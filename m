@@ -2,123 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5802748AE43
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3AA48AE47
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240355AbiAKNQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 08:16:08 -0500
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:35405 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231301AbiAKNQF (ORCPT
+        id S240374AbiAKNQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 08:16:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59160 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231301AbiAKNQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 08:16:05 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id BF2342B000AA;
-        Tue, 11 Jan 2022 08:16:03 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 11 Jan 2022 08:16:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=yXTF+1sEdjFyfoYhAlSGINwu0y1
-        8yyw0z2aXapj6u4s=; b=em2fys3m84jBAFDKBEC2AtPfRilTDRqkdzw8ozzA6l6
-        30K4NDfPlt1b8QYIJMPqk7fIWDEziCILf40sm/KhSZspwryVD4twAz5xNT98hWbu
-        QiWMjFg1ReB+ejs5OYkDtWff3+s23Ky5H9DyXGJMANhEQGfPzGaktvEmCfOG+KaE
-        6rB6nVIMEVGnL8pywaZl0GjF/+y1B0Gv7I739IjwcgsMLPo/dd3yecNIoqBM3S92
-        6+b1f0swMcOXFtZPoPn/lWrDEUK+Q3PP96/JL2UWupTV/ULVMHDAWpSvTzt4unT/
-        X0yfFyBA27LEykZEMDpQLSmrTseAZSZjVw+wm/W4V1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=yXTF+1
-        sEdjFyfoYhAlSGINwu0y18yyw0z2aXapj6u4s=; b=C+zr0Y0956COKArNfHRi56
-        IDtjkytBsqm5Coct7+bYOVMexGoB29J/yOeQyHxFVtSN3NWHM2eQVtKi9AuM0OXE
-        svEwkJKmG33o8eYktYg2kBQl2WOzCV6jAjdYhuHS7uq1eAY/09g1NopLe+VO5hrj
-        1hIod3wivTRUUSbEgvoSrao56fp9YYlL7NjYfSVEtGSJm8HOeKfR59VKMSeBZfRA
-        dtAsksVWzZofW2v3BNP4kS2wVu9RegXT5oHv6JByPakrtV9tWejYN/F8yzGlZMVR
-        o0OEkUyPeM+QTHILkQhSZFHolVy3ZzB2W+FgRrtfco3FV2enF7/w0WNc9Jxla7vg
-        ==
-X-ME-Sender: <xms:EoPdYad0marmisCixdg_8fVLP38I_JWJ52xK9uzP5BwYAebeFNznXQ>
-    <xme:EoPdYUPRDiaHR9nam5B6FvrzRrSJm52tWillR4Sn7WF37x8rzCyoTe35Se6OWqb5e
-    SvP7w9QINNGVRYGoJE>
-X-ME-Received: <xmr:EoPdYbijdX-m7OiCg45S9T3GxFFboEfpClpikmxQVeBEu4AYNC_B9tbDhGjk_jt-rC3LiGQx0RvlhDH7nCsDd3-_bCPFNoK8K7UaY5A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudehfedghedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:EoPdYX9xsbi5OKt0UVB5Jz7mUeIhO-8PLiOE_ao_XQWal4FBUz85Cg>
-    <xmx:EoPdYWsx3Q4nY_ScaWbb0nGHzkgiqjCYiZFAw5NIKrQSTP-lDzVBoA>
-    <xmx:EoPdYeHIHujuD1UkImBK1090PRp3fe1BeYzT5l3puZPF2u8gKPjFUQ>
-    <xmx:E4PdYQLwkXLO94HZxxhz8aDZg5Ng_9bQLnGiW-8duNk12P9wLUb6QjYN0zA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 11 Jan 2022 08:16:02 -0500 (EST)
-Date:   Tue, 11 Jan 2022 14:16:01 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Kris Karas <bugs-a21@moonlit-rail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Borislav Petkov <bp@suse.de>
-Subject: Re: [PATCH v2 0/2] video: A couple of fixes for the vga16fb driver
-Message-ID: <20220111131601.u36j6grsvnir5gvp@houat>
-References: <20220110095625.278836-1-javierm@redhat.com>
+        Tue, 11 Jan 2022 08:16:50 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 967DD61628;
+        Tue, 11 Jan 2022 13:16:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7909C36AE3;
+        Tue, 11 Jan 2022 13:16:49 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="SqubP8RT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1641907005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YQeC7YctX/YVqYkAnzGKLgfZxfV+ytQelxLfYGqLnUc=;
+        b=SqubP8RTPOzXlEBQMp36lDr1ayPnfc/jhXUCmamqFS8JbyvknBtF/KetrOsETNwW+dMc/+
+        Xjai/hibANJ9trNSLSz1MOiFZmM2RuooRZ73xz2qeaaigDVBS2Im/1yS6/itPjyJqIXaCQ
+        sP3bisQvgrEFDz2HlaNG6Vg4m+JKDSc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b5f64864 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 11 Jan 2022 13:16:45 +0000 (UTC)
+Received: by mail-yb1-f175.google.com with SMTP id c6so45145410ybk.3;
+        Tue, 11 Jan 2022 05:16:44 -0800 (PST)
+X-Gm-Message-State: AOAM531fuK1Ew8eRhTyOsIGRMGBSstsaFldDKo7PDcViDbBwlSSM9/T9
+        4fnJSr1P3Bm7FvqFiTlzQ4MzMJQLS2+7zH2y1aA=
+X-Google-Smtp-Source: ABdhPJxBYHrKFKQwwlE52qAsHcsrMv7o0I8tu8BgRgRGkDchwQOZShIdmgvijLdWQcaOJmR2LudNbTFJfE0zYHl+z/w=
+X-Received: by 2002:a25:ae8d:: with SMTP id b13mr6700286ybj.255.1641907001570;
+ Tue, 11 Jan 2022 05:16:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5rhk7fpudnheurb4"
-Content-Disposition: inline
-In-Reply-To: <20220110095625.278836-1-javierm@redhat.com>
+References: <20220110132349.siplwka7yhe2tmwc@valinor> <CAHmME9oSK5sVVhMewm-oVvn=twP4yyYnLY0OVebYZ0sy1mQAyA@mail.gmail.com>
+ <YdxCsI3atPILABYe@mit.edu> <CAHmME9oRdoc3c36gXAcmOwumwvUi_6oqCsLmFxRP_NDMz_MK1Q@mail.gmail.com>
+ <Ydxu+KS5UkQ6hU9R@mit.edu> <Ydx7D3H0PS0Zs9/B@sol.localdomain>
+ <CAHmME9pe-DxTcFcMtsNnLPcccoY+0gEysivZQszAusH1M8ThmA@mail.gmail.com>
+ <YdyNxJzdBmSSEtDC@mit.edu> <CAHmME9rmWBA02SyeFiiGZ8=kydYJSJwcYPscBrTBzoXMEPH9sQ@mail.gmail.com>
+ <e6fac6ab-07eb-4d8c-9206-bacf6660a7cf@www.fastmail.com> <Ydz1F/AqB1oO/qHF@mit.edu>
+In-Reply-To: <Ydz1F/AqB1oO/qHF@mit.edu>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 11 Jan 2022 14:16:30 +0100
+X-Gmail-Original-Message-ID: <CAHmME9o8FFLC3vvTN0cNzdzoYvBFwJMUCTaxOhnXfTaEELbBeg@mail.gmail.com>
+Message-ID: <CAHmME9o8FFLC3vvTN0cNzdzoYvBFwJMUCTaxOhnXfTaEELbBeg@mail.gmail.com>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Simo Sorce <simo@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrey Walton <noloader@gmail.com>,
+        Stephan Mueller <smueller@chronox.de>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>,
+        Eric Biggers <ebiggers@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ted,
 
---5rhk7fpudnheurb4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jan 11, 2022 at 4:12 AM Theodore Ts'o <tytso@mit.edu> wrote:
+> These are both dangerous.  The first means creating a new device node
+> which effectively is /dev/drbg-random which could be bind mounted or
+> mknod'ed to be /dev/urandom.  But if the user boots a kernel that
+> doesn't support this new device node, it will mean opening
+> /dev/urandom will get ENODEV.
+>
+> Similarly, getrandom(2) never fails.  By allowing a SELinux policy to
+> force it to fail with ENOSYS, or some other error, it means exposing
+> userspace code to a failure path that may not be as well tested.
+> Sure, *sane* code might fall back to opening /dev/urandom; but the
+> whole point of getrandom(2) was that it was a dumb, stupid interface
+> interface that could be safely used by application programmers.  Not
+> paranoid OS crypto engineers that carefully check the error returns of
+> all system calls, with appropriate fallbacks and making sure that code
+> always "fails safe".
+>
+> Right now, the enterprise distros are doing their own thing, and quite
+> frankly, I don't see a problem with that.
 
-Hi,
+I agree with you. I think enterprise distros ought to keep doing their
+own thing here, and there's a clear solution that does this in
+userspace, and also a pretty non-invasive patch from Marcelo to patch
+the crap into the kernel need be.
 
-On Mon, Jan 10, 2022 at 10:56:23AM +0100, Javier Martinez Canillas wrote:
-> This patch series contains two fixes for the vga16fb driver. I looked at
-> the driver due a regression reported [0], caused by commit d391c5827107
-> ("drivers/firmware: move x86 Generic System Framebuffers support").
->=20
-> The mentioned commit didn't change any logic but just moved the platform
-> device registration that matches the vesafb and efifb drivers to happen
-> later. And this caused the vga16fb driver to be probed even in machines
-> that don't have an EGA or VGA video adapter.
->=20
-> This is a v2 of the patch series that addresses issues pointed out by
-> Geert Uytterhoeven.
->=20
-> Patch #1 is fixing the wrong check to determine if either EGA or VGA is
-> used and patch #2 adds a check to the driver to only be loaded for EGA
-> and VGA 16 color graphic cards.
+I spent some time reading about FIPS certification, compliance, and
+the requirements of various customers. One thing in particular leapt
+out at me, which I think you've been saying over and over in this
+thread but I didn't fully understand until this morning:
 
-For both patches,
+The goal is generally to have particular pieces of software or
+particular solutions FIPS certified. And to do this, they start from
+the top of the stack and move onward down. Most OSS software out there
+today isn't really FIPS ready and oftentimes a full solution needs
+modifications in one place or another. Other times, it's enough to
+plug in the right userspace crypto libraries. And I noticed in looking
+at things that are FIPS certified that random number generation tends
+to go through a userspace abstraction layer. And, it looks like these
+abstraction layers all have FIPS-able RNG hooks. You mentioned OpenSSL
+earlier, and it looks like even libgcrypt and wolfSSL have an
+abstraction layer for this.
 
-Acked-by: Maxime Ripard <maxime@cerno.tech>
+In other words, it's not even so clear that people who need FIPS
+compliance really need /dev/urandom and such to be FIPS compliant as
+part of that. And the ones who think they do for whatever security
+theater nonsense can happily load up that CUSE thing I made, apply a
+deliberately-downstream patch, or whatever other clever solution.
 
-Maxime
+So indeed it really doesn't seem like this is something the kernel
+needs to be doing.
 
---5rhk7fpudnheurb4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYd2DEQAKCRDj7w1vZxhR
-xbXXAP4gpuUuyyTwx3PEj37oaIJQF37qaFBZHNDqYNK9DJonuQD+LsvkihtOL+7n
-xXiJmQtTvSoH/8OE236YGI56zT1kvAQ=
-=fqNz
------END PGP SIGNATURE-----
-
---5rhk7fpudnheurb4--
+Jason

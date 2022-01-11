@@ -2,131 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCAE148B3D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1208348B3DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242603AbiAKR2d convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 11 Jan 2022 12:28:33 -0500
-Received: from out02.mta.xmission.com ([166.70.13.232]:50092 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240411AbiAKR2L (ORCPT
+        id S1344215AbiAKR2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:28:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344256AbiAKR2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:28:11 -0500
-Received: from in02.mta.xmission.com ([166.70.13.52]:48794)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n7KwM-005tcc-0R; Tue, 11 Jan 2022 10:28:10 -0700
-Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:60092 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n7KwK-00EGFs-QD; Tue, 11 Jan 2022 10:28:09 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Olivier Langlois <olivier@trillion01.com>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "<linux-arch@vger.kernel.org>" <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
-        <20211213225350.27481-1-ebiederm@xmission.com>
-        <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
-        <87sfu3b7wm.fsf@email.froward.int.ebiederm.org>
-        <YdniQob7w5hTwB1v@osiris>
-        <87ilurwjju.fsf@email.froward.int.ebiederm.org>
-        <87o84juwhg.fsf@email.froward.int.ebiederm.org>
-        <57dfc87c7dd5a2f9f9841bba1185336016595ef7.camel@trillion01.com>
-Date:   Tue, 11 Jan 2022 11:28:01 -0600
-In-Reply-To: <57dfc87c7dd5a2f9f9841bba1185336016595ef7.camel@trillion01.com>
-        (Olivier Langlois's message of "Mon, 10 Jan 2022 18:00:07 -0500")
-Message-ID: <87lezmrxlq.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1n7KwK-00EGFs-QD;;;mid=<87lezmrxlq.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18MwSq61euGY5qBKV2lHfNFGNEA7dtXK2I=
-X-SA-Exim-Connect-IP: 68.110.24.146
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa08.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMNoVowels,XMSubLong,
-        XM_B_Unicode autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 XMSubLong Long Subject
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        *  0.0 XM_B_Unicode BODY: Testing for specific types of unicode
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa08 1397; Body=1 Fuz1=1 Fuz2=1]
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Olivier Langlois <olivier@trillion01.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 547 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 11 (2.1%), b_tie_ro: 9 (1.7%), parse: 1.53 (0.3%),
-         extract_message_metadata: 17 (3.0%), get_uri_detail_list: 1.70 (0.3%),
-         tests_pri_-1000: 10 (1.8%), tests_pri_-950: 1.50 (0.3%),
-        tests_pri_-900: 1.40 (0.3%), tests_pri_-90: 126 (23.1%), check_bayes:
-        117 (21.5%), b_tokenize: 6 (1.2%), b_tok_get_all: 7 (1.4%),
-        b_comp_prob: 2.1 (0.4%), b_tok_touch_all: 97 (17.7%), b_finish: 1.32
-        (0.2%), tests_pri_0: 364 (66.6%), check_dkim_signature: 0.50 (0.1%),
-        check_dkim_adsp: 2.7 (0.5%), poll_dns_idle: 0.67 (0.1%), tests_pri_10:
-        2.1 (0.4%), tests_pri_500: 7 (1.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
- special case
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+        Tue, 11 Jan 2022 12:28:12 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A959C03400E
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:28:07 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id pj2so58628pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:28:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=12+q0b6y6nH7kbDmn5mxOCkgQv+jyWWInPi8qR3sLk0=;
+        b=JXfN+aLUdx2zlu9qac6uYhla2U/n8TT6p+hrU2GGv0I6TKuQe+IPgh8G5lv5757keI
+         l5oDFnb4HpmzkMW6hgqDXu0R/FRYbjfs6AKjay71k5mZWDQkXNA3DAuMPbMBksXzp2xw
+         FQ9PWBH9Ry/ouH+0AL2n0zYCPZK0gjci88ohw3L1motWzX7XKg5CDN1c9ErNPgh95FV0
+         OX0dG4OBgbQjFk3zoxgez0BiFzqcJ5zVc4913i8lszMlKgwld3eJIGOYujLXcl1A9DDF
+         SyWXmN5lD7NIhnlESzVUqYLSOb0TClQ0V4cCz+2tVvRdVx6rFTQrYx0I+JIVLxzdQOoS
+         DHow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=12+q0b6y6nH7kbDmn5mxOCkgQv+jyWWInPi8qR3sLk0=;
+        b=0nZNh5TER4YYJL4U7yfPzSkj8rWWau21T8jInR7ns3zLDTn39QTlqi45lwfnf14FtP
+         pG8Bxjzv5O9hKzmMI8xpr6tlZplDI76Kv9hdLfBKALd4RykAVoIZihna3HhwktcHzujb
+         ur2mJCsRgu760U7OaBlhyI8VLAC/2apwNopshgzrZMmSWwRb9yw5iFD+wT+GmXX47Sea
+         yuUKjsSKl3eaX2bifQKZSCwbLPnOKaD0B7NLFLjRptc0jR/JsjWLARUdPT+qVAYtiwe9
+         6joTP3GF27e9fD0xbECMhTzycgFUmsK5umygdMnI5sD8OM03px/8W3I10T3tterasNTV
+         d/ow==
+X-Gm-Message-State: AOAM531MbTY8QtIEEljjaWbMyijN7uxeg6lMYjW7d6Mni7csfiYjwXuK
+        33FrFXRfX0+YWmy2QQk45noBCevebGXLQQ==
+X-Google-Smtp-Source: ABdhPJyMMLCfkog+/r5Po8vgFXuxtpWPcgiAhliF7cPIp8Sqws1L7o06MOk1nanJj51Y59PSWbbI3A==
+X-Received: by 2002:a05:6a00:1413:b0:4bf:a0d7:1f55 with SMTP id l19-20020a056a00141300b004bfa0d71f55mr5587142pfu.13.1641922086523;
+        Tue, 11 Jan 2022 09:28:06 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id b21sm11261590pfv.74.2022.01.11.09.28.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 09:28:05 -0800 (PST)
+Date:   Tue, 11 Jan 2022 09:28:05 -0800 (PST)
+X-Google-Original-Date: Tue, 11 Jan 2022 09:27:38 PST (-0800)
+Subject:     Re: [PATCH] riscv: mm: fix wrong phys_ram_base value for RV64
+In-Reply-To: <20211202153641.1961-1-jszhang@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        alex@ghiti.fr, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     jszhang@kernel.org
+Message-ID: <mhng-662897d8-3b0a-4580-a607-f853c01263b5@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Olivier Langlois <olivier@trillion01.com> writes:
-
-> On Mon, 2022-01-10 at 15:11 -0600, Eric W. Biederman wrote:
->> 
->> 
->> I have been able to confirm that changing wait_event_interruptible to
->> wait_event_killable was the culprit.  Something about the way
->> systemd-coredump handles coredumps is not compatible with
->> wait_event_killable.
+On Thu, 02 Dec 2021 07:36:41 PST (-0800), jszhang@kernel.org wrote:
+> Currently, if 64BIT and !XIP_KERNEL, the phys_ram_base is always 0,
+> no matter the real start of dram reported by memblock is. The original
+> patch[1] is correct, I believe it's not corrected merged due to lots
+> of #ifdef in arch/riscv/mm/init.c, I plan to send a clean up series
+> soon.
 >
-> This is my experience too that systemd-coredump is doing something
-> unexpected. When I tested the patch:
-> https://lore.kernel.org/lkml/cover.1629655338.git.olivier@trillion01.com/
+> [1] http://lists.infradead.org/pipermail/linux-riscv/2021-July/007650.html
 >
-> to make sure that the patch worked, sending coredumps to systemd-
-> coredump was making systemd-coredump, well, core dump... Not very
-> useful...
+> Fixes: 6d7f91d914bc ("riscv: Get rid of CONFIG_PHYS_RAM_BASE in kernel physical address conversion")
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 
-Oh.  Wow....
+Thanks, this is on for-next.
 
-> Sending the dumps through a pipe to anything else than systemd-coredump
-> was working fine.
-
-Interesting.
-
-I need to read through the pipe code and see how all of that works.  For
-writing directly to disk only ignoring killable interruptions are the
-usual semantics.  Ordinary pipe code has different semantics, and I
-suspect that is what is tripping things up.
-
-As for systemd-coredump it does whatever it does and I suspect some
-versions of systemd-coredump are simply not robust if a coredump stops
-unexpectedly.
-
-The good news is the pipe code is simple enough, it will be possible to
-completely read through that code.
-
-Eric
-
-
+> ---
+>  arch/riscv/mm/init.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 24b2b8044602..3c0649dba4ff 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -187,10 +187,10 @@ static void __init setup_bootmem(void)
+>
+>
+>  	phys_ram_end = memblock_end_of_DRAM();
+> -#ifndef CONFIG_64BIT
+>  #ifndef CONFIG_XIP_KERNEL
+>  	phys_ram_base = memblock_start_of_DRAM();
+>  #endif
+> +#ifndef CONFIG_64BIT
+>  	/*
+>  	 * memblock allocator is not aware of the fact that last 4K bytes of
+>  	 * the addressable memory can not be mapped because of IS_ERR_VALUE

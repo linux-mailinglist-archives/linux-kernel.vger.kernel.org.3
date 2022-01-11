@@ -2,90 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD55148A552
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 02:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F3548A557
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 02:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346398AbiAKBtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 20:49:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52542 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346331AbiAKBtv (ORCPT
+        id S1346436AbiAKBxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 20:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344455AbiAKBxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 20:49:51 -0500
+        Mon, 10 Jan 2022 20:53:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C349BC06173F;
+        Mon, 10 Jan 2022 17:53:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3773614A2;
-        Tue, 11 Jan 2022 01:49:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60721C36AF6;
-        Tue, 11 Jan 2022 01:49:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61E4061499;
+        Tue, 11 Jan 2022 01:53:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E4FFC36AE5;
+        Tue, 11 Jan 2022 01:53:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641865790;
-        bh=3UQexFSZqQnTQR1vM+ym9IdZtYO7x9+eEj9hHwpof2g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BQozbTlnPgrukL7vnpLVJ9H/DstgWWDWnwD31DV8ia92WG5ubukIjYYznYVo2JSrK
-         C3wpyZa7rhs37US3++TC9eGrr4IRhXhGSGejXjL3gnxRtGNcvSSv0OHreAWz444GAr
-         7NuJ7Jkyjf9R4VcYrFd7ghB0/IxhIpcA6VIqoWB+562e215kFvZcZ2VZ/ur7aNw59Z
-         0FlG7UHVf1CF7oKe2PxM+LAwRUCcMe9Am8bmk4IxoomucqAx5ccbqTsW5e2vLWs3zs
-         na2vS/6Nv8PCA25bs8mIlZucyBQ7FUTQjl9A12YfgtHoTm5pTHa9V6YxnSQmVLd9/Z
-         45fXMG+nynI6Q==
-Received: by mail-yb1-f181.google.com with SMTP id c6so41153240ybk.3;
-        Mon, 10 Jan 2022 17:49:50 -0800 (PST)
-X-Gm-Message-State: AOAM530R5JeEyhr2wk2JegMWYbWhAtFX/en/CUDqpLDkUahKGDhY1+WG
-        lnnBqwGauaON0GL27o9Z6DCsXaM8cX71LkN8Uqw=
-X-Google-Smtp-Source: ABdhPJwsDC9bqbFvVxq3Il8K1t5nZFwWkMVwSr4dlbvI9paqqXq2IMgtspS0YGQqbFvUu7baVkUxbRik6cN2qY1kd6s=
-X-Received: by 2002:a25:c42:: with SMTP id 63mr3275054ybm.219.1641865789528;
- Mon, 10 Jan 2022 17:49:49 -0800 (PST)
+        s=k20201202; t=1641866013;
+        bh=xlepkRSUYEKf5ttuG4z0MwoSARgdaxLG7rPytmfxLPo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BRUIq5t2DKXCUQXkYOVojOlem01fquXfUd003zgoAP0opQA3NLBYqaHRJEs2btdJ7
+         3DRCyTzxctT/eHzy2navFVTwmG6nG+4qiiPwJaMXIXNY+egH18OoWbKWKkWuLo+VAC
+         C3JLfx3t6GF+73/tdUbCxbeW4lK6U3ZKS2uS4AuIu/GCv2keK9x39faaFrCaAubBdX
+         7DnCSnppnLo1WTp0Yum+uyN6fhuOnUDBBt4optddC+9AiB/h65Cub96ZyYjABc9IiB
+         RpHnq7Wl1vR0PknCIwPnfN4Z65HjSCi1UnhlsHMBFj7hbtBzGDQvJzyZCvIjYXhNYv
+         yTJf4Sk89wpSA==
+Date:   Tue, 11 Jan 2022 03:53:23 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Haitao Huang <haitao.huang@linux.intel.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+Message-ID: <YdzjEzjF0YKn+pZ6@iki.fi>
+References: <a24bc46e4ba8a69938a7f73012019ce0f61005c2.camel@kernel.org>
+ <f6a55943-13ef-41ef-609a-6406cffef513@intel.com>
+ <YcsklLw1uFyppSji@iki.fi>
+ <573e0836-6ac2-30a4-0c21-d4763707ac96@intel.com>
+ <YdgvFTIRboHwTgRT@iki.fi>
+ <op.1fmvdehpwjvjmi@hhuan26-mobl1.mshome.net>
+ <YdmxpTVM1JG8nxQ3@iki.fi>
+ <YdmzDy1BOHgh8CII@iki.fi>
+ <Ydm6RiIwuh3IspRI@iki.fi>
+ <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net>
 MIME-Version: 1.0
-References: <20211229215646.830451-1-void@manifault.com> <1f1b9b01-cfab-8a84-f35f-c21172e5d64d@redhat.com>
- <CAPhsuW4Ua2hDs5WMtF0s_CQki-ZdYMvkU2s+Nc7Rvs=-D6WL=Q@mail.gmail.com> <4df1f9a0-3b26-903b-fe63-af5e75ed98d4@redhat.com>
-In-Reply-To: <4df1f9a0-3b26-903b-fe63-af5e75ed98d4@redhat.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 10 Jan 2022 17:49:38 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7O6br8BtAb0Tnx2aMJODfp5Rvxn-YABPUCuL1ofNPcyw@mail.gmail.com>
-Message-ID: <CAPhsuW7O6br8BtAb0Tnx2aMJODfp5Rvxn-YABPUCuL1ofNPcyw@mail.gmail.com>
-Subject: Re: [PATCH] livepatch: Avoid CPU hogging with cond_resched
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     David Vernet <void@manifault.com>, live-patching@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>, jpoimboe@redhat.com,
-        pmladek@suse.com, jikos@kernel.org, mbenes@suse.cz
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 8:17 AM Joe Lawrence <joe.lawrence@redhat.com> wrote:
->
-> On 1/7/22 11:46 AM, Song Liu wrote:
-> > On Fri, Jan 7, 2022 at 6:13 AM Joe Lawrence <joe.lawrence@redhat.com> wrote:
-> >>
-> >> On 12/29/21 4:56 PM, David Vernet wrote:
-> >>> For example, under certain workloads, enabling a KLP patch with
-> >>> many objects or functions may cause ksoftirqd to be starved, and thus for
-> >>> interrupts to be backlogged and delayed.
-> >>
-> >> Just curious, approximately how many objects/functions does it take to
-> >> hit this condition?  While the livepatching kselftests are more about
-> >> API and kernel correctness, this sounds like an interesting test case
-> >> for some of the other (out of tree) test suites.
-> >
-> > Not many patched functions. We only do small fixes at the moment. In the recent
-> > example, we hit the issue with ~10 patched functions. Another version
-> > with 2 to 3
-> > patched function seems fine.
-> >
-> > Yes, I think this is an important test case.
-> >
->
-> Thanks, Song.  If you can share any test setup details, I'll pass those
-> along to our internal QE group.  And once merged, we'll be adding this
-> one to the list of backports for our distro.
+On Mon, Jan 10, 2022 at 04:05:21PM -0600, Haitao Huang wrote:
+> On Sat, 08 Jan 2022 10:22:30 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+> wrote:
+> 
+> > On Sat, Jan 08, 2022 at 05:51:46PM +0200, Jarkko Sakkinen wrote:
+> > > On Sat, Jan 08, 2022 at 05:45:44PM +0200, Jarkko Sakkinen wrote:
+> > > > On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang wrote:
+> > > > > > > > OK, so the question is: do we need both or would a
+> > > mechanism just
+> > > > > > > to extend
+> > > > > > > > permissions be sufficient?
+> > > > > > >
+> > > > > > > I do believe that we need both in order to support pages
+> > > having only
+> > > > > > > the permissions required to support their intended use
+> > > during the
+> > > > > > > time the
+> > > > > > > particular access is required. While technically it is
+> > > possible to grant
+> > > > > > > pages all permissions they may need during their lifetime it
+> > > is safer to
+> > > > > > > remove permissions when no longer required.
+> > > > > >
+> > > > > > So if we imagine a run-time: how EMODPR would be useful, and
+> > > how using it
+> > > > > > would make things safer?
+> > > > > >
+> > > > > In scenarios of JIT compilers, once code is generated into RW pages,
+> > > > > modifying both PTE and EPCM permissions to RX would be a good
+> > > defensive
+> > > > > measure. In that case, EMODPR is useful.
+> > > >
+> > > > What is the exact threat we are talking about?
+> > > 
+> > > To add: it should be *significantly* critical thread, given that not
+> > > supporting only EAUG would leave us only one complex call pattern with
+> > > EACCEPT involvement.
+> > > 
+> > > I'd even go to suggest to leave EMODPR out of the patch set, and
+> > > introduce
+> > > it when there is PoC code for any of the existing run-time that
+> > > demonstrates the demand for it. Right now this way too speculative.
+> > > 
+> > > Supporting EMODPE is IMHO by factors more critical.
+> > 
+> > At least it does not protected against enclave code because an enclave
+> > can
+> > always choose not to EACCEPT any of the EMODPR requests. I'm not only
+> > confused here about the actual threat but also the potential adversary
+> > and
+> > target.
+> > 
+> I'm not sure I follow your thoughts here. The sequence should be for enclave
+> to request  EMODPR in the first place through runtime to kernel, then to
+> verify with EACCEPT that the OS indeed has done EMODPR.
+> If enclave does not verify with EACCEPT, then its own code has
+> vulnerability. But this does not justify OS not providing the mechanism to
+> request EMODPR.
 
-We get this on shadow production traffic of our web service, which we cannot
-recreate out of our data centers.
-I tried to use iperf to generate traffic (among a few hosts), but it
-doesn't work.
-At the moment, I am not sure what's the easiest way to repro this.
+The question is really simple: what is the threat scenario? In order to use
+the word "vulnerability", you would need one.
 
-Thanks,
-Song
+Given the complexity of the whole dance with EMODPR it is mandatory to have
+one, in order to ack it to the mainline.
+
+> Similar to how we don't want have RWX code pages for normal Linux
+> application, when an enclave loads code pages (either directly or JIT
+> compiled from high level code ) into EAUG'd page (which has RW), we do not
+> want leave pages to be RWX for code to be executable, hence the need of
+> EMODPR request OS to reduce the permissions to RX once the code is ready to
+> execute.
+
+You cannot compare *enforced* permissions outside the enclave, and claim that
+they would be equivalent to the permissions of the already sandboxed code
+inside the enclave, with permissions that are not enforced but are based
+on good will of the enclave code.
+
+/Jarkko

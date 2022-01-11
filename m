@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E373A48B8CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECBF48B8D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244178AbiAKUon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 15:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbiAKUol (ORCPT
+        id S244238AbiAKUor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 15:44:47 -0500
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:51143 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244197AbiAKUoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 15:44:41 -0500
-Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F4EC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:44:41 -0800 (PST)
-Received: by mail-ua1-x942.google.com with SMTP id v12so889336uar.7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:44:41 -0800 (PST)
+        Tue, 11 Jan 2022 15:44:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=waQIcZKyNdPCLDxFw78b4nNpaKUPya0Ccd67sLKThUU=;
-        b=XV+HMgID3Hv83bUZ66RgpoMqQ+yH9+ajiaFZ9HJffkxl2DH2Pz10kKcgghmpVKrIiU
-         SKmpTf7sgAZy7YVTXL69xJbJ4eVQLQyg35zBiYkuRe4x2q1nzJl0IPitXqbI5L7eK0FN
-         B9wxBcSc9DF2nPMFwbYvdSEc/XXPb6ervoLmL9UCVyDopPEIfGwXPNG4npI2DVOaL8RK
-         GoWXlIqKoKSrr4JWp5N4O2CX5LnIrPLrQsik9EdhMlPp+Fjg2Hr74yx5iqnXGXpo/axt
-         cld3nMvBTbtha0+Ew8V4/bIHWDymH/iS/Zu985clDXCVR51ydBixWx7evKk5bT+GSe4v
-         8HiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=waQIcZKyNdPCLDxFw78b4nNpaKUPya0Ccd67sLKThUU=;
-        b=qaKcwjzBEBUDFSUqC/frK8TR2rwfuT2CZVICi4VQOWyrNtif92AXK4YtwYZwHQjBsx
-         QLx8glg2lQXe6tQqc0jvABlNvwaPES5hHTZOpk+Iwg6Z+WpfzpwQIqXDC/vYFdfBwPTT
-         qxXwAA0wske+l1ebKpV8oUkInGV9YJ3r/buiab1fvhVvkzay+srac4BkSznnyvFDUFLW
-         0KKb9uEuRGSz4s6KyhCXC6JEKgE8U7fZI0FKJFv5SfkcD6GWin1WqfqQFntYaXXA8Vtm
-         q74cg3iryXqeSViwJce1f/VEjqdoTbhc7JLcGiGUFpLCuAIiDvpDg9np6ymoa1RE62d3
-         9RlA==
-X-Gm-Message-State: AOAM533EfEE4acIwYMv4wcIEkaQu4tvAJwpzJP7EA0LQ5K4Yl/evjUrG
-        aygXQqrleAP3IxwYhp+N0XuDxZ/36yXWJuCtJiM=
-X-Google-Smtp-Source: ABdhPJw17+I1KXLL+/f/rBCg9YNhy3ausHGBL+Gyqa+cYCHWkagAoIRjxVrZ9XMXpL3RRbc0OOkoSdzOoFrMiS8aeA0=
-X-Received: by 2002:a05:6102:55a8:: with SMTP id dc40mr3038098vsb.61.1641933880255;
- Tue, 11 Jan 2022 12:44:40 -0800 (PST)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1641933886; x=1673469886;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=X+iEdzMsEoTMpcwwqvHDzvTqGb+6u2LSzv5AVOuyP5w=;
+  b=eRgL5YJoSw9+ZVP5luZ4UHA01nXrMmgfFLqgZzcObCSDd0K7J3ckaVRk
+   W2RSOp3XOZCSj/HOsbr2fLMRErMmzfYWEJqBlM6bNBu1TRWA1xHvOMsAz
+   4bT3bynMHKpgbNYKNTDHj/Bvng49xU+EPP/ONMzKL2u8LT8VZ7DuxyHvT
+   0=;
+X-IronPort-AV: E=Sophos;i="5.88,279,1635206400"; 
+   d="scan'208";a="168282843"
+Subject: Re: [PATCH 1/3] memblock: define functions to set the usable memory range
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-34cb9e7b.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP; 11 Jan 2022 20:44:44 +0000
+Received: from EX13MTAUEA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-34cb9e7b.us-west-2.amazon.com (Postfix) with ESMTPS id 459BE4151D;
+        Tue, 11 Jan 2022 20:44:44 +0000 (UTC)
+Received: from EX13D31UEA001.ant.amazon.com (10.43.61.114) by
+ EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.26; Tue, 11 Jan 2022 20:44:42 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX13D31UEA001.ant.amazon.com (10.43.61.114) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.26; Tue, 11 Jan 2022 20:44:42 +0000
+Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
+ (172.19.206.175) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
+ Server id 15.0.1497.26 via Frontend Transport; Tue, 11 Jan 2022 20:44:42
+ +0000
+Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
+        id 20514A1; Tue, 11 Jan 2022 20:44:41 +0000 (UTC)
+Date:   Tue, 11 Jan 2022 20:44:41 +0000
+From:   Frank van der Linden <fllinden@amazon.com>
+To:     Mike Rapoport <rppt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
+        <frowand.list@gmail.com>, <ardb@kernel.org>, <linux-mm@kvack.org>,
+        <devicetree@vger.kernel.org>, <linux-efi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kexec@lists.infradead.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <geert+renesas@glider.be>
+Message-ID: <20220111204441.GA36458@dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com>
+References: <20220110210809.3528-1-fllinden@amazon.com>
+ <20220110210809.3528-2-fllinden@amazon.com> <Yd1cnquQFZoNE7FP@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a59:9b0c:0:b0:27c:109c:8b54 with HTTP; Tue, 11 Jan 2022
- 12:44:40 -0800 (PST)
-Reply-To: mstheresaheidi8@gmail.com
-From:   Ms Theresa Heidi <wangbestauto@gmail.com>
-Date:   Tue, 11 Jan 2022 20:44:40 +0000
-Message-ID: <CAMp4C+3vLOtm8y7Uhx_z0dn7FCU8eqgKwhasT-WZQSqEVBfLDQ@mail.gmail.com>
-Subject: ASUNTO URGENTE AYUDA!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Yd1cnquQFZoNE7FP@kernel.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Querido Amado,
+On Tue, Jan 11, 2022 at 12:31:58PM +0200, Mike Rapoport wrote:
+> > --- a/include/linux/memblock.h
+> > +++ b/include/linux/memblock.h
+> > @@ -481,6 +481,8 @@ phys_addr_t memblock_reserved_size(void);
+> >  phys_addr_t memblock_start_of_DRAM(void);
+> >  phys_addr_t memblock_end_of_DRAM(void);
+> >  void memblock_enforce_memory_limit(phys_addr_t memory_limit);
+> > +void memblock_set_usable_range(phys_addr_t base, phys_addr_t size);
+> > +void memblock_enforce_usable_range(void);
+> >  void memblock_cap_memory_range(phys_addr_t base, phys_addr_t size);
+> >  void memblock_mem_limit_remove_map(phys_addr_t limit);
+> 
+> We already have 3 very similar interfaces that deal with memory capping.
+> Now you suggest to add fourth that will "generically" solve a single use
+> case of DT, EFI and kdump interaction on arm64.
+> 
+> Looks like a workaround for a fundamental issue of incompatibility between
+> DT and EFI wrt memory registration.
 
-DONACI=C3=93N BEN=C3=89FICA Por favor, lea atentamente, s=C3=A9 que es cier=
-to que
-esta carta puede resultarle una sorpresa. Encontr=C3=A9 su contacto de
-correo electr=C3=B3nico a trav=C3=A9s de una b=C3=BAsqueda privada cuando n=
-ecesitaba
-su ayuda. Le escribo este correo con una gran tristeza en mi coraz=C3=B3n,
-he elegido comunicarme con usted a trav=C3=A9s de Internet porque sigue
-siendo el medio de comunicaci=C3=B3n m=C3=A1s r=C3=A1pido.
+Yep, I figured this would be the main argument against this - arm64
+already added several other more-or-less special cased interfaces over
+time.
 
-Mi nombre es Sra. Theresa Heidi Soy nativa de Francia actualmente
-hospitalizada en un hospital privado aqu=C3=AD en Israel como resultado de
-un c=C3=A1ncer de pulm=C3=B3n Tengo 62 a=C3=B1os y me diagnosticaron c=C3=
-=A1ncer de pulm=C3=B3n
-hace aproximadamente 4 a=C3=B1os, inmediatamente despu=C3=A9s de la muerte =
-de mi
-marido, que me ha dejado todo aquello por lo que trabajaba. Estoy con
-mi computadora port=C3=A1til en un hospital aqu=C3=AD en el que he estado e=
-n
-tratamiento por c=C3=A1ncer de pulm=C3=B3n. Tengo algunos fondos heredados =
-de mi
-difunto esposo, la suma de Dos Millones Quinientos Mil D=C3=B3lares
-Solamente (USD$2,500,000,00). Ahora est=C3=A1 claro que me estoy acercando
-a los =C3=BAltimos d=C3=ADas de mi vida y no creo que necesite este dinero =
-nunca
-m=C3=A1s. Mi m=C3=A9dico me hizo entender que no durar=C3=ADa el per=C3=ADo=
-do de un a=C3=B1o
-debido a un problema de c=C3=A1ncer de pulm=C3=B3n.
+I'm more than happy to solve this in a different way.
 
-Este dinero todav=C3=ADa est=C3=A1 en el banco extranjero y la gerencia me
-escribi=C3=B3 como el verdadero propietario para que me presente a recibir
-el dinero o, m=C3=A1s bien, emita una carta de autorizaci=C3=B3n para que
-alguien lo reciba en mi nombre ya que no puedo ir debido a mi
-enfermedad. . Si no act=C3=BAa, el banco puede obtener el fondo confiscado
-por mantenerlo durante tanto tiempo.
+What would you suggest:
 
-Decid=C3=AD contactarlo si est=C3=A1 dispuesto e interesado en ayudarme a
-retirar este dinero del banco extranjero y luego usar los fondos para
-obras de caridad para ayudar a los menos privilegiados y tambi=C3=A9n para
-luchar contra la pandemia de Covid-19 en la sociedad. Quiero que
-maneje estos fondos fiduciarios de buena fe antes de que me suceda
-algo. Este no es dinero robado y no hay peligros involucrados, es 100%
-libre de riesgos con pruebas legales completas.
+1) Try to merge the similar interfaces in to one.
+2) Just deal with it at a lower (arm64) level?
+3) Some other way?
 
-Quiero que tome el 45% del dinero total para su uso personal, mientras
-que el 55% del dinero se destinar=C3=A1 a obras de caridad. Agradecer=C3=A9=
- su
-m=C3=A1xima confianza y confidencialidad en este asunto para lograr el
-deseo de mi coraz=C3=B3n, ya que no quiero nada que ponga en peligro mi
-=C3=BAltimo deseo. Lamento mucho si recibi=C3=B3 esta carta en su correo no
-deseado, se debe a un error de conexi=C3=B3n reciente aqu=C3=AD en el pa=C3=
-=ADs.
+Thanks,
 
-Su Amada Hermana.
-Sra. Teresa Heidi
+- Frank

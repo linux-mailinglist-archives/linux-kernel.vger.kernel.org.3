@@ -2,207 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EDB48A6AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65AE948A6B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347416AbiAKEH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 23:07:29 -0500
-Received: from foss.arm.com ([217.140.110.172]:41626 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232625AbiAKEHX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 23:07:23 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E2921FB;
-        Mon, 10 Jan 2022 20:07:23 -0800 (PST)
-Received: from [10.163.72.245] (unknown [10.163.72.245])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 563423F774;
-        Mon, 10 Jan 2022 20:07:20 -0800 (PST)
-Subject: Re: [PATCH] mm/migration: Add trace events for THP migrations
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-mm@kvack.org, Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>,
-        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org
-References: <1641531575-28524-1-git-send-email-anshuman.khandual@arm.com>
- <20220110120351.44e60aed@gandalf.local.home>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <389876c9-dc71-ccf8-1c8a-8e30b55f1b0a@arm.com>
-Date:   Tue, 11 Jan 2022 09:37:23 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20220110120351.44e60aed@gandalf.local.home>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S232625AbiAKEJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 23:09:00 -0500
+Received: from smtpbg126.qq.com ([106.55.201.22]:27449 "EHLO smtpbg587.qq.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1347448AbiAKEI5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 23:08:57 -0500
+X-QQ-mid: bizesmtp2t1641874129t0i3xrpx5
+Received: from localhost.localdomain (unknown [111.193.225.251])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 11 Jan 2022 12:08:42 +0800 (CST)
+X-QQ-SSF: 01000000002000B06000000A0000000
+X-QQ-FEAT: 835QeueZ15tztOVm6/bsUfNjyJ6gY/fZsz15qIb0Z3mmrNfg+V8Vx19fsnM1g
+        ui9IO0N3pojArQbqo7hfZd1Rp0HaEtTxuPhWDDSmuoVgDLn/qXLcC0tW8op/Q4g/vRLTDdK
+        +j2aGxgPdRyBf3pwX1zhpRiEQ9EpaKi94jBzlmUqvsKbD9PD7kDslqMHe5uoJ4o+B9qYpg7
+        T4TziNgnFghO3ecsSDkBJSvnMJ2T29yeDJ3X7CwvnWLuw/q59fsempaBuACe2SQIotlhcic
+        Q5D+gNEsdY+ceovSszwVh5VmCft3Qz9PJ28sHEukYsTFTaWN65J8iEyGpNh6HIe196aMQgo
+        R0wPrit9aDl2b6mBxYynWt11oWyaQ==
+X-QQ-GoodBg: 0
+From:   dongsheng li <lidongsheng@dayudpu.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        dongsheng li <lidongsheng@dayudpu.com>
+Subject: [PATCH] virtio_vdpa: Support surprise removal of virtio vdpa device
+Date:   Tue, 11 Jan 2022 12:08:31 +0800
+Message-Id: <20220111040831.5224-1-lidongsheng@dayudpu.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:dayudpu.com:qybgspam:qybgspam2
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When virtio vdpa device removed, the abnormal damage of the device cannot be
+perceived normally, which will cause problems similar to:
 
+Commit 43bb40c5b926 ("virtio_pci: Support surprise removal of
+virtio pci device")
 
-On 1/10/22 10:33 PM, Steven Rostedt wrote:
-> On Fri,  7 Jan 2022 10:29:35 +0530
-> Anshuman Khandual <anshuman.khandual@arm.com> wrote:
-> 
->> This adds two trace events for PMD based THP migration without split. These
->> events closely follow the implementation details like setting and removing
->> of PMD migration entries, which are essential operations for THP migration.
->>
->> Cc: Steven Rostedt <rostedt@goodmis.org>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: Zi Yan <ziy@nvidia.com>
->> Cc: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
->> Cc: John Hubbard <jhubbard@nvidia.com>
->> Cc: Matthew Wilcox <willy@infradead.org>
->> Cc: linux-mm@kvack.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->> This applies on v5.16-rc8
->>
->> Changes in V1:
->>
->> - Dropped mm, pmdp, page arguments from trace
->> - Updated trace argument names and output format
->>
->> Changes in RFC:
->>
->> https://lore.kernel.org/all/1640328398-20698-1-git-send-email-anshuman.khandual@arm.com/
->>
->>  include/trace/events/thp.h | 37 +++++++++++++++++++++++++++++++++++++
->>  mm/huge_memory.c           |  5 +++++
->>  2 files changed, 42 insertions(+)
->>
->> diff --git a/include/trace/events/thp.h b/include/trace/events/thp.h
->> index d7fbbe551841..193a555aa2ea 100644
->> --- a/include/trace/events/thp.h
->> +++ b/include/trace/events/thp.h
->> @@ -83,6 +83,43 @@ TRACE_EVENT(hugepage_splitting,
->>  		      __entry->addr, __entry->pte)
->>  );
->>  
->> +TRACE_EVENT(set_migration_pmd,
->> +
->> +	TP_PROTO(unsigned long addr, unsigned long pmd),
->> +
->> +	TP_ARGS(addr, pmd),
->> +
->> +	TP_STRUCT__entry(
->> +		__field(unsigned long, addr)
->> +		__field(unsigned long, pmd)
->> +	),
->> +
->> +	TP_fast_assign(
->> +		__entry->addr = addr;
->> +		__entry->pmd = pmd;
->> +	),
->> +
->> +	TP_printk("create pmd migration entry addr=%lx, pmd=%lx", __entry->addr, __entry->pmd)
->> +);
->> +
->> +TRACE_EVENT(remove_migration_pmd,
->> +
->> +	TP_PROTO(unsigned long addr, unsigned long pmd),
->> +
->> +	TP_ARGS(addr, pmd),
->> +
->> +	TP_STRUCT__entry(
->> +		__field(unsigned long, addr)
->> +		__field(unsigned long, pmd)
->> +	),
->> +
->> +	TP_fast_assign(
->> +		__entry->addr = addr;
->> +		__entry->pmd = pmd;
->> +	),
->> +
->> +	TP_printk("remove pmd migration entry addr=%lx, val=%lx", __entry->addr, __entry->pmd)
-> 
-> The two above are pretty much identical, except the first one has "pmd=%lx"
-> for the pmd, and the second has "val=%lx" for the pmd. I'd suggest they
-> both be the same, and then you could save memory by combining the two into
+Hence, add the ability to abort the command on surprise removal
 
-Right, both can be the same 'pmd=%lx'.
+Signed-off-by: dongsheng li <lidongsheng@dayudpu.com>
+---
+ drivers/virtio/virtio_vdpa.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> DECLARE_EVENT_CLASS() / DEFINE_EVENT() macros:
-> 
-> DECLARE_EVENT_CLASS(migration_pmd,
-> 
-> 	TP_PROTO(unsigned long addr, unsigned long pmd),
-> 
-> 	TP_ARGS(addr, pmd),
-> 
-> 	TP_STRUCT__entry(
-> 		__field(unsigned long, addr)
-> 		__field(unsigned long, pmd)
-> 	),
-> 
-> 	TP_fast_assign(
-> 		__entry->addr = addr;
-> 		__entry->pmd = pmd;
-> 	),
-> 
-> 	TP_printk("create pmd migration entry addr=%lx, pmd=%lx", __entry->addr, __entry->pmd)
-> );
-> 
-> DEFINE_EVENT(migration_pmd, set_migration_pmd,
-> 	TP_PROTO(unsigned long addr, unsigned long pmd),
-> 	TP_ARGS(addr, pmd)
-> );
-> 
-> DEFINE_EVENT(migration_pmd, remove_migration_pmd,
-> 	TP_PROTO(unsigned long addr, unsigned long pmd),
-> 	TP_ARGS(addr, pmd)
-> );
-> 
-> And then you have the same thing, but it combines the code which saves both
-> data and text.
+diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
+index 4a9ddb44b2a7..fd930409d190 100644
+--- a/drivers/virtio/virtio_vdpa.c
++++ b/drivers/virtio/virtio_vdpa.c
+@@ -374,6 +374,7 @@ static void virtio_vdpa_remove(struct vdpa_device *vdpa)
+ {
+ 	struct virtio_vdpa_device *vd_dev = vdpa_get_drvdata(vdpa);
+ 
++	virtio_break_device(vd_dev->vdev);
+ 	unregister_virtio_device(&vd_dev->vdev);
+ }
+ 
+-- 
+2.17.1
 
-But both need to print different messages. Hence I am wondering whether
-a (const char *) based message can be passed down here as well.
-
-create pmd migration entry addr=%lx, pmd=%lx
-remove pmd migration entry addr=%lx, pmd=%lx
-
-> 
-> -- Steve
-> 
->> +);
->>  #endif /* _TRACE_THP_H */
->>  
->>  /* This part must be outside protection */
->> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->> index e5483347291c..d0adc019afe0 100644
->> --- a/mm/huge_memory.c
->> +++ b/mm/huge_memory.c
->> @@ -39,6 +39,9 @@
->>  #include <asm/pgalloc.h>
->>  #include "internal.h"
->>  
->> +#define CREATE_TRACE_POINTS
->> +#include <trace/events/thp.h>
->> +
->>  /*
->>   * By default, transparent hugepage support is disabled in order to avoid
->>   * risking an increased memory footprint for applications that are not
->> @@ -3173,6 +3176,7 @@ void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
->>  	set_pmd_at(mm, address, pvmw->pmd, pmdswp);
->>  	page_remove_rmap(page, true);
->>  	put_page(page);
->> +	trace_set_migration_pmd(address, pmd_val(pmdswp));
->>  }
->>  
->>  void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
->> @@ -3206,5 +3210,6 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
->>  	if ((vma->vm_flags & VM_LOCKED) && !PageDoubleMap(new))
->>  		mlock_vma_page(new);
->>  	update_mmu_cache_pmd(vma, address, pvmw->pmd);
->> +	trace_remove_migration_pmd(address, pmd_val(pmde));
->>  }
->>  #endif
-> 

@@ -2,151 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E29748AE2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A2C48AE2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240302AbiAKNGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 08:06:02 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:49468 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236102AbiAKNGB (ORCPT
+        id S240315AbiAKNGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 08:06:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236102AbiAKNGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 08:06:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1641906361; x=1673442361;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=J+t8T0SDKaKxChCOBni42uvmLsI2U82MOlA7kFSEowQ=;
-  b=ZyvJhLdH3sqsi7M7nXTS8r23iErX50mACS8BYDtviwLFX4XiUR8+a3xm
-   lmPVuB+0lxFHWdMSHXwQE/c4SOyTBKXAejHnBvmt4jdSGxgsx2ORfxeET
-   E5F10PZ2GNqCaXkC+05LMbluOVtDRoo1svyzKlTSbA+RSrY1ezVXC0sPM
-   U3yOzByCthsOaXx8uX/Lbl8nKPlsW0T7Ri0iidgMvdoj6//XatK/4kr6U
-   KifJ5MZfvqHxGrjmgrY1JNJwjexSAdnoLeKAfq2T1tFTjnTYlDJ8Z+eck
-   tZOQ/ci/XuEIcRQ5zmo3thf03y7t+ZgX3rAvgps5jpWV/mpNtDT19jLnj
-   g==;
-IronPort-SDR: 4JZn0sd76OX9lGedEygPTjJOmxQ6e3W7XHQxX3klVTnV9nABHPhChS/UhlsbfnPOZHTu/BE97G
- XYIaQ79Pzk6VgZM8aC/c9KVB4x1SWMHqwbDeftckIIofHfknyNoGCrkKK/Vo6CvQdkaxx8/0e+
- vrvaBy++A/Knh8XBvKkXWhbFJ+i/TiFDQ3VlyvE86eV6eZypS3k+J1Z44qb5gddIVsur2rxjYp
- eTSvf8rWBdOvNhuYHJYw+NAVMTPNwxbcu5rCY2o06IgLS+mK4Kd2jshV+h0MXEScLisV1R6xkE
- bipdjVkHUwoHHgwYGb2nao0z
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="145039025"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Jan 2022 06:06:00 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 11 Jan 2022 06:06:00 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 11 Jan 2022 06:05:58 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <nicolas.ferre@microchip.com>
-CC:     <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>,
-        <robh+dt@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH] ARM: dts: at91: sama7g5: Add NAND support
-Date:   Tue, 11 Jan 2022 15:05:56 +0200
-Message-ID: <20220111130556.905978-1-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 11 Jan 2022 08:06:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9326FC06173F;
+        Tue, 11 Jan 2022 05:06:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40150B81AB4;
+        Tue, 11 Jan 2022 13:06:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A54CEC36AF4;
+        Tue, 11 Jan 2022 13:06:36 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="gJBCKMH1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1641906391;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YUgye/d6jt0DNu369eV2V7tQU7bwWVb+qYvWTJEDDUk=;
+        b=gJBCKMH165sQrZK91jVMvJlAjIAXskVGtOctYi/ddmqiXUPOqgVgJQ7dcNUDFw5IINbLhZ
+        S+3cTpwMqr6aE3go9Ru/ZgNWUWbVyo5P1L8dj4dO8mwJTtNDqXLRyuSAZ2ySH2JyEjcD98
+        zKtTLtXqh6MLAQHy0K/2PpMEj2nGDCI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f19b60fb (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 11 Jan 2022 13:06:31 +0000 (UTC)
+Received: by mail-yb1-f175.google.com with SMTP id p187so4561848ybc.0;
+        Tue, 11 Jan 2022 05:06:31 -0800 (PST)
+X-Gm-Message-State: AOAM532KDojvsFvb8Rgb8Wd3OZKha31+f+Es4F9ssIMpBiUJ/eOjgCH3
+        Ia6NCre9pCC+H+/FMRUIE09mDmATctyhBK6aHqA=
+X-Google-Smtp-Source: ABdhPJzPQZrE87XNNZNA2ikIc68treEqUvOMcyKN25afy+XYYUuJt2NLhxrqhLB5H05NAfIMwF2i/KDvCg+JjDvOOrM=
+X-Received: by 2002:a25:f90d:: with SMTP id q13mr6045343ybe.32.1641906388088;
+ Tue, 11 Jan 2022 05:06:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
+ <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com>
+ <20211210014337.xmin2lu5rhhe3b3t@valinor> <20220110132349.siplwka7yhe2tmwc@valinor>
+ <CAHmME9oSK5sVVhMewm-oVvn=twP4yyYnLY0OVebYZ0sy1mQAyA@mail.gmail.com>
+ <YdxCsI3atPILABYe@mit.edu> <CAHmME9oRdoc3c36gXAcmOwumwvUi_6oqCsLmFxRP_NDMz_MK1Q@mail.gmail.com>
+ <Ydxu+KS5UkQ6hU9R@mit.edu> <Ydx7D3H0PS0Zs9/B@sol.localdomain>
+ <CAHmME9pe-DxTcFcMtsNnLPcccoY+0gEysivZQszAusH1M8ThmA@mail.gmail.com>
+ <YdyNxJzdBmSSEtDC@mit.edu> <CAHmME9rmWBA02SyeFiiGZ8=kydYJSJwcYPscBrTBzoXMEPH9sQ@mail.gmail.com>
+ <e6fac6ab-07eb-4d8c-9206-bacf6660a7cf@www.fastmail.com>
+In-Reply-To: <e6fac6ab-07eb-4d8c-9206-bacf6660a7cf@www.fastmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 11 Jan 2022 14:06:17 +0100
+X-Gmail-Original-Message-ID: <CAHmME9qw8hbbE2y56t7zygedofDDDLoPUxYWGZB_Kae0ipFARA@mail.gmail.com>
+Message-ID: <CAHmME9qw8hbbE2y56t7zygedofDDDLoPUxYWGZB_Kae0ipFARA@mail.gmail.com>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Simo Sorce <simo@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrey Walton <noloader@gmail.com>,
+        Stephan Mueller <smueller@chronox.de>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>,
+        Eric Biggers <ebiggers@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add NAND support. The sama7g5's SMC IP is the same as sama5d2's with
-a slightly change: it provides a synchronous clock output (SMC clock)
-that is dedicated to FPGA usage. Since this doesn't interfere with the SMC
-NAND configuration, thus code will not be added in the current nand driver
-to address the FPGA usage, use the sama5d2's compatible and choose not to
-introduce dedicated compatibles for sama7g5.
-Tested with Micron MT29F4G08ABAEAWP NAND flash.
+Hi Andy,
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
-The patch depends on the following patch:
-https://lore.kernel.org/linux-clk/20220111125310.902856-1-tudor.ambarus@microchip.com/T/#u
+On Tue, Jan 11, 2022 at 2:44 AM Andy Lutomirski <luto@kernel.org> wrote:
+> So let=E2=80=99s solve it for real.  Have a driver (in a module) that
 
- arch/arm/boot/dts/sama7g5.dtsi | 55 ++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+Um, let's not. This really isn't something the kernel needs to solve
+here at all. There's a viable userspace solution. I see that the
+discussion of something finally slightly technical (as opposed to just
+compliance BS) has nerd sniped you a bit, but keep in mind what the
+actual overall picture is. This isn't something that needs to be done.
+My little CUSE thing (which I'm happy to develop out a bit more, even)
+has the intent of fulfilling a compliance checkbox and nothing more.
 
-diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
-index eddcfbf4d223..7972cb8c2562 100644
---- a/arch/arm/boot/dts/sama7g5.dtsi
-+++ b/arch/arm/boot/dts/sama7g5.dtsi
-@@ -75,6 +75,45 @@ soc {
- 		#size-cells = <1>;
- 		ranges;
- 
-+		nfc_sram: sram@600000 {
-+			compatible = "mmio-sram";
-+			no-memory-wc;
-+			reg = <0x00600000 0x2400>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x00600000 0x2400>;
-+		};
-+
-+		nfc_io: nfc-io@10000000 {
-+			compatible = "atmel,sama5d3-nfc-io", "syscon";
-+			reg = <0x10000000 0x8000000>;
-+		};
-+
-+		ebi: ebi@40000000 {
-+			compatible = "atmel,sama5d3-ebi";
-+			#address-cells = <2>;
-+			#size-cells = <1>;
-+			atmel,smc = <&hsmc>;
-+			reg = <0x40000000 0x20000000>;
-+			ranges = <0x0 0x0 0x40000000 0x8000000
-+				  0x1 0x0 0x48000000 0x8000000
-+				  0x2 0x0 0x50000000 0x8000000
-+				  0x3 0x0 0x58000000 0x8000000>;
-+			clocks = <&pmc PMC_TYPE_CORE PMC_MCK1>;
-+			status = "disabled";
-+
-+			nand_controller: nand-controller {
-+				compatible = "atmel,sama5d3-nand-controller";
-+				atmel,nfc-sram = <&nfc_sram>;
-+				atmel,nfc-io = <&nfc_io>;
-+				ecc-engine = <&pmecc>;
-+				#address-cells = <2>;
-+				#size-cells = <1>;
-+				ranges;
-+				status = "disabled";
-+			};
-+		};
-+
- 		securam: securam@e0000000 {
- 			compatible = "microchip,sama7g5-securam", "atmel,sama5d2-securam", "mmio-sram";
- 			reg = <0xe0000000 0x4000>;
-@@ -181,6 +220,22 @@ tcb1: timer@e0800000 {
- 			clock-names = "t0_clk", "t1_clk", "t2_clk", "slow_clk";
- 		};
- 
-+		hsmc: hsmc@e0808000 {
-+			compatible = "atmel,sama5d2-smc", "syscon", "simple-mfd";
-+			reg = <0xe0808000 0x1000>;
-+			interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&pmc PMC_TYPE_PERIPHERAL 21>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges;
-+
-+			pmecc: ecc-engine@e0808070 {
-+				compatible = "atmel,sama5d2-pmecc";
-+				reg = <0xe0808070 0x490>,
-+				      <0xe0808500 0x200>;
-+			};
-+		};
-+
- 		qspi0: spi@e080c000 {
- 			compatible = "microchip,sama7g5-ospi";
- 			reg = <0xe080c000 0x400>, <0x20000000 0x10000000>;
--- 
-2.25.1
-
+Jason

@@ -2,178 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D706548B635
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 819A048B632
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:55:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350270AbiAKS4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:56:14 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33596 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1350286AbiAKSzy (ORCPT
+        id S1350274AbiAKSzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:55:46 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54620 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350250AbiAKSzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:55:54 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20BHRk48018380;
-        Tue, 11 Jan 2022 10:55:39 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=Tn8fDBTZXSj3cbksFu1mnhx0sJxlIHvVbgi47Mq/0BY=;
- b=Qg+EB185rxoAjFVCdmkHxvAX6usqOfgtfBXY+MlmPn7ZAyaZ1oKg3RDibHlLeEJdWaEx
- HooDe+DJNUHsM7XOIXgTYLtpHXxuD9Nv6hj9GvBitZ9B2zfd5jR9XDPqUrZeoef1Wkmb
- DSTegkGq7G2ltohaXCVlihvV1wnmpFWXB0o= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dgt008854-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 11 Jan 2022 10:55:39 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 11 Jan 2022 10:55:37 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jtvjqGFz/AJNAX/BmT0VQ2r8v9E7vfZEQkfZ9xmFUPJgAT1qLF5x+kag12kqd/4B5B/vaaojlTw5UpGIXJ0x9aENe0arvs34l2QjbtBEfV7vMIn37dw3W2Z9j+3hhIWx/t8DPk+Aj6uVGspRFJxtXTOp+qladElKTxqU91MVVjCxW3P4UyaVVMbvOlklnyDKj0BDyYkfzJZguqhfFVpiCCCDVDn3c/nzNBpr5oqLEXX2iVHsHJjOaZDoUknfgl1SqZP1DiMd4WFt9fuyJ6K73ahQ8rA5bgyjA6kGgMZ0lsVIlzkf5qGbstRhouGpUJGvAArV3+BOIWXgIXdfFvIHxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Tn8fDBTZXSj3cbksFu1mnhx0sJxlIHvVbgi47Mq/0BY=;
- b=b0IWWNi19bWBHb15xD05UBLldgxpnhOpLFaQPU5CAG070XGXk9It35Tl+VAp9d2tXbZZfrpfiRGbAKRzIOUIbpoa0v5BGnEPx4kT+PGeKyVZsbNa1kkm38YfpmsWzO2yhP9iOpLvvPLj61SKCuWuFSs7lKuJ/pqo1WXEUnHF7FW1bX6JcnO6uz1VRCJrBGxaz+w23Q5UDMcsa4DehFpbeLIKruZ52P+7J3+6J8mCZSEbzvxOcB96J8DsEVvquqTbBFDfMlwBb7CG4G2JtW4M5kvGiEKuKGJxIdZIKUY/8wdE/u/DbvlTHQaZ+Qll/WWsaHYB9eTZP+wKIxjhRJ+Qhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
- by BY3PR15MB4802.namprd15.prod.outlook.com (2603:10b6:a03:3b5::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Tue, 11 Jan
- 2022 18:55:36 +0000
-Received: from BYAPR15MB4136.namprd15.prod.outlook.com
- ([fe80::c4e9:672d:1e51:7913]) by BYAPR15MB4136.namprd15.prod.outlook.com
- ([fe80::c4e9:672d:1e51:7913%3]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
- 18:55:36 +0000
-Date:   Tue, 11 Jan 2022 10:55:31 -0800
-From:   Roman Gushchin <guro@fb.com>
-To:     Muchun Song <songmuchun@bytedance.com>
-CC:     <willy@infradead.org>, <akpm@linux-foundation.org>,
-        <hannes@cmpxchg.org>, <mhocko@kernel.org>,
-        <vdavydov.dev@gmail.com>, <shakeelb@google.com>,
-        <shy828301@gmail.com>, <alexs@kernel.org>,
-        <richard.weiyang@gmail.com>, <david@fromorbit.com>,
-        <trond.myklebust@hammerspace.com>, <anna.schumaker@netapp.com>,
-        <jaegeuk@kernel.org>, <chao@kernel.org>,
-        <kari.argillander@gmail.com>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-nfs@vger.kernel.org>, <zhengqi.arch@bytedance.com>,
-        <duanxiongchun@bytedance.com>, <fam.zheng@bytedance.com>,
-        <smuchun@gmail.com>
-Subject: Re: [PATCH v5 03/16] fs: introduce alloc_inode_sb() to allocate
- filesystems specific inode
-Message-ID: <Yd3SoypOW0EBZj6K@carbon.dhcp.thefacebook.com>
-References: <20211220085649.8196-1-songmuchun@bytedance.com>
- <20211220085649.8196-4-songmuchun@bytedance.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20211220085649.8196-4-songmuchun@bytedance.com>
-X-ClientProxiedBy: MW4PR04CA0324.namprd04.prod.outlook.com
- (2603:10b6:303:82::29) To BYAPR15MB4136.namprd15.prod.outlook.com
- (2603:10b6:a03:96::24)
+        Tue, 11 Jan 2022 13:55:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CF356176D;
+        Tue, 11 Jan 2022 18:55:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8210C36AE3;
+        Tue, 11 Jan 2022 18:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641927339;
+        bh=zojY8MTCnk8nwBqZ+pXLnQcYipINl6Y5Z/qNYwqhFRc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=q6rIpxYlfnP/5Kr6nyyWLHpNrmEsfDvrClt4rm7Sxa+1/jl/V84qxepgXn6Z1rAuV
+         D4gwcA5ZtoWGkG6HLcaC+VisaRHHhwJbOIdSmEU6qKbp+oWzrfFQi8OP1ZmfgK8KGT
+         mtMF+0rbkAPCQKXPXwlIXWrhLX2nDzaohYCxuShmtjY1QZGoVnUQdnhDCk4RGeYGCH
+         JqWvFMyFdFXK+NlxHa/2xaj+Fa911Zg0OouSpg7ZOaBvPfXIhBlQBskNawWvNYPpEF
+         I8pNitn+N71ZQzXYH4yFJvtFiD07SMzFThKa0m1x6j1pnwBd5t6JwSHMP9A3hOWbgW
+         quz7Pk34Z32wA==
+Date:   Tue, 11 Jan 2022 12:55:38 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Yao Hongbo <yaohongbo@linux.alibaba.com>
+Cc:     bhelgaas@google.com, lukas@wunner.de,
+        zhangliguang@linux.alibaba.com,
+        alikernel-developer@linux.alibaba.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [RFC PATCH v2] PCI: Waiting command completed in
+ get_port_device_capability()
+Message-ID: <20220111185538.GA152548@bhelgaas>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: df22f2f7-1484-45e4-1f6f-08d9d533f38f
-X-MS-TrafficTypeDiagnostic: BY3PR15MB4802:EE_
-X-Microsoft-Antispam-PRVS: <BY3PR15MB4802C7E24906993127F36CD9BE519@BY3PR15MB4802.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xxv1yOuar9HgdHQwjt9JqGKbzzLKsmVbq4G7i00PwG1vFsQnZZMk8rxBj0uiNcCiIP7BK/m/2xG1tThUK3ThBPfV+LxgUFh7dY2PN07Y5YMtLWvahi/hI0jBcWlS1FDWV6JtFv6ArTsDWWGVwgDfZffOxCqrgaBv7e7VY8GvPoCG8OWm28YwRVW1MGz1ACm4eoHBQfBszQ8cZHcD5HFYvSe8MiWmg76SkcRfeWhaBz/1G9QoaMQlp8EkaPVBb31VexGxLdTGPex2UMDFt4KrHPxkJlgWiVyK+y8jzAyhCo7Ku3vZ/zYULrG66kzuL8lYYynwopjekjevtQPIpXHhk5EnncHGFCggSxALePiBY45vK9gPNvlAbtuEfU8ZPOOTo+4cc6imMoL6aef3rDz5sBfgs6CbgxVfbN2fvQRjM+48BhbWefaUAAQ9XyK2hJjMcbR9pTQTUs9/AWwnLjtmU8TUXjBalX2pAXcsEWIdPTlWnDaHt4oA6zCoeoVZBoImC8g0yDoZC7Yb+N0uAfkQdNKQbypLkYINlM2SMHMFQs60NqV0iStQ97b2R9J2BsA1+2FQxldilT+kJ3mr06MISy9ThAN3ENePq62Z9mg0dOe58vlRKkDN1zznLWGfBBqqP4w48VL7JBtCRMwv2Y7fhg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(83380400001)(6506007)(52116002)(316002)(7416002)(6666004)(6916009)(86362001)(8676002)(66946007)(5660300002)(508600001)(66476007)(2906002)(6512007)(8936002)(66556008)(186003)(9686003)(6486002)(4326008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gTcTuUujrtvhFrQQcuscoDF3V9YKLIj8gYosiecpiULsZ7TXJqKWfX+/oGEc?=
- =?us-ascii?Q?1h9oKrDLkZMVYHS+0tUzqS7gnHu4e4N9wWUP9enEdIloV8wyAbdioxqSHox9?=
- =?us-ascii?Q?xQT/cIGUqrFPHXsqoV5ksGTjuWl7fBsvRc4qAWhw2T5IF4yyzusjsBP05Dzj?=
- =?us-ascii?Q?4xfaG62+Bv0OePMHuV41VnOYBmESYJUf1AetABhdDMnUKZT8M0SBDuB1Io67?=
- =?us-ascii?Q?twFlNkZtx1rpcXRjr2J2Ua497mCLIVfbtSzbHFcENFW/mNiUCJfDA9oxmSkU?=
- =?us-ascii?Q?O+3oeBcPcaRt8pVqT9ZhcbbLL2Dik4sEs91zJX3Cgqij/mZi28emV7BmXh2W?=
- =?us-ascii?Q?zQ2yGhpilejMplDftDOtoUKzm+gnS2F2hBU5n+QXJbwbTp963tYPfuUHFHTV?=
- =?us-ascii?Q?lZ+OVjMXRMY24iPfnMSU1ynGryZvG+9Rw+BpMGjxCCEAlG+MX4wX80eb7oKN?=
- =?us-ascii?Q?h+VpWD+8upFBAQB3kLdA29FdNbN4bbrxFtB25IQxH4paD8W7PbBh5WYMEe7t?=
- =?us-ascii?Q?I12V90FVniOhw1fUFSr5maCAkJK8antjqBiA3hB3qPgq7nOvxZpFQSzP3+V+?=
- =?us-ascii?Q?alLys7afW2SYRrr41S+8GhzMQuig6vTFOcCK6LARgxiskYVD5LhQ4tbH5t21?=
- =?us-ascii?Q?4TEBr6EKi8ptnQhtVcuxlIgdDMQmy60QbH96PxB6YlF9hpl17AXB26zh2N8l?=
- =?us-ascii?Q?4v6dVw27TsNAI4UwauPLpNYdODnTf4vrsYdzR+G0h9ciL+TewTB9FJS/akGR?=
- =?us-ascii?Q?jDYibLa3by61MQG59mYY5BfAjkj1ZCuQiVDZYTFOw0+Z1Bk1HkjSxok4eA4g?=
- =?us-ascii?Q?b9NVtU9NKZRR6X3JOH6sU2OSOXEqZUOXybKJIycTbC1/hHRTZ4tmzlc95NMV?=
- =?us-ascii?Q?Sq2HMFRFhd7iIk0zG83zfjksSFXCrSAfi9og4jLOko0FK5AAdiPBLd7JoT3r?=
- =?us-ascii?Q?na4Q5PaQRm+H6fc7wMaYl6GmkOxrnm8qW4XIHI81aWWVJDWLOYalqBE46Oxv?=
- =?us-ascii?Q?S04qU0y/G5X6Kzz8fJzMSH13s3WC+nxDjoiGVXueJzyn+Novahkgwbd/5bin?=
- =?us-ascii?Q?C2KIv5p02Vs+NQX0zocc0Rit16Gc2rlcmH38cPmOoyDYBdVPGKvshOnQhdiB?=
- =?us-ascii?Q?Y7z26hTlryo4S61UXkWTxViRUjN0l5QgkfvuQbcVlxI/gc8IT8lCkG7U6NdV?=
- =?us-ascii?Q?d9Uzy9H0TO+0sLhLEaJ9IXRpwuII+dtEBZAqbYpr8iTYQSnuPQN5Usds7qkD?=
- =?us-ascii?Q?x7dCYcOUJW/HbESa64GwfMgf6eNM2FmWsxK+ntSoyihSoPjYzUKjQGGOW6P6?=
- =?us-ascii?Q?oK1PkUNE6ZLLEh909agSW5Q3b5R3QQVOVRpjwK90QKCz7qK2H9rapG9SZ0dF?=
- =?us-ascii?Q?4oXbMTZqEukGyHcjH3OzEtJ9tV8oVjdDZ8p7gjYuMIxNxn8MLnQV47RMv5xL?=
- =?us-ascii?Q?JCwbpTKE6TizSE7KGH30xWGN8U8MRcig0PindyJhJhB4J3n/38HY5KAru0h8?=
- =?us-ascii?Q?nyy6N/6d9vN9ZIjcZFt5oAOhdf0Y2X0MJbGxVw+4gLmZdEa/ETd2YWLs4iX0?=
- =?us-ascii?Q?wP8Z8IAwa1uDGwsqy41jWXmTLagojfijYh+/tJe5?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: df22f2f7-1484-45e4-1f6f-08d9d533f38f
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 18:55:35.8739
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A9ZJ2Qf85+BXtRib8AvGJC3XGzHJsPfoSt/cY+ZQf/XXQWC9pCZsWXocRq83u0gR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR15MB4802
-X-OriginatorOrg: fb.com
-X-Proofpoint-GUID: CgMtw1C0EAhOQVeZ4eq5M4uzTBbpNE00
-X-Proofpoint-ORIG-GUID: CgMtw1C0EAhOQVeZ4eq5M4uzTBbpNE00
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 impostorscore=0
- suspectscore=0 spamscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201110101
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1641525769-113099-1-git-send-email-yaohongbo@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 04:56:36PM +0800, Muchun Song wrote:
-> The allocated inode cache is supposed to be added to its memcg list_lru
-> which should be allocated as well in advance. That can be done by
-> kmem_cache_alloc_lru() which allocates object and list_lru. The file
-> systems is main user of it. So introduce alloc_inode_sb() to allocate
-> file system specific inodes and set up the inode reclaim context
-> properly. The file system is supposed to use alloc_inode_sb() to
-> allocate inodes. In the later patches, we will convert all users to the
-> new API.
+[+cc Lukas, Rafael (in case you have any recollection of 2bd50dd800b5)]
+
+On Fri, Jan 07, 2022 at 11:22:49AM +0800, Yao Hongbo wrote:
+> According to the PCIe specification Revision 5.0, section
+> 7.5.3.11 (slot Status Register), if Command Complete notification
+> is supported,  a write to the slot control register needs to set
+> the command completed bit, which can indicate the controller is
+> ready to receive the next command.
 > 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> However, before probing the pcie hotplug service, there needs to set
+> HPIE bit in the slot ctrl register to disable hotplug interrupts,
+> and there is no wait currently.
+> 
+> The interval between the two functions get_port_device_capability() and
+> pcie_disable_notification() is not long, which may cause the latter to
+> be interfered by the former.
+> 
+> The command complete event received by pcie_disable_notification() may
+> belong to the operation of get_port_device_capability().
+
+Yes, looks like a potential problem.
+
+> Signed-off-by: Liguang Zhang <zhangliguang@linux.alibaba.com>
+> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
 > ---
->  Documentation/filesystems/porting.rst |  5 +++++
->  fs/inode.c                            |  2 +-
->  include/linux/fs.h                    | 11 +++++++++++
->  3 files changed, 17 insertions(+), 1 deletion(-)
+>  drivers/pci/pcie/portdrv_core.c | 40 ++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 38 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/filesystems/porting.rst b/Documentation/filesystems/porting.rst
-> index bf19fd6b86e7..c9c157d7b7bb 100644
-> --- a/Documentation/filesystems/porting.rst
-> +++ b/Documentation/filesystems/porting.rst
-> @@ -45,6 +45,11 @@ typically between calling iget_locked() and unlocking the inode.
+> diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
+> index bda6308..ec2088b6e 100644
+> --- a/drivers/pci/pcie/portdrv_core.c
+> +++ b/drivers/pci/pcie/portdrv_core.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/string.h>
+>  #include <linux/slab.h>
+>  #include <linux/aer.h>
+> +#include <linux/delay.h>
 >  
->  At some point that will become mandatory.
+>  #include "../pci.h"
+>  #include "portdrv.h"
+> @@ -190,6 +191,42 @@ static int pcie_init_service_irqs(struct pci_dev *dev, int *irqs, int mask)
+>  	return 0;
+>  }
 >  
-> +**mandatory**
+> +static void pcie_port_disable_hp_interrupt(struct pci_dev *dev)
+> +{
+> +	u16 slot_status;
+> +	u32 slot_cap;
+> +	int timeout = 1000;
 > +
-> +The foo_inode_info should always be allocated through alloc_inode_sb() rather
-> +than kmem_cache_alloc() or kmalloc() related.
-
-I'd add a couple of words on why it has to be allocated this way.
+> +	pcie_capability_clear_word(dev, PCI_EXP_SLTCTL,
+> +			PCI_EXP_SLTCTL_CCIE | PCI_EXP_SLTCTL_HPIE);
 > +
->  ---
+> +	/*
+> +	 * If the command completed notification is not supported,
+> +	 * we don't need to wait after writing to the slot ctrl register.
+> +	 */
+> +	pcie_capability_read_dword(dev, PCI_EXP_SLTCAP, &slot_cap);
+> +	if (slot_cap & PCI_EXP_SLTCAP_NCCS)
+> +		return;
+> +
+> +	do {
+> +		pcie_capability_read_word(dev, PCI_EXP_SLTSTA, &slot_status);
+> +		if (slot_status == (u16) ~0) {
+> +			pci_info(dev, "%s: no response from device\n",  __func__);
+> +			return;
+> +		}
+> +
+> +		if (slot_status & PCI_EXP_SLTSTA_CC) {
+> +			pcie_capability_write_word(dev, PCI_EXP_SLTSTA, PCI_EXP_SLTSTA_CC);
+> +			return;
+> +		}
+> +
+> +		msleep(10);
+> +		timeout -= 10;
+> +	} while (timeout >= 0);
+> +
+> +	pci_info(dev, "Timeout on hotplug disable interrupt!\n");
+> +}
+> +
+>  /**
+>   * get_port_device_capability - discover capabilities of a PCI Express port
+>   * @dev: PCI Express port to examine
+> @@ -213,8 +250,7 @@ static int get_port_device_capability(struct pci_dev *dev)
+>  		 * Disable hot-plug interrupts in case they have been enabled
+>  		 * by the BIOS and the hot-plug service driver is not loaded.
+>  		 */
+> -		pcie_capability_clear_word(dev, PCI_EXP_SLTCTL,
+> -			  PCI_EXP_SLTCTL_CCIE | PCI_EXP_SLTCTL_HPIE);
+> +		pcie_port_disable_hp_interrupt(dev);
 
-Reviewed-by: Roman Gushchin <guro@fb.com>
+This originally came from 2bd50dd800b5 ("PCI: PCIe: Disable PCIe port
+services during port initialization"), where we disable hotplug
+interrupts in case the hotplug driver is not available.
 
-Thanks!
+In general, I think the OS should not be responsible for disabling
+interrupts for feature X.  The OS may predate feature X and may not
+know anything about X at all.  The power-on default for interrupts
+related to X should be "disabled" (as it is for HPIE and CCIE), and if
+firmware enables them, it should disable them or arrange to handle
+them itself before handing off to the OS.
+
+I don't know whether 2bd50dd800b5 was prompted by spurious hotplug
+interrupts or not.  If it was, I think we were seeing a firmware
+defect or possibly a pciehp initialization issue.
+
+At the time of 2bd50dd800b5, we always cleared HPIE and CCIE here.
+
+But now, on ACPI systems, we only clear HPIE and CCIE here if we *do*
+have the hotplug driver (because host->native_pcie_hotplug only
+remains set if we have been granted control via _OSC, and we only
+request control when CONFIG_HOTPLUG_PCI_PCIE is enabled).  On these
+systems, we should be able to remove this disable code because pciehp
+will do whatever it needs.
+
+For non-ACPI systems, bridge->native_pcie_hotplug will always be set,
+so we will clear HPIE and CCIE here and then (if
+CONFIG_HOTPLUG_PCI_PCIE is enabled) initialize pciehp soon after,
+which may be a problem as you describe.
+
+What kind of system are you seeing the problem on?  It seems like it
+should be safe to drop the HPIE and CCIE disable here for ACPI
+systems.  And *likely* we could do the same for non-ACPI systems,
+though I have no experience there.
+
+Bjorn

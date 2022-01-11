@@ -2,194 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDB648A4C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 02:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C603848A4CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 02:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346130AbiAKBLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 20:11:19 -0500
-Received: from mail-bn8nam11on2077.outbound.protection.outlook.com ([40.107.236.77]:2221
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        id S1346136AbiAKBLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 20:11:43 -0500
+Received: from mail-eopbgr80092.outbound.protection.outlook.com ([40.107.8.92]:8160
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S243256AbiAKBLS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 20:11:18 -0500
+        id S243256AbiAKBLm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 20:11:42 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jJX9ur+Tt9x9o3QJLUtXEZ3hoVr6WfGap9O56wnY2jDr52P479Z4+swHnA/RV33yDv7VPudyAoN9Qheme637dguBcAw0+h544xGyNx9x0cPUlrJ4+fffC72oOm7HmC8UkEUPmA5ZzFp8xqOTruFUTkFtbpcc5wjLd+AZhCEEXsm5gxDjfIvtfNbv2pn6RCfQjbt4azu/8Ruq9hwgJB3vMt2sccnXPwqT6y3xPK+Yk4yiunFqy5JGr7S/ky8CJTkdYnnyNxJk9eGaodgas+tT0X0o0iyaEk4PTUbv/DD+UTcaPLzMm8PwlJdW8AGgf1F6Z+iRE3mCwnwYo4kMV8R4OQ==
+ b=Y5b6CUPflUl6ywDs7nYZ0kU7BQWsPFFQ4RMdso43YzSUy4T4NGEytiyvYYQhD0A+xmzP8ktP5LqvYrw99UmJNKqxFIJjROL0o5E06XCz2y8vJLngFAZcHbw+5Ib9MlEslwGONKQZdlyeeukUGzSJBy4Ncwmykr2KFL4ltZBbKHAKRaEHnIeRYdDhI+43iNjWZ3nLirYPFurRn1IHykTmtjZxlof2zvSe0sYiXBCD41kcZn8yQyVmE9aBTflh9FaXxKUbiVG+LJjvzEvX89T1Brhy3JrMQn2didsIlKC58CAY5kZbO1zhIrbmLuuYHLW49kHmvbVkoqNEnDPUMcK+dg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f1CuogxryWITDKxQkmWF72xL+mix5zrNwNisPgmxkeY=;
- b=CHAb5Dk8cKexuEl2UH00k9CYa9WuHrwE8ucmg2Ows/C3lk6/vb9+pOS7tYoVxqZpoDlNwHSZe9B/6E0meepe3vDU7o2+wrDmGbj/XZWXdcf1NkBD4QMSFBvzixMGrSYnsEk8s/VbLBLWTWucijYCxdppGl88Hq3oHxnIGjekDyRKdP8epO5SAqm/j6Ph2+geaaamJ6DaYC/KzeX9fQS9HRa705L7UMLZ9O5AdY8PuXdv6wYF2bqZ+rzTG7wu65C7Jjv9AuenUF7bbNw8JI40r4P/1hjLY1PGWGAR64TOtEctR9QrZyRjTMlfTPMmGE46yelgPKcQMMPcIOLkQ813lg==
+ bh=XIGQK451HMQyekE/K5MaAjhokeUWC3JPhAPGa7cT7sE=;
+ b=kpo4i/G0wJkFi6uPBrHodKukVDGD6/nlCBFCG6X/M7aWoCpPua+zX9tUODy2JAlKSYi/oe1Zl+Ijyf4fMoMk6YXjHdR3oECNCrRhr3rcPAAXfz0+m1X0Q6EzL1tW4i32rLYUFUc1djKogzLcGNKygzBJ1zCnbTE5Icn9b0qSbnLbbh58MX7eUpJ4OSjz0zn3PavzIUwcmzy41QNSzuyxgQPe12rv65F+hTyGyfDlW7HIGXhY1w4jwIXoxy710+pUkuTRbRbzXNkdlhk/D3OdXgQ9QLEEqaf9/ZEDCbH0oAQrbKd1mOAwTQsum4el8dkhL8T6MbVrWYve9K6oI9VUKQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f1CuogxryWITDKxQkmWF72xL+mix5zrNwNisPgmxkeY=;
- b=neEYbsG8appQOuzAb/gQxpeCDHKJwSuJjflOffmFJ39MJEbITNWBMXhcaV42JZZg7ulKaaO926MjEdEdNTfd1exYD/7/LapKqDMfhN2qp9H8PAR9cpNgHdWVExN8jk+8iWDXVMu8sKix+mAlb3E01BQmh8/ICJfnigfL3YyWlHW8Mfl/YpCOJ3gmc8Z7QcdN4mQY9EBPDbXHMzOFW2FL8LhwAKEXKNlFNogpjaZvziO/AFuNzWIZj/NQs+cEYuZwz5bE+qQLvJf21/562GnS6LNGVGoTNff+oqYlEIMpyljPWg4DE0GV+TX0Bs1Y9n9aSNfDlHkPjr+qDOOOqhWx1Q==
+ bh=XIGQK451HMQyekE/K5MaAjhokeUWC3JPhAPGa7cT7sE=;
+ b=fyDXiso/ttU//G/F7ITTK6CSqtKM34dxaBNAIhlefsN+keJwxmAtltKjCwY2vUiTN6FdLqO61Y3Kt5kOl/HWSX2faAuAaGq0QNzbTcsCe0xiv/6V2tvQ43ce1LV/a/LEtdnzMPssmaLDs117XBXjSC35LpbUrSsR0JjZIHN1ogs=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by BY5PR12MB4853.namprd12.prod.outlook.com (2603:10b6:a03:1da::18) with
+ header.d=none;dmarc=none action=none header.from=plvision.eu;
+Received: from AM9P190MB1122.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:262::24)
+ by AM0P190MB0753.EURP190.PROD.OUTLOOK.COM (2603:10a6:208:195::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Tue, 11 Jan
- 2022 01:11:16 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::8496:16fd:65c5:4af7]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::8496:16fd:65c5:4af7%4]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
- 01:11:16 +0000
-Message-ID: <2eabe1ff-821b-a0b4-9585-db72d2f1a9b4@nvidia.com>
-Date:   Mon, 10 Jan 2022 17:11:14 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v2 02/28] gup: Remove for_each_compound_head()
-Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-References: <20220110042406.499429-1-willy@infradead.org>
- <20220110042406.499429-3-willy@infradead.org>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20220110042406.499429-3-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR05CA0058.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::33) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Tue, 11 Jan
+ 2022 01:11:40 +0000
+Received: from AM9P190MB1122.EURP190.PROD.OUTLOOK.COM
+ ([fe80::b93b:8d91:d56a:8256]) by AM9P190MB1122.EURP190.PROD.OUTLOOK.COM
+ ([fe80::b93b:8d91:d56a:8256%8]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
+ 01:11:40 +0000
+From:   Yevhen Orlov <yevhen.orlov@plvision.eu>
+To:     netdev@vger.kernel.org, stephen@networkplumber.org, andrew@lunn.ch,
+        idosch@idosch.org
+Cc:     Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
+        Yevhen Orlov <yevhen.orlov@plvision.eu>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] net: marvell: prestera: Fix deinit sequence for router
+Date:   Tue, 11 Jan 2022 03:11:29 +0200
+Message-Id: <20220111011129.5457-1-yevhen.orlov@plvision.eu>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: FR3P281CA0045.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:4a::16) To AM9P190MB1122.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:262::24)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fd2cd0bb-f656-4aca-a5c4-08d9d49f442e
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4853:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB485342F5F8FC47676F38CA1CA8519@BY5PR12MB4853.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:153;
+X-MS-Office365-Filtering-Correlation-Id: 7de175bc-14a8-47d2-cd26-08d9d49f52a1
+X-MS-TrafficTypeDiagnostic: AM0P190MB0753:EE_
+X-Microsoft-Antispam-PRVS: <AM0P190MB0753C360E7A7A3AF4CCC7E6293519@AM0P190MB0753.EURP190.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:341;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KpfNrotObTYEaSmHLm9Jwo8+FUSl9qgVdZjenAd+xfEMyo5kSwzCzewEeu/3Pv2QQGeuWaJ4oghEXJRQUrv1Qcq7fTVCdPA1GIRYzK90+gRmXOXbt8T+42F6DMRw8pEvQer1bQNWzfTAYoDpQMhBaGA9kR3KAg0OmEXGsS9JuurY1Ebg8XxybkPvo5Asuv/paPnWRTdNiEcMPe30vZJWm81L1luAJlWaZQ+sT00RJXx/PRFWg9QlwVa4JEqN1F9bVBlDMCd7Kj1nclgUkG/3hkfUbpq4vVhjFG3Wov5g4Txv8gotPS6LFW/FryOEsppjKGiZfA6i8aEOrlAuEb1zQXrL0qviKLQNPUp3u6X2RkOx5E8W+jyISef+NR3orXN5eCS5SWUHO/TQvVVM600kPbmBcqurX0KO57uO2CQHP08VVyJ7jkUxA4JlGhd8gWdIgrea4BtX3MEmmvyAXQs1J/1sCN0X3M4A+LILgyZLA8d7p9LAf5D1tvVBSZ1LXHmgi9hWrJdM5b3qssTyz95iM7XEm/djOUiTw43ma/oxZ3JKa9YVoxUsJchjIQFGaf4+ObxbPSt6R3MMoecZD2+aJAkp8BQv3cKhxfGuLYF8jQGeA3jUUf+bDkWkVTLZkeqCuSMXNpRFKZBlWXCkh8zyCnlNa9HbxlLwB1J2nGCVPv7qN2OuIy2fSHNSmwY+5yA5MGgs0eb2buF+7Cmw0Ob3tTEEKotSzwxclqKEvAOzuDqxKNEQuST9BHZLgxb21yOR
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(6512007)(8936002)(53546011)(6506007)(6486002)(186003)(31696002)(66946007)(2906002)(66476007)(54906003)(26005)(2616005)(4326008)(316002)(5660300002)(66556008)(31686004)(86362001)(36756003)(83380400001)(8676002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: bqIghcrT3AbfMMtzzr+xqqdglF0qVYUF4CQ9mhPsPh2JIn/YvvzyajQcInU6RhQHO/NNPk6nghJjTEsCJj24ikB6PamlriuFqwE/CGD0Kk1dGBBTjPf81FLbsFsNOrTLkIWO5hRbXpc9agiKRfayt/HQy+HICvN4bwy6UQbPAH5ujxPgQG+bSDu0IRZheUpHa2Tst9Uhm3swiutz726qkKZpK6oaYM4G9BImV/dgGgW55qeTg8GsFbj/QbAft7ZLTyUQJPIfd+4d3SkDoa43r7GutZuZ6WghuoaeClcDnsIf8fU4FxU8/vip3pIiuvJqZ0TneglFuswuyhEVtHT8KPJOQjxaNbYSvOE1x6KvS/dY4WFFo+AdSLAHMGpoxKOHuOPCklSQz3wyWGuF+t8OTWKtIzl1/2wfDxYzBaMMMzl1IBHNfVpTLYqjJA7lfhnZwXrXC+SfuKxlKsW9jh90ru3OhvopGneGXkjG3A7qGLxRMAsEDSca6GQmVoa/jC/pmwBNnH57nRntsjwMdGiA08KIVWpuOnaBrsaNPhgTd8n+ZPWsHiWSS4zCYRUGQQL/j9u8/jVr1hPSa+OX2mQG1E9J5prD3wweT9rd/wd7D4rkQVkWZzkCB6Ewbuyf9OKRmky/R4JKdVG9hoG/OpXVU8FFULSwVjkpnGM0DqxGV2tdubZcWSSpf66p2tSntZG+71v0yjzRpNrLSLAyCCML7w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9P190MB1122.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(346002)(396003)(366004)(136003)(376002)(39830400003)(1076003)(83380400001)(6486002)(54906003)(66574015)(36756003)(52116002)(66946007)(8676002)(86362001)(316002)(8936002)(6506007)(66476007)(66556008)(6666004)(6512007)(4326008)(2616005)(38100700002)(5660300002)(2906002)(38350700002)(26005)(508600001)(44832011)(186003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eXIycHdJOVJuajQ0MG1QdXF2NWsrRDhtU1E3RUtXb3BXdVBVeVNtVDlvUHRC?=
- =?utf-8?B?WVpyaFhrZnVXdVNJRTBMN1c5dmdBSWpOQjlmb3hMQ29OTC9YaFh4ZFRDdHIr?=
- =?utf-8?B?OVN0bEFxR0NHSGsxTmFZNk5mLzdHTDQ2VE5KL3F1aEZXVUs1bkFwUWIza2pp?=
- =?utf-8?B?b2dMaUJaaDJxb3dKWTBtVlA3U1BNOG83UTRuOG96clNFRGRQeUhxc0xPd05S?=
- =?utf-8?B?azFQSEZUMlEyVTFEU2JNdUhEa284YUpGSDFEUTFBb2F2T2UraVo3YTZBbmFy?=
- =?utf-8?B?ZDV2MElDa0pHeC9TVWZYTDgvem9pTWF3TWdsK1Myc1lXWWZadFRYcnBISSt2?=
- =?utf-8?B?YkJKQmJlNkg1dm5waHJkenFEVTFzbU54amdaL3NvWGxrTjhmQklkS3lzTHNW?=
- =?utf-8?B?ZktDTDE0a3p4Wi9oeTliSC83cWpJQWhLYlJibnQ2Q05QTlF1VG16anFZeEQ4?=
- =?utf-8?B?OEJPaDdYVDI1ZGZWZ3ordFZ6SzBkbHE1NDJGbGtSMWJlVjA4Y21nYmtVN0g1?=
- =?utf-8?B?NUtBa3BwZVY0U1oxUDk5d1NidGNmbzNlS3RhT24zaHM5ckNjYnZ0OGl4Ymxj?=
- =?utf-8?B?YmRKU2hjclgvd1dGTkFiRmFKSzlwWG9mRzFtbnpBRCs1R2pBYnN0bGNtK0Nz?=
- =?utf-8?B?czVtbjJjcVJvRklvZUtZK3JoUTY5VGZoTUNzTnR6T0FOZWZDZEFNODQwa1py?=
- =?utf-8?B?MU5mcjBXU0NzR2dueDJyVTZKOHMzODhoWDhrU1h6aUpDenNyUTBTY043eS9Y?=
- =?utf-8?B?bUIvYmJRREIxcmtNUUFVMUNzcXY3ejlyaUNqTmJ1WS9jaXhRc0E2Mk1pdExK?=
- =?utf-8?B?VjBnTnl6ZXdOcWRJZTNhaGVCTHlGaWVNZzdDUXpHSWZocWdRR3l0UzRQMVh6?=
- =?utf-8?B?cHY2UmRQWjVIa2lqQlUyM3FFTG5rT1hCRHBFczBOQWtHTVNVM1lPRjU2bEZL?=
- =?utf-8?B?T3kzS1c3MVBUV09mZ1ZHRCs1NGtNYVhkVHhodkpzUnpRT2FOSnZBUFJIQ0lZ?=
- =?utf-8?B?dWFtTGhPUG9oSjJ3eGJiTmhIT3ErM3ZMOWthaWJWMzlORExYMzB2emRtNmRi?=
- =?utf-8?B?RWQzelBVSDFnS1B3WGpiYlFVVzRQUUlCd240SVRVZ1Z1ME5KcExxVHE3TFM1?=
- =?utf-8?B?ZDJ5cWczcGxRTG1rL2R3alk0OXZHRjdIZlgxSnJqQXZEZXNzOTdLTXgxR1Jk?=
- =?utf-8?B?UlJidTl1aUJ6ajF0T1dQbXlTa1BqT3ZCeGZDa05QUmVTUXA2U3lPdHlZUi85?=
- =?utf-8?B?UnJEazdPUTVLam9IbVd6THNiYS9pM3Q0NkJQUjgwTllDZy84enozZE5XRkpX?=
- =?utf-8?B?M1REZStsU0FRMksxZmVraG12SUJTQTZEUVlwd0o0Rno0MStEZFk3ZnpsM3lU?=
- =?utf-8?B?VHdLU1hkS240TFhXOW0yVDBuR3FnMlpQeER2WUxuUzJIRWNRQkYydHMrTTBm?=
- =?utf-8?B?dEVBQ0RoSDlKL0V3ZVBGMXB5K3VHN3k4VmxaQi9hQkhIWUFrTWFkemZMcS84?=
- =?utf-8?B?YW9Ea2t1NzliZkFaUWdlUEVnK2pHWCtGb3dBVG0xVUxGQjdLcytrSlBRV1J1?=
- =?utf-8?B?RTd5NHVNUlhHVmh6djI5TEJoa2NZZU1mbzNCdWlKbWNSMXNINFREcERuYVRT?=
- =?utf-8?B?cWN0VnA1Mm8wbnhBb0xueFhsTndqWHdidy9RYytRTFNOUjJNaHNnUWNhOVRq?=
- =?utf-8?B?UTAwaFdOd3J6U0djSklQQy9rOGNibm9wWlhycGYxQlpFNDc4NER1Q21DaWpE?=
- =?utf-8?B?U2lIbnBtOUZ3UmRCdnZKd3FmZXFSZTZhS2E0MlZoZUhRUFZMd3B3Wk5TVzFx?=
- =?utf-8?B?MnRtNnlCYnNsNTFnU3hENDhtMGJwS0N2VThLdlFFNndBaS9mRVo5VDllNGh4?=
- =?utf-8?B?aEZrSk85WEFBUktWdEd0VTNLMjNVRlhqS1VGSzhqR1M4VE5teXp0emhQbVF0?=
- =?utf-8?B?T1RZeGFLc292OW1xNFJQWWdzdDMxd1hJRUQxZlppVFA4STZBdHhPaXdENnNn?=
- =?utf-8?B?Q0NoSnZBakNjMGhZbU9ZaWhpc1VJQUU4bnZOZ1JoQUZySlZvdmc0WndBemFI?=
- =?utf-8?B?alFhUGtkeHZUVUthMGtSeVEvQVYzcVpNSGU3LzM4YnNTRFA4WG9vQ2thckVu?=
- =?utf-8?B?SnNubU9WQ3NEUGh1ejFNUGxoeGd0SjAvR0VuUER6dDhITyszUERIMFdhS21E?=
- =?utf-8?Q?a2SnVNdv6G78zzsGKaFhg2s=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd2cd0bb-f656-4aca-a5c4-08d9d49f442e
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jugNHSXZ5BTx63xdBpcwbMSW70R6epDiHpCh501fqb7HV57UoWtXWdv4dChc?=
+ =?us-ascii?Q?f3qysaIZDH8SJgj0toSXFeSYmYD1Hcf+E6jy0c1O2T5rKO8X1WT/yo0SDxrm?=
+ =?us-ascii?Q?d4Sesxt1XWKkq5GqITSBXRFIrvN4GpfYQayx7i+/+FZs64uB+vzsNfSX8eLh?=
+ =?us-ascii?Q?JbWD5B7lWgryH6LLDFifZromEXEj69H1sgHwoufIEPRLT4PucGAWstqsUVCw?=
+ =?us-ascii?Q?mnCUnY2RDp9ZFU8Nq2LtzZKdt1kT3EEhfy+NYE2XSy5UeOZyG74N1k7YTJ1I?=
+ =?us-ascii?Q?io+XMT4oMmN2sL6H854VRmzvFOwxeibCzmVE4JJGuVJcG+Nf+I2Bc/lzqe/x?=
+ =?us-ascii?Q?3qkSL415Xg0wxDLIb/pz+WfQzksHV9DIP6t/O2gZJ+hPijqh3pKtbyTT3brQ?=
+ =?us-ascii?Q?aRpjFQcI6sM6dqA6zuoEy3eiCWzD5dkz04UG/TLDpkBVhpJuXuBrF1i3CKYl?=
+ =?us-ascii?Q?QLzo27h06EAOZAhtXRLRq5R5+TDno/2U8SOlQ/nRPZb0jsuUJOPfhCOMWTQ1?=
+ =?us-ascii?Q?HVgoySamh5A/AWbx8EYkfhZNMxO/VjHVqqEDQRyAFqNMwZWHzXSIdjcWzS42?=
+ =?us-ascii?Q?ucYKRlMDw26Y44B9whh0QLHufwG3TgmPsHYzJ5ujbqSPFBCup7FbWcog+6tG?=
+ =?us-ascii?Q?+ffMlvSkU2id9WT68M5jQkq99UXi14EVrToF+x+XwVCJF/fknd/Zy8XJEsfL?=
+ =?us-ascii?Q?dH6BUTUKpfWjPJgR23GurOQX+novw9S7AN7cmhskOm686WF6glrYZpqw70qZ?=
+ =?us-ascii?Q?jPPSIzVGzVg7PXANqc6XgkWg7Q+2P/s34M+6HbPvGDSPaUmlG4OuSu1ESAQr?=
+ =?us-ascii?Q?Ro6FYIN3bAk+EL6si2y6IOlGZMrpOurUymAN6Mf6aM8LoRvjvMC8CD/Gwy8l?=
+ =?us-ascii?Q?TJhiPYIwQwsJKAPlz3zj1DwmeQgOxl/OLPvOJXzgVg8svpeZVmxdsshop1mp?=
+ =?us-ascii?Q?z3Dq2C4FFtWoPveWc8Y+CuhH9IzXaR6JjQlAGtly20ixht0AP1VLPbIDu3Dr?=
+ =?us-ascii?Q?Mr9a0hjXtdJBE8Toy31axnV+psODQTH+UXHr2IaP/YZEueasQAhWTKcM+HGx?=
+ =?us-ascii?Q?VT3aQZ+oFTMe4+AufGaRA7gWtosXYCWE7jTfqhaGl3AU2FrI3TYdRO+oyqZ/?=
+ =?us-ascii?Q?xTHf4Zp9BvHqpLo6hPjso6CVQsxCO5siQ+S0vo0AWVHHD/ot4mZLPrweNFdx?=
+ =?us-ascii?Q?qRRWMMiqQX2yrs1TOllsgy8k6addaVio2TFaRxuryI6gw3Vzkp8bLF0mIo8z?=
+ =?us-ascii?Q?KXymW7aUosiEobqbZGHpHnJwHGv9V89BkPJyS7lyDacalfHcoDQ+rBDDRPpA?=
+ =?us-ascii?Q?q+AqyjwO5bdkYWbgWrv+5gzta5DZlmdJ8NL5Wfeaab0a5GKSv0mvMmz5SpBt?=
+ =?us-ascii?Q?4lN3lcy1ehaA/AqPkT682iXaqYfQDFmHNNE47xSMX9PT+h1xaI6lOG4M03pj?=
+ =?us-ascii?Q?S8Eztv/PoTL4gTWy8oj1Ezx1Zz2RzP/4GqGPH7cYMP4jywA/u+kPiPD5Mfsi?=
+ =?us-ascii?Q?2GhgVDTYFd9Ij2wOhd+nfMpgvN1kpWBgcr6hmfRPQIP1DTu8tXx//f8ylHJV?=
+ =?us-ascii?Q?+OU2pEp4mmxUx7YlBvAj7Ju07c7UcSlxMauaHLEZ02Gn+4Nw3WxokP/jZyAJ?=
+ =?us-ascii?Q?v2jaUPupDe/1556Ceo56V6FYv0cHOGEWWxuXK6XWb5dEVeDIfjJWd+Vt1fbb?=
+ =?us-ascii?Q?2uGRCQ=3D=3D?=
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7de175bc-14a8-47d2-cd26-08d9d49f52a1
+X-MS-Exchange-CrossTenant-AuthSource: AM9P190MB1122.EURP190.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 01:11:15.9838
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 01:11:40.2109
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: e0DNJkE4hE869BK34xubWjGUml8dH3lMRsw6ssoygSLqggmTlp8aYJo9mSCkp4jgfxHzDp4UEGdcrmabTlTSsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4853
+X-MS-Exchange-CrossTenant-UserPrincipalName: mtKektSeK0WDqO8jYOxOSIOdC8BZpOu4OaPosIgP07VBI0DX0HGLizhrHwi8+QNPPeUykr6GoidoamroT33R1Rn7Fuv01Rf+3On2VgG9OC8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0P190MB0753
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/22 20:23, Matthew Wilcox (Oracle) wrote:
-> This macro doesn't simplify the users; it's easier to just call
-> compound_next() inside a standard loop.
+* Add missed call prestera_router_fini in prestera_switch_fini
+* Add prestera_router_hw_fini, which verify lists are empty
 
-Yes it is. :)
+Fixes: 69204174cc5c ("net: marvell: prestera: Add prestera router infra")
+Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
+---
+ drivers/net/ethernet/marvell/prestera/prestera_main.c      | 1 +
+ drivers/net/ethernet/marvell/prestera/prestera_router.c    | 4 ++--
+ drivers/net/ethernet/marvell/prestera/prestera_router_hw.c | 6 ++++++
+ drivers/net/ethernet/marvell/prestera/prestera_router_hw.h | 1 +
+ 4 files changed, 10 insertions(+), 2 deletions(-)
 
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
-
-Looks great.
-
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-
-
-thanks,
+diff --git a/drivers/net/ethernet/marvell/prestera/prestera_main.c b/drivers/net/ethernet/marvell/prestera/prestera_main.c
+index 08fdd1e50388..cad93f747d0c 100644
+--- a/drivers/net/ethernet/marvell/prestera/prestera_main.c
++++ b/drivers/net/ethernet/marvell/prestera/prestera_main.c
+@@ -982,6 +982,7 @@ static void prestera_switch_fini(struct prestera_switch *sw)
+ 	prestera_event_handlers_unregister(sw);
+ 	prestera_rxtx_switch_fini(sw);
+ 	prestera_switchdev_fini(sw);
++	prestera_router_fini(sw);
+ 	prestera_netdev_event_handler_unregister(sw);
+ 	prestera_hw_switch_fini(sw);
+ }
+diff --git a/drivers/net/ethernet/marvell/prestera/prestera_router.c b/drivers/net/ethernet/marvell/prestera/prestera_router.c
+index 607b88bfa451..6ef4d32b8fdd 100644
+--- a/drivers/net/ethernet/marvell/prestera/prestera_router.c
++++ b/drivers/net/ethernet/marvell/prestera/prestera_router.c
+@@ -168,7 +168,7 @@ int prestera_router_init(struct prestera_switch *sw)
+ err_register_inetaddr_notifier:
+ 	unregister_inetaddr_validator_notifier(&router->inetaddr_valid_nb);
+ err_register_inetaddr_validator_notifier:
+-	/* prestera_router_hw_fini */
++	prestera_router_hw_fini(sw);
+ err_router_lib_init:
+ 	kfree(sw->router);
+ 	return err;
+@@ -178,7 +178,7 @@ void prestera_router_fini(struct prestera_switch *sw)
+ {
+ 	unregister_inetaddr_notifier(&sw->router->inetaddr_nb);
+ 	unregister_inetaddr_validator_notifier(&sw->router->inetaddr_valid_nb);
+-	/* router_hw_fini */
++	prestera_router_hw_fini(sw);
+ 	kfree(sw->router);
+ 	sw->router = NULL;
+ }
+diff --git a/drivers/net/ethernet/marvell/prestera/prestera_router_hw.c b/drivers/net/ethernet/marvell/prestera/prestera_router_hw.c
+index 490e9b61fd8d..e5592b69ad37 100644
+--- a/drivers/net/ethernet/marvell/prestera/prestera_router_hw.c
++++ b/drivers/net/ethernet/marvell/prestera/prestera_router_hw.c
+@@ -29,6 +29,12 @@ int prestera_router_hw_init(struct prestera_switch *sw)
+ 	return 0;
+ }
+ 
++void prestera_router_hw_fini(struct prestera_switch *sw)
++{
++	WARN_ON(!list_empty(&sw->router->vr_list));
++	WARN_ON(!list_empty(&sw->router->rif_entry_list));
++}
++
+ static struct prestera_vr *__prestera_vr_find(struct prestera_switch *sw,
+ 					      u32 tb_id)
+ {
+diff --git a/drivers/net/ethernet/marvell/prestera/prestera_router_hw.h b/drivers/net/ethernet/marvell/prestera/prestera_router_hw.h
+index ab5e013ac3ad..b6b028551868 100644
+--- a/drivers/net/ethernet/marvell/prestera/prestera_router_hw.h
++++ b/drivers/net/ethernet/marvell/prestera/prestera_router_hw.h
+@@ -32,5 +32,6 @@ prestera_rif_entry_create(struct prestera_switch *sw,
+ 			  struct prestera_rif_entry_key *k,
+ 			  u32 tb_id, const unsigned char *addr);
+ int prestera_router_hw_init(struct prestera_switch *sw);
++void prestera_router_hw_fini(struct prestera_switch *sw);
+ 
+ #endif /* _PRESTERA_ROUTER_HW_H_ */
 -- 
-John Hubbard
-NVIDIA
+2.17.1
 
->   mm/gup.c | 16 +++++-----------
->   1 file changed, 5 insertions(+), 11 deletions(-)
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 7a07e0c00bf5..86f8d843de72 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -253,9 +253,6 @@ static inline void compound_next(unsigned long i, unsigned long npages,
->   	struct page *page;
->   	unsigned int nr;
->   
-> -	if (i >= npages)
-> -		return;
-> -
->   	page = compound_head(list[i]);
->   	for (nr = i + 1; nr < npages; nr++) {
->   		if (compound_head(list[nr]) != page)
-> @@ -266,12 +263,6 @@ static inline void compound_next(unsigned long i, unsigned long npages,
->   	*ntails = nr - i;
->   }
->   
-> -#define for_each_compound_head(__i, __list, __npages, __head, __ntails) \
-> -	for (__i = 0, \
-> -	     compound_next(__i, __npages, __list, &(__head), &(__ntails)); \
-> -	     __i < __npages; __i += __ntails, \
-> -	     compound_next(__i, __npages, __list, &(__head), &(__ntails)))
-> -
->   /**
->    * unpin_user_pages_dirty_lock() - release and optionally dirty gup-pinned pages
->    * @pages:  array of pages to be maybe marked dirty, and definitely released.
-> @@ -306,7 +297,8 @@ void unpin_user_pages_dirty_lock(struct page **pages, unsigned long npages,
->   		return;
->   	}
->   
-> -	for_each_compound_head(index, pages, npages, head, ntails) {
-> +	for (index = 0; index < npages; index += ntails) {
-> +		compound_next(index, npages, pages, &head, &ntails);
->   		/*
->   		 * Checking PageDirty at this point may race with
->   		 * clear_page_dirty_for_io(), but that's OK. Two key
-> @@ -394,8 +386,10 @@ void unpin_user_pages(struct page **pages, unsigned long npages)
->   	if (WARN_ON(IS_ERR_VALUE(npages)))
->   		return;
->   
-> -	for_each_compound_head(index, pages, npages, head, ntails)
-> +	for (index = 0; index < npages; index += ntails) {
-> +		compound_next(index, npages, pages, &head, &ntails);
->   		put_compound_head(head, ntails, FOLL_PIN);
-> +	}
->   }
->   EXPORT_SYMBOL(unpin_user_pages);
->   

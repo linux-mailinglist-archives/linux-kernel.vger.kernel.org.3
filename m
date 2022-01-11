@@ -2,115 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD90148B878
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1DC48B885
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350129AbiAKUTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 15:19:17 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:60480
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243935AbiAKUSe (ORCPT
+        id S244356AbiAKUUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 15:20:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244059AbiAKUU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 15:18:34 -0500
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C175640ADD
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 20:18:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641932312;
-        bh=kQHLxaxxJLFmOGqzWUxDRLkwO6oKafieScmNTdNr7i4=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=VeAGBk987DL99eyMA326D2qBmIp6pbLOyKqIahGvEtrCQcWtGZGsR7wfHQA2OvL+h
-         IyLIoRdozt4bnkBE0/V25LMMX3rmcF1bd4Y+c3e5jFQLUWMUHjM7YuF4s+b33WrDSW
-         QVKClLFciVl1JnMLAqk42iYL51KqHLSTJN/BVO9DnKat3Tse2NOEqNl9eFgYqRzfBU
-         B7yJAkRSmlz5EMzjS8oG2y8rOzpHfOWbcPv/FnpSdYNZrIKVMqyHumRXrpkQeYWqHt
-         fEfX+p6nu3eKdPAXlxF1LAgG6wUbbbS/j9yx9zjN82EwLFTplGw22Xrf6hq8fypzWy
-         GWrK9L18+3NpA==
-Received: by mail-ed1-f71.google.com with SMTP id y18-20020a056402271200b003fa16a5debcso179846edd.14
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:18:32 -0800 (PST)
+        Tue, 11 Jan 2022 15:20:27 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3932C061756
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:20:26 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so856822pji.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:20:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C3y1gsU53cU0M96DAP0mJZYhnckzL5l0LMIdOY1soDM=;
+        b=DIBAYaAINs1ZCRwrmioj93W8oTc1wNh6GCtdd3lx0HkK1+34jZUuhSYeHcceGA5gUk
+         spfkDqAXZWVKYXcMubaTtH4oIFNAx+aWLhUXk1l6BkKx23gEPoVTZ14wF9l7HrTSIKs6
+         B6EQS3cIIx2f/9KGNhSZkgla9BG7blg0lFH54=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kQHLxaxxJLFmOGqzWUxDRLkwO6oKafieScmNTdNr7i4=;
-        b=4DO03Jf92HVU24XvoyahILgrvPyFp6Bj7PB66Wu0GtJfWGaWPqtMIRwbcju5p4GiKg
-         rX7L9u8USRIY5YPhG0pxNE5V48rwf30KkMt3f0RG9A5gy0hm5KIclpSujNpWA7hmpL7Z
-         AQ/1ZUGEuUm/+OqD0ZDxrYuHZclpsm0YbgkYA8aWAE8za180/sQjn99xh522yr763o7L
-         jFMyICDYsmI8pD532xmzwHG8d39AOwjiZKR7mDZzwBujBZAj6B7NCsDjOLuk/VQomGtF
-         n+Z+DdsDNgs0lVnwaYnVv+/ceTPCxXg6/k0jBlJiNzFstK38L553+ZcxPksFD9sB2Og6
-         v4mw==
-X-Gm-Message-State: AOAM530PPAZJezwVtu/uyo7S14qu4swkC5lCyx4gcIe9tRIh3FLLre6x
-        nD1J5bMcLnPDiBW4Bo931yRzOmlvL7DFT1c8/TneDgFfuEglLh3DjAeOZ8iuth3S822GUUgzcb6
-        yDkYJ3sMKQ3BF/CaeTKLQnRZmv6/CAxln0cnv5lebzg==
-X-Received: by 2002:a50:f086:: with SMTP id v6mr737743edl.94.1641932312221;
-        Tue, 11 Jan 2022 12:18:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxJA2UIH8S5lzI4JycUQ9WDc6T41H+sPiiwxmzpWvqHdoH7V+UxlOdlH0f0srHDP5vkj+BfXg==
-X-Received: by 2002:a50:f086:: with SMTP id v6mr737711edl.94.1641932312024;
-        Tue, 11 Jan 2022 12:18:32 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id e4sm4030881ejs.13.2022.01.11.12.18.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 12:18:31 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Alim Akhtar <alim.akhtar@gmail.com>
-Subject: [PATCH v2 28/28] arm64: dts: exynos: use dedicated wake-up pinctrl compatible in ExynosAutov9
-Date:   Tue, 11 Jan 2022 21:17:22 +0100
-Message-Id: <20220111201722.327219-22-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com>
-References: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C3y1gsU53cU0M96DAP0mJZYhnckzL5l0LMIdOY1soDM=;
+        b=TEsO1j+y9aUc1SUzr8IuGItOTOhSagVJGmIy7R29jlxPOxLfk4KTglC474saZrDiJb
+         f+hOsKQ5ywYPl4/EzKpvHuQra4Su1KTdmQPEAebihOG0BtTbEKfOwtxPV83RQ7hkXQLr
+         2xAxEcioAnjdsHw0d3QXJeBY8F3Qjo4juEiz7UR8ZAhSD0IV0UOyX2+Nrri/B74rylD2
+         E2G6TyaZ2BfR+DXUBEov6s0K4whty9ZLbdCpXADN7iGGfHAGrWrB0lqnjYIeLPcqzcow
+         aN3j9SMPNnRDDjK+gVindKAOAxDdeERhkGYKxWPLRr+Z2PD+36xTLYdQXiWPt81O65Wp
+         BaRw==
+X-Gm-Message-State: AOAM531GqMwTCoeUAIaVr+HlG6hDQzVJE9vkhbqZsEOBkoJHh/XVtaZD
+        3GpXAPJdyekB8PHov3J52BHUKg==
+X-Google-Smtp-Source: ABdhPJxdFw4zQYvyjcl5AtbxFlvjo9EJjjDavrF0GPgcOtKpd3UN4iOcTHrAENdb5oKbCz1XkpU/TA==
+X-Received: by 2002:a17:902:e88a:b0:14a:19f6:6396 with SMTP id w10-20020a170902e88a00b0014a19f66396mr6285403plg.95.1641932426389;
+        Tue, 11 Jan 2022 12:20:26 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:f0a7:d33a:2234:5687])
+        by smtp.gmail.com with UTF8SMTPSA id p32sm178337pgb.49.2022.01.11.12.20.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 12:20:26 -0800 (PST)
+Date:   Tue, 11 Jan 2022 12:20:24 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, jponduru@codeaurora.org,
+        avuyyuru@codeaurora.org, bjorn.andersson@linaro.org,
+        agross@kernel.org, cpratapa@codeaurora.org,
+        subashab@codeaurora.org, evgreen@chromium.org, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 2/2] net: ipa: prevent concurrent replenish
+Message-ID: <Yd3miKw2AIY8Rr0F@google.com>
+References: <20220111192150.379274-1-elder@linaro.org>
+ <20220111192150.379274-3-elder@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220111192150.379274-3-elder@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Older Samsung Exynos SoC pin controller nodes (Exynos3250, Exynos4,
-Exynos5, Exynos5433) with external wake-up interrupts, expected to have
-one interrupt for multiplexing these wake-up interrupts.  Also they
-expected to have exactly one pin controller capable of external wake-up
-interrupts.
+On Tue, Jan 11, 2022 at 01:21:50PM -0600, Alex Elder wrote:
+> We have seen cases where an endpoint RX completion interrupt arrives
+> while replenishing for the endpoint is underway.  This causes another
+> instance of replenishing to begin as part of completing the receive
+> transaction.  If this occurs it can lead to transaction corruption.
+> 
+> Use a new atomic variable to ensure only replenish instance for an
+> endpoint executes at a time.
+> 
+> Fixes: 84f9bd12d46db ("soc: qcom: ipa: IPA endpoints")
+> Signed-off-by: Alex Elder <elder@linaro.org>
+> ---
+>  drivers/net/ipa/ipa_endpoint.c | 13 +++++++++++++
+>  drivers/net/ipa/ipa_endpoint.h |  2 ++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
+> index 8b055885cf3cf..a1019f5fe1748 100644
+> --- a/drivers/net/ipa/ipa_endpoint.c
+> +++ b/drivers/net/ipa/ipa_endpoint.c
+> @@ -1088,15 +1088,27 @@ static void ipa_endpoint_replenish(struct ipa_endpoint *endpoint, bool add_one)
+>  		return;
+>  	}
+>  
+> +	/* If already active, just update the backlog */
+> +	if (atomic_xchg(&endpoint->replenish_active, 1)) {
+> +		if (add_one)
+> +			atomic_inc(&endpoint->replenish_backlog);
+> +		return;
+> +	}
+> +
+>  	while (atomic_dec_not_zero(&endpoint->replenish_backlog))
+>  		if (ipa_endpoint_replenish_one(endpoint))
+>  			goto try_again_later;
 
-It seems however that newer ARMv8 Exynos SoC like Exynos850 and
-ExynosAutov9 have differences:
-1. No multiplexed external wake-up interrupt, only direct,
-2. More than one pin controller capable of external wake-up interrupts.
+I think there is a race here, not sure whether it's a problem: If the first
+interrupt is here just when a 2nd interrupt evaluates 'replenish_active' the
+latter will return, since it looks like replenishing is still active, when it
+actually just finished. Would replenishing be kicked off anyway shortly after
+or could the transaction be stalled until another endpoint RX completion
+interrupt arrives?
 
-Use dedicated ExynosAutov9 compatible for its external wake-up interrupts
-controller to indicate the differences.
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- arch/arm64/boot/dts/exynos/exynosautov9.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-index de8fcb82eaec..807d500d6022 100644
---- a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-@@ -208,7 +208,7 @@ pinctrl_alive: pinctrl@10450000 {
- 			reg = <0x10450000 0x1000>;
- 
- 			wakeup-interrupt-controller {
--				compatible = "samsung,exynos7-wakeup-eint";
-+				compatible = "samsung,exynosautov9-wakeup-eint";
- 			};
- 		};
- 
--- 
-2.32.0
-
+> +
+> +	atomic_set(&endpoint->replenish_active, 0);
+> +
+>  	if (add_one)
+>  		atomic_inc(&endpoint->replenish_backlog);
+>  
+>  	return;
+>  
+>  try_again_later:
+> +	atomic_set(&endpoint->replenish_active, 0);
+> +
+>  	/* The last one didn't succeed, so fix the backlog */
+>  	delta = add_one ? 2 : 1;
+>  	backlog = atomic_add_return(delta, &endpoint->replenish_backlog);
+> @@ -1691,6 +1703,7 @@ static void ipa_endpoint_setup_one(struct ipa_endpoint *endpoint)
+>  		 * backlog is the same as the maximum outstanding TREs.
+>  		 */
+>  		endpoint->replenish_enabled = false;
+> +		atomic_set(&endpoint->replenish_active, 0);
+>  		atomic_set(&endpoint->replenish_saved,
+>  			   gsi_channel_tre_max(gsi, endpoint->channel_id));
+>  		atomic_set(&endpoint->replenish_backlog, 0);
+> diff --git a/drivers/net/ipa/ipa_endpoint.h b/drivers/net/ipa/ipa_endpoint.h
+> index 0a859d10312dc..200f093214997 100644
+> --- a/drivers/net/ipa/ipa_endpoint.h
+> +++ b/drivers/net/ipa/ipa_endpoint.h
+> @@ -53,6 +53,7 @@ enum ipa_endpoint_name {
+>   * @netdev:		Network device pointer, if endpoint uses one
+>   * @replenish_enabled:	Whether receive buffer replenishing is enabled
+>   * @replenish_ready:	Number of replenish transactions without doorbell
+> + * @replenish_active:	1 when replenishing is active, 0 otherwise
+>   * @replenish_saved:	Replenish requests held while disabled
+>   * @replenish_backlog:	Number of buffers needed to fill hardware queue
+>   * @replenish_work:	Work item used for repeated replenish failures
+> @@ -74,6 +75,7 @@ struct ipa_endpoint {
+>  	/* Receive buffer replenishing for RX endpoints */
+>  	bool replenish_enabled;
+>  	u32 replenish_ready;
+> +	atomic_t replenish_active;
+>  	atomic_t replenish_saved;
+>  	atomic_t replenish_backlog;
+>  	struct delayed_work replenish_work;		/* global wq */
+> -- 
+> 2.32.0
+> 

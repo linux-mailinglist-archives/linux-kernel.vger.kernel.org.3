@@ -2,158 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E825848A7F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 07:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C9748A7FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 07:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348340AbiAKGvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 01:51:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S234583AbiAKGxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 01:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348335AbiAKGvq (ORCPT
+        with ESMTP id S233846AbiAKGx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 01:51:46 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA1AC06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 22:51:45 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id q8so30967483wra.12
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 22:51:45 -0800 (PST)
+        Tue, 11 Jan 2022 01:53:29 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A357C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 22:53:29 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id y11so21024377iod.6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 22:53:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=WvUeAegBbN2t7XZPXpjXropqbre3MN5PjxAyFdDVXy8=;
-        b=fClPNCq1gbIhLUY0oORyPisVUYCFx2go4SFsXbaveQbet21Bh6PeApbUZjpiuYY/gs
-         +TdenI7lwJdyuQnfpn/TnJkTdAS2b6TEmeXbk0EXMHOzce3tdF9PYL8pDuQgLMTOAHrU
-         4LmoGIs7wKwU0KdXyAuJgs7MW/2R1XG3Qekc8RroGXFLaN4sFw3j1mCRImUM2L/9zgKj
-         HPkV6IYu26y6YXI5DdTYZ2ayue5HfCo8UYLNP7ov22C0/lKnGg4trKy8L7wzBtoL6nvT
-         7m+iMbI4yNY2+x2w0A2X/KszSdibg3EJC61kLmvMPnnlI6arcM+5xYbLufVTQsk45+Mc
-         HAQA==
+        bh=mSDl3QNPw4cusWftYB9ASogJT1ZlpHBuHV1JbJnIkcs=;
+        b=EglXCHArEpYpL7rh/UinFzlp1BBkEt46ijZrwE1U+E3jdCWiq8UShov6puMiGCPQ/3
+         QMpPM0B8CJT2t9jCtocSbc0iLnhqkJGtA5JF388ATZQg+zBgbV6FDexxN7mY91kjfD9M
+         UnRzDfmEHUyH8EgVFBKoNRyBKLgTSzuP8i2mpqrkjPbqaMzUAy85rkBptZ+ErT4cqfH/
+         VM5bpFN8lBQy4Vs0l81nGqCkb6PSyiSd0iXOaJHdp5XSqS70ONVZGnWZPVJCev47VWlT
+         3UWPPkkJMJ2CLC+WMDixnyaAdaHQHxWs4GK/+7dXiWKPDWv/ZMMoucUErvvR4HnzBpeL
+         ND1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=WvUeAegBbN2t7XZPXpjXropqbre3MN5PjxAyFdDVXy8=;
-        b=diF7x2nmcTcJm5AoiQenreaR9Bx1skrBZerrF501Z1FlXdWUiLu/uPHA7KxuXzr4zp
-         dclqtruzQUCCNFiTT1oQRSvhPhWjitsGhV2HcQRAKhYrSWHoc/zX15jzrAcUM5s0O3YY
-         +g9epa1KEqIsgyDQ8jU74GSC5o2ly4zNXXRjNyx7fgMFfZ7tLhxktFEs99DQFcTZoWAQ
-         5rQTxxVgy7PT66UoQblzQBYb30L7XgYHN+zW9G32QLLBCfQymxQESOogDgZzIXGJDgaN
-         AXFvpLFejHuSVQMk5D5+nNQRLDAwxohL1cI5lGVqD0UV9ia3ipwQvfquVXrICfYNhvvU
-         3JOQ==
-X-Gm-Message-State: AOAM532i1xRj5QZ9QhPXcs3+d8VmdELvSmX3SXwYHhY10G1VGq5drhQM
-        C9vHt3crK6MAc/QXyLYBUO2kIKsvjqSuZbAuMDeaiw==
-X-Google-Smtp-Source: ABdhPJxRT6S/xCWLMxNWCMX5VMNYulIQRzWES2torjkKuDX6004u60s96qWnFNNaOBOo/1byUIia+2fe3Rl4duBjUM8=
-X-Received: by 2002:a5d:638c:: with SMTP id p12mr2594807wru.80.1641883904288;
- Mon, 10 Jan 2022 22:51:44 -0800 (PST)
+        bh=mSDl3QNPw4cusWftYB9ASogJT1ZlpHBuHV1JbJnIkcs=;
+        b=oDwNWVIe8KI2bRB3P/KNxkRdgpmdppj8k6stlK9LA9wUw8lm3F+Fpd02H2qEV/e0eG
+         lQBJl0tfyXFPRZHyGpUWdyN4DagSTOC9ppKehGU448Z++3ud1SlkyvQQldvWnb19FqMy
+         dM503fRiHhLCaKXog52tLP1gdHf3JDU2NoNKpmwdhsmekq2GMHBKMskeKiMMYto/ty6S
+         9169d0EMCD1UX3xR1lzV0oG5u38zux1NtNDDvoH6gu//lK6awbCSmQGzx86PHtHzCDbC
+         9bpm4y6IjV2iocKzzECmhHbgveVCmhmLWJum0yMJVzQ7G8Yuo54kavRan2oLoooUpDgn
+         MDzA==
+X-Gm-Message-State: AOAM533XAtilpIsElzL5SE1nn5PoWYriCRSb2TPJYKLrV5enBW7aCtLa
+        8d2Fsuddkf9RPz7hqjZ7JCCRkDLJkt7cVnolDvAyQQ==
+X-Google-Smtp-Source: ABdhPJztacg8YHUE48ljmhu2/De8xlmIklTvWPbHOcEJi/2sSA+6bP6x2m9vsxqPaSpG0al/1KqmwoCfK5rUlFEBzDw=
+X-Received: by 2002:a05:6602:2b03:: with SMTP id p3mr1590314iov.74.1641884008720;
+ Mon, 10 Jan 2022 22:53:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20220108012304.1049587-1-dlatypov@google.com> <20220108012304.1049587-5-dlatypov@google.com>
-In-Reply-To: <20220108012304.1049587-5-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 11 Jan 2022 14:51:32 +0800
-Message-ID: <CABVgOS=oebdtvxVepSzWdWNVZTo-19MROmewb=DRszZd3YPV+g@mail.gmail.com>
-Subject: Re: [PATCH 4/6] kunit: factor out kunit_base_assert_format() call
- into kunit_fail()
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, torvalds@linux-foundation.org
+References: <20220108164617.3130175-1-jaegeuk@kernel.org> <YdvoxkAAquI17UbX@infradead.org>
+ <a23a3226-95d9-9835-c1c7-2d13f4a1ee16@redhat.com> <CAEe=SxnWeK0pSfijPKJSTxBiMgD1Ev69fV3qSTCgWASk0b3vhA@mail.gmail.com>
+ <9efbbcb7-29cd-a8ab-0632-01986edc862f@redhat.com>
+In-Reply-To: <9efbbcb7-29cd-a8ab-0632-01986edc862f@redhat.com>
+From:   Tim Murray <timmurray@google.com>
+Date:   Mon, 10 Jan 2022 22:53:16 -0800
+Message-ID: <CAEe=Sx=C8e7=A6ziy8dYC+FvkWvVYZ+o=XMCP_4vX0efsUPT4Q@mail.gmail.com>
+Subject: Re: [PATCH] f2fs: move f2fs to use reader-unfair rwsems
+To:     Waiman Long <longman@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 9:23 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> We call this function first thing for all the assertion `format()`
-> functions.
-> This is the part that prints the file and line number and assertion type
-> (EXPECTATION, ASSERTION).
->
-> Having it as part of the format functions lets us have the flexibility
-> to not print that information (or print it differently) for new
-> assertion types, but I think this we don't need that.
->
-> And in the future, we'd like to consider factoring that data (file,
-> line#, type) out of the kunit_assert struct and into a `static`
-> variable, as Linus suggested [1], so we'd need to extract it anyways.
->
-> [1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+On Mon, Jan 10, 2022 at 8:15 PM Waiman Long <longman@redhat.com> wrote:
+> That is not how rwsem works. A reader which fails to get the lock
+> because it is write-locked will remove its reader count before going to
+> sleep. So the reader count will be zero eventually. Of course, there is
+> a short period of time where the reader count will be non-zero until the
+> reader removes its own reader count. So if a new writer comes in at that
+> time, it will fail its initial trylock and probably go to optimistic
+> spinning mode. If the writer that owns the lock release it at the right
+> moment, the reader may acquire the read lock.
 
-Looks good to me, thanks!
+Thanks for the correction, that makes sense. I haven't spent too much
+time on rwsem internals and I'm not confident about when flags are set
+and cleared in sem->count; is there a case where sem->count after
+up_write() could be nonzero?
 
-Reviewed-by: David Gow <davidgow@google.com>
+An example from one trace:
 
+1. Low-priority userspace thread 4764 is blocked in f2fs_unlink,
+probably at f2fs_lock_op, which is a wrapper around
+down_read(cp_rwsem).
+2. f2fs-ckpt runs at t=0ms and wakes thread 4764, making it runnable.
+3. At t=1ms, f2fs-ckpt enters uninterruptible sleep and blocks at
+rwsem_down_write_slowpath per sched_blocked_reason.
+4. At t=26ms, thread 4764 runs for the first time since being made
+runnable. Within 40us, thread 4764 unblocks f2fs-ckpt and makes it
+runnable.
 
->  lib/kunit/assert.c | 6 ------
->  lib/kunit/test.c   | 1 +
->  2 files changed, 1 insertion(+), 6 deletions(-)
+Since thread 4764 is awakened by f2fs-ckpt but never runs before it
+unblocks f2fs-ckpt in down_write_slowpath(), the only idea I had is
+that cp_rwsem->count is nonzero after f2fs-ckpt's up_write() in step 2
+(maybe because of rwsem_mark_wake()?).
+
+> I do have a question about the number of readers in such a case compared
+> with the number of writers. Are there a large number of low priority
+> hanging around? What is an average read lock hold time?
 >
-> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-> index b972bda61c0c..4d9a1295efc7 100644
-> --- a/lib/kunit/assert.c
-> +++ b/lib/kunit/assert.c
-> @@ -40,7 +40,6 @@ EXPORT_SYMBOL_GPL(kunit_assert_print_msg);
->  void kunit_fail_assert_format(const struct kunit_assert *assert,
->                               struct string_stream *stream)
->  {
-> -       kunit_base_assert_format(assert, stream);
->         string_stream_add(stream, "%pV", &assert->message);
->  }
->  EXPORT_SYMBOL_GPL(kunit_fail_assert_format);
-> @@ -52,7 +51,6 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
->
->         unary_assert = container_of(assert, struct kunit_unary_assert, assert);
->
-> -       kunit_base_assert_format(assert, stream);
->         if (unary_assert->expected_true)
->                 string_stream_add(stream,
->                                   KUNIT_SUBTEST_INDENT "Expected %s to be true, but is false\n",
-> @@ -73,7 +71,6 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
->         ptr_assert = container_of(assert, struct kunit_ptr_not_err_assert,
->                                   assert);
->
-> -       kunit_base_assert_format(assert, stream);
->         if (!ptr_assert->value) {
->                 string_stream_add(stream,
->                                   KUNIT_SUBTEST_INDENT "Expected %s is not null, but is\n",
-> @@ -119,7 +116,6 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
->         binary_assert = container_of(assert, struct kunit_binary_assert,
->                                      assert);
->
-> -       kunit_base_assert_format(assert, stream);
->         string_stream_add(stream,
->                           KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
->                           binary_assert->left_text,
-> @@ -147,7 +143,6 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
->         binary_assert = container_of(assert, struct kunit_binary_ptr_assert,
->                                      assert);
->
-> -       kunit_base_assert_format(assert, stream);
->         string_stream_add(stream,
->                           KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
->                           binary_assert->left_text,
-> @@ -187,7 +182,6 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
->         binary_assert = container_of(assert, struct kunit_binary_str_assert,
->                                      assert);
->
-> -       kunit_base_assert_format(assert, stream);
->         string_stream_add(stream,
->                           KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
->                           binary_assert->left_text,
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 5ad671745483..735c1b67d843 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -255,6 +255,7 @@ static void kunit_fail(struct kunit *test, struct kunit_assert *assert)
->                 return;
->         }
->
-> +       kunit_base_assert_format(assert, stream);
->         assert->format(assert, stream);
->
->         kunit_print_string_stream(test, stream);
-> --
-> 2.34.1.575.g55b058a8bb-goog
->
+> Blocking for 9.7s for a write lock is quite excessive and we need to
+> figure out how this happen.,
+
+Just to be 100% clear, it's not a single 9.7s stall, it's many smaller
+stalls of 10-500+ms in f2fs-ckpt that add up to 9.7s over that range.
+
+f2fs is not my area of expertise, but my understanding is that
+cp_rwsem in f2fs has many (potentially unbounded) readers and a single
+writer. Arbitrary userspace work (fsync, creating/deleting/truncating
+files, atomic writes) may grab the read lock, but assuming the
+merge_checkpoint option is enabled, only f2fs-ckpt will ever grab the
+write lock during normal operation. However, in this particular
+example, it looks like there may have been 5-10 threads blocked on
+f2fs-ckpt that were awakened alongside thread 4764 in step 2.
+
+I'll defer to the f2fs experts on the average duration that the read
+lock is held.

@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B578448B64B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3B848B654
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350314AbiAKTAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 14:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
+        id S1350357AbiAKTAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 14:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350308AbiAKTAA (ORCPT
+        with ESMTP id S1350308AbiAKTAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:00:00 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BA2C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:00:00 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id i3so50037445ybh.11
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:00:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6mcjefM06R1tkqX7tpt74UGpOHh5gM914x34vbidQ7U=;
-        b=F+gorQ0yIwFh7cUVtQjrmOBwbnBDGysGw8+cdmXVa10toj/WPbDIRBPkFkFUNYvaU2
-         R26V6akf1digOv3c6ALWePu834Rjw5UmY9eF0bNp2xiNcNT170xPRYfTwSwMfM09wQAP
-         eJdid4xGZJZcoPD+hlEiKMitr3f6p3h7MILz0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6mcjefM06R1tkqX7tpt74UGpOHh5gM914x34vbidQ7U=;
-        b=WXoXJH2SPqRtEXtO9+bryfCxOVsVmQA7R9uWGZyi7AivOOdS+GdQDftUK4m8LxMVwV
-         KXhQh5OTOnskvFyNeOxCcmpFheC74cejQY86TpefB26V+wG/ZUN9ynlFjn4rjStJegQV
-         /5jD+7gJS5sSqDyLcjfhVMxq2OYYaHf+0DxFJsY3bayIB3EUZWMDNA2UuwK9j10T3vG+
-         bYkRpYbNVlSOptSz81JyXOFVmfAWLfiHz+kOJs3eHDnQqevH1q4teZ+ZRyXwZC0NnDjs
-         H3bRnTs2MqBB5usK0bLnI5WkyFhzrU/yiZG0ZbgW6sAypHkSKPv/fMGrLtyap92Vj3DM
-         8YRw==
-X-Gm-Message-State: AOAM531/NsVoSa6+84N4awMphfusUpcTrjgnD+j96Bg8S6gpW1+ftVfy
-        cU7oeATA0JiFcKyz23KNEheJIpSbjvE/R2J0TzCh
-X-Google-Smtp-Source: ABdhPJw9jESqQRPziTwI+V57RAwCz2GR3tx8f8YYGG8jsyMcn7fb2lG4mMTjKh7uAkvhExbUbAkL2EbhFloRRVNtt4c=
-X-Received: by 2002:a25:3890:: with SMTP id f138mr7506325yba.703.1641927593840;
- Tue, 11 Jan 2022 10:59:53 -0800 (PST)
+        Tue, 11 Jan 2022 14:00:20 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52036C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:00:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6lg/YQOMfTdWC8/+oY9b2dJk5r3hMXV+s1jSNhLuMho=; b=hKLhNAPUBMKTrlRjkXM99Kvqhv
+        G/dAO8OBQEXH5ogTsRzdqvBhOkgysPoC+UitwtXa8PUFMwr1fA/ZEK5nljZFoYK4xA5NMtLF9+RHl
+        V6aYtrEqN2JMzNROpfT/O1/7MXqNvqZ+T+UG/yQbtPMzi1bvluP4zy6es9FnuZbh4h3O+ONmbkUty
+        b6gi/Qftkav7i+r/N/4eLBjlyf4fT0Q4TmkyyDGL8ETxRfCtxOS7K4cROyUhwULoKmhBazrgn87vX
+        yrB10DVXF6U+Fqrbo5UYVqkESJhbs/VKxvdROhVNlqfC8hbrSvIbYFj/KawCY7qW91VJEpxJf/cXq
+        EQLV9rIw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7MNX-00HMZd-Vk; Tue, 11 Jan 2022 19:00:19 +0000
+Date:   Tue, 11 Jan 2022 11:00:19 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH] firmware: remove old CONFIG_FW_LOADER_MODULE test
+Message-ID: <Yd3Twxj4FjYvBwuo@bombadil.infradead.org>
+References: <20211230093932.2747587-1-gregkh@linuxfoundation.org>
+ <YdcAOL6hCck2jqXq@kroah.com>
 MIME-Version: 1.0
-References: <20220111142054.18733-1-nikita.shubin@maquefel.me>
- <20220111142054.18733-2-nikita.shubin@maquefel.me> <4b655bf8-ce56-ffe6-78b6-1f949b8df11f@linux.intel.com>
-In-Reply-To: <4b655bf8-ce56-ffe6-78b6-1f949b8df11f@linux.intel.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 11 Jan 2022 10:59:43 -0800
-Message-ID: <CAOnJCUKVGZ=ixXJb3d--JKA8DqSvHq4bnV9A1z4YPiQzDjzXHQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] perf tools: Add 'm' event modifier for counting machine
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Atish Patra <atishp@rivosinc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux <linux@yadro.com>, Nikita Shubin <n.shubin@yadro.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Song Liu <song@kernel.org>, linux-perf-users@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdcAOL6hCck2jqXq@kroah.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 10:53 AM Andi Kleen <ak@linux.intel.com> wrote:
->
->
-> >
-> >    u - user-space counting
-> >    k - kernel counting
-> > + m - machine counting
->
->
-> You really need to explain what "machine counting" actually is, as well
-> that is likely irrelevant for most CPUs.
->
+On Thu, Jan 06, 2022 at 03:44:08PM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Dec 30, 2021 at 10:39:32AM +0100, Greg Kroah-Hartman wrote:
+> > The CONFIG_FW_LOADER_MODULE check in firmware.h is very obsolete given
+> > that this symbol went away decades ago, so it should be removed.
+> > 
+> > Reported-by: Borislav Petkov <bp@alien8.de>
+> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  include/linux/firmware.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/include/linux/firmware.h b/include/linux/firmware.h
+> > index 3b057dfc8284..0b1c4d9c5465 100644
+> > --- a/include/linux/firmware.h
+> > +++ b/include/linux/firmware.h
+> > @@ -34,7 +34,7 @@ static inline bool firmware_request_builtin(struct firmware *fw,
+> >  }
+> >  #endif
+> >  
+> > -#if defined(CONFIG_FW_LOADER) || (defined(CONFIG_FW_LOADER_MODULE) && defined(MODULE))
+> > +#if defined(CONFIG_FW_LOADER)
+> >  int request_firmware(const struct firmware **fw, const char *name,
+> >  		     struct device *device);
+> >  int firmware_request_nowarn(const struct firmware **fw, const char *name,
+> > -- 
+> > 2.34.1
+> > 
+> 
+> Odd, 0-day reports a bunch of warnings with this change:
+> 
+> drivers/base/firmware_loader/main.c:1054:1: error: redefinition of 'request_firmware_nowait'
+> drivers/base/firmware_loader/main.c:811:1: error: redefinition of 'request_firmware'
+> drivers/base/firmware_loader/main.c:838:5: error: redefinition of 'firmware_request_nowarn'
+> drivers/base/firmware_loader/main.c:863:5: error: redefinition of 'request_firmware_direct'
+> drivers/base/firmware_loader/main.c:887:5: error: redefinition of 'firmware_request_platform'
+> drivers/base/firmware_loader/main.c:941:1: error: redefinition of 'request_firmware_into_buf'
+> drivers/base/firmware_loader/main.c:970:1: error: redefinition of 'request_partial_firmware_into_buf'
+> drivers/base/firmware_loader/main.c:992:6: error: redefinition of 'release_firmware'
+> 
+> 
+> Luis, any ideas?
 
-Ideally, this should firmware counting instead of "machine counting"
-which is a RISC-V specific terminology
-(Machine mode is highest privilege mode similar to EL3 in ARM where
-the firmware runs)
+Yeah I think this comes from the fact that modules get a respective
+_MODULE define in the generated file
+include/generated/autoconf.h 
 
-> I also didn't see that anywhere in the commit logs.
->
-> -Andi
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+For example:
 
+vagrant@kdevops-dev /data/linux-next (git::20211203-umh-fix-exitcodes)$
+grep CONFIG_CRC8 .config
+CONFIG_CRC8=m
+vagrant@kdevops-dev /data/linux-next (git::20211203-umh-fix-exitcodes)$
+grep CONFIG_CRC8 include/generated/autoconf.h
+#define CONFIG_CRC8_MODULE 1 
 
+So I think the above was put in place to ask if its built-in or a
+module.
 
--- 
-Regards,
-Atish
+  Luis

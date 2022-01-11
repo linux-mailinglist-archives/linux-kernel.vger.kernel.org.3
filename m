@@ -2,109 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B4E48AA13
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 378BD48AA19
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236757AbiAKJCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 04:02:15 -0500
-Received: from 1.mo552.mail-out.ovh.net ([178.32.96.117]:34563 "EHLO
-        1.mo552.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236605AbiAKJCO (ORCPT
+        id S1349139AbiAKJFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 04:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236605AbiAKJFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 04:02:14 -0500
-Received: from mxplan5.mail.ovh.net (unknown [10.108.4.36])
-        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id D4DDE2252A;
-        Tue, 11 Jan 2022 09:02:10 +0000 (UTC)
-Received: from kaod.org (37.59.142.95) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 11 Jan
- 2022 10:02:01 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-95G001713f3599-f95f-45bc-8458-3cc8394211bc,
-                    5383433EA887FCAE918FFCB03530F9AACAE8953B) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <83cac5d2-b5f2-836c-1f4f-bfe054a8bedb@kaod.org>
-Date:   Tue, 11 Jan 2022 10:02:01 +0100
+        Tue, 11 Jan 2022 04:05:53 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07877C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 01:05:53 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id x195so64611oix.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 01:05:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JjYGG4Mqq7wY6CDKzIIHdAwcntS1fcaEqeO52o9kuCo=;
+        b=aj32NzB5DXtXPhsv65Yawh1K41rQQVKEISKPYIQz7P3mXLb0B34EfYh587Asp5+hwU
+         G+p5GOcSTno2KmORLfdSw7988hfVeE8U6Bp7xJn8Hjyqwo8juM+K1YycYf76R+L8otYO
+         wi4uULReXi5fhrFTlp6px6jAIXsQHy50uAH4c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JjYGG4Mqq7wY6CDKzIIHdAwcntS1fcaEqeO52o9kuCo=;
+        b=KFtoAG9fvgiWARjfG9EeZ3jJb8uWX4nrQqdTrsg2rURhI/q+bpdx/pt7A6eYHnvo8h
+         Z56ZokiakDPKG1uzwVYurJty8tWW/QCCnODqUtu5NLErkQ+T0cVd4ncEFyhIwn3lvwes
+         QSBvKPj88YSzNijIO3ce9r8lFpPKXGzvyrhB+ykh/3q5g+PRhRl3dqMaadR6Hy+TkKnb
+         qAtd82CrIbEqmAQMKVcztTt8BI3Aq+VfYWvogAYhZbykz8pyMZS9kGIbRuUx2MelRYiL
+         AVWVXjy1zTrpefM3s2EcSJ9lY4J++W92uVXT+WkpNVUe52PLHKn5SiSjiXoS0mXxQsv9
+         45Kg==
+X-Gm-Message-State: AOAM533Kt17+kz2deMw+GLAvg+s1b57txhzlZdyp48+o/LVZSj8g2bb7
+        Jf/n5yBECuu1yPEHzkBzJvpVlfKMDTFpvaWitZEu0w==
+X-Google-Smtp-Source: ABdhPJxhDq3BvTLlSca+MsSLzCtT9n/Enjn62SMAefOQGarIUm6cKqdqaniOy/Xvm7lcKJaeiswM4kBpupKlPG9r368=
+X-Received: by 2002:aca:b103:: with SMTP id a3mr1089511oif.14.1641891952360;
+ Tue, 11 Jan 2022 01:05:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [patch] genirq/msi: Populate sysfs entry only once
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, <linux-pci@vger.kernel.org>,
-        <xen-devel@lists.xenproject.org>, Juergen Gross <jgross@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        <linux-s390@vger.kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
+References: <YdyKWeU0HTv8m7wD@casper.infradead.org> <20220111004126.GJ2328285@nvidia.com>
+In-Reply-To: <20220111004126.GJ2328285@nvidia.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Tue, 11 Jan 2022 10:05:40 +0100
+Message-ID: <CAKMK7uFfpTKQEPpVQxNDi0NeO732PJMfiZ=N6u39bSCFY3d6VQ@mail.gmail.com>
+Subject: Re: Phyr Starter
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, nvdimm@lists.linux.dev,
+        linux-rdma@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        Joao Martins <joao.m.martins@oracle.com>,
         Logan Gunthorpe <logang@deltatee.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, <linux-ntb@googlegroups.com>
-References: <20211206210600.123171746@linutronix.de>
- <20211206210749.224917330@linutronix.de> <87leznqx2a.ffs@tglx>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <87leznqx2a.ffs@tglx>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.95]
-X-ClientProxiedBy: DAG6EX1.mxp5.local (172.16.2.51) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 62e82270-dbcc-463c-8f53-caaee6d6cca0
-X-Ovh-Tracer-Id: 5157184527403223894
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrudehvddguddvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeeigedvffekgeeftedutddttdevudeihfegudffkeeitdekkeetkefhffelveelleenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddrleehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhrtghpthhtoheplhhinhhugidqnhhtsgesghhoohhglhgvghhrohhuphhsrdgtohhm
+        Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/10/22 19:12, Thomas Gleixner wrote:
-> The MSI entries for multi-MSI are populated en bloc for the MSI descriptor,
-> but the current code invokes the population inside the per interrupt loop
-> which triggers a warning in the sysfs code and causes the interrupt
-> allocation to fail.
-> 
-> Move it outside of the loop so it works correctly for single and multi-MSI.
-> 
-> Fixes: bf5e758f02fc ("genirq/msi: Simplify sysfs handling")
-> Reported-by: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Dropping some thoughts from the gpu driver perspective, feel free to
+tell me it's nonsense from the mm/block view :-)
 
-Reviewed-by: Cédric Le Goater <clg@kaod.org>
+Generally I think we really, really need something like this that's
+across all subsystems and consistent.
 
-Thanks,
+On Tue, Jan 11, 2022 at 1:41 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> On Mon, Jan 10, 2022 at 07:34:49PM +0000, Matthew Wilcox wrote:
+> > Finally, it may be possible to stop using scatterlist to describe the
+> > input to the DMA-mapping operation.  We may be able to get struct
+> > scatterlist down to just dma_address and dma_length, with chaining
+> > handled through an enclosing struct.
+>
+> Can you talk about this some more? IMHO one of the key properties of
+> the scatterlist is that it can hold huge amounts of pages without
+> having to do any kind of special allocation due to the chaining.
+>
+> The same will be true of the phyr idea right?
+>
+> > I would like to see phyr replace bio_vec everywhere it's currently used.
+> > I don't have time to do that work now because I'm busy with folios.
+> > If someone else wants to take that on, I shall cheer from the sidelines.
+> > What I do intend to do is:
+>
+> I wonder if we mixed things though..
+>
+> IMHO there is a lot of optimization to be had by having a
+> datastructure that is expressly 'the physical pages underlying a
+> contiguous chunk of va'
+>
+> If you limit to that scenario then we can be more optimal because
+> things like byte granular offsets and size in the interior pages don't
+> need to exist. Every interior chunk is always aligned to its order and
+> we only need to record the order.
 
-C.
+At least from the gfx side of things only allowing page sized chunks
+makes a lot of sense. sg chains kinda feel wrong because they allow
+byte chunks (but really that's just not allowed), so quite some
+mismatch.
 
-> ---
->   kernel/irq/msi.c |   11 +++++------
->   1 file changed, 5 insertions(+), 6 deletions(-)
-> 
-> --- a/kernel/irq/msi.c
-> +++ b/kernel/irq/msi.c
-> @@ -887,12 +887,11 @@ int __msi_domain_alloc_irqs(struct irq_d
->   			ret = msi_init_virq(domain, virq + i, vflags);
->   			if (ret)
->   				return ret;
-> -
-> -			if (info->flags & MSI_FLAG_DEV_SYSFS) {
-> -				ret = msi_sysfs_populate_desc(dev, desc);
-> -				if (ret)
-> -					return ret;
-> -			}
-> +		}
-> +		if (info->flags & MSI_FLAG_DEV_SYSFS) {
-> +			ret = msi_sysfs_populate_desc(dev, desc);
-> +			if (ret)
-> +				return ret;
->   		}
->   		allocated++;
->   	}
-> 
+If we go with page size I think hardcoding a PHYS_PAGE_SIZE KB(4)
+would make sense, because thanks to x86 that's pretty much the lowest
+common denominator that all hw (I know of at least) supports. Not
+having to fiddle with "which page size do we have" in driver code
+would be neat. It makes writing portable gup code in drivers just
+needlessly silly.
 
+> An overall starting offset and total length allow computing the slice
+> of the first/last entry.
+>
+> If the physical address is always aligned then we get 12 free bits
+> from the min 4k alignment and also only need to store order, not an
+> arbitary byte granular length.
+>
+> The win is I think we can meaningfully cover most common cases using
+> only 8 bytes per physical chunk. The 12 bits can be used to encode the
+> common orders (4k, 2M, 1G, etc) and some smart mechanism to get
+> another 16 bits to cover 'everything'.
+>
+> IMHO storage density here is quite important, we end up having to keep
+> this stuff around for a long time.
+>
+> I say this here, because I've always though bio_vec/etc are more
+> general than we actually need, being byte granular at every chunk.
+>
+> >  - Add an interface to gup.c to pin/unpin N phyrs
+> >  - Add a sg_map_phyrs()
+> >    This will take an array of phyrs and allocate an sg for them
+> >  - Whatever else I need to do to make one RDMA driver happy with
+> >    this scheme
+>
+> I spent alot of time already cleaning all the DMA code in RDMA - it is
+> now nicely uniform and ready to do this sort of change. I was
+> expecting to be a bio_vec, but this is fine too.
+>
+> What is needed is a full scatterlist replacement, including the IOMMU
+> part.
+>
+> For the IOMMU I would expect the datastructure to be re-used, we start
+> with a list of physical pages and then 'dma map' gives us a list of
+> IOVA physical pages, in another allocation, but exactly the same
+> datastructure.
+>
+> This 'dma map' could return a pointer to the first datastructure if
+> there is no iommu, allocate a single entry list if the whole thing can
+> be linearly mapped with the iommu, and other baroque cases (like pci
+> offset/etc) will need to allocate full array. ie good HW runs fast and
+> is memory efficient.
+>
+> It would be nice to see a patch sketching showing what this
+> datastructure could look like.
+>
+> VFIO would like this structure as well as it currently is a very
+> inefficient page at a time loop when it iommu maps things.
+
+I also think that it would be nice if we can have this as a consistent
+set of datastructures, both for dma_addr_t and phys_addr_t. Roughly my
+wishlist:
+- chained by default, because of the allocation headaches, so I'm with
+Jason here
+- comes compressed out of gup, I think we all agree on this, I don't
+really care how it's compressed as long as I don't get 512 entries for
+2M pages :-)
+- ideally the dma_ and the phys_ part are split since for dma-buf and
+some gpu driver internal use-case there's some where really only the
+dma addr is valid, and nothing else. But we can also continue the
+current hack of pretending the other side isn't there (atm we scramble
+those pointers to make sure dma-buf users don't cheat)
+- I think minimally an sg list form of dma-mapped stuff which does not
+have a struct page, iirc last time we discussed that we agreed that
+this really needs to be part of such a rework or it's not really
+improving things much
+- a few per-entry driver bits would be nice in both the phys/dma
+chains, if we can have them. gpus have funny gpu interconnects, this
+would allow us to put all the gpu addresses into dma_addr_t if we can
+have some bits indicating whether it's on the pci bus, gpu local
+memory or the gpu<->gpu interconnect.
+
+Cheers, Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

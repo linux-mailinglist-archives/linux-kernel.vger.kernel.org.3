@@ -2,226 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 740A848A7E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 07:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF70A48A7E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 07:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235937AbiAKGon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 01:44:43 -0500
-Received: from mail-bn8nam12on2040.outbound.protection.outlook.com ([40.107.237.40]:47264
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        id S1348252AbiAKGou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 01:44:50 -0500
+Received: from mail-eopbgr50066.outbound.protection.outlook.com ([40.107.5.66]:63177
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348226AbiAKGoe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 01:44:34 -0500
+        id S234266AbiAKGoo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 01:44:44 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lbz0fY8btkEa0WS6RZCz0XyIENhr3wyTL8oBkrRHKjLRgj2BrS7ZcknsWZTRwwAYuukoq7xBqArjGK0/X4UDvKfthlyXA89YLkSMIa8xyQBd3gzF4Feh5gBf6lVIS5Yj2cBnT39M5UdcOFJRGtP+NKYexvOEojSaxy83z4YYLHXn+z0wUaw90jZFsRgRcRhEwdcMsC8BVGPEygQqzdeyM+HGggXse1ng8idXYHq3NfnkJOii6/M5c+nqIW+9UwyBH9RzHJlWhuMZTz3tASbjQJ/okA4iBn4bODYPAawYRlZIzhvIeDyaqyo7ovrrM+rPnCLI0Pn1DrvAL/WcZOYsFQ==
+ b=O5Mv42zK4wtNAyF4WMEp0bvVkep4Q/T+Cgwu2AD2DEkDd8Xe8FgrfdzopN9w3CZ1YHm7x/eUqy1cdkdvq6ScTr4l35XbKV2dCQyaIEHOo80I5xLOKAftJ9hhSEYJZe9Ij6/YylqqYfxDw0RrNYJxh93eVwd/vfnEabhcVKBiOhEKh3FdTCg/3nY1WnB2a2X+KrXNpMdDpadMATmXa+3N1kIvdUxxKzES2Dm20TqMLSJruhiysRGJkLP3Ud3/FJDB8lQby5tfQBwBqxPBAvYQEmYB8jEW8URtnZe7FkD7heRpPCgbILPd1eDyEU8IL6r9LkHXA2PvtiS1GNjfoeoRKQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8E54jDy51AuAA2hrLsj3H1PXKwPrlVnEDQnKs3sK/5Y=;
- b=dbKkNd7fB8MnX78t+4pPblb1g9ghFFgwVfkxGBZIby+Cuu2d6/XKjdFqwvWEOkSEek1wfg3tDkANxhQK0P7A7fCIgAOi0QgMbqXC8bQi5vsFibwSSgkRPisgsqD7l5Ao1NJaZ0AGW4/fy6Knjpkb0w6eMEsKQ8dk8lAOBopAbUBlOD6VQ4Rd/I+gMhEUri8lznJby779J/FgQ1HJezxw8DDcegriTVR41G+2VbJNhMYUnQ6KtYjnHjPMFTDaFjYqAIbsQbpT26j4SuIJU5FxPazr3UdI8sPRvwp2+METUmCO+uEIISDHtVYDVR8T3Wecot+AkXYIebIyOedSmi6ypQ==
+ bh=IWcPcHC7sezCB69bNF6RlCc1n34wi/5pi3iy6L1Curc=;
+ b=OnyW3X1ur86oPbF7k+JV5bB/O02KfykQFh9b2rhQC90ElUtS8ZR6xX+AbKxo0fH91sK1dLac12VjgIIxAd5p4lhHA7SbYrWSs3QM/YO6i9dHmbwt15u8w8lA8pJC1FQSFnBwFs/XHfHrYNEANd7B0nORqPLfeK/rPqgacZu5SWfptfToLgaAQ8Av+v3RwShnBvtf855rjOAB9RRsB/HLpWci6JGR2b9i5YRURZdCKhglCHukh499jwwU2i0f+jzHtFNjuGQrsF7Lz0uOUhLuRWTgKSeStUkiJVpWxbl7JS0T9HQFIPputZsBKhccr3OuBscj89qS13Px18D2qiESMQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8E54jDy51AuAA2hrLsj3H1PXKwPrlVnEDQnKs3sK/5Y=;
- b=MKAMx5w84z71CMOQsp9UKGl6GSutTVSQCFRsX37GqQAXqNu1iQqK4UbGs6dmodvCsBCBpwaWTtUh6NGwO5OYyLxq7ATfy2hOI2x4kA2msy7H9omIkW9pNMauGnfXI7qDOlPWQCtVn8NRn2m9q2TCdsIZ/ZburT61gHnLAIb25u55zD5eK0V8+T+HHdF9KBlZZtx9Xckir8c0B8q21uAVYYDYsmMxXPin8cLahZwXAUlJ0KLMhLQ6aJa3yPYmbmGwG2v6sPtkQ2UbX82c7cFmZN6a0WP39UciR8T3I88G9aX8JkBwXzEKbU64DVFUBDEtwLxJ7fSAl8B5LhE6iVs4xw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by BY5PR12MB4276.namprd12.prod.outlook.com (2603:10b6:a03:20f::13) with
+ bh=IWcPcHC7sezCB69bNF6RlCc1n34wi/5pi3iy6L1Curc=;
+ b=KWFYNTvKgGiLBK/mqh1OB+99AaIbg82IbrQWIMcsg51Hk+Zt8NuzFPcbVhSXRee1VS8AK8fDQg/+XFGDLNWTTN1YORhJF6xRNZ8Lk56d0Lb6VEEhqZUMoyXeejljjXBIWeTStBd5wp3YPZAtYpmdtkU+jJxYt410nCmjaCUDVbk=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DU2PR04MB9129.eurprd04.prod.outlook.com (2603:10a6:10:2f4::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Tue, 11 Jan
- 2022 06:44:32 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::8496:16fd:65c5:4af7]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::8496:16fd:65c5:4af7%4]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
- 06:44:32 +0000
-Message-ID: <725ee15c-e2c0-ca74-995f-a6f8b5196f62@nvidia.com>
-Date:   Mon, 10 Jan 2022 22:44:30 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v2 17/28] gup: Add gup_put_folio()
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Tue, 11 Jan
+ 2022 06:44:41 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::d4dc:8c9a:55d0:81d8]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::d4dc:8c9a:55d0:81d8%3]) with mapi id 15.20.4867.011; Tue, 11 Jan 2022
+ 06:44:41 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: RE: [PATCH 1/9] dt-bindings: remoteproc: imx_rproc: support i.MX8QXP
+Thread-Topic: [PATCH 1/9] dt-bindings: remoteproc: imx_rproc: support i.MX8QXP
+Thread-Index: AQHYBpwqPpFjre1FRE2CDzo8h2g4iKxdYC5g
+Date:   Tue, 11 Jan 2022 06:44:40 +0000
+Message-ID: <DU0PR04MB9417B64FFCA45C6ABA034CD588519@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220111033333.403448-1-peng.fan@oss.nxp.com>
+ <20220111033333.403448-4-peng.fan@oss.nxp.com>
+In-Reply-To: <20220111033333.403448-4-peng.fan@oss.nxp.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-References: <20220110042406.499429-1-willy@infradead.org>
- <20220110042406.499429-18-willy@infradead.org>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20220110042406.499429-18-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0270.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::35) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9ea707ce-c002-475f-7a59-08d9d4cdd83b
+x-ms-traffictypediagnostic: DU2PR04MB9129:EE_
+x-microsoft-antispam-prvs: <DU2PR04MB9129E6D643DBD591C808515088519@DU2PR04MB9129.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: v/7Lq/nxy1ZoDRxInbkX4ILE53RCVhanU/ZIpxmg7Gmy/dUkzn+diawae5JoCt3aqxZp8RcLzYg7FnlpDtOEqdmCasGvw15g1i2MVlUBfbsuq2T8DvONbN1JtXEgvjLGPWcYS5EyRATTclm6P1YxU14sQq4ZkbH1GbBayJ7IukqL2WgGh1+3skvU44v+A7PvPgOB/rPHciS4ykbdXvjmo9cgpt6XR8O8NDDwdvsvnj//avkhHRpndlguyi2sK6V/SvMfMnv3CAo906tVfI2waAbAl5eChYe66Nhesoir+Y+O4trAj9B2J7fzQTg73wzyTMqhsXH65iGYYaMef14KWGIZbDIynRupTGrEq2SqbQ+tdzVSFoOE4g//6gxk08RH4HxrBIP5oorTDVcke52JFXqc0MsPflAxfSdTXuqH/UdEYzhBTj3VrUEFui6uFNH4ZGsZv69RNm5quXlzMMUL313O3zA3f1YK28kZ/6q20sAAhrn2Y2wl9HWjccEgB1nMX2ZY92vOaXlzWylqqJutH/ZaJR90k+/4LTo82Cr6YF/z1WauDZ9hoKFZhr43o8i26AwVvY29ta42Pnqwxq0A0q4VgQlATtv5iT/Ct+cDxmSH5fC+WRJAgTx/N+pteD/IjYM/cn0IEXk+aeE02w8fo4itbqf0PmmvOTm0A2mwGmtdP6+mS7Lku56tjHpFkphlOWdjRPUIgvDlpq5FHoPhE439nv8jrvgBOetlaq9KRho=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(26005)(7416002)(8936002)(71200400001)(8676002)(122000001)(38100700002)(66946007)(6506007)(186003)(44832011)(33656002)(55016003)(9686003)(52536014)(316002)(66556008)(66446008)(64756008)(66476007)(7696005)(110136005)(2906002)(921005)(508600001)(5660300002)(86362001)(76116006)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?L8aU4heZhObhvEOoGzeDu6s1Wr4WURC4NAyayvWTEglG4kMrJBQkbEeO8dKH?=
+ =?us-ascii?Q?G0D2jE7dwsAv0EImfjjWsK0XSk6qFp/fhmlRfiU7txqrtSUFJANQA/e+8jrk?=
+ =?us-ascii?Q?MrD8N3u/Ge2OXyvbgWRyTFY40tPFYemi0U7eYIeErndAJnr/7Dv/SEBn/KXV?=
+ =?us-ascii?Q?uuYeJLeDToVfuQtRD/CaspgSwXFLhSHZZu/x1a7dAkp3Dv/h4AL6Vnwp5Ebl?=
+ =?us-ascii?Q?x2/d1bz1CK3WCWR5ER0E6wBCtlCyRMVXFcnjSIXan0Av8LHl8N5/JK3DmAHx?=
+ =?us-ascii?Q?COeuN6uq0q3wfYo92xybm5iiZq2JmyhCShinoSS+pMky2uTAYlTjxrVx4RFs?=
+ =?us-ascii?Q?7utbdpUZwsdTBS60l/IY6Wl1WIdd/qWvhsEukmYk1J4ptAh/HntGt4q66Fva?=
+ =?us-ascii?Q?gMjG0tjhsFicMtDzGCVd+mqOOTz4cVzmL8d7a4vsxTo9AVoZvnxun1b/g7OK?=
+ =?us-ascii?Q?fkmWXzbI5IvR65lsLCepMvr2xNQNy5xEWf+3RHtM2ZT57579D6pvNWkEVm5n?=
+ =?us-ascii?Q?Qc9uRqkcpi0f/2QXc1p+sja/2k/p/F0NGMxSrhznTeOQr5CRRuTjdN8xg2g2?=
+ =?us-ascii?Q?6VjF1Jr0qOinZhppAOCla96X9axxPEQT4PGb8/02o7Ito3F1de0ScKW/iPsT?=
+ =?us-ascii?Q?OJWk/P7gTZLKfQIc1eFlMJk1dL81yKzkH9eeIXAt+5MEsTil5E4pySHpDtEq?=
+ =?us-ascii?Q?qpMCTWXr9L0sgdpn65k9Jcli22BnQSfVZJeYrNI0gHYRblPScO3GtKnaQekI?=
+ =?us-ascii?Q?h6JdE+oHy8DhFsydL7jarqFnJC9DJwzhaUAeJnAQF/MgJfG0EZDRp32z0aP2?=
+ =?us-ascii?Q?K6H2cRgmvpKDeOIMCSf7lWgt6nHjgGYL1BX3tu6lE3VnlWyxIxS3/jlHrH55?=
+ =?us-ascii?Q?pTJYiFLwjJLVvYvW7rhyjKYfpvj3FLQz8M1h7EZxP+bNEDMf7TafqlGP1rI9?=
+ =?us-ascii?Q?284A/QrwOlafR+vpDArHNoNoMoAqsPc5SNe/NW8N5rrE0R+gT2qv6amq0FYt?=
+ =?us-ascii?Q?EUQUYNOPSEBiDCp14Iq28jXBbtgyIregXMF21n9pQ6Q8S1BfsUDa5BGP7lR+?=
+ =?us-ascii?Q?BhRg7+C4+G1pu4FgiTyiDHOnL6OL42WaGoQxk3gPkCJucCz9c0WFOT9Hmq/k?=
+ =?us-ascii?Q?/NFIADlLPLwLFhXDWKs+Nm4ov11fQBOO1UfXPgaZOn2dW7jZA+5gJ8T7SU7P?=
+ =?us-ascii?Q?7xbQU5fmQmzwLSbk8KEGaT+GNE1xIwdwWnb4R0a2fm6idRldc9BWR2ejxAcy?=
+ =?us-ascii?Q?voIHrrFdfziOFKKMq0Y4B+Iacjfu3l52mA56Atte64jf+3lkypuUqHc2JUvs?=
+ =?us-ascii?Q?12VmhWgw2joWjEmJc0v7RGchjqnZZJpTVyTQsbFwleKLKkPj4yjM+FYqLisa?=
+ =?us-ascii?Q?ZtRpiyvt7WQCrIYSBvvEY2poyRAg2QU4lnY+Ro4RIVJWwvSLIDNFCnTjF001?=
+ =?us-ascii?Q?bPI8ZS5Kk2eVo17uleWWZTL3RL0Seu98JKDJnwhQfvWxgQ7IXjW9wYj/o03/?=
+ =?us-ascii?Q?HhNhj1lyW2yXtYkxkh0ED+rmA6skEPhw3w/o3TgoXRo9pvDYUxIMPOL2uCIy?=
+ =?us-ascii?Q?Z+Bo2ZOtrtZdYa26e6SOe/w11ENCN4EtbQo/YSIV/O3MKYBR0nyuVWgpHivB?=
+ =?us-ascii?Q?2qxlpCpf7dX8BZnmJ9cJJtI=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a17dadf0-6aa5-454c-5c44-08d9d4cdd314
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4276:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB4276E927E6388E698426556EA8519@BY5PR12MB4276.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EuZSXlp2Z9fdUr5wFdJwyJl2szs3ZFkvYDKv23mlzz9WLcDWhm0GjY0qYkf99STDLvbubQ0C6k2Vo35PUCj7edy3q3iMFtBH++neN/RgiarTk1fCpypBg3nCbfC9EubT4BvvTdSlcHDC2PZcdcc8ISrFyx1p1Lbm5WeWQ0A5Lw8WDQfcNaFYftgN5NySG3GiP4ZRuv/pQp5LCKKXZqPMFazBu+QK2f3GuuRhPvw0WnZZ6msThZWOlCABwnPNL83NbB65rbVnYf1Kzxw4IsSEK6joqZuuQ52WEraJ8rS2Vr/Z2x3JnDl75wpupD7pZH7Y8pFQ+o/uY9zOjF4Ca149Ird7PK6RZRSlNWk6/gqUNg9n2KS1r1pUCRqPUYhJyDoG2qfV1daBQ0hph67MYUA3hcvWEDt3RB/p0jcVjkbzyzi4BQEe/NzokuJXEgiQQascQviCx4NeQLQQznTwvwBNMc6UYqSgQQ4/+10SjFlXyXoGJ+SqrFlU+f4uRfSszm8l7gs3Ay35SnuHWzCDo8H8yw9dBDnoUByMRKbK11tZAwjzACL2YlPYYv8HrgAm0qyUFohe3oIYk6A4NxVN09/1UaN1O7pUQ1vEFwLXC8u8mvsnAVUexrUrn8AbT6MWp5eC5+SShJvUkDYJkXI7B3+27Yz9HJi64jDo3IQy0dK6I1zsHb9Oyqf2t1uk5yJSWiyeIkAukYayxdY5ZAFpXMEvizUPprVE/7ShQiK+BbilrRhsbAc2vqobeEb5kmX/zlgf
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(4326008)(5660300002)(8936002)(8676002)(2616005)(66556008)(66476007)(2906002)(66946007)(26005)(36756003)(508600001)(6512007)(186003)(31696002)(6486002)(38100700002)(54906003)(316002)(31686004)(86362001)(6506007)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MEFrNFhMTlo3VGtlcURNeUUyc0xuVHVBTm5TUEFaZFNJSWQrY1FJdU14M3l2?=
- =?utf-8?B?cVNHK0RHSHBSTG4yYWh4L1N6a01pS2xMWnRFcUpBT3lxU2ROSnpUZGY1b3Jx?=
- =?utf-8?B?YmZSNWhidkpaZlRrdGVFR2RsUWQ0aEptN0hPNnZBR3BvRlRxL2RvUzU3VGgx?=
- =?utf-8?B?cmY1UEZRMjZCRWlNbm84VHMzUDhoVzhSYm1vWjVaWU92dW81dUdHTFBNYWNR?=
- =?utf-8?B?T2prWU0zN0o3OHNtRWJ1ZkhNQjgzMGZoeW85cHpsNnJ3bTM4alprYytHWXd2?=
- =?utf-8?B?VEdUTHQvdS82dm1WTHBaUXZRRnBlYVdkZ3o1Z05nL0ZycWtHTWxjVll6eHh4?=
- =?utf-8?B?SDlGYTQzMFNMdnl0RFpsOGNYUnl0djBweFJPbU1YQSs5bDdFcTZmVnVjd0lI?=
- =?utf-8?B?cGFTUzkydnFNUTB0cUhKZVhmY3FIMnpib29UaFNKdUl5ZVE1SGI1OEVOL3Bq?=
- =?utf-8?B?Si9Fby9BK29OQ3hKaWpHU2ZSU21oMlNzSjBLZE1meFNhNTY5Qzh5dWh3Umcy?=
- =?utf-8?B?SG0wR2V5N3F1ckdTNkUzbUI3ZHNNU0tCNEVSZDNzWVhkNUdEMjVRbTJOR3ZD?=
- =?utf-8?B?NWJFY2pjVm5BYWZQZkpvdkQzb0hZaytKR3N5Y3QxMENxUDV4ZVZ1WTF0djMv?=
- =?utf-8?B?RGM4Vy9uNzdYdTdMbkoyeFZibzg2RS9OM1J0WG9wWWhndkl0N1B1Y0VqMm0y?=
- =?utf-8?B?dHdmUlpoWklpSFhhbDdvMkIvUld5R253N0paTzZxS1k0MlJaMkNDK3dPaW5Q?=
- =?utf-8?B?NGFpcjNlTnF1WXgyc1VDaEc5UjRVMW82S3UvL1dSdzc0QWw4Z3dEWjJ1djJj?=
- =?utf-8?B?RTIvUlNDb2o1TGxKVG1KdTZjaWZZSzJvOHlRa3BFak96THdEdFMycFlGRkhy?=
- =?utf-8?B?UmVONER5ZG5OK2t1TFphbW9oMkNUVTRwRlM0a3dDdmwzRUpxUTFXKyt5K290?=
- =?utf-8?B?N2Zmb3FuVVZpdVR4Mk9hcTFKOU8vZE13czJHVkdVN0x6NS9sblo0YldPY3I0?=
- =?utf-8?B?NzcxZTI2eGdwcmVMajVHbWdhY1dWc2dMb1lXa2NZRE1KZGZ5TnN4R2Z3bjhi?=
- =?utf-8?B?T040TGRKMWFNb3pLSHBiM3dzOGdxRTUvenZRNis0U3F6ZjNLUWw3OTBRM0Qz?=
- =?utf-8?B?MkRhTTliL0paN2tjdEpmMGRvT21hYlAxS0VheVd1WDRtRFR2Z0xPb0xST2lI?=
- =?utf-8?B?SEJBZXcvT2tRQmpuRnRkRG5uZUZ1ZDl0UjlRV2RkRWNLSkhydHpVZWVxcElQ?=
- =?utf-8?B?UnkveWp5MFh5bnpSSzZCZGlkakk3cTlCMkptYWhiZFZXU1ZSRytTb3FPL0hx?=
- =?utf-8?B?N0tkZzFhRnBmSHNPWk9Bb0tSeXBHUVlld290bytrSytSM0xKUFA2UzQ4cHhz?=
- =?utf-8?B?SmRpRmVmUnpsRFAvOFFoalg5Z0lIZVRjUFBEVXN1aEVkYkVGY0MyL21DMDdJ?=
- =?utf-8?B?SzQ1K3lYODM0OEhqbU9WalBLbUhtOWdtMUtPWEI5Q2xWUVZaWmZXbDdEelpH?=
- =?utf-8?B?WDdtQy82cUs0VnVXNVBQQlJxMVdIMTlvS1lvYlJ5Y2d3QkROUU4xazNBNzJo?=
- =?utf-8?B?RWxxY05ZWGdBdFRQOFdIOHpVcG1EUHp1Qk1WVUZHNGxodDNjQ3p1NDE4YTdY?=
- =?utf-8?B?Y2hSSllSVlpRZVRFdnl1amJLeHR1L0xGVmRLS2FiS1pnS3JLbDhib0xXK3Iy?=
- =?utf-8?B?cVpFV0tnWEIzNktJRHB0V3RJeUo2WStPMXRnWldHR1VEM1owMitQV3VOdm1n?=
- =?utf-8?B?NndZT2wxaVliN25ERjZXTkliL2MyVENjVzNsWi9mRkljZmsxNnhzd2dkZVds?=
- =?utf-8?B?Z3lScWFuVHpCMkhyQ3Uwak5yemt4aEsvZFR1T3hxZHhsSVg1a2FXQVVrMzBT?=
- =?utf-8?B?aGZQVWNCNjhBeGtQNHFkRmVmbEdXUG8rOWh3cFRvQmRHa1hLc2lSdjl3NUd6?=
- =?utf-8?B?ZmRzTTFBU242SXk0RzI1V1NKZjlkb0VXSEJ6SU9YR2ZkMlhJVkxlYjYvTHlK?=
- =?utf-8?B?Mk8zVnVnaWpLZTJSQWxMdTFEQmQzVDhOTnhBZG1zTUxBeWFvRTRFYTVtZlJu?=
- =?utf-8?B?M0VHV2wzN1lucUIyTlhHeVRqcGNsUWZJdnBZa1FVaXJlQm1uejBDbEJ6ODFK?=
- =?utf-8?B?NjFPV2Y1dWo4WmV4NkN1NndmTGN2V3FwOGpHdmswYzNBdWhsdUdya0N0b2c2?=
- =?utf-8?Q?yylykoO9T+xHgxYGCx5MOzI=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a17dadf0-6aa5-454c-5c44-08d9d4cdd314
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 06:44:32.6221
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ea707ce-c002-475f-7a59-08d9d4cdd83b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2022 06:44:40.9703
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IvuNN6HdXLMHJd5OYUzN9CQdtVJjQpO6QuJ/v3RelIrwWO3+MdB+whIUw53Nfa7PlGEgZZ2cornHStRkkx2K9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4276
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SJwzKYvUHW8FhoBWVo4pH0c9p3FvgHkQ5geuWGJ33/gZiiejndXA9pyFnhMNmQVpdiVh4hvDiAjZLnvfWoEbAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9129
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/22 20:23, Matthew Wilcox (Oracle) wrote:
-> Convert put_compound_head() to gup_put_folio() and hpage_pincount_sub()
-> to folio_pincount_sub().  This removes the last call to put_page_refs(),
-> so delete it.  Add a temporary put_compound_head() wrapper which will
-> be deleted by the end of this series.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Subject: [PATCH 1/9] dt-bindings: remoteproc: imx_rproc: support i.MX8QXP
+
++Rob
+
+>=20
+> From: Peng Fan <peng.fan@nxp.com>
+>=20
+> Add i.MX8QXP compatible
+>=20
+> Add a new property rsrc-id for SoC which supports SCFW. This rsrc-id is u=
+sed
+> to check whether remote process is under control of Linux or not.
+>=20
+> To i.MX8QM/QXP, when M4 is in the same hardware partition with Cortex-A
+> cores, need power up M4 through SCFW, then M4 could start. So introduce
+> power-domains property
+>=20
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->   mm/gup.c | 42 ++++++++++++++----------------------------
->   1 file changed, 14 insertions(+), 28 deletions(-)
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 9e581201d679..719252fa0402 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -45,34 +45,15 @@ static void folio_pincount_add(struct folio *folio, int refs)
->   		folio_ref_add(folio, refs * (GUP_PIN_COUNTING_BIAS - 1));
->   }
->   
-> -static int page_pincount_sub(struct page *page, int refs)
-> +static int folio_pincount_sub(struct folio *folio, int refs)
-
-I just noticed that this return value was a little hard to reason about, which
-prompted me to notice that I'd skipped reviewing patch 10. So I went back
-and added a note there. :)
-
-Anyway, this one looks good,
-
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-
-
-thanks,
--- 
-John Hubbard
-NVIDIA
-
->   {
-> -	VM_BUG_ON_PAGE(page != compound_head(page), page);
-> -
-> -	if (PageHead(page))
-> -		atomic_sub(refs, compound_pincount_ptr(page));
-> +	if (folio_test_large(folio))
-> +		atomic_sub(refs, folio_pincount_ptr(folio));
->   	else
->   		refs *= GUP_PIN_COUNTING_BIAS;
->   	return refs;
->   }
->   
-> -/* Equivalent to calling put_page() @refs times. */
-> -static void put_page_refs(struct page *page, int refs)
-> -{
-> -#ifdef CONFIG_DEBUG_VM
-> -	if (VM_WARN_ON_ONCE_PAGE(page_ref_count(page) < refs, page))
-> -		return;
-> -#endif
-> -
-> -	/*
-> -	 * Calling put_page() for each ref is unnecessarily slow. Only the last
-> -	 * ref needs a put_page().
-> -	 */
-> -	if (refs > 1)
-> -		page_ref_sub(page, refs - 1);
-> -	put_page(page);
-> -}
-> -
->   /*
->    * Return the folio with ref appropriately incremented,
->    * or NULL if that failed.
-> @@ -171,15 +152,20 @@ struct page *try_grab_compound_head(struct page *page,
->   	return &try_grab_folio(page, refs, flags)->page;
->   }
->   
-> -static void put_compound_head(struct page *page, int refs, unsigned int flags)
-> +static void gup_put_folio(struct folio *folio, int refs, unsigned int flags)
->   {
->   	if (flags & FOLL_PIN) {
-> -		mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_RELEASED,
-> -				    refs);
-> -		refs = page_pincount_sub(page, refs);
-> +		node_stat_mod_folio(folio, NR_FOLL_PIN_RELEASED, refs);
-> +		refs = folio_pincount_sub(folio, refs);
->   	}
->   
-> -	put_page_refs(page, refs);
-> +	folio_put_refs(folio, refs);
-> +}
+>  .../devicetree/bindings/remoteproc/fsl,imx-rproc.yaml  | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>=20
+> diff --git
+> a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> index fc16d903353e..ed1bcb3046a9 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> @@ -19,6 +19,7 @@ properties:
+>        - fsl,imx8mm-cm4
+>        - fsl,imx8mn-cm7
+>        - fsl,imx8mp-cm7
+> +      - fsl,imx8qxp-cm4
+>        - fsl,imx8ulp-cm33
+>        - fsl,imx7d-cm4
+>        - fsl,imx7ulp-cm4
+> @@ -59,6 +60,15 @@ properties:
+>        Indicate whether need to load the default firmware and start the
+> remote
+>        processor automatically.
+>=20
+> +  power-domains:
+> +    maxItems: 8
 > +
-> +static void put_compound_head(struct page *page, int refs, unsigned int flags)
-> +{
-> +	VM_BUG_ON_PAGE(PageTail(page), page);
-> +	gup_put_folio((struct folio *)page, refs, flags);
->   }
->   
->   /**
-> @@ -220,7 +206,7 @@ bool __must_check try_grab_page(struct page *page, unsigned int flags)
->    */
->   void unpin_user_page(struct page *page)
->   {
-> -	put_compound_head(compound_head(page), 1, FOLL_PIN);
-> +	gup_put_folio(page_folio(page), 1, FOLL_PIN);
->   }
->   EXPORT_SYMBOL(unpin_user_page);
->   
+> +  rsrc-id:
+> +    description:
+> +      This property is to specify the resource id of the remote processo=
+r in
+> SoC
+> +      which supports SCFW
+> +    maxItems: 1
+> +
+>  required:
+>    - compatible
+>=20
+> --
+> 2.25.1
 

@@ -2,36 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F24D148A452
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 929B048A454
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345898AbiAKAXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 19:23:35 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:55393 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1345892AbiAKAXd (ORCPT
+        id S1345894AbiAKAXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 19:23:37 -0500
+Received: from relmlor2.renesas.com ([210.160.252.172]:4418 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1345900AbiAKAXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 19:23:33 -0500
+        Mon, 10 Jan 2022 19:23:35 -0500
 X-IronPort-AV: E=Sophos;i="5.88,278,1635174000"; 
-   d="scan'208";a="106050139"
+   d="scan'208";a="106595518"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 11 Jan 2022 09:23:31 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 11 Jan 2022 09:23:35 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2E2044157D34;
-        Tue, 11 Jan 2022 09:23:30 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id C71CD4157D3F;
+        Tue, 11 Jan 2022 09:23:32 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     linux-media@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 03/13] media: bdisp: Use platform_get_irq() to get the interrupt
-Date:   Tue, 11 Jan 2022 00:23:04 +0000
-Message-Id: <20220111002314.15213-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 04/13] media: s5p-mfc: Use platform_get_irq() to get the interrupt
+Date:   Tue, 11 Jan 2022 00:23:05 +0000
+Message-Id: <20220111002314.15213-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220111002314.15213-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20220111002314.15213-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -49,42 +50,42 @@ In preparation for removal of static setup of IRQ resource from DT core
 code use platform_get_irq().
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
 ---
 v1->v2
-* No change.
+* Included RB tag
 ---
- drivers/media/platform/sti/bdisp/bdisp-v4l2.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/media/platform/s5p-mfc/s5p_mfc.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-index 01ce7b711774..5aa79d9277c8 100644
---- a/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-+++ b/drivers/media/platform/sti/bdisp/bdisp-v4l2.c
-@@ -1284,7 +1284,6 @@ static int bdisp_remove(struct platform_device *pdev)
- static int bdisp_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc.c b/drivers/media/platform/s5p-mfc/s5p_mfc.c
+index f6732f031e96..761341934925 100644
+--- a/drivers/media/platform/s5p-mfc/s5p_mfc.c
++++ b/drivers/media/platform/s5p-mfc/s5p_mfc.c
+@@ -1268,7 +1268,6 @@ static int s5p_mfc_probe(struct platform_device *pdev)
  {
- 	struct bdisp_dev *bdisp;
+ 	struct s5p_mfc_dev *dev;
+ 	struct video_device *vfd;
 -	struct resource *res;
- 	struct device *dev = &pdev->dev;
  	int ret;
  
-@@ -1335,14 +1334,11 @@ static int bdisp_probe(struct platform_device *pdev)
- 		goto err_wq;
- 	}
+ 	pr_debug("%s++\n", __func__);
+@@ -1294,12 +1293,10 @@ static int s5p_mfc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(dev->regs_base))
+ 		return PTR_ERR(dev->regs_base);
  
 -	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
 -	if (!res) {
--		dev_err(dev, "failed to get IRQ resource\n");
--		ret = -EINVAL;
+-		dev_err(&pdev->dev, "failed to get irq resource\n");
+-		return -ENOENT;
+-	}
+-	dev->irq = res->start;
 +	ret = platform_get_irq(pdev, 0);
 +	if (ret < 0)
- 		goto err_clk;
--	}
- 
--	ret = devm_request_threaded_irq(dev, res->start, bdisp_irq_handler,
-+	ret = devm_request_threaded_irq(dev, ret, bdisp_irq_handler,
- 					bdisp_irq_thread, IRQF_ONESHOT,
- 					pdev->name, bdisp);
++		return ret;
++	dev->irq = ret;
+ 	ret = devm_request_irq(&pdev->dev, dev->irq, s5p_mfc_irq,
+ 					0, pdev->name, dev);
  	if (ret) {
 -- 
 2.17.1

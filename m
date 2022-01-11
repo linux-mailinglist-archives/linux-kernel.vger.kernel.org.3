@@ -2,228 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B0948AA08
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B96848AA0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349120AbiAKJAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 04:00:36 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:41354 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349097AbiAKJAf (ORCPT
+        id S1349127AbiAKJAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 04:00:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54317 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349133AbiAKJAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 04:00:35 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1CD5A1F3B6;
-        Tue, 11 Jan 2022 09:00:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641891634; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 11 Jan 2022 04:00:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641891640;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OeasfAigrOwxNyBh17klLqWDReCRAIT8+9bALhOBBTE=;
-        b=OMEOsmUPz8Sg5EGy0PNoyTTlWBHkVa2PxtC09u3JHkWldsYJD3LDsOF2LQXxRkUQ+wrIz9
-        kcASeAyImPhvK10QPGGJBnFhD4+6Ifeni3fz+rJutCz7kPryrVDu9fMuWjvffV0B/2cRYu
-        QcGlA6B7IXEkYO+V2VC7xQyW7LQxBQ4=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 49F73A3B9B;
-        Tue, 11 Jan 2022 09:00:33 +0000 (UTC)
-Date:   Tue, 11 Jan 2022 10:00:32 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
-Message-ID: <Yd1HMDqiySwVxbF7@dhcp22.suse.cz>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-7-yuzhao@google.com>
- <Ydg8AeE6JIUnC+ps@dhcp22.suse.cz>
- <YdjOazilBEkdUT7x@google.com>
- <YdxSUuDc3OC4pe+f@dhcp22.suse.cz>
- <Ydza/zXKY9ATRoh6@google.com>
+        bh=HwTgs2Y/gzDETqEOa6cQ15U5dH6fx+WgFTgxP975v6Q=;
+        b=gDWrQeambq5xOYRRcHZNcVV9tG/csQBBwflMuRO+ZDBZb/+Z/4klSdBM0PscdwRqclY9jG
+        ZCuUHM8hsi4G48q3+q/0qIQ21JtxL5ghQZ3BRF765jxGQJQ4AlfYYTjE7f++U/mQemH2xM
+        rHTBXOD2azT4myq4uCd1C5gRjwxGWkQ=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-616-NlelGdW1P_GOXz4UoGwmvw-1; Tue, 11 Jan 2022 04:00:38 -0500
+X-MC-Unique: NlelGdW1P_GOXz4UoGwmvw-1
+Received: by mail-ed1-f72.google.com with SMTP id t1-20020a056402524100b003f8500f6e35so12742714edd.8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 01:00:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=HwTgs2Y/gzDETqEOa6cQ15U5dH6fx+WgFTgxP975v6Q=;
+        b=OUEm9NreuRg4/5hyGcKWiE3l5QhDjFnFRLAmG6J8pPgF84sLxdwqo+mouJwAJj6l2d
+         u5iiEVVcPlOsbM8SsNnU8PhMAtfHJGUhN8xtMI/G/bVBxk0zR4eIYVKFJYDTw6IrCJ3U
+         wr0tfBWl3KqYl/s8+Vop0NGti2r18ngyoJmTcSwe7Rs+O5bEgnpmDRdgiYCatwFeUn2u
+         UVxLrCAc7WfaYEiTjxj1LMiht0lzBMK88mJIpf+6LQB9ktng1rhdy/9L/VDGwaHnqGoH
+         77LYPFVxhLQkcw+O+xSURMupIZMIyRSp/P8jb+P6D1iSIzSBB16++vdq+Dlhjg5hr+t4
+         wWTA==
+X-Gm-Message-State: AOAM533WotiCtTrX5fIO4SjxwzXPlmIeptceYP8uMbMwHZv65ABmbhMq
+        KaoHKCzzbohdHORs4aGw23rBehNfcDiKmOh0XcJmuEzctwnDWgt8FRkS1Xm72dlzHRYmXI2rLFH
+        FotiKDnQ0aGWhjdzfkfnwckWG
+X-Received: by 2002:aa7:db90:: with SMTP id u16mr3397372edt.403.1641891637581;
+        Tue, 11 Jan 2022 01:00:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyt1tzZWdcTIPjqZ/ckY27ze6jZWXnU+i9Or1hNPoXVzyiDFui8mVzHKOKlX5UJaksDRC7jqg==
+X-Received: by 2002:aa7:db90:: with SMTP id u16mr3397346edt.403.1641891637307;
+        Tue, 11 Jan 2022 01:00:37 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:6800:150a:bea9:f03e:c4da? (p200300cbc7026800150abea9f03ec4da.dip0.t-ipconnect.de. [2003:cb:c702:6800:150a:bea9:f03e:c4da])
+        by smtp.gmail.com with ESMTPSA id h11sm4815589edb.59.2022.01.11.01.00.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 01:00:36 -0800 (PST)
+Message-ID: <865621ac-81e4-5396-ded1-3502b1e5a061@redhat.com>
+Date:   Tue, 11 Jan 2022 10:00:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ydza/zXKY9ATRoh6@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Andrea Arcangeli <aarcange@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>
+References: <20211115134951.85286-1-peterx@redhat.com>
+ <20211115134951.85286-2-peterx@redhat.com>
+ <849f1e44-d35e-b8c6-c7c3-a73941028ba7@redhat.com>
+ <4711362.BPgp0156Pq@nvdebian>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH RFC v2 1/2] mm: Don't skip swap entry even if zap_details
+ specified
+In-Reply-To: <4711362.BPgp0156Pq@nvdebian>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 10-01-22 18:18:55, Yu Zhao wrote:
-> On Mon, Jan 10, 2022 at 04:35:46PM +0100, Michal Hocko wrote:
-> > On Fri 07-01-22 16:36:11, Yu Zhao wrote:
-> > > On Fri, Jan 07, 2022 at 02:11:29PM +0100, Michal Hocko wrote:
-> > > > On Tue 04-01-22 13:22:25, Yu Zhao wrote:
-> > > > [...]
-> > > > > +static void lru_gen_age_node(struct pglist_data *pgdat, struct scan_control *sc)
-> > > > > +{
-> > > > > +	struct mem_cgroup *memcg;
-> > > > > +	bool success = false;
-> > > > > +	unsigned long min_ttl = READ_ONCE(lru_gen_min_ttl);
-> > > > > +
-> > > > > +	VM_BUG_ON(!current_is_kswapd());
-> > > > > +
-> > > > > +	current->reclaim_state->mm_walk = &pgdat->mm_walk;
-> > > > > +
-> > > > > +	memcg = mem_cgroup_iter(NULL, NULL, NULL);
-> > > > > +	do {
-> > > > > +		struct lruvec *lruvec = mem_cgroup_lruvec(memcg, pgdat);
-> > > > > +
-> > > > > +		if (age_lruvec(lruvec, sc, min_ttl))
-> > > > > +			success = true;
-> > > > > +
-> > > > > +		cond_resched();
-> > > > > +	} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)));
-> > > > > +
-> > > > > +	if (!success && mutex_trylock(&oom_lock)) {
-> > > > > +		struct oom_control oc = {
-> > > > > +			.gfp_mask = sc->gfp_mask,
-> > > > > +			.order = sc->order,
-> > > > > +		};
-> > > > > +
-> > > > > +		if (!oom_reaping_in_progress())
-> > > > > +			out_of_memory(&oc);
-> > > > > +
-> > > > > +		mutex_unlock(&oom_lock);
-> > > > > +	}
-> > > > 
-> > > > Why do you need to trigger oom killer from this path? Why cannot you
-> > > > rely on the page allocator to do that like we do now?
-> > > 
-> > > This is per desktop users' (repeated) requests. The can't tolerate
-> > > thrashing as servers do because of UI lags; and they usually don't
-> > > have fancy tools like oomd.
-> > > 
-> > > Related discussions I saw:
-> > > https://github.com/zen-kernel/zen-kernel/issues/218
-> > > https://lore.kernel.org/lkml/20101028191523.GA14972@google.com/
-> > > https://lore.kernel.org/lkml/20211213051521.21f02dd2@mail.inbox.lv/
-> > > https://lore.kernel.org/lkml/54C2C89C.8080002@gmail.com/
-> > > https://lore.kernel.org/lkml/d9802b6a-949b-b327-c4a6-3dbca485ec20@gmx.com/
-> > 
-> > I do not really see any arguments why an userspace based trashing
-> > detection cannot be used for those. Could you clarify?
+On 11.01.22 08:40, Alistair Popple wrote:
+> On Monday, 10 January 2022 7:37:15 PM AEDT David Hildenbrand wrote:
+>> On 15.11.21 14:49, Peter Xu wrote:
+>>> This check existed since the 1st git commit of Linux repository, but at that
+>>> time there's no page migration yet so I think it's okay.
+>>>
+>>> With page migration enabled, it should logically be possible that we zap some
+>>> shmem pages during migration.  When that happens, IIUC the old code could have
+>>> the RSS counter accounted wrong on MM_SHMEMPAGES because we will zap the ptes
+>>> without decreasing the counters for the migrating entries.  I have no unit test
+>>> to prove it as I don't know an easy way to trigger this condition, though.
+>>>
+>>> Besides, the optimization itself is already confusing IMHO to me in a few points:
+>>>
+>>>   - The wording "skip swap entries" is confusing, because we're not skipping all
+>>>     swap entries - we handle device private/exclusive pages before that.
+>>
+>> I think one part of the confusion is "swap vs non-swap" entries.
+>> For !pte_none() && !pte_present() we can have
+>>
+>> * swap entry
+>> * non-swap entry
+>> ** device exclusive entry
+>> ** device private entry
+>> ** HWpoison entry
+>> ** migration entry
+>>
+>> So the comment claims to skip "swap entries" but also skips HWpoison and
+>> migration entries, and I think that's the confusing part.
+>> Both only apply to PageAnon().
 > 
-> It definitely can be done. But who is going to do it for every distro
-> and all individual users? AFAIK, not a single distro provides such a
-> solution for desktop/laptop/phone users.
+> I must be missing something but why do these only apply to PageAnon()?
 
-If existing interfaces provides sufficient information to make those
-calls then I would definitely prefer a userspace solution.
+My memory might be wrong. I remember that for PageAnon() we need
+migration/hwpoison entries because there is no way we could refault the
+page from a mapping once we zap the entry. For everything else, we could
+zap and refault. But looks like we indeed also use migration/hwpoison
+entries for pages with a mapping, although it might not be strictly
+required.
 
-> And also there is the theoretical question how reliable a userspace
-> solution can be. What if this usespace solution itself gets stuck in
-> the direct reclaim path. I'm sure if nobody has done some search to
-> prove or debunk it.
+> 
+>> IIUC, the only way we could get details != NULL is via unmap_mapping_page()+unmap_mapping_pages().
+>>
+>> I do wonder if any of the callers really cares about PageAnon() pages where this would be relevant.
+>>
+>> Am I wrong or is unmap_mapping_pages() never called with "even_cows == true" and we can remove
+>> that paremeter:
+> 
+> Except that unmap_mapping_range() takes `even_cows` as a parameter and passes
+> that to unmap_mapping_pages(), and from what I can tell there are callers of
+> unmap_mapping_range() that set `even_cows = true`.
 
-I have to confess I haven't checked oomd or other solutions but with a
-sufficient care (all the code mlocked in + no allocations done while
-collecting data) I believe this should be achieveable.
-
-> In addition, what exactly PSI values should be used on different
-> models of consumer electronics? Nobody knows. We have a team working
-> on this and we haven't figured it out for all our Chromebook models.
-
-I believe this is a matter of tuning for a specific deployment. We do
-not have only psi but also refault counters that can be used.
-
-> As Andrew said, "a blunt instrument like this would be useful".
-> https://lore.kernel.org/lkml/20211202135824.33d2421bf5116801cfa2040d@linux-foundation.org/
-> 
-> I'd like to have less code in kernel too, but I've learned never to
-> walk over users. If I remove this and they come after me asking why,
-> I'd have a hard time convincing them.
-> 
-> > Also my question was pointing to why out_of_memory is called from the
-> > reclaim rather than the allocator (memcg charging path). It is the
-> > caller of the reclaim to control different reclaim strategies and tell
-> > when all the hopes are lost and the oom killer should be invoked. This
-> > allows for a different policies at the allocator level and this change
-> > will break that AFAICS. E.g. what if the underlying allocation context
-> > is __GFP_NORETRY?
-> 
-> This is called in kswapd only, and by default (min_ttl=0) it doesn't
-> do anything. So __GFP_NORETRY doesn't apply.
-
-My bad. I must have got lost when traversing the code but I can see you
-are enforcing that by a VM_BUG_ON. So the limited scope reclaim is not a
-problem indeed.
-
-> The question would be
-> more along the lines of long-term ABI support.
-> 
-> And I'll add the following comments, if you think we can keep this
-> logic:
->    OOM kill if every generation from all memcgs is younger than min_ttl.
->    Another theoretical possibility is all memcgs are either below min or
->    ineligible at priority 0, but this isn't the main goal.
-> 
-> (Please read my reply at the bottom to decide whether we should keep
->  it or not. Thanks.)
-> 
-> > > >From patch 8:
-> > >   Personal computers
-> > >   ------------------
-> > >   :Thrashing prevention: Write ``N`` to
-> > >    ``/sys/kernel/mm/lru_gen/min_ttl_ms`` to prevent the working set of
-> > >    ``N`` milliseconds from getting evicted. The OOM killer is invoked if
-> > >    this working set can't be kept in memory. Based on the average human
-> > >    detectable lag (~100ms), ``N=1000`` usually eliminates intolerable
-> > >    lags due to thrashing. Larger values like ``N=3000`` make lags less
-> > >    noticeable at the cost of more OOM kills.
-> > 
-> > This is a very good example of something that should be a self contained
-> > patch with its own justification.
-> 
-> Consider it done.
-> 
-> > TBH it is really not all that clear to
-> > me that we want to provide any user visible knob to control OOM behavior
-> > based on a time based QoS.
-> 
-> Agreed, and it didn't exist until v4, i.e., after I was demanded to
-> provide it for several times.
-> 
-> For example:
-> https://github.com/zen-kernel/zen-kernel/issues/223
-> 
-> And another example:
->    Your Multigenerational LRU patchset is pretty complex and
->    effective, but does not eliminate thrashing condition fully on an
->    old PCs with slow HDD.
-> 
->    I'm kindly asking you to cooperate with hakavlad if it's possible
->    and maybe re-implement parts of le9 patch in your patchset wherever
->    acceptable, as they are quite similar in the core concept.
-> 
-> This is excerpt of an email from iam@valdikss.org.ru, and he has
-> posted demo videos in this discussion:
-> https://lore.kernel.org/lkml/2dc51fc8-f14e-17ed-a8c6-0ec70423bf54@valdikss.org.ru/
-
-That is all an interesting feedback but we should be really craful about
-ABI constrains and future maintainability of the knob. I still stand
-behind my statement that kernel should implement such features only if
-it is clear that we cannot really implement a similar logic in the
-userspace.
+You're right.
 
 -- 
-Michal Hocko
-SUSE Labs
+Thanks,
+
+David / dhildenb
+

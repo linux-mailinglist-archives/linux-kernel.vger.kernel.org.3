@@ -2,169 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADC848AD4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C39848AD4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 13:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239524AbiAKMFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 07:05:49 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57844 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239371AbiAKMFq (ORCPT
+        id S239554AbiAKMGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 07:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238692AbiAKMGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 07:05:46 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 11 Jan 2022 07:06:33 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23E3C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 04:06:32 -0800 (PST)
+Received: from [IPv6:2a00:c281:14a3:8100:a909:23ff:b834:d3b1] (unknown [IPv6:2a00:c281:14a3:8100:a909:23ff:b834:d3b1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7035E6160D;
-        Tue, 11 Jan 2022 12:05:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 370DCC36AE3;
-        Tue, 11 Jan 2022 12:05:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641902745;
-        bh=XWSY+DFW6VXDZ5S5vTsdWAWmSuDV4VU9C9Uf/1Ppn+I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KP/WM15M5vPgevoKKzjXbZIzAy45IeS7bUPdHmwBxTBMmLjroWWsvD/9b3OOguhha
-         jt3TfpAWeTeEbuH6pmNjo9m7VmTZ2kJqZOlTvMQwCEIBoMciduq5B7DGhUQb5g40gV
-         Sw89Q5V5FsVZPAh2QiWCj07d1NZs3vb+h0NMgJmg=
-Date:   Tue, 11 Jan 2022 13:05:43 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Starke, Daniel" <daniel.starke@siemens.com>
-Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] tty: n_gsm: Fix SW flow control encoding/handling
-Message-ID: <Yd1yl2jrrCHB+3Ww@kroah.com>
-References: <AM4PR1001MB137808D63F6C99698FA02DFFE0519@AM4PR1001MB1378.EURPRD10.PROD.OUTLOOK.COM>
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D50C51F44341;
+        Tue, 11 Jan 2022 12:06:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641902791;
+        bh=kRoLZoDn7anbUJOPv8KDNgu67NtycySGqdoUYDHej6w=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=SD27BulwCwAOuSZwhDZ7Wh19ADlUE6jLQVXKC8eRr3ElJx74/Q7WH6uJD2Nf+AAKl
+         d4SK9fccjRpn0CUJpn9x30q2qxN3lbrnDm6qh8uAB9HZnSoJVTVLBUBt6JD5nzNLjO
+         NIPKXPZWxcWFcIEgvqiztoo7G5OkETpRb7hRada2fL5kvE7AaOykuylhO1XT9fjttK
+         CzOyp1hImlRoM/ul+OK00cdrpJH/6h9zCGIXZOLsB+KLaGdTPbyqfA8Z8QT8Kd73E5
+         IBG+0izeqjZt6sv8mNMQA4G0vvy02/WGXYyNXmsZD8yRfbvSCYYGbQq1wRtiKQZ0nk
+         dYx6HPf2OehWA==
+Subject: Re: [PATCH] checkpatch: warn for p0 patch only if prefix is not b
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel@collabora.com, Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>
+References: <20220110200529.18601-1-dafna.hirschfeld@collabora.com>
+ <CAKXUXMyepnLO=jLPciG5mWvTxbQGR+1PaeYs1_c+-t3hFAEhNg@mail.gmail.com>
+ <ff6e3942-24e4-25ec-946c-cc6301ebf260@collabora.com>
+ <CAKXUXMzkibUyMOZnUv2A7Ksv=E_qYPqjfaio3at-pqG9RYukig@mail.gmail.com>
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Message-ID: <9ea178f0-aa8e-5311-17fc-d13511838655@collabora.com>
+Date:   Tue, 11 Jan 2022 14:06:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM4PR1001MB137808D63F6C99698FA02DFFE0519@AM4PR1001MB1378.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <CAKXUXMzkibUyMOZnUv2A7Ksv=E_qYPqjfaio3at-pqG9RYukig@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 11:54:01AM +0000, Starke, Daniel wrote:
-> > > According to 3GPP 27.010 chapter 5.2.7.3 DC1 and DC3 (SW flow control)
-> > 
-> > What is all of that?  Do you have a link to the document that this is and where it says this?
+
+
+On 11.01.22 13:27, Lukas Bulwahn wrote:
+> On Tue, Jan 11, 2022 at 11:47 AM Dafna Hirschfeld
+> <dafna.hirschfeld@collabora.com> wrote:
+>>
+>>
+>>
+>> On 11.01.22 12:18, Lukas Bulwahn wrote:
+>>> Dafna,
+>>>
+>>> On Mon, Jan 10, 2022 at 9:06 PM Dafna Hirschfeld
+>>> <dafna.hirschfeld@collabora.com> wrote:
+>>>>
+>>>> It might be that file 'b' happens to exit. In that
+>>>> case, if the prefix is also 'b' (which is the
+>>>> common case) we get the falsely warning:
+>>>>
+>>>> patch prefix 'b' exists, appears to be a -p0 patch
+>>>>
+>>>> So warn only if prefix is not 'b'
+>>>>
+>>>
+>>> The checkpatch script that is maintained here is really only intended
+>>> for its use in the kernel development. You may use checkpatch anywhere
+>>> else, but any changes that increase complexity for those other use
+>>> cases is really difficult to argue for inclusion in the kernel
+>>> repository. The checkpatch script currently is already large and
+>>> complex enough and all rules need to be understood as rough
+>>> heuristics, not as strict rules.
+>>>
+>>> So, can you point to a kernel repository where there is actually a
+>>> file 'b' included? On a quick scan, I could not find a file 'b' in the
+>>> current trees of the repositories on my machine.
+>>>
+>>> I am just letting you know about what I have observed; I do not decide
+>>> on the inclusion of this patch, though.
+>>
+>> Hi, a 'b' file might make it to the source folder as an untracked file.
+>> This actually happened to me since I was too lazy to give it a meaningful name.
+>> Then I got this warning and it took me some time to figure out what is the problem.
+>>
 > 
-> n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-> See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-> The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-> the newer 27.010 here. Chapter 5.2.7.3 states that DC1 and DC3 data bytes
-> shall be quoted to ensure transparent transmission of these bytes without
-> setting software flow control. This is partly already the case in the
-> current n_gsm implementation. This chapter refers also to ISO/IEC 646
-> regarding the encoding of DC1 and DC3.
+> Well, but you run checkpatch.pl on a patch, right? So, you need to add
+> the file explicitly with git (where you notice adding a file called b,
+> which probably is really not a good name), you create a git commit
+> (where that is pointed out again), then create a patch from that
+> (which you may manually look at again) and then run checkpatch.pl
+> before you submit it (again, submitting a patch with a file 'b' is
+> probably a good reason to rethink your submission).
+
+Hi , no, the 'b' file is left untracked.
+It is easily reproducible, inside a kernel source repo do:
+
+touch b
+
+# These two commands will both trigger the warning.
+./scripts/checkpatch.pl --strict -g HEAD
+./scripts/checkpatch.pl --strict 0001-some-random-patch.patch
+
 > 
-> > > are to
-> > > be treated according to ISO/IEC 646.
-> > 
-> > What is "ISO/IEC 646"?
+> If it helps, you can add some documentation on the PATCH_PREFIX rule
+> in the checkpatch documentation at
+> ./Documentation/dev-tools/checkpatch.rst. Especially, you can note the
+> situation you encountered there, e.g., that adding files with explicit
+> name 'a' or 'b' may make this rule trigger. If that documentation of
+> the rule is helpful, I will ack that documentation patch and request
+> inclusion of it.
+
+I can do that as well if you think it is better.
+
+Thanks,
+Dafna
+
 > 
-> ISO/IEC 646 refers to the set of ISO standards described as the ISO 7-bit
-> coded character set for information interchange. Its final version is also
-> known as ITU T.50. See https://www.itu.int/rec/T-REC-T.50-199209-I/en
+> Lukas
 > 
-> > > That means the MSB shall be ignored.
-> > 
-> > "MSB"?  Please spell it out, you have plenty of room here.
-> 
-> MSB stands for "most significant bit" in this context.
-
-Please put all of the above in the changelog text when you resubmit
-this.
-
-> > > This patch applies the needed changes to handle this correctly.
-> > 
-> > What changes are needed?  Please talk about what you are doing, as the documentation asks you to so do.
-> 
-> To abide the standard it is needed to quote DC1 and DC3 correctly if these
-> are seen as data bytes and not as control characters. The current code
-> already tries to enforces this but fails to catch all defined cases.
-> 3GPP 27.010 chapter 5.2.7.3 clearly states that the most significant bit
-> shall be ignored for DC1 and DC3 handling. The current implementation
-> handles only the case with the most significant bit was set 0. Cases in
-> which DC1 and DC3 have the most significant bit set 1 are left unhandled.
-> This patch fixes this by masking the data bytes with ASCII_MASK (only the
-> 7 least significant bits set 1) before comparing them with XON (a.k.a. DC1)
-> and XOFF (a.k.a. DC3).
-
-Great, again, please put this in the changelog text so that we can
-properly understand it.
-
-> > > Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-> > > ---
-> > >  drivers/tty/n_gsm.c | 6 ++++--
-> > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c index 
-> > > 0b96b14bbfe1..9ee0643fc9e2 100644
-> > > --- a/drivers/tty/n_gsm.c
-> > > +++ b/drivers/tty/n_gsm.c
-> > > @@ -322,6 +322,7 @@ static int addr_cnt;
-> > >  #define GSM1_ESCAPE_BITS	0x20
-> > >  #define XON			0x11
-> > >  #define XOFF			0x13
-> > > +#define ASCII_MASK		0x7F
-> > 
-> > Where did "ASCII" come from?  You didn't say anything about that in the changelog.
-> 
-> The original version (ISO 646 IRV) differed from ASCII only in the code
-> point for the currency symbol. Therefore, I used ASCII_MASK here to define
-> the mask for the significant bits. I believe that this is easier to
-> understand than ISO_IEC_646_MASK for example.
-
-If this really is for ISO 646 then please use that text here.
-
-> > >  static const struct tty_port_operations gsm_port_ops;
-> > >  
-> > > @@ -521,7 +522,7 @@ static void gsm_print_packet(const char *hdr, int addr, int cr,
-> > >   *	@output: output buffer
-> > >   *	@len: length of input
-> > >   *
-> > > - *	Expand a buffer by bytestuffing it. The worst case size change
-> > > + *	Expand a buffer by byte stuffing it. The worst case size change
-> > 
-> > This change is not described above, and is totally different and belongs in a different change.
-> 
-> You are absolutely right. Shall I create a new patch?
-
-Yes please.
-
-> > >   *	is doubling and the caller is responsible for handing out
-> > >   *	suitable sized buffers.
-> > >   */
-> > > @@ -531,7 +532,8 @@ static int gsm_stuff_frame(const u8 *input, u8 *output, int len)
-> > >  	int olen = 0;
-> > >  	while (len--) {
-> > >  		if (*input == GSM1_SOF || *input == GSM1_ESCAPE
-> > > -		    || *input == XON || *input == XOFF) {
-> > > +		    || (*input & ASCII_MASK) == XON
-> > > +		    || (*input & ASCII_MASK) == XOFF) {
-> > >  			*output++ = GSM1_ESCAPE;
-> > >  			*output++ = *input++ ^ GSM1_ESCAPE_BITS;
-> > >  			olen++;
-> > > --
-> > > 2.25.1
-> > > 
-> > 
-> > What commit does this fix?
-> 
-> It fixes the initial commit for the n_gsm:
-> Commit e1eaea46bb40 (tty: n_gsm line discipline, 2010-03-26)
-
-Great, please add that to the commit when you submit it.  Also it should
-go to stable kernels so please add that marking as the documentation
-asks for.
-
-> However, this patch is based on the main branch from the TTY/Serial driver
-> development tree.
-
-That branch tracks Linus's tree, not the tty/serial driver changes, so
-you might want to use a different branch if you think there are going to
-be conflicts.
-
-thanks,
-
-greg k-h
+>> Thanks,
+>> Dafna
+>>
+>>>
+>>> Lukas
+>>>
+>>>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+>>>> ---
+>>>>    scripts/checkpatch.pl | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+>>>> index 1784921c645d..72263b142e39 100755
+>>>> --- a/scripts/checkpatch.pl
+>>>> +++ b/scripts/checkpatch.pl
+>>>> @@ -2821,7 +2821,7 @@ sub process {
+>>>>                           $in_commit_log = 0;
+>>>>
+>>>>                           $p1_prefix = $1;
+>>>> -                       if (!$file && $tree && $p1_prefix ne '' &&
+>>>> +                       if (!$file && $tree && $p1_prefix ne '' && $p1_prefix ne 'b' &&
+>>>>                               -e "$root/$p1_prefix") {
+>>>>                                   WARN("PATCH_PREFIX",
+>>>>                                        "patch prefix '$p1_prefix' exists, appears to be a -p0 patch\n");
+>>>
+>>>> --
+>>>> 2.17.1
+>>>>

@@ -2,118 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3BC48B415
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C3548B418
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344696AbiAKReG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:34:06 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28446 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344422AbiAKRdz (ORCPT
+        id S1344293AbiAKRfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:35:02 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:35210 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344944AbiAKRe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:33:55 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BHSc2M004984;
-        Tue, 11 Jan 2022 17:33:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=LYZkJR4oncJxN66Oc7azyJCnhGGrYnsYS2+B+fYIguE=;
- b=phckWgCuuTMA98EoBAvvo3laLAaZItybfNT2ooN3ERdS4ssKdKWFtxV+oajLwws/mZOl
- 5Xn5fyvgfsmchocFGkom7WbdzEv65H8RnX5g9qIgMdV4YhtutieFztzIscGuOk1PszYZ
- SpGx9ZCwXn211sVXxL7W41umr1nObNTbg++a6Ha9VpygeBHXnfgZHjvgGzeiSEOd1AvS
- JKRY1PxKIpvap8HXaRKxepeB1agHTDTd+ilddgDiykyAkqkK2Ul85TGmRA7O1qAyszBW
- WWM58gpyybVwSV2iCL6U+uWBAzVgwGiM0vKzRoOLl+iJ7HhLVYmlRLRb17gUbDFiw/ux OA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dheaxg3cg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 17:33:52 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20BHVThG014358;
-        Tue, 11 Jan 2022 17:33:52 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dheaxg3bv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 17:33:52 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20BHIHDU018620;
-        Tue, 11 Jan 2022 17:33:51 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma01wdc.us.ibm.com with ESMTP id 3df28a9tw0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 17:33:51 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BHWnX918088322
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jan 2022 17:32:49 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 32D8F2806F;
-        Tue, 11 Jan 2022 17:32:49 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8AAA228064;
-        Tue, 11 Jan 2022 17:32:47 +0000 (GMT)
-Received: from [9.65.85.237] (unknown [9.65.85.237])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jan 2022 17:32:47 +0000 (GMT)
-Message-ID: <342ce098-6af5-acc9-86b1-fadfb03c8522@linux.ibm.com>
-Date:   Tue, 11 Jan 2022 12:32:46 -0500
+        Tue, 11 Jan 2022 12:34:57 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C388D1F3B8;
+        Tue, 11 Jan 2022 17:34:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641922495; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VE6dnqfaUn3R40sODHdx81iTMjOF1gEB2Id1XsRVNY0=;
+        b=mLq2MfeQFuGSSIPHJP4/6ckjMlkO+SeNMpH8JC4iOMDHV2d5mYExFijzvLiDB6dc1faMlX
+        usKXhbn6OphlCjCYZbLxAS3Ja2ZmxPuhJcZDDh6bl5Jno2BOh4uCsQEjaPo0XQlsChBegR
+        cWr+GoecpWkvQPxd31JDz2A5CM6ZsL4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641922495;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VE6dnqfaUn3R40sODHdx81iTMjOF1gEB2Id1XsRVNY0=;
+        b=DBUQScVSGMUCSDpvDh+/tKiuiX/9cpWeYKB8DIcPTLDcT/pk64QhwciwBCdC1Bgt5PgcmY
+        2KIoOfdAihhnMIBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ACBBE13AE7;
+        Tue, 11 Jan 2022 17:34:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KtPLKL+/3WFDVAAAMHmgww
+        (envelope-from <bp@suse.de>); Tue, 11 Jan 2022 17:34:55 +0000
+Date:   Tue, 11 Jan 2022 18:35:04 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] locking/core for v5.17
+Message-ID: <Yd2/yMnHa8zHe02U@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v17 02/15] s390/vfio-ap: use new AP bus interface to
- search for queue devices
-Content-Language: en-US
-To:     Halil Pasic <pasic@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jjherne@linux.ibm.com, freude@linux.ibm.com,
-        borntraeger@de.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
- <20211021152332.70455-3-akrowiak@linux.ibm.com>
- <20211227092502.7ccdf37b.pasic@linux.ibm.com>
-From:   Tony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <20211227092502.7ccdf37b.pasic@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: mV34uZFP7Lx8TMv5K-5-7phQmFJAJQ3j
-X-Proofpoint-GUID: xLFgryVv_Mxp5g_hIwHJWzQKBxaJV7qe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- phishscore=0 priorityscore=1501 adultscore=0 impostorscore=0
- malwarescore=0 suspectscore=0 spamscore=0 mlxscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201110095
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
+please pull locking/core updates for v5.17.
 
-On 12/27/21 03:25, Halil Pasic wrote:
-> On Thu, 21 Oct 2021 11:23:19 -0400
-> Tony Krowiak <akrowiak@linux.ibm.com> wrote:
->
->> his patch refactors the vfio_ap device driver to use the AP bus's
->> ap_get_qdev() function to retrieve the vfio_ap_queue struct containing
->> information about a queue that is bound to the vfio_ap device driver.
->> The bus's ap_get_qdev() function retrieves the queue device from a
->> hashtable keyed by APQN. This is much more efficient than looping over
->> the list of devices attached to the AP bus by several orders of
->> magnitude.
->>
->> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
->> Reviewed-by: Halil Pasic <pasic@linux.ibm.com>
-> I assume nothing changed here, and nothing significant changed around
-> this patch (context). If I'm wrong, please tell me and I will
-> re-evaluate.
+Thx.
 
-rebase to this patch -> delete the patch -> fix resultant conflicts
+---
 
->
-> Regards,
-> Halil
+The following changes since commit 8f556a326c93213927e683fc32bbf5be1b62540a:
 
+  locking/rtmutex: Fix incorrect condition in rtmutex_spin_on_owner() (2021-12-18 10:55:51 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/locking_core_for_v5.17_rc1
+
+for you to fetch changes up to f16cc980d649e664b8f41e1bbaba50255d24e5d1:
+
+  Merge branch 'locking/urgent' into locking/core (2021-12-18 10:57:03 +0100)
+
+----------------------------------------------------------------
+Peter Zijlstra says:
+
+"Lots of cleanups and preparation; highlights:
+
+ - futex: Cleanup and remove runtime futex_cmpxchg detection
+
+ - rtmutex: Some fixes for the PREEMPT_RT locking infrastructure
+
+ - kcsan: Share owner_on_cpu() between mutex,rtmutex and rwsem and
+   annotate the racy owner->on_cpu access *once*.
+
+ - atomic64: Dead-Code-Elemination"
+
+----------------------------------------------------------------
+Arnd Bergmann (4):
+      futex: Ensure futex_atomic_cmpxchg_inatomic() is present
+      futex: Remove futex_cmpxchg detection
+      futex: Fix sparc32/m68k/nds32 build regression
+      futex: Fix additional regressions
+
+Ingo Molnar (1):
+      Merge tag 'v5.16-rc5' into locking/core, to pick up fixes
+
+Kefeng Wang (1):
+      locking: Make owner_on_cpu() into <linux/sched.h>
+
+Marco Elver (1):
+      locking: Mark racy reads of owner->on_cpu
+
+Mark Rutland (1):
+      locking/atomic: atomic64: Remove unusable atomic ops
+
+Peter Zijlstra (1):
+      locking/rtmutex: Squash self-deadlock check for ww_rt_mutex.
+
+Sebastian Andrzej Siewior (10):
+      kernel/locking: Use a pointer in ww_mutex_trylock().
+      sched: Trigger warning if ->migration_disabled counter underflows.
+      locking: Remove rt_rwlock_is_contended().
+      locking/rtmutex: Add rt_mutex_lock_nest_lock() and rt_mutex_lock_killable().
+      lockdep/selftests: Avoid using local_lock_{acquire|release}().
+      lockdep/selftests: Unbalanced migrate_disable() & rcu_read_lock().
+      lockdep/selftests: Skip the softirq related tests on PREEMPT_RT
+      lockdep/selftests: Adapt ww-tests for PREEMPT_RT
+      x86/mm: Include spinlock_t definition in pgtable.
+      locking: Allow to include asm/spinlock_types.h from linux/spinlock_types_raw.h
+
+Thomas Gleixner (2):
+      lockdep: Remove softirq accounting on PREEMPT_RT.
+      Merge branch 'locking/urgent' into locking/core
+
+ arch/alpha/include/asm/spinlock_types.h          |   2 +-
+ arch/arc/Kconfig                                 |   1 -
+ arch/arm/Kconfig                                 |   1 -
+ arch/arm/include/asm/spinlock_types.h            |   2 +-
+ arch/arm64/Kconfig                               |   1 -
+ arch/arm64/include/asm/spinlock_types.h          |   2 +-
+ arch/csky/Kconfig                                |   1 -
+ arch/csky/include/asm/spinlock_types.h           |   2 +-
+ arch/hexagon/include/asm/spinlock_types.h        |   2 +-
+ arch/ia64/include/asm/spinlock_types.h           |   2 +-
+ arch/m68k/Kconfig                                |   1 -
+ arch/mips/include/asm/futex.h                    |  27 ++--
+ arch/powerpc/include/asm/simple_spinlock_types.h |   2 +-
+ arch/powerpc/include/asm/spinlock_types.h        |   2 +-
+ arch/riscv/Kconfig                               |   1 -
+ arch/riscv/include/asm/spinlock_types.h          |   2 +-
+ arch/s390/Kconfig                                |   1 -
+ arch/s390/include/asm/spinlock_types.h           |   2 +-
+ arch/sh/Kconfig                                  |   1 -
+ arch/sh/include/asm/spinlock_types.h             |   2 +-
+ arch/um/Kconfig                                  |   1 -
+ arch/um/kernel/skas/uaccess.c                    |   1 -
+ arch/x86/include/asm/pgtable.h                   |   1 +
+ arch/xtensa/Kconfig                              |   1 -
+ arch/xtensa/include/asm/futex.h                  |   8 +-
+ arch/xtensa/include/asm/spinlock_types.h         |   2 +-
+ include/asm-generic/futex.h                      |  31 ++--
+ include/linux/irqflags.h                         |  23 +--
+ include/linux/ratelimit_types.h                  |   2 +-
+ include/linux/rtmutex.h                          |   9 ++
+ include/linux/sched.h                            |   9 ++
+ include/linux/spinlock_types_up.h                |   2 +-
+ init/Kconfig                                     |   9 +-
+ kernel/futex/core.c                              |  35 -----
+ kernel/futex/futex.h                             |   6 -
+ kernel/futex/syscalls.c                          |  22 ---
+ kernel/locking/lockdep.c                         |   2 +
+ kernel/locking/mutex.c                           |  11 +-
+ kernel/locking/rtmutex.c                         |  10 +-
+ kernel/locking/rtmutex_api.c                     |  30 +++-
+ kernel/locking/rwsem.c                           |   9 --
+ kernel/locking/spinlock_rt.c                     |   6 -
+ kernel/locking/ww_rt_mutex.c                     |   2 +-
+ kernel/sched/core.c                              |   3 +
+ lib/atomic64.c                                   |   2 -
+ lib/locking-selftest.c                           | 172 ++++++++++++++++-------
+ 46 files changed, 241 insertions(+), 225 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

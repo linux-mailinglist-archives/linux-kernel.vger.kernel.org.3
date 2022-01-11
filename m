@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 133BA48B9CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC53448B9CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:42:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245408AbiAKVlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 16:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45754 "EHLO
+        id S245423AbiAKVmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 16:42:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244314AbiAKVlN (ORCPT
+        with ESMTP id S244160AbiAKVml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 16:41:13 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCE5C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 13:41:12 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id o6so1733635edc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 13:41:12 -0800 (PST)
+        Tue, 11 Jan 2022 16:42:41 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1334FC06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 13:42:41 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id 59-20020a17090a09c100b001b34a13745eso7783451pjo.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 13:42:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JRft7F9qbd0sLcWJbamLPoi+pNYux+iGGbxHhoSk7vY=;
-        b=UXNvfzWDTaA7GWmf9EFwEmVTWICRfCyTEix2ERDPHXrQGf2wLZ1KACGAhcNNBfB1pr
-         3EkPIQhSaRu+ywLf0BlfEvMS2SxEEGWYnO2cI6isR2z78D6pHi5FnEKmIzo5nqnSG3Zf
-         XE/YBbhG87GpQS8dHVnmcbq3Pg4+yZWU8XU9gHbzy4kOp+YK38PD5m+amwC4Pn2PYEcC
-         DAdV59LXUrenku4k0M/0NdYAQthn//hoDm3V/VdWeXNa0kzzwE/+a3n9ty9K5hNODcGq
-         X/R7HLf/mozZjLRAWJ78I9f4HdFzotXPEcKHRBe/lGZi8HWPgUGySo/AdXqBnpBHXrTo
-         n0Tg==
+        bh=KCtl+aQhoJ9DtvkfZHIukzRqBwMxSUFEaktu28rcleI=;
+        b=L2suR1S5x2NrE5nWhMWmHQ0Q9QMrw6Hnka1mcs9wr7FQ4piDNqL1vlZPWi20qxqXj8
+         tqaRC2O0Y46QqyoGHkokENtzkVbvYM964uZ78ncSNkUw6vR1GRmMmL8UBEvU1VQzTu/A
+         uhiUicwK0L7kyddr5paUhdoiKW8NqBK1Ut3VnnOX/Qx6jgeXGX6BpxzvSVDPb/YtgqPx
+         yzpN49BC2VwacO82evRM9qryk4s2qETORf5omgosxBwPILqsUS7R1sKL4qTn8Jm7FXSG
+         KdjyQMMpT13uk2dqQdmVYsa8brcJ3b+G3jPbfQdEbmNT1IfDYRjdrcpd+rYv61HX3jgh
+         HcZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JRft7F9qbd0sLcWJbamLPoi+pNYux+iGGbxHhoSk7vY=;
-        b=MnX8mliSd3z1BEgjg2LiFV769r2aPnnaSqwmdKoGGBvTA74RCWEsR+UA6YcmZz1Hmt
-         Fpjhzld3E+aL/46IKEEloxUR+6IAQodEurbSMkWy/hyRnsSGT0naGwiZW5vx4UUgf1Wy
-         juKX/5+KrQwrN+cUCSbEzze8XGc3XnbS7Eo2dfn6y9O+kBkUbC/y+e+lHugh7C8gY/km
-         9LCg7ML8ND3ZZYKXRINt4Zwugpy/K00qhb7Te4JbgYB+f7owxGRnuBU71l90aLdFiY3R
-         rA+8DfQ48FHzdJV9CwdATM472KbjnqCGPbrMi7fokIKy0CelaOJjX6SVnzD3GvGQA2jp
-         pNgw==
-X-Gm-Message-State: AOAM533JalvuXhTpmxeUDWH9+y3Sa8CmRb+ifmXG/6yWrerfElsLCSHv
-        1le2Qy96RsZyr7t9bqhCllLPK8pCJWjo6PT8dFYXBw==
-X-Google-Smtp-Source: ABdhPJy2jFcVSHacK9cBAXSGViqz+bdTAIAKJi1AvsFKLICgvo7IR/Yxciyco3MyvoeloNa4L12Jx9q/RlgGi+9hy/A=
-X-Received: by 2002:a50:f105:: with SMTP id w5mr6122865edl.222.1641937271005;
- Tue, 11 Jan 2022 13:41:11 -0800 (PST)
+        bh=KCtl+aQhoJ9DtvkfZHIukzRqBwMxSUFEaktu28rcleI=;
+        b=Qy4qLcdQopVnT4NB/KEJQSy2omFTavbKzi6ETORVnpVm900zSaDhFApU0Y4adK5mNt
+         /gse/W7SVHMFQLvjcy2Y3mo/b4BcZq0pBwhsGPBGvoTA6roYegTa+6+KwPMcx6Oje8L/
+         /4na/Vfiy/NANtJXP53keWihZG04Wddqz4GsRYLosDEUehs/GCiXGDkAYSOuXZ5cy7C6
+         SqVBSvA7bjXQEkwa5SC5NIc16rpKVCg60dNez1QFCWqfzSZcUx2/bAx6/4F1FiujRZG2
+         3iYQw+J0BDU+u45AYaIlJbKEnVAsJhYXWC/kDdDEaESjlmY87olIxPCPhylhSuGz0dRT
+         pmsg==
+X-Gm-Message-State: AOAM532morAbr+PxGNm14olhgHGJk9+1Qp3zK4wiwRjrU2w/H8ow6ysr
+        IdGGAQuRvJUt3GByoaG3w4x1N4IXzjYx8USTxt3fsQ==
+X-Google-Smtp-Source: ABdhPJzT3LGBUJRGgB9WED/csvGPJLe27sUUkxGU7Ra5c/k1nyJkl7smPQc41ZISVZvOn5JBLZ6GtgrCjuTfxZGcO84=
+X-Received: by 2002:a05:6a00:24c2:b0:4bc:bea:1e60 with SMTP id
+ d2-20020a056a0024c200b004bc0bea1e60mr6390678pfv.63.1641937360270; Tue, 11 Jan
+ 2022 13:42:40 -0800 (PST)
 MIME-Version: 1.0
 References: <20220111194231.1797841-1-dlatypov@google.com> <20220111194231.1797841-6-dlatypov@google.com>
  <CAFd5g46bCr4DEqruLbtgcLOpuPQUgS32ePDicrezBwOXL_r5Hg@mail.gmail.com>
 In-Reply-To: <CAFd5g46bCr4DEqruLbtgcLOpuPQUgS32ePDicrezBwOXL_r5Hg@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 11 Jan 2022 13:40:59 -0800
-Message-ID: <CAGS_qxrNAuXUN2VftJ2e9k=zt+vp+7P-WuZM8FJOa98vsZtFHQ@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 11 Jan 2022 16:42:29 -0500
+Message-ID: <CAFd5g47F3uRmVZXWxz9Xkx23=PccLnZ3j_CsSqBnA4o5uEutKw@mail.gmail.com>
 Subject: Re: [PATCH v2 5/6] kunit: split out part of kunit_assert into a
  static const
-To:     Brendan Higgins <brendanhiggins@google.com>
+To:     Daniel Latypov <dlatypov@google.com>
 Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
         skhan@linuxfoundation.org, torvalds@linux-foundation.org
@@ -62,7 +63,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 1:35 PM Brendan Higgins
+On Tue, Jan 11, 2022 at 4:35 PM Brendan Higgins
 <brendanhiggins@google.com> wrote:
 >
 > On Tue, Jan 11, 2022 at 2:42 PM Daniel Latypov <dlatypov@google.com> wrote:
@@ -149,24 +150,9 @@ On Tue, Jan 11, 2022 at 1:35 PM Brendan Higgins
 >
 > Can you provide some context for this?
 
-This is what the commit desc is referring to.
-We leave in the type field in this change so we can clean that up and
-all the macros all at once.
+NVM, I saw the context in the next patch. Could you maybe mention that
+it is removed in a later patch in the comment?
 
-This TODO is addressed and removed in the next commit, so I was being
-a bit lazy with the TODO.
- I was hoping people could check `git blame` and find the context they
-need, if people do somehow find their way to this intermediate commit.
-
-If you want, I can update the TODO message to be more fleshed out.
-Something like
-
-TODO(...): delete this unused field when we've updated all the related
-KUNIT_INIT_ASSERT macros.
-
-?
-
->
 > >         struct va_format message;
 > >         void (*format)(const struct kunit_assert *assert,
 > >                        struct string_stream *stream);

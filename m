@@ -2,132 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F40FF48B596
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C060048B588
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345307AbiAKSTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:19:21 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10116 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344629AbiAKSTL (ORCPT
+        id S1344215AbiAKSRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:17:03 -0500
+Received: from mail-40134.protonmail.ch ([185.70.40.134]:60889 "EHLO
+        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242138AbiAKSRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:19:11 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BHdmUx000777;
-        Tue, 11 Jan 2022 18:16:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=f23pSkAQkmTfG63MYPw5lvGkPGpCHSGtCMNQ0RMPVVw=;
- b=N+it7FobbBF3xJcmaNg2iZZ98mYKy6HWCX+u8RfBEw1GG7keGo90reSd69lYwS0WJHuK
- loz4psJdgKhiSFY8/6YeQOlTmpq7hYJlDVeifMzDYezPJPhxG5wTCZg1h4KGL0W+CUvH
- c+UIkBqMgIYHYPUZYVW1trpsRaf7PaE0eTGT4P0IBT7HHnnqjz5kkwIR/uqV46WkryRz
- cUyagGQPvwlIj327i35I3wXvbkp2ZR1gt3ZaL4JqBJJrq4/uF/yi5kJSNfJK0qTAnVFT
- 9zb4jLQHby+Y6QDkWZZD0FoVcOtQ0N5k1bXjLNC0QD3GrSOmCj2l2jE65WRU72kBofS6 zA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhbp7e0pn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 18:16:45 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20BIDEJU016077;
-        Tue, 11 Jan 2022 18:16:44 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhbp7e0nf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 18:16:44 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20BIFZZY006044;
-        Tue, 11 Jan 2022 18:16:41 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3df2892wsv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 18:16:41 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BIGdvP45875706
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jan 2022 18:16:39 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4395611C050;
-        Tue, 11 Jan 2022 18:16:39 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0C56911C05B;
-        Tue, 11 Jan 2022 18:16:37 +0000 (GMT)
-Received: from sig-9-65-94-95.ibm.com (unknown [9.65.94.95])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jan 2022 18:16:36 +0000 (GMT)
-Message-ID: <a384fcf8bdd9ff79456e9669fc61ab50ec4e1c55.camel@linux.ibm.com>
-Subject: Re: [PATCH v9 2/8] integrity: Introduce a Linux keyring called
- machine
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "pjones@redhat.com" <pjones@redhat.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>
-Date:   Tue, 11 Jan 2022 13:16:36 -0500
-In-Reply-To: <100B070F-7EB4-4BF7-B2B9-E5AE78D3066A@oracle.com>
-References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
-         <20220105235012.2497118-3-eric.snowberg@oracle.com>
-         <883da244c04fcb07add9984859a09d7b1827880a.camel@linux.ibm.com>
-         <100B070F-7EB4-4BF7-B2B9-E5AE78D3066A@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GtMCw9gU-05vUSKvCgnmnFZN-mUkf-aF
-X-Proofpoint-ORIG-GUID: zoiRmxjG6RJRitTOPoRW8Bc1iQ31vQ07
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 suspectscore=0 spamscore=0 malwarescore=0
- mlxlogscore=999 clxscore=1015 impostorscore=0 priorityscore=1501
- mlxscore=0 adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201110098
+        Tue, 11 Jan 2022 13:17:02 -0500
+Date:   Tue, 11 Jan 2022 18:16:57 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail2; t=1641925020;
+        bh=HuYqRO+NxpAmrDf9iS48/sHc8VXB4DvNx7uZ9s7jHNU=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc;
+        b=TsIAR5i1jrXf15l0E86aaAH+5ZBvAmqt4YCVWQn4SATiThLWR6fTg6Wvw4Pun5UYU
+         CZUDxPnB46rvraelFEnovovoDIYkRxqDgtwil6PEW/dJCXAYas52/fmSt6lAEWT3uB
+         jDk/ZpZMXNyqNy6ViKosfTamvtCJ2+5MT8mUNLsG+ZNQbalwSvRKpX+MD2dAE13Oo/
+         FQIFuuaiVZLkQMTYRnXJDAZAsMwSXxMBaVqwNDCVFl8B8Q/CtUp3l4C1qC2URz5DHi
+         k49n4a0JJM/FgUVioA9f0530QxPovyZz6ct5O7BCBWJpgVygn0cOFUdm+m2gdDL27I
+         ZzrHGYQzH3Gbg==
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Reply-To: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Subject: Re: PATCH v4 ASUS EC Sensors
+Message-ID: <0uakBuv1oBXoq7hUQxghKrFabqWebbG437WBNMuBVpYRL4vCE-IxwsbH16I82L-hq4xLtuSvBM1UaPfUy1HxmoFJYFHkDuJPxh3dZ_P8LuM=@protonmail.com>
+In-Reply-To: <20220111180347.1245774-1-eugene.shalygin@gmail.com>
+References: <20220111180347.1245774-1-eugene.shalygin@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-01-10 at 23:25 +0000, Eric Snowberg wrote:
-> > Jarkko, my concern is that once this version of the patch set is
-> > upstreamed, would limiting which keys may be loaded onto the .machine
-> > keyring be considered a regression?
-> 
-> 
-> Currently certificates built into the kernel do not have a CA restriction on them.  
-> IMA will trust anything in this keyring even if the CA bit is not set.  While it would 
-> be advisable for a kernel to be built with a CA, nothing currently enforces it. 
-> 
-> My thinking for the dropped CA restriction patches was to introduce a new Kconfig.  
-> This Kconfig would do the CA enforcement on the machine keyring.  However if the 
-> Kconfig option was not set for enforcement, it would work as it does in this series, 
-> plus it would allow IMA to work with non-CA keys.  This would be done by removing 
-> the restriction placed in this patch. Let me know your thoughts on whether this would 
-> be an appropriate solution.  I believe this would get around what you are identifying as 
-> a possible regression.
+2022. janu=C3=A1r 11., kedd 19:03 keltez=C3=A9ssel, Eugene Shalygin =C3=
+=ADrta:
 
-True the problem currently exists with the builtin keys, but there's a
-major difference between trusting the builtin keys and those being
-loading via MOK.  This is an integrity gap that needs to be closed and
-shouldn't be expanded to keys on the .machine keyring.
+> This patchset replaces the HWMON asus_wmi_ec_sensors driver with
+> an implementation that does not use WMI but queries the embedded
+> controller directly.
+>
+> That provides two enhancements: sensor reading became quicker (on some
+> systems or kernel configuration it took almost a full second to read
+> all the sensors, that transfers less than 15 bytes of data), the driver
+> became more fexible. The driver now relies on ACPI mutex to lock access
+> to the EC, in the same way as the WMI DSDT code does.
+>
+> Chenges in v5:
+>  - Place the sensors bitset directly into the driver_data field of the
+> =09 dmi_system_id struct.
+>  - Replace doc comments with regular ones.
+>
+> Changes in v4:
+>  - Deprecate the wmi driver rather than removing it.
+>
+> Changes in v3:
+>  - Remove BIOS version checks and BIOS version dependent mutex path.
+>
+> Changes in v2:
+>  - Replace sensor flags enum with bitset
+>  - Replace module init/probe functions with module_platform_driver_probe
+>    and ask the platform drivers framework to load the driver when ACPI
+>    EC is found (ACPI ID "PNP0C09").
+>  - Extend board data with BIOS version attribute for the mutex path to be
+>    BIOS version dependent.
+>  - Add module parameter to override the mutex path.
+>
 
-"plus it would allow IMA to work with non-CA keys" is unacceptable.
+Hi
 
-Mimi
 
+I believe the subject should say "v5" and not "v4". In any case, FYI, `git =
+format-patch`
+has the `--cover-letter` option, which will generate a cover letter templat=
+e
+with the right patch version, etc.
+
+
+Regards,
+Barnab=C3=A1s P=C5=91cze

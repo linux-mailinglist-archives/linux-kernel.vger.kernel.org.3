@@ -2,109 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D68C848AB86
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E631E48AB8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349310AbiAKKfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:35:54 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:47234 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349296AbiAKKfw (ORCPT
+        id S1348523AbiAKKjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:39:22 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:22264 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237905AbiAKKjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:35:52 -0500
-Received: from [77.244.183.192] (port=64540 helo=[192.168.178.41])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1n7EVK-000DqX-8N; Tue, 11 Jan 2022 11:35:50 +0100
-Subject: Re: [PATCH 1/2] PCI: dra7xx: Fix link removal on probe error
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     PCI <linux-pci@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sekhar Nori <nsekhar@ti.com>
-References: <20211214221450.589884-1-luca@lucaceresoli.net>
- <CAL_Jsq+GQTcx1EGKHug2ZcDZufrKM-4k6PB0vQeTCTG42MHzvA@mail.gmail.com>
- <59a23c89-0810-eb28-acd9-7051ac34d438@lucaceresoli.net>
-Message-ID: <4579940c-27dc-733e-4022-ebea4671c839@lucaceresoli.net>
-Date:   Tue, 11 Jan 2022 11:35:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 11 Jan 2022 05:39:20 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20B8ugoD023411;
+        Tue, 11 Jan 2022 10:38:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=2KSWVqEuYdeVeXQVkUDMn8UjL/H2Nqn1KJweQMRZxow=;
+ b=FGY6T3AfTA44nno4Xj+ElYs2S3RoHXDyErvQ+8kB6mWMEx4VHl4kiGncE5PCeGVfHt62
+ nX0NPtm6m7D1pF52JuejjGh1MMEElb4gCf2bp8UtExB1A2x7JJ7B1khr1gTRElop0zM9
+ VT0CQ1w0Ws5n2rHAJv7HXrReU7A478TC5uCM0EU5bY5DbW4HE7TXlPLIutlSicTv8dUe
+ ybaaGQAY5QQ2eOwgZO1P6JbHonmu5cRdB04iTKr3yLlEBgr9sbSlBRQTwr3v1pe8pKp0
+ tkEAfGjsd8U4p1kz3OXMCCjQU5VKUyjmDRL5TN2zbxsq3JzHHl0TaEN3vhxCl4BVDtwT kA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh6u11xkq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 10:38:12 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20BARfvZ026334;
+        Tue, 11 Jan 2022 10:38:12 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh6u11xkc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 10:38:12 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20BAc6lZ012575;
+        Tue, 11 Jan 2022 10:38:10 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma05wdc.us.ibm.com with ESMTP id 3df28ag8mg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 10:38:10 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BAc9Bv12189976
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jan 2022 10:38:10 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D8840C605D;
+        Tue, 11 Jan 2022 10:38:09 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2AACDC6055;
+        Tue, 11 Jan 2022 10:38:01 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.92.234])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Jan 2022 10:38:00 +0000 (GMT)
+X-Mailer: emacs 28.0.90 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Yu Zhao <yuzhao@google.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>
+Subject: Re: [PATCH v6 7/9] mm: multigenerational lru: eviction
+In-Reply-To: <20220104202227.2903605-8-yuzhao@google.com>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <20220104202227.2903605-8-yuzhao@google.com>
+Date:   Tue, 11 Jan 2022 16:07:57 +0530
+Message-ID: <87czkyzhfe.fsf@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <59a23c89-0810-eb28-acd9-7051ac34d438@lucaceresoli.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Pg5gpO9q8jfjUxexhw0xTbVE_geykH2H
+X-Proofpoint-ORIG-GUID: eYTBPwHrLMKJHelQZVIX0_2Z4auf6jKB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015 spamscore=0
+ bulkscore=0 impostorscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201110061
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+...
 
-On 16/12/21 10:08, Luca Ceresoli wrote:
-> Hi Rob,
-> 
-> thanks for the quick feedback!
-> 
-> On 14/12/21 23:42, Rob Herring wrote:
->> On Tue, Dec 14, 2021 at 4:15 PM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->>>
->>> If a devm_phy_get() calls fails with phy_count==N (N > 0), then N links
->>> have already been added by device_link_add() and won't be deleted by
->>> device_link_del() because the code calls 'return' and not 'goto err_link'.
->>>
->>> Fix in a very simple way by doing all the devm_phy_get() calls before all
->>> the device_link_add() calls.
->>>
->>> Fixes: 7a4db656a635 ("PCI: dra7xx: Create functional dependency between PCIe and PHY")
->>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->>> ---
->>>  drivers/pci/controller/dwc/pci-dra7xx.c | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/pci/controller/dwc/pci-dra7xx.c b/drivers/pci/controller/dwc/pci-dra7xx.c
->>> index f7f1490e7beb..2ccc53869e13 100644
->>> --- a/drivers/pci/controller/dwc/pci-dra7xx.c
->>> +++ b/drivers/pci/controller/dwc/pci-dra7xx.c
->>> @@ -757,7 +757,9 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
->>>                 phy[i] = devm_phy_get(dev, name);
->>>                 if (IS_ERR(phy[i]))
->>>                         return PTR_ERR(phy[i]);
->>> +       }
->>>
->>> +       for (i = 0; i < phy_count; i++) {
->>>                 link[i] = device_link_add(dev, &phy[i]->dev, DL_FLAG_STATELESS);
->>
->> I think this should happen automatically now with fw_devlink being
->> enabled by default. Can you try?
-> 
-> Do you mean removal should be done automatically? I think they are not
-> due to the DL_FLAG_STATELESS flag.
+ +static int isolate_folios(struct lruvec *lruvec, struct scan_control *sc, int swappiness,
+> +			  int *type_scanned, struct list_head *list)
+> +{
+> +	int i;
+> +	int type;
+> +	int scanned;
+> +	int tier = -1;
+> +	DEFINE_MIN_SEQ(lruvec);
+> +
+> +	VM_BUG_ON(!seq_is_valid(lruvec));
+> +
+> +	/*
+> +	 * Try to make the obvious choice first. When anon and file are both
+> +	 * available from the same generation, interpret swappiness 1 as file
+> +	 * first and 200 as anon first.
+> +	 */
+> +	if (!swappiness)
+> +		type = 1;
+> +	else if (min_seq[0] < min_seq[1])
+> +		type = 0;
+> +	else if (swappiness == 1)
+> +		type = 1;
+> +	else if (swappiness == 200)
+> +		type = 0;
+> +	else
+> +		type = get_type_to_scan(lruvec, swappiness, &tier);
+> +
 
-I would love to have feedback because, as said, I think my patch is
-correct, but if I'm wrong (which might well be) I have to drop patch 1
-and rewrite patch 2 in a slightly more complex form.
+Wondering wether it will make it simpler to use
+#define ANON 0
+#define FILE 1
 
-About your request to try: I only have hardware with phy_count==1, and
-anyway I cannot access it at the moment. :(
+and then
+	else if (min_seq[ANON] < min_seq[FILE])
+		type = ANON;
 
-Regards.
--- 
-Luca
+The usage of 0/1 across code do confuse
+
+-aneesh

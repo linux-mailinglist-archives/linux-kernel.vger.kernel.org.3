@@ -2,94 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C378048B168
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8A848B17B
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349756AbiAKPza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:55:30 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:56576 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349717AbiAKPz3 (ORCPT
+        id S1349739AbiAKQAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 11:00:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243724AbiAKQAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:55:29 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id 4cd268dabde6e4c3; Tue, 11 Jan 2022 16:55:27 +0100
-Received: from kreacher.localnet (unknown [213.134.181.61])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 6BF5C66B107;
-        Tue, 11 Jan 2022 16:55:26 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Subject: [PATCH] ACPICA: Use uintptr_t and offsetof() in Linux kernel builds
-Date:   Tue, 11 Jan 2022 16:55:25 +0100
-Message-ID: <2614912.mvXUDI8C0e@kreacher>
+        Tue, 11 Jan 2022 11:00:43 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB57C06173F;
+        Tue, 11 Jan 2022 08:00:42 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id l25so22970927wrb.13;
+        Tue, 11 Jan 2022 08:00:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=z1ex1ZxABsRXp/rPR+OVpQZtaHaI+kiKsq7GHCUqCKY=;
+        b=QS8x1RpHwLgdNOzNlAXTdd3wgN+Sr2biQcXw86WVibyEtMYIR5fiP11FkksEE3X9KH
+         Vy8g8mbmPpskChnlRvN6QR2QGO13LagrRxDgwrJvBKNicGMk2JWNamzzrsObkdZ8Q/11
+         rwER7fuYYdvj2GPOgVp4AKg6cu8OsRACp0Us2aKJ89qqKGKF6YQ3NRNm9l2lQwROOfsU
+         K3FE1YgR6YiIx8KkzbIigVCYszYhziZfu9kjEt3SPLV0Pqa3sEyb0/a4KTCiPzy106vj
+         f0K+Nvnr+M4+nfGK9FFd9KDXdx0K3wNGqjMCP1glG8waYYydHIp/tbu/mqUN12wfzrW/
+         R7Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=z1ex1ZxABsRXp/rPR+OVpQZtaHaI+kiKsq7GHCUqCKY=;
+        b=s1oPxr8DHPdlig6dIk9DzyxAcxw8Q/bHntbIN7sxy0mwhGehBpExvCMJn5hXoj2pxc
+         reOoech8hrGLeQ+z3DeNA176kDT4FzOBKZSjRRKqOFz5HywMIgM+hRXU92urMKr0ObIY
+         EutyFOfo+w1fRCu3XC67jc17jnoKP2f4aENjLmYPNhKDJuoXoFJZ5x3tXU56a3Rsxge0
+         zY9g8hk1tgQnZUz+HE0LinJbYNskMNbIWf4dQjKLnGr+A4CaEbvmL2RRTLiUtOBAwXgb
+         EGUZA90AnO0zwbxXM8baufcqlRSNddQMCWBQzIRb37cDjrc1G9oX49HvShLA3rUASjXw
+         ZM4Q==
+X-Gm-Message-State: AOAM531ECSbKMYLmXoPiZgX3VxSXc7BodKmgsx65L7JZhqfubY6tx8C/
+        HU+L/J/eX37ncx88+KWhP34=
+X-Google-Smtp-Source: ABdhPJxdXExuqi+hXs3I6AWGuNvzvZPLK4cCuOcyHY0iJstOqhzvSZc7j1zHr7ElMyBNOj2/SSBKtg==
+X-Received: by 2002:a05:6000:2aa:: with SMTP id l10mr4548402wry.518.1641916841256;
+        Tue, 11 Jan 2022 08:00:41 -0800 (PST)
+Received: from [192.168.8.198] ([148.252.129.73])
+        by smtp.gmail.com with ESMTPSA id u12sm9507394wrf.60.2022.01.11.08.00.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 08:00:40 -0800 (PST)
+Message-ID: <0b7d2c38-8c76-6e29-1dd0-c5eeee8e2377@gmail.com>
+Date:   Tue, 11 Jan 2022 15:57:34 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.61
-X-CLIENT-HOSTNAME: 213.134.181.61
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrudehfedgkedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvvefgteeuteehkeduuedvudetleevffdtffdtjeejueekffetieekgfeigfehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukedurdeiudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdeiuddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgsvghrthdrmhhoohhrvgesihhnthgvlhdrtghomhdprhgtphhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 09/14] ipv6: hand dst refs to cork setup
+Content-Language: en-US
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org
+References: <cover.1641863490.git.asml.silence@gmail.com>
+ <07031c43d3e5c005fbfc76b60a58e30c66d7c620.1641863490.git.asml.silence@gmail.com>
+ <CA+FuTSdJYwN=vxpj4nkpSxdyJ5_47PZuPTjQkRphYvLt47KdjQ@mail.gmail.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CA+FuTSdJYwN=vxpj4nkpSxdyJ5_47PZuPTjQkRphYvLt47KdjQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 1/11/22 15:39, Willem de Bruijn wrote:
+> On Mon, Jan 10, 2022 at 8:25 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>
+>> During cork->dst setup, ip6_make_skb() gets an additional reference to
+>> a passed in dst. However, udpv6_sendmsg() doesn't need dst after calling
+>> ip6_make_skb(), and so we can save two additional atomics by passing
+>> dst references to ip6_make_skb(). udpv6_sendmsg() is the only caller, so
+>> it's enough to make sure it doesn't use dst afterwards.
+>>
+>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+>> ---
+> 
+> There are two patches 9/14
 
-To avoid "performing pointer subtraction with a null pointer has
-undefined behavior" compiler warnings, use uintptr_t and offsetof()
-that are always available during Linux kernel builds to define
-acpi_uintptr_t and the ACPI_TO_INTEGER() and ACPI_OFFSET() macros.
+Weird, thanks for letting know
 
-Based on earlier proposal from Arnd Bergmann.
+> 
+>>   net/ipv6/ip6_output.c | 9 ++++++---
+>>   net/ipv6/udp.c        | 3 ++-
+>>   2 files changed, 8 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+>> index 0cc490f2cfbf..6a7bba4dd04d 100644
+>> --- a/net/ipv6/ip6_output.c
+>> +++ b/net/ipv6/ip6_output.c
+>> @@ -1356,6 +1356,8 @@ static int ip6_setup_cork(struct sock *sk, struct inet_cork_full *cork,
+>>          unsigned int mtu;
+>>          struct ipv6_txoptions *nopt, *opt = ipc6->opt;
+>>
+>> +       cork->base.dst = &rt->dst;
+>> +
+> 
+> Is there a reason to move this up from its original location next to
+> the other cork initialization assignments?
 
-Link: https://lore.kernel.org/linux-acpi/20210927121338.938994-1-arnd@kernel.org
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- include/acpi/actypes.h          |    4 ++++
- include/acpi/platform/aclinux.h |    5 +++++
- 2 files changed, 9 insertions(+)
-
-Index: linux-pm/include/acpi/platform/aclinux.h
-===================================================================
---- linux-pm.orig/include/acpi/platform/aclinux.h
-+++ linux-pm/include/acpi/platform/aclinux.h
-@@ -114,6 +114,11 @@
- #define acpi_raw_spinlock                   raw_spinlock_t *
- #define acpi_cpu_flags                      unsigned long
- 
-+#define acpi_uintptr_t                      uintptr_t
-+
-+#define ACPI_TO_INTEGER(p)                  ((uintptr_t)(p))
-+#define ACPI_OFFSET(d, f)                   offsetof(d, f)
-+
- /* Use native linux version of acpi_os_allocate_zeroed */
- 
- #define USE_NATIVE_ALLOCATE_ZEROED
-Index: linux-pm/include/acpi/actypes.h
-===================================================================
---- linux-pm.orig/include/acpi/actypes.h
-+++ linux-pm/include/acpi/actypes.h
-@@ -507,8 +507,12 @@ typedef u64 acpi_integer;
- /* Pointer/Integer type conversions */
- 
- #define ACPI_TO_POINTER(i)              ACPI_CAST_PTR (void, (acpi_size) (i))
-+#ifndef ACPI_TO_INTEGER
- #define ACPI_TO_INTEGER(p)              ACPI_PTR_DIFF (p, (void *) 0)
-+#endif
-+#ifndef ACPI_OFFSET
- #define ACPI_OFFSET(d, f)               ACPI_PTR_DIFF (&(((d *) 0)->f), (void *) 0)
-+#endif
- #define ACPI_PTR_TO_PHYSADDR(i)         ACPI_TO_INTEGER(i)
- 
- /* Optimizations for 4-character (32-bit) acpi_name manipulation */
+ip6_setup_cork() consumes a dst ref now even in error cases, moved
+it to not patch up all error returns in there. On the other hand
+I can add dst_release() to callers when it failed.
 
 
+> That the reference is taken in ip6_append_data for corked requests
+> (once, in setup cork branch) and inherited from udpv6_send_skb
+> otherwise is non-trivial. Worth a comment.
 
+Will update in v2, thanks
+
+-- 
+Pavel Begunkov

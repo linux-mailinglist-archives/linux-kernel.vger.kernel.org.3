@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B3C48B46F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E58C548B481
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344629AbiAKRuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:50:46 -0500
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:34587 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344022AbiAKRup (ORCPT
+        id S1344818AbiAKRvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:51:07 -0500
+Received: from mail-oi1-f182.google.com ([209.85.167.182]:44982 "EHLO
+        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344760AbiAKRvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:50:45 -0500
-Received: by mail-oi1-f177.google.com with SMTP id r131so140842oig.1;
-        Tue, 11 Jan 2022 09:50:44 -0800 (PST)
+        Tue, 11 Jan 2022 12:51:02 -0500
+Received: by mail-oi1-f182.google.com with SMTP id s9so69669oib.11;
+        Tue, 11 Jan 2022 09:51:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=xpEEP6pn59TAkOy+KIoH6uTjJ6S6pmp9UVrqmovuxDE=;
-        b=YJ25l3EgN2rD2Czconkq/TijjLo6pp6BeiRUYYhb9ETvv1a3ANRk4ntTSEeWjmqb2m
-         Owj1AQTF+JAdLAk9lbTgVtUI+/fqTX6R97APAbPzB+/ZIEq42CLMWGFrfjZhEbMPTJPQ
-         JCNgYfJ9iXsmK4h44xyDaNrfBlsvST3UZhLM5ZYxOlW5VU7bWstiqGlBRCRvBQLm3U5e
-         18jsCnkix1fvljRN0bsKQRJFObpRREvwn2Zg1RYNBoxwEgvpxga+KnsNibA1pqjxpWhD
-         1tjPcP6esQFDp02/bByoVksSrXXAChTUvt5Kekr7IDJ2Moz19pYMd7gowe8zgbFu7ir6
-         C9Jw==
-X-Gm-Message-State: AOAM531hATMwIQlzPHhG8eCOphQAoG+QeQWD0gYy1Mh++v4hsNlTZ0a0
-        rQTfO6BG/PDR+CawVkNEQqT9nA0KpQ==
-X-Google-Smtp-Source: ABdhPJwwX2jBplY7ZSp7V0C8lWNfBrPtgM86TV0fUt2mbnasJt+D7XWKI7BTjDNSI5byvJHPplpI/Q==
-X-Received: by 2002:a05:6808:4d2:: with SMTP id a18mr2576006oie.99.1641923444555;
-        Tue, 11 Jan 2022 09:50:44 -0800 (PST)
+        bh=FCQPITei3COem8cmVAANSwaWxSLVAkkDF2YSEJ/o+O4=;
+        b=lHlzRVInTDME5au5sr1oghWgv+u8lkaHIxhHPMtJrq4W26YNJb6IgfpV1pDLIJ0dAS
+         PyehQf9ojUU8rx50BDNlwkTfKa0RmpdGFBDKuz1zvLNpZHWbdDpZsWHqXUGgwu1BAeU+
+         h7oyQR5GPvvf3NwnKjv1I2uYhgtQPxqi8S3zoYbghXSV+rbM6fXwPlH/JmkD/v3DYIoH
+         YQSAGNCkKvT3LrE9wMEcgdu4N9pCdpvkyYeexkwl21AQtNtCTMFWzDP1/tcFbAMiR8td
+         amvoDUenFnhIPUEcPVJopiwpUz3PbvheaE2FyBqtaM7guWNNN+n5DZPzb4UDPTRybATU
+         +Lag==
+X-Gm-Message-State: AOAM533qcQjiKHWB4l09R15ddvWoM20tB2qZ706ecGiaDDjqyUAvE2SZ
+        /igqC/2+KfkIRxVi3Mg1+g==
+X-Google-Smtp-Source: ABdhPJzRyceLnQnI7OQ9vNM9e7mwGoZsEmJTGCoevf0mvD9EDvtFFVOamMtqqTkLJJ2l6jnWh/xgMQ==
+X-Received: by 2002:a05:6808:1290:: with SMTP id a16mr2549347oiw.116.1641923461627;
+        Tue, 11 Jan 2022 09:51:01 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id a26sm48342oos.39.2022.01.11.09.50.43
+        by smtp.gmail.com with ESMTPSA id s1sm2020749ooo.11.2022.01.11.09.51.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 09:50:43 -0800 (PST)
-Received: (nullmailer pid 3226952 invoked by uid 1000);
-        Tue, 11 Jan 2022 17:50:42 -0000
-Date:   Tue, 11 Jan 2022 11:50:42 -0600
+        Tue, 11 Jan 2022 09:51:01 -0800 (PST)
+Received: (nullmailer pid 3227467 invoked by uid 1000);
+        Tue, 11 Jan 2022 17:51:00 -0000
+Date:   Tue, 11 Jan 2022 11:51:00 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: PCI: snps,dw-pcie-ep: Drop conflicting
- 'max-functions' schema
-Message-ID: <Yd3Dcltq5IG6CeWa@robh.at.kernel.org>
-References: <20220107030358.2378221-1-robh@kernel.org>
+Cc:     Felix Fietkau <nbd@nbd.name>, netdev@vger.kernel.org,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>, devicetree@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        linux-mediatek@lists.infradead.org, linux-wireless@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: net: wireless: mt76: Fix 8-bit property
+ sizes
+Message-ID: <Yd3DhO7bel0NH5UL@robh.at.kernel.org>
+References: <20220107030419.2380198-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220107030358.2378221-1-robh@kernel.org>
+In-Reply-To: <20220107030419.2380198-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Jan 2022 21:03:57 -0600, Rob Herring wrote:
-> 'max-functions' is already defined in pci-ep.yaml schema as a uint8 and all
-> users of it expect an uint8. Drop the conflicting schema.
+On Thu, 06 Jan 2022 21:04:17 -0600, Rob Herring wrote:
+> The '/bits/ 8' notation applies the next <> list of values. Another <> list
+> is encoded as 32-bits by default. IOW, each <> list needs to be preceeded
+> with '/bits/ 8'.
+> 
+> While the dts format allows this, as a rule we don't mix sizes for DT
+> properties since all size information is lost in the dtb file.
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml | 4 ----
->  1 file changed, 4 deletions(-)
+>  .../devicetree/bindings/net/wireless/mediatek,mt76.yaml       | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 
 Applied, thanks!

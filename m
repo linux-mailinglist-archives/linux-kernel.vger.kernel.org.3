@@ -2,134 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4EE48A84A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CEEA48A850
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348488AbiAKHUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 02:20:07 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:10013 "EHLO mx1.tq-group.com"
+        id S1348494AbiAKHVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:21:51 -0500
+Received: from mga11.intel.com ([192.55.52.93]:32086 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233066AbiAKHUG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:20:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1641885606; x=1673421606;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3Jyu/v5o+vrp+3w/SDYYyY+040QxdlcF7dPATNH70YY=;
-  b=gVSMLqDA/+3EI+ADbvB1B7iyKfv6v8p1hWpMkHNVlyDMXrYBzSqqJSIg
-   fqkA2H/QbRnMjK7xk+x2jMLNjWVaz+92DCigr6sJzCUklZAnF4IYbJuQm
-   80CuWW8pdzdwr5TiEYanF5tGeaj3nO1Yr6BqFUltVhZSraL42lv73JIHX
-   aavQmz/MK1w4St8h7NGaK4Mjc2thF/cToWleYC8GQacVCu1pIq1AXFilw
-   z9BdB0ff4Y09ivS0rkFb94o8JxsPiiwAK+6/N7qO164is25nYId5wUAwP
-   HZNcO2SRIi3Rc5C+hSRgTEZhuHHUj3mfJJ1D/1CwA9lnl/wpd9quQcnRK
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,279,1635199200"; 
-   d="scan'208";a="21419129"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 11 Jan 2022 08:20:05 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 11 Jan 2022 08:20:05 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 11 Jan 2022 08:20:05 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1641885605; x=1673421605;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3Jyu/v5o+vrp+3w/SDYYyY+040QxdlcF7dPATNH70YY=;
-  b=mImTkfGmWhTa5RFiG3xqVVSjwgAI1LZUvKi0XIHdgYU8Zm6qcUKmUQsi
-   TvPt56HycPYVu1Tnz56KlkuWZ9KXy/YWcywQ73zemf/wBiN9fm9v7tg0y
-   eEoWnBaKApayIQbueD7cWVPSf+uMrMszryddorLvWzSl0lEneX5ZZqC57
-   E1EnT37MxwmcuoY+HqAOR0XFrMFn7U3TmbnDAUrimKJVGBPa+JOR+APFL
-   MfnXChOGpusAfSWZf6Eskz08QPV8FXnEXpA4xrc9/xrK9CMBTtmTYN+ZZ
-   wNJYdyEgQ/uTDY2zJBj6ocpI19nABSiAS+UDcHyWkLgDY5DmIg1SptL41
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,279,1635199200"; 
-   d="scan'208";a="21419127"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 11 Jan 2022 08:20:04 +0100
-Received: from steina-w.localnet (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 152F8280065;
-        Tue, 11 Jan 2022 08:20:04 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>
-Subject: Re: (EXT) Re: [PATCH] arm64: dts: imx8mm-venice-gw73xx-0x: add dt overlays for serial modes
-Date:   Tue, 11 Jan 2022 08:20:01 +0100
-Message-ID: <2226437.ElGaqSPkdT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <CAJ+vNU0U7HknAZcnua39r9to+kJBea6Fg3NiJ9ybZ1xygKoF4g@mail.gmail.com>
-References: <20211214213630.14819-1-tharvey@gateworks.com> <CAJ+vNU0U7HknAZcnua39r9to+kJBea6Fg3NiJ9ybZ1xygKoF4g@mail.gmail.com>
+        id S233066AbiAKHVu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 02:21:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641885710; x=1673421710;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xjapLZr71geqGy0ynMObGUc/b2WTvX3JtHl3+Y57FyQ=;
+  b=ZPCKDbReKptblS+04zhk6Iv0vmJbQloMjgHX9AAouwBCTBBVAMpG9Rto
+   ICoq+i66pozE91Q5gYneyXbYG9GzAivyexdjAwuhRnxx4zRvhuQ6P4Zy4
+   MmB9iuo5pdjP+k1O0qu08pXzNPw3H7hFSqO2ckgjFDNec/LYa+SWjPZYW
+   akMY0cPo+zUgw23mSEdZxJZ3dxX4SFhzCxh0d74fNZdPkPSGI5GUQCw1S
+   Y54VjC0BE8sjXL5vqzcb9iXDJfjDN6pj3NiKs1ngzqogLwqXNfoAvDDW3
+   bOeeMU3FbIXBBGVsnVgV9KpjTcLmnkVpnp/eGY7RXxG46FanQQ2su28I7
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="240973002"
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="240973002"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 23:21:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="514992579"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 10 Jan 2022 23:21:48 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n7BTX-0004YJ-H6; Tue, 11 Jan 2022 07:21:47 +0000
+Date:   Tue, 11 Jan 2022 15:21:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:irq/msi] BUILD SUCCESS
+ 74a5257a0c175810d620b5e631c4e7554955ac25
+Message-ID: <61dd2ff4.v5CAmuGl972JWWQ1%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, 11. Januar 2022, 01:00:21 CET schrieb Tim Harvey:
-> [SNIP]
-> > diff --git a/arch/arm64/boot/dts/freescale/Makefile
-> > b/arch/arm64/boot/dts/freescale/Makefile index a14a6173b765..5ec8d59347b6
-> > 100644
-> > --- a/arch/arm64/boot/dts/freescale/Makefile
-> > +++ b/arch/arm64/boot/dts/freescale/Makefile
-> > @@ -44,6 +44,9 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-var-som-symphony.dtb
-> > 
-> >  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw71xx-0x.dtb
-> >  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x.dtb
-> >  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x.dtb
-> > 
-> > +dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs232-rts.dtbo
-> > +dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs422.dtbo
-> > +dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs485.dtbo
-> > 
-> >  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7901.dtb
-> >  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7902.dtb
-> >  dtb-$(CONFIG_ARCH_MXC) += imx8mn-beacon-kit.dtb
-> > 
-> [SNIP]
-> I'm mostly interested to see if my approach to dt fragments here and
-> the naming of the files makes sense to others.
-> 
-> This patch causes the kernel to build dtbo files for:
-> arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dtbo
-> arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dtbo
-> arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dtbo
-> 
-> The intention is that these files are used by boot firmware (U-Boot)
-> to adjust the dtb before passing it to the kernel.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/msi
+branch HEAD: 74a5257a0c175810d620b5e631c4e7554955ac25  genirq/msi: Populate sysfs entry only once
 
-Hi Tim,
+elapsed time: 724m
 
-do these dtbo actually work? I'm wondering because I was trying to useoverlays 
-myself and noticed that the had to be compiled with -@ for u-boot to be able 
-to apply them. Apparently there are 2 possibilities:
-* Set "DTC_FLAGS_[dtb] := -@" yourself
-See https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-commit/?id=e426d63e752bdbe7d5ba2d872319dde9ab844a07
+configs tested: 121
+configs skipped: 4
 
-* Use dedicated overlay target
-See https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-commit/?id=15d16d6dadf6947ac7f9a686c615995c5a426ce2
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-You use neither of them. IIRC just naming the target file .dtbo will not apply 
-symbols (-Q) during dtc call. Can you verify using 'V=1'
-Also I'm wondering which way is the best to go.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+mips                 randconfig-c004-20220111
+powerpc                     tqm8541_defconfig
+nios2                            allyesconfig
+powerpc                      ppc40x_defconfig
+m68k                        stmark2_defconfig
+sh                           se7721_defconfig
+mips                      fuloong2e_defconfig
+csky                             alldefconfig
+powerpc                       ppc64_defconfig
+powerpc                     taishan_defconfig
+sh                           se7780_defconfig
+um                             i386_defconfig
+h8300                               defconfig
+xtensa                  nommu_kc705_defconfig
+parisc                generic-64bit_defconfig
+arc                    vdk_hs38_smp_defconfig
+arm                        multi_v7_defconfig
+sh                         microdev_defconfig
+arm                          iop32x_defconfig
+powerpc                    adder875_defconfig
+parisc                           alldefconfig
+arm                           viper_defconfig
+mips                 decstation_r4k_defconfig
+arm                        clps711x_defconfig
+powerpc                      arches_defconfig
+mips                       bmips_be_defconfig
+arm                            zeus_defconfig
+sh                           se7722_defconfig
+ia64                        generic_defconfig
+mips                         mpc30x_defconfig
+arc                          axs103_defconfig
+sh                          urquell_defconfig
+arm                            hisi_defconfig
+sh                             shx3_defconfig
+m68k                       bvme6000_defconfig
+sh                   rts7751r2dplus_defconfig
+riscv                            allyesconfig
+arm                  randconfig-c002-20220111
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220111
+arc                  randconfig-r043-20220111
+s390                 randconfig-r044-20220111
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-Best regards,
-Alexander
+clang tested configs:
+arm                  randconfig-c002-20220111
+x86_64                        randconfig-c007
+riscv                randconfig-c006-20220111
+powerpc              randconfig-c003-20220111
+i386                          randconfig-c001
+s390                 randconfig-c005-20220111
+mips                 randconfig-c004-20220111
+arm                     am200epdkit_defconfig
+arm                          imote2_defconfig
+powerpc                     akebono_defconfig
+powerpc                     kilauea_defconfig
+powerpc                          g5_defconfig
+powerpc                     kmeter1_defconfig
+powerpc                     tqm5200_defconfig
+arm                  colibri_pxa300_defconfig
+mips                           ip22_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
 
-
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

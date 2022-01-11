@@ -2,172 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 895AB48A8EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1607B48A8F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348732AbiAKHwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 02:52:53 -0500
-Received: from lithops.sigma-star.at ([195.201.40.130]:44096 "EHLO
-        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236041AbiAKHww (ORCPT
+        id S236160AbiAKHyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348754AbiAKHyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:52:52 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id AD864614E2C4;
-        Tue, 11 Jan 2022 08:52:50 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 2ZT5CSczOSjH; Tue, 11 Jan 2022 08:52:50 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 2A582614E2CB;
-        Tue, 11 Jan 2022 08:52:50 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id D7MJJ8k-LbO6; Tue, 11 Jan 2022 08:52:50 +0100 (CET)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 0607E614E2C4;
-        Tue, 11 Jan 2022 08:52:50 +0100 (CET)
-Date:   Tue, 11 Jan 2022 08:52:49 +0100 (CET)
-From:   Richard Weinberger <richard@nod.at>
-To:     torvalds <torvalds@linux-foundation.org>
-Cc:     linux-um <linux-um@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <10132756.248426.1641887569979.JavaMail.zimbra@nod.at>
-Subject: [GIT PULL] UML updates for 5.17
+        Tue, 11 Jan 2022 02:54:32 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E41C06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 23:54:31 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id x6so53233663lfa.5
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 23:54:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mVkx1LI+zPocvRrKE2R4cG9ZBr7aaInh7cFXNgORfho=;
+        b=LN0juXaxA9tVwJXZRuY9egGBTmaSUYrCHgO27ujgdpnJR4V1Yviw5JKAysLSEukThd
+         cdTrmijULzElk6t9Y8LQKiJOEhnEcIXIBUo1nxrFo3cqcyE8nDfLnV0W3HQMZioNb9aC
+         XsYyscifecQTpZ/zelqIIGGk4FZvzV9I8c5tZUzGR36X0Liklpa/mYWWzSEQZaQoYlL6
+         paAqbAVll02qifRcxHutVItDy7A75ZfqWitfUl0TyUvIG2KP2Yp3BEap4BXQzmdeogEz
+         KYXRfz0n5bu1KaWCUSSDTPiBoL/s9PGUhJKpxv/1WyS87l7j8iWbxtKrsR/o2hE+oB5c
+         WL8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mVkx1LI+zPocvRrKE2R4cG9ZBr7aaInh7cFXNgORfho=;
+        b=if+LMTjS+TX9scJMqzHLR0Bwg7gBLYwtFo989OWHPZLVhx0DY5CVp3b6xFmnTCeryD
+         fO2+rfxZV0RJvf5k8gGsVXFmjF2YWE6MZDMJWWx7AIqdr7hNMmAZow9iPNdivWG8zBmX
+         JBzuKqGPninPppf2/cusEo2k7CdXRjdjRB+98uXGo39MlrTAplLcXyYY6q11Tdp77L4t
+         9cqxTQ4k0ReszPrCl/nkTA5YaehVhHNEm1XuSjU2kNsOHa0aLju70juMcPBmjKhB5IZq
+         KP7qFdsccyiVsch9ZoWd2vWZcDvivFdrmzE45yKcLGQPXO+7XJfj8BQkvvowFwh1lSeK
+         qShg==
+X-Gm-Message-State: AOAM531MzkJWIUb5ZCGipfhvzR/UrZ0BgsYBW5qY+0LUDYMNtqfKCuvU
+        z+DHRTdac7onjZk1VKMqexzEABbJg5gytBSI53bCbQ==
+X-Google-Smtp-Source: ABdhPJz1/rb+3w2JrqZCiqQv07Gem85CX8i7vfbfVikfoqKAFTBhHBDaxADXrOJtNjoRgddqGe4NvlFOBCWd4g6RCF0=
+X-Received: by 2002:a2e:968a:: with SMTP id q10mr2045001lji.381.1641887669835;
+ Mon, 10 Jan 2022 23:54:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF95 (Linux)/8.8.12_GA_3809)
-Thread-Index: RsIVnHqP6wx+gtlWtggyZBf0Dh/AXA==
-Thread-Topic: UML updates for 5.17
+References: <20211222093802.22357-1-vincent.guittot@linaro.org>
+ <20211222093802.22357-2-vincent.guittot@linaro.org> <9e526482-905c-e759-8aa6-1ff84bb5b2a3@arm.com>
+ <CAKfTPtBR3BWCwEaJe0Cq6K5__zNxfU7FFo2f0bpOPkvzxKdiww@mail.gmail.com>
+ <8f39d837-2589-4f7b-5232-1ed134fb1ad7@arm.com> <CAKfTPtCVD40GiDEG0pnU+k-nwMAh2PSu_OXq4w3k0A0zR4cLpw@mail.gmail.com>
+ <f1549032-50f6-e9fc-a7ae-24373352576b@arm.com> <CAKfTPtAREuJtj8AuZPwfe_=W7v8J-UOXDWeyBL0-VcKGaTSr5Q@mail.gmail.com>
+In-Reply-To: <CAKfTPtAREuJtj8AuZPwfe_=W7v8J-UOXDWeyBL0-VcKGaTSr5Q@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 11 Jan 2022 08:54:18 +0100
+Message-ID: <CAKfTPtCgxwK6tYxKK69nBuGwNjsFBbE+WuohmhWJRo++pPKqog@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] sched/pelt: Don't sync hardly util_sum with uti_avg
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        rickyiu@google.com, odin@uged.al, sachinp@linux.vnet.ibm.com,
+        naresh.kamboju@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Fri, 7 Jan 2022 at 16:21, Vincent Guittot <vincent.guittot@linaro.org> wrote:
+>
+> On Fri, 7 Jan 2022 at 12:43, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> >
+> > On 05/01/2022 14:57, Vincent Guittot wrote:
+> > > On Wed, 5 Jan 2022 at 14:15, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> > >>
+> > >> On 04/01/2022 14:42, Vincent Guittot wrote:
+> > >>> On Tue, 4 Jan 2022 at 12:47, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> > >>>>
+> > >>>> On 22/12/2021 10:38, Vincent Guittot wrote:
+> > >>
+> > >> [...]
+> > >>
+> > >>>> I still wonder whether the regression only comes from the changes in
+> > >>>> update_cfs_rq_load_avg(), introduced by 1c35b07e6d39.
+> > >>>> And could be fixed only by this part of the patch-set (A):
+> > >>>
+> > >>> I have been able to trigger the warning even with (A) though It took
+> > >>> much more time.
+> > >>> And I have been able to catch wrong situations  (with additional
+> > >>> traces) in the 3 places A, B and C
+> > >>
+> > >> OK. By wrong situation you mean '_sum < _avg * MIN_DIVIDER' ?
+> > >
+> > > not only.
+> > > also util_sum == 0 but util_avg !=0 in different places although these
+> >
+> > Ah OK, I saw this one as part of '_sum < _avg * MIN_DIVIDER'.
+> >
+> > > situation didn't trigger sched_warn because some other sync happened
+> > > before the periodic call of __update_blocked_fair
+> > > or if nr_running == 1 and  and task's util_avg/sum > cfs' util_avg/sum
+> > > just before removing the task
+> >
+> > I see.
+> >
+> > >>>> @@ -3677,15 +3706,22 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq
+> > >>>> *cfs_rq)
+> > >>>>
+> > >>>>     r = removed_load;
+> > >>>>     sub_positive(&sa->load_avg, r);
+> > >>>> -   sa->load_sum = sa->load_avg * divider;
+> > >>>> +   sub_positive(&sa->load_sum, r * divider);
+> > >>>> +   sa->load_sum = max_t(u32, sa->load_sum, sa->load_avg * MIN_DIVIDER);
+> > >>>>
+> > >>>>     r = removed_util;
+> > >>>>     sub_positive(&sa->util_avg, r);
+> > >>>> -   sa->util_sum = sa->util_avg * divider;
+> > >>>> +   sub_positive(&sa->util_sum, r * divider);
+> > >>>> +   sa->util_sum = max_t(u32, sa->util_sum, sa->util_avg * MIN_DIVIDER);
+> > >>>>
+> > >>>>     r = removed_runnable;
+> > >>>>     sub_positive(&sa->runnable_avg, r);
+> > >>>> -   sa->runnable_sum = sa->runnable_avg * divider;
+> > >>>> +   sub_positive(&sa->runnable_sum, r * divider);
+> > >>>> +   sa->runnable_sum = max_t(u32, sa->runnable_sum,
+> > >>>> +                                 sa->runnable_avg * MIN_DIVIDER);
+> > >>>>
+> > >>>> i.e. w/o changing update_tg_cfs_X() (and
+> > >>>> detach_entity_load_avg()/dequeue_load_avg()).
+> > >>>>
+> > >>>> update_load_avg()
+> > >>>>   update_cfs_rq_load_avg()    <---
+> > >>>>   propagate_entity_load_avg()
+> > >>>>     update_tg_cfs_X()         <---
+> > >>>>
+> > >>>>
+> > >>>> I didn't see the SCHED_WARN_ON() [cfs_rq_is_decayed()] when looping on
+> > >>>> hackbench in several different sched group levels on
+> > >>>> [Hikey620 (Arm64, 8 CPUs, SMP, 4 taskgroups: A/B C/D E/F G/H), >12h uptime].
+> > >>>
+> > >>> IIRC, it was with hikey960 with cgroup v1
+> > >>> As a side note, I never trigger the problem with dragonboard845 and cgroup v2
+> > >>
+> > >> OK, just started a test on hikey960 cgroupv1. Let's see if I can catch it.
+> >
+> > Still no sign of the issue (hikey960, cgroupv1,  4 taskgroups: A/B C/D
+> > E/F G/H > 45h uptime
+> >
+> > >>>>> @@ -3780,7 +3799,11 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
+> > >>>>>
+> > >>>>>       dequeue_load_avg(cfs_rq, se);
+> > >>>>>       sub_positive(&cfs_rq->avg.util_avg, se->avg.util_avg);
+> > >>>>> -     cfs_rq->avg.util_sum = cfs_rq->avg.util_avg * divider;
+> > >>>>> +     sub_positive(&cfs_rq->avg.util_sum, se->avg.util_sum);
+> > >>>>> +     /* See update_tg_cfs_util() */
+> > >>>>> +     cfs_rq->avg.util_sum = max_t(u32, cfs_rq->avg.util_sum,
+> > >>>>> +                                       cfs_rq->avg.util_avg * MIN_DIVIDER);
+> > >>>>> +
+> > >>>>
+> > >>>> Maybe add a:
+> > >>>>
+> > >>>> Fixes: fcf6631f3736 ("sched/pelt: Ensure that *_sum is always synced
+> > >>>> with *_avg")
+> > >>>
+> > >>> I spent time thinking about adding fixes tag. There is no crash/warn
+> > >>> so far so should we propagate it back in LTS for better performance ?
+> > >>
+> > >> Not sure I understand. What do you mean by 'should we propagate it back
+> > >> in LTS'?
+> > >
+> > > Sorry I had any stables in mind and not only LTS.
+> > >
+> > > Some of the changes done in PELT signal propagation that replace
+> > > subtracting util_sum  by using util_avg * divider instead, are related
+> > > to other problems with sched group hierarchy and
+> > > throttling/unthrottling. I'm not 100% confident that using fixes tag
+> > > to backport this on stables doesn't need to backport more patches on
+> > > other areas in order to not resurrect old problems. So I wonder if
+> > > it's worth  backporting this on stables
+> >
+> > OK, I see. So only 1c35b07e6d39 (i.e. the util _sum/_avg change in
+> > update_cfs_rq_load_avg() (1)) caused the CPU frequency regression. That
+> > was the reason why I initially suggested to split the patch-set
+> > differently. But you said that you saw the issue also when (1) is fixed.
+>
+> Ok, I think that we were not speaking about the same setup. I wrongly
+> read that you were saying that
+> sa->util_sum = max_t(u32, sa->util_sum, sa->util_avg * MIN_DIVIDER);
+> was only needed in update_cfs_rq_load_avg() but not in the other places.
+>
+> But what you said is that we only need the below to fix the perf
+> regression raised by rick ?
+>      r = removed_util;
+>      sub_positive(&sa->util_avg, r);
+>  -   sa->util_sum = sa->util_avg * divider;
+>  +   sub_positive(&sa->util_sum, r * divider);
+>  +   sa->util_sum = max_t(u32, sa->util_sum, sa->util_avg * MIN_DIVIDER);
 
-The following changes since commit 1c3e979bf3e225e5b4b810b24712b16254d608b6:
+The test with the code above doesn't trigger any SCHEd_WARN over the
+weekend so it's probably ok to make a dedicated patch for this with
+tag.
+I'm going to prepare a v2
 
-  Merge branch 'for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid (2021-12-21 09:30:32 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git tags/for-linus-5.17-rc1
-
-for you to fetch changes up to db0dd9cee82270e032123169ceff659eced5115d:
-
-  um: virtio_uml: Allow probing from devicetree (2021-12-22 20:40:05 +0100)
-
-----------------------------------------------------------------
-This pull request contains the following changes for UML:
-
-- set_fs removal
-- Devicetree support
-- Many cleanups from Al
-- Various virtio and build related fixes
-
-----------------------------------------------------------------
-Al Viro (15):
-      uml: trim unused junk from arch/x86/um/sys_call_table_*.c
-      um: move amd64 variant of mmap(2) to arch/x86/um/syscalls_64.c
-      logic_io instance of iounmap() needs volatile on argument
-      um: stop polluting the namespace with registers.h contents
-      uml/i386: missing include in barrier.h
-      um: kill unused cpu()
-      um: remove a dangling extern of syscall_trace()
-      um: unexport handle_page_fault()
-      um, x86: bury crypto_tfm_ctx_offset
-      um: common-offsets.h debriding...
-      um: header debriding - activate_ipi()
-      um: header debriding - mem_user.h
-      um: header debriding - net_*.h
-      um: header debriding - os.h
-      um: header debriding - sigio.h
-
-Changcheng Deng (1):
-      um: Replace if (cond) BUG() with BUG_ON()
-
-Christoph Hellwig (1):
-      um: remove set_fs
-
-Johannes Berg (8):
-      um: fix ndelay/udelay defines
-      um: rename set_signals() to um_set_signals()
-      uml: x86: add FORCE to user_constants.h
-      um: gitignore: Add kernel/capflags.c
-      um: virt-pci: Fix 32-bit compile
-      lib/logic_iomem: Fix 32-bit build
-      lib/logic_iomem: Fix operation on 32-bit
-      um: virtio_uml: Fix time-travel external time propagation
-
-Randy Dunlap (1):
-      um: registers: Rename function names to avoid conflicts and build problems
-
-Sjoerd Simons (1):
-      hostfs: Fix writeback of dirty pages
-
-Vincent Whitchurch (3):
-      um: Extract load file helper from initrd.c
-      um: Add devicetree support
-      um: virtio_uml: Allow probing from devicetree
-
-Yang Guang (1):
-      um: Use swap() to make code cleaner
-
- arch/um/.gitignore                      |  1 +
- arch/um/Kconfig                         |  2 +-
- arch/um/drivers/virt-pci.c              |  8 ++---
- arch/um/drivers/virtio_uml.c            | 54 +++++++++++++++++++++++++++--
- arch/um/include/asm/delay.h             |  4 +--
- arch/um/include/asm/irqflags.h          |  4 +--
- arch/um/include/asm/processor-generic.h |  2 +-
- arch/um/include/asm/thread_info.h       |  4 ---
- arch/um/include/asm/uaccess.h           | 21 ++++++++++--
- arch/um/include/shared/common-offsets.h | 15 --------
- arch/um/include/shared/irq_user.h       |  1 -
- arch/um/include/shared/kern_util.h      |  2 --
- arch/um/include/shared/longjmp.h        |  2 +-
- arch/um/include/shared/mem_user.h       |  5 ---
- arch/um/include/shared/net_kern.h       |  2 --
- arch/um/include/shared/net_user.h       |  1 -
- arch/um/include/shared/os.h             | 17 ++-------
- arch/um/include/shared/registers.h      |  6 ++--
- arch/um/include/shared/sigio.h          |  1 -
- arch/um/kernel/Makefile                 |  4 ++-
- arch/um/kernel/dtb.c                    | 41 ++++++++++++++++++++++
- arch/um/kernel/exec.c                   |  1 +
- arch/um/kernel/initrd.c                 | 48 +++-----------------------
- arch/um/kernel/ksyms.c                  |  2 +-
- arch/um/kernel/load_file.c              | 61 +++++++++++++++++++++++++++++++++
- arch/um/kernel/mem.c                    |  3 +-
- arch/um/kernel/process.c                |  6 +---
- arch/um/kernel/skas/uaccess.c           | 25 --------------
- arch/um/kernel/syscall.c                | 28 ---------------
- arch/um/kernel/trap.c                   |  1 -
- arch/um/kernel/um_arch.c                |  3 ++
- arch/um/kernel/um_arch.h                | 14 ++++++++
- arch/um/os-Linux/registers.c            |  4 +--
- arch/um/os-Linux/sigio.c                | 13 ++++---
- arch/um/os-Linux/signal.c               |  8 ++---
- arch/um/os-Linux/start_up.c             |  2 +-
- arch/x86/kernel/asm-offsets.c           |  3 --
- arch/x86/um/Makefile                    |  2 +-
- arch/x86/um/asm/barrier.h               |  1 +
- arch/x86/um/asm/segment.h               |  8 -----
- arch/x86/um/os-Linux/registers.c        |  1 +
- arch/x86/um/ptrace_32.c                 |  1 +
- arch/x86/um/ptrace_64.c                 |  1 +
- arch/x86/um/shared/sysdep/syscalls_64.h |  3 --
- arch/x86/um/signal.c                    |  1 +
- arch/x86/um/sys_call_table_32.c         |  4 ---
- arch/x86/um/sys_call_table_64.c         | 17 ---------
- arch/x86/um/syscalls_64.c               | 14 +++++++-
- fs/hostfs/hostfs_kern.c                 |  3 ++
- include/asm-generic/logic_io.h          |  2 +-
- lib/logic_iomem.c                       | 23 +++++++------
- 51 files changed, 265 insertions(+), 235 deletions(-)
- create mode 100644 arch/um/kernel/dtb.c
- create mode 100644 arch/um/kernel/load_file.c
- delete mode 100644 arch/um/kernel/syscall.c
- create mode 100644 arch/um/kernel/um_arch.h
+>
+> The WARN that I mentioned in my previous email was about not adding
+> the max_t in all 3 places. I rerun some test today and I triggered the
+> WARN after a detach without the max_t line.
+>
+> I can probably isolate the code above in a dedicated patch for the
+> regression raised by Rick and we could consider adding a fixes tag; I
+> will run more tests with only this part during the weekend.
+> That being said, we need to stay consistent in all 3 places where we
+> move or propagate some *_avg. In particular, using  "sa->util_sum =
+> sa->util_avg * divider" has the drawback of filtering the contribution
+> not already accounted for in util_avg and the impact is much larger
+> than expected. It means that  although fixing only
+> update_cfs_rq_load_avg() seems enough for rick's case, some other
+> cases could be impacted by the 2 other places and we need to fixed
+> them now that we have a better view of the root cause

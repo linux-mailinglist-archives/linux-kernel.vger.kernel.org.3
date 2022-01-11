@@ -2,140 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC2948B72E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F3348B733
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350564AbiAKTSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 14:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
+        id S1350794AbiAKTSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 14:18:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350698AbiAKTRg (ORCPT
+        with ESMTP id S1350919AbiAKTR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:17:36 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28231C06118C
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:16:59 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso19673253otf.12
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:16:59 -0800 (PST)
+        Tue, 11 Jan 2022 14:17:58 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B95C029820
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:17:19 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id r138so440704oie.3
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:17:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=RmmeEOXgL4aczt2lYfVEJ81JJyR5GHuXnUEqtqtBYAw=;
-        b=cOATJM7qKaMwa1rfMreaSBRrwDDzMO7PjOtbZd5NEoxEnpoVYSyEoZ9YYXqeYIXSvr
-         YE9v8N/iag490QDHMRj+L/DdGLjpFJHDqQCT7vnsL3SeJdwkX63Af178WulVTiUohxbi
-         2Z/g/UTUnmDWrvpF1A4BuycMUQiQMZtfEfDMEJMhly8ysY21Lwy1FYkVyAAHc2Y+CloD
-         QUqxx8+pjJdctbF3pQ+CoqO2LSEEj2OAsTt02lMfMbyq/L2h4o6KshlrJhMnTMxz7HRI
-         kj1j8PJ6vmHhfhTs5wV82Z3hYb9FrcuJ2q8JzsdRPEiJYoahPTsWOV6v37b2pmdg3f9Q
-         Qtpg==
+        bh=XXfEP3eDjuVf2I0hzndCbBZCmDbt3TXTw7VkqrBBp6g=;
+        b=GqsQHSUI/DSQ5OHrZM4cAIUTNhygx8SMT8UZeIjwtBBPg0C1RHAiQTcr+e9hK8YBlu
+         l8uN7LR5JJfZ1yuZ2HAK/ZI1cEra7YuXTRaICw2tpHE2SpAPNvHUYAQWqMGqoRK2xquF
+         NunrkGKuyj1aPAhJandfNKcNq/xbyYZ/ka9wk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=RmmeEOXgL4aczt2lYfVEJ81JJyR5GHuXnUEqtqtBYAw=;
-        b=blyBUQt8NGLuT2Xa991X4XzJxvWkWGOexyfeGvVHZLyfJW86IdMWdiAwlgvgwKbV5U
-         XPPwgijTSrj3Skmit0V3LmH1RfgOkf1qDPB6CiolujoJRStcM31sx7zyco2uBT5IJ6fC
-         GNaocIvbKZ2WMQtfHiMds6k7ZYQJvm7LzuL8FJX+ntiQnKXac7hfwJ8uCkAiOa3R42a+
-         SGPj7NT8ZOKmLhVMkiR1VaVg1HaFLTgrs62mg/MZM2LJmGZuUUDL4bp3gaQ8JZTDkPa4
-         yibDAUYWJDOqbRSGwn5TkRduNLe3FsEY+UX4hgx9cycbQQvkajARdijs5DM24jDRqIRU
-         lF1A==
-X-Gm-Message-State: AOAM5338tkzvFffLcqPlR3mjfIog50KoceXzBiIqy978YOjBAV4fbBqw
-        Y05FrPYlJN4sbvG0hWhTWlYGDeVYHK0rQmm3ecd5Sg==
-X-Google-Smtp-Source: ABdhPJyFhnhDMW2ISK4zn+lMszvCQjj7MkaLiyC7O4OUsyaW0HdldRqbQFmZ06I5CZ/gdojGHnnTpqjIXgdkiahuGYk=
-X-Received: by 2002:a05:6830:441f:: with SMTP id q31mr4578699otv.14.1641928618059;
- Tue, 11 Jan 2022 11:16:58 -0800 (PST)
+        bh=XXfEP3eDjuVf2I0hzndCbBZCmDbt3TXTw7VkqrBBp6g=;
+        b=0HPRCRU0VHNduAuTr051b01/XUNpDHJDBDgeXKfwXS0lu2RK1Rdw6+wfVRfsYGpy85
+         xO8Y6I5xlftavX6eLjN/g2oUbD1mdEyRbDoFBfNvbz9+TWenuc/yDMvPauTeok9P3a+p
+         ryY2VvNFR/VVFSOFF17b5bvAeEsOKNKKIYcgGdwyuCvr74cMorXJT6ppE6l8Gg7r40hT
+         02v1ptaVn9qivlmA6c1y90o42k+2ri31U4QiMTgaBTpcMLM237QLVf0CRzB3Qs3Gk3Cs
+         tusm0Dwy2dWW7DI0E5gkjH3l/X8aKGMzqmmTqASMHqGn295mcL9ZQKos16bxDEnrpqRM
+         PxDQ==
+X-Gm-Message-State: AOAM531SADLW4RbBYxBLvm31kC9Ldo7HgcIJ7r1vBH3MKR0Jtsibt38o
+        6s5M/jo/8I3s5IB0sfLI1bSuWMCogCmuZw==
+X-Google-Smtp-Source: ABdhPJzS7wolZWqDq7WJGlkt9OsOujKQQWmBWitn2sVSriq7COep72sysNUIQx0KMlUDnMJaioi6Sw==
+X-Received: by 2002:a05:6808:1707:: with SMTP id bc7mr2878390oib.86.1641928636693;
+        Tue, 11 Jan 2022 11:17:16 -0800 (PST)
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
+        by smtp.gmail.com with ESMTPSA id h14sm1055856otm.46.2022.01.11.11.17.15
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 11:17:15 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id a12-20020a0568301dcc00b005919e149b4cso1685269otj.8
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:17:15 -0800 (PST)
+X-Received: by 2002:a9d:5908:: with SMTP id t8mr2359606oth.186.1641928634923;
+ Tue, 11 Jan 2022 11:17:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
- <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com>
- <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
- <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
- <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
- <CALMp9eTPJZDtMiHZ5XRiYw2NR9EBKSfcP5CYddzyd2cgWsJ9hw@mail.gmail.com> <CAJHc60xD2U36pM4+Dq3yZw6Cokk-16X83JHMPXj4aFnxOJ3BUQ@mail.gmail.com>
-In-Reply-To: <CAJHc60xD2U36pM4+Dq3yZw6Cokk-16X83JHMPXj4aFnxOJ3BUQ@mail.gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 11 Jan 2022 11:16:46 -0800
-Message-ID: <CALMp9eR+evJ+w9VTSvR2KHciQDgTsnS=bh=1OUL4yy8gG6O51A@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Reiji Watanabe <reijiw@google.com>, Marc Zyngier <maz@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
+References: <20211001144212.v2.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
+ <cd453cd2-e23f-84b9-e7d3-667df2397c45@intel.com>
+In-Reply-To: <cd453cd2-e23f-84b9-e7d3-667df2397c45@intel.com>
+From:   Brian Norris <briannorris@chromium.org>
+Date:   Tue, 11 Jan 2022 11:17:04 -0800
+X-Gmail-Original-Message-ID: <CA+ASDXPu5=kv1KoJ-189uHXGua-vhYJzJ4pNujmVxJf_dWE=Sg@mail.gmail.com>
+Message-ID: <CA+ASDXPu5=kv1KoJ-189uHXGua-vhYJzJ4pNujmVxJf_dWE=Sg@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/bridge: analogix_dp: Grab runtime PM reference for DP-AUX
+To:     Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        stable <stable@vger.kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Dave Airlie <airlied@redhat.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 10:52 AM Raghavendra Rao Ananta
-<rananta@google.com> wrote:
+Hi Andrzej,
+
+On Tue, Jan 11, 2022 at 5:26 AM Andrzej Hajda <andrzej.hajda@intel.com> wrote:
+> I am not DP specialist so CC-ed people working with DP
+
+Thanks for the review regardless! I'll also not claim to be a DP
+specialist -- although I've had to learn my fair share to debug a good
+handful of issues on an SoC using this driver.
+
+> On 01.10.2021 23:42, Brian Norris wrote:
+> > If the display is not enable()d, then we aren't holding a runtime PM
+> > reference here. Thus, it's easy to accidentally cause a hang, if user
+> > space is poking around at /dev/drm_dp_aux0 at the "wrong" time.
+> >
+> > Let's get the panel and PM state right before trying to talk AUX.
+> >
+> > Fixes: 0d97ad03f422 ("drm/bridge: analogix_dp: Remove duplicated code")
+> > Cc: <stable@vger.kernel.org>
+> > Cc: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+> > Signed-off-by: Brian Norris <briannorris@chromium.org>
 >
-> On Mon, Jan 10, 2022 at 3:57 PM Jim Mattson <jmattson@google.com> wrote:
-> >
-> > On Mon, Jan 10, 2022 at 3:07 PM Raghavendra Rao Ananta
-> > <rananta@google.com> wrote:
-> > >
-> > > On Fri, Jan 7, 2022 at 4:05 PM Jim Mattson <jmattson@google.com> wrote:
-> > > >
-> > > > On Fri, Jan 7, 2022 at 3:43 PM Raghavendra Rao Ananta
-> > > > <rananta@google.com> wrote:
-> > > > >
-> > > > > Hi Reiji,
-> > > > >
-> > > > > On Thu, Jan 6, 2022 at 10:07 PM Reiji Watanabe <reijiw@google.com> wrote:
-> > > > > >
-> > > > > > Hi Raghu,
-> > > > > >
-> > > > > > On Tue, Jan 4, 2022 at 11:49 AM Raghavendra Rao Ananta
-> > > > > > <rananta@google.com> wrote:
-> > > > > > >
-> > > > > > > Capture the start of the KVM VM, which is basically the
-> > > > > > > start of any vCPU run. This state of the VM is helpful
-> > > > > > > in the upcoming patches to prevent user-space from
-> > > > > > > configuring certain VM features after the VM has started
-> > > > > > > running.
-> > > >
-> > > > What about live migration, where the VM has already technically been
-> > > > started before the first call to KVM_RUN?
-> > >
-> > > My understanding is that a new 'struct kvm' is created on the target
-> > > machine and this flag should be reset, which would allow the VMM to
-> > > restore the firmware registers. However, we would be running KVM_RUN
-> > > for the first time on the target machine, thus setting the flag.
-> > > So, you are right; It's more of a resume operation from the guest's
-> > > point of view. I guess the name of the variable is what's confusing
-> > > here.
-> >
-> > I was actually thinking that live migration gives userspace an easy
-> > way to circumvent your restriction. You said, "This state of the VM is
-> > helpful in the upcoming patches to prevent user-space from configuring
-> > certain VM features after the VM has started running." However, if you
-> > don't ensure that these VM features are configured the same way on the
-> > target machine as they were on the source machine, you have not
-> > actually accomplished your stated goal.
-> >
-> Isn't that up to the VMM to save/restore and validate the registers
-> across migrations?
+>
+> Few questions/issues here:
+>
+> 1. If it is just to avoid accidental 'hangs' it would be better to just
+> check if the panel is working before transfer, if not, return error
+> code. If there is better reason for this pm dance, please provide it  in
+> description.
 
-Yes, just as it is up to userspace not to make bad configuration
-changes after the first VMRUN.
+I'm not that familiar with DP-AUX, but I believe it can potentially
+provide a variety of useful information (e.g., EDID?) to users without
+the display and primary video link being active. So it doesn't sound
+like a good idea to me to purposely leave this interface uninitialized
+(and emitting errors) even when the user is asking for communication
+(via /dev/drm_dp_aux<N>). Do you want me to document what
+/dev/drm_dp_aux<N> does, and why someone would use it, in the commit
+message?
 
-> Perhaps I have to re-word my intentions for the patch- userspace
-> should be able to configure the registers before issuing the first
-> KVM_RUN.
+> 2. Again I see an assumption that panel-prepare enables power for
+> something different than video transmission, accidentally it is true for
+> most devices, but devices having more fine grained power management will
+> break, or at least will be used inefficiently - but maybe in case of dp
+> it is OK ???
 
-Perhaps it would help if you explained *why* you are doing this. It
-sounds like you are either trying to protect against a malicious
-userspace, or you are trying to keep userspace from doing something
-stupid. In general, kvm only enforces constraints that are necessary
-to protect the host. If that's what you're doing, I don't understand
-why live migration doesn't provide an end-run around your protections.
+For this part, I'm less sure -- I wasn't sure what the general needs
+are for AUX communication, and whether we need the panel enabled or
+not. It seems logical that we need something powered, and I don't know
+of anything besides "prepare()" that ensures that for DP panels.
+
+(NB: the key to _my_ problem is the PM runtime reference. It's
+absolutely essential that we don't try to utilize the DP hardware
+without powering it up. The panel power state is less critical.)
+
+> 3. More general issue - I am not sure if this should not be handled
+> uniformly for all drm_dp devices.
+
+I'm not sure what precisely you mean by #3. But FWIW, this is at least
+partially documented ("make sure it's been properly enabled"):
+
+        /**
+         * @transfer: transfers a message representing a single AUX
+         * transaction.
+         *
+         * This is a hardware-specific implementation of how
+         * transactions are executed that the drivers must provide.
+...
+         * Also note that this callback can be called no matter the
+         * state @dev is in. Drivers that need that device to be powered
+         * to perform this operation will first need to make sure it's
+         * been properly enabled.
+         */
+        ssize_t (*transfer)(struct drm_dp_aux *aux,
+                            struct drm_dp_aux_msg *msg);
+
+But maybe the definition of "properly enabled" is what you're unsure
+about? (I'm also a little unsure.)
+
+Regards,
+Brian

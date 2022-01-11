@@ -2,35 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6413648B2DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D92548B2D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343830AbiAKRGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:06:44 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:49352 "EHLO
+        id S1343789AbiAKRGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:06:41 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:55126 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343762AbiAKRGm (ORCPT
+        with ESMTP id S244358AbiAKRGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:06:42 -0500
+        Tue, 11 Jan 2022 12:06:40 -0500
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id 05f254b4bae9469d; Tue, 11 Jan 2022 18:06:40 +0100
+ id 8f130c71a8b5247a; Tue, 11 Jan 2022 18:06:38 +0100
 Received: from kreacher.localnet (unknown [213.134.181.61])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id CBB1C66B10C;
-        Tue, 11 Jan 2022 18:06:39 +0100 (CET)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 226FD66B10C;
+        Tue, 11 Jan 2022 18:06:38 +0100 (CET)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux ACPI <linux-acpi@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH v1 1/3] ACPI: scan: Change acpi_scan_init() return value type to void
-Date:   Tue, 11 Jan 2022 17:50:22 +0100
-Message-ID: <4372141.LvFx2qVVIh@kreacher>
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH v1 2/3] ACPI: scan: Simplify initialization of power and sleep buttons
+Date:   Tue, 11 Jan 2022 17:52:00 +0100
+Message-ID: <4683167.GXAFRqVoOG@kreacher>
 In-Reply-To: <11903300.O9o76ZdvQC@kreacher>
 References: <11903300.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
@@ -39,87 +38,117 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 213.134.181.61
 X-CLIENT-HOSTNAME: 213.134.181.61
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrudehfedgleejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeetgefgleetgeduheeugeeikeevudelueelvdeufeejfeffgeefjedugfetfeehhfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukedurdeiudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurdeiuddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgs
- vghrgheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehhuggvghhovgguvgesrhgvughhrghtrdgtohhmpdhrtghpthhtohepuggrnhdrtggrrhhpvghnthgvrhesohhrrggtlhgvrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrudehfedgleejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudekuddriedunecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekuddriedupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
+ pdhrtghpthhtohephhguvghgohgvuggvsehrvgguhhgrthdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The only caller of acpi_scan_init(), acpi_init(), doesn't check its
-return value, so turn it into a void function.
+It should be perfectly fine to use ACPI if the "fixed" power or sleep
+buttons cannot be initialized.  Moreover, running acpi_bus_scan()
+successfully on ACPI_ROOT_OBJECT generally causes many devices to
+be enumerated and probed, possibly including the entire PCI bus, so
+unregistering acpi_root if the registration of the "fixed" buttons
+fails is rather unhelpful.
 
-This avoids complaints from the Smatch static checker that the
-function should return a negative error code when it fails, which
-is not really a problem in this particular case.
+For this reason, do not fail acpi_scan_init() when
+acpi_bus_scan_fixed() fails and turn the latter into a void function.
 
-No intentional functional impact.
+While at it, drop the outdated and misleading comment from
+acpi_bus_scan_fixed().
 
-Link: https://lore.kernel.org/linux-acpi/20220106082317.GA9123@kili/
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/acpi/internal.h |    2 +-
- drivers/acpi/scan.c     |   10 +++-------
- 2 files changed, 4 insertions(+), 8 deletions(-)
+ drivers/acpi/scan.c |   58 ++++++++++++++++++----------------------------------
+ 1 file changed, 21 insertions(+), 37 deletions(-)
 
 Index: linux-pm/drivers/acpi/scan.c
 ===================================================================
 --- linux-pm.orig/drivers/acpi/scan.c
 +++ linux-pm/drivers/acpi/scan.c
-@@ -2513,9 +2513,8 @@ static void __init acpi_get_spcr_uart_ad
+@@ -2457,42 +2457,33 @@ int acpi_bus_register_early_device(int t
+ }
+ EXPORT_SYMBOL_GPL(acpi_bus_register_early_device);
  
- static bool acpi_scan_initialized;
- 
--int __init acpi_scan_init(void)
-+void __init acpi_scan_init(void)
+-static int acpi_bus_scan_fixed(void)
++static void acpi_bus_scan_fixed(void)
  {
--	int result;
- 	acpi_status status;
- 	struct acpi_table_stao *stao_ptr;
+-	int result = 0;
+-
+-	/*
+-	 * Enumerate all fixed-feature devices.
+-	 */
+ 	if (!(acpi_gbl_FADT.flags & ACPI_FADT_POWER_BUTTON)) {
+-		struct acpi_device *device = NULL;
++		struct acpi_device *adev = NULL;
  
-@@ -2565,8 +2564,7 @@ int __init acpi_scan_init(void)
- 	/*
- 	 * Enumerate devices in the ACPI namespace.
- 	 */
--	result = acpi_bus_scan(ACPI_ROOT_OBJECT);
--	if (result)
-+	if (acpi_bus_scan(ACPI_ROOT_OBJECT))
- 		goto out;
+-		result = acpi_add_single_object(&device, NULL,
+-						ACPI_BUS_TYPE_POWER_BUTTON, false);
+-		if (result)
+-			return result;
+-
+-		device->flags.match_driver = true;
+-		result = device_attach(&device->dev);
+-		if (result < 0)
+-			return result;
+-
+-		device_init_wakeup(&device->dev, true);
++		acpi_add_single_object(&adev, NULL, ACPI_BUS_TYPE_POWER_BUTTON,
++				       false);
++		if (adev) {
++			adev->flags.match_driver = true;
++			if (device_attach(&adev->dev) >= 0)
++				device_init_wakeup(&adev->dev, true);
++			else
++				dev_dbg(&adev->dev, "No driver\n");
++		}
+ 	}
  
- 	acpi_root = acpi_fetch_acpi_dev(ACPI_ROOT_OBJECT);
-@@ -2575,8 +2573,7 @@ int __init acpi_scan_init(void)
+ 	if (!(acpi_gbl_FADT.flags & ACPI_FADT_SLEEP_BUTTON)) {
+-		struct acpi_device *device = NULL;
++		struct acpi_device *adev = NULL;
  
- 	/* Fixed feature devices do not exist on HW-reduced platform */
- 	if (!acpi_gbl_reduced_hardware) {
--		result = acpi_bus_scan_fixed();
--		if (result) {
-+		if (acpi_bus_scan_fixed()) {
- 			acpi_detach_data(acpi_root->handle,
- 					 acpi_scan_drop_device);
- 			acpi_device_del(acpi_root);
-@@ -2591,7 +2588,6 @@ int __init acpi_scan_init(void)
- 
-  out:
- 	mutex_unlock(&acpi_scan_lock);
--	return result;
+-		result = acpi_add_single_object(&device, NULL,
+-						ACPI_BUS_TYPE_SLEEP_BUTTON, false);
+-		if (result)
+-			return result;
+-
+-		device->flags.match_driver = true;
+-		result = device_attach(&device->dev);
++		acpi_add_single_object(&adev, NULL, ACPI_BUS_TYPE_SLEEP_BUTTON,
++				       false);
++		if (adev) {
++			adev->flags.match_driver = true;
++			if (device_attach(&adev->dev) < 0)
++				dev_dbg(&adev->dev, "No driver\n");
++		}
+ 	}
+-
+-	return result < 0 ? result : 0;
  }
  
- static struct acpi_probe_entry *ape;
-Index: linux-pm/drivers/acpi/internal.h
-===================================================================
---- linux-pm.orig/drivers/acpi/internal.h
-+++ linux-pm/drivers/acpi/internal.h
-@@ -14,7 +14,7 @@
- int early_acpi_osi_init(void);
- int acpi_osi_init(void);
- acpi_status acpi_os_initialize1(void);
--int acpi_scan_init(void);
-+void acpi_scan_init(void);
- #ifdef CONFIG_PCI
- void acpi_pci_root_init(void);
- void acpi_pci_link_init(void);
+ static void __init acpi_get_spcr_uart_addr(void)
+@@ -2572,15 +2563,8 @@ void __init acpi_scan_init(void)
+ 		goto out;
+ 
+ 	/* Fixed feature devices do not exist on HW-reduced platform */
+-	if (!acpi_gbl_reduced_hardware) {
+-		if (acpi_bus_scan_fixed()) {
+-			acpi_detach_data(acpi_root->handle,
+-					 acpi_scan_drop_device);
+-			acpi_device_del(acpi_root);
+-			acpi_bus_put_acpi_device(acpi_root);
+-			goto out;
+-		}
+-	}
++	if (!acpi_gbl_reduced_hardware)
++		acpi_bus_scan_fixed();
+ 
+ 	acpi_turn_off_unused_power_resources();
+ 
 
 
 

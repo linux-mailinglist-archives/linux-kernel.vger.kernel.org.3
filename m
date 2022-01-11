@@ -2,127 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF0148A949
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E97C448A94F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348889AbiAKIXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 03:23:14 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43504 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231130AbiAKIXN (ORCPT
+        id S1348897AbiAKIYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 03:24:48 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:37378
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231130AbiAKIYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 03:23:13 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20B6M46N006394;
-        Tue, 11 Jan 2022 08:23:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ZCXiORw8q4kMLigaeWbCEr1ZbPrWij1oIpz06YA8rxA=;
- b=S3f5OetpLok3Be2CnYgiKrtAE1kWYUG+VQ4nMJGvncSWPAdO/DsQXbLQYQ9pCG8WicW/
- Xps6ZA+mN5l2nS0B9ozVqPPJ8fgqA0MkYTCuV51ePXLrfuIcGXGbFhtXU7DaJDUUrtc4
- daI2VRPdeIUduquDVlIoOai9gPPAeVPSBXbfg9DAzp9OJ787VstVx0GvaI9FuU8pplqG
- GXAexwgPXRDJel3i4KS5P/svW2FAcUS8dy/2xUnhFgwNW5qVYbnJZx6yARD+T8IPXLWi
- YdUEi7Y12mb80VYoSSIOrQfI5WKpGLguoxSNFxfd1VN4jBwLEnM0sOMjHBQ1AcGpNyej kw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh4jdasgp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 08:23:12 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20B7psTJ030195;
-        Tue, 11 Jan 2022 08:23:11 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dh4jdasg3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 08:23:11 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20B8DgS5025268;
-        Tue, 11 Jan 2022 08:23:09 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3dfwhhx62b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Jan 2022 08:23:09 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20B8N6v138863202
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jan 2022 08:23:06 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B499D4C05A;
-        Tue, 11 Jan 2022 08:23:06 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5FA724C044;
-        Tue, 11 Jan 2022 08:23:06 +0000 (GMT)
-Received: from [9.145.30.70] (unknown [9.145.30.70])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 11 Jan 2022 08:23:06 +0000 (GMT)
-Message-ID: <8b720956-c8fe-0fe2-b019-70518d5c60c8@linux.ibm.com>
-Date:   Tue, 11 Jan 2022 09:23:08 +0100
+        Tue, 11 Jan 2022 03:24:46 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 31D173F17B
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:24:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641889479;
+        bh=RlYMk8d+v+1iEbphE7wTAkvSOR/8u38JKByqwypBsb8=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Lm153ZohCxPkwWIZesvRD92Y+FWTJOh3aZhSDmM1A/oVSdEMMhdX/2r2kzF+s1LSR
+         ZCAysbNcHQHW709kxXFO2mttqRMqy7YSwmtMbesuEpj9qJJzEZ9VL9FRHmwnjUdakj
+         FICOMEUTAaIEyiZ6B2uRTgmo05C4ycPYYGKFFxeLQ4CBoxqDizvGjDAdCs/Zt9XjOa
+         PqBHXHDazqc7INEthTsKCG41pvHLh5a4LGFZBNF9vEDxX3O52c2Nhkrz3Avjmlnxxn
+         N621w9klIKTBktu30OLpqzpq+hlMt5G1FJQjgYMcRAVR4eeFoput2iqZjOSpSEnrLB
+         8UgLGPwhtN1gg==
+Received: by mail-ed1-f69.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso12563078edt.20
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 00:24:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RlYMk8d+v+1iEbphE7wTAkvSOR/8u38JKByqwypBsb8=;
+        b=a1NqR9NrF0CRYUgawNCeDfo92yvBkb4I8dydmPV0tCKWDyZ91CYPQIHuNiBQENjaL2
+         pUWTGV0gnKdsqpRN5rtMZefZ4CD9cq5C7ZR0XU/1bRK7DZAhMsPx5/rBnVKj6WuhfXdk
+         c8B3W9wAM0RRSBx3ExQlZBXlyJ7f25eiZ/7voPRNjXk4EqhDT9JAJJca20p2QqGwN4YY
+         23uM8Rzs9hQ/0O1cj0umkgQleLKoOWbGqv9rHoVg4y1QJBd0/4PX2sm3JNnnjtdpUHR/
+         n6lHmv4NF4bzW2hw7ZSLg3iE/Sjw34I5DOH2C6KK2pEoN0mXPbMj31aNcbEQgYcOEC2k
+         m8RA==
+X-Gm-Message-State: AOAM532Ul+5oC/ccnJTAHn5XB2EbqH4oGm0LBtL+fmDMVHxiU/cP5n3s
+        G/Ei6d63KR20qOGw2hHMlIi30PsgH7KQWWIW98J707exLhSSSaN6m6RV/7WgDmcCQhD4NiUQRdx
+        cR/v6NNGl5u0Bpzjl6CrwUJ3UQ3f8X1EoETOzFdpY+g==
+X-Received: by 2002:aa7:cc83:: with SMTP id p3mr3203684edt.382.1641889478711;
+        Tue, 11 Jan 2022 00:24:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxKoaMG4DzJPDmsJxeBkG8NBA12PgQ/03+cQRBY7Ozb0pIe/kxcZthl7BTrnasE0CDNDFSqxg==
+X-Received: by 2002:aa7:cc83:: with SMTP id p3mr3203677edt.382.1641889478514;
+        Tue, 11 Jan 2022 00:24:38 -0800 (PST)
+Received: from [192.168.1.126] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id h3sm2337887ede.32.2022.01.11.00.24.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 00:24:37 -0800 (PST)
+Message-ID: <21f01245-9bcf-95fc-7781-a8da02029783@canonical.com>
+Date:   Tue, 11 Jan 2022 09:24:37 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH net 1/3] net/smc: Resolve the race between link group
- access and termination
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] tty: serial: samsung_tty: Check null pointer after
+ calling of_match_node
 Content-Language: en-US
-To:     Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <1641806784-93141-1-git-send-email-guwen@linux.alibaba.com>
- <1641806784-93141-2-git-send-email-guwen@linux.alibaba.com>
-From:   Karsten Graul <kgraul@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <1641806784-93141-2-git-send-email-guwen@linux.alibaba.com>
+References: <20220111081647.637752-1-jiasheng@iscas.ac.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220111081647.637752-1-jiasheng@iscas.ac.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3-XXLShBQ0Q4E7NQgLXScZgiyhhOrOrK
-X-Proofpoint-ORIG-GUID: oMbR3VimQlmhhihOmexF_qD8Y4fVweVl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-11_03,2022-01-10_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- mlxscore=0 adultscore=0 clxscore=1015 mlxlogscore=999 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 phishscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201110044
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/01/2022 10:26, Wen Gu wrote:
-> We encountered some crashes caused by the race between the access
-> and the termination of link groups.
+On 11/01/2022 09:16, Jiasheng Jiang wrote:
+> If there is no suitable node, of_match_node() will return NULL pointer.
+
+NAK.
+
+This is not possible. All drivers have such pattern and it was
+discouraged to add empty/dead NULL checks.
+
+If you think returning NULL is possible, please explain/document it.
+
+> Therefore it should be better to check it in order to avoid the
+> dereference of NULL pointer.
+> And the only caller s3c24xx_serial_probe() has already checked the
+> return value of the s3c24xx_get_driver_data().
+> So the new check can be dealed with.
 > 
 
->  
-> +/* won't be freed until no one accesses to lgr anymore */
-> +static void __smc_lgr_free(struct smc_link_group *lgr)
-> +{
-> +	smc_lgr_free_bufs(lgr);
-> +	if (!lgr->is_smcd)
-> +		smc_wr_free_lgr_mem(lgr);
-> +	kfree(lgr);
-> +}
-> +
->  /* remove a link group */
->  static void smc_lgr_free(struct smc_link_group *lgr)
->  {
-> @@ -1298,7 +1326,6 @@ static void smc_lgr_free(struct smc_link_group *lgr)
->  		smc_llc_lgr_clear(lgr);
->  	}
->  
-> -	smc_lgr_free_bufs(lgr);
->  	destroy_workqueue(lgr->tx_wq);
->  	if (lgr->is_smcd) {
->  		smc_ism_put_vlan(lgr->smcd, lgr->vlan_id);
-> @@ -1306,11 +1333,21 @@ static void smc_lgr_free(struct smc_link_group *lgr)
->  		if (!atomic_dec_return(&lgr->smcd->lgr_cnt))
->  			wake_up(&lgr->smcd->lgrs_deleted);
->  	} else {
-> -		smc_wr_free_lgr_mem(lgr);
->  		if (!atomic_dec_return(&lgr_cnt))
->  			wake_up(&lgrs_deleted);
 
-These waiters (seaparate ones for smcd and smcr) are used to wait for all lgrs 
-to be deleted when a module unload or reboot was triggered, so it must only be 
-woken up when the lgr is actually freed.
+
+Best regards,
+Krzysztof

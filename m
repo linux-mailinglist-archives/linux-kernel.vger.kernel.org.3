@@ -2,96 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E42248B5FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DA248B601
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 19:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345746AbiAKSpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 13:45:21 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:41517 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241456AbiAKSpU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:45:20 -0500
-Received: by mail-ot1-f42.google.com with SMTP id a12-20020a0568301dcc00b005919e149b4cso1583926otj.8;
-        Tue, 11 Jan 2022 10:45:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=F0e3m98RqwjSlzmyX1kOm+vOF2VQm1ViKY66pyPBG2s=;
-        b=8Dmj46V2KKz2ydt3O+/Lg7d+MJE8wawHM8m7YjDwcubdwFNRERbIPAeVe+OrnYZbyo
-         acmqkvv+heo45vQ4crT0PwXwsDu/qbiTHNvetPoWfYw2USc2Cde9mrOsfUCrII2OlQfH
-         bb8iFX6VXOAhoSnp4PTrExHTk4+hbshMVlxF7/qNUy20v+hItc/46MCsOUw7HzI9sO2/
-         /UMnug9MasAkZFfc+KDKBexCFj0RwSyCnwC0rhMpS5tzEOmXzDzWvsBWXcw2TeyGdy7d
-         5Xgkq7tmfaK3Kk/D+SfcHEj8NzBkO1q3Wr7cGgd2ltH6toofdMbIwPz59Obb98wdLnX2
-         wYUg==
-X-Gm-Message-State: AOAM5304PTya0mZAoJIBISGBNPcen1D/0L6dqIBpWN582SXVlq9bInzl
-        6XUoXT4KqtO86FruKB07rQ==
-X-Google-Smtp-Source: ABdhPJxy8a1EpLFMlB6hTOJMVu4IhrR2rQpyht3PAS0epH89Pr9U2ltlySSjVA6xxzQVEcZbuo4ZRg==
-X-Received: by 2002:a9d:6e91:: with SMTP id a17mr4265345otr.138.1641926719396;
-        Tue, 11 Jan 2022 10:45:19 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o12sm434552ooi.15.2022.01.11.10.45.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 10:45:18 -0800 (PST)
-Received: (nullmailer pid 3304828 invoked by uid 1000);
-        Tue, 11 Jan 2022 18:45:16 -0000
-Date:   Tue, 11 Jan 2022 12:45:16 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        SHA-cyfmac-dev-list@infineon.com, Rob Herring <robh+dt@kernel.org>,
-        linux-acpi@vger.kernel.org,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com, Len Brown <lenb@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v2 01/35] dt-bindings: net: bcm4329-fmac: Add Apple
- properties & chips
-Message-ID: <Yd3QPF0KxD3RFfXM@robh.at.kernel.org>
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-2-marcan@marcan.st>
+        id S1345843AbiAKSqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 13:46:00 -0500
+Received: from mail-dm6nam11on2076.outbound.protection.outlook.com ([40.107.223.76]:30080
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S241456AbiAKSp7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 13:45:59 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=asqBXFAOq930NKnea6wWKVkJm1zbWu0huHJNVvAIhZ06L7eE0asN6UeT5A/b3Xfx8UqBiytj570+5iz6gH59WgWNh4J8bUKr/Pcx2P7Cr8G/SwWDqMK1T3c+RXjI02fa47Hp0JwV9tGIs7nuz8h9xSGkUxtjOeyFvyW/eKggCsuIANUB7N9BptcAbkfoPqg53lysGxICZX9Nh4f7OKgOPzD/yJbeFesvBVsR8vJ5mMu9FpIBDz4NnWfiuVzbIDECM8DgDvDZu9/03zjucIJZGp0DjU3J0qW9pibge7oL2Xgan62JocDlN61IB3NGoxeQ08M+Yar3j+diBHxhdhQjlw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=p+0uGS0ppa5jZIeHGZkxKEmzGYIlN9vguT/7+TCOYGQ=;
+ b=fUBGZBw+8cVhW/W2AjZOqsMNWyRHFPi1VAnLmavG0e3jRYSXJXFBvj6VsRIuOExlzkUDeoPOnrXjxRu4q8pTigS+ybQWf5JvRCn3mt4GUNql+Q3EzPN4qrridPANleuiqjTc01tDnHUpbJBgGUtIKTUb3H0sK/9lZHKt1LG2qjeDCg2wpTTS6VZt/u5xNZ7xBA6GlzcCy4b6ZMKN7iC9pwT7EmaNQ9bYzy+UT6Puy1NMNDXXl6VD2SRicdrBvQKdZrkO99Z5k+H6X5iE9f8vy0KNkIn8VLCOeynGWfneq/9W6G/NBo93wQtsabsn+vfi9sDh4AF8DJB7VXzcK1RAtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p+0uGS0ppa5jZIeHGZkxKEmzGYIlN9vguT/7+TCOYGQ=;
+ b=bnyfAFB2osszaU/EvS5qMZeDZk87xQ3nJ7b1xzeBAqxnXkOFqmuC4Wf/XX9ujLoOl51IHk9cTKTKVnfGiI6y2XgQtz3KqMmEbAhHOhxF+85I3qy2VABgGP44BHS1c+ME2naAYamq2ApGMUG58ZOC9vIX76POwDuSeWiOgboGtpkL0M0FOOq8YGmwqkhAWYUyP+6oYUok2CgYRmT6ADiwIWxePNmkZ4jnwGrSdvxyTrt8o5ahq8uh+PoAa/6GWyhYFXtbvHdU2WdpBv8tdXr8oOJ1OM+VORbBjSktbPF3JGyMRWnFgC7Ym8YOAhXLhqUavrdLFn2O33hAMX9INwoj4g==
+Received: from DS7PR03CA0080.namprd03.prod.outlook.com (2603:10b6:5:3bb::25)
+ by MN2PR12MB4549.namprd12.prod.outlook.com (2603:10b6:208:268::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Tue, 11 Jan
+ 2022 18:45:57 +0000
+Received: from DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3bb:cafe::74) by DS7PR03CA0080.outlook.office365.com
+ (2603:10b6:5:3bb::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9 via Frontend
+ Transport; Tue, 11 Jan 2022 18:45:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ DM6NAM11FT049.mail.protection.outlook.com (10.13.172.188) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4867.7 via Frontend Transport; Tue, 11 Jan 2022 18:45:57 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 11 Jan
+ 2022 18:45:56 +0000
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 11 Jan
+ 2022 18:45:56 +0000
+Received: from amhetre.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Tue, 11 Jan 2022 18:45:54 +0000
+From:   Ashish Mhetre <amhetre@nvidia.com>
+To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <amhetre@nvidia.com>, <linux-tegra@vger.kernel.org>,
+        <krzysztof.kozlowski@canonical.com>, <linux-kernel@vger.kernel.org>
+CC:     <Snikam@nvidia.com>, <vdumpa@nvidia.com>
+Subject: [Patch V1 0/4] memory: tegra: Update mc interrupts
+Date:   Wed, 12 Jan 2022 00:15:46 +0530
+Message-ID: <1641926750-27544-1-git-send-email-amhetre@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104072658.69756-2-marcan@marcan.st>
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 99292e1b-b1dc-496b-9df1-08d9d5329ae6
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4549:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB4549C545A615CAC37262AD87CA519@MN2PR12MB4549.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 915YqWjpKc7fC6HXpBTyCEYgT1zXRKQ3MxL10/nv3Z3ILM0/oOqZm1uW6XBHrPQGIP037g8LQ2k4JA5xrSkQwq+ciAzvueemDCnE6pk5EAahebCWbP7zC6QckW61sMjk3chTLT+C5vogVhV2Ihj4mn6cEnSq0HyE+cbAS2A/GXr3783J1DXz5ZaH8ywTCSMU53X/wZIR66tBuzuAH7vEUIkgpqkbm3PSxkpxXgNyQoW9MUg21I1WK820wuARmWAKbOZFFIH7bcIR8duJAQPAC+Ld3S+bsSYqT8lU5hhnV9dRUeSNwxX11zBTXTcPnI+mPyhwvv2EtMCqZ7PtulPKzNUtlYTnqXH6orgFsjZQ0BHALWDiJx2hX2dW2oLGtMYbIuvnRiMGVyOOnlyVuJBDPdnUXsInIV4uws6sqYszD0bjtI/S7QqI4oeX7atMOZ7qC7P7jCtGJTHxnwN4EiL2mvy08Z6lapZdaOIaKAcS7b8mkgQN3GvsUjYTFd5qhKTGbbwLQpXetDUI60rmgAbssRvxoX8b1P1r4AXR6/tDp5S4mRZnnpsg+HPJ0HN/gVe8zUDthY23DL8Hfzwe6veh8ak/XjZHmGjTYod6Xl9oKBWdaGc0toU7PmO9uHWd0CcukOqGeG8/yY0H+SV5z162jLAkWhR/F5Y9a2rYgcd1/d2ZgMzDWQ+ArCskdvBBgw/62fF0CjaoEp322rrzq/d06+WFVddORhIs3v5zLJoyjkHVGMCZt2Fo9QBhxX8v4X8QkXSRzu1iOQWSBFEKVQ0Xf9NClBDrs0VVoUPoZtQ2uh0=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(36756003)(6666004)(70586007)(26005)(82310400004)(7696005)(83380400001)(4744005)(54906003)(316002)(508600001)(15650500001)(110136005)(70206006)(5660300002)(426003)(2616005)(356005)(8676002)(2906002)(47076005)(4326008)(8936002)(86362001)(336012)(36860700001)(107886003)(81166007)(40460700001)(186003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 18:45:57.2428
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99292e1b-b1dc-496b-9df1-08d9d5329ae6
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4549
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Jan 2022 16:26:24 +0900, Hector Martin wrote:
-> This binding is currently used for SDIO devices, but these chips are
-> also used as PCIe devices on DT platforms and may be represented in the
-> DT. Re-use the existing binding and add chip compatibles used by Apple
-> T2 and M1 platforms (the T2 ones are not known to be used in DT
-> platforms, but we might as well document them).
-> 
-> Then, add properties required for firmware selection and calibration on
-> M1 machines.
-> 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  .../net/wireless/brcm,bcm4329-fmac.yaml       | 37 +++++++++++++++++--
->  1 file changed, 34 insertions(+), 3 deletions(-)
-> 
+Update MC code to add interrupt handling and error logging support.
+All basic interrupts and corresponding error logging supported by T186 and
+T194 is added.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Ashish Mhetre (4):
+  memory: tegra: Add support for mc interrupts
+  memory: tegra: Add interrupt mask
+  memory: tegra: add mc-err support for T186
+  memory: tegra: add mc-err support for T194
+
+ drivers/memory/tegra/mc.c       |  14 ++++-
+ drivers/memory/tegra/mc.h       |  26 ++++++++-
+ drivers/memory/tegra/tegra114.c |   1 +
+ drivers/memory/tegra/tegra124.c |   2 +
+ drivers/memory/tegra/tegra186.c | 118 ++++++++++++++++++++++++++++++++++++++
+ drivers/memory/tegra/tegra194.c | 124 ++++++++++++++++++++++++++++++++++++++++
+ drivers/memory/tegra/tegra20.c  |   6 +-
+ drivers/memory/tegra/tegra210.c |   1 +
+ drivers/memory/tegra/tegra30.c  |   1 +
+ include/soc/tegra/mc.h          |   7 ++-
+ 10 files changed, 294 insertions(+), 6 deletions(-)
+
+-- 
+2.7.4
+

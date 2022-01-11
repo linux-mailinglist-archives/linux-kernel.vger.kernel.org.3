@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BED6D48B875
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5439948B87A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350762AbiAKUTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 15:19:10 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:38494
+        id S1350171AbiAKUTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 15:19:20 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:38536
         "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345974AbiAKUSa (ORCPT
+        by vger.kernel.org with ESMTP id S1346206AbiAKUSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 15:18:30 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        Tue, 11 Jan 2022 15:18:35 -0500
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 06B4A4004D
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 20:18:29 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0E32E3F175
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 20:18:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641932309;
-        bh=B7eb4svBYjse6OhWKfcBGRECU3OCvQCpw+6zWu1iivQ=;
+        s=20210705; t=1641932314;
+        bh=XwytGlpNwAoffYK7XTO0vqmQRh/r4dCBFpHoBh3s1F0=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=VMklxot9Fi6B5ts7Cs6cSfLPN64RxB8T+o/PTWfmjx2L7wWRNvmHUmkjIn99JKzIT
-         Vzsizbfm+KWGqpA9LPmJZPbEWHnA4vghNX02OblrzuAlqN7tHXKOWgVR+uqyqvecVe
-         aFrVnmUzbc9bdpNuKzBWtR5FtmLXbupI2Wu5fO/PHbAM5C3iuSYeHlE5lYRBYa0hKr
-         GpQGuvO3YBok9SXyz4HSAoASTtOQ+ZGtT+UK5I5YOResSZBENX4x/y8mm/cap3LZf0
-         w5iATjKLFFR7bYcFMdURmthaD2O29mlHrqIkayVkrrF6KYF57wLdvA/m/aM8WH9ORp
-         JwKjus9QN8nyQ==
-Received: by mail-ed1-f69.google.com with SMTP id y18-20020a056402271200b003fa16a5debcso179703edd.14
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:18:29 -0800 (PST)
+        b=DcYFEOjuEXNKf16XaFaixFi0MwNqz5Pd2SaTc+DQN31QVseYAhvL/tul8+x3BsCC5
+         x+BkoOknyXq87E/tp1ibqbvAEXKQ32X7dvQbX8n/A+z78qPHYOBWEJCvmP0dNjBAQe
+         FmrPAeLa8+LRrrjX5g0bnf4z+boF9suHGi5ROX4zG1MscSXZGwTb/UqNR/vT69fVht
+         h1hvLpV7cd/9ADhnT0CPCxC8ucYs1bXwg4BiUB0vHTuAm8E0nVc1DViSInnDckVMJi
+         mHkOlypKfOGlYHamUwSSGDX+jJ7681teQ1GdPnMcBXCJ1i8GAeHu6oiDdgmybmvPTe
+         nT7w/uuD3XBuw==
+Received: by mail-ed1-f72.google.com with SMTP id eg24-20020a056402289800b003fe7f91df01so206325edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:18:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=B7eb4svBYjse6OhWKfcBGRECU3OCvQCpw+6zWu1iivQ=;
-        b=kRGiyIlKKrsiGGGWN9WOEh/w0w+dRqMWwMbwzt1+Cq7RbtxHLq0QZfRopXE9yOIjYz
-         NcALgFC4hzJMflayptQf+9U57gSXcL4MN3/q9fo70Ni+pwPGsimZy+jVPSbqtHUBYbqF
-         ZruCaqmXXNZ0ljzfaQOhzZpoJlTXN32QFvx4C72ABQwYAgeC7PvRQG3qK9AEseeyxfEU
-         HF93/WJA/Z1bxGQS2RJXEsZdAEPcAXlietDd/4PeebYaIuY3U9hIdZBhUopUoDMoBrp+
-         GC47ZXc7fWNXrL1MBkYz5sup+VpGvRHjv7/LZ1R3/RYRldCgZpURQpYZAVrPE4whaw6n
-         +CCg==
-X-Gm-Message-State: AOAM530MXfvyIzqoMndSoLczboAROCYptxXsa09LxVMeBgY71CyCPfPu
-        9/teZ3QuYkHG728Lk0AJzQ4Ox+eoy3X+rMq1o6xnqivm6vrD3VZw6IE/rdEYcfvvIrLnUP6SPly
-        KyKHXI3cULB8He4ASX0orkCbV+QiZxBP0qMNPYTOexw==
-X-Received: by 2002:a17:906:9743:: with SMTP id o3mr4917475ejy.162.1641932307890;
-        Tue, 11 Jan 2022 12:18:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyDLMQAtYvvGFLQbylU0wX+h2/hT+LQs+a2r74G9q823h9VzJ2eJOEH3H9exRQ9Re9sKec2MA==
-X-Received: by 2002:a17:906:9743:: with SMTP id o3mr4917457ejy.162.1641932307713;
-        Tue, 11 Jan 2022 12:18:27 -0800 (PST)
+        bh=XwytGlpNwAoffYK7XTO0vqmQRh/r4dCBFpHoBh3s1F0=;
+        b=zXtamFgWuAX5TRR5Pmb6KNdrkPrUsTEEYQTRLJ8dTSpqXPY5UbyMThsXjjav2+RJ3+
+         0chVFEeeE/c4r1MNFfBpUVr5iYMKblj9L7GqRzjjqBjusn0zxCGXRxFHv+a+qMAnc7DZ
+         XTvBJ1uVYh9m0/giNvfbCMgyPbOsNnbsVk1lil2STJdKPTqARCt3gZ805J6aipnYAiiz
+         Z2GtzgjQcWd39VgVFMjyGFDMvsFvZ4fKh+RJr91W8mnaiP3qAfCrPxqIrU1n0FjMjKAJ
+         MzfPdsa0JyznrHjjIToJpsWqZ1BnTTbXZ6XP4bz45oPeUa22g7AAarkse0ONLMHKFMbL
+         e8iQ==
+X-Gm-Message-State: AOAM530sw7a9b9EQCIEpQyasyUhgcGO6T9sWsKh4E1WiiM3qYbr7G8mY
+        qxwPQclgkuC8Q41MWuelzcxHuqcXBQV5WWvOkzRtIPjcxQJY4Fv3hBEPutkKDiyLdiEbnsMHbwY
+        MH6L687TidniBzWvnbc5Vhggq1J0XTycUnaMlLABupg==
+X-Received: by 2002:a50:d710:: with SMTP id t16mr5950660edi.50.1641932309590;
+        Tue, 11 Jan 2022 12:18:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxQMEe2rdc+p0osbS3bSYRErMsf6bgYHS+lbWQrndlXIAAbjx5a0Ndcs/anYHU7KQMKJQOuDg==
+X-Received: by 2002:a50:d710:: with SMTP id t16mr5950638edi.50.1641932309393;
+        Tue, 11 Jan 2022 12:18:29 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id e4sm4030881ejs.13.2022.01.11.12.18.24
+        by smtp.gmail.com with ESMTPSA id e4sm4030881ejs.13.2022.01.11.12.18.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 12:18:26 -0800 (PST)
+        Tue, 11 Jan 2022 12:18:28 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Tomasz Figa <tomasz.figa@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
@@ -67,9 +67,9 @@ Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
         Sam Protsenko <semen.protsenko@linaro.org>,
         Chanho Park <chanho61.park@samsung.com>,
         Alim Akhtar <alim.akhtar@gmail.com>
-Subject: [PATCH v2 25/28] dt-bindings: pinctrl: samsung: describe Exynos850 and ExynosAutov9 wake-ups
-Date:   Tue, 11 Jan 2022 21:17:19 +0100
-Message-Id: <20220111201722.327219-19-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v2 26/28] pinctrl: samsung: add support for Exynos850 and ExynosAutov9 wake-ups
+Date:   Tue, 11 Jan 2022 21:17:20 +0100
+Message-Id: <20220111201722.327219-20-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com>
 References: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com>
@@ -79,98 +79,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Older Samsung Exynos SoC pin controller nodes (Exynos3250, Exynos4,
-Exynos5, Exynos5433) with external wake-up interrupts, expected to have
-one interrupt for multiplexing these wake-up interrupts.  Also they
-expected to have exactly one pin controller capable of external wake-up
-interrupts.
-
-It seems however that newer ARMv8 Exynos SoC like Exynos850 and
+It seems that newer ARMv8 Exynos SoC like Exynos850 and
 ExynosAutov9 have differences of their pin controller node capable of
 external wake-up interrupts:
 1. No multiplexed external wake-up interrupt, only direct,
 2. More than one pin controller capable of external wake-up interrupts.
 
-Add dedicated Exynos850 and ExynosAutov9 compatibles.
+Add support for dedicated Exynos850 and ExynosAutov9 compatibles.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- .../samsung,pinctrl-wakeup-interrupt.yaml     | 27 ++++++++++++++++---
- 1 file changed, 24 insertions(+), 3 deletions(-)
+ drivers/pinctrl/samsung/pinctrl-exynos.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
-index 6b684a53119b..a822f70f5702 100644
---- a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl-wakeup-interrupt.yaml
-@@ -16,9 +16,12 @@ description: |
-   controller.
+diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.c b/drivers/pinctrl/samsung/pinctrl-exynos.c
+index 0489c899b401..a158d587814e 100644
+--- a/drivers/pinctrl/samsung/pinctrl-exynos.c
++++ b/drivers/pinctrl/samsung/pinctrl-exynos.c
+@@ -465,6 +465,10 @@ static const struct of_device_id exynos_wkup_irq_ids[] = {
+ 			.data = &exynos4210_wkup_irq_chip },
+ 	{ .compatible = "samsung,exynos7-wakeup-eint",
+ 			.data = &exynos7_wkup_irq_chip },
++	{ .compatible = "samsung,exynos850-wakeup-eint",
++			.data = &exynos7_wkup_irq_chip },
++	{ .compatible = "samsung,exynosautov9-wakeup-eint",
++			.data = &exynos7_wkup_irq_chip },
+ 	{ }
+ };
  
-   External wake-up interrupts for Samsung S3C/S5P/Exynos SoC pin controller.
--  Only one pin-controller device node can include external wake-up interrupts
--  child node (in other words, only one External wake-up interrupts
-+  For S3C24xx, S3C64xx, S5PV210 and Exynos4210 compatible wake-up interrupt
-+  controllers, only one pin-controller device node can include external wake-up
-+  interrupts child node (in other words, only one External wake-up interrupts
-   pin-controller is supported).
-+  For newer controllers, multiple pin-controller device node can include
-+  external wake-up interrupts child node.
- 
-   See also Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml for
-   additional information and example.
-@@ -32,6 +35,8 @@ properties:
-       - samsung,s5pv210-wakeup-eint
-       - samsung,exynos4210-wakeup-eint
-       - samsung,exynos7-wakeup-eint
-+      - samsung,exynos850-wakeup-eint
-+      - samsung,exynosautov9-wakeup-eint
- 
-   interrupts:
-     description:
-@@ -41,7 +46,6 @@ properties:
- 
- required:
-   - compatible
--  - interrupts
- 
- allOf:
-   - if:
-@@ -56,6 +60,8 @@ allOf:
-         interrupts:
-           minItems: 6
-           maxItems: 6
-+      required:
-+        - interrupts
- 
-   - if:
-       properties:
-@@ -67,6 +73,8 @@ allOf:
-         interrupts:
-           minItems: 4
-           maxItems: 4
-+      required:
-+        - interrupts
- 
-   - if:
-       properties:
-@@ -81,5 +89,18 @@ allOf:
-         interrupts:
-           minItems: 1
-           maxItems: 1
-+      required:
-+        - interrupts
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - samsung,exynos850-wakeup-eint
-+              - samsung,exynosautov9-wakeup-eint
-+    then:
-+      properties:
-+        interrupts: false
- 
- additionalProperties: false
 -- 
 2.32.0
 

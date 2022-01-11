@@ -2,100 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E990048B181
+	by mail.lfdr.de (Postfix) with ESMTP id 812CF48B180
 	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349761AbiAKQBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 11:01:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36878 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243724AbiAKQBj (ORCPT
+        id S1349768AbiAKQBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 11:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349734AbiAKQBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Jan 2022 11:01:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF172B81BFC;
-        Tue, 11 Jan 2022 16:01:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3A45C36AEB;
-        Tue, 11 Jan 2022 16:01:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641916896;
-        bh=CQgqKlu92zeQ40myiuVq09uscHk3R4B09Rx0+uBbAzg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ETCc+O4Qmxi8D3a3vLU3TSJXSwVCppBfKIlxKlmz6/EZlSYtzXlYdG4jjwJM427TM
-         roqLX8d3nu+ccChPI2Eyj7aCrwIy1PFsnWKA3U3TaRYJ2Dw1C9JEmgZ7Gok4eisXLA
-         3aj6riSZjr12cPbv756kPB3iW1YdZOQM2BDqw0Wv5xzUBUpZdaC9fwtVe/Hjq1IWeP
-         ww7Bnj7enVtGeQRSNlilMJkXHhhvmq5rXltk9qwnxVOsRJEhJ6z949ox2Uy/vrRLKN
-         BlFKXSOGeJBmz+gjpVZaNyrYESEETpGWawAI45o8Pg9RpnehXCRGGq/zY2X1KuhJPc
-         rAPU4IYHHiHUg==
-Date:   Tue, 11 Jan 2022 09:01:32 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Miller <davem@davemloft.net>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Subject: Re: [GIT PULL] Networking for 5.17
-Message-ID: <Yd2p3IbHJdzNok+1@archlinux-ax161>
-References: <20220110025203.2545903-1-kuba@kernel.org>
- <CAHk-=wg-pW=bRuRUvhGmm0DgqZ45A0KaH85V5KkVoxGKX170Xg@mail.gmail.com>
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0C2C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:01:38 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id m1so24784668lfq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:01:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Q2AS3TycxvQevBVYSjYR4nMIYCUKzDFIHcZBkFvEUh8=;
+        b=PEJK0uUzswSNHeEIUqeC8L1+7Mc20M0ZjBZuw5++ylPnGIp+qQ7sHzfLt1gdOAyTA7
+         kaUGUTfHh2v/YlLeOYj7EVD/V0SCsTRjyQKDXii5zE0uhOaWP08q58KU6EXmQHaOPRIX
+         BeBajHU/kBiX3LZMcRxOA2KQde7/GvH5bFXF8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Q2AS3TycxvQevBVYSjYR4nMIYCUKzDFIHcZBkFvEUh8=;
+        b=TBonaHsZUcmocNGPuNWTITpK6nYu0A5PfYLTKe58z7n5RGggmHDjjzqgzNQSzuAzw4
+         M76BNfrNoWMskqYxpjQrFZmdBhej1/2ae3SjVjPz4eoTyd2qesdY6dwQqnm6h5PRxwL5
+         fc0KCNYKcTzvtv1pBCP0wSM44D/rF+8GAPK55paJlxuEHqyYMtOfD75uBLV/TWScP4rR
+         nxp0uTvnr20q6LHpAvER4Bl73sb9Hhb8W8pmV7qej7nKCZAtZTqTaBiAunJwyszApRZQ
+         z3XU7oFqD1qce/OQwIwaMHHEnNvI4RFowS3xvN3moFPUN2wPxq5dTJPnKAFrVv17i4u8
+         /hUg==
+X-Gm-Message-State: AOAM531qUDuPKE1VIaurDgLAFulddd1tYn2MEr0XAZVDZKDK3H9k/zX4
+        3jrtXklxcwiFdm8sZLUGyJ+fgg==
+X-Google-Smtp-Source: ABdhPJyU7ZLqlohFzOd47OnZPgm3hPrl0/6UYKuMwycVjGJc9vAxSJGYIov6dSe39xOdJKJ2SmVcIA==
+X-Received: by 2002:ac2:4c45:: with SMTP id o5mr3921318lfk.687.1641916896972;
+        Tue, 11 Jan 2022 08:01:36 -0800 (PST)
+Received: from [172.16.11.17] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id f6sm1373976lfg.67.2022.01.11.08.01.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 08:01:36 -0800 (PST)
+Subject: Re: [RFC 1/2] printk/dynamic_debug: Remove cyclic dependency between
+ printk.h and dynamic_debug.h
+To:     Petr Mladek <pmladek@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Chris Down <chris@chrisdown.name>,
+        Marc Zyngier <maz@kernel.org>,
+        Andrew Scull <ascull@google.com>,
+        Will Deacon <will@kernel.org>, Jason Baron <jbaron@akamai.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20220111143046.14680-1-pmladek@suse.com>
+ <20220111143046.14680-2-pmladek@suse.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <996a7cf5-b047-5038-c86b-f10820364465@rasmusvillemoes.dk>
+Date:   Tue, 11 Jan 2022 17:01:35 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wg-pW=bRuRUvhGmm0DgqZ45A0KaH85V5KkVoxGKX170Xg@mail.gmail.com>
+In-Reply-To: <20220111143046.14680-2-pmladek@suse.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 07:31:30PM -0800, Linus Torvalds wrote:
-> I really wish we had more automation doing clang builds. Yes, some
-> parts of the kernel are still broken with clang, but a lot isn't, and
-> this isn't the first time my clang build setup has found issues.
+On 11/01/2022 15.30, Petr Mladek wrote:
+> `make headerdep` reports many circular dependencies with the same
+> pattern:
+> 
+> In file included from linux/printk.h,
+>                  from linux/dynamic_debug.h:188
+>                  from linux/printk.h:559 <-- here
+> 
+> It looks like false positive:
+> 
+>    + printk.h includes dynamic_debug.h when CONFIG_DYNAMIC_DEBUG_CORE
+>    + dynamic_debug.h includes printk.h when !CONFIG_DYNAMIC_DEBUG_CORE
+> 
+> Anyway, it would be great to get rid of this dependency because it is
+> tricky and it might hit us in the future. Also it might hide another
+> more complicated cyclic dependencies.
+> 
+> One solution would be to move the inlined ddebug_dyndbg_module_param_cb()
+> and dynamic_debug_exec_queries() from 'dynamic_debug.h' into some .c so
+> that it will not be needed to inline printk() in 'dynamic_debug.h'.
+> 
+> The obvious location would be 'lib/dynamic_debug.c'. But it is built
+> only when CONFIG_DYNAMIC_DEBUG_CORE is set. And the problematic
+> inline variants are used only when this config option is _not_ set.
+> So that it is not that easy.
+> 
+> Instead, this patch adds 'include/linux/printk_core.h' and moves some
+> lowlevel printk API there. Then the raw _printk() can be called from
+> the inlined code in 'dynamic_debug.h'.
 
-As far as I know, we have four major groups doing regular build testing
-with clang:
 
-* Intel's kernel test robot
-* KernelCI
-* RedHat's Continuous Kernel Integration (CKI)
-* Linaro's Linux Kernel Functional Testing (LKFT)
+Urgh, this doesn't look like the right approach.
 
-I regularly check the daily -next report that we get from KernelCI to
-see what breakage there is and triage it as needed. The rest email us as
-things break. The Intel folks are the only ones building from the
-mailing list as far as I can tell, everyone else mainly targets your
-tree and/or -next.
+>  
+>  static inline int ddebug_add_module(struct _ddebug *tab, unsigned int n,
+>  				    const char *modname)
+> @@ -202,9 +202,8 @@ static inline int ddebug_dyndbg_module_param_cb(char *param, char *val,
+>  						const char *modname)
+>  {
+>  	if (strstr(param, "dyndbg")) {
+> -		/* avoid pr_warn(), which wants pr_fmt() fully defined */
+> -		printk(KERN_WARNING "dyndbg param is supported only in "
+> -			"CONFIG_DYNAMIC_DEBUG builds\n");
+> +		/* Use raw _printk() to avoid cyclic dependency. */
+> +		_printk(KERN_WARNING "dyndbg param is supported only in CONFIG_DYNAMIC_DEBUG builds\n");
+>  		return 0; /* allow and ignore */
+>  	}
+>  	return -EINVAL;
 
-I don't think this particular issue was an automation fail, more of a
-timing one, as the warning was reported by the kernel test robot:
+It looks like this has only one caller, kernel/module.c. I suggest
+simply moving the match logic into unknown_module_param_cb(), making it
+on par with the other "generic" module parameter async_probe. That is,
+do something like
 
-https://lore.kernel.org/r/202201101850.vQyjtIwg-lkp@intel.com/
 
-However, it was reported a little under a day after the patch hit the
-mailing list according to the lore timestamps at the bottom, after it
-had already been merged into net-next (it looks like they were applied
-to the netfilter tree and merged into net-next within an hour or so).
+  if (strstr(param, "dyndbg")) {
+    if (IS_ENABLED(CONFIG_DYNAMIC_DEBUG)) {
+      return ddebug_dyndbg_module_param_cb(param, val, modname)
+    }
+    pr_warn("dyndbg param is supported only in ...");
+    return 0; /* allow and ignore */
+  }
 
-Pablo did sent a follow up fix rather quickly, which I noticed because
-my own local builds were broken.
+  pr_warn("%s: unknown parameter '%s' ignored\n", modname, param);
+  return 0;
 
-https://lore.kernel.org/r/20220110221419.60994-1-pablo@netfilter.org/
+That makes it simpler to add more magic/generic module parameters in
+unknown_module_param_cb(). No need for a static inline stub, and no need
+for conditionally declaring ddebug_dyndbg_module_param_cb(). So all that
+is needed in dynamic_debug.h is to remove the static inline definition,
+and pull the declaration outside #if defined(CONFIG_DYNAMIC_DEBUG_CORE)
+protection.
 
-Normally, I try to review patches like this so that the maintainers are
-aware that the warning will break a build with CONFIG_WERROR. In this
-case, I assumed that the netdev build tests would catch it and it would
-be applied before the pull request was sent, as they have started
-testing with clang and catching these warnings before accepting patches
-but as Jakub said, that did not happen.
+What's with the strstr, btw? Shouldn't it just be !strcmp()?
 
-I'll try to keep an eye out for this stuff in the future, so that it is
-dealt with by the time you get it, especially now that passing -Werror
-is expected. Most standard arm64 and x86_64 configs should be completely
-warning free with clang now, arm and some of the more exotic
-architectures are still a WIP.
+> @@ -223,7 +222,8 @@ static inline int ddebug_dyndbg_module_param_cb(char *param, char *val,
+>  
+>  static inline int dynamic_debug_exec_queries(const char *query, const char *modname)
+>  {
+> -	pr_warn("kernel not built with CONFIG_DYNAMIC_DEBUG_CORE\n");
+> +	/* Use raw _printk() to avoid cyclic dependency. */
+> +	_printk(KERN_WARNING "kernel not built with CONFIG_DYNAMIC_DEBUG_CORE\n");
+>  	return 0;
+>  }
 
-Cheers,
-Nathan
+And for this one I think the solution is even simpler, as I can't find
+any in-tree callers. Perhaps just nuke it entirely?
+
+Rasmus

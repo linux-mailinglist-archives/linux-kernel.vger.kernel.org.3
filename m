@@ -2,97 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BA648A6C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422BA48A6C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347765AbiAKEVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 23:21:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234169AbiAKEVM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 23:21:12 -0500
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F70C06173F;
-        Mon, 10 Jan 2022 20:21:12 -0800 (PST)
-Received: by mail-pl1-x641.google.com with SMTP id p14so15264601plf.3;
-        Mon, 10 Jan 2022 20:21:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UvMY/BpPHYLYCpXHLFkn3wGD0r030IMs3mS/Z9JjkxE=;
-        b=B4huMDPf/I5XDFsWvuSzqemyC/KmP1kbRmHZg++C6oVqbp5JbmVAzQgwpvPHI2R75a
-         eFndp8C17Wl5PflRaDCVZxWcEbqa5+6UBaNvURPDfheA6K3ribm3QBuU6IOQsF33gvfv
-         CjqRwLCo8SxPYN+3PU9wnp1g8XQZT7e3InZz01HdorpXlY2u1ZmABwxOTI3afAnpZwat
-         i9vhYGqNVJ8YqfUT5BX0bjwabLXthH/pG1n69kGxdrzJ/ttwuvaMK9HnkU1t1NJ+JTqA
-         QeE/kZSdavrTfUBIMdC4YD/raQ0rjw+M3FbXDOLoz/5nwzR2M6KdOEqNP0tSb1lZ4ktK
-         ruYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UvMY/BpPHYLYCpXHLFkn3wGD0r030IMs3mS/Z9JjkxE=;
-        b=ggOt4VYDlempqy5eehPcGASosJwhweSa72POebmjpnIyhv7hdGsTf1JHaXur0FKupa
-         usKmbzkQp0IjUxvHx89EHw3YeQtlJ3SnjU+OAYsv2JvDI8uCrPMOt3nte61LJNfHMsKq
-         1u3LQ1kHsoPHhGpf7Y1B94bKMOwoE/pX3rIdCP6oiFJ9F7Kumjob+4fn8mdQOzxlmTsu
-         6lkER4MZfMftBMCb1UmuME7/FWAuqHmMAgVWGyMG6Mw5FidVqNDW5FXo2+2oNm79QhgN
-         oCdQc/OewoGWL6QAdTZ5AdcCiBAW1FpkckE1jq0r9kNCrgcaTcWXw3BhIZFDILejykYY
-         xhsA==
-X-Gm-Message-State: AOAM533bLX61WYnmX+brsh21D5NvtPR1hhi8fblInclWCjIGZ4ApBWvL
-        fGbnRbLASgduwnuaHWwwnko=
-X-Google-Smtp-Source: ABdhPJyDr6Fn1C47Iap8ZBIHs4/z1kc6JXdQiRuNiVOxnKKraI7K5S7M44p+tPjlcF0xZ5fXCGK7BA==
-X-Received: by 2002:a17:902:6ac1:b0:149:7087:7b8a with SMTP id i1-20020a1709026ac100b0014970877b8amr2900110plt.174.1641874872357;
-        Mon, 10 Jan 2022 20:21:12 -0800 (PST)
-Received: from slim.das-security.cn ([103.84.139.54])
-        by smtp.gmail.com with ESMTPSA id f7sm1062943pfe.210.2022.01.10.20.21.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 20:21:12 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     jreuter@yaina.de, ralf@linux-mips.org, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH net] ax25: use after free in ax25_connect
-Date:   Tue, 11 Jan 2022 12:20:48 +0800
-Message-Id: <20220111042048.43532-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S1347791AbiAKEWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 23:22:16 -0500
+Received: from mail-dm6nam12on2078.outbound.protection.outlook.com ([40.107.243.78]:53344
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229687AbiAKEWN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 23:22:13 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eEl6QkU7zgf8jLdq7RZ0xIRLVZzQ/ozMyy72XdsomMm0RRKIOv9AP37tIhvYrwHrtCjXUMPNGr9C5zP0S1ijLQsFOUhfGCf2dfnFpFihOzpA/AKH7gSCD0t/IfG492INhsdJBk1ndYmRXQRwxPcfl1ZVKocwhAFNyIoRPBNDk/88pCV14e6stPQjIcxaLrSgBaZ2swAnOSQ2+rNT86EzGccyDwCp6HOpkF4onYveHfXnPV4huvv4a+YtTHq61X/lCv4i/HjDjxtzcSRjopFK+N20BBDTPhdm4ZfiPHBRAgtNoRKXuE8oHAfjo1IQpfbxUsV5lEZO/SYZemV271qxbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=449iKoL0c6wdLFwGHayRhCT36fmy1UZ7s9gp9L0qUSA=;
+ b=JBrPyvrtNnm41XGXhGQ48KTpXILRpTEuBANdbFzHn9UM+vh5/93fockQ0EtVpH7Womzl6uy/CFkxb04mRdMcBF7gz1vDQLjxlbJpuSgv5ntJU8Kxs/AULHJSLpvqqAir8Ig2tpYsaSxsu4ByiLYmciOiGwyWFLHOgDR+1IyeJT5NUH7W8/58mOBtyMigTTuYdEUrkYWQfaDe0COeJZx0LP7Bt99ELTtcrzjecCCfGAs/gajcGcdLvGM+RRKmSnLOgMNmYSdcxAil6trovCD3tFC+jDTFCLmW1B6Btg8Dw+G0JM0Yevg0UmRJDO24pZm1YVxwLJifkN/MiK68pLh8XA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=449iKoL0c6wdLFwGHayRhCT36fmy1UZ7s9gp9L0qUSA=;
+ b=j+VRI28boUIVnBSN5/28/9DTRNswe4TufT20FrNJyQlgrg4rGj8euTWUJYV13kPA2U/LE+YkgMv/EX+jK74Lvf7KV8Mb6VUELMy5NMF4cD1aqvqZKMFhBbF+uzLmYBXkHd9nfrjhaZ2v556SsAvW1tVcgI2N/bZSNYk5E84+k+Y9EOwwdDr8rwYEF3TaKTY4K1iB6BN7egHPFf8tTJdtEurBh73PBM5mebOnGXHzjbPKHUVvkeFlSnJBNYSQOK+5mUQwZfOOCKOd5iQrJ388EkoLOY3vRRgkmh6CK7BOtHJXArNiaB3SV1rf/S/15fTrhCXBRLr9LwxGNmgt0bju7A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by BYAPR12MB2790.namprd12.prod.outlook.com (2603:10b6:a03:69::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Tue, 11 Jan
+ 2022 04:22:12 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::8496:16fd:65c5:4af7]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::8496:16fd:65c5:4af7%4]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
+ 04:22:12 +0000
+Message-ID: <19c12ef2-f0ab-1b17-ff77-a448a4636639@nvidia.com>
+Date:   Mon, 10 Jan 2022 20:22:10 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v2 13/28] mm: Add folio_pincount_ptr()
+Content-Language: en-US
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        William Kucharski <william.kucharski@oracle.com>,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+References: <20220110042406.499429-1-willy@infradead.org>
+ <20220110042406.499429-14-willy@infradead.org>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20220110042406.499429-14-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR05CA0151.namprd05.prod.outlook.com
+ (2603:10b6:a03:339::6) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 07f300ec-4bdd-4412-3025-08d9d4b9f07b
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2790:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB27902ED0681BE4C8CD99ADE7A8519@BYAPR12MB2790.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G6zsphn0nlxysgcD8/9qXnygSyy4F3z8wncWw0a+BAfltQ/jdnNFoD4/ggBrdtcmAEJkgABe4ru6UzQWV4M09o+xew3g7zB7CWg25Ie4hXdOnYbp1nB3eZL95BZ5EWFZyK+rNz5M+07daLaYPb5zLBULSvqrHycnb+Snlo0x9Qnevqry+qxvMKxMKzSlvJId+q5GjLsbtVWfn4X760bhqwL3WKQKYwJ3WFKybvQpmVLbvL324uj0pH1zS7JTdvt6/IftynrSnmhnWIunbKksT/HJTlTohcRdB5z54vyrKdH91T3awq85fMhVZA7NFwDxZK1gXtBTxPGgsQBe6geQl2kQctOH4pR3YZ65AKPZnOI8WdyotFv/O+DBHvNE2ZuN8od7Nei8jhR3UIUj+WmhfD6bA79Tkp0qj/8wSbgcEoZEvUubiAjgn8NGPaL0SwB0HiXw8zque92YDKdDXAt6hI52c04zeQDwjIA+yTUGt7Z5BBYc8coM3XfHn5fSqNMfw797XXLXSK9OgOjEVPEXdM+seeTIs9AX7ivepJbPU6uX+VR46gPHoFFF23uNkMdC0YZqUJs8kjqB7q3SSM0Ia7rymETCqNf0uPe4DLI7VgW/3ErQsJHFOI5ixMWGjptRGkpQAQrL0Psp6MExoNJHrx2XO0I5rYd2gIw5IDVu1nKPr04rtcAUQYA7xbyrF3hx7jXqN091Hs2Uj3EreKcmn80gCt6/3K3LBofKNFZiXE0B7E/MEHYuDpUru+ZymOwh
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(86362001)(6506007)(53546011)(8936002)(31696002)(26005)(66476007)(508600001)(316002)(31686004)(5660300002)(36756003)(66556008)(6512007)(2906002)(8676002)(6486002)(54906003)(2616005)(66946007)(186003)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cjU3NDkvbDdhbmdWaDQyZ1E5ZTJDUFJsMnd2WFQ2Z3c5MXBFdjM3TU9qaE5N?=
+ =?utf-8?B?UUtrdEtJenpFbGpTaytYWC96djQ4MjliVDdhdTl3Z2oxR0Y2czZHTitjTENM?=
+ =?utf-8?B?eVZ3YXdVdXBWNzRMaWRWa3NDbUR6UWxpRnh4YktIcUFpdFRMT29SbThzaVM1?=
+ =?utf-8?B?K3NGSWx0UE9oS2xFV3QrREZrRk1JZFFzWGpxQlZMZlB0WXl4bThnZ2JVWk42?=
+ =?utf-8?B?MVY1OExIR0VvMkhGcFViVkU4cjJtdFdhSGZOWFhmNFhiY2U4eGVmc0oxblYw?=
+ =?utf-8?B?TytaeGFyZ3JLb1hwZDJPOWhrMjZmODJrOEtTaTlFM2IvbTludFpVWTNBbDZU?=
+ =?utf-8?B?MVBXcW5OZHJlaUdESzQrTVRNUlBxSWdTLzVxbTdmWjBWR3gyQndVTGNvWS9x?=
+ =?utf-8?B?UlplS0tlL2Y4cWpkK1puMFp2Lzh5UzdPYXpjZG5zbVBGK0VHaXJPSldOL0ov?=
+ =?utf-8?B?Wk5sMzBrdXlEOEFPNHpsNGp5Sis4UytYN0xlZFIxOXFJdHJvSG45dXQ1OXRv?=
+ =?utf-8?B?Q3RybWUxazNnOFFWRkNCbEt3eHdrNkpwbWkxTk1ObncveGFpM2MzYzdZNHY0?=
+ =?utf-8?B?allCY2RrSTl4eUh6ZFFqemJveXJjc2VYeW4veWdYdGZJNUhhRmQ1VE4xdW1Z?=
+ =?utf-8?B?SFZzVHJkWDlsOWI4UDhNcjFTdEVONXZ1aXdxSjVxYXlNaG42dmY1L2lxR2ll?=
+ =?utf-8?B?YVg5U1IwdVl1Q1UyTnBISmtkUTB6UTVZRVVXUVVFUW90dVBraks3aWtwNkxP?=
+ =?utf-8?B?bGhEWVdybTR0allzYTFhTGVXSWV3cTdLZHRNNDRqUUw5aXRiRVV2dVE3OWtZ?=
+ =?utf-8?B?UDV3N3htOTI3Qm0rN2wxU0hOVHRPUklWRm5KSzFzYTZlbGdrV1U4UVR6WHpI?=
+ =?utf-8?B?enBRTzhMeklnbjB4eG9CT0Q3RVo4WFU5OTYyM1RPRS9BcjYveVJHaHk2MFUv?=
+ =?utf-8?B?TXZwVWV6MzdCak5lNDdTVjNPazVCS2ZkTEhURE85ZlVsQTI4dGpBWnVRbUZ2?=
+ =?utf-8?B?RmZHWm11OFlhVjBYZlQ4eURuc1pEL3lUT3RTZ1VuZy8wZE4vbFRDak1KaDU5?=
+ =?utf-8?B?ZnNaRnFKZHNKbGhKYk9yM0JjRWJydHZ2bmhYSFVBN3lGN2ZBbFZaQzRhZmhF?=
+ =?utf-8?B?WlNwMzlYb2ZuOVYyMGFtbDNvUkVHcSsrdnA3ZmtJVzZEYnZYVHpsamNvNkly?=
+ =?utf-8?B?UndlUER2YXlROGMxRHNkN0VPMGlaMTl1RUJmTS9iZXc2bkcxdTVxaWNvemMr?=
+ =?utf-8?B?aE5mNmdhTGpHQ1RZTDJTcEVFL2pTTjFWUkhQVGtnTDk4T2pZNTNCYmk4SDRs?=
+ =?utf-8?B?UGNUSGRpRDRoZzUzL0hYRkhvS05vaStmaVlVc1J1Ykl3RVhJQU9XMmgvc3Js?=
+ =?utf-8?B?d2kzYWR5MnZkdU1DYk1WbE9wcTE3SjlLSlR6cHVKL3ZkZFdtUCtDc0ZodjI4?=
+ =?utf-8?B?NkhibVVDNy9JT1loQklMZFRucFBGOHhsU3VIdStwWUhDQThtUHZzRWRLbnZY?=
+ =?utf-8?B?aHBlQ0xqRXZOSTRvaURKa1RGM01iMjFDaHBsWHZTR1RwNUZZNlg0V1NlSFVu?=
+ =?utf-8?B?VTNFWEJkZk15RnZ0bkxIRGo2K1ZuUFdUelc2ano3MzFaNStRME1scFN1MVM1?=
+ =?utf-8?B?Y3JxQkdsbzA4eFh2Z2k3ZE91c1FheFZKcWtteWxaa2JzajNDOUJzcCtqWlBK?=
+ =?utf-8?B?clFLb2JuejJ4ZWhyWjZIcVZZYlBDTER4OHpZOGd5K0daV0pmb21KR3JXSU4z?=
+ =?utf-8?B?MXhwOTc0dnZhSGd3S0dzenMwc04wNE8xZUN0bXhHakk5KzhpbHRhdVA3Ykgr?=
+ =?utf-8?B?SVpja3kvdWIxbEZjbXNjSExIUXJkZ0tTcll6RjcxSjgyeVMwRFVianRjQkFC?=
+ =?utf-8?B?dzVZMmdSbGlBRkFWcm1pWVhrWTdXM0xWdUFMTkZXUXVaZnZkUG9JbURpZzlM?=
+ =?utf-8?B?Q1doOTRaSURibWJDWmhlcFkyOW5icHdidDdSVUZMZ2tINFMzQzhQMktvZ0gr?=
+ =?utf-8?B?ck1jRHR4SzZJSlFrWFpKZEViYmZ2MWQzd1JEZGl5VTBNN1JSWUxHZjlxYlhY?=
+ =?utf-8?B?QkpiekdTMHIwSlNFaTBPeTZ1Vi81eWY3Q0cwazRaSFE5VWQ5NUtKL1FPYWww?=
+ =?utf-8?B?djAxUVNTZjJoL1JXeUdqZ0h2MmdqQ0xhVUVLbzB1bHZ6WmJQaUZmbEFYYnFr?=
+ =?utf-8?Q?kH0AQu1GJ2u9x9rylqySTyA=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07f300ec-4bdd-4412-3025-08d9d4b9f07b
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 04:22:11.9684
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZN+0l+UakJteP+knrvVCfPy/nHnrDXmkbyfi5VVLAOmVFR1P86hVF/vOHYpLJVlR9KQ0wjSN0Nl9L/zsNDztZw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2790
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sk_to_ax25(sk) needs to be called after lock_sock(sk) to avoid UAF
-caused by a race condition.
+On 1/9/22 20:23, Matthew Wilcox (Oracle) wrote:
+> This is the folio equivalent of compound_pincount_ptr().
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>   include/linux/mm_types.h | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 60e4595eaf63..34c7114ea9e9 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -312,6 +312,12 @@ static inline atomic_t *compound_mapcount_ptr(struct page *page)
+>   	return &page[1].compound_mapcount;
+>   }
+>   
+> +static inline atomic_t *folio_pincount_ptr(struct folio *folio)
+> +{
+> +	struct page *tail = &folio->page + 1;
+> +	return &tail->compound_pincount;
+> +}
+> +
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- net/ax25/af_ax25.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Should we make this code (the various folio map/pin count inline
+functions) more uniform? I see that you prefer "+1" over page[1], sure,
+but having a mix seems like it's trying to call out a difference for
+which the reader would search in vain. :)
 
-diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
-index cfca99e295b8..c5d62420a2a8 100644
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -1127,7 +1127,7 @@ static int __must_check ax25_connect(struct socket *sock,
- 	struct sockaddr *uaddr, int addr_len, int flags)
- {
- 	struct sock *sk = sock->sk;
--	ax25_cb *ax25 = sk_to_ax25(sk), *ax25t;
-+	ax25_cb *ax25, *ax25t;
- 	struct full_sockaddr_ax25 *fsa = (struct full_sockaddr_ax25 *)uaddr;
- 	ax25_digi *digi = NULL;
- 	int ct = 0, err = 0;
-@@ -1155,6 +1155,8 @@ static int __must_check ax25_connect(struct socket *sock,
- 
- 	lock_sock(sk);
- 
-+	ax25 = sk_to_ax25(sk);
-+
- 	/* deal with restarts */
- 	if (sock->state == SS_CONNECTING) {
- 		switch (sk->sk_state) {
+After the whole series is applied, this area ends up with a 50/50 mix of the
+two.
+
+Or am I overlooking something, and they really *should* look different?
+
+
+Just a very minor point, so either way,
+
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+
+thanks,
 -- 
-2.25.1
+John Hubbard
+NVIDIA
 
+>   static inline atomic_t *compound_pincount_ptr(struct page *page)
+>   {
+>   	return &page[1].compound_pincount;

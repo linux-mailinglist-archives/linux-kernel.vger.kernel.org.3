@@ -2,157 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EF748AB30
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C0248AB36
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237540AbiAKKOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:14:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236392AbiAKKOA (ORCPT
+        id S237594AbiAKKOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:14:53 -0500
+Received: from mail-ua1-f49.google.com ([209.85.222.49]:44813 "EHLO
+        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231667AbiAKKOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:14:00 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3BFC06175D
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:13:57 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id x4so6784628wru.7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 02:13:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=6PCA+vRYUe/AduahtIfH11YxAjqrR5aT6yWf1P1UjKM=;
-        b=xrnn7pfPtVk8GmZXH74suntUOfiJSbMkHTNai+3uNuBcbbzTXiKd42TVtluDU8+XvJ
-         eJguqBRQB3yNfFCspuEeUxuaG6YnNk1ykZ+ErK52kqvbSO2THosjeqXIyu7roja9Jt3y
-         MsDa3SCUlGcXd69wdtgbEgkZlmrL1rKbc/HyhQxseE8XYICgaXD/yt6QnZM+C/KPokj2
-         PohuiVjL8E5sb3VTAoeQwHQzWsRceX7zawKB65yMb5Ur5wvbTbjj5yCK9nGBVA/TVu+K
-         9sS3zrIT8iX5UtY2HUjey0tlfdUaQ3PfPub6AlX9ZaPMvLn4AzsfCh7pvQmGWEq+nCSQ
-         yFSw==
+        Tue, 11 Jan 2022 05:14:52 -0500
+Received: by mail-ua1-f49.google.com with SMTP id l15so17242873uai.11;
+        Tue, 11 Jan 2022 02:14:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=6PCA+vRYUe/AduahtIfH11YxAjqrR5aT6yWf1P1UjKM=;
-        b=E73BDC31FuoDzuDqNq9Tzq6HiHduqDAJ2gYjU+5nTRuQA5FX4SP2LseSYjwEy0pedo
-         hrvdl7afqMODgYDnxlil3snIEiVc8ZYr659ChxAMZ1++lBtewUIGkcoX9b+TfX6i6jRw
-         V98x4q6N2m4wuzQBRJLzAPgaoJ70h1jMVuqMcJsaMMnS8LCoUsYN7asAUPPFBIA89gYe
-         y0qY+vhHLFDgeak1j6U1jxA0Q2LQRzvVZoGZwYvgf7s1apX8aaHsIw3mLCPZNMCTAp5/
-         i4VLLMWumNnjnCINt9JIaJgAUGE88C97A8h4dEyNTSPW1Ou28so33WxUfIfhoPmKw7UN
-         H6xQ==
-X-Gm-Message-State: AOAM530722QXghmfuIfSBPJgH6zoe/pKGV01v6o8KzjHoHzq8fm583YN
-        iHadiNxh3JNScJ9JXsnPA2NSOw==
-X-Google-Smtp-Source: ABdhPJywTk9GhMWZxxqHvgfzFl2ehPAmWpoal5qpAaIBDxvx3IEGSmDLg3dQoXaJJEoI6VdA5mEzlQ==
-X-Received: by 2002:a5d:6b09:: with SMTP id v9mr3048585wrw.591.1641896036277;
-        Tue, 11 Jan 2022 02:13:56 -0800 (PST)
-Received: from google.com ([31.124.24.179])
-        by smtp.gmail.com with ESMTPSA id d22sm9158677wrb.83.2022.01.11.02.13.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 02:13:55 -0800 (PST)
-Date:   Tue, 11 Jan 2022 10:13:43 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     broonie@kernel.org, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [RFC v5 net-next 01/13] mfd: ocelot: add support for external
- mfd control over SPI for the VSC7512
-Message-ID: <Yd1YV+eUIaCnttYd@google.com>
-References: <20211218214954.109755-1-colin.foster@in-advantage.com>
- <20211218214954.109755-2-colin.foster@in-advantage.com>
- <Ycx9MMc+2ZhgXzvb@google.com>
- <20211230014300.GA1347882@euler>
- <Ydwju35sN9QJqJ/P@google.com>
- <20220111003306.GA27854@COLIN-DESKTOP1.localdomain>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WC7G6vkWzKe7686M1twI77VkZDIsn5dgTzG4HQCrkC8=;
+        b=apLqzgVN7TqCMGSnMT8TFDohQdEisJxTJA40CyofJ2db5RGaYCmk5F9sK54TAWBqCP
+         RnPrUUjMP2ZlFkt8rk4HcqQBgcCwsbLRBlU/4eXI+ZXDQz5wVyxY+hhv3QVHpsK2rZDx
+         rEgyJX54VN57DFM8U91lL3YY7SvWJ4wHGr2K9Q6StFXLTmT7z7frfnVtEmUdTBKq7oXS
+         epUYGp/zoExuz4apJ4EBKb965+vrV/YWlIUWu6F+bdZmFAJyAZrZzW8A6mM8ZQcr7agf
+         PTJSMi99Ld/t0u6NGoKWwmsYtX1+ic3jPN4bbXI15SfYze3qJ+IhgPuyX3Ht162f6xSa
+         77Ow==
+X-Gm-Message-State: AOAM5332nSQ+Ux5YSuf7XFbPBZsaORKlhPd7cxNV3V0j2vSSSe1vkE3m
+        ivO9t54HMw5iOJREWhZjQYMi6zTLV8aEdw==
+X-Google-Smtp-Source: ABdhPJxu2FBL+CNRIadogtn9xPTxK7mkYG/b3cbLWUoHdsdgGnnzKINDqbdphcoJSXFey3yTUWfbdA==
+X-Received: by 2002:ab0:59cf:: with SMTP id k15mr1560872uad.47.1641896091677;
+        Tue, 11 Jan 2022 02:14:51 -0800 (PST)
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com. [209.85.221.173])
+        by smtp.gmail.com with ESMTPSA id m62sm5545204uam.0.2022.01.11.02.14.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 02:14:51 -0800 (PST)
+Received: by mail-vk1-f173.google.com with SMTP id 19so2254669vkl.2;
+        Tue, 11 Jan 2022 02:14:51 -0800 (PST)
+X-Received: by 2002:a05:6122:c89:: with SMTP id ba9mr290347vkb.39.1641896091170;
+ Tue, 11 Jan 2022 02:14:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220111003306.GA27854@COLIN-DESKTOP1.localdomain>
+References: <20211222145901.23661-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdW6wZLYGttKaSiX_ZknfGrqo5Z6mFBA6ZhqxURtzbaHCw@mail.gmail.com>
+In-Reply-To: <CAMuHMdW6wZLYGttKaSiX_ZknfGrqo5Z6mFBA6ZhqxURtzbaHCw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 11 Jan 2022 11:14:40 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWcZr0mXQFL6Q3Cu6rpU4WaM2tBw+N06LtmaD_=D00tSg@mail.gmail.com>
+Message-ID: <CAMuHMdWcZr0mXQFL6Q3Cu6rpU4WaM2tBw+N06LtmaD_=D00tSg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: pinctrl: renesas,rzg2l-pinctrl: Add
+ description for power-source property
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > > No magic numbers please.
-> > > 
-> > > I've gotten conflicting feedback on this. Several of the ocelot drivers
-> > > (drivers/net/dsa/ocelot/felix_vsc9959.c) have these ranges hard-coded.
-> > > Others (Documentation/devicetree/bindings/net/mscc-ocelot.txt) have them
-> > > all passed in through the device tree. 
-> > > 
-> > > https://lore.kernel.org/netdev/20211126213225.okrskqm26lgprxrk@skbuf/
-> > 
-> > Ref or quote?
-> > 
-> > I'm not brain grepping it searching for what you might be referring to.
-> > 
-> > I'm not sure what you're trying to say here.  I'm asking you to define
-> > this numbers please.
-> 
-> I'll define the numbers as you suggest.
-> 
-> The quote I was referring to is this:
-> 
-> > The last option I haven't put much consideration toward would be to
-> > move some of the decision making to the device tree. The main ocelot
-> > driver appears to leave a lot of these addresses out. For instance
-> > Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt.
-> > That added DT complexity could remove needs for lines like this:
-> > > > +              ocelot->map[GCB][GCB_MIIM_MII_STATUS & REG_MASK],
-> > But that would probably impose DT changes on Seville and Felix, which
-> > is the last thing I want to do.
-> 
-> The thing with putting the targets in the device tree is that you're
-> inflicting yourself unnecessary pain. Take a look at
-> Documentation/devicetree/bindings/net/mscc-ocelot.txt, and notice that
-> they mark the "ptp" target as optional because it wasn't needed when
-> they first published the device tree, and now they need to maintain
-> compatibility with those old blobs.
+On Mon, Jan 10, 2022 at 4:30 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Wed, Dec 22, 2021 at 3:59 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > Add description for "power-source" property mentioning the values in enum
+> > are in millivolts.
+> >
+> > Suggested-by: Pavel Machek <pavel@denx.de>
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> i.e. will queue in renesas-pinctrl-for-v5.18.
 
-I wasn't asking you to put it in DT, just to define the numbers.
+... with s/millivolts/millivolt/.
 
-> > > There's yet another complexity with these, and I'm not sure what the
-> > > answer is. Currently all regmaps are tied to the ocelot_spi device...
-> > > ocelot_spi calls devm_regmap_init. So those regmaps hang around if
-> > > they're created by a module that has been removed. At least until the
-> > > entire MFD module is removed. Maybe there's something I haven't seen yet
-> > > where the devres or similar has a reference count. I don't know the best
-> > > path forward on this one.
-> > 
-> > Why are you worrying about creating them 2 different ways?
-> > 
-> > If it's possible for them to all create and use their own regmaps,
-> > what's preventing you from just do that all the time?
-> 
-> There isn't really any worry, there just might be efficiencies to be
-> had if two children share the same regmap. But so long as any regmap is
-> created with unique names, there's no reason multiple regmaps can't
-> overlap the same regions. In those cases, maybe syscon would be the best
-> thing to implement if it becomes needed.
-> 
-> I have nothing against making every child regmap be unique if that's the
-> desire.
+Gr{oetje,eeting}s,
 
-Unless something has changed or my understanding is not correct,
-regmap does not support over-lapping register ranges.
+                        Geert
 
-However, even if that is required, I still think we can come up with
-something cleaner than creating a whole API based around creating
-and fetching different regmap configurations depending on how the
-system was initialised.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

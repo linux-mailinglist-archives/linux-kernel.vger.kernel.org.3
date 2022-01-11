@@ -2,184 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C3548B418
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB65448B41F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344293AbiAKRfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:35:02 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:35210 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344944AbiAKRe5 (ORCPT
+        id S1344381AbiAKRgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242666AbiAKRgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:34:57 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C388D1F3B8;
-        Tue, 11 Jan 2022 17:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641922495; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=VE6dnqfaUn3R40sODHdx81iTMjOF1gEB2Id1XsRVNY0=;
-        b=mLq2MfeQFuGSSIPHJP4/6ckjMlkO+SeNMpH8JC4iOMDHV2d5mYExFijzvLiDB6dc1faMlX
-        usKXhbn6OphlCjCYZbLxAS3Ja2ZmxPuhJcZDDh6bl5Jno2BOh4uCsQEjaPo0XQlsChBegR
-        cWr+GoecpWkvQPxd31JDz2A5CM6ZsL4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641922495;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=VE6dnqfaUn3R40sODHdx81iTMjOF1gEB2Id1XsRVNY0=;
-        b=DBUQScVSGMUCSDpvDh+/tKiuiX/9cpWeYKB8DIcPTLDcT/pk64QhwciwBCdC1Bgt5PgcmY
-        2KIoOfdAihhnMIBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ACBBE13AE7;
-        Tue, 11 Jan 2022 17:34:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KtPLKL+/3WFDVAAAMHmgww
-        (envelope-from <bp@suse.de>); Tue, 11 Jan 2022 17:34:55 +0000
-Date:   Tue, 11 Jan 2022 18:35:04 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] locking/core for v5.17
-Message-ID: <Yd2/yMnHa8zHe02U@zn.tnic>
+        Tue, 11 Jan 2022 12:36:31 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13945C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:36:31 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id w7so18277687plp.13
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:36:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kmqD567CtlmXllpc1rQayweyZNMIGqk+RZtPJBuYT90=;
+        b=sivzBEkWVy1S0pf5Z71owP5T4t13Zyykw7vqCCakVV0L1ZomD5pSrWWdeOgJuBAzWL
+         zFUHh31Ym7mqCNUa7K4JxPVQhFbPy4N3qrzqt5roRk7BcHeqGnIc2hOgv6DFtWK5tTy2
+         WdWZCAOQdakcQ38IpcuCVuoEK9rwgLOE50yRhvkZiFuadJGbVSlIPWXMc7yIFrHCMtIG
+         bTt98MWR4oDq6HIq7Y/sVn7MmFX9CS1xFwzTO6bvb1DR9JWIcoX/Hrrl/rCckOdh5LoP
+         mdC2nr6t5awVklH9vDGx4GBF7LvyiGNU3Chu6orbgSoWmiYl0jqTamZ/7yzMNKGRgmwF
+         24Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kmqD567CtlmXllpc1rQayweyZNMIGqk+RZtPJBuYT90=;
+        b=ppuwfXxXyKJc2ffjkvBiJKvUpeynzOV3nJ3cct0CXGBs8w98avHiGzOYEYyQpb6F6h
+         P/supRUeNmnFznHRRJ6eRLN25IBE9ud/z7TMdlE51prwkPpaNzIFQ3L4cdEZKahDW6vU
+         o3rI1ts9DDENx3NnSe6CKqol7GHcFeySbPBCwMaZzspcIBolVgAmnawOwjH6PwKxYJVy
+         cGuLh2n4JvHw+vInP11Co43p01BrzFAq1d7DgQ+gUqbQxIotzslPqkHqpae9Czor0O9i
+         jmpUJKNHkYCcvmj/3dpJvAQ01647w+f2I9V999VhPBo7IR85JJa3LXzet2T9tsAu+UKs
+         oF8g==
+X-Gm-Message-State: AOAM532jKpdnx8Kxp931EZt5cHDf9+637btqxfTfhQP5agk+PUssl2C/
+        QNYylx7zKJ0+8THw58alPME3fw==
+X-Google-Smtp-Source: ABdhPJyi/ql3rEX/0G3ckRnHJKB6twfx7NB9W6on7gUjJywSRrz2rhGBuYgadAJVOgr9Cf/e9+m1Mg==
+X-Received: by 2002:a62:79c2:0:b0:4bd:e9da:c173 with SMTP id u185-20020a6279c2000000b004bde9dac173mr5462897pfc.65.1641922590326;
+        Tue, 11 Jan 2022 09:36:30 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id qe10sm3488021pjb.5.2022.01.11.09.36.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 09:36:29 -0800 (PST)
+Date:   Tue, 11 Jan 2022 17:36:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
+Message-ID: <Yd3AGRtkBgWSmGf2@google.com>
+References: <20220104194918.373612-1-rananta@google.com>
+ <20220104194918.373612-2-rananta@google.com>
+ <Ydjje8qBOP3zDOZi@google.com>
+ <CAJHc60ziKv6P4ZmpLXrv+s4DrrDtOwuQRAc4bKcrbR3aNAK5mQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJHc60ziKv6P4ZmpLXrv+s4DrrDtOwuQRAc4bKcrbR3aNAK5mQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Jan 10, 2022, Raghavendra Rao Ananta wrote:
+> On Fri, Jan 7, 2022 at 5:06 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Tue, Jan 04, 2022, Raghavendra Rao Ananta wrote:
+> > > +#define kvm_vm_has_started(kvm) (kvm->vm_started)
+> >
+> > Needs parantheses around (kvm), but why bother with a macro?  This is the same
+> > header that defines struct kvm.
+> >
+> No specific reason for creating a macro as such. I can remove it if it
+> feels noisy.
 
-please pull locking/core updates for v5.17.
+Please do.  In the future, don't use a macro unless there's a good reason to do
+so.  Don't get me wrong, I love abusing macros, but for things like this they are
+completely inferior to
 
-Thx.
+  static inline bool kvm_vm_has_started(struct kvm *kvm)
+  {
+  	return kvm->vm_started;
+  }
 
----
+because a helper function gives us type safety, doesn't suffer from concatenation
+of tokens potentially doing weird things, is easier to extend to a multi-line
+implementation, etc...
 
-The following changes since commit 8f556a326c93213927e683fc32bbf5be1b62540a:
+An example of when it's ok to use a macro is x86's
 
-  locking/rtmutex: Fix incorrect condition in rtmutex_spin_on_owner() (2021-12-18 10:55:51 +0100)
+  #define kvm_arch_vcpu_memslots_id(vcpu) ((vcpu)->arch.hflags & HF_SMM_MASK ? 1 : 0)
 
-are available in the Git repository at:
+which uses a macro instead of a proper function to avoid a circular dependency
+due to arch/x86/include/asm/kvm_host.h being included by include/linux/kvm_host.h
+and thus x86's implementation of kvm_arch_vcpu_memslots_id() coming before the
+definition of struct kvm_vcpu.  But that's very much an exception and done only
+because the alternatives suck more.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/locking_core_for_v5.17_rc1
+> > > +                      */
+> > > +                     mutex_lock(&kvm->lock);
+> >
+> > This adds unnecessary lock contention when running vCPUs.  The naive solution
+> > would be:
+> >                         if (!kvm->vm_started) {
+> >                                 ...
+> >                         }
+> >
+> Not sure if I understood the solution..
 
-for you to fetch changes up to f16cc980d649e664b8f41e1bbaba50255d24e5d1:
+In your proposed patch, KVM_RUN will take kvm->lock _every_ time.  That introduces
+unnecessary contention as it will serialize this bit of code if multiple vCPUs
+are attempting KVM_RUN.  By checking !vm_started, only the "first" KVM_RUN for a
+VM will acquire kvm->lock and thus avoid contention once the VM is up and running.
+There's still a possibility that multiple vCPUs will contend for kvm->lock on their
+first KVM_RUN, hence the quotes.  I called it "naive" because it's possible there's
+a more elegant solution depending on the use case, e.g. a lockless approach might
+work (or it might not).
 
-  Merge branch 'locking/urgent' into locking/core (2021-12-18 10:57:03 +0100)
+> > > +                     kvm->vm_started = true;
+> > > +                     mutex_unlock(&kvm->lock);
+> >
+> > Lastly, why is this in generic KVM?
+> >
+> The v1 of the series originally had it in the arm specific code.
+> However, I was suggested to move it to the generic code since the book
+> keeping is not arch specific and could be helpful to others too [1].
 
-----------------------------------------------------------------
-Peter Zijlstra says:
-
-"Lots of cleanups and preparation; highlights:
-
- - futex: Cleanup and remove runtime futex_cmpxchg detection
-
- - rtmutex: Some fixes for the PREEMPT_RT locking infrastructure
-
- - kcsan: Share owner_on_cpu() between mutex,rtmutex and rwsem and
-   annotate the racy owner->on_cpu access *once*.
-
- - atomic64: Dead-Code-Elemination"
-
-----------------------------------------------------------------
-Arnd Bergmann (4):
-      futex: Ensure futex_atomic_cmpxchg_inatomic() is present
-      futex: Remove futex_cmpxchg detection
-      futex: Fix sparc32/m68k/nds32 build regression
-      futex: Fix additional regressions
-
-Ingo Molnar (1):
-      Merge tag 'v5.16-rc5' into locking/core, to pick up fixes
-
-Kefeng Wang (1):
-      locking: Make owner_on_cpu() into <linux/sched.h>
-
-Marco Elver (1):
-      locking: Mark racy reads of owner->on_cpu
-
-Mark Rutland (1):
-      locking/atomic: atomic64: Remove unusable atomic ops
-
-Peter Zijlstra (1):
-      locking/rtmutex: Squash self-deadlock check for ww_rt_mutex.
-
-Sebastian Andrzej Siewior (10):
-      kernel/locking: Use a pointer in ww_mutex_trylock().
-      sched: Trigger warning if ->migration_disabled counter underflows.
-      locking: Remove rt_rwlock_is_contended().
-      locking/rtmutex: Add rt_mutex_lock_nest_lock() and rt_mutex_lock_killable().
-      lockdep/selftests: Avoid using local_lock_{acquire|release}().
-      lockdep/selftests: Unbalanced migrate_disable() & rcu_read_lock().
-      lockdep/selftests: Skip the softirq related tests on PREEMPT_RT
-      lockdep/selftests: Adapt ww-tests for PREEMPT_RT
-      x86/mm: Include spinlock_t definition in pgtable.
-      locking: Allow to include asm/spinlock_types.h from linux/spinlock_types_raw.h
-
-Thomas Gleixner (2):
-      lockdep: Remove softirq accounting on PREEMPT_RT.
-      Merge branch 'locking/urgent' into locking/core
-
- arch/alpha/include/asm/spinlock_types.h          |   2 +-
- arch/arc/Kconfig                                 |   1 -
- arch/arm/Kconfig                                 |   1 -
- arch/arm/include/asm/spinlock_types.h            |   2 +-
- arch/arm64/Kconfig                               |   1 -
- arch/arm64/include/asm/spinlock_types.h          |   2 +-
- arch/csky/Kconfig                                |   1 -
- arch/csky/include/asm/spinlock_types.h           |   2 +-
- arch/hexagon/include/asm/spinlock_types.h        |   2 +-
- arch/ia64/include/asm/spinlock_types.h           |   2 +-
- arch/m68k/Kconfig                                |   1 -
- arch/mips/include/asm/futex.h                    |  27 ++--
- arch/powerpc/include/asm/simple_spinlock_types.h |   2 +-
- arch/powerpc/include/asm/spinlock_types.h        |   2 +-
- arch/riscv/Kconfig                               |   1 -
- arch/riscv/include/asm/spinlock_types.h          |   2 +-
- arch/s390/Kconfig                                |   1 -
- arch/s390/include/asm/spinlock_types.h           |   2 +-
- arch/sh/Kconfig                                  |   1 -
- arch/sh/include/asm/spinlock_types.h             |   2 +-
- arch/um/Kconfig                                  |   1 -
- arch/um/kernel/skas/uaccess.c                    |   1 -
- arch/x86/include/asm/pgtable.h                   |   1 +
- arch/xtensa/Kconfig                              |   1 -
- arch/xtensa/include/asm/futex.h                  |   8 +-
- arch/xtensa/include/asm/spinlock_types.h         |   2 +-
- include/asm-generic/futex.h                      |  31 ++--
- include/linux/irqflags.h                         |  23 +--
- include/linux/ratelimit_types.h                  |   2 +-
- include/linux/rtmutex.h                          |   9 ++
- include/linux/sched.h                            |   9 ++
- include/linux/spinlock_types_up.h                |   2 +-
- init/Kconfig                                     |   9 +-
- kernel/futex/core.c                              |  35 -----
- kernel/futex/futex.h                             |   6 -
- kernel/futex/syscalls.c                          |  22 ---
- kernel/locking/lockdep.c                         |   2 +
- kernel/locking/mutex.c                           |  11 +-
- kernel/locking/rtmutex.c                         |  10 +-
- kernel/locking/rtmutex_api.c                     |  30 +++-
- kernel/locking/rwsem.c                           |   9 --
- kernel/locking/spinlock_rt.c                     |   6 -
- kernel/locking/ww_rt_mutex.c                     |   2 +-
- kernel/sched/core.c                              |   3 +
- lib/atomic64.c                                   |   2 -
- lib/locking-selftest.c                           | 172 ++++++++++++++++-------
- 46 files changed, 241 insertions(+), 225 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+I'm definitely in favor of moving/adding thing to generic KVM when it makes sense,
+but I'm skeptical in this particular case.  The code _is_ arch specific in that
+arm64 apparently needs to acquire kvm->lock when checking if a vCPU has run, e.g.
+versus a hypothetical x86 use case that might be completely ok with a lockless
+implementation.  And it's not obvious that there's a plausible, safe use case
+outside of arm64, e.g. on x86, there is very, very little that is truly shared
+across the entire VM/system, most things are per-thread/core/package in some way,
+shape, or form.  In other words, I'm a wary of providing something like this for
+x86 because odds are good that any use will be functionally incorrect.

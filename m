@@ -2,85 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE6548B2F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5809D48B2F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243580AbiAKRLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:11:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35170 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242530AbiAKRLB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S243278AbiAKRLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 11 Jan 2022 12:11:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4EF01B81C1F;
-        Tue, 11 Jan 2022 17:11:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02511C36AEB;
-        Tue, 11 Jan 2022 17:10:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641921059;
-        bh=GhDvYFZGPRT80b9dqotfwgVnldQY1ncyLaPdagj1mBM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XBiJhLA6JzUOHUpzbouhgmeQVRu+bwMItqkjG6cf0SxClEMTTly5zRh+oWRBl56Md
-         pyDu9y4JwuQU61iJ0U4TQZ8+VX1BIT78IfibtQeTyj1ubVQlc0iuS6SFiuIXIOsANK
-         nC8WJwG/1aFSvvUxsr8bdev/yCK/wSEr8Y/GTCyJNxsTJK4DVTSZnnSP9MTjg61TrX
-         tbJZOWozAUodS3Mfw4BKdKSgjCDNuFQgNRLmr5dFI7z4mgRRwK61AdkLrjGV1fmuw2
-         sukPzbZE+dg8Cc2EDdJpOKOREVNPPKbiE8M2LQrlfQJlqebaS8f17PF+bIPBxHUAfa
-         I5l11pCGl/+sA==
-Date:   Tue, 11 Jan 2022 19:10:52 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Christian Dietrich <christian.dietrich@tuhh.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] mm/pgtable: define pte_index so that preprocessor could
- recognize it
-Message-ID: <Yd26HEL4PvKdSaTQ@kernel.org>
-References: <20220111145457.20748-1-rppt@kernel.org>
- <s7bzgo2cn99.fsf@dokucode.de>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243128AbiAKRLA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 12:11:00 -0500
+Received: from cavan.codon.org.uk (cavan.codon.org.uk [IPv6:2a00:1098:84:22e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C05AC06173F;
+        Tue, 11 Jan 2022 09:11:00 -0800 (PST)
+Received: by cavan.codon.org.uk (Postfix, from userid 1000)
+        id 0C042424F9; Tue, 11 Jan 2022 17:10:59 +0000 (GMT)
+Date:   Tue, 11 Jan 2022 17:10:59 +0000
+From:   Matthew Garrett <mjg59@srcf.ucam.org>
+To:     "Alexander E. Patrakov" <patrakov@gmail.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Andy Lutomirski <luto@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Simo Sorce <simo@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrey Walton <noloader@gmail.com>,
+        Stephan Mueller <smueller@chronox.de>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>,
+        Eric Biggers <ebiggers@kernel.org>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+Message-ID: <20220111171059.GA10674@srcf.ucam.org>
+References: <CAHmME9oRdoc3c36gXAcmOwumwvUi_6oqCsLmFxRP_NDMz_MK1Q@mail.gmail.com>
+ <Ydxu+KS5UkQ6hU9R@mit.edu>
+ <Ydx7D3H0PS0Zs9/B@sol.localdomain>
+ <CAHmME9pe-DxTcFcMtsNnLPcccoY+0gEysivZQszAusH1M8ThmA@mail.gmail.com>
+ <YdyNxJzdBmSSEtDC@mit.edu>
+ <CAHmME9rmWBA02SyeFiiGZ8=kydYJSJwcYPscBrTBzoXMEPH9sQ@mail.gmail.com>
+ <e6fac6ab-07eb-4d8c-9206-bacf6660a7cf@www.fastmail.com>
+ <Ydz1F/AqB1oO/qHF@mit.edu>
+ <20220111041349.GA5542@srcf.ucam.org>
+ <CAN_LGv0CTDi9k=t=TGHvaHZz5YVT+OUEBaRXjP=Xv=kousHY1w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <s7bzgo2cn99.fsf@dokucode.de>
+In-Reply-To: <CAN_LGv0CTDi9k=t=TGHvaHZz5YVT+OUEBaRXjP=Xv=kousHY1w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+On Tue, Jan 11, 2022 at 02:57:54PM +0500, Alexander E. Patrakov wrote:
 
-On Tue, Jan 11, 2022 at 04:20:34PM +0100, Christian Dietrich wrote:
-> Hello Mike!
-> 
-> Mike Rapoport <rppt@kernel.org> [11. Januar 2022]:
-> 
-> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> > index e24d2c992b11..d468efcf48f4 100644
-> > --- a/include/linux/pgtable.h
-> > +++ b/include/linux/pgtable.h
-> > @@ -62,6 +62,7 @@ static inline unsigned long pte_index(unsigned long address)
-> >  {
-> >  	return (address >> PAGE_SHIFT) & (PTRS_PER_PTE - 1);
-> >  }
-> > +#define pte_index pte_index
-> 
-> Wouldn't it make sense to remove the dead CPP blocks (#ifdef pte_index)
-> from mm/memory.c? 
+> LD_PRELOAD is not a solution because of containers and statically-linked
+> binaries.
 
-It does make sense to remove the dead code, but this cleanup does not need
-stable backporting so it'll be a separate patch.
+No, it doesn't solve all problems, but the question is whether it needs 
+to. We're talking about the scenario where:
 
-Care to send a patch? ;-)
+a) a customer requires FIPS compliance, and
+b) the customer has an app that calls getrandom() and doesn't fallback, 
+and
+c) they're doing so with statically linked binaries or container 
+infrastructure that doesn't allow injection of other libraries
 
-> Or is there a case were pte_index is not defined for an architecture?
-
-Nope, the fix in include/linux/pgtable.h covers MMU architectures and NOMMU
-do not compile mm/memory.c anyway.
-
-> chris
-> -- 
-
--- 
-Sincerely yours,
-Mike.
+How common is this? Does the kernel need to solve this scenario?

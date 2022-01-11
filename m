@@ -2,80 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C061F48BA2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1711C48BA48
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:56:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343874AbiAKVyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 16:54:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245648AbiAKVyZ (ORCPT
+        id S235638AbiAKV4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 16:56:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45312 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343743AbiAKVyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 16:54:25 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C58C061751
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 13:54:25 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id m13so1313962pji.3
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 13:54:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5f2yRwnca4po/TToI5ROjNbeo8iSZ748Ub/QrR0dHuc=;
-        b=EcYu/L/5MbgCkc0L2lvz8kq++K/ZH0L6kyU96mHQoUta86MlYouS8n6Gtky3M+1Y1S
-         wPhzlxv2PiVSZMVHyeV7aFt0UwW3dHGXMDdV419vMkzoTyRYfO4Yljqqg6AujFch4Drv
-         fb107vvImyU7gNrGngWSnpx2pzPfC0aM9s424=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5f2yRwnca4po/TToI5ROjNbeo8iSZ748Ub/QrR0dHuc=;
-        b=UwdSplB+EOoHr0SL50HpaBtYqB5DYN5rbOqubw4ren2gS87G7lWipQ+HAU8PWjYO4w
-         ZWlvJhtYgVK948L0I003sc8Rd0oOwjJUDot5nQGTiNivjWYeKBL2glmckNPcq6TmWrg3
-         oRhSG0N+z+IuM1b6/c3V+rBEH00eJq5zT2bbGetyL6P8LTldJxX4rS+ccjX9Yhn5E9gD
-         UHcAzojUPSU3pddNSbdcfzeQWhoj80sdjWXHO/+2OZYCZld/T0LP4Sm7nJdbUcRiAqbm
-         LW+i0sWWcH7i+IS3Nk9eftM3GXOIC5AP6XXAr8t/S0RpzILSX/iOzhO7CiA5GzAr69VF
-         SjcA==
-X-Gm-Message-State: AOAM532aw0YQG7pIS51ONi+P4Z+K471McnhQnVNK2S65gN20kBqVn4wY
-        9XPJhsp4P5+aNdWOt3zUZQQLqQ==
-X-Google-Smtp-Source: ABdhPJwIONtNTCuP+/Vo0J8+j1E+yBh8BAxbE5zlFWfqgTUvLrNDPMYJfbWwD35RGyvzDpCz9S3efA==
-X-Received: by 2002:a63:1046:: with SMTP id 6mr5708874pgq.602.1641938065083;
-        Tue, 11 Jan 2022 13:54:25 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:f0a7:d33a:2234:5687])
-        by smtp.gmail.com with UTF8SMTPSA id j16sm10322713pfu.216.2022.01.11.13.54.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 13:54:24 -0800 (PST)
-Date:   Tue, 11 Jan 2022 13:54:23 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, jponduru@codeaurora.org,
-        avuyyuru@codeaurora.org, bjorn.andersson@linaro.org,
-        agross@kernel.org, cpratapa@codeaurora.org,
-        subashab@codeaurora.org, evgreen@chromium.org, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 2/2] net: ipa: prevent concurrent replenish
-Message-ID: <Yd38j7mR5vwqlSMZ@google.com>
-References: <20220111192150.379274-1-elder@linaro.org>
- <20220111192150.379274-3-elder@linaro.org>
+        Tue, 11 Jan 2022 16:54:33 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD21761835
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 21:54:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37EBFC36AE3;
+        Tue, 11 Jan 2022 21:54:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641938072;
+        bh=2ElZUm7GetZ+TNF4a6rIglKM1ZYfRPNHb16RWnwiOa0=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=D7PNvQAYUASTtBPY/hPgk3f82JTAreZIGwi/xYntKGjVXGtMDiRgPfZ50DTKDIf/f
+         8zBCsOxdUdUNoOB/4+UlQSifmJXSS78PdH+PMG1skQShQyqou8i5KmGqxowb0V0vaX
+         36NBnji160ici6rzXGfYFRGxXQklXGiwzY+DK226WeId9p4HtqiGa+4eY/hFaCnH8i
+         GT/PGkUNDC/a4u+ZwYxdyeXy+s80Yaw/J4HLB+oC4aBbRR0jV2g3Oevh2RYRZ/YlL0
+         AVEQEw9YNMa11aT6brvupk58nzZl6FPJH/q3t92mksOgpCa2GfNg7jay+YNKmu4oCW
+         FlJs/Aq937wjg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 0286A5C0DA1; Tue, 11 Jan 2022 13:54:31 -0800 (PST)
+Date:   Tue, 11 Jan 2022 13:54:31 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     masahiroy@kernel.org
+Cc:     sfr@canb.auug.org.au, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        caihuoqing@baidu.com, linux@dominikbrodowski.net
+Subject: [PATCH] drivers/pcmcia: Fix ifdef covering yenta_pm_ops
+Message-ID: <20220111215431.GA2609427@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220111192150.379274-3-elder@linaro.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 01:21:50PM -0600, Alex Elder wrote:
-> We have seen cases where an endpoint RX completion interrupt arrives
-> while replenishing for the endpoint is underway.  This causes another
-> instance of replenishing to begin as part of completing the receive
-> transaction.  If this occurs it can lead to transaction corruption.
-> 
-> Use a new atomic variable to ensure only replenish instance for an
-> endpoint executes at a time.
-> 
-> Fixes: 84f9bd12d46db ("soc: qcom: ipa: IPA endpoints")
-> Signed-off-by: Alex Elder <elder@linaro.org>
+Currently, yenta_dev_suspend_noirq(), yenta_dev_resume_noirq(),
+and yenta_pm_ops are covered by "#ifdef CONFIG_PM", which results in
+compiler warnings in kernels built with CONFIG_PM_SLEEP=n and CONFIG_PM=y:
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+drivers/pcmcia/yenta_socket.c:1322:12: warning: ‘yenta_dev_resume_noirq’ defined but not used [-Wunused-function]
+ 1322 | static int yenta_dev_resume_noirq(struct device *dev)
+      |            ^~~~~~~~~~~~~~~~~~~~~~
+drivers/pcmcia/yenta_socket.c:1303:12: warning: ‘yenta_dev_suspend_noirq’ defined but not used [-Wunused-function]
+ 1303 | static int yenta_dev_suspend_noirq(struct device *dev)
+      |            ^~~~~~~~~~~~~~~~~~~~~~~
+
+This affects kernels built without suspend and hibernation.
+
+Avoid these warnings by using "#ifdef CONFIG_PM_SLEEP".
+
+Fixes: 3daaf2c7aae8 ("pcmcia: Make use of the helper macro SET_NOIRQ_SYSTEM_SLEEP_PM_OPS()")
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+
+diff --git a/drivers/pcmcia/yenta_socket.c b/drivers/pcmcia/yenta_socket.c
+index 837877daed622..3966a6ceb1ac7 100644
+--- a/drivers/pcmcia/yenta_socket.c
++++ b/drivers/pcmcia/yenta_socket.c
+@@ -1299,7 +1299,7 @@ static int yenta_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	return ret;
+ }
+ 
+-#ifdef CONFIG_PM
++#ifdef CONFIG_PM_SLEEP
+ static int yenta_dev_suspend_noirq(struct device *dev)
+ {
+ 	struct pci_dev *pdev = to_pci_dev(dev);

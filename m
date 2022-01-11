@@ -2,103 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EF148B2D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E8248B2E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244311AbiAKRGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:06:19 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:59284
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241667AbiAKRGS (ORCPT
+        id S1343857AbiAKRHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:07:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241502AbiAKRHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:06:18 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 11 Jan 2022 12:07:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B028C06173F;
+        Tue, 11 Jan 2022 09:07:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 859B53F31F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:06:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641920777;
-        bh=yHM2E3K7PraAAJZW6vk3OPqoH3vFzda1D3jFgKg0Kxo=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=EVyFf34v1Hhf/iam5SnOpiYtNuQ2u7NkGLT3rKuYZcBvpyb9V+XHwn1PHJ8dZQpzF
-         a5SQ6AwWFH4TjaG/NyH+Zkgv8EWG1iKOefU4quzSRTXkxyptsCUMdrUvg4vTibv9B9
-         DXlL2ROC0YykFm8d8WCabrZsLGvtDLvDPy9HMS1/aenUPhdtqRYTiDgiWqXjLkXpkY
-         KKB/sn3h2E5QSjRQdpdBtNFZr9igNWtEV+/zI03e7Wz6EgmQwQjHb/aFXgV7NEZnEl
-         FtY65v0qATDfEvJ23uCjW/GAame3mZEGcOw705TMCNbG1VGat2U3FifZhT4qcjMUIX
-         LchifHI/0lEIA==
-Received: by mail-ed1-f69.google.com with SMTP id m8-20020a056402510800b003f9d22c4d48so13873083edd.21
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 09:06:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yHM2E3K7PraAAJZW6vk3OPqoH3vFzda1D3jFgKg0Kxo=;
-        b=JfTVT420lH5V1uXTpa7pJaannOEd7BFK9PJGA5pTHYUfDWRuu5RXKwqts78FfdSyKm
-         RwuX5VxDjOAdK59NNMDc0egrqWd51AomUMmiKeJtTXB6Pv6FY2XUN3QC5BDUyRGfvJKT
-         uBI6+V9argNbFcbg6wMWmDys+KvrDyNCCbT+6dNUKKMRWFdUfCtimvZ1jc99jPl5cw/S
-         P7OfX+DDRmF4B+OraZnmMFhN5SRDK5kTRq1ksapAO+Ry89LAQ38Sc5Rw+Gj5OAVES3y1
-         NHiu5jz87eZxmxbEwd33OUKKb258UtIN8CHNNp2Fli6TkWJmhFEEVQ/9ifhrd54WPpMq
-         z/oA==
-X-Gm-Message-State: AOAM531aACpfFAyhRXmLywBe0LlTm55+sw3Ac2zrvAYsMf2J65HJQD6N
-        arYzwOxJ+OuHU2G8ztJSOSTVbZy0GHxfSlNvbZX/6AS5G1LQPR7lOMm/Ol1pHEu+z5hoFXoJZjF
-        bKCbHqde1dEuas7v0M0Qt8RUwH5BwYvAq0PGHRC62eA==
-X-Received: by 2002:a17:907:1b1f:: with SMTP id mp31mr4233121ejc.247.1641920777182;
-        Tue, 11 Jan 2022 09:06:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyNQAYRkR8aH2kKGfF5rTf5NkddVy3w5dhxChqjTNsjXzjMNArOAj98x/iMiCtdSBgXLqHPyg==
-X-Received: by 2002:a17:907:1b1f:: with SMTP id mp31mr4233101ejc.247.1641920777033;
-        Tue, 11 Jan 2022 09:06:17 -0800 (PST)
-Received: from [192.168.0.25] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id ky5sm3688615ejc.204.2022.01.11.09.06.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 09:06:16 -0800 (PST)
-Message-ID: <dd6caaeb-f395-2109-b1a3-6076f8c41ad0@canonical.com>
-Date:   Tue, 11 Jan 2022 18:06:15 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2BE0EB81C01;
+        Tue, 11 Jan 2022 17:07:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9D3BC36AEB;
+        Tue, 11 Jan 2022 17:07:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641920833;
+        bh=Bb3A3XFCuWFd37ZgOFBZ6v9nl+Hpbl1G5QlYpLgRpGY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=FFG3DSiV2Wpd/y9VgiD0yjfSnf2K0AdK+UvJi3GzF6RjCSirT91FRbzTkLRhlbi/x
+         3jJcRnVLq4dbnhkE4Cj4WNAOyenHrlGVlA4ebywvDSKbyrV+3uLI7I4NjbMuvBHrkX
+         wmuEGwi/3mLqHcpONGEH0mZt5i4rzd4nCx+h/EqU8FcUYTXg88H0SLBuVNqoWposvH
+         5o9aGwiLVhllnGoSga5L1s646vAkvYb8Q2WNkfDoR+L6HOdIuWEx4/Yc1aHZxk+Klq
+         53N2//GoOXvw0BDyEFlPCompSGVo+W8ddeLaY7wytpcmlRofvmv0J2VreKJWjUktuZ
+         uchRelT6qVAug==
+Date:   Tue, 11 Jan 2022 11:07:11 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Longji Guo <guolongji@uniontech.com>
+Cc:     bhelgaas@google.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] X86: PCI: ACPI: Remove initialization of static
+ variables to false
+Message-ID: <20220111170711.GA151667@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 3/5] regulator: dt-bindings: maxim,max77843: add MAX77843
- bindings
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Inki Dae <inki.dae@samsung.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Beomho Seo <beomho.seo@samsung.com>
-References: <20211229124631.21576-1-krzysztof.kozlowski@canonical.com>
- <20211229124631.21576-4-krzysztof.kozlowski@canonical.com>
- <YdRrWGry08M+h2IZ@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <YdRrWGry08M+h2IZ@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203080758.962-1-guolongji@uniontech.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2022 16:44, Rob Herring wrote:
-> On Wed, Dec 29, 2021 at 01:46:29PM +0100, Krzysztof Kozlowski wrote:
->> Document the bindings for MAX77843 regulator driver.  The bindings are
->> almost identical to MAX77693 bindings, except the actual names of
->> regulators.
+On Fri, Dec 03, 2021 at 04:07:58PM +0800, Longji Guo wrote:
+> Remove the initialization of pci_ignore_seg to false which is pointless.
 > 
-> Same issues here as your other Maxim regulator conversions.
+> Signed-off-by: Longji Guo <guolongji@uniontech.com>
+
+Applied to pci/enumeration for v5.17, thanks!
+
+> ---
+>  arch/x86/pci/acpi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-
-Thanks, all comments (also from extcon and mfd) applied.
-
-
-Best regards,
-Krzysztof
+> diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
+> index 948656069cdd..052f1d78a562 100644
+> --- a/arch/x86/pci/acpi.c
+> +++ b/arch/x86/pci/acpi.c
+> @@ -20,7 +20,7 @@ struct pci_root_info {
+>  };
+>  
+>  static bool pci_use_crs = true;
+> -static bool pci_ignore_seg = false;
+> +static bool pci_ignore_seg;
+>  
+>  static int __init set_use_crs(const struct dmi_system_id *id)
+>  {
+> -- 
+> 2.20.1
+> 
+> 
+> 

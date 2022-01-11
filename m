@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B4648A59E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 03:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D21048A5A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 03:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244313AbiAKC0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 21:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S1346598AbiAKC0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 21:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244189AbiAKC0O (ORCPT
+        with ESMTP id S244334AbiAKC0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 21:26:14 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA732C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 18:26:13 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id j83so43433396ybg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 18:26:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P1ENhSWsAV/dz7z50ZJCYCuaP4VRXWxn4r2j+Sg+6UA=;
-        b=T55GOK2PpaNsrGqiMFTAqH2V7QdMHJhf0a3BMQ7I8S2f2h7BI4JXGBsntFUbrKsnrl
-         rEzOH+AqALeZAy8Qhyi3rFQo8NaIqguy97C9ERCdlxVx+n7E8WH64/TjwHln91YBdBBk
-         AWYzFw4wU9mhtUfJSXGLzZymCyI9uQqeU39t+zioXUDqxTWAI0BMcwXbJxPBATEie6rv
-         xQARIPZV9m3Nn76w+UJ2xS8QDkRdVgio/eXbMdoElnUL60H99TIz4WO/aNSZ8URTri7U
-         84EE4GnWjFwaNRNtzSO8JCOqqvhya0pINZ5DHiHwfs7OeADtTaDkmdukFBkr8yOlXG57
-         zZYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P1ENhSWsAV/dz7z50ZJCYCuaP4VRXWxn4r2j+Sg+6UA=;
-        b=sprBonu+zBN9hg0h2cfa0YHED8ajGjxfCbGbWu/z18tp9ToHAnxNuGLB46sQyuUxlb
-         E7KsKdTEMATNm9JWZqAVvLg/uQu7dnX/PNbuJ7T5QSzaRgfJfq0h/8TG/MmtmLH1PChb
-         XWc9kwF1vQZgg8pg4zP6SOrVlzXWzCwqPaXhlfSFnoOqzmnCzWfUhQ/9LB4UlEPV3ZfG
-         nbELCWuq+H5Bw2FuhpnQT/vlmTpRvP1ux9zsv0U+TBl+yXhSwOQGEVh6aovSsx7xVSpj
-         gPpgC3AOvesYpKH1yekwN4bGtPuYNlEsccxNc5M3VJcZxnJK4mnGL+7lWWDqBhMATngI
-         A0wA==
-X-Gm-Message-State: AOAM532IeQ70JqW8Fg20T/eZ5yw5hksEimEcXg31CPCul296bz+r1b+2
-        EcqRvovRjLgKoxLiP+YhKib5m6VDc16/JjFm7swysw==
-X-Google-Smtp-Source: ABdhPJxowJER3pmqEV7tisAM0wfJwlxJtB+yz5CCw6efvbLqhAjzPpwfWxGFtuk58ztzM2xStozGxj4PibwWfRfK6RY=
-X-Received: by 2002:a25:b194:: with SMTP id h20mr3367724ybj.485.1641867973020;
- Mon, 10 Jan 2022 18:26:13 -0800 (PST)
+        Mon, 10 Jan 2022 21:26:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF56C06173F;
+        Mon, 10 Jan 2022 18:26:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1EB1614AD;
+        Tue, 11 Jan 2022 02:26:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C82B3C36AE9;
+        Tue, 11 Jan 2022 02:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641867996;
+        bh=RoS5hZ6L8a7Wi1YOqt08vug9u+dcIkraLKLNW7lPZyc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hGXMcP2jIxMqnKzLok7ha4kWfvc5Rn2CklJr5NMTvSnju9j2IVpr0s3UY9kmjx/Wj
+         igkhJsD2G2a9H2i9Txe0DxBx1E3hY8Xy+nqWaGErttm1KA60a+jqtHynRQskQFvHOb
+         4B75DYifrZMFgiUPw3KIcPU00DD6v7W4tC7LTDYEDNREsH6CFf59B0lTswyE+/5Pb1
+         5bVIexCXR45V+8RLk7HYMJej339BOxU7FDcWUi99cvbm6PfbFFsFi2Lb5M1AQsg5Vh
+         m7lP3sgoVgKujmGN5JbsFhrSImk6vTXjM3UltGLh3R4LRILqL3LGnOI8DQuXl3nQ8w
+         xOepiqJCnLvDQ==
+Date:   Tue, 11 Jan 2022 04:26:25 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, ardb@kernel.org, jmorris@namei.org,
+        serge@hallyn.com, nayna@linux.ibm.com, keescook@chromium.org,
+        torvalds@linux-foundation.org, weiyongjun1@huawei.com,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
+        konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 8/8] integrity: Only use machine keyring when
+ uefi_check_trust_mok_keys is true
+Message-ID: <Ydzq0d+TzMmtohsV@iki.fi>
+References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
+ <20220105235012.2497118-9-eric.snowberg@oracle.com>
+ <YdoQbKD/jJompy6I@iki.fi>
+ <2aa9e4b290424c869afe983ed63b5a0c4d12df36.camel@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220111010302.8864-1-richard.weiyang@gmail.com> <20220111010302.8864-2-richard.weiyang@gmail.com>
-In-Reply-To: <20220111010302.8864-2-richard.weiyang@gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 11 Jan 2022 10:25:37 +0800
-Message-ID: <CAMZfGtWBt+qYB1-NS+G8Tzk0pm6UZGvENZFBWrz+i35=N1kOAw@mail.gmail.com>
-Subject: Re: [PATCH 2/4] mm/memcg: mem_cgroup_per_node is already set to 0 on allocation
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <guro@fb.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2aa9e4b290424c869afe983ed63b5a0c4d12df36.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 9:03 AM Wei Yang <richard.weiyang@gmail.com> wrote:
->
-> kzalloc_node() would set data to 0, so it's not necessary to set it
-> again.
->
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+On Sat, Jan 08, 2022 at 08:47:21PM -0500, Mimi Zohar wrote:
+> On Sun, 2022-01-09 at 00:30 +0200, Jarkko Sakkinen wrote:
+> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > 
+> > Mimi, have you tested these patches already?
+> 
+> Sorry, not yet this version this of the patch set.  Planning to test
+> shortly.
+> 
+> Mimi
+> 
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Yeah, it is otherwise good IMHO. It's too late for v5.17 tho, so there is
+no rush. We will get this to v5.18.
 
-Thanks.
+/Jarkko

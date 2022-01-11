@@ -2,168 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 812CF48B180
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E8248B185
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349768AbiAKQBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 11:01:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349734AbiAKQBj (ORCPT
+        id S1349777AbiAKQDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 11:03:00 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4044 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240042AbiAKQC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 11:01:39 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0C2C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:01:38 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id m1so24784668lfq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 08:01:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Q2AS3TycxvQevBVYSjYR4nMIYCUKzDFIHcZBkFvEUh8=;
-        b=PEJK0uUzswSNHeEIUqeC8L1+7Mc20M0ZjBZuw5++ylPnGIp+qQ7sHzfLt1gdOAyTA7
-         kaUGUTfHh2v/YlLeOYj7EVD/V0SCsTRjyQKDXii5zE0uhOaWP08q58KU6EXmQHaOPRIX
-         BeBajHU/kBiX3LZMcRxOA2KQde7/GvH5bFXF8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Q2AS3TycxvQevBVYSjYR4nMIYCUKzDFIHcZBkFvEUh8=;
-        b=TBonaHsZUcmocNGPuNWTITpK6nYu0A5PfYLTKe58z7n5RGggmHDjjzqgzNQSzuAzw4
-         M76BNfrNoWMskqYxpjQrFZmdBhej1/2ae3SjVjPz4eoTyd2qesdY6dwQqnm6h5PRxwL5
-         fc0KCNYKcTzvtv1pBCP0wSM44D/rF+8GAPK55paJlxuEHqyYMtOfD75uBLV/TWScP4rR
-         nxp0uTvnr20q6LHpAvER4Bl73sb9Hhb8W8pmV7qej7nKCZAtZTqTaBiAunJwyszApRZQ
-         z3XU7oFqD1qce/OQwIwaMHHEnNvI4RFowS3xvN3moFPUN2wPxq5dTJPnKAFrVv17i4u8
-         /hUg==
-X-Gm-Message-State: AOAM531qUDuPKE1VIaurDgLAFulddd1tYn2MEr0XAZVDZKDK3H9k/zX4
-        3jrtXklxcwiFdm8sZLUGyJ+fgg==
-X-Google-Smtp-Source: ABdhPJyU7ZLqlohFzOd47OnZPgm3hPrl0/6UYKuMwycVjGJc9vAxSJGYIov6dSe39xOdJKJ2SmVcIA==
-X-Received: by 2002:ac2:4c45:: with SMTP id o5mr3921318lfk.687.1641916896972;
-        Tue, 11 Jan 2022 08:01:36 -0800 (PST)
-Received: from [172.16.11.17] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id f6sm1373976lfg.67.2022.01.11.08.01.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 08:01:36 -0800 (PST)
-Subject: Re: [RFC 1/2] printk/dynamic_debug: Remove cyclic dependency between
- printk.h and dynamic_debug.h
-To:     Petr Mladek <pmladek@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Chris Down <chris@chrisdown.name>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Scull <ascull@google.com>,
-        Will Deacon <will@kernel.org>, Jason Baron <jbaron@akamai.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20220111143046.14680-1-pmladek@suse.com>
- <20220111143046.14680-2-pmladek@suse.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <996a7cf5-b047-5038-c86b-f10820364465@rasmusvillemoes.dk>
-Date:   Tue, 11 Jan 2022 17:01:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 11 Jan 2022 11:02:59 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BEUe2m035994;
+        Tue, 11 Jan 2022 16:02:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=dMRAPPyuMvF9myQdsG2sQNq5e8o8ZFFCRM9aoVDt6Ew=;
+ b=L4q3jur4wwQMEYRepCd2MrQwBoYDzJFm2hZEgeVs7+6wSM+4aSzSdYWZIJQgvMe2Vl6v
+ KSbEQNx1AN8Kyy61kBTEjafX3kLiLijQgCAn0wChBlZ6a5oS6QdrrgIlAdYX/tsCq49M
+ RmdbzFNTxaBozODDww3AJolpT0Br8CPZ/ErU70C//7vsQMgxSIT6SI+oFLI+FVBtn0xB
+ vTRrHq/nxYtws5dBT+BmYkQddN0ghm4NfeEJpi96zL5qCthkA6rYro3TXsvd2XA9z3ds
+ eU6rcZM7Wz+7+8j5xXKBm7Lrs8wOQh5GB+rMerLXYFg6Yx0ONrI+BVFXakiGtfUCSsI7 uA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfmjf1j4c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 16:02:56 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20BFmAZB009888;
+        Tue, 11 Jan 2022 16:02:55 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dfmjf1j3j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 16:02:55 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20BFmAAm029495;
+        Tue, 11 Jan 2022 16:02:53 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma02fra.de.ibm.com with ESMTP id 3df289yngt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 16:02:53 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BG2pFw39715102
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jan 2022 16:02:51 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1FF954C05E;
+        Tue, 11 Jan 2022 16:02:51 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C650D4C052;
+        Tue, 11 Jan 2022 16:02:50 +0000 (GMT)
+Received: from [9.145.30.70] (unknown [9.145.30.70])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Jan 2022 16:02:50 +0000 (GMT)
+Message-ID: <b1882268-d8bb-eee9-8238-e30962928034@linux.ibm.com>
+Date:   Tue, 11 Jan 2022 17:02:53 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220111143046.14680-2-pmladek@suse.com>
-Content-Type: text/plain; charset=windows-1252
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH net 3/3] net/smc: Resolve the race between SMC-R link
+ access and clear
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1641806784-93141-1-git-send-email-guwen@linux.alibaba.com>
+ <1641806784-93141-4-git-send-email-guwen@linux.alibaba.com>
+ <8f13aa62-6360-8038-3041-86fd51b40a3e@linux.ibm.com>
+ <fa057e34-7626-2b19-2c2e-acd4999e7fe5@linux.alibaba.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <fa057e34-7626-2b19-2c2e-acd4999e7fe5@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: CJDdKF2Pw4wYIPPP1_oN8N7Alr7CQzli
+X-Proofpoint-ORIG-GUID: emefwc9y2-8gEEFrZAKVMPb_lGlEVoLj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 bulkscore=0 suspectscore=0 phishscore=0
+ impostorscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
+ mlxlogscore=999 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201110091
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 15.30, Petr Mladek wrote:
-> `make headerdep` reports many circular dependencies with the same
-> pattern:
+On 11/01/2022 16:49, Wen Gu wrote:
+> Thanks for your review.
 > 
-> In file included from linux/printk.h,
->                  from linux/dynamic_debug.h:188
->                  from linux/printk.h:559 <-- here
+> On 2022/1/11 4:40 pm, Karsten Graul wrote:
+>> On 10/01/2022 10:26, Wen Gu wrote:
+>>> @@ -1226,15 +1245,23 @@ void smcr_link_clear(struct smc_link *lnk, bool log)
+>>>       smc_wr_free_link(lnk);
+>>>       smc_ib_destroy_queue_pair(lnk);
+>>>       smc_ib_dealloc_protection_domain(lnk);
+>>> -    smc_wr_free_link_mem(lnk);
+>>> -    smc_lgr_put(lnk->lgr); /* lgr_hold in smcr_link_init() */
+>>>       smc_ibdev_cnt_dec(lnk);
+>>>       put_device(&lnk->smcibdev->ibdev->dev);
+>>>       smcibdev = lnk->smcibdev;
+>>> -    memset(lnk, 0, sizeof(struct smc_link));
+>>> -    lnk->state = SMC_LNK_UNUSED;
+>>>       if (!atomic_dec_return(&smcibdev->lnk_cnt))
+>>>           wake_up(&smcibdev->lnks_deleted);
+>>
+>> Same here, waiter should not be woken up until the link memory is actually freed.
+>>
 > 
-> It looks like false positive:
+> OK, I will correct this as well.
 > 
->    + printk.h includes dynamic_debug.h when CONFIG_DYNAMIC_DEBUG_CORE
->    + dynamic_debug.h includes printk.h when !CONFIG_DYNAMIC_DEBUG_CORE
-> 
-> Anyway, it would be great to get rid of this dependency because it is
-> tricky and it might hit us in the future. Also it might hide another
-> more complicated cyclic dependencies.
-> 
-> One solution would be to move the inlined ddebug_dyndbg_module_param_cb()
-> and dynamic_debug_exec_queries() from 'dynamic_debug.h' into some .c so
-> that it will not be needed to inline printk() in 'dynamic_debug.h'.
-> 
-> The obvious location would be 'lib/dynamic_debug.c'. But it is built
-> only when CONFIG_DYNAMIC_DEBUG_CORE is set. And the problematic
-> inline variants are used only when this config option is _not_ set.
-> So that it is not that easy.
-> 
-> Instead, this patch adds 'include/linux/printk_core.h' and moves some
-> lowlevel printk API there. Then the raw _printk() can be called from
-> the inlined code in 'dynamic_debug.h'.
+> And similarly I want to move smc_ibdev_cnt_dec() and put_device() to
+> __smcr_link_clear() as well to ensure that put link related resources
+> only when link is actually cleared. What do you think?
 
-
-Urgh, this doesn't look like the right approach.
-
->  
->  static inline int ddebug_add_module(struct _ddebug *tab, unsigned int n,
->  				    const char *modname)
-> @@ -202,9 +202,8 @@ static inline int ddebug_dyndbg_module_param_cb(char *param, char *val,
->  						const char *modname)
->  {
->  	if (strstr(param, "dyndbg")) {
-> -		/* avoid pr_warn(), which wants pr_fmt() fully defined */
-> -		printk(KERN_WARNING "dyndbg param is supported only in "
-> -			"CONFIG_DYNAMIC_DEBUG builds\n");
-> +		/* Use raw _printk() to avoid cyclic dependency. */
-> +		_printk(KERN_WARNING "dyndbg param is supported only in CONFIG_DYNAMIC_DEBUG builds\n");
->  		return 0; /* allow and ignore */
->  	}
->  	return -EINVAL;
-
-It looks like this has only one caller, kernel/module.c. I suggest
-simply moving the match logic into unknown_module_param_cb(), making it
-on par with the other "generic" module parameter async_probe. That is,
-do something like
-
-
-  if (strstr(param, "dyndbg")) {
-    if (IS_ENABLED(CONFIG_DYNAMIC_DEBUG)) {
-      return ddebug_dyndbg_module_param_cb(param, val, modname)
-    }
-    pr_warn("dyndbg param is supported only in ...");
-    return 0; /* allow and ignore */
-  }
-
-  pr_warn("%s: unknown parameter '%s' ignored\n", modname, param);
-  return 0;
-
-That makes it simpler to add more magic/generic module parameters in
-unknown_module_param_cb(). No need for a static inline stub, and no need
-for conditionally declaring ddebug_dyndbg_module_param_cb(). So all that
-is needed in dynamic_debug.h is to remove the static inline definition,
-and pull the declaration outside #if defined(CONFIG_DYNAMIC_DEBUG_CORE)
-protection.
-
-What's with the strstr, btw? Shouldn't it just be !strcmp()?
-
-> @@ -223,7 +222,8 @@ static inline int ddebug_dyndbg_module_param_cb(char *param, char *val,
->  
->  static inline int dynamic_debug_exec_queries(const char *query, const char *modname)
->  {
-> -	pr_warn("kernel not built with CONFIG_DYNAMIC_DEBUG_CORE\n");
-> +	/* Use raw _printk() to avoid cyclic dependency. */
-> +	_printk(KERN_WARNING "kernel not built with CONFIG_DYNAMIC_DEBUG_CORE\n");
->  	return 0;
->  }
-
-And for this one I think the solution is even simpler, as I can't find
-any in-tree callers. Perhaps just nuke it entirely?
-
-Rasmus
+I think that's a good idea, yes.

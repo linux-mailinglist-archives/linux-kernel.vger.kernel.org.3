@@ -2,175 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9138048AA49
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D79AB48AA4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 10:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349195AbiAKJQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 04:16:42 -0500
-Received: from ewsoutbound.kpnmail.nl ([195.121.94.167]:13966 "EHLO
-        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236935AbiAKJQl (ORCPT
+        id S1349216AbiAKJSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 04:18:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42151 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236935AbiAKJSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 04:16:41 -0500
-X-KPN-MessageId: 18605330-72bf-11ec-9a2e-005056abbe64
-Received: from smtp.kpnmail.nl (unknown [10.31.155.40])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id 18605330-72bf-11ec-9a2e-005056abbe64;
-        Tue, 11 Jan 2022 10:16:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:to:subject:from:mime-version:date:message-id;
-        bh=7sMnICIvN+Dgs1egxxA2KorGhnbnx8+H8ysgISZGjBM=;
-        b=O+VWJ3fydQKr/WgCwUUWXqnzQFTBFgG0EkTTMJdLmewLsT7CZ9ZmNi0fzC2sjZH8qofQDk8eHZOIO
-         nluQUA6GemGvglSxLCKhGbeDxd2ESFKRdmPi3okyQpmYBPi4K0uaAVCn8zxWCjOp0tk3puIezD7PUa
-         anmqUQEQoXK9oRFTwq1DVA0NHAz5zbXWeVYHEd7u0ld6iqzwvx1tggBoprZ15A4nRiVReO1aLLUyV5
-         vzY39+LOROlWjCUvbkKPKMmEtkraXwY+iSaxL4MQ01zm1MFEit8WoqepKUz37CR3iAxv3QM4I+XnAv
-         VV7GAtjvHB2HPpDVdhAujnXiTVfmYMg==
-X-KPN-VerifiedSender: No
-X-CMASSUN: 33|yDCXCyXpplCIeGif+s2ZnTO+p3G+Zr6ynyRziGuFOJP6KoBiLoJbafN8cEzivH+
- cB1dtil5/MYuCW00gRos5CA==
-X-Originating-IP: 193.91.129.219
-Received: from [192.168.2.10] (cdb815bc1.dhcp.as2116.net [193.91.129.219])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id 2dbeb6da-72bf-11ec-b76f-005056ab7584;
-        Tue, 11 Jan 2022 10:16:38 +0100 (CET)
-Message-ID: <368bc1b7-ff86-beaa-6749-afbe5960eaeb@xs4all.nl>
-Date:   Tue, 11 Jan 2022 10:16:37 +0100
+        Tue, 11 Jan 2022 04:18:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641892716;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6oHUrM3RS+L3Vz7kWz+c3UDjVYd8L99qu3vLDUjDJeI=;
+        b=KOLQPoBCSaHP1ummHXjEBhjc61y1qLnHF/vgYn5s1E5pelhJltCTmUIx2DRQ8BMRINHYWf
+        hD67K8J7tjYkmnKNyGuJLOnbj0MoZgRcD+pIQseABYj3cfXVSkhjPyfTUmWIGhOVRoO2PS
+        nR7ZPg/PM2oxJ+kqjDGTli5W61GXy+0=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-381-_30HZ7dWPYmLU48hgGBkHQ-1; Tue, 11 Jan 2022 04:18:35 -0500
+X-MC-Unique: _30HZ7dWPYmLU48hgGBkHQ-1
+Received: by mail-wm1-f70.google.com with SMTP id v23-20020a05600c215700b0034566adb612so2906482wml.0
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 01:18:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6oHUrM3RS+L3Vz7kWz+c3UDjVYd8L99qu3vLDUjDJeI=;
+        b=cmKwTPO7y/+qndR5Rz2QE0117SsqShG00jqpcnt4d/UtiZpOCz0DSFW8cJVBP+cpMV
+         KnKdHhkumDms3hUVGsAm8IPaZ0ycDeMQXsYcSezeDul+tHo9x56HQebJpBB/mA5d/RoO
+         olGbDxiRHFbFKsbJSt1ER+pj/PA5+rzBI1Nr46V+ynIcBs3MTqynoO0RkjxytzFhjxXl
+         b0h4mXSOsdMvUdKzEw48uBCun39mWSZozeUxROEXcs7oRcHgDp2BHroBmqtdRm0FNLKL
+         L01g3q9lRq8kl+FQZDXAgHdjmVzEkIjVEQmb9OtCT9Wy7CbdU4aZA/gOfZQUsaoD1Yfo
+         3QsA==
+X-Gm-Message-State: AOAM531FO/K6xu0cg9w2HCWelZLmkGOzJOr2NPqTsAp56T+ApksG0rMC
+        NyNZ5APuIgMqxhnHJwFmMR1Sc3//lJLYC0FQV/FgWZkAppIMrsgueVAp1w7YIiJpmQ4+s+lqO9K
+        hMdLQTHQewuZnxiaHsgXpPFOq
+X-Received: by 2002:a05:6000:1e07:: with SMTP id bj7mr3051691wrb.126.1641892713134;
+        Tue, 11 Jan 2022 01:18:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyiPRTSDhAfJev3SQP2RODjc8Dk9f2YD2fksE5REufjVnPUKkWdd61Xhdqv1491aGkI0dXbAQ==
+X-Received: by 2002:a05:6000:1e07:: with SMTP id bj7mr3051663wrb.126.1641892712909;
+        Tue, 11 Jan 2022 01:18:32 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id p11sm10444194wru.99.2022.01.11.01.18.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 01:18:32 -0800 (PST)
+Message-ID: <3fb108bc-08c5-032c-bbe1-c819e85a91ed@redhat.com>
+Date:   Tue, 11 Jan 2022 10:18:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.4.1
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: Re: [PATCH v3] media: meson: vdec: Fix a NULL pointer dereference in
- amvdec_add_ts()
-To:     Zhou Qingyang <zhou1615@umn.edu>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Cc:     kjlu@umn.edu, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Maxime Jourdan <mjourdan@baylibre.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211214144613.35fec82a@coco.lan>
- <20211215033535.40422-1-zhou1615@umn.edu>
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1 2/2] drm/sprd: fix potential NULL dereference
 Content-Language: en-US
-In-Reply-To: <20211215033535.40422-1-zhou1615@umn.edu>
+To:     Kevin Tang <kevin3.tang@gmail.com>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, mark.rutland@arm.com
+Cc:     devicetree@vger.kernel.org, zhang.lyra@gmail.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        lukas.bulwahn@gmail.com, orsonzhai@gmail.com, zou_wei@huawei.com,
+        pony1.wu@gmail.com, dan.carpenter@oracle.com
+References: <20211224141213.27612-1-kevin3.tang@gmail.com>
+ <20211224141213.27612-3-kevin3.tang@gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20211224141213.27612-3-kevin3.tang@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zhou Qingyang, this is exactly the patch Neil wrote, except you just stuck your
-name on it. Not nice.
+On 12/24/21 15:12, Kevin Tang wrote:
+> platform_get_resource() may fail and return NULL, so check it's value
+> before using it.
+> 
+> 'drm' could be null in sprd_drm_shutdown, and drm_warn maybe dereference
+> it, remove this warning log.
+>
 
-Neil, can you post your patch with your own Signed-off-by, then I'll take that one.
+I would split this second change in a separate patch and just keep this
+one about checking the platform_get_resource() return value.
 
-Regards,
+If you do that, feel free to add:
 
-	Hans
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
-On 15/12/2021 04:35, Zhou Qingyang wrote:
-> In amvdec_add_ts(), there is a dereference of kzalloc(), which could lead
-> to a NULL pointer dereference on failure of kzalloc().
-> 
-> Fix this bug by adding a NULL check of new_ts.
-> 
-> This bug was found by a static analyzer[1].
-> 
-> Builds with CONFIG_VIDEO_MESON_VDEC=m show no new warnings,
-> and our static analyzer no longer warns about this code.
-> 
-> Fixes: 876f123b8956 ("media: meson: vdec: bring up to compliance")
-> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> ---
-> 
-> [1] The analysis employs differential checking to identify inconsistent
-> security operations (e.g., checks or kfrees) between two code paths and
-> confirms that the inconsistent operations are not recovered in the 
-> current function or the callers, so they constitute bugs.
-> 
-> Note that, as a bug found by static analysis, it can be a false
-> positive or hard to trigger. Multiple researchers have cross-reviewed
-> the bug.
-> 
-> Changes in v3:
->   -  Change the description of patch
->   -  Turn the return type from 'void' to 'int'
->   -  Check the return value in the caller 'esparser_queue()'
-> 
-> Changes in v2:
->   -  Delete dev_err() message
-> 
->  drivers/staging/media/meson/vdec/esparser.c     | 7 ++++++-
->  drivers/staging/media/meson/vdec/vdec_helpers.c | 8 ++++++--
->  drivers/staging/media/meson/vdec/vdec_helpers.h | 4 ++--
->  3 files changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
-> index db7022707ff8..095100a50da8 100644
-> --- a/drivers/staging/media/meson/vdec/esparser.c
-> +++ b/drivers/staging/media/meson/vdec/esparser.c
-> @@ -328,7 +328,12 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
->  
->  	offset = esparser_get_offset(sess);
->  
-> -	amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
-> +	ret = amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
-> +	if (!ret) {
-> +		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
-> +		return ret;
-> +	}
-> +
->  	dev_dbg(core->dev, "esparser: ts = %llu pld_size = %u offset = %08X flags = %08X\n",
->  		vb->timestamp, payload_size, offset, vbuf->flags);
->  
-> diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
-> index b9125c295d1d..06fd66539797 100644
-> --- a/drivers/staging/media/meson/vdec/vdec_helpers.c
-> +++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
-> @@ -227,13 +227,16 @@ int amvdec_set_canvases(struct amvdec_session *sess,
->  }
->  EXPORT_SYMBOL_GPL(amvdec_set_canvases);
->  
-> -void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
-> -		   struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
-> +int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
-> +		  struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
->  {
->  	struct amvdec_timestamp *new_ts;
->  	unsigned long flags;
->  
->  	new_ts = kzalloc(sizeof(*new_ts), GFP_KERNEL);
-> +	if (!new_ts)
-> +		return -ENOMEM;
-> +
->  	new_ts->ts = ts;
->  	new_ts->tc = tc;
->  	new_ts->offset = offset;
-> @@ -242,6 +245,7 @@ void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
->  	spin_lock_irqsave(&sess->ts_spinlock, flags);
->  	list_add_tail(&new_ts->list, &sess->timestamps);
->  	spin_unlock_irqrestore(&sess->ts_spinlock, flags);
-> +	return 0;
->  }
->  EXPORT_SYMBOL_GPL(amvdec_add_ts);
->  
-> diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
-> index 88137d15aa3a..4bf3e61d081b 100644
-> --- a/drivers/staging/media/meson/vdec/vdec_helpers.h
-> +++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
-> @@ -56,8 +56,8 @@ void amvdec_dst_buf_done_offset(struct amvdec_session *sess,
->   * @offset: offset in the VIFIFO where the associated packet was written
->   * @flags: the vb2_v4l2_buffer flags
->   */
-> -void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
-> -		   struct v4l2_timecode tc, u32 offset, u32 flags);
-> +int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
-> +		  struct v4l2_timecode tc, u32 offset, u32 flags);
->  void amvdec_remove_ts(struct amvdec_session *sess, u64 ts);
->  
->  /**
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

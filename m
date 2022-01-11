@@ -2,250 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7511A48A706
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 06:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D824848A70F
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 06:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234576AbiAKFPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 00:15:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+        id S235916AbiAKFQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 00:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233896AbiAKFO7 (ORCPT
+        with ESMTP id S235370AbiAKFQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 00:14:59 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AE2C061748
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 21:14:58 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id i3so44013369ybh.11
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 21:14:58 -0800 (PST)
+        Tue, 11 Jan 2022 00:16:08 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C046C061756
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 21:16:08 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so1144724wme.0
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 21:16:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=F1DnS9sCmbdeb4JrbE2m/+T6GWQXHNi5EGutXDvA3b4=;
-        b=B+1y0he3f2uT2uw6Qquv5i3oxPVwwyTgAM7PFihWed5i7NzYtMpIwuAmHaW0jxi5aW
-         plGvuh1VgGiFZImCHIh6QPWuKVLt6PFXJr10Wm9lDGIGJiQL8D02eCgrI8uMMHpkzNtj
-         07bAdPyGUSmXrIlEz94j5d7rrx5UtFsDcecDdgOvOldIIZruWZiHgovPGC2JiWH7ZK/V
-         /A2Ohx22LS0TVKFIDORjWZMRcKBScKj0YU10x0F1zarn5EFrISvlbRMFL6GgZG3n2gO5
-         Dybrv4nHKaxKhJcVx3X/5ejet+QXB90DaOAz7VVKFa5Koxzt4Ewfk28dwse9hkXbJa4a
-         DQaQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=bSNX6pQ/gPr4FEh3I35IahXDeli5OYEUEUgSyYahM0RBqCz2HCrKkHdxBPgWHNu94r
+         /WBHXdiRvCVry+Yh0JS/FWbJzzsD9axM8rN+Rln/ZctuUTXTJZA/vHo0ZzKrezGBxr4C
+         aKEsRXsSEWTNd+YTFfkB+dFwaIzBAandwINO7N57+GDER3xSs8yyvkNYHhilAAR4RUOc
+         SPssizuxC22BRCyfsrI0D8rZvm3N7kmGb8li/PSIay0smLZQeThoVpIykohPtHtl7r8b
+         ll2henPGTyO+GD6aiOV7sbQCTOwD7rupSm3IYcbvNlrpiw2Z7grgF0e66xSByZX9yjsy
+         aT8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=F1DnS9sCmbdeb4JrbE2m/+T6GWQXHNi5EGutXDvA3b4=;
-        b=Jo0IBBX1ZOunfycGhPlFCEm6Ov1MXjkbcy566NkHHHC4/Gq8OBjmuaenBmmbrv2LV2
-         Ww+uUuro+otV2Eu3y/JKQVoxsqi6yrCpglIMDQGUwlnBWUK9yT157l3cmQr8qlG7k0W6
-         330GxhTSL99ctNHfWUBm5C7d1LxWyRKK3za4J7calphkHxuEAvsXAKL88ZOvYyxPzxee
-         fc2luXxjdo+OHR0DugDvZeNDHVgwpyq9tWu9PLkapG9weAT0odbeYK31jvyajaGCgXX2
-         7GfwtYmEJW52CAwowKeEgyp1XOOey4/emCUsva+EN8AvPsJr/1S1UmRo8VHeRZ2Hi+0j
-         y1Rg==
-X-Gm-Message-State: AOAM531u8NjMS1+O1tHBXa4RPaNbfza1Y78HaBQzcHw2WNXKwy8ZhHsC
-        oCr/yXCMrVGJWZXB4xDD28b1/SsOvsIfj3vXVMQwFX1zenVboQ==
-X-Google-Smtp-Source: ABdhPJwjrbbHpyHT5HbhjU4WFLXOGAm53DJGXXsHAcO7EA8L+8O9q7Z7b6EWiCNetOSMv1U8JjT3NCbzfw98IfUS2JI=
-X-Received: by 2002:a25:2416:: with SMTP id k22mr3808436ybk.553.1641878097867;
- Mon, 10 Jan 2022 21:14:57 -0800 (PST)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=JXBaXdum1K7ga4+fqYJdldM5UuSt7uyQgBnxiTi1STOKNhBolJ9RT2mrK3mSvpvG5R
+         EG5mAqMvH5sDO6Ory+aJimuWN6Lqq+cO89nmCO3FLr8bKsYqNJXd9/jdhtH47pA1CFoY
+         4BITPJDkY2BcQy/CyNLepLkzDevK0dPE5axKCtlfx/7NvziflLe4UGsoGxdnv2MVIJel
+         Zv1BCIOOaMl9+7W48HJa84n4FN/hBGkjqsNO+9Op57yo8Vsv91NXM3pvwex3CgxWlEd2
+         m75vOtNJlgQ91dPh924KN7VDf5FOpEUyYMr5Nr8KAAMpfSE6eVI6J6GwhqoWziTmfFj/
+         T1Ig==
+X-Gm-Message-State: AOAM533VMeGObmH7kcGNTD6zvtF4zzAavSECjds8iD2ID5CtgnRVRvJD
+        vbiHSsChHchiX7NMRDkEkxqNjIodgkEDvHAmJmI=
+X-Google-Smtp-Source: ABdhPJxZI0sL5WkNZkjLcPzlXq850Kv17cFxNIadwYuWoomnJAWw3WfPrhrOImo0YOA2ba+0JgLiacoMQkcDgIZWASc=
+X-Received: by 2002:a05:600c:384f:: with SMTP id s15mr867378wmr.179.1641878166919;
+ Mon, 10 Jan 2022 21:16:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20220110071821.500480371@linuxfoundation.org>
-In-Reply-To: <20220110071821.500480371@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 11 Jan 2022 10:44:46 +0530
-Message-ID: <CA+G9fYu+CPS8mx0h2c-Y-uaoRA42te93UfA6v3ygWimZ6Ly8-g@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/72] 5.15.14-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Sender: donnalouisemchince@gmail.com
+Received: by 2002:adf:e3c8:0:0:0:0:0 with HTTP; Mon, 10 Jan 2022 21:16:06
+ -0800 (PST)
+From:   DINA MCKENNA <dinamckennahowley@gmail.com>
+Date:   Tue, 11 Jan 2022 05:16:06 +0000
+X-Google-Sender-Auth: kZD7G7PJX5WZVJp10iD8l2oOCLk
+Message-ID: <CA+4Ruvsk8FpA_BfBHxHwkiNgTSOwxA0jmzeeUdBC5EZekZOt6w@mail.gmail.com>
+Subject: Calvary greetings.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jan 2022 at 13:03, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.14 release.
-> There are 72 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 12 Jan 2022 07:18:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.14-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hello my dear,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina. Howley Mckenna, a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country  for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die.. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+I'm waiting for your immediate reply..
 
-## Build
-* kernel: 5.15.14-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: e8d40b0a77381adfdcadb8307596341334c9e18d
-* git describe: v5.15.13-73-ge8d40b0a7738
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.13-73-ge8d40b0a7738
-
-## Test Regressions (compared to v5.15.11-129-g47b0c2878802)
-No test regressions found.
-
-## Metric Regressions (compared to v5.15.11-129-g47b0c2878802)
-No metric regressions found.
-
-## Test Fixes (compared to v5.15.11-129-g47b0c2878802)
-No test fixes found.
-
-## Metric Fixes (compared to v5.15.11-129-g47b0c2878802)
-No metric fixes found.
-
-## Test result summary
-total: 97540, pass: 83368, fail: 678, skip: 12534, xfail: 960
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 263 total, 257 passed, 6 failed
-* arm64: 42 total, 40 passed, 2 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 37 passed, 3 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 31 passed, 6 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 56 total, 50 passed, 6 failed
-* riscv: 28 total, 23 passed, 5 failed
-* s390: 22 total, 20 passed, 2 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 42 total, 40 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+May God Bless you,
+Mrs. Dina. Howley Mckenna.

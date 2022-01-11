@@ -2,180 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBCE48A57E
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 03:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F5748A584
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 03:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346552AbiAKCPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 21:15:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        id S1346556AbiAKCXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 21:23:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346248AbiAKCPk (ORCPT
+        with ESMTP id S239445AbiAKCXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 21:15:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3220CC06173F;
-        Mon, 10 Jan 2022 18:15:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3FA06149E;
-        Tue, 11 Jan 2022 02:15:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A805CC36AE9;
-        Tue, 11 Jan 2022 02:15:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641867339;
-        bh=sUbIUOCDZhI92yuv5FI8tKMMU7KnIXq6nXeens81ATw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HC6mVkxnUVGjfY0ARZsN5dYM0UyznvVRRdM1a5GEAK8GSpvCEJvQhBPZCCfVBJsAw
-         U5S+3jcsMue/ACK79DNkOJCyLlQuy81t1jUHwfaYQZch/dHq+jFPcrMSGvvo5Kohzf
-         pGZ3x3cS9U0RZh/9qcb7zyOlZ1Q+c9KNE0G/XW50p8J8uOLqq5RYhe7eafaZWfrjN5
-         WLF+/Rm1xCwWEzcCTTXTlVQyD/CwxmFyyaAuEJb+oCH1AqFJIy5AUrGMNeHNUxhUcO
-         iLLbjZ+VcKyYsxKGPflK5hdDaTK3S9ybbbGygeqQu7GjokpewO95wRMeMe6NXASDKt
-         SJZy/eA6VWSWA==
-Date:   Tue, 11 Jan 2022 04:15:28 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Haitao Huang <haitao.huang@linux.intel.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
-        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
-        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
-        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
-Message-ID: <YdzoQJknQK5r6xLK@iki.fi>
-References: <573e0836-6ac2-30a4-0c21-d4763707ac96@intel.com>
- <YdgvFTIRboHwTgRT@iki.fi>
- <op.1fmvdehpwjvjmi@hhuan26-mobl1.mshome.net>
- <YdmxpTVM1JG8nxQ3@iki.fi>
- <YdmzDy1BOHgh8CII@iki.fi>
- <Ydm6RiIwuh3IspRI@iki.fi>
- <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net>
- <YdzjEzjF0YKn+pZ6@iki.fi>
- <YdzjrIxrVfgrlzWH@iki.fi>
- <YdzldMXO2LrssnER@iki.fi>
+        Mon, 10 Jan 2022 21:23:04 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9AFC06173F
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 18:23:03 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id c71so49786830edf.6
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 18:23:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VDFF6vcwE/TPS4Bt0jt6DdR/lz4gZprEiARRzw5a6Io=;
+        b=dJDgY15gVyHjJT/hG1Aj8S+rnxUuUkTSco0i4Zn3r+05ajdLaK9tNqk0tN5/w79pm4
+         TVTwm7UzrvGzsqw1IHEx42V1ZvgeO26COuPrXlqA/Ap7orFBU4WfHPAqYCWNVlJPYMmo
+         9BuDDZRgWcpPZH1lr19ZH6e6VF87hE6uN/Ewg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VDFF6vcwE/TPS4Bt0jt6DdR/lz4gZprEiARRzw5a6Io=;
+        b=wK/GJt3QeBPHCksMHFJAKJ4oKHQOjIk1oqEW2egJsQza/FSsQNcIDnFW5cmInL2FWX
+         saDFLhfkHsXNi5WLlYeX+4dUdjpEEnBf2HBQ15uL1xRzIbN4MjFt+y2z0kS155Rj1sID
+         ljo8vRl6bPPqKLXpOMBAyzM9uL6hE+RHfmUPxTVJOc3Dg6LVXoKftyQ1NtWGz8+aHJbk
+         zpEieBXMYJkcabRAC8qzj5q2LP1/EDxjcgZR9Ft3JbWqe43ODB8SY6NKFN6yvJdbHooy
+         OG35LLO9CWK1h8ag/p/ZuUq6euXUgcUDIqax6A6CIKYhUkgBHh7mUshV7qgOesJyXM0X
+         pjNA==
+X-Gm-Message-State: AOAM530L1FzpUjD5jokCprvjb+S7WZ+wShLeK+17ZSfA9dAX4NQs8/5h
+        /DYcKmK0S66mah8h+w950IAlVYe8YqUhYMa/lcg=
+X-Google-Smtp-Source: ABdhPJyO8l4jcE/oRYUQNF/S6NwkTKL4mfgYQnhZez2h+2yVmB+Pg1Cd8sfl6j3qjLXWhDtRnycJfQ==
+X-Received: by 2002:a17:906:d555:: with SMTP id cr21mr2006735ejc.299.1641867782200;
+        Mon, 10 Jan 2022 18:23:02 -0800 (PST)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
+        by smtp.gmail.com with ESMTPSA id c12sm4508118edx.80.2022.01.10.18.23.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jan 2022 18:23:01 -0800 (PST)
+Received: by mail-wr1-f54.google.com with SMTP id k30so12681996wrd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 18:23:01 -0800 (PST)
+X-Received: by 2002:adf:f54e:: with SMTP id j14mr1838192wrp.442.1641867780948;
+ Mon, 10 Jan 2022 18:23:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdzldMXO2LrssnER@iki.fi>
+References: <CAPM=9tz=_hRpQV1V3M-=KmVVEbr1K166qeb-ne64PHk9Sn-ozg@mail.gmail.com>
+ <CAHk-=wg9hDde_L3bK9tAfdJ4N=TJJ+SjO3ZDONqH5=bVoy_Mzg@mail.gmail.com>
+ <CAKMK7uEag=v-g6ygHPcT-uQJJx+5KOh2ZRzC2QtM-MCjjW67TA@mail.gmail.com>
+ <CADnq5_P9n39RQ5+Nm8O=YKXXvXh1CEzwC2fOEzEJuS2zQLUWEw@mail.gmail.com>
+ <CAHk-=wgDGcaRxUwRCR6p-rxDVO78Yj4YyM6ZsPRGiT2JOCoQ6A@mail.gmail.com>
+ <CADnq5_OYO7kq+9DBnDvbSfpouFvdLB0LPSL6+f1ZPRBsV=qEqA@mail.gmail.com> <CAHk-=wiCCRG9Lwzr+Cur=K1V2GJ9ab_ket7EnG4RZhJ8jJM7xQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wiCCRG9Lwzr+Cur=K1V2GJ9ab_ket7EnG4RZhJ8jJM7xQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 10 Jan 2022 18:22:44 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi8b-YKHeNfwyYHMcgR2vJh4xpSZ0qjkv8E8Y9V8Sv2Tg@mail.gmail.com>
+Message-ID: <CAHk-=wi8b-YKHeNfwyYHMcgR2vJh4xpSZ0qjkv8E8Y9V8Sv2Tg@mail.gmail.com>
+Subject: Re: [git pull] drm for 5.17-rc1 (pre-merge window pull)
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        "Wentland, Harry" <harry.wentland@amd.com>,
+        Dave Airlie <airlied@gmail.com>,
+        "Koenig, Christian" <christian.koenig@amd.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 04:03:32AM +0200, Jarkko Sakkinen wrote:
-> On Tue, Jan 11, 2022 at 03:55:59AM +0200, Jarkko Sakkinen wrote:
-> > On Tue, Jan 11, 2022 at 03:53:26AM +0200, Jarkko Sakkinen wrote:
-> > > On Mon, Jan 10, 2022 at 04:05:21PM -0600, Haitao Huang wrote:
-> > > > On Sat, 08 Jan 2022 10:22:30 -0600, Jarkko Sakkinen <jarkko@kernel.org>
-> > > > wrote:
-> > > > 
-> > > > > On Sat, Jan 08, 2022 at 05:51:46PM +0200, Jarkko Sakkinen wrote:
-> > > > > > On Sat, Jan 08, 2022 at 05:45:44PM +0200, Jarkko Sakkinen wrote:
-> > > > > > > On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang wrote:
-> > > > > > > > > > > OK, so the question is: do we need both or would a
-> > > > > > mechanism just
-> > > > > > > > > > to extend
-> > > > > > > > > > > permissions be sufficient?
-> > > > > > > > > >
-> > > > > > > > > > I do believe that we need both in order to support pages
-> > > > > > having only
-> > > > > > > > > > the permissions required to support their intended use
-> > > > > > during the
-> > > > > > > > > > time the
-> > > > > > > > > > particular access is required. While technically it is
-> > > > > > possible to grant
-> > > > > > > > > > pages all permissions they may need during their lifetime it
-> > > > > > is safer to
-> > > > > > > > > > remove permissions when no longer required.
-> > > > > > > > >
-> > > > > > > > > So if we imagine a run-time: how EMODPR would be useful, and
-> > > > > > how using it
-> > > > > > > > > would make things safer?
-> > > > > > > > >
-> > > > > > > > In scenarios of JIT compilers, once code is generated into RW pages,
-> > > > > > > > modifying both PTE and EPCM permissions to RX would be a good
-> > > > > > defensive
-> > > > > > > > measure. In that case, EMODPR is useful.
-> > > > > > >
-> > > > > > > What is the exact threat we are talking about?
-> > > > > > 
-> > > > > > To add: it should be *significantly* critical thread, given that not
-> > > > > > supporting only EAUG would leave us only one complex call pattern with
-> > > > > > EACCEPT involvement.
-> > > > > > 
-> > > > > > I'd even go to suggest to leave EMODPR out of the patch set, and
-> > > > > > introduce
-> > > > > > it when there is PoC code for any of the existing run-time that
-> > > > > > demonstrates the demand for it. Right now this way too speculative.
-> > > > > > 
-> > > > > > Supporting EMODPE is IMHO by factors more critical.
-> > > > > 
-> > > > > At least it does not protected against enclave code because an enclave
-> > > > > can
-> > > > > always choose not to EACCEPT any of the EMODPR requests. I'm not only
-> > > > > confused here about the actual threat but also the potential adversary
-> > > > > and
-> > > > > target.
-> > > > > 
-> > > > I'm not sure I follow your thoughts here. The sequence should be for enclave
-> > > > to request  EMODPR in the first place through runtime to kernel, then to
-> > > > verify with EACCEPT that the OS indeed has done EMODPR.
-> > > > If enclave does not verify with EACCEPT, then its own code has
-> > > > vulnerability. But this does not justify OS not providing the mechanism to
-> > > > request EMODPR.
-> > > 
-> > > The question is really simple: what is the threat scenario? In order to use
-> > > the word "vulnerability", you would need one.
-> > > 
-> > > Given the complexity of the whole dance with EMODPR it is mandatory to have
-> > > one, in order to ack it to the mainline.
-> > > 
-> > > > Similar to how we don't want have RWX code pages for normal Linux
-> > > > application, when an enclave loads code pages (either directly or JIT
-> > > > compiled from high level code ) into EAUG'd page (which has RW), we do not
-> > > > want leave pages to be RWX for code to be executable, hence the need of
-> > > > EMODPR request OS to reduce the permissions to RX once the code is ready to
-> > > > execute.
-> > > 
-> > > You cannot compare *enforced* permissions outside the enclave, and claim that
-> > > they would be equivalent to the permissions of the already sandboxed code
-> > > inside the enclave, with permissions that are not enforced but are based
-> > > on good will of the enclave code.
-> > 
-> > To add, you can already do "EMODPR" by simply adjusting VMA permissions to be
-> > more restrictive. How this would be worse than this collaboration based 
-> > thing?
-> 
-> ... or you could even make soft version of EMODPR without using that opcode
-> by writing an ioctl to update our xarray to allow lower permissions. That
-> ties the hands of the process who is doing the mmap() already. 
+On Mon, Jan 10, 2022 at 5:21 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> I'll see if I can bisect it at least partially.
 
-E.g. why not just
+It seems to be very reliable. I can see the flickering even at early
+boot before gdb has started - the graphical screen where you type the
+encrypted disk password at boot already shows it as you type.
 
-#define SGX_IOC_ENCLAVE_RESTRICT_PAGE_PERMISSIONS \
-	_IOW(SGX_MAGIC, 0x05, struct sgx_enclave_modify_page_permissions)
-#define SGX_IOC_ENCLAVE_EXTEND_PAGE_PERMISSIONS \
-	_IOW(SGX_MAGIC, 0x06, struct sgx_enclave_modify_page_permissions)
+Right now it is
 
-struct sgx_enclave_restrict_page_permissions {
-	__u64 src;
-	__u64 offset;
-	__u64 length;
-	__u64 secinfo;
-	__u64 count;
-};
-struct sgx_enclave_extend_page_permissions {
-	__u64 src;
-	__u64 offset;
-	__u64 length;
-	__u64 secinfo;
-	__u64 count;
-};
+  bad: 9602044d1cc12280e20c88885f2cd640ae80f69e
+  good: 3867e3704f136beadf5e004b61696ef7f990bee4
 
-These would simply update the xarray and nothing else. I'd go with two
-ioctls (with the necessary checks for secinfo) in order to provide hook
-up points in the future for LSMs.
+so it's going to be one of these:
 
-This leaves only EAUG and EMODT requiring the EACCEPT handshake.
+  9602044d1cc1 drm/amd/display: Fix for the no Audio bug with Tiled Displays
+  a896f870f8a5 drm/amd/display: Fix for otg synchronization logic
+  aba3c3fede54 drm/amd/display: Clear DPCD lane settings after repeater training
+  9311ed1e1241 drm/amd/display: add hdmi disable debug check
+  6421f7c750e9 drm/amd/display: Allow DSC on supported MST branch devices
+  ebe5ffd8e271 drm/amd/display: Enable P010 for DCN3x ASICs
+  c022375ae095 drm/amd/display: Add DP-HDMI FRL PCON Support in DC
+  50b1f44ec547 drm/amd/display: Add DP-HDMI FRL PCON SST Support in DM
+  81d104f4afbf drm/amdgpu: Don't halt RLC on GFX suspend
+  fe9c5c9affc9 drm/amdgpu: Use MAX_HWIP instead of HW_ID_MAX
+  370016988665 drm/amdgpu: fix the missed handling for SDMA2 and SDMA3
+  6c18ecefaba7 drm/amdgpu: declare static function to fix compiler warning
+  94a80b5bc7a2 amdgpu/pm: Modify implmentations of
+get_power_profile_mode to use amdgpu_pp_profile_name
 
-/Jarkko
+and I guess I'll do the few more bisections to pick out the exact one.
+
+             Linus

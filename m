@@ -2,282 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8AF48A43B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEBB48A41C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345853AbiAKAQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 19:16:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
+        id S243204AbiAKAAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 19:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345861AbiAKAQa (ORCPT
+        with ESMTP id S242625AbiAKAAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 19:16:30 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED42C061751
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:16:30 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so2662786pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:16:30 -0800 (PST)
+        Mon, 10 Jan 2022 19:00:34 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDE1C061748
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:00:33 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id z3so14540010plg.8
+        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:00:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igorinstitute-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:from:date:subject:to:cc;
-        bh=OKxY7uPjxFFlFQlDxYMxuTRCsaMzh8pPcJXmf3kY7ws=;
-        b=hY4dwUsHvwrRkYZMn0xRmsott38t8qinCfHVdwHg3VoG4STxrJnvbsJSyfCHz/pEQw
-         niCGazakcqMOBGHLHNmqT4LXgfx7CbDf0eGlrhPhIm+77Pxp1/gwNzOwWl3dQLV3+n3e
-         6IOJ4ArSXc/Yqfk3+aMay+YCqoUAU0K99rsM18XwdGMPKr8+5b+D71Buy/SGGPDKDRak
-         kDuC3TQ9Nt3u2C2utHUkU9QIhvn2086HuxYyJY0p3ndbkCvN+TXUO2w6vX60F/kxNTAi
-         64rgLG3zJL+0gXZsz22qzXTqYVn3huJjivdGUDM5LMT1tHueCbJBeK447Fx3GlaQlnXg
-         PfBQ==
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=zuq3NXRWllFEinxDVSxSn6g55pIWnkmVxTKgeR8Rvso=;
+        b=wK3kJ8twvyqAdlIet7Bftfc3sJdLQooxkdrhGyBdNfyEtl40wHZO0HrWRug7XvBnLf
+         4IDPJbPOvCihEAIFLkJkNPzySy8EGL7254MLvO0HAf0XK1xaGzvNn8cs7grrN87iq/JP
+         MQLpdcGjm4UGrLL2CFpsYN/Oy7GMpXx1b9cb3siu7chrfeG27fqy1JYpKIhLcEqNkonX
+         oRzqBrllAsG8XiUmfTC0+gI+WNY9ua2c0pyAkY4cULPvdxWYAoA4AJp8hETX5ldWrlel
+         SLEUl2hDlpcpcMPYg+GngkuyxY8cAi5haoYpDHtOACZlIp76SxVkCw78u+qP2Piz82g3
+         hJvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:from:date:subject:to:cc;
-        bh=OKxY7uPjxFFlFQlDxYMxuTRCsaMzh8pPcJXmf3kY7ws=;
-        b=nNcd6WiW2iBrBnWxPiYYM0K4ZD6b+QrIycIxiqXupGE1hIfaZ+qJck+wnDeJVEk2am
-         vvdkB9o7BOyHnvacFAZYcTaR5pIByYu+5uWjV9YJG8GmY3lAgfyWOE9OHddcS8SmeWjw
-         lzFU/GsfGEz8hM01JOYt/BRsIcrChKK7vwQebwms6xm2busq7FX9L+PEf40mnIVBz/6O
-         t6OY4LVi92UJFEI9kP39ElAuPaX85cIh/AF+Ky/p3iRMNSQnlEsW+FBsUv6PwSHPtZAU
-         3NPbBBCpthymAUSLoLTdJbnDIFRC37P5vkLzENDCycEVwj04Fz2/x6U+xzhvt9zbnbhw
-         27JQ==
-X-Gm-Message-State: AOAM533Z0ARfycjvhDIwDj+6bUv+tTiW9qG3GekBxZZk791jcwVg7Btz
-        FiAlLPZR9J/jOFw3yqD3wn9w8w==
-X-Google-Smtp-Source: ABdhPJxZYag+tChJzGuDNCxkXzKJDJIn9XS0QQrdsSJ3hlk7bhBKwxuYiWEEEsEBqv5Qpk6gUbU1tg==
-X-Received: by 2002:a63:a619:: with SMTP id t25mr1907796pge.235.1641860188853;
-        Mon, 10 Jan 2022 16:16:28 -0800 (PST)
-Received: from localhost ([121.99.145.49])
-        by smtp.gmail.com with ESMTPSA id w4sm169662pjq.7.2022.01.10.16.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 16:16:28 -0800 (PST)
-Message-ID: <61dccc5c.1c69fb81.9af91.0df6@mx.google.com>
-From:   Daniel Beer <daniel.beer@igorinstitute.com>
-Date:   Tue, 11 Jan 2022 13:00:09 +1300
-Subject: [PATCH 2/2] ASoC: dt-bindings: add bindings for TI TAS5805M.
-To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Andy Liu <andy-liu@ti.com>,
-        Daniel Beer <daniel.beer@igorinstitute.com>,
-        Derek Simkowiak <derek.simkowiak@igorinstitute.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=zuq3NXRWllFEinxDVSxSn6g55pIWnkmVxTKgeR8Rvso=;
+        b=mGy1khU4ysRjrYZXC2mVmQdkZ9JuU8TtHnHUPozcrNhrAKf8kmX6Z8yYeI4bEhUjmU
+         kR6F6OezYJEas1ESHjE/YuHjGIMxwesONySGBk3URD2uPPRryHwV2LcAJx2tbHXOMsae
+         BCu+2XKHSCfJSyLfUVHViL9XwZv9oHivPNuJvjPS4baokZRM3pEXwP6ZjUXg+M2f5y8V
+         1NLuB2NJTr4Glr5PGy353zjp+LfK0dxFDulnFE5yah469VeKyT9HYZmUMnEMtEYuyPYz
+         aKgc0jeZCPJmA/fOgCHyO7x2atYlQpfLlNB0+iHhB/L1TfNmz489r4XYCMWkOrYVxDA3
+         j3Yw==
+X-Gm-Message-State: AOAM531soER4EQSrH1oAtqExjzrV33eM21REumzsXyjjgr6tCQ3qd31Z
+        fvANFz8oNuorSOTLTOWL4IL19HOOEBI+gbfWKO9C2Q==
+X-Google-Smtp-Source: ABdhPJwT03HQS2JGvNVaddNqSHmcxSEOVZzwNIZztfB8jJ2rTbKuFz6Gk3SMdi7Xf/qpN6HWnOs/jCmCKwbnKyCb/iw=
+X-Received: by 2002:aa7:9543:0:b0:4bf:2a07:5bc7 with SMTP id
+ w3-20020aa79543000000b004bf2a075bc7mr1995022pfq.73.1641859232915; Mon, 10 Jan
+ 2022 16:00:32 -0800 (PST)
+MIME-Version: 1.0
+References: <20211214213630.14819-1-tharvey@gateworks.com>
+In-Reply-To: <20211214213630.14819-1-tharvey@gateworks.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Mon, 10 Jan 2022 16:00:21 -0800
+Message-ID: <CAJ+vNU0U7HknAZcnua39r9to+kJBea6Fg3NiJ9ybZ1xygKoF4g@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: imx8mm-venice-gw73xx-0x: add dt overlays for
+ serial modes
+To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Device Tree Mailing List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TAS5805M is a class D speaker amplifier with integrated DSP. The
-example here includes a tested flat configuration for mono (PBTL)
-output.
+On Tue, Dec 14, 2021 at 1:36 PM Tim Harvey <tharvey@gateworks.com> wrote:
+>
+> The imx8mm-venice-gw73xx-0x som+baseboard combination has a multi-protocol
+> RS-232/RS-485/RS-422 transceiver to an off-board connector which
+> can be configured in a number of ways via UART and GPIO configuration.
+>
+> The default configuration per the imx8mm-venice-gw73xx-0x dts is for
+> UART2 TX/RX and UART4 TX/RX to be available as RS-232:
+>  J15.1 UART2 TX out
+>  J15.2 UART2 RX in
+>  J15.3 UART4 TX out
+>  J15.4 UART4 RX in
+>  J15.5 GND
+>
+> Add dt overlays to allow additional the modes of operation:
+>
+> rs232-rts (UART2 RS-232 with RTS/CTS hardware flow control)
+>  J15.1 TX out
+>  J15.2 RX in
+>  J15.3 RTS out
+>  J15.4 CTS in
+>  J15.5 GND
+>
+> rs485 (UART2 RS-485 half duplex)
+>  J15.1 TXRX-
+>  J15.2 N/C
+>  J15.3 TXRX+
+>  J15.4 N/C
+>  J15.5 GND
+>
+> rs422 (UART2 RS-422 full duplex)
+>  J15.1 TX-
+>  J15.2 RX+
+>  J15.3 TX+
+>  J15.4 RX-
+>  J15.5 GND
+>
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> ---
+>  arch/arm64/boot/dts/freescale/Makefile        |  3 +
+>  .../imx8mm-venice-gw73xx-0x-rs232-rts.dts     | 53 ++++++++++++++++
+>  .../imx8mm-venice-gw73xx-0x-rs422.dts         | 61 +++++++++++++++++++
+>  .../imx8mm-venice-gw73xx-0x-rs485.dts         | 61 +++++++++++++++++++
+>  4 files changed, 178 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts
+>
+> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+> index a14a6173b765..5ec8d59347b6 100644
+> --- a/arch/arm64/boot/dts/freescale/Makefile
+> +++ b/arch/arm64/boot/dts/freescale/Makefile
+> @@ -44,6 +44,9 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-var-som-symphony.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw71xx-0x.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x.dtb
+> +dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs232-rts.dtbo
+> +dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs422.dtbo
+> +dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs485.dtbo
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7901.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7902.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mn-beacon-kit.dtb
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts
+> new file mode 100644
+> index 000000000000..c184cf4aea4e
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts
+> @@ -0,0 +1,53 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright 2021 Gateworks Corporation
+> + *
+> + * GW73xx RS232 with RTS/CTS hardware flow control:
+> + *  - GPIO4_0 rs485_en needs to be driven low (in-active)
+> + *  - UART4_TX becomes RTS
+> + *  - UART4_RX becomes CTS
+> + */
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +#include "imx8mm-pinfunc.h"
+> +
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +&{/} {
+> +       compatible = "gw,imx8mm-gw73xx-0x";
+> +};
+> +
+> +&gpio4 {
+> +       rs485_en {
+> +               gpio-hog;
+> +               gpios = <0 GPIO_ACTIVE_HIGH>;
+> +               output-low;
+> +               line-name = "rs485_en";
+> +       };
+> +};
+> +
+> +&uart2 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&pinctrl_uart2>;
+> +       rts-gpios = <&gpio5 29 GPIO_ACTIVE_LOW>;
+> +       cts-gpios = <&gpio5 28 GPIO_ACTIVE_LOW>;
+> +       uart-has-rtscts;
+> +       status = "okay";
+> +};
+> +
+> +&uart4 {
+> +       status = "disabled";
+> +};
+> +
+> +&iomuxc {
+> +       pinctrl_uart2: uart2grp {
+> +               fsl,pins = <
+> +                       MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX     0x140
+> +                       MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX     0x140
+> +                       MX8MM_IOMUXC_UART4_TXD_GPIO5_IO29       0x140
+> +                       MX8MM_IOMUXC_UART4_RXD_GPIO5_IO28       0x140
+> +               >;
+> +       };
+> +};
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts
+> new file mode 100644
+> index 000000000000..3e6404340d52
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts
+> @@ -0,0 +1,61 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright 2021 Gateworks Corporation
+> + *
+> + * GW73xx RS422 (RS485 full duplex):
+> + *  - GPIO1_0 rs485_term selects on-chip termination
+> + *  - GPIO4_0 rs485_en needs to be driven high (active)
+> + *  - GPIO4_2 rs485_hd needs to be driven low (in-active)
+> + *  - UART4_TX is DE for RS485 transmitter
+> + *  - RS485_EN needs to be pulled high
+> + *  - RS485_HALF needs to be low
+> + */
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +#include "imx8mm-pinfunc.h"
+> +
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +&{/} {
+> +       compatible = "gw,imx8mm-gw73xx-0x";
+> +};
+> +
+> +&gpio4 {
+> +       rs485_en {
+> +               gpio-hog;
+> +               gpios = <0 GPIO_ACTIVE_HIGH>;
+> +               output-high;
+> +               line-name = "rs485_en";
+> +       };
+> +
+> +       rs485_hd {
+> +               gpio-hog;
+> +               gpios = <2 GPIO_ACTIVE_HIGH>;
+> +               output-low;
+> +               line-name = "rs485_hd";
+> +       };
+> +};
+> +
+> +&uart2 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&pinctrl_uart2>;
+> +       rts-gpios = <&gpio5 29 GPIO_ACTIVE_HIGH>;
+> +       linux,rs485-enabled-at-boot-time;
+> +       status = "okay";
+> +};
+> +
+> +&uart4 {
+> +       status = "disabled";
+> +};
+> +
+> +&iomuxc {
+> +       pinctrl_uart2: uart2grp {
+> +               fsl,pins = <
+> +                       MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX     0x140
+> +                       MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX     0x140
+> +                       MX8MM_IOMUXC_UART4_TXD_GPIO5_IO29       0x140
+> +               >;
+> +       };
+> +};
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts
+> new file mode 100644
+> index 000000000000..97f19c15c3d0
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts
+> @@ -0,0 +1,61 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright 2021 Gateworks Corporation
+> + *
+> + * GW73xx RS485 HD:
+> + *  - GPIO1_0 rs485_term selects on-chip termination
+> + *  - GPIO4_0 rs485_en needs to be driven high (active)
+> + *  - GPIO4_2 rs485_hd needs to be driven high (active)
+> + *  - UART4_TX is DE for RS485 transmitter
+> + *  - RS485_EN needs to be pulled high
+> + *  - RS485_HALF needs to be pulled high
+> + */
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +#include "imx8mm-pinfunc.h"
+> +
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +&{/} {
+> +       compatible = "gw,imx8mm-gw73xx-0x";
+> +};
+> +
+> +&gpio4 {
+> +       rs485_en {
+> +               gpio-hog;
+> +               gpios = <0 GPIO_ACTIVE_HIGH>;
+> +               output-high;
+> +               line-name = "rs485_en";
+> +       };
+> +
+> +       rs485_hd {
+> +               gpio-hog;
+> +               gpios = <2 GPIO_ACTIVE_HIGH>;
+> +               output-high;
+> +               line-name = "rs485_hd";
+> +       };
+> +};
+> +
+> +&uart2 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&pinctrl_uart2>;
+> +       rts-gpios = <&gpio5 29 GPIO_ACTIVE_HIGH>;
+> +       linux,rs485-enabled-at-boot-time;
+> +       status = "okay";
+> +};
+> +
+> +&uart4 {
+> +       status = "disabled";
+> +};
+> +
+> +&iomuxc {
+> +       pinctrl_uart2: uast2grp {
+> +               fsl,pins = <
+> +                       MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX     0x140
+> +                       MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX     0x140
+> +                       MX8MM_IOMUXC_UART4_TXD_GPIO5_IO29       0x140
+> +               >;
+> +       };
+> +};
+> --
+> 2.17.1
+>
 
-Signed-off-by: Daniel Beer <daniel.beer@igorinstitute.com>
----
- .../devicetree/bindings/sound/tas5805m.yaml   | 201 ++++++++++++++++++
- 1 file changed, 201 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/tas5805m.yaml
+gentle ping.
 
-diff --git a/Documentation/devicetree/bindings/sound/tas5805m.yaml b/Documentation/devicetree/bindings/sound/tas5805m.yaml
-new file mode 100644
-index 000000000000..162008e6a1ed
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/tas5805m.yaml
-@@ -0,0 +1,201 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/tas5805m.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: TAS5805M audio amplifier
-+
-+maintainers:
-+  - Daniel Beer <daniel.beer@igorinstitute.com>
-+
-+description: |
-+  The TAS5805M is a class D audio amplifier with a built-in DSP.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ti,tas5805m
-+
-+  reg:
-+    maxItems: 1
-+    description: |
-+      I2C address of the amplifier. See the datasheet for possible values.
-+
-+  pvdd-supply:
-+    description: |
-+      Regulator for audio power supply (PVDD in the datasheet).
-+
-+  pdn-gpio:
-+    description: |
-+      Power-down control GPIO (PDN pin in the datasheet).
-+
-+  ti,dsp-config: |
-+    description: |
-+      A byte sequence giving DSP configuration. Each pair of bytes, in
-+      sequence, gives a register address and a value to write. If you
-+      are taking this data from TI's PPC3 tool, this should contain only
-+      the register writes following the 5ms delay.
-+
-+examples:
-+  - |
-+    i2c0 {
-+    	#address-cells = <1>;
-+	#size-cells = <0>;
-+	tas5805m: tas5805m@2c {
-+		reg = <0x2c>;
-+		compatible = "ti,tas5805m";
-+		status = "ok";
-+
-+		pvdd-supply = <&audiopwr>;
-+		pdn-gpio = <&tlmm 160 0>;
-+
-+		// Mono PBTL DSP configuration
-+		ti,dsp-config = [
-+			00 00 7f 00 03 00 00 00 7f 00 46 01 00 00 7f 00
-+			03 02 00 00 7f 00 78 80 00 00 7f 00 61 0b 60 01
-+			7d 11 7e ff 00 01 51 05 00 00 02 04 53 00 54 00
-+			00 00 00 00 00 00 00 00 00 00 7f 00 66 87 7f 8c
-+			00 29 18 00 19 40 1a 26 1b e7 1c 00 1d 40 1e 26
-+			1f e7 20 00 21 00 22 00 23 00 24 00 25 00 26 00
-+			27 00 00 2a 24 00 25 80 26 00 27 00 28 00 29 80
-+			2a 00 2b 00 30 00 31 71 32 94 33 9a 00 2c 0c 00
-+			0d 00 0e 00 0f 00 10 00 11 00 12 00 13 00 14 00
-+			15 80 16 00 17 00 18 00 19 00 1a 00 1b 00 1c 00
-+			1d 80 1e 00 1f 00 20 00 21 00 22 00 23 00 28 00
-+			29 80 2a 00 2b 00 2c 00 2d 00 2e 00 2f 00 34 00
-+			35 80 36 00 37 00 38 00 39 00 3a 00 3b 00 48 00
-+			49 80 4a 00 4b 00 4c 00 4d 00 4e 00 4f 00 5c 00
-+			5d 00 5e 57 5f 62 60 00 61 89 62 37 63 4c 64 08
-+			65 13 66 85 67 62 68 40 69 00 6a 00 6b 00 6c 02
-+			6d 66 6e c4 6f 1b 74 00 75 80 76 00 77 00 00 2d
-+			18 7d 19 99 1a 3b 1b e5 1c 00 1d 00 1e 57 1f 62
-+			20 00 21 00 22 00 23 00 24 00 25 00 26 00 27 00
-+			28 00 29 00 2a 00 2b 00 2c 00 2d 80 2e 00 2f 00
-+			00 2e 24 11 25 3d 26 c3 27 1a 00 00 7f aa 00 24
-+			18 08 19 00 1a 00 1b 00 1c 00 1d 00 1e 00 1f 00
-+			20 00 21 00 22 00 23 00 24 00 25 00 26 00 27 00
-+			28 00 29 00 2a 00 2b 00 2c 08 2d 00 2e 00 2f 00
-+			30 00 31 00 32 00 33 00 34 00 35 00 36 00 37 00
-+			38 00 39 00 3a 00 3b 00 3c 00 3d 00 3e 00 3f 00
-+			40 08 41 00 42 00 43 00 44 00 45 00 46 00 47 00
-+			48 00 49 00 4a 00 4b 00 4c 00 4d 00 4e 00 4f 00
-+			50 00 51 00 52 00 53 00 54 08 55 00 56 00 57 00
-+			58 00 59 00 5a 00 5b 00 5c 00 5d 00 5e 00 5f 00
-+			60 00 61 00 62 00 63 00 64 00 65 00 66 00 67 00
-+			68 08 69 00 6a 00 6b 00 6c 00 6d 00 6e 00 6f 00
-+			70 00 71 00 72 00 73 00 74 00 75 00 76 00 77 00
-+			78 00 79 00 7a 00 7b 00 7c 08 7d 00 7e 00 7f 00
-+			00 25 08 00 09 00 0a 00 0b 00 0c 00 0d 00 0e 00
-+			0f 00 10 00 11 00 12 00 13 00 14 00 15 00 16 00
-+			17 00 18 08 19 00 1a 00 1b 00 1c 00 1d 00 1e 00
-+			1f 00 20 00 21 00 22 00 23 00 24 00 25 00 26 00
-+			27 00 28 00 29 00 2a 00 2b 00 2c 08 2d 00 2e 00
-+			2f 00 30 00 31 00 32 00 33 00 34 00 35 00 36 00
-+			37 00 38 00 39 00 3a 00 3b 00 3c 00 3d 00 3e 00
-+			3f 00 40 08 41 00 42 00 43 00 44 00 45 00 46 00
-+			47 00 48 00 49 00 4a 00 4b 00 4c 00 4d 00 4e 00
-+			4f 00 50 00 51 00 52 00 53 00 54 08 55 00 56 00
-+			57 00 58 00 59 00 5a 00 5b 00 5c 00 5d 00 5e 00
-+			5f 00 60 00 61 00 62 00 63 00 64 00 65 00 66 00
-+			67 00 68 08 69 00 6a 00 6b 00 6c 00 6d 00 6e 00
-+			6f 00 70 00 71 00 72 00 73 00 74 00 75 00 76 00
-+			77 00 78 00 79 00 7a 00 7b 00 7c 08 7d 00 7e 00
-+			7f 00 00 26 08 00 09 00 0a 00 0b 00 0c 00 0d 00
-+			0e 00 0f 00 10 00 11 00 12 00 13 00 14 00 15 00
-+			16 00 17 00 18 08 19 00 1a 00 1b 00 1c 00 1d 00
-+			1e 00 1f 00 20 00 21 00 22 00 23 00 24 00 25 00
-+			26 00 27 00 28 00 29 00 2a 00 2b 00 2c 08 2d 00
-+			2e 00 2f 00 30 00 31 00 32 00 33 00 34 00 35 00
-+			36 00 37 00 38 00 39 00 3a 00 3b 00 3c 00 3d 00
-+			3e 00 3f 00 40 08 41 00 42 00 43 00 44 00 45 00
-+			46 00 47 00 48 00 49 00 4a 00 4b 00 4c 00 4d 00
-+			4e 00 4f 00 50 00 51 00 52 00 53 00 54 08 55 00
-+			56 00 57 00 58 00 59 00 5a 00 5b 00 5c 00 5d 00
-+			5e 00 5f 00 60 00 61 00 62 00 63 00 64 00 65 00
-+			66 00 67 00 68 08 69 00 6a 00 6b 00 6c 00 6d 00
-+			6e 00 6f 00 70 00 71 00 72 00 73 00 74 00 75 00
-+			76 00 77 00 78 00 79 00 7a 00 7b 00 7c 08 7d 00
-+			7e 00 7f 00 00 27 08 00 09 00 0a 00 0b 00 0c 00
-+			0d 00 0e 00 0f 00 10 00 11 00 12 00 13 00 14 00
-+			15 00 16 00 17 00 18 08 19 00 1a 00 1b 00 1c 00
-+			1d 00 1e 00 1f 00 20 00 21 00 22 00 23 00 24 00
-+			25 00 26 00 27 00 28 00 29 00 2a 00 2b 00 2c 08
-+			2d 00 2e 00 2f 00 30 00 31 00 32 00 33 00 34 00
-+			35 00 36 00 37 00 38 00 39 00 3a 00 3b 00 3c 00
-+			3d 00 3e 00 3f 00 40 08 41 00 42 00 43 00 44 00
-+			45 00 46 00 47 00 48 00 49 00 4a 00 4b 00 4c 00
-+			4d 00 4e 00 4f 00 50 00 51 00 52 00 53 00 54 08
-+			55 00 56 00 57 00 58 00 59 00 5a 00 5b 00 5c 00
-+			5d 00 5e 00 5f 00 60 00 61 00 62 00 63 00 64 00
-+			65 00 66 00 67 00 68 08 69 00 6a 00 6b 00 6c 00
-+			6d 00 6e 00 6f 00 70 00 71 00 72 00 73 00 74 00
-+			75 00 76 00 77 00 78 00 79 00 7a 00 7b 00 7c 08
-+			7d 00 7e 00 7f 00 00 28 08 00 09 00 0a 00 0b 00
-+			0c 00 0d 00 0e 00 0f 00 10 00 11 00 12 00 13 00
-+			14 00 15 00 16 00 17 00 18 08 19 00 1a 00 1b 00
-+			1c 00 1d 00 1e 00 1f 00 20 00 21 00 22 00 23 00
-+			24 00 25 00 26 00 27 00 28 00 29 00 2a 00 2b 00
-+			2c 08 2d 00 2e 00 2f 00 30 00 31 00 32 00 33 00
-+			34 00 35 00 36 00 37 00 38 00 39 00 3a 00 3b 00
-+			3c 00 3d 00 3e 00 3f 00 40 08 41 00 42 00 43 00
-+			44 00 45 00 46 00 47 00 48 00 49 00 4a 00 4b 00
-+			4c 00 4d 00 4e 00 4f 00 50 00 51 00 52 00 53 00
-+			54 08 55 00 56 00 57 00 58 00 59 00 5a 00 5b 00
-+			5c 00 5d 00 5e 00 5f 00 60 00 61 00 62 00 63 00
-+			64 00 65 00 66 00 67 00 68 08 69 00 6a 00 6b 00
-+			6c 00 6d 00 6e 00 6f 00 70 00 71 00 72 00 73 00
-+			74 00 75 00 76 00 77 00 78 00 79 00 7a 00 7b 00
-+			7c 08 7d 00 7e 00 7f 00 00 29 08 00 09 00 0a 00
-+			0b 00 0c 00 0d 00 0e 00 0f 00 10 00 11 00 12 00
-+			13 00 14 00 15 00 16 00 17 00 00 2e 7c 08 7d 00
-+			7e 00 7f 00 00 2f 08 00 09 00 0a 00 0b 00 0c 00
-+			0d 00 0e 00 0f 00 10 00 11 00 12 00 13 00 14 00
-+			15 00 16 00 17 00 1c 08 1d 00 1e 00 1f 00 20 00
-+			21 00 22 00 23 00 24 00 25 00 26 00 27 00 28 00
-+			29 00 2a 00 2b 00 2c 00 2d 00 2e 00 2f 00 00 2a
-+			48 00 49 01 4a 64 4b 0a 4c 00 4d 01 4e 64 4f 0a
-+			50 00 51 01 52 64 53 0a 54 7e 55 d0 56 b5 57 2d
-+			58 82 59 59 5a 05 5b 7b 00 00 7f 8c 00 2b 34 00
-+			35 0d 36 a6 37 86 38 00 39 0d 3a a6 3b 86 3c 00
-+			3d 06 3e d3 3f 72 40 00 41 00 42 00 43 00 44 00
-+			45 00 46 00 47 00 48 ff 49 81 4a 47 4b ae 4c f9
-+			4d 06 4e 21 4f a9 50 fe 51 01 52 c0 53 79 54 00
-+			55 00 56 00 57 00 58 00 59 00 5a 00 5b 00 00 2d
-+			58 01 59 53 5a 8f 5b cc 5c 01 5d 53 5e 8f 5f cc
-+			60 00 61 22 62 1d 63 95 64 00 65 00 66 00 67 00
-+			68 00 69 00 6a 00 6b 00 6c ff 6d 81 6e 47 6f ae
-+			70 f9 71 06 72 21 73 a9 74 fe 75 01 76 c0 77 79
-+			78 00 79 00 7a 00 7b 00 7c 00 7d 00 7e 00 7f 00
-+			00 00 7f aa 00 2e 40 01 41 d7 42 e8 43 0a 44 01
-+			45 d7 46 e8 47 0a 48 01 49 d7 4a e8 4b 0a 4c 68
-+			4d 82 4e f5 4f bf 50 a7 51 9a 52 74 53 5a 00 2b
-+			20 6a 21 5a 22 dd 23 c9 24 95 25 a5 26 22 27 37
-+			28 6a 29 5a 2a dd 2b c9 2c 68 2d 82 2e f5 2f bf
-+			30 a7 31 9a 32 74 33 5a 0c 6a 0d 5a 0e dd 0f c9
-+			10 95 11 a5 12 22 13 37 14 6a 15 5a 16 dd 17 c9
-+			18 68 19 82 1a f5 1b bf 1c a7 1d 9a 1e 74 1f 5a
-+			00 2a 34 00 35 01 36 64 37 0a 38 00 39 01 3a 64
-+			3b 0a 3c 00 3d 01 3e 64 3f 0a 40 7e 41 d0 42 b5
-+			43 2d 44 82 45 59 46 05 47 7b 00 00 7f 8c 00 2d
-+			30 01 31 53 32 8f 33 cc 34 01 35 53 36 8f 37 cc
-+			38 00 39 03 3a 69 3b c5 3c 00 3d 00 3e 00 3f 00
-+			40 00 41 00 42 00 43 00 44 ff 45 81 46 47 47 ae
-+			48 f9 49 06 4a 21 4b a9 4c fe 4d 01 4e c0 4f 79
-+			50 00 51 00 52 00 53 00 54 00 55 00 56 00 57 00
-+			00 00 7f aa 00 2a 5c 7e 5d d2 5e 19 5f 37 60 81
-+			61 2d 62 e6 63 c9 64 7e 65 d2 66 19 67 37 68 7e
-+			69 d0 6a b5 6b 2d 6c 82 6d 59 6e 05 6f 7b 70 7e
-+			71 d2 72 19 73 37 74 81 75 2d 76 e6 77 c9 78 7e
-+			79 d2 7a 19 7b 37 7c 7e 7d d0 7e b5 7f 2d 00 2b
-+			08 82 09 59 0a 05 0b 7b 00 2e 54 01 55 d7 56 e8
-+			57 0a 58 01 59 d7 5a e8 5b 0a 5c 01 5d d7 5e e8
-+			5f 0a 60 68 61 82 62 f5 63 bf 64 a7 65 9a 66 74
-+			67 5a 00 00 7f 8c 00 2e 10 00 11 80 12 00 13 00
-+			0c 00 0d 80 0e 00 0f 00 08 00 09 80 0a 00 0b 00
-+			18 00 19 80 1a 00 1b 00 1c 40 1d 00 1e 00 1f 00
-+			20 40 21 00 22 00 23 00 00 00 7f 00 30 00 4c 30
-+			03 03 00 00 7f 00 78 80
-+		];
-+	};
-+    };
--- 
-2.30.2
+I'm mostly interested to see if my approach to dt fragments here and
+the naming of the files makes sense to others.
 
+This patch causes the kernel to build dtbo files for:
+arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dtbo
+arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dtbo
+arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dtbo
+
+The intention is that these files are used by boot firmware (U-Boot)
+to adjust the dtb before passing it to the kernel.
+
+Best regards,
+
+Tim

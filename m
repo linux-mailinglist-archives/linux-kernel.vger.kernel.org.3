@@ -2,186 +2,377 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1DB48A6C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2896F48A6DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347822AbiAKE1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 23:27:21 -0500
-Received: from mail-dm6nam12on2072.outbound.protection.outlook.com ([40.107.243.72]:61856
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230008AbiAKE1U (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 23:27:20 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ET4zHu3Ok/Zi+2jEn0AzlQzBcDhcuGjtqjCXrU2+bEHHCXvpBR8cbxOT93N2XBIEeouCeEFLHywmj43kC0/OGuKHLMoJy09V480Xnq2cSj8DeGZvyko5+cStQXP6ZnmTgdZdwGmRruMPsRVNZq+UfD9xPY4OheF3r0l3VuJIZpEIBWI8Illn+F33Al43Yy2MPwyN1y1XAsKJC+cVWdBXI/vbuWhVxPRS+w6kr2gT1u0Wm5U3UvSfcZhnK9+f3KpcT6yxaWuyhL3WqyjDNm0R/XKlSMJWErfHOpQChkhLfFtvQI33xzvGynA9KPho0qcpBREOdxkx01rY/R2DDna9TQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iNPx8lftIqjoHYDTQhE/WS2/c/NuzAitAbIMHNDpP2c=;
- b=CWI2yqDO0Etw8bdZeXCHGi8Ok4TVCY8vR7U/lVShphDOYE6YSSu/BFZ5aik5paBZr3hp4eFvy93JLoHpCwhz8Q6qt+ERP57wb4O+TM+IAGlX+UIyzriFkPXx68psOUSMHyX01xIjqE3GkG5NB3uXOZooR+uTmn3dEcgzrfEaVaIWGKM28ZoWuNtYyR4YpbKxVmOQSc+un3XQJRM7jeE2rN8pPFrIpyov1XBBGLUG+siivl2fQwJ9viein2hoqSOi/W/UkuWy1X+wOjqguW8QvtPd2mez1bkp4dCZdH8ld3VFOl+p9tiwVoxywWZY6rAK6BoGCOPL37oP8FBdsWIiZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iNPx8lftIqjoHYDTQhE/WS2/c/NuzAitAbIMHNDpP2c=;
- b=AQDzrDxySigczw8cXDbvQ+i3MzHSEtuINqREWYyRlZKEwDk3J0yDzMvPrcz7iQ0SOKL8w3AHy/bpUgVwpHwK8qX4NJmGumnxD748gxNGzk0ZJ8OtMt+2dD7CJ3kRsVaJfmLpgqMTJdVjzyAbSfMLnP7ixMFHbiPQCGk5uUOtB9sVAUg+1tOKla0Hn4MKzusrlWK/qIEU/kdNe+lovdTqluOwNmTbyTWwqbqHFygiyC9IpzymlDBMfVjLV89nKLg5Za7DwOM38Yy7L2EusM+4R16xdqNWjkvlXLYmjzND4x2xq7IYmLKptd/tfWb6v3GSrTSahmY0H1WX+eqmPFHN9g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by BYAPR12MB2790.namprd12.prod.outlook.com (2603:10b6:a03:69::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Tue, 11 Jan
- 2022 04:27:18 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::8496:16fd:65c5:4af7]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::8496:16fd:65c5:4af7%4]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
- 04:27:18 +0000
-Message-ID: <4c4e4790-41dd-e97b-8620-9177ee15a46b@nvidia.com>
-Date:   Mon, 10 Jan 2022 20:27:16 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v2 14/28] mm: Convert page_maybe_dma_pinned() to use a
- folio
-Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-References: <20220110042406.499429-1-willy@infradead.org>
- <20220110042406.499429-15-willy@infradead.org>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20220110042406.499429-15-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0021.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::26) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        id S234747AbiAKEhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 23:37:23 -0500
+Received: from mga06.intel.com ([134.134.136.31]:48511 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234012AbiAKEhW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 23:37:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641875842; x=1673411842;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CGnlIWPi/hH+iO9Qh4brMlKzt8eJJ01Gch7+Zshwins=;
+  b=TslNHj/vgxuvnVnsS3iHgeajyGtCZOiWejXlYLQdvRUyzLJ3AEd+rPUt
+   zZnepFHrtTmFcxEq/HuUSCTrEMpaCc3hDRpjSQ7g4e8wZVpnGMj3NH97h
+   3q96nEP3kFj5VmMmw/GVx3hfF+kyf+tY9TQVqAK/4nzQ8YTUGQYfUL5Y+
+   MOgBeUGWJ/KhYdapwAztQghH00Zk0Rd5MBCYM6Ke6DFfPeoSCfkDLEjDm
+   to4R5qE4fxbm40W73F/H75O7S1kGNEx95Ou0VCyLsj9cBRnNXCF7xsSy3
+   McZgJTNk40jpR5wtC7nyvsN6uKskoKJWOCa2LfXdH7E1mwUVSxGDvDqck
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="304137919"
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="304137919"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 20:37:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="474388889"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
+  by orsmga006.jf.intel.com with ESMTP; 10 Jan 2022 20:37:14 -0800
+Date:   Tue, 11 Jan 2022 12:29:20 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Lizhi Hou <lizhi.hou@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        maxz@xilinx.com, sonal.santan@xilinx.com, yliu@xilinx.com,
+        michal.simek@xilinx.com, stefanos@xilinx.com,
+        devicetree@vger.kernel.org, trix@redhat.com, mdf@kernel.org,
+        robh@kernel.org, dwmw2@infradead.org,
+        Max Zhen <max.zhen@xilinx.com>
+Subject: Re: [PATCH V4 XRT Alveo Infrastructure 3/5] of: create empty of root
+Message-ID: <20220111042920.GA979169@yilunxu-OptiPlex-7050>
+References: <20220105225013.1567871-1-lizhi.hou@xilinx.com>
+ <20220105225013.1567871-4-lizhi.hou@xilinx.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 171fd05e-36ef-4eb0-f791-08d9d4baa73c
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2790:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB2790AB6FF0AFB3C295DAA8C2A8519@BYAPR12MB2790.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mN/jkt/tuwL5ssMpX6uTb5PEgZvlmlcIYDbdn1qrsu1d0UsVDAog+4UZddB1u47rRQovPLEe+w3Jfu2jTWrCZAVSh5iKw14xFLLNQwIXoOoG3A1OuuXY80UQXpiglmWIDRZ5BQTE+2wSyLxbwAr9wqCvqh2kkHCkpQ7k1SLfnzAKGuhK1+7MwyTGSYKbrdnRdBYih2hdwAYZ9kIFCfgJhhr5icV82Bj3f6qqQvRrPAr0G1lVqM12v8OthsVeyQEVINEHCpLJ3a6dqTuHx4fdB+nIY3SR4gb1d4S4PO43PCxlPbZzIuLvfFEdcK9gFZBnCyS8w1quIpOKfbxtXlutkTmxRccyPZUL9ePuIkCoEanSE0gIGmkJEqpGc2GEqkvBhmN0L41O7wODgj6QMw9qfHi7o5aZIKoPdTT4Yc/+2PjEdY7bEbKgtnNK/ascm1rE5ukGIiosXOYBEC795OkXrMOLqT1ntuMCl21QYZ3qj8QJxPCNZ+7fsQfwEIyNmZvq35Zbr9+mawJX7N2f8Ek3K21EZLOqswoaO+MjrH8g282nODTy08qJWiXGHD5OEbbm+BKD0Fl2YS1wRefTtdjbYcBnXASE9dyVnhI2YUeVQgi+hx5LO1x5HvEvV1OGYeACicbsUpLYceX33hDS4jTvWuQV9zQt88vd7hE4LEE5VKCvG6rt+tTkKGliblhspqKvlnmolDIrEwOE05gLzqk3smzE0iaiCKQOjYg/EARS+5u7zxKlqM6HGXT+Xjuz0VSC
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(86362001)(6506007)(53546011)(8936002)(31696002)(83380400001)(26005)(66476007)(508600001)(316002)(31686004)(5660300002)(36756003)(66556008)(6512007)(2906002)(8676002)(6486002)(54906003)(2616005)(66946007)(186003)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SklESXdGOC9hMFdHTWw0YThmR1FFNndneERaVWd0MWpXK1pnR0lRWmo1K3RZ?=
- =?utf-8?B?SW9QbTJqam54S3RXRE1QRGZxSUkwejlFZ0NxL0hTQXE0K2R1dmMvSjBBQWxi?=
- =?utf-8?B?RlNwTmJocXY5ZlhZMDl4Q1JuenFSMUpTMkpPQWpXdEQ1eGZqTWdCMzVValpm?=
- =?utf-8?B?eFY4WnhOeFUxSW5uV3hwZ05pRHJ4dkc2NVlzYXlwWEF2TG5lcFNnaEgvTlFY?=
- =?utf-8?B?R0VvMDJ4TkE3VVJQcTJlMjVZTGVGZE9COEl3VGM3UUFtdFVESVpIckpGcmFO?=
- =?utf-8?B?WFg5dXBpRXVZaWJmZ1JIQkVOR1h4dUhyNFNHb0VoK1RjTXVLM0xxMWd5T1ZH?=
- =?utf-8?B?aUQ2VjhyZVNTYVdXeXJ4UlhhU3RFdFJTZHNQRURYSG1neTdUa3pBWE1QZ3B3?=
- =?utf-8?B?ejlEd1NGOVliZVhySmFmUlJZcEZiVmtKUFJDaWpHUTRha3E2SG1FMlVaYlpo?=
- =?utf-8?B?ZVNzSlVxVGJsTTVUYnZMbWxHM2VHZWZQSURCa1VKb0RIVlcrRjU1RkYxZmow?=
- =?utf-8?B?bXN3NzVoRVpNZjNyUDlUanRHNVFOOFBpMDMydGFKaUdnaDRUb1dGcjJVM0Y5?=
- =?utf-8?B?MGJWcm5YTVp2R1BkQitrTXRtcVNQTU5PZFJGT2lNRmVPOVd6SkptMWtGdWdk?=
- =?utf-8?B?Si9YR3FoQjNxZnZHR05NdlJLODdObG1RMGkyK2RKOExtalZ6WHdtRGYrc3Fs?=
- =?utf-8?B?NCtiellhV3FySUx4WkhOdlNUR2dGelVnUmFFU3BJWDRCejVKbWlqbUNaZldS?=
- =?utf-8?B?bjFqL0gwSXQweXFaeFN1T0RBbFFRNTJqZUozQUVJeTRTQmUxVm92aVBFZGEx?=
- =?utf-8?B?YzVpNDFPRFdBcDd1NHpLRXJoWFozYmw4enliNjIraS96SDMzeTdnUEU1R3kw?=
- =?utf-8?B?S0VaZWNqdVdWYlJFSTM0MlVNSDNOYjFYVzZ5dUE3cm9oalFFVEl2R2srYkFW?=
- =?utf-8?B?UWFLTHc2TEp0VDFtSmNYQWwrM1k4N21wQ3cybGk5NGM4blpNV0FhNXVCYjhT?=
- =?utf-8?B?QkNKUDBOa3Z4VDJROFRsZlpuWXRjbnZVc2pETE0xUkQwSm41L3RBcnByNnYw?=
- =?utf-8?B?MXdpblB4ZytPOEMyWGxzQU5LaVVsMlowMTVRUHhGbGw4Tk5BcGhUOU9HVG1t?=
- =?utf-8?B?eUR3b1RhTHpmUWgwR0hZRTdmVHoza09lNGZDRGZGOFUyci9tWmNxUFphVjRy?=
- =?utf-8?B?WEdTQmxZK2dCM1F5U2xhZ3crSUs3OUM4Tkt6b3JnUTkvRHNST2VwNnJZaDVh?=
- =?utf-8?B?K1lFSEc3WnJQbC90QTMrQzJzRFJ4emZPN1BtMjJNUWRtMmRoUWliZTFjNlp5?=
- =?utf-8?B?MUlmWE1sWHk5bjdnNjhwV1Y4T2syL2Y2RHBDL1JGSTIvdWVNS0xZY0Y1WER2?=
- =?utf-8?B?bUlzZzQ4U1JOSUxXNDJqa2htUWN2OE5mUXBJMXpEeHZGUHA2TllkOGkzMDlu?=
- =?utf-8?B?QzAvcWcxTEo2MGloVGFyZVIyK0tvSnRHRVpuaXlnR1gwcERzSDZBN21TSG1r?=
- =?utf-8?B?clU4RUc2Mm5WM2tUTjUzNStXM24rSWd3MDY3R2Q5cWhPT2Q2YjNtRGJWbWwr?=
- =?utf-8?B?LzBFK1VYZ01kN3JMRk5ITFlHTmNLTDh0Qzh3eEFRcEp3cmc1Mi9lenlYZFNC?=
- =?utf-8?B?U1ZPSEp6U1J3Zmt5aVdnRDE0YXZXRmZxRklST0lieHF4ODR1NVlMWjdwdmFW?=
- =?utf-8?B?dFUyR1pYeXZPWitzc0VmNXdXZ1NZT0l1RmwyU1B0OUx4ZjVrOWdVWEVHdDdQ?=
- =?utf-8?B?eU9SM1NJZWt1djA0eWRGR2VMaStWckJyenkwV2NkTGxpdWo1Z2JOMytTejl5?=
- =?utf-8?B?UWNXS0VDMGFjNGUrTDAvOU9OK1V6V2VWd1F2TmpJTEFMMGtIWTFmd1RMQngy?=
- =?utf-8?B?QW9ESlFsZWpQb0UrOGhldXJYSXcxVTg4eElhd3hQU1FYL3ZScDFUNmNBYXBu?=
- =?utf-8?B?MVJCdlJhNmtqK0cwQTRBa05ENjFJa0ZtZnVyQzd5NEliK2g3NDBPZGhhUVJ5?=
- =?utf-8?B?d3BUa0hoMWc2UlloVnlQcWpUbmlNaEhTYS9RTzdDT2hzRUYwTmNwRk12TEhV?=
- =?utf-8?B?ZWNPdzg2d2NjcGR4S1dreFdReWt0T3hQRUh2aFdlc0xtbjBjUkNicGdXd2lj?=
- =?utf-8?B?VEZuU3VXYSs2dFN5R0c2MFZrMTM2ZmJHcHFBTi9tVzZSUEoyb1QyZy9EdWJX?=
- =?utf-8?Q?GF69qIbenHrwmTKtlpKgO7w=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 171fd05e-36ef-4eb0-f791-08d9d4baa73c
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 04:27:18.7101
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dJuvsBX9kXYttNG3QZxR5TL6RM6uysKDgpZPPQbWI0U/9fkZ8Bwn2H80H6EMRgX3oUvfXxnJiL2P5lVtgo532w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2790
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220105225013.1567871-4-lizhi.hou@xilinx.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/22 20:23, Matthew Wilcox (Oracle) wrote:
-> Replace three calls to compound_head() with one.  This removes the last
-> user of compound_pincount(), so remove that helper too.
+On Wed, Jan 05, 2022 at 02:50:11PM -0800, Lizhi Hou wrote:
+> When OF_FLATTREE is selected and there is not a device tree, create an
+> empty device tree root node. of/unittest.c code is referenced.
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 > ---
->   include/linux/mm.h | 21 ++++++++-------------
->   1 file changed, 8 insertions(+), 13 deletions(-)
-
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-
-
-thanks,
--- 
-John Hubbard
-NVIDIA
-
+>  drivers/of/Makefile        |  5 +++
+>  drivers/of/fdt.c           | 90 ++++++++++++++++++++++++++++++++++++++
+>  drivers/of/fdt_default.dts |  5 +++
+>  drivers/of/of_private.h    | 17 +++++++
+>  drivers/of/unittest.c      | 72 ++----------------------------
+>  5 files changed, 120 insertions(+), 69 deletions(-)
+>  create mode 100644 drivers/of/fdt_default.dts
 > 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index bf9624ca61c3..d3769897c8ac 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -934,13 +934,6 @@ static inline int head_compound_pincount(struct page *head)
->   	return atomic_read(compound_pincount_ptr(head));
->   }
->   
-> -static inline int compound_pincount(struct page *page)
-> -{
-> -	VM_BUG_ON_PAGE(!PageCompound(page), page);
-> -	page = compound_head(page);
-> -	return head_compound_pincount(page);
-> -}
-> -
->   static inline void set_compound_order(struct page *page, unsigned int order)
->   {
->   	page[1].compound_order = order;
-> @@ -1340,18 +1333,20 @@ void unpin_user_pages(struct page **pages, unsigned long npages);
->    */
->   static inline bool page_maybe_dma_pinned(struct page *page)
->   {
-> -	if (PageCompound(page))
-> -		return compound_pincount(page) > 0;
-> +	struct folio *folio = page_folio(page);
+> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+> index c13b982084a3..a2989055c578 100644
+> --- a/drivers/of/Makefile
+> +++ b/drivers/of/Makefile
+> @@ -1,5 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-y = base.o device.o platform.o property.o
 > +
-> +	if (folio_test_large(folio))
-> +		return atomic_read(folio_pincount_ptr(folio)) > 0;
->   
->   	/*
-> -	 * page_ref_count() is signed. If that refcount overflows, then
-> -	 * page_ref_count() returns a negative value, and callers will avoid
-> +	 * folio_ref_count() is signed. If that refcount overflows, then
-> +	 * folio_ref_count() returns a negative value, and callers will avoid
->   	 * further incrementing the refcount.
->   	 *
-> -	 * Here, for that overflow case, use the signed bit to count a little
-> +	 * Here, for that overflow case, use the sign bit to count a little
->   	 * bit higher via unsigned math, and thus still get an accurate result.
->   	 */
-> -	return ((unsigned int)page_ref_count(compound_head(page))) >=
-> +	return ((unsigned int)folio_ref_count(folio)) >=
->   		GUP_PIN_COUNTING_BIAS;
->   }
->   
+
+remove the blank line.
+
+>  obj-$(CONFIG_OF_KOBJ) += kobj.o
+>  obj-$(CONFIG_OF_DYNAMIC) += dynamic.o
+>  obj-$(CONFIG_OF_FLATTREE) += fdt.o
+> @@ -20,4 +21,8 @@ obj-y	+= kexec.o
+>  endif
+>  endif
+>  
+> +ifndef CONFIG_OF_UNITTEST
+> +obj-$(CONFIG_OF_FLATTREE) += fdt_default.dtb.o
+> +endif
+> +
+
+Same question as Tom, the unittest should work well with or without
+of_root, is it? So creating an empty root will not affect unittest, so
+why so many ifdefs for CONFIG_OF_UNITTEST?
+
+>  obj-$(CONFIG_OF_UNITTEST) += unittest-data/
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index 4546572af24b..66ef9ac97829 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -466,6 +466,96 @@ void *of_fdt_unflatten_tree(const unsigned long *blob,
+>  }
+>  EXPORT_SYMBOL_GPL(of_fdt_unflatten_tree);
+>  
+> +static int __init of_fdt_root_init(void)
+> +{
+> +	struct device_node *dt = NULL, *np;
+> +	void *fdt = NULL, *fdt_aligned;
+> +	struct property *prop = NULL;
+> +	__be32 *val = NULL;
+> +	int size, rc = 0;
+> +
+> +#if !defined(CONFIG_OF_UNITTEST)
+> +	if (of_root)
+> +		return 0;
+> +#endif
+> +	size = __dtb_fdt_default_end - __dtb_fdt_default_begin;
+> +
+> +	fdt = kmalloc(size + FDT_ALIGN_SIZE, GFP_KERNEL);
+> +	if (!fdt)
+> +		return -ENOMEM;
+> +
+> +	fdt_aligned = PTR_ALIGN(fdt, FDT_ALIGN_SIZE);
+> +	memcpy(fdt_aligned, __dtb_fdt_default_begin, size);
+> +
+> +	if (!of_fdt_unflatten_tree((const unsigned long *)fdt_aligned,
+> +				   NULL, &dt)) {
+> +		pr_warn("%s: unflatten default tree failed\n", __func__);
+> +		kfree(fdt);
+> +		return -ENODATA;
+> +	}
+> +	if (!dt) {
+> +		pr_warn("%s: empty default tree\n", __func__);
+> +		kfree(fdt);
+> +		return -ENODATA;
+> +	}
+> +
+> +	/*
+> +	 * This lock normally encloses of_resolve_phandles()
+> +	 */
+> +	of_overlay_mutex_lock();
+> +
+> +	rc = of_resolve_phandles(dt);
+> +	if (rc) {
+> +		pr_err("%s: Failed to resolve phandles (rc=%i)\n", __func__, rc);
+> +		goto failed;
+> +	}
+> +
+> +	if (!of_root) {
+> +		prop = kcalloc(2, sizeof(*prop), GFP_KERNEL);
+> +		if (!prop) {
+> +			rc = -ENOMEM;
+> +			goto failed;
+> +		}
+> +		val = kzalloc(sizeof(*val), GFP_KERNEL);
+> +		if (!val) {
+> +			rc = -ENOMEM;
+> +			goto failed;
+> +		}
+> +		*val = cpu_to_be32(sizeof(void *) / sizeof(u32));
+> +
+> +		prop->name = "#address-cells";
+> +		prop->value = val;
+> +		prop->length = sizeof(u32);
+> +		of_add_property(dt, prop);
+> +		prop++;
+> +		prop->name = "#size-cells";
+> +		prop->value = val;
+> +		prop->length = sizeof(u32);
+> +		of_add_property(dt, prop);
+> +		of_root = dt;
+> +		for_each_of_allnodes(np)
+> +			__of_attach_node_sysfs(np);
+> +		of_aliases = of_find_node_by_path("/aliases");
+> +		of_chosen = of_find_node_by_path("/chosen");
+> +		of_overlay_mutex_unlock();
+> +pr_info("OF ROOT FLAG %lx\n", of_root->_flags);
+> +		return 0;
+> +	}
+> +
+> +	unittest_data_add(dt);
+
+It's confusing to me. If we need to share some functions with unittest,
+make a new clearly defined (and named) function.
+
+> +
+> +	of_overlay_mutex_unlock();
+> +
+> +	return 0;
+> +
+> +failed:
+> +	of_overlay_mutex_unlock();
+> +	kfree(val);
+> +	kfree(prop);
+> +	return rc;
+> +}
+> +pure_initcall(of_fdt_root_init);
+
+Is it better we have a new Kconfig option for the empty tree creation.
+
+> +
+>  /* Everything below here references initial_boot_params directly. */
+>  int __initdata dt_root_addr_cells;
+>  int __initdata dt_root_size_cells;
+> diff --git a/drivers/of/fdt_default.dts b/drivers/of/fdt_default.dts
+> new file mode 100644
+> index 000000000000..d1f12a76dfc6
+> --- /dev/null
+> +++ b/drivers/of/fdt_default.dts
+> @@ -0,0 +1,5 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/dts-v1/;
+> +
+> +/ {
+> +};
+> diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
+> index 631489f7f8c0..1ef93bccfdba 100644
+> --- a/drivers/of/of_private.h
+> +++ b/drivers/of/of_private.h
+> @@ -41,6 +41,18 @@ extern struct mutex of_mutex;
+>  extern struct list_head aliases_lookup;
+>  extern struct kset *of_kset;
+>  
+> +#if defined(CONFIG_OF_UNITTEST)
+> +extern u8 __dtb_testcases_begin[];
+> +extern u8 __dtb_testcases_end[];
+> +#define __dtb_fdt_default_begin		__dtb_testcases_begin
+> +#define __dtb_fdt_default_end		__dtb_testcases_end
+
+Maybe we don't have to use the test dt data, stick to the default empty
+fdt is fine?
+
+> +void __init unittest_data_add(struct device_node *dt);
+> +#else
+> +extern u8 __dtb_fdt_default_begin[];
+> +extern u8 __dtb_fdt_default_end[];
+> +static inline void unittest_data_add(struct device_node *dt) {}
+> +#endif
+> +
+>  #if defined(CONFIG_OF_DYNAMIC)
+>  extern int of_property_notify(int action, struct device_node *np,
+>  			      struct property *prop, struct property *old_prop);
+> @@ -84,6 +96,11 @@ static inline void __of_detach_node_sysfs(struct device_node *np) {}
+>  
+>  #if defined(CONFIG_OF_RESOLVE)
+>  int of_resolve_phandles(struct device_node *tree);
+> +#else
+> +static inline int of_resolve_phandles(struct device_node *tree)
+> +{
+> +	return 0;
+> +}
+
+If we have an empty of_resolve_phandles, does the empty tree creation
+still works? Or if we don't need this func, just delete in the code.
+
+Thanks,
+Yilun
+
+>  #endif
+>  
+>  void __of_phandle_cache_inv_entry(phandle handle);
+> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+> index 8c056972a6dd..745f455235cc 100644
+> --- a/drivers/of/unittest.c
+> +++ b/drivers/of/unittest.c
+> @@ -1402,73 +1402,15 @@ static void attach_node_and_children(struct device_node *np)
+>   *	unittest_data_add - Reads, copies data from
+>   *	linked tree and attaches it to the live tree
+>   */
+> -static int __init unittest_data_add(void)
+> +void __init unittest_data_add(struct device_node *dt)
+>  {
+> -	void *unittest_data;
+> -	void *unittest_data_align;
+> -	struct device_node *unittest_data_node = NULL, *np;
+> -	/*
+> -	 * __dtb_testcases_begin[] and __dtb_testcases_end[] are magically
+> -	 * created by cmd_dt_S_dtb in scripts/Makefile.lib
+> -	 */
+> -	extern uint8_t __dtb_testcases_begin[];
+> -	extern uint8_t __dtb_testcases_end[];
+> -	const int size = __dtb_testcases_end - __dtb_testcases_begin;
+> -	int rc;
+> -	void *ret;
+> -
+> -	if (!size) {
+> -		pr_warn("%s: testcases is empty\n", __func__);
+> -		return -ENODATA;
+> -	}
+> -
+> -	/* creating copy */
+> -	unittest_data = kmalloc(size + FDT_ALIGN_SIZE, GFP_KERNEL);
+> -	if (!unittest_data)
+> -		return -ENOMEM;
+> -
+> -	unittest_data_align = PTR_ALIGN(unittest_data, FDT_ALIGN_SIZE);
+> -	memcpy(unittest_data_align, __dtb_testcases_begin, size);
+> -
+> -	ret = of_fdt_unflatten_tree(unittest_data_align, NULL, &unittest_data_node);
+> -	if (!ret) {
+> -		pr_warn("%s: unflatten testcases tree failed\n", __func__);
+> -		kfree(unittest_data);
+> -		return -ENODATA;
+> -	}
+> -	if (!unittest_data_node) {
+> -		pr_warn("%s: testcases tree is empty\n", __func__);
+> -		kfree(unittest_data);
+> -		return -ENODATA;
+> -	}
+> -
+> -	/*
+> -	 * This lock normally encloses of_resolve_phandles()
+> -	 */
+> -	of_overlay_mutex_lock();
+> -
+> -	rc = of_resolve_phandles(unittest_data_node);
+> -	if (rc) {
+> -		pr_err("%s: Failed to resolve phandles (rc=%i)\n", __func__, rc);
+> -		of_overlay_mutex_unlock();
+> -		return -EINVAL;
+> -	}
+> -
+> -	if (!of_root) {
+> -		of_root = unittest_data_node;
+> -		for_each_of_allnodes(np)
+> -			__of_attach_node_sysfs(np);
+> -		of_aliases = of_find_node_by_path("/aliases");
+> -		of_chosen = of_find_node_by_path("/chosen");
+> -		of_overlay_mutex_unlock();
+> -		return 0;
+> -	}
+> +	struct device_node *np;
+>  
+>  	EXPECT_BEGIN(KERN_INFO,
+>  		     "Duplicate name in testcase-data, renamed to \"duplicate-name#1\"");
+>  
+>  	/* attach the sub-tree to live tree */
+> -	np = unittest_data_node->child;
+> +	np = dt->child;
+>  	while (np) {
+>  		struct device_node *next = np->sibling;
+>  
+> @@ -1479,10 +1421,6 @@ static int __init unittest_data_add(void)
+>  
+>  	EXPECT_END(KERN_INFO,
+>  		   "Duplicate name in testcase-data, renamed to \"duplicate-name#1\"");
+> -
+> -	of_overlay_mutex_unlock();
+> -
+> -	return 0;
+>  }
+>  
+>  #ifdef CONFIG_OF_OVERLAY
+> @@ -3258,7 +3196,6 @@ static inline __init void of_unittest_overlay_high_level(void) {}
+>  static int __init of_unittest(void)
+>  {
+>  	struct device_node *np;
+> -	int res;
+>  
+>  	pr_info("start of unittest - you will see error messages\n");
+>  
+> @@ -3267,9 +3204,6 @@ static int __init of_unittest(void)
+>  	if (IS_ENABLED(CONFIG_UML))
+>  		unittest_unflatten_overlay_base();
+>  
+> -	res = unittest_data_add();
+> -	if (res)
+> -		return res;
+>  	if (!of_aliases)
+>  		of_aliases = of_find_node_by_path("/aliases");
+>  
+> -- 
+> 2.27.0

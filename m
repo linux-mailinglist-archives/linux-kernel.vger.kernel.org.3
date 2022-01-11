@@ -2,175 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEB548A884
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C45E748A889
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 08:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348539AbiAKHiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 02:38:06 -0500
-Received: from mail-bn7nam10on2044.outbound.protection.outlook.com ([40.107.92.44]:20992
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235559AbiAKHiG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:38:06 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E+by6kaT1HNOJnbj1apTpFsyvuNfuYHxB5HK8VSIiZfy8GZp6tYk1R82KI9fLudKaLLEyGMbGmKRePKcZyLC3lSZrVrv6J3e6sQFoNf82/dmdBqkryOF+B/Sc7bbPVVS8kebW78mUUzJqOSUv01ymDU9uRLrIdK/3WxAHRqEHPrez5DW2xhU0MEJ7XgyAgkKjOmF7N6zEAfvUa2Kps5efhAzDrGY2qJ0S4H9W6K5HcRLRMUx1W8aNGEBEadfMq90avuRdWUP4I0yaD6I0Rmmgxuaxc4HK971w8esZk0ThFqXvl8MaPiXXNMWo6SNwUDdlmevX7Tm8QYxkVL4IPmj+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JZVJ4+ZJhohvHyWcG2kUOV7QVH+Ntha+GOtXgw5+y5E=;
- b=dkqToLIBqvj6ZBwY1LpgA934g/YH4Se12d7XBf5btllr+It4wXhqaFkMgJyCkok/fK8G5lRRJzLR+VHKHcriIgO3MgV9GTttDt9h70mNTlV5JEnimnMONDnf9lMUu44MfZhtBIWEKCj5OkZqrVHFGCgLyr8UWdSavP5JTAOhprBe8GCYL3gQGjpJkfhbV1NDceBcEhCND8Cjy3ttTxPW7St+IgFj4c6Eu5ocTyGBmt4Qm7EVyQE323BZSV7Inc/RbixMIAvmbWW9ca7zMJ+nHOdbxOetfE0B1jvrHEBhd9WvB8VUf+l6XEyad1F52gQzJLeikC6TGGUSGLZ427Q++g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JZVJ4+ZJhohvHyWcG2kUOV7QVH+Ntha+GOtXgw5+y5E=;
- b=oJfcV+sLiL7mm7yJ5dTSlplUDEDXRW9Mu3LXGRoi8JyZxYplrkTBgRGK7x/9DhNpBtJDS2PLJkoBNMBqEllurgKQLMIREH7yHxV85MNbwhBGoKyWIYEW01/OBTmpQwt/eSM3Fm8YntSislKctaQQR4Gr+urG2PCLtkrSEQIJsQ/EODDQh2jGE4pVxFPXVfBnpun5su2x64go+KdF9JIv52amf5cQ1KHr1gyGXkGVDiAZA9zzkP7UbEOVEU3BrNAaS9NYNPcwbLLurrVPVgVQVh1tBa5YewgBIJNomczre6Xtqmuf7NSIrskaEHhgARoKjrrewxR6n/q2dZ2EhO40Bw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by BYAPR12MB3414.namprd12.prod.outlook.com (2603:10b6:a03:aa::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Tue, 11 Jan
- 2022 07:38:04 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::8496:16fd:65c5:4af7]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::8496:16fd:65c5:4af7%4]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
- 07:38:04 +0000
-Message-ID: <4789f3d7-1e6c-65ad-8410-29a8a9b26c99@nvidia.com>
-Date:   Mon, 10 Jan 2022 23:38:02 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v2 23/28] gup: Convert gup_huge_pud() to use a folio
-Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-References: <20220110042406.499429-1-willy@infradead.org>
- <20220110042406.499429-24-willy@infradead.org>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20220110042406.499429-24-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0231.namprd13.prod.outlook.com
- (2603:10b6:a03:2c1::26) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        id S1348567AbiAKHif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 02:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235663AbiAKHie (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 02:38:34 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B285C06173F;
+        Mon, 10 Jan 2022 23:38:34 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id ie23-20020a17090b401700b001b38a5318easo4332183pjb.2;
+        Mon, 10 Jan 2022 23:38:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aSFGM/gOtWEIdQ8s/qIWiC6bRqOFDJFspWBP5HCcU2M=;
+        b=KO3do/4TL4c1Mx65rpa4UAuDDdPNHh+XqAv14goa1MUM+IJOkbZqIwb0SnYkOHqm2n
+         s0IwVqx94REDTtyLLHq8uXbOIdO5cqkHBYj3CWH6yYcJv9rist61zUEEcsTHsnTfokeI
+         1Pzae4OL9Q9NH/A4FdZtIfyimZ/zDImJQPs8Z86acp9tMPV0G862XmxARaD9fY3o4LxF
+         z4M/Pr+RDb4bXVqxvmVxjwip/HSkJfSrLgffup9M2O8KgLNnEHCBfWkJdm9wJNHzFvks
+         KeY65dcSsaupF+/EsXWeDHmyXmjMkfaCNnY8ab3/rl8I8kgMzo1ydHROP+vR8QFiUuT3
+         AlJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aSFGM/gOtWEIdQ8s/qIWiC6bRqOFDJFspWBP5HCcU2M=;
+        b=ni0zGRy+esocccSzOpC3FrRv7S2fHPOjtZ5voQzmpsKLsxAyf9q81DF4nkmN56Jhw+
+         5Fee2zoR1oVzMAjkyzmT8DSH3FWw8co0XYiRcpeFRtcSKq44S296NNFjjQ7Ta6IGrM4n
+         A1s0R4GCQ5qK1lBiozuff9X+MiT9vbh4q2j6ve8vrLLVd3c2FlGK5j8DFz7oE0ZP37RJ
+         LAGphUkuYUlMDSCY8YYRi9oHmCVX2bOX2GnFpwuywva3tlfTsxHiWEKgpAWzkyTQubVc
+         BrZgPT9EB24g2SdU/VDKae3ssFEXz7npWAYT9y7JcD7tMbCHAlKigLUoiIU6Q+LAPvyv
+         jVOA==
+X-Gm-Message-State: AOAM530R+OIBa/UoaWw4ydks+F3y5mvucEyHARUmrIejERAvz/Sgl1Ix
+        IPKNmHFgpndvvq7+dYiBjQw=
+X-Google-Smtp-Source: ABdhPJzUen6Trd4KsFKQCtsbp1BuxIAeUM+g0wIV8lZagW6Od6HumXP69rDl9zO3iQaT4jL0PR1C4Q==
+X-Received: by 2002:a17:902:ceca:b0:14a:3eba:41ed with SMTP id d10-20020a170902ceca00b0014a3eba41edmr3149026plg.118.1641886713988;
+        Mon, 10 Jan 2022 23:38:33 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id c19sm4878180pfo.91.2022.01.10.23.38.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 23:38:33 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86: Making the module parameter of vPMU more common
+Date:   Tue, 11 Jan 2022 15:38:23 +0800
+Message-Id: <20220111073823.21885-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9eec63eb-eff3-40e5-d468-08d9d4d54d6a
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3414:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB341472466A02B69B0A536718A8519@BYAPR12MB3414.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:398;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kJKXxzVNZnCHJMbdGHHWOb6g4/LLAZ04XxtNvYcPX5UDSTnrMvEUL5eFEB9xS8/S2Odk7F9wOsvAUlJnBXD5DTcFL5sDeN+dtPCiRF9dMZmJ8+aUSxPHGTSRtrca0i2RZa3yadtbo40VaEhi6PuDmt7zPZaAjSnE8QR2W6f0tdWfKEbwbOceHoWgROrTh5ee969UrJxBo1n0U91JyPWEH7yA1WP15tWm49y7CoeV5OTWEyoOwvsJoO841UBcGe/r97X9+U4iiMlh1m7+QSQnbRMKVgf5GLlp99IN+jP3k+g0ktjD1+r+kmp3kK7Hlh1fHJ6+P30AutxqvHm8gb2zC5huE+Xgi1LjHijtKrEss6Oe7WOpivQYqcf2CiUS5QKqNhI6dhhoJNMXU9wNsar3fW/5qvwUtPjrkHAQEOGmtSaOnAPv8zmoPTxBRlfpYYYaB0SQR8efaE1ogNuFmop48/A0uis4/uzXFwxLpkBRbDApgbdFr1OEK9CzYagvZJVwd87xoUof6b4wEKI5t9ClIo7hx3XfmTS/BVGwvxH6R8mltOxLuD/A1BeHvzzBwM9xUXTDJNCYvP9lefpwCN3DkWWnxltEj4CzyBQZqT4+3+OyhC9hbziehXuSjUfr0Mln6oPEgBlUQ1lpHybSFQLHa8uc/s3F6lrv1iNx9rciuoeLGuowJAAf9u9GC0717YC1Korz0YAOEs6722c0a85PUWwrxTkphA5oEJ6huiD5cRmBBqbI4xwebKrSeeJ0TZvy
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2616005)(186003)(31696002)(54906003)(6512007)(66476007)(5660300002)(66556008)(6486002)(31686004)(6506007)(53546011)(316002)(86362001)(38100700002)(83380400001)(508600001)(26005)(66946007)(4326008)(36756003)(8936002)(8676002)(2906002)(14583001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S2l5MGk2VHptb2JJL3dMR0pzeXVPcVZuZDB6bHBHNk5zdU9haWlSUDM2TGxS?=
- =?utf-8?B?RjQwRVVDTVNncmhqVEhHZk42SlgrN2YrbCtMbEJVVmdwUzNOajVFSi9GenhD?=
- =?utf-8?B?VFdaQ213YlIzaVJnSS9yRzArZXpRMnZUME5WcnVjZ2YwMm9hemRZc2lGYTUw?=
- =?utf-8?B?bEpMODFDSG0xMUdJb3RpUXpXOU8yVVFJamRqVmJmSUpXKy83dkxUTWlIUnNV?=
- =?utf-8?B?bjFQd29WOS9sL0V0OWliZGMrdG5DeHM4TmtNeDlUQlh3T2tTVE55RjN5TlVC?=
- =?utf-8?B?NGozbHY3V2lpakpPQTlKK21Lb1poVlZVYVVuOC8wMzc3Sy9QRkdOTmZURkh1?=
- =?utf-8?B?RE1PSlFTblpNbFBaQUwzd0lpNlR5QjNST2Flbk0vOHloSkxyanlOakZuUDhW?=
- =?utf-8?B?ckdORXROd3NDNVZVQlpTTzYxSy9acU1VUS9kTHVIMXBSUFM3RkdBVCt2UHJj?=
- =?utf-8?B?TkxSZEZtVDZYYzBkQzllc3NyMUJ4VnhhT2pSOHh3bWFseVYyZ2dQT2Zac05D?=
- =?utf-8?B?Y25rcDFoYm5KaG42MVBkZndoVWRVZldXZkRvL2NydVM5bWlIazJOaGFLMGdO?=
- =?utf-8?B?QmxLZlVXTHBSUUJkNkhDbEVWT0RlOHRpdGJBbTVTUjNXdC9Wd1MzcmpOZXFR?=
- =?utf-8?B?eW5IcVhwaUJyMkhPQXFsNmJxeDRUb3lLbG0zclFiNGt5RW9JWFFkWnduUVZn?=
- =?utf-8?B?Y0tZSk9KTTZnMW1ZSktQRGdzWm9IZm8xWHUza2VhRjRHbUM0WXI4VmhESDhH?=
- =?utf-8?B?b2F1aW1SZ0NwUHNJdnFlS0FqVEsrL2tWeElkcEd6QU5kckd0ajNtMGZrOHdj?=
- =?utf-8?B?QjFXNW9lcEk4Z2hMK0tMZ1JsK3lOK3ArWjEwTGx3Z091K3VSWUhHRW5ObktS?=
- =?utf-8?B?SUd5dUk1eVNHVTFlaFBQQVo3S1pIMStyQlQyRTIvbWtORmE3bU90a0Q1L3V1?=
- =?utf-8?B?RlJyMjB3UFNGWFVnenRSa1dQWjZQQmtSTDFUNGIvaFF1RHBNa3pBbDZqTTR4?=
- =?utf-8?B?RTR1bVl6UEJHM0tmeG53MVJCTjRUTHhuU2dUd2ZXR1pFaEJ6S0VRYnpXSnZT?=
- =?utf-8?B?UCtWQVZYVHhDR0dSVjhMU3N1QzRUL1RGOGE0cEN2bjBSQmFCMCtUMm5yRTZ0?=
- =?utf-8?B?MGxuZTZnTzVqQkRDVmFncCsvcVFuZHRWVTRpMFRsbFFPeWhFMHowblpDallq?=
- =?utf-8?B?RkNqWmRTZVA4OTFHTDFIeVFEekROZGJCQ1dONE01aktNODBYem5RVzZRZEVK?=
- =?utf-8?B?cEpRMkdrWDR2RFo0ZVdNS2RkRmRGaXZyNGcybHQxOEVUWUhvM2oyTmVkNUM4?=
- =?utf-8?B?eVB4ZWpod2E0U2dXZjQzSjBDZCtTNlMrSVNOWGRmS1ZTcjNOZ0t5OEhKVytW?=
- =?utf-8?B?aENvaG9keVRHNXk0MndSazFRTjFSV0NnamFVMWsraFgxRDBibGJVa0w2bFZr?=
- =?utf-8?B?QllDOUdrWVhUa3lhL3NtWmZGSml4d3RWSnBtTGRObDBudTVZcHRrQmQ1UHkr?=
- =?utf-8?B?VnFudHBidWpMK0xEdFd5Q3cwYW8yYUVyZ3JzbER4Mk9PdmtGUThvZnRpV1hx?=
- =?utf-8?B?TEIvOFpLaHF4STBkNDRhMlFZR0tnTFBIRDZ1YUpDdFN4dklSMjM3YjExdFJh?=
- =?utf-8?B?SzBTaERVYWtzR3ZYdWhKZGdUTERlUDlXYW44SjBFcWJZU0hpdVNXV2p3VHZX?=
- =?utf-8?B?TjlOdGttby9IR2pDOEowTERLRm50TlowNEQ0RUpLTlVJa3c4RHJhUlRUKzR0?=
- =?utf-8?B?MEJhY2g4YkpvV2tmekhaTFV2MEVUeUZrUXFjbEFPRytUYXBXVEIyZDYzOFM3?=
- =?utf-8?B?Z2NWSzViREFCYWYyOUpZUEREK0hIMWNqYzhvYmQxRU1ERFFkSlBNVVlzcmFk?=
- =?utf-8?B?c2IzM3F0UEEzdFB1a3E2cHJISmgxRlZMWm4ydEJ4dDR5RGlCZ21BZEdDTi9v?=
- =?utf-8?B?RWtvc01HNmNCTy8yWVhQV0FtSXpyMHNKTTYwRzVEbEpTNFpWZERwOXF0aHl5?=
- =?utf-8?B?emRLTkUzL3BvMUp3WVBhdVQ5Wm9IcDEzVHhQQzI0MmErTXkzOXVrNGY2V29K?=
- =?utf-8?B?RnFDQVFSNWhyV2Z3TVA1bG9XRlowZGw1RTBOTDY3TGY2bm1PRWZ2L0dtTDJM?=
- =?utf-8?B?TXF6ekxtWVl5dG1oRitISTlXb1dlMGlDWjhzMHdZN3dLaENxWGpab2RsaWFO?=
- =?utf-8?Q?XmbWjcngohcOhJYel+jSqWM=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9eec63eb-eff3-40e5-d468-08d9d4d54d6a
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 07:38:04.3010
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: C/iAaiEVXHVRfvTuq1VW6mKRC3O2h0VORn+yyRrvzCEIWLbbibGnMGvjWmRXJYBeBzs7Ow6yYTiSnScvKmrWug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3414
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/9/22 20:24, Matthew Wilcox (Oracle) wrote:
-> Use the new folio-based APIs.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->   mm/gup.c | 11 ++++++-----
->   1 file changed, 6 insertions(+), 5 deletions(-)
+From: Like Xu <likexu@tencent.com>
 
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+The new module parameter to control PMU virtualization should apply
+to Intel as well as AMD, for situations where userspace is not trusted.
+If the module parameter allows PMU virtualization, there could be a
+new KVM_CAP or guest CPUID bits whereby userspace can enable/disable
+PMU virtualization on a per-VM basis.
 
+If the module parameter does not allow PMU virtualization, there
+should be no userspace override, since we have no precedent for
+authorizing that kind of override. If it's false, other counter-based
+profiling features (such as LBR including the associated CPUID bits
+if any) will not be exposed.
 
-thanks,
+Change its name from "pmu" to "enable_pmu" as we have temporary
+variables with the same name in our code like "struct kvm_pmu *pmu".
+
+Fixes: b1d66dad65dc ("KVM: x86/svm: Add module param to control PMU virtualization")
+Suggested-by : Jim Mattson <jmattson@google.com>
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ arch/x86/kvm/cpuid.c            | 6 +++---
+ arch/x86/kvm/svm/pmu.c          | 2 +-
+ arch/x86/kvm/svm/svm.c          | 8 ++------
+ arch/x86/kvm/svm/svm.h          | 1 -
+ arch/x86/kvm/vmx/capabilities.h | 4 ++++
+ arch/x86/kvm/vmx/pmu_intel.c    | 2 +-
+ arch/x86/kvm/x86.c              | 5 +++++
+ arch/x86/kvm/x86.h              | 1 +
+ 8 files changed, 17 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 0b920e12bb6d..b2ff8bfd8220 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -770,10 +770,10 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 		perf_get_x86_pmu_capability(&cap);
+ 
+ 		/*
+-		 * Only support guest architectural pmu on a host
+-		 * with architectural pmu.
++		 * The guest architecture pmu is only supported if the architecture
++		 * pmu exists on the host and the module parameters allow it.
+ 		 */
+-		if (!cap.version)
++		if (!cap.version || !enable_pmu)
+ 			memset(&cap, 0, sizeof(cap));
+ 
+ 		eax.split.version_id = min(cap.version, 2);
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index 12d8b301065a..5aa45f13b16d 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -101,7 +101,7 @@ static inline struct kvm_pmc *get_gp_pmc_amd(struct kvm_pmu *pmu, u32 msr,
+ {
+ 	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
+ 
+-	if (!pmu)
++	if (!enable_pmu)
+ 		return NULL;
+ 
+ 	switch (msr) {
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 6cb38044a860..549f73ce5ebc 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -192,10 +192,6 @@ module_param(vgif, int, 0444);
+ static int lbrv = true;
+ module_param(lbrv, int, 0444);
+ 
+-/* enable/disable PMU virtualization */
+-bool pmu = true;
+-module_param(pmu, bool, 0444);
+-
+ static int tsc_scaling = true;
+ module_param(tsc_scaling, int, 0444);
+ 
+@@ -4573,7 +4569,7 @@ static __init void svm_set_cpu_caps(void)
+ 		kvm_cpu_cap_set(X86_FEATURE_VIRT_SSBD);
+ 
+ 	/* AMD PMU PERFCTR_CORE CPUID */
+-	if (pmu && boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
++	if (enable_pmu && boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
+ 		kvm_cpu_cap_set(X86_FEATURE_PERFCTR_CORE);
+ 
+ 	/* CPUID 0x8000001F (SME/SEV features) */
+@@ -4712,7 +4708,7 @@ static __init int svm_hardware_setup(void)
+ 			pr_info("LBR virtualization supported\n");
+ 	}
+ 
+-	if (!pmu)
++	if (!enable_pmu)
+ 		pr_info("PMU virtualization is disabled\n");
+ 
+ 	svm_set_cpu_caps();
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index daa8ca84afcc..47ef8f4a9358 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -32,7 +32,6 @@
+ extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
+ extern bool npt_enabled;
+ extern bool intercept_smi;
+-extern bool pmu;
+ 
+ /*
+  * Clean bits in VMCB.
+diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
+index c8029b7845b6..959b59d13b5a 100644
+--- a/arch/x86/kvm/vmx/capabilities.h
++++ b/arch/x86/kvm/vmx/capabilities.h
+@@ -5,6 +5,7 @@
+ #include <asm/vmx.h>
+ 
+ #include "lapic.h"
++#include "x86.h"
+ 
+ extern bool __read_mostly enable_vpid;
+ extern bool __read_mostly flexpriority_enabled;
+@@ -389,6 +390,9 @@ static inline u64 vmx_get_perf_capabilities(void)
+ {
+ 	u64 perf_cap = 0;
+ 
++	if (!enable_pmu)
++		return perf_cap;
++
+ 	if (boot_cpu_has(X86_FEATURE_PDCM))
+ 		rdmsrl(MSR_IA32_PERF_CAPABILITIES, perf_cap);
+ 
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index ffccfd9823c0..466d18fc0c5d 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -487,7 +487,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	pmu->reserved_bits = 0xffffffff00200000ull;
+ 
+ 	entry = kvm_find_cpuid_entry(vcpu, 0xa, 0);
+-	if (!entry)
++	if (!entry || !enable_pmu)
+ 		return;
+ 	eax.full = entry->eax;
+ 	edx.full = entry->edx;
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index c194a8cbd25f..bff2ff8cb35f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -187,6 +187,11 @@ module_param(force_emulation_prefix, bool, S_IRUGO);
+ int __read_mostly pi_inject_timer = -1;
+ module_param(pi_inject_timer, bint, S_IRUGO | S_IWUSR);
+ 
++/* Enable/disable PMU virtualization */
++bool __read_mostly enable_pmu = true;
++EXPORT_SYMBOL_GPL(enable_pmu);
++module_param(enable_pmu, bool, 0444);
++
+ /*
+  * Restoring the host value for MSRs that are only consumed when running in
+  * usermode, e.g. SYSCALL MSRs and TSC_AUX, can be deferred until the CPU
+diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+index da7031e80f23..1ebd5a7594da 100644
+--- a/arch/x86/kvm/x86.h
++++ b/arch/x86/kvm/x86.h
+@@ -336,6 +336,7 @@ extern u64 host_xcr0;
+ extern u64 supported_xcr0;
+ extern u64 host_xss;
+ extern u64 supported_xss;
++extern bool enable_pmu;
+ 
+ static inline bool kvm_mpx_supported(void)
+ {
 -- 
-John Hubbard
-NVIDIA
+2.33.1
 
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index a006bce2d47b..7b7bf8361558 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -2527,7 +2527,8 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
->   			unsigned long end, unsigned int flags,
->   			struct page **pages, int *nr)
->   {
-> -	struct page *head, *page;
-> +	struct page *page;
-> +	struct folio *folio;
->   	int refs;
->   
->   	if (!pud_access_permitted(orig, flags & FOLL_WRITE))
-> @@ -2543,17 +2544,17 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
->   	page = nth_page(pud_page(orig), (addr & ~PUD_MASK) >> PAGE_SHIFT);
->   	refs = record_subpages(page, addr, end, pages + *nr);
->   
-> -	head = try_grab_compound_head(pud_page(orig), refs, flags);
-> -	if (!head)
-> +	folio = try_grab_folio(page, refs, flags);
-> +	if (!folio)
->   		return 0;
->   
->   	if (unlikely(pud_val(orig) != pud_val(*pudp))) {
-> -		put_compound_head(head, refs, flags);
-> +		gup_put_folio(folio, refs, flags);
->   		return 0;
->   	}
->   
->   	*nr += refs;
-> -	SetPageReferenced(head);
-> +	folio_set_referenced(folio);
->   	return 1;
->   }
->   

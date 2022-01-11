@@ -2,198 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD09248A6BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BA648A6C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 05:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347728AbiAKEUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 23:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
+        id S1347765AbiAKEVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 23:21:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiAKEUj (ORCPT
+        with ESMTP id S234169AbiAKEVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 23:20:39 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E25C06173F;
-        Mon, 10 Jan 2022 20:20:39 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id x15so15272700plg.1;
-        Mon, 10 Jan 2022 20:20:39 -0800 (PST)
+        Mon, 10 Jan 2022 23:21:12 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F70C06173F;
+        Mon, 10 Jan 2022 20:21:12 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id p14so15264601plf.3;
+        Mon, 10 Jan 2022 20:21:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:organization:subject:in-reply-to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Tto62C+VWnwHMjIZEt/IkjdeF/hUNskHa7hE32WUZWo=;
-        b=nGTZvLPVZhT+r0RT2Y/D+I8RG8YKSzE/wpDhxsSXL6ToEwD5+XL24LyirAjpM9Udi8
-         M0+Td9ZDbJ1+oHivltWchrBBw2jO++RQz2s52zf4kUd5YJHWJxUKAu/o5J9xjIAuyryW
-         +0hb2hMmoG3/uUR6T8yAwSptn6mFucCIGrQaqg2VJXlruJLi/e/FT+PTPouezh2VM7C+
-         sDNMmHgwIqW35Cgda6qPlN7ntOKaCY+XkpkQB44SIfjIo+KjNjcd2c7bIOhhyR4GVS+u
-         uQynCn/bUcfM9q5nIkrNqkOUcj2yafqb2PC3TkFs53nNAJQR+86jy6S7njJPOlk3+HcR
-         aSQA==
+        bh=UvMY/BpPHYLYCpXHLFkn3wGD0r030IMs3mS/Z9JjkxE=;
+        b=B4huMDPf/I5XDFsWvuSzqemyC/KmP1kbRmHZg++C6oVqbp5JbmVAzQgwpvPHI2R75a
+         eFndp8C17Wl5PflRaDCVZxWcEbqa5+6UBaNvURPDfheA6K3ribm3QBuU6IOQsF33gvfv
+         CjqRwLCo8SxPYN+3PU9wnp1g8XQZT7e3InZz01HdorpXlY2u1ZmABwxOTI3afAnpZwat
+         i9vhYGqNVJ8YqfUT5BX0bjwabLXthH/pG1n69kGxdrzJ/ttwuvaMK9HnkU1t1NJ+JTqA
+         QeE/kZSdavrTfUBIMdC4YD/raQ0rjw+M3FbXDOLoz/5nwzR2M6KdOEqNP0tSb1lZ4ktK
+         ruYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=Tto62C+VWnwHMjIZEt/IkjdeF/hUNskHa7hE32WUZWo=;
-        b=JYOlp+PYfZNqw/P2P7SthPyOFzvoFV5ka7wKy44oIPsL8RmmbbbQKEqezCiNit7rP4
-         7sZVGtVHzbJlamueyBoBO+vd7Ir0jHc8+YFtzYfzlvWY2/MSLW/UJLyGmEQU6mGjUOif
-         Q6Ybgw+v2PHxzg65mKOE4CtSX64rfCpauWe8ysaj0ux9+mQzXANvrBU9RnHolvqbG43J
-         jp4fSqXxVAZJS+jfuTGlWGqehDgGmaN8n5WuLEnwS32n+1lAK1+rD+Wu2FsVTIRd8AkB
-         498ONCBbAUA6xpwwKscajZOfwKkuc41OB4QiaydGybiUOHouIywdnkx8J3RYkLh9nkWN
-         AjQQ==
-X-Gm-Message-State: AOAM5333N4bQlnKWfc1/+mq+DTLvOtG2r14uSj3qfisx19Af/isTAmZu
-        Bg/dDo3Ca80kU858YQptm9w=
-X-Google-Smtp-Source: ABdhPJyCeAzKwRCAJCdxXI9tSlZrQtzB5EZyg4yJJ/9hoSTjTGV3tnt7nvk8rmjjXPCEDgSuyAt0qw==
-X-Received: by 2002:a17:90a:5893:: with SMTP id j19mr1198018pji.30.1641874838514;
-        Mon, 10 Jan 2022 20:20:38 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id w5sm8460312pfu.214.2022.01.10.20.20.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 20:20:38 -0800 (PST)
-Message-ID: <80b40829-0d25-eb84-7bd7-f21685daeb20@gmail.com>
-Date:   Tue, 11 Jan 2022 12:20:29 +0800
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UvMY/BpPHYLYCpXHLFkn3wGD0r030IMs3mS/Z9JjkxE=;
+        b=ggOt4VYDlempqy5eehPcGASosJwhweSa72POebmjpnIyhv7hdGsTf1JHaXur0FKupa
+         usKmbzkQp0IjUxvHx89EHw3YeQtlJ3SnjU+OAYsv2JvDI8uCrPMOt3nte61LJNfHMsKq
+         1u3LQ1kHsoPHhGpf7Y1B94bKMOwoE/pX3rIdCP6oiFJ9F7Kumjob+4fn8mdQOzxlmTsu
+         6lkER4MZfMftBMCb1UmuME7/FWAuqHmMAgVWGyMG6Mw5FidVqNDW5FXo2+2oNm79QhgN
+         oCdQc/OewoGWL6QAdTZ5AdcCiBAW1FpkckE1jq0r9kNCrgcaTcWXw3BhIZFDILejykYY
+         xhsA==
+X-Gm-Message-State: AOAM533bLX61WYnmX+brsh21D5NvtPR1hhi8fblInclWCjIGZ4ApBWvL
+        fGbnRbLASgduwnuaHWwwnko=
+X-Google-Smtp-Source: ABdhPJyDr6Fn1C47Iap8ZBIHs4/z1kc6JXdQiRuNiVOxnKKraI7K5S7M44p+tPjlcF0xZ5fXCGK7BA==
+X-Received: by 2002:a17:902:6ac1:b0:149:7087:7b8a with SMTP id i1-20020a1709026ac100b0014970877b8amr2900110plt.174.1641874872357;
+        Mon, 10 Jan 2022 20:21:12 -0800 (PST)
+Received: from slim.das-security.cn ([103.84.139.54])
+        by smtp.gmail.com with ESMTPSA id f7sm1062943pfe.210.2022.01.10.20.21.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 20:21:12 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     jreuter@yaina.de, ralf@linux-mips.org, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH net] ax25: use after free in ax25_connect
+Date:   Tue, 11 Jan 2022 12:20:48 +0800
+Message-Id: <20220111042048.43532-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220110034747.30498-1-likexu@tencent.com>
- <YdzV33X5w6+tCamI@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-Subject: Re: [PATCH v2] KVM: x86/pt: Ignore all unknown Intel PT capabilities
-In-Reply-To: <YdzV33X5w6+tCamI@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/2022 8:57 am, Sean Christopherson wrote:
-> On Mon, Jan 10, 2022, Like Xu wrote:
->> From: Like Xu <likexu@tencent.com>
->>
->> Some of the new Intel PT capabilities (e.g. SDM Vol3, 32.2.4 Event
->> Tracing, it exposes details about the asynchronous events, when they are
->> generated, and when their corresponding software event handler completes
->> execution) cannot be safely and fully emulated by the KVM, especially
->> emulating the simultaneous writing of guest PT packets generated by
->> the KVM to the guest PT buffer.
->>
->> For KVM, it's better to advertise currently supported features based on
->> the "static struct pt_cap_desc" implemented in the host PT driver and
->> ignore _all_ unknown features before they have been investigated one by
->> one and supported in a safe manner, leaving the rest as system-wide-only
->> tracing capabilities.
->>
->> Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
->> Signed-off-by: Like Xu <likexu@tencent.com>
->> ---
->> v1 -> v2 Changelog:
->> - Be safe and ignore _all_ unknown capabilities. (Paolo)
->>
->> Previous:
->> https://lore.kernel.org/kvm/20220106085533.84356-1-likexu@tencent.com/
->>
->>   arch/x86/kvm/cpuid.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->> index 0b920e12bb6d..439b93359848 100644
->> --- a/arch/x86/kvm/cpuid.c
->> +++ b/arch/x86/kvm/cpuid.c
->> @@ -901,6 +901,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->>   			break;
->>   		}
->>   
->> +		/* It's better to be safe and ignore _all_ unknown capabilities. */
-> 
-> No need to justify why unknown capabilities are hidden as that's very much (supposed
-> to be) standard KVM behavior.
-> 
->> +		entry->ebx &= GENMASK(5, 0);
-> 
-> Please add a #define somewhere so that this is self-documenting, e.g. see
-> KVM_SUPPORTED_XCR0.
+sk_to_ax25(sk) needs to be called after lock_sock(sk) to avoid UAF
+caused by a race condition.
 
-How about we define this macro in the <asm/intel_pt.h> so that the next PT 
-capability
-enabler can update the mask with minimal effort, considering that many pure kernel
-developers don't care about KVM code ?
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ net/ax25/af_ax25.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> 
-> And why just EBX?  ECX appears to enumerate features too, and EDX is presumably
-> reserved to enumerate yet more features when EBX/ECX run out of bits.
-
-Yes, how about this version:
-
-diff --git a/arch/x86/include/asm/intel_pt.h b/arch/x86/include/asm/intel_pt.h
-index ebe8d2ea44fe..da94d0eeb9df 100644
---- a/arch/x86/include/asm/intel_pt.h
-+++ b/arch/x86/include/asm/intel_pt.h
-@@ -24,6 +24,12 @@ enum pt_capabilities {
-  	PT_CAP_psb_periods,
-  };
-
-+#define GUEST_SUPPORTED_CPUID_14_EBX	\
-+	(BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5))
+diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
+index cfca99e295b8..c5d62420a2a8 100644
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -1127,7 +1127,7 @@ static int __must_check ax25_connect(struct socket *sock,
+ 	struct sockaddr *uaddr, int addr_len, int flags)
+ {
+ 	struct sock *sk = sock->sk;
+-	ax25_cb *ax25 = sk_to_ax25(sk), *ax25t;
++	ax25_cb *ax25, *ax25t;
+ 	struct full_sockaddr_ax25 *fsa = (struct full_sockaddr_ax25 *)uaddr;
+ 	ax25_digi *digi = NULL;
+ 	int ct = 0, err = 0;
+@@ -1155,6 +1155,8 @@ static int __must_check ax25_connect(struct socket *sock,
+ 
+ 	lock_sock(sk);
+ 
++	ax25 = sk_to_ax25(sk);
 +
-+#define GUEST_SUPPORTED_CPUID_14_ECX	\
-+	(BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(31))
-+
-  #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
-  void cpu_emergency_stop_pt(void);
-  extern u32 intel_pt_validate_hw_cap(enum pt_capabilities cap);
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 0b920e12bb6d..be8c9170f98e 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -19,6 +19,7 @@
-  #include <asm/user.h>
-  #include <asm/fpu/xstate.h>
-  #include <asm/sgx.h>
-+#include <asm/intel_pt.h>
-  #include "cpuid.h"
-  #include "lapic.h"
-  #include "mmu.h"
-@@ -900,7 +901,10 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array 
-*array, u32 function)
-  			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-  			break;
-  		}
--
-+		entry->eax = min(entry->eax, 1u);
-+		entry->ebx &= GUEST_SUPPORTED_CPUID_14_EBX;
-+		entry->ecx &= GUEST_SUPPORTED_CPUID_14_ECX;
-+		entry->edx = 0;
-  		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
-  			if (!do_host_cpuid(array, function, i))
-  				goto out;
+ 	/* deal with restarts */
+ 	if (sock->state == SS_CONNECTING) {
+ 		switch (sk->sk_state) {
+-- 
+2.25.1
 
-> 
-> And is there any possibility of a malicious user/guest using features to cause
-> problems in the host?  I.e. does KVM need to enforce that the guest can't enable
-> any unsupported features?
-
-If a user space is set up with features not supported by KVM, it owns the risk 
-itself.
-
-AFAI, the guest Intel PT introduces a great attack interface for the host and
-we only use the guest supported PT features in a highly trusted environment.
-
-I agree that more uncertainty and fixes can be triggered in the security motive,
-not expecting too much from this patch. :D
-
-> 
->>   		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
->>   			if (!do_host_cpuid(array, function, i))
->>   				goto out;
->> -- 
->> 2.33.1
->>

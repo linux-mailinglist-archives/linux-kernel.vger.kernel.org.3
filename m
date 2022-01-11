@@ -2,97 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB1C48B06B
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B9948B07E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 16:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244947AbiAKPIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 10:08:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244776AbiAKPIX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 10:08:23 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEE0C061751
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 07:08:23 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id w188so1853246oiw.13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 07:08:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zo32VZLxMS3zJXGjj1I1zmEGC+mu6YnSTq3H93JaVfE=;
-        b=Heyv3jK4mICHGAg012fN5bLm0U8J43bySG6C7i3qEmYU3W4v4K5T/HU6QotlZPmNtM
-         3NjOHZXk6+tEHOBl1/MeNi2wiIYOlY8+nucM+gl8WjsFxunOsfIq070wf08UxVvTomvm
-         BnmR8diWkLVSL2wMK8Cx3w0Gu1yo7kFftTON5/pJOOhfShySbIQV6JvlCVnvx3ZgSb4Z
-         kj8hmfT2kivsxcL85x9rZVmdR/DmbogPyRa6TrekwHnzj+h7Ev4MgcYQPGV1NXfvIo+I
-         bdOTh2/FrCw8k66dyFo6TIZeU8Jdb82+Pr0QVjTVpORBqUb9e9qTdx56DG3RSBHTilh3
-         j9xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zo32VZLxMS3zJXGjj1I1zmEGC+mu6YnSTq3H93JaVfE=;
-        b=DEGCKN9SpNaKNmtQ2i2FNK8EKrIriLKN+S7f0HNynwD9oAYvwicQiHmg0ZFv+eHUeu
-         48v7VVovobKN6atGrRF87fxoOJWsuaj2ByskGw5Ui6RrTP8B+q1ru8oa07OZ8MGOi3L0
-         fp+/IgJ2DsfVitAYo9b7CfNioIoLe9nskILeXAWFnCkctXt6kS+6WmKE1rSZtDnf5bt5
-         zFaUcw6RUT/qMsF0R/2OQbOhwxO8fRKN1JuRtvjesouYVCDiRwuXbgKWMbEcnHxb+6bP
-         B8/fEX/IzfFXGMPZTBDvd8CrYcYijRwEFyO+EAWRvPznDfNeV33ECyWT0e+jB8/pDz3x
-         fHgg==
-X-Gm-Message-State: AOAM530wuakflAxgMZxHcmEQuDko9wiHY58lIPGvleFeSy8gN9gZvmQw
-        YYwgc1NIwqjC09b0v/BJFpdMFv0tHngujzMTNtA=
-X-Google-Smtp-Source: ABdhPJwWtVP4MUZ1ZhbDstAftVZRtLtF9Yj4Z9a9nCZ3XslWL/zrmxNq9Mr+sGuurWu+NDiAulzfV+j3KakpH8XjWCI=
-X-Received: by 2002:a05:6808:4c3:: with SMTP id a3mr2123816oie.123.1641913702634;
- Tue, 11 Jan 2022 07:08:22 -0800 (PST)
+        id S241305AbiAKPKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 10:10:43 -0500
+Received: from mga02.intel.com ([134.134.136.20]:16693 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231876AbiAKPKn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 10:10:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641913843; x=1673449843;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=raQ8l+bv6wdJlnIW7NpStfMFzzYdy0dFEY+CK/dN7yc=;
+  b=jPJyvjmeGYXGSrHHRWcHYCChQqKeqEweyxlhyzo+CvntIoMA29bAAwyQ
+   Fah/vCuLEPQBxOM/eiveYlk3CI2CiqetIxfoh3MLhj4Ilum9/PxMH2N3e
+   0nxjP2N/NdwY0M0NRvj9h6IW++8mbK/lrKUkIzsAiquhZuJfTMCSb1Xq3
+   Ah0nj8A/13+SAKAVU+PCpt63PnyJ3lBPSGktLljlPrYNpPgpi4LwGOzpq
+   Dwx+tRKChZV0dtxTbITDSGCMtc7jzVLR9PSzdOxGLRZh5Q3gm0nP96TGX
+   SKXiJKk/IfzA8m6NUFv9LpWpGqM0/EV567bFsfC8OsjUyhs6DWsBapAvq
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="230845430"
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="230845430"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 07:10:25 -0800
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="613243314"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 07:10:22 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1n7Ilp-009H3k-3J;
+        Tue, 11 Jan 2022 17:09:09 +0200
+Date:   Tue, 11 Jan 2022 17:09:08 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] vsprintf: Fix potential unaligned access
+Message-ID: <Yd2dlEMp0a8TAi9i@smile.fi.intel.com>
+References: <20220110205049.11696-1-andriy.shevchenko@linux.intel.com>
+ <Yd2a4MApVR8hexny@alley>
 MIME-Version: 1.0
-References: <CAPM=9tz=_hRpQV1V3M-=KmVVEbr1K166qeb-ne64PHk9Sn-ozg@mail.gmail.com>
- <CAHk-=wg9hDde_L3bK9tAfdJ4N=TJJ+SjO3ZDONqH5=bVoy_Mzg@mail.gmail.com>
- <CAKMK7uEag=v-g6ygHPcT-uQJJx+5KOh2ZRzC2QtM-MCjjW67TA@mail.gmail.com>
- <CADnq5_P9n39RQ5+Nm8O=YKXXvXh1CEzwC2fOEzEJuS2zQLUWEw@mail.gmail.com>
- <CAHk-=wgDGcaRxUwRCR6p-rxDVO78Yj4YyM6ZsPRGiT2JOCoQ6A@mail.gmail.com>
- <CADnq5_OYO7kq+9DBnDvbSfpouFvdLB0LPSL6+f1ZPRBsV=qEqA@mail.gmail.com>
- <CAHk-=wiCCRG9Lwzr+Cur=K1V2GJ9ab_ket7EnG4RZhJ8jJM7xQ@mail.gmail.com>
- <CAHk-=wi8b-YKHeNfwyYHMcgR2vJh4xpSZ0qjkv8E8Y9V8Sv2Tg@mail.gmail.com>
- <CAHk-=whnWnB9yjVaqWNKjavSJxDOEbTAPwef=O7qjL8nKZgV6A@mail.gmail.com> <CAHk-=whSAYiO_TkKut6XckdQigFj39ft1Kcs2qJe5niHWPGdwg@mail.gmail.com>
-In-Reply-To: <CAHk-=whSAYiO_TkKut6XckdQigFj39ft1Kcs2qJe5niHWPGdwg@mail.gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 11 Jan 2022 10:08:08 -0500
-Message-ID: <CADnq5_OZR9Ft=WVVbpM_WUpFZurni4yVxGPpa4nDkhupmod_ag@mail.gmail.com>
-Subject: Re: [git pull] drm for 5.17-rc1 (pre-merge window pull)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jun Lei <Jun.Lei@amd.com>,
-        Mustapha Ghaddar <mustapha.ghaddar@amd.com>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
-        meenakshikumar somasundaram <meenakshikumar.somasundaram@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        "Wentland, Harry" <harry.wentland@amd.com>,
-        Dave Airlie <airlied@gmail.com>,
-        "Koenig, Christian" <christian.koenig@amd.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd2a4MApVR8hexny@alley>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 9:53 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Mon, Jan 10, 2022 at 6:44 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > I'll double-check to see if a revert fixes it at the top of my tree.
->
-> Yup. It reverts cleanly, and the end result builds and works fine, and
-> doesn't show the horrendous flickering.
->
-> I have done that revert, and will continue the merge window work.
-> Somebody else gets to figure out what the actual bug is, but that
-> commit was horribly broken on my machine (Sapphire Pulse RX 580 8GB,
-> fwiw).
+On Tue, Jan 11, 2022 at 03:57:36PM +0100, Petr Mladek wrote:
+> On Mon 2022-01-10 22:50:49, Andy Shevchenko wrote:
+> > The %p4cc specifier in some cases might get an unaligned pointer.
+> > Due to this we need to make copy to local variable once to avoid
+> > potential crashes on some architectures due to improper access.
+> > 
+> > Fixes: af612e43de6d ("lib/vsprintf: Add support for printing V4L2 and DRM fourccs")
+> > Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> Looks good to me:
+> 
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> 
+> I have already sent pull request for 5.17. Could this wait
+> for 5.18 or would you prefer to get it into 5.17, please?
 
-Thanks for tracking this down.  We are investigating the issue.
+It's not so critical.
+But would be nice to have.
 
-Alex
+> My understanding of Sakari's reply is that the current callers
+> provide aligned pointers. In that case it would not be urgent.
+> But I might have gotten it wrong.
+
+Not really. There are potential unaligned callers, but Sakari
+has another patch that fixes that on the (one of *) caller side.
+
+*) I dunno how many other callers (probably none) in tree and
+   how many potentially can be with similar issue.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

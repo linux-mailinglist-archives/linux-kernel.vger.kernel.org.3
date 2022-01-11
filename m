@@ -2,295 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4DE48AE1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9400348AE22
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 14:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240259AbiAKNEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 08:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239831AbiAKNEL (ORCPT
+        id S240281AbiAKNE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 08:04:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31116 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240272AbiAKNEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 08:04:11 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA96C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:04:11 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1n7Gom-0001Dn-3J; Tue, 11 Jan 2022 14:04:04 +0100
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1n7Gol-00EHkV-0r; Tue, 11 Jan 2022 14:04:03 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        David Jander <david@protonic.nl>,
-        Robin van der Gracht <robin@protonic.nl>,
-        linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH v2 1/1] iio: adc: tsc2046: rework the trigger state machine
-Date:   Tue, 11 Jan 2022 14:04:02 +0100
-Message-Id: <20220111130402.3404769-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Tue, 11 Jan 2022 08:04:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641906261;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CnoXRZzxHpYZJCWWJWjQzv34cSxRuBzuUNROP7tocqU=;
+        b=J7ie4awMUKp0X52WIJ4CV5Qxr2LakL28ytYOoKgQITNXvU9CNe3qs3IDReFf5unlz9AKQB
+        Tu1X/N+gH1psYAw3N6kdPipV0FuOAX21+FkZgvnO/OLQN6NpKwpiJDY2n6IejNhWeLpMro
+        oLdkfXa7LzoZEmEeIM8JQc6SBxRBv/A=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-526-F1SzrF0ONVedw1wAbXFxZg-1; Tue, 11 Jan 2022 08:04:20 -0500
+X-MC-Unique: F1SzrF0ONVedw1wAbXFxZg-1
+Received: by mail-ed1-f72.google.com with SMTP id s7-20020a056402520700b003f841380832so13245154edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 05:04:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=CnoXRZzxHpYZJCWWJWjQzv34cSxRuBzuUNROP7tocqU=;
+        b=PFO7eISr+AVvLO6LBhqJpbe9vV4+MfkODT5FY82TnAcs/eFgDfyTUlXDLVjvFVOTNg
+         hIWCcqidqSBGm1/apUcvjgvi5txVrqM8Gz9jJTFI0OGS/jUnBY8IiV3Zb/S/m8DVQDRl
+         O49FLuUONxz9HUpzzkMWTMHnelNLP1jwyl9QGYVJYq2Kk8To44WZB1rC6C6D6fl8gyI5
+         63gfwNMIwVNsZwvawu6hMRuulWVNZtjIjCWZk6QWSWzJoP54cVuINGc4Wz3MEpwPjPyx
+         sn8Upnk7TRnqyvIdammQZ5B2VR70T2t63n5PP09lwwKnn8gfjPOv0l0PlK6ObyMtNUt6
+         Jw1w==
+X-Gm-Message-State: AOAM5301kctr/CgWhGcCqjEWxVOecMl7S75jhkq3UAVZrmWUuFkvd7Jt
+        Oewtwr0o+54qd1BG/JDcMeTifiSF9q1yY2Z/MuSNWEwAjNSAxPboPJUfQDsGbN6iNMP7vffj1pQ
+        2lLRdD9tmXeb4vFTZZ+Go5cgw
+X-Received: by 2002:a17:906:3707:: with SMTP id d7mr3673136ejc.688.1641906259336;
+        Tue, 11 Jan 2022 05:04:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyufWlr/Lw1gvdqS0EUpwg1gh0cWIzsXPiLkrC7aOl+Vt8tOWZrM6glrUNIyzIuktDWyNcriw==
+X-Received: by 2002:a17:906:3707:: with SMTP id d7mr3673099ejc.688.1641906259017;
+        Tue, 11 Jan 2022 05:04:19 -0800 (PST)
+Received: from redhat.com ([2.55.5.100])
+        by smtp.gmail.com with ESMTPSA id j5sm3591214ejo.171.2022.01.11.05.04.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 05:04:18 -0800 (PST)
+Date:   Tue, 11 Jan 2022 08:04:10 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Yongji Xie <xieyongji@bytedance.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Christian Brauner <christian.brauner@canonical.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>, bcrl@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mika =?iso-8859-1?Q?Penttil=E4?= <mika.penttila@nextfour.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>, joro@8bytes.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        He Zhe <zhe.he@windriver.com>,
+        Liu Xiaodong <xiaodong.liu@intel.com>,
+        Joe Perches <joe@perches.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        John Garry <john.garry@huawei.com>, songmuchun@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Netdev <netdev@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v12 00/13] Introduce VDUSE - vDPA Device in Userspace
+Message-ID: <20220111080359-mutt-send-email-mst@kernel.org>
+References: <20210830141737.181-1-xieyongji@bytedance.com>
+ <20220110075546-mutt-send-email-mst@kernel.org>
+ <CACycT3v1aEViw7vV4x5qeGVPrSrO-BTDvQshEX35rx_X0Au2vw@mail.gmail.com>
+ <20220110100911-mutt-send-email-mst@kernel.org>
+ <CACycT3v6jo3-8ATWUzf659vV94a2oRrm-zQtGNDZd6OQr-MENA@mail.gmail.com>
+ <20220110103938-mutt-send-email-mst@kernel.org>
+ <CACycT3sbJC1Jn7NeWk_ccQ_2_YgKybjugfxmKpfgCP3Ayoju4w@mail.gmail.com>
+ <20220111065301-mutt-send-email-mst@kernel.org>
+ <CACycT3sdfAbdByKJwg8N-Jb2qVDdgfSqprp_aOp5fpYz4LxmgA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <CACycT3sdfAbdByKJwg8N-Jb2qVDdgfSqprp_aOp5fpYz4LxmgA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Initially this was designed to:
-| Fix sleeping in atomic context warning and a deadlock after iio_trigger_poll()
-| call
-|
-| If iio_trigger_poll() is called after IRQ was disabled, we will call
-| reenable_trigger() directly from hard IRQ or hrtimer context instead of
-| IRQ thread. In this case we will run in to multiple issue as sleeping in atomic
-| context and a deadlock.
-|
-| To avoid this issue, rework the trigger to use state machine. All state
-| changes are done over the hrtimer, so it allows us to drop fsleep() and
-| avoid the deadlock.
+On Tue, Jan 11, 2022 at 08:57:49PM +0800, Yongji Xie wrote:
+> On Tue, Jan 11, 2022 at 7:54 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Tue, Jan 11, 2022 at 11:31:37AM +0800, Yongji Xie wrote:
+> > > On Mon, Jan 10, 2022 at 11:44 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > >
+> > > > On Mon, Jan 10, 2022 at 11:24:40PM +0800, Yongji Xie wrote:
+> > > > > On Mon, Jan 10, 2022 at 11:10 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > >
+> > > > > > On Mon, Jan 10, 2022 at 09:54:08PM +0800, Yongji Xie wrote:
+> > > > > > > On Mon, Jan 10, 2022 at 8:57 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > >
+> > > > > > > > On Mon, Aug 30, 2021 at 10:17:24PM +0800, Xie Yongji wrote:
+> > > > > > > > > This series introduces a framework that makes it possible to implement
+> > > > > > > > > software-emulated vDPA devices in userspace. And to make the device
+> > > > > > > > > emulation more secure, the emulated vDPA device's control path is handled
+> > > > > > > > > in the kernel and only the data path is implemented in the userspace.
+> > > > > > > > >
+> > > > > > > > > Since the emuldated vDPA device's control path is handled in the kernel,
+> > > > > > > > > a message mechnism is introduced to make userspace be aware of the data
+> > > > > > > > > path related changes. Userspace can use read()/write() to receive/reply
+> > > > > > > > > the control messages.
+> > > > > > > > >
+> > > > > > > > > In the data path, the core is mapping dma buffer into VDUSE daemon's
+> > > > > > > > > address space, which can be implemented in different ways depending on
+> > > > > > > > > the vdpa bus to which the vDPA device is attached.
+> > > > > > > > >
+> > > > > > > > > In virtio-vdpa case, we implements a MMU-based software IOTLB with
+> > > > > > > > > bounce-buffering mechanism to achieve that. And in vhost-vdpa case, the dma
+> > > > > > > > > buffer is reside in a userspace memory region which can be shared to the
+> > > > > > > > > VDUSE userspace processs via transferring the shmfd.
+> > > > > > > > >
+> > > > > > > > > The details and our user case is shown below:
+> > > > > > > > >
+> > > > > > > > > ------------------------    -------------------------   ----------------------------------------------
+> > > > > > > > > |            Container |    |              QEMU(VM) |   |                               VDUSE daemon |
+> > > > > > > > > |       ---------      |    |  -------------------  |   | ------------------------- ---------------- |
+> > > > > > > > > |       |dev/vdx|      |    |  |/dev/vhost-vdpa-x|  |   | | vDPA device emulation | | block driver | |
+> > > > > > > > > ------------+-----------     -----------+------------   -------------+----------------------+---------
+> > > > > > > > >             |                           |                            |                      |
+> > > > > > > > >             |                           |                            |                      |
+> > > > > > > > > ------------+---------------------------+----------------------------+----------------------+---------
+> > > > > > > > > |    | block device |           |  vhost device |            | vduse driver |          | TCP/IP |    |
+> > > > > > > > > |    -------+--------           --------+--------            -------+--------          -----+----    |
+> > > > > > > > > |           |                           |                           |                       |        |
+> > > > > > > > > | ----------+----------       ----------+-----------         -------+-------                |        |
+> > > > > > > > > | | virtio-blk driver |       |  vhost-vdpa driver |         | vdpa device |                |        |
+> > > > > > > > > | ----------+----------       ----------+-----------         -------+-------                |        |
+> > > > > > > > > |           |      virtio bus           |                           |                       |        |
+> > > > > > > > > |   --------+----+-----------           |                           |                       |        |
+> > > > > > > > > |                |                      |                           |                       |        |
+> > > > > > > > > |      ----------+----------            |                           |                       |        |
+> > > > > > > > > |      | virtio-blk device |            |                           |                       |        |
+> > > > > > > > > |      ----------+----------            |                           |                       |        |
+> > > > > > > > > |                |                      |                           |                       |        |
+> > > > > > > > > |     -----------+-----------           |                           |                       |        |
+> > > > > > > > > |     |  virtio-vdpa driver |           |                           |                       |        |
+> > > > > > > > > |     -----------+-----------           |                           |                       |        |
+> > > > > > > > > |                |                      |                           |    vdpa bus           |        |
+> > > > > > > > > |     -----------+----------------------+---------------------------+------------           |        |
+> > > > > > > > > |                                                                                        ---+---     |
+> > > > > > > > > -----------------------------------------------------------------------------------------| NIC |------
+> > > > > > > > >                                                                                          ---+---
+> > > > > > > > >                                                                                             |
+> > > > > > > > >                                                                                    ---------+---------
+> > > > > > > > >                                                                                    | Remote Storages |
+> > > > > > > > >                                                                                    -------------------
+> > > > > > > > >
+> > > > > > > > > We make use of it to implement a block device connecting to
+> > > > > > > > > our distributed storage, which can be used both in containers and
+> > > > > > > > > VMs. Thus, we can have an unified technology stack in this two cases.
+> > > > > > > > >
+> > > > > > > > > To test it with null-blk:
+> > > > > > > > >
+> > > > > > > > >   $ qemu-storage-daemon \
+> > > > > > > > >       --chardev socket,id=charmonitor,path=/tmp/qmp.sock,server,nowait \
+> > > > > > > > >       --monitor chardev=charmonitor \
+> > > > > > > > >       --blockdev driver=host_device,cache.direct=on,aio=native,filename=/dev/nullb0,node-name=disk0 \
+> > > > > > > > >       --export type=vduse-blk,id=test,node-name=disk0,writable=on,name=vduse-null,num-queues=16,queue-size=128
+> > > > > > > > >
+> > > > > > > > > The qemu-storage-daemon can be found at https://github.com/bytedance/qemu/tree/vduse
+> > > > > > > >
+> > > > > > > > It's been half a year - any plans to upstream this?
+> > > > > > >
+> > > > > > > Yeah, this is on my to-do list this month.
+> > > > > > >
+> > > > > > > Sorry for taking so long... I've been working on another project
+> > > > > > > enabling userspace RDMA with VDUSE for the past few months. So I
+> > > > > > > didn't have much time for this. Anyway, I will submit the first
+> > > > > > > version as soon as possible.
+> > > > > > >
+> > > > > > > Thanks,
+> > > > > > > Yongji
+> > > > > >
+> > > > > > Oh fun. You mean like virtio-rdma? Or RDMA as a backend for regular
+> > > > > > virtio?
+> > > > > >
+> > > > >
+> > > > > Yes, like virtio-rdma. Then we can develop something like userspace
+> > > > > rxe、siw or custom protocol with VDUSE.
+> > > > >
+> > > > > Thanks,
+> > > > > Yongji
+> > > >
+> > > > Would be interesting to see the spec for that.
+> > >
+> > > Will send it ASAP.
+> > >
+> > > > The issues with RDMA revolved around the fact that current
+> > > > apps tend to either use non-standard propocols for connection
+> > > > establishment or use UD where there's IIRC no standard
+> > > > at all. So QP numbers are hard to virtualize.
+> > > > Similarly many use LIDs directly with the same effect.
+> > > > GUIDs might be virtualizeable but no one went to the effort.
+> > > >
+> > >
+> > > Actually we aimed at emulating a soft RDMA with normal NIC (not use
+> > > RDMA capability) rather than virtualizing a physical RDMA NIC into
+> > > several vRDMA devices. If so, I think we won't have those issues,
+> > > right?
+> >
+> > Right, maybe you won't.
+> >
+> > > > To say nothing about the interaction with memory overcommit.
+> > > >
+> > >
+> > > I don't get you here. Could you give me more details?
+> > >
+> > > Thanks,
+> > > Yongji
+> >
+> > RDMA devices tend to want to pin the memory under DMA.
+> >
+> 
+> I see. Maybe something like dm or odp could be helpful.
+> 
+> Thanks,
+> Yongji
 
-Since this issue was fixed by: 9020ef659885 ("iio: trigger: Fix a scheduling
-whilst atomic issue seen on tsc2046"). This patch is a cleanup to make
-state machine easier to follow.
+Yes sure.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/iio/adc/ti-tsc2046.c | 144 ++++++++++++++++++++++++-----------
- 1 file changed, 98 insertions(+), 46 deletions(-)
-
-diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
-index e8fc4d01f30b..c373da11bff1 100644
---- a/drivers/iio/adc/ti-tsc2046.c
-+++ b/drivers/iio/adc/ti-tsc2046.c
-@@ -82,6 +82,10 @@
- #define TI_TSC2046_DATA_12BIT			GENMASK(14, 3)
- 
- #define TI_TSC2046_MAX_CHAN			8
-+#define TI_TSC2046_MIN_POLL_CNT			3
-+#define TI_TSC2046_EXT_POLL_CNT			3
-+#define TI_TSC2046_POLL_CNT \
-+	(TI_TSC2046_MIN_POLL_CNT + TI_TSC2046_EXT_POLL_CNT)
- 
- /* Represents a HW sample */
- struct tsc2046_adc_atom {
-@@ -123,14 +127,23 @@ struct tsc2046_adc_ch_cfg {
- 	unsigned int oversampling_ratio;
- };
- 
-+enum tsc2046_state {
-+	TSC2046_STATE_SHUTDOWN,
-+	TSC2046_STATE_STANDBY,
-+	TSC2046_STATE_POLL,
-+	TSC2046_STATE_POLL_IRQ_DISABLE,
-+	TSC2046_STATE_ENABLE_IRQ,
-+};
-+
- struct tsc2046_adc_priv {
- 	struct spi_device *spi;
- 	const struct tsc2046_adc_dcfg *dcfg;
- 
- 	struct iio_trigger *trig;
- 	struct hrtimer trig_timer;
--	spinlock_t trig_lock;
--	unsigned int trig_more_count;
-+	enum tsc2046_state state;
-+	int poll_cnt;
-+	spinlock_t state_lock;
- 
- 	struct spi_transfer xfer;
- 	struct spi_message msg;
-@@ -411,21 +424,62 @@ static const struct iio_info tsc2046_adc_info = {
- 	.update_scan_mode = tsc2046_adc_update_scan_mode,
- };
- 
--static enum hrtimer_restart tsc2046_adc_trig_more(struct hrtimer *hrtimer)
-+static enum hrtimer_restart tsc2046_adc_timer(struct hrtimer *hrtimer)
- {
- 	struct tsc2046_adc_priv *priv = container_of(hrtimer,
- 						     struct tsc2046_adc_priv,
- 						     trig_timer);
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&priv->trig_lock, flags);
--
--	disable_irq_nosync(priv->spi->irq);
--
--	priv->trig_more_count++;
--	iio_trigger_poll(priv->trig);
-+	/* This state machine should address following challenges :
-+	 * - the interrupt source is based on level shifter attached to the X
-+	 *   channel of ADC. It will change the state every time we switch
-+	 *   between channels. So, we need to disable IRQ if we do
-+	 *   iio_trigger_poll().
-+	 * - we should do iio_trigger_poll() at some reduced sample rate
-+	 * - we should still trigger for some amount of time after last
-+	 *   interrupt with enabled IRQ was processed.
-+	 */
- 
--	spin_unlock_irqrestore(&priv->trig_lock, flags);
-+	spin_lock_irqsave(&priv->state_lock, flags);
-+	switch (priv->state) {
-+	case TSC2046_STATE_ENABLE_IRQ:
-+		if (priv->poll_cnt < TI_TSC2046_POLL_CNT) {
-+			priv->poll_cnt++;
-+			hrtimer_start(&priv->trig_timer,
-+				      ns_to_ktime(priv->scan_interval_us *
-+						  NSEC_PER_USEC),
-+				      HRTIMER_MODE_REL_SOFT);
-+
-+			if (priv->poll_cnt >= TI_TSC2046_MIN_POLL_CNT) {
-+				priv->state = TSC2046_STATE_POLL_IRQ_DISABLE;
-+				enable_irq(priv->spi->irq);
-+			} else {
-+				priv->state = TSC2046_STATE_POLL;
-+			}
-+		} else {
-+			priv->state = TSC2046_STATE_STANDBY;
-+			enable_irq(priv->spi->irq);
-+		}
-+		break;
-+	case TSC2046_STATE_POLL_IRQ_DISABLE:
-+		disable_irq_nosync(priv->spi->irq);
-+		fallthrough;
-+	case TSC2046_STATE_POLL:
-+		priv->state = TSC2046_STATE_ENABLE_IRQ;
-+		/* iio_trigger_poll() starts hrtimer */
-+		iio_trigger_poll(priv->trig);
-+		break;
-+	case TSC2046_STATE_SHUTDOWN:
-+		break;
-+	case TSC2046_STATE_STANDBY:
-+		fallthrough;
-+	default:
-+		dev_warn(&priv->spi->dev, "Got unexpected state: %i\n",
-+			 priv->state);
-+		break;
-+	}
-+	spin_unlock_irqrestore(&priv->state_lock, flags);
- 
- 	return HRTIMER_NORESTART;
- }
-@@ -434,16 +488,20 @@ static irqreturn_t tsc2046_adc_irq(int irq, void *dev_id)
- {
- 	struct iio_dev *indio_dev = dev_id;
- 	struct tsc2046_adc_priv *priv = iio_priv(indio_dev);
--
--	spin_lock(&priv->trig_lock);
-+	unsigned long flags;
- 
- 	hrtimer_try_to_cancel(&priv->trig_timer);
- 
--	priv->trig_more_count = 0;
--	disable_irq_nosync(priv->spi->irq);
--	iio_trigger_poll(priv->trig);
-+	spin_lock_irqsave(&priv->state_lock, flags);
-+	if (priv->state != TSC2046_STATE_SHUTDOWN) {
-+		priv->state = TSC2046_STATE_ENABLE_IRQ;
-+		priv->poll_cnt = 0;
- 
--	spin_unlock(&priv->trig_lock);
-+		/* iio_trigger_poll() starts hrtimer */
-+		disable_irq_nosync(priv->spi->irq);
-+		iio_trigger_poll(priv->trig);
-+	}
-+	spin_unlock_irqrestore(&priv->state_lock, flags);
- 
- 	return IRQ_HANDLED;
- }
-@@ -452,49 +510,42 @@ static void tsc2046_adc_reenable_trigger(struct iio_trigger *trig)
- {
- 	struct iio_dev *indio_dev = iio_trigger_get_drvdata(trig);
- 	struct tsc2046_adc_priv *priv = iio_priv(indio_dev);
--	unsigned long flags;
--	int delta;
-+	ktime_t tim;
- 
- 	/*
- 	 * We can sample it as fast as we can, but usually we do not need so
- 	 * many samples. Reduce the sample rate for default (touchscreen) use
- 	 * case.
--	 * Currently we do not need a highly precise sample rate. It is enough
--	 * to have calculated numbers.
--	 */
--	delta = priv->scan_interval_us - priv->time_per_scan_us;
--	if (delta > 0)
--		fsleep(delta);
--
--	spin_lock_irqsave(&priv->trig_lock, flags);
--
--	/*
--	 * We need to trigger at least one extra sample to detect state
--	 * difference on ADC side.
- 	 */
--	if (!priv->trig_more_count) {
--		int timeout_ms = DIV_ROUND_UP(priv->scan_interval_us,
--					      USEC_PER_MSEC);
--
--		hrtimer_start(&priv->trig_timer, ms_to_ktime(timeout_ms),
--			      HRTIMER_MODE_REL_SOFT);
--	}
--
--	enable_irq(priv->spi->irq);
--
--	spin_unlock_irqrestore(&priv->trig_lock, flags);
-+	tim = ns_to_ktime((priv->scan_interval_us - priv->time_per_scan_us) *
-+			  NSEC_PER_USEC);
-+	hrtimer_start(&priv->trig_timer, tim, HRTIMER_MODE_REL_SOFT);
- }
- 
- static int tsc2046_adc_set_trigger_state(struct iio_trigger *trig, bool enable)
- {
- 	struct iio_dev *indio_dev = iio_trigger_get_drvdata(trig);
- 	struct tsc2046_adc_priv *priv = iio_priv(indio_dev);
-+	unsigned long flags;
- 
- 	if (enable) {
--		enable_irq(priv->spi->irq);
-+		spin_lock_irqsave(&priv->state_lock, flags);
-+		if (priv->state == TSC2046_STATE_SHUTDOWN) {
-+			priv->state = TSC2046_STATE_STANDBY;
-+			enable_irq(priv->spi->irq);
-+		}
-+		spin_unlock_irqrestore(&priv->state_lock, flags);
- 	} else {
--		disable_irq(priv->spi->irq);
--		hrtimer_try_to_cancel(&priv->trig_timer);
-+		spin_lock_irqsave(&priv->state_lock, flags);
-+
-+		if (priv->state == TSC2046_STATE_STANDBY ||
-+		    priv->state == TSC2046_STATE_POLL_IRQ_DISABLE)
-+			disable_irq_nosync(priv->spi->irq);
-+
-+		priv->state = TSC2046_STATE_SHUTDOWN;
-+		spin_unlock_irqrestore(&priv->state_lock, flags);
-+
-+		hrtimer_cancel(&priv->trig_timer);
- 	}
- 
- 	return 0;
-@@ -668,10 +719,11 @@ static int tsc2046_adc_probe(struct spi_device *spi)
- 	iio_trigger_set_drvdata(trig, indio_dev);
- 	trig->ops = &tsc2046_adc_trigger_ops;
- 
--	spin_lock_init(&priv->trig_lock);
-+	spin_lock_init(&priv->state_lock);
-+	priv->state = TSC2046_STATE_SHUTDOWN;
- 	hrtimer_init(&priv->trig_timer, CLOCK_MONOTONIC,
- 		     HRTIMER_MODE_REL_SOFT);
--	priv->trig_timer.function = tsc2046_adc_trig_more;
-+	priv->trig_timer.function = tsc2046_adc_timer;
- 
- 	ret = devm_iio_trigger_register(dev, trig);
- 	if (ret) {
 -- 
-2.30.2
+MST
 

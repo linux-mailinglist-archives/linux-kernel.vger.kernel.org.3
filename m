@@ -2,303 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D939548B25F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C73C48B263
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 17:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350079AbiAKQix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 11:38:53 -0500
-Received: from mga03.intel.com ([134.134.136.65]:6370 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349910AbiAKQiw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 11:38:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641919132; x=1673455132;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GEwuWc9dchjVM7Bim0sjiOnsXnE27MDga3RRhHzBnQ0=;
-  b=M4jjzlFGSPDTQZ9KfBtsgMDU0hk+w9nsMrofrU/zojMRfUji9ZxneCg6
-   C1q9Ka7rdaFaN41GlBrdMMU7zzo61jKO9FDHmlfWUXMGBIf3VoQXm17Wq
-   2OBKzwy1ziM64lIJrrzjtcgiNOx1xEDI+9NA4MCwVWZ1UqECs18C7ik/m
-   um7pp6w2qfTpLA5vMpqJ5d/1AJkOWTUxmI9N85Hd3sujSyZ8LP6ZSJjSZ
-   SkBdvAm5/jezq2YW48u4DeW22dLODzJ6bYZNnShYoUr7FtI2c670+t+76
-   Qu//kf0gTYYfFWikhS/fg9dOKf+gysdilZeVF/eSH3nQHlGX2GlSmNb1z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="243484402"
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="243484402"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 08:38:27 -0800
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="515150387"
-Received: from dchandr2-mobl.amr.corp.intel.com ([10.212.157.65])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 08:38:26 -0800
-Message-ID: <49026b58c92f418e6def0ef1bba609bdaecd368c.camel@linux.intel.com>
-Subject: Re: [PATCH] platform/x86: ISST: do not hold lock
- punit_misc_dev_lock when register misc
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Liwei Song <liwei.song@windriver.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        MarkGross <markgross@kernel.org>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 11 Jan 2022 08:38:26 -0800
-In-Reply-To: <8809e11c-191e-036a-9066-90cc316f83b9@windriver.com>
-References: <20220111103122.32362-1-liwei.song@windriver.com>
-         <9e5fd9f2-dda7-73ef-00a8-203da3827e9d@redhat.com>
-         <8809e11c-191e-036a-9066-90cc316f83b9@windriver.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S1350116AbiAKQjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 11:39:19 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:30574 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343677AbiAKQjJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 11:39:09 -0500
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BFECkm021137;
+        Tue, 11 Jan 2022 16:39:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=qYUimI/oBafc8eML8PiDAN9lHGmyYDPmFrGDjCkveao=;
+ b=BxjmSqIk8MF/9BolZ65xrbnfPTI3jeCwaNaRzCJL9JshPsw4B5P7ZlptPIVLvT+2D5j2
+ S/s7Vw84cdJrN0GJ1uTm88Pmwwv9fTJ95lVSa2+GQYJHl7KBu3/4uCZV9BFZj+iqMtGn
+ uwulKl4tAkkMOrPRm8bs+nPYevF3C75QA/mBrRNABF/L8RD9TM3IN261lZj36evyVWKt
+ nwMLRZh0WgzXaNsUDAYo8zllPIwNNEsKMKWCh4dOXGCWYjugkTIDaLTpa+jzgfM1Q3de
+ WGXQKPPMo2gmcthcX6qdLiDMZFMRt4snu1PUtf1qSVb0P5PUvLCGVqNWT+RfVnk2XsaI VA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dgp7nkfc8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jan 2022 16:39:06 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20BGTxJf019736;
+        Tue, 11 Jan 2022 16:39:05 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2173.outbound.protection.outlook.com [104.47.55.173])
+        by aserp3020.oracle.com with ESMTP id 3df2e50qhy-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jan 2022 16:39:05 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NgNrVmPGZzMtxoD0iCvJGBPQEi9TI83MYa+IXrv4HTdhB2At+NfYdlcCiAxatlNmERNDpCn0t3PdA0RPPXtzge5soDWAWvhxvf/WNgHSRdYNFLTtkBUq9jhSaRuO07ILKDFUe7ZC6zrtiCM7envUOTBF7aRFLc2Ba5y5mOpLvdSiuDyMndJZ1oe8nzt4/+bIF2JPPMDbgM+wDlXdV4dL8yFZgZDap82P0vH3E/E0PhkESOJ94WDhSwkfR0a48Cthv8zIG6GFzK/dpwo7bDQZO9praLpKcYnhgan3V9eTkRSzRbmjyqx5nL/b9FzcysygaqYCU7a6JXESXbDMxOvsJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qYUimI/oBafc8eML8PiDAN9lHGmyYDPmFrGDjCkveao=;
+ b=HYPEGhfAaPBQJl3cVsZUYfghHvJnJEgR0J6Urtv8uspG24AxneXSQKDkbM1+T2eDdKQZLCK/27cKNvwO7YizNjYOTJ7RB5UXj2kHRXkHp2Au7SACKUWWxZFhlyvWrQmfPqVCuMnBkpAnU2Yk6nShvv1rb1AHVksJgz7KiCQLqm2jYlLJYC4yT+1MnOQOJ2Xo27o7FoW3ZeL+wsxSssYNanXLQI93by+ZBuoxmeo9B1P832aaiFbpUqGyMNjdQVGxUwa63U29A69O75FA+QbmD7EegytxRxxxpQtfjITqIuu7Nvy4B1NYd7Xl/B2l3HhtJ/1+wO+x+SJFNLdI1vAxyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qYUimI/oBafc8eML8PiDAN9lHGmyYDPmFrGDjCkveao=;
+ b=eHdOezHVn1P9bY8e4wyFubhAvBTlsvHVqdEuBro+7kq3UiUgIQA+zjVHZqMSqTmCEHd0ScGS4IZHAdprZCnEnRbf2rPOTyZ4HeoemNp1lS8X97H8OCA6ZDZteIIc8WaggOUJy0YWPxMgw2Z3A7MoU8M380DAyB0vQxK8Bwa4ljM=
+Received: from SN4PR10MB5590.namprd10.prod.outlook.com (2603:10b6:806:205::5)
+ by SN6PR10MB2430.namprd10.prod.outlook.com (2603:10b6:805:47::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Tue, 11 Jan
+ 2022 16:39:03 +0000
+Received: from SN4PR10MB5590.namprd10.prod.outlook.com
+ ([fe80::54fa:f1f7:d24b:e1b0]) by SN4PR10MB5590.namprd10.prod.outlook.com
+ ([fe80::54fa:f1f7:d24b:e1b0%4]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
+ 16:39:03 +0000
+From:   Haakon Bugge <haakon.bugge@oracle.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Yishai Hadas <yishaih@nvidia.com>,
+        Or Gerlitz <ogerlitz@mellanox.com>
+CC:     OFED mailing list <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC for-rc] IB/mlx4: Fix the fix for reading flow-counters
+Thread-Topic: [RFC for-rc] IB/mlx4: Fix the fix for reading flow-counters
+Thread-Index: AQHYBwlQCvRoMTPPuEKfYe0lhfeCNaxeBTSAgAAANAA=
+Date:   Tue, 11 Jan 2022 16:39:03 +0000
+Message-ID: <E392D0EF-5C0A-4844-9455-4BD0B5FDE04F@oracle.com>
+References: <1641918938-10011-1-git-send-email-haakon.bugge@oracle.com>
+ <5106B29C-9978-454D-9D25-84C29B110105@oracle.com>
+In-Reply-To: <5106B29C-9978-454D-9D25-84C29B110105@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3693.40.0.1.81)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a3813182-4428-406d-6b4d-08d9d520e0b4
+x-ms-traffictypediagnostic: SN6PR10MB2430:EE_
+x-microsoft-antispam-prvs: <SN6PR10MB2430346C52B3BC39400E4581FD519@SN6PR10MB2430.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: uCwcHeeYE0Zs8BVdxcjyJlrupnXMGs79IxHjBjy3K5Num4q+FNqIiUD/ecGKChBqeOeJZ5+f+1A8idl/tcuWSpM8YmJ5Oeo05XqD+aWrs6YcYkuo2v/9o/BSoX6+9FGvAwxF2Auupxe6WPW1oiIGv//qc2NNCMwKGbbBg/fmg6b7SNiBpZCGg9COnXcq/7qYF+2gVqwYLqHE94d9ZlBVSeCCmNwU35BP09i4evsABl1styi9eaqgT/9cSaqKKsrvZJgyN5Y9eTPes6yEXBt581Vk9KXFDSK34WyETkt3OZrTAJSpTloVtv28EuL9t3Zj3OD5poef8EMlndXfh8eggPRv/lzzbm2OOf5GIO90a2SGqUUMPrHxgEM/bJJvy+gPFcrXPBZbSQzXHtTfOYijoip417IVAB2vBlikgkskNs3kZwyjj2biSQ3Zpjoc6S3BJZ9izFaV2bPp3CeUFUGfalg62jZ5hhQlinY7U/tBbWU3643uHkS8sgt8ITpQUO270RrE+5W5KpXifMAWMCcBBINN/Du4qTD2BbA8gMJo3FZKFYEBUwlyuHzlXCL4FmaNfOEQEoHiTOvCKdj92Oi2x841f/xk8uS2myrHypfG8qm/tNXlF2iu+qXerSxO5DQwOWb+4yTOxGKhO/TV1avJI+v8F1S/fKXfBPkZ9OmdQ/mMtgGnujgwc6bBv6sTcGsC5bhM7AbIl+jw4sgu2VY79SQkfJnFh8eRZgEDrEpyATVScKwjciChlahkELYqYQx4
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR10MB5590.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(44832011)(33656002)(53546011)(2616005)(83380400001)(71200400001)(6486002)(508600001)(6506007)(54906003)(8676002)(186003)(316002)(110136005)(5660300002)(8936002)(66476007)(86362001)(4326008)(76116006)(26005)(6512007)(66556008)(38070700005)(66946007)(38100700002)(64756008)(122000001)(36756003)(2906002)(66446008)(91956017)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TncrVWhkYnp6UzlvMHBldDIvd2FjcHc5bFJLUzF2VTF1VldEbUtCcWZtSlVw?=
+ =?utf-8?B?T3JpQkpKMzNaT1pMdXBsbEIzR3NrQ0RXSjU0eXZNbVZFaEpWRUFZamtFY1pF?=
+ =?utf-8?B?SzMwaGg0TTJTTytvVllYWHp0S0labU84UkFDT0k1cldEU1AzRW5kZThtbmoz?=
+ =?utf-8?B?V095UzBSNUNMOWQxUG1xdnJDeWh5b25oTTVDRmlqekdvOERYOXBQcXFIM01L?=
+ =?utf-8?B?T1NNZmVTRW1UbWVUSWl2cU5JYnRUVCtJSTlnVUo1TW9DV01ONzFjSi9pNkVX?=
+ =?utf-8?B?RmY4MXczSmI5RDM1aDY3ajNSZXdjVU1ha1pFWGlET1JqdWNGSm4yWVdiVDVZ?=
+ =?utf-8?B?Q2hTQVhUWmZ4bkJLYnl0RU9mSmdaLzVEYjBrc09mbzJFQTRvZzB4bVl0SG5Q?=
+ =?utf-8?B?QmtPQ0tla3Jyc3ZWSVBGcGdNcnpwb21rZHFBaTFsSGtzWmxieWZuaTBzTUN0?=
+ =?utf-8?B?N1FkYnlrUVN5cGRKNXNMbDBXVm9OUmgrcFg2WjUrKzBteFNENU1iaDlnQi9B?=
+ =?utf-8?B?VnhERjFQN0JhQldSSFZlRkdkdFN0SFBaclRVdmJDVGNHdDFFNFB2dHk2UDBH?=
+ =?utf-8?B?MkNNcERLMkZRcndYRFRZNEQrbmZkbGhQbnJ2VU9icEFVQ0k5MWxBR3Qzc0VB?=
+ =?utf-8?B?OElXeUs5NFpDTEtyWFZ2SnRySG9kU0p2M0NuQXFCZmpXNm12cVNDRWRaRzJ4?=
+ =?utf-8?B?SHI4cG5kMkg0T3hXVmdZUVl2MldxS0NUdEs4UUhkczJ5b3pKU3NxQjVzc2VC?=
+ =?utf-8?B?c29JdHZvYURGUXdDZlV1SHowWXF6eDl0RzF0cmpQakQzNUtPL1ZQMDN1M3or?=
+ =?utf-8?B?M3gzVGVlSlFBZTFrVHZ1R0d6SG5jRDBFQlNFUnc4Zytub0daYXhxL0ZhMTlK?=
+ =?utf-8?B?MEFGbXBESE51Wk8yTVNPVU9mQURoSEs1RjByYVcvdG55ai9wTENzYnYxd2lo?=
+ =?utf-8?B?cjlNcWxDRTFKenBZSDEvUDZFRXhONUtQNEh1TmpxT05BU3ZrNEtxanV4aXR6?=
+ =?utf-8?B?Q1pXczdMc09VZXVGVTM1ZEtHTEI2OXR0WlVUME80bTRIZHZNbU81R0NyWnlN?=
+ =?utf-8?B?MXc0NEVwZnp6K3dRVDl5QVJFQnhoRkVOY09IZHJrUUhPZDA3MUJCZjlQbUk3?=
+ =?utf-8?B?SzF0ajZ5MlBYeksvUFAxZWN6MUlOSWQ3NGtXVG9DdTlTYU5weXRROHc3SWRr?=
+ =?utf-8?B?NWhYWHU0RFovSHkvOHVoa1BVbSs1UHBHTXloMjF6VzhWTnNyaXlMY2NxMVlw?=
+ =?utf-8?B?MkQrVUNzOVY0YXorOUVGSmgzRFRtMytzdzZueFl5bHllV0dnRDg1TU9hQTE4?=
+ =?utf-8?B?SXVZR2tpMVNoNUpZeUlHZE5OWVRVd2tyMTR3VGlFeWJrMmZWS3RxT0pSSXN2?=
+ =?utf-8?B?NUhnc251eHhMcTMyNFpjR0laNXVhOFRsRFNCNE9PR21EZjZQYWxjZklNeXg0?=
+ =?utf-8?B?WGZqc2l4dkYwKzhoaTB3R1oveXB6U215MVhOdnNIT2wySkFmenA5bVMySWg3?=
+ =?utf-8?B?aTdtbWVKcVhjZW0vV1pIYm9pcWV2N0VXWnBxRGk0cHIvS0xLcWFaTk5YaE1U?=
+ =?utf-8?B?dHZUYVdQblVMWXA5RThlV045azh4NFA3ZnhERC82NUdVK3F3MjRmbDlYV2Vw?=
+ =?utf-8?B?T0JXSlRaMDdpL1AvMFRvdW1LUWNpUW4rRDQxS0NNMkQ2Rkd6RGRkclJFa1dr?=
+ =?utf-8?B?NXpQRGc2cS9Wb1dnRE1jcFFLRUg0T1QvL2lpOVpyclI0YVIyUGFjYWRvQ0M2?=
+ =?utf-8?B?RFRERDYwN2hSeGJLdDlHanM4Um9URzZLemt1WXQzWmlaR2dldTltc2ZMc0Ex?=
+ =?utf-8?B?R1g5VTQwbllXanJ6cUNKYkdzQTFycW9tekd3SlA5NTU2M3lNWXRpVCtVSU51?=
+ =?utf-8?B?U0IyOGpsd3phdDNadFJvN3ZIKzBKdytBSXlGemloYlFnM0NPaVNBVW5TZENU?=
+ =?utf-8?B?RkU4NEl1ajhTMExmdmkyOW1yalh2OFB6cDE5SDd6RndqZ3RPQnNxRUNWY2JD?=
+ =?utf-8?B?TE92SlpKdzh2eG85ZCs4elBlc2I0VXRScjhBUHhMbEtuNmlEVmx1aXpLcUNm?=
+ =?utf-8?B?T0JCQ1VaRTNicXdvd2pyYzVDUmNaM2pGbmUxNjllb0E5Zi93a1B1d0x6ODha?=
+ =?utf-8?B?Q1RwMlFycDNraE9CMzVBTXdDMlpGVFpUSGZWR2YzMkh3amFZVGU4UXFyRGx5?=
+ =?utf-8?Q?Nkqkx5DLUR8vBn22KY4iqiA=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1E3118E0B183C54E806334A95D9DD419@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR10MB5590.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3813182-4428-406d-6b4d-08d9d520e0b4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2022 16:39:03.4132
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6cu6RaxWbY0kISm2EryvUjwW8i5ej7URPy2VRNsO720WZfZqgMjebFjjZOjSJNHOI9HUWbrHR9aoiNDd8InMZQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2430
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10223 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 adultscore=0
+ suspectscore=0 mlxlogscore=999 bulkscore=0 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201110093
+X-Proofpoint-GUID: CMR6-bKqLDdDpM--UspAOEUtbaZw1iPS
+X-Proofpoint-ORIG-GUID: CMR6-bKqLDdDpM--UspAOEUtbaZw1iPS
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
-On Tue, 2022-01-11 at 19:57 +0800, Liwei Song wrote:
-> 
-> On 1/11/22 18:39, Hans de Goede wrote:
-> > Hi,
-> > 
-> > On 1/11/22 11:31, Liwei Song wrote:
-> > > exist the below call sequences may cause deadlock:
-> > > 
-> > > isst_if_probe()
-> > >    --> isst_if_cdev_register()
-> > >       --> mutex_lock(&punit_misc_dev_lock)
-> > >    --> misc_register()
-> > >       --> mutex_lock(&misc_mtx)
-> > > 
-> > > misc_open()
-> > >    --> mutex_lock(&misc_mtx)
-> > >    --> isst_if_open()
-> > >       --> mutex_lock(&punit_misc_dev_lock)
-> > > 
-> > > to fix this do not hold punit_misc_dev_lock when call
-> > > misc_register
-> > > since it has misc_mtx lock for sync.
-> > 
-> > I agree that the punit_misc_dev_lock should not be hold during
-> > (un)registration, but this fix looks wrong with unlocking +
-> > relocking it.
-> > 
-> > Normally things like this are done by setting up everything which
-> > needs
-> > to be setup before calling misc_register() and in that case the
-> > setup code does not need to lock the punit_misc_dev_lock at all
-> > since
-> > none of the misc_dev callbacks can be called before everything is
-> > setup (and the same in reverse for unregister, unregister the misc-
-> > dev
-> > before doing any teardown, then there is no need for the lock).
-> > 
-> > Note the above assumes that the punit_misc_dev_lock is only used
-> > from misc-dev callbacks based on its name, I did not check this is
-> > true.
-> 
-> Hi Hans,
-> 
-> Thanks for your input, in my case there are two devices on my board
-> will trigger the probe routine(isst_if_probe and isst_if_mbox_probe),
-> both of them will call misc_register(), punit_misc_dev_lock is also
-> used by the probe.
-To check how to get to that scenario:
-I guess you have some application which opens isst device during system
-startup, correct?
-
-Thanks,
-Srinivas
-
-> 
-> Thanks,
-> Liwei.
-> 
-> 
-> > Srinivas, can you take a look please ? And see if you can come up
-> > with a better fix ?
-> > 
-> > Regards,
-> > 
-> > Hans
-> > 
-> > 
-> > 
-> > 
-> > > [  256.104522]
-> > > ======================================================
-> > > [  256.113783] WARNING: possible circular locking dependency
-> > > detected
-> > > [  256.120093] 5.16.0-rc6-yocto-standard+ #99 Not tainted
-> > > [  256.125362] --------------------------------------------------
-> > > ----
-> > > [  256.131673] intel-speed-sel/844 is trying to acquire lock:
-> > > [  256.137290] ffffffffc036f0d0 (punit_misc_dev_lock){+.+.}-
-> > > {3:3}, at: isst_if_open+0x18/0x90 [isst_if_common]
-> > > [  256.147171]
-> > > [  256.147171] but task is already holding lock:
-> > > [  256.153135] ffffffff8ee7cb50 (misc_mtx){+.+.}-{3:3}, at:
-> > > misc_open+0x2a/0x170
-> > > [  256.160407]
-> > > [  256.160407] which lock already depends on the new lock.
-> > > [  256.160407]
-> > > [  256.168712]
-> > > [  256.168712] the existing dependency chain (in reverse order)
-> > > is:
-> > > [  256.176327]
-> > > [  256.176327] -> #1 (misc_mtx){+.+.}-{3:3}:
-> > > [  256.181946]        lock_acquire+0x1e6/0x330
-> > > [  256.186265]        __mutex_lock+0x9b/0x9b0
-> > > [  256.190497]        mutex_lock_nested+0x1b/0x20
-> > > [  256.195075]        misc_register+0x32/0x1a0
-> > > [  256.199390]        isst_if_cdev_register+0x65/0x180
-> > > [isst_if_common]
-> > > [  256.205878]        isst_if_probe+0x144/0x16e [isst_if_mmio]
-> > > [  256.209991] hrtimer: interrupt took 10370 ns
-> > > [  256.211582]        local_pci_probe+0x47/0xa0
-> > > [  256.220384]        work_for_cpu_fn+0x17/0x30
-> > > [  256.224790]        process_one_work+0x26a/0x650
-> > > [  256.229456]        worker_thread+0x1dd/0x3b0
-> > > [  256.233861]        kthread+0x191/0x1c0
-> > > [  256.237745]        ret_from_fork+0x1f/0x30
-> > > [  256.241976]
-> > > [  256.241976] -> #0 (punit_misc_dev_lock){+.+.}-{3:3}:
-> > > [  256.248552]        validate_chain+0xbc6/0x1750
-> > > [  256.253131]        __lock_acquire+0x88c/0xc10
-> > > [  256.257618]        lock_acquire+0x1e6/0x330
-> > > [  256.261933]        __mutex_lock+0x9b/0x9b0
-> > > [  256.266165]        mutex_lock_nested+0x1b/0x20
-> > > [  256.270739]        isst_if_open+0x18/0x90 [isst_if_common]
-> > > [  256.276356]        misc_open+0x100/0x170
-> > > [  256.280409]        chrdev_open+0xa5/0x1e0
-> > > [  256.284550]        do_dentry_open+0x23d/0x3c0
-> > > [  256.289039]        vfs_open+0x2f/0x40
-> > > [  256.292836]        path_openat+0x87a/0x940
-> > > [  256.297064]        do_filp_open+0xc5/0x140
-> > > [  256.301295]        do_sys_openat2+0x23d/0x320
-> > > [  256.305782]        do_sys_open+0x59/0x80
-> > > [  256.309836]        __x64_sys_openat+0x20/0x30
-> > > [  256.314324]        do_syscall_64+0x3f/0x90
-> > > [  256.318552]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > > [  256.324259]
-> > > [  256.324259] other info that might help us debug this:
-> > > [  256.324259]
-> > > [  256.332394]  Possible unsafe locking scenario:
-> > > [  256.332394]
-> > > [  256.338444]        CPU0                    CPU1
-> > > [  256.343105]        ----                    ----
-> > > [  256.347768]   lock(misc_mtx);
-> > > [  256.350870]                                lock(punit_misc_dev
-> > > _lock);
-> > > [  256.357441]                                lock(misc_mtx);
-> > > [  256.363058]   lock(punit_misc_dev_lock);
-> > > [  256.367110]
-> > > [  256.367110]  *** DEADLOCK ***
-> > > [  256.367110]
-> > > [  256.373162] 1 lock held by intel-speed-sel/844:
-> > > [  256.377824]  #0: ffffffff8ee7cb50 (misc_mtx){+.+.}-{3:3}, at:
-> > > misc_open+0x2a/0x170
-> > > [  256.385531]
-> > > [  256.385531] stack backtrace:
-> > > [  256.390021] CPU: 12 PID: 844 Comm: intel-speed-sel Not tainted
-> > > 5.16.0-rc6-yocto-standard+ #99
-> > > [  256.398678] Hardware name: ACCTON MOROCITY/MOROCITY, BIOS
-> > > IDVLCRB1.86B.0021.D09.2111010103 11/01/2021
-> > > [  256.408028] Call Trace:
-> > > [  256.410605]  <TASK>
-> > > [  256.412837]  dump_stack_lvl+0x5b/0x82
-> > > [  256.416635]  dump_stack+0x10/0x12
-> > > [  256.420085]  print_circular_bug.isra.43+0x261/0x2c0
-> > > [  256.425095]  check_noncircular+0x126/0x140
-> > > [  256.429326]  ? __this_cpu_preempt_check+0x13/0x20
-> > > [  256.434167]  validate_chain+0xbc6/0x1750
-> > > [  256.438223]  ? validate_chain+0xbc6/0x1750
-> > > [  256.442451]  ? validate_chain+0x236/0x1750
-> > > [  256.446687]  __lock_acquire+0x88c/0xc10
-> > > [  256.450658]  lock_acquire+0x1e6/0x330
-> > > [  256.454452]  ? isst_if_open+0x18/0x90 [isst_if_common]
-> > > [  256.459726]  ? __mutex_lock+0x79/0x9b0
-> > > [  256.463610]  ? __mutex_lock+0x79/0x9b0
-> > > [  256.467493]  ? isst_if_open+0x18/0x90 [isst_if_common]
-> > > [  256.472764]  ? isst_if_open+0x18/0x90 [isst_if_common]
-> > > [  256.478038]  __mutex_lock+0x9b/0x9b0
-> > > [  256.481748]  ? isst_if_open+0x18/0x90 [isst_if_common]
-> > > [  256.487021]  ? __mutex_lock+0x102/0x9b0
-> > > [  256.490993]  ? __this_cpu_preempt_check+0x13/0x20
-> > > [  256.495837]  mutex_lock_nested+0x1b/0x20
-> > > [  256.499893]  ? mutex_lock_nested+0x1b/0x20
-> > > [  256.504121]  isst_if_open+0x18/0x90 [isst_if_common]
-> > > [  256.509222]  misc_open+0x100/0x170
-> > > [  256.512759]  chrdev_open+0xa5/0x1e0
-> > > [  256.516386]  ? cdev_put.part.1+0x20/0x20
-> > > [  256.520441]  do_dentry_open+0x23d/0x3c0
-> > > [  256.524414]  vfs_open+0x2f/0x40
-> > > [  256.527689]  path_openat+0x87a/0x940
-> > > [  256.531399]  do_filp_open+0xc5/0x140
-> > > [  256.535112]  ? trace_preempt_on+0x28/0xd0
-> > > [  256.539255]  ? alloc_fd+0x152/0x230
-> > > [  256.542880]  ? preempt_count_sub+0x9b/0x100
-> > > [  256.547200]  ? _raw_spin_unlock+0x2c/0x50
-> > > [  256.551348]  do_sys_openat2+0x23d/0x320
-> > > [  256.555320]  ? do_sys_openat2+0x23d/0x320
-> > > [  256.559467]  do_sys_open+0x59/0x80
-> > > [  256.563003]  __x64_sys_openat+0x20/0x30
-> > > [  256.566972]  do_syscall_64+0x3f/0x90
-> > > [  256.570680]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > > [  256.575866] RIP: 0033:0x7f9be4b97c27
-> > > [  256.579576] Code: 25 00 00 41 00 3d 00 00 41 00 74 37 64 8b 04
-> > > 25 18 00 00 00 85 c0 75 5b 44 89 e2 48 89 ee bf 9c ff ff ff b8 01
-> > > 01 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 85 00 00 00 48 83 c4 68
-> > > 5d 41 5c c3 0f 1f
-> > > [  256.598474] RSP: 002b:00007ffd8fc01b70 EFLAGS: 00000246
-> > > ORIG_RAX: 0000000000000101
-> > > [  256.606177] RAX: ffffffffffffffda RBX: 00005572f20332b0 RCX:
-> > > 00007f9be4b97c27
-> > > [  256.613443] RDX: 0000000000000000 RSI: 00005572f202936a RDI:
-> > > 00000000ffffff9c
-> > > [  256.620709] RBP: 00005572f202936a R08: 0000000000000008 R09:
-> > > 0000000000000001
-> > > [  256.627974] R10: 0000000000000000 R11: 0000000000000246 R12:
-> > > 0000000000000000
-> > > [  256.635241] R13: 00005572f20332b0 R14: 0000000000000001 R15:
-> > > 0000000000000000
-> > > [  256.642513]  </TASK>
-> > > 
-> > > Signed-off-by: Liwei Song <liwei.song@windriver.com>
-> > > ---
-> > >  drivers/platform/x86/intel/speed_select_if/isst_if_common.c | 6
-> > > +++++-
-> > >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git
-> > > a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> > > b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> > > index c9a85eb2e860..bcbc0d508ec4 100644
-> > > --- a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> > > +++ b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
-> > > @@ -693,10 +693,12 @@ int isst_if_cdev_register(int device_type,
-> > > struct isst_if_cmd_cb *cb)
-> > >  	if (!misc_usage_count) {
-> > >  		int ret;
-> > >  
-> > > +		mutex_unlock(&punit_misc_dev_lock);
-> > >  		misc_device_ret = misc_register(&isst_if_char_driver);
-> > >  		if (misc_device_ret)
-> > > -			goto unlock_exit;
-> > > +			return misc_device_ret;
-> > >  
-> > > +		mutex_lock(&punit_misc_dev_lock);
-> > >  		ret = isst_if_cpu_info_init();
-> > >  		if (ret) {
-> > >  			misc_deregister(&isst_if_char_driver);
-> > > @@ -731,7 +733,9 @@ void isst_if_cdev_unregister(int device_type)
-> > >  	if (device_type == ISST_IF_DEV_MBOX)
-> > >  		isst_delete_hash();
-> > >  	if (!misc_usage_count && !misc_device_ret) {
-> > > +		mutex_unlock(&punit_misc_dev_lock);
-> > >  		misc_deregister(&isst_if_char_driver);
-> > > +		mutex_lock(&punit_misc_dev_lock);
-> > >  		isst_if_cpu_info_exit();
-> > >  	}
-> > >  	mutex_unlock(&punit_misc_dev_lock);
-> > > 
-
+DQoNCj4gT24gMTEgSmFuIDIwMjIsIGF0IDE3OjM4LCBIYWFrb24gQnVnZ2UgPGhhYWtvbi5idWdn
+ZUBvcmFjbGUuY29tPiB3cm90ZToNCj4gDQo+IA0KPiANCj4+IE9uIDExIEphbiAyMDIyLCBhdCAx
+NzozNSwgSMOla29uIEJ1Z2dlIDxoYWFrb24uYnVnZ2VAb3JhY2xlLmNvbT4gd3JvdGU6DQo+PiAN
+Cj4+IEl0IGlzIG5vdCBsb2dpY2FsIHRvIGNhbGwgaWJvZV9wcm9jZXNzX21hZCgpIHdoZW4gdGhl
+IGxpbmstbGF5ZXIgaXMNCj4+IEluZmluaWJhbmQuIE5ldmVydGhlbGVzcywgdGhlIGNvbW1pdCBt
+ZXNzYWdlIGluIGNvbW1pdCA0M2JmYjk3MjllYTgNCj4+ICgiSUIvbWx4NDogRml4IHVzZSBvZiBm
+bG93LWNvdW50ZXJzIGZvciBwcm9jZXNzX21hZCIpIGV4cGxpY2l0bHkgc3RhdGUNCj4+IHRoYXQg
+aWJvZV9wcm9jZXNzX21hZCgpIHNoYWxsIGJlIGNhbGxlZC4NCj4+IA0KPj4gV2l0aG91dCB0aGlz
+IGZpeCwgcmVhZGluZzoNCj4gDQo+ICMgY2F0IC9zeXMvY2xhc3MvaW5maW5pYmFuZC9tbHg0XzAv
+cG9ydHMvMi9jb3VudGVyc19leHQvcG9ydF94bWl0X2RhdGFfNjQNCg0KIHNob3VsZCByZWFkOg0K
+DQogIyBjYXQgL3N5cy9jbGFzcy9pbmZpbmliYW5kL21seDRfMS9wb3J0cy8xL2NvdW50ZXJzX2V4
+dC9wb3J0X3htaXRfZGF0YV82NA0KDQoNCj4gDQo+IChzb3JyeSwgdGhpcyBsaW5lIHdhcyBvZiBj
+b3Vyc2UgdGFrZW4gYXMgY29tbWVudCBhbmQgd2FzIHJlbW92ZWQpLg0KPiANCj4gDQo+IFRoeHMs
+IEjDpWtvbg0KPiANCj4gDQo+PiANCj4+IHlpZWxkcyAiSW52YWxpZCBhcmd1bWVudCIsIHdoZXJl
+YXMgd2l0aCB0aGlzIGNvbW1pdCwgc2FpZCBjb3VudGVyIGNhbg0KPj4gYmUgcmVhZC4NCj4+IA0K
+Pj4gUGxlYXNlIG5vdGUgdGhhdCBtbHg0XzEgaXMgYSBWRi4NCj4+IA0KPj4gRml4ZXM6IDQzYmZi
+OTcyOWVhOCAoIklCL21seDQ6IEZpeCB1c2Ugb2YgZmxvdy1jb3VudGVycyBmb3IgcHJvY2Vzc19t
+YWQiKQ0KPj4gU2lnbmVkLW9mZi1ieTogSMOla29uIEJ1Z2dlIDxoYWFrb24uYnVnZ2VAb3JhY2xl
+LmNvbT4NCj4+IC0tLQ0KPj4gZHJpdmVycy9pbmZpbmliYW5kL2h3L21seDQvbWFkLmMgfCA0ICsr
+LS0NCj4+IDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+
+PiANCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2luZmluaWJhbmQvaHcvbWx4NC9tYWQuYyBiL2Ry
+aXZlcnMvaW5maW5pYmFuZC9ody9tbHg0L21hZC5jDQo+PiBpbmRleCBkMTNlY2JkLi5jYzgzNzgy
+IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9pbmZpbmliYW5kL2h3L21seDQvbWFkLmMNCj4+ICsr
+KyBiL2RyaXZlcnMvaW5maW5pYmFuZC9ody9tbHg0L21hZC5jDQo+PiBAQCAtOTk4LDggKzk5OCw4
+IEBAIGludCBtbHg0X2liX3Byb2Nlc3NfbWFkKHN0cnVjdCBpYl9kZXZpY2UgKmliZGV2LCBpbnQg
+bWFkX2ZsYWdzLCB1MzIgcG9ydF9udW0sDQo+PiAJCSAgICAgKGluLT5tYWRfaGRyLmF0dHJfaWQg
+PT0gSUJfUE1BX1BPUlRfQ09VTlRFUlMgfHwNCj4+IAkJICAgICAgaW4tPm1hZF9oZHIuYXR0cl9p
+ZCA9PSBJQl9QTUFfUE9SVF9DT1VOVEVSU19FWFQgfHwNCj4+IAkJICAgICAgaW4tPm1hZF9oZHIu
+YXR0cl9pZCA9PSBJQl9QTUFfQ0xBU1NfUE9SVF9JTkZPKSkpDQo+PiAtCQkJcmV0dXJuIGlib2Vf
+cHJvY2Vzc19tYWQoaWJkZXYsIG1hZF9mbGFncywgcG9ydF9udW0sDQo+PiAtCQkJCQkJaW5fd2Ms
+IGluX2dyaCwgaW4sIG91dCk7DQo+PiArCQkJcmV0dXJuIGliX3Byb2Nlc3NfbWFkKGliZGV2LCBt
+YWRfZmxhZ3MsIHBvcnRfbnVtLA0KPj4gKwkJCQkJICAgICAgaW5fd2MsIGluX2dyaCwgaW4sIG91
+dCk7DQo+PiANCj4+IAkJcmV0dXJuIGliX3Byb2Nlc3NfbWFkKGliZGV2LCBtYWRfZmxhZ3MsIHBv
+cnRfbnVtLCBpbl93YywgaW5fZ3JoLA0KPj4gCQkJCSAgICAgIGluLCBvdXQpOw0KPj4gLS0gDQo+
+PiAxLjguMy4xDQoNCg==

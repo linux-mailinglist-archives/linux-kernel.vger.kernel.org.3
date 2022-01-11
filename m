@@ -2,87 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7800F48B8B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7551148B8CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 21:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243651AbiAKUg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 15:36:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
+        id S244130AbiAKUm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 15:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233821AbiAKUg4 (ORCPT
+        with ESMTP id S233821AbiAKUm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 15:36:56 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E69C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:36:55 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id m4so1003544edb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:36:55 -0800 (PST)
+        Tue, 11 Jan 2022 15:42:56 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B89EC06173F;
+        Tue, 11 Jan 2022 12:42:56 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id q8so383464wra.12;
+        Tue, 11 Jan 2022 12:42:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rhTc2fZPRf49402IZJZrD0G7GSgDTNNYfixj1K2wtCE=;
-        b=OnO/1NBECg49FscHQiUJJsI8kyhIwulL1CMWTPj8c0arPJ6mcuNDGMP5Z05+RZhGTw
-         8Qh32WeUSDrvpb5ZBfUM3ESbcIof4lmsWcUQjW6k/+74HYvPJHnWn/a2ppJXhT7w2/D9
-         JIMurhESR3+nOenjxbC56gH0WvfIU30WlZzUU=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VbynRfVLNK84/t0eJlwghbR8r9mR46wfAVOe8pGCiW8=;
+        b=E9vjXnFFhdjfiKeRN77wV7BgukDWXVrWLq0z+xGOVSyfoLLoLg1REwjos7l40v/q8V
+         AoW4+OuQliT9XZv1Toqa0sARUzmveSE8A52x4hwTkCapPSTBmzG7J4TZQ/vQ7kI5m1If
+         6iVJozb+rOHoAHAmhciOKTd7g5BYrzwrfXt2T59cRUGTbWclLdw6+CjWM1mTo2M5Ptzf
+         K/NbgaAipuGftYc42agwfeSh9lH5n58iraSr42S9ekLNzakb0e57/On+bPWOQSTBbCK4
+         Qml2+NB+hjesUzTVtRGynwz2NPCLQpT2t4oZ4oaK3sA6nosJc81k71fY7TBm/zV09adq
+         zvMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rhTc2fZPRf49402IZJZrD0G7GSgDTNNYfixj1K2wtCE=;
-        b=P6VrP20zoBLSZqS17AVEkivx2uBt4XV4NnnLYk3E5kJqP+IgW26oZBEKjHssxyb1Xg
-         q5+D0epLE9EvqLfD88YQyWJXJuK3Ai712sL5JMz8ubDmOQaDOm7omdklm4PJt1Rn6Zl3
-         hEZlyStgk0ABunicHa2TlYYJ/KlxMnfC1qXZqxNbtAd715cHaVBjUVGZvfik0wflGInT
-         fSdMZZiXRbFgvmXxAb6/QAagcmqcsRuo0BQwMaZjshQBiKdNU0JHHYRsjL/DUJLBU4aa
-         BRxv4Ofa3LWF4pppQyYruJcBrcnO8ni6QS86tAPDPLK0R6KU4hN9h9Xu118qoV48wtCa
-         hqrA==
-X-Gm-Message-State: AOAM531XGMG+gkrE1pkce2Dn+Y4+SMJHMBrENfwQDYokIdpHquzXWiXg
-        h+nirmau/wdRWX1adE6bTynoXzs7eNRcswYafMI=
-X-Google-Smtp-Source: ABdhPJzKR8ptVlpklPwEkNvSowiumfxJsrztEZm+xlmNs7ECndUl6NyDMMIdOkVrhkrsYqbIHet7WQ==
-X-Received: by 2002:a17:906:9912:: with SMTP id zl18mr4873850ejb.348.1641933413949;
-        Tue, 11 Jan 2022 12:36:53 -0800 (PST)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id d1sm3965241ejo.176.2022.01.11.12.36.51
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VbynRfVLNK84/t0eJlwghbR8r9mR46wfAVOe8pGCiW8=;
+        b=eqNCsSIBAQv/rEC09CLE94M/oP+FZHJLsdqMFUdVznJCicEEXELSOIpk8lfGJ9veJn
+         aG43B4HsFsZxi51IZErurAAGUIzj2FANOyZErfVoGIOfL/p6nadpiIKRenhxj/QBkeGu
+         j1QIFNHgeWcmKe4GXMVw1K70gNT5IzWKOp7WbmjSx5g631/6z+zctKOMyoT/+gM/8v2j
+         fFuztcld+T1I9zv/GSw43hFQMj8DIn3qeMuodzJQP1lmqhMGaqa0SemY0XKEhNobFac3
+         30O6m5V67PDZHlGV4qoCbTE+LVCazrlcKEUt8Q0fB9tRE339xY68XzofeA9Gf0t5UEDR
+         Wxiw==
+X-Gm-Message-State: AOAM533HU2sF0ZVt5FrFSR1B2jFQXO6JyLG5sQGgEyhQrfzT6RNv0e7T
+        nDR9lWEirujsAHx522ENvtQ=
+X-Google-Smtp-Source: ABdhPJxeR7GANkBhNDGq4Vd5Bc/wRjE1y1lR4wjizP9vAN+N8/RNyapu93mbY9rnphpU5+5CEo1t6Q==
+X-Received: by 2002:a5d:47ad:: with SMTP id 13mr5292335wrb.268.1641933774981;
+        Tue, 11 Jan 2022 12:42:54 -0800 (PST)
+Received: from [192.168.8.198] ([148.252.129.73])
+        by smtp.gmail.com with ESMTPSA id e12sm10944885wrg.110.2022.01.11.12.42.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 12:36:52 -0800 (PST)
-Received: by mail-wr1-f53.google.com with SMTP id s1so412449wra.6
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 12:36:51 -0800 (PST)
-X-Received: by 2002:adf:f54e:: with SMTP id j14mr5154363wrp.442.1641933411136;
- Tue, 11 Jan 2022 12:36:51 -0800 (PST)
+        Tue, 11 Jan 2022 12:42:54 -0800 (PST)
+Message-ID: <9e3bb558-ecb1-a6aa-35e4-a2771136b3fe@gmail.com>
+Date:   Tue, 11 Jan 2022 20:39:26 +0000
 MIME-Version: 1.0
-References: <20220111155255.745428-1-brgl@bgdev.pl>
-In-Reply-To: <20220111155255.745428-1-brgl@bgdev.pl>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 11 Jan 2022 12:36:35 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg1RUc-41K=XTQavnkuLg2=oe8r8LWBocWWWXhM77=2gw@mail.gmail.com>
-Message-ID: <CAHk-=wg1RUc-41K=XTQavnkuLg2=oe8r8LWBocWWWXhM77=2gw@mail.gmail.com>
-Subject: Re: [GIT PULL] gpio: updates for v5.17
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 09/14] ipv6: hand dst refs to cork setup
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <cover.1641863490.git.asml.silence@gmail.com>
+ <07031c43d3e5c005fbfc76b60a58e30c66d7c620.1641863490.git.asml.silence@gmail.com>
+ <48293134f179d643e9ec7bcbd7bca895df7611ac.camel@redhat.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <48293134f179d643e9ec7bcbd7bca895df7611ac.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 7:53 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> The gpio-sim module is back, this time without any changes to configfs. This
-> results in a less elegant user-space interface but I never got any follow-up on
-> the committable items and didn't want to delay this module for several more
-> months.
+On 1/11/22 17:11, Paolo Abeni wrote:
+> On Tue, 2022-01-11 at 01:21 +0000, Pavel Begunkov wrote:
+>> During cork->dst setup, ip6_make_skb() gets an additional reference to
+>> a passed in dst. However, udpv6_sendmsg() doesn't need dst after calling
+>> ip6_make_skb(), and so we can save two additional atomics by passing
+>> dst references to ip6_make_skb(). udpv6_sendmsg() is the only caller, so
+>> it's enough to make sure it doesn't use dst afterwards.
+> 
+> What about the corked path in udp6_sendmsg()? I mean:
 
-Yeah, I think that was the right choice.
+It doesn't change it for callers, so the ref stays with udp6_sendmsg() when
+corking. To compensate for ip6_setup_cork() there is an explicit dst_hold()
+in ip6_append_data, should be fine.
 
-I actually did spend some time looking at the configfs code, and it
-just worried me. It may have been clever, but there was no real
-serious user that would have used it outside of this gpio use-case,
-and the games it played with the dentry layer were scary. With no real
-maintainer for configfs, and no VFS person willing to work on it, I
-think it was a dead end. With that in mind, the fewer fancy configfs
-users we have, and the fewer reasons to use it, the better.
+@@ -1784,6 +1784,7 @@ int ip6_append_data(struct sock *sk,
+  		/*
+  		 * setup for corking
+  		 */
++		dst_hold(&rt->dst);
+  		err = ip6_setup_cork(sk, &inet->cork, &np->cork,
+  				     ipc6, rt);
 
-            Linus
+
+I don't care much about corking perf, but might be better to implement
+this "handing away" for ip6_append_data() as well to be more consistent
+with ip6_make_skb().
+
+
+> udp6_sendmsg(MSG_MORE) -> ip6_append_data() -> ip6_setup_cork()
+> 
+> what if ip6_setup_cork() errors out in that path?
+
+-- 
+Pavel Begunkov

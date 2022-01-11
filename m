@@ -2,130 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA13748ABB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:51:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC75A48ABBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 11:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238019AbiAKKvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 05:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237719AbiAKKvf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:51:35 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFE1C06173F;
-        Tue, 11 Jan 2022 02:51:34 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id kc16so18000095qvb.3;
-        Tue, 11 Jan 2022 02:51:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WW/ErXuM7aTThn8DyOtAxfHC+Lf/dAu6aF/ysr/kDtQ=;
-        b=iy8TwFF44l+/tUgYTLhp7Cm+F03uo/wvxz6bjpch4q9ZrjF8KY4CTo4cH0pcLNIPQZ
-         WgmTqDF14LmBZTQ/CK0AJ6CZrQ1V6VVJ+Gur0yR78DsI7OqeyG15uEZr+KwjW7w3ABhE
-         151Tv7E2gmimx0dpdcSfYjPPuWUqmpfXDtEEI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WW/ErXuM7aTThn8DyOtAxfHC+Lf/dAu6aF/ysr/kDtQ=;
-        b=y9iga9Mwl6MJyqvfOCNo0lN6cUHDwrzK19s3hV5fPifp2rLwdIHbYjhP5KbwiYeGCD
-         zA37kM4vm0S+nvf7NN06h3C/tKzFuBUyF0Ptb6n0RXG3WRjCcpna8pydUQ/pTIXbmzBQ
-         Ny+R8nR0mZSMm559LROWb7yDP/BZqqrpxmeyDP2I/H8xZGrgzLgqYq1RA9QklYyxHLuF
-         RYKJFXnTiAq3xPy4smNGWJno2M8TBZvgkkOvPFiGSfTIvwty/yCFNDfsKIxkKZRTWjt4
-         +70vZuiGXV+Maz+aUBoMsxyzMjaKY6WEsw7UQBwSLgaN5/OmBpdqCxeiHBIWklCKlEmJ
-         OPdA==
-X-Gm-Message-State: AOAM5338WYczeZ49GCiOj6hqx6T6q8nsPyHQukoNfMJ21m0V5jiNoK3H
-        dgAqVHDViF2xfgcWfb0pmmszpJ9aCWbY6IdzG+8=
-X-Google-Smtp-Source: ABdhPJwt9p/tA3IkzY4pwfvtSr0KZDZ035KTUfqJ7iLltePV28fkkpcn/7KMIUQ58fumeDWt58a21jTwY1bs+1+spiw=
-X-Received: by 2002:a05:6214:2522:: with SMTP id gg2mr3178151qvb.65.1641898293761;
- Tue, 11 Jan 2022 02:51:33 -0800 (PST)
+        id S1349352AbiAKKyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 05:54:47 -0500
+Received: from mga12.intel.com ([192.55.52.136]:52878 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238019AbiAKKyq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 05:54:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641898486; x=1673434486;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=63xmTGn9lBdK3U4EFWqQEKciamR4hubP+IGQXhYm0yk=;
+  b=kiUtYMrSuKzKgxG1xlgz7MTwITx99ECkVxLEw+a1WjxgVfHq7HBZRgIa
+   8svO2hXYnmpIlOnv+Z4P8AFbMQHEKBUUTYijhw8UTCBeSrpKTs03Yc9Gv
+   PYY936qu1VY0LpPQ3nNvejpyz5nbnPdk0ZkuqAQXsOGXyJ4kxllSC/kqh
+   ZqvgXQbvv0zbnPxsRWL+/mQ8LzW/fvjS1rptxz8cIsZ7snbDb5aRicaJa
+   GFwjZwBEJr6vsiknMhyMv7TG+zPEtjLn1VbqL9xeJ+IYuiCV4m8XKBS2Q
+   rYHsLK+yMUnuyAHY+ACwEzvfNLi3kFimbo5ZhZ6nSe06F/qOEuXewJp0j
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="223440012"
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="223440012"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 02:54:45 -0800
+X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
+   d="scan'208";a="474494525"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 02:54:43 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id AB19B2017F;
+        Tue, 11 Jan 2022 12:54:41 +0200 (EET)
+Date:   Tue, 11 Jan 2022 12:54:41 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v1 1/1] vsprintf: Fix potential unaligned access
+Message-ID: <Yd1h8c8Sk4fZ+h0A@paasikivi.fi.intel.com>
+References: <20220110205049.11696-1-andriy.shevchenko@linux.intel.com>
+ <YdyvXq8D2jsiM47E@paasikivi.fi.intel.com>
+ <Yd1XlN0e23GRF9i6@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20220109132613.122912-1-guoheyi@linux.alibaba.com> <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com>
-In-Reply-To: <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 11 Jan 2022 10:51:22 +0000
-Message-ID: <CACPK8XcYp9iAD3fjBQCax41C-1UpA+1AQW3epyEooYzNLt7R5g@mail.gmail.com>
-Subject: Re: [PATCH] drivers/i2c-aspeed: avoid invalid memory reference after timeout
-To:     Heyi Guo <guoheyi@linux.alibaba.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd1XlN0e23GRF9i6@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 at 07:52, Heyi Guo <guoheyi@linux.alibaba.com> wrote:
->
-> Hi all,
->
-> Any comments?
->
-> Thanks,
->
-> Heyi
->
-> =E5=9C=A8 2022/1/9 =E4=B8=8B=E5=8D=889:26, Heyi Guo =E5=86=99=E9=81=93:
-> > The memory will be freed by the caller if transfer timeout occurs,
-> > then it would trigger kernel panic if the peer device responds with
-> > something after timeout and triggers the interrupt handler of aspeed
-> > i2c driver.
-> >
-> > Set the msgs pointer to NULL to avoid invalid memory reference after
-> > timeout to fix this potential kernel panic.
+Hi Andy,
 
-Thanks for the patch. How did you discover this issue? Do you have a
-test I can run to reproduce the crash?
+On Tue, Jan 11, 2022 at 12:10:28PM +0200, Andy Shevchenko wrote:
+> On Tue, Jan 11, 2022 at 12:12:46AM +0200, Sakari Ailus wrote:
+> > On Mon, Jan 10, 2022 at 10:50:49PM +0200, Andy Shevchenko wrote:
+> > > The %p4cc specifier in some cases might get an unaligned pointer.
+> > > Due to this we need to make copy to local variable once to avoid
+> > > potential crashes on some architectures due to improper access.
+> > 
+> > I guess this problem exists virtually everywhere where pointers are being
+> > handled: the pointer could be unaligned.
+> 
+> True. And my patch improves the situation.
+> See, for example, 0f70fe605fad ("hexdump: fix for non-aligned buffers").
 
-Can you provide a Fixes tag?
+This is different since there's no guarantee of a void pointer's alignment.
 
-Do other i2c master drivers do this? I took a quick look at the meson
-driver and it doesn't appear to clear it's pointer to msgs.
+The pixelformat used for %p4cc is a pointer to u32.
 
-> >
-> > Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
-> >
-> > -------
-> >
-> > Cc: Brendan Higgins <brendanhiggins@google.com>
-> > Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> > Cc: Joel Stanley <joel@jms.id.au>
-> > Cc: Andrew Jeffery <andrew@aj.id.au>
-> > Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> > Cc: linux-i2c@vger.kernel.org
-> > Cc: openbmc@lists.ozlabs.org
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > Cc: linux-aspeed@lists.ozlabs.org
-> > ---
-> >   drivers/i2c/busses/i2c-aspeed.c | 5 +++++
-> >   1 file changed, 5 insertions(+)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-a=
-speed.c
-> > index 67e8b97c0c950..3ab0396168680 100644
-> > --- a/drivers/i2c/busses/i2c-aspeed.c
-> > +++ b/drivers/i2c/busses/i2c-aspeed.c
-> > @@ -708,6 +708,11 @@ static int aspeed_i2c_master_xfer(struct i2c_adapt=
-er *adap,
-> >               spin_lock_irqsave(&bus->lock, flags);
-> >               if (bus->master_state =3D=3D ASPEED_I2C_MASTER_PENDING)
-> >                       bus->master_state =3D ASPEED_I2C_MASTER_INACTIVE;
-> > +             /*
-> > +              * All the buffers may be freed after returning to caller=
-, so
-> > +              * set msgs to NULL to avoid memory reference after freei=
-ng.
-> > +              */
-> > +             bus->msgs =3D NULL;
-> >               spin_unlock_irqrestore(&bus->lock, flags);
-> >
-> >               return -ETIMEDOUT;
+-- 
+Kind regards,
+
+Sakari Ailus

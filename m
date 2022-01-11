@@ -2,119 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D1548A9FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD34048A9FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 09:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349053AbiAKI7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 03:59:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
+        id S1349083AbiAKI7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 03:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236410AbiAKI7m (ORCPT
+        with ESMTP id S236626AbiAKI7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 11 Jan 2022 03:59:42 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15C5C06173F;
-        Tue, 11 Jan 2022 00:59:41 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id o12so53844485lfk.1;
-        Tue, 11 Jan 2022 00:59:41 -0800 (PST)
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB66C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 00:59:42 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id k15so64145899edk.13
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 00:59:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6nEJxrC4VF52kQQsquVABp1lWQCr9hliOF685p20gBY=;
-        b=TDKbVRvR44rzTiWqaqeJCI2IErsf3K0AkKOncfqrFtzCzzxK0kVQGxuBrfemty+iwh
-         0U+AAgBavx+nHC4eWULR8BXDxf1ae1PWYQKKyR9VEXWTtpmD91dMh/7W2ePDJsiUO6xS
-         +WVvOGvz1bwB+kuzAT0mLPsQk68VBZU9J6Rjk6FTY2W3pljRrPNFy61Y1v56J8JQ9Ncb
-         c3/EdlKXieuTpMbAg/7xj15dezkz8QwP/Lsqzfh7CoydmWvA9hS/Nc7qoTyLFdAQUHsY
-         FRS5MvyOhhl+s0D7THITRbRSoSIT2JEZH0u7ds61zsXuSYYFuj1E2FZj0Aqi68FPoxUd
-         Mq4g==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=FJS4/5T71szSxuyB4zC+w3VW/dKU2m10Yv1EUUU33j4=;
+        b=Xx2Ll7ZRy6oI2lfYU3HYejIvVsJffeeNJB4KdEvoppVvqxSLzzE7UUThsyW17quBtf
+         RMh8eeG8M6mn9jxfZ4ONXO/zp1KvWmLNuSbVqsvPRNzifPSlMQ0UO44miEI2Myzw/wKk
+         nIZcHFJFyn0pcZNW+A7KnUDdgGke+vl4pTnKaS8j0OeEA6s8gKpmW6Aw9s5hNZFaq7Hm
+         vx9cvGjfdHxaVbX9wWqmXLHzMczsQrkqQQDedbn9PiOYCVyrw5B+74CpyiuLW6cvU95o
+         z8UHemt1NMJUtO9sQdMEFXpQWQ3VyGRxDNbVY9UdJkR9NbBt6Xv+dGGMXSjyNLi1TJjI
+         Andw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6nEJxrC4VF52kQQsquVABp1lWQCr9hliOF685p20gBY=;
-        b=3a2+GyhdIMkR9QmVZQfYXy8WiaKPbOgmzkAFXJmhHK1SVAijqts2ZBvpQURqXIqzrV
-         zB57344K8t2BUC1FVIGlkwLa9G11j+SMw7b842z3BsphGdEGLZ3O6Uefcu3156qFqm23
-         P3sdPUuNurvPEw8hV2xdxhkdz8Dg3ds+neyKMxkfa3PLvRHGPLwcjH0Fe1d4gBZqj/wh
-         QU+YNgnJeLkHCh+CcY0Rl960+TD3Tvklb9m8NYraYPB1Oz5ikKPVNAey1zsJ1On7RfcU
-         6goZQdDvWWpMkHpaO4KjHvLoqvxbh5AX62Z6OtTnoBXrvDkjbpioYPGSGJqfj7bPZ3Cy
-         OC2A==
-X-Gm-Message-State: AOAM531q8u4sUMogXJgV84QSfiaPzcsqJlJf61nIDRJ9SXwP/PpGXeKl
-        4k3M2LSpTLJ0Qg3WAP6ZK/0=
-X-Google-Smtp-Source: ABdhPJxDW5jjSr6LF6rIE41gSK6F+vTyYsZ3vnc92yuIWqQPeWNguXcIK0Tz6CGWst39vHdVQa1Rdg==
-X-Received: by 2002:a2e:9c07:: with SMTP id s7mr2246267lji.476.1641891580304;
-        Tue, 11 Jan 2022 00:59:40 -0800 (PST)
-Received: from ?IPv6:2a00:1370:810c:714f:a10:76ff:fe69:21b6? ([2a00:1370:810c:714f:a10:76ff:fe69:21b6])
-        by smtp.googlemail.com with ESMTPSA id e8sm1246693lji.2.2022.01.11.00.59.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 00:59:39 -0800 (PST)
-Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
- special case
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211213225350.27481-1-ebiederm@xmission.com>
- <9363765f-9883-75ee-70f1-a1a8e9841812@gmail.com>
- <87pmp67y4r.fsf@email.froward.int.ebiederm.org>
- <5bbb54c4-7504-cd28-5dde-4e5965496625@gmail.com>
- <87bl0m14ew.fsf@email.froward.int.ebiederm.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <6692758a-0af2-67e0-26fd-365625b3ad0c@gmail.com>
-Date:   Tue, 11 Jan 2022 11:59:39 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=FJS4/5T71szSxuyB4zC+w3VW/dKU2m10Yv1EUUU33j4=;
+        b=OrehrikMGFtAvIJkh8Gr5PjUJFqpjB1t+gs7vq9A9m10L2n+mjxn9tj6F6QF8ZJfb1
+         sxGWB9P2OQzPB1y2yEmOdtwHeCdyGv+/5OAfzqd0e4yx89jPl18PsiVYiRZ8r8ZsYNjq
+         XM94E9xR4hiPVaRmVhqW2Ct7UeoTwiBIlp7rjtP2XDC/c/151DR3iNp7ao3FG0yxiSRB
+         4R96Dn3FWNME80J2e7wIbyJEgPGyj5Evpp4PBOwfXJ2UvfmdEJPdsoK0JdoeUwQqDY9+
+         W4cCO05MSfB3dZNCSBTxE2eyxTU3O+6X1dN2KXbhgo8v/iAEyMUD+v9h46/sYNdt5stx
+         RrHQ==
+X-Gm-Message-State: AOAM530CXrevSHI7NnxSm4Yev5qqS70crNuoQ99mTXzBfZQq6bA484qd
+        wiwwolEAaSnrxHQh9dk3+h3fMvRUSGlOGOIzl7U=
+X-Google-Smtp-Source: ABdhPJzt8EV5v8zFvxof+Vv8cnSbmUIL7hzoEELm2VegrJ0ZmQLM+B7+EC79Hz+RE1j3oFDTCGHPBvJlzRiEATRDATY=
+X-Received: by 2002:a17:906:af82:: with SMTP id mj2mr2760328ejb.33.1641891580770;
+ Tue, 11 Jan 2022 00:59:40 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <87bl0m14ew.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a54:3ec5:0:0:0:0:0 with HTTP; Tue, 11 Jan 2022 00:59:40
+ -0800 (PST)
+Reply-To: mussaomra2017@gmail.com
+From:   Mr Omra Musa <adams.sule02@gmail.com>
+Date:   Tue, 11 Jan 2022 08:59:40 +0000
+Message-ID: <CAHahp4398P4L9sfa0msOKgf9g3cYOZ7KZG08J+=HGaDX+G9f+g@mail.gmail.com>
+Subject: GREETING TO YOU.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-08.01.2022 21:13, Eric W. Biederman пишет:
-> Dmitry Osipenko <digetx@gmail.com> writes:
-> 
->> 05.01.2022 22:58, Eric W. Biederman пишет:
->>>
->>> I have not yet been able to figure out how to run gst-pluggin-scanner in
->>> a way that triggers this yet.  In truth I can't figure out how to
->>> run gst-pluggin-scanner in a useful way.
->>>
->>> I am going to set up some unit tests and see if I can reproduce your
->>> hang another way, but if you could give me some more information on what
->>> you are doing to trigger this I would appreciate it.
->>
->> Thanks, Eric. The distro is Arch Linux, but it's a development
->> environment where I'm running latest GStreamer from git master. I'll try
->> to figure out the reproduction steps and get back to you.
-> 
-> Thank you.
-> 
-> Until I can figure out why this is causing problems I have dropped the
-> following two patches from my queue:
->  signal: Make SIGKILL during coredumps an explicit special case
->  signal: Drop signals received after a fatal signal has been processed
-> 
-> I have replaced them with the following two patches that just do what
-> is needed for the rest of the code in the series:
->  signal: Have prepare_signal detect coredumps using
->  signal: Make coredump handling explicit in complete_signal
-> 
-> Perversely my failure to change the SIGKILL handling when coredumps are
-> happening proves to me that I need to change the SIGKILL handling when
-> coredumps are happening to make the code more maintainable.
+Good Day,
 
-Eric, thank you again. I started to look at the reproduction steps and
-haven't completed it yet. Turned out the problem affects only older
-NVIDIA Tegra2 Cortex-A9 CPU that lacks support of ARM NEON instructions
-set, hence the problem isn't visible on x86 and other CPUs out of the
-box. I'll need to check whether the problem could be simulated on all
-arches or maybe it's specific to VFP exception handling of ARM32.
+
+I know this email might come to you as a surprise as first coming from
+one you haven=E2=80=99t met with before.
+
+I am Mr. Omra Musa, the bank manager with ADB bank of Burkina Faso,and
+a personal banker of Dr.Mohamed Farouk Ibrahim, an Egyptian who
+happened to be a medical contractor attached to the overthrown Afghan
+government by the Taliban government.
+
+Dr.Mohamed Farouk Ibrahim deposits some sum of ($15) million USD with
+our bank but he was died by car accidents with his family while trying
+to leave from Kandahar.
+
+The said sum can be used for an investment if you are interested.
+Details relating to the funds are in my position and will present you
+as the Next-of-Kin because there was none, and I shall furnish you
+with more detail once i hear your response.
+
+Regards,
+Mr. Omra Musa
+
+
+you can reply to my private email address at mussaomra2017@gmail.com

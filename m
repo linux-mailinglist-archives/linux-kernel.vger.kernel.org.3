@@ -2,258 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D122348B9F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B390A48B9EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 22:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245561AbiAKVx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 16:53:28 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:57024 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244453AbiAKVxY (ORCPT
+        id S245544AbiAKVvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 16:51:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245524AbiAKVvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 16:53:24 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BJO67p019147;
-        Tue, 11 Jan 2022 21:51:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=2H5Wg4txvEfKvOhUbzDzkGIZsIxoIAbeL9o4tNy2Qrc=;
- b=qOeVVrZ4XMps0YWU2JTsWGwSCKzHB83bUFhWmooeZxuIo1K/2Wpq114HIB9mntQydk4o
- tKctaFYcBWNTd3JfUm7ltKOVpAZyjYYiq9Ac4Ha15bdr3x7ELWoLj26GMaCFQUxj2jpA
- n5d+tEn/ruZsyC8loHe5PbeRCZhK1RcYv5sU+EeOX3PEeksDWU0PMHhGxo351Ubq7lqO
- cvG0hbbZ9V7P1VDjUm2kgAVClXvv4TJ7fFzNjVqqJreGuXMzy4K4FPcUJeGEbL9a0y/1
- fs3vTgs1QEi8T8zrCPucPWMVb9PQeCLHf+OOmzvp6aXjO6MVyNJF37V0IqnTA2jTazvN XA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dgp7nmaa0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jan 2022 21:51:39 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20BLkAH6181554;
-        Tue, 11 Jan 2022 21:51:37 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
-        by userp3030.oracle.com with ESMTP id 3deyqxuqnt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jan 2022 21:51:37 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n/KpF+xJOAoVE+DMS7eaZp5A3thXzSAU67TTlRO/LH6qubDcf2WCQWJsx89WjoY7FSrZA+XHKDfDfl3XPc1L5vG5fMsbvW5N+MRAUqm9KSm/WWAqqvosdjQ2H3moatAalbkc9hICf9DoBg/soAw7or8OHlksEICEo2+lTElILQ5XZ2hYxZ104H1uPpEmwTkVSvsDpkPAU32ib+wQ2tGLT97Mii+zrGtV9TDMe6exg/PN8JjoGVLIN6Idao6ssnK3OM7Q8hPHkft96/KUHw1zZwXCBjrJF4nzW6edIWR5R69Nd+4A7vbgW/OlASaRznamquSK0RKf8KXoWgkEo7t+Wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2H5Wg4txvEfKvOhUbzDzkGIZsIxoIAbeL9o4tNy2Qrc=;
- b=PV+ko7zOZDUH66OMVg8jSxef0gAbbnNZ9xnrTjB6zF/tSl9i4pAVakMSnJ2661+1OQmbp1SjlNjoM6WolJj566PLQ7Arp9DidG5Rhcc1vFTkjUJgKv2maZ0tM3Xpmi6yfU2wg4WdRlgBdtF7BV/2SptzNE8x/6InhRKjTtTPHp+uIn80tB8Q0azyM6FID7oAXC1tDaAMEgFBlVbC8fVt4Zz5FVvnd8IKDAQUo34QSjROhXdbOyAn3ZXW+nm8N7MJEdNttvTHXt5BZvoOkkTcYi6icV32qDRYUnOdRpuMUXlnkdFK7OxySQlsI6Xfa8uYKBt9cYIrkTGznyrvfqt0LA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 11 Jan 2022 16:51:55 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EACC06173F;
+        Tue, 11 Jan 2022 13:51:54 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id x7so1369360lfu.8;
+        Tue, 11 Jan 2022 13:51:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2H5Wg4txvEfKvOhUbzDzkGIZsIxoIAbeL9o4tNy2Qrc=;
- b=qVEoaKnB08hU5Kr7Yz2NDnWdOVqvrrOhYIimQ0H/jpVwwHhmAoa3evC0iGwHCZsRu4wCvdfaR0ItqDcffCPg7IIxPDvklL1LtNqlOFF4Hrkt0GynvQ0o5n1+jpqKdzT0A5r/gbHManolU2N0SqAAPjMZvJegpl2+UhK9UMidn20=
-Received: from SN6PR10MB2576.namprd10.prod.outlook.com (2603:10b6:805:44::15)
- by SN6PR10MB2893.namprd10.prod.outlook.com (2603:10b6:805:d1::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Tue, 11 Jan
- 2022 21:51:35 +0000
-Received: from SN6PR10MB2576.namprd10.prod.outlook.com
- ([fe80::4c8c:47df:f81e:f412]) by SN6PR10MB2576.namprd10.prod.outlook.com
- ([fe80::4c8c:47df:f81e:f412%5]) with mapi id 15.20.4867.012; Tue, 11 Jan 2022
- 21:51:35 +0000
-Date:   Tue, 11 Jan 2022 15:51:29 -0600
-From:   Venu Busireddy <venu.busireddy@oracle.com>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 12/40] x86/sev: Add helper for validating pages in
- early enc attribute changes
-Message-ID: <Yd374d2+XdBD+vTM@dt>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-13-brijesh.singh@amd.com>
- <YdOGk5b0vYSpP1Ws@dt>
- <7934f88f-8e2b-ea45-6110-202ea8c2ad64@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7934f88f-8e2b-ea45-6110-202ea8c2ad64@amd.com>
-X-ClientProxiedBy: SA0PR13CA0005.namprd13.prod.outlook.com
- (2603:10b6:806:130::10) To SN6PR10MB2576.namprd10.prod.outlook.com
- (2603:10b6:805:44::15)
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LMY3Ujp/5t/QB5HIIGCVnvOYV4B3XNKhgJol3q1xzfw=;
+        b=cjgNy/ZImYzv+Ci+Do9dozBnOYPqtyzGBd43uujJ7CutimHh3TttuEhWUdDrGZaeyQ
+         37TadljhDcP+JvHCSUTvW/2C9KdvWgIV6Y6uHoSuxMr7r0zocr1y0peNckKYO1l1Rz7j
+         d0pZ0Q6Nw1bgOiCFGmohROWKgJTc6Ty8+lkD4Vx+t1OMed7HUxfHXvErplupUqyE9YN2
+         31OE2XUN5vLSFYxNsj9Mza0QhDpPyktwkecICSulvI0Fqkjce0xmqvVrRrfNhYOENOJ2
+         rhWybnx2bkJlK0SN4ZaEOKoEmhiQ9t23j79EgIN+Hgf3h4LHL8YLEq6KZQI3cDfPI6Uj
+         latg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LMY3Ujp/5t/QB5HIIGCVnvOYV4B3XNKhgJol3q1xzfw=;
+        b=AXR7ZYzttNkKW2oSLce5k+mgqrzwpQ83Kpm888OjgDmfj8frjjDJ+p3fghLZUsyJgS
+         2DjNlWPCThnsfKnZp7xvS8FR65/lvVPR8cSBqILMEmgn6nimYY5+jYUcOoNlbgn6yYMO
+         zz54VUDtZIna/szSWwhOQB8K6UtkPBKZaabSUiSNIMGvsAmO7ODzpEEtYgnvmNiwA06F
+         ROuMVPo+V22nox54G0tOkljHJPdycm9qryeVPqomgQ8Onx7CZtG5y+JIm7LtPM0GDVaK
+         p5ciflyOHS19RYVgbwi8NdOJU31zky6sZBbk1tamldxQ3yQmmPV+Ingq9x9MqPZW92sl
+         aqpQ==
+X-Gm-Message-State: AOAM530x/JQnK/7iLAQoPNvP1HfeuL256LVfxxjdtDJVTG4dsbqYVCst
+        98ernMnhiOTFRqKk3gnLzPI+2X3p7a3/SoX9YoOzQC4Vo98=
+X-Google-Smtp-Source: ABdhPJxMgoYReHKKbNf85q+B8jlHE84IDODN+vnQdTft2WB4d4xeRw41pMW5+IoLp+Bb3dIS6mT4n9T0VcQgAWjMPpQ=
+X-Received: by 2002:a05:651c:19a3:: with SMTP id bx35mr4420351ljb.500.1641937912629;
+ Tue, 11 Jan 2022 13:51:52 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 19359e98-2caf-4fc6-7d28-08d9d54c8959
-X-MS-TrafficTypeDiagnostic: SN6PR10MB2893:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR10MB28938289459D297D670959BEE6519@SN6PR10MB2893.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5bxpY5tNXiYO7udzPhKCArQcXWwltWt2rYjBBqCQR/klv0Uawh+NkrCFnaH2p+6QTGw6xr7BQ0zAPc8NYgxTD7nQzjBUKZIPrBwFyrPi7FJ6qdpFuCASTnFvFNsqsRIU0RcR1/4I3//+/1rW9Q1q116yptQZRZNBt6HjDUrZUmqsuuB/XY8akhpFPY/M4jrwGb1oh2HMjn4uznKFUQsxuxNDktdUoqidt817/K7ZnaoiCNjAWaUPNEZKkcJrauKHRC8h6vQAtKDSRax05axtGsFrEjbZmGJ8+L4SE+VpC6xrJqAUwawiIpbUQG/hPwO7SAGuOeSs0Z1ERgUDKk2ILkNSpPYP5Q+nKu1Aevjc2meliCBSN9L7QqcC3cG90VbgQGiR+O+c9FJKS8iKxooHsTjWxamyg+P3B01bSU1kqvDfSuMilMqp3eUUeUmrcAZVgHhidY8zywFd2m0AbjsMr3CgbPP7VaqaIFE5y0R4rcj1OIRmI9LZhzb+4Orq7ovo3a+b01UkWLFKoCTAJ4XbDfQOS2n1EMGeyV1VyQMLQS05cM1POfhYvRByHT4ruFFCTVUQnHBq/4d19AQgv/el0vQ8gRxgWn0CzvC9cC5C6J99U3q6oHmgYyVCNlWma6By6Sgd7P8jWv+H1KAde3f8fg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2576.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(508600001)(6666004)(66556008)(66476007)(66946007)(5660300002)(6916009)(4326008)(54906003)(316002)(6512007)(9686003)(2906002)(7416002)(7406005)(26005)(6506007)(8676002)(8936002)(83380400001)(33716001)(86362001)(186003)(6486002)(38100700002)(53546011)(44832011);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TvWw7zu5XZFR1ynBbo0bd/h7grFNi1TQgSPJZLUUOsLcLrqud5vovdqGltUf?=
- =?us-ascii?Q?jKyH9eY1SK0kxqvd0yDc6DDYmqa2WEGN/VcFUn3tV/9eTFCvFzvMOxjAJ08K?=
- =?us-ascii?Q?M3oJ5I0ePCV2ss5iLCQPz70cv+0wXajkWfHMxCaJaRmv6s6FSAPuVBk04mNc?=
- =?us-ascii?Q?XU48FoknV6CXmhF9+HYYWijFKVVeD7oT5CO1ADSOM4w8PpjwrFxwcw4eVmMc?=
- =?us-ascii?Q?JQnWOxJyL1vpjXSAKBRzrEgtc9wzKaIR2GgX26rwV88opD9AK4e1lJwCl9cc?=
- =?us-ascii?Q?kG0/lOpWhwVoPMaL7JyoIZ04YjGQD0mWUc0q2QRvIofnLvxF1nD09MebJObT?=
- =?us-ascii?Q?7qt25RyiSGy4hUBys/u7A+0XrDC11DZQ7o0pqQ93sHM+jyrL6sgXuGpM7esb?=
- =?us-ascii?Q?4cfF0EOhIHhAnqHH75IbrtziSiHC4CHcuS3Be326VvrKkwJw7DpePeKi2lWa?=
- =?us-ascii?Q?q5aeWH+8dkiZd6E62HI5x7iQ0KD17Pp2Gtigi4VsETywBlF480sRI/zrZmPq?=
- =?us-ascii?Q?IKfji+ggSs0TGAL15ayeRNLCRNTIOjvOb/OoJvXgWfchFjeN0y/BI9Ob4cUS?=
- =?us-ascii?Q?e6VcMFQ8g5BS//UGSfwqP1q8De5fWgPdH8R+QO9WTVTXxg4zz7Abz13ECgFZ?=
- =?us-ascii?Q?i5/U/8oVaRkRXVaS+7A06PL1VWMnMKNadaEKSfuW3EZZbo3eJjTl54ORwLJI?=
- =?us-ascii?Q?jYcLqf0cLomvb27WFemqnIFhcu/B/pFcMojEDVf3gDIm8svIIQ+T2lyv4grv?=
- =?us-ascii?Q?x2w0Gu1f2wpTB3twdkTFzGzVWslNbTZGr1KmjL33uFdlBo4zTIUxRnZfu9bO?=
- =?us-ascii?Q?7KnNQGci1VQv+ewLVeBjeBw7pDUct81tyv8oH6e+BE3mX0tYiJx6crdPOMr4?=
- =?us-ascii?Q?pMnvmCTgLnDc2go+lfgp2Zn7PuYifRx11974eetqP0UZXQjuZDV8NjW1X0zw?=
- =?us-ascii?Q?yl2VYGnDOXZMh/d9gX1dTWWIUModPuCnHfyf4JmDT1cS76HVFBiTKhJZm71/?=
- =?us-ascii?Q?tzRj6CcqDdp+EhbkpIZwIEdxl28ADlik7mKGsI6YiQYrBvvWXH7jogs3BGk9?=
- =?us-ascii?Q?F39NZm9eLYsU8XzDHzeE258Lo15UwwWdat3QNGTbtcrVmjlFdqt+EhyTpCgV?=
- =?us-ascii?Q?Qhc8Se3HZpbpLBsjqN4WT1CKJ10XH88Ib0fQPBKFuXH/rXLy7JaMNQUTYOdC?=
- =?us-ascii?Q?HHwd1mLQ3G0z0DHHFUvMJqioVSxoEDBOA54uCeb/UtX40kp5FEimIy4m3y5L?=
- =?us-ascii?Q?9JTgAGwYYy+C5KFQCBCWMEd0733rDIIBZQnZiIuqZucs1zQeTohqjadpYvH1?=
- =?us-ascii?Q?KMFSQ9xgKrB1wtZCnEzDFTseWRAsKBgP9eMCN7E9FbK8lxzBiCWWjei+HqVI?=
- =?us-ascii?Q?l8yg/5hqvjucwiaYQ9ZcIC9aets8ybGwyJJ/rfrzkLN85UmbW6jtyMVB8AVA?=
- =?us-ascii?Q?9OJyrYmOJEdW69Fk58kphUWnpddBwFWN1FWE5JJJrgLLWIbVfrz0kK965LfC?=
- =?us-ascii?Q?22WTr/gzJhROR4Cp//3vo/tBbB2zKd5XTKEZybGoNhDDTrVJyM1fT6SUips/?=
- =?us-ascii?Q?/ZhVWqqD/AOe1zTboeKJXYFfTOi7P93jdKuNClt5Go/A0/oo2RvigbzRg3+7?=
- =?us-ascii?Q?/rt+YgQgA9EF+SbEHeCia5mDApPNEz4nw9CsAaYPEI2Vrbv0wEQ1xM2IQLlv?=
- =?us-ascii?Q?ucHgDA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19359e98-2caf-4fc6-7d28-08d9d54c8959
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB2576.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2022 21:51:34.9679
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7jVCTiv7KhhUR/y+MDX0S5HjkgeqrYEpGSVSJNU9nXdSNqWNLwr194TVKK3ZObYUX25SNDeg+9XrcaB5OBnjZj8J1OnpSmSdByH15ZYN2K0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2893
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10224 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=0 spamscore=0
- mlxlogscore=999 adultscore=0 phishscore=0 malwarescore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201110113
-X-Proofpoint-GUID: p5eFSxbNhQxgbQPqQ_lFNnRRt04lfmJz
-X-Proofpoint-ORIG-GUID: p5eFSxbNhQxgbQPqQ_lFNnRRt04lfmJz
+References: <CAJjP=Bt52AW_w2sKnM=MbckPkH1hevPMJVWm_Wf+wThmR72YTg@mail.gmail.com>
+ <CAH2r5mt_2f==5reyc0HmMLvYJVmP4Enykwauo+LQoFGFbVFeRQ@mail.gmail.com>
+ <CAJjP=BvNVOj3KRnhFgk6xiwnxVhxE-sN98-pr6e1Kzc5Xg5EvQ@mail.gmail.com>
+ <CAH2r5mvsetx5G+c=8ePh+X8ng7FvMrnuM9+FJ4Sid4b3E+T41Q@mail.gmail.com> <CAJjP=BvqZUnJPq=C0OUKbXr=mbJd7a6YDSJC-sNY1j_33_e-uw@mail.gmail.com>
+In-Reply-To: <CAJjP=BvqZUnJPq=C0OUKbXr=mbJd7a6YDSJC-sNY1j_33_e-uw@mail.gmail.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Tue, 11 Jan 2022 15:51:41 -0600
+Message-ID: <CAH2r5mserz2O8M5YEwHu=PgCxwDCEBAJkYADUZt9XbQWGTZ2Yg@mail.gmail.com>
+Subject: Re: Possible regression: unable to mount CIFS 1.0 shares from older
+ machines since 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c
+To:     Davyd McColl <davydm@gmail.com>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-11 15:22:01 -0600, Brijesh Singh wrote:
-> Hi Venu,
-> 
-> 
-> On 1/3/22 5:28 PM, Venu Busireddy wrote:
-> ...
-> 
-> > > +
-> > > +	 /*
-> > > +	  * Ask the hypervisor to mark the memory pages as private in the RMP
-> > > +	  * table.
-> > > +	  */
-> > 
-> > Indentation is off. While at it, you may want to collapse it into a one
-> > line comment.
-> > 
-> 
-> Based on previous review feedback I tried to keep the comment to 80
-> character limit.
+Interesting but may be a slightly different issue than NTLMv1
 
-Isn't the line length limit 100 now? Also, there are quite a few lines
-that are longer than 80 characters in this file, and elsewhere.
+Looking at the wireshark trace the problem looks to be the SMB1 tree
+connect being badly formatted (the share name being corrupted due to
+the password field in the treeconnect being empty) not a problem with
+NTLMv1 authentication on the session setup (although there may be an
+issue when we fix the alignment of tree connect request).
 
-But you can ignore my comment.
+Samba server added SMB2.1 support in Samba version 3.5 back in 2010
+and it looks like yours is Samba 3.0.23 (from 2003) so predates SMB2
+support much less SMB3 and SMB3.1.1 support.
 
-> > > +	early_set_page_state(paddr, npages, SNP_PAGE_STATE_PRIVATE);
-> > > +
-> > > +	/* Validate the memory pages after they've been added in the RMP table. */
-> > > +	pvalidate_pages(vaddr, npages, 1);
-> > > +}
-> > > +
-> > > +void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
-> > > +					unsigned int npages)
-> > > +{
-> > > +	if (!cc_platform_has(CC_ATTR_SEV_SNP))
-> > > +		return;
-> > > +
-> > > +	/*
-> > > +	 * Invalidate the memory pages before they are marked shared in the
-> > > +	 * RMP table.
-> > > +	 */
-> > 
-> > Collapse into one line?
-> > 
-> 
-> same as above.
+On Tue, Jan 11, 2022 at 12:45 AM Davyd McColl <davydm@gmail.com> wrote:
+>
+> Hi Steve
+>
+> As requested, wireshark captures to the device in question, as well as
+> the fstab entry I have for the device:
+> - win11, browsing with explorer
+> - win11, net use
+> - unpatched linux 5.16.0 attempt to mount
+> - patched linux 5.16.0 successful mount
+> - fstab entry - note that I have to specify samba version 1.0 as the
+> default has changed and the mount fails otherwise. Explicitly
+> specifying 2.0 errors and suggests that I should select a different
+> version.
+>
+> -d
+>
+> On Tue, 11 Jan 2022 at 00:13, Steve French <smfrench@gmail.com> wrote:
+> >
+> > I would be surprised if Windows 11 still negotiates (with default
+> > registry settings) SMB1 much less NTLMv1 in SMB1, but I have not tried
+> > Windows 11 with an NTLMv1 only server (they are hard to find - I may
+> > have an original NT4 and an NT3.5 CD somewhere - might be possible to
+> > install a VM with NT3.5 but that is really really old and not sure I
+> > can find those CDs).
+> >
+> > Is it possible to send me the wireshark trace (or other network trace)
+> > of the failing mount from Linux and also the one with the succeeding
+> > NET USE from Windows 11 to the same server?
+> >
+> > Hopefully it is something unrelated to NTLMv1, there has been a LOT of
+> > pushback across the world, across products in making sure no one uses
+> > SMB1 anymore.  See e.g.
+> > https://techcommunity.microsoft.com/t5/storage-at-microsoft/stop-using-smb1/ba-p/425858
+> > and https://twitter.com/nerdpyle/status/776900804712148993
+> >
+> > On Mon, Jan 10, 2022 at 2:30 PM Davyd McColl <davydm@gmail.com> wrote:
+> > >
+> > > I don't understand. I tracked down the exact commit where the issue
+> > > occurs with a 2 hour git bisect. This was after first confirming that
+> > > my older 5.14 kernel did not display the symptoms. I can still connect
+> > > to the share via windows 11 explorer. I don't know what else I need to
+> > > do here to show where the issue was introduced?
+> > >
+> > > Apologies for bouncing mails - literally no email client I have seems
+> > > to be capable of plaintext emails, so every time I forget, I have to
+> > > find a browser with the gmail web interface to reply.
+> > >
+> > > -d
+> > >
+> > > On Mon, 10 Jan 2022 at 19:31, Steve French <smfrench@gmail.com> wrote:
+> > > >
+> > > > I want to make sure that we don't have an unrelated regression
+> > > > involved here since NTLMv2 replaced NTLMv1 over 20 years ago (googling
+> > > > this e.g. I see "NTLMv2, introduced in Windows NT 4.0 SP4 and natively
+> > > > supported in Windows 2000")  and should be the default for Windows
+> > > > NT4, Windows 2000 etc. as well as any version of Samba from the last
+> > > > 15 years+.  I have significant concerns with adding mechanisms that
+> > > > were asked to be disabled ~19 years ago e.g. see
+> > > > https://support.microsoft.com/en-us/topic/security-guidance-for-ntlmv1-and-lm-network-authentication-da2168b6-4a31-0088-fb03-f081acde6e73
+> > > > due to security concerns.
+> > > >
+> > > > Can we double check that there are not other issues involved in your example?
+> > > >
+> > > > The concerns about NTLMv1 security concerns (and why it should never
+> > > > be used) are very persuasive e.g. many articles like
+> > > > https://miriamxyra.com/2017/11/08/stop-using-lan-manager-and-ntlmv1/
+> > > >
+> > > > On Mon, Jan 10, 2022 at 7:48 AM Davyd McColl <davydm@gmail.com> wrote:
+> > > > >
+> > > > > Good day
+> > > > >
+> > > > > I'm following advice from the thread at
+> > > > > https://bugzilla.kernel.org/show_bug.cgi?id=215375 as to how to report
+> > > > > this, so please bear with me and redirect me as necessary.
+> > > > >
+> > > > > Since commit 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c, I'm unable to
+> > > > > mount a CIFS 1.0 share ( from a media player: mede8er med600x3d, which
+> > > > > runs some older linux). Apparently I'm not the only one, according to
+> > > > > that thread, though the other affected party there is windows-based.
+> > > > >
+> > > > > I first logged this in the Gentoo bugtracker
+> > > > > (https://bugs.gentoo.org/821895) and a reversion patch is available
+> > > > > there for the time being.
+> > > > >
+> > > > > I understand that some of the encryption methods upon which the
+> > > > > original feature relied are to be removed and, as such, the ability to
+> > > > > mount these older shares was removed. This is sure to affect anyone
+> > > > > running older Windows virtual machines (or older, internally-visible
+> > > > > windows hosts) in addition to anyone attempting to connect to shares
+> > > > > from esoteric devices like mine.
+> > > > >
+> > > > > Whilst I understand the desire to clean up code and remove dead
+> > > > > branches, I'd really appreciate it if this particular feature remains
+> > > > > available either by kernel configuration (which suits me fine, but is
+> > > > > likely to be a hassle for anyone running a binary distribution) or via
+> > > > > boot parameters. In the mean-time, I'm updating my own sync software
+> > > > > to support this older device because if I can't sync media to the
+> > > > > player, the device is not very useful to me.
+> > > > >
+> > > > > Thanks
+> > > > > -d
+> > > >
+> > > >
+> > > >
+> > > > --
+> > > > Thanks,
+> > > >
+> > > > Steve
+> > >
+> > >
+> > >
+> > > --
+> > > -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+> > > If you say that getting the money is the most important thing
+> > > You will spend your life completely wasting your time
+> > > You will be doing things you don't like doing
+> > > In order to go on living
+> > > That is, to go on doing things you don't like doing
+> > >
+> > > Which is stupid.
+> > >
+> > > - Alan Watts
+> > > https://www.youtube.com/watch?v=-gXTZM_uPMY
+> > >
+> > > Quidquid latine dictum sit, altum sonatur.
+> >
+> >
+> >
+> > --
+> > Thanks,
+> >
+> > Steve
+>
+>
+>
+> --
+> -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+> If you say that getting the money is the most important thing
+> You will spend your life completely wasting your time
+> You will be doing things you don't like doing
+> In order to go on living
+> That is, to go on doing things you don't like doing
+>
+> Which is stupid.
+>
+> - Alan Watts
+> https://www.youtube.com/watch?v=-gXTZM_uPMY
+>
+> Quidquid latine dictum sit, altum sonatur.
 
-Same as above.
-
-> 
-> ...
-> 
-> > > +		/*
-> > > +		 * ON SNP, the page state in the RMP table must happen
-> > > +		 * before the page table updates.
-> > > +		 */
-> > > +		early_snp_set_memory_shared((unsigned long)__va(pa), pa, 1);
-> > 
-> > I know "1" implies "true", but to emphasize that the argument is
-> > actually a boolean, could you please change the "1" to "true?"
-> > 
-> 
-> I assume you mean the last argument to the
-> early_snp_set_memory_{private,shared}. Please note that its a number of
-> pages (unsigned int). The 'true' does not make sense to me.
-
-Sorry. While reading the code, I was looking at the invocations
-of pvalidate_pages(), where 0 and 1 are passed instead of "false"
-and "true" for the third argument. But while replying to the thread,
-I marked my comment at the wrong place. I meant to suggest to change
-the third argument to pvalidate_pages().
 
 
-> > > +	}
-> > > +
-> > >   	/* Change the page encryption mask. */
-> > >   	new_pte = pfn_pte(pfn, new_prot);
-> > >   	set_pte_atomic(kpte, new_pte);
-> > > +
-> > > +	/*
-> > > +	 * If page is set encrypted in the page table, then update the RMP table to
-> > > +	 * add this page as private.
-> > > +	 */
-> > > +	if (enc)
-> > > +		early_snp_set_memory_private((unsigned long)__va(pa), pa, 1);
-> > 
-> > Here too, could you please change the "1" to "true?"
-> > 
-> 
-> same as above.
-> 
-> thanks
+-- 
+Thanks,
+
+Steve

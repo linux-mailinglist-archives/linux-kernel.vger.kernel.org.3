@@ -2,192 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A1D48A425
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9266348A42A
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 01:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243124AbiAKAD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 10 Jan 2022 19:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242685AbiAKAD6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 10 Jan 2022 19:03:58 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DA7C06173F
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:03:58 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id pj2so14483388pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 10 Jan 2022 16:03:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bNM9ZVCR8tZHajtAJXLpdHF8Llkjr0dqa8R869iJemo=;
-        b=bp2z3KzSROC9TJu/MkLs94yRBSLlh3VwJnX7DdsAdjLiMZ4/HMJkPho+H7Nza7G0SJ
-         g1tJI1FjuE0s6HSIXb7iMC5/M9rklNoXKfP0DsQT1YluwstofE9riSrX+2vVPeFSnsHX
-         xGqATL78hKCjyXI6xLcsikSMYu9Lm+4g7eYh2vzhJrUXUaAQk9gy03NmIMDrOJ8REaBo
-         G7pUp1tjVl+NWDovHA2Iuv+MeuSMylw6L9kYrswsa/3Qh2qHL+J9K5+qNHDj7x2tX4sQ
-         /PlCnHSRrR0nQg9QfPxm2AAT6f8BndxrsKperdZr0JBvjQ1IkZTVacNHkEPv6nm3mX/y
-         XdDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bNM9ZVCR8tZHajtAJXLpdHF8Llkjr0dqa8R869iJemo=;
-        b=f4z6ibV8x1exGoV3rJRx9PeSxVq8tQRXCGUF1X07SXnDU/By4XYbFs4JsmfJLP/iiy
-         ksFfG4syGfUSONaXowTaCfdTx66p6HmHtN+wzEAho03VrtU49whwArFdeTsuDRnBvCQB
-         y3fGhlHKL6e3C5QZnUonLwbr3b7JtgrjntyHPBukkzayrzk0fptHkhIuWAH2Ywb+VnG2
-         nIWwlwsW9taB7TfJXJDduJEmi5ASB29jE29EBRDitniqear4njt5cNmPJazreROd9F2i
-         OkUc1l/iNlK4YEjEprwFBCc/P3sOQ6tqKR3Dk2HTaKwg1yx8FtwQY47zoGabTTzVilpk
-         MQhw==
-X-Gm-Message-State: AOAM533qU9LzUrX/1sp0eSgBvEiObVXSSquAexV4N4PUXZcEae9dbcsm
-        4KlnkAxz/nEqQJjWAl207mOKSXCJgh0hnU9333sflg==
-X-Google-Smtp-Source: ABdhPJxuAcM9rY2b6YVfZSUUOK3qwgze/Y9TbE703V2JDk3Cs9QyEmWYQwPfCo3t09bQ7ywn9VCefhp+Hb9pkJJAL70=
-X-Received: by 2002:a17:90b:4a09:: with SMTP id kk9mr275828pjb.230.1641859437688;
- Mon, 10 Jan 2022 16:03:57 -0800 (PST)
+        id S1345818AbiAKAGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 10 Jan 2022 19:06:20 -0500
+Received: from mga06.intel.com ([134.134.136.31]:42271 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242685AbiAKAGT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Jan 2022 19:06:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641859579; x=1673395579;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p7nsmEccBKpPlOWZFEkdVoJGgRfuwq0AFf2KH3+X540=;
+  b=JfCOoP2l8DEA0Yj1lUVZ4y2U2UJq2hC98UBWjGQKJ3WkjNPPD4cuOTbl
+   89RoCbI0rNCJzFW2KeiMZohBDyESWFsuPtRzoWJXyKbL5II4LeRis2dNL
+   rDww2YguDKxHa9OR02aRtdZpDrQ3nrLV1vCJlgh2dO7dR6+K1fPOUeBLU
+   ROvBVoW8Dst4yojLZ4fgPWM7er5wFOXQUrVFRold8a5JhjzB3MjEvheBa
+   PLclmgDWh5TbTqGxWbA4XAuPljTh/wPXq8tJG7sBv8fkrfNzjoS06qPAO
+   KtFnw2gnzA246QXLgirBtoL6eo3T9SLJ/PN0u8COBsara56SiHUwR/5Y1
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="304103492"
+X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
+   d="scan'208";a="304103492"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 16:06:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,278,1635231600"; 
+   d="scan'208";a="622863838"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 10 Jan 2022 16:06:16 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n74g3-00045s-Jr; Tue, 11 Jan 2022 00:06:15 +0000
+Date:   Tue, 11 Jan 2022 08:06:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        srv_heupstream@mediatek.com
+Subject: Re: [v1 06/16] clk: mediatek: Add MT8186 apmixedsys clock support
+Message-ID: <202201110701.jdDbg8yY-lkp@intel.com>
+References: <20220110134416.5191-7-chun-jie.chen@mediatek.com>
 MIME-Version: 1.0
-References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
- <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com> <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
-In-Reply-To: <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
-From:   Reiji Watanabe <reijiw@google.com>
-Date:   Mon, 10 Jan 2022 16:03:41 -0800
-Message-ID: <CAAeT=FwfjUiaWAJHCEqTCyu9PRr+JEKx1v0P-CJ=2-yGBvaGbA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110134416.5191-7-chun-jie.chen@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 3:43 PM Raghavendra Rao Ananta
-<rananta@google.com> wrote:
->
-> Hi Reiji,
->
-> On Thu, Jan 6, 2022 at 10:07 PM Reiji Watanabe <reijiw@google.com> wrote:
-> >
-> > Hi Raghu,
-> >
-> > On Tue, Jan 4, 2022 at 11:49 AM Raghavendra Rao Ananta
-> > <rananta@google.com> wrote:
-> > >
-> > > Capture the start of the KVM VM, which is basically the
-> > > start of any vCPU run. This state of the VM is helpful
-> > > in the upcoming patches to prevent user-space from
-> > > configuring certain VM features after the VM has started
-> > > running.
-> > >
-> > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > > ---
-> > >  include/linux/kvm_host.h | 3 +++
-> > >  virt/kvm/kvm_main.c      | 9 +++++++++
-> > >  2 files changed, 12 insertions(+)
-> > >
-> > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > > index c310648cc8f1..d0bd8f7a026c 100644
-> > > --- a/include/linux/kvm_host.h
-> > > +++ b/include/linux/kvm_host.h
-> > > @@ -623,6 +623,7 @@ struct kvm {
-> > >         struct notifier_block pm_notifier;
-> > >  #endif
-> > >         char stats_id[KVM_STATS_NAME_SIZE];
-> > > +       bool vm_started;
-> >
-> > Since KVM_RUN on any vCPUs doesn't necessarily mean that the VM
-> > started yet, the name might be a bit misleading IMHO.  I would
-> > think 'has_run_once' or 'ran_once' might be more clear (?).
-> >
-> I always struggle with the names; but if you feel that 'ran_once'
-> makes more sense for a reader, I can change it.
+Hi Chun-Jie,
 
-I would prefer 'ran_once'.
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on robh/for-next v5.16 next-20220110]
+[cannot apply to mbgg-mediatek/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Chun-Jie-Chen/dt-bindings-ARM-Mediatek-Add-new-document-bindings-of-MT8186-clock/20220110-224451
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+config: nios2-allyesconfig (https://download.01.org/0day-ci/archive/20220111/202201110701.jdDbg8yY-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/2b9fcab7333544a52a4e5fd9e42764e1f1e7a7b1
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Chun-Jie-Chen/dt-bindings-ARM-Mediatek-Add-new-document-bindings-of-MT8186-clock/20220110-224451
+        git checkout 2b9fcab7333544a52a4e5fd9e42764e1f1e7a7b1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/clk/mediatek/clk-mt8186-apmixedsys.c: In function 'clk_mt8186_apmixed_probe':
+>> drivers/clk/mediatek/clk-mt8186-apmixedsys.c:102:9: error: implicit declaration of function 'mtk_clk_unregister'; did you mean 'devm_clk_unregister'? [-Werror=implicit-function-declaration]
+     102 |         mtk_clk_unregister(clk_data);
+         |         ^~~~~~~~~~~~~~~~~~
+         |         devm_clk_unregister
+   cc1: some warnings being treated as errors
 
 
-> > >  };
-> > >
-> > >  #define kvm_err(fmt, ...) \
-> > > @@ -1666,6 +1667,8 @@ static inline bool kvm_check_request(int req, struct kvm_vcpu *vcpu)
-> > >         }
-> > >  }
-> > >
-> > > +#define kvm_vm_has_started(kvm) (kvm->vm_started)
-> > > +
-> > >  extern bool kvm_rebooting;
-> > >
-> > >  extern unsigned int halt_poll_ns;
-> > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > > index 72c4e6b39389..962b91ac2064 100644
-> > > --- a/virt/kvm/kvm_main.c
-> > > +++ b/virt/kvm/kvm_main.c
-> > > @@ -3686,6 +3686,7 @@ static long kvm_vcpu_ioctl(struct file *filp,
-> > >         int r;
-> > >         struct kvm_fpu *fpu = NULL;
-> > >         struct kvm_sregs *kvm_sregs = NULL;
-> > > +       struct kvm *kvm = vcpu->kvm;
-> > >
-> > >         if (vcpu->kvm->mm != current->mm || vcpu->kvm->vm_dead)
-> > >                 return -EIO;
-> > > @@ -3723,6 +3724,14 @@ static long kvm_vcpu_ioctl(struct file *filp,
-> > >                         if (oldpid)
-> > >                                 synchronize_rcu();
-> > >                         put_pid(oldpid);
-> > > +
-> > > +                       /*
-> > > +                        * Since we land here even on the first vCPU run,
-> > > +                        * we can mark that the VM has started running.
-> > > +                        */
-> >
-> > It might be nicer to add a comment why the code below gets kvm->lock.
-> >
-> I've been going back and forth on this one. Initially I considered
-> simply going with atomic_t, but the patch 4/11 (KVM: arm64: Setup a
-> framework for hypercall bitmap firmware registers)
-> kvm_arm_set_fw_reg_bmap()'s implementation felt like we need a lock to
-> have the whole 'is the register busy?' operation atomic. But, that's
-> just one of the applications.
+vim +102 drivers/clk/mediatek/clk-mt8186-apmixedsys.c
 
-I understand why you need the code to get the lock here with the
-current implementation.
-But, since the code just set the one field (vm_started) with the lock,
-I thought the intention of getting the lock might not be so obvious.
-(But, maybe clear enough looking at the code in the patch-4)
+    82	
+    83	static int clk_mt8186_apmixed_probe(struct platform_device *pdev)
+    84	{
+    85		struct clk_onecell_data *clk_data;
+    86		struct device_node *node = pdev->dev.of_node;
+    87		int r;
+    88	
+    89		clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
+    90		if (!clk_data)
+    91			return -ENOMEM;
+    92	
+    93		mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
+    94	
+    95		r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
+    96		if (r)
+    97			goto unregister_clk;
+    98	
+    99		return r;
+   100	
+   101	unregister_clk:
+ > 102		mtk_clk_unregister(clk_data);
+   103		mtk_free_clk_data(clk_data);
+   104		return r;
+   105	}
+   106	
 
-Thanks,
-Reiji
-
-
-> > Anyway, the patch generally looks good to me, and thank you
-> > for making this change (it works for my purpose as well).
-> >
-> > Reviewed-by: Reiji Watanabe <reijiw@google.com>
-> >
-> Glad that it's helping you as well and thanks for the review.
->
-> Regards,
-> Raghavendra
->
-> > Thanks,
-> > Reiji
-> >
-> >
-> > > +                       mutex_lock(&kvm->lock);
-> > > +                       kvm->vm_started = true;
-> > > +                       mutex_unlock(&kvm->lock);
-> > >                 }
-> > >                 r = kvm_arch_vcpu_ioctl_run(vcpu);
-> > >                 trace_kvm_userspace_exit(vcpu->run->exit_reason, r);
-> > > --
-> > > 2.34.1.448.ga2b2bfdf31-goog
-> > >
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

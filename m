@@ -2,153 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1511F48BA5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 752CA48BA62
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344042AbiAKWBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:01:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59130 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238155AbiAKWBO (ORCPT
+        id S1345204AbiAKWBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343842AbiAKWB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:01:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641938473;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w2jxRqIBbW1BWS5wOVOFlHgZQrT7yiG10aXfva0H0PA=;
-        b=V0Y42/Sfze0yfIuUc5s+GDYRBgM2o5qKyQJYH6IrT/JVhccgcG6SLPzRrl/8cKcMLMmO5n
-        UdDhDS2VD74L+Qgxcw3q44n4FY1EMFGNb3om8uUL6fVE64gX/M7k9oxTBhBCNZ1290e8yf
-        aBTjbZ+Y73NM3+fnbUfP0Rknn1wxNgE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-64---M5XwUAPpC8ia0ZVKJUgA-1; Tue, 11 Jan 2022 17:01:10 -0500
-X-MC-Unique: --M5XwUAPpC8ia0ZVKJUgA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 11 Jan 2022 17:01:29 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F56C06173F;
+        Tue, 11 Jan 2022 14:01:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D6B2C1083F60;
-        Tue, 11 Jan 2022 22:01:08 +0000 (UTC)
-Received: from [10.22.17.167] (unknown [10.22.17.167])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 63A015ED29;
-        Tue, 11 Jan 2022 22:01:07 +0000 (UTC)
-Message-ID: <4a2352a9-42b4-56cd-423a-825faffcd801@redhat.com>
-Date:   Tue, 11 Jan 2022 17:01:06 -0500
+        by sin.source.kernel.org (Postfix) with ESMTPS id 09133CE1BAF;
+        Tue, 11 Jan 2022 22:01:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32B65C36AE9;
+        Tue, 11 Jan 2022 22:01:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641938485;
+        bh=9lyo4a7wsSQoH9aAqy6csVZ0oeEb5XrusjosDq6bNi4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=egNfDjOvv46AdQ2B6ud2WT6mVIGPjavhSHH2PHK3HKIuE3aXsdg/GvBRDo5aALxka
+         escHHXylha6bDTT+aXPk0zU5ZeMF+cCnVR2mr7j+VllKY5KMOTr7PT6XAWLiFfEd7L
+         a3wgwPjM38ls+9dT0xcUJH+0sItn04wO7cr/RD4zj4UE2Wswy0PvGYlhlDt2PEWLCt
+         8C60co6m2EShIUQmgCkbNqCcO/RCSDR/ppwtmwKb810UvE2LBAXTBuMpw1yZNz9uIr
+         8HXQMl+aKlK9McFSuvr9BCzg2ELyww4xBTThCqczVXzDG3jFpdzYP1ba7W7wieSA2i
+         RBxvXUO41Xi2A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2675940714; Tue, 11 Jan 2022 19:01:23 -0300 (-03)
+Date:   Tue, 11 Jan 2022 19:01:23 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        kajoljain <kjain@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the perf tree
+Message-ID: <Yd3+M+efH6bTEpP9@kernel.org>
+References: <20220106091921.3fa617bc@canb.auug.org.au>
+ <6623bc13-d99c-74c1-29c8-b4ae7a570d99@linux.ibm.com>
+ <20220112084553.2aa71f08@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] f2fs: move f2fs to use reader-unfair rwsems
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Tim Murray <timmurray@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-References: <20220108164617.3130175-1-jaegeuk@kernel.org>
- <YdvoxkAAquI17UbX@infradead.org>
- <a23a3226-95d9-9835-c1c7-2d13f4a1ee16@redhat.com>
- <CAEe=SxnWeK0pSfijPKJSTxBiMgD1Ev69fV3qSTCgWASk0b3vhA@mail.gmail.com>
- <9efbbcb7-29cd-a8ab-0632-01986edc862f@redhat.com>
- <CAEe=Sx=C8e7=A6ziy8dYC+FvkWvVYZ+o=XMCP_4vX0efsUPT4Q@mail.gmail.com>
- <86891228-9c91-09f1-0e2d-0a3392649d52@redhat.com>
- <Yd25SWaqEDSpR1vO@google.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Yd25SWaqEDSpR1vO@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220112084553.2aa71f08@canb.auug.org.au>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/22 12:07, Jaegeuk Kim wrote:
-> On 01/11, Waiman Long wrote:
->> On 1/11/22 01:53, Tim Murray wrote:
->>> On Mon, Jan 10, 2022 at 8:15 PM Waiman Long <longman@redhat.com> wrote:
->>>> That is not how rwsem works. A reader which fails to get the lock
->>>> because it is write-locked will remove its reader count before going to
->>>> sleep. So the reader count will be zero eventually. Of course, there is
->>>> a short period of time where the reader count will be non-zero until the
->>>> reader removes its own reader count. So if a new writer comes in at that
->>>> time, it will fail its initial trylock and probably go to optimistic
->>>> spinning mode. If the writer that owns the lock release it at the right
->>>> moment, the reader may acquire the read lock.
->>> Thanks for the correction, that makes sense. I haven't spent too much
->>> time on rwsem internals and I'm not confident about when flags are set
->>> and cleared in sem->count; is there a case where sem->count after
->>> up_write() could be nonzero?
->>>
->>> An example from one trace:
->>>
->>> 1. Low-priority userspace thread 4764 is blocked in f2fs_unlink,
->>> probably at f2fs_lock_op, which is a wrapper around
->>> down_read(cp_rwsem).
->>> 2. f2fs-ckpt runs at t=0ms and wakes thread 4764, making it runnable.
->>> 3. At t=1ms, f2fs-ckpt enters uninterruptible sleep and blocks at
->>> rwsem_down_write_slowpath per sched_blocked_reason.
->>> 4. At t=26ms, thread 4764 runs for the first time since being made
->>> runnable. Within 40us, thread 4764 unblocks f2fs-ckpt and makes it
->>> runnable.
->>>
->>> Since thread 4764 is awakened by f2fs-ckpt but never runs before it
->>> unblocks f2fs-ckpt in down_write_slowpath(), the only idea I had is
->>> that cp_rwsem->count is nonzero after f2fs-ckpt's up_write() in step 2
->>> (maybe because of rwsem_mark_wake()?).
->>>
->>>> I do have a question about the number of readers in such a case compared
->>>> with the number of writers. Are there a large number of low priority
->>>> hanging around? What is an average read lock hold time?
->>>>
->>>> Blocking for 9.7s for a write lock is quite excessive and we need to
->>>> figure out how this happen.,
->>> Just to be 100% clear, it's not a single 9.7s stall, it's many smaller
->>> stalls of 10-500+ms in f2fs-ckpt that add up to 9.7s over that range.
->>>
->>> f2fs is not my area of expertise, but my understanding is that
->>> cp_rwsem in f2fs has many (potentially unbounded) readers and a single
->>> writer. Arbitrary userspace work (fsync, creating/deleting/truncating
->>> files, atomic writes) may grab the read lock, but assuming the
->>> merge_checkpoint option is enabled, only f2fs-ckpt will ever grab the
->>> write lock during normal operation. However, in this particular
->>> example, it looks like there may have been 5-10 threads blocked on
->>> f2fs-ckpt that were awakened alongside thread 4764 in step 2.
->>>
->>> I'll defer to the f2fs experts on the average duration that the read
->>> lock is held.
->> Thanks for the explanation.
->>
->> Another question that I have is whether the test result is based on the
->> latest upstream kernel or earlier kernel version. We used to allow reader
->> optimistic spinning which was then removed in later kernel. Reader
->> optimistic spinning may further increase writer wait time.
-> It's on 5.10 kernel having all the upstream f2fs patches, and yes, we wanted
-> to get higher priority on writer over many readers since the writer, checkpoint,
-> is the  most latency-critical operation that can block all the other filesystem
-> operations.
+Em Wed, Jan 12, 2022 at 08:45:53AM +1100, Stephen Rothwell escreveu:
+> Hi all,
+> 
+> On Fri, 7 Jan 2022 14:28:37 +0530 kajoljain <kjain@linux.ibm.com> wrote:
+> >
+> > On 1/6/22 3:49 AM, Stephen Rothwell wrote:
+> > > 
+> > > After merging the perf tree, today's linux-next build (powerpc
+> > > ppc64_defconfig) failed like this:
+> > > 
+> > > In file included from include/linux/perf_event.h:17,
+> > >                  from arch/powerpc/perf/isa207-common.h:12,
+> > >                  from arch/powerpc/perf/isa207-common.c:9:
+> > > arch/powerpc/perf/isa207-common.c: In function 'isa207_find_source':
+> > > include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_2' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
+> > >  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
+> > >       |           ^~~~~~~~~
+> > > arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
+> > >   273 | #define P(a, b)    PERF_MEM_S(a, b)
+> > >       |                    ^~~~~~~~~~
+> > > arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
+> > >   240 |     ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
+> > >       |                                                   ^
+> > > include/uapi/linux/perf_event.h:1339:11: note: each undeclared identifier is reported only once for each function it appears in
+> > >  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
+> > >       |           ^~~~~~~~~
+> > > arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
+> > >   273 | #define P(a, b)    PERF_MEM_S(a, b)
+> > >       |                    ^~~~~~~~~~
+> > > arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
+> > >   240 |     ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
+> > >       |                                                   ^
+> > > include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_3' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
+> > >  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
+> > >       |           ^~~~~~~~~
+> > > arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
+> > >   273 | #define P(a, b)    PERF_MEM_S(a, b)
+> > >       |                    ^~~~~~~~~~
+> > > arch/powerpc/perf/isa207-common.c:244:51: note: in expansion of macro 'P'
+> > >   244 |     ret |= PH(LVL, REM_RAM2) | REM | LEVEL(RAM) | P(HOPS, 3);
+> > >       |                                                   ^
+> > > 
+> > > Caused by commit
+> > > 
+> > >   af2b24f228a0 ("perf powerpc: Add data source encodings for power10 platform")
+> > > 
+> > > It looks like patch 1/4 of this series is missing ...  
+> > 
+> > Hi Stephen,
+> >      Yes you are right, original patch series contain 4 patches, where
+> > 1/4 patch contain kernel side changes for the same. Hence we are getting
+> > this error, as that patch is missing in the Arnaldo tree.
+> > 
+> > Link to the patchset: https://lkml.org/lkml/2021/12/6/143
+> > 
+> > That kernel side patch is taken by Michael Ellermen via powerpc git.
+> > 
+> > Link to the patchset on powerpc/next:
+> > 
+> > [1/4] perf: Add new macros for mem_hops field
+> > https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=cb1c4aba055f928ffae0c868e8dfe08eeab302e7
+> > 
+> > 
+> > [3/4] powerpc/perf: Add encodings to represent data based on newer
+> > composite PERF_MEM_LVLNUM* fields
+> >  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=4a20ee106154ac1765dea97932faad29f0ba57fc
+> > 
+> > [4/4] powerpc/perf: Add data source encodings for power10 platform
+> > https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=6ed05a8efda56e5be11081954929421de19cce88
+> > 
+> > Thanks,
+> > Kajol Jain
+> > 
+> > > 
+> > > I have used the perf tree from next-20220105 for today.
+> > >   
+> 
+> I am still getting this build failure.
 
-v5.10 kernel still have reader optimistic spinning enabled in rwsem 
-which may have worsen the writer wait time. Could you try with a more 
-up-to-date kernel or backport the relevant rwsem patches into your test 
-kernel to see how much it can help?
+Yeah, this patch shouldn't have been merged thru the perf _tools_ tree,
+my bad, it should have gone thru Michael PPC kernel tree.
 
+It was a single series mixing up tools/ with kernel bits, I thought I
+had picked just the tools part but made a mistake.
 
->> Anyway, AFAICS, this patch keeps readers out of the rwsem wait queue and so
->> only writers can go into it. We can make an unfair rwsem to give preference
->> to writers in the wait queue and wake up readers only if there is no more
->> writers in the wait queue or even in the optimistic spinning queue. That
->> should achieve the same effect as this patch.
-> Can we get a patch for the variant to test a bit? Meanwhile, I think we can
-> merge this patch to add a wraper first and switches to it later?
+This should get resolved when the rest of the kernel bits go via
+Michael's powerpc tree, right?
 
-Give me a week or so and I can make a RFC patch to support unfair rwsem 
-for you to try out. You do need to try it on the latest kernel, though.
-
-Cheers,
-longman
-
+- Arnaldo

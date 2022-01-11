@@ -2,197 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 424AB48B3BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A60248B2CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 18:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343983AbiAKRZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 12:25:00 -0500
-Received: from mga03.intel.com ([134.134.136.65]:11614 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238268AbiAKRYf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:24:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641921875; x=1673457875;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=gEUR+PS3VK1rPxJq6WRhpVCCJmBWIol2sYXcM1N0t6I=;
-  b=neRQrHkUc5sTOWvdaUnorTxzbtt4sdBqFv7MjMsNG08Ix9HhdBZug1EV
-   3/coqG52g1JrJB9GX572WVGQIpz5q+64vPjyfGNnDOa9AQM7hDz6CluRg
-   B1v64i/wMh79Ue4tFWxGbjP4iedywa+pNnz2MLW4y52F69uPQagaJLq1f
-   /h3jA3QfxpIKa4FDP9h+1rn8X7Xf5AeSP+N1VGWjPXRyBWeX4RR1GhJ/j
-   HFlM9e+ztQuK2GykFYb44RCdP+/m0uFsY1fQLNFy1D76/PpvL7W+ae9Sa
-   a+dusAHm9m2uywvr9737jW+JH5AGZYWhY2gC3Bgypv63KNvfm2YnTydLQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10223"; a="243497028"
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="243497028"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 09:23:36 -0800
-X-IronPort-AV: E=Sophos;i="5.88,279,1635231600"; 
-   d="scan'208";a="592749789"
-Received: from cdoher2x-mobl1.amr.corp.intel.com (HELO [10.212.119.165]) ([10.212.119.165])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 09:23:32 -0800
-Subject: Re: [PATCH] firmware: mediatek: add adsp ipc protocol interface
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Linux-ALSA <alsa-devel@alsa-project.org>, tzungbi@google.com,
-        cujomalainey@google.com, Liam Girdwood <lgirdwood@gmail.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        sound-open-firmware@alsa-project.org
-References: <20220111071011.5964-1-allen-kh.cheng@mediatek.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <91eef4c9-adda-1921-16b5-af181b30d36e@linux.intel.com>
-Date:   Tue, 11 Jan 2022 11:02:03 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S244118AbiAKRDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 12:03:12 -0500
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:44649 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240781AbiAKRDJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 12:03:09 -0500
+Received: by mail-ot1-f44.google.com with SMTP id w19-20020a056830061300b0058f1dd48932so19239978oti.11;
+        Tue, 11 Jan 2022 09:03:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v5pxCwfoCTuq2L7n8+mgWgSvoekCjKiZJBmym09wYFY=;
+        b=8OpcUqcWyrqmJHFcqJlEFoSYxyDxyA1sqLSwOnLCsa32IF3LJvzdt0A5/TkLE/Slr8
+         F6MsZppylr6UAHB6vqgp5vFtts2KpmYFyogiqw1g71Jgs6xtfrnRYBjei6lBCOQAdzy+
+         ZzBfiqtlmy6pxrK+GKUthFXLEtPSJBe0zCS93K4ExLtgLem5q2zhdfLj/cmwetJ4YbYB
+         Q0Gta/wvwLxPp8tJZ9dxfGnEeh0RfgVo3Q0Yrk9k+LfU+qyztb76u+4LJI+Pf8ikEsdg
+         rdEFlI9IQS4QgTeYHgOmd36ymQRo5NgW34qL0b3sFWmfQzZFszUj8rCV54TNqm+Gv9tg
+         UMuA==
+X-Gm-Message-State: AOAM531jUTV03/cxfG4nv77cFeJ69dG924UeLm/B0FDJeYwLZ/zPxqd+
+        s2O4EHNjPWOfADa3/DovbA==
+X-Google-Smtp-Source: ABdhPJzMfJtTgvczm2Kzwh4+nG+SG4x4EJsGeop3JT5WO9l1QP7x0N5xbB2Dl+0AXl1yiXnE2pGN2Q==
+X-Received: by 2002:a9d:5d05:: with SMTP id b5mr3906269oti.306.1641920589160;
+        Tue, 11 Jan 2022 09:03:09 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id 12sm501983otu.9.2022.01.11.09.03.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 09:03:08 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: net: mdio: Drop resets/reset-names child properties
+Date:   Tue, 11 Jan 2022 11:02:47 -0600
+Message-Id: <20220111170248.3160841-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20220111071011.5964-1-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+resets/reset-names are device specific and don't belong in the MDIO bus
+schema. For example, it doesn't match what is defined for the
+"qca,ar9331-switch" binding which defines "reset-names" to be "switch"
+rather than "phy". Neither name is that useful IMO.
 
-> +int mtk_adsp_ipc_send(struct mtk_adsp_ipc *ipc, unsigned int idx, uint32_t msg)
-> +{
-> +	struct mtk_adsp_chan *dsp_chan;
-> +	int ret;
-> +
-> +	if (idx >= MTK_ADSP_MBOX_NUM)
-> +		return -EINVAL;
-> +
-> +	dsp_chan = &ipc->chans[idx];
-> +	ret = mbox_send_message(dsp_chan->ch, &msg);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return 0;
+Other child properties are also device specific, but those won't conflict
+with device schemas.
 
-this can be simplified a bit without the 'ret' variable
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/net/mdio.yaml | 6 ------
+ 1 file changed, 6 deletions(-)
 
-return mbox_send_message(dsp_chan->ch, &msg);
-
-> +}
-> +EXPORT_SYMBOL(mtk_adsp_ipc_send);
-
-
-> +static int mtk_adsp_ipc_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct mtk_adsp_ipc *dsp_ipc;
-> +	struct mtk_adsp_chan *dsp_chan;
-> +	struct mbox_client *cl;
-> +	char *chan_name;
-> +	int ret;
-> +	int i, j;
-> +
-> +	device_set_of_node_from_dev(&pdev->dev, pdev->dev.parent);
-> +
-> +	dsp_ipc = devm_kzalloc(dev, sizeof(*dsp_ipc), GFP_KERNEL);
-> +	if (!dsp_ipc)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < MTK_ADSP_MBOX_NUM; i++) {
-> +		chan_name = kasprintf(GFP_KERNEL, "mbox%d", i);
-> +		if (!chan_name) {
-> +			ret = -ENOMEM;
-> +			goto out;
-> +		}
-
-in this case with the existing code you will free something that was not
-allocated. It's not super elegant, consider using different labels as
-suggested below.
-
-> +
-> +		dsp_chan = &dsp_ipc->chans[i];
-> +		cl = &dsp_chan->cl;
-> +		cl->dev = dev->parent;
-> +		cl->tx_block = false;
-> +		cl->knows_txdone = false;
-> +		cl->tx_prepare = NULL;
-> +		cl->rx_callback = mtk_adsp_ipc_recv;
-> +
-> +		dsp_chan->ipc = dsp_ipc;
-> +		dsp_chan->idx = i;
-> +		dsp_chan->ch = mbox_request_channel_byname(cl, chan_name);
-> +		if (IS_ERR(dsp_chan->ch)) {
-> +			ret = PTR_ERR(dsp_chan->ch);
-> +			if (ret != -EPROBE_DEFER)
-> +				dev_err(dev, "Failed to request mbox chan %d ret %d\n",
-> +					i, ret);
-> +			goto out;
-
-goto out_free;
-
-> +		}
-> +
-> +		dev_dbg(dev, "request mbox chan %s\n", chan_name);
-> +		kfree(chan_name);
-> +	}
-> +
-> +	dsp_ipc->dev = dev;
-> +	dev_set_drvdata(dev, dsp_ipc);
-> +	dev_dbg(dev, "MTK ADSP IPC initialized\n");
-> +
-> +	return 0;
-> +
-> +out:
-
-out_free:
-> +	kfree(chan_name);
-
-out:
-
-> +	for (j = 0; j < i; j++) {
-> +		dsp_chan = &dsp_ipc->chans[j];
-> +		mbox_free_channel(dsp_chan->ch);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int mtk_adsp_ipc_remove(struct platform_device *pdev)
-> +{
-> +	struct mtk_adsp_ipc *dsp_ipc = dev_get_drvdata(&pdev->dev);
-> +	struct mtk_adsp_chan *dsp_chan;
-> +	int i;
-> +
-> +	for (i = 0; i < MTK_ADSP_MBOX_NUM; i++) {
-> +		dsp_chan = &dsp_ipc->chans[i];
-> +		mbox_free_channel(dsp_chan->ch);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver mtk_adsp_ipc_driver = {
-> +	.driver = {
-> +		.name = "mtk-adsp-ipc",
-> +	},
-> +	.probe = mtk_adsp_ipc_probe,
-> +	.remove = mtk_adsp_ipc_remove,
-> +};
-> +builtin_platform_driver(mtk_adsp_ipc_driver);
-> +
-> +MODULE_AUTHOR("Allen-KH Cheng <allen-kh.cheng@mediatek.com>");
-> +MODULE_DESCRIPTION("MTK ADSP IPC Driver");
-> +MODULE_LICENSE("GPL v2");
-
-the v2 here isn't useful, the license information can be found in the
-SPDX line.
-
-MODULE_LICENSE("GPL");
-
+diff --git a/Documentation/devicetree/bindings/net/mdio.yaml b/Documentation/devicetree/bindings/net/mdio.yaml
+index 53206e4a7a14..b5706d4e7e38 100644
+--- a/Documentation/devicetree/bindings/net/mdio.yaml
++++ b/Documentation/devicetree/bindings/net/mdio.yaml
+@@ -76,12 +76,6 @@ patternProperties:
+           the turn around line low at end of the control phase of the
+           MDIO transaction.
+ 
+-      resets:
+-        maxItems: 1
+-
+-      reset-names:
+-        const: phy
+-
+       reset-gpios:
+         maxItems: 1
+         description:
+-- 
+2.32.0
 

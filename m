@@ -2,72 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B576048BB0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD01348BB0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 23:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244030AbiAKWyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 17:54:54 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:33370 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiAKWyw (ORCPT
+        id S1345291AbiAKWzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 17:55:01 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26722 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S245384AbiAKWzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 17:54:52 -0500
-Received: by mail-ot1-f53.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso576003otf.0;
-        Tue, 11 Jan 2022 14:54:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oaRuwn3z2vZgd7d6uXNPEElduZNqC7atPxnY1MWXEY8=;
-        b=7r7XjMUBrodiwOkpClbbe/puSFPdfgM+IB86Jykvjq4hl7k3mlzkbU0Z+m4vMcVes2
-         FunTwWGkPgyf6cdVBWUMDxGlEhSs7zMKnVvq9zff+5V6++/TPs2hJ34Jdb7JPfd1yuTS
-         b1dLbRPxibf4iZmzroXFLPhmobhK77+z4hlJXJiUVyTzkZKcqqlC9/blHF+f+MSZqYZT
-         ScuJxDRay0CPioKuFVGdhF43aZx8RuR0eZbXXH1PYeQfxtzeAhqPQeuHs5l++09V+ICH
-         yQFoHK5heQhNpMQugm5MI20Ba8QvTVUk8GG+iJdTcHGjdunsUof7vDW3C9IbRYed9suC
-         jOxQ==
-X-Gm-Message-State: AOAM531KtZoOrqiv88XI6Hxoy65nKv63JuTA9ED5s5RwYWeMGDbztpM6
-        9wamq6Un097YEFYeNFhgLQ==
-X-Google-Smtp-Source: ABdhPJwvYN7rY4HXMQOQTwTBQsr1FwLLwpj6T6v32VokHKGrciARnmlF3v+Wt525mMAIkpcHWb5nnQ==
-X-Received: by 2002:a05:6830:13d9:: with SMTP id e25mr4780844otq.215.1641941691939;
-        Tue, 11 Jan 2022 14:54:51 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id h1sm2187481oog.26.2022.01.11.14.54.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 14:54:51 -0800 (PST)
-Received: (nullmailer pid 3659851 invoked by uid 1000);
-        Tue, 11 Jan 2022 22:54:50 -0000
-Date:   Tue, 11 Jan 2022 16:54:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Christian Hewitt <christianshewitt@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        devicetree@vger.kernel.org, Benoit Masson <yahoo@perenite.com>,
-        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v2 2/9] dt-bindings: arm: amlogic: add X96-AIR bindings
-Message-ID: <Yd4KulrOCjS4PdWG@robh.at.kernel.org>
-References: <20220103163956.6581-1-christianshewitt@gmail.com>
- <20220103163956.6581-3-christianshewitt@gmail.com>
+        Tue, 11 Jan 2022 17:55:00 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20BLAqO4014969;
+        Tue, 11 Jan 2022 22:54:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=lGKny6BRVT9I6YxbfmrywxA1StAM5e2OipAhtJiEQio=;
+ b=OSAkb2Auo6UsEBC7DoiNIiEyDlliXCutaO3Fv1S6AbfDaeRPu5HldKSxhaBK3gnqn8O/
+ sPG7YnNfxGOqAzcYjM23J2ocuvkRXQyOakU5s/mCe48ZZ7Kqeq54cTgUU1MIJKrnK+IP
+ nl/zjcii9sfGp1BtYi3ZPtcZxIEaAs3B9K7QbWdpnEC/j+DLxD9UOv2wYnS9BeD2Y/cN
+ 55vlWJlFjdK+V/ENRISJaP1wsirOTLQqdkGwLPB6njjHDhS2j392smr2aWC00MPWJKn5
+ XZ9mZBI1+XZAip72gqAnintC8qyIVlyyb8nuJAMbOQcWc4v+esGRCVnHyQ/1g6L73Opa Xg== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dhd08gv31-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 22:54:58 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20BMlta6021511;
+        Tue, 11 Jan 2022 22:54:56 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3df289m48e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jan 2022 22:54:56 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20BMssfW47448480
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jan 2022 22:54:54 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5BA47A4059;
+        Tue, 11 Jan 2022 22:54:54 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6A16BA404D;
+        Tue, 11 Jan 2022 22:54:53 +0000 (GMT)
+Received: from sig-9-65-73-162.ibm.com (unknown [9.65.73.162])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 11 Jan 2022 22:54:53 +0000 (GMT)
+Message-ID: <e645dbdcd74699ff92242c51f743cffe0ea3ae14.camel@linux.ibm.com>
+Subject: Re: [GIT PULL] integrity subsystem updates for v5.17
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Tue, 11 Jan 2022 17:54:52 -0500
+In-Reply-To: <CAHk-=wi6O9cpRxWEnYMXjeMis47456UrVCksV6K_WCgjUmYEXQ@mail.gmail.com>
+References: <41707c7dd9705b8bb04a6d56aee349ff17c4af50.camel@linux.ibm.com>
+         <CAHk-=wi6O9cpRxWEnYMXjeMis47456UrVCksV6K_WCgjUmYEXQ@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: sGHypL8zpKWOkMq3pvbeUimqSf7Uybk8
+X-Proofpoint-GUID: sGHypL8zpKWOkMq3pvbeUimqSf7Uybk8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103163956.6581-3-christianshewitt@gmail.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 clxscore=1015 mlxlogscore=928 adultscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 spamscore=0 phishscore=0
+ priorityscore=1501 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201110118
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Jan 2022 16:39:49 +0000, Christian Hewitt wrote:
-> Add board bindings for the Amediatech X96-AIR STB which ships with
-> model variants distiguished by Ethernet configuration: models using
-> an external Gigabit PHY have a -gbit suffix, while models using an
-> internal 10/100 PHY have no suffix.
+On Tue, 2022-01-11 at 13:21 -0800, Linus Torvalds wrote:
+> On Mon, Jan 10, 2022 at 2:02 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.17
 > 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/amlogic.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+> Side note: I can't find the key you're using for the tag signing anywhere.
 > 
+> This isn't new, and I've seen this key before, and I suspect it's just
+> another new key update that the complete breakdown of all the pgp
+> keyservers makes hard to get out.
+> 
+> You used to use RSA key 8D2302082EFE723A379ECCD26B792466B03E715A,
+> which I have, the last few pulls you've been using EDDSA key
+> 1D5D554518DE57A8AAF51E3ECBC19CD1B02AE7E5 that I can't actually find.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Yes, I received the Nitrokey Start and followed the maintainer-pgp-
+guide (and Nitrokey) directions at the time.  It was hard finding a
+working gpg server, but I finally found one, at least I thought I found
+one.
+
+> 
+> It also isn't in the kernel.org pgpkeys repo.
+> 
+> You could try submitting it there:
+> 
+>   https://korg.docs.kernel.org/pgpkeys.html#submitting-keys-to-the-keyring
+> 
+> Oh, how I hate pgp. I thought that having git wrap all the key
+> verification would make it usable (counter-example: the incredible
+> garbage that is pgp signed email), but then the keyservers stopped
+> working, and so the keys themselves end up being a problem.
+
+Submitted.
+
+Mimi
+

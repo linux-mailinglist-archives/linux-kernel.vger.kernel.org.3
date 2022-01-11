@@ -2,130 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B3A48B75C
-	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325C348B75E
+	for <lists+linux-kernel@lfdr.de>; Tue, 11 Jan 2022 20:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235934AbiAKT36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 14:29:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S236064AbiAKTbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 14:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235839AbiAKT3z (ORCPT
+        with ESMTP id S235839AbiAKTbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 14:29:55 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07129C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:29:55 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id l15so308029pls.7
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 11:29:55 -0800 (PST)
+        Tue, 11 Jan 2022 14:31:22 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C660CC06173F;
+        Tue, 11 Jan 2022 11:31:21 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id v186so28840ybg.1;
+        Tue, 11 Jan 2022 11:31:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xzVuATJi0a8u1tXW7Evjch4xTueZKS94YDE36TE9HHo=;
-        b=OxayUWxYOARiQlDidsYe1/FVFLBC7u7reVNeilSP1QhK7zZDv4/rX2rCOKdPWJUFKW
-         KNmI0ToQeAZay960YHed+dTXgIcw/xhAFP0beVo5OQ55IdhQXGGNDyBcbvQSrJKjUSUu
-         Df46CgsM0X7wnKS096QWeVpCyc7E9fWsiGhPs=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ynbqr0wi2/VtsdbQavXJS7nZj8ACuHscRkWjTklM/hM=;
+        b=V+lU/fYhP6eAi8gy8f63ftwQQMcDtC+NH4rx5JmUQENQH84B+PlnYLqe+ErfU1agad
+         N/nRk3z4oVIILPeiz3sr4BGbzCYQXnHIT3FdxvnpnR+t3wRvMV1sNdTf+SRHPr9Xij9+
+         U4m+fwWbZ1065HhB9HaW7roza7sb2XoDDqh3ls4Ppb1uleKc8h+TzWMndacmFXuyGHGe
+         9g5tqFybKgf8qMDkjBbe8Ft2DElXq17PrXMKsvH8/IS2SPZeGWBHoWxgpLKOL6noot+I
+         BoWgjnLxiU+shqU7B3SoNKxwrSEMHM/v+N7r5H02o+f7MhP9kUcfaJJHwSlL3nGccrBW
+         E+6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xzVuATJi0a8u1tXW7Evjch4xTueZKS94YDE36TE9HHo=;
-        b=GJWkuQyUZxq3DHcjNrri4To7BEB8sPfhuwjFdcBDBL3gG8jgBumYYMuznGxe8DiLxU
-         OGr6WYFCkn6EgfL7trHJG0oZVtJwG+8IHSC8M/CAoLEdU1Y38d0bRrfyA/IgcU4BA5Jl
-         MzVy6WZxQPbkLL3QyjYJnwrsmgOi6iREY1m6t9IwAd0uLYRa6noyW2Sz45w35YuIO2nk
-         aD8ej4oDLwz5KS4kQ5dEeQ8pH2+j+ILcOKPdwbaf4MovE0wmj9YPg/QnDnTvCeecq30K
-         nM6qztSC7ijPCMkSi2GPoZ00X0vjwWiXLJl5Q/t70UEN7pjPlTjz4Y9gNGdO1RrhuCzH
-         W4JQ==
-X-Gm-Message-State: AOAM533JZnyn+L+FG0lMh7xvubtxw+V4TKldm4Va4Zp6AP5q49xK6FVu
-        5kZ/IRU605MUZhOBDVSi8dDdMQ==
-X-Google-Smtp-Source: ABdhPJx8UoJ4wIeExZ0+899Y+0oGQn2SzH4M3hBPj7bBdLfUHpD24v9QuJInPBBYgyvLkNWdoc/0jg==
-X-Received: by 2002:a63:7257:: with SMTP id c23mr5405701pgn.573.1641929394529;
-        Tue, 11 Jan 2022 11:29:54 -0800 (PST)
-Received: from localhost ([2600:1700:2434:285f:b8b9:866f:ece3:8a5b])
-        by smtp.gmail.com with ESMTPSA id p1sm128333pgj.46.2022.01.11.11.29.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 11:29:54 -0800 (PST)
-From:   Ivan Babrou <ivan@cloudflare.com>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Ivan Babrou <ivan@cloudflare.com>
-Subject: [PATCH bpf-next] tcp: bpf: Add TCP_BPF_RCV_SSTHRESH for bpf_setsockopt
-Date:   Tue, 11 Jan 2022 11:29:52 -0800
-Message-Id: <20220111192952.49040-1-ivan@cloudflare.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ynbqr0wi2/VtsdbQavXJS7nZj8ACuHscRkWjTklM/hM=;
+        b=f/s7hTNj5eURvScfabetnwr5QGtLp/Z5YaEVt5LZI6QRz+hbbMqlDjSpLICmXylSgH
+         OuQotyuvsPqYkab9GGdbiBIPM7lqj+Y+nfzNeBYiwS/cuwYoMSQsoXJg7ulf6/5UZIeb
+         iA5MJZFKosc6J7KCNa0IE8M40MsAZWv43e02nRuu4ymyaSq6HotQ24zMRJBVLRi3fHz+
+         6RHgdG9J/Odiz9MlISc/BODCRR3LkM1LCmBf56g22nYRZLd4AqnCi3tJa/jjg44Cbx7D
+         vUZLHgx4AXAheU7pcaLwrNaRUVyHRlTtHyzEKBzUlWHN4ZsT1xjFZ4lGb+9zgsz9YTPY
+         J6SA==
+X-Gm-Message-State: AOAM533DlCIKMJ6HJzWhGm+/GpZWv+x5iGj1HenezPrj+l1dsqEa+/Wk
+        Nqp0in8da37ckOxsNPXwimbhYzfqyo4IBCtyoiI=
+X-Google-Smtp-Source: ABdhPJzXzgBVE32TUw+VVIrjIvulHLCAjN20s6KbIS5ra0vt5/2nb7X1MIUUG0p+Mbesi/ce+7BegWUK+6t3odbUY+8=
+X-Received: by 2002:a05:6902:4e9:: with SMTP id w9mr6864881ybs.186.1641929481089;
+ Tue, 11 Jan 2022 11:31:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220111002314.15213-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220111002314.15213-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <0bfff433-e216-6f9d-d225-9f07ac48013a@xs4all.nl> <CA+V-a8sszaUP6o6LJgDX49oPGVQFOc6G0vtY3p6sz4JNm=xB4A@mail.gmail.com>
+ <df687e82-3e9e-4df6-ac3c-ee2e1355779c@xs4all.nl>
+In-Reply-To: <df687e82-3e9e-4df6-ac3c-ee2e1355779c@xs4all.nl>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 11 Jan 2022 19:30:55 +0000
+Message-ID: <CA+V-a8tuVoYmLbi45d70MBhVDKdg4eUFbE64bTja1WyNmZ89Xw@mail.gmail.com>
+Subject: Re: [PATCH v2 06/13] media: davinci: vpif: Use platform_get_irq_optional()
+ to get the interrupt
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds bpf_setsockopt(TCP_BPF_RCV_SSTHRESH) to allow setting
-rcv_ssthresh value for TCP connections. Combined with increased
-window_clamp via tcp_rmem[1], it allows to advertise initial scaled
-TCP window larger than 64k. This is useful for high BDP connections,
-where it allows to push data with fewer roundtrips, reducing latency.
+Hi Hans,
 
-For active connections the larger window is advertised in the first
-non-SYN ACK packet as the part of the 3 way handshake.
+On Tue, Jan 11, 2022 at 10:45 AM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+>
+> On 11/01/2022 11:43, Lad, Prabhakar wrote:
+> > Hi Hans,
+> >
+> > On Tue, Jan 11, 2022 at 10:25 AM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+> >>
+> >> Hi Prabhakar,
+> >>
+> >> On 11/01/2022 01:23, Lad Prabhakar wrote:
+> >>> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> >>> allocation of IRQ resources in DT core code, this causes an issue
+> >>> when using hierarchical interrupt domains using "interrupts" property
+> >>> in the node as this bypasses the hierarchical setup and messes up the
+> >>> irq chaining.
+> >>>
+> >>> In preparation for removal of static setup of IRQ resource from DT core
+> >>> code use platform_get_irq_optional().
+> >>>
+> >>> While at it, propagate error code in case devm_request_irq() fails
+> >>> instead of returning -EINVAL in vpif_display.c.
+> >>
+> >> Please note that this patch clashes with [1], for which I just posted a PR [2].
+> >>
+> > Ouch, I think I had a comment for patch#2 which needed to be addressed
+> > (I was nitpicking anyway) so I was hoping this will go in first.
+>
+> Patch 2 was fine since that change makes sense when looking at patch 3.
+>
+Agreed.
 
-For passive connections the larger window is advertised whenever
-there's any packet to send after the 3 way handshake.
+> >
+> >> So once [2] is merged you'll need to rebase this patch.
+> >>
+> > Ok, do you want me to just re-send this patch alone or the entire series?
+>
+> Either works.
+>
+Will just send this  alone patch as v3.
 
-See: https://lkml.org/lkml/2021/12/22/652
-
-Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
----
- include/uapi/linux/bpf.h       | 1 +
- net/core/filter.c              | 6 ++++++
- tools/include/uapi/linux/bpf.h | 1 +
- 3 files changed, 8 insertions(+)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 791f31dd0abe..36ebf87278bd 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5978,6 +5978,7 @@ enum {
- 	TCP_BPF_SYN		= 1005, /* Copy the TCP header */
- 	TCP_BPF_SYN_IP		= 1006, /* Copy the IP[46] and TCP header */
- 	TCP_BPF_SYN_MAC         = 1007, /* Copy the MAC, IP[46], and TCP header */
-+	TCP_BPF_RCV_SSTHRESH	= 1008, /* Set rcv_ssthresh */
- };
- 
- enum {
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 2e32cee2c469..aafb6066b1a6 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4904,6 +4904,12 @@ static int _bpf_setsockopt(struct sock *sk, int level, int optname,
- 					return -EINVAL;
- 				inet_csk(sk)->icsk_rto_min = timeout;
- 				break;
-+			case TCP_BPF_RCV_SSTHRESH:
-+				if (val <= 0)
-+					ret = -EINVAL;
-+				else
-+					tp->rcv_ssthresh = min_t(u32, val, tp->window_clamp);
-+				break;
- 			case TCP_SAVE_SYN:
- 				if (val < 0 || val > 1)
- 					ret = -EINVAL;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 791f31dd0abe..36ebf87278bd 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5978,6 +5978,7 @@ enum {
- 	TCP_BPF_SYN		= 1005, /* Copy the TCP header */
- 	TCP_BPF_SYN_IP		= 1006, /* Copy the IP[46] and TCP header */
- 	TCP_BPF_SYN_MAC         = 1007, /* Copy the MAC, IP[46], and TCP header */
-+	TCP_BPF_RCV_SSTHRESH	= 1008, /* Set rcv_ssthresh */
- };
- 
- enum {
--- 
-2.34.1
-
+Cheers,
+Prabhakar

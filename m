@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D5A48CEB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 00:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3EA48CEC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 00:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235063AbiALXE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 18:04:26 -0500
-Received: from mga02.intel.com ([134.134.136.20]:20822 "EHLO mga02.intel.com"
+        id S235284AbiALXGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 18:06:39 -0500
+Received: from mga04.intel.com ([192.55.52.120]:11050 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234993AbiALXEO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 18:04:14 -0500
+        id S235159AbiALXEe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 18:04:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642028654; x=1673564654;
+  t=1642028673; x=1673564673;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WYDoKxLxRjZ7HqNhNFg14V/WsU2wyS41U6hNDWUzGIw=;
-  b=XTH9zEMrXEVOfkK8t9LHRhKYKNWI9owDmHTEhykB5x4TVDHCVTOn+BKc
-   TJV3MceTb5jxKKx5Y8OvmzSDpxsO6AfkPNpO+t3EXtDG1e0fCwS7MEJ96
-   20gDJUo15l9qlc2n5JOrpjeLKPpBxSoGaZTOg1u2pMy5klLy1S2tYQdTG
-   83Tutp1leUWO7zr0TCn5IojOP3KJnOtE4lZ46KXBhqAd2yDXXanL3fbDf
-   a4JC5QvLpkxNahuBWZ8su7c6vqYJfTLY01ZX+5sUbRVug7AenygBv0Nnc
-   Z7ghJPXSmdhwfXFI+g2QFfyUmghKhqa/cOWD2tMTAmqFCxT0mOjoRCq/R
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="231214616"
+  bh=yqb5OYduT2L5PyODrd9dlMq3ChrmMYABh4PrezmrUEg=;
+  b=LwxXD7Msiixw9bhM6l9Oq9e3WFKxTyLc2PSYjLVT5uEmXssMidmW5Roo
+   6Vzmi4p9MBxxrJYWaTeilTwe6cFTyDmRVWVYQrKJjROBEzYyHyOK0a+gi
+   XPghefgPlfrXUHKnPAnY71EgyGFFJvaczMjxGKpC7KGTJ6EFixJErfVVc
+   SRVWpAgSAq77Fmb3+sXAHq+RT+E46XcZhYrkICKR5J8txF1EBRx5SGfzj
+   lMd++GmTWF2wekvRq8HEErDvrKyzZmb/98tcFf2xFqwZXAS69SQeChNb1
+   9SSUhqrl8+q9edyWGsRmKTn5DS5wznb5Y7nnwBEcEBv5yPK0WIT28vmve
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="242689848"
 X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="231214616"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 15:04:12 -0800
+   d="scan'208";a="242689848"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 15:04:32 -0800
 X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="528808443"
+   d="scan'208";a="623636695"
 Received: from kstefans-mobl.ger.corp.intel.com (HELO localhost) ([10.249.154.174])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 15:04:04 -0800
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 15:04:21 -0800
 From:   Iwona Winiarska <iwona.winiarska@intel.com>
 To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -57,9 +57,9 @@ Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
         Billy Tsai <billy_tsai@aspeedtech.com>,
         Iwona Winiarska <iwona.winiarska@intel.com>,
         Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH v5 02/13] dt-bindings: Add bindings for peci-aspeed
-Date:   Thu, 13 Jan 2022 00:02:36 +0100
-Message-Id: <20220112230247.982212-3-iwona.winiarska@intel.com>
+Subject: [PATCH v5 03/13] ARM: dts: aspeed: Add PECI controller nodes
+Date:   Thu, 13 Jan 2022 00:02:37 +0100
+Message-Id: <20220112230247.982212-4-iwona.winiarska@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220112230247.982212-1-iwona.winiarska@intel.com>
 References: <20220112230247.982212-1-iwona.winiarska@intel.com>
@@ -69,94 +69,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree bindings for the peci-aspeed controller driver.
+Add PECI controller nodes with all required information.
 
 Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
 ---
- .../devicetree/bindings/peci/peci-aspeed.yaml | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.yaml
+ arch/arm/boot/dts/aspeed-g4.dtsi | 11 +++++++++++
+ arch/arm/boot/dts/aspeed-g5.dtsi | 11 +++++++++++
+ arch/arm/boot/dts/aspeed-g6.dtsi | 11 +++++++++++
+ 3 files changed, 33 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/peci/peci-aspeed.yaml b/Documentation/devicetree/bindings/peci/peci-aspeed.yaml
-new file mode 100644
-index 000000000000..1e68a801a92a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/peci/peci-aspeed.yaml
-@@ -0,0 +1,72 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/peci/peci-aspeed.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm/boot/dts/aspeed-g4.dtsi b/arch/arm/boot/dts/aspeed-g4.dtsi
+index b313a1cf5f73..3c2961da6272 100644
+--- a/arch/arm/boot/dts/aspeed-g4.dtsi
++++ b/arch/arm/boot/dts/aspeed-g4.dtsi
+@@ -391,6 +391,17 @@ uart_routing: uart-routing@9c {
+ 				};
+ 			};
+ 
++			peci0: peci-controller@1e78b000 {
++				compatible = "aspeed,ast2400-peci";
++				reg = <0x1e78b000 0x60>;
++				interrupts = <15>;
++				clocks = <&syscon ASPEED_CLK_GATE_REFCLK>;
++				resets = <&syscon ASPEED_RESET_PECI>;
++				cmd-timeout-ms = <1000>;
++				clock-frequency = <1000000>;
++				status = "disabled";
++			};
 +
-+title: Aspeed PECI Bus Device Tree Bindings
+ 			uart2: serial@1e78d000 {
+ 				compatible = "ns16550a";
+ 				reg = <0x1e78d000 0x20>;
+diff --git a/arch/arm/boot/dts/aspeed-g5.dtsi b/arch/arm/boot/dts/aspeed-g5.dtsi
+index c7049454c7cb..aab1c3ecb4dc 100644
+--- a/arch/arm/boot/dts/aspeed-g5.dtsi
++++ b/arch/arm/boot/dts/aspeed-g5.dtsi
+@@ -511,6 +511,17 @@ ibt: ibt@140 {
+ 				};
+ 			};
+ 
++			peci0: peci-controller@1e78b000 {
++				compatible = "aspeed,ast2500-peci";
++				reg = <0x1e78b000 0x60>;
++				interrupts = <15>;
++				clocks = <&syscon ASPEED_CLK_GATE_REFCLK>;
++				resets = <&syscon ASPEED_RESET_PECI>;
++				cmd-timeout-ms = <1000>;
++				clock-frequency = <1000000>;
++				status = "disabled";
++			};
 +
-+maintainers:
-+  - Iwona Winiarska <iwona.winiarska@intel.com>
-+  - Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+ 			uart2: serial@1e78d000 {
+ 				compatible = "ns16550a";
+ 				reg = <0x1e78d000 0x20>;
+diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
+index 5106a424f1ce..564f1292993f 100644
+--- a/arch/arm/boot/dts/aspeed-g6.dtsi
++++ b/arch/arm/boot/dts/aspeed-g6.dtsi
+@@ -507,6 +507,17 @@ wdt4: watchdog@1e7850c0 {
+ 				status = "disabled";
+ 			};
+ 
++			peci0: peci-controller@1e78b000 {
++				compatible = "aspeed,ast2600-peci";
++				reg = <0x1e78b000 0x100>;
++				interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&syscon ASPEED_CLK_GATE_REF0CLK>;
++				resets = <&syscon ASPEED_RESET_PECI>;
++				cmd-timeout-ms = <1000>;
++				clock-frequency = <1000000>;
++				status = "disabled";
++			};
 +
-+allOf:
-+  - $ref: peci-controller.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - aspeed,ast2400-peci
-+      - aspeed,ast2500-peci
-+      - aspeed,ast2600-peci
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    description:
-+      Clock source for PECI controller. Should reference the external
-+      oscillator clock.
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  cmd-timeout-ms:
-+    minimum: 1
-+    maximum: 1000
-+    default: 1000
-+
-+  clock-frequency:
-+    description:
-+      The desired operation frequency of PECI controller in Hz.
-+    minimum: 2000
-+    maximum: 2000000
-+    default: 1000000
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - resets
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/ast2600-clock.h>
-+    peci-controller@1e78b000 {
-+      compatible = "aspeed,ast2600-peci";
-+      reg = <0x1e78b000 0x100>;
-+      interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks = <&syscon ASPEED_CLK_GATE_REF0CLK>;
-+      resets = <&syscon ASPEED_RESET_PECI>;
-+      cmd-timeout-ms = <1000>;
-+      clock-frequency = <1000000>;
-+    };
-+...
+ 			lpc: lpc@1e789000 {
+ 				compatible = "aspeed,ast2600-lpc-v2", "simple-mfd", "syscon";
+ 				reg = <0x1e789000 0x1000>;
 -- 
 2.31.1
 

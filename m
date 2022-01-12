@@ -2,83 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D32948BBE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1694248BBE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347228AbiALAbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 19:31:07 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:36743 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347113AbiALAbG (ORCPT
+        id S1347213AbiALAcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 19:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236299AbiALAcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 19:31:06 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JYT4l6NLcz4xmx;
-        Wed, 12 Jan 2022 11:31:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641947464;
-        bh=eGWiuVFBisnDmbb6Z82keERvFmUzmkgkjh080+uAVj4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dfJAnqzPkGzQFc4W/tfKhr8WxrLtFJFEj4xzRAhmXWwuDAMgawIAIRDTB0F9Oal1p
-         17Xv0jnYW4JLnVcAicbPugNI8v69coywllBdjHG/t63UdGBPVoSUrMpqO3RoTEflt+
-         onoaaNtRVg0/Lm5OSVeFUbZY8eZCGp89QXZJ9+0nC9l+HK72qY3ECVAwF1N9rS2IUd
-         siIIsgoQvAHppky14MtYyNCOnaWSFOXiI/DGfR+7mLznYYnd0bUMcrYsZ3NnUP+oBl
-         roHvFY9NBDm74MGr3LZd9/2SSi4TXOVxaeb0/9TGffp5Act0C5YbD+lENsKLI19+9u
-         krfoaxrHu2jRQ==
-Date:   Wed, 12 Jan 2022 11:31:03 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Yinan Liu <yinan@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the ftrace tree
-Message-ID: <20220112113103.7e03448f@canb.auug.org.au>
+        Tue, 11 Jan 2022 19:32:32 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E78C06173F;
+        Tue, 11 Jan 2022 16:32:31 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id h23so1270125iol.11;
+        Tue, 11 Jan 2022 16:32:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xzRivGiDnFlH/NigKDtyx/5jSI6przCmRsoRUX9qzW4=;
+        b=ECF3Q/SSeCeIXhQRldXxQpXI/q5uTMDtKLXT1zBBl1JNCGWkD0adGys7P49TM1Ckoy
+         arXjylMaMFTeE4w9rjBUYs/+RSdbLOPqj/aKKwRQ0NzDXP+Bc9a7sekFkUAE0IOu4qRl
+         BTZLX0/4xRmkPtFQiD4RYFVlGpo+XYtNl0AGUxWA/SFqBIa8B/bDkcSVzoS65X+fOk2N
+         Z08qE2Cz+ZFhtkYpJb17NnPJoVyAZpWoULYS7OYk2GbRDf2WSJ0DmJvXZWQgJ1sHSX0x
+         bYle2rl5p1GCDiMBXmNejRCVR462bxS29IgQdt4uUJnH0lqeNLaP0feesnzkZ+PBZEr6
+         etBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xzRivGiDnFlH/NigKDtyx/5jSI6przCmRsoRUX9qzW4=;
+        b=5CiOHqOTkNBoxxEKrdNNJ50kqV928vlYNsxvbAqX3qTjmCW4aaImZyI0oGhLRicuk/
+         LfUDaCZniNKFqn23q/TUNNJJmxZYxCNpa8Zi+PmTXSFsiZt5qLlbWjgdSVTz2AAuWcvP
+         qicVLmIp7evt8p4uUPc3HCgU9lmQloA7/vBWazXYoEf+UxxVYPUHU7oO7OIFFYj/dTO4
+         AgqxyyKBZFcqbSjtyyFUMe6cGX8w2X8sBZWoAAlBkbi65MU7u2kCdFMpzoMys70roQae
+         MBURmi+TB/Fgs4STsdiBrLF9iLR+RVlNWo/vngK6d5i2RZofbtyIr7q6VJm3a5TPRfKQ
+         fj6g==
+X-Gm-Message-State: AOAM531Ocly62USnmCB0UVI473aThtRf6JVSEmcx3YH13fRKYaUf7npv
+        omv8v00xkNe1bnD2iYl7k/6zAeKYevWDJkJCjAk=
+X-Google-Smtp-Source: ABdhPJxKhwcG0hnl29QpdnKHcbrr3/gJYspv2gQI/bfG3WAECR8HiBX6lovOe32Dk6eBpnHyoZ2HcOKpjz+Tig6YHr8=
+X-Received: by 2002:a6b:e508:: with SMTP id y8mr3309614ioc.177.1641947551194;
+ Tue, 11 Jan 2022 16:32:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yHmrOeaaL/IhgbC3Nk4PLoS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20220110085952.6137-1-sj@kernel.org> <CANiq72nysMx0tOHstkDFWV2wYnjiePDxvGeip=RU4bKkyAZbtw@mail.gmail.com>
+In-Reply-To: <CANiq72nysMx0tOHstkDFWV2wYnjiePDxvGeip=RU4bKkyAZbtw@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 12 Jan 2022 01:32:20 +0100
+Message-ID: <CANiq72=uZ58gQ5PmF5bXk7f47yGGzeL=WQnNbybeBPDZuQhijA@mail.gmail.com>
+Subject: Re: [PATCH v2 for-rust-for-linux] init/Kconfig: Specify the
+ interpreter for rust-version.sh
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wei Liu <wei.liu@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/yHmrOeaaL/IhgbC3Nk4PLoS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jan 10, 2022 at 11:13 AM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> Picking it up, thanks!
 
-Hi all,
+This is now in linux-next (Jan 11) -- hopefully it is now better for you!
 
-After merging the ftrace tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+I will carry the patch in our rust-next branch but I won't put it in
+the patch series, this way we won't need to revert it when merged into
+mainline.
 
-Inconsistent kallsyms data
-Try make KALLSYMS_EXTRA_PASS=3D1 as a workaround
-
-I am not sure what caused this - maybe commit
-
-  4f1f18311591 ("scripts: ftrace - move the sort-processing in ftrace_init")
-
-I have used the ftrace tree from next-20220111 for today.
-
---=20
 Cheers,
-Stephen Rothwell
-
---Sig_/yHmrOeaaL/IhgbC3Nk4PLoS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHeIUcACgkQAVBC80lX
-0Gx9fwgAg8JFV7QXUJDl7iwqjuFgrw+3eQgQn6ImcFG9uDSkUhBgvCjcVLKhHMwZ
-NrTAwDI5Phldj+FasEDRmn7AOm2Xe+pv1ThhCHVAb7G+x5w/XaGLLfWkQ9Djb+a9
-7QAw+wTVzj18t43cXlAmhvqOrwnIz+jYdOQcsCNiLcpFz+Kz9EywyU28faTR6JBo
-2+h7uZoK9W0dzmmlSEciWN17XKegp9qU2bQTyFtSePBQEVkrHf8GnkwDdQlzUk3D
-BRbsPKAo54vVaaHQdoW4WL+kHRt0aLz8a39VU1iLv+dlGM/4UH3Olsii014IInh3
-Ftue5HwMEU+NHMilp3F0Q6+9kUfcmg==
-=SubM
------END PGP SIGNATURE-----
-
---Sig_/yHmrOeaaL/IhgbC3Nk4PLoS--
+Miguel

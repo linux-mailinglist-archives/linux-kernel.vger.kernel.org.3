@@ -2,96 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FED848BFB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D51CE48BFBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351528AbiALIRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:17:36 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:56092 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1351524AbiALIRf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:17:35 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowAAH6RWNjt5hKiMSBg--.14500S2;
-        Wed, 12 Jan 2022 16:17:17 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     adrian.hunter@intel.com, ulf.hansson@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re: [PATCH] mmc: sdhci-of-esdhc: Check for error num after setting mask
-Date:   Wed, 12 Jan 2022 16:17:15 +0800
-Message-Id: <20220112081715.692436-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1350183AbiALITm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:19:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47530 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351580AbiALITi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 03:19:38 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67059C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:19:38 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id v6so2674722wra.8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:19:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=N65x+okBqwUwEt3rIQ+NIW+LytKbN9dsX1fy1vfrCfI=;
+        b=SW98+bEGXg9kLnzJ/Wwc1NHVh8cpZxfiyWuV2nGuJ74fgv45ymJw6JemuQAKIArNtE
+         5DG1Lvl/4pk6ePJLHplSmtJIGixksULeN7oycvXq0sRHaw/4lS/qVfJAvoc8aJzPYJrI
+         bu99OyB1WGiRnjZ8R698wf4TY0nB6PSdMvu0I0WVoj9h9PvxXwNW4SXrQXAaDcFLOauK
+         oksO6kEvCFpQXgxhIYdwL8HhuTJcxAZwjAnsbsKzbGn6ZPbWputKpy32zfY0Dc8P8gcT
+         5Y4Kkf1SoAroY0F0bMlIoGFd5/EqnI63psov11WvPWXEj0TAeGUeO2GO9FaqWwlkQb/C
+         ltAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=N65x+okBqwUwEt3rIQ+NIW+LytKbN9dsX1fy1vfrCfI=;
+        b=4iMUZjgJ3ST9hdN0cdV2K4B65N7fTiReVFat+VejuGuF7iJ22QWnU4S0zNP5egF3vU
+         wwpGewpyYvQ4aSHnUMulMwbrDEetyQnML3Z6uRbQU5tyfov3i/uR5cWh/9frsS5v/pUQ
+         ZTAVVbq0brilUZ3dHovRet1wjAp0vfyU06oVP+s4S4d/9GOBy3mtApMBx+Rp/3eRjxnU
+         Of96/k6/HvbK2ChSZfU6LHAE1Qkn9XnghozOzLgYnY2z8/zamwourKGeS9+xK4CyIgWp
+         HwKlaRCx6+1P4kDjJLOI58DPxDx8WFmY/bCT63+G1pAzjbT+GmzUshFJ7GpPdbc+2eMM
+         qlrQ==
+X-Gm-Message-State: AOAM533/epqT/hchzRRj9px9eiRy/wcXllUnMChyT3UkkMky2/YF+NOD
+        MVhRqw9fzFkovBp6MXT/Tq+SEw==
+X-Google-Smtp-Source: ABdhPJyuElpnJODcDGKEk++EbHO+Un+WeepU7Q/OryifjLA3PhxRGHAWWF2yBRHvGTJDk1mAUoD/sA==
+X-Received: by 2002:a5d:584b:: with SMTP id i11mr6667217wrf.433.1641975576862;
+        Wed, 12 Jan 2022 00:19:36 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:381b:6e50:a892:5269? ([2001:861:44c0:66c0:381b:6e50:a892:5269])
+        by smtp.gmail.com with ESMTPSA id i8sm14694212wry.108.2022.01.12.00.19.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 00:19:35 -0800 (PST)
+Subject: Re: [PATCH 6/6] drm/meson: add support for MIPI-DSI transceiver
+To:     Jagan Teki <jagan@amarulasolutions.com>
+Cc:     daniel@ffwll.ch, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20200907081825.1654-1-narmstrong@baylibre.com>
+ <20200907081825.1654-7-narmstrong@baylibre.com>
+ <CAMty3ZBEmafG8LS_yv4eektvUoHwYFoV=-8wohUXgsvpRbZqtA@mail.gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <70d1af3f-bc00-4afd-1157-1cf70d3b2c88@baylibre.com>
+Date:   Wed, 12 Jan 2022 09:19:35 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAAH6RWNjt5hKiMSBg--.14500S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF1rCr1fKw1UAF1xAF1xGrg_yoW8AF1fp3
-        yFgwn0yrs5WryF9rsrZw1UAF4YyrWrArZ8twsxWa42v3s8Crn0kr18Kan0qF1DCFn3Kw4I
-        vrW2y3WUG34qqa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFyl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUIzuXUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+In-Reply-To: <CAMty3ZBEmafG8LS_yv4eektvUoHwYFoV=-8wohUXgsvpRbZqtA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 02:45:13PM +0800, Adrian Hunter wrote:
->> Because of the possible failure of the dma_supported(), the
->> dma_set_mask_and_coherent() may return error num.
->> Therefore, it should be better to check it and return the error if
->> fails.
->> Also, the caller, esdhc_of_resume(), should deal with the return
->> value.
->> Moreover, as the sdhci_esdhc_driver has not been used, it does not
->> need to
->> be considered.
->
-> Apologies, but that last sentence I don't understand.  Can you clarify
-> it a bit.
-> What doesn't need to be considered and why?
+Hi,
 
-Thanks, because the original esdhc_of_enable_dma() only returns 0, the
-caller may not consider to check the return value.
-I also notice that the esdhc_of_enable_dma() is assigned to
-sdhci_esdhc_le_pdata and sdhci_esdhc_be_pdata, which is only used by
-sdhci_esdhc_driver.
-And now the sdhci_esdhc_driver only have 'probe' and 'remove', without
-other action.
-So we should not consider to check whether there is a caller for
-esdhc_of_enable_dma() in sdhci_esdhc_driver.
+On 12/01/2022 08:24, Jagan Teki wrote:
+> Hi Neil,
+> 
+> On Mon, Sep 7, 2020 at 1:48 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
+>>
+>> The Amlogic AXg SoCs embeds a Synopsys DW-MIPI-DSI transceiver (ver 1.21a), with a custom
+>> glue managing the IP resets, clock and data input similar to the DW-HDMI Glue on other
+>> Amlogic SoCs.
+>>
+>> This adds support for the Glue managing the transceiver, mimicing the init flow provided
+>> by Amlogic to setup the ENCl encoder, the glue, the transceiver, the digital D-PHY and the
+>> Analog PHY in the proper way.
+>>
+>> The DW-MIPI-DSI transceiver + D-PHY are directly clocked by the VCLK2 clock, which pixel clock
+>> is derived and feeds the ENCL encoder and the VIU pixel reader.
+>>
+>> An optional "MEAS" clock can be enabled to measure the delay between each vsync feeding the
+>> DW-MIPI-DSI transceiver.
+>>
+>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+>> ---
 
->>  	if (ret == 0) {
->>  		/* Isn't this already done by sdhci_resume_host() ?
->>  		--rmk */
->> -		esdhc_of_enable_dma(host);
->> +		ret = esdhc_of_enable_dma(host);
->> +		if (ret)
->> +			return ret;
+[..]
+
 >> +
->
-> This is already done by sdhci_resume_host(), which assumes there can be
-> no
-> error if DMA has been enabled previously i.e. -> enable_dma() is called
-> at setup and the return value checked then.  If it is possible that DMA
-> support can disappear later, then it would be better to address that in
-> SDHCI so that all SDHCI drivers get the benefit.
+>> +static const struct component_ops meson_dw_mipi_dsi_ops = {
+>> +       .bind   = meson_dw_mipi_dsi_bind,
+>> +       .unbind = meson_dw_mipi_dsi_unbind,
+>> +};
+> 
+> Do you thought of non-component based meson DSI like STM DSI? It
+> require changes from meson drm but just to understand if you have any
+> such plan.
 
-Fine, since it is already checked in setup, I think it is no need to
-check later.
+I have no such plans for now, note this serie has been rewritten at [1] but still
+with based with components.
 
-I will send a v2 without the change of esdhc_of_resume().
+If worth it, the plan is to get it with components and than yes if it's simpler
+drop components completely.
 
-Sincerely thanks,
-Jiang
+I'll have a look at how ST does
+
+Neil
+
+[1] https://lore.kernel.org/r/20220107145515.613009-1-narmstrong@baylibre.com
+
+> 
+> Thanks,
+> Jagan.
+> 
 

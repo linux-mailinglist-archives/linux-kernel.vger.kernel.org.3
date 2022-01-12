@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 257B848CDC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C339D48CDC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiALVZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 16:25:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbiALVZg (ORCPT
+        id S229921AbiALV1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 16:27:49 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:35478 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229886AbiALV1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 16:25:36 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32A4C06173F;
-        Wed, 12 Jan 2022 13:25:35 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so7554696pjp.0;
-        Wed, 12 Jan 2022 13:25:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=71MHWWgwv/fcd6sVQlX/nQYgJbOKyivyKZ2pLN/ooAE=;
-        b=MBKN0ogjzTfVJcRRMglHt5ESyQHxLRwHCERWBzWPgi83VsoxTi/Fbn8BYq/uobfLzZ
-         gHZp+dt9q700lzX2CllbNPEzFxC2mi2HCC6jQZGf3GM+tSFkr4RxazZlKiX52oxuYdHO
-         u27qqIDERnsUEtWROk2gV3xo3MCQPV+p61qlPOqHxVW5IZ0o67fe93e8aiV9efjo2z0R
-         EhHLVlGg4Pa0/P3so+qZE3kbaDSJMsts+HEvdWoUH07QFmfRW7WMEN4HtpMsW/xHTIf0
-         m+MHVNTyDXpXyh2xH5gY7ShdMbrOlFuqW1s45u/xNjJ+33GeSfqzTgTkSRD1RyUDdC6Q
-         hcsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=71MHWWgwv/fcd6sVQlX/nQYgJbOKyivyKZ2pLN/ooAE=;
-        b=qRBWz9VGm++UX7vuOTsi10OsuPlwZoZYHnE59V46fOKEhXKI4MPryueuRg9kRU12mt
-         LWY9HI1LO+kh4I2sY+fWCgoQY5cnVAx4F1r1ndzVYIsv5VxN/9IP3depfhZsxdkBd1nI
-         y8R5veV36AqVz1ewGYb9OodUydPcwf4u3+RBxo/ZgkijWS+uVMCpe69xEHaYqS32lWds
-         /LoXkmlY0lCyW5nmxAiq1O2NOS/rkIhoryYSTzN5w1Qaxz1sCbP+ZXFRS06c2i9Mvr60
-         SS7Ty7YLhU66DuuLyMB3ggQCJbYJMtkr5EUuovs43CsqG92m3H5iXIpIo8uZg2m+/m8u
-         x8Vg==
-X-Gm-Message-State: AOAM532f+sRlXOjDzZIjpBHIW3bYjYXK0nCn5zU02f6JMEqeNLX1Ezhs
-        UW50PGCx8ki/S3MawaweSRg=
-X-Google-Smtp-Source: ABdhPJw+N7bRQaNyf8Dv9Y3SYFf4IM95GVtc1OynWB0qzu4QMpIzFmCg9jbdNsBBQS9lT15Yv88qbA==
-X-Received: by 2002:a62:e217:0:b0:4be:3ce4:17a7 with SMTP id a23-20020a62e217000000b004be3ce417a7mr1164361pfi.55.1642022735256;
-        Wed, 12 Jan 2022 13:25:35 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id c19sm509955pfl.118.2022.01.12.13.25.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 13:25:34 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 12 Jan 2022 11:25:33 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     longman@redhat.com, akpm@linux-foundation.org,
-        cgroups@vger.kernel.org, corbet@lwn.net, frederic@kernel.org,
-        guro@fb.com, hannes@cmpxchg.org, juri.lelli@redhat.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, lizefan.x@bytedance.com,
-        mtosatti@redhat.com, pauld@redhat.com, peterz@infradead.org,
-        shuah@kernel.org
-Subject: Re: [PATCH] cgroup/cpuset: Make child cpusets restrict parents on v1
- hierarchy
-Message-ID: <Yd9HTVxEPo2/zfou@slm.duckdns.org>
-References: <8d73dc26-74e1-d763-d897-6e03cdac3c8c@redhat.com>
- <20211217154854.41409-1-mkoutny@suse.com>
+        Wed, 12 Jan 2022 16:27:43 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-56-YKI_HUCbPtWK5PQHYtyc5g-1; Wed, 12 Jan 2022 21:27:40 +0000
+X-MC-Unique: YKI_HUCbPtWK5PQHYtyc5g-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Wed, 12 Jan 2022 21:27:40 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Wed, 12 Jan 2022 21:27:40 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
+        Eric Biggers <ebiggers@kernel.org>
+CC:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        WireGuard mailing list <wireguard@lists.zx2c4.com>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Herbert Xu" <herbert@gondor.apana.org.au>
+Subject: RE: [PATCH crypto 1/2] lib/crypto: blake2s-generic: reduce code size
+ on small systems
+Thread-Topic: [PATCH crypto 1/2] lib/crypto: blake2s-generic: reduce code size
+ on small systems
+Thread-Index: AQHYB+VtFSMgWrVqxkafOfrj0ELoyKxf5LLQ
+Date:   Wed, 12 Jan 2022 21:27:40 +0000
+Message-ID: <d7e206a5a03d46a69c0be3b8ed651518@AcuMS.aculab.com>
+References: <CAHmME9qbnYmhvsuarButi6s=58=FPiti0Z-QnGMJ=OsMzy1eOg@mail.gmail.com>
+ <20220111134934.324663-1-Jason@zx2c4.com>
+ <20220111134934.324663-2-Jason@zx2c4.com> <Yd8enQTocuCSQVkT@gmail.com>
+ <CAHmME9qGs8yfYy0GVcV8XaUt9cjCqQF2D79RvrsQE+CNLCeojA@mail.gmail.com>
+In-Reply-To: <CAHmME9qGs8yfYy0GVcV8XaUt9cjCqQF2D79RvrsQE+CNLCeojA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211217154854.41409-1-mkoutny@suse.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 04:48:54PM +0100, Michal Koutný wrote:
-> The commit 1f1562fcd04a ("cgroup/cpuset: Don't let child cpusets
-> restrict parent in default hierarchy") inteded to relax the check only
-> on the default hierarchy (or v2 mode) but it dropped the check in v1
-> too.
-> 
-> This patch returns and separates the legacy-only validations so that
-> they can be considered only in the v1 mode, which should enforce the old
-> constraints for the sake of compatibility.
-> 
-> Fixes: 1f1562fcd04a ("cgroup/cpuset: Don't let child cpusets restrict parent in default hierarchy")
-> Suggested-by: Waiman Long <longman@redhat.com>
-> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+RnJvbTogSmFzb24gQS4gRG9uZW5mZWxkDQo+IFNlbnQ6IDEyIEphbnVhcnkgMjAyMiAxODo1MQ0K
+PiANCj4gT24gV2VkLCBKYW4gMTIsIDIwMjIgYXQgNzozMiBQTSBFcmljIEJpZ2dlcnMgPGViaWdn
+ZXJzQGtlcm5lbC5vcmc+IHdyb3RlOg0KPiA+IEhvdyBhYm91dCB1bnJvbGxpbmcgdGhlIGlubmVy
+IGxvb3AgYnV0IG5vdCB0aGUgb3V0ZXIgb25lPyAgV291bGRuJ3QgdGhhdCBnaXZlDQo+ID4gbW9z
+dCBvZiB0aGUgYmVuZWZpdCwgd2l0aG91dCBodXJ0aW5nIHBlcmZvcm1hbmNlIGFzIG11Y2g/DQo+
+ID4NCj4gPiBJZiB5b3Ugc3RheSB3aXRoIHRoaXMgYXBwcm9hY2ggYW5kIGRvbid0IHVucm9sbCBl
+aXRoZXIgbG9vcCwgY2FuIHlvdSB1c2UgJ3InIGFuZA0KPiA+ICdpJyBpbnN0ZWFkIG9mICdpJyBh
+bmQgJ2onLCB0byBtYXRjaCB0aGUgbmFtaW5nIGluIEcoKT8NCj4gDQo+IEFsbCB0aGlzIG1pZ2h0
+IHdvcmssIHN1cmUuIEJ1dCBhcyBtZW50aW9uZWQgZWFybGllciwgSSd2ZSBhYmFuZG9uZWQNCj4g
+dGhpcyBlbnRpcmVseSwgYXMgSSBkb24ndCB0aGluayB0aGlzIHBhdGNoIGlzIG5lY2Vzc2FyeS4g
+U2VlIHRoZSB2Mw0KPiBwYXRjaHNldCBpbnN0ZWFkOg0KPiANCj4gaHR0cHM6Ly9sb3JlLmtlcm5l
+bC5vcmcvbGludXgtY3J5cHRvLzIwMjIwMTExMjIwNTA2Ljc0MjA2Ny0xLUphc29uQHp4MmM0LmNv
+bS8NCg0KSSB0aGluayB5b3UgbWVudGlvbmVkIGluIGFub3RoZXIgdGhyZWFkIHRoYXQgdGhlIGJ1
+ZmZlcnMgKGVnIGZvciBJUHY2DQphZGRyZXNzZXMpIGFyZSBhY3R1YWxseSBvZnRlbiBxdWl0ZSBz
+aG9ydC4NCg0KRm9yIHNob3J0IGJ1ZmZlcnMgdGhlICdyb2xsZWQtdXAnIGxvb3AgbWF5IGJlIG9m
+IHNpbWlsYXIgcGVyZm9ybWFuY2UNCnRvIHRoZSB1bnJvbGxlZCBvbmUgYmVjYXVzZSBvZiB0aGUg
+dGltZSB0YWtlbiB0byByZWFkIGFsbCB0aGUgaW5zdHJ1Y3Rpb25zDQppbnRvIHRoZSBJLWNhY2hl
+IGFuZCBkZWNvZGUgdGhlbS4NCklmIHRoZSBsb29wIGVuZHMgdXAgc21hbGwgZW5vdWdoIGl0IHdp
+bGwgZml0IGludG8gdGhlICdkZWNvZGVkIGxvb3ANCmJ1ZmZlcicgb2YgbW9kZXJuIEludGVsIHg4
+NiBjcHUgYW5kIHdvbid0IGV2ZW4gbmVlZCBkZWNvZGluZyBvbg0KZWFjaCBpdGVyYXRpb24uDQoN
+CkkgcmVhbGx5IHN1c3BlY3QgdGhhdCB0aGUgaGVhdmlseSB1bnJvbGxlZCBsb29wIGlzIG9ubHkg
+cmVhbGx5IGZhc3QNCmZvciBiaWcgYnVmZmVycyBhbmQvb3Igd2hlbiBpdCBpcyBhbHJlYWR5IGlu
+IHRoZSBJLWNhY2hlLg0KSW4gcmVhbCBsaWZlIEkgd29uZGVyIGhvdyBvZnRlbiB0aGF0IGFjdHVh
+bGx5IGhhcHBlbnM/DQpFc3BlY2lhbGx5IGZvciB0aGUgdXNlcyB0aGUga2VybmVsIGlzIG1ha2lu
+ZyBvZiB0aGUgY29kZS4NCg0KWW91IG5lZWQgdG8gYmVuY2htYXJrIHNpbmdsZSBleGVjdXRpb25z
+IG9mIHRoZSBmdW5jdGlvbg0KKGRvYWJsZSBvbiB4ODYgd2l0aCB0aGUgcGVyZm9ybWFuY2UgbW9u
+aXRvciBjeWNsZSBjb3VudGVyKQ0KdG8gZ2V0IHR5cGljYWwvYmVzdCBjbG9ja3MvYnl0ZSBmaWd1
+cmVzIHJhdGhlciB0aGFuIGENCmJpZyBhdmVyYWdlIGZvciByZXBlYXRlZCBvcGVyYXRpb24gb24g
+YSBsb25nIGJ1ZmZlci4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lk
+ZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0K
+UmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-Applied to cgroup/for-5.17-fixes.
-
-Thanks.
-
--- 
-tejun

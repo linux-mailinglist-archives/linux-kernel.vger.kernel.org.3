@@ -2,32 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E08FD48BF26
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C8248BF1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351273AbiALHkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:40:40 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:33672 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1351299AbiALHjg (ORCPT
+        id S1351265AbiALHje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:39:34 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:38286 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1351267AbiALHjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:39:36 -0500
-X-UUID: 2e40ab6a741e481b81514266684dba5b-20220112
-X-UUID: 2e40ab6a741e481b81514266684dba5b-20220112
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        Wed, 12 Jan 2022 02:39:32 -0500
+X-UUID: f58b5cd259ad49a3a7d031d6a98f96cb-20220112
+X-UUID: f58b5cd259ad49a3a7d031d6a98f96cb-20220112
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
         (envelope-from <sean.wang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1835634332; Wed, 12 Jan 2022 15:39:33 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 12 Jan 2022 15:39:32 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Jan
- 2022 15:39:26 +0800
+        with ESMTP id 1094068246; Wed, 12 Jan 2022 15:39:29 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 12 Jan 2022 15:39:27 +0800
 Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 12 Jan 2022 15:39:25 +0800
+ Transport; Wed, 12 Jan 2022 15:39:27 +0800
 From:   <sean.wang@mediatek.com>
 To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
 CC:     <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
@@ -45,9 +41,9 @@ CC:     <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
         <linux-bluetooth@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 5/7] Bluetooth: btmtksdio: lower log level in btmtksdio_runtime_[resume|suspend]()
-Date:   Wed, 12 Jan 2022 15:39:15 +0800
-Message-ID: <c355cd94eee37a15a17a0ad51e82def6c922cd89.1641972745.git.objelf@gmail.com>
+Subject: [PATCH 6/7] Bluetooth: btmtksdio: run sleep mode by default
+Date:   Wed, 12 Jan 2022 15:39:16 +0800
+Message-ID: <ed300b791b317f8ee20e22071e0fdcf82656f359.1641972745.git.objelf@gmail.com>
 X-Mailer: git-send-email 1.7.9.5
 In-Reply-To: <bddfacd096b6fe927d08e48ad6993c17c9954028.1641972745.git.objelf@gmail.com>
 References: <bddfacd096b6fe927d08e48ad6993c17c9954028.1641972745.git.objelf@gmail.com>
@@ -60,8 +56,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sean Wang <sean.wang@mediatek.com>
 
-Lower its log level from INFO to DEBUG prior to we enable runtime pm for
-mt7921s with the smaller idle time as default.
+Apply sleep mode by default and a smaller idle time to reduce power
+consumption further.
 
 Signed-off-by: Sean Wang <sean.wang@mediatek.com>
 ---
@@ -69,27 +65,21 @@ Signed-off-by: Sean Wang <sean.wang@mediatek.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index b0aae4143037..3e8f19556e2c 100644
+index 3e8f19556e2c..491f029452ca 100644
 --- a/drivers/bluetooth/btmtksdio.c
 +++ b/drivers/bluetooth/btmtksdio.c
-@@ -1253,7 +1253,7 @@ static int btmtksdio_runtime_suspend(struct device *dev)
+@@ -31,9 +31,9 @@
  
- 	err = btmtksdio_fw_pmctrl(bdev);
+ #define VERSION "0.1"
  
--	bt_dev_info(bdev->hdev, "status (%d) return ownership to device", err);
-+	bt_dev_dbg(bdev->hdev, "status (%d) return ownership to device", err);
+-#define MTKBTSDIO_AUTOSUSPEND_DELAY	8000
++#define MTKBTSDIO_AUTOSUSPEND_DELAY	1000
  
- 	return err;
- }
-@@ -1273,7 +1273,7 @@ static int btmtksdio_runtime_resume(struct device *dev)
+-static bool enable_autosuspend;
++static bool enable_autosuspend = true;
  
- 	err = btmtksdio_drv_pmctrl(bdev);
- 
--	bt_dev_info(bdev->hdev, "status (%d) get ownership from device", err);
-+	bt_dev_dbg(bdev->hdev, "status (%d) get ownership from device", err);
- 
- 	return err;
- }
+ struct btmtksdio_data {
+ 	const char *fwname;
 -- 
 2.25.1
 

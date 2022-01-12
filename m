@@ -2,107 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5594448CA5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076FC48CA62
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344065AbiALRs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 12:48:58 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45578 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240668AbiALRsx (ORCPT
+        id S1344331AbiALRtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 12:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344086AbiALRtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 12:48:53 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E36BCB81EA6;
-        Wed, 12 Jan 2022 17:48:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ADA2C36AE5;
-        Wed, 12 Jan 2022 17:48:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642009730;
-        bh=v5HVJMOt7K5cfz9ChUmoP+h6WJ8BSd2gVzVjKi67/bs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I5IBb8wMr1OFJJp1W4xiBKrGiLlzko0I4nZKxuwBG2kwloTU3de7Oz94htQwZBPr8
-         midFS13nAQX6Fs4UhOwPEDWTfK3m//xboWTelsPoUzvmjVnw9K46ZScJcMUUQytTur
-         7BunIoxoYHeHz3gAtPMyPmjMdrnivJ/PN5GYKIYXs6s6USAb1V/37faYc+sPS2afL5
-         CqFVDc8M5gI7eCI2dRDH7JnnKzHJTXdSGAokYiV0Zo58OAa8yhIaoDyWhDmGiNgESi
-         6OU0gIiFdHdDPRihZPjIdDbuzH9Rru5AYGe8XFWwDECAlPy1P1bWERHxc8HWk2dJEO
-         9TKEzmzEjOrAw==
-Received: by pali.im (Postfix)
-        id 2CEB5768; Wed, 12 Jan 2022 18:48:48 +0100 (CET)
-Date:   Wed, 12 Jan 2022 18:48:48 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-mmc@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v9 08/24] wfx: add bus_sdio.c
-Message-ID: <20220112174848.db5osolurllpc7du@pali>
-References: <20220111171424.862764-1-Jerome.Pouiller@silabs.com>
- <42104281.b1Mx7tgHyx@pc-42>
- <20220112114332.jadw527pe7r2j4vv@pali>
- <2680707.qJCEgCfB62@pc-42>
+        Wed, 12 Jan 2022 12:49:13 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE365C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:49:12 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id c190so2409383qkg.9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:49:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FGEfHWlf9UMI6v4enCzCD7r7seKvBt4wr+xOvzAydtg=;
+        b=WbGG70yB5ix1xJm1WZIdyIccnKWNDVsMGBobYnUvRJtVGwRDFABrhR3HRodaO2H2gT
+         o+mvzdaj9LW0ogQ/fZRLZ/G14ELweRvxby5HD2yygkGanrwyi0saa1PLA/b2HANEP9wP
+         uVBQAarQx5wX6tUlOrtGMc8zeFxL6B2vOiWjnaC9BUVZle/bRqhOpgFK7qozPGiliRpF
+         KQaDAmpG3GhdrpqiN7KljC2pW8M/Z/6NhEvocoQhtnW+0wIJ3qYItndrv8QOCrbR/Jxa
+         UB+N+Y+r+k/dW13lG7nxHXxFVvAgkFh1FoS5a/O9Z9S/tPGYbuQ9WwEOG5hY/jGGrlg2
+         U5EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FGEfHWlf9UMI6v4enCzCD7r7seKvBt4wr+xOvzAydtg=;
+        b=eapshznX/pS5/nG5UeFeCh0qKmI9i66NFj6redO+M676R3HOHy/7WDjsOhw4MCvUym
+         23qCYuvTs8/nLOj4oSqDVW0VbYmwT+qwELofcmcC9uDv9id45wmIA24j1gCLPfG2cN5h
+         ESdJ3xptwa/vXWeu9U2N3OT9iZ0LWyu0pe4Tx89H0JR2y66E0X5P1NzybFmUtGP/hd3i
+         huuF+X5+iOvJUfyWK80I/9zzKg8G3guTbfaWdhJdqCUW1utigWYymBjJ/SByysc3uYDR
+         DollXBq1FqqggRX17ziMZgtiLjCYzBHI2tg1HzXEObdZhSr9zOJKmsuyN2X3QVMQIx6s
+         yZmg==
+X-Gm-Message-State: AOAM532wXej0o69fYHPjJ/XlInqylN744VGJYcRdi3bLo5nXmi++gpA8
+        YhqQMvKNIwDzIn77a5hWUyv6sNYOk3WqZjphIju+kQ==
+X-Google-Smtp-Source: ABdhPJxfN2XJ4LOiyU4hogddx6yOZvk/BIWqCAvRPuDRWYY6wyEn2p4yI9Sa7X55t3Lg1CYmOJU4b8GfjXSbXBZJY5g=
+X-Received: by 2002:a25:7807:: with SMTP id t7mr1066672ybc.488.1642009751595;
+ Wed, 12 Jan 2022 09:49:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2680707.qJCEgCfB62@pc-42>
-User-Agent: NeoMutt/20180716
+References: <20220111232309.1786347-1-surenb@google.com> <Yd7oPlxCpnzNmFzc@cmpxchg.org>
+ <CAJuCfpGHLXDvMU1GLMcgK_K72_ErPhbcFh1ZvEeHg025yinNuw@mail.gmail.com>
+In-Reply-To: <CAJuCfpGHLXDvMU1GLMcgK_K72_ErPhbcFh1ZvEeHg025yinNuw@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 12 Jan 2022 09:49:00 -0800
+Message-ID: <CAJuCfpEaM3KoPy3MUG7HW2yzcT6oJ5gdceyHPNpHrqTErq27eQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] psi: Fix uaf issue when psi trigger is destroyed
+ while being polled
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biggers <ebiggers@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>,
+        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 12 January 2022 17:45:45 Jérôme Pouiller wrote:
-> On Wednesday 12 January 2022 12:43:32 CET Pali Rohár wrote:
-> > 
-> > On Wednesday 12 January 2022 12:18:58 Jérôme Pouiller wrote:
-> > > On Wednesday 12 January 2022 11:58:59 CET Pali Rohár wrote:
-> > > > On Tuesday 11 January 2022 18:14:08 Jerome Pouiller wrote:
-> > > > > +static const struct sdio_device_id wfx_sdio_ids[] = {
-> > > > > +     { SDIO_DEVICE(SDIO_VENDOR_ID_SILABS, SDIO_DEVICE_ID_SILABS_WF200) },
-> > > > > +     { },
-> > > > > +};
-> > > >
-> > > > Hello! Is this table still required?
+On Wed, Jan 12, 2022 at 9:43 AM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> )
+>
+> On Wed, Jan 12, 2022 at 6:40 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> >
+> > On Tue, Jan 11, 2022 at 03:23:09PM -0800, Suren Baghdasaryan wrote:
+> > > With write operation on psi files replacing old trigger with a new one,
+> > > the lifetime of its waitqueue is totally arbitrary. Overwriting an
+> > > existing trigger causes its waitqueue to be freed and pending poll()
+> > > will stumble on trigger->event_wait which was destroyed.
+> > > Fix this by disallowing to redefine an existing psi trigger. If a write
+> > > operation is used on a file descriptor with an already existing psi
+> > > trigger, the operation will fail with EBUSY error.
+> > > Also bypass a check for psi_disabled in the psi_trigger_destroy as the
+> > > flag can be flipped after the trigger is created, leading to a memory
+> > > leak.
 > > >
-> > > As far as I understand, if the driver does not provide an id_table, the
-> > > probe function won't be never called (see sdio_match_device()).
-> > >
-> > > Since, we rely on the device tree, we could replace SDIO_VENDOR_ID_SILABS
-> > > and SDIO_DEVICE_ID_SILABS_WF200 by SDIO_ANY_ID. However, it does not hurt
-> > > to add an extra filter here.
-> > 
-> > Now when this particular id is not required, I'm thinking if it is still
-> > required and it is a good idea to define these SDIO_VENDOR_ID_SILABS
-> > macros into kernel include files. As it would mean that other broken
-> > SDIO devices could define these bogus numbers too... And having them in
-> > common kernel includes files can cause issues... e.g. other developers
-> > could think that it is correct to use them as they are defined in common
-> > header files. But as these numbers are not reliable (other broken cards
-> > may have same ids as wf200) and their usage may cause issues in future.
-> 
-> In order to make SDIO_VENDOR_ID_SILABS less official, do you prefer to
-> define it in wfx/bus_sdio.c instead of mmc/sdio_ids.h?
-> 
-> Or even not defined at all like:
-> 
->     static const struct sdio_device_id wfx_sdio_ids[] = {
->          /* WF200 does not have official VID/PID */
->          { SDIO_DEVICE(0x0000, 0x1000) },
->          { },
->     };
+> > > Fixes: 0e94682b73bf ("psi: introduce psi monitor")
+> > > Cc: stable@vger.kernel.org
+> > > Reported-by: syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com
+> > > Analyzed-by: Eric Biggers <ebiggers@kernel.org>
+> > > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> >
+> > Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+>
+> Hmm. kernel test robot notified me of new (which are not really new)
+> warnings but I don't think this patch specifically introduced them:
+>
+> kernel/sched/psi.c:1112:21: warning: no previous prototype for
+> function 'psi_trigger_create' [-Wmissing-prototypes]
+>    struct psi_trigger *psi_trigger_create(struct psi_group *group,
+>                        ^
+>    kernel/sched/psi.c:1112:1: note: declare 'static' if the function
+> is not intended to be used outside of this translation unit
+>    struct psi_trigger *psi_trigger_create(struct psi_group *group,
+>    ^
+>    static
+> >> kernel/sched/psi.c:1182:6: warning: no previous prototype for function 'psi_trigger_destroy' [-Wmissing-prototypes]
+>    void psi_trigger_destroy(struct psi_trigger *t)
+>         ^
+>    kernel/sched/psi.c:1182:1: note: declare 'static' if the function
+> is not intended to be used outside of this translation unit
+>    void psi_trigger_destroy(struct psi_trigger *t)
+>    ^
+>    static
+>    kernel/sched/psi.c:1249:10: warning: no previous prototype for
+> function 'psi_trigger_poll' [-Wmissing-prototypes]
+>    __poll_t psi_trigger_poll(void **trigger_ptr,
+>             ^
+>    kernel/sched/psi.c:1249:1: note: declare 'static' if the function
+> is not intended to be used outside of this translation unit
+>    __poll_t psi_trigger_poll(void **trigger_ptr,
+>    ^
+>
+> This happens with the following config:
+>
+> CONFIG_CGROUPS=n
+> CONFIG_PSI=y
+>
+> With cgroups disabled these functions are defined as non-static but
+> are not defined in the header
+> (https://elixir.bootlin.com/linux/latest/source/include/linux/psi.h#L28)
+> since the only external user cgroup.c is disabled. The cleanest way to
+> fix these I think is by doing smth like this in psi.c:
+>
+> struct psi_trigger *_psi_trigger_create(struct psi_group *group, char
+> *buf, size_t nbytes, enum psi_res res)
+> {
+>   // original psi_trigger_create code
+> }
+>
+> #ifdef CONFIG_CGROUPS
+>
+> struct psi_trigger *psi_trigger_create(struct psi_group *group, char
+> *buf, size_t nbytes, enum psi_res res)
+> {
+>     return _psi_trigger_create(group, buf, nbytes, res);
+> }
+>
+> #else
+>
+> static struct psi_trigger *psi_trigger_create(struct psi_group *group,
+> char *buf, size_t nbytes, enum psi_res res)
+> {
+>     return _psi_trigger_create(group, buf, nbytes, res);
+> }
+>
+> #endif
 
-This has advantage that it is explicitly visible that this device does
-not use any officially assigned ids.
+Actually this would be enough:
 
-> 
-> 
-> -- 
-> Jérôme Pouiller
-> 
-> 
+static struct psi_trigger *_psi_trigger_create(struct psi_group
+*group, char *buf, size_t nbytes, enum psi_res res)
+{
+   // original psi_trigger_create code
+}
+
+#ifdef CONFIG_CGROUPS
+ struct psi_trigger *psi_trigger_create(struct psi_group *group, char
+*buf, size_t nbytes, enum psi_res res)
+ {
+     return _psi_trigger_create(group, buf, nbytes, res);
+ }
+#endif
+
+and locally we use _psi_trigger_create().
+
+>
+> Two questions:
+> 1. Is this even worth fixing?
+> 2. If so, I would like to do that as a separate patch (these warnings
+> are unrelated to the changes in this patch). Would that be ok?
+> Thanks,
+> Suren.

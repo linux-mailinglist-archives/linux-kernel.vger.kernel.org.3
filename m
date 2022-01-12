@@ -2,77 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E238548C2A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD1C48C2A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352687AbiALK7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 05:59:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352671AbiALK7I (ORCPT
+        id S1352666AbiALK7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 05:59:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42992 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238370AbiALK7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 05:59:08 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE41C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:59:07 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id y3so162408ila.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:59:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MfwR9+Vn3jORLxr1DCzz5sw91FiMcAgXShlKPQP07jQ=;
-        b=NDZBc/s1vAw8tQA5LjF31oTBrFLLcmW+F8lIL8mO9e1iiuzWvOVpkL1c9Uw3JvgGgQ
-         lW01tlg/wfoycDe2ykWw52j01N7BRgIUTZHpPrdDmepvuZAUmpkG0YQzkRmb9mbMAOVa
-         27N6dOP70T+yPfhseSXJ33v4jkRK9JoRgIEx8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MfwR9+Vn3jORLxr1DCzz5sw91FiMcAgXShlKPQP07jQ=;
-        b=jKy1CUXU9lngE1bkyCz2foLARMZ9gvVNYSupjJObIFj3jiMeCIuUBkPbiqaqk4Hxn8
-         vShGR6TI5qIvvD1T69yJMELma0kyLRQU7XYj4WoRGIsJ7Z8m04rWR6d2kno3jwMUYGdN
-         P5NOM2YNGFptqJnjW97tyuqmyS9LOo0d4okW7DQZyykqoXoz5yFv2Te1ub4ScgWrvRlt
-         75fvYNRMrB3JXvuHvZyBeNXtWD8zwNLirMG6yCScirL4U4LgT1ES/BLvSyBxjs26gJoM
-         M1y5/Y9liXlx78EhZyc98BWFqWNIHA4NioB1D4s48qddDkieiiMgoyCGzY3vhq2+icBg
-         yG1Q==
-X-Gm-Message-State: AOAM532Gr0gV3GiYUo8bcFMSKxGiE3g1Y6szKETGDKdkL3vR7hzXD0j4
-        HycvtZEnIhlyGv019yvKfl3nE6ub1Z/vTLOVrDFysw==
-X-Google-Smtp-Source: ABdhPJxMD3Payzn92jPXXv9nrRvXDf6eBuPX2VU3t1MbasTCzgSWT0uLtDReSbroas9QGt1LuRqwsjrJcGI2QNNuxqE=
-X-Received: by 2002:a05:6e02:1c27:: with SMTP id m7mr4511705ilh.114.1641985147116;
- Wed, 12 Jan 2022 02:59:07 -0800 (PST)
+        Wed, 12 Jan 2022 05:59:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32049B81D6E;
+        Wed, 12 Jan 2022 10:59:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE218C36AEA;
+        Wed, 12 Jan 2022 10:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641985141;
+        bh=CCz9TaBhzlxAUXt2zsk2hkuFbg2xBTs8dNBs1B2KDk0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UznS4jwQpkrbFrZEuqaNLNNh/z0lhS02+fspB5UeJo49CjIt5Zck676z2fYlkQ/AT
+         Z727URmzejxLbhgeT+MDTHS5+22oxYVEyAHrdvlI+LoSR9LIsaRDkrStrcT8fMRbjh
+         hfWs0s77bzL0lAjcCFyeLLeqV7fY9C18d/z4bTOrK1o3BgQ9ZeO4I2eeMwvqLYj/+1
+         +OW5THTBkefTeC4PeorM+TW6bDHQspdXvbcqDEJPMBcQ0uds1ttAQtntC/wpnk0VDP
+         mlDWQApr0xVwXJr9O2HxGYP/xLcEAKnRJNOeauChgPNKksyNVdGqBYGABZLtxXdbHE
+         FUlckO/TEucgA==
+Received: by pali.im (Postfix)
+        id 71E3E768; Wed, 12 Jan 2022 11:58:59 +0100 (CET)
+Date:   Wed, 12 Jan 2022 11:58:59 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Jerome Pouiller <Jerome.Pouiller@silabs.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-mmc@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v9 08/24] wfx: add bus_sdio.c
+Message-ID: <20220112105859.u4j76o7cpsr4znmb@pali>
+References: <20220111171424.862764-1-Jerome.Pouiller@silabs.com>
+ <20220111171424.862764-9-Jerome.Pouiller@silabs.com>
 MIME-Version: 1.0
-References: <20220106122452.18719-1-wsa@kernel.org> <Yd6gRR0jtqhRLwtB@ninjato>
- <98ed8d6d16a3d472d9432eb169aa2da44b66b5cc.camel@yandex.ru> <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com>
-In-Reply-To: <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Wed, 12 Jan 2022 18:58:41 +0800
-Message-ID: <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
-Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in adapter"
-To:     Tareque Md Hanif <tarequemd.hanif@yahoo.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220111171424.862764-9-Jerome.Pouiller@silabs.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Konstantin and Tareque,
+On Tuesday 11 January 2022 18:14:08 Jerome Pouiller wrote:
+> +static const struct sdio_device_id wfx_sdio_ids[] = {
+> +	{ SDIO_DEVICE(SDIO_VENDOR_ID_SILABS, SDIO_DEVICE_ID_SILABS_WF200) },
+> +	{ },
+> +};
 
-Can you help provide logs if we apply
-5a7b95fb993ec399c8a685552aa6a8fc995c40bd but revert
-8d35a2596164c1c9d34d4656fd42b445cd1e247f?
+Hello! Is this table still required?
 
-Thanks
-
-On Wed, Jan 12, 2022 at 6:02 PM Tareque Md Hanif
-<tarequemd.hanif@yahoo.com> wrote:
->
->
-> On 1/12/22 15:51, Wolfram Sang wrote:
-> > would the reporters of the
-> > regression be available for further testing?
-> Sure. I am available.
+> +MODULE_DEVICE_TABLE(sdio, wfx_sdio_ids);
+> +
+> +struct sdio_driver wfx_sdio_driver = {
+> +	.name = "wfx-sdio",
+> +	.id_table = wfx_sdio_ids,
+> +	.probe = wfx_sdio_probe,
+> +	.remove = wfx_sdio_remove,
+> +	.drv = {
+> +		.owner = THIS_MODULE,
+> +		.of_match_table = wfx_sdio_of_match,
+> +	}
+> +};
+> -- 
+> 2.34.1
+> 

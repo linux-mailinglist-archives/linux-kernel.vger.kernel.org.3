@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 090BE48BC7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E3048BC7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347783AbiALBcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 20:32:11 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:54432
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235678AbiALBcK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 20:32:10 -0500
-Received: from HP-EliteBook-840-G7.. (36-229-237-100.dynamic-ip.hinet.net [36.229.237.100])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id DD30541941;
-        Wed, 12 Jan 2022 01:32:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641951123;
-        bh=Jd9ClsZn8dY52Thwduiwucevo5VuBYcc8qo3tnNAMNw=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=Xb1Bjh4x9tA2CLxIgjsBPbs9Bfk5iWUaVfSZVwZn8dwF7XkY55BasZkGZxs760GS7
-         Jy+iix38ttC+Q50SvYSEKojrLhLpY84Io23p8mhf2wsx0lGrzdiX+qpxkS1sS7WaMT
-         qe8id+jmJDUJhJqtrEeRg9XU2WlJBswbbu534i0mO6KIv8LYzuldV3JvSya72b8mRy
-         esBma+1J+W6+I1dXuI2UzDmuFQJrZaIpGcWXXIER7XN7dG+RNASqv5NCTul9vu+rRC
-         GE0IGAuOESTBrH1NqW2dtSCjK6MOpimcTmo/a4dC5a7VJ1cKze1LgiZCTE3qlM/V7C
-         gsNcoCbXRlo5Q==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     kbusch@kernel.org, axboe@fb.com, hch@lst.de, sagi@grimberg.me
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Rajat Jain <rajatja@google.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] nvme: Mark external NVMe devices as removable
-Date:   Wed, 12 Jan 2022 09:31:54 +0800
-Message-Id: <20220112013154.1210480-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.33.1
+        id S1346368AbiALBfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 20:35:01 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:54954 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229938AbiALBe7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 20:34:59 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAAnLwMwMN5hFd0MBg--.15076S2;
+        Wed, 12 Jan 2022 09:34:40 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     hverkuil@xs4all.nl, dwlsalmeida@gmail.com, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] media: vidtv: Check for null return of vzalloc
+Date:   Wed, 12 Jan 2022 09:34:39 +0800
+Message-Id: <20220112013439.668397-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAAnLwMwMN5hFd0MBg--.15076S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4DJr1DWFyrurWDJw1rtFb_yoWkXrb_ua
+        n3X3WxWa1UKrWrtrnrtrn8ZrW0kaykuFyvgFs3tw4SvFy3ZF18Jry7Zr18Gw429FZ09FZr
+        Aw13ZF1rAr1xGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVWk
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUg4SOUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c037b6c818c3 ("PCI: Add sysfs "removable" attribute") can mark
-entire Thunderbolt hierarchy as removable, if system firmware provides
-correct attribute.
+As the possible failure of the vzalloc(), e->encoder_buf might be NULL.
+Therefore, it should be better to check it in order
+to guarantee the success of the initialization.
+If fails, we need to free not only 'e' but also 'e->name'.
 
-So apply GENHD_FL_REMOVABLE for NVMe if removable bit is set, to make
-userspace daemon like Udisks knows it can be automount.
-
-Cc: Rajat Jain <rajatja@google.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Fixes: f90cf6079bf6 ("media: vidtv: add a bridge driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- drivers/nvme/host/core.c | 3 +++
- 1 file changed, 3 insertions(+)
+Changelog
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 1af8a4513708a..1c3b04883965f 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -3851,6 +3851,9 @@ static void nvme_alloc_ns(struct nvme_ctrl *ctrl, unsigned nsid,
- 	ns->disk = disk;
- 	ns->queue = disk->queue;
+v1 -> v2
+
+* Change 1. Add 'kfree(e->name)' if fails.
+---
+ drivers/media/test-drivers/vidtv/vidtv_s302m.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.c b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+index d79b65854627..ddaff46c440f 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_s302m.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
+@@ -455,6 +455,12 @@ struct vidtv_encoder
+ 		e->name = kstrdup(args.name, GFP_KERNEL);
  
-+	if (dev_is_removable(ctrl->dev))
-+		ns->disk->flags |= GENHD_FL_REMOVABLE;
+ 	e->encoder_buf = vzalloc(VIDTV_S302M_BUF_SZ);
++	if (!e->encoder_buf) {
++		kfree(e->name);
++		kfree(e);
++		return NULL;
++	}
 +
- 	if (ctrl->opts && ctrl->opts->data_digest)
- 		blk_queue_flag_set(QUEUE_FLAG_STABLE_WRITES, ns->queue);
+ 	e->encoder_buf_sz = VIDTV_S302M_BUF_SZ;
+ 	e->encoder_buf_offset = 0;
  
 -- 
-2.33.1
+2.25.1
 

@@ -2,93 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9213348BC8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FC248BC8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347853AbiALBln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 20:41:43 -0500
-Received: from mout.gmx.net ([212.227.17.21]:53467 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236309AbiALBln (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 20:41:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1641951693;
-        bh=uHF0ooAWGXR54vTGChda2qbPj9tBD6JBdlJPU4+vjME=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=jdasv9ndBdJF+6zmGC3wpoNjDwn+HO9UZCrUEJQ/Tv1qWf3jRUGrO2LMqoE1VWznU
-         VsYfZ17lmGkOlH6SD1bu7iZVdJ546McEOYAPfreitCFTuy6DGLqtXyIGifzPfOFUbL
-         sxckmWd+DIf7Q2Ri4ephHwPXMb/EY+WMX1STme8k=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.47] ([149.172.237.68]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M1Ygt-1n4znb3yg7-0038gO; Wed, 12
- Jan 2022 02:41:33 +0100
-Subject: Re: [PATCH] Bugfix RTS line config in RS485 mode is overwritten in
- pl011_set_mctrl() function.
-To:     Jochen Mades <jochen@mades.net>, Lukas Wunner <lukas@wunner.de>
-Cc:     gregkh@linuxfoundation.org, Russell King <linux@armlinux.org.uk>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>
-References: <20211231171516.18407-1-jochen@mades.net>
- <20220102100710.GA29858@wunner.de>
- <0e0e91b8-72f8-aa31-50e2-80090dd5613a@gmx.de>
- <20220102182801.GA22268@wunner.de>
- <27017560.2684465.1641895232612@webmail.strato.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <21c124f6-43a2-7ac8-2fde-a7bebacec459@gmx.de>
-Date:   Wed, 12 Jan 2022 02:41:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1347868AbiALBnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 20:43:21 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:35689 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236309AbiALBnV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 20:43:21 -0500
+Received: by mail-oi1-f175.google.com with SMTP id s127so1542469oig.2;
+        Tue, 11 Jan 2022 17:43:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e/Tnb+6NC4NDoEen3QeGtmshX2VZpftcd33BR336ijw=;
+        b=DDMtDeB/wj5fZEsrO21n/lGpGqJ091g3N2FGgvsMbzZq9wxV6urGWWi2anb+mV/bok
+         t1ap7oc505jZIx8KgE2FR8idXnHFDCp1+EuxbB6WxZogvmVu4kwZCjv4jJeV7bExMRDH
+         doDbal43prHe0BoflW7WpL+AH2S12t9cE+/LexsAj+Y+dPZYmKV6racPYO1G7xblpl4/
+         afahcZyZkKuSfUnUUGsLYd2SltYiLTAVe/JjhuPsdyMxwGgFtXwpaZvHtZjqElY6Ecj5
+         +3CPQCi3TFmv+izgM8s5BWnXmoKF2G/y/D93YRr6z7ea4HoivFqX/1WhBXrNzUxzaPO5
+         QQaQ==
+X-Gm-Message-State: AOAM530EQd8b/ir6yCavPcYl0+zLAgCXo+9NRXKLr1uhuuxVXEKK8tzn
+        F028IO/gHlmxizLoDnRbCQ==
+X-Google-Smtp-Source: ABdhPJzJTSFUtdEQLZAtLeh5H43ctftwk1Z0EICg9ZlaMpQR1Vk4Ah73GP2ShCBaFZnQGsqfer37hQ==
+X-Received: by 2002:a05:6808:2113:: with SMTP id r19mr3759580oiw.118.1641951800511;
+        Tue, 11 Jan 2022 17:43:20 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id r30sm91841otv.48.2022.01.11.17.43.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 17:43:19 -0800 (PST)
+Received: (nullmailer pid 3887562 invoked by uid 1000);
+        Wed, 12 Jan 2022 01:43:18 -0000
+Date:   Tue, 11 Jan 2022 19:43:18 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     YC Hung <yc.hung@mediatek.com>
+Cc:     robh+dt@kernel.org, broonie@kernel.org, daniel.baluta@nxp.com,
+        trevor.wu@mediatek.com, tiwai@suse.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        cezary.rojewski@intel.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org, allen-kh.cheng@mediatek.com
+Subject: Re: [PATCH v4] dt-bindings: dsp: mediatek: add mt8195 dsp document
+Message-ID: <Yd4yNkeGlzdULNlv@robh.at.kernel.org>
+References: <20220106064847.15588-1-yc.hung@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <27017560.2684465.1641895232612@webmail.strato.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:W5ZXNZUmvomns9fZHWeaYhn6U8ZKnwprDdCMksMUzkajbIgXC7k
- iZNFoeSwZHT3kbTlbrf3iDgOeGWAQFJLfnZFLp+o3PB+JKT12byOgPL6c4VhMJoCR8vkmzg
- nWiwQ5R4jwEDg6tuK9i/s5FhbXWNVZfmB29tcG1MNlccdpw4OJpudq8ba/fmQv3lpxOkr90
- 9QCaqg6zdtyj80yJaFihA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JzkNfumjzlY=:XQu8umm3dbKkINtCRcA++3
- QTnB+D5ysR9G/t0fRP7yGIlWKU9r/mpHSW6LJSzNXQmy/aOb+QC8KcsLSV5LDOpxISFVasDO7
- tdNQ0kjfaNiGQONFgByzdjU2rx7ra7OiOaKZpQG0OQNWiGKeES0biIktErROUKTEVuMFEXfpE
- sW+DvOpewxGemTP1RetjtcC6XJt0miBmCrEZVv+UCcgmNr6pnWuDzk9pRmd/ub/9nFuHgr8HP
- VQFls63dzJylCHckZJygbrDfeKWBIs/6ShDmxeKwcw/i8Jr/nbFneTNRKY7RK5bUYTiByAZEP
- SMGUZjgRmxj/ix2JeS5mNupFO5hQHMTO2hqXLe5fNemV5dcs+rqwry7nCDcZQRFBGtFmZ01C/
- vheyx75evcB4G6FbHMsgGRYU4QVC8roxEcOZR91pi4XDbKxoi0pkjfDDoQJdF3IELeKbJk+xn
- zIL6sJINagZStkzB8uqMbnD2uJDEgjNGM/JZXCZr8nNGiWNZhbLPA5qIoMx1jB5EOfv4+hfBQ
- vQEh0tOfqIPpIZmflk25kWPSXC2yAdHE3oJ1m0ph8XP1MJTY9mOAuDv8NlZH0LOwi/LB99hx9
- 2oEj5E73GTDP3HiU7rOpM8SNjRAsJSjmrx8jReJHzUm+q9FearrxH6G9HAlGSOvYJ172P79qP
- 4Pr7j3A0JAmNlx+qAYBoRBmK+duwXUrJazojl23cY/dng8cXgtnASOzTaZl5zlpJztL5FACg9
- c+OmR2TTaIXVmMwfEmb3DQA24EG7ZE4NB3X6/xVVv1FYe96PCTe3/VYNNYZjo+9NDpt5Kgpsd
- bbfzE/kuh201ohN9ZV2EUbi+X/azKcPoNMD3xfVsLwMqH+1Sk0DnWEGBs/dy4J7/HQblYdt5d
- ywGEuv5Ks7PAieabExwgAV0vyOYVlQt4pX/PiPFG1EjRPFM7SG4T1GWIZMHlzVGu2cqwONBoM
- dTflsAWPBxIDQFWALVXLg8sB+jlRtkpDRG71CaOdH/nfkMz3sLTbAR2d5Xd+IC/GFgTosRDF/
- W72JbNGB8zjO4BLxHS2L/74b6OZ8EWBL8zRsRzIPpmK17onhHwfKU7Ot4uvyOv2UdE4kMRpsN
- uWPyzWI2bovF/k=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220106064847.15588-1-yc.hung@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jochen,
+On Thu, 06 Jan 2022 14:48:48 +0800, YC Hung wrote:
+> From: "YC Hung" <yc.hung@mediatek.com>
+> 
+> This patch adds mt8195 dsp document. The dsp is used for Sound Open
+> Firmware driver node. It includes registers,  clocks, memory regions,
+> and mailbox for dsp.
+> 
+> Signed-off-by: yc.hung <yc.hung@mediatek.com>
+> ---
+> Changes since v3:
+>   Fix patch v3 error : v3 only provide difference between v3 and v2.
+> 
+> Changes since v2:
+>   Remove useless watchdog interrupt.
+>   Add commit message more detail description.
+> 
+> Changes since v1:
+>   Rename yaml file name as mediatek,mt8195-dsp.yaml
+>   Refine descriptions for mailbox, memory-region and drop unused labels
+>   in examples.
+> ---
+>  .../bindings/dsp/mediatek,mt8195-dsp.yaml     | 105 ++++++++++++++++++
+>  1 file changed, 105 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> 
 
-On 11.01.22 at 11:00, Jochen Mades wrote:
-> Hi Lukas, Lino,
->
-> please let me know when I could test again with an "official" linux kern=
-el, instead of using my local patch.
->
-> Bests
-> Jochen
-
-While the fix itself looks good so far there are still some style issue as=
- Lukas pointed out. These issues
-have to be fixed before the patch can be accepted for mainline integration=
-. Please have a look at
-Documentation/process/submitting-patches.rst for the correct patch format.=
- After these issues are fixed
-please send the patch as a v2, so we can review the new version.
-
-Best regards,
-Lino
-
+Reviewed-by: Rob Herring <robh@kernel.org>

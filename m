@@ -2,113 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA53F48C347
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9037248C34D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352912AbiALLiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 06:38:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28979 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352903AbiALLiF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 06:38:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641987485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RZ/OOdpAGgV62HtjD3bMC3/ezB1HxaLvh507CGIQyfE=;
-        b=TAbxfQ34m3WVYWhMzXVM+6iXRiVc17q+xmVtrFoLlhAnOGLBvusMCYtuHEX9PZGxSKskiv
-        dWhndhIYuaw3OdPPm4yuwsVcao3LZu8fRQh3Zp84V811hoxFmHRHepT9y5FupJHRlL2rIJ
-        aUFyIN4S4WIEPpkfR5PD8yxd9TVkywc=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-504-Sb9XDJvCM52PuWAtlMMb6w-1; Wed, 12 Jan 2022 06:38:04 -0500
-X-MC-Unique: Sb9XDJvCM52PuWAtlMMb6w-1
-Received: by mail-wm1-f71.google.com with SMTP id bg32-20020a05600c3ca000b00349f2aca1beso1422730wmb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:38:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RZ/OOdpAGgV62HtjD3bMC3/ezB1HxaLvh507CGIQyfE=;
-        b=f6Eqo2FSjuqvnGsw02iQqK0j2AqbvZ8lLgnoDx0kATnBg7z0NSA/Qt9vRE64hazTxB
-         +9N+jfFdNe38N8GU7VSF20h5TK7dIwmCOHfdaDlwSZYUdEpMdw8HdwqQwwxhTQuBi+8y
-         GxKxxUamuEOqWaKtFrpSQz+ug0a2gGwY29pmsEWvFMFEr0XS1yxWeUlhvofF+ckLBEZQ
-         o7v/f2lhFxzrAqHvbCDjzJb0GIVGnlj5IfaRf/UQfjlmPl3OIUdfb9SiJ+so5RKe+fe7
-         Zy58bGamvaB6e1yGXtWcFCbtrxqmsWuZctTMcsaHKACFUUuh6beadVDTwWjV+k9pzzPH
-         lMBQ==
-X-Gm-Message-State: AOAM533wjR2xXUFpSF2pBfSaZJLMcdUP8jg0AfibhMqdVofuVrCRj1Oz
-        IyphVDPkDHgqZR7SRJEYHpSmphTr7lhU21ySzkcSnz7Xdh18nrPbgRKPWHoY6bwNKgiuYr+Ybk1
-        JXxf8q2bCg65PqzYyP5HG7zPs
-X-Received: by 2002:a05:600c:3b19:: with SMTP id m25mr6332968wms.100.1641987482741;
-        Wed, 12 Jan 2022 03:38:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyCMtCBYnaCQK1iXFn85zR/lqJOVMZxN9oUrlR9Ead1HQenjTkkrnQCGumLIh+enmiNou0HhQ==
-X-Received: by 2002:a05:600c:3b19:: with SMTP id m25mr6332946wms.100.1641987482542;
-        Wed, 12 Jan 2022 03:38:02 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id d16sm8380854wrq.27.2022.01.12.03.38.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 03:38:02 -0800 (PST)
-Message-ID: <2155e11e-beec-f896-0ab5-d48bb860f335@redhat.com>
-Date:   Wed, 12 Jan 2022 12:38:01 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 0/2] video: A couple of fixes for the vga16fb driver
+        id S1352927AbiALLiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 06:38:22 -0500
+Received: from mail-ma1ind01olkn0158.outbound.protection.outlook.com ([104.47.100.158]:20562
+        "EHLO IND01-MA1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240126AbiALLiU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 06:38:20 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZXHxtAd6p+rP5D9g6s3+/kksyvp0ZSdI1gd4gZ9MnFTL8tjWSjwQDLSYmEVwhGikttSUyDI7Ea4LEce3Pg1G4gNFb+bIYIZn0SxfyumbOK3/3pnsD4/mtHObKBmEiwznznsq3CN/Yg8nwO5N4R4C8rADkXTQJp663aOTsPmeSJ1SH3NVhrEiGQcICrkAXTgnzUE/cLUk8WEzzRY1sIE/0h5wBHvLYZEl0VmPgionE+smqBxRH77v60gbJtW6iCnhhh5Z533HqOs+ZcaGWcvY5QFLGXuyKww0qx5Q5d3J0rK78v18Yyw7peSo0bubm0NPgl8G5o0qhp8qTIX7v/VhtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LVXkYUdn61OI7VmNeupfiHJuRYIQRw9gflew86sCwH4=;
+ b=eEHuSt+vFW33taN4IOjndnMWnXDKlsvDEDC/Ub09ONMeP2ZPFC6ggOM/kdCJEySHmmgRlN1yPaVme/1z8AnYEsFLITkD37FbjdMiiC81sgiQ+oI9Mo5T8FqALIF8AZAr/IZoMwtx7xTqAzlx7W0IQ7eHSgb+L6vHYHbsI5z6Ng43iVMz3UojjMg1gB6bUqQcqYZZy5Nla11GynKQ4DR3wFA9eUAIDFL02aQHHzlKt2eumvC4L9H9zSCT0Lwr9DZuxACoXxK9mIaWEQnewCw9Gv6bqJ825r0Ii7rT4srBtPhc1s3VXiQr5VnLHWzLASEVpeCGpuBbwWSp7hUZGMGF6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LVXkYUdn61OI7VmNeupfiHJuRYIQRw9gflew86sCwH4=;
+ b=tC0p/7TI5DWv68ZXjRqgYrRXQsOQmDKnULUWBKgXot66S48X7o21JqQFuALa6fGc0JwR8y0Mp6uvylPPAxyZ8aASRyrkCHfoTE4JKRJD/qpn4krZx0PHFGaf2U07/45nZXLJyIB/5cYFaN11IB1O/ubS4+aXXtViQL4tFY79olGkSm5q2BLrN1zrpFFvJY8EOWQpvaqjMLQnDesMphSuAlWWZ6Q4PPVSG85Zyx3dKrWgK9/IHRKnZlRjVv0RVaIGJZjAYHcsWf1uJ3EJO3KE1617ydqZMm/hNln2qhXtv59mtfxhTcidxmvYQi5u9uF+pSIiX2eEGX7pXV4qIxaZ3Q==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by PNZPR01MB4687.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:33::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Wed, 12 Jan
+ 2022 11:38:16 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7%8]) with mapi id 15.20.4867.012; Wed, 12 Jan 2022
+ 11:38:16 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     "harry.wentland@amd.com" <harry.wentland@amd.com>,
+        "sunpeng.li@amd.com" <sunpeng.li@amd.com>,
+        "Rodrigo.Siqueira@amd.com" <Rodrigo.Siqueira@amd.com>,
+        "alexander.deucher@amd.com" <alexander.deucher@amd.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "Xinhui.Pan@amd.com" <Xinhui.Pan@amd.com>
+CC:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/amd/display: Force link_rate as LINK_RATE_RBR2 for 2018
+ 15" Apple Retina panels
+Thread-Topic: [PATCH] drm/amd/display: Force link_rate as LINK_RATE_RBR2 for
+ 2018 15" Apple Retina panels
+Thread-Index: AQHYB6jjF2GESjF2oUG76i0mYHGKrg==
+Date:   Wed, 12 Jan 2022 11:38:15 +0000
+Message-ID: <1A00E804-5390-415D-B6D8-2551C8954DFA@live.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     "Kris Karas (Bug reporting)" <bugs-a21@moonlit-rail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Borislav Petkov <bp@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-References: <20220110095625.278836-1-javierm@redhat.com>
- <65a13d92-93fc-25d2-0009-b7e60f3392c4@moonlit-rail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <65a13d92-93fc-25d2-0009-b7e60f3392c4@moonlit-rail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [hNn/Sb7Kt6rzonYPDuTVqRmFBLYfPtDZLND5yiZtCgdtdVlVEcRQBVs08rHfR0SC]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 15dd377a-8e5e-483f-c6fb-08d9d5c005f6
+x-ms-traffictypediagnostic: PNZPR01MB4687:EE_
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yMfKSXK0QZmzzVawypKOCdIbPJBdHaEoirlXwn9Fup0orBUOg07KO9Sk5EQ1Q0SFOeiiAELfNnG4gylEdGgsh2n3sI8kDdMmcfdg4cjD7XizS/To+pSrzzDsmZUtnpoKivz4uFuLw4yySus8lzpEC3sTgS3hogpMm/pJ9ngkCXSf+yAYDHK6Pky1QjBjDShljIlGo1vpPp+ScyQNx4YiIjU2ybFv+0EdvA6FVuH2R27EHSDXuLLplwudA+uMPIg3v6B5yGJ/bLD9E3+7K2PkNrNPpAtEGMxerlFt//MaE75SEOEBEDUmqcKEuwsqjJ9opbhKnHmm+k0RHJGfbtdsfbWZVPCAiPvbgDBrTCJ5Eq5c1BNXZJ3yzaL/7GCpLCl8vv610xO9MVfrft6qJZStNLSC2gJX7ftX3Arcz1nfKO23c/4QFOhUH+GMA2wriV0wdUPAorGjOCcxVOA5oyHngdfZPFsox3AOBIgmyU7mzGpYfJi5osuOBl8qyUraSveWM7IgBNGzPp2suZ+GeU8ed+ap99juMfUJm7lGsjtNDH78O9HRrUb2WZPqjniKeK+jaI56qIU97jyo/A+vsusIEQ==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hOn3gmDU6I5InvfTTJrRIexZ7AkvKtDbJZuB1M1SbKM7M6/P+ZpMJXjp/UqA?=
+ =?us-ascii?Q?/MQK29RwB6iHeieMfkyP3pin3sq6OzFxczyHuQMTd/ogijSBpDWP4jJc4197?=
+ =?us-ascii?Q?TQt2ny4D3CxyTk5Uy6ciWP9FPyoILBseBlEt2Y2R8HqGSHYi/3c4tHdhAULa?=
+ =?us-ascii?Q?5nIe0QApZDaEODAhEbdgXgvFtfJE3yP8w5U9s5C9p3ZDPdzMfCVVbfSy833T?=
+ =?us-ascii?Q?lNuLNwQuAgVWb+Je74x5oQYKco1cFj4MkYiWE9mDKtW+80i3fDO2QjYicSAu?=
+ =?us-ascii?Q?5yUj3EM4+R0VyXRuaUTcNSH5AANoIjMuYhcmYQL3TQheyvgOUv98kU9BeXjY?=
+ =?us-ascii?Q?Tj9zJ5W68DsZqCt36XHzWbC6X7pxu42e9MeC35jO5/gkDuliHS6PO/WuPIPI?=
+ =?us-ascii?Q?3ihYVp9oa3427lh7qMYhyFAYzO+GLKu/HPwr9AFvhSiWM5k8M13z9DN1D4PP?=
+ =?us-ascii?Q?ehUY/pc9M1mCavmPFsxw6L+mcQJl45NHRR6GS28zUgwR5mNMwSMJ8CP7rqi+?=
+ =?us-ascii?Q?pBC4sBT5wKlexyW7QvECueVaU18CzIVQVe8G3jwpBT4vhb3MVBborE00oq5W?=
+ =?us-ascii?Q?0lh6P7iMF/tkzkbfJ9bQMo/Xp2pZdsCDGUzZv66Xai7jTHpYUXiCqYl6kQ24?=
+ =?us-ascii?Q?wwYX6NtCFMY8/P34zdtC30wKM47RBU7wbqdTU17PebWbuBkIScJELH1rWD/L?=
+ =?us-ascii?Q?skpZo2N0L7Bd1s7MWXur8N718vb0nim5w4WuX1aexJWob2rEuXbBby2su0MD?=
+ =?us-ascii?Q?ZfutH7CXffr8H7DJFestdaBkYpQz35RXQk7hIxomoKedg34j1vTLVRaRKoF1?=
+ =?us-ascii?Q?tDPv1Nb/zq1ih+zQSijuYx2Zs0xGsfCKF4fJFc59eTGq/WgfnbOy9Gsvm/yU?=
+ =?us-ascii?Q?Mnds23BEM9iOu6783Jj6PtbTCSN8+XZmu65WWHV2jQqndxgHHgIkISDEGoje?=
+ =?us-ascii?Q?GGYVsUBlXGxXgkC98Y+ffPQz3nPIjBr2yrXlsaKaqcN/Hf3bYLPXzEYZBaFP?=
+ =?us-ascii?Q?1Tzf3r/xlgw45KfFLOrMbrlFDg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1EB580D66CB3AA4399B90B391C3531AF@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15dd377a-8e5e-483f-c6fb-08d9d5c005f6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2022 11:38:15.8897
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNZPR01MB4687
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Kris,
+From: Aun-Ali Zaidi <admin@kodeit.net>
+=20
+The eDP link rate reported by the DP_MAX_LINK_RATE dpcd register (0xa) is
+contradictory to the highest rate supported reported by
+EDID (0xc =3D LINK_RATE_RBR2). The effects of this compounded with commit
+'4a8ca46bae8a ("drm/amd/display: Default max bpc to 16 for eDP")' results
+in no display modes being found and a dark panel.
 
-On 1/12/22 03:19, Kris Karas (Bug reporting) wrote:
-> Hi Javier, Geert, et al,
-> 
-> Javier Martinez Canillas wrote:
->> Changes in v2:
->> - Make the change only for x86 (Geert Uytterhoeven)
->> - Only check the suppported video mode for x86 (Geert Uytterhoeven).
-> 
-> I just updated Bug 215001 to reflect that I have tested this new, V2 
-> patch against 4 systems, one more than last time - 2 BIOS/VGAC and 2 
-> UEFI - and it works perfectly on all four.
-> 
-> Thanks, Javier, for the excellent work!
-> I didn't test with non-X86, but the code appears to bypass the patch on 
-> non-X86, so should work fine for Geert.
-> 
-> Kris
-> 
-> Tested-By: Kris Karas <bugs-a21@moonlit-rail.com>
->
+For now, simply force the maximum supported link rate for the eDP attached
+2018 15" Apple Retina panels.
 
-Thanks a lot for testing again!
+Additionally, we must also check the firmware revision since the device ID
+reported by the DPCD is identical to that of the more capable 16,1,
+incorrectly quirking it. We also use said firmware check to quirk the
+refreshed 15,1 models with Vega graphics as they use a slightly newer
+firmware version.
 
-I've applied patch #1 to drm-misc-next and #2 to drm-misc-fixes.
+Tested-by: Aun-Ali Zaidi <admin@kodeit.net>
+Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
+---
+ .../gpu/drm/amd/display/dc/core/dc_link_dp.c  | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-Best regards,
--- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu=
+/drm/amd/display/dc/core/dc_link_dp.c
+index 05e216524..17939ad17 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+@@ -5597,6 +5597,25 @@ static bool retrieve_link_cap(struct dc_link *link)
+ 		dp_hw_fw_revision.ieee_fw_rev,
+ 		sizeof(dp_hw_fw_revision.ieee_fw_rev));
+=20
++	/* Quirk for Apple MBP 2018 15" Retina panels: wrong DP_MAX_LINK_RATE */
++	{
++		uint8_t str_mbp_2018[] =3D { 101, 68, 21, 103, 98, 97 };
++		uint8_t fwrev_mbp_2018[] =3D { 7, 4 };
++		uint8_t fwrev_mbp_2018_vega[] =3D { 8, 4 };
++
++		// We also check for the firmware revision as 16,1 models have an
++		// identical device id and are incorrectly quirked otherwise.
++		if ((link->dpcd_caps.sink_dev_id =3D=3D 0x0010fa) &&
++		    !memcmp(link->dpcd_caps.sink_dev_id_str, str_mbp_2018,
++			     sizeof(str_mbp_2018)) &&
++		    (!memcmp(link->dpcd_caps.sink_fw_revision, fwrev_mbp_2018,
++			     sizeof(fwrev_mbp_2018)) ||
++		    !memcmp(link->dpcd_caps.sink_fw_revision, fwrev_mbp_2018_vega,
++			     sizeof(fwrev_mbp_2018_vega)))) {
++			link->reported_link_cap.link_rate =3D LINK_RATE_RBR2;
++		}
++	}
++
+ 	memset(&link->dpcd_caps.dsc_caps, '\0',
+ 			sizeof(link->dpcd_caps.dsc_caps));
+ 	memset(&link->dpcd_caps.fec_cap, '\0', sizeof(link->dpcd_caps.fec_cap));
+--=20
+2.25.1
+
 

@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2369248BFD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CEDB48BFD4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351574AbiALI1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
+        id S1351584AbiALI1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:27:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351552AbiALI1D (ORCPT
+        with ESMTP id S1351552AbiALI1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:27:03 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54BFC06173F;
-        Wed, 12 Jan 2022 00:27:02 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id h4so2161079qth.11;
-        Wed, 12 Jan 2022 00:27:02 -0800 (PST)
+        Wed, 12 Jan 2022 03:27:37 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0019C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:27:36 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id p12so2142149qvj.6
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:27:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=LuNmEw0MfoqSToYP/cUIWFfLjxFvMv1mm3SH85aVwKQ=;
-        b=RlCcduVThM/eyUmTcYa89sPCxYPO3H3EMF/lWZ9ZgSB3bM3EQK4az+Gw386qPJTGfs
-         OUJWdaAb3SKI2p1hSMUTjxtl9s+5zcdZi+uayv9GQzAYakn4s5UYwTMJyUAUWXuxW62p
-         qII8J+DhnaX+q0vL9tciKmZC3SUcFgeDi2EQnhSWTm8WaV5sNa+PB68Gp8eportS2dLw
-         K0oL4P+svfifgPQf0ng4U/RHSTd7i0dzeP5LWLtd0qArKgvhx5DYHOM0Yu5FFqFvHJYG
-         tqKDleil3ER1C4ln906UPJevCMGRCLdPP49G7eQdV49Fptq8Z13bureq/AioMVjiNR4h
-         TZmA==
+        bh=h01bjARNb7y7qwRAWKIHAQxTQlqFFpWv+tbnghhAPks=;
+        b=XL5p1cRjWWRnif4ZWMp10WAKVQdktJ99CU8VrSpzsX/FUAArUV/A1MuAIXUG84F3vT
+         8zJKLliDpSc0y/ozvXau1+VEV1va7sA+WRQfWgs6skTruDynejqBAPwmbNiovWE5+hiw
+         0MEfgVzD4cOyNkFjmZbp7fXxatgGzEj1cQUXMO2V00zDlT3Vl6warlaIE5EoJ4y1MKZj
+         pWdnqUwIDzlaOi8knlQ3Lt+WnD+zpot79koOHu7gv8yX/Y2KEJ0oRXxEDVdTvmGtLioF
+         vP0HS3naVii9fve0BC8YSPrQOIawksy85ADaSn/rnoiGi7DIN2Yk2gbD4QctN9blL71E
+         w6qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=LuNmEw0MfoqSToYP/cUIWFfLjxFvMv1mm3SH85aVwKQ=;
-        b=FjwZ199sXYiDOc0M0LoAy8s5wd/ZDdMm6J9276v/yvfyhycJwJM1LFe8dMHFf1O7ws
-         JlhU7YRAs0QE+qTaS03pRKZaoI6SDUdzUk7na2GqP/u6W8p6c8/Lyy4jyNseryXLuJcH
-         8sNLL1ZB95kDUZyJIWJx3ROQhfM8vXIs2cjg+TNlCS9wyaWbRQ8MDPY4T6LX5rrfldKQ
-         LfrSQnS0DbiGZI4wbisU4pfEeMxDKIxlfU3JsMnpZIFIZrBKGPjaLWaVBPvW+xWyeWcV
-         5LLrKihfz/6XLdWztFp2D9GXTwFm2mqb2X03stoMKRpUahmykXcxhxmYOWk6Ams6sj8n
-         pZhw==
-X-Gm-Message-State: AOAM530+ZEcp5ag2bStiBHegn+xYighNR3UWDrYGFlERbS+vTBay+71z
-        lJIrkcc1bw3p2hXbDMoUPhA=
-X-Google-Smtp-Source: ABdhPJyK6TI9Lp08GP+vsE0U1arVF3rwlnzsvPSe0pC1quP4SDE0da/CMYFtlmKwflckYBrQAq46gw==
-X-Received: by 2002:ac8:5787:: with SMTP id v7mr6569612qta.547.1641976021986;
-        Wed, 12 Jan 2022 00:27:01 -0800 (PST)
+        bh=h01bjARNb7y7qwRAWKIHAQxTQlqFFpWv+tbnghhAPks=;
+        b=wfyDwwx2HzwIoK9E2McEhz6hnxBfteYTuN1J0MiwDU42FkBHXpBEroDRIRa4mSM8Nq
+         4Ei5mTvlXrygBYzRRdLa5vsO6Xo2Dc8aTI97ejklr9Z/vHdvGyglRUZtVNK8elzUclei
+         /3KwX3c/r8zIWzjU1B7GXlpznyrPBJ/7gezDknb9mlG+qiVHESF9bZbjHNVX9PZDP47E
+         73wfB9OS+Y0pi6ihwLaeYfPTkOzJLE2k4f+nNRcR0OJWkWB/m4yuKxyiTbonyWnBIo8E
+         9pUg18Btdm1PNoLbC4nO0TYeYPSelYyyBuSKhHb6iQEY9WOF4mROB25zN/BRIpkTBHme
+         qsXg==
+X-Gm-Message-State: AOAM532AjoKTzo9P3Wq0Aja9XJUhntG3S7/xdEZMqbmmMvmilfYR+mI/
+        RkshQLbqbU8WfhpSLWFMHvU=
+X-Google-Smtp-Source: ABdhPJx9HqhPLSYFpsALofcmkf50IwgYwMGyWYj6KUBpbyFlCzbmmO1ZzDD3XoR+d2IVbZ8VIEcuHQ==
+X-Received: by 2002:a05:6214:d0f:: with SMTP id 15mr7204173qvh.18.1641976056188;
+        Wed, 12 Jan 2022 00:27:36 -0800 (PST)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id l16sm1771562qkl.114.2022.01.12.00.26.59
+        by smtp.gmail.com with ESMTPSA id r3sm3174416qtc.84.2022.01.12.00.27.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 00:27:01 -0800 (PST)
+        Wed, 12 Jan 2022 00:27:35 -0800 (PST)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     davem@davemloft.net
-Cc:     yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
+To:     oleg@redhat.com
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] net/ipv6: remove redundant err variable
-Date:   Wed, 12 Jan 2022 08:26:55 +0000
-Message-Id: <20220112082655.667680-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] arch/riscv/kernel: remove redundant err variable
+Date:   Wed, 12 Jan 2022 08:27:29 +0000
+Message-Id: <20220112082729.667743-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -67,36 +67,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Return value from ip6_tnl_err() directly instead
+Return value from user_regset_copyin() directly instead
 of taking this in another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
 ---
- net/ipv6/ip6_tunnel.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/riscv/kernel/ptrace.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
-index fe786df4f849..897194eb3b89 100644
---- a/net/ipv6/ip6_tunnel.c
-+++ b/net/ipv6/ip6_tunnel.c
-@@ -698,13 +698,12 @@ mplsip6_err(struct sk_buff *skb, struct inet6_skb_parm *opt,
- 	    u8 type, u8 code, int offset, __be32 info)
+diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+index 9c0511119bad..a89243730153 100644
+--- a/arch/riscv/kernel/ptrace.c
++++ b/arch/riscv/kernel/ptrace.c
+@@ -42,12 +42,10 @@ static int riscv_gpr_set(struct task_struct *target,
+ 			 unsigned int pos, unsigned int count,
+ 			 const void *kbuf, const void __user *ubuf)
  {
- 	__u32 rel_info = ntohl(info);
--	int err, rel_msg = 0;
-+	int rel_msg = 0;
- 	u8 rel_type = type;
- 	u8 rel_code = code;
+-	int ret;
+ 	struct pt_regs *regs;
  
--	err = ip6_tnl_err(skb, IPPROTO_MPLS, opt, &rel_type, &rel_code,
-+	return ip6_tnl_err(skb, IPPROTO_MPLS, opt, &rel_type, &rel_code,
- 			  &rel_msg, &rel_info, offset);
--	return err;
+ 	regs = task_pt_regs(target);
+-	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, regs, 0, -1);
+-	return ret;
++	return user_regset_copyin(&pos, &count, &kbuf, &ubuf, regs, 0, -1);
  }
  
- static int ip4ip6_dscp_ecn_decapsulate(const struct ip6_tnl *t,
+ #ifdef CONFIG_FPU
 -- 
 2.25.1
 

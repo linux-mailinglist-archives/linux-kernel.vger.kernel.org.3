@@ -2,77 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBA048BD43
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E24E48BD47
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:28:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348704AbiALC2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 21:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348651AbiALC2M (ORCPT
+        id S1348724AbiALC2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 21:28:40 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:17340 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348713AbiALC2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 21:28:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152CAC061748;
-        Tue, 11 Jan 2022 18:28:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD63A61732;
-        Wed, 12 Jan 2022 02:28:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9163C36AEB;
-        Wed, 12 Jan 2022 02:28:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641954491;
-        bh=LKQxuf+e03vISf279LcO6bjfXRhK01rdCmFOm7s3OHw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YP5uE2ZNosmrbqOcrcG37yrML9gIfFMfm1tVlORS7PeKOBFTaOK85/N7TwsqUE6DT
-         to6Xbd4ix46rAIDPM1nZcAmfpkliQd2xFLc4nVadbGkqDhp9QTNB6uKyRiyJnjc4vL
-         AR9Wgi1SsDyCY4OmDnIYwBw17DvuboJqxXF9PBctOQJOIDpwAHWBR5M0EsduE7zxxx
-         R9XgGPHMZWQVOYj3GoMQ2Yoj48INXrkzNMcLzTh306P2r4lcJm5wtxPnQGhcw6Wf+k
-         D9uXGB9yo1B3hAwQ/IMAgz5MYGCQyUqWmZScHw/qUXLGVPc05/wmO14lUhBEgYvYYd
-         yPtCb+ScUe53g==
-Date:   Tue, 11 Jan 2022 18:28:09 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFm?= =?UTF-8?B?YcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next] Revert "of: net: support NVMEM cells with MAC
- in text format"
-Message-ID: <20220111182809.23de1b21@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220111081206.2393560-1-michael@walle.cc>
-References: <20220111081206.2393560-1-michael@walle.cc>
+        Tue, 11 Jan 2022 21:28:39 -0500
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JYWg547Nzz9s7h;
+        Wed, 12 Jan 2022 10:27:29 +0800 (CST)
+Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 12 Jan 2022 10:28:37 +0800
+Received: from [10.174.178.220] (10.174.178.220) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 12 Jan 2022 10:28:36 +0800
+Subject: Re: [PATCH] scsi: Do not break scan luns loop if add single lun
+ failed
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Zhiqiang Liu <liuzhiqiang26@huawei.com>,
+        Wenchao Hao <haowenchao@huawei.com>
+References: <20211225232911.1117843-1-haowenchao@huawei.com>
+From:   Wenchao Hao <haowenchao@huawei.com>
+Message-ID: <5ec37028-052c-3851-6a89-983ab5ed4ae2@huawei.com>
+Date:   Wed, 12 Jan 2022 10:28:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20211225232911.1117843-1-haowenchao@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 09:12:06 +0100 Michael Walle wrote:
-> This reverts commit 9ed319e411915e882bb4ed99be3ae78667a70022.
+On 2021/12/26 7:29, Wenchao Hao wrote:
+> Failed to add a single lun does not mean all luns are unaccessible,
+> if we break the scan luns loop, the other luns reported by REPORT LUNS
+> command would not be probed any more.
 > 
-> We can already post process a nvmem cell value in a particular driver.
-> Instead of having yet another place to convert the values, the post
-> processing hook of the nvmem provider should be used in this case.
+> In this case, we might loss some luns which are accessible.
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+> Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
 > ---
-> As mentioned in [1] I think we should discuss this a bit more and revert
-> the patch for now before there are any users of it.
+>   drivers/scsi/scsi_scan.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> [1] https://lore.kernel.org/netdev/20211229124047.1286965-1-michael@walle.cc/
+> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+> index 23e1c0acdeae..fee7ce082103 100644
+> --- a/drivers/scsi/scsi_scan.c
+> +++ b/drivers/scsi/scsi_scan.c
+> @@ -1476,13 +1476,13 @@ static int scsi_report_lun_scan(struct scsi_target *starget, blist_flags_t bflag
+>   				lun, NULL, NULL, rescan, NULL);
+>   			if (res == SCSI_SCAN_NO_RESPONSE) {
+>   				/*
+> -				 * Got some results, but now none, abort.
+> +				 * Got some results, but now none, abort this lun
+>   				 */
+>   				sdev_printk(KERN_ERR, sdev,
+>   					"Unexpected response"
+>   					" from lun %llu while scanning, scan"
+>   					" aborted\n", (unsigned long long)lun);
+> -				break;
+> +				continue;
+>   			}
+>   		}
+>   	}
+> 
 
-Revert seems reasonable since there are two different proposals, 
-but I won't pretend to understand the space so if anyone has opinions
-please share them.
-
-> btw, now with net-next closed, should this patch have net-next or net as
-> the queue in the subject?
-
-net, technically, although currently the trees are pretty much
-identical.
+ping ...

@@ -2,214 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF7C48C00B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DE148C00D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351676AbiALIgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:36:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S1351678AbiALIg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:36:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351671AbiALIf6 (ORCPT
+        with ESMTP id S1351684AbiALIg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:35:58 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4744AC061756
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:35:58 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id w9so2507367iol.13
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:35:58 -0800 (PST)
+        Wed, 12 Jan 2022 03:36:26 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09146C061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:36:25 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id f141-20020a1c1f93000000b003497aec3f86so1065713wmf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:36:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pHnk4u7CVnW4YX08e13GAG2PhlcG7TaAHrFaqBnUaMM=;
-        b=gx2Kq4XVtiikSnxRzFDbx0NQVXHhzL0l+bHFfCMP2xlRMkr/vmevVZ8IT/q5b+WYJs
-         eaFjydh5vORIST5f+Ac8TvlzBEDdCCJUbjGTHKWRBPXqpZwPPu0sKbs0A1mQ6FwYF6Q0
-         +/ZxF5v+AJdoCHnGOPoTn+UHUD2WSAt3sFFWwm9bdBV6VDbMc1hbxQxjkZjNjOE4aoo0
-         lDxwgeWu5w+yHW93cC4rtxq3O1Whl/ivLMO/y26cbq2zsMZaiJovijbxl/HvkB9uZwI/
-         6jNnGuRao0y5e3EqpY1DMWEnJ2psHyQxJ+BVFKamfMrQHr4gftGqnD1yezMR7w1NnuDa
-         Gcxw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1E2KjRoh5QPl4QWMlc2IUWvkR+6ixdGn9JSrzheefFg=;
+        b=idLfv1ilDizLmqIzN61Jg0hGt0PH90u8gTat3Tz816EZ1fpB7SwujvNV+f/SdYwJdD
+         SE0zDt28mqiF/ZTr5LNv8XWtCZZOQ6o1m8ug1MCsQisTcy3sOY6lRLZ9YOKe/ot+Bver
+         9hnZD4hZhJ2aBcBudLe4eUBzeYT6kd3eECZSoGQ+mpUhxOVRwrpY9U8Mm7XKMd4coD8l
+         IlRcTsbIaH4YX4m+W/B0o5Ww8kKxzHHBuKR0d4EPpPSDY8kvIXy7LeaaaU9uFv8JOLql
+         0mWdHWznsrb7NdYNrYOfBY0bzvOAYHXy4O07H55qY7KlbHfzKWB7grQxSKi6E1Oj9hvH
+         TWfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pHnk4u7CVnW4YX08e13GAG2PhlcG7TaAHrFaqBnUaMM=;
-        b=TEwN6t3AK/D5nh4Bgf/Wl8qDYxSNAfnMCdhr/x8zekvNrIrkJET6T+oSaD9fLXb6xC
-         b0g211jUOQLP6jByt6PDscaet+JUgxa9gOqidVuj9Dpaiv3obMFD+pYImifUO8AFReZ2
-         T1g4/ZkUbFMeI92OsoDykP89d+3aHV4F2qYdckCIqlzaWcacKpbFbYzHjrx2kW5ZPvEs
-         fWQnGNI4qzDFtsjy4OOnqXNEH/IvpzQ1lB/MDdUBYiGJNsa+/GnDKvWtzA7I1utPBUWq
-         24e9RTC2RPpJ/44iokLDVgueboEd+3TIE9a2xNG5WAw+FDeaP00TsoiqmJK3wd1iVLUs
-         cw1Q==
-X-Gm-Message-State: AOAM532/ho8ZsxIrwVwCuNhyGxF53aATj24XcqRshoqLIPaXYyyrmHnL
-        VtVia1Mtoe+shiPG+IxoSoJjnw==
-X-Google-Smtp-Source: ABdhPJxZlNJrPU030MfCBCkKKlxLKP0SEloQRCq8kLfrAAW8D7t9fRq/tmsOnP5SuyHHRUX2Od2o2g==
-X-Received: by 2002:a05:6638:4192:: with SMTP id az18mr3846460jab.212.1641976557500;
-        Wed, 12 Jan 2022 00:35:57 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:b6b6:70f4:b540:6383])
-        by smtp.gmail.com with ESMTPSA id a1sm7136939iol.55.2022.01.12.00.35.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 00:35:56 -0800 (PST)
-Date:   Wed, 12 Jan 2022 01:35:52 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 8/9] mm: multigenerational lru: user interface
-Message-ID: <Yd6S6Js1W4AnFFmv@google.com>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-9-yuzhao@google.com>
- <YdwKB3SfF7hkB9Xv@kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=1E2KjRoh5QPl4QWMlc2IUWvkR+6ixdGn9JSrzheefFg=;
+        b=5SxTFps3TvxaMkGY1HVruZNmaoaR8mf9ERpt1yPm/WOPVnJG94ixUwyJMI4b40Yq/I
+         q7/uoNhth3d49ZPd+XTn90uX3qduG33DWlTtrS1V5jy/Mj1HPDznGUbqCv6dezVh9S7g
+         e/5GzQ814DxZfBBx6MUimvez6hLIgQYwEOVXq4BAI9qlKNnLJZTdguyqcHcvoAjdSWM7
+         USRJpbmZV+abp6Ma6CaliFsXL2IPcXqhawBBUQ7btefypkJGvxwVWfSdkGbyQxd/iATN
+         1HWgmkvho24B19hBuDDdRyctF03xbCV8irj6e9bWy0IwRqmVsaRdta60/HJPUMScaDcD
+         5GhA==
+X-Gm-Message-State: AOAM530moeoDcYO38FDZ7XeqtA/7WwyixJC0Yqjd44UYuYXodG5TQ6HJ
+        jaQOXfXvN+GUepR4FgRXlLSEwg==
+X-Google-Smtp-Source: ABdhPJwO5grJqRAgA1XNoFKUoNoU+h2BcmLSXzb5kwD5rMkFiB4D067C/be3+G1ireruH4pCRhKW7Q==
+X-Received: by 2002:a1c:f310:: with SMTP id q16mr2295490wmq.148.1641976584294;
+        Wed, 12 Jan 2022 00:36:24 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:381b:6e50:a892:5269? ([2001:861:44c0:66c0:381b:6e50:a892:5269])
+        by smtp.gmail.com with ESMTPSA id o10sm4351118wmq.31.2022.01.12.00.36.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 00:36:23 -0800 (PST)
+Subject: Re: [PATCH V2 2/2] soc: s4: Add support for power domains controller
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "Shunzhou.Jiang" <shunzhou.jiang@amlogic.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, jbrunet@baylibre.com
+References: <20211230094434.3053195-1-shunzhou.jiang@amlogic.com>
+ <20211230094434.3053195-3-shunzhou.jiang@amlogic.com>
+ <CAFBinCALAOJz16=u7r8tLM6ditriq=-NOACS2HRLrWs5B_FkVA@mail.gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <b2a9b8f0-2b12-c49f-9609-21999b1fffc8@baylibre.com>
+Date:   Wed, 12 Jan 2022 09:36:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdwKB3SfF7hkB9Xv@kernel.org>
+In-Reply-To: <CAFBinCALAOJz16=u7r8tLM6ditriq=-NOACS2HRLrWs5B_FkVA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 12:27:19PM +0200, Mike Rapoport wrote:
-> Hi,
+Hi Shunzhou,
+
+On 30/12/2021 23:15, Martin Blumenstingl wrote:
+> On Thu, Dec 30, 2021 at 10:44 AM Shunzhou.Jiang
+> <shunzhou.jiang@amlogic.com> wrote:
+>>
+>> From: Shunzhou Jiang <shunzhou.jiang@amlogic.com>
+>>
+>> Add support s4 Power controller. In s4, power control
+>> registers are in secure domain, and should be accessed by smc.
+>>
+>> Signed-off-by: Shunzhou Jiang <shunzhou.jiang@amlogic.com>
+> Also here I don't have any datasheet to compare this with, so this gets my:
+> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 > 
-> On Tue, Jan 04, 2022 at 01:22:27PM -0700, Yu Zhao wrote:
-> > Add /sys/kernel/mm/lru_gen/enabled as a runtime kill switch.
-> > 
-> > Add /sys/kernel/mm/lru_gen/min_ttl_ms for thrashing prevention.
-> > Compared with the size-based approach, e.g., [1], this time-based
-> > approach has the following advantages:
-> > 1) It's easier to configure because it's agnostic to applications and
-> >    memory sizes.
-> > 2) It's more reliable because it's directly wired to the OOM killer.
-> > 
-> > Add /sys/kernel/debug/lru_gen for working set estimation and proactive
-> > reclaim. Compared with the page table-based approach and the PFN-based
-> > approach, e.g., mm/damon/[vp]addr.c, this lruvec-based approach has
-> > the following advantages:
-> > 1) It offers better choices because it's aware of memcgs, NUMA nodes,
-> >    shared mappings and unmapped page cache.
-> > 2) It's more scalable because it's O(nr_hot_evictable_pages), whereas
-> >    the PFN-based approach is O(nr_total_pages).
-> > 
-> > Add /sys/kernel/debug/lru_gen_full for debugging.
-> > 
-> > [1] https://lore.kernel.org/lkml/20211130201652.2218636d@mail.inbox.lv/
-> > 
-> > Signed-off-by: Yu Zhao <yuzhao@google.com>
-> > Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
-> > ---
-> >  Documentation/vm/index.rst        |   1 +
-> >  Documentation/vm/multigen_lru.rst |  62 +++++
+> [...]
+>> +       SEC_PD(S4_VPU_HDMI,     GENPD_FLAG_ALWAYS_ON),
+>> +       SEC_PD(S4_USB_COMB,     GENPD_FLAG_ALWAYS_ON),
+>> +       SEC_PD(S4_GE2D,         0),
+>> +       SEC_PD(S4_ETH,          GENPD_FLAG_ALWAYS_ON),
+> For the A1 SoC's UART entry we have the following comment which
+> explains why we want to to be "always on":
+>   UART should keep working in ATF after suspend and before resume
 > 
-> The description of user visible interfaces should go to
-> Documentation/admin-guide/mm
+> If for some reason you need to re-send this series then it would be
+> great if you could add a comment above each entry with
+> GENPD_FLAG_ALWAYS_ON.
+> It will help others (like me) understand these SoCs better.
+
+Can you resend with those comments added so I can apply the patches ?
+
+Thanks,
+Neil
+
 > 
-> Documentation/vm/multigen_lru.rst should have contained design description
-> and the implementation details and it would be great to actually have such
-> document.
-
-Will do, thanks.
-
-> >  include/linux/nodemask.h          |   1 +
-> >  mm/vmscan.c                       | 415 ++++++++++++++++++++++++++++++
-> >  4 files changed, 479 insertions(+)
-> >  create mode 100644 Documentation/vm/multigen_lru.rst
-> > 
-> > diff --git a/Documentation/vm/index.rst b/Documentation/vm/index.rst
-> > index 6f5ffef4b716..f25e755b4ff4 100644
-> > --- a/Documentation/vm/index.rst
-> > +++ b/Documentation/vm/index.rst
-> > @@ -38,3 +38,4 @@ algorithms.  If you are looking for advice on simply allocating memory, see the
-> >     unevictable-lru
-> >     z3fold
-> >     zsmalloc
-> > +   multigen_lru
-> > diff --git a/Documentation/vm/multigen_lru.rst b/Documentation/vm/multigen_lru.rst
-> > new file mode 100644
-> > index 000000000000..6f9e0181348b
-> > --- /dev/null
-> > +++ b/Documentation/vm/multigen_lru.rst
-> > @@ -0,0 +1,62 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +=====================
-> > +Multigenerational LRU
-> > +=====================
-> > +
-> > +Quick start
-> > +===========
-> > +Runtime configurations
-> > +----------------------
-> > +:Required: Write ``1`` to ``/sys/kernel/mm/lru_gen/enable`` if the
-> > + feature wasn't enabled by default.
 > 
-> Required for what? This sentence seem to lack context. Maybe add an
-> overview what is Multigenerational LRU so that users will have an idea what
-> these knobs control.
-
-Apparently I left an important part of this quick start in the next
-patch, where Kconfig options are added. I'm wonder whether I should
-squash the next patch into this one.
-
-I always separate Kconfig changes and leave them in the last patch
-because it gives me peace of mind knowing it'll never give any auto
-bisectors a hard time.
-
-But I saw people not following this practice, and I'm also tempted to
-do so. Can anybody remind me whether it's considered a bad practice to
-have code changes and Kconfig changes in the same patch?
-
-> > +
-> > +Recipes
-> > +=======
+> Best regards,
+> Martin
 > 
-> Some more context here will be also helpful.
 
-Will do.
-
-> > +Personal computers
-> > +------------------
-> > +:Thrashing prevention: Write ``N`` to
-> > + ``/sys/kernel/mm/lru_gen/min_ttl_ms`` to prevent the working set of
-> > + ``N`` milliseconds from getting evicted. The OOM killer is invoked if
-> > + this working set can't be kept in memory. Based on the average human
-> > + detectable lag (~100ms), ``N=1000`` usually eliminates intolerable
-> > + lags due to thrashing. Larger values like ``N=3000`` make lags less
-> > + noticeable at the cost of more OOM kills.
-> > +
-> > +Data centers
-> > +------------
-> > +:Debugfs interface: ``/sys/kernel/debug/lru_gen`` has the following
-> > + format:
-> > + ::
-> > +
-> > +   memcg  memcg_id  memcg_path
-> > +     node  node_id
-> > +       min_gen  birth_time  anon_size  file_size
-> > +       ...
-> > +       max_gen  birth_time  anon_size  file_size
-> > +
-> > + ``min_gen`` is the oldest generation number and ``max_gen`` is the
-> > + youngest generation number. ``birth_time`` is in milliseconds.
-> > + ``anon_size`` and ``file_size`` are in pages.
-> 
-> And what does oldest and youngest generations mean from the user
-> perspective?
-
-Good question. Will add more details in the next spin.

@@ -2,129 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D2E48C48F
+	by mail.lfdr.de (Postfix) with ESMTP id EEBEE48C490
 	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240964AbiALNPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:15:51 -0500
-Received: from mga14.intel.com ([192.55.52.115]:55272 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240633AbiALNPs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:15:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641993348; x=1673529348;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lfvkePIADNtvsOM3O+4EOfaKJDRflYFfJEeZtR9jA5w=;
-  b=PM3CYZI/SRWp9YaQdPsl4ekNRzsSSDzbG5ynZNbb5MRRPYGhLAGcY4Xo
-   vOl0+0F2bgmBn5VVNO3I1QxOWwmLq3/B+a/zDpnd3SzUIgjGyDC63U3l9
-   vt6Q+SbeRRyWlVwWbtkpCnuXBbEeDfzj4z92kPU4BRe5hozd6Y09676vZ
-   RJbO4HK1d18Ki9HRKrgvOMBZ8DXldoo9w+Xk+HO/IeX9D7toW5k+adjzo
-   JZYMf0322RNlq2J6oiSbnhZIcyNX6dAhXhJCY/NAK3W8RddrLagEeVaJ1
-   JYZXWJTut4b+701LrPhIdR6jW/MoJhLetF2Y3Jz3m+DYm+f4CGjkA2ytl
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="243929860"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="243929860"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 05:15:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="515481084"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 12 Jan 2022 05:15:47 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n7dTe-0005qA-FJ; Wed, 12 Jan 2022 13:15:46 +0000
-Date:   Wed, 12 Jan 2022 21:15:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 1470/2375] include/linux/rcupdate.h:380:9: error:
- dereferencing pointer to incomplete type 'struct task_struct'
-Message-ID: <202201122122.PcOklMwO-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S241105AbiALNPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:15:55 -0500
+Received: from so254-9.mailgun.net ([198.61.254.9]:48550 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241068AbiALNPy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 08:15:54 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1641993354; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=NbjsN81+5glnjMYel3L0NP5kJiwyJHrGJEqa1Ex6F+s=; b=hp/ssrD8xnuLT+/x5KCnv+Hgs984XNtvE1vTcED6ibbP1asMaPURhzU3eI+nEzcuCbObwL9Q
+ EfgLKiOWMCaX1vDsFyPzI8HsRel16Hl72JvMF5vnbIoisD5VAEgiB3NSHIhSSZGOP2UVtrVP
+ nd1jcvmJ/ZkN+1OhcGR4O7Et3+M=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 61ded48906362278a19bb692 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 12 Jan 2022 13:15:53
+ GMT
+Sender: Vijayanand=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id C441BC43617; Wed, 12 Jan 2022 13:15:52 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        FROM_ADDR_WS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from vjitta-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: vjitta)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C8D96C4338F;
+        Wed, 12 Jan 2022 13:15:49 +0000 (UTC)
+From:   Vijayanand@codeaurora.org, Jitta@codeaurora.org
+To:     joro@8bytes.org, will@kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, vjitta@codeaurora.org,
+        Vijayanand Jitta <quic_vjitta@quicinc.com>
+Subject: [PATCH v3] iommu: Fix potential use-after-free during probe
+Date:   Wed, 12 Jan 2022 18:45:41 +0530
+Message-Id: <1641993341-3019-1-git-send-email-quic_vjitta@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   391ce485ced0e47bf8d2ce8bc32bb87887e16656
-commit: 4d8fbe77fc63f683b6c14ba02bc96f6f53cc5fc1 [1470/2375] headers/deps: rcu/wait: Remove <linux/sched/task_flags.h> from <linux/rcuwait.h>
-config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220112/202201122122.PcOklMwO-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=4d8fbe77fc63f683b6c14ba02bc96f6f53cc5fc1
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout 4d8fbe77fc63f683b6c14ba02bc96f6f53cc5fc1
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
+From: Vijayanand Jitta <quic_vjitta@quicinc.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Kasan has reported the following use after free on dev->iommu.
+when a device probe fails and it is in process of freeing dev->iommu
+in dev_iommu_free function, a deferred_probe_work_func runs in parallel
+and tries to access dev->iommu->fwspec in of_iommu_configure path thus
+causing use after free.
 
-All errors (new ones prefixed by >>):
+BUG: KASAN: use-after-free in of_iommu_configure+0xb4/0x4a4
+Read of size 8 at addr ffffff87a2f1acb8 by task kworker/u16:2/153
 
-   In file included from include/linux/rcuwait.h:5,
-                    from include/linux/percpu_rwsem.h:7,
-                    from include/linux/percpu_rwsem_api.h:2,
-                    from kernel/locking/locktorture.c:16:
-   include/linux/rcuwait.h: In function 'rcuwait_active':
->> include/linux/rcupdate.h:380:9: error: dereferencing pointer to incomplete type 'struct task_struct'
-     380 |  typeof(*p) *_________p1 = (typeof(*p) *__force)READ_ONCE(p); \
-         |         ^
-   include/linux/rcupdate.h:490:31: note: in expansion of macro '__rcu_access_pointer'
-     490 | #define rcu_access_pointer(p) __rcu_access_pointer((p), __rcu)
-         |                               ^~~~~~~~~~~~~~~~~~~~
-   include/linux/rcuwait.h:33:11: note: in expansion of macro 'rcu_access_pointer'
-      33 |  return !!rcu_access_pointer(w->task);
-         |           ^~~~~~~~~~~~~~~~~~
+Workqueue: events_unbound deferred_probe_work_func
+Call trace:
+ dump_backtrace+0x0/0x33c
+ show_stack+0x18/0x24
+ dump_stack_lvl+0x16c/0x1e0
+ print_address_description+0x84/0x39c
+ __kasan_report+0x184/0x308
+ kasan_report+0x50/0x78
+ __asan_load8+0xc0/0xc4
+ of_iommu_configure+0xb4/0x4a4
+ of_dma_configure_id+0x2fc/0x4d4
+ platform_dma_configure+0x40/0x5c
+ really_probe+0x1b4/0xb74
+ driver_probe_device+0x11c/0x228
+ __device_attach_driver+0x14c/0x304
+ bus_for_each_drv+0x124/0x1b0
+ __device_attach+0x25c/0x334
+ device_initial_probe+0x24/0x34
+ bus_probe_device+0x78/0x134
+ deferred_probe_work_func+0x130/0x1a8
+ process_one_work+0x4c8/0x970
+ worker_thread+0x5c8/0xaec
+ kthread+0x1f8/0x220
+ ret_from_fork+0x10/0x18
 
+Allocated by task 1:
+ ____kasan_kmalloc+0xd4/0x114
+ __kasan_kmalloc+0x10/0x1c
+ kmem_cache_alloc_trace+0xe4/0x3d4
+ __iommu_probe_device+0x90/0x394
+ probe_iommu_group+0x70/0x9c
+ bus_for_each_dev+0x11c/0x19c
+ bus_iommu_probe+0xb8/0x7d4
+ bus_set_iommu+0xcc/0x13c
+ arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+ arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+ platform_drv_probe+0xe4/0x13c
+ really_probe+0x2c8/0xb74
+ driver_probe_device+0x11c/0x228
+ device_driver_attach+0xf0/0x16c
+ __driver_attach+0x80/0x320
+ bus_for_each_dev+0x11c/0x19c
+ driver_attach+0x38/0x48
+ bus_add_driver+0x1dc/0x3a4
+ driver_register+0x18c/0x244
+ __platform_driver_register+0x88/0x9c
+ init_module+0x64/0xff4 [arm_smmu]
+ do_one_initcall+0x17c/0x2f0
+ do_init_module+0xe8/0x378
+ load_module+0x3f80/0x4a40
+ __se_sys_finit_module+0x1a0/0x1e4
+ __arm64_sys_finit_module+0x44/0x58
+ el0_svc_common+0x100/0x264
+ do_el0_svc+0x38/0xa4
+ el0_svc+0x20/0x30
+ el0_sync_handler+0x68/0xac
+ el0_sync+0x160/0x180
 
-vim +380 include/linux/rcupdate.h
+Freed by task 1:
+ kasan_set_track+0x4c/0x84
+ kasan_set_free_info+0x28/0x4c
+ ____kasan_slab_free+0x120/0x15c
+ __kasan_slab_free+0x18/0x28
+ slab_free_freelist_hook+0x204/0x2fc
+ kfree+0xfc/0x3a4
+ __iommu_probe_device+0x284/0x394
+ probe_iommu_group+0x70/0x9c
+ bus_for_each_dev+0x11c/0x19c
+ bus_iommu_probe+0xb8/0x7d4
+ bus_set_iommu+0xcc/0x13c
+ arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+ arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+ platform_drv_probe+0xe4/0x13c
+ really_probe+0x2c8/0xb74
+ driver_probe_device+0x11c/0x228
+ device_driver_attach+0xf0/0x16c
+ __driver_attach+0x80/0x320
+ bus_for_each_dev+0x11c/0x19c
+ driver_attach+0x38/0x48
+ bus_add_driver+0x1dc/0x3a4
+ driver_register+0x18c/0x244
+ __platform_driver_register+0x88/0x9c
+ init_module+0x64/0xff4 [arm_smmu]
+ do_one_initcall+0x17c/0x2f0
+ do_init_module+0xe8/0x378
+ load_module+0x3f80/0x4a40
+ __se_sys_finit_module+0x1a0/0x1e4
+ __arm64_sys_finit_module+0x44/0x58
+ el0_svc_common+0x100/0x264
+ do_el0_svc+0x38/0xa4
+ el0_svc+0x20/0x30
+ el0_sync_handler+0x68/0xac
+ el0_sync+0x160/0x180
 
-76c8eaafe4f061f Paul E. McKenney        2021-04-21  377  
-ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  378  #define __rcu_access_pointer(p, space) \
-ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  379  ({ \
-7d0ae8086b82831 Paul E. McKenney        2015-03-03 @380  	typeof(*p) *_________p1 = (typeof(*p) *__force)READ_ONCE(p); \
-423a86a610cad12 Joel Fernandes (Google  2018-12-12  381) 	rcu_check_sparse(p, space); \
-ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  382  	((typeof(*p) __force __kernel *)(_________p1)); \
-ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  383  })
-ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  384  #define __rcu_dereference_check(p, c, space) \
-ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  385  ({ \
-ac59853c06993a4 Pranith Kumar           2014-11-13  386  	/* Dependency order vs. p above. */ \
-506458efaf153c1 Will Deacon             2017-10-24  387  	typeof(*p) *________p1 = (typeof(*p) *__force)READ_ONCE(p); \
-f78f5b90c4ffa55 Paul E. McKenney        2015-06-18  388  	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_check() usage"); \
-423a86a610cad12 Joel Fernandes (Google  2018-12-12  389) 	rcu_check_sparse(p, space); \
-ac59853c06993a4 Pranith Kumar           2014-11-13  390  	((typeof(*p) __force __kernel *)(________p1)); \
-ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  391  })
-ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  392  #define __rcu_dereference_protected(p, c, space) \
-ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  393  ({ \
-f78f5b90c4ffa55 Paul E. McKenney        2015-06-18  394  	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected() usage"); \
-423a86a610cad12 Joel Fernandes (Google  2018-12-12  395) 	rcu_check_sparse(p, space); \
-ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  396  	((typeof(*p) __force __kernel *)(p)); \
-ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  397  })
-995f1405610bd84 Paul E. McKenney        2016-07-01  398  #define rcu_dereference_raw(p) \
-995f1405610bd84 Paul E. McKenney        2016-07-01  399  ({ \
-995f1405610bd84 Paul E. McKenney        2016-07-01  400  	/* Dependency order vs. p above. */ \
-506458efaf153c1 Will Deacon             2017-10-24  401  	typeof(p) ________p1 = READ_ONCE(p); \
-995f1405610bd84 Paul E. McKenney        2016-07-01  402  	((typeof(*p) __force __kernel *)(________p1)); \
-995f1405610bd84 Paul E. McKenney        2016-07-01  403  })
-ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  404  
+Fix this by taking device_lock during probe_iommu_group.
 
-:::::: The code at line 380 was first introduced by commit
-:::::: 7d0ae8086b828311250c6afdf800b568ac9bd693 rcu: Convert ACCESS_ONCE() to READ_ONCE() and WRITE_ONCE()
-
-:::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-
+Signed-off-by: Vijayanand Jitta <quic_vjitta@quicinc.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/iommu/iommu.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index dd7863e..261792d 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -1617,7 +1617,7 @@ static int probe_iommu_group(struct device *dev, void *data)
+ {
+ 	struct list_head *group_list = data;
+ 	struct iommu_group *group;
+-	int ret;
++	int ret = 0;
+ 
+ 	/* Device is probed already if in a group */
+ 	group = iommu_group_get(dev);
+@@ -1626,9 +1626,13 @@ static int probe_iommu_group(struct device *dev, void *data)
+ 		return 0;
+ 	}
+ 
+-	ret = __iommu_probe_device(dev, group_list);
+-	if (ret == -ENODEV)
+-		ret = 0;
++	ret = device_trylock(dev);
++	if (ret) {
++		ret = __iommu_probe_device(dev, group_list);
++		if (ret == -ENODEV)
++			ret = 0;
++		device_unlock(dev);
++	}
+ 
+ 	return ret;
+ }
+-- 
+2.7.4
+

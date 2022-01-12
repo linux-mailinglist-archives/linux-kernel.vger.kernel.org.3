@@ -2,83 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F7C48C1EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA5048C1F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239953AbiALKEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 05:04:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239196AbiALKEW (ORCPT
+        id S1352232AbiALKHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 05:07:31 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:55836
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349646AbiALKHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 05:04:22 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209BAC06173F;
-        Wed, 12 Jan 2022 02:04:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Kh/HKj3/o1WOFn9L3CDxPNGxXJ5OR1S9mBMFhWz9mXY=; b=Inj4tqlAk9DWNVe9v6+4CQ6Xhe
-        FWOdQX8JvqI/7oePa/z66spHCoPa/5xqHj8tZpSjqJDFIOojup1PaO+6R0MCymfVsXdCJ9TNPlgrA
-        hm8GM1IbQTs2nENXPRwRIEu+309+J20VXtvD5kcHstRRhDWDasaCeN0NzuiLZ+WEzOTNC9fRAweYZ
-        1zVnbBBN1HKqMueamY1H0hFVgEBiUm9bsrZYfsKmxj0DVhptvsT8upBEWoPzJjuvZEdLvz2EdrDTW
-        gqUctnWJpjoo1SPh6JlMNKLAe8Zr5+PXmvk92vCrUFCTGiZ2GKzC5J7r3IyTagGVf6AjVFOHIlMeC
-        9cpQyi2Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7aTz-0040I5-6b; Wed, 12 Jan 2022 10:03:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Wed, 12 Jan 2022 05:07:30 -0500
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D7F08300222;
-        Wed, 12 Jan 2022 11:03:52 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B578920139FF2; Wed, 12 Jan 2022 11:03:52 +0100 (CET)
-Date:   Wed, 12 Jan 2022 11:03:52 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     hannes@cmpxchg.org, torvalds@linux-foundation.org,
-        ebiggers@kernel.org, tj@kernel.org, lizefan.x@bytedance.com,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        stable@vger.kernel.org, kernel-team@android.com,
-        syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com
-Subject: Re: [PATCH v3 1/1] psi: Fix uaf issue when psi trigger is destroyed
- while being polled
-Message-ID: <Yd6niK1gzKc5lIJ8@hirez.programming.kicks-ass.net>
-References: <20220111232309.1786347-1-surenb@google.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7D2233FFDE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641982049;
+        bh=AFoEvp5eWcTOKPSE4vqU4Dm4wZS4JP2i5S4paCY8zig=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=DhPTLHtslM1nJL0+yJHCfEFe167fbm6XtOOvmUCTXWng6ZtSIx96BC3FHJ3hlpKwb
+         JfwQd/MW4UBe6OyZYCKR1jbDp4BpIq+u50s436RHDP5prJGprVjw7+TtG5xJP2pI5K
+         irA3G+aIdx0ltLgQAWHfp+Dwmc3Ddp508Zv4RW6HL6nH+3Otq6Zi7w+PgZz8WqqfFj
+         4nYJHy3S2ccEdmjc9EzLt8CvV20S43L/7DvA+1gDKOdyr2DTl1++ZCqr/yMC5wHnna
+         2E68zIvXQSCe9GdBZ1NUKTf+g5utqQPEd5xlbT97e9tFlnqofF/5QgPWDvLfXKZ3X+
+         ezD40Hk2+TPWw==
+Received: by mail-ed1-f71.google.com with SMTP id j10-20020a05640211ca00b003ff0e234fdfso1879533edw.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:07:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AFoEvp5eWcTOKPSE4vqU4Dm4wZS4JP2i5S4paCY8zig=;
+        b=1V4S0ttwEAXOWpvzLVa8mhk5sKqS7fqK6gTDnNBLYWcKypQBFR8WesG7xa5jk3c5v7
+         dtlmgx5qt98WrCKRj0kedM1ofA0Pa5YlX6FdFWwYVC5d58YGoDSwyx8iQjTUdauelEn1
+         CCh1L+U2SDP09rY1yq+CVzoPzO41UlocrI5m+iVUexMi/ZcIGWEbuxDwN1mLswwK9XAU
+         z91Xgq/Vwj7YTUxViMVzyrZA9jN/w5mo+bflWARIc/l7ZO16iSjf8ufja8glA4Fon/45
+         WXqqV9K2KXrpbl4YYNcwYE1mFbXn9XjH/FLZ93wRnrqODqqguH5iNGbjgz5ovT+s6hx7
+         hwsw==
+X-Gm-Message-State: AOAM531ct5/PJb4gw8voNeo7lUMJQBzdz4G+EZms7N2ejL+/ljyZikFd
+        Uw0/sFAGTa2RCXOwSu8dB1g2cuKb9PX3VHVd3gbw0BJJKasWA4AOFy6FddOCoy2XlaoIN0uqwLs
+        olfAlnSld81zqo07Uy232kj1STXDt0lbmGtnG0MVgwg==
+X-Received: by 2002:a17:906:2bc3:: with SMTP id n3mr7252232ejg.332.1641982049156;
+        Wed, 12 Jan 2022 02:07:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyb/NuTKevzN07lPwyurPSJI67fCctIz9rq4OSgNTLHT/x3rRMME7Elc/Be6y3vkmR9tseimQ==
+X-Received: by 2002:a17:906:2bc3:: with SMTP id n3mr7252215ejg.332.1641982048986;
+        Wed, 12 Jan 2022 02:07:28 -0800 (PST)
+Received: from [192.168.0.29] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id qf18sm2471944ejc.124.2022.01.12.02.07.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 02:07:28 -0800 (PST)
+Message-ID: <38217570-9f19-2b04-6ed0-89f365e29d5f@canonical.com>
+Date:   Wed, 12 Jan 2022 11:07:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111232309.1786347-1-surenb@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v3] nfc: st-nci: Fix potential buffer overflows in
+ EVT_TRANSACTION
+Content-Language: en-US
+To:     Jordy Zomer <jordy@pwning.systems>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, wengjianfeng@yulong.com
+References: <20211117171554.2731340-1-jordy@pwning.systems>
+ <20220111164543.3233040-1-jordy@pwning.systems>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220111164543.3233040-1-jordy@pwning.systems>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 03:23:09PM -0800, Suren Baghdasaryan wrote:
-> With write operation on psi files replacing old trigger with a new one,
-> the lifetime of its waitqueue is totally arbitrary. Overwriting an
-> existing trigger causes its waitqueue to be freed and pending poll()
-> will stumble on trigger->event_wait which was destroyed.
-> Fix this by disallowing to redefine an existing psi trigger. If a write
-> operation is used on a file descriptor with an already existing psi
-> trigger, the operation will fail with EBUSY error.
-> Also bypass a check for psi_disabled in the psi_trigger_destroy as the
-> flag can be flipped after the trigger is created, leading to a memory
-> leak.
+On 11/01/2022 17:45, Jordy Zomer wrote:
+> It appears that there are some buffer overflows in EVT_TRANSACTION.
+> This happens because the length parameters that are passed to memcpy
+> come directly from skb->data and are not guarded in any way.
 > 
-> Fixes: 0e94682b73bf ("psi: introduce psi monitor")
-> Cc: stable@vger.kernel.org
-> Reported-by: syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com
-> Analyzed-by: Eric Biggers <ebiggers@kernel.org>
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Signed-off-by: Jordy Zomer <jordy@pwning.systems>
 > ---
+>  drivers/nfc/st-nci/se.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
 
-Thanks, I'll go stick this in sched/urgent unless Linus picks it up
-himself.
+Looks ok.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+Best regards,
+Krzysztof

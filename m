@@ -2,132 +2,542 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A177F48BEF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D923F48BEFA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:24:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351193AbiALHY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:24:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24733 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237408AbiALHY0 (ORCPT
+        id S1351200AbiALHYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237408AbiALHYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:24:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641972266;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4/5pK0Zr6DD8A5nn05o+mZc3e8AW7Gue1WA4ZvFpbm8=;
-        b=gdcR6TFOwJdBTrz53uY1xPE8F1d6PFlPDuEJO50LUy5FDW+aFRx32UT7TNUExcjIB1PT02
-        sy+Ug+jpjUGpTxQdr0UklM1YZo2A5Nxv4gzVfF0QWT1lJtgA6Xo2SLKp0wxR+6VPZKjqjI
-        mtFAVH3VLpus6PBkHxfWdB9ohirMlvw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-258-PyQcd5q3MT2vf5hnsOavGw-1; Wed, 12 Jan 2022 02:24:20 -0500
-X-MC-Unique: PyQcd5q3MT2vf5hnsOavGw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 753E713EA;
-        Wed, 12 Jan 2022 07:24:19 +0000 (UTC)
-Received: from [10.72.12.204] (ovpn-12-204.pek2.redhat.com [10.72.12.204])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 460D95F92B;
-        Wed, 12 Jan 2022 07:24:15 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v4 00/21] Support SDEI Virtualization
-To:     Eric Auger <eauger@redhat.com>, kvmarm@lists.cs.columbia.edu
-Cc:     maz@kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan.Cameron@huawei.com, pbonzini@redhat.com, will@kernel.org
-References: <20210815001352.81927-1-gshan@redhat.com>
- <eee7eeb2-cedf-e52f-1e5f-403d9edabd94@redhat.com>
- <7f5e86dd-b38d-8699-58bd-35db78ec1b7a@redhat.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <cb75497e-6e24-3b9e-36b2-a80a6478c439@redhat.com>
-Date:   Wed, 12 Jan 2022 15:24:13 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Wed, 12 Jan 2022 02:24:51 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF78CC06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 23:24:50 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id u21so6176316edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 23:24:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uQCDewLBjewv7c8fs65JsSOFwpm0o6zytmCWic/8nRc=;
+        b=YtT1rtZdyJlrkVd6HjSwLPBzN/Obnfg8cZw8b6eK+XtmeFY1sZUh7KJO7edpY/Bca+
+         l5xA0bRzwdB4cTfr53JAXJVszzPasxM1kN8VkdVUuz4UysoQA1Y5kLMP4zv5xdcMwQWn
+         vozVhsNd4XlUanJWfsD5hwTjNxP0CS8Sl437w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uQCDewLBjewv7c8fs65JsSOFwpm0o6zytmCWic/8nRc=;
+        b=4tYQhRJ/Pbo/O7mRXXvKFRSrhT5jDqsN9gqPwQFVbXe9B/axKeAK0YsUND/lIaDKGU
+         9mp9eF4HXY0Q1EUK1Se+00HWjSmlORwTSct1u+ygleKaG0TxJ31O3TTT+7oFd1fhms7C
+         qqfzOgtSoeqSm87eUVGVvcw8BHe7Axexw/67FpyEi0CobbkUoPmQdgmBZTV+i+H1ojma
+         E/7ULXJD1BRlkpRiPjIe5QQdqctsxXXIWagF6SdzpB1dWaeHRfc1e8P6xADh0YZ7ZiOw
+         gd+2TjNesxAVysFumwLE1/t3s9lRgOtJVquTBcpiCGn37/u6ZEgFryLNJaiZBc1QdoNs
+         /K/w==
+X-Gm-Message-State: AOAM532GSSGDR+Zmt8/nBBpba7TW949/UVIZ7fWVSiGesaMHe1gd36wC
+        QWlioIqR9JznbF7MurRQ09ytWFviTGEObXEaxJq/l4pH8Me3eQ==
+X-Google-Smtp-Source: ABdhPJyEJlSh0abG118+el5cM/GHTx1HkR0P0GQy2atseVhUAX9rTgXQUM2klaGLOApwsObcgD+MtEKSA9hCfVpqHZE=
+X-Received: by 2002:a17:907:961d:: with SMTP id gb29mr6450110ejc.123.1641972289289;
+ Tue, 11 Jan 2022 23:24:49 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <7f5e86dd-b38d-8699-58bd-35db78ec1b7a@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+References: <20200907081825.1654-1-narmstrong@baylibre.com> <20200907081825.1654-7-narmstrong@baylibre.com>
+In-Reply-To: <20200907081825.1654-7-narmstrong@baylibre.com>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Wed, 12 Jan 2022 12:54:38 +0530
+Message-ID: <CAMty3ZBEmafG8LS_yv4eektvUoHwYFoV=-8wohUXgsvpRbZqtA@mail.gmail.com>
+Subject: Re: [PATCH 6/6] drm/meson: add support for MIPI-DSI transceiver
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     daniel@ffwll.ch, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+Hi Neil,
 
-On 11/10/21 10:29 PM, Eric Auger wrote:
-> On 8/15/21 2:19 AM, Gavin Shan wrote:
->> On 8/15/21 10:13 AM, Gavin Shan wrote:
->>> This series intends to virtualize Software Delegated Exception Interface
->>> (SDEI), which is defined by DEN0054A. It allows the hypervisor to deliver
->>> NMI-alike event to guest and it's needed by asynchronous page fault to
->>> deliver page-not-present notification from hypervisor to guest. The code
->>> and the required qemu changes can be found from:
->>>
->>>      https://developer.arm.com/documentation/den0054/latest
->>>      https://github.com/gwshan/linux    ("kvm/arm64_sdei")
->>>      https://github.com/gwshan/qemu     ("kvm/arm64_sdei")
->>>
->>> The SDEI event is identified by a 32-bits number. Bits[31:24] are used
->>> to indicate the SDEI event properties while bits[23:0] are identifying
->>> the unique number. The implementation takes bits[23:22] to indicate the
->>> owner of the SDEI event. For example, those SDEI events owned by KVM
->>> should have these two bits set to 0b01. Besides, the implementation
->>> supports SDEI events owned by KVM only.
->>>
->>> The design is pretty straightforward and the implementation is just
->>> following the SDEI specification, to support the defined SMCCC intefaces,
->>> except the IRQ binding stuff. There are several data structures
->>> introduced.
->>> Some of the objects have to be migrated by VMM. So their definitions are
->>> split up for VMM to include the corresponding states for migration.
->>>
->>>      struct kvm_sdei_kvm
->>>         Associated with VM and used to track the KVM exposed SDEI events
->>>         and those registered by guest.
->>>      struct kvm_sdei_vcpu
->>>         Associated with vCPU and used to track SDEI event delivery. The
->>>         preempted context is saved prior to the delivery and restored
->>>         after that.
->>>      struct kvm_sdei_event
->>>         SDEI events exposed by KVM so that guest can register and enable.
->>>      struct kvm_sdei_kvm_event
->>>         SDEI events that have been registered by guest.
->>>      struct kvm_sdei_vcpu_event
->>>         SDEI events that have been queued to specific vCPU for delivery.
->>>
->>> The series is organized as below:
->>>
->>>      PATCH[01]    Introduces template for smccc_get_argx()
->>>      PATCH[02]    Introduces the data structures and infrastructure
->>>      PATCH[03-14] Supports various SDEI related hypercalls
->>>      PATCH[15]    Supports SDEI event notification
->>>      PATCH[16-17] Introduces ioctl command for migration
->>>      PATCH[18-19] Supports SDEI event injection and cancellation
->>>      PATCH[20]    Exports SDEI capability
->>>      PATCH[21]    Adds self-test case for SDEI virtualization
->>>
->>
->> [...]
->>
->> I explicitly copied James Morse and Mark Rutland when posting the series,
->> but something unknown went wrong. I'm including them here to avoid
->> reposting the whole series.
-> I don't see James nor Mark included here either
-> 
+On Mon, Sep 7, 2020 at 1:48 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
+>
+> The Amlogic AXg SoCs embeds a Synopsys DW-MIPI-DSI transceiver (ver 1.21a), with a custom
+> glue managing the IP resets, clock and data input similar to the DW-HDMI Glue on other
+> Amlogic SoCs.
+>
+> This adds support for the Glue managing the transceiver, mimicing the init flow provided
+> by Amlogic to setup the ENCl encoder, the glue, the transceiver, the digital D-PHY and the
+> Analog PHY in the proper way.
+>
+> The DW-MIPI-DSI transceiver + D-PHY are directly clocked by the VCLK2 clock, which pixel clock
+> is derived and feeds the ENCL encoder and the VIU pixel reader.
+>
+> An optional "MEAS" clock can be enabled to measure the delay between each vsync feeding the
+> DW-MIPI-DSI transceiver.
+>
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> ---
+>  drivers/gpu/drm/meson/Kconfig             |   7 +
+>  drivers/gpu/drm/meson/Makefile            |   1 +
+>  drivers/gpu/drm/meson/meson_dw_mipi_dsi.c | 562 ++++++++++++++++++++++
+>  3 files changed, 570 insertions(+)
+>  create mode 100644 drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
+>
+> diff --git a/drivers/gpu/drm/meson/Kconfig b/drivers/gpu/drm/meson/Kconfig
+> index 9f9281dd49f8..385f6f23839b 100644
+> --- a/drivers/gpu/drm/meson/Kconfig
+> +++ b/drivers/gpu/drm/meson/Kconfig
+> @@ -16,3 +16,10 @@ config DRM_MESON_DW_HDMI
+>         default y if DRM_MESON
+>         select DRM_DW_HDMI
+>         imply DRM_DW_HDMI_I2S_AUDIO
+> +
+> +config DRM_MESON_DW_MIPI_DSI
+> +       tristate "MIPI DSI Synopsys Controller support for Amlogic Meson Display"
+> +       depends on DRM_MESON
+> +       default y if DRM_MESON
+> +       select DRM_DW_MIPI_DSI
+> +       select GENERIC_PHY_MIPI_DPHY
+> diff --git a/drivers/gpu/drm/meson/Makefile b/drivers/gpu/drm/meson/Makefile
+> index 28a519cdf66b..2cc870e91182 100644
+> --- a/drivers/gpu/drm/meson/Makefile
+> +++ b/drivers/gpu/drm/meson/Makefile
+> @@ -5,3 +5,4 @@ meson-drm-y += meson_rdma.o meson_osd_afbcd.o
+>
+>  obj-$(CONFIG_DRM_MESON) += meson-drm.o
+>  obj-$(CONFIG_DRM_MESON_DW_HDMI) += meson_dw_hdmi.o
+> +obj-$(CONFIG_DRM_MESON_DW_MIPI_DSI) += meson_dw_mipi_dsi.o
+> diff --git a/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c b/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
+> new file mode 100644
+> index 000000000000..bbe1294fce7c
+> --- /dev/null
+> +++ b/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
+> @@ -0,0 +1,562 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (C) 2016 BayLibre, SAS
+> + * Author: Neil Armstrong <narmstrong@baylibre.com>
+> + * Copyright (C) 2015 Amlogic, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/component.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of_graph.h>
+> +#include <linux/reset.h>
+> +#include <linux/phy/phy.h>
+> +
+> +#include <video/mipi_display.h>
+> +
+> +#include <drm/bridge/dw_mipi_dsi.h>
+> +#include <drm/drm_mipi_dsi.h>
+> +
+> +#include <drm/drm_atomic_helper.h>
+> +#include <drm/drm_device.h>
+> +#include <drm/drm_probe_helper.h>
+> +#include <drm/drm_print.h>
+> +
+> +#include "meson_drv.h"
+> +#include "meson_dw_mipi_dsi.h"
+> +#include "meson_registers.h"
+> +#include "meson_venc.h"
+> +
+> +#define DRIVER_NAME "meson-dw-mipi-dsi"
+> +#define DRIVER_DESC "Amlogic Meson MIPI-DSI DRM driver"
+> +
+> +/*  MIPI DSI/VENC Color Format Definitions */
+> +#define MIPI_DSI_VENC_COLOR_30B   0x0
+> +#define MIPI_DSI_VENC_COLOR_24B   0x1
+> +#define MIPI_DSI_VENC_COLOR_18B   0x2
+> +#define MIPI_DSI_VENC_COLOR_16B   0x3
+> +
+> +#define COLOR_16BIT_CFG_1         0x0
+> +#define COLOR_16BIT_CFG_2         0x1
+> +#define COLOR_16BIT_CFG_3         0x2
+> +#define COLOR_18BIT_CFG_1         0x3
+> +#define COLOR_18BIT_CFG_2         0x4
+> +#define COLOR_24BIT               0x5
+> +#define COLOR_20BIT_LOOSE         0x6
+> +#define COLOR_24_BIT_YCBCR        0x7
+> +#define COLOR_16BIT_YCBCR         0x8
+> +#define COLOR_30BIT               0x9
+> +#define COLOR_36BIT               0xa
+> +#define COLOR_12BIT               0xb
+> +#define COLOR_RGB_111             0xc
+> +#define COLOR_RGB_332             0xd
+> +#define COLOR_RGB_444             0xe
+> +
+> +/*  MIPI DSI Relative REGISTERs Definitions */
+> +/* For MIPI_DSI_TOP_CNTL */
+> +#define BIT_DPI_COLOR_MODE        20
+> +#define BIT_IN_COLOR_MODE         16
+> +#define BIT_CHROMA_SUBSAMPLE      14
+> +#define BIT_COMP2_SEL             12
+> +#define BIT_COMP1_SEL             10
+> +#define BIT_COMP0_SEL              8
+> +#define BIT_DE_POL                 6
+> +#define BIT_HSYNC_POL              5
+> +#define BIT_VSYNC_POL              4
+> +#define BIT_DPICOLORM              3
+> +#define BIT_DPISHUTDN              2
+> +#define BIT_EDPITE_INTR_PULSE      1
+> +#define BIT_ERR_INTR_PULSE         0
+> +
+> +/* HHI Registers */
+> +#define HHI_VIID_CLK_DIV       0x128 /* 0x4a offset in data sheet */
+> +#define VCLK2_DIV_MASK         0xff
+> +#define VCLK2_DIV_EN           BIT(16)
+> +#define VCLK2_DIV_RESET                BIT(17)
+> +#define CTS_ENCL_SEL_MASK      (0xf << 12)
+> +#define CTS_ENCL_SEL_SHIFT     12
+> +#define HHI_VIID_CLK_CNTL      0x12c /* 0x4b offset in data sheet */
+> +#define VCLK2_EN               BIT(19)
+> +#define VCLK2_SEL_MASK         (0x7 << 16)
+> +#define VCLK2_SEL_SHIFT                16
+> +#define VCLK2_SOFT_RESET       BIT(15)
+> +#define VCLK2_DIV1_EN          BIT(0)
+> +#define HHI_VID_CLK_CNTL2      0x194 /* 0x65 offset in data sheet */
+> +#define CTS_ENCL_EN            BIT(3)
+> +
+> +/**
+> + * DOC: MIPI DSI
+> + *
+> + */
+> +
+> +struct meson_dw_mipi_dsi {
+> +       struct drm_encoder encoder;
+> +       struct meson_drm *priv;
+> +       struct device *dev;
+> +       void __iomem *base;
+> +       struct phy *phy;
+> +       union phy_configure_opts phy_opts;
+> +       struct dw_mipi_dsi *dmd;
+> +       struct dw_mipi_dsi_plat_data pdata;
+> +       struct mipi_dsi_device *dsi_device;
+> +       unsigned long mode_flags;
+> +       struct clk *px_clk;
+> +};
+> +#define encoder_to_meson_dw_mipi_dsi(x) \
+> +       container_of(x, struct meson_dw_mipi_dsi, encoder)
+> +
+> +static void dw_mipi_dsi_set_vclk(struct meson_dw_mipi_dsi *mipi_dsi,
+> +                                struct drm_display_mode *mode)
+> +{
+> +       struct meson_drm *priv = mipi_dsi->priv;
+> +       unsigned int vclk2_div;
+> +       unsigned int pll_rate;
+> +       int ret;
+> +
+> +       pll_rate = mipi_dsi->phy_opts.mipi_dphy.hs_clk_rate;
+> +       vclk2_div = pll_rate / (mode->clock * 1000);
+> +
+> +       ret = clk_set_rate(mipi_dsi->px_clk, pll_rate);
+> +       if (ret) {
+> +               pr_err("Failed to set DSI PLL rate %lu\n",
+> +                      mipi_dsi->phy_opts.mipi_dphy.hs_clk_rate);
+> +
+> +               return;
+> +       }
+> +
+> +       /* Disable VCLK2 */
+> +       regmap_update_bits(priv->hhi, HHI_VIID_CLK_CNTL, VCLK2_EN, 0);
+> +
+> +       /* Setup the VCLK2 divider value */
+> +       regmap_update_bits(priv->hhi, HHI_VIID_CLK_DIV,
+> +                               VCLK2_DIV_MASK, (vclk2_div - 1));
+> +
+> +       /* select gp0 for vclk2 */
+> +       regmap_update_bits(priv->hhi, HHI_VIID_CLK_CNTL,
+> +                               VCLK2_SEL_MASK, (0 << VCLK2_SEL_SHIFT));
+> +
+> +       /* enable vclk2 gate */
+> +       regmap_update_bits(priv->hhi, HHI_VIID_CLK_CNTL, VCLK2_EN, VCLK2_EN);
+> +
+> +       /* select vclk2_div1 for encl */
+> +       regmap_update_bits(priv->hhi, HHI_VIID_CLK_DIV,
+> +                               CTS_ENCL_SEL_MASK, (8 << CTS_ENCL_SEL_SHIFT));
+> +
+> +       /* release vclk2_div_reset and enable vclk2_div */
+> +       regmap_update_bits(priv->hhi, HHI_VIID_CLK_DIV,
+> +                               VCLK2_DIV_EN | VCLK2_DIV_RESET, VCLK2_DIV_EN);
+> +
+> +       /* enable vclk2_div1 gate */
+> +       regmap_update_bits(priv->hhi, HHI_VIID_CLK_CNTL,
+> +                               VCLK2_DIV1_EN, VCLK2_DIV1_EN);
+> +
+> +       /* reset vclk2 */
+> +       regmap_update_bits(priv->hhi, HHI_VIID_CLK_CNTL,
+> +                               VCLK2_SOFT_RESET, VCLK2_SOFT_RESET);
+> +       regmap_update_bits(priv->hhi, HHI_VIID_CLK_CNTL,
+> +                               VCLK2_SOFT_RESET, 0);
+> +
+> +       /* enable encl_clk */
+> +       regmap_update_bits(priv->hhi, HHI_VID_CLK_CNTL2,
+> +                               CTS_ENCL_EN, CTS_ENCL_EN);
+> +
+> +       usleep_range(10000, 11000);
+> +}
+> +
+> +static int dw_mipi_dsi_phy_init(void *priv_data)
+> +{
+> +       struct meson_dw_mipi_dsi *mipi_dsi = priv_data;
+> +       struct meson_drm *priv = mipi_dsi->priv;
+> +
+> +
+> +       phy_power_on(mipi_dsi->phy);
+> +
+> +       writel_relaxed(1, priv->io_base + _REG(ENCL_VIDEO_EN));
+> +
+> +       return 0;
+> +}
+> +
+> +static void dw_mipi_dsi_phy_power_off(void *priv_data)
+> +{
+> +       struct meson_dw_mipi_dsi *mipi_dsi = priv_data;
+> +
+> +       phy_power_off(mipi_dsi->phy);
+> +}
+> +
+> +static int
+> +dw_mipi_dsi_get_lane_mbps(void *priv_data, const struct drm_display_mode *mode,
+> +                         unsigned long mode_flags, u32 lanes, u32 format,
+> +                         unsigned int *lane_mbps)
+> +{
+> +       struct meson_dw_mipi_dsi *mipi_dsi = priv_data;
+> +
+> +       *lane_mbps = mipi_dsi->phy_opts.mipi_dphy.hs_clk_rate / 1000000;
+> +
+> +       return 0;
+> +}
+> +
+> +static int
+> +dw_mipi_dsi_phy_get_timing(void *priv_data, unsigned int lane_mbps,
+> +                          struct dw_mipi_dsi_dphy_timing *timing)
+> +{
+> +       /* TOFIX handle other cases */
+> +
+> +       timing->clk_lp2hs = 37;
+> +       timing->clk_hs2lp = 135;
+> +       timing->data_lp2hs = 50;
+> +       timing->data_hs2lp = 3;
+> +
+> +       return 0;
+> +}
+> +
+> +static int
+> +dw_mipi_dsi_get_esc_clk_rate(void *priv_data, unsigned int *esc_clk_rate)
+> +{
+> +       *esc_clk_rate = 4; /* Mhz */
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct dw_mipi_dsi_phy_ops meson_dw_mipi_dsi_phy_ops = {
+> +       .init = dw_mipi_dsi_phy_init,
+> +       .power_off = dw_mipi_dsi_phy_power_off,
+> +       .get_lane_mbps = dw_mipi_dsi_get_lane_mbps,
+> +       .get_timing = dw_mipi_dsi_phy_get_timing,
+> +       .get_esc_clk_rate = dw_mipi_dsi_get_esc_clk_rate,
+> +};
+> +
+> +/* Encoder */
+> +
+> +static void meson_mipi_dsi_encoder_destroy(struct drm_encoder *encoder)
+> +{
+> +       drm_encoder_cleanup(encoder);
+> +}
+> +
+> +static const struct drm_encoder_funcs meson_mipi_dsi_encoder_funcs = {
+> +       .destroy        = meson_mipi_dsi_encoder_destroy,
+> +};
+> +
+> +static int meson_mipi_dsi_encoder_atomic_check(struct drm_encoder *encoder,
+> +                                       struct drm_crtc_state *crtc_state,
+> +                                       struct drm_connector_state *conn_state)
+> +{
+> +       struct meson_dw_mipi_dsi *mipi_dsi =
+> +                       encoder_to_meson_dw_mipi_dsi(encoder);
+> +
+> +       switch (mipi_dsi->dsi_device->format) {
+> +       case MIPI_DSI_FMT_RGB888:
+> +               break;
+> +       case MIPI_DSI_FMT_RGB666:
+> +               break;
+> +       case MIPI_DSI_FMT_RGB666_PACKED:
+> +       case MIPI_DSI_FMT_RGB565:
+> +       default:
+> +               DRM_DEV_ERROR(mipi_dsi->dev,
+> +                               "invalid pixel format %d\n",
+> +                               mipi_dsi->dsi_device->format);
+> +               return -EINVAL;
+> +       };
+> +
+> +       return 0;
+> +}
+> +
+> +static void meson_mipi_dsi_encoder_disable(struct drm_encoder *encoder)
+> +{
+> +       struct meson_dw_mipi_dsi *mipi_dsi =
+> +                       encoder_to_meson_dw_mipi_dsi(encoder);
+> +       struct meson_drm *priv = mipi_dsi->priv;
+> +
+> +       writel_relaxed(0, priv->io_base + _REG(ENCL_VIDEO_EN));
+> +}
+> +
+> +static void meson_mipi_dsi_encoder_enable(struct drm_encoder *encoder)
+> +{
+> +       struct meson_dw_mipi_dsi *mipi_dsi =
+> +                       encoder_to_meson_dw_mipi_dsi(encoder);
+> +       struct meson_drm *priv = mipi_dsi->priv;
+> +
+> +       writel_bits_relaxed(BIT(3), BIT(3),
+> +                       priv->io_base + _REG(ENCL_VIDEO_MODE_ADV));
+> +       writel_relaxed(0, priv->io_base + _REG(ENCL_TST_EN));
+> +}
+> +
+> +static void meson_dw_mipi_dsi_init(struct meson_dw_mipi_dsi *mipi_dsi)
+> +{
+> +       writel_relaxed((1 << 4) | (1 << 5) | (0 << 6),
+> +                       mipi_dsi->base + MIPI_DSI_TOP_CNTL);
+> +
+> +       writel_bits_relaxed(0xf, 0xf,
+> +                           mipi_dsi->base + MIPI_DSI_TOP_SW_RESET);
+> +       writel_bits_relaxed(0xf, 0,
+> +                           mipi_dsi->base + MIPI_DSI_TOP_SW_RESET);
+> +
+> +       writel_bits_relaxed(0x3, 0x3,
+> +                           mipi_dsi->base + MIPI_DSI_TOP_CLK_CNTL);
+> +
+> +       writel_relaxed(0, mipi_dsi->base + MIPI_DSI_TOP_MEM_PD);
+> +}
+> +
+> +static void meson_mipi_dsi_encoder_mode_set(struct drm_encoder *encoder,
+> +                                  struct drm_display_mode *mode,
+> +                                  struct drm_display_mode *adjusted_mode)
+> +{
+> +       struct meson_dw_mipi_dsi *mipi_dsi = encoder_to_meson_dw_mipi_dsi(encoder);
+> +       unsigned int dpi_data_format, venc_data_width;
+> +       struct meson_drm *priv = mipi_dsi->priv;
+> +       int bpp;
+> +       u32 reg;
+> +
+> +       mipi_dsi->mode_flags = mode->flags;
+> +
+> +       bpp = mipi_dsi_pixel_format_to_bpp(mipi_dsi->dsi_device->format);
+> +
+> +       phy_mipi_dphy_get_default_config(mode->clock * 1000,
+> +                                        bpp, mipi_dsi->dsi_device->lanes,
+> +                                        &mipi_dsi->phy_opts.mipi_dphy);
+> +
+> +       phy_configure(mipi_dsi->phy, &mipi_dsi->phy_opts);
+> +
+> +       switch (mipi_dsi->dsi_device->format) {
+> +       case MIPI_DSI_FMT_RGB888:
+> +               dpi_data_format = COLOR_24BIT;
+> +               venc_data_width = MIPI_DSI_VENC_COLOR_24B;
+> +               break;
+> +       case MIPI_DSI_FMT_RGB666:
+> +               dpi_data_format = COLOR_18BIT_CFG_2;
+> +               venc_data_width = MIPI_DSI_VENC_COLOR_18B;
+> +               break;
+> +       case MIPI_DSI_FMT_RGB666_PACKED:
+> +       case MIPI_DSI_FMT_RGB565:
+> +               /* invalid */
+> +               break;
+> +       };
+> +
+> +       dw_mipi_dsi_set_vclk(mipi_dsi, mode);
+> +       meson_venc_mipi_dsi_mode_set(priv, mode);
+> +
+> +       meson_encl_load_gamma(priv);
+> +
+> +       writel_relaxed(0, priv->io_base + _REG(ENCL_VIDEO_EN));
+> +
+> +       meson_dw_mipi_dsi_init(mipi_dsi);
+> +
+> +       /* Configure Set color format for DPI register */
+> +       reg = readl_relaxed(mipi_dsi->base + MIPI_DSI_TOP_CNTL) &
+> +               ~(0xf<<BIT_DPI_COLOR_MODE) &
+> +               ~(0x7<<BIT_IN_COLOR_MODE) &
+> +               ~(0x3<<BIT_CHROMA_SUBSAMPLE);
+> +
+> +       writel_relaxed(reg |
+> +               (dpi_data_format  << BIT_DPI_COLOR_MODE)  |
+> +               (venc_data_width  << BIT_IN_COLOR_MODE) |
+> +               0 << BIT_COMP0_SEL |
+> +               1 << BIT_COMP1_SEL |
+> +               2 << BIT_COMP2_SEL |
+> +               (mipi_dsi->mode_flags & DRM_MODE_FLAG_NHSYNC ? 0 : BIT(BIT_HSYNC_POL)) |
+> +               (mipi_dsi->mode_flags & DRM_MODE_FLAG_NVSYNC ? 0 : BIT(BIT_VSYNC_POL)),
+> +               mipi_dsi->base + MIPI_DSI_TOP_CNTL);
+> +}
+> +
+> +static const struct drm_encoder_helper_funcs
+> +                               meson_mipi_dsi_encoder_helper_funcs = {
+> +       .atomic_check   = meson_mipi_dsi_encoder_atomic_check,
+> +       .disable        = meson_mipi_dsi_encoder_disable,
+> +       .enable         = meson_mipi_dsi_encoder_enable,
+> +       .mode_set       = meson_mipi_dsi_encoder_mode_set,
+> +};
+> +
+> +static int meson_dw_mipi_dsi_bind(struct device *dev, struct device *master,
+> +                               void *data)
+> +{
+> +       struct meson_dw_mipi_dsi *mipi_dsi = dev_get_drvdata(dev);
+> +       struct drm_device *drm = data;
+> +       struct meson_drm *priv = drm->dev_private;
+> +       struct drm_encoder *encoder;
+> +       int ret;
+> +
+> +       /* Check before if we are supposed to have a sub-device... */
+> +       if (!mipi_dsi->dsi_device)
+> +               return -EPROBE_DEFER;
+> +
+> +       encoder = &mipi_dsi->encoder;
+> +       mipi_dsi->priv = priv;
+> +
+> +       /* Encoder */
+> +       ret = drm_encoder_init(drm, encoder, &meson_mipi_dsi_encoder_funcs,
+> +                              DRM_MODE_ENCODER_DSI, "meson_mipi_dsi");
+> +       if (ret) {
+> +               dev_err(priv->dev, "Failed to init DSI encoder\n");
+> +               return ret;
+> +       }
+> +
+> +       drm_encoder_helper_add(encoder, &meson_mipi_dsi_encoder_helper_funcs);
+> +
+> +       encoder->possible_crtcs = BIT(0);
+> +
+> +       ret = dw_mipi_dsi_bind(mipi_dsi->dmd, encoder);
+> +       if (ret) {
+> +               DRM_DEV_ERROR(dev, "Failed to bind: %d\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       phy_init(mipi_dsi->phy);
+> +
+> +       return 0;
+> +}
+> +
+> +static void meson_dw_mipi_dsi_unbind(struct device *dev, struct device *master,
+> +                                  void *data)
+> +{
+> +       struct meson_dw_mipi_dsi *mipi_dsi = dev_get_drvdata(dev);
+> +
+> +       dw_mipi_dsi_remove(mipi_dsi->dmd);
+> +
+> +       phy_exit(mipi_dsi->phy);
+> +}
+> +
+> +static const struct component_ops meson_dw_mipi_dsi_ops = {
+> +       .bind   = meson_dw_mipi_dsi_bind,
+> +       .unbind = meson_dw_mipi_dsi_unbind,
+> +};
 
-Yeah, I used the following command to post the series, but I don't know
-why James/Mark are missed. I'm not sure it's git-sendemail issue or not
-so far. The issue appears some times on my laptop :)
-
-# git-sendemail --to=<mail0> --cc=<mail1> --cc=<mail2> *.patch
+Do you thought of non-component based meson DSI like STM DSI? It
+require changes from meson drm but just to understand if you have any
+such plan.
 
 Thanks,
-Gavin
-
+Jagan.

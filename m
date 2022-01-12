@@ -2,70 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED0448C464
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C2548C46D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240764AbiALNHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240620AbiALNGp (ORCPT
+        id S1353375AbiALNKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:10:30 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61676 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240733AbiALNK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:06:45 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB72BC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 05:06:44 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id c3-20020a9d6c83000000b00590b9c8819aso2439937otr.6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 05:06:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z7S+WoAeewe+evENxRmugDyi2UMRp34iK32ErxvL3wo=;
-        b=meVur/9VwPAlsmAsM0Kz3/CEuBQxHIEi/Lf5zYvV2ZuGpkpT/cVCzb5J4gCgJCI5wd
-         Txhzs4mYq7J0pffGLhadd2Gw+QT4x+ijFOhdOImiCZGi64/1otLe3LvX2GPCmgqpRmNj
-         eW7qPHzDoXiKuAaVacDvl0T4b6kukGChuXmm76vOwg+yBeEMpBc/sXYIbM3XKJBF+REn
-         fsnGol9dlFgYWuz3M7Xz2YBXFEo0S80WAfay+3LERZcPhT1l6wsHqpcniYszlRG+/4n8
-         sbxVAjlz5rLhKp8b6ZenV1dmzQz8nFmN1NW+wENQwtmSCvtdhEz+CZLv+H3IHnA4TR+s
-         4xmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z7S+WoAeewe+evENxRmugDyi2UMRp34iK32ErxvL3wo=;
-        b=c79utODldu/dmAOr0Z5+Zg8frvtPgEYTlPwEoHKxo/byxe3IGwNjK2Ots2l2hs2Px+
-         DV7wjyD5smPJl1kkAtT15AjgA3VuFDWWOZ5ht5kSth+axSpPVat3pVz/6+bTKZ1QKnGk
-         cf2BDJLnHGVENHBje+8cNIBNaw9xG8nl/vJ0QwOHWXzuep5DyT9mk8I5W1Du3cUrE8U3
-         +tZcqmymq1Ns09soh5djxzh50QN5MzmL6rwdUeHRclNGAUvcGmGYdFOANve4X9a9BVL9
-         mSOXyV+1HgVjEM2yWx4ITQ3HI3J5Z0RhllDJOmFoU9KvBiG/XAyhZE9oykN30h/bhqtK
-         6Wkw==
-X-Gm-Message-State: AOAM531drR1gvx22lr9UHJagRDuZP66WeNH0Tao5XAxLqPoCcxQOpUkF
-        mE3r5aAr04TPHlTwFSg9K733nknpkms1OPI8zSo=
-X-Google-Smtp-Source: ABdhPJzhLV/0rB6f2JipQkq0d/eVp4DSmcgkGd/tCGySuWmaKuuAkk18bn6ncI92MkWFkv+txjpFusGiC8i+vM1vG2I=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr6312199otu.207.1641992804060;
- Wed, 12 Jan 2022 05:06:44 -0800 (PST)
+        Wed, 12 Jan 2022 08:10:28 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20CC0nxE010267;
+        Wed, 12 Jan 2022 13:10:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=WE/h8p+zfUwl0XsOgyrkKm55pvwEA29XYRNXiHXrPs8=;
+ b=IMJYWb8oloNk2epW2AqRtQWlsLoXMzEfJ6vfY7n8/M+w1pUA3Qs+z2+ZClahD28qRl9K
+ 6YSiT7gSEcQDvfc9SauuKO+3A8gF0YWgBxh6fP33pLOAQ7pupGR/HaGyWPOsZ1pSlSOJ
+ Gaz3oxUigsKBdx0zNaCcZQjpVWpj2a9L33YJu42/g1KEIw7lyArOnuQQvGGpvxZdo7BV
+ QDhnddl8nbIpND+FmWzDbSFZL5bBbEcWmeGcNip5lqO5iWHH3vS1CZOqQNQIxGNFmIzb
+ YY5SybTmwIew0WS3W8Jd/G0/q058H120JUDV1JhWFM2ZdGwbASvuc/Qec55T2TK7uwOc PA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhtht0fj2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 13:10:21 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20CD70cq025221;
+        Wed, 12 Jan 2022 13:10:19 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3df289bxym-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 13:10:19 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20CDAFwG34603438
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Jan 2022 13:10:15 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C7CE1AE04D;
+        Wed, 12 Jan 2022 13:10:15 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 977C5AE058;
+        Wed, 12 Jan 2022 13:10:15 +0000 (GMT)
+Received: from [9.145.93.126] (unknown [9.145.93.126])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 12 Jan 2022 13:10:15 +0000 (GMT)
+Message-ID: <ba78ac07-d3c1-ad7a-12eb-9bc53cdb9c43@linux.ibm.com>
+Date:   Wed, 12 Jan 2022 14:10:15 +0100
 MIME-Version: 1.0
-Received: by 2002:ac9:7f90:0:0:0:0:0 with HTTP; Wed, 12 Jan 2022 05:06:43
- -0800 (PST)
-Reply-To: salemchantal@mail.ee
-From:   MRS Salem Chantal Lawrence <mrs.minaabrune08@gmail.com>
-Date:   Wed, 12 Jan 2022 05:06:43 -0800
-Message-ID: <CACLMMrZsPN6t_PdEVk9nNJ8tEvgiYBHE9kpxeTw33Rk=6O6qUQ@mail.gmail.com>
-Subject: Receive Your Compensation!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH v5] powerpc/pseries: read the lpar name from the firmware
+Content-Language: en-US
+To:     Michael Ellerman <michaele@au1.ibm.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     Nathan Lynch <nathanl@linux.ibm.com>
+References: <20220106161339.74656-1-ldufour@linux.ibm.com>
+ <c26f2961-dd19-b888-b601-af5ade74c140@linux.ibm.com>
+ <87zgo128x0.fsf@mpe.ellerman.id.au>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <87zgo128x0.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: __8lH80r6UhtEQcTThHPRTptXKA3aFmv
+X-Proofpoint-ORIG-GUID: __8lH80r6UhtEQcTThHPRTptXKA3aFmv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-12_04,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ malwarescore=0 bulkscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
+ priorityscore=1501 adultscore=0 suspectscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201120086
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attention
+On 11/01/2022, 23:40:27, Michael Ellerman wrote:
+> Tyrel Datwyler <tyreld@linux.ibm.com> writes:
+>> On 1/6/22 8:13 AM, Laurent Dufour wrote:
+>>> The LPAR name may be changed after the LPAR has been started in the HMC.
+>>> In that case lparstat command is not reporting the updated value because it
+>>> reads it from the device tree which is read at boot time.
+>>>
+>>> However this value could be read from RTAS.
+>>>
+>>> Adding this value in the /proc/powerpc/lparcfg output allows to read the
+>>> updated value.
+>>>
+>>> However the hypervisor, like Qemu/KVM, may not support this RTAS
+>>> parameter. In that case the value reported in lparcfg is read from the
+>>> device tree and so is not updated accordingly.
+>>>
+>>> Cc: Nathan Lynch <nathanl@linux.ibm.com>
+>>> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+>>
+>> My only nit would be that in general for consistency with other function names
+>> _RTAS_ and _DT_ should be lowercase. Seeing as they are statically scoped within
+>> lparcfg.c maybe its ok. Otherwise,
+> 
+> Yeah I agree, I changed them to lower case when applying.
 
+Thanks Michael and Tyrel.
 
-You have Been Compensated with the sum of 4.6 million dollars in this
-United Nation the Payment will be issue into Atm Visa Card and send to you
-
-from the Santander Bank of Spain we need your address, Passport and your
-Whatsapp Number.
-
-
-THANKS
-MRS Salem Chantal Lawrence

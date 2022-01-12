@@ -2,59 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E69848BDD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 05:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC63148BDD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 05:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350562AbiALEEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 23:04:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47730 "EHLO
+        id S1346018AbiALELL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 23:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiALEEg (ORCPT
+        with ESMTP id S229770AbiALELK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 23:04:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFC6C06173F;
-        Tue, 11 Jan 2022 20:04:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 311F6B81DC3;
-        Wed, 12 Jan 2022 04:04:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB90C36AE5;
-        Wed, 12 Jan 2022 04:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641960272;
-        bh=eGRlpg3VxAY5n3m2OpliJ4gtpt/6kROMKWXtYJ8Kqgo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=orETFnpTdbqZ95McoFABt5RqtThiZqm/TkCEOEitnJ9AAPdoMJyO7dz/HdaVX6IkU
-         Cd4UqH/QEZu+NfHXcT1Xzm8RXoFlZAL1LyDwv3l008Q2/gGOVGrXZ/PGGc8BsyWogN
-         x83fCMHFe2NPxX/3sV15OKdy2KbHt787jvR0ICWFlmE95gwxxgwDN2Gz0ynfvwG7Ff
-         GFdRzkUiz5aFcfrMPnpaRQDIPGfRTY5GamFatZbTBEYBNS6acUBD55NxopJoCKKvdw
-         4GNySUOb2sy8xhkb7k1V6q6aqUER/uKDO5ZDq6iJZsVVUIusBJDGftYBxRoA2J72fZ
-         WMGIT9k55V20w==
-Date:   Tue, 11 Jan 2022 20:04:26 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     davem@davemloft.net, jponduru@codeaurora.org,
-        avuyyuru@codeaurora.org, bjorn.andersson@linaro.org,
-        agross@kernel.org, cpratapa@codeaurora.org,
-        subashab@codeaurora.org, evgreen@chromium.org, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 2/2] net: ipa: prevent concurrent replenish
-Message-ID: <20220111200426.37fd9f67@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220111192150.379274-3-elder@linaro.org>
-References: <20220111192150.379274-1-elder@linaro.org>
-        <20220111192150.379274-3-elder@linaro.org>
+        Tue, 11 Jan 2022 23:11:10 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9715C06173F;
+        Tue, 11 Jan 2022 20:11:10 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id a1-20020a17090a688100b001b3fd52338eso1303854pjd.1;
+        Tue, 11 Jan 2022 20:11:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L3zit3ZisIykD+J7W/w/LdcsvaZddg/hlkAzNk64CDc=;
+        b=YLhkGzWqfbeaAjok250HgZg7AcR/GfWcLFcx6ZfXbajWrwh2C9C9i8Wb6lhRQVA1O1
+         kE0+HOXJ0wng8YQ1vv+ooZ5okHR5nJhq2Uja+tPjqAz/plWUMI0mvj7FSNfDJBoBTZRn
+         C2y6/3gDaJxKGdguaxlIrCtukGfG61M8bTlRyu0cfHa3YUkD2+rPGPEEzpXTIC9+tgD/
+         +6GavfrYSaSu6LeAHMOX9gk0S4YjkWDDktwkYaa4QfJq1FFhMK5jvhLOzn6U3gDvaS+m
+         wYaLD1q91mz+byg5dab3B/386DZrwYAY2VZkx9KZtwfnwSPyTHxIG6WsHdDL1+yWWuJ+
+         PSbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L3zit3ZisIykD+J7W/w/LdcsvaZddg/hlkAzNk64CDc=;
+        b=nt/DSZ4Poo3zsA61YlS5tqtUhO0Jbx2pw3D7/8AJWzURZ43NJd13PkO7KEEliWadQY
+         7B4+EwycaQesjFHDA98v9HaTnX668X/NnNAew5DMHLFqRpRLocKNPrR3+2rlrV2bw2vV
+         QirU8zU6gm48BvlSYFGOSbstInoeLQ/lqxkR5rg2Sdg3Mqk0C32HMNufgCSPtjK5wFZs
+         o5ublUK0cn4+8KIhmr5iXX0HDG/0McQoJf60b9eKUGaMXE0TyTd/l12L5E8sty/16lFZ
+         CRD/asP+Yc/RfLKhVAFj1TVoIkdPhefzu0uL2CyT2Kwu4djESmxa0OIgxuJTt0Vg1NYT
+         zkwg==
+X-Gm-Message-State: AOAM5328FPHG79ZWgsflrIrPV7n7mvlCsyNVUdnFiagRGk6wxiXgbeR3
+        iPusqBNlTrirNDwF41yH4U0=
+X-Google-Smtp-Source: ABdhPJzg7u5LABeMdTWZ8i7PcbMUHLE5C7HuaKTE7xqKYfob+C5Is9xhK7sRZX7UgnreRzl7pNrGww==
+X-Received: by 2002:a17:902:b681:b0:14a:9cc:d9a3 with SMTP id c1-20020a170902b68100b0014a09ccd9a3mr7712222pls.121.1641960670257;
+        Tue, 11 Jan 2022 20:11:10 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id h5sm7117718pfo.57.2022.01.11.20.11.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 20:11:09 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] KVM: x86/pt: Ignore all unknown Intel PT capabilities
+Date:   Wed, 12 Jan 2022 12:11:00 +0800
+Message-Id: <20220112041100.26769-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 13:21:50 -0600 Alex Elder wrote:
-> Use a new atomic variable to ensure only replenish instance for an
-> endpoint executes at a time.
+From: Like Xu <likexu@tencent.com>
 
-Why atomic_t? test_and_set_bit() + clear_bit() should do nicely here?
+Some of the new Intel PT capabilities (e.g. SDM Vol3, 32.2.4 Event
+Tracing, exposes details about the asynchronous events, when they are
+generated, and when their corresponding software event handler completes
+execution) cannot be safely and fully emulated by the KVM, especially
+emulating the simultaneous writing of guest PT packets generated by
+the KVM to the guest PT buffer.
+
+For KVM, it's better to advertise currently supported features based on
+the "static struct pt_cap_desc" implemented in the host PT driver and
+ignore _all_ unknown features before they have been investigated one by
+one and supported in a safe manner, leaving the rest as system-wide-only
+tracing capabilities.
+
+Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+v2 -> v3 Changelog:
+- Remove unnecessary comment; (Sean)
+- Add a #define in the pt header for better self-documentin; (Sean)
+- Add validity checks to CPUID E{A|B|C|D}X; (Sean)
+
+Previous:
+https://lore.kernel.org/kvm/20220110034747.30498-1-likexu@tencent.com/
+
+ arch/x86/include/asm/intel_pt.h | 6 ++++++
+ arch/x86/kvm/cpuid.c            | 6 +++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/intel_pt.h b/arch/x86/include/asm/intel_pt.h
+index ebe8d2ea44fe..da94d0eeb9df 100644
+--- a/arch/x86/include/asm/intel_pt.h
++++ b/arch/x86/include/asm/intel_pt.h
+@@ -24,6 +24,12 @@ enum pt_capabilities {
+ 	PT_CAP_psb_periods,
+ };
+ 
++#define GUEST_SUPPORTED_CPUID_14_EBX	\
++	(BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5))
++
++#define GUEST_SUPPORTED_CPUID_14_ECX	\
++	(BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(31))
++
+ #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
+ void cpu_emergency_stop_pt(void);
+ extern u32 intel_pt_validate_hw_cap(enum pt_capabilities cap);
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 0b920e12bb6d..be8c9170f98e 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -19,6 +19,7 @@
+ #include <asm/user.h>
+ #include <asm/fpu/xstate.h>
+ #include <asm/sgx.h>
++#include <asm/intel_pt.h>
+ #include "cpuid.h"
+ #include "lapic.h"
+ #include "mmu.h"
+@@ -900,7 +901,10 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+ 			break;
+ 		}
+-
++		entry->eax = min(entry->eax, 1u);
++		entry->ebx &= GUEST_SUPPORTED_CPUID_14_EBX;
++		entry->ecx &= GUEST_SUPPORTED_CPUID_14_ECX;
++		entry->edx = 0;
+ 		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
+ 			if (!do_host_cpuid(array, function, i))
+ 				goto out;
+-- 
+2.33.1
+

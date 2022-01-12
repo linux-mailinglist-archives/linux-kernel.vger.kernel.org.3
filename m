@@ -2,214 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5522C48C08B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB7548C089
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349513AbiALI54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351817AbiALI5y (ORCPT
+        id S1351869AbiALI5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:57:46 -0500
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:51613 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351894AbiALI5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:57:54 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D80AC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:57:54 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so1127296wme.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:57:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wR5khnPxhK4CBR2Wab/qs/59R6BOAEdLfga3Tx4ANzY=;
-        b=W+tcii0vpg0IJsUsZyclv1hfxchyR5W0H1AjVksk6v87Fymf3imE0ZbnVgIMWQlPoD
-         NCRzEjtxyZ4BQpWzoi8rTBu3uaBG2lpxoEUSWV4XBOzmXvxJtORWyY8hvBAAf+0+PpeT
-         xqh+0LnyKRT8V2Sp7wJ4nY9QZdSmoaLHpc3b2VZEyai9AhkfsDDX/nN/jWBsGDTcHECe
-         EmrN/ZK0k4F0Q10rb1vNQ35smwsrICW+fwPfHZAuknOsRKVGUFe0Iyr0L8EkVZ5mNHv1
-         jfBzSvmAGZcBVlXEsc6wB0aM5BaoCmdV021DqggTVis9irkrwNHlulnnDBB83y94Rx1J
-         b+DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=wR5khnPxhK4CBR2Wab/qs/59R6BOAEdLfga3Tx4ANzY=;
-        b=vhy2tSVIHX2aEFJfEIT3zj5dzaCM4j5O+H6nJ5SICFr41ux0f/I6roxDH8MDWXPTVn
-         3RDY42StHzCrB7xsMCcDr8L9GHeabf0FvfjJasSwO/EzrprpL7WnxJB0DxgqsHa3AxuA
-         CQ3HRhfLCIZqJjDO3hNfs9e8arMcd8KIjsKCIK4SXKOjvaK/tnNpYgUMOMtBFo41WPjU
-         pz4GdbM/lWl6DDdT9RRyYqSf+39vm87sJ7qENNMPY5nRCQf29Sg7279XcCs8rd3vdNbp
-         y86fpMD27t9Fx+/iUD1OYe/b9Nj5DLml7U5+/l+VJQ5rUChwPrp029twN4HGJNj+k4+a
-         CvdA==
-X-Gm-Message-State: AOAM532LeWY3o2UMIexPbn+w+HsF1XkK+wvt1UmBDnvtVAXsOpRoHorC
-        7wVrjkCbLnm7QhwDPxIpQ+CcIg==
-X-Google-Smtp-Source: ABdhPJy2wuTWz1YQufaNV4KyDqVVfw+Nh1t0+hHx9utE3ws3C795N0PeSF8Kv5633viZNQpjimxbmg==
-X-Received: by 2002:a05:600c:298:: with SMTP id 24mr5641692wmk.75.1641977872694;
-        Wed, 12 Jan 2022 00:57:52 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:381b:6e50:a892:5269? ([2001:861:44c0:66c0:381b:6e50:a892:5269])
-        by smtp.gmail.com with ESMTPSA id i3sm3837499wrn.11.2022.01.12.00.57.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 00:57:52 -0800 (PST)
-Subject: Re: [PATCH] arm64: dts: meson-sm1: add spdifin spdifout nodes
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Artem Lapkin <email2tema@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        christianshewitt@gmail.com, art@khadas.com, nick@khadas.com,
-        gouwa@khadas.com
-References: <20211215030236.340841-1-art@khadas.com>
- <1jtuekrfsf.fsf@starbuckisacylon.baylibre.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <b4b62e3d-dc43-a56c-06c5-78e6ee7f6303@baylibre.com>
-Date:   Wed, 12 Jan 2022 09:57:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 12 Jan 2022 03:57:41 -0500
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id A6F29C0006;
+        Wed, 12 Jan 2022 08:57:34 +0000 (UTC)
+Date:   Wed, 12 Jan 2022 09:58:35 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Eugen Hristev <eugen.hristev@microchip.com>
+Cc:     linux-media@vger.kernel.org, robh+dt@kernel.org,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, nicolas.ferre@microchip.com
+Subject: Re: [PATCH v3 17/23] media: atmel: atmel-isc-base: use mutex to lock
+ awb workqueue from streaming
+Message-ID: <20220112085835.twjhxjnigl3uhgqj@uno.localdomain>
+References: <20211213134940.324266-1-eugen.hristev@microchip.com>
+ <20211213134940.324266-18-eugen.hristev@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <1jtuekrfsf.fsf@starbuckisacylon.baylibre.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20211213134940.324266-18-eugen.hristev@microchip.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2022 16:35, Jerome Brunet wrote:
-> 
-> On Wed 15 Dec 2021 at 11:02, Artem Lapkin <email2tema@gmail.com> wrote:
-> 
->> Add spdifin spdifout nodes for Amlogic SM1 SoCs.
->              ^ add (same in the title)
-> 
->>
->> Signed-off-by: Artem Lapkin <art@khadas.com>
->> ---
->>
->> SPDIF IN and SPDIF OUT both tested and works fine for VIM3L (meson-sm1)
->> same as for VIM3 (meson-g12)
->>
->> SPDIF in and SPDIF OUT both pins available via GPIO header (SPDIF_OUT PIN
->> 13 spdif_ao_out_pins and SPDIF_IN PIN 35 - same PWM_F spdif_in_h_pins)
->>
->> https://lore.kernel.org/linux-arm-kernel/1jtuhwvqxa.fsf@starbuckisacylon.baylibre.com/t/
->>
->> ALSA spdifin test example
->> =========================
->>
->> # arecord -fS16_LE -r48000 -c2 -Dplug:spdifin
->>
->> # cat .asoundrc
->> pcm.spdifin {
->> type iec958
->> slave {
->> pcm "hw:0,1"
->> format IEC958_SUBFRAME_LE
->> }
->> }
->>
->> DT sound card configs for testing
->> =================================
->>
->> &spdifout {
->>     pinctrl-0 = <&spdif_ao_out_pins>;
->>     pinctrl-names = "default";
->>     status = "okay";
->> };
->>
->> &spdifin {
->>     pinctrl-0 = <&spdif_in_h_pins>;
->>     pinctrl-names = "default";
->>     status = "okay";
->> };
->>
->> ...
->>     spdif_dit: audio-codec-1 {
->> 	#sound-dai-cells = <0>;
->> 	compatible = "linux,spdif-dit";
->> 	status = "okay";
->> 	sound-name-prefix = "DIT";
->>     };
->>
->>     spdif_dir: audio-codec-2 {
->> 	#sound-dai-cells = <0>;
->> 	compatible = "linux,spdif-dir";
->> 	status = "okay";
->> 	sound-name-prefix = "DIR";
->>     };
->> ...
->> 	audio-routing = ...
->> 		"TODDR_B IN 3", "SPDIFIN Capture",
->> 		"SPDIFOUT IN 0", "FRDDR_A OUT 3";
->>
->> ...
->> 	dai-link-10 {
->> 	    sound-dai = <&spdifout>;
->>
->> 	    codec-0 {
->> 		sound-dai = <&spdif_dit>;
->> 	    };
->> 	};
->>
->> 	/* spdif or toslink interface */
->> 	dai-link-11 {
->> 	    sound-dai = <&spdifin>;
->>
->> 	    codec-0 {
->> 		sound-dai = <&spdif_dir>;
->> 	    };
->> 	};
->> ...
->>
->> ---
->>  arch/arm64/boot/dts/amlogic/meson-sm1.dtsi | 27 ++++++++++++++++++++++
->>  1 file changed, 27 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
->> index 3d8b1f4f2001..1e0adf259d61 100644
->> --- a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
->> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
->> @@ -356,6 +356,33 @@ tdmin_lb: audio-controller@3c0 {
->>  			status = "disabled";
->>  		};
->>  
->> +		spdifin: audio-controller@400 {
->> +			compatible = "amlogic,g12a-spdifin",
->> +			"amlogic,axg-spdifin";
->> +			reg = <0x0 0x400 0x0 0x30>;
->> +			#sound-dai-cells = <0>;
->> +			sound-name-prefix = "SPDIFIN";
->> +			interrupts = <GIC_SPI 151 IRQ_TYPE_EDGE_RISING>;
->> +			clocks = <&clkc_audio AUD_CLKID_SPDIFIN>,
->> +			<&clkc_audio AUD_CLKID_SPDIFIN_CLK>;
->> +			clock-names = "pclk", "refclk";
->> +			resets = <&clkc_audio AUD_RESET_SPDIFIN>;
->> +			status = "disabled";
->> +		};
->> +
->> +		spdifout: audio-controller@480 {
-> 
-> Node should still be named spdifout_a, even if the spdifout_b is not added yet
-> 
->> +			compatible = "amlogic,g12a-spdifout",
->> +			"amlogic,axg-spdifout";
->> +			reg = <0x0 0x480 0x0 0x50>;
->> +			#sound-dai-cells = <0>;
->> +			sound-name-prefix = "SPDIFOUT";
-> 
-> Same here
-> 
->> +			clocks = <&clkc_audio AUD_CLKID_SPDIFOUT>,
->> +			<&clkc_audio AUD_CLKID_SPDIFOUT_CLK>;
->> +			clock-names = "pclk", "mclk";
->> +			resets = <&clkc_audio AUD_RESET_SPDIFOUT>;
->> +			status = "disabled";
->> +		};
->> +
->>  		tdmout_a: audio-controller@500 {
->>  			compatible = "amlogic,sm1-tdmout";
->>  			reg = <0x0 0x500 0x0 0x40>;
-> 
+Hi Eugen
 
-All these fixed while applying, no need to send a new version.
+On Mon, Dec 13, 2021 at 03:49:34PM +0200, Eugen Hristev wrote:
+> The AWB workqueue runs in a kernel thread and needs to be synchronized
+> w.r.t. the streaming status.
+> It is possible that streaming is stopped while the AWB workq is running.
+> In this case it is likely that the check for isc->stop is done at one point
+> in time, but the AWB computations are done later, including a call to
+> isc_update_profile, which requires streaming to be started.
+> Thus , isc_update_profile will fail if during this operation sequence the
+> streaming was stopped.
+> To solve this issue, a mutex is added, that will serialize the awb work and
+> streaming stopping, with the mention that either streaming is stopped
+> completely including termination of the last frame is done, and after that
+> the AWB work can check stream status and stop; either first AWB work is
+> completed and after that the streaming can stop correctly.
+> The awb spin lock cannot be used since this spinlock is taken in the same
+> context and using it in the stop streaming will result in a recursion BUG.
+>
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> ---
+>  drivers/media/platform/atmel/atmel-isc-base.c | 31 ++++++++++++++++---
+>  drivers/media/platform/atmel/atmel-isc.h      |  1 +
+>  2 files changed, 28 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+> index b0c3ed21f372..53cac1aac0fd 100644
+> --- a/drivers/media/platform/atmel/atmel-isc-base.c
+> +++ b/drivers/media/platform/atmel/atmel-isc-base.c
+> @@ -401,6 +401,7 @@ static void isc_stop_streaming(struct vb2_queue *vq)
+>  	struct isc_buffer *buf;
+>  	int ret;
+>
+> +	mutex_lock(&isc->awb_mutex);
+>  	v4l2_ctrl_activate(isc->do_wb_ctrl, false);
+>
+>  	isc->stop = true;
+> @@ -410,6 +411,8 @@ static void isc_stop_streaming(struct vb2_queue *vq)
+>  		v4l2_err(&isc->v4l2_dev,
+>  			 "Timeout waiting for end of the capture\n");
+>
+> +	mutex_unlock(&isc->awb_mutex);
+> +
+>  	/* Disable DMA interrupt */
+>  	regmap_write(isc->regmap, ISC_INTDIS, ISC_INT_DDONE);
+>
+> @@ -1416,10 +1419,6 @@ static void isc_awb_work(struct work_struct *w)
+>  	u32 min, max;
+>  	int ret;
+>
+> -	/* streaming is not active anymore */
+> -	if (isc->stop)
+> -		return;
+> -
+>  	if (ctrls->hist_stat != HIST_ENABLED)
+>  		return;
+>
+> @@ -1470,7 +1469,24 @@ static void isc_awb_work(struct work_struct *w)
+>  	}
+>  	regmap_write(regmap, ISC_HIS_CFG + isc->offsets.his,
+>  		     hist_id | baysel | ISC_HIS_CFG_RAR);
 
-Neil
+isc_stop_streaming() calls runtime_put and here you access the hw.
+
+Feels like it's safer to hold the mutex for the whole duration of the
+AWB routine ?
+
+> +
+> +	/*
+> +	 * We have to make sure the streaming has not stopped meanwhile.
+> +	 * ISC requires a frame to clock the internal profile update.
+> +	 * To avoid issues, lock the sequence with a mutex
+> +	 */
+> +	mutex_lock(&isc->awb_mutex);
+> +
+> +	/* streaming is not active anymore */
+> +	if (isc->stop) {
+> +		mutex_unlock(&isc->awb_mutex);
+> +		return;
+> +	};
+> +
+>  	isc_update_profile(isc);
+> +
+> +	mutex_unlock(&isc->awb_mutex);
+> +
+>  	/* if awb has been disabled, we don't need to start another histogram */
+>  	if (ctrls->awb)
+>  		regmap_write(regmap, ISC_CTRLEN, ISC_CTRL_HISREQ);
+> @@ -1549,6 +1565,8 @@ static int isc_s_awb_ctrl(struct v4l2_ctrl *ctrl)
+>
+>  		isc_update_awb_ctrls(isc);
+>
+> +		mutex_lock(&isc->awb_mutex);
+> +
+>  		if (!isc->stop) {
+>  			/*
+>  			 * If we are streaming, we can update profile to
+> @@ -1563,6 +1581,7 @@ static int isc_s_awb_ctrl(struct v4l2_ctrl *ctrl)
+>  			 */
+>  			v4l2_ctrl_activate(isc->do_wb_ctrl, false);
+>  		}
+> +		mutex_unlock(&isc->awb_mutex);
+>
+>  		/* if we have autowhitebalance on, start histogram procedure */
+>  		if (ctrls->awb == ISC_WB_AUTO && !isc->stop &&
+> @@ -1754,6 +1773,7 @@ static void isc_async_unbind(struct v4l2_async_notifier *notifier,
+>  {
+>  	struct isc_device *isc = container_of(notifier->v4l2_dev,
+>  					      struct isc_device, v4l2_dev);
+> +	mutex_destroy(&isc->awb_mutex);
+>  	cancel_work_sync(&isc->awb_work);
+>  	video_unregister_device(&isc->video_dev);
+>  	v4l2_ctrl_handler_free(&isc->ctrls.handler);
+> @@ -1866,6 +1886,8 @@ static int isc_async_complete(struct v4l2_async_notifier *notifier)
+>  	isc->current_subdev = container_of(notifier,
+>  					   struct isc_subdev_entity, notifier);
+>  	mutex_init(&isc->lock);
+> +	mutex_init(&isc->awb_mutex);
+> +
+>  	init_completion(&isc->comp);
+>
+>  	/* Initialize videobuf2 queue */
+> @@ -1941,6 +1963,7 @@ static int isc_async_complete(struct v4l2_async_notifier *notifier)
+>  	video_unregister_device(vdev);
+>
+>  isc_async_complete_err:
+> +	mutex_destroy(&isc->awb_mutex);
+>  	mutex_destroy(&isc->lock);
+>  	return ret;
+>  }
+> diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
+> index 0b6370d7775f..c2cb805faff3 100644
+> --- a/drivers/media/platform/atmel/atmel-isc.h
+> +++ b/drivers/media/platform/atmel/atmel-isc.h
+> @@ -307,6 +307,7 @@ struct isc_device {
+>  	struct work_struct	awb_work;
+>
+>  	struct mutex		lock; /* serialize access to file operations */
+> +	struct mutex		awb_mutex; /* serialize access to streaming status from awb work queue */
+>  	spinlock_t		awb_lock; /* serialize access to DMA buffers from awb work queue */
+>
+>  	struct regmap_field	*pipeline[ISC_PIPE_LINE_NODE_NUM];
+> --
+> 2.25.1
+>

@@ -2,102 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2819148C8E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73CA148C8EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:57:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355409AbiALQ4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355394AbiALQ4M (ORCPT
+        id S233583AbiALQ5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:57:37 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:60381 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229532AbiALQ5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:56:12 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E885AC061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 08:56:11 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id b13so12688759edn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 08:56:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=NJhosxIvNzrC/VhIsim2Tzwi5SfgYi1srP7PEdKZuc0=;
-        b=ZY1C7fMnE8afESbIjb74BrrED2ovO0CVJ7DUSP/UozT7CD9/93WCaavjpRZpvUfJz9
-         peeBGGtmf9Ht8nMQAFY+eHcFQCp1hFaOrOSRFLOHTvfIJ1tLYLVVOaC6hYHc9BLSoXoT
-         0BVA+ASG4dxPSCWoU2fZgWhoj08LDlHLJP9abbkoETyYpXJAVda4p1+PDbtZkPJac3CX
-         0BaLnyFt22zAeM2pby4ZbkicWvIjD8wBhF24dKjmo2jt6axE3v7O18v1ZvEhaeXb+QIZ
-         TnvsE1aJ5GWHMRAD4EIAfBCCrZfVxcf2s+z+7+Ce8FuEooLhE3c17woL8I2C7yOqzO2V
-         gD0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=NJhosxIvNzrC/VhIsim2Tzwi5SfgYi1srP7PEdKZuc0=;
-        b=UW2nBKXxcIPAlZmXoIiB9nFT4XQi3+cBLLG+W5vbOXoryLdK18qKz5fqX3zGmvJ6PI
-         v+GNbQJQbnalqaaaKIxsf/0YsYKePu4F6OYXbHBvVwqH5zy1pPLk2tSEqAZm9J8246Ds
-         xPUJx+L8t+CiTXk4KgEctQemx4RWuq+iPtwZI7T0vIkYgReJ54gph01TuKyF11PvT0Kh
-         2DLHduKc+3IVaJvwzNbQPUFnPk9ZyUSF9wLpgbpIkRRStSQKa9R+9nG6YOqNveI9r1n4
-         tS1kB8EqHKt7OglGsLOxfbMs3YpABORcJ/v/yzdtg/PT1qDYMHMJ85cWZAkd3JzPdKGb
-         kNRA==
-X-Gm-Message-State: AOAM533CmsjBn9gm0qVnt+7xXx9PI1I20gSayI7H54srnBevjEg3olB5
-        dQl093HvMPpvsC1pw3TxqQmiJtOrsP+NgHwcmuQ=
-X-Google-Smtp-Source: ABdhPJzGokt0RDC/kh1mg4CwOqfAjdaIEKgPC5tdrslj7CsUrO8isSmGUpgRhBElmLfU1wIGseqtJwPO9R5RpjHFUP0=
-X-Received: by 2002:a17:907:6e18:: with SMTP id sd24mr507524ejc.90.1642006570232;
- Wed, 12 Jan 2022 08:56:10 -0800 (PST)
+        Wed, 12 Jan 2022 11:57:31 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id C85C3240003;
+        Wed, 12 Jan 2022 16:57:25 +0000 (UTC)
+Date:   Wed, 12 Jan 2022 17:57:25 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH] selftests: rtc: Increase test timeout so that all tests
+ run
+Message-ID: <Yd8IdbGybWBOa5qe@piout.net>
+References: <20220112165359.3206047-1-nfraprado@collabora.com>
 MIME-Version: 1.0
-Received: by 2002:a17:906:3006:0:0:0:0 with HTTP; Wed, 12 Jan 2022 08:56:09
- -0800 (PST)
-Reply-To: mrsnitayapwalter@gmail.com
-From:   "MRS.NITAYA.P WALTERS" <froshwood@gmail.com>
-Date:   Wed, 12 Jan 2022 17:56:09 +0100
-Message-ID: <CALLU5d2Z13gqrHdtveB2iccGPm+0ufD8CPb=F_EJRgdv8gamtg@mail.gmail.com>
-Subject: Hello my Dearest
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220112165359.3206047-1-nfraprado@collabora.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello My Dearest.
+On 12/01/2022 11:53:59-0500, Nícolas F. R. A. Prado wrote:
+> The timeout setting for the rtc kselftest is currently 90 seconds.
+> However, two of the tests set alarms, which take one minute to complete
+> each. So the timeout should be at least 120. Set it to 180, so that all
+> tests are able to complete and still have some slack.
 
- I AM MRS. NITAYA  P. WALTER, NATIONALITY OF THAILAND AND USA, I WAS
-ONCE MARRIED TO LATE WALTER RICHARD IN THE  CITY OF NEIGHBORHOOD IN
-CLEVELAND, (OHIO)  IN USA WHO  WAS A CRUDE OIL BUSINESS MAN THAT DIED
-OF HEART ATTACK FEW YEARS AGO, WITHOUT A CHILD.
+Hum, I don't get the logic from that, a test takes up to 60 seconds and
+the timeout is 90s per test so we already have plenty of slack there.
 
-SINCE HIS DEATH I DECIDED NOT TO REMARRY, WHEN MY LATE HUSBAND WAS
-ALIVE HE DEPOSITED THE SUM OF US$ 25 MILLION (TWENTY-FIVE MILLION
-DOLLARS) IN HSBC BANK IN MILAN CITY OF ITALY IN EUROPEAN CONTINET.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+> 
+> This issue was discovered as part of adding the rtc kselftest to run on KernelCI
+> for the rk3399-gru-kevin device, which uses rtc-cros-ec as the RTC driver.
+> 
+> The output log with the current timeout is shown in [1]. As can be seen, the
+> whole test times out before the alarm_wkalm_set_minute test has had a chance to
+> complete:
+> 
+> 	# #  RUN           rtc.alarm_wkalm_set_minute ...
+> 	# # rtctest.c:294:alarm_wkalm_set_minute:Alarm time now set to 11/01/2022 23:03:00.
+> 	#
+> 	not ok 1 selftests: rtc: rtctest # TIMEOUT 90 seconds
+> 
+> With the increased timeout, as shown in [2], the alarm_wkalm_set_minute test
+> does complete its run:
+> 
+> 	# #  RUN           rtc.alarm_wkalm_set_minute ...
+> 	# # rtctest.c:294:alarm_wkalm_set_minute:Alarm time now set to 12/01/2022 15:54:00.
+> 	# #            OK  rtc.alarm_wkalm_set_minute
+> 	# ok 7 rtc.alarm_wkalm_set_minute
+> 	# # FAILED: 6 / 7 tests passed.
+> 
+> The fact that the alarm_alm_set_minute test times out on its own is probably an
+> issue with the rtc-cros-ec driver. Still, since the tests are independent, all
+> of them should be able to run regardless of how long each one takes (so,
+> assuming the worst case scenario).
+> 
+> [1] https://lava.collabora.co.uk/scheduler/job/5409783
+> [2] https://lava.collabora.co.uk/scheduler/job/5415176
+> 
+>  tools/testing/selftests/rtc/settings | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/rtc/settings b/tools/testing/selftests/rtc/settings
+> index ba4d85f74cd6..a953c96aa16e 100644
+> --- a/tools/testing/selftests/rtc/settings
+> +++ b/tools/testing/selftests/rtc/settings
+> @@ -1 +1 @@
+> -timeout=90
+> +timeout=180
+> -- 
+> 2.34.1
+> 
 
-PRESENTLY THIS MONEY IS STILL IN HSBC BANK SLEEPING. MY LATE HUSBAND
-WALTER RICHARD MADE THIS MONEY AVAILABLE FOR EXPORTATION OF CRUDE OIL
-IN MALAYSIA BEFORE HIS DEATH CAME.
-
- RECENTLY, MY DOCTOR TOLD ME THAT HE CANNOT GUARANTEE ME OF LONG
-LIVING  DUE TO MY THROAT CANCER DISEASE, HAVING KNOWN MY CONDITION SO
-I DECIDED TO HAND YOU OVER THIS MONEY TO TAKE CARE OF THE
-LESS-PRIVILEGED, WIDOWS AND THE NEEDY  PEOPLE  AS I HAVE ALREADY WILL
-SOME OF THE PROPERTIES AND FUNDS HERE IN USA TO ST. THOMAS MORE NEWMAN
-CENTER, YOU WILL UTILIZE THIS MONEY THE WAY I AM GOING TO INSTRUCT
-HEREIN. I WANT YOU TO TAKE 30 PERCENT OF THE TOTAL MONEY FOR YOUR
-PERSONAL USE WHILE 70% OF THE MONEY WILL GO TO  CHARITY=E2=80=9D PEOPLE AND
-HELPING THE ORPHANAGES AS LISTED ABOVE.
-
- I DON=E2=80=99T WANT MY HUSBAND=E2=80=99S EFFORTS TO BE USED BY THE GOVERN=
-MENT OF
-ITALY, I GREW UP AS AN ORPHAN AND I DON=E2=80=99T HAVE ANYBODY AS A FAMILY
-MEMBER, JUST TO ENDEAVOUR THAT THE NAME OF GOD IS MAINTAINED. AM DOING
-THIS SO THAT GOD WILL FORGIVE MY SINS AND ACCEPT MY SOUL BECAUSE THIS
-SICKNESS HAS SUFFERED ME SO MUCH.
-
-AS SOON AS I RECEIVE YOUR POSITIVE REPLY I SHALL GIVE YOU THE CONTACT
-OF MY LATE HUSBAND ACCOUNTANT AT HSBC BANK IN MILAN ITALY TO GIVE YOU
-A GOOD DIRECTION ON HOW TO CLAIM THIS FUND,  I WILL SEND AUTHORITY
-LETTER THAT WILL PROVE YOU THE PRESENT BENEFICIARY OF THE MONEY IN THE
- BANK THAT IS IF YOU ASSURE ME THAT YOU WILL ACT ACCORDINGLY AS I
-STATED HEREIN. HOPING  TO RECEIVE YOUR REPLY.
-
- REGARDS,
-
-MRS. NITAYA  P. WALTER
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

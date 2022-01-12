@@ -2,80 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C840148C717
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBA648C71D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354567AbiALPUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:20:30 -0500
-Received: from mga01.intel.com ([192.55.52.88]:44802 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354583AbiALPUY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:20:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642000824; x=1673536824;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=f/5nsh6nLoBINONVdBqki4aXxEoQYraMQMisuojf5D8=;
-  b=T1TT8b0vD6ro3zaHqbuI/cR2Zsu+7JwzrmnfuxQc7Pvn1VvZ4Qwd1Zdi
-   nhG2GRoNdA2DgLwNx0qfG/Xu3k+cZ6833iuLo2QyJGnF6g6eKIw+hjq+z
-   3JKbwc3mFpaRJD2yc9BU2ZGEMbLkA1Ug5zSQmUROJg3b8gylrPJX2+eGO
-   RBtD2u3HkujCLQKmSdQ7EloHEx4kcVs1nH5QtabpD+MExL8HnkIUlXIIf
-   L2JuDmnmxbDf2o8+A9UudetF49y3SB4l7na6/BKDlREdFSQsZbCaySAA/
-   oMOwGmqW5uStqW2utrTfq0ldw3A4IbWmcZlUHKU992FiNitx+sR24v9iw
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="268101876"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="268101876"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 07:19:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="528673697"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 12 Jan 2022 07:19:55 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n7fPm-00060L-S7; Wed, 12 Jan 2022 15:19:54 +0000
-Date:   Wed, 12 Jan 2022 23:19:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: pci.c:undefined reference to `pci_remap_iospace'
-Message-ID: <202201122304.s9fOLkUx-lkp@intel.com>
+        id S243838AbiALPVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240982AbiALPVU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 10:21:20 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DB1C06173F;
+        Wed, 12 Jan 2022 07:21:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PeT2LoZXZw99I6PIg4z9VVN/0YLATJTsoI1YHe2dcKg=; b=Y2RbGA40kz18bOBofpUu+nLNyz
+        71OBT4yUrBNu1aldnyDPbWRDXY2pOatTuDqzuY4Zb3CKxogY/whi+VDJZGw27whuQhrLoJUGPPR/A
+        SMl8hhueSWk2N2dLb//FURhbOz+HrZ1jtiqoqdU4KsKaa8pXqdMSX+obvMHs0mbOBvJlwXUo/YbUP
+        eFcGHx85qsqO0uFFJMjTcv1kcrKqe2JRut633rMY8gsx7Mlz9eOUtLpk9gIOxV1OF1tGaMqhUOOoc
+        AgZvDsOnRLmSZyStd9mX7FYfN0P2CTCkhhC7ye0x6TlZUJHgS3+g1VMF7mVdj7PKrbWGsCBnrw3k0
+        ccKB8yXg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7fQt-000oy1-RE; Wed, 12 Jan 2022 15:21:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5ADFB300237;
+        Wed, 12 Jan 2022 16:21:01 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id F3BCE2B33E986; Wed, 12 Jan 2022 16:21:00 +0100 (CET)
+Date:   Wed, 12 Jan 2022 16:21:00 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Subject: Re: [PATCH v9 4/7] cgroup/cpuset: Add a new isolated cpus.partition
+ type
+Message-ID: <Yd7x3P+wGCVfYtza@hirez.programming.kicks-ass.net>
+References: <20211205183220.818872-1-longman@redhat.com>
+ <20211205183220.818872-5-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211205183220.818872-5-longman@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   daadb3bd0e8d3e317e36bc2c1542e86c528665e5
-commit: 09d97da660ff77df20984496aa0abcd6b88819f2 MIPS: Only define pci_remap_iospace() for Ralink
-date:   5 weeks ago
-config: mips-randconfig-r021-20220112 (https://download.01.org/0day-ci/archive/20220112/202201122304.s9fOLkUx-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09d97da660ff77df20984496aa0abcd6b88819f2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 09d97da660ff77df20984496aa0abcd6b88819f2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+On Sun, Dec 05, 2021 at 01:32:17PM -0500, Waiman Long wrote:
+> Cpuset v1 uses the sched_load_balance control file to determine if load
+> balancing should be enabled.  Cpuset v2 gets rid of sched_load_balance
+> as its use may require disabling load balancing at cgroup root.
+> 
+> For workloads that require very low latency like DPDK, the latency
+> jitters caused by periodic load balancing may exceed the desired
+> latency limit.
+> 
+> When cpuset v2 is in use, the only way to avoid this latency cost is to
+> use the "isolcpus=" kernel boot option to isolate a set of CPUs. After
+> the kernel boot, however, there is no way to add or remove CPUs from
+> this isolated set. For workloads that are more dynamic in nature, that
+> means users have to provision enough CPUs for the worst case situation
+> resulting in excess idle CPUs.
+> 
+> To address this issue for cpuset v2, a new cpuset.cpus.partition type
+> "isolated" is added which allows the creation of a cpuset partition
+> without load balancing. This will allow system administrators to
+> dynamically adjust the size of isolated partition to the current need
+> of the workload without rebooting the system.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+you can, ofcourse, create lots of 1 cpu partitions, which is effectively
+what you're doing, except there was a problem with that which you also
+forgot to mention.
 
-All errors (new ones prefixed by >>):
 
-   mipsel-linux-ld: drivers/pci/pci.o: in function `devm_pci_remap_iospace':
->> pci.c:(.text+0x708c): undefined reference to `pci_remap_iospace'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

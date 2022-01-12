@@ -2,124 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A73B648BFEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A138248BFF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351612AbiALIa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:30:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349434AbiALIa5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:30:57 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F349DC061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:30:56 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id d187-20020a1c1dc4000000b003474b4b7ebcso1046969wmd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:30:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vJ+w22PTxUPaJcKWhY/UceXma5p+nqWWd0Bsmebx8pQ=;
-        b=IeeX2Is5svan06jOKIvq/96afdKfJzhzUKgHhQ0u3wtF46c8hjl3h1OBkqD4qXrQm0
-         /KbWT6JaUOGhdO0C+JbtgZonOP1rb8bp1Jt6GiSUz0jpJ23IbDPBZ9CTtyY/rzrMBR+B
-         aCOFCWREcEAk27MX53Tnv0n4CVIEuvSpIzMigVMQglVkTxGoC0xN138aXE6J8fSBJjqI
-         pKpcMP/FQhH1tlN82stvigaOWpKwkwzF6BUYLwqlgv7HCTrGv6zRllLN/MC/WWt+X0gl
-         xjw44EEjrXtd4Dl9g3SLB2LSTF8BfR3cOcFnzbTHLq3yoJE++xNvbhq15kZrZi2iMBI2
-         umOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=vJ+w22PTxUPaJcKWhY/UceXma5p+nqWWd0Bsmebx8pQ=;
-        b=QjE9S5TlqEv8ZMEuPm4q5YqZGWTJ7PLXS5JR8qtDDjuQmc/OuO0ouSLCDR9nstTVUw
-         QInTR+zj+t8fDYxkG40I1VIXYXxDXJGZTaAvXTtMvzVGbe4BwDl1GVV15dUTE8pea0QK
-         lZ868RlLBNnnWcFa5rMikUWLXTuhXwBeIWJNz8tfW1vChBpCS5qHEet4F4gPAN0qCbkK
-         oNBOFv0R2jd9RatTCDPSn52wkZioJS9mSZZMWgQLWPJvUlwIXdj0FzPzPsg1lGFJZBrP
-         jMJh7/0Ibp6MNhIvmIibTrsXsVY7ifdqxGtXIEnixZW/1NrQSWGa/Yvl5dlhLM7p0b/Z
-         CBvQ==
-X-Gm-Message-State: AOAM531aei4FbV/RWdGG2InYkDw7IXXlha9ofRYJJ+UlNlmSyXiqyZTy
-        WtdgszX2CDk3K0XD9Jr7cf6W+sE51P3d2A==
-X-Google-Smtp-Source: ABdhPJxLOO/vJS+ah4oOFATT6onrl/OkLjwtx4tPEXlqChpCptI4FLbhrbta4n/T6Sb+KXZ8/ItwFQ==
-X-Received: by 2002:a05:600c:4ec7:: with SMTP id g7mr5616827wmq.152.1641976255095;
-        Wed, 12 Jan 2022 00:30:55 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:381b:6e50:a892:5269? ([2001:861:44c0:66c0:381b:6e50:a892:5269])
-        by smtp.gmail.com with ESMTPSA id q206sm3981739wme.8.2022.01.12.00.30.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 00:30:54 -0800 (PST)
-Subject: Re: [PATCH 2/3] arm64: dts: meson-g12-common: add more pwm_f options
-To:     Gary Bisson <gary.bisson@boundarydevices.com>,
-        linux-amlogic@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220103154616.308376-1-gary.bisson@boundarydevices.com>
- <20220103154616.308376-3-gary.bisson@boundarydevices.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <a4282cb9-3ebd-0c95-7a47-522eb1bbb770@baylibre.com>
-Date:   Wed, 12 Jan 2022 09:30:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1351631AbiALIcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:32:19 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:59394 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238074AbiALIcR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 03:32:17 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowADHzQH9kd5hTlcSBg--.19832S2;
+        Wed, 12 Jan 2022 16:31:57 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     adrian.hunter@intel.com, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] mmc: sdhci-of-esdhc: Check for error num after setting mask
+Date:   Wed, 12 Jan 2022 16:31:56 +0800
+Message-Id: <20220112083156.1124782-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220103154616.308376-3-gary.bisson@boundarydevices.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowADHzQH9kd5hTlcSBg--.19832S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw4UJr1ktFWxCF1rJFWxtFb_yoW8Wr17pa
+        1rWFyFkrWfJr1ru39av3WUZFyYqw1ktFWrt3y7Wan2v343JryjqFyxAFyjvF1kJFyrtw1f
+        XFWjyr1ru3y8J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFyl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUepBTUUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2022 16:46, Gary Bisson wrote:
-> Add missing PWM_F pin muxing for GPIOA_11 and GPIOZ_12.
-> 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Neil Armstrong <narmstrong@baylibre.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc: Jerome Brunet <jbrunet@baylibre.com>
-> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
->  .../arm64/boot/dts/amlogic/meson-g12-common.dtsi | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-> index 00c6f53290d4..af1357c48bee 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-> @@ -894,6 +894,22 @@ mux {
->  						};
->  					};
->  
-> +					pwm_f_z_pins: pwm-f-z {
-> +						mux {
-> +							groups = "pwm_f_z";
-> +							function = "pwm_f";
-> +							bias-disable;
-> +						};
-> +					};
-> +
-> +					pwm_f_a_pins: pwm-f-a {
-> +						mux {
-> +							groups = "pwm_f_a";
-> +							function = "pwm_f";
-> +							bias-disable;
-> +						};
-> +					};
-> +
->  					pwm_f_x_pins: pwm-f-x {
->  						mux {
->  							groups = "pwm_f_x";
-> 
+Because of the possible failure of the dma_supported(), the
+dma_set_mask_and_coherent() may return error num.
+Therefore, it should be better to check it and return the error if
+fails.
+And since the sdhci_setup_host() has already checked the return value of
+the enable_dma, we need not check it in sdhci_resume_host() again.
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Fixes: 5552d7ad596c ("mmc: sdhci-of-esdhc: set proper dma mask for ls104x chips")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog
+
+v1 -> v2
+
+* Change 1. Remove the change of esdhc_of_resume and refine the commit
+* message.
+---
+ drivers/mmc/host/sdhci-of-esdhc.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/mmc/host/sdhci-of-esdhc.c b/drivers/mmc/host/sdhci-of-esdhc.c
+index a593b1fbd69e..0f3658b36513 100644
+--- a/drivers/mmc/host/sdhci-of-esdhc.c
++++ b/drivers/mmc/host/sdhci-of-esdhc.c
+@@ -524,12 +524,16 @@ static void esdhc_of_adma_workaround(struct sdhci_host *host, u32 intmask)
+ 
+ static int esdhc_of_enable_dma(struct sdhci_host *host)
+ {
++	int ret;
+ 	u32 value;
+ 	struct device *dev = mmc_dev(host->mmc);
+ 
+ 	if (of_device_is_compatible(dev->of_node, "fsl,ls1043a-esdhc") ||
+-	    of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc"))
+-		dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
++	    of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc")) {
++		ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
++		if (ret)
++			return ret;
++	}
+ 
+ 	value = sdhci_readl(host, ESDHC_DMA_SYSCTL);
+ 
+-- 
+2.25.1
+

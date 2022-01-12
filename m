@@ -2,96 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA22648BBC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F4348BBCA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236556AbiALAY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 19:24:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55062 "EHLO
+        id S1343949AbiALAZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 19:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234921AbiALAYY (ORCPT
+        with ESMTP id S236650AbiALAZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 19:24:24 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DFAC06173F;
-        Tue, 11 Jan 2022 16:24:24 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id u21so3076626edd.5;
-        Tue, 11 Jan 2022 16:24:24 -0800 (PST)
+        Tue, 11 Jan 2022 19:25:08 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBA5C061751
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 16:25:08 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id p5-20020a170902bd0500b00148cb2d29ecso883524pls.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 16:25:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=dFpazlv+lywoGwl9/cFSYAAABBv6zxWMmcLpH0m+3/M=;
-        b=Jvwa9TaIcLtrQXSCOZEpvt5o4j62C2t3W/QMQ/KHJ/fiv10OoW6JKvXj5KBsR6XAd9
-         YTJX3yMs+oReKUEusB6HXOycLwagLJUD3wZlEY4LzzdZZk2UhbnmiM2kmyYYwY3bXcry
-         I5k+BCombR71JSn6bX3+5Knoym/PI1ut2Mzwc/VjfVDq/AqE04o8xf4fXQz5FmaHuweo
-         JkXPznZqOnmSwakVWgUKEGUyT9xIufjGXDTNb8kX1g956DAXLnicAHPkoZITy9/nV74M
-         TdhGyqIuaWMDnKnhm95W6/P6RSpUBTjyJ0EQAGayOmRlDg58JOSj8qZKnbD+IR6TiQkT
-         Fhdg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=vlRniYjFJS8GXTiQcavbR3Q+xuXRc84rf1pjpwDnwgg=;
+        b=df+gpApiwun2GvAf38KC9NfFl7J6EAynZgVzNNFQkSADXGenAgGcqOLHLlVcZCeTxl
+         PM13+5GoBj3Xq8UO58xP3qzjtwkVMBGVQHzsQXOe26QheVTOBfaD6nAasM+5+1sm7uHm
+         XY2Oi83aWBGkdAN4Mq/s3CQzkFF5VOkCKCDuCZPcLa+6TSM7YuyEJQUaST3xCns1ea3y
+         UeJzJtk/cUYV3ZZht5PX/iFfjfgJZ5Zpt1nHw1myAnwmJdLjKN7UoLzgP3Q/+K/1+Aod
+         tlN+ggeCtLMSkAgTZT7Xxbz7LpvfU9AX3wjNjaQ2g7Ruyiv90CU2Fs/jARkVbgya+grH
+         t6BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dFpazlv+lywoGwl9/cFSYAAABBv6zxWMmcLpH0m+3/M=;
-        b=G/jHIhwY2QJz/iM/z5KIfT2569IgvybYzHhliT2r/TU3elKOSOMZT5f4/Bo5EicCdL
-         25ttgA19YAuRpYnZZ253K9e1OPUGNYEreETryAjuspUuHvye/nPB4+jGEwdU3vMyS+c+
-         Z8ghKHbsJdyudSjGW+anmyxGMto1fn3gOi8smG+prQhkHuSKPjf/WbGsDt1Xlkmjhc8R
-         zpSQNxq6NLQiCtImpKYvQZQ5BOPIWgiD0q3chewd8knqmHuyRcEpt7b8aWFbw8Pl54r+
-         Wk2/R1sVJPi6s+1WsoHmE0tzg9imcYQ1Y3mWOsu3AiRucytev6W7DwGQi1IStyJrvGGI
-         lGbQ==
-X-Gm-Message-State: AOAM530SBq9Gc+Ny3kwm304gHfgojkfX29KJXJMxEO3B7pDwZiEhrver
-        Ai75uDbHGqq4YWq8jy/DqP8=
-X-Google-Smtp-Source: ABdhPJxbp1jqOMEDjz32OniUVIm0N2DkA9bp6QjRfoPbyPBgiQ99JQe7N3wdX7/klyg2U5f09KGbYA==
-X-Received: by 2002:a05:6402:1764:: with SMTP id da4mr6500959edb.324.1641947062977;
-        Tue, 11 Jan 2022 16:24:22 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id w17sm183314edr.68.2022.01.11.16.24.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 11 Jan 2022 16:24:22 -0800 (PST)
-Date:   Wed, 12 Jan 2022 00:24:21 +0000
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     Roman Gushchin <guro@fb.com>
-Cc:     Wei Yang <richard.weiyang@gmail.com>, hannes@cmpxchg.org,
-        mhocko@kernel.org, vdavydov.dev@gmail.com,
-        akpm@linux-foundation.org, shakeelb@google.com, vbabka@suse.cz,
-        willy@infradead.org, songmuchun@bytedance.com, shy828301@gmail.com,
-        surenb@google.com, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 3/4] mm/memcg: retrieve parent memcg from css.parent
-Message-ID: <20220112002421.m3fyktkkz55fup3v@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20220111010302.8864-1-richard.weiyang@gmail.com>
- <20220111010302.8864-3-richard.weiyang@gmail.com>
- <Yd3H8Hea6dBlkzeW@carbon.dhcp.thefacebook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yd3H8Hea6dBlkzeW@carbon.dhcp.thefacebook.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=vlRniYjFJS8GXTiQcavbR3Q+xuXRc84rf1pjpwDnwgg=;
+        b=u/I1Lc/b8RWRHSLtecAOCcqKsbd2b2YSM1fLomduhvDf58J+oEoeTGtWc/1muIwVxn
+         mlh/oB09bmoSS9GHHEifcBeSVOXf5B/0QqOFWKFjga8YJJkCSpKPs8FifYgd0YlQzuNC
+         eDyrWKWsb6VQttUH9TLAV75vNC9HxWTvsQo7UaGC2aT1SYXebuEZ1WIRr6YBFkzJA/sQ
+         gasHnTtYq5OPguTf2QpFR+kfgfZb26mZkaSeDBLtk0PbgiJFyeH53/olsM8ons9z1K/4
+         FZU2ZsxL9STpo100c8j+z0DU5515xyd7/bnBznf8ohe3TfvoqvlKzdrK1Hg4A6/fjTpb
+         iSuw==
+X-Gm-Message-State: AOAM530QZBx+YpZzql1OEIMgogTdUnm6B0WXUMfaAg4UYTLg8tfkGix5
+        vLiCtn/lmnWdmg8+fT8DcWhK/eyVvZmI
+X-Google-Smtp-Source: ABdhPJwRSPJ9w2VH9jxXZL7U+jG+KqHxLna8R9IbOO47LvXY9HDELLu9W/eathbshbZ8HlUeiShOF/GHIWd9
+X-Received: from connoro.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:a99])
+ (user=connoro job=sendgmr) by 2002:aa7:85c7:0:b0:4bc:ac23:64a2 with SMTP id
+ z7-20020aa785c7000000b004bcac2364a2mr7007514pfn.20.1641947108064; Tue, 11 Jan
+ 2022 16:25:08 -0800 (PST)
+Date:   Wed, 12 Jan 2022 00:25:03 +0000
+Message-Id: <20220112002503.115968-1-connoro@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
+Subject: [PATCH bpf] tools/resolve_btfids: build with host flags
+From:   "Connor O'Brien" <connoro@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Connor O'Brien" <connoro@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 10:09:52AM -0800, Roman Gushchin wrote:
->On Tue, Jan 11, 2022 at 01:03:01AM +0000, Wei Yang wrote:
->> The parent we get from page_counter is correct, while this is two
->> different hierarchy.
->> 
->> Let's retrieve the parent memcg from css.parent just like parent_cs(),
->> blkcg_parent(), etc.
->
->Does it bring any benefits except consistency?
->
+resolve_btfids is built using $(HOSTCC) and $(HOSTLD) but does not
+pick up the corresponding flags. As a result, host-specific settings
+(such as a sysroot specified via HOSTCFLAGS=--sysroot=..., or a linker
+specified via HOSTLDFLAGS=-fuse-ld=...) will not be respected.
 
-I am afraid no.
+Fix this by setting CFLAGS to KBUILD_HOSTCFLAGS and LDFLAGS to
+KBUILD_HOSTLDFLAGS.
 
->> 
->> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
->
->Reviewed-by: Roman Gushchin <guro@fb.com>
->
->Thanks!
+Also pass the cflags through to libbpf via EXTRA_CFLAGS to ensure that
+the host libbpf is built with flags consistent with resolve_btfids.
 
+Signed-off-by: Connor O'Brien <connoro@google.com>
+---
+ tools/bpf/resolve_btfids/Makefile | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index 9ddeca947..a7f87cdf1 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -20,6 +20,8 @@ LD       = $(HOSTLD)
+ ARCH     = $(HOSTARCH)
+ RM      ?= rm
+ CROSS_COMPILE =
++CFLAGS  := $(KBUILD_HOSTCFLAGS)
++LDFLAGS := $(KBUILD_HOSTLDFLAGS)
+ 
+ OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+ 
+@@ -47,10 +49,10 @@ $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
+ 
+ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
+ 	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
+-		    DESTDIR=$(LIBBPF_DESTDIR) prefix=			       \
++		    DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
+ 		    $(abspath $@) install_headers
+ 
+-CFLAGS := -g \
++CFLAGS += -g \
+           -I$(srctree)/tools/include \
+           -I$(srctree)/tools/include/uapi \
+           -I$(LIBBPF_INCLUDE) \
 -- 
-Wei Yang
-Help you, Help me
+2.34.1.575.g55b058a8bb-goog
+

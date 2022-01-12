@@ -2,72 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FE948CAA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 991C748CAA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356036AbiALSHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 13:07:09 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:37714 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356020AbiALSHH (ORCPT
+        id S1356078AbiALSKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 13:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356056AbiALSJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:07:07 -0500
-Received: by mail-il1-f197.google.com with SMTP id l15-20020a056e021aaf00b002b7ed7d8cb4so1650567ilv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:07:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=4qfyyc8d8t6HSYNLIhDajcHWDIP5czgFUKxiWdgZZuo=;
-        b=wb1JKaRbFb4/e8S8mbASxcKjqdtFkvyCbp5wpWzUUdz4tq17Ob2mMNrX8rgVMTPW2f
-         W5guYK00luPeqUgdeVfB39w4Eu1xClqGJjLK5+2PnP3haWLpdIjKr3kLjmQNvRkjXINL
-         AbMMueW/iXt0YZafvOYeJ78f+pnvgWr58hyHDMWwFlacSYm4QcJYxI0CKJRihblx3fMP
-         pWz0gS7nsuddSjQg8FyzVGyXRgQVeInXc1mqrbJi69eVoNdfGOWo1A4RHPCcxe+b3F8m
-         0Uf3yRWkdl8GqyWUAegHd16PGPYPOtnba6VCsqBJEn9+BWEZ4tJUXozWHLjMii/YBwxr
-         akAQ==
-X-Gm-Message-State: AOAM530lSx1ePuRRuM/HgK9uO1JYBTeMnYnLPHs7RWT4d9UnDoOl890q
-        pDsAZyiTFcHrnkwe6TsxHgQKbkbtUGs/wO/g325gmEz6wo5T
-X-Google-Smtp-Source: ABdhPJypiq3WNQhaEDkIOaecF5zA0hAxEGuLf4XczFian/Ud6RPY4l9/xIPbalhaOGaw8NUbxN6HUozucfb4pNbwD+xvQf1HCkcn
+        Wed, 12 Jan 2022 13:09:06 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111A8C03400D;
+        Wed, 12 Jan 2022 10:08:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6La9C4YyAg08OoV/358HZSqSghTNkDUXX2vxnwT4Wyc=; b=k5WVo9XBH6g8ABPj+Q9UPZDGFz
+        0aExXTaFDhQJ94Za0elX1EdK7gjPU0vGnsHXpuN67EquXAOEiE2boxLVEedHcoqT/yv6pksM/g6p8
+        sA1Nl8sXUQzZRUFNVZe3w1ZkNXQbnXv6AEJUhORMamQhK1b3t0jtoQwohGHFESDhSc5zPmlxJw5Rw
+        jHJgoXAvDvsSHxbzYTB55w7skpfhJUIKdLW1tt1gZpK+szCVeEM+pWLtGRl0kYMEueGTSbP4S8Cy7
+        lMDxCY+F5Qi/fX43i1puyxHJkQxt8bVlId4CYwLRBagnd2I8y5HsMC7UdF4hp+33Jf2y2+zXFlzdK
+        guQt/TQA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56676)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1n7i2l-0006IJ-L2; Wed, 12 Jan 2022 18:08:19 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1n7i2j-000754-Oj; Wed, 12 Jan 2022 18:08:17 +0000
+Date:   Wed, 12 Jan 2022 18:08:17 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v5 08/10] ARM: uaccess: add __{get,put}_kernel_nofault
+Message-ID: <Yd8ZEbywqjXkAx9k@shell.armlinux.org.uk>
+References: <20210726141141.2839385-1-arnd@kernel.org>
+ <20210726141141.2839385-9-arnd@kernel.org>
+ <Yd8P37V/N9EkwmYq@wychelm>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1490:: with SMTP id a16mr491280iow.30.1642010826998;
- Wed, 12 Jan 2022 10:07:06 -0800 (PST)
-Date:   Wed, 12 Jan 2022 10:07:06 -0800
-In-Reply-To: <000000000000c1524005cdeacc5f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000f890905d56670f5@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in veth_xdp_rcv
-From:   syzbot <syzbot+67f89551088ea1a6850e@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, fgheet255t@gmail.com,
-        hawk@kernel.org, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, toke@redhat.com, toke@toke.dk,
-        yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd8P37V/N9EkwmYq@wychelm>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Wed, Jan 12, 2022 at 05:29:03PM +0000, Daniel Thompson wrote:
+> On Mon, Jul 26, 2021 at 04:11:39PM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > These mimic the behavior of get_user and put_user, except
+> > for domain switching, address limit checking and handling
+> > of mismatched sizes, none of which are relevant here.
+> > 
+> > To work with pre-Armv6 kernels, this has to avoid TUSER()
+> > inside of the new macros, the new approach passes the "t"
+> > string along with the opcode, which is a bit uglier but
+> > avoids duplicating more code.
+> > 
+> > As there is no __get_user_asm_dword(), I work around it
+> > by copying 32 bit at a time, which is possible because
+> > the output size is known.
+> > 
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> I've just been bisecting some regressions running the kgdbts tests on
+> arm and this patch came up.
 
-commit 2cbad989033bff0256675c38f96f5faab852af4b
-Author: Paolo Abeni <pabeni@redhat.com>
-Date:   Tue Nov 30 10:08:06 2021 +0000
+So the software PAN code is working :)
 
-    bpf: Do not WARN in bpf_warn_invalid_xdp_action()
+The kernel attempted to access an address that is in the userspace
+domain (NULL pointer) and took an exception.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14e9e1ddb00000
-start commit:   252c765bd764 riscv, bpf: Add BPF exception tables
-git tree:       bpf-next
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f60548b4c38ae4a8
-dashboard link: https://syzkaller.appspot.com/bug?extid=67f89551088ea1a6850e
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1797fcf2b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e71f9f300000
+I suppose we should handle a domain fault more gracefully - what are
+the required semantics if the kernel attempts a userspace access
+using one of the _nofault() accessors?
 
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: bpf: Do not WARN in bpf_warn_invalid_xdp_action()
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

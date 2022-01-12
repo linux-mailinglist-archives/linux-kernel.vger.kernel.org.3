@@ -2,194 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0ABA48BD89
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 04:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F6F48BD86
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 04:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349069AbiALDGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 22:06:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45142 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347731AbiALDGe (ORCPT
+        id S1349050AbiALDGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 22:06:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347731AbiALDGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 22:06:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641956794;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hLUxMC+s0pjFSC8kaV/VAZ/OjH+3iQwtRfE6QrexVRQ=;
-        b=CbTvkKSwsGdKG6kpTLJugZ4XuOeJRudt5m7p30PWh49X2QCCdY1VplQLLGURauvcEkTCDv
-        RZ+Ooy8AfZl9Hrst5UzgFmJFDdMJGSLVp0pJY2VZrpsFwwrYjd8tVWnQECWUE6O0ptjm7k
-        HhWt2f9IjShz8JcRf8EBoRDkaIiawEA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-88-BVlO2JIgPpuRso4p7ARE6A-1; Tue, 11 Jan 2022 22:06:31 -0500
-X-MC-Unique: BVlO2JIgPpuRso4p7ARE6A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 11 Jan 2022 22:06:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97B2C06173F;
+        Tue, 11 Jan 2022 19:06:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 97F321853028;
-        Wed, 12 Jan 2022 03:06:29 +0000 (UTC)
-Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7C73E5E24E;
-        Wed, 12 Jan 2022 03:05:58 +0000 (UTC)
-Date:   Wed, 12 Jan 2022 11:05:54 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     mkoutny@suse.com, paulmck@kernel.org, tj@kernel.org,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH v6 2/2] block: cancel all throttled bios in del_gendisk()
-Message-ID: <Yd5FkuhYX9YcgQkZ@T590>
-References: <20220110134758.2233758-1-yukuai3@huawei.com>
- <20220110134758.2233758-3-yukuai3@huawei.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D821B81DA5;
+        Wed, 12 Jan 2022 03:06:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17569C36AEB;
+        Wed, 12 Jan 2022 03:06:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641956764;
+        bh=zki247rmLODdkQj3pLKnVdNIAgFXqIuIAfHlqbqgraM=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=WhMoy39pDXaQ2/HKJSbTsmar8xEUWNNUr5gUrnczMg84ByrkAPnV9RpgNHvDS2qQt
+         WKeDSj5FGrPUPFMdUavpB3gUTpyn53U0gKwTDmjm8UwzAiXxnaXs8OQRh7xxQ20EVh
+         A6odeRn4fjcr1pMuiq8qhbrlt3EyAM4pvB4Gu9ZPla/QsBiAdnTylq/Agv4X1ylhls
+         WPnj+kC7759Sba5XOnAxIkoSG0cYlTvKes8wDdl3/dFMdwPiG3fbQ2ciJfsiYiqzRb
+         MnAlnqlqLtvrDaKgnQIFY6FEkdN54aJ9retauZATrHkUGJHPLpUc+Umt1BLfNDIrVp
+         B+C5LFm0vhJlg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110134758.2233758-3-yukuai3@huawei.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YbwMoIybSUAteBzV@yoga>
+References: <20211203035601.3505780-1-bjorn.andersson@linaro.org> <20211216015136.96AD3C36AE1@smtp.kernel.org> <Ybqo+wUv6lNT75tJ@ripper> <20211216185856.27406C36AE2@smtp.kernel.org> <YbvMkIhdsGdCfvFV@ripper> <20211217014521.55CD4C36AE0@smtp.kernel.org> <YbwMoIybSUAteBzV@yoga>
+Subject: Re: [PATCH] clk: qcom: rcg2: Cache rate changes for parked RCGs
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Amit Nischal <anischal@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <tdas@codeaurora.org>, dmitry.baryshkov@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Date:   Tue, 11 Jan 2022 19:06:02 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20220112030604.17569C36AEB@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yu Kuai,
+Quoting Bjorn Andersson (2021-12-16 20:05:52)
+> On Thu 16 Dec 19:45 CST 2021, Stephen Boyd wrote:
+> > > >=20
+> > > > >=20
+> > > > > > So instead of saving the current_rate can we save the cfg regis=
+ter value
+> > > > > > (or however many registers we need) to put back the frequency o=
+f the clk
+> > > > > > to what we want on enable? The other thing is that we made reca=
+lc_rate()
+> > > > > > work "seamlessly" here by stashing the frequency into the regis=
+ter but
+> > > > > > leaving it uncommitted until enable. We may need to now look at=
+ the
+> > > > > > software copy of the registers in the shared rcg recalc rate op=
+eration
+> > > > > > to figure out what the frequency is.
+> > > > > >=20
+> > > > >=20
+> > > > > I made an attempt at this, the problem I had was to come up within
+> > > > > something sane for how to deal with set_rate on parked clocks; be=
+cause
+> > > > > we need to re-generate the register contents, without writing out=
+ the
+> > > > > value - and that got messy.
+> > > >=20
+> > > > Looking back on the introduction of this code[1] I see that it's not
+> > > > about the rate but more about the parent. i.e. we park the clk on t=
+he XO
+> > > > parent but don't care about the m/n values or pre divider because it
+> > > > doesn't really matter if the clk is running slowly. So nothing need=
+s to
+> > > > be saved except for the cfg register, and we can do that in software
+> > > > with a single u32 instead of using a rate and looking it up and then
+> > > > reprogramming the other values. We should be able to cache the regi=
+ster
+> > > > content with an init clk_op.
+> > > >=20
+> > >=20
+> > > So you're suggesting that, in clk_rcg2_shared_set_rate(), when the RCG
+> > > is found to be disabled, I should write out M, N, D and calculate a n=
+ew
+> > > cfg value which I stash until the next enable?
+> > >=20
+> > > Looks a little bit messy, but I will give it a try.
+> >=20
+> > No. I don't see where clk_rcg2_shared_set_rate() needs to change.
+> >=20
+> > I'm suggesting we cache the config register on disable so it can be
+> > restored on enable. Basically everything is the same except now we don't
+> > write the cfg register and leave it dirty in the hardware. We need a
+> > shared rcg version of recalc rate that looks at the shadow cfg register
+> > instead of reading the hardware because we've changed the parent behind
+> > the back of the framework and we want to make it look like nothing has
+> > changed.=20
+> >=20
+>=20
+> I see, that was my first attempt of an implementation as well.
+>=20
+> The problem I ran into right away was that i had something that did
+> disable(), set_rate(), enable() and I would restore the wrong settings.
+>=20
+> So clk_rcg2_shared_set_rate() needs to update the stashed cfg value -
+> and it needs to write out M, N and D if we're not caching those.
+>=20
+> > This is all based on my understanding that the problem is the RCG is
+> > changing rate due to the gdsc turning on the clk for us. So we can't
+> > leave anything dirty in the hardware and have to keep it in software.
+> > I hope the change is minimal.
+>=20
+> That's my understanding as well.
+>=20
+>=20
+> Looking more at the code I think it's possible that we get disable(),
+> set_parent(), enable() as well; which if that's the case would result
+> in the same problem, so I assume I need to tend to that as well.
 
-On Mon, Jan 10, 2022 at 09:47:58PM +0800, Yu Kuai wrote:
-> Throttled bios can't be issued after del_gendisk() is done, thus
-> it's better to cancel them immediately rather than waiting for
-> throttle is done.
-> 
-> For example, if user thread is throttled with low bps while it's
-> issuing large io, and the device is deleted. The user thread will
-> wait for a long time for io to return.
-> 
-> Noted this patch is mainly from revertion of commit 32e3374304c7
-> ("blk-throttle: remove tg_drain_bios") and commit b77412372b68
-> ("blk-throttle: remove blk_throtl_drain").
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->  block/blk-throttle.c | 77 ++++++++++++++++++++++++++++++++++++++++++++
->  block/blk-throttle.h |  2 ++
->  block/genhd.c        |  2 ++
->  3 files changed, 81 insertions(+)
-
-Just wondering why not take the built-in way in throtl_upgrade_state() for
-canceling throttled bios? Something like the following, then we can avoid
-to re-invent the wheel.
-
- block/blk-throttle.c | 38 +++++++++++++++++++++++++++++++-------
- block/blk-throttle.h |  2 ++
- block/genhd.c        |  3 +++
- 3 files changed, 36 insertions(+), 7 deletions(-)
-
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index cf7e20804f1b..17e56b2e44c4 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -1816,16 +1816,11 @@ static void throtl_upgrade_check(struct throtl_grp *tg)
- 		throtl_upgrade_state(tg->td);
- }
- 
--static void throtl_upgrade_state(struct throtl_data *td)
-+static void __throtl_cancel_bios(struct throtl_data *td)
- {
- 	struct cgroup_subsys_state *pos_css;
- 	struct blkcg_gq *blkg;
- 
--	throtl_log(&td->service_queue, "upgrade to max");
--	td->limit_index = LIMIT_MAX;
--	td->low_upgrade_time = jiffies;
--	td->scale = 0;
--	rcu_read_lock();
- 	blkg_for_each_descendant_post(blkg, pos_css, td->queue->root_blkg) {
- 		struct throtl_grp *tg = blkg_to_tg(blkg);
- 		struct throtl_service_queue *sq = &tg->service_queue;
-@@ -1834,12 +1829,41 @@ static void throtl_upgrade_state(struct throtl_data *td)
- 		throtl_select_dispatch(sq);
- 		throtl_schedule_next_dispatch(sq, true);
- 	}
--	rcu_read_unlock();
- 	throtl_select_dispatch(&td->service_queue);
- 	throtl_schedule_next_dispatch(&td->service_queue, true);
- 	queue_work(kthrotld_workqueue, &td->dispatch_work);
- }
- 
-+void blk_throtl_cancel_bios(struct request_queue *q)
-+{
-+	struct cgroup_subsys_state *pos_css;
-+	struct blkcg_gq *blkg;
-+
-+	rcu_read_lock();
-+	spin_lock_irq(&q->queue_lock);
-+	__throtl_cancel_bios(q->td);
-+	spin_unlock_irq(&q->queue_lock);
-+	rcu_read_unlock();
-+
-+	blkg_for_each_descendant_post(blkg, pos_css, q->root_blkg)
-+		del_timer_sync(&blkg_to_tg(blkg)->service_queue.pending_timer);
-+	del_timer_sync(&q->td->service_queue.pending_timer);
-+
-+	throtl_shutdown_wq(q);
-+}
-+
-+static void throtl_upgrade_state(struct throtl_data *td)
-+{
-+	throtl_log(&td->service_queue, "upgrade to max");
-+	td->limit_index = LIMIT_MAX;
-+	td->low_upgrade_time = jiffies;
-+	td->scale = 0;
-+
-+	rcu_read_lock();
-+	__throtl_cancel_bios(td);
-+	rcu_read_unlock();
-+}
-+
- static void throtl_downgrade_state(struct throtl_data *td)
- {
- 	td->scale /= 2;
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index b23a9f3abb82..525ac607c518 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -162,11 +162,13 @@ static inline int blk_throtl_init(struct request_queue *q) { return 0; }
- static inline void blk_throtl_exit(struct request_queue *q) { }
- static inline void blk_throtl_register_queue(struct request_queue *q) { }
- static inline bool blk_throtl_bio(struct bio *bio) { return false; }
-+static inline void blk_throtl_cancel_bios(struct request_queue *q) {}
- #else /* CONFIG_BLK_DEV_THROTTLING */
- int blk_throtl_init(struct request_queue *q);
- void blk_throtl_exit(struct request_queue *q);
- void blk_throtl_register_queue(struct request_queue *q);
- bool __blk_throtl_bio(struct bio *bio);
-+void blk_throtl_cancel_bios(struct request_queue *q);
- static inline bool blk_throtl_bio(struct bio *bio)
- {
- 	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
-diff --git a/block/genhd.c b/block/genhd.c
-index 626c8406f21a..1395cbd8eacf 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -30,6 +30,7 @@
- #include "blk.h"
- #include "blk-mq-sched.h"
- #include "blk-rq-qos.h"
-+#include "blk-throttle.h"
- 
- static struct kobject *block_depr;
- 
-@@ -622,6 +623,8 @@ void del_gendisk(struct gendisk *disk)
- 
- 	blk_mq_freeze_queue_wait(q);
- 
-+	blk_throtl_cancel_bios(q);
-+
- 	rq_qos_exit(q);
- 	blk_sync_queue(q);
- 	blk_flush_integrity();
-
-Thanks,
-Ming
-
+Hopefully we can write the M, N, D and pre-divier values all the time
+and avoid writing the parent selection register (the cfg one) when the
+clk is off. It would mean that the "safe parent" of XO is getting
+divided pretty heavily sometimes but I suspect it doesn't matter in
+practice. When the clk is enabled in the kernel, we'll move the parent
+over by making the cfg register have the right parent selectoin and then
+the mnd and divider would already be what they're supposed to be in the
+hardware. Does that work?

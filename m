@@ -2,432 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0F648BDC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 04:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CA948BDC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 04:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350487AbiALDtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 22:49:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiALDtF (ORCPT
+        id S1350505AbiALDv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 22:51:27 -0500
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:57433 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229770AbiALDvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 22:49:05 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487A7C06173F;
-        Tue, 11 Jan 2022 19:49:05 -0800 (PST)
-Received: from hatter.bewilderbeest.net (174-21-190-118.tukw.qwest.net [174.21.190.118])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id D924F629;
-        Tue, 11 Jan 2022 19:49:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1641959345;
-        bh=RSlPYOSoLXIaCFIKwFzv0GzVQ1YKlgaNsQGPB2MDF/4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PPhB+q4wmxlwXe+9vs0dKVxGbvVS0uSu1irHUiyW0Ca8Y9WU8rneG3/n1ziLQiZl4
-         MJlgnJ1eBQlj+9uWQz5iAYN7EWMPveN61yIsiWnK06EdRkRy5Kvu8nWYYjg4iH3tyj
-         N2GbZRd868fcAw0oTgVi4kZRGHWgFYOs644kuTj8=
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        linux-kernel@vger.kernel.org, Zev Weiss <zev@bewilderbeest.net>,
-        Renze Nicolai <renze@rnplus.nl>
-Subject: [PATCH v3] hwmon: (nct6775) add support for TSI temperature registers
-Date:   Tue, 11 Jan 2022 19:48:24 -0800
-Message-Id: <20220112034824.3467-1-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.34.1
+        Tue, 11 Jan 2022 22:51:25 -0500
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id BA76E320167D;
+        Tue, 11 Jan 2022 22:51:24 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 11 Jan 2022 22:51:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=date:from:to:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=cPPCjW0++zs5j1BPECt8fbcKsS3
+        R/TgbbewmfZx6kS0=; b=Mycbv/xmkNCGIvmdvQRqd5qmGXjmN22OACHXD3vEihP
+        +wZ9PiGK7MtO/eKtnqwHZQH7s3HsbgS4Hq7F79wABVSaFTDICaMOcgZtxoakP7Yr
+        7IYxz+TmJPNj5fnzaVCl/qv6x9g1jJ2AwzSDMsqK6elihGLO1HYV5sfItMzgBPi7
+        kZVXaxChxsx5YcKKa5VieU8evfVtSGC+/xqiSul3sBgIxPdXnkvW1kGOOaGhHvIP
+        N42x3WTsjT5TcwpbPSiR/be5lB6aIShtDIS9pcnRd4JdpaE1Art4smCFz6sMwuNc
+        mG0cqcN5isN3PhQv3bjyqBxa4C1zpE4UumFxwPgPKwQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=cPPCjW
+        0++zs5j1BPECt8fbcKsS3R/TgbbewmfZx6kS0=; b=kmP4fLlO7ppe2GRHsMlvON
+        qfHmAQENdYCE+z6g9W9LIH7rg1ZCN67Qx5zAUqtwY8+ozh+2K6kGHqQIvZLNEfXo
+        9bKh5+LP97KwSDH9VzYWLGT0i/uYpFXb66WYJul+3K0CvS9/mI6vVdqtymLDQHrR
+        AuJ8jq6YWC3ic4a/wX70gl00dwqKfcfXTRgQ8gWRsiRtBZ+T/C4FTyi02YKYAzn2
+        ErJvvxreRAjCMj55CaCrxyJhZcNLqtfjZzKhFNSrXM6N6uSIovRU8r4lMeQ3p3Jk
+        hYyslVdn0IaKzoeIkf66UbMC0P/kuyeh+qa3eV7iOwe8VXYqFcEyyUEn5F9l6G8A
+        ==
+X-ME-Sender: <xms:O1DeYTI9JtqiTyLBk3hklhpMyh1A-8T314X4NJUfChZYb-Pwnv2LqQ>
+    <xme:O1DeYXIWUUvJd4g8oUFebDJrhsdYZBho3Ac22tCqfCL2W9z6BzmYQiWrzINQ_F9tv
+    BA-3zapAQVPDJzTrHI>
+X-ME-Received: <xmr:O1DeYbtSKXC4tSgdfW8Vzb02NBfq8EmKh2UQH4Ad7OZRCGsMbGDqLHaItSvKe8QwIkf53vxa0PEYrUoh0_jZSIGZ1Zj9XqFmhQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudehgedgieeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtre
+    dttddtvdenucfhrhhomhepvfgrkhgrshhhihcuufgrkhgrmhhothhouceoohdqthgrkhgr
+    shhhihesshgrkhgrmhhotggthhhirdhjpheqnecuggftrfgrthhtvghrnhepjeegieefue
+    evueefieeggeejledvgfejgeffjefgvdekleehgfdtfeetjeelkeejnecuffhomhgrihhn
+    pehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
+X-ME-Proxy: <xmx:O1DeYcanM5X5wgDAWQGKg709O0DgC6iL2S_wP6CkE1_nSrh5rBAfNA>
+    <xmx:O1DeYaYXhoq_-EX_RbkYJya82uhHoHkGwC3OjWk7r8VTlQ9904_jRQ>
+    <xmx:O1DeYQDSRbYnQ5gQRqW2UYGdWXC8tOpv6rP8lj19Q3CpjIgFtduxqg>
+    <xmx:PFDeYaF3FhyFtbVWrwImjfHw8nRRsk9yjqSuJ8lI2vAigi6JH7wI0g>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Jan 2022 22:51:21 -0500 (EST)
+Date:   Wed, 12 Jan 2022 12:51:18 +0900
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     stefanr@s5r6.in-berlin.de, alsa-devel@alsa-project.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, marcan@marcan.st
+Subject: Re: [PATCH 0/3] firewire: assist unit driver to compute packet
+ timestamp
+Message-ID: <Yd5QNs/YnvzGOy0g@workstation>
+Mail-Followup-To: stefanr@s5r6.in-berlin.de, alsa-devel@alsa-project.org,
+        linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        marcan@marcan.st
+References: <20211202113457.24011-1-o-takashi@sakamocchi.jp>
+ <YcGycqUrptkWYeOV@workstation>
+ <YdgdfrcvhJrUXwYF@workstation>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdgdfrcvhJrUXwYF@workstation>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These registers report CPU temperatures (and, depending on the system,
-sometimes chipset temperatures) via the TSI interface on AMD systems.
-They're distinct from most of the other Super-IO temperature readings
-(CPUTIN, SYSTIN, etc.) in that they're not a selectable source for
-monitoring and are in a different (higher resolution) format, but can
-still provide useful temperature data.
+Hi Stefan,
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-Tested-by: Renze Nicolai <renze@rnplus.nl>
----
+I'm sorry to post messages several times for the patchset if you are
+still busy. But I'm still waiting for any reaction.
 
-This patch has been tested on NCT6779 and NCT6798[1] hardware on
-(respectively) ASRock Rack ROMED8HM3 and X570D4U boards, and seems to
-work as expected; the implementation for the other chips supported by
-the driver is purely based on the datasheets and has not been tested
-(for lack of available hardware).
+I note that Linus have announced merge window for v5.17 kernel.
+ * https://lore.kernel.org/lkml/CAHk-=wgUkBrUVhjixy4wvrUhPbW-DTgtQubJWVOoLW=O0wRKMA@mail.gmail.com/T/#u
 
-[1] Or at least, its chip ID registers identify it as an NCT6798 and
-it seems to behave consistently with that, though it's actually
-physically labeled as an NCT6796.
+I'm glad if seeing your action for pull request as a response to the
+window.
 
-Changes since v2 [1]:
- - fixed a pair of <= that should have been < in is_word_sized()
- - fixed nct6116 switch case mistakenly referencing NCT6106_REG_TSI_TEMP
 
-Changes since v1 [0]:
- - simplified logic in is_word_sized()
+Kind Regards
 
-[0] https://lore.kernel.org/linux-hwmon/Yb7RVu6fQc+tLIAg@hatter.bewilderbeest.net/
-[1] https://lore.kernel.org/linux-hwmon/20211226051438.5081-1-zev@bewilderbeest.net/
+Takashi Sakamoto
 
- drivers/hwmon/nct6775.c | 130 ++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 124 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-index fd3f91cb01c6..8e50d6f44264 100644
---- a/drivers/hwmon/nct6775.c
-+++ b/drivers/hwmon/nct6775.c
-@@ -308,6 +308,7 @@ static void superio_exit(struct nct6775_sio_data *sio_data)
- 
- #define NUM_TEMP	10	/* Max number of temp attribute sets w/ limits*/
- #define NUM_TEMP_FIXED	6	/* Max number of fixed temp attribute sets */
-+#define NUM_TSI_TEMP	8	/* Max number of TSI temp register pairs */
- 
- #define NUM_REG_ALARM	7	/* Max number of alarm registers */
- #define NUM_REG_BEEP	5	/* Max number of beep registers */
-@@ -498,6 +499,8 @@ static const u16 NCT6775_REG_TEMP_CRIT[32] = {
- 	[11] = 0xa07
- };
- 
-+static const u16 NCT6775_REG_TSI_TEMP[] = { 0x669 };
-+
- /* NCT6776 specific data */
- 
- /* STEP_UP_TIME and STEP_DOWN_TIME regs are swapped for all chips but NCT6775 */
-@@ -581,6 +584,9 @@ static const u16 NCT6776_REG_TEMP_CRIT[32] = {
- 	[12] = 0x70a,
- };
- 
-+static const u16 NCT6776_REG_TSI_TEMP[] = {
-+	0x409, 0x40b, 0x40d, 0x40f, 0x411, 0x413, 0x415, 0x417 };
-+
- /* NCT6779 specific data */
- 
- static const u16 NCT6779_REG_IN[] = {
-@@ -864,6 +870,8 @@ static const char *const nct6796_temp_label[] = {
- #define NCT6796_TEMP_MASK	0xbfff0ffe
- #define NCT6796_VIRT_TEMP_MASK	0x80000c00
- 
-+static const u16 NCT6796_REG_TSI_TEMP[] = { 0x409, 0x40b };
-+
- static const char *const nct6798_temp_label[] = {
- 	"",
- 	"SYSTIN",
-@@ -1005,6 +1013,8 @@ static const u16 NCT6106_REG_TEMP_CRIT[32] = {
- 	[12] = 0x205,
- };
- 
-+static const u16 NCT6106_REG_TSI_TEMP[] = { 0x59, 0x5b, 0x5d, 0x5f, 0x61, 0x63, 0x65, 0x67 };
-+
- /* NCT6112D/NCT6114D/NCT6116D specific data */
- 
- static const u16 NCT6116_REG_FAN[] = { 0x20, 0x22, 0x24, 0x26, 0x28 };
-@@ -1069,6 +1079,8 @@ static const s8 NCT6116_BEEP_BITS[] = {
- 	34, -1				/* intrusion0, intrusion1 */
- };
- 
-+static const u16 NCT6116_REG_TSI_TEMP[] = { 0x59, 0x5b };
-+
- static enum pwm_enable reg_to_pwm_enable(int pwm, int mode)
- {
- 	if (mode == 0 && pwm == 255)
-@@ -1169,6 +1181,12 @@ static inline u8 in_to_reg(u32 val, u8 nr)
- 	return clamp_val(DIV_ROUND_CLOSEST(val * 100, scale_in[nr]), 0, 255);
- }
- 
-+/* TSI temperatures are in 8.3 format */
-+static inline unsigned int tsi_temp_from_reg(unsigned int reg)
-+{
-+	return (reg >> 5) * 125;
-+}
-+
- /*
-  * Data structures and manipulation thereof
-  */
-@@ -1179,7 +1197,7 @@ struct nct6775_data {
- 	enum kinds kind;
- 	const char *name;
- 
--	const struct attribute_group *groups[6];
-+	const struct attribute_group *groups[7];
- 
- 	u16 reg_temp[5][NUM_TEMP]; /* 0=temp, 1=temp_over, 2=temp_hyst,
- 				    * 3=temp_crit, 4=temp_lcrit
-@@ -1240,6 +1258,8 @@ struct nct6775_data {
- 	const u16 *REG_ALARM;
- 	const u16 *REG_BEEP;
- 
-+	const u16 *REG_TSI_TEMP;
-+
- 	unsigned int (*fan_from_reg)(u16 reg, unsigned int divreg);
- 	unsigned int (*fan_from_reg_min)(u16 reg, unsigned int divreg);
- 
-@@ -1267,6 +1287,7 @@ struct nct6775_data {
- 	s8 temp_offset[NUM_TEMP_FIXED];
- 	s16 temp[5][NUM_TEMP]; /* 0=temp, 1=temp_over, 2=temp_hyst,
- 				* 3=temp_crit, 4=temp_lcrit */
-+	s16 tsi_temp[NUM_TSI_TEMP];
- 	u64 alarms;
- 	u64 beeps;
- 
-@@ -1315,6 +1336,7 @@ struct nct6775_data {
- 
- 	u16 have_temp;
- 	u16 have_temp_fixed;
-+	u16 have_tsi_temp;
- 	u16 have_in;
- 
- 	/* Remember extra register values over suspend/resume */
-@@ -1464,13 +1486,15 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
- 	switch (data->kind) {
- 	case nct6106:
- 		return reg == 0x20 || reg == 0x22 || reg == 0x24 ||
-+		  (reg >= 0x59 && reg < 0x69 && (reg & 1)) ||
- 		  reg == 0xe0 || reg == 0xe2 || reg == 0xe4 ||
- 		  reg == 0x111 || reg == 0x121 || reg == 0x131;
- 	case nct6116:
- 		return reg == 0x20 || reg == 0x22 || reg == 0x24 ||
--		  reg == 0x26 || reg == 0x28 || reg == 0xe0 || reg == 0xe2 ||
--		  reg == 0xe4 || reg == 0xe6 || reg == 0xe8 || reg == 0x111 ||
--		  reg == 0x121 || reg == 0x131 || reg == 0x191 || reg == 0x1a1;
-+		  reg == 0x26 || reg == 0x28 || reg == 0x59 || reg == 0x5b ||
-+		  reg == 0xe0 || reg == 0xe2 || reg == 0xe4 || reg == 0xe6 ||
-+		  reg == 0xe8 || reg == 0x111 || reg == 0x121 || reg == 0x131 ||
-+		  reg == 0x191 || reg == 0x1a1;
- 	case nct6775:
- 		return (((reg & 0xff00) == 0x100 ||
- 		    (reg & 0xff00) == 0x200) &&
-@@ -1479,7 +1503,7 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
- 		    (reg & 0x00ff) == 0x55)) ||
- 		  (reg & 0xfff0) == 0x630 ||
- 		  reg == 0x640 || reg == 0x642 ||
--		  reg == 0x662 ||
-+		  reg == 0x662 || reg == 0x669 ||
- 		  ((reg & 0xfff0) == 0x650 && (reg & 0x000f) >= 0x06) ||
- 		  reg == 0x73 || reg == 0x75 || reg == 0x77;
- 	case nct6776:
-@@ -1490,6 +1514,7 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
- 		    (reg & 0x00ff) == 0x55)) ||
- 		  (reg & 0xfff0) == 0x630 ||
- 		  reg == 0x402 ||
-+		  (reg >= 0x409 && reg < 0x419 && (reg & 1)) ||
- 		  reg == 0x640 || reg == 0x642 ||
- 		  ((reg & 0xfff0) == 0x650 && (reg & 0x000f) >= 0x06) ||
- 		  reg == 0x73 || reg == 0x75 || reg == 0x77;
-@@ -1504,6 +1529,7 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
- 		return reg == 0x150 || reg == 0x153 || reg == 0x155 ||
- 		  (reg & 0xfff0) == 0x4c0 ||
- 		  reg == 0x402 ||
-+		  (reg >= 0x409 && reg < 0x419 && (reg & 1)) ||
- 		  reg == 0x63a || reg == 0x63c || reg == 0x63e ||
- 		  reg == 0x640 || reg == 0x642 || reg == 0x64a ||
- 		  reg == 0x64c ||
-@@ -1987,6 +2013,12 @@ static struct nct6775_data *nct6775_update_device(struct device *dev)
- 								   data->REG_TEMP_OFFSET[i]);
- 		}
- 
-+		for (i = 0; i < NUM_TSI_TEMP; i++) {
-+			if (!(data->have_tsi_temp & BIT(i)))
-+				continue;
-+			data->tsi_temp[i] = data->read_value(data, data->REG_TSI_TEMP[i]);
-+		}
-+
- 		data->alarms = 0;
- 		for (i = 0; i < NUM_REG_ALARM; i++) {
- 			u8 alarm;
-@@ -2670,6 +2702,44 @@ static const struct sensor_template_group nct6775_temp_template_group = {
- 	.base = 1,
- };
- 
-+static ssize_t show_tsi_temp(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct nct6775_data *data = nct6775_update_device(dev);
-+	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
-+
-+	return sysfs_emit(buf, "%u\n", tsi_temp_from_reg(data->tsi_temp[sattr->index]));
-+}
-+
-+static ssize_t show_tsi_temp_label(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
-+
-+	return sysfs_emit(buf, "TSI%d_TEMP\n", sattr->index);
-+}
-+
-+SENSOR_TEMPLATE(tsi_temp_input, "temp%d_input", 0444, show_tsi_temp, NULL, 0);
-+SENSOR_TEMPLATE(tsi_temp_label, "temp%d_label", 0444, show_tsi_temp_label, NULL, 0);
-+
-+static umode_t nct6775_tsi_temp_is_visible(struct kobject *kobj, struct attribute *attr,
-+					       int index)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct nct6775_data *data = dev_get_drvdata(dev);
-+	int temp = index / 2;
-+
-+	return (data->have_tsi_temp & BIT(temp)) ? attr->mode : 0;
-+}
-+
-+/*
-+ * The index calculation in nct6775_tsi_temp_is_visible() must be kept in
-+ * sync with the size of this array.
-+ */
-+static struct sensor_device_template *nct6775_tsi_temp_template[] = {
-+	&sensor_dev_template_tsi_temp_input,
-+	&sensor_dev_template_tsi_temp_label,
-+	NULL
-+};
-+
- static ssize_t
- show_pwm_mode(struct device *dev, struct device_attribute *attr, char *buf)
- {
-@@ -3948,10 +4018,11 @@ static int nct6775_probe(struct platform_device *pdev)
- 	const u16 *reg_temp, *reg_temp_over, *reg_temp_hyst, *reg_temp_config;
- 	const u16 *reg_temp_mon, *reg_temp_alternate, *reg_temp_crit;
- 	const u16 *reg_temp_crit_l = NULL, *reg_temp_crit_h = NULL;
--	int num_reg_temp, num_reg_temp_mon;
-+	int num_reg_temp, num_reg_temp_mon, num_reg_tsi_temp;
- 	u8 cr2a;
- 	struct attribute_group *group;
- 	struct device *hwmon_dev;
-+	struct sensor_template_group tsi_temp_tg;
- 	int num_attr_groups = 0;
- 
- 	if (sio_data->access == access_direct) {
-@@ -4043,11 +4114,13 @@ static int nct6775_probe(struct platform_device *pdev)
- 		data->ALARM_BITS = NCT6106_ALARM_BITS;
- 		data->REG_BEEP = NCT6106_REG_BEEP;
- 		data->BEEP_BITS = NCT6106_BEEP_BITS;
-+		data->REG_TSI_TEMP = NCT6106_REG_TSI_TEMP;
- 
- 		reg_temp = NCT6106_REG_TEMP;
- 		reg_temp_mon = NCT6106_REG_TEMP_MON;
- 		num_reg_temp = ARRAY_SIZE(NCT6106_REG_TEMP);
- 		num_reg_temp_mon = ARRAY_SIZE(NCT6106_REG_TEMP_MON);
-+		num_reg_tsi_temp = ARRAY_SIZE(NCT6106_REG_TSI_TEMP);
- 		reg_temp_over = NCT6106_REG_TEMP_OVER;
- 		reg_temp_hyst = NCT6106_REG_TEMP_HYST;
- 		reg_temp_config = NCT6106_REG_TEMP_CONFIG;
-@@ -4116,11 +4189,13 @@ static int nct6775_probe(struct platform_device *pdev)
- 		data->ALARM_BITS = NCT6116_ALARM_BITS;
- 		data->REG_BEEP = NCT6106_REG_BEEP;
- 		data->BEEP_BITS = NCT6116_BEEP_BITS;
-+		data->REG_TSI_TEMP = NCT6116_REG_TSI_TEMP;
- 
- 		reg_temp = NCT6106_REG_TEMP;
- 		reg_temp_mon = NCT6106_REG_TEMP_MON;
- 		num_reg_temp = ARRAY_SIZE(NCT6106_REG_TEMP);
- 		num_reg_temp_mon = ARRAY_SIZE(NCT6106_REG_TEMP_MON);
-+		num_reg_tsi_temp = ARRAY_SIZE(NCT6116_REG_TSI_TEMP);
- 		reg_temp_over = NCT6106_REG_TEMP_OVER;
- 		reg_temp_hyst = NCT6106_REG_TEMP_HYST;
- 		reg_temp_config = NCT6106_REG_TEMP_CONFIG;
-@@ -4191,11 +4266,13 @@ static int nct6775_probe(struct platform_device *pdev)
- 		data->REG_WEIGHT_TEMP[2] = NCT6775_REG_WEIGHT_TEMP_BASE;
- 		data->REG_ALARM = NCT6775_REG_ALARM;
- 		data->REG_BEEP = NCT6775_REG_BEEP;
-+		data->REG_TSI_TEMP = NCT6775_REG_TSI_TEMP;
- 
- 		reg_temp = NCT6775_REG_TEMP;
- 		reg_temp_mon = NCT6775_REG_TEMP_MON;
- 		num_reg_temp = ARRAY_SIZE(NCT6775_REG_TEMP);
- 		num_reg_temp_mon = ARRAY_SIZE(NCT6775_REG_TEMP_MON);
-+		num_reg_tsi_temp = ARRAY_SIZE(NCT6775_REG_TSI_TEMP);
- 		reg_temp_over = NCT6775_REG_TEMP_OVER;
- 		reg_temp_hyst = NCT6775_REG_TEMP_HYST;
- 		reg_temp_config = NCT6775_REG_TEMP_CONFIG;
-@@ -4264,11 +4341,13 @@ static int nct6775_probe(struct platform_device *pdev)
- 		data->REG_WEIGHT_TEMP[2] = NCT6775_REG_WEIGHT_TEMP_BASE;
- 		data->REG_ALARM = NCT6775_REG_ALARM;
- 		data->REG_BEEP = NCT6776_REG_BEEP;
-+		data->REG_TSI_TEMP = NCT6776_REG_TSI_TEMP;
- 
- 		reg_temp = NCT6775_REG_TEMP;
- 		reg_temp_mon = NCT6775_REG_TEMP_MON;
- 		num_reg_temp = ARRAY_SIZE(NCT6775_REG_TEMP);
- 		num_reg_temp_mon = ARRAY_SIZE(NCT6775_REG_TEMP_MON);
-+		num_reg_tsi_temp = ARRAY_SIZE(NCT6776_REG_TSI_TEMP);
- 		reg_temp_over = NCT6775_REG_TEMP_OVER;
- 		reg_temp_hyst = NCT6775_REG_TEMP_HYST;
- 		reg_temp_config = NCT6776_REG_TEMP_CONFIG;
-@@ -4341,11 +4420,13 @@ static int nct6775_probe(struct platform_device *pdev)
- 		data->REG_WEIGHT_TEMP[2] = NCT6775_REG_WEIGHT_TEMP_BASE;
- 		data->REG_ALARM = NCT6779_REG_ALARM;
- 		data->REG_BEEP = NCT6776_REG_BEEP;
-+		data->REG_TSI_TEMP = NCT6776_REG_TSI_TEMP;
- 
- 		reg_temp = NCT6779_REG_TEMP;
- 		reg_temp_mon = NCT6779_REG_TEMP_MON;
- 		num_reg_temp = ARRAY_SIZE(NCT6779_REG_TEMP);
- 		num_reg_temp_mon = ARRAY_SIZE(NCT6779_REG_TEMP_MON);
-+		num_reg_tsi_temp = ARRAY_SIZE(NCT6776_REG_TSI_TEMP);
- 		reg_temp_over = NCT6779_REG_TEMP_OVER;
- 		reg_temp_hyst = NCT6779_REG_TEMP_HYST;
- 		reg_temp_config = NCT6779_REG_TEMP_CONFIG;
-@@ -4460,6 +4541,25 @@ static int nct6775_probe(struct platform_device *pdev)
- 			data->REG_BEEP = NCT6776_REG_BEEP;
- 		else
- 			data->REG_BEEP = NCT6792_REG_BEEP;
-+		switch (data->kind) {
-+		case nct6791:
-+		case nct6792:
-+		case nct6793:
-+			data->REG_TSI_TEMP = NCT6776_REG_TSI_TEMP;
-+			num_reg_tsi_temp = ARRAY_SIZE(NCT6776_REG_TSI_TEMP);
-+			break;
-+		case nct6795:
-+		case nct6796:
-+		case nct6797:
-+		case nct6798:
-+			data->REG_TSI_TEMP = NCT6796_REG_TSI_TEMP;
-+			num_reg_tsi_temp = ARRAY_SIZE(NCT6796_REG_TSI_TEMP);
-+			break;
-+		default:
-+			dev_warn(dev, "unknown number of TSI temp registers for %s\n", data->name);
-+			num_reg_tsi_temp = 0;
-+			break;
-+		}
- 
- 		reg_temp = NCT6779_REG_TEMP;
- 		num_reg_temp = ARRAY_SIZE(NCT6779_REG_TEMP);
-@@ -4659,6 +4759,12 @@ static int nct6775_probe(struct platform_device *pdev)
- 	}
- #endif /* USE_ALTERNATE */
- 
-+	/* Check which TSIx_TEMP registers are active */
-+	for (i = 0; i < num_reg_tsi_temp; i++) {
-+		if (data->read_value(data, data->REG_TSI_TEMP[i]))
-+			data->have_tsi_temp |= BIT(i);
-+	}
-+
- 	/* Initialize the chip */
- 	nct6775_init_device(data);
- 
-@@ -4766,6 +4872,18 @@ static int nct6775_probe(struct platform_device *pdev)
- 		return PTR_ERR(group);
- 
- 	data->groups[num_attr_groups++] = group;
-+
-+	if (data->have_tsi_temp) {
-+		tsi_temp_tg.templates = nct6775_tsi_temp_template;
-+		tsi_temp_tg.is_visible = nct6775_tsi_temp_is_visible;
-+		tsi_temp_tg.base = fls(data->have_temp) + 1;
-+		group = nct6775_create_attr_group(dev, &tsi_temp_tg, fls(data->have_tsi_temp));
-+		if (IS_ERR(group))
-+			return PTR_ERR(group);
-+
-+		data->groups[num_attr_groups++] = group;
-+	}
-+
- 	data->groups[num_attr_groups++] = &nct6775_group_other;
- 
- 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, data->name,
--- 
-2.34.1
-
+On Fri, Jan 07, 2022 at 08:01:18PM +0900, Takashi Sakamoto wrote:
+> Hi Stefan,
+> 
+> Wishing you a happy new year.
+> 
+> We are in the last week for release of v5.16 kernel, and soon merge
+> window for v5.17 kernel will be opened if thing goes well. I wish any
+> action for the review process to merge these patches into upstream.
+> 
+> 
+> Thanks
+> 
+> Takashi Sakamoto
+> 
+> On Tue, Dec 21, 2021 at 07:54:42PM +0900, Takashi Sakamoto wrote:
+> > Hi Stefan,
+> > 
+> > Thank you for your long effort to maintain Linux FireWire subsystem. I'd
+> > like to use the timestamp function for my integration in ALSA firewire
+> > stack planned at next version of Linux kernel. I'm glad if getting to
+> > your help for upstreaming.
+> > 
+> > On Thu, Dec 02, 2021 at 08:34:54PM +0900, Takashi Sakamoto wrote:
+> > > Hi,
+> > > 
+> > > In 1394 OHCI specification, each descriptor of IR/IT/AR/AT DMA context
+> > > has timeStamp field. The value of timeStamp field express the time in
+> > > which the controller accept packet. The resolution of value is isochronous
+> > > cycle count (8,000 Hz) with second up to 7.
+> > > 
+> > > I have a plan to use the value of timeStamp field for ALSA firewire stack
+> > > so that userspace ALSA PCM/Rawmidi applications can get converted timestamp
+> > > (ktime) for PCM frame/MIDI message. The timestamp can ideally express
+> > > finer granularity than the time to invoke IRQ handler (and co).
+> > > 
+> > > Current implementation of Linux FireWire subsystem delivers the value of
+> > > timeStamp field to unit driver for IR/IT/AT DMA context, but not for AR
+> > > DMA context. Additionally, the way to refer to Isochronous Cycle Timer
+> > > Register in MMIO region of 1394 OHCI controller is transaction to local
+> > > node. It includes overhead of transaction and it's preferable to add
+> > > less-overhead way available in any type of IRQ context.
+> > > 
+> > > This patchset adds two functions exposed in kernel space:
+> > > 
+> > >  * fw_card_read_cycle_time()
+> > >     * allow unit driver to access to CYCLE_TIME register in MMIO region
+> > >       without initiate transaction
+> > >  * fw_request_get_timestamp()
+> > >     * allow unit driver to get timestamp of request packet inner request
+> > >       handler
+> > > 
+> > > I note that Hector Martin found kernel null pointer dereference during
+> > > process to remove PCI card and has posted a patch:
+> > > 
+> > >  * https://lore.kernel.org/lkml/20211027113130.8802-1-marcan@marcan.st/
+> > > 
+> > > His patch is included in the series with my comment for relevant commit
+> > > 20802224298c ("firewire: core: add forgotten dummy driver methods, remove
+> > > unused ones"). The patch is required since unit driver can refer to dummy
+> > > driver between removal callback of PCI subsystem and removal callback of
+> > > FireWire subsystem.
+> > > 
+> > > Hector Martin (1):
+> > >   firewire: Add dummy read_csr/write_csr functions
+> > > 
+> > > Takashi Sakamoto (2):
+> > >   firewire: add kernel API to access CYCLE_TIME register
+> > >   firewire: add kernel API to access packet structure in request
+> > >     structure for AR context
+> > > 
+> > >  drivers/firewire/core-card.c        | 39 +++++++++++++++++++++++++++++
+> > >  drivers/firewire/core-cdev.c        |  6 +++--
+> > >  drivers/firewire/core-transaction.c | 18 +++++++++++++
+> > >  include/linux/firewire.h            |  3 +++
+> > >  4 files changed, 64 insertions(+), 2 deletions(-)
+> > > 
+> > > -- 
+> > > 2.32.0
+> > 
+> > 
+> > Sincerely yours
+> > 
+> > Takashi Sakamoto

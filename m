@@ -2,74 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D4248C753
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCE748C749
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:36:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245667AbiALPhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:37:52 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:34334 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1354653AbiALPhn (ORCPT
+        id S1354630AbiALPgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354631AbiALPgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:37:43 -0500
-X-UUID: c0010ea03e1d4bc8b1fd8867459ae98d-20220112
-X-UUID: c0010ea03e1d4bc8b1fd8867459ae98d-20220112
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1417043481; Wed, 12 Jan 2022 23:37:39 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 12 Jan 2022 23:37:38 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 12 Jan 2022 23:37:38 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
-        <narmstrong@baylibre.com>, <robert.foss@linaro.org>,
-        <andrzej.hajda@intel.com>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <p.zabel@pengutronix.de>
-CC:     <xji@analogixsemi.com>, <jitao.shi@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [v8, PATCH 3/3] drm/bridge: anx7625: config hs packets end aligned to avoid screen shift
-Date:   Wed, 12 Jan 2022 23:36:39 +0800
-Message-ID: <20220112153639.12343-4-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220112153639.12343-1-rex-bc.chen@mediatek.com>
-References: <20220112153639.12343-1-rex-bc.chen@mediatek.com>
+        Wed, 12 Jan 2022 10:36:53 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970BDC061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:36:52 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id c71so11527333edf.6
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:36:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=pFQlRwVs64l+mhGnFgsqy5BuLBon+B2tD/h1013B7pA=;
+        b=QzqyPaQ29wk/535/mqu2iWnjEbZEvV5DPaoeeXxkQ+LF4iriofj5ZloKOQPaEo8mq1
+         4Ok2uSRIvsJ1dpLerR+PqrvemFbeiGCdrtYeRlA8w2gc80/B5dKsMyNMY4KhXc5tp2cR
+         znG9K0aUnnYZJlWFanPSZuUIfaCNvZzvhe8Ss=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=pFQlRwVs64l+mhGnFgsqy5BuLBon+B2tD/h1013B7pA=;
+        b=bIswPo6R1DAV0e8XNa4zvY91lGVtSo1ICcYPS37usOS1MXg0osR44fECoaQtIPQCAI
+         Mh5vROX+Eh3f/eKA7BAWSAtZrrV0DJDNgStKnRZyxGSIZHaW1dVUgl0VP9n82SUTZN4J
+         WlQr1lspER1nQoivSDnooBWgFYD3Rrv0v5YnkYBanXFI/JS6hGtr+Fp5o04z7coZinRF
+         mq42G8RZURVd5so30W52Y232oqluec6YVWZC1laiuWFJvo1aVG/PBmZBPAceA28R6FPS
+         PNNz2eLx1v2E7K5aJdmk04qdnrAj2ZTCA6sdm5t5xGEjkGRgTZrYAnnjrBodyTMwON07
+         Oltw==
+X-Gm-Message-State: AOAM5301rHc81DCqQycWJNwW3Mh5+O15TtaJCspYd1C5m8SoD+mFZIga
+        op5x2E1hLtLHEb41X4jOmWRpSw==
+X-Google-Smtp-Source: ABdhPJyhR2ASi9+GtKBfKy+OT8soYwXQEidXwNi5BGuIk/eoLc5gqe3YWIlj8uA/tAbZc4ODk8QK9Q==
+X-Received: by 2002:a05:6402:51cc:: with SMTP id r12mr172836edd.239.1642001811228;
+        Wed, 12 Jan 2022 07:36:51 -0800 (PST)
+Received: from miu.piliscsaba.redhat.com (catv-178-48-189-3.catv.broadband.hu. [178.48.189.3])
+        by smtp.gmail.com with ESMTPSA id l10sm18542ejh.102.2022.01.12.07.36.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 07:36:50 -0800 (PST)
+Date:   Wed, 12 Jan 2022 16:36:43 +0100
+From:   Miklos Szeredi <miklos@szeredi.hu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: [GIT PULL] fuse update for 5.17
+Message-ID: <Yd71i1Yul3rPO2Lp@miu.piliscsaba.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This device requires the packets on lanes aligned at the end to fix
-screen shift or scroll.
+Hi Linus,
 
-Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-Reviewed-by: Xin Ji <xji@analogixsemi.com>
-Acked-by: Robert Foss <robert.foss@linaro.org>
+Please pull from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git tags/fuse-update-5.17
+
+- Fix a regression introduced in 5.15.
+
+- Extend the size of the FUSE_INIT request to accommodate for more flags.
+  There's a slight possibility of a regression for obscure fuse servers; if
+  this happens, then more complexity will need to be added to the protocol.
+
+- Allow the DAX property to be controlled by the server on a per-inode
+  basis in virtiofs.
+
+- Allow sending security context to the server when creating a file or
+  directory.
+
+Thanks,
+Miklos
+
 ---
- drivers/gpu/drm/bridge/analogix/anx7625.c | 1 +
- 1 file changed, 1 insertion(+)
+Jeffle Xu (7):
+      fuse: add fuse_should_enable_dax() helper
+      fuse: make DAX mount option a tri-state
+      fuse: support per inode DAX in fuse protocol
+      fuse: enable per inode DAX
+      fuse: negotiate per inode DAX in FUSE_INIT
+      fuse: mark inode DONT_CACHE when per inode DAX hint changes
+      Documentation/filesystem/dax: DAX on virtiofs
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index 2346dbcc505f..672705a68dae 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -1674,6 +1674,7 @@ static int anx7625_attach_dsi(struct anx7625_data *ctx)
- 	dsi->mode_flags = MIPI_DSI_MODE_VIDEO	|
- 		MIPI_DSI_MODE_VIDEO_SYNC_PULSE	|
- 		MIPI_DSI_MODE_VIDEO_HSE;
-+	dsi->hs_packet_end_aligned = true;
- 
- 	ret = devm_mipi_dsi_attach(dev, dsi);
- 	if (ret) {
--- 
-2.18.0
+Miklos Szeredi (1):
+      fuse: extend init flags
 
+Vivek Goyal (1):
+      fuse: send security context of inode on file
+
+Xie Yongji (1):
+      fuse: Pass correct lend value to filemap_write_and_wait_range()
+
+---
+ Documentation/filesystems/dax.rst | 20 ++++++++-
+ fs/fuse/dax.c                     | 36 +++++++++++++++-
+ fs/fuse/dir.c                     | 91 +++++++++++++++++++++++++++++++++++++++
+ fs/fuse/file.c                    |  6 +--
+ fs/fuse/fuse_i.h                  | 31 +++++++++++--
+ fs/fuse/inode.c                   | 89 +++++++++++++++++++++++---------------
+ fs/fuse/virtio_fs.c               | 18 ++++++--
+ include/uapi/linux/fuse.h         | 55 +++++++++++++++++++++--
+ 8 files changed, 294 insertions(+), 52 deletions(-)

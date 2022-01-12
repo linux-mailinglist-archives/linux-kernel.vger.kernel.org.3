@@ -2,100 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1851748C8AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743AE48C89F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349710AbiALQpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:45:52 -0500
-Received: from mga02.intel.com ([134.134.136.20]:50789 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239986AbiALQpt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:45:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642005949; x=1673541949;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=fRrm1uZQrkX3U3iwIWdjmqt0HX6DyiPt9SbTXaP/1Wc=;
-  b=HTKZ3aLCE9tiqRg8Y6pz0iA1f/hXRJLz5dClu/uOUCkb0bTPn67T2JAD
-   XAEF+9Tq9BaChZxR9nGKQDi7MKHXY1Jobc2i24mrLnW3YrnhHe2/qTgqW
-   ikPzTEv0sHoQjG2tzyCBeXN7L37okVLjettbwoRuIwAk0/w5Kz1z9/JIm
-   afTWXcQvplcn7eMotbPzTZ1qUl6Wfb3giPqX1TnjmNJfB/U+f8ouAiQPx
-   aTptiq5F8deAyV6Pf+upilLEtbUe+BgKSWI06LrEnvln+qXQ+EbLITrVr
-   WHZi0Q5U9wpstSbtuAjMBfcdYThTFmHsnhpyGHKU2HwxvRNvvd6zgQ0XJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="231120289"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="231120289"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 08:42:07 -0800
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="529248449"
-Received: from rfriess-x1c10.amr.corp.intel.com (HELO [10.212.33.247]) ([10.212.33.247])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 08:42:05 -0800
-Subject: Re: [PATCH v2 0/1] firmware: mtk: add adsp ipc protocol for sof
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        Linux-ALSA <alsa-devel@alsa-project.org>, tzungbi@google.com,
-        cujomalainey@google.com, Liam Girdwood <lgirdwood@gmail.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        sound-open-firmware@alsa-project.org
-References: <20220112113247.29135-1-allen-kh.cheng@mediatek.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <61ba06c7-74e4-03f9-2fe7-f12f862c7942@linux.intel.com>
-Date:   Wed, 12 Jan 2022 10:42:04 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S1355264AbiALQmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:42:10 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:47412 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343550AbiALQmJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 11:42:09 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F35C12111A;
+        Wed, 12 Jan 2022 16:42:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642005728; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iPj77zfOxRCcPyyK297Nw8fAGEmReWAwmZRBcfRDDwI=;
+        b=Lbem7p69GLWKSbIxnPTzAQw4r9cVFVUDjIJyfVJEhj5PIH3JLRLQSbg4qKu3AIaxAjIeEz
+        NV4/PpwDGlgnZgjO/gmGuvYUas2cfoKiTz+xaRNofe3h6jPGpzTqn/BDtM0Ki55G22d8+8
+        k07G644Dmvi2BZH9IEGOiNzBIVUGD+I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642005728;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iPj77zfOxRCcPyyK297Nw8fAGEmReWAwmZRBcfRDDwI=;
+        b=SizK2zmP+zoXfYhgsaqQYwmKHnfGeHkTQPdKoh6MZWiBN4KZMmA8i+UNYc3s308oMqg28r
+        XwgWtuI5gN20YOAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A419113BE6;
+        Wed, 12 Jan 2022 16:42:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GbRIJ98E32H8TAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 12 Jan 2022 16:42:07 +0000
+Message-ID: <4f0c30d7-fd10-84c7-4e7f-6d103e4ba9c1@suse.cz>
+Date:   Wed, 12 Jan 2022 17:42:07 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220112113247.29135-1-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v4 20/66] mm/khugepaged: Optimize
+ collapse_pte_mapped_thp() by using vma_lookup()
 Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-21-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211201142918.921493-21-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/1/21 15:29, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> 
+> vma_lookup() will walk the vma tree once and not continue to look for
+> the next vma.  Since the exact vma is checked below, this is a more
+> optimal way of searching.
+> 
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
 
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-On 1/12/22 5:32 AM, allen-kh.cheng wrote:
-> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> ---
+>  mm/khugepaged.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> This patch provides mtk adsp ipc support for sof.
-> 
-> ADSP IPC protocol offers (send/recv) interfaces using
-> mediatek-mailbox APIs.
-> 
-> changes since v1:
-> - add comments for mtk_adsp_ipc_send and mtk_adsp_ipc_recv
-> - remove unuseful MODULE_LICENSE
-> - change label name to out_free
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index e99101162f1a..0ff7d72cdd1d 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -1433,7 +1433,7 @@ static int khugepaged_add_pte_mapped_thp(struct mm_struct *mm,
+>  void collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr)
+>  {
+>  	unsigned long haddr = addr & HPAGE_PMD_MASK;
+> -	struct vm_area_struct *vma = find_vma(mm, haddr);
+> +	struct vm_area_struct *vma = vma_lookup(mm, haddr);
+>  	struct page *hpage;
+>  	pte_t *start_pte, *pte;
+>  	pmd_t *pmd, _pmd;
 
-my comment was not on changing the label name, but making sure you only
-free something that was allocated by using *two* labels.
-
-> 
-> Allen-KH Cheng (1):
->   firmware: mediatek: add adsp ipc protocol interface
-> 
->  drivers/firmware/Kconfig                      |   1 +
->  drivers/firmware/Makefile                     |   1 +
->  drivers/firmware/mediatek/Kconfig             |   9 +
->  drivers/firmware/mediatek/Makefile            |   2 +
->  drivers/firmware/mediatek/mtk-adsp-ipc.c      | 159 ++++++++++++++++++
->  .../linux/firmware/mediatek/mtk-adsp-ipc.h    |  65 +++++++
->  6 files changed, 237 insertions(+)
->  create mode 100644 drivers/firmware/mediatek/Kconfig
->  create mode 100644 drivers/firmware/mediatek/Makefile
->  create mode 100644 drivers/firmware/mediatek/mtk-adsp-ipc.c
->  create mode 100644 include/linux/firmware/mediatek/mtk-adsp-ipc.h
-> 

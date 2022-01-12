@@ -2,135 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1F348C12F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B94048C13A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352157AbiALJl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 04:41:59 -0500
-Received: from mail-co1nam11on2074.outbound.protection.outlook.com ([40.107.220.74]:40097
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1349438AbiALJl6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:41:58 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RA/5/W0u10QQQUiRPHqNlheYxFSIwOvyOkIKEojvcpdt4d+14yA0W5JbifgA4IWgeLtR9ZQ9j7aosb8cxCJ/lJGpDfrHVZD/AWKP5OdZmv9dgV0BMzROnkRt5dKLw3JShCO/EdSlXNzdWAKFbH+5DVPEaTmWNPWvixh1gRhjqQPMXpd1TBXIgVQYT+DDwIt15nfPQqgsJ37LRw03Fi4zbh3WRmtCSc124mlRXGdBkwDMdcS5m7sfx59udkIMgYm8P3YtZ/zfBDjEJ+zEIM+6MRkBkUVkwdihS96L689H/V5tPegzrmCLdQYPU9XhCsL87SrKS/dIM+Uziiv+wPDe7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k665TgVDSm3qXqQSpkMBItG+pMeD8K8C4D1maWqAi2w=;
- b=iXB8ZPa1byw5YSxWiHeY4baFAWe7/baRuHXibUbXgaNc977b8xIiJiH9CPT/knwnOxSLDAsAQL/0StpVnbNpHZRdZ1R0k2UT8DypHFTET9VKCDOsz+51lgOHYoduZ/jU4puEwIoGbLTia9qodtrriCwQb0cEEHmqc/8s7uZScWeBhWjRjQ84ORk/JaUPawwvTWAckiSeS63PiGlhs+aY2IiHTzUG9l8pWpoAq5b0+xOWbL6w0kAUTYvGV7cQAEq/lJEACk5w3wudkclnpHe2BavJ5Wx36e5yr9yRyIA+3J/R6qRk6qEKDrAyA+vs3BQUdzLbxhQYj4e6x/WmEriFjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k665TgVDSm3qXqQSpkMBItG+pMeD8K8C4D1maWqAi2w=;
- b=KXvMtAV9fkpUNFdnXVvNngmdkb2PS8VT73xJkfj9x6LhlfHwPSeMpAunfyjLxUzXF+ZiAHDJZPtFdRNdif1XHiGgPrIR/4w3GKxwHjm5q420bOan77tzISFspNUh3AcCAq87IdR5UBkU4Jjvsx+wheFp4gSteMnztIM4C4ubpxa0KdMHvj4e9aycEIpjUIBnosBT5QWIqLCZBKAVXJIx9Uxwwyp51gIXElhjsoOaGfMPVJvLc0jjZNfyiNF+rE9QkGm4RxrhF68epdAQR1utDovPTE6naIIdO+XF25/0osqiZf+WMxPf/0uEKRcbIVTOG9ka2pzBZS6sZuqKfcSvxw==
-Received: from BN0PR08CA0021.namprd08.prod.outlook.com (2603:10b6:408:142::16)
- by CH2PR12MB5001.namprd12.prod.outlook.com (2603:10b6:610:61::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.11; Wed, 12 Jan
- 2022 09:41:57 +0000
-Received: from BN8NAM11FT056.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:142:cafe::31) by BN0PR08CA0021.outlook.office365.com
- (2603:10b6:408:142::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10 via Frontend
- Transport; Wed, 12 Jan 2022 09:41:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- BN8NAM11FT056.mail.protection.outlook.com (10.13.177.26) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4867.9 via Frontend Transport; Wed, 12 Jan 2022 09:41:56 +0000
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 12 Jan
- 2022 09:41:46 +0000
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 12 Jan
- 2022 09:41:46 +0000
-Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
- mail.nvidia.com (172.20.187.12) with Microsoft SMTP Server id 15.0.1497.18
- via Frontend Transport; Wed, 12 Jan 2022 09:41:44 +0000
-From:   Wayne Chang <waynec@nvidia.com>
-To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <singhanc@nvidia.com>, <waynec@nvidia.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v5 1/1] ucsi_ccg: Check DEV_INT bit only when starting CCG4
-Date:   Wed, 12 Jan 2022 17:41:43 +0800
-Message-ID: <20220112094143.628610-1-waynec@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        id S1352166AbiALJpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 04:45:20 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:49520 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1346466AbiALJpT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 04:45:19 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20C7J52B019096;
+        Wed, 12 Jan 2022 10:44:32 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=QKXUvjkTnqfyuuJJ/9fLbLqUbNNWBj6UxoTZSD1VgXg=;
+ b=0g/MsK1OiOZU3dq3G+D9GapTzmQoW0YuFw/h5Ckk73elOP3+Le70B19CLQZcWzaRyP+A
+ CJJBRhXPyMms72FMVYJk3TOCHFDbI5dWJ6SRMK37GhUNW+Xo/92x3ZUQYRTNMetn/plf
+ qJcjWFbMshrfUEyUXbAa96a9pb1pTnOQFHy/Va4Cm9oO1XzV1IU5a26vFN/B3CzB+UHH
+ zpD3IaZSjYd4SMqVYH1WdlcLmzjSoZLij/SvntyI0C2GCNkF7D3DQ9W2G9qqPfn8IGo9
+ LUnkfzMr0E40eeuyzSNluk4L97Pk3TSMlhXoXbFvXqZctksW32DqKb/1XyS2fsZah23f aA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dhtg9s0m5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 10:44:32 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 81091100034;
+        Wed, 12 Jan 2022 10:44:28 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 72E2D218120;
+        Wed, 12 Jan 2022 10:44:28 +0100 (CET)
+Received: from lmecxl0951.lme.st.com (10.75.127.46) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 12 Jan
+ 2022 10:44:27 +0100
+Subject: Re: [PATCH v2 6/6] drm/stm: ltdc: Drop format_mod_supported function
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        <contact@emersion.fr>
+CC:     <dmitry.baryshkov@linaro.org>, <maarten.lankhorst@linux.intel.com>,
+        <mripard@kernel.org>, <tzimmermann@suse.de>, <airlied@linux.ie>,
+        <daniel@ffwll.ch>, <jani.nikula@linux.intel.com>,
+        <joonas.lahtinen@linux.intel.com>, <rodrigo.vivi@intel.com>,
+        <marex@denx.de>, <stefan@agner.ch>, <shawnguo@kernel.org>,
+        <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
+        <festevam@gmail.com>, <linux-imx@nxp.com>,
+        <philippe.cornu@foss.st.com>, <benjamin.gaignard@linaro.org>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <intel-gfx@lists.freedesktop.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20211222090552.25972-1-jose.exposito89@gmail.com>
+ <20211222090552.25972-7-jose.exposito89@gmail.com>
+From:   yannick Fertre <yannick.fertre@foss.st.com>
+Message-ID: <c5ffa201-4811-b070-75b5-85064cd78506@foss.st.com>
+Date:   Wed, 12 Jan 2022 10:44:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-NVConfidentiality: public
+In-Reply-To: <20211222090552.25972-7-jose.exposito89@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0f1fd480-55c7-487c-2fb0-08d9d5afc623
-X-MS-TrafficTypeDiagnostic: CH2PR12MB5001:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR12MB5001CB1B1AA34C7F3F10B517AF529@CH2PR12MB5001.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tFuMQfNy/8S2qRvjppGln7tCfvaIJijPPGcyzEfRvztmMM4vZOMbvlGbGiFbfrrwvBjYVffh6dlxlRIDE+3zJkpVy1bLC5NjBQBncgp3AgnFBiLx+BAnDhXSh6Xpp/jBX0SPBrPAfQka5mTbE6XaQ5OYlQIEj16T03Wi1jhccQiKSw2UY6nwKEa2/patXYNQ6QzGVQhopibRUu0h2kKdvAYqfDyI8dIJFv7UV9h1l6lTsbraE3oRxi7Y/7J0yoKThsOJFbI+ygk7HisJuZlL20BjZDXjPBSdYEJI5ZyWDsfKMGJ+3qYY5bccrOIChf0qXb8tfE5ueaK5HU8DUMo5+dJl2e8AZJ/WN2l7tVoGpWYSp/x+nE0HcjnD9o75Z2DDYsVDDeDGTQnD7XYc0FLV2ialhj0xpuks6rZbC/ekT6hJOlUp6a3DmSb2dEDPxwj49KBgecqQtwbTsaYpwmyI9OtArd5hk3b7eEX7UQcedMRWQIQzWh5Q3iHr14/kamjjaYu5a1YRnyegcaUI/s56zHbTNNtX5Y+jEsK+qaKPpy1Hm5E90n82sOkEChFy0wnY58yjibajxiAqCjRnB0s3vyicOkavipsk+JuBZ0tN3FIhhAH3jUhg4IaCiVCdUJiSil+4z2R1yTOtwqV832/qfsGdSegjseIvPzXKORd+xmUPH7Y6KGGkw0Zqk58dhYybKQRJF7EShILgqnpwDTQXb4EmqKy/4OXv7LnRkov8CY0VFf5Ry9HSNJNO8g9lAGm2H50FepQNcB8MBxrnNgjlyK80h65xwlrXcAEXozUOweI=
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700002)(8676002)(40460700001)(5660300002)(47076005)(70206006)(356005)(110136005)(508600001)(81166007)(2906002)(83380400001)(36756003)(316002)(86362001)(70586007)(82310400004)(2616005)(186003)(4326008)(36860700001)(54906003)(336012)(8936002)(426003)(1076003)(7696005)(26005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2022 09:41:56.8105
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f1fd480-55c7-487c-2fb0-08d9d5afc623
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT056.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5001
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-12_03,2022-01-11_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sing-Han Chen <singhanc@nvidia.com>
+Hello José,
+thanks for your patch.
 
-CCGx clears Bit 0:Device Interrupt in the INTR_REG
-if CCGx is reset successfully. However, there might
-be a chance that other bits in INTR_REG are not
-cleared due to internal data queued in PPM. This case
-misleads the driver that CCGx reset failed.
+Reviewed-by: Yannick Fertre <yannick.fertre@foss.st.com>
+Tested-by: Yannick Fertre <yannick.fertre@foss.st.com>
 
-The commit checks bit 0 in INTR_REG and ignores other
-bits. The ucsi driver would reset PPM later.
 
-Fixes: 247c554a14aa ("usb: typec: ucsi: add support for Cypress CCGx")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
----
-V4 -> V5: Added Cc tag and revised the commit messages
-V3 -> V4: Updated the Fixes tag
-V2 -> V3: Added the Fixes tag
-V1 -> V2: Fixed the name of Sign-off-by
- drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index bff96d64dddf..6db7c8ddd51c 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -325,7 +325,7 @@ static int ucsi_ccg_init(struct ucsi_ccg *uc)
- 		if (status < 0)
- 			return status;
- 
--		if (!data)
-+		if (!(data & DEV_INT))
- 			return 0;
- 
- 		status = ccg_write(uc, CCGX_RAB_INTR_REG, &data, sizeof(data));
--- 
-2.25.1
-
+On 12/22/21 10:05 AM, José Expósito wrote:
+> The "drm_plane_funcs.format_mod_supported" can be removed in favor of
+> the default implementation.
+> 
+> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> ---
+>   drivers/gpu/drm/stm/ltdc.c | 11 -----------
+>   1 file changed, 11 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+> index dbdee954692a..ef909e50f0e4 100644
+> --- a/drivers/gpu/drm/stm/ltdc.c
+> +++ b/drivers/gpu/drm/stm/ltdc.c
+> @@ -925,16 +925,6 @@ static void ltdc_plane_atomic_print_state(struct drm_printer *p,
+>   	fpsi->counter = 0;
+>   }
+>   
+> -static bool ltdc_plane_format_mod_supported(struct drm_plane *plane,
+> -					    u32 format,
+> -					    u64 modifier)
+> -{
+> -	if (modifier == DRM_FORMAT_MOD_LINEAR)
+> -		return true;
+> -
+> -	return false;
+> -}
+> -
+>   static const struct drm_plane_funcs ltdc_plane_funcs = {
+>   	.update_plane = drm_atomic_helper_update_plane,
+>   	.disable_plane = drm_atomic_helper_disable_plane,
+> @@ -943,7 +933,6 @@ static const struct drm_plane_funcs ltdc_plane_funcs = {
+>   	.atomic_duplicate_state = drm_atomic_helper_plane_duplicate_state,
+>   	.atomic_destroy_state = drm_atomic_helper_plane_destroy_state,
+>   	.atomic_print_state = ltdc_plane_atomic_print_state,
+> -	.format_mod_supported = ltdc_plane_format_mod_supported,
+>   };
+>   
+>   static const struct drm_plane_helper_funcs ltdc_plane_helper_funcs = {
+> 

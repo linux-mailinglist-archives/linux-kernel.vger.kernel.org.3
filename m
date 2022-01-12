@@ -2,109 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C2548C46D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DB048C471
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353375AbiALNKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:10:30 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61676 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240733AbiALNK2 (ORCPT
+        id S1353389AbiALNL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:11:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240733AbiALNLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:10:28 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20CC0nxE010267;
-        Wed, 12 Jan 2022 13:10:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=WE/h8p+zfUwl0XsOgyrkKm55pvwEA29XYRNXiHXrPs8=;
- b=IMJYWb8oloNk2epW2AqRtQWlsLoXMzEfJ6vfY7n8/M+w1pUA3Qs+z2+ZClahD28qRl9K
- 6YSiT7gSEcQDvfc9SauuKO+3A8gF0YWgBxh6fP33pLOAQ7pupGR/HaGyWPOsZ1pSlSOJ
- Gaz3oxUigsKBdx0zNaCcZQjpVWpj2a9L33YJu42/g1KEIw7lyArOnuQQvGGpvxZdo7BV
- QDhnddl8nbIpND+FmWzDbSFZL5bBbEcWmeGcNip5lqO5iWHH3vS1CZOqQNQIxGNFmIzb
- YY5SybTmwIew0WS3W8Jd/G0/q058H120JUDV1JhWFM2ZdGwbASvuc/Qec55T2TK7uwOc PA== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhtht0fj2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jan 2022 13:10:21 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20CD70cq025221;
-        Wed, 12 Jan 2022 13:10:19 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3df289bxym-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jan 2022 13:10:19 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20CDAFwG34603438
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jan 2022 13:10:15 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C7CE1AE04D;
-        Wed, 12 Jan 2022 13:10:15 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 977C5AE058;
-        Wed, 12 Jan 2022 13:10:15 +0000 (GMT)
-Received: from [9.145.93.126] (unknown [9.145.93.126])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 12 Jan 2022 13:10:15 +0000 (GMT)
-Message-ID: <ba78ac07-d3c1-ad7a-12eb-9bc53cdb9c43@linux.ibm.com>
-Date:   Wed, 12 Jan 2022 14:10:15 +0100
+        Wed, 12 Jan 2022 08:11:52 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4873DC06173F;
+        Wed, 12 Jan 2022 05:11:51 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id d19so4267995wrb.0;
+        Wed, 12 Jan 2022 05:11:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7f+ic8TxlFUKFnOCkZFKPq8TQyP8w+H9m7F2OJNGJIU=;
+        b=RVMUTjFa2UESa2BHtCcnl158JFKhuK2xO1kpBSTZ0X0bo61yvjOQY44KawcWNL8w0M
+         nNZwpYIaDYS0HoTBxoLPTjfZcHOKfsSuuUbbaD0bGx9VpnpuQT+a1g+GgHuFPhnLtaO5
+         D/Tk0P1D3ZnOUFToCEqm4X0zOXu0fjbFJ7bb1GJuib0N6GPonyLT8pJxmkvaOz/GMhq8
+         YmY4y5+ozBBzlcxFLeRqOZjEHRpUFokRSzOIwrNDMGBfg8q7m6/2y5Sj+HgQ6EC5Y92q
+         RED3KO1imjeMSnf4WEiwDT9l/rIxcDYz0/9kJOG9DEb2yDhv9XWCIu4Gn3Eh9DM9vKSb
+         hr8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7f+ic8TxlFUKFnOCkZFKPq8TQyP8w+H9m7F2OJNGJIU=;
+        b=XplpaBffydWeHB/BXJTticVxX/nO9ldkz1EUrKKYuUCfE2n3+i8Yy00wJPvsaRmgm6
+         mSwBJ9N14d9HpoKWK9yL2jKK2n8I5EiJ4LwA1dSbFlb9Bsl1m+vRFe/WNmQU4Bz8P1JA
+         rX9oTaikwbMV9pAWD6IO9oM/Brln4MWY1KOuAcgQGcz1FkP2EIyPpwNvaiC0cjNqNNlt
+         5RwY9xCJttsZvf+gooEduDXKYFKx/ivOW9OvYuxi33SQgRZeJA2n6mOEdiT4IuVONZ/4
+         m/d7tvwP6WOHRofVa2P1sA6f88C6LQm5oC13K9DCNRGqbdPXncWloXJyk031QJ3pgH3C
+         w5Mw==
+X-Gm-Message-State: AOAM533bT+4JJOS+q89J9AAwVw76//0sCnYGcESULQl9p+RrAigEoOC6
+        K7fGJhoArQGsj9bbSeuwH7A=
+X-Google-Smtp-Source: ABdhPJyAmRIUsejPaQWvBKGx7Z/IESGUrX9XZF+BHeFnFeTxc+qlqbVlguYwFdSdKkBuTyGtqoDwHA==
+X-Received: by 2002:a5d:6881:: with SMTP id h1mr7871866wru.250.1641993109742;
+        Wed, 12 Jan 2022 05:11:49 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id z7sm10125751wrm.117.2022.01.12.05.11.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 05:11:48 -0800 (PST)
+Date:   Wed, 12 Jan 2022 14:11:45 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thierry Reding <treding@nvidia.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH v1 1/1] gpio: tegra: Get rid of duplicate of_node
+ assignment
+Message-ID: <Yd7TkUKo2g2Asbna@orome>
+References: <20211223122639.86923-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v5] powerpc/pseries: read the lpar name from the firmware
-Content-Language: en-US
-To:     Michael Ellerman <michaele@au1.ibm.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     Nathan Lynch <nathanl@linux.ibm.com>
-References: <20220106161339.74656-1-ldufour@linux.ibm.com>
- <c26f2961-dd19-b888-b601-af5ade74c140@linux.ibm.com>
- <87zgo128x0.fsf@mpe.ellerman.id.au>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <87zgo128x0.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: __8lH80r6UhtEQcTThHPRTptXKA3aFmv
-X-Proofpoint-ORIG-GUID: __8lH80r6UhtEQcTThHPRTptXKA3aFmv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-12_04,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- malwarescore=0 bulkscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
- priorityscore=1501 adultscore=0 suspectscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201120086
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="eS9Bqgo09E4YMHL2"
+Content-Disposition: inline
+In-Reply-To: <20211223122639.86923-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/2.1.5 (31b18ae9) (2021-12-30)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022, 23:40:27, Michael Ellerman wrote:
-> Tyrel Datwyler <tyreld@linux.ibm.com> writes:
->> On 1/6/22 8:13 AM, Laurent Dufour wrote:
->>> The LPAR name may be changed after the LPAR has been started in the HMC.
->>> In that case lparstat command is not reporting the updated value because it
->>> reads it from the device tree which is read at boot time.
->>>
->>> However this value could be read from RTAS.
->>>
->>> Adding this value in the /proc/powerpc/lparcfg output allows to read the
->>> updated value.
->>>
->>> However the hypervisor, like Qemu/KVM, may not support this RTAS
->>> parameter. In that case the value reported in lparcfg is read from the
->>> device tree and so is not updated accordingly.
->>>
->>> Cc: Nathan Lynch <nathanl@linux.ibm.com>
->>> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
->>
->> My only nit would be that in general for consistency with other function names
->> _RTAS_ and _DT_ should be lowercase. Seeing as they are statically scoped within
->> lparcfg.c maybe its ok. Otherwise,
-> 
-> Yeah I agree, I changed them to lower case when applying.
 
-Thanks Michael and Tyrel.
+--eS9Bqgo09E4YMHL2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Dec 23, 2021 at 02:26:39PM +0200, Andy Shevchenko wrote:
+> GPIO library does copy the of_node from the parent device of
+> the GPIO chip, there is no need to repeat this in the individual
+> drivers. Remove these assignment all at once.
+>=20
+> For the details one may look into the of_gpio_dev_init() implementation.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/gpio/gpio-tegra.c | 1 -
+>  1 file changed, 1 deletion(-)
+
+Yep, this is indeed not necessary (anymore), so:
+
+Reviewed-by: Thierry Reding <treding@nvidia.com>
+
+I've also given this a quick spin on a Tegra124 device (Venice 2) and
+everything seems to be working fine, so also:
+
+Tested-by: Thierry Reding <treding@nvidia.com>
+
+Thanks,
+Thierry
+
+--eS9Bqgo09E4YMHL2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmHe05EACgkQ3SOs138+
+s6FIEBAAjnCefZf/TmXMbRK8YKO2zooLOhkybC1j9ERVbbd/smfeyQoyKxCqIm5M
+hejWChgrfuYDoiWv+Mi1BnTZOz0vTRNo9Dbnsi7izpin+IQAufYosObqf/AMn8E0
+dKrEOZLgyIT9fBla17Y8mXTgt9RPoVFst4aKI3oPibWBc1TJQa02967JSbVzm4FZ
+13U02UIg7JYeb5MKjAl2bz0INiU+t3Solc4t3NZelsbOwMgOCA7Kntg9LZAYXkfJ
+hg4TNLxOQZuK6wIoDXxsW60p+RRsrbwjJuuYwF13Dj/JOX8SDH0JGThEM7RwDpyk
+SWvm2UMB1UVlSi6Rxk8RRoZ1BW0WYDdQdKKHZJWtXZP2xsVXQopL0rLx74U97hwW
+d/zm5prIcM4fDU03g8Z0KCFUbjKmrc3Hk7mG9Yc0KF4uL/bYcNCt/9DxGVxV9PWY
+MJasmjFaGrt9Xox6ZPOQxgFez6uaEIN1b9rYEiKa2yK50od5JKsqAqtSVynZPmwY
+22apy+LvILhB4vchrOwWTMkgQNXDwqqC3DEFswl2uLMLfH9h5iNa6yX6nW157aGp
+tpg1viE44QXtHz/+mby3JY6VAJO46ged+gG92kj1WTJqOZxiCwQG8t4OY687fkkJ
+wNQvAbiRMPZPn5SMpNxT4l/O7hNEzBDRxtUwmVHjz1lLZSOUlQ8=
+=v1tj
+-----END PGP SIGNATURE-----
+
+--eS9Bqgo09E4YMHL2--

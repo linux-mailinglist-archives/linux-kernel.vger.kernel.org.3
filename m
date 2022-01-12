@@ -2,176 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F7848C42E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 13:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA0548C433
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 13:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353262AbiALMrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 07:47:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
+        id S240720AbiALMuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 07:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353244AbiALMqx (ORCPT
+        with ESMTP id S240376AbiALMuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 07:46:53 -0500
+        Wed, 12 Jan 2022 07:50:04 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0616DC06173F;
-        Wed, 12 Jan 2022 04:46:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB50C06173F;
+        Wed, 12 Jan 2022 04:50:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDD9AB81EA7;
-        Wed, 12 Jan 2022 12:46:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D21E9C36AE5;
-        Wed, 12 Jan 2022 12:46:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6E3CB81C28;
+        Wed, 12 Jan 2022 12:50:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFD17C36AEA;
+        Wed, 12 Jan 2022 12:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641991610;
-        bh=Q/J6JEZ3cVVSxVKhadTn858ZM/rd91mNJYmHU4mHfIg=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=U99u+zmreZJOhJq8CvvcY3iyLgFI7JS44DRn2ZOoCDBLKbVGB+V+wefuIa5P+6tMd
-         Z63P3JKuM0hvrMiwhdqbSum6Q5Tr2iXCESBA1+B7JQDpHc2JdFIKK42w1QYp3nX6P3
-         3E2o4lGzX2U7DVtHqoxoxW2C67YXo+fQY/qnnSLs6ebPr7qoHxREtZbmLSPsnW7tfy
-         TDVq1UkNUinYPY45wIyIFnwUa4vflxV79OZDSLrd2wN62SDGbBzHKijWPjibK1i6XP
-         Xm788dUZigBXNZsUm931/h06vq9Qwg4TM6SYf67Cp49Gaq5rymFNeiUzl5nW/V3eOR
-         ky0AECcvhk9eA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-mmc@vger.kernel.org,
-        Pali =?utf-8?Q?Roh?= =?utf-8?Q?=C3=A1r?= <pali@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v9 23/24] wfx: remove from the staging area
-References: <20220111171424.862764-1-Jerome.Pouiller@silabs.com>
-        <20220111171424.862764-24-Jerome.Pouiller@silabs.com>
-        <874k69jsv1.fsf@tynnyri.adurom.net> <65681266.04G08nq4u0@pc-42>
-Date:   Wed, 12 Jan 2022 14:46:46 +0200
-In-Reply-To: <65681266.04G08nq4u0@pc-42> (=?utf-8?B?IkrDqXLDtG1l?=
- Pouiller"'s message of "Wed,
-        12 Jan 2022 10:32:41 +0100")
-Message-ID: <87fsptt93d.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        s=k20201202; t=1641991801;
+        bh=es9m6ZzRsfDSxrajcPwjFzdDNiyTpBaI+nUK7etSSww=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VH3p6kR/ayYGLkBzdSnuGJWM48YACsYfcWNHffq/ZKtBr6CAf6pH+TXOJZMTjYUeN
+         z4Pq0bdl74qTxnZh/7oIeC/nVwIZN41wjZDue63bR1CWRHwsVl+1tiq8etwBWvmOvT
+         DVBK9LPFEJexRd3QDZGuhuqIHaNFwE/jt54Yk3XNo7HKqWU1cY3XHXU/jDi1cG5jQn
+         1lSpXS69wqFN1iSu1c6DVgT9tQPtBR1Su97fdEAdFBaiDY7I8dSlGxa+x/Yheee5us
+         Bv28dg5+tMT2qA6wvlXl//dnK2wLXjiOgkXPfiVgFhr7PQs0IfKyBnc657+FRIKnLt
+         veJeNrk5+UkuA==
+Date:   Wed, 12 Jan 2022 20:49:50 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lznuaa@gmail.com
+Subject: Re: [PATCH 1/1] usb: xhci-plat: fix crash when suspend if remote
+ wake enable
+Message-ID: <20220112124950.GB3796@Peter>
+References: <20220110172738.31686-1-Frank.Li@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110172738.31686-1-Frank.Li@nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com> writes:
+On 22-01-10 11:27:38, Frank Li wrote:
+> Crashed at i.mx8qm platform when suspend if enable remote wakeup
+> 
+> Internal error: synchronous external abort: 96000210 [#1] PREEMPT SMP
+> Modules linked in:
+> CPU: 2 PID: 244 Comm: kworker/u12:6 Not tainted 5.15.5-dirty #12
+> Hardware name: Freescale i.MX8QM MEK (DT)
+> Workqueue: events_unbound async_run_entry_fn
+> pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : xhci_disable_hub_port_wake.isra.62+0x60/0xf8
+> lr : xhci_disable_hub_port_wake.isra.62+0x34/0xf8
+> sp : ffff80001394bbf0
+> x29: ffff80001394bbf0 x28: 0000000000000000 x27: ffff00081193b578
+> x26: ffff00081193b570 x25: 0000000000000000 x24: 0000000000000000
+> x23: ffff00081193a29c x22: 0000000000020001 x21: 0000000000000001
+> x20: 0000000000000000 x19: ffff800014e90490 x18: 0000000000000000
+> x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> x14: 0000000000000000 x13: 0000000000000002 x12: 0000000000000000
+> x11: 0000000000000000 x10: 0000000000000960 x9 : ffff80001394baa0
+> x8 : ffff0008145d1780 x7 : ffff0008f95b8e80 x6 : 000000001853b453
+> x5 : 0000000000000496 x4 : 0000000000000000 x3 : ffff00081193a29c
+> x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffff000814591620
+> Call trace:
+>  xhci_disable_hub_port_wake.isra.62+0x60/0xf8
+>  xhci_suspend+0x58/0x510
+>  xhci_plat_suspend+0x50/0x78
+>  platform_pm_suspend+0x2c/0x78
+>  dpm_run_callback.isra.25+0x50/0xe8
+>  __device_suspend+0x108/0x3c0
+> 
+> The basic flow:
+> 	1. run time suspend call xhci_suspend, xhci parent devices gate the clock.
+>         2. echo mem >/sys/power/state, system _device_suspend call xhci_suspend
+>         3. xhci_suspend call xhci_disable_hub_port_wake, which access register,
+> 	   but clock already gated by run time suspend.
+> 
+> This problem was hidden by power domain driver, which call run time resume before it.
+> 
+> But the below commit remove it and make this issue happen.
+> 	commit c1df456d0f06e ("PM: domains: Don't runtime resume devices at genpd_prepare()")
+> 
+> This patch call run time resume before suspend to make sure clock is on
+> before access register.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  drivers/usb/host/xhci-plat.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index c6b791a83ad18..7d2f665271310 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -442,6 +442,9 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+>  	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+>  	int ret;
+>  
+> +	if (pm_runtime_suspended(dev))
+> +		pm_runtime_resume(dev);
+> +
+>  	ret = xhci_priv_suspend_quirk(hcd);
+>  	if (ret)
+>  		return ret;
+> -- 
 
-> On Wednesday 12 January 2022 08:49:54 CET Kalle Valo wrote:
->> Jerome Pouiller <Jerome.Pouiller@silabs.com> writes:
->>=20
->> > From: J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com>
->> >
->> > Signed-off-by: J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com>
->> > ---
->> >  .../bindings/net/wireless/silabs,wfx.yaml     | 125 ---
->> >  drivers/staging/wfx/Kconfig                   |   8 -
->> >  drivers/staging/wfx/Makefile                  |  25 -
->> >  drivers/staging/wfx/bh.c                      | 330 -------
->> >  drivers/staging/wfx/bh.h                      |  33 -
->> >  drivers/staging/wfx/bus.h                     |  38 -
->> >  drivers/staging/wfx/bus_sdio.c                | 272 ------
->> >  drivers/staging/wfx/bus_spi.c                 | 271 ------
->> >  drivers/staging/wfx/data_rx.c                 |  94 --
->> >  drivers/staging/wfx/data_rx.h                 |  18 -
->> >  drivers/staging/wfx/data_tx.c                 | 596 -------------
->> >  drivers/staging/wfx/data_tx.h                 |  68 --
->> >  drivers/staging/wfx/debug.c                   | 365 --------
->> >  drivers/staging/wfx/debug.h                   |  19 -
->> >  drivers/staging/wfx/fwio.c                    | 405 ---------
->> >  drivers/staging/wfx/fwio.h                    |  15 -
->> >  drivers/staging/wfx/hif_api_cmd.h             | 555 ------------
->> >  drivers/staging/wfx/hif_api_general.h         | 262 ------
->> >  drivers/staging/wfx/hif_api_mib.h             | 346 --------
->> >  drivers/staging/wfx/hif_rx.c                  | 416 ---------
->> >  drivers/staging/wfx/hif_rx.h                  |  17 -
->> >  drivers/staging/wfx/hif_tx.c                  | 513 -----------
->> >  drivers/staging/wfx/hif_tx.h                  |  60 --
->> >  drivers/staging/wfx/hif_tx_mib.c              | 324 -------
->> >  drivers/staging/wfx/hif_tx_mib.h              |  49 --
->> >  drivers/staging/wfx/hwio.c                    | 352 --------
->> >  drivers/staging/wfx/hwio.h                    |  75 --
->> >  drivers/staging/wfx/key.c                     | 241 -----
->> >  drivers/staging/wfx/key.h                     |  20 -
->> >  drivers/staging/wfx/main.c                    | 506 -----------
->> >  drivers/staging/wfx/main.h                    |  43 -
->> >  drivers/staging/wfx/queue.c                   | 307 -------
->> >  drivers/staging/wfx/queue.h                   |  45 -
->> >  drivers/staging/wfx/scan.c                    | 149 ----
->> >  drivers/staging/wfx/scan.h                    |  22 -
->> >  drivers/staging/wfx/sta.c                     | 833=20
-> ------------------
->> >  drivers/staging/wfx/sta.h                     |  73 --
->> >  drivers/staging/wfx/traces.h                  | 501 -----------
->> >  drivers/staging/wfx/wfx.h                     | 164 ----
->> >  39 files changed, 8555 deletions(-)
->> >  delete mode 100644 drivers/staging/wfx/Documentation/devicetree/
-> bindings/net/wireless/silabs,wfx.yaml
->> >  delete mode 100644 drivers/staging/wfx/Kconfig
->> >  delete mode 100644 drivers/staging/wfx/Makefile
->> >  delete mode 100644 drivers/staging/wfx/bh.c
->> >  delete mode 100644 drivers/staging/wfx/bh.h
->> >  delete mode 100644 drivers/staging/wfx/bus.h
->> >  delete mode 100644 drivers/staging/wfx/bus_sdio.c
->> >  delete mode 100644 drivers/staging/wfx/bus_spi.c
->> >  delete mode 100644 drivers/staging/wfx/data_rx.c
->> >  delete mode 100644 drivers/staging/wfx/data_rx.h
->> >  delete mode 100644 drivers/staging/wfx/data_tx.c
->> >  delete mode 100644 drivers/staging/wfx/data_tx.h
->> >  delete mode 100644 drivers/staging/wfx/debug.c
->> >  delete mode 100644 drivers/staging/wfx/debug.h
->> >  delete mode 100644 drivers/staging/wfx/fwio.c
->> >  delete mode 100644 drivers/staging/wfx/fwio.h
->> >  delete mode 100644 drivers/staging/wfx/hif_api_cmd.h
->> >  delete mode 100644 drivers/staging/wfx/hif_api_general.h
->> >  delete mode 100644 drivers/staging/wfx/hif_api_mib.h
->> >  delete mode 100644 drivers/staging/wfx/hif_rx.c
->> >  delete mode 100644 drivers/staging/wfx/hif_rx.h
->> >  delete mode 100644 drivers/staging/wfx/hif_tx.c
->> >  delete mode 100644 drivers/staging/wfx/hif_tx.h
->> >  delete mode 100644 drivers/staging/wfx/hif_tx_mib.c
->> >  delete mode 100644 drivers/staging/wfx/hif_tx_mib.h
->> >  delete mode 100644 drivers/staging/wfx/hwio.c
->> >  delete mode 100644 drivers/staging/wfx/hwio.h
->> >  delete mode 100644 drivers/staging/wfx/key.c
->> >  delete mode 100644 drivers/staging/wfx/key.h
->> >  delete mode 100644 drivers/staging/wfx/main.c
->> >  delete mode 100644 drivers/staging/wfx/main.h
->> >  delete mode 100644 drivers/staging/wfx/queue.c
->> >  delete mode 100644 drivers/staging/wfx/queue.h
->> >  delete mode 100644 drivers/staging/wfx/scan.c
->> >  delete mode 100644 drivers/staging/wfx/scan.h
->> >  delete mode 100644 drivers/staging/wfx/sta.c
->> >  delete mode 100644 drivers/staging/wfx/sta.h
->> >  delete mode 100644 drivers/staging/wfx/traces.h
->> >  delete mode 100644 drivers/staging/wfx/wfx.h
->>=20
->> I'm not sure what's your plan here, but with staging wireless drivers
->> there's usually a simple simple move (git mv) of the driver from
->> drivers/staging to drivers/net/wireless. An example here:
->>=20
->> https://git.kernel.org/linus/5625f965d764
->>=20
->> What you seem to do here is that you add a new driver to
->> drivers/net/wireless and then remove the old driver from
->> drivers/staging. And I'm guessing these two drivers are not identical
->> and have differences?
->
-> Until v7, I have more or less kept in sync this PR and the staging tree.=
-=20
-> I have been a bit lazy from the v8.
->
-> However, I still have the patches in my local tree. I am going to
-> clean-up them and send them to staging.
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
 
-Very good, thanks.
+-- 
 
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
+Thanks,
+Peter Chen
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes

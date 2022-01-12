@@ -2,93 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A322348BD7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4E148BD7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349002AbiALC4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 21:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348983AbiALC4c (ORCPT
+        id S1349004AbiALC6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 21:58:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53017 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348722AbiALC6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 21:56:32 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7784AC061748
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 18:56:31 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id g14so2467830ybs.8
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 18:56:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zdgI3Zt03Z9yu5gw1AVJ9FZ0coQfTSlXMvH0cNGXvgo=;
-        b=obpEDlbTBNVc0ialZgTqwmfTDtdmvE9nkCFctdSCLRHt41Kf7zO8z/PUVdUnyMkRqs
-         5MIb1HRW+bE2l/qRgtUHe7YNjxYAIfUEPhngcYd3bDzozP+HiYM8BOH4dS222yZp1SKx
-         ikHECaW7xeMH6R3LmlhaGwC2r0uvbPax53uE/cwEm4OKAlH+hLpeamBQiOOeGr9t6bvB
-         koskXZ64keEmaP620oo7bzAv3FL8oEFZS+hXNMGhzySlygLOlEA2hxuZ/RenGzwk8v+6
-         VMUnFAt4zkp3/KkOA3vXcpJjhNCrNG0eXUfW0WewAVvSQz7pJnxwxf14Tq8Na93pbTuV
-         8luA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zdgI3Zt03Z9yu5gw1AVJ9FZ0coQfTSlXMvH0cNGXvgo=;
-        b=a/9LcB5dBzXPym0x1shilfsZCDELdbVwQh+eeO+oVfXjHWyVA6iIvLvrZCIsuCx/rw
-         6BqpSZwoVhZzt/aVCOMHNTxI3+kxWKcNlWB2xWHcor91ixhPmER3V1IDtJrSgsfilTZf
-         q70KAIqxo8YFsrz6R++S9w7pXe2E6XPtdiyZXBgHpUcLZTYH9y0WpqYbbSrpY3YHf/88
-         zzD3LES0Ax7JHS30Jv/PknkAqVMV8L/Xz29RdWRMUthvZWAPcK3lAqdFGd+VAHEnwFjq
-         E1Ou7DkXfhU7X76HotbAGv67O3ThUsh4vuAH+xE86lRgCJ096KH2ILjUfGSYZ7JFrXHr
-         4ZRw==
-X-Gm-Message-State: AOAM530hsN+zy+O+Z52uHLCWUWwlXGxXpU9kQ/wouXmY9Eiy7xpBYBzE
-        1j5Hx2llZReDiKvbDRzL9ie+2IxUmcxsNqSm2abKWQ==
-X-Google-Smtp-Source: ABdhPJxjYC1WaBKd1/OkWaghbsu4OSs2IYGS94HFmYSGQsFxRIfiLwnY3TJvgShBoOtj9pIN381fuSYp6loOYXf2PQA=
-X-Received: by 2002:a25:7312:: with SMTP id o18mr3742934ybc.485.1641956190618;
- Tue, 11 Jan 2022 18:56:30 -0800 (PST)
+        Tue, 11 Jan 2022 21:58:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641956326;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yu1Ym+x2T7q80BfcH6OCGclknqzM/xi6/S5+IsSqfEw=;
+        b=ID8e8p6SV+sfshsEhssEEecYVV0mdDVptpBng58UxMRe39p85E9o063EINdcCUwipxRr1b
+        uGB53YomdpPcXCAd8Q/Pmf0q+8Gmz/Eo7JhaiNi9k2o4XNlBZIizgSrG0Xq12tm2mDNAuR
+        dwXAKa0RHAMw7vWz8i44p9KjF6msgZA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-528-RIuCibhXNgKiavnO-x1HCA-1; Tue, 11 Jan 2022 21:58:45 -0500
+X-MC-Unique: RIuCibhXNgKiavnO-x1HCA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8316B801B0C;
+        Wed, 12 Jan 2022 02:58:44 +0000 (UTC)
+Received: from [10.72.12.29] (ovpn-12-29.pek2.redhat.com [10.72.12.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E21C3610A5;
+        Wed, 12 Jan 2022 02:58:37 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v4 11/21] KVM: arm64: Support SDEI_PE_{MASK, UNMASK}
+ hypercall
+To:     Eric Auger <eauger@redhat.com>, kvmarm@lists.cs.columbia.edu
+Cc:     maz@kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan.Cameron@huawei.com, pbonzini@redhat.com, will@kernel.org
+References: <20210815001352.81927-1-gshan@redhat.com>
+ <20210815001352.81927-12-gshan@redhat.com>
+ <e5acdb48-fb16-ab18-4938-c03265c4cfbf@redhat.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <60e72d4e-6002-eaac-783f-20a2cbe6f9aa@redhat.com>
+Date:   Wed, 12 Jan 2022 10:58:34 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-References: <20211220085649.8196-1-songmuchun@bytedance.com>
- <20211220085649.8196-5-songmuchun@bytedance.com> <Yd3TVKpvsBmZM51k@carbon.dhcp.thefacebook.com>
-In-Reply-To: <Yd3TVKpvsBmZM51k@carbon.dhcp.thefacebook.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 12 Jan 2022 10:55:54 +0800
-Message-ID: <CAMZfGtXcGv_ZcNZZDGhj=O4pXGOsnftLZpYS2qrNsQqOFuh3ZA@mail.gmail.com>
-Subject: Re: [PATCH v5 04/16] fs: allocate inode by using alloc_inode_sb()
-To:     Roman Gushchin <guro@fb.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>, Alex Shi <alexs@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Dave Chinner <david@fromorbit.com>,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org,
-        Kari Argillander <kari.argillander@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <e5acdb48-fb16-ab18-4938-c03265c4cfbf@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 2:58 AM Roman Gushchin <guro@fb.com> wrote:
->
-> On Mon, Dec 20, 2021 at 04:56:37PM +0800, Muchun Song wrote:
-> > The inode allocation is supposed to use alloc_inode_sb(), so convert
-> > kmem_cache_alloc() of all filesystems to alloc_inode_sb().
-> >
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > Acked-by: Theodore Ts'o <tytso@mit.edu>               [ext4]
->
-> LGTM
->
-> Acked-by: Roman Gushchin <guro@fb.com>
+Hi Eric,
 
-Thanks Roman.
+On 11/10/21 4:31 AM, Eric Auger wrote:
+> On 8/15/21 2:13 AM, Gavin Shan wrote:
+>> This supports SDEI_PE_{MASK, UNMASK} hypercall. They are used by
+>> the guest to stop the specific vCPU from receiving SDEI events.
+>>
+>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>> ---
+>>   arch/arm64/kvm/sdei.c | 35 +++++++++++++++++++++++++++++++++++
+>>   1 file changed, 35 insertions(+)
+>>
+>> diff --git a/arch/arm64/kvm/sdei.c b/arch/arm64/kvm/sdei.c
+>> index 458695c2394f..3fb33258b494 100644
+>> --- a/arch/arm64/kvm/sdei.c
+>> +++ b/arch/arm64/kvm/sdei.c
+>> @@ -551,6 +551,37 @@ static unsigned long kvm_sdei_hypercall_route(struct kvm_vcpu *vcpu)
+>>   	return ret;
+>>   }
+>>   
+>> +static unsigned long kvm_sdei_hypercall_mask(struct kvm_vcpu *vcpu,
+>> +					     bool mask)
+>> +{
+>> +	struct kvm *kvm = vcpu->kvm;
+>> +	struct kvm_sdei_kvm *ksdei = kvm->arch.sdei;
+>> +	struct kvm_sdei_vcpu *vsdei = vcpu->arch.sdei;
+>> +	unsigned long ret = SDEI_SUCCESS;
+>> +
+>> +	/* Sanity check */
+>> +	if (!(ksdei && vsdei)) {
+>> +		ret = SDEI_NOT_SUPPORTED;
+>> +		goto out;
+>> +	}
+>> +
+>> +	spin_lock(&vsdei->lock);
+>> +
+>> +	/* Check the state */
+>> +	if (mask == vsdei->state.masked) {
+>> +		ret = SDEI_DENIED;
+> are you sure? I don't this error documented in 5.1.12?
+> 
+> Besides the spec says:
+> "
+> This call can be invoked by the client to mask the PE, whether or not
+> the PE is already masked."
+
+Yep, I think this check can safely dropped.
+
+>> +		goto unlock;
+>> +	}
+>> +
+>> +	/* Update the state */
+>> +	vsdei->state.masked = mask ? 1 : 0;
+>> +
+>> +unlock:
+>> +	spin_unlock(&vsdei->lock);
+>> +out:
+>> +	return ret;
+> In case of success the returned value is SUCESS for UNMASK but not for
+> MASK (see table in 5.1.12).
+> 
+> By the way I have just noticed there is a more recent of the spec than
+> the A:
+> 
+> ARM_DEN0054C
+> 
+> You should update the cover letter and [PATCH v4 02/21] KVM: arm64: Add
+> SDEI virtualization infrastructure commit msg
+> 
+
+Thanks, Eric. You've looked into newer version of spec. I will update
+the code and link to the spec accordingly :)
+
+> 
+>> +}
+>> +
+>>   int kvm_sdei_hypercall(struct kvm_vcpu *vcpu)
+>>   {
+>>   	u32 func = smccc_get_function(vcpu);
+>> @@ -588,7 +619,11 @@ int kvm_sdei_hypercall(struct kvm_vcpu *vcpu)
+>>   		ret = kvm_sdei_hypercall_route(vcpu);
+>>   		break;
+>>   	case SDEI_1_0_FN_SDEI_PE_MASK:
+>> +		ret = kvm_sdei_hypercall_mask(vcpu, true);
+>> +		break;
+>>   	case SDEI_1_0_FN_SDEI_PE_UNMASK:
+>> +		ret = kvm_sdei_hypercall_mask(vcpu, false);
+>> +		break;
+>>   	case SDEI_1_0_FN_SDEI_INTERRUPT_BIND:
+>>   	case SDEI_1_0_FN_SDEI_INTERRUPT_RELEASE:
+>>   	case SDEI_1_0_FN_SDEI_PRIVATE_RESET:
+>>
+
+Thanks,
+Gavin
+

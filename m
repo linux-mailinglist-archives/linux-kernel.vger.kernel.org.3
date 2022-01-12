@@ -2,149 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD7348CB57
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:54:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5609D48CB5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356559AbiALSyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 13:54:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344376AbiALSyA (ORCPT
+        id S1356348AbiALSzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 13:55:14 -0500
+Received: from mail-qk1-f174.google.com ([209.85.222.174]:41934 "EHLO
+        mail-qk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356379AbiALSy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:54:00 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD30C061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:54:00 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id g81so8223871ybg.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:54:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VDiXGGcZpLradskpTdR9ZfOJwP4eXSYg53Oie0mB7Q4=;
-        b=Qxf1SgnRdrjcbKSGPORBSlu/NlfikRSVgwDC/sREwNuW+qlqcnkuVRK4JncUyoMmnF
-         yefFKpAkzoRpR6EPbHIfV7d/X8Q6tKpF897Avv3Y5eicSfXdv/Bm2/aKXvxXx8Lwl3aN
-         mlGlwqSkq01X0KsN55z8NyFpPHjTC7VTmmYz1e5eqDxLhvwizP9sFVgjZoKaFSPgqhvW
-         /YSztR5SNlkcO95cplDvykW+ssjg0IChaCRk/W8tanlDy/E/HgdT135HZqctP8vXXLWR
-         2L88qi/53PGgVv3X32SpXtMxI8TwmrqqTzlA/fCcotD1MggEdo75Auzaq8InQAOrRfrQ
-         wOXQ==
+        Wed, 12 Jan 2022 13:54:56 -0500
+Received: by mail-qk1-f174.google.com with SMTP id m2so4341941qkd.8;
+        Wed, 12 Jan 2022 10:54:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VDiXGGcZpLradskpTdR9ZfOJwP4eXSYg53Oie0mB7Q4=;
-        b=vFRLKFOCwSYaulGF6anmge5Xlnao9Um73v2HQR43kJ2j5pXrAT/Ilay66fDR844ZSN
-         2MWrZn7tUtIDXc1Zrvt1m1wc0Ic5AgXrAl2wB4y5yj+0yUOGsENWItsUGBHTr9Petkeq
-         vBIHF1XK26u+vUPaqVgM2sryhsrAevBCMrNzt6yU5TwKqBksX+Fw46NSnOH5pRoGE8Kt
-         ZBJQPx8O7IhvBjTHSjNoHhuywlnKH6a0r79Dvr0AAlhC3Hnow+IMoPsY32onZtZZAM1s
-         rzHGOYMk7FDVlfp10nz7nqfaHRlHprKYNzqn3Bi716pkFjroDftHpmd6f1QaoUJK940X
-         zG7Q==
-X-Gm-Message-State: AOAM531jQWLKzmWLVvm3wV2KhNGynsp1liulUMNWT1cIa5EkHS1jArLH
-        /TfQV6cehRI6L53Zv/XaXh/0UbPp8boeefjjd2hX8A==
-X-Google-Smtp-Source: ABdhPJyyqercS1kDAJ5mzYiC+yjPw41Z6Wd2bHa81ktBvON+ZCzsZy7m7UgTlE4ao53RyEGV7vACgzNato8hCl8vO2k=
-X-Received: by 2002:a25:a4e9:: with SMTP id g96mr1315310ybi.318.1642013639110;
- Wed, 12 Jan 2022 10:53:59 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/t7XYJprcGgT+MiFCmJFl5BViepilZLUR2LeW1J1da4=;
+        b=VGP8d4WS0Ja6WsGKm2zSiZyHKfuZCbxs2YYx3Tok5/TAULHH6p1HPcZo33pimnXaNf
+         C0JHEoOnw/lY0AFubWKyCx9lvkFVNq1U+0vlfB/dS83NfFOnk+Mkn1EmB6Uf4BBARzU2
+         oh+4XWMdZSUTaKM0gXzNYnwr4spT+2NiwB08M22Hxd6nDrHSWOVuvvpzdduFtd7qTEZD
+         vDe+W9/U1dhLKD5Aqw1MyF7B8WB3KnnvWo7Ep0SWeKdcnAk8ALDusE+/dXFEfPtVzMA6
+         Z5Oqr01lznkrAuHzGhCGH6jrIvJXJ7s+zo9wR5BjtEWgBweVzCEo7TTIaZqVAbKlEh86
+         71dA==
+X-Gm-Message-State: AOAM533AcPEA8kizIH7jhJKhC+UG59DCk4bbZWIf1dxCrGhgojsQUwxM
+        F2dZJ1JXC/3ssvCcmqABeqIfG7Ydfy6fvw==
+X-Google-Smtp-Source: ABdhPJwB7ZQ3Ez708M5SrcKyvZSGOpUiRQlpgl9eKVbVtyBoKCrA7kpUVzVl7kQKiHahz0I/xsKxLg==
+X-Received: by 2002:a05:620a:4501:: with SMTP id t1mr842754qkp.412.1642013695166;
+        Wed, 12 Jan 2022 10:54:55 -0800 (PST)
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-014.fbsv.net. [2a03:2880:20ff:e::face:b00c])
+        by smtp.gmail.com with ESMTPSA id i22sm395088qko.53.2022.01.12.10.54.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 10:54:54 -0800 (PST)
+Date:   Wed, 12 Jan 2022 10:54:53 -0800
+From:   David Vernet <void@manifault.com>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     mcgrof@kernel.org, cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com, allen.lkml@gmail.com
+Subject: Re: [RFC PATCH v2 03/13] module: Move livepatch support to a
+ separate file
+Message-ID: <Yd8j/Q2H0zYrAA2c@dev0025.ash9.facebook.com>
+References: <20220106234319.2067842-1-atomlin@redhat.com>
+ <20220106234319.2067842-4-atomlin@redhat.com>
 MIME-Version: 1.0
-References: <20220111232309.1786347-1-surenb@google.com> <Yd7oPlxCpnzNmFzc@cmpxchg.org>
- <CAJuCfpGHLXDvMU1GLMcgK_K72_ErPhbcFh1ZvEeHg025yinNuw@mail.gmail.com>
- <CAJuCfpEaM3KoPy3MUG7HW2yzcT6oJ5gdceyHPNpHrqTErq27eQ@mail.gmail.com>
- <Yd8a8TdThrGHsf2o@casper.infradead.org> <CAJuCfpF45VY_7esx7p2yEK+eK-ufSMsBETEdJPF=Mzxj+BTnLA@mail.gmail.com>
- <Yd8hpPwsIT2pbKUN@gmail.com>
-In-Reply-To: <Yd8hpPwsIT2pbKUN@gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 12 Jan 2022 10:53:48 -0800
-Message-ID: <CAJuCfpF_aZ7OnDRYr2MNa-x=ctO-daw-U=k+-GCYkJR1_yTHQg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] psi: Fix uaf issue when psi trigger is destroyed
- while being polled
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>,
-        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220106234319.2067842-4-atomlin@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 10:44 AM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> On Wed, Jan 12, 2022 at 10:26:08AM -0800, Suren Baghdasaryan wrote:
-> > On Wed, Jan 12, 2022 at 10:16 AM Matthew Wilcox <willy@infradead.org> wrote:
-> > >
-> > > On Wed, Jan 12, 2022 at 09:49:00AM -0800, Suren Baghdasaryan wrote:
-> > > > > This happens with the following config:
-> > > > >
-> > > > > CONFIG_CGROUPS=n
-> > > > > CONFIG_PSI=y
-> > > > >
-> > > > > With cgroups disabled these functions are defined as non-static but
-> > > > > are not defined in the header
-> > > > > (https://elixir.bootlin.com/linux/latest/source/include/linux/psi.h#L28)
-> > > > > since the only external user cgroup.c is disabled. The cleanest way to
-> > > > > fix these I think is by doing smth like this in psi.c:
-> > >
-> > > A cleaner way to solve these is simply:
-> > >
-> > > #ifndef CONFIG_CGROUPS
-> > > static struct psi_trigger *psi_trigger_create(...);
-> > > ...
-> > > #endif
-> > >
-> > > I tested this works:
-> > >
-> > > $ cat foo5.c
-> > > static int psi(void *);
-> > >
-> > > int psi(void *x)
-> > > {
-> > >         return (int)(long)x;
-> > > }
-> > >
-> > > int bar(void *x)
-> > > {
-> > >         return psi(x);
-> > > }
-> > > $ gcc -W -Wall -O2 -c -o foo5.o foo5.c
-> > > $ readelf -s foo5.o
-> > >
-> > > Symbol table '.symtab' contains 4 entries:
-> > >    Num:    Value          Size Type    Bind   Vis      Ndx Name
-> > >      0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
-> > >      1: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS foo5.c
-> > >      2: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text
-> > >      3: 0000000000000000     3 FUNC    GLOBAL DEFAULT    1 bar
-> > >
-> >
-> > Thanks Matthew!
-> > That looks much cleaner. I'll post a separate patch to fix these. My
-> > main concern was whether it's worth adding more code to satisfy this
-> > warning but with this approach the code changes are minimal, so I'll
-> > go ahead and post it shortly.
->
-> Why not simply move the declarations of psi_trigger_create() and
-> psi_trigger_destroy() in include/linux/psi.h outside of the
-> '#ifdef CONFIG_CGROUPS' block, to match the .c file?
+Thanks for doing this refactor. +1 to doing this, though Petr had some
+suggestions in another thread that I'll wait on before Acking.
 
-IIRC this was done to avoid another warning that these functions are
-not used outside of psi.c when CONFIG_CGROUPS=n
+Aaron Tomlin <atomlin@redhat.com> wrote on Thu [2022-Jan-06 23:43:09 +0000]:
+> diff --git a/kernel/module/livepatch.c b/kernel/module/livepatch.c
+> new file mode 100644
+> index 000000000000..e147f5418327
+> --- /dev/null
+> +++ b/kernel/module/livepatch.c
+> @@ -0,0 +1,75 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * kernel/module/livepatch.c - module livepatch support
+> + *
+> + * Copyright (C) 2016 Jessica Yu <jeyu@redhat.com>
+> + */
 
->
-> They *could* be static when !CONFIG_CGROUPS, but IMO it's not worth bothering.
->
-> - Eric
+Should the copyright year (and possibly author) be updated? Or just removed
+entirely?
+
+- David

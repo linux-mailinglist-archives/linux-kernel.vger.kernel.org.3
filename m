@@ -2,116 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C14248C815
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A60C48C817
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355037AbiALQSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:18:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241078AbiALQSW (ORCPT
+        id S1355080AbiALQTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:19:11 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17362 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241078AbiALQTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:18:22 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42337C06173F;
-        Wed, 12 Jan 2022 08:18:22 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A2866340;
-        Wed, 12 Jan 2022 17:18:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642004300;
-        bh=ho0GztGidqsgkHFOy/IoivSO/mjCjEUyQTHM2LUcs1k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YOidp/TgjysAdxA6sWUh1C6DvRc/IXPdx+bLugyK2SiOS7PXlZ+YmHlE3Mb4dDbC8
-         /JeSbFcPIJdEe3SFtDX2TK3Ay5GK5RVXi+RW73jA9R7qKsWEdgHu/JvQ1dLg43lF+z
-         UbcbfTwe11zklTu9pLSsUtjBXBU+YQTrCARig4lI=
-Date:   Wed, 12 Jan 2022 18:18:09 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, dave.stevenson@raspberrypi.com
-Subject: Re: [PATCH 2/3] media: v4l: Add V4L2-PIX-FMT-Y12P format
-Message-ID: <Yd7/QSBE6SgoN6ic@pendragon.ideasonboard.com>
-References: <20220112161014.972076-1-jeanmichel.hautbois@ideasonboard.com>
- <20220112161014.972076-3-jeanmichel.hautbois@ideasonboard.com>
+        Wed, 12 Jan 2022 11:19:03 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20CG7whU015849;
+        Wed, 12 Jan 2022 16:18:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=Uk9m0lZZKUeUMSCI2sqaQaxPknoFIIxE6cFSIDILurA=;
+ b=gxFrs6vhU7RynkzViVurPlHL4MGpNrmKW96Jq2KJdljNHajAkOPOSbK3wJISyx1IQKQ9
+ vWFnG9ya7fXrG/IrdTb4UbjWkQJj8DXPGVgh2dXX9VusVQTR9dTiJEBYQTkCW0ziISml
+ FrOjoAuyPz2GKoAPadd/l0JtHph57Es8UPlBl+KdXBlv7DweSA/sWQ4nZ1aknLJDJLch
+ QUnHlUpPMQJZzDOeGgXEtPuuAnXUsL70tLueUq/DNiEQQLuPf4T+/yxWFCn+a4mmHI2q
+ SYxXZdvaYMzPN6SLfdtdUnvsLLlbCiFQzEb2kMW1aRBazCcGvWjb3RJjv3S8YbI0f0aG 2Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhycgvgdg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 16:18:59 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20CGGkDD009006;
+        Wed, 12 Jan 2022 16:18:58 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhycgvgcs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 16:18:58 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20CGB9LG007338;
+        Wed, 12 Jan 2022 16:18:56 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3df289dgvv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 16:18:56 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20CGIsM528967172
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Jan 2022 16:18:54 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E995EAE057;
+        Wed, 12 Jan 2022 16:18:53 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7E146AE045;
+        Wed, 12 Jan 2022 16:18:53 +0000 (GMT)
+Received: from localhost (unknown [9.43.59.72])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 12 Jan 2022 16:18:53 +0000 (GMT)
+Date:   Wed, 12 Jan 2022 21:48:52 +0530
+From:   riteshh <riteshh@linux.ibm.com>
+To:     harshad shirwadkar <harshadshirwadkar@gmail.com>,
+        luo penghao <luo.penghao@zte.com.cn>
+Cc:     Lukas Czerner <lczerner@redhat.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, cgel.zte@gmail.com,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux] ext4: Delete useless ret assignment
+Message-ID: <20220112161852.uctmtrfvxbf6bmij@riteshh-domain>
+References: <20211230062905.586150-1-luo.penghao@zte.com.cn>
+ <YdZzt0LF/ajTGNXo@mit.edu>
+ <20220106105843.comh4jk3krxppgbp@work>
+ <CAD+ocbyF=9pskuSRono-hAg2mEzEmCOD30oFGYW8piQ=BjwhYw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220112161014.972076-3-jeanmichel.hautbois@ideasonboard.com>
+In-Reply-To: <CAD+ocbyF=9pskuSRono-hAg2mEzEmCOD30oFGYW8piQ=BjwhYw@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -ykcULlyQWhnxv2JPtYzEKaF0HLqplp8
+X-Proofpoint-ORIG-GUID: dDFN8OKLXFrd75sAorbo8EnuQLbv6Pox
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-12_04,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 adultscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
+ priorityscore=1501 clxscore=1011 phishscore=0 malwarescore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201120103
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Michel,
+On 22/01/06 04:59PM, harshad shirwadkar wrote:
+> First of all thanks for catching this. Yeah, I think the right thing
+> to do here is to return the return value up to the caller. Also, I
+> agree with Lukas, we should only set fc_modified_inodes_size if the
+> allocation succeeds. Luo, would you be okay updating the patch to
+> include these changes?
+>
+> Thanks,
+> Harshad
+>
+> On Thu, Jan 6, 2022 at 2:58 AM Lukas Czerner <lczerner@redhat.com> wrote:
+> >
+> > On Wed, Jan 05, 2022 at 11:44:39PM -0500, Theodore Ts'o wrote:
+> > > On Thu, Dec 30, 2021 at 06:29:05AM +0000, cgel.zte@gmail.com wrote:
+> > > > From: luo penghao <luo.penghao@zte.com.cn>
+> > > >
+> > > > The assignments in these two places will be overwritten by new
+> > > > assignments later, so they should be deleted.
+> > > >
+> > > > The clang_analyzer complains as follows:
+> > > >
+> > > > fs/ext4/fast_commit.c
+> > > >
+> > > > Value stored to 'ret' is never read
+> > >
 
-Thank you for the patch.
+Since I was also suspecting a similar issue in ext4_fc_record_modified_inode()
+(w.r.t. krealloc()) while doing some code reviews a while ago.
+And I also happened to stumble upon this discussion which added some more
+context to it.
 
-On Wed, Jan 12, 2022 at 05:10:13PM +0100, Jean-Michel Hautbois wrote:
-> This is a packed grey-scale image format with a depth of 12 bits per
-> pixel. Two consecutive pixels are packed into 3 bytes. The first 2 bytes
-> contain the 8 high order bits of the pixels, and the 3rd byte contains
-> the 4 least significants bits of each pixel, in the same order.
-> 
-> Add the entry in userspace API, and document it.
-> 
-> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+@Luo,
+I am preparing some other fixes and might submit this fix also as part of those.
+I am completely ok, if you would like to push a patch from your end
+based on this discussion. In that case, I will request to drop my patch
+or won't even publish it, if you submit it before my fixes gets out.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+-ritesh
 
-> ---
->  .../userspace-api/media/v4l/pixfmt-yuv-luma.rst       | 11 +++++++++++
->  drivers/media/v4l2-core/v4l2-ioctl.c                  |  1 +
->  include/uapi/linux/videodev2.h                        |  1 +
->  3 files changed, 13 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-> index 8ebd58c3588f..d37ce6027095 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-> @@ -92,6 +92,17 @@ are often referred to as greyscale formats.
->        - ...
->        - ...
->  
-> +    * .. _V4L2-PIX-FMT-Y12P:
-> +
-> +      - ``V4L2_PIX_FMT_Y12P``
-> +      - 'Y12P'
-> +
-> +      - Y'\ :sub:`0`\ [11:4]
-> +      - Y'\ :sub:`1`\ [11:4]
-> +      - Y'\ :sub:`1`\ [3:0] Y'\ :sub:`0`\ [3:0]
-> +      - ...
-> +      - ...
-> +
->      * .. _V4L2-PIX-FMT-Y14:
->  
->        - ``V4L2_PIX_FMT_Y14``
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> index 9ac557b8e146..e90979af8efb 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1263,6 +1263,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_Y16_BE:	descr = "16-bit Greyscale BE"; break;
->  	case V4L2_PIX_FMT_Y10BPACK:	descr = "10-bit Greyscale (Packed)"; break;
->  	case V4L2_PIX_FMT_Y10P:		descr = "10-bit Greyscale (MIPI Packed)"; break;
-> +	case V4L2_PIX_FMT_Y12P:		descr = "12-bit Greyscale (MIPI Packed)"; break;
->  	case V4L2_PIX_FMT_Y8I:		descr = "Interleaved 8-bit Greyscale"; break;
->  	case V4L2_PIX_FMT_Y12I:		descr = "Interleaved 12-bit Greyscale"; break;
->  	case V4L2_PIX_FMT_Z16:		descr = "16-bit Depth"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index df8b9c486ba1..39ab8c216fe8 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -569,6 +569,7 @@ struct v4l2_pix_format {
->  /* Grey bit-packed formats */
->  #define V4L2_PIX_FMT_Y10BPACK    v4l2_fourcc('Y', '1', '0', 'B') /* 10  Greyscale bit-packed */
->  #define V4L2_PIX_FMT_Y10P    v4l2_fourcc('Y', '1', '0', 'P') /* 10  Greyscale, MIPI RAW10 packed */
-> +#define V4L2_PIX_FMT_Y12P    v4l2_fourcc('Y', '1', '2', 'P') /* 12  Greyscale, MIPI RAW12 packed */
->  
->  /* Palette formats */
->  #define V4L2_PIX_FMT_PAL8    v4l2_fourcc('P', 'A', 'L', '8') /*  8  8-bit palette */
-
--- 
-Regards,
-
-Laurent Pinchart
+> > > I suspect the right answer here is that we *should* be checking the
+> > > return value, and reflecting the error up to caller, if appropriate.
+> > >
+> > > Harshad, what do you think?
+> >
+> > Indeed we absolutely *must* be checking the return value and bail out
+> > otherwise we risk overwriting kernel memory among other possible
+> > problems.
+> >
+> > See ext4_fc_record_modified_inode() where we increment
+> > fc_modified_inodes_size before the actual reallocation which in case of
+> > allocation failure will leave us with elevated fc_modified_inodes_size
+> > and the next call to ext4_fc_record_modified_inode() can modify
+> > fc_modified_inodes[] out of bounds.
+> >
+> > In addition to checking the return value we should probably also move
+> > incrementing the fc_modified_inodes_size until after the successful
+> > reallocation in order to avoid such pitfalls.
+> >
+> > Thanks!
+> > -Lukas
+> >
+> > >
+> > >                                       - Ted
+> > >
+> > > >
+> > > > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > > > Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
+> > > > ---
+> > > >  fs/ext4/fast_commit.c | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> > > > index 8ea5a81..8d5d044 100644
+> > > > --- a/fs/ext4/fast_commit.c
+> > > > +++ b/fs/ext4/fast_commit.c
+> > > > @@ -1660,7 +1660,7 @@ static int ext4_fc_replay_add_range(struct super_block *sb,
+> > > >             return 0;
+> > > >     }
+> > > >
+> > > > -   ret = ext4_fc_record_modified_inode(sb, inode->i_ino);
+> > > > +   ext4_fc_record_modified_inode(sb, inode->i_ino);
+> > > >
+> > > >     start = le32_to_cpu(ex->ee_block);
+> > > >     start_pblk = ext4_ext_pblock(ex);
+> > > > @@ -1785,7 +1785,7 @@ ext4_fc_replay_del_range(struct super_block *sb, struct ext4_fc_tl *tl,
+> > > >             return 0;
+> > > >     }
+> > > >
+> > > > -   ret = ext4_fc_record_modified_inode(sb, inode->i_ino);
+> > > > +   ext4_fc_record_modified_inode(sb, inode->i_ino);
+> > > >
+> > > >     jbd_debug(1, "DEL_RANGE, inode %ld, lblk %d, len %d\n",
+> > > >                     inode->i_ino, le32_to_cpu(lrange.fc_lblk),
+> > > > --
+> > > > 2.15.2
+> > > >
+> > > >
+> > >
+> >

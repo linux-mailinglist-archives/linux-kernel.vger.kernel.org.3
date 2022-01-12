@@ -2,162 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A92948C2E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA04548C2EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352774AbiALLLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 06:11:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352761AbiALLLK (ORCPT
+        id S1352787AbiALLPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 06:15:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22510 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237932AbiALLPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 06:11:10 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD635C06173F;
-        Wed, 12 Jan 2022 03:11:10 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id pf13so4200602pjb.0;
-        Wed, 12 Jan 2022 03:11:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=iVlCo1TFSBMrozoizl3ZBqKH7/OrLx149Kn2CvvnqdE=;
-        b=mTU+vUGIHWlm/17PwWxhC45VAIcBNSpihQhGtzP5UaoiGz8da4P5avJYxJkBU1GjIl
-         UXuvK7ddIsu6seAIBZlml0UmPuLLx4Dl9+Ibh/8wyC5dJjLcnzKguZHRh4/iV5IQOWYi
-         xALxGXzujDSy7Mt288cr426RK9lBjUV/Z1c0ANiuQt+Cv6rEUBgISXG8Dj1RhouxzpIB
-         370vGB8j+MaEbAl1q52QWaY8GZIVZOcOUAkztzafYwfvPQAnNCgUK3kj0dc8+m9v3MYl
-         npUMqFtvpvuC3tMjQ82Cub8uu/rLKXHnbNSqXMmXGVpkNTawVZ8wpyhPCCc+zNgSSfsp
-         YkJQ==
+        Wed, 12 Jan 2022 06:15:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641986106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/O6VUSuDrBCGXjIOjB+lCz/TDMc6L1BfrxoUSl2WMqg=;
+        b=aGibjgzr8vSsqUTeUNO4UlQgIpykX45L9lmdJjyGGtjmpGB4Wbn8SfiuPYYch6dV6LKMd2
+        oYUlQ2JMJPXjd8IcDAcnin/KxI5r4p4fZHPRitbyEkt/4qVswPfGGLpSx39qJ38TfYCSJL
+        MxsWr5/6VBatkHYP4FoLwqCSHuTU/IA=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-390-8A80HG8nNfaIos3c_evOhg-1; Wed, 12 Jan 2022 06:15:05 -0500
+X-MC-Unique: 8A80HG8nNfaIos3c_evOhg-1
+Received: by mail-qv1-f70.google.com with SMTP id 6-20020ad45b86000000b0041a32b5b1c4so599466qvp.8
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:15:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=iVlCo1TFSBMrozoizl3ZBqKH7/OrLx149Kn2CvvnqdE=;
-        b=SqH7tlSAllZHETl3XbGOX6c2dV5yxUOzUfzmu2L+JXjncSLCK1wY/Kp9/sHQDZ4FEV
-         MR1PCTIM1fgC4o/SiM5QyQX6uYEIrehU2JQpCXA5c0S3WEQaRuYBXEUF1KHnbwQYRHiQ
-         9552wdapH5t6Vn/ZlsDo1WybdCpn/kty9vTxgnfwx/r8T3P2vJp9HjeP1r/1+IOk7/BU
-         rN0DhdznKHyXSb2fAKMbmtlkTusFUEe0RcsLMW1HfmqjaqiNrjeYqMzJOBQn+5o9oZlS
-         Ig0pTAuG7u1safIDFI5e04kEKAXYMdW20ogCHbp3Ve7nb1jA/eUWdLkDxn+6STp+dmz7
-         Phug==
-X-Gm-Message-State: AOAM533EL+Pd7f6K3jrEe4UaxXLjZhlEGO6NST508XIMRjN9BvaWSLbQ
-        xDiBFV5VkXhA73mRQC9ZHFjLCOtODItdhMia
-X-Google-Smtp-Source: ABdhPJz6nLyHQ0+VX2XGrBaoC2n4a2WzeLuc0Qv4oKEdShF4rH4Xrax3gMHQTRt0oBgEI9tDniXEuw==
-X-Received: by 2002:a17:902:c086:b0:14a:6828:388d with SMTP id j6-20020a170902c08600b0014a6828388dmr2142149pld.17.1641985870124;
-        Wed, 12 Jan 2022 03:11:10 -0800 (PST)
-Received: from [0.0.0.0] ([20.187.112.145])
-        by smtp.gmail.com with ESMTPSA id z24sm5347743pjq.17.2022.01.12.03.11.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 03:11:09 -0800 (PST)
-Subject: Re: [PATCH net] ax25: use after free in ax25_connect
-To:     Eric Dumazet <eric.dumazet@gmail.com>, jreuter@yaina.de,
-        ralf@linux-mips.org, davem@davemloft.net, kuba@kernel.org
-Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=/O6VUSuDrBCGXjIOjB+lCz/TDMc6L1BfrxoUSl2WMqg=;
+        b=em53vddM1kf5WWxxYDkoCTi2w63JEVLofWvxl4QlJW4Eps1PHjD3HGYf0pRtLDFVqX
+         L5lLETAAZ1oiICzoKvH8qJcYkFpkoY4nuy5T1VY78DLtOEXw68AOUqwuyw32iG3eJib/
+         BCYeQ4kS6r3Cbo6a41aKYT+NpZKgjFIDn7KRYhESrBCNr5+4UWtrUJph0nHzRCRBjL8G
+         /FVE0TmjCve4sLoc4ijq5K9nI0wOlyz3BruNwHgyGu0sPe4kvFZ887Hvn2hr0r28J91m
+         zEOzA2lPyEK1iEFlrI/D0TFP20jx+ziKnHeuT1KJ8OIHinhKmB1gBh1SrQmy7HqLLGjw
+         VAiw==
+X-Gm-Message-State: AOAM5314cpjRsrfCvz2mnqLJ0TLpZQQM2jofofVM2n37w1Q3a9UMtds4
+        8vKGM+PSP0GAQ/UACMSMTNqI9Flo8PexoD4Wq+w6NpiMEhR07q1PNC5Nyc4c/Zv89WkKnD9us6I
+        m5WoLXnUzsGuClNgOs+DbmmIl
+X-Received: by 2002:a05:622a:1c5:: with SMTP id t5mr7159795qtw.311.1641986105465;
+        Wed, 12 Jan 2022 03:15:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJytfENyhCNljtiDCzXK7f0hQt2E1jJGbk4pwZSAZeomnRI3JR8zM0bsNr9/Do/Yp2K6SzERzg==
+X-Received: by 2002:a05:622a:1c5:: with SMTP id t5mr7159783qtw.311.1641986105264;
+        Wed, 12 Jan 2022 03:15:05 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-96-254.dyn.eolo.it. [146.241.96.254])
+        by smtp.gmail.com with ESMTPSA id y17sm1361497qkp.134.2022.01.12.03.15.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 03:15:04 -0800 (PST)
+Message-ID: <3520c1e1609d8bef103766ad03508d0060824b98.camel@redhat.com>
+Subject: Re: [PATCH 09/14] ipv6: hand dst refs to cork setup
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
         linux-kernel@vger.kernel.org
-References: <20220111042048.43532-1-hbh25y@gmail.com>
- <f35292c0-621f-3f07-87ed-2533bfd1496e@gmail.com>
- <f48850cb-8e26-afa0-576c-691bb4be5587@gmail.com>
- <571c72e8-2111-6aa0-1bd7-e0af7fc50539@gmail.com>
-From:   Hangyu Hua <hbh25y@gmail.com>
-Message-ID: <80007b3e-eba8-1fbe-302d-4398830843dd@gmail.com>
-Date:   Wed, 12 Jan 2022 19:11:05 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Date:   Wed, 12 Jan 2022 12:15:01 +0100
+In-Reply-To: <9e3bb558-ecb1-a6aa-35e4-a2771136b3fe@gmail.com>
+References: <cover.1641863490.git.asml.silence@gmail.com>
+         <07031c43d3e5c005fbfc76b60a58e30c66d7c620.1641863490.git.asml.silence@gmail.com>
+         <48293134f179d643e9ec7bcbd7bca895df7611ac.camel@redhat.com>
+         <9e3bb558-ecb1-a6aa-35e4-a2771136b3fe@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
-In-Reply-To: <571c72e8-2111-6aa0-1bd7-e0af7fc50539@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yes.
+On Tue, 2022-01-11 at 20:39 +0000, Pavel Begunkov wrote:
+> On 1/11/22 17:11, Paolo Abeni wrote:
+> > On Tue, 2022-01-11 at 01:21 +0000, Pavel Begunkov wrote:
+> > > During cork->dst setup, ip6_make_skb() gets an additional reference to
+> > > a passed in dst. However, udpv6_sendmsg() doesn't need dst after calling
+> > > ip6_make_skb(), and so we can save two additional atomics by passing
+> > > dst references to ip6_make_skb(). udpv6_sendmsg() is the only caller, so
+> > > it's enough to make sure it doesn't use dst afterwards.
+> > 
+> > What about the corked path in udp6_sendmsg()? I mean:
+> 
+> It doesn't change it for callers, so the ref stays with udp6_sendmsg() when
+> corking. To compensate for ip6_setup_cork() there is an explicit dst_hold()
+> in ip6_append_data, should be fine.
 
-And there are two ways to release ax25, ax25_release and time expiry. I 
-tested that ax25_release will not be invoked before ax25_connect is done 
-by closing fd from user space. I think the reason is that __sys_connect 
-use fdget() to protect fd. But i can't test if a function like 
-ax25_std_heartbeat_expiry will release ax25 between sk_to_ax25(sk) and 
-lock_sock(sk).
+Whoops, I underlooked that chunk, thanks for pointing it out!
 
-So i think it's better to protect sk_to_ax25(sk) by a lock. Beacause 
-functions like ax25_release use sk_to_ax25 after a lock.
+Yes, it looks fine.
 
+> @@ -1784,6 +1784,7 @@ int ip6_append_data(struct sock *sk,
+>   		/*
+>   		 * setup for corking
+>   		 */
+> +		dst_hold(&rt->dst);
+>   		err = ip6_setup_cork(sk, &inet->cork, &np->cork,
+>   				     ipc6, rt);
+> 
+> 
+> I don't care much about corking perf, but might be better to implement
+> this "handing away" for ip6_append_data() as well to be more consistent
+> with ip6_make_skb().
 
-On 2022/1/12 下午5:59, Eric Dumazet wrote:
-> 
-> On 1/11/22 18:13, Hangyu Hua wrote:
->> I try to use ax25_release to trigger this bug like this:
->> ax25_release                 ax25_connect
->> lock_sock(sk);
->> -----------------------------sk = sock->sk;
->> -----------------------------ax25 = sk_to_ax25(sk);
->> ax25_destroy_socket(ax25);
->> release_sock(sk);
->> -----------------------------lock_sock(sk);
->> -----------------------------use ax25 again
->>
->> But i failed beacause their have large speed difference. And i
->> don't have a physical device to test other function in ax25.
->> Anyway, i still think there will have a function to trigger this
->> race condition like ax25_destroy_timer. Beacause Any ohter
->> functions in ax25_proto_ops like ax25_bind protect ax25_sock by 
->> lock_sock(sk).
-> 
-> 
-> For a given sk pointer, sk_to_ax25(sk) is always returning the same value,
-> 
-> regardless of sk lock being held or not.
-> 
-> ax25_sk(sk)->cb  is set only from ax25_create() or ax25_make_new()
-> 
-> ax25_connect can not be called until these operations have completed ?
-> 
-> 
-> 
->>
->> Thanks.
->>
->>
->>
->>
->> On 2022/1/12 上午4:56, Eric Dumazet wrote:
->>>
->>> On 1/10/22 20:20, Hangyu Hua wrote:
->>>> sk_to_ax25(sk) needs to be called after lock_sock(sk) to avoid UAF
->>>> caused by a race condition.
->>>
->>> Can you describe what race condition you have found exactly ?
->>>
->>> sk pointer can not change.
->>>
->>>
->>>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
->>>> ---
->>>>   net/ax25/af_ax25.c | 4 +++-
->>>>   1 file changed, 3 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
->>>> index cfca99e295b8..c5d62420a2a8 100644
->>>> --- a/net/ax25/af_ax25.c
->>>> +++ b/net/ax25/af_ax25.c
->>>> @@ -1127,7 +1127,7 @@ static int __must_check ax25_connect(struct 
->>>> socket *sock,
->>>>       struct sockaddr *uaddr, int addr_len, int flags)
->>>>   {
->>>>       struct sock *sk = sock->sk;
->>>> -    ax25_cb *ax25 = sk_to_ax25(sk), *ax25t;
->>>> +    ax25_cb *ax25, *ax25t;
->>>>       struct full_sockaddr_ax25 *fsa = (struct full_sockaddr_ax25 
->>>> *)uaddr;
->>>>       ax25_digi *digi = NULL;
->>>>       int ct = 0, err = 0;
->>>> @@ -1155,6 +1155,8 @@ static int __must_check ax25_connect(struct 
->>>> socket *sock,
->>>>       lock_sock(sk);
->>>> +    ax25 = sk_to_ax25(sk);
->>>> +
->>>>       /* deal with restarts */
->>>>       if (sock->state == SS_CONNECTING) {
->>>>           switch (sk->sk_state) {
+I'm personally fine with the the added dst_hold() in ip6_append_data()
+
+Thanks!
+
+Paolo
+

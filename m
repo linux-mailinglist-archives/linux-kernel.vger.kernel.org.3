@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C761448C369
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A669848C372
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352950AbiALLni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 06:43:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57320 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239294AbiALLng (ORCPT
+        id S1352961AbiALLpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 06:45:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239294AbiALLpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 06:43:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D466A6164C;
-        Wed, 12 Jan 2022 11:43:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C3E9C36AE9;
-        Wed, 12 Jan 2022 11:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641987815;
-        bh=nNZvPmLCj5hUY/EAI5dVhxfi/PBGWTo2PlQBAzZcUlo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DQMxxxnMGBy6NVEsiApsuYJBAUBJcIKybBu8A/KI9r+NnkFEzT8nLBqev2dR7t6PU
-         FHzCaqUwApBvErP/Kwh9/Nh0vYxKUdVEywsTsxCJlmC6AIWzQuDOPnUVf+MUsc/dHs
-         5OMJ7R6ucqR6jmV5GargzvvkdW+ZWPz0W5ksFxlqB8q5HIF6ZSWnEAAy30d1uTLXhe
-         /RsA4Idg/f69O5iCf67aYoj6Px8mf/9h80vETZUjfBpTfEAwTIoGonqXRBa3AoBQlN
-         O6qJBnSGAhs743Y1SmfwVgltsjL6ZVkizQOPlSW+juG4T8Z6WsC8waCLm75Ckvtx8L
-         u5PuHNHhgZubg==
-Received: by pali.im (Postfix)
-        id ADF7E768; Wed, 12 Jan 2022 12:43:32 +0100 (CET)
-Date:   Wed, 12 Jan 2022 12:43:32 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-mmc@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v9 08/24] wfx: add bus_sdio.c
-Message-ID: <20220112114332.jadw527pe7r2j4vv@pali>
-References: <20220111171424.862764-1-Jerome.Pouiller@silabs.com>
- <20220111171424.862764-9-Jerome.Pouiller@silabs.com>
- <20220112105859.u4j76o7cpsr4znmb@pali>
- <42104281.b1Mx7tgHyx@pc-42>
+        Wed, 12 Jan 2022 06:45:49 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936DFC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:45:49 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id m6so5512177ybc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:45:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=1oAWQHZqJjxGspd66xUUwdpCocjq4RF4bRYfPMa0RgM=;
+        b=LCxuNDTBSrsTxNHCIoEpEJhzykzI1PqU0Qu7+y1h/2eirkEaNcUWcRKGGAWaV79ru6
+         Xv6at+0+iUtpOEe63PUlXlbArXuMTPWdZ+/I9QGm1/Tn/3qseWRDveOL4FnagSPN1A/T
+         WQA5lRrrNPqlTtbO2930mHMbqr0IbKawgZZJX2ACEHAPmOPO0eKb5zSkXu2527bDe22H
+         qZSNnQTvKG1BZvNckxJgIPiclQ2QGrvZHaHYpAF4Yj1u61rLGVSA/EQd1E9Vbu/Wv0mM
+         76FeBD8ggDrgJZACy1k8ttE1LmolWjhAvrPauqbZAqe0sJtrtel+dc7OKUTio8KPUJJT
+         BrjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=1oAWQHZqJjxGspd66xUUwdpCocjq4RF4bRYfPMa0RgM=;
+        b=jLycsV9bLvShfYzjsO9S5yFGnHYSf7lE90V4CoEBWAU+nAlJrk0a9TlCQzeOK6p7m2
+         8nxxZ/4/ClX31CtLz98naaMK+lRkqZSjdCH8ZYjH3lAhG2P/Y0sp9BupP9+q+dt3cnis
+         yEnpiBn3mS20CNzB8KFKf/lDkHpHUsGfU3IzulyDYd0uUO3YKV6dqh67hbGyWUI4EyyV
+         XeQojpAqN+9dxhR9UzSNbY1N7aLtFrbRa+Ut7oQCEolpd2YdzGrLomf0xGiJN7/izC0e
+         oUjzxmjVInwhzmKnJiYPQJ2bYw73TLmh73Okw/lNYzfaqMXkTNs0/rJPSdtRlVSHRHV+
+         KYlA==
+X-Gm-Message-State: AOAM533qawjIOBZ7XSwzUlWc9e2kAT6LCnKqLlCuIS5c1a+os70/Zu0E
+        cuLsrS2dVF4Dm3piX7hYsMiT5HUIGmlD1KBw7Yd2SJpoB918Sw==
+X-Google-Smtp-Source: ABdhPJy833HxrFP8l/AcVNmiqInufp1tn6sOo1ri3JhrVF4Lbfk3FqLKPmb8gT8eZ0+nFbb7F4rgAXM2QRTArxbTsF4=
+X-Received: by 2002:a5b:d09:: with SMTP id y9mr7287068ybp.146.1641987948106;
+ Wed, 12 Jan 2022 03:45:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <42104281.b1Mx7tgHyx@pc-42>
-User-Agent: NeoMutt/20180716
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 12 Jan 2022 17:15:37 +0530
+Message-ID: <CA+G9fYsMHhXJCgO-ykR0oO1kVdusGnthgj6ifxEKaGPHZJ-ZCw@mail.gmail.com>
+Subject: [next]: LTP: getxattr05.c:97: TFAIL: unshare(CLONE_NEWUSER) failed:
+ ENOSPC (28)
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, LTP List <ltp@lists.linux.it>,
+        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev
+Cc:     Alexey Gladkov <legion@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 12 January 2022 12:18:58 Jérôme Pouiller wrote:
-> On Wednesday 12 January 2022 11:58:59 CET Pali Rohár wrote:
-> > On Tuesday 11 January 2022 18:14:08 Jerome Pouiller wrote:
-> > > +static const struct sdio_device_id wfx_sdio_ids[] = {
-> > > +     { SDIO_DEVICE(SDIO_VENDOR_ID_SILABS, SDIO_DEVICE_ID_SILABS_WF200) },
-> > > +     { },
-> > > +};
-> > 
-> > Hello! Is this table still required?
-> 
-> As far as I understand, if the driver does not provide an id_table, the
-> probe function won't be never called (see sdio_match_device()).
-> 
-> Since, we rely on the device tree, we could replace SDIO_VENDOR_ID_SILABS
-> and SDIO_DEVICE_ID_SILABS_WF200 by SDIO_ANY_ID. However, it does not hurt
-> to add an extra filter here.
+While testing LTP syscalls with Linux next 20220110 (and till date 20220112)
+on x86_64, i386, arm and arm64 the following tests failed.
 
-Now when this particular id is not required, I'm thinking if it is still
-required and it is a good idea to define these SDIO_VENDOR_ID_SILABS
-macros into kernel include files. As it would mean that other broken
-SDIO devices could define these bogus numbers too... And having them in
-common kernel includes files can cause issues... e.g. other developers
-could think that it is correct to use them as they are defined in common
-header files. But as these numbers are not reliable (other broken cards
-may have same ids as wf200) and their usage may cause issues in future.
+tst_test.c:1365: TINFO: Timeout per run is 0h 15m 00s
+getxattr05.c:87: TPASS: Got same data when acquiring the value of
+system.posix_acl_access twice
+getxattr05.c:97: TFAIL: unshare(CLONE_NEWUSER) failed: ENOSPC (28)
+tst_test.c:391: TBROK: Invalid child (13545) exit value 1
 
-Ulf, any opinion?
+fanotify17.c:176: TINFO: Test #1: Global groups limit in privileged user ns
+fanotify17.c:155: TFAIL: unshare(CLONE_NEWUSER) failed: ENOSPC (28)
+tst_test.c:391: TBROK: Invalid child (14739) exit value 1
 
-Btw, is there any project which maintains SDIO ids, like there is
-pci-ids.ucw.cz for PCI or www.linux-usb.org/usb-ids.html for USB?
+sendto03.c:48: TBROK: unshare(268435456) failed: ENOSPC (28)
 
-> > > +MODULE_DEVICE_TABLE(sdio, wfx_sdio_ids);
-> > > +
-> > > +struct sdio_driver wfx_sdio_driver = {
-> > > +     .name = "wfx-sdio",
-> > > +     .id_table = wfx_sdio_ids,
-> > > +     .probe = wfx_sdio_probe,
-> > > +     .remove = wfx_sdio_remove,
-> > > +     .drv = {
-> > > +             .owner = THIS_MODULE,
-> > > +             .of_match_table = wfx_sdio_of_match,
-> > > +     }
-> > > +};
-> > > --
-> > > 2.34.1
-> > >
-> > 
-> 
-> 
-> -- 
-> Jérôme Pouiller
-> 
-> 
-> 
+setsockopt05.c:45: TBROK: unshare(268435456) failed: ENOSPC (28)
+
+strace output:
+--------------
+[pid   481] wait4(-1, 0x7fff52f5ae8c, 0, NULL) = -1 ECHILD (No child processes)
+[pid   481] clone(child_stack=NULL,
+flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD,
+child_tidptr=0x7f3af0fa7a10) = 483
+strace: Process 483 attached
+[pid   481] wait4(-1,  <unfinished ...>
+[pid   483] unshare(CLONE_NEWUSER)      = -1 ENOSPC (No space left on device)
+
+metadata:
+  git branch: master
+  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git commit: 57c149e506d5bec1b845ad1a8a631063fcac1f6e
+  git describe: next-20220110
+  arch: x86
+  toolchain: gcc-11
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+GOOD: next-20220107
+ BAD:    next-20220110
+
+Test logs:
+https://lkft.validation.linaro.org/scheduler/job/4301888#L1474
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220110/testrun/7253656/suite/ltp-syscalls-tests/test/getxattr05/log
+
+compare test history:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220112/testrun/7277164/suite/ltp-syscalls-tests/test/getxattr05/history/
+
+kernel-config:
+https://builds.tuxbuild.com/23V6AwGvHW7H3kr6WxZZwueajVS/config
+
+We are investigating this regression.
+
+Steps to reproduce:
+   # cd /opt/ltp
+   # ./runltp -s getxattr05
+
+--
+Linaro LKFT
+https://lkft.linaro.org

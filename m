@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8744748BED1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0242148BED3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351111AbiALHHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:07:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
+        id S237328AbiALHH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237328AbiALHHa (ORCPT
+        with ESMTP id S1351119AbiALHHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:07:30 -0500
+        Wed, 12 Jan 2022 02:07:48 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8230C06173F;
-        Tue, 11 Jan 2022 23:07:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE30C06173F;
+        Tue, 11 Jan 2022 23:07:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EE83B8196F;
-        Wed, 12 Jan 2022 07:07:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE1CC36AEA;
-        Wed, 12 Jan 2022 07:07:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5E3EB81DD1;
+        Wed, 12 Jan 2022 07:07:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074C3C36AEA;
+        Wed, 12 Jan 2022 07:07:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641971247;
-        bh=lBeYJcwOlBUNUCtLY7rniM4aBmILYhIJMmfAyuOSK7I=;
+        s=korg; t=1641971264;
+        bh=nTFBhQOmnBA93U9cxAz7NAgpiaQ5l5uga4MLGTJJUP4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N8I+xk/BRnXBuc1KlsDm4/2VzECMqq8l4ncrAK3yWNUX67kwE7GFNrBY898w/shFo
-         00i0HbNX1EtS2m/COkY39+6Wag/ekrU5RSTBzpokHkpnzyefxAxPWV96N77AAAbwmx
-         gEO/DelN+Iyd8UuoK4UIVwaJcedlSkcaUoNxGQp4=
-Date:   Wed, 12 Jan 2022 08:07:24 +0100
+        b=WTV7tM6Ua2JmZrTqbyT4xI5YYM+cRjMhRdyMn8X/1edr5hssfJoaLzyBu4uPw+r+o
+         1S3rJ/o0rrXPdNOMgECEMomkghn/01pBjAypruajMcnXjjvhLHF5l0DlP3cjA33xhV
+         DMdb+mTKLBha0fGYz/ApFpqcTgPTRzKhi7QPDOqQ=
+Date:   Wed, 12 Jan 2022 08:07:41 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Wayne Chang <waynec@nvidia.com>
 Cc:     heikki.krogerus@linux.intel.com, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, singhanc@nvidia.com
-Subject: Re: [PATCH v3 1/1] ucsi_ccg: Check DEV_INT bit only when starting
+Subject: Re: [PATCH v4 1/1] ucsi_ccg: Check DEV_INT bit only when starting
  CCG4
-Message-ID: <Yd5+LJD1ey+vygA9@kroah.com>
-References: <20220112032100.610146-1-waynec@nvidia.com>
+Message-ID: <Yd5+Pd+YHWEB1Px9@kroah.com>
+References: <20220112054950.615341-1-waynec@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220112032100.610146-1-waynec@nvidia.com>
+In-Reply-To: <20220112054950.615341-1-waynec@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 11:21:00AM +0800, Wayne Chang wrote:
+On Wed, Jan 12, 2022 at 01:49:50PM +0800, Wayne Chang wrote:
 > From: Sing-Han Chen <singhanc@nvidia.com>
 > 
 > after driver sending the UCSI_START cmd, CCGx would
@@ -60,7 +60,7 @@ On Wed, Jan 12, 2022 at 11:21:00AM +0800, Wayne Chang wrote:
 > the commit checks bit 0 in INTR_REG and ignore other
 > bits. ucsi driver would reset PPM later.
 > 
-> Fixes: 247c554a14aa16ca ("usb: typec: ucsi: add support for Cypress CCGx")
+> Fixes: 247c554a14aa ("usb: typec: ucsi: add support for Cypress CCGx")
 > Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
 > Signed-off-by: Wayne Chang <waynec@nvidia.com>
 > ---
@@ -83,6 +83,7 @@ On Wed, Jan 12, 2022 at 11:21:00AM +0800, Wayne Chang wrote:
 > -- 
 > 2.25.1
 > 
+
 
 Hi,
 

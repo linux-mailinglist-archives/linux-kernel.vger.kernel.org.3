@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AAF48BF07
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1AE148BF0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351222AbiALHeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:34:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        id S1351226AbiALHhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351213AbiALHeC (ORCPT
+        with ESMTP id S1348606AbiALHhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:34:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B378FC06173F;
-        Tue, 11 Jan 2022 23:34:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E6EFB81DDD;
-        Wed, 12 Jan 2022 07:34:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD50EC36AE9;
-        Wed, 12 Jan 2022 07:33:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641972840;
-        bh=katItcAdlIg1VGt12/hCRr+LeICzVsuaMib2lQWOzyI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JCK9Eaqtu1se7xDxHwSZE0k9cZHqZJpt3dd3i/+RmEzcrQGfK8Ht8FRJFQ1fCPTMr
-         vl0S1e1jJrCth141cPiBkIXHpfiIhnHBFfUEaQ/uNkAYhQewg8GxeOVlGKhIuzu9C1
-         nfG9q0n8Z7WGki8vqIB0xNbi6RhIgNSR57ltVOH9aG4ur78CMlID+55fOa2mu8rMIW
-         KYC3Y2kHSASWIDmkwIeWYCzKvQTdco4loYa3dkG1wRsyXsfJEIUumYdcR4mEl2eej5
-         +b7E79Pe/oeZAFMOH58YSNWZ1OJnrkbcgmTft1lpW/UL3j73ebTYKxJqxwVOvBvE2C
-         8uFqL4QfhplzA==
-Date:   Wed, 12 Jan 2022 16:33:53 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH 0/6] fprobe: Introduce fprobe function entry/exit
- probe
-Message-Id: <20220112163353.4da6a6b9c6eef69dbda50324@kernel.org>
-In-Reply-To: <20220111223944.jbi3mxedwifxwyz5@ast-mbp.lan>
-References: <20220104080943.113249-1-jolsa@kernel.org>
-        <164191321766.806991.7930388561276940676.stgit@devnote2>
-        <20220111223944.jbi3mxedwifxwyz5@ast-mbp.lan>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Wed, 12 Jan 2022 02:37:01 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C05C06173F;
+        Tue, 11 Jan 2022 23:37:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=fvAZAKUP/Zqwb11B0tcBTMXNBgsHZ7Zgz24N0iCbuG8=; b=p/a9wnJdFYOgwffXCjNDcDz1Pe
+        F6JRoLk42iSOPE8BF5hpVdCuGEn7QOIbHEkXwhMO/kEanuUZ+PFIBAJft30K3vx9/QQT9tA6vK/UF
+        yWZE2oMWcvaBXwNujgmfjaN1U8lAtLr0mfrash1r+XdDh79d6MgHWsmWnU7u3ePTNJCSp4GkNhjRP
+        j/dcRjx3bJK68MoqQb+5zm8bCGyRc6ugGJlXgvz+eiOYUmjZzOtYfofvzxAZEzCOyfehnyc+5rHqe
+        +FWPaxTs9AkaEg4bKbdSq22K0AmTzJTAKWrRyzQ6qu+jVKKuo2bzx4QMMo6laYaqmuNR+dRxSmt/h
+        QazstK4g==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7YBj-000l8V-ES; Wed, 12 Jan 2022 07:36:55 +0000
+Message-ID: <7cfa578d-7981-1035-a48b-b9e6823c150f@infradead.org>
+Date:   Tue, 11 Jan 2022 23:36:50 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH] firmware_loader: simplfy builtin or module check
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>
+References: <20220112023416.215644-1-mcgrof@kernel.org>
+ <3e721c69-afa9-6634-2e52-e9a9c2a89372@infradead.org>
+ <CAK7LNARiDFpphJrhk5q00d5sSPWAQ2mMLu8Z2YP0Xwk=3WGt3w@mail.gmail.com>
+ <da39d895-61fc-5ca2-64e0-e31e20e98245@infradead.org>
+In-Reply-To: <da39d895-61fc-5ca2-64e0-e31e20e98245@infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexei,
 
-On Tue, 11 Jan 2022 14:39:44 -0800
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-> On Wed, Jan 12, 2022 at 12:00:17AM +0900, Masami Hiramatsu wrote:
-> > Hi Jiri,
-> > 
-> > Here is a short series of patches, which shows what I replied
-> > to your series.
-> > 
-> > This introduces the fprobe, the function entry/exit probe with
-> > multiple probe point support. This also introduces the rethook
-> > for hooking function return, which I cloned from kretprobe.
-> > 
-> > I also rewrite your [08/13] bpf patch to use this fprobe instead
-> > of kprobes. I didn't tested that one, but the sample module seems
-> > to work. Please test bpf part with your libbpf updates.
-> > 
-> > BTW, while implementing the fprobe, I introduced the per-probe
-> > point private data, but I'm not sure why you need it. It seems
-> > that data is not used from bpf...
-> > 
-> > If this is good for you, I would like to proceed this with
-> > the rethook and rewrite the kretprobe to use the rethook to
-> > hook the functions. That should be much cleaner (and easy to
-> > prepare for the fgraph tracer integration)
+On 1/11/22 23:03, Randy Dunlap wrote:
 > 
-> What is the speed of attach/detach of thousands fprobes?
+> 
+> On 1/11/22 22:56, Masahiro Yamada wrote:
+>> On Wed, Jan 12, 2022 at 3:37 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>>
+>>>
+>>>
+>>> On 1/11/22 18:34, Luis Chamberlain wrote:
+>>>> The existing check is outdated and confuses developers. Use the
+>>>> already existing IS_ENABLED() defined on kconfig.h which makes
+>>>> the intention much clearer.
+>>>>
+>>>> Reported-by: Borislav Petkov <bp@alien8.de>
+>>>> Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+>>>
+>>> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+>>>
+>>> Thanks.
+>>>
+>>>> ---
+>>>>  include/linux/firmware.h | 2 +-
+>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/include/linux/firmware.h b/include/linux/firmware.h
+>>>> index 3b057dfc8284..fa3493dbe84a 100644
+>>>> --- a/include/linux/firmware.h
+>>>> +++ b/include/linux/firmware.h
+>>>> @@ -34,7 +34,7 @@ static inline bool firmware_request_builtin(struct firmware *fw,
+>>>>  }
+>>>>  #endif
+>>>>
+>>>> -#if defined(CONFIG_FW_LOADER) || (defined(CONFIG_FW_LOADER_MODULE) && defined(MODULE))
+>>>
+>>> The "defined(MODULE)" part wasn't needed here. :)
+>>
+>>
+>>
+>> It _is_ needed.
+>>
+>> This seems to be equivalent to IS_REACHABLE(CONFIG_FW_LOADER),
+>> not IS_ENABLE(CONFIG_FW_LOADER).>>
+> 
+> Hm, /me confused.
+> 
+> How can CONFIG_FW_LOADER_MODULE be =y when MODULE is not defined?
+> 
 
-I've treaked my example module and it shows below result;
+OK, I get it now. Thanks for correcting me.
 
-/lib/modules/5.16.0-rc4+/kernel/samples/fprobe # time insmod ./fprobe_example.ko
- symbol='btrfs_*'
-[  187.095925] fprobe_init: 1028 symbols found
-[  188.521694] fprobe_init: Planted fprobe at btrfs_*
-real	0m 1.47s
-user	0m 0.00s
-sys	0m 1.36s
-
-I think using ftrace_set_filter_ips() can make it faster.
-(maybe it needs to drop per-probe point private data, that
-prevents fprobe to use that interface)
-
-Thank you,
+>>
+>>
+>>>
+>>>> +#if IS_ENABLED(CONFIG_FW_LOADER)
+>>>>  int request_firmware(const struct firmware **fw, const char *name,
+>>>>                    struct device *device);
+>>>>  int firmware_request_nowarn(const struct firmware **fw, const char *name,
+>>>
+>>> --
+>>> ~Randy
+>>
+>>
+>>
+> 
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+~Randy

@@ -2,131 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 929E148CD8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B9D48CD95
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232939AbiALVRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 16:17:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
+        id S229751AbiALVTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 16:19:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbiALVRB (ORCPT
+        with ESMTP id S229491AbiALVTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 16:17:01 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8452EC061756
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 13:17:01 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id i8-20020a17090a138800b001b3936fb375so14885337pja.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 13:17:01 -0800 (PST)
+        Wed, 12 Jan 2022 16:19:12 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0197C06173F;
+        Wed, 12 Jan 2022 13:19:11 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id r28so6577768wrc.3;
+        Wed, 12 Jan 2022 13:19:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=boundarydevices.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=P0OpirpLo3lFPzhXuxtbh2WjLoHGGYMgIKLuMYWDySQ=;
-        b=Nex77jCtujyu/JYrJVhh4VSI3QRugHS/8QUW03cirP3xG0d+h0WH5uL/kfJz8OD25w
-         X9vKtrk0BED2tqKug1kk50kdAJBQroPulaajtEo6EBVDocXTMnaO1gpsgGo4BP1HaLza
-         OPbQfVL+WH8aIdzOa//C5wHZHjs4CSjMHwNP0=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6TxiOntNhsCrtTXgbXmjcIfphc43hOl3QDBs0NNaLFY=;
+        b=KFiMw3MPBADupNQlBvuHMx9S77BKhdF50zxz77/j9FbgxZiOW10JkOCDEu4tDtTIUZ
+         AF2ne5pOpFtLLh0J/9OVlZ3Xk8elbrON8BeE8eBJFFtdl+rcmCx6FlCLn1TGlLjOGU1U
+         MbEepFp7jfyJPApV+rIYxxpUAJzQ5eydRVetMrqCpxYELcUkPYCWoTUG1/frTgYsvUGJ
+         ZiTlzH1EJEC+Ki3ORSUcCKfj0/d1Le+p8V28PtIAlySvlQOqa+hdOESzqWF4D3jzjQSP
+         3LTRiZFk53hsfrs+MASoRHQUwhCVAtsh7bisLyz3COXkFx2eHCyN6mzF2beFQqpPV5MI
+         6hXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=P0OpirpLo3lFPzhXuxtbh2WjLoHGGYMgIKLuMYWDySQ=;
-        b=nzg0P1p0/m95IPvVOINzo860EMKqBB6op9GvmO3tMXCdfpmX9vjwpMxHXf8UKYb80t
-         DsWTsjpZbkS81mPswp2pO1Ny3cFeoA1BnmIxD5G/7FtoJ24gEz7g9uYebg64rWhao1+r
-         CvPA8mKaizR0Jbo8n1GdpcKEBOTNT+COQSh85CT1kcr4FJpqdfTYz/LV2NwRPfS1bwq6
-         ni3XePL/NAc1MfaukTLVMSCP428GFhbKmEe4X30W9xkbYSJifoOK6zQ53n/F85E5dLVC
-         OWEROIzFwNMlr7FGuoLiFTuQrB5IhCDLzC2RQ7jQ5v/uEJTgKC1/YcDJcGfxm0boPzDr
-         fbTw==
-X-Gm-Message-State: AOAM530P8hC7/Of8lFYjjQErmHSGh0nL0d8Nm4RK71yi8CdkefNYPVBv
-        ezKVCpvNlRxtDJRy1McHMLcZhw==
-X-Google-Smtp-Source: ABdhPJwbJwaH/Q4KmjeX+oL9vPN/RCYvtu1ji5uNMCH/GhuM3e2/kYW/rA9QUcuITjN8PNtNNsSrUw==
-X-Received: by 2002:a63:a745:: with SMTP id w5mr1310352pgo.374.1642022221052;
-        Wed, 12 Jan 2022 13:17:01 -0800 (PST)
-Received: from localhost.localdomain (2a01cb000f5a8200e371e4a5048c8b22.ipv6.abo.wanadoo.fr. [2a01:cb00:f5a:8200:e371:e4a5:48c:8b22])
-        by smtp.gmail.com with ESMTPSA id h15sm507192pfc.89.2022.01.12.13.16.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 13:17:00 -0800 (PST)
-From:   Gary Bisson <gary.bisson@boundarydevices.com>
-To:     linux-amlogic@lists.infradead.org
-Cc:     Gary Bisson <gary.bisson@boundarydevices.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] arm64: dts: meson-g12-common: add uart_ao_b pins muxing
-Date:   Wed, 12 Jan 2022 22:16:42 +0100
-Message-Id: <20220112211642.2248901-4-gary.bisson@boundarydevices.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220112211642.2248901-1-gary.bisson@boundarydevices.com>
-References: <20220103154616.308376-1-gary.bisson@boundarydevices.com>
- <20220112211642.2248901-1-gary.bisson@boundarydevices.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6TxiOntNhsCrtTXgbXmjcIfphc43hOl3QDBs0NNaLFY=;
+        b=AhCHq7KkOBj8cb3yqwx2hxb4C5O1Y47uNXu8Q4DJ8YcKxNTl8ScG4l1lfR++qJaOXg
+         jlBI6b5Xz3oVQ4puaQTTJfogXA1Y6WVCWh7jwnds5GgRNPBZtYs1mGa7Q9sMppW5/Ch9
+         rDsOa/HPI+s4hahrPtCBjEh+s1bifAPKk6CxihkodLWGv+INl3GMtCNPlPTMKUgD49pk
+         NvqJLGc42b0EKnuTPNvBGga+CTGK74I9QQnXzejjvd5D4prVRWYCIgvPvPeZfhOl4EgE
+         yw4uKQwojRebBitb/ozp8DlpL4xAL58fpDbztS6Vm7H94zlBDsvAAJZnjXFYryAYB22A
+         sVmw==
+X-Gm-Message-State: AOAM533w+L5sRr9qrUpYclC6VRjs/yZv0JrAVVCcaK1iDk8HoZTjay6+
+        TXdqGR6DyyW1jU5zBgP+UpOgj4osSFVAhPNZieE=
+X-Google-Smtp-Source: ABdhPJzFEuWp7Wsk8JdHQYZwsj1tBXEicac30GClml/cPixPa0nmwZPRG1lrU1uj5FLFPmz34phbSV+YiJmWRQFzecY=
+X-Received: by 2002:a5d:6488:: with SMTP id o8mr1369457wri.93.1642022349685;
+ Wed, 12 Jan 2022 13:19:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220112030115.1.Ibac66e1e0e565313bc28f192e6c94cb508f205eb@changeid>
+ <20220112030115.3.I86c32730e08cba9e5c83f02ec17885124d45fa56@changeid>
+In-Reply-To: <20220112030115.3.I86c32730e08cba9e5c83f02ec17885124d45fa56@changeid>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 12 Jan 2022 13:19:07 -0800
+Message-ID: <CAF6AEGuJxdrYM5XXt6sUGmjossqZTRzwQ6Y8qYsnfCYDvGQurw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] drm/msm/adreno: Expose speedbin to userspace
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- RX/TX signals can be mapped on 2 different pairs of pins so supporting
-  both options
-- RTS/CTS signals however only have 1 option available
+On Tue, Jan 11, 2022 at 1:31 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>
+> Expose speedbin through MSM_PARAM_CHIP_ID parameter to help userspace
+> identify the sku.
+>
+> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> ---
+>
+>  drivers/gpu/drm/msm/adreno/adreno_gpu.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> index f33cfa4..e970e6a 100644
+> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> @@ -242,10 +242,11 @@ int adreno_get_param(struct msm_gpu *gpu, uint32_t param, uint64_t *value)
+>                 *value = !adreno_is_a650_family(adreno_gpu) ? 0x100000 : 0;
+>                 return 0;
+>         case MSM_PARAM_CHIP_ID:
+> -               *value = adreno_gpu->rev.patchid |
+> -                               (adreno_gpu->rev.minor << 8) |
+> -                               (adreno_gpu->rev.major << 16) |
+> -                               (adreno_gpu->rev.core << 24);
+> +               *value = (uint64_t) adreno_gpu->rev.patchid |
+> +                               (uint64_t) (adreno_gpu->rev.minor << 8) |
+> +                               (uint64_t) (adreno_gpu->rev.major << 16) |
+> +                               (uint64_t) (adreno_gpu->rev.core << 24) |
+> +                               (((uint64_t) adreno_gpu->rev.sku) << 32);
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
-Changes v1->v2:
-- renamed nodes as suggested by Neil
+How about this instead, so we are only changing the behavior for
+new/unreleased devices:
 
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Neil Armstrong <narmstrong@baylibre.com>
-Cc: Kevin Hilman <khilman@baylibre.com>
-Cc: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
----
- .../boot/dts/amlogic/meson-g12-common.dtsi    | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
+*value = adreno_gpu->rev.patchid |
+(adreno_gpu->rev.minor << 8) |
+(adreno_gpu->rev.major << 16) |
+(adreno_gpu->rev.core << 24);
+if (!adreno_gpu->info->revn)
+*value |= (((uint64_t) adreno_gpu->rev.sku) << 32);
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-index af1357c48bee..62350c408e16 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-@@ -1952,6 +1952,33 @@ mux {
- 						};
- 					};
- 
-+					uart_ao_b_2_3_pins: uart-ao-b-2-3 {
-+						mux {
-+							groups = "uart_ao_b_tx_2",
-+								 "uart_ao_b_rx_3";
-+							function = "uart_ao_b";
-+							bias-disable;
-+						};
-+					};
-+
-+					uart_ao_b_8_9_pins: uart-ao-b-8-9 {
-+						mux {
-+							groups = "uart_ao_b_tx_8",
-+								 "uart_ao_b_rx_9";
-+							function = "uart_ao_b";
-+							bias-disable;
-+						};
-+					};
-+
-+					uart_ao_b_cts_rts_pins: uart-ao-b-cts-rts {
-+						mux {
-+							groups = "uart_ao_b_cts",
-+								 "uart_ao_b_rts";
-+							function = "uart_ao_b";
-+							bias-disable;
-+						};
-+					};
-+
- 					pwm_a_e_pins: pwm-a-e {
- 						mux {
- 							groups = "pwm_a_e";
--- 
-2.34.1
+(sorry about the butchered indentation.. somehow gmail has become
+antagonistic about pasting code)
 
+BR,
+-R
+
+>                 return 0;
+>         case MSM_PARAM_MAX_FREQ:
+>                 *value = adreno_gpu->base.fast_rate;
+> --
+> 2.7.4
+>

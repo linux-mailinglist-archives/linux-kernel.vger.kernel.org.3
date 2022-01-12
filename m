@@ -2,121 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D9C48C944
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E23B548C946
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349935AbiALRXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 12:23:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
+        id S1349984AbiALRXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 12:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241052AbiALRXE (ORCPT
+        with ESMTP id S241052AbiALRXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 12:23:04 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1F9C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:23:04 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id i14so4622518ioj.12
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:23:04 -0800 (PST)
+        Wed, 12 Jan 2022 12:23:17 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBE2C061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:23:17 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id i5so12731103edf.9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:23:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=J/kXP8SqQiSR4LFSJtIEJPK0TG8hRH/GcTd8e3fRbjs=;
-        b=aqjAJjD5sEzzsSormxWUDg+xxR/nVVrhCqo5Bwox0k6u8BHFr4gzNOnQyR4SbJEBlU
-         xbVJGwuA4ZHNpMYQ1WZ22wAcLzZDoZTJnkRmAvqm6wEUniRPJjt4W1rvQin9zDna6Uf7
-         09FXzkX2W4SCyzfv2dWOvGG4pmAqH7MB5Q4D8XjRvA80FAzdaEuEQDSBySp5Qus87V1z
-         ivrJoRfkSDTTv/BPJcG2OnAHxzFIUDpmnttdoVyJvvz46vkcHeojzwXKMgQ21urLLBd/
-         Q5sgGLJz9jGF+4rkz+TF7KilSYEw26kZFoLRTVoZskHBZSEYLn/fTaRA+GRcYZ0H6V63
-         k92g==
+        bh=E+GKoVKVOccM1dkHK89h18D/i/ewkNsD1XD52+ih008=;
+        b=YY7EmduOKEk8dWB6cII/ef1v9AxvCOr1SnL3fx6/ZNGGk67oKF+qRhYprPqE+3oFN/
+         g+b5/83+y67yADjCpXPuZfvYhZzO5nqqhuQ2fbT5er9pPGlUNj+57ySElgYffNsP2GEZ
+         /umsblvoP1yyVcVXtkDgnfyJPHwp0gJSSyU4JM+8Cao6+mFbXBVQxs3WpD7UQGYHWjN8
+         IpEACg6dKFoEeuH0Xv/5297woB+oPpU/R+8PyR4ouKNfZM1hhgRjcepzNvRhCkShvH2d
+         vwBaFoMikYcXnqYJpqr22e3sJwwV62Nx+0crvK2xH59oKw5Aaq3zZUaLDu/DY+4cT7+o
+         ldlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=J/kXP8SqQiSR4LFSJtIEJPK0TG8hRH/GcTd8e3fRbjs=;
-        b=wMi5O95chkXnPEQ/CII/DJT67Az3prnT4rGq0cs3BQvH3Ys75hSEKt5LK5cskB/SQu
-         xgoOx2eZGwbSR2APBju+gGvpfyFgGAyafWTdnDwFRyQNw2SiiLM00ykhh8SFPccBK4My
-         TB1oEvY2qR/ApRpz9c5hv5pMXy91PxG7z3gjhSaGvI2l9eV338KLdbcb2/yRxPX8/C2B
-         0XMMgSM/zrOm/WvF2LvTG7CNnXMRCz3t7oOqtMsv+gkcpWo+X8N6pjxBGB13BVhUQzJZ
-         8ubVjEqCgDw44g3iRDC0w2mMkw8aSbRF19bp1Syc58fPd6pDx8hW9ukrRbttixmVSUjy
-         lcwA==
-X-Gm-Message-State: AOAM531taf6KRzGT/SvK2LPNuxpn2g7BvVd3ecDkbSiN1jqRHKobRnoo
-        M8s2/GggURSZL1J6+LxDOmLvchQeMpBoiWgruQrNmA==
-X-Google-Smtp-Source: ABdhPJw/NzKKgLkxmtrIipbWj99LyLr319P/VDc5fsuulsUImAm9BAUPdJp4oK6zjqvwsi9z2dk8Kvgekj5hYBQguKE=
-X-Received: by 2002:a02:22c9:: with SMTP id o192mr352411jao.287.1642008183379;
- Wed, 12 Jan 2022 09:23:03 -0800 (PST)
+        bh=E+GKoVKVOccM1dkHK89h18D/i/ewkNsD1XD52+ih008=;
+        b=jOVKUuc8G+eEOOsveAL9nHqp4OtNYXoPY/wucadrJLLdd2ffPqiAkLcsZEaySwzkS1
+         /DkRyGauZVlpSxTEV6ObOYA21NF+ikdTpWkgM1PgVOj3k0yU0EFtRsKFh1SuPzUGOvBe
+         01b7fhH78U3C41hPeKbNNPOX5M3UhddtR9DuOlMy7dZVhXVlEiI8KPQuCHRAoJ94BAg+
+         /4GpvCzydiw/Giik3ejiVoXbiFbdmqxe0ZMn3NodtO014v8VhR+1HtWYu/PyYSagb8v0
+         /GgsdjeveKzFTcPQvY4iACptZJTmhyEHGyDroMFdq3dOfMFOCxoDJyUxEMMHLm5VQd5H
+         xA4Q==
+X-Gm-Message-State: AOAM530iOLoiJOvCXGoXZNcqFLosgq+zU8j81Z/60k8oj6A1MS1YSwtD
+        sLNliYpkgp6i+x1MUNk7zEklttR9Komn9weHZGdFl9eiug==
+X-Google-Smtp-Source: ABdhPJxv2JamqB8KhkNB2ZizekiRoIe5nQT6otoSikAytVEhtNxSH4AwmjXTFL7tWFAgtQSeUywiYRYw/dNvZlQVbRk=
+X-Received: by 2002:a17:907:9687:: with SMTP id hd7mr600079ejc.12.1642008195767;
+ Wed, 12 Jan 2022 09:23:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20211126071305.3733878-1-irogers@google.com>
-In-Reply-To: <20211126071305.3733878-1-irogers@google.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 12 Jan 2022 09:22:51 -0800
-Message-ID: <CAP-5=fU2kEq3T8UCpX0tAmwcGhZ+1h92uRPbzyuLDNpeCD7ffQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] perf pmu-events: Don't lower case MetricExpr
-To:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     eranian@google.com
+References: <tencent_425C87AB28D1FF53823C3047E48A71FC520A@qq.com>
+In-Reply-To: <tencent_425C87AB28D1FF53823C3047E48A71FC520A@qq.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 12 Jan 2022 12:23:04 -0500
+Message-ID: <CAHC9VhT018QQmjYdh1ftOYrMC9ZxMqKtkBU2dceF=PLg2j6rvQ@mail.gmail.com>
+Subject: Re: [PATCH] integrity: check the return value of audit_log_start()
+To:     xkernel.wang@foxmail.com
+Cc:     jmorris@namei.org, serge@hallyn.com,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25, 2021 at 11:13 PM Ian Rogers <irogers@google.com> wrote:
+On Tue, Dec 14, 2021 at 12:39 AM <xkernel.wang@foxmail.com> wrote:
 >
-> This patch changes MetricExpr to be written out in the same case. This
-> enables events in metrics to use modifiers like 'G' which currently
-> yield parse errors when made lower case. To keep tests passing the
-> literal #smt_on is compared in a non-case sensitive way - #SMT_on is
-> present in at least SkylakeX metrics.
-
-Ping.
-
-Thanks,
-Ian
-
-> This patch is on top of:
-> https://lore.kernel.org/lkml/20211124001231.3277836-1-irogers@google.com/
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
 >
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> audit_log_start() returns audit_buffer pointer on success or NULL on
+> error, so it is better to check the return value of it to prevent
+> potential memory access error.
+>
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 > ---
->  tools/perf/pmu-events/jevents.c | 2 --
->  tools/perf/util/expr.c          | 2 +-
->  2 files changed, 1 insertion(+), 3 deletions(-)
+>  security/integrity/integrity_audit.c | 38 +++++++++++++++-------------
+>  1 file changed, 20 insertions(+), 18 deletions(-)
 >
-> diff --git a/tools/perf/pmu-events/jevents.c b/tools/perf/pmu-events/jevents.c
-> index 2e7c4153875b..1a57c3f81dd4 100644
-> --- a/tools/perf/pmu-events/jevents.c
-> +++ b/tools/perf/pmu-events/jevents.c
-> @@ -672,8 +672,6 @@ static int json_events(const char *fn,
->                                 addfield(map, &je.metric_constraint, "", "", val);
->                         } else if (json_streq(map, field, "MetricExpr")) {
->                                 addfield(map, &je.metric_expr, "", "", val);
-> -                               for (s = je.metric_expr; *s; s++)
-> -                                       *s = tolower(*s);
->                         } else if (json_streq(map, field, "ArchStdEvent")) {
->                                 addfield(map, &arch_std, "", "", val);
->                                 for (s = arch_std; *s; s++)
-> diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
-> index cdbab4f959fe..5cd6b9ff2489 100644
-> --- a/tools/perf/util/expr.c
-> +++ b/tools/perf/util/expr.c
-> @@ -397,7 +397,7 @@ double expr__get_literal(const char *literal)
->         static struct cpu_topology *topology;
->         double result = NAN;
+> diff --git a/security/integrity/integrity_audit.c b/security/integrity/integrity_audit.c
+> index 2922005..62785d5 100644
+> --- a/security/integrity/integrity_audit.c
+> +++ b/security/integrity/integrity_audit.c
+> @@ -45,23 +45,25 @@ void integrity_audit_message(int audit_msgno, struct inode *inode,
+>                 return;
 >
-> -       if (!strcmp("#smt_on", literal)) {
-> +       if (!strcasecmp("#smt_on", literal)) {
->                 result =  smt_on() > 0 ? 1.0 : 0.0;
->                 goto out;
+>         ab = audit_log_start(audit_context(), GFP_KERNEL, audit_msgno);
+
+As this is IMA code, it's largely up to Mimi about what she would
+prefer, but I think a much simpler patch would be to just return early
+if ab == NULL, for example:
+
+  ab = audit_log_start( .... , audit_msgno);
+  if (!ab)
+    return;
+
+> -       audit_log_format(ab, "pid=%d uid=%u auid=%u ses=%u",
+> -                        task_pid_nr(current),
+> -                        from_kuid(&init_user_ns, current_uid()),
+> -                        from_kuid(&init_user_ns, audit_get_loginuid(current)),
+> -                        audit_get_sessionid(current));
+> -       audit_log_task_context(ab);
+> -       audit_log_format(ab, " op=%s cause=%s comm=", op, cause);
+> -       audit_log_untrustedstring(ab, get_task_comm(name, current));
+> -       if (fname) {
+> -               audit_log_format(ab, " name=");
+> -               audit_log_untrustedstring(ab, fname);
+> +       if (ab) {
+> +               audit_log_format(ab, "pid=%d uid=%u auid=%u ses=%u",
+> +                               task_pid_nr(current),
+> +                               from_kuid(&init_user_ns, current_uid()),
+> +                               from_kuid(&init_user_ns, audit_get_loginuid(current)),
+> +                               audit_get_sessionid(current));
+> +               audit_log_task_context(ab);
+> +               audit_log_format(ab, " op=%s cause=%s comm=", op, cause);
+> +               audit_log_untrustedstring(ab, get_task_comm(name, current));
+> +               if (fname) {
+> +                       audit_log_format(ab, " name=");
+> +                       audit_log_untrustedstring(ab, fname);
+> +               }
+> +               if (inode) {
+> +                       audit_log_format(ab, " dev=");
+> +                       audit_log_untrustedstring(ab, inode->i_sb->s_id);
+> +                       audit_log_format(ab, " ino=%lu", inode->i_ino);
+> +               }
+> +               audit_log_format(ab, " res=%d errno=%d", !result, errno);
+> +               audit_log_end(ab);
 >         }
+> -       if (inode) {
+> -               audit_log_format(ab, " dev=");
+> -               audit_log_untrustedstring(ab, inode->i_sb->s_id);
+> -               audit_log_format(ab, " ino=%lu", inode->i_ino);
+> -       }
+> -       audit_log_format(ab, " res=%d errno=%d", !result, errno);
+> -       audit_log_end(ab);
+>  }
 > --
-> 2.34.0.rc2.393.gf8c9666880-goog
->
+
+
+
+-- 
+paul moore
+www.paul-moore.com

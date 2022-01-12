@@ -2,198 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2036348BC3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2268848BC3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347567AbiALBMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 20:12:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S1347576AbiALBNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 20:13:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235242AbiALBMX (ORCPT
+        with ESMTP id S235242AbiALBNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 20:12:23 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40BA9C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:12:23 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id p5so1910845ybd.13
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:12:23 -0800 (PST)
+        Tue, 11 Jan 2022 20:13:43 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680CEC061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:13:43 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id z22so3317257edd.12
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:13:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=xjTRFSqJYxYJ0HsDKiZ54zl6ugx3DS6HwynO3TCtbWQ=;
-        b=TVIjjtwN9h32YujM+MZEy4iUZ5h7ltDdZbZiPSD1vzeeFpazkfVIyITMKHz4pL194g
-         ZmX9bNwdqz74RtIQ6tduewnJo8IZH1wqIeU24iy+nzkA/ky1H05wcUm5Nb15LCky1y8O
-         zXYTzFtT/Z1Z7PIPWSCHiRUA9VtwffvzU7Y22P4+LXH1k7qfN2JA+cr6Q2HeD/i3NTEq
-         xs+iCTqMbv3YfOi4xjlUrBDZtDOuhp8scfG0C2XDKV8qfb1NePWklVHI+K96tHKY/9Gu
-         TWvIDMhK9rYbiqwfCOOSqdTVm5jnY/J4PotjEooSCHQN6VQcE9uDltv0X0nwFzUtyNt+
-         3a5w==
+         :cc;
+        bh=ZaT2R5kaQaju0x+UlFgmD6QCY5CgbQuRRz1zHWPJHC4=;
+        b=KwRQEipDQ1RRC11ovJQe096JtPP98rYiCW+xIiGzmIAL1tCH+EtzUwqttlOcM+XYAw
+         ZvWANexjQd1shQQzpJlh0l8FfwFdImhKdrrAJCWGSedclApedKOPE7R970cLKZa5eMFE
+         9gc2gkd7RCatTI5HoQ+jO+Dlxa0Z7IabAfEoM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xjTRFSqJYxYJ0HsDKiZ54zl6ugx3DS6HwynO3TCtbWQ=;
-        b=UkNFeudzu5qlgDHEHOEzSz3sDc98xrb3hBt4ejVvb/SwAIPRfijIhxliOr6/80MQs3
-         yM6gEzj+VR86VX147eZ+hKdwwBnRApEIrAbBwPclx2kxUX4BtrZX4DdLxx4xpKL+hkat
-         Uam/PMDrtXlqHNlN9li0yjbv4IX03l1Z/qjqWmjllYPP4aDLw6OkoxfSMqTjRHSOKy2U
-         vu4Nll9p7/VS8KQz3ViZkrpQ9sPtdX0ykBerSGNEvjDRvdmMJ3+DKKZ3+j0WVcqSo02Y
-         57MZgV3VKwmB3wpVLTzTO290ixoWp7WmIOZcDz1WzQ4crldxrX3cRF3hP93OTqYaE552
-         KjaA==
-X-Gm-Message-State: AOAM533PgnsBJ2SK5my0RiR5AI+rQhlkW/NWjofqO2v5G54KDobAayEL
-        wI63gdfEvLELVIWYnbj4xsggu0sb//8fVkga0VGNsQ==
-X-Google-Smtp-Source: ABdhPJzZvRCw98B6Izrbwi0vXW5WEsiulf6Jw5949i1tVCJKs6+A1LXAxYLEsQ5qpXuRxCROgZN5vKK18jern8XWoKo=
-X-Received: by 2002:a25:c691:: with SMTP id k139mr9527616ybf.327.1641949942208;
- Tue, 11 Jan 2022 17:12:22 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=ZaT2R5kaQaju0x+UlFgmD6QCY5CgbQuRRz1zHWPJHC4=;
+        b=1j3LUoFp2peRE5oi7/G0avPRf9aHiK6FsqupnxeXd8nnVyACIWbUQ/BbjgG+aW81LJ
+         4FOCGmL49ro6Yj7aU/lwjdyAnnWeGZaUFOcDFE/64LSG5G9XbeQWYiIVx+5hBr1s4W1E
+         4BJ1wTQ4+Pk2Qezl/xFdZFZCD91mjZtEHonZYeX6IGkmLdDtwuOnre9Rawjq2HE6aAUz
+         2ODI9xEWvOR1QYQgLZAlsQAjQKq1euEeKO6drW1Xpk3zDquUEiTHoGwISSyKPeN39Jem
+         UD1Q5oM6gzIEHUFj8whx9NI4mn8a9W7oT6YkjyOZ1+ReFK7mu0HROBFxAUC8wivKkg6I
+         swQA==
+X-Gm-Message-State: AOAM532QRsesD1GALj+lHcNbZl7yjlKjae8zAErc1yPC9l/IwtvKP0T3
+        YR3uI1HdFsMqHi0v/ewQJ35SusyATZ9jAcr3vm8=
+X-Google-Smtp-Source: ABdhPJw+Bq8wlPLNBDQcbLMiM2qTsOFjfXwApB9c0SckAEksCvVktCagZmzj5cfzuU1rPPhtPs59Qw==
+X-Received: by 2002:a17:907:d11:: with SMTP id gn17mr3512909ejc.252.1641950021828;
+        Tue, 11 Jan 2022 17:13:41 -0800 (PST)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id 16sm4063748ejx.149.2022.01.11.17.13.40
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 17:13:40 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso616548wme.1
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:13:40 -0800 (PST)
+X-Received: by 2002:a05:600c:4c94:: with SMTP id g20mr4584839wmp.26.1641950020220;
+ Tue, 11 Jan 2022 17:13:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20220104235148.21320-1-hridya@google.com> <49b29081-42df-ffcd-8fea-bd819499ff1b@amd.com>
- <CA+wgaPMWT0s0KNo_wM7jU+bH626OAVtn77f7_WX=E1wyU8aBzg@mail.gmail.com>
- <3a29914d-0c7b-1f10-49cb-dbc1cc6e52b0@amd.com> <CA+wgaPOmRTAuXiSRRmj-s=3d2W6ny=EMFtroOShYKrp0u+xF+g@mail.gmail.com>
- <CA+wgaPO81R+NckRt0nzZazxs9fqSC_V_wyChU=kcMqJ01WxXNw@mail.gmail.com>
- <5a6bd742-10ca-2e88-afaa-3744731c2c0c@amd.com> <CA+wgaPPdCMPi1t+ObyO4+cqsk7Xx3E=K5BOPM37=QAviQDAfmw@mail.gmail.com>
- <CAKMK7uGRUrP+0PcY-yxTweb_K_QacHJchgPoa0K9K_kwGO+K3g@mail.gmail.com>
- <934ac18c-d53e-beeb-48c1-015a5936e713@amd.com> <Yd1nJqmHXULnccNF@kroah.com> <3610ecd0-03c7-2cae-8f36-f8fd555757b0@amd.com>
-In-Reply-To: <3610ecd0-03c7-2cae-8f36-f8fd555757b0@amd.com>
-From:   Hridya Valsaraju <hridya@google.com>
-Date:   Tue, 11 Jan 2022 17:11:45 -0800
-Message-ID: <CA+wgaPP9DDSuOjJjK6F7XF_=UpP=Li+3-3Pa9Nr-c2qEUr=RBQ@mail.gmail.com>
-Subject: Re: [PATCH] dma-buf: Move sysfs work out of DMA-BUF export/release path
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        john.stultz@linaro.org, surenb@google.com, kaleshsingh@google.com,
-        tjmercier@google.com, keescook@google.com
+References: <20220111193855.GA13612@embeddedor>
+In-Reply-To: <20220111193855.GA13612@embeddedor>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 11 Jan 2022 17:13:24 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgTEj354w942PW88eP6BLu8=XREzUaeo1zx816OUFLe2A@mail.gmail.com>
+Message-ID: <CAHk-=wgTEj354w942PW88eP6BLu8=XREzUaeo1zx816OUFLe2A@mail.gmail.com>
+Subject: Re: [GIT PULL] Enable -Wcast-function-type for 5.17-rc1
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 3:43 AM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
+On Tue, Jan 11, 2022 at 11:32 AM Gustavo A. R. Silva
+<gustavoars@kernel.org> wrote:
 >
->
-> Am 11.01.22 um 12:16 schrieb Greg Kroah-Hartman:
-> > On Tue, Jan 11, 2022 at 11:58:07AM +0100, Christian K=C3=B6nig wrote:
-> >>>> This is also not a problem due to the high number of DMA-BUF
-> >>>> exports during launch time, as even a single export can be delayed f=
-or
-> >>>> an unpredictable amount of time. We cannot eliminate DMA-BUF exports
-> >>>> completely during app-launches and we are unfortunately seeing repor=
-ts
-> >>>> of the exporting process occasionally sleeping long enough to cause
-> >>>> user-visible jankiness :(
-> >>>>
-> >>>> We also looked at whether any optimizations are possible from the
-> >>>> kernfs implementation side[1] but the semaphore is used quite extens=
-ively
-> >>>> and it looks like the best way forward would be to remove sysfs
-> >>>> creation/teardown from the DMA-BUF export/release path altogether. W=
-e
-> >>>> have some ideas on how we can reduce the code-complexity in the
-> >>>> current patch. If we manage to
-> >>>> simplify it considerably, would the approach of offloading sysfs
-> >>>> creation and teardown into a separate thread be acceptable Christian=
-?
-> >> At bare minimum I suggest to use a work_struct instead of re-inventing=
- that
-> >> with kthread.
-> >>
-> >> And then only put the exporting of buffers into the background and not=
- the
-> >> teardown.
-> >>
-> >>>> Thank you for the guidance!
-> >>> One worry I have here with doing this async that now userspace might
-> >>> have a dma-buf, but the sysfs entry does not yet exist, or the dma-bu=
-f
-> >>> is gone, but the sysfs entry still exists. That's a bit awkward wrt
-> >>> semantics.
+> Please, pull the following patch that globally enables
+> -Wcast-function-type.
 
+This seems to have been in linux-next, so hopefully that means that
+all cases that used to warn are actually fixed and there are no ugly
+surprises waiting..
 
-Thank you all for your thoughts and guidance. You are correct that we
-will be trading accuracy for performance here. One precedence we could
-find was in the case of RSS accounting where SPLIT_RSS_COUNTING caused
-the accounting to have less overhead but also made it less accurate.
-If you would prefer that it not be the default case, we can make it
-configurable by putting it behind a config instead.
-
-
-> >>>
-> >>> Also I'm pretty sure that if we can hit this, then other subsystems
-> >>> using kernfs have similar problems, so trying to fix this in kernfs
-> >>> with slightly more fine-grained locking sounds like a much more solid
-> >>> approach. The linked patch talks about how the big delays happen due
-> >>> to direct reclaim, and that might be limited to specific code paths
-> >>> that we need to look at? As-is this feels a bit much like papering
-> >>> over kernfs issues in hackish ways in sysfs users, instead of tacklin=
-g
-> >>> the problem at its root.
-> >> Which is exactly my feeling as well, yes.
-> > More and more people are using sysfs/kernfs now for things that it was
-> > never designed for (i.e. high-speed statistic gathering).  That's not
-> > the fault of kernfs, it's the fault of people thinking it can be used
-> > for stuff like that :)
->
-> I'm starting to get the feeling that we should maybe have questioned
-> adding sysfs files for each exported DMA-buf a bit more. Anyway, to late
-> for that. We have to live with the consequences.
->
-> > But delays like this is odd, tearing down sysfs attributes should
-> > normally _never_ be a fast-path that matters to system throughput.  So
-> > offloading it to a workqueue makes sense as the attributes here are for
-> > objects that are on the fast-path.
->
-> That's what is puzzling me as well. As far as I understood Hridya
-> tearing down things is not the problem, because during teardown we
-> usually have a dying task where it's usually not much of a problem if
-> the corpse is around for another few milliseconds until everything is
-> cleaned up.
-
-
-We have seen instances where the last reference to the buffer is not
-dropped by the dying process but by Surfaceflinger[1].
-
-
->
-> The issue happens during creation of the sysfs attribute and that's
-> extremely odd because if this waits for reclaim then drivers will
-> certainly wait for reclaim as well. See we need a few bytes for the
-> sysfs attribute, but drivers usually need a few megabytes for the
-> DMA-buf backing store before they can even export the DMA-buf.
-
-
-We have been working off of traces collected from the devices of end
-users to analyze the issue and currently don't have sufficient
-information to understand why exactly direct reclaim affects sysfs the
-way we are seeing it on the traces. We are actively trying to
-reproduce the issue consistently to perform more experiments to
-understand it. The DMA-BUF system heap on the Android Common Kernel
-keeps a pool of pre-allocated pages in reserve and we are guessing
-that it could possibly be the reason why we have not seen similar
-issues with direct reclaim earlier. We will update the thread once we
-have more information.
-
-We are also working on a leaner version of the patch that uses
-work_struct instead.
-
-Regards,
-Hridya
-
-[1] : https://source.android.com/devices/graphics/surfaceflinger-windowmana=
-ger
-
-
->
-> So something doesn't add up in the rational for this problem.
->
-> Regards,
-> Christian.
->
-> >
-> > thanks,
-> >
-> > greg k-h
->
+              Linus

@@ -2,93 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B72BC48C747
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB9248C74F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354628AbiALPgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:36:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33490 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349515AbiALPgh (ORCPT
+        id S244925AbiALPhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:37:35 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:42906 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1354643AbiALPhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:36:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94E656193B;
-        Wed, 12 Jan 2022 15:36:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA45C36AE5;
-        Wed, 12 Jan 2022 15:36:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642001796;
-        bh=uTJTttzqqqZPjkI09aLeLUGr5DSV9ce4+aCAyJpdblg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ciqaKSgWS61sGO2OnlkX7fx3671UexqzZ4lde/1MqfCw1iI993dDInBqtdsCXa+4M
-         7TPX6Rm3fX4DN6fPAoCtsxjp1vC2kn9JygQvJekjHEvEz2nr8+5ZzDbOT2S3OQSe3c
-         a68ALXvVY/3rUSM+ZaKNoRpMWiaV5keEYodwMNhrEd79PpPCWcKmK4Zz6Qz88Jr2mg
-         QRckd5LUZGxhtuSsH2e19G1QRuQxI20df10iVx2eD19TYiXJMBVqM/v0x6MQ0XM6Ys
-         3qfye7VZ+xByWF7p/JkMCN5xXjzYCfKw6VMw3SNpmdOxD+mKwl1sxfIDO6R/09UmOD
-         ojL06gyv6hllw==
-Date:   Wed, 12 Jan 2022 16:36:27 +0100
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 09/11] dt-bindings: PCI: mvebu: Update information
- about intx interrupts
-Message-ID: <20220112163627.4e975d24@thinkpad>
-In-Reply-To: <20220112151814.24361-10-pali@kernel.org>
-References: <20220105150239.9628-1-pali@kernel.org>
-        <20220112151814.24361-1-pali@kernel.org>
-        <20220112151814.24361-10-pali@kernel.org>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 12 Jan 2022 10:37:20 -0500
+X-UUID: a38c246a3e774bc7b3003fcd183cc0eb-20220112
+X-UUID: a38c246a3e774bc7b3003fcd183cc0eb-20220112
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1065663607; Wed, 12 Jan 2022 23:37:15 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 12 Jan 2022 23:37:14 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Jan
+ 2022 23:37:13 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 12 Jan 2022 23:37:13 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
+        <narmstrong@baylibre.com>, <robert.foss@linaro.org>,
+        <andrzej.hajda@intel.com>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <p.zabel@pengutronix.de>
+CC:     <xji@analogixsemi.com>, <jitao.shi@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [v8, PATCH 0/3] force hsa hbp hfp packets multiple of lanenum to avoid screen shift
+Date:   Wed, 12 Jan 2022 23:36:36 +0800
+Message-ID: <20220112153639.12343-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jan 2022 16:18:12 +0100
-Pali Roh=C3=A1r <pali@kernel.org> wrote:
+Changes since v7:
+ - Rebase to kernel 5.16
+ - Add tags of reviewed-by and acked-by.
+ - Add detailed commit message for flag "hs_packet_end_aligned" in DSI common driver.
 
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/pci/mvebu-pci.txt | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/pci/mvebu-pci.txt b/Docume=
-ntation/devicetree/bindings/pci/mvebu-pci.txt
-> index 24225852bce0..6d022a9d36ee 100644
-> --- a/Documentation/devicetree/bindings/pci/mvebu-pci.txt
-> +++ b/Documentation/devicetree/bindings/pci/mvebu-pci.txt
-> @@ -81,6 +81,11 @@ and the following optional properties:
->  - reset-gpios: optional GPIO to PERST#
->  - reset-delay-us: delay in us to wait after reset de-assertion, if not
->    specified will default to 100ms, as required by the PCIe specification.
-> +- interrupt-names: list of interrupt names, supported are:
-> +   - "intx" - interrupt line triggered by one of the legacy interrupt
-> +- interrupts or interrupts-extended: List of the interrupt sources which
-> +  corresponding to the "interrupt-names". If non-empty then also additio=
-nal
-> +  'interrupt-controller' subnode must be defined.
-> =20
->  Example:
-> =20
+Changes since v6:
+ - Add "bool hs_packet_end_aligned" in "struct mipi_dsi_device" to control the dsi aligned.
+ - Config the "hs_packet_end_aligned" in ANX7725 .attach().
 
-Empty commit message. At least add something like this:
+Changes since v5:
+ - Search the anx7625 compatible as flag to control dsi output aligned.
 
-Document the following additional properties in the mvebu-pci DT
-binding:
-- interrupt-names
-- interrupts / interrupts-extended
+Changes since v4:
+ - Move "dt-bindings: drm/bridge: anx7625: add force_dsi_end_without_null" before
+   "drm/mediatek: force hsa hbp hfp packets multiple of lanenum to avoid".
+ - Retitle "dt-bindings: drm/bridge: anx7625: add force_dsi_end_without_null".
 
+Rex-BC Chen (3):
+  drm/dsi: transfer DSI HS packets ending at the same time
+  drm/mediatek: implement the DSI hs packets aligned
+  drm/bridge: anx7625: config hs packets end aligned to avoid screen shift
 
-Marek
+ drivers/gpu/drm/bridge/analogix/anx7625.c |  1 +
+ drivers/gpu/drm/mediatek/mtk_dsi.c        | 10 ++++++++++
+ include/drm/drm_mipi_dsi.h                |  3 +++
+ 3 files changed, 14 insertions(+)
+
+-- 
+2.18.0
+

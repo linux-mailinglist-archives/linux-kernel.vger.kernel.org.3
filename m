@@ -2,157 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A03748CD44
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F88248CD48
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357787AbiALUuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 15:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S1357810AbiALUvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 15:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357780AbiALUtP (ORCPT
+        with ESMTP id S1357777AbiALUvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 15:49:15 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5731FC061757
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 12:49:15 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id p14so6022483plf.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 12:49:15 -0800 (PST)
+        Wed, 12 Jan 2022 15:51:44 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D77CC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 12:51:44 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id o3so7472164pjs.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 12:51:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=7W9xjq/mp4aCvm206IRSxrwEOD/OCQl74SQ0cZUg6Zk=;
-        b=G3BfIgpjh8dLLN9x19avToNGSRfF/ePsf9nlDhPAc0Ehj3HS5/gMO/ZXBJxrXL201M
-         +DW1BQ1fSpf8G9JpajYzKjS7Ofsy4kTGeWUF1yCcL4lszLSl0wx9Ok6rPUAGhaII5Kfx
-         /FLCIJVVW9fE4ObKwgK7nNjhDytHcS1l5nc2g=
+        bh=oP2xECK3jqBdvkGX0hGsK3lqWf4wO8IHTIIQlzl9xV0=;
+        b=go0VIqj3WoGgVNblUj4B4WLTzg0PxEjFmQwtbzqnMOJC/F9Bo/wFDWoyLE0dbsjdHB
+         coldoa/fGsktjsQjiCKnHHJE+EiXAfz3OCArE7wRQTF8YQfx0bvJzyr1K7D/yk8KjGXe
+         rya2Zi8dKNG+opPse71wY+dyqIsh7bczGHRPo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=7W9xjq/mp4aCvm206IRSxrwEOD/OCQl74SQ0cZUg6Zk=;
-        b=ZVzny2XMlsWoJSWgRsLjy+rRJzZAnc7P0DUhwYICeqR2ITWpBB9UKza3uMxuZ3fYgR
-         ph9sWR/TJvP+yhwbtpy1Sg6Efp556+v4A4brZxg+90TQIURmoO6HAZ2efMotOnqh2Koc
-         5/LSEk27VsVwYKB2SKXregICOQ2+dvGAlCQZ0LbQGcaFxPLcr9PcZ1In19FPl6Ug+Tdj
-         /0W6dIj96fhoRQekFlxcLs1URbYyL2XyI/OCFJYdBvKFo0Z7hYt8ZLqoIfep2aTzsqe4
-         305JrVbaEJp47+PL58CWUeoOhq/Jn1FXg+AohzXJGzFK7DoN1stsSDYkZYAFOC8MuhIu
-         ky5A==
-X-Gm-Message-State: AOAM531yEb8Cg5uY88eYzLOoPa5JJsVf2LtpDaEH3bmVG9FyjqODyJsn
-        +KOE0++hyAhIZEWO1+u0qcqjww==
-X-Google-Smtp-Source: ABdhPJy/L9qAeACUYTmweyUFS9pNNxRrKwqLON0XCFhLcLmffYCohvW4vQnr/k0oyGFlb3Kr0h84uQ==
-X-Received: by 2002:a17:902:b201:b0:149:4b25:332d with SMTP id t1-20020a170902b20100b001494b25332dmr1201061plr.17.1642020554893;
-        Wed, 12 Jan 2022 12:49:14 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id mw8sm487817pjb.42.2022.01.12.12.49.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 12:49:14 -0800 (PST)
-Date:   Wed, 12 Jan 2022 12:49:13 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Leon Romanovsky <leon@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] RDMA/mlx5: Use memset_after() to zero struct mlx5_ib_mr
-Message-ID: <202201121247.BB9F6E9@keescook>
-References: <20211118203138.1287134-1-keescook@chromium.org>
- <YZpPr2P11LJNtrIm@unreal>
- <20211207184729.GA118570@nvidia.com>
- <202112071138.64C168D@keescook>
- <20211207194525.GL6385@nvidia.com>
+        bh=oP2xECK3jqBdvkGX0hGsK3lqWf4wO8IHTIIQlzl9xV0=;
+        b=kt2SpLgqDevByOW1uA6xcOu1V2mmq75BOsnf2YeYxe1Qiwird9VxT1oSEld3pNfVEj
+         DwlvjMrLCT4RGUQiVLiWf9bAST2AUw4f7c9zjHKREOflyh/jxm5r5w68496V9rKzuL0r
+         6yoTf2JmPOhuBrIyCo7p0Zo8tfmQrCe+RA8gf+MUpIl2ccCbAQLt4CKbMvyNNbiLfF+X
+         7I7mmfkA7Z+Tq6u1v0XJZELx9bylGgCX+H8AX/IB5+ZR+BB4Ui81eHA2TsgJLpgnWmX2
+         4pS5crjPaW1XbqFqm8b8C1/OdJlYksKC61NRBG0svuWP5zXgDq3cz4mjt+kTZLCqjUWE
+         4wEA==
+X-Gm-Message-State: AOAM530FroBij5Etcnc90JMg/1pFFSFu7aFQO/AxnuboIdr3mzxGr08Z
+        s2fGv9MxM9M7zQz/GI5sTeFTsw==
+X-Google-Smtp-Source: ABdhPJxnNSOW9L3MOKWhvTl5dDqgf06igl93+P7KOL/G2UMdszRHDjsCTcZlPgKLzKrTN0wPIapNjQ==
+X-Received: by 2002:a65:6114:: with SMTP id z20mr1259114pgu.438.1642020703986;
+        Wed, 12 Jan 2022 12:51:43 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:f6eb:5b26:28c:1ca5])
+        by smtp.gmail.com with UTF8SMTPSA id gt22sm490651pjb.35.2022.01.12.12.51.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 12:51:43 -0800 (PST)
+Date:   Wed, 12 Jan 2022 12:51:41 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Felipe Balbi <balbi@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        linux-usb@vger.kernel.org, Roger Quadros <rogerq@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v19 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for
+ onboard USB hub
+Message-ID: <Yd8/XdMuAVW0fM6e@google.com>
+References: <20220112191048.837236-1-mka@chromium.org>
+ <20220112111028.v19.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
+ <CAE-0n51VZobLjRGZFYquEMgDutfmsAC0j8mj6cM7fvK7Myeczw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211207194525.GL6385@nvidia.com>
+In-Reply-To: <CAE-0n51VZobLjRGZFYquEMgDutfmsAC0j8mj6cM7fvK7Myeczw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 03:45:25PM -0400, Jason Gunthorpe wrote:
-> On Tue, Dec 07, 2021 at 11:41:07AM -0800, Kees Cook wrote:
-> > On Tue, Dec 07, 2021 at 02:47:29PM -0400, Jason Gunthorpe wrote:
-> > > On Sun, Nov 21, 2021 at 03:54:55PM +0200, Leon Romanovsky wrote:
-> > > > On Thu, Nov 18, 2021 at 12:31:38PM -0800, Kees Cook wrote:
-> > > > > In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> > > > > field bounds checking for memset(), avoid intentionally writing across
-> > > > > neighboring fields.
-> > > > > 
-> > > > > Use memset_after() to zero the end of struct mlx5_ib_mr that should
-> > > > > be initialized.
-> > > > > 
-> > > > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > > >  drivers/infiniband/hw/mlx5/mlx5_ib.h | 5 ++---
-> > > > >  1 file changed, 2 insertions(+), 3 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-> > > > > index e636e954f6bf..af94c9fe8753 100644
-> > > > > +++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-> > > > > @@ -665,8 +665,7 @@ struct mlx5_ib_mr {
-> > > > >  	/* User MR data */
-> > > > >  	struct mlx5_cache_ent *cache_ent;
-> > > > >  	struct ib_umem *umem;
-> > > > > -
-> > > > > -	/* This is zero'd when the MR is allocated */
-> > > > > +	/* Everything after umem is zero'd when the MR is allocated */
-> > > > >  	union {
-> > > > >  		/* Used only while the MR is in the cache */
-> > > > >  		struct {
-> > > > > @@ -718,7 +717,7 @@ struct mlx5_ib_mr {
-> > > > >  /* Zero the fields in the mr that are variant depending on usage */
-> > > > >  static inline void mlx5_clear_mr(struct mlx5_ib_mr *mr)
-> > > > >  {
-> > > > > -	memset(mr->out, 0, sizeof(*mr) - offsetof(struct mlx5_ib_mr, out));
-> > > > > +	memset_after(mr, 0, umem);
-> > > > 
-> > > > I think that it is not equivalent change and you need "memset_after(mr, 0, cache_ent);"
-> > > > to clear umem pointer too.
-> > > 
-> > > Kees?
-> > 
-> > Oops, sorry, I missed the ealrier reply!
-> > 
-> > I don't think that matches -- the original code wipes from the start of
-> > "out" to the end of the struct. "out" is the first thing in the union
-> > after "umem", so "umem" was not wiped before. I retained that behavior
-> > ("wipe everything after umem").
-> > 
-> > Am I misunderstanding the desired behavior here?
+On Wed, Jan 12, 2022 at 12:47:15PM -0800, Stephen Boyd wrote:
+> Quoting Matthias Kaehlcke (2022-01-12 11:10:48)
+> > Add nodes for the onboard USB hub on trogdor devices. Remove the
+> > 'always-on' property from the hub regulator, since the regulator
+> > is now managed by the onboard_usb_hub driver.
+> >
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > ---
 > 
-> Ah, it is this patch:
+> One question below
 > 
-> commit f0ae4afe3d35e67db042c58a52909e06262b740f
-> Author: Alaa Hleihel <alaa@nvidia.com>
-> Date:   Mon Nov 22 13:41:51 2021 +0200
-> 
->     RDMA/mlx5: Fix releasing unallocated memory in dereg MR flow
-> 
-> Which moved umem into the union that is causing the confusion
-> 
-> It hasn't quite made it to a rc release yet, so I suppose the answer
-> is to rebase this on that then it is as Leon  says about cache_ent
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-The umem patch appears to have been reverted. Should I send an updated
-patch for memset_after()? I think it would simply be:
+Thanks!
 
-diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-index e3c33be9c5a0..a58f69b19705 100644
---- a/drivers/infiniband/hw/mlx5/mlx5_ib.h
-+++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-@@ -667,7 +667,7 @@ struct mlx5_ib_mr {
- 	struct mlx5_cache_ent *cache_ent;
- 	struct ib_umem *umem;
- 
--	/* This is zero'd when the MR is allocated */
-+	/* Everything after umem is zero'd when MR allocated */
- 	union {
- 		/* Used only while the MR is in the cache */
- 		struct {
-@@ -719,7 +719,7 @@ struct mlx5_ib_mr {
- /* Zero the fields in the mr that are variant depending on usage */
- static inline void mlx5_clear_mr(struct mlx5_ib_mr *mr)
- {
--	memset(mr->out, 0, sizeof(*mr) - offsetof(struct mlx5_ib_mr, out));
-+	memset_after(mr, 0, umem);
- }
- 
- static inline bool is_odp_mr(struct mlx5_ib_mr *mr)
+> >  .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts | 19 ++++++++-----------
+> >  .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts | 12 +++++-------
+> >  .../dts/qcom/sc7180-trogdor-pompom-r1.dts     | 11 ++++-------
+> >  .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts | 19 ++++++++-----------
+> >  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 19 ++++++++++++++++++-
+> >  5 files changed, 43 insertions(+), 37 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> > index d4f4441179fc..cd31460b3bd6 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+> > @@ -202,7 +202,6 @@ pp3300_hub: pp3300-hub {
+> >                 pinctrl-names = "default";
+> >                 pinctrl-0 = <&en_pp3300_hub>;
+> >
+> > -               regulator-always-on;
+> >                 regulator-boot-on;
+> 
+> Is regulator-boot-on necessary?
 
--- 
-Kees Cook
+It tells the kernel that the regulator is already on at boot, and avoids an
+off-on cycle that would happen otherwise (internal reference: b/185972336).

@@ -2,76 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CAA48C7C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F0E48C7C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354901AbiALQA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243611AbiALQA4 (ORCPT
+        id S1354906AbiALQBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:01:10 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:45046 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354904AbiALQBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:00:56 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FC2C06173F;
-        Wed, 12 Jan 2022 08:00:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=a4RIhYLvj6dtCIsbKBQiK7ICIr+8JBXqAej9bojJf5U=; b=JJdIuf9iYn0J00n8xs8HqcPuUj
-        qegSAtyPzsNSae4+aOtQk0DrvXy0jWLqwAjnOWffLGmuP8Ob/o+o5NWghKzU2FLnhTfX6gT9IRv3H
-        e1S8c88W09JKM1pxYZ/n2/rbEhGstuGMonlhiqQQ9kSiXHit0A+xeJ5YRC7huDpcm34/VebixaDYG
-        Xw5Fo7OvTVfa76IcCm18zCAZ6T3YSAZ1AHnDACp4xjBlfFK589XjgZRRyPY3MhzBXlbSoNxqvkoGO
-        TF7weNEVOEQ7B0cC7LLbihysmo69fqPEEs/yw87+gV2zW+FF8iDvhVMLm/yE2uUv8XOp3SA8dnA/E
-        ObIfanrw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7g3R-0032J4-N0; Wed, 12 Jan 2022 16:00:53 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     gregkh@linuxfoundation.org, bp@suse.de
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v2] firmware_loader: simplfy builtin or module check
-Date:   Wed, 12 Jan 2022 08:00:53 -0800
-Message-Id: <20220112160053.723795-1-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.31.1
+        Wed, 12 Jan 2022 11:01:06 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3048F218E7;
+        Wed, 12 Jan 2022 16:01:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642003265; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EQmq30EueErdT4273jGK5qYGu6Nc+PXgleFJQRKvmq0=;
+        b=1XSqxQ93aR70hxul495A+TGZEf/C3xyfSAb9x5naKKcRGq9xnU/EZkYoaSYSWbY1qLbw4Z
+        2iXj1A23pwzc/AyH+G9DaqB5K8WXzdM1zhy3N9MAmr8iBcTFcpRLAxtQjCI6ZOkjxw81H0
+        7rSgoX9KtTtJvZrEc4hmM3mdkcupvdM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642003265;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EQmq30EueErdT4273jGK5qYGu6Nc+PXgleFJQRKvmq0=;
+        b=SaxcYLFICPWhub+W3LKCHEWc0uMXedb2Yhg47pSjtirkJerwlhBB4ztrM7QrLl0Hm1+ijQ
+        806dQfKa2ZqZflBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DBC5113B77;
+        Wed, 12 Jan 2022 16:01:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XRW7NED73mE7NwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 12 Jan 2022 16:01:04 +0000
+Message-ID: <705ac4ab-34fb-e60f-aceb-d46e1913a28e@suse.cz>
+Date:   Wed, 12 Jan 2022 17:01:04 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v4 18/66] xen: Use vma_lookup() in privcmd_ioctl_mmap()
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-19-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211201142918.921493-19-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The existing check is outdated and confuses developers. Use the
-already existing IS_REACHABLE() defined on kconfig.h which makes
-the intention much clearer.
+On 12/1/21 15:29, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> 
+> vma_lookup() walks the VMA tree for a specific value, find_vma() will
+> search the tree after walking to a specific value.  It is more efficient
+> to only walk to the requested value as this case requires the address to
+> equal the vm_start.
 
-Reported-by: Borislav Petkov <bp@alien8.de>
-Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- include/linux/firmware.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+By that you mean the privcmd_ioctl_mmap() code checks msg->va !=
+vma->vm_start and thus we know it's never interested the next vma, that
+find_vma() can return if no vma covers the address?
 
-diff --git a/include/linux/firmware.h b/include/linux/firmware.h
-index 3b057dfc8284..ec2ccfebef65 100644
---- a/include/linux/firmware.h
-+++ b/include/linux/firmware.h
-@@ -34,7 +34,7 @@ static inline bool firmware_request_builtin(struct firmware *fw,
- }
- #endif
- 
--#if defined(CONFIG_FW_LOADER) || (defined(CONFIG_FW_LOADER_MODULE) && defined(MODULE))
-+#if IS_REACHABLE(CONFIG_FW_LOADER)
- int request_firmware(const struct firmware **fw, const char *name,
- 		     struct device *device);
- int firmware_request_nowarn(const struct firmware **fw, const char *name,
--- 
-2.34.1
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+
+> ---
+>  drivers/xen/privcmd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/xen/privcmd.c b/drivers/xen/privcmd.c
+> index 3369734108af..ad17166b0ef6 100644
+> --- a/drivers/xen/privcmd.c
+> +++ b/drivers/xen/privcmd.c
+> @@ -282,7 +282,7 @@ static long privcmd_ioctl_mmap(struct file *file, void __user *udata)
+>  						     struct page, lru);
+>  		struct privcmd_mmap_entry *msg = page_address(page);
+>  
+> -		vma = find_vma(mm, msg->va);
+> +		vma = vma_lookup(mm, msg->va);
+>  		rc = -EINVAL;
+>  
+>  		if (!vma || (msg->va != vma->vm_start) || vma->vm_private_data)
 

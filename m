@@ -2,72 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D22948C0CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0E448C0D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351969AbiALJQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 04:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238051AbiALJQB (ORCPT
+        id S1351980AbiALJQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 04:16:27 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4403 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238051AbiALJQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:16:01 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D44C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 01:16:01 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id g4so216130ilq.9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 01:16:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=YvhLqtXFXpXGpbWvWzgYRL+OsAY+IIBJ61D3XIKUj4s=;
-        b=VMSEZgcNZKsxoA7Vb9wLzKSkbByFT8x8MubfVqTop9OqeIXN3ea5ROvYZ4qoNE0TK0
-         rwi03BdpR+0VpwF+KrCbqQQcXqs7poLDRN3zNorOgYVgK3zAR1Vek1vLvC7JxslVQjkw
-         3OIXAw9ZSjI7CdpToGrpUpsMIKCx7EnVx6uE8ineeK6JGZrcHm5Q1s9DAQ9WkwDMYyFk
-         KyPxbNxOZ13WlV1CwnJO2L1YIMm1UEyI0rOWj+x7TG6MGYdDygb8EVjY//CSm1l2fClF
-         3CaCwT+n4J95flSvfhBgp+nPmM7t2YqpjG0DJhgFrLhgA+qYvb5P6q1nMSR6IFhm6OPN
-         4u1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=YvhLqtXFXpXGpbWvWzgYRL+OsAY+IIBJ61D3XIKUj4s=;
-        b=pd/X1oWLE3IfRTwb7IQv9UDgBmpj0JL2+FAq3XgSrmXUCgQN0jiyQw2Nr0cWfNjs3M
-         NJ0xbuan/A3p2pIhTWGWsfCd+qN1MRo2IQfDAdLRCpScLcDRDJInFEzcvRBLywzQyVI2
-         iH8E7xn72xltHGml8UCOVKw8Vwv5tZ8KDFSNsyYPZZaAq7aHyMvRDXHWMYQOafqlSRLQ
-         cwkpIz95dgEuu8ZESlp4ki/eX9R1B350c/n8Ose7ITBgEa9iw/vFFXe7EULrA+JXGy10
-         f8+hVm97JgFRxv2rUfku9j02dLScrcc8Ki7tDte1nzJrm8VDFciKuyDYKpIn2Gm6S16j
-         s6eA==
-X-Gm-Message-State: AOAM533PT0umxTkVFWkVopKr761pc1+jFJU6DXLA/G4RX5B7y42xzZM6
-        2BsVX7/Ojiq0O0iePTJjMmzftCPmdNIyUtZtHQ==
-X-Google-Smtp-Source: ABdhPJzllaFnqyLWjww7LtwpBqGKthDyqbmVgAZglalzhDKD6QSr0Xp11r56j8eXsEgl5Wslp/9Co6zi5ggTO8TAR/w=
-X-Received: by 2002:a05:6e02:1a26:: with SMTP id g6mr970212ile.52.1641978960274;
- Wed, 12 Jan 2022 01:16:00 -0800 (PST)
+        Wed, 12 Jan 2022 04:16:26 -0500
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JYhgg0J3Cz685HY;
+        Wed, 12 Jan 2022 17:13:35 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 12 Jan 2022 10:16:23 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.020;
+ Wed, 12 Jan 2022 10:16:23 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+CC:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Subject: RE: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+Thread-Topic: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+Thread-Index: AQHYBxWUAJoIvMeqLk2UYoD6PZRMZ6xeNfyAgADgBLA=
+Date:   Wed, 12 Jan 2022 09:16:22 +0000
+Message-ID: <b37f9c0e9bf941f0b778c6949538835d@huawei.com>
+References: <20220111180318.591029-1-roberto.sassu@huawei.com>
+ <ab29dd6f-1301-e012-8898-9c739ca511a3@maciej.szmigiero.name>
+In-Reply-To: <ab29dd6f-1301-e012-8898-9c739ca511a3@maciej.szmigiero.name>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.33]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Reply-To: zahirikeen@gmail.com
-Sender: ali.wa1234ara@gmail.com
-Received: by 2002:a05:6638:35aa:0:0:0:0 with HTTP; Wed, 12 Jan 2022 01:15:59
- -0800 (PST)
-From:   Zahiri Keen <zahirikeen2@gmail.com>
-Date:   Wed, 12 Jan 2022 09:15:59 +0000
-X-Google-Sender-Auth: y7co6ZPpcN43ZsqmqVdEIatQpNI
-Message-ID: <CA+0F4TEyt5imwenyd+GJWuVK5ifVsu-Vd_s1=0fh=-_zPWnuyQ@mail.gmail.com>
-Subject: Greetings.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good Day,
-
-I know this email might come to you as a surprise because is coming
-from someone you haven=E2=80=99t met with before.
-
-I am Mr. Zahiri Keen, the bank manager with BOA bank i contact you for
-a deal relating to the funds which are in my position I shall furnish
-you with more detail once your response.
-
-Regards,
+PiBGcm9tOiBNYWNpZWogUy4gU3ptaWdpZXJvIFttYWlsdG86bWFpbEBtYWNpZWouc3ptaWdpZXJv
+Lm5hbWVdDQo+IFNlbnQ6IFR1ZXNkYXksIEphbnVhcnkgMTEsIDIwMjIgOTozMyBQTQ0KPiBPbiAx
+MS4wMS4yMDIyIDE5OjAzLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0KPiA+IFN1cHBvcnQgZm9yIFBH
+UCBrZXlzIGFuZCBzaWduYXR1cmVzIHdhcyBwcm9wb3NlZCBieSBEYXZpZCBsb25nIHRpbWUgYWdv
+LA0KPiA+IGJlZm9yZSB0aGUgZGVjaXNpb24gb2YgdXNpbmcgUEtDUyM3IGZvciBrZXJuZWwgbW9k
+dWxlcyBzaWduYXR1cmVzDQo+ID4gdmVyaWZpY2F0aW9uIHdhcyBtYWRlLiBBZnRlciB0aGF0LCB0
+aGVyZSBoYXMgYmVlbiBub3QgZW5vdWdoIGludGVyZXN0IHRvDQo+ID4gc3VwcG9ydCBQR1AgdG9v
+Lg0KPiA+DQo+ID4gTGF0ZWx5LCB3aGVuIGRpc2N1c3NpbmcgYSBwcm9wb3NhbCBvZiBpbnRyb2R1
+Y2luZyBmc3Zlcml0eSBzaWduYXR1cmVzIGluDQo+ID4gRmVkb3JhIFsxXSwgZGV2ZWxvcGVycyBl
+eHByZXNzZWQgdGhlaXIgcHJlZmVyZW5jZSBvbiBub3QgaGF2aW5nIGEgc2VwYXJhdGUNCj4gPiBr
+ZXkgZm9yIHNpZ25pbmcsIHdoaWNoIHdvdWxkIGNvbXBsaWNhdGUgdGhlIG1hbmFnZW1lbnQgb2Yg
+dGhlIGRpc3RyaWJ1dGlvbi4NCj4gPiBUaGV5IHdvdWxkIGJlIG1vcmUgaW4gZmF2b3Igb2YgdXNp
+bmcgdGhlIHNhbWUgUEdQIGtleSwgY3VycmVudGx5IHVzZWQgZm9yDQo+ID4gc2lnbmluZyBSUE0g
+aGVhZGVycywgYWxzbyBmb3IgZmlsZS1iYXNlZCBzaWduYXR1cmVzIChub3Qgb25seSBmc3Zlcml0
+eSwgYnV0DQo+ID4gYWxzbyBJTUEgb25lcykuDQo+IA0KPiBBcmVuJ3QgUEdQIGtleXMgc2ltcGx5
+IFJTQSAvIEVDQyAvIEVkRFNBIGtleXMgd2l0aCBhZGRpdGlvbmFsIG1ldGFkYXRhPw0KPiBDYW4n
+dCB0aGV5IGJlIHVud3JhcHBlZCBmcm9tIHRoZWlyIChjb21wbGV4KSBQR1AgZm9ybWF0IGluIHVz
+ZXJzcGFjZSBhbmQNCj4gbG9hZGVkIHJhdyBpbnRvIHRoZSBrZXJuZWwsIGluIGEgc2ltaWxhciB3
+YXkgYXMgdGhleSBhcmUgc29tZXRpbWVzIHVzZWQNCj4gZm9yIFNTSCBhdXRoZW50aWNhdGlvbj8N
+Cg0KUHJvYmFibHksIHRoaXMgd291bGQgYmUgcG9zc2libGUgYnkgaW50cm9kdWNpbmcgYSBuZXcg
+YXN5bW1ldHJpYw0Ka2V5IHN1YnR5cGUgcGFyc2luZyBQR1Aga2V5cyBhbmQgc2lnbmF0dXJlcyBp
+biBhIG1vcmUgc2ltcGxlIGZvcm1hdCwNCmFmdGVyIGNvbnZlcnNpb24gYnkgdXNlciBzcGFjZS4g
+QnV0IHN0aWxsLCBhIHBhcnNlciB3b3VsZCBiZSByZXF1aXJlZC4NClRvIGJlIGhvbmVzdCwgSSB3
+b3VsZCBwcmVmZXIgdG8gaW1wbGVtZW50IChhY3R1YWxseSBEYXZpZCBkaWQpIGENCnBhcnNlciBm
+b2xsb3dpbmcgYW4gUkZDLCB0aGFuIGRldmVsb3BpbmcgYSBuZXcgb25lLg0KDQo+IFRoaXMgd2ls
+bCBzYXZlIHVzIGZyb20gaGF2aW5nIHRvIGFkZCBjb21wbGV4IHBhcnNlcnMgKGEgd2VsbC1rbm93
+biBzb3VyY2UNCj4gb2YgYnVncykgaW50byB0aGUga2VybmVsIC0gSSBndWVzcyB0aGVyZSBhcmVu
+J3QgYW55IHBsYW5zIHRvIGFkZCBhbg0KPiBpbi1rZXJuZWwgUEdQIFdlYiBvZiBUcnVzdCBpbXBs
+ZW1lbnRhdGlvbi4NCg0KSSBleHRlbnNpdmVseSB0ZXN0ZWQgdGhlIGltcGxlbWVudGF0aW9uIHdp
+dGggYW4gYWQtaG9jIGZhdWx0IGluamVjdG9yLA0KdG8gc2VlIGlmIHRoZSBjb2RlIGNhbiBjb3Jy
+ZWN0bHkgaGFuZGxlIGVycm9ycy4gSSBhbHNvIGRldmVsb3BlZCBhDQpmdXp6ZXIgdG8gY29ycnVw
+dCB0aGUgZGF0YSBiZWZvcmUgaXQgaXMgcmVhZCBieSB0aGUga2VybmVsLiBGaW5hbGx5LA0KSSBj
+aGVja2VkIHRoYXQgdGhlcmUgYXJlIG5vdCBtZW1vcnkgbGVha3MuIEJ1dCBJIGFncmVlLCB0aGVy
+ZSBjb3VsZA0Kc3RpbGwgYmUgYnVncy4NCg0KSWYgeW91IG1lYW4gdGhhdCBhIGtleSBjYW4gYmUg
+YWRkZWQgdG8gdGhlIGtlcm5lbCBpZiBpcyB2b3VjaGVkIGZvcg0KYnkgYW5vdGhlciBrZXkgaW4g
+dGhlIGJ1aWx0LWluIGtleXJpbmcsIEkgYWN0dWFsbHkgaW1wbGVtZW50ZWQgdGhpcw0KKHdhcyBt
+aXNzaW5nIGluIHRoZSBvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbikuIFNvbWUga2V5cmluZ3MsIGUu
+Zy4gLmltYSwNCmhhdmUgdGhpcyByZXN0cmljdGlvbi4NCg0KVGhlIHdheSB0aGlzIHdvcmtzIGlz
+IHRoYXQsIHdoZW5ldmVyIHlvdSBhZGQgYSBQR1Aga2V5IHRvIHRoZQ0Ka2VybmVsLCB0aGUgcGFy
+c2VyIHRha2VzIG5vdCBvbmx5IHRoZSBwdWJsaWMga2V5IGFuZCB0aGUgdXNlciBJRCwNCmJ1dCBh
+bHNvIGl0cyBzaWduYXR1cmUgYnkgdGhlIHNhbWUgb3IgYW5vdGhlciBQR1Aga2V5Lg0KDQpUaGUg
+c2lnbmF0dXJlIGlzIHZlcmlmaWVkIHdoZW4gdGhlIGtleSBpcyBhZGRlZCB0byB0aGUga2V5cmlu
+Zw0Kd2l0aCB0aGF0IHJlc3RyaWN0aW9uLCBhbmQgb25seSBpZiB0aGUgdmVyaWZpY2F0aW9uIGlz
+IHN1Y2Nlc3NmdWwNCnRoZSBrZXkgY2FuIGJlIGFkZGVkLg0KDQpSb2JlcnRvDQoNCkhVQVdFSSBU
+RUNITk9MT0dJRVMgRHVlc3NlbGRvcmYgR21iSCwgSFJCIDU2MDYzDQpNYW5hZ2luZyBEaXJlY3Rv
+cjogTGkgUGVuZywgWmhvbmcgUm9uZ2h1YQ0KDQo+IFRoYW5rcywNCj4gTWFjaWVqDQo=

@@ -2,246 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE0E48CC02
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E403648CC07
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345123AbiALTbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:31:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
+        id S1344236AbiALTeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242447AbiALTbN (ORCPT
+        with ESMTP id S231425AbiALTeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:31:13 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B3DC061751
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:31:12 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id l13so2559224qvz.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:31:12 -0800 (PST)
+        Wed, 12 Jan 2022 14:34:24 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DAEC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:34:23 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id z23-20020a25ad97000000b00611938ef715so6381953ybi.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:34:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KPUZPC7mXCjPccDHGkZXT/St+JP8rkpXgLzmJC/vgmw=;
-        b=S8Jxp6bnUFN1BWPzxUiK5ka/41HWamlWdabBFBawIBZ789+Pkoy6jRmhTQbgDPRW0L
-         X79mLKs3wSwdqzRu5EIcPr1+zg/J750tdo2KfMF/6xYjxOs8KBgr5lhcOeNTz/ia+XSh
-         YTrtbeTffff8WEtlm7s5bhDzfXuCELxJzmKEL+JZjO3wh2quZjJXYrkUGGk0lYv2PMQW
-         DYotx9DXwm8tv/mwSA36chwFIxOaEtlOjmLP9Iwro2+zceNwH5pf1nYvbYvP4FoOAO2W
-         80Fx/cG48QddDt3LCKYH9/RsORwCss33ojxuQyULPhaU+EcO60fuIdtrS9ClQ/wZEuGr
-         PRIQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=kdM0s6QqOxdtaUmFhX2PE5X5ddjgitMB71Dm4q7m87s=;
+        b=V8+gjWwjm4Ky6SLe5A5IuD83oIh+f1aYiVoKyfRZoe1PTQN+9mnMtuGcCOH+pH2686
+         WSyE1eG+6msHIAif2qdiOo9qYmiRhfcSGHYVV4kNzEuaRbTgHDHgwNyttE75FN4BG0wN
+         HPTKoxOzp+YzVDsVBhg8f2CIfh1S9FTssSsjgWa5FkE2iz6BO3aIe7VtNSdPgoG05sHj
+         Ikru9OqvIMi4qJDPJytjmaek0ugP9G4EVJ73EGuKhxsW6QSW22Nm0IYVS2KXxSJuiK0t
+         4Utb5IKYTsVHc6/xsgjZRLrXfBPbC2m+GCaTq86R3iLXcZtyWd+O7lOVBvgDnRe9mSpg
+         0ahA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KPUZPC7mXCjPccDHGkZXT/St+JP8rkpXgLzmJC/vgmw=;
-        b=Sx+4745ryYa8dTa43vCeaqwX0O8Nlez+pqUZkF2ZOeYpIV7eInaUgyyfMdOsvfMBto
-         n4/isEVhujK3GaeGdT0sAgwjl2ejrcGVfEX1y3OLj3bNChPkVq86uMKLODIBqoJee9hl
-         cUZhhjcoKmWpMpZVLPy7CP+lDT8oFN2cB5TIDd/Vdb71WFLCFvkN0AUrM408O29zbDlt
-         JyWHXWsIKml41Je41a2kviubv5zehA4C4YPYUnwv1XORNZpo1KmZ6XU+78O2U1lWNxlA
-         oetjiTp0bPVtfAoI+6qM9AWkY42GlOmkvuSg4Z/MHchJqQkMr8DjGTqXxTeX+0hlaFYc
-         GYYQ==
-X-Gm-Message-State: AOAM533DbcwmghasvI4/KERC2984/MMiLG83gx050GCx4kzO0n3gBoH5
-        jrU1mO7syHrqM4BG7H+mvw==
-X-Google-Smtp-Source: ABdhPJxPoEb6FawqYUheCv1D9WhofObClNu7d3NLeJ0x/+cf95VgiON48fDy1oGwWTnVAptcmSEliQ==
-X-Received: by 2002:ad4:5ded:: with SMTP id jn13mr1122262qvb.112.1642015871965;
-        Wed, 12 Jan 2022 11:31:11 -0800 (PST)
-Received: from gabell (209-6-122-159.s2973.c3-0.arl-cbr1.sbo-arl.ma.cable.rcncustomer.com. [209.6.122.159])
-        by smtp.gmail.com with ESMTPSA id x9sm530599qta.10.2022.01.12.11.31.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 11:31:11 -0800 (PST)
-Date:   Wed, 12 Jan 2022 14:31:08 -0500
-From:   Masayoshi Mizuma <msys.mizuma@gmail.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     wens@kernel.org, Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>, tsbogend@alpha.franken.de,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>, ito-yuichi@fujitsu.com,
-        mpe@ellerman.id.au, x86@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Douglas Anderson <dianders@chromium.org>,
-        Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
-        julien.thierry.kdev@gmail.com,
-        Jason Wessel <jason.wessel@windriver.com>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Miller <davem@davemloft.net>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v7 0/7] arm64: Add framework to turn an IPI as NMI
-Message-ID: <Yd8sfP0IXN4KiLuP@gabell>
-References: <1604317487-14543-1-git-send-email-sumit.garg@linaro.org>
- <CAGb2v66mVoWiCibjq25d3Z8OvbWNO9p+vMo761RJLiD-BqVbqw@mail.gmail.com>
- <CAFA6WYN-wpQ86ik5FeAhimCcCoRAs9_g3BGL8CiSUmHxfeCSbg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFA6WYN-wpQ86ik5FeAhimCcCoRAs9_g3BGL8CiSUmHxfeCSbg@mail.gmail.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=kdM0s6QqOxdtaUmFhX2PE5X5ddjgitMB71Dm4q7m87s=;
+        b=mKslwO6yMoZyB9IU3Y7q3jfTWfyqsC1D9MbOSyUwD7KzxTlubC1O9MMWHcD3WrCr/W
+         uiavX5Z+QrHQnS/czcOvPomchzzOeU7ICN9nbgLyE3R5cR4LgBLM4H9iptTfpB9DJAc9
+         SUFcUEw1xw/rEB4D+Qkl7n6T2nnn7usPhfoHPjitnkbjQyG3mGSOfO9y37V1IU3htjmL
+         UDG2hxMghlAClwYod3pk6I7kgt73QPECmlDOS1TEV5ksRYLOByWIV8MMl4XRwWzPMWa/
+         o/xEHltf+WBQecWV08bIWqLT9edasz+QyIp7YBogl1gUuhObJNupgBqkbQ/xHUg1eBnO
+         iBbg==
+X-Gm-Message-State: AOAM5300yXTD1H08/e9OGrxjLfFkc7Qrgh/EUR9JgmNvRScUWq0winIf
+        2vTMaJer5ecvJXu9jaANPoiTaDWurs0=
+X-Google-Smtp-Source: ABdhPJyhqR54GLN1gtH44CVTwYRuxSEbv2EJmzrb6mL02jpxrlWdB9SUIKuAODZ7wOG5g8Qqzoa/FDbqZ+E=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:ddf2:9aea:6994:df79])
+ (user=haoluo job=sendgmr) by 2002:a05:6902:114b:: with SMTP id
+ p11mr1926345ybu.578.1642016063252; Wed, 12 Jan 2022 11:34:23 -0800 (PST)
+Date:   Wed, 12 Jan 2022 11:31:44 -0800
+Message-Id: <20220112193152.3058718-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH RESEND RFC bpf-next v1 0/8] Pinning bpf objects outside bpffs
+From:   Hao Luo <haoluo@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 07, 2021 at 11:29:29AM +0530, Sumit Garg wrote:
-> On Fri, 25 Jun 2021 at 20:26, Chen-Yu Tsai <wens@kernel.org> wrote:
-> >
-> > On Mon, Nov 2, 2020 at 7:46 PM Sumit Garg <sumit.garg@linaro.org> wrote:
-> > >
-> > > With pseudo NMIs support available its possible to configure SGIs to be
-> > > triggered as pseudo NMIs running in NMI context. And kernel features
-> > > such as:
-> > > - NMI backtrace can leverage IPI turned as NMI to get a backtrace of CPU
-> > >   stuck in hard lockup using magic SYSRQ.
-> > > - kgdb relies on NMI support to round up CPUs which are stuck in hard
-> > >   lockup state with interrupts disabled.
-> > >
-> > > This patch-set adds framework to turn an IPI as NMI which can be triggered
-> > > as a pseudo NMI which in turn invokes registered NMI handlers.
-> > >
-> > > After this patch-set we should be able to get a backtrace for a CPU
-> > > stuck in HARDLOCKUP. Have a look at an examples below from a hard lockup
-> > > testcase run on Developerbox:
-> > >
-> > > $ echo HARDLOCKUP > /sys/kernel/debug/provoke-crash/DIRECT
-> > >
-> > > NMI backtrace:
-> > > ==============
-> > >
-> > > # Issue Magic SysRq to dump backtrace
-> > >
-> > > [  376.894502] NMI backtrace for cpu 8
-> > > [  376.894506] CPU: 8 PID: 555 Comm: bash Not tainted 5.9.0-rc3-00740-g06ff047-dirty #242
-> > > [  376.894510] Hardware name: Socionext SynQuacer E-series DeveloperBox, BIOS build #73 Apr  6 2020
-> > > [  376.894514] pstate: 40000005 (nZcv daif -PAN -UAO BTYPE=--)
-> > > [  376.894517] pc : lkdtm_HARDLOCKUP+0x8/0x18
-> > > [  376.894520] lr : lkdtm_do_action+0x24/0x30
-> > > [  376.894524] sp : ffff800012cebd20
-> > > [  376.894527] pmr_save: 00000060
-> > > [  376.894530] x29: ffff800012cebd20 x28: ffff000875ae8000
-> > > [  376.894540] x27: 0000000000000000 x26: 0000000000000000
-> > > [  376.894550] x25: 000000000000001a x24: ffff800012cebe40
-> > > [  376.894560] x23: 000000000000000b x22: ffff800010fc5040
-> > > [  376.894569] x21: ffff000878b61000 x20: ffff8000113b2870
-> > > [  376.894579] x19: 000000000000001b x18: 0000000000000010
-> > > [  376.894588] x17: 0000000000000000 x16: 0000000000000000
-> > > [  376.894598] x15: ffff000875ae8470 x14: 00000000000002ad
-> > > [  376.894613] x13: 0000000000000000 x12: 0000000000000000
-> > > [  376.894622] x11: 0000000000000007 x10: 00000000000009c0
-> > > [  376.894631] x9 : ffff800012ceba80 x8 : ffff000875ae8a20
-> > > [  376.894641] x7 : ffff00087f6b3280 x6 : ffff00087f6b3200
-> > > [  376.894651] x5 : 0000000000000000 x4 : ffff00087f6a91f8
-> > > [  376.894660] x3 : ffff00087f6b0120 x2 : 1aa310cec69eb500
-> > > [  376.894670] x1 : 0000000000000000 x0 : 0000000000000060
-> > > [  376.894679] Call trace:
-> > > [  376.894683]  lkdtm_HARDLOCKUP+0x8/0x18
-> > > [  376.894686]  direct_entry+0x124/0x1c0
-> > > [  376.894689]  full_proxy_write+0x60/0xb0
-> > > [  376.894693]  vfs_write+0xf0/0x230
-> > > [  376.894696]  ksys_write+0x6c/0xf8
-> > > [  376.894699]  __arm64_sys_write+0x1c/0x28
-> > > [  376.894703]  el0_svc_common.constprop.0+0x74/0x1f0
-> > > [  376.894707]  do_el0_svc+0x24/0x90
-> > > [  376.894710]  el0_sync_handler+0x180/0x2f8
-> > > [  376.894713]  el0_sync+0x158/0x180
-> > >
-> > > KGDB:
-> > > =====
-> > >
-> > > # Enter kdb via Magic SysRq
-> > >
-> > > [6]kdb> btc
-> > > btc: cpu status: Currently on cpu 6
-> > > Available cpus: 0-5(I), 6, 7(I), 8, 9-23(I)
-> > > <snip>
-> > > Stack traceback for pid 555
-> > > 0xffff000875ae8000      555      554  1    8   R  0xffff000875ae89c0  bash
-> > > CPU: 8 PID: 555 Comm: bash Not tainted 5.9.0-rc3-00740-g06ff047-dirty #242
-> > > Hardware name: Socionext SynQuacer E-series DeveloperBox, BIOS build #73 Apr  6 2020
-> > > Call trace:
-> > >  dump_backtrace+0x0/0x1a0
-> > >  show_stack+0x18/0x28
-> > >  dump_stack+0xc0/0x11c
-> > >  kgdb_cpu_enter+0x648/0x660
-> > >  kgdb_nmicallback+0xa0/0xa8
-> > >  ipi_kgdb_nmicallback+0x24/0x30
-> > >  ipi_nmi_handler+0x48/0x60
-> > >  handle_percpu_devid_fasteoi_ipi+0x74/0x88
-> > >  generic_handle_irq+0x30/0x48
-> > >  handle_domain_nmi+0x48/0x80
-> > >  gic_handle_irq+0x18c/0x34c
-> > >  el1_irq+0xcc/0x180
-> > >  lkdtm_HARDLOCKUP+0x8/0x18
-> > >  direct_entry+0x124/0x1c0
-> > >  full_proxy_write+0x60/0xb0
-> > >  vfs_write+0xf0/0x230
-> > >  ksys_write+0x6c/0xf8
-> > >  __arm64_sys_write+0x1c/0x28
-> > >  el0_svc_common.constprop.0+0x74/0x1f0
-> > >  do_el0_svc+0x24/0x90
-> > >  el0_sync_handler+0x180/0x2f8
-> > >  el0_sync+0x158/0x180
-> > > <snip>
-> > >
-> > > Changes in v7:
-> > > - Add a new library function: kgdb_smp_call_nmi_hook() to expose fallback
-> > >   mechanism to arch specific code.
-> > > - Addressed other misc comments from Daniel.
-> > >
-> > > Changes in v6:
-> > > - Two new patches: #4 and #6 which adds runtime fallback framework for
-> > >   sysrq backtrace and kgdb roundup features.
-> > > - Reversed order of NMI backtrace and kgdb roundup feaure patches.
-> > > - Addressed other misc. comments from Marc.
-> > > - I haven't picked any tags from v5 since I think there is major rework
-> > >   involved. Masayoshi, could you please confirm if these features still
-> > >   work for you?
-> > >
-> > > Changes in v5:
-> > > - Rebased to head of upstream master.
-> > > - Remove redundant invocation of ipi_nmi_setup().
-> > > - Addressed misc. comments.
-> > >
-> > > Changes in v4:
-> > > - Move IPI NMI framework to a separate file.
-> > > - Get rid of hard-coded IPI_CALL_NMI_FUNC allocation.
-> > > - Add NMI backtrace support leveraged via magic SYSRQ.
-> > >
-> > > Changes in v3:
-> > > - Rebased to Marc's latest IPIs patch-set [1].
-> > >
-> > > [1] https://lkml.org/lkml/2020/9/1/603
-> > >
-> > > Changes since RFC version [1]:
-> > > - Switch to use generic interrupt framework to turn an IPI as NMI.
-> > > - Dependent on Marc's patch-set [2] which turns IPIs into normal
-> > >   interrupts.
-> > > - Addressed misc. comments from Doug on patch #4.
-> > > - Posted kgdb NMI printk() fixup separately which has evolved since
-> > >   to be solved using different approach via changing kgdb interception
-> > >   of printk() in common printk() code (see patch [3]).
-> > >
-> > > [1] https://lkml.org/lkml/2020/4/24/328
-> > > [2] https://lkml.org/lkml/2020/5/19/710
-> > > [3] https://lkml.org/lkml/2020/5/20/418
-> > >
-> > > Sumit Garg (7):
-> > >   arm64: Add framework to turn IPI as NMI
-> > >   irqchip/gic-v3: Enable support for SGIs to act as NMIs
-> > >   arm64: smp: Assign and setup an IPI as NMI
-> > >   nmi: backtrace: Allow runtime arch specific override
-> > >   arm64: ipi_nmi: Add support for NMI backtrace
-> > >   kgdb: Expose default CPUs roundup fallback mechanism
-> > >   arm64: kgdb: Roundup cpus using IPI as NMI
-> >
-> > Tested-by: Chen-Yu Tsai <wens@csie.org>
-> >
-> > on an ROC-RK3399-PC.
-> 
-> Thanks for testing this feature.
-> 
-> -Sumit
+Bpffs is a pseudo file system that persists bpf objects. Previously
+bpf objects can only be pinned in bpffs, this patchset extends pinning
+to allow bpf objects to be pinned (or exposed) to other file systems.
 
-Hello Sumit,
+In particular, this patchset allows pinning bpf objects in kernfs. This
+creates a new file entry in the kernfs file system and the created file
+is able to reference the bpf object. By doing so, bpf can be used to
+customize the file's operations, such as seq_show.
 
-How is this patch series going?
+As a concrete usecase of this feature, this patchset introduces a
+simple new program type called 'bpf_view', which can be used to format
+a seq file by a kernel object's state. By pinning a bpf_view program
+into a cgroup directory, userspace is able to read the cgroup's state
+from file in a format defined by the bpf program.
 
-- Masa
+Different from bpffs, kernfs doesn't have a callback when a kernfs node
+is freed, which is problem if we allow the kernfs node to hold an extra
+reference of the bpf object, because there is no chance to dec the
+object's refcnt. Therefore the kernfs node created by pinning doesn't
+hold reference of the bpf object. The lifetime of the kernfs node
+depends on the lifetime of the bpf object. Rather than "pinning in
+kernfs", it is "exposing to kernfs". We require the bpf object to be
+pinned in bpffs first before it can be pinned in kernfs. When the
+object is unpinned from bpffs, their kernfs nodes will be removed
+automatically. This somehow treats a pinned bpf object as a persistent
+"device".
+
+We rely on fsnotify to monitor the inode events in bpffs. A new function
+bpf_watch_inode() is introduced. It allows registering a callback
+function at inode destruction. For the kernfs case, a callback that
+removes kernfs node is registered at the destruction of bpffs inodes.
+For other file systems such as sockfs, bpf_watch_inode() can monitor the
+destruction of sockfs inodes and the created file entry can hold the bpf
+object's reference. In this case, it is truly "pinning".
+
+File operations other than seq_show can also be implemented using bpf.
+For example, bpf may be of help for .poll and .mmap in kernfs.
+
+Patch organization:
+ - patch 1/8 and 2/8 are preparations. 1/8 implements bpf_watch_inode();
+   2/8 records bpffs inode in bpf object.
+ - patch 3/8 and 4/8 implement generic logic for creating bpf backed
+   kernfs file.
+ - patch 5/8 and 6/8 add a new program type for formatting output.
+ - patch 7/8 implements cgroup seq_show operation using bpf.
+ - patch 8/8 adds selftest.
+
+Hao Luo (8):
+  bpf: Support pinning in non-bpf file system.
+  bpf: Record back pointer to the inode in bpffs
+  bpf: Expose bpf object in kernfs
+  bpf: Support removing kernfs entries
+  bpf: Introduce a new program type bpf_view.
+  libbpf: Support of bpf_view prog type.
+  bpf: Add seq_show operation for bpf in cgroupfs
+  selftests/bpf: Test exposing bpf objects in kernfs
+
+ include/linux/bpf.h                           |   9 +-
+ include/uapi/linux/bpf.h                      |   2 +
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/bpf_view.c                         | 190 ++++++++++++++
+ kernel/bpf/bpf_view.h                         |  25 ++
+ kernel/bpf/inode.c                            | 219 ++++++++++++++--
+ kernel/bpf/inode.h                            |  54 ++++
+ kernel/bpf/kernfs_node.c                      | 165 ++++++++++++
+ kernel/bpf/syscall.c                          |   3 +
+ kernel/bpf/verifier.c                         |   6 +
+ kernel/trace/bpf_trace.c                      |  12 +-
+ tools/include/uapi/linux/bpf.h                |   2 +
+ tools/lib/bpf/libbpf.c                        |  21 ++
+ .../selftests/bpf/prog_tests/pinning_kernfs.c | 245 ++++++++++++++++++
+ .../selftests/bpf/progs/pinning_kernfs.c      |  72 +++++
+ 15 files changed, 995 insertions(+), 32 deletions(-)
+ create mode 100644 kernel/bpf/bpf_view.c
+ create mode 100644 kernel/bpf/bpf_view.h
+ create mode 100644 kernel/bpf/inode.h
+ create mode 100644 kernel/bpf/kernfs_node.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/pinning_kernfs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/pinning_kernfs.c
+
+-- 
+2.34.1.448.ga2b2bfdf31-goog
+

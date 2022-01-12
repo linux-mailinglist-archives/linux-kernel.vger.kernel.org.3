@@ -2,116 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4958048C1E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F4748C1E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349700AbiALKBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 05:01:44 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:58422
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239501AbiALKBH (ORCPT
+        id S1349625AbiALKCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 05:02:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349547AbiALKBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 05:01:07 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4105D4031B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:00:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641981655;
-        bh=vkZ3shAsrts82aZQTD9Odzm7oGr7rqF0WKQDjTKTwd8=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=S7HG6Oi3Xdgd9IQ6IB9xO4/FlOuXdwlL8p1wzr9IojJNAoPTeYo67CeiQ4Mm/5j0d
-         msHHEZ4yo7CPwhZd5krDR22Iw0HHyfhXOiqZvcEQoEJWkxQzKTcFci4W94vJy+H51p
-         eoxvOHwkhT74ZwkxvVVoS+W6bPbrzwkiU4Dnwak0G7EJhoUZw36e7W6i91NpR4vcCD
-         8E5bfO1LETYSLd2qNVh7GM9ye3rrzf+JfQYguNy5W8gr2o3SK2o4nlhxYQuPjd/YVI
-         y2vjmevgk2iPzNt3rm2YzD/Y/sWoMdNvgHKDni/q0BqdlQOehu/wKWqsCIhyQBfspA
-         4dCcUxe13IWkg==
-Received: by mail-ed1-f72.google.com with SMTP id m8-20020a056402510800b003f9d22c4d48so1766949edd.21
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:00:55 -0800 (PST)
+        Wed, 12 Jan 2022 05:01:35 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F127C061757
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:01:34 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id u21so7722680edd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:01:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=T5yvoHZXf5sRcIr28nRZ918Ghx2PDXySAnpXVpTEeyo=;
+        b=IFnPU1h6tQdehMMmQirBcyt3PUDYvOYItJ7Gc2qM2IvjLICD+XK0IF0sEZnFTQ6aHg
+         n2++qzfy9+/2SstO58HcFlkSXrXky9rMusNMOMWIom7d7hQeTilkwcspTekZ2lKPzg4r
+         0xpEifFX8O1cCdxr8NyqVOr4UxU7UKQscxxcc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vkZ3shAsrts82aZQTD9Odzm7oGr7rqF0WKQDjTKTwd8=;
-        b=0eMT0CCbXONNlihETBJ4Nbz3VoZGZoGdMhwCmrL19hcAEFXsKid4CYsru+Nsvhmxf5
-         JhfxlVj0J2ng7G21G1tLQQL9RKasMVeaG1PDWlLRGFW/nCcc8QUiDjIIe9RHIGSriV1c
-         F6vBrXIQzOk4CpE9Y5Y9tTcy1rsI7O0gT5D2xaa7KKCcn/uFeTnPxMXML8uvwcGZFCwh
-         2BAqA2jfrdIf8UvW33+3AFRfISu7sJKOGJVksv7AMuLgR5VTM5kMOflZrAw/4ua6xhSL
-         k7uN7FEiaVThQMNAkkCdyDBIatFTWkswb628Zk4NwDmXb9WuediX2ZvJwy9Wein1CHlK
-         X73g==
-X-Gm-Message-State: AOAM530tj7xuysxTVLs3JKGb/egVwvmh/obqYlIRMPHevJrpaKTuwfJ7
-        C2uKlOM5Inek8koGp9RzCD5WYWOm9bY5qv5yquOy9umDaiVMKoURN93ssTEx8H6tgFHYRLXI2Ik
-        Qb5jzLYm+DlKoemF9/j8nOHwbIxuMJ8dOQMepNUmMGw==
-X-Received: by 2002:a17:907:7295:: with SMTP id dt21mr6749935ejc.453.1641981654827;
-        Wed, 12 Jan 2022 02:00:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxr7AHmnhL8e6o/jXCWgESvLqrOYDTSQTTXkoaFmOMriyvAZ3QFfDrNia5S1pL4Lx8Q/Cv4WQ==
-X-Received: by 2002:a17:907:7295:: with SMTP id dt21mr6749917ejc.453.1641981654645;
-        Wed, 12 Jan 2022 02:00:54 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id hb11sm4311083ejc.33.2022.01.12.02.00.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 02:00:53 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Pratyush Yadav <p.yadav@ti.com>, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 4/4] spi: s3c64xx: allow controller-data to be optional
-Date:   Wed, 12 Jan 2022 11:00:46 +0100
-Message-Id: <20220112100046.68068-5-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com>
-References: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=T5yvoHZXf5sRcIr28nRZ918Ghx2PDXySAnpXVpTEeyo=;
+        b=YeIA7g07jbw2d5ggHc3uBu7yC2u7QLOaSeMw5yC6dPAeB9yWvC/FvMifkCEOmvAvfb
+         LjdBp1wKLLffxJz7wKDV1xApVxZXsxx8VLpM0JHUeMsgM2sT53oD9iK/7d7uV8ku53GA
+         DnAgtOddCiyRR4C2HUczpQlWUqJsjdrwG4vEv+jSUD7G9vuhbkPKihV3xqjjx4OA5fWZ
+         F9iu5vnYMzUHhqC/2WV4Fc7jUX7Fploz7W/28kAllB1VEvvFCJY2Ei3ddhoMORMViCEp
+         XeQ/2WD+JtWc1vGG6Wq75entSBu/WwiZyQtxNe0zls073uLitz3Fym+JkhnakHnI1NNR
+         hh9A==
+X-Gm-Message-State: AOAM5337fbqF8UzIwQFJZrQSvYMeoKzNJx0w99fmtf++YeH3FlyEdqiV
+        i1EeaSv4FWMm+IdCjEDkKKRuukJadPQQFzhLoBTTZg==
+X-Google-Smtp-Source: ABdhPJzBCKeQImyBz9RVwKOY2T54xBFQQK7yDRACZFnbHnlAKzoMjJH8dsFKhcz6QDIsGnLn67HJYp60Nwck4y9NKCk=
+X-Received: by 2002:a17:906:bc56:: with SMTP id s22mr7649762ejv.760.1641981692859;
+ Wed, 12 Jan 2022 02:01:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211222090552.25972-1-jose.exposito89@gmail.com> <20211222090552.25972-7-jose.exposito89@gmail.com>
+In-Reply-To: <20211222090552.25972-7-jose.exposito89@gmail.com>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Wed, 12 Jan 2022 15:31:21 +0530
+Message-ID: <CAMty3ZD_R+Tzab-qcWEcbTKVCKq3pNTi7Mr7903Vu9a9M5EefQ@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] drm/stm: ltdc: Drop format_mod_supported function
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     contact@emersion.fr, airlied@linux.ie,
+        alexandre.torgue@foss.st.com, benjamin.gaignard@linaro.org,
+        linux-stm32@st-md-mailman.stormreply.com, marex@denx.de,
+        linux-imx@nxp.com, intel-gfx@lists.freedesktop.org,
+        tzimmermann@suse.de, s.hauer@pengutronix.de,
+        rodrigo.vivi@intel.com, kernel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, yannick.fertre@foss.st.com,
+        linux-kernel@vger.kernel.org, philippe.cornu@foss.st.com,
+        mcoquelin.stm32@gmail.com, dmitry.baryshkov@linaro.org,
+        shawnguo@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Samsung SoC SPI driver requires to provide controller-data node
-for each of SPI peripheral device nodes.  Make this controller-data node
-optional, so DTS could be simpler.
+On Wed, Dec 22, 2021 at 2:36 PM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gm=
+ail.com> wrote:
+>
+> The "drm_plane_funcs.format_mod_supported" can be removed in favor of
+> the default implementation.
+>
+> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+> ---
 
-Suggested-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- drivers/spi/spi-s3c64xx.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 8755cd85e83c..769d958a2f86 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -796,16 +796,14 @@ static struct s3c64xx_spi_csinfo *s3c64xx_get_slave_ctrldata(
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	data_np = of_get_child_by_name(slave_np, "controller-data");
--	if (!data_np) {
--		dev_err(&spi->dev, "child node 'controller-data' not found\n");
--		return ERR_PTR(-EINVAL);
--	}
--
- 	cs = kzalloc(sizeof(*cs), GFP_KERNEL);
--	if (!cs) {
--		of_node_put(data_np);
-+	if (!cs)
- 		return ERR_PTR(-ENOMEM);
-+
-+	data_np = of_get_child_by_name(slave_np, "controller-data");
-+	if (!data_np) {
-+		dev_info(&spi->dev, "child node 'controller-data' not found, using defaults\n");
-+		return cs;
- 	}
- 
- 	of_property_read_u32(data_np, "samsung,spi-feedback-delay", &fb_delay);
--- 
-2.32.0
-
+Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
+Tested-by: Jagan Teki <jagan@amarulasolutions.com> # i.Core STM32MP1

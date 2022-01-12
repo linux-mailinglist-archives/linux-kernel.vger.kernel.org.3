@@ -2,122 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A669848C372
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6EC348C375
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352961AbiALLpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 06:45:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239294AbiALLpt (ORCPT
+        id S1352973AbiALLrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 06:47:04 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:42599 "EHLO
+        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352963AbiALLq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 06:45:49 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936DFC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:45:49 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id m6so5512177ybc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:45:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=1oAWQHZqJjxGspd66xUUwdpCocjq4RF4bRYfPMa0RgM=;
-        b=LCxuNDTBSrsTxNHCIoEpEJhzykzI1PqU0Qu7+y1h/2eirkEaNcUWcRKGGAWaV79ru6
-         Xv6at+0+iUtpOEe63PUlXlbArXuMTPWdZ+/I9QGm1/Tn/3qseWRDveOL4FnagSPN1A/T
-         WQA5lRrrNPqlTtbO2930mHMbqr0IbKawgZZJX2ACEHAPmOPO0eKb5zSkXu2527bDe22H
-         qZSNnQTvKG1BZvNckxJgIPiclQ2QGrvZHaHYpAF4Yj1u61rLGVSA/EQd1E9Vbu/Wv0mM
-         76FeBD8ggDrgJZACy1k8ttE1LmolWjhAvrPauqbZAqe0sJtrtel+dc7OKUTio8KPUJJT
-         BrjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=1oAWQHZqJjxGspd66xUUwdpCocjq4RF4bRYfPMa0RgM=;
-        b=jLycsV9bLvShfYzjsO9S5yFGnHYSf7lE90V4CoEBWAU+nAlJrk0a9TlCQzeOK6p7m2
-         8nxxZ/4/ClX31CtLz98naaMK+lRkqZSjdCH8ZYjH3lAhG2P/Y0sp9BupP9+q+dt3cnis
-         yEnpiBn3mS20CNzB8KFKf/lDkHpHUsGfU3IzulyDYd0uUO3YKV6dqh67hbGyWUI4EyyV
-         XeQojpAqN+9dxhR9UzSNbY1N7aLtFrbRa+Ut7oQCEolpd2YdzGrLomf0xGiJN7/izC0e
-         oUjzxmjVInwhzmKnJiYPQJ2bYw73TLmh73Okw/lNYzfaqMXkTNs0/rJPSdtRlVSHRHV+
-         KYlA==
-X-Gm-Message-State: AOAM533qawjIOBZ7XSwzUlWc9e2kAT6LCnKqLlCuIS5c1a+os70/Zu0E
-        cuLsrS2dVF4Dm3piX7hYsMiT5HUIGmlD1KBw7Yd2SJpoB918Sw==
-X-Google-Smtp-Source: ABdhPJy833HxrFP8l/AcVNmiqInufp1tn6sOo1ri3JhrVF4Lbfk3FqLKPmb8gT8eZ0+nFbb7F4rgAXM2QRTArxbTsF4=
-X-Received: by 2002:a5b:d09:: with SMTP id y9mr7287068ybp.146.1641987948106;
- Wed, 12 Jan 2022 03:45:48 -0800 (PST)
+        Wed, 12 Jan 2022 06:46:58 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id 9A6CB2B000BC;
+        Wed, 12 Jan 2022 06:46:56 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 12 Jan 2022 06:46:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=HUjciRt5oJndHDa2833SlsReu2F
+        Lf5JGDbYdWg1xoYs=; b=SZi998ghqmL2HXA2R5cA6kdLNdjDPgHYR9a/jMNWD/M
+        STVYrgIBv9PRtm4F6daxWUFqq7njRWhRR1w7i/Lxl/yz0HSm/hMbv/snu9NwGmFU
+        QRw94aOfYdZxlJna4jtr4L8v647c9uUxKpea/Nwj1Y2zRp4pMaGMwtNRa4C+puJD
+        YPUyrqxbGsjoEPPuHynorRPNf9TX+FxQsT6Z9m8UZKrsXd4H5t3rTyaSSe2NoKPm
+        ZMntaHnoffnytcFuF17PWrEn+3dqCGQ1d0JPKz+waGBGGyzfP/Tyn3mitbqkxTxo
+        bRxacFYHw6/3CtXKOLvIVYUsxxHm7kUcjIEd5GDEN9w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=HUjciR
+        t5oJndHDa2833SlsReu2FLf5JGDbYdWg1xoYs=; b=e8KGKIF93rUVNZc7T1LIw8
+        dnhAHggVIVyYIvaghnzQOHPyS7LEiB0865QxwGenVqJj+rDUAZi/E/mTqNqVw88f
+        u/ue7smcTQDal/ZoLbMcXfPQefBQWB/s0LvqIbgAFkNbFzaVC9l+9mnPtWX6zVmZ
+        yYCRIWE2SglpMf6YJUZwHmxZxnglXRmCMy09gqVyPeTdQUpLDPS0EITFNzl8f+t3
+        bMR5sE6gzbMom/00etMAzwFrp1JPIKUkpi4A/A6HuRigum8lY+zOKG8T+Di2X1Hw
+        1cgJSlL3ff/wkRImI3DsaBd8T2Z+W5Oct3VpB0JQsexKFWZpGXs3Db995HOOOuug
+        ==
+X-ME-Sender: <xms:r7_eYWfWPldIQcrbBv4JI72JlpglwS-V0hp4t4G-RuoSRiwnDxDkFA>
+    <xme:r7_eYQPwS9sDu6r7IYJVxhF_ojRpJvGVDFySU5_JoZtnhaJgo9gnQovbmlphcgapN
+    BDSL1IAMuSW0ptw4xA>
+X-ME-Received: <xmr:r7_eYXg7HG2IEdFVPE-A20qAjMWihuijnIlzk4eUBazQ2ZwFQmRi59q0gh2M_zrq3lSZUGWgv4x1AlrcDtReGXgIN_dUmpM5ImTE140>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrtddugddtiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:r7_eYT-O9vnOaLcoNm2Si1eFH1RLaTmkni9-2U4VK_JBUP5KimGsFg>
+    <xmx:r7_eYSvvHvL15QKgqRlIlAC4aP9hntOkNkwwZBQkdUMOCKRbs87h8Q>
+    <xmx:r7_eYaETlyi_9EAwH07vLaeKw55u35-zIqdoqyTvbykkCEKvOHuKhQ>
+    <xmx:sL_eYSGQhz3HeeWNFuPBcxFaJ8zVu3aqyBJZC2SykptAa5M6SzFh_mvz_Pc>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 12 Jan 2022 06:46:55 -0500 (EST)
+Date:   Wed, 12 Jan 2022 12:46:52 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Tim Gover <tim.gover@raspberrypi.com>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Emma Anholt <emma@anholt.net>, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH v2 1/3] clk: Introduce a clock request API
+Message-ID: <20220112114652.hmfdcpqil5jg2vz6@houat>
+References: <20210914093515.260031-1-maxime@cerno.tech>
+ <20210914093515.260031-2-maxime@cerno.tech>
+ <20220112033716.63631C36AEA@smtp.kernel.org>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 12 Jan 2022 17:15:37 +0530
-Message-ID: <CA+G9fYsMHhXJCgO-ykR0oO1kVdusGnthgj6ifxEKaGPHZJ-ZCw@mail.gmail.com>
-Subject: [next]: LTP: getxattr05.c:97: TFAIL: unshare(CLONE_NEWUSER) failed:
- ENOSPC (28)
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, LTP List <ltp@lists.linux.it>,
-        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev
-Cc:     Alexey Gladkov <legion@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="egjpwy3yppd7su6i"
+Content-Disposition: inline
+In-Reply-To: <20220112033716.63631C36AEA@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While testing LTP syscalls with Linux next 20220110 (and till date 20220112)
-on x86_64, i386, arm and arm64 the following tests failed.
 
-tst_test.c:1365: TINFO: Timeout per run is 0h 15m 00s
-getxattr05.c:87: TPASS: Got same data when acquiring the value of
-system.posix_acl_access twice
-getxattr05.c:97: TFAIL: unshare(CLONE_NEWUSER) failed: ENOSPC (28)
-tst_test.c:391: TBROK: Invalid child (13545) exit value 1
+--egjpwy3yppd7su6i
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-fanotify17.c:176: TINFO: Test #1: Global groups limit in privileged user ns
-fanotify17.c:155: TFAIL: unshare(CLONE_NEWUSER) failed: ENOSPC (28)
-tst_test.c:391: TBROK: Invalid child (14739) exit value 1
+Hi Stephen,
 
-sendto03.c:48: TBROK: unshare(268435456) failed: ENOSPC (28)
+Thanks for your answer
 
-setsockopt05.c:45: TBROK: unshare(268435456) failed: ENOSPC (28)
+On Tue, Jan 11, 2022 at 07:37:15PM -0800, Stephen Boyd wrote:
+> Sorry for being super delayed on response here. I'm buried in other
+> work. +Jerome for exclusive clk API.
+>=20
+> Quoting Maxime Ripard (2021-09-14 02:35:13)
+> > It's not unusual to find clocks being shared across multiple devices
+> > that need to change the rate depending on what the device is doing at a
+> > given time.
+> >=20
+> > The SoC found on the RaspberryPi4 (BCM2711) is in such a situation
+> > between its two HDMI controllers that share a clock that needs to be
+> > raised depending on the output resolution of each controller.
+> >=20
+> > The current clk_set_rate API doesn't really allow to support that case
+> > since there's really no synchronisation between multiple users, it's
+> > essentially a fire-and-forget solution.
+>=20
+> I'd also say a "last caller wins"
+>=20
+> >=20
+> > clk_set_min_rate does allow for such a synchronisation, but has another
+> > drawback: it doesn't allow to reduce the clock rate once the work is
+> > over.
+>=20
+> What does "work over" mean specifically? Does it mean one of the clk
+> consumers has decided to stop using the clk?
 
-strace output:
---------------
-[pid   481] wait4(-1, 0x7fff52f5ae8c, 0, NULL) = -1 ECHILD (No child processes)
-[pid   481] clone(child_stack=NULL,
-flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD,
-child_tidptr=0x7f3af0fa7a10) = 483
-strace: Process 483 attached
-[pid   481] wait4(-1,  <unfinished ...>
-[pid   483] unshare(CLONE_NEWUSER)      = -1 ENOSPC (No space left on device)
+That, or it doesn't need to enforce that minimum anymore. We have
+several cases like this on the RPi. For example, during a change of
+display mode a (shared) clock needs to be raised to a minimum, but
+another shared one needs to raise its minimum based on the resolution.
 
-metadata:
-  git branch: master
-  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git commit: 57c149e506d5bec1b845ad1a8a631063fcac1f6e
-  git describe: next-20220110
-  arch: x86
-  toolchain: gcc-11
+In the former case, we only need the minimum to be enforced during the
+resolution change, so it's fairly quick, but the latter requires its
+minimum for as long as the display is on.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Why doesn't clk_set_rate_range() work? Or clk_set_rate_range() combined
+> with clk_set_rate_exclusive()?
 
-GOOD: next-20220107
- BAD:    next-20220110
+clk_set_rate_range could work (it's what we have right now in mainline
+after all), but it's suboptimal since the clock is never scaled down.
 
-Test logs:
-https://lkft.validation.linaro.org/scheduler/job/4301888#L1474
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220110/testrun/7253656/suite/ltp-syscalls-tests/test/getxattr05/log
+It's especially showing in my first example where we need to raise the
+clock only for the duration of the resolution change. Using
+clk_set_min_rate works but we end up with that fairly high clock (at
+least 500MHz) for the rest of the system life even though we usually can
+get away with using a clock around 200MHz outside of that (short) window.
 
-compare test history:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220112/testrun/7277164/suite/ltp-syscalls-tests/test/getxattr05/history/
+This is fairly inefficient, and is mostly what I'm trying to address.
 
-kernel-config:
-https://builds.tuxbuild.com/23V6AwGvHW7H3kr6WxZZwueajVS/config
+> > In our previous example, this means that if we were to raise the
+> > resolution of one HDMI controller to the largest resolution and then
+> > changing for a smaller one, we would still have the clock running at the
+> > largest resolution rate resulting in a poor power-efficiency.
+>=20
+> Does this example have two HDMI controllers where they share one clk and
+> want to use the most efficient frequency for both of the HDMI devices? I
+> think I'm following along but it's hard. It would be clearer if there
+> was some psuedo-code explaining how it is both non-workable with current
+> APIs and workable with the new APIs.
 
-We are investigating this regression.
+The fact that we have two HDMI controllers that share one clock is why
+we use clk_set_min_rate in the first place, but you can have that
+behavior with clk_set_min_rate only with a single user.
 
-Steps to reproduce:
-   # cd /opt/ltp
-   # ./runltp -s getxattr05
+With pseudo-code, if you do something like
 
---
-Linaro LKFT
-https://lkft.linaro.org
+clk =3D clk_get(NULL);
+clk_set_min_rate(600 * 1000 * 1000);
+clk_set_min_rate(1000);
+
+The clock will still remain at 600MHz, even though you would be totally
+fine with the clock running at 1kHz.
+
+If you really wanted to make the clock run at 1kHz, you'd need to have:
+
+clk =3D clk_get(NULL);
+clk_set_min_rate(600 * 1000 * 1000);
+clk_set_min_rate(1000);
+clk_set_rate(1000);
+
+And that works fine for a single user.
+
+If you have a clock shared by multiple drivers though, things get
+tricky. Indeed, you can't really find out what the minimum for that
+clock is, so figuring out the rate to pass to the clk_set_rate call
+would be difficult already. And it wouldn't be atomic anyway.
+
+It's made even more difficult since in clk_calc_new_rates the core
+checks that the rate is within the boundaries and will error out if it
+isn't, so even using clk_set_rate(0) wouldn't work.
+
+It could work if the clock driver makes sure in round/determine_rate
+that the rate passed in within the boundaries of the clock, but then you
+start working around the core and relying on the behavior of clock
+drivers, which is a fairly significant abstraction violation.
+
+> > In order to address both issues, let's create an API that allows user to
+> > create temporary requests to increase the rate to a minimum, before
+> > going back to the initial rate once the request is done.
+> >=20
+> > This introduces mainly two side-effects:
+> >=20
+> >   * There's an interaction between clk_set_rate and requests. This has
+> >     been addressed by having clk_set_rate increasing the rate if it's
+> >     greater than what the requests asked for, and in any case changing
+> >     the rate the clock will return to once all the requests are done.
+> >=20
+> >   * Similarly, clk_round_rate has been adjusted to take the requests
+> >     into account and return a rate that will be greater or equal to the
+> >     requested rates.
+> >=20
+>=20
+> I believe clk_set_rate_range() is broken but it can be fixed. I'm
+> forgetting the details though. If the intended user of this new API
+> can't use that range API then it would be good to understand why it
+> can't be used. I imagine it would be something like
+>=20
+> 	struct clk *clk_hdmi1, *clk_hdmi2;
+>=20
+> 	clk_set_rate_range(&clk_hdmi1, HDMI1_MIN, HDMI1_MAX);
+> 	clk_set_rate_range(&clk_hdmi2, HDMI2_MIN, HDMI2_MAX);
+> 	clk_set_rate_range(&clk_hdmi2, 0, UINT_MAX);
+>=20
+> and then the goal would be for HDMI1_MIN to be used, or at the least for
+> the last call to clk_set_rate_range() to drop the rate constraint and
+> re-evaluate the frequency of the clk again based on hdmi1's rate range.
+
+This is pretty much what this series was doing. I was being conservative
+and didn't really want to modify the behavior of existing functions, but
+that will work fine.
+
+Thanks!
+Maxime
+
+--egjpwy3yppd7su6i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYd6/rAAKCRDj7w1vZxhR
+xR9GAQDP0lh5cm05+cYde3a9KcPm6bTgvLdbWYfrwII7np7O7gD/RQycjeJyoZ25
+SvqeoDWllJmlR1yk/+VSlpi0hZxiJwI=
+=QGDi
+-----END PGP SIGNATURE-----
+
+--egjpwy3yppd7su6i--

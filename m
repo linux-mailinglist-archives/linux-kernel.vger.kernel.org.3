@@ -2,140 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B78048C947
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B51048C939
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350006AbiALRX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 12:23:29 -0500
-Received: from mga04.intel.com ([192.55.52.120]:45290 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350009AbiALRX1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 12:23:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642008207; x=1673544207;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9XhBsTlbflZR5cFj2Ctv0MUAiEdS3gEqY5TeMTTEcbo=;
-  b=EoJ/kW5vRzLz6Odk9jLcsreDtRKcdGQpgCuMoHR3lBKpfrrlW0ESwM1r
-   w93QS5rcBZkxkUzPg/dk8Ef3TVapUn9+kianOK2fb2AhHctx4GDX9SD1i
-   hLxWJE+ARhww9WrKwwrcV7DRj1WCXUe2FP2k4ciDJWZbxDe9UEXpw6HgL
-   hw6tWwIsKNOU3/L5B0vgN1N6Q0FCsPu6L0dZ036R3PADQmKaRuCLiWbQn
-   Owo6OfbqESi7fIwFTNZk6C66Zl+2x4nIecJJe5nIy4bofyzV+D/5ioPrX
-   HsMYZw2SzqrA9GQ8G6G9z/eQttSmOwn0mBhsADvAZDlqmxEcU6iZWDXdD
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="242607556"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="242607556"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 09:21:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="515570153"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 12 Jan 2022 09:21:04 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n7hJ1-00069q-RU; Wed, 12 Jan 2022 17:21:03 +0000
-Date:   Thu, 13 Jan 2022 01:20:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-ixp4xx/common-pci.c:143:5: warning: no previous
- prototype for function 'ixp4xx_pci_write'
-Message-ID: <202201130136.7675O5xx-lkp@intel.com>
+        id S1355546AbiALRVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 12:21:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355549AbiALRUv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 12:20:51 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FA9C061756
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:20:49 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id l8so4950194plt.6
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:20:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QRCI1RlLdVZvt5lKUzeK60PXJ4E91izm9CxbrCuYWiw=;
+        b=iD4ax0W/ZQejkpiTV+wC/BTGkgvydCG1+oy9k4x41xcYsxdOIrYBD3Jg5pNLFotLn3
+         4lS1DP/A5h5rWv9t8jIgjAfIWRHyWSXlvlM7IaIgxX7hDAUmIgxXIoU5b+8CgT0R9dt0
+         iCbsvCcrQj4kpbl/NpitUUKIbg7rTypIFxqdxfB2feMrGc8niiEgwy4Jncc/4d2meNQg
+         hKQ5yFTrProqxoFW6AG+GqRq3CQHFwiDeSswlB6x17ayzfA94e4NsXmAcxNN0/DUQR5b
+         DQXQiXIgM3bNMe/5PUo8aj95UIBHAUjKy79FkjU/HbhRpV61hkglUgnEV5dHn1QxLypF
+         YTdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QRCI1RlLdVZvt5lKUzeK60PXJ4E91izm9CxbrCuYWiw=;
+        b=Biny6LMUaRZsHVtarkRROaXH8Pf/x+c5otYY2ALF92MTse1zj8D5JnxPePld83tCVV
+         EcbiuzS8/sCpVOpBHDyxBi4bx0vn7ebc1kEBIWwVdsNNOAd4YWC2FyFSkVOZv8TUpfMs
+         nFA46lhoEINava0L6C/iXjIm4nRZzvQy+HBjxfUup1sSz9Fs2Zusjqk9pCfQhKKyXT0u
+         IMdVbHtTcnaiuE0R4/lDI6E5ewX8yhXbKqyyaqyjxnELQfkC0h1MrVaj4OAIqXyQ1dKy
+         57sp6RqASqVhzh4Y83WlmAlcI6e2eD0JJZgvYGneltqIyU5r5T/xqBiJFe/2b6pE9BKE
+         sjXw==
+X-Gm-Message-State: AOAM531oBjww+UejJg9h5BrOYlqtTLs5l9KTHwmjtHYYzSMuMdNHqCPa
+        2MnmEAzf3xh4eLAsrboSW/Jt1Q==
+X-Google-Smtp-Source: ABdhPJzSQE5HuAs9ufGKv8GVZpWcgq8Jooiv84LWQSj+pdxhdpdaB4H7DHBA1IqNFc1FS00InVj1vA==
+X-Received: by 2002:a05:6a00:2442:b0:4bc:e7ac:b5aa with SMTP id d2-20020a056a00244200b004bce7acb5aamr553091pfj.56.1642008049112;
+        Wed, 12 Jan 2022 09:20:49 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id kb1sm266614pjb.45.2022.01.12.09.20.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 09:20:48 -0800 (PST)
+Date:   Wed, 12 Jan 2022 17:20:44 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, kevin.tian@intel.com,
+        tglx@linutronix.de, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
+        Bharata B Rao <bharata@linux.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 3/6] KVM: Remove opaque from
+ kvm_arch_check_processor_compat
+Message-ID: <Yd8N7PFqZbACzh2r@google.com>
+References: <20211227081515.2088920-1-chao.gao@intel.com>
+ <20211227081515.2088920-4-chao.gao@intel.com>
+ <Ydy8BCfE0jhJd5uE@google.com>
+ <20220111031933.GB2175@gao-cwp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220111031933.GB2175@gao-cwp>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, Jan 11, 2022, Chao Gao wrote:
+> On Mon, Jan 10, 2022 at 11:06:44PM +0000, Sean Christopherson wrote:
+> >On Mon, Dec 27, 2021, Chao Gao wrote:
+> >> No arch implementation uses this opaque now.
+> >
+> >Except for the RISC-V part, this can be a pure revert of commit b99040853738 ("KVM:
+> >Pass kvm_init()'s opaque param to additional arch funcs").  I think it makes sense
+> >to process it as a revert, with a short blurb in the changelog to note that RISC-V
+> >is manually modified as RISC-V support came along in the interim.
+> 
+> commit b99040853738 adds opaque param to kvm_arch_hardware_setup(), which isn't
+> reverted in this patch. I.e., this patch is a partial revert of b99040853738
+> plus manual changes to RISC-V. Given that, "process it as a revert" means
+> clearly say in changelog that this commit contains a partial revert of commit
+> b99040853738 ("KVM: Pass kvm_init()'s opaque param to additional arch funcs").
+> 
+> Right?
 
-FYI, the error/warning still remains.
+What I meant is literally do
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   daadb3bd0e8d3e317e36bc2c1542e86c528665e5
-commit: d5d9f7ac58ea1041375a028f143ca5784693ea86 ARM/ixp4xx: Make NEED_MACH_IO_H optional
-date:   7 months ago
-config: arm-ixp4xx_defconfig (https://download.01.org/0day-ci/archive/20220113/202201130136.7675O5xx-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 244dd2913a43a200f5a6544d424cdc37b771028b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d5d9f7ac58ea1041375a028f143ca5784693ea86
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d5d9f7ac58ea1041375a028f143ca5784693ea86
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+  git revert -s b99040853738
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   arch/arm/mach-ixp4xx/common-pci.c:94:5: warning: no previous prototype for function 'ixp4xx_pci_read_errata' [-Wmissing-prototypes]
-   int ixp4xx_pci_read_errata(u32 addr, u32 cmd, u32* data)
-       ^
-   arch/arm/mach-ixp4xx/common-pci.c:94:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ixp4xx_pci_read_errata(u32 addr, u32 cmd, u32* data)
-   ^
-   static 
-   arch/arm/mach-ixp4xx/common-pci.c:121:5: warning: no previous prototype for function 'ixp4xx_pci_read_no_errata' [-Wmissing-prototypes]
-   int ixp4xx_pci_read_no_errata(u32 addr, u32 cmd, u32* data)
-       ^
-   arch/arm/mach-ixp4xx/common-pci.c:121:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ixp4xx_pci_read_no_errata(u32 addr, u32 cmd, u32* data)
-   ^
-   static 
->> arch/arm/mach-ixp4xx/common-pci.c:143:5: warning: no previous prototype for function 'ixp4xx_pci_write' [-Wmissing-prototypes]
-   int ixp4xx_pci_write(u32 addr, u32 cmd, u32 data)
-       ^
-   arch/arm/mach-ixp4xx/common-pci.c:143:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ixp4xx_pci_write(u32 addr, u32 cmd, u32 data)
-   ^
-   static 
-   3 warnings generated.
-
-
-vim +/ixp4xx_pci_write +143 arch/arm/mach-ixp4xx/common-pci.c
-
-^1da177e4c3f41 Linus Torvalds  2005-04-16  142  
-^1da177e4c3f41 Linus Torvalds  2005-04-16 @143  int ixp4xx_pci_write(u32 addr, u32 cmd, u32 data)
-^1da177e4c3f41 Linus Torvalds  2005-04-16  144  {    
-^1da177e4c3f41 Linus Torvalds  2005-04-16  145  	unsigned long flags;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  146  	int retval = 0;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  147  
-bd31b85960a7fc Thomas Gleixner 2009-07-03  148  	raw_spin_lock_irqsave(&ixp4xx_pci_lock, flags);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  149  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  150  	*PCI_NP_AD = addr;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  151  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  152  	/* set up the write */
-^1da177e4c3f41 Linus Torvalds  2005-04-16  153  	*PCI_NP_CBE = cmd;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  154  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  155  	/* execute the write by writing to NP_WDATA */
-^1da177e4c3f41 Linus Torvalds  2005-04-16  156  	*PCI_NP_WDATA = data;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  157  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  158  	if(check_master_abort())
-^1da177e4c3f41 Linus Torvalds  2005-04-16  159  		retval = 1;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  160  
-bd31b85960a7fc Thomas Gleixner 2009-07-03  161  	raw_spin_unlock_irqrestore(&ixp4xx_pci_lock, flags);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  162  	return retval;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  163  }
-^1da177e4c3f41 Linus Torvalds  2005-04-16  164  
-
-:::::: The code at line 143 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+and then manually handle RISC-V.

@@ -2,173 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D613A48C7D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F10BA48C7D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354909AbiALQFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:05:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240010AbiALQE6 (ORCPT
+        id S1354929AbiALQFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:05:06 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:40809 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349654AbiALQFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:04:58 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE8FC06173F;
-        Wed, 12 Jan 2022 08:04:58 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id m13so5823460pji.3;
-        Wed, 12 Jan 2022 08:04:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p9vDS7ou1+K0jTUYDpO057Bsl73tb9hvAFDeAhdEnkg=;
-        b=MXWP+LqLo5weL9eKi1XWJ8ZN2oPbD5LfoJB0Ew569LonPEQIaH2ebzF4unLsuTpb1X
-         FhAD6mlmgYTkz6itTdqWP8YofB8WKWSOZh+TlqG4tukI3AifSrDIy3seUEaJJ7z2H7b/
-         tqgrEFue4Y5oRJ2vuQYHcSw6x5BeWXuQmcAF4lVePFaa8gSHi/Er8AIA9vypcLQbDdnQ
-         l1CXxvuOLnBNhie+rC5z7wnM8oYgWHt6918HnXFCI7cD3nBdwKtfX/LWHQ9DcRGOAccn
-         3NLO0h4/odsPrjfhZIa2FKJsIplh+v8ZYgICI9DdQFX04G+AeajhoE/EZvRG7mFdPwaG
-         hrPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p9vDS7ou1+K0jTUYDpO057Bsl73tb9hvAFDeAhdEnkg=;
-        b=qlTdvySDOXYP9cZ7SsM7TL/0s6ZFMLK4WuLYNF1rACFYyg7yxql1egCpb3vJhHu9Tg
-         1h3PNZ6Rp8NVhQ8y8UkQXiOx9cXkWMrDAAQ82KmnTkgg2a0+riqzudh7n8SPd66Pa109
-         c+donF7QxY+VrlEAXA66T6q6fP+yYjz6kSSL3E6YF5Azg6yqalGmXSfyXq28h2vUaQc9
-         rDZxWucujwb5I82GMmHRRen+wwIdcgbz7B4vugrBMV4p3Ou2Bu9xKCPAlD8a59uDZn1X
-         Wi7X8MJ6MyusbNcUFzXfK3WEP+Lsx9w4KXqK/rFt3spwrn83NsfSXKLkgEto2nl1UQC/
-         pQJw==
-X-Gm-Message-State: AOAM530voLNVnbHf+ZxP/cTzJfRfHjuVcSxeUZs8x7V5xwwt4iujMkhn
-        Ww01+VMCIrG9dLdxXTvV3qw=
-X-Google-Smtp-Source: ABdhPJw/5EmtPQ4pqAF9nzNkFBcXsKnPk0aGXdobZEznOBMSaixKn2hhPXJIDcuFSe1NWrzRpGoApg==
-X-Received: by 2002:a17:902:ecc6:b0:148:a65d:842d with SMTP id a6-20020a170902ecc600b00148a65d842dmr430395plh.56.1642003497591;
-        Wed, 12 Jan 2022 08:04:57 -0800 (PST)
-Received: from localhost.localdomain ([218.88.125.213])
-        by smtp.gmail.com with ESMTPSA id e15sm104808pfv.23.2022.01.12.08.04.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 12 Jan 2022 08:04:57 -0800 (PST)
-From:   yongw.pur@gmail.com
-X-Google-Original-From: wang.yong12@zte.com.cn
-To:     alexs@kernel.org, siyanteng@loongson.cn, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wang.yong12@zte.com.cn, yang.yang29@zte.com.cn
-Subject: [PATCH] docs/zh_CN: Update zh_CN/accounting/delay-accounting.rst
-Date:   Wed, 12 Jan 2022 08:04:42 -0800
-Message-Id: <1642003482-48935-1-git-send-email-wang.yong12@zte.com.cn>
-X-Mailer: git-send-email 2.7.4
+        Wed, 12 Jan 2022 11:05:03 -0500
+Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MUTxo-1mymAW3XSi-00QX2d; Wed, 12 Jan 2022 17:05:00 +0100
+Received: by mail-wr1-f51.google.com with SMTP id d19so5218282wrb.0;
+        Wed, 12 Jan 2022 08:05:00 -0800 (PST)
+X-Gm-Message-State: AOAM532fEFC7+q8fAs2J4GS8beF+63w22k222x57JixMLXUiFv5jaCFK
+        0FM5r9StM58LN6Pfdxq7JFi8DSFYuKHz4c6I/jo=
+X-Google-Smtp-Source: ABdhPJwxDiNjuYbWLVY7t/HnE/b6lwh+fnY5dRvYsPdOtZoOHc+AaageW7dUz2/7e+9onzGuGMB9DjgqyRi5twekUIc=
+X-Received: by 2002:a5d:6ac7:: with SMTP id u7mr352566wrw.219.1642003500106;
+ Wed, 12 Jan 2022 08:05:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <266065918e47e8965bb6a0ab486da070278788e4.1641996057.git.geert+renesas@glider.be>
+ <BY3PR18MB47375336D4AC1FE79D493945C6529@BY3PR18MB4737.namprd18.prod.outlook.com>
+In-Reply-To: <BY3PR18MB47375336D4AC1FE79D493945C6529@BY3PR18MB4737.namprd18.prod.outlook.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 12 Jan 2022 17:04:43 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2jLgtcuJ6MD7LmJzagiRQSk85eL3tiHDmB33i_n3CZ2w@mail.gmail.com>
+Message-ID: <CAK8P3a2jLgtcuJ6MD7LmJzagiRQSk85eL3tiHDmB33i_n3CZ2w@mail.gmail.com>
+Subject: Re: [EXT] [PATCH] hwrng: cn10k - HW_RANDOM_CN10K should depend on ARCH_THUNDER
+To:     Sunil Kovvuri Goutham <sgoutham@marvell.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Joseph Longever <jlongever@marvell.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:b5qf4fSrYaOSl0TY/67lJGFRyt7/kIn9f92D3rCPV0N+4k1YFSI
+ ctF3btkrrmxhGf1ZD/EiK1+MfXbjSeJlK3YKpBkxpX2nnma+YSe1/QOeGg1/jL9kYooxPse
+ oxZS20NSOOxw+J9Ku+3q7FUhbQ+H+DQE8Rgidt3V8NzKNfbrqTdZfEXYYYBRfwy+tEK4WN+
+ yziu4hm7pRzVTJ4NgWkGQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CK+vVeUYYN8=:uYVV6LTf5d6eyPfRqYdKfx
+ fLTpQ7Tpj0AzMYab02YykBYox8A2CDqoEQjlDLhc5iNhZkkJF5Z5BBDf5iRT/y1E1Hg0KCmMU
+ JVCav3x9+9eBMTlS1hK9pfSWlbYvU6UwfHG2kpZ3dimeMqu899umOOy14tezlFInENOl1U5Ab
+ iAU+G/X9lv9W7BvT1dAMvBuaTFLkIkZg3OUQraSPuVF2qdioK5KjKgnMXbA1FS5lbrCuovfrF
+ GZtE6FjHZyZEiaZ6kwEcjyAwi5IpG3sbxX9ZX8evw8CD/U4EUe6VkCJ1knwydwIAMWGTNm5e9
+ Bh6apuCCy2EbUjqfXtAj1SteBQq4aDOtYvJWehrjxhap5L6eGvwpENtKPUSRLB6UrQAeHs9x2
+ b/5sXEQ/uWGfrXa19CPwvcg3W8rcWU2HODHKRAqDmevwmXwVJnCuw5naSvq46dKRrPcuYvuBR
+ y4iip5733G9vFd/pKJGHzL6L5Rh9bp/RsVURhCIICiO39LZulxi/S32YVzQPr7PNvFvB8g3g3
+ 5H9tAniSagpDLfU7nnPwXDtMcQ7tyONc9gZxVHFAZ2a9bc8FT0ufEY0ZqCf2eNnRxWdF56qQt
+ vVSmBmh9N6ZWDFABbONDu1+S5Id9jtxx6cjlfB1IcQS4kJPZ/6/pBiibx/KTi4SuWHtbM/Azu
+ DE3+jL2bujdaWKeX3no1RxtHFQhkmiqKad6OoYC0q8tKE36djBajWHuzDtEKQY3LH8Y4=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wangyong <wang.yong12@zte.com.cn>
+On Wed, Jan 12, 2022 at 4:55 PM Sunil Kovvuri Goutham
+<sgoutham@marvell.com> wrote:
+>
+> >From: Geert Uytterhoeven <geert+renesas@glider.be>
+> >Sent: Wednesday, January 12, 2022 7:33 PM
+> >To: Herbert Xu <herbert@gondor.apana.org.au>; Sunil Kovvuri Goutham <sgoutham@marvell.com>; Bharat Bhushan <bbhushan2@marvell.com>; Joseph Longever <jlongever@marvell.com>
+> >Cc: Arnd Bergmann <arnd@arndb.de>; linux-crypto@vger.kernel.org <linux-crypto@vger.kernel.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; Geert Uytterhoeven <geert+renesas@glider.be>
+> >Subject: [EXT] [PATCH] hwrng: cn10k - HW_RANDOM_CN10K should depend on ARCH_THUNDER
+>
+> >The Marvell CN10K True Random Number generator is only present on
+> >Marvell CN10K SoCs, and not available as an independent PCIe endpoint.
+> >Hence add a dependency on ARCH_THUNDER, to prevent asking the user about
+> >this driver when configuring a kernel without Cavium Thunder (incl.
+> >Marvell CN10K) SoC support.
+> >
+> >Fixes: 38e9791a02090414 ("hwrng: cn10k - Add random number generator support")
+> >Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> >---
+> >drivers/char/hw_random/Kconfig | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> >diff --git a/drivers/char/hw_random/Kconfig b/drivers/char/hw_random/Kconfig
+> >index c91cb48a1db168dd..b33c01e9935336f7 100644
+> >--- a/drivers/char/hw_random/Kconfig
+> >+++ b/drivers/char/hw_random/Kconfig
+> >@@ -540,7 +540,7 @@ config HW_RANDOM_ARM_SMCCC_TRNG
+> >
+> > config HW_RANDOM_CN10K
+> >        tristate "Marvell CN10K Random Number Generator support"
+> >-       depends on HW_RANDOM && PCI && ARM64
+> >+       depends on HW_RANDOM && PCI && ARCH_THUNDER
+> >        default HW_RANDOM
+> >        help
+> >          This driver provides support for the True Random Number
+>
+> Nack.
+> ARCH_THUNDER/THUNDER2 are old Cavium server class silicon series
+> which are not related to Marvell CN10K silicon.
 
-Update zh_CN/accounting/delay-accounting.rst.
-The document modification has been merged which refers to the following link:
-https://lore.kernel.org/all/1639583021-92977-1-git-send-email-wang.yong12@zte.com.cn/
+Can you tell me where you would draw the line? Based on a discussion we had on
+IRC, I was going to send a patch to rename ARCH_THUNDER to ARCH_OCTEON
+and clarify how it relates to the other families. Here is what I
+understood it should be:
 
-Signed-off-by: wangyong <wang.yong12@zte.com.cn>
-Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
----
- .../zh_CN/accounting/delay-accounting.rst          | 62 +++++++++++-----------
- 1 file changed, 30 insertions(+), 32 deletions(-)
+config ARCH_OCTEON
+        bool "Marvell OCTEON and ThunderX data processing units"
+        help
+          This enables support for Marvell (formerly Cavium) OCTEON
+          Family of DPUs and SoCs, including OCTEON 10, Octeon TX2
+          CN92xx/CN96xx/CN98xx, OcteonTX CN8xxx, ThunderX CN88xx, and
+          Octeon Fusion products.
 
-diff --git a/Documentation/translations/zh_CN/accounting/delay-accounting.rst b/Documentation/translations/zh_CN/accounting/delay-accounting.rst
-index 67d5606..f184941 100644
---- a/Documentation/translations/zh_CN/accounting/delay-accounting.rst
-+++ b/Documentation/translations/zh_CN/accounting/delay-accounting.rst
-@@ -17,6 +17,8 @@ a) 等待一个CPU（任务为可运行）
- b) 完成由该任务发起的块I/O同步请求
- c) 页面交换
- d) 内存回收
-+e) 页缓存抖动
-+f) 直接规整
- 
- 并将这些统计信息通过taskstats接口提供给用户空间。
- 
-@@ -37,10 +39,10 @@ d) 内存回收
- 向用户态返回一个通用数据结构，对应每pid或每tgid的统计信息。延时计数功能填写
- 该数据结构的特定字段。见
- 
--     include/linux/taskstats.h
-+     include/uapi/linux/taskstats.h
- 
- 其描述了延时计数相关字段。系统通常以计数器形式返回 CPU、同步块 I/O、交换、内存
--回收等的累积延时。
-+回收、页缓存抖动、直接规整等的累积延时。
- 
- 取任务某计数器两个连续读数的差值，将得到任务在该时间间隔内等待对应资源的总延时。
- 
-@@ -72,40 +74,36 @@ kernel.task_delayacct进行开关。注意，只有在启用延时计数后启
- 
- getdelays命令的一般格式::
- 
--	getdelays [-t tgid] [-p pid] [-c cmd...]
-+	getdelays [-dilv] [-t tgid] [-p pid]
- 
- 获取pid为10的任务从系统启动后的延时信息::
- 
--	# ./getdelays -p 10
-+	# ./getdelays -d -p 10
- 	（输出信息和下例相似）
- 
- 获取所有tgid为5的任务从系统启动后的总延时信息::
- 
--	# ./getdelays -t 5
--
--
--	CPU	count	real total	virtual total	delay total
--		7876	92005750	100000000	24001500
--	IO	count	delay total
--		0	0
--	SWAP	count	delay total
--		0	0
--	RECLAIM	count	delay total
--		0	0
--
--获取指定简单命令运行时的延时信息::
--
--  # ./getdelays -c ls /
--
--  bin   data1  data3  data5  dev  home  media  opt   root  srv        sys  usr
--  boot  data2  data4  data6  etc  lib   mnt    proc  sbin  subdomain  tmp  var
--
--
--  CPU	count	real total	virtual total	delay total
--	6	4000250		4000000		0
--  IO	count	delay total
--	0	0
--  SWAP	count	delay total
--	0	0
--  RECLAIM	count	delay total
--	0	0
-+	# ./getdelays -d -t 5
-+	print delayacct stats ON
-+	TGID	5
-+
-+
-+	CPU             count     real total  virtual total    delay total  delay average
-+	                    8        7000000        6872122        3382277          0.423ms
-+	IO              count    delay total  delay average
-+	                    0              0              0ms
-+	SWAP            count    delay total  delay average
-+	                    0              0              0ms
-+	RECLAIM         count    delay total  delay average
-+	                    0              0              0ms
-+	THRASHING       count    delay total  delay average
-+	                    0              0              0ms
-+	COMPACT         count    delay total  delay average
-+	                    0              0              0ms
-+
-+获取pid为1的IO计数，它只和-p一起使用::
-+	# ./getdelays -i -p 1
-+	printing IO accounting
-+	linuxrc: read=65536, write=0, cancelled_write=0
-+
-+上面的命令与-v一起使用，可以获取更多调试信息。
--- 
-2.7.4
+          Note: these are unrelated to the similarly named ThunderX2
+          CN99xx server processors, the Octeon TX2 91xx SoCs and the
+          Armada processors.
 
+config ARCH_THUNDER2
+        bool "Marvell/Cavium ThunderX2 Server Processors"
+        select GPIOLIB
+        help
+          This enables support for Marvell's discontinued ThunderX2
+          CN99XX family of server processors, originally sold by Cavium.
+
+          Note: these do not include the unrelated ThunderX CN88xx or
+          OCTEON TX2 processors, despite the similarities in naming.
+
+config ARCH_MVEBU
+        bool "Marvell EBU SoC Family"
+        help
+          This enables support for Marvell EBU familly, including:
+           - Armada 3700 SoC Family
+           - Armada 7K SoC Family
+           - Armada 8K SoC Family
+           - Octeon TX2 CN91xx Family
+
+If that's not the correct interpretation, does that mean that OCTEON 10
+and Octeon TX2 CN92xx/CN96xx/CN98xx are a different family from
+Octeon/TX CN8xxx and ThunderX CN88xx and should have a fourth
+symbol, or are they part of the Armada family?
+
+
+      Arnd

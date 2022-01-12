@@ -2,144 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0AFE48C287
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1640C48C28D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352630AbiALKv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 05:51:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352627AbiALKvz (ORCPT
+        id S239900AbiALKyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 05:54:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33202 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237739AbiALKyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 05:51:55 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94BAC061757
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:51:54 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id o15so6557587lfo.11
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:51:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ajadRxekfKlNZLmonMEGUdpiiUlJCpBU8D0nYRIxhqA=;
-        b=n7ouKiMIb/tYofVya2jhLWqIz4otlZtpCCE4aguIdHQS6dKoDs8RksAdkHVkfh6ck9
-         kLk0Qw8b9sD6WfOvMmBksUUT/hrgra1I5API4Y6De42JSRUZLf8BRJKHORRK20eAuH9Z
-         swLy1bap3RlWJDUOMzIPyTBWUX06YOkgPTcU1RN0vX5H25enAYzExMTYYSCp0FfsdTGY
-         lCUHBleRTxjJZ/zLOnra4Cugri59EkvL9QHtXp6yzeoBDHKWdRMa4IKepql+xYOfmE3V
-         +vq+5Z3GSTB+IFeoGbA8QKA7aUQmuOgEdues2+HRvY+0UaG7QLcRZBpvmP6TFxyAaliz
-         U2YA==
+        Wed, 12 Jan 2022 05:54:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641984893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1nXDaBEqSwcubb9UAlItnBJ/49dksDZCXM8chYBVKNM=;
+        b=eaOidEo6xZ3TEaF50RWiokNJKpMsPxk2vRYtsgJI6pAwkcpJ/8nwbE1TBOygi293chaXaK
+        GCwKWV2vyZDvtetMzX6yS0Ef7tCsOEqM9XAVnzIRjCUGLHeiFmZt2ep/7mqA8o4+NRTn9C
+        X8eBduQyEzvTi7y6JkFep/IDPJ95giI=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-652-ezvSIp_fOhGQaYzj8V-VYw-1; Wed, 12 Jan 2022 05:54:52 -0500
+X-MC-Unique: ezvSIp_fOhGQaYzj8V-VYw-1
+Received: by mail-ed1-f71.google.com with SMTP id ec25-20020a0564020d5900b003fc074c5d21so1880575edb.19
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:54:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ajadRxekfKlNZLmonMEGUdpiiUlJCpBU8D0nYRIxhqA=;
-        b=E3zY9vqyHvjKK1pPf83T7NNfxLJ8yWJuTeuIneVjIkuTFLpptx8yJ20Jf3BY3D1+Au
-         f67TeaMV23FVkrXVCTcUWB/1TuOnOZM31WkEAwSuX3nNBwbZTH+6a4PsJCLYxbpro0sn
-         dfXI+Z00HD+iT3niS0c2HxjcTIN7q2vlrXsNOF3uKW2lFbjk7CI9c4eF9T8HkM7lBYVt
-         4NoB0zQBiu9s6juuaxnGN3v/fXkj7WQq2JLQI6KIy68exMH+zQ6xnrULfxA4OT5Z/b3I
-         pNOcaDTVz1XMvnOb594Ga9evOI3DtUtBXqdsAfs/Di+RcVyapFVS3qG6qsEVT4ldGclK
-         Mw1A==
-X-Gm-Message-State: AOAM5308VB67Bb5dt22tWa57dcnFifseuQNnXG51ZUltDAarYfU981qQ
-        EbTsALEKCeNv9zCUkkhmDQzmHRR067q4NAjlcLysrw==
-X-Google-Smtp-Source: ABdhPJwlG2ajFyVnViZREk3eK3GmcRqUFKwmypVgeholraY8xEQawKZtMDgFhgZE9kKw4JIyjTxnCJC3g5FMtOM/0kI=
-X-Received: by 2002:a05:651c:98f:: with SMTP id b15mr6038585ljq.367.1641984713037;
- Wed, 12 Jan 2022 02:51:53 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=1nXDaBEqSwcubb9UAlItnBJ/49dksDZCXM8chYBVKNM=;
+        b=Q9SGhj3q5BQQAWCz9Ic/4R06kxjSh880Bk8izRRbi8QL8j5QuiIgCDb587LULw4/J1
+         2ODJAkVEPEwhk3Kzvo7u3DgNNrHeNMd1g8UGDUpVOraIaSgz7cL69tgkRzxxWfW69isL
+         u+ieDu5umlxMk4atLGKwMab/OY7cmUgbzQIFpfeg/FZQ6dQHuuG8u+aAq3v7wgfNTa8L
+         Hzm3magPuM0/HMhATCZd+8Md30Jg3zIERDBErf7VrpTwHS8YY02Qi6xuewi1vtaqglJQ
+         W1jzSnxXDypCGLNL4Ada+k/R/TnarfT5S3VtnSjO01B+xBhBdbJ2UcliquIM4Kj0BhHf
+         dsaA==
+X-Gm-Message-State: AOAM530+Rm7mXIACrIWatxl2iIaJaYLrJJeV+EXo2B4kNlKohdNotBkE
+        TphpLLnFXXbzIuKnDy7Pbrn/pclvKH+zQUec9cytq7N1K+4R5ifSR2boNIsqWZB7bvzSt6gEofy
+        xmWLgITzz6qlnosl6D7RTJOK6
+X-Received: by 2002:a17:906:3052:: with SMTP id d18mr7112117ejd.675.1641984891159;
+        Wed, 12 Jan 2022 02:54:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyn5fswqQ0dOEoBSWPUJo6KSN9+8h4kCBAhgFotHJOoSPil79OW088szvXQNfhv7fsGVeMxSQ==
+X-Received: by 2002:a17:906:3052:: with SMTP id d18mr7112100ejd.675.1641984890940;
+        Wed, 12 Jan 2022 02:54:50 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:4700:e25f:39eb:3cb8:1dec? (p200300cbc7024700e25f39eb3cb81dec.dip0.t-ipconnect.de. [2003:cb:c702:4700:e25f:39eb:3cb8:1dec])
+        by smtp.gmail.com with ESMTPSA id hc40sm1981993ejc.72.2022.01.12.02.54.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 02:54:50 -0800 (PST)
+Message-ID: <7dc078ef-70f4-159e-b928-34f0fb0ffaea@redhat.com>
+Date:   Wed, 12 Jan 2022 11:54:49 +0100
 MIME-Version: 1.0
-References: <20220111171424.862764-1-Jerome.Pouiller@silabs.com> <20220111171424.862764-9-Jerome.Pouiller@silabs.com>
-In-Reply-To: <20220111171424.862764-9-Jerome.Pouiller@silabs.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 12 Jan 2022 11:51:16 +0100
-Message-ID: <CAPDyKFoMQG-GOfRsMk21Awk21cxVN6bMe9n8YCh8xHbg7j1Rgg@mail.gmail.com>
-Subject: Re: [PATCH v9 08/24] wfx: add bus_sdio.c
-To:     Jerome Pouiller <Jerome.Pouiller@silabs.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-mmc@vger.kernel.org,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>
+References: <20220105214756.91065-1-zi.yan@sent.com>
+ <20220105214756.91065-2-zi.yan@sent.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC PATCH v3 1/8] mm: page_alloc: avoid merging non-fallbackable
+ pageblocks with others.
+In-Reply-To: <20220105214756.91065-2-zi.yan@sent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
-
-> +static const struct of_device_id wfx_sdio_of_match[] = {
-> +       { .compatible = "silabs,wf200",    .data = &pdata_wf200 },
-> +       { .compatible = "silabs,brd4001a", .data = &pdata_brd4001a },
-> +       { .compatible = "silabs,brd8022a", .data = &pdata_brd8022a },
-> +       { .compatible = "silabs,brd8023a", .data = &pdata_brd8023a },
-> +       { .compatible = "silabs,wfx-sdio", .data = &pdata_wfx_sdio },
-> +       { },
-> +};
-> +MODULE_DEVICE_TABLE(of, wfx_sdio_of_match);
-> +
-> +static int wfx_sdio_probe(struct sdio_func *func, const struct sdio_device_id *id)
+On 05.01.22 22:47, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> This is done in addition to MIGRATE_ISOLATE pageblock merge avoidance.
+> It prepares for the upcoming removal of the MAX_ORDER-1 alignment
+> requirement for CMA and alloc_contig_range().
+> 
+> MIGRARTE_HIGHATOMIC should not merge with other migratetypes like
+> MIGRATE_ISOLATE and MIGRARTE_CMA[1], so this commit prevents that too.
+> Also add MIGRARTE_HIGHATOMIC to fallbacks array for completeness.
+> 
+> [1] https://lore.kernel.org/linux-mm/20211130100853.GP3366@techsingularity.net/
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>  include/linux/mmzone.h |  6 ++++++
+>  mm/page_alloc.c        | 28 ++++++++++++++++++----------
+>  2 files changed, 24 insertions(+), 10 deletions(-)
+> 
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index aed44e9b5d89..0aa549653e4e 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -83,6 +83,12 @@ static inline bool is_migrate_movable(int mt)
+>  	return is_migrate_cma(mt) || mt == MIGRATE_MOVABLE;
+>  }
+>  
+> +/* See fallbacks[MIGRATE_TYPES][3] in page_alloc.c */
+> +static inline bool migratetype_has_fallback(int mt)
 > +{
-> +       const struct wfx_platform_data *pdata = of_device_get_match_data(&func->dev);
-> +       struct device_node *np = func->dev.of_node;
-> +       struct wfx_sdio_priv *bus;
-> +       int ret;
+> +	return mt < MIGRATE_PCPTYPES;
+> +}
 > +
-> +       if (func->num != 1) {
-> +               dev_err(&func->dev, "SDIO function number is %d while it should always be 1 (unsupported chip?)\n",
-> +                       func->num);
-> +               return -ENODEV;
-> +       }
-> +
-> +       if (!pdata) {
-> +               dev_warn(&func->dev, "no compatible device found in DT\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       bus = devm_kzalloc(&func->dev, sizeof(*bus), GFP_KERNEL);
-> +       if (!bus)
-> +               return -ENOMEM;
-> +
-> +       bus->func = func;
-> +       bus->of_irq = irq_of_parse_and_map(np, 0);
-> +       sdio_set_drvdata(func, bus);
-> +       func->card->quirks |= MMC_QUIRK_LENIENT_FN0 |
-> +                             MMC_QUIRK_BLKSZ_FOR_BYTE_MODE |
-> +                             MMC_QUIRK_BROKEN_BYTE_MODE_512;
-
-This should not be needed any more, right?
-
-> +
-> +       sdio_claim_host(func);
-> +       ret = sdio_enable_func(func);
-> +       /* Block of 64 bytes is more efficient than 512B for frame sizes < 4k */
-> +       sdio_set_block_size(func, 64);
-> +       sdio_release_host(func);
-> +       if (ret)
-> +               return ret;
-> +
-> +       bus->core = wfx_init_common(&func->dev, pdata, &wfx_sdio_hwbus_ops, bus);
-> +       if (!bus->core) {
-> +               ret = -EIO;
-> +               goto sdio_release;
-> +       }
-> +
-> +       ret = wfx_probe(bus->core);
-> +       if (ret)
-> +               goto sdio_release;
-> +
-> +       return 0;
-> +
-> +sdio_release:
-> +       sdio_claim_host(func);
-> +       sdio_disable_func(func);
-> +       sdio_release_host(func);
-> +       return ret;
+>  #define for_each_migratetype_order(order, type) \
+>  	for (order = 0; order < MAX_ORDER; order++) \
+>  		for (type = 0; type < MIGRATE_TYPES; type++)
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 8dd6399bafb5..5193c953dbf8 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1042,6 +1042,12 @@ buddy_merge_likely(unsigned long pfn, unsigned long buddy_pfn,
+>  	return page_is_buddy(higher_page, higher_buddy, order + 1);
+>  }
+>  
+> +static inline bool has_non_fallback_pageblock(struct zone *zone)
+> +{
+> +	return has_isolate_pageblock(zone) || zone_cma_pages(zone) != 0 ||
+> +		zone->nr_reserved_highatomic != 0;
 > +}
 
-[...]
+Due to zone_cma_pages(), the unlikely() below will be very wrong on many
+setups. Previously, isolation really was a corner case. CMA and
+highatomic are less of a corner case ...
 
-Other than the above, this looks good to me!
+I'm not even sure if this check is worth having around anymore at all,
+or if it would be easier and cheaper to just always check the both
+migration types unconditionally. Would certainly simplify the code.
 
+Side node: we actually care about has_free_non_fallback_pageblock(), we
+can only merge with free pageblocks. But that might not necessarily be
+cheaper to test/track/check.
 
-Kind regards
-Uffe
+> +
+>  /*
+>   * Freeing function for a buddy system allocator.
+>   *
+> @@ -1117,14 +1123,15 @@ static inline void __free_one_page(struct page *page,
+>  	}
+>  	if (order < MAX_ORDER - 1) {
+>  		/* If we are here, it means order is >= pageblock_order.
+> -		 * We want to prevent merge between freepages on isolate
+> -		 * pageblock and normal pageblock. Without this, pageblock
+> -		 * isolation could cause incorrect freepage or CMA accounting.
+> +		 * We want to prevent merge between freepages on pageblock
+> +		 * without fallbacks and normal pageblock. Without this,
+> +		 * pageblock isolation could cause incorrect freepage or CMA
+> +		 * accounting or HIGHATOMIC accounting.
+>  		 *
+>  		 * We don't want to hit this code for the more frequent
+>  		 * low-order merging.
+>  		 */
+> -		if (unlikely(has_isolate_pageblock(zone))) {
+> +		if (unlikely(has_non_fallback_pageblock(zone))) {
+>  			int buddy_mt;
+>  
+>  			buddy_pfn = __find_buddy_pfn(pfn, order);
+> @@ -1132,8 +1139,8 @@ static inline void __free_one_page(struct page *page,
+>  			buddy_mt = get_pageblock_migratetype(buddy);
+>  
+>  			if (migratetype != buddy_mt
+> -					&& (is_migrate_isolate(migratetype) ||
+> -						is_migrate_isolate(buddy_mt)))
+> +					&& (!migratetype_has_fallback(migratetype) ||
+> +						!migratetype_has_fallback(buddy_mt)))
+>  				goto done_merging;
+>  		}
+>  		max_order = order + 1;
+> @@ -2484,6 +2491,7 @@ static int fallbacks[MIGRATE_TYPES][3] = {
+>  	[MIGRATE_UNMOVABLE]   = { MIGRATE_RECLAIMABLE, MIGRATE_MOVABLE,   MIGRATE_TYPES },
+>  	[MIGRATE_MOVABLE]     = { MIGRATE_RECLAIMABLE, MIGRATE_UNMOVABLE, MIGRATE_TYPES },
+>  	[MIGRATE_RECLAIMABLE] = { MIGRATE_UNMOVABLE,   MIGRATE_MOVABLE,   MIGRATE_TYPES },
+> +	[MIGRATE_HIGHATOMIC] = { MIGRATE_TYPES }, /* Never used */
+>  #ifdef CONFIG_CMA
+>  	[MIGRATE_CMA]         = { MIGRATE_TYPES }, /* Never used */
+>  #endif
+> @@ -2795,8 +2803,8 @@ static void reserve_highatomic_pageblock(struct page *page, struct zone *zone,
+>  
+>  	/* Yoink! */
+>  	mt = get_pageblock_migratetype(page);
+> -	if (!is_migrate_highatomic(mt) && !is_migrate_isolate(mt)
+> -	    && !is_migrate_cma(mt)) {
+> +	/* Only reserve normal pageblock */
+> +	if (migratetype_has_fallback(mt)) {
+>  		zone->nr_reserved_highatomic += pageblock_nr_pages;
+>  		set_pageblock_migratetype(page, MIGRATE_HIGHATOMIC);
+>  		move_freepages_block(zone, page, MIGRATE_HIGHATOMIC, NULL);
+> @@ -3545,8 +3553,8 @@ int __isolate_free_page(struct page *page, unsigned int order)
+>  		struct page *endpage = page + (1 << order) - 1;
+>  		for (; page < endpage; page += pageblock_nr_pages) {
+>  			int mt = get_pageblock_migratetype(page);
+> -			if (!is_migrate_isolate(mt) && !is_migrate_cma(mt)
+> -			    && !is_migrate_highatomic(mt))
+> +			/* Only change normal pageblock */
+> +			if (migratetype_has_fallback(mt))
+>  				set_pageblock_migratetype(page,
+>  							  MIGRATE_MOVABLE);
+>  		}
+
+That part is a nice cleanup IMHO. Although the "has fallback" part is a
+bit imprecise. "migratetype_is_mergable()" might be a bit clearer.
+ideally "migratetype_is_mergable_with_other_types()". Can we come up
+with a nice name for that?
+
+-- 
+Thanks,
+
+David / dhildenb
+

@@ -2,129 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B0548BF7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1E748BF7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351389AbiALIGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:06:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
+        id S1351397AbiALIGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351388AbiALIF6 (ORCPT
+        with ESMTP id S1349140AbiALIGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:05:58 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CE0C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:05:57 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id q5so2473649ioj.7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:05:57 -0800 (PST)
+        Wed, 12 Jan 2022 03:06:38 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41966C06173F;
+        Wed, 12 Jan 2022 00:06:38 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id iw1so2140029qvb.1;
+        Wed, 12 Jan 2022 00:06:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pyw7GGJuc0hBOwmctWzhV5NE4YVpQMRChj4A/vKkkr4=;
-        b=Z+qDYRtw4H7+Xhjv9rXrIpQm265j7kHSqnL11bYAwhEcsXLlyCTMo4DGQMSeyO22BX
-         IjKFWkNtLTgesG7Dn90valcqe2XUfiJ5fv7aqbCbm0gtpV2aRAJ/6H/f6hZL/ZpJXmh9
-         6cbze64uaBbCwy+JMGzKYboFBVl+cMocBG9e5v+YJmevCYJ0bH0chy6VC9DXMG/IAWO8
-         bwJQ8FzyaP+8SF9sUohyCD0DwZkzr1qLhTz8HHaHRF9v1ge8ypjGonWRsQH18MvTwvnc
-         YR1tfC6ouTRJowyCKbTSk44cHOVHtB/1i7achYXAt7eVF4T5cfzcr61g8W0DZC6jFbjr
-         H3ug==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s9wP9RSrgr08glKF9dncR1CuR8sUvA64NLVwaMsEmbU=;
+        b=ogcCtyIpl7XMHQhcKCT/FAzS4h1kiYH97fEBksTunkvVyezNqhSGGfvfQ9+0mWFFzd
+         7F4c1j7IADAECwYvbe8EbzKyiGBte4fvT0VyL4w56GC6/16oCim7ofaqrVx/0ujGexK1
+         +q3Ik/qv9HPUTGTRGOiTSVWK4y737fKb+fMv/iU+ND6gmsUuA9bSm8fvY9WLG1VQWliG
+         bqr5iP5Xkt6HOuXNUfP9CR4+9ZrWGIg2LJQ8mcDSMtRlsyvMoleA8jXeHNP23a76D7Be
+         rdsbuXXP35366F6F0+bRLv/jPGJdUOwTVGlQ2/Q+NTMkqZIoaEPa/VDwD0Jfr8B+9IPF
+         l1Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pyw7GGJuc0hBOwmctWzhV5NE4YVpQMRChj4A/vKkkr4=;
-        b=yINvPH00hPbsRG6I96MoTOIecjt7o8pcLuEP5wHf3+fulEDAKS89/x47Ex9VGTVhSG
-         dg+x+4ChIHtN52yZFVsMUL1Xf7mL7Zq6c0QVpHdE2ayWef22Ok1ULmUywfwEI/turulr
-         2bY8hvnMWiwWlDr78OWXGDxiFO9s2UArKEfYSc3w37MAEntlJId8eFvyS+HbwxrFF2rQ
-         9Ps2QlI5j2J5IERjSAaNPniujqYiep68ZxCxQ1aDMpD+3ZW546+tjVzKwlIXw1CgKVHG
-         SA3+RrFMFRfMLmplPkZHjGM9T43SD/KYFWJUkKshy4J/0Qd9bvlmwvgU9ZkUPv9QKdl2
-         YRJQ==
-X-Gm-Message-State: AOAM533cOPcMaxvZ17wKhTnLNZFvghWjOtuPg13TJ1IQpWBE/Z8WgsQD
-        f74Qe1hRzW+sT+71L9ILPN2/2A==
-X-Google-Smtp-Source: ABdhPJxS1FZp/i/SPqHdj4pGDjPeqMB4/I876fPMsGFsuuH99sxVcJWSlXkHHhif8uuR0sVcS/X06A==
-X-Received: by 2002:a05:6638:d01:: with SMTP id q1mr4064289jaj.248.1641974756815;
-        Wed, 12 Jan 2022 00:05:56 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:b6b6:70f4:b540:6383])
-        by smtp.gmail.com with ESMTPSA id c3sm1856408iow.28.2022.01.12.00.05.55
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s9wP9RSrgr08glKF9dncR1CuR8sUvA64NLVwaMsEmbU=;
+        b=DEp8BBjjcf7w5VGwF6WxubTuZCE2Ul/AZqlx3YeO3RaDZ7HgQ/23oODewzuZjg058E
+         7ZPYxIMpg8V4QqOjQA0k7bi3JTIPugL48vU+vAz/uLlWQVEnu/TlmJVu9PVVU3spw2be
+         rW1JAQfiMaxO73aVLyG7uxBOBOuUWOxN3jihXcqcL7w48+zb9aAPUYu2Jkf5blhA6DVO
+         cXbAjAJUglLQ61DHxLXDONV3ysakWg5niRLYloxZ6mt5c2peMqEH9rov4XMYFmCvVVX8
+         wSQBWgP5i9h9knv9/5PWv86X7s86xtxXW7q3RYzY+mKlfirbHnzetcAZW4kPEpvXPWnr
+         wWaw==
+X-Gm-Message-State: AOAM530Ny1ecgTnT/TFBse4IWk1XSVjOGmYdFWabRvQAxz5gnhzNBlMi
+        jb50zF1iyhheW3oEczMaa7Q=
+X-Google-Smtp-Source: ABdhPJwm0V0bPtI8HXjfNZ/O4N0UAjpRihZIarKX3MZU85E5mJUIIZNmlXu2DRyT8OmNEh38J6JfnA==
+X-Received: by 2002:a05:6214:f25:: with SMTP id iw5mr6709778qvb.3.1641974797539;
+        Wed, 12 Jan 2022 00:06:37 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id g13sm4199068qko.34.2022.01.12.00.06.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 00:05:56 -0800 (PST)
-Date:   Wed, 12 Jan 2022 01:05:51 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 7/9] mm: multigenerational lru: eviction
-Message-ID: <Yd6L349/aJd8hbYn@google.com>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-8-yuzhao@google.com>
- <87czkyzhfe.fsf@linux.ibm.com>
+        Wed, 12 Jan 2022 00:06:37 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     wg@grandegger.com
+Cc:     mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
+        mailhol.vincent@wanadoo.fr, jiapeng.chong@linux.alibaba.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
+Subject: [PATCH] drivers/net/can/softing: remove redundant ret variable
+Date:   Wed, 12 Jan 2022 08:06:29 +0000
+Message-Id: <20220112080629.667191-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87czkyzhfe.fsf@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 04:07:57PM +0530, Aneesh Kumar K.V wrote:
-> ...
-> 
->  +static int isolate_folios(struct lruvec *lruvec, struct scan_control *sc, int swappiness,
-> > +			  int *type_scanned, struct list_head *list)
-> > +{
-> > +	int i;
-> > +	int type;
-> > +	int scanned;
-> > +	int tier = -1;
-> > +	DEFINE_MIN_SEQ(lruvec);
-> > +
-> > +	VM_BUG_ON(!seq_is_valid(lruvec));
-> > +
-> > +	/*
-> > +	 * Try to make the obvious choice first. When anon and file are both
-> > +	 * available from the same generation, interpret swappiness 1 as file
-> > +	 * first and 200 as anon first.
-> > +	 */
-> > +	if (!swappiness)
-> > +		type = 1;
-> > +	else if (min_seq[0] < min_seq[1])
-> > +		type = 0;
-> > +	else if (swappiness == 1)
-> > +		type = 1;
-> > +	else if (swappiness == 200)
-> > +		type = 0;
-> > +	else
-> > +		type = get_type_to_scan(lruvec, swappiness, &tier);
-> > +
-> 
-> Wondering wether it will make it simpler to use
-> #define ANON 0
-> #define FILE 1
-> 
-> and then
-> 	else if (min_seq[ANON] < min_seq[FILE])
-> 		type = ANON;
-> 
-> The usage of 0/1 across code do confuse
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-I agree, and I plan to do this later because the existing code uses
-this convention and needs renaming too.
+Return value from softing_startstop() directly instead
+of taking this in another redundant variable.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+---
+ drivers/net/can/softing/softing_main.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/net/can/softing/softing_main.c b/drivers/net/can/softing/softing_main.c
+index cfc1325aad10..737dac5ea3b1 100644
+--- a/drivers/net/can/softing/softing_main.c
++++ b/drivers/net/can/softing/softing_main.c
+@@ -392,13 +392,10 @@ static int softing_netdev_open(struct net_device *ndev)
+ 
+ static int softing_netdev_stop(struct net_device *ndev)
+ {
+-	int ret;
+-
+ 	netif_stop_queue(ndev);
+ 
+ 	/* softing cycle does close_candev() */
+-	ret = softing_startstop(ndev, 0);
+-	return ret;
++	return softing_startstop(ndev, 0);
+ }
+ 
+ static int softing_candev_set_mode(struct net_device *ndev, enum can_mode mode)
+-- 
+2.25.1
+

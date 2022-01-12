@@ -2,161 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B7448C575
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 715C048C578
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353875AbiALODF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:03:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353879AbiALODC (ORCPT
+        id S1353888AbiALODI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:03:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55790 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240845AbiALODH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:03:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2ED8C061756;
-        Wed, 12 Jan 2022 06:03:01 -0800 (PST)
+        Wed, 12 Jan 2022 09:03:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91DEF60C02;
-        Wed, 12 Jan 2022 14:03:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B50ABC36AEA;
-        Wed, 12 Jan 2022 14:02:57 +0000 (UTC)
-Date:   Wed, 12 Jan 2022 15:02:54 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, LTP List <ltp@lists.linux.it>,
-        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
-        containers@lists.linux.dev, Alexey Gladkov <legion@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [next]: LTP: getxattr05.c:97: TFAIL: unshare(CLONE_NEWUSER)
- failed: ENOSPC (28)
-Message-ID: <20220112140254.cvngcwggeevwaazw@wittgenstein>
-References: <CA+G9fYsMHhXJCgO-ykR0oO1kVdusGnthgj6ifxEKaGPHZJ-ZCw@mail.gmail.com>
- <20220112131837.igsjkkttqskw4eix@wittgenstein>
- <CADYN=9Lvm-1etZS817eZK91NUyxkFBmsu=5-q_8Ei-1eV8DuZQ@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5089B81ECF;
+        Wed, 12 Jan 2022 14:03:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C93BBC36AEB;
+        Wed, 12 Jan 2022 14:03:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641996184;
+        bh=amKt34teMxxIOXBwhnAeme3pTGwo72TG1kvA6fCdAUc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JM5Ek/Gkdgj1W6LkNO3zvguV7eQ/YgGUEFumexpV7OZALwD2h+HAdznF73CaJKfOU
+         66W5QtKh9dt4HpgTXBNJfH7z6f4e7lg0iR98TE1LRO+Y1d69DFHtMGgJXcVWQ5w7Z5
+         3fOXI6f8CyZ7+kd3xNMtErHqAxKChAJ6AxG6P25/B/81usdgh9ek6eJ8CZZNl9oyx2
+         /usOeVmqN1X17K4LL9/lCo6u+HN9tHAmusWKZxAlIP48IbcLKxI9bM0m6vQZIIdc20
+         a/rr9E1g2ikcSJR1/KBWyK33dgXlhXF95hIgW98qQ1+91gCeziKqsadfemfhXeRDSO
+         tUU3yAswDHkAA==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [RFC PATCH v2 1/8] ftrace: Add ftrace_set_filter_ips function
+Date:   Wed, 12 Jan 2022 23:02:58 +0900
+Message-Id: <164199617822.1247129.11776583613282139994.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <164199616622.1247129.783024987490980883.stgit@devnote2>
+References: <164199616622.1247129.783024987490980883.stgit@devnote2>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CADYN=9Lvm-1etZS817eZK91NUyxkFBmsu=5-q_8Ei-1eV8DuZQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 02:22:42PM +0100, Anders Roxell wrote:
-> On Wed, 12 Jan 2022 at 14:18, Christian Brauner
-> <christian.brauner@ubuntu.com> wrote:
-> >
-> > On Wed, Jan 12, 2022 at 05:15:37PM +0530, Naresh Kamboju wrote:
-> > > While testing LTP syscalls with Linux next 20220110 (and till date 20220112)
-> > > on x86_64, i386, arm and arm64 the following tests failed.
-> > >
-> > > tst_test.c:1365: TINFO: Timeout per run is 0h 15m 00s
-> > > getxattr05.c:87: TPASS: Got same data when acquiring the value of
-> > > system.posix_acl_access twice
-> > > getxattr05.c:97: TFAIL: unshare(CLONE_NEWUSER) failed: ENOSPC (28)
-> > > tst_test.c:391: TBROK: Invalid child (13545) exit value 1
-> > >
-> > > fanotify17.c:176: TINFO: Test #1: Global groups limit in privileged user ns
-> > > fanotify17.c:155: TFAIL: unshare(CLONE_NEWUSER) failed: ENOSPC (28)
-> > > tst_test.c:391: TBROK: Invalid child (14739) exit value 1
-> > >
-> > > sendto03.c:48: TBROK: unshare(268435456) failed: ENOSPC (28)
-> > >
-> > > setsockopt05.c:45: TBROK: unshare(268435456) failed: ENOSPC (28)
-> > >
-> > > strace output:
-> > > --------------
-> > > [pid   481] wait4(-1, 0x7fff52f5ae8c, 0, NULL) = -1 ECHILD (No child processes)
-> > > [pid   481] clone(child_stack=NULL,
-> > > flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD,
-> > > child_tidptr=0x7f3af0fa7a10) = 483
-> > > strace: Process 483 attached
-> > > [pid   481] wait4(-1,  <unfinished ...>
-> > > [pid   483] unshare(CLONE_NEWUSER)      = -1 ENOSPC (No space left on device)
-> >
-> > This looks like another regression in the ucount code. Reverting the
-> > following commit fixes it and makes the getxattr05 test work again:
-> >
-> > commit 0315b634f933b0f12cfa82660322f6186c1aa0f4
-> > Author: Alexey Gladkov <legion@kernel.org>
-> > Date:   Fri Dec 17 15:48:23 2021 +0100
-> >
-> >     ucounts: Split rlimit and ucount values and max values
-> >
-> >     Since the semantics of maximum rlimit values are different, it would be
-> >     better not to mix ucount and rlimit values. This will prevent the error
-> >     of using inc_count/dec_ucount for rlimit parameters.
-> >
-> >     This patch also renames the functions to emphasize the lack of
-> >     connection between rlimit and ucount.
-> >
-> >     v2:
-> >     - Fix the array-index-out-of-bounds that was found by the lkp project.
-> >
-> >     Reported-by: kernel test robot <oliver.sang@intel.com>
-> >     Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> >     Link: https://lkml.kernel.org/r/73ea569042babda5cee2092423da85027ceb471f.1639752364.git.legion@kernel.org
-> >     Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
-> >
-> > The issue only surfaces if /proc/sys/user/max_user_namespaces is
-> > actually written to.
-> 
-> I did a git bisect and that pointed me to this patch too.
+From: Jiri Olsa <jolsa@redhat.com>
 
-Uhm, doesn't this want to be:
+Adding ftrace_set_filter_ips function to be able to set filter on
+multiple ip addresses at once.
 
-diff --git a/kernel/ucount.c b/kernel/ucount.c
-index 22070f004e97..108c6a879cd8 100644
---- a/kernel/ucount.c
-+++ b/kernel/ucount.c
-@@ -264,7 +264,7 @@ long inc_rlimit_ucounts(struct ucounts *ucounts, enum rlimit_type type, long v)
-        long ret = 0;
+With the kprobe multi attach interface we have cases where we need to
+initialize ftrace_ops object with thousands of functions, so having
+single function diving into ftrace_hash_move_and_update_ops with
+ftrace_lock is faster.
 
-        for (iter = ucounts; iter; iter = iter->ns->ucounts) {
--               long new = atomic_long_add_return(v, &iter->ucount[type]);
-+               long new = atomic_long_add_return(v, &iter->rlimit[type]);
-                if (new < 0 || new > max)
-                        ret = LONG_MAX;
-                else if (iter == ucounts)
-@@ -279,7 +279,7 @@ bool dec_rlimit_ucounts(struct ucounts *ucounts, enum rlimit_type type, long v)
-        struct ucounts *iter;
-        long new = -1; /* Silence compiler warning */
-        for (iter = ucounts; iter; iter = iter->ns->ucounts) {
--               long dec = atomic_long_sub_return(v, &iter->ucount[type]);
-+               long dec = atomic_long_sub_return(v, &iter->rlimit[type]);
-                WARN_ON_ONCE(dec < 0);
-                if (iter == ucounts)
-                        new = dec;
+The functions ips are passed as unsigned long array with count.
 
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ include/linux/ftrace.h |    3 +++
+ kernel/trace/ftrace.c  |   53 ++++++++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 47 insertions(+), 9 deletions(-)
 
-otherwise,
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 9999e29187de..60847cbce0da 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -512,6 +512,8 @@ struct dyn_ftrace {
+ 
+ int ftrace_set_filter_ip(struct ftrace_ops *ops, unsigned long ip,
+ 			 int remove, int reset);
++int ftrace_set_filter_ips(struct ftrace_ops *ops, unsigned long *ips,
++			  unsigned int cnt, int remove, int reset);
+ int ftrace_set_filter(struct ftrace_ops *ops, unsigned char *buf,
+ 		       int len, int reset);
+ int ftrace_set_notrace(struct ftrace_ops *ops, unsigned char *buf,
+@@ -802,6 +804,7 @@ static inline unsigned long ftrace_location(unsigned long ip)
+ #define ftrace_regex_open(ops, flag, inod, file) ({ -ENODEV; })
+ #define ftrace_set_early_filter(ops, buf, enable) do { } while (0)
+ #define ftrace_set_filter_ip(ops, ip, remove, reset) ({ -ENODEV; })
++#define ftrace_set_filter_ips(ops, ips, cnt, remove, reset) ({ -ENODEV; })
+ #define ftrace_set_filter(ops, buf, len, reset) ({ -ENODEV; })
+ #define ftrace_set_notrace(ops, buf, len, reset) ({ -ENODEV; })
+ #define ftrace_free_filter(ops) do { } while (0)
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 30bc880c3849..d38ae5063be3 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -4958,7 +4958,7 @@ ftrace_notrace_write(struct file *file, const char __user *ubuf,
+ }
+ 
+ static int
+-ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
++__ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
+ {
+ 	struct ftrace_func_entry *entry;
+ 
+@@ -4976,9 +4976,25 @@ ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
+ 	return add_hash_entry(hash, ip);
+ }
+ 
++static int
++ftrace_match_addr(struct ftrace_hash *hash, unsigned long *ips,
++		  unsigned int cnt, int remove)
++{
++	unsigned int i;
++	int err;
++
++	for (i = 0; i < cnt; i++) {
++		err = __ftrace_match_addr(hash, ips[i], remove);
++		if (err)
++			return err;
++	}
++	return 0;
++}
++
+ static int
+ ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
+-		unsigned long ip, int remove, int reset, int enable)
++		unsigned long *ips, unsigned int cnt,
++		int remove, int reset, int enable)
+ {
+ 	struct ftrace_hash **orig_hash;
+ 	struct ftrace_hash *hash;
+@@ -5008,8 +5024,8 @@ ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
+ 		ret = -EINVAL;
+ 		goto out_regex_unlock;
+ 	}
+-	if (ip) {
+-		ret = ftrace_match_addr(hash, ip, remove);
++	if (ips) {
++		ret = ftrace_match_addr(hash, ips, cnt, remove);
+ 		if (ret < 0)
+ 			goto out_regex_unlock;
+ 	}
+@@ -5026,10 +5042,10 @@ ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
+ }
+ 
+ static int
+-ftrace_set_addr(struct ftrace_ops *ops, unsigned long ip, int remove,
+-		int reset, int enable)
++ftrace_set_addr(struct ftrace_ops *ops, unsigned long *ips, unsigned int cnt,
++		int remove, int reset, int enable)
+ {
+-	return ftrace_set_hash(ops, NULL, 0, ip, remove, reset, enable);
++	return ftrace_set_hash(ops, NULL, 0, ips, cnt, remove, reset, enable);
+ }
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+@@ -5628,10 +5644,29 @@ int ftrace_set_filter_ip(struct ftrace_ops *ops, unsigned long ip,
+ 			 int remove, int reset)
+ {
+ 	ftrace_ops_init(ops);
+-	return ftrace_set_addr(ops, ip, remove, reset, 1);
++	return ftrace_set_addr(ops, &ip, 1, remove, reset, 1);
+ }
+ EXPORT_SYMBOL_GPL(ftrace_set_filter_ip);
+ 
++/**
++ * ftrace_set_filter_ips - set a functions to filter on in ftrace by addresses
++ * @ops - the ops to set the filter with
++ * @ips - the array of addresses to add to or remove from the filter.
++ * @cnt - the number of addresses in @ips
++ * @remove - non zero to remove ips from the filter
++ * @reset - non zero to reset all filters before applying this filter.
++ *
++ * Filters denote which functions should be enabled when tracing is enabled
++ * If @ips array or any ip specified within is NULL , it fails to update filter.
++ */
++int ftrace_set_filter_ips(struct ftrace_ops *ops, unsigned long *ips,
++			  unsigned int cnt, int remove, int reset)
++{
++	ftrace_ops_init(ops);
++	return ftrace_set_addr(ops, ips, cnt, remove, reset, 1);
++}
++EXPORT_SYMBOL_GPL(ftrace_set_filter_ips);
++
+ /**
+  * ftrace_ops_set_global_filter - setup ops to use global filters
+  * @ops - the ops which will use the global filters
+@@ -5653,7 +5688,7 @@ static int
+ ftrace_set_regex(struct ftrace_ops *ops, unsigned char *buf, int len,
+ 		 int reset, int enable)
+ {
+-	return ftrace_set_hash(ops, buf, len, 0, 0, reset, enable);
++	return ftrace_set_hash(ops, buf, len, NULL, 0, 0, reset, enable);
+ }
+ 
+ /**
 
-inc_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_NPROC, 1)
-
-means
-
-long inc_rlimit_ucounts(struct ucounts *ucounts, UCOUNT_RLIMIT_NPROC, long v)
-{
-	struct ucounts *iter;
-	long max = LONG_MAX;
-	long ret = 0;
-
-	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
-		long new = atomic_long_add_return(v, &iter->ucount[UCOUNT_RLIMIT_NPROC]);
-		if (new < 0 || new > max)
-			ret = LONG_MAX;
-		else if (iter == ucounts)
-			ret = new;
-		max = get_userns_rlimit_max(iter->ns, UCOUNT_RLIMIT_NPROC);
-	}
-	return ret;
-}
-
-which means that UCOUNT_RLIMIT_NPROC overwrites ucount[UCOUNT_RLIMIT_NPROC]?

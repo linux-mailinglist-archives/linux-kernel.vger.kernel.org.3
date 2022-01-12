@@ -2,96 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 108BA48CC1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C0948CC1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357011AbiALTgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:36:15 -0500
-Received: from mga11.intel.com ([192.55.52.93]:37890 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356791AbiALTf1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:35:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642016127; x=1673552127;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=YuJU8sDPPXrY7j14l/N36i5HlcFv+BrkOxyMAgWnQeU=;
-  b=fCC/HbAulwZ/BJzumOsPNjlqNjahwxuwvK/QP7QP3PXgdrmgyLpbQuLF
-   gXJ+igfD3GqjSjWWy7swX0CxGial/Tj4+qyJiVYFVmHSBc1pczeeTyi+H
-   KayPUBPFjkHru+P8UL5ctQyKykbapHDCTJ2o93dx/A4tlLAJiTUW/06vf
-   4nnHkvMUQ52Hkt2mAeoJECczssd3cqrBUuZQKk9EVaCQUE9D1JwEi8RFx
-   vbCBRU3HLH42tuI7yGiPN0/03V+OkK18FrTd3PWob+RDht9vkZXqnaRV9
-   QEprnSOyiEOECUEAHcjy4wAdpXOqLgkgQplWM0XCO2yjIodKNDddsSbom
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="241393258"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="241393258"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 11:35:27 -0800
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="593118453"
-Received: from kumarkan-mobl.amr.corp.intel.com (HELO [10.209.80.194]) ([10.209.80.194])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 11:35:25 -0800
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220111113314.27173-1-kirill.shutemov@linux.intel.com>
- <20220111113314.27173-4-kirill.shutemov@linux.intel.com>
- <b3348430-1b91-4b8b-b70c-76d48f8737f7@intel.com>
- <20220112192955.amelr4sq662pfv67@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv2 3/7] efi/x86: Implement support for unaccepted memory
-Message-ID: <5e624c5a-387e-fef0-3870-f6a58d3f832e@intel.com>
-Date:   Wed, 12 Jan 2022 11:35:23 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1344966AbiALThO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:37:14 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:42245 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356853AbiALTgk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 14:36:40 -0500
+Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MI5Dj-1nABbl2dF9-00FFhG; Wed, 12 Jan 2022 20:36:38 +0100
+Received: by mail-wr1-f45.google.com with SMTP id k30so6103563wrd.9;
+        Wed, 12 Jan 2022 11:36:38 -0800 (PST)
+X-Gm-Message-State: AOAM533UC8qhhTcs8GYDJ/+zKBpbNzYYByHcEZn/VBHiev3d1R4yabXf
+        +jc+Q9qsqLC/OMyhjE9SDAgwZZdHPpNU6vx368E=
+X-Google-Smtp-Source: ABdhPJxROagmxR5J8MlQaHRf+4tU5rG6aldq7qt4ZWTWnEwU5lUja8ML2hO9ZXqsHv5/gtcEfuFOzYdmiXAZiLGLabk=
+X-Received: by 2002:a5d:6ac7:: with SMTP id u7mr1059496wrw.219.1642016198201;
+ Wed, 12 Jan 2022 11:36:38 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220112192955.amelr4sq662pfv67@box.shutemov.name>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <266065918e47e8965bb6a0ab486da070278788e4.1641996057.git.geert+renesas@glider.be>
+ <BY3PR18MB47375336D4AC1FE79D493945C6529@BY3PR18MB4737.namprd18.prod.outlook.com>
+ <CAK8P3a2jLgtcuJ6MD7LmJzagiRQSk85eL3tiHDmB33i_n3CZ2w@mail.gmail.com> <BY3PR18MB4737E57C0DC616FFE73CC7AEC6529@BY3PR18MB4737.namprd18.prod.outlook.com>
+In-Reply-To: <BY3PR18MB4737E57C0DC616FFE73CC7AEC6529@BY3PR18MB4737.namprd18.prod.outlook.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 12 Jan 2022 20:36:22 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0Eeyt=rWG6CjYCKck-k5+uT5GkLuDG+S4GkQgD49-H1A@mail.gmail.com>
+Message-ID: <CAK8P3a0Eeyt=rWG6CjYCKck-k5+uT5GkLuDG+S4GkQgD49-H1A@mail.gmail.com>
+Subject: Re: [EXT] [PATCH] hwrng: cn10k - HW_RANDOM_CN10K should depend on ARCH_THUNDER
+To:     Sunil Kovvuri Goutham <sgoutham@marvell.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Joseph Longever <jlongever@marvell.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:S4HTrNCoawQZl4FCTePxhGeG5TMVCh1mvjOnRdOK0xojB5LuV35
+ YDtQFyNVJwaScrDqzJUBhBiyFLrqYEK2GVizWFZ+C8WZWA5c3YYvCNng3NFGltGpNexZtaq
+ nifnYvhSTtekV29XeeBU7QGsIl4Ta0Cay/rYPnmlIu5J9N1MCQpwhjraBbgTK9vApumYbOk
+ liRZQ5gDBucO2kb6WpFpQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:J1D/eof8IkU=:yMx0htCF84rQDTNkpZdJUh
+ a+pUKseRnUCUDfaE8wZV7RzEsQ2lwdoD9w/cM93oVD4UxhWTa//joe9rCI/zC5jgotEEtsXIA
+ ffMURRQnTQF/uTffGpHKQB5qVb/J9oVpdBbkEhD1X0Af9iINKJlspCMGnwpCbDCvCYF4QPDcE
+ LNkYyUpT2y2vmWu9hIB+BMGBZU21yqU60Blo1EKLUxW1C/CNWxHa+lUNmqcK+kwJG1GddsW5j
+ 1CjWWUU/pkleHzJdWnk8JGyPHJ9qBgzmTL7JHXcup01BDzBwC5OWU9VsLevOIJFNXeKsM6gYM
+ YJT/U/s5jub6l1kikF5xYvw7VYnjv5uDVkGOs458AjnDuQ9owhuf4dY6LLvwHI7ba6viN/RmA
+ yF5hFgdi9B2yYUq/hhNBSNqE4DQ2LvyM4EpSPK55bTG0BMUzA4k6CiBzpwfVctcTCBLnxd8/j
+ dL1viJdhMIGaDOQY677fu0n3oTEB5fMznLpO+5gg22DrJBmm2h8epp6dW2z3Fnv1+hheoFJSA
+ MykmOeM6wXVqbAO8NvGL2dJfQryPpjY1WdpHc47xxMJcDv0XhmN5pYJuPSeTSuY+4v0SvDNyI
+ U4/0edQwGuYtENW+iF1O70qj6iEiyH9L+vvqCKsX4TvJIfl2U/bv93XkNLhJzT2QLGTZvqzMq
+ FxLjmd9aaUK8+sXamjWjBZ/2OJkxUWfgCtiWH4rzYXOgFRnvCxcBJsE9/3vgopobwFIs=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/22 11:29 AM, Kirill A. Shutemov wrote:
->>> +	 * In the worst case scenario -- a huge hole in the middle of the
->>> +	 * address space -- It needs 256MiB to handle 4PiB of the address
->>> +	 * space.
->>> +	 *
->>> +	 * TODO: handle situation if params->unaccepted_memory has already set.
->>> +	 * It's required to deal with kexec.
->> What happens today with kexec() since its not dealt with?
-> I didn't give it a try, but I assume it will hang.
-> 
-> There are more things to do to make kexec working and safe. We will get
-> there, but it is not top priority.
+On Wed, Jan 12, 2022 at 5:34 PM Sunil Kovvuri Goutham
+<sgoutham@marvell.com> wrote:
+> >Subject: Re: [EXT] [PATCH] hwrng: cn10k - HW_RANDOM_CN10K should depend on ARCH_THUNDER
+> >On Wed, Jan 12, 2022 at 4:55 PM Sunil Kovvuri Goutham <sgoutham@marvell.com> wrote:
+> >config ARCH_OCTEON
+> >        bool "Marvell OCTEON and ThunderX data processing units"
+> >       help
+> >          This enables support for Marvell (formerly Cavium) OCTEON
+> >          Family of DPUs and SoCs, including OCTEON 10, Octeon TX2
+> >          CN92xx/CN96xx/CN98xx, OcteonTX CN8xxx, ThunderX CN88xx, and
+> >          Octeon Fusion products.
+> >
+> >          Note: these are unrelated to the similarly named ThunderX2
+> >         CN99xx server processors, the Octeon TX2 91xx SoCs and the
+> >          Armada processors.
+> >
+> >config ARCH_THUNDER2
+> >        bool "Marvell/Cavium ThunderX2 Server Processors"
+> >        select GPIOLIB
+> >        help
+> >          This enables support for Marvell's discontinued ThunderX2
+> >          CN99XX family of server processors, originally sold by Cavium.
+> >
+> >          Note: these do not include the unrelated ThunderX CN88xx or
+> >          OCTEON TX2 processors, despite the similarities in naming.
+> >
+> >config ARCH_MVEBU
+> >        bool "Marvell EBU SoC Family"
+> >        help
+> >          This enables support for Marvell EBU familly, including:
+> >           - Armada 3700 SoC Family
+> >           - Armada 7K SoC Family
+> >           - Armada 8K SoC Family
+> >           - Octeon TX2 CN91xx Family
+> >
+> >If that's not the correct interpretation, does that mean that OCTEON 10
+> >and Octeon TX2 CN92xx/CN96xx/CN98xx are a different family from
+> >Octeon/TX CN8xxx and ThunderX CN88xx and should have a fourth
+> >symbol, or are they part of the Armada family?
+>
+> OcteonTx (8xx) are derivatives of ThunderX.
 
-Well, if we know it's broken, shouldn't we at least turn kexec off?
+Ok, and those are the same family as the earlier cnMIPS based OCTEON
+CN3xxx/CN5xxx/CN6xxx/CN7xxx/CNF7xxx and the later ARMv8.2
+Fusion CNF9xxx, right?
 
-It would be dirt simple to do in Kconfig.  As would setting:
+> Octeon 10 and OcteonTx2 (9x series) are different families and not related to
+> Armada as well.
 
-	kexec_load_disabled = true;
+I assume with '9x' you mean only the CN92xx/CN96xx/CN98xx/CN10x/DPU400
+family here, not the OcteonTx2 CN91xx that is clearly part of the Marvell
+Sheeva/Kirkwood/MVEBU/Armada family, and the CN99xx in the
+Netlogic/Broadcom family.
 
-which would probably also do the trick.  That's from three seconds of
-looking.  I'm sure you can come up with something better.
+Is there anything that you can say about this product line? It looked like it
+was derived from the cnMIPS/OcteonTX line, and it seems to share its
+mystery (presumably ThunderX1-derived rather than Cortex or Vulcan)
+ARMv8.2 core with the CNF9xxx.
+
+> But I am fine if ARCH_THUNDER is renamed to ARCH_OCTEON to include all.
+
+I'd really prefer to have sensible names, so if there are six unrelated Marvell
+SoC families (pxa/mmp, armada/mvebu/cn91xx, xlp/vulcan/thunderx2,
+berlin/synaptics, cavium/octeon/thunderx/fusion, and whatever turned into
+non-cavium cn92xx/cn96xx/cn98xx/cn10x/dpu400) instead of five, we should
+probably have six ARCH_* names for those. (Note: for some other
+manufacturers such as Broadcom or Mediatek, we do use just the company
+name as the CONFIG_ARCH_* symbol, but I feel that for Marvell or NXP,
+that ship has sailed long ago, based on the number of acquisitions and
+spinoffs).
+
+Any suggestions for the name? Were these acquired from some other
+company?
+
+        Arnd

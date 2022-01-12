@@ -2,214 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C3148C76E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A04E48C775
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343536AbiALPmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243806AbiALPm1 (ORCPT
+        id S1354744AbiALPn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:43:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44234 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242234AbiALPnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:42:27 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2237DC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:42:27 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        Wed, 12 Jan 2022 10:43:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 28EBD1EC02B9;
-        Wed, 12 Jan 2022 16:42:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642002141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=n7aI5Rcz6Vke8FIjQCVrNeGW9V44Jlub6zktdVeEpcA=;
-        b=J0VwABANyrVBGRTOva3eH4H6UPFdaYDS2C1EEWK8uiOG4e8fd6qitpicTBbiJ3aQaOhcgp
-        suspqcKWj4HZLPbpjFI1LTgBBMy2eGwd9rhtpjUHxh7wqK6zCTFpx4rN3xvUYbO4L+8xEp
-        xpj8EnoxL7fZsZoppLVlyinHPNBWIvI=
-Date:   Wed, 12 Jan 2022 16:42:25 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        lkp@lists.01.org, lkp@intel.com
-Subject: Re: [PATCH] x86/entry_32: Fix segment exceptions
-Message-ID: <Yd724f1Uv1GTZ+46@zn.tnic>
-References: <20220106083523.GB32167@xsang-OptiPlex-9020>
- <Yd1l0gInc4zRcnt/@hirez.programming.kicks-ass.net>
- <Yd4u2rVVSdpEpwwM@google.com>
- <Yd6zrbFBzSn3ducx@hirez.programming.kicks-ass.net>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9EAFB81F68;
+        Wed, 12 Jan 2022 15:43:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 170D6C36AE5;
+        Wed, 12 Jan 2022 15:43:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642002192;
+        bh=Zg7ygGz6sOLlajsI3tjCRIWEiEwQ+qlt2jgeme43mro=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=a/4hVBsxpAOcJv+atUaGlJNYXSbgn93sjNGu4mtwH2sATr9mEbgWoYeH7Jo+8A2vt
+         pDOrNTzTjquuuQh26/TKbaDqmVekQHzAnkC9NjlrsOwqVLxrisSNLsE3enZQbg6RH7
+         eUW27COvQai1RQ9UR+qgU0zdXjulxU2XIHLqBI8W8m16v9KqnFd3PwwQffLl+snpkw
+         0tPXsRdOYNZuNVbEHl6RdBk+/GRqnveGEMw+f9zLn3iZNq8dxFWOa2FTP4R4Ncht0N
+         zcQjdBok8gXbaHz346NK4GgdbGPkXlOk6xXPQXmwfExQbkNohEk6D92p5Gjz5XVXJv
+         kAVez7FWOqRFQ==
+Date:   Wed, 12 Jan 2022 09:43:10 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Yao Hongbo <yaohongbo@linux.alibaba.com>
+Cc:     bhelgaas@google.com, zhangliguang@linux.alibaba.com,
+        alikernel-developer@linux.alibaba.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] PCI: Add "pci=reassign_all_bus" boot parameter
+Message-ID: <20220112154310.GA259954@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yd6zrbFBzSn3ducx@hirez.programming.kicks-ass.net>
+In-Reply-To: <1640856613-101412-1-git-send-email-yaohongbo@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 11:55:41AM +0100, Peter Zijlstra wrote:
-> Full and proper patch below. Boris, if you could merge in x86/core that
-> branch should then be ready for a pull req.
+On Thu, Dec 30, 2021 at 05:30:13PM +0800, Yao Hongbo wrote:
+> PCI bridges may be misconfigured by te system BIOS, and then the OS
+> scan the bridges that need to be reconfigured.
+> However, the PCI bus topology configured by the bios may be wrong:
+> 
+> [   19.376273] pci 0000:40:00.0: bridge configuration invalid ([bus
+> 00-00]), reconfiguring
+> [   19.384443] pci_bus 0000:47: busn_res: can not insert [bus 47-46]
+> under [bus 40-46] (conflicts with (null) [bus 40-46])
+> 
+> The primary bus number and subordinate bus number written by the bios
+> were wrong, and the OS continues to add bridges on the wrong bus
+> topology.
+> 
+> In order to avoid such problems, a kernel cmdline needs to be
+> added to support the os to fully configure the pci bus.
 
-I've got this as the final version. Scream if something's wrong.
+Why can't we make Linux smart enough to fix this by itself, without
+forcing the user to boot with "pci=reassign_all_bus"?
 
----
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Tue, 11 Jan 2022 12:11:14 +0100
-Subject: [PATCH] x86/entry_32: Fix segment exceptions
-
-The LKP robot reported that commit in Fixes: caused a failure. Turns out
-the ldt_gdt_32 selftest turns into an infinite loop trying to clear the
-segment.
-
-As discovered by Sean, what happens is that PARANOID_EXIT_TO_KERNEL_MODE
-in the handle_exception_return path overwrites the entry stack data with
-the task stack data, restoring the "bad" segment value.
-
-Instead of having the exception retry the instruction, have it emulate
-the full instruction. Replace EX_TYPE_POP_ZERO with EX_TYPE_POP_REG
-which will do the equivalent of: POP %reg; MOV $imm, %reg.
-
-In order to encode the segment registers, add them as registers 8-11 for
-32-bit.
-
-By setting regs->[defg]s the (nested) RESTORE_REGS will pop this value
-at the end of the exception handler and by increasing regs->sp, it will
-have skipped the stack slot.
-
-This was debugged by Sean Christopherson <seanjc@google.com>.
-
- [ bp: Add EX_REG_GS too. ]
-
-Fixes: aa93e2ad7464 ("x86/entry_32: Remove .fixup usage")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/Yd1l0gInc4zRcnt/@hirez.programming.kicks-ass.net
----
- arch/x86/entry/entry_32.S                  | 13 +++++++++----
- arch/x86/include/asm/extable_fixup_types.h | 11 ++++++++++-
- arch/x86/lib/insn-eval.c                   |  5 +++++
- arch/x86/mm/extable.c                      | 17 +++--------------
- 4 files changed, 27 insertions(+), 19 deletions(-)
-
-diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-index e0a95d8a6553..a7ec22b1d06c 100644
---- a/arch/x86/entry/entry_32.S
-+++ b/arch/x86/entry/entry_32.S
-@@ -268,11 +268,16 @@
- 1:	popl	%ds
- 2:	popl	%es
- 3:	popl	%fs
--	addl	$(4 + \pop), %esp	/* pop the unused "gs" slot */
-+4:	addl	$(4 + \pop), %esp	/* pop the unused "gs" slot */
- 	IRET_FRAME
--	_ASM_EXTABLE_TYPE(1b, 1b, EX_TYPE_POP_ZERO)
--	_ASM_EXTABLE_TYPE(2b, 2b, EX_TYPE_POP_ZERO)
--	_ASM_EXTABLE_TYPE(3b, 3b, EX_TYPE_POP_ZERO)
-+
-+	/*
-+	 * There is no _ASM_EXTABLE_TYPE_REG() for ASM, however since this is
-+	 * ASM the registers are known and we can trivially hard-code them.
-+	 */
-+	_ASM_EXTABLE_TYPE(1b, 2b, EX_TYPE_POP_ZERO|EX_REG_DS)
-+	_ASM_EXTABLE_TYPE(2b, 3b, EX_TYPE_POP_ZERO|EX_REG_ES)
-+	_ASM_EXTABLE_TYPE(3b, 4b, EX_TYPE_POP_ZERO|EX_REG_FS)
- .endm
- 
- .macro RESTORE_ALL_NMI cr3_reg:req pop=0
-diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/include/asm/extable_fixup_types.h
-index b5ab333e064a..503622627400 100644
---- a/arch/x86/include/asm/extable_fixup_types.h
-+++ b/arch/x86/include/asm/extable_fixup_types.h
-@@ -16,9 +16,16 @@
- #define EX_DATA_FLAG_SHIFT		12
- #define EX_DATA_IMM_SHIFT		16
- 
-+#define EX_DATA_REG(reg)		((reg) << EX_DATA_REG_SHIFT)
- #define EX_DATA_FLAG(flag)		((flag) << EX_DATA_FLAG_SHIFT)
- #define EX_DATA_IMM(imm)		((imm) << EX_DATA_IMM_SHIFT)
- 
-+/* segment regs */
-+#define EX_REG_DS			EX_DATA_REG(8)
-+#define EX_REG_ES			EX_DATA_REG(9)
-+#define EX_REG_FS			EX_DATA_REG(10)
-+#define EX_REG_GS			EX_DATA_REG(11)
-+
- /* flags */
- #define EX_FLAG_CLEAR_AX		EX_DATA_FLAG(1)
- #define EX_FLAG_CLEAR_DX		EX_DATA_FLAG(2)
-@@ -41,7 +48,9 @@
- #define	EX_TYPE_RDMSR_IN_MCE		13
- #define	EX_TYPE_DEFAULT_MCE_SAFE	14
- #define	EX_TYPE_FAULT_MCE_SAFE		15
--#define	EX_TYPE_POP_ZERO		16
-+
-+#define	EX_TYPE_POP_REG			16 /* sp += sizeof(long) */
-+#define EX_TYPE_POP_ZERO		(EX_TYPE_POP_REG | EX_DATA_IMM(0))
- 
- #define	EX_TYPE_IMM_REG			17 /* reg := (long)imm */
- #define	EX_TYPE_EFAULT_REG		(EX_TYPE_IMM_REG | EX_DATA_IMM(-EFAULT))
-diff --git a/arch/x86/lib/insn-eval.c b/arch/x86/lib/insn-eval.c
-index 7760d228041b..c8a962c2e653 100644
---- a/arch/x86/lib/insn-eval.c
-+++ b/arch/x86/lib/insn-eval.c
-@@ -430,6 +430,11 @@ static const int pt_regoff[] = {
- 	offsetof(struct pt_regs, r13),
- 	offsetof(struct pt_regs, r14),
- 	offsetof(struct pt_regs, r15),
-+#else
-+	offsetof(struct pt_regs, ds),
-+	offsetof(struct pt_regs, es),
-+	offsetof(struct pt_regs, fs),
-+	offsetof(struct pt_regs, gs),
- #endif
- };
- 
-diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
-index 41eaa648349e..dba2197c05c3 100644
---- a/arch/x86/mm/extable.c
-+++ b/arch/x86/mm/extable.c
-@@ -126,18 +126,6 @@ static bool ex_handler_clear_fs(const struct exception_table_entry *fixup,
- 	return ex_handler_default(fixup, regs);
- }
- 
--static bool ex_handler_pop_zero(const struct exception_table_entry *fixup,
--				struct pt_regs *regs)
--{
--	/*
--	 * Typically used for when "pop %seg" traps, in which case we'll clear
--	 * the stack slot and re-try the instruction, which will then succeed
--	 * to pop zero.
--	 */
--	*((unsigned long *)regs->sp) = 0;
--	return ex_handler_default(fixup, regs);
--}
--
- static bool ex_handler_imm_reg(const struct exception_table_entry *fixup,
- 			       struct pt_regs *regs, int reg, int imm)
- {
-@@ -218,8 +206,9 @@ int fixup_exception(struct pt_regs *regs, int trapnr, unsigned long error_code,
- 	case EX_TYPE_RDMSR_IN_MCE:
- 		ex_handler_msr_mce(regs, false);
- 		break;
--	case EX_TYPE_POP_ZERO:
--		return ex_handler_pop_zero(e, regs);
-+	case EX_TYPE_POP_REG:
-+		regs->sp += sizeof(long);
-+		fallthrough;
- 	case EX_TYPE_IMM_REG:
- 		return ex_handler_imm_reg(e, regs, reg, imm);
- 	case EX_TYPE_FAULT_SGX:
--- 
-2.29.2
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 1 +
+>  drivers/acpi/pci_root.c                         | 3 +++
+>  drivers/pci/pci.c                               | 5 +++++
+>  include/linux/pci.h                             | 2 ++
+>  4 files changed, 11 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 2fba824..c83a2e5 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -4084,6 +4084,7 @@
+>  		nomio		[S390] Do not use MIO instructions.
+>  		norid		[S390] ignore the RID field and force use of
+>  				one PCI domain per PCI function
+> +		reassign_all_bus	The OS fully configure the PCI bus.
+>  
+>  	pcie_aspm=	[PCIE] Forcibly enable or disable PCIe Active State Power
+>  			Management.
+> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
+> index ab2f7df..e21ac25 100644
+> --- a/drivers/acpi/pci_root.c
+> +++ b/drivers/acpi/pci_root.c
+> @@ -592,6 +592,9 @@ static int acpi_pci_root_add(struct acpi_device *device,
+>  	is_pcie = strcmp(acpi_device_hid(device), "PNP0A08") == 0;
+>  	negotiate_os_control(root, &no_aspm, is_pcie);
+>  
+> +	if (pci_reassign_all_bus)
+> +		pci_add_flags(PCI_REASSIGN_ALL_BUS);
+> +
+>  	/*
+>  	 * TBD: Need PCI interface for enumeration/configuration of roots.
+>  	 */
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 3d2fb39..5746e88 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -142,6 +142,9 @@ bool pci_reset_supported(struct pci_dev *dev)
+>  /* If set, the PCI config space of each device is printed during boot. */
+>  bool pci_early_dump;
+>  
+> +/* If set, the pci will reassign resources*/
+> +bool pci_reassign_all_bus;
+> +
+>  bool pci_ats_disabled(void)
+>  {
+>  	return pcie_ats_disabled;
+> @@ -6846,6 +6849,8 @@ static int __init pci_setup(char *str)
+>  				pci_add_flags(PCI_SCAN_ALL_PCIE_DEVS);
+>  			} else if (!strncmp(str, "disable_acs_redir=", 18)) {
+>  				disable_acs_redir_param = str + 18;
+> +			} else if (!strncmp(str, "reassign_all_bus", 16)) {
+> +				pci_reassign_all_bus = true;
+>  			} else {
+>  				pr_err("PCI: Unknown option `%s'\n", str);
+>  			}
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 18a75c8e..ad0e3e9 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -2119,6 +2119,8 @@ int pcim_iomap_regions_request_all(struct pci_dev *pdev, int mask,
+>  extern u8 pci_dfl_cache_line_size;
+>  extern u8 pci_cache_line_size;
+>  
+> +extern bool pci_reassign_all_bus;
+> +
+>  /* Architecture-specific versions may override these (weak) */
+>  void pcibios_disable_device(struct pci_dev *dev);
+>  void pcibios_set_master(struct pci_dev *dev);
+> -- 
+> 1.8.3.1
+> 

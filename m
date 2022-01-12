@@ -2,89 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE58748C273
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC6348C283
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352596AbiALKmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 05:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239535AbiALKmu (ORCPT
+        id S1352625AbiALKvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 05:51:18 -0500
+Received: from mout.kundenserver.de ([212.227.126.134]:41065 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352617AbiALKvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 05:42:50 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B347C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:42:49 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id g11so6626537lfu.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:42:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:user-agent:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3j1Wm1WQHCFUig/uDRHfmIv5SpKzeQw7chJmfSgR5q4=;
-        b=p6aMaiUfS2aFhdIKJPAp2V+Fqmt1X+rIAr9B+Tw4cAQ4NP8x/Zj5ahuADz0UcFv0hP
-         oq2c9SNmQC7m6l64shXc+g4y4P8vo7bPa6k/ZcjdN+c1Rvt2BfNrtPRdWPo+0NMBSVFw
-         /siyfCx6ycstGXvnNgUw2BdK7jtXToYPEXpVpYmiBwDXvp0Oi4T/Y34Q+hiblZ6n7s5N
-         B255jnSuCK76xNMMNWVTROkQ9RVT05pZmf6wM9a97+UwkESi5aVwdl3QIm4l2p5Uh+Mt
-         W7lczBqwp0ifCOR/QdpdKYlMRVu1++T+dPXB+VPkQfU94vsND7zDkkTq63qN7qbNYo8l
-         Odiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=3j1Wm1WQHCFUig/uDRHfmIv5SpKzeQw7chJmfSgR5q4=;
-        b=ZgqohMY6dnd4THcLRnMSTN+fomrrjP42LhirTHsz5XeqjyrBRjnSeRcnBC974PKDkm
-         H3uMzZ+OIW/CQ6x497F53TVb4n+xZdrxTJJ3G+KbA3TTfJDU7Nxy11wmIcxD+9650Fkk
-         AdOfAAsHsc9XhIwkKsTsScLTqH11tZfjJdhevMGP9/UvIoxqozVCOi2CzkYcIYzMOTtW
-         4BKgrKTBO6MWk47DXN3j5roGINCQDEYCVp82FhZyBcg3rWPTOlxg2DNYF7PA8ORzfrbE
-         fT/txXZKF4PTcNcOT6z3vERLTtcN57lDTRWFineiBxNptFYuHFm588MtmP64BsHtHD7f
-         L2AQ==
-X-Gm-Message-State: AOAM5326wO76o4pEMT6SWRyPuW4EI2UCNhzKJslEPfgFJQo0eljT+MJL
-        yjVBaD6k9H+MMFRB2E6nlyo=
-X-Google-Smtp-Source: ABdhPJzuABYWWIrH4rMkTpYkDL8tqn5CpBW1tgufB/0QrijxkPTAcuh6r5G5g8hpT6v3go9dhN08Ig==
-X-Received: by 2002:a2e:9245:: with SMTP id v5mr6203793ljg.149.1641984168048;
-        Wed, 12 Jan 2022 02:42:48 -0800 (PST)
-Received: from localhost.localdomain (ntd06459.static.corbina.ru. [95.31.14.149])
-        by smtp.gmail.com with ESMTPSA id r6sm1604322lfm.114.2022.01.12.02.42.47
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Wed, 12 Jan 2022 02:42:47 -0800 (PST)
-Date:   Wed, 12 Jan 2022 13:48:27 +0300
-From:   Alexander Sergeyev <sergeev917@gmail.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Jeremy Szu <jeremy.szu@canonical.com>, tiwai@suse.com,
-        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
-        Kailang Yang <kailang@realtek.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jian-Hong Pan <jhp@endlessos.org>,
-        Hui Wang <hui.wang@canonical.com>,
-        PeiSen Hou <pshou@realtek.com>
-Subject: Re: [PATCH 1/4] ALSA: hda/realtek: fix mute/micmute LEDs for HP 855
- G8
-Message-ID: <20220112104827.4aymoth7ua65nwge@localhost.localdomain>
-User-Agent: mtt
-References: <20210519170357.58410-1-jeremy.szu@canonical.com>
- <20220111195229.a77wrpjclqwrx4bx@localhost.localdomain>
- <s5ho84h9tit.wl-tiwai@suse.de>
- <20220112101249.ya73jvpmqmeh4ggg@localhost.localdomain>
- <s5hilup9s87.wl-tiwai@suse.de>
+        Wed, 12 Jan 2022 05:51:13 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mkn8B-1mdSvf0ao3-00mJXK for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022
+ 11:51:12 +0100
+Received: by mail-oi1-f177.google.com with SMTP id r138so2838721oie.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:51:11 -0800 (PST)
+X-Gm-Message-State: AOAM531MklMigwk2lgNP8sGv1kDNnpkSskNS/0TNfdRxFDz0mPw29TyS
+        fq55nTDlqWQvD63XZZTZ7YLh2wQHHpc9wbVcevg=
+X-Google-Smtp-Source: ABdhPJxbehyJ+UKG3ve0S1BMZRUcfxENmtnL2Wld4IkBqEWRgysmAU7BrnfjMesY0V41P6v5dm0xcpJrqvKWnlaq/Lg=
+X-Received: by 2002:a05:6808:2327:: with SMTP id bn39mr4773607oib.108.1641984670830;
+ Wed, 12 Jan 2022 02:51:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <s5hilup9s87.wl-tiwai@suse.de>
+References: <1641980099-20315-1-git-send-email-anshuman.khandual@arm.com> <1641980099-20315-2-git-send-email-anshuman.khandual@arm.com>
+In-Reply-To: <1641980099-20315-2-git-send-email-anshuman.khandual@arm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 12 Jan 2022 11:50:54 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1cDF=jEVGchU8LNBdjdtROmHHHpebOASreR=WOuZ4Z1A@mail.gmail.com>
+Message-ID: <CAK8P3a1cDF=jEVGchU8LNBdjdtROmHHHpebOASreR=WOuZ4Z1A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] arm64: Add Cortex-X2 CPU part definition
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:kcn6oH7FUcH/VHf7rMji7ishbRQbtgkyMxy07qI5It4WAzkHXPe
+ a7pDK3FcRirPiJMnFer/hmiRDkr722vHv5Mv8nbGEk3XjVAhXkQdd8AbXuGAvW1KD4TMZp2
+ yKJaQNvUuS3/Z26AzDXrLI5tlm5CjX8f3gzNuzbUO+83y4H40F2INtPHXqmEn9376Grgfwu
+ dgBOEaL5z0U7OywXtJfYw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TRZwugt47t0=:9V3FSTa/ANnAkUJm5nTovO
+ 5rqeGPtVYnIN9qdDf29llc1cnvA9lqyYHEgEDY/NT6ihDMkyt8arbHaT7CRADSOzZ+Z/aMuqq
+ YVIKqjdQTwkjq5I+SuYHIDpS8hDXCUiQ9oisk5fks8K8HeVtqpq2HkTvln8U0pBUQ/d+Ho81E
+ HFDn9UGFtUuIvcmJxCkyKCu7jB87W9/keTPk6D9O0ahZ0Uh/vBqelyGt+RhctSWQljpTT/d0x
+ 9lfynibsIwyn6sZE881P6inKiMVt1yj0nC9zYjdhOoh0897JqkjBoLqB90QqkByRTyFKYvs8Q
+ 1wv4Es/GVp0B9BSh42AaMODpJqdn52qfqAzVTTJJxwZGPP6aGsBPTb+Jc3aqQtt24jbYdcN4B
+ UHF38e2p6w8ZOlQp2iIdpa5pZgi/mWGP0TMVgtbmKpHSaV9t63R5byJ40XP9wng6LlHXLJsv2
+ +4zh8NlYe4ClO2ke1IXqopqtNMnHuPWLCejb+H2AiiaZS1AUZs6NkWCLLIdKtdQvQq8ecJlSi
+ K+AMNGvSCnjVyfTAle6ooRur3esZCe1IVv6XFnDJNZhjXczQv5LYpAkWZYii04GIV39QSfkPp
+ db/SqgvPPI5mBQk4AqmbpFirAjJ3dpSYByCQm5/p/+zzsRBKrIVb5c1mwCnz0jyneDKiUcPLW
+ YJbr+oGWU7ut2m/tKI5sECr70hPAnbjfj7XFXhS8g1O0dTakm8B6SktHwpF62/ImGe0faiOLJ
+ jVhpa1GjJduRbHRRPo/UNLEA7qSREZjAtkyBnahF/s6Z0BHzMyjSexlQtd0lpgcRDTJ5WYmzH
+ jE7rkqtW4DKFnZbA4AoHRrvVi5XlaDum4IGSWweDnOKvh3Nyno=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 11:13:44AM +0100, Takashi Iwai wrote:
->Sounds like some timing issue, then. It's pretty hard to debug, unfortunately.
+On Wed, Jan 12, 2022 at 10:34 AM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+>
+> Add the CPU Partnumbers for the new Arm designs.
+>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  arch/arm64/include/asm/cputype.h | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/arm64/include/asm/cputype.h b/arch/arm64/include/asm/cputype.h
+> index 19b8441aa8f2..657eeb06c784 100644
+> --- a/arch/arm64/include/asm/cputype.h
+> +++ b/arch/arm64/include/asm/cputype.h
+> @@ -74,6 +74,7 @@
+>  #define ARM_CPU_PART_NEOVERSE_N1       0xD0C
+>  #define ARM_CPU_PART_CORTEX_A77                0xD0D
+>  #define ARM_CPU_PART_CORTEX_A710       0xD47
+> +#define ARM_CPU_PART_CORTEX_X2         0xD48
+>  #define ARM_CPU_PART_NEOVERSE_N2       0xD49
 
-I can imagine. Is it possible that initcall_debug logs could help? Or is it 
-timing issues within the same module?
+No objections to the patch, but would it be possible to just add all the missing
+ones here to the degree that they are known already? I don't see any entries for
+Cortex-A34, Cortex-A65AE, Cortex-A78, Cortex-A78C, Cortex-A78AE,
+Neoverse-E1, Neoverse-V1, Cortex-X1, Cortex-X2, Cortex-A510, Cortex-A710
+and Cortex-R82 among the Arm-designed cores that can run Linux, and there
+are probably others that I missed going through the list.
 
->You may try to get the codec proc dump with COEF by passing 
->snd_hda_codec.dump_coef=1 module option for both working and non-working 
->cases.
->You can unbind and re-bind the PCI (HD-audio controller) device via sysfs.
-
-I'll try both options later today when able, thank you!
+        Arnd

@@ -2,37 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB3A48CD97
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE7C48CD9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiALVUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 16:20:37 -0500
+        id S230399AbiALVUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 16:20:39 -0500
 Received: from mga03.intel.com ([134.134.136.65]:1416 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229491AbiALVUg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 16:20:36 -0500
+        id S230077AbiALVUi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 16:20:38 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642022436; x=1673558436;
-  h=from:to:cc:subject:date:message-id;
-  bh=oxP3kSzMpQU8LS3Jv/vnJRR1g2ZKuhTNt8AONEbvO4I=;
-  b=beRX8cVocSudKRkV70l3ausB2Lo4uuawQuAahj25Y+Ej2etkQ1Yj95Qj
-   PQX9i3tRVtgKDLd+rGEF75F++zc5wX77gLFx5grL7zrwFCsHuVmEINTo2
-   KQ0EiAFirYWNbWPlU60LeSY8qa0vUc9fPilZ+nc7KpPPY1KBxTSjuICq/
-   KP2/EDEIT2BGKDqgfDUOjWvBgJk2ekVLBbQS+3sDuhPjVHDC51q73RlMT
-   6iyT8OEPogsthLizjkw50E3fshGXVgyaROm6qIBN4MJdcwwKAvh12Ia1c
-   +oLWVvfCKcezw2XePwBtDLTN7v81VBgmK0rg9OkgblrGlpu/BF1lFvn9Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="243810777"
+  t=1642022438; x=1673558438;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=VnKbDj9INci9I8jOiGqny0phPxxQrd50d9zB9AWtByI=;
+  b=Bc4gkGuuFnZn3ucPzAtO1WkeRDC8r9/pV3w8BLd9YvOQj5iXdeDfOzbs
+   x9VzJuo+Wj6P6YqTQibNTfprI0VRHxsxcDync2AOcp3mBdt9XSJWBy6vy
+   Y+PGmUgxxZlXrrDdBDesUtwT0jBhizhzi2mFMGtHc58SdxPb/5F0jNci7
+   SjLt45lCcFNa/+AmccAkIQN9LPashNi8z09vGBeyG69/6rt/DijdhGvvH
+   Vt06w/f32yqYmyTdydsFX9I+4LxK+lXbuBraatJuWSGFjw4P7wkiKnHdx
+   9uyap9SgZ3bQu2kRCvSSnqTRwFp+1zNqjApJsgdq/lPy9tQHnxpw5vlP3
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="243810782"
 X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="243810777"
+   d="scan'208";a="243810782"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 13:20:36 -0800
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 13:20:38 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="529378212"
+   d="scan'208";a="529378223"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by orsmga008.jf.intel.com with ESMTP; 12 Jan 2022 13:20:35 -0800
+  by orsmga008.jf.intel.com with ESMTP; 12 Jan 2022 13:20:37 -0800
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
 To:     linux-crypto@vger.kernel.org, dm-devel@redhat.com,
         herbert@gondor.apana.org.au, ebiggers@kernel.org, ardb@kernel.org,
@@ -40,93 +41,147 @@ To:     linux-crypto@vger.kernel.org, dm-devel@redhat.com,
         dave.hansen@linux.intel.com, mingo@kernel.org
 Cc:     linux-kernel@vger.kernel.org, dan.j.williams@intel.com,
         charishma1.gairuboyina@intel.com, kumar.n.dwarakanath@intel.com,
-        ravi.v.shankar@intel.com, chang.seok.bae@intel.com
-Subject: [PATCH v5 00/12] x86: Support Key Locker
-Date:   Wed, 12 Jan 2022 13:12:46 -0800
-Message-Id: <20220112211258.21115-1-chang.seok.bae@intel.com>
+        ravi.v.shankar@intel.com, chang.seok.bae@intel.com,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v5 01/12] Documentation/x86: Document Key Locker
+Date:   Wed, 12 Jan 2022 13:12:47 -0800
+Message-Id: <20220112211258.21115-2-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220112211258.21115-1-chang.seok.bae@intel.com>
+References: <20220112211258.21115-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes from v4 [1]:
-* Drop CBC mode support (PATCH10). (Eric Biggers)
-* Update the changelog (PATCH8). (Rafael Wysocki)
+Document the overview of the feature along with relevant consideration when
+provisioning dm-crypt volumes with AES-KL instead of AES-NI.
 
-A couple of other things outside of these patches are still in progress:
-* Support DM-crypt/cryptsetup for Key Locker usage (Andy Lutomirski)
-  [2].
-* Understand decryption under-performance (Eric Biggers and Milan Broz)
-  [3][4].
-
-This feature's usage for the threat model can be found in the previous
-cover letter [1]. This version is based on 5.16.
-
-Thanks,
-Chang
-
-[1] V4: https://lore.kernel.org/lkml/20211214005212.20588-1-chang.seok.bae@intel.com/
-[2] https://lore.kernel.org/lkml/75ec3ad1-6234-ae1f-1b83-482793e4fd23@kernel.org/
-[3] https://lore.kernel.org/lkml/YbqRseO+TtuGQk5x@sol.localdomain/
-[4] https://lore.kernel.org/lkml/120368dc-e337-9176-936c-4db2a8bf710e@gmail.com/
-
-Chang S. Bae (12):
-  Documentation/x86: Document Key Locker
-  x86/cpufeature: Enumerate Key Locker feature
-  x86/insn: Add Key Locker instructions to the opcode map
-  x86/asm: Add a wrapper function for the LOADIWKEY instruction
-  x86/msr-index: Add MSRs for Key Locker internal wrapping key
-  x86/keylocker: Define Key Locker CPUID leaf
-  x86/cpu/keylocker: Load an internal wrapping key at boot-time
-  x86/PM/keylocker: Restore internal wrapping key on resume from ACPI
-    S3/4
-  x86/cpu: Add a configuration and command line option for Key Locker
-  crypto: x86/aes - Prepare for a new AES implementation
-  crypto: x86/aes-kl - Support AES algorithm using Key Locker
-    instructions
-  crypto: x86/aes-kl - Support XTS mode
-
- .../admin-guide/kernel-parameters.txt         |   2 +
- Documentation/x86/index.rst                   |   1 +
- Documentation/x86/keylocker.rst               |  98 +++
- arch/x86/Kconfig                              |   3 +
- arch/x86/crypto/Makefile                      |   5 +-
- arch/x86/crypto/aes-intel_asm.S               |  26 +
- arch/x86/crypto/aes-intel_glue.c              | 125 ++++
- arch/x86/crypto/aes-intel_glue.h              |  48 ++
- arch/x86/crypto/aeskl-intel_asm.S             | 633 ++++++++++++++++++
- arch/x86/crypto/aeskl-intel_glue.c            | 216 ++++++
- arch/x86/crypto/aesni-intel_asm.S             |  58 +-
- arch/x86/crypto/aesni-intel_glue.c            | 239 ++-----
- arch/x86/crypto/aesni-intel_glue.h            |  17 +
- arch/x86/include/asm/cpufeatures.h            |   1 +
- arch/x86/include/asm/disabled-features.h      |   8 +-
- arch/x86/include/asm/keylocker.h              |  45 ++
- arch/x86/include/asm/msr-index.h              |   6 +
- arch/x86/include/asm/special_insns.h          |  32 +
- arch/x86/include/uapi/asm/processor-flags.h   |   2 +
- arch/x86/kernel/Makefile                      |   1 +
- arch/x86/kernel/cpu/common.c                  |  21 +-
- arch/x86/kernel/cpu/cpuid-deps.c              |   1 +
- arch/x86/kernel/keylocker.c                   | 199 ++++++
- arch/x86/kernel/smpboot.c                     |   2 +
- arch/x86/lib/x86-opcode-map.txt               |  11 +-
- arch/x86/power/cpu.c                          |   2 +
- crypto/Kconfig                                |  36 +
- tools/arch/x86/lib/x86-opcode-map.txt         |  11 +-
- 28 files changed, 1633 insertions(+), 216 deletions(-)
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes from RFC v2:
+* Add as a new patch.
+---
+ Documentation/x86/index.rst     |  1 +
+ Documentation/x86/keylocker.rst | 98 +++++++++++++++++++++++++++++++++
+ 2 files changed, 99 insertions(+)
  create mode 100644 Documentation/x86/keylocker.rst
- create mode 100644 arch/x86/crypto/aes-intel_asm.S
- create mode 100644 arch/x86/crypto/aes-intel_glue.c
- create mode 100644 arch/x86/crypto/aes-intel_glue.h
- create mode 100644 arch/x86/crypto/aeskl-intel_asm.S
- create mode 100644 arch/x86/crypto/aeskl-intel_glue.c
- create mode 100644 arch/x86/crypto/aesni-intel_glue.h
- create mode 100644 arch/x86/include/asm/keylocker.h
- create mode 100644 arch/x86/kernel/keylocker.c
 
-
-base-commit: df0cc57e057f18e44dac8e6c18aba47ab53202f9
---
+diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
+index f498f1d36cd3..bbea47ea10f6 100644
+--- a/Documentation/x86/index.rst
++++ b/Documentation/x86/index.rst
+@@ -38,3 +38,4 @@ x86-specific Documentation
+    features
+    elf_auxvec
+    xstate
++   keylocker
+diff --git a/Documentation/x86/keylocker.rst b/Documentation/x86/keylocker.rst
+new file mode 100644
+index 000000000000..e65d936ef199
+--- /dev/null
++++ b/Documentation/x86/keylocker.rst
+@@ -0,0 +1,98 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++==============
++x86 Key Locker
++==============
++
++Introduction
++============
++
++Key Locker is a CPU feature feature to reduce key exfiltration
++opportunities while maintaining a programming interface similar to AES-NI.
++It converts the AES key into an encoded form, called the 'key handle'. The
++key handle is a wrapped version of the clear-text key where the wrapping
++key has limited exposure. Once converted, all subsequent data encryption
++using new AES instructions (AES-KL) uses this key handle, reducing the
++exposure of private key material in memory.
++
++Internal Wrapping Key (IWKey)
++=============================
++
++The CPU-internal wrapping key is an entity in a software-invisible CPU
++state. On every system boot, a new key is loaded. So the key handle that
++was encoded by the old wrapping key is no longer usable on system shutdown
++or reboot.
++
++And the key may be lost on the following exceptional situation upon wakeup:
++
++IWKey Restore Failure
++---------------------
++
++The CPU state is volatile with the ACPI S3/4 sleep states. When the system
++supports those states, the key has to be backed up so that it is restored
++on wake up. The kernel saves the key in non-volatile media.
++
++The event of an IWKey restore failure upon resume from suspend, all
++established key handles become invalid. In flight dm-crypt operations
++receive error results from pending operations. In the likely scenario that
++dm-crypt is hosting the root filesystem the recovery is identical to if a
++storage controller failed to resume from suspend, reboot. If the volume
++impacted by an IWKey restore failure is a data-volume then it is possible
++that I/O errors on that volume do not bring down the rest of the system.
++However, a reboot is still required because the kernel will have
++soft-disabled Key Locker. Upon the failure, the crypto library code will
++return -ENODEV on every AES-KL function call. The Key Locker implementation
++only loads a new IWKey at initial boot, not any time after like resume from
++suspend.
++
++Use Case and Non-use Cases
++==========================
++
++Bare metal disk encryption is the only intended use case.
++
++Userspace usage is not supported because there is no ABI provided to
++communicate and coordinate wrapping-key restore failure to userspace. For
++now, key restore failures are only coordinated with kernel users. But the
++kernel can not prevent userspace from using the feature's AES instructions
++('AES-KL') when the feature has been enabled. So, the lack of userspace
++support is only documented, not actively enforced.
++
++Key Locker is not expected to be advertised to guest VMs and the kernel
++implementation ignores it even if the VMM enumerates the capability. The
++expectation is that a guest VM wants private IWKey state, but the
++architecture does not provide that. An emulation of that capability, by
++caching per VM IWKeys in memory, defeats the purpose of Key Locker. The
++backup / restore facility is also not performant enough to be suitable for
++guest VM context switches.
++
++AES Instruction Set
++===================
++
++The feature accompanies a new AES instruction set. This instruction set is
++analogous to AES-NI. A set of AES-NI instructions can be mapped to an
++AES-KL instruction. For example, AESENC128KL is responsible for ten rounds
++of transformation, which is equivalent to nine times AESENC and one
++AESENCLAST in AES-NI.
++
++But they have some notable differences:
++
++* AES-KL provides a secure data transformation using an encrypted key.
++
++* If an invalid key handle is provided, e.g. a corrupted one or a handle
++  restriction failure, the instruction fails with setting RFLAGS.ZF. The
++  crypto library implementation includes the flag check to return an error
++  code. Note that the flag is also set when the internal wrapping key is
++  changed because of missing backup.
++
++* AES-KL implements support for 128-bit and 256-bit keys, but there is no
++  AES-KL instruction to process an 192-bit key. But there is no AES-KL
++  instruction to process a 192-bit key. The AES-KL cipher implementation
++  logs a warning message with a 192-bit key and then falls back to AES-NI.
++  So, this 192-bit key-size limitation is only documented, not enforced. It
++  means the key will remain in clear-text in memory. This is to meet Linux
++  crypto-cipher expectation that each implementation must support all the
++  AES-compliant key sizes.
++
++* Some AES-KL hardware implementation may have noticeable performance
++  overhead when compared with AES-NI instructions.
++
+-- 
 2.17.1
 

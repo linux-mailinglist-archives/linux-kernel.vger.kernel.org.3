@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C99648CD8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:17:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 929E148CD8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbiALVRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 16:17:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
+        id S232939AbiALVRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 16:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiALVQ6 (ORCPT
+        with ESMTP id S231598AbiALVRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 16:16:58 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B934C061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 13:16:58 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so7399319pji.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 13:16:58 -0800 (PST)
+        Wed, 12 Jan 2022 16:17:01 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8452EC061756
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 13:17:01 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id i8-20020a17090a138800b001b3936fb375so14885337pja.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 13:17:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=boundarydevices.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zgxD7kZzL7b24qfqWANZprBwy/1xz32dY5nSJ1Y+mnM=;
-        b=LoZvhsYPqLB7U/0kRvIfraJSktSWw60cF3UyRYJm0oOks02RiP1kSnBRFebdQB6nV+
-         x88KAxwQGU+4HMdYwBcBFraVtL9auGlav5RC1ebYM7TECrHBBeS1lGnqAKDNUmYVw3mE
-         H8Y4AGqH+jcm3Yjr7lHqimRCW6kc9sWQhunxc=
+        bh=P0OpirpLo3lFPzhXuxtbh2WjLoHGGYMgIKLuMYWDySQ=;
+        b=Nex77jCtujyu/JYrJVhh4VSI3QRugHS/8QUW03cirP3xG0d+h0WH5uL/kfJz8OD25w
+         X9vKtrk0BED2tqKug1kk50kdAJBQroPulaajtEo6EBVDocXTMnaO1gpsgGo4BP1HaLza
+         OPbQfVL+WH8aIdzOa//C5wHZHjs4CSjMHwNP0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zgxD7kZzL7b24qfqWANZprBwy/1xz32dY5nSJ1Y+mnM=;
-        b=JudUxd0Hby2mKaWOnmPjko5yYvkN1SaUuhX3SoL6MqtccNx2mCSbr5ZYDO+Zk8hNuI
-         k2071q2deIbup/VfUYeACbQBIPx798SI4Nau+u3f0lA5yrpjM0b6XyDccKBJCzYwmvDV
-         SPctf+T04rRobtJ+CBuUmyL02H4JJLEYqTDAjb5rOofDLHgegXpWBpxjQ3gULXCsLAjS
-         1pXFD9xK50N79Ke25u7uXUB+LvuguPFBz9VRSmLWu/EPYLhUpYcbJbtjduPtUftazxni
-         vmMsm5MJjnMVx0rcAAUdyke8bJCo6fgS2mi0dirv7Z5Az4g0HhcCIsZq0mLi9CjtxJ27
-         0jIg==
-X-Gm-Message-State: AOAM5322PSFjuRiKj0S1bjdWcrz98tntMhhpCvmllCWLTIF9UrKcOu+e
-        bcU0Xl/0T9Sgwg6VW0D12/03sA==
-X-Google-Smtp-Source: ABdhPJz8ajGHuukTahaTnyx/SiHDR6PQ/asbdfTpJaZd5ZZo8iGS77v5cne7LTcgmRkOLz4lT2lYTw==
-X-Received: by 2002:a17:90a:e7c8:: with SMTP id kb8mr1650228pjb.35.1642022217759;
-        Wed, 12 Jan 2022 13:16:57 -0800 (PST)
+        bh=P0OpirpLo3lFPzhXuxtbh2WjLoHGGYMgIKLuMYWDySQ=;
+        b=nzg0P1p0/m95IPvVOINzo860EMKqBB6op9GvmO3tMXCdfpmX9vjwpMxHXf8UKYb80t
+         DsWTsjpZbkS81mPswp2pO1Ny3cFeoA1BnmIxD5G/7FtoJ24gEz7g9uYebg64rWhao1+r
+         CvPA8mKaizR0Jbo8n1GdpcKEBOTNT+COQSh85CT1kcr4FJpqdfTYz/LV2NwRPfS1bwq6
+         ni3XePL/NAc1MfaukTLVMSCP428GFhbKmEe4X30W9xkbYSJifoOK6zQ53n/F85E5dLVC
+         OWEROIzFwNMlr7FGuoLiFTuQrB5IhCDLzC2RQ7jQ5v/uEJTgKC1/YcDJcGfxm0boPzDr
+         fbTw==
+X-Gm-Message-State: AOAM530P8hC7/Of8lFYjjQErmHSGh0nL0d8Nm4RK71yi8CdkefNYPVBv
+        ezKVCpvNlRxtDJRy1McHMLcZhw==
+X-Google-Smtp-Source: ABdhPJwbJwaH/Q4KmjeX+oL9vPN/RCYvtu1ji5uNMCH/GhuM3e2/kYW/rA9QUcuITjN8PNtNNsSrUw==
+X-Received: by 2002:a63:a745:: with SMTP id w5mr1310352pgo.374.1642022221052;
+        Wed, 12 Jan 2022 13:17:01 -0800 (PST)
 Received: from localhost.localdomain (2a01cb000f5a8200e371e4a5048c8b22.ipv6.abo.wanadoo.fr. [2a01:cb00:f5a:8200:e371:e4a5:48c:8b22])
-        by smtp.gmail.com with ESMTPSA id h15sm507192pfc.89.2022.01.12.13.16.54
+        by smtp.gmail.com with ESMTPSA id h15sm507192pfc.89.2022.01.12.13.16.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 13:16:57 -0800 (PST)
+        Wed, 12 Jan 2022 13:17:00 -0800 (PST)
 From:   Gary Bisson <gary.bisson@boundarydevices.com>
 To:     linux-amlogic@lists.infradead.org
 Cc:     Gary Bisson <gary.bisson@boundarydevices.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] arm64: dts: meson-g12-common: add more pwm_f options
-Date:   Wed, 12 Jan 2022 22:16:41 +0100
-Message-Id: <20220112211642.2248901-3-gary.bisson@boundarydevices.com>
+Subject: [PATCH v2 3/3] arm64: dts: meson-g12-common: add uart_ao_b pins muxing
+Date:   Wed, 12 Jan 2022 22:16:42 +0100
+Message-Id: <20220112211642.2248901-4-gary.bisson@boundarydevices.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220112211642.2248901-1-gary.bisson@boundarydevices.com>
 References: <20220103154616.308376-1-gary.bisson@boundarydevices.com>
@@ -68,11 +68,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing PWM_F pin muxing for GPIOA_11 and GPIOZ_12.
+- RX/TX signals can be mapped on 2 different pairs of pins so supporting
+  both options
+- RTS/CTS signals however only have 1 option available
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
 ---
+Changes v1->v2:
+- renamed nodes as suggested by Neil
+
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: Neil Armstrong <narmstrong@baylibre.com>
 Cc: Kevin Hilman <khilman@baylibre.com>
@@ -82,36 +86,47 @@ Cc: devicetree@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org
 ---
- .../arm64/boot/dts/amlogic/meson-g12-common.dtsi | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ .../boot/dts/amlogic/meson-g12-common.dtsi    | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-index 00c6f53290d4..af1357c48bee 100644
+index af1357c48bee..62350c408e16 100644
 --- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
 +++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-@@ -894,6 +894,22 @@ mux {
+@@ -1952,6 +1952,33 @@ mux {
  						};
  					};
  
-+					pwm_f_z_pins: pwm-f-z {
++					uart_ao_b_2_3_pins: uart-ao-b-2-3 {
 +						mux {
-+							groups = "pwm_f_z";
-+							function = "pwm_f";
++							groups = "uart_ao_b_tx_2",
++								 "uart_ao_b_rx_3";
++							function = "uart_ao_b";
 +							bias-disable;
 +						};
 +					};
 +
-+					pwm_f_a_pins: pwm-f-a {
++					uart_ao_b_8_9_pins: uart-ao-b-8-9 {
 +						mux {
-+							groups = "pwm_f_a";
-+							function = "pwm_f";
++							groups = "uart_ao_b_tx_8",
++								 "uart_ao_b_rx_9";
++							function = "uart_ao_b";
 +							bias-disable;
 +						};
 +					};
 +
- 					pwm_f_x_pins: pwm-f-x {
++					uart_ao_b_cts_rts_pins: uart-ao-b-cts-rts {
++						mux {
++							groups = "uart_ao_b_cts",
++								 "uart_ao_b_rts";
++							function = "uart_ao_b";
++							bias-disable;
++						};
++					};
++
+ 					pwm_a_e_pins: pwm-a-e {
  						mux {
- 							groups = "pwm_f_x";
+ 							groups = "pwm_a_e";
 -- 
 2.34.1
 

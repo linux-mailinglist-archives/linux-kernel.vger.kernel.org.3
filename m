@@ -2,84 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3733048C435
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 13:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8713948C437
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 13:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353271AbiALMu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 07:50:58 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:36696
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232738AbiALMuu (ORCPT
+        id S1353279AbiALMvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 07:51:38 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4405 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232738AbiALMvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 07:50:50 -0500
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 334293F175
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 12:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641991846;
-        bh=D1KNKVI44z/PsvFst/TK173wi7+38whGq+x5398gON0=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=JopNeE47KEvoxm4NCN1RCmzwDftFfmdF37ZnIZEMUVjwC929IYfszBVbRSuFkQNhS
-         gS5hH884G/xyEyzrKioPnz7I2+tH/hoOuqcU2AndlQoMmq+f9gfYmdXmxaSbQrrQ3L
-         mwjVmDtjAeBbe1K/Kit4jnfeVREQlIepdEDTpMY3wBrT8C/lN+mOmOyyHzxaPsO4Ud
-         RdfMVyiMvbDvDuAhQmX6Xbgyoo7XXXCaBBknXsRzy3p16c6aL1H0Kw2feVrRZhO9QG
-         wUhC/P9C2UstQHIYvsOwSVKMfyhzfPWeOPEhT6forpKxejP6lvtafh6TgGjFJ5IqBq
-         PHS44/jM5JeOQ==
-Received: by mail-oi1-f199.google.com with SMTP id j125-20020aca3c83000000b002bc93dd9241so1634348oia.4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 04:50:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D1KNKVI44z/PsvFst/TK173wi7+38whGq+x5398gON0=;
-        b=xswWYRN+ypIpkmCivhPIn+5DfO2xAhHqbvil0yaJEZZ716/TlIzSUW+BFFd2lx/h0r
-         vQLyCQAvD7+0hCxcWsDI4bdX8tTNDtIojuUXImEnQa3GXWONfmIOW94mX2lpyL7bybdR
-         L0hLyXon0S/0+ZmBNmb5MRiW1fqiqurktaT/H1GC5uUbZcCOt2N8WsIu1bnz1cMlUbPq
-         p8zURpMWRSkTD5mnnQq4YamMn6NdShZSt9OgcBSImJ/sWuIvtI9B4l5LdpohVhYn0nqw
-         0EakgGxf/156HrrOWPlcCW1cWP0+tRoca1ApQXZlSUNqsER7Gd4Y3rj06evZ5wC6jiyw
-         6fwg==
-X-Gm-Message-State: AOAM533K6/L3uePnOtZ+Ezi7NZDeeQZJOktvv1JK3iCZvhxM3x2zqzs3
-        3fP5Giyvy4t4Yiu2jvtwB0B1xBAkMAd+QVZ41UmVMKj0RHaRbHLg2oS/AjO4XRmfo1RjxX+o5n3
-        OaiHon9mLPJzVe7CljUHqdA6csPdSQyBnuTFm4KHYV4Ff2nHDNzyRBujXzg==
-X-Received: by 2002:a9d:24e4:: with SMTP id z91mr6458444ota.11.1641991845087;
-        Wed, 12 Jan 2022 04:50:45 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwM+H18459QT/pnZUF17RGyfujL4v5cngiYatRHZMiCD1d/ynvUX+jBq5rww/cWUEn6F5jL1h5ES8nPHbI6LoQ=
-X-Received: by 2002:a9d:24e4:: with SMTP id z91mr6458435ota.11.1641991844824;
- Wed, 12 Jan 2022 04:50:44 -0800 (PST)
+        Wed, 12 Jan 2022 07:51:37 -0500
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JYnRy4gY2z67vyB;
+        Wed, 12 Jan 2022 20:48:46 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 12 Jan 2022 13:51:35 +0100
+Received: from [10.47.88.157] (10.47.88.157) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 12 Jan
+ 2022 12:51:33 +0000
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH -next v4] blk-mq: fix tag_get wait task can't be awakened
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        QiuLaibin <qiulaibin@huawei.com>
+CC:     <axboe@kernel.dk>, <ming.lei@redhat.com>,
+        <martin.petersen@oracle.com>, <hare@suse.de>,
+        <johannes.thumshirn@wdc.com>, <bvanassche@acm.org>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220111140216.1858823-1-qiulaibin@huawei.com>
+ <Yd2Q6LyJUDAU54Dt@smile.fi.intel.com>
+ <d7f51067-f5a8-e78c-5ece-c1ef132b9b9a@huawei.com>
+ <Yd7J4XbkdIm52bVw@smile.fi.intel.com>
+Message-ID: <3d386998-d810-5036-a87e-50aba9f56639@huawei.com>
+Date:   Wed, 12 Jan 2022 12:51:13 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-References: <20220112013154.1210480-1-kai.heng.feng@canonical.com> <20220112071659.GA4502@lst.de>
-In-Reply-To: <20220112071659.GA4502@lst.de>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 12 Jan 2022 20:50:33 +0800
-Message-ID: <CAAd53p4+WjhPM6VKZOZKQ4WcgNWjR7Eh_7Kjs1HZ_wiKov6Ctw@mail.gmail.com>
-Subject: Re: [PATCH] nvme: Mark external NVMe devices as removable
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kbusch@kernel.org, axboe@fb.com, sagi@grimberg.me,
-        Rajat Jain <rajatja@google.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <Yd7J4XbkdIm52bVw@smile.fi.intel.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.88.157]
+X-ClientProxiedBy: lhreml714-chm.china.huawei.com (10.201.108.65) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 3:17 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Wed, Jan 12, 2022 at 09:31:54AM +0800, Kai-Heng Feng wrote:
-> > Commit c037b6c818c3 ("PCI: Add sysfs "removable" attribute") can mark
-> > entire Thunderbolt hierarchy as removable, if system firmware provides
-> > correct attribute.
-> >
-> > So apply GENHD_FL_REMOVABLE for NVMe if removable bit is set, to make
-> > userspace daemon like Udisks knows it can be automount.
->
-> GENHD_FL_REMOVABLE means removable media as in floppies or CD-ROMs,
-> which does not apply to NVMe at all.
+On 12/01/2022 12:30, Andy Shevchenko wrote:
+>>>> +		if (test_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags) ||
+>>>> +		    test_and_set_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags)) {
+>>> Whoever wrote this code did too much defensive programming, because the first
+>>> conditional doesn't make much sense here. Am I right?
+>>>
+>> I think because this judgement is in the general IO process, there are also
+>> some performance considerations here.
+> I didn't buy this. Is there any better argument why you need redundant
+> test_bit() call?
+> 
 
-USB thumb drives also use this flag, so I am not sure why it's not
-applicable to NVMe?
-
-Kai-Heng
+I think that the idea is that test_bit() is fast and test_and_set_bit() 
+is slow; as such, if we generally expect the bit to be set, then there 
+is no need to do the slower test_and_set_bit() always.

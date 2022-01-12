@@ -2,107 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FDC48CCDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C11548CCE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357152AbiALUJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 15:09:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
+        id S236213AbiALUKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 15:10:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236213AbiALUI7 (ORCPT
+        with ESMTP id S1357669AbiALUJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 15:08:59 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA85FC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 12:08:58 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id g5so5737343plo.12
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 12:08:58 -0800 (PST)
+        Wed, 12 Jan 2022 15:09:48 -0500
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9688EC06173F;
+        Wed, 12 Jan 2022 12:09:48 -0800 (PST)
+Received: by mail-ua1-x92c.google.com with SMTP id p37so7030571uae.8;
+        Wed, 12 Jan 2022 12:09:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=D645mgqW5zfoTP46+QhUw2O9sxzB2yEdYGETq2QYUIc=;
-        b=DWIC6htSOV9vGcO0bRNecpulHUzTYmyXY3L2XoFR2hq5WiQzBtJAvbfLOlkpwvXTim
-         1LCO/0Us67/M1pVffQgcYsfjnDXUVqrBThuM3GD7SWB5+jr5XFROeR/MFTG9G5WFTskB
-         wWglScDHMcE2eojuLHM5kTZ1veb4rvfd7fjYy1VMmaMWpAADj4JEOaEZ2z3Aqwr1/I8G
-         bUDb3JNVZ1La4XExNHDgfIsz0vAdAaENlP38Q7Sx3GQ/4Eg3gK+A3pObrY+xXPdhjhba
-         QK8qekAcN1KJzd1P4BZhLBeSnonDtaLKPmBlav5SRehqMGrh9+Jn4nn//JdHKSOwUtW+
-         NcOQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/4zazzFqIYCG/88G2zNvkkpvFQtMz6NxYikeCTrDZI8=;
+        b=n2jcE2JB0r4p/pRX7koB0HcEiZxuEm+139VeLMGmRhc0z2YEjLKbagbzFaz+aLJoIv
+         MqHtwbNDhmy+lWBbx7fCpujC9k8ENfxgB+tf3FOHa8yFvdzO8T3infL44dEBy3HULBNM
+         VafqG82USxgDxiS7giR7OuVwBtkGu7i54/mDXoi4HahJ1IErV/l5puRYFdNF8i0zR/HW
+         mSUwGxvRGSa4Qwec8CebhvNm0xdDMjRoUiQawNbWT55n7Bg9o7aXGwH/FT9zwMWQQfnn
+         IzJtHBOTptqwdKyHTzsglPiNDuQI11Cl8ZnolUzm4VS0N5lsKZslquDRbTW2kI/D8xQP
+         ghtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=D645mgqW5zfoTP46+QhUw2O9sxzB2yEdYGETq2QYUIc=;
-        b=hcQWQpc8pjX7sSYlJDl9WA7kJwh3RG3Rkx7VnxP519iM3YtwfCtVUD69LRZzfpVT5F
-         V3qLs/kZpLTccgW5rLD/2AIEqoYyrp9o8KSywq2qNngQit8BwXfT3pfZRNkjzZD3uf08
-         mgIHL2U5q5wcNoKA0y64BTMwUJRFknNxzxB55tSEMFqhjhXV9TjuMX3hP3nGlnLshpac
-         pOlC+qGoQb+E9kzD8dx+74yiw9OkoI7weuK7gPO5gc1ga6ZTf+NLlJvxm2BWuLd1VVal
-         ip77xyxp11Bqh2flCghOt3ijZ4VgvkTHCGXSvIyGVYC1w5d3aIJoPyH8BcU3jrpHHMTC
-         O/dw==
-X-Gm-Message-State: AOAM5337irTEiEQ4py8BxRc3LlpJi8sI7KaSylJ8IOu1F6UiYKJiCQHy
-        MvJBSt/l2mapr64oZwjujxk=
-X-Google-Smtp-Source: ABdhPJzK21s0xf4uXp/UDCK5dJItxKDTNO5bdzvomlewiUyOtuWf33+4fuYshih6cG15DpH2muUIaw==
-X-Received: by 2002:a62:ed06:0:b0:4bb:1152:2fbd with SMTP id u6-20020a62ed06000000b004bb11522fbdmr941473pfh.34.1642018138143;
-        Wed, 12 Jan 2022 12:08:58 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id x25sm430874pfu.8.2022.01.12.12.08.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 12:08:57 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 12 Jan 2022 10:08:55 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 1/2] kernfs: use kernfs_node specific mutex and
- spinlock.
-Message-ID: <Yd81V5AYz/sMps9F@slm.duckdns.org>
-References: <20220103084544.1109829-1-imran.f.khan@oracle.com>
- <20220103084544.1109829-2-imran.f.khan@oracle.com>
- <YdLH6qQNxa11YmRO@kroah.com>
- <719eb5d2-680c-e596-1446-3ca8f47c3aea@oracle.com>
- <YdP57ij4JxahpdnC@kroah.com>
- <YddRVH4r6uNHt3xa@slm.duckdns.org>
- <03cb9939-efbb-1ce8-42f5-c167ac5246da@oracle.com>
- <YdivuA12i3VU8zO/@slm.duckdns.org>
- <989749c4-bae9-8055-39b4-ffc1cb6fc20b@oracle.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/4zazzFqIYCG/88G2zNvkkpvFQtMz6NxYikeCTrDZI8=;
+        b=MFalsCd5/uVhd4fIz+7ARGbhSLaEJlZyWZPu2Sq5/QuknrrCgxv3avJ3tR1AZB+EtT
+         gDebTzSYfyqm1iFscA/NbXrlhe3kDdzJ22+sqbrbIdD6zyKI/vyvJUqncBS69nV2OdSj
+         lJrpBifwbkEp/zWFHh+MoRkaQXOifiCxcIIk190br1wMH6OuuElz55OEXeyXAoVORQAi
+         wTNIbfRXhRadu1m0bEEMW0UxT6ztvksXmETLrZ9fLQ47v7VXLlTsyWTVAoNUq5oayWyF
+         J2CJ8sFSVh6vTZDfauYa4+HAC3RM08kjDGYopqKF4WezAS3fm1l6C0+ZTf58iW7C9Kzr
+         OPmg==
+X-Gm-Message-State: AOAM531Gic1paEnAN7Qs/GhdzT5Mn/PQ9mE/Cxkk2iYpF9OjwJ67Sn9N
+        3Unc/eGJKEZiFQEASm0oLthAzhGQN2iWHIYx/S8=
+X-Google-Smtp-Source: ABdhPJxJo/rld++GT9M5d6zn4cBK6v8mhODfJW+SsfVSE/Z0P8+PlYSevigr4p+wsfOnnf8CplHidPAUdUc1sqBKvJE=
+X-Received: by 2002:ab0:3c9e:: with SMTP id a30mr969512uax.131.1642018187671;
+ Wed, 12 Jan 2022 12:09:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <989749c4-bae9-8055-39b4-ffc1cb6fc20b@oracle.com>
+References: <20211207104924.21327-1-sergio.paracuellos@gmail.com>
+ <CAMhs-H886ZPZED-qmMtZcWFabRLNL14Y7SSz_Ko7d45zXL+v2w@mail.gmail.com> <20220112180627.GB1319@lpieralisi>
+In-Reply-To: <20220112180627.GB1319@lpieralisi>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Wed, 12 Jan 2022 21:09:36 +0100
+Message-ID: <CAMhs-H_KXmAuJzJhNWoHX7yy0p2hNeexe5rbBc4EPinTwGmzSA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] PCI: mt7621: Remove specific MIPS code from driver
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     linux-pci <linux-pci@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Jan 12, 2022 at 7:06 PM Lorenzo Pieralisi
+<lorenzo.pieralisi@arm.com> wrote:
+>
+> On Wed, Jan 12, 2022 at 03:42:56PM +0100, Sergio Paracuellos wrote:
+> > Hi Bjorn, Lorenzo,
+> >
+> > On Tue, Dec 7, 2021 at 11:49 AM Sergio Paracuellos
+> > <sergio.paracuellos@gmail.com> wrote:
+> > >
+> > > Hi all,
+> > >
+> > > MIPS specific code can be removed from driver and put into ralink mt7=
+621
+> > > instead which is a more accurate place to do this. To make this possi=
+ble
+> > > we need to have access to 'bridge->windows' in 'pcibios_root_bridge_p=
+repare()'
+> > > which has been implemented for ralink mt7621 platform (there is no re=
+al
+> > > need to implement this for any other platforms since those ones haven=
+'t got
+> > > I/O coherency units). This also allow us to properly enable this driv=
+er to
+> > > completely be enabled for COMPILE_TEST. This patchset appoarch:
+> > > - Move windows list splice in 'pci_register_host_bridge()' after func=
+tion
+> > >   'pcibios_root_bridge_prepare()' is called.
+> > > - Implement 'pcibios_root_bridge_prepare()' for ralink mt7621.
+> > > - Avoid custom MIPs code in pcie-mt7621 driver.
+> > > - Add missing 'MODULE_LICENSE()' to pcie-mt7621 driver to avoid compi=
+le test
+> > >   module compilation to complain (already sent patch from Yanteng Si =
+that
+> > >   I have rewrite commit message and long description a bit.
+> > > - Remove MIPS conditional code from Kconfig and mark driver as 'trist=
+ate'.
+> > >
+> > > This patchset is a real fix for some errors reported by Kernel Test R=
+obot about
+> > > implicit mips functions used in driver code and fix errors in driver =
+when
+> > > is compiled as a module [1] (mips:allmodconfig).
+> > >
+> > > Changes in v3:
+> > >  - Rebase the series on the top of the temporal fix sent for v5.16[3]=
+ for
+> > >    the module compilation problem.
+> > >  - Address review comments from Guenter in PATCH 2 (thanks Guenter!):
+> > >     - Address TODO in comment about the hardware does not allow zeros
+> > >       after 1s for the mask and WARN_ON if that's happend.
+> > >     - Be sure mask is real valid upper 16 bits.
+> >
+> > What are your plans for this series? Can we merge this?
+>
+> I was waiting for an ACK on patch (2) since it affects MIPS code.
 
-On Tue, Jan 11, 2022 at 10:42:31AM +1100, Imran Khan wrote:
-> The database application has a health monitoring component which
-> regularly collects stats from sysfs. With small number of databases this
-> was not an issue but recently several customers did some consolidation
-> and ended up having hundreds of databases, all running on the same
-> server and in those setups the contention became more and more evident.
-> As more and more customers are consolidating we have started to get more
-> occurences of this issue and in this case it all depends on number of
-> running databases on the server.
-> 
-> I will have to reach out to application team to get a list of all sysfs
-> files being accessed but one of them is
-> "/sys/class/infiniband/<device>/ports/<port number>/gids/<gid index>".
+I was expecting Thomas to get ACK for this patch or get it through the
+MIPS tree.
 
-I can imagine a similar scenario w/ cgroups with heavy stacking - each
-application fetches its own stat regularly which isn't a problem in
-isolation but once you put thousands of them on a machine, the shared lock
-can get pretty hot, and the cgroup scenario probably is more convincing in
-that they'd be hitting different files but the lock gets hot it is shared
-across them.
+>
+> It would also be great if Bjorn reviewed it to make sure he agrees
+> with the approach.
 
-Greg, I think the call for better scalability for read operations is
-reasonably justified especially for heavy workload stacking which is a valid
-use case and likely to become more prevalent. Given the requirements, hashed
-locking seems like the best solution here. It doesn't cause noticeable space
-overhead and is pretty easy to scale. What do you think?
+Agreed.
 
-Thanks.
+>
+> I think it is too late for this cycle, apologies, there is a significant
+> review backlog.
+>
+> Lorenzo
 
--- 
-tejun
+Best regards,
+    Sergio Paracuellos
+
+>
+> > Best regards,
+> >     Sergio Paracuellos
+> >
+> > >
+> > > Changes in v2:
+> > >  - Collect Acked-by from Arnd Bergmann for PATCH 1.
+> > >  - Collect Reviewed-by from Krzysztof Wilczy=C5=84ski for PATCH 4.
+> > >  - Adjust some patches commit subject and message as pointed out by B=
+jorn in review of v1 of the series[2].
+> > >
+> > > This patchset is the good way of properly compile driver as a module =
+removing
+> > > all MIPS specific code into arch ralink mt7621 place. To avoid mips:a=
+llmodconfig reported
+> > > problems for v5.16 the following patch has been sent[3]. This series =
+are rebased onto this patch to provide
+> > > a real fix for this problem.
+> > >
+> > > [0]: https://lore.kernel.org/linux-mips/CAMhs-H8ShoaYiFOOzJaGC68nZz=
+=3DV365RXN_Kjuj=3DfPFENGJiiw@mail.gmail.com/T/#t
+> > > [1]: https://lkml.org/lkml/2021/11/14/436
+> > > [2]: https://lore.kernel.org/r/20211115070809.15529-1-sergio.paracuel=
+los@gmail.com
+> > > [3]: https://lore.kernel.org/linux-pci/20211203192454.32624-1-sergio.=
+paracuellos@gmail.com/T/#u
+> > >
+> > > Thanks in advance for your time.
+> > >
+> > > Best regards,
+> > >    Sergio Paracuellos
+> > >
+> > > Sergio Paracuellos (5):
+> > >   PCI: Let pcibios_root_bridge_prepare() access to 'bridge->windows'
+> > >   MIPS: ralink: implement 'pcibios_root_bridge_prepare()'
+> > >   PCI: mt7621: Avoid custom MIPS code in driver code
+> > >   PCI: mt7621: Add missing 'MODULE_LICENSE()' definition
+> > >   PCI: mt7621: Allow COMPILE_TEST for all arches
+> > >
+> > >  arch/mips/ralink/mt7621.c            | 31 ++++++++++++++++++++++
+> > >  drivers/pci/controller/Kconfig       |  4 +--
+> > >  drivers/pci/controller/pcie-mt7621.c | 39 ++------------------------=
+--
+> > >  drivers/pci/probe.c                  |  4 +--
+> > >  4 files changed, 37 insertions(+), 41 deletions(-)
+> > >
+> > > --
+> > > 2.33.0
+> > >

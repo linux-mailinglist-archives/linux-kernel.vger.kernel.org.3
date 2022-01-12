@@ -2,125 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5756C48C72F
+	by mail.lfdr.de (Postfix) with ESMTP id EA0ED48C731
 	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354580AbiALP0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S1354626AbiALP0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:26:35 -0500
+Received: from mail.efficios.com ([167.114.26.124]:44074 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354546AbiALP0d (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 12 Jan 2022 10:26:33 -0500
-Received: from foss.arm.com ([217.140.110.172]:60654 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354569AbiALP01 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:26:27 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9CC04ED1;
-        Wed, 12 Jan 2022 07:26:26 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B54133F774;
-        Wed, 12 Jan 2022 07:26:24 -0800 (PST)
-Subject: Re: [PATCH 3 1/4] sched/pelt: Relax the sync of util_sum with
- util_avg
-To:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        linux-kernel@vger.kernel.org, rickyiu@google.com, odin@uged.al
-Cc:     sachinp@linux.vnet.ibm.com, naresh.kamboju@linaro.org
-References: <20220111134659.24961-1-vincent.guittot@linaro.org>
- <20220111134659.24961-2-vincent.guittot@linaro.org>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <1e64dac6-7724-f3f8-978e-fc70dbcc0ae3@arm.com>
-Date:   Wed, 12 Jan 2022 16:26:23 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id BD59C256B27;
+        Wed, 12 Jan 2022 10:26:32 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ywqNQ_Y1SLBR; Wed, 12 Jan 2022 10:26:32 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 3DF70256B26;
+        Wed, 12 Jan 2022 10:26:32 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 3DF70256B26
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1642001192;
+        bh=rGGJGHjEQWCw2EbTCdbcCnpbFwo6zy6FqMyQlybEF2A=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=kzwC2oqhbik0JW5pBB8AB53Mkg+AUU0bPq9gKzWLHyHpORdbhR+ZGRxPycDzMfuIY
+         +4O6gLG83Ep9n0ymoIdj2L9HYgJ/29Hi+MWS9LrFlDa3FG6MJstjygnmw9YVs2snly
+         EsQtkZo3o8v8xE5JGs9YU1vTJzghhfRPjYrMJYi5b+G5fFF85CleuPNEQ0jsd4VfoJ
+         gN2onxBvuFwqdNlMYjYjhCbdRyNTehZFxGvZwVNVXI8rTmA8qO9bjiOG1sU3FZQOkK
+         LT5WQTqc5JqnrdoJSodNIg1ifkX0Ijim7eppqA6nexs/lEVPaK/sVpRWHND+nWULjl
+         +Ggkyw4/XU+ZQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 8ZuMFzoGb8TO; Wed, 12 Jan 2022 10:26:32 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 2BC48256ADF;
+        Wed, 12 Jan 2022 10:26:32 -0500 (EST)
+Date:   Wed, 12 Jan 2022 10:26:32 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Florian Weimer <fw@deneb.enyo.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        carlos <carlos@redhat.com>
+Message-ID: <688677480.24662.1642001192132.JavaMail.zimbra@efficios.com>
+In-Reply-To: <87y23l6l2j.fsf@mid.deneb.enyo.de>
+References: <20220107170302.8325-1-mathieu.desnoyers@efficios.com> <87a6g7ny0j.fsf@mid.deneb.enyo.de> <1968088162.13310.1641584935813.JavaMail.zimbra@efficios.com> <87y23l6l2j.fsf@mid.deneb.enyo.de>
+Subject: Re: [RFC PATCH] rseq: x86: implement abort-at-ip extension
 MIME-Version: 1.0
-In-Reply-To: <20220111134659.24961-2-vincent.guittot@linaro.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4177)
+Thread-Topic: rseq: x86: implement abort-at-ip extension
+Thread-Index: ikLHFitF/BUFuQSDCDNnlnEWeAUhFQ==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 14:46, Vincent Guittot wrote:
-> Rick reported performance regressions in bugzilla because of cpu frequency
-> being lower than before:
->     https://bugzilla.kernel.org/show_bug.cgi?id=215045
+----- On Jan 12, 2022, at 10:16 AM, Florian Weimer fw@deneb.enyo.de wrote:
+
+> * Mathieu Desnoyers:
 > 
-> He bisected the problem to:
-> commit 1c35b07e6d39 ("sched/fair: Ensure _sum and _avg values stay consistent")
+>> ----- On Jan 7, 2022, at 2:31 PM, Florian Weimer fw@deneb.enyo.de wrote:
+>>
+>>> * Mathieu Desnoyers:
+>>> 
+>>>> Allow rseq critical section abort handlers to optionally figure out at
+>>>> which instruction pointer the rseq critical section was aborted.
+>>>>
+>>>> This allows implementing rseq critical sections containing loops, in
+>>>> which case the commit side-effect cannot be the last instruction. This
+>>>> is useful to implement adaptative mutexes aware of preemption in
+>>>> user-space. (see [1])
+>>> 
+>>> Could you write the program counter to the rseq area instead?  This
+>>> would avoid discussing which register to clobber.
+>>
+>> Using the rseq area for that purpose would be problematic for nested signal
+>> handlers with rseq critical sections. If a signal happens to be delivered
+>> right after the abort ip adjustment, its signal handler containing a rseq
+>> critical section could overwrite the relevant "abort-at-ip" field in the
+>> rseq per-thread area before it has been read by the abort handler interrupted
+>> by the signal.
+>>
+>> Making this architecture-agnostic is indeed a laudable goal, but I don't
+>> think the rseq per-thread area is a good fit for this.
+>>
+>> I also though about making the clobbered register configurable on a
+>> per-critical-section basis, but I rather think that it would be
+>> overengineered: too much complexity for the gain. Unless there are
+>> very strong reasons for choosing one register over another on a per
+>> use-case basis ?
 > 
-> This commit forces util_sum to be synced with the new util_avg after
-> removing the contribution of a task and before the next periodic sync. By
-> doing so util_sum is rounded to its lower bound and might lost up to
-> LOAD_AVG_MAX-1 of accumulated contribution which has not yet been
-> reflected in util_avg.
-> 
-> Instead of always setting util_sum to the low bound of util_avg, which can
-> significantly lower the utilization of root cfs_rq after propagating the
-> change down into the hierarchy, we revert the change of util_sum and
-> propagate the difference.
+> You could perhaps push a signal frame onto the stack.  It's going to
+> be expensive, but it's already in the context switch path, so maybe it
+> does not matter.
 
-IMHO, this paragraph does not match the changes in this patch.
+The route I'm taking in my subsequent version of the patch is very close to
+pushing a signal frame: on abort, skip the redzone, and push the abort-at-ip
+pointer. Then abort handler is then expected to pop the abort-at-ip pointer
+and unskip the redzone.
 
-> In addition, we also check that cfs's util_sum always stays above the
-> lower bound for a given util_avg as it has been observed that
-> sched_entity's util_sum is sometimes above cfs one.
+Thanks,
 
-And I guess this one also refers to the code change in 2/4, i.e. in
-update_tg_cfs_util().
-> Reported-by: Rick Yiu <rickyiu@google.com>
-> Fixes: 1c35b07e6d39 ("sched/fair: Ensure _sum and _avg values stay consistent")
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
->  kernel/sched/fair.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 095b0aa378df..ed35255fdb85 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -3381,6 +3381,7 @@ void set_task_rq_fair(struct sched_entity *se,
->  	se->avg.last_update_time = n_last_update_time;
->  }
->  
-> +#define MIN_DIVIDER (LOAD_AVG_MAX - 1024)
->  
->  /*
->   * When on migration a sched_entity joins/leaves the PELT hierarchy, we need to
-> @@ -3449,7 +3450,6 @@ void set_task_rq_fair(struct sched_entity *se,
->   * XXX: only do this for the part of runnable > running ?
->   *
->   */
-> -
->  static inline void
->  update_tg_cfs_util(struct cfs_rq *cfs_rq, struct sched_entity *se, struct cfs_rq *gcfs_rq)
->  {
-> @@ -3681,7 +3681,19 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
->  
->  		r = removed_util;
->  		sub_positive(&sa->util_avg, r);
-> -		sa->util_sum = sa->util_avg * divider;
-> +		sub_positive(&sa->util_sum, r * divider);
-> +		/*
-> +		 * Because of rounding, se->util_sum might ends up being +1 more than
+Mathieu
 
-There are no se's involved in update_cfs_rq_load_avg(). Could be hard to
-grasp for people only looking at this function.
-
-> +		 * cfs->util_sum. Although this is not a problem by itself, detaching
-> +		 * a lot of tasks with the rounding problem between 2 updates of
-> +		 * util_avg (~1ms) can make cfs->util_sum becoming null whereas
-> +		 * cfs_util_avg is not.
-> +		 * Check that util_sum is still above its lower bound for the new
-> +		 * util_avg. Given that period_contrib might have moved since the last
-> +		 * sync, we are only sure that util_sum must be above or equal to
-> +		 *    util_avg * minimum possible divider
-                   ^^^
-some superfluous whitepaces.
-
-> +		 */
-> +		sa->util_sum = max_t(u32, sa->util_sum, sa->util_avg * MIN_DIVIDER);
->  
->  		r = removed_runnable;
->  		sub_positive(&sa->runnable_avg, r);
-> 
-
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

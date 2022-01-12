@@ -2,240 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A067748CE95
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 23:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0D648CE9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 23:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234730AbiALWzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 17:55:55 -0500
-Received: from mga12.intel.com ([192.55.52.136]:62411 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234670AbiALWzv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 17:55:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642028151; x=1673564151;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=0yuWlAUkRzHoSTAziHjPis8qDhb61eB+HtVZSeBAn2w=;
-  b=naShmNah0OKVh//Rwbmqv5qcCrf5fI0bIrfQihhIqUTizsz6yFcorbzi
-   6LlJWu6v8umw5lgbMM4tdC9EoX0XKZ5PEagPL0q/w+jSNvbChri8F7LP8
-   aAUfLDzv1wLwt7sUiZPFHn2eLG6+Wm6+Z2cEuZwIFt8TqlyLsHAhqYLPX
-   q7V30yUXogNZnaKEmdtebNNctXFaHgsnc7zmNSad0P+1byRnWInCzGHw1
-   igMB6cEL8nWmwhfpkg04dvlbiSg/pvioiz3UzTR5ZwUai/+1of6grf4oy
-   bEmXbxZvr1q4O00jM+a6qyXFJeh73p7SuzbNxRI9KH02HkPFxNoRC/Y6M
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="223854376"
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="223854376"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 14:55:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="623634680"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by orsmga004.jf.intel.com with ESMTP; 12 Jan 2022 14:55:42 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 12 Jan 2022 14:55:35 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Wed, 12 Jan 2022 14:55:35 -0800
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.43) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Wed, 12 Jan 2022 14:55:34 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XckB6BSg2IZw/cN7bJfuVjUQ2y96recyzw8JptGzo06CtuIFa6dBwbcSghW2mLAUMTk8F0gdsUygCtoC/+OVLoMSV3x0d8LXdl2VQBhyMffV8a+eFnMxAG3a4XLvy8oQ52G1cMvoHAKit5jNdxOrwVPsX4+oG5sRdOJpTRPHPXZBoB9jcVqb6854aB0pRBhse6tNY+2XML5wwGodeSbfnj+wuuPR6o6jHtAvdpBJUvBY/oRAnL1/lrhIYmIwfPkzyhS9ahdHTPK5bBAOYS+OePyieCg/uMD5dEbj1CjN4+D/gzzGVkU9vM9GO0wygntdYQdV0tLb+bwcO0pZGli+Jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=klEACL5klxjOZc4oCo0cArzCSqQMYBY7oiKlif2UXns=;
- b=JY5mbtxFovRWLOiENaFBb+xBEgKMfrOs4yhAgQTGVwu7picjlhl8fplOy760XyKbuosrhXoF3TxYC9KKJ82djkRhMAIhRExVjRW48zHug6Sg1Nkl1c+U2wnVcLGliL4xUq+haEMXgfZPlHVl/EKwlvGnw8AP52sf8WavoX0uvsSG1K+9kb1F6axElpv9o9Zl6tHHHFUar95olJ630ftWtmD1Ea8+NW/1bpua9ODTcpDlHRh+CmJ1GM9GNftITQDkoLxjKTK2Wdc0DAB6z81djawjpGcgjuFab0Wbk8j1/UWckLdmRSpXCYskqel6jaikOMlLvjX1zR0DjTeXt03AkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CO1PR11MB4771.namprd11.prod.outlook.com (2603:10b6:303:9f::9)
- by DM6PR11MB4092.namprd11.prod.outlook.com (2603:10b6:5:192::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Wed, 12 Jan
- 2022 22:55:28 +0000
-Received: from CO1PR11MB4771.namprd11.prod.outlook.com
- ([fe80::4843:15c6:62c1:d088]) by CO1PR11MB4771.namprd11.prod.outlook.com
- ([fe80::4843:15c6:62c1:d088%3]) with mapi id 15.20.4888.011; Wed, 12 Jan 2022
- 22:55:27 +0000
-From:   "Ismail, Mohammad Athari" <mohammad.athari.ismail@intel.com>
-To:     Russell King <linux@armlinux.org.uk>
-CC:     Andrew Lunn <andrew@lunn.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH net v2] net: phy: marvell: add Marvell specific PHY
- loopback
-Thread-Topic: [PATCH net v2] net: phy: marvell: add Marvell specific PHY
- loopback
-Thread-Index: AQHYB5efdv1tXs/AiUepicn/jvMmF6xfXQeAgACh7IA=
-Date:   Wed, 12 Jan 2022 22:55:27 +0000
-Message-ID: <CO1PR11MB477101305A603B6BC7083360D5529@CO1PR11MB4771.namprd11.prod.outlook.com>
-References: <20220112093344.27894-1-mohammad.athari.ismail@intel.com>
- <Yd7T1e/R9jGWMK2B@shell.armlinux.org.uk>
-In-Reply-To: <Yd7T1e/R9jGWMK2B@shell.armlinux.org.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.200.16
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3ad56442-c6e9-4955-0c2c-08d9d61ea07f
-x-ms-traffictypediagnostic: DM6PR11MB4092:EE_
-x-microsoft-antispam-prvs: <DM6PR11MB4092B3DD2DA056C25C1BFE13D5529@DM6PR11MB4092.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5IMxOzyHPGzZeCpTItOiWqn7rJFsh5nN8ESICZi8uIyntemIinTSIapjk7BGDbl0gkB2nhs+eddOaac+cZN2xsf2RFi4eMDZNzg0fcM6lELQ+QamWTPMaZOTXouKqFtk5csInq9xc3miJ0sCAg56jmqnAMP80CWzFj5tg14aG2wa4C+debzjwRNbiNIDXKpiwy9zdjYkhFn0nmMtv64R0TybUDN+Fe32ewU3LrUBZ19lzx2rmhys01+mCv4lCLYbyMyZkigGi2CWbe8MvONEtO1v4ZmHHtjVxYgg4ZOWRf7OkNCDtOre54z8IHZ0Qbfy3TyM4rqwqal5M7b7gsmLi4/fctduvAkNWl4dmgMcmZD08RUc65782B8KJWFl+lNBEEgUy4SugK5aXPb7jmteThm7YufzjP39EPtje45E/2bb5EqQXJVEj02eqdEEdmPbDRo157it4yfbDChveNo0ZNQAxymYGNoFrgeiWzxPuDm857vuCWLV5Nc0y2BqTczEvsdnzlCXe7LFyTb+3Eg8Tt1rkz+BMgjkJg6Qzhj7FG+cxP9KUyPKa83idNXmirhDjfiYuntxopZ2Ooo+nHfn80yY5BHeyVSyzK/mTXKSAI81hgCw+QdICx0XecoeafVxxOYkxls1AXebGQ2M2yUhit+P0SHHqcxPE5rQUCWGz3/v7fKTXpZThi7jtniNX8aeK2nTzJWGUuMtsZbIFBHbM8C/uWGHBcK+yI3oJgO7apSkcvxTQWIMjHgGxgV4CUFxKCoX+VTYB4MxXeEB9LhT3BvyeRaEqnztXL5Py/1mn7M=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4771.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6916009)(83380400001)(54906003)(5660300002)(8936002)(316002)(186003)(26005)(966005)(82960400001)(508600001)(8676002)(52536014)(2906002)(86362001)(38070700005)(76116006)(33656002)(7696005)(66946007)(53546011)(38100700002)(9686003)(122000001)(71200400001)(55016003)(55236004)(66476007)(66556008)(4326008)(6506007)(64756008)(66446008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zeMyxcJbm+a96R0NCDxj05JSxeXdRTUhQaH2srC1kWg88BjWRk3pbE7ogpl6?=
- =?us-ascii?Q?G4WCVlUkeZCO/nDDQK/Xz2FX2eaaF+VtfEEuvqlxuKCihG7CRch8GuUhalDR?=
- =?us-ascii?Q?OTmWVmRnTK4I8HqDo1P4WB3dEBt3LV1rqCPMj8nYyfhvBmxdJECQQywfsxCf?=
- =?us-ascii?Q?FKX3JxvxKZvrHBfv3TLvn1/GLeghsmA/oRz3OJagfc5OCUfStm+hbA7ybm19?=
- =?us-ascii?Q?jNo5sbTsxb8TzF2bP8A9DcsfC+1dI7jYDzWfGFC4wWlXC58Pg3hASdXHRui2?=
- =?us-ascii?Q?0McFIXWrGzu5Vky+qJF87WhsiI3sAloVUK7ldiMWP18hJL3kDmptIT4x+UIp?=
- =?us-ascii?Q?2P6vwI3vv86ObS9gN+Jisxzi1j7jgmtCcpA4B0Zryf7sNm8U+mGujoJSKcEa?=
- =?us-ascii?Q?beNM+fJj/fVGKJXg3EXfa0tSThnjPmMY8VyqbM1FZhdMa8OfaAJ+tzwSvKLX?=
- =?us-ascii?Q?EJ8QG4Rrd8GmcxEIjTTZUDqdFXMboiWCDxfxtpbebkqumbxElehVeFBJ4V1q?=
- =?us-ascii?Q?/KjuL6QpAxIUyaCJDcfe6shpgjfT9fwVfci2ecgiHdQSsW1hN6JZ80Dd5VET?=
- =?us-ascii?Q?XIzCzoaJS3IMBXWH4NKFxk7u8oidURqsYnHPBSHXN1G3inYpy2kxAKn7xk2T?=
- =?us-ascii?Q?S3Ymjk2SzcbDYRVbfE0X/TCsP2GpfIj6AeiL2qccQTV9rpMQqBrLsZm/HDXq?=
- =?us-ascii?Q?LOYnrtoQWv2vNuG6BHyf0ZTCWe55Qk74wz9fsWSgwXcb30MxnL041bu9R+sx?=
- =?us-ascii?Q?eoB0tatRjlRrfvk+XGO2q/GT3Uw1Fa70JqMcgMYFKFLzaJDfcu5XCdae7r2p?=
- =?us-ascii?Q?TErCo0lgSwxk1pDbwk3E4dIyWW9KZFw3vQnyaJi4jOHjocgAPj4/S5Xps8wu?=
- =?us-ascii?Q?xPhtJdw+M8R7v/5QC+0ksT92q985il9+8FJy7eu6heZxSsWniDoTlXcKdzMx?=
- =?us-ascii?Q?+LsGKvaIGRomPpKFIsTy8J2kKoXjgxepR03vHHXXWnr0cw7uw3emIEg0dHBs?=
- =?us-ascii?Q?kpbSbrw0n+JBTtCStfsPQiFWHLK7KpvJ63Axysn6uY24cXZ515CoLUxFxq43?=
- =?us-ascii?Q?pxXyXExBb4PHQJPlWXAlIHV83PjEy/glt+0jixJ72YUqruFH/iV5B1iBDh2o?=
- =?us-ascii?Q?1HL/eDmmsxCPAOgrAylUlF3u2Z4CAsZwfXxJ6Jv+9G2aJl852E3mCTuQazYM?=
- =?us-ascii?Q?Y3+3drKQX+44nBOuuW5YzK0N4ZIVtt21cB973uppCQ/EfP2U/b+ujSni4r61?=
- =?us-ascii?Q?7VQbqyZVgS3LvZ/yxMJBvmgrXUti4YqLeKnMx0himMOCzTuiZYV+Ya+mp6/W?=
- =?us-ascii?Q?kzvJo5WOeFNCW422b9SVHQ2fpWeGygpdo6q63yxWzBVOO0SjEAwjBQDcgJuB?=
- =?us-ascii?Q?ZOdrlC/Q7KmcbA5lwcdlbymEtZ1FaSQrgrR6O4VAlamgAlrf+9uMrKscLXdJ?=
- =?us-ascii?Q?tUyQIXCNiO3Ljz6dF5tHE4p6cJ8rP4TyxCziYs/50NlC0fcZNlpCFnKP/Jh/?=
- =?us-ascii?Q?xGjPu5vSJdyaC18+x5KpTK5fr4UoYuVj+We6TqvSvvMigMU2dIRQIaXdpeAO?=
- =?us-ascii?Q?4dKlK9pOzSRponSDo9teN56esC5SOwObnB8pYS8QgoSC2edmNG7bfmM4qYVj?=
- =?us-ascii?Q?chaCaotuxF9oK7Ysdb/yZltfS22/D7TEFYGGkdImjgFhmTcf6NDkap05LKcF?=
- =?us-ascii?Q?rGAHlUUNRVeis9Lsdqr8wRyRdfuPQaIL6v/C9Vyx9a22i+RDzdG7/rDP5Opu?=
- =?us-ascii?Q?IAwrdU2iTQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S234790AbiALW4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 17:56:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26919 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234777AbiALW4U (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 17:56:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642028177;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BnkpM+pGxrApbJHkm0M03d3jDQgbOfi2NwpUNQ1rReQ=;
+        b=LwpFKEHl003X/IPXR1EmhNPX4yXaoGhN3nQJg/Zrqt/HdNJ6flcYyBVtg4s8l1zqIqf0sy
+        6ScnSeM4fVuoI33zp2/dG5xbcRNdW4BB3qgQF0/3IMu/EBuARcZ1Knt89uwkLSOWLXRdXp
+        HOZlKdSeiJr49tEiLeAROoKPX29qvzE=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-203-9tDh9QrhPP6dNrF3J26qbg-1; Wed, 12 Jan 2022 17:56:16 -0500
+X-MC-Unique: 9tDh9QrhPP6dNrF3J26qbg-1
+Received: by mail-ed1-f72.google.com with SMTP id h1-20020aa7cdc1000000b0040042dd2fe4so2307340edw.17
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 14:56:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=BnkpM+pGxrApbJHkm0M03d3jDQgbOfi2NwpUNQ1rReQ=;
+        b=t7Ksnn9d0kcIRGhGU0Jki6x9e43+Edo3VCLgjkypWHwjRIu1CsHhSzyZrXbQoSGpiO
+         FhAx6H5DaBNczMyOc7U2M0HJNdvI8kxMo52bOCWCgB5WFd4Kh+kmjaSj9tm4yO1pZawt
+         IWUDD4byCvq/FyqQ1TE1SHSJCvun+C/kUZAOD/+oHl+WGSDycCeBqmZF7BL1qNCvfgK/
+         GHbUj415RuW52gtgP592XE/V0R/JfBoUC5ldDjM4agbRZwi2pKylcuU7FUolv2qQ08Mw
+         EyHqFvwcAUNHyFOU7Rcs4PReJFNgo5GB9ExEIGdatfqQ5zEubM+5EcC0ctW3+vc8K2eW
+         zW1w==
+X-Gm-Message-State: AOAM533ofBZBlC4iemwPSyC4JvkGZPaw7UpdrDXJQpxkmaHMYgQJw9xj
+        nuTlTJJVIoGKwepu0NoP3G7coIVR78cNseCvi4NIsrG8K15JhuSSdy63+9l2CFNemGbuVIo0YX+
+        KrIy2Rgkq2XXbMKCKPF2tr+Ck
+X-Received: by 2002:a17:906:158f:: with SMTP id k15mr1419789ejd.367.1642028174500;
+        Wed, 12 Jan 2022 14:56:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzslN7ywjh8PbuXmxEdQtB8I0bf47LWMuq0xevWYn8N1avx8AZ2QP4uOzEEVzrJFXzW9EpY6g==
+X-Received: by 2002:a17:906:158f:: with SMTP id k15mr1419770ejd.367.1642028174153;
+        Wed, 12 Jan 2022 14:56:14 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id u9sm301028ejh.195.2022.01.12.14.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 14:56:13 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 1BE561802BD; Wed, 12 Jan 2022 23:56:13 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        linux-crypto@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH RFC v1 1/3] bpf: move from sha1 to blake2s in tag
+ calculation
+In-Reply-To: <20220112131204.800307-2-Jason@zx2c4.com>
+References: <20220112131204.800307-1-Jason@zx2c4.com>
+ <20220112131204.800307-2-Jason@zx2c4.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Wed, 12 Jan 2022 23:56:13 +0100
+Message-ID: <87tue8ftrm.fsf@toke.dk>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4771.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ad56442-c6e9-4955-0c2c-08d9d61ea07f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2022 22:55:27.8585
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: seic0EkxVtwaVBY/fD5Rl7fIOmL52x24rPLPYfRRSlPYLgNkvtCRxcXl8xBT/N5vf0nPbo73HFLucFyN5+EhOkifgDWOd3rRD9AQxZosZ2TKuSluO+B1jaGA7nSMZ3jL
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4092
-X-OriginatorOrg: intel.com
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[ adding the bpf list - please make sure to include that when sending
+  BPF-related patches, not everyone in BPF land follows netdev ]  
 
+"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
 
-> -----Original Message-----
-> From: Russell King <linux@armlinux.org.uk>
-> Sent: Wednesday, January 12, 2022 9:13 PM
-> To: Ismail, Mohammad Athari <mohammad.athari.ismail@intel.com>
-> Cc: Andrew Lunn <andrew@lunn.ch>; David S . Miller
-> <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; Oleksij
-> Rempel <linux@rempel-privat.de>; Heiner Kallweit
-> <hkallweit1@gmail.com>; netdev@vger.kernel.org; linux-
-> kernel@vger.kernel.org; stable@vger.kernel.org
-> Subject: Re: [PATCH net v2] net: phy: marvell: add Marvell specific PHY
-> loopback
->=20
-> On Wed, Jan 12, 2022 at 05:33:44PM +0800, Mohammad Athari Bin Ismail
-> wrote:
-> > +static int marvell_loopback(struct phy_device *phydev, bool enable) {
-> > +	if (enable) {
-> > +		u16 bmcr_ctl =3D 0, mscr2_ctl =3D 0;
-> > +
-> > +		if (phydev->speed =3D=3D SPEED_1000)
-> > +			bmcr_ctl =3D BMCR_SPEED1000;
-> > +		else if (phydev->speed =3D=3D SPEED_100)
-> > +			bmcr_ctl =3D BMCR_SPEED100;
-> > +
-> > +		if (phydev->duplex =3D=3D DUPLEX_FULL)
-> > +			bmcr_ctl |=3D BMCR_FULLDPLX;
-> > +
-> > +		phy_modify(phydev, MII_BMCR, ~0, bmcr_ctl);
->=20
-> Is there any point in doing a read-modify-write here if you're just setti=
-ng all
-> bits in the register? Wouldn't phy_write() be more appropriate? What abou=
-t
-> error handing?
+> BLAKE2s is faster and more secure. SHA-1 has been broken for a long time
+> now. This also removes quite a bit of code, and lets us potentially
+> remove sha1 from lib, which would further reduce vmlinux size.
 
-Yes, you're right. phy_write() is more suitable. And will add error handlin=
-g as well.
-Will include them in v3 patch.
+AFAIU, the BPF tag is just used as an opaque (i.e., arbitrary) unique
+identifier for BPF programs, without any guarantees of stability. Which
+means changing it should be fine; at most we'd confuse some operators
+who have memorised the tags of their BPF programs :)
 
->=20
-> > +
-> > +		if (phydev->speed =3D=3D SPEED_1000)
-> > +			mscr2_ctl =3D BMCR_SPEED1000;
-> > +		else if (phydev->speed =3D=3D SPEED_100)
-> > +			mscr2_ctl =3D BMCR_SPEED100;
-> > +
-> > +		phy_modify_paged(phydev, MII_MARVELL_MSCR_PAGE,
-> > +				 MII_88E1510_MSCR_2, BMCR_SPEED1000 |
-> > +				 BMCR_SPEED100, mscr2_ctl);
-> > +
+The only other concern I could see would be if it somehow locked us into
+that particular algorithm for other future use cases for computing
+hashes of BPF programs (say, signing if that ends up being the direction
+we go in). But obviously SHA1 would not be a good fit for that anyway,
+so the algorithm choice would have to be part of that discussion in any
+case.
 
-I believe this also need error handling.
+So all in all, I don't see any issues with making this change for BPF.
 
-> > +		/* Need soft reset to have speed configuration takes effect
-> */
-> > +		genphy_soft_reset(phydev);
+-Toke
 
-Ditto.
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+> Cc: linux-crypto@vger.kernel.org
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  kernel/bpf/core.c | 39 ++++-----------------------------------
+>  1 file changed, 4 insertions(+), 35 deletions(-)
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 2405e39d800f..d01976749467 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -33,6 +33,7 @@
+>  #include <linux/extable.h>
+>  #include <linux/log2.h>
+>  #include <linux/bpf_verifier.h>
+> +#include <crypto/blake2s.h>
+>  
+>  #include <asm/barrier.h>
+>  #include <asm/unaligned.h>
+> @@ -265,24 +266,16 @@ void __bpf_prog_free(struct bpf_prog *fp)
+>  
+>  int bpf_prog_calc_tag(struct bpf_prog *fp)
+>  {
+> -	const u32 bits_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
+>  	u32 raw_size = bpf_prog_tag_scratch_size(fp);
+> -	u32 digest[SHA1_DIGEST_WORDS];
+> -	u32 ws[SHA1_WORKSPACE_WORDS];
+> -	u32 i, bsize, psize, blocks;
+>  	struct bpf_insn *dst;
+>  	bool was_ld_map;
+> -	u8 *raw, *todo;
+> -	__be32 *result;
+> -	__be64 *bits;
+> +	u8 *raw;
+> +	int i;
+>  
+>  	raw = vmalloc(raw_size);
+>  	if (!raw)
+>  		return -ENOMEM;
+>  
+> -	sha1_init(digest);
+> -	memset(ws, 0, sizeof(ws));
+> -
+>  	/* We need to take out the map fd for the digest calculation
+>  	 * since they are unstable from user space side.
+>  	 */
+> @@ -307,31 +300,7 @@ int bpf_prog_calc_tag(struct bpf_prog *fp)
+>  		}
+>  	}
+>  
+> -	psize = bpf_prog_insn_size(fp);
+> -	memset(&raw[psize], 0, raw_size - psize);
+> -	raw[psize++] = 0x80;
+> -
+> -	bsize  = round_up(psize, SHA1_BLOCK_SIZE);
+> -	blocks = bsize / SHA1_BLOCK_SIZE;
+> -	todo   = raw;
+> -	if (bsize - psize >= sizeof(__be64)) {
+> -		bits = (__be64 *)(todo + bsize - sizeof(__be64));
+> -	} else {
+> -		bits = (__be64 *)(todo + bsize + bits_offset);
+> -		blocks++;
+> -	}
+> -	*bits = cpu_to_be64((psize - 1) << 3);
+> -
+> -	while (blocks--) {
+> -		sha1_transform(digest, todo, ws);
+> -		todo += SHA1_BLOCK_SIZE;
+> -	}
+> -
+> -	result = (__force __be32 *)digest;
+> -	for (i = 0; i < SHA1_DIGEST_WORDS; i++)
+> -		result[i] = cpu_to_be32(digest[i]);
+> -	memcpy(fp->tag, result, sizeof(fp->tag));
+> -
+> +	blake2s(fp->tag, raw, NULL, sizeof(fp->tag), bpf_prog_insn_size(fp), 0);
+>  	vfree(raw);
+>  	return 0;
+>  }
+> -- 
+> 2.34.1
 
-> > +
-> > +		/* FIXME: Based on trial and error test, it seem 1G need to
-> have
-> > +		 * delay between soft reset and loopback enablement.
-> > +		 */
-> > +		if (phydev->speed =3D=3D SPEED_1000)
-> > +			msleep(1000);
-> > +
-> > +		return phy_modify(phydev, MII_BMCR, BMCR_LOOPBACK,
-> > +				  BMCR_LOOPBACK);
-> > +	} else {
-> > +		phy_modify(phydev, MII_BMCR, BMCR_LOOPBACK, 0);
->=20
-> Error handling?
-
-Will add it in v3 patch.
-
--Athari-
-
-
->=20
-> Thanks.
->=20
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

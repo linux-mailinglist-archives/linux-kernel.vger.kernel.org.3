@@ -2,93 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C8448CB20
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E525348CB22
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243723AbiALSiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 13:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356358AbiALSiG (ORCPT
+        id S1343991AbiALSjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 13:39:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54231 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343802AbiALSjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:38:06 -0500
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF3EC06175B
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:37:55 -0800 (PST)
-Received: by mail-pj1-x1044.google.com with SMTP id oa15so6731437pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:37:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xeVQl5zfCEMGt7HE1AVdsHxExo9MfJ6g3IFfBZu2Ax8=;
-        b=jOBxq7bLh2Rgotk9hAQPft1z7qkH7P08jjiqwOseYEM427Y2CR4UiWxgNvx8PW3TSU
-         QVTsCZmEJRrXmj3qxe12icHn8rHm2MtEfrw2v18Yj9d6zB2aZBJZbPtQ0x1ydOJ0b9Zj
-         6sHfcTxZzU3eEu9TjAinMSr0MttPaq8piWXn7g7BWJToR39RCFLt/ry3QAuONkouQ4MQ
-         bm1AjdSpCjf7OnjAC15w7PrsJ3q2gHJnpV0o54z/OAJbSJ4JBVMqpK90LdcP+DRhkPnK
-         gonJcC/s3XgVq8E2EvlresIAZ9sESbpXV8Lla7dCHayXmZkCS9abeBfcUdC4Dc4kNeJk
-         e5zA==
+        Wed, 12 Jan 2022 13:39:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642012751;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QDVFLXIz2JDZrvGc2eGZe6Vv1J9TCTU3WjZaistUlP8=;
+        b=NATlFa4UuJJ2O4NUID5hqTXoswzbJ/VdMShvBf/8zwbdVji9QuaJYfdehAVNxKA8YfY5ZO
+        fkIiR1/fh9OuMKeciFKjTJvFVlCuFDBrhri7997P7wpKLjOWWYyq139UdhxH888yrgsHge
+        BAdvRPkbnEH9xZO4/3p1LI8FpJipSUQ=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-493-4186DCbDO8KRd_lqPk4JTw-1; Wed, 12 Jan 2022 13:39:10 -0500
+X-MC-Unique: 4186DCbDO8KRd_lqPk4JTw-1
+Received: by mail-ed1-f70.google.com with SMTP id z10-20020a05640235ca00b003f8efab3342so3070448edc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:39:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xeVQl5zfCEMGt7HE1AVdsHxExo9MfJ6g3IFfBZu2Ax8=;
-        b=zORJ2pnMfXtsVWhNvPMvMdh+5JGtS36CEjDpOnKLxlINfpq0hYwH2VMmkdt2eTmR6t
-         USvx2uRk9YrCiE8alG5g/yB0RlCM79ZNw2XOfwQv/1eAQauB+J3mCteVIiRLnPeA5KAK
-         zQNbFZ1CkiapZhfH5IL20Uc+RGNTUNeJOMW2e149ApkH1J5Biitx4Oj+kXoOvxNa184m
-         lJrwBYfR0MuR6jH5X/M0nqAlYdHtC/idhy6PULC1wIvyBmxiYIq2/9T0I1mhs6MrrANi
-         5L+ZtY5N/n6siaigzWunB/3aInNQfVphrMhJSXslMUc5ZjUBs41/ipZuDz17cpHL16UB
-         Pz6Q==
-X-Gm-Message-State: AOAM530ko+orkqKuXg/zSlSkFiwNDw34LFajRrs8E/BDOnuHiKNba8QT
-        Xxg4nKFTNKAu6BHoEAP1j+E0r5ZqZC//CAyJW2A=
-X-Google-Smtp-Source: ABdhPJwjBPJvUb41ypOcE9CukUMoFtjdD0CRObulND8RzruFRXWOWVw5vixKSgQmBT728tfpOq+QNxuWa28+5mRgx1I=
-X-Received: by 2002:a62:8855:0:b0:4bd:e21c:1f14 with SMTP id
- l82-20020a628855000000b004bde21c1f14mr629003pfd.76.1642012674726; Wed, 12 Jan
- 2022 10:37:54 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QDVFLXIz2JDZrvGc2eGZe6Vv1J9TCTU3WjZaistUlP8=;
+        b=ADMqp3K8tbb9mdWbIlR/T5Es9BLmb6sSav1p9lC4Ov9ligFvDa0Zz4qeH1tPQ9bGCD
+         8SzOMgEFRWSoKtcdeFEN+o9MgVua2EHztmXPMLkDoixmQPrfToCI0A/+m9cEGr0gpAqi
+         GYtMdQtaPIuLAsHQ254dujq6lRRgBe06Y8WzmmU5VqzvXBpRwZo8pO0/TAT0RVxCHwDm
+         MZm350UMRihfTqhZcweBLAUqCllQ7/RDY2CMt54xQb8AWOPh4je75EgtARAQpMenxGuw
+         f5WrNi6leezNZ7AsCAow9qxAmJq+PJZodNN3I2vVICeljYrYrkxtaWRWx9mSpXjFLKU0
+         Pl6w==
+X-Gm-Message-State: AOAM533r9oTXfsToS5CzPpORLT0bcMT4P91ViIDJTvwgRdBG53Vc40qo
+        kvUwbVVlLwoVZ+hnJE4bNTfOcMwR0tWFIdvxM1b/5OKcghnBGK3SzhtP5/UCeyKyBNsgpoTXx0d
+        ATOyIm8uX3Yn1xDJFWdbxLi3w
+X-Received: by 2002:a05:6402:1602:: with SMTP id f2mr897818edv.80.1642012749692;
+        Wed, 12 Jan 2022 10:39:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwftRaiNcrTcdkuykZ6qJFdRyA+68PtNAEc9NiHUw/3W9bAuJOBn+/B0NV9fSBUzIRHv8zORQ==
+X-Received: by 2002:a05:6402:1602:: with SMTP id f2mr897806edv.80.1642012749515;
+        Wed, 12 Jan 2022 10:39:09 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id h2sm153319ejo.169.2022.01.12.10.39.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 10:39:09 -0800 (PST)
+Message-ID: <50136685-706e-fc6a-0a77-97e584e74f93@redhat.com>
+Date:   Wed, 12 Jan 2022 19:39:07 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:cac1:0:0:0:0 with HTTP; Wed, 12 Jan 2022 10:37:54
- -0800 (PST)
-Reply-To: uchennailobitenone@gmail.com
-From:   uchenna <uchekalu0211@gmail.com>
-Date:   Wed, 12 Jan 2022 10:37:54 -0800
-Message-ID: <CADXpZ38+2JPU-CYDBmB1nfqVYaGaka0AYk=rUT9Dng-a2WOfEQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+Content-Language: en-US
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Igor Mammedov <imammedo@redhat.com>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
+References: <20211122175818.608220-1-vkuznets@redhat.com>
+ <20211122175818.608220-3-vkuznets@redhat.com>
+ <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
+ <20211227183253.45a03ca2@redhat.com>
+ <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com> <87mtkdqm7m.fsf@redhat.com>
+ <20220103104057.4dcf7948@redhat.com> <875yr1q8oa.fsf@redhat.com>
+ <ceb63787-b057-13db-4624-b430c51625f1@redhat.com> <87o84qpk7d.fsf@redhat.com>
+ <877dbbq5om.fsf@redhat.com> <5505d731-cf87-9662-33f3-08844d92877c@redhat.com>
+ <20220111090022.1125ffb5@redhat.com> <87fsptnjic.fsf@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <87fsptnjic.fsf@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-May the Almighty Lord be with you....
-Am A WIDOW TO LATE MR David HOLLAND,  I AM 59 .YEARS OLD. My name is
-Josephine HOLLAND.  I am married to Late Mr. David HOLLAND, who worked
-in the France Embassy a here in Lome -Togo West Africa for nine years
-before he died in the
-year 2019.
+On 1/12/22 14:58, Vitaly Kuznetsov wrote:
+> -	best = kvm_find_cpuid_entry(vcpu, 0xD, 1);
+> +	best = cpuid_entry2_find(entries, nent, 0xD, 1);
+>   	if (best && (cpuid_entry_has(best, X86_FEATURE_XSAVES) ||
+>   		     cpuid_entry_has(best, X86_FEATURE_XSAVEC)))
+>   		best->ebx = xstate_required_size(vcpu->arch.xcr0, true);
+>   
+> -	best = kvm_find_kvm_cpuid_features(vcpu);
+> +	best = __kvm_find_kvm_cpuid_features(vcpu, vcpu->arch.cpuid_entries,
+> +					     vcpu->arch.cpuid_nent);
+>   	if (kvm_hlt_in_guest(vcpu->kvm) && best &&
 
-You are chosen to Receive A Donation Cash Grant of my late husband
-that funds $5.7,000,  000,00 (Five Million Seven Hundred Thousand
-United States Dollars) to help the poor and orphanages through your
-sincere help before my death. I am suffering from long time cancer of
-the Breast, from all indication my conditions is really deteriorating
-and it is quite obvious that I wouldn't live any more longer according
-to my doctor because the cancer has gotten to a very bad stage that no
-hope for me to be a living person again, All i need from you is your
-sincerity to use this funds to do this project as i desired and I need
-your information as where My Bank will be sending the funds,
+I think this should be __kvm_find_kvm_cpuid_features(vcpu, entries, nent).
 
-such as:
-Receiver's name:_ Address:_ Phone
-number:_ Country:_
+> 
+> +		case 0x1:
+> +			/* Only initial LAPIC id is allowed to change */
+> +			if (e->eax ^ best->eax || ((e->ebx ^ best->ebx) >> 24) ||
+> +			    e->ecx ^ best->ecx || e->edx ^ best->edx)
+> +				return -EINVAL;
+> +			break;
 
-Please do not be offended by the way or manner I came to you as a
-stranger to do this, it is about the only way I could get to you after
-going through your contacts Id. I shall give you the contacts of the
-bank. For legitimacy with  a letter of authority that will establish
-you as my appointed beneficiary of this money.
+This XOR is a bit weird.  In addition the EBX test is checking the wrong 
+bits (it checks whether 31:24 change and ignores changes to 23:0).
 
-I am waiting for your reply.
-From Sister Josephine HOLLAND.
+You can write just "(e->ebx & ~0xff000000u) != (best->ebx ~0xff000000u)".
 
-You should contact me through my private email address:
+> 
+> +		default:
+> +			if (e->eax ^ best->eax || e->ebx ^ best->ebx ||
+> +			    e->ecx ^ best->ecx || e->edx ^ best->edx)
+> +				return -EINVAL;
 
-hollandmrsjosephineeholland@gmail.com
+This one even more so.
+
+Paolo
+

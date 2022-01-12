@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 005EB48BD14
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D0548BD16
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348409AbiALCVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 21:21:07 -0500
-Received: from mail-ot1-f48.google.com ([209.85.210.48]:35441 "EHLO
-        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236391AbiALCVF (ORCPT
+        id S1348427AbiALCWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 21:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236391AbiALCWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 21:21:05 -0500
-Received: by mail-ot1-f48.google.com with SMTP id 60-20020a9d0142000000b0059103eb18d4so985506otu.2;
-        Tue, 11 Jan 2022 18:21:05 -0800 (PST)
+        Tue, 11 Jan 2022 21:22:17 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266A5C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 18:22:17 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id m1so3138948lfq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 18:22:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=XVVa5bqL/dcAtURXq87wPg3cYkV+G48POPS93zwghbw=;
+        b=cGLjTMu2EOK8/M2MOzuvXQpmKDiBHi48Fi2+W9kbazzlRZHZfFAsofF1KqZQybiBZd
+         1FHxsIB+m4BZjgbJhgdIGLufNXuBT1j4QG1STTgH0rR1qOnwQeZraOok20MOcKHNp/iZ
+         JVq8wybcSm/GS/92L5qAlYKvuJmcRqGVx1MlCrdXxS9MIeG/McOR+N4Vwlh4491HVunN
+         2uqGVAGOzlQil8xs3j3/L4iPw5meaPhRPsJQNAo0qyDI3a9pLSo8emElfvbBKLVTet1o
+         2rQgsVOJukYqTcDfQBLB5ayWL1tlcQgjNnXYMIfkjLLxT6plorbnuB6VCdS0wHtyyy6V
+         shCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qSz9nqMvLNyS6aeY5fUaSL26SyAlQ9l55+SxfRywHfw=;
-        b=40fA9/TeVvFbsUjMfZcNmR/1giV9vDboxa9n3iwG4h5O89n9zrbafk2KnoKE4CwceQ
-         DnWC+PY4RNLPp3cOltskDvzesh6AldCwer5qldhxAoDiapadfkpwfcsWmjRajMGriHbx
-         87uwW9eTMYz9q3NRB84Zi5C6ZwdHkps0NXgm2mkwwCzo0SjmKOqxEae3g9HnFN9xP9zG
-         WY/Haq4pEuSofk47AIRoSQdoYeDHObYwtFkx9ECsSknguMmQgmgfFAVDbl54p7Op9xae
-         6G126hDZky4TnTsGx/LmYQ9ZEw39IoO+POPU49onkcYHlnM7s3T5yHcCY7B1C90q05EW
-         b7vw==
-X-Gm-Message-State: AOAM533RiyxMxNhjp7FrlX14Fd7h+dV0I11f1nvD/UtkllcI+ajwA5ZO
-        fu+Rjisi93bKi8ILyzGhjKe6b7cVrw==
-X-Google-Smtp-Source: ABdhPJxI82YkGfNmAqCIMJ/wSuUgCxzRZYE5VokdiLCTNQR4r9d1Ns1/A+MGaXe+wOOZUsTN0zDyfw==
-X-Received: by 2002:a9d:6452:: with SMTP id m18mr1492762otl.99.1641954064626;
-        Tue, 11 Jan 2022 18:21:04 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d21sm668955oti.5.2022.01.11.18.21.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 18:21:04 -0800 (PST)
-Received: (nullmailer pid 3943654 invoked by uid 1000);
-        Wed, 12 Jan 2022 02:21:03 -0000
-Date:   Tue, 11 Jan 2022 20:21:03 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Abhishek Kumar <kuabhs@chromium.org>
-Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        pillair@codeaurora.org, Kalle Valo <kvalo@kernel.org>,
-        linux-wireless@vger.kernel.org, ath10k@lists.infradead.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, dianders@chromium.org,
-        kvalo@codeaurora.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] dt: bindings: add dt entry for ath10k default BDF
- name
-Message-ID: <Yd47D9GjbAFaWXEo@robh.at.kernel.org>
-References: <20220110231255.v2.1.Ie4dcc45b0bf365077303c596891d460d716bb4c5@changeid>
- <20220110231255.v2.2.Ia0365467994f8f9085c86b5674b57ff507c669f8@changeid>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=XVVa5bqL/dcAtURXq87wPg3cYkV+G48POPS93zwghbw=;
+        b=d/QxxO5tuXJj67bjmt/kz45U35VMlSWTCsFKi1ybPSrRcPt9rizZrBvaPC0cj2d0mz
+         Y40W9FC+17UORj/7wX19KgaHNsFiIsezvWaaEEJSoS1fvM5IvftZ6DGIC96TUtv8M2bl
+         OdL5vz+nGxxez3L33i5MZA/UGji9L8VHvI7+312UVumjVURriBCpG79yPFtLwt/Ui1Oo
+         o0/JG16PHTKZBj4zPjqAHE/xwaSmyKvEqsXhdxBxJTEneaHjCJ8xPGlawK9c3HxeCbF1
+         JHOdvtb9xpF4akNrfIevj6UluvmsiGrmB7Y6MpdfobiJtSyH78PQMFuqHB8Zyps78eMs
+         JGRA==
+X-Gm-Message-State: AOAM533zOMMTovb6fmgGb7TJHaFOifM9yhKk6lsEiiUNV2vdNoQ9WhCG
+        NlPFiK0LItrqvKEAJt1r41QfoumWi8QSlbHziuM=
+X-Google-Smtp-Source: ABdhPJxp9/icLInmWCdEM+f4c4ICC4QOgvp2JHr/cAgx3pPBndOmu6RD2YzDcMQ7F4GjU5v4DhhWPA0lrTKpVRN+Hdw=
+X-Received: by 2002:a05:6512:400f:: with SMTP id br15mr3797117lfb.233.1641954135548;
+ Tue, 11 Jan 2022 18:22:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110231255.v2.2.Ia0365467994f8f9085c86b5674b57ff507c669f8@changeid>
+Received: by 2002:a05:6520:3806:b0:18f:6b3b:f015 with HTTP; Tue, 11 Jan 2022
+ 18:22:14 -0800 (PST)
+Reply-To: fulhammartins8@gmail.com
+From:   Fulham Martins <bfranck976@gmail.com>
+Date:   Tue, 11 Jan 2022 18:22:14 -0800
+Message-ID: <CAOXQwBy2YxgKTtjZTd1R3knq7T-DF+TxKCtRwNCDDpEVixkQsA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jan 2022 23:14:15 +0000, Abhishek Kumar wrote:
-> It is possible that BDF name with board-id+chip-id+variant
-> combination is not found in the board-2.bin. Such cases can
-> cause wlan probe to fail and completely break wifi. In such
-> case there can be an optional property to define a default
-> BDF name to search for in the board-2.bin file when none of
-> the combinations (board-id,chip-id,variant) match.
-> To address the above concern provide an optional proptery:
-> qcom,ath10k-default-bdf
-> 
-> Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
-> ---
-> 
-> Changes in v2:
->  - Changes in v2: none
-> 
->  .../devicetree/bindings/net/wireless/qcom,ath10k.txt          | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+Dear Prospective Partner,
 
-Acked-by: Rob Herring <robh@kernel.org>
+My Name is Mr. Fulham Martins. I am from the United Kingdom.
+It is my resolve to contact you for an investment plan in your country. It is
+no more a secret that investments are thriving fast in your country.
+Therefore, I want to invest in your country and want you to be my
+business partner.
+I am ready to invest in any sector such as Manufacturing, Agriculture,
+Real Estate, Hoteling,etc. or any other business that has good return
+on investment/profitable.
+
+If you choose to be of assistance,I am ready to send the CONSIGNMENT
+FUND BOX to your country regarding the investment
+collaboration/partnership or do a direct bank transfer to your account
+based on whatever modalities the investment will entail.
+I am presently based in the United Kingdom and would like to know
+whether you are ready to partner with me on this. Kindly indicate your
+interest to enable us proceed.
+Thank you in anticipation as I look forward to reading your reply on
+fulhammartins8@gmail.com.
+
+
+Best regards.
+
+Mr.Fulham Martins.

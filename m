@@ -2,337 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1FC48CC47
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C241848CC4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350110AbiALTrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:47:45 -0500
-Received: from mail-qv1-f44.google.com ([209.85.219.44]:42816 "EHLO
-        mail-qv1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344836AbiALTrn (ORCPT
+        id S1345806AbiALTuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:50:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357751AbiALTuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:47:43 -0500
-Received: by mail-qv1-f44.google.com with SMTP id q4so4117328qvh.9;
-        Wed, 12 Jan 2022 11:47:42 -0800 (PST)
+        Wed, 12 Jan 2022 14:50:11 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA47C061751
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:50:10 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id h14so8639956ybe.12
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:50:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jRJqEvb6RaoXDTGIGvfe6D9l0JWX3IBGy+0XrscHKFk=;
+        b=A05wtVt0YhyBSdDPVxnMOaffKavmT2bc7mtYBlQvpXZuCcKdvBu2pQnaPFx3DGatS3
+         dletqWECy0d2sgn8vA9vLAVgNohXHyzj9Cgqbl79LKWXgG+hE4wDbGAhWFykD9TScLom
+         RAoovIZCddTCKuxzFHyAQtyUFKl1Zj9Pah7k/alWN5AMM8RaorUkk56uf1K/F+4vbrJ1
+         tVX2xsXqH3CMuhvO/jQ0GHItrhwrslksLTTyVuEJKA47jbtOoEt6Dy2V8InbwuqJee6U
+         RtN4mRaJgakGvKhskjQGCe4cEY3Rn9j04AANjfnBq6vDTcY1WWI2cp4TB0GwIncWQef6
+         qjjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LS8hL1GmUk72BpTv6iWJ4EZzxEd7GZ0n2u6swA/Q374=;
-        b=XlGWyOzd0vgk6bJ4sA8AeK8X7WwI426SGMKE1QOlVNTGqTMJcA/HrjGDtsOuKQ40h9
-         CZsC1/f6aSN5G90Z649ZlAfsWdkSmY5loHMmiZJ566t276hAF0gimr6SlDcq9TFM0Pue
-         YhXfjOMyIHQjr53YHdd+L+v4SbFRf6IV+NFRJutw7CnpZwCeIHbS6b7i6fRNruel22bl
-         PZ2yvI/YDzzyFz6wJpTY6jgU9UNr6OG0R1x0FmcY2ua+iq/UyeZXj7cfK96hhM5SH+39
-         B2efp1dielnOyvJzb/vAQ/aQu24dJ1g2XNbLxtoZPeVdcjJ5fnQXwYRU1N2by0gQygnM
-         B8tA==
-X-Gm-Message-State: AOAM5306S0UEmBkhr5rlWKyAEVJ39NorZ9zj5WeUunrqP8zjjy0AlKH7
-        ixBUt5VdIwX2r7IdnFgEWv3lkMoxwL3rLlnq+74=
-X-Google-Smtp-Source: ABdhPJyzkoBWpashpwb5RVjS/k/WrbElhFvQn5TfU5+ARYQx15XStEGLaBGaVP367S3Vgp6YHSnM1mXxgw4keJKZkyU=
-X-Received: by 2002:a05:6214:509e:: with SMTP id kk30mr1157539qvb.61.1642016861798;
- Wed, 12 Jan 2022 11:47:41 -0800 (PST)
+        bh=jRJqEvb6RaoXDTGIGvfe6D9l0JWX3IBGy+0XrscHKFk=;
+        b=Ll/NtkWoLFGPy211X8GhYKj1aj2+JCJR+PkTQZ4rXQ0cFRJxX1xavCtXsU7LddOhqt
+         /g3ho2tu7hcWL0+7baEKrYiGW7fZalaQ2Kzt9JAu1hr+ROB15LLV9J0qolWpijjfoWUW
+         eJZgdAAszRYhnMTjrx5u5Xy9ogU+eHWSyzM5RgW0WobQaESwz/ehJY1vABJ2sncl+jF5
+         /Xd8hg7I4duFh//qv/FpiHdvvsnF+g8nbNDnOFi2pX4JWSTwnj3pZfea5hsoKBMgs4h8
+         iMsbiQBkFFy68Oc7v8Oiy820439YiMFKPqZmeEOumMcK7fsDh1ik4EWOpg1BG+gQfnS9
+         Uasw==
+X-Gm-Message-State: AOAM531Ho4W2yNJezqsg1RdGJYqYZFH/03b3WIOHWyEDVzqoEIOMi1un
+        336x+U3dvEgXnxquZSsCBfaoPn3xzUI8ZfNWcTSEtg==
+X-Google-Smtp-Source: ABdhPJx6W0X7kISJhEYdoiY21aNG29fuGIZW3ogzIBP7+xBMxjmD0lYfSi3qgeEmYg4Q7LUKrKFZmmy6/h0/7WJ3H6o=
+X-Received: by 2002:a25:c245:: with SMTP id s66mr1871016ybf.243.1642017009537;
+ Wed, 12 Jan 2022 11:50:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20220108034743.31277-1-ricardo.neri-calderon@linux.intel.com> <20220108034743.31277-6-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20220108034743.31277-6-ricardo.neri-calderon@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 12 Jan 2022 20:47:31 +0100
-Message-ID: <CAJZ5v0jbr=O+pMAikzWZZsFdcg5P8EWvW_zJRT0Ls21iEbJBWA@mail.gmail.com>
-Subject: Re: [PATCH v4 5/7] thermal: intel: hfi: Enable notification interrupt
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+References: <20220111232309.1786347-1-surenb@google.com> <Yd7oPlxCpnzNmFzc@cmpxchg.org>
+ <CAJuCfpGHLXDvMU1GLMcgK_K72_ErPhbcFh1ZvEeHg025yinNuw@mail.gmail.com>
+ <CAJuCfpEaM3KoPy3MUG7HW2yzcT6oJ5gdceyHPNpHrqTErq27eQ@mail.gmail.com>
+ <Yd8a8TdThrGHsf2o@casper.infradead.org> <CAJuCfpF45VY_7esx7p2yEK+eK-ufSMsBETEdJPF=Mzxj+BTnLA@mail.gmail.com>
+ <Yd8hpPwsIT2pbKUN@gmail.com> <CAJuCfpF_aZ7OnDRYr2MNa-x=ctO-daw-U=k+-GCYkJR1_yTHQg@mail.gmail.com>
+ <Yd8mIY5IxwOKTK+D@gmail.com> <CAJuCfpG9o5Z7x6hvPXy-Tfgom31sm4rjAA=f4KiY9pppGRGSHQ@mail.gmail.com>
+In-Reply-To: <CAJuCfpG9o5Z7x6hvPXy-Tfgom31sm4rjAA=f4KiY9pppGRGSHQ@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 12 Jan 2022 11:49:58 -0800
+Message-ID: <CAJuCfpHeg9mb4oq71P6xcC9fQipWBaAy9WJZg=jM+cUnR+ouMg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] psi: Fix uaf issue when psi trigger is destroyed
+ while being polled
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        LKML <linux-kernel@vger.kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>,
+        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 4:46 AM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
+On Wed, Jan 12, 2022 at 11:06 AM Suren Baghdasaryan <surenb@google.com> wrote:
 >
-> When hardware wants to inform the operating system about updates in the HFI
-> table, it issues a package-level thermal event interrupt. For this,
-> hardware has new interrupt and status bits in the IA32_PACKAGE_THERM_
-> INTERRUPT and IA32_PACKAGE_THERM_STATUS registers. The existing thermal
-> throttle driver already handles thermal event interrupts: it initializes
-> the thermal vector of the local APIC as well as per-CPU and package-level
-> interrupt reporting. It also provides routines to service such interrupts.
-> Extend its functionality to also handle HFI interrupts.
+> On Wed, Jan 12, 2022 at 11:04 AM Eric Biggers <ebiggers@kernel.org> wrote:
+> >
+> > On Wed, Jan 12, 2022 at 10:53:48AM -0800, Suren Baghdasaryan wrote:
+> > > On Wed, Jan 12, 2022 at 10:44 AM Eric Biggers <ebiggers@kernel.org> wrote:
+> > > >
+> > > > On Wed, Jan 12, 2022 at 10:26:08AM -0800, Suren Baghdasaryan wrote:
+> > > > > On Wed, Jan 12, 2022 at 10:16 AM Matthew Wilcox <willy@infradead.org> wrote:
+> > > > > >
+> > > > > > On Wed, Jan 12, 2022 at 09:49:00AM -0800, Suren Baghdasaryan wrote:
+> > > > > > > > This happens with the following config:
+> > > > > > > >
+> > > > > > > > CONFIG_CGROUPS=n
+> > > > > > > > CONFIG_PSI=y
+> > > > > > > >
+> > > > > > > > With cgroups disabled these functions are defined as non-static but
+> > > > > > > > are not defined in the header
+> > > > > > > > (https://elixir.bootlin.com/linux/latest/source/include/linux/psi.h#L28)
+> > > > > > > > since the only external user cgroup.c is disabled. The cleanest way to
+> > > > > > > > fix these I think is by doing smth like this in psi.c:
+> > > > > >
+> > > > > > A cleaner way to solve these is simply:
+> > > > > >
+> > > > > > #ifndef CONFIG_CGROUPS
+> > > > > > static struct psi_trigger *psi_trigger_create(...);
+> > > > > > ...
+> > > > > > #endif
+> > > > > >
+> > > > > > I tested this works:
+> > > > > >
+> > > > > > $ cat foo5.c
+> > > > > > static int psi(void *);
+> > > > > >
+> > > > > > int psi(void *x)
+> > > > > > {
+> > > > > >         return (int)(long)x;
+> > > > > > }
+> > > > > >
+> > > > > > int bar(void *x)
+> > > > > > {
+> > > > > >         return psi(x);
+> > > > > > }
+> > > > > > $ gcc -W -Wall -O2 -c -o foo5.o foo5.c
+> > > > > > $ readelf -s foo5.o
+> > > > > >
+> > > > > > Symbol table '.symtab' contains 4 entries:
+> > > > > >    Num:    Value          Size Type    Bind   Vis      Ndx Name
+> > > > > >      0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+> > > > > >      1: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS foo5.c
+> > > > > >      2: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text
+> > > > > >      3: 0000000000000000     3 FUNC    GLOBAL DEFAULT    1 bar
+> > > > > >
+> > > > >
+> > > > > Thanks Matthew!
+> > > > > That looks much cleaner. I'll post a separate patch to fix these. My
+> > > > > main concern was whether it's worth adding more code to satisfy this
+> > > > > warning but with this approach the code changes are minimal, so I'll
+> > > > > go ahead and post it shortly.
+> > > >
+> > > > Why not simply move the declarations of psi_trigger_create() and
+> > > > psi_trigger_destroy() in include/linux/psi.h outside of the
+> > > > '#ifdef CONFIG_CGROUPS' block, to match the .c file?
+> > >
+> > > IIRC this was done to avoid another warning that these functions are
+> > > not used outside of psi.c when CONFIG_CGROUPS=n
+> > >
+> >
+> > What tool gave that warning?
 >
-> The frequency of the thermal HFI interrupt is specific to each processor
-> model. On some processors, a single interrupt happens as soon as the HFI is
-> enabled and hardware will never update HFI capabilities afterwards. On
-> other processors, thermal and power constraints may cause thermal HFI
-> interrupts every tens of milliseconds.
+> Let me double-check by building it. It has been a while since I
+> developed the code and I don't want to mislead by making false claims.
 >
-> To not overwhelm consumers of the HFI data, use delayed work to throttle
-> the rate at which HFI updates are processed.
->
-> Cc: Andi Kleen <ak@linux.intel.com>
-> Cc: Aubrey Li <aubrey.li@linux.intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Tim Chen <tim.c.chen@linux.intel.com>
-> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-> Reviewed-by: Len Brown <len.brown@intel.com>
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
-> Changes since v3:
->   * None
->
-> Changes since v2:
->   * Added missing #include files.
->
-> Changes since v1:
->   * Renamed X86_FEATURE_INTEL_HFI as X86_FEATURE_HFI. (Boris)
->   * Repurposed hfi_instance::event_lock to handle HFI interrupt
->     events to avoid keeping CPUs spinning needlessly. Added a new
->     hfi_instance::table_lock to serialize access to an HFI table.
->     (PeterZ)
->   * Replaced raw_spin_[un]lock[restore|save]() with raw_spin_[un]lock().
->     intel_hfi_process_event() runs in interrupt context and hence there
->     is no need to save interrupt flags.
->   * Renamed HFI_CONFIG_ENABLE_BIT as HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT
->     for clarity.
->   * Reworked timestamp updates for readability. Removed redundant
->     hfi_instance::timestamp.
->   * Relaxed timestamp check to allow time wrap-around.
-> ---
->  drivers/thermal/intel/intel_hfi.c   | 103 ++++++++++++++++++++++++++++
->  drivers/thermal/intel/intel_hfi.h   |   2 +
->  drivers/thermal/intel/therm_throt.c |  10 +++
->  3 files changed, 115 insertions(+)
->
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index 37f979a9e833..1a08c58f26f6 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -26,20 +26,28 @@
->  #include <linux/cpumask.h>
->  #include <linux/gfp.h>
->  #include <linux/io.h>
-> +#include <linux/kernel.h>
->  #include <linux/math.h>
->  #include <linux/mutex.h>
->  #include <linux/percpu-defs.h>
->  #include <linux/printk.h>
->  #include <linux/processor.h>
->  #include <linux/slab.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/string.h>
->  #include <linux/topology.h>
-> +#include <linux/workqueue.h>
->
->  #include <asm/msr.h>
->
->  #include "intel_hfi.h"
->
-> +#define THERM_STATUS_CLEAR_PKG_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | \
-> +                                    BIT(9) | BIT(11) | BIT(26))
-> +
->  /* Hardware Feedback Interface MSR configuration bits */
->  #define HW_FEEDBACK_PTR_VALID_BIT              BIT(0)
-> +#define HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT      BIT(0)
->
->  /* CPUID detection and enumeration definitions for HFI */
->
-> @@ -98,6 +106,9 @@ struct hfi_hdr {
->   * @data:              Base address of the local table data
->   * @cpus:              CPUs represented in this HFI table instance
->   * @hw_table:          Pointer to the HFI table of this instance
-> + * @update_work:       Delayed work to process HFI updates
-> + * @table_lock:                Lock to protect acceses to the table of this instance
-> + * @event_lock:                Lock to process HFI interrupts
->   *
->   * A set of parameters to parse and navigate a specific HFI table.
->   */
-> @@ -110,6 +121,9 @@ struct hfi_instance {
->         void                    *data;
->         cpumask_var_t           cpus;
->         void                    *hw_table;
-> +       struct delayed_work     update_work;
-> +       raw_spinlock_t          table_lock;
-> +       raw_spinlock_t          event_lock;
->  };
->
->  /**
-> @@ -147,6 +161,83 @@ static struct hfi_instance *hfi_instances;
->  static struct hfi_features hfi_features;
->  static DEFINE_MUTEX(hfi_instance_lock);
->
-> +#define HFI_UPDATE_INTERVAL    HZ
-> +
-> +static void hfi_update_work_fn(struct work_struct *work)
-> +{
-> +       struct hfi_instance *hfi_instance;
-> +
-> +       hfi_instance = container_of(to_delayed_work(work), struct hfi_instance,
-> +                                   update_work);
-> +       if (!hfi_instance)
-> +               return;
-> +
-> +       /* TODO: Consume update here. */
-> +}
-> +
-> +void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
-> +{
-> +       struct hfi_instance *hfi_instance;
-> +       int cpu = smp_processor_id();
-> +       struct hfi_cpu_info *info;
-> +       u64 new_timestamp;
-> +
-> +       if (!pkg_therm_status_msr_val)
-> +               return;
-> +
-> +       info = &per_cpu(hfi_cpu_info, cpu);
-> +       if (!info)
-> +               return;
-> +
-> +       /*
-> +        * It is possible that we get an HFI thermal interrupt on this CPU
-> +        * before its HFI instance is initialized. This is not a problem. The
-> +        * CPU that enabled the interrupt for this package will also get the
-> +        * interrupt and is fully initialized.
-> +        */
-> +       hfi_instance = info->hfi_instance;
-> +       if (!hfi_instance)
-> +               return;
 
-Generally, a CPU whose info has been initialized can be offline, so
-this code may run on an offline CPU.
+No warnings, so it was probably done to keep the scope of these
+functions as local as possible.
+I agree that moving them out of #ifdef CONFIG_CGROUPS in the header
+file makes sense here. The scope unnecessarily expands when
+CONFIG_CGROUPS=n but the code is simpler. Will do that then.
 
-I'm not actually sure if this is a concern, but just mentioning it in
-case it is.
+I noticed there is another warning about psi_cpu_proc_ops and similar
+structures being unused when CONFIG_PROC_FS=n. Looks like I'll need
+some more ifdefs to fix all these warnings.
 
-> +
-> +       /*
-> +        * On most systems, all CPUs in the package receive a package-level
-> +        * thermal interrupt when there is an HFI update. It is sufficient to
-> +        * let a single CPU to acknowledge the update and schedule work to
-> +        * process it. The remaining CPUs can resume their work.
-> +        */
-> +       if (!raw_spin_trylock(&hfi_instance->event_lock))
-> +               return;
-> +
-> +       /* Skip duplicated updates. */
-> +       new_timestamp = *(u64 *)hfi_instance->hw_table;
-> +       if (*hfi_instance->timestamp == new_timestamp) {
-> +               raw_spin_unlock(&hfi_instance->event_lock);
-> +               return;
-> +       }
-> +
-> +       raw_spin_lock(&hfi_instance->table_lock);
-> +
-> +       /*
-> +        * Copy the updated table into our local copy. This includes the new
-> +        * timestamp.
-> +        */
-> +       memcpy(hfi_instance->local_table, hfi_instance->hw_table,
-> +              hfi_features.nr_table_pages << PAGE_SHIFT);
-> +
-> +       raw_spin_unlock(&hfi_instance->table_lock);
-> +       raw_spin_unlock(&hfi_instance->event_lock);
-> +
-> +       /*
-> +        * Let hardware know that we are done reading the HFI table and it is
-> +        * free to update it again.
-> +        */
-> +       pkg_therm_status_msr_val &= THERM_STATUS_CLEAR_PKG_MASK &
-> +                                   ~PACKAGE_THERM_STATUS_HFI_UPDATED;
-> +       wrmsrl(MSR_IA32_PACKAGE_THERM_STATUS, pkg_therm_status_msr_val);
-> +
-> +       schedule_delayed_work(&hfi_instance->update_work, HFI_UPDATE_INTERVAL);
-
-AFAICS, if update_work has been scheduled already, but is not pending
-yet, the delay will be set to the current time plus
-HFI_UPDATE_INTERVAL, but shouldn't it actually run earlier in that
-case?
-
-Also it looks like the processing introduced in the next patch can
-take quite a bit of time if there is a sufficiently large number of
-CPUs in the package, so is it suitable for system_wq in all cases?
-
-> +}
-> +
->  static void init_hfi_cpu_index(struct hfi_cpu_info *info)
->  {
->         union cpuid6_edx edx;
-> @@ -259,8 +350,20 @@ void intel_hfi_online(unsigned int cpu)
->
->         init_hfi_instance(hfi_instance);
->
-> +       INIT_DELAYED_WORK(&hfi_instance->update_work, hfi_update_work_fn);
-> +       raw_spin_lock_init(&hfi_instance->table_lock);
-> +       raw_spin_lock_init(&hfi_instance->event_lock);
-> +
->         cpumask_set_cpu(cpu, hfi_instance->cpus);
->
-> +       /*
-> +        * Enable the hardware feedback interface and never disable it. See
-> +        * comment on programming the address of the table.
-> +        */
-> +       rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
-> +       msr_val |= HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT;
-> +       wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
-> +
->  unlock:
->         mutex_unlock(&hfi_instance_lock);
->         return;
-> diff --git a/drivers/thermal/intel/intel_hfi.h b/drivers/thermal/intel/intel_hfi.h
-> index 56c6b2d75202..325aa78b745c 100644
-> --- a/drivers/thermal/intel/intel_hfi.h
-> +++ b/drivers/thermal/intel/intel_hfi.h
-> @@ -6,10 +6,12 @@
->  void __init intel_hfi_init(void);
->  void intel_hfi_online(unsigned int cpu);
->  void intel_hfi_offline(unsigned int cpu);
-> +void intel_hfi_process_event(__u64 pkg_therm_status_msr_val);
->  #else
->  static inline void intel_hfi_init(void) { }
->  static inline void intel_hfi_online(unsigned int cpu) { }
->  static inline void intel_hfi_offline(unsigned int cpu) { }
-> +static inline void intel_hfi_process_event(__u64 pkg_therm_status_msr_val) { }
->  #endif /* CONFIG_INTEL_HFI_THERMAL */
->
->  #endif /* _INTEL_HFI_H */
-> diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
-> index 2a79598a7f7a..930e19eeeac6 100644
-> --- a/drivers/thermal/intel/therm_throt.c
-> +++ b/drivers/thermal/intel/therm_throt.c
-> @@ -619,6 +619,10 @@ void intel_thermal_interrupt(void)
->                                         PACKAGE_THERM_STATUS_POWER_LIMIT,
->                                         POWER_LIMIT_EVENT,
->                                         PACKAGE_LEVEL);
-> +
-> +               if (this_cpu_has(X86_FEATURE_HFI))
-> +                       intel_hfi_process_event(msr_val &
-> +                                               PACKAGE_THERM_STATUS_HFI_UPDATED);
->         }
->  }
->
-> @@ -728,6 +732,12 @@ void intel_init_thermal(struct cpuinfo_x86 *c)
->                         wrmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT,
->                               l | (PACKAGE_THERM_INT_LOW_ENABLE
->                                 | PACKAGE_THERM_INT_HIGH_ENABLE), h);
-> +
-> +               if (cpu_has(c, X86_FEATURE_HFI)) {
-> +                       rdmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT, l, h);
-> +                       wrmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT,
-> +                             l | PACKAGE_THERM_INT_HFI_ENABLE, h);
-> +               }
->         }
->
->         rdmsr(MSR_IA32_MISC_ENABLE, l, h);
-> --
-> 2.17.1
->
+> >
+> > - Eric

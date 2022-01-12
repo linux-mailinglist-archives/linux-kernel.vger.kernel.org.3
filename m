@@ -2,192 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40FE548C52E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B71548C522
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353726AbiALNxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:53:02 -0500
-Received: from mga02.intel.com ([134.134.136.20]:32055 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238942AbiALNw7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:52:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641995579; x=1673531579;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6o9aGlupJ5pLyORTimcn6DvGUzsV6iRYvEXQu/xlHjg=;
-  b=nTwMvAxqsLGjEdnv1t3Ca6fu/Hq6lj112WXRizLYR4VoWx0+vkyZThTa
-   b7lBc3MGDbUX0VW1wivv7gp1TcWtTQd13V9WsPo51aZYSLSMfIoFiIxan
-   Oz6Nlo6b46aTQEG3CSrXU49Yqj0x3qEn5EJ67GitkMfqYiPTHvk49sjoX
-   EpsKnq6y3tYveqbnnT91m0RD/BBqZS9bpj8X13DwcKtJ7waSZYvu4/Z+1
-   dyL2wAgJbDA3Bqsr+qhEZvsxy96WWR5MFyfij2sHjoNvRYCI2A0y2mAwC
-   ZijHonAVaKuA2uPgMOjfIZQBp0m7sQCKbdJOPa59jC+r//7I/ycScWjpP
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="231077537"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="231077537"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 05:52:58 -0800
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="474911438"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 05:52:41 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n7e28-009hhk-Us;
-        Wed, 12 Jan 2022 15:51:24 +0200
-Date:   Wed, 12 Jan 2022 15:51:24 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
+        id S241186AbiALNvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:51:52 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:55829 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238942AbiALNvu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 08:51:50 -0500
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 135C35801F7;
+        Wed, 12 Jan 2022 08:51:50 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 12 Jan 2022 08:51:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=MLA47hZB1A4Qpb5hssg01vfnJip
+        n57xpzNo0zfRv1Sk=; b=E/XE/OAvd6p+HarUW+eHIk4TKY23snVAEnbwHiOLYoV
+        F9CJsAVNntW0Tumzl13g3HkVg4r0e60Vz+FGtjIWfBLBdCfTE8b1Ge9BN8IVdpJY
+        Eiu6eYfCNBgzDxa+I8mxP88eN7uPfhv4KzE7cR38v2umqePMcdcSvL+ePY2gGvUT
+        TlKSYH6efZmw9GzX5+ida3qBKcscmtXn2g0o28c10/usUGDoUtE/Y3B4A64qvTne
+        MDzPEyQ1nSxG2sN7VcvnLZZqBFtQPof2kGA5A6S/CrrLvbirjHnxJyFy2GYopxVQ
+        xFGmhw74Z3dkiRV+Y+0JkG7ewUTgT0QZ2Apfb4B8ndg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=MLA47h
+        ZB1A4Qpb5hssg01vfnJipn57xpzNo0zfRv1Sk=; b=GXJV4rmfo/RafX/62NIGNT
+        MQPluOvANwW2ld6EUeie+B0Jrv72rav5xYIvVAH6Gyq+dryBz9usv0Qo2zSgOMKY
+        kGTLNhdo/otTORQyq5/xOICBlruF2X4vtFH0c+AEwn8gyhM7LzEZ94oorRPIzz9H
+        HXv1F5894Rn+eCBSc4mhBFcTDCuQoTy09pc/mqWm0VwEFjeGtQZkZpfynB8PPcnW
+        e+7+/OnIhZLjvc8npJgPxnmTsazbPTdvpVApR8pj4BXccZv58SdSrjekpMyWf1QF
+        Vr7PH9Y0q4uhbSiaLIVdEe+kD7OaaoRlq1/qK4x1YrKgkqBqSY7JgDGw60ALGYoQ
+        ==
+X-ME-Sender: <xms:9dzeYUT59e-PAk2Qsb4jP6YUOCwRNbzBiq26eAVHZKc7nnWVV6_quQ>
+    <xme:9dzeYRxWVDS3h-bxENOSEyJQCFeMatNALanLOYkc_XQlE6nBv_29nqt9r5QbBAoph
+    9EbIS2mx445acbCalc>
+X-ME-Received: <xmr:9dzeYR0qdq7ImNfEpmxvgp46pjJHktMZe_8cVkR4M3rO3h9TBS5Z5EZhnBHK99XkyAOGIg52sYX4qv1B0iAepLDlyjhXrZjUUiBOmH0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrtddugdefudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelgefhjeefjeduudduffejheehtefguedvieejjedvfefhkeevtedthedvhfek
+    vdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:9dzeYYBoxa9ihjQQQ_3rxSeJW9KRF1LOMmdfI_LwfM1sWwmCGCuoYQ>
+    <xmx:9dzeYdhCNMUL1gxuDrdCC5_xUMz6GbGiFQCU9i5Q5xJBpz5CByu00Q>
+    <xmx:9dzeYUoiVVtsIZuJHN-QPErqyql5e7R0NdLghIZ6eN5Quf-uEWrxHw>
+    <xmx:9tzeYVw-sdptMcAwBDDL214Ex6VA-HuT1YetBEUp9rqQWltcLFq--Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 12 Jan 2022 08:51:48 -0500 (EST)
+Date:   Wed, 12 Jan 2022 14:51:47 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Auger <eric.auger@redhat.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        openipmi-developer@lists.sourceforge.net,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <Yd7c3BTcdXcbHDUM@smile.fi.intel.com>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
- <YdyilpjC6rtz6toJ@lunn.ch>
- <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
- <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <Yd7Z3Qwevb/lEwQZ@lunn.ch>
+        linux-clk@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Tim Gover <tim.gover@raspberrypi.com>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Emma Anholt <emma@anholt.net>, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH v2 0/3] clk: Implement a clock request API
+Message-ID: <20220112135147.dbkmsnlqyipq7urq@houat>
+References: <20210914093515.260031-1-maxime@cerno.tech>
+ <a5400ae3-f181-91fc-bc35-db989584c70b@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t2qv6kke3mwujz2s"
 Content-Disposition: inline
-In-Reply-To: <Yd7Z3Qwevb/lEwQZ@lunn.ch>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <a5400ae3-f181-91fc-bc35-db989584c70b@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 02:38:37PM +0100, Andrew Lunn wrote:
-> > If an optional IRQ is not present, drivers either just ignore it (e.g.
-> > for devices that can have multiple interrupts or a single muxed IRQ),
-> > or they have to resort to polling. For the latter, fall-back handling
-> > is needed elsewhere in the driver.
-> > To me it sounds much more logical for the driver to check if an
-> > optional irq is non-zero (available) or zero (not available), than to
-> > sprinkle around checks for -ENXIO. In addition, you have to remember
-> > that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
-> > (or some other error code) to indicate absence. I thought not having
-> > to care about the actual error code was the main reason behind the
-> > introduction of the *_optional() APIs.
-> 
-> The *_optional() functions return an error code if there has been a
-> real error which should be reported up the call stack. This excludes
-> whatever error code indicates the requested resource does not exist,
-> which can be -ENODEV etc. If the device does not exist, a magic cookie
-> is returned which appears to be a valid resources but in fact is
-> not. So the users of these functions just need to check for an error
-> code, and fail the probe if present.
-> 
-> You seems to be suggesting in binary return value: non-zero
-> (available) or zero (not available)
 
+--t2qv6kke3mwujz2s
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-No, what is suggested is to (besides the API changes):
-- do not treat ENXIO as something special in platform_get_irq*()
-- allow platform_get_irq*() to return other error codes
+Hi Dmitry,
 
-> This discards the error code when something goes wrong. That is useful
-> information to have, so we should not be discarding it.
-> 
-> IRQ don't currently have a magic cookie value. One option would be to
-> add such a magic cookie to the subsystem. Otherwise, since 0 is
-> invalid, return 0 to indicate the IRQ does not exist.
-> 
-> The request for a script checking this then makes sense. However, i
-> don't know how well coccinelle/sparse can track values across function
-> calls. They probably can check for:
-> 
->    ret = irq_get_optional()
->    if (ret < 0)
->       return ret;
-> 
-> A missing if < 0 statement somewhere later is very likely to be an
-> error. A comparison of <= 0 is also likely to be an error. A check for
-> > 0 before calling any other IRQ functions would be good. I'm
-> surprised such a check does not already existing in the IRQ API, but
-> there are probably historical reasons for that.
-> 
->       Andrew
+On Wed, Jan 12, 2022 at 04:28:41PM +0300, Dmitry Osipenko wrote:
+> 14.09.2021 12:35, Maxime Ripard =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > Hi,
+> >=20
+> > This is a follow-up of the discussion here:
+> > https://lore.kernel.org/linux-clk/20210319150355.xzw7ikwdaga2dwhv@gilmo=
+ur/
+> >=20
+> > This implements a mechanism to raise and lower clock rates based on con=
+sumer
+> > workloads, with an example of such an implementation for the RaspberryP=
+i4 HDMI
+> > controller.
+> >=20
+> > There's a couple of things worth discussing:
+> >=20
+> >   - The name is in conflict with clk_request_rate, and even though it f=
+eels
+> >     like the right name to me, we should probably avoid any confusion
+> >=20
+> >   - The code so far implements a policy of always going for the lowest =
+rate
+> >     possible. While we don't have an use-case for something else, this =
+should
+> >     maybe be made more flexible?
+>=20
+> Hello Maxime,
+>=20
+> On NVIDIA Tegra we use interconnect framework for converting of
+> workload-based memory bandwidth requirement to the memory clock rate
+> [1]. All Tegra SoCs have two display controllers and other memory
+> clients, ICC takes care of summing and updating memory bandwidth for us,
+> which in the end results in a freq change of the shared memory controller.
+>=20
+> [1] https://git.kernel.org/linus/04d5d5df9
+>=20
+> Not so long time ago me and Thierry Reding were looking at yours v1 and
+> back then Thierry suggested that the same ICC approach might work for
+> yours case. I'm now looking at the v2 and yours discussion with Stephen
+> Boyd, and it appears that ICC is indeed what you really need. Have you
+> considered to use ICC?
 
--- 
-With Best Regards,
-Andy Shevchenko
+The goals seem to be similar indeed, but most of these clocks feed some
+internal state machine in those devices and are not related to the
+memory bandwidth at all. So there's no real interconnect to model there :/
 
+Maxime
 
+--t2qv6kke3mwujz2s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYd7c8wAKCRDj7w1vZxhR
+xVuPAP9/9WqdgEDuYNDuYiROyAiSVfLJJPhtDldKsoecRjwokgD/ZDi8CesqnZXj
+fnIDTx+JuQiyTMzhpUz/iwl0Lx+NSQE=
+=mcMz
+-----END PGP SIGNATURE-----
+
+--t2qv6kke3mwujz2s--

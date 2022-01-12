@@ -2,97 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C998F48C348
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C83D48C2F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:15:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352917AbiALLiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 06:38:09 -0500
-Received: from gateway20.websitewelcome.com ([192.185.59.4]:31406 "EHLO
-        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352904AbiALLiH (ORCPT
+        id S1352800AbiALLPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 06:15:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237932AbiALLPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 06:38:07 -0500
-X-Greylist: delayed 1241 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Jan 2022 06:38:06 EST
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id E90FD4018ED72
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 05:17:21 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id 7bb6nll43INxB7bb6nJrDx; Wed, 12 Jan 2022 05:15:20 -0600
-X-Authority-Reason: nr=8
-Received: from host-79-47-126-144.retail.telecomitalia.it ([79.47.126.144]:48568 helo=[10.0.0.88])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1n7bb4-001QEl-Su; Wed, 12 Jan 2022 05:15:19 -0600
-Message-ID: <5f04540c-273a-c4f2-692d-9de2f1495ba9@kernel.org>
-Date:   Wed, 12 Jan 2022 12:15:13 +0100
+        Wed, 12 Jan 2022 06:15:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B46C06173F;
+        Wed, 12 Jan 2022 03:15:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C09EB81DC0;
+        Wed, 12 Jan 2022 11:15:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20B19C36AEA;
+        Wed, 12 Jan 2022 11:15:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641986136;
+        bh=RTTu6nWijk2G34RQ8PR1ea0narp9zXHqxMjZSrcL0co=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Hq5LE8KaLV3xNlfl8hONGT11QmqFJgF5ZZ53zgnsdO9DYAJ3B8+wjU1jSIWeFQ3/D
+         CaFHUcDIXoppDdArCINBydMDN3XpiApt2gXzo3WfUQ9EosZsIz+fETbj6cGaJgODcQ
+         RZjbF9LA/EWCKAuGks8VTqUhgG/KYGeeO094JHFcgGFdZ+k6BgYzvYRyQgp0IWuabE
+         6Amw158NYWiJ4GIMYCwvGg+6cm48+dwbs/dP2cMG/t24qKzlZsJcARwnFtoH8cDJjI
+         ORDJ0PD0+aoOGK4FPG7XBpY4YizNUp6zImN53U/p5QaZfcKlKu0EVwLvcYWDLCGCVV
+         ObzsbCCfB0d5Q==
+Message-ID: <f86483fca8b0dc68ce243ba47998ff3296a3b6f8.camel@kernel.org>
+Subject: Re: [PATCH 4/5] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64
+ in fcntl.h
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>
+Cc:     Guo Ren <guoren@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>
+Date:   Wed, 12 Jan 2022 06:15:33 -0500
+In-Reply-To: <CAK8P3a1ONn=FiPU3669MjBMntS-1K5bgX4pHforUsYJ7yhwZ-g@mail.gmail.com>
+References: <20220111083515.502308-1-hch@lst.de>
+         <20220111083515.502308-5-hch@lst.de>
+         <CAK8P3a0mHC5=OOGV=sGnC9JqZWxzsJyZbTefnCtryQU3o3PY_g@mail.gmail.com>
+         <20220112075609.GA4854@lst.de>
+         <CAK8P3a1ONn=FiPU3669MjBMntS-1K5bgX4pHforUsYJ7yhwZ-g@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [for-next][PATCH 16/31] rtla: Real-Time Linux Analysis tool
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tao Zhou <tao.zhou@linux.dev>, Ingo Molnar <mingo@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        John Kacur <jkacur@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220111173030.999527342@goodmis.org>
- <20220111173116.190327559@goodmis.org>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220111173116.190327559@goodmis.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 79.47.126.144
-X-Source-L: No
-X-Exim-ID: 1n7bb4-001QEl-Su
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-79-47-126-144.retail.telecomitalia.it ([10.0.0.88]) [79.47.126.144]:48568
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 1
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven!
-
-On 1/11/22 18:30, Steven Rostedt wrote:
-> From: Daniel Bristot de Oliveira <bristot@kernel.org>
+On Wed, 2022-01-12 at 09:28 +0100, Arnd Bergmann wrote:
+> On Wed, Jan 12, 2022 at 8:56 AM Christoph Hellwig <hch@lst.de> wrote:
+> > 
+> > On Tue, Jan 11, 2022 at 04:33:30PM +0100, Arnd Bergmann wrote:
+> > > This is a very subtle change to the exported UAPI header contents:
+> > > On 64-bit architectures, the three unusable numbers are now always
+> > > shown, rather than depending on a user-controlled symbol.
+> > 
+> > Well, the change is bigger and less subtle.  Before this change the
+> > constants were never visible to userspace at all (except on mips),
+> > because the #ifdef CONFIG_64BIT it never set for userspace builds.
 > 
-> The rtla is a meta-tool that includes a set of commands that aims
-> to analyze the real-time properties of Linux. But instead of testing
-> Linux as a black box, rtla leverages kernel tracing capabilities to
-> provide precise information about the properties and root causes of
-> unexpected results.
+> I suppose you mean /always/ visible here, with that ifndef.
 > 
-> rtla --help works and provide information about the available options.
+> > > This is probably what we want here for compatibility reasons, but I think
+> > > it should be explained in the changelog text, and I'd like Jeff or Bruce
+> > > to comment on it as well: the alternative here would be to make the
+> > > uapi definition depend on __BITS_PER_LONG==32, which is
+> > > technically the right thing to do but more a of a change.
+> > 
+> > I can change this to #if __BITS_PER_LONG==32 || defined(__KERNEL__),
+> > but it will still be change in what userspace sees.
 > 
-> This is just the "main" and the Makefile, no function yet.
+> Exactly, that is the tradeoff, which is why I'd like the flock maintainers
+> to say which way they prefer. We can either do it more correctly (hiding
+> the constants from user space when they are not usable), or with less
+> change (removing the incorrect #ifdef). Either way sounds reasonable
+> to me, I mainly care that this is explained in the changelog and that the
+> maintainers are aware of the two options.
 > 
-> Link: https://lkml.kernel.org/r/f59acda8bc513c4a6c279a9bc3ad112a20690e68.1638182284.git.bristot@kernel.org
 
-Thanks for picking RTLA!
+I don't have a strong opinion here. If we were taking symbols away that
+were previously visible to userland it would be one thing, but since
+we're just adding symbols that may not have been there before, this
+seems less likely to break anything.
 
-Just one problem, you are picking the V8, but we actually had a V9:
-  https://lore.kernel.org/lkml/cover.1639158831.git.bristot@kernel.org/
+I probably lean toward Christoph's original solution instead of keeping
+the conditional definitions. It's hard to imagine there are many
+programs that care whether these other symbols are defined or not.
 
--- Daniel
+You can add this to the original patch:
+
+Acked-by: Jeff Layton <jlayton@kernel.org>
+

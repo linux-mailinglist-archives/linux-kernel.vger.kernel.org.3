@@ -2,80 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE1F48C254
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFF648C255
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239706AbiALKcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 05:32:00 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:36096 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239182AbiALKb7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 05:31:59 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 347B21F461;
-        Wed, 12 Jan 2022 10:31:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641983518; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EZgKoHTkYozkeRvOASqvTf69IaXwtK5eJNoCLH3AhbI=;
-        b=sanr4+/wNNMdO7ubzNxEAwyQj+vXii4/Tvu1+l3/Jvg+MJQZelEeBMZWNYSwkFPUJ8diEZ
-        EyIbzejfDJPUj5HKVis1EWWBt8y6/TB9jz76pZOT2tL1HkmEJ8doGJf7TcY4wZZTL/SiCA
-        AcQLqOB2y7cJjIJAjfTV559SuUS++bg=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BB99CA3B85;
-        Wed, 12 Jan 2022 10:31:57 +0000 (UTC)
-Date:   Wed, 12 Jan 2022 11:31:57 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
+        id S1352547AbiALKcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 05:32:55 -0500
+Received: from foss.arm.com ([217.140.110.172]:58212 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239182AbiALKcv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 05:32:51 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11A131FB;
+        Wed, 12 Jan 2022 02:32:51 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.1.119])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 89C3F3F5A1;
+        Wed, 12 Jan 2022 02:32:49 -0800 (PST)
+Date:   Wed, 12 Jan 2022 10:32:44 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
         Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 8/9] mm: multigenerational lru: user interface
-Message-ID: <Yd6uHYtjGfgqjDpw@dhcp22.suse.cz>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-9-yuzhao@google.com>
- <YdwKB3SfF7hkB9Xv@kernel.org>
- <Yd6S6Js1W4AnFFmv@google.com>
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64: errata: Update
+ ARM64_ERRATUM_[2119858|2224489] with Cortex-X2 ranges
+Message-ID: <Yd6uTCwjzDdBrtGI@FVFF77S0Q05N>
+References: <1641980099-20315-1-git-send-email-anshuman.khandual@arm.com>
+ <1641980099-20315-3-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yd6S6Js1W4AnFFmv@google.com>
+In-Reply-To: <1641980099-20315-3-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 12-01-22 01:35:52, Yu Zhao wrote:
-[...]
-> But I saw people not following this practice, and I'm also tempted to
-> do so. Can anybody remind me whether it's considered a bad practice to
-> have code changes and Kconfig changes in the same patch?
+Hi Anshuman,
 
-If you want to have the patch series bisectable then it is preferable to
-add kconfig options early so that the code is enabled in the respective
-steps. Sometimes that can be impractical though (e.g. when the feature is
-incomplete at that stage).
--- 
-Michal Hocko
-SUSE Labs
+On Wed, Jan 12, 2022 at 03:04:59PM +0530, Anshuman Khandual wrote:
+> Errata ARM64_ERRATUM_[2119858|2224489] also affect some Cortex-X2 ranges as
+> well. Lets update these errata definition and detection to accommodate all
+> new Cortex-X2 based cpu MIDR ranges.
+> 
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+> Cc: coresight@lists.linaro.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  arch/arm64/Kconfig             | 12 ++++++------
+>  arch/arm64/kernel/cpu_errata.c |  2 ++
+>  2 files changed, 8 insertions(+), 6 deletions(-)
+
+I think you've misssed Documentation/arm64/silicon-errata.rst -- for other
+common errata we add lines for each affected part, e.g. as we do for
+ARM64_ERRATUM_1418040.
+
+Other than that, this looks good to me!
+
+Thanks,
+Mark.
+
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index c4207cf9bb17..d8046c832225 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -671,14 +671,14 @@ config ARM64_WORKAROUND_TRBE_OVERWRITE_FILL_MODE
+>  	bool
+>  
+>  config ARM64_ERRATUM_2119858
+> -	bool "Cortex-A710: 2119858: workaround TRBE overwriting trace data in FILL mode"
+> +	bool "Cortex-A710/X2: 2119858: workaround TRBE overwriting trace data in FILL mode"
+>  	default y
+>  	depends on CORESIGHT_TRBE
+>  	select ARM64_WORKAROUND_TRBE_OVERWRITE_FILL_MODE
+>  	help
+> -	  This option adds the workaround for ARM Cortex-A710 erratum 2119858.
+> +	  This option adds the workaround for ARM Cortex-A710/X2 erratum 2119858.
+>  
+> -	  Affected Cortex-A710 cores could overwrite up to 3 cache lines of trace
+> +	  Affected Cortex-A710/X2 cores could overwrite up to 3 cache lines of trace
+>  	  data at the base of the buffer (pointed to by TRBASER_EL1) in FILL mode in
+>  	  the event of a WRAP event.
+>  
+> @@ -761,14 +761,14 @@ config ARM64_ERRATUM_2253138
+>  	  If unsure, say Y.
+>  
+>  config ARM64_ERRATUM_2224489
+> -	bool "Cortex-A710: 2224489: workaround TRBE writing to address out-of-range"
+> +	bool "Cortex-A710/X2: 2224489: workaround TRBE writing to address out-of-range"
+>  	depends on CORESIGHT_TRBE
+>  	default y
+>  	select ARM64_WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
+>  	help
+> -	  This option adds the workaround for ARM Cortex-A710 erratum 2224489.
+> +	  This option adds the workaround for ARM Cortex-A710/X2 erratum 2224489.
+>  
+> -	  Affected Cortex-A710 cores might write to an out-of-range address, not reserved
+> +	  Affected Cortex-A710/X2 cores might write to an out-of-range address, not reserved
+>  	  for TRBE. Under some conditions, the TRBE might generate a write to the next
+>  	  virtually addressed page following the last page of the TRBE address space
+>  	  (i.e., the TRBLIMITR_EL1.LIMIT), instead of wrapping around to the base.
+> diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+> index 9e1c1aef9ebd..29cc062a4153 100644
+> --- a/arch/arm64/kernel/cpu_errata.c
+> +++ b/arch/arm64/kernel/cpu_errata.c
+> @@ -347,6 +347,7 @@ static const struct midr_range trbe_overwrite_fill_mode_cpus[] = {
+>  #endif
+>  #ifdef CONFIG_ARM64_ERRATUM_2119858
+>  	MIDR_ALL_VERSIONS(MIDR_CORTEX_A710),
+> +	MIDR_RANGE(MIDR_CORTEX_X2, 0, 0, 2, 0),
+>  #endif
+>  	{},
+>  };
+> @@ -371,6 +372,7 @@ static struct midr_range trbe_write_out_of_range_cpus[] = {
+>  #endif
+>  #ifdef CONFIG_ARM64_ERRATUM_2224489
+>  	MIDR_ALL_VERSIONS(MIDR_CORTEX_A710),
+> +	MIDR_RANGE(MIDR_CORTEX_X2, 0, 0, 2, 0),
+>  #endif
+>  	{},
+>  };
+> -- 
+> 2.20.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

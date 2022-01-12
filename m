@@ -2,140 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1377F48C5AC
+	by mail.lfdr.de (Postfix) with ESMTP id B7B9348C5AE
 	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353989AbiALONP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353961AbiALONH (ORCPT
+        id S1354012AbiALONm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:13:42 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33680 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354001AbiALONY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:13:07 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8326BC06173F;
-        Wed, 12 Jan 2022 06:13:07 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id s30so8584069lfo.7;
-        Wed, 12 Jan 2022 06:13:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FZO7GH1VAP3gSHj6yutdiODbC5oJX0jySmLnQ+aEZjQ=;
-        b=S2lAPi1WJQbC/HEbdwHo2alb0WAeNMwyaDCAGarVnoSS5VbXmaYWRaWxrj0uZRQym7
-         WdaldxxcSmISYa/iiXZBt/xCXueESue0xrZafJxUG4F0h7YkK11dO5J1GK8jznyJIgA5
-         lMUbY6uCQiBL1p0sZUSqdjVUFEx3D2XOlvlzAE8uqMmaK5Q1NyT9LiKtX2TYh/HHLhdj
-         Okv9m+HMoxtHuRJ+MlOicPXiG/5hDrwkJGQ3CNUs2rILI6pmZVUfP69uESnIoUlmqKSq
-         AJsER2ZAL3DYZ69rLSpg0cj+uzWjzYiT/T2I+XF5Q5IhTjRrlJnxsyDymywu9iDZ7iov
-         UyXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FZO7GH1VAP3gSHj6yutdiODbC5oJX0jySmLnQ+aEZjQ=;
-        b=vu7R4qWq97/bJ62e1ASvFxl/yLHgMnx4ZgzGCknHVByT9vS7jb9sdmgtpyFRb/hyHc
-         /L178ouwbEjeQFN8z4fmJQQgTxB+daAcJMKJvawO4ceEc1dW+ee7XXmyJ9DfXgTqm4ci
-         1Oqqi1gawJ9l/+qAQ2ifOI6fHGYzbQObpi3YMi8W7SU/irfzkOm1fDp8ZhHCu48erUSH
-         Kgwge8X5pNTYsbULnpBp3UBxdf3R2mX2vc4/QM+wM41WPzOdtCSUI/EU2X9B8D8Ywx7f
-         OzkuoGvLvHJh4ddHB4V670V6LO11t0ZNCQ0bSN1R6hGTE203fSB7NuJJ9Q7tggO5nUVL
-         m4JQ==
-X-Gm-Message-State: AOAM531PLROCoL/gIUpCZiunfkemH/fzzLX8d7l6a+p8Y1sHYxeZ+lie
-        +Pqwyeyl67FDjxATS1SxU8o=
-X-Google-Smtp-Source: ABdhPJy4lr99ztyBa2kSA3shxOrQgi4BCovoR/p0JF4BQpd8xxVBVzq3w2HMuEnQ81LnX0RG0k3PxA==
-X-Received: by 2002:a05:6512:159d:: with SMTP id bp29mr3863011lfb.645.1641996785910;
-        Wed, 12 Jan 2022 06:13:05 -0800 (PST)
-Received: from [192.168.2.145] (94-29-62-108.dynamic.spd-mgts.ru. [94.29.62.108])
-        by smtp.googlemail.com with ESMTPSA id m1sm761824lfh.212.2022.01.12.06.13.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 06:13:05 -0800 (PST)
-Subject: Re: [PATCH v2 0/3] clk: Implement a clock request API
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-clk@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Emma Anholt <emma@anholt.net>, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>
-References: <20210914093515.260031-1-maxime@cerno.tech>
- <a5400ae3-f181-91fc-bc35-db989584c70b@gmail.com>
- <20220112135147.dbkmsnlqyipq7urq@houat>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <d5dbdd71-d5db-53d1-176a-812c908f1abf@gmail.com>
-Date:   Wed, 12 Jan 2022 17:13:04 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 12 Jan 2022 09:13:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A60A1B81EF9;
+        Wed, 12 Jan 2022 14:13:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68FA9C36AEB;
+        Wed, 12 Jan 2022 14:13:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641996802;
+        bh=5JHtTD0+GU4gLjkgA+JwgQ5sOiBtIl1aQCtAZIdQblk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Gkexck+fM6W35/NWJYNxq4RmrR8Z6g/EBNNVqkQpwVTXReirOgRVQTSVo9Z12mdHX
+         k+c4BUTawDJV1T5KjxKI+MmaEa7G/Q9+DTXbpWHzTuEAENInaFavOU1XTrTvIjp/bu
+         QSOwOhy/o68eu2MVf1VhQZAK14vi07TD4OQBAMZt1qMoGAg2Bq/exNYMwPHzT6LQlP
+         Kfc847VUKlpo5gFqI9a1EjBIstVafMKOEGMhyLeXUBj8AfZek+wXhsylQ4VkBoT269
+         iYG5AiuBcRw9eS3es8i6wB1IBDMuWGosamyzIP1zP6zrO6rr7TxUavsYxrCwWBfpO8
+         itIFOYtHatdDA==
+Received: by mail-wr1-f50.google.com with SMTP id l25so4424865wrb.13;
+        Wed, 12 Jan 2022 06:13:22 -0800 (PST)
+X-Gm-Message-State: AOAM533hyIbImJFDsOM+TwhqvX/fZ7yUhagh7jj5VDEg9LbiTHrAjkda
+        fJhRsOhZsYiKmAWM2Fvn2hx1QWUhKsFCHxg3krU=
+X-Google-Smtp-Source: ABdhPJxFpW72y0ahbskV/7mJQw6O+qadUeEgXZUNqaTKGjsy98Z5C82x7s/ZPRn5ltWrWfcZELCXMjG3fkKf24GapuY=
+X-Received: by 2002:a05:6000:154c:: with SMTP id 12mr8164552wry.447.1641996800726;
+ Wed, 12 Jan 2022 06:13:20 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220112135147.dbkmsnlqyipq7urq@houat>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20220112140137.728162-1-jforbes@fedoraproject.org>
+ <CAHmME9rJFVeWL=SFTkM8=+2te_GnH4n-THH+F3p5mnHfCkhZ4w@mail.gmail.com>
+ <CAMj1kXHubNk3gRTOmD1rOCifCUE4O6=TvNr_XhP1tNcCBuzfBQ@mail.gmail.com>
+ <CAHmME9oKEawBAGSN_tdpBDe2_vRUE8Gh+GMXn+d94A6te4FJPQ@mail.gmail.com>
+ <CAMj1kXGzzHefRu1wcgDsYpybSDrUK__FXE-Mjm2r1fg2xiz6Jg@mail.gmail.com> <CAHmME9p25W3Pg4T4Pers+hxryhAcQZEZMx5uueF3a-oCr7ABuA@mail.gmail.com>
+In-Reply-To: <CAHmME9p25W3Pg4T4Pers+hxryhAcQZEZMx5uueF3a-oCr7ABuA@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 12 Jan 2022 15:13:09 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEgE-3Pnnak-RZAPch=ma399Ki4jrMb8j32x2AFyZZALA@mail.gmail.com>
+Message-ID: <CAMj1kXEgE-3Pnnak-RZAPch=ma399Ki4jrMb8j32x2AFyZZALA@mail.gmail.com>
+Subject: Re: [PATCH v2] lib/crypto: add prompts back to crypto libraries
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Justin Forbes <jmforbes@linuxtx.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-12.01.2022 16:51, Maxime Ripard пишет:
-> Hi Dmitry,
-> 
-> On Wed, Jan 12, 2022 at 04:28:41PM +0300, Dmitry Osipenko wrote:
->> 14.09.2021 12:35, Maxime Ripard пишет:
->>> Hi,
->>>
->>> This is a follow-up of the discussion here:
->>> https://lore.kernel.org/linux-clk/20210319150355.xzw7ikwdaga2dwhv@gilmour/
->>>
->>> This implements a mechanism to raise and lower clock rates based on consumer
->>> workloads, with an example of such an implementation for the RaspberryPi4 HDMI
->>> controller.
->>>
->>> There's a couple of things worth discussing:
->>>
->>>   - The name is in conflict with clk_request_rate, and even though it feels
->>>     like the right name to me, we should probably avoid any confusion
->>>
->>>   - The code so far implements a policy of always going for the lowest rate
->>>     possible. While we don't have an use-case for something else, this should
->>>     maybe be made more flexible?
->>
->> Hello Maxime,
->>
->> On NVIDIA Tegra we use interconnect framework for converting of
->> workload-based memory bandwidth requirement to the memory clock rate
->> [1]. All Tegra SoCs have two display controllers and other memory
->> clients, ICC takes care of summing and updating memory bandwidth for us,
->> which in the end results in a freq change of the shared memory controller.
->>
->> [1] https://git.kernel.org/linus/04d5d5df9
->>
->> Not so long time ago me and Thierry Reding were looking at yours v1 and
->> back then Thierry suggested that the same ICC approach might work for
->> yours case. I'm now looking at the v2 and yours discussion with Stephen
->> Boyd, and it appears that ICC is indeed what you really need. Have you
->> considered to use ICC?
-> 
-> The goals seem to be similar indeed, but most of these clocks feed some
-> internal state machine in those devices and are not related to the
-> memory bandwidth at all. So there's no real interconnect to model there :/
+On Wed, 12 Jan 2022 at 15:12, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> On Wed, Jan 12, 2022 at 3:08 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Wed, 12 Jan 2022 at 15:08, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > >
+> > > On Wed, Jan 12, 2022 at 3:06 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > >
+> > > > On Wed, 12 Jan 2022 at 15:05, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > > > >
+> > > > > This commit also needs this snippet:
+> > > > >
+> > > >
+> > > > Why?
+> > >
+> > > So that the menu of crypto library options is inside of the library
+> > > menu. Otherwise this will appear inside of the _root_ menu, which
+> > > isn't what we want.
+> >
+> > Why not? I think that's fine.
+>
+> It's really not appropriate there. Look:
+>
+> - Justin vanilla: https://i.imgur.com/14UBpML.png
+> - Justin + Jason: https://i.imgur.com/lDfZnma.png
+>
+> We really don't want another top level menu. We're not that important.
+> Rather, crypto libraries are but one ordinary subset of ordinary
+> libraries, just like how the build system does it too.
 
-If you could convert resolution/pclk to BW and BW to the clock rates,
-then it should be possible to model ICC. BW doesn't necessarily need to
-be "memory" bandwidth, bandwidth is abstract value expressed in kbytes/sec.
-
-The state machine will be ICC provider then, although you'll need to
-model that machine as a separate device somehow. For example, on Tegra
-we needed to specify clocks as separate devices to model GENPD [2][3].
-
-[2]
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=b1bc04a2ac5
-
-[3]
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/arch/arm/boot/dts/tegra30.dtsi?h=next-20220112#n394
+I disagree. The root menu is a jumble of things already, and having
+this one at the root is really not a problem.

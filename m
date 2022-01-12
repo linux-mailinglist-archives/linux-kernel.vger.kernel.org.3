@@ -2,135 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0204B48C7C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E80A48C7C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354880AbiALP7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:59:11 -0500
-Received: from mga09.intel.com ([134.134.136.24]:33174 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243611AbiALP7K (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:59:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642003150; x=1673539150;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2h9kGZ6Ec4GeM31EL2xlZEdWmBPcDTkaLVd1B02B9gw=;
-  b=axoWClXvOEMmFdhxF9idwqQMI3pxFbccwFieJc2RZ1x5jNVpJZH9IkNe
-   j8T1j462WhUFOp24ePLv0JbThaemjq+fTUuJWEo/6wUQsPeGDzIi4VhJ0
-   s/0G9TEq/yAhUfF64b9Kcf2SxnFy2kTlr2RCEBzRFlA5lfBEESKNAnIIM
-   24F3rIeTYhC32Wu0x/IYjcv567C95DCKqCv78KHi/zRsnsNGMPRgF/vsg
-   sikh9KI3KmM1Kip8dI50bHhV9I8X3kynJwy8gVW27PMOx2cpmPlHHXLnN
-   PRNFdqj1qs5GFFuqHDmxGx4RIftwBruhv6hjDhMDdRO9bGIZYb1vI85SZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="243561342"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="243561342"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 07:59:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="613610338"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Jan 2022 07:59:06 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n7g1c-00063e-OC; Wed, 12 Jan 2022 15:59:00 +0000
-Date:   Wed, 12 Jan 2022 23:58:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, akpm@linux-foundation.org,
-        yang.shi@linux.alibaba.com, ying.huang@intel.com
-Cc:     kbuild-all@lists.01.org, dave.hansen@linux.intel.com,
-        yang.yang29@zte.com.cn, saravanand@fb.com, minchan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Subject: Re: [PATCH] mm/vmstat: add event for ksm swapping in copy
-Message-ID: <202201122306.EC6LSwot-lkp@intel.com>
-References: <20220112115110.669160-1-yang.yang29@zte.com.cn>
+        id S1354884AbiALP7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:59:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243611AbiALP7y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 10:59:54 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F6EC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:59:53 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id z22so11730529edd.12
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:59:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=lYACK799UnG7SCiflS/5tGBYCqIfuCsEiRuD3/rdbDw=;
+        b=UOTbuSaIswTM5CBEtONb4LNCG6GlQIgcbiuao4QHu+Vc1lxso5P4L2MllcerxVeM6q
+         OZ0hjIt14JooSNtXkPnXvfgCG0L8xXn3P9AZVnofeI6JkXSDd+Rkq9RwnbL4J8wtYp5v
+         +pI90hd7fQb381mkR2ejV2oC/98Rhgeb6npjJKz12Mw1hp6ahlztPzERYERJN1ILL+6w
+         dYMa874VYzEGrSaQs4F3lReuywtiebKGJqbCM/Dqsn9EgFYKDZbNCSL4zvNXy7aTm2gq
+         vREMjnhlOlCURkKoFyRIw5B7YwtJjdbfpTu7KyIj0cMeoYyygvfS03RZlK1YC1PDlFO1
+         R35A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=lYACK799UnG7SCiflS/5tGBYCqIfuCsEiRuD3/rdbDw=;
+        b=76TWxkuInB3rtS0+rN4ETaAzj+0ith6lXDYUNFQ55QUB+pWvxN3rGq/31Pb8mY7wc5
+         MRSDBcf9+9Y/M13vwcQf/Hq33919GpEP75eu6YHI+w4M+SloRRoCCnVKWD2jZt6qU5Yl
+         3qXP6CkdrSUkEpkQwL7enpysv20MO0ePcwNXOlPtYENUVo2gwR3gfR8rBHi8f/aU2Oyl
+         X8hJvCCuh+pc3ktkm2I0qgor6K3Hs2b3M5t/pkmgkNtzY8MmKD58hx0ITkCLFEmv2i3o
+         SAuaARKD7zT75cg9ZnhnvAICXOJ96LklrWTTwZRJJv8XWZfQxPW3ZmFD9g8bqKWl2sqJ
+         igmg==
+X-Gm-Message-State: AOAM530BpTEu8zMCxEo9DZU8Y57aMsDMMefz2taGqzM0av41tsnwK+SJ
+        erhMPCgRonB9as7s3CY8psfLB7cFAutiFfAfxyg=
+X-Google-Smtp-Source: ABdhPJxGo0g9yRWPe+IcNAopUqB9ZIZgniObyH3qdyLo5jxe95XVZM97g0aLkiwYKTGpGGg6dleels/r3iB6YNu6sWQ=
+X-Received: by 2002:a17:906:6d95:: with SMTP id h21mr308032ejt.190.1642003191977;
+ Wed, 12 Jan 2022 07:59:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220112115110.669160-1-yang.yang29@zte.com.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a17:907:2d2b:0:0:0:0 with HTTP; Wed, 12 Jan 2022 07:59:51
+ -0800 (PST)
+Reply-To: kamaraalima287@gmail.com
+From:   "Dr. Alima Kamara" <jemillasmith57@gmail.com>
+Date:   Wed, 12 Jan 2022 07:59:51 -0800
+Message-ID: <CAL1ZfBvGBr1W6NDiB64UxaCsYh0ydVx2fsRMnynOav8DH1L+Zw@mail.gmail.com>
+Subject: Dear Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+-- 
 
-Thank you for the patch! Yet something to improve:
+Greetings,
 
-[auto build test ERROR on hnaz-mm/master]
+My name is (Dr Alima Kamara) I am working with one of the prime banks
+here in Burkina Faso. Here in this bank existed a dormant account for
+many years, which belong to one of our late foreign customer Mr.
+Moises Saba Masri from Mexico.
 
-url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/mm-vmstat-add-event-for-ksm-swapping-in-copy/20220112-195303
-base:   https://github.com/hnaz/linux-mm master
-config: alpha-buildonly-randconfig-r004-20220112 (https://download.01.org/0day-ci/archive/20220112/202201122306.EC6LSwot-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/56a4520e557228d8383f27b6aef54b2f931a0588
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-vmstat-add-event-for-ksm-swapping-in-copy/20220112-195303
-        git checkout 56a4520e557228d8383f27b6aef54b2f931a0588
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
+You can get more information's as regards to this on below
+website:http://www.ynetnews.com/articles/0,7340,L-3832556,00.html
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+When I discovered that there had been neither deposits nor withdrawals
+from this account for this long period, I decided to carry out a
+system investigation and discovered that none of the family member or
+relations of the late person are aware of this account, which means
+nobody will come to take it.
 
-All errors (new ones prefixed by >>):
+The amount in this account stands at $18,300, 000.00 (Eighteen Million
+Three Hundred Thousand USA Dollars). I want a foreign account where
+the bank will transfer this fund, I will front you in the bank as the
+Next of Kin to the late customer and back you up with relevant
+information.
 
-   mm/ksm.c: In function 'ksm_might_need_to_copy':
->> mm/ksm.c:2597:32: error: 'KSM_SWPIN_COPY' undeclared (first use in this function)
-    2597 |                 count_vm_event(KSM_SWPIN_COPY);
-         |                                ^~~~~~~~~~~~~~
-   mm/ksm.c:2597:32: note: each undeclared identifier is reported only once for each function it appears in
+What the bank need is proof and information about the late customer
+which I will assist you on. this is a genuine, risk free and legal
+business transaction, All details shall be sent to you once I hear
+from you.
 
+The information as contained herein be accorded the necessary
+attention, urgency as well as the secrecy it deserves.
 
-vim +/KSM_SWPIN_COPY +2597 mm/ksm.c
+If you are really sure of your integrity, trustworthy and
+confidentiality reply back to me urgently through my private email
+here: ( kamaraalima287@gmail.com   ).
 
-  2565	
-  2566	struct page *ksm_might_need_to_copy(struct page *page,
-  2567				struct vm_area_struct *vma, unsigned long address)
-  2568	{
-  2569		struct anon_vma *anon_vma = page_anon_vma(page);
-  2570		struct page *new_page;
-  2571	
-  2572		if (PageKsm(page)) {
-  2573			if (page_stable_node(page) &&
-  2574			    !(ksm_run & KSM_RUN_UNMERGE))
-  2575				return page;	/* no need to copy it */
-  2576		} else if (!anon_vma) {
-  2577			return page;		/* no need to copy it */
-  2578		} else if (anon_vma->root == vma->anon_vma->root &&
-  2579			 page->index == linear_page_index(vma, address)) {
-  2580			return page;		/* still no need to copy it */
-  2581		}
-  2582		if (!PageUptodate(page))
-  2583			return page;		/* let do_swap_page report the error */
-  2584	
-  2585		new_page = alloc_page_vma(GFP_HIGHUSER_MOVABLE, vma, address);
-  2586		if (new_page &&
-  2587		    mem_cgroup_charge(page_folio(new_page), vma->vm_mm, GFP_KERNEL)) {
-  2588			put_page(new_page);
-  2589			new_page = NULL;
-  2590		}
-  2591		if (new_page) {
-  2592			copy_user_highpage(new_page, page, address, vma);
-  2593	
-  2594			SetPageDirty(new_page);
-  2595			__SetPageUptodate(new_page);
-  2596			__SetPageLocked(new_page);
-> 2597			count_vm_event(KSM_SWPIN_COPY);
-  2598		}
-  2599	
-  2600		return new_page;
-  2601	}
-  2602	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best regards,
+Dr Alima Kamara.

@@ -2,119 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D54A48BECF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:06:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8744748BED1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351102AbiALHGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:06:39 -0500
-Received: from mga05.intel.com ([192.55.52.43]:33619 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237328AbiALHGi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:06:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641971198; x=1673507198;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=w1S6Ea3urNn5/maW8twjQA1LVYjr4EJNP9bamJwc15Y=;
-  b=UuPxU7y8SQi8k7vdZ/zTXb01ntsy0BYrKWC7CBKrBZmmQ+W8LvPXf+tK
-   gRRIubLn2HVrdHGxnvm/hv19GOin+GUA06umEeeoN+yfYwNsoIdgYvhbx
-   hAATAyDtNug0ZBRX0cNc6Vt8QqELIzAYWRe8ksnMku0ZHSjeTjsMWezPZ
-   nMCPzL6GE0q6FjFapNh35okJypgFJLjGvqUw19KLti/9TCDIzA2fIyUDs
-   szHFnn3aRw/vwcjL2EdNRe5bZddpKIF7453jhu73iy2iRhfdayp4jqRWf
-   tgIwLEz7NYUcS9j4sDDqGS84cfRCXXnVLiOraVp68JMYJXhae26MKzmxe
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="330022111"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="330022111"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 23:06:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="472736893"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
-  by orsmga003.jf.intel.com with ESMTP; 11 Jan 2022 23:06:36 -0800
-Subject: Re: [PATCH] mmc: sdhci-of-esdhc: Check for error num after setting
- mask
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, ulf.hansson@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220106021638.2527426-1-jiasheng@iscas.ac.cn>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <ae5373d2-372a-5eb6-1b2a-7b1dae888355@intel.com>
-Date:   Wed, 12 Jan 2022 09:06:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S1351111AbiALHHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:07:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237328AbiALHHa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 02:07:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8230C06173F;
+        Tue, 11 Jan 2022 23:07:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EE83B8196F;
+        Wed, 12 Jan 2022 07:07:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE1CC36AEA;
+        Wed, 12 Jan 2022 07:07:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641971247;
+        bh=lBeYJcwOlBUNUCtLY7rniM4aBmILYhIJMmfAyuOSK7I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N8I+xk/BRnXBuc1KlsDm4/2VzECMqq8l4ncrAK3yWNUX67kwE7GFNrBY898w/shFo
+         00i0HbNX1EtS2m/COkY39+6Wag/ekrU5RSTBzpokHkpnzyefxAxPWV96N77AAAbwmx
+         gEO/DelN+Iyd8UuoK4UIVwaJcedlSkcaUoNxGQp4=
+Date:   Wed, 12 Jan 2022 08:07:24 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     heikki.krogerus@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, singhanc@nvidia.com
+Subject: Re: [PATCH v3 1/1] ucsi_ccg: Check DEV_INT bit only when starting
+ CCG4
+Message-ID: <Yd5+LJD1ey+vygA9@kroah.com>
+References: <20220112032100.610146-1-waynec@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <20220106021638.2527426-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220112032100.610146-1-waynec@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2022 04:16, Jiasheng Jiang wrote:
-> Because of the possible failure of the dma_supported(), the
-> dma_set_mask_and_coherent() may return error num.
-> Therefore, it should be better to check it and return the error if
-> fails.
-> Also, the caller, esdhc_of_resume(), should deal with the return value.
-> Moreover, as the sdhci_esdhc_driver has not been used, it does not need to
-> be considered.
-
-Apologies, but that last sentence I don't understand.  Can you clarify it a bit.
-What doesn't need to be considered and why?
-
+On Wed, Jan 12, 2022 at 11:21:00AM +0800, Wayne Chang wrote:
+> From: Sing-Han Chen <singhanc@nvidia.com>
 > 
-> Fixes: 5552d7ad596c ("mmc: sdhci-of-esdhc: set proper dma mask for ls104x chips")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> after driver sending the UCSI_START cmd, CCGx would
+> clear Bit 0:Device Interrupt in the INTR_REG if CCGX
+> reset successfully.
+> 
+> however, there might be a chance that other bits in
+> INTR_REG are not cleared due to internal data queued
+> in PPM and cause the driver thinks CCGx reset failed.
+> 
+> the commit checks bit 0 in INTR_REG and ignore other
+> bits. ucsi driver would reset PPM later.
+> 
+> Fixes: 247c554a14aa16ca ("usb: typec: ucsi: add support for Cypress CCGx")
+> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
 > ---
->  drivers/mmc/host/sdhci-of-esdhc.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/mmc/host/sdhci-of-esdhc.c b/drivers/mmc/host/sdhci-of-esdhc.c
-> index a593b1fbd69e..bedfc7bb5174 100644
-> --- a/drivers/mmc/host/sdhci-of-esdhc.c
-> +++ b/drivers/mmc/host/sdhci-of-esdhc.c
-> @@ -524,12 +524,16 @@ static void esdhc_of_adma_workaround(struct sdhci_host *host, u32 intmask)
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index bff96d64dddf..6db7c8ddd51c 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -325,7 +325,7 @@ static int ucsi_ccg_init(struct ucsi_ccg *uc)
+>  		if (status < 0)
+>  			return status;
 >  
->  static int esdhc_of_enable_dma(struct sdhci_host *host)
->  {
-> +	int ret;
->  	u32 value;
->  	struct device *dev = mmc_dev(host->mmc);
+> -		if (!data)
+> +		if (!(data & DEV_INT))
+>  			return 0;
 >  
->  	if (of_device_is_compatible(dev->of_node, "fsl,ls1043a-esdhc") ||
-> -	    of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc"))
-> -		dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
-> +	    of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc")) {
-> +		ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
-> +		if (ret)
-> +			return ret;
-> +	}
->  
->  	value = sdhci_readl(host, ESDHC_DMA_SYSCTL);
->  
-> @@ -1245,7 +1249,10 @@ static int esdhc_of_resume(struct device *dev)
->  
->  	if (ret == 0) {
->  		/* Isn't this already done by sdhci_resume_host() ? --rmk */
-> -		esdhc_of_enable_dma(host);
-> +		ret = esdhc_of_enable_dma(host);
-> +		if (ret)
-> +			return ret;
-> +
-
-This is already done by sdhci_resume_host(), which assumes there can be no
-error if DMA has been enabled previously i.e. -> enable_dma() is called
-at setup and the return value checked then.  If it is possible that DMA
-support can disappear later, then it would be better to address that in
-SDHCI so that all SDHCI drivers get the benefit.
-
->  		sdhci_writel(host, esdhc_proctl, SDHCI_HOST_CONTROL);
->  	}
->  	return ret;
+>  		status = ccg_write(uc, CCGX_RAB_INTR_REG, &data, sizeof(data));
+> -- 
+> 2.25.1
 > 
 
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

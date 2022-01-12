@@ -2,71 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C99D648C82E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7B748C830
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355130AbiALQWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
+        id S1355153AbiALQW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:22:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243649AbiALQWE (ORCPT
+        with ESMTP id S1343583AbiALQWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:22:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC4EC06173F;
-        Wed, 12 Jan 2022 08:22:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC17061A14;
-        Wed, 12 Jan 2022 16:22:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A9CCC36AEA;
-        Wed, 12 Jan 2022 16:22:00 +0000 (UTC)
-Date:   Wed, 12 Jan 2022 11:21:59 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tao Zhou <tao.zhou@linux.dev>, Ingo Molnar <mingo@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        John Kacur <jkacur@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [for-next][PATCH 16/31] rtla: Real-Time Linux Analysis tool
-Message-ID: <20220112112159.742d258c@rorschach.local.home>
-In-Reply-To: <5f04540c-273a-c4f2-692d-9de2f1495ba9@kernel.org>
-References: <20220111173030.999527342@goodmis.org>
-        <20220111173116.190327559@goodmis.org>
-        <5f04540c-273a-c4f2-692d-9de2f1495ba9@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 12 Jan 2022 11:22:24 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C54C06173F;
+        Wed, 12 Jan 2022 08:22:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=73ISc36zHOBbEPIhT2sXi6cBIDsEirS073hxwaFHAkc=; b=Gm6sjutaovbsmQFVS4tBvsnKqR
+        klDEQUdaJ6DZADSOFORP17pQvvGEMWoxOCyEVojQcTlTy6kvEnAngUEzvibTR+9DMV9X6OK62Nmxt
+        JgHaj3CX7PdXieVCE8GDYvMiUHjm6RTdLbHcOFxSsflS3dqM6wdckF8c+cEvbD4MXnwXwCQgrMgy4
+        9AuvHGGUNivKYA0KOPwC6d4aGWu52WQnKxQ/Cd8bGeM5SMlEe0PsLy0f/uRsZ93VfDdGZyw+IBpME
+        y4uCLrMcba/hmWMKXHfeoyXP/Zj0eSSPiyruXjKvIPxJ4i9vShbdvK3teHdoBDwjBLucKuXKA5lzU
+        79xtOZYw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7gOC-000pSp-Db; Wed, 12 Jan 2022 16:22:20 +0000
+Message-ID: <0ccb377d-0073-9e3b-758d-441747002f6f@infradead.org>
+Date:   Wed, 12 Jan 2022 08:22:14 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v2] firmware_loader: simplfy builtin or module check
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, gregkh@linuxfoundation.org,
+        bp@suse.de
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Masahiro Yamada <masahiroy@kernel.org>
+References: <20220112160053.723795-1-mcgrof@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220112160053.723795-1-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jan 2022 12:15:13 +0100
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
 
-> > Link: https://lkml.kernel.org/r/f59acda8bc513c4a6c279a9bc3ad112a20690e68.1638182284.git.bristot@kernel.org  
+
+On 1/12/22 08:00, Luis Chamberlain wrote:
+> The existing check is outdated and confuses developers. Use the
+> already existing IS_REACHABLE() defined on kconfig.h which makes
+> the intention much clearer.
+
+Yes.
+
+> Reported-by: Borislav Petkov <bp@alien8.de>
+> Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+
+Ackd-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  include/linux/firmware.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Thanks for picking RTLA!
-> 
-> Just one problem, you are picking the V8, but we actually had a V9:
->   https://lore.kernel.org/lkml/cover.1639158831.git.bristot@kernel.org/
+> diff --git a/include/linux/firmware.h b/include/linux/firmware.h
+> index 3b057dfc8284..ec2ccfebef65 100644
+> --- a/include/linux/firmware.h
+> +++ b/include/linux/firmware.h
+> @@ -34,7 +34,7 @@ static inline bool firmware_request_builtin(struct firmware *fw,
+>  }
+>  #endif
+>  
+> -#if defined(CONFIG_FW_LOADER) || (defined(CONFIG_FW_LOADER_MODULE) && defined(MODULE))
+> +#if IS_REACHABLE(CONFIG_FW_LOADER)
+>  int request_firmware(const struct firmware **fw, const char *name,
+>  		     struct device *device);
+>  int firmware_request_nowarn(const struct firmware **fw, const char *name,
 
-Strange. I should have picked it up from Patchwork.
-
-https://patchwork.kernel.org/project/linux-trace-devel/list/?series=604588
-
-Not sure how that happened. As it's not kernel code, I may rebase to
-fix it.
-
--- Steve
+-- 
+~Randy

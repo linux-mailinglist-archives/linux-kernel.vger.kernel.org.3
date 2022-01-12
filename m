@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C39A448BE8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 07:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F41848BE85
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 07:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350980AbiALGX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 01:23:58 -0500
-Received: from out162-62-57-87.mail.qq.com ([162.62.57.87]:51315 "EHLO
-        out162-62-57-87.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231773AbiALGX4 (ORCPT
+        id S1350967AbiALGRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 01:17:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348303AbiALGRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 01:23:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1641968626;
-        bh=AFpLSdr37ru0LWxmAPC73QLpfj5oiuYqjThjLb9wsxw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=nnm9oAsnIHYCERrPtMHi18826hTqthXYw7IRFsS7rMc4cjxxpxbXbGg0oGe2ubw9x
-         m44lEd+Q/bmMvI8CGON6ZongK3JaF0kWlmhHWRp61taGA8rA7ruT3AhMGgXhYrs+Ie
-         bg39nTl1biVaFDfUZNFtAUT0fLUngU9ZANLEDDr4=
-Received: from localhost ([119.32.47.91])
-        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
-        id 41BB8A76; Wed, 12 Jan 2022 14:16:27 +0800
-X-QQ-mid: xmsmtpt1641968187tlvhrscib
-Message-ID: <tencent_236C8935F1179CB3D1788CBF3B179494D60A@qq.com>
-X-QQ-XMAILINFO: NhDhJCJPIfnTDcnTznCD9f89oc8Kla5y5v2MzY6O6cSG9gIiK9IrdR1D2zyAdn
-         0eevOWM0Gzp1keStWW2+1yuPnFR55xMhbf4VE/VnKMqNPaoxt8WVVPzOuWO8QkM5LrHjlxav/STa
-         NLaSIsTmak/NjAw41rodE0av49y7UgoIO9hdmnFVjKxqc37FSLHsNkM+c8g9DmI1gE+/6qMuGeoY
-         UjC9CkpgJJCWNVroOiv1aMvWX73iuGSnHsFJi6jTcVmQvDDF6SBAXvvJ/nMlXI7WdSZJ29Weh4sr
-         Fy9iEuvugRh4LbhP3JFnl+dFRzmlzNIAlNlcgWc1r4JXUmFYrTQO7buYKnXSlhbQiSdtGXbQj+tZ
-         bbcwdLcD15F1tMX+aJJ1GOYfe5flcx4bVJYbE1IT0rZmUycWtxau0MV5mCVPJrovk3MMhKTzz13C
-         Rhto0xY+wTqzl22lpJrFuG5OOhhV7hhYcofvpCqqS3yQqHtIu8vcstrC3MKi/Rukc/NpAAiI9Aw/
-         kXl9hQTS2yfDTZf97PPzb37VW9pdEoQYkaIwC8HJQ69QmX13ofWx9SQ9MqgXYOoQ2KiCdcWTuv7l
-         lhpc6stePTGrBece03FyX3cBhPpyiLjEVvYdyRe76WIo/+2+mZic2oUAk2gV2zsYRo+qYUghoB9e
-         gqSuFePvAniIjalpy3FqaP/qWcePpd/i3ylWDx7mC9NYOs4ttbaC0mPLeTk3IKepXrBeAyeWM+TZ
-         eDOSlPZTcUcJlGJzs3htjwYWZ2wERUqR3fkJfGB5XMw+U9jVV7Ik4T4N96dY4hjMQ7kqPYQqRs9s
-         jowG9PHQa4WCLVDQ/ua2h4SdTSm3iEetG+h2PMmcSnJ0qkN87OJPbzq/mMVpVFlIVpLrW1ryW2NA
-         ==
-Date:   Wed, 12 Jan 2022 14:16:27 +0800
-From:   Conley Lee <conleylee@foxmail.com>
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
-        wens@csie.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] net: ethernet: sun4i-emac: replace magic number with
- macro
-X-OQ-MSGID: <Yd5yO0+T+q9gBYlj@fedora>
-References: <tencent_58B12979F0BFDB1520949A6DB536ED15940A@qq.com>
- <tencent_71466C2135CD1780B19D7844BE3F167C940A@qq.com>
- <Yd2xC7ZaHrTAXcZd@Red>
+        Wed, 12 Jan 2022 01:17:02 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6D6C06173F;
+        Tue, 11 Jan 2022 22:17:01 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JYclv6r89z4xtf;
+        Wed, 12 Jan 2022 17:16:59 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641968220;
+        bh=yFi+3KXhMq7UG+Oe03QV8m3EOvDsRHxHoOi6GM6dX30=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=V14is3/hiYMJkQeGu/t+nG5lJGMIZHG2KO4CwoVvIjs3T2/cRc1D2wha8ilUmu36n
+         gNnxQudDtE8BsR7VlM4adDXeWA5ZyFVkawjY3fvav+LRUyuBuUsrCKOuaDRB0OlDH4
+         oYRYVlIG1fAma6h4cUhbO85/H2ivveUkIuU5qNAm2hXYv5nvJxgiRcO163D3zVcbed
+         T7Y1VeAC9xrUyYuUntw+h/O50cvWHglW2pVxIASZMwl6dfn/XglBZkMn2ELQ/1s/Ld
+         X43tXPP6ajT9dtTpSxcwDJOOvQH2GypCLPWcXiqMXMTrjeMAwhNXf4hLMZqnetbF24
+         W02kgYej+uv9A==
+Date:   Wed, 12 Jan 2022 17:16:59 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        kajoljain <kjain@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the perf tree
+Message-ID: <20220112171659.531d22ce@canb.auug.org.au>
+In-Reply-To: <Yd3+M+efH6bTEpP9@kernel.org>
+References: <20220106091921.3fa617bc@canb.auug.org.au>
+        <6623bc13-d99c-74c1-29c8-b4ae7a570d99@linux.ibm.com>
+        <20220112084553.2aa71f08@canb.auug.org.au>
+        <Yd3+M+efH6bTEpP9@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yd2xC7ZaHrTAXcZd@Red>
+Content-Type: multipart/signed; boundary="Sig_/T3JOs1KmPuGJiVn25L_X9u1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/11/22 at 05:32下午, Corentin Labbe wrote:
-> Date: Tue, 11 Jan 2022 17:32:11 +0100
-> From: Corentin Labbe <clabbe.montjoie@gmail.com>
-> To: Conley Lee <conleylee@foxmail.com>
-> Cc: davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
->  wens@csie.org, netdev@vger.kernel.org,
->  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v3] net: ethernet: sun4i-emac: replace magic number
->  with macro
-> 
-> Le Tue, Jan 11, 2022 at 11:05:53AM +0800, Conley Lee a écrit :
-> > This patch remove magic numbers in sun4i-emac.c and replace with macros
-> > defined in sun4i-emac.h
-> > 
-> > Signed-off-by: Conley Lee <conleylee@foxmail.com>
-> 
-> Hello
-> 
-> I sent a CI job witch next-20220107+yourpatch and saw no regression.
-> 
-> Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-> Tested-on: sun4i-a10-olinuxino-lime
-> 
-> Thanks!
-> Regards
-> 
-Could you please provide more information about it ? I test it on my
-marsboard-a20 and everything work well.
+--Sig_/T3JOs1KmPuGJiVn25L_X9u1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks 
+Hi Arnaldo,
+
+On Tue, 11 Jan 2022 19:01:23 -0300 Arnaldo Carvalho de Melo <acme@kernel.or=
+g> wrote:
+>
+> Yeah, this patch shouldn't have been merged thru the perf _tools_ tree,
+> my bad, it should have gone thru Michael PPC kernel tree.
+>=20
+> It was a single series mixing up tools/ with kernel bits, I thought I
+> had picked just the tools part but made a mistake.
+>=20
+> This should get resolved when the rest of the kernel bits go via
+> Michael's powerpc tree, right?
+
+I just re merged the perf tree on top of the reste of linux-next and it
+builds fine.  So I guess you need to wait until after the powerpc tree
+has been merged before sending your pull request (or revert the
+offending commit(s)).
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/T3JOs1KmPuGJiVn25L_X9u1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHeclsACgkQAVBC80lX
+0GzXkQf1EdG0TaroyZNyzbSgam1A7k8ERp13NZSY5Alpr06WhD+0kyAMXTIDEhXx
+Hgl4Eep5tLg9AWv9rpgF3vHqQZGCuQ1kRBJfY1viNaXzq+p0T1Q+Elne3uvaF6+g
+BiURYXeYViW6zWPk4QvKIwBZIH6zCdqummAtH059rOnr4yoqOnqq4NVeo1rG1l1D
+ybO7ZNNoxn5TVh7ieSMO+cQCJ4YOOZM5zobKzQUODWg9Gl9245S/Xj0/qNEpKXRs
+LmuXBuFEuWx1jydc6Do3NhP+koEbIpmWhMvNkr5lOz+ia87ynIEpUzhv93YGMkv1
+M2J9CtfJGdH9xSDT+HjxDXl+fRrS
+=cVRW
+-----END PGP SIGNATURE-----
+
+--Sig_/T3JOs1KmPuGJiVn25L_X9u1--

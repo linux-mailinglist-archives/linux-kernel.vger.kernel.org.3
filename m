@@ -2,128 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8B448CA9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FE948CAA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356023AbiALSGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 13:06:45 -0500
-Received: from foss.arm.com ([217.140.110.172]:34186 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355976AbiALSGb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:06:31 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7D5D86D;
-        Wed, 12 Jan 2022 10:06:30 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9669C3F766;
-        Wed, 12 Jan 2022 10:06:29 -0800 (PST)
-Date:   Wed, 12 Jan 2022 18:06:27 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 0/5] PCI: mt7621: Remove specific MIPS code from driver
-Message-ID: <20220112180627.GB1319@lpieralisi>
-References: <20211207104924.21327-1-sergio.paracuellos@gmail.com>
- <CAMhs-H886ZPZED-qmMtZcWFabRLNL14Y7SSz_Ko7d45zXL+v2w@mail.gmail.com>
+        id S1356036AbiALSHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 13:07:09 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:37714 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356020AbiALSHH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 13:07:07 -0500
+Received: by mail-il1-f197.google.com with SMTP id l15-20020a056e021aaf00b002b7ed7d8cb4so1650567ilv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:07:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=4qfyyc8d8t6HSYNLIhDajcHWDIP5czgFUKxiWdgZZuo=;
+        b=wb1JKaRbFb4/e8S8mbASxcKjqdtFkvyCbp5wpWzUUdz4tq17Ob2mMNrX8rgVMTPW2f
+         W5guYK00luPeqUgdeVfB39w4Eu1xClqGJjLK5+2PnP3haWLpdIjKr3kLjmQNvRkjXINL
+         AbMMueW/iXt0YZafvOYeJ78f+pnvgWr58hyHDMWwFlacSYm4QcJYxI0CKJRihblx3fMP
+         pWz0gS7nsuddSjQg8FyzVGyXRgQVeInXc1mqrbJi69eVoNdfGOWo1A4RHPCcxe+b3F8m
+         0Uf3yRWkdl8GqyWUAegHd16PGPYPOtnba6VCsqBJEn9+BWEZ4tJUXozWHLjMii/YBwxr
+         akAQ==
+X-Gm-Message-State: AOAM530lSx1ePuRRuM/HgK9uO1JYBTeMnYnLPHs7RWT4d9UnDoOl890q
+        pDsAZyiTFcHrnkwe6TsxHgQKbkbtUGs/wO/g325gmEz6wo5T
+X-Google-Smtp-Source: ABdhPJypiq3WNQhaEDkIOaecF5zA0hAxEGuLf4XczFian/Ud6RPY4l9/xIPbalhaOGaw8NUbxN6HUozucfb4pNbwD+xvQf1HCkcn
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMhs-H886ZPZED-qmMtZcWFabRLNL14Y7SSz_Ko7d45zXL+v2w@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Received: by 2002:a05:6602:1490:: with SMTP id a16mr491280iow.30.1642010826998;
+ Wed, 12 Jan 2022 10:07:06 -0800 (PST)
+Date:   Wed, 12 Jan 2022 10:07:06 -0800
+In-Reply-To: <000000000000c1524005cdeacc5f@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000f890905d56670f5@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in veth_xdp_rcv
+From:   syzbot <syzbot+67f89551088ea1a6850e@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, fgheet255t@gmail.com,
+        hawk@kernel.org, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, toke@redhat.com, toke@toke.dk,
+        yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 03:42:56PM +0100, Sergio Paracuellos wrote:
-> Hi Bjorn, Lorenzo,
-> 
-> On Tue, Dec 7, 2021 at 11:49 AM Sergio Paracuellos
-> <sergio.paracuellos@gmail.com> wrote:
-> >
-> > Hi all,
-> >
-> > MIPS specific code can be removed from driver and put into ralink mt7621
-> > instead which is a more accurate place to do this. To make this possible
-> > we need to have access to 'bridge->windows' in 'pcibios_root_bridge_prepare()'
-> > which has been implemented for ralink mt7621 platform (there is no real
-> > need to implement this for any other platforms since those ones haven't got
-> > I/O coherency units). This also allow us to properly enable this driver to
-> > completely be enabled for COMPILE_TEST. This patchset appoarch:
-> > - Move windows list splice in 'pci_register_host_bridge()' after function
-> >   'pcibios_root_bridge_prepare()' is called.
-> > - Implement 'pcibios_root_bridge_prepare()' for ralink mt7621.
-> > - Avoid custom MIPs code in pcie-mt7621 driver.
-> > - Add missing 'MODULE_LICENSE()' to pcie-mt7621 driver to avoid compile test
-> >   module compilation to complain (already sent patch from Yanteng Si that
-> >   I have rewrite commit message and long description a bit.
-> > - Remove MIPS conditional code from Kconfig and mark driver as 'tristate'.
-> >
-> > This patchset is a real fix for some errors reported by Kernel Test Robot about
-> > implicit mips functions used in driver code and fix errors in driver when
-> > is compiled as a module [1] (mips:allmodconfig).
-> >
-> > Changes in v3:
-> >  - Rebase the series on the top of the temporal fix sent for v5.16[3] for
-> >    the module compilation problem.
-> >  - Address review comments from Guenter in PATCH 2 (thanks Guenter!):
-> >     - Address TODO in comment about the hardware does not allow zeros
-> >       after 1s for the mask and WARN_ON if that's happend.
-> >     - Be sure mask is real valid upper 16 bits.
-> 
-> What are your plans for this series? Can we merge this?
+syzbot suspects this issue was fixed by commit:
 
-I was waiting for an ACK on patch (2) since it affects MIPS code.
+commit 2cbad989033bff0256675c38f96f5faab852af4b
+Author: Paolo Abeni <pabeni@redhat.com>
+Date:   Tue Nov 30 10:08:06 2021 +0000
 
-It would also be great if Bjorn reviewed it to make sure he agrees
-with the approach.
+    bpf: Do not WARN in bpf_warn_invalid_xdp_action()
 
-I think it is too late for this cycle, apologies, there is a significant
-review backlog.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14e9e1ddb00000
+start commit:   252c765bd764 riscv, bpf: Add BPF exception tables
+git tree:       bpf-next
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f60548b4c38ae4a8
+dashboard link: https://syzkaller.appspot.com/bug?extid=67f89551088ea1a6850e
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1797fcf2b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e71f9f300000
 
-Lorenzo
+If the result looks correct, please mark the issue as fixed by replying with:
 
-> Best regards,
->     Sergio Paracuellos
-> 
-> >
-> > Changes in v2:
-> >  - Collect Acked-by from Arnd Bergmann for PATCH 1.
-> >  - Collect Reviewed-by from Krzysztof Wilczyński for PATCH 4.
-> >  - Adjust some patches commit subject and message as pointed out by Bjorn in review of v1 of the series[2].
-> >
-> > This patchset is the good way of properly compile driver as a module removing
-> > all MIPS specific code into arch ralink mt7621 place. To avoid mips:allmodconfig reported
-> > problems for v5.16 the following patch has been sent[3]. This series are rebased onto this patch to provide
-> > a real fix for this problem.
-> >
-> > [0]: https://lore.kernel.org/linux-mips/CAMhs-H8ShoaYiFOOzJaGC68nZz=V365RXN_Kjuj=fPFENGJiiw@mail.gmail.com/T/#t
-> > [1]: https://lkml.org/lkml/2021/11/14/436
-> > [2]: https://lore.kernel.org/r/20211115070809.15529-1-sergio.paracuellos@gmail.com
-> > [3]: https://lore.kernel.org/linux-pci/20211203192454.32624-1-sergio.paracuellos@gmail.com/T/#u
-> >
-> > Thanks in advance for your time.
-> >
-> > Best regards,
-> >    Sergio Paracuellos
-> >
-> > Sergio Paracuellos (5):
-> >   PCI: Let pcibios_root_bridge_prepare() access to 'bridge->windows'
-> >   MIPS: ralink: implement 'pcibios_root_bridge_prepare()'
-> >   PCI: mt7621: Avoid custom MIPS code in driver code
-> >   PCI: mt7621: Add missing 'MODULE_LICENSE()' definition
-> >   PCI: mt7621: Allow COMPILE_TEST for all arches
-> >
-> >  arch/mips/ralink/mt7621.c            | 31 ++++++++++++++++++++++
-> >  drivers/pci/controller/Kconfig       |  4 +--
-> >  drivers/pci/controller/pcie-mt7621.c | 39 ++--------------------------
-> >  drivers/pci/probe.c                  |  4 +--
-> >  4 files changed, 37 insertions(+), 41 deletions(-)
-> >
-> > --
-> > 2.33.0
-> >
+#syz fix: bpf: Do not WARN in bpf_warn_invalid_xdp_action()
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

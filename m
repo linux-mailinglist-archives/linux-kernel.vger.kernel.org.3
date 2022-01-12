@@ -2,96 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B8848CD30
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B0748CD35
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357703AbiALUme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 15:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
+        id S1344640AbiALUnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 15:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242076AbiALUmZ (ORCPT
+        with ESMTP id S242076AbiALUn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 15:42:25 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F68BC06173F;
-        Wed, 12 Jan 2022 12:42:25 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id l15so5949281pls.7;
-        Wed, 12 Jan 2022 12:42:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HO7qMaYrtwZh1fXZ2JialerphvW3Ld7mXY4ozQ74kp8=;
-        b=T//gm9B2hHMRxudRJ5GrIEq6vQlBYHNIMACX99yWLgykrZKNX5UGa2PRk/IKsheR9g
-         SWsPtR+wGtZy0Blm7u2k70b9UNWVcT/RT09nQceitwss3Y5RfmnBn6zAjT7l60cTCdXt
-         iZQrIaOMIfkVahpM0KMcnLkUCH5L+MTWJZMExT952E4p5H3TMJIEzmpAYFQgCLChvT+z
-         KgOhRQ+jgbOZe3oAFhAcNabmstwsLyXc5p1cyFMrEsK4i1iYf4DUxdzvsHp03iqY0jG4
-         OucI73fRpoq/TsjOvrQBp6OGrF4X+l4m5tzLK6hHSeqkuXV2AWYjJRZLrmeGcWRZz98E
-         JINA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=HO7qMaYrtwZh1fXZ2JialerphvW3Ld7mXY4ozQ74kp8=;
-        b=nzDUJVcOK3Tlxk+yaluscdF7yMBU15Gf7sl3G5JJAPFJ5Y7HYz/lElzhUDO14ghn4a
-         JLiVRMMk9SEWdU6jDul2e+kPWfbqmC4oF/PAQefy05IY5KiYpzjNkKkz0OUi101OAR2R
-         ahq1sBTZueELoy1UamyWJ1Y3Cw5W2wm8MngjUl3rXXHDq66qmNm4kS+SdSKB+Odut+ZW
-         KpSvwj7gB5vvqKgrfVJ/c2RNYqsQculHt2mH1VcxVkoBOxjXdyIitcO5agTOwusyRlIZ
-         2VrUNrPypBULVfakEuh3kBH4nJBOxjsobRspVKPMACdEfds7+aJmshzTIOMBMkyLTVzb
-         5kqg==
-X-Gm-Message-State: AOAM5301V+CjJiPDL+My0IhlSNzk71hHc6yXnTVGNwISqnuupibrcE0W
-        czhXSwFIsQYs55RJYRxRlncix4uskn+WWQ==
-X-Google-Smtp-Source: ABdhPJzLS6XwzXazPOo/ws/RqiqAsQqeHOGmR3WO1ZRJ2o73zL9HFfGixxuVnhAWWPfUUYnr0Q8Puw==
-X-Received: by 2002:a63:b245:: with SMTP id t5mr1194847pgo.388.1642020144614;
-        Wed, 12 Jan 2022 12:42:24 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id s35sm422950pfw.193.2022.01.12.12.42.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 12:42:24 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 12 Jan 2022 10:42:22 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Cruz Zhao <CruzZhao@linux.alibaba.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, joshdon@google.com, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] sched/core: Force idle accounting per cgroup
-Message-ID: <Yd89Lv3VuaaFVm4h@slm.duckdns.org>
-References: <1641894961-9241-1-git-send-email-CruzZhao@linux.alibaba.com>
- <1641894961-9241-4-git-send-email-CruzZhao@linux.alibaba.com>
+        Wed, 12 Jan 2022 15:43:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAD1C06173F;
+        Wed, 12 Jan 2022 12:43:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD8CC61997;
+        Wed, 12 Jan 2022 20:43:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 354DCC36AE9;
+        Wed, 12 Jan 2022 20:43:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642020208;
+        bh=Ac7uCpPE99DsSqddUNSny/kXs/+W3vMP+9SzM1bqi5Y=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=KvltawUOr6vMDJKKeqdbhvC9zFgQ9x13wrlLoHrp7wdqTbt/r2BGtNHmxUuIoDdcd
+         XjP+voQsPddNiYsdKxKcEBTFTTmeBeJZEyYahCS9hZKwYRuLAEUmYEzrJF96qedEni
+         evXKJKMGxDt8iiBAGXFUaA0UIPrxJ4ExI4Ik6wqN/jkm7/aJ6CRkEpn4FpAVN1bQ0K
+         hMLxVwNokR9tTO6nGCtQtVAvCvSycyYqnSl7Hw8b2nXZGvDl1owyPX7+ix4tmSDTQU
+         tOkbNk1zekdWfVziiBaSdSRTwn1WFZ+nc2VO8Aj6E7Vk2oNYeD1DB85GXrgPueS5d2
+         AhZtzJ+IUOzEQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1641894961-9241-4-git-send-email-CruzZhao@linux.alibaba.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211215060019.441549-1-chi.minghao@zte.com.cn>
+References: <20211215060019.441549-1-chi.minghao@zte.com.cn>
+Subject: Re: [PATCH clk-next] drivers/clk: remove redundant result variable
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     pgaikwad@nvidia.com, mturquette@baylibre.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+To:     cgel.zte@gmail.com, pdeschrijver@nvidia.com
+Date:   Wed, 12 Jan 2022 12:43:25 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20220112204328.354DCC36AE9@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Please fix the subject to include tegra
 
-On Tue, Jan 11, 2022 at 05:56:01PM +0800, Cruz Zhao wrote:
-> +#ifdef CONFIG_SCHED_CORE
-> +void cpuacct_account_forceidle(int cpu, struct task_struct *tsk, u64 cputime)
-> +{
-> +	struct cpuacct *ca;
-> +	u64 *fi;
-> +
-> +	rcu_read_lock();
-> +	/*
-> +	 * We have hold rq->core->__lock here, which protects ca->forceidle
-> +	 * percpu.
-> +	 */
-> +	for (ca = task_ca(tsk); ca; ca = parent_ca(ca)) {
-> +		fi = per_cpu_ptr(ca->forceidle, cpu);
-> +		*fi += cputime;
-> +	}
+$ git log --oneline -2 -- drivers/clk/tegra
+b1bc04a2ac5b clk: tegra: Support runtime PM and power domain
+e360e116a0ee clk: tegra: Make vde a child of pll_p on tegra114
 
-Please don't do this. Use rstat and integrate it with other stats.
-
-Thanks.
-
--- 
-tejun
+Quoting cgel.zte@gmail.com (2021-12-14 22:00:19)
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+>=20
+> Return value from FIELD_GET() directly instead
+> of taking this in another redundant variable.
+>=20
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>

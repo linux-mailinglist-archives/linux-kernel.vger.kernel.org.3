@@ -2,109 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5228C48C694
+	by mail.lfdr.de (Postfix) with ESMTP id BF1E448C695
 	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354368AbiALOzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:55:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240344AbiALOzt (ORCPT
+        id S1354375AbiALO4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:56:02 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:35826 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354371AbiALO4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:55:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E909C06173F;
-        Wed, 12 Jan 2022 06:55:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 12 Jan 2022 09:56:01 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1475FB81F4A;
-        Wed, 12 Jan 2022 14:55:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3CE5C36AE5;
-        Wed, 12 Jan 2022 14:55:43 +0000 (UTC)
-Date:   Wed, 12 Jan 2022 15:55:40 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        David Laight <David.Laight@ACULAB.COM>,
-        carlos <carlos@redhat.com>
-Subject: Re: [RFC PATCH v2 1/2] rseq: x86: implement abort-at-ip extension
-Message-ID: <20220112145540.6mzkqx6qmy2e2rcz@wittgenstein>
-References: <20220110171611.8351-1-mathieu.desnoyers@efficios.com>
- <20220111110556.inteixgtl5vpmka7@wittgenstein>
- <1626924888.21447.1641922985771.JavaMail.zimbra@efficios.com>
- <20220112084617.32bjjo774n7vvyct@wittgenstein>
- <1475639366.24565.1641998849957.JavaMail.zimbra@efficios.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EDE722113A;
+        Wed, 12 Jan 2022 14:55:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1641999359; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5KSUB5kk6nqxyfWFyV07yS90dxBEdeusq9/dOu6x3jE=;
+        b=l/xiyL8QrWWgcg71BMnXFzBYFg1IlHLPgU1TngGuuVcjuCRidcqSKgkdiURr9OCmM/S8Mz
+        yW5vpZpRGS3452NJlNPMWOtgLO1gB9/bZY02dquRSlN+ZaESF51baJKn5t8e7S62jnpUPP
+        7Ugi2zWPLYCm7N4nK9ghIxWuHZnGqQQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1641999359;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5KSUB5kk6nqxyfWFyV07yS90dxBEdeusq9/dOu6x3jE=;
+        b=DXlVaQErcO2qUlP5shtCFtZwdL197gN301t5uJHizZrhYjsqtdJy4MqtyK1PCrTjSjjnOh
+        Iw+DKH6oq3uAHgAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9EAC613B70;
+        Wed, 12 Jan 2022 14:55:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8YT5Jf/r3mF7DwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 12 Jan 2022 14:55:59 +0000
+Message-ID: <7bd61a52-57ef-04e4-6298-039308bb8f86@suse.cz>
+Date:   Wed, 12 Jan 2022 15:55:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1475639366.24565.1641998849957.JavaMail.zimbra@efficios.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-18-Liam.Howlett@oracle.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v4 17/66] mmap: Change zeroing of maple tree in
+ __vma_adjust
+In-Reply-To: <20211201142918.921493-18-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 09:47:29AM -0500, Mathieu Desnoyers wrote:
-> ----- On Jan 12, 2022, at 3:46 AM, Christian Brauner christian.brauner@ubuntu.com wrote:
+On 12/1/21 15:29, Liam Howlett wrote:
+> Only write to the maple tree if we are not inserting or the insert isn't
+> going to overwrite the area to clear.  This avoids spanning writes and
+> node coealescing when unnecessary.
 > 
-> > On Tue, Jan 11, 2022 at 12:43:05PM -0500, Mathieu Desnoyers wrote:
-> [...]
-> >> >> + *
-> >> >> + * rseq critical sections defined with the RSEQ_CS_FLAG_ABORT_AT_IP flag
-> >> >> + * have the following behavior on abort: when the stack grows down: the
-> >> >> + * stack pointer is decremented to skip the redzone, and decremented of
-> >> >> + * the pointer size.  The aborted address (abort-at-ip) is stored at
-> >> >> + * this stack pointer location.  The user-space abort handler needs to
-> >> >> + * pop the abort-at-ip address from the stack, and add the redzone size
-> >> >> + * to the stack pointer.
-> >> >> + *
-> >> >> + * TODO: describe stack grows up.
-> >> > 
-> >> > Is this intentional or did you forget? :)
-> >> 
-> >> Since I did not implement abort-at-ip on stack-grows-up architectures, I felt
-> >> it would be too early to describe the algorithm. I can simply remove the TODO
-> >> altogether and we'll take care of it when we get there ? If I had to try to
-> >> wordsmith it, it would look like e.g.:
-> >> 
-> >>  *                                    [...] When the stack grows up: the
-> >>  * stack pointer is incremented to skip the redzone, and incremented of
-> >>  * the pointer size.  The aborted address (abort-at-ip) is stored immediately
-> >>  * under this stack pointer location.  The user-space abort handler needs to
-> >>  * pop the abort-at-ip address from the stack, and subtract the redzone size
-> >>  * from the stack pointer.
-> >> 
-> >> [ Please let me know if I got somehow confused in my understanding of stack
-> >> grows
-> >> up architectures. ]
-> >> 
-> >> I'm also unsure whether any of the stack grows up architecture have redzones ?
-> > 
-> > I don't think so? From when I last touched that piece of arch code when
-> > massaging copy_thread() I only remember parisc as having an upwards
-> > growing stack.
-> > 
-> >> From a quick grep for redzone in Linux arch/, only openrisc, powerpc64 and
-> > > x86-64 appear to have redzones.
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> ---
+>  mm/mmap.c | 21 +++++++++++++--------
+>  1 file changed, 13 insertions(+), 8 deletions(-)
 > 
-> I figured it was kind of silly to special-case arch-agnostic comments for stack
-> grows up/down, how about the following instead ?
-> 
->  * rseq critical sections defined with the RSEQ_CS_FLAG_ABORT_AT_IP flag
->  * have the following behavior on abort: the stack pointer is adjusted to
->  * skip over the redzone [*], and the aborted address (abort-at-ip) is pushed
->  * at this stack pointer location.  The user-space abort handler needs to pop
->  * the abort-at-ip address from the stack, and adjust the stack pointer to skip
->  * back over the redzone.
->  *
->  * [*] The openrisc, powerpc64 and x86-64 architectures define a "redzone" as a
->  *     stack area beyond the stack pointer which can be used by the compiler
->  *     to store local variables in leaf functions.
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 93ed19b2c6ce..c5f92666d145 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -615,6 +615,7 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
+>  	bool vma_changed = false;
+>  	long adjust_next = 0;
+>  	int remove_next = 0;
+> +	unsigned long old_start;
+>  
+>  	if (next && !insert) {
+>  		struct vm_area_struct *exporter = NULL, *importer = NULL;
+> @@ -740,25 +741,29 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
+>  			vma_interval_tree_remove(next, root);
+>  	}
+>  
+> +	old_start = vma->vm_start;
+>  	if (start != vma->vm_start) {
+> -		if (vma->vm_start < start)
+> -			vma_mt_szero(mm, vma->vm_start, start);
+> -		else
+> -			vma_changed = true;
+> +		vma_changed = true;
 
-Sounds good to me.
+This says vma_changed = true even if vma is shrinking, so below we might do
+an unnecessary vma_store(), no?
+
+>  		vma->vm_start = start;
+>  	}
+>  	if (end != vma->vm_end) {
+> -		if (vma->vm_end > end)
+> -			vma_mt_szero(mm, end, vma->vm_end);
+> -		else
+> +		if (vma->vm_end > end) {
+
+In contrast to the above, here vma_changed is only set when expanding
+('vma_expand' would be a more descriptive name maybe?). So why are the two
+cases handled differently, am I missing something?
+
+> +			if (!insert || (insert && (insert->vm_start != end)))
+
+Note: thanks to lazy evaluation, "insert &&" should be unnecessary?
+More importantly: is "insert->vm_start == end" a guarantee that insert
+covers the whole interval from end to vma->vm_end? Probably yes, but a
+VM_WARN_ON would be in order?
+
+> +				vma_mt_szero(mm, end, vma->vm_end);
+
+I guess it can't happen that insert would cover a later part of this
+interval, so we could zero only between end vna insert->vm_start?
+
+> +		} else
+>  			vma_changed = true;
+
+Same nit about { } block as previously.
+
+>  		vma->vm_end = end;
+>  		if (!next)
+>  			mm->highest_vm_end = vm_end_gap(vma);
+>  	}
+>  
+> -	if (vma_changed)
+> +	if (vma_changed) {
+>  		vma_store(mm, vma);
+> +		if (old_start < start) {
+> +			if (insert && (insert->vm_start != old_start))
+> +				vma_mt_szero(mm, old_start, start);
+
+This condition looks actively wrong, no zeroing at all if insert is NULL?
+
+> +		}
+> +	}
+>  
+>  	vma->vm_pgoff = pgoff;
+>  	if (adjust_next) {
+

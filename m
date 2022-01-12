@@ -2,87 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C066C48BEA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 07:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A094248BEA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 07:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351011AbiALGhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 01:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S1351019AbiALGk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 01:40:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbiALGhX (ORCPT
+        with ESMTP id S237188AbiALGk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 01:37:23 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9323EC06173F;
-        Tue, 11 Jan 2022 22:37:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=YqoElJ4gLoFxpMmqTr6DXyFLLJ3IMJmaBEiGkV4Xy7k=; b=TQAu79R/g92s8CNB5s5e4alPpz
-        m6gDq1emVz6gWBhx0RaZEJ4Fz1kXkIISiu3CC+JtDtXJ0qQ06SzIuCQQFSdQ2PHtzNfJY3POpNc9L
-        OpzfND/mvZpH88V6kSs5kGaBNUoUT2EUv0QIUmlQ9NSRCtv7ybw5WK1JXGSpdv+zsGSSv7X2qIpO1
-        vF8OBLJTbhq4YEcoW9hG5VA/SZXmmfuh4pErh12cHzyDc3x3H8LW9PYaydJrQv/ZOh7JxSXzgj/2j
-        6e3EYPH2kVlTVxDpkncsaN6Wgb310mWJpZInMmHDMF7eQcMYvCut6LBmwjWF+T9jJIX8GQg5syyVn
-        TN+vvm5A==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7XG1-000kZb-1C; Wed, 12 Jan 2022 06:37:17 +0000
-Message-ID: <3e721c69-afa9-6634-2e52-e9a9c2a89372@infradead.org>
-Date:   Tue, 11 Jan 2022 22:37:10 -0800
+        Wed, 12 Jan 2022 01:40:56 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CF0C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 22:40:55 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id q25so5857858edb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 22:40:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=j6hbyKol68wFX5iiymhuEQsHgpNKkmkI3FMm7bj3TOM=;
+        b=DEtq4nScoRmZpHDPIBFDzULWTmc5oEnWu0HWl9mQoRoTBM/ad+z67adCChiy1HP+pi
+         Mjg76DatHzF73HgPRTkNFeVunycvIIrnPHK779ME6ig3sk4t9yTZcHn++pQulQo1u6Og
+         DbWzyLfYG5f49VrhQgdqFb/MuIFgl/WUeFAQTGJl/LFgzVifoBOEP2obm0yPedSGnpyp
+         Pq5ybK7XZ5Da8x4DaO5dOZmka175e9kebZLXISJdscKlODyPDME40gTkt+O3Uk4IFQx6
+         zVUXDFXfWJ0mE6jE2Jmx7lUJt1hQmAE/k2d9KoTKwEwgt8g5+h/xsBMjs4qSLFRHaPwu
+         IdGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=j6hbyKol68wFX5iiymhuEQsHgpNKkmkI3FMm7bj3TOM=;
+        b=sVpDiwgTg2X6wbNlOuR9VTO40OqmJ03eZ0R8a4+8Y2B+BumuaiUa+yxn/h/9Z8Nx0J
+         k2Ydst2ZjnJ5493SpH233+igmWINtXBsRXtQzbQqGicWPex+AKNUydqvsfq6wEqi0w/m
+         XKZw3SujXkjNQfRY2p73nc67sLA+1GUU6KZN1RZw5gzF4O918u/gf73q27UqRIVctUPl
+         4x4lodcpO/yK283D/cRoBV+nrJSJ0FpODKwVMTFY4eITxiAWIx+6IqXKk933CDLsw45t
+         u25xLYizSd7ySIfzy1x45qADfZWZ5/hl1oR2nw7K63qWNXCx6oNlXI4i9801jdFZ1648
+         NSrg==
+X-Gm-Message-State: AOAM533Loxy5IYbzcsGQSVUoD8PtXtmhAYLvTHN9kqv0p5yM1+IkPBmO
+        EK0/lVvNhcMXzUG4OTrjiohd2g==
+X-Google-Smtp-Source: ABdhPJxFACxwQqohWAwzNyIFzdza3Go5zCu+23kAyqd4VttcVfMxPX4biC1GqarDCqok0lezkQ4qEQ==
+X-Received: by 2002:a50:d6d5:: with SMTP id l21mr7486410edj.69.1641969653736;
+        Tue, 11 Jan 2022 22:40:53 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([104.245.96.239])
+        by smtp.gmail.com with ESMTPSA id ck3sm1892109edb.36.2022.01.11.22.40.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 22:40:53 -0800 (PST)
+Date:   Wed, 12 Jan 2022 14:40:47 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@redhat.com>,
+        Balbir Singh <bsingharora@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, codalist@coda.cs.cmu.edu,
+        linux-audit@redhat.com
+Subject: Re: [PATCH v2 0/7] pid: Introduce helper task_is_in_root_ns()
+Message-ID: <20220112064046.GA3316542@leoy-ThinkPad-X240s>
+References: <20211208083320.472503-1-leo.yan@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] firmware_loader: simplfy builtin or module check
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>, gregkh@linuxfoundation.org,
-        bp@suse.de
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>
-References: <20220112023416.215644-1-mcgrof@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220112023416.215644-1-mcgrof@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208083320.472503-1-leo.yan@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi David,
 
-
-On 1/11/22 18:34, Luis Chamberlain wrote:
-> The existing check is outdated and confuses developers. Use the
-> already existing IS_ENABLED() defined on kconfig.h which makes
-> the intention much clearer.
+On Wed, Dec 08, 2021 at 04:33:13PM +0800, Leo Yan wrote:
+> The kernel uses open code to check if a process is in root PID namespace
+> or not in several places.
 > 
-> Reported-by: Borislav Petkov <bp@alien8.de>
-> Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  include/linux/firmware.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Suggested by Suzuki, this patch set is to create a helper function
+> task_is_in_init_pid_ns() to replace open code.
 > 
-> diff --git a/include/linux/firmware.h b/include/linux/firmware.h
-> index 3b057dfc8284..fa3493dbe84a 100644
-> --- a/include/linux/firmware.h
-> +++ b/include/linux/firmware.h
-> @@ -34,7 +34,7 @@ static inline bool firmware_request_builtin(struct firmware *fw,
->  }
->  #endif
->  
-> -#if defined(CONFIG_FW_LOADER) || (defined(CONFIG_FW_LOADER_MODULE) && defined(MODULE))
+> This patch set has been applied on the mainline kernel and built for
+> Arm64 kernel with enabling all relevant modules.
 
-The "defined(MODULE)" part wasn't needed here. :)
+I'd like sync for how to merging this patch set.  Except patch 05/07,
+all of other patches in this patch set have been received the reviewed
+or acked tags.  So could you pick up this patch set?
 
-> +#if IS_ENABLED(CONFIG_FW_LOADER)
->  int request_firmware(const struct firmware **fw, const char *name,
->  		     struct device *device);
->  int firmware_request_nowarn(const struct firmware **fw, const char *name,
+Furthermore, we have another patch set "coresight: etm: Correct PID
+tracing for non-root namespace" [1], which is dependent on the current
+patch set and it has been Acked by Suzuki.
 
--- 
-~Randy
+I'd like to get opinions from David and CoreSight maintainers Mathieu
+and Suzuki, should we merge the patch set [1] via David's tree as well
+to avoid dependency issue, or prefer to merge it via CoreSight tree?
+If David prefers the prior option, I can resend the patch set [1] with
+looping David.
+
+Thanks,
+Leo
+
+[1] https://lore.kernel.org/lkml/20211213121323.1887180-1-leo.yan@linaro.org/

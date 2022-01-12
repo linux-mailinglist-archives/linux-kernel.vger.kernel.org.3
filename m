@@ -2,720 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5DF48C95F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F14E48C965
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355673AbiALR2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 12:28:25 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:47054 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355584AbiALR1p (ORCPT
+        id S1355655AbiALRaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 12:30:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355606AbiALR3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 12:27:45 -0500
-Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:662a:d95e:24d7:7832])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1A3201288;
-        Wed, 12 Jan 2022 18:27:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642008462;
-        bh=JUDmXm68+J+lcdg2+zBOfwAt1GhWT5fRkTcBrl5ner4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qY1yAZXUDVunKGwDDqKoRbvNH72FHC+sTQgKslkoiSrA8NlFQYJ2eDL9Ok1PXNN+A
-         Bt+dpCSlucSbPac2HIj3YleY0/cxF/yJVs6GwBvii/2vCZD4ChCadnaVXYtkXYSoDQ
-         CPT6OvthNZX14mmYlR/DzFDodlniIdkFHcHO4NJs=
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     kernel-list@raspberrypi.com, mchehab@kernel.org,
-        dave.stevenson@raspberrypi.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        laurent.pinchart@ideasonboard.com, naush@raspberrypi.com,
-        lukasz@jany.st, devicetree@vger.kernel.org,
-        jeanmichel.hautbois@ideasonboard.com
-Subject: [RFC PATCH 3/3] media: imx219: Add support for multiplexed streams
-Date:   Wed, 12 Jan 2022 18:27:20 +0100
-Message-Id: <20220112172719.1178446-4-jeanmichel.hautbois@ideasonboard.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220112172719.1178446-1-jeanmichel.hautbois@ideasonboard.com>
-References: <20220112172719.1178446-1-jeanmichel.hautbois@ideasonboard.com>
+        Wed, 12 Jan 2022 12:29:18 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC44C0611FD
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:29:07 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id o3so5510817wrh.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:29:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=N9bf45Vsnql2DAZRfvEJqoNSxZBMQPHwxVGSKSDQy60=;
+        b=LZMJCz6XYFs2xNd0usdav4SY44jSwMDhV+wZi48FWWDR8PNdi35ImXXLXkzfPoKdjR
+         yTMTdllA5DXz4axM1bpqdZOpeTR3QqYyWbbHhGW06sDJaQKM0PSOSVuzAW5IdhWO1SB7
+         4Xnv7ZYzgw2M4cTa/RLrfgZeeUcX7XGifNDk/naRH2OGYgKszQPgc3Q54giuavbhQ3nW
+         s03lH2lPYuBrjcfDg8ac3vtU7VUJQbnCGh61PYxAqDwM8pF7VIn6QBs3DGQaTZ09L9WZ
+         Ptnq5hQ0f869WYnN5iFQWx2+rEk2pQHdsGR6cWYpfPlImyRJ/o+NJDsulJEUrP7/Zl0W
+         m3xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=N9bf45Vsnql2DAZRfvEJqoNSxZBMQPHwxVGSKSDQy60=;
+        b=EeasAvQ4v1Rlzn20ba6iJCJL70GRGpdD3qc6y8j7VJXyREfXsc3ZpC9Kh6Bwn40jFc
+         y7lCwyAtN5tqjDrSXJ3679bpGXZIxvQ4a3gltiy9DV9kC02v6l8qEEjJ7SE8Ad/zWzZL
+         N+CizMZBjcXP8jQrm61wPjoiMrJKwsVQGH3kT4qDhujhFAARldhl52iL4ACFxX95cHuA
+         KQ3gnYII6o1CsxEmNdTAkhDy5GRQOTToned9ngrZLIhz8U4wPS7JiRdkn641ToFM2D4s
+         UiV3dVRrwcyek1JdmM2XIimWoSDDQlmFDZL5jooWOaCfJbIhg9dEzxgxL04J6/Cf8J1x
+         fdew==
+X-Gm-Message-State: AOAM532B/uf2R0gU7WEUzgJynhILHl7CovXnYeuIf8B3R/3eGSXJSR3M
+        Nk1Myjj9ExSEMAXjWbV+cLHMUw==
+X-Google-Smtp-Source: ABdhPJyQ/XgEL7OqgBoSz4nyTl7HYSjbzplU/zIan0zUP3gSgEajSCNS8/OXImpkmE2kocFJlgBxkw==
+X-Received: by 2002:a5d:638c:: with SMTP id p12mr714359wru.80.1642008546166;
+        Wed, 12 Jan 2022 09:29:06 -0800 (PST)
+Received: from wychelm (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id h2sm340446wmb.12.2022.01.12.09.29.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 09:29:05 -0800 (PST)
+Date:   Wed, 12 Jan 2022 17:29:03 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v5 08/10] ARM: uaccess: add __{get,put}_kernel_nofault
+Message-ID: <Yd8P37V/N9EkwmYq@wychelm>
+References: <20210726141141.2839385-1-arnd@kernel.org>
+ <20210726141141.2839385-9-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210726141141.2839385-9-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As of now, imx219 was not supporting anything more than one stream. Add
-support for embedded data, based on linux-rpi kernel, and make it work
-with multiplexed streams. We have only one source pad with two streams:
-stream 0 is the image, and stream 1 is the embedded data.
+On Mon, Jul 26, 2021 at 04:11:39PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> These mimic the behavior of get_user and put_user, except
+> for domain switching, address limit checking and handling
+> of mismatched sizes, none of which are relevant here.
+> 
+> To work with pre-Armv6 kernels, this has to avoid TUSER()
+> inside of the new macros, the new approach passes the "t"
+> string along with the opcode, which is a bit uglier but
+> avoids duplicating more code.
+> 
+> As there is no __get_user_asm_dword(), I work around it
+> by copying 32 bit at a time, which is possible because
+> the output size is known.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
----
- drivers/media/i2c/imx219.c | 458 ++++++++++++++++++++-----------------
- 1 file changed, 248 insertions(+), 210 deletions(-)
+I've just been bisecting some regressions running the kgdbts tests on
+arm and this patch came up.
 
-diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index e10af3f74b38..d531b67f541b 100644
---- a/drivers/media/i2c/imx219.c
-+++ b/drivers/media/i2c/imx219.c
-@@ -118,6 +118,16 @@
- #define IMX219_PIXEL_ARRAY_WIDTH	3280U
- #define IMX219_PIXEL_ARRAY_HEIGHT	2464U
- 
-+/* Embedded metadata stream structure */
-+#define IMX219_EMBEDDED_LINE_WIDTH 16384
-+#define IMX219_NUM_EMBEDDED_LINES 1
-+
-+enum pad_types {
-+	IMAGE_PAD,
-+	METADATA_PAD,
-+	NUM_PADS
-+};
-+
- struct imx219_reg {
- 	u16 address;
- 	u8 val;
-@@ -429,7 +439,7 @@ static const char * const imx219_supply_name[] = {
-  * - v flip
-  * - h&v flips
-  */
--static const u32 codes[] = {
-+static const u32 imx219_mbus_formats[] = {
- 	MEDIA_BUS_FMT_SRGGB10_1X10,
- 	MEDIA_BUS_FMT_SGRBG10_1X10,
- 	MEDIA_BUS_FMT_SGBRG10_1X10,
-@@ -655,62 +665,17 @@ static u32 imx219_get_format_code(struct imx219 *imx219, u32 code)
- 
- 	lockdep_assert_held(&imx219->mutex);
- 
--	for (i = 0; i < ARRAY_SIZE(codes); i++)
--		if (codes[i] == code)
-+	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
-+		if (imx219_mbus_formats[i] == code)
- 			break;
- 
--	if (i >= ARRAY_SIZE(codes))
-+	if (i >= ARRAY_SIZE(imx219_mbus_formats))
- 		i = 0;
- 
- 	i = (i & ~3) | (imx219->vflip->val ? 2 : 0) |
- 	    (imx219->hflip->val ? 1 : 0);
- 
--	return codes[i];
--}
--
--static void imx219_set_default_format(struct imx219 *imx219)
--{
--	struct v4l2_mbus_framefmt *fmt;
--
--	fmt = &imx219->fmt;
--	fmt->code = MEDIA_BUS_FMT_SRGGB10_1X10;
--	fmt->colorspace = V4L2_COLORSPACE_SRGB;
--	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
--	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
--							  fmt->colorspace,
--							  fmt->ycbcr_enc);
--	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
--	fmt->width = supported_modes[0].width;
--	fmt->height = supported_modes[0].height;
--	fmt->field = V4L2_FIELD_NONE;
--}
--
--static int imx219_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
--{
--	struct imx219 *imx219 = to_imx219(sd);
--	struct v4l2_mbus_framefmt *try_fmt =
--		v4l2_subdev_get_try_format(sd, fh->state, 0);
--	struct v4l2_rect *try_crop;
--
--	mutex_lock(&imx219->mutex);
--
--	/* Initialize try_fmt */
--	try_fmt->width = supported_modes[0].width;
--	try_fmt->height = supported_modes[0].height;
--	try_fmt->code = imx219_get_format_code(imx219,
--					       MEDIA_BUS_FMT_SRGGB10_1X10);
--	try_fmt->field = V4L2_FIELD_NONE;
--
--	/* Initialize try_crop rectangle. */
--	try_crop = v4l2_subdev_get_try_crop(sd, fh->state, 0);
--	try_crop->top = IMX219_PIXEL_ARRAY_TOP;
--	try_crop->left = IMX219_PIXEL_ARRAY_LEFT;
--	try_crop->width = IMX219_PIXEL_ARRAY_WIDTH;
--	try_crop->height = IMX219_PIXEL_ARRAY_HEIGHT;
--
--	mutex_unlock(&imx219->mutex);
--
--	return 0;
-+	return imx219_mbus_formats[i];
- }
- 
- static int imx219_set_ctrl(struct v4l2_ctrl *ctrl)
-@@ -802,98 +767,148 @@ static const struct v4l2_ctrl_ops imx219_ctrl_ops = {
- 	.s_ctrl = imx219_set_ctrl,
- };
- 
--static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_state *sd_state,
--				 struct v4l2_subdev_mbus_code_enum *code)
-+static void imx219_init_formats(struct v4l2_subdev_state *state)
- {
--	struct imx219 *imx219 = to_imx219(sd);
-+	struct v4l2_mbus_framefmt *format;
-+
-+	format = v4l2_state_get_stream_format(state, 0, 0);
-+	format->code = imx219_mbus_formats[0];
-+	format->width = supported_modes[0].width;
-+	format->height = supported_modes[0].height;
-+	format->field = V4L2_FIELD_NONE;
-+	format->colorspace = V4L2_COLORSPACE_RAW;
-+
-+	if (state->routing.routes[1].flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE) {
-+		format = v4l2_state_get_stream_format(state, 0, 1);
-+		format->code = MEDIA_BUS_FMT_METADATA_8;
-+		format->width = IMX219_EMBEDDED_LINE_WIDTH;
-+		format->height = 1;
-+		format->field = V4L2_FIELD_NONE;
-+		format->colorspace = V4L2_COLORSPACE_DEFAULT;
-+	}
-+}
- 
--	if (code->index >= (ARRAY_SIZE(codes) / 4))
--		return -EINVAL;
-+static int _imx219_set_routing(struct v4l2_subdev *sd,
-+			       struct v4l2_subdev_state *state)
-+{
-+	struct v4l2_subdev_route routes[] = {
-+		{
-+			.source_pad = 0,
-+			.source_stream = 0,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_IMMUTABLE |
-+				 V4L2_SUBDEV_ROUTE_FL_SOURCE |
-+				 V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+		},
-+		{
-+			.source_pad = 0,
-+			.source_stream = 1,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_SOURCE |
-+				 V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+		}
-+	};
- 
--	mutex_lock(&imx219->mutex);
--	code->code = imx219_get_format_code(imx219, codes[code->index * 4]);
--	mutex_unlock(&imx219->mutex);
-+	struct v4l2_subdev_krouting routing = {
-+		.num_routes = ARRAY_SIZE(routes),
-+		.routes = routes,
-+	};
-+
-+	int ret;
-+
-+	ret = v4l2_subdev_set_routing(sd, state, &routing);
-+	if (ret)
-+		return ret;
-+
-+	imx219_init_formats(state);
- 
- 	return 0;
- }
- 
--static int imx219_enum_frame_size(struct v4l2_subdev *sd,
--				  struct v4l2_subdev_state *sd_state,
--				  struct v4l2_subdev_frame_size_enum *fse)
-+static int imx219_set_routing(struct v4l2_subdev *sd,
-+			      struct v4l2_subdev_state *state,
-+			      enum v4l2_subdev_format_whence which,
-+			      struct v4l2_subdev_krouting *routing)
- {
--	struct imx219 *imx219 = to_imx219(sd);
--	u32 code;
-+	int ret;
- 
--	if (fse->index >= ARRAY_SIZE(supported_modes))
-+	if (routing->num_routes == 0 || routing->num_routes > 2)
- 		return -EINVAL;
- 
--	mutex_lock(&imx219->mutex);
--	code = imx219_get_format_code(imx219, fse->code);
--	mutex_unlock(&imx219->mutex);
--	if (fse->code != code)
--		return -EINVAL;
-+	v4l2_subdev_lock_state(state);
- 
--	fse->min_width = supported_modes[fse->index].width;
--	fse->max_width = fse->min_width;
--	fse->min_height = supported_modes[fse->index].height;
--	fse->max_height = fse->min_height;
-+	ret = _imx219_set_routing(sd, state);
- 
--	return 0;
-+	v4l2_subdev_unlock_state(state);
-+
-+	return ret;
- }
- 
--static void imx219_reset_colorspace(struct v4l2_mbus_framefmt *fmt)
-+static int imx219_init_cfg(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_state *state)
- {
--	fmt->colorspace = V4L2_COLORSPACE_SRGB;
--	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
--	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
--							  fmt->colorspace,
--							  fmt->ycbcr_enc);
--	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
-+	int ret;
-+
-+	v4l2_subdev_lock_state(state);
-+
-+	ret = _imx219_set_routing(sd, state);
-+
-+	v4l2_subdev_unlock_state(state);
-+
-+	return ret;
- }
- 
--static void imx219_update_pad_format(struct imx219 *imx219,
--				     const struct imx219_mode *mode,
--				     struct v4l2_subdev_format *fmt)
-+static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
-+				 struct v4l2_subdev_state *sd_state,
-+				 struct v4l2_subdev_mbus_code_enum *code)
- {
--	fmt->format.width = mode->width;
--	fmt->format.height = mode->height;
--	fmt->format.field = V4L2_FIELD_NONE;
--	imx219_reset_colorspace(&fmt->format);
-+	if (code->index >= ARRAY_SIZE(imx219_mbus_formats))
-+		return -EINVAL;
-+
-+	code->code = imx219_mbus_formats[code->index];
-+
-+	return 0;
- }
- 
--static int __imx219_get_pad_format(struct imx219 *imx219,
--				   struct v4l2_subdev_state *sd_state,
--				   struct v4l2_subdev_format *fmt)
-+static int imx219_enum_frame_size(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_state *sd_state,
-+				  struct v4l2_subdev_frame_size_enum *fse)
- {
--	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		struct v4l2_mbus_framefmt *try_fmt =
--			v4l2_subdev_get_try_format(&imx219->sd, sd_state,
--						   fmt->pad);
--		/* update the code which could change due to vflip or hflip: */
--		try_fmt->code = imx219_get_format_code(imx219, try_fmt->code);
--		fmt->format = *try_fmt;
-+	unsigned int i;
-+
-+	if (fse->stream == 0) {
-+		for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); ++i) {
-+			if (imx219_mbus_formats[i] == fse->code)
-+				break;
-+		}
-+
-+		if (i == ARRAY_SIZE(imx219_mbus_formats))
-+			return -EINVAL;
-+
-+		if (fse->index >= ARRAY_SIZE(supported_modes))
-+			return -EINVAL;
-+
-+		fse->min_width  = supported_modes[fse->index].width;
-+		fse->max_width  = fse->min_width;
-+		fse->max_height = supported_modes[fse->index].height;
-+		fse->min_height = fse->max_height;
- 	} else {
--		imx219_update_pad_format(imx219, imx219->mode, fmt);
--		fmt->format.code = imx219_get_format_code(imx219,
--							  imx219->fmt.code);
-+		if (fse->code != MEDIA_BUS_FMT_METADATA_8)
-+			return -EINVAL;
-+
-+		fse->min_width = IMX219_EMBEDDED_LINE_WIDTH;
-+		fse->max_width = fse->min_width;
-+		fse->min_height = IMX219_NUM_EMBEDDED_LINES;
-+		fse->max_height = fse->min_height;
- 	}
- 
- 	return 0;
- }
- 
--static int imx219_get_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_state *sd_state,
--				 struct v4l2_subdev_format *fmt)
-+static void imx219_update_metadata_pad_format(struct v4l2_subdev_format *fmt)
- {
--	struct imx219 *imx219 = to_imx219(sd);
--	int ret;
--
--	mutex_lock(&imx219->mutex);
--	ret = __imx219_get_pad_format(imx219, sd_state, fmt);
--	mutex_unlock(&imx219->mutex);
--
--	return ret;
-+	fmt->format.width = IMX219_EMBEDDED_LINE_WIDTH;
-+	fmt->format.height = IMX219_NUM_EMBEDDED_LINES;
-+	fmt->format.code = MEDIA_BUS_FMT_METADATA_8;
-+	fmt->format.field = V4L2_FIELD_NONE;
- }
- 
- static int imx219_set_pad_format(struct v4l2_subdev *sd,
-@@ -901,82 +916,99 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx219 *imx219 = to_imx219(sd);
-+	struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
- 	const struct imx219_mode *mode;
--	struct v4l2_mbus_framefmt *framefmt;
--	int exposure_max, exposure_def, hblank;
-+	struct v4l2_mbus_framefmt *format;
-+	u32 code;
- 	unsigned int i;
-+	int ret = 0;
-+	int exposure_max, exposure_def, hblank;
- 
--	mutex_lock(&imx219->mutex);
-+	if (fmt->pad != 0) {
-+		dev_err(&client->dev, "%s Could not get pad %d\n", __func__,
-+			fmt->pad);
-+		return -EINVAL;
-+	}
-+
-+	if (fmt->stream == 1) {
-+		/* Only one embedded data mode is supported */
-+		imx219_update_metadata_pad_format(fmt);
-+		return 0;
-+	}
-+
-+	if (fmt->stream != 0)
-+		return -EINVAL;
- 
--	for (i = 0; i < ARRAY_SIZE(codes); i++)
--		if (codes[i] == fmt->format.code)
-+	/*
-+	 * Validate the media bus code, defaulting to the first one if the
-+	 * requested code isn't supported.
-+	 */
-+	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); ++i) {
-+		if (imx219_mbus_formats[i] == fmt->format.code) {
-+			code = fmt->format.code;
- 			break;
--	if (i >= ARRAY_SIZE(codes))
--		i = 0;
-+		}
-+	}
-+
-+	if (i == ARRAY_SIZE(imx219_mbus_formats))
-+		code = imx219_mbus_formats[0];
- 
- 	/* Bayer order varies with flips */
--	fmt->format.code = imx219_get_format_code(imx219, codes[i]);
-+	fmt->format.code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
- 
- 	mode = v4l2_find_nearest_size(supported_modes,
- 				      ARRAY_SIZE(supported_modes),
- 				      width, height,
--				      fmt->format.width, fmt->format.height);
--	imx219_update_pad_format(imx219, mode, fmt);
--	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
--		*framefmt = fmt->format;
--	} else if (imx219->mode != mode ||
--		   imx219->fmt.code != fmt->format.code) {
--		imx219->fmt = fmt->format;
--		imx219->mode = mode;
--		/* Update limits and set FPS to default */
--		__v4l2_ctrl_modify_range(imx219->vblank, IMX219_VBLANK_MIN,
--					 IMX219_VTS_MAX - mode->height, 1,
--					 mode->vts_def - mode->height);
--		__v4l2_ctrl_s_ctrl(imx219->vblank,
--				   mode->vts_def - mode->height);
--		/* Update max exposure while meeting expected vblanking */
--		exposure_max = mode->vts_def - 4;
--		exposure_def = (exposure_max < IMX219_EXPOSURE_DEFAULT) ?
--			exposure_max : IMX219_EXPOSURE_DEFAULT;
--		__v4l2_ctrl_modify_range(imx219->exposure,
--					 imx219->exposure->minimum,
--					 exposure_max, imx219->exposure->step,
--					 exposure_def);
--		/*
--		 * Currently PPL is fixed to IMX219_PPL_DEFAULT, so hblank
--		 * depends on mode->width only, and is not changeble in any
--		 * way other than changing the mode.
--		 */
--		hblank = IMX219_PPL_DEFAULT - mode->width;
--		__v4l2_ctrl_modify_range(imx219->hblank, hblank, hblank, 1,
--					 hblank);
--	}
-+				      fmt->format.width,
-+				      fmt->format.height);
- 
--	mutex_unlock(&imx219->mutex);
-+	v4l2_subdev_lock_state(sd_state);
- 
--	return 0;
--}
-+	/* Update the stored format and return it. */
-+	format = v4l2_state_get_stream_format(sd_state, fmt->pad, fmt->stream);
- 
--static int imx219_set_framefmt(struct imx219 *imx219)
--{
--	switch (imx219->fmt.code) {
--	case MEDIA_BUS_FMT_SRGGB8_1X8:
--	case MEDIA_BUS_FMT_SGRBG8_1X8:
--	case MEDIA_BUS_FMT_SGBRG8_1X8:
--	case MEDIA_BUS_FMT_SBGGR8_1X8:
--		return imx219_write_regs(imx219, raw8_framefmt_regs,
--					ARRAY_SIZE(raw8_framefmt_regs));
--
--	case MEDIA_BUS_FMT_SRGGB10_1X10:
--	case MEDIA_BUS_FMT_SGRBG10_1X10:
--	case MEDIA_BUS_FMT_SGBRG10_1X10:
--	case MEDIA_BUS_FMT_SBGGR10_1X10:
--		return imx219_write_regs(imx219, raw10_framefmt_regs,
--					ARRAY_SIZE(raw10_framefmt_regs));
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE && imx219->streaming) {
-+		ret = -EBUSY;
-+		goto done;
- 	}
- 
--	return -EINVAL;
-+	format->code = code;
-+	format->width = mode->width;
-+	format->height = mode->height;
-+
-+	fmt->format = *format;
-+
-+	/* Update limits and set FPS to default */
-+	__v4l2_ctrl_modify_range(imx219->vblank,
-+				 IMX219_VBLANK_MIN,
-+				 IMX219_VTS_MAX - mode->height,
-+				 1,
-+				 mode->vts_def - mode->height);
-+	__v4l2_ctrl_s_ctrl(imx219->vblank, mode->vts_def - mode->height);
-+	/*
-+	 * Update max exposure while meeting
-+	 * expected vblanking
-+	 */
-+	exposure_max = mode->vts_def - 4;
-+	exposure_def = (exposure_max < IMX219_EXPOSURE_DEFAULT) ?
-+			exposure_max : IMX219_EXPOSURE_DEFAULT;
-+	__v4l2_ctrl_modify_range(imx219->exposure,
-+				 imx219->exposure->minimum,
-+				 exposure_max,
-+				 imx219->exposure->step,
-+				 exposure_def);
-+	/*
-+	 * Currently PPL is fixed to IMX219_PPL_DEFAULT, so
-+	 * hblank depends on mode->width only, and is not
-+	 * changeble in any way other than changing the mode.
-+	 */
-+	hblank = IMX219_PPL_DEFAULT - mode->width;
-+	__v4l2_ctrl_modify_range(imx219->hblank, hblank, hblank, 1, hblank);
-+
-+done:
-+	v4l2_subdev_unlock_state(sd_state);
-+
-+	return ret;
- }
- 
- static const struct v4l2_rect *
-@@ -1037,9 +1069,11 @@ static int imx219_start_streaming(struct imx219 *imx219)
- 	const struct imx219_reg_list *reg_list;
- 	int ret;
- 
--	ret = pm_runtime_resume_and_get(&client->dev);
--	if (ret < 0)
-+	ret = pm_runtime_get_sync(&client->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_noidle(&client->dev);
- 		return ret;
-+	}
- 
- 	/* Apply default values of current mode */
- 	reg_list = &imx219->mode->reg_list;
-@@ -1049,13 +1083,6 @@ static int imx219_start_streaming(struct imx219 *imx219)
- 		goto err_rpm_put;
- 	}
- 
--	ret = imx219_set_framefmt(imx219);
--	if (ret) {
--		dev_err(&client->dev, "%s failed to set frame format: %d\n",
--			__func__, ret);
--		goto err_rpm_put;
--	}
--
- 	/* Apply customized values from user */
- 	ret =  __v4l2_ctrl_handler_setup(imx219->sd.ctrl_handler);
- 	if (ret)
-@@ -1133,21 +1160,22 @@ static int imx219_set_stream(struct v4l2_subdev *sd, int enable)
- /* Power/clock management functions */
- static int imx219_power_on(struct device *dev)
- {
--	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct imx219 *imx219 = to_imx219(sd);
- 	int ret;
- 
- 	ret = regulator_bulk_enable(IMX219_NUM_SUPPLIES,
- 				    imx219->supplies);
- 	if (ret) {
--		dev_err(dev, "%s: failed to enable regulators\n",
-+		dev_err(&client->dev, "%s: failed to enable regulators\n",
- 			__func__);
- 		return ret;
- 	}
- 
- 	ret = clk_prepare_enable(imx219->xclk);
- 	if (ret) {
--		dev_err(dev, "%s: failed to enable clock\n",
-+		dev_err(&client->dev, "%s: failed to enable clock\n",
- 			__func__);
- 		goto reg_off;
- 	}
-@@ -1166,7 +1194,8 @@ static int imx219_power_on(struct device *dev)
- 
- static int imx219_power_off(struct device *dev)
- {
--	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct imx219 *imx219 = to_imx219(sd);
- 
- 	gpiod_set_value_cansleep(imx219->reset_gpio, 0);
-@@ -1178,7 +1207,8 @@ static int imx219_power_off(struct device *dev)
- 
- static int __maybe_unused imx219_suspend(struct device *dev)
- {
--	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct imx219 *imx219 = to_imx219(sd);
- 
- 	if (imx219->streaming)
-@@ -1189,7 +1219,8 @@ static int __maybe_unused imx219_suspend(struct device *dev)
- 
- static int __maybe_unused imx219_resume(struct device *dev)
- {
--	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct imx219 *imx219 = to_imx219(sd);
- 	int ret;
- 
-@@ -1255,11 +1286,13 @@ static const struct v4l2_subdev_video_ops imx219_video_ops = {
- };
- 
- static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
--	.enum_mbus_code = imx219_enum_mbus_code,
--	.get_fmt = imx219_get_pad_format,
--	.set_fmt = imx219_set_pad_format,
--	.get_selection = imx219_get_selection,
--	.enum_frame_size = imx219_enum_frame_size,
-+	.init_cfg		= imx219_init_cfg,
-+	.enum_mbus_code		= imx219_enum_mbus_code,
-+	.get_fmt		= v4l2_subdev_get_fmt,
-+	.set_fmt		= imx219_set_pad_format,
-+	.get_selection		= imx219_get_selection,
-+	.set_routing		= imx219_set_routing,
-+	.enum_frame_size	= imx219_enum_frame_size,
- };
- 
- static const struct v4l2_subdev_ops imx219_subdev_ops = {
-@@ -1268,10 +1301,6 @@ static const struct v4l2_subdev_ops imx219_subdev_ops = {
- 	.pad = &imx219_pad_ops,
- };
- 
--static const struct v4l2_subdev_internal_ops imx219_internal_ops = {
--	.open = imx219_open,
--};
--
- /* Initialize control handlers */
- static int imx219_init_controls(struct imx219 *imx219)
- {
-@@ -1446,6 +1475,7 @@ static int imx219_check_hwcfg(struct device *dev)
- static int imx219_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
-+	struct v4l2_subdev *sd;
- 	struct imx219 *imx219;
- 	int ret;
- 
-@@ -1453,7 +1483,8 @@ static int imx219_probe(struct i2c_client *client)
- 	if (!imx219)
- 		return -ENOMEM;
- 
--	v4l2_i2c_subdev_init(&imx219->sd, client, &imx219_subdev_ops);
-+	sd = &imx219->sd;
-+	v4l2_i2c_subdev_init(sd, client, &imx219_subdev_ops);
- 
- 	/* Check the hardware configuration in device tree */
- 	if (imx219_check_hwcfg(dev))
-@@ -1520,27 +1551,29 @@ static int imx219_probe(struct i2c_client *client)
- 		goto error_power_off;
- 
- 	/* Initialize subdev */
--	imx219->sd.internal_ops = &imx219_internal_ops;
--	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
--			    V4L2_SUBDEV_FL_HAS_EVENTS;
--	imx219->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-+	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-+		     V4L2_SUBDEV_FL_HAS_EVENTS |
-+		     V4L2_SUBDEV_FL_MULTIPLEXED;
- 
--	/* Initialize source pad */
-+	/* Initialize the media entity. */
- 	imx219->pad.flags = MEDIA_PAD_FL_SOURCE;
--
--	/* Initialize default format */
--	imx219_set_default_format(imx219);
--
--	ret = media_entity_pads_init(&imx219->sd.entity, 1, &imx219->pad);
-+	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
-+	ret = media_entity_pads_init(&sd->entity, 1, &imx219->pad);
- 	if (ret) {
- 		dev_err(dev, "failed to init entity pads: %d\n", ret);
- 		goto error_handler_free;
- 	}
- 
--	ret = v4l2_async_register_subdev_sensor(&imx219->sd);
-+	ret = v4l2_subdev_init_finalize(sd);
-+	if (ret) {
-+		dev_err(dev, "failed to finalize sensor init: %d\n", ret);
-+		goto error_media_entity;
-+	}
-+
-+	ret = v4l2_async_register_subdev_sensor(sd);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to register sensor sub-device: %d\n", ret);
--		goto error_media_entity;
-+		goto error_free_state;
- 	}
- 
- 	/* Enable runtime PM and turn off the device */
-@@ -1550,6 +1583,8 @@ static int imx219_probe(struct i2c_client *client)
- 
- 	return 0;
- 
-+error_free_state:
-+	v4l2_subdev_cleanup(sd);
- error_media_entity:
- 	media_entity_cleanup(&imx219->sd.entity);
- 
-@@ -1568,6 +1603,9 @@ static int imx219_remove(struct i2c_client *client)
- 	struct imx219 *imx219 = to_imx219(sd);
- 
- 	v4l2_async_unregister_subdev(sd);
-+
-+	v4l2_subdev_cleanup(sd);
-+
- 	media_entity_cleanup(&sd->entity);
- 	imx219_free_controls(imx219);
- 
--- 
-2.32.0
+It looks like once this patch applies then copy_from_kernel_nofault()
+starts faulting when it called from kgdb. I've put an example stack
+trace at the bottom of this mail and the most simplified reproduction
+I currently have is:
+~~~
+make multi_v7_defconfig
+../scripts/config --enable KGDB --enable KGDB_TESTS
+make olddefconfig
+make -j `nproc`
+qemu-system-arm -M virt -m 1G -nographic \
+                -kernel arch/arm/boot/zImage -initrd rootfs.cpio.gz
+# Boot and login
+echo V1 > /sys/module/kgdbts/parameters/kgdbts
+~~~
 
+I suspect this will reproduce on any arm system with CONFIG_KGDB and
+CONFIG_KGDB_TESTS enabled simply by running that last echo command...
+but I have only tested on QEMU for now.
+
+
+Daniel.
+
+
+Stack trace:
+~~~
+# echo kgdbts=V1F1000 > /sys/module/kgdbts/parameters/kgdbts
+[   34.995507] KGDB: Registered I/O driver kgdbts
+[   35.038102] kgdbts:RUN plant and detach test
+
+Entering kdb (current=0xd4264380, pid 134) on processor 0 due to Keyboard Entry
+[0]kdb> [   35.056005] kgdbts:RUN sw breakpoint test
+[   35.062309] kgdbts:RUN bad memory access test
+[   35.063619] 8<--- cut here ---
+[   35.064022] Unhandled fault: page domain fault (0x01b) at 0x00000000
+[   35.064212] pgd = (ptrval)
+[   35.064459] [00000000] *pgd=942dc835, *pte=00000000, *ppte=00000000
+[   35.065071] Internal error: : 1b [#1] SMP ARM
+[   35.065381] KGDB: re-enter exception: ALL breakpoints killed
+[   35.065850] ---[ end trace 909d8c43057666be ]---
+[   35.066088] 8<--- cut here ---
+[   35.066189] Unhandled fault: page domain fault (0x01b) at 0x00000000
+[   35.066332] pgd = (ptrval)
+[   35.066406] [00000000] *pgd=942dc835, *pte=00000000, *ppte=00000000
+[   35.066597] Internal error: : 1b [#2] SMP ARM
+[   35.066906] CPU: 0 PID: 134 Comm: sh Tainted: G      D           5.14.0-rc1-00013-g2df4c9a741a0 #60
+[   35.067152] Hardware name: ARM-Versatile Express
+[   35.067432] [<c0311bdc>] (unwind_backtrace) from [<c030bdc0>] (show_stack+0x10/0x14)
+[   35.067880] [<c030bdc0>] (show_stack) from [<c114b9c8>] (dump_stack_lvl+0x58/0x70)
+[   35.068054] [<c114b9c8>] (dump_stack_lvl) from [<c0430cdc>] (kgdb_reenter_check+0x104/0x150)
+[   35.068213] [<c0430cdc>] (kgdb_reenter_check) from [<c0430dcc>] (kgdb_handle_exception+0xa4/0x114)
+[   35.068395] [<c0430dcc>] (kgdb_handle_exception) from [<c0311268>] (kgdb_notify+0x30/0x74)
+[   35.068563] [<c0311268>] (kgdb_notify) from [<c037422c>] (atomic_notifier_call_chain+0xac/0x194)
+[   35.068745] [<c037422c>] (atomic_notifier_call_chain) from [<c0374370>] (notify_die+0x5c/0xbc)
+[   35.068933] [<c0374370>] (notify_die) from [<c030bf04>] (die+0x140/0x544)
+[   35.069079] [<c030bf04>] (die) from [<c03164d4>] (do_DataAbort+0xb8/0xbc)
+[   35.069220] [<c03164d4>] (do_DataAbort) from [<c0300afc>] (__dabt_svc+0x5c/0xa0)
+[   35.069434] Exception stack(0xd4249c10 to 0xd4249c58)
+[   35.069616] 9c00:                                     ???????? ???????? ???????? ????????
+[   35.069776] 9c20: ???????? ???????? ???????? ???????? ???????? ???????? ???????? ????????
+[   35.069943] 9c40: ???????? ???????? ???????? ???????? ???????? ????????
+[   35.070107] [<c0300afc>] (__dabt_svc) from [<c049c8c4>] (copy_from_kernel_nofault+0x114/0x13c)
+[   35.070291] [<c049c8c4>] (copy_from_kernel_nofault) from [<c0431688>] (kgdb_mem2hex+0x1c/0x88)
+[   35.070463] [<c0431688>] (kgdb_mem2hex) from [<c04322b0>] (gdb_serial_stub+0x8c4/0x1088)
+[   35.070640] [<c04322b0>] (gdb_serial_stub) from [<c04302e8>] (kgdb_cpu_enter+0x4f4/0x988)
+[   35.070796] [<c04302e8>] (kgdb_cpu_enter) from [<c0430e08>] (kgdb_handle_exception+0xe0/0x114)
+[   35.070982] [<c0430e08>] (kgdb_handle_exception) from [<c0311210>] (kgdb_compiled_brk_fn+0x24/0x2c)
+[   35.071166] [<c0311210>] (kgdb_compiled_brk_fn) from [<c030c40c>] (do_undefinstr+0x104/0x230)
+[   35.071342] [<c030c40c>] (do_undefinstr) from [<c0300c6c>] (__und_svc_finish+0x0/0x54)
+[   35.071502] Exception stack(0xd4249dc8 to 0xd4249e10)
+[   35.071614] 9dc0:                   ???????? ???????? ???????? ???????? ???????? ????????
+[   35.071778] 9de0: ???????? ???????? ???????? ???????? ???????? ???????? ???????? ????????
+[   35.071944] 9e00: ???????? ???????? ???????? ????????
+[   35.072054] [<c0300c6c>] (__und_svc_finish) from [<c042fd20>] (kgdb_breakpoint+0x30/0x58)
+[   35.072211] [<c042fd20>] (kgdb_breakpoint) from [<c0b14b08>] (configure_kgdbts+0x228/0x68c)
+[   35.072395] [<c0b14b08>] (configure_kgdbts) from [<c036fdcc>] (param_attr_store+0x60/0xb8)
+[   35.072560] [<c036fdcc>] (param_attr_store) from [<c05bcf14>] (kernfs_fop_write_iter+0x110/0x1d4)
+[   35.072745] [<c05bcf14>] (kernfs_fop_write_iter) from [<c050f074>] (vfs_write+0x350/0x508)
+[   35.072920] [<c050f074>] (vfs_write) from [<c050f370>] (ksys_write+0x64/0xdc)
+[   35.073075] [<c050f370>] (ksys_write) from [<c03000c0>] (ret_fast_syscall+0x0/0x2c)
+[   35.073259] Exception stack(0xd4249fa8 to 0xd4249ff0)
+[   35.073372] 9fa0:                   ???????? ???????? ???????? ???????? ???????? ????????
+[   35.073527] 9fc0: ???????? ???????? ???????? ???????? ???????? ???????? ???????? ????????
+[   35.073679] 9fe0: ???????? ???????? ???????? ????????
+[   35.073960] Kernel panic - not syncing: Recursive entry to debugger
+[   36.286118] SMP: failed to stop secondary CPUs
+[   36.286568] ---[ end Kernel panic - not syncing: Recursive entry to debugger ]---
+~~~

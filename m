@@ -2,90 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D88B248BED8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFE748BEDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348352AbiALHKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237258AbiALHJ7 (ORCPT
+        id S1351146AbiALHLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:11:40 -0500
+Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:33911 "EHLO
+        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237258AbiALHLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:09:59 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210DEC06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 23:09:59 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id u21so6044111edd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 23:09:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e4STGP8nx6rQ3ZHW8wIeGVs8uIWas7TIWKM1+FpYezU=;
-        b=ZmTrP16zO40yngw5STTmjokex1CAtMdhbY5IbDWg95ESmBDwfuvdEC5gZIC0XLHbQq
-         bfgwrEmfLj0d2IQI54C+C1JAlyj78bMJJummud0FLcJbPrE4Zl6LsbpBMwjyVE6xfuR3
-         K6g3L5I6zaIlVB2Ra+IYGW+ZsHGdG81aLKjPc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e4STGP8nx6rQ3ZHW8wIeGVs8uIWas7TIWKM1+FpYezU=;
-        b=mCS4n3jQeEuK1o/nhnfT/hhay6bg6lA4mp/Zc/5n3WcFodnLXb3m6lgbUQf/gZCKSB
-         2etnh5j+M53BP81+cOZ8J6zBBWdpcRhgmhS08waI3e5VPZq7CmfuXe/hltR76CPz+C/B
-         dg9Rx6TbR7dOfr6rCceN/pPWP4LPhIS7CSHHp0FMvHr+hryhh8rCD772qTNosNwXxOsu
-         EVzKNaF1RaFuhqHNkGNwgGj3Evoybw/cldYY478C6MJdeXhBNL2e2qXtuztlNoGSunTe
-         +4rEwIVXUWIdFIY8NwsrZM8jbwk3Pj6aIsZZnNYLS5+EOiOc+5Naw8Otg5rq94VXA44l
-         6ALg==
-X-Gm-Message-State: AOAM530N+8TNwBMkntwNYe83DirpZ1LTDc7r9n4KfF8MH8tFyNv+PmCq
-        nwUGTYLViP+g70TOEfoQYU0cvE4OSKbY5YPLkRzAew==
-X-Google-Smtp-Source: ABdhPJyn8pZbZiDsgDpS9epZmGHtoPwtrHVrQnpxg/IvMYAfsCnSw98pwWo/FbDisciefPKFkzl0TWCxn/Uv0enkwI4=
-X-Received: by 2002:a17:907:3d8e:: with SMTP id he14mr6365432ejc.167.1641971397535;
- Tue, 11 Jan 2022 23:09:57 -0800 (PST)
+        Wed, 12 Jan 2022 02:11:37 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R611e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=dust.li@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V1dZVxb_1641971494;
+Received: from localhost(mailfrom:dust.li@linux.alibaba.com fp:SMTPD_---0V1dZVxb_1641971494)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 12 Jan 2022 15:11:34 +0800
+Date:   Wed, 12 Jan 2022 15:11:34 +0800
+From:   "dust.li" <dust.li@linux.alibaba.com>
+To:     Wen Gu <guwen@linux.alibaba.com>, kgraul@linux.ibm.com,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net/smc: Avoid setting clcsock options after clcsock
+ released
+Message-ID: <20220112071134.GA47613@linux.alibaba.com>
+Reply-To: dust.li@linux.alibaba.com
+References: <1641807505-54454-1-git-send-email-guwen@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20220104095954.10313-1-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220104095954.10313-1-angelogioacchino.delregno@collabora.com>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Wed, 12 Jan 2022 12:39:46 +0530
-Message-ID: <CAMty3ZAojTyw3H8VprH9aiyTyWjeL8oqPxNNr=J33_5FrcUj9Q@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/mediatek: mtk_dsi: Avoid EPROBE_DEFER loop with
- external bridge
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org, chunkuang.hu@kernel.org,
-        airlied@linux.ie, linux-kernel@vger.kernel.org,
-        andrzej.hajda@intel.com, linux-mediatek@lists.infradead.org,
-        matthias.bgg@gmail.com, kernel@collabora.com,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1641807505-54454-1-git-send-email-guwen@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 3:30 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+On Mon, Jan 10, 2022 at 05:38:25PM +0800, Wen Gu wrote:
+>We encountered a crash in smc_setsockopt() and it is caused by
+>accessing smc->clcsock after clcsock was released.
 >
-> DRM bridge drivers are now attaching their DSI device at probe time,
-> which requires us to register our DSI host in order to let the bridge
-> to probe: this recently started producing an endless -EPROBE_DEFER
-> loop on some machines that are using external bridges, like the
-> parade-ps8640, found on the ACER Chromebook R13.
+> BUG: kernel NULL pointer dereference, address: 0000000000000020
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 0 P4D 0
+> Oops: 0000 [#1] PREEMPT SMP PTI
+> CPU: 1 PID: 50309 Comm: nginx Kdump: loaded Tainted: G E     5.16.0-rc4+ #53
+> RIP: 0010:smc_setsockopt+0x59/0x280 [smc]
+> Call Trace:
+>  <TASK>
+>  __sys_setsockopt+0xfc/0x190
+>  __x64_sys_setsockopt+0x20/0x30
+>  do_syscall_64+0x34/0x90
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f16ba83918e
+>  </TASK>
 >
-> Now that the DSI hosts/devices probe sequence is documented, we can
-> do adjustments to the mtk_dsi driver as to both fix now and make sure
-> to avoid this situation in the future: for this, following what is
-> documented in drm_bridge.c, move the mtk_dsi component_add() to the
-> mtk_dsi_ops.attach callback and delete it in the detach callback;
-> keeping in mind that we are registering a drm_bridge for our DSI,
-> which is only used/attached if the DSI Host is bound, it wouldn't
-> make sense to keep adding our bridge at probe time (as it would
-> be useless to have it if mtk_dsi_ops.attach() fails!), so also move
-> that one to the dsi host attach function (and remove it in detach).
+>This patch tries to fix it by holding clcsock_release_lock and
+>checking whether clcsock has already been released. In case that
+>a crash of the same reason happens in smc_getsockopt(), this patch
+>also checkes smc->clcsock in smc_getsockopt().
 >
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> ---
+>Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+>---
+> net/smc/af_smc.c | 16 +++++++++++++++-
+> 1 file changed, 15 insertions(+), 1 deletion(-)
+>
+>diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+>index 1c9289f..af423f4 100644
+>--- a/net/smc/af_smc.c
+>+++ b/net/smc/af_smc.c
+>@@ -2441,6 +2441,11 @@ static int smc_setsockopt(struct socket *sock, int level, int optname,
+> 	/* generic setsockopts reaching us here always apply to the
+> 	 * CLC socket
+> 	 */
+>+	mutex_lock(&smc->clcsock_release_lock);
+>+	if (!smc->clcsock) {
+>+		mutex_unlock(&smc->clcsock_release_lock);
+>+		return -EBADF;
+>+	}
+> 	if (unlikely(!smc->clcsock->ops->setsockopt))
+> 		rc = -EOPNOTSUPP;
+> 	else
+>@@ -2450,6 +2455,7 @@ static int smc_setsockopt(struct socket *sock, int level, int optname,
+> 		sk->sk_err = smc->clcsock->sk->sk_err;
+> 		sk_error_report(sk);
+> 	}
+>+	mutex_unlock(&smc->clcsock_release_lock);
+> 
+> 	if (optlen < sizeof(int))
+> 		return -EINVAL;
+>@@ -2509,13 +2515,21 @@ static int smc_getsockopt(struct socket *sock, int level, int optname,
+> 			  char __user *optval, int __user *optlen)
+> {
+> 	struct smc_sock *smc;
+>+	int rc;
+> 
+> 	smc = smc_sk(sock->sk);
+>+	mutex_lock(&smc->clcsock_release_lock);
+>+	if (!smc->clcsock) {
+>+		mutex_unlock(&smc->clcsock_release_lock);
+>+		return -EBADF;
+>+	}
+> 	/* socket options apply to the CLC socket */
+> 	if (unlikely(!smc->clcsock->ops->getsockopt))
+Missed a mutex_unlock() here ?
 
-Eventually I've observed similar issue on other Component based DSI
-controllers, hence
+> 		return -EOPNOTSUPP;
 
-Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
+>-	return smc->clcsock->ops->getsockopt(smc->clcsock, level, optname,
+>+	rc = smc->clcsock->ops->getsockopt(smc->clcsock, level, optname,
+> 					     optval, optlen);
+>+	mutex_unlock(&smc->clcsock_release_lock);
+>+	return rc;
+> }
+> 
+> static int smc_ioctl(struct socket *sock, unsigned int cmd,
+>-- 
+>1.8.3.1

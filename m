@@ -2,71 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B66848C55F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8925A48C56F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353848AbiALOA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:00:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
+        id S1353856AbiALOCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241882AbiALOAz (ORCPT
+        with ESMTP id S241882AbiALOCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:00:55 -0500
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9A9C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 06:00:55 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:76d0:2bff:fec8:549])
-        by laurent.telenet-ops.be with bizsmtp
-        id hq0t2600C0kcUhD01q0tjW; Wed, 12 Jan 2022 15:00:53 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1n7eBI-009GW7-Qg; Wed, 12 Jan 2022 15:00:52 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1n7eBI-000Tza-Cg; Wed, 12 Jan 2022 15:00:52 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Bhaskara Budiredla <bbudiredla@marvell.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] perf: MARVELL_CN10K_TAD_PMU should depend on ARCH_THUNDER
-Date:   Wed, 12 Jan 2022 15:00:47 +0100
-Message-Id: <b4662a2c767d04cca19417e0c845edea2da262ad.1641995941.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Wed, 12 Jan 2022 09:02:44 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6749C061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 06:02:44 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id s22so3416893oie.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 06:02:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RaVClApmtGgpRlYnM5kQpmqztW/pi5heVD5J5MFzplI=;
+        b=flO9fP2R8WxzaJ5Kz5uUQGdJ9lkgnZI5KNf9FiEeiTBfnzdk6169QVXGSlisfb8gyE
+         N0Ru1BKCEDNAC6E6h5Y0sy32K7KeuC2QXpRFJikJm0/m8W5cKZpl6oqLaeLmP9gqxNB4
+         GmViploQHdPwmEpbtTplhUqlbMCfSxLi6ZM6s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=RaVClApmtGgpRlYnM5kQpmqztW/pi5heVD5J5MFzplI=;
+        b=US0iYMvEtBDd2NrfCejUHAIfK5bdvVFbK7RNIhpm+I/QykOErPo91doP9UhtZ1R5zD
+         NdleXhDcBAJpoRnDVjPL/KwoXo0tJd48UT9EPTMY8blxXpik1bLoNFB4Fa0kur5UNs+Y
+         SgQbXKDbjBpUYYH2IuRoOhVqOKLUAobLoPQ6XfYr/XNKUhxIkK8gLs08NH8e6Gz4xyuh
+         uyhJO9RR9qcVNXBL06uNnEKnGmH/oEtlMqxN0v9/xGQBxTCJnhZs3bvDHvR5jC3wKqII
+         r+cwDXSWYpBcZYZe92i3nP09CTGBdSptM+/n5dsgFUlRQ/epZyLawqFaXt10KgcWslxO
+         T8yg==
+X-Gm-Message-State: AOAM533RDBMJbg+ZtWoYhL54H/A7jezmfG2M/IlxFCKb3OkefeIoJ5rw
+        ddYAu32ePKpCS6j2HjhJ+I42ZA==
+X-Google-Smtp-Source: ABdhPJx9rhiB6CInae9e3Xbxkk8u46Hp4Mlkg0iMTBYFaUSEbWc9CaA9aF/soaurH+X6eataEsYC9g==
+X-Received: by 2002:a05:6808:208e:: with SMTP id s14mr5356378oiw.170.1641996163942;
+        Wed, 12 Jan 2022 06:02:43 -0800 (PST)
+Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
+        by smtp.gmail.com with ESMTPSA id x11sm2532015oot.20.2022.01.12.06.02.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 06:02:43 -0800 (PST)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+From:   "Justin M. Forbes" <jforbes@fedoraproject.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     jmforbes@linuxtx.org,
+        "Justin M. Forbes" <jforbes@fedoraproject.org>
+Subject: [PATCH v2] lib/crypto: add prompts back to crypto libraries
+Date:   Wed, 12 Jan 2022 08:01:38 -0600
+Message-Id: <20220112140137.728162-1-jforbes@fedoraproject.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Marvell CN10K Last-Level cache Tag-and-data Units (LLC-TAD)
-performance monitor is only present on Marvell CN10K SoCs.  Hence add a
-dependency on ARCH_THUNDER, to prevent asking the user about this driver
-when configuring a kernel without Cavium Thunder (incl. Marvell CN10K)
-SoC support.
+Commit 6048fdcc5f269 ("lib/crypto: blake2s: include as built-in") took
+away a number of prompt texts from other crypto libraries. This makes
+values flip from built-in to module when oldconfig runs, and causes
+problems when these crypto libs need to be built in for thingslike
+BIG_KEYS.
 
-Fixes: 036a7584bede317d ("drivers: perf: Add LLC-TAD perf counter support")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Fixes: 6048fdcc5f269 ("lib/crypto: blake2s: include as built-in")
+Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
 ---
- drivers/perf/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ lib/crypto/Kconfig | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
-index e1a0c44bc686493e..7d6ffdf44a415a66 100644
---- a/drivers/perf/Kconfig
-+++ b/drivers/perf/Kconfig
-@@ -141,7 +141,7 @@ config ARM_DMC620_PMU
- 
- config MARVELL_CN10K_TAD_PMU
- 	tristate "Marvell CN10K LLC-TAD PMU"
--	depends on ARM64 || (COMPILE_TEST && 64BIT)
-+	depends on ARCH_THUNDER || (COMPILE_TEST && 64BIT)
+diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
+index 8620f38e117c..179041b60294 100644
+--- a/lib/crypto/Kconfig
++++ b/lib/crypto/Kconfig
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+
++menu "Crypto library routines"
++
+ config CRYPTO_LIB_AES
+ 	tristate
+
+@@ -40,7 +42,7 @@ config CRYPTO_LIB_CHACHA_GENERIC
+ 	  of CRYPTO_LIB_CHACHA.
+
+ config CRYPTO_LIB_CHACHA
+-	tristate
++	tristate "ChaCha library interface"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
+ 	select CRYPTO_LIB_CHACHA_GENERIC if CRYPTO_ARCH_HAVE_LIB_CHACHA=n
  	help
- 	  Provides support for Last-Level cache Tag-and-data Units (LLC-TAD)
- 	  performance monitors on CN10K family silicons.
+@@ -65,7 +67,7 @@ config CRYPTO_LIB_CURVE25519_GENERIC
+ 	  of CRYPTO_LIB_CURVE25519.
+
+ config CRYPTO_LIB_CURVE25519
+-	tristate
++	tristate "Curve25519 scalar multiplication library"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_CURVE25519 || !CRYPTO_ARCH_HAVE_LIB_CURVE25519
+ 	select CRYPTO_LIB_CURVE25519_GENERIC if CRYPTO_ARCH_HAVE_LIB_CURVE25519=n
+ 	help
+@@ -100,7 +102,7 @@ config CRYPTO_LIB_POLY1305_GENERIC
+ 	  of CRYPTO_LIB_POLY1305.
+
+ config CRYPTO_LIB_POLY1305
+-	tristate
++	tristate "Poly1305 library interface"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305
+ 	select CRYPTO_LIB_POLY1305_GENERIC if CRYPTO_ARCH_HAVE_LIB_POLY1305=n
+ 	help
+@@ -109,7 +111,7 @@ config CRYPTO_LIB_POLY1305
+ 	  is available and enabled.
+
+ config CRYPTO_LIB_CHACHA20POLY1305
+-	tristate
++	tristate "ChaCha20-Poly1305 AEAD support (8-byte nonce library version)"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
+ 	depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305
+ 	select CRYPTO_LIB_CHACHA
+@@ -120,3 +122,5 @@ config CRYPTO_LIB_SHA256
+
+ config CRYPTO_LIB_SM4
+ 	tristate
++
++endmenu
 -- 
-2.25.1
+2.34.1
 

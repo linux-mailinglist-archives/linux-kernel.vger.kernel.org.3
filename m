@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28FC248BC8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0AF48BC90
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347868AbiALBnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 20:43:21 -0500
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:35689 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236309AbiALBnV (ORCPT
+        id S1347901AbiALBoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 20:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236309AbiALBoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 20:43:21 -0500
-Received: by mail-oi1-f175.google.com with SMTP id s127so1542469oig.2;
-        Tue, 11 Jan 2022 17:43:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e/Tnb+6NC4NDoEen3QeGtmshX2VZpftcd33BR336ijw=;
-        b=DDMtDeB/wj5fZEsrO21n/lGpGqJ091g3N2FGgvsMbzZq9wxV6urGWWi2anb+mV/bok
-         t1ap7oc505jZIx8KgE2FR8idXnHFDCp1+EuxbB6WxZogvmVu4kwZCjv4jJeV7bExMRDH
-         doDbal43prHe0BoflW7WpL+AH2S12t9cE+/LexsAj+Y+dPZYmKV6racPYO1G7xblpl4/
-         afahcZyZkKuSfUnUUGsLYd2SltYiLTAVe/JjhuPsdyMxwGgFtXwpaZvHtZjqElY6Ecj5
-         +3CPQCi3TFmv+izgM8s5BWnXmoKF2G/y/D93YRr6z7ea4HoivFqX/1WhBXrNzUxzaPO5
-         QQaQ==
-X-Gm-Message-State: AOAM530EQd8b/ir6yCavPcYl0+zLAgCXo+9NRXKLr1uhuuxVXEKK8tzn
-        F028IO/gHlmxizLoDnRbCQ==
-X-Google-Smtp-Source: ABdhPJzJTSFUtdEQLZAtLeh5H43ctftwk1Z0EICg9ZlaMpQR1Vk4Ah73GP2ShCBaFZnQGsqfer37hQ==
-X-Received: by 2002:a05:6808:2113:: with SMTP id r19mr3759580oiw.118.1641951800511;
-        Tue, 11 Jan 2022 17:43:20 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id r30sm91841otv.48.2022.01.11.17.43.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 17:43:19 -0800 (PST)
-Received: (nullmailer pid 3887562 invoked by uid 1000);
-        Wed, 12 Jan 2022 01:43:18 -0000
-Date:   Tue, 11 Jan 2022 19:43:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     YC Hung <yc.hung@mediatek.com>
-Cc:     robh+dt@kernel.org, broonie@kernel.org, daniel.baluta@nxp.com,
-        trevor.wu@mediatek.com, tiwai@suse.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        cezary.rojewski@intel.com, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
-        linux-kernel@vger.kernel.org, allen-kh.cheng@mediatek.com
-Subject: Re: [PATCH v4] dt-bindings: dsp: mediatek: add mt8195 dsp document
-Message-ID: <Yd4yNkeGlzdULNlv@robh.at.kernel.org>
-References: <20220106064847.15588-1-yc.hung@mediatek.com>
+        Tue, 11 Jan 2022 20:44:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE51C06173F;
+        Tue, 11 Jan 2022 17:44:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B0A361682;
+        Wed, 12 Jan 2022 01:44:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0A3C36AE3;
+        Wed, 12 Jan 2022 01:43:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641951839;
+        bh=ssV4IOZe/mj0Wlv5asZC4ExDpfjoHEImje+e8erdkTA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lL8DtX0XUF8W3JOYxAct5pcraAVNmUX4WBgSVTaxTIB7Jg4PYIEovyDMe3bx6wBhP
+         pyFAA7642KgBAzYI9n5nate65pbU9ysw5Nm9PDi8OIeu6Kx59rLF5l40erXnRXUBpR
+         Y5yskVlNqBeMTP7etDovG3IzrlfMEB0G+R6JpoIwp2fj+VHTxQqaEzaMIaR3Sb8Sch
+         4ruXS4i4ZTJhaXZO160ib9S5nwiGs1naEi+x6qDxCbCjiIUOkARTkB/uqPgvtups7W
+         3PeR5gWS7EgP7RPxj6o/5VmN31g4znRe4OfSiHjyV4wQmm3mhP4uLcFeM/wbL8PrMJ
+         Gk0o0rZnKgiWw==
+Received: by pali.im (Postfix)
+        id 97B49B98; Wed, 12 Jan 2022 02:43:56 +0100 (CET)
+Date:   Wed, 12 Jan 2022 02:43:56 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        PCI <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 08/11] PCI: mvebu: Use child_ops API
+Message-ID: <20220112014356.h2pm7nc3vzsvjexq@pali>
+References: <20220105150239.9628-1-pali@kernel.org>
+ <20220105150239.9628-9-pali@kernel.org>
+ <CAL_Jsq+1hoAUVOzyOGZ1vVMsChhHJJpzk5HNU4Gi=Luy_8LArA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220106064847.15588-1-yc.hung@mediatek.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_Jsq+1hoAUVOzyOGZ1vVMsChhHJJpzk5HNU4Gi=Luy_8LArA@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Jan 2022 14:48:48 +0800, YC Hung wrote:
-> From: "YC Hung" <yc.hung@mediatek.com>
+On Wednesday 05 January 2022 09:41:51 Rob Herring wrote:
+> On Wed, Jan 5, 2022 at 9:03 AM Pali Rohár <pali@kernel.org> wrote:
+> >
+> > Split struct pci_ops between ops and child_ops. Member ops is used for
+> > accessing PCIe Root Ports via pci-bridge-emul.c driver and child_ops for
+> > accessing real PCIe cards.
+> >
+> > There is no need to mix these two struct pci_ops into one as PCI core code
+> > already provides separate callbacks via bridge->ops and bridge->child_ops.
 > 
-> This patch adds mt8195 dsp document. The dsp is used for Sound Open
-> Firmware driver node. It includes registers,  clocks, memory regions,
-> and mailbox for dsp.
-> 
-> Signed-off-by: yc.hung <yc.hung@mediatek.com>
-> ---
-> Changes since v3:
->   Fix patch v3 error : v3 only provide difference between v3 and v2.
-> 
-> Changes since v2:
->   Remove useless watchdog interrupt.
->   Add commit message more detail description.
-> 
-> Changes since v1:
->   Rename yaml file name as mediatek,mt8195-dsp.yaml
->   Refine descriptions for mailbox, memory-region and drop unused labels
->   in examples.
-> ---
->  .../bindings/dsp/mediatek,mt8195-dsp.yaml     | 105 ++++++++++++++++++
->  1 file changed, 105 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
-> 
+> I had similar patches including mvebu that I never got around to
+> sending out. I pushed the branch out now at least[1].
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Are you going to finish your patch series and send it? Because if yes,
+I can drop this my patch in v3 and let all ->child_ops conversion for
+you.

@@ -2,95 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6B748CBD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 727E148CBDA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344696AbiALT0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:26:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
+        id S1345405AbiALT0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:26:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242903AbiALTZz (ORCPT
+        with ESMTP id S1344337AbiALT0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:25:55 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C428C061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:25:55 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id c19so4236292qtx.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:25:55 -0800 (PST)
+        Wed, 12 Jan 2022 14:26:00 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15614C061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:26:00 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id i81-20020a253b54000000b00611b1da1f8fso1550754yba.5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:26:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=oqb3porLNx+xL8LPszd6cBs+HKnYfYssZ8m+DqN9VEA=;
-        b=JblWP2i4DLSV2FyMNw36nU485keGSlI6pKsZ/cvydLVu6L3v0/mVIV+DFzlwPb5zqC
-         6HLM7hm1YzH1Bm7u5uyEHrtXlt5U/fWRwORt7j5BvzgJCFinC4s6CWBXrE1tP2avSuYZ
-         IWhxIPyAx8uAN+UB91LIGGdJXalmzTlHGbYdqqBhTeTLmfFuvbICHwUxpeIts2ilbLfw
-         06/ABRLD/vLSsH1ewNN3zca9VKlBgkyEEWQz1M0vJ4W9qfu6+AKuqBKqej59yUksH5IT
-         eMsYR86MqkHfuoX+UVtue+m28tXOamjsgWZJaWSF7Y7ke8I9FXDbih/bPJxLkDkdBZC0
-         gK9w==
+        bh=sXsPIbfQ05P0repzOjAvu6+3E/heYEca8fbLMQGQFvE=;
+        b=OVkw/OOQFATmzm1SJea+QKvbMcvbrUZuyRpLKQiqbaK5v2Tnvmu+BZ0ots7zJCdUHU
+         z8ccxQc7x69F99FJgAIRsTcsBG1ISQK7GavxRUeCpdJp7zfJW1nCzASnhVjx4Ng0xmIe
+         C44vlOxJa6I+pJxIfsk1hiZt+lu6sBOAUI3WPPBvbN6UiS7GG3CdDzAQ0O1c8uvnAXai
+         O6Hd4heEx0/z5vJzDL1M5KdGMZttUn5ReRHQMQmSA+7ykquom4vhDJv0DStOsLAorR2N
+         csWjLeU6++lgIkjcyWgPfzztPqg29O6fOEN4A+Bxq1bMisAZj/obE5R8IY0i+SKCxSbH
+         WzTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oqb3porLNx+xL8LPszd6cBs+HKnYfYssZ8m+DqN9VEA=;
-        b=iVp9nPHuQNuJDuL7Aa7DSFiFuYSWziCKMBl+WS8HCpaQVI0oiPvfpMi2Az0LqLQ7N/
-         fy15vYvVzaYTT2IRBOa52i9wYWpR7OAdYhXk9inkaSEo0AQSWGnEzxTeBo9nPIjchWN7
-         XiIEvgpns5ik5O07p5bR6CeLrn8Q7k0+sLLzuPGOxefIz6zulnwB+M+EfNPHhjskNepx
-         5OTwNnSeue3fGwHtL8P6jyaao+yPOEMWONDJ2dNnI4P7wTWnlDlu/MvMBRMRsPTKxuU2
-         sLjo5AE5g95WUuAF4EuGlO2tjUqWYGKUHBE2porzDKiRQ9hN9UlDFEGRo0B+7XhwgvE8
-         rnNA==
-X-Gm-Message-State: AOAM530uWvtdoe9YYQfaFroBaA3ZQhSaBA7JbSEe05QhKeuJYBQ1fi8K
-        OMy3byTS1CdsA+9zas23dAxFfYYomwHivF4ce93GaKefpm8=
-X-Google-Smtp-Source: ABdhPJyY1HDRNDcRGH2Y8HwDgStmoOsQvc5QbGqYHkwVCXfhTw8Oky+Gr6lvVhzr2CXUzxeJWT5FMQtyKlZBVm29bSw=
-X-Received: by 2002:ac8:584a:: with SMTP id h10mr866476qth.615.1642015554496;
- Wed, 12 Jan 2022 11:25:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20220112113247.29135-1-allen-kh.cheng@mediatek.com> <20220112113247.29135-2-allen-kh.cheng@mediatek.com>
-In-Reply-To: <20220112113247.29135-2-allen-kh.cheng@mediatek.com>
-From:   Curtis Malainey <cujomalainey@google.com>
-Date:   Wed, 12 Jan 2022 11:25:42 -0800
-Message-ID: <CAOReqxga6hLXs4P2hD1k_X01AWesQBae5AhJTLtiK_3Ndex_Sw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] firmware: mediatek: add adsp ipc protocol interface
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        sound-open-firmware@alsa-project.org
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=sXsPIbfQ05P0repzOjAvu6+3E/heYEca8fbLMQGQFvE=;
+        b=y7uGJ38ja31wxc0UWPgOxG7nF1qzgnay4qjoRB0rUmFoiIIhU4SqPTZ8pLWgL6eQlc
+         uhdAnq704iEV6udi0hyD+RvWtxuIauUWhaEuDZ0lzDJ9eh15q4gLtCGcWl0nbT8jtXi/
+         PtaQQM7gJ6cPxXjEk18WFgp9DpVCHWfvv2tUQuXrh1ighdNjmck2bN1uGSB/NzoVd3rs
+         EjFUnl3VXJg18+pNwXb6j8OzsoeVlOW7fLpL3l7kJsKHpMDx3Z4A7JI8HjNIW/Tvig9h
+         iwcyYPjQgFT+zhKEm/9EMbYb+oqEYrTdC+li8ZOP6/1yKQV32Ta+1hb1X+TIFjK1k2VH
+         70/A==
+X-Gm-Message-State: AOAM530FLKPhMRDVQyx8qphrYeSQaUQ9rLb9+2QAYfCy11F3ZSodBjG6
+        0K8gDjPV7e5BlQkBaZeYYygVJpWvjZg=
+X-Google-Smtp-Source: ABdhPJxYm5u9VpP7OA8U6j16gepHc9xNcbC+H/aOGc5oUb0spGUr2hCdgYEzAcb2fZU4jMdkNLKi5RoNLG4=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:ddf2:9aea:6994:df79])
+ (user=haoluo job=sendgmr) by 2002:a25:ac24:: with SMTP id w36mr656053ybi.610.1642015559343;
+ Wed, 12 Jan 2022 11:25:59 -0800 (PST)
+Date:   Wed, 12 Jan 2022 11:25:43 -0800
+In-Reply-To: <20220112192547.3054575-1-haoluo@google.com>
+Message-Id: <20220112192547.3054575-5-haoluo@google.com>
+Mime-Version: 1.0
+References: <20220112192547.3054575-1-haoluo@google.com>
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH RESEND RFC bpf-next v1 4/8] bpf: Support removing kernfs entries
+From:   Hao Luo <haoluo@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>, Joe@google.com,
+        Burton@google.com, jevburton.kernel@gmail.com,
+        Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 3:43 AM allen-kh.cheng
-<allen-kh.cheng@mediatek.com> wrote:
->
-> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
->
-> Some of mediatek processors contain
-> the Tensilica HiFix DSP for audio processing.
->
-> The communication between Host CPU and DSP firmware is
-> taking place using a shared memory area for message passing.
->
-> ADSP IPC protocol offers (send/recv) interfaces using
-> mediatek-mailbox APIs.
->
-> We use two mbox channels to implement a request-reply protocol.
->
-> Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
-> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+When a bpf object has been exposed in kernfs, there should be a way
+to remove it. Kernfs doesn't implement unlink, therefore one can not
+remove the entry in a normal way. To remove the file, we can allow
+writing a special command to the new entry, which can trigger a
+remove_self() for removal.
 
-Reviewed-by: Curtis Malainey <cujomalainey@chromium.org>
+So far there are two ways to remove an entry that is created by pinning
+bpf objects in kernfs:
+
+ 1. unpin the object from bpffs.
+ 2. write a special command to the kernfs entry.
+
+Signed-off-by: Hao Luo <haoluo@google.com>
+---
+ kernel/bpf/kernfs_node.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/kernel/bpf/kernfs_node.c b/kernel/bpf/kernfs_node.c
+index c1c45f7b948b..3d331d8357db 100644
+--- a/kernel/bpf/kernfs_node.c
++++ b/kernel/bpf/kernfs_node.c
+@@ -9,6 +9,9 @@
+ 
+ /* file_operations for kernfs file system */
+ 
++/* Command for removing a kernfs entry */
++#define REMOVE_CMD "rm"
++
+ /* Handler when the watched inode is freed. */
+ static void kn_watch_free_inode(void *obj, enum bpf_type type, void *kn)
+ {
+@@ -22,8 +25,27 @@ static const struct notify_ops notify_ops = {
+ 	.free_inode = kn_watch_free_inode,
+ };
+ 
++static ssize_t bpf_generic_write(struct kernfs_open_file *of, char *buf,
++				 size_t bytes, loff_t off)
++{
++	if (sysfs_streq(buf, REMOVE_CMD)) {
++		kernfs_remove_self(of->kn);
++		return bytes;
++	}
++
++	return -EINVAL;
++}
++
++static ssize_t bpf_generic_read(struct kernfs_open_file *of, char *buf,
++				size_t bytes, loff_t off)
++{
++	return -EIO;
++}
++
+ /* Kernfs file operations for bpf created files. */
+ static const struct kernfs_ops bpf_generic_ops = {
++	.write          = bpf_generic_write,
++	.read           = bpf_generic_read,
+ };
+ 
+ /* Test whether a given dentry is a kernfs entry. */
+-- 
+2.34.1.448.ga2b2bfdf31-goog
+

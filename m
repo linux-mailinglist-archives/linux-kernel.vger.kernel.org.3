@@ -2,113 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A86248C13E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A2048C145
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352181AbiALJqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 04:46:45 -0500
-Received: from foss.arm.com ([217.140.110.172]:57464 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349532AbiALJqn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:46:43 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E69E3D6E;
-        Wed, 12 Jan 2022 01:46:42 -0800 (PST)
-Received: from [10.57.85.171] (unknown [10.57.85.171])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C1D373F5A1;
-        Wed, 12 Jan 2022 01:46:40 -0800 (PST)
-Message-ID: <f6e2378a-11be-0886-6105-86ad9ccbc992@arm.com>
-Date:   Wed, 12 Jan 2022 09:46:38 +0000
+        id S1352190AbiALJsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 04:48:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349532AbiALJsP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 04:48:15 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC41C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 01:48:15 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id a5so3121053wrh.5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 01:48:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZvNdPw4A75PyvJZJhJ+BPOLK9/MSxsg60VQkLM65tgg=;
+        b=qPgICBIwsAuQ1mjh5JgLh0eGoMrUhQKrlo4MV2YdySlBeeHB+POQad1H7CiUqxuS8O
+         U+1Kajkl33THx+j+VFNYgF0NTzwxJfYSKfWZ19JKQLygMlJGY52ETkqGYKGTgS+DSG+d
+         HKX7mMWAQ0rt45qMKIuof/rJnYn3z1SYaMoqS4K1QXEKg4LcXx9UV/VQrOYFB6JvOmO5
+         VF1biEL6X5LiKhNgv3hcQ3C1VWy0FCenj+CQzgt3r3Ii3MMNIJGZhG6VZ2YSRmLq2z4a
+         iVbZ/YMrmf3ThWxhjErjR2fCeYAOJ5hi3XXAW0knA3QMLeTtEYt3o2lPtt/2EgDIZgmW
+         Bang==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZvNdPw4A75PyvJZJhJ+BPOLK9/MSxsg60VQkLM65tgg=;
+        b=VhdEHjAXZhQNcLP2AvpFiV4unu9LOe355OlcyDVY0/o4/mHOz5cbEKMBJDzL83x/5K
+         RDdRLU7wUGD2ydfEt/IDtl25iDeTvTBveW1+h0wfAjAtrke4ETOceFs13nUrY3m/3IdG
+         CJ286p7zhPRHUuElra2B4eBOq1vFUTwBay0KGJ1A0ngs4MaDhhWe/8jVLYJ77ELRK4x1
+         M4DOHhbFTFFP1kk+mOw6WJNXB6Vua4uQP8V5nO49pvrbft+7MhcPJj6AYWAwNN/to+fO
+         fRFl2cGtkVrXmOBY21gUsk8r2cAV0bUyT/rs3ubMynMU4Rc7qDqgf6YE9GnKKTlNr3lw
+         fRIQ==
+X-Gm-Message-State: AOAM531hm6wciMNrRPPE7krqwdE/v+3izd01mOqlSo+7gE/lw5J/lV1c
+        P68eymQ3cvbMzivQ+ShUdG4EirTgLyCXIA==
+X-Google-Smtp-Source: ABdhPJwxxZwVdV43gKiB2TyUPoD+VU3fvQnEiXCfMxT94G6fGkWA+CDZt+6ONQEfiW/WQTdGzINeEA==
+X-Received: by 2002:adf:8023:: with SMTP id 32mr6168506wrk.136.1641980893667;
+        Wed, 12 Jan 2022 01:48:13 -0800 (PST)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id o13sm12390642wrc.111.2022.01.12.01.48.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 01:48:13 -0800 (PST)
+Subject: Re: [PATCH] ASoC: codecs: Check for error pointer after calling
+ devm_regmap_init_mmio
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, cezary.rojewski@intel.com,
+        bgoswami@codeaurora.org, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <20220111013215.494516-1-jiasheng@iscas.ac.cn>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Message-ID: <8be9a48c-6b61-9272-a2e4-0bd483e0544c@linaro.org>
+Date:   Wed, 12 Jan 2022 09:48:11 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH 2/3] coresight: Fail to open with return stacks if they
- are unavailable
-To:     James Clark <james.clark@arm.com>, coresight@lists.linaro.org
-Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-References: <20211208160907.749482-1-james.clark@arm.com>
- <20211208160907.749482-2-james.clark@arm.com>
- <b52ef2f3-9e30-59a6-2aea-e46c93915868@arm.com>
- <b61ef2e3-e573-4867-af5d-fd5fabece4b1@arm.com>
- <70b562dc-adcd-da34-3811-ff872bc7cab8@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <70b562dc-adcd-da34-3811-ff872bc7cab8@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220111013215.494516-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/01/2022 15:10, James Clark wrote:
-> 
-> 
-> On 09/12/2021 11:13, James Clark wrote:
->>
->>
->> On 09/12/2021 11:00, Suzuki K Poulose wrote:
->>> On 08/12/2021 16:09, James Clark wrote:
->>>> Maintain consistency with the other options by failing to open when they
->>>> aren't supported. For example ETM_OPT_TS, ETM_OPT_CTXTID2 and the newly
->>>> added ETM_OPT_BRANCH_BROADCAST all return with -EINVAL if they are
->>>> requested but not supported by hardware.
->>>>
->>>> The consequence of not doing this is that the user may not be
->>>> aware that they are not enabling the feature as it is silently disabled.
->>>>
->>>> Signed-off-by: James Clark <james.clark@arm.com>
->>>> ---
->>>>    drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++----
->>>>    1 file changed, 9 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>> index d2bafb50c66a..0a9bb943a5e5 100644
->>>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>> @@ -674,10 +674,15 @@ static int etm4_parse_event_config(struct coresight_device *csdev,
->>>>        }
->>>>          /* return stack - enable if selected and supported */
->>>> -    if ((attr->config & BIT(ETM_OPT_RETSTK)) && drvdata->retstack)
->>>> -        /* bit[12], Return stack enable bit */
->>>> -        config->cfg |= BIT(12);
->>>> -
->>>> +    if (attr->config & BIT(ETM_OPT_RETSTK)) {
->>>> +        if (!drvdata->retstack) {
->>>> +            ret = -EINVAL;
->>>> +            goto out;
->>>> +        } else {
->>>> +            /* bit[12], Return stack enable bit */
->>>> +            config->cfg |= BIT(12);
->>>> +        }
->>>
->>> nit: While at this, please could you change the hard coded value
->>> to ETM4_CFG_BIT_RETSTK ?
->>>
->> I started changing them all because I had trouble searching for bits by name but then
->> I thought it would snowball into a bigger change so I undid it.
->>
->> I think I'll just go and do it now if it's an issue here.
-> 
-> Hi Suzuki,
-> 
-> I started on this and I think the only worthwhile change is to make them all consistent
-> with sysreg.h. As in have xxx_SHIFT and xxx_MASK style definitions like:
-> 
->    #define TRCCONFIGR_INSTP0_SHIFT		1
->    #define TRCCONFIGR_INSTPO_MASK		GENMASK(1,0)
-> 
-> This has been done for SPE and some of the new ETM stuff. If that sounds right to you
-> I will go and do it as a followup patch to this one. It is quite a bit change so I can
-> see maybe we don't want to do it? (Personally I would vote to do it)
 
-Yes, please go ahead with that. Thanks for taking it up !
 
-Suzuki
+On 11/01/2022 01:32, Jiasheng Jiang wrote:
+> The devm_regmap_init_mmio() may return error pointer under certain
+> circumstances, for example the possible failure of the kzalloc() in
+> regmap_mmio_gen_context(), which is called by devm_regmap_init_mmio().
+> Then the error pointer will be dereferenced.
+> For example rx->regmap will be used in rx_macro_mclk_enable().
+> Therefore, it should be better to check it.
+> 
+> Fixes: af3d54b99764 ("ASoC: codecs: lpass-rx-macro: add support for lpass rx macro")
+> Fixes: c39667ddcfc5 ("ASoC: codecs: lpass-tx-macro: add support for lpass tx macro")
+> Fixes: 809bcbcecebf ("ASoC: codecs: lpass-wsa-macro: Add support to WSA Macro")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Thanks for the patch,
+
+LGTM,
+
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+> ---
+>   sound/soc/codecs/lpass-rx-macro.c  | 2 ++
+>   sound/soc/codecs/lpass-tx-macro.c  | 2 ++
+>   sound/soc/codecs/lpass-wsa-macro.c | 2 ++
+>   3 files changed, 6 insertions(+)
+> 
+> diff --git a/sound/soc/codecs/lpass-rx-macro.c b/sound/soc/codecs/lpass-rx-macro.c
+> index 07894ec5e7a6..2adbf2e2697f 100644
+> --- a/sound/soc/codecs/lpass-rx-macro.c
+> +++ b/sound/soc/codecs/lpass-rx-macro.c
+> @@ -3542,6 +3542,8 @@ static int rx_macro_probe(struct platform_device *pdev)
+>   		return PTR_ERR(base);
+>   
+>   	rx->regmap = devm_regmap_init_mmio(dev, base, &rx_regmap_config);
+> +	if (IS_ERR(rx->regmap))
+> +		return PTR_ERR(rx->regmap);
+>   
+>   	dev_set_drvdata(dev, rx);
+>   
+> diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
+> index 27a0d5defd27..e4bbc6bd4925 100644
+> --- a/sound/soc/codecs/lpass-tx-macro.c
+> +++ b/sound/soc/codecs/lpass-tx-macro.c
+> @@ -1803,6 +1803,8 @@ static int tx_macro_probe(struct platform_device *pdev)
+>   		return PTR_ERR(base);
+>   
+>   	tx->regmap = devm_regmap_init_mmio(dev, base, &tx_regmap_config);
+> +	if (IS_ERR(tx->regmap))
+> +		return PTR_ERR(tx->regmap);
+>   
+>   	dev_set_drvdata(dev, tx);
+>   
+> diff --git a/sound/soc/codecs/lpass-wsa-macro.c b/sound/soc/codecs/lpass-wsa-macro.c
+> index d3ac318fd6b6..dd1a8b7bc794 100644
+> --- a/sound/soc/codecs/lpass-wsa-macro.c
+> +++ b/sound/soc/codecs/lpass-wsa-macro.c
+> @@ -2405,6 +2405,8 @@ static int wsa_macro_probe(struct platform_device *pdev)
+>   		return PTR_ERR(base);
+>   
+>   	wsa->regmap = devm_regmap_init_mmio(dev, base, &wsa_regmap_config);
+> +	if (IS_ERR(wsa->regmap))
+> +		return PTR_ERR(wsa->regmap);
+>   
+>   	dev_set_drvdata(dev, wsa);
+>   
+> 

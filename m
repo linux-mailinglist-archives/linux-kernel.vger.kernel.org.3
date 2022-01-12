@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0AF48BC90
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879DE48BC93
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347901AbiALBoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 20:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236309AbiALBoA (ORCPT
+        id S1347913AbiALBon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 20:44:43 -0500
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:40614 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347954AbiALBog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 20:44:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE51C06173F;
-        Tue, 11 Jan 2022 17:44:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B0A361682;
-        Wed, 12 Jan 2022 01:44:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0A3C36AE3;
-        Wed, 12 Jan 2022 01:43:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641951839;
-        bh=ssV4IOZe/mj0Wlv5asZC4ExDpfjoHEImje+e8erdkTA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lL8DtX0XUF8W3JOYxAct5pcraAVNmUX4WBgSVTaxTIB7Jg4PYIEovyDMe3bx6wBhP
-         pyFAA7642KgBAzYI9n5nate65pbU9ysw5Nm9PDi8OIeu6Kx59rLF5l40erXnRXUBpR
-         Y5yskVlNqBeMTP7etDovG3IzrlfMEB0G+R6JpoIwp2fj+VHTxQqaEzaMIaR3Sb8Sch
-         4ruXS4i4ZTJhaXZO160ib9S5nwiGs1naEi+x6qDxCbCjiIUOkARTkB/uqPgvtups7W
-         3PeR5gWS7EgP7RPxj6o/5VmN31g4znRe4OfSiHjyV4wQmm3mhP4uLcFeM/wbL8PrMJ
-         Gk0o0rZnKgiWw==
-Received: by pali.im (Postfix)
-        id 97B49B98; Wed, 12 Jan 2022 02:43:56 +0100 (CET)
-Date:   Wed, 12 Jan 2022 02:43:56 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        PCI <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 08/11] PCI: mvebu: Use child_ops API
-Message-ID: <20220112014356.h2pm7nc3vzsvjexq@pali>
-References: <20220105150239.9628-1-pali@kernel.org>
- <20220105150239.9628-9-pali@kernel.org>
- <CAL_Jsq+1hoAUVOzyOGZ1vVMsChhHJJpzk5HNU4Gi=Luy_8LArA@mail.gmail.com>
+        Tue, 11 Jan 2022 20:44:36 -0500
+Received: by mail-ot1-f42.google.com with SMTP id t6-20020a9d7746000000b005917e6b96ffso884736otl.7;
+        Tue, 11 Jan 2022 17:44:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8FJYBnTRh9rd8jwZmCF0yeW+9K4P/KfA/YEfvfZuWPU=;
+        b=3qTVCGibkfF3h6leUmaPSUYcu7aBmobvb4t0yLiM/iAXjpe7yNjltHAr7pH7EcyoGW
+         VBCEy7EkbaqH5YT1x6UGcTAB3f5vT6fGrEWOFE68XW+HvUP4fGwG/reHCaLwSCwmV5x3
+         Sv7moC8Yxz8T4xrFhHavLTV3XAA+sBuvfNaNi5RYd0N7qMpeZdlCcpdMmF4J7wLeulYS
+         40dDvFkLJCaYtZb2Guy/urvacMKUBOtpdR13YvuLicYHE9lCYmC5SRzI0Kok3Oy+kLe8
+         fhjE9TU5xK1I9JqrMY5pwZlfVf7MX+AOTZEUWdw6tZVX4T2kT3NUEjnBfxvVceegfI1a
+         nuLA==
+X-Gm-Message-State: AOAM531n2OY9bCO0/1s5ylnTYJIj0ehKJO2sZxHAEVOK7shjFBy/WJsC
+        j400sjVvrPV4R6k+lc2eLw==
+X-Google-Smtp-Source: ABdhPJyJdqYCZBTnyRZAAQSUb2Fy0wPfx3w1meJoDKPyViA5DIUnR5fzgQIssWX4qg5Urx6Twwq+Sg==
+X-Received: by 2002:a05:6830:2706:: with SMTP id j6mr5193697otu.24.1641951876052;
+        Tue, 11 Jan 2022 17:44:36 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bn17sm665232oib.7.2022.01.11.17.44.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 17:44:35 -0800 (PST)
+Received: (nullmailer pid 3889527 invoked by uid 1000);
+        Wed, 12 Jan 2022 01:44:34 -0000
+Date:   Tue, 11 Jan 2022 19:44:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Johnson Wang <johnson.wang@mediatek.com>
+Cc:     linux-mediatek@lists.infradead.org, lee.jones@linaro.org,
+        broonie@kernel.org, robh+dt@kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 3/4] dt-bindings: mfd: Add compatible for the MediaTek
+ MT6366 PMIC
+Message-ID: <Yd4ygpoi7KrzU012@robh.at.kernel.org>
+References: <20220106065407.16036-1-johnson.wang@mediatek.com>
+ <20220106065407.16036-4-johnson.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_Jsq+1hoAUVOzyOGZ1vVMsChhHJJpzk5HNU4Gi=Luy_8LArA@mail.gmail.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20220106065407.16036-4-johnson.wang@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 05 January 2022 09:41:51 Rob Herring wrote:
-> On Wed, Jan 5, 2022 at 9:03 AM Pali Rohár <pali@kernel.org> wrote:
-> >
-> > Split struct pci_ops between ops and child_ops. Member ops is used for
-> > accessing PCIe Root Ports via pci-bridge-emul.c driver and child_ops for
-> > accessing real PCIe cards.
-> >
-> > There is no need to mix these two struct pci_ops into one as PCI core code
-> > already provides separate callbacks via bridge->ops and bridge->child_ops.
+On Thu, 06 Jan 2022 14:54:06 +0800, Johnson Wang wrote:
+> This adds compatible for the MediaTek MT6366 PMIC.
 > 
-> I had similar patches including mvebu that I never got around to
-> sending out. I pushed the branch out now at least[1].
+> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/mt6397.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Are you going to finish your patch series and send it? Because if yes,
-I can drop this my patch in v3 and let all ->child_ops conversion for
-you.
+Acked-by: Rob Herring <robh@kernel.org>

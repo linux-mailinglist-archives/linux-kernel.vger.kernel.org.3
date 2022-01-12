@@ -2,153 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6946248C699
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7631C48C69D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354380AbiALO6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:58:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54390 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354363AbiALO6O (ORCPT
+        id S1354392AbiALO6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:58:17 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:50768 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1354382AbiALO6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:58:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9969B81F66;
-        Wed, 12 Jan 2022 14:58:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04EC5C36AE5;
-        Wed, 12 Jan 2022 14:58:10 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lDmQMrtS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1641999489;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k6xdXfbjX4p4PFWNqT3e9bw0113nGRXEFRBnzlw2H9c=;
-        b=lDmQMrtSZVZLs67HkCMB2Hy664p6YC8OWyX7BuHgA1R78Fijo1y/Yra2U7gPbBXC7EwXQN
-        EoLtN/mfOHFZAXWw/HB14BvuiR2nouCnks+0HkpfW9Q6APxvYaf2vEQNVKk8YvbwChRbBS
-        x7pincWXHyElFsJWWIsnUwSjfVzoGXA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 069cbd44 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 12 Jan 2022 14:58:09 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>
-Subject: [PATCH v3] lib/crypto: add prompts back to crypto libraries
-Date:   Wed, 12 Jan 2022 15:57:58 +0100
-Message-Id: <20220112145758.926796-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9oxy-P8hq=85hOGSOena3kxpTAOHoXto7s4tnDUkXvYPg@mail.gmail.com>
-References: <CAHmME9oxy-P8hq=85hOGSOena3kxpTAOHoXto7s4tnDUkXvYPg@mail.gmail.com>
+        Wed, 12 Jan 2022 09:58:16 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-138-PRd9B9jAPKiWgPy9P27ZCQ-1; Wed, 12 Jan 2022 14:58:14 +0000
+X-MC-Unique: PRd9B9jAPKiWgPy9P27ZCQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Wed, 12 Jan 2022 14:58:14 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Wed, 12 Jan 2022 14:58:14 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Mathieu Desnoyers' <mathieu.desnoyers@efficios.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+CC:     Christian Brauner <brauner@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, carlos <carlos@redhat.com>
+Subject: RE: [RFC PATCH v2 1/2] rseq: x86: implement abort-at-ip extension
+Thread-Topic: [RFC PATCH v2 1/2] rseq: x86: implement abort-at-ip extension
+Thread-Index: AdgHxNJPmHALYHCBSGGqQq0pyoAGXA==
+Date:   Wed, 12 Jan 2022 14:58:14 +0000
+Message-ID: <71e7d09733df4a899d12b7ef25198bbc@AcuMS.aculab.com>
+References: <20220110171611.8351-1-mathieu.desnoyers@efficios.com>
+ <20220111110556.inteixgtl5vpmka7@wittgenstein>
+ <1626924888.21447.1641922985771.JavaMail.zimbra@efficios.com>
+ <20220112084617.32bjjo774n7vvyct@wittgenstein>
+ <1475639366.24565.1641998849957.JavaMail.zimbra@efficios.com>
+In-Reply-To: <1475639366.24565.1641998849957.JavaMail.zimbra@efficios.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Justin M. Forbes" <jforbes@fedoraproject.org>
-
-Commit 6048fdcc5f269 ("lib/crypto: blake2s: include as built-in") took
-away a number of prompt texts from other crypto libraries. This makes
-values flip from built-in to module when oldconfig runs, and causes
-problems when these crypto libs need to be built in for thingslike
-BIG_KEYS.
-
-Fixes: 6048fdcc5f269 ("lib/crypto: blake2s: include as built-in")
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: linux-crypto@vger.kernel.org
-Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
-[Jason: moved menu into submenu of lib/ instead of root menu]
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- crypto/Kconfig     |  2 --
- lib/Kconfig        |  2 ++
- lib/crypto/Kconfig | 12 ++++++++----
- 3 files changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index 55718de56137..a346b6f74bb3 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -1924,5 +1924,3 @@ source "crypto/asymmetric_keys/Kconfig"
- source "certs/Kconfig"
- 
- endif	# if CRYPTO
--
--source "lib/crypto/Kconfig"
-diff --git a/lib/Kconfig b/lib/Kconfig
-index 5e7165e6a346..9534698ce890 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -122,6 +122,8 @@ config INDIRECT_IOMEM_FALLBACK
- 	  mmio accesses when the IO memory address is not a registered
- 	  emulated region.
- 
-+source "lib/crypto/Kconfig"
-+
- config CRC_CCITT
- 	tristate "CRC-CCITT functions"
- 	help
-diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index 8620f38e117c..179041b60294 100644
---- a/lib/crypto/Kconfig
-+++ b/lib/crypto/Kconfig
-@@ -1,5 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+menu "Crypto library routines"
-+
- config CRYPTO_LIB_AES
- 	tristate
- 
-@@ -40,7 +42,7 @@ config CRYPTO_LIB_CHACHA_GENERIC
- 	  of CRYPTO_LIB_CHACHA.
- 
- config CRYPTO_LIB_CHACHA
--	tristate
-+	tristate "ChaCha library interface"
- 	depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
- 	select CRYPTO_LIB_CHACHA_GENERIC if CRYPTO_ARCH_HAVE_LIB_CHACHA=n
- 	help
-@@ -65,7 +67,7 @@ config CRYPTO_LIB_CURVE25519_GENERIC
- 	  of CRYPTO_LIB_CURVE25519.
- 
- config CRYPTO_LIB_CURVE25519
--	tristate
-+	tristate "Curve25519 scalar multiplication library"
- 	depends on CRYPTO_ARCH_HAVE_LIB_CURVE25519 || !CRYPTO_ARCH_HAVE_LIB_CURVE25519
- 	select CRYPTO_LIB_CURVE25519_GENERIC if CRYPTO_ARCH_HAVE_LIB_CURVE25519=n
- 	help
-@@ -100,7 +102,7 @@ config CRYPTO_LIB_POLY1305_GENERIC
- 	  of CRYPTO_LIB_POLY1305.
- 
- config CRYPTO_LIB_POLY1305
--	tristate
-+	tristate "Poly1305 library interface"
- 	depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305
- 	select CRYPTO_LIB_POLY1305_GENERIC if CRYPTO_ARCH_HAVE_LIB_POLY1305=n
- 	help
-@@ -109,7 +111,7 @@ config CRYPTO_LIB_POLY1305
- 	  is available and enabled.
- 
- config CRYPTO_LIB_CHACHA20POLY1305
--	tristate
-+	tristate "ChaCha20-Poly1305 AEAD support (8-byte nonce library version)"
- 	depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
- 	depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305
- 	select CRYPTO_LIB_CHACHA
-@@ -120,3 +122,5 @@ config CRYPTO_LIB_SHA256
- 
- config CRYPTO_LIB_SM4
- 	tristate
-+
-+endmenu
--- 
-2.34.1
+PiAgKiBbKl0gVGhlIG9wZW5yaXNjLCBwb3dlcnBjNjQgYW5kIHg4Ni02NCBhcmNoaXRlY3R1cmVz
+IGRlZmluZSBhICJyZWR6b25lIiBhcyBhDQo+ICAqICAgICBzdGFjayBhcmVhIGJleW9uZCB0aGUg
+c3RhY2sgcG9pbnRlciB3aGljaCBjYW4gYmUgdXNlZCBieSB0aGUgY29tcGlsZXINCj4gICogICAg
+IHRvIHN0b3JlIGxvY2FsIHZhcmlhYmxlcyBpbiBsZWFmIGZ1bmN0aW9ucy4NCg0KSSB3b25kZXIg
+aWYgdGhhdCBpcyByZWFsbHkgd29ydGggdGhlIHRyb3VibGUgaXQgY2F1c2VzIQ0KQnkgdGhlIHRp
+bWUgYSBmdW5jdGlvbiBpcyBzcGlsbGluZyB2YWx1ZXMgdG8gc3RhY2sgdGhlIGNvc3QNCm9mIGEg
+JXNwIHVwZGF0ZSBpcyBhbG1vc3QgY2VydGFpbmx5IG5vaXNlLg0KDQpTb21lb25lIGNsZWFybHkg
+dGhvdWdodCBpdCB3YXMgYSAnZ29vZCBpZGVhICh0bSknLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0
+ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBL
+ZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 

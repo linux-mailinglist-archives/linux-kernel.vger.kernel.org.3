@@ -2,118 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F0E48C7C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EC848C7CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354906AbiALQBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:01:10 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:45046 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354904AbiALQBG (ORCPT
+        id S242668AbiALQBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:01:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57392 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1354907AbiALQBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:01:06 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3048F218E7;
-        Wed, 12 Jan 2022 16:01:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642003265; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 12 Jan 2022 11:01:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642003281;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=EQmq30EueErdT4273jGK5qYGu6Nc+PXgleFJQRKvmq0=;
-        b=1XSqxQ93aR70hxul495A+TGZEf/C3xyfSAb9x5naKKcRGq9xnU/EZkYoaSYSWbY1qLbw4Z
-        2iXj1A23pwzc/AyH+G9DaqB5K8WXzdM1zhy3N9MAmr8iBcTFcpRLAxtQjCI6ZOkjxw81H0
-        7rSgoX9KtTtJvZrEc4hmM3mdkcupvdM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642003265;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EQmq30EueErdT4273jGK5qYGu6Nc+PXgleFJQRKvmq0=;
-        b=SaxcYLFICPWhub+W3LKCHEWc0uMXedb2Yhg47pSjtirkJerwlhBB4ztrM7QrLl0Hm1+ijQ
-        806dQfKa2ZqZflBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DBC5113B77;
-        Wed, 12 Jan 2022 16:01:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id XRW7NED73mE7NwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 12 Jan 2022 16:01:04 +0000
-Message-ID: <705ac4ab-34fb-e60f-aceb-d46e1913a28e@suse.cz>
-Date:   Wed, 12 Jan 2022 17:01:04 +0100
+        bh=61jkuwvVXvuFtimMSu8IeQNNLzj0gYj5g/G0tQLun4o=;
+        b=FOnOMfLKaV4XmlW575QHnUep3JgRrV7OlVmTADxL+cOhSFwLZ9WCE85dLM1U2PRQpTGEuz
+        hz4irlv8XXqMV/8CYdvwbmeRzYHYUZgV+tlcw8B2FsEfHLQbs5VV2PTu986Bx9aIEeSbJn
+        BtLA53hoaXRI4JuOqBCO3qMMxGvk/wY=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-256-MZ3EbpFqOUemUohzwmF1nA-1; Wed, 12 Jan 2022 11:01:20 -0500
+X-MC-Unique: MZ3EbpFqOUemUohzwmF1nA-1
+Received: by mail-ed1-f69.google.com with SMTP id x11-20020aa7d38b000000b004004e4fc8fdso124361edq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 08:01:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=61jkuwvVXvuFtimMSu8IeQNNLzj0gYj5g/G0tQLun4o=;
+        b=sMHpaSG086gkfm+cZmpTRdSe3qo7DKDGDGrVtEKm941jSJu2y3faRLhZALzpCMw7Vp
+         255LsdtuQsHnpyZDM7qbuJm38fHkDksIC69IBXnWoKFPWN/cxHuPR+kn7+4+P4vnFqQq
+         hTHbNhX4s4Y9d4g2SGQwC30hTYnalrIYRXqKxSFHLnUO+Ky2KqZNTOH2HFmPNpFJG2By
+         GQ578wrvSjV6nIHSOgobGmwrR32XL6eumtpgbIGAVzyf0zjOTVVW2AhMZ+YQZfH07BNL
+         q84E73M+x+w89xWY8Zf+3fOnvFcYJ1aq0lPNrOyOZqlSgyLi/zgdxesQXCnFLw2P3i38
+         2i4g==
+X-Gm-Message-State: AOAM531VcA/IGsY+N8VS8c4OYaieebb8bHjJK56iJDjYD2t1d14OBq0I
+        ijnaSbGCyLcVEBeAM6/ykM7iMdP7wAMpMnPR3Mhgm3/ln49TMlIopIkBbhYLMDsMxjKMtTEFd8V
+        SKwMclp8UzYbQPUgiULmf43wI
+X-Received: by 2002:a17:907:8a14:: with SMTP id sc20mr302775ejc.312.1642003275929;
+        Wed, 12 Jan 2022 08:01:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwxGt6hG1hH0dOVq6f/p2z8HN7LPcMPdtYQjVG0H4X9gj95ZjcBiN/8cWzbbMtxEHAc87CxqQ==
+X-Received: by 2002:a17:907:8a14:: with SMTP id sc20mr302756ejc.312.1642003275652;
+        Wed, 12 Jan 2022 08:01:15 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id p3sm40988ejo.61.2022.01.12.08.01.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 08:01:15 -0800 (PST)
+Date:   Wed, 12 Jan 2022 17:01:13 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v2 0/8] fprobe: Introduce fprobe function entry/exit
+ probe
+Message-ID: <Yd77SYWgtrkhFIYz@krava>
+References: <164199616622.1247129.783024987490980883.stgit@devnote2>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v4 18/66] xen: Use vma_lookup() in privcmd_ioctl_mmap()
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-19-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211201142918.921493-19-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164199616622.1247129.783024987490980883.stgit@devnote2>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:29, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+On Wed, Jan 12, 2022 at 11:02:46PM +0900, Masami Hiramatsu wrote:
+> Hi Jiri and Alexei,
 > 
-> vma_lookup() walks the VMA tree for a specific value, find_vma() will
-> search the tree after walking to a specific value.  It is more efficient
-> to only walk to the requested value as this case requires the address to
-> equal the vm_start.
+> Here is the 2nd version of fprobe. This version uses the
+> ftrace_set_filter_ips() for reducing the registering overhead.
+> Note that this also drops per-probe point private data, which
+> is not used anyway.
+> 
+> This introduces the fprobe, the function entry/exit probe with
+> multiple probe point support. This also introduces the rethook
+> for hooking function return as same as kretprobe does. This
 
-By that you mean the privcmd_ioctl_mmap() code checks msg->va !=
-vma->vm_start and thus we know it's never interested the next vma, that
-find_vma() can return if no vma covers the address?
+nice, I was going through the multi-user-graph support 
+and was wondering that this might be a better way
 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> abstraction will help us to generalize the fgraph tracer,
+> because we can just switch it from rethook in fprobe, depending
+> on the kernel configuration.
+> 
+> The patch [1/8] and [7/8] are from your series[1]. Other libbpf
+> patches will not be affected by this change.
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+I'll try the bpf selftests on top of this
 
+> 
+> [1] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
+> 
+> I also added an out-of-tree (just for testing) patch at the
+> end of this series ([8/8]) for adding a wildcard support to
+> the sample program. With that patch, it shows how long the
+> registration will take;
+> 
+> # time insmod fprobe_example.ko symbol='btrfs_*'
+> [   36.130947] fprobe_init: 1028 symbols found
+> [   36.177901] fprobe_init: Planted fprobe at btrfs_*
+> real    0m 0.08s
+> user    0m 0.00s
+> sys     0m 0.07s
+
+I'll run my bpftrace tests on top of that
+
+thanks,
+jirka
+
+> 
+> Thank you,
+> 
 > ---
->  drivers/xen/privcmd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/xen/privcmd.c b/drivers/xen/privcmd.c
-> index 3369734108af..ad17166b0ef6 100644
-> --- a/drivers/xen/privcmd.c
-> +++ b/drivers/xen/privcmd.c
-> @@ -282,7 +282,7 @@ static long privcmd_ioctl_mmap(struct file *file, void __user *udata)
->  						     struct page, lru);
->  		struct privcmd_mmap_entry *msg = page_address(page);
->  
-> -		vma = find_vma(mm, msg->va);
-> +		vma = vma_lookup(mm, msg->va);
->  		rc = -EINVAL;
->  
->  		if (!vma || (msg->va != vma->vm_start) || vma->vm_private_data)
+> Jiri Olsa (2):
+>       ftrace: Add ftrace_set_filter_ips function
+>       bpf: Add kprobe link for attaching raw kprobes
+> 
+> Masami Hiramatsu (6):
+>       fprobe: Add ftrace based probe APIs
+>       rethook: Add a generic return hook
+>       rethook: x86: Add rethook x86 implementation
+>       fprobe: Add exit_handler support
+>       fprobe: Add sample program for fprobe
+>       [DO NOT MERGE] Out-of-tree: Support wildcard symbol option to sample
+> 
+> 
+>  arch/x86/Kconfig                |    1 
+>  arch/x86/kernel/Makefile        |    1 
+>  arch/x86/kernel/rethook.c       |  115 ++++++++++++++++++++
+>  include/linux/bpf_types.h       |    1 
+>  include/linux/fprobe.h          |   57 ++++++++++
+>  include/linux/ftrace.h          |    3 +
+>  include/linux/rethook.h         |   74 +++++++++++++
+>  include/linux/sched.h           |    3 +
+>  include/uapi/linux/bpf.h        |   12 ++
+>  kernel/bpf/syscall.c            |  195 +++++++++++++++++++++++++++++++++-
+>  kernel/exit.c                   |    2 
+>  kernel/fork.c                   |    3 +
+>  kernel/kallsyms.c               |    1 
+>  kernel/trace/Kconfig            |   22 ++++
+>  kernel/trace/Makefile           |    2 
+>  kernel/trace/fprobe.c           |  168 +++++++++++++++++++++++++++++
+>  kernel/trace/ftrace.c           |   54 ++++++++-
+>  kernel/trace/rethook.c          |  226 +++++++++++++++++++++++++++++++++++++++
+>  samples/Kconfig                 |    7 +
+>  samples/Makefile                |    1 
+>  samples/fprobe/Makefile         |    3 +
+>  samples/fprobe/fprobe_example.c |  154 +++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h  |   12 ++
+>  23 files changed, 1103 insertions(+), 14 deletions(-)
+>  create mode 100644 arch/x86/kernel/rethook.c
+>  create mode 100644 include/linux/fprobe.h
+>  create mode 100644 include/linux/rethook.h
+>  create mode 100644 kernel/trace/fprobe.c
+>  create mode 100644 kernel/trace/rethook.c
+>  create mode 100644 samples/fprobe/Makefile
+>  create mode 100644 samples/fprobe/fprobe_example.c
+> 
+> --
+> Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
+> 
 

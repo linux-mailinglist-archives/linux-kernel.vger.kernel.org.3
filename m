@@ -2,105 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD1E48CCE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0F448CCEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357562AbiALULa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 15:11:30 -0500
-Received: from elvis.franken.de ([193.175.24.41]:45124 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1357519AbiALULV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 15:11:21 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1n7jxj-0007Ba-00; Wed, 12 Jan 2022 21:11:15 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 60F5FC0F38; Wed, 12 Jan 2022 21:10:56 +0100 (CET)
-Date:   Wed, 12 Jan 2022 21:10:56 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-pci@vger.kernel.org, lorenzo.pieralisi@arm.com,
-        bhelgaas@google.com, linux@roeck-us.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/5] MIPS: ralink: implement
- 'pcibios_root_bridge_prepare()'
-Message-ID: <20220112201056.GA5653@alpha.franken.de>
-References: <20211207104924.21327-1-sergio.paracuellos@gmail.com>
- <20211207104924.21327-3-sergio.paracuellos@gmail.com>
+        id S1357335AbiALUOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 15:14:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357325AbiALUNn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 15:13:43 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0498C061751;
+        Wed, 12 Jan 2022 12:13:42 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id oa15so7297303pjb.4;
+        Wed, 12 Jan 2022 12:13:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XMI3dbv7S6q2jB5/NVdmh3pFl60FzTgbFc2uAC8p4kQ=;
+        b=WNdGX4sWq7OTOq6tvGxIIKvH3UBlRIANC2Pv4V6m0hc0ZZLdjqFY8Jtl6Q23Qq5e2G
+         jHU+I5ciqJ8LhYAJBYBZuT6b5/cWT6ZC9iGb/q37U7Jm1bfZmKdOCueEdeUfZTqxLFVi
+         rOEmnW3bKlifhvohIlJ7VTKFccteIR9AUKP4ya1gVpsyQdE8S0EWkzp82S86jZnNSIsx
+         LtkyBbCL702Bh6BO/GgYdaEYZ9C0pvMefrKGrnGhy2SJ+Odk6MGjWfabSPV9rkGvO5RJ
+         t04P/EXDhXVjBMC+VOKTjiVetCpaDxS3nrBJQOAc6apK322tGTdZFhlhWYF+XUUhoFTJ
+         hK1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=XMI3dbv7S6q2jB5/NVdmh3pFl60FzTgbFc2uAC8p4kQ=;
+        b=Vlj8Q8zylUHyno1H/A4iruh0NyLzTRFtSoIE2jKCRwtiYIcsuHNuX+Bwf4xSZfao2I
+         g8mKFeM1DLKvPF8svAPWbZrOA2bHYzG9skHvZsoR9Bm844bzWOG350Bido4sI8WY1svi
+         9GNW7d7GVcPV3tRWRjQSMdzj9978A84p1fYjODjxW80kxRL1KyVtJf8NMmon82glI270
+         lEr8LBwAITRgtxuMUHmug1qE+KrhLqGqlhQjKEaVE/VhfhK0ZSnRcqW34l6BuWwvks7R
+         bQ8zPqNltCGOf3GcK5ZBxmLhPZ7t5dyNRx/qzDdZnku4f0fMMXmljkv3Lhc5e6REGNpT
+         pZhA==
+X-Gm-Message-State: AOAM532R7QIyuqeFtgZDYrlfaUFI06FiB/uM5uctZnuB8Va7CIKPmVds
+        csga8atBHmp5bVXAx7mgZn4=
+X-Google-Smtp-Source: ABdhPJxq26drZEE9wV2Y1XH1ljH7HvENl4m541tSkiSwjR162ek5D4RLLMtTTVviKpZ4wLCDDi12mA==
+X-Received: by 2002:a17:902:c942:b0:14a:604d:2c35 with SMTP id i2-20020a170902c94200b0014a604d2c35mr986692pla.153.1642018422294;
+        Wed, 12 Jan 2022 12:13:42 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id s8sm397048pfu.190.2022.01.12.12.13.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 12:13:41 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 12 Jan 2022 10:13:40 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Wang Jianchao <jianchao.wan9@gmail.com>
+Cc:     axboe@kernel.dk, jbacik@fb.com, bvanassche@acm.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 13/13] blk: introduce iostat per cgroup module
+Message-ID: <Yd82dJMxdQkssu4k@slm.duckdns.org>
+References: <20220110091046.17010-1-jianchao.wan9@gmail.com>
+ <20220110091046.17010-14-jianchao.wan9@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211207104924.21327-3-sergio.paracuellos@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220110091046.17010-14-jianchao.wan9@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 11:49:21AM +0100, Sergio Paracuellos wrote:
-> PCI core code call 'pcibios_root_bridge_prepare()' function inside function
-> 'pci_register_host_bridge()'. This point is very good way to properly enter
-> into this MIPS ralink specific code to properly setup I/O coherency units
-> with PCI memory addresses.
+On Mon, Jan 10, 2022 at 05:10:46PM +0800, Wang Jianchao wrote:
+> From: Wang Jianchao <wangjianchao@kuaishou.com>
 > 
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> ---
->  arch/mips/ralink/mt7621.c | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
-> index bd71f5b14238..d6efffd4dd20 100644
-> --- a/arch/mips/ralink/mt7621.c
-> +++ b/arch/mips/ralink/mt7621.c
-> @@ -10,6 +10,8 @@
->  #include <linux/slab.h>
->  #include <linux/sys_soc.h>
->  #include <linux/memblock.h>
-> +#include <linux/pci.h>
-> +#include <linux/bug.h>
->  
->  #include <asm/bootinfo.h>
->  #include <asm/mipsregs.h>
-> @@ -22,6 +24,35 @@
->  
->  static void *detect_magic __initdata = detect_memory_region;
->  
-> +int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
-> +{
-> +	struct resource_entry *entry;
-> +	resource_size_t mask;
-> +
-> +	entry = resource_list_first_type(&bridge->windows, IORESOURCE_MEM);
-> +	if (!entry) {
-> +		pr_err("Cannot get memory resource\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (mips_cps_numiocu(0)) {
-> +		/*
-> +		 * Hardware doesn't accept mask values with 1s after
-> +		 * 0s (e.g. 0xffef), so warn if that's happen
-> +		 */
-> +		mask = ~(entry->res->end - entry->res->start) & CM_GCR_REGn_MASK_ADDRMASK;
-> +		WARN_ON(mask && BIT(ffz(~mask)) - 1 != ~mask);
-> +
-> +		write_gcr_reg1_base(entry->res->start);
-> +		write_gcr_reg1_mask(mask | CM_GCR_REGn_MASK_CMTGT_IOCU0);
-> +		pr_info("PCI coherence region base: 0x%08llx, mask/settings: 0x%08llx\n",
-> +			(unsigned long long)read_gcr_reg1_base(),
-> +			(unsigned long long)read_gcr_reg1_mask());
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  phys_addr_t mips_cpc_default_phys_base(void)
->  {
->  	panic("Cannot detect cpc address");
-> -- 
-> 2.33.0
+> iostat can only track the whole device's io statistics. This patch
+> introduces iostat per cgroup based on blk-rq-qos framework which
+> can track bw, iops, queue latency and device latency and distinguish
+> regular or meta data. The blkio.iostat per cgroup output in following
+> format,
+> vda-data bytes iops queue_lat dev_lat [ditto]  [ditto]
+>     meta   \___________ ______________/    |        |
+> 	               v                   v        v
+> 	             read               write   discard
+> In particular, the blkio.iostat of root only output the statistics
+> of IOs from root cgroup. However, the non-root blkio.iostat outputs
+> all of the children cgroups. With meta stats in root cgroup, hope
+> to observe the performace of fs metadata.
 
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+I think using bpf is a way better solution for this kind of detailed
+statistics. What if I want to know what portions are random, or the
+distribution of IO sizes? Do I add another rq-qos policy or add another
+interface file with interface versioning?
+
+Thanks.
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+tejun

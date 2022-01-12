@@ -2,135 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D26448CAAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA6048CAB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356068AbiALSK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 13:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
+        id S1356109AbiALSKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 13:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356070AbiALSJ1 (ORCPT
+        with ESMTP id S1356091AbiALSJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:09:27 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C96BC061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:08:44 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id g14so7897843ybs.8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:08:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eLoe+yCOLX8twUoVnJSmKEThBpM9HQQFjJ/YCsOmEqo=;
-        b=sM2pOGw+VpV9fEIP1NjSY4EwV7AcQhlq5kQpevs1vpJUY1/wqvZGO14UsjVSIGi4KO
-         0xFyyWnKF8RnRiQ9QTjCBqspBtCwUaJMbb1JnyobjHfOw7HAOB45fyPrbx6ULMES3QfA
-         1K+5NVv6/9/HPmtYoPxk7tPP+UAka3Gns3nyHc7K3xrpJHSngSgARkxqZMQ47npXn644
-         DE9+7odqYt8BstnTgUifJbQ7/R9av7njwqtwSCbDdmjN753efTawRlUW5KocyfCemjeW
-         pPHXtnlznKcgGaSD30YnQph+Ju3ocJHis1S1NlIQFcHPcVRynTbi1J386LRNrmp+S+zE
-         ukWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eLoe+yCOLX8twUoVnJSmKEThBpM9HQQFjJ/YCsOmEqo=;
-        b=nu6PV8dM3Ds7DEqXzj/Y0v71+wgMtoozifLU8wsUlFFqypwgDJ/5x7xFkvI9jwBXdn
-         aupYLY2V2TncJYMSCjkJzmufJvAu22F/0TUkQoII8QfKjXwUXvsrPy6b/7J68aw4Rv3n
-         QJUnxNBM2LnqsFQVioCrWMTO8bj4wA80EQ1QErBzQYqd8guj6vzMaQ8O/Z0JFOH/z1Mh
-         UVw/8CF3UnPrJpDvgLINirX/BQA369gPIowe5xguVk8d1Ubi4bUvmBvbvyuzxJk8YjNv
-         Wsl8zP2jkgzfNyKi64UIamhvEPjsv/gwheRWA5wfxRp3kVWZVWjzuXPpmp3m6Q1x0f7b
-         RkWQ==
-X-Gm-Message-State: AOAM531bDenzH/WLa4mpuB68vgWu8W5DDo3ZNoBhBxLWBH1ZIIWJFd7D
-        KVwNZQMtMil4m2bOqy64K4remoi31odpXn5OGOgQ1A==
-X-Google-Smtp-Source: ABdhPJyOENQ36F72MCUSVYL6GkdmncC92a9wV1s6msf5ZpTvvHnphmMhSYKEkA/XtQw4bc2lP+lyOA6otSG7YAZ1iDM=
-X-Received: by 2002:a25:d750:: with SMTP id o77mr1052699ybg.543.1642010923523;
- Wed, 12 Jan 2022 10:08:43 -0800 (PST)
+        Wed, 12 Jan 2022 13:09:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87779C029821
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:08:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 537E6B82019
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 18:08:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD856C36AE5;
+        Wed, 12 Jan 2022 18:08:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642010925;
+        bh=VlrEvxHO8qId8hO2mJ1A4YNsrSfUlCpbrxYUtTbPUss=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=casDJNYZ+EmimQPGtXoxCj/EyHIV8HglReYvVT8MqQIdFnYyLCrGYJ7GWHem4U+sA
+         fZFZcuRtdzxMRaQYly9tb+JynVW40KfDDz4ixyu2zM3Ei9h5vc3BhLk6CxVAsEKlxh
+         NR4slFd69YHy6QGxoEstrwriSo7MlZHQVB3j69tKR2CtRChi2kswo1hg4n7qPTu809
+         9DGHryht8+WRJcQ46stSyNDp6p1Lk8HEy6lx89aR1NlMxLv++9ssX0ZPwrX3bZpqXI
+         sNK0xc4XWU08VDdXKwjG+UiLoqq9ywleO6/Ruy2W05pJpLYfn+QvMYdQzoDydb0HLY
+         bcxJj0yIFDT3g==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n7i39-00073g-JF; Wed, 12 Jan 2022 18:08:43 +0000
 MIME-Version: 1.0
-References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
- <Ydjje8qBOP3zDOZi@google.com> <CAJHc60ziKv6P4ZmpLXrv+s4DrrDtOwuQRAc4bKcrbR3aNAK5mQ@mail.gmail.com>
- <Yd3AGRtkBgWSmGf2@google.com> <CAJHc60w7vfHkg+9XkPw+38nZBWLLhETJj310ekM1HpQQTL_O0Q@mail.gmail.com>
- <Yd3UymPg++JW98/2@google.com>
-In-Reply-To: <Yd3UymPg++JW98/2@google.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Wed, 12 Jan 2022 10:08:32 -0800
-Message-ID: <CAJHc60yPmdyonJESHPHvXJR+ekugZev4XzsZc2YV2mnfBdy-bw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Date:   Wed, 12 Jan 2022 18:08:43 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH] platform: finally disallow IRQ0 in platform_get_irq() and
+ its ilk
+In-Reply-To: <9c3f9a6e-89b6-b73b-032f-e4b4ee6f72ac@omp.ru>
+References: <5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru>
+ <87pmp7volh.wl-maz@kernel.org> <9c3f9a6e-89b6-b73b-032f-e4b4ee6f72ac@omp.ru>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <58caf8b54828bcc25cfc65220d29b68f@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: s.shtylyov@omp.ru, gregkh@linuxfoundation.org, rafael@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de, geert@linux-m68k.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 11:04 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Tue, Jan 11, 2022, Raghavendra Rao Ananta wrote:
-> > On Tue, Jan 11, 2022 at 9:36 AM Sean Christopherson <seanjc@google.com> wrote:
-> > > In your proposed patch, KVM_RUN will take kvm->lock _every_ time.  That introduces
-> > > unnecessary contention as it will serialize this bit of code if multiple vCPUs
-> > > are attempting KVM_RUN.  By checking !vm_started, only the "first" KVM_RUN for a
-> > > VM will acquire kvm->lock and thus avoid contention once the VM is up and running.
-> > > There's still a possibility that multiple vCPUs will contend for kvm->lock on their
-> > > first KVM_RUN, hence the quotes.  I called it "naive" because it's possible there's
-> > > a more elegant solution depending on the use case, e.g. a lockless approach might
-> > > work (or it might not).
-> > >
-> > But is it safe to read kvm->vm_started without grabbing the lock in
-> > the first place?
->
-> Don't know, but that's my point.  Without a consumer in generic KVM and due to
-> my lack of arm64 knowledge, without a high-level description of how the flag will
-> be used by arm64, it's really difficult to determine what's safe and what's not.
-> For other architectures, it's an impossible question to answer because we don't
-> know how the flag might be used.
->
-> > use atomic_t maybe for this?
->
-> No.  An atomic_t is generally useful only if there are multiple writers that can
-> possibly write different values.  It's highly unlikely that simply switching to an
-> atomic address the needs of arm64.
->
-> > > > > > +                     kvm->vm_started = true;
-> > > > > > +                     mutex_unlock(&kvm->lock);
-> > > > >
-> > > > > Lastly, why is this in generic KVM?
-> > > > >
-> > > > The v1 of the series originally had it in the arm specific code.
-> > > > However, I was suggested to move it to the generic code since the book
-> > > > keeping is not arch specific and could be helpful to others too [1].
-> > >
-> > > I'm definitely in favor of moving/adding thing to generic KVM when it makes sense,
-> > > but I'm skeptical in this particular case.  The code _is_ arch specific in that
-> > > arm64 apparently needs to acquire kvm->lock when checking if a vCPU has run, e.g.
-> > > versus a hypothetical x86 use case that might be completely ok with a lockless
-> > > implementation.  And it's not obvious that there's a plausible, safe use case
-> > > outside of arm64, e.g. on x86, there is very, very little that is truly shared
-> > > across the entire VM/system, most things are per-thread/core/package in some way,
-> > > shape, or form.  In other words, I'm a wary of providing something like this for
-> > > x86 because odds are good that any use will be functionally incorrect.
-> > I've been going back and forth on this. I've seen a couple of
-> > variables declared in the generic struct and used only in the arch
-> > code. vcpu->valid_wakeup for instance, which is used only by s390
-> > arch. Maybe I'm looking at it the wrong way as to what can and can't
-> > go in the generic kvm code.
->
-> Ya, valid_wakeup is an oddball, I don't know why it's in kvm_vcpu instead of
-> arch code that's wrapped with e.g. kvm_arch_vcpu_valid_wakeup().
->
-> That said, valid_wakeup is consumed by generic KVM, i.e. has well defined semantics
-> for how it is used, so it's purely a "this code is rather odd" issue.  vm_started
-> on the other hand is only produced by generic KVM, and so its required semantics are
-> unclear.
+On 2022-01-12 17:53, Sergey Shtylyov wrote:
+> On 1/4/22 12:26 PM, Marc Zyngier wrote:
+> 
+>> [Adding Geert]
+>> 
+>> On Sat, 06 Nov 2021 20:26:47 +0000,
+>> Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
+>>> 
+>>> The commit a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 
+>>> is
+>>> invalid") only calls WARN() when IRQ0 is about to be returned, 
+>>> however
+>>> using IRQ0 is considered invalid (according to Linus) outside the 
+>>> arch/
+>>> code where it's used by the i8253 drivers. Many driver subsystems 
+>>> treat
+>>> 0 specially (e.g. as an indication of the polling mode by libata), so
+>>> the users of platform_get_irq[_byname]() in them would have to filter
+>>> out IRQ0 explicitly and this (quite obviously) doesn't scale...
+>>> Let's finally get this straight and return -EINVAL instead of IRQ0!
+>>> 
+>>> Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is 
+>>> invalid")
+>>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>>> 
+>>> ---
+>>> The patch is against the 'driver-core-linus' branch of Greg 
+>>> Kroah-Hartman's
+>>> 'driver-core.git' repo.
+>>> 
+>>>  drivers/base/platform.c |    6 ++++--
+>>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>> 
+>>> Index: driver-core/drivers/base/platform.c
+>>> ===================================================================
+>>> --- driver-core.orig/drivers/base/platform.c
+>>> +++ driver-core/drivers/base/platform.c
+>>> @@ -231,7 +231,8 @@ int platform_get_irq_optional(struct pla
+>>>  out_not_found:
+>>>  	ret = -ENXIO;
+>>>  out:
+>>> -	WARN(ret == 0, "0 is an invalid IRQ number\n");
+>>> +	if (WARN(!ret, "0 is an invalid IRQ number\n"))
+>>> +		return -EINVAL;
+>>>  	return ret;
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(platform_get_irq_optional);
+>>> @@ -445,7 +446,8 @@ static int __platform_get_irq_byname(str
+>>> 
+>>>  	r = platform_get_resource_byname(dev, IORESOURCE_IRQ, name);
+>>>  	if (r) {
+>>> -		WARN(r->start == 0, "0 is an invalid IRQ number\n");
+>>> +		if (WARN(!r->start, "0 is an invalid IRQ number\n"))
+>>> +			return -EINVAL;
+>>>  		return r->start;
+>>>  	}
+>> 
+>> Geert recently mentioned that a few architectures (such as sh?) still
+>> use IRQ0 as something valid in limited cases.
+>> 
+>> From my PoV, this patch is fine, but please be prepared to fix things
+>> in a couple of years when someone decides to boot a recent kernel on
+>> their pet dinosaur. With that in mind:
+>> 
+>> Acked-by: Marc Zyngier <maz@kernel.org>
+> 
+>    Greg, so would that ACK be enough? Is there a chance this patch
+> gets finally included
+> into 5.17-rc1? Or should I look into fixing the recently found
+> arch/sh/ issue 1st (as you
+> can see, just WARN()'ing about IRQ0 wasn't enough to get this fixed)?
 
-Understood. I'll move it to arm64 and we can refactor it if there's a
-need for any other arch(s).
+Fixing SH would be a good thing.
 
 Thanks,
-Raghavendra
+
+         M.
+-- 
+Jazz is not dead. It just smells funny...

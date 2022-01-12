@@ -2,115 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAF448BBC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA22648BBC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236068AbiALAVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 19:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S236556AbiALAY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 19:24:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiALAVv (ORCPT
+        with ESMTP id S234921AbiALAYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 19:21:51 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9A0C06173F;
-        Tue, 11 Jan 2022 16:21:50 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JYSt520fWz4xtf;
-        Wed, 12 Jan 2022 11:21:48 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641946909;
-        bh=pWR0F1Pzz3t59vyhhhWsePr/xIsKtinI1MrS69LcH+E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Qp0ldJbU0d/Rd2hPuHjiW+GEBW95zbCIwqP7tDqUQOrKDyRjeqVqC3Wu4k7L2LBLP
-         LJpA5sA03en1Eb2fjT/SdythcGQtPXr+YeBLWXcNpbendl+wwpEkzgdtQ0MC3a/Njn
-         Qx4QnJe5q0NWYbNgs4DYhnQwSSS5hAsPJXOGkTLQi2SXCt62/R6I05dy0fmz3HJfqE
-         2QRbz2lPcOpET7SsxDXgxZJgFRBcExNrKQSLORCQd/bkyLlW4agPXVpeMYZJsK/rpw
-         dwJ86owSINhgwAoRdvnWpKWnL8g7qKGbskt1oj4UyY/6No4NPVim1ZsjTVTWT3XkMg
-         8nXQz8iUpcKSA==
-Date:   Wed, 12 Jan 2022 11:21:47 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yinan Liu <yinan@linux.alibaba.com>
-Subject: linux-next: manual merge of the ftrace tree with the kbuild tree
-Message-ID: <20220112112147.3e19ce23@canb.auug.org.au>
+        Tue, 11 Jan 2022 19:24:24 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DFAC06173F;
+        Tue, 11 Jan 2022 16:24:24 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id u21so3076626edd.5;
+        Tue, 11 Jan 2022 16:24:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=dFpazlv+lywoGwl9/cFSYAAABBv6zxWMmcLpH0m+3/M=;
+        b=Jvwa9TaIcLtrQXSCOZEpvt5o4j62C2t3W/QMQ/KHJ/fiv10OoW6JKvXj5KBsR6XAd9
+         YTJX3yMs+oReKUEusB6HXOycLwagLJUD3wZlEY4LzzdZZk2UhbnmiM2kmyYYwY3bXcry
+         I5k+BCombR71JSn6bX3+5Knoym/PI1ut2Mzwc/VjfVDq/AqE04o8xf4fXQz5FmaHuweo
+         JkXPznZqOnmSwakVWgUKEGUyT9xIufjGXDTNb8kX1g956DAXLnicAHPkoZITy9/nV74M
+         TdhGyqIuaWMDnKnhm95W6/P6RSpUBTjyJ0EQAGayOmRlDg58JOSj8qZKnbD+IR6TiQkT
+         Fhdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dFpazlv+lywoGwl9/cFSYAAABBv6zxWMmcLpH0m+3/M=;
+        b=G/jHIhwY2QJz/iM/z5KIfT2569IgvybYzHhliT2r/TU3elKOSOMZT5f4/Bo5EicCdL
+         25ttgA19YAuRpYnZZ253K9e1OPUGNYEreETryAjuspUuHvye/nPB4+jGEwdU3vMyS+c+
+         Z8ghKHbsJdyudSjGW+anmyxGMto1fn3gOi8smG+prQhkHuSKPjf/WbGsDt1Xlkmjhc8R
+         zpSQNxq6NLQiCtImpKYvQZQ5BOPIWgiD0q3chewd8knqmHuyRcEpt7b8aWFbw8Pl54r+
+         Wk2/R1sVJPi6s+1WsoHmE0tzg9imcYQ1Y3mWOsu3AiRucytev6W7DwGQi1IStyJrvGGI
+         lGbQ==
+X-Gm-Message-State: AOAM530SBq9Gc+Ny3kwm304gHfgojkfX29KJXJMxEO3B7pDwZiEhrver
+        Ai75uDbHGqq4YWq8jy/DqP8=
+X-Google-Smtp-Source: ABdhPJxbp1jqOMEDjz32OniUVIm0N2DkA9bp6QjRfoPbyPBgiQ99JQe7N3wdX7/klyg2U5f09KGbYA==
+X-Received: by 2002:a05:6402:1764:: with SMTP id da4mr6500959edb.324.1641947062977;
+        Tue, 11 Jan 2022 16:24:22 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id w17sm183314edr.68.2022.01.11.16.24.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 11 Jan 2022 16:24:22 -0800 (PST)
+Date:   Wed, 12 Jan 2022 00:24:21 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     Roman Gushchin <guro@fb.com>
+Cc:     Wei Yang <richard.weiyang@gmail.com>, hannes@cmpxchg.org,
+        mhocko@kernel.org, vdavydov.dev@gmail.com,
+        akpm@linux-foundation.org, shakeelb@google.com, vbabka@suse.cz,
+        willy@infradead.org, songmuchun@bytedance.com, shy828301@gmail.com,
+        surenb@google.com, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 3/4] mm/memcg: retrieve parent memcg from css.parent
+Message-ID: <20220112002421.m3fyktkkz55fup3v@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20220111010302.8864-1-richard.weiyang@gmail.com>
+ <20220111010302.8864-3-richard.weiyang@gmail.com>
+ <Yd3H8Hea6dBlkzeW@carbon.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hbqfl/N6O/56_5migZ9LuR=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd3H8Hea6dBlkzeW@carbon.dhcp.thefacebook.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/hbqfl/N6O/56_5migZ9LuR=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jan 11, 2022 at 10:09:52AM -0800, Roman Gushchin wrote:
+>On Tue, Jan 11, 2022 at 01:03:01AM +0000, Wei Yang wrote:
+>> The parent we get from page_counter is correct, while this is two
+>> different hierarchy.
+>> 
+>> Let's retrieve the parent memcg from css.parent just like parent_cs(),
+>> blkcg_parent(), etc.
+>
+>Does it bring any benefits except consistency?
+>
 
-Hi all,
+I am afraid no.
 
-Today's linux-next merge of the ftrace tree got a conflict in:
+>> 
+>> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+>
+>Reviewed-by: Roman Gushchin <guro@fb.com>
+>
+>Thanks!
 
-  scripts/link-vmlinux.sh
-
-between commit:
-
-  7d153696e5db ("kbuild: do not include include/config/auto.conf from shell=
- scripts")
-
-from the kbuild tree and commit:
-
-  4f1f18311591 ("scripts: ftrace - move the sort-processing in ftrace_init")
-
-from the ftrace tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc scripts/link-vmlinux.sh
-index 5189c9a12066,dd9955f45774..000000000000
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@@ -412,11 -411,8 +412,8 @@@ if is_enabled CONFIG_BUILDTIME_TABLE_SO
-  	fi
-  fi
- =20
-- info SYSMAP System.map
-- mksysmap vmlinux System.map
--=20
-  # step a (see comment above)
- -if [ -n "${CONFIG_KALLSYMS}" ]; then
- +if is_enabled CONFIG_KALLSYMS; then
-  	mksysmap ${kallsyms_vmlinux} .tmp_System.map
- =20
-  	if ! cmp -s System.map .tmp_System.map; then
-
---Sig_/hbqfl/N6O/56_5migZ9LuR=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHeHxsACgkQAVBC80lX
-0GwiFQf/dKVwG65IVK08HsTS76vrpVY0Lboqs8j2pZhrtGQ0oACESCPUjYLm+asy
-PPgYevr4d52IqG9pWx79eokHKc/bXlLV5fuWth2M6fu/QN2oCFlreDmFoF7hzYg3
-x9syhYf+Cfiz6RifcVaxDaWtaQqNMvwRNX9hmcT5EruLQu8OT1YwBnst237p4nsu
-j3NIRXe/ab2HTBJwmOYSX0MZMGfnauvm0qkV3Df1NMuqqIF8+Qa6V96IFVIr/UHA
-hscvu2CuYA44uT6RMNbywzwgZAQD/d9XznocRvcAHnKfH0GPu1cKihxTk6CwXMs3
-Q5I6HsSzJNXkDw+qiW5we/5bQfqkqQ==
-=sXRj
------END PGP SIGNATURE-----
-
---Sig_/hbqfl/N6O/56_5migZ9LuR=--
+-- 
+Wei Yang
+Help you, Help me

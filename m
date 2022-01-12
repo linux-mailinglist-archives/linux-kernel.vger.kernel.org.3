@@ -2,144 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9999548BC1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD84448BC1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347480AbiALBC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 20:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
+        id S1344866AbiALBDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 20:03:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347471AbiALBCZ (ORCPT
+        with ESMTP id S1344077AbiALBDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 20:02:25 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12E7C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:02:24 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id b13so3560978edn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:02:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8B3i53DIdCTHTAdYfwnz50NvQALzLxzsVidL1FhgLmU=;
-        b=EK2SOb9OHyWt1jhh6mIsGgGLfUAui3x/k9CyoYVtZx2QneH12+Panh3HzF/TVB86f8
-         wUpjBoOMjRf5CEDgDLKWWcLUP6atsZgXaF5T+d2YAvKFTRidIO9aIKvR0tLBo2PKweBS
-         p03XKqx39KzXBaF1qGeEZhIjqCP93ZQef7Rws=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8B3i53DIdCTHTAdYfwnz50NvQALzLxzsVidL1FhgLmU=;
-        b=4akado12seEzmuIY/L6pLUJVWHSMvWthjDbWEH+O23eFzh8/FKfOPKjZwviXaXyPfd
-         YG8sPkSosN6wlYAD+cnk7l33VzF7od0bsYlrkuYOQwEp/6CP8/aCTg4zSOG7JvdHAr4Q
-         iVDZHSUqkOX+Mbpq1BWb3118QQNYOqmOdaO0E2A19nZ8jL1TnmgAv9MEetHOjpXkDB+N
-         Qcqwn+tdO5uB1faQPETac9xmYujK81wBU1ichSxAax36aE5MIjgTJpzOKvLnXPLGmlbe
-         93j2ktDVdFQKWKVVZaK36uGYCRSa8MLiTr41EFlTjS/IW+jYmIggYScUaQ2pysNRxmXU
-         zM8w==
-X-Gm-Message-State: AOAM531QiupVoGqmV0EXds5194Fnc7wUtPBb7bagAUNtLq0CBB5/diwE
-        BNyTD5bdxclvb1xQQ6YoECU7eSeMzwSxSOjGeV4=
-X-Google-Smtp-Source: ABdhPJw7ojzMji5Z7iSoHjTZNAAQa4gUMNPi6z9L0YtRd6gckraOhYreLi30w3vRNvsGGQbXzppDYg==
-X-Received: by 2002:a05:6402:84e:: with SMTP id b14mr6570974edz.200.1641949343091;
-        Tue, 11 Jan 2022 17:02:23 -0800 (PST)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id b15sm273596edd.91.2022.01.11.17.02.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 17:02:22 -0800 (PST)
-Received: by mail-wr1-f53.google.com with SMTP id o3so1306439wrh.10
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:02:22 -0800 (PST)
-X-Received: by 2002:a5d:6951:: with SMTP id r17mr5665842wrw.274.1641949341987;
- Tue, 11 Jan 2022 17:02:21 -0800 (PST)
+        Tue, 11 Jan 2022 20:03:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A53C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:03:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0A393CE1BBB
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 01:03:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B244C36AE3;
+        Wed, 12 Jan 2022 01:03:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641949383;
+        bh=175gygNvX/igOQyHqyBDa6ice4DXkW9ovpC1HV7NYf8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=qPbVAd37NkIJ4rKHTPYTMlgNUGKVsXrwBbVC+iJhiX9euf2gI9U1KaPjHk3Ek9hdC
+         tvxWdAa2mpx/b654GnISkJNBgNvzm0lJees8WJ2bT95CKq6fDoWP+3hgfcEgGbuEPc
+         1/C5ew0aLceZfcLxj7bF5GswGypm0TAPrAPk9m3VMYvtCmL6ABRKU0nXCbZpMO+uAd
+         +UMz47e6ZTKQ3EAAeUiv6eb9GDDpR6aIIMG+WeJxy7ZfkNd49fiXrsOD6bB4KllpRi
+         wPOwjTzUgwVgqg7djrPd5vj6A/24TRfYBN3wPxy7P2UERQle16d2A9V8CW24XOrDwn
+         w1OcXL8WpLAxA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BA94D5C0DA1; Tue, 11 Jan 2022 17:03:02 -0800 (PST)
+Date:   Tue, 11 Jan 2022 17:03:02 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alison Chaiken <achaiken@aurora.tech>
+Cc:     tglx@linutronix.de, peterz@infradead.org,
+        valentin.schneider@arm.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org, glenn@aurora.tech,
+        alison@she-devel.com
+Subject: Re: [PATCH 0/5] handle kthread_prio kernel cmdline parameter
+ consistently
+Message-ID: <20220112010302.GL947480@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220111233253.21692-1-achaiken@aurora.tech>
 MIME-Version: 1.0
-References: <20220111191456.GA11976@embeddedor>
-In-Reply-To: <20220111191456.GA11976@embeddedor>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 11 Jan 2022 17:02:05 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjh5NjGvRm357n-v6wWU6J920hB4iG+nCtOHz2Qbs=p5A@mail.gmail.com>
-Message-ID: <CAHk-=wjh5NjGvRm357n-v6wWU6J920hB4iG+nCtOHz2Qbs=p5A@mail.gmail.com>
-Subject: Re: [GIT PULL] fallthrough fixes for Clang for 5.17-rc1
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="00000000000044e56705d5581f70"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220111233253.21692-1-achaiken@aurora.tech>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000044e56705d5581f70
-Content-Type: text/plain; charset="UTF-8"
+On Tue, Jan 11, 2022 at 03:32:49PM -0800, Alison Chaiken wrote:
+> When CONFIG_PREEMPT_RT=y, RCU_SOFTIRQ work is moved to dedicated rcuc
+> per-core threads.  The rcutree.kthread_prio kernel cmdline parameter
+> controls the priority of those threads.
+> 
+> A provided kthread_prio kernel cmdline parameter also elevates the
+> priority of rcuog threads, but only if they are launched from
+> rcu_spawn_gp_kthread(), not if they are launched from
+> rcu_spawn_one_nocb_kthread().  Fix this inconsistency.
+> 
+> When CONFIG_RCU_NOCB_CPU=y, an rcu_nocbs command-line parameter
+> offloads the work of rcuc on designated cores to new rcuop threads
+> that are not pinned to the cores whose expired grace-period timer
+> callbacks they run.  While rcuop threads have the same function as
+> rcuc threads, their priority is not controlled by the kthread_prio
+> parameter.  Add this feature and update the documentation accordingly.
+> 
+> Alison Chaiken (4):
+>   RCU: move kthread_prio bounds-check to a separate function
+>   RCU: make priority of grace-period thread consistent
+>   RCU: elevate priority of offloaded callback threads
+>   RCU: update documentation regarding kthread_prio cmdline parameter
 
-On Tue, Jan 11, 2022 at 11:08 AM Gustavo A. R. Silva
-<gustavoars@kernel.org> wrote:
->
-> Please, pull the following patches that fix some fall-through warnings
-> when building with Clang and -Wimplicit-fallthrough.
+I have queued these for review and testing, thank you!
 
-Ugh. I started pulling that, and then I actually looked at this one:
+2/4 appears to have been produced against a pre-merge-window mainline,
+so I had to adjust it a bit to queue it on -rcu.  Please check to make
+sure that I did not mess anything up.
 
-> Gustavo A. R. Silva (1):
->       MIPS: mm: tlbex: Fix fall-through warning for Clang
-
-and that's just too ugly to live.
-
-It was ugly before, but now it's just insane.
-
-It literally has an if-statement with a block statement that contains
-other cases.
-
-Fine, that's not illegal, and Duff's device made the model famous.
-
-But in this case, there's no actual _reason_ for it. It literally
-looks like a mistake to me.
-
-There's no reason to have that block statement in the first place, and
-there's *doubly* no reason to add a "fallthrough" to other case
-statements that then just do a "break" anyway.
-
-I notice that we actually had that exact same pattern earlier, see
-line 2166 in that same line. And it's equally bogus there. Actually,
-it's even more bogus there, because the indentation is wrong too!
-
-So I _think_ that patch should do something like the attached, but I
-didn't actually test this in any way (I didn't check my mips
-cross-build setup), and this is all so ugly that I have to avert my
-eyes to even attach that patch to this email.
-
-I also don't understand why it's doing that 'switch ()' on the
-current_cpu_type(), only to avoid the 'cpu_has_mips_r2_exec_hazard'
-test, Which is just _another_ switch on current_cpu_type().
-
-All this code is completely incomprehensibly oddly written. It looks
-like some kind of cut-and-paste thing with no actual understanding of
-the code. And I refuse to make it worse than it already is by adding
-even *more* mindless blather to it.
-
-               Linus
-
---00000000000044e56705d5581f70
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kyau8cz60>
-X-Attachment-Id: f_kyau8cz60
-
-IGFyY2gvbWlwcy9tbS90bGJleC5jIHwgMTMgKysrKysrLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQs
-IDYgaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9hcmNoL21pcHMv
-bW0vdGxiZXguYyBiL2FyY2gvbWlwcy9tbS90bGJleC5jCmluZGV4IGIxMzFlNmE3NzM4My4uNzRm
-NTU3ZWQ1MGIwIDEwMDY0NAotLS0gYS9hcmNoL21pcHMvbW0vdGxiZXguYworKysgYi9hcmNoL21p
-cHMvbW0vdGxiZXguYwpAQCAtMjE2MSwxNSArMjE2MSwxNCBAQCBzdGF0aWMgdm9pZCBidWlsZF9y
-NDAwMF90bGJfbG9hZF9oYW5kbGVyKHZvaWQpCiAKIAkJc3dpdGNoIChjdXJyZW50X2NwdV90eXBl
-KCkpIHsKIAkJZGVmYXVsdDoKLQkJCWlmIChjcHVfaGFzX21pcHNfcjJfZXhlY19oYXphcmQpIHsK
-KwkJCWlmIChjcHVfaGFzX21pcHNfcjJfZXhlY19oYXphcmQpCiAJCQkJdWFzbV9pX2VoYigmcCk7
-Ci0JCQlmYWxsdGhyb3VnaDsKKwkJCWJyZWFrOwogCiAJCWNhc2UgQ1BVX0NBVklVTV9PQ1RFT046
-CiAJCWNhc2UgQ1BVX0NBVklVTV9PQ1RFT05fUExVUzoKIAkJY2FzZSBDUFVfQ0FWSVVNX09DVEVP
-TjI6Ci0JCQkJYnJlYWs7Ci0JCQl9CisJCQlicmVhazsKIAkJfQogCiAJCS8qIEV4YW1pbmUgIGVu
-dHJ5bG8gMCBvciAxIGJhc2VkIG9uIHB0ci4gKi8KQEAgLTIyMzcsMTQgKzIyMzYsMTQgQEAgc3Rh
-dGljIHZvaWQgYnVpbGRfcjQwMDBfdGxiX2xvYWRfaGFuZGxlcih2b2lkKQogCiAJCXN3aXRjaCAo
-Y3VycmVudF9jcHVfdHlwZSgpKSB7CiAJCWRlZmF1bHQ6Ci0JCQlpZiAoY3B1X2hhc19taXBzX3Iy
-X2V4ZWNfaGF6YXJkKSB7CisJCQlpZiAoY3B1X2hhc19taXBzX3IyX2V4ZWNfaGF6YXJkKQogCQkJ
-CXVhc21faV9laGIoJnApOworCQkJYnJlYWs7CiAKIAkJY2FzZSBDUFVfQ0FWSVVNX09DVEVPTjoK
-IAkJY2FzZSBDUFVfQ0FWSVVNX09DVEVPTl9QTFVTOgogCQljYXNlIENQVV9DQVZJVU1fT0NURU9O
-MjoKLQkJCQlicmVhazsKLQkJCX0KKwkJCWJyZWFrOwogCQl9CiAKIAkJLyogRXhhbWluZSAgZW50
-cnlsbyAwIG9yIDEgYmFzZWQgb24gcHRyLiAqLwo=
---00000000000044e56705d5581f70--
+							Thanx, Paul

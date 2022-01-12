@@ -2,90 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B379848CEB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 00:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB9F48CEB9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 00:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbiALXEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 18:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235007AbiALXEO (ORCPT
+        id S235107AbiALXFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 18:05:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53861 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235035AbiALXFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 18:04:14 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57580C06173F;
-        Wed, 12 Jan 2022 15:04:14 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id k30so6893326wrd.9;
-        Wed, 12 Jan 2022 15:04:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JPJblGojv68qXHEOlkKW58+4JrhFqdhCrhqhESY/HD8=;
-        b=SNg2sho5IfNYgbCB1xjM7OU0QW/XXzdGkG91d1s3K8i/BZdXb/7ynPl0xsu8gc5Fze
-         OsOs3f0ljlyOF8CKxhZEJGTP8tw6cFiYkLDJkHd9o8QtMM6wKIvwCLMeKLk5RbW7hqF1
-         vwtc8H0ZiX50S+ydlSu3wqtd+8iYRmItAhrXoM/huli9jx6Pe8HD80VQ8FZloXOJ1aas
-         KVga/aKcn0i+V80DoR/aQIeLiIoqS9wEtyUgkl2XLdvR4KLrF6+F/EvNdPF1Yudu2iWu
-         sNVk9efUgltg7Gtc7FwQkGOO1+RmyF/NWeeSgdx78q7QPGZo3vAvxCw6jayQk/cltldR
-         iLKg==
+        Wed, 12 Jan 2022 18:05:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642028750;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ws9TpzzjuOpfNvU+GlroZVEa9/4QRGFMjeW9z5siB2s=;
+        b=FefFndmGT4ERIexYhdPO27kS5EX6dqkSwSncAefl02WzCcvcg/nVPqvDP9VKxHrkPIoyA4
+        TI4EQtV/tfN+hnV1noIEqBxe/yZVjtkKs90mu8pJCJ4Fu3WmrnYEdVFESN2Jgp2QDXL+p3
+        qvKPPsUSOO8m5yzadsLkJi/wdy+315g=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-81-ja-FdpTuNMyVkpkgSYrArg-1; Wed, 12 Jan 2022 18:05:48 -0500
+X-MC-Unique: ja-FdpTuNMyVkpkgSYrArg-1
+Received: by mail-ed1-f69.google.com with SMTP id z8-20020a056402274800b003f8580bfb99so3600190edd.11
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 15:05:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JPJblGojv68qXHEOlkKW58+4JrhFqdhCrhqhESY/HD8=;
-        b=XYxFbydNVRXJCi+kSMT6sFXwP+EqdxA3+z5Vfby5LwJsYdZuiRLcnbiEnEFLI5ZPtN
-         UB2NF8vHUrrKtISfQk/U0FIDvtop35sQR6KX76bCdh8KKXjsA4soSGXUjyC40ODNmT87
-         +BkrWwQ6svvwr+P7J/eZ7Q2SEEqOFHbiJTAfz4JRB895KGTQ4DrQUc6YuwamEmDBuyBR
-         nGli1ruJ6sz3rfSALsELmL0uSsTNLwwQPTSlS3C/840eI4U+8aoKcAskHFz88/Om60cE
-         KKaIMzkg/3t35AzRQ2VHx/rpj8o/ldWsaq3aFrDTI03bc8kOpRaa2+wqbchmjFBo3i8I
-         p02A==
-X-Gm-Message-State: AOAM533Jpq8++ZtTBrn05w1VB6dOHopW+cBRMyxLzRNeW3VpqTKVk5jU
-        k4icrxPvCw1GOxYMj2oIYOrWNfizb+7EK9cn
-X-Google-Smtp-Source: ABdhPJwLUWRwU/yurVO2wcN8frae9XRxsB3mD9pZLrIi6BlQpko2UABoU6oUiG1e2dzTUOGkQ78erA==
-X-Received: by 2002:a05:6000:18cd:: with SMTP id w13mr1604727wrq.199.1642028652961;
-        Wed, 12 Jan 2022 15:04:12 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id c7sm1294974wri.21.2022.01.12.15.04.12
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=Ws9TpzzjuOpfNvU+GlroZVEa9/4QRGFMjeW9z5siB2s=;
+        b=1VmYS8/GsWZ0uytqxVwOFDFAtb4GBIbmY73wSs0MnQ1/SFZG6vitC6capQf7XGXicM
+         t+HMzD5MAEkLmGEEcpPE/0R5tubtkzHFjw2xj+Xj518wfgO9xsNx0qRO8Y1+DFD2C75w
+         4Yogqqa1y+YCE3ZNUzLa5McT5wn/YEldQkOkWAtcaRaN2rc+PlE99XsUihf3FuX4NiiB
+         RbbmU2WTB1eDAwUaaeVwCc8eb7miDHPsnvYHVJV0SixaSxKiTHj2HSXque2VaRHK5neI
+         SmRYTOGyMEmkoKd2Kdzo8/2awXo0n18xCcFmqj8wRc+nw8g2yIrf7Y2qr+eH38HZlsUO
+         b1uQ==
+X-Gm-Message-State: AOAM530As3eV8vnUlP3NZw0EuIqUC65SslinShvx7lOn3EE9D2VAAJ0d
+        JvSCQqF1DX5+3BnIRvLb/IpblehG3yBxUKXc00FC70x/8uZVX380A/a9VPmqTZEC9MCH8BiI3YC
+        SNDagy7RcY7GvgcNdBIpi3kYp
+X-Received: by 2002:a05:6402:4404:: with SMTP id y4mr1783917eda.226.1642028746623;
+        Wed, 12 Jan 2022 15:05:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwojY1LxAjD9AXAzaNuTF4NAhU9QOmsFCUDXeKKPiTITlH+XF52dJU+fJLJfD7B/tnfoQW5Uw==
+X-Received: by 2002:a05:6402:4404:: with SMTP id y4mr1783858eda.226.1642028745612;
+        Wed, 12 Jan 2022 15:05:45 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id qf22sm318756ejc.85.2022.01.12.15.05.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 15:04:12 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        ocfs2-devel@oss.oracle.com
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ocfs2: remove redundant assignment to variable free_space
-Date:   Wed, 12 Jan 2022 23:04:11 +0000
-Message-Id: <20220112230411.1090761-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Wed, 12 Jan 2022 15:05:44 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 242B21802D8; Thu, 13 Jan 2022 00:05:44 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        linux-crypto@vger.kernel.org, Erik Kline <ek@google.com>,
+        Fernando Gont <fgont@si6networks.com>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        hideaki.yoshifuji@miraclelinux.com,
+        Hannes Frederic Sowa <hannes@stressinduktion.org>
+Subject: Re: [PATCH RFC v1 2/3] ipv6: move from sha1 to blake2s in address
+ calculation
+In-Reply-To: <20220112131204.800307-3-Jason@zx2c4.com>
+References: <20220112131204.800307-1-Jason@zx2c4.com>
+ <20220112131204.800307-3-Jason@zx2c4.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 13 Jan 2022 00:05:44 +0100
+Message-ID: <87r19cftbr.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable free_space is being initialized with a value that is not read,
-it is being re-assigned later in the two paths of an if statement. The
-early initialization is redundant and can be removed.
+"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/ocfs2/dir.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> BLAKE2s is faster and more secure. SHA-1 has been broken for a long time
+> now. This also removes some code complexity, and lets us potentially
+> remove sha1 from lib, which would further reduce vmlinux size.
 
-diff --git a/fs/ocfs2/dir.c b/fs/ocfs2/dir.c
-index bd8d534f11cb..f2cc1ff29e6d 100644
---- a/fs/ocfs2/dir.c
-+++ b/fs/ocfs2/dir.c
-@@ -3343,7 +3343,7 @@ static int ocfs2_find_dir_space_id(struct inode *dir, struct buffer_head *di_bh,
- 	struct ocfs2_dir_entry *de, *last_de = NULL;
- 	char *de_buf, *limit;
- 	unsigned long offset = 0;
--	unsigned int rec_len, new_rec_len, free_space = dir->i_sb->s_blocksize;
-+	unsigned int rec_len, new_rec_len, free_space;
- 
- 	/*
- 	 * This calculates how many free bytes we'd have in block zero, should
--- 
-2.33.1
+So this one is a bit less obvious than the BPF case: the "stable address
+generation" is supposed to result in generating addresses that are,
+well, stable. The documentation for the stable_secret sysctl implies
+that this should be for the lifetime of the system:
+
+       It is recommended to generate this secret during installation
+       of a system and keep it stable after that.
+
+However, if we make this change, systems setting a stable_secret and
+using addr_gen_mode 2 or 3 will come up with a completely different
+address after a kernel upgrade. Which would be bad for any operator
+expecting to be able to find their machine again after a reboot,
+especially if it is accessed remotely.
+
+I haven't ever used this feature myself, though, or seen it in use. So I
+don't know if this is purely a theoretical concern, or if the
+stable_address feature is actually used in this way in practice. If it
+is, I guess the switch would have to be opt-in, which kinda defeats the
+purpose, no (i.e., we'd have to keep the SHA1 code around)?
+
+Adding some of the people involved in the original work on stable
+address generation in the hope that they can shed some light on the
+real-world uses for this feature.
+
+-Toke
+
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+> Cc: linux-crypto@vger.kernel.org
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  net/ipv6/addrconf.c | 31 +++++++++----------------------
+>  1 file changed, 9 insertions(+), 22 deletions(-)
+>
+> diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+> index 3445f8017430..f5cb534aa261 100644
+> --- a/net/ipv6/addrconf.c
+> +++ b/net/ipv6/addrconf.c
+> @@ -61,7 +61,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/notifier.h>
+>  #include <linux/string.h>
+> -#include <linux/hash.h>
+> +#include <crypto/blake2s.h>
+>  
+>  #include <net/net_namespace.h>
+>  #include <net/sock.h>
+> @@ -3225,25 +3225,16 @@ static int ipv6_generate_stable_address(struct in6_addr *address,
+>  					const struct inet6_dev *idev)
+>  {
+>  	static DEFINE_SPINLOCK(lock);
+> -	static __u32 digest[SHA1_DIGEST_WORDS];
+> -	static __u32 workspace[SHA1_WORKSPACE_WORDS];
+> -
+> -	static union {
+> -		char __data[SHA1_BLOCK_SIZE];
+> -		struct {
+> -			struct in6_addr secret;
+> -			__be32 prefix[2];
+> -			unsigned char hwaddr[MAX_ADDR_LEN];
+> -			u8 dad_count;
+> -		} __packed;
+> -	} data;
+> -
+> +	struct {
+> +		struct in6_addr secret;
+> +		__be32 prefix[2];
+> +		unsigned char hwaddr[MAX_ADDR_LEN];
+> +		u8 dad_count;
+> +	} __packed data;
+>  	struct in6_addr secret;
+>  	struct in6_addr temp;
+>  	struct net *net = dev_net(idev->dev);
+>  
+> -	BUILD_BUG_ON(sizeof(data.__data) != sizeof(data));
+> -
+>  	if (idev->cnf.stable_secret.initialized)
+>  		secret = idev->cnf.stable_secret.secret;
+>  	else if (net->ipv6.devconf_dflt->stable_secret.initialized)
+> @@ -3254,20 +3245,16 @@ static int ipv6_generate_stable_address(struct in6_addr *address,
+>  retry:
+>  	spin_lock_bh(&lock);
+>  
+> -	sha1_init(digest);
+>  	memset(&data, 0, sizeof(data));
+> -	memset(workspace, 0, sizeof(workspace));
+>  	memcpy(data.hwaddr, idev->dev->perm_addr, idev->dev->addr_len);
+>  	data.prefix[0] = address->s6_addr32[0];
+>  	data.prefix[1] = address->s6_addr32[1];
+>  	data.secret = secret;
+>  	data.dad_count = dad_count;
+>  
+> -	sha1_transform(digest, data.__data, workspace);
+> -
+>  	temp = *address;
+> -	temp.s6_addr32[2] = (__force __be32)digest[0];
+> -	temp.s6_addr32[3] = (__force __be32)digest[1];
+> +	blake2s((u8 *)&temp.s6_addr32[2], (u8 *)&data, NULL,
+> +		sizeof(temp.s6_addr32[2]) * 2, sizeof(data), 0);
+>  
+>  	spin_unlock_bh(&lock);
+>  
+> -- 
+> 2.34.1
 

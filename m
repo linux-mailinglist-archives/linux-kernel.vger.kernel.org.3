@@ -2,84 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F0148BCC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E677848BCC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348066AbiALB6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 20:58:45 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:36757 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346397AbiALB6o (ORCPT
+        id S1348088AbiALB7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 20:59:02 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:56474 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348072AbiALB7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 20:58:44 -0500
-Received: by mail-oi1-f181.google.com with SMTP id r138so1564850oie.3;
-        Tue, 11 Jan 2022 17:58:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QiBvIiOGnQbPLLO74MUCf7VtqI9zuABcfRwv5FnEOog=;
-        b=X1arPjKivDias7qz9ViGbVuiO3BzYv0/Ux/B+Eas+MHdWJJkGqW1H793Lkputdj4Wi
-         Ppkuiwgh6wveaoK3Yfqj9MBEKIpxuqLRY+GEvQzod3/uMjOVghVdizOY52pkgeNqNMy6
-         Rsk0SfPG3oEe177otHfuvk33WUrHj2sNUCN9+CBXV4pt7ILcJBwuRC/65ywFWZO3yQry
-         T7XLNnUzYx+sCOu2SnnolC0n+Lvs6UdpywGnLAezcwir26Qld/mN4jA0BReuKk8PqCrO
-         ZQmhOsXfALkcrjGMhQBlB5WSE1HVlUqjlT1VSo5L2GIqEAgii56Bm3GCmGF3gna6D7WC
-         jc1A==
-X-Gm-Message-State: AOAM530vliFHZJFekHRo6WeYZTt8D8JIsPXguxTivqofOH4RT679kx3c
-        zLNiKXNGsMrsOaeVuxIUeA==
-X-Google-Smtp-Source: ABdhPJyR5jHQ9khvDQSLdyXjDuxF95nxq+SC47jVCaQyQQP7mxU834P9q8u0DA0BfrR2IPkwzJR7og==
-X-Received: by 2002:a05:6808:8d:: with SMTP id s13mr3800219oic.178.1641952724038;
-        Tue, 11 Jan 2022 17:58:44 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id a6sm2010540oil.6.2022.01.11.17.58.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 17:58:43 -0800 (PST)
-Received: (nullmailer pid 3911029 invoked by uid 1000);
-        Wed, 12 Jan 2022 01:58:42 -0000
-Date:   Tue, 11 Jan 2022 19:58:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
+        Tue, 11 Jan 2022 20:59:00 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id 41AB61F44896
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641952739;
+        bh=PF3ZlHbSf6Aq8JxiqzqbyxWalp7fsDDicZK8qmN8P8E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bxtPlOI2O8fiNwobm6Uw7SqhUN3uGufkvzXzy81i/UbTq1R2/nodo9PX3bv/5U8+7
+         2JdK2yFLRe2ipy10Yw3D+T4yAWedzWKfV8naSEf5qE1L3ysgyinRE1ZBp3gG6HQU9H
+         woJX0h4r7gH+vd89YietJNlCoBRB6VX1wLwOtpQLjezlcWj53N8NXjmtebQ8Uq1T+5
+         Mwoq8hTmaKHGAdMCg7C1yWZjCuybzHtiQBKjuOO/pgvwcg7rtUUA/F3BYRaPsIy5XZ
+         ojgCvyfy2vG68u6HJ6LpzVYNmiutgVbWj/sJOdFb5aRzLTnQwmquFHqu67SInN681V
+         mkcEfTH4A/tOQ==
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     hch@lst.de, chao@kernel.org, tytso@mit.edu,
         linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Lucas Stach <dev@lynxeye.de>
-Subject: Re: [PATCH v1 13/14] dt-bindings: arm: fsl: add
- toradex,verdin-imx8mm et al.
-Message-ID: <Yd410mxlPDradVc2@robh.at.kernel.org>
-References: <20220107180314.1816515-1-marcel@ziswiler.com>
- <20220107180314.1816515-14-marcel@ziswiler.com>
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Subject: [GIT PULL] unicode patches for 5.17
+Date:   Tue, 11 Jan 2022 20:58:54 -0500
+Message-ID: <87a6g11zq9.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220107180314.1816515-14-marcel@ziswiler.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Jan 2022 19:03:13 +0100, Marcel Ziswiler wrote:
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> 
-> Add toradex,verdin-imx8mm for our new Verdin iMX8M Mini modules, its
-> nonwifi and wifi variants and the carrier boards (both Dahlia and the
-> Verdin Development Board) they may be mated in.
-> 
-> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> ---
-> 
->  .../devicetree/bindings/arm/fsl.yaml          | 21 +++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
+The following changes since commit 9e1ff307c779ce1f0f810c7ecce3d95bbae40896:
 
-Acked-by: Rob Herring <robh@kernel.org>
+  Linux 5.15-rc4 (2021-10-03 14:08:47 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krisman/unicode.git tags/unicode-for-next-5.17
+
+for you to fetch changes up to e2a58d2d3416aceeae63dfc7bf680dd390ff331d:
+
+  unicode: only export internal symbols for the selftests (2021-10-12 11:41:39 -0300)
+
+----------------------------------------------------------------
+This branch has patches from Christoph Hellwig to split the large data
+tables of the unicode subsystem into a loadable module, which allow
+users to not have them around if case-insensitive filesystems are not to
+be used.  It also includes minor code fixes to unicode and its users,
+from the same author.
+
+There is a trivial conflict in the function encoding_show in
+fs/f2fs/sysfs.c reported by linux-next between commit
+
+84eab2a899f2 ("f2fs: replace snprintf in show functions with sysfs_emit")
+
+and commit a440943e68cd ("unicode: remove the charset field from struct
+unicode_map") from my tree.
+
+I left an example of how I would solve it on the branch
+unicode-f2fs-mergeconflict of my tree.
+
+All the patches here have been on linux-next releases for the past
+months.
+
+Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
+
+----------------------------------------------------------------
+Christoph Hellwig (11):
+      ext4: simplify ext4_sb_read_encoding
+      f2fs: simplify f2fs_sb_read_encoding
+      unicode: remove the charset field from struct unicode_map
+      unicode: mark the version field in struct unicode_map unsigned
+      unicode: pass a UNICODE_AGE() tripple to utf8_load
+      unicode: remove the unused utf8{,n}age{min,max} functions
+      unicode: simplify utf8len
+      unicode: move utf8cursor to utf8-selftest.c
+      unicode: cache the normalization tables in struct unicode_map
+      unicode: Add utf8-data module
+      unicode: only export internal symbols for the selftests
+
+ fs/ext4/super.c                                    |  39 ++-
+ fs/f2fs/super.c                                    |  38 +--
+ fs/f2fs/sysfs.c                                    |   3 +-
+ fs/unicode/Kconfig                                 |  13 +-
+ fs/unicode/Makefile                                |  13 +-
+ fs/unicode/mkutf8data.c                            |  24 +-
+ fs/unicode/utf8-core.c                             | 109 ++++-----
+ fs/unicode/utf8-norm.c                             | 262 +++------------------
+ fs/unicode/utf8-selftest.c                         |  94 ++++----
+ .../{utf8data.h_shipped => utf8data.c_shipped}     |  22 +-
+ fs/unicode/utf8n.h                                 |  81 +++----
+ include/linux/unicode.h                            |  49 +++-
+ 12 files changed, 291 insertions(+), 456 deletions(-)
+ rename fs/unicode/{utf8data.h_shipped => utf8data.c_shipped} (99%)
+

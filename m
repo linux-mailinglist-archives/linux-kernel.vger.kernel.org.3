@@ -2,155 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA5948C74C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBEF48C754
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:38:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354645AbiALPhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:37:02 -0500
-Received: from mail-dm6nam12on2064.outbound.protection.outlook.com ([40.107.243.64]:14144
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1354643AbiALPhB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:37:01 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QNT8XW9j5Biv+uij7GSCOBbp5smcODWutVje/xsIqwTlTbM/HR2H/45eAey0X2n9zD09rYWODVFxxzQarZ+OzTM2bFb2MUVvdvCBGCJ1nDvLHeVVqL9fKRiJD66l6hmEXO8ANkhKQ8krI40/od1TLmP8NZES5TV/TRswRVOXxrvGm4bvChefkL3Mkf6j0v0ElYis0uAXKhe4Ox+Pa4vAEdiL6Ki26PrHPmumYVDkOh505GhfGXBg1K1Kj2fcMCuQ4PtwfUVhPB0Eu5xbIIGPxFTaBeNi26QSczI0EpiI9O8N3QgwYsAprzyv+UD/AmMeA/+eX7Exfm+iSfTNy3YZnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YDj/xRoFADL+7xyX54XAMWJTyWwqBkVJ8lv7XUMQ7DI=;
- b=iOUibV9e1Qshicy+5WL1jaVlCL3m2+VpnHpHIZTISe9vF+j+Y1t6kqNCJxyzj+hXloOWJdysPjcWklo03d2pIiQDTnc+uHRdpCbRKJq5ScoLBtUKYgNiJquYB2L2SBjv7DPoGPIQgmqbAFWz9t02i0SQd1W761LxaRBEFC/AnxiKUIeaSXdAUvW5PyUjDVEuF2PeperfeOkgnxcDF0ftgjOr1j+Jp9a4EZgjWgslAEZZP9IXL4XATcdsUboQj+g+AhRm+a1SFJZmEIzQOL4/MOgcUiR3xUm4q1ufyV1aYgtXWyAaA6C1B5VERyRWC4suhQEIYctevwCFszvCY6v4fQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YDj/xRoFADL+7xyX54XAMWJTyWwqBkVJ8lv7XUMQ7DI=;
- b=MkQeHXGvSzRjRIJroxEEtXFWzG3C1Sb4VE0jCPYRXnhx9cHKPTvr91zbaPHZLm9PlNTdMWRygyk7zy0O1p6SkLMSQMQJ+/Cki6qLAShBrmzDQ1Mm5yRh6j5qsXyWioLHAuPLIg9/2hCeLCq69KCEwOqyhs5NT25+6vKPY/omV74=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by BL1PR12MB5256.namprd12.prod.outlook.com (2603:10b6:208:319::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Wed, 12 Jan
- 2022 15:36:59 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::dd4b:b67b:1688:b52]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::dd4b:b67b:1688:b52%9]) with mapi id 15.20.4888.010; Wed, 12 Jan 2022
- 15:36:58 +0000
-Message-ID: <4dace73c-c37b-2eab-c9f3-49349ef7c0ee@amd.com>
-Date:   Wed, 12 Jan 2022 10:36:53 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [git pull] drm for 5.17-rc1 (pre-merge window pull)
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alex Deucher <alexdeucher@gmail.com>, Jun Lei <Jun.Lei@amd.com>,
-        Mustapha Ghaddar <mustapha.ghaddar@amd.com>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
-        meenakshikumar somasundaram <meenakshikumar.somasundaram@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Dave Airlie <airlied@gmail.com>,
-        "Koenig, Christian" <christian.koenig@amd.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
-References: <CAPM=9tz=_hRpQV1V3M-=KmVVEbr1K166qeb-ne64PHk9Sn-ozg@mail.gmail.com>
- <CAHk-=wg9hDde_L3bK9tAfdJ4N=TJJ+SjO3ZDONqH5=bVoy_Mzg@mail.gmail.com>
- <CAKMK7uEag=v-g6ygHPcT-uQJJx+5KOh2ZRzC2QtM-MCjjW67TA@mail.gmail.com>
- <CADnq5_P9n39RQ5+Nm8O=YKXXvXh1CEzwC2fOEzEJuS2zQLUWEw@mail.gmail.com>
- <CAHk-=wgDGcaRxUwRCR6p-rxDVO78Yj4YyM6ZsPRGiT2JOCoQ6A@mail.gmail.com>
- <CADnq5_OYO7kq+9DBnDvbSfpouFvdLB0LPSL6+f1ZPRBsV=qEqA@mail.gmail.com>
- <CAHk-=wiCCRG9Lwzr+Cur=K1V2GJ9ab_ket7EnG4RZhJ8jJM7xQ@mail.gmail.com>
- <CAHk-=wi8b-YKHeNfwyYHMcgR2vJh4xpSZ0qjkv8E8Y9V8Sv2Tg@mail.gmail.com>
- <CAHk-=whnWnB9yjVaqWNKjavSJxDOEbTAPwef=O7qjL8nKZgV6A@mail.gmail.com>
- <CAHk-=whSAYiO_TkKut6XckdQigFj39ft1Kcs2qJe5niHWPGdwg@mail.gmail.com>
- <CADnq5_OZR9Ft=WVVbpM_WUpFZurni4yVxGPpa4nDkhupmod_ag@mail.gmail.com>
- <6490ec74-7de2-c3a3-d852-31b8594110d8@amd.com>
- <CAHk-=whZW+Cy++vucKQd6Lrj7B1bhd1-pKkgV8xxPJr35Dh2UA@mail.gmail.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <CAHk-=whZW+Cy++vucKQd6Lrj7B1bhd1-pKkgV8xxPJr35Dh2UA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0085.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:4::18) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        id S1354682AbiALPhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:37:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354675AbiALPhl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 10:37:41 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846DFC061756
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:37:41 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id v6so4189244iom.6
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:37:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=MT99N4Q2sFal4BV16Y2DBXC/G/wrM662hqSWy6/EPAQ=;
+        b=D0S0R5BWdXP7WT4Jxia2RzF8E3yxC0WXj9P3O+YnVLnHhqSIQ2JW+5kY2dPh1PPR/Y
+         7W1Tpbiu75Q/Fu3jQIkni3pTXyji2vObSu6rhv6ChCEDRL+stBsobpCCNra3vUD3ifxK
+         AfFN1QmWvS9AZYTgmmNLcRFmC5G1oRummR9Qqm7eg0HogVm2JM7xvQu5RonTlRvEMHP5
+         ULvw+lrRwa2Xaq/Y52RC6SOEdsdDpclOBFCFbJjmEcO9xmq6SgMr6J2CHG1cLxczqp5k
+         O4w/FrdFAWlbwpGG73aM772tslqT+oTwNdEOtU5vqfjttquEwj8SVtyp4vw8VFdaEF9B
+         hkuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=MT99N4Q2sFal4BV16Y2DBXC/G/wrM662hqSWy6/EPAQ=;
+        b=dmxm9OrLoRhvxd6UFKq9rZ4xXeb+6iH0/fDtuF72bOjsFSPAArRpB2gw2qhB68pt2Q
+         QyMxd/w1KMrUs0JqTXkMgjilb7OrU9/4iZKM/cjZKWNjwaYDFuOfe98dPAhgixjq6DYd
+         cHjLVrs3cod0wC5m47rnrFWipXGEz5AlSEIf9useNMADe8/1o3/nLustgXzmDJf8pqO+
+         E9vRR77ddpErPFZoye2aLFIj0jF5CVPAhDjEN7vK/NeDHp49Ll7B/Ll5Nj8ZCkyoPX+p
+         ZEBNoK0w6C7UXImxsBIg8NBUhUzvGjiZ9ajuSOj33upUrBpDPEL2Umw0aNtQL+oNXEEc
+         UeOQ==
+X-Gm-Message-State: AOAM533UO75BKECkBIdpAAHZyuyXKZpv8+V9Jod3RLtMlKNznxoiSk/R
+        VB8oj8EvAiGlPsFcV2eoKnbLxDRjNGJUPg==
+X-Google-Smtp-Source: ABdhPJxJdvuaZ19Y7sMdEg69RcgJIpnlbIXBJQAvPiqtQRRRwcBkrb+bQomtuKkXuGoodyXSRYGuHQ==
+X-Received: by 2002:a6b:fd08:: with SMTP id c8mr129589ioi.184.1642001860721;
+        Wed, 12 Jan 2022 07:37:40 -0800 (PST)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id a11sm62043ilj.33.2022.01.12.07.37.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 07:37:40 -0800 (PST)
+Subject: Re: [PATCH -next v4] blk-mq: fix tag_get wait task can't be awakened
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        John Garry <john.garry@huawei.com>
+Cc:     QiuLaibin <qiulaibin@huawei.com>, ming.lei@redhat.com,
+        martin.petersen@oracle.com, hare@suse.de,
+        johannes.thumshirn@wdc.com, bvanassche@acm.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220111140216.1858823-1-qiulaibin@huawei.com>
+ <Yd2Q6LyJUDAU54Dt@smile.fi.intel.com>
+ <d7f51067-f5a8-e78c-5ece-c1ef132b9b9a@huawei.com>
+ <Yd7J4XbkdIm52bVw@smile.fi.intel.com>
+ <3d386998-d810-5036-a87e-50aba9f56639@huawei.com>
+ <Yd7n7xA9ecF1/0DK@smile.fi.intel.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <03a3bece-12d7-6732-9b80-a008a86320ba@kernel.dk>
+Date:   Wed, 12 Jan 2022 08:37:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 83bb1893-3491-45a6-c405-08d9d5e15ed6
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5256:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB525671AF0D0926C1BE38B09A8C529@BL1PR12MB5256.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gxAiKtoer8+WQCMoR5LA6/N6YaM92sSdy2KLqBlN9u+ccZsRNFDUr7fItupkkABu7yNCsflDOAFMxS8OwvD9tL0DPldIh1vm02LXU9E1d3xktJxVQH5fkK++E4JsoWuXTiLGTLPo6PBmuoIH68MzgBzDeJ3aK4MOPE8sG580l/hhn6YIeii3z7mYs1/YqAY6IKbZSy10YSozOHuaQMw1msOftJsrq9rD37sk3LThnEXvKpcoxuwEJBDvo8jpQ5Ifr29xtKCu9xLqVq1aRCW2Ec0fuj7OkXbsjmScnGJzJKQnxuv4uQcW8lhFfM7TNzyh7Y+1XsOgrjnN30eCEO26qyLMbge0ADbAiDa+gtNqi9cr++nq38XRxIv+35ekcahI8wstSUdZH4zYGSh4ego4ICO9oRWD0RtOdloQriJNE0OZ73vgpDYw3LaU3GA0Kzu2veRYpJFNIZueE8NpbeW7wLirApLGdWOlWwh/ucoaLBmDqTGJKIia2spuIh5T/CONd1BlDb3HxFaR3weuUpVq7j6zmJvCHPv/tS7vUoALIRSKvHW+ylwD0DqrhOvvkfWyMaLCyuUCweFxETRRkd/pyMV04CueZsygHDfBlsa8mKl3L1xX6hwQ2QGZF+gh0rKpKlSLbHWsSb3zlUuLdnK55XHUZMUlTnsJXfItCh+U/YH0LwbYSghzDJex7idLHNWQKslHbP8EnuH+rYA6BVjpD59+wAUt/KQafH75FbrYxzZC1Hwn6lwSSVqnwI7sm1dh
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(5660300002)(6512007)(83380400001)(6916009)(53546011)(6506007)(508600001)(31686004)(66946007)(38100700002)(2906002)(86362001)(4744005)(8936002)(6486002)(36756003)(66476007)(66556008)(6666004)(186003)(31696002)(316002)(4326008)(2616005)(26005)(54906003)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L281azMrN2FPMzk5d0NhQXdwdHRWOWloYU5LM29ldWErMjg4WDFBa1FFb1Ra?=
- =?utf-8?B?TllvRGQvNzcrN3YvalptRVpUMmlHVTIremFsYzF3d2ZRNlUzY1BDYXByU3FH?=
- =?utf-8?B?T3JLSGxaMEpxRFRlOE9yekw1bzJUZGRGRjA2Z3hScGxNTW5ValNZQ2VlSTBK?=
- =?utf-8?B?YUlITmZBRGZVU05wc2FKNXlrM2QyZXNxZnRScU9FcWhPV3h4OGM2dHdFMlNh?=
- =?utf-8?B?UC9SdE9la1MwdnBnS3ltdkhyWkVXSE00YStDdWpuK3NaRE1LaUlSZzBSM2pZ?=
- =?utf-8?B?a3NsRW53N2IrUUgwMzlsTDZXOUs4R1B5N3BEcEo4bkhyK1ZVT1FuUDA1Mklj?=
- =?utf-8?B?R21xL0hQSzcwcTRQWG5BZVJyN3F4aDdRVExqSXN1aFpTRmhTU2dhRlVHcjNm?=
- =?utf-8?B?Z0NaeXFEbzcvZjlCNHoySVFwL0RRT0V5YnNVRTZCQzR1MThJY0phVzhDbVNY?=
- =?utf-8?B?NjhyeTdPMFE0WnVIemFQbGdYZVlKZ1E3S2VTY3QyRWdVT05TdEtGTktTb1ll?=
- =?utf-8?B?bmlyK1c2NlY2bThqUDdCcU9WaEwzWTQxL05KRU1XNzRsemxpbnhrb0RpVUcy?=
- =?utf-8?B?MGVUVTVCNkFub3VNczJxN21OQUtsdkZZZSt6N0g3STNibTBJZGxvczd6eWhj?=
- =?utf-8?B?MUQvUktUaTJjT0JuRmd3RHNPVjloN2M0L1J1NjVTUk5LTUZtS1QxTXdJZFFV?=
- =?utf-8?B?TUhYN3h4Sm02NytReXl2QlN1alRsL0NiTk9aYkNOcFdha2FIN0NkbStHNVJj?=
- =?utf-8?B?MjB2OG5DajNYcTNFUjh0blJnSUptT3J0NzJ5NndrV3A4ZDVvZzVwYXl2MEF1?=
- =?utf-8?B?d3JhRFFQMklhT3duQ001cGpWYS9NRWptbTB1cnJMdmJuSlZ5TW9TMEhpWTk1?=
- =?utf-8?B?UHRta0RiOVpZSnQ5NENhTTF4Y0ZnZTdLMlRJaWFLVVp2V1hOM25Mb1J0Z04y?=
- =?utf-8?B?Y25pdFRlektaTWswbkwxaDdwN2VsNjdwdDlrYy8xSTEvdFVpYlZWVW5sclRN?=
- =?utf-8?B?dFZxY2xnUHM5aHNGOWlqOWMxNHpraExoRkdRbXE3b2Q5MjAycmhWRnI0WGww?=
- =?utf-8?B?MytrZzRnSFVDUmo4TGlpRlJPdkFha240MFBjT2pjVHZ5d2xaUGdIRDZIeTNU?=
- =?utf-8?B?emtSenRwZXBJWFpMKzBVMDJVN1RSaUJOS01WcU52bFptTGJMZUdqYjlWcU5a?=
- =?utf-8?B?UFkyNDVQTjIzbGdlNEg5T01EZXg5QXFRbSs3NytFQ1hPaWxRNkF1alIrOU9O?=
- =?utf-8?B?YXNySzRJY3lWWTBFeG1uTG81UkZsQTdkSHkzTWkvckdsY0paYmNqdGpGcXFU?=
- =?utf-8?B?blFrYlBjdllaZTBFK2lLYkpSK3hod3dwVTl0MmdudVgxRGNzSEhHc25VSFJs?=
- =?utf-8?B?Y016UjMvdkFpVGwrdVdseGFqYVhodUZsa2ZHUlZDVWxka2srV2Z0dGZYZEFY?=
- =?utf-8?B?dVNSK0RtUllxdjJPNkN1d0dlUWZTR3RBL0YxYzlqYUJvNEthQytKeTl6ZkRj?=
- =?utf-8?B?U2NzcFlHbEtpUmI1TmU0NEJQTDZpMDJGZHI1bURNUTVWemtCeXp5bDZTSVB3?=
- =?utf-8?B?aXY3KzB3aUY3d2V6QkVzU0ZodEJ6cFp2bkVlVW9Oa3diRWFtUlkxZU9Qa3pJ?=
- =?utf-8?B?Y3ErOTI5TFBYOUNLUE4wbTlJdWc5NkNtSGJBSFVpTTFZZjBGSWh5cGJQelYr?=
- =?utf-8?B?Y2pBaE4yb1RzeG5icStuSVFkUUpGdG1RMlBDZngvb00vcDIrWTNWdDZocmxT?=
- =?utf-8?B?aXEzdDIvS0V4N1RyeDE3b3ZGVkZIeGVnbzJwU0U1NE5JN1N0eEpxeExqUVhX?=
- =?utf-8?B?V0orQ094eDNlWStTOUpXd28xeWdheVlmbzQ1cjRtSjFYUWtKWFFUdzBRR291?=
- =?utf-8?B?bWJnd2g2N2hBVm1rMUJ0UXZsSHBvK3V5aTBlay9xYlFwL3lLRmltMzg2T29F?=
- =?utf-8?B?MDNoTGZ2anVTbnFuYStpUU1NU0dNTVZHUzd0ZEM1MFJ3TzMwZnRIQ2g5KzZl?=
- =?utf-8?B?bFRzdllSbjBHRE1KWmgzUlFBZkE1Sm9ydW1Edk5VbVNJMDNDdmhOdEZUdzFk?=
- =?utf-8?B?Mk5XS3kyM3ZzRzJPaFVveVdEN3o0d3Q1RVFnTkNiRTR5T3dxS0ZOUkhIeXBP?=
- =?utf-8?B?VzFXTXNUallZT0xyTmhxbjF0Mko5ZW9NWUpNMVBEdC9lVE5Dc09VVUpsYi93?=
- =?utf-8?Q?uKVNf0IgcLr5wh9hAxECT6Y=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83bb1893-3491-45a6-c405-08d9d5e15ed6
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2022 15:36:58.7626
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WaXojJoGqrVa7yYdEFc8qTCy2XjyxOpMgteAO1RqPcyzmb/6k9EW1tuUvindCX6Eo6Q4AJJ8Th6cP36U16ssSw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5256
+In-Reply-To: <Yd7n7xA9ecF1/0DK@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-01-11 15:51, Linus Torvalds wrote:
-> On Tue, Jan 11, 2022 at 7:38 AM Harry Wentland <harry.wentland@amd.com> wrote:
+On 1/12/22 7:38 AM, Andy Shevchenko wrote:
+> On Wed, Jan 12, 2022 at 12:51:13PM +0000, John Garry wrote:
+>> On 12/01/2022 12:30, Andy Shevchenko wrote:
+>>>>>> +		if (test_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags) ||
+>>>>>> +		    test_and_set_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags)) {
+>>>>> Whoever wrote this code did too much defensive programming, because the first
+>>>>> conditional doesn't make much sense here. Am I right?
+>>>>>
+>>>> I think because this judgement is in the general IO process, there are also
+>>>> some performance considerations here.
+>>> I didn't buy this. Is there any better argument why you need redundant
+>>> test_bit() call?
 >>
->> Attached is a v2 of the buggy patch that should get this right.
->> If you have a chance to try it out let us know
+>> I think that the idea is that test_bit() is fast and test_and_set_bit() is
+>> slow; as such, if we generally expect the bit to be set, then there is no
+>> need to do the slower test_and_set_bit() always.
 > 
-> I can confirm that I do not see the horribly flickering behavior with
-> this patch.
+> It doesn't sound thought through solution, the bit can be flipped in
+> between, so what is this all about? Maybe missing proper serialization
+> somewhere else?
 
-Thanks for testing it. The patch is up for review on the amd-gfx
-mailing list.
+You need to work on your communication a bit - if there's a piece of
+code you don't understand, maybe try being a bit less aggressive about
+it? Otherwise people tend to just ignore you rather than explain it.
 
-Harry
+test_bit() is a lot faster than a test_and_set_bit(), and there's no
+need to run the latter if the former returns true. This is a pretty
+common optimization, particularly if the majority of the calls end up
+having the bit set already.
+
+Can the bit be flipped right after? Certainly! Can that happen if just
+test_and_set_bit() is used? Of course! This isn't a critical section
+with a lock, it's a piece of state. And guarding the RMW operation with
+a test first doesn't change that one bit.
+
+-- 
+Jens Axboe
+

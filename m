@@ -2,109 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B08E48C0D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161B348C0D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351989AbiALJRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 04:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238051AbiALJR1 (ORCPT
+        id S1351997AbiALJRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 04:17:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50612 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238051AbiALJRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:17:27 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1B9C06173F;
-        Wed, 12 Jan 2022 01:17:26 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id e25so1773782qkl.12;
-        Wed, 12 Jan 2022 01:17:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+NFO7YFOhu5N2KIpI5XoTsgg4HKZco8DxgkDsyob4xk=;
-        b=B7sUTA+M2I9UMuxHrM840LUe9oBfvMj2/YBE7zbzM0Ej0+pkS6t1CtznD22MEzfLxE
-         aLWI9fyF0okNiGKnuO0biBcIZj77rAfbg23XSdrSAwdBoLCHdso9l5urR+Qkzxt5G+Zg
-         AnS2MIZaOVa3UeLkY5lkW10L5yWmkqU14ohVcleH73ET322XgIoNbLNTfSQ7cdXVr5f5
-         qzdlKj32aUMP+ZII0QiSoytdDu1hPNpxlIo8WFc1mT6mMOmB5eB62Wh9thiWl12ICrqI
-         IxvKDnkvEfLyDZgmXjRhXnxtN6eUFhd0dvGaoyVQX6zv2AVcL/wOa00We4PiiGeW0bii
-         IVEw==
+        Wed, 12 Jan 2022 04:17:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641979072;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e0KOzwrUqCbQH/o01fWrMq8CbrmFNeed7/005+0tTSM=;
+        b=H59MAF8k/pVuuEPySGSp8cyqmuVoDAH4//yDHVVy8EQeNlH7NCcRSPbqbyK0CggISTdfEI
+        leRKYNF2fM5kh3qYtYZ/On6GZVH90syIE8wToW3wMXoh4HeUECO9RKRWGQHlqjUh0UdP1o
+        6LhPbzvD0myQ8sfbimckFOAh+uPuH7M=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639-Z8eCPqBmMeufg8GdZRWPIg-1; Wed, 12 Jan 2022 04:17:51 -0500
+X-MC-Unique: Z8eCPqBmMeufg8GdZRWPIg-1
+Received: by mail-ed1-f70.google.com with SMTP id z9-20020a05640240c900b003fea688a17eso1711578edb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 01:17:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=+NFO7YFOhu5N2KIpI5XoTsgg4HKZco8DxgkDsyob4xk=;
-        b=VndDjH5aaYqo93Ofvr8peHKHzeOkm5QhUA3DIF15ccYnJ3sqqq8o3/SOah/T2Td6Hs
-         tZtur9HrZAVOKiiKPqtn/ARlGifFCFJ0rdmtAsiJ9Y3DEyvEZP1ajfC2NbuUj7lIH7a+
-         VGsSmPK3xNsPhKgiFj3Eo0x+XAG4+WcpLL7sLV4ojSwhucgS2+rEIPMRaiVkSETVavI2
-         lIBZFTS+VxYUGG228LLw1SstdegYMBu49TK+TM5XfAcLaldUj1h7scp8VZX1dfL0gvQE
-         xgLSPn10Ya/AG3LpvRxoPys6r0osV+NJyZZiKQBBBKDhkZNoFEk+6oBq3zcEZ34GXmW6
-         16IA==
-X-Gm-Message-State: AOAM53160mK4u9HDaTA/ehdBunJRczmVYwr+xVdxrmzV1MZFuDThGd6e
-        0nes3tW70K4pJKziH43VcTE=
-X-Google-Smtp-Source: ABdhPJwx4z2TJB79mUF7qBiS98SXynKTINHLUqSHAtHhA+1CCgGXGQ0xytwVwpwtCam8uL03gzNpzg==
-X-Received: by 2002:a37:9c8:: with SMTP id 191mr1032972qkj.358.1641979046074;
-        Wed, 12 Jan 2022 01:17:26 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f4sm8365315qkp.14.2022.01.12.01.17.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 01:17:25 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     djrscally@gmail.com
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] media: i2c: remove unneeded variable
-Date:   Wed, 12 Jan 2022 09:17:18 +0000
-Message-Id: <20220112091718.668278-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        bh=e0KOzwrUqCbQH/o01fWrMq8CbrmFNeed7/005+0tTSM=;
+        b=41GP4buNq7aa+ImzRB/tVjPW8DUZhHkezBYLNylY8JsY4t+00QJWtXP9z5+vE/fcbV
+         U1kR+ovZGLFA0hpylywszqTqGj92SDQ79cDEsl2nGdzLsDhiv+kienyCiUhyXnCgHOMa
+         ZtzLBxMTnkeVtcTCknSMP8YPFmSdZZtFoKB0mbFXx06vkVIQyr1dzN5lby8ACnuQXb5Q
+         JfikQEq/Qbaac1bkiRq7qY1+6/c5JPoWazb0UsJnFdM+9E1JLMI03f1i23EIefkNvYcG
+         BGVbajou+H4yKgXKNjMa0H8YFWvvphX0xzQCE8I1FVtDJ9QUzFW8fSSp0Y4Yz6NKrBBK
+         HB1Q==
+X-Gm-Message-State: AOAM532AjNx3rry/ZIkR45Wz9rFqrorE8bwvDjXirj6SH4NP0N3OxibH
+        I9thtNHl3YEoSdTXKQ7riFri3q4wiePJGOrmFDNSsdKZOBCS2rIFtz60UkBbN+nWvCodX8c5ebS
+        p3Dn2EEQ5hqYtDT8Ac9ilGXY3
+X-Received: by 2002:a17:907:3f0c:: with SMTP id hq12mr6821389ejc.358.1641979069881;
+        Wed, 12 Jan 2022 01:17:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzOD9iPR7HXlJWokCcL1fccdXMM8E7I6wuS9gOcKt0Yc+oOkHcqTjYDlSTOto/CciTFEAMyvw==
+X-Received: by 2002:a17:907:3f0c:: with SMTP id hq12mr6821377ejc.358.1641979069698;
+        Wed, 12 Jan 2022 01:17:49 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:4700:e25f:39eb:3cb8:1dec? (p200300cbc7024700e25f39eb3cb81dec.dip0.t-ipconnect.de. [2003:cb:c702:4700:e25f:39eb:3cb8:1dec])
+        by smtp.gmail.com with ESMTPSA id i22sm4360577ejw.75.2022.01.12.01.17.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 01:17:49 -0800 (PST)
+Message-ID: <af52b95b-dab3-a5d5-0e31-f7e91b16e556@redhat.com>
+Date:   Wed, 12 Jan 2022 10:17:48 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] mm/thp: Drop unused trace events
+ hugepage_[invalidate|splitting]
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        linux-kernel@vger.kernel.org
+References: <1641546351-15109-1-git-send-email-anshuman.khandual@arm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <1641546351-15109-1-git-send-email-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+On 07.01.22 10:05, Anshuman Khandual wrote:
+> The trace events hugepage_[invalidate|splitting], were added via the commit
+> 9e813308a5c1 ("powerpc/thp: Add tracepoints to track hugepage invalidate").
+> Afterwards their call sites i.e trace_hugepage_[invalidate|splitting] were
+> just dropped off, leaving these trace points unused.
+> 
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+> Cc: Kirill A. Shutemov <kirill@shutemov.name>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+> This applies on v5.16-rc8
+> 
+> trace_hugepage_splitting() dropped via the commit 7aa9a23c69ea
+> trace_hugepage_invalidate() dropped via the commit 7900757ce1b4
+> 
+>  include/trace/events/thp.h | 36 ------------------------------------
+>  1 file changed, 36 deletions(-)
+> 
+> diff --git a/include/trace/events/thp.h b/include/trace/events/thp.h
+> index d7fbbe551841..ffa4b37d02a9 100644
+> --- a/include/trace/events/thp.h
+> +++ b/include/trace/events/thp.h
+> @@ -8,24 +8,6 @@
+>  #include <linux/types.h>
+>  #include <linux/tracepoint.h>
+>  
+> -TRACE_EVENT(hugepage_invalidate,
+> -
+> -	    TP_PROTO(unsigned long addr, unsigned long pte),
+> -	    TP_ARGS(addr, pte),
+> -	    TP_STRUCT__entry(
+> -		    __field(unsigned long, addr)
+> -		    __field(unsigned long, pte)
+> -		    ),
+> -
+> -	    TP_fast_assign(
+> -		    __entry->addr = addr;
+> -		    __entry->pte = pte;
+> -		    ),
+> -
+> -	    TP_printk("hugepage invalidate at addr 0x%lx and pte = 0x%lx",
+> -		      __entry->addr, __entry->pte)
+> -);
+> -
+>  TRACE_EVENT(hugepage_set_pmd,
+>  
+>  	    TP_PROTO(unsigned long addr, unsigned long pmd),
+> @@ -65,24 +47,6 @@ TRACE_EVENT(hugepage_update,
+>  
+>  	    TP_printk("hugepage update at addr 0x%lx and pte = 0x%lx clr = 0x%lx, set = 0x%lx", __entry->addr, __entry->pte, __entry->clr, __entry->set)
+>  );
+> -TRACE_EVENT(hugepage_splitting,
+> -
+> -	    TP_PROTO(unsigned long addr, unsigned long pte),
+> -	    TP_ARGS(addr, pte),
+> -	    TP_STRUCT__entry(
+> -		    __field(unsigned long, addr)
+> -		    __field(unsigned long, pte)
+> -		    ),
+> -
+> -	    TP_fast_assign(
+> -		    __entry->addr = addr;
+> -		    __entry->pte = pte;
+> -		    ),
+> -
+> -	    TP_printk("hugepage splitting at addr 0x%lx and pte = 0x%lx",
+> -		      __entry->addr, __entry->pte)
+> -);
+> -
+>  #endif /* _TRACE_THP_H */
+>  
+>  /* This part must be outside protection */
 
-Remove unneeded variable used to store return value.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
----
- drivers/media/i2c/ov5693.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/media/i2c/ov5693.c b/drivers/media/i2c/ov5693.c
-index 2784fcf67f3b..a55910f6283a 100644
---- a/drivers/media/i2c/ov5693.c
-+++ b/drivers/media/i2c/ov5693.c
-@@ -950,7 +950,6 @@ static int ov5693_set_fmt(struct v4l2_subdev *sd,
- 	unsigned int width, height;
- 	unsigned int hblank;
- 	int exposure_max;
--	int ret = 0;
- 
- 	crop = __ov5693_get_pad_crop(ov5693, state, format->pad, format->which);
- 
-@@ -982,7 +981,7 @@ static int ov5693_set_fmt(struct v4l2_subdev *sd,
- 	format->format = *fmt;
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
--		return ret;
-+		return 0;
- 
- 	mutex_lock(&ov5693->lock);
- 
-@@ -1012,7 +1011,7 @@ static int ov5693_set_fmt(struct v4l2_subdev *sd,
- 				     exposure_max));
- 
- 	mutex_unlock(&ov5693->lock);
--	return ret;
-+	return 0;
- }
- 
- static int ov5693_get_selection(struct v4l2_subdev *sd,
 -- 
-2.25.1
+Thanks,
+
+David / dhildenb
 

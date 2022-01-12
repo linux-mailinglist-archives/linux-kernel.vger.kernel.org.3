@@ -2,94 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6D948CCB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC65748CCCA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357119AbiALUBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 15:01:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
+        id S1357898AbiALUD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 15:03:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357168AbiALUAf (ORCPT
+        with ESMTP id S243255AbiALUAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 15:00:35 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A2EC034003
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 12:00:35 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id j1so5332230iob.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 12:00:35 -0800 (PST)
+        Wed, 12 Jan 2022 15:00:46 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4778C061756;
+        Wed, 12 Jan 2022 12:00:45 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id 30so14469312edv.3;
+        Wed, 12 Jan 2022 12:00:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Cl1FUyfdprGONZXPglxSDKBSmEWDkw6VkfF16x5mxXo=;
-        b=QVJEehF7WPyvGeEiM5KzQqPIBMMXGEV3R+wLe8PkJGDeACISPmV4QHm+bqRf3ctMii
-         e9A7XOez7BgUJWpIS85K3eqDw9O/LP5gRWCD7MDNpgnuqpnoM7y4SqV96P1MzAz4QbkZ
-         6dTMEEMsxLx1RvNmJhKDjS7fzc3PdRvc8pQIM=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T4aJvth/j/tURi7i+5z+htKe8ISAimHDCbWnrVNR53g=;
+        b=q5oQSKJc6vaYkwN+B4EjLF+BLRWuIK9Fad6ZhT816+rVjbaZrwADtHhR/nJPtHKw/K
+         xwUypYEqqARevPtfgMan5U3d6b1EcVY2wiaIf/ORlub+N+9tg3VK4xFCUizaWWmx0mxF
+         673wyAfRzl7KZPCw1sp24Jvq4UVdzlAb0+5/VCfZ/VHCbKI53KMBChItm0NUpdGCcY7g
+         C8XRO+xUXGqKtoYuGA/t9gDIUioohabLGraJzZHxEhxv+tcz54Gvd1q8MzvHLNcymX7t
+         VmbiCOLtfCAySHyR0uxwXOx+s4P8U7Dygo/4iXCdiL8ke+AukzRBnWTKMVtInGGol33Y
+         KVjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Cl1FUyfdprGONZXPglxSDKBSmEWDkw6VkfF16x5mxXo=;
-        b=Uqn0eig2rGvEPJ3jmporPYB6dPQs9Spvjq4t6pXvHboxkAD6QbALuIJVVJ1or1CnRS
-         qewV6tloOjXVk4LwZdT2zqbr0Q35Dc2zSIwkNmx4TDIzLu8+bEkUAgr48jH3xgE82JpE
-         1PhPQ+YEXU9zI0AQ6d9lWhvJAZHh/Zfgr6h4H5KZguw0ShaXbHzP6mf0ZAxw0LkQyIdx
-         FDzdDkBrnPF2FDpAfmG98+ETrL3IheBjpNilmriIQtoVN/s3VqEQREpXh3RBC4sqMTAu
-         hQCPQWZx8NH9qDlBD1m/JzA4Ad8/+rltcyo5c9LlbfMeXu96WbrLRpRKDV5dMrOD58nh
-         Hvkw==
-X-Gm-Message-State: AOAM533xVdSyhu1nd28Ttj+8tOkvBxoH69HMuYFS3MNEfxqy7B96tiph
-        fRh/SYoEycjKGfhMHP3y3QaXeQ==
-X-Google-Smtp-Source: ABdhPJyqfTMBuJuxUvt68Bs1IVabNVrDXN9rilZ2BQG+2TZJXMJyou7YfZBE20+jh9R7SNMFYnATlw==
-X-Received: by 2002:a5d:8a0a:: with SMTP id w10mr692518iod.90.1642017634562;
-        Wed, 12 Jan 2022 12:00:34 -0800 (PST)
-Received: from [192.168.1.128] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id h4sm412552ilh.1.2022.01.12.12.00.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 12:00:34 -0800 (PST)
-Subject: Re: [PATCH v3] tools/power/cpupower/{ToDo => TODO}: Rename the todo
- file
-To:     Onur Ozkan <onurozkan.dev@gmail.com>, trenn@suse.com
-Cc:     shuah@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Onur Ozkan <work@onurozkan.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211224104343.33331-1-work@onurozkan.dev>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <9fdc2f8e-8c76-ad3b-1ca5-39fae07d37de@linuxfoundation.org>
-Date:   Wed, 12 Jan 2022 13:00:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        bh=T4aJvth/j/tURi7i+5z+htKe8ISAimHDCbWnrVNR53g=;
+        b=0wkNyOAuYAB7Neeu7f/dELdhciGOdBuFed3gGxOK2j+X+tGnCK4sMWl1cPzGr9Tsc6
+         +YS6zCAPSkrmDWLlREttyUBsiTO53GfIF3jiz81FyUqghfAKSW97ZfU/b/Xv4e93hKg3
+         QUM/+cMX2pv4uxRnBejRcxzpSk6DNY3rWf1xvO2z32F8xZBdK25L5oI6QHhF97Pxzjks
+         GqzkhHenNNXo1r8/aNCeGT+8rmmORNjHixNDbrIeukx4O56UxLhPq85NRLC9Vl8O6Ppg
+         sdVziMTpkRFU0g9X6lcznFGPP62zZfwuUb+9nv3Eyo1g0v8Koq3sNi5EfoaqLgMgzk6K
+         lUPA==
+X-Gm-Message-State: AOAM532kSWQCjlE6BfmKWFrVJjK5mECFTZTJMRfRsftPcXusbYwYq2qK
+        r0OHx+3YOf0jF7/+IdoHpwM=
+X-Google-Smtp-Source: ABdhPJy71x22M8XAPtO8aFRlNcNzSxs1A97LUar9f5vBhM1REJmMTQLe30+TJ6VtN3yWdauDrL+5+w==
+X-Received: by 2002:a17:907:7ea6:: with SMTP id qb38mr1045303ejc.59.1642017644566;
+        Wed, 12 Jan 2022 12:00:44 -0800 (PST)
+Received: from demon-pc.localdomain ([79.119.107.253])
+        by smtp.gmail.com with ESMTPSA id rp17sm169566ejb.113.2022.01.12.12.00.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 12:00:44 -0800 (PST)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: adc: ad7124: fix mask used for setting AIN_BUFP & AIN_BUFM bits
+Date:   Wed, 12 Jan 2022 22:00:36 +0200
+Message-Id: <20220112200036.694490-1-cosmin.tanislav@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20211224104343.33331-1-work@onurozkan.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/24/21 3:43 AM, Onur Ozkan wrote:
-> Renamed the to-do file to 'TODO' instead of 'ToDo' to
-> comply with the naming standard.
-> 
+According to page 90 of the datasheet [1], AIN_BUFP is bit 6 and
+AIN_BUFM is bit 5 of the CONFIG_0 -> CONFIG_7 registers.
 
-I get it now. I didn't pick up on the "ToDo" vs. "TODO"
-difference. No need to add the list.
+Fix the mask used for setting these bits.
 
-> Signed-off-by: Onur Ozkan <work@onurozkan.dev>
+[1]: https://www.analog.com/media/en/technical-documentation/data-sheets/ad7124-8.pdf
 
-Your from doesn't match the Signed-off-by - please match them
-and send v4 - no need to add the TODO file list this time.
+Fixes: 0eaecea6e487 ("iio: adc: ad7124: Add buffered input support")
+Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+---
+ drivers/iio/adc/ad7124.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->   tools/power/cpupower/{ToDo => TODO} | 0
->   1 file changed, 0 insertions(+), 0 deletions(-)
->   rename tools/power/cpupower/{ToDo => TODO} (100%)
-> 
-> diff --git a/tools/power/cpupower/ToDo b/tools/power/cpupower/TODO
-> similarity index 100%
-> rename from tools/power/cpupower/ToDo
-> rename to tools/power/cpupower/TODO
-> 
+diff --git a/drivers/iio/adc/ad7124.c b/drivers/iio/adc/ad7124.c
+index e45c600fccc0..18c154afbd7a 100644
+--- a/drivers/iio/adc/ad7124.c
++++ b/drivers/iio/adc/ad7124.c
+@@ -76,7 +76,7 @@
+ #define AD7124_CONFIG_REF_SEL(x)	FIELD_PREP(AD7124_CONFIG_REF_SEL_MSK, x)
+ #define AD7124_CONFIG_PGA_MSK		GENMASK(2, 0)
+ #define AD7124_CONFIG_PGA(x)		FIELD_PREP(AD7124_CONFIG_PGA_MSK, x)
+-#define AD7124_CONFIG_IN_BUFF_MSK	GENMASK(7, 6)
++#define AD7124_CONFIG_IN_BUFF_MSK	GENMASK(6, 5)
+ #define AD7124_CONFIG_IN_BUFF(x)	FIELD_PREP(AD7124_CONFIG_IN_BUFF_MSK, x)
+ 
+ /* AD7124_FILTER_X */
+-- 
+2.34.1
 
-thanks,
--- Shuah

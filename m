@@ -2,119 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0C948C213
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C8E48C21D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352425AbiALKPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 05:15:33 -0500
-Received: from mail-vk1-f180.google.com ([209.85.221.180]:44639 "EHLO
-        mail-vk1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352424AbiALKP0 (ORCPT
+        id S1352444AbiALKR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 05:17:59 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:34614 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346594AbiALKR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 05:15:26 -0500
-Received: by mail-vk1-f180.google.com with SMTP id b77so1289544vka.11;
-        Wed, 12 Jan 2022 02:15:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6wKmSWMHWAmRWv4Hqzo9xUOdqr9ud8CTsl9Le52Qq2A=;
-        b=UdJ+3JwWIGh8nEWkR/7xNhp5wmVjLb312NkEYecxcCxg9gYEyWnhyN0nECeoJbQ4fe
-         HvYmTn8j/Gfnh582frysA4LW+OiyMKO5DAtBo98+lN0Rwm9hU97vdXecgDWUq2lSrvMW
-         MXMNipSsLcxIDEi6FSP9+Zydr4fHX8K3o8Xy28G+5rv5Smv9O6853BdcIBWwAUNPoKn+
-         u9yxhPb6CRnUYEpnnklTkkxsj/nPN9zD3BcCzSWCUg5LwtT1JsJsizIGmODuv9c3DyyE
-         gt/lUHggPMTHGhWq+XHLdBovfOs+bE1WVLb8NL7iyN41O44Arz2fe0AVj0YGjFFJT/Nl
-         Fh1Q==
-X-Gm-Message-State: AOAM531ol+EeMlI524uZquTCmL0PZ+LJd12DJucRv8vGnm5ImWlYrBXM
-        iwkaLN/UGhpi2r1013pinJs8W7caHHcDcfRN
-X-Google-Smtp-Source: ABdhPJxGK1DQ3X9+n/nyYXTC44TPzwLt8ESYBketdmypv6EmtQY3GDXY5clHFTVIJzOZ6E6k1gRgGA==
-X-Received: by 2002:a1f:3213:: with SMTP id y19mr4091393vky.7.1641982525770;
-        Wed, 12 Jan 2022 02:15:25 -0800 (PST)
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
-        by smtp.gmail.com with ESMTPSA id k23sm8260478vsm.1.2022.01.12.02.15.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 02:15:25 -0800 (PST)
-Received: by mail-ua1-f49.google.com with SMTP id l15so3710587uai.11;
-        Wed, 12 Jan 2022 02:15:24 -0800 (PST)
-X-Received: by 2002:a67:c81c:: with SMTP id u28mr3649287vsk.38.1641982524577;
- Wed, 12 Jan 2022 02:15:24 -0800 (PST)
+        Wed, 12 Jan 2022 05:17:56 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id AF6DE1F3D0;
+        Wed, 12 Jan 2022 10:17:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1641982675; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g/PcfchBevR47yLCk2MvJMcIoOeey+Dc7tFuclOHyHY=;
+        b=ihOEkN8DjQyUt0ipnU90uMOZ2gXOVMRbLDzXwZb6s6F8FLHvme9bzA1Up283oRsVgW8TRI
+        3snyjvVlAjeBn09Iscu8aTJ2GMnUcRLx0jwB0ZIVXuvPDja9V5BdcKNwCLFIhyLOFsuMpE
+        lL6uy541yhuj4resrieM6V346Nz/eO4=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 71453A3B81;
+        Wed, 12 Jan 2022 10:17:54 +0000 (UTC)
+Date:   Wed, 12 Jan 2022 11:17:53 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>
+Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
+Message-ID: <Yd6q0QdLVTS53vu4@dhcp22.suse.cz>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <20220104202227.2903605-7-yuzhao@google.com>
+ <Ydxlg5rI4ZvODQvF@dhcp22.suse.cz>
+ <Yd4oaUwHkpadAKwe@google.com>
 MIME-Version: 1.0
-References: <20211226082530.2245198-4-nikita.yoush@cogentembedded.com>
- <20211226153349.2296024-1-nikita.yoush@cogentembedded.com>
- <CAMuHMdUJfq+nFFMoiPiTt1=Ny9zOm-O1EAmq3n56n4RJ6H8tdA@mail.gmail.com> <fccd00c9-ec44-9586-0df2-6e46568665c1@cogentembedded.com>
-In-Reply-To: <fccd00c9-ec44-9586-0df2-6e46568665c1@cogentembedded.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 12 Jan 2022 11:15:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWa+2q+Zx79YxRZECN-d52Zcs7rP-BNYBxWX5250aaxJw@mail.gmail.com>
-Message-ID: <CAMuHMdWa+2q+Zx79YxRZECN-d52Zcs7rP-BNYBxWX5250aaxJw@mail.gmail.com>
-Subject: Re: [PATCH 3/3 v2] arm64: dts: renesas: add MOST device
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christian Gromm <christian.gromm@microchip.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-staging@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd4oaUwHkpadAKwe@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikita,
+On Tue 11-01-22 18:01:29, Yu Zhao wrote:
+> On Mon, Jan 10, 2022 at 05:57:39PM +0100, Michal Hocko wrote:
+> > On Tue 04-01-22 13:22:25, Yu Zhao wrote:
+> > [...]
+> > > +static void walk_mm(struct lruvec *lruvec, struct mm_struct *mm, struct lru_gen_mm_walk *walk)
+> > > +{
+> > > +	static const struct mm_walk_ops mm_walk_ops = {
+> > > +		.test_walk = should_skip_vma,
+> > > +		.p4d_entry = walk_pud_range,
+> > > +	};
+> > > +
+> > > +	int err;
+> > > +#ifdef CONFIG_MEMCG
+> > > +	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
+> > > +#endif
+> > > +
+> > > +	walk->next_addr = FIRST_USER_ADDRESS;
+> > > +
+> > > +	do {
+> > > +		unsigned long start = walk->next_addr;
+> > > +		unsigned long end = mm->highest_vm_end;
+> > > +
+> > > +		err = -EBUSY;
+> > > +
+> > > +		rcu_read_lock();
+> > > +#ifdef CONFIG_MEMCG
+> > > +		if (memcg && atomic_read(&memcg->moving_account))
+> > > +			goto contended;
+> > > +#endif
+> > 
+> > Why do you need to check for moving_account?
+> 
+> This check, if succeeds, blocks memcg migration.
 
-On Wed, Jan 12, 2022 at 9:56 AM Nikita Yushchenko
-<nikita.yoush@cogentembedded.com> wrote:
-> >> +                       reg = <0 0xec520000 0 0x800>;
-> >> +                       interrupts = <GIC_SPI 384 IRQ_TYPE_LEVEL_HIGH>,
-> >> +                               <GIC_SPI 385 IRQ_TYPE_LEVEL_HIGH>,
-> >> +                               <GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>,
-> >> +                               <GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
-> >> +                               <GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
-> >
-> > What is the purpose of the various interrupts?
-> > Perhaps you need interrupt-names?
-> > The driver seems to use only the first two, which is strange, as
-> > the second and third interrupt handle different channels.
->
-> Maybe Christian Gromm (the original driver author) can comment here?
->
-> As far as I understand:
-> - interrupts are: mlb, ahb0, ahb1, ch0rx, ch1rx
-> - of those, the first 3 are from dim2 itself, and the last two are from renesas-specific logic around dim2
-> - in the interrupt assignment tables for gen3 SoCs, renesas documents all 5 interrupts, however in the
-> mlb section, renesas mentions only mlb, ahb0 and ch0rx interrupts
-> - moreover, renesas explicitly denies access dim2 registers responsible for channels 32..63 - which
-> renders ahb1 interrupt useless; and renesas does not document any registers related to "async rx
-> response" on channels 32..63 - which renders chrx1 interrupt useless
-> - anyway, dim2 driver registers only 32 channels (for all use cases, not only for renesas), and thus
-> uses only ahb0 interrupt
-> - dim2 driver does not implement renesas-specific processing logic and thus does not use ch0rx interrupt
->
-> I'm not sure how to proceed here.
-> Is it better to define only two interrupts (mlb, ahb0) in device trees?
->
-> Regarding 'interrupt-names' - dim2 driver currently uses platform_get_irq() and thus depends on numeric
-> positions (mlb interrupt at index 0 and ahb0 interrupt at index 1). I'm not sure about current use cases
-> of the driver other than with rcar-gen3, and if it is ok to use of_get_irq_byname() instead. And without
-> using of_get_irq_byname(), interrupt-names looks somewhat useless.
-
-As the driver is under staging, I think we can make any changes we want.
-
-> > But without any DT binding documentation
-> > for this hardware block, this is hard to validate, and not yet ready for
-> > upstream integration.
->
-> Christian, are you going to provide DT binding documentation for dim2?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+OK, I can see that you rely on the RCU here for the synchronization. A
+comment which mentions mem_cgroup_move_charge would be helpful for
+clarity. Is there any reason you are not using folio_memcg_lock in the
+pte walk instead?
+-- 
+Michal Hocko
+SUSE Labs

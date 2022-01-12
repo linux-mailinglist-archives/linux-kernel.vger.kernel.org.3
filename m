@@ -2,93 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B8048C8E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:56:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C4748C861
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355393AbiALQ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:56:15 -0500
-Received: from gateway23.websitewelcome.com ([192.185.50.108]:49049 "EHLO
-        gateway23.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355389AbiALQ4K (ORCPT
+        id S1355230AbiALQcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:32:51 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:44714 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1349855AbiALQct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:56:10 -0500
-X-Greylist: delayed 1429 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Jan 2022 11:56:10 EST
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 62E75142DB
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:32:21 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id 7gXtnJI6LXvvJ7gXtnP3ZQ; Wed, 12 Jan 2022 10:32:21 -0600
-X-Authority-Reason: nr=8
-Received: from host-79-47-126-144.retail.telecomitalia.it ([79.47.126.144]:48570 helo=[10.0.0.88])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1n7gXr-003OI0-MF; Wed, 12 Jan 2022 10:32:19 -0600
-Message-ID: <e07e5812-e78c-63a4-99e0-aab24fd95779@kernel.org>
-Date:   Wed, 12 Jan 2022 17:32:11 +0100
+        Wed, 12 Jan 2022 11:32:49 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20CBGCPj019089;
+        Wed, 12 Jan 2022 17:32:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=nJFFg7Jg5nwGSZI7zTj0mF4qnxKp4dp2BsQXGHK2x1Q=;
+ b=YxLVdyrTPlAlEgOnlj6octXuB8eH7jxiTb151QaR07OwTIkxKtutY0KmU278cnXSVCtw
+ LYBj3NsIuYzOhM9rJajTdiffmVeXHzx0k2AcGYiwjhp3DtUW27T14BWb+BLhYeMLkGqL
+ aPbISc8luhrNp9/AL3iCz/HCbXUNZfvrYsrqUKwNqJSGsHB0ATN2o8aB5iX5CFh6Ihaf
+ CB24RWDZcVhSYzTrt9TqKLe3lZlvBC/U0Ww1lrOLpv1nkuaNlX92fzu9oAP66uIwLFZh
+ kg0IRpXfviir2bke16thGRFHBQkF+mOBVtYEW/R4Dus+BODa5k/rRovywriShJEPI2XS Cg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dhtg9u810-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 17:32:33 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2E31A100034;
+        Wed, 12 Jan 2022 17:32:33 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 24E5F24B8B1;
+        Wed, 12 Jan 2022 17:32:33 +0100 (CET)
+Received: from localhost (10.75.127.50) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 12 Jan 2022 17:32:32
+ +0100
+From:   Yann Gautier <yann.gautier@foss.st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        Yann Gautier <yann.gautier@foss.st.com>
+Subject: [PATCH 00/10] ARM: dts: stm32: update sdmmc nodes
+Date:   Wed, 12 Jan 2022 17:32:16 +0100
+Message-ID: <20220112163226.25384-1-yann.gautier@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [for-next][PATCH 16/31] rtla: Real-Time Linux Analysis tool
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tao Zhou <tao.zhou@linux.dev>, Ingo Molnar <mingo@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        John Kacur <jkacur@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220111173030.999527342@goodmis.org>
- <20220111173116.190327559@goodmis.org>
- <5f04540c-273a-c4f2-692d-9de2f1495ba9@kernel.org>
- <20220112112159.742d258c@rorschach.local.home>
- <20220112113054.1be08f6c@rorschach.local.home>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220112113054.1be08f6c@rorschach.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 79.47.126.144
-X-Source-L: No
-X-Exim-ID: 1n7gXr-003OI0-MF
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-79-47-126-144.retail.telecomitalia.it ([10.0.0.88]) [79.47.126.144]:48570
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 1
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-12_04,2022-01-11_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/22 17:30, Steven Rostedt wrote:
-> On Wed, 12 Jan 2022 11:21:59 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
->> Strange. I should have picked it up from Patchwork.
->>
->> https://patchwork.kernel.org/project/linux-trace-devel/list/?series=604588
-> The above is the wrong v9 :-p (Now I see how this could have happened!)
-> 
-> Should have been:
-> 
->   https://patchwork.kernel.org/project/linux-trace-devel/list/?series=593861
+This patches series brings updates for SDMMC nodes on STM32MP13
+(max frequency, pins slew-rates, sleep pins, and controller version).
+The sdmmc2 node is also added as STM32MP13 embeds 2 SDMMC controllers.
 
-That is it, thanks Steve!
+The compatible for sdmmc nodes is also updated for both STM32MP13
+and STM32MP15, to align with bootloaders DT, and after arm,pl18x.yaml
+has been updated [1].
 
--- Daniel
+[1] commit 552bc46484b3 ("dt-bindings: mmc: mmci: Add st,stm32-sdmmc2
+    compatible")
+
+Gerald Baeza (1):
+  ARM: dts: stm32: update sdmmc slew-rate in stm32mp13 pinctrl
+
+Yann Gautier (9):
+  ARM: dts: stm32: add st,stm32-sdmmc2 compatible on stm32mp151
+  ARM: dts: stm32: add st,stm32-sdmmc2 compatible on stm32mp131
+  ARM: dts: stm32: increase SDMMC max-frequency for STM32MP13
+  ARM: dts: stm32: update SDMMC clock slew-rate on STM32MP135F-DK board
+  ARM: dts: stm32: add sdmmc sleep pins for STM32MP13
+  ARM: dts: stm32: add sdmmc sleep config for STM32MP135F-DK
+  ARM: dts: stm32: update SDMMC version for STM32MP13
+  ARM: dts: stm32: add SDMMC2 in STM32MP13 DT
+  ARM: dts: stm32: add sdmmc2 pins for STM32MP13
+
+ arch/arm/boot/dts/stm32mp13-pinctrl.dtsi | 81 ++++++++++++++++++++----
+ arch/arm/boot/dts/stm32mp131.dtsi        | 20 +++++-
+ arch/arm/boot/dts/stm32mp135f-dk.dts     |  7 +-
+ arch/arm/boot/dts/stm32mp151.dtsi        |  6 +-
+ 4 files changed, 94 insertions(+), 20 deletions(-)
+
+-- 
+2.17.1
+

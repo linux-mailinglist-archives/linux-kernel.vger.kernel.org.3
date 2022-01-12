@@ -2,150 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A9F48C44A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 13:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C0848C444
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 13:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353302AbiALM7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 07:59:23 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:34903 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240947AbiALM7W (ORCPT
+        id S1353292AbiALM41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 07:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240649AbiALM4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 07:59:22 -0500
-Received: from kwepemi100005.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JYngN5w3MzccYq;
-        Wed, 12 Jan 2022 20:58:40 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- kwepemi100005.china.huawei.com (7.221.188.155) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 12 Jan 2022 20:59:20 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 12 Jan 2022 20:59:19 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <wangjie125@huawei.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
-        <chenhao288@hisilicon.com>
-Subject: [PATCH net] net: bonding: fix bond_xmit_broadcast return value error bug
-Date:   Wed, 12 Jan 2022 20:54:18 +0800
-Message-ID: <20220112125418.55118-1-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Wed, 12 Jan 2022 07:56:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93898C06173F;
+        Wed, 12 Jan 2022 04:56:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30DC36189A;
+        Wed, 12 Jan 2022 12:56:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80705C36AE5;
+        Wed, 12 Jan 2022 12:56:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641992184;
+        bh=25exskXbMuH0/ANkBgfQoC39mz6jhEbI7zTs38nzR/c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rpEGKvgp9g6HB1Zs1hXqFJQorUstW3JCF7s9VawkBeeZZDCvDOfdTr6U9uw9uxm3i
+         7gZYh7X908sABdlCrnYDhJEDGal29D1h/JDDfW/oRF7qCIH5ZqnNhIXbON9kNnkt1B
+         OOpFr3Ya0Goee+OrYVQwxdn3cxkkvwb3viUuC5TYBywD+eMJp08EYYkC7bYXdPew0d
+         TeAF2ZN0kOYTZZZWlOB4cs8EUMpZKbTe3od+e6Eh6nrbaUFlBL71I4AXdW3zRM34Ms
+         blNpTPWauUBtOyEVIhUHZkBUxN+KrmDbb9jdW06u/fyMbV61xcm0VFwk3Ss4AKUg8u
+         r/OlCZFyqET4A==
+Date:   Wed, 12 Jan 2022 20:56:15 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     a-govindraju@ti.com, frank.li@nxp.com, rogerq@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: cdnsp: Fix segmentation fault in cdns_lost_power
+ function
+Message-ID: <20220112125615.GC3796@Peter>
+References: <20220111090737.10345-1-pawell@gli-login.cadence.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220111090737.10345-1-pawell@gli-login.cadence.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jie Wang <wangjie125@huawei.com>
+On 22-01-11 10:07:37, Pawel Laszczak wrote:
+> From: Pawel Laszczak <pawell@cadence.com>
+> 
+> CDNSP driver read not initialized cdns->otg_v0_regs
+> which lead to segmentation fault. Patch fixes this issue.
+> 
+> Fixes: 2cf2581cd229 ("usb: cdns3: add power lost support for system resume")
+> cc: <stable@vger.kernel.org>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  drivers/usb/cdns3/drd.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
+> index 55c73b1d8704..d00ff98dffab 100644
+> --- a/drivers/usb/cdns3/drd.c
+> +++ b/drivers/usb/cdns3/drd.c
+> @@ -483,11 +483,11 @@ int cdns_drd_exit(struct cdns *cdns)
+>  /* Indicate the cdns3 core was power lost before */
+>  bool cdns_power_is_lost(struct cdns *cdns)
+>  {
+> -	if (cdns->version == CDNS3_CONTROLLER_V1) {
+> -		if (!(readl(&cdns->otg_v1_regs->simulate) & BIT(0)))
+> +	if (cdns->version == CDNS3_CONTROLLER_V0) {
+> +		if (!(readl(&cdns->otg_v0_regs->simulate) & BIT(0)))
+>  			return true;
+>  	} else {
+> -		if (!(readl(&cdns->otg_v0_regs->simulate) & BIT(0)))
+> +		if (!(readl(&cdns->otg_v1_regs->simulate) & BIT(0)))
+>  			return true;
+>  	}
+>  	return false;
+> -- 
 
-In Linux bonding scenario, one packet is copied to several copies and sent
-by all slave device of bond0 in mode 3(broadcast mode). The mode 3 xmit
-function bond_xmit_broadcast() only ueses the last slave device's tx result
-as the final result. In this case, if the last slave device is down, then
-it always return NET_XMIT_DROP, even though the other slave devices xmit
-success. It may cause the tx statistics error, and cause the application
-(e.g. scp) consider the network is unreachable.
+Pawel, may this lead cdns driver segment fault?
 
-For example, use the following command to configure server A.
-
-echo 3 > /sys/class/net/bond0/bonding/mode
-ifconfig bond0 up
-ifenslave bond0 eth0 eth1
-ifconfig bond0 192.168.1.125
-ifconfig eth0 up
-ifconfig eth1 down
-The slave device eth0 and eth1 are connected to server B(192.168.1.107).
-Run the ping 192.168.1.107 -c 3 -i 0.2 command, the following information
-is displayed.
-
-PING 192.168.1.107 (192.168.1.107) 56(84) bytes of data.
-64 bytes from 192.168.1.107: icmp_seq=1 ttl=64 time=0.077 ms
-64 bytes from 192.168.1.107: icmp_seq=2 ttl=64 time=0.056 ms
-64 bytes from 192.168.1.107: icmp_seq=3 ttl=64 time=0.051 ms
-
- 192.168.1.107 ping statistics
-0 packets transmitted, 3 received
-
-Actually, the slave device eth0 of the bond successfully sends three
-ICMP packets, but the result shows that 0 packets are transmitted.
-
-Also if we use scp command to get remote files, the command end with the
-following printings.
-
-ssh_exchange_identification: read: Connection timed out
-
-So this patch modifies the bond_xmit_broadcast to return NET_XMIT_SUCCESS
-if one slave device in the bond sends packets successfully. If all slave
-devices send packets fail, the discarded packets stats is increased. The
-skb is released when there is no slave device in the bond or the last slave
-device is down.
-
-Fixes: ae46f184bc1f ("bonding: propagate transmit status")
-Signed-off-by: Jie Wang <wangjie125@huawei.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
----
- drivers/net/bonding/bond_main.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 07fc603c2fa7..fce80b57f15b 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -4884,25 +4884,39 @@ static netdev_tx_t bond_xmit_broadcast(struct sk_buff *skb,
- 	struct bonding *bond = netdev_priv(bond_dev);
- 	struct slave *slave = NULL;
- 	struct list_head *iter;
-+	bool xmit_suc = false;
-+	bool skb_used = false;
- 
- 	bond_for_each_slave_rcu(bond, slave, iter) {
--		if (bond_is_last_slave(bond, slave))
--			break;
--		if (bond_slave_is_up(slave) && slave->link == BOND_LINK_UP) {
--			struct sk_buff *skb2 = skb_clone(skb, GFP_ATOMIC);
-+		struct sk_buff *skb2;
-+
-+		if (!(bond_slave_is_up(slave) && slave->link == BOND_LINK_UP))
-+			continue;
- 
-+		if (bond_is_last_slave(bond, slave)) {
-+			skb2 = skb;
-+			skb_used = true;
-+		} else {
-+			skb2 = skb_clone(skb, GFP_ATOMIC);
- 			if (!skb2) {
- 				net_err_ratelimited("%s: Error: %s: skb_clone() failed\n",
- 						    bond_dev->name, __func__);
- 				continue;
- 			}
--			bond_dev_queue_xmit(bond, skb2, slave->dev);
- 		}
-+
-+		if (bond_dev_queue_xmit(bond, skb2, slave->dev) == NETDEV_TX_OK)
-+			xmit_suc = true;
- 	}
--	if (slave && bond_slave_is_up(slave) && slave->link == BOND_LINK_UP)
--		return bond_dev_queue_xmit(bond, skb, slave->dev);
- 
--	return bond_tx_drop(bond_dev, skb);
-+	if (!skb_used)
-+		dev_kfree_skb_any(skb);
-+
-+	if (xmit_suc)
-+		return NETDEV_TX_OK;
-+
-+	atomic_long_inc(&bond_dev->tx_dropped);
-+	return NET_XMIT_DROP;
- }
- 
- /*------------------------- Device initialization ---------------------------*/
 -- 
-2.33.0
+
+Thanks,
+Peter Chen
 

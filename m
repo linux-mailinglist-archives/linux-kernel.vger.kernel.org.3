@@ -2,71 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3F548BDE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 05:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2196F48BDE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 05:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350722AbiALEcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 23:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        id S1350759AbiALEdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 23:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231799AbiALEcs (ORCPT
+        with ESMTP id S231799AbiALEdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 23:32:48 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312D3C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 20:32:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5eLgB2WyWQPkc7m0camX6d8IeA1VEda0fgqfFrNeOtw=; b=doAYrs0dqZb/mzbDOgCE10yTcu
-        +9/11AvgCj0QSAzmL7FAol0mTTNqyU4Lbk05ZQEOHL3m2s2iIZ/8wSxqiF3jW5eruSxPHDrE1jsQx
-        rEG62ueGu7CgFFGPz5R8edIsnHlPsj5XcjsXZHbf0RaSmy6O9cO4DiMvMXi0kXTlvonswVQ/nOnVo
-        csucgV8Rey4pHWIumO9lVyud8Q72HFTaZkFA3kHC8AOLNH2nT+HSc2gJXnnK5z7XMNk4GWYFYgNa6
-        p8meXad6uYaaYixQSWvjAWgJ7KSAC7E3N7JD/2bntFxSKXLDdVGQI8ww8yL9l0joWBr66snjq3z2Z
-        4gI2k9IQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7VJL-003p5A-0D; Wed, 12 Jan 2022 04:32:35 +0000
-Date:   Wed, 12 Jan 2022 04:32:34 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Peng Liang <liangpeng10@huawei.com>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        xiexiangyou@huawei.com, zhengchuan@huawei.com,
-        wanghao232@huawei.com
-Subject: Re: [RFC 0/1] memfd: Support mapping to zero page on reading
-Message-ID: <Yd5Z4i+67+ae68HM@casper.infradead.org>
-References: <20211222123400.1659635-1-liangpeng10@huawei.com>
- <4b1885b8-eb95-c50-2965-11e7c8efbf36@google.com>
+        Tue, 11 Jan 2022 23:33:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56E3C06173F;
+        Tue, 11 Jan 2022 20:33:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A25BB81DCA;
+        Wed, 12 Jan 2022 04:33:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DD5C36AE5;
+        Wed, 12 Jan 2022 04:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641962015;
+        bh=7NrSKZ8PtbnKJG51c0SYHsrsFfDrjACpv6k5pXnZx3M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JTFhIvstI57YbIol9tDSGX0d9S9d/XWtAhjl1QpcRlKHqSXvMeboUJvvBB9UK2PBr
+         U8Fy/MshQkyUnqOd/BwfJInhrsvK6NLQrdCjgRD+//eQ0iGHbgZL1yNT29Eu/A7ynf
+         aAdh6E28aYEXvQ2j4CC0s4u8P6JuqQS3hOXz6At5vwsWZe2rdK5qCv0mSJ0gGxoYZI
+         gWYQFSMRpIofe/2u6f/Ja5S7GSV/r4s9aOA8R3h6VH9aqqFfg8fj5znm5KqN+Deq4g
+         Sy8tZ1OU82TpWynTQYX3BEAfq5jBiTtaDOYEtrmKMob4xtfHyO9Pn0JLiSDvWkhY6b
+         8yLkwqKvHj2jA==
+Date:   Tue, 11 Jan 2022 20:33:33 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Yang Shen <shenyang39@huawei.com>,
+        Yonglong Liu <liuyonglong@huawei.com>,
+        Peng Li <lipeng321@huawei.com>,
+        Matthias Brugger <mbrugger@suse.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: hns: Fix missing put_device() call in
+ hns_mac_register_phy
+Message-ID: <20220111203333.507ec4f5@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20220110064031.3431-1-linmq006@gmail.com>
+References: <20220110064031.3431-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4b1885b8-eb95-c50-2965-11e7c8efbf36@google.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 06:30:31PM -0800, Hugh Dickins wrote:
-> But I have to say that use of ZERO_PAGE for shmem/memfd/tmpfs read-fault
-> might (potentially) be very welcome.  Not as some MFD_ZEROPAGE special
-> case, but as how it would always work.  Deleting the shmem_recalc_inode()
-> cruft, which is there to correct accounting for the unmodified read-only
-> pages, after page reclaim has got around to freeing them later.
+On Mon, 10 Jan 2022 06:40:29 +0000 Miaoqian Lin wrote:
+> We need to drop the reference taken by hns_dsaf_find_platform_device
+> Missing put_device() may cause refcount leak.
 > 
-> It does require more work than you gave it in 1/1: mainly, as you call
-> out above, there's a need to note in the mapping's XArray when ZERO_PAGE
-> has been used at an offset, and do an rmap walk to unmap those ptes when
-> a writable page is substituted - see __xip_unmap() in Linux 3.19's
-> mm/filemap_xip.c for such an rmap walk.
+> Fixes: 804ffe5c6197 ("net: hns: support deferred probe when no mdio")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/net/ethernet/hisilicon/hns/hns_dsaf_mac.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_mac.c b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_mac.c
+> index 7edf8569514c..7364e05487c7 100644
+> --- a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_mac.c
+> +++ b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_mac.c
+> @@ -764,6 +764,7 @@ static int hns_mac_register_phy(struct hns_mac_cb *mac_cb)
+>  		dev_err(mac_cb->dev,
+>  			"mac%d mdio is NULL, dsaf will probe again later\n",
+>  			mac_cb->mac_id);
+> +		put_device(&pdev->dev);
+>  		return -EPROBE_DEFER;
+>  	}
+>  
 
-I think putting a pointer to the zero page in the XArray would introduce
-some unwelcome complexity, but the XArray has a special XA_ZERO_ENTRY
-which might be usable for such a thing.  It would need some careful
-analysis and testing, of course, but it might also let us remove
-the special cases in the DAX code for DAX_ZERO_PAGE.
+With more context:
 
-I agree with you that temporarily allocating pages has worked "well
-enough", but maybe some workloads would benefit; even for files on block
-device filesystems, reading a hole and never writing to it may be common
-enough that this is an optimisation we've been missing for many years.
+@@ -755,24 +755,25 @@ static int hns_mac_register_phy(struct hns_mac_cb *mac_cb)
+        pdev = hns_dsaf_find_platform_device(args.fwnode);
+        if (!pdev) {
+                dev_err(mac_cb->dev, "mac%d mdio pdev is NULL\n",
+                        mac_cb->mac_id);
+                return  -EINVAL;
+        }
+ 
+        mii_bus = platform_get_drvdata(pdev);
+        if (!mii_bus) {
+                dev_err(mac_cb->dev,
+                        "mac%d mdio is NULL, dsaf will probe again later\n",
+                        mac_cb->mac_id);
++               put_device(&pdev->dev);
+                return -EPROBE_DEFER;
+        }
+ 
+        rc = hns_mac_register_phydev(mii_bus, mac_cb, addr);
+        if (!rc)
+                dev_dbg(mac_cb->dev, "mac%d register phy addr:%d\n",
+                        mac_cb->mac_id, addr);
+ 
+        return rc;
+ }
+
+Looks like if put_device() is missing it will also be missing in case
+hns_mac_register_phydev() returns an error.

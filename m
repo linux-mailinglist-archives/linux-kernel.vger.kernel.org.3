@@ -2,69 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5B948BBB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB9E48BBC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346969AbiALAOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 19:14:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
+        id S231352AbiALAUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 19:20:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347360AbiALANu (ORCPT
+        with ESMTP id S230147AbiALAUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 19:13:50 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34820C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 16:13:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 81B85CE1BC4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:13:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C9793C36AF7;
-        Wed, 12 Jan 2022 00:13:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641946426;
-        bh=qhX2xjZPOnkovTNT3pAqKCmQ0qegNrFZZqQzrqUF+GQ=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=qTvVcFn0E18/yTwUUfXfuFX/tq+d4ydfwbNJB/L+cmBsFBd/UsuCbrWXlNVLfOSHf
-         JoWglTjdNPr5hn5gHdi7M7pEERQ/kiNRmu/TVsioji3rhBnt/BKZQpFjRQpDyGdFrn
-         VwuG/jl0KuORcnokTUjFQ4FrNHXpGXd3SRooyNX028+X2pB1g7nWIY9+z6BmJK536G
-         d16tnf+mwxSg5kvLShI0LVjg0GYF+0Eyx1FylN3PK8C1HEorqEoSo8Ay5i15oXMHsw
-         oqFY0qO3QTKBRmfQgwpdbHZD3G4wh6ehT1dn58v8fHyLiWnnTqCZYtR8/dZEPBkTZN
-         GTeE/IbieAcTw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B6C89F60793;
-        Wed, 12 Jan 2022 00:13:46 +0000 (UTC)
-Subject: Re: [GIT PULL] Various minor gfs2 cleanups and fixes for 5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220111172215.1149791-1-agruenba@redhat.com>
-References: <20220111172215.1149791-1-agruenba@redhat.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220111172215.1149791-1-agruenba@redhat.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v5.16-rc3-fixes
-X-PR-Tracked-Commit-Id: 74382e277ae97b4bcfac6f8b61df7a500d392500
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8481c323e4ea0a65f0578107a3e668c1c69cf474
-Message-Id: <164194642674.21161.15806950616568910059.pr-tracker-bot@kernel.org>
-Date:   Wed, 12 Jan 2022 00:13:46 +0000
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
+        Tue, 11 Jan 2022 19:20:39 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6DEC06173F;
+        Tue, 11 Jan 2022 16:20:39 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id l15so1426720pls.7;
+        Tue, 11 Jan 2022 16:20:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=OLIwB5BHLC3yAD2ZzXqCsAZKNHH6hfK1FSSG8NbarnE=;
+        b=VxpKJF/YSyWacV7Rg5PK/7SjOxS0/V85OJKrODkd1WxXxjGZJk0xznqcbmTVccQFka
+         v9GgsYzJRZ9Ma146A+oCV7VgOhvu3TaJWQGdR+Q5CVZQg4u5ioDXUmHNjhnI0vnUJaVw
+         LnOncS7ILpiX45fg3coj8QxdLh3CterH8ejY5besGQC4dpn6cAGTKmjfn+XO5cB7nii6
+         OD1+trOyy2Z+85tgc5EC1fZjKmWWHxE/syuRJmHoGCAJpOuepDs13D7rY+kfsmKLVE6+
+         WgKeI/21jJsSTXWVoTjs67NASWspnbKkXTBgdp+VZuORZxvx5cQLKn8oyoTP5JI731VN
+         wmzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=OLIwB5BHLC3yAD2ZzXqCsAZKNHH6hfK1FSSG8NbarnE=;
+        b=TWrjX5Fu8ut6bTeoBoRt/Ya5rEQWALnT+OALdLjr5ZT6fDbrNDu0QSoEoQp1Wt1gYM
+         RA80qCV0DBAGwSfcse/vshPBRyv/rX9Y76N3WPnDyVu0gPDZtwlL0cSmClwvJn7uL25y
+         7K3KKVqE8pmPc0Qhf9C9NkSZal43CTecsRFEYQV7E+GRqrD0zndeFnvLeJp4jNTxzIYK
+         AN4C+2Nr9X4xp3dVaFng+DIMZUIO5YMRPH13+67ItTOQUI6EZsHTFZwpV1gqWRiHbj6k
+         MWfyyf3QB75zcbVk45WBucSPves3zz3yBQWN6oloJCSMnhhj8hxBIg+MMI5xyLge/x2i
+         yd0w==
+X-Gm-Message-State: AOAM530zkpwWWw2wVensI5UEM+A98PSjLXZRD4/AlRu8DU20dfkjLQIy
+        qwPclEM/jcjYG1FkwPfU8eo=
+X-Google-Smtp-Source: ABdhPJwWIHZ5gvsxZEoBrIRUqAVZ7nbupSccTZkUnmCtOdQFIb0LoZWqT+fwN6FxcnxNZJSIRv2ofw==
+X-Received: by 2002:a17:90b:3a89:: with SMTP id om9mr5906345pjb.120.1641946839187;
+        Tue, 11 Jan 2022 16:20:39 -0800 (PST)
+Received: from [10.1.1.24] (222-155-5-102-adsl.sparkbb.co.nz. [222.155.5.102])
+        by smtp.gmail.com with ESMTPSA id p37sm12805225pfh.97.2022.01.11.16.20.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 11 Jan 2022 16:20:38 -0800 (PST)
+Subject: Re: [PATCH 08/17] ptrace/m68k: Stop open coding ptrace_report_syscall
+To:     Finn Thain <fthain@linux-m68k.org>
+References: <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
+ <20220103213312.9144-8-ebiederm@xmission.com>
+ <CAMuHMdWsNBjOJh0QEx9sppA9x3WoL8H2icqukNqECFhOPremjw@mail.gmail.com>
+ <YdxcszwEslyQJSuF@zeniv-ca.linux.org.uk>
+ <CAMuHMdX9nhUQe_jeQCUtXeQgcQ5MBiHpPiRexh86EssoHNtJ3Q@mail.gmail.com>
+ <acf7b627-2dec-c76c-2aa0-6b4c6addd793@gmail.com>
+ <d660267-ce4f-e598-9b40-5cdbb4566c7@linux-m68k.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <6060f799-d0c5-e4c2-a81c-2bd872ce3d5a@gmail.com>
+Date:   Wed, 12 Jan 2022 13:20:31 +1300
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <d660267-ce4f-e598-9b40-5cdbb4566c7@linux-m68k.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 11 Jan 2022 18:22:15 +0100:
+Hi Finn,
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v5.16-rc3-fixes
+Am 12.01.2022 um 11:42 schrieb Finn Thain:
+> On Tue, 11 Jan 2022, Michael Schmitz wrote:
+>>> In fact Michael did so in "[PATCH v7 1/2] m68k/kernel - wire up
+>>> syscall_trace_enter/leave for m68k"[1], but that's still stuck...
+>>>
+>>> [1]
+>>> https://lore.kernel.org/r/1624924520-17567-2-git-send-email-schmitzmic@gmail.com/
+>>
+>> That patch (for reasons I never found out) did interact badly with
+>> Christoph Hellwig's 'remove set_fs' patches (and Al's signal fixes which
+>> Christoph's patches are based upon). Caused format errors under memory
+>> stress tests quite reliably, on my 030 hardware.
+>>
+>
+> Those patches have since been merged, BTW.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8481c323e4ea0a65f0578107a3e668c1c69cf474
+Yes, that's why I advised caution with mine.
 
-Thank you!
+>
+>> Probably needs a fresh look - the signal return path got changed by Al's
+>> patches IIRC, and I might have relied on offsets to data on the stack
+>> that are no longer correct with these patches. Or there's a race between
+>> the syscall trap and signal handling when returning from interrupt
+>> context ...
+>>
+>> Still school hols over here so I won't have much peace and quiet until
+>> February.
+>>
+>
+> So the patch works okay with Aranym 68040 but not Motorola 68030? Since
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Correct - I seem to recall we also tested those on your 040 and there 
+was no regression there, but I may be misremembering that.
+
+> there is at least one known issue affecting both Motorola 68030 and Hatari
+> 68030, perhaps this patch is not the problem. In anycase, Al's suggestion
+
+I hadn't ever made that connection, but it might be another explanation, 
+yes.
+
+> to split the patch into two may help in that testing two smaller patches
+> might narrow down the root cause.
+
+That's certainly true.
+
+What's the other reason these patches are still stuck, Geert? Did we 
+ever settle the dispute about what return code ought to abort a syscall 
+(in the seccomp context)?
+
+Cheers,
+
+	Michael
+
+

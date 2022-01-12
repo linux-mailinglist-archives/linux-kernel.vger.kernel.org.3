@@ -2,218 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BEF48CC92
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA8848CC95
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350159AbiALT4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:56:35 -0500
-Received: from mail-qt1-f171.google.com ([209.85.160.171]:34468 "EHLO
-        mail-qt1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357611AbiALTx3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:53:29 -0500
-Received: by mail-qt1-f171.google.com with SMTP id y10so4348895qtw.1;
-        Wed, 12 Jan 2022 11:53:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jJL3a71hY/nIwYviaKdD0vj8/3ycQ9lxEe2C9EyccVc=;
-        b=Ylar9exRu551mNaY4W3Sd7U7Xnfjid77R5n4mEK6GFThYSaSpvcd6YcK1Hg4DhNhqG
-         FBXbN3xrKet2j56S20N6TmRp5m+0Xq00ATCnbvsO5pwerIYvG/S/pfLdq5Jff4SCz3sF
-         GIwRpEYYdU31LisB3NxeJJVHvLD7QOQ93v2u4GI+MLw9bytd0pUOJnN/aNLrnIyYmLCy
-         jojCS0y2uLv49ZmXDbxBdH9F2Kas0xDfoRY9HoZyHwAw+3s09vxH7TDKWeULWGVMUPCm
-         Y1zs2zzwa/yx+nnMXAWafpvuvCSpFGPdF78LsIP+mhohTxWLhtpC+d2uk/FBNPqtlu3X
-         YWZA==
-X-Gm-Message-State: AOAM533jjgF531SdJnb+YOElh71qX+OWLLWTl+9RB/Io5X2MHsYfs0FP
-        mEp1VkwBoBKuMvHyzfYRVcL7YPr4SGttwxQmt38=
-X-Google-Smtp-Source: ABdhPJx5zwgQ74maWpzMxiGzXPIhbW5qJVbcYv7mpeVaPuWtmbIFVDwd5M/M7e3UNzJ3LorIJTmXP4RiV5qtZHbcGAM=
-X-Received: by 2002:ac8:5795:: with SMTP id v21mr1007664qta.472.1642017206293;
- Wed, 12 Jan 2022 11:53:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20220108034743.31277-1-ricardo.neri-calderon@linux.intel.com> <20220108034743.31277-8-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20220108034743.31277-8-ricardo.neri-calderon@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 12 Jan 2022 20:53:15 +0100
-Message-ID: <CAJZ5v0h5-xsYCfs=c+wE4tWrcmvkdbgrc+fnwytSghwuAWnu0A@mail.gmail.com>
-Subject: Re: [PATCH v4 7/7] thermal: intel: hfi: Notify user space for HFI events
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
+        id S1350636AbiALT4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:56:37 -0500
+Received: from mga12.intel.com ([192.55.52.136]:46878 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1357410AbiALTyz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 14:54:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642017295; x=1673553295;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=+z6qhzkY5AZh8lvp5ZYnAbRLSbu3XClV+3f1x7uGg64=;
+  b=gOhxgnsvs+RrdlXnSykIUtCvUPYH1sfsD/0ZtPlrrHOvNk6ITZnv0fsD
+   DQz8jum22OE9E9/5moWEIhVO7ME48ULmP2MKlRXRHDDReP+GOYD8E2cXm
+   vu/lgt2T5hlHZjTvhjWjBo11t+iodUYYxHYpS+rZkBO8EZ3TsHDmTXn74
+   qZyiET4iRM1MFkObE4eikd2rR1Kw2adIFhN5wMZdUUeKNZ40ETImMoPPJ
+   CnMJleuUwD5vQs+I/Q90ACWyrOkhHeDXTLTkcNIPrioSn+8elYfaH9OBG
+   xy4sjDBzOarBQElNUAWhCbg8BmbmgSA0dx98af+mSGAMZMHq80Caz/GuF
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="223824034"
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="223824034"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 11:53:47 -0800
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="593122646"
+Received: from kumarkan-mobl.amr.corp.intel.com (HELO [10.209.80.194]) ([10.209.80.194])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 11:53:45 -0800
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220111113314.27173-1-kirill.shutemov@linux.intel.com>
+ <20220111113314.27173-6-kirill.shutemov@linux.intel.com>
+ <3a361a1d-0e14-8884-c5bb-90aeb87e38ef@intel.com>
+ <20220112194302.cyxhjypsptr4mtix@box.shutemov.name>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv2 5/7] x86/mm: Reserve unaccepted memory bitmap
+Message-ID: <a4b5707f-0f0b-57a8-ccdb-d89f66210b52@intel.com>
+Date:   Wed, 12 Jan 2022 11:53:42 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20220112194302.cyxhjypsptr4mtix@box.shutemov.name>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 4:46 AM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
->
-> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
->
-> When the hardware issues an HFI event, relay a notification to user space.
-> This allows user space to respond by reading performance and efficiency of
-> each CPU and take appropriate action.
->
-> For example, when performance and efficiency of a CPU is 0, user space can
-> either offline the CPU or inject idle. Also, if user space notices a
-> downward trend in performance, it may proactively adjust power limits to
-> avoid future situations in which performance drops to 0.
->
-> To avoid excessive notifications, the rate is limited by one HZ per event.
-> To limit the netlink message size, parameters for only 16 CPUs at max are
-> sent in one message. If there are more than 16 CPUs, issue as many messages
-> as needed to notify the status of all CPUs.
->
-> In the HFI specification, both performance and efficiency capabilities are
-> set in the [0, 255] range. The existing implementations of HFI hardware
-> do not scale the maximum values to 255. Since userspace cares about
-> capability values that are either 0 or show a downward/upward trend, this
-> fact does not matter much. Relative changes in capabilities are enough. To
-> comply with the thermal netlink ABI, scale both performance and efficiency
-> capabilities to the [0, 1023] interval.
->
-> Cc: Andi Kleen <ak@linux.intel.com>
-> Cc: Aubrey Li <aubrey.li@linux.intel.com>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Tim Chen <tim.c.chen@linux.intel.com>
-> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-> Reviewed-by: Len Brown <len.brown@intel.com>
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
-> Changes since v3:
->   * None
->
-> Changes since v2:
->   * None
->
-> Changes since v1:
->   * Made get_one_hfi_cap() return void. Removed unnecessary checks.
->     (Rafael)
->   * Replaced raw_spin_[un]lock_irq[restore|save]() with raw_spin_
->     [un]lock_irq() in get_one_hfi_cap(). This function is only called from
->     a workqueue and there is no need to save and restore irq flags.
->   * Scaled performance and energy efficiency values to a [0, 1023] interval
->     when reporting values to user space via thermal netlink notifications.
->     (Lucasz).
->   * Reworded commit message to comment on the scaling of HFI capabilities
->     to comply with the proposed thermal netlink ABI.
-> ---
->  drivers/thermal/intel/Kconfig     |  1 +
->  drivers/thermal/intel/intel_hfi.c | 57 ++++++++++++++++++++++++++++++-
->  2 files changed, 57 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-> index e9d2925227d4..6cf3fe36a4ae 100644
-> --- a/drivers/thermal/intel/Kconfig
-> +++ b/drivers/thermal/intel/Kconfig
-> @@ -104,6 +104,7 @@ config INTEL_HFI_THERMAL
->         bool "Intel Hardware Feedback Interface"
->         depends on CPU_SUP_INTEL
->         depends on X86_THERMAL_VECTOR
-> +       select THERMAL_NETLINK
->         help
->           Select this option to enable the Hardware Feedback Interface. If
->           selected, hardware provides guidance to the operating system on
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index 1a08c58f26f6..9fd66f176948 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -40,6 +40,7 @@
->
->  #include <asm/msr.h>
->
-> +#include "../thermal_core.h"
->  #include "intel_hfi.h"
->
->  #define THERM_STATUS_CLEAR_PKG_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | \
-> @@ -162,6 +163,60 @@ static struct hfi_features hfi_features;
->  static DEFINE_MUTEX(hfi_instance_lock);
->
->  #define HFI_UPDATE_INTERVAL    HZ
-> +#define HFI_MAX_THERM_NOTIFY_COUNT     16
-> +
-> +static void get_one_hfi_cap(struct hfi_instance *hfi_instance, s16 index,
-> +                           struct hfi_cpu_data *hfi_caps)
-> +{
-> +       struct hfi_cpu_data *caps;
-> +
-> +       /* Find the capabilities of @cpu */
-> +       raw_spin_lock_irq(&hfi_instance->table_lock);
-> +       caps = hfi_instance->data + index * hfi_features.cpu_stride;
-> +       memcpy(hfi_caps, caps, sizeof(*hfi_caps));
-> +       raw_spin_unlock_irq(&hfi_instance->table_lock);
-> +}
-> +
-> +/*
-> + * Call update_capabilities() when there are changes in the HFI table.
-> + */
-> +static void update_capabilities(struct hfi_instance *hfi_instance)
-> +{
-> +       struct cpu_capability cpu_caps[HFI_MAX_THERM_NOTIFY_COUNT];
-> +       int i = 0, cpu;
-> +
+On 1/12/22 11:43 AM, Kirill A. Shutemov wrote:
+> On Tue, Jan 11, 2022 at 11:10:40AM -0800, Dave Hansen wrote:
+>> On 1/11/22 03:33, Kirill A. Shutemov wrote:
+>>> Unaccepted memory bitmap is allocated during decompression stage and
+>>> handed over to main kernel image via boot_params. The bitmap is used to
+>>> track if memory has been accepted.
+>>>
+>>> Reserve unaccepted memory bitmap has to prevent reallocating memory for
+>>> other means.
+>>
+>> I'm having a hard time parsing that changelog, especially the second
+>> paragraph.  Could you give it another shot?
+> 
+> What about this:
+> 
+> 	Unaccepted memory bitmap is allocated during decompression stage and
+> 	handed over to main kernel image via boot_params.
+> 
+> 	Kernel tracks what memory has been accepted in the bitmap.
+> 
+> 	Reserve memory where the bitmap is placed to prevent memblock from
+> 	re-allocating the memory for other needs.
+> 
+> ?
 
-Wouldn't it be better to hold hfi_instance_lock for the duration of this loop?
+Ahh, I get what you're trying to say now.  But, it still really lacks a
+coherent problem statement.  How about this?
 
-Surely, CPU offline or online during it can be confusing.
+	== Problem ==
 
-> +       for_each_cpu(cpu, hfi_instance->cpus) {
-> +               struct hfi_cpu_data caps;
-> +               s16 index;
-> +
-> +               /*
-> +                * We know index is valid because this CPU is present
-> +                * in this instance.
-> +                */
-> +               index = per_cpu(hfi_cpu_info, cpu).index;
-> +
-> +               get_one_hfi_cap(hfi_instance, index, &caps);
-> +
-> +               cpu_caps[i].cpu = cpu;
-> +
-> +               /*
-> +                * Scale performance and energy efficiency to
-> +                * the [0, 1023] interval that thermal netlink uses.
-> +                */
-> +               cpu_caps[i].performance = caps.perf_cap << 2;
-> +               cpu_caps[i].efficiency = caps.ee_cap << 2;
-> +               ++i;
-> +
-> +               if (i >= HFI_MAX_THERM_NOTIFY_COUNT) {
-> +                       thermal_genl_cpu_capability_event(HFI_MAX_THERM_NOTIFY_COUNT,
-> +                                                         cpu_caps);
-> +                       i = 0;
-> +               }
-> +       }
-> +
-> +       if (i)
-> +               thermal_genl_cpu_capability_event(i, cpu_caps);
-> +}
->
->  static void hfi_update_work_fn(struct work_struct *work)
->  {
-> @@ -172,7 +227,7 @@ static void hfi_update_work_fn(struct work_struct *work)
->         if (!hfi_instance)
->                 return;
->
-> -       /* TODO: Consume update here. */
-> +       update_capabilities(hfi_instance);
->  }
->
->  void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
-> --
-> 2.17.1
->
+	A given page of memory can only be accepted once.  The kernel
+	has a need to accept memory both in the early decompression
+	stage and during normal runtime.
+
+	== Solution ==
+
+	Use a bitmap to communicate the acceptance state of each page
+	between the decompression stage and normal runtime.  This
+	eliminates the possibility of attempting to double-accept a
+	page.
+
+	== Details ==
+
+	Allocate the bitmap during decompression stage and hand it over
+	to the main kernel image via boot_params.
+
+	In the runtime kernel, reserve the bitmap's memory to ensure
+	nothing overwrites it.
+
+>>> +	/* Mark unaccepted memory bitmap reserved */
+>>> +	if (boot_params.unaccepted_memory) {
+>>> +		unsigned long size;
+>>> +
+>>> +		/* One bit per 2MB */
+>>> +		size = DIV_ROUND_UP(e820__end_of_ram_pfn() * PAGE_SIZE,
+>>> +				    PMD_SIZE * BITS_PER_BYTE);
+>>> +		memblock_reserve(boot_params.unaccepted_memory, size);
+>>> +	}
+>>
+>> Is it OK that the size of the bitmap is inferred from
+>> e820__end_of_ram_pfn()?  Is this OK in the presence of mem= and other things
+>> that muck with the e820?
+> 
+> Good question. I think we are fine. If kernel is not able to allocate
+> memory from a part of physical address space we don't need the bitmap for
+> it either.
+
+That's a good point.  If the e820 range does a one-way shrink it's
+probably fine.  The only problem would be if the bitmap had space for
+for stuff past e820__end_of_ram_pfn() *and* it later needed to be accepted.
+
+Would it be worth recording the size of the reservation and then
+double-checking against it in the bitmap operations?

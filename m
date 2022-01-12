@@ -2,146 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF6F48C66F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2468148C672
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354275AbiALOtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:49:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354256AbiALOtI (ORCPT
+        id S1354283AbiALOuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:50:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49840 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239463AbiALOuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:49:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0E8C06173F;
-        Wed, 12 Jan 2022 06:49:08 -0800 (PST)
+        Wed, 12 Jan 2022 09:50:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA745B81ED0;
-        Wed, 12 Jan 2022 14:49:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21199C36AEA;
-        Wed, 12 Jan 2022 14:49:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABBF3B81F46;
+        Wed, 12 Jan 2022 14:50:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61D08C36AEF;
+        Wed, 12 Jan 2022 14:50:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641998945;
-        bh=tUAj1+vcYAmzKzaI31fyw8aqfm34XHOHX4eyc4NGFyA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=morh+rIOrKybqitKRfUIUIFi2rcTWKUy8xiWifzxi1P7YtMsmq77Ua/B4yJpe4CwL
-         LL44Sai9LAt7ttDvYV0f0GoSXrXxFrChD9miO10WSgmkPTMsU1t7ashiL/xn4VeSyS
-         0H0O1fj+5ywoqBQVpnimlmNk7ZxT48qteMlH/XwJkMUvguC9ZWHgCc8mkxmahfHtTk
-         GK2jeXBr8Nlg0j1NA2sWrxBliUqs5Omm8hwikUQPENuoaqln/0Wjd+lGKZZP5VFq3T
-         WHspIKXqTAWyLqyPHMRt1t7K7U+tPTpAZjKjl3QLTqaGlllX4g+3DG5IOwih+np8R+
-         r8l2RQX+64gng==
-Date:   Wed, 12 Jan 2022 08:49:03 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lukasz Maniak <lukasz.maniak@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?Q?=C5=81ukasz?= Gieryk <lukasz.gieryk@linux.intel.com>
-Subject: Re: [PATCH] PCI: Reset IOV state on FLR to PF
-Message-ID: <20220112144903.GA253960@bhelgaas>
+        s=k20201202; t=1641999001;
+        bh=IQnTEWWPj/T6G7CafhN3yxIczQw5jaOpanOpbhcfynI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=daCuMezYE1O4Z0Mu4w9f5bt8xt93rbC4AmBfk51x5I73eC6wpA9gojEotjFT/pSiu
+         ZKXjJhJOoXLAXYw29UICNrDgHeDGNGNwdbnd27g/S/HRw2il/DkVdMo7sSrm9LgEtO
+         0jPtqJRROZFLjnAXi6Srrq5jX4xQxji5V7uj3tJljPn/UcpoWX/ZXVnGf8iSbdtLAB
+         QHcefq6eyms+bKbmraVgYy03E21oRvVi97KYuNapBx/KJsoSxaEwmCRt4RlOU1a1nJ
+         t/Nrwp88QbvmcT88Aq2gt4Lu/4D2ROpqshOQATWVjiXSY65wFjZQvb5IFJW6vSqcyr
+         xGPk7SzmlKyOg==
+Received: by mail-wm1-f54.google.com with SMTP id 25-20020a05600c231900b003497473a9c4so3605718wmo.5;
+        Wed, 12 Jan 2022 06:50:01 -0800 (PST)
+X-Gm-Message-State: AOAM533eG838W4wUVtQNvpsGBI8vB+X9/YSyY2BGqLD7FnRE2stChmXz
+        cjvGTzQG8Gj26uUZ8nY+RiG/mhpZ0uL/+kaWUXI=
+X-Google-Smtp-Source: ABdhPJy2OkE8s7vrbX7qNwL9Me4Gj5tUrZqLLRbHBRR6eseY6i1g35qBWExkWnVX9hxHQ0BwFmG6dL4y1VSYest3k20=
+X-Received: by 2002:a05:600c:1991:: with SMTP id t17mr7068642wmq.25.1641998999585;
+ Wed, 12 Jan 2022 06:49:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222191958.955681-1-lukasz.maniak@linux.intel.com>
+References: <20220112140137.728162-1-jforbes@fedoraproject.org>
+ <CAHmME9rJFVeWL=SFTkM8=+2te_GnH4n-THH+F3p5mnHfCkhZ4w@mail.gmail.com>
+ <CAMj1kXHubNk3gRTOmD1rOCifCUE4O6=TvNr_XhP1tNcCBuzfBQ@mail.gmail.com>
+ <CAHmME9oKEawBAGSN_tdpBDe2_vRUE8Gh+GMXn+d94A6te4FJPQ@mail.gmail.com>
+ <CAMj1kXGzzHefRu1wcgDsYpybSDrUK__FXE-Mjm2r1fg2xiz6Jg@mail.gmail.com>
+ <CAHmME9p25W3Pg4T4Pers+hxryhAcQZEZMx5uueF3a-oCr7ABuA@mail.gmail.com>
+ <CAMj1kXEgE-3Pnnak-RZAPch=ma399Ki4jrMb8j32x2AFyZZALA@mail.gmail.com>
+ <CAHmME9oTsOZCJoPUT=LwUuwWHbAa_N1MRoGjTYY5Poj4tr0+Zg@mail.gmail.com>
+ <CAMj1kXFSN0yJzmgDKp1bmF7wgaAwJba+FteStJEKH7HDBSP5kQ@mail.gmail.com> <CAHmME9qcjHq6M+sOOxCT4xte5AcZRoHjcMQfod3Zc1=FJsq8BQ@mail.gmail.com>
+In-Reply-To: <CAHmME9qcjHq6M+sOOxCT4xte5AcZRoHjcMQfod3Zc1=FJsq8BQ@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 12 Jan 2022 15:49:48 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGp8bkxc0XpAR=DJJhsRNeoJb2wtEwmdRH4eh35KHNk8Q@mail.gmail.com>
+Message-ID: <CAMj1kXGp8bkxc0XpAR=DJJhsRNeoJb2wtEwmdRH4eh35KHNk8Q@mail.gmail.com>
+Subject: Re: [PATCH v2] lib/crypto: add prompts back to crypto libraries
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Justin Forbes <jmforbes@linuxtx.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 08:19:57PM +0100, Lukasz Maniak wrote:
-> As per PCI Express specification, FLR to a PF resets the PF state as
-> well as the SR-IOV extended capability including VF Enable which means
-> that VFs no longer exist.
+On Wed, 12 Jan 2022 at 15:44, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> On Wed, Jan 12, 2022 at 3:42 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Wed, 12 Jan 2022 at 15:15, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > >
+> > > On Wed, Jan 12, 2022 at 3:13 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > >
+> > > > On Wed, 12 Jan 2022 at 15:12, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > > > >
+> > > > > On Wed, Jan 12, 2022 at 3:08 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > > >
+> > > > > > On Wed, 12 Jan 2022 at 15:08, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > > > > > >
+> > > > > > > On Wed, Jan 12, 2022 at 3:06 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > > > > >
+> > > > > > > > On Wed, 12 Jan 2022 at 15:05, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > > > > > > > >
+> > > > > > > > > This commit also needs this snippet:
+> > > > > > > > >
+> > > > > > > >
+> > > > > > > > Why?
+> > > > > > >
+> > > > > > > So that the menu of crypto library options is inside of the library
+> > > > > > > menu. Otherwise this will appear inside of the _root_ menu, which
+> > > > > > > isn't what we want.
+> > > > > >
+> > > > > > Why not? I think that's fine.
+> > > > >
+> > > > > It's really not appropriate there. Look:
+> > > > >
+> > > > > - Justin vanilla: https://i.imgur.com/14UBpML.png
+> > > > > - Justin + Jason: https://i.imgur.com/lDfZnma.png
+> > > > >
+> > > > > We really don't want another top level menu. We're not that important.
+> > > > > Rather, crypto libraries are but one ordinary subset of ordinary
+> > > > > libraries, just like how the build system does it too.
+> > > >
+> > > > I disagree. The root menu is a jumble of things already, and having
+> > > > this one at the root is really not a problem.
+> > >
+> > > Should CRC routines also go into a submenu and be put at the root?
+> > > What about other library functions? Library functions belong in the
+> > > library submenu. We don't need our own top level submenu for this. The
+> > > whole point of lib/crypto/ is that they're just boring library
+> > > functions. Libraries! So, part of the libraries menu.
+> >
+> > Shouting it doesn't make it true.
+>
+> I'm not shouting. I respectfully disagree with your perspective. I
+> think the comparison to CRC routines is an apt one, still unaddressed.
+>
 
-Can you add a specific reference to the spec, please?
+Sure, but none of this is relevant for the short term fix that we need
+to get in asap. There are lots of future changes we can philosophize
+about, but those discussions should take place on the linux-crypto
+list after the merge window closes.
 
-> Currently, the IOV state is not updated during FLR, resulting in
-> non-compliant PCI driver behavior.
+> > Nobody cares about what the root menu looks like
+>
+> I certainly do.
+>
 
-And include a little detail about what problem is observed?  How would
-a user know this problem is occurring?
+Fair enough. But on many architectures, it looks absolutely horrid,
+and I rarely see fixes sent for it.
 
-> This patch introduces a simple function, called on the FLR path, that
-> removes the virtual function devices from the PCI bus and their
-> corresponding sysfs links with a final clear of the num_vfs value in IOV
-> state.
-> 
-> Signed-off-by: Lukasz Maniak <lukasz.maniak@linux.intel.com>
-> ---
->  drivers/pci/iov.c | 21 +++++++++++++++++++++
->  drivers/pci/pci.c |  2 ++
->  drivers/pci/pci.h |  4 ++++
->  3 files changed, 27 insertions(+)
-> 
-> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-> index 0267977c9f17..69ee321027b4 100644
-> --- a/drivers/pci/iov.c
-> +++ b/drivers/pci/iov.c
-> @@ -1013,6 +1013,27 @@ int pci_iov_bus_range(struct pci_bus *bus)
->  	return max ? max - bus->number : 0;
->  }
->  
-> +/**
-> + * pci_reset_iov_state - reset the state of the IOV capability
-> + * @dev: the PCI device
-> + */
-> +void pci_reset_iov_state(struct pci_dev *dev)
-> +{
-> +	struct pci_sriov *iov = dev->sriov;
-> +
-> +	if (!dev->is_physfn)
-> +		return;
-> +	if (!iov->num_VFs)
-> +		return;
-> +
-> +	sriov_del_vfs(dev);
-> +
-> +	if (iov->link != dev->devfn)
-> +		sysfs_remove_link(&dev->dev.kobj, "dep_link");
-> +
-> +	iov->num_VFs = 0;
-> +}
-> +
->  /**
->   * pci_enable_sriov - enable the SR-IOV capability
->   * @dev: the PCI device
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 3d2fb394986a..535f19d37e8d 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -4694,6 +4694,8 @@ EXPORT_SYMBOL(pci_wait_for_pending_transaction);
->   */
->  int pcie_flr(struct pci_dev *dev)
->  {
-> +	pci_reset_iov_state(dev);
-> +
->  	if (!pci_wait_for_pending_transaction(dev))
->  		pci_err(dev, "timed out waiting for pending transaction; performing function level reset anyway\n");
->  
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index 3d60cabde1a1..7bb144fbec76 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -480,6 +480,7 @@ void pci_iov_update_resource(struct pci_dev *dev, int resno);
->  resource_size_t pci_sriov_resource_alignment(struct pci_dev *dev, int resno);
->  void pci_restore_iov_state(struct pci_dev *dev);
->  int pci_iov_bus_range(struct pci_bus *bus);
-> +void pci_reset_iov_state(struct pci_dev *dev);
->  extern const struct attribute_group sriov_pf_dev_attr_group;
->  extern const struct attribute_group sriov_vf_dev_attr_group;
->  #else
-> @@ -501,6 +502,9 @@ static inline int pci_iov_bus_range(struct pci_bus *bus)
->  {
->  	return 0;
->  }
-> +static inline void pci_reset_iov_state(struct pci_dev *dev)
-> +{
-> +}
->  
->  #endif /* CONFIG_PCI_IOV */
->  
-> 
-> base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
-> -- 
-> 2.25.1
-> 
+> > and given that this
+> > patch is presumably going to be sent as an early fix on top of your
+> > rng branch, it is better not to touch anything under crypto/ unless
+> > you are 100% certain it is not going to conflict with Herbert's tree.
+>
+> Oh, I was thinking Herbert would take this since he hasn't sent a pull
+> yet? Otherwise, sure, I can do it.
+>
+
+How could he? This patch does not apply to his cryptodev tree, which
+won't receive backmerges from mainline until the next cycle.

@@ -2,103 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6370948C769
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30A248C773
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:43:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354717AbiALPkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:40:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50709 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1354748AbiALPki (ORCPT
+        id S1354733AbiALPnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:43:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242234AbiALPm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:40:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642002037;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gJmHbv9SCbjdwt82aanZM10+dOvSdHukj6nnuz8zRSw=;
-        b=UWwAtnDzDTwQpsR+5BG6U65uqeERP0iAnJsU8ErE1n89OIfmxm6z3hpe8Y8zYk/anR+Kyd
-        ChojIrDGyrLq6sPKZ6/F+ZNffos/ohgBiJ4gz3YHugtHc0Axs/4pX+baVzOia7af35Uwqo
-        5ZQbmvzU1d1St/XNuvIXjOlCDxOjIOk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-259-2_ciwF2DNHmPaaptMl4MsQ-1; Wed, 12 Jan 2022 10:40:34 -0500
-X-MC-Unique: 2_ciwF2DNHmPaaptMl4MsQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EA38710168C0;
-        Wed, 12 Jan 2022 15:40:31 +0000 (UTC)
-Received: from [10.22.10.195] (unknown [10.22.10.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3420E87942;
-        Wed, 12 Jan 2022 15:40:02 +0000 (UTC)
-Message-ID: <0cf37ac0-69c7-2da4-22a6-58e78dc35cef@redhat.com>
-Date:   Wed, 12 Jan 2022 10:40:01 -0500
+        Wed, 12 Jan 2022 10:42:56 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A194C06173F;
+        Wed, 12 Jan 2022 07:42:56 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id u21so11596431edd.5;
+        Wed, 12 Jan 2022 07:42:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pk9G/dsg1PMyd6CzhEC9GX6NcblEd21mpPVthjg3MLs=;
+        b=Vxd19zFFtTEat1uiYtqlhQV7EaP6I8hVYcJnMd6D1rH51e/Ti5Y4O+/H7dyC5bVm3Y
+         MtlzMck/g1LqI0dQZegrpQlgtSf08vQ2FBlUpESv19pTYWvUKqFJHD7yO/0yCTABBBGC
+         jf8jFuLUdZZmKQImTUg3P4iNXLynJkrf5KX3c2Pf6kmRYNVIkcXIcsozCRWziaG7A4xW
+         A7uPseDeLHARbb1byJRfcOncgnDCo8c5VEyFfel+Id6d0/ioSlmQaZdff3FNGKTnyTsi
+         JlSrzrJCOjlTeaxwQYsQhogf0cdhJdvy1/wczXL2A6OmSygHaE8267RTt7YVNqLioB3p
+         dKyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pk9G/dsg1PMyd6CzhEC9GX6NcblEd21mpPVthjg3MLs=;
+        b=n5F/0MkReA/e84uudtaEKs01Iqwb9R0rARrcm0yA8SB1MpmL+Ek+QgD8tmm4wLnTCt
+         9mzLFVeZy3You3+A5q74Gq6BbRoBxzSXMxfCRBau2414yad+2MlYY890JkPhZzafAdHR
+         qgBk9g2SFUdc+W7QuFbobrWo96C3HStGwA8Mkp8OE60usUc46jjBE9O61/cTmw3HtpAl
+         0Qb3Z8A3GGVzJdqnApfq4aISRxnfX5QwkkmywoNqwT6Fl5ueJMj45SEzLiNr3sXJVvoy
+         0gS4wAcxKtRHueLbckty1DCvXjqxxB0KKnZ42WctdUJeqO3Ug1w0+6iWY7WCjd9RsALd
+         acuw==
+X-Gm-Message-State: AOAM531h4Fs4uqM8xIYI7IuV9EGgDbH/jznE0U6LZUNEG6OzuNrVPoQP
+        FkHQy5mw5VC5Opoju9lIf9+WVosJBS9Xg3w8zDY=
+X-Google-Smtp-Source: ABdhPJxKMGIxMdkdnYrPXoFEYoZXbMBp/Rzeh6pyOJszu097bd5j2k2qv6ZQGDXeWxHMQCHfzfb6AoGzHs0MIIZgIVo=
+X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr222895ejc.497.1642002174794;
+ Wed, 12 Jan 2022 07:42:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 4/7] cgroup/cpuset: Add a new isolated cpus.partition
- type
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-References: <20211205183220.818872-1-longman@redhat.com>
- <20211205183220.818872-5-longman@redhat.com>
- <Yd7x3P+wGCVfYtza@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Yd7x3P+wGCVfYtza@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com> <1641996862-26960-4-git-send-email-akhilrajeev@nvidia.com>
+In-Reply-To: <1641996862-26960-4-git-send-email-akhilrajeev@nvidia.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 12 Jan 2022 17:41:08 +0200
+Message-ID: <CAHp75Vd=gxF9jFMvRw3qM9rfsxxCsO8qYXKVheuhjOV7ypU9og@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] i2c: smbus: Use device_*() functions instead of of_*()
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     Christian Koenig <christian.koenig@amd.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 12, 2022 at 4:15 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+>
+> Change of_*() functions to device_*() for firmware agnostic usage.
+> This allows to have smbus_alert interrupt without any changes
 
-On 1/12/22 10:21, Peter Zijlstra wrote:
-> On Sun, Dec 05, 2021 at 01:32:17PM -0500, Waiman Long wrote:
->> Cpuset v1 uses the sched_load_balance control file to determine if load
->> balancing should be enabled.  Cpuset v2 gets rid of sched_load_balance
->> as its use may require disabling load balancing at cgroup root.
->>
->> For workloads that require very low latency like DPDK, the latency
->> jitters caused by periodic load balancing may exceed the desired
->> latency limit.
->>
->> When cpuset v2 is in use, the only way to avoid this latency cost is to
->> use the "isolcpus=" kernel boot option to isolate a set of CPUs. After
->> the kernel boot, however, there is no way to add or remove CPUs from
->> this isolated set. For workloads that are more dynamic in nature, that
->> means users have to provision enough CPUs for the worst case situation
->> resulting in excess idle CPUs.
->>
->> To address this issue for cpuset v2, a new cpuset.cpus.partition type
->> "isolated" is added which allows the creation of a cpuset partition
->> without load balancing. This will allow system administrators to
->> dynamically adjust the size of isolated partition to the current need
->> of the workload without rebooting the system.
-> you can, ofcourse, create lots of 1 cpu partitions, which is effectively
-> what you're doing, except there was a problem with that which you also
-> forgot to mention.
+the smbus_alert
 
-Yes, that is a possible workaround. However, it makes cgroup management 
-much harder especially in the cgroup v2 environment where multiple 
-controllers are likely to be enabled in the same cgroup.
+> in the controller drivers using ACPI table.
 
-Cheers,
-Longman
+the ACPI
 
+...
+
+This change reveals potential issue:
+
+> -               irq = of_irq_get_byname(adapter->dev.of_node, "smbus_alert");
+> +               irq = device_irq_get_byname(adapter->dev.parent, "smbus_alert");
+
+>                 if (irq <= 0)
+
+I guess this '= 0' part should be fixed first.
+
+>                         return irq;
+
+-- 
+With Best Regards,
+Andy Shevchenko

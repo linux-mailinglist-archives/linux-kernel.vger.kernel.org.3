@@ -2,63 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEFF48CB29
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D9B48CB41
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356409AbiALSmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 13:42:24 -0500
-Received: from mail-qk1-f173.google.com ([209.85.222.173]:39497 "EHLO
-        mail-qk1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356384AbiALSmO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:42:14 -0500
-Received: by mail-qk1-f173.google.com with SMTP id 69so4314732qkd.6;
-        Wed, 12 Jan 2022 10:42:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JmfYPB11Ou5DTZdDH8mTQHFm0SLlZ8h38q0aVdDysic=;
-        b=G+qh8T4jsQjlJuj0Anf1C4YzujKeYu/78+AGu8kEsRbelwScb/x82HXY3/QPAW1KL6
-         NKttT1g5NJCES1rF6MPBx3PvOmWTCoMJuDnm4U63mWo4qMlWNs+bi77HuHB1/exo+8wm
-         y4KSw2983JmeHr5fchvqP/nyhUDW+WZEyPohH0GVQkCny66uhoXoYnlIvfYJn1UoaZ6b
-         dMvWICfzIh+fvQB0/hByZ3W+YiUVz0+wH1glkiwNU4fGsBYsKHhrriVctedDbq/YhxtX
-         lbpQ2cB6vv7+MOz+3CLT9aTIQpKLvRAi9JO+gjHpOyznIJGoFek8VxZ83TrehIoO6SVY
-         De4g==
-X-Gm-Message-State: AOAM533Vexwr8JK9ONNRpG95RYPg4+32CrJ13LvjkG4BtM1VG7TnqxZu
-        Fve9UZ1TAl/imBdX7hWCOzyaPBf2oNfWKVqvGTfO9xgw
-X-Google-Smtp-Source: ABdhPJx3uptLFabDUOylc68jm5c+2NFmXEkPVdtXcBIzVMWhVjtUe9ctWyrfGxVMTHX82SzVfpT6yMQykXXMYzjjyj4=
-X-Received: by 2002:a37:dc45:: with SMTP id v66mr799997qki.516.1642012933392;
- Wed, 12 Jan 2022 10:42:13 -0800 (PST)
+        id S1356510AbiALSth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 13:49:37 -0500
+Received: from mga11.intel.com ([192.55.52.93]:32836 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1356492AbiALStS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 13:49:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642013358; x=1673549358;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P8rim4q0I6ulB+Ywv2t0GgbvDOgoQUtrXFzLeGezyTs=;
+  b=htc1WEJca4KmONw/vvXfg0fre6y/XVoTmnIn4Bg+IK/8drx4f1+N7fhc
+   9d3o/+Hwws1aBR5qVw1e5D1Rl98meOFFiPobeQFaJgnJ4ReUVqCT/V1oL
+   ArFdFs1dlZ9N4G3Il7T2aNkpwSUkGeZVmKEcFZaw8AcZ7djUVcMWTlAnh
+   wFuaM2douecBcOkqAVhTRevH6+p0y5flNR0tOTUSrLbxJF4l6bfaDx4ps
+   ZCpjbsn1t+UFHLcfjNqLGmjSJ2ssw5JrVsg0TYG4v6kM2w/UzEGHBN2Z4
+   YXtzf6JaVAdQwzzmZR58X6knlHout+QXlLI+vHJ+zoGJJaB2nBhzclqBB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="241375345"
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="241375345"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 10:43:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="515611386"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 12 Jan 2022 10:43:08 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n7iaR-0006Et-Ab; Wed, 12 Jan 2022 18:43:07 +0000
+Date:   Thu, 13 Jan 2022 02:42:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Seevalamuthu Mariappan <quic_seevalam@quicinc.com>
+Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>
+Subject: [ammarfaizi2-block:kvalo/ath/pending 255/273]
+ drivers/net/wireless/ath/ath11k/wmi.c:7833:39: error: 'struct ath11k' has no
+ member named 'debug'
+Message-ID: <202201130245.W7Ps705H-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220103155838.616580-1-sudeep.holla@arm.com> <20220105174554.GA29945@1e936cf764ba>
- <20220106141230.qddcwyycefxlbrma@bogus>
-In-Reply-To: <20220106141230.qddcwyycefxlbrma@bogus>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 12 Jan 2022 19:42:02 +0100
-Message-ID: <CAJZ5v0iG0-O1m2hS62yXMNW4p1JhWhxXZCDQc=mxKc50mU7GZw@mail.gmail.com>
-Subject: Re: [RFC PATCH] ACPI: PCC: pcc_ctx can be static
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, kbuild-all@lists.01.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 3:12 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> Hi,
->
-> On Thu, Jan 06, 2022 at 01:45:56AM +0800, kernel test robot wrote:
-> > drivers/acpi/acpi_pcc.c:34:22: warning: symbol 'pcc_ctx' was not declared. Should it be static?
-> >
-> > Reported-by: kernel test robot <lkp@intel.com>
->
-> Thanks for the fix and sorry for not noticing this before it was merged.
->
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
+head:   061c4062835233faef6961a898155015fc5e0631
+commit: 3af45eb104584443956572fa9d2a332123816b37 [255/273] ath11k: Add debugfs interface to configure firmware debug log level
+config: xtensa-randconfig-r024-20220112 (https://download.01.org/0day-ci/archive/20220113/202201130245.W7Ps705H-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/3af45eb104584443956572fa9d2a332123816b37
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block kvalo/ath/pending
+        git checkout 3af45eb104584443956572fa9d2a332123816b37
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash drivers/net/wireless/ath/ath11k/
 
-Applied, thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/net/wireless/ath/ath11k/wmi.c: In function 'ath11k_wmi_fw_dbglog_cfg':
+>> drivers/net/wireless/ath/ath11k/wmi.c:7833:39: error: 'struct ath11k' has no member named 'debug'
+    7833 |                 memcpy(tlv->value, &ar->debug.module_id_bitmap,
+         |                                       ^~
+   drivers/net/wireless/ath/ath11k/wmi.c:7836:27: error: 'struct ath11k' has no member named 'debug'
+    7836 |                 memset(&ar->debug.module_id_bitmap, 0,
+         |                           ^~
+
+
+vim +7833 drivers/net/wireless/ath/ath11k/wmi.c
+
+  7800	
+  7801	int ath11k_wmi_fw_dbglog_cfg(struct ath11k *ar, struct ath11k_fw_dbglog *dbglog)
+  7802	{
+  7803		struct ath11k_pdev_wmi *wmi = ar->wmi;
+  7804		struct wmi_debug_log_config_cmd_fixed_param *cmd;
+  7805		struct sk_buff *skb;
+  7806		struct wmi_tlv *tlv;
+  7807		int ret, len;
+  7808	
+  7809		len = sizeof(*cmd) + TLV_HDR_SIZE + (MAX_MODULE_ID_BITMAP_WORDS * sizeof(u32));
+  7810		skb = ath11k_wmi_alloc_skb(wmi->wmi_ab, len);
+  7811		if (!skb)
+  7812			return -ENOMEM;
+  7813	
+  7814		cmd = (struct wmi_debug_log_config_cmd_fixed_param *)skb->data;
+  7815		cmd->tlv_header = FIELD_PREP(WMI_TLV_TAG, WMI_TAG_DEBUG_LOG_CONFIG_CMD) |
+  7816				  FIELD_PREP(WMI_TLV_LEN, sizeof(*cmd) - TLV_HDR_SIZE);
+  7817		cmd->dbg_log_param = dbglog->param;
+  7818	
+  7819		tlv = (struct wmi_tlv *)((u8 *)cmd + sizeof(*cmd));
+  7820		tlv->header = FIELD_PREP(WMI_TLV_TAG, WMI_TAG_ARRAY_UINT32) |
+  7821			      FIELD_PREP(WMI_TLV_LEN, MAX_MODULE_ID_BITMAP_WORDS * sizeof(u32));
+  7822	
+  7823		switch (dbglog->param) {
+  7824		case WMI_DEBUG_LOG_PARAM_LOG_LEVEL:
+  7825		case WMI_DEBUG_LOG_PARAM_VDEV_ENABLE:
+  7826		case WMI_DEBUG_LOG_PARAM_VDEV_DISABLE:
+  7827		case WMI_DEBUG_LOG_PARAM_VDEV_ENABLE_BITMAP:
+  7828			cmd->value = dbglog->value;
+  7829			break;
+  7830		case WMI_DEBUG_LOG_PARAM_MOD_ENABLE_BITMAP:
+  7831		case WMI_DEBUG_LOG_PARAM_WOW_MOD_ENABLE_BITMAP:
+  7832			cmd->value = dbglog->value;
+> 7833			memcpy(tlv->value, &ar->debug.module_id_bitmap,
+  7834			       MAX_MODULE_ID_BITMAP_WORDS * sizeof(u32));
+  7835			/* clear current config to be used for next user config */
+  7836			memset(&ar->debug.module_id_bitmap, 0,
+  7837			       MAX_MODULE_ID_BITMAP_WORDS * sizeof(u32));
+  7838			break;
+  7839		default:
+  7840			dev_kfree_skb(skb);
+  7841			return -EINVAL;
+  7842		}
+  7843	
+  7844		ret = ath11k_wmi_cmd_send(wmi, skb, WMI_DBGLOG_CFG_CMDID);
+  7845		if (ret) {
+  7846			ath11k_warn(ar->ab,
+  7847				    "failed to send WMI_DBGLOG_CFG_CMDID\n");
+  7848			dev_kfree_skb(skb);
+  7849		}
+  7850		return ret;
+  7851	}
+  7852	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,59 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFFD48BF59
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F079248BF5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351298AbiALH4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:56:14 -0500
-Received: from verein.lst.de ([213.95.11.211]:45167 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237500AbiALH4O (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:56:14 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id BD67E68AFE; Wed, 12 Jan 2022 08:56:09 +0100 (CET)
-Date:   Wed, 12 Jan 2022 08:56:09 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>
-Subject: Re: [PATCH 4/5] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64
- in fcntl.h
-Message-ID: <20220112075609.GA4854@lst.de>
-References: <20220111083515.502308-1-hch@lst.de> <20220111083515.502308-5-hch@lst.de> <CAK8P3a0mHC5=OOGV=sGnC9JqZWxzsJyZbTefnCtryQU3o3PY_g@mail.gmail.com>
+        id S1351313AbiALH55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:57:57 -0500
+Received: from mail-ua1-f50.google.com ([209.85.222.50]:35577 "EHLO
+        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237500AbiALH54 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 02:57:56 -0500
+Received: by mail-ua1-f50.google.com with SMTP id m90so3245395uam.2;
+        Tue, 11 Jan 2022 23:57:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dlv4bb07uQ08vixl16O6rQbCEVIDaSU7CPtshf2sCJ8=;
+        b=xJzZyJaRdhl50Fq/aKQNRYGE9yShXNzGnjRSCkd5XunKN0xAlQ9A9yUgOqp5QAaqQP
+         iXDbcTr/gx0b33wIijpC3tGQRENo8lxOBDIgGFTXTJv9VofiJxcpChux0sxdhbvffiDP
+         8Azn6zWwwHYW+cSJD1WfpxfyqzGlgP/9MeX3MZf8Sxd57s3xJkg46oWmd+1RAeHwU5yZ
+         Tgpe+JFN42f2W8TBgcxqFNyl31TuwfweGUc/7BNXjhOg6mG3Ynj10b/AZ0ed0MXQBFot
+         11xb9OrE7sVTRdXut59ktbaI8SO3ifcV452OZ++zrpukmw6pb5rHG7lJytdqCaUOYPx9
+         2alQ==
+X-Gm-Message-State: AOAM532njuS9eqPJwIne+QZ+6fckxdXvFaGatLZgKTvDLYzZK0gsim2N
+        X8E+qGT1OkVkYZ/9p0pIaLplWCybDKcPzQ==
+X-Google-Smtp-Source: ABdhPJzwq2lon5agsPMriD1uoDPAbBQaz8iEzso6djGSIQe/q8TY3E6qSTOJjzTONrwLWA3XqVI0/Q==
+X-Received: by 2002:ab0:22c5:: with SMTP id z5mr3794812uam.100.1641974275458;
+        Tue, 11 Jan 2022 23:57:55 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id u33sm7308702uau.7.2022.01.11.23.57.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 23:57:54 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id x33so3145138uad.12;
+        Tue, 11 Jan 2022 23:57:54 -0800 (PST)
+X-Received: by 2002:a67:e985:: with SMTP id b5mr3471391vso.77.1641974274526;
+ Tue, 11 Jan 2022 23:57:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0mHC5=OOGV=sGnC9JqZWxzsJyZbTefnCtryQU3o3PY_g@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+References: <20220110095625.278836-1-javierm@redhat.com> <65a13d92-93fc-25d2-0009-b7e60f3392c4@moonlit-rail.com>
+In-Reply-To: <65a13d92-93fc-25d2-0009-b7e60f3392c4@moonlit-rail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 12 Jan 2022 08:57:43 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXWBfA2rqu4DhWkpDt+PmNdZLC6_zcG+W+m=8UDudO+vA@mail.gmail.com>
+Message-ID: <CAMuHMdXWBfA2rqu4DhWkpDt+PmNdZLC6_zcG+W+m=8UDudO+vA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] video: A couple of fixes for the vga16fb driver
+To:     "Kris Karas (Bug reporting)" <bugs-a21@moonlit-rail.com>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Borislav Petkov <bp@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 04:33:30PM +0100, Arnd Bergmann wrote:
-> This is a very subtle change to the exported UAPI header contents:
-> On 64-bit architectures, the three unusable numbers are now always
-> shown, rather than depending on a user-controlled symbol.
+Hi Kris,
 
-Well, the change is bigger and less subtle.  Before this change the
-constants were never visible to userspace at all (except on mips),
-because the #ifdef CONFIG_64BIT it never set for userspace builds.
+On Wed, Jan 12, 2022 at 3:19 AM Kris Karas (Bug reporting)
+<bugs-a21@moonlit-rail.com> wrote:
+> Javier Martinez Canillas wrote:
+> > Changes in v2:
+> > - Make the change only for x86 (Geert Uytterhoeven)
+> > - Only check the suppported video mode for x86 (Geert Uytterhoeven).
+>
+> I just updated Bug 215001 to reflect that I have tested this new, V2
+> patch against 4 systems, one more than last time - 2 BIOS/VGAC and 2
+> UEFI - and it works perfectly on all four.
+>
+> Thanks, Javier, for the excellent work!
+> I didn't test with non-X86, but the code appears to bypass the patch on
+> non-X86, so should work fine for Geert.
 
-> This is probably what we want here for compatibility reasons, but I think
-> it should be explained in the changelog text, and I'd like Jeff or Bruce
-> to comment on it as well: the alternative here would be to make the
-> uapi definition depend on __BITS_PER_LONG==32, which is
-> technically the right thing to do but more a of a change.
+Note that I can no longer test the PPC use case, as the hardware
+died a long time ago.
 
-I can change this to #if __BITS_PER_LONG==32 || defined(__KERNEL__),
-but it will still be change in what userspace sees.
+> Tested-By: Kris Karas <bugs-a21@moonlit-rail.com>
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

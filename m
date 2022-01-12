@@ -2,55 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8337648BEAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 07:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1299F48BEAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 07:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351042AbiALGpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 01:45:34 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:34626 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237188AbiALGpe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 01:45:34 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowADXuBX6eN5hyNEQBg--.9833S2;
-        Wed, 12 Jan 2022 14:45:14 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     ebiggers@kernel.org
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re:[PATCH] fs/eventfd.c: Check error number after calling ida_simple_get
-Date:   Wed, 12 Jan 2022 14:45:13 +0800
-Message-Id: <20220112064513.692182-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1351054AbiALGqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 01:46:13 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:60690 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351044AbiALGqM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 01:46:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 60BECCE1BCF;
+        Wed, 12 Jan 2022 06:46:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B469C36AE9;
+        Wed, 12 Jan 2022 06:46:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641969968;
+        bh=4Tn/USo8KXboTynK6KqLOmV0gnZLDsBgsgeyLJRL42U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KPBg50AG2faZ8N/dkKJzcmsW0yf4+tZqhCuQn+FFCR6kc2LkIgOS6StWmkVzv0WOT
+         xBb+gILh/BDRFnnrCnrG/CF9hRYe/34tqdNvlFZU3P0bKcCIdBtaF0Ekhip3FZOHnU
+         4ax4ZDl2jRoPJwOQj1iZWfUaFrDbOJYSdFps7gUK/HcmyKUFRRZT4f7K1qcJ972sxI
+         15MLR5c/BlgsMvRDUIaIAV5KAg8KdDk3AhV0oOxKh2c9EcN0K7cTgCEkwKog49VHPh
+         +R6aYIPs+srU9pWbkDcZK3xM5tibGLjp9mkmdZm5/dMBbfOSjEhf1e48Yvr3Berhn6
+         JJJh+q5HmRWVA==
+Date:   Tue, 11 Jan 2022 22:46:06 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     hannes@cmpxchg.org, torvalds@linux-foundation.org, tj@kernel.org,
+        lizefan.x@bytedance.com, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, stable@vger.kernel.org,
+        kernel-team@android.com,
+        syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com
+Subject: Re: [PATCH v3 1/1] psi: Fix uaf issue when psi trigger is destroyed
+ while being polled
+Message-ID: <Yd55LpWuuKHm26L2@sol.localdomain>
+References: <20220111232309.1786347-1-surenb@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowADXuBX6eN5hyNEQBg--.9833S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYo7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87
-        Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
-        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx
-        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIF
-        xwCY02Avz4vE14v_GF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2
-        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
-        ZFpf9x0JU24E_UUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220111232309.1786347-1-surenb@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 02:35:58PM +0800, Eric Biggers wrote:
-> Shouldn't this be 'ctx->id < 0'?
+On Tue, Jan 11, 2022 at 03:23:09PM -0800, Suren Baghdasaryan wrote:
+> With write operation on psi files replacing old trigger with a new one,
+> the lifetime of its waitqueue is totally arbitrary. Overwriting an
+> existing trigger causes its waitqueue to be freed and pending poll()
+> will stumble on trigger->event_wait which was destroyed.
+> Fix this by disallowing to redefine an existing psi trigger. If a write
+> operation is used on a file descriptor with an already existing psi
+> trigger, the operation will fail with EBUSY error.
+> Also bypass a check for psi_disabled in the psi_trigger_destroy as the
+> flag can be flipped after the trigger is created, leading to a memory
+> leak.
+> 
+> Fixes: 0e94682b73bf ("psi: introduce psi monitor")
+> Cc: stable@vger.kernel.org
+> Reported-by: syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com
+> Analyzed-by: Eric Biggers <ebiggers@kernel.org>
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
 
-Thanks, that's right.
-I will submit a v2.
+Looks good,
 
-Sincerely thanks,
-Jiang
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 
+- Eric

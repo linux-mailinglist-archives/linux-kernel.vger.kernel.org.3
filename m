@@ -2,68 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0829448CBB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9695F48CBB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344921AbiALTPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
+        id S1356798AbiALTPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:15:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357039AbiALTOm (ORCPT
+        with ESMTP id S1357161AbiALTPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:14:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFE5C0254AF
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:12:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78429B8208F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 19:12:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C7D9C36AEA;
-        Wed, 12 Jan 2022 19:12:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642014728;
-        bh=CDo7uly22Fc1kgATpN7dPjU3sEevu035m4wPXRN1K7M=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=UpUQATtvFF4gJeXe/RJbuFo2Ych1qwN0JZtTYiKAObF5p5CVsCrG96Fxk91rg6xo5
-         HqVQk6TIvVYQwg5jPA+a6RD1fr7h5ur068zSG5cIqHHxtb7oeV15uace9KO3j18uzL
-         grySlBUxmDPMra8C/hGSpV0jAW4RN53UPCJj9nWFed4C8rh1GZ8E7JS5CO506NDaAI
-         iu8ZlnoEM7eKsexqBu31+1yb4UFectdG9haOr7z9Ywf7qqdafHWlLgjLsB9e7YItYR
-         1wJH1RnRBfl8oUZW6iCufnNayf7u4RIO5Syz+RqPtD4/jrI2yVIy5H1CLc2dQ6QY6E
-         VnTodxnM6p0ZQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 35DE1F6078C;
-        Wed, 12 Jan 2022 19:12:08 +0000 (UTC)
-Subject: Re: [GIT PULL] dma-mapping updates for Linux 5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Ydx+6rmjq2giOC/b@infradead.org>
-References: <Ydx+6rmjq2giOC/b@infradead.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Ydx+6rmjq2giOC/b@infradead.org>
-X-PR-Tracked-Remote: git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-5.17
-X-PR-Tracked-Commit-Id: f857acfc457ea63fa5b862d77f055665d863acfe
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7e7b69654724c72bd3219b71f58937845dca0b2b
-Message-Id: <164201472820.2601.1205408391529229477.pr-tracker-bot@kernel.org>
-Date:   Wed, 12 Jan 2022 19:12:08 +0000
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+        Wed, 12 Jan 2022 14:15:04 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DE5C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:14:51 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id s30so11596781lfo.7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:14:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=igVDWcMipF0SatFt9p6gNS2Y828EjA5ZzPFbjDN4w8s=;
+        b=ZWWedQq2A4EN9KB+CRMjVwqfQ/K1up/vwGXDtcnByaN/WoonWF25/SCIWCrjK8xz0Y
+         7H+uXrxtCbFyEOSIwciKYoUEevYu3KPy/M+dg8KmzPfA2wRC+EEo3MN80sRDsYvl8ya1
+         ayoOP76A/t9AtPZaVOvMfMDuup94Fut3p2jGJ5oP3MJwEa5PCOq/an+JBZF+Mkn1D3Ro
+         08JO/UCPXrBhBQzGpzSRc+c9BSEJpkiKcltxVeaWdFl5HHcYQqrKQTs1TYes7jjmAfc4
+         eQkwiuP6dhERXlBcyWQYTEjwwxfmz1tPsTpTsCu2+mI4Hymn+wBWE/muNjkbJpjIyhIx
+         tu8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=igVDWcMipF0SatFt9p6gNS2Y828EjA5ZzPFbjDN4w8s=;
+        b=jptH6VHGLs145VRCRSACz2i9Ti4hZFupTBXnAnqwVRnlnc61ZMVXGPRvtMq32HqCAb
+         L7974GiowCrHgqj0txLQFJCn/Tw5B38YE/0sP4dtMbDyonm0U2mmuNzGIJZzPaDnuXtp
+         G6o6IiZWcNwJCmlys3qQt/WXsK4SzmK+bHrR9wluyOqrj62soGdfbAo0Ff3X+1FlWxwY
+         sBUrAFzPzd+TPYSHb8DntQ9SCclw9qO9Sl564RPaTq5kwKDKH2otBF1sbt+xLUsVaJIz
+         WMdbYqYDn97nFAoakdAu6Am/D8Uhc/9kLtcrZe4DYYVElbIUJEqKQYluGPxuDT6LGI6B
+         k8/Q==
+X-Gm-Message-State: AOAM532IMtM/G5DlA9hXzv5nemH71QL3sAA8R2QyprlYOueHfOTMQU2/
+        9TJ4IDU0D1C3bduDqSqB/91jTw==
+X-Google-Smtp-Source: ABdhPJzlfxAT+7HQhcd4fAWklADHKI95H3h5K1MM3L4iC2TQORXo0ZIlDg8+0aydimE2hYeywaPhYA==
+X-Received: by 2002:a2e:b791:: with SMTP id n17mr622707ljo.307.1642014889495;
+        Wed, 12 Jan 2022 11:14:49 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id p17sm67328lfu.233.2022.01.12.11.14.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 11:14:47 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id E8448103A6D; Wed, 12 Jan 2022 22:15:10 +0300 (+03)
+Date:   Wed, 12 Jan 2022 22:15:10 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 1/7] mm: Add support for unaccepted memory
+Message-ID: <20220112191510.6uqdflbreuet7bnx@box.shutemov.name>
+References: <20220111113314.27173-1-kirill.shutemov@linux.intel.com>
+ <20220111113314.27173-2-kirill.shutemov@linux.intel.com>
+ <3a68fabd-eaff-2164-5609-3a71fd4a7257@intel.com>
+ <d84e242f-f7f6-4fb0-8f22-bcc790a296a0@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d84e242f-f7f6-4fb0-8f22-bcc790a296a0@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 10 Jan 2022 19:46:02 +0100:
+On Wed, Jan 12, 2022 at 12:31:10PM +0100, David Hildenbrand wrote:
+> 
+> > 
+> > Looking at stuff like this, I can't help but think that a:
+> > 
+> > 	#define PageOffline PageUnaccepted
+> > 
+> > and some other renaming would be a fine idea.  I get that the Offline 
+> > bit can be reused, but I'm not sure that the "Offline" *naming* should 
+> > be reused.  What you're doing here is logically distinct from existing 
+> > offlining.
+> 
+> Yes, or using a new pagetype bit to make the distinction clearer.
+> Especially the function names like maybe_set_page_offline() et. Al are
+> confusing IMHO. They are all about accepting unaccepted memory ... and
+> should express that.
 
-> git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-5.17
+"Unaccepted" is UEFI treminology and I'm not sure we want to expose
+core-mm to it. Power/S390/ARM may have a different name for the same
+concept. Offline/online is neutral terminology, familiar to MM developers.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7e7b69654724c72bd3219b71f58937845dca0b2b
+What if I change accept->online in function names and document the meaning
+properly?
 
-Thank you!
+> I assume PageOffline() will be set only on the first sub-page of a
+> high-order PageBuddy() page, correct?
+> 
+> Then we'll have to monitor all PageOffline() users such that they can
+> actually deal with PageBuddy() pages spanning *multiple* base pages for
+> a PageBuddy() page. For now it's clear that if a page is PageOffline(),
+> it cannot be PageBuddy() and cannot span more than one base page.
+
+> E.g., fs/proc/kcore.c:read_kcore() assumes that PageOffline() is set on
+> individual base pages.
+
+Right, pages that offline from hotplug POV are never on page allocator's
+free lists, so it cannot ever step on them.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+ Kirill A. Shutemov

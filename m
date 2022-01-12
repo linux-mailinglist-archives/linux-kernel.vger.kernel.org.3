@@ -2,79 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B3948BCFD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5AC548BCFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348319AbiALCOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 21:14:17 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:35815 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236375AbiALCOQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 21:14:16 -0500
-Received: by mail-ot1-f45.google.com with SMTP id 60-20020a9d0142000000b0059103eb18d4so971825otu.2;
-        Tue, 11 Jan 2022 18:14:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xDZwp1RpgUqiJWiQLnFoilI1CwJ7sriHv7jgndUrRv0=;
-        b=6Jxy4Ijt+cMzYhPOifBQ4Ge2oSEu47IDukqHVyhsaxx9zhH8DJvS72typ1zY+eOsKS
-         3b4HVHCB77wEkJHO9qNMRC5S1AAyp2zKACFYi8mTLTJ4HMaumGwVTEHOvo6rXoSEl2ha
-         A1PoSX0X2aoAs+wK0O1+wgk3XJjHdYZI0u/LYJlsQfUNZalZsAonowk6We2l7AkNk5qL
-         jFXqxKt+HoC+i1oSGjij+itr3hPw8OsEYfK3Ipgw05SHot2vufWpyYKX9KIkVP2D0MvA
-         WqGiBPDQBLmmYojrirKB6qzAqT5qncMmc46AaFdB4KWrff+qmuCDqseUpk1ElTRmMmLO
-         6UFg==
-X-Gm-Message-State: AOAM531IeP7VpmkAw3h+BvLqCB7kuIiIIbTZD0l6BRIBMtLntMXSMTvK
-        6fdROkLt/tPCwlJL9Hb8tYXnDiKxuw==
-X-Google-Smtp-Source: ABdhPJxv4ceHLsRSRP8AEcZNyx95RQ9t7DxidsoXxomfARqy38EYFsg7POnSlUKhsDzeaeFwLb3bFQ==
-X-Received: by 2002:a9d:60f:: with SMTP id 15mr5048995otn.266.1641953656131;
-        Tue, 11 Jan 2022 18:14:16 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id v4sm2263905oot.36.2022.01.11.18.14.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 18:14:15 -0800 (PST)
-Received: (nullmailer pid 3933654 invoked by uid 1000);
-        Wed, 12 Jan 2022 02:14:14 -0000
-Date:   Tue, 11 Jan 2022 20:14:14 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Stanislav Jakubek <stano.jakubek@gmail.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: vendor-prefixes: add Huawei
-Message-ID: <Yd45dgW8Fgsmuzrm@robh.at.kernel.org>
-References: <20220109132311.GA2827@standask-GA-A55M-S2HP>
- <20220110095543.00001ac0@Huawei.com>
- <20220110121307.GA1894@standask-GA-A55M-S2HP>
+        id S1348343AbiALCOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 21:14:49 -0500
+Received: from mga05.intel.com ([192.55.52.43]:13847 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348153AbiALCOl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 21:14:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641953681; x=1673489681;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=iwKZ073cu08h+Lh8CgyaGyaCaRfHHiOzkPf0DUgI5BI=;
+  b=NeKBVJfe4D0L7pYogvYg+pZBnMnG/yYDqMctAXLZXcoM3hl0hoWJAIH9
+   aHSI+gyQV3aLIsA0vtfrrxiJalMdjLSioTZS4iVDsvSR+F8XcZ9wxGAFE
+   vSiPt3J1ppiqMVIe6c6/oj4/kIFI5rrxwGLi2RzRGiFmlNFPA/JL30tFu
+   FojGYw/F47MYQ0rqZJMffOOa+0vRD/Zuug3y+mfBw6ukWgqBbpGyOV0DL
+   7Lyu06+du+R8vbuba0OrKIz5L1mllbzhVfZ+/xCV7iq9goGoHbCx1XLRw
+   GOz3dp3pA3yAGQp9OmXuHl/OBF3L9AQs7d7SsBfg7jteV98aX8A2DZKw+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="329988863"
+X-IronPort-AV: E=Sophos;i="5.88,281,1635231600"; 
+   d="scan'208";a="329988863"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 18:14:41 -0800
+X-IronPort-AV: E=Sophos;i="5.88,281,1635231600"; 
+   d="scan'208";a="670010352"
+Received: from dchandr2-mobl.amr.corp.intel.com ([10.212.157.65])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 18:14:39 -0800
+Message-ID: <13f71a99d35155fa252a3ef9310b1d02733ab439.camel@linux.intel.com>
+Subject: Re: [PATCH] platform/x86: ISST: do not hold lock
+ punit_misc_dev_lock when register misc
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Liwei Song <liwei.song@windriver.com>,
+        HansdeGoede <hdegoede@redhat.com>,
+        MarkGross <markgross@kernel.org>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 11 Jan 2022 18:14:33 -0800
+In-Reply-To: <bdcdc712-318e-d44c-d11e-d49ab7886e2b@windriver.com>
+References: <20220111103122.32362-1-liwei.song@windriver.com>
+         <3d677ec215006f2b4d08f1bd32c040e88d53ebde.camel@linux.intel.com>
+         <bdcdc712-318e-d44c-d11e-d49ab7886e2b@windriver.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110121307.GA1894@standask-GA-A55M-S2HP>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 01:13:07PM +0100, Stanislav Jakubek wrote:
-> On Mon, Jan 10, 2022 at 09:55:43AM +0000, Jonathan Cameron wrote:
-> > On Sun, 9 Jan 2022 14:23:11 +0100
-> > Stanislav Jakubek <stano.jakubek@gmail.com> wrote:
-> > 
-> > > Add vendor prefix for Huawei (https://www.huawei.com/en/)
-> > 
-> > Patch description should say why...  Is there an existing binding
-> > using a huawei vendor prefix?
-> 
-> Not sure about bindings, but there are device trees using the huawei 
-> vendor prefix. I'm aware of at least these two:
-> /arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
-> /arch/arm64/boot/dts/qcom/msm8994-angler-rev-101.dts
-> 
-> Similar situation with the other vendor prefix patches I've sent yesterday.
-> 
-> Should I send a v2 with an updated patch description for this and
-> the other patches?
+Hi Song,
 
-Yes.
+On Wed, 2022-01-12 at 10:06 +0800, Liwei Song wrote:
+> 
+> On 1/12/22 05:20, Srinivas Pandruvada wrote:
+> > Hi Song,
+> > 
+> > Please check the attached and see if you can reproduce this.
+> 
+> Hi Srinivas,
+> 
+> The attached patch works well without the deadlock warning, thank you
+> for your help.
+> 
+I really appreciate for reporting this issue.
+I will post the patch with tested-by.
 
-Rob
+Thanks,
+Srinivas
+
+> Thanks,
+> Liwei.
+> 
+> 
+> > Thanks,
+> > Srinivas
+> > 
+> > On Tue, 2022-01-11 at 18:31 +0800, Liwei Song wrote:
+> > > exist the below call sequences may cause deadlock:
+> > > 
+> > > isst_if_probe()
+> > >    --> isst_if_cdev_register()
+> > >       --> mutex_lock(&punit_misc_dev_lock)
+> > >    --> misc_register()
+> > >       --> mutex_lock(&misc_mtx)
+> > > 
+> > > misc_open()
+> > >    --> mutex_lock(&misc_mtx)
+> > >    --> isst_if_open()
+> > >       --> mutex_lock(&punit_misc_dev_lock)
+> > > 
+> > > to fix this do not hold punit_misc_dev_lock when call
+> > > misc_register
+> > > since it has misc_mtx lock for sync.
+> > > 
+> > > [  256.104522]
+> > > ======================================================
+> > > [  256.113783] WARNING: possible circular locking dependency
+> > > detected
+> > > [  256.120093] 5.16.0-rc6-yocto-standard+ #99 Not tainted
+> > > [  256.125362] --------------------------------------------------
+> > > ----
+> > > [  256.131673] intel-speed-sel/844 is trying to acquire lock:
+> > > [  256.137290] ffffffffc036f0d0 (punit_misc_dev_lock){+.+.}-
+> > > {3:3},
+> > > at: isst_if_open+0x18/0x90 [isst_if_common]
+> > > [  256.147171]
+> > > [  256.147171] but task is already holding lock:
+> > > [  256.153135] ffffffff8ee7cb50 (misc_mtx){+.+.}-{3:3}, at:
+> > > misc_open+0x2a/0x170
+> > > [  256.160407]
+> > > [  256.160407] which lock already depends on the new lock.
+> > > [  256.160407]
+> > > [  256.168712]
+> > > [  256.168712] the existing dependency chain (in reverse order)
+> > > is:
+> > > [  256.176327]
+> > > [  256.176327] -> #1 (misc_mtx){+.+.}-{3:3}:
+> > > [  256.181946]        lock_acquire+0x1e6/0x330
+> > > [  256.186265]        __mutex_lock+0x9b/0x9b0
+> > > [  256.190497]        mutex_lock_nested+0x1b/0x20
+> > > [  256.195075]        misc_register+0x32/0x1a0
+> > > [  256.199390]        isst_if_cdev_register+0x65/0x180
+> > > [isst_if_common]
+> > > [  256.205878]        isst_if_probe+0x144/0x16e [isst_if_mmio]
+> > > [  256.209991] hrtimer: interrupt took 10370 ns
+> > > [  256.211582]        local_pci_probe+0x47/0xa0
+> > > [  256.220384]        work_for_cpu_fn+0x17/0x30
+> > > [  256.224790]        process_one_work+0x26a/0x650
+> > > [  256.229456]        worker_thread+0x1dd/0x3b0
+> > > [  256.233861]        kthread+0x191/0x1c0
+> > > [  256.237745]        ret_from_fork+0x1f/0x30
+> > > [  256.241976]
+> > > [  256.241976] -> #0 (punit_misc_dev_lock){+.+.}-{3:3}:
+> > > [  256.248552]        validate_chain+0xbc6/0x1750
+> > > [  256.253131]        __lock_acquire+0x88c/0xc10
+> > > [  256.257618]        lock_acquire+0x1e6/0x330
+> > > [  256.261933]        __mutex_lock+0x9b/0x9b0
+> > > [  256.266165]        mutex_lock_nested+0x1b/0x20
+> > > [  256.270739]        isst_if_open+0x18/0x90 [isst_if_common]
+> > > [  256.276356]        misc_open+0x100/0x170
+> > > [  256.280409]        chrdev_open+0xa5/0x1e0
+> > > [  256.284550]        do_dentry_open+0x23d/0x3c0
+> > > [  256.289039]        vfs_open+0x2f/0x40
+> > > [  256.292836]        path_openat+0x87a/0x940
+> > > [  256.297064]        do_filp_open+0xc5/0x140
+> > > [  256.301295]        do_sys_openat2+0x23d/0x320
+> > > [  256.305782]        do_sys_open+0x59/0x80
+> > > [  256.309836]        __x64_sys_openat+0x20/0x30
+> > > [  256.314324]        do_syscall_64+0x3f/0x90
+> > > [  256.318552]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > > [  256.324259]
+> > > [  256.324259] other info that might help us debug this:
+> > > [  256.324259]
+> > > [  256.332394]  Possible unsafe locking scenario:
+> > > [  256.332394]
+> > > [  256.338444]        CPU0                    CPU1
+> > > [  256.343105]        ----                    ----
+> > > [  256.347768]   lock(misc_mtx);
+> > > [  256.350870]                                lock(punit_misc_dev
+> > > _loc
+> > > k);
+> > > [  256.357441]                                lock(misc_mtx);
+> > > [  256.363058]   lock(punit_misc_dev_lock);
+> > > [  256.367110]
+> > > [  256.367110]  *** DEADLOCK ***
+> > > [  256.367110]
+> > > [  256.373162] 1 lock held by intel-speed-sel/844:
+> > > [  256.377824]  #0: ffffffff8ee7cb50 (misc_mtx){+.+.}-{3:3}, at:
+> > > misc_open+0x2a/0x170
+> > > [  256.385531]
+> > > [  256.385531] stack backtrace:
+> > > [  256.390021] CPU: 12 PID: 844 Comm: intel-speed-sel Not tainted
+> > > 5.16.0-rc6-yocto-standard+ #99
+> > > [  256.398678] Hardware name: ACCTON MOROCITY/MOROCITY, BIOS
+> > > IDVLCRB1.86B.0021.D09.2111010103 11/01/2021
+> > > [  256.408028] Call Trace:
+> > > [  256.410605]  <TASK>
+> > > [  256.412837]  dump_stack_lvl+0x5b/0x82
+> > > [  256.416635]  dump_stack+0x10/0x12
+> > > [  256.420085]  print_circular_bug.isra.43+0x261/0x2c0
+> > > [  256.425095]  check_noncircular+0x126/0x140
+> > > [  256.429326]  ? __this_cpu_preempt_check+0x13/0x20
+> > > [  256.434167]  validate_chain+0xbc6/0x1750
+> > > [  256.438223]  ? validate_chain+0xbc6/0x1750
+> > > [  256.442451]  ? validate_chain+0x236/0x1750
+> > > [  256.446687]  __lock_acquire+0x88c/0xc10
+> > > [  256.450658]  lock_acquire+0x1e6/0x330
+> > > [  256.454452]  ? isst_if_open+0x18/0x90 [isst_if_common]
+> > > [  256.459726]  ? __mutex_lock+0x79/0x9b0
+> > > [  256.463610]  ? __mutex_lock+0x79/0x9b0
+> > > [  256.467493]  ? isst_if_open+0x18/0x90 [isst_if_common]
+> > > [  256.472764]  ? isst_if_open+0x18/0x90 [isst_if_common]
+> > > [  256.478038]  __mutex_lock+0x9b/0x9b0
+> > > [  256.481748]  ? isst_if_open+0x18/0x90 [isst_if_common]
+> > > [  256.487021]  ? __mutex_lock+0x102/0x9b0
+> > > [  256.490993]  ? __this_cpu_preempt_check+0x13/0x20
+> > > [  256.495837]  mutex_lock_nested+0x1b/0x20
+> > > [  256.499893]  ? mutex_lock_nested+0x1b/0x20
+> > > [  256.504121]  isst_if_open+0x18/0x90 [isst_if_common]
+> > > [  256.509222]  misc_open+0x100/0x170
+> > > [  256.512759]  chrdev_open+0xa5/0x1e0
+> > > [  256.516386]  ? cdev_put.part.1+0x20/0x20
+> > > [  256.520441]  do_dentry_open+0x23d/0x3c0
+> > > [  256.524414]  vfs_open+0x2f/0x40
+> > > [  256.527689]  path_openat+0x87a/0x940
+> > > [  256.531399]  do_filp_open+0xc5/0x140
+> > > [  256.535112]  ? trace_preempt_on+0x28/0xd0
+> > > [  256.539255]  ? alloc_fd+0x152/0x230
+> > > [  256.542880]  ? preempt_count_sub+0x9b/0x100
+> > > [  256.547200]  ? _raw_spin_unlock+0x2c/0x50
+> > > [  256.551348]  do_sys_openat2+0x23d/0x320
+> > > [  256.555320]  ? do_sys_openat2+0x23d/0x320
+> > > [  256.559467]  do_sys_open+0x59/0x80
+> > > [  256.563003]  __x64_sys_openat+0x20/0x30
+> > > [  256.566972]  do_syscall_64+0x3f/0x90
+> > > [  256.570680]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > > [  256.575866] RIP: 0033:0x7f9be4b97c27
+> > > [  256.579576] Code: 25 00 00 41 00 3d 00 00 41 00 74 37 64 8b 04
+> > > 25
+> > > 18 00 00 00 85 c0 75 5b 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01
+> > > 00
+> > > 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 85 00 00 00 48 83 c4 68 5d 41
+> > > 5c
+> > > c3 0f 1f
+> > > [  256.598474] RSP: 002b:00007ffd8fc01b70 EFLAGS: 00000246
+> > > ORIG_RAX:
+> > > 0000000000000101
+> > > [  256.606177] RAX: ffffffffffffffda RBX: 00005572f20332b0 RCX:
+> > > 00007f9be4b97c27
+> > > [  256.613443] RDX: 0000000000000000 RSI: 00005572f202936a RDI:
+> > > 00000000ffffff9c
+> > > [  256.620709] RBP: 00005572f202936a R08: 0000000000000008 R09:
+> > > 0000000000000001
+> > > [  256.627974] R10: 0000000000000000 R11: 0000000000000246 R12:
+> > > 0000000000000000
+> > > [  256.635241] R13: 00005572f20332b0 R14: 0000000000000001 R15:
+> > > 0000000000000000
+> > > [  256.642513]  </TASK>
+> > > 
+> > > Signed-off-by: Liwei Song <liwei.song@windriver.com>
+> > > ---
+> > >  drivers/platform/x86/intel/speed_select_if/isst_if_common.c | 6
+> > > +++++-
+> > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git
+> > > a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> > > b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> > > index c9a85eb2e860..bcbc0d508ec4 100644
+> > > --- a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> > > +++ b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> > > @@ -693,10 +693,12 @@ int isst_if_cdev_register(int device_type,
+> > > struct isst_if_cmd_cb *cb)
+> > >  	if (!misc_usage_count) {
+> > >  		int ret;
+> > >  
+> > > +		mutex_unlock(&punit_misc_dev_lock);
+> > >  		misc_device_ret = misc_register(&isst_if_char_driver);
+> > >  		if (misc_device_ret)
+> > > -			goto unlock_exit;
+> > > +			return misc_device_ret;
+> > >  
+> > > +		mutex_lock(&punit_misc_dev_lock);
+> > >  		ret = isst_if_cpu_info_init();
+> > >  		if (ret) {
+> > >  			misc_deregister(&isst_if_char_driver);
+> > > @@ -731,7 +733,9 @@ void isst_if_cdev_unregister(int device_type)
+> > >  	if (device_type == ISST_IF_DEV_MBOX)
+> > >  		isst_delete_hash();
+> > >  	if (!misc_usage_count && !misc_device_ret) {
+> > > +		mutex_unlock(&punit_misc_dev_lock);
+> > >  		misc_deregister(&isst_if_char_driver);
+> > > +		mutex_lock(&punit_misc_dev_lock);
+> > >  		isst_if_cpu_info_exit();
+> > >  	}
+> > >  	mutex_unlock(&punit_misc_dev_lock);
+

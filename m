@@ -2,481 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3393348BD1F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE01B48BD21
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348471AbiALCZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 21:25:19 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:38454 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345320AbiALCZS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 21:25:18 -0500
-Received: by mail-oi1-f170.google.com with SMTP id g205so1605188oif.5;
-        Tue, 11 Jan 2022 18:25:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=llwb2H8HSHeg6jRR6oNprJOTRNjfZ9WvMbBDpFuM5Rg=;
-        b=GmFt/W8yhlSS47vidpld8FS5NyidbSERKpvH1UllxPScwiMEgl5DO6Xipq2OlE66vo
-         gnfWqOqj3JZ1ZvpsGG7BP30VmxGG+I8nllm7m2MyRYdwwlr/WJte51Jo/FdzAD1qE9ci
-         ECMJGqfiQ8RWjQNI5JGvf0coQaCJjdFxchqOYL5GGyi1hZEFyr3PwWNZ4s+dGuRxuyrn
-         QDFnDv+rKyasYBsEpjmRVnGTmTAsRvRts1hTgzzzfZ5hl3eG2neF2M3Egi5vVBkhOhSh
-         LQqTAUz3H8wTW/hXiVKR4YEu3RjNqhgVbi8129KLawydYhzs8wHOHYyBehWYColbVgF/
-         iTJA==
-X-Gm-Message-State: AOAM533so6nQfit51JgFZzjaaI2Bk/zWfhPUE4APlvz+cqS8EXJkEBso
-        nODBtWRb36DXMgOYf7zCTg==
-X-Google-Smtp-Source: ABdhPJy2nlg9zamK7JojNNLBrl6nPvpxc1QWG+h+BDkBimkyKlKgmz2arQconqtCRlBTuVHnenH6fw==
-X-Received: by 2002:a54:4402:: with SMTP id k2mr3669609oiw.1.1641954317752;
-        Tue, 11 Jan 2022 18:25:17 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f9sm2364869oto.56.2022.01.11.18.25.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 18:25:16 -0800 (PST)
-Received: (nullmailer pid 3949473 invoked by uid 1000);
-        Wed, 12 Jan 2022 02:25:15 -0000
-Date:   Tue, 11 Jan 2022 20:25:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Pratyush Yadav <p.yadav@ti.com>, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sam Protsenko <semen.protsenko@linaro.org>
-Subject: Re: [PATCH v2 2/4] spi: dt-bindings: samsung: convert to dtschema
-Message-ID: <Yd48C4pRH7tQz++f@robh.at.kernel.org>
-References: <20220111101338.58630-1-krzysztof.kozlowski@canonical.com>
- <20220111101338.58630-3-krzysztof.kozlowski@canonical.com>
+        id S1348475AbiALCZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 21:25:27 -0500
+Received: from mga12.intel.com ([192.55.52.136]:50594 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348482AbiALCZ0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 21:25:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641954326; x=1673490326;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pRlkgtVYHyK0F8BrC7N7odv1pJXwI6Azj/FyryriqSA=;
+  b=dDJx/XQPT02yuYiXncxhaIOQB4QPekd76bxVXzzk9hoBw05pbMaD3BMB
+   0o1ymsBo6Gjiy1tu/EdnPEIhCWS5WArzYVb6SmLrm6iUSwrJTAjMRCKHQ
+   pTyp5LczthiDfhTagWFv+55J47bPIFuxPoyb80yIPHawUSIl0kl3VJ2Yl
+   vzBUe1wUv0i6pcuhXBNAjpBJczsXnZCBvyhQJicPA7UtK9mJSdTSXxuRS
+   PwtCjY5r0jAwQ++xz+knqWl48Y7AQMbhw6NqPWDf9HNgibG6IlmLodCwC
+   HUdw51+KjUNDjhkV7R6q6zE3FcLXacfYD1yw0h7vunWdFHyVk9UkhjXjY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="223625374"
+X-IronPort-AV: E=Sophos;i="5.88,281,1635231600"; 
+   d="scan'208";a="223625374"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 18:25:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,281,1635231600"; 
+   d="scan'208";a="670012631"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Jan 2022 18:25:24 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     liwei.song@windriver.com, hdegoede@redhat.com, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] platform/x86: ISST: Fix possible circular locking dependency detected
+Date:   Tue, 11 Jan 2022 18:25:21 -0800
+Message-Id: <20220112022521.54669-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111101338.58630-3-krzysztof.kozlowski@canonical.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 11:13:36AM +0100, Krzysztof Kozlowski wrote:
-> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
-> controller bindings to DT schema format
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  .../spi/samsung,spi-peripheral-props.yaml     |  35 ++++
->  .../devicetree/bindings/spi/samsung,spi.yaml  | 198 ++++++++++++++++++
->  .../bindings/spi/spi-peripheral-props.yaml    |   1 +
->  .../devicetree/bindings/spi/spi-samsung.txt   | 122 -----------
->  MAINTAINERS                                   |   2 +-
->  5 files changed, 235 insertions(+), 123 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
->  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-samsung.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
-> new file mode 100644
-> index 000000000000..aa5a1f48494b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
-> @@ -0,0 +1,35 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/samsung,spi-peripheral-props.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Peripheral-specific properties for Samsung S3C/S5P/Exynos SoC SPI controller
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> +
-> +description:
-> +  See spi-peripheral-props.yaml for more info.
-> +
-> +properties:
-> +  controller-data:
-> +    type: object
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      samsung,spi-feedback-delay:
-> +        description: |
-> +          The sampling phase shift to be applied on the miso line (to account
-> +          for any lag in the miso line). Valid values:
-> +           - 0: No phase shift.
-> +           - 1: 90 degree phase shift sampling.
-> +           - 2: 180 degree phase shift sampling.
-> +           - 3: 270 degree phase shift sampling.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 1, 2, 3]
-> +
-> +    required:
-> +      - samsung,spi-feedback-delay
-> +
-> +additionalProperties: true
-> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> new file mode 100644
-> index 000000000000..da4533feb946
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> @@ -0,0 +1,198 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/samsung,spi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Samsung S3C/S5P/Exynos SoC SPI controller
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> +
-> +description:
-> +  All the SPI controller nodes should be represented in the aliases node using
-> +  the following format 'spi{n}' where n is a unique number for the alias.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +          - samsung,s3c2443-spi # for S3C2443, S3C2416 and S3C2450
-> +          - samsung,s3c6410-spi
-> +          - samsung,s5pv210-spi # for S5PV210 and S5PC110
-> +          - samsung,exynos5433-spi
-> +      - const: samsung,exynos7-spi
-> +        deprecated: true
-> +
-> +  clocks:
-> +    minItems: 2
-> +    maxItems: 3
-> +
-> +  clock-names:
-> +    minItems: 2
-> +    maxItems: 3
-> +
-> +  cs-gpios: true
-> +
-> +  dmas:
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +  dma-names:
-> +    items:
-> +      - const: tx
-> +      - const: rx
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  no-cs-readback:
-> +    description:
-> +      The CS line is disconnected, therefore the device should not operate
-> +      based on CS signalling.
-> +    type: boolean
-> +
-> +  num-cs:
-> +    minimum: 1
-> +    maximum: 4
-> +    default: 1
-> +
-> +  samsung,spi-src-clk:
-> +    description:
-> +      If the spi controller includes a internal clock mux to select the clock
-> +      source for the spi bus clock, this property can be used to indicate the
-> +      clock to be used for driving the spi bus clock. If not specified, the
-> +      clock number 0 is used as default.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    default: 0
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  "^.*@[0-9a-f]+$":
-> +    type: object
-> +    allOf:
-> +      - $ref: spi-peripheral-props.yaml
-> +
-> +    required:
-> +      - controller-data
-> +
-> +    unevaluatedProperties: false
+As reported:
 
-This is wrong because the child nodes will certainly have device 
-specific properties.
+[  256.104522] ======================================================
+[  256.113783] WARNING: possible circular locking dependency detected
+[  256.120093] 5.16.0-rc6-yocto-standard+ #99 Not tainted
+[  256.125362] ------------------------------------------------------
+[  256.131673] intel-speed-sel/844 is trying to acquire lock:
+[  256.137290] ffffffffc036f0d0 (punit_misc_dev_lock){+.+.}-{3:3}, at: isst_if_open+0x18/0x90 [isst_if_common]
+[  256.147171]
+[  256.147171] but task is already holding lock:
+[  256.153135] ffffffff8ee7cb50 (misc_mtx){+.+.}-{3:3}, at: misc_open+0x2a/0x170
+[  256.160407]
+[  256.160407] which lock already depends on the new lock.
+[  256.160407]
+[  256.168712]
+[  256.168712] the existing dependency chain (in reverse order) is:
+[  256.176327]
+[  256.176327] -> #1 (misc_mtx){+.+.}-{3:3}:
+[  256.181946]        lock_acquire+0x1e6/0x330
+[  256.186265]        __mutex_lock+0x9b/0x9b0
+[  256.190497]        mutex_lock_nested+0x1b/0x20
+[  256.195075]        misc_register+0x32/0x1a0
+[  256.199390]        isst_if_cdev_register+0x65/0x180 [isst_if_common]
+[  256.205878]        isst_if_probe+0x144/0x16e [isst_if_mmio]
+...
+[  256.241976]
+[  256.241976] -> #0 (punit_misc_dev_lock){+.+.}-{3:3}:
+[  256.248552]        validate_chain+0xbc6/0x1750
+[  256.253131]        __lock_acquire+0x88c/0xc10
+[  256.257618]        lock_acquire+0x1e6/0x330
+[  256.261933]        __mutex_lock+0x9b/0x9b0
+[  256.266165]        mutex_lock_nested+0x1b/0x20
+[  256.270739]        isst_if_open+0x18/0x90 [isst_if_common]
+[  256.276356]        misc_open+0x100/0x170
+[  256.280409]        chrdev_open+0xa5/0x1e0
+...
 
-The whole child node schema can be dropped.
+The call sequence suggested that misc_device /dev file can be opened
+before misc device is yet to be registered, which is done only once.
 
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - dmas
-> +  - dma-names
-> +  - interrupts
-> +  - reg
-> +
-> +allOf:
-> +  - $ref: spi-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: samsung,exynos5433-spi
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 3
-> +          maxItems: 3
-> +        clock-names:
-> +          items:
-> +            - const: spi
-> +            - enum:
-> +                - spi_busclk0
-> +                - spi_busclk1
-> +                - spi_busclk2
-> +                - spi_busclk3
-> +            - const: spi_ioclk
-> +    else:
-> +      properties:
-> +        clocks:
-> +          minItems: 2
-> +          maxItems: 2
-> +        clock-names:
-> +          items:
-> +            - const: spi
-> +            - enum:
-> +                - spi_busclk0
-> +                - spi_busclk1
-> +                - spi_busclk2
-> +                - spi_busclk3
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/exynos5433.h>
-> +    #include <dt-bindings/clock/samsung,s2mps11.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    spi@14d30000 {
-> +        compatible = "samsung,exynos5433-spi";
-> +        reg = <0x14d30000 0x100>;
-> +        interrupts = <GIC_SPI 433 IRQ_TYPE_LEVEL_HIGH>;
-> +        dmas = <&pdma0 11>, <&pdma0 10>;
-> +        dma-names = "tx", "rx";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        clocks = <&cmu_peric CLK_PCLK_SPI1>,
-> +                 <&cmu_peric CLK_SCLK_SPI1>,
-> +                 <&cmu_peric CLK_SCLK_IOCLK_SPI1>;
-> +        clock-names = "spi",
-> +                      "spi_busclk0",
-> +                      "spi_ioclk";
-> +        samsung,spi-src-clk = <0>;
-> +        pinctrl-names = "default";
-> +        pinctrl-0 = <&spi1_bus>;
-> +        num-cs = <1>;
-> +
-> +        cs-gpios = <&gpd6 3 GPIO_ACTIVE_HIGH>;
-> +
-> +        audio-codec@0 {
-> +            compatible = "wlf,wm5110";
-> +            reg = <0x0>;
-> +            spi-max-frequency = <20000000>;
-> +            interrupt-parent = <&gpa0>;
-> +            interrupts = <4 IRQ_TYPE_NONE>;
-> +            clocks = <&pmu_system_controller 0>,
-> +                     <&s2mps13_osc S2MPS11_CLK_BT>;
-> +            clock-names = "mclk1", "mclk2";
-> +
-> +            gpio-controller;
-> +            #gpio-cells = <2>;
-> +            interrupt-controller;
-> +            #interrupt-cells = <2>;
-> +
-> +            wlf,micd-detect-debounce = <300>;
-> +            wlf,micd-bias-start-time = <0x1>;
-> +            wlf,micd-rate = <0x7>;
-> +            wlf,micd-dbtime = <0x2>;
-> +            wlf,micd-force-micbias;
-> +            wlf,micd-configs = <0x0 1 0>;
-> +            wlf,hpdet-channel = <1>;
-> +            wlf,gpsw = <0x1>;
-> +            wlf,inmode = <2 0 2 0>;
-> +
-> +            wlf,reset = <&gpc0 7 GPIO_ACTIVE_HIGH>;
-> +            wlf,ldoena = <&gpf0 0 GPIO_ACTIVE_HIGH>;
-> +
-> +            /* core supplies */
-> +            AVDD-supply = <&ldo18_reg>;
-> +            DBVDD1-supply = <&ldo18_reg>;
-> +            CPVDD-supply = <&ldo18_reg>;
-> +            DBVDD2-supply = <&ldo18_reg>;
-> +            DBVDD3-supply = <&ldo18_reg>;
-> +            SPKVDDL-supply = <&ldo18_reg>;
-> +            SPKVDDR-supply = <&ldo18_reg>;
-> +
-> +            controller-data {
-> +                samsung,spi-feedback-delay = <0>;
-> +            };
-> +        };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> index 5dd209206e88..df885eeb144f 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> @@ -85,5 +85,6 @@ properties:
->  # The controller specific properties go here.
->  allOf:
->    - $ref: cdns,qspi-nor-peripheral-props.yaml#
-> +  - $ref: samsung,spi-peripheral-props.yaml#
->  
->  additionalProperties: true
-> diff --git a/Documentation/devicetree/bindings/spi/spi-samsung.txt b/Documentation/devicetree/bindings/spi/spi-samsung.txt
-> deleted file mode 100644
-> index 49028a4f5df1..000000000000
-> --- a/Documentation/devicetree/bindings/spi/spi-samsung.txt
-> +++ /dev/null
-> @@ -1,122 +0,0 @@
-> -* Samsung SPI Controller
-> -
-> -The Samsung SPI controller is used to interface with various devices such as flash
-> -and display controllers using the SPI communication interface.
-> -
-> -Required SoC Specific Properties:
-> -
-> -- compatible: should be one of the following.
-> -    - samsung,s3c2443-spi: for s3c2443, s3c2416 and s3c2450 platforms
-> -    - samsung,s3c6410-spi: for s3c6410 platforms
-> -    - samsung,s5pv210-spi: for s5pv210 and s5pc110 platforms
-> -    - samsung,exynos5433-spi: for exynos5433 compatible controllers
-> -    - samsung,exynos7-spi: for exynos7 platforms <DEPRECATED>
-> -
-> -- reg: physical base address of the controller and length of memory mapped
-> -  region.
-> -
-> -- interrupts: The interrupt number to the cpu. The interrupt specifier format
-> -  depends on the interrupt controller.
-> -
-> -- dmas : Two or more DMA channel specifiers following the convention outlined
-> -  in bindings/dma/dma.txt
-> -
-> -- dma-names: Names for the dma channels. There must be at least one channel
-> -  named "tx" for transmit and named "rx" for receive.
-> -
-> -- clocks: specifies the clock IDs provided to the SPI controller; they are
-> -  required for interacting with the controller itself, for synchronizing the bus
-> -  and as I/O clock (the latter is required by exynos5433 and exynos7).
-> -
-> -- clock-names: string names of the clocks in the 'clocks' property; for all the
-> -  the devices the names must be "spi", "spi_busclkN" (where N is determined by
-> -  "samsung,spi-src-clk"), while Exynos5433 should specify a third clock
-> -  "spi_ioclk" for the I/O clock.
-> -
-> -Required Board Specific Properties:
-> -
-> -- #address-cells: should be 1.
-> -- #size-cells: should be 0.
-> -
-> -Optional Board Specific Properties:
-> -
-> -- samsung,spi-src-clk: If the spi controller includes a internal clock mux to
-> -  select the clock source for the spi bus clock, this property can be used to
-> -  indicate the clock to be used for driving the spi bus clock. If not specified,
-> -  the clock number 0 is used as default.
-> -
-> -- num-cs: Specifies the number of chip select lines supported. If
-> -  not specified, the default number of chip select lines is set to 1.
-> -
-> -- cs-gpios: should specify GPIOs used for chipselects (see spi-bus.txt)
-> -
-> -- no-cs-readback: the CS line is disconnected, therefore the device should not
-> -  operate based on CS signalling.
-> -
-> -SPI Controller specific data in SPI slave nodes:
-> -
-> -- The spi slave nodes should provide the following information which is required
-> -  by the spi controller.
-> -
-> -  - samsung,spi-feedback-delay: The sampling phase shift to be applied on the
-> -    miso line (to account for any lag in the miso line). The following are the
-> -    valid values.
-> -
-> -      - 0: No phase shift.
-> -      - 1: 90 degree phase shift sampling.
-> -      - 2: 180 degree phase shift sampling.
-> -      - 3: 270 degree phase shift sampling.
-> -
-> -Aliases:
-> -
-> -- All the SPI controller nodes should be represented in the aliases node using
-> -  the following format 'spi{n}' where n is a unique number for the alias.
-> -
-> -
-> -Example:
-> -
-> -- SoC Specific Portion:
-> -
-> -	spi_0: spi@12d20000 {
-> -		compatible = "samsung,exynos4210-spi";
-> -		reg = <0x12d20000 0x100>;
-> -		interrupts = <0 66 0>;
-> -		dmas = <&pdma0 5
-> -			&pdma0 4>;
-> -		dma-names = "tx", "rx";
-> -		#address-cells = <1>;
-> -		#size-cells = <0>;
-> -	};
-> -
-> -- Board Specific Portion:
-> -
-> -	spi_0: spi@12d20000 {
-> -		#address-cells = <1>;
-> -		#size-cells = <0>;
-> -		pinctrl-names = "default";
-> -		pinctrl-0 = <&spi0_bus>;
-> -		cs-gpios = <&gpa2 5 0>;
-> -
-> -		w25q80bw@0 {
-> -			#address-cells = <1>;
-> -			#size-cells = <1>;
-> -			compatible = "w25x80";
-> -			reg = <0>;
-> -			spi-max-frequency = <10000>;
-> -
-> -			controller-data {
-> -				samsung,spi-feedback-delay = <0>;
-> -			};
-> -
-> -			partition@0 {
-> -				label = "U-Boot";
-> -				reg = <0x0 0x40000>;
-> -				read-only;
-> -			};
-> -
-> -			partition@40000 {
-> -				label = "Kernel";
-> -				reg = <0x40000 0xc0000>;
-> -			};
-> -		};
-> -	};
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5ea5655a29c3..1f951bc877f0 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17054,7 +17054,7 @@ M:	Andi Shyti <andi@etezian.org>
->  L:	linux-spi@vger.kernel.org
->  L:	linux-samsung-soc@vger.kernel.org
->  S:	Maintained
-> -F:	Documentation/devicetree/bindings/spi/spi-samsung.txt
-> +F:	Documentation/devicetree/bindings/spi/samsung,spi*.yaml
->  F:	drivers/spi/spi-s3c*
->  F:	include/linux/platform_data/spi-s3c64xx.h
->  F:	include/linux/spi/s3c24xx-fiq.h
-> -- 
-> 2.32.0
-> 
-> 
+Here punit_misc_dev_lock was used as common lock, to protect the
+registration by multiple ISST HW drivers, one time setup, prevent
+duplicate registry of misc device and prevent load/unload when device
+is open.
+
+We can split into locks:
+- One which just prevent duplicate call to misc_register() and one
+time setup. Also never call again if the misc_register() failed or
+required one time setup is failed. This lock is not shared with
+any misc device callbacks.
+
+- The other lock protects registry, load and unload of HW drivers.
+
+Sequence in isst_if_cdev_register()
+- Register callbacks under punit_misc_dev_open_lock
+- Call isst_misc_reg() which registers misc_device on the first
+registry which is under punit_misc_dev_reg_lock, which is not
+shared with callbacks.
+
+Sequence in isst_if_cdev_unregister
+Just opposite of isst_if_cdev_register
+
+Reported-and-tested-by: Liwei Song <liwei.song@windriver.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ .../intel/speed_select_if/isst_if_common.c    | 97 ++++++++++++-------
+ 1 file changed, 63 insertions(+), 34 deletions(-)
+
+diff --git a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+index c9a85eb2e860..e8424e70d81d 100644
+--- a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
++++ b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+@@ -596,7 +596,10 @@ static long isst_if_def_ioctl(struct file *file, unsigned int cmd,
+ 	return ret;
+ }
+ 
+-static DEFINE_MUTEX(punit_misc_dev_lock);
++/* Lock to prevent module registration when already opened by user space */
++static DEFINE_MUTEX(punit_misc_dev_open_lock);
++/* Lock to allow one share misc device for all ISST interace */
++static DEFINE_MUTEX(punit_misc_dev_reg_lock);
+ static int misc_usage_count;
+ static int misc_device_ret;
+ static int misc_device_open;
+@@ -606,7 +609,7 @@ static int isst_if_open(struct inode *inode, struct file *file)
+ 	int i, ret = 0;
+ 
+ 	/* Fail open, if a module is going away */
+-	mutex_lock(&punit_misc_dev_lock);
++	mutex_lock(&punit_misc_dev_open_lock);
+ 	for (i = 0; i < ISST_IF_DEV_MAX; ++i) {
+ 		struct isst_if_cmd_cb *cb = &punit_callbacks[i];
+ 
+@@ -628,7 +631,7 @@ static int isst_if_open(struct inode *inode, struct file *file)
+ 	} else {
+ 		misc_device_open++;
+ 	}
+-	mutex_unlock(&punit_misc_dev_lock);
++	mutex_unlock(&punit_misc_dev_open_lock);
+ 
+ 	return ret;
+ }
+@@ -637,7 +640,7 @@ static int isst_if_relase(struct inode *inode, struct file *f)
+ {
+ 	int i;
+ 
+-	mutex_lock(&punit_misc_dev_lock);
++	mutex_lock(&punit_misc_dev_open_lock);
+ 	misc_device_open--;
+ 	for (i = 0; i < ISST_IF_DEV_MAX; ++i) {
+ 		struct isst_if_cmd_cb *cb = &punit_callbacks[i];
+@@ -645,7 +648,7 @@ static int isst_if_relase(struct inode *inode, struct file *f)
+ 		if (cb->registered)
+ 			module_put(cb->owner);
+ 	}
+-	mutex_unlock(&punit_misc_dev_lock);
++	mutex_unlock(&punit_misc_dev_open_lock);
+ 
+ 	return 0;
+ }
+@@ -662,6 +665,43 @@ static struct miscdevice isst_if_char_driver = {
+ 	.fops		= &isst_if_char_driver_ops,
+ };
+ 
++static int isst_misc_reg(void)
++{
++	mutex_lock(&punit_misc_dev_reg_lock);
++	if (misc_device_ret)
++		goto unlock_exit;
++
++	if (!misc_usage_count) {
++		misc_device_ret = isst_if_cpu_info_init();
++		if (misc_device_ret)
++			goto unlock_exit;
++
++		misc_device_ret = misc_register(&isst_if_char_driver);
++		if (misc_device_ret) {
++			isst_if_cpu_info_exit();
++			goto unlock_exit;
++		}
++	}
++	misc_usage_count++;
++
++unlock_exit:
++	mutex_unlock(&punit_misc_dev_reg_lock);
++
++	return misc_device_ret;
++}
++
++static void isst_misc_unreg(void)
++{
++	mutex_lock(&punit_misc_dev_reg_lock);
++	if (misc_usage_count)
++		misc_usage_count--;
++	if (!misc_usage_count && !misc_device_ret) {
++		misc_deregister(&isst_if_char_driver);
++		isst_if_cpu_info_exit();
++	}
++	mutex_unlock(&punit_misc_dev_reg_lock);
++}
++
+ /**
+  * isst_if_cdev_register() - Register callback for IOCTL
+  * @device_type: The device type this callback handling.
+@@ -679,38 +719,31 @@ static struct miscdevice isst_if_char_driver = {
+  */
+ int isst_if_cdev_register(int device_type, struct isst_if_cmd_cb *cb)
+ {
+-	if (misc_device_ret)
+-		return misc_device_ret;
++	int ret;
+ 
+ 	if (device_type >= ISST_IF_DEV_MAX)
+ 		return -EINVAL;
+ 
+-	mutex_lock(&punit_misc_dev_lock);
++	mutex_lock(&punit_misc_dev_open_lock);
++	/* Device is already open, we don't want to add new callbacks */
+ 	if (misc_device_open) {
+-		mutex_unlock(&punit_misc_dev_lock);
++		mutex_unlock(&punit_misc_dev_open_lock);
+ 		return -EAGAIN;
+ 	}
+-	if (!misc_usage_count) {
+-		int ret;
+-
+-		misc_device_ret = misc_register(&isst_if_char_driver);
+-		if (misc_device_ret)
+-			goto unlock_exit;
+-
+-		ret = isst_if_cpu_info_init();
+-		if (ret) {
+-			misc_deregister(&isst_if_char_driver);
+-			misc_device_ret = ret;
+-			goto unlock_exit;
+-		}
+-	}
+ 	memcpy(&punit_callbacks[device_type], cb, sizeof(*cb));
+ 	punit_callbacks[device_type].registered = 1;
+-	misc_usage_count++;
+-unlock_exit:
+-	mutex_unlock(&punit_misc_dev_lock);
++	mutex_unlock(&punit_misc_dev_open_lock);
+ 
+-	return misc_device_ret;
++	ret = isst_misc_reg();
++	if (ret) {
++		/*
++		 * No need of mutex as the misc device register failed
++		 * as no one can open device yet. Hence no contention.
++		 */
++		punit_callbacks[device_type].registered = 0;
++		return ret;
++	}
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(isst_if_cdev_register);
+ 
+@@ -725,16 +758,12 @@ EXPORT_SYMBOL_GPL(isst_if_cdev_register);
+  */
+ void isst_if_cdev_unregister(int device_type)
+ {
+-	mutex_lock(&punit_misc_dev_lock);
+-	misc_usage_count--;
++	isst_misc_unreg();
++	mutex_lock(&punit_misc_dev_open_lock);
+ 	punit_callbacks[device_type].registered = 0;
+ 	if (device_type == ISST_IF_DEV_MBOX)
+ 		isst_delete_hash();
+-	if (!misc_usage_count && !misc_device_ret) {
+-		misc_deregister(&isst_if_char_driver);
+-		isst_if_cpu_info_exit();
+-	}
+-	mutex_unlock(&punit_misc_dev_lock);
++	mutex_unlock(&punit_misc_dev_open_lock);
+ }
+ EXPORT_SYMBOL_GPL(isst_if_cdev_unregister);
+ 
+-- 
+2.25.1
+

@@ -2,135 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD03C48C1B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CC448C1C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239130AbiALJyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 04:54:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239362AbiALJyg (ORCPT
+        id S239192AbiALJ4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 04:56:45 -0500
+Received: from mxout04.lancloud.ru ([45.84.86.114]:36970 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238801AbiALJ4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:54:36 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1926C06173F;
-        Wed, 12 Jan 2022 01:54:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AkEsNGw7XQrqb8BRcUxXpRJLYWEiaYJ1i3UkAFQeC+8=; b=gxnHIGVg5zc9Z2933Qq10jQJSy
-        DM0dQEXd/HiFA2mpV/IyvnM+c+0DalZ6cCv0SJTdbDGCWcm3Az3ZyrxNF9rwERusRhBkriiWfHm5N
-        Z+KL8wArT1VXK0+uZwQltZxI9ZKUOyTjWVGxt4kfwf/Y/efzqVmcS6xYJeqLFo6LiuO/6Pqj9A2hR
-        zo7Hcm2pzKDlwsKk808YMHF3DTyeadl0YJet7/fmDuSvVr1DA9JFaGSb/w40OZXnWdmOZglxoLVE/
-        piLu7LU4pFhrofccQwCKapvsT9a+p1T1drVmcbDgqFtTYEUnfsay7YkYFOgCBaal9I1PNxZCwMVi2
-        3PWSUyrg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7aKi-000mPx-1r; Wed, 12 Jan 2022 09:54:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8CEAB3001FD;
-        Wed, 12 Jan 2022 10:54:16 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 45E4E2B33EC0A; Wed, 12 Jan 2022 10:54:16 +0100 (CET)
-Date:   Wed, 12 Jan 2022 10:54:16 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kan.liang@linux.intel.com
-Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org, ak@linux.intel.com,
-        damarion@cisco.com, edison_chan_gz@hotmail.com,
-        ray.kinsella@intel.com, stable@vger.kernel.org
-Subject: Re: [PATCH] perf/x86/intel: Add a quirk for the calculation of the
- number of counters on Alder Lake
-Message-ID: <Yd6lSH41fqcpUS+P@hirez.programming.kicks-ass.net>
-References: <1641925238-149288-1-git-send-email-kan.liang@linux.intel.com>
+        Wed, 12 Jan 2022 04:56:37 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 8F26A20C5FE3
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: consolidate the compat fcntl definitions
+To:     Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>
+CC:     Guo Ren <guoren@kernel.org>, <x86@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-parisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-s390@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>
+References: <20220111083515.502308-1-hch@lst.de>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <4ae57b3d-0758-1a05-b743-c46a97d09e5e@omp.ru>
+Date:   Wed, 12 Jan 2022 12:56:31 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1641925238-149288-1-git-send-email-kan.liang@linux.intel.com>
+In-Reply-To: <20220111083515.502308-1-hch@lst.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 10:20:38AM -0800, kan.liang@linux.intel.com wrote:
-> From: Kan Liang <kan.liang@linux.intel.com>
-> 
-> For some Alder Lake machine with all E-cores disabled in a BIOS, the
-> below warning may be triggered.
-> 
-> [ 2.010766] hw perf events fixed 5 > max(4), clipping!
-> 
-> Current perf code relies on the CPUID leaf 0xA and leaf 7.EDX[15] to
-> calculate the number of the counters and follow the below assumption.
-> 
-> For a hybrid configuration, the leaf 7.EDX[15] (X86_FEATURE_HYBRID_CPU)
-> is set. The leaf 0xA only enumerate the common counters. Linux perf has
-> to manually add the extra GP counters and fixed counters for P-cores.
-> For a non-hybrid configuration, the X86_FEATURE_HYBRID_CPU should not
-> be set. The leaf 0xA enumerates all counters.
-> 
-> However, that's not the case when all E-cores are disabled in a BIOS.
-> Although there are only P-cores in the system, the leaf 7.EDX[15]
-> (X86_FEATURE_HYBRID_CPU) is still set. But the leaf 0xA is updated
-> to enumerate all counters of P-cores. The inconsistency triggers the
-> warning.
-> 
-> Several software ways were considered to handle the inconsistency.
-> - Drop the leaf 0xA and leaf 7.EDX[15] CPUID enumeration support.
->   Hardcode the number of counters. This solution may be a problem for
->   virtualization. A hypervisor cannot control the number of counters
->   in a Linux guest via changing the guest CPUID enumeration anymore.
-> - Find another CPUID bit that is also updated with E-cores disabled.
->   There may be a problem in the virtualization environment too. Because
->   a hypervisor may disable the feature/CPUID bit.
-> - The P-cores have a maximum of 8 GP counters and 4 fixed counters on
->   ADL. The maximum number can be used to detect the case.
->   This solution is implemented in this patch.
+Hello!
 
-ARGH!! This is horrific :-(
+On 1/11/22 11:35 AM, Christoph Hellwig wrote:
 
-This is also the N-th problem with hybrid enumeration; is there a plan
-to fix all that for the next generation or are we going to keep muddling
-things?
+> currenty the compat fcnt definitions are duplicate for all compat
 
-> Fixes: ee72a94ea4a6 ("perf/x86/intel: Fix fixed counter check warning for some Alder Lake")
-> Reported-by: Damjan Marion (damarion) <damarion@cisco.com>
-> Tested-by: Damjan Marion (damarion) <damarion@cisco.com>
-> Reported-by: Chan Edison <edison_chan_gz@hotmail.com>
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> Cc: stable@vger.kernel.org
-> ---
->  arch/x86/events/intel/core.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> index 187906e..f1201e8 100644
-> --- a/arch/x86/events/intel/core.c
-> +++ b/arch/x86/events/intel/core.c
-> @@ -6239,6 +6239,18 @@ __init int intel_pmu_init(void)
->  			pmu->num_counters = x86_pmu.num_counters;
->  			pmu->num_counters_fixed = x86_pmu.num_counters_fixed;
->  		}
-> +
-> +		/* Quirk: For some Alder Lake machine, when all E-cores are disabled in
-> +		 * a BIOS, the leaf 0xA will enumerate all counters of P-cores. However,
-> +		 * the X86_FEATURE_HYBRID_CPU is still set. The above codes will
-> +		 * mistakenly add extra counters for P-cores. Correct the number of
-> +		 * counters here.
-> +		 */
+   fcntl?
 
-I fixed that comment style for you.
+> architectures, and the native fcntl64 definitions aren't even usable
+> from userspace due to a bogus CONFIG_64BIT ifdef.  This series tries
+> to sort out all that.
 
-> +		if ((pmu->num_counters > 8) || (pmu->num_counters_fixed > 4)) {
-> +			pmu->num_counters = x86_pmu.num_counters;
-> +			pmu->num_counters_fixed = x86_pmu.num_counters_fixed;
-> +		}
-> +
->  		pmu->max_pebs_events = min_t(unsigned, MAX_PEBS_EVENTS, pmu->num_counters);
->  		pmu->unconstrained = (struct event_constraint)
->  					__EVENT_CONSTRAINT(0, (1ULL << pmu->num_counters) - 1,
-> -- 
-> 2.7.4
-> 
+[...]
+
+MBR, Sergey

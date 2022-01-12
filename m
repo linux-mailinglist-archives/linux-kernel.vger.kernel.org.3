@@ -2,281 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA9848CA89
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A96A648CA93
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355876AbiALSAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 13:00:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348660AbiALSAm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:00:42 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDCFC06173F;
-        Wed, 12 Jan 2022 10:00:42 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id c7so344751qtc.11;
-        Wed, 12 Jan 2022 10:00:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CriCySXrNpC8ZnIvwaSwEFiKu6PNvsRlr1qh1Ccyt5Y=;
-        b=Sw/X3lgrThaJv1+CGWfnQCvUfW97chW8vgAXpY3KSX8dDKAhQMql5BSRaiGLpMInZU
-         YY+XbAoEQSMJU9wuapM9AgoIQwWIiCBVphOqDA4TAdhZ8ggy+BZotzb4G1Vist52fGxT
-         hEUTGw/24MnTdn+QAlXZvWtaErFo51L4MbWu8NsPBh0kDkwzh5lCbXuHaUqJKPeiKEL9
-         1mEH12Xw6s+OYzCwhisQiKGzgAn/uDafvjdximhNmsiiOlQ4JKZPxeBYcHpE2RFnLotB
-         Sqpkf9+wAjeMHaGU7jn1EcVVSAFKoEwmqJwXRQyQ/9i5ikWlRFaUN3N9CA4g4NhnGiUX
-         kf0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CriCySXrNpC8ZnIvwaSwEFiKu6PNvsRlr1qh1Ccyt5Y=;
-        b=RMnWrImAOp+6cYRczvxMCu6xwBe4CjErEr9nd6mw0VZxTpw7O3w2VWEqQ00QfXZurk
-         CYm4++e4+5W1JbWhv8u6WqxXWlAyRYVLw7CE7kujtnAi1EVkXmBD69VY8F9sFc8wP+DP
-         13VFSgMVKOJAPy0Jc6ZS+ayPt1oME3jEvS4/fxxRPyLO5lVdt3dSjEylLuweMGMerZ8M
-         fitAOq8ST9rrT1eTWYVk5luOgb3QGv4Q5D0NNDBGIf1Zo2ZkQDlCDt0DtVjspMm0tWOd
-         5wbpRWpomzaTceQYT/EVveLcnil7pxHaB+tQN4PbajA1di9hfzk49A9vr4WZYdR5hY1y
-         KnPg==
-X-Gm-Message-State: AOAM531HYjXl4sP+zbx/Kyvf3l4DHkbZzRxj/NTwwsmFnUWkEobIE7CH
-        lIG/xq4yCUwc4EqPAjjCpg==
-X-Google-Smtp-Source: ABdhPJwcgPLWqHNkKxgwltSZbrVHGjrrmt/ekqkoX3h9dOWd7+WmIp9ppvBb7oWxPtQSbbYCAtaF7w==
-X-Received: by 2002:ac8:588b:: with SMTP id t11mr568494qta.676.1642010441521;
-        Wed, 12 Jan 2022 10:00:41 -0800 (PST)
-Received: from gabell (209-6-122-159.s2973.c3-0.arl-cbr1.sbo-arl.ma.cable.rcncustomer.com. [209.6.122.159])
-        by smtp.gmail.com with ESMTPSA id s19sm328737qtk.40.2022.01.12.10.00.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 10:00:41 -0800 (PST)
-Date:   Wed, 12 Jan 2022 13:00:39 -0500
-From:   Masayoshi Mizuma <msys.mizuma@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8] libperf: Add arm64 support to perf_mmap__read_self()
-Message-ID: <Yd8XR738OOrX7k36@gabell>
-References: <20211214215630.4025090-1-robh@kernel.org>
+        id S1356028AbiALSDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 13:03:18 -0500
+Received: from mga07.intel.com ([134.134.136.100]:34465 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1355902AbiALSCc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 13:02:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642010552; x=1673546552;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=peCOLHBM3+E7NaIzL8oRlL1xCDcIV08L04w1ldsTMcY=;
+  b=kjjkkLzesKb7C0R+GiZuW9pmZFDEG3iFMPI7qDpjTJ4hASujhpPBMOHc
+   OAiHgspLOJlinV0ugYvH0S4AfiZUv45DKpYrBBGoLJxWEVB+SQHn2nkAu
+   p6Lp1dRNEPeHP34npuR5Mj0c/hpUS9Ihmvk+0cZjH/be2g6r5OfDJNRJT
+   sjXeQpxhC7asNSbMFsiZo1UzigyOO/Rei0iUWt/bteMoqfbtk8EATkbhJ
+   Gfn0BDgDqfIYRewh/xohO2aKkHha9BX4O7opBjv9LyXEh874VQaqjuUN+
+   pf7fjnd3M6+7NHpQRNRPow3uBqdX9P1EmCeQRCNffWXNMRhSKWIOHH823
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="307148257"
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="307148257"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 10:02:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="613650646"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Jan 2022 10:02:06 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n7hwk-0006CT-02; Wed, 12 Jan 2022 18:02:06 +0000
+Date:   Thu, 13 Jan 2022 02:01:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     cgel.zte@gmail.com, linux-graphics-maintainer@vmware.com
+Cc:     kbuild-all@lists.01.org, airlied@linux.ie,
+        CGEL ZTE <cgel.zte@gmail.com>, Zeal Robot <zealci@zte.com.cn>,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm/vmwgfx: remove redundant ret variable
+Message-ID: <202201130145.eexFh3na-lkp@intel.com>
+References: <20220112082422.667488-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214215630.4025090-1-robh@kernel.org>
+In-Reply-To: <20220112082422.667488-1-chi.minghao@zte.com.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 03:56:30PM -0600, Rob Herring wrote:
-> Add the arm64 variants for read_perf_counter() and read_timestamp().
-> Unfortunately the counter number is encoded into the instruction, so the
-> code is a bit verbose to enumerate all possible counters.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Hi,
 
-This patch works well on the aarch64 machine, thanks!
-Please feel free to add:
-Tested-by: Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>
+Thank you for the patch! Perhaps something to improve:
 
-the log of make tests:
-```
-  # echo 1 > /proc/sys/kernel/perf_user_access
-  # make tests V=1
-  make -f /src/linux/tools/build/Makefile.build dir=. obj=libperf
-  make -C /src/linux/tools/lib/api/ O= libapi.a
-  make -f /src/linux/tools/build/Makefile.build dir=./fd obj=libapi
-  make -f /src/linux/tools/build/Makefile.build dir=./fs obj=libapi
-  make -f /src/linux/tools/build/Makefile.build dir=. obj=tests
-  make -f /src/linux/tools/build/Makefile.build dir=./tests obj=tests
-  running static:
-  - running tests/test-cpumap.c...OK
-  - running tests/test-threadmap.c...OK
-  - running tests/test-evlist.c...OK
-  - running tests/test-evsel.c...
-          loop = 65536, count = 328191
-          loop = 131072, count = 655878
-          loop = 262144, count = 1311204
-          loop = 524288, count = 2640123
-          loop = 1048576, count = 5243358
-          loop = 65536, count = 1290820
-          loop = 131072, count = 2509179
-          loop = 262144, count = 5011308
-          loop = 524288, count = 9999221
-          loop = 1048576, count = 20136809
-  OK
-  running dynamic:
-  - running tests/test-cpumap.c...OK
-  - running tests/test-threadmap.c...OK
-  - running tests/test-evlist.c...OK
-  - running tests/test-evsel.c...
-          loop = 65536, count = 328219
-          loop = 131072, count = 655856
-          loop = 262144, count = 1311199
-          loop = 524288, count = 2633704
-          loop = 1048576, count = 5243402
-          loop = 65536, count = 1303460
-          loop = 131072, count = 2513614
-          loop = 262144, count = 5020097
-          loop = 524288, count = 10043687
-          loop = 1048576, count = 20101337
-  OK
-  #
-```
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on next-20220112]
+[cannot apply to v5.16]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-- Masa
+url:    https://github.com/0day-ci/linux/commits/cgel-zte-gmail-com/drm-vmwgfx-remove-redundant-ret-variable/20220112-162527
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220113/202201130145.eexFh3na-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/3542ac844ea28aaa8528f5deb3ee52d1690f1f8a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/drm-vmwgfx-remove-redundant-ret-variable/20220112-162527
+        git checkout 3542ac844ea28aaa8528f5deb3ee52d1690f1f8a
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/vmwgfx/
 
-> ---
-> v8:
->  - Set attr.config1 to request user access on arm64
-> v7:
->  - Move enabling of libperf user read test for arm64 to this patch
-> ---
->  tools/lib/perf/mmap.c             | 98 +++++++++++++++++++++++++++++++
->  tools/lib/perf/tests/test-evsel.c |  5 +-
->  2 files changed, 102 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/lib/perf/mmap.c b/tools/lib/perf/mmap.c
-> index c89dfa5f67b3..7ee3eb9f5e27 100644
-> --- a/tools/lib/perf/mmap.c
-> +++ b/tools/lib/perf/mmap.c
-> @@ -13,6 +13,7 @@
->  #include <internal/lib.h>
->  #include <linux/kernel.h>
->  #include <linux/math64.h>
-> +#include <linux/stringify.h>
->  #include "internal.h"
->  
->  void perf_mmap__init(struct perf_mmap *map, struct perf_mmap *prev,
-> @@ -294,6 +295,103 @@ static u64 read_timestamp(void)
->  
->  	return low | ((u64)high) << 32;
->  }
-> +#elif defined(__aarch64__)
-> +#define read_sysreg(r) ({						\
-> +	u64 __val;							\
-> +	asm volatile("mrs %0, " __stringify(r) : "=r" (__val));		\
-> +	__val;								\
-> +})
-> +
-> +static u64 read_pmccntr(void)
-> +{
-> +	return read_sysreg(pmccntr_el0);
-> +}
-> +
-> +#define PMEVCNTR_READ(idx)					\
-> +	static u64 read_pmevcntr_##idx(void) {			\
-> +		return read_sysreg(pmevcntr##idx##_el0);	\
-> +	}
-> +
-> +PMEVCNTR_READ(0);
-> +PMEVCNTR_READ(1);
-> +PMEVCNTR_READ(2);
-> +PMEVCNTR_READ(3);
-> +PMEVCNTR_READ(4);
-> +PMEVCNTR_READ(5);
-> +PMEVCNTR_READ(6);
-> +PMEVCNTR_READ(7);
-> +PMEVCNTR_READ(8);
-> +PMEVCNTR_READ(9);
-> +PMEVCNTR_READ(10);
-> +PMEVCNTR_READ(11);
-> +PMEVCNTR_READ(12);
-> +PMEVCNTR_READ(13);
-> +PMEVCNTR_READ(14);
-> +PMEVCNTR_READ(15);
-> +PMEVCNTR_READ(16);
-> +PMEVCNTR_READ(17);
-> +PMEVCNTR_READ(18);
-> +PMEVCNTR_READ(19);
-> +PMEVCNTR_READ(20);
-> +PMEVCNTR_READ(21);
-> +PMEVCNTR_READ(22);
-> +PMEVCNTR_READ(23);
-> +PMEVCNTR_READ(24);
-> +PMEVCNTR_READ(25);
-> +PMEVCNTR_READ(26);
-> +PMEVCNTR_READ(27);
-> +PMEVCNTR_READ(28);
-> +PMEVCNTR_READ(29);
-> +PMEVCNTR_READ(30);
-> +
-> +/*
-> + * Read a value direct from PMEVCNTR<idx>
-> + */
-> +static u64 read_perf_counter(unsigned int counter)
-> +{
-> +	static u64 (* const read_f[])(void) = {
-> +		read_pmevcntr_0,
-> +		read_pmevcntr_1,
-> +		read_pmevcntr_2,
-> +		read_pmevcntr_3,
-> +		read_pmevcntr_4,
-> +		read_pmevcntr_5,
-> +		read_pmevcntr_6,
-> +		read_pmevcntr_7,
-> +		read_pmevcntr_8,
-> +		read_pmevcntr_9,
-> +		read_pmevcntr_10,
-> +		read_pmevcntr_11,
-> +		read_pmevcntr_13,
-> +		read_pmevcntr_12,
-> +		read_pmevcntr_14,
-> +		read_pmevcntr_15,
-> +		read_pmevcntr_16,
-> +		read_pmevcntr_17,
-> +		read_pmevcntr_18,
-> +		read_pmevcntr_19,
-> +		read_pmevcntr_20,
-> +		read_pmevcntr_21,
-> +		read_pmevcntr_22,
-> +		read_pmevcntr_23,
-> +		read_pmevcntr_24,
-> +		read_pmevcntr_25,
-> +		read_pmevcntr_26,
-> +		read_pmevcntr_27,
-> +		read_pmevcntr_28,
-> +		read_pmevcntr_29,
-> +		read_pmevcntr_30,
-> +		read_pmccntr
-> +	};
-> +
-> +	if (counter < ARRAY_SIZE(read_f))
-> +		return (read_f[counter])();
-> +
-> +	return 0;
-> +}
-> +
-> +static u64 read_timestamp(void) { return read_sysreg(cntvct_el0); }
-> +
->  #else
->  static u64 read_perf_counter(unsigned int counter __maybe_unused) { return 0; }
->  static u64 read_timestamp(void) { return 0; }
-> diff --git a/tools/lib/perf/tests/test-evsel.c b/tools/lib/perf/tests/test-evsel.c
-> index 33ae9334861a..89be89afb24d 100644
-> --- a/tools/lib/perf/tests/test-evsel.c
-> +++ b/tools/lib/perf/tests/test-evsel.c
-> @@ -130,6 +130,9 @@ static int test_stat_user_read(int event)
->  	struct perf_event_attr attr = {
->  		.type	= PERF_TYPE_HARDWARE,
->  		.config	= event,
-> +#ifdef __aarch64__
-> +		.config1 = 0x2,		/* Request user access */
-> +#endif
->  	};
->  	int err, i;
->  
-> @@ -150,7 +153,7 @@ static int test_stat_user_read(int event)
->  	pc = perf_evsel__mmap_base(evsel, 0, 0);
->  	__T("failed to get mmapped address", pc);
->  
-> -#if defined(__i386__) || defined(__x86_64__)
-> +#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
->  	__T("userspace counter access not supported", pc->cap_user_rdpmc);
->  	__T("userspace counter access not enabled", pc->index);
->  	__T("userspace counter width not set", pc->pmc_width >= 32);
-> -- 
-> 2.32.0
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/vmwgfx/vmwgfx_bo.c: In function 'vmw_dumb_create':
+>> drivers/gpu/drm/vmwgfx/vmwgfx_bo.c:794:1: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+     794 | void vmw_bo_swap_notify(struct ttm_buffer_object *bo)
+         | ^~~~
+   drivers/gpu/drm/vmwgfx/vmwgfx_bo.c:860:1: error: expected declaration or statement at end of input
+     860 | }
+         | ^
+   At top level:
+   drivers/gpu/drm/vmwgfx/vmwgfx_bo.c:853:6: warning: 'vmw_bo_is_vmw_bo' defined but not used [-Wunused-function]
+     853 | bool vmw_bo_is_vmw_bo(struct ttm_buffer_object *bo)
+         |      ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/vmwgfx/vmwgfx_bo.c:815:6: warning: 'vmw_bo_move_notify' defined but not used [-Wunused-function]
+     815 | void vmw_bo_move_notify(struct ttm_buffer_object *bo,
+         |      ^~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/vmwgfx/vmwgfx_bo.c:794:6: warning: 'vmw_bo_swap_notify' defined but not used [-Wunused-function]
+     794 | void vmw_bo_swap_notify(struct ttm_buffer_object *bo)
+         |      ^~~~~~~~~~~~~~~~~~
+
+
+vim +794 drivers/gpu/drm/vmwgfx/vmwgfx_bo.c
+
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  761  
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  762  
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  763  /**
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  764   * vmw_dumb_create - Create a dumb kms buffer
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  765   *
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  766   * @file_priv: Pointer to a struct drm_file identifying the caller.
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  767   * @dev: Pointer to the drm device.
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  768   * @args: Pointer to a struct drm_mode_create_dumb structure
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  769   * Return: Zero on success, negative error code on failure.
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  770   *
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  771   * This is a driver callback for the core drm create_dumb functionality.
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  772   * Note that this is very similar to the vmw_bo_alloc ioctl, except
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  773   * that the arguments have a different format.
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  774   */
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  775  int vmw_dumb_create(struct drm_file *file_priv,
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  776  		    struct drm_device *dev,
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  777  		    struct drm_mode_create_dumb *args)
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  778  {
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  779  	struct vmw_private *dev_priv = vmw_priv(dev);
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  780  	struct vmw_buffer_object *vbo;
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  781  
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  782  	args->pitch = args->width * ((args->bpp + 7) / 8);
+8afa13a0583f94 Zack Rusin       2021-12-06  783  	args->size = ALIGN(args->pitch * args->height, PAGE_SIZE);
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  784  
+3542ac844ea28a Minghao Chi      2022-01-12  785  	return vmw_gem_object_create_with_handle(dev_priv, file_priv,
+8afa13a0583f94 Zack Rusin       2021-12-06  786  						args->size, &args->handle,
+8afa13a0583f94 Zack Rusin       2021-12-06  787  						&vbo);
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  788  
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  789  /**
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  790   * vmw_bo_swap_notify - swapout notify callback.
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  791   *
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  792   * @bo: The buffer object to be swapped out.
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  793   */
+e9431ea5076a91 Thomas Hellstrom 2018-06-19 @794  void vmw_bo_swap_notify(struct ttm_buffer_object *bo)
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  795  {
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  796  	/* Is @bo embedded in a struct vmw_buffer_object? */
+8afa13a0583f94 Zack Rusin       2021-12-06  797  	if (vmw_bo_is_vmw_bo(bo))
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  798  		return;
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  799  
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  800  	/* Kill any cached kernel maps before swapout */
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  801  	vmw_bo_unmap(vmw_buffer_object(bo));
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  802  }
+e9431ea5076a91 Thomas Hellstrom 2018-06-19  803  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

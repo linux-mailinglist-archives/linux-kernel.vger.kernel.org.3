@@ -2,126 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D51CE48BFBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9E348BFC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350183AbiALITm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47530 "EHLO
+        id S1351539AbiALIWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:22:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351580AbiALITi (ORCPT
+        with ESMTP id S1351532AbiALIWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:19:38 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67059C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:19:38 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id v6so2674722wra.8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:19:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=N65x+okBqwUwEt3rIQ+NIW+LytKbN9dsX1fy1vfrCfI=;
-        b=SW98+bEGXg9kLnzJ/Wwc1NHVh8cpZxfiyWuV2nGuJ74fgv45ymJw6JemuQAKIArNtE
-         5DG1Lvl/4pk6ePJLHplSmtJIGixksULeN7oycvXq0sRHaw/4lS/qVfJAvoc8aJzPYJrI
-         bu99OyB1WGiRnjZ8R698wf4TY0nB6PSdMvu0I0WVoj9h9PvxXwNW4SXrQXAaDcFLOauK
-         oksO6kEvCFpQXgxhIYdwL8HhuTJcxAZwjAnsbsKzbGn6ZPbWputKpy32zfY0Dc8P8gcT
-         5Y4Kkf1SoAroY0F0bMlIoGFd5/EqnI63psov11WvPWXEj0TAeGUeO2GO9FaqWwlkQb/C
-         ltAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=N65x+okBqwUwEt3rIQ+NIW+LytKbN9dsX1fy1vfrCfI=;
-        b=4iMUZjgJ3ST9hdN0cdV2K4B65N7fTiReVFat+VejuGuF7iJ22QWnU4S0zNP5egF3vU
-         wwpGewpyYvQ4aSHnUMulMwbrDEetyQnML3Z6uRbQU5tyfov3i/uR5cWh/9frsS5v/pUQ
-         ZTAVVbq0brilUZ3dHovRet1wjAp0vfyU06oVP+s4S4d/9GOBy3mtApMBx+Rp/3eRjxnU
-         Of96/k6/HvbK2ChSZfU6LHAE1Qkn9XnghozOzLgYnY2z8/zamwourKGeS9+xK4CyIgWp
-         HwKlaRCx6+1P4kDjJLOI58DPxDx8WFmY/bCT63+G1pAzjbT+GmzUshFJ7GpPdbc+2eMM
-         qlrQ==
-X-Gm-Message-State: AOAM533/epqT/hchzRRj9px9eiRy/wcXllUnMChyT3UkkMky2/YF+NOD
-        MVhRqw9fzFkovBp6MXT/Tq+SEw==
-X-Google-Smtp-Source: ABdhPJyuElpnJODcDGKEk++EbHO+Un+WeepU7Q/OryifjLA3PhxRGHAWWF2yBRHvGTJDk1mAUoD/sA==
-X-Received: by 2002:a5d:584b:: with SMTP id i11mr6667217wrf.433.1641975576862;
-        Wed, 12 Jan 2022 00:19:36 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:381b:6e50:a892:5269? ([2001:861:44c0:66c0:381b:6e50:a892:5269])
-        by smtp.gmail.com with ESMTPSA id i8sm14694212wry.108.2022.01.12.00.19.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 00:19:35 -0800 (PST)
-Subject: Re: [PATCH 6/6] drm/meson: add support for MIPI-DSI transceiver
-To:     Jagan Teki <jagan@amarulasolutions.com>
-Cc:     daniel@ffwll.ch, linux-amlogic@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20200907081825.1654-1-narmstrong@baylibre.com>
- <20200907081825.1654-7-narmstrong@baylibre.com>
- <CAMty3ZBEmafG8LS_yv4eektvUoHwYFoV=-8wohUXgsvpRbZqtA@mail.gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <70d1af3f-bc00-4afd-1157-1cf70d3b2c88@baylibre.com>
-Date:   Wed, 12 Jan 2022 09:19:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 12 Jan 2022 03:22:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A27C06173F;
+        Wed, 12 Jan 2022 00:22:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88A88B81E16;
+        Wed, 12 Jan 2022 08:22:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F482C36AF2;
+        Wed, 12 Jan 2022 08:22:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641975729;
+        bh=d1ftraH1O4GFl/RXb8fXChBLOCIhUwf/rKeBnWF2s8Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Q7waHOVUFhvNFQTXN+bEUvSp4H2G4AcvGNpeaKQUa/gMO1Juu0PBugZ/Y3aC+hGWF
+         pqgozGmw694BBEMxKh0W+1/W1284dc47cQi5bl0hgizZD3tJSq1alw7x5LOusXDyq5
+         +/RHBdTOt/G9YxoCWmS2dCTZJ4Kk0Vp/kC3o8Ucnw7ieXgzCVs8zMfD3mymKNJNyfK
+         ANc/Mg8n6ZbCbSHvVG07wARdX5c5076eUvlM3II1FkJz56AmPhcD1SvEpmcr1V4vLG
+         roJIfPm9iupAsBHPRnBGebU+a+f1qEauQ0BCgA+ehjlX9FCh9DbNym3TZVnakwpLeX
+         oRG0MyK61POGQ==
+Received: by mail-wm1-f44.google.com with SMTP id o203-20020a1ca5d4000000b003477d032384so1049621wme.2;
+        Wed, 12 Jan 2022 00:22:09 -0800 (PST)
+X-Gm-Message-State: AOAM533ccGGm1GEBv1jCG1NuqCNWlDAl4grqC0UHySR3FZ9R48c3+tZb
+        6kllgrQWseg5js0Fx8qQoi4HQiyFxcLFwMc/tKc=
+X-Google-Smtp-Source: ABdhPJwfVQHV8dCC/CGugsEkwv/3ZgZDt4Bim6g91t8GLh1Wwd2xBJTCtFfEx9qOP82LNIcRj3Cjqq8gpMbx43y4YjU=
+X-Received: by 2002:a05:600c:1991:: with SMTP id t17mr5673757wmq.25.1641975727594;
+ Wed, 12 Jan 2022 00:22:07 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAMty3ZBEmafG8LS_yv4eektvUoHwYFoV=-8wohUXgsvpRbZqtA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <6D757C75-65B1-468B-842D-10410081A8E4@live.com>
+ <CAMj1kXETPO9iJoFm26v5gof2xpakHkvz3YV4ahet7BLjX5m5FQ@mail.gmail.com>
+ <D3B9962F-F6F0-4622-9E0F-A3EABACAD471@live.com> <CAMj1kXGem3QB0rj-b57xrcDYkCv6Moi=RX1OUspj3s4vMtsdug@mail.gmail.com>
+ <CAMj1kXEjmJxS-_r4HK_v_Qm85y2oeawk+bWUpSY7mV5NLFCm4g@mail.gmail.com> <787447CE-C7DC-4EA3-B498-6FEA88C523A1@live.com>
+In-Reply-To: <787447CE-C7DC-4EA3-B498-6FEA88C523A1@live.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 12 Jan 2022 09:21:55 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXExPTyxSaioSmwhz+bTYwLjQJQ5PHRJKY11cX9M71STSQ@mail.gmail.com>
+Message-ID: <CAMj1kXExPTyxSaioSmwhz+bTYwLjQJQ5PHRJKY11cX9M71STSQ@mail.gmail.com>
+Subject: Re: [BUG][SEVERE] Enabling EFI runtime services causes panics in the
+ T2 security chip on Macs equipped with it.
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     "jk@ozlabs.org" <jk@ozlabs.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 12 Jan 2022 at 07:23, Aditya Garg <gargaditya08@live.com> wrote:
+>
+> Hi Ard
+> As I said before, if I apply the patch below, the things work well
+> >
+> > Can you check whether things work as before after applying the change below?
+> >
+> > diff --git a/arch/x86/platform/efi/efi.c b/arch/x86/platform/efi/efi.c
+> > index 147c30a81f15..d7203355cc69 100644
+> > --- a/arch/x86/platform/efi/efi.c
+> > +++ b/arch/x86/platform/efi/efi.c
+> > @@ -399,7 +399,7 @@ static int __init efi_systab_init(unsigned long phys)
+> >                efi_nr_tables           = systab32->nr_tables;
+> >        }
+> >
+> > -       efi.runtime_version = hdr->revision;
+> > +       efi.runtime_version = EFI_1_10_SYSTEM_TABLE_REVISION;
+> >
+> >        efi_systab_report_header(hdr, efi_fw_vendor);
+> >        early_memunmap(p, size);
+>
+> Now, I tried to quirk on the basis of DMI data for some t2 Macs using this patch :-
+>
 
-On 12/01/2022 08:24, Jagan Teki wrote:
-> Hi Neil,
-> 
-> On Mon, Sep 7, 2020 at 1:48 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->>
->> The Amlogic AXg SoCs embeds a Synopsys DW-MIPI-DSI transceiver (ver 1.21a), with a custom
->> glue managing the IP resets, clock and data input similar to the DW-HDMI Glue on other
->> Amlogic SoCs.
->>
->> This adds support for the Glue managing the transceiver, mimicing the init flow provided
->> by Amlogic to setup the ENCl encoder, the glue, the transceiver, the digital D-PHY and the
->> Analog PHY in the proper way.
->>
->> The DW-MIPI-DSI transceiver + D-PHY are directly clocked by the VCLK2 clock, which pixel clock
->> is derived and feeds the ENCL encoder and the VIU pixel reader.
->>
->> An optional "MEAS" clock can be enabled to measure the delay between each vsync feeding the
->> DW-MIPI-DSI transceiver.
->>
->> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
->> ---
+Hello Aditya,
 
-[..]
+This code runs far too early for DMI checks.
 
->> +
->> +static const struct component_ops meson_dw_mipi_dsi_ops = {
->> +       .bind   = meson_dw_mipi_dsi_bind,
->> +       .unbind = meson_dw_mipi_dsi_unbind,
->> +};
-> 
-> Do you thought of non-component based meson DSI like STM DSI? It
-> require changes from meson drm but just to understand if you have any
-> such plan.
+What we might do is just use EFI 1.10 for all Apple x86 EFI machines.
 
-I have no such plans for now, note this serie has been rewritten at [1] but still
-with based with components.
+Please try the below:
 
-If worth it, the plan is to get it with components and than yes if it's simpler
-drop components completely.
+diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+index ae79c3300129..2303f9b06412 100644
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -722,6 +722,13 @@ void __init efi_systab_report_header(const
+efi_table_hdr_t *systab_hdr,
+                systab_hdr->revision >> 16,
+                systab_hdr->revision & 0xffff,
+                vendor);
++
++       if (IS_ENABLED(CONFIG_X86_64) &&
++           systab_hdr->revision > EFI_1_10_SYSTEM_TABLE_REVISION &&
++           !strcmp(vendor, "Apple")) {
++               pr_info("Apple EFI Mac detected, using EFI v1.10
+runtime services only\n");
++               efi.runtime_version = EFI_1_10_SYSTEM_TABLE_REVISION;
++       }
+ }
 
-I'll have a look at how ST does
-
-Neil
-
-[1] https://lore.kernel.org/r/20220107145515.613009-1-narmstrong@baylibre.com
-
-> 
-> Thanks,
-> Jagan.
-> 
-
+ static __initdata char memory_type_name[][13] = {

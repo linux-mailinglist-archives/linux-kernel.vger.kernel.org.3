@@ -2,171 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1E448C695
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6946248C699
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354375AbiALO4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:56:02 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:35826 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354371AbiALO4B (ORCPT
+        id S1354380AbiALO6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:58:15 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54390 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354363AbiALO6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:56:01 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 12 Jan 2022 09:58:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EDE722113A;
-        Wed, 12 Jan 2022 14:55:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1641999359; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9969B81F66;
+        Wed, 12 Jan 2022 14:58:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04EC5C36AE5;
+        Wed, 12 Jan 2022 14:58:10 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lDmQMrtS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1641999489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5KSUB5kk6nqxyfWFyV07yS90dxBEdeusq9/dOu6x3jE=;
-        b=l/xiyL8QrWWgcg71BMnXFzBYFg1IlHLPgU1TngGuuVcjuCRidcqSKgkdiURr9OCmM/S8Mz
-        yW5vpZpRGS3452NJlNPMWOtgLO1gB9/bZY02dquRSlN+ZaESF51baJKn5t8e7S62jnpUPP
-        7Ugi2zWPLYCm7N4nK9ghIxWuHZnGqQQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1641999359;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5KSUB5kk6nqxyfWFyV07yS90dxBEdeusq9/dOu6x3jE=;
-        b=DXlVaQErcO2qUlP5shtCFtZwdL197gN301t5uJHizZrhYjsqtdJy4MqtyK1PCrTjSjjnOh
-        Iw+DKH6oq3uAHgAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9EAC613B70;
-        Wed, 12 Jan 2022 14:55:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8YT5Jf/r3mF7DwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 12 Jan 2022 14:55:59 +0000
-Message-ID: <7bd61a52-57ef-04e4-6298-039308bb8f86@suse.cz>
-Date:   Wed, 12 Jan 2022 15:55:59 +0100
+        bh=k6xdXfbjX4p4PFWNqT3e9bw0113nGRXEFRBnzlw2H9c=;
+        b=lDmQMrtSZVZLs67HkCMB2Hy664p6YC8OWyX7BuHgA1R78Fijo1y/Yra2U7gPbBXC7EwXQN
+        EoLtN/mfOHFZAXWw/HB14BvuiR2nouCnks+0HkpfW9Q6APxvYaf2vEQNVKk8YvbwChRbBS
+        x7pincWXHyElFsJWWIsnUwSjfVzoGXA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 069cbd44 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 12 Jan 2022 14:58:09 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>
+Subject: [PATCH v3] lib/crypto: add prompts back to crypto libraries
+Date:   Wed, 12 Jan 2022 15:57:58 +0100
+Message-Id: <20220112145758.926796-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9oxy-P8hq=85hOGSOena3kxpTAOHoXto7s4tnDUkXvYPg@mail.gmail.com>
+References: <CAHmME9oxy-P8hq=85hOGSOena3kxpTAOHoXto7s4tnDUkXvYPg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Minchan Kim <minchan@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Rom Lemarchand <romlem@google.com>
-References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
- <20211201142918.921493-18-Liam.Howlett@oracle.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v4 17/66] mmap: Change zeroing of maple tree in
- __vma_adjust
-In-Reply-To: <20211201142918.921493-18-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 15:29, Liam Howlett wrote:
-> Only write to the maple tree if we are not inserting or the insert isn't
-> going to overwrite the area to clear.  This avoids spanning writes and
-> node coealescing when unnecessary.
-> 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> ---
->  mm/mmap.c | 21 +++++++++++++--------
->  1 file changed, 13 insertions(+), 8 deletions(-)
-> 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 93ed19b2c6ce..c5f92666d145 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -615,6 +615,7 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
->  	bool vma_changed = false;
->  	long adjust_next = 0;
->  	int remove_next = 0;
-> +	unsigned long old_start;
->  
->  	if (next && !insert) {
->  		struct vm_area_struct *exporter = NULL, *importer = NULL;
-> @@ -740,25 +741,29 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
->  			vma_interval_tree_remove(next, root);
->  	}
->  
-> +	old_start = vma->vm_start;
->  	if (start != vma->vm_start) {
-> -		if (vma->vm_start < start)
-> -			vma_mt_szero(mm, vma->vm_start, start);
-> -		else
-> -			vma_changed = true;
-> +		vma_changed = true;
+From: "Justin M. Forbes" <jforbes@fedoraproject.org>
 
-This says vma_changed = true even if vma is shrinking, so below we might do
-an unnecessary vma_store(), no?
+Commit 6048fdcc5f269 ("lib/crypto: blake2s: include as built-in") took
+away a number of prompt texts from other crypto libraries. This makes
+values flip from built-in to module when oldconfig runs, and causes
+problems when these crypto libs need to be built in for thingslike
+BIG_KEYS.
 
->  		vma->vm_start = start;
->  	}
->  	if (end != vma->vm_end) {
-> -		if (vma->vm_end > end)
-> -			vma_mt_szero(mm, end, vma->vm_end);
-> -		else
-> +		if (vma->vm_end > end) {
+Fixes: 6048fdcc5f269 ("lib/crypto: blake2s: include as built-in")
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: linux-crypto@vger.kernel.org
+Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
+[Jason: moved menu into submenu of lib/ instead of root menu]
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ crypto/Kconfig     |  2 --
+ lib/Kconfig        |  2 ++
+ lib/crypto/Kconfig | 12 ++++++++----
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-In contrast to the above, here vma_changed is only set when expanding
-('vma_expand' would be a more descriptive name maybe?). So why are the two
-cases handled differently, am I missing something?
-
-> +			if (!insert || (insert && (insert->vm_start != end)))
-
-Note: thanks to lazy evaluation, "insert &&" should be unnecessary?
-More importantly: is "insert->vm_start == end" a guarantee that insert
-covers the whole interval from end to vma->vm_end? Probably yes, but a
-VM_WARN_ON would be in order?
-
-> +				vma_mt_szero(mm, end, vma->vm_end);
-
-I guess it can't happen that insert would cover a later part of this
-interval, so we could zero only between end vna insert->vm_start?
-
-> +		} else
->  			vma_changed = true;
-
-Same nit about { } block as previously.
-
->  		vma->vm_end = end;
->  		if (!next)
->  			mm->highest_vm_end = vm_end_gap(vma);
->  	}
->  
-> -	if (vma_changed)
-> +	if (vma_changed) {
->  		vma_store(mm, vma);
-> +		if (old_start < start) {
-> +			if (insert && (insert->vm_start != old_start))
-> +				vma_mt_szero(mm, old_start, start);
-
-This condition looks actively wrong, no zeroing at all if insert is NULL?
-
-> +		}
-> +	}
->  
->  	vma->vm_pgoff = pgoff;
->  	if (adjust_next) {
+diff --git a/crypto/Kconfig b/crypto/Kconfig
+index 55718de56137..a346b6f74bb3 100644
+--- a/crypto/Kconfig
++++ b/crypto/Kconfig
+@@ -1924,5 +1924,3 @@ source "crypto/asymmetric_keys/Kconfig"
+ source "certs/Kconfig"
+ 
+ endif	# if CRYPTO
+-
+-source "lib/crypto/Kconfig"
+diff --git a/lib/Kconfig b/lib/Kconfig
+index 5e7165e6a346..9534698ce890 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -122,6 +122,8 @@ config INDIRECT_IOMEM_FALLBACK
+ 	  mmio accesses when the IO memory address is not a registered
+ 	  emulated region.
+ 
++source "lib/crypto/Kconfig"
++
+ config CRC_CCITT
+ 	tristate "CRC-CCITT functions"
+ 	help
+diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
+index 8620f38e117c..179041b60294 100644
+--- a/lib/crypto/Kconfig
++++ b/lib/crypto/Kconfig
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
++menu "Crypto library routines"
++
+ config CRYPTO_LIB_AES
+ 	tristate
+ 
+@@ -40,7 +42,7 @@ config CRYPTO_LIB_CHACHA_GENERIC
+ 	  of CRYPTO_LIB_CHACHA.
+ 
+ config CRYPTO_LIB_CHACHA
+-	tristate
++	tristate "ChaCha library interface"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
+ 	select CRYPTO_LIB_CHACHA_GENERIC if CRYPTO_ARCH_HAVE_LIB_CHACHA=n
+ 	help
+@@ -65,7 +67,7 @@ config CRYPTO_LIB_CURVE25519_GENERIC
+ 	  of CRYPTO_LIB_CURVE25519.
+ 
+ config CRYPTO_LIB_CURVE25519
+-	tristate
++	tristate "Curve25519 scalar multiplication library"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_CURVE25519 || !CRYPTO_ARCH_HAVE_LIB_CURVE25519
+ 	select CRYPTO_LIB_CURVE25519_GENERIC if CRYPTO_ARCH_HAVE_LIB_CURVE25519=n
+ 	help
+@@ -100,7 +102,7 @@ config CRYPTO_LIB_POLY1305_GENERIC
+ 	  of CRYPTO_LIB_POLY1305.
+ 
+ config CRYPTO_LIB_POLY1305
+-	tristate
++	tristate "Poly1305 library interface"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305
+ 	select CRYPTO_LIB_POLY1305_GENERIC if CRYPTO_ARCH_HAVE_LIB_POLY1305=n
+ 	help
+@@ -109,7 +111,7 @@ config CRYPTO_LIB_POLY1305
+ 	  is available and enabled.
+ 
+ config CRYPTO_LIB_CHACHA20POLY1305
+-	tristate
++	tristate "ChaCha20-Poly1305 AEAD support (8-byte nonce library version)"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
+ 	depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305
+ 	select CRYPTO_LIB_CHACHA
+@@ -120,3 +122,5 @@ config CRYPTO_LIB_SHA256
+ 
+ config CRYPTO_LIB_SM4
+ 	tristate
++
++endmenu
+-- 
+2.34.1
 

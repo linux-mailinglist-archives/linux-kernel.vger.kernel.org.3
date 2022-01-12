@@ -2,99 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEDB48BFD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9090C48BFD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351584AbiALI1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
+        id S1351589AbiALI23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:28:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351552AbiALI1h (ORCPT
+        with ESMTP id S237957AbiALI22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:27:37 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0019C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:27:36 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id p12so2142149qvj.6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:27:36 -0800 (PST)
+        Wed, 12 Jan 2022 03:28:28 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C961C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:28:28 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id k30so2713651wrd.9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:28:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h01bjARNb7y7qwRAWKIHAQxTQlqFFpWv+tbnghhAPks=;
-        b=XL5p1cRjWWRnif4ZWMp10WAKVQdktJ99CU8VrSpzsX/FUAArUV/A1MuAIXUG84F3vT
-         8zJKLliDpSc0y/ozvXau1+VEV1va7sA+WRQfWgs6skTruDynejqBAPwmbNiovWE5+hiw
-         0MEfgVzD4cOyNkFjmZbp7fXxatgGzEj1cQUXMO2V00zDlT3Vl6warlaIE5EoJ4y1MKZj
-         pWdnqUwIDzlaOi8knlQ3Lt+WnD+zpot79koOHu7gv8yX/Y2KEJ0oRXxEDVdTvmGtLioF
-         vP0HS3naVii9fve0BC8YSPrQOIawksy85ADaSn/rnoiGi7DIN2Yk2gbD4QctN9blL71E
-         w6qg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=FKtDyNYer2rw6Zv9E7QWadmZIxE7oXLzSiDYp94iL9k=;
+        b=N3oTYWmb+v9cGuBIeWCILWZcj+nVimwmYD78hO4muTLMz+5RQ2gA8bAcjU3/RX72Cb
+         lOmadz2T2tEDgcQhmMNI/rIZTUtBfCf0j+wFou9FkYkHrwPTuuhToz3/+H6u3IPWz2nw
+         uF/EyQJS8xt5e8fGyddIDYul+WM4sFc7bJRdD4rBhDUKdV4BT/mu5A6ZtAlZ5fwcmWH2
+         YUe4JGwo5LDRWKOhkHKgW0aJ+uoTlpLcVwUAZ6KELe30PhKQX9438FmOfRDwVfwQX0qG
+         OjgmZ+91hjQZRl3q5dV4L5y9JW5kIPzU2aitFcJo4bYyNgtvbtABvsOtY67tS0Vy1XaG
+         vSBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h01bjARNb7y7qwRAWKIHAQxTQlqFFpWv+tbnghhAPks=;
-        b=wfyDwwx2HzwIoK9E2McEhz6hnxBfteYTuN1J0MiwDU42FkBHXpBEroDRIRa4mSM8Nq
-         4Ei5mTvlXrygBYzRRdLa5vsO6Xo2Dc8aTI97ejklr9Z/vHdvGyglRUZtVNK8elzUclei
-         /3KwX3c/r8zIWzjU1B7GXlpznyrPBJ/7gezDknb9mlG+qiVHESF9bZbjHNVX9PZDP47E
-         73wfB9OS+Y0pi6ihwLaeYfPTkOzJLE2k4f+nNRcR0OJWkWB/m4yuKxyiTbonyWnBIo8E
-         9pUg18Btdm1PNoLbC4nO0TYeYPSelYyyBuSKhHb6iQEY9WOF4mROB25zN/BRIpkTBHme
-         qsXg==
-X-Gm-Message-State: AOAM532AjoKTzo9P3Wq0Aja9XJUhntG3S7/xdEZMqbmmMvmilfYR+mI/
-        RkshQLbqbU8WfhpSLWFMHvU=
-X-Google-Smtp-Source: ABdhPJx9HqhPLSYFpsALofcmkf50IwgYwMGyWYj6KUBpbyFlCzbmmO1ZzDD3XoR+d2IVbZ8VIEcuHQ==
-X-Received: by 2002:a05:6214:d0f:: with SMTP id 15mr7204173qvh.18.1641976056188;
-        Wed, 12 Jan 2022 00:27:36 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id r3sm3174416qtc.84.2022.01.12.00.27.33
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FKtDyNYer2rw6Zv9E7QWadmZIxE7oXLzSiDYp94iL9k=;
+        b=r/ilzxCqB5VZIpWJtUTq6UaVEj8enNzX5iNEfvrKrgFvHJMEYHEMctgQav2NwaIszo
+         0GyRNX12MRO3Lw/MsQlJgXCNGUJpL6k2xDOCGtlsIJh5KY9uMH/gurhXXKmuKbtiTMl7
+         U/eNlGsCWlL27naE2r7PXISEfg4blP7KMmcDDuzqYvAaRQRyr9UH0AaXeS672A9i3FBr
+         J+Iu/J97KiaO3+0I5PotONiFpuQ35rnLEfU00jwZg+jggsuHrBoPFlpZISlF0SdUVx4I
+         nkBSdbjWWyQieHoS/iGviY/hyE/9SoouxvBcNp/26UzrF3qKpNpwWOSbuhMgssNTd5Dn
+         +EKQ==
+X-Gm-Message-State: AOAM5317W8DEoHy6dSFZC1PBcMUWp/s8IqUOyor1DlqmdUvDPgXYaeQR
+        2kgTcmZTaI5W5aP8lwKt0sc3noJFODju0Q==
+X-Google-Smtp-Source: ABdhPJy5DHSJBcGXXU6KEF3PtRXYTJdsZ9LtzeYqX4zs5f3GcuDPV1oA+K5gXJ8cpzwkh7xaQgViHg==
+X-Received: by 2002:a05:6000:1a8a:: with SMTP id f10mr7085427wry.246.1641976106700;
+        Wed, 12 Jan 2022 00:28:26 -0800 (PST)
+Received: from localhost.localdomain ([2001:861:44c0:66c0:381b:6e50:a892:5269])
+        by smtp.gmail.com with ESMTPSA id v129sm254846wme.29.2022.01.12.00.28.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 00:27:35 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     oleg@redhat.com
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] arch/riscv/kernel: remove redundant err variable
-Date:   Wed, 12 Jan 2022 08:27:29 +0000
-Message-Id: <20220112082729.667743-1-chi.minghao@zte.com.cn>
+        Wed, 12 Jan 2022 00:28:26 -0800 (PST)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        linux-amlogic@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Christian Hewitt <christianshewitt@gmail.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Benoit Masson <yahoo@perenite.com>
+Subject: Re: [PATCH v3 0/9] arm64: dts: meson: add support for ac2xx devices
+Date:   Wed, 12 Jan 2022 09:28:22 +0100
+Message-Id: <164197609474.825600.7106897196640617717.b4-ty@baylibre.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220112022713.25962-1-christianshewitt@gmail.com>
+References: <20220112022713.25962-1-christianshewitt@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Hi,
 
-Return value from user_regset_copyin() directly instead
-of taking this in another redundant variable.
+On Wed, 12 Jan 2022 02:27:04 +0000, Christian Hewitt wrote:
+> This series adds support for several popular Amlogic S905X3 (SM1) Android
+> Set-Top Box devices. Like most Android box devices, they ship in variants
+> with multiple RAM, eMMC, WiFi and BT configurations. RAM and eMMC are not
+> something we need to consider to get a working boot, but we do need to get
+> the correct connectivity spec. Broadly speaking we see boxes with Higher
+> and Lower spec connectivity; High spec is Gigabit Ethernet and Faster dual
+> antennna WiFi, and Lower spec is Megabit Ethernet and a single antenna. In
+> some low-end boxes BT is omitted.
+> 
+> [...]
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
----
- arch/riscv/kernel/ptrace.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.18/dt64)
 
-diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-index 9c0511119bad..a89243730153 100644
---- a/arch/riscv/kernel/ptrace.c
-+++ b/arch/riscv/kernel/ptrace.c
-@@ -42,12 +42,10 @@ static int riscv_gpr_set(struct task_struct *target,
- 			 unsigned int pos, unsigned int count,
- 			 const void *kbuf, const void __user *ubuf)
- {
--	int ret;
- 	struct pt_regs *regs;
- 
- 	regs = task_pt_regs(target);
--	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, regs, 0, -1);
--	return ret;
-+	return user_regset_copyin(&pos, &count, &kbuf, &ubuf, regs, 0, -1);
- }
- 
- #ifdef CONFIG_FPU
+[1/9] arm64: dts: meson: add common SM1 ac2xx dtsi
+      https://git.kernel.org/amlogic/c/b5a03ecec30c1a71d51de3e73a2e7ab23c3ddeb6
+[2/9] dt-bindings: arm: amlogic: add X96-AIR bindings
+      https://git.kernel.org/amlogic/c/d2ecf5ae59c8eef9fe2ad20d83977c2889646d4c
+[3/9] arm64: dts: meson: add initial device-trees for X96-AIR
+      https://git.kernel.org/amlogic/c/37875d9dcb42d489ba28518b50fed0b2ba768b03
+[4/9] dt-bindings: vendor-prefixes: add cyx prefix
+      https://git.kernel.org/amlogic/c/3dbabb9ac746ab01c71aa019c58a2e0cc6eafe1c
+[5/9] dt-bindings: arm: amlogic: add A95XF3-AIR bindings
+      https://git.kernel.org/amlogic/c/bc7811bd4e884bbc21cc7b7031cb7c297662db9c
+[6/9] arm64: dts: meson: add initial device-trees for A95XF3-AIR
+      https://git.kernel.org/amlogic/c/8b749a0205bd41cafae37e878fd4a1b57b7b24f3
+[7/9] dt-bindings: vendor-prefixes: add haochuangyi prefix
+      https://git.kernel.org/amlogic/c/bf510ace20ac153946d6d0ab6305dd8aa52eec6c
+[8/9] dt-bindings: arm: amlogic: add H96-Max bindings
+      https://git.kernel.org/amlogic/c/2ca889b1201625d36efcd51d25371d937a6a0b8f
+[9/9] arm64: dts: meson: add initial device-tree for H96-Max
+      https://git.kernel.org/amlogic/c/ac7b4433714a37e2c4b61acc6ce9b4538175e836
+
 -- 
-2.25.1
-
+Neil

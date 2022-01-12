@@ -2,132 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 093E148C0E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1D848C0ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349416AbiALJWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 04:22:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46577 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238292AbiALJWF (ORCPT
+        id S1352016AbiALJYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 04:24:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236569AbiALJX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:22:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641979324;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZkMJP6Kct1rran15fCHGX0wTP5ePzlWHQDky7Omxb9c=;
-        b=WSkcuCbpKr2Yq92XTW/iizhDEQzxNgSJdoLgS3Zh9CgzLH2004vsUKE4lb8Xn+Yga6RnXE
-        Puz20qff351aq+tLhWSORkMPLCILWbjFR7t/J5dSCD5Uc5kWM5uncwrvVMqwOAiBDl5P+q
-        qGuDzfLFX8KXexnJkQihP0XuX9zrkhw=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-WLIuCpP8Mx6Fqg2mGt-JHQ-1; Wed, 12 Jan 2022 04:22:03 -0500
-X-MC-Unique: WLIuCpP8Mx6Fqg2mGt-JHQ-1
-Received: by mail-ed1-f70.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso1682211edt.20
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 01:22:03 -0800 (PST)
+        Wed, 12 Jan 2022 04:23:59 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C84CC06173F;
+        Wed, 12 Jan 2022 01:23:59 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so3659342pjp.0;
+        Wed, 12 Jan 2022 01:23:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=xoqHD2fGBh/+nC109QIpzVKHDNVPgk6VF0zAraXZPPU=;
+        b=jVQB6rE98LmPOOgpYk3AXOPs1FkIMnXp+j+jJb3wfdgB2K+Woja5aXjei+6qR8DL8G
+         oLvV4KJjodWKh844Oe45kTaFdNxfV3j5alK22iDdliYYBjFBn1gKU9xiUv6M+fypwiQF
+         3ygYyFqUW+HPPFGOczwtJiZjuLoqMXx+Xvzr8qfstNtgjR4MKJSrNJDfdOfegyW+XJcu
+         zhvBo2TgBx8Evy6WW4hcxJkX68u4hmAmkBtgSUf9s0jrXbznmJKAlyvZjswaPjdDruEb
+         ZYZsLXZhx9TycXq7orz+TUq4xWOMDA2zD+Du1W72xLCJH/cnvCF8iLgZK/2PO9xWjYqT
+         NuwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=ZkMJP6Kct1rran15fCHGX0wTP5ePzlWHQDky7Omxb9c=;
-        b=YY1dJYjofZ/LAHxeOQi1Nt3B7fFaHGyE6fpVFhtPJ29jnMSMiDEls+BrNf9FcOnvzQ
-         kyeH8rSLJP8eHyTtsxo7r2WuMe+mEAcGk0FzTsEKlAT7FGJv4HaZjsIQnQK1BXgUeGiw
-         1kLQkQxagz/NLDIJu8vHQVcVkT6IbdUxXDRUwtZyBUz4bKTKn7vE15MAvRadHHMoPXDF
-         lfnddCzxoVSsm3q/I8gD/GllMVCnqQFDLnYs/KbPgn0dnmEt8+ANIN03JpBCLmxqhMvP
-         tud9PSkzF80f1uhZ97Eyf6ZETUEYsqD62/YAL59KracF3Elrim9DPr5lqPQdOlp/DgbK
-         mFgg==
-X-Gm-Message-State: AOAM531vtFiCwEGEJN/T82ppKSWkHvtpHo+O3GB0T3G3Oh60aaToCvGR
-        LFjqS6frcTc8T2nNvsZHN1wBJG3aMD6hMnfhI6DpB92ZqCGlGoKfZt3QvdkPpxlkBbpOgS5xeWl
-        p5bKhNVGrgtfZa1ZjObFtIZNj
-X-Received: by 2002:a17:906:9754:: with SMTP id o20mr5550566ejy.452.1641979322230;
-        Wed, 12 Jan 2022 01:22:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyPDWe8+Rv8mGKTnrR5wrymtNU5ulfIG8wkZ/6tOwfne+hNzNx7U1tUD1XD7lB+6xV4pw95CA==
-X-Received: by 2002:a17:906:9754:: with SMTP id o20mr5550550ejy.452.1641979321997;
-        Wed, 12 Jan 2022 01:22:01 -0800 (PST)
-Received: from ?IPV6:2003:cb:c702:4700:e25f:39eb:3cb8:1dec? (p200300cbc7024700e25f39eb3cb81dec.dip0.t-ipconnect.de. [2003:cb:c702:4700:e25f:39eb:3cb8:1dec])
-        by smtp.gmail.com with ESMTPSA id d24sm4286245ejd.182.2022.01.12.01.22.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 01:22:01 -0800 (PST)
-Message-ID: <4cbe2f51-0654-dcfa-cd9c-1b5096cc5394@redhat.com>
-Date:   Wed, 12 Jan 2022 10:22:01 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 2/2] Fix assgining cma_area_count
-Content-Language: en-US
-To:     Ercan Ersoy <ercanersoy@ercanersoy.net>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org
-References: <775ae3ba4f7034a78769559fa1a3542a@ercanersoy.net>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <775ae3ba4f7034a78769559fa1a3542a@ercanersoy.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=xoqHD2fGBh/+nC109QIpzVKHDNVPgk6VF0zAraXZPPU=;
+        b=AhnqfP9Sl//o+q8uwJ98UNTX82aZKr1ntdjuf4rAOIVVDYsKuPPQoCKTG8BWZop87u
+         wrFOAlEhEiCn/Tvy9/onInE1xQNa/ahcbG2wLLztSuvGyGQIDaoq9zES7DRsio4X9vtR
+         sa0g3suvju46oqxmAahXNznW2gCnEEgmBAlaLl62NilaXqCyzODx+PU28t5Qq/8cR4ZV
+         fB5Rnd1FxVKEajlDqucTE8BNwXFoHBuK3AjY0LaIi6OGM/+8f1bYKz3mUDoOMj4E2tG9
+         7z7JrM4fQM9mFD2pPAYuKTNqCwuanmD1Vuq0aT0E0yGWzKf3HvwdlOJCiTkx967N67JA
+         YWDw==
+X-Gm-Message-State: AOAM5326eCRfmElZVyZiYKCdReg8H6aznMdGI6eWYyGNNPR3JKUa0e6L
+        ccqsAPhFC0MM/aaWDvZez3A=
+X-Google-Smtp-Source: ABdhPJzUZz7nksdFPTQeZMQJKHhPbzTNpPBHSV+vvjfihX9xgYGn5aRbJPCxpWW06QyO1PGck6bTZQ==
+X-Received: by 2002:a63:7d0e:: with SMTP id y14mr7618945pgc.356.1641979438564;
+        Wed, 12 Jan 2022 01:23:58 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id h11sm4898527pjs.10.2022.01.12.01.23.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 12 Jan 2022 01:23:58 -0800 (PST)
+From:   Hammer Hsieh <hammerh0314@gmail.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jirislaby@kernel.org,
+        p.zabel@pengutronix.de
+Cc:     wells.lu@sunplus.com, hammer.hsieh@sunplus.com,
+        Hammer Hsieh <hammerh0314@gmail.com>
+Subject: [PATCH v6 0/2] Add UART driver for Suplus SP7021 SoC
+Date:   Wed, 12 Jan 2022 17:24:02 +0800
+Message-Id: <1641979444-11661-1-git-send-email-hammerh0314@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.01.22 08:39, Ercan Ersoy wrote:
-> 
-> I have patched "Contiguous Memory Allocator" of Linux kernel.
-> 
-> This fix of patch is for cma_init_reserved_mem function in
-> mm/cma.c source file as creating area without specific name.
-> 
-> Without fix may be a problem a lot of cma as next cma2147483647 naming.
-> Without fix may be a problem huge memory systems.
-> 
-> I think after "cma2147483647" naming is "cma-2147483648".
-> 
-> Thanks for interesting,
-> Ercan
-> 
-> --- START PATCH ---
->  From 5d3d01a3a0f7339617d1df945c0bd0ec1ab91ae3 Mon Sep 17 00:00:00 2001
->  From: Ercan Ersoy <ercanersoy@ercanersoy.net>
-> Date: Sun, 9 Jan 2022 10:01:14 +0300
-> Subject: [PATCH 2/2] Fix assgining cma_area_count
-> 
-> Fix assigning to cma->name in cma_init_reserved_mem function
-> in mm/cma.c source file.
-> 
+This is a patch series for UART driver for Suplus SP7021 SoC.
 
-Honestly, how on earth are we supposed to have that many CMA areas?
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART. I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-It's limited by MAX_CMA_AREAS, which is usually ... 7 or 19.
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-Calling this a fix is a bit though. This is a cleanup we might not care
-too much about.
+Refer to (UART):
+https://sunplus.atlassian.net/wiki/spaces/doc/pages/1873412290/13.+Universal+Asynchronous+Receiver+Transmitter+UART
 
-> Signed-off-by: Ercan Ersoy <ercanersoy@ercanersoy.net>
-> ---
->   mm/cma.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/cma.c b/mm/cma.c
-> index bc9ca8f3c487..03f01d1f1b57 100644
-> --- a/mm/cma.c
-> +++ b/mm/cma.c
-> @@ -199,7 +199,7 @@ int __init cma_init_reserved_mem(phys_addr_t base, 
-> phys_addr_t size,
->   	if (name)
->   		snprintf(cma->name, CMA_MAX_NAME, name);
->   	else
-> -		snprintf(cma->name, CMA_MAX_NAME,  "cma%d\n", cma_area_count);
-> +		snprintf(cma->name, CMA_MAX_NAME,  "cma%u\n", cma_area_count);
-> 
->   	cma->base_pfn = PFN_DOWN(base);
->   	cma->count = size >> PAGE_SHIFT;
+Hammer Hsieh (2):
+  dt-bindings:serial:Add bindings doc for Sunplus SoC UART Driver
+  serial:sunplus-uart:Add Sunplus SoC UART Driver
 
+ .../bindings/serial/sunplus,sp7021-uart.yaml       |  56 ++
+ MAINTAINERS                                        |   6 +
+ drivers/tty/serial/Kconfig                         |  25 +
+ drivers/tty/serial/Makefile                        |   1 +
+ drivers/tty/serial/sunplus-uart.c                  | 756 +++++++++++++++++++++
+ include/uapi/linux/serial_core.h                   |   3 +
+ 6 files changed, 847 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+ create mode 100644 drivers/tty/serial/sunplus-uart.c
 
 -- 
-Thanks,
-
-David / dhildenb
+2.7.4
 

@@ -2,95 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC31248C3E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 13:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD0448C3E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 13:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353131AbiALMZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 07:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353124AbiALMZO (ORCPT
+        id S1353121AbiALMZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 07:25:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21888 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1353117AbiALMZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 07:25:14 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2FFC061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 04:25:14 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id i82so3340412ioa.8
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 04:25:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r0Ed94N6PJ1HQvpwsTDcBAz1gPfqabvU1XtB9N89ivo=;
-        b=i9YELGkPrF9QildKnEB0Dl461a8mPFeJ9M7JKTP5U2yLPD5Qyis0LkkhVGUzbd0RpI
-         /P9zvBLoXiB15zji+qwH/xUWw+pRZlU1+I1m4SRLHwC6H8/GEBbhK+sL4dz43TxBPrHP
-         fdSDxAOsL7O3hf1tG/sWVsfWRSmoMvMLYA4Dw=
+        Wed, 12 Jan 2022 07:25:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641990308;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xWgksL6bFpGhiY8GnHIJjFsUKx5kfO64Lt2XcltxSMk=;
+        b=VU3pzOsZlSghR5YqTMTJ/hHs6a4HCKa0aHpYAvB5rGLEQia0H2LlkS6Citruw2fgDCI7//
+        MOwpexEErT+9yUTwB6n2qn/Tv1sdfj7q/FvOW+fLEyp1v9nDJGwO/gSNYVG7tkQxfj8uBf
+        XY9CjbmRbpZLyd7RcxQz6CVAsqp2WlE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-170-mJW0YoquNTGGY5Jc3wOF0A-1; Wed, 12 Jan 2022 07:25:07 -0500
+X-MC-Unique: mJW0YoquNTGGY5Jc3wOF0A-1
+Received: by mail-ed1-f71.google.com with SMTP id j10-20020a05640211ca00b003ff0e234fdfso2170673edw.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 04:25:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r0Ed94N6PJ1HQvpwsTDcBAz1gPfqabvU1XtB9N89ivo=;
-        b=kRlm9RZ6eCKaWn/hvwSfbgfaKWIQHRXPUf2wYVpc847qNptzBJ7rcJH/1XU9ULQ6v9
-         Q05towokwQUqmEHjztbKUXvZxTstHIJ6KNtqLvjH0CYb9pFV7Yz5osVDYzBvhv6BKOGO
-         jAnw5ujYKpeZXSVktEIxeNNA1b4jb+yEkKlYm0qY/5Ozhuw2cXU9KVoliL1xRAX/6e2J
-         nw9nENmDhSkyEllmqidf13Vq2UO/eqIlwhfaUNEYe4QkbbvQ7lYizsSRtIFfp0+vxTVp
-         iD9T0BUnSx9QAB+jfkuvYZcx2YtLuul1a3wcyh4ozrgffMPOE9hsP7S96QhpY7LllNtg
-         JsAg==
-X-Gm-Message-State: AOAM532aROAz4GE226DTYIZUuM75GspNXG8PbpTh7a1/IN+Qq2rT+EmW
-        XvGERsdDqpeQw4Nevy5MwJQ27FsH9DPxJ8PwUiujMA==
-X-Google-Smtp-Source: ABdhPJz3aWTJ6YHXl+DNpQfRBduYGsa3dA2FrH3qublefl99BTefVU7PwBsvrZTCfAWITEprI8dsA0VWgDMC1jSTU/M=
-X-Received: by 2002:a05:6602:17d0:: with SMTP id z16mr4259571iox.204.1641990313893;
- Wed, 12 Jan 2022 04:25:13 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=xWgksL6bFpGhiY8GnHIJjFsUKx5kfO64Lt2XcltxSMk=;
+        b=YB7mSFzJX0DuEH6Nd044/FZCB8EM3JTJLXOFHNruhRLOeZEHRRCn2lPRkrjBsPALUD
+         LyUMLiJRL1++HjfHrq/ZCbIMt9y0QHAeecqgrkE2yuEJGZ3mVR+RIqCFHsprRCy1LXyy
+         hTAi6GRp5+EmAW3G6Fg8pvWhVoJUsbhhVuNBcfAwfvwxMLsMnexj8jEYrWzcPrHvfeHX
+         tki3Ldc+zjozJOS2u5nbX7+4HwMZLltbGAFJM29lXPTO4OOZRLkij0gCPdAvYjmWauNR
+         mZiffXe3lfeA4lh+yuv7kgzlukSshQnbVn0H13YbTJ2Pcpq5kB6yXig1pFyoOY1/LUvm
+         J1/w==
+X-Gm-Message-State: AOAM5303bw2rLFNLVk0WANI3q7UI7RHTZCneXynz+UUTqeUSDxzOZYAj
+        dNckSl0t1g0WKc17BTOWhd9cKerPylDoB7LOcbmmz0JkSVB0KST5AJkyPRrZrb5vk0ZUakwzSjL
+        M3buRd6K1N/su0ZdgtnE6BuE9
+X-Received: by 2002:a17:907:720f:: with SMTP id dr15mr7339376ejc.729.1641990306553;
+        Wed, 12 Jan 2022 04:25:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyqxWZY7TfzuBRT62moR2hjCiDFrckpFbnSxgt2c5ujzQ6k4qnDmvre7ffxzfYevGV/CcTIwg==
+X-Received: by 2002:a17:907:720f:: with SMTP id dr15mr7339357ejc.729.1641990306254;
+        Wed, 12 Jan 2022 04:25:06 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:4700:e25f:39eb:3cb8:1dec? (p200300cbc7024700e25f39eb3cb81dec.dip0.t-ipconnect.de. [2003:cb:c702:4700:e25f:39eb:3cb8:1dec])
+        by smtp.gmail.com with ESMTPSA id gn36sm2897744ejc.29.2022.01.12.04.25.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 04:25:05 -0800 (PST)
+Message-ID: <cf596fdc-6599-7c53-26e8-1524c5f214f7@redhat.com>
+Date:   Wed, 12 Jan 2022 13:25:04 +0100
 MIME-Version: 1.0
-References: <20220106122452.18719-1-wsa@kernel.org> <Yd6gRR0jtqhRLwtB@ninjato>
- <98ed8d6d16a3d472d9432eb169aa2da44b66b5cc.camel@yandex.ru>
- <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com> <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
-In-Reply-To: <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Wed, 12 Jan 2022 20:24:48 +0800
-Message-ID: <CAJMQK-g1pqg05K+ZL0R3i67gitEVoZQ2jbOuL=Q2djBr45soAg@mail.gmail.com>
-Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in adapter"
-To:     Tareque Md Hanif <tarequemd.hanif@yahoo.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>, linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        John Dias <joaodias@google.com>, huww98@outlook.com,
+        John Hubbard <jhubbard@nvidia.com>
+References: <20211228175904.3739751-1-minchan@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC v2] mm: introduce page pin owner
+In-Reply-To: <20211228175904.3739751-1-minchan@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 6:58 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
-> hi Konstantin and Tareque,
->
-> Can you help provide logs if we apply
-> 5a7b95fb993ec399c8a685552aa6a8fc995c40bd but revert
-> 8d35a2596164c1c9d34d4656fd42b445cd1e247f?
->
-Another thing might be helpful to test with:
+On 28.12.21 18:59, Minchan Kim wrote:
+> A Contiguous Memory Allocator(CMA) allocation can fail if any page
+> within the requested range has an elevated refcount(a pinned page).
+> 
+> Debugging such failures is difficult, because the struct pages only
+> show a combined refcount, and do not show the callstacks or
+> backtraces of the code that acquired each refcount. So the source
+> of the page pins remains a mystery, at the time of CMA failure.
+> 
+> In order to solve this without adding too much overhead, just do
+> nothing most of the time, which is pretty low overhead. However,
+> once a CMA failure occurs, then mark the page (this requires a
+> pointer's worth of space in struct page, but it uses page extensions
+> to get that), and start tracing the subsequent put_page() calls.
+> As the program finishes up, each page pin will be undone, and
+> traced with a backtrace. The programmer reads the trace output and
+> sees the list of all page pinning code paths.
+> 
 
-after apply 5a7b95fb993ec399c8a685552aa6a8fc995c40bd
-1. delete SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late,
-i2c_resume_early) and function i2c_suspend_late() and
-i2c_resume_early().
-2. delete SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume,
-NULL) and function i2c_runtime_suspend() and i2c_runtime_resume().
-
-Does it still fail if we do 1 or 2?
-
-Sorry that we don't have a platform with intel CPU and amd GPU
-combination to test with.
+It's worth noting that this is a pure debug feature, right?
 
 
-> Thanks
->
-> On Wed, Jan 12, 2022 at 6:02 PM Tareque Md Hanif
-> <tarequemd.hanif@yahoo.com> wrote:
-> >
-> >
-> > On 1/12/22 15:51, Wolfram Sang wrote:
-> > > would the reporters of the
-> > > regression be available for further testing?
-> > Sure. I am available.
+I like the general approach, however, IMHO the current naming is a bit
+sub-optimal and misleading. All you're doing is flagging pages that
+should result in a tracepoint when unref'ed.
+
+"page pinners" makes it somewhat sound like you're targeting FOLL_PIN,
+not simply any references.
+
+"owner" is misleading IMHO as well.
+
+
+What about something like:
+
+"mm: selective tracing of page reference holders on unref"
+
+PAGE_EXT_PIN_OWNER -> PAGE_EXT_TRACE_UNREF
+
+$whatever feature/user can then set the bit, for example, when migration
+fails.
+
+I somewhat dislike that it's implicitly activated by failed page
+migration. At least the current naming doesn't reflect that.
+
+
+> This will consume an additional 8 bytes per 4KB page, or an
+> additional 0.2% of RAM. In addition to the storage space, it will
+> have some performance cost, due to increasing the size of struct
+> page so that it is greater than the cacheline size (or multiples
+> thereof) of popular (x86, ...) CPUs.
+
+I think I might be missing something. Aren't you simply reusing
+&page_ext->flags ? I mean, the "overhead" is just ordinary page_ext
+overhead ... and whee exactly are you changing "struct page" layout? Is
+this description outdated?
+
+> 
+> The idea can apply every user of migrate_pages as well as CMA to
+> know the reason why the page migration failed. To support it,
+> the implementation takes "enum migrate_reason" string as filter
+> of the tracepoint(see below).
+> 
+
+I wonder if we could achieve the same thing for debugging by
+
+a) Tracing the PFN when migration fails
+b) Tracing any unref of any PFN
+
+User space can then combine both information to achieve the same result.
+I assume one would need a big trace buffer, but maybe for a debug
+feature good enough?
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

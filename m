@@ -2,127 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D190748C6C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A64148C6DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348043AbiALPIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:08:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35909 "EHLO
+        id S1354477AbiALPOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:14:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22219 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243634AbiALPI3 (ORCPT
+        by vger.kernel.org with ESMTP id S1354448AbiALPN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:08:29 -0500
+        Wed, 12 Jan 2022 10:13:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642000108;
+        s=mimecast20190719; t=1642000438;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wIsaeiGuSCkVHBbiFSlgQvB16Jlw+ZXtL+xJeRxkUSY=;
-        b=dAx8CnXlBqVkWRt+WJ4VnFqnmB9zrc3RwsNQT4U58RDxtP4qUabyxpqxhzLagphmV5+sv3
-        v5KhqXIDGHerE9A5/M6MiV7u6kHVMR4dAjTxEVg2+C86/bEjBM3/TYeUMWgEaEXyuVLDK6
-        SvNgLlH4skwrOCI1mqTdFcFpRCO2DUg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=2Bh7ctsPUcuF3d9C05pOY2/eeubhRbwCqaFcDL5uFWI=;
+        b=P6srx1coDVJ/xcz5rxB8rd7YZJ7JZH2YbE+qPBhd7VujjGqHzWGE/c/wkO5dmiahZ8+Pzu
+        4Tlpy8BwHcvUIRrTVO34D6Fk7TRtYdBcT60QGSXk1UMVU2mc6vYYnFswHHWXH5z4nCEApr
+        r+9KeEaUUoml9YYr3GZalMQqhje3NC8=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-288-bpTCFuRDMDGM_PFejjfqQw-1; Wed, 12 Jan 2022 10:08:26 -0500
-X-MC-Unique: bpTCFuRDMDGM_PFejjfqQw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 640B4801B0C;
-        Wed, 12 Jan 2022 15:08:25 +0000 (UTC)
-Received: from [10.22.10.195] (unknown [10.22.10.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 03B4279A29;
-        Wed, 12 Jan 2022 15:08:18 +0000 (UTC)
-Message-ID: <fd02584d-03d7-f27b-c11c-6ed1f212f03c@redhat.com>
-Date:   Wed, 12 Jan 2022 10:08:18 -0500
+ us-mta-620-9tGwBpQQOeGYpfq3iJdSIQ-1; Wed, 12 Jan 2022 10:13:57 -0500
+X-MC-Unique: 9tGwBpQQOeGYpfq3iJdSIQ-1
+Received: by mail-ed1-f72.google.com with SMTP id m8-20020a056402510800b003f9d22c4d48so2496554edd.21
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:13:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2Bh7ctsPUcuF3d9C05pOY2/eeubhRbwCqaFcDL5uFWI=;
+        b=vex86zzfL9qKGrvunfTfijlN3T4cPzOweVY/duwfEaD8D+koJ/QJQeJYMxK0WgbVmO
+         P4gW+Ih3358mL3TSHRhq7kA7VJVCHeIkHbuJusVJk+MRJIVBlifmrXtN6tyfh7q/VEYK
+         cWz/fgWiG5nPSH3MxNCm9LUGElTW6LLSrI/PYE82+I1Sm2oG/LumbWhSu1ZXA02UCYqo
+         taCmBuYdVnhT8+8+7IMsmrP4vkCHkpFH5xb3xzG2OyHmLy8lZTc3axl1LILnXT2lcPR2
+         yEftu3h9CUkS2pnTJpDbfbTcKgt2wwgUip0PSr7qrZ+u5on8wTbTPwTZRnIJ/OZn7nye
+         otyA==
+X-Gm-Message-State: AOAM530GqNcIQ11jD4kL9GiUxm9mkpy8lw+RIq4R4oUfIAE7i9fIhH0t
+        AsnnTltjL4kr4yfmT2lozBfzkXMn1Xf/n+Y7XtTwpDR8n6BdqyVmguPaE5rr/Bb8LV3SMGQMCRB
+        dxO5mn5o8OQdww2LrHpw5s7wB
+X-Received: by 2002:a05:6402:4301:: with SMTP id m1mr91624edc.125.1642000436627;
+        Wed, 12 Jan 2022 07:13:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyHCfLIBizaWXXYa2iLmLrtn7fgNZy0TD2UORPcAGGaEg/oxddwYAXs40mqRBDL6oAsbgh8ZQ==
+X-Received: by 2002:a05:6402:4301:: with SMTP id m1mr91537edc.125.1642000436370;
+        Wed, 12 Jan 2022 07:13:56 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id o25sm40807edr.20.2022.01.12.07.13.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 07:13:55 -0800 (PST)
+Message-ID: <e6487826-7683-2f29-c057-e5d7b913800c@redhat.com>
+Date:   Wed, 12 Jan 2022 16:13:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
-Subject: Re: [PATCH] f2fs: move f2fs to use reader-unfair rwsems
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
 Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Tim Murray <timmurray@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-References: <20220108164617.3130175-1-jaegeuk@kernel.org>
- <YdvoxkAAquI17UbX@infradead.org>
- <a23a3226-95d9-9835-c1c7-2d13f4a1ee16@redhat.com>
- <CAEe=SxnWeK0pSfijPKJSTxBiMgD1Ev69fV3qSTCgWASk0b3vhA@mail.gmail.com>
- <9efbbcb7-29cd-a8ab-0632-01986edc862f@redhat.com>
- <CAEe=Sx=C8e7=A6ziy8dYC+FvkWvVYZ+o=XMCP_4vX0efsUPT4Q@mail.gmail.com>
- <86891228-9c91-09f1-0e2d-0a3392649d52@redhat.com>
- <Yd25SWaqEDSpR1vO@google.com>
- <4a2352a9-42b4-56cd-423a-825faffcd801@redhat.com>
- <Yd4f49lhnC7+vvAm@google.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Yd4f49lhnC7+vvAm@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Auger <eric.auger@redhat.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        netdev <netdev@vger.kernel.org>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de> <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <Yd7Z3Qwevb/lEwQZ@lunn.ch>
+ <CAMuHMdV2cGvqMppwt9xhpze=pcnHfTozDZMjwT1DkivLD+_nbQ@mail.gmail.com>
+ <CAJZ5v0iyAHtDe1kFObQorXOX0Xraxac0j29Dh+8sq7zxzbsmcQ@mail.gmail.com>
+ <78a17bae-435b-e35e-b2dc-1166777725a0@omp.ru>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <78a17bae-435b-e35e-b2dc-1166777725a0@omp.ru>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/11/22 19:25, Jaegeuk Kim wrote:
-> On 01/11, Waiman Long wrote:
+Hi,
+
+On 1/12/22 16:05, Sergey Shtylyov wrote:
+> On 1/12/22 5:41 PM, Rafael J. Wysocki wrote:
+> 
+> [...]
+>>>>> If an optional IRQ is not present, drivers either just ignore it (e.g.
+>>>>> for devices that can have multiple interrupts or a single muxed IRQ),
+>>>>> or they have to resort to polling. For the latter, fall-back handling
+>>>>> is needed elsewhere in the driver.
+>>>>> To me it sounds much more logical for the driver to check if an
+>>>>> optional irq is non-zero (available) or zero (not available), than to
+>>>>> sprinkle around checks for -ENXIO. In addition, you have to remember
+>>>>> that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
+>>>>> (or some other error code) to indicate absence. I thought not having
+>>>>> to care about the actual error code was the main reason behind the
+>>>>> introduction of the *_optional() APIs.
+>>>>Hi,
+>>>> The *_optional() functions return an error code if there has been a
+>>>> real error which should be reported up the call stack. This excludes
+>>>> whatever error code indicates the requested resource does not exist,
+>>>> which can be -ENODEV etc. If the device does not exist, a magic cookie
+>>>> is returned which appears to be a valid resources but in fact is
+>>>> not. So the users of these functions just need to check for an error
+>>>> code, and fail the probe if present.
+>>>
+>>> Agreed.
+>>>
+>>> Note that in most (all?) other cases, the return type is a pointer
+>>> (e.g. to struct clk), and NULL is the magic cookie.
+>>>
+>>>> You seems to be suggesting in binary return value: non-zero
+>>>> (available) or zero (not available)
+>>>
+>>> Only in case of success. In case of a real failure, an error code
+>>> must be returned.
+>>>
+>>>> This discards the error code when something goes wrong. That is useful
+>>>> information to have, so we should not be discarding it.
+>>>
+>>> No, the error code must be retained in case of failure.
+>>>
+>>>> IRQ don't currently have a magic cookie value. One option would be to
+>>>> add such a magic cookie to the subsystem. Otherwise, since 0 is
+>>>> invalid, return 0 to indicate the IRQ does not exist.
+>>>
+>>> Exactly. And using 0 means the similar code can be used as for other
+>>> subsystems, where NULL would be returned.
+>>>
+>>> The only remaining difference is the "dummy cookie can be passed
+>>> to other functions" behavior.  Which is IMHO a valid difference,
+>>> as unlike with e.g. clk_prepare_enable(), you do pass extra data to
+>>> request_irq(), and sometimes you do need to handle the absence of
+>>> the interrupt using e.g. polling.
+>>>
+>>>> The request for a script checking this then makes sense. However, i
+>>>> don't know how well coccinelle/sparse can track values across function
+>>>> calls. They probably can check for:
+>>>>
+>>>>    ret = irq_get_optional()
+>>>>    if (ret < 0)
+>>>>       return ret;
+>>>>
+>>>> A missing if < 0 statement somewhere later is very likely to be an
+>>>> error. A comparison of <= 0 is also likely to be an error. A check for
+>>>>> 0 before calling any other IRQ functions would be good. I'm
+>>>> surprised such a check does not already existing in the IRQ API, but
+>>>> there are probably historical reasons for that.
+>>>
+>>> There are still a few platforms where IRQ 0 does exist.
 >>
->> v5.10 kernel still have reader optimistic spinning enabled in rwsem which
->> may have worsen the writer wait time. Could you try with a more up-to-date
->> kernel or backport the relevant rwsem patches into your test kernel to see
->> how much it can help?
-> We're using https://android.googlesource.com/kernel/common/+/refs/heads/android12-5.10.
-> By any chance, may I ask which upstream patches we need to backport?
->
-I am referring to the following commits:
-
-617f3ef95177 locking/rwsem: Remove reader optimistic spinning
-1a728dff855a locking/rwsem: Enable reader optimistic lock stealing
-2f06f702925b locking/rwsem: Prevent potential lock starvation
-c8fe8b056438 locking/rwsem: Pass the current atomic count to 
-rwsem_down_read_slowpath()
-
-To apply cleanly on top of 5.10.y, you will also need the followings:
-
-c995e638ccbb locking/rwsem: Fold __down_{read,write}*()
-285c61aedf6b locking/rwsem: Introduce rwsem_write_trylock()
-3379116a0ca9 locking/rwsem: Better collate rwsem_read_trylock()
-
-Reading the commit log of 2f06f702925b ("locking/rwsem: Prevent 
-potential lock starvation"), I realize that writer lock starvation is 
-possible in the f2fs case. That can explain why there was a worst case 
-lock wait time of 9.7s.
-
-I believe that you will see a big improvement by applying those upstream 
-commits. In hindsight, I think I should have put a "Fixes" tag in that 
-commit.
-
+>> Not just a few even.  This happens on a reasonably recent x86 PC:
 >>
->>>> Anyway, AFAICS, this patch keeps readers out of the rwsem wait queue and so
->>>> only writers can go into it. We can make an unfair rwsem to give preference
->>>> to writers in the wait queue and wake up readers only if there is no more
->>>> writers in the wait queue or even in the optimistic spinning queue. That
->>>> should achieve the same effect as this patch.
->>> Can we get a patch for the variant to test a bit? Meanwhile, I think we can
->>> merge this patch to add a wraper first and switches to it later?
->> Give me a week or so and I can make a RFC patch to support unfair rwsem for
->> you to try out. You do need to try it on the latest kernel, though.
-> Thank you so much. My thought flow is applying this in f2fs for all the old
-> kernels shipped in Android devices. Then, we can try to backport upstream
-> rwsem patches and yours to switch finally. Let me know if you have any concern.
+>> rafael@gratch:~/work/linux-pm> head -2 /proc/interrupts
+>>            CPU0       CPU1       CPU2       CPU3       CPU4       CPU5
+>>   0:         10          0          0          0          0          0
+>>  IR-IO-APIC    2-edge
+>> timer
+> 
+>    IIRC Linus has proclaimed that IRQ0 was valid for the i8253 driver (living in
+> arch/x86/); IRQ0 only was frowned upon when returned by platform_get_irq() and its
+> ilk.
+> 
+> MBR, Sergey
 
-Assuming that Tr is the worst case reader lock hold time with a single 
-writer, I believe the worst case writer lock wait time should be about 
-2*Tr with the above commits applied. Introducing a unfair rwsem option 
-will reduce that to just Tr. So try this out by applying the above 
-upstream commits to see if they can meet your requirement as you may not 
-really need an unfair rwsem option.
+Right, platform_get_irq() has this:
 
-Cheers,
-Longman
+        WARN(ret == 0, "0 is an invalid IRQ number\n");
+
+So given that platform_get_irq() returning 0 is not expected, it seems
+reasonable for platform_get_irq_optional() to use 0 as a special
+"no irq available" return value, matching the NULL returned by
+gpiod_get_optional().
+
+Regards,
+
+Hans
 

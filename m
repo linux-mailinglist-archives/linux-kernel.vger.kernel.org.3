@@ -2,419 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A62C48CBF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C4B48CBF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:27:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356805AbiALT16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:27:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345309AbiALT0h (ORCPT
+        id S1345056AbiALT1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:27:15 -0500
+Received: from mail-qt1-f179.google.com ([209.85.160.179]:46896 "EHLO
+        mail-qt1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345003AbiALT0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:26:37 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430FFC06118C
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:26:09 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id q185-20020a25d9c2000000b00611ae9c8773so2546072ybg.18
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:26:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=VsFFxxwANtIrhwRpJUE2VY/wPWYvmyT5gfi+R44pAG0=;
-        b=ENdmOdatY4zEiRnYojm/ITEfSN1H8OKJs2sqMObJUrQuyAnQL29NnS6KfPbj2g5Qnd
-         YJ+SI7OApM3JzYQWWA+m4+OkEkHa/ifyxZz7TRpORAoFVUh+f19+ll3idvlJaWwGiz0x
-         RVymw0RpjRv0pKuGBsvbyaeCwNn6/X1qgBlbISYnKEkSNkqUOS8ytGWS6J/F5bujUfv7
-         ZsmSPauNSBF8Yp7zauBJ52KmJM9Hw3zNQxAkmXOPFpVWGa8yGzEIKyXYD3slkNmAU5BR
-         GA5MN9JR+rZw2Tv4z/zRY11br063GYBf0z3PDIiQfW3F/AdoLSjSnfI1SdcWK7ORR5EH
-         bdbQ==
+        Wed, 12 Jan 2022 14:26:11 -0500
+Received: by mail-qt1-f179.google.com with SMTP id v7so4200362qtw.13;
+        Wed, 12 Jan 2022 11:26:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=VsFFxxwANtIrhwRpJUE2VY/wPWYvmyT5gfi+R44pAG0=;
-        b=nZ8yMIZp7ujE3xTNW4R+m5HaixIx28wXE90dIDVV38OcN4SJhiQrilgpn4aZvnQz/h
-         szs42r8BU+1DKGSga5RK/diHUwBZJ8GQZ6jrSCkcd1ksiBzhsucEZNbpBCY6jQ1DmKWu
-         SN0eT/saWq9OZ6gjakFwfDvF9T4Nc3bug00toXHB8SlIp8/eJVmlTpnYPSPPtyZa0U/U
-         pUS0OV2GHGzLbPBeoVof5Q/18nKYqYMTnx8uRpV/hCWpgawbUl5ERFrTMWgDFhRztcUS
-         MH+F8Bjk4wup9fIE2f6hGK3HPO0ZtF8WHOc2U07nY4wxwGqUNJB3AKJPJZKWkHe/58vX
-         /sVQ==
-X-Gm-Message-State: AOAM531k2z0rCur7YCD22rGFvWY8J2vSITim1596rMbqvNujC+Gbq17S
-        eFHtcm4FEV8iSrgn8bjyDPakyWXxYUg=
-X-Google-Smtp-Source: ABdhPJz8qpgAQmgwYbd9zW1gXEAdsK0dh9ecxoggPUKYUrNtALfc2eMBc/Rst1BQvOSd8nJ964YzuHP40Lo=
-X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:ddf2:9aea:6994:df79])
- (user=haoluo job=sendgmr) by 2002:a25:248a:: with SMTP id k132mr1659355ybk.282.1642015568531;
- Wed, 12 Jan 2022 11:26:08 -0800 (PST)
-Date:   Wed, 12 Jan 2022 11:25:47 -0800
-In-Reply-To: <20220112192547.3054575-1-haoluo@google.com>
-Message-Id: <20220112192547.3054575-9-haoluo@google.com>
-Mime-Version: 1.0
-References: <20220112192547.3054575-1-haoluo@google.com>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH RESEND RFC bpf-next v1 8/8] selftests/bpf: Test exposing bpf
- objects in kernfs
-From:   Hao Luo <haoluo@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>, Joe@google.com,
-        Burton@google.com, jevburton.kernel@gmail.com,
-        Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2OdLpMkE2Acb+qyy0VLgKmSLDMsqxL4iDRMnwTvWvo4=;
+        b=Df+XV2aRp4lprTsUyOnO5eHLEPye13FpHlQ+kiHMFdbRuoafzWAUPX/QcmfXFJeDGg
+         k0YdRpkXSfugmORDM5e2OE9GyZpFzVHlZREYnK3+L46vpzBcJ1bti2VhsfYSCFkOYdxB
+         3nPgwD16WR7KeYydmH3BGSxpZkr1pwXCNusI+hgqU4TiJ4jqSVS4uqwYHwtaO0Dh73ME
+         GlQrOFeqxXD8//MNvAg1hFTqhEEJokx59X7b8r6T+M2s+ghKuCw7DNPpwDfpelOKHENn
+         Q5eaa8+ll+txetBBDV5sovo3iztMuHgy0J5YCHZJj7LZKRdNLfM9qYKEEaObYhQHPm50
+         fwUQ==
+X-Gm-Message-State: AOAM531Wf8FIPXo84pSeKBlpOZhQJR0PrpDmUZAvf8F/WJoRMidHJBzV
+        ku7VbPzCCPkrrVt2Xgj5tBbWcnuXiIp41XwgpuA=
+X-Google-Smtp-Source: ABdhPJx1aWGsGy+DZCQpo3w29Z+cZ5A3P9bcxtWN7LIJdJrayKGtcTlLBLeJhDQioFdlyGdiwS9VToSEXBXcEca3Y5Y=
+X-Received: by 2002:a05:622a:44e:: with SMTP id o14mr901295qtx.369.1642015569811;
+ Wed, 12 Jan 2022 11:26:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20220106025059.25847-1-ricardo.neri-calderon@linux.intel.com> <20220106025059.25847-7-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20220106025059.25847-7-ricardo.neri-calderon@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 12 Jan 2022 20:25:59 +0100
+Message-ID: <CAJZ5v0ioQ7UQt58NraPAG=M8k-joSy5pmszFjp=NcS6z==6RQg@mail.gmail.com>
+Subject: Re: [PATCH v3 6/7] thermal: netlink: Add a new event to notify CPU
+ capabilities change
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add selftests for exposing bpf objects in kernfs. Basically the added
-test tests two functionalities:
+On Thu, Jan 6, 2022 at 3:49 AM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
+>
+> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+>
+> Add a new netlink event to notify change in CPU capabilities in terms of
+> performance and efficiency.
+>
+> Firmware may change CPU capabilities as a result of thermal events in the
+> system or to account for changes in the TDP (thermal design power) level.
+>
+> This notification type will allow user space to avoid running workloads
+> on certain CPUs or proactively adjust power limits to avoid future events.
+>
+> The netlink message consists of a nested attribute
+> (THERMAL_GENL_ATTR_CPU_CAPABILITY) with three attributes:
+>
+>  * THERMAL_GENL_ATTR_CPU_CAPABILITY_ID (type u32):
+>    -- logical CPU number
+>  * THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE (type u32):
+>    -- Scaled performance from 0-1023
+>  * THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY (type u32):
+>    -- Scaled efficiency from 0-1023
+>
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Cc: Aubrey Li <aubrey.li@linux.intel.com>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+> Reviewed-by: Len Brown <len.brown@intel.com>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-  1. the ability to expose generic bpf objects in kernfs.
-  2. the ability to expose bpf_view programs to cgroup file system and
-     read from the created cgroupfs entry.
+Of course, I need to know if Daniel and Lukasz agree with this patch.
 
-The test assumes cgroup v2 is mounted at /sys/fs/cgroup/ and bpffs is
-mounted at /sys/fs/bpf/
+> ---
+> Changes since v2:
+>   * None
+>
+> Changes since v1:
+>   * Reworded commit message.
+>   * Reworded the members of struct cpu_capacity for clarity. (Lukasz)
+>   * Defined the CPU capability attributes to be scaled in the [0, 1023]
+>     interval. (Lukasz)
+> ---
+>  drivers/thermal/thermal_netlink.c | 55 +++++++++++++++++++++++++++++++
+>  drivers/thermal/thermal_netlink.h | 13 ++++++++
+>  include/uapi/linux/thermal.h      |  6 +++-
+>  3 files changed, 73 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+> index a16dd4d5d710..38e6c20f460c 100644
+> --- a/drivers/thermal/thermal_netlink.c
+> +++ b/drivers/thermal/thermal_netlink.c
+> @@ -43,6 +43,11 @@ static const struct nla_policy thermal_genl_policy[THERMAL_GENL_ATTR_MAX + 1] =
+>         [THERMAL_GENL_ATTR_CDEV_MAX_STATE]      = { .type = NLA_U32 },
+>         [THERMAL_GENL_ATTR_CDEV_NAME]           = { .type = NLA_STRING,
+>                                                     .len = THERMAL_NAME_LENGTH },
+> +       /* CPU capabilities */
+> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY]              = { .type = NLA_NESTED },
+> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]           = { .type = NLA_U32 },
+> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE]  = { .type = NLA_U32 },
+> +       [THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY]   = { .type = NLA_U32 },
+>  };
+>
+>  struct param {
+> @@ -58,6 +63,8 @@ struct param {
+>         int temp;
+>         int cdev_state;
+>         int cdev_max_state;
+> +       struct cpu_capability *cpu_capabilities;
+> +       int cpu_capabilities_count;
+>  };
+>
+>  typedef int (*cb_t)(struct param *);
+> @@ -190,6 +197,45 @@ static int thermal_genl_event_gov_change(struct param *p)
+>         return 0;
+>  }
+>
+> +static int thermal_genl_event_cpu_capability_change(struct param *p)
+> +{
+> +       struct cpu_capability *cpu_cap = p->cpu_capabilities;
+> +       struct sk_buff *msg = p->msg;
+> +       struct nlattr *start_cap;
+> +       int i, ret;
+> +
+> +       start_cap = nla_nest_start(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY);
+> +       if (!start_cap)
+> +               return -EMSGSIZE;
+> +
+> +       for (i = 0; i < p->cpu_capabilities_count; ++i) {
+> +               if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
+> +                               cpu_cap->cpu)) {
+> +                       ret = -EMSGSIZE;
+> +                       goto out_cancel_nest;
+> +               }
+> +               if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
+> +                               cpu_cap->performance)) {
+> +                       ret = -EMSGSIZE;
+> +                       goto out_cancel_nest;
+> +               }
+> +               if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
+> +                               cpu_cap->efficiency)) {
+> +                       ret = -EMSGSIZE;
+> +                       goto out_cancel_nest;
+> +               }
+> +               ++cpu_cap;
+> +       }
+> +
+> +       nla_nest_end(msg, start_cap);
+> +
+> +       return 0;
+> +out_cancel_nest:
+> +       nla_nest_cancel(msg, start_cap);
+> +
+> +       return ret;
 
-Signed-off-by: Hao Luo <haoluo@google.com>
----
- .../selftests/bpf/prog_tests/pinning_kernfs.c | 245 ++++++++++++++++++
- .../selftests/bpf/progs/pinning_kernfs.c      |  72 +++++
- 2 files changed, 317 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/pinning_kernfs.c
- create mode 100644 tools/testing/selftests/bpf/progs/pinning_kernfs.c
+It looks like ret is never different from -EMSGSIZE here, so I'd just
+return that error and drop the ret variable.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/pinning_kernfs.c b/tools/testing/selftests/bpf/prog_tests/pinning_kernfs.c
-new file mode 100644
-index 000000000000..aa702d05bf25
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/pinning_kernfs.c
-@@ -0,0 +1,245 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <fcntl.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <test_progs.h>
-+#include <time.h>
-+#include <unistd.h>
-+#include "pinning_kernfs.skel.h"
-+
-+/* remove pinned object from kernfs */
-+static void do_unpin(const char *kernfs_path, const char *msg)
-+{
-+	struct stat statbuf = {};
-+	const char cmd[] = "rm";
-+	int fd;
-+
-+	fd = open(kernfs_path, O_WRONLY);
-+	if (fd < 0)
-+		return;
-+	ASSERT_GE(write(fd, cmd, sizeof(cmd)), 0, "fail_unpin_cgroup_entry");
-+	close(fd);
-+
-+	ASSERT_ERR(stat(kernfs_path, &statbuf), msg);
-+}
-+
-+static void do_pin(int fd, const char *pinpath)
-+{
-+	struct stat statbuf = {};
-+
-+	if (!ASSERT_OK(bpf_obj_pin(fd, pinpath), "bpf_obj_pin"))
-+		return;
-+
-+	ASSERT_OK(stat(pinpath, &statbuf), "stat");
-+}
-+
-+static void check_pinning(const char *bpffs_rootpath,
-+			  const char *kernfs_rootpath)
-+{
-+	const char msg[] = "xxx";
-+	char buf[8];
-+	struct pinning_kernfs *skel;
-+	struct bpf_link *link;
-+	int prog_fd, map_fd, link_fd;
-+	char bpffs_path[64];
-+	char kernfs_path[64];
-+	struct stat statbuf = {};
-+	int err, fd;
-+
-+	skel = pinning_kernfs__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "pinning_kernfs__open_and_load"))
-+		return;
-+
-+	snprintf(kernfs_path, 64, "%s/bpf_obj", kernfs_rootpath);
-+	snprintf(bpffs_path, 64, "%s/bpf_obj", bpffs_rootpath);
-+
-+	prog_fd = bpf_program__fd(skel->progs.wait_show);
-+
-+	/* test 1:
-+	 *
-+	 *  - expose object in kernfs without pinning in bpffs in the first place.
-+	 */
-+	ASSERT_ERR(bpf_obj_pin(prog_fd, kernfs_path), "pin_kernfs_first");
-+
-+	/* test 2:
-+	 *
-+	 *  - expose bpf prog in kernfs.
-+	 *  - read/write the newly creaded kernfs entry.
-+	 */
-+	do_pin(prog_fd, bpffs_path);
-+	do_pin(prog_fd, kernfs_path);
-+	fd = open(kernfs_path, O_RDWR);
-+	err = read(fd, buf, sizeof(buf));
-+	if (!ASSERT_EQ(err, -1, "unexpected_successful_read"))
-+		goto out;
-+
-+	err = write(fd, msg, sizeof(msg));
-+	if (!ASSERT_EQ(err, -1, "unexpected_successful_write"))
-+		goto out;
-+
-+	close(fd);
-+	do_unpin(kernfs_path, "kernfs_unpin_prog");
-+	ASSERT_OK(unlink(bpffs_path), "bpffs_unlink_prog");
-+
-+	/* test 3:
-+	 *
-+	 *  - expose bpf map in kernfs.
-+	 *  - read/write the newly created kernfs entry.
-+	 */
-+	map_fd = bpf_map__fd(skel->maps.wait_map);
-+	do_pin(map_fd, bpffs_path);
-+	do_pin(map_fd, kernfs_path);
-+	fd = open(kernfs_path, O_RDWR);
-+	err = read(fd, buf, sizeof(buf));
-+	if (!ASSERT_EQ(err, -1, "unexpected_successful_read"))
-+		goto out;
-+
-+	err = write(fd, msg, sizeof(msg));
-+	if (!ASSERT_EQ(err, -1, "unexpected_successful_write"))
-+		goto out;
-+
-+	close(fd);
-+	do_unpin(kernfs_path, "kernfs_unpin_map");
-+	ASSERT_OK(unlink(bpffs_path), "bpffs_unlink_map");
-+
-+	/* test 4:
-+	 *
-+	 *  - expose bpf link in kernfs.
-+	 *  - read/write the newly created kernfs entry.
-+	 *  - removing bpffs entry also removes kernfs entries.
-+	 */
-+	link = bpf_program__attach(skel->progs.wait_record);
-+	link_fd = bpf_link__fd(link);
-+	do_pin(link_fd, bpffs_path);
-+	do_pin(link_fd, kernfs_path);
-+	fd = open(kernfs_path, O_RDWR);
-+	err = read(fd, buf, sizeof(buf));
-+	if (!ASSERT_EQ(err, -1, "unexpected_successful_read"))
-+		goto destroy_link;
-+
-+	err = write(fd, msg, sizeof(msg));
-+	if (!ASSERT_EQ(err, -1, "unexpected_successful_write"))
-+		goto destroy_link;
-+
-+	ASSERT_OK(unlink(bpffs_path), "bpffs_unlink_link");
-+	ASSERT_ERR(stat(kernfs_path, &statbuf), "unpin_bpffs_first");
-+
-+	/* cleanup */
-+destroy_link:
-+	bpf_link__destroy(link);
-+out:
-+	close(fd);
-+	pinning_kernfs__destroy(skel);
-+}
-+
-+static void spin_on_cpu(int seconds)
-+{
-+	time_t start, now;
-+
-+	start = time(NULL);
-+	do {
-+		now = time(NULL);
-+	} while (now - start < seconds);
-+}
-+
-+static void do_work(const char *cgroup)
-+{
-+	int cpu = 0, pid;
-+	char cmd[128];
-+
-+	/* make cgroup threaded */
-+	snprintf(cmd, 128, "echo threaded > %s/cgroup.type", cgroup);
-+	system(cmd);
-+
-+	pid = fork();
-+	if (pid == 0) {
-+		/* attach to cgroup */
-+		snprintf(cmd, 128, "echo %d > %s/cgroup.procs", getpid(), cgroup);
-+		system(cmd);
-+
-+		/* pin process to target cpu */
-+		snprintf(cmd, 128, "taskset -pc %d %d", cpu, getpid());
-+		system(cmd);
-+
-+		spin_on_cpu(3); /* spin on cpu for 3 seconds */
-+		exit(0);
-+	}
-+
-+	/* pin process to target cpu */
-+	snprintf(cmd, 128, "taskset -pc %d %d", cpu, getpid());
-+	system(cmd);
-+
-+	spin_on_cpu(3); /* spin on cpu for 3 seconds */
-+	wait(NULL);
-+}
-+
-+void read_from_file(const char *path)
-+{
-+	int id = 0, lat;
-+	char buf[64];
-+	int fd;
-+
-+	fd = open(path, O_RDONLY);
-+	if (fd < 0)
-+		return;
-+	ASSERT_GE(read(fd, buf, sizeof(buf)), 0, "fail_read_cgroup_entry");
-+	ASSERT_EQ(sscanf(buf, "%d %d", &id, &lat), 2, "unexpected_seq_show_output");
-+	close(fd);
-+}
-+
-+static void check_cgroup_seq_show(const char *bpffs_dir,
-+				  const char *cgroup_dir)
-+{
-+	struct pinning_kernfs *skel;
-+	char bpffs_path[64];
-+	char cgroup_path[64];
-+	int fd;
-+
-+	skel = pinning_kernfs__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "pinning_kernfs__open_and_load"))
-+		return;
-+
-+	pinning_kernfs__attach(skel);
-+
-+	snprintf(bpffs_path, 64, "%s/bpf_obj", bpffs_dir);
-+	snprintf(cgroup_path, 64, "%s/bpf_obj", cgroup_dir);
-+
-+	/* generate wait events for the cgroup */
-+	do_work(cgroup_dir);
-+
-+	/* expose wait_show prog to cgroupfs */
-+	fd = bpf_link__fd(skel->links.wait_show);
-+	ASSERT_OK(bpf_obj_pin(fd, bpffs_path), "pin_bpffs");
-+	ASSERT_OK(bpf_obj_pin(fd, cgroup_path), "pin_cgroupfs");
-+
-+	/* read from cgroupfs and check results */
-+	read_from_file(cgroup_path);
-+
-+	/* cleanup */
-+	do_unpin(cgroup_path, "cgroup_unpin_seq_show");
-+	ASSERT_OK(unlink(bpffs_path), "bpffs_unlink_seq_show");
-+
-+	pinning_kernfs__destroy(skel);
-+}
-+
-+void test_pinning_kernfs(void)
-+{
-+	char kernfs_tmpl[] = "/sys/fs/cgroup/bpf_pinning_test_XXXXXX";
-+	char bpffs_tmpl[] = "/sys/fs/bpf/pinning_test_XXXXXX";
-+	char *kernfs_rootpath, *bpffs_rootpath;
-+
-+	kernfs_rootpath = mkdtemp(kernfs_tmpl);
-+	bpffs_rootpath = mkdtemp(bpffs_tmpl);
-+
-+	/* check pinning map, prog and link in kernfs */
-+	if (test__start_subtest("pinning"))
-+		check_pinning(bpffs_rootpath, kernfs_rootpath);
-+
-+	/* check cgroup seq_show implemented using bpf */
-+	if (test__start_subtest("cgroup_seq_show"))
-+		check_cgroup_seq_show(bpffs_rootpath, kernfs_rootpath);
-+
-+	rmdir(kernfs_rootpath);
-+	rmdir(bpffs_rootpath);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/pinning_kernfs.c b/tools/testing/selftests/bpf/progs/pinning_kernfs.c
-new file mode 100644
-index 000000000000..ca03a9443794
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/pinning_kernfs.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Google */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+struct bpf_map_def SEC("maps") wait_map = {
-+	.type = BPF_MAP_TYPE_HASH,
-+	.key_size = sizeof(__u64),
-+	.value_size = sizeof(__u64),
-+	.max_entries = 65532,
-+};
-+
-+/* task_group() from kernel/sched/sched.h */
-+static struct task_group *task_group(struct task_struct *p)
-+{
-+	return p->sched_task_group;
-+}
-+
-+static struct cgroup *task_cgroup(struct task_struct *p)
-+{
-+	struct task_group *tg;
-+
-+	tg = task_group(p);
-+	return tg->css.cgroup;
-+}
-+
-+/* cgroup_id() from linux/cgroup.h */
-+static __u64 cgroup_id(const struct cgroup *cgroup)
-+{
-+	return cgroup->kn->id;
-+}
-+
-+SEC("tp_btf/sched_stat_wait")
-+int BPF_PROG(wait_record, struct task_struct *p, __u64 delta)
-+{
-+	struct cgroup *cgrp;
-+	__u64 *wait_ns;
-+	__u64 id;
-+
-+	cgrp = task_cgroup(p);
-+	if (!cgrp)
-+		return 0;
-+
-+	id = cgroup_id(cgrp);
-+	wait_ns = bpf_map_lookup_elem(&wait_map, &id);
-+
-+	/* record the max wait latency seen so far */
-+	if (!wait_ns)
-+		bpf_map_update_elem(&wait_map, &id, &delta, BPF_NOEXIST);
-+	else if (*wait_ns < delta)
-+		*wait_ns = delta;
-+	return 0;
-+}
-+
-+SEC("view/cgroup")
-+int BPF_PROG(wait_show, struct seq_file *seq, struct cgroup *cgroup)
-+{
-+	__u64 id, *value;
-+
-+	id = cgroup_id(cgroup);
-+	value = bpf_map_lookup_elem(&wait_map, &id);
-+
-+	if (value)
-+		BPF_SEQ_PRINTF(seq, "%llu %llu\n", id, *value);
-+	else
-+		BPF_SEQ_PRINTF(seq, "%llu 0\n", id);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.34.1.448.ga2b2bfdf31-goog
+> +}
+> +
+>  int thermal_genl_event_tz_delete(struct param *p)
+>         __attribute__((alias("thermal_genl_event_tz")));
+>
+> @@ -219,6 +265,7 @@ static cb_t event_cb[] = {
+>         [THERMAL_GENL_EVENT_CDEV_DELETE]        = thermal_genl_event_cdev_delete,
+>         [THERMAL_GENL_EVENT_CDEV_STATE_UPDATE]  = thermal_genl_event_cdev_state_update,
+>         [THERMAL_GENL_EVENT_TZ_GOV_CHANGE]      = thermal_genl_event_gov_change,
+> +       [THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE] = thermal_genl_event_cpu_capability_change,
+>  };
+>
+>  /*
+> @@ -356,6 +403,14 @@ int thermal_notify_tz_gov_change(int tz_id, const char *name)
+>         return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_GOV_CHANGE, &p);
+>  }
+>
+> +int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps)
+> +{
+> +       struct param p = { .cpu_capabilities_count = count, .cpu_capabilities = caps };
+> +
+> +       return thermal_genl_send_event(THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE, &p);
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_genl_cpu_capability_event);
+> +
+>  /*************************** Command encoding ********************************/
+>
+>  static int __thermal_genl_cmd_tz_get_id(struct thermal_zone_device *tz,
+> diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+> index e554f76291f4..44bc3dec5568 100644
+> --- a/drivers/thermal/thermal_netlink.h
+> +++ b/drivers/thermal/thermal_netlink.h
+> @@ -4,6 +4,12 @@
+>   *  Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+>   */
+>
+> +struct cpu_capability {
 
+I'm wondering if the struct name is not too generic as the purpose it
+is used for is rather narrow and specific.
+
+> +       int cpu;
+> +       int performance;
+> +       int efficiency;
+> +};
+> +
+>  /* Netlink notification function */
+>  #ifdef CONFIG_THERMAL_NETLINK
+>  int __init thermal_netlink_init(void);
+> @@ -23,6 +29,7 @@ int thermal_notify_cdev_add(int cdev_id, const char *name, int max_state);
+>  int thermal_notify_cdev_delete(int cdev_id);
+>  int thermal_notify_tz_gov_change(int tz_id, const char *name);
+>  int thermal_genl_sampling_temp(int id, int temp);
+> +int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps);
+>  #else
+>  static inline int thermal_netlink_init(void)
+>  {
+> @@ -101,4 +108,10 @@ static inline int thermal_genl_sampling_temp(int id, int temp)
+>  {
+>         return 0;
+>  }
+> +
+> +static inline int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps)
+> +{
+> +       return 0;
+> +}
+> +
+>  #endif /* CONFIG_THERMAL_NETLINK */
+> diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
+> index 9aa2fedfa309..fc78bf3aead7 100644
+> --- a/include/uapi/linux/thermal.h
+> +++ b/include/uapi/linux/thermal.h
+> @@ -44,7 +44,10 @@ enum thermal_genl_attr {
+>         THERMAL_GENL_ATTR_CDEV_MAX_STATE,
+>         THERMAL_GENL_ATTR_CDEV_NAME,
+>         THERMAL_GENL_ATTR_GOV_NAME,
+> -
+> +       THERMAL_GENL_ATTR_CPU_CAPABILITY,
+> +       THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
+> +       THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
+> +       THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
+>         __THERMAL_GENL_ATTR_MAX,
+>  };
+>  #define THERMAL_GENL_ATTR_MAX (__THERMAL_GENL_ATTR_MAX - 1)
+> @@ -71,6 +74,7 @@ enum thermal_genl_event {
+>         THERMAL_GENL_EVENT_CDEV_DELETE,         /* Cdev unbound */
+>         THERMAL_GENL_EVENT_CDEV_STATE_UPDATE,   /* Cdev state updated */
+>         THERMAL_GENL_EVENT_TZ_GOV_CHANGE,       /* Governor policy changed  */
+> +       THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE,       /* CPU capability changed */
+>         __THERMAL_GENL_EVENT_MAX,
+>  };
+>  #define THERMAL_GENL_EVENT_MAX (__THERMAL_GENL_EVENT_MAX - 1)
+> --
+> 2.17.1
+>

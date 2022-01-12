@@ -2,67 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C3348CC2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 114A048CC8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357513AbiALTld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:41:33 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33996 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357383AbiALTkJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:40:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6ADEB820E0;
-        Wed, 12 Jan 2022 19:40:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9DB0EC36AEF;
-        Wed, 12 Jan 2022 19:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642016406;
-        bh=wSBLToXmBu1q0nRiptB0lPv7GNJ6wue0y7kQ2DaH7JI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=tNys5s5KENOCrczkCYEUb4uX2F0mMkybUpL/+SfLG2D/M+t1hbFKi4j50j7x5a9CU
-         Ef8uckMlEQY1z1jzk3vX9sAL4AzOdQE5TNZl9bKksEPcmnK4ZWg3TJtJFp7t1oiCmo
-         Uzc+9PWH2FZ0Ojw0jJvv+AqDFRjPIlx8OzOAbD9TOSeziHDQfIRFw7EPuPXgKh9LF6
-         6ZEI1agWzQBSoRe7mD67v9PXbsaT/FByqdmaiyZFj2jdLuvZSrIrPvcUb/LdDjiNae
-         h/zdnRjLei8hgz2Q3WhVe9j/iHc/TSYHdqK3AaQt2afRV2eeIDNU0B52pH/ObK1hxP
-         y/1+zW1zNUNBg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8C202F60796;
-        Wed, 12 Jan 2022 19:40:06 +0000 (UTC)
-Subject: Re: [GIT PULL] SPDX update for 5.17-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yd7etLWYHrtjFRdq@kroah.com>
-References: <Yd7etLWYHrtjFRdq@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yd7etLWYHrtjFRdq@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/spdx.git tags/spdx-5.17-rc1
-X-PR-Tracked-Commit-Id: bc128349588d571b55bfec471a773e29cfcd2d73
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 81ff0be4b9e3bcfee022d71cf89d72f7e2ed41ba
-Message-Id: <164201640656.24328.9407358004484514665.pr-tracker-bot@kernel.org>
-Date:   Wed, 12 Jan 2022 19:40:06 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-spdx@vger.kernel.org
+        id S1357589AbiALTxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:53:14 -0500
+Received: from mail.z3ntu.xyz ([128.199.32.197]:33198 "EHLO mail.z3ntu.xyz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1356987AbiALTv6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 14:51:58 -0500
+Received: from localhost.localdomain (ip-213-127-106-2.ip.prioritytelecom.net [213.127.106.2])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 99ECDCDF9F;
+        Wed, 12 Jan 2022 19:42:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1642016544; bh=0kWYHyQ+FdQZVfHCIbfLblrDXNannTFucaCQYt2r6LQ=;
+        h=From:To:Cc:Subject:Date;
+        b=miax10sWCxLcvuPulMRI9I8OxkGClnhZ7on8fnVVyuxu3eLoIzlmYgDUW+CcsPSnK
+         Cz95AHMYXfk4vBg0yIPTahxcsi7xikZlNOJK59DxWJKpylDH8bAjfHzKVFpB2OfNoy
+         ookhq+C83s4UtZgJGkb6zXdZKvG7GFw/47b1tpAI=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, Amit Kucheria <amitk@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Zhang Rui <rui.zhang@intel.com>, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 00/15] Initial MSM8953 & Fairphone 3 support
+Date:   Wed, 12 Jan 2022 20:40:49 +0100
+Message-Id: <20220112194118.178026-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 12 Jan 2022 14:59:16 +0100:
+This series adds initial support for MSM8953 (and SDM632 which is based
+on MSM8953) and the Fairphone 3 smartphone.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/spdx.git tags/spdx-5.17-rc1
+Only relatively basic functionality is supported like storage, volume
+keys and USB.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/81ff0be4b9e3bcfee022d71cf89d72f7e2ed41ba
+There is currently close-to-mainline support for other components for
+this SoC including GPU, WiFi and audio, this series adds only basic
+support so that the other components can start getting upstreamed
+easier.
 
-Thank you!
+Luca Weiss (10):
+  dt-bindings: phy: qcom,qusb2: Document msm8953 compatible
+  phy: qcom-qusb2: Add compatible for MSM8953
+  dt-bindings: mfd: qcom,tcsr: Document msm8953 compatible
+  mfd: qcom-spmi-pmic: Add pm8953 compatible
+  dt-bindings: mmc: sdhci-msm: Add msm8953 compatible
+  dt-bindings: thermal: tsens: Add msm8953 compatible
+  dt-bindings: usb: qcom,dwc3: Add msm8953 compatible
+  dt-bindings: pinctrl: qcom: msm8953: allow gpio-reserved-ranges
+  dt-bindings: arm: qcom: Document sdm632 and fairphone,fp3 board
+  arm64: dts: qcom: sdm632: Add device tree for Fairphone 3
+
+Vladimir Lypak (5):
+  rpmsg: smd: Drop unnecessary condition for channel creation
+  arm64: dts: qcom: Add MSM8953 device tree
+  arm64: dts: qcom: Add PM8953 PMIC
+  arm64: dts: qcom: Add SDM632 device tree
+  arm64: dts: qcom: Add MSM8953+PM8953 device tree
+
+ .../devicetree/bindings/arm/qcom.yaml         |    6 +
+ .../bindings/mfd/qcom,spmi-pmic.txt           |    1 +
+ .../devicetree/bindings/mfd/qcom,tcsr.txt     |    1 +
+ .../devicetree/bindings/mmc/sdhci-msm.txt     |    1 +
+ .../bindings/phy/qcom,qusb2-phy.yaml          |    1 +
+ .../pinctrl/qcom,msm8953-pinctrl.yaml         |    2 +
+ .../bindings/thermal/qcom-tsens.yaml          |    1 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |    1 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi  |   50 +
+ arch/arm64/boot/dts/qcom/msm8953.dtsi         | 1337 +++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8953.dtsi          |   90 ++
+ .../boot/dts/qcom/sdm632-fairphone-fp3.dts    |  189 +++
+ arch/arm64/boot/dts/qcom/sdm632.dtsi          |  125 ++
+ drivers/phy/qualcomm/phy-qcom-qusb2.c         |    3 +
+ drivers/rpmsg/qcom_smd.c                      |    8 +-
+ 16 files changed, 1810 insertions(+), 7 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8953.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8953.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm632.dtsi
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.34.1
+

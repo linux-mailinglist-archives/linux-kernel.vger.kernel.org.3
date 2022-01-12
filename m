@@ -2,174 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE6048C230
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BACE48C234
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352491AbiALKYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 05:24:49 -0500
-Received: from outbound-smtp23.blacknight.com ([81.17.249.191]:45485 "EHLO
-        outbound-smtp23.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238224AbiALKYr (ORCPT
+        id S1352509AbiALK0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 05:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346668AbiALK0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 05:24:47 -0500
-Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp23.blacknight.com (Postfix) with ESMTPS id 878D2BED54
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:24:45 +0000 (GMT)
-Received: (qmail 12870 invoked from network); 12 Jan 2022 10:24:45 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.197.169])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 12 Jan 2022 10:24:45 -0000
-Date:   Wed, 12 Jan 2022 10:24:43 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when
- SD_NUMA spans multiple LLCs
-Message-ID: <20220112102443.GZ3366@techsingularity.net>
-References: <YbcEE/mgIAhWuS+A@BLR-5CG11610CF.amd.com>
- <20211213130131.GQ3366@techsingularity.net>
- <YbddCcGJUpcPc8nS@BLR-5CG11610CF.amd.com>
- <YbnW/vLgE8MmQopN@BLR-5CG11610CF.amd.com>
- <20211215122550.GR3366@techsingularity.net>
- <YbuGYtxRSqVkOdbj@BLR-5CG11610CF.amd.com>
- <20211220111243.GS3366@techsingularity.net>
- <CAKfTPtARUODOnL9X-X+09cCu_BeMbZsW9U=kHX2vrXor7Du6qQ@mail.gmail.com>
- <20220105104207.GV3366@techsingularity.net>
- <CAKfTPtBCdgKb7gBDoFo3ictVYhgQGcneHViEtYj8o=WVH3kTaA@mail.gmail.com>
+        Wed, 12 Jan 2022 05:26:04 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950A9C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:26:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bY2JSU8rJ+dPp80OKJVHcdzdjlnRjYlHBejREtlB6zg=; b=a7KRul1JWTSh1kjSCPmtTe5u3x
+        3NtK1XHXoiLuedeRkuwMaZT7uV/6wQN1JVbBjQM51QhE0PMKgctbeoMyeJGuGYlvfOKHU/fK+Zzlu
+        S/waPaWdgFrpwpSNDpQ78iSoaUkoHDOc+Qam2i+dZM6XdLqkDpBp2s2FU8mDjXHPJq+0CtAiG8pmm
+        kRab8T6kSl4D0OXhEeQsom6jEGaNgz7zzp8ueS1uORxsC6Ks52OAQaNABiw0ZGGwP5Lk/9doKatES
+        UXdoBOIJpdei9FGD7f753v8o/FBzvHPl0Av4vebquNV++o4fdxpcwlvg++3zVC1pfo8qg3eb+srVp
+        uhrMURdA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7apF-00413M-SV; Wed, 12 Jan 2022 10:25:54 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9B1E8300222;
+        Wed, 12 Jan 2022 11:25:53 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7752E20DD2CE1; Wed, 12 Jan 2022 11:25:53 +0100 (CET)
+Date:   Wed, 12 Jan 2022 11:25:53 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        lkp@lists.01.org, lkp@intel.com
+Subject: Re: [x86/entry_32]  aa93e2ad74:
+ BUG:soft_lockup-CPU##stuck_for#s![systemd-logind:#]
+Message-ID: <Yd6ssarpDknV1r9z@hirez.programming.kicks-ass.net>
+References: <20220106083523.GB32167@xsang-OptiPlex-9020>
+ <Yd1l0gInc4zRcnt/@hirez.programming.kicks-ass.net>
+ <Yd4u2rVVSdpEpwwM@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtBCdgKb7gBDoFo3ictVYhgQGcneHViEtYj8o=WVH3kTaA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <Yd4u2rVVSdpEpwwM@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 04:53:26PM +0100, Vincent Guittot wrote:
-> On Wed, 5 Jan 2022 at 11:42, Mel Gorman <mgorman@techsingularity.net> wrote:
-> >
-> > On Tue, Dec 21, 2021 at 06:13:15PM +0100, Vincent Guittot wrote:
-> > > > <SNIP>
-> > > >
-> > > > @@ -9050,9 +9054,9 @@ static bool update_pick_idlest(struct sched_group *idlest,
-> > > >   * This is an approximation as the number of running tasks may not be
-> > > >   * related to the number of busy CPUs due to sched_setaffinity.
-> > > >   */
-> > > > -static inline bool allow_numa_imbalance(int dst_running, int dst_weight)
-> > > > +static inline bool allow_numa_imbalance(int dst_running, int imb_numa_nr)
-> > > >  {
-> > > > -       return (dst_running < (dst_weight >> 2));
-> > > > +       return dst_running < imb_numa_nr;
-> > > >  }
-> > > >
-> > > >  /*
-> > > >
-> > > > <SNIP>
-> > > >
-> > > > @@ -9280,19 +9285,13 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
-> > > >         }
-> > > >  }
-> > > >
-> > > > -#define NUMA_IMBALANCE_MIN 2
-> > > > -
-> > > >  static inline long adjust_numa_imbalance(int imbalance,
-> > > > -                               int dst_running, int dst_weight)
-> > > > +                               int dst_running, int imb_numa_nr)
-> > > >  {
-> > > > -       if (!allow_numa_imbalance(dst_running, dst_weight))
-> > > > +       if (!allow_numa_imbalance(dst_running, imb_numa_nr))
-> > > >                 return imbalance;
-> > > >
-> > > > -       /*
-> > > > -        * Allow a small imbalance based on a simple pair of communicating
-> > > > -        * tasks that remain local when the destination is lightly loaded.
-> > > > -        */
-> > > > -       if (imbalance <= NUMA_IMBALANCE_MIN)
-> > > > +       if (imbalance <= imb_numa_nr)
-> > >
-> > > Isn't this always true ?
-> > >
-> > > imbalance is "always" < dst_running as imbalance is usually the number
-> > > of these tasks that we would like to migrate
-> > >
-> >
-> > It's not necessarily true. allow_numa_imbalanced is checking if
-> > dst_running < imb_numa_nr and adjust_numa_imbalance is checking the
-> > imbalance.
-> >
-> > imb_numa_nr = 4
-> > dst_running = 2
-> > imbalance   = 1
-> >
-> > In that case, imbalance of 1 is ok, but 2 is not.
+On Wed, Jan 12, 2022 at 01:28:58AM +0000, Sean Christopherson wrote:
+> On Tue, Jan 11, 2022, Peter Zijlstra wrote:
+> > On Thu, Jan 06, 2022 at 04:35:23PM +0800, kernel test robot wrote:
+> > > 
+> > > 
+> > > Greeting,
+> > > 
+> > > FYI, we noticed the following commit (built with clang-14):
+> > > 
+> > > commit: aa93e2ad7464ffb90155a5ffdde963816f86d5dc ("x86/entry_32: Remove .fixup usage")
+> > > https://git.kernel.org/cgit/linux/kernel/git/tip/tip.git x86/core
+> > > 
+> > > in testcase: kernel-selftests
+> > > version: 
+> > > with following parameters:
+> > > 
+> > > 	group: x86
+> > > 
+> > 
+> > It would be very useful if this thing would also say which of the many
+> > x86 selftests fails... it appears to be: ldt_gdt_32.
+> > 
+> > The below fixes it, but I'm still not entirely sure what the actual
+> > problem is, although Andy did find a bug in that the exception handler
+> > should do: *(ss:esp) = 0, adding ss-base (using insn_get_seg_base())
+> > doesn't seem to cure things.
 > 
-> I don't catch your example. Why is imbalance = 2 not ok in your
-> example above ? allow_numa_imbalance still returns true (dst-running <
-> imb_numa_nr) and we still have imbalance <= imb_numa_nr
+> Because I was curious...
 > 
+> The issue is that PARANOID_EXIT_TO_KERNEL_MODE in the handle_exception_return
+> path overwrites the entry stack data with the task stack data, restoring the "bad"
+> segment value.
 
-At the time I wrote it, the comparison looked like < instead of <=.
+Oh gawd... that's terrible, and yes, that now makes perfect sense.
 
-> Also the name dst_running is quite confusing; In the case of
-> calculate_imbalance, busiest->nr_running is passed as dst_running
-> argument. But the busiest group is the src not the dst of the balance
-> 
-> Then,  imbalance < busiest->nr_running in load_balance because we try
-> to even the number of task running in each groups without emptying it
-> and allow_numa_imbalance checks that dst_running < imb_numa_nr. So we
-> have imbalance < dst_running < imb_numa_nr
-> 
-
-But either way, you have a valid point. The patch as-is is too complex
-and doing too much and is failing to make progress as a result. I'm going
-to go back to the drawing board and come up with a simpler version that
-adjusts the cut-off depending on topology but only allows an imbalance
-of NUMA_IMBALANCE_MIN and tidy up the inconsistencies.
-
-> > This?
-> >
-> >                                  * The 25% imbalance is an arbitrary cutoff
-> >                                  * based on SMT-2 to balance between memory
-> >                                  * bandwidth and avoiding premature sharing
-> >                                  * of HT resources and SMT-4 or SMT-8 *may*
-> >                                  * benefit from a different cutoff. nr_llcs
-> >                                  * are accounted for to mitigate premature
-> >                                  * cache eviction due to multiple tasks
-> >                                  * using one cache while a sibling cache
-> >                                  * remains relatively idle.
-> >
-> > > For example, why is it better than just 25% of the LLC weight ?
-> >
-> > Because lets say there are 2 LLCs then an imbalance based on just the LLC
-> > weight might allow 2 tasks to share one cache while another is idle. This
-> > is the original problem whereby the vanilla imbalance allowed multiple
-> > LLCs on the same node to be overloaded which hurt workloads that prefer
-> > to spread wide.
-> 
-> In this case, shouldn't it be (llc_weight >> 2) * nr_llcs to fill each
-> llc up to 25%  ? instead of dividing by nr_llcs
-> 
-> As an example, you have
-> 1 node with 1 LLC with 128 CPUs will get an imb_numa_nr = 32
-> 1 node with 2 LLC with 64 CPUs each will get an imb_numa_nr = 8
-> 1 node with 4 LLC with 32 CPUs each will get an imb_numa_nr = 2
-> 
-> sd->imb_numa_nr is used at NUMA level so the more LLC you have the
-> lower imbalance is allowed
-> 
-
-The more LLCs, the lower the threshold where imbalances is allowed is
-deliberate given that the motivating problem was that embarassingly
-parallel problems on AMD suffer due to overloading some LLCs while
-others remain idle.
-
--- 
-Mel Gorman
-SUSE Labs
+However did you find that?

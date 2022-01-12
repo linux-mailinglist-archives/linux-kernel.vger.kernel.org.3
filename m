@@ -2,59 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B125848CD65
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A5E48CD67
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbiALVEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 16:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbiALVEb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 16:04:31 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC6EC06173F;
-        Wed, 12 Jan 2022 13:04:30 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id b13so15208837edn.0;
-        Wed, 12 Jan 2022 13:04:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ThSThbm8jqTBBe76oP5BA5XU5DKB6LNTnemsUXlyd9k=;
-        b=e6898xcMaQpjMVu+ZGiATJxhdy5xqw7eQ1tsd9QfsGmeOLvoQu2tGNeo40hMWRj9sZ
-         3N4NVXyMrBwJVxvubIpae0FIqxuwcC6NlR2SgrzCO8Spde1xmE+xii4OBhZ4iKwe93Nv
-         KwoD3Bn7iu0d4l3aZSQ+wheICK6VXMdYWoN6R3owGdKlMfpX+A8Zi/Woz6RpxBdxW5P+
-         VdPPlPSKi/GPNoWRzbyqp0e4bLB57lN++NwZeQocLGgcL+agnVKHctOkR+33s7wVUrY3
-         JQryFRtYfd8zj49HbqwmfG1GFcH80QO62uV6oIxfvJXG1r2HrN3cJ/noWYT8CZyUKBsj
-         T+Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ThSThbm8jqTBBe76oP5BA5XU5DKB6LNTnemsUXlyd9k=;
-        b=zhK19hUId0wpxhO5M7jC80j9k+4XMQaxITqhTzz67UYEV80sF3j5wMjAjb9ic3W1nt
-         TQ7YTG81MAch2R89EdySsptjXywITkTnP9mAE4gp9CK9JCEEc1/t6EO2Fes8RUFmzHLJ
-         KfBLXhbWUiDLsLJ4FttNjkTwY0p0m+/uBqG0d2PJYNNKCUH45+oE/HoDCNtEuteYiIeD
-         D8ENdrYGjrvRPX0TkXlEqCotyMWOkdtcJMs45/CPbMKEFoyXODbfaX+XeE8XI/RMhNzZ
-         y3bhRQoZvNzD/aMLJLmtdk9lK3xC6fplDw45Sz9pukwVPpYy0cse6HtGpsJel4q6Kgai
-         4Lfg==
-X-Gm-Message-State: AOAM533eN1TCaBYLX9sUVZhURXvsCiGYw4nuLmDJW/Ey0j0PC8uNrlyK
-        Cjl8wlZO+J+7nltOV82ux4U=
-X-Google-Smtp-Source: ABdhPJy8iKKrvRUJo/qE1rl6DMNo8JFJCgqk8SUjzVg1qL4iuYXL8BFC7QikelgLdaetoBZWsx9FFA==
-X-Received: by 2002:a17:906:274f:: with SMTP id a15mr1171154ejd.492.1642021469427;
-        Wed, 12 Jan 2022 13:04:29 -0800 (PST)
-Received: from fedora.domain.name ([95.70.245.190])
-        by smtp.gmail.com with ESMTPSA id o8sm333930edc.85.2022.01.12.13.04.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 13:04:29 -0800 (PST)
-From:   ozkanonur <onurozkan.dev@gmail.com>
-To:     trenn@suse.com
-Cc:     shuah@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ozkanonur <onurozkan.dev@gmail.com>
-Subject: [PATCH v4] tools/power/cpupower/{ToDo => TODO}: Rename the todo file
-Date:   Thu, 13 Jan 2022 00:04:21 +0300
-Message-Id: <20220112210421.37254-1-onurozkan.dev@gmail.com>
+        id S231236AbiALVFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 16:05:04 -0500
+Received: from mga03.intel.com ([134.134.136.65]:64760 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231314AbiALVEv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 16:04:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642021491; x=1673557491;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dkjECNbSTjX/KrfO+kBf5SXgsG44C9iiZ1r0ReJlwcM=;
+  b=bQhJj5m5svsHrCWKlAUUisrfIWrqO5qcWOHkXPPDjrB1UNed3mbfvezk
+   Q9DpfxvijbmM+8k/yqqMmbnogoG35Cl4fg89oh+l72KH2ex5KMC8tz+5o
+   fNDFmRLgQ2OxfAB81mDbiKLvqL0jkuO2rFooPNKVBKIYVcTkE/3a9BkRD
+   H1CIZFg52x9mg3ulhWUe6wegUw+uQxCz96Y5ofgqKhkc19oyZSQ8sLaWX
+   t/Bii4iAHqoQaGposWMX9a5V9JZmmmDYcD/ZlKzAxJSQ9k5pDg8jqcTby
+   gx/H3u88FiIqwm743JKHL7wmBNcEfWv7le5yy/YMvqXOi4/b2b3/fI8Wv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="243807729"
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="243807729"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 13:04:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="613716665"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Jan 2022 13:04:47 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 10984120; Wed, 12 Jan 2022 23:04:59 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v1 1/1] pinctrl: Place correctly CONFIG_PINCTRL_STMFX in the Makefile
+Date:   Wed, 12 Jan 2022 23:04:56 +0200
+Message-Id: <20220112210456.29375-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,19 +51,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Renamed the to-do file to 'TODO' instead of 'ToDo' to
-comply with the naming standard.
+Keep Makefile entries ordered in the same way as Kconfig ones.
 
-Signed-off-by: ozkanonur <onurozkan.dev@gmail.com>
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- tools/power/cpupower/{ToDo => TODO} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename tools/power/cpupower/{ToDo => TODO} (100%)
+ drivers/pinctrl/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/power/cpupower/ToDo b/tools/power/cpupower/TODO
-similarity index 100%
-rename from tools/power/cpupower/ToDo
-rename to tools/power/cpupower/TODO
+diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+index 91665076e013..f64d29f614ec 100644
+--- a/drivers/pinctrl/Makefile
++++ b/drivers/pinctrl/Makefile
+@@ -42,9 +42,9 @@ obj-$(CONFIG_PINCTRL_PISTACHIO)	+= pinctrl-pistachio.o
+ obj-$(CONFIG_PINCTRL_RK805)	+= pinctrl-rk805.o
+ obj-$(CONFIG_PINCTRL_ROCKCHIP)	+= pinctrl-rockchip.o
+ obj-$(CONFIG_PINCTRL_SINGLE)	+= pinctrl-single.o
+-obj-$(CONFIG_PINCTRL_STMFX) 	+= pinctrl-stmfx.o
+ obj-$(CONFIG_PINCTRL_ST) 	+= pinctrl-st.o
+ obj-$(CONFIG_PINCTRL_STARFIVE)	+= pinctrl-starfive.o
++obj-$(CONFIG_PINCTRL_STMFX) 	+= pinctrl-stmfx.o
+ obj-$(CONFIG_PINCTRL_SX150X)	+= pinctrl-sx150x.o
+ obj-$(CONFIG_PINCTRL_TB10X)	+= pinctrl-tb10x.o
+ obj-$(CONFIG_PINCTRL_THUNDERBAY) += pinctrl-thunderbay.o
 -- 
 2.34.1
 

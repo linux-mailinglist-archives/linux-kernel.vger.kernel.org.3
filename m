@@ -2,87 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9285448CCAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4896048CCB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357226AbiALT5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:57:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357910AbiALT4P (ORCPT
+        id S1357355AbiALUB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 15:01:27 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33258 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357188AbiALUAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:56:15 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDB8C06173F;
-        Wed, 12 Jan 2022 11:56:15 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id o3so7279254pjs.1;
-        Wed, 12 Jan 2022 11:56:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dNkZ0++TsRPpQCPTOH0l2U03MNR7CYedQf/ILhGHDCQ=;
-        b=FVHowSxzxH0lM5OYHTtnXmPdNNn6TwZTY9vMhwV3Kua4R5qH9ahghCKP7BgNpG7w93
-         rInTEEox+Pdc4dBwQGdiXhYhIEZ0v6pTLbB4RUTpa8XAsxmzFxZ/yZj+CLIEibwO0QMr
-         2alqRU8IwcePCT7PkUZXlrYLqAhIWA38/d9t/nQottPSJeyK9RWnFtx4SHVAr4y83d6Z
-         ASGMC5Lca330QH44LwphBzPdIG13gOPVHf5k9fz+hl5kmRZdLBa3ZFmU+aqINGja6WkA
-         auzGsDNGemwunjO2nW0VnddXmOXJoo/IsXbtnEISwViLWwN7svOrw8hwgNYTRCQuyaQ1
-         Voig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=dNkZ0++TsRPpQCPTOH0l2U03MNR7CYedQf/ILhGHDCQ=;
-        b=EaMTdGUW1BpH0R9lE2+Q+8AVZf4HNTqtC+d+6aqV5gRxEMsHt/vk4qhGliR7dLvDoZ
-         AsxLen2xUaShMOATmnadc8njxs6DWlV9mypUM5rx5dXchHeH9xESsbc8rDM5IaAltGim
-         BitAG0042a/0h99uoszuCmYSQcN+nAjBAstfRpiIwtAbmw9K4cM/UN+2zlDazUHse8v4
-         z/xiLFyiiwhNIB95Rqao66jEX/Mz5NFPT5Qdb3SZ85MOeJeEa4A3a2rZ6XtFkKdk3dOv
-         iiFzDRd5IImJwuH53KjWnnzB5l7sfGfzG+DU44TSYmeEwlsgJ/eL4/XMam8buSYzCRQ/
-         12oA==
-X-Gm-Message-State: AOAM533MbM+kpnHrheDe75eey3uaa+AGSyPnrJeMsT/viCkoz/zRY7vn
-        0kz0oXX+/Y0kvZST2D54+uQ=
-X-Google-Smtp-Source: ABdhPJyx1U13I9gL8tC0uj7krseZ+9lkdrgGXHckKEIfuGjNxFyzIsau5hYc+VBvIdDONmEyyifNuA==
-X-Received: by 2002:a17:902:c711:b0:14a:3335:acc6 with SMTP id p17-20020a170902c71100b0014a3335acc6mr1020484plp.123.1642017375124;
-        Wed, 12 Jan 2022 11:56:15 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id lk10sm7440106pjb.20.2022.01.12.11.56.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 11:56:14 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 12 Jan 2022 09:56:13 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] cgroup: Fix cgroup_can_fork() and
- cgroup_post_fork() kernel-doc comment
-Message-ID: <Yd8yXXFIU102O/dy@slm.duckdns.org>
-References: <20220108063812.50370-1-yang.lee@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220108063812.50370-1-yang.lee@linux.alibaba.com>
+        Wed, 12 Jan 2022 15:00:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57F8360B01
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 20:00:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5993C36AE9;
+        Wed, 12 Jan 2022 20:00:34 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.95)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1n7jnN-003EMS-9g;
+        Wed, 12 Jan 2022 15:00:33 -0500
+Message-ID: <20220112195843.098894945@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Wed, 12 Jan 2022 14:58:43 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>
+Subject: [for-next][PATCH 00/14] tracing: Rebase for update of v9 of RTLA tool
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 08, 2022 at 02:38:12PM +0800, Yang Li wrote:
-> Add the description of @kargs in cgroup_can_fork() and
-> cgroup_post_fork() kernel-doc comment to remove warnings found
-> by running scripts/kernel-doc, which is caused by using 'make W=1'.
-> 
-> kernel/cgroup/cgroup.c:6235: warning: Function parameter or member
-> 'kargs' not described in 'cgroup_can_fork'
-> kernel/cgroup/cgroup.c:6296: warning: Function parameter or member
-> 'kargs' not described in 'cgroup_post_fork'
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Since I pulled in version 8 of the rtla tool instead of the most recent
+v9 (which was the one I last reviewed, but somehow pulled in the older
+version), I'm rebasing to v9. This is not an issue as none of the
+patches actually touch kernel code. Only tools and Documentation.
 
-Applied to cgroup/for-5.18.
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+for-next
 
-Thanks.
+Head SHA1: fa7e5a516e8ca0740ad1563b33d24b430dc31f77
 
--- 
-tejun
+
+Daniel Bristot de Oliveira (14):
+      rtla: Real-Time Linux Analysis tool
+      rtla: Helper functions for rtla
+      rtla: Add osnoise tool
+      rtla/osnoise: Add osnoise top mode
+      rtla/osnoise: Add the hist mode
+      rtla: Add timerlat tool and timelart top mode
+      rtla/timerlat: Add timerlat hist mode
+      rtla: Add Documentation
+      rtla: Add rtla osnoise man page
+      rtla: Add rtla osnoise top documentation
+      rtla: Add rtla osnoise hist documentation
+      rtla: Add rtla timerlat documentation
+      rtla: Add rtla timerlat top documentation
+      rtla: Add rtla timerlat hist documentation
+
+----
+ Documentation/tools/rtla/Makefile                  |  41 +
+ Documentation/tools/rtla/common_appendix.rst       |  12 +
+ Documentation/tools/rtla/common_hist_options.rst   |  23 +
+ Documentation/tools/rtla/common_options.rst        |  28 +
+ .../tools/rtla/common_osnoise_description.rst      |   8 +
+ .../tools/rtla/common_osnoise_options.rst          |  17 +
+ .../tools/rtla/common_timerlat_description.rst     |  10 +
+ .../tools/rtla/common_timerlat_options.rst         |  16 +
+ Documentation/tools/rtla/common_top_options.rst    |   3 +
+ Documentation/tools/rtla/rtla-osnoise-hist.rst     |  66 ++
+ Documentation/tools/rtla/rtla-osnoise-top.rst      |  61 ++
+ Documentation/tools/rtla/rtla-osnoise.rst          |  59 ++
+ Documentation/tools/rtla/rtla-timerlat-hist.rst    | 106 +++
+ Documentation/tools/rtla/rtla-timerlat-top.rst     | 145 ++++
+ Documentation/tools/rtla/rtla-timerlat.rst         |  57 ++
+ Documentation/tools/rtla/rtla.rst                  |  48 ++
+ tools/tracing/rtla/Makefile                        | 102 +++
+ tools/tracing/rtla/README.txt                      |  36 +
+ tools/tracing/rtla/src/osnoise.c                   | 875 +++++++++++++++++++++
+ tools/tracing/rtla/src/osnoise.h                   |  91 +++
+ tools/tracing/rtla/src/osnoise_hist.c              | 801 +++++++++++++++++++
+ tools/tracing/rtla/src/osnoise_top.c               | 579 ++++++++++++++
+ tools/tracing/rtla/src/rtla.c                      |  87 ++
+ tools/tracing/rtla/src/timerlat.c                  |  72 ++
+ tools/tracing/rtla/src/timerlat.h                  |   4 +
+ tools/tracing/rtla/src/timerlat_hist.c             | 822 +++++++++++++++++++
+ tools/tracing/rtla/src/timerlat_top.c              | 618 +++++++++++++++
+ tools/tracing/rtla/src/trace.c                     | 192 +++++
+ tools/tracing/rtla/src/trace.h                     |  27 +
+ tools/tracing/rtla/src/utils.c                     | 433 ++++++++++
+ tools/tracing/rtla/src/utils.h                     |  56 ++
+ 31 files changed, 5495 insertions(+)
+ create mode 100644 Documentation/tools/rtla/Makefile
+ create mode 100644 Documentation/tools/rtla/common_appendix.rst
+ create mode 100644 Documentation/tools/rtla/common_hist_options.rst
+ create mode 100644 Documentation/tools/rtla/common_options.rst
+ create mode 100644 Documentation/tools/rtla/common_osnoise_description.rst
+ create mode 100644 Documentation/tools/rtla/common_osnoise_options.rst
+ create mode 100644 Documentation/tools/rtla/common_timerlat_description.rst
+ create mode 100644 Documentation/tools/rtla/common_timerlat_options.rst
+ create mode 100644 Documentation/tools/rtla/common_top_options.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise-hist.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise-top.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat-hist.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat-top.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat.rst
+ create mode 100644 Documentation/tools/rtla/rtla.rst
+ create mode 100644 tools/tracing/rtla/Makefile
+ create mode 100644 tools/tracing/rtla/README.txt
+ create mode 100644 tools/tracing/rtla/src/osnoise.c
+ create mode 100644 tools/tracing/rtla/src/osnoise.h
+ create mode 100644 tools/tracing/rtla/src/osnoise_hist.c
+ create mode 100644 tools/tracing/rtla/src/osnoise_top.c
+ create mode 100644 tools/tracing/rtla/src/rtla.c
+ create mode 100644 tools/tracing/rtla/src/timerlat.c
+ create mode 100644 tools/tracing/rtla/src/timerlat.h
+ create mode 100644 tools/tracing/rtla/src/timerlat_hist.c
+ create mode 100644 tools/tracing/rtla/src/timerlat_top.c
+ create mode 100644 tools/tracing/rtla/src/trace.c
+ create mode 100644 tools/tracing/rtla/src/trace.h
+ create mode 100644 tools/tracing/rtla/src/utils.c
+ create mode 100644 tools/tracing/rtla/src/utils.h

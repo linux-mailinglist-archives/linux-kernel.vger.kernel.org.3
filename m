@@ -2,118 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2583048BECA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:03:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E28FA48BEDA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351095AbiALHDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:03:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbiALHDw (ORCPT
+        id S1351135AbiALHKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:10:44 -0500
+Received: from forward500p.mail.yandex.net ([77.88.28.110]:57306 "EHLO
+        forward500p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237258AbiALHKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:03:52 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B3AC06173F;
-        Tue, 11 Jan 2022 23:03:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=B7oR5l7h0xuDP9JkX9UDFLPOyakW7jPGUaFIedqZLKM=; b=ALPDjET2IPPnr29smamizRIwBR
-        MWLZ7saJYUtW5+15kJkTnMhfYXVh2fhKAmh8368gqR/G/8+oY/51j4QzGpE/TGxslgvC/OUVfTa8b
-        sme1cQBHlG6P8ik1cH9uNbueJLsd9FPAzKfUcnavdIo4pz1dnM24GG28AuWihddIdcBe19XTlspV5
-        78GlkHzWt/PlrvrJt+TjNyHj/9RjB0wezmSZrrSGnJWKvstGg0Ur5Ao9YojceyFghaVF/vnZ1Q9Ap
-        oWib4BV6bYLujt7cMleA2MACmgN2iT1JKL7M4r4DRZatw2l9p5KGGm8WFmQRK+ul7OVkZqg5nYrLq
-        ku3LD3lQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7Xfe-000kn9-PH; Wed, 12 Jan 2022 07:03:47 +0000
-Message-ID: <da39d895-61fc-5ca2-64e0-e31e20e98245@infradead.org>
-Date:   Tue, 11 Jan 2022 23:03:41 -0800
+        Wed, 12 Jan 2022 02:10:43 -0500
+X-Greylist: delayed 329 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Jan 2022 02:10:42 EST
+Received: from vla1-765d064640cd.qloud-c.yandex.net (vla1-765d064640cd.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:90b:0:640:765d:646])
+        by forward500p.mail.yandex.net (Yandex) with ESMTP id 82F74F01FC4;
+        Wed, 12 Jan 2022 10:05:10 +0300 (MSK)
+Received: from vla5-445dc1c4c112.qloud-c.yandex.net (vla5-445dc1c4c112.qloud-c.yandex.net [2a02:6b8:c18:3609:0:640:445d:c1c4])
+        by vla1-765d064640cd.qloud-c.yandex.net (mxback/Yandex) with ESMTP id w9vdM0OdSv-58fGQiIq;
+        Wed, 12 Jan 2022 10:05:10 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1641971110;
+        bh=kKmRzQlK4bLFeiYuB/aCX0zAC+JTU5I8gbqx8qA+gHg=;
+        h=In-Reply-To:Subject:To:From:References:Date:Message-ID:Cc;
+        b=Mn17IXGRLQOkkIqwJLI9ciRUPgpK5/7u/bGrGalwkviqe45uzgL68DFODGFocQu0c
+         Nb84pfyTZZBOdevDAEHVFZfPtYqbmHarF9gmuKxAaq8P8B2W39FQms/V6jNtXMIk8R
+         Yk4x54Nzw/uY3nw0wZ+PD3V81BDHT+nVFbcgO3Kg=
+Authentication-Results: vla1-765d064640cd.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
+Received: by vla5-445dc1c4c112.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id FiNekykY1X-57PGSYXd;
+        Wed, 12 Jan 2022 10:05:07 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 2
+Date:   Wed, 12 Jan 2022 10:05:06 +0300
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux <linux@yadro.com>, Nikita Shubin <n.shubin@yadro.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Song Liu <song@kernel.org>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        linux-perf-users@vger.kernel.org,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 0/1] perf tools: Add 'm' event modifier for counting
+Message-ID: <20220112100506.12bc4e89@redslave.neermore.group>
+In-Reply-To: <CAOnJCUJ6JNY9eWrPhGi3XK3omDwXhM37oimsZoqxbOP_f7vUog@mail.gmail.com>
+References: <20220111142054.18733-1-nikita.shubin@maquefel.me>
+        <B6E7919C-9414-4CC1-BB86-7D358085CECD@jrtc27.com>
+        <CAOnJCUJ6JNY9eWrPhGi3XK3omDwXhM37oimsZoqxbOP_f7vUog@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] firmware_loader: simplfy builtin or module check
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Borislav Petkov <bp@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>
-References: <20220112023416.215644-1-mcgrof@kernel.org>
- <3e721c69-afa9-6634-2e52-e9a9c2a89372@infradead.org>
- <CAK7LNARiDFpphJrhk5q00d5sSPWAQ2mMLu8Z2YP0Xwk=3WGt3w@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAK7LNARiDFpphJrhk5q00d5sSPWAQ2mMLu8Z2YP0Xwk=3WGt3w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Atish!
 
+On Tue, 11 Jan 2022 10:45:56 -0800
+Atish Patra <atishp@atishpatra.org> wrote:
 
-On 1/11/22 22:56, Masahiro Yamada wrote:
-> On Wed, Jan 12, 2022 at 3:37 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->>
->>
->> On 1/11/22 18:34, Luis Chamberlain wrote:
->>> The existing check is outdated and confuses developers. Use the
->>> already existing IS_ENABLED() defined on kconfig.h which makes
->>> the intention much clearer.
->>>
->>> Reported-by: Borislav Petkov <bp@alien8.de>
->>> Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
->>
->> Acked-by: Randy Dunlap <rdunlap@infradead.org>
->>
->> Thanks.
->>
->>> ---
->>>  include/linux/firmware.h | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/include/linux/firmware.h b/include/linux/firmware.h
->>> index 3b057dfc8284..fa3493dbe84a 100644
->>> --- a/include/linux/firmware.h
->>> +++ b/include/linux/firmware.h
->>> @@ -34,7 +34,7 @@ static inline bool firmware_request_builtin(struct firmware *fw,
->>>  }
->>>  #endif
->>>
->>> -#if defined(CONFIG_FW_LOADER) || (defined(CONFIG_FW_LOADER_MODULE) && defined(MODULE))
->>
->> The "defined(MODULE)" part wasn't needed here. :)
+> On Tue, Jan 11, 2022 at 6:29 AM Jessica Clarke <jrtc27@jrtc27.com>
+> wrote:
+> >
+> > On 11 Jan 2022, at 14:20, Nikita Shubin <nikita.shubin@maquefel.me>
+> > wrote:  
+> > >
+> > > From: Nikita Shubin <n.shubin@yadro.com>
+> > >
+> > > This patch is a proposal to add Machine Mode modifier that is
+> > > currently available only for RISC-V for perf tool.
+> > >
+> > > We don't currently have a level that is lower than kernel, so i
+> > > don't see we can reuse something existing for this purpose.
+> > >  
 > 
-> 
-> 
-> It _is_ needed.
-> 
-> This seems to be equivalent to IS_REACHABLE(CONFIG_FW_LOADER),
-> not IS_ENABLE(CONFIG_FW_LOADER).
+> Thanks for a quick turnaround with a working patch!!
 > 
 
-Hm, /me confused.
+Nothing please - your RISC-V PMU series as well as your work on
+sscofpmf extension are great, so i am glad i can help you with that.
 
-How can CONFIG_FW_LOADER_MODULE be =y when MODULE is not defined?
+> However, the use case can be applied to other arch as well. It would
+> be good to classify this
+> as excluding "firmware" events instead of machine mode which is a
+> RISC-V terminology.
+
+That's a bit confusing cause, "firmware" resides in M-Mode in RISC-V
+case and it's another level of privilege, i don't think it's possible
+to exclude firmware that is on the same level as kernel.
+
+For example we have PSCI in ARM, which falls in "firmware" category, in
+my option, but we can't distinguish from other stuff on same privilege
+level. 
+
+> Ofcourse, the current documentation should indicate that this option
+> is only useful
+> for RISC-V right now.
+> 
+> I would like to understand if this idea is appealing to the broader
+> community.
+
+Yes - i would like to hear if adding event modifier is a way to go or
+not.
 
 > 
-> 
->>
->>> +#if IS_ENABLED(CONFIG_FW_LOADER)
->>>  int request_firmware(const struct firmware **fw, const char *name,
->>>                    struct device *device);
->>>  int firmware_request_nowarn(const struct firmware **fw, const char *name,
->>
->> --
->> ~Randy
+> > > The exclude_machine bit seems harmless to as no one will proccess
+> > > it apart of riscv.  
+> >
+> > Armv8 has equivalent bits in PMEVTYPER<n>_EL0 and PMCCFILTR_EL0 for
+> > EL-based filtering, which includes filtering EL3.
+> >
+> > Jess
+> >  
+> > > Patch depends on Atish Patra PMU series:
+> > > https://lwn.net/Articles/879905/
+> > > + some modifications to pass execlude event to SBI PMU extension
+> > >
+> > > Tested with qemu.
+> > >
+> > > Nikita Shubin (1):
+> > >  perf tools: Add 'm' event modifier for counting machine
+> > >
+> > > include/uapi/linux/perf_event.h        |  3 ++-
+> > > tools/include/uapi/linux/perf_event.h  |  3 ++-
+> > > tools/perf/Documentation/perf-list.txt |  1 +
+> > > tools/perf/tests/parse-events.c        | 18 ++++++++++++++++++
+> > > tools/perf/util/evsel.c                |  4 +++-
+> > > tools/perf/util/parse-events.c         | 18 +++++++++++++-----
+> > > tools/perf/util/parse-events.l         |  2 +-
+> > > 7 files changed, 40 insertions(+), 9 deletions(-)
+> > >
+> > > --
+> > > 2.31.1
+> > >
+> > >
+> > > _______________________________________________
+> > > linux-riscv mailing list
+> > > linux-riscv@lists.infradead.org
+> > > http://lists.infradead.org/mailman/listinfo/linux-riscv  
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv  
 > 
 > 
 > 
 
--- 
-~Randy

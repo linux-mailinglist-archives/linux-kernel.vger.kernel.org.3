@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB12C48BD93
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 04:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F90C48BD99
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 04:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349105AbiALDPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 22:15:10 -0500
-Received: from out162-62-57-210.mail.qq.com ([162.62.57.210]:42933 "EHLO
-        out162-62-57-210.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345682AbiALDPI (ORCPT
+        id S1349134AbiALDSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 22:18:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348321AbiALDSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 22:15:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1641957304;
-        bh=yD1+HnweGuASmWcBMTr/tuOJ+2830tkElTWGis7dnco=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ZWlAp/xyaFhQe8YgV4u2SCwjsApcuIaYoTAfm9F5PC9PMFbbvxmEhVQ7IHhvfzqRW
-         FrH/GUndns8ONqyEIFznHNHh4YboZaF0ywfG5LAlifaxg057ObfExWcrif5OeWw/7o
-         yH+1DkyfR0Srh+7eFdqs97+Awt5eEI9eE08VUWF8=
-Received: from fedora.. ([119.32.47.91])
-        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
-        id 3711B294; Wed, 12 Jan 2022 11:13:49 +0800
-X-QQ-mid: xmsmtpt1641957233t4gn71klx
-Message-ID: <tencent_A92DC943F79DB360AE14672BB749BFE08A05@qq.com>
-X-QQ-XMAILINFO: Nn+88S7+9wlcKPHjr17hA4IryKRVfFFdIl4J/dQgzAR928cTS85t7LVkbZBZpe
-         MPyKdLNe2s8ki1cjpjJEHN8LgOlfx9kzJmlGWuZQ7rZ7xXFsQ82fGi5+wYYQI7qSL7JSbhh5O0VH
-         HA30dzKay8hNXsEMc6Ht57HwY5q4zqwwthwaLTU0PldvjIj29KxYHzwxbGtQMiftVMvoMCuc8hv8
-         eg11XjsVstzN+yOpSKcItZ1UqDUJ0fML1HntoB3mLx6xiXwGheMfjoE6LfAh81KREx20a0pUTjj9
-         V/jC0aolwFzZ5frC43/vdyuytFRC6WBWJb7nMBzU97Ubm/BJZbNuvUvBxGH3RNVIud0lWv08xiVO
-         ojfB0tozJHFIe51pJYlhdHgrXOANN7CKSoQuqB6Rr8gs6te9233nv6H1tfZw/aBjRRaqjY62zr1U
-         D0juHTGsieLh6KmCXmqubzh9m+aVNgqDPheN1RokcVSLvZpnfrlDqlDd58IvEPRL1yR5VkGfvKEc
-         2zSVw2+6hVs4Au3HlamuNtqi3itpipFx5fv7dW1G20GBR5JGXKAcof7mT0u388p66ZRwibbce2+S
-         mnES+g8dIIx/+nrI42GuBZdNGrIpzAK/wfjCfnK9pxG8mE2LYLyac6+T4xiKFAZpor9cNGrIm1xl
-         bS3q49wvwDenV8IoJFRkYHzfw1EdNwdUqSUeOd/ZTU81NwGYw4Pa7lGAzd2UVvOF94nb392EubaM
-         rc8Box4W0YYZ2mvlwDJw3SSrAt3W38eLHe2ZuX874kriEInfc3S/ElEyy74MXRey/b1SCvkiOTPB
-         K/2TY+fBWZiBePyXgrGOE5WKEivoC7jz/x+QtjhZf1CKkgBOLj8t4oBkMfzQeV4h1uGIpUhJzQ1j
-         DhkFCW4Yo0
-From:   Conley Lee <conleylee@foxmail.com>
-To:     mripard@kernel.org, wens@csie.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Conley Lee <conleylee@foxmail.com>
-Subject: [PATCH v3 2/2] sunxi.yaml: add HAOYU Electronics Marsboard A20
-Date:   Wed, 12 Jan 2022 11:13:47 +0800
-X-OQ-MSGID: <20220112031347.2492813-3-conleylee@foxmail.com>
+        Tue, 11 Jan 2022 22:18:41 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F4FC06173F;
+        Tue, 11 Jan 2022 19:18:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=PVoVl6PR0n0Bk1pat/DgH/rPJNu9igik/VHMYACb0+o=; b=CckRcoL5Jw27ipPDuFB+UJdn4N
+        N1MSn2QxzYK7eZ3nNjsYBhbnVFcTWIEn1WL2ZUDUyg0Okj9x19FK4kV3Vi+9a6qEg9DkS1rcG5L9O
+        HEAc7QN6mOzkJgUQ8zCs04XZCMQNvFkDT2Iho9GhEarT0h/gR5UUSX3tdtCA4nymcn7I2bXj5yMJ/
+        Dr4yvhZQhpdRIcOEySBaIo1rw1bFmaTxMLJ7guz9wQ4ECxON8OlgXfJtj1BeF8bT3a2CDRfvH81wL
+        WQIPbNgtyTXj3cXBOt0AKPK4RLV8YtdUoZoTI+nQBZaEvOq7xk4P1sYmpJZfAzSUjG+tyISlOtq+5
+        bB7/OAwA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7U9o-0010pv-Ul; Wed, 12 Jan 2022 03:18:40 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Cc:     jeyu@kernel.org, Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH] MAINTAINERS: add mailing lists for kmod and modules
+Date:   Tue, 11 Jan 2022 19:18:37 -0800
+Message-Id: <20220112031837.241476-1-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220112031347.2492813-1-conleylee@foxmail.com>
-References: <tencent_DC7B4D416B69D6D6789356010B5B9647C606@qq.com>
- <20220112031347.2492813-1-conleylee@foxmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add haoyu,a20-marsboard bindings
+Add the linux-modules list for kmod and linux modules changes.
 
-Signed-off-by: Conley Lee <conleylee@foxmail.com>
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- Documentation/devicetree/bindings/arm/sunxi.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ MAINTAINERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
-index 889128acf49a..4bd93ae26bd1 100644
---- a/Documentation/devicetree/bindings/arm/sunxi.yaml
-+++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
-@@ -444,6 +444,11 @@ properties:
-           - const: haoyu,a10-marsboard
-           - const: allwinner,sun4i-a10
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 47a541ef7ba0..acd112c42255 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10681,6 +10681,7 @@ F:	samples/kmemleak/kmemleak-test.c
+ KMOD KERNEL MODULE LOADER - USERMODE HELPER
+ M:	Luis Chamberlain <mcgrof@kernel.org>
+ L:	linux-kernel@vger.kernel.org
++L:	linux-modules@vger.kernel.org
+ S:	Maintained
+ F:	include/linux/kmod.h
+ F:	kernel/kmod.c
+@@ -12970,6 +12971,8 @@ F:	drivers/media/dvb-frontends/mn88473*
  
-+      - description: HAOYU Electronics Marsboard A20
-+        items:
-+          - const: haoyu,a20-marsboard
-+          - const: allwinner,sun7i-a20
-+
-       - description: MapleBoard MP130
-         items:
-           - const: mapleboard,mp130
+ MODULE SUPPORT
+ M:	Luis Chamberlain <mcgrof@kernel.org>
++L:	linux-modules@vger.kernel.org
++L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+ F:	include/linux/module.h
 -- 
-2.31.1
+2.33.0
 

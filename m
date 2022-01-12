@@ -2,184 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7E748C904
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B22A48C908
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355472AbiALRCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 12:02:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46945 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355421AbiALRBx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 12:01:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642006912;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ckf4WGo4i4lnL9AHjNXuCyeOV9H88Iioo8xqSOOYCz8=;
-        b=HLBa41P8+sYT1e2SpaIhJo2t8GE+gxDXPw0lqIAkZKmQo/W5fYXI9A4fydZm22xYamvj0j
-        lv5q2PjSDP4Y3qAG6CNtlKnj+8uhAb7tIPrV9EKnOgWKbAy68DRJSegNuS8JjhBD7WGlC/
-        0AZK+dnpvYzbbXPGSeSLE1OlxVV7sfk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-JKn_c-JTPaWkXM-1pdRcCA-1; Wed, 12 Jan 2022 12:01:51 -0500
-X-MC-Unique: JKn_c-JTPaWkXM-1pdRcCA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 73B89760C4;
-        Wed, 12 Jan 2022 17:01:50 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 538C526DE0;
-        Wed, 12 Jan 2022 17:01:48 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] KVM: nVMX: Allow VMREAD when Enlightened VMCS is in use
-Date:   Wed, 12 Jan 2022 18:01:34 +0100
-Message-Id: <20220112170134.1904308-6-vkuznets@redhat.com>
-In-Reply-To: <20220112170134.1904308-1-vkuznets@redhat.com>
-References: <20220112170134.1904308-1-vkuznets@redhat.com>
+        id S1355506AbiALRDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 12:03:49 -0500
+Received: from 8bytes.org ([81.169.241.247]:37486 "EHLO theia.8bytes.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1355540AbiALRC3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 12:02:29 -0500
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 67A4525F; Wed, 12 Jan 2022 18:02:24 +0100 (CET)
+Date:   Wed, 12 Jan 2022 18:02:23 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Subject: [git pull] IOMMU Updates for Linux v5.17
+Message-ID: <Yd8Jn2aUqblPfRvF@8bytes.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="d8vwtHnKPut+5Js9"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hyper-V TLFS explicitly forbids VMREAD and VMWRITE instructions when
-Enlightened VMCS interface is in use:
 
-"Any VMREAD or VMWRITE instructions while an enlightened VMCS is
-active is unsupported and can result in unexpected behavior.""
+--d8vwtHnKPut+5Js9
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Windows 11 + WSL2 seems to ignore this, attempts to VMREAD VMCS field
-0x4404 ("VM-exit interruption information") are observed. Failing
-these attempts with nested_vmx_failInvalid() makes such guests
-unbootable.
+Hi Linus,
 
-Microsoft confirms this is a Hyper-V bug and claims that it'll get fixed
-eventually but for the time being we need a workaround. (Temporary) allow
-VMREAD to get data from the currently loaded Enlightened VMCS.
+The following changes since commit c9e6606c7fe92b50a02ce51dda82586ebdf99b48:
 
-Note: VMWRITE instructions remain forbidden, it is not clear how to
-handle them properly and hopefully won't ever be needed.
+  Linux 5.16-rc8 (2022-01-02 14:23:25 -0800)
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- arch/x86/kvm/vmx/evmcs.h  | 12 +++++++++
- arch/x86/kvm/vmx/nested.c | 55 +++++++++++++++++++++++++++------------
- 2 files changed, 51 insertions(+), 16 deletions(-)
+are available in the Git repository at:
 
-diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
-index 9bc2521b159e..8d70f9aea94b 100644
---- a/arch/x86/kvm/vmx/evmcs.h
-+++ b/arch/x86/kvm/vmx/evmcs.h
-@@ -98,6 +98,18 @@ static __always_inline int evmcs_field_offset(unsigned long field,
- 	return evmcs_field->offset;
- }
- 
-+static inline u64 evmcs_read_any(struct hv_enlightened_vmcs *evmcs,
-+				 unsigned long field, u16 offset)
-+{
-+	/*
-+	 * vmcs12_read_any() doesn't care whether the supplied structure
-+	 * is 'struct vmcs12' or 'struct hv_enlightened_vmcs' as it takes
-+	 * the exact offset of the required field, use it for convenience
-+	 * here.
-+	 */
-+	return vmcs12_read_any((void *)evmcs, field, offset);
-+}
-+
- #if IS_ENABLED(CONFIG_HYPERV)
- 
- static __always_inline int get_evmcs_offset(unsigned long field,
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 5941ba05b509..9758448479b4 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -7,6 +7,7 @@
- #include <asm/mmu_context.h>
- 
- #include "cpuid.h"
-+#include "evmcs.h"
- #include "hyperv.h"
- #include "mmu.h"
- #include "nested.h"
-@@ -5099,27 +5100,49 @@ static int handle_vmread(struct kvm_vcpu *vcpu)
- 	if (!nested_vmx_check_permission(vcpu))
- 		return 1;
- 
--	/*
--	 * In VMX non-root operation, when the VMCS-link pointer is INVALID_GPA,
--	 * any VMREAD sets the ALU flags for VMfailInvalid.
--	 */
--	if (vmx->nested.current_vmptr == INVALID_GPA ||
--	    (is_guest_mode(vcpu) &&
--	     get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA))
--		return nested_vmx_failInvalid(vcpu);
--
- 	/* Decode instruction info and find the field to read */
- 	field = kvm_register_read(vcpu, (((instr_info) >> 28) & 0xf));
- 
--	offset = get_vmcs12_field_offset(field);
--	if (offset < 0)
--		return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
-+	if (!evmptr_is_valid(vmx->nested.hv_evmcs_vmptr)) {
-+		/*
-+		 * In VMX non-root operation, when the VMCS-link pointer is INVALID_GPA,
-+		 * any VMREAD sets the ALU flags for VMfailInvalid.
-+		 */
-+		if (vmx->nested.current_vmptr == INVALID_GPA ||
-+		    (is_guest_mode(vcpu) &&
-+		     get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA))
-+			return nested_vmx_failInvalid(vcpu);
- 
--	if (!is_guest_mode(vcpu) && is_vmcs12_ext_field(field))
--		copy_vmcs02_to_vmcs12_rare(vcpu, vmcs12);
-+		offset = get_vmcs12_field_offset(field);
-+		if (offset < 0)
-+			return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
-+
-+		if (!is_guest_mode(vcpu) && is_vmcs12_ext_field(field))
-+			copy_vmcs02_to_vmcs12_rare(vcpu, vmcs12);
-+
-+		/* Read the field, zero-extended to a u64 value */
-+		value = vmcs12_read_any(vmcs12, field, offset);
-+	} else {
-+		/*
-+		 * Hyper-V TLFS (as of 6.0b) explicitly states, that while an
-+		 * enlightened VMCS is active VMREAD/VMWRITE instructions are
-+		 * unsupported. Unfortunately, certain versions of Windows 11
-+		 * don't comply with this requirement which is not enforced in
-+		 * genuine Hyper-V. Allow VMREAD from an enlightened VMCS as a
-+		 * workaround, as misbehaving guests will panic on VM-Fail.
-+		 * Note, enlightened VMCS is incompatible with shadow VMCS so
-+		 * all VMREADs from L2 should go to L1.
-+		 */
-+		if (WARN_ON_ONCE(is_guest_mode(vcpu)))
-+			return nested_vmx_failInvalid(vcpu);
- 
--	/* Read the field, zero-extended to a u64 value */
--	value = vmcs12_read_any(vmcs12, field, offset);
-+		offset = evmcs_field_offset(field, NULL);
-+		if (offset < 0)
-+			return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
-+
-+		/* Read the field, zero-extended to a u64 value */
-+		value = evmcs_read_any(vmx->nested.hv_evmcs, field, offset);
-+	}
- 
- 	/*
- 	 * Now copy part of this value to register or memory, as requested.
--- 
-2.34.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git iommu-update=
+s-v5.17
 
+for you to fetch changes up to 66dc1b791c5839d64d261c8b40250a33e6da050b:
+
+  Merge branches 'arm/smmu', 'virtio', 'x86/amd', 'x86/vt-d' and 'core' int=
+o next (2022-01-04 10:33:45 +0100)
+
+----------------------------------------------------------------
+IOMMU Updates for Linux v5.17
+
+Including:
+
+	- Identity domain support for virtio-iommu
+
+	- Move flush queue code into iommu-dma
+
+	- Some fixes for AMD IOMMU suspend/resume support when x2apic
+	  is used
+
+	- Arm SMMU Updates from Will Deacon:
+	  - Revert evtq and priq back to their former sizes
+	  - Return early on short-descriptor page-table allocation failure
+	  - Fix page fault reporting for Adreno GPU on SMMUv2
+	  - Make SMMUv3 MMU notifier ops 'const'
+	  - Numerous new compatible strings for Qualcomm SMMUv2 implementations
+
+	- Various smaller fixes and cleanups
+
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      iommu/vt-d: Use bitmap_zalloc() when applicable
+
+Dafna Hirschfeld (1):
+      iommu: Log iova range in map/unmap trace events
+
+David Heidelberg (1):
+      dt-bindings: arm-smmu: Add compatible for the SDX55 SoC
+
+Hector Martin (1):
+      iommu/io-pgtable-arm: Fix table descriptor paddr formatting
+
+Jean-Philippe Brucker (5):
+      iommu/virtio: Add definitions for VIRTIO_IOMMU_F_BYPASS_CONFIG
+      iommu/virtio: Support bypass domains
+      iommu/virtio: Sort reserved regions
+      iommu/virtio: Pass end address to viommu_add_mapping()
+      iommu/virtio: Support identity-mapped domains
+
+Joerg Roedel (3):
+      Merge tag 'arm-smmu-updates' of git://git.kernel.org/pub/scm/linux/ke=
+rnel/git/will/linux into arm/smmu
+      iommu/iova: Temporarily include dma-mapping.h from iova.h
+      Merge branches 'arm/smmu', 'virtio', 'x86/amd', 'x86/vt-d' and 'core'=
+ into next
+
+John Garry via iommu (1):
+      iommu/iova: Move fast alloc size roundup into alloc_iova_fast()
+
+Kees Cook (1):
+      iommu/vt-d: Use correctly sized arguments for bit field
+
+Kefeng Wang (1):
+      iommu/vt-d: Drop duplicate check in dma_pte_free_pagetable()
+
+Lu Baolu (2):
+      iommu: Extend mutex lock scope in iommu_probe_device()
+      iommu/vt-d: Remove unused macros
+
+Matthew Wilcox (Oracle) (2):
+      iommu/amd: Use put_pages_list
+      iommu/vt-d: Use put_pages_list
+
+Maxim Levitsky (5):
+      iommu/amd: Restore GA log/tail pointer on host resume
+      iommu/amd: X2apic mode: re-enable after resume
+      iommu/amd: X2apic mode: setup the INTX registers on mask/unmask
+      iommu/amd: X2apic mode: mask/unmask interrupts on suspend/resume
+      iommu/amd: Remove useless irq affinity notifier
+
+Ma=C3=ADra Canal (1):
+      iommu/vt-d: Remove unused dma_to_mm_pfn function
+
+Paul Menzel (1):
+      iommu/amd: Fix typo in *glues =E2=80=A6 together* in comment
+
+Rikard Falkeborn (1):
+      iommu/arm-smmu-v3: Constify arm_smmu_mmu_notifier_ops
+
+Rob Clark (1):
+      iommu/arm-smmu-qcom: Fix TTBR0 read
+
+Robin Murphy (6):
+      iommu/iova: Squash entry_dtor abstraction
+      iommu/iova: Squash flush_cb abstraction
+      iommu/amd: Simplify pagetable freeing
+      iommu/iova: Consolidate flush queue code
+      iommu/iova: Move flush queue code to iommu-dma
+      iommu: Move flush queue data into iommu_dma_cookie
+
+Vinod Koul (2):
+      dt-bindings: arm-smmu: Add compatible for SM8450 SoC
+      iommu: arm-smmu-impl: Add SM8450 qcom iommu implementation
+
+Xiang wangx (1):
+      iommu/virtio: Fix typo in a comment
+
+Xiongfeng Wang (1):
+      iommu/iova: Fix race between FQ timeout and teardown
+
+Yunfei Wang (1):
+      iommu/io-pgtable-arm-v7s: Add error handle for page table allocation =
+failure
+
+Zhou Wang (1):
+      Revert "iommu/arm-smmu-v3: Decrease the queue size of evtq and priq"
+
+ .../devicetree/bindings/iommu/arm,smmu.yaml        |   2 +
+ drivers/iommu/amd/amd_iommu_types.h                |   2 -
+ drivers/iommu/amd/init.c                           | 109 ++++----
+ drivers/iommu/amd/io_pgtable.c                     | 110 +++------
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c    |   2 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h        |   5 +-
+ drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |   3 +-
+ drivers/iommu/dma-iommu.c                          | 274 ++++++++++++++++-=
+----
+ drivers/iommu/intel/iommu.c                        | 111 +++------
+ drivers/iommu/io-pgtable-arm-v7s.c                 |   6 +-
+ drivers/iommu/io-pgtable-arm.c                     |   9 +-
+ drivers/iommu/iommu.c                              |   3 +-
+ drivers/iommu/iova.c                               | 209 +---------------
+ drivers/iommu/virtio-iommu.c                       | 115 +++++++--
+ drivers/vdpa/vdpa_user/iova_domain.c               |   8 -
+ include/linux/intel-svm.h                          |   6 -
+ include/linux/iommu.h                              |   3 +-
+ include/linux/iova.h                               |  68 +----
+ include/trace/events/iommu.h                       |  10 +-
+ include/uapi/linux/virtio_iommu.h                  |   8 +-
+ 20 files changed, 493 insertions(+), 570 deletions(-)
+
+Please pull.
+
+Thanks,
+
+	Joerg
+
+--d8vwtHnKPut+5Js9
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmHfCZcACgkQK/BELZcB
+GuPYbA/8DJ3UDORB+m9PPRo59QhfMsTtrJVMNxPUYan3Nfoz+l6K8QZc8lMVG6xY
+TN7I9ptXi0TdZHbGUA/1YKgZlkXqQj60K9YK/0TBkwB/MwN2utQigbjZSRQPT3Zd
+2D6y+mnMSX+j+mCWtwpttJkgriUPtk7eDkK2ur3Ex2QocfBnH1ObuL0ufQrj5XN8
+A68YMLfl3bhn6X9RAuxBh15RZXHYyk7AK1NIFOxY4tKFiSk18QRl1y3in8o39kV2
+lkDs4ggjh+TgE65+1Rrx1Cl9FV3kbwrkAkBVCKtyQjuPsYRZpw38bg1JWOg4imSY
+sp9AXkJdmmFPECdEcE82++CCDp00S89Hh3NgoAhuhLD75h4zV2puYUdv6FgFOBif
+bSZq3/Q7psQ9cjsamkjv8fq7gfqQHGS6P3g5Wtm/MGV4Ksv/dE9MnUcdszqpVVdr
+9Hq1Fd/OvRDaqnuDIPRRTvzD5EbrnVBAEsXHXQEkZWNvlmPRnyfAnCgC5F4/6pw5
+U2w8acAk9sFZHgtEEJK/GqvMGsmZ+Z9P58EXWpZz9/ovwQNpg/LtZp9bLG7cA8vM
+xHe+HpJoEBMjZhaqVrngLBUjntZGac9aq35JRCd7/VlBD3qlEvLiQaAV6uWfomJG
+FweCzpso0Q18sxH+bqOx0b2tFXYTsCylbvygZJqLSbMiU2Jfrio=
+=gWcn
+-----END PGP SIGNATURE-----
+
+--d8vwtHnKPut+5Js9--

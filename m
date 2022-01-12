@@ -2,117 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBE648BF1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 315E148BF1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351288AbiALHjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351314AbiALHji (ORCPT
+        id S1351310AbiALHjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:39:43 -0500
+Received: from mail-vk1-f179.google.com ([209.85.221.179]:33685 "EHLO
+        mail-vk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351328AbiALHjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:39:38 -0500
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15544C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 23:39:38 -0800 (PST)
-Received: by mail-oo1-xc36.google.com with SMTP id q15-20020a4a6c0f000000b002dc415427d3so425308ooc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 23:39:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0UjdAdkvyGyBdDeJRmh0/905GmT+tl9Ko8X4YQ6eFHU=;
-        b=UlXqyHjxjNnKAVw0+ayhTbo92N9ebMVlz1rAVWY1Xhw0JQGg8SOGQbvJGtklD7/yss
-         QVGylcrSn2bhHatb44M5k4uO5rxwrQDbNXHGGZXCYD+NhjL+5+92SYssrSQ7CaRZSQlN
-         NRo/tGjNXav1jCYrFrZ2qQQfrNR/Go6qaKH42Oq1n3nKibYqfkdv7HOAS9DJyMb5+9gp
-         WWr47cu7Uz40HgIxsz1Xb4hgQMV5ZSD8D1cSxDSvJjuX8DGsyCiaiRtzLc0PXpHql4Tb
-         IgaggYgv55cpQYCO9LQGzKOlF0FX1aX3mZKRCpc8+s5A7weSQP+ZLsaYe3wo3wEv5qS8
-         Arng==
+        Wed, 12 Jan 2022 02:39:39 -0500
+Received: by mail-vk1-f179.google.com with SMTP id g5so1133998vkg.0;
+        Tue, 11 Jan 2022 23:39:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0UjdAdkvyGyBdDeJRmh0/905GmT+tl9Ko8X4YQ6eFHU=;
-        b=GyaZLPc5M36nIpf5Yo0vNpn72lojVw/zMASwaD+HL3S2GW7bN1/ORisl7bEdPqzgfO
-         yCol3ULSDCr773bN8hqZR7vz45g+q0h4nS3lJ7Q1DGtlgeb979TcTldf1tydOZyIS5hH
-         Cvj5R1Ho7k0kayOjydgJjw+JB9EUljCxLZ5QYPlRyZKNE0/ppc10h32azQGjrLGCDIVX
-         19+j0ra1yFOEMh273NOVR0j15zUo3EMHTJjGbp71arfLBBPfeutwjsaLDI4WkRSQ6N73
-         QhCz0MiIFEV/iGWL70MGYNZ7EdoBf0VDhx1xyRywkoWn3kVWJebuLlZJa74phV88A1sz
-         QxIg==
-X-Gm-Message-State: AOAM530mZQBoc1RgpwCyuPBN4AIBM3Nc3g+aYNXn+PWFKVgNDFC06ZIU
-        od+gy2bq+EuacS8jMkME8+iNpEHFx9j/4xikVP/u4Q==
-X-Google-Smtp-Source: ABdhPJySNabagEYkC1TTzHXdv3F+abrHDb5cQW54ucTV7V9XFyRblwiUMng/CKIs17F6vmzComYTOr7dbtUtqWco+pA=
-X-Received: by 2002:a4a:d344:: with SMTP id d4mr1451343oos.18.1641973177120;
- Tue, 11 Jan 2022 23:39:37 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=MHfD03WmQisvwQlA0yVYr+t2tOrW8sr+EcU6Wg5KSck=;
+        b=1YMG+rRXfwavl134UZ73NS6rtboS3cxSjqHMnAkxxJbZOptDl9DzPUZbmjyGfXXksp
+         1kD9F3qW2KgAVydvfflcLxIHIix4CsvUxMb4bZMeegeICcRQJzRP5bpu99edyQxvbnsM
+         twyYG1hLfhElGdqknfmIV2qLSm4pSYjtjOWJL82iHHidOD1pOu36NsFf5d8VsMJ83G3J
+         YaVWQW6aot349tc1eLDzjBEa+tRt6JC2vZL5FfykUZcr+pyj92PpLvkh2xUGRKLN7G+U
+         5n96x8tgZA6WLCKBRo/6oxsO8HIs/SL512JtkzP3MDbSZtt7GlzssmJr9uQLWZJuLWDV
+         yqmA==
+X-Gm-Message-State: AOAM532MuuqpFexqY2FicgdHavTTWFcgAlxY9AjS3+Hi38qM6ATOx2Z+
+        wyNmkBNFbF0vVbwp2JdCbdP/v64mWA9zbQ==
+X-Google-Smtp-Source: ABdhPJzuxtsPnI37YIYK5BxpU/cRukaZdYXc3zFpmpzwFNlkrcvFJA/MFm52jHebuMxsnSbo8Nc/xA==
+X-Received: by 2002:a1f:3490:: with SMTP id b138mr3856785vka.31.1641973178972;
+        Tue, 11 Jan 2022 23:39:38 -0800 (PST)
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com. [209.85.221.178])
+        by smtp.gmail.com with ESMTPSA id s47sm2201128uad.17.2022.01.11.23.39.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jan 2022 23:39:38 -0800 (PST)
+Received: by mail-vk1-f178.google.com with SMTP id n12so1073619vkc.12;
+        Tue, 11 Jan 2022 23:39:38 -0800 (PST)
+X-Received: by 2002:a1f:384b:: with SMTP id f72mr4068168vka.0.1641973178116;
+ Tue, 11 Jan 2022 23:39:38 -0800 (PST)
 MIME-Version: 1.0
-References: <CACDmwr_b0Z6JK2M6i6RZ4Qg3wb1uqG0NrybQ9mR2iw5QJT8XoA@mail.gmail.com>
- <CACT4Y+ZxnG0sLhqn4uw6ueAUsA4cNZJh0_6eES6C45u9jW-4Pw@mail.gmail.com>
- <CACDmwr8QH-2Kk8DU5zxJ6RLdCho2MzkA9uMJtQ+smoV-qhOq9A@mail.gmail.com>
- <CACT4Y+buWoqxZoUgzuYyYt6jP76GbjDoVqA7M07itQVgD60C9w@mail.gmail.com> <CACkBjsZ5BD7_vNWmLKfHUfU7D_-0A7V1-=U78sbe+qw=XUf9ag@mail.gmail.com>
-In-Reply-To: <CACkBjsZ5BD7_vNWmLKfHUfU7D_-0A7V1-=U78sbe+qw=XUf9ag@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 12 Jan 2022 08:39:25 +0100
-Message-ID: <CACT4Y+aM2qCBnjiVCiBhvGqYrDxBELPVYFPYYHf22zd-_GgnPg@mail.gmail.com>
-Subject: Re: KCSAN: data-race in tick_nohz_stop_tick / tick_sched_timer
-To:     Hao Sun <sunhao.th@gmail.com>
-Cc:     Kaia Yadira <hypericumperforatum4444@gmail.com>,
-        kvartet <xyru1999@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
+References: <20211202191630.12450-1-jaschultz@microsoft.com> <20211202191630.12450-3-jaschultz@microsoft.com>
+In-Reply-To: <20211202191630.12450-3-jaschultz@microsoft.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 12 Jan 2022 08:39:27 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUPwo7pCSwY8_9xTaDruTHt6d=wHiNHvRmE71k8hWeLBw@mail.gmail.com>
+Message-ID: <CAMuHMdUPwo7pCSwY8_9xTaDruTHt6d=wHiNHvRmE71k8hWeLBw@mail.gmail.com>
+Subject: Re: [PATCH 2/5] platform: surface: Propagate ACPI Dependency
+To:     Jarrett Schultz <jaschultzms@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Jarrett Schultz <jaschultz@microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jan 2022 at 02:39, Hao Sun <sunhao.th@gmail.com> wrote:
+Hi Jarrett,
+
+On Mon, Dec 6, 2021 at 4:03 PM Jarrett Schultz <jaschultzms@gmail.com> wrote:
+> Since the Surface XBL Driver does not depend on ACPI, the
+> platform/surface directory as a whole no longer depends on ACPI. With
+> respect to this, the ACPI dependency is moved into each config that depends
+> on ACPI individually.
 >
-> Dmitry Vyukov <dvyukov@google.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=8812=E6=
-=97=A5=E5=91=A8=E4=B8=89 01:18=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > On Tue, 11 Jan 2022 at 17:56, Kaia Yadira
-> > <hypericumperforatum4444@gmail.com> wrote:
-> > >
-> > > I'm sorry. They are similar but I can't tell if they are the same bug=
-,
-> > > so I report them individually.
-> >
-> > +CC list back
-> >
-> > I did not mean that you report similar bugs. I meant that you and
-> > kvartet seem to be following the same process. There are several
-> > complaints about the quality of reports. So I am wondering what you
-> > are doing/why/what's your goal.
-> >
-> > Hao Sun, you are CCed on all emails, maybe you can shed some light on t=
-his?
+> Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
+
+Thanks for your patch, which is now commit 272479928172edf0 ("platform:
+surface: Propagate ACPI Dependency").
+
+> --- a/drivers/platform/surface/Kconfig
+> +++ b/drivers/platform/surface/Kconfig
+> @@ -5,7 +5,6 @@
 >
-> Hi Dmitry,
->
-> I'm on holiday and ignored these emails.
-> kvartet is an acquaintance of mine, I have no idea who Kaia is.
-> I have little knowledge of their actions. They may be new to the
-> kernel community and may not understand the rules in reporting bugs
->
-> Maybe we should add some `WARNING` in Syzkaller docs, e.g.,
-> `how_to_report_bug.md`, to tell people to polish their reports before
-> sending them out.
+>  menuconfig SURFACE_PLATFORMS
+>         bool "Microsoft Surface Platform-Specific Device Drivers"
+> -       depends on ACPI
+>         default y
+>         help
+>           Say Y here to get to see options for platform-specific device drivers
 
-Hi Hao,
+Without any dependency, all users configuring a kernel are now asked
+about this. Is there any other platform dependency that can be used
+instead?
 
-Thanks for the info.
+Gr{oetje,eeting}s,
 
-We've already extended how_to_report_bug.md with some warning:
-https://github.com/google/syzkaller/commit/ca0f51ac4a404a5378464e91c42eca8c=
-1e78e21a
-But it does not mention KCSAN/KMSAN yet, as these reports come in later.
+                        Geert
 
-> Or maybe we should just suppress all the `task-hung` and `kcsan`
-> reports in Syzkaller by default, enable them manually if the user
-> knows what they are doing.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-This is a good idea.
-We will need to figure out details, and this will require some coding.
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

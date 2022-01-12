@@ -2,122 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F26648CA5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCC948CA64
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344188AbiALRtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 12:49:08 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:58954 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344086AbiALRtG (ORCPT
+        id S1344270AbiALRuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 12:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344044AbiALRuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 12:49:06 -0500
-Date:   Wed, 12 Jan 2022 18:49:03 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1642009744;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HKPb/OgUpnzZpZ4ZaPFda8NZxcSKTOmxke8zHueMxac=;
-        b=1hQCpQQQ+jHY+D72ntC/E5Js8/B0BNdQPukf/gTE1gtTWD0umpu8zk8kmazRtUhScf/+C4
-        H3w+uALRaDkNI2HWGdJ/+yVrV2D54yzOl8DjmlfpvVsP5t8yJcOIhdHeldDcY8Ho4fpAHW
-        mvF6JrOBBWUmNz0qslncNKeMrjg6KuwoonPWpzskyfGOv368bLIynnxIa3ducHX0dXoaPj
-        5LQ60lUY8JICr0xXvcqBMcyXZTUeGR+Iz/f5Mr4cHvWYo6JK3u/2XQF7U2ip2xP/pqspaP
-        bjrVuwexhm0EGiQNDfpF5H7lzJRSQ4nHD5KMdI9XEHjNgmrn0OXYRf+nUeTtmA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1642009744;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HKPb/OgUpnzZpZ4ZaPFda8NZxcSKTOmxke8zHueMxac=;
-        b=IV0GB3BaIALcRkDSiM2M6ufawjT2zJkwDW0wms3ZNdsZ2piidnOHqn7fJLsWdOxnc6/NX9
-        IF8rBbUmblwOdIAQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Wed, 12 Jan 2022 12:50:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F80C06173F;
+        Wed, 12 Jan 2022 09:50:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A2FCB82025;
+        Wed, 12 Jan 2022 17:50:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 978DAC36AEA;
+        Wed, 12 Jan 2022 17:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642009803;
+        bh=Z0Rl1UoN9N17xgQ6MEb+B6+A/2Qrjg74rAJxXxT4OT8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P0XleWHkyMR/4cxnd/lE5N9yckMOtMzpOYqJLwTwS5ZecdNl1fYAanfjJIAP9frdI
+         KmZznXmtAvdBXPmvXfHu2S7U6RhvYnbrNAnWhDXBAcx32N+S5oY48TR3ateaHQ3p6E
+         H7UJ++2s/fAL+HpTOr83A3y8tQLxjTG4TjRHbjHgPyZwuIsQP1JaFZbEBcD6VKz44z
+         4RSXRUWPJZiY/qW6/+OfZNtGHi7/t7Pg757R+sHvLuU5sdMVqFfsI3Iqr/zRrmkjk/
+         5tuhyKhB3aDx2s9pFxnqUJpqv9BStl2tquE+FqWTlMC4AMx1NhERdcOJxbShP7jA8q
+         sVfkYinUCXqhQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id DDADB40714; Wed, 12 Jan 2022 14:50:01 -0300 (-03)
+Date:   Wed, 12 Jan 2022 14:50:01 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: Re: [PATCH 5/5] random: Defer processing of randomness on PREEMPT_RT.
-Message-ID: <Yd8Ujw4t8DKYuhZK@linutronix.de>
-References: <20211207121737.2347312-1-bigeasy@linutronix.de>
- <20211207121737.2347312-6-bigeasy@linutronix.de>
- <CAHmME9q2Yid56ZZ9sBQWjEWEK2B06g3H9KYRwWqExXRoCdbPdA@mail.gmail.com>
- <20211207201037.h46573oa5nfj33xq@linutronix.de>
- <CAHmME9pzdXyD0oRYyCoVUSqqsA9h03-oR7kcNhJuPEcEMTJYgw@mail.gmail.com>
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        eranian@google.com
+Subject: Re: [RFC PATCH] perf pmu-events: Don't lower case MetricExpr
+Message-ID: <Yd8UySEClsWdzKF5@kernel.org>
+References: <20211126071305.3733878-1-irogers@google.com>
+ <CAP-5=fU2kEq3T8UCpX0tAmwcGhZ+1h92uRPbzyuLDNpeCD7ffQ@mail.gmail.com>
+ <Yd8To1ASO73135LK@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAHmME9pzdXyD0oRYyCoVUSqqsA9h03-oR7kcNhJuPEcEMTJYgw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yd8To1ASO73135LK@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-20 15:38:58 [+0100], Jason A. Donenfeld wrote:
-> Hey Sebastian,
-Hi Jason,
+Em Wed, Jan 12, 2022 at 02:45:07PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Wed, Jan 12, 2022 at 09:22:51AM -0800, Ian Rogers escreveu:
+> > On Thu, Nov 25, 2021 at 11:13 PM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > This patch changes MetricExpr to be written out in the same case. This
+> > > enables events in metrics to use modifiers like 'G' which currently
+> > > yield parse errors when made lower case. To keep tests passing the
+> > > literal #smt_on is compared in a non-case sensitive way - #SMT_on is
+> > > present in at least SkylakeX metrics.
+> > 
+> > Ping.
+> 
+> I tried applying 20211124001231.3277836-1-irogers@google.com on top of
+> your perf_cpu series, it failed, will check.
+> 
+> BTW, I got the two other patches in that series:
+> 
+> ⬢[acme@toolbox perf]$ git log --oneline -2
+> 6dd8646939a770e4 (HEAD -> perf/core) perf tools: Probe non-deprecated sysfs path 1st
+> 0ce05781f4905fcf perf tools: Fix SMT fallback with large core counts
+> ⬢[acme@toolbox perf]$
 
-> I think I understand the motivation for this patchset, and maybe it'll
-> turn out to be the only way of accomplishing what RT needs. But I
-> really don't like complicating the irq ingestion flow like that,
-> splitting the captured state into two pieces, and having multiple
-> entry points. It makes the whole thing more difficult to analyze and
-> maintain. Again, maybe we'll *have* to do this ultimately, but I want
-> to make sure we at least explore the alternatives fully.
+It was due to that cpu__max_present_cpu().cpu;
 
-Sure.
+Fixed, applied.
 
-> One thing you brought up is that the place where a spinlock becomes
-> problematic for RT is if userspace goes completely nuts with
-> RNDRESEEDCRNG. If that's really the only place where contention might
-> be harmful, can't we employ other techniques there instead? For
-> example, just ratelimiting the frequency at which RNDRESEEDCRNG can be
-> called _before_ taking that lock, using the usual ratelimit.h
-> structure?
+- Arnaldo
 
-ratelimit. Didn't think about it.
-There is RNDRESEEDCRNG and RNDADDENTROPY from the user API and lets
-ignore the kernel users for the moment.
-With the DEFAULT_RATELIMIT_BURST we would allow 10 "concurrent"
-operations. This isn't as bad as previously but still not perfect (the
-latency number jumped up to 50us in a smoke test).
-Also in the !__ratelimit() case we would have to return an error. This
-in turn breaks the usecase where one invokes 11 times
-ioctl(,RNDADDENTROPY,) with a smaller buffer instead once with a big
-buffer. Not sure how bad this is but it creates corner cases=E2=80=A6
-We could also sleep & loop until __ratelimit() allows but it looks odd.
-
->            Or, alternatively, what about a lock that very heavily
-> prioritizes acquisitions from the irq path rather than from the
-> userspace path? I think Herbert might have had a suggestion there
-> related to the net stack's sock lock?
-
-Using a semaphore might work. down_trylock() can be invoked from
-hard-irq context while the preemptible context would use down() and
-sleep if needed. add_interrupt_randomness() has already a trylock. We
-have add_disk_randomness() which is invoked from IRQ-context (on !RT) so
-we would have to use trylock there, too (for its mix_pool_bytes()
-invocation).
-The sock-lock is either always invoked from preemptible context or has a
-plan B in the contended case if invoked from atomic context. I'm not
-sure what plan B could be here in atomic context. I *think* we need to
-do these things and can't delay them.
-Now that I think about it, we could add a mutex_t which is acquired
-first for the user-API part to ensure that there is only one at a time
-(instead of using ratelimit). Assuming that there is nothing else in the
-kernel that can hammer on the lock (getrandom() is kind of rate
-limited). If we really want to go that road, I would have to retest and
-see how long extract_buf() holds the lock acquired.
-
-Either way, we still need to split out the possible crng_reseed()
-invocations (if (crng_init < 2)) due to crng_state::lock which must not
-be acquired on PREEMPT_RT in hard-irq context
-(add_interrupt_randomness() -> credit_entropy_bits()). I *think* the
-other places were fine.
-
-> Jason
-
-Sebastian
+diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+index e808738493e219fd..c94fb9bef919f5cb 100644
+--- a/tools/perf/util/expr.c
++++ b/tools/perf/util/expr.c
+@@ -405,12 +405,17 @@ double expr_id_data__source_count(const struct expr_id_data *data)
+ double expr__get_literal(const char *literal)
+ {
+ 	static struct cpu_topology *topology;
++	double result = NAN;
+ 
+-	if (!strcmp("#smt_on", literal))
+-		return smt_on() > 0 ? 1.0 : 0.0;
++	if (!strcmp("#smt_on", literal)) {
++		result = smt_on() > 0 ? 1.0 : 0.0;
++		goto out;
++	}
+ 
+-	if (!strcmp("#num_cpus", literal))
+-		return cpu__max_present_cpu().cpu;
++	if (!strcmp("#num_cpus", literal)) {
++		result = cpu__max_present_cpu().cpu;
++		goto out;
++	}
+ 
+ 	/*
+ 	 * Assume that topology strings are consistent, such as CPUs "0-1"
+@@ -422,16 +427,24 @@ double expr__get_literal(const char *literal)
+ 		topology = cpu_topology__new();
+ 		if (!topology) {
+ 			pr_err("Error creating CPU topology");
+-			return NAN;
++			goto out;
+ 		}
+ 	}
+-	if (!strcmp("#num_packages", literal))
+-		return topology->package_cpus_lists;
+-	if (!strcmp("#num_dies", literal))
+-		return topology->die_cpus_lists;
+-	if (!strcmp("#num_cores", literal))
+-		return topology->core_cpus_lists;
++	if (!strcmp("#num_packages", literal)) {
++		result = topology->package_cpus_lists;
++		goto out;
++	}
++	if (!strcmp("#num_dies", literal)) {
++		result = topology->die_cpus_lists;
++		goto out;
++	}
++	if (!strcmp("#num_cores", literal)) {
++		result = topology->core_cpus_lists;
++		goto out;
++	}
+ 
+ 	pr_err("Unrecognized literal '%s'", literal);
+-	return NAN;
++out:
++	pr_debug2("literal: %s = %f\n", literal, result);
++	return result;
+ }

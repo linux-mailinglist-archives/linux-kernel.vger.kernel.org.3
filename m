@@ -2,104 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED36848C652
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EEC948C656
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354229AbiALOoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S1354234AbiALOop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:44:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241952AbiALOoO (ORCPT
+        with ESMTP id S241952AbiALOon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:44:14 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD34DC06173F;
-        Wed, 12 Jan 2022 06:44:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qlFlkECPRVUfbaXMoD/8vlzFEq0cbbwMCSchJ4LcKmA=; b=ETiOH3cX3l64g4+xs3cWHLUrdN
-        7WR6s0Q0zlVj69t0YQ65pnGYn4EismXW1LBUlOOvnE31JkoIkXUv5M63Zyy4bapawDeqbgov6qqwK
-        X45/FT76S+b9mdv8iiwlis1MZ8pMQeWw4Ku9VGsU9qKu9kao7NpElqX+qFDoLwn1QshZn/sdewSVI
-        kl0pN1N86BrdV8X6dVgNvb7J4DmbHj5WCJuxwRBTbrBrmmaemjQMG2jIj5WMxdPkj8mc6mCUgjQAN
-        EiUugVc26avg9zr1YZVanW80LAZGRExwd/Yq337LmHGZ7OY7c95K81iGaYey7WzRcKrst8+gdw02p
-        wUopTTpg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7eqz-000ocW-2C; Wed, 12 Jan 2022 14:43:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AB48B3001CD;
-        Wed, 12 Jan 2022 15:43:54 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 660E82006F92B; Wed, 12 Jan 2022 15:43:54 +0100 (CET)
-Date:   Wed, 12 Jan 2022 15:43:54 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Gang Li <ligang.bdlg@bytedance.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3] sched/numa: add per-process numa_balancing
-Message-ID: <Yd7pKuvjayH4q14L@hirez.programming.kicks-ass.net>
-References: <20211206024530.11336-1-ligang.bdlg@bytedance.com>
+        Wed, 12 Jan 2022 09:44:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A4FC06173F;
+        Wed, 12 Jan 2022 06:44:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 486E6B81F1A;
+        Wed, 12 Jan 2022 14:44:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC6CCC36AEB;
+        Wed, 12 Jan 2022 14:44:39 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GkaMMKTM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1641998677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gXV/axjwX5FUovf02ypwHqsrpqjCvYH1CxskvWmTeNQ=;
+        b=GkaMMKTMPWBCYwW7Tn9myvspr/g9Frxmtuumqgq85W6TRteXdG7WjFtAObxz5GY2oJq+tL
+        hWgQ9VNUaOx38l95jijpKIhc+i/x41elM4S77G8+x/ry35SptQ+tlU179KoFQcJExzkLhU
+        dVFlvx+WqT3GU/gVz3Yg0siPtqjgYBA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4fbe9360 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 12 Jan 2022 14:44:37 +0000 (UTC)
+Received: by mail-yb1-f178.google.com with SMTP id h14so6941189ybe.12;
+        Wed, 12 Jan 2022 06:44:36 -0800 (PST)
+X-Gm-Message-State: AOAM532lO6Q8tEHtIfQeuVcPtTbooYyMPGl87071oZtQwM7gXZ5zRMmX
+        c0hMCYjrwolWcE4AuzVVd/oJTc6JD5GpAUYrMNY=
+X-Google-Smtp-Source: ABdhPJywVIrLkb4/m1TSdxctzhJhqAd4fykL3p9P7V0t7ryMwoWNbSTC1FNZYgyl4UT2kyVvLBpPJWH3YF0gOQsPvN8=
+X-Received: by 2002:a25:f90d:: with SMTP id q13mr14483ybe.32.1641998675780;
+ Wed, 12 Jan 2022 06:44:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206024530.11336-1-ligang.bdlg@bytedance.com>
+References: <20220112140137.728162-1-jforbes@fedoraproject.org>
+ <CAHmME9rJFVeWL=SFTkM8=+2te_GnH4n-THH+F3p5mnHfCkhZ4w@mail.gmail.com>
+ <CAMj1kXHubNk3gRTOmD1rOCifCUE4O6=TvNr_XhP1tNcCBuzfBQ@mail.gmail.com>
+ <CAHmME9oKEawBAGSN_tdpBDe2_vRUE8Gh+GMXn+d94A6te4FJPQ@mail.gmail.com>
+ <CAMj1kXGzzHefRu1wcgDsYpybSDrUK__FXE-Mjm2r1fg2xiz6Jg@mail.gmail.com>
+ <CAHmME9p25W3Pg4T4Pers+hxryhAcQZEZMx5uueF3a-oCr7ABuA@mail.gmail.com>
+ <CAMj1kXEgE-3Pnnak-RZAPch=ma399Ki4jrMb8j32x2AFyZZALA@mail.gmail.com>
+ <CAHmME9oTsOZCJoPUT=LwUuwWHbAa_N1MRoGjTYY5Poj4tr0+Zg@mail.gmail.com> <CAMj1kXFSN0yJzmgDKp1bmF7wgaAwJba+FteStJEKH7HDBSP5kQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXFSN0yJzmgDKp1bmF7wgaAwJba+FteStJEKH7HDBSP5kQ@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 12 Jan 2022 15:44:24 +0100
+X-Gmail-Original-Message-ID: <CAHmME9qcjHq6M+sOOxCT4xte5AcZRoHjcMQfod3Zc1=FJsq8BQ@mail.gmail.com>
+Message-ID: <CAHmME9qcjHq6M+sOOxCT4xte5AcZRoHjcMQfod3Zc1=FJsq8BQ@mail.gmail.com>
+Subject: Re: [PATCH v2] lib/crypto: add prompts back to crypto libraries
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Justin Forbes <jmforbes@linuxtx.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 10:45:28AM +0800, Gang Li wrote:
-> This patch add a new api PR_NUMA_BALANCING in prctl.
-> 
-> A large number of page faults will cause performance loss when numa
-> balancing is performing. Thus those processes which care about worst-case
-> performance need numa balancing disabled. Others, on the contrary, allow a
-> temporary performance loss in exchange for higher average performance, so
-> enable numa balancing is better for them.
-> 
-> Numa balancing can only be controlled globally by
-> /proc/sys/kernel/numa_balancing. Due to the above case, we want to
-> disable/enable numa_balancing per-process instead.
-> 
-> Add numa_balancing under mm_struct. Then use it in task_tick_fair.
-> 
-> Set per-process numa balancing:
-> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_DISABLE); //disable
-> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_ENABLE);  //enable
-> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_DEFAULT); //follow global
+On Wed, Jan 12, 2022 at 3:42 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Wed, 12 Jan 2022 at 15:15, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > On Wed, Jan 12, 2022 at 3:13 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > >
+> > > On Wed, 12 Jan 2022 at 15:12, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > > >
+> > > > On Wed, Jan 12, 2022 at 3:08 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > >
+> > > > > On Wed, 12 Jan 2022 at 15:08, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > > > > >
+> > > > > > On Wed, Jan 12, 2022 at 3:06 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > > > >
+> > > > > > > On Wed, 12 Jan 2022 at 15:05, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > > > > > > >
+> > > > > > > > This commit also needs this snippet:
+> > > > > > > >
+> > > > > > >
+> > > > > > > Why?
+> > > > > >
+> > > > > > So that the menu of crypto library options is inside of the library
+> > > > > > menu. Otherwise this will appear inside of the _root_ menu, which
+> > > > > > isn't what we want.
+> > > > >
+> > > > > Why not? I think that's fine.
+> > > >
+> > > > It's really not appropriate there. Look:
+> > > >
+> > > > - Justin vanilla: https://i.imgur.com/14UBpML.png
+> > > > - Justin + Jason: https://i.imgur.com/lDfZnma.png
+> > > >
+> > > > We really don't want another top level menu. We're not that important.
+> > > > Rather, crypto libraries are but one ordinary subset of ordinary
+> > > > libraries, just like how the build system does it too.
+> > >
+> > > I disagree. The root menu is a jumble of things already, and having
+> > > this one at the root is really not a problem.
+> >
+> > Should CRC routines also go into a submenu and be put at the root?
+> > What about other library functions? Library functions belong in the
+> > library submenu. We don't need our own top level submenu for this. The
+> > whole point of lib/crypto/ is that they're just boring library
+> > functions. Libraries! So, part of the libraries menu.
+>
+> Shouting it doesn't make it true.
 
-This seems to imply you can prctl(ENABLE) even if the global is
-disabled, IOW sched_numa_balancing is off.
+I'm not shouting. I respectfully disagree with your perspective. I
+think the comparison to CRC routines is an apt one, still unaddressed.
 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 884f29d07963..2980f33ac61f 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -11169,8 +11169,12 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
->  		entity_tick(cfs_rq, se, queued);
->  	}
->  
-> -	if (static_branch_unlikely(&sched_numa_balancing))
-> +#ifdef CONFIG_NUMA_BALANCING
-> +	if (curr->mm && (curr->mm->numab_enabled == NUMAB_ENABLED
-> +	    || (static_branch_unlikely(&sched_numa_balancing)
-> +	    && curr->mm->numab_enabled == NUMAB_DEFAULT)))
->  		task_tick_numa(rq, curr);
-> +#endif
->  
->  	update_misfit_status(curr, rq);
->  	update_overutilized_status(task_rq(curr));
+> Nobody cares about what the root menu looks like
 
-There's just about everything wrong there... not least of all the
-horrific coding style.
+I certainly do.
+
+> and given that this
+> patch is presumably going to be sent as an early fix on top of your
+> rng branch, it is better not to touch anything under crypto/ unless
+> you are 100% certain it is not going to conflict with Herbert's tree.
+
+Oh, I was thinking Herbert would take this since he hasn't sent a pull
+yet? Otherwise, sure, I can do it.
+
+Jason

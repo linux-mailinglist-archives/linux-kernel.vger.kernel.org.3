@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BDB48BF8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C8F48BF91
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351438AbiALIKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
+        id S1351450AbiALINO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:13:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237993AbiALIKs (ORCPT
+        with ESMTP id S237993AbiALINK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:10:48 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C8DC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:10:48 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id t24so1633468qkg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:10:48 -0800 (PST)
+        Wed, 12 Jan 2022 03:13:10 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655C4C06173F;
+        Wed, 12 Jan 2022 00:13:10 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id e3so2541981lfc.9;
+        Wed, 12 Jan 2022 00:13:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dowhile0-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ln4Z+utk5t4wG7dSTr+N/vIytSHGiSk5Tc9SQNyOM48=;
-        b=jRXNSagtG+3zCQ/ueepVM/ZM8F+fDU+KYJkYAXte5pXlSXGD9pne8SjP5bzXRhTgTr
-         /LDmH+gdHv7f4ka7Fty9DPzim7kmqkCpYiSN6KQNDQ1L+UPPyG2am2s07g300gsYADGT
-         AJb+btdFlbtttkdtoD0ebAkqEFyeO5ZOGo36O3wC5NiCecrGTlB1idrAmqutPEOfyWam
-         n2rwJW/QZf1zc8D4/iVVtZbcNwIeE6AAM47bc7p45h7cvF0VojA9f3EwrNZAN7Pp7rug
-         7ldZ/AEjhRU4lUkcoA5PoPuAYB5eWOFx3J/E/jDvDoQ4tw6dtRSx+L/Q35l36UtxOMOi
-         uTrA==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Ui0cHnkj5I0HD2fe+MzyyLDDYFQT+ppgbg9aYqgOGaQ=;
+        b=PK01xfrMmh5kecd+m8mNSyqTT/hhuRPndmcj70so55KnrdpEXwL/6KoItu7rAZL/XF
+         RaSCIa8OkGbCcjUUaLcWfiDXQ+mzw6SxdTQJSmYPC4H/spPzuwMh+cIiy4B9lFaLIap9
+         ASo4kJFV/AsFC+rBGLtIDCClJUKOUQsxcKueaQ224s1SCZXGqx6dk8rNWROY9JHxHQYz
+         W2DXn5kho3mqn2iXb3761ZaurglP9kmoYYLwaAMirF7FE2Ax62r+nznsvR1AMy8WVJvr
+         B7rcnUEkYcqNEGSpG3owyBKnH2waME/mbVJ3hk/uHFVdurpkpDSZbCadDDR1mCOlu47m
+         IOIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ln4Z+utk5t4wG7dSTr+N/vIytSHGiSk5Tc9SQNyOM48=;
-        b=7tHh6OF7NmMyHrxNqguRvfBhxrQX9wGXYbatUZOjOe51GcM5j3akzMB2+F2ct69ooQ
-         X3WVDBZZPhFMtWDSlTVccEAWNsoqyzebVW36gfoaY6b3YaZCaeB/0smoojQ9jjlKWHPS
-         gP/GeKQ/Y93SfZqE2iwpCesj/0F3Z169vOeeFdzMBwuj0pXls1mmh/ApkRUZx1uWdj/i
-         UAKRbWIOgexyISvxvY6KBMmdeyWVq1CosA1M7D/s1eoexbE8/C7ZnTLms89JE8Ixd3Qy
-         x4YAyxJZztiAARutPGJkbBKko6dxyrSjxzsgc1q1qTqcl5bJcBiOp2AHkwI3OvGlEGA3
-         A1Rw==
-X-Gm-Message-State: AOAM5328F4jkB5ALqIH4KlkWFSc0JzuDaVhQksDOUq8R5YsMTG6QZx5D
-        Q92Rr23MqmLzyZEx6Whgpcy+qGJqKGXZPYTHq14aYQ==
-X-Google-Smtp-Source: ABdhPJxgw8vuzvGsNpSUXyvXwl1oHkWI75DxxBdrzPmti4gBxsNpCUeqpRI1bGJFhSec2o2EMW1PEEto2AraQlbf+yQ=
-X-Received: by 2002:a37:8045:: with SMTP id b66mr5682021qkd.670.1641975047533;
- Wed, 12 Jan 2022 00:10:47 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ui0cHnkj5I0HD2fe+MzyyLDDYFQT+ppgbg9aYqgOGaQ=;
+        b=JAHPE8MKY3Xj1rSWOXkV3sq0kf0P9wMWEHo9q9mXZKo47PqjVXN4HWeHdlmLji8wTG
+         OU6vHdkprg+OMDxdKC7u6gsm86eshyBBe59VnCBTfGbZ/sNYCqUf8Ll50zorfsnk+KZO
+         iU/rTNQrLZVZPh6uKbxi/4uHth6Q60dp5ofm7JlSWbuaBv3cwhiR+GmV/FW/UFh4CZCk
+         B2sSx66wE7KVpLqwU/TYKXtno3R87ozJFVUSi/QJxKpAK9CDsrsEDI+3TbTz2uR7k0J0
+         uJwFNCQ1jxIC2o7CmyHH2FQuJnp97QffWJnfFAdUa/x2adxV6aFQ+XcavKwa7j83s4ZK
+         r8ig==
+X-Gm-Message-State: AOAM530ejzck5rnUKoiDKsavurbaLgzomxQAPcgqWZM1+GjaURvn8dLW
+        oqfyRwAF1TVunhD9721iQ48=
+X-Google-Smtp-Source: ABdhPJyj7lXG9CASnnt14HBgHRh1fruIOO6aEFTwylkhyvTmZwgsEJSPtZR4Qjp3V4kzM4QEnbP/Cw==
+X-Received: by 2002:a2e:9581:: with SMTP id w1mr5744510ljh.36.1641975188762;
+        Wed, 12 Jan 2022 00:13:08 -0800 (PST)
+Received: from [192.168.2.145] (94-29-62-108.dynamic.spd-mgts.ru. [94.29.62.108])
+        by smtp.googlemail.com with ESMTPSA id a6sm1519757ljm.136.2022.01.12.00.13.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 00:13:08 -0800 (PST)
+Subject: Re: [Patch V1 1/4] memory: tegra: Add support for mc interrupts
+To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org
+Cc:     Snikam@nvidia.com, vdumpa@nvidia.com
+References: <1641926750-27544-1-git-send-email-amhetre@nvidia.com>
+ <1641926750-27544-2-git-send-email-amhetre@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <1c2dacc4-566a-929c-2100-37b6f9bece98@gmail.com>
+Date:   Wed, 12 Jan 2022 11:13:07 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220111175430.224421-1-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220111175430.224421-1-krzysztof.kozlowski@canonical.com>
-From:   Javier Martinez Canillas <javier@dowhile0.org>
-Date:   Wed, 12 Jan 2022 09:10:36 +0100
-Message-ID: <CABxcv===MQp6Riutw0Cs=CAxX1k9fNZfcL+nDEuRHveXzjMQBw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] regulator/mfd: dt-bindings: maxim,max77802:
- convert to dtschema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1641926750-27544-2-git-send-email-amhetre@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof,
+11.01.2022 21:45, Ashish Mhetre пишет:
+>  
+> @@ -765,16 +768,21 @@ static int tegra_mc_probe(struct platform_device *pdev)
+>  			return err;
+>  	}
+>  
+> -	if (mc->soc->ops && mc->soc->ops->handle_irq) {
+> +	if (mc->soc->interrupt_ops && mc->soc->interrupt_ops->handle_irq) {
+>  		mc->irq = platform_get_irq(pdev, 0);
+>  		if (mc->irq < 0)
+>  			return mc->irq;
+>  
+>  		WARN(!mc->soc->client_id_mask, "missing client ID mask for this SoC\n");
+>  
+> +		/* clear any mc-errs that occurred before. */
 
-On Tue, Jan 11, 2022 at 6:55 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> Hi,
->
-> Changes since v1
-> ================
-> 1. MFD: Use absolute path to schemas.
-> 2. Regulator: skip properties.
->
-> Dependencies
-> ============
-> 1. DTS patch: nothing depends on it, sending here so Rob's automatic
->    checker won't complain about DTS.
->    I will take it via Samsung SoC tree.
->
-> 2. Final MFD patch depends on regulator, so the two last patches could
->    go via Rob's, Mark's or Lee's trees.
->
-> Best regards,
-> Krzysztof
->
-> Krzysztof Kozlowski (3):
->   regulator: dt-bindings: maxim,max77802: convert to dtschema
->   dt-bindings: mfd: maxim,max77802: convert to dtschema
->   dt-bindings: leds: common: fix unit address in max77693 example
->
+s/mc-errs/Memory Controller errors/
 
-For the three patches:
+> +		if (mc->soc->interrupt_ops->clear_interrupt)
+> +			mc->soc->interrupt_ops->clear_interrupt(mc);
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+There is no explanation of this change neither in the code, nor in the
+commit message. Please always provide detailed descriptions for a
+non-trivial changes.
 
-Best regards,
-Javier
+Interrupts aren't cleared intentionally by the driver, otherwise you'll
+never know about early-boot memory faults which happened before the
+probe. Hence this change is incorrect.

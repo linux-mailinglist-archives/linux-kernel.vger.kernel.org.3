@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE5848C2D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EF848C2CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352734AbiALLGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 06:06:05 -0500
-Received: from mga03.intel.com ([134.134.136.65]:12357 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352721AbiALLGD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S1352724AbiALLGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 12 Jan 2022 06:06:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641985563; x=1673521563;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VuPOLmrsF8cSs6FEO/+gfqFlm4i8tVhcHrfju4W9VSk=;
-  b=atkP1DH3haQP44taRdIMAw1kQOThPAqdOOdnICw5CmLPwGl/vAroUNWj
-   NVnl4UtdkGcPvwynkRUMD8HFCfUEsfShkVKSoQqDnpy5eDuPP43D2GMXV
-   UTeoWiBIUpxG2r9LQr7A/VZbHasim5rHOZKhkNzbwTA5vFw1fp3lhfStm
-   /GvcE95JHwrJoL/kgqv3vZsW0Rt7YqteiWbey6tHgtifc4WE+pEjcb1mr
-   pgFMxYQ3sam2+s6DmnZtp+TeMsce2kRgTouF9xY5Jy6kkBMJsEkwH/Kbm
-   D62U2cIs3EbhBJ2JuRlR39+z7n2phkaAH3zuIexSHEQZOMuO+3rZxMPeb
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="243666479"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="243666479"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 03:05:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="670116996"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 12 Jan 2022 03:05:38 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 12 Jan 2022 13:05:37 +0200
-Date:   Wed, 12 Jan 2022 13:05:37 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Wayne Chang <waynec@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, singhanc@nvidia.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v5 1/1] ucsi_ccg: Check DEV_INT bit only when starting
- CCG4
-Message-ID: <Yd62AVTwH2pGgk4y@kuha.fi.intel.com>
-References: <20220112094143.628610-1-waynec@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220112094143.628610-1-waynec@nvidia.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239350AbiALLGA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 06:06:00 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307D6C06173F;
+        Wed, 12 Jan 2022 03:06:00 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id pf13so4175734pjb.0;
+        Wed, 12 Jan 2022 03:06:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=efnCwJ4wgzV+ae0TxSAq8p0i4hZZzCH5LWLiMt2dAJE=;
+        b=f/1n3avpzsj/EuXCiZYRr48U0S3OM7RPnCSuk27DXVwMQM7Ju+p8IUkhwDhgg6Ml4j
+         Gj5IFn5u3bC9FduiQO+qhtHpneaxd4WstAIuj6KV58CNEiN5gfaF5m/WY6fCmSE8iwKg
+         o8C/HzigxznDVMQ8XvaWb0N/dvbVUMcsaMBsKYc+UQ924jXYs2guYlYwlcBsOn9GVmW4
+         3txrEZ3xiOb8TrziW5OO/M04KJsTURXSMIcsdodIobGfi6KrooqAgqhUJ651FECGBhRQ
+         P4Wb+ccLav2WUBa6T92m39vulNuoLCkLyj43bK2Yekkmby/5xiTmXVmkw8FxZCv9qjvf
+         bv2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=efnCwJ4wgzV+ae0TxSAq8p0i4hZZzCH5LWLiMt2dAJE=;
+        b=yL7z+6ZpCYKMPTAR/ut3iVY0FM4Ydvlqt0gZUgdgq7Xd7og/Ry+TySvKgfVpAGIIMr
+         liURm9wvhdvCCn9Csre5neeiH7YddBFDyqhx/He6tvsdZpuyljFOHpzApDtH4tMSPvVF
+         nZYPK0ACcWzzokXKfEBDZUlTUqgEVMczRw/JsbDEFxG0+unC5AG4MqUIC18OeRbj52Cm
+         cLR+S1qO+b5B0Rh0lNewFJscF+8atzEZ6np5cTJNS2tCe9U+ymMvCJC2LfNnk+i2WPcJ
+         97wnTF5udeJo8QgxFKWvJ7GBbO3PTOYXcPYQ359B5SWo73rcra77OKEzBwxiyK7b9but
+         IflQ==
+X-Gm-Message-State: AOAM533f/C6BL3Rw5DH8MQrPf5qS8P3g9dJy7WZoWQ7l0TtiO2zmiDUQ
+        ozkOyQURzxhfasY0j2eUhaA=
+X-Google-Smtp-Source: ABdhPJwZ7JmlpvrmkxPo12gxEGrApToWsgG2LYg4nmFl+Su9WKF1tD+v6QwVtUq2UJN2XeJ7stIizA==
+X-Received: by 2002:a05:6a00:8cc:b0:4a8:262:49e1 with SMTP id s12-20020a056a0008cc00b004a8026249e1mr8715366pfu.28.1641985559757;
+        Wed, 12 Jan 2022 03:05:59 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id l3sm2291605pgs.74.2022.01.12.03.05.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 03:05:59 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     hverkuil@xs4all.nl
+Cc:     hans.verkuil@cisco.com, linmq006@gmail.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        m.tretter@pengutronix.de, mchehab@kernel.org,
+        p.zabel@pengutronix.de
+Subject: [PATCH v2] media: coda: Fix missing put_device() call in coda_get_vdoa_data
+Date:   Wed, 12 Jan 2022 11:05:54 +0000
+Message-Id: <20220112110554.1862-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <5454a150-7b11-dbce-02c4-d300c6629b1e@xs4all.nl>
+References: <5454a150-7b11-dbce-02c4-d300c6629b1e@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 05:41:43PM +0800, Wayne Chang wrote:
-> From: Sing-Han Chen <singhanc@nvidia.com>
-> 
-> CCGx clears Bit 0:Device Interrupt in the INTR_REG
-> if CCGx is reset successfully. However, there might
-> be a chance that other bits in INTR_REG are not
-> cleared due to internal data queued in PPM. This case
-> misleads the driver that CCGx reset failed.
-> 
-> The commit checks bit 0 in INTR_REG and ignores other
-> bits. The ucsi driver would reset PPM later.
-> 
-> Fixes: 247c554a14aa ("usb: typec: ucsi: add support for Cypress CCGx")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the error handling path.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Fixes: e7f3c5481035 ("[media] coda: use VDOA for un-tiling custom macroblock format")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+Changes in v2:
+- remove the goto and unused label.
+---
+ drivers/media/platform/coda/coda-common.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> ---
-> V4 -> V5: Added Cc tag and revised the commit messages
-> V3 -> V4: Updated the Fixes tag
-> V2 -> V3: Added the Fixes tag
-> V1 -> V2: Fixed the name of Sign-off-by
->  drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> index bff96d64dddf..6db7c8ddd51c 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -325,7 +325,7 @@ static int ucsi_ccg_init(struct ucsi_ccg *uc)
->  		if (status < 0)
->  			return status;
->  
-> -		if (!data)
-> +		if (!(data & DEV_INT))
->  			return 0;
->  
->  		status = ccg_write(uc, CCGX_RAB_INTR_REG, &data, sizeof(data));
-> -- 
-> 2.25.1
-
-thanks,
-
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index 0e312b0842d7..c3942b0abb00 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -408,6 +408,7 @@ static struct vdoa_data *coda_get_vdoa_data(void)
+ 	if (!vdoa_data)
+ 		vdoa_data = ERR_PTR(-EPROBE_DEFER);
+ 
++	put_device(&vdoa_pdev->dev);
+ out:
+ 	of_node_put(vdoa_node);
+ 
 -- 
-heikki
+2.17.1
+

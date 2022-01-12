@@ -2,258 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3346648C02E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7092B48C032
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:47:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351735AbiALIq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:46:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
+        id S1351747AbiALIrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:47:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348068AbiALIq2 (ORCPT
+        with ESMTP id S1351737AbiALIrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:46:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9A2C06173F;
-        Wed, 12 Jan 2022 00:46:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68196B81CB7;
-        Wed, 12 Jan 2022 08:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C95FC36AE9;
-        Wed, 12 Jan 2022 08:46:21 +0000 (UTC)
-Date:   Wed, 12 Jan 2022 09:46:17 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        David Laight <David.Laight@ACULAB.COM>,
-        carlos <carlos@redhat.com>
-Subject: Re: [RFC PATCH v2 1/2] rseq: x86: implement abort-at-ip extension
-Message-ID: <20220112084617.32bjjo774n7vvyct@wittgenstein>
-References: <20220110171611.8351-1-mathieu.desnoyers@efficios.com>
- <20220111110556.inteixgtl5vpmka7@wittgenstein>
- <1626924888.21447.1641922985771.JavaMail.zimbra@efficios.com>
+        Wed, 12 Jan 2022 03:47:07 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E71C06173F;
+        Wed, 12 Jan 2022 00:47:07 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id w19-20020a056830061300b0058f1dd48932so1740035oti.11;
+        Wed, 12 Jan 2022 00:47:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=s9uju5lktsl2BkeSmx7+Ucw5N0WQwmtf63EDu0Y/kqo=;
+        b=njpeRzdd707CcSA9IsThlEC7roEZp7FrGsogWyW2y9Ok8bMD2iuN733qt7/QDI0DMr
+         r+hVn9iTuE/eRvtVzYVR7x6xYj3YCxHVZI/oEw5feGVKCH8xTwsReVC2VzvTTRlVhW8+
+         F1Q8BuWvTPpOo5IiRf3O2yfNPUmHBkiFnqWGgPwaGojpVVyCgNvu/X+eCYjFE5z3WQDo
+         HfaUW8f+PzhQFzopdUyp5MjNWsPWP0FnByeJ8KQTcZhprfdJcGwqeoHgMCu0rA3kD9Ag
+         VKkOw6XKUbQ8jayOC47toLh2MfiInEHOa7jTMN6vXmgPcchHcsQwtGgWzUk1sMtGeNhN
+         hzoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=s9uju5lktsl2BkeSmx7+Ucw5N0WQwmtf63EDu0Y/kqo=;
+        b=iUQi89sLGbRaBesBVNB4vlvoxP9PYpfppi88tabh/sPE/bN+lQMMu4+VrNEqApOy+4
+         M/9ys/JRH7c1UjsRgBt70AcX44G9E0mYWsiV95W9ximhXstoBahvBBgY0lbH8C/vd9cx
+         krPhHM7Huoc9uQ/MvdSPreh+IYfomAypYwKFcpJ28FhY8Z95daVR8nyXQCRiXXMvnUjt
+         AKQ5ZoGIu3jBUCG4Egc+BQS1BAI1rSHWF6lbitfcz1RNQUKrKj+Vsccec3ydbMxZyGpw
+         djuMoSFxrTl6VokFX9IbL30T8tID2FZ/sVdCvNzlQS6ONDMsj1Wm8EouixpJINaSpjes
+         z1Lg==
+X-Gm-Message-State: AOAM533BmDjBIdDLLW+ugIH1Sts/ktMSydNKBXSrIeGjfrUHI6KOQ2LP
+        rPMrdXsOA1yh271HrDZVJ9GQUuICahJXWtN/bvHqbEB6
+X-Google-Smtp-Source: ABdhPJynnDNRHIEDntsC5XjuiwZCFNN+RWK5Wp/x6GpTKDHklJAXFCGgujYR1FRxcQADeQd2BjHO7RIxf/V6x4KlXPE=
+X-Received: by 2002:a9d:37a2:: with SMTP id x31mr1420675otb.51.1641977226796;
+ Wed, 12 Jan 2022 00:47:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1626924888.21447.1641922985771.JavaMail.zimbra@efficios.com>
+References: <20211124214418.GA1094@raspberrypi>
+In-Reply-To: <20211124214418.GA1094@raspberrypi>
+From:   Austin Kim <austinkernel.kim@gmail.com>
+Date:   Wed, 12 Jan 2022 17:46:56 +0900
+Message-ID: <CAOoBcBWHi+UJENsfNzG2NMAjBj0RjsKSWNDaQ+++F-uL0ubAYQ@mail.gmail.com>
+Subject: Re: [PATCH] ima: Fix trivial typos in the comments
+To:     Austin Kim <austindh.kim@gmail.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 12:43:05PM -0500, Mathieu Desnoyers wrote:
-> ----- On Jan 11, 2022, at 6:05 AM, Christian Brauner brauner@kernel.org wrote:
-> 
-> > On Mon, Jan 10, 2022 at 12:16:10PM -0500, Mathieu Desnoyers wrote:
-> >> Allow rseq critical section abort handlers to optionally figure out at
-> >> which instruction pointer the rseq critical section was aborted.
-> >> 
-> >> This allows implementing rseq critical sections with loops containing
-> >> the commit instruction, for which having the commit as last instruction
-> >> of the sequence is not possible.  This is useful to implement adaptative
-> >> mutexes aware of preemption in user-space. (see [1])
-> >> 
-> >> This also allows implementing rseq critical sections with multiple
-> >> commit steps, and use the abort-at-ip information to figure out what
-> >> needs to be undone in the abort handler.
-> >> 
-> >> Introduce the RSEQ_FLAG_QUERY_ABORT_AT_IP rseq system call flag.  This
-> >> lets userspace query whether the kernel and architecture supports the
-> >> abort-at-ip rseq extension.
-> >> 
-> >> Only provide this information for rseq critical sections for which the
-> >> rseq_cs descriptor has the RSEQ_CS_FLAG_ABORT_AT_IP flag set.  Abort
-> >> handlers for critical sections with this flag set need to readjust the
-> >> stack pointer.  The abort-at-ip pointer is populated by the kernel on
-> >> the top of stack on abort.  For x86-32, the abort handler of an
-> >> abort-at-ip critical section needs to add 4 bytes to the stack pointer.
-> >> For x86-64, the abort hanler needs to add 136 bytes to the stack
-> >> pointer: 8 bytes to skip the abort-at-ip value, and 128 bytes to skip
-> >> the x86-64 redzone for leaf functions.
-> >> 
-> >> [1]
-> >> https://github.com/compudj/rseq-test/blob/adapt-lock-abort-at-ip/test-rseq-adaptative-lock.c#L80
-> >> 
-> >> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> >> ---
-> >> Changes since v1:
-> >> - Use top of stack to place abort-at-ip value rather than ecx/rcx
-> >>   register,
-> >> - Skip redzone on x86-64.
-> >> ---
-> >>  arch/x86/include/asm/ptrace.h |  5 +++++
-> >>  arch/x86/kernel/ptrace.c      | 12 ++++++++++++
-> >>  include/uapi/linux/rseq.h     |  4 ++++
-> >>  kernel/rseq.c                 | 28 ++++++++++++++++++++++++++++
-> >>  4 files changed, 49 insertions(+)
-> >> 
-> >> diff --git a/arch/x86/include/asm/ptrace.h b/arch/x86/include/asm/ptrace.h
-> >> index 703663175a5a..c96eb2448110 100644
-> >> --- a/arch/x86/include/asm/ptrace.h
-> >> +++ b/arch/x86/include/asm/ptrace.h
-> >> @@ -387,5 +387,10 @@ extern int do_set_thread_area(struct task_struct *p, int
-> >> idx,
-> >>  # define do_set_thread_area_64(p, s, t)	(0)
-> >>  #endif
-> >>  
-> >> +#ifdef CONFIG_RSEQ
-> >> +# define RSEQ_ARCH_HAS_ABORT_AT_IP
-> >> +int rseq_abort_at_ip(struct pt_regs *regs, unsigned long ip);
-> >> +#endif
-> >> +
-> >>  #endif /* !__ASSEMBLY__ */
-> >>  #endif /* _ASM_X86_PTRACE_H */
-> >> diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
-> >> index 6d2244c94799..561ed98d12ba 100644
-> >> --- a/arch/x86/kernel/ptrace.c
-> >> +++ b/arch/x86/kernel/ptrace.c
-> >> @@ -1368,3 +1368,15 @@ void user_single_step_report(struct pt_regs *regs)
-> >>  {
-> >>  	send_sigtrap(regs, 0, TRAP_BRKPT);
-> >>  }
-> >> +
-> >> +int rseq_abort_at_ip(struct pt_regs *regs, unsigned long ip)
-> >> +{
-> >> +	if (user_64bit_mode(regs)) {
-> >> +		/* Need to skip redzone for leaf functions. */
-> >> +		regs->sp -= sizeof(u64) + 128;
-> >> +		return put_user(ip, (u64 __user *)regs->sp);
-> >> +	} else {
-> >> +		regs->sp -= sizeof(u32);
-> >> +		return put_user(ip, (u32 __user *)regs->sp);
-> >> +	}
-> > 
-> > I think it would be really helpful if you added the full explanation for
-> > sizeof(u64) + 128 or -sizeof(u32) into this codepath or provide
-> > constants. For folks not familiar with stuff like this it'll look like
-> > magic numbers. :)
-> 
-> Good point, here is the planned update:
+Hi,
 
-That's great, thanks!
+Would you take a look at this patch?
+It won't take long.
 
-> 
-> int rseq_abort_at_ip(struct pt_regs *regs, unsigned long ip)
-> {
->         if (user_64bit_mode(regs)) {
->                 /*
->                  * rseq abort-at-ip x86-64 ABI: stack pointer is decremented to
->                  * skip the redzone (128 bytes on x86-64), and decremented of
->                  * the pointer size (8 bytes).  The aborted address (abort-at-ip)
->                  * is stored at this updated stack pointer location (top of stack).
->                  *
->                  * Skipping the redzone is needed to make sure not to corrupt
->                  * stack data when the rseq critical section is within a leaf
->                  * function.
->                  */
->                 regs->sp -= sizeof(u64) + 128;
->                 return put_user(ip, (u64 __user *)regs->sp);
->         } else {
->                 /*
->                  * rseq abort-at-ip x86-32 ABI: stack pointer is decremented of
->                  * the pointer size (4 bytes).  The aborted address (abort-at-ip)
->                  * is stored at this updated stack pointer location (top of stack).
->                  */
->                 regs->sp -= sizeof(u32);
->                 return put_user(ip, (u32 __user *)regs->sp);
->         }
-> }
-> 
-> 
-> 
-> > 
-> >> +}
-> >> diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
-> >> index 9a402fdb60e9..3130232e6d0c 100644
-> >> --- a/include/uapi/linux/rseq.h
-> >> +++ b/include/uapi/linux/rseq.h
-> >> @@ -20,12 +20,14 @@ enum rseq_cpu_id_state {
-> >>  
-> >>  enum rseq_flags {
-> >>  	RSEQ_FLAG_UNREGISTER = (1 << 0),
-> >> +	RSEQ_FLAG_QUERY_ABORT_AT_IP = (1 << 1),
-> >>  };
-> >>  
-> >>  enum rseq_cs_flags_bit {
-> >>  	RSEQ_CS_FLAG_NO_RESTART_ON_PREEMPT_BIT	= 0,
-> >>  	RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT	= 1,
-> >>  	RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT	= 2,
-> >> +	RSEQ_CS_FLAG_ABORT_AT_IP_BIT		= 3,
-> >>  };
-> >>  
-> >>  enum rseq_cs_flags {
-> >> @@ -35,6 +37,8 @@ enum rseq_cs_flags {
-> >>  		(1U << RSEQ_CS_FLAG_NO_RESTART_ON_SIGNAL_BIT),
-> >>  	RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE	=
-> >>  		(1U << RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT),
-> >> +	RSEQ_CS_FLAG_ABORT_AT_IP		=
-> >> +		(1U << RSEQ_CS_FLAG_ABORT_AT_IP_BIT),
-> >>  };
-> >>  
-> >>  /*
-> >> diff --git a/kernel/rseq.c b/kernel/rseq.c
-> >> index 6d45ac3dae7f..fb52f2d11b56 100644
-> >> --- a/kernel/rseq.c
-> >> +++ b/kernel/rseq.c
-> >> @@ -21,6 +21,13 @@
-> >>  #define RSEQ_CS_PREEMPT_MIGRATE_FLAGS (RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE | \
-> >>  				       RSEQ_CS_FLAG_NO_RESTART_ON_PREEMPT)
-> >>  
-> >> +#ifdef RSEQ_ARCH_HAS_ABORT_AT_IP
-> >> +static bool rseq_has_abort_at_ip(void) { return true; }
-> >> +#else
-> >> +static bool rseq_has_abort_at_ip(void) { return false; }
-> >> +static int rseq_abort_at_ip(struct pt_regs *regs, unsigned long ip) { return 0;
-> >> }
-> >> +#endif
-> >> +
-> >>  /*
-> >>   *
-> >>   * Restartable sequences are a lightweight interface that allows
-> >> @@ -79,6 +86,16 @@
-> >>   *
-> >>   *       [abort_ip]
-> >>   *   F1. <failure>
-> >> + *
-> >> + * rseq critical sections defined with the RSEQ_CS_FLAG_ABORT_AT_IP flag
-> >> + * have the following behavior on abort: when the stack grows down: the
-> >> + * stack pointer is decremented to skip the redzone, and decremented of
-> >> + * the pointer size.  The aborted address (abort-at-ip) is stored at
-> >> + * this stack pointer location.  The user-space abort handler needs to
-> >> + * pop the abort-at-ip address from the stack, and add the redzone size
-> >> + * to the stack pointer.
-> >> + *
-> >> + * TODO: describe stack grows up.
-> > 
-> > Is this intentional or did you forget? :)
-> 
-> Since I did not implement abort-at-ip on stack-grows-up architectures, I felt
-> it would be too early to describe the algorithm. I can simply remove the TODO
-> altogether and we'll take care of it when we get there ? If I had to try to
-> wordsmith it, it would look like e.g.:
-> 
->  *                                    [...] When the stack grows up: the
->  * stack pointer is incremented to skip the redzone, and incremented of
->  * the pointer size.  The aborted address (abort-at-ip) is stored immediately
->  * under this stack pointer location.  The user-space abort handler needs to
->  * pop the abort-at-ip address from the stack, and subtract the redzone size
->  * from the stack pointer.
-> 
-> [ Please let me know if I got somehow confused in my understanding of stack grows
-> up architectures. ]
-> 
-> I'm also unsure whether any of the stack grows up architecture have redzones ?
+BR,
+Austin Kim
 
-I don't think so? From when I last touched that piece of arch code when
-massaging copy_thread() I only remember parisc as having an upwards
-growing stack.
-
-> From a quick grep for redzone in Linux arch/, only openrisc, powerpc64 and
-> x86-64 appear to have redzones.
+2021=EB=85=84 11=EC=9B=94 26=EC=9D=BC (=EA=B8=88) =EC=98=A4=EC=A0=84 11:34,=
+ Austin Kim <austindh.kim@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> There are a few minor typos in the comments. Fix these.
+>
+> Signed-off-by: Austin Kim <austindh.kim@gmail.com>
+> ---
+>  security/integrity/ima/ima_api.c          | 2 +-
+>  security/integrity/ima/ima_main.c         | 2 +-
+>  security/integrity/ima/ima_policy.c       | 2 +-
+>  security/integrity/ima/ima_template_lib.c | 2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/im=
+a_api.c
+> index a64fb0130b01..5b220a2fe573 100644
+> --- a/security/integrity/ima/ima_api.c
+> +++ b/security/integrity/ima/ima_api.c
+> @@ -238,7 +238,7 @@ int ima_collect_measurement(struct integrity_iint_cac=
+he *iint,
+>                 goto out;
+>
+>         /*
+> -        * Dectecting file change is based on i_version. On filesystems
+> +        * Detecting file change is based on i_version. On filesystems
+>          * which do not support i_version, support is limited to an initi=
+al
+>          * measurement/appraisal/audit.
+>          */
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
+ma_main.c
+> index 8c6e4514d494..8ed6da428328 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -764,7 +764,7 @@ int ima_post_read_file(struct file *file, void *buf, =
+loff_t size,
+>   *           call to ima_post_load_data().
+>   *
+>   * Callers of this LSM hook can not measure, appraise, or audit the
+> - * data provided by userspace.  Enforce policy rules requring a file
+> + * data provided by userspace.  Enforce policy rules requiring a file
+>   * signature (eg. kexec'ed kernel image).
+>   *
+>   * For permission return 0, otherwise return -EACCES.
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima=
+/ima_policy.c
+> index 320ca80aacab..ad7e19208a69 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -429,7 +429,7 @@ static int ima_lsm_update_rule(struct ima_rule_entry =
+*entry)
+>         /*
+>          * ima_lsm_copy_rule() shallow copied all references, except for =
+the
+>          * LSM references, from entry to nentry so we only want to free t=
+he LSM
+> -        * references and the entry itself. All other memory refrences wi=
+ll now
+> +        * references and the entry itself. All other memory references w=
+ill now
+>          * be owned by nentry.
+>          */
+>         ima_lsm_free_rule(entry);
+> diff --git a/security/integrity/ima/ima_template_lib.c b/security/integri=
+ty/ima/ima_template_lib.c
+> index ca017cae73eb..5a5d462ab36d 100644
+> --- a/security/integrity/ima/ima_template_lib.c
+> +++ b/security/integrity/ima/ima_template_lib.c
+> @@ -272,7 +272,7 @@ static int ima_eventdigest_init_common(const u8 *dige=
+st, u32 digestsize,
+>          * digest formats:
+>          *  - DATA_FMT_DIGEST: digest
+>          *  - DATA_FMT_DIGEST_WITH_ALGO: [<hash algo>] + ':' + '\0' + dig=
+est,
+> -        *    where <hash algo> is provided if the hash algoritm is not
+> +        *    where <hash algo> is provided if the hash algorithm is not
+>          *    SHA1 or MD5
+>          */
+>         u8 buffer[CRYPTO_MAX_ALG_NAME + 2 + IMA_MAX_DIGEST_SIZE] =3D { 0 =
+};
+> --
+> 2.20.1
+>

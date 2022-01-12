@@ -2,359 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0750848CBFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE0E48CC02
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238880AbiALTbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:31:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
+        id S1345123AbiALTbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345043AbiALT3h (ORCPT
+        with ESMTP id S242447AbiALTbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:29:37 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668E4C061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:29:36 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id j11so11772552lfg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:29:36 -0800 (PST)
+        Wed, 12 Jan 2022 14:31:13 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B3DC061751
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:31:12 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id l13so2559224qvz.10
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:31:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=hsIYvPFsQpFlvnu+4QvX7hPubnwS5nh6fnjUwOjpcw4=;
-        b=W9nZI7OOzFut0ywxhhcABMfJKkyquB1m3dTmKINFu3ueD7bAzW4z5a83Pcpls1SFN1
-         m3b+WpSYv5SfdlyxKty+oPMy1O5igtGRhpIMYkrcm0PEs2a/jZT9ZUFtj469XXeO4tye
-         cEvlIOERhl4+rFqZlCFbWT27dBDKraoRGMr6T5ZncsS+gCf0kX3rDvv8R9pCf+6B/bb8
-         K1JqW84x4QYKr+A4LYaj1YRaucBpTF148u0Lff3Fsjzpu/Snk5RrOfBV25gDswIaPfd5
-         0H4EH0vebLGoOhZ1fdumRGFCrwbjtwMFdZnZXo1tfcX4TC3CpYijiVifSs63KH2HLnit
-         5Qbg==
+        bh=KPUZPC7mXCjPccDHGkZXT/St+JP8rkpXgLzmJC/vgmw=;
+        b=S8Jxp6bnUFN1BWPzxUiK5ka/41HWamlWdabBFBawIBZ789+Pkoy6jRmhTQbgDPRW0L
+         X79mLKs3wSwdqzRu5EIcPr1+zg/J750tdo2KfMF/6xYjxOs8KBgr5lhcOeNTz/ia+XSh
+         YTrtbeTffff8WEtlm7s5bhDzfXuCELxJzmKEL+JZjO3wh2quZjJXYrkUGGk0lYv2PMQW
+         DYotx9DXwm8tv/mwSA36chwFIxOaEtlOjmLP9Iwro2+zceNwH5pf1nYvbYvP4FoOAO2W
+         80Fx/cG48QddDt3LCKYH9/RsORwCss33ojxuQyULPhaU+EcO60fuIdtrS9ClQ/wZEuGr
+         PRIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=hsIYvPFsQpFlvnu+4QvX7hPubnwS5nh6fnjUwOjpcw4=;
-        b=zsfiUdUBQtid8bSuD6oIFRIM89JU91ZK0ozLTjHlDNSWLD0nRKuqW0jifVOu+Y4vRo
-         qFbwedw7ysiMsPtf6yipSCfn2dxT65AbIedT/20Q7PH1QWMNCKVDbOGGvr0uMCHwLuHE
-         TTwFxKZWAUfUIdPF8VIGcWp4l12eLD7Df+1Ph9DrbjDzE7YJox6vs42515Vr+WP1CfnZ
-         jK7NztANjHnWOs5FBj5pAQD5wij7Bxyxn6e6VYYRuvU4IXTXjRLDhaTg2pyvGB0i/vTp
-         7t/Bo2vOSuRhjcadR8Za5lvAK6ulzgJUk1HvqMR0jEtf/Ni8W+knWCenriJQ1siH8rQK
-         5zpQ==
-X-Gm-Message-State: AOAM533jezGVPLse19mNZAQg0MzhS9JeDiZUgSnoJChEtJIni7faek8g
-        oeqP6NXMp9ysa5qV/0FNSnp4vitqaENhaA==
-X-Google-Smtp-Source: ABdhPJwfteyA3AxwkXuikDGECkDTTZNKK9LbcePDkVLp26AbPKfei0LSJ9JM3HlNHHeCMcQnGlCG0A==
-X-Received: by 2002:a05:651c:982:: with SMTP id b2mr666698ljq.55.1642015773947;
-        Wed, 12 Jan 2022 11:29:33 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id p9sm72383lfu.83.2022.01.12.11.29.31
+        bh=KPUZPC7mXCjPccDHGkZXT/St+JP8rkpXgLzmJC/vgmw=;
+        b=Sx+4745ryYa8dTa43vCeaqwX0O8Nlez+pqUZkF2ZOeYpIV7eInaUgyyfMdOsvfMBto
+         n4/isEVhujK3GaeGdT0sAgwjl2ejrcGVfEX1y3OLj3bNChPkVq86uMKLODIBqoJee9hl
+         cUZhhjcoKmWpMpZVLPy7CP+lDT8oFN2cB5TIDd/Vdb71WFLCFvkN0AUrM408O29zbDlt
+         JyWHXWsIKml41Je41a2kviubv5zehA4C4YPYUnwv1XORNZpo1KmZ6XU+78O2U1lWNxlA
+         oetjiTp0bPVtfAoI+6qM9AWkY42GlOmkvuSg4Z/MHchJqQkMr8DjGTqXxTeX+0hlaFYc
+         GYYQ==
+X-Gm-Message-State: AOAM533DbcwmghasvI4/KERC2984/MMiLG83gx050GCx4kzO0n3gBoH5
+        jrU1mO7syHrqM4BG7H+mvw==
+X-Google-Smtp-Source: ABdhPJxPoEb6FawqYUheCv1D9WhofObClNu7d3NLeJ0x/+cf95VgiON48fDy1oGwWTnVAptcmSEliQ==
+X-Received: by 2002:ad4:5ded:: with SMTP id jn13mr1122262qvb.112.1642015871965;
+        Wed, 12 Jan 2022 11:31:11 -0800 (PST)
+Received: from gabell (209-6-122-159.s2973.c3-0.arl-cbr1.sbo-arl.ma.cable.rcncustomer.com. [209.6.122.159])
+        by smtp.gmail.com with ESMTPSA id x9sm530599qta.10.2022.01.12.11.31.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 11:29:32 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 1B9F2103A6D; Wed, 12 Jan 2022 22:29:55 +0300 (+03)
-Date:   Wed, 12 Jan 2022 22:29:55 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
+        Wed, 12 Jan 2022 11:31:11 -0800 (PST)
+Date:   Wed, 12 Jan 2022 14:31:08 -0500
+From:   Masayoshi Mizuma <msys.mizuma@gmail.com>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     wens@kernel.org, Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>, tsbogend@alpha.franken.de,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Jason Cooper <jason@lakedaemon.net>, ito-yuichi@fujitsu.com,
+        mpe@ellerman.id.au, x86@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Douglas Anderson <dianders@chromium.org>,
+        Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
+        julien.thierry.kdev@gmail.com,
+        Jason Wessel <jason.wessel@windriver.com>,
+        kgdb-bugreport@lists.sourceforge.net,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 3/7] efi/x86: Implement support for unaccepted memory
-Message-ID: <20220112192955.amelr4sq662pfv67@box.shutemov.name>
-References: <20220111113314.27173-1-kirill.shutemov@linux.intel.com>
- <20220111113314.27173-4-kirill.shutemov@linux.intel.com>
- <b3348430-1b91-4b8b-b70c-76d48f8737f7@intel.com>
+        David Miller <davem@davemloft.net>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v7 0/7] arm64: Add framework to turn an IPI as NMI
+Message-ID: <Yd8sfP0IXN4KiLuP@gabell>
+References: <1604317487-14543-1-git-send-email-sumit.garg@linaro.org>
+ <CAGb2v66mVoWiCibjq25d3Z8OvbWNO9p+vMo761RJLiD-BqVbqw@mail.gmail.com>
+ <CAFA6WYN-wpQ86ik5FeAhimCcCoRAs9_g3BGL8CiSUmHxfeCSbg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b3348430-1b91-4b8b-b70c-76d48f8737f7@intel.com>
+In-Reply-To: <CAFA6WYN-wpQ86ik5FeAhimCcCoRAs9_g3BGL8CiSUmHxfeCSbg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 09:17:19AM -0800, Dave Hansen wrote:
-> On 1/11/22 03:33, Kirill A. Shutemov wrote:
-> ...
-> > +void mark_unaccepted(struct boot_params *params, u64 start, u64 end)
-> > +{
-> > +	/*
-> > +	 * The accepted memory bitmap only works at PMD_SIZE granularity.
-> > +	 * If a request comes in to mark memory as unaccepted which is not
-> > +	 * PMD_SIZE-aligned, simply accept the memory now since it can not be
-> > +	 * *marked* as unaccepted.
-> > +	 */
-> > +
-> > +	/* Immediately accept whole range if it is within a PMD_SIZE block: */
-> > +	if ((start & PMD_MASK) == (end & PMD_MASK)) {
-> > +		npages = (end - start) / PAGE_SIZE;
-> > +		__accept_memory(start, start + npages * PAGE_SIZE);
-> > +		return;
-> > +	}
+On Wed, Jul 07, 2021 at 11:29:29AM +0530, Sumit Garg wrote:
+> On Fri, 25 Jun 2021 at 20:26, Chen-Yu Tsai <wens@kernel.org> wrote:
+> >
+> > On Mon, Nov 2, 2020 at 7:46 PM Sumit Garg <sumit.garg@linaro.org> wrote:
+> > >
+> > > With pseudo NMIs support available its possible to configure SGIs to be
+> > > triggered as pseudo NMIs running in NMI context. And kernel features
+> > > such as:
+> > > - NMI backtrace can leverage IPI turned as NMI to get a backtrace of CPU
+> > >   stuck in hard lockup using magic SYSRQ.
+> > > - kgdb relies on NMI support to round up CPUs which are stuck in hard
+> > >   lockup state with interrupts disabled.
+> > >
+> > > This patch-set adds framework to turn an IPI as NMI which can be triggered
+> > > as a pseudo NMI which in turn invokes registered NMI handlers.
+> > >
+> > > After this patch-set we should be able to get a backtrace for a CPU
+> > > stuck in HARDLOCKUP. Have a look at an examples below from a hard lockup
+> > > testcase run on Developerbox:
+> > >
+> > > $ echo HARDLOCKUP > /sys/kernel/debug/provoke-crash/DIRECT
+> > >
+> > > NMI backtrace:
+> > > ==============
+> > >
+> > > # Issue Magic SysRq to dump backtrace
+> > >
+> > > [  376.894502] NMI backtrace for cpu 8
+> > > [  376.894506] CPU: 8 PID: 555 Comm: bash Not tainted 5.9.0-rc3-00740-g06ff047-dirty #242
+> > > [  376.894510] Hardware name: Socionext SynQuacer E-series DeveloperBox, BIOS build #73 Apr  6 2020
+> > > [  376.894514] pstate: 40000005 (nZcv daif -PAN -UAO BTYPE=--)
+> > > [  376.894517] pc : lkdtm_HARDLOCKUP+0x8/0x18
+> > > [  376.894520] lr : lkdtm_do_action+0x24/0x30
+> > > [  376.894524] sp : ffff800012cebd20
+> > > [  376.894527] pmr_save: 00000060
+> > > [  376.894530] x29: ffff800012cebd20 x28: ffff000875ae8000
+> > > [  376.894540] x27: 0000000000000000 x26: 0000000000000000
+> > > [  376.894550] x25: 000000000000001a x24: ffff800012cebe40
+> > > [  376.894560] x23: 000000000000000b x22: ffff800010fc5040
+> > > [  376.894569] x21: ffff000878b61000 x20: ffff8000113b2870
+> > > [  376.894579] x19: 000000000000001b x18: 0000000000000010
+> > > [  376.894588] x17: 0000000000000000 x16: 0000000000000000
+> > > [  376.894598] x15: ffff000875ae8470 x14: 00000000000002ad
+> > > [  376.894613] x13: 0000000000000000 x12: 0000000000000000
+> > > [  376.894622] x11: 0000000000000007 x10: 00000000000009c0
+> > > [  376.894631] x9 : ffff800012ceba80 x8 : ffff000875ae8a20
+> > > [  376.894641] x7 : ffff00087f6b3280 x6 : ffff00087f6b3200
+> > > [  376.894651] x5 : 0000000000000000 x4 : ffff00087f6a91f8
+> > > [  376.894660] x3 : ffff00087f6b0120 x2 : 1aa310cec69eb500
+> > > [  376.894670] x1 : 0000000000000000 x0 : 0000000000000060
+> > > [  376.894679] Call trace:
+> > > [  376.894683]  lkdtm_HARDLOCKUP+0x8/0x18
+> > > [  376.894686]  direct_entry+0x124/0x1c0
+> > > [  376.894689]  full_proxy_write+0x60/0xb0
+> > > [  376.894693]  vfs_write+0xf0/0x230
+> > > [  376.894696]  ksys_write+0x6c/0xf8
+> > > [  376.894699]  __arm64_sys_write+0x1c/0x28
+> > > [  376.894703]  el0_svc_common.constprop.0+0x74/0x1f0
+> > > [  376.894707]  do_el0_svc+0x24/0x90
+> > > [  376.894710]  el0_sync_handler+0x180/0x2f8
+> > > [  376.894713]  el0_sync+0x158/0x180
+> > >
+> > > KGDB:
+> > > =====
+> > >
+> > > # Enter kdb via Magic SysRq
+> > >
+> > > [6]kdb> btc
+> > > btc: cpu status: Currently on cpu 6
+> > > Available cpus: 0-5(I), 6, 7(I), 8, 9-23(I)
+> > > <snip>
+> > > Stack traceback for pid 555
+> > > 0xffff000875ae8000      555      554  1    8   R  0xffff000875ae89c0  bash
+> > > CPU: 8 PID: 555 Comm: bash Not tainted 5.9.0-rc3-00740-g06ff047-dirty #242
+> > > Hardware name: Socionext SynQuacer E-series DeveloperBox, BIOS build #73 Apr  6 2020
+> > > Call trace:
+> > >  dump_backtrace+0x0/0x1a0
+> > >  show_stack+0x18/0x28
+> > >  dump_stack+0xc0/0x11c
+> > >  kgdb_cpu_enter+0x648/0x660
+> > >  kgdb_nmicallback+0xa0/0xa8
+> > >  ipi_kgdb_nmicallback+0x24/0x30
+> > >  ipi_nmi_handler+0x48/0x60
+> > >  handle_percpu_devid_fasteoi_ipi+0x74/0x88
+> > >  generic_handle_irq+0x30/0x48
+> > >  handle_domain_nmi+0x48/0x80
+> > >  gic_handle_irq+0x18c/0x34c
+> > >  el1_irq+0xcc/0x180
+> > >  lkdtm_HARDLOCKUP+0x8/0x18
+> > >  direct_entry+0x124/0x1c0
+> > >  full_proxy_write+0x60/0xb0
+> > >  vfs_write+0xf0/0x230
+> > >  ksys_write+0x6c/0xf8
+> > >  __arm64_sys_write+0x1c/0x28
+> > >  el0_svc_common.constprop.0+0x74/0x1f0
+> > >  do_el0_svc+0x24/0x90
+> > >  el0_sync_handler+0x180/0x2f8
+> > >  el0_sync+0x158/0x180
+> > > <snip>
+> > >
+> > > Changes in v7:
+> > > - Add a new library function: kgdb_smp_call_nmi_hook() to expose fallback
+> > >   mechanism to arch specific code.
+> > > - Addressed other misc comments from Daniel.
+> > >
+> > > Changes in v6:
+> > > - Two new patches: #4 and #6 which adds runtime fallback framework for
+> > >   sysrq backtrace and kgdb roundup features.
+> > > - Reversed order of NMI backtrace and kgdb roundup feaure patches.
+> > > - Addressed other misc. comments from Marc.
+> > > - I haven't picked any tags from v5 since I think there is major rework
+> > >   involved. Masayoshi, could you please confirm if these features still
+> > >   work for you?
+> > >
+> > > Changes in v5:
+> > > - Rebased to head of upstream master.
+> > > - Remove redundant invocation of ipi_nmi_setup().
+> > > - Addressed misc. comments.
+> > >
+> > > Changes in v4:
+> > > - Move IPI NMI framework to a separate file.
+> > > - Get rid of hard-coded IPI_CALL_NMI_FUNC allocation.
+> > > - Add NMI backtrace support leveraged via magic SYSRQ.
+> > >
+> > > Changes in v3:
+> > > - Rebased to Marc's latest IPIs patch-set [1].
+> > >
+> > > [1] https://lkml.org/lkml/2020/9/1/603
+> > >
+> > > Changes since RFC version [1]:
+> > > - Switch to use generic interrupt framework to turn an IPI as NMI.
+> > > - Dependent on Marc's patch-set [2] which turns IPIs into normal
+> > >   interrupts.
+> > > - Addressed misc. comments from Doug on patch #4.
+> > > - Posted kgdb NMI printk() fixup separately which has evolved since
+> > >   to be solved using different approach via changing kgdb interception
+> > >   of printk() in common printk() code (see patch [3]).
+> > >
+> > > [1] https://lkml.org/lkml/2020/4/24/328
+> > > [2] https://lkml.org/lkml/2020/5/19/710
+> > > [3] https://lkml.org/lkml/2020/5/20/418
+> > >
+> > > Sumit Garg (7):
+> > >   arm64: Add framework to turn IPI as NMI
+> > >   irqchip/gic-v3: Enable support for SGIs to act as NMIs
+> > >   arm64: smp: Assign and setup an IPI as NMI
+> > >   nmi: backtrace: Allow runtime arch specific override
+> > >   arm64: ipi_nmi: Add support for NMI backtrace
+> > >   kgdb: Expose default CPUs roundup fallback mechanism
+> > >   arm64: kgdb: Roundup cpus using IPI as NMI
+> >
+> > Tested-by: Chen-Yu Tsai <wens@csie.org>
+> >
+> > on an ROC-RK3399-PC.
 > 
-> I still don't quite like how this turned out.  It's still a bit unclear to
-> the reader that this has covered all the corner cases.  I think this needs a
-> better comment:
+> Thanks for testing this feature.
 > 
-> 	/*
-> 	 * Handle <PMD_SIZE blocks that do not end at a PMD boundary.
-> 	 *
-> 	 * Immediately accept the whole block.  This handles the case
-> 	 * where the below round_{up,down}() would "lose" a small,
-> 	 * <PMD_SIZE block.
-> 	 */
-> 	if ((start & PMD_MASK) == (end & PMD_MASK)) {
-> 		...
-> 		return;
-> 	}
-> 
-> 	/*
-> 	 * There is at least one more block to accept.  Both 'start'
-> 	 * and 'end' may not be PMD-aligned.
-> 	 */
+> -Sumit
 
-Okay, looks better. Thanks.
+Hello Sumit,
 
-> > +	/* Immediately accept a <PMD_SIZE piece at the start: */
-> > +	if (start & ~PMD_MASK) {
-> > +		__accept_memory(start, round_up(start, PMD_SIZE));
-> > +		start = round_up(start, PMD_SIZE);
-> > +	}
-> > +
-> > +	/* Immediately accept a <PMD_SIZE piece at the end: */
-> > +	if (end & ~PMD_MASK) {
-> > +		__accept_memory(round_down(end, PMD_SIZE), end);
-> > +		end = round_down(end, PMD_SIZE);
-> > +	}
-> 
-> 	/*
-> 	 * 'start' and 'end' are now both PMD-aligned.
-> 	 * Record the range as being unaccepted:
-> 	 */
+How is this patch series going?
 
-Okay.
-
-> > +	if (start == end)
-> > +		return;
-> 
-> Does bitmap_set()not accept zero-sized 'len' arguments?
-
-Looks like it does. Will drop this.
-
-> > +	bitmap_set((unsigned long *)params->unaccepted_memory,
-> > +		   start / PMD_SIZE, (end - start) / PMD_SIZE);
-> > +}
-> 
-> The code you have there is _precise_.  It will never eagerly accept any area
-> that _can_ be represented in the bitmap.  But, that's kinda hard to
-> describe.  Maybe we should be a bit more sloppy about accepting things up
-> front to make it easier to describe:
-> 
-> 	/*
-> 	 * Accept small regions that might not be
-> 	 * able to be represented in the bitmap:
-> 	 */
-> 	if (end - start < PMD_SIZE*2) {
-> 		npages = (end - start) / PAGE_SIZE;
-> 		__accept_memory(start, start + npages * PAGE_SIZE);
-> 		return;
-> 	}
-> 
-> 	/*
-> 	 * No matter how the start and end are aligned, at
-> 	 * least one unaccepted PMD_SIZE area will remain.
-> 	 */
-> 
-> 	... now do the start/end rounding
-> 
-> That has the downside of accepting a few things that it doesn't *HAVE* to
-> accept.  But, its behavior is very easy to describe.
-
-Hm. Okay. I will give it a try. I like how it is now, but maybe it will be
-better.
-
-> 
-> > diff --git a/arch/x86/include/asm/unaccepted_memory.h b/arch/x86/include/asm/unaccepted_memory.h
-> > new file mode 100644
-> > index 000000000000..cbc24040b853
-> > --- /dev/null
-> > +++ b/arch/x86/include/asm/unaccepted_memory.h
-> > @@ -0,0 +1,12 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/* Copyright (C) 2020 Intel Corporation */
-> > +#ifndef _ASM_X86_UNACCEPTED_MEMORY_H
-> > +#define _ASM_X86_UNACCEPTED_MEMORY_H
-> > +
-> > +#include <linux/types.h>
-> > +
-> > +struct boot_params;
-> > +
-> > +void mark_unaccepted(struct boot_params *params, u64 start, u64 num);
-> > +
-> > +#endif
-> > diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
-> > index b25d3f82c2f3..16bc686a198d 100644
-> > --- a/arch/x86/include/uapi/asm/bootparam.h
-> > +++ b/arch/x86/include/uapi/asm/bootparam.h
-> > @@ -217,7 +217,8 @@ struct boot_params {
-> >   	struct boot_e820_entry e820_table[E820_MAX_ENTRIES_ZEROPAGE]; /* 0x2d0 */
-> >   	__u8  _pad8[48];				/* 0xcd0 */
-> >   	struct edd_info eddbuf[EDDMAXNR];		/* 0xd00 */
-> > -	__u8  _pad9[276];				/* 0xeec */
-> > +	__u64 unaccepted_memory;			/* 0xeec */
-> > +	__u8  _pad9[268];				/* 0xef4 */
-> >   } __attribute__((packed));
-> >   /**
-> > diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
-> > index 2c3dac5ecb36..36c1bf33f112 100644
-> > --- a/drivers/firmware/efi/Kconfig
-> > +++ b/drivers/firmware/efi/Kconfig
-> > @@ -243,6 +243,20 @@ config EFI_DISABLE_PCI_DMA
-> >   	  options "efi=disable_early_pci_dma" or "efi=no_disable_early_pci_dma"
-> >   	  may be used to override this option.
-> > +config UNACCEPTED_MEMORY
-> > +	bool
-> > +	depends on EFI_STUB
-> > +	help
-> > +	   Some Virtual Machine platforms, such as Intel TDX, introduce
-> > +	   the concept of memory acceptance, requiring memory to be accepted
-> > +	   before it can be used by the guest. This protects against a class of
-> > +	   attacks by the virtual machine platform.
-> 
-> 	Some Virtual Machine platforms, such as Intel TDX, require
-> 	some memory to be "accepted" by the guest before it can be used.
-> 	This requirement protects against a class of attacks by the
-> 	virtual machine platform.
-> 
-> Can we make this "class of attacks" a bit more concrete?  Maybe:
-> 
-> 	This mechanism helps prevent malicious hosts from making changes
-> 	to guest memory.
-> 
-> ??
-
-Okay.
-
-> > +	   UEFI specification v2.9 introduced EFI_UNACCEPTED_MEMORY memory type.
-> > +
-> > +	   This option adds support for unaccepted memory and makes such memory
-> > +	   usable by kernel.
-> > +
-> >   endmenu
-> >   config EFI_EMBEDDED_FIRMWARE
-> > diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-> > index ae79c3300129..abe862c381b6 100644
-> > --- a/drivers/firmware/efi/efi.c
-> > +++ b/drivers/firmware/efi/efi.c
-> > @@ -740,6 +740,7 @@ static __initdata char memory_type_name[][13] = {
-> >   	"MMIO Port",
-> >   	"PAL Code",
-> >   	"Persistent",
-> > +	"Unaccepted",
-> >   };
-> >   char * __init efi_md_typeattr_format(char *buf, size_t size,
-> > diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> > index a0b946182b5e..346b12d6f1b2 100644
-> > --- a/drivers/firmware/efi/libstub/x86-stub.c
-> > +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> > @@ -9,12 +9,14 @@
-> >   #include <linux/efi.h>
-> >   #include <linux/pci.h>
-> >   #include <linux/stddef.h>
-> > +#include <linux/bitmap.h>
-> >   #include <asm/efi.h>
-> >   #include <asm/e820/types.h>
-> >   #include <asm/setup.h>
-> >   #include <asm/desc.h>
-> >   #include <asm/boot.h>
-> > +#include <asm/unaccepted_memory.h>
-> >   #include "efistub.h"
-> > @@ -504,6 +506,13 @@ setup_e820(struct boot_params *params, struct setup_data *e820ext, u32 e820ext_s
-> >   			e820_type = E820_TYPE_PMEM;
-> >   			break;
-> > +		case EFI_UNACCEPTED_MEMORY:
-> > +			if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
-> > +				continue;
-> > +			e820_type = E820_TYPE_RAM;
-> > +			mark_unaccepted(params, d->phys_addr,
-> > +					d->phys_addr + PAGE_SIZE * d->num_pages);
-> > +			break;
-> >   		default:
-> >   			continue;
-> >   		}
-> > @@ -575,6 +584,9 @@ static efi_status_t allocate_e820(struct boot_params *params,
-> >   {
-> >   	efi_status_t status;
-> >   	__u32 nr_desc;
-> > +	bool unaccepted_memory_present = false;
-> > +	u64 max_addr = 0;
-> > +	int i;
-> >   	status = efi_get_memory_map(map);
-> >   	if (status != EFI_SUCCESS)
-> > @@ -589,9 +601,55 @@ static efi_status_t allocate_e820(struct boot_params *params,
-> >   		if (status != EFI_SUCCESS)
-> >   			goto out;
-> >   	}
-> > +
-> > +	if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
-> > +		goto out;
-> > +
-> > +	/* Check if there's any unaccepted memory and find the max address */
-> > +	for (i = 0; i < nr_desc; i++) {
-> > +		efi_memory_desc_t *d;
-> > +
-> > +		d = efi_early_memdesc_ptr(*map->map, *map->desc_size, i);
-> > +		if (d->type == EFI_UNACCEPTED_MEMORY)
-> > +			unaccepted_memory_present = true;
-> > +		if (d->phys_addr + d->num_pages * PAGE_SIZE > max_addr)
-> > +			max_addr = d->phys_addr + d->num_pages * PAGE_SIZE;
-> > +	}
-> > +
-> > +	/*
-> > +	 * If unaccepted memory present allocate a bitmap to track what memory
-> 
-> 			       ^ is
-> 
-> > +	 * has to be accepted before access.
-> > +	 *
-> > +	 * One bit in the bitmap represents 2MiB in the address space: one 4k
-> > +	 * page is enough to track 64GiB or physical address space.
-> 
-> That's a bit awkward and needs a "or->of".  Perhaps:
-> 
-> 	* One bit in the bitmap represents 2MiB in the address space:
-> 	* A 4k bitmap can track 64GiB of physical address space.
-
-Okay.
-
-> 
-> > +	 * In the worst case scenario -- a huge hole in the middle of the
-> > +	 * address space -- It needs 256MiB to handle 4PiB of the address
-> > +	 * space.
-> > +	 *
-> > +	 * TODO: handle situation if params->unaccepted_memory has already set.
-> > +	 * It's required to deal with kexec.
-> 
-> What happens today with kexec() since its not dealt with?
-
-I didn't give it a try, but I assume it will hang.
-
-There are more things to do to make kexec working and safe. We will get
-there, but it is not top priority.
-
--- 
- Kirill A. Shutemov
+- Masa

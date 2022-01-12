@@ -2,85 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5368748C62E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E61A648C62A
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354165AbiALOkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:40:04 -0500
-Received: from mga14.intel.com ([192.55.52.115]:62406 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344321AbiALOj6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:39:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641998398; x=1673534398;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t9GZHV7SchHN++tiNyzKfQqOdxyRHDm0qiBtCg+J5Dc=;
-  b=YzGPXmTh5y63jY0fJ81NORS5St3/zjgE+DfW2loB5Iv17znMJin0aoSi
-   aF2NWspYtNRm3mN+0EfNFnwGRu1CcatYdEwKBu6t2qKLfddaDj1oW+1wu
-   AjzAHTINV8KWLdL6Ot/QlJAPid0P6vx1JZuZzGG43Iv6NLGgFor1jj03s
-   jO1ro5ykbPpf7TXQxUr+N0Qb5Rh6BHgShS9YKm4bR+OEZSBENni8xDfTb
-   QKw21m2bXEkd4gYU1Xo40P3h7D/UhHmHq+ejp9a5J+eeou744y9VVcJcl
-   FZBRxdOYo1gJ0i3ZoMDRDDsmrxHGl/+7s0I2NzxU2jRFPqzLq2q7Razsf
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="243948919"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="243948919"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 06:39:57 -0800
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="490753046"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 06:39:55 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n7elr-009ixQ-Te;
-        Wed, 12 Jan 2022 16:38:39 +0200
-Date:   Wed, 12 Jan 2022 16:38:39 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     John Garry <john.garry@huawei.com>
-Cc:     QiuLaibin <qiulaibin@huawei.com>, axboe@kernel.dk,
-        ming.lei@redhat.com, martin.petersen@oracle.com, hare@suse.de,
-        johannes.thumshirn@wdc.com, bvanassche@acm.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next v4] blk-mq: fix tag_get wait task can't be awakened
-Message-ID: <Yd7n7xA9ecF1/0DK@smile.fi.intel.com>
-References: <20220111140216.1858823-1-qiulaibin@huawei.com>
- <Yd2Q6LyJUDAU54Dt@smile.fi.intel.com>
- <d7f51067-f5a8-e78c-5ece-c1ef132b9b9a@huawei.com>
- <Yd7J4XbkdIm52bVw@smile.fi.intel.com>
- <3d386998-d810-5036-a87e-50aba9f56639@huawei.com>
+        id S1354161AbiALOj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:39:57 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:15587 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344321AbiALOj4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 09:39:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641998396; x=1673534396;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=iCgUxcPRWgRfarCkwn197Zs65Kz++fhiEjcJLIhUBEM=;
+  b=FTw4liqS6ZgGKLKw+7/tiIfNIeplPky+rR05ZIArR2ijS9xlyXlFUGqD
+   FwQFksm+vOHBrw01bA1XI7a+oJqCE4m144kbUBAJjSLCL846doOwO+gTL
+   oZglCZsQt8wloDQfrg6Efr3pPc/SezKAXndswPd8p/nMV37idixeejAti
+   Y=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 Jan 2022 06:39:55 -0800
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 06:39:55 -0800
+Received: from hu-ctheegal-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 12 Jan 2022 06:39:51 -0800
+From:   Chitti Babu Theegala <quic_ctheegal@quicinc.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <joel@joelfernandes.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <quic_lingutla@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <quic_rjendra@quicinc.com>,
+        "Chitti Babu Theegala" <quic_ctheegal@quicinc.com>
+Subject: [PATCH] sched/fair: Prefer small idle cores for forkees
+Date:   Wed, 12 Jan 2022 20:09:02 +0530
+Message-ID: <20220112143902.13239-1-quic_ctheegal@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3d386998-d810-5036-a87e-50aba9f56639@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 12:51:13PM +0000, John Garry wrote:
-> On 12/01/2022 12:30, Andy Shevchenko wrote:
-> > > > > +		if (test_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags) ||
-> > > > > +		    test_and_set_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags)) {
-> > > > Whoever wrote this code did too much defensive programming, because the first
-> > > > conditional doesn't make much sense here. Am I right?
-> > > > 
-> > > I think because this judgement is in the general IO process, there are also
-> > > some performance considerations here.
-> > I didn't buy this. Is there any better argument why you need redundant
-> > test_bit() call?
-> 
-> I think that the idea is that test_bit() is fast and test_and_set_bit() is
-> slow; as such, if we generally expect the bit to be set, then there is no
-> need to do the slower test_and_set_bit() always.
+Newly forked threads don't have any useful utilization data yet and
+it's not possible to forecast their impact on energy consumption.
+These forkees (though very small, most times) end up waking big
+cores from deep sleep for that very small durations.
 
-It doesn't sound thought through solution, the bit can be flipped in between,
-so what is this all about? Maybe missing proper serialization somewhere else?
+Bias all forkees to small cores to prevent waking big cores from deep
+sleep to save power.
 
+Signed-off-by: Chitti Babu Theegala <quic_ctheegal@quicinc.com>
+---
+ kernel/sched/fair.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 6e476f6..d407bbc 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5976,7 +5976,7 @@ static int wake_affine(struct sched_domain *sd, struct task_struct *p,
+ }
+ 
+ static struct sched_group *
+-find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu);
++find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu, int sd_flag);
+ 
+ /*
+  * find_idlest_group_cpu - find the idlest CPU among the CPUs in the group.
+@@ -6063,7 +6063,7 @@ static inline int find_idlest_cpu(struct sched_domain *sd, struct task_struct *p
+ 			continue;
+ 		}
+ 
+-		group = find_idlest_group(sd, p, cpu);
++		group = find_idlest_group(sd, p, cpu, sd_flag);
+ 		if (!group) {
+ 			sd = sd->child;
+ 			continue;
+@@ -8997,7 +8997,8 @@ static inline void update_sg_wakeup_stats(struct sched_domain *sd,
+ static bool update_pick_idlest(struct sched_group *idlest,
+ 			       struct sg_lb_stats *idlest_sgs,
+ 			       struct sched_group *group,
+-			       struct sg_lb_stats *sgs)
++			       struct sg_lb_stats *sgs,
++			       int sd_flag)
+ {
+ 	if (sgs->group_type < idlest_sgs->group_type)
+ 		return true;
+@@ -9034,6 +9035,11 @@ static bool update_pick_idlest(struct sched_group *idlest,
+ 		if (idlest_sgs->idle_cpus > sgs->idle_cpus)
+ 			return false;
+ 
++		/* Select smaller cpu group for newly woken up forkees */
++		if ((sd_flag & SD_BALANCE_FORK) && (idlest_sgs->idle_cpus &&
++			!capacity_greater(idlest->sgc->max_capacity, group->sgc->max_capacity)))
++			return false;
++
+ 		/* Select group with lowest group_util */
+ 		if (idlest_sgs->idle_cpus == sgs->idle_cpus &&
+ 			idlest_sgs->group_util <= sgs->group_util)
+@@ -9062,7 +9068,7 @@ static inline bool allow_numa_imbalance(int dst_running, int dst_weight)
+  * Assumes p is allowed on at least one CPU in sd.
+  */
+ static struct sched_group *
+-find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
++find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu, int sd_flag)
+ {
+ 	struct sched_group *idlest = NULL, *local = NULL, *group = sd->groups;
+ 	struct sg_lb_stats local_sgs, tmp_sgs;
+@@ -9097,7 +9103,7 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+ 
+ 		update_sg_wakeup_stats(sd, group, sgs, p);
+ 
+-		if (!local_group && update_pick_idlest(idlest, &idlest_sgs, group, sgs)) {
++		if (!local_group && update_pick_idlest(idlest, &idlest_sgs, group, sgs, sd_flag)) {
+ 			idlest = group;
+ 			idlest_sgs = *sgs;
+ 		}
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.7.4
 

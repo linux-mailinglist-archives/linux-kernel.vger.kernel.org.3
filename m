@@ -2,190 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F7748C7F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B4D48C7F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354990AbiALQLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:11:11 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:44596 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354959AbiALQKg (ORCPT
+        id S1355054AbiALQL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:11:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354983AbiALQKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:10:36 -0500
-Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:662a:d95e:24d7:7832])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 89CFA1288;
-        Wed, 12 Jan 2022 17:10:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642003832;
-        bh=VCBTSsPld2Ez4eAHN+wIhOxYrG8HzOdAeyTamFH3RPw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vrQnE9WVsjvwtYukwesvy63sViHd+vTQFszYqFAMaRYDgl6HPpyMKVE0EwIb9tCCd
-         9XFe7yr8ge5hg4btNadQ4bBtlgKOjdQMpDjH6lubfi7JZrvr7nBV+bSdLnp3LoOCDT
-         hTpKFNWg75oM9XaCPWzwfXc5A5ZrX+G+uzIW05XQ=
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
-        dave.stevenson@raspberrypi.com,
-        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Subject: [PATCH 3/3] media: v4l: Add V4L2-PIX-FMT-Y14P format
-Date:   Wed, 12 Jan 2022 17:10:14 +0100
-Message-Id: <20220112161014.972076-4-jeanmichel.hautbois@ideasonboard.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220112161014.972076-1-jeanmichel.hautbois@ideasonboard.com>
-References: <20220112161014.972076-1-jeanmichel.hautbois@ideasonboard.com>
+        Wed, 12 Jan 2022 11:10:54 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6786C061757
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 08:10:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/W8SEIIQmiWMQWtlkvLK99xQHSUvadSNsXTuHZvrmos=; b=f8KMzwOD3kOV6VI3KiODnTCYm/
+        FMuCvqr8/3+fj9J3+fFdI90hgqRo4MhbftFAbtdR7CQDeHAYj1sRNJyeEEGBkZYIkgboRA1D1GQo2
+        nRc4MxerBmw1rG5iWcoSDI7q+WXuoTjQinzK0W0CcXOdgMsu3deXmiy5qkVUTGGjUg3aOKg+8rUCv
+        79+m3fG8smp8TynImopDEk7ham1Z+NLH0NC9OwDT1LYqf/k1OGAjT22JxbLs4ncdzwAFQ+XPRKYxa
+        yT6uzsdNllCJu2YnN9cOAcz35pYXXaqV3Ri8J3UFxZfYyvhjvpxluL+w1A3/ANCT7Ny0vlWEkNAUm
+        vAopbPTA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7gCi-000pNZ-2J; Wed, 12 Jan 2022 16:10:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 882EA300237;
+        Wed, 12 Jan 2022 17:10:23 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 703CE2133FEEB; Wed, 12 Jan 2022 17:10:23 +0100 (CET)
+Date:   Wed, 12 Jan 2022 17:10:23 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Mel Gorman <mgorman@suse.de>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Hasan Al Maruf <hasanalmaruf@fb.com>
+Subject: Re: [PATCH -V10 RESEND 0/6] NUMA balancing: optimize memory
+ placement for memory tiering system
+Message-ID: <Yd79b6PptQMNzDRw@hirez.programming.kicks-ass.net>
+References: <20211207022757.2523359-1-ying.huang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207022757.2523359-1-ying.huang@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a packed grey-scale image format with a depth of 14 bits per
-pixel. Every four consecutive samples are packed into seven bytes. Each
-of the first four bytes contain the eight high order bits of the pixels,
-and the three following bytes contains the six least significants bits
-of each pixel, in the same order.
+On Tue, Dec 07, 2021 at 10:27:51AM +0800, Huang Ying wrote:
+> After commit c221c0b0308f ("device-dax: "Hotplug" persistent memory
+> for use like normal RAM"), the PMEM could be used as the
+> cost-effective volatile memory in separate NUMA nodes.  In a typical
+> memory tiering system, there are CPUs, DRAM and PMEM in each physical
+> NUMA node.  The CPUs and the DRAM will be put in one logical node,
+> while the PMEM will be put in another (faked) logical node.
 
-As the other formats only needed 5 bytes before, append two bytes in the
-documentation array.
-
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
----
- .../media/v4l/pixfmt-yuv-luma.rst             | 33 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
- include/uapi/linux/videodev2.h                |  1 +
- 3 files changed, 35 insertions(+)
-
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-index d37ce6027095..1f645fde6d5c 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-@@ -36,6 +36,8 @@ are often referred to as greyscale formats.
-       - Byte 2
-       - Byte 3
-       - Byte 4
-+      - Byte 5
-+      - Byte 6
- 
-     * .. _V4L2-PIX-FMT-GREY:
- 
-@@ -47,6 +49,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y10:
- 
-@@ -58,6 +62,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y10BPACK:
- 
-@@ -69,6 +75,8 @@ are often referred to as greyscale formats.
-       - Y'\ :sub:`1`\ [3:0] Y'\ :sub:`2`\ [9:6]
-       - Y'\ :sub:`2`\ [5:0] Y'\ :sub:`3`\ [9:8]
-       - Y'\ :sub:`3`\ [7:0]
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y10P:
- 
-@@ -80,6 +88,8 @@ are often referred to as greyscale formats.
-       - Y'\ :sub:`2`\ [9:2]
-       - Y'\ :sub:`3`\ [9:2]
-       - Y'\ :sub:`3`\ [1:0] Y'\ :sub:`2`\ [1:0] Y'\ :sub:`1`\ [1:0] Y'\ :sub:`0`\ [1:0]
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y12:
- 
-@@ -91,6 +101,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y12P:
- 
-@@ -102,6 +114,8 @@ are often referred to as greyscale formats.
-       - Y'\ :sub:`1`\ [3:0] Y'\ :sub:`0`\ [3:0]
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y14:
- 
-@@ -113,6 +127,21 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
-+
-+    * .. _V4L2-PIX-FMT-Y14P:
-+
-+      - ``V4L2_PIX_FMT_Y14P``
-+      - 'Y14P'
-+
-+      - Y'\ :sub:`0`\ [13:6]
-+      - Y'\ :sub:`1`\ [13:6]
-+      - Y'\ :sub:`2`\ [13:6]
-+      - Y'\ :sub:`3`\ [13:6]
-+      - Y'\ :sub:`1`\ [1:0] Y'\ :sub:`0`\ [5:0]
-+      - Y'\ :sub:`2`\ [3:0] Y'\ :sub:`1`\ [5:2]
-+      - Y'\ :sub:`3`\ [5:0] Y'\ :sub:`2`\ [1:0]
- 
-     * .. _V4L2-PIX-FMT-Y16:
- 
-@@ -124,6 +153,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y16-BE:
- 
-@@ -135,6 +166,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
- .. raw:: latex
- 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index e90979af8efb..4e33b86c6d27 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1264,6 +1264,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_PIX_FMT_Y10BPACK:	descr = "10-bit Greyscale (Packed)"; break;
- 	case V4L2_PIX_FMT_Y10P:		descr = "10-bit Greyscale (MIPI Packed)"; break;
- 	case V4L2_PIX_FMT_Y12P:		descr = "12-bit Greyscale (MIPI Packed)"; break;
-+	case V4L2_PIX_FMT_Y14P:		descr = "14-bit Greyscale (MIPI Packed)"; break;
- 	case V4L2_PIX_FMT_Y8I:		descr = "Interleaved 8-bit Greyscale"; break;
- 	case V4L2_PIX_FMT_Y12I:		descr = "Interleaved 12-bit Greyscale"; break;
- 	case V4L2_PIX_FMT_Z16:		descr = "16-bit Depth"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 39ab8c216fe8..581537ce12a3 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -570,6 +570,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_Y10BPACK    v4l2_fourcc('Y', '1', '0', 'B') /* 10  Greyscale bit-packed */
- #define V4L2_PIX_FMT_Y10P    v4l2_fourcc('Y', '1', '0', 'P') /* 10  Greyscale, MIPI RAW10 packed */
- #define V4L2_PIX_FMT_Y12P    v4l2_fourcc('Y', '1', '2', 'P') /* 12  Greyscale, MIPI RAW12 packed */
-+#define V4L2_PIX_FMT_Y14P    v4l2_fourcc('Y', '1', '4', 'P') /* 14  Greyscale, MIPI RAW12 packed */
- 
- /* Palette formats */
- #define V4L2_PIX_FMT_PAL8    v4l2_fourcc('P', 'A', 'L', '8') /*  8  8-bit palette */
--- 
-2.32.0
-
+So what does a system like that actually look like, SLIT table wise, and
+how does that affect init_numa_topology_type() ?

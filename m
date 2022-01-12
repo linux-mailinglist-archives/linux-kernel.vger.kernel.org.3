@@ -2,198 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EE448BD4A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:29:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A4848BD4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348737AbiALC33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 21:29:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50534 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236896AbiALC30 (ORCPT
+        id S1348758AbiALCap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 21:30:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236896AbiALCao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 21:29:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641954565;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VsbqtGg+ePpOhhtcOeVTbJ5DJvk86Q9d7Vdl1Q2cFD8=;
-        b=aU4cVC7obJ3xAlKZU1kE5nCpZHcSOCBm+mgKVm07TXzVKIpL742n22BIvhU+41fcrBMH7T
-        qeDNLG4UCR5nAH3vqCwvEGtc3JVaO6bMjHkp1NFdKGEiPXxvfXkyibFeIS8dHHr6NmPMv3
-        gsamVSoQWdS76EjbIIE9vpO83SkYubo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-532-bKcD2JEsNH6AUYuLu_pM3g-1; Tue, 11 Jan 2022 21:29:19 -0500
-X-MC-Unique: bKcD2JEsNH6AUYuLu_pM3g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C8C2A14759;
-        Wed, 12 Jan 2022 02:29:17 +0000 (UTC)
-Received: from [10.72.12.29] (ovpn-12-29.pek2.redhat.com [10.72.12.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EC1955DF2E;
-        Wed, 12 Jan 2022 02:29:11 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v4 05/21] KVM: arm64: Support SDEI_EVENT_{ENABLE, DISABLE}
- hypercall
-To:     Eric Auger <eauger@redhat.com>, kvmarm@lists.cs.columbia.edu
-Cc:     maz@kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan.Cameron@huawei.com, pbonzini@redhat.com, will@kernel.org
-References: <20210815001352.81927-1-gshan@redhat.com>
- <20210815001352.81927-6-gshan@redhat.com>
- <4ce1aed4-d955-145c-777b-350efec2e7bc@redhat.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <d7fdb8f8-d0f7-32c4-9644-0ab7cb46dfdf@redhat.com>
-Date:   Wed, 12 Jan 2022 10:29:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Tue, 11 Jan 2022 21:30:44 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CC5C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 18:30:44 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id c10so1511788qte.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 18:30:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=lIP6jXZTWkK4qpyxqcXz8zyKwuUerH2jn69YNiPJK8k=;
+        b=gW+B4u4nRrKEaLzuPl2OyYwzbRA42NXsbLP3xKTGOOJBgxt2QTkR7x3XQlVHZBrMjk
+         hwrZaSJwHPcVCllDF6fv8uQMjl2ez8atQWji6Jm6rkol3fy9sI+Xe3Hf3XW5GWWrvPj3
+         Ki0PfjGP7AUws3e9ma+93kICTVYjeOTwRSY84cmYr/hQXHvG7R+l2R51APFtQfUZR+qB
+         XZq00lb6ESPcLGlrjyhohmJ5SmaJrEcT4/pa+xUsVJUoK2AifFnu6AlcPU7JvlyF8Vjr
+         ZeLHfggsev1FGj8u88emd72IE9fpctGocRNm97ttbdibhs+7mpkJ9UCO2FjHjc6fYpa9
+         r7Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=lIP6jXZTWkK4qpyxqcXz8zyKwuUerH2jn69YNiPJK8k=;
+        b=IS0icM3d54m2X++g09S2wOnWR6Gepdq2bPk1VTW9zYc1FVKiE+tENTjIv0TmooOVra
+         SkEGohdjivE9jVdYUt/ENmY4kDzIqo3w2cXwDVAVCLL0OmsJaiWpualszZhPk5Q9P+K+
+         EsBEN10JOgE9wT1fnGGW5KcIJJOzBbgfBU3VAXUgKz3hefLqdDl2D8O5jZUz3/FsV+pv
+         mwsAcpmEd2qdz7+AfRQsCtbpNzE9gO3Mnu7yh++tK/GtAgwXa9TMdFgvJNMCTIfT1BFZ
+         5wFZM9I68z1QZ+XMieAoLLnmBPJUhD9MzFv/2FILbrQbSCOJwfB7Q7mhTLtZswHNqxX0
+         DeGw==
+X-Gm-Message-State: AOAM530tJW8w83g0Wb+1LAxKlsksCSuS2Nqi2vpfde9+iFYFN0JO+VFT
+        YNGTlhZD8Y0ix8o4HlhP312wvA==
+X-Google-Smtp-Source: ABdhPJxEIfWTangXKiPL2HlnhduS4sXYYN6W9hXMNQ+LnksQF5KL2cS6hAS1CuxY9Kr8Lne8KdWSYg==
+X-Received: by 2002:ac8:7f8b:: with SMTP id z11mr6225569qtj.396.1641954642725;
+        Tue, 11 Jan 2022 18:30:42 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id h1sm7653965qta.54.2022.01.11.18.30.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 18:30:42 -0800 (PST)
+Date:   Tue, 11 Jan 2022 18:30:31 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Peng Liang <liangpeng10@huawei.com>
+cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        hughd@google.com, xiexiangyou@huawei.com, zhengchuan@huawei.com,
+        wanghao232@huawei.com
+Subject: Re: [RFC 0/1] memfd: Support mapping to zero page on reading
+In-Reply-To: <20211222123400.1659635-1-liangpeng10@huawei.com>
+Message-ID: <4b1885b8-eb95-c50-2965-11e7c8efbf36@google.com>
+References: <20211222123400.1659635-1-liangpeng10@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <4ce1aed4-d955-145c-777b-350efec2e7bc@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+On Wed, 22 Dec 2021, Peng Liang wrote:
 
-On 11/10/21 12:02 AM, Eric Auger wrote:
-> On 8/15/21 2:13 AM, Gavin Shan wrote:
->> This supports SDEI_EVENT_{ENABLE, DISABLE} hypercall. After SDEI
->> event is registered by guest, it won't be delivered to the guest
->> until it's enabled. On the other hand, the SDEI event won't be
->> raised to the guest or specific vCPU if it's has been disabled
->> on the guest or specific vCPU.
->>
->> Signed-off-by: Gavin Shan <gshan@redhat.com>
->> ---
->>   arch/arm64/kvm/sdei.c | 68 +++++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 68 insertions(+)
->>
->> diff --git a/arch/arm64/kvm/sdei.c b/arch/arm64/kvm/sdei.c
->> index d3ea3eee154b..b022ce0a202b 100644
->> --- a/arch/arm64/kvm/sdei.c
->> +++ b/arch/arm64/kvm/sdei.c
->> @@ -206,6 +206,70 @@ static unsigned long kvm_sdei_hypercall_register(struct kvm_vcpu *vcpu)
->>   	return ret;
->>   }
->>   
->> +static unsigned long kvm_sdei_hypercall_enable(struct kvm_vcpu *vcpu,
->> +					       bool enable)
->> +{
->> +	struct kvm *kvm = vcpu->kvm;
->> +	struct kvm_sdei_kvm *ksdei = kvm->arch.sdei;
->> +	struct kvm_sdei_vcpu *vsdei = vcpu->arch.sdei;
->> +	struct kvm_sdei_event *kse = NULL;
->> +	struct kvm_sdei_kvm_event *kske = NULL;
->> +	unsigned long event_num = smccc_get_arg1(vcpu);
->> +	int index = 0;
->> +	unsigned long ret = SDEI_SUCCESS;
->> +
->> +	/* Sanity check */
->> +	if (!(ksdei && vsdei)) {
->> +		ret = SDEI_NOT_SUPPORTED;
->> +		goto out;
->> +	}
->> +
->> +	if (!kvm_sdei_is_valid_event_num(event_num)) {
-> I would rename into is_exposed_event_num()
+> Hi all,
+> 
+> Recently we are working on implementing CRIU [1] for QEMU based on
+> Steven's work [2].  It will use memfd to allocate guest memory in order
+> to restore (inherit) it in the new QEMU process.  However, memfd will
+> allocate a new page for reading while anonymous memory will map to zero
+> page for reading.  For QEMU, memfd may cause that all memory are
+> allocated during the migration because QEMU will read all pages in
+> migration.  It may lead to OOM if over-committed memory is enabled,
+> which is usually enabled in public cloud.
+> 
+> In this patch I try to add support mapping to zero pages on reading
+> memfd.  On reading, memfd will map to zero page instead of allocating a
+> new page.  Then COW it when a write occurs.
+> 
+> For now it's just a demo for discussion.  There are lots of work to do,
+> e.g.:
+> 1. don't support THP;
+> 2. don't support shared reading and writing, only for inherit.  For
+>    example:
+>      task1                        | task2
+>        1) read from addr          |
+>                                   |   2) write to addr
+>        3) read from addr again    |
+>    then 3) will read 0 instead of the data task2 writed in 2).
+> 
+> Would something similar be welcome in the Linux?
 
-kvm_sdei_is_virtual() has been recommended by you when you reviewed the following
-patch. I think kvm_sdei_is_virtual() is good enough :)
+David has made good suggestions on better avoiding the need for
+such a change, for the use case you have in mind.
 
-    [PATCH v4 02/21] KVM: arm64: Add SDEI virtualization infrastructure
+And I don't care for the particular RFC patch that you posted.
 
->> +		ret = SDEI_INVALID_PARAMETERS;
->> +		goto out;
->> +	}
->> +
->> +	/* Check if the KVM event exists */
->> +	spin_lock(&ksdei->lock);
->> +	kske = kvm_sdei_find_kvm_event(kvm, event_num);
->> +	if (!kske) {
->> +		ret = SDEI_INVALID_PARAMETERS;
-> should be DENIED according to the spec, ie. nobody registered that event?
+But I have to say that use of ZERO_PAGE for shmem/memfd/tmpfs read-fault
+might (potentially) be very welcome.  Not as some MFD_ZEROPAGE special
+case, but as how it would always work.  Deleting the shmem_recalc_inode()
+cruft, which is there to correct accounting for the unmodified read-only
+pages, after page reclaim has got around to freeing them later.
 
-Ok.
+It does require more work than you gave it in 1/1: mainly, as you call
+out above, there's a need to note in the mapping's XArray when ZERO_PAGE
+has been used at an offset, and do an rmap walk to unmap those ptes when
+a writable page is substituted - see __xip_unmap() in Linux 3.19's
+mm/filemap_xip.c for such an rmap walk.
 
->> +		goto unlock;
->> +	}
->> +
->> +	/* Check if there is pending events */
-> does that match the "handler-unregister-pending state" case mentionned
-> in the spec?
->> +	if (kske->state.refcount) {
->> +		ret = SDEI_PENDING;
-> ? not documented in my A spec? DENIED?
+Though when this came up before (in the "no-fault mmap" MAP_NOSIGBUS
+thread last year - which then got forgotten), Linus was wary of that
+unmapping, and it was dropped for a simple MAP_PRIVATE implementation.
 
-Yep, It should be DENIED.
+And I've never scoped out what is needed to protect the page from
+writing in all circumstances: in principle, it ought to be easy by
+giving shmem_vm_ops a page_mkwrite; but that's likely to come with
+a performance penalty, which may not be justified for this case.
 
->> +		goto unlock;
->> +	}
->> +
->> +	/* Check if it has been registered */
-> isn't duplicate of /* Check if the KVM event exists */ ?
+I didn't check what you did for write protection: maybe what you
+did was enough, but one has to be very careful about that.
 
-It's not duplicate check, but the comment here seems misleading. I will
-correct this to:
+Making this change to ZERO_PAGE has never quite justified the effort
+so far: temporarily allocated pages have worked well enough in most
+circumstances.
 
-	/* Check if it has been defined or exposed */
+Hugh
 
->> +	kse = kske->kse;
->> +	index = (kse->state.type == SDEI_EVENT_TYPE_PRIVATE) ?
->> +		vcpu->vcpu_idx : 0;
->> +	if (!kvm_sdei_is_registered(kske, index)) {
->> +		ret = SDEI_DENIED;
->> +		goto unlock;
->> +	}
->> +
->> +	/* Verify its enablement state */
->> +	if (enable == kvm_sdei_is_enabled(kske, index)) {
-> spec says:
-> Enabling/disabled an event, which is already enabled/disabled, is
-> permitted and has no effect. I guess ret should be OK.
-
-yep, it should be ok.
-
->> +		ret = SDEI_DENIED;
->> +		goto unlock;
->> +	}
->> +
->> +	/* Update enablement state */
->> +	if (enable)
->> +		kvm_sdei_set_enabled(kske, index);
->> +	else
->> +		kvm_sdei_clear_enabled(kske, index);
->> +
->> +unlock:
->> +	spin_unlock(&ksdei->lock);
->> +out:
->> +	return ret;
->> +}
->> +
->>   int kvm_sdei_hypercall(struct kvm_vcpu *vcpu)
->>   {
->>   	u32 func = smccc_get_function(vcpu);
->> @@ -220,7 +284,11 @@ int kvm_sdei_hypercall(struct kvm_vcpu *vcpu)
->>   		ret = kvm_sdei_hypercall_register(vcpu);
->>   		break;
->>   	case SDEI_1_0_FN_SDEI_EVENT_ENABLE:
->> +		ret = kvm_sdei_hypercall_enable(vcpu, true);
->> +		break;
->>   	case SDEI_1_0_FN_SDEI_EVENT_DISABLE:
->> +		ret = kvm_sdei_hypercall_enable(vcpu, false);
->> +		break;
->>   	case SDEI_1_0_FN_SDEI_EVENT_CONTEXT:
->>   	case SDEI_1_0_FN_SDEI_EVENT_COMPLETE:
->>   	case SDEI_1_0_FN_SDEI_EVENT_COMPLETE_AND_RESUME:
->>
-
-Thanks,
-Gavin
-
+> 
+> Thanks,
+> Peng
+> 
+> [1] https://criu.org/Checkpoint/Restore
+> [2] https://patchwork.kernel.org/project/qemu-devel/cover/1628286241-217457-1-git-send-email-steven.sistare@oracle.com/
+> 
+> Peng Liang (1):
+>   memfd: Support mapping to zero page on reading memfd
+> 
+>  include/linux/fs.h         |  2 ++
+>  include/uapi/linux/memfd.h |  1 +
+>  mm/memfd.c                 |  8 ++++++--
+>  mm/memory.c                | 37 ++++++++++++++++++++++++++++++++++---
+>  mm/shmem.c                 | 10 ++++++++--
+>  5 files changed, 51 insertions(+), 7 deletions(-)
+> 
+> -- 
+> 2.33.1

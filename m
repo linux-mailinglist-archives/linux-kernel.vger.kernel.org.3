@@ -2,90 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9A648CF39
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 00:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB5848CF65
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 00:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235630AbiALXrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 18:47:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        id S235830AbiALXue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 18:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235590AbiALXro (ORCPT
+        with ESMTP id S235911AbiALXtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 18:47:44 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59D7C06173F;
-        Wed, 12 Jan 2022 15:47:43 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id f141-20020a1c1f93000000b003497aec3f86so2596352wmf.3;
-        Wed, 12 Jan 2022 15:47:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aJ+t5KPBHmObAXEucp1lDxWIckLxKNo3ipApmjpHFS8=;
-        b=FoHKvy8jOXROJPA/BKAAFbGezF6+Ysz69F/HtVV1vyaKKwc5zkG9kPCbIkdTIiSqC3
-         InQwrQ/ZuIBngh+RJCnw9SL3dcWgv3QfezIYVF45/N1Zl98/LSbrxrm2/uyR2/ESz+lY
-         F22HBnCGfyh+zAFU5ZqzxpfluKvjhxTavKvyaUVU1EvkYMA2s8bXlXMcuu3R3lYfmA90
-         J+wSBlWEVzoSscSzjbQe6vAfAtXqTE8yEk4LEgZIOhGw7z8gN/9M0wDzk7upFInCgdKm
-         +FiAr75dq+PvaWo0pTxSpy0KM/eTlv/WrZMwtxiTySuKkduqXyVUpme9qs6YpSJSSrNf
-         AvnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aJ+t5KPBHmObAXEucp1lDxWIckLxKNo3ipApmjpHFS8=;
-        b=wqd+XIPKZmLtzQBfijkKL7B+uhJ+jAME50fsH1zVe/f2/LvKVktFByv7xyNV+WmF1h
-         rSAOjNtml3W3fwWC2bO1qkeWnS37grIraFbGyFGq1ubST8tskLpyDki3uV68cialCoha
-         buJqhafxQnchRhjhb7GdngcDSoClFVBLJZHKREykXi1vMSsuaW0b96EsgM3s9oBqJX2h
-         06dhLhRyjvDdZKq6AMmEESMJs7DyEwHxF7rOwWPCeb/9qxrOsdyKnLAp9hj7Z2Q5LRKx
-         M2L81h/z7jFuyWhi1hOu4nS57f7ypKcQ4PTn5fXpJ5Aoj1IYuqDMvy7eyqyd0WOjnoBx
-         QLig==
-X-Gm-Message-State: AOAM533Od9M/lG8lGRalbEnMhrIFq+1rsz8VLgRPEOb2pNa7l9Pd+p4D
-        xQimioNJzAoJ3BQZG8g7q8dP26RTuGISfg==
-X-Google-Smtp-Source: ABdhPJyeOMPQZMVd+rSnSZLcDVDIAEXJEqv6bt22UWvapDnuA+0wOSfrEODnidchAY4Z60MZbcRdzA==
-X-Received: by 2002:a05:600c:4991:: with SMTP id h17mr1533052wmp.14.1642031262336;
-        Wed, 12 Jan 2022 15:47:42 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id u3sm1321186wrs.0.2022.01.12.15.47.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 15:47:41 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-ide@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ata: pata_ali: remove redundant return statement
-Date:   Wed, 12 Jan 2022 23:47:41 +0000
-Message-Id: <20220112234741.1232858-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Wed, 12 Jan 2022 18:49:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9899CC03327A;
+        Wed, 12 Jan 2022 15:49:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C2FE61B76;
+        Wed, 12 Jan 2022 23:49:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF912C36AEC;
+        Wed, 12 Jan 2022 23:49:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642031341;
+        bh=Z7mt3+G/fwnHyZZJZ0z9JnL903ZKyuvNqQOlWYiLwB0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TprkK78zLj7tO9uxmpbvT8O9oAnEwnw2nfNmXkW3gJj2oBE0uE/ykBoDstVTstc29
+         e+FsSYQB94sqiOwXeLbxF3yDeUvZaza5gMozgovMYC+IWUc2qTyhhcC7ThzPdc9uOM
+         Qj3SAuBJr5EsY09qc5hHT4YouRiDdgZkOuXQQxcFXi1dGv1QipjnexVmqMAsWSSLO3
+         sHVXGouPveTUvjpgufryF2jN7ja72hvaUfysdsITd7ZmNg3eoEhiVHYRn9xYMmaqbb
+         QTyzqZzlEFkqQ7KmMV3WSczwgMyk8WkSK/72pKYI17+WKDdtHa7GK+XkAB024CAS6B
+         61Y5SsMrwsWfQ==
+Date:   Thu, 13 Jan 2022 01:48:48 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Haitao Huang <haitao.huang@linux.intel.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+Message-ID: <Yd9o4BJWNtK5AxoB@iki.fi>
+References: <op.1fmvdehpwjvjmi@hhuan26-mobl1.mshome.net>
+ <YdmxpTVM1JG8nxQ3@iki.fi>
+ <YdmzDy1BOHgh8CII@iki.fi>
+ <Ydm6RiIwuh3IspRI@iki.fi>
+ <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net>
+ <YdzjEzjF0YKn+pZ6@iki.fi>
+ <YdzjrIxrVfgrlzWH@iki.fi>
+ <YdzldMXO2LrssnER@iki.fi>
+ <YdzoQJknQK5r6xLK@iki.fi>
+ <op.1ftbip0cwjvjmi@hhuan26-mobl1.mshome.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <op.1ftbip0cwjvjmi@hhuan26-mobl1.mshome.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A return statement is unnecessarily complicated, currently value
-in variable mask is bitwise-masked and the variable is being
-updated and then returned. Just updating the mask is all that is
-required as the following statement is a return.
+On Mon, Jan 10, 2022 at 09:48:15PM -0600, Haitao Huang wrote:
+> On Mon, 10 Jan 2022 20:15:28 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+> wrote:
+> 
+> > On Tue, Jan 11, 2022 at 04:03:32AM +0200, Jarkko Sakkinen wrote:
+> > > On Tue, Jan 11, 2022 at 03:55:59AM +0200, Jarkko Sakkinen wrote:
+> > > > On Tue, Jan 11, 2022 at 03:53:26AM +0200, Jarkko Sakkinen wrote:
+> > > > > On Mon, Jan 10, 2022 at 04:05:21PM -0600, Haitao Huang wrote:
+> > > > > > On Sat, 08 Jan 2022 10:22:30 -0600, Jarkko Sakkinen
+> > > <jarkko@kernel.org>
+> > > > > > wrote:
+> > > > > >
+> > > > > > > On Sat, Jan 08, 2022 at 05:51:46PM +0200, Jarkko Sakkinen wrote:
+> > > > > > > > On Sat, Jan 08, 2022 at 05:45:44PM +0200, Jarkko Sakkinen
+> > > wrote:
+> > > > > > > > > On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang
+> > > wrote:
+> > > > > > > > > > > > > OK, so the question is: do we need both or would a
+> > > > > > > > mechanism just
+> > > > > > > > > > > > to extend
+> > > > > > > > > > > > > permissions be sufficient?
+> > > > > > > > > > > >
+> > > > > > > > > > > > I do believe that we need both in order to support
+> > > pages
+> > > > > > > > having only
+> > > > > > > > > > > > the permissions required to support their intended use
+> > > > > > > > during the
+> > > > > > > > > > > > time the
+> > > > > > > > > > > > particular access is required. While technically it is
+> > > > > > > > possible to grant
+> > > > > > > > > > > > pages all permissions they may need during their
+> > > lifetime it
+> > > > > > > > is safer to
+> > > > > > > > > > > > remove permissions when no longer required.
+> > > > > > > > > > >
+> > > > > > > > > > > So if we imagine a run-time: how EMODPR would be
+> > > useful, and
+> > > > > > > > how using it
+> > > > > > > > > > > would make things safer?
+> > > > > > > > > > >
+> > > > > > > > > > In scenarios of JIT compilers, once code is generated
+> > > into RW pages,
+> > > > > > > > > > modifying both PTE and EPCM permissions to RX would be
+> > > a good
+> > > > > > > > defensive
+> > > > > > > > > > measure. In that case, EMODPR is useful.
+> > > > > > > > >
+> > > > > > > > > What is the exact threat we are talking about?
+> > > > > > > >
+> > > > > > > > To add: it should be *significantly* critical thread,
+> > > given that not
+> > > > > > > > supporting only EAUG would leave us only one complex call
+> > > pattern with
+> > > > > > > > EACCEPT involvement.
+> > > > > > > >
+> > > > > > > > I'd even go to suggest to leave EMODPR out of the patch
+> > > set, and
+> > > > > > > > introduce
+> > > > > > > > it when there is PoC code for any of the existing run-time
+> > > that
+> > > > > > > > demonstrates the demand for it. Right now this way too
+> > > speculative.
+> > > > > > > >
+> > > > > > > > Supporting EMODPE is IMHO by factors more critical.
+> > > > > > >
+> > > > > > > At least it does not protected against enclave code because
+> > > an enclave
+> > > > > > > can
+> > > > > > > always choose not to EACCEPT any of the EMODPR requests. I'm
+> > > not only
+> > > > > > > confused here about the actual threat but also the potential
+> > > adversary
+> > > > > > > and
+> > > > > > > target.
+> > > > > > >
+> > > > > > I'm not sure I follow your thoughts here. The sequence should
+> > > be for enclave
+> > > > > > to request  EMODPR in the first place through runtime to
+> > > kernel, then to
+> > > > > > verify with EACCEPT that the OS indeed has done EMODPR.
+> > > > > > If enclave does not verify with EACCEPT, then its own code has
+> > > > > > vulnerability. But this does not justify OS not providing the
+> > > mechanism to
+> > > > > > request EMODPR.
+> > > > >
+> > > > > The question is really simple: what is the threat scenario? In
+> > > order to use
+> > > > > the word "vulnerability", you would need one.
+> > > > >
+> > > > > Given the complexity of the whole dance with EMODPR it is
+> > > mandatory to have
+> > > > > one, in order to ack it to the mainline.
+> > > > >
+> > > > > > Similar to how we don't want have RWX code pages for normal Linux
+> > > > > > application, when an enclave loads code pages (either directly
+> > > or JIT
+> > > > > > compiled from high level code ) into EAUG'd page (which has
+> > > RW), we do not
+> > > > > > want leave pages to be RWX for code to be executable, hence
+> > > the need of
+> > > > > > EMODPR request OS to reduce the permissions to RX once the
+> > > code is ready to
+> > > > > > execute.
+> > > > >
+> > > > > You cannot compare *enforced* permissions outside the enclave,
+> > > and claim that
+> > > > > they would be equivalent to the permissions of the already
+> > > sandboxed code
+> > > > > inside the enclave, with permissions that are not enforced but
+> > > are based
+> > > > > on good will of the enclave code.
+> > > >
+> > > > To add, you can already do "EMODPR" by simply adjusting VMA
+> > > permissions to be
+> > > > more restrictive. How this would be worse than this collaboration
+> > > based
+> > > > thing?
+> > > 
+> > > ... or you could even make soft version of EMODPR without using that
+> > > opcode
+> > > by writing an ioctl to update our xarray to allow lower permissions.
+> > > That
+> > > ties the hands of the process who is doing the mmap() already.
+> > 
+> > E.g. why not just
+> > 
+> > #define SGX_IOC_ENCLAVE_RESTRICT_PAGE_PERMISSIONS \
+> > 	_IOW(SGX_MAGIC, 0x05, struct sgx_enclave_modify_page_permissions)
+> > #define SGX_IOC_ENCLAVE_EXTEND_PAGE_PERMISSIONS \
+> > 	_IOW(SGX_MAGIC, 0x06, struct sgx_enclave_modify_page_permissions)
+> > 
+> > struct sgx_enclave_restrict_page_permissions {
+> > 	__u64 src;
+> > 	__u64 offset;
+> > 	__u64 length;
+> > 	__u64 secinfo;
+> > 	__u64 count;
+> > };
+> > struct sgx_enclave_extend_page_permissions {
+> > 	__u64 src;
+> > 	__u64 offset;
+> > 	__u64 length;
+> > 	__u64 secinfo;
+> > 	__u64 count;
+> > };
+> > 
+> > These would simply update the xarray and nothing else. I'd go with two
+> > ioctls (with the necessary checks for secinfo) in order to provide hook
+> > up points in the future for LSMs.
+> > 
+> > This leaves only EAUG and EMODT requiring the EACCEPT handshake.
+> > 
+> > /Jarkko
+> The trusted code base here is the enclave. It can't trust any code outside
+> for enforcement. There is also need for TLB shootdown.
+> 
+> To answer your earlier question about threat, the threat is
+> malicious/compromised code inside enclave. Yes, you can say the whole thing
+> is sand-boxed, but the runtime inside enclave could load complex upper layer
+> code.  Therefore the runtime needs to have a trusted mechanism to ensure
+> code pages not writable so that there is less/no chance for compromised
+> malicious enclave to modify existing code pages. I still consider it to be
+> similar to normal Linux elf-loader/dynamic linker relying on mmap/mprotect
+> and trusting OS to enforce permissions, but here the enclave runtime only
+> trust the HW provided mechanism: EMODPR to change EPCM records and EACCEPT
+> to verify.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/ata/pata_ali.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So what if:
 
-diff --git a/drivers/ata/pata_ali.c b/drivers/ata/pata_ali.c
-index ab28a6707b94..1b90cda27246 100644
---- a/drivers/ata/pata_ali.c
-+++ b/drivers/ata/pata_ali.c
-@@ -123,7 +123,7 @@ static unsigned long ali_20_filter(struct ata_device *adev, unsigned long mask)
- 		mask &= ~(ATA_MASK_MWDMA | ATA_MASK_UDMA);
- 	ata_id_c_string(adev->id, model_num, ATA_ID_PROD, sizeof(model_num));
- 	if (strstr(model_num, "WDC"))
--		return mask &= ~ATA_MASK_UDMA;
-+		mask &= ~ATA_MASK_UDMA;
- 	return mask;
- }
- 
--- 
-2.33.1
+1. User space does EMODPR ioctl.
+2. Enclave does EACCEPT.
+3. Enclave does EMODPE.
 
+The problem here is the asymmetry of these operations. If EMODPE also
+required EACCEPT from the run-time, EMODPR would also make sense.
+
+Please give a code example on how EMODPR improves trust.
+
+/Jarkko

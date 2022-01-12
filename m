@@ -2,140 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E64EA48C685
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2AC48C68D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354321AbiALOwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:52:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54544 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1354308AbiALOwb (ORCPT
+        id S1354345AbiALOxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242867AbiALOxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:52:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641999150;
+        Wed, 12 Jan 2022 09:53:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F74C06173F;
+        Wed, 12 Jan 2022 06:53:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9B45618D6;
+        Wed, 12 Jan 2022 14:53:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F21DFC36AE5;
+        Wed, 12 Jan 2022 14:53:42 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DnJhczWU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1641999220;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JbB9qVe2cdADAoLi9p85NL4WatOPJExL0xOEqnBVVk0=;
-        b=Ucm89owBNRQ30FIjBPEKpBKWsPly8jGZoRAZWX9HwTW1YCYDBl2OBHNn5LwJwFAlw8COqr
-        8H/wPoJgALvTQiyaA1UZ/IqxB2I8s9l4gQCOR/MahCKi3gDEigB/DCd96/t5/xmuDxJXpR
-        jXefJ/3TiCFdVTVv4huZ95LMnTkzKLg=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-570-fQcCSRfcP-WG_n6gRmjodQ-1; Wed, 12 Jan 2022 09:52:29 -0500
-X-MC-Unique: fQcCSRfcP-WG_n6gRmjodQ-1
-Received: by mail-ed1-f69.google.com with SMTP id z9-20020a05640240c900b003fea688a17eso2473985edb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 06:52:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=JbB9qVe2cdADAoLi9p85NL4WatOPJExL0xOEqnBVVk0=;
-        b=mPB4wvvQSBTUGBhqNT3O7BBweEDzR8VxhoNR/s56GfSVccFT3tmYtVgcudtTUjOAzz
-         80CaPiIKT9/Q7/ypPe0RlxtIVT7QI8PU3m3TuyccOkflJkdT9HdBfr6vqeJGveNtVN6t
-         7AbDlXIgOifRzx/XZSd8bJB+9eDe6+0jlwWTo1wyWpJ+4B2ZnFcttX3tx28QLubR+nk7
-         5YnVXmV/XsIqp6v+c6U0P7RtQOdx959FaVoGxp85+AE7aTg+1ryiIZ1Xu8Nfm3Iy9UfE
-         JScO+Zh4efkKT1O0Fyy7QGkhXwpfV1k3+qseUEDCjyksOmmdheJx7kw6Er//pQlRaCfO
-         R+pw==
-X-Gm-Message-State: AOAM531IGn9AvmhLHrlW4THKHR9gyACvjoCQYgHPQ3NluJFWVB+e9aOG
-        iXjKWFLNQJE7CCjZ/0pwL56LcVZBbf+0NJPAAyyyfKmH3XAH3/bKYGMa7rdWNfYX0EMATP26BE7
-        ruI55Lw9FfTZfhtNDu74+YtxI
-X-Received: by 2002:a17:906:3a55:: with SMTP id a21mr102711ejf.274.1641999148057;
-        Wed, 12 Jan 2022 06:52:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxuS6tdgV/MCq8jq1Hv/Sxpb7BZFZoP0GZA1WpMAVHCYU+7TrNcUVD8zlmUbrxmVIq5DlbDfA==
-X-Received: by 2002:a17:906:3a55:: with SMTP id a21mr102691ejf.274.1641999147794;
-        Wed, 12 Jan 2022 06:52:27 -0800 (PST)
-Received: from redhat.com ([2.55.132.148])
-        by smtp.gmail.com with ESMTPSA id h3sm25788ede.32.2022.01.12.06.52.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 06:52:26 -0800 (PST)
-Date:   Wed, 12 Jan 2022 09:52:23 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     =?utf-8?B?5p2O5Lic5Y2H?= <lidongsheng@dayudpu.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] virtio_vdpa: Support surprise removal of virtio vdpa
- device
-Message-ID: <20220112095208-mutt-send-email-mst@kernel.org>
-References: <tencent_7A45E1E967F13AE14B061269@qq.com>
- <20220111065033-mutt-send-email-mst@kernel.org>
- <CACGkMEuAoSwore14qnuMDgdEtWh-UOJf1=oR9vhPMff8hoEZEQ@mail.gmail.com>
- <20220112013018-mutt-send-email-mst@kernel.org>
- <CACGkMEs6u7o4pX4ahvnfPByt1BrSfmaFfEKm5pQJsjjH+XHYxw@mail.gmail.com>
+        bh=OvxDuX4+u+Vf1kkrJDUSgv4TPdU3VRNAUcdKXCwTT5c=;
+        b=DnJhczWUUvD9OTeps1orXgX12AsBGp8v848iAIhv/ZzalybRxXv6B+W0wFW1EvIgePDNd5
+        5BFnz3pj0i7cmnVA5+7UVWIR4xX5E+ZaRghwy95P6vsOX/GiJjrV8wcSWThUm5LkEcga/3
+        KA8n/vlCNHW0k1FN13d0g11tFVP9uA0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7ed3ec98 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 12 Jan 2022 14:53:39 +0000 (UTC)
+Received: by mail-yb1-f170.google.com with SMTP id p187so7236263ybc.0;
+        Wed, 12 Jan 2022 06:53:39 -0800 (PST)
+X-Gm-Message-State: AOAM530cwaiY/Rbwpt1gU6ucBwwoq3ocSJthWHQg+t5VUXMcHKC3NbcJ
+        fn5DfLy0z28eXBLPJAigsyOauF839wpQ0U+JXmE=
+X-Google-Smtp-Source: ABdhPJwAh0eq22/F6YHBPJWD2phZRQHNCdVF9y2Jwg0IP/3UBPQfmh3lcD/TeR7RGNFppvZBiNntC9otajWWGkEMDrY=
+X-Received: by 2002:a25:854f:: with SMTP id f15mr3731ybn.121.1641999218396;
+ Wed, 12 Jan 2022 06:53:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEs6u7o4pX4ahvnfPByt1BrSfmaFfEKm5pQJsjjH+XHYxw@mail.gmail.com>
+References: <20220112140137.728162-1-jforbes@fedoraproject.org>
+ <CAHmME9rJFVeWL=SFTkM8=+2te_GnH4n-THH+F3p5mnHfCkhZ4w@mail.gmail.com>
+ <CAMj1kXHubNk3gRTOmD1rOCifCUE4O6=TvNr_XhP1tNcCBuzfBQ@mail.gmail.com>
+ <CAHmME9oKEawBAGSN_tdpBDe2_vRUE8Gh+GMXn+d94A6te4FJPQ@mail.gmail.com>
+ <CAMj1kXGzzHefRu1wcgDsYpybSDrUK__FXE-Mjm2r1fg2xiz6Jg@mail.gmail.com>
+ <CAHmME9p25W3Pg4T4Pers+hxryhAcQZEZMx5uueF3a-oCr7ABuA@mail.gmail.com>
+ <CAMj1kXEgE-3Pnnak-RZAPch=ma399Ki4jrMb8j32x2AFyZZALA@mail.gmail.com>
+ <CAHmME9oTsOZCJoPUT=LwUuwWHbAa_N1MRoGjTYY5Poj4tr0+Zg@mail.gmail.com>
+ <CAMj1kXFSN0yJzmgDKp1bmF7wgaAwJba+FteStJEKH7HDBSP5kQ@mail.gmail.com>
+ <CAHmME9qcjHq6M+sOOxCT4xte5AcZRoHjcMQfod3Zc1=FJsq8BQ@mail.gmail.com> <CAMj1kXGp8bkxc0XpAR=DJJhsRNeoJb2wtEwmdRH4eh35KHNk8Q@mail.gmail.com>
+In-Reply-To: <CAMj1kXGp8bkxc0XpAR=DJJhsRNeoJb2wtEwmdRH4eh35KHNk8Q@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 12 Jan 2022 15:53:27 +0100
+X-Gmail-Original-Message-ID: <CAHmME9oxy-P8hq=85hOGSOena3kxpTAOHoXto7s4tnDUkXvYPg@mail.gmail.com>
+Message-ID: <CAHmME9oxy-P8hq=85hOGSOena3kxpTAOHoXto7s4tnDUkXvYPg@mail.gmail.com>
+Subject: Re: [PATCH v2] lib/crypto: add prompts back to crypto libraries
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Justin Forbes <jmforbes@linuxtx.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 03:52:52PM +0800, Jason Wang wrote:
-> On Wed, Jan 12, 2022 at 2:30 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Wed, Jan 12, 2022 at 10:23:07AM +0800, Jason Wang wrote:
-> > > On Tue, Jan 11, 2022 at 7:52 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Tue, Jan 11, 2022 at 11:36:42AM +0800, 李东升 wrote:
-> > > > > When virtio vdpa device removed, the abnormal damage of the device cannot be
-> > > > > perceived normally, which will cause problems similar to:
-> > > > >
-> > > > > 43bb40c5b926
-> > > >
-> > > >
-> > > > Should include the subject of the patch too.
-> > > >
-> > > > > Hence, add the ability to abort the command on surprise removal
-> > > > >
-> > > > > Signed-off-by: dongsheng li <lidongsheng@dayudpu.com>
-> > > >
-> > > > When removing gracefully,
-> > > > I am not sure we should break device unconditionally like this
-> > > > before giving drivers a chance to clean up.
-> > > > Should we just do it for surprise removal?
-> > >
-> > > That requires a new method to query whether it's a surprise removal.
-> > >
-> > > Thanks
-> >
-> > We can check pci_device_is_present like virtio does.
-> 
-> Though the PCI device is the main user, we are vdpa transport that is
-> unaware of the type of its parent.
-> 
-> So it looks to me we need a new method and PCI parent and do call this
-> function when needed.
-> 
-> Thanks
+On Wed, Jan 12, 2022 at 3:50 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> Sure, but none of this is relevant for the short term fix that we need
+> to get in asap. There are lots of future changes we can philosophize
+> about, but those discussions should take place on the linux-crypto
+> list after the merge window closes.
 
-Sure.
+I think of adding things to the root menu as a regression. I'd like to
+avoid an additional regression in fixing this.
 
+> > > and given that this
+> > > patch is presumably going to be sent as an early fix on top of your
+> > > rng branch, it is better not to touch anything under crypto/ unless
+> > > you are 100% certain it is not going to conflict with Herbert's tree.
 > >
-> > > >
-> > > > > ---
-> > > > >  drivers/virtio/virtio_vdpa.c | 1 +
-> > > > >  1 file changed, 1 insertion(+)
-> > > > >
-> > > > > diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
-> > > > > index 4a9ddb44b2a7..fd930409d190 100644
-> > > > > --- a/drivers/virtio/virtio_vdpa.c
-> > > > > +++ b/drivers/virtio/virtio_vdpa.c
-> > > > > @@ -374,6 +374,7 @@ static void virtio_vdpa_remove(struct vdpa_device *vdpa)
-> > > > >  {
-> > > > >   struct virtio_vdpa_device *vd_dev = vdpa_get_drvdata(vdpa);
-> > > > >
-> > > > > + virtio_break_device(vd_dev->vdev);
-> > > > >   unregister_virtio_device(&vd_dev->vdev);
-> > > > >  }
-> > > > >
-> > > > > --
-> > > > > 2.17.1
-> > > >
+> > Oh, I was thinking Herbert would take this since he hasn't sent a pull
+> > yet? Otherwise, sure, I can do it.
 > >
+>
+> How could he? This patch does not apply to his cryptodev tree, which
+> won't receive backmerges from mainline until the next cycle.
 
+Oh, okay then. I'll take it. In which case, I really don't want to be
+the one responsible for mucking up the root menu with something nobody
+cares about (crypto library submenu). I'll fix up the menu location
+thing locally then and send a v3 here.
+
+Jason

@@ -2,133 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1E848C391
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74BF848C397
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240311AbiALLxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 06:53:04 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47946 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231301AbiALLxA (ORCPT
+        id S240324AbiALLyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 06:54:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240322AbiALLyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 06:53:00 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20CBZu2Z018712;
-        Wed, 12 Jan 2022 11:52:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=2IYjVAcUZFYCWjH34ePtxnIej+sBhsH6eWJhxUehLgQ=;
- b=lc4X+w7YCdn7TYurfA2ykuki5m2UWKKTPyinpUkAI2CLTaSp+7d5mBmI6XasATJBKxRk
- US/bJBXNOI2cfLFIZwouCx1Widi3xHEsB8+bjL522rTEIizeQxxDRg4Kk4hs8zB5MQXc
- J/g7OXt5PU1bjgZQCYvjuHKc5YJwd4qNZyg5i7KIZ6DO/QA7gyS/vvH0Sv6K5W6emeIR
- gIpV1flsjgU9ZV6f85VB0rwuPWa3PP0P3lwEz4+bK5yjD/So6igHK0EUEY2UFcIEfFK8
- 9LQz+1pXJtEzRpsAAnfp4RQhAuZ1W7lOzDrPfLNPmdJ+sTCcETYAVhIKLQObrDs9xCm4 HA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dhvrc3rfv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jan 2022 11:52:57 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20CBFrKU029814;
-        Wed, 12 Jan 2022 11:52:56 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dhvrc3rf4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jan 2022 11:52:56 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20CBm1HS026909;
-        Wed, 12 Jan 2022 11:52:55 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3df289thnb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jan 2022 11:52:55 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20CBhm9N26673494
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jan 2022 11:43:48 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 953114C081;
-        Wed, 12 Jan 2022 11:52:51 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E0E474C097;
-        Wed, 12 Jan 2022 11:52:50 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.56.243])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Wed, 12 Jan 2022 11:52:50 +0000 (GMT)
-Date:   Wed, 12 Jan 2022 12:52:17 +0100
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     Tony Krowiak <akrowiak@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jjherne@linux.ibm.com, freude@linux.ibm.com,
-        borntraeger@de.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com, Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH v17 06/15] s390/vfio-ap: refresh guest's APCB by
- filtering APQNs assigned to mdev
-Message-ID: <20220112125217.108e0fba.pasic@linux.ibm.com>
-In-Reply-To: <831f8897-b7cd-8240-c607-be3a106bad5c@linux.ibm.com>
-References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
-        <20211021152332.70455-7-akrowiak@linux.ibm.com>
-        <20211227095301.34a91ca4.pasic@linux.ibm.com>
-        <831f8897-b7cd-8240-c607-be3a106bad5c@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Wed, 12 Jan 2022 06:54:40 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D80BC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:54:39 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id l16-20020a17090a409000b001b2e9628c9cso4218452pjg.4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:54:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=LT0CPQ4LjGQda0r31DVagHWPW/WMPcFrzJQSM8nEMzY=;
+        b=XXHml25tt60drO39EtR8zK5L1Iz7/ByCY2ePEkE6ZC3/SXcRL8eYBBAc5Z2o4STa6Y
+         ERzQII6QW51u9O72XmVQdBn10hSPBEirs/WSNZynh0UdcWJaYwiOMFNQYGeYQzk4BB0Q
+         H0MtQWV7t5ww1dfQ0ulV1KsNttsDxZsgbJOmc4CP+2kpyEPvmfdpmmuIdbTWFY78lwp6
+         i4YoMn8EhjD+Eq7sqPjs5fFmEcqo7C42qJpNWQ9aQyilQA98CgaB2sTZw0KTSKX3VdSj
+         3DMq7SKJeDzCIwCTdsZY9yg3ZHrfcth7njtWIwbn1QEu1TrEepKOO3h5MhujyOF7o6MF
+         l4Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LT0CPQ4LjGQda0r31DVagHWPW/WMPcFrzJQSM8nEMzY=;
+        b=Lj1aY5Y0jZfC3M7Qo2Tf8hdibekJWzNUNwt5ANtpBVq8AVhFJgDfkXZ8sMMjq4QQmJ
+         +voadqB5Gmqrd4D0agAxU3eHzVEiTroI8cfF0251wQOpeDginn15MCchMWZo7xvKtnSW
+         VSR9tpApuaR9GYj7s8vDEuhpZNqjwQNSBJ7VpdKFa8MA0YGyr4XQCP/do4irAsTZvXDE
+         fFh6Mg70uK8FUo6ZMnhDB2tiwWAjZwLYtKfrU3QdEnib5SrZRf3hmrN0KFSH88k3nzUL
+         CUmO5C4xca7DAfS5VRX0L/0R6A+1dcFST7kUMnwMg6hvxWl/jviq0SOGdBRNLv8vjWzb
+         WMHg==
+X-Gm-Message-State: AOAM532gDKVchfJpDpTTeoVoMD8h/t+T6gt/Br8ui0+WYD/haEJoDoWC
+        gOynCoCgLUQg6RUqNuUBCxtNGZkkskqchXGzLQw=
+X-Google-Smtp-Source: ABdhPJwJYlKnZr2PrQgseAYhkwhTlfxEl3/6t8ytnMogoOwa6qEIpKivSILXXDn61XzZIX3rkM/WJw==
+X-Received: by 2002:a05:6a00:2151:b0:4a2:5c9a:f0a9 with SMTP id o17-20020a056a00215100b004a25c9af0a9mr9073381pfk.39.1641988478895;
+        Wed, 12 Jan 2022 03:54:38 -0800 (PST)
+Received: from VICKYMQLIN-NB1.localdomain ([159.226.95.33])
+        by smtp.gmail.com with ESMTPSA id r11sm13791398pff.81.2022.01.12.03.54.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 12 Jan 2022 03:54:38 -0800 (PST)
+Date:   Wed, 12 Jan 2022 19:54:35 +0800
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Suman Anna <s-anna@ti.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        "Nagalla, Hari" <hnagalla@ti.com>
+Subject: Re: [PATCH] iommu/omap: Fix missing put_device() call in
+ omap_iommu_probe_device
+Message-ID: <20220112114851.GA712@VICKYMQLIN-NB1.localdomain>
+References: <20220107080428.10873-1-linmq006@gmail.com>
+ <de3a3e1c-6c51-e951-cc7f-9ce2ccb3f283@ti.com>
+ <20220110022531.GA61@VICKYMQLIN-NB1.localdomain>
+ <fd659736-2106-1be3-084b-7caddf2dc18e@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Q7ASgJJCw0MbMLlHkqBjCNcRucoRahkS
-X-Proofpoint-GUID: uUTllvUaeYlvT8nOgTEphpbBF84PcXzw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-12_04,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 adultscore=0 mlxscore=0
- phishscore=0 impostorscore=0 spamscore=0 mlxlogscore=999 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201120075
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fd659736-2106-1be3-084b-7caddf2dc18e@ti.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 16:19:06 -0500
-Tony Krowiak <akrowiak@linux.ibm.com> wrote:
+Hi Suman,
 
-> >
-> > Also we could probably do the filtering incrementally. In a sense that
-> > at a time only so much changes, and we know that the invariant was
-> > preserved without that change. But that would probably end up trading
-> > complexity for cycles. I will trust your judgment and your tests on this
-> > matter.  
+On Mon, Jan 10, 2022 at 12:43:57PM -0600, Suman Anna wrote:
+> Hi Miaoqian,
 > 
-> I am not entirely clear on what you are suggesting. I think you are
-> suggesting that there may not be a need to look at every APQN
-> assigned to the mdev when an adapter or domain is assigned or
-> unassigned or a queue is probed or removed. Maybe you can clarify
-> what you are suggesting here.
+> On 1/9/22 8:43 PM, Miaoqian Lin wrote:
+> > Hi Suman Anna,
+> > On Fri, Jan 07, 2022 at 08:42:16AM -0600, Suman Anna wrote:
+> >> Hi Miaoqian,
+> >>
+> >>
+> >>> Add the corresponding 'put_device()' in the error handling paths.
+> >>
+> >> Also, need it in the regular path, not just in error handling path.
+> > I think after calling platform_get_drvdata() normally, the
+> > reference will be released in other functions, so don't need it in the
+> > regular path.
+> > 
+> 
+> No, it's a local reference and is acquired within omap_iommu_probe_device() and
+> needs to be released within this function. What other function are you referring
+> to here?
+> 
 
-Exactly. For example if we have the following assigned
-adapters:
-1, 2, 3
-domains:
-1, 2, 3
-and the operation we are trying to perform is assign domain 4, then it
-is sufficient to have a look at the queues with the APQNs (1,4), (2,4)
-and (3, 4). We don't have to examine all the 14 queues.
+I am referring to the release function of this device, here is
+omap_iommu_release_device(). But I find omap_iommu_release_device()
+doesn't handle the reference, and calls kfree(arch_data) directly.
 
-When an unassign dapter is performed, there is no need to do the
-re-filtering, because there is nothing that can pop-back or go away. And
-on unassign domain is performed, then all we care about are the queues
-of that domain on the filtered adapters.
 
-Similarly if after that successful assign the queue (3,4) gets removed
-(from vfio_ap) and then added back again and probed, we only have to
-look at the queues (3, 1), (3, 2), (3, 3).
-
-But I'm OK with the current design of this. It is certainly conceptually
-simpler to say we have a master-copy and we filter that master-copy based
-on the very same rules every time something changes. I'm really fine
-either way as log as it works well. :D
-
-Regards,
-Halil

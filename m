@@ -2,139 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DD548C485
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 576FB48C488
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353459AbiALNNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:13:40 -0500
-Received: from mail-ma1ind01olkn0147.outbound.protection.outlook.com ([104.47.100.147]:19106
-        "EHLO IND01-MA1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1353504AbiALNNF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:13:05 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NpRGnzq1vRkjFRPbmnAj5h5QakxOYMGVc75OSssnkZMBK3fXvL9MhlPEtJMD/hRRuVIGKi1iknHN0QXScWN+pjgdyDcyp2Q+XKhW8RzT/GTCZdMsmarYERSD1rvEukXMH4ds4sJmDkbC/sObWqbIk96FJnEks8I86ICb8jRqiVwcs8iNumVWRWEOinSpRFUkMcxDDhJUEw8z+oqUg8GBDS40zaIcwJ1xMawYAOQufHRcUykYi7VeqK5yFx3ARh1O73uLjHZUH9fFUwrS0fKv+SLa8VRbK5E+vuSllDtHACMkUZJZF5cBcILRzUvZE/puNBXEmopkbslp6SYWhw4wHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V/kMTFG8OMmTFpRBz5T9Ud641V/Oq/od8Ewz9EOvGic=;
- b=NORvbuBa8xKNy0RX9oGhWF/C60xnnEHs66Q4kllWkI/txR7Rh3yESVOhnrc1w24M2NHkrL+PrxPWPZaLtD7sWdmlz6URJ07S/ZEqx9cTcs3kC47bOJJC1ACa1YtwgJwmGUYipmGYDqaonSirZiuqbEuVpXzULxKd/dbOUfX6/o92qRtoBYD6sPfIiURLLxPFU0ygGPbLXsF0zonaLRaMVm2Ut0/geV8ymudeqJ+LU7ptp8uwcqj7/M0/v2aZIzGhqHN46UBvN4pgLiXWYNv1vrtSfuAFnz7XLeT5nQU95B2BSM6Ewg975p1fspjgRmHqZJQPO+ATXWgB5g6sF0RCwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V/kMTFG8OMmTFpRBz5T9Ud641V/Oq/od8Ewz9EOvGic=;
- b=fkvEQ02QIKcGd5czTtufPdMfN4PEBnDTGPj2TBYiJTV84VDGaiNMyxwOjxVknsr9S6O9S6moOieF8J2iDqX/fRHhm0Y+iyOXQlzcYAqP16XwCAYJmWEmz/5yxQCME/1fetQ+71B6v1lE/90nWTR08Djg3LgGRVN1Ypng/KrOhe5zFIBWorfPYDTNWIQzbV/vxeFkEUxMDqDiHYPHqXIc28z/qiZevnqduSv4NayXbS2j+T1IZsj/I4NiQsYD44n9hDGA7oMz9Gd8he2t/sY9Up268KUbXpRdzg7aeJ/h2ufZf9Vdd/8FtCwXH96K4YedQlGMhgfw5DdulntDFjQbsQ==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by PNXPR01MB7201.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:c5::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10; Wed, 12 Jan
- 2022 13:13:01 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::7ca6:9165:19ec:4cd7%8]) with mapi id 15.20.4867.012; Wed, 12 Jan 2022
- 13:13:01 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>
-CC:     "linux-uvc-devel@lists.sourceforge.net" 
-        <linux-uvc-devel@lists.sourceforge.net>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "paul@mrarm.io" <paul@mrarm.io>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH] media: uvcvideo: Add support for Apple T2-attached FaceTime
- HD Camera
-Thread-Topic: [PATCH] media: uvcvideo: Add support for Apple T2-attached
- FaceTime HD Camera
-Thread-Index: AQHYB7YgubwvQq98m02ITNscTMkEuA==
-Date:   Wed, 12 Jan 2022 13:13:01 +0000
-Message-ID: <F8030678-1AA2-4601-A1F0-CA8618CFD969@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [BliPOO75yCj/a6OWulJbc3FbLTV43x5zuxSYclQ/4iFmFNqsv3Y5Vp9egd1Q4JPh]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bb21d0a3-ecf7-4297-0a71-08d9d5cd42ba
-x-ms-traffictypediagnostic: PNXPR01MB7201:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TJpbId1Mgzq4WxkZrLVw2qkgfqMo+Cg+gl0zzq3gQc4MKWYgkVD9MA2Wdsf2g/0xrWULjq1JeyR1tYumWgr4a8busPT9akp5buuNRBqwJWFXtSzGkO8MMTcjI40oHoABOobcCFINq2l9d366f+u2yz8NjSpNwRfRCUdLnGD2R4mlVraQVYjBmJFgiW0MV+EnJWchWHyXJu4DRytTUIPlUFj1a3B8ogXVhlZ32GjaNZoLuZLwrjlph9DHwPVq4291ivQez4Mk9rvTZbTHGzSaK/nsf5po0QyNDMaxWq18vJJ7kENe7mYMb/ZJ8OvU018IgH1KW0n+HcrJYrd8aKhOxtfc7e+z02GBhpSYsotuZ3Wafk+6yg3FoQ03K3aT+3V8/RODROtiClQv0Ym3qiV3vPCDrdqSVHNdmQ0KxlW/4eQjPv19JAAVPJ+EkVbTPAjSAVZ9y1YcPouCaYca8jIUvzgj71pH1GYrEsx0/zLoSZT8Pyf0mmtPHr8mDESo53SaH+sH4vIokOGvkjZ7Up8QNbrr+itzkLEQRAo91o6/8UKjehzP84HDXlXGwGq2HT4Ckso8K9IovNHYAQB7vEVWHg==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?N0DhxizGenG+rp6+wM7kGTiHNxMpduYLXSZL4GPQnoDqQbg/gLk+5cuX8gwk?=
- =?us-ascii?Q?MzP31BH0j8JtmpI7LN7dy7qU3cG/QxlAnbuJ9lwKkMNNnq0olgGkUOrTtQou?=
- =?us-ascii?Q?8XEYeKwKq/pcda8rCDALc9Hsekfkz0nKtqGnZzQ+ZFK/2OV3wG+ut/CCMTr8?=
- =?us-ascii?Q?Vr5xZ4KDI0E1kPXOw4s8eNLht8+PR1waw2rpTgvfzED5cJdV+sLK1cOtT07S?=
- =?us-ascii?Q?kvjWffMFOZdbC/hfvZK9o0pXzBPHP3BlIiRZX7blMmE+2xxQjkq45R6SnFTs?=
- =?us-ascii?Q?xUR29B+4F/La57zcuHv3FsiXNwUljUW/Ig5+i23hohCfkysauVow+XKjCOWV?=
- =?us-ascii?Q?AhNfBMUOitcDWmznV8WtdkeU7sneNSzxD0jgqAudtKRICqvRq//X1GZW6rCs?=
- =?us-ascii?Q?SO8ON+pOJHE2YO3HlD/F8HITLEkxHrRmaYCLp2O3bvr4Kw3SWWJ4uGoq6QNh?=
- =?us-ascii?Q?Hf/gT+x1Un4skDRKN/8fnOIDj6pQEGSoz2dshOHmsnZJCWUM6BlKFghjYd0L?=
- =?us-ascii?Q?LCtpXp4KLuCaRsRGlT7vhmO/nlOWZBDZ4TEY4BLDnWX5g5nlqy2KX2hDycZs?=
- =?us-ascii?Q?ENOM7KCfOwLTNQpTqnNAoczGbk9/6px2EF1clkZCy/FQuUxSNWgX9RrZ5Cor?=
- =?us-ascii?Q?hLFq3PZHYAhQw07+o1TwGbM8Bn2BJgMV6STiQZwwVnaU/053o+20IkmDGrjZ?=
- =?us-ascii?Q?8blXvP4uwS6CyWGZpCr8pxeORJBuXfc9q3uJfQo2xb2HaGl/10IwRNECHbJt?=
- =?us-ascii?Q?/xYZlJ5n5qO7AfKv7dNYkD8OI5mrfy1U4xA8iVS/L4tU9Sw82B17xXL38816?=
- =?us-ascii?Q?nU80tUg+79HrKX9xmFa7U6GHeQmiao88+68zeKYlSbpT0bVDSTSuyW4Ulopt?=
- =?us-ascii?Q?7+YiRmRcrw9VbnprbjVyhdxeXWTHvnowS4MTBM80D1GaYFbnYLDp0PsGkRLw?=
- =?us-ascii?Q?C81qkDbsta8Jot5UzshO1OjLX4InBsbEknwtfKvQTO91LEnag3vgBE55zQhk?=
- =?us-ascii?Q?EFNDR9PNMwa35SWl+F3K7abBKg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <E0923E64D64D254598A7724A67846A75@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb21d0a3-ecf7-4297-0a71-08d9d5cd42ba
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2022 13:13:01.3509
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNXPR01MB7201
+        id S1353441AbiALNNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:13:48 -0500
+Received: from so254-9.mailgun.net ([198.61.254.9]:50106 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353437AbiALNNZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 08:13:25 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1641993204; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=t8UcX5N7QmTU7XeUfa4gdrtpln6WbR8NBAKQ1OyJ86A=; b=REpByCKepLNeWkOYGK6DvtEw8CpduWKWwL8jls4yDPboeQUWf7/+Bp3Bd+evRGm/by/6w5CX
+ HZ/OeVP/C3MK5Ac6VCljpdwFfry0ZuUKvo2+IRfMprjlbn/QRus/D2hfgHbCXblRWzcyz9X1
+ 4mkYrUqxuvW+bdg4IYy3DbnwKLw=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 61ded3f369943108c5b544bf (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 12 Jan 2022 13:13:23
+ GMT
+Sender: quic_vjitta=quicinc.com@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B988FC4360D; Wed, 12 Jan 2022 13:13:23 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from vjitta-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: vjitta)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1113DC4338F;
+        Wed, 12 Jan 2022 13:13:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 1113DC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
+From:   Vijayanand Jitta <quic_vjitta@quicinc.com>
+To:     joro@8bytes.org, will@kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, vjitta@codeaurora.org,
+        Vijayanand Jitta <quic_vjitta@quicinc.com>
+Subject: [PATCH v3] iommu: Fix potential use-after-free during probe
+Date:   Wed, 12 Jan 2022 18:43:04 +0530
+Message-Id: <1641993184-1232-1-git-send-email-quic_vjitta@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Pawlowski <paul@mrarm.io>
+Kasan has reported the following use after free on dev->iommu.
+when a device probe fails and it is in process of freeing dev->iommu
+in dev_iommu_free function, a deferred_probe_work_func runs in parallel
+and tries to access dev->iommu->fwspec in of_iommu_configure path thus
+causing use after free.
 
-Adds the requisite device id to support detection of the Apple FaceTime
-HD webcam exposed over the T2 BCE VHCI interface.
+BUG: KASAN: use-after-free in of_iommu_configure+0xb4/0x4a4
+Read of size 8 at addr ffffff87a2f1acb8 by task kworker/u16:2/153
 
-Tested-by: Aun-Ali Zaidi <admin@kodeit.net>
-Signed-off-by: Paul Pawlowski <paul@mrarm.io>
-Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
+Workqueue: events_unbound deferred_probe_work_func
+Call trace:
+ dump_backtrace+0x0/0x33c
+ show_stack+0x18/0x24
+ dump_stack_lvl+0x16c/0x1e0
+ print_address_description+0x84/0x39c
+ __kasan_report+0x184/0x308
+ kasan_report+0x50/0x78
+ __asan_load8+0xc0/0xc4
+ of_iommu_configure+0xb4/0x4a4
+ of_dma_configure_id+0x2fc/0x4d4
+ platform_dma_configure+0x40/0x5c
+ really_probe+0x1b4/0xb74
+ driver_probe_device+0x11c/0x228
+ __device_attach_driver+0x14c/0x304
+ bus_for_each_drv+0x124/0x1b0
+ __device_attach+0x25c/0x334
+ device_initial_probe+0x24/0x34
+ bus_probe_device+0x78/0x134
+ deferred_probe_work_func+0x130/0x1a8
+ process_one_work+0x4c8/0x970
+ worker_thread+0x5c8/0xaec
+ kthread+0x1f8/0x220
+ ret_from_fork+0x10/0x18
+
+Allocated by task 1:
+ ____kasan_kmalloc+0xd4/0x114
+ __kasan_kmalloc+0x10/0x1c
+ kmem_cache_alloc_trace+0xe4/0x3d4
+ __iommu_probe_device+0x90/0x394
+ probe_iommu_group+0x70/0x9c
+ bus_for_each_dev+0x11c/0x19c
+ bus_iommu_probe+0xb8/0x7d4
+ bus_set_iommu+0xcc/0x13c
+ arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+ arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+ platform_drv_probe+0xe4/0x13c
+ really_probe+0x2c8/0xb74
+ driver_probe_device+0x11c/0x228
+ device_driver_attach+0xf0/0x16c
+ __driver_attach+0x80/0x320
+ bus_for_each_dev+0x11c/0x19c
+ driver_attach+0x38/0x48
+ bus_add_driver+0x1dc/0x3a4
+ driver_register+0x18c/0x244
+ __platform_driver_register+0x88/0x9c
+ init_module+0x64/0xff4 [arm_smmu]
+ do_one_initcall+0x17c/0x2f0
+ do_init_module+0xe8/0x378
+ load_module+0x3f80/0x4a40
+ __se_sys_finit_module+0x1a0/0x1e4
+ __arm64_sys_finit_module+0x44/0x58
+ el0_svc_common+0x100/0x264
+ do_el0_svc+0x38/0xa4
+ el0_svc+0x20/0x30
+ el0_sync_handler+0x68/0xac
+ el0_sync+0x160/0x180
+
+Freed by task 1:
+ kasan_set_track+0x4c/0x84
+ kasan_set_free_info+0x28/0x4c
+ ____kasan_slab_free+0x120/0x15c
+ __kasan_slab_free+0x18/0x28
+ slab_free_freelist_hook+0x204/0x2fc
+ kfree+0xfc/0x3a4
+ __iommu_probe_device+0x284/0x394
+ probe_iommu_group+0x70/0x9c
+ bus_for_each_dev+0x11c/0x19c
+ bus_iommu_probe+0xb8/0x7d4
+ bus_set_iommu+0xcc/0x13c
+ arm_smmu_bus_init+0x44/0x130 [arm_smmu]
+ arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
+ platform_drv_probe+0xe4/0x13c
+ really_probe+0x2c8/0xb74
+ driver_probe_device+0x11c/0x228
+ device_driver_attach+0xf0/0x16c
+ __driver_attach+0x80/0x320
+ bus_for_each_dev+0x11c/0x19c
+ driver_attach+0x38/0x48
+ bus_add_driver+0x1dc/0x3a4
+ driver_register+0x18c/0x244
+ __platform_driver_register+0x88/0x9c
+ init_module+0x64/0xff4 [arm_smmu]
+ do_one_initcall+0x17c/0x2f0
+ do_init_module+0xe8/0x378
+ load_module+0x3f80/0x4a40
+ __se_sys_finit_module+0x1a0/0x1e4
+ __arm64_sys_finit_module+0x44/0x58
+ el0_svc_common+0x100/0x264
+ do_el0_svc+0x38/0xa4
+ el0_svc+0x20/0x30
+ el0_sync_handler+0x68/0xac
+ el0_sync+0x160/0x180
+
+Fix this by taking device_lock during probe_iommu_group.
+
+Signed-off-by: Vijayanand Jitta <quic_vjitta@quicinc.com>
 ---
- drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/iommu/iommu.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc=
-_driver.c
-index 7c007426e..88dc9e7aa 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2848,6 +2848,15 @@ static const struct usb_device_id uvc_ids[] =3D {
- 	  .bInterfaceProtocol	=3D 0,
- 	  .driver_info		=3D UVC_INFO_QUIRK(UVC_QUIRK_PROBE_MINMAX
- 					| UVC_QUIRK_BUILTIN_ISIGHT) },
-+	/* Apple FaceTime HD Camera (Built-In) */
-+	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		=3D 0x05ac,
-+	  .idProduct		=3D 0x8514,
-+	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
-+	  .bInterfaceSubClass	=3D 1,
-+	  .bInterfaceProtocol	=3D 0,
-+	  .driver_info		=3D (kernel_ulong_t)&uvc_quirk_probe_def },
- 	/* Apple Built-In iSight via iBridge */
- 	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
- 				| USB_DEVICE_ID_MATCH_INT_INFO,
---=20
-2.25.1
-
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index dd7863e..261792d 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -1617,7 +1617,7 @@ static int probe_iommu_group(struct device *dev, void *data)
+ {
+ 	struct list_head *group_list = data;
+ 	struct iommu_group *group;
+-	int ret;
++	int ret = 0;
+ 
+ 	/* Device is probed already if in a group */
+ 	group = iommu_group_get(dev);
+@@ -1626,9 +1626,13 @@ static int probe_iommu_group(struct device *dev, void *data)
+ 		return 0;
+ 	}
+ 
+-	ret = __iommu_probe_device(dev, group_list);
+-	if (ret == -ENODEV)
+-		ret = 0;
++	ret = device_trylock(dev);
++	if (ret) {
++		ret = __iommu_probe_device(dev, group_list);
++		if (ret == -ENODEV)
++			ret = 0;
++		device_unlock(dev);
++	}
+ 
+ 	return ret;
+ }
+-- 
+2.7.4
 

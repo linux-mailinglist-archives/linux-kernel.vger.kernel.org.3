@@ -2,70 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C21048BCE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2268B48BCF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348232AbiALCHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 21:07:45 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:40280 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348215AbiALCHl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 21:07:41 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowABX8kDZN95hHloNBg--.11070S2;
-        Wed, 12 Jan 2022 10:07:21 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     hverkuil@xs4all.nl, dwlsalmeida@gmail.com, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re: [PATCH] media: vidtv: Check for null return of vzalloc
-Date:   Wed, 12 Jan 2022 10:07:20 +0800
-Message-Id: <20220112020720.692110-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1348276AbiALCJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 21:09:11 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37244 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348241AbiALCI6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 21:08:58 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E72CFB81DAC;
+        Wed, 12 Jan 2022 02:08:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4960C36AF7;
+        Wed, 12 Jan 2022 02:08:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641953335;
+        bh=00jqOo/HIGe5aQsScbRyEcP5fhzEdEEb5a/Ce7t3cpo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Dr+fOp8wi/DQiF30YWSyDTO/X/gY2KuY68uhH1bbSr9L4LCWtzdsmA1/2FVgH6Yui
+         JAWtdZN3+qVuyTH8g7AWcIBoPboWqU5NEOBJY3Qi2lQYpTEjvY17r0McmIXxiQGXjy
+         vMb/2FSp+DWz/rMXSgh25TUrsAEIDTZ/nrgIfBaLqltrBBD10mPo/jp96cQ+uhKTVZ
+         t/CRg13JBexnPXx/8lXSOSAHOwES426B7kTOWti7Bnc9HE8lsIaWa7rd+tvu1aEfg1
+         xp9S5v0O07CBLJ8tI8dJHISW+bnA5ZRD+Ol48fLpo9kJtTe3dTBYie/PALeVEuaDAh
+         NJnD0tFre3L5A==
+Received: by mail-ua1-f53.google.com with SMTP id p37so2079833uae.8;
+        Tue, 11 Jan 2022 18:08:55 -0800 (PST)
+X-Gm-Message-State: AOAM533Opp9zIVvjJvrCfV1tuThm/QSh3Qw6TB1NDwGtqr4KjtW3Orua
+        FxNU4CMZS4MtUeRvMA53FtR5PXMJItklfSsdFzE=
+X-Google-Smtp-Source: ABdhPJwDjcWqNqYbbEwXXTZv6pYv1AFZouP6oGIFcDRCp67/dn6q+IWJLxLbMTSk+FCyEJgyv6a7C0pY5YW8GYdxT6U=
+X-Received: by 2002:a67:fd64:: with SMTP id h4mr3438011vsa.8.1641953334235;
+ Tue, 11 Jan 2022 18:08:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowABX8kDZN95hHloNBg--.11070S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYr7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z2
-        80aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8Jw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
-        YxC7MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjfUYc_-DUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+References: <20220111083515.502308-1-hch@lst.de> <20220111083515.502308-5-hch@lst.de>
+ <CAK8P3a0mHC5=OOGV=sGnC9JqZWxzsJyZbTefnCtryQU3o3PY_g@mail.gmail.com>
+In-Reply-To: <CAK8P3a0mHC5=OOGV=sGnC9JqZWxzsJyZbTefnCtryQU3o3PY_g@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 12 Jan 2022 10:08:42 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS81o1bsAGj=016F=Nw7MszhsYa95cw6JLThjwW50YRpw@mail.gmail.com>
+Message-ID: <CAJF2gTS81o1bsAGj=016F=Nw7MszhsYa95cw6JLThjwW50YRpw@mail.gmail.com>
+Subject: Re: [PATCH 4/5] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 05:58:10PM +0800, Hans Verkuil wrote:
-> This doesn't free e->name!
-> 
-> Actually, the same issue is also present later in this function:
+On Tue, Jan 11, 2022 at 11:33 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> ctx = kzalloc(priv_sz, GFP_KERNEL);
->        if (!ctx) {
->	        kfree(e);
->	        return NULL;
->	}
+> On Tue, Jan 11, 2022 at 9:35 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > The fcntl F_GETLK64/F_SETLK64/F_SETLKW64 are only implemented for the
+> > 32-bit syscall APIs, but we also need them for compat handling on 64-bit
+> > builds.  Redefining them is error prone (as shown by the example that
+> > parisc gets it wrong currently), so we should use the same defines for
+> > both case.  In theory we could try to hide them from userspace, but
+> > given that only MIPS actually gets that right, while the asm-generic
+> > version used by most architectures relies on a Kconfig symbol that can't
+> > be relied on to be set properly by userspace is a clear indicator to not
+> > bother.
+> >
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > ---
+>
+> > diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+> > index 98f4ff165b776..43d7c44031be0 100644
+> > --- a/include/uapi/asm-generic/fcntl.h
+> > +++ b/include/uapi/asm-generic/fcntl.h
+> > @@ -116,13 +116,11 @@
+> >  #define F_GETSIG       11      /* for sockets. */
+> >  #endif
+> >
+> > -#ifndef CONFIG_64BIT
+> >  #ifndef F_GETLK64
+> >  #define F_GETLK64      12      /*  using 'struct flock64' */
+> >  #define F_SETLK64      13
+> >  #define F_SETLKW64     14
+> >  #endif
+> > -#endif
+> >
+> >  #ifndef F_SETOWN_EX
+> >  #define F_SETOWN_EX    15
+>
+> This is a very subtle change to the exported UAPI header contents:
+> On 64-bit architectures, the three unusable numbers are now always
+> shown, rather than depending on a user-controlled symbol.
+>
+> This is probably what we want here for compatibility reasons, but I think
+> it should be explained in the changelog text, and I'd like Jeff or Bruce
+> to comment on it as well: the alternative here would be to make the
+> uapi definition depend on __BITS_PER_LONG==32, which is
 
->> +		kfree(e);
->> +		return NULL;
->> +	}
+__BITS_PER_LONG==32 || __KERNEL__  just for kernel use in compat.
 
-Thanks for your reminder.
-I have sent a v2 to fix it.
-And also I have sent a patch to fix the 'ctx' with
-'Reported-by: Hans Verkuil <hverkuil@xs4all.nl>',
-since they are two different things.
+> technically the right thing to do but more a of a change.
+>
+>        Arnd
 
-Sincerely thanks,
-Jiang
 
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

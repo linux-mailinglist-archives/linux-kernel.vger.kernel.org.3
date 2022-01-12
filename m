@@ -2,103 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFE248CAED
+	by mail.lfdr.de (Postfix) with ESMTP id 40B1A48CAEC
 	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356179AbiALSZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 13:25:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
+        id S1356195AbiALSZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 13:25:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356254AbiALSYx (ORCPT
+        with ESMTP id S1356218AbiALSYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:24:53 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686A9C06175D
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:24:43 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id m13so6659674pji.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:24:43 -0800 (PST)
+        Wed, 12 Jan 2022 13:24:44 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3688C06175A
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:24:35 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id hv15so6647079pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:24:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JpfNq1c3sE1WhdGYKIS0ftjO4NBaLyS7DBSMNWoLJHI=;
-        b=GlIiBaF6dnpwDfdu4gkhjmVdaaSbadefQdROFC7ChPMpFMnW/b7OHsQM9Mx6b2iRh4
-         Jc5C/nfB41M+idSzLKtM52wBPm+NFgB8ml8TJcOd476tfBCdOrPrsz3Rm+BaypwvAgbq
-         J2ZtmL2HOjxYrvPzs0vVyKeU3VqbZSI5UsIOUDp9j7+JcSgW9D5uP4/ctU58sdBXdo60
-         UM3C7mOnmzi1xJgkTb2qrG42+rh8WsYqcmS9X+qPlXL5F7UiapHjIMXQ2dCj0h/Rzy5j
-         Ro7Gjo2pCHwF8sP3jkxFKjx+afncmqtSokAMqrm1VL9sWgu1kKnnBLoeTfDhZci5LQvW
-         /8Bw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZmWNRIqHpgfFlpkzNid2AC/wsgEhhdjKgSthxqzupr0=;
+        b=Hu0l1zFFoYveGm/teMMMLzjdYZZ9zlHgOwE5BiAa/3z6diZCXc1oZ+E0g3Wm2YT3T4
+         zMZkwh6IK/rLwGDBUppTCSQwiB69w1v1Cv8Zr47GFjUlpUkHTF3/rvPZNi4YJH2B8TEZ
+         Lyv7xmvISTTPRvYjZtNac+DUiLid4AEGwCa5xnmYyRz/c/jylydiABnVDFOnS7fNFFtD
+         FOeyhg327siqhBuHgRQ9qcTdfQg76s8e3XPQUwRWNYi1FBbiPP3WL11PfBg6cJEkL1S6
+         KkxJxDKOa/ryCIPaNWK/05qGqzmQdrQ6FQiyNHCRRx3A8OR3nVgXU4hU7ZlR7ZJu9jJJ
+         hZyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JpfNq1c3sE1WhdGYKIS0ftjO4NBaLyS7DBSMNWoLJHI=;
-        b=JomVl91C8H0jSToKpcraBGpak7IROR2eHjpiJU4VUzZ5lvJdYxcjuPrIUvJR3OEF15
-         Ecw2iXwSKhSdZzZ3oi7x6kWUYB0dk1pSPqh8RLz+Go8B/OctTM+n5WdCZLEYjjXBIuAk
-         BC1HAzRMsZ3ZaHEI0jyaCrLu0d8dmqoFBqUCjqChHeQ88PDdXcCnHeCkKlhdR5dAM5+W
-         Ppc2tgkjEAvmIV6N+TYXrpjFvmCuJfMHNkrldMXfv0FaSYv05n8WODVGTpcPxJYIQymD
-         pSBXIonF11bQmqlupiwcoAQRZ7N2rkq9G9te2hTGic/jCYbVaZ8OTmiia/AvDOQ4g/ZL
-         ryxw==
-X-Gm-Message-State: AOAM533dACN2he5GjhPEFmhLf95PpE7040p0n2HdQYu+uyEEEZCY3PPU
-        udFBEaO8S/vEuaS6YW1OMvW1XMOZW8BgMKX6wu7zSAYyfSDtNg==
-X-Google-Smtp-Source: ABdhPJw68X6m4+77CEdM91UjbLJ6uhSp3l4p8Vg66CvqBxY10j/EnvM2Z0tQHnRtlMIYAiNPOzJUdYBIKzkcqU+M9Eo=
-X-Received: by 2002:a63:b517:: with SMTP id y23mr771749pge.115.1642011882808;
- Wed, 12 Jan 2022 10:24:42 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZmWNRIqHpgfFlpkzNid2AC/wsgEhhdjKgSthxqzupr0=;
+        b=FWs5RdoC0luqMQqJuNkr+JaQWYKidDXyUPT4mrkxCtYYPPrjK6xkNveb7yzHGvs7q1
+         qjs5nhWAD1brCp1B6tM4i3dMr06MMDnqMk7+scmtc8Q+KAFlSNFVWLl/AZ18JONnVfjg
+         1kWdo7NNPEk+0cxLdM9o3XDDPXIaLCtx5Gpyr7xjM200qblxQn10q2pxvzxUEdHVonc1
+         Wk+6Hf1gVuuI4dwCHFZnx5Ec83bSxy2hFsNwCipa6xDvJlSUFFor135njUFGLIvYbLWW
+         V13PFNV2+4WhFB5PHvDhW5ok+XSWJUseOTJAeaVyqyUh7QK5TItFvrnoI59t8iYjHLbd
+         Dr9w==
+X-Gm-Message-State: AOAM533r/6f388jea6EcNelfaKM1QMyDJ+17vuJEIlBUPrE3Qc21Zi7m
+        zAjZ9Eas0GHgT3F2/zIqkwrkdw==
+X-Google-Smtp-Source: ABdhPJxC3Spy6jAzawZZkjc8A2flGmd3z5F+VR5mfljb/8geqt6+8TviA+FPYekZyzWdSxeA0zZurA==
+X-Received: by 2002:a17:902:8346:b0:149:d1c7:fdc0 with SMTP id z6-20020a170902834600b00149d1c7fdc0mr689096pln.166.1642011875155;
+        Wed, 12 Jan 2022 10:24:35 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n15sm6311862pjj.12.2022.01.12.10.24.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 10:24:34 -0800 (PST)
+Date:   Wed, 12 Jan 2022 18:24:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
+Message-ID: <Yd8c3zlTweSGhwtt@google.com>
+References: <20220104194918.373612-1-rananta@google.com>
+ <20220104194918.373612-2-rananta@google.com>
+ <Ydjje8qBOP3zDOZi@google.com>
+ <CAJHc60ziKv6P4ZmpLXrv+s4DrrDtOwuQRAc4bKcrbR3aNAK5mQ@mail.gmail.com>
+ <Yd3AGRtkBgWSmGf2@google.com>
+ <CAJHc60w7vfHkg+9XkPw+38nZBWLLhETJj310ekM1HpQQTL_O0Q@mail.gmail.com>
+ <Yd3UymPg++JW98/2@google.com>
+ <CAJHc60yPmdyonJESHPHvXJR+ekugZev4XzsZc2YV2mnfBdy-bw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210719082756.15733-1-ms@dev.tdt.de> <CAJ+vNU3_8Gk8Mj_uCudMz0=MdN3B9T9pUOvYtP7H_B0fnTfZmg@mail.gmail.com>
- <94120968908a8ab073fa2fc0dd56b17d@dev.tdt.de> <CAJ+vNU2Bn_eks03g191KKLx5uuuekdqovx000aqcT5=f_6Zq=w@mail.gmail.com>
- <7fe5e3b3ff8fe9375fef409521b93102@dev.tdt.de> <Yd7UHYeAl3wigMmr@lunn.ch>
-In-Reply-To: <Yd7UHYeAl3wigMmr@lunn.ch>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Wed, 12 Jan 2022 10:24:29 -0800
-Message-ID: <CAJ+vNU0r6N_ePohyZy5t7v4QpdaJWQ7mXrKr=qxhExVxm-ChRg@mail.gmail.com>
-Subject: Re: [PATCH net-next v6] net: phy: intel-xway: Add RGMII internal
- delay configuration
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Martin Schiller <ms@dev.tdt.de>, Hauke Mehrtens <hauke@hauke-m.de>,
-        martin.blumenstingl@googlemail.com,
-        Florian Fainelli <f.fainelli@gmail.com>, hkallweit1@gmail.com,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJHc60yPmdyonJESHPHvXJR+ekugZev4XzsZc2YV2mnfBdy-bw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 5:14 AM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> > > If I add a 'genphy_soft_reset(phydev);' at the top of
-> > > xway_gphy_rgmii_init before the write to XWAY_MDIO_MIICTRL the values
-> > > do take effect so perhaps that's the proper fix.
-> >
-> > OK, I see that we have to change something here.
-> > But I would like to avoid a complete reset (BMCR_RESET) if possible.
->
-> What does the datasheet say about BMCR_RESET? Some PHYs, like Marvell,
-> it only resets the internal state machines. Register values are not
-> changed back to defaults or anything like that. Also for many register
-> writes in Marvell PHYs the write does not take effect until the next
-> reset.
->
-> So a BMCR_RESET can be the correct thing to do.
->
+On Wed, Jan 12, 2022, Raghavendra Rao Ananta wrote:
+> Understood. I'll move it to arm64 and we can refactor it if there's a
+> need for any other arch(s).
 
-Andrew,
-
-Datasheet [1] says "Resets the PHY to its default state. Active links
-are terminated. Note that this is a self-clearing bit which is set to
-zero by the hardware after reset has been done. See also IEEE
-802.3-2008 22.2.4.1.1."
-
-Experimentally I can change the delays and read them back as such,
-then issue a BMCR_RESET and read them and they revert to strapped
-values so I know BMCR_RESET resets at least some of the registers.
-
-I suppose something to force auto-negotiation to occur again
-(BMCR_ANEN?) would suffice. I'm not sure what the best course of
-action is.
-
-Tim
-[1] https://assets.maxlinear.com/web/documents/618152_gpy111_pef7071vv16_hd_rev1.5.pdf
+Before you do that, can you answer Jim's question on _why_ arm64 needs this?

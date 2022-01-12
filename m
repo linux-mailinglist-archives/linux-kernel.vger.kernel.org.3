@@ -2,157 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4B548BEF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A04CB48BEF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351183AbiALHU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:20:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45524 "EHLO
+        id S1351175AbiALHWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:22:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28074 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237408AbiALHUy (ORCPT
+        by vger.kernel.org with ESMTP id S237408AbiALHWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:20:54 -0500
+        Wed, 12 Jan 2022 02:22:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641972053;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        s=mimecast20190719; t=1641972163;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FtIbmDuJfaFcyPVq4lejO1YQT8JqBoet7CpPdE4P+Vs=;
-        b=MOI+9DAG5J3JCTcOAqBQmZ93F+A7iqx/bXmPQgngs2jsUjQamyFs2eqvFMFGojcgkOX57c
-        MyUxV8PolV1nnr1m6ilSniCBItH3n2CACp4aTAr7FFM6/DVGpbftllBSCwkLbjZ71R1Qfa
-        QdJ0nQepZdjohSZGeCPzccR0Xb/CDeo=
+        bh=SozMMaXUKHvJpCmWVV67dCSZEl8d23MxU5rvzgWoya8=;
+        b=i+n3bDrzpsbmPeLTQrR2IKRyzu592AZ/HNxFGRhIb8Z43p50xRo1/30sd96JpXaSC6//qm
+        tN+4XXcwvFzHz9HmZNm/fCsD2Sx5t1rHSSj7NL6DDfPOwnUar3nakjbGXyi2Irc7OEIBK8
+        ffGn3GO7CggTBQnwPwWU0vI+uBPFRO4=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-664-iG6Fe2TPNT6yCUhnGs8TxA-1; Wed, 12 Jan 2022 02:20:50 -0500
-X-MC-Unique: iG6Fe2TPNT6yCUhnGs8TxA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+ us-mta-556-9c7H-I3-PXyJH_JF4GvA4Q-1; Wed, 12 Jan 2022 02:20:52 -0500
+X-MC-Unique: 9c7H-I3-PXyJH_JF4GvA4Q-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 158141023F50;
-        Wed, 12 Jan 2022 07:20:48 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 914407B9D2;
-        Wed, 12 Jan 2022 07:20:41 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <3462849.1641593783@warthog.procyon.org.uk>
-References: <3462849.1641593783@warthog.procyon.org.uk> <164021579335.640689.2681324337038770579.stgit@warthog.procyon.org.uk> <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
-To:     Steve French <smfrench@gmail.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        linux-cifs@vger.kernel.org,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        ceph-devel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 63/68] cifs: Support fscache indexing rewrite
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 15EFB100C611;
+        Wed, 12 Jan 2022 07:20:51 +0000 (UTC)
+Received: from [10.72.12.204] (ovpn-12-204.pek2.redhat.com [10.72.12.204])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F363A5E4B7;
+        Wed, 12 Jan 2022 07:20:47 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v4 20/21] KVM: arm64: Export SDEI capability
+To:     Eric Auger <eauger@redhat.com>, kvmarm@lists.cs.columbia.edu
+Cc:     maz@kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan.Cameron@huawei.com, pbonzini@redhat.com, will@kernel.org
+References: <20210815001352.81927-1-gshan@redhat.com>
+ <20210815001352.81927-21-gshan@redhat.com>
+ <90fd5226-0889-6a7c-1586-732015943863@redhat.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <29ff20b5-2395-2f2e-3c5c-6061c9a00716@redhat.com>
+Date:   Wed, 12 Jan 2022 15:20:45 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <534839.1641972040.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 12 Jan 2022 07:20:40 +0000
-Message-ID: <534840.1641972040@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+In-Reply-To: <90fd5226-0889-6a7c-1586-732015943863@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve,
+On 11/10/21 9:55 PM, Eric Auger wrote:
+> On 8/15/21 2:13 AM, Gavin Shan wrote:
+>> The SDEI functionality is ready to be exported so far. This adds
+>> new capability (KVM_CAP_ARM_SDEI) and exports it.
+> 
+> Need to be documented in
+> kvm/api.rst
+> as the rest of the API
+> 
 
-I think this needs the further changes below, which I will fold in.  The
-issues are:
+Ok, Thanks, Eric :)
 
- (1) One of the error paths in cifs_atomic_open() uses the cookie when it
-     should jump around that.
 
- (2) There's an additional successful return from the middle of cifs_open(=
-)
-     that I mistook for an error path, but does need to use the cookie on
-     the way out.
-
-David
----
-diff --git a/fs/cifs/dir.c b/fs/cifs/dir.c
-index 6186824b366e..bf3b4c9901b9 100644
---- a/fs/cifs/dir.c
-+++ b/fs/cifs/dir.c
-@@ -508,6 +508,7 @@ cifs_atomic_open(struct inode *inode, struct dentry *d=
-irentry,
- 			server->ops->close(xid, tcon, &fid);
- 		cifs_del_pending_open(&open);
- 		rc =3D -ENOMEM;
-+		goto out;
- 	}
- =
-
- 	fscache_use_cookie(cifs_inode_cookie(file_inode(file)),
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index 44da7646f789..47333730c963 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -568,7 +568,7 @@ int cifs_open(struct inode *inode, struct file *file)
- 			spin_lock(&CIFS_I(inode)->deferred_lock);
- 			cifs_del_deferred_close(cfile);
- 			spin_unlock(&CIFS_I(inode)->deferred_lock);
--			goto out;
-+			goto use_cache;
- 		} else {
- 			_cifsFileInfo_put(cfile, true, false);
- 		}
-@@ -630,19 +630,6 @@ int cifs_open(struct inode *inode, struct file *file)
- 		goto out;
- 	}
- =
-
--
--	fscache_use_cookie(cifs_inode_cookie(file_inode(file)),
--			   file->f_mode & FMODE_WRITE);
--	if (file->f_flags & O_DIRECT &&
--	    (!((file->f_flags & O_ACCMODE) !=3D O_RDONLY) ||
--	     file->f_flags & O_APPEND)) {
--		struct cifs_fscache_inode_coherency_data cd;
--		cifs_fscache_fill_coherency(file_inode(file), &cd);
--		fscache_invalidate(cifs_inode_cookie(file_inode(file)),
--				   &cd, i_size_read(file_inode(file)),
--				   FSCACHE_INVAL_DIO_WRITE);
--	}
--
- 	if ((oplock & CIFS_CREATE_ACTION) && !posix_open_ok && tcon->unix_ext) {
- 		/*
- 		 * Time to set mode which we can not set earlier due to
-@@ -661,6 +648,19 @@ int cifs_open(struct inode *inode, struct file *file)
- 				       cfile->pid);
- 	}
- =
-
-+use_cache:
-+	fscache_use_cookie(cifs_inode_cookie(file_inode(file)),
-+			   file->f_mode & FMODE_WRITE);
-+	if (file->f_flags & O_DIRECT &&
-+	    (!((file->f_flags & O_ACCMODE) !=3D O_RDONLY) ||
-+	     file->f_flags & O_APPEND)) {
-+		struct cifs_fscache_inode_coherency_data cd;
-+		cifs_fscache_fill_coherency(file_inode(file), &cd);
-+		fscache_invalidate(cifs_inode_cookie(file_inode(file)),
-+				   &cd, i_size_read(file_inode(file)),
-+				   FSCACHE_INVAL_DIO_WRITE);
-+	}
-+
- out:
- 	free_dentry_path(page);
- 	free_xid(xid);
+>>
+>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>> ---
+>>   arch/arm64/kvm/arm.c     | 3 +++
+>>   include/uapi/linux/kvm.h | 1 +
+>>   2 files changed, 4 insertions(+)
+>>
+>> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+>> index 215cdbeb272a..7d9bbc888ae5 100644
+>> --- a/arch/arm64/kvm/arm.c
+>> +++ b/arch/arm64/kvm/arm.c
+>> @@ -278,6 +278,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>>   	case KVM_CAP_ARM_PTRAUTH_GENERIC:
+>>   		r = system_has_full_ptr_auth();
+>>   		break;
+>> +	case KVM_CAP_ARM_SDEI:
+>> +		r = 1;
+>> +		break;
+>>   	default:
+>>   		r = 0;
+>>   	}
+>> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+>> index 8cf41fd4bf86..2aa748fd89c7 100644
+>> --- a/include/uapi/linux/kvm.h
+>> +++ b/include/uapi/linux/kvm.h
+>> @@ -1112,6 +1112,7 @@ struct kvm_ppc_resize_hpt {
+>>   #define KVM_CAP_BINARY_STATS_FD 203
+>>   #define KVM_CAP_EXIT_ON_EMULATION_FAILURE 204
+>>   #define KVM_CAP_ARM_MTE 205
+>> +#define KVM_CAP_ARM_SDEI 206
+>>   
+>>   #ifdef KVM_CAP_IRQ_ROUTING
+>>   
+>>
+> Eric
+> 
 

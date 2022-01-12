@@ -2,89 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 248A748CC30
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AD248CC36
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344693AbiALToB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:44:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344616AbiALTl7 (ORCPT
+        id S1345121AbiALToI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:44:08 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:21700 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S242012AbiALTmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:41:59 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBC7C034001;
-        Wed, 12 Jan 2022 11:41:58 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id E97761F45477
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642016516;
-        bh=j1WfXZUz+wC9kqhM1EXQE7wmwlkIqg3xZKNoHdE+zsc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UViVjohB8AQZ8CMFZdINzd6tR3m1h7AeoyD7I0YxkLwdrHmERgMWet1kVbNkTJ7Wt
-         HLS+HWBKVI0ah60gKk98VimUnWC6P4PxwLexIG65A+iIZjX5Iz1bTULR21/DV5xaWr
-         tH/kUjaCo5jtsxW6/4oR0XSlQc4fDO3QZUfIDFDbTqQIZz5dUaemT91YSSm9/qjdqT
-         DvKdAXJorG0Rga2briDUW48ymqMB25JTjQncFUiPLMjPOoRhKfw4mMFn0qw8dMjsHM
-         C68H8HZe4hGSljKUl2DloCQePSejdpQnuVnkrKWDC+rSMxAGMDXkFjJprt7qnofEjb
-         8LpANljyChipQ==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>
-Cc:     linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-Subject: [PATCH v2] selftests: rtc: Increase test timeout so that all tests run
-Date:   Wed, 12 Jan 2022 14:41:42 -0500
-Message-Id: <20220112194142.3276385-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Wed, 12 Jan 2022 14:42:20 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20CIrYZh010590;
+        Wed, 12 Jan 2022 19:41:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=LoOm8uqxQR+nKIJB4PO8wiHFx1IfpcpGJzsbrjBhpVM=;
+ b=YN5Jd0E0osKTQxFo/JC/cwhMPXEULt2HC/YfHK0lg+J/vYNLkYLuIkTazmH3/CO4tQkD
+ PNoWqo4ElolYS5X27qoFyn9Mv9GTMQ2SUvAd+NZOA6VwXFzVw8BVIAbqPRL20fiAMMJe
+ RZ99nmXJoIynUEq7vw7U7J+/aeqoP5gmV7c3PdIdJZLvGDTHTQYrYLdZ2xwarCK9B6tV
+ 8ALQu3HgpxsMaYjJaomt3CWWCC9lq1EiudzMkp2s5xnFJQeNCDp0y5Zq1ldQtDouoh7P
+ 2jmFXejHD9uU2gqqCzDHzlnhza6A3dECebpjPekhSvZzX3CYdenY+wyWiXNWji2PaGF6 Rw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dj22xmd2k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 19:41:54 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20CJewR2011635;
+        Wed, 12 Jan 2022 19:41:54 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dj22xmd21-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 19:41:54 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20CJMHig013108;
+        Wed, 12 Jan 2022 19:41:52 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3df28acwnn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 19:41:52 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20CJfnT335979524
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Jan 2022 19:41:49 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C7C3752057;
+        Wed, 12 Jan 2022 19:41:49 +0000 (GMT)
+Received: from sig-9-65-71-51.ibm.com (unknown [9.65.71.51])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id D651F52052;
+        Wed, 12 Jan 2022 19:41:47 +0000 (GMT)
+Message-ID: <2d681148b6ea57241f6a7c518dd331068a5f47b0.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 2/8] integrity: Introduce a Linux keyring called
+ machine
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "pjones@redhat.com" <pjones@redhat.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>
+Date:   Wed, 12 Jan 2022 14:41:47 -0500
+In-Reply-To: <eece68eba2beceeb410748c1f9f32162793d2057.camel@linux.ibm.com>
+References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
+         <20220105235012.2497118-3-eric.snowberg@oracle.com>
+         <883da244c04fcb07add9984859a09d7b1827880a.camel@linux.ibm.com>
+         <100B070F-7EB4-4BF7-B2B9-E5AE78D3066A@oracle.com>
+         <a384fcf8bdd9ff79456e9669fc61ab50ec4e1c55.camel@linux.ibm.com>
+         <F1F41DB2-171A-4A6F-9AE7-E03C4D3B7DD0@oracle.com>
+         <eece68eba2beceeb410748c1f9f32162793d2057.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: yibQjF2rx3U1wwXi2TNxQ2B6RIqK-wK3
+X-Proofpoint-ORIG-GUID: 3Rn-3sr2We5w9O-YqLkyNH-jBopmSzQi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-12_05,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ phishscore=0 spamscore=0 impostorscore=0 mlxlogscore=999
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201120114
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The timeout setting for the rtc kselftest is currently 90 seconds. This
-setting is used by the kselftest runner to stop running a test if it
-takes longer than the assigned value.
+On Tue, 2022-01-11 at 20:14 -0500, Mimi Zohar wrote:
+> On Tue, 2022-01-11 at 21:26 +0000, Eric Snowberg wrote:
+> > 
+> > > On Jan 11, 2022, at 11:16 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > 
+> > > On Mon, 2022-01-10 at 23:25 +0000, Eric Snowberg wrote:
+> > >>> Jarkko, my concern is that once this version of the patch set is
+> > >>> upstreamed, would limiting which keys may be loaded onto the .machine
+> > >>> keyring be considered a regression?
+> > >> 
+> > >> 
+> > >> Currently certificates built into the kernel do not have a CA restriction on them.  
+> > >> IMA will trust anything in this keyring even if the CA bit is not set.  While it would 
+> > >> be advisable for a kernel to be built with a CA, nothing currently enforces it. 
+> > >> 
+> > >> My thinking for the dropped CA restriction patches was to introduce a new Kconfig.  
+> > >> This Kconfig would do the CA enforcement on the machine keyring.  However if the 
+> > >> Kconfig option was not set for enforcement, it would work as it does in this series, 
+> > >> plus it would allow IMA to work with non-CA keys.  This would be done by removing 
+> > >> the restriction placed in this patch. Let me know your thoughts on whether this would 
+> > >> be an appropriate solution.  I believe this would get around what you are identifying as 
+> > >> a possible regression.
+> > > 
+> > > True the problem currently exists with the builtin keys, but there's a
+> > > major difference between trusting the builtin keys and those being
+> > > loading via MOK.  This is an integrity gap that needs to be closed and
+> > > shouldn't be expanded to keys on the .machine keyring.
+> > > 
+> > > "plus it would allow IMA to work with non-CA keys" is unacceptable.
+> > 
+> > Ok, I’ll leave that part out.  Could you clarify the wording I should include in the future 
+> > cover letter, which adds IMA support, on why it is unacceptable for the end-user to
+> > make this decision?
+> 
+> The Kconfig IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+> "help" is very clear:
 
-However, two of the test cases inside rtc set alarms. These alarms are
-set to the next beginning of the minute, so each of these test cases may
-take up to, in the worst case, 60 seconds.
+[Reposting the text due to email formatting issues.]
 
-In order to allow for all test cases in rtc to run, even in the worst
-case, when using the kselftest runner, the timeout value should be
-increased to at least 120. Set it to 180, so there's some additional
-slack.
+help
+  Keys may be added to the IMA or IMA blacklist keyrings, if the
+  key is validly signed by a CA cert in the system built-in or
+  secondary trusted keyrings.
 
-Correct operation can be tested by running the following command right
-after the start of a minute (low second count), and checking that all
-test cases run:
+  Intermediate keys between those the kernel has compiled in and the 
+  IMA keys to be added may be added to the system secondary keyring,
+  provided they are validly signed by a key already resident in the
+  built-in or secondary trusted keyrings.
 
-	./run_kselftest.sh -c rtc
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
+The first paragraph requires "validly signed by a CA cert in the system
+built-in or secondary trusted keyrings" for keys to be loaded onto the
+IMA keyring.  This Kconfig is limited to just the builtin and secondary
+keyrings.  Changing this silently to include the ".machine" keyring
+introduces integrity risks that previously did not exist.  A new IMA
+Kconfig needs to be defined to allow all three keyrings - builtin,
+machine, and secondary.
 
-Changes in v2:
-- Expanded commit message to make the issue, and how to test the fix, clearer
+The second paragraph implies that only CA and intermediate CA keys are
+on secondary keyring, or as in our case the ".machine" keyring linked
+to the secondary keyring.
 
-v1: https://lore.kernel.org/all/20220112165359.3206047-1-nfraprado@collabora.com/
-
- tools/testing/selftests/rtc/settings | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/rtc/settings b/tools/testing/selftests/rtc/settings
-index ba4d85f74cd6..a953c96aa16e 100644
---- a/tools/testing/selftests/rtc/settings
-+++ b/tools/testing/selftests/rtc/settings
-@@ -1 +1 @@
--timeout=90
-+timeout=180
--- 
-2.34.1
+Mimi
 

@@ -2,69 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 894C348CF74
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 00:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9313948CF77
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 00:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236200AbiALXzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 18:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
+        id S236297AbiALXzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 18:55:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236508AbiALXzK (ORCPT
+        with ESMTP id S236243AbiALXzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 18:55:10 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DB6C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 15:55:07 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id r138so5537644oie.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 15:55:07 -0800 (PST)
+        Wed, 12 Jan 2022 18:55:41 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC22EC061748;
+        Wed, 12 Jan 2022 15:55:35 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id k30so7049237wrd.9;
+        Wed, 12 Jan 2022 15:55:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Sg4haoVhGfqcJy96RZDuqpK7b4znU/XZS/3LD4XsYVA=;
-        b=I4rXHfEehYuHdlJpaeZurJZYw5gDLaE799m0bfrKRzkZmzrhNkpxhPechTauENI8sx
-         V8goHj+N+YuzZU7iBnEsyJnfVNlUF7uvT8uoO67R0Uoolqaad6WDk5w27mq7JCiOFhcV
-         SF44GUvT9mS7pIvXQm3IZ5PU6p6jGEFKT0V+lbbuwWssAdZ3iI38cUdXOUvIVhr8YvjO
-         zHhngs5MSQdbe8FejqsIKtkPiQRnDEhw3sBtHaCqixorS0+9tI2sEL4KJDKtDUXEaDx5
-         Tyids01cGJQuyeOk7aqWpoj9anotIOolDlxp591zft+bwrYP+6Ia1qUG1nf0UCcXqjYR
-         NLiA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZrJnoV8ByVp01mrwYzfs3BpkSmN3S2DUUHlhgKf3S44=;
+        b=VVT0NC1971pm7KJrYLjrND6wXdnBy4Fkz/NuATd6EdPB7ByJKyrJ0afI5SGvvRXz2X
+         50ZqJy4nI9D9gJBtTUBrkaRKLvs9lZsw5k29MfgIoIu5wR7NJXXhceHyij6sn3KnQo/v
+         101KK4ILIIy9LNQeBHo7LoBE3TeEu/FT99q1PtGFVefk/+mPyV1iHV6Swr0omhaMw/Wm
+         cT2vOaYP996ZtAtk9NTEToEVNxMldvHLfoatdCFTpGTecvpuAY03QbV2xg5TnDohKGub
+         EdYZ6tp6FS33cpLf7vvHzAxFOW6TTtRuqqce6e3+xxDWJJ5G8V5ZzlaPKylbuHWMkf/I
+         N0Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Sg4haoVhGfqcJy96RZDuqpK7b4znU/XZS/3LD4XsYVA=;
-        b=uZj73gHGXREeON0cdik6RlhEN4wJD8qbwSLlONJXNgNZTHltsgiYs993PUvhcr5bVh
-         b7eL8rCgAJpCvfFAf5O7UIA0CtNB85eQOw0bAZtlTSYiSKeIyf54mYL40s0+qpiNU5I3
-         zfovPww+CrUn5xjgPcxQR9Qoa+blXS6r93njqJrxxlNdHCG8qPeho9hWLlXq9lPnODek
-         rH1m01ZDbzOQytSJpKQTC/Z5ubL2okAGL+JGHdRL3SDf5auKtsbqSKJ9CV8f9pOCwGL5
-         tauqoN6MVXm8Vr21pKQHnBj7/TAjmwtBJtxGFNlfDbNW6Q+bivIyyaJ4M4sMno3LtQJU
-         fIqg==
-X-Gm-Message-State: AOAM532iQ0tO5+FCcMcv49hC/oTqR16nHvcINttXZ91nflzj1aLq/5Y1
-        4BVBy2ORd9Erh20uLeJRgEwZB4sc1TFMGFq89AEzrViylVI=
-X-Google-Smtp-Source: ABdhPJy+r8906AoK0fKTATnHiiCVWoA19BvOjlPlJLpsbdB7zRsAFkb/Ek5aDFN2Tx7ZSZSiZpsQlTw7NGn9EQ2mKJk=
-X-Received: by 2002:a54:4613:: with SMTP id p19mr1316839oip.162.1642031707215;
- Wed, 12 Jan 2022 15:55:07 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZrJnoV8ByVp01mrwYzfs3BpkSmN3S2DUUHlhgKf3S44=;
+        b=ba6Bq9ZGYC/qsGyFKlrYqfdgSinsiH3NYCt7Di8lcfhaV+dqAmXks1Qetesi+gN6z2
+         ittuyqGVXtIjrVncHWUOokQPtjlgA1hfv1DpqkJz0oav6q4O4WIdeb2C8aFfXE7AysQY
+         G7xCSfuZOPeF1LGrdHkLSfRnQ39/6XG9GfVOiIMp386sJWWMAgI85aONBKhG+r2FuOT1
+         C4k50mRiSJp+hRrMr25mHTFjFPmcykjDH45SPhzabB8B1lDVHyKll6uFaaypFK1nm2f7
+         oL+0EFfFO4/A/ACX/0B4nQH0REM93jGPy0D+DYiM7Qa2PAcjhgSzoAcRdEsL8QtsAyxl
+         w2Vw==
+X-Gm-Message-State: AOAM5301V+Xn0pvbSki90j5Mb4iR88497o3VGbRN8HHTVosEAP5S+9q+
+        FkTHm3KEDDGpeU/3vVQc+Fg=
+X-Google-Smtp-Source: ABdhPJy8XX5/dFYxJ5mkFUXKlNg3U36B1VmjIA6pRqoybdXmuNWLWzgHhjNNEEC94ODARsOq6v3/Hg==
+X-Received: by 2002:a05:6000:1787:: with SMTP id e7mr1711033wrg.31.1642031734649;
+        Wed, 12 Jan 2022 15:55:34 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id o8sm1337903wry.20.2022.01.12.15.55.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 15:55:34 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Chas Williams <3chas3@gmail.com>,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] atm: iphase: remove redundant pointer skb
+Date:   Wed, 12 Jan 2022 23:55:33 +0000
+Message-Id: <20220112235533.1281944-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <202201130136.7675O5xx-lkp@intel.com>
-In-Reply-To: <202201130136.7675O5xx-lkp@intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 13 Jan 2022 00:54:55 +0100
-Message-ID: <CACRpkdb=604wtkcfY_DeSWDj1ojsPm2pZpGVrvVwMjp7=fi2sg@mail.gmail.com>
-Subject: Re: arch/arm/mach-ixp4xx/common-pci.c:143:5: warning: no previous
- prototype for function 'ixp4xx_pci_write'
-To:     kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 6:23 PM kernel test robot <lkp@intel.com> wrote:
+The pointer skb is redundant, it is assigned a value that is never
+read and hence can be removed. Cleans up clang scan warning:
 
-> FYI, the error/warning still remains.
+drivers/atm/iphase.c:205:18: warning: Although the value stored
+to 'skb' is used in the enclosing expression, the value is never
+actually read from 'skb' [deadcode.DeadStores]
 
-This code is about to get deleted in the next kernel cycle.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/atm/iphase.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Yours,
-Linus Walleij
+diff --git a/drivers/atm/iphase.c b/drivers/atm/iphase.c
+index bc8e8d9f176b..3e726ee91fdc 100644
+--- a/drivers/atm/iphase.c
++++ b/drivers/atm/iphase.c
+@@ -178,7 +178,6 @@ static void ia_hack_tcq(IADEV *dev) {
+ 
+ static u16 get_desc (IADEV *dev, struct ia_vcc *iavcc) {
+   u_short 		desc_num, i;
+-  struct sk_buff        *skb;
+   struct ia_vcc         *iavcc_r = NULL; 
+   unsigned long delta;
+   static unsigned long timer = 0;
+@@ -202,8 +201,7 @@ static u16 get_desc (IADEV *dev, struct ia_vcc *iavcc) {
+            else 
+               dev->ffL.tcq_rd -= 2;
+            *(u_short *)(dev->seg_ram + dev->ffL.tcq_rd) = i+1;
+-           if (!(skb = dev->desc_tbl[i].txskb) || 
+-                          !(iavcc_r = dev->desc_tbl[i].iavcc))
++           if (!dev->desc_tbl[i].txskb || !(iavcc_r = dev->desc_tbl[i].iavcc))
+               printk("Fatal err, desc table vcc or skb is NULL\n");
+            else 
+               iavcc_r->vc_desc_cnt--;
+-- 
+2.33.1
+

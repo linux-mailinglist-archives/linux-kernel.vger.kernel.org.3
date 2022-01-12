@@ -2,139 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A04E48C775
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E436148C778
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354744AbiALPn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:43:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44234 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242234AbiALPnO (ORCPT
+        id S1343614AbiALPoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:44:25 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:59970 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241305AbiALPoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:43:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9EAFB81F68;
-        Wed, 12 Jan 2022 15:43:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 170D6C36AE5;
-        Wed, 12 Jan 2022 15:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642002192;
-        bh=Zg7ygGz6sOLlajsI3tjCRIWEiEwQ+qlt2jgeme43mro=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=a/4hVBsxpAOcJv+atUaGlJNYXSbgn93sjNGu4mtwH2sATr9mEbgWoYeH7Jo+8A2vt
-         pDOrNTzTjquuuQh26/TKbaDqmVekQHzAnkC9NjlrsOwqVLxrisSNLsE3enZQbg6RH7
-         eUW27COvQai1RQ9UR+qgU0zdXjulxU2XIHLqBI8W8m16v9KqnFd3PwwQffLl+snpkw
-         0tPXsRdOYNZuNVbEHl6RdBk+/GRqnveGEMw+f9zLn3iZNq8dxFWOa2FTP4R4Ncht0N
-         zcQjdBok8gXbaHz346NK4GgdbGPkXlOk6xXPQXmwfExQbkNohEk6D92p5Gjz5XVXJv
-         kAVez7FWOqRFQ==
-Date:   Wed, 12 Jan 2022 09:43:10 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Yao Hongbo <yaohongbo@linux.alibaba.com>
-Cc:     bhelgaas@google.com, zhangliguang@linux.alibaba.com,
-        alikernel-developer@linux.alibaba.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] PCI: Add "pci=reassign_all_bus" boot parameter
-Message-ID: <20220112154310.GA259954@bhelgaas>
+        Wed, 12 Jan 2022 10:44:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642002263; x=1673538263;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=x5XEAfB7yc7UwEh95na4p3I+08Ja8Oc5avplXUDituQ=;
+  b=BtPvrrWjDd40S9ERdIvjewTowpYJ7Bkw2J9OM8+t6J8gBDTdlul36kkY
+   geAidH9UyRW+B7GjHBPqS+zYuqBoFnKIuOSHgAiP0S97x/Ks1xETGNkv7
+   tFURMTl1dRwBbNjUnEk+96JRJdLh21Pz2UpF5sgmWKwnvjezsFegybB2X
+   w=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 12 Jan 2022 07:44:22 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 07:44:22 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 12 Jan 2022 07:43:41 -0800
+Received: from [10.216.41.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 12 Jan
+ 2022 07:43:37 -0800
+Subject: Re: [PATCH v3 RESEND] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED
+ for shmem
+To:     Mark Hemment <markhemm@googlemail.com>
+CC:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>, <vbabka@suse.cz>,
+        <rientjes@google.com>, <mhocko@suse.com>,
+        "Suren Baghdasaryan" <surenb@google.com>,
+        Shakeel Butt <shakeelb@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Charan Teja Reddy <charante@codeaurora.org>
+References: <1641488717-13865-1-git-send-email-quic_charante@quicinc.com>
+ <CANe_+UiDXHgPOZoqT9yxLgTwkVmjA7OiXduP1R0qO2vCt=KKWQ@mail.gmail.com>
+ <c19b1c9e-6351-6e71-d472-5ccd39885984@quicinc.com>
+ <CANe_+Uj+ccUSaCcU_+XixuM9eJkrh3M1TOCMB5D=8rpUxUM0JA@mail.gmail.com>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+Message-ID: <18269bfb-0dd9-a1c6-cd8b-94a0faf42105@quicinc.com>
+Date:   Wed, 12 Jan 2022 21:13:33 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1640856613-101412-1-git-send-email-yaohongbo@linux.alibaba.com>
+In-Reply-To: <CANe_+Uj+ccUSaCcU_+XixuM9eJkrh3M1TOCMB5D=8rpUxUM0JA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 05:30:13PM +0800, Yao Hongbo wrote:
-> PCI bridges may be misconfigured by te system BIOS, and then the OS
-> scan the bridges that need to be reconfigured.
-> However, the PCI bus topology configured by the bios may be wrong:
-> 
-> [   19.376273] pci 0000:40:00.0: bridge configuration invalid ([bus
-> 00-00]), reconfiguring
-> [   19.384443] pci_bus 0000:47: busn_res: can not insert [bus 47-46]
-> under [bus 40-46] (conflicts with (null) [bus 40-46])
-> 
-> The primary bus number and subordinate bus number written by the bios
-> were wrong, and the OS continues to add bridges on the wrong bus
-> topology.
-> 
-> In order to avoid such problems, a kernel cmdline needs to be
-> added to support the os to fully configure the pci bus.
+Thanks Mark!!
 
-Why can't we make Linux smart enough to fix this by itself, without
-forcing the user to boot with "pci=reassign_all_bus"?
+On 1/12/2022 5:08 PM, Mark Hemment wrote:
+>>>> +static int shmem_fadvise_dontneed(struct address_space *mapping, loff_t start,
+>>>> +                               loff_t end)
+>>>> +{
+>>>> +       int ret;
+>>>> +       struct page *page;
+>>>> +       LIST_HEAD(list);
+>>>> +       struct writeback_control wbc = {
+>>>> +               .sync_mode = WB_SYNC_NONE,
+>>>> +               .nr_to_write = LONG_MAX,
+>>>> +               .range_start = 0,
+>>>> +               .range_end = LLONG_MAX,
+>>>> +               .for_reclaim = 1,
+>>>> +       };
+>>>> +
+>>>> +       if (!shmem_mapping(mapping))
+>>>> +               return -EINVAL;
+>>>> +
+>>>> +       if (!total_swap_pages)
+>>>> +               return 0;
+>>>> +
+>>>> +       lru_add_drain();
+>>>> +       shmem_isolate_pages_range(mapping, start, end, &list);
+>>>> +
+>>>> +       while (!list_empty(&list)) {
+>>>> +               page = lru_to_page(&list);
+>>>> +               list_del(&page->lru);
+>>>> +               if (page_mapped(page))
+>>>> +                       goto keep;
+>>>> +               if (!trylock_page(page))
+>>>> +                       goto keep;
+>>>> +               if (unlikely(PageTransHuge(page))) {
+>>>> +                       if (split_huge_page_to_list(page, &list))
+>>>> +                               goto keep;
+>>>> +               }
+>>> I don't know the shmem code and the lifecycle of a shm-page, so
+>>> genuine questions;
+>>> When the try-lock succeeds, should there be a test for PageWriteback()
+>>> (page skipped if true)?  Also, does page->mapping need to be tested
+>>> for NULL to prevent races with deletion from the page-cache?
+>> I failed to envisage it. I should have considered both these conditions
+>> here. BTW, I am just thinking about why we shouldn't use
+>> reclaim_pages(page_list) function here with an extra set_page_dirty() on
+>> a page that is isolated? It just call the shrink_page_list() where all
+>> these conditions are properly handled. What is your opinion here?
+> Should be possible to use reclaim_pages() (I haven't look closely).
+> It might actually be good to use this function, as will do some
+> congestion throttling.  Although it will always try to unmap
+> pages (note: your page_mapped() test is 'unstable' as done without the
+> page locked), so might give behaviour you want to avoid.
 
-> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 1 +
->  drivers/acpi/pci_root.c                         | 3 +++
->  drivers/pci/pci.c                               | 5 +++++
->  include/linux/pci.h                             | 2 ++
->  4 files changed, 11 insertions(+)
+page_mapped can be true between isolate and then asking for reclaim of
+it through reclaim_pages(), and then can be unmapped there. Thanks for
+pointing it out.
+
+BTW, the posix_fadvise man pages[1] doesn't talk about any restrictions
+with the mapped pages. If so, Am I allowed to even unmap the pages when
+called FADV_DONTNEED on the file (agree for mapped, we can rely on
+MADV_DONTNEED too)?
+
+[1]https://man7.org/linux/man-pages/man2/posix_fadvise.2.html
+
+> Note: reclaim_pages() is already used for madvise(PAGEOUT).  The shmem
+> code would need to prepare page(s) to help shrink_page_list() to make
+> progress (see madvise.c:madvise_cold_or_pageout_pte_range()).
 > 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 2fba824..c83a2e5 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -4084,6 +4084,7 @@
->  		nomio		[S390] Do not use MIO instructions.
->  		norid		[S390] ignore the RID field and force use of
->  				one PCI domain per PCI function
-> +		reassign_all_bus	The OS fully configure the PCI bus.
->  
->  	pcie_aspm=	[PCIE] Forcibly enable or disable PCIe Active State Power
->  			Management.
-> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
-> index ab2f7df..e21ac25 100644
-> --- a/drivers/acpi/pci_root.c
-> +++ b/drivers/acpi/pci_root.c
-> @@ -592,6 +592,9 @@ static int acpi_pci_root_add(struct acpi_device *device,
->  	is_pcie = strcmp(acpi_device_hid(device), "PNP0A08") == 0;
->  	negotiate_os_control(root, &no_aspm, is_pcie);
->  
-> +	if (pci_reassign_all_bus)
-> +		pci_add_flags(PCI_REASSIGN_ALL_BUS);
-> +
->  	/*
->  	 * TBD: Need PCI interface for enumeration/configuration of roots.
->  	 */
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 3d2fb39..5746e88 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -142,6 +142,9 @@ bool pci_reset_supported(struct pci_dev *dev)
->  /* If set, the PCI config space of each device is printed during boot. */
->  bool pci_early_dump;
->  
-> +/* If set, the pci will reassign resources*/
-> +bool pci_reassign_all_bus;
-> +
->  bool pci_ats_disabled(void)
->  {
->  	return pcie_ats_disabled;
-> @@ -6846,6 +6849,8 @@ static int __init pci_setup(char *str)
->  				pci_add_flags(PCI_SCAN_ALL_PCIE_DEVS);
->  			} else if (!strncmp(str, "disable_acs_redir=", 18)) {
->  				disable_acs_redir_param = str + 18;
-> +			} else if (!strncmp(str, "reassign_all_bus", 16)) {
-> +				pci_reassign_all_bus = true;
->  			} else {
->  				pr_err("PCI: Unknown option `%s'\n", str);
->  			}
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 18a75c8e..ad0e3e9 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -2119,6 +2119,8 @@ int pcim_iomap_regions_request_all(struct pci_dev *pdev, int mask,
->  extern u8 pci_dfl_cache_line_size;
->  extern u8 pci_cache_line_size;
->  
-> +extern bool pci_reassign_all_bus;
-> +
->  /* Architecture-specific versions may override these (weak) */
->  void pcibios_disable_device(struct pci_dev *dev);
->  void pcibios_set_master(struct pci_dev *dev);
-> -- 
-> 1.8.3.1
-> 
+> Taking a step back; is fadvise(DONTNEED) really needed/wanted?  Yes,
+> you gave a usecase (which I cut from this thread in my earlier reply),
+> but I'm not familiar with various shmem uses to know if this feature
+> is needed.  Someone else will need to answer this.
+
+Actually I needed this for the use case mentioned. And regarding the
+various use cases, I encountered that GEM buffers for display/graphics
+are using the shmem buffers.
+drivers/gpu/drm/i915/gem/i915_gem_shmem.c

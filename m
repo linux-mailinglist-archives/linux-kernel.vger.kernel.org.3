@@ -2,91 +2,359 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B32048CBFD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0750848CBFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344854AbiALTap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:30:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S238880AbiALTbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345485AbiALT3D (ORCPT
+        with ESMTP id S1345043AbiALT3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:29:03 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B58C03400E;
-        Wed, 12 Jan 2022 11:28:49 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id a1-20020a17090a688100b001b3fd52338eso5910689pjd.1;
-        Wed, 12 Jan 2022 11:28:49 -0800 (PST)
+        Wed, 12 Jan 2022 14:29:37 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668E4C061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:29:36 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id j11so11772552lfg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:29:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PEnXAX+olmoKfZvXTGdewhEjU5UGuUJE4ReQqDTfiwY=;
-        b=FFi4PcEl+SPmSBJ+fUunrRZ1ZHIfaD/4VyfL+6v0VGpitoALJuhaScmTR3w2uBXa1w
-         m8bfjnRcFwrqwccjoDLb4UO08BYfD3wrb7zH6IgoVmvogt0366Q7MsED5id4jzaHT8jZ
-         ENMFupDO+CpVBqzFDKT93Qa7o3bUBFHZrf9qyBBMjsDWvTdYIimFdD2/gMJzzvZX9NDq
-         rmNw9sCSkRjulQ8xIUUj2nzAFYyj/2Hf2GvFNQ1izeRacZxicgsN4PR4AaLFBH0JG8qr
-         0DZR+z08ecpZx8IhwmhvqB9CAkXlEPIoKEPK/0UfaTXqvjgf/DZu2S/axdDKiAGycInF
-         P0bQ==
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hsIYvPFsQpFlvnu+4QvX7hPubnwS5nh6fnjUwOjpcw4=;
+        b=W9nZI7OOzFut0ywxhhcABMfJKkyquB1m3dTmKINFu3ueD7bAzW4z5a83Pcpls1SFN1
+         m3b+WpSYv5SfdlyxKty+oPMy1O5igtGRhpIMYkrcm0PEs2a/jZT9ZUFtj469XXeO4tye
+         cEvlIOERhl4+rFqZlCFbWT27dBDKraoRGMr6T5ZncsS+gCf0kX3rDvv8R9pCf+6B/bb8
+         K1JqW84x4QYKr+A4LYaj1YRaucBpTF148u0Lff3Fsjzpu/Snk5RrOfBV25gDswIaPfd5
+         0H4EH0vebLGoOhZ1fdumRGFCrwbjtwMFdZnZXo1tfcX4TC3CpYijiVifSs63KH2HLnit
+         5Qbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PEnXAX+olmoKfZvXTGdewhEjU5UGuUJE4ReQqDTfiwY=;
-        b=iyBPyARV2zzhcn2XXWBKyXdKnjIz8VPPpI6ScMz9XtuUvYLKXd9y51Rz0ryWlcRbcq
-         9iS4JY01t9cOG43/ROI4KRMX2SlXslfJ7Wk+D8rddGDoeN3ACVOIUZGdnxSyb2Uxa1J6
-         n6t1wpQqLHp4tH2WtwRbBl3ZdT5uSweDzGAloeRaHJ2E7EOt88gonVYcb7hZ9+BEXFAt
-         9X7dFBNRmPU8j8cDt/8FR4iIRyTn1ODfSid5mYZH8yaj4svLaF5VvwOQwjGwt22eIBOv
-         3DsHKMZc57/qlQrT5eVGKd54abrK4/cfCa28NjxZYcWwH8wFmNSKUk0qOy1yjRbkmweV
-         KWfQ==
-X-Gm-Message-State: AOAM531AuiojyUFyswGQBxrTZoVs19MHLgGG3j4uNNNco9ANXSCSdLv8
-        Z+96pHQO4l2bW4Xt9u+r6rA=
-X-Google-Smtp-Source: ABdhPJzuc2ui2a6aGJRSU/SQqU161Mz8cxRnWt6fy7ED0LeNGlGWZNbBhQ1KsVQDaU5T3N08XL572A==
-X-Received: by 2002:a63:b811:: with SMTP id p17mr968806pge.81.1642015729548;
-        Wed, 12 Jan 2022 11:28:49 -0800 (PST)
-Received: from [10.69.44.239] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id rm4sm454316pjb.4.2022.01.12.11.28.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 11:28:49 -0800 (PST)
-Message-ID: <881ba4aa-2dc6-b116-869f-0fa2ecfe326b@gmail.com>
-Date:   Wed, 12 Jan 2022 11:28:48 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hsIYvPFsQpFlvnu+4QvX7hPubnwS5nh6fnjUwOjpcw4=;
+        b=zsfiUdUBQtid8bSuD6oIFRIM89JU91ZK0ozLTjHlDNSWLD0nRKuqW0jifVOu+Y4vRo
+         qFbwedw7ysiMsPtf6yipSCfn2dxT65AbIedT/20Q7PH1QWMNCKVDbOGGvr0uMCHwLuHE
+         TTwFxKZWAUfUIdPF8VIGcWp4l12eLD7Df+1Ph9DrbjDzE7YJox6vs42515Vr+WP1CfnZ
+         jK7NztANjHnWOs5FBj5pAQD5wij7Bxyxn6e6VYYRuvU4IXTXjRLDhaTg2pyvGB0i/vTp
+         7t/Bo2vOSuRhjcadR8Za5lvAK6ulzgJUk1HvqMR0jEtf/Ni8W+knWCenriJQ1siH8rQK
+         5zpQ==
+X-Gm-Message-State: AOAM533jezGVPLse19mNZAQg0MzhS9JeDiZUgSnoJChEtJIni7faek8g
+        oeqP6NXMp9ysa5qV/0FNSnp4vitqaENhaA==
+X-Google-Smtp-Source: ABdhPJwfteyA3AxwkXuikDGECkDTTZNKK9LbcePDkVLp26AbPKfei0LSJ9JM3HlNHHeCMcQnGlCG0A==
+X-Received: by 2002:a05:651c:982:: with SMTP id b2mr666698ljq.55.1642015773947;
+        Wed, 12 Jan 2022 11:29:33 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id p9sm72383lfu.83.2022.01.12.11.29.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 11:29:32 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 1B9F2103A6D; Wed, 12 Jan 2022 22:29:55 +0300 (+03)
+Date:   Wed, 12 Jan 2022 22:29:55 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 3/7] efi/x86: Implement support for unaccepted memory
+Message-ID: <20220112192955.amelr4sq662pfv67@box.shutemov.name>
+References: <20220111113314.27173-1-kirill.shutemov@linux.intel.com>
+ <20220111113314.27173-4-kirill.shutemov@linux.intel.com>
+ <b3348430-1b91-4b8b-b70c-76d48f8737f7@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH -next v2] scsi: efct: don't use GFP_KERNEL under spin lock
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Cc:     hch@lst.de, james.smart@broadcom.com, martin.petersen@oracle.com
-References: <20220111012441.3232527-1-yangyingliang@huawei.com>
-From:   James Smart <jsmart2021@gmail.com>
-In-Reply-To: <20220111012441.3232527-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b3348430-1b91-4b8b-b70c-76d48f8737f7@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/10/2022 5:24 PM, Yang Yingliang wrote:
-> GFP_KERNEL/GFP_DMA can't be used under a spin lock, according the
-> comment of els_ios_lock, it's used to protect els ios list, so we
-> can move down the spin lock to avoid using this flag under the lock.
+On Tue, Jan 11, 2022 at 09:17:19AM -0800, Dave Hansen wrote:
+> On 1/11/22 03:33, Kirill A. Shutemov wrote:
+> ...
+> > +void mark_unaccepted(struct boot_params *params, u64 start, u64 end)
+> > +{
+> > +	/*
+> > +	 * The accepted memory bitmap only works at PMD_SIZE granularity.
+> > +	 * If a request comes in to mark memory as unaccepted which is not
+> > +	 * PMD_SIZE-aligned, simply accept the memory now since it can not be
+> > +	 * *marked* as unaccepted.
+> > +	 */
+> > +
+> > +	/* Immediately accept whole range if it is within a PMD_SIZE block: */
+> > +	if ((start & PMD_MASK) == (end & PMD_MASK)) {
+> > +		npages = (end - start) / PAGE_SIZE;
+> > +		__accept_memory(start, start + npages * PAGE_SIZE);
+> > +		return;
+> > +	}
 > 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: 8f406ef72859 ("scsi: elx: libefc: Extended link Service I/O handling")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
-> v2:
->    move up unlock to just protect list_add_tail()
-> ---
->   drivers/scsi/elx/libefc/efc_els.c | 8 ++------
->   1 file changed, 2 insertions(+), 6 deletions(-)
+> I still don't quite like how this turned out.  It's still a bit unclear to
+> the reader that this has covered all the corner cases.  I think this needs a
+> better comment:
 > 
+> 	/*
+> 	 * Handle <PMD_SIZE blocks that do not end at a PMD boundary.
+> 	 *
+> 	 * Immediately accept the whole block.  This handles the case
+> 	 * where the below round_{up,down}() would "lose" a small,
+> 	 * <PMD_SIZE block.
+> 	 */
+> 	if ((start & PMD_MASK) == (end & PMD_MASK)) {
+> 		...
+> 		return;
+> 	}
+> 
+> 	/*
+> 	 * There is at least one more block to accept.  Both 'start'
+> 	 * and 'end' may not be PMD-aligned.
+> 	 */
 
-Looks fine.
+Okay, looks better. Thanks.
 
-Reviewed-by: James Smart <jsmart2021@gmail.com>
+> > +	/* Immediately accept a <PMD_SIZE piece at the start: */
+> > +	if (start & ~PMD_MASK) {
+> > +		__accept_memory(start, round_up(start, PMD_SIZE));
+> > +		start = round_up(start, PMD_SIZE);
+> > +	}
+> > +
+> > +	/* Immediately accept a <PMD_SIZE piece at the end: */
+> > +	if (end & ~PMD_MASK) {
+> > +		__accept_memory(round_down(end, PMD_SIZE), end);
+> > +		end = round_down(end, PMD_SIZE);
+> > +	}
+> 
+> 	/*
+> 	 * 'start' and 'end' are now both PMD-aligned.
+> 	 * Record the range as being unaccepted:
+> 	 */
 
--- james
+Okay.
+
+> > +	if (start == end)
+> > +		return;
+> 
+> Does bitmap_set()not accept zero-sized 'len' arguments?
+
+Looks like it does. Will drop this.
+
+> > +	bitmap_set((unsigned long *)params->unaccepted_memory,
+> > +		   start / PMD_SIZE, (end - start) / PMD_SIZE);
+> > +}
+> 
+> The code you have there is _precise_.  It will never eagerly accept any area
+> that _can_ be represented in the bitmap.  But, that's kinda hard to
+> describe.  Maybe we should be a bit more sloppy about accepting things up
+> front to make it easier to describe:
+> 
+> 	/*
+> 	 * Accept small regions that might not be
+> 	 * able to be represented in the bitmap:
+> 	 */
+> 	if (end - start < PMD_SIZE*2) {
+> 		npages = (end - start) / PAGE_SIZE;
+> 		__accept_memory(start, start + npages * PAGE_SIZE);
+> 		return;
+> 	}
+> 
+> 	/*
+> 	 * No matter how the start and end are aligned, at
+> 	 * least one unaccepted PMD_SIZE area will remain.
+> 	 */
+> 
+> 	... now do the start/end rounding
+> 
+> That has the downside of accepting a few things that it doesn't *HAVE* to
+> accept.  But, its behavior is very easy to describe.
+
+Hm. Okay. I will give it a try. I like how it is now, but maybe it will be
+better.
+
+> 
+> > diff --git a/arch/x86/include/asm/unaccepted_memory.h b/arch/x86/include/asm/unaccepted_memory.h
+> > new file mode 100644
+> > index 000000000000..cbc24040b853
+> > --- /dev/null
+> > +++ b/arch/x86/include/asm/unaccepted_memory.h
+> > @@ -0,0 +1,12 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/* Copyright (C) 2020 Intel Corporation */
+> > +#ifndef _ASM_X86_UNACCEPTED_MEMORY_H
+> > +#define _ASM_X86_UNACCEPTED_MEMORY_H
+> > +
+> > +#include <linux/types.h>
+> > +
+> > +struct boot_params;
+> > +
+> > +void mark_unaccepted(struct boot_params *params, u64 start, u64 num);
+> > +
+> > +#endif
+> > diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
+> > index b25d3f82c2f3..16bc686a198d 100644
+> > --- a/arch/x86/include/uapi/asm/bootparam.h
+> > +++ b/arch/x86/include/uapi/asm/bootparam.h
+> > @@ -217,7 +217,8 @@ struct boot_params {
+> >   	struct boot_e820_entry e820_table[E820_MAX_ENTRIES_ZEROPAGE]; /* 0x2d0 */
+> >   	__u8  _pad8[48];				/* 0xcd0 */
+> >   	struct edd_info eddbuf[EDDMAXNR];		/* 0xd00 */
+> > -	__u8  _pad9[276];				/* 0xeec */
+> > +	__u64 unaccepted_memory;			/* 0xeec */
+> > +	__u8  _pad9[268];				/* 0xef4 */
+> >   } __attribute__((packed));
+> >   /**
+> > diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
+> > index 2c3dac5ecb36..36c1bf33f112 100644
+> > --- a/drivers/firmware/efi/Kconfig
+> > +++ b/drivers/firmware/efi/Kconfig
+> > @@ -243,6 +243,20 @@ config EFI_DISABLE_PCI_DMA
+> >   	  options "efi=disable_early_pci_dma" or "efi=no_disable_early_pci_dma"
+> >   	  may be used to override this option.
+> > +config UNACCEPTED_MEMORY
+> > +	bool
+> > +	depends on EFI_STUB
+> > +	help
+> > +	   Some Virtual Machine platforms, such as Intel TDX, introduce
+> > +	   the concept of memory acceptance, requiring memory to be accepted
+> > +	   before it can be used by the guest. This protects against a class of
+> > +	   attacks by the virtual machine platform.
+> 
+> 	Some Virtual Machine platforms, such as Intel TDX, require
+> 	some memory to be "accepted" by the guest before it can be used.
+> 	This requirement protects against a class of attacks by the
+> 	virtual machine platform.
+> 
+> Can we make this "class of attacks" a bit more concrete?  Maybe:
+> 
+> 	This mechanism helps prevent malicious hosts from making changes
+> 	to guest memory.
+> 
+> ??
+
+Okay.
+
+> > +	   UEFI specification v2.9 introduced EFI_UNACCEPTED_MEMORY memory type.
+> > +
+> > +	   This option adds support for unaccepted memory and makes such memory
+> > +	   usable by kernel.
+> > +
+> >   endmenu
+> >   config EFI_EMBEDDED_FIRMWARE
+> > diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+> > index ae79c3300129..abe862c381b6 100644
+> > --- a/drivers/firmware/efi/efi.c
+> > +++ b/drivers/firmware/efi/efi.c
+> > @@ -740,6 +740,7 @@ static __initdata char memory_type_name[][13] = {
+> >   	"MMIO Port",
+> >   	"PAL Code",
+> >   	"Persistent",
+> > +	"Unaccepted",
+> >   };
+> >   char * __init efi_md_typeattr_format(char *buf, size_t size,
+> > diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+> > index a0b946182b5e..346b12d6f1b2 100644
+> > --- a/drivers/firmware/efi/libstub/x86-stub.c
+> > +++ b/drivers/firmware/efi/libstub/x86-stub.c
+> > @@ -9,12 +9,14 @@
+> >   #include <linux/efi.h>
+> >   #include <linux/pci.h>
+> >   #include <linux/stddef.h>
+> > +#include <linux/bitmap.h>
+> >   #include <asm/efi.h>
+> >   #include <asm/e820/types.h>
+> >   #include <asm/setup.h>
+> >   #include <asm/desc.h>
+> >   #include <asm/boot.h>
+> > +#include <asm/unaccepted_memory.h>
+> >   #include "efistub.h"
+> > @@ -504,6 +506,13 @@ setup_e820(struct boot_params *params, struct setup_data *e820ext, u32 e820ext_s
+> >   			e820_type = E820_TYPE_PMEM;
+> >   			break;
+> > +		case EFI_UNACCEPTED_MEMORY:
+> > +			if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
+> > +				continue;
+> > +			e820_type = E820_TYPE_RAM;
+> > +			mark_unaccepted(params, d->phys_addr,
+> > +					d->phys_addr + PAGE_SIZE * d->num_pages);
+> > +			break;
+> >   		default:
+> >   			continue;
+> >   		}
+> > @@ -575,6 +584,9 @@ static efi_status_t allocate_e820(struct boot_params *params,
+> >   {
+> >   	efi_status_t status;
+> >   	__u32 nr_desc;
+> > +	bool unaccepted_memory_present = false;
+> > +	u64 max_addr = 0;
+> > +	int i;
+> >   	status = efi_get_memory_map(map);
+> >   	if (status != EFI_SUCCESS)
+> > @@ -589,9 +601,55 @@ static efi_status_t allocate_e820(struct boot_params *params,
+> >   		if (status != EFI_SUCCESS)
+> >   			goto out;
+> >   	}
+> > +
+> > +	if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
+> > +		goto out;
+> > +
+> > +	/* Check if there's any unaccepted memory and find the max address */
+> > +	for (i = 0; i < nr_desc; i++) {
+> > +		efi_memory_desc_t *d;
+> > +
+> > +		d = efi_early_memdesc_ptr(*map->map, *map->desc_size, i);
+> > +		if (d->type == EFI_UNACCEPTED_MEMORY)
+> > +			unaccepted_memory_present = true;
+> > +		if (d->phys_addr + d->num_pages * PAGE_SIZE > max_addr)
+> > +			max_addr = d->phys_addr + d->num_pages * PAGE_SIZE;
+> > +	}
+> > +
+> > +	/*
+> > +	 * If unaccepted memory present allocate a bitmap to track what memory
+> 
+> 			       ^ is
+> 
+> > +	 * has to be accepted before access.
+> > +	 *
+> > +	 * One bit in the bitmap represents 2MiB in the address space: one 4k
+> > +	 * page is enough to track 64GiB or physical address space.
+> 
+> That's a bit awkward and needs a "or->of".  Perhaps:
+> 
+> 	* One bit in the bitmap represents 2MiB in the address space:
+> 	* A 4k bitmap can track 64GiB of physical address space.
+
+Okay.
+
+> 
+> > +	 * In the worst case scenario -- a huge hole in the middle of the
+> > +	 * address space -- It needs 256MiB to handle 4PiB of the address
+> > +	 * space.
+> > +	 *
+> > +	 * TODO: handle situation if params->unaccepted_memory has already set.
+> > +	 * It's required to deal with kexec.
+> 
+> What happens today with kexec() since its not dealt with?
+
+I didn't give it a try, but I assume it will hang.
+
+There are more things to do to make kexec working and safe. We will get
+there, but it is not top priority.
+
+-- 
+ Kirill A. Shutemov

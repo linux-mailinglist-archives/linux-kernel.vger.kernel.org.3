@@ -2,100 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 374FB48C6C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D190748C6C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354443AbiALPFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:05:44 -0500
-Received: from mail.efficios.com ([167.114.26.124]:37014 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348032AbiALPFf (ORCPT
+        id S1348043AbiALPIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:08:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35909 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243634AbiALPI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:05:35 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id DC2C0256756;
-        Wed, 12 Jan 2022 10:05:34 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id LP9esjWTT2mL; Wed, 12 Jan 2022 10:05:34 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 456C92565D5;
-        Wed, 12 Jan 2022 10:05:34 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 456C92565D5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1641999934;
-        bh=+iUEccd7drZTeuR4f7YzCJIgxU8t9H+YvbeucnM5mMg=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=T17CrfyvbDZJhUwy5q8Id+CqZhBKv+R1IXgpx8TYklCEYgtgfgP70DnNxdgTSOc/U
-         m6Iw37ZRyMAq+XPOEWaUqY3hlbPkwL8NpE68y4TOOOFp+AaaJ1Hpxo4aonzjybZURZ
-         V/CycUJKSWEmcMtf7daa3KfVZaS3eWwD26Jl6ZDjVH5leaE/9FhCurfoL/WptzqqmY
-         NXuLIfrXMktzE4i4K3fdMtbIeCnZ+8uavt3GlcjnvZssRi3r0IRs5jYkdfKnCu74MM
-         YQnq6zg3X3TbMZtKdR47n0oR9V6kQX4NVek1EAZ3shsiaIVfURd10ZvwHs2d3i+I72
-         wCLfAckYxdXmQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id R-1ccebGqD7y; Wed, 12 Jan 2022 10:05:34 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 315472567CF;
-        Wed, 12 Jan 2022 10:05:34 -0500 (EST)
-Date:   Wed, 12 Jan 2022 10:05:34 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>, carlos <carlos@redhat.com>
-Message-ID: <1953851780.24610.1641999934047.JavaMail.zimbra@efficios.com>
-In-Reply-To: <71e7d09733df4a899d12b7ef25198bbc@AcuMS.aculab.com>
-References: <20220110171611.8351-1-mathieu.desnoyers@efficios.com> <20220111110556.inteixgtl5vpmka7@wittgenstein> <1626924888.21447.1641922985771.JavaMail.zimbra@efficios.com> <20220112084617.32bjjo774n7vvyct@wittgenstein> <1475639366.24565.1641998849957.JavaMail.zimbra@efficios.com> <71e7d09733df4a899d12b7ef25198bbc@AcuMS.aculab.com>
-Subject: Re: [RFC PATCH v2 1/2] rseq: x86: implement abort-at-ip extension
+        Wed, 12 Jan 2022 10:08:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642000108;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wIsaeiGuSCkVHBbiFSlgQvB16Jlw+ZXtL+xJeRxkUSY=;
+        b=dAx8CnXlBqVkWRt+WJ4VnFqnmB9zrc3RwsNQT4U58RDxtP4qUabyxpqxhzLagphmV5+sv3
+        v5KhqXIDGHerE9A5/M6MiV7u6kHVMR4dAjTxEVg2+C86/bEjBM3/TYeUMWgEaEXyuVLDK6
+        SvNgLlH4skwrOCI1mqTdFcFpRCO2DUg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-288-bpTCFuRDMDGM_PFejjfqQw-1; Wed, 12 Jan 2022 10:08:26 -0500
+X-MC-Unique: bpTCFuRDMDGM_PFejjfqQw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 640B4801B0C;
+        Wed, 12 Jan 2022 15:08:25 +0000 (UTC)
+Received: from [10.22.10.195] (unknown [10.22.10.195])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 03B4279A29;
+        Wed, 12 Jan 2022 15:08:18 +0000 (UTC)
+Message-ID: <fd02584d-03d7-f27b-c11c-6ed1f212f03c@redhat.com>
+Date:   Wed, 12 Jan 2022 10:08:18 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] f2fs: move f2fs to use reader-unfair rwsems
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Tim Murray <timmurray@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+References: <20220108164617.3130175-1-jaegeuk@kernel.org>
+ <YdvoxkAAquI17UbX@infradead.org>
+ <a23a3226-95d9-9835-c1c7-2d13f4a1ee16@redhat.com>
+ <CAEe=SxnWeK0pSfijPKJSTxBiMgD1Ev69fV3qSTCgWASk0b3vhA@mail.gmail.com>
+ <9efbbcb7-29cd-a8ab-0632-01986edc862f@redhat.com>
+ <CAEe=Sx=C8e7=A6ziy8dYC+FvkWvVYZ+o=XMCP_4vX0efsUPT4Q@mail.gmail.com>
+ <86891228-9c91-09f1-0e2d-0a3392649d52@redhat.com>
+ <Yd25SWaqEDSpR1vO@google.com>
+ <4a2352a9-42b4-56cd-423a-825faffcd801@redhat.com>
+ <Yd4f49lhnC7+vvAm@google.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Yd4f49lhnC7+vvAm@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4177)
-Thread-Topic: rseq: x86: implement abort-at-ip extension
-Thread-Index: AdgHxNJPmHALYHCBSGGqQq0pyoAGXDSYsRN7
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Jan 12, 2022, at 9:58 AM, David Laight David.Laight@ACULAB.COM wrote:
+On 1/11/22 19:25, Jaegeuk Kim wrote:
+> On 01/11, Waiman Long wrote:
+>>
+>> v5.10 kernel still have reader optimistic spinning enabled in rwsem which
+>> may have worsen the writer wait time. Could you try with a more up-to-date
+>> kernel or backport the relevant rwsem patches into your test kernel to see
+>> how much it can help?
+> We're using https://android.googlesource.com/kernel/common/+/refs/heads/android12-5.10.
+> By any chance, may I ask which upstream patches we need to backport?
+>
+I am referring to the following commits:
 
->>  * [*] The openrisc, powerpc64 and x86-64 architectures define a "redzone" as a
->>  *     stack area beyond the stack pointer which can be used by the compiler
->>  *     to store local variables in leaf functions.
-> 
-> I wonder if that is really worth the trouble it causes!
-> By the time a function is spilling values to stack the cost
-> of a %sp update is almost certainly noise.
-> 
-> Someone clearly thought it was a 'good idea (tm)'.
+617f3ef95177 locking/rwsem: Remove reader optimistic spinning
+1a728dff855a locking/rwsem: Enable reader optimistic lock stealing
+2f06f702925b locking/rwsem: Prevent potential lock starvation
+c8fe8b056438 locking/rwsem: Pass the current atomic count to 
+rwsem_down_read_slowpath()
 
-I must admit that I've been surprised to learn about these redzones. Thanks for
-pointing them out to me, it was clearly a blind spot. I suspect it would be useful
-to introduce per-architecture KERNEL_REDZONE, USER_REDZONE and COMPAT_USER_REDZONE
-with a asm-generic version defining them to 0, with proper documentation. It would
-make it clearer to kernel developers working on stuff similar to signal handler
-delivery that they need to consider these carefully.
+To apply cleanly on top of 5.10.y, you will also need the followings:
 
-Mathieu
+c995e638ccbb locking/rwsem: Fold __down_{read,write}*()
+285c61aedf6b locking/rwsem: Introduce rwsem_write_trylock()
+3379116a0ca9 locking/rwsem: Better collate rwsem_read_trylock()
 
-> 
->	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT,
-> UK
-> Registration No: 1397386 (Wales)
+Reading the commit log of 2f06f702925b ("locking/rwsem: Prevent 
+potential lock starvation"), I realize that writer lock starvation is 
+possible in the f2fs case. That can explain why there was a worst case 
+lock wait time of 9.7s.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+I believe that you will see a big improvement by applying those upstream 
+commits. In hindsight, I think I should have put a "Fixes" tag in that 
+commit.
+
+>>
+>>>> Anyway, AFAICS, this patch keeps readers out of the rwsem wait queue and so
+>>>> only writers can go into it. We can make an unfair rwsem to give preference
+>>>> to writers in the wait queue and wake up readers only if there is no more
+>>>> writers in the wait queue or even in the optimistic spinning queue. That
+>>>> should achieve the same effect as this patch.
+>>> Can we get a patch for the variant to test a bit? Meanwhile, I think we can
+>>> merge this patch to add a wraper first and switches to it later?
+>> Give me a week or so and I can make a RFC patch to support unfair rwsem for
+>> you to try out. You do need to try it on the latest kernel, though.
+> Thank you so much. My thought flow is applying this in f2fs for all the old
+> kernels shipped in Android devices. Then, we can try to backport upstream
+> rwsem patches and yours to switch finally. Let me know if you have any concern.
+
+Assuming that Tr is the worst case reader lock hold time with a single 
+writer, I believe the worst case writer lock wait time should be about 
+2*Tr with the above commits applied. Introducing a unfair rwsem option 
+will reduce that to just Tr. So try this out by applying the above 
+upstream commits to see if they can meet your requirement as you may not 
+really need an unfair rwsem option.
+
+Cheers,
+Longman
+

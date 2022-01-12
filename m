@@ -2,82 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDEA048C7A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F3948C7B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354824AbiALPwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S1354855AbiALPzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:55:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245483AbiALPwe (ORCPT
+        with ESMTP id S1354850AbiALPze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:52:34 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97FAC06173F;
-        Wed, 12 Jan 2022 07:52:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WJbLqDhZiskfp5FI4IE2x8brDDmN7SOUeyren1ySdPE=; b=jxnEEsy5n0BssJvJbU2r4hq+Ew
-        /D5esqzqKe83/Jar+jJ9J31vVLRiPHNNUZfgpMQmhKPeeJZXJQodW8TSjOqlavH86xSGIB4Xbq1y5
-        Ihgx/dD3V+p43hLKc4IS+jLFj/ikxFL0I6CEM7wI7CAHhQzgFD9rhpbZgJVMuL5c4ciVhE+Ankv4Q
-        itXE5XZ1OW5j/5ODe/1HJhSJIu6XOCEc6Yw88/sGuFX0G4JfGd8JTa/mrGRFKHbxlSMP9koaQcs1+
-        UFDziF99LWaYJb8B61onPRed20UYQY/F9v0NJU4LrSQbqoHWHwwNaxgOfg9KsdJoxEH4ao7VeSy9c
-        xmN2tFgQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7fvH-0030LB-GT; Wed, 12 Jan 2022 15:52:27 +0000
-Date:   Wed, 12 Jan 2022 07:52:27 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     Allen <allen.lkml@gmail.com>, Christoph Lameter <cl@linux.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org, atomlin@atomlin.com,
-        ghalat@redhat.com
-Subject: Re: [RFC PATCH v2 00/13] module: core code clean up
-Message-ID: <Yd75OzrhrjDp7CVa@bombadil.infradead.org>
-References: <20220106234319.2067842-1-atomlin@redhat.com>
- <CAOMdWSJHm9bRAcrB6U+FsRiK6Fg2bbtbUH82w54VD7kbFmnVsA@mail.gmail.com>
- <CAOMdWS+Sn1sZJt8ocig5U7d7qG3N8oJBW-D1ey0qbZ3AXF-JWg@mail.gmail.com>
- <20220112132104.7emyelwuv3jmmhdt@ava.usersys.com>
+        Wed, 12 Jan 2022 10:55:34 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425FBC061748;
+        Wed, 12 Jan 2022 07:55:34 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id q25so11813843edb.2;
+        Wed, 12 Jan 2022 07:55:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7sr5SESFFMB446XWLFZjyV/pitsS2bsWKxu5hETTxNM=;
+        b=Z2DtGmZd15CFngreVTZS0S8eF7cgf7qNpMDbsRgyUrblkJjHI85j+s6mkaq75JZm5o
+         wEHEL2I0wXsvGpLtxUUV3rqwVXnDb9feupL/z2lSXJsWxcZChRN/j/W939f9yB725iag
+         qwklSKX1aENX/c5ItiOJhEtnVOmv+ZUs847RBU4EICM221XSsQ3t3XhFirGFoFl6TQbN
+         TCPPw7eTuOSJ22n3HaBTIAhTJFOURowETCLAj3qkYfN6YBf3S8zSBpj2BXJ3DvOXUxWZ
+         DRwAEny9Wdzxhgu3ndh5BcOqPEmvCa78a6+JiO7U/ZskfFkwVW4k9gxFhducOkDqRLwH
+         1jUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7sr5SESFFMB446XWLFZjyV/pitsS2bsWKxu5hETTxNM=;
+        b=CBApm3Yb4z6wThdpfKHk4VlQhPo1Abhrcy/hzHu//qHjFaBijfQGsZV7XYtckNvIId
+         YFfBYNtyzJ5eOpFzKbNPgMiOi7pR9nb4HvzxTQKa6aUrk618Wm6NBqFVu4juOPzGhVLP
+         OqGqTVDf10NYR0pCJzrDzx/kAXRg+/2gVKqBgbQgXGA3UplchEUSCyu7rstzmZlOam8i
+         APLaosKmoeWZCj6AzxelIqV5fa8e5lndtvLp5ocOjMYFZgnoA0VpxM4Jl7NGeJZAbIIg
+         3I8QcvWBVSW+v/LS/jIBuIEb+9Wmrwkrr81tJkn8/NmYhD2i0THsjXL3N+zUCm9Zxg3P
+         O9Cg==
+X-Gm-Message-State: AOAM5330Afd96KBXUwp4yAFUfNxUcCtlipqnFfQuqFnWhYxYJlDxeEAE
+        K23tysQ82SPEJqkat+eSt53rhtBSQlfuY6m+8Ow=
+X-Google-Smtp-Source: ABdhPJzJXO9xzC/S0TQ24Y7YhDy0ls0vhKKyoj7GKS7LG+kDSY0DZTNtnzQnsn3WgzH7kNxAQFLNTr838SaKfW72fS4=
+X-Received: by 2002:a05:6402:2696:: with SMTP id w22mr270559edd.296.1642002932831;
+ Wed, 12 Jan 2022 07:55:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220112132104.7emyelwuv3jmmhdt@ava.usersys.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com> <1641996862-26960-2-git-send-email-akhilrajeev@nvidia.com>
+In-Reply-To: <1641996862-26960-2-git-send-email-akhilrajeev@nvidia.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 12 Jan 2022 17:53:45 +0200
+Message-ID: <CAHp75Vc+uN8MTM4cSMQ5gk7GvgkZwJ7aoKwnFiNjQVM4QTqPVg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] device property: Add device_irq_get_byname
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     Christian Koenig <christian.koenig@amd.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 01:21:04PM +0000, Aaron Tomlin wrote:
-> On Tue 2022-01-11 17:16 -0800, Allen wrote:
-> > Hi Aaron,
-> 
-> Hi Allen,
-> 
-> >   Was the code compile tested?
-> 
-> Not entirely i.e. not the whole of kernel/module/Makefile, unfortunately.
-> Furthermore, only x86-64 was compiled tested. At the moment, I felt the
-> need to share the concept/or approach thus far to simply obtain some
-> overall feedback before further modifications.
-> 
-> >   Unfortunately, I could not apply the series cleanly on top of the
-> > latest 5.17-rc1.
-> 
-> Sorry about that: this work was based on Linus' commit 81361b837a34 ("Merge
-> tag 'kbuild-v5.14' of
-> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.").
+On Wed, Jan 12, 2022 at 4:14 PM Akhil R <akhilrajeev@nvidia.com> wrote:
 
-Please work off of modules-next tree:
+In the subject line: device_irq_get_byname()
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
+> Get interrupt by name from ACPI table as well.
 
-That is, this tree on the modules-next branch:
+an interrupt
+the ACPI
 
-git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+> Add option to use 'interrupt-names' in _DSD which can map to interrupt by
 
-  Luis
+can be mapped
+Interrupt() resource
+
+(The last one is very important to point out this is only about
+Interrupt() resources for now).
+
+> index. The implementation is similar to 'interrupt-names' in devicetree.
+
+the Device Tree
+
+> Also add a common routine to get irq by name from devicetree and ACPI
+
+IRQ
+Device Tree
+
+> table.
+
+...
+
+>  /**
+> + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
+> + * @fwnode:    Pointer to the firmware node
+> + * @name:      IRQ name in interrupt-names property in fwnode
+> + *
+> + * Returns Linux IRQ number on success, errno otherwise.
+
+negative errno
+
+> + */
+> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
+> +{
+> +       int index;
+
+> +       if (unlikely(!name))
+
+Don't use unlikely() here.
+
+> +               return -EINVAL;
+> +
+> +       index = fwnode_property_match_string(fwnode, "interrupt-names",  name);
+> +       if (index < 0)
+> +               return index;
+> +
+> +       return fwnode_irq_get(fwnode, index);
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko

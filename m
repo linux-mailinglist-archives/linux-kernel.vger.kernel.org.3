@@ -2,101 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F05948BCCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA7C48BCCB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348111AbiALCAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 21:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348122AbiALB7e (ORCPT
+        id S1348101AbiALB7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 20:59:31 -0500
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:42933 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244071AbiALB73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 20:59:34 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF01C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:59:34 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id m6so2192978ybc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:59:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cVxEczww7H9SKUQS4bM3hqv/i/BHfSqFjaglAC6lVKQ=;
-        b=Ts2boQ0OQ6dUg+Q1bgi1eRic89TubkUE0VQ2NPiyhgnU3O0OzuHrNsR/aYTnxham6j
-         QkFUVZHsgmjs/3IJLRiePUPt2SyMyFnLJAjc+jITIcvu+aD44BkdZK20a5pA5ojpVZjz
-         aOvkgkwHgYrqe31l/rstBihzrSuX6cCEeJOTCrj9q4I/BeqQFvPfpTlLSoJoJmqH6J3V
-         yuAgSyr6Z0SbVWOFs00A9/fwH4X5uc6aBbvOAdytDX6Tn7l/PeZz0eXeYkvh9LgU2UoE
-         lWPQDZt03th6mEf0Qj5U2yfEOk7ebdD/9B8nEoucVNGOBtU98dqeVrDKcGwN/HY+e6yu
-         CB8A==
+        Tue, 11 Jan 2022 20:59:29 -0500
+Received: by mail-oi1-f178.google.com with SMTP id y14so1526879oia.9;
+        Tue, 11 Jan 2022 17:59:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cVxEczww7H9SKUQS4bM3hqv/i/BHfSqFjaglAC6lVKQ=;
-        b=GUNmxynq0AMmWksnyZyg4EL8X1vr+BpvF95ktWmpWJmNH04sQSele7VrXCknRdXqTt
-         TeW2j2ImhYheBvlxGud0AVSm7f6yChFcgHASLs0W49To3F+svewf2XMGNFnAL0Udrpen
-         5BqdX1x8HClR1tPdn4DLW37inqZfYlkv2rSUvVuOl54MvLe5GVLxsJkd5poJS08VJ/TY
-         zXRz1euRG+P5wRoJ6VlURWTnqN6irNByvMdfp0QHoPt/uz2TbPcNS67u4EOejHfSWhSH
-         I4FC2YgvA2CfWtBt4A00rUTQXHhaIvLTBycv+73DCUoHWcf2WKyV3B2Bmy0XzAHdzOCw
-         f4xQ==
-X-Gm-Message-State: AOAM530mD3ZF7lvG7eGoqrO3DJdRZmFQkBGSQYdMJUkPdzdiVy9ToWaj
-        5+Jw6+67RGdknkMzI5Ugu3HfsVChOfWYGI6vxAFL5Q==
-X-Google-Smtp-Source: ABdhPJwN4hwcuKzBzJtr7wGTU0xnt0KS8/Uq8aK0aVyxSAu3ccYgg66CQmlwyhXOT6fWIigjAUWgjHVnsEGldOBZvgI=
-X-Received: by 2002:a25:2383:: with SMTP id j125mr9713381ybj.430.1641952773384;
- Tue, 11 Jan 2022 17:59:33 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SY7Nt3LIYS+ee95IOS2lYNehaYFihAIPxIiHoAlBkr0=;
+        b=GMheOFW2O67tS0IVR9zAlAeST4u5gr5Sw/EXCDAM8bEGPnugQNnPiCuqiFEYbAKfBC
+         rZfw9sB1jDocGjmlY3NhRkdmxjVpQlvMbo465Ki5nKp/ObwFG1F1go6n+I11KGprWUOI
+         wBfJ/jGdO+AWXR5l4+AcHzwgztYtTAbGdcHxTcGsiPqLSleXhJiwENzTPw9lcYQMPF/Z
+         PCf5eRaanli4iKURkditrMKErM7YsFU+JK3Muba1nREV78V7LpDVB5ocTkfRiVaxkukl
+         uD8+iaLivIqCc78bsa0ZtrX0PMocg66iSAU02MQn/qIlPbJ1krHr7VfOEKafoBi4/jBW
+         Lgog==
+X-Gm-Message-State: AOAM532OsRRgXCmTIOAvfTfqocFj2+dHZh6jzHCkjAjQwoUgxjiFR592
+        /HRNTjbTfSbcO7OxpJykbCLwKs/7qA==
+X-Google-Smtp-Source: ABdhPJyhji8EPb5FuVMZbGyJHgSzUgoThoUKc/7Ld8ukWHPII1dRpzHjuB3StkNE/TYAj81PwYIOnQ==
+X-Received: by 2002:aca:3014:: with SMTP id w20mr2685105oiw.69.1641952768993;
+        Tue, 11 Jan 2022 17:59:28 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id w19sm406835oiw.29.2022.01.11.17.59.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 17:59:28 -0800 (PST)
+Received: (nullmailer pid 3912227 invoked by uid 1000);
+        Wed, 12 Jan 2022 01:59:27 -0000
+Date:   Tue, 11 Jan 2022 19:59:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lin Huang <hl@rock-chips.com>,
+        Derek Basehore <dbasehore@chromium.org>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Subject: Re: [PATCH 02/10] dt-bindings: devfreq: rk3399_dmc: Deprecate
+ unused/redundant properties
+Message-ID: <Yd41/06PvO7DDGlO@robh.at.kernel.org>
+References: <20220107235320.965497-1-briannorris@chromium.org>
+ <20220107155215.2.I5ba582cd678d34c03d647e5500db8e33b7524d66@changeid>
 MIME-Version: 1.0
-References: <1641894961-9241-1-git-send-email-CruzZhao@linux.alibaba.com> <1641894961-9241-3-git-send-email-CruzZhao@linux.alibaba.com>
-In-Reply-To: <1641894961-9241-3-git-send-email-CruzZhao@linux.alibaba.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Tue, 11 Jan 2022 17:59:22 -0800
-Message-ID: <CABk29NtonxXS53J-+3w_GTLTVurf8HS4v35T9evoGyERB0uDqA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] sched/core: Forced idle accounting per-cpu
-To:     Cruz Zhao <CruzZhao@linux.alibaba.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        cgroups@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220107155215.2.I5ba582cd678d34c03d647e5500db8e33b7524d66@changeid>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 1:56 AM Cruz Zhao <CruzZhao@linux.alibaba.com> wrote:
->
-> Accounting for "forced idle" time per cpu, which is the time a cpu is
-> forced to idle by its SMT sibling.
->
-> As it's not accurate to measure the capacity loss only by cookie'd forced
-> idle time, and it's hard to trace the forced idle time caused by all the
-> uncookie'd tasks, we account the forced idle time from the perspective of
-> the cpu.
->
-> Forced idle time per cpu is displayed via /proc/schedstat, we can get the
-> forced idle time of cpu x from the 10th column of the row for cpu x. The
-> unit is ns. It also requires that schedstats is enabled.
->
-> Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
+On Fri, 07 Jan 2022 15:53:12 -0800, Brian Norris wrote:
+> These DRAM configuration properties are all handled in ARM Trusted
+> Firmware (and have been since the early days of this SoC), and there are
+> no in-tree users of the DMC binding yet. It's better to just defer to
+> firmware instead of maintaining this large list of properties.
+> 
+> There's also some confusion about units: many of these are specified in
+> MHz, but the downstream users and driver code are treating them as Hz, I
+> believe. Rather than straighten all that out, I just drop them.
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 > ---
+> 
+>  .../bindings/devfreq/rk3399_dmc.yaml          | 42 +++++++++----------
+>  1 file changed, 21 insertions(+), 21 deletions(-)
+> 
 
-Two quick followup questions:
-
-1) From your v1, I still wasn't quite sure if the per-cpu time was
-useful or not for you versus a single overall sum (ie. I think other
-metrics could be more useful for analyzing steal_cookie if that's what
-you're specifically interested in). Do you definitely want the per-cpu
-totals?
-
-2) If your cgroup accounting patch is merged, do you still want this
-patch? You can grab the global values from the root cgroup (assuming
-you have cgroups enabled). The only potential gap is if you need
-per-cpu totals, though I'm working to add percpu stats to cgroup-v2:
-https://lkml.kernel.org/r/%3C20220107234138.1765668-1-joshdon@google.com%3E
+Reviewed-by: Rob Herring <robh@kernel.org>

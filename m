@@ -2,411 +2,460 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 016E648C54F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C112C48C555
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353805AbiALN5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241015AbiALN4u (ORCPT
+        id S241620AbiALN61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:58:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49044 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236849AbiALN60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:56:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9718C061748;
-        Wed, 12 Jan 2022 05:56:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78E226190C;
-        Wed, 12 Jan 2022 13:56:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 786A2C36AE5;
-        Wed, 12 Jan 2022 13:56:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641995808;
-        bh=qrtJywSoWq2A3DUpZiXLa179d7xdDv4wfltTscP03l0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IhYpTobhQNqY6qw/Xa45OCwy2/oo4KFG2cnF8pxIItXIWUjvu+YJydGEwL8sPQ7Ek
-         zbzUuV6j7kYAKAliPUlNg3ZQUV8FkOL7YntlMy9zDgNkvCkv2L0KDPAKlnqZd3nUCD
-         f6xwso3EksNOpMZO0zDdbbok9VuZzI/PgVRQBPlE=
-Date:   Wed, 12 Jan 2022 14:56:46 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB changes for 5.17-rc1
-Message-ID: <Yd7eHm8EDkYETMw8@kroah.com>
+        Wed, 12 Jan 2022 08:58:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641995905;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u92yA883SjiA8RmcsqvmgxkfZYspTwlEn6ow9YD5DEM=;
+        b=Wt2a4mqNBokJuVhpVwChdixFBtclZD1bNT5/kmxyvSeWYrNfk7Jp32+t5Nej/+toNtxVBE
+        kX7i+1MhDMtpc1sUuSxt/8hzZ7PxQRg/9LF0JPRCYhy77Qb8XTz1xDsUa1LxAPDl4/WpLE
+        obt1zhN0G8qOS6JyvVo1R3QDw4NrP1g=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-582-i4LAS5_FO2eTNBi2ibjMuQ-1; Wed, 12 Jan 2022 08:58:23 -0500
+X-MC-Unique: i4LAS5_FO2eTNBi2ibjMuQ-1
+Received: by mail-ed1-f70.google.com with SMTP id m8-20020a056402510800b003f9d22c4d48so2286584edd.21
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 05:58:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=u92yA883SjiA8RmcsqvmgxkfZYspTwlEn6ow9YD5DEM=;
+        b=YAla6jjWIbQOwb9LSKJhXvKVWvXxf9xDxsykeo59XV66qCMd4U/+kzXJFR2p5AxkMe
+         vBhr4Oo55AE+Sn83BEnHGkFl/6+bey+EhbnD8J8qmW7idh1/A4b7DCHB6cx5RVjFI5Xu
+         JujyC0LWVaiUsdr8zFAwr0sFCvFwDT/CjJXTgZkBw8ZIM2Sv2hurhaGAg7bBjUBX3tKs
+         VRvSYgY/HlOnoCnjtahjYmA0qkg8+7JkMUM/KKQPINv9FavWvMbc0zba0jSwCMLXtPYJ
+         5j//+enmxbCe4dmRwIXJnXJhKLou3+5ZAAi0aqzvEtCWQC3JSfV1Krio+bqowKin5xLy
+         PhWQ==
+X-Gm-Message-State: AOAM530ksV474X5Sb5HAKgJn2QC2Do7dWzobkDBLqBfGtGZJo+++yOyG
+        KsNZCHzqMQiLpPeLffWR0sWT+ItC47fhdLVhzbFI/Jdp94nrRn+22qxx3NnpQwSA8GyrLQUrEfA
+        tmpjCISXxfTsx2QMzp52HqG9F
+X-Received: by 2002:a17:906:478a:: with SMTP id cw10mr7547998ejc.39.1641995902106;
+        Wed, 12 Jan 2022 05:58:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxQWCCq3M0i6JXw8e8/d6zE68bpCKlO/E128Sxu1xmkY7DvL2COwCFZkw0bskJ47bnhDkzIrQ==
+X-Received: by 2002:a17:906:478a:: with SMTP id cw10mr7547984ejc.39.1641995901935;
+        Wed, 12 Jan 2022 05:58:21 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id kw14sm4525869ejc.68.2022.01.12.05.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 05:58:20 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Igor Mammedov <imammedo@redhat.com>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+In-Reply-To: <20220111090022.1125ffb5@redhat.com>
+References: <20211122175818.608220-1-vkuznets@redhat.com>
+ <20211122175818.608220-3-vkuznets@redhat.com>
+ <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
+ <20211227183253.45a03ca2@redhat.com>
+ <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
+ <87mtkdqm7m.fsf@redhat.com> <20220103104057.4dcf7948@redhat.com>
+ <875yr1q8oa.fsf@redhat.com>
+ <ceb63787-b057-13db-4624-b430c51625f1@redhat.com>
+ <87o84qpk7d.fsf@redhat.com> <877dbbq5om.fsf@redhat.com>
+ <5505d731-cf87-9662-33f3-08844d92877c@redhat.com>
+ <20220111090022.1125ffb5@redhat.com>
+Date:   Wed, 12 Jan 2022 14:58:19 +0100
+Message-ID: <87fsptnjic.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/mixed; boundary="=-=-="
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit c9e6606c7fe92b50a02ce51dda82586ebdf99b48:
+--=-=-=
+Content-Type: text/plain
 
-  Linux 5.16-rc8 (2022-01-02 14:23:25 -0800)
+Igor Mammedov <imammedo@redhat.com> writes:
 
-are available in the Git repository at:
+> On Fri, 7 Jan 2022 19:15:43 +0100
+> Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+>> On 1/7/22 10:02, Vitaly Kuznetsov wrote:
+>> > 
+>> > I'm again leaning towards an allowlist and currently I see only two
+>> > candidates:
+>> > 
+>> > CPUID.01H.EBX bits 31:24 (initial LAPIC id)
+>> > CPUID.0BH.EDX (x2APIC id)
+>> > 
+>> > Anything else I'm missing?  
+>> 
+>> I would also ignore completely CPUID leaves 03H, 04H, 0BH, 80000005h, 
+>> 80000006h, 8000001Dh, 8000001Eh (cache and processor topology), just to 
+>> err on the safe side.
+>
+> on top of that,
+>
+> 1Fh
+>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.17-rc1
+The implementation turned out to be a bit more complex as kvm also
+mangles CPUIDs so we need to account for that. Could you give the
+attached series a spin to see if it works?
 
-for you to fetch changes up to cbb4f5f435995a56ef770e35bfafb4bcff8f0ada:
+-- 
+Vitaly
 
-  docs: ABI: fixed formatting in configfs-usb-gadget-uac2 (2022-01-08 15:48:52 +0100)
 
-----------------------------------------------------------------
-USB/Thunderbolt changes for 5.17-rc1
+--=-=-=
+Content-Type: text/x-patch
+Content-Disposition: inline;
+ filename=0001-KVM-x86-Fix-indentation-in-kvm_set_cpuid.patch
 
-Here is the big set of USB and Thunderbolt driver changes for 5.17-rc1.
+From 9b7d89c0a86f52e404278a5dfd86521bff278d17 Mon Sep 17 00:00:00 2001
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+Date: Wed, 12 Jan 2022 14:41:24 +0100
+Subject: [PATCH RFC 1/3] KVM: x86: Fix indentation in kvm_set_cpuid()
 
-Nothing major in here, just lots of little updates and cleanups.  These
-include:
-	- some USB header fixes picked from Ingo's header-splitup work
-	- more USB4/Thunderbolt hardware support added
-	- USB gadget driver updates and additions
-	- USB typec additions (includes some acpi changes, which were
-	  acked by the ACPI maintainer)
-	- core USB fixes as found by syzbot that were too late for
-	  5.16-final
-	- USB dwc3 driver updates
-	- USB dwc2 driver updates
-	- platform_get_irq() conversions of some USB drivers
-	- other minor USB driver updates and additions
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ arch/x86/kvm/cpuid.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-All of these have been in linux-next for a while with no reported
-issues.
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 07e9215e911d..89af3c7390d3 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -276,21 +276,21 @@ u64 kvm_vcpu_reserved_gpa_bits_raw(struct kvm_vcpu *vcpu)
+ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+                         int nent)
+ {
+-    int r;
++	int r;
+ 
+-    r = kvm_check_cpuid(e2, nent);
+-    if (r)
+-        return r;
++	r = kvm_check_cpuid(e2, nent);
++	if (r)
++		return r;
+ 
+-    kvfree(vcpu->arch.cpuid_entries);
+-    vcpu->arch.cpuid_entries = e2;
+-    vcpu->arch.cpuid_nent = nent;
++	kvfree(vcpu->arch.cpuid_entries);
++	vcpu->arch.cpuid_entries = e2;
++	vcpu->arch.cpuid_nent = nent;
+ 
+-    kvm_update_kvm_cpuid_base(vcpu);
+-    kvm_update_cpuid_runtime(vcpu);
+-    kvm_vcpu_after_set_cpuid(vcpu);
++	kvm_update_kvm_cpuid_base(vcpu);
++	kvm_update_cpuid_runtime(vcpu);
++	kvm_vcpu_after_set_cpuid(vcpu);
+ 
+-    return 0;
++	return 0;
+ }
+ 
+ /* when an old userspace process fills a new kernel module */
+-- 
+2.34.1
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-----------------------------------------------------------------
-Alan Stern (2):
-      USB: Fix "slab-out-of-bounds Write" bug in usb_hcd_poll_rh_status
-      USB: core: Fix bug in resuming hub's handling of wakeup requests
+--=-=-=
+Content-Type: text/x-patch
+Content-Disposition: inline;
+ filename=0002-KVM-x86-Do-runtime-CPUID-update-before-updating-vcpu.patch
 
-Amelie Delaunay (1):
-      usb: dwc2: platform: adopt dev_err_probe() to silent probe defer
+From c735aa9b4375d37dbd61c7c655d6b007d7d1962c Mon Sep 17 00:00:00 2001
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+Date: Wed, 12 Jan 2022 14:27:54 +0100
+Subject: [PATCH RFC 2/3] KVM: x86: Do runtime CPUID update before updating
+ vcpu->arch.cpuid_entries
 
-Amjad Ouled-Ameur (1):
-      usb: dwc3: meson-g12a: fix shared reset control use
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ arch/x86/kvm/cpuid.c | 35 +++++++++++++++++++++++++----------
+ 1 file changed, 25 insertions(+), 10 deletions(-)
 
-Andy Shevchenko (1):
-      thunderbolt: Do not dereference fwnode in struct device
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 89af3c7390d3..16f4083edeeb 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -125,14 +125,21 @@ static void kvm_update_kvm_cpuid_base(struct kvm_vcpu *vcpu)
+ 	}
+ }
+ 
+-static struct kvm_cpuid_entry2 *kvm_find_kvm_cpuid_features(struct kvm_vcpu *vcpu)
++static struct kvm_cpuid_entry2 *__kvm_find_kvm_cpuid_features(struct kvm_vcpu *vcpu,
++					      struct kvm_cpuid_entry2 *entries, int nent)
+ {
+ 	u32 base = vcpu->arch.kvm_cpuid_base;
+ 
+ 	if (!base)
+ 		return NULL;
+ 
+-	return kvm_find_cpuid_entry(vcpu, base | KVM_CPUID_FEATURES, 0);
++	return cpuid_entry2_find(entries, nent, base | KVM_CPUID_FEATURES, 0);
++}
++
++static struct kvm_cpuid_entry2 *kvm_find_kvm_cpuid_features(struct kvm_vcpu *vcpu)
++{
++	return __kvm_find_kvm_cpuid_features(vcpu, vcpu->arch.cpuid_entries,
++					     vcpu->arch.cpuid_nent);
+ }
+ 
+ void kvm_update_pv_runtime(struct kvm_vcpu *vcpu)
+@@ -147,11 +154,12 @@ void kvm_update_pv_runtime(struct kvm_vcpu *vcpu)
+ 		vcpu->arch.pv_cpuid.features = best->eax;
+ }
+ 
+-void kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu)
++static void __kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *entries,
++				       int nent)
+ {
+ 	struct kvm_cpuid_entry2 *best;
+ 
+-	best = kvm_find_cpuid_entry(vcpu, 1, 0);
++	best = cpuid_entry2_find(entries, nent, 1, 0);
+ 	if (best) {
+ 		/* Update OSXSAVE bit */
+ 		if (boot_cpu_has(X86_FEATURE_XSAVE))
+@@ -162,33 +170,39 @@ void kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu)
+ 			   vcpu->arch.apic_base & MSR_IA32_APICBASE_ENABLE);
+ 	}
+ 
+-	best = kvm_find_cpuid_entry(vcpu, 7, 0);
++	best = cpuid_entry2_find(entries, nent, 7, 0);
+ 	if (best && boot_cpu_has(X86_FEATURE_PKU) && best->function == 0x7)
+ 		cpuid_entry_change(best, X86_FEATURE_OSPKE,
+ 				   kvm_read_cr4_bits(vcpu, X86_CR4_PKE));
+ 
+-	best = kvm_find_cpuid_entry(vcpu, 0xD, 0);
++	best = cpuid_entry2_find(entries, nent, 0xD, 0);
+ 	if (best)
+ 		best->ebx = xstate_required_size(vcpu->arch.xcr0, false);
+ 
+-	best = kvm_find_cpuid_entry(vcpu, 0xD, 1);
++	best = cpuid_entry2_find(entries, nent, 0xD, 1);
+ 	if (best && (cpuid_entry_has(best, X86_FEATURE_XSAVES) ||
+ 		     cpuid_entry_has(best, X86_FEATURE_XSAVEC)))
+ 		best->ebx = xstate_required_size(vcpu->arch.xcr0, true);
+ 
+-	best = kvm_find_kvm_cpuid_features(vcpu);
++	best = __kvm_find_kvm_cpuid_features(vcpu, vcpu->arch.cpuid_entries,
++					     vcpu->arch.cpuid_nent);
+ 	if (kvm_hlt_in_guest(vcpu->kvm) && best &&
+ 		(best->eax & (1 << KVM_FEATURE_PV_UNHALT)))
+ 		best->eax &= ~(1 << KVM_FEATURE_PV_UNHALT);
+ 
+ 	if (!kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_MISC_ENABLE_NO_MWAIT)) {
+-		best = kvm_find_cpuid_entry(vcpu, 0x1, 0);
++		best = cpuid_entry2_find(entries, nent, 0x1, 0);
+ 		if (best)
+ 			cpuid_entry_change(best, X86_FEATURE_MWAIT,
+ 					   vcpu->arch.ia32_misc_enable_msr &
+ 					   MSR_IA32_MISC_ENABLE_MWAIT);
+ 	}
+ }
++
++void kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu)
++{
++	__kvm_update_cpuid_runtime(vcpu, vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
++}
+ EXPORT_SYMBOL_GPL(kvm_update_cpuid_runtime);
+ 
+ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+@@ -278,6 +292,8 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ {
+ 	int r;
+ 
++	__kvm_update_cpuid_runtime(vcpu, e2, nent);
++
+ 	r = kvm_check_cpuid(e2, nent);
+ 	if (r)
+ 		return r;
+@@ -287,7 +303,6 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ 	vcpu->arch.cpuid_nent = nent;
+ 
+ 	kvm_update_kvm_cpuid_base(vcpu);
+-	kvm_update_cpuid_runtime(vcpu);
+ 	kvm_vcpu_after_set_cpuid(vcpu);
+ 
+ 	return 0;
+-- 
+2.34.1
 
-Balamanikandan Gunasundar (1):
-      usb: gadget: at91_udc: Convert to GPIO descriptors
 
-Changcheng Deng (1):
-      xhci: use max() to make code cleaner
+--=-=-=
+Content-Type: text/x-patch
+Content-Disposition: inline;
+ filename=0003-KVM-x86-Partially-allow-KVM_SET_CPUID-2-after-KVM_RU.patch
 
-Christophe JAILLET (2):
-      usb: Remove redundant 'flush_workqueue()' calls
-      usb: dwc2: Simplify a bitmap declaration
+From f29f2c4e48540f3e1214a6ecdd49510465d2d234 Mon Sep 17 00:00:00 2001
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+Date: Wed, 12 Jan 2022 12:51:01 +0100
+Subject: [PATCH RFC 3/3] KVM: x86: Partially allow KVM_SET_CPUID{,2} after
+ KVM_RUN for CPU hotplug
 
-Chunfeng Yun (2):
-      usb: xhci-mtk: remove unnecessary error check
-      usb: xhci-mtk: fix random remote wakeup
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ arch/x86/kvm/cpuid.c | 69 +++++++++++++++++++++++++++++++++++++++++---
+ arch/x86/kvm/x86.c   | 19 ------------
+ 2 files changed, 65 insertions(+), 23 deletions(-)
 
-Dan Carpenter (1):
-      usb: hub: make wait_for_connected() take an int instead of a pointer to int
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 16f4083edeeb..0f130d686323 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -80,9 +80,11 @@ static inline struct kvm_cpuid_entry2 *cpuid_entry2_find(
+ 	return NULL;
+ }
+ 
+-static int kvm_check_cpuid(struct kvm_cpuid_entry2 *entries, int nent)
++static int kvm_check_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *entries,
++			   int nent, bool is_update)
+ {
+-	struct kvm_cpuid_entry2 *best;
++	struct kvm_cpuid_entry2 *best, *e;
++	int i;
+ 
+ 	/*
+ 	 * The existing code assumes virtual address is 48-bit or 57-bit in the
+@@ -96,6 +98,58 @@ static int kvm_check_cpuid(struct kvm_cpuid_entry2 *entries, int nent)
+ 			return -EINVAL;
+ 	}
+ 
++	if (!is_update)
++		return 0;
++
++	/*
++	 * KVM does not correctly handle changing guest CPUID after KVM_RUN, as
++	 * MAXPHYADDR, GBPAGES support, AMD reserved bit behavior, etc.. aren't
++	 * tracked in kvm_mmu_page_role.  As a result, KVM may miss guest page
++	 * faults due to reusing SPs/SPTEs. In practice no sane VMM mucks with
++	 * the core vCPU model on the fly. It would've been better to forbid any
++	 * KVM_SET_CPUID{,2} calls after KVM_RUN altogether but unfortunately
++	 * some VMMs (e.g. QEMU) reuse vCPU fds for CPU hotplug/unplug and they
++	 * need to set CPUID to e.g. change [x2]APIC id. Implement an allowlist
++	 * of CPUIDs which are allowed to change.
++	 */
++	for (i = 0; i < nent; i++) {
++		e = &entries[i];
++
++		best = kvm_find_cpuid_entry(vcpu, e->function, e->index);
++		if (!best)
++			return -EINVAL;
++
++		switch (e->function) {
++		case 0x1:
++			/* Only initial LAPIC id is allowed to change */
++			if (e->eax ^ best->eax || ((e->ebx ^ best->ebx) >> 24) ||
++			    e->ecx ^ best->ecx || e->edx ^ best->edx)
++				return -EINVAL;
++			break;
++		case 0x3:
++			/* processor serial number */
++		case 0x4:
++			/* cache parameters */
++		case 0xb:
++		case 0x1f:
++			/* x2APIC id and CPU topology */
++		case 0x80000005:
++			/* AMD l1 cache information */
++		case 0x80000006:
++			/* l2 cache information */
++		case 0x8000001d:
++			/* AMD cache topology */
++		case 0x8000001e:
++			/* AMD processor topology */
++			break;
++		default:
++			if (e->eax ^ best->eax || e->ebx ^ best->ebx ||
++			    e->ecx ^ best->ecx || e->edx ^ best->edx)
++				return -EINVAL;
++			break;
++		}
++	}
++
+ 	return 0;
+ }
+ 
+@@ -291,10 +345,11 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+                         int nent)
+ {
+ 	int r;
++	bool is_update = vcpu->arch.last_vmentry_cpu != -1;
+ 
+ 	__kvm_update_cpuid_runtime(vcpu, e2, nent);
+ 
+-	r = kvm_check_cpuid(e2, nent);
++	r = kvm_check_cpuid(vcpu, e2, nent, is_update);
+ 	if (r)
+ 		return r;
+ 
+@@ -303,7 +358,13 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ 	vcpu->arch.cpuid_nent = nent;
+ 
+ 	kvm_update_kvm_cpuid_base(vcpu);
+-	kvm_vcpu_after_set_cpuid(vcpu);
++
++	/*
++	 * KVM_SET_CPUID{,2} after KVM_RUN is not allowed to change vCPU features, see
++	 * kvm_check_cpuid().
++	 */
++	if (!is_update)
++		kvm_vcpu_after_set_cpuid(vcpu);
+ 
+ 	return 0;
+ }
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index e50e97ac4408..285d563af856 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -5148,17 +5148,6 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
+ 		struct kvm_cpuid __user *cpuid_arg = argp;
+ 		struct kvm_cpuid cpuid;
+ 
+-		/*
+-		 * KVM does not correctly handle changing guest CPUID after KVM_RUN, as
+-		 * MAXPHYADDR, GBPAGES support, AMD reserved bit behavior, etc.. aren't
+-		 * tracked in kvm_mmu_page_role.  As a result, KVM may miss guest page
+-		 * faults due to reusing SPs/SPTEs.  In practice no sane VMM mucks with
+-		 * the core vCPU model on the fly, so fail.
+-		 */
+-		r = -EINVAL;
+-		if (vcpu->arch.last_vmentry_cpu != -1)
+-			goto out;
+-
+ 		r = -EFAULT;
+ 		if (copy_from_user(&cpuid, cpuid_arg, sizeof(cpuid)))
+ 			goto out;
+@@ -5169,14 +5158,6 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
+ 		struct kvm_cpuid2 __user *cpuid_arg = argp;
+ 		struct kvm_cpuid2 cpuid;
+ 
+-		/*
+-		 * KVM_SET_CPUID{,2} after KVM_RUN is forbidded, see the comment in
+-		 * KVM_SET_CPUID case above.
+-		 */
+-		r = -EINVAL;
+-		if (vcpu->arch.last_vmentry_cpu != -1)
+-			goto out;
+-
+ 		r = -EFAULT;
+ 		if (copy_from_user(&cpuid, cpuid_arg, sizeof(cpuid)))
+ 			goto out;
+-- 
+2.34.1
 
-David Heidelberg (1):
-      dt-bindings: usb: qcom,dwc3: add binding for IPQ4019 and IPQ8064
 
-Dinh Nguyen (1):
-      usb: dwc2: do not gate off the hardware if it does not support clock gating
+--=-=-=--
 
-Dongliang Mu (1):
-      usb: bdc: fix error handling code in bdc_resume
-
-Fabrice Gasnier (4):
-      dt-bindings: usb: dwc2: document the port when usb-role-switch is used
-      dt-bindings: usb: document role-switch-default-mode property in dwc2
-      usb: dwc2: drd: add role-switch-default-node support
-      usb: dwc2: drd: restore role and overrides upon resume
-
-Gil Fine (7):
-      thunderbolt: Add TMU uni-directional mode
-      thunderbolt: Add CL0s support for USB4 routers
-      thunderbolt: Move usb4_switch_wait_for_bit() to switch.c
-      thunderbolt: Implement TMU time disruption for Intel Titan Ridge
-      thunderbolt: Rename Intel TB_VSE_CAP_IECS capability
-      thunderbolt: Enable CL0s for Intel Titan Ridge
-      thunderbolt: Add module parameter for CLx disabling
-
-Greg Kroah-Hartman (8):
-      Merge 5.16-rc3 into usb-next
-      Merge 5.16-rc4 into usb-next
-      Merge 5.16-rc5 into usb-next
-      Merge 5.16-rc6 into usb-next
-      Revert "usb: host: ehci-sh: propagate errors from platform_get_irq()"
-      Merge 5.16-rc8 into usb-next
-      Merge tag 'thunderbolt-for-v5.17-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
-      USB: common: debug: add needed kernel.h include
-
-Guo Zhengkui (1):
-      usb: core: hcd: change sizeof(vaddr) to sizeof(unsigned long)
-
-Haimin Zhang (1):
-      USB: ehci_brcm_hub_control: Improve port index sanitizing
-
-Hangyu Hua (2):
-      usb: gadget: don't release an existing dev->buf
-      usb: gadget: clear related members when goto fail
-
-Heikki Krogerus (5):
-      acpi: Export acpi_bus_type
-      acpi: Store CRC-32 hash of the _PLD in struct acpi_device
-      usb: Link the ports to the connectors they are attached to
-      usb: typec: port-mapper: Convert to the component framework
-      usb: Remove usb_for_each_port()
-
-Ingo Molnar (4):
-      headers/prep: usb: gadget: Fix namespace collision
-      headers/prep: Fix non-standard header section: drivers/usb/cdns3/core.h
-      headers/prep: Fix non-standard header section: drivers/usb/host/ohci-tmio.c
-      headers/deps: USB: Optimize <linux/usb/ch9.h> dependencies, remove <linux/device.h>
-
-Jason Wang (1):
-      usb: cdnsp: Remove unneeded semicolon after `}'
-
-John Keeping (4):
-      usb: gadget: f_midi: allow resetting index option
-      usb: dwc2: gadget: use existing helper
-      usb: dwc2: gadget: initialize max_speed from params
-      usb: gadget: u_audio: fix calculations for small bInterval
-
-Juergen Gross (3):
-      usb: Add Xen pvUSB protocol description
-      usb: Introduce Xen pvUSB frontend (xen hcd)
-      xen: add Xen pvUSB maintainer
-
-Kai-Heng Feng (1):
-      usb: hub: Add delay for SuperSpeed hub resume to let links transit to U0
-
-Kees Cook (1):
-      thunderbolt: xdomain: Avoid potential stack OOB read
-
-Lad Prabhakar (6):
-      usb: host: fotg210: Use platform_get_irq() to get the interrupt
-      usb: renesas_usbhs: Use platform_get_irq() to get the interrupt
-      usb: dwc3: Drop unneeded calls to platform_get_resource_byname()
-      usb: isp1760: Use platform_get_irq() to get the interrupt
-      usb: cdns3: Use platform_get_irq_byname() to get the interrupt
-      usb: musb: dsps: Use platform_get_irq_byname() to get the interrupt
-
-Linyu Yuan (4):
-      usb: gadget: configfs: simplify os_desc_item_to_gadget_info() helper
-      usb: gadget: configfs: remove os_desc_attr_release()
-      usb: gadget: configfs: use to_config_usb_cfg() in os_desc_link()
-      usb: gadget: configfs: use to_usb_function_instance() in cfg (un)link func
-
-Luca Weiss (1):
-      dt-bindings: usb: qcom,dwc3: Add SM6350 compatible
-
-Lukas Bulwahn (1):
-      MAINTAINERS: remove typo from XEN PVUSB DRIVER section
-
-Manish Narani (1):
-      dt-bindings: usb: dwc3-xilinx: Convert USB DWC3 bindings
-
-Mathias Nyman (1):
-      usb: hub: avoid warm port reset during USB3 disconnect
-
-Miaoqian Lin (2):
-      usb: dwc3: dwc3-qcom: Add missing platform_device_put() in dwc3_qcom_acpi_register_core
-      usb: dwc3: qcom: Fix NULL vs IS_ERR checking in dwc3_qcom_probe
-
-Mika Westerberg (6):
-      thunderbolt: Runtime PM activate both ends of the device link
-      thunderbolt: Tear down existing tunnels when resuming from hibernate
-      thunderbolt: Runtime resume USB4 port when retimers are scanned
-      thunderbolt: Do not allow subtracting more NFC credits than configured
-      thunderbolt: Do not program path HopIDs for USB4 routers
-      thunderbolt: Add debug logging of DisplayPort resource allocation
-
-Neal Liu (4):
-      usb: uhci: add aspeed ast2600 uhci support
-      usb: aspeed-vhub: add qualifier descriptor
-      usb: aspeed-vhub: fix ep0 OUT ack received wrong length issue
-      usb: aspeed-vhub: support test mode feature
-
-Pavankumar Kondeti (1):
-      usb: gadget: f_fs: Use stream_open() for endpoint files
-
-Pavel Hofman (4):
-      docs: ABI: added missing num_requests param to UAC2
-      docs: ABI: fixed req_number desc in UAC1
-      usb: gadget: u_audio: Subdevice 0 for capture ctls
-      docs: ABI: fixed formatting in configfs-usb-gadget-uac2
-
-Philipp Hortmann (3):
-      Docs: usb: update err() to pr_err() and replace __FILE__
-      Docs: usb: update comment and code near increment usage count
-      Docs: usb: update writesize, copy_from_user, usb_fill_bulk_urb, usb_submit_urb
-
-Qihang Hu (1):
-      usb: gadget: composite: Show warning if function driver's descriptors are incomplete.
-
-Razvan Heghedus (2):
-      usb: core: Export usb_device_match_id
-      usb: misc: ehset: Rework test mode entry
-
-Rob Herring (6):
-      usb: ohci-spear: Remove direct access to platform_device resource list
-      usb: ohci-s3c2410: Use platform_get_irq() to get the interrupt
-      usb: uhci: Use platform_get_irq() to get the interrupt
-      usb: chipidea: Set the DT node on the child device
-      usb: musb: Drop unneeded resource copying
-      usb: musb: Set the DT node on the child device
-
-Saranya Gopal (1):
-      usb: typec: ucsi: Expose number of alternate modes in partner
-
-Sergey Shtylyov (4):
-      usb: gadget: udc: bcm63xx: propagate errors from platform_get_irq()
-      usb: gadget: udc: pxa25x: propagate errors from platform_get_irq()
-      usb: host: ehci-sh: propagate errors from platform_get_irq()
-      usb: host: ohci-omap: propagate errors from platform_get_irq()
-
-Shubhrajyoti Datta (1):
-      usb: xilinx: Add suspend resume support
-
-Thierry Reding (1):
-      dt-bindings: usb: tegra-xudc: Document interconnects and iommus properties
-
-Thinh Nguyen (4):
-      usb: dwc3: gadget: Skip checking Update Transfer status
-      usb: dwc3: gadget: Ignore Update Transfer cmd params
-      usb: dwc3: gadget: Skip reading GEVNTSIZn
-      usb: dwc3: gadget: Support Multi-Stream Transfer
-
-Vinod Koul (1):
-      dt-bindings: usb: qcom,dwc3: add binding for SM8450
-
-Wei Ming Chen (1):
-      usb: core: Fix file path that does not exist
-
-Wei Yongjun (1):
-      usb: ftdi-elan: fix memory leak on device disconnect
-
-Xiaoke Wang (1):
-      thunderbolt: Check return value of kmemdup() in icm_handle_event()
-
-Yang Yingliang (1):
-      usb: host: xen-hcd: add missing unlock in error path
-
-luo penghao (1):
-      usb-storage: Remove redundant assignments
-
- Documentation/ABI/testing/configfs-usb-gadget-uac1 |    2 +-
- Documentation/ABI/testing/configfs-usb-gadget-uac2 |    2 +
- Documentation/ABI/testing/sysfs-bus-usb            |    9 +
- Documentation/devicetree/bindings/usb/dwc2.yaml    |   13 +
- .../devicetree/bindings/usb/dwc3-xilinx.txt        |   56 -
- .../devicetree/bindings/usb/dwc3-xilinx.yaml       |  131 ++
- .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml |   13 +
- .../devicetree/bindings/usb/qcom,dwc3.yaml         |    4 +
- .../driver-api/usb/writing_usb_driver.rst          |   32 +-
- Documentation/usb/gadget-testing.rst               |    2 +-
- MAINTAINERS                                        |    8 +
- drivers/acpi/bus.c                                 |    1 +
- drivers/acpi/scan.c                                |   16 +
- drivers/thunderbolt/acpi.c                         |   15 +-
- drivers/thunderbolt/icm.c                          |    7 +-
- drivers/thunderbolt/lc.c                           |   24 +
- drivers/thunderbolt/path.c                         |   42 +-
- drivers/thunderbolt/retimer.c                      |   28 +-
- drivers/thunderbolt/switch.c                       |  493 +++++-
- drivers/thunderbolt/tb.c                           |   91 +-
- drivers/thunderbolt/tb.h                           |  106 +-
- drivers/thunderbolt/tb_msgs.h                      |   47 +-
- drivers/thunderbolt/tb_regs.h                      |  113 +-
- drivers/thunderbolt/tmu.c                          |  337 +++-
- drivers/thunderbolt/tunnel.c                       |   27 +-
- drivers/thunderbolt/tunnel.h                       |    9 +-
- drivers/thunderbolt/usb4.c                         |   52 +-
- drivers/thunderbolt/xdomain.c                      |   16 +-
- drivers/usb/cdns3/cdns3-plat.c                     |   14 +-
- drivers/usb/cdns3/cdnsp-gadget.c                   |    2 +-
- drivers/usb/cdns3/core.h                           |    6 +-
- drivers/usb/chipidea/core.c                        |    1 +
- drivers/usb/chipidea/otg.c                         |    5 +-
- drivers/usb/common/debug.c                         |    1 +
- drivers/usb/core/driver.c                          |    3 +-
- drivers/usb/core/generic.c                         |    2 +-
- drivers/usb/core/hcd.c                             |   11 +-
- drivers/usb/core/hub.c                             |   37 +-
- drivers/usb/core/port.c                            |   32 +
- drivers/usb/core/usb.c                             |   46 -
- drivers/usb/dwc2/core.h                            |    6 +-
- drivers/usb/dwc2/drd.c                             |   51 +-
- drivers/usb/dwc2/gadget.c                          |   17 +-
- drivers/usb/dwc2/hcd.c                             |    7 +-
- drivers/usb/dwc2/platform.c                        |   63 +-
- drivers/usb/dwc3/core.h                            |    9 +
- drivers/usb/dwc3/dwc3-meson-g12a.c                 |   17 +-
- drivers/usb/dwc3/dwc3-qcom.c                       |   15 +-
- drivers/usb/dwc3/gadget.c                          |   59 +-
- drivers/usb/dwc3/host.c                            |   45 +-
- drivers/usb/gadget/composite.c                     |   39 +-
- drivers/usb/gadget/configfs.c                      |   39 +-
- drivers/usb/gadget/function/f_fs.c                 |    4 +-
- drivers/usb/gadget/function/f_midi.c               |   48 +-
- drivers/usb/gadget/function/u_audio.c              |   28 +-
- drivers/usb/gadget/legacy/inode.c                  |   18 +-
- drivers/usb/gadget/udc/aspeed-vhub/dev.c           |   19 +-
- drivers/usb/gadget/udc/aspeed-vhub/ep0.c           |    7 +
- drivers/usb/gadget/udc/aspeed-vhub/hub.c           |   47 +-
- drivers/usb/gadget/udc/aspeed-vhub/vhub.h          |    1 +
- drivers/usb/gadget/udc/at91_udc.c                  |   67 +-
- drivers/usb/gadget/udc/at91_udc.h                  |    8 +-
- drivers/usb/gadget/udc/bcm63xx_udc.c               |    8 +-
- drivers/usb/gadget/udc/bdc/bdc_core.c              |    1 +
- drivers/usb/gadget/udc/mv_udc_core.c               |    4 +-
- drivers/usb/gadget/udc/pxa25x_udc.c                |    2 +-
- drivers/usb/gadget/udc/udc-xilinx.c                |   56 +
- drivers/usb/host/Kconfig                           |   11 +
- drivers/usb/host/Makefile                          |    1 +
- drivers/usb/host/ehci-brcm.c                       |    6 +-
- drivers/usb/host/fotg210-hcd.c                     |   11 +-
- drivers/usb/host/ohci-omap.c                       |    2 +-
- drivers/usb/host/ohci-s3c2410.c                    |   10 +-
- drivers/usb/host/ohci-spear.c                      |    2 +-
- drivers/usb/host/ohci-tmio.c                       |    5 -
- drivers/usb/host/u132-hcd.c                        |    1 -
- drivers/usb/host/uhci-platform.c                   |    9 +-
- drivers/usb/host/xen-hcd.c                         | 1609 ++++++++++++++++++++
- drivers/usb/host/xhci-mtk.c                        |   16 +-
- drivers/usb/host/xhci.c                            |    6 +-
- drivers/usb/isp1760/isp1760-if.c                   |   16 +-
- drivers/usb/misc/ehset.c                           |   58 +
- drivers/usb/misc/ftdi-elan.c                       |    1 +
- drivers/usb/musb/am35x.c                           |    2 +
- drivers/usb/musb/da8xx.c                           |   20 +-
- drivers/usb/musb/jz4740.c                          |    1 +
- drivers/usb/musb/mediatek.c                        |    2 +
- drivers/usb/musb/musb_dsps.c                       |   15 +-
- drivers/usb/musb/omap2430.c                        |   23 +-
- drivers/usb/musb/ux500.c                           |   18 +-
- drivers/usb/phy/phy-mv-usb.c                       |    5 +-
- drivers/usb/renesas_usbhs/common.c                 |   14 +-
- drivers/usb/renesas_usbhs/common.h                 |    1 -
- drivers/usb/renesas_usbhs/mod.c                    |   14 +-
- drivers/usb/storage/sierra_ms.c                    |    2 -
- drivers/usb/typec/Makefile                         |    3 +-
- drivers/usb/typec/class.c                          |    2 -
- drivers/usb/typec/class.h                          |   10 +-
- drivers/usb/typec/port-mapper.c                    |  279 +---
- drivers/usb/typec/ucsi/ucsi.c                      |   16 +-
- drivers/usb/usbip/usbip_event.c                    |    1 -
- include/acpi/acpi_bus.h                            |    1 +
- include/linux/usb.h                                |    9 -
- include/linux/usb/ch9.h                            |    3 +-
- include/linux/usb/typec.h                          |   12 -
- include/xen/interface/io/usbif.h                   |  405 +++++
- 106 files changed, 4185 insertions(+), 978 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
- create mode 100644 Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
- create mode 100644 drivers/usb/host/xen-hcd.c
- create mode 100644 include/xen/interface/io/usbif.h

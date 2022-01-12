@@ -2,96 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C468A48C948
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D9C48C944
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355551AbiALRYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 12:24:23 -0500
-Received: from gateway24.websitewelcome.com ([192.185.51.253]:27111 "EHLO
-        gateway24.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355577AbiALRYC (ORCPT
+        id S1349935AbiALRXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 12:23:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241052AbiALRXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 12:24:02 -0500
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id 0393A3B8B3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:24:00 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id 7hJvn5W2PRnrr7hJvnsSRj; Wed, 12 Jan 2022 11:21:59 -0600
-X-Authority-Reason: nr=8
-Received: from host-79-47-126-144.retail.telecomitalia.it ([79.47.126.144]:48572 helo=[10.0.0.88])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1n7hJu-004Oi8-Ht; Wed, 12 Jan 2022 11:21:58 -0600
-Message-ID: <76028ce8-b46b-b164-60b2-4a40f3872775@kernel.org>
-Date:   Wed, 12 Jan 2022 18:21:49 +0100
+        Wed, 12 Jan 2022 12:23:04 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1F9C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:23:04 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id i14so4622518ioj.12
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:23:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J/kXP8SqQiSR4LFSJtIEJPK0TG8hRH/GcTd8e3fRbjs=;
+        b=aqjAJjD5sEzzsSormxWUDg+xxR/nVVrhCqo5Bwox0k6u8BHFr4gzNOnQyR4SbJEBlU
+         xbVJGwuA4ZHNpMYQ1WZ22wAcLzZDoZTJnkRmAvqm6wEUniRPJjt4W1rvQin9zDna6Uf7
+         09FXzkX2W4SCyzfv2dWOvGG4pmAqH7MB5Q4D8XjRvA80FAzdaEuEQDSBySp5Qus87V1z
+         ivrJoRfkSDTTv/BPJcG2OnAHxzFIUDpmnttdoVyJvvz46vkcHeojzwXKMgQ21urLLBd/
+         Q5sgGLJz9jGF+4rkz+TF7KilSYEw26kZFoLRTVoZskHBZSEYLn/fTaRA+GRcYZ0H6V63
+         k92g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J/kXP8SqQiSR4LFSJtIEJPK0TG8hRH/GcTd8e3fRbjs=;
+        b=wMi5O95chkXnPEQ/CII/DJT67Az3prnT4rGq0cs3BQvH3Ys75hSEKt5LK5cskB/SQu
+         xgoOx2eZGwbSR2APBju+gGvpfyFgGAyafWTdnDwFRyQNw2SiiLM00ykhh8SFPccBK4My
+         TB1oEvY2qR/ApRpz9c5hv5pMXy91PxG7z3gjhSaGvI2l9eV338KLdbcb2/yRxPX8/C2B
+         0XMMgSM/zrOm/WvF2LvTG7CNnXMRCz3t7oOqtMsv+gkcpWo+X8N6pjxBGB13BVhUQzJZ
+         8ubVjEqCgDw44g3iRDC0w2mMkw8aSbRF19bp1Syc58fPd6pDx8hW9ukrRbttixmVSUjy
+         lcwA==
+X-Gm-Message-State: AOAM531taf6KRzGT/SvK2LPNuxpn2g7BvVd3ecDkbSiN1jqRHKobRnoo
+        M8s2/GggURSZL1J6+LxDOmLvchQeMpBoiWgruQrNmA==
+X-Google-Smtp-Source: ABdhPJw/NzKKgLkxmtrIipbWj99LyLr319P/VDc5fsuulsUImAm9BAUPdJp4oK6zjqvwsi9z2dk8Kvgekj5hYBQguKE=
+X-Received: by 2002:a02:22c9:: with SMTP id o192mr352411jao.287.1642008183379;
+ Wed, 12 Jan 2022 09:23:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [for-next][PATCH 16/31] rtla: Real-Time Linux Analysis tool
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tao Zhou <tao.zhou@linux.dev>, Ingo Molnar <mingo@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        John Kacur <jkacur@redhat.com>,
+References: <20211126071305.3733878-1-irogers@google.com>
+In-Reply-To: <20211126071305.3733878-1-irogers@google.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 12 Jan 2022 09:22:51 -0800
+Message-ID: <CAP-5=fU2kEq3T8UCpX0tAmwcGhZ+1h92uRPbzyuLDNpeCD7ffQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] perf pmu-events: Don't lower case MetricExpr
+To:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220111173030.999527342@goodmis.org>
- <20220111173116.190327559@goodmis.org>
- <5f04540c-273a-c4f2-692d-9de2f1495ba9@kernel.org>
- <20220112112159.742d258c@rorschach.local.home>
- <20220112113054.1be08f6c@rorschach.local.home>
- <20220112121426.2dde33c2@rorschach.local.home>
- <20220112121623.5b989f83@rorschach.local.home>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220112121623.5b989f83@rorschach.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 79.47.126.144
-X-Source-L: No
-X-Exim-ID: 1n7hJu-004Oi8-Ht
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-79-47-126-144.retail.telecomitalia.it ([10.0.0.88]) [79.47.126.144]:48572
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 1
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     eranian@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/22 18:16, Steven Rostedt wrote:
-> On Wed, 12 Jan 2022 12:14:26 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
->> And by making this mistake, I noticed something in doing the diff. You
->> put rtla into Documentation/tools. It should be in tools/ itself, not
->> the Documentation directory.
-> At least it use to be in tools/tracing/rtla, but this series has code
-> in Documentation/tools/rtla, was it not fully moved over?
+On Thu, Nov 25, 2021 at 11:13 PM Ian Rogers <irogers@google.com> wrote:
+>
+> This patch changes MetricExpr to be written out in the same case. This
+> enables events in metrics to use modifiers like 'G' which currently
+> yield parse errors when made lower case. To keep tests passing the
+> literal #smt_on is compared in a non-case sensitive way - #SMT_on is
+> present in at least SkylakeX metrics.
 
-The code is in tools/tracing/rtla/. The documentation is in
-Documentation/tools/rtla. It  was requested by Corbet in the v3 [1].
+Ping.
 
-Am I missing something?
+Thanks,
+Ian
 
-[1] https://lore.kernel.org/lkml/87tuhcsu0h.fsf@meer.lwn.net/
-
--- Daniel
+> This patch is on top of:
+> https://lore.kernel.org/lkml/20211124001231.3277836-1-irogers@google.com/
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/pmu-events/jevents.c | 2 --
+>  tools/perf/util/expr.c          | 2 +-
+>  2 files changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/pmu-events/jevents.c b/tools/perf/pmu-events/jevents.c
+> index 2e7c4153875b..1a57c3f81dd4 100644
+> --- a/tools/perf/pmu-events/jevents.c
+> +++ b/tools/perf/pmu-events/jevents.c
+> @@ -672,8 +672,6 @@ static int json_events(const char *fn,
+>                                 addfield(map, &je.metric_constraint, "", "", val);
+>                         } else if (json_streq(map, field, "MetricExpr")) {
+>                                 addfield(map, &je.metric_expr, "", "", val);
+> -                               for (s = je.metric_expr; *s; s++)
+> -                                       *s = tolower(*s);
+>                         } else if (json_streq(map, field, "ArchStdEvent")) {
+>                                 addfield(map, &arch_std, "", "", val);
+>                                 for (s = arch_std; *s; s++)
+> diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+> index cdbab4f959fe..5cd6b9ff2489 100644
+> --- a/tools/perf/util/expr.c
+> +++ b/tools/perf/util/expr.c
+> @@ -397,7 +397,7 @@ double expr__get_literal(const char *literal)
+>         static struct cpu_topology *topology;
+>         double result = NAN;
+>
+> -       if (!strcmp("#smt_on", literal)) {
+> +       if (!strcasecmp("#smt_on", literal)) {
+>                 result =  smt_on() > 0 ? 1.0 : 0.0;
+>                 goto out;
+>         }
+> --
+> 2.34.0.rc2.393.gf8c9666880-goog
+>

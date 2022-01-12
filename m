@@ -2,113 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED70748CE2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 23:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C0A48CE30
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 23:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234089AbiALWBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 17:01:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36000 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232804AbiALWA6 (ORCPT
+        id S234202AbiALWBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 17:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234083AbiALWBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 17:00:58 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C3ECB82141;
-        Wed, 12 Jan 2022 22:00:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C780DC36AE9;
-        Wed, 12 Jan 2022 22:00:54 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lr/xlBLC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1642024850;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x7iEe7IoxzS5LF9sUIO2C6nbsTbfn+EF6LhXMAOlaaE=;
-        b=lr/xlBLCZhYJYGE3l7rjBQs6lpPhxatKOJKXsHsFfWW3BhDx3vbC+FWBWLhVD95Lbk1THF
-        oSse5uLcPApKGTWPwssJ2FwtmJjFGDvACZbzrZlCO4liAvC4eQxuEuVrLVB2jAb8cYgDlJ
-        DrO8bK6NuGXBT8OcmyHrGhlAr4ooSIo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 92028de6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 12 Jan 2022 22:00:50 +0000 (UTC)
-Received: by mail-yb1-f171.google.com with SMTP id d7so9581607ybo.5;
-        Wed, 12 Jan 2022 14:00:49 -0800 (PST)
-X-Gm-Message-State: AOAM530Fc3zhdBtk60l6Yed4ldWjjRgJhjAHlXwXT98ANN7NZdM/LE4i
-        I0+qYylS8zYedz6Fb+/u2tn3747HpRTJzff8/H4=
-X-Google-Smtp-Source: ABdhPJxpRMesfcwVP3cDFwxhtrXE3cWVaFTB1pgeIm7wgCjUmTGJYn0+LmHJIWiD1lpG6RAGzWa6tkk4ceurJUL7qr0=
-X-Received: by 2002:a25:8c4:: with SMTP id 187mr2224483ybi.245.1642024848755;
- Wed, 12 Jan 2022 14:00:48 -0800 (PST)
+        Wed, 12 Jan 2022 17:01:06 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEFEC061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 14:01:06 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso4198117otf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 14:01:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=iDJDLZqw5nv9QVwGnsBVKxZyO7G5hSL4+2etn9Bv6Go=;
+        b=a1N1BaLxxFZpzGFDluM1OOLYe9nqcZfzbiT8QO8HXMHHMAXl8pAAifZHrowg1kXXTQ
+         zQJnGHTyFMFWOBSo0nGUsmUVCc3oBLCDAPqMjy5G/zC19DtkzGYCb6rE80YwHanN8fXi
+         yC5mQCPGOcKaXDqML0s41KBnLzWdb0mbPyIho=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=iDJDLZqw5nv9QVwGnsBVKxZyO7G5hSL4+2etn9Bv6Go=;
+        b=zkosEcF4lFEa2sANMqq97zBJbYtKT0GukEW6H2d3RJZhUtnSh4P8aHg/D9yAtL5gAi
+         GsZdCagww+WBwl3J7456BhII5Qd6vUKPL5z5iVvMLobxSiqpberbJ2UgrssWg8nrIYUF
+         MBIgXHmNCDvNwXI8qZTEF6Xg4WsrwuQx6qk/8fgtYZKrXykwWiq7/NGd91WMl3MMadWH
+         3bcW+Qq/iKAu0af6WECI/JRB3OSWxMmK5Xy0FwnfawPT93Gv7a9wXAweXL/7w/rd/L+6
+         a1Fpf1gCwUiMjUlCCI1MzF1YHr+tNesoof60dqr14nZXzpA3RFATs/72g+UdWMs8gKOt
+         9T/Q==
+X-Gm-Message-State: AOAM533c9e5lPkql/9d6rSsP+OR2Jv/RK0qYreGKWl7V6GpoUbc12bxQ
+        55MDUZ6y4fXNAwOGWlItDxRkFNvplVRLYXSaGLMzLA==
+X-Google-Smtp-Source: ABdhPJzQLSAKbBUW+wiQF4THmbYAT7bPbn5M3SmifRqFgAKnUpZtQQfng5QPQJOIEMUOIxWmAXz6jopofhs+LCriqLM=
+X-Received: by 2002:a9d:7451:: with SMTP id p17mr1191775otk.159.1642024865576;
+ Wed, 12 Jan 2022 14:01:05 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 12 Jan 2022 14:01:05 -0800
 MIME-Version: 1.0
-Received: by 2002:a05:7110:209:b0:11c:1b85:d007 with HTTP; Wed, 12 Jan 2022
- 14:00:48 -0800 (PST)
-In-Reply-To: <d7e206a5a03d46a69c0be3b8ed651518@AcuMS.aculab.com>
-References: <CAHmME9qbnYmhvsuarButi6s=58=FPiti0Z-QnGMJ=OsMzy1eOg@mail.gmail.com>
- <20220111134934.324663-1-Jason@zx2c4.com> <20220111134934.324663-2-Jason@zx2c4.com>
- <Yd8enQTocuCSQVkT@gmail.com> <CAHmME9qGs8yfYy0GVcV8XaUt9cjCqQF2D79RvrsQE+CNLCeojA@mail.gmail.com>
- <d7e206a5a03d46a69c0be3b8ed651518@AcuMS.aculab.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 12 Jan 2022 23:00:48 +0100
-X-Gmail-Original-Message-ID: <CAHmME9p-JZS480-e3MvPsa1Q07rqX79h8oNEZsF970GjT-_nqA@mail.gmail.com>
-Message-ID: <CAHmME9p-JZS480-e3MvPsa1Q07rqX79h8oNEZsF970GjT-_nqA@mail.gmail.com>
-Subject: Re: [PATCH crypto 1/2] lib/crypto: blake2s-generic: reduce code size
- on small systems
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        WireGuard mailing list <wireguard@lists.zx2c4.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
+In-Reply-To: <20220112111028.v19.1.I08fd2e1c775af04f663730e9fb4d00e6bbb38541@changeid>
+References: <20220112191048.837236-1-mka@chromium.org> <20220112111028.v19.1.I08fd2e1c775af04f663730e9fb4d00e6bbb38541@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Wed, 12 Jan 2022 14:01:05 -0800
+Message-ID: <CAE-0n53_XT-b2AJsF6E4dMaLgygkuZDdL=c5UYWEe_ceoPh4SQ@mail.gmail.com>
+Subject: Re: [PATCH v19 1/5] of/platform: Add stubs for of_platform_device_create/destroy()
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Felipe Balbi <balbi@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        linux-usb@vger.kernel.org, Roger Quadros <rogerq@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-
-On 1/12/22, David Laight <David.Laight@aculab.com> wrote:
-> I think you mentioned in another thread that the buffers (eg for IPv6
-> addresses) are actually often quite short.
+Quoting Matthias Kaehlcke (2022-01-12 11:10:44)
+> Code for platform_device_create() and of_platform_device_destroy() is
+> only generated if CONFIG_OF_ADDRESS=y. Add stubs to avoid unresolved
+> symbols when CONFIG_OF_ADDRESS is not set.
 >
-> For short buffers the 'rolled-up' loop may be of similar performance
-> to the unrolled one because of the time taken to read all the instructions
-> into the I-cache and decode them.
-> If the loop ends up small enough it will fit into the 'decoded loop
-> buffer' of modern Intel x86 cpu and won't even need decoding on
-> each iteration.
->
-> I really suspect that the heavily unrolled loop is only really fast
-> for big buffers and/or when it is already in the I-cache.
-> In real life I wonder how often that actually happens?
-> Especially for the uses the kernel is making of the code.
->
-> You need to benchmark single executions of the function
-> (doable on x86 with the performance monitor cycle counter)
-> to get typical/best clocks/byte figures rather than a
-> big average for repeated operation on a long buffer.
->
-> 	David
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
 
-This patch has been dropped entirely from future revisions. The latest
-as of writing is at:
-
-https://lore.kernel.org/linux-crypto/20220111220506.742067-1-Jason@zx2c4.com/
-
-If you'd like to do something with blake2s, by all means submit a
-patch and include various rationale and metrics and benchmarks. I do
-not intend to do that myself and do not think my particular patch here
-should be merged. But if you'd like to do something, feel free to CC
-me for a review. However, as mentioned, I don't think much needs to be
-done here.
-
-Again, v3 is here:
-https://lore.kernel.org/linux-crypto/20220111220506.742067-1-Jason@zx2c4.com/
-
-Thanks,
-Jason
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

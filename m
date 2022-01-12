@@ -2,149 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF1A48C8D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 108CC48C8DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355366AbiALQx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:53:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244049AbiALQx5 (ORCPT
+        id S1355386AbiALQyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:54:05 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:42288 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244049AbiALQyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:53:57 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25152C06173F;
-        Wed, 12 Jan 2022 08:53:57 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso3228340wmj.0;
-        Wed, 12 Jan 2022 08:53:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CmDqim83S7smzzgFZYQWzZX82mxSbacYZtG0Bvj74CE=;
-        b=Gooqz3pGE2xIZxIbIGJQLrIRjMArFhSLcIUWoQhBsOBmW3e6PZatoyF5z2wG0PUGFa
-         CLu0xfko08vECly+rrW1caHq9cUkCoBLK4sZ7Nmv3/akl398RmOa7WOCqEQmsiUodE7m
-         ZZ01UnVnq6Gn45kOTPR/RIHBRXuQW5UOhmvYMH9JRSW6UdEA61wf6OnFKIwwRiEXs4bf
-         78yOnQBWP2v9FA7VC2T23ZEc+o3q3zBj8On2aOzEha/F7w6mWTKLa6eJ4ApadYnA8Lpk
-         SV0niXyNoamldwV8nYStwUh8lOaCbr1oyp9uknXYLsUk+I92IvzcNAPJaP2D6eNVJd3X
-         hMZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CmDqim83S7smzzgFZYQWzZX82mxSbacYZtG0Bvj74CE=;
-        b=BrhUC1gcnZC5JnBq8dRj0b+EzxHDjH7iKcjjUSGlvPE0Mz2cdomZ1vI4yS5r2iWcXe
-         qD7VTG88CVwKjYdwUzajTplg6TyY2SVzonFLrKS0zJe/m5KW9Jr6Fqm07L5VvbG65cDh
-         76srvJWLW6yknZNbLv9bwqe2IZxBE3Bkl9osAX4847GZnBskOqnpi/pWA951ECTmhpOY
-         9JJ6hXPIXk+tEklBwrFbLoc6e6Rs6VM88Bkpf/LLplMBWX5yeO2dsa9i1oGz1TVLLfgY
-         /2UtwFmO5lkilDyp4hv37IKVcqgnvKPVr1payyTGQKwyK3saUSc/0SQEiicORQ23giHV
-         0G8A==
-X-Gm-Message-State: AOAM530BG/fNHUlZsocnj2MxSVrngQDYACdV7kSWPH8ccyEgEyQWhHrY
-        rDFjDjD/pJ6Z6ezjmOvi020=
-X-Google-Smtp-Source: ABdhPJzEx82qM4/HY7q08tCkRCENMDysIpj+x69sPQaBHYvrmCKcp+8FVgnGuprjzwwhBjMa+VHEYA==
-X-Received: by 2002:a05:600c:190c:: with SMTP id j12mr328180wmq.166.1642006435674;
-        Wed, 12 Jan 2022 08:53:55 -0800 (PST)
-Received: from [192.168.8.198] ([148.252.129.73])
-        by smtp.gmail.com with ESMTPSA id j8sm69412wms.46.2022.01.12.08.53.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 08:53:55 -0800 (PST)
-Message-ID: <9701c478-6815-74c7-eedd-9a2f02458b35@gmail.com>
-Date:   Wed, 12 Jan 2022 16:53:06 +0000
+        Wed, 12 Jan 2022 11:54:02 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 041391F3A3;
+        Wed, 12 Jan 2022 16:54:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642006440; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UlUXwhz5IgifMhCXTxIB0eJXkNvd51PGEd132obgUBM=;
+        b=Tj12U0yEKazKvlgKPCg4i2/GRE9ioMuLOlUekHY2+lygso0kKTeGZHQJ81hlJdavgJyN7v
+        LBWtJFHnvvbYoUfi+VKpAi8GdY3lJbV1Q6YfPzun1caBg7QjACzmPP/B+9WLMRSyMy5bCR
+        8wgX92bPc1ryW7ohVEZWY48psnWhwlI=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9D218A3B84;
+        Wed, 12 Jan 2022 16:53:59 +0000 (UTC)
+Date:   Wed, 12 Jan 2022 17:53:56 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     mcgrof@kernel.org, cl@linux.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com, allen.lkml@gmail.com,
+        live-patching@vger.kernel.org
+Subject: Re: [RFC PATCH v2 03/13] module: Move livepatch support to a
+ separate file
+Message-ID: <Yd8HpK44aWhhNI/Q@alley>
+References: <20220106234319.2067842-1-atomlin@redhat.com>
+ <20220106234319.2067842-4-atomlin@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC v2 02/19] skbuff: pass a struct ubuf_info in msghdr
-Content-Language: en-US
-To:     Hao Xu <haoxu@linux.alibaba.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
-References: <cover.1640029579.git.asml.silence@gmail.com>
- <7dae2f61ee9a1ad38822870764fcafad43a3fe4e.1640029579.git.asml.silence@gmail.com>
- <fd376342-13e2-4ce9-074a-f6b3da69be3b@linux.alibaba.com>
- <4bc0e57b-ee3b-ae77-5d5d-213a48bdf4b0@gmail.com>
- <cf5eb67e-05dc-3b8d-3e61-ddf9a9706265@linux.alibaba.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <cf5eb67e-05dc-3b8d-3e61-ddf9a9706265@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220106234319.2067842-4-atomlin@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/22 03:39, Hao Xu wrote:
-> 在 2022/1/11 下午11:50, Pavel Begunkov 写道:
->> On 1/11/22 13:51, Hao Xu wrote:
->>> 在 2021/12/21 下午11:35, Pavel Begunkov 写道:
->>>> Instead of the net stack managing ubuf_info, allow to pass it in from
->>>> outside in a struct msghdr (in-kernel structure), so io_uring can make
->>>> use of it.
->>>>
->>>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->>>> ---
->>> Hi Pavel,
->>> I've some confusions here since I have a lack of
->>> network knowledge.
->>> The first one is why do we make ubuf_info visible
->>> for io_uring. Why not just follow the old MSG_ZEROCOPY
->>> logic?
->>
->> I assume you mean leaving allocation up and so in socket awhile the
->> patchset let's io_uring to manage and control ubufs. In short,
->> performance and out convenience
->>
->> TL;DR;
->> First, we want a nice and uniform API with io_uring, i.e. posting
->> an CQE instead of polling an err queue/etc., and for that the network
->> will need to know about io_uring ctx in some way. As an alternative it
->> may theoretically be registered in socket, but it'll quickly turn into
->> a huge mess, consider that it's a many to many relation b/w io_uring and
->> sockets. The fact that io_uring holds refs to files will only complicate
->> it.
-> Make sense to me, thanks.
->>
->> It will also limit API. For instance, we won't be able to use a single
->> ubuf with several different sockets.
-> Is there any use cases for this multiple sockets with single
-> notification?
+On Thu 2022-01-06 23:43:09, Aaron Tomlin wrote:
+> No functional change.
+> 
+> This patch migrates livepatch support (i.e. used during module
+> add/or load and remove/or deletion) from core module code into
+> kernel/module/livepatch.c. At the moment it contains code to
+> persist Elf information about a given livepatch module, only.
+> 
+> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> ---
+>  kernel/module/Makefile    |  1 +
+>  kernel/module/internal.h  | 12 ++++++
+>  kernel/module/livepatch.c | 75 +++++++++++++++++++++++++++++++++
+>  kernel/module/main.c      | 89 +--------------------------------------
+>  4 files changed, 89 insertions(+), 88 deletions(-)
+>  create mode 100644 kernel/module/livepatch.c
+> 
+> diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+> index a9cf6e822075..47d70bb18da3 100644
+> --- a/kernel/module/Makefile
+> +++ b/kernel/module/Makefile
+> @@ -6,3 +6,4 @@
+>  obj-$(CONFIG_MODULES) += main.o
+>  obj-$(CONFIG_MODULE_SIG) += signing.o
+>  obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
+> +obj-$(CONFIG_LIVEPATCH) += livepatch.o
+> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+> index ffc50df010a7..91ef152aeffb 100644
+> --- a/kernel/module/internal.h
+> +++ b/kernel/module/internal.h
+> @@ -51,3 +51,15 @@ struct load_info {
+>  };
+>  
+>  extern int mod_verify_sig(const void *mod, struct load_info *info);
+> +
+> +#ifdef CONFIG_LIVEPATCH
+> +extern int copy_module_elf(struct module *mod, struct load_info *info);
+> +extern void free_module_elf(struct module *mod);
+> +extern int check_modinfo_livepatch(struct module *mod, struct load_info *info);
+> +#else /* !CONFIG_LIVEPATCH */
+> +static inline int copy_module_elf(struct module *mod, struct load_info *info)
+> +{
+> +	return 0;
+> +}
+> +static inline void free_module_elf(struct module *mod) { }
 
-Don't know, scatter send maybe? It's just one of those moments when
-a design that feels right (to me) yields more flexibility than was
-initially planned, which is definitely a good thing
+It looks like there is no check_modinfo_livepatch() variant when
+CONFIG_LIPATCH is disabled.
+
+> +#endif /* CONFIG_LIVEPATCH */
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 2a6b859716c0..9bcaf251e109 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3052,19 +2977,7 @@ static int copy_chunked_from_user(void *dst, const void __user *usrc, unsigned l
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_LIVEPATCH
+> -static int check_modinfo_livepatch(struct module *mod, struct load_info *info)
+> -{
+> -	if (get_modinfo(info, "livepatch")) {
+> -		mod->klp = true;
+> -		add_taint_module(mod, TAINT_LIVEPATCH, LOCKDEP_STILL_OK);
+> -		pr_notice_once("%s: tainting kernel with TAINT_LIVEPATCH\n",
+> -			       mod->name);
+ > -	}
+> -
+> -	return 0;
+> -}
+> -#else /* !CONFIG_LIVEPATCH */
+> +#ifndef CONFIG_LIVEPATCH
+>  static int check_modinfo_livepatch(struct module *mod, struct load_info *info)
+>  {
+>  	if (get_modinfo(info, "livepatch")) {
+
+But it exist here.
+
+It would be better to have the two variants close each other. I mean
+to have it somewhere like:
+
+#ifdef CONFIG_LIVEPATCH
+
+   variant A
+
+#else
+
+   variant B
+
+#endif
 
 
->> Another problem is performance, registration or some other tricks
->> would some additional sync. It'd also need sync on use, say it's
->> just one rcu_read, but the problem that it only adds up to complexity
->> and prevents some other optimisations. E.g. we amortise to ~0 atomics
->> getting refs on skb setups based on guarantees io_uring provides, and
->> not only. SKBFL_MANAGED_FRAGS can only work with pages being controlled
->> by the issuer, and so it needs some context as currently provided by
->> ubuf. io_uring also caches ubufs, which relies on io_uring locking, so
->> it removes kmalloc/free for almost zero overhead.
->>
->>
->>> The second one, my understanding about the buffer
->>> lifecycle is that the kernel side informs
->>> the userspace by a cqe generated by the ubuf_info
->>> callback that all the buffers attaching to the
->>> same notifier is now free to use when all the data
->>> is sent, then why is the flush in 13/19 needed as
->>> it is at the submission period?
->>
->> Probably I wasn't clear enough. A user has to flush a notifier, only
->> then it's expected to post an CQE after all buffers attached to it
->> are freed. io_uring holds one ubuf ref, which will be release on flush.
-> I see, I saw another ref inc in skb_zcopy_set() which I previously
-> misunderstood and thus thought there was only one refcount. Thanks!
->> I also need to add a way to flush without send.
->>
->> Will spend some time documenting for next iteration.
+A solution would be to do it a similar way like in
+check_modinfo_retpoline(). Have a generic:
 
--- 
-Pavel Begunkov
+static int check_modinfo_livepatch(struct module *mod, struct load_info *info)
+{
+	if (!get_modinfo(info, "livepatch"))
+		return 0;
+
+	if (set_livepatch_module(mod)) {
+		add_taint_module(mod, TAINT_LIVEPATCH, LOCKDEP_STILL_OK);
+		pr_notice_once("%s: tainting kernel with TAINT_LIVEPATCH\n",
+			       mod->name);
+		return 0;
+       }
+
+       pr_err("%s: module is marked as livepatch module, but livepatch support is disabled",
+	       mod->name);
+       return -ENOEXEC;
+}
+
+, where set_livepatch_module(mod) might be defined inline
+similar way like is_livepatch_module():
+
+#ifdef CONFIG_LIVEPATCH
+static inline bool set_livepatch_module(struct module *mod)
+{
+	mod->klp = true;
+	return true;
+}
+#else /* !CONFIG_LIVEPATCH */
+static inline bool set_livepatch_module(struct module *mod)
+{
+	return false;
+}
+#endif /* CONFIG_LIVEPATCH */
+
+
+Well, it might be matter of taste. Others might prefer another solution.
+Adding live-patching mailing list into Cc.
+
+Anyway, if we do any code refactoring, we should do it in a separate
+preparatory patch.
+
+Best Regards,
+Petr

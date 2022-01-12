@@ -2,164 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 161B348C0D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7698B48C0DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351997AbiALJRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 04:17:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50612 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238051AbiALJRx (ORCPT
+        id S1352003AbiALJTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 04:19:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58970 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238432AbiALJTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:17:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641979072;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e0KOzwrUqCbQH/o01fWrMq8CbrmFNeed7/005+0tTSM=;
-        b=H59MAF8k/pVuuEPySGSp8cyqmuVoDAH4//yDHVVy8EQeNlH7NCcRSPbqbyK0CggISTdfEI
-        leRKYNF2fM5kh3qYtYZ/On6GZVH90syIE8wToW3wMXoh4HeUECO9RKRWGQHlqjUh0UdP1o
-        6LhPbzvD0myQ8sfbimckFOAh+uPuH7M=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-Z8eCPqBmMeufg8GdZRWPIg-1; Wed, 12 Jan 2022 04:17:51 -0500
-X-MC-Unique: Z8eCPqBmMeufg8GdZRWPIg-1
-Received: by mail-ed1-f70.google.com with SMTP id z9-20020a05640240c900b003fea688a17eso1711578edb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 01:17:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=e0KOzwrUqCbQH/o01fWrMq8CbrmFNeed7/005+0tTSM=;
-        b=41GP4buNq7aa+ImzRB/tVjPW8DUZhHkezBYLNylY8JsY4t+00QJWtXP9z5+vE/fcbV
-         U1kR+ovZGLFA0hpylywszqTqGj92SDQ79cDEsl2nGdzLsDhiv+kienyCiUhyXnCgHOMa
-         ZtzLBxMTnkeVtcTCknSMP8YPFmSdZZtFoKB0mbFXx06vkVIQyr1dzN5lby8ACnuQXb5Q
-         JfikQEq/Qbaac1bkiRq7qY1+6/c5JPoWazb0UsJnFdM+9E1JLMI03f1i23EIefkNvYcG
-         BGVbajou+H4yKgXKNjMa0H8YFWvvphX0xzQCE8I1FVtDJ9QUzFW8fSSp0Y4Yz6NKrBBK
-         HB1Q==
-X-Gm-Message-State: AOAM532AjNx3rry/ZIkR45Wz9rFqrorE8bwvDjXirj6SH4NP0N3OxibH
-        I9thtNHl3YEoSdTXKQ7riFri3q4wiePJGOrmFDNSsdKZOBCS2rIFtz60UkBbN+nWvCodX8c5ebS
-        p3Dn2EEQ5hqYtDT8Ac9ilGXY3
-X-Received: by 2002:a17:907:3f0c:: with SMTP id hq12mr6821389ejc.358.1641979069881;
-        Wed, 12 Jan 2022 01:17:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzOD9iPR7HXlJWokCcL1fccdXMM8E7I6wuS9gOcKt0Yc+oOkHcqTjYDlSTOto/CciTFEAMyvw==
-X-Received: by 2002:a17:907:3f0c:: with SMTP id hq12mr6821377ejc.358.1641979069698;
-        Wed, 12 Jan 2022 01:17:49 -0800 (PST)
-Received: from ?IPV6:2003:cb:c702:4700:e25f:39eb:3cb8:1dec? (p200300cbc7024700e25f39eb3cb81dec.dip0.t-ipconnect.de. [2003:cb:c702:4700:e25f:39eb:3cb8:1dec])
-        by smtp.gmail.com with ESMTPSA id i22sm4360577ejw.75.2022.01.12.01.17.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 01:17:49 -0800 (PST)
-Message-ID: <af52b95b-dab3-a5d5-0e31-f7e91b16e556@redhat.com>
-Date:   Wed, 12 Jan 2022 10:17:48 +0100
+        Wed, 12 Jan 2022 04:19:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95DE6B81DDD;
+        Wed, 12 Jan 2022 09:19:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C2BC36AE9;
+        Wed, 12 Jan 2022 09:19:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641979142;
+        bh=RO6US7dUIfZ18yXvjEkA9PpLQg7tR79xX51uEs/Oz+M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ziPoyrEmgRCDpvQ60gNQDVTsgddVhzBhAx0Yp28kKJ+REV0sEu4O5uo1zVoJBB75J
+         XJHBUo6pGqq0ZveN6sU/NqPvF9hqzOlBdT4VvsD3/EIlQSlWrLu+OTWVqc3iYQgB8S
+         F+HdHJHfxqEBoXv9ll32azMzEoVC6s9egRMZYvOM=
+Date:   Wed, 12 Jan 2022 10:18:57 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4.4 00/14] 4.4.299-rc1 review
+Message-ID: <Yd6dAUs4lKe/pilm@kroah.com>
+References: <20220110071811.779189823@linuxfoundation.org>
+ <20220111113439.GA11620@duo.ucw.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] mm/thp: Drop unused trace events
- hugepage_[invalidate|splitting]
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        linux-kernel@vger.kernel.org
-References: <1641546351-15109-1-git-send-email-anshuman.khandual@arm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <1641546351-15109-1-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220111113439.GA11620@duo.ucw.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.01.22 10:05, Anshuman Khandual wrote:
-> The trace events hugepage_[invalidate|splitting], were added via the commit
-> 9e813308a5c1 ("powerpc/thp: Add tracepoints to track hugepage invalidate").
-> Afterwards their call sites i.e trace_hugepage_[invalidate|splitting] were
-> just dropped off, leaving these trace points unused.
+On Tue, Jan 11, 2022 at 12:34:39PM +0100, Pavel Machek wrote:
+> Hi!
 > 
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-> Cc: Kirill A. Shutemov <kirill@shutemov.name>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
-> This applies on v5.16-rc8
+> > This is the start of the stable review cycle for the 4.4.299 release.
+> > There are 14 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
 > 
-> trace_hugepage_splitting() dropped via the commit 7aa9a23c69ea
-> trace_hugepage_invalidate() dropped via the commit 7900757ce1b4
+> CIP testing did not find any problems here:
 > 
->  include/trace/events/thp.h | 36 ------------------------------------
->  1 file changed, 36 deletions(-)
+> https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-4.4.y
 > 
-> diff --git a/include/trace/events/thp.h b/include/trace/events/thp.h
-> index d7fbbe551841..ffa4b37d02a9 100644
-> --- a/include/trace/events/thp.h
-> +++ b/include/trace/events/thp.h
-> @@ -8,24 +8,6 @@
->  #include <linux/types.h>
->  #include <linux/tracepoint.h>
->  
-> -TRACE_EVENT(hugepage_invalidate,
-> -
-> -	    TP_PROTO(unsigned long addr, unsigned long pte),
-> -	    TP_ARGS(addr, pte),
-> -	    TP_STRUCT__entry(
-> -		    __field(unsigned long, addr)
-> -		    __field(unsigned long, pte)
-> -		    ),
-> -
-> -	    TP_fast_assign(
-> -		    __entry->addr = addr;
-> -		    __entry->pte = pte;
-> -		    ),
-> -
-> -	    TP_printk("hugepage invalidate at addr 0x%lx and pte = 0x%lx",
-> -		      __entry->addr, __entry->pte)
-> -);
-> -
->  TRACE_EVENT(hugepage_set_pmd,
->  
->  	    TP_PROTO(unsigned long addr, unsigned long pmd),
-> @@ -65,24 +47,6 @@ TRACE_EVENT(hugepage_update,
->  
->  	    TP_printk("hugepage update at addr 0x%lx and pte = 0x%lx clr = 0x%lx, set = 0x%lx", __entry->addr, __entry->pte, __entry->clr, __entry->set)
->  );
-> -TRACE_EVENT(hugepage_splitting,
-> -
-> -	    TP_PROTO(unsigned long addr, unsigned long pte),
-> -	    TP_ARGS(addr, pte),
-> -	    TP_STRUCT__entry(
-> -		    __field(unsigned long, addr)
-> -		    __field(unsigned long, pte)
-> -		    ),
-> -
-> -	    TP_fast_assign(
-> -		    __entry->addr = addr;
-> -		    __entry->pte = pte;
-> -		    ),
-> -
-> -	    TP_printk("hugepage splitting at addr 0x%lx and pte = 0x%lx",
-> -		      __entry->addr, __entry->pte)
-> -);
-> -
->  #endif /* _TRACE_THP_H */
->  
->  /* This part must be outside protection */
+> Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+> 
+> Best regards,
+>                                                                 Pavel
+> 
+> -- 
+> DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+> HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
 
--- 
-Thanks,
 
-David / dhildenb
+Thank you for testing and letting me know.
 
+greg k-h

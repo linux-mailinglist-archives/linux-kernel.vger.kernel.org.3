@@ -2,93 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A138248BFF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4007F48BFF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351631AbiALIcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:32:19 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:59394 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238074AbiALIcR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:32:17 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowADHzQH9kd5hTlcSBg--.19832S2;
-        Wed, 12 Jan 2022 16:31:57 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     adrian.hunter@intel.com, ulf.hansson@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] mmc: sdhci-of-esdhc: Check for error num after setting mask
-Date:   Wed, 12 Jan 2022 16:31:56 +0800
-Message-Id: <20220112083156.1124782-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1351634AbiALIdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349403AbiALIdp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 03:33:45 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A391C061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:33:45 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id l25so2699645wrb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:33:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=L9IwQQiFv4F/PhynVJYSv5Kyc4QAGDJohE6u03AkZCY=;
+        b=ykU5ZOUHvLq9H1hXJszUCoCrw8lfvWNcahYrIkAKp6JFkivyVZxKNdH9eQ85FGazOy
+         gpwM1M4vXuWc4igtNKWSSb1oRtLO8Yvr1lTqcBJNGH31SvVM9ADxNx3SNLDoGxw07WK9
+         dODBae7RBmpAE8JakS15tZUXb/Re85JA3MkQTZ2fAC6LS5sTuH1eoqYX8ka99EW4X6PR
+         9KqQpTmxxw9t95YlEbE+WR4a57enObcr/Ssyi1LCrYg48AAodx1ec6IuRD5abA48hkrx
+         MoVhc/o9XpGyrRGzW6LflkufCw+oOm/nBGghLbtmnVWdzVTZ/AZ/BdWzCt6+prPsfg9N
+         cqIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=L9IwQQiFv4F/PhynVJYSv5Kyc4QAGDJohE6u03AkZCY=;
+        b=GlCg7a1eHQa8gnegfNc6m8Y9SIkSC+DTXpdZINxXHsFsHLD/ddvIc3XOotiGLpUJ1x
+         Re8O6XMV2l07DhVfaNotBQHy0H5nnY3I1Ki5VhN0NT35SXXb4Yk8apVDkK1GztpSq0w/
+         aRsq7FG5r1eydzB+zYX53W+mxbFCi/zD7mOkUvTgkWvT8aQf3DTgu6XHKZRjE20sfrPT
+         jDEQuqQpELznUmeMkE86Hpcvy+bWDxML9sD8k4B/SXLjoFVP9KbOabGYtOkbeb+HvgDV
+         0s+C1eZk+uWtDQMzUxsqe0gtav7acvlqyZGkn5Ph+niLArbYu5FvVexmDwlKlB+7T8m6
+         L8ew==
+X-Gm-Message-State: AOAM532Q+oY6EY+X81SmKvYyaxggXq7U3QbBEZ0gopI4I+P/+sn1abRf
+        bVmJodf6xIBtpeyqCAozdPkuECZZS8UMTw==
+X-Google-Smtp-Source: ABdhPJyLeEQevgBuRP9or53vy/ZSxJEEVj0xCH5CX4telS7LvKnJ9CXi9LMJI9Y/jfyPrt/P/UuRqQ==
+X-Received: by 2002:adf:d4cd:: with SMTP id w13mr7005412wrk.506.1641976423144;
+        Wed, 12 Jan 2022 00:33:43 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:381b:6e50:a892:5269? ([2001:861:44c0:66c0:381b:6e50:a892:5269])
+        by smtp.gmail.com with ESMTPSA id l6sm3662645wmq.22.2022.01.12.00.33.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 00:33:42 -0800 (PST)
+Subject: Re: [PATCH 3/3] arm64: dts: meson-g12-common: add uart_ao_b pins
+ muxing
+To:     Gary Bisson <gary.bisson@boundarydevices.com>,
+        linux-amlogic@lists.infradead.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220103154616.308376-1-gary.bisson@boundarydevices.com>
+ <20220103154616.308376-4-gary.bisson@boundarydevices.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <fe58c139-f127-d102-a6a6-b8c2151aac20@baylibre.com>
+Date:   Wed, 12 Jan 2022 09:33:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowADHzQH9kd5hTlcSBg--.19832S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uw4UJr1ktFWxCF1rJFWxtFb_yoW8Wr17pa
-        1rWFyFkrWfJr1ru39av3WUZFyYqw1ktFWrt3y7Wan2v343JryjqFyxAFyjvF1kJFyrtw1f
-        XFWjyr1ru3y8J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFyl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUepBTUUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+In-Reply-To: <20220103154616.308376-4-gary.bisson@boundarydevices.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
-And since the sdhci_setup_host() has already checked the return value of
-the enable_dma, we need not check it in sdhci_resume_host() again.
+Hi,
 
-Fixes: 5552d7ad596c ("mmc: sdhci-of-esdhc: set proper dma mask for ls104x chips")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog
+On 03/01/2022 16:46, Gary Bisson wrote:
+> - RX/TX signals can be mapped on 2 different pairs of pins so supporting
+>   both options
+> - RTS/CTS signals however only have 1 option available
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>  .../boot/dts/amlogic/meson-g12-common.dtsi    | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+> index af1357c48bee..3a7773ffbd08 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+> @@ -1952,6 +1952,33 @@ mux {
+>  						};
+>  					};
+>  
+> +					uart_ao_b_1_pins: uart-ao-b-1 {
+> +						mux {
+> +							groups = "uart_ao_b_tx_2",
+> +								 "uart_ao_b_rx_3";
+> +							function = "uart_ao_b";
+> +							bias-disable;
+> +						};
+> +					};
+> +
+> +					uart_ao_b_2_pins: uart-ao-b-2 {
+> +						mux {
+> +							groups = "uart_ao_b_tx_8",
+> +								 "uart_ao_b_rx_9";
+> +							function = "uart_ao_b";
+> +							bias-disable;
+> +						};
+> +					};
 
-v1 -> v2
+I'm not fan of these nodes namings.
 
-* Change 1. Remove the change of esdhc_of_resume and refine the commit
-* message.
----
- drivers/mmc/host/sdhci-of-esdhc.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Perhaps :
+- uart-ao-b-2-3
+- uart-ao-b-8-9
 
-diff --git a/drivers/mmc/host/sdhci-of-esdhc.c b/drivers/mmc/host/sdhci-of-esdhc.c
-index a593b1fbd69e..0f3658b36513 100644
---- a/drivers/mmc/host/sdhci-of-esdhc.c
-+++ b/drivers/mmc/host/sdhci-of-esdhc.c
-@@ -524,12 +524,16 @@ static void esdhc_of_adma_workaround(struct sdhci_host *host, u32 intmask)
- 
- static int esdhc_of_enable_dma(struct sdhci_host *host)
- {
-+	int ret;
- 	u32 value;
- 	struct device *dev = mmc_dev(host->mmc);
- 
- 	if (of_device_is_compatible(dev->of_node, "fsl,ls1043a-esdhc") ||
--	    of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc"))
--		dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
-+	    of_device_is_compatible(dev->of_node, "fsl,ls1046a-esdhc")) {
-+		ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
-+		if (ret)
-+			return ret;
-+	}
- 
- 	value = sdhci_readl(host, ESDHC_DMA_SYSCTL);
- 
--- 
-2.25.1
+so the actual pins numbers used are more clear ?
+
+> +
+> +					uart_ao_b_cts_rts_pins: uart-ao-b-cts-rts {
+> +						mux {
+> +							groups = "uart_ao_b_cts",
+> +								 "uart_ao_b_rts";
+> +							function = "uart_ao_b";
+> +							bias-disable;
+> +						};
+> +					};
+> +
+>  					pwm_a_e_pins: pwm-a-e {
+>  						mux {
+>  							groups = "pwm_a_e";
+> 
 

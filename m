@@ -2,120 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AFB48C7A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9CE448C7AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354834AbiALPx5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 12 Jan 2022 10:53:57 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:37760 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1354828AbiALPxz (ORCPT
+        id S1354846AbiALPzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354847AbiALPyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:53:55 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-170-LR7s-IWrOjeZPtZqGrTbpA-1; Wed, 12 Jan 2022 15:53:52 +0000
-X-MC-Unique: LR7s-IWrOjeZPtZqGrTbpA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Wed, 12 Jan 2022 15:53:52 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Wed, 12 Jan 2022 15:53:52 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Peter Zijlstra' <peterz@infradead.org>
-CC:     'Mathieu Desnoyers' <mathieu.desnoyers@efficios.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>, carlos <carlos@redhat.com>
-Subject: RE: [RFC PATCH v2 1/2] rseq: x86: implement abort-at-ip extension
-Thread-Topic: [RFC PATCH v2 1/2] rseq: x86: implement abort-at-ip extension
-Thread-Index: AdgHxNJPmHALYHCBSGGqQq0pyoAGXDSYsRN7NJggl0D8toN7AP///DpQ
-Date:   Wed, 12 Jan 2022 15:53:52 +0000
-Message-ID: <d3276adfc6b34cf0a9a4497f276c4bf0@AcuMS.aculab.com>
-References: <20220110171611.8351-1-mathieu.desnoyers@efficios.com>
- <20220111110556.inteixgtl5vpmka7@wittgenstein>
- <1626924888.21447.1641922985771.JavaMail.zimbra@efficios.com>
- <20220112084617.32bjjo774n7vvyct@wittgenstein>
- <1475639366.24565.1641998849957.JavaMail.zimbra@efficios.com>
- <71e7d09733df4a899d12b7ef25198bbc@AcuMS.aculab.com>
- <1953851780.24610.1641999934047.JavaMail.zimbra@efficios.com>
- <0088806280f54211b3f90b2c1a82a140@AcuMS.aculab.com>
- <Yd708EjQNEa9dFXZ@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yd708EjQNEa9dFXZ@hirez.programming.kicks-ass.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 12 Jan 2022 10:54:44 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAD8C06173F;
+        Wed, 12 Jan 2022 07:54:44 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id v1so4215116ioj.10;
+        Wed, 12 Jan 2022 07:54:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pFJ/5YX2hKQMWWd4jbVdAiQQ3E9iCyV59fKnRpe2rjE=;
+        b=AeyaDt32H7QGfKGP7f1XnQSjfL1GC1itGsgMnC3MtpGpnjCf/39HnH9CDDGZNfBErq
+         oBTl5kiT5CKBdLZK11Kt59aDugyecduZrgL+KDNGzah3NBqFJHDSjFZ9NhYjrKyXLoCt
+         O2KqPkAuqVO6sJTSxx4binn3lmJvDjBiVlsHfibT3hEeDoxDlYaaw9XhkV8KRkmTVQ/P
+         p6b2WscKVwHeDo+cWLguuuf5h2Cfcxwl7S1xreFqmil+tmYYWbPnfjj+aX8ja/OYFakh
+         +NGQxZ/O3Tz1hfpCAo44oRzqUZh8nXPQzf/gMlxaKd/qkmCb3WXf5bQQQu6HGD2KjUEy
+         mQZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pFJ/5YX2hKQMWWd4jbVdAiQQ3E9iCyV59fKnRpe2rjE=;
+        b=EJe9kzq7QAyk/aEfeI55a7sLkMhsmUgerFhAwaxnteoW43SOVdO4M+Xb5E0c3tiSgq
+         jiolCmHSCTywmBoVUGl3P/t3i/YSh313kXELYWVgI2INDysOw/FrxsanFRtrwziztiq5
+         wF1/7UcLce+joEX0JzcmxeSOEgtsD9SILZ+6L3bbeBuD2ipFDwHfXt2YuSxci9cQUXnL
+         0OuYdhCQoSNYXd2zlWHH0CLapkPeWZa49p7zNYelJF5pk++SepU72pf+8KA94lV13N1z
+         awWaCwkJpDjWUks/XrcsHOFw1FFtC+fjdcvDnL1Ljfcz3Mxs/QI37YRJSclrd0Mmz2mw
+         SCDg==
+X-Gm-Message-State: AOAM5328KLDr7fFkHxuXoigPD4GSjDam4JR3KUkFdDNf4carfztJH4Eh
+        x9nvyR+8FkgOwWFlYa0NaKk=
+X-Google-Smtp-Source: ABdhPJwI+dhtW0LgtXpTKLjpztLTIjus7FlvV/KgUFLadovNp27M9fbNP+IS0zeAzZ/HhsWpjnByrg==
+X-Received: by 2002:a02:6f13:: with SMTP id x19mr152979jab.35.1642002883650;
+        Wed, 12 Jan 2022 07:54:43 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.58])
+        by smtp.googlemail.com with ESMTPSA id a8sm74318ilt.42.2022.01.12.07.54.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 07:54:42 -0800 (PST)
+Message-ID: <33308db2-a583-165c-cae0-b055c7976f33@gmail.com>
+Date:   Wed, 12 Jan 2022 08:54:41 -0700
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH] net/ipv6: remove redundant err variable
 Content-Language: en-US
+To:     cgel.zte@gmail.com, davem@davemloft.net
+Cc:     yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220112082655.667680-1-chi.minghao@zte.com.cn>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20220112082655.667680-1-chi.minghao@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra 
-> Sent: 12 January 2022 15:34
-> 
-> On Wed, Jan 12, 2022 at 03:15:27PM +0000, David Laight wrote:
-> > From: Mathieu Desnoyers
-> > > Sent: 12 January 2022 15:06
-> > >
-> > > ----- On Jan 12, 2022, at 9:58 AM, David Laight David.Laight@ACULAB.COM wrote:
-> > >
-> > > >>  * [*] The openrisc, powerpc64 and x86-64 architectures define a "redzone" as a
-> > > >>  *     stack area beyond the stack pointer which can be used by the compiler
-> > > >>  *     to store local variables in leaf functions.
-> > > >
-> > > > I wonder if that is really worth the trouble it causes!
-> > > > By the time a function is spilling values to stack the cost
-> > > > of a %sp update is almost certainly noise.
-> > > >
-> > > > Someone clearly thought it was a 'good idea (tm)'.
-> > >
-> > > I must admit that I've been surprised to learn about these redzones. Thanks for
-> > > pointing them out to me, it was clearly a blind spot. I suspect it would be useful
-> > > to introduce per-architecture KERNEL_REDZONE, USER_REDZONE and COMPAT_USER_REDZONE
-> > > with a asm-generic version defining them to 0, with proper documentation. It would
-> > > make it clearer to kernel developers working on stuff similar to signal handler
-> > > delivery that they need to consider these carefully.
-> >
-> > They can never be used in kernel - any ISR would overwrite them.
-> 
-> That depends on how the architecture does exceptions;
+On 1/12/22 1:26 AM, cgel.zte@gmail.com wrote:
+> diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
+> index fe786df4f849..897194eb3b89 100644
+> --- a/net/ipv6/ip6_tunnel.c
+> +++ b/net/ipv6/ip6_tunnel.c
+> @@ -698,13 +698,12 @@ mplsip6_err(struct sk_buff *skb, struct inet6_skb_parm *opt,
+>  	    u8 type, u8 code, int offset, __be32 info)
+>  {
+>  	__u32 rel_info = ntohl(info);
+> -	int err, rel_msg = 0;
+> +	int rel_msg = 0;
 
-True, many newer ones don't actually write anything to the stack.
-Makes the cpu simpler.
+this line needs to be moved down to maintain reverse xmas tree ordering.
 
-> also consider:
-> 
->   https://www.intel.com/content/www/us/en/develop/download/flexible-return-and-event-delivery-
-> specification.html
+You need to make the subject
+'[PATCH net-next] net/ipv6: remove redundant err variable'
 
-That contains the snippet:
-	The SWAPGS instruction supports efficient updates of the GS base address.
+and since net-next is closed you will need to resubmit when it is open.
 
-Which is just so horribly not true...
-Even FRED is always doing a GS swap - so you can easily lose the kernel GS value.
-
-I remember fixing all the 'in kernel' faults in the netbsd x86-64 return to user path.
-Entirely horrid...
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+>  	u8 rel_type = type;
+>  	u8 rel_code = code;
+>  
+> -	err = ip6_tnl_err(skb, IPPROTO_MPLS, opt, &rel_type, &rel_code,
+> +	return ip6_tnl_err(skb, IPPROTO_MPLS, opt, &rel_type, &rel_code,
+>  			  &rel_msg, &rel_info, offset);
+> -	return err;
+>  }
+>  
+>  static int ip4ip6_dscp_ecn_decapsulate(const struct ip6_tnl *t,
 

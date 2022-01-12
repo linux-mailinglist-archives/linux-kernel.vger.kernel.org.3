@@ -2,135 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EEC948C656
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8011D48C65F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:46:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354234AbiALOop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:44:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241952AbiALOon (ORCPT
+        id S1354242AbiALOqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:46:16 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:52930 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241952AbiALOqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:44:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A4FC06173F;
-        Wed, 12 Jan 2022 06:44:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 486E6B81F1A;
-        Wed, 12 Jan 2022 14:44:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC6CCC36AEB;
-        Wed, 12 Jan 2022 14:44:39 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GkaMMKTM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1641998677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gXV/axjwX5FUovf02ypwHqsrpqjCvYH1CxskvWmTeNQ=;
-        b=GkaMMKTMPWBCYwW7Tn9myvspr/g9Frxmtuumqgq85W6TRteXdG7WjFtAObxz5GY2oJq+tL
-        hWgQ9VNUaOx38l95jijpKIhc+i/x41elM4S77G8+x/ry35SptQ+tlU179KoFQcJExzkLhU
-        dVFlvx+WqT3GU/gVz3Yg0siPtqjgYBA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4fbe9360 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 12 Jan 2022 14:44:37 +0000 (UTC)
-Received: by mail-yb1-f178.google.com with SMTP id h14so6941189ybe.12;
-        Wed, 12 Jan 2022 06:44:36 -0800 (PST)
-X-Gm-Message-State: AOAM532lO6Q8tEHtIfQeuVcPtTbooYyMPGl87071oZtQwM7gXZ5zRMmX
-        c0hMCYjrwolWcE4AuzVVd/oJTc6JD5GpAUYrMNY=
-X-Google-Smtp-Source: ABdhPJywVIrLkb4/m1TSdxctzhJhqAd4fykL3p9P7V0t7ryMwoWNbSTC1FNZYgyl4UT2kyVvLBpPJWH3YF0gOQsPvN8=
-X-Received: by 2002:a25:f90d:: with SMTP id q13mr14483ybe.32.1641998675780;
- Wed, 12 Jan 2022 06:44:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20220112140137.728162-1-jforbes@fedoraproject.org>
- <CAHmME9rJFVeWL=SFTkM8=+2te_GnH4n-THH+F3p5mnHfCkhZ4w@mail.gmail.com>
- <CAMj1kXHubNk3gRTOmD1rOCifCUE4O6=TvNr_XhP1tNcCBuzfBQ@mail.gmail.com>
- <CAHmME9oKEawBAGSN_tdpBDe2_vRUE8Gh+GMXn+d94A6te4FJPQ@mail.gmail.com>
- <CAMj1kXGzzHefRu1wcgDsYpybSDrUK__FXE-Mjm2r1fg2xiz6Jg@mail.gmail.com>
- <CAHmME9p25W3Pg4T4Pers+hxryhAcQZEZMx5uueF3a-oCr7ABuA@mail.gmail.com>
- <CAMj1kXEgE-3Pnnak-RZAPch=ma399Ki4jrMb8j32x2AFyZZALA@mail.gmail.com>
- <CAHmME9oTsOZCJoPUT=LwUuwWHbAa_N1MRoGjTYY5Poj4tr0+Zg@mail.gmail.com> <CAMj1kXFSN0yJzmgDKp1bmF7wgaAwJba+FteStJEKH7HDBSP5kQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXFSN0yJzmgDKp1bmF7wgaAwJba+FteStJEKH7HDBSP5kQ@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+        Wed, 12 Jan 2022 09:46:14 -0500
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20CBMfZx006161;
+        Wed, 12 Jan 2022 15:45:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=PFOJ1LsMAP6bXSULAimH2RrG6EWZ3R86IFqcQserM2E=;
+ b=gR3mTW6VGxbAGQblc9l7ZUntrUiuq9cBQ4wZSPIUXNpOhUhmxROiRk10SdemD2U8+YQ/
+ l2TOpzRt+HfBe7vkS4GaoaF7mnsyoOLNc7e7gvSSTBvaWCQRQwJo3ZkiywC8JLZVfVh+
+ XWUWeaclTc9i+D9zICQ7lZbh0E4GJvgqgVQHKVyatBZJEXQWQgeo3pKEVl+g7N8eele/
+ JFZ+R3JErvjE6ZH5wm5KHOpimjmKGur/O0iZnKk0IPTwzeJH6jTvWgVZf4jwJ5z4FLe4
+ zE0KMmkLmcsqafb7GJLkWgleHlaDRU8LUpd8VVVr/ndU0PJzZ7dHhSP2rleA+G2eU0je 1Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dhtft2jvj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 15:45:59 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D6BB410002A;
+        Wed, 12 Jan 2022 15:45:58 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CB61123C6A2;
+        Wed, 12 Jan 2022 15:45:58 +0100 (CET)
+Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 12 Jan 2022 15:45:58
+ +0100
+From:   <patrice.chotard@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
+        <patrice.chotard@foss.st.com>, <stable@vger.kernel.org>
+Subject: [PATCH v2] spi: stm32-qspi: Update spi registering
 Date:   Wed, 12 Jan 2022 15:44:24 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qcjHq6M+sOOxCT4xte5AcZRoHjcMQfod3Zc1=FJsq8BQ@mail.gmail.com>
-Message-ID: <CAHmME9qcjHq6M+sOOxCT4xte5AcZRoHjcMQfod3Zc1=FJsq8BQ@mail.gmail.com>
-Subject: Re: [PATCH v2] lib/crypto: add prompts back to crypto libraries
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Justin Forbes <jmforbes@linuxtx.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <20220112144424.5278-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-12_04,2022-01-11_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 3:42 PM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Wed, 12 Jan 2022 at 15:15, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > On Wed, Jan 12, 2022 at 3:13 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > >
-> > > On Wed, 12 Jan 2022 at 15:12, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > > >
-> > > > On Wed, Jan 12, 2022 at 3:08 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > >
-> > > > > On Wed, 12 Jan 2022 at 15:08, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > > > > >
-> > > > > > On Wed, Jan 12, 2022 at 3:06 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > > > >
-> > > > > > > On Wed, 12 Jan 2022 at 15:05, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > > > > > > >
-> > > > > > > > This commit also needs this snippet:
-> > > > > > > >
-> > > > > > >
-> > > > > > > Why?
-> > > > > >
-> > > > > > So that the menu of crypto library options is inside of the library
-> > > > > > menu. Otherwise this will appear inside of the _root_ menu, which
-> > > > > > isn't what we want.
-> > > > >
-> > > > > Why not? I think that's fine.
-> > > >
-> > > > It's really not appropriate there. Look:
-> > > >
-> > > > - Justin vanilla: https://i.imgur.com/14UBpML.png
-> > > > - Justin + Jason: https://i.imgur.com/lDfZnma.png
-> > > >
-> > > > We really don't want another top level menu. We're not that important.
-> > > > Rather, crypto libraries are but one ordinary subset of ordinary
-> > > > libraries, just like how the build system does it too.
-> > >
-> > > I disagree. The root menu is a jumble of things already, and having
-> > > this one at the root is really not a problem.
-> >
-> > Should CRC routines also go into a submenu and be put at the root?
-> > What about other library functions? Library functions belong in the
-> > library submenu. We don't need our own top level submenu for this. The
-> > whole point of lib/crypto/ is that they're just boring library
-> > functions. Libraries! So, part of the libraries menu.
->
-> Shouting it doesn't make it true.
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-I'm not shouting. I respectfully disagree with your perspective. I
-think the comparison to CRC routines is an apt one, still unaddressed.
+Some device driver need to communicate to qspi device during the remove
+process, qspi controller must be functional when spi_unregister_master()
+is called.
 
-> Nobody cares about what the root menu looks like
+To ensure this, replace devm_spi_register_master() by spi_register_master()
+and spi_unregister_master() is called directly in .remove callback before
+stopping the qspi controller.
 
-I certainly do.
+This issue was put in evidence using kernel v5.11 and later
+with a spi-nor which supports the software reset feature introduced
+by commit d73ee7534cc5 ("mtd: spi-nor: core: perform a Soft Reset on
+shutdown")
 
-> and given that this
-> patch is presumably going to be sent as an early fix on top of your
-> rng branch, it is better not to touch anything under crypto/ unless
-> you are 100% certain it is not going to conflict with Herbert's tree.
+Fixes: c530cd1d9d5e ("spi: spi-mem: add stm32 qspi controller")
 
-Oh, I was thinking Herbert would take this since he hasn't sent a pull
-yet? Otherwise, sure, I can do it.
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: <stable@vger.kernel.org> # 5.8.x
+---
 
-Jason
+v2: 
+  _ update commit message
+  _ make usage of devm_spi_alloc_master() instead of spi_alloc_master()
+
+ drivers/spi/spi-stm32-qspi.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index 514337c86d2c..09839a3dbb26 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -688,7 +688,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	int ret, irq;
+ 
+-	ctrl = spi_alloc_master(dev, sizeof(*qspi));
++	ctrl = devm_spi_alloc_master(dev, sizeof(*qspi));
+ 	if (!ctrl)
+ 		return -ENOMEM;
+ 
+@@ -784,7 +784,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(dev);
+ 	pm_runtime_get_noresume(dev);
+ 
+-	ret = devm_spi_register_master(dev, ctrl);
++	ret = spi_register_master(ctrl);
+ 	if (ret)
+ 		goto err_pm_runtime_free;
+ 
+@@ -817,6 +817,7 @@ static int stm32_qspi_remove(struct platform_device *pdev)
+ 	struct stm32_qspi *qspi = platform_get_drvdata(pdev);
+ 
+ 	pm_runtime_get_sync(qspi->dev);
++	spi_unregister_master(qspi->ctrl);
+ 	/* disable qspi */
+ 	writel_relaxed(0, qspi->io_base + QSPI_CR);
+ 	stm32_qspi_dma_free(qspi);
+-- 
+2.17.1
+

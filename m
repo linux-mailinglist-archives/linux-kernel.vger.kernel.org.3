@@ -2,277 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840BC48BE70
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 06:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E94C148BE74
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 07:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350958AbiALFuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 00:50:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350953AbiALFuJ (ORCPT
+        id S237197AbiALGFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 01:05:47 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:12474 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230391AbiALGFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 00:50:09 -0500
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B61C06173F;
-        Tue, 11 Jan 2022 21:50:09 -0800 (PST)
-Received: by mail-ua1-x931.google.com with SMTP id p37so2748273uae.8;
-        Tue, 11 Jan 2022 21:50:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=81RrSKaMYzHzRVmwiFgL6qFDtdCtyRRjy6UlCfpIl9c=;
-        b=WEjPcL0PrVBhGlC5RuTZXniJKZ8tVzUqpvI2PUWqMWLonleHUqAds/z6LSI+GhV1MJ
-         KzdmJW23f1xTLHYV/ruVJJoS8Utd5mbslgVqdiFRevQxwlJ3fbTNXs3gtoVu9iXswEj9
-         51VU8xEnb6h7SG2km4YWB1jlYq3GW0n6ZFE5lLmpP4NipFTZW6dZapyutEk95iV46WoO
-         4YntvzdT6HqU5AN6+WKUreLTd/InXxaK+xGFHOpsAB9v4bo2S1dlWwV9HajC7cHSifFU
-         zksQH+cQg4JVrfXyOh3dNQgVKfvcdcCXkfLeAzyTfMiHby3T1UY2V8dTObTsDkdQaT1y
-         CRFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=81RrSKaMYzHzRVmwiFgL6qFDtdCtyRRjy6UlCfpIl9c=;
-        b=5BXWoSaL1XBrpoPGdgE9MMnFlKEYtXS9Tl0+HG4Ri5ygezzJQJiknbhZu1h9ct/pRq
-         IRtbxDd31mr1OYUw2cFd94OameMC+2IcmGJmRCk52/XeTg5W1+fsBRUCdPns+DNl8ToP
-         w5FJKxdxDngTe9dyr2gRjGxBS/b7jaI6UfLJa8cyl0dw+sZWrLT5VzUVDWTxjVW/pK3N
-         fA3mTEFD2Kv0aaAexyCISjdGG7cxaRhVL5u3m5dZCleFRHszTjD0FIjSru3FIitHPOUA
-         XNhq4kauFgtNhy31tCn4Gur0u5hs6s1vlgUcsRv2CCrrTgV6XBxmuL6D958juCioSfKR
-         wlKw==
-X-Gm-Message-State: AOAM532y6wI0v5HmLbxECtL/hHUiqCxh7ZPlW3PW0094TPFVgz0g4yTY
-        P3sZ+/fu+FWgXSC8Rj5LkSsg7arYBLHdFkTjRLBomypPQr8=
-X-Google-Smtp-Source: ABdhPJxirclRhhpNoeBGWtih/Mbh3Du/jDTqc/Turdjrp1ynfLWf6pTyYxtz+bnCpFGK9awjZmpo0V6s7Az6qf4+1n4=
-X-Received: by 2002:a05:6102:485:: with SMTP id n5mr144298vsa.57.1641966607860;
- Tue, 11 Jan 2022 21:50:07 -0800 (PST)
+        Wed, 12 Jan 2022 01:05:45 -0500
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 20C5x3q2088074;
+        Wed, 12 Jan 2022 13:59:03 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from [192.168.2.115] (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Jan
+ 2022 14:05:40 +0800
+Message-ID: <a779f1c1-e5b0-5d55-bc6c-5f253d03525d@aspeedtech.com>
+Date:   Wed, 12 Jan 2022 14:05:41 +0800
 MIME-Version: 1.0
-References: <CAJjP=Bt52AW_w2sKnM=MbckPkH1hevPMJVWm_Wf+wThmR72YTg@mail.gmail.com>
- <CAH2r5mt_2f==5reyc0HmMLvYJVmP4Enykwauo+LQoFGFbVFeRQ@mail.gmail.com>
- <CAJjP=BvNVOj3KRnhFgk6xiwnxVhxE-sN98-pr6e1Kzc5Xg5EvQ@mail.gmail.com>
- <CAH2r5mvsetx5G+c=8ePh+X8ng7FvMrnuM9+FJ4Sid4b3E+T41Q@mail.gmail.com>
- <CAJjP=BvqZUnJPq=C0OUKbXr=mbJd7a6YDSJC-sNY1j_33_e-uw@mail.gmail.com> <CAN05THSGwCKckQoeB6D91iBv0Sed+ethK7tde7GSc1UzS-0OYg@mail.gmail.com>
-In-Reply-To: <CAN05THSGwCKckQoeB6D91iBv0Sed+ethK7tde7GSc1UzS-0OYg@mail.gmail.com>
-From:   Davyd McColl <davydm@gmail.com>
-Date:   Wed, 12 Jan 2022 07:49:56 +0200
-Message-ID: <CAJjP=BvcWrF-k_sFxak1mgHAHVVS7_JZow+h_47XB1VzG2+Drw@mail.gmail.com>
-Subject: Re: Possible regression: unable to mount CIFS 1.0 shares from older
- machines since 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c
-To:     ronnie sahlberg <ronniesahlberg@gmail.com>
-Cc:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] media: aspeed: Fix no complete irq for non-64-aligned
+ width
+Content-Language: en-US
+To:     Joel Stanley <joel@jms.id.au>
+CC:     Eddie James <eajames@linux.ibm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211214045348.13702-1-jammy_huang@aspeedtech.com>
+ <CACPK8XfkXi6M=gzfkYcuoga6WxnzSm2+mspBt4gjop7Ytm+VCA@mail.gmail.com>
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+In-Reply-To: <CACPK8XfkXi6M=gzfkYcuoga6WxnzSm2+mspBt4gjop7Ytm+VCA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 20C5x3q2088074
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ronnie
+Hi Joel,
 
-The regular fstab line for this mount is:
+OK, thanks for your review. I will send another updated patch per your 
+advice.
 
-//mede8er/mede8er  /mnt/mede8er-smb  cifs
-noauto,guest,users,uid=daf,gid=daf,iocharset=utf8,vers=1.0,nobrl,sec=none
- 0  0
-
-Altering the end of the options from "sec=none" to
-"username=guest,sec=ntlmssp" or "guest,sec=ntlmssp" results in failure
-to mount
-(tested on my patched kernel, which still supports the original fstab
-line), with dmesg containing:
-
-[45753.525219] CIFS: VFS: Use of the less secure dialect vers=1.0 is
-not recommended unless required for acc
-ess to very old servers
-[45753.525222] CIFS: Attempting to mount \\mede8er\mede8er
-[45756.861351] CIFS: VFS: Unable to select appropriate authentication method!
-[45756.861361] CIFS: VFS: \\mede8er Send error in SessSetup = -22
-[45756.861395] CIFS: VFS: cifs_mount failed w/return code = -22
-
-There is no way that I know of to set up users for smb auth on this
-device - it only supports guest connections.
-
--d
-
-
-On Wed, 12 Jan 2022 at 04:32, ronnie sahlberg <ronniesahlberg@gmail.com> wrote:
+On 2022/1/12 上午 08:51, Joel Stanley wrote:
+> On Tue, 14 Dec 2021 at 04:53, Jammy Huang <jammy_huang@aspeedtech.com> wrote:
+>> In ast2500, engine will stop occasionally for 1360x768.
+>>
+>> This is a bug which has been addressed, but the workaround is specific
+>> for 1680 only. Here we make it more complete.
+>>
+>> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+>> ---
+>>   drivers/media/platform/aspeed-video.c | 12 +++++++-----
+>>   1 file changed, 7 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+>> index 793b2adaa0f5..4d3e6b105d44 100644
+>> --- a/drivers/media/platform/aspeed-video.c
+>> +++ b/drivers/media/platform/aspeed-video.c
+>> @@ -1055,18 +1055,20 @@ static void aspeed_video_set_resolution(struct aspeed_video *video)
+>>          /* Set capture/compression frame sizes */
+>>          aspeed_video_calc_compressed_size(video, size);
+>>
+>> -       if (video->active_timings.width == 1680) {
+>> +       if (!IS_ALIGNED(act->width, 64)) {
+>>                  /*
+>>                   * This is a workaround to fix a silicon bug on A1 and A2
+> Please add:  "a AST2500 silicon bug" so we know which A1/A2 this is
+> referring to.
 >
-> Thanks for the network traces.
+> With that added, you can add:
 >
-> In the traces, both win11 and linux are not using even NTLM but the
-> even older "share password" authentication mode where you specify a
-> password for the share in the TreeConnect command.
-> That is something I think we should not support at all.
+>   Reviewed-by: Joel Stanley <joel@jms.id.au>
 >
-> What is the exact mount command line you use?
-> Can you try mounting the share using a username and ntlmssp ?
-> I.e. username=your-user,sec=ntlmssp  on the mount command
+>>                   * revisions. Since it doesn't break capturing operation of
+>>                   * other revisions, use it for all revisions without checking
+>> -                * the revision ID. It picked 1728 which is a very next
+>> -                * 64-pixels aligned value to 1680 to minimize memory bandwidth
+>> +                * the revision ID. It picked new width which is a very next
+>> +                * 64-pixels aligned value to minimize memory bandwidth
+>>                   * and to get better access speed from video engine.
+>>                   */
+>> +               u32 width = ALIGN(act->width, 64);
+>> +
+>>                  aspeed_video_write(video, VE_CAP_WINDOW,
+>> -                                  1728 << 16 | act->height);
+>> -               size += (1728 - 1680) * video->active_timings.height;
+>> +                                  width << 16 | act->height);
+>> +               size = width * act->height;
+> You could make it clearer by putting the write on one line:
 >
-> regards
-> ronnie sahlberg
->
-> On Wed, Jan 12, 2022 at 6:57 AM Davyd McColl <davydm@gmail.com> wrote:
-> >
-> > Hi Steve
-> >
-> > As requested, wireshark captures to the device in question, as well as
-> > the fstab entry I have for the device:
-> > - win11, browsing with explorer
-> > - win11, net use
-> > - unpatched linux 5.16.0 attempt to mount
-> > - patched linux 5.16.0 successful mount
-> > - fstab entry - note that I have to specify samba version 1.0 as the
-> > default has changed and the mount fails otherwise. Explicitly
-> > specifying 2.0 errors and suggests that I should select a different
-> > version.
-> >
-> > -d
-> >
-> > On Tue, 11 Jan 2022 at 00:13, Steve French <smfrench@gmail.com> wrote:
-> > >
-> > > I would be surprised if Windows 11 still negotiates (with default
-> > > registry settings) SMB1 much less NTLMv1 in SMB1, but I have not tried
-> > > Windows 11 with an NTLMv1 only server (they are hard to find - I may
-> > > have an original NT4 and an NT3.5 CD somewhere - might be possible to
-> > > install a VM with NT3.5 but that is really really old and not sure I
-> > > can find those CDs).
-> > >
-> > > Is it possible to send me the wireshark trace (or other network trace)
-> > > of the failing mount from Linux and also the one with the succeeding
-> > > NET USE from Windows 11 to the same server?
-> > >
-> > > Hopefully it is something unrelated to NTLMv1, there has been a LOT of
-> > > pushback across the world, across products in making sure no one uses
-> > > SMB1 anymore.  See e.g.
-> > > https://techcommunity.microsoft.com/t5/storage-at-microsoft/stop-using-smb1/ba-p/425858
-> > > and https://twitter.com/nerdpyle/status/776900804712148993
-> > >
-> > > On Mon, Jan 10, 2022 at 2:30 PM Davyd McColl <davydm@gmail.com> wrote:
-> > > >
-> > > > I don't understand. I tracked down the exact commit where the issue
-> > > > occurs with a 2 hour git bisect. This was after first confirming that
-> > > > my older 5.14 kernel did not display the symptoms. I can still connect
-> > > > to the share via windows 11 explorer. I don't know what else I need to
-> > > > do here to show where the issue was introduced?
-> > > >
-> > > > Apologies for bouncing mails - literally no email client I have seems
-> > > > to be capable of plaintext emails, so every time I forget, I have to
-> > > > find a browser with the gmail web interface to reply.
-> > > >
-> > > > -d
-> > > >
-> > > > On Mon, 10 Jan 2022 at 19:31, Steve French <smfrench@gmail.com> wrote:
-> > > > >
-> > > > > I want to make sure that we don't have an unrelated regression
-> > > > > involved here since NTLMv2 replaced NTLMv1 over 20 years ago (googling
-> > > > > this e.g. I see "NTLMv2, introduced in Windows NT 4.0 SP4 and natively
-> > > > > supported in Windows 2000")  and should be the default for Windows
-> > > > > NT4, Windows 2000 etc. as well as any version of Samba from the last
-> > > > > 15 years+.  I have significant concerns with adding mechanisms that
-> > > > > were asked to be disabled ~19 years ago e.g. see
-> > > > > https://support.microsoft.com/en-us/topic/security-guidance-for-ntlmv1-and-lm-network-authentication-da2168b6-4a31-0088-fb03-f081acde6e73
-> > > > > due to security concerns.
-> > > > >
-> > > > > Can we double check that there are not other issues involved in your example?
-> > > > >
-> > > > > The concerns about NTLMv1 security concerns (and why it should never
-> > > > > be used) are very persuasive e.g. many articles like
-> > > > > https://miriamxyra.com/2017/11/08/stop-using-lan-manager-and-ntlmv1/
-> > > > >
-> > > > > On Mon, Jan 10, 2022 at 7:48 AM Davyd McColl <davydm@gmail.com> wrote:
-> > > > > >
-> > > > > > Good day
-> > > > > >
-> > > > > > I'm following advice from the thread at
-> > > > > > https://bugzilla.kernel.org/show_bug.cgi?id=215375 as to how to report
-> > > > > > this, so please bear with me and redirect me as necessary.
-> > > > > >
-> > > > > > Since commit 76a3c92ec9e0668e4cd0e9ff1782eb68f61a179c, I'm unable to
-> > > > > > mount a CIFS 1.0 share ( from a media player: mede8er med600x3d, which
-> > > > > > runs some older linux). Apparently I'm not the only one, according to
-> > > > > > that thread, though the other affected party there is windows-based.
-> > > > > >
-> > > > > > I first logged this in the Gentoo bugtracker
-> > > > > > (https://bugs.gentoo.org/821895) and a reversion patch is available
-> > > > > > there for the time being.
-> > > > > >
-> > > > > > I understand that some of the encryption methods upon which the
-> > > > > > original feature relied are to be removed and, as such, the ability to
-> > > > > > mount these older shares was removed. This is sure to affect anyone
-> > > > > > running older Windows virtual machines (or older, internally-visible
-> > > > > > windows hosts) in addition to anyone attempting to connect to shares
-> > > > > > from esoteric devices like mine.
-> > > > > >
-> > > > > > Whilst I understand the desire to clean up code and remove dead
-> > > > > > branches, I'd really appreciate it if this particular feature remains
-> > > > > > available either by kernel configuration (which suits me fine, but is
-> > > > > > likely to be a hassle for anyone running a binary distribution) or via
-> > > > > > boot parameters. In the mean-time, I'm updating my own sync software
-> > > > > > to support this older device because if I can't sync media to the
-> > > > > > player, the device is not very useful to me.
-> > > > > >
-> > > > > > Thanks
-> > > > > > -d
-> > > > >
-> > > > >
-> > > > >
-> > > > > --
-> > > > > Thanks,
-> > > > >
-> > > > > Steve
-> > > >
-> > > >
-> > > >
-> > > > --
-> > > > -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-> > > > If you say that getting the money is the most important thing
-> > > > You will spend your life completely wasting your time
-> > > > You will be doing things you don't like doing
-> > > > In order to go on living
-> > > > That is, to go on doing things you don't like doing
-> > > >
-> > > > Which is stupid.
-> > > >
-> > > > - Alan Watts
-> > > > https://www.youtube.com/watch?v=-gXTZM_uPMY
-> > > >
-> > > > Quidquid latine dictum sit, altum sonatur.
-> > >
-> > >
-> > >
-> > > --
-> > > Thanks,
-> > >
-> > > Steve
-> >
-> >
-> >
-> > --
-> > -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-> > If you say that getting the money is the most important thing
-> > You will spend your life completely wasting your time
-> > You will be doing things you don't like doing
-> > In order to go on living
-> > That is, to go on doing things you don't like doing
-> >
-> > Which is stupid.
-> >
-> > - Alan Watts
-> > https://www.youtube.com/watch?v=-gXTZM_uPMY
-> >
-> > Quidquid latine dictum sit, altum sonatur.
-
-
+>                  aspeed_video_write(video, VE_CAP_WINDOW, width << 16 |
+> act->height);
 
 -- 
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-If you say that getting the money is the most important thing
-You will spend your life completely wasting your time
-You will be doing things you don't like doing
-In order to go on living
-That is, to go on doing things you don't like doing
+Best Regards
+Jammy
 
-Which is stupid.
-
-- Alan Watts
-https://www.youtube.com/watch?v=-gXTZM_uPMY
-
-Quidquid latine dictum sit, altum sonatur.

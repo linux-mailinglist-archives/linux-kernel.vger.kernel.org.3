@@ -2,143 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D9B48CB41
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:50:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C8F48CB33
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356510AbiALSth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 13:49:37 -0500
-Received: from mga11.intel.com ([192.55.52.93]:32836 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356492AbiALStS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:49:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642013358; x=1673549358;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=P8rim4q0I6ulB+Ywv2t0GgbvDOgoQUtrXFzLeGezyTs=;
-  b=htc1WEJca4KmONw/vvXfg0fre6y/XVoTmnIn4Bg+IK/8drx4f1+N7fhc
-   9d3o/+Hwws1aBR5qVw1e5D1Rl98meOFFiPobeQFaJgnJ4ReUVqCT/V1oL
-   ArFdFs1dlZ9N4G3Il7T2aNkpwSUkGeZVmKEcFZaw8AcZ7djUVcMWTlAnh
-   wFuaM2douecBcOkqAVhTRevH6+p0y5flNR0tOTUSrLbxJF4l6bfaDx4ps
-   ZCpjbsn1t+UFHLcfjNqLGmjSJ2ssw5JrVsg0TYG4v6kM2w/UzEGHBN2Z4
-   YXtzf6JaVAdQwzzmZR58X6knlHout+QXlLI+vHJ+zoGJJaB2nBhzclqBB
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="241375345"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="241375345"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 10:43:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="515611386"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 12 Jan 2022 10:43:08 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n7iaR-0006Et-Ab; Wed, 12 Jan 2022 18:43:07 +0000
-Date:   Thu, 13 Jan 2022 02:42:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Seevalamuthu Mariappan <quic_seevalam@quicinc.com>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>
-Subject: [ammarfaizi2-block:kvalo/ath/pending 255/273]
- drivers/net/wireless/ath/ath11k/wmi.c:7833:39: error: 'struct ath11k' has no
- member named 'debug'
-Message-ID: <202201130245.W7Ps705H-lkp@intel.com>
+        id S1356471AbiALSpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 13:45:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356446AbiALSoz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 13:44:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341D6C06173F;
+        Wed, 12 Jan 2022 10:44:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C816A61A35;
+        Wed, 12 Jan 2022 18:44:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9663BC36AE5;
+        Wed, 12 Jan 2022 18:44:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642013094;
+        bh=LW70gO4DLI9yvYy93v3QKw+URWyMDt50sXq2NeIJKtY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u9JyeUuGZinPYZac9f50ZGapw9lan1RmyRRYW6nsTq8Kzhkpsjl1QGkaz+oFRnqVN
+         7FZPmXLOZcqpo1pFn456eGEuQuqgkfk4cKrThZvQHIoq0gP0NWJrNg5bT9OYwgigh6
+         X1qxvJ8t2zZPtnNyGlI82cYsOlxgc4Wgw8nT4d1kKN5f91W3lGNeyPImjj7G/f9i+s
+         b0ygOn9p1x9rcOhj16ej7REyR+9FSy+AA1EubEkrfizXFPIwzk2t7/ocGMNuDUIHZu
+         ff6Aai615p5p8nnquDFEkpEwFQ+QQeofZvGLFKcPrV10stWyP4K/kieXrkhKZVwoGh
+         vdJBm2AYGVeEw==
+Date:   Wed, 12 Jan 2022 10:44:52 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>,
+        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>
+Subject: Re: [PATCH v3 1/1] psi: Fix uaf issue when psi trigger is destroyed
+ while being polled
+Message-ID: <Yd8hpPwsIT2pbKUN@gmail.com>
+References: <20220111232309.1786347-1-surenb@google.com>
+ <Yd7oPlxCpnzNmFzc@cmpxchg.org>
+ <CAJuCfpGHLXDvMU1GLMcgK_K72_ErPhbcFh1ZvEeHg025yinNuw@mail.gmail.com>
+ <CAJuCfpEaM3KoPy3MUG7HW2yzcT6oJ5gdceyHPNpHrqTErq27eQ@mail.gmail.com>
+ <Yd8a8TdThrGHsf2o@casper.infradead.org>
+ <CAJuCfpF45VY_7esx7p2yEK+eK-ufSMsBETEdJPF=Mzxj+BTnLA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAJuCfpF45VY_7esx7p2yEK+eK-ufSMsBETEdJPF=Mzxj+BTnLA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
-head:   061c4062835233faef6961a898155015fc5e0631
-commit: 3af45eb104584443956572fa9d2a332123816b37 [255/273] ath11k: Add debugfs interface to configure firmware debug log level
-config: xtensa-randconfig-r024-20220112 (https://download.01.org/0day-ci/archive/20220113/202201130245.W7Ps705H-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/3af45eb104584443956572fa9d2a332123816b37
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block kvalo/ath/pending
-        git checkout 3af45eb104584443956572fa9d2a332123816b37
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash drivers/net/wireless/ath/ath11k/
+On Wed, Jan 12, 2022 at 10:26:08AM -0800, Suren Baghdasaryan wrote:
+> On Wed, Jan 12, 2022 at 10:16 AM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Wed, Jan 12, 2022 at 09:49:00AM -0800, Suren Baghdasaryan wrote:
+> > > > This happens with the following config:
+> > > >
+> > > > CONFIG_CGROUPS=n
+> > > > CONFIG_PSI=y
+> > > >
+> > > > With cgroups disabled these functions are defined as non-static but
+> > > > are not defined in the header
+> > > > (https://elixir.bootlin.com/linux/latest/source/include/linux/psi.h#L28)
+> > > > since the only external user cgroup.c is disabled. The cleanest way to
+> > > > fix these I think is by doing smth like this in psi.c:
+> >
+> > A cleaner way to solve these is simply:
+> >
+> > #ifndef CONFIG_CGROUPS
+> > static struct psi_trigger *psi_trigger_create(...);
+> > ...
+> > #endif
+> >
+> > I tested this works:
+> >
+> > $ cat foo5.c
+> > static int psi(void *);
+> >
+> > int psi(void *x)
+> > {
+> >         return (int)(long)x;
+> > }
+> >
+> > int bar(void *x)
+> > {
+> >         return psi(x);
+> > }
+> > $ gcc -W -Wall -O2 -c -o foo5.o foo5.c
+> > $ readelf -s foo5.o
+> >
+> > Symbol table '.symtab' contains 4 entries:
+> >    Num:    Value          Size Type    Bind   Vis      Ndx Name
+> >      0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+> >      1: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS foo5.c
+> >      2: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text
+> >      3: 0000000000000000     3 FUNC    GLOBAL DEFAULT    1 bar
+> >
+> 
+> Thanks Matthew!
+> That looks much cleaner. I'll post a separate patch to fix these. My
+> main concern was whether it's worth adding more code to satisfy this
+> warning but with this approach the code changes are minimal, so I'll
+> go ahead and post it shortly.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Why not simply move the declarations of psi_trigger_create() and
+psi_trigger_destroy() in include/linux/psi.h outside of the
+'#ifdef CONFIG_CGROUPS' block, to match the .c file?
 
-All errors (new ones prefixed by >>):
+They *could* be static when !CONFIG_CGROUPS, but IMO it's not worth bothering.
 
-   drivers/net/wireless/ath/ath11k/wmi.c: In function 'ath11k_wmi_fw_dbglog_cfg':
->> drivers/net/wireless/ath/ath11k/wmi.c:7833:39: error: 'struct ath11k' has no member named 'debug'
-    7833 |                 memcpy(tlv->value, &ar->debug.module_id_bitmap,
-         |                                       ^~
-   drivers/net/wireless/ath/ath11k/wmi.c:7836:27: error: 'struct ath11k' has no member named 'debug'
-    7836 |                 memset(&ar->debug.module_id_bitmap, 0,
-         |                           ^~
-
-
-vim +7833 drivers/net/wireless/ath/ath11k/wmi.c
-
-  7800	
-  7801	int ath11k_wmi_fw_dbglog_cfg(struct ath11k *ar, struct ath11k_fw_dbglog *dbglog)
-  7802	{
-  7803		struct ath11k_pdev_wmi *wmi = ar->wmi;
-  7804		struct wmi_debug_log_config_cmd_fixed_param *cmd;
-  7805		struct sk_buff *skb;
-  7806		struct wmi_tlv *tlv;
-  7807		int ret, len;
-  7808	
-  7809		len = sizeof(*cmd) + TLV_HDR_SIZE + (MAX_MODULE_ID_BITMAP_WORDS * sizeof(u32));
-  7810		skb = ath11k_wmi_alloc_skb(wmi->wmi_ab, len);
-  7811		if (!skb)
-  7812			return -ENOMEM;
-  7813	
-  7814		cmd = (struct wmi_debug_log_config_cmd_fixed_param *)skb->data;
-  7815		cmd->tlv_header = FIELD_PREP(WMI_TLV_TAG, WMI_TAG_DEBUG_LOG_CONFIG_CMD) |
-  7816				  FIELD_PREP(WMI_TLV_LEN, sizeof(*cmd) - TLV_HDR_SIZE);
-  7817		cmd->dbg_log_param = dbglog->param;
-  7818	
-  7819		tlv = (struct wmi_tlv *)((u8 *)cmd + sizeof(*cmd));
-  7820		tlv->header = FIELD_PREP(WMI_TLV_TAG, WMI_TAG_ARRAY_UINT32) |
-  7821			      FIELD_PREP(WMI_TLV_LEN, MAX_MODULE_ID_BITMAP_WORDS * sizeof(u32));
-  7822	
-  7823		switch (dbglog->param) {
-  7824		case WMI_DEBUG_LOG_PARAM_LOG_LEVEL:
-  7825		case WMI_DEBUG_LOG_PARAM_VDEV_ENABLE:
-  7826		case WMI_DEBUG_LOG_PARAM_VDEV_DISABLE:
-  7827		case WMI_DEBUG_LOG_PARAM_VDEV_ENABLE_BITMAP:
-  7828			cmd->value = dbglog->value;
-  7829			break;
-  7830		case WMI_DEBUG_LOG_PARAM_MOD_ENABLE_BITMAP:
-  7831		case WMI_DEBUG_LOG_PARAM_WOW_MOD_ENABLE_BITMAP:
-  7832			cmd->value = dbglog->value;
-> 7833			memcpy(tlv->value, &ar->debug.module_id_bitmap,
-  7834			       MAX_MODULE_ID_BITMAP_WORDS * sizeof(u32));
-  7835			/* clear current config to be used for next user config */
-  7836			memset(&ar->debug.module_id_bitmap, 0,
-  7837			       MAX_MODULE_ID_BITMAP_WORDS * sizeof(u32));
-  7838			break;
-  7839		default:
-  7840			dev_kfree_skb(skb);
-  7841			return -EINVAL;
-  7842		}
-  7843	
-  7844		ret = ath11k_wmi_cmd_send(wmi, skb, WMI_DBGLOG_CFG_CMDID);
-  7845		if (ret) {
-  7846			ath11k_warn(ar->ab,
-  7847				    "failed to send WMI_DBGLOG_CFG_CMDID\n");
-  7848			dev_kfree_skb(skb);
-  7849		}
-  7850		return ret;
-  7851	}
-  7852	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+- Eric

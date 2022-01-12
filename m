@@ -2,142 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC63148BDD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 05:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9118748BDD4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 05:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346018AbiALELL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 23:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S1350577AbiALENL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 23:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiALELK (ORCPT
+        with ESMTP id S229770AbiALENK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 23:11:10 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9715C06173F;
-        Tue, 11 Jan 2022 20:11:10 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id a1-20020a17090a688100b001b3fd52338eso1303854pjd.1;
-        Tue, 11 Jan 2022 20:11:10 -0800 (PST)
+        Tue, 11 Jan 2022 23:13:10 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A84C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 20:13:10 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id c14-20020a17090a674e00b001b31e16749cso9351396pjm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 20:13:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=L3zit3ZisIykD+J7W/w/LdcsvaZddg/hlkAzNk64CDc=;
-        b=YLhkGzWqfbeaAjok250HgZg7AcR/GfWcLFcx6ZfXbajWrwh2C9C9i8Wb6lhRQVA1O1
-         kE0+HOXJ0wng8YQ1vv+ooZ5okHR5nJhq2Uja+tPjqAz/plWUMI0mvj7FSNfDJBoBTZRn
-         C2y6/3gDaJxKGdguaxlIrCtukGfG61M8bTlRyu0cfHa3YUkD2+rPGPEEzpXTIC9+tgD/
-         +6GavfrYSaSu6LeAHMOX9gk0S4YjkWDDktwkYaa4QfJq1FFhMK5jvhLOzn6U3gDvaS+m
-         wYaLD1q91mz+byg5dab3B/386DZrwYAY2VZkx9KZtwfnwSPyTHxIG6WsHdDL1+yWWuJ+
-         PSbA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DbUxyMjpIOog9wvfYa8Q3QxFBHZVqdqm471d2skc/TM=;
+        b=Sn3ZbZTXPZfNkTiNJMD2UkTzn2GvsdJbhulbJeiycHizNIxII/MgCzTeKZdWeoSaNm
+         ribBHtwEFV+3p6rNFZDkF7tKn9PtU6TCMycdCpBxoZJdw5POb6cSBfxiPad/GCEqVboJ
+         KsDK7acIaRwgWaj0uu2Go95+/KCjhVw4snhP33a/jStYyzM09pmh3w8TZrOflIYxHIHL
+         DunxK3hjlWNj+5NtNxk9sy4TNr2OJUlAj56z8QpIKMHQlVWGRWkiSW/MeTAUUXo4Ye5k
+         KxaLk0NDYDaFr6uM2pIds5uL6kMkRuHa8V3L3O43xsUIF/QMDPChi9kyV+aA+mKC6j61
+         F1Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=L3zit3ZisIykD+J7W/w/LdcsvaZddg/hlkAzNk64CDc=;
-        b=nt/DSZ4Poo3zsA61YlS5tqtUhO0Jbx2pw3D7/8AJWzURZ43NJd13PkO7KEEliWadQY
-         7B4+EwycaQesjFHDA98v9HaTnX668X/NnNAew5DMHLFqRpRLocKNPrR3+2rlrV2bw2vV
-         QirU8zU6gm48BvlSYFGOSbstInoeLQ/lqxkR5rg2Sdg3Mqk0C32HMNufgCSPtjK5wFZs
-         o5ublUK0cn4+8KIhmr5iXX0HDG/0McQoJf60b9eKUGaMXE0TyTd/l12L5E8sty/16lFZ
-         CRD/asP+Yc/RfLKhVAFj1TVoIkdPhefzu0uL2CyT2Kwu4djESmxa0OIgxuJTt0Vg1NYT
-         zkwg==
-X-Gm-Message-State: AOAM5328FPHG79ZWgsflrIrPV7n7mvlCsyNVUdnFiagRGk6wxiXgbeR3
-        iPusqBNlTrirNDwF41yH4U0=
-X-Google-Smtp-Source: ABdhPJzg7u5LABeMdTWZ8i7PcbMUHLE5C7HuaKTE7xqKYfob+C5Is9xhK7sRZX7UgnreRzl7pNrGww==
-X-Received: by 2002:a17:902:b681:b0:14a:9cc:d9a3 with SMTP id c1-20020a170902b68100b0014a09ccd9a3mr7712222pls.121.1641960670257;
-        Tue, 11 Jan 2022 20:11:10 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id h5sm7117718pfo.57.2022.01.11.20.11.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DbUxyMjpIOog9wvfYa8Q3QxFBHZVqdqm471d2skc/TM=;
+        b=hWxhkpk7Z2e/+9Ek8DLyY6clh9Gr6Rhwu6yorEw7MTZQ2TQil5d4LwVIZlSAoHQw9q
+         wLbUnhaArnHRWtXlb7FPvmSBsYttXK4+DoNUjHKE3kHWv7yEnSIdA82kbqio10IDqQx1
+         wRFHQIjS483ZNv+rPp9l5RUcVUH4oeqHJ+BByWpJJCf3jCgt57Vj2KCpxwqNTAYzvUd0
+         T8hMSp1Vx+gIt9Hy9MXgjJQ3UHc9W7+B/pxPvnu6GH9RozJYK8qXFZr6dfbCobksJefy
+         J6yIpHk9Cnch248igjYz6EnNnGQkNS0hCtR52bPFdydfpST1KnboMY/juv9fe4Msota8
+         YlYA==
+X-Gm-Message-State: AOAM533J4evkUA+jLYXpGmb3BOi1+hTIf0qdAjD2sSlUbXA/DArHst6s
+        bmLSdtD1e/C7OVEs9jyKmw==
+X-Google-Smtp-Source: ABdhPJxSSNkxwmCEPEdNlNPJ7QZ7UwepXMStTYc8FQ7Vl5dm6pY3aUNir0lDN6Q8ldY1w02w1P4WHw==
+X-Received: by 2002:a17:902:7107:b0:14a:438f:f196 with SMTP id a7-20020a170902710700b0014a438ff196mr7736213pll.165.1641960790099;
+        Tue, 11 Jan 2022 20:13:10 -0800 (PST)
+Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id t8sm11996244pfj.114.2022.01.11.20.13.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 20:11:09 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] KVM: x86/pt: Ignore all unknown Intel PT capabilities
-Date:   Wed, 12 Jan 2022 12:11:00 +0800
-Message-Id: <20220112041100.26769-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.33.1
+        Tue, 11 Jan 2022 20:13:09 -0800 (PST)
+Date:   Wed, 12 Jan 2022 12:13:03 +0800
+From:   Pingfan Liu <kernelfans@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH v2] tracing: Add test for user space strings when
+ filtering on  string pointers
+Message-ID: <Yd5VTy0UW1tOcjTD@piliu.users.ipa.redhat.com>
+References: <20220110115532.536088fd@gandalf.local.home>
+ <31c11a47a8bc4e34a1a64d54a54bb944@AcuMS.aculab.com>
+ <20220110122436.5302128f@gandalf.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110122436.5302128f@gandalf.local.home>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+Hi Steven,
 
-Some of the new Intel PT capabilities (e.g. SDM Vol3, 32.2.4 Event
-Tracing, exposes details about the asynchronous events, when they are
-generated, and when their corresponding software event handler completes
-execution) cannot be safely and fully emulated by the KVM, especially
-emulating the simultaneous writing of guest PT packets generated by
-the KVM to the guest PT buffer.
+Sorry that I am out of office, and not reply in time.
 
-For KVM, it's better to advertise currently supported features based on
-the "static struct pt_cap_desc" implemented in the host PT driver and
-ignore _all_ unknown features before they have been investigated one by
-one and supported in a safe manner, leaving the rest as system-wide-only
-tracing capabilities.
+On Mon, Jan 10, 2022 at 12:24:36PM -0500, Steven Rostedt wrote:
+> On Mon, 10 Jan 2022 17:11:52 +0000
+> David Laight <David.Laight@ACULAB.COM> wrote:
+> 
+> > From: Steven Rostedt
+> > > Sent: 10 January 2022 16:56
+> > > 
+> > > From: Steven Rostedt <rostedt@goodmis.org>
+> > > 
+> > > Pingfan reported that the following causes a fault:
+> > > 
+> > >   echo "filename ~ \"cpu\"" > events/syscalls/sys_enter_openat/filter
+> > >   echo 1 > events/syscalls/sys_enter_at/enable
+> > > 
+> > > The reason is that trace event filter treats the user space pointer
+> > > defined by "filename" as a normal pointer to compare against the "cpu"
+> > > string. If the string is not loaded into memory yet, it will trigger a
+> > > fault in kernel space:  
 
-Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Like Xu <likexu@tencent.com>
----
-v2 -> v3 Changelog:
-- Remove unnecessary comment; (Sean)
-- Add a #define in the pt header for better self-documentin; (Sean)
-- Add validity checks to CPUID E{A|B|C|D}X; (Sean)
+For accurate commit log, the swapped-out user page is not the root cause
+of this bug is "supervisor read access in kernel mode". And it is trueth
+that swapped-out user page can trigger a bug here, but it should be a
+different a stack.
 
-Previous:
-https://lore.kernel.org/kvm/20220110034747.30498-1-likexu@tencent.com/
+> > 
+> > If a userspace pointer can end up the kernel structure then presumably
+> > a 'dodgy' user program can supply an arbitrary kernel address instead?
+> > This may give the user the ability to read arbitrary kernel addresses
+> > (including ones that are mapped to PCIe IO addresses).
+> > Doesn't sound good at all.
+> 
+> Only root has access to the information read here. All tracing requires
+> root or those explicitly given access to the tracing data, which pretty
+> much allows all access to kernel internals (including all memory). So
+> nothing to worry about here ;-)
+> 
 
- arch/x86/include/asm/intel_pt.h | 6 ++++++
- arch/x86/kvm/cpuid.c            | 6 +++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+I am not sure about the opposite way. Since kernel is not allowed to
+access userspace most of the time, then is it an leakage, which looks
+like:
+    use tracepoint as trampoline to uaccess.
+    read out user info from ustring_per_cpu
 
-diff --git a/arch/x86/include/asm/intel_pt.h b/arch/x86/include/asm/intel_pt.h
-index ebe8d2ea44fe..da94d0eeb9df 100644
---- a/arch/x86/include/asm/intel_pt.h
-+++ b/arch/x86/include/asm/intel_pt.h
-@@ -24,6 +24,12 @@ enum pt_capabilities {
- 	PT_CAP_psb_periods,
- };
- 
-+#define GUEST_SUPPORTED_CPUID_14_EBX	\
-+	(BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5))
-+
-+#define GUEST_SUPPORTED_CPUID_14_ECX	\
-+	(BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(31))
-+
- #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
- void cpu_emergency_stop_pt(void);
- extern u32 intel_pt_validate_hw_cap(enum pt_capabilities cap);
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 0b920e12bb6d..be8c9170f98e 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -19,6 +19,7 @@
- #include <asm/user.h>
- #include <asm/fpu/xstate.h>
- #include <asm/sgx.h>
-+#include <asm/intel_pt.h>
- #include "cpuid.h"
- #include "lapic.h"
- #include "mmu.h"
-@@ -900,7 +901,10 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
- 			break;
- 		}
--
-+		entry->eax = min(entry->eax, 1u);
-+		entry->ebx &= GUEST_SUPPORTED_CPUID_14_EBX;
-+		entry->ecx &= GUEST_SUPPORTED_CPUID_14_ECX;
-+		entry->edx = 0;
- 		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
- 			if (!do_host_cpuid(array, function, i))
- 				goto out;
--- 
-2.33.1
+But any kernel code can call copy_from_user() function family freely, so
+it is not a problem caused by this patch, right? Or ustring_per_cpu
+should be zeroed out.
 
+For V2, feel free to add "Tested-by"
+
+
+Thanks,
+
+	Pingfan
+> > 
+> > ...
+> > > +	if (likely((unsigned long)str >= TASK_SIZE)) {
+> > > +		/* For safety, do not trust the string pointer */
+> > > +		if (!strncpy_from_kernel_nofault(kstr, str, USTRING_BUF_SIZE))
+> > > +			return NULL;
+> > > +	} else {
+> > > +		/* user space address? */
+> > > +		ustr = (char __user *)str;
+> > > +		if (!strncpy_from_user_nofault(kstr, ustr, USTRING_BUF_SIZE))
+> > > +			return NULL;  
+> > 
+> > Is that check against TASK_SIZE even correct for all architectures?
+> > copy_to/from_user() uses access_ok() - which is architecture dependant.
+> 
+> The problem with access_ok() (which I tried first) is that it can't be used
+> from interrupt context, and this check can happen in interrupt context.
+> Either way, if we pick the wrong one for the arch, the only thing bad that
+> can happen is that it returns "fault" and the filter fails, just like if
+> the pointer was to bad memory.
+> 
+> > 
+> > I think you need to remember where the pointer came from.
+> > 
+> 
+> Why?
+> 
+> -- Steve

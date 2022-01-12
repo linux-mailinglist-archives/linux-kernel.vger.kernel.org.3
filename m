@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F367C48C559
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CE048C55B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353823AbiALN7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:59:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241570AbiALN7A (ORCPT
+        id S1353828AbiALN7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:59:22 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54200 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353824AbiALN7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:59:00 -0500
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914D2C061751
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 05:59:00 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:76d0:2bff:fec8:549])
-        by albert.telenet-ops.be with bizsmtp
-        id hpyx2600Q0kcUhD06pyyov; Wed, 12 Jan 2022 14:58:58 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1n7e9R-009GVN-En; Wed, 12 Jan 2022 14:58:57 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1n7e9Q-000TvB-VF; Wed, 12 Jan 2022 14:58:56 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Boris Brezillon <bbrezillon@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Srujana Challa <schalla@marvell.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] crypto: marvell - Fix platform dependency for CRYPTO_DEV_OCTEONTX2_CPT
-Date:   Wed, 12 Jan 2022 14:58:55 +0100
-Message-Id: <7c89454656dd825b38b0364bbb2a849554e6f57d.1641995837.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Wed, 12 Jan 2022 08:59:21 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EAD9B81ECF;
+        Wed, 12 Jan 2022 13:59:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E065C36AE5;
+        Wed, 12 Jan 2022 13:59:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641995959;
+        bh=+LlsTTL6jKby2wg3vA3f/f/mlBHdCpbvYqKPOji/bos=;
+        h=Date:From:To:Cc:Subject:From;
+        b=eLxRWdCNCikhQNYuxBmci5w69bsdkpE4Ss3pilDKLAFfINjXmgFfV3hch9i6ayRYg
+         3Gz9j6ywQvwbqi1mcGSDie2biroiOdgoi5tuMyJRh4pQWXgsh2wahtHYjacqbsmvMt
+         eA62k1vE5CIHi/A9EOj3qVm0Yc+XqEUdR1NbV/zo=
+Date:   Wed, 12 Jan 2022 14:59:16 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        linux-spdx@vger.kernel.org
+Subject: [GIT PULL] SPDX update for 5.17-rc1
+Message-ID: <Yd7etLWYHrtjFRdq@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Arnd pointed out that OcteonTX2 is Thunder, not ThunderX2
-(ThunderX2 is CN99XX, formerly named Broadcom Vulcan).
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-Fixes: 42e6f351dcb05fd1 ("crypto: marvell - CRYPTO_DEV_OCTEONTX2_CPT should depend on ARCH_THUNDER2")
-Reported-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/crypto/marvell/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-diff --git a/drivers/crypto/marvell/Kconfig b/drivers/crypto/marvell/Kconfig
-index 9125199f1702bbeb..3221a9d39dec604c 100644
---- a/drivers/crypto/marvell/Kconfig
-+++ b/drivers/crypto/marvell/Kconfig
-@@ -38,7 +38,7 @@ config CRYPTO_DEV_OCTEONTX_CPT
- 
- config CRYPTO_DEV_OCTEONTX2_CPT
- 	tristate "Marvell OcteonTX2 CPT driver"
--	depends on ARCH_THUNDER2 || COMPILE_TEST
-+	depends on ARCH_THUNDER || COMPILE_TEST
- 	depends on PCI_MSI && 64BIT
- 	depends on CRYPTO_LIB_AES
- 	depends on NET_VENDOR_MARVELL
--- 
-2.25.1
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/spdx.git tags/spdx-5.17-rc1
+
+for you to fetch changes up to bc128349588d571b55bfec471a773e29cfcd2d73:
+
+  LICENSES/LGPL-2.1: Add LGPL-2.1-or-later as valid identifiers (2021-12-16 14:33:10 +0100)
+
+----------------------------------------------------------------
+SPDX/License update for 5.17-rc1
+
+Here is a single change that fixes up the description of the LGPL-2.1 or
+later identifiers so that the tools properly acknowledge that this is a
+valid license.
+
+This change has been in linux-next for weeks with no reported problems.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Mauro Carvalho Chehab (1):
+      LICENSES/LGPL-2.1: Add LGPL-2.1-or-later as valid identifiers
+
+ LICENSES/preferred/LGPL-2.1 | 2 ++
+ 1 file changed, 2 insertions(+)

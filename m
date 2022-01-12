@@ -2,184 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3C348BF04
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AAF48BF07
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351211AbiALHd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:33:29 -0500
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:43635 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348740AbiALHd2 (ORCPT
+        id S1351222AbiALHeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:34:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351213AbiALHeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:33:28 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=yaohongbo@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V1dZZmi_1641972805;
-Received: from 30.225.24.107(mailfrom:yaohongbo@linux.alibaba.com fp:SMTPD_---0V1dZZmi_1641972805)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 12 Jan 2022 15:33:26 +0800
-Message-ID: <8ecf5265-2059-1149-3f7f-916c61b20cef@linux.alibaba.com>
-Date:   Wed, 12 Jan 2022 15:33:25 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [RFC PATCH v2] PCI: Waiting command completed in
- get_port_device_capability()
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     bhelgaas@google.com, lukas@wunner.de,
-        zhangliguang@linux.alibaba.com,
-        alikernel-developer@linux.alibaba.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-References: <20220111185538.GA152548@bhelgaas>
-From:   Yao Hongbo <yaohongbo@linux.alibaba.com>
-In-Reply-To: <20220111185538.GA152548@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Wed, 12 Jan 2022 02:34:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B378FC06173F;
+        Tue, 11 Jan 2022 23:34:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E6EFB81DDD;
+        Wed, 12 Jan 2022 07:34:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD50EC36AE9;
+        Wed, 12 Jan 2022 07:33:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641972840;
+        bh=katItcAdlIg1VGt12/hCRr+LeICzVsuaMib2lQWOzyI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JCK9Eaqtu1se7xDxHwSZE0k9cZHqZJpt3dd3i/+RmEzcrQGfK8Ht8FRJFQ1fCPTMr
+         vl0S1e1jJrCth141cPiBkIXHpfiIhnHBFfUEaQ/uNkAYhQewg8GxeOVlGKhIuzu9C1
+         nfG9q0n8Z7WGki8vqIB0xNbi6RhIgNSR57ltVOH9aG4ur78CMlID+55fOa2mu8rMIW
+         KYC3Y2kHSASWIDmkwIeWYCzKvQTdco4loYa3dkG1wRsyXsfJEIUumYdcR4mEl2eej5
+         +b7E79Pe/oeZAFMOH58YSNWZ1OJnrkbcgmTft1lpW/UL3j73ebTYKxJqxwVOvBvE2C
+         8uFqL4QfhplzA==
+Date:   Wed, 12 Jan 2022 16:33:53 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH 0/6] fprobe: Introduce fprobe function entry/exit
+ probe
+Message-Id: <20220112163353.4da6a6b9c6eef69dbda50324@kernel.org>
+In-Reply-To: <20220111223944.jbi3mxedwifxwyz5@ast-mbp.lan>
+References: <20220104080943.113249-1-jolsa@kernel.org>
+        <164191321766.806991.7930388561276940676.stgit@devnote2>
+        <20220111223944.jbi3mxedwifxwyz5@ast-mbp.lan>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Alexei,
 
+On Tue, 11 Jan 2022 14:39:44 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-在 2022/1/12 上午2:55, Bjorn Helgaas 写道:
-> [+cc Lukas, Rafael (in case you have any recollection of 2bd50dd800b5)]
+> On Wed, Jan 12, 2022 at 12:00:17AM +0900, Masami Hiramatsu wrote:
+> > Hi Jiri,
+> > 
+> > Here is a short series of patches, which shows what I replied
+> > to your series.
+> > 
+> > This introduces the fprobe, the function entry/exit probe with
+> > multiple probe point support. This also introduces the rethook
+> > for hooking function return, which I cloned from kretprobe.
+> > 
+> > I also rewrite your [08/13] bpf patch to use this fprobe instead
+> > of kprobes. I didn't tested that one, but the sample module seems
+> > to work. Please test bpf part with your libbpf updates.
+> > 
+> > BTW, while implementing the fprobe, I introduced the per-probe
+> > point private data, but I'm not sure why you need it. It seems
+> > that data is not used from bpf...
+> > 
+> > If this is good for you, I would like to proceed this with
+> > the rethook and rewrite the kretprobe to use the rethook to
+> > hook the functions. That should be much cleaner (and easy to
+> > prepare for the fgraph tracer integration)
 > 
-> On Fri, Jan 07, 2022 at 11:22:49AM +0800, Yao Hongbo wrote:
->> According to the PCIe specification Revision 5.0, section
->> 7.5.3.11 (slot Status Register), if Command Complete notification
->> is supported,  a write to the slot control register needs to set
->> the command completed bit, which can indicate the controller is
->> ready to receive the next command.
->>
->> However, before probing the pcie hotplug service, there needs to set
->> HPIE bit in the slot ctrl register to disable hotplug interrupts,
->> and there is no wait currently.
->>
->> The interval between the two functions get_port_device_capability() and
->> pcie_disable_notification() is not long, which may cause the latter to
->> be interfered by the former.
->>
->> The command complete event received by pcie_disable_notification() may
->> belong to the operation of get_port_device_capability().
-> 
-> Yes, looks like a potential problem.
-> 
->> Signed-off-by: Liguang Zhang <zhangliguang@linux.alibaba.com>
->> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
->> ---
->>  drivers/pci/pcie/portdrv_core.c | 40 ++++++++++++++++++++++++++++++++++++++--
->>  1 file changed, 38 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
->> index bda6308..ec2088b6e 100644
->> --- a/drivers/pci/pcie/portdrv_core.c
->> +++ b/drivers/pci/pcie/portdrv_core.c
->> @@ -15,6 +15,7 @@
->>  #include <linux/string.h>
->>  #include <linux/slab.h>
->>  #include <linux/aer.h>
->> +#include <linux/delay.h>
->>  
->>  #include "../pci.h"
->>  #include "portdrv.h"
->> @@ -190,6 +191,42 @@ static int pcie_init_service_irqs(struct pci_dev *dev, int *irqs, int mask)
->>  	return 0;
->>  }
->>  
->> +static void pcie_port_disable_hp_interrupt(struct pci_dev *dev)
->> +{
->> +	u16 slot_status;
->> +	u32 slot_cap;
->> +	int timeout = 1000;
->> +
->> +	pcie_capability_clear_word(dev, PCI_EXP_SLTCTL,
->> +			PCI_EXP_SLTCTL_CCIE | PCI_EXP_SLTCTL_HPIE);
->> +
->> +	/*
->> +	 * If the command completed notification is not supported,
->> +	 * we don't need to wait after writing to the slot ctrl register.
->> +	 */
->> +	pcie_capability_read_dword(dev, PCI_EXP_SLTCAP, &slot_cap);
->> +	if (slot_cap & PCI_EXP_SLTCAP_NCCS)
->> +		return;
->> +
->> +	do {
->> +		pcie_capability_read_word(dev, PCI_EXP_SLTSTA, &slot_status);
->> +		if (slot_status == (u16) ~0) {
->> +			pci_info(dev, "%s: no response from device\n",  __func__);
->> +			return;
->> +		}
->> +
->> +		if (slot_status & PCI_EXP_SLTSTA_CC) {
->> +			pcie_capability_write_word(dev, PCI_EXP_SLTSTA, PCI_EXP_SLTSTA_CC);
->> +			return;
->> +		}
->> +
->> +		msleep(10);
->> +		timeout -= 10;
->> +	} while (timeout >= 0);
->> +
->> +	pci_info(dev, "Timeout on hotplug disable interrupt!\n");
->> +}
->> +
->>  /**
->>   * get_port_device_capability - discover capabilities of a PCI Express port
->>   * @dev: PCI Express port to examine
->> @@ -213,8 +250,7 @@ static int get_port_device_capability(struct pci_dev *dev)
->>  		 * Disable hot-plug interrupts in case they have been enabled
->>  		 * by the BIOS and the hot-plug service driver is not loaded.
->>  		 */
->> -		pcie_capability_clear_word(dev, PCI_EXP_SLTCTL,
->> -			  PCI_EXP_SLTCTL_CCIE | PCI_EXP_SLTCTL_HPIE);
->> +		pcie_port_disable_hp_interrupt(dev);
-> 
-> This originally came from 2bd50dd800b5 ("PCI: PCIe: Disable PCIe port
-> services during port initialization"), where we disable hotplug
-> interrupts in case the hotplug driver is not available.
-> 
-> In general, I think the OS should not be responsible for disabling
-> interrupts for feature X.  The OS may predate feature X and may not
-> know anything about X at all.  The power-on default for interrupts
-> related to X should be "disabled" (as it is for HPIE and CCIE), and if
-> firmware enables them, it should disable them or arrange to handle
-> them itself before handing off to the OS.
-> 
-> I don't know whether 2bd50dd800b5 was prompted by spurious hotplug
-> interrupts or not.  If it was, I think we were seeing a firmware
-> defect or possibly a pciehp initialization issue.
-> 
-> At the time of 2bd50dd800b5, we always cleared HPIE and CCIE here.
-> 
-> But now, on ACPI systems, we only clear HPIE and CCIE here if we *do*
-> have the hotplug driver (because host->native_pcie_hotplug only
-> remains set if we have been granted control via _OSC, and we only
-> request control when CONFIG_HOTPLUG_PCI_PCIE is enabled).  On these
-> systems, we should be able to remove this disable code because pciehp
-> will do whatever it needs.
-> 
-> For non-ACPI systems, bridge->native_pcie_hotplug will always be set,
-> so we will clear HPIE and CCIE here and then (if
-> CONFIG_HOTPLUG_PCI_PCIE is enabled) initialize pciehp soon after,
-> which may be a problem as you describe.
-> 
-> What kind of system are you seeing the problem on?  It seems like it
-> should be safe to drop the HPIE and CCIE disable here for ACPI
-> systems.  And *likely* we could do the same for non-ACPI systems,
-> though I have no experience there.
+> What is the speed of attach/detach of thousands fprobes?
 
-Hi, Bjorn
-Thanks for your comments.
+I've treaked my example module and it shows below result;
 
-The problem occurs on ACPI systems.
+/lib/modules/5.16.0-rc4+/kernel/samples/fprobe # time insmod ./fprobe_example.ko
+ symbol='btrfs_*'
+[  187.095925] fprobe_init: 1028 symbols found
+[  188.521694] fprobe_init: Planted fprobe at btrfs_*
+real	0m 1.47s
+user	0m 0.00s
+sys	0m 1.36s
 
-[    7.739359] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI EDR HPX-Type3]
-[    7.749238] acpi PNP0A08:00: _OSC: platform does not support [SHPCHotplug AER LTR DPC]
-[    7.757609] acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME PCIeCapability]
+I think using ftrace_set_filter_ips() can make it faster.
+(maybe it needs to drop per-probe point private data, that
+prevents fprobe to use that interface)
 
+Thank you,
 
-We clear HPIE and CCIE here because the firmware doesn't control Hotplug via __OSC.
-
-And on ACPI systems, we can also set pcie_ports=native, which will also encounter such problems.
-
-
-
-> Bjorn
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

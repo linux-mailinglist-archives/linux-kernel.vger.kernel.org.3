@@ -2,73 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C306F48C06F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D6548C074
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351804AbiALIyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:54:10 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:58447 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351785AbiALIyH (ORCPT
+        id S1351799AbiALIzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:55:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351771AbiALIy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:54:07 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R991e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V1e05Wd_1641977645;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V1e05Wd_1641977645)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 12 Jan 2022 16:54:05 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     jack@suse.cz
-Cc:     amir73il@gmail.com, repnop@google.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] fanotify: remove variable set but not used
-Date:   Wed, 12 Jan 2022 16:54:03 +0800
-Message-Id: <20220112085403.74670-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 12 Jan 2022 03:54:57 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434E4C06173F;
+        Wed, 12 Jan 2022 00:54:57 -0800 (PST)
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n7ZPD-0004z1-6n; Wed, 12 Jan 2022 09:54:55 +0100
+Message-ID: <0a79a9be-eddc-fa2b-d7d9-8a2680ed370a@leemhuis.info>
+Date:   Wed, 12 Jan 2022 09:54:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-BS
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+References: <51654a51-4264-c333-40d5-4f755e69d54b@leemhuis.info>
+ <20220111145031.cfkyxffmps3swakv@meerkat.local>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: Add a few more FAQs to the [kernel.org] releases page
+In-Reply-To: <20220111145031.cfkyxffmps3swakv@meerkat.local>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1641977697;ad489ecd;
+X-HE-SMSGID: 1n7ZPD-0004z1-6n
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code that uses the pointer info has been removed in
-'https://lore.kernel.org/all/20211129201537.1932819-11-amir73il@gmail.com/'
-and fanotify_event_info() doesn't change 'event', so the declaration and 
-assignment of info can be removed.
+On 11.01.22 15:50, Konstantin Ryabitsev wrote:
+> On Tue, Jan 11, 2022 at 07:32:46AM +0100, Thorsten Leemhuis wrote:
+>> * you added two sections that use the term "LTS", which is not explained
+>> on that page and wasn't used on it earlier. I wonder if it might be
+>> better to use "Longterm series" or something like that instead, as that
+>> it the term used on the page (and the official one afaics).
+> Thanks for the feedback, I switched to using "longterm" uniformly on that
+> page.
 
-Eliminate the following clang warning:
-fs/notify/fanotify/fanotify_user.c:161:24: warning: variable ‘info’ set
-but not used
+Ahh, nice, thx.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- fs/notify/fanotify/fanotify_user.c | 3 ---
- 1 file changed, 3 deletions(-)
+>> This was also added:
+>>
+>>> Does the odd-even number still mean anything?
+>>>
+>>> Not since 2.5 days.
+>>
+>> I guess a lot of users won't known how long ago that was, so how about
+>> using an answer like this instead:
+>>
+>> "Not since December 2003, when Linux 2.6 got released."
+> 
+> I've expanded a bit more on that topic, just to avoid confusion.
 
-diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
-index 73b1615f9d96..1026f67b1d1e 100644
---- a/fs/notify/fanotify/fanotify_user.c
-+++ b/fs/notify/fanotify/fanotify_user.c
-@@ -158,7 +158,6 @@ static size_t fanotify_event_len(unsigned int info_mode,
- 				 struct fanotify_event *event)
- {
- 	size_t event_len = FAN_EVENT_METADATA_LEN;
--	struct fanotify_info *info;
- 	int fh_len;
- 	int dot_len = 0;
- 
-@@ -168,8 +167,6 @@ static size_t fanotify_event_len(unsigned int info_mode,
- 	if (fanotify_is_error_event(event->mask))
- 		event_len += FANOTIFY_ERROR_INFO_LEN;
- 
--	info = fanotify_event_info(event);
--
- 	if (fanotify_event_has_any_dir_fh(event)) {
- 		event_len += fanotify_dir_name_info_len(event);
- 	} else if ((info_mode & FAN_REPORT_NAME) &&
--- 
-2.20.1.7.g153144c
+Great.
 
+BTW, also a big "thank you" from my side for linking "reporting issues".
+
+I looked a little more at the two pages you changed. Most of what
+follows is nitpicking, feel free to ignore it. Quotes from here on are
+from the linked pages, not from the mail I'm replying to:
+
+
+# https://www.kernel.org/category/releases.html
+
+> What is the next longterm release going to be?
+>
+> Longterm kernels are picked based on various factors -- major new
+> features, popular commercial distribution needs, device manufacturer
+> demand, maintainer workload and availability, etc. You can roughly
+> estimate when the new longterm version will become available based on
+> how much time has elapsed since the last longterm version was
+> chosen.
+
+This is not true anymore afaics (or is it vague on purpose?). Greg (now
+CCed) since a few years always makes the last mainline release of a year
+the next longterm kernel. He said that a few times, for example here:
+https://twitter.com/kernellogger/status/1321081399730970626
+
+So something like this maybe?
+"""
+What is the next longterm release going to be?
+
+The last Linux mainline version released in a year becomes a longterm
+kernel.
+"""
+
+# https://www.kernel.org/category/faq.html
+
+> Why is an LTS kernel marked as "stable" on the front page?
+>  
+> Long-term support ("LTS") kernels announced on the Releases page […]
+
+Maybe get rid of the LTS here, too?
+
+"""
+Why is a longterm kernel described as "stable" on the front page?
+
+Longterm kernels announced on the Releases page […]
+"""
+
+FWIW, in reporting issues I did it like this: "Longterm kernels
+(sometimes called 'LTS kernels') are […]"
+
+> How do I report a problem with the kernel?
+
+I'd sort the list of distribution bug trackers alphabetically to avoid
+people thinking things like "why is x listed earlier than my favourite
+distro, which is way better".
+
+Ohh, and I guess you make some people happy if you do
+s/OpenSUSE/openSUSE/ :-D
+
+Ciao, Thorsten

@@ -2,105 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B96C648BF2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B4F48BF2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237620AbiALHm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:42:56 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:52374
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236960AbiALHmz (ORCPT
+        id S237688AbiALHn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:43:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49534 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231359AbiALHn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:42:55 -0500
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 12 Jan 2022 02:43:56 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9607C3F198
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:42:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641973374;
-        bh=epu2LRZE4ho4WW6edxeyHFTEV0S/nG4S9x7fJoxh1S0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-         In-Reply-To:Content-Type;
-        b=FzRkzwXJ0mxEFiJZcC56k4YPZtoeQbUsY6dETKVc5aUwEkJSIcE4tW4qduNGpPVvT
-         8GVZbIXyEKuUyDia04hnt+pKc7CQfZu3cKhSDjARA8TGTJOSTzn8p006AQtWfHd5bE
-         soZxKYn4TmIRgSTDp0FBXY741KVtuaYuXumW4J+sETk0xfQ/yUoE8U+mQpxDGING0B
-         ovpRazThHRKFKy00Z4LhP5plFh5juKp8V3lrLwgZPn5ln3cBeiK7GkWIiJf45iDdfF
-         1TBprjbucgOCoEm0X3E9X1YemxBClz+50JrL7NBfPbUylH4nZAoP3zl8UjzhMoJcYC
-         XbGGs3LKOeOtA==
-Received: by mail-ed1-f71.google.com with SMTP id g11-20020a056402090b00b003f8fd1ac475so1521505edz.1
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 23:42:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=epu2LRZE4ho4WW6edxeyHFTEV0S/nG4S9x7fJoxh1S0=;
-        b=RdIQMsN1K2gIQ74ZcwQZrhHKZiuOWXWH1qdbDlzCS/0lhs0xLGZYpKWyAYlrJh8bxJ
-         jM1+QumjGSk0k0o7wTc5p6V+g0uPrXSL4iHe7AaBIfBWVUDqGRJw/UOXC0KVmgTNeZ8p
-         mK9SsF3R5KwLLIwe75QYpbJo5ugXKjq+mg6/EybstrAYRXcUaSn6/t0Q5Iiq4QSvzoIB
-         wG/lSK7sL1PFZqD4sI2w91OTpKfaFRG2oj+rQ3elNHbGc3snaYF1pHi5oND7Z13QCqp/
-         79oQvN09HMiRX1X2sYTfd9FkZsPEad1bE5U8KoFM9j8Ttz3ExX/wRE0g0a/dFWl6uWu4
-         +5gQ==
-X-Gm-Message-State: AOAM532VH0+5YcbQiWbhegYpyKSfKVjPbmol2Ethnj6Z9/fd8X3otZrS
-        fOPaDIJ8DVVPJwWfaaQyDc/WzLNm0slnu3m/LPevrwNkeKPSIsKTa675FvOhls4nhBWDVLja+xb
-        df1tkmRnL0ZXlmyDYgf1FIrEl9FBJVFicoNG0rswpWA==
-X-Received: by 2002:aa7:df13:: with SMTP id c19mr7689773edy.233.1641973374240;
-        Tue, 11 Jan 2022 23:42:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw0NbbWSBowvR9ILzXQnO9GdhgSKLG97/LSzMoBz0Gaauz3kd508ZNjLoLgXl9i652kC+N/dw==
-X-Received: by 2002:aa7:df13:: with SMTP id c19mr7689756edy.233.1641973374107;
-        Tue, 11 Jan 2022 23:42:54 -0800 (PST)
-Received: from [192.168.0.26] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id hq29sm4265184ejc.141.2022.01.11.23.42.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 23:42:53 -0800 (PST)
-Message-ID: <783a67ad-ee7e-c75a-a52c-672cd355bd37@canonical.com>
-Date:   Wed, 12 Jan 2022 08:42:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 3/3] dt-bindings: leds: common: fix unit address in
- max77693 example
-Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220111175430.224421-1-krzysztof.kozlowski@canonical.com>
- <20220111175430.224421-4-krzysztof.kozlowski@canonical.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220111175430.224421-4-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88507B81E06;
+        Wed, 12 Jan 2022 07:43:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7BEFC36AEA;
+        Wed, 12 Jan 2022 07:43:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641973434;
+        bh=P4fphtGFF/hVfABFIytuAPP0L5tQIZq8gmY+Nbs2xK4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=occkmkh4v3Dq9b8k6mUnoKo+F98hcecUsaIMFliimpfwiREZBWIuQtHNWMn9ePE+a
+         oxbWoq3uDNy3J6YQrN7i87NHXqDNWYA6Dz7dHwRBiBPXIxYMLKZb8xxTDRGIqEc51H
+         6krBDPRFTjJHBOatjtldRhPTeYj2anascRn53R2v9VsXFGkzlftDRuqs+z72KGHE4K
+         XLX2PTg91K7C1qsuC8Jm6RDkcF+xFUTCyxSvF7xqDmdt28ipOR40SN3Z76PnxMakuo
+         83j79CPpvEjFFjpaZs2ELxMfBmpqspRhjXPDAZn0mDzMh47keiOcgFyysUjyUP41bQ
+         nY3QqkgD0m1CA==
+From:   SeongJae Park <sj@kernel.org>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     SeongJae Park <sj@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wei Liu <wei.liu@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>
+Subject: Re: [PATCH v2 for-rust-for-linux] init/Kconfig: Specify the interpreter for rust-version.sh
+Date:   Wed, 12 Jan 2022 07:43:51 +0000
+Message-Id: <20220112074351.31353-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CANiq72=uZ58gQ5PmF5bXk7f47yGGzeL=WQnNbybeBPDZuQhijA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 18:54, Krzysztof Kozlowski wrote:
-> The max77693 LED device node should not take an unit address, because it
-> is instantiated from a max77693 I2C parent device node.  This also
-> splits all examples to separate DTS examples because they are actually
-> independent.
+On Wed, 12 Jan 2022 01:32:20 +0100 Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
+
+> On Mon, Jan 10, 2022 at 11:13 AM Miguel Ojeda
+> <miguel.ojeda.sandonis@gmail.com> wrote:
+> >
+> > Picking it up, thanks!
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  Documentation/devicetree/bindings/leds/common.yaml | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+> This is now in linux-next (Jan 11) -- hopefully it is now better for you!
+
+Confirmed that, thank you! :)
+
 > 
+> I will carry the patch in our rust-next branch but I won't put it in
+> the patch series, this way we won't need to revert it when merged into
+> mainline.
 
-This should be part of my max77693 patchset:
-https://lore.kernel.org/lkml/20220111175017.223966-1-krzysztof.kozlowski@canonical.com/
+Sure.  Looking forward to the day!
 
-Nothing actually depends on this patch. It just fixes a warning which
-will be brought to eyes with mentioned max77693 patchset.
 
-Pavel, feel free to take it separately via leds tree. Other way is to
-take it with other max77693 patches (probably via MFD tree).
+Thanks,
+SJ
 
-Best regards,
-Krzysztof
+> 
+> Cheers,
+> Miguel

@@ -2,187 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0D648CE9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 23:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F3B48CE9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 23:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234790AbiALW4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 17:56:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26919 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234777AbiALW4U (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 17:56:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642028177;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BnkpM+pGxrApbJHkm0M03d3jDQgbOfi2NwpUNQ1rReQ=;
-        b=LwpFKEHl003X/IPXR1EmhNPX4yXaoGhN3nQJg/Zrqt/HdNJ6flcYyBVtg4s8l1zqIqf0sy
-        6ScnSeM4fVuoI33zp2/dG5xbcRNdW4BB3qgQF0/3IMu/EBuARcZ1Knt89uwkLSOWLXRdXp
-        HOZlKdSeiJr49tEiLeAROoKPX29qvzE=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-203-9tDh9QrhPP6dNrF3J26qbg-1; Wed, 12 Jan 2022 17:56:16 -0500
-X-MC-Unique: 9tDh9QrhPP6dNrF3J26qbg-1
-Received: by mail-ed1-f72.google.com with SMTP id h1-20020aa7cdc1000000b0040042dd2fe4so2307340edw.17
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 14:56:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=BnkpM+pGxrApbJHkm0M03d3jDQgbOfi2NwpUNQ1rReQ=;
-        b=t7Ksnn9d0kcIRGhGU0Jki6x9e43+Edo3VCLgjkypWHwjRIu1CsHhSzyZrXbQoSGpiO
-         FhAx6H5DaBNczMyOc7U2M0HJNdvI8kxMo52bOCWCgB5WFd4Kh+kmjaSj9tm4yO1pZawt
-         IWUDD4byCvq/FyqQ1TE1SHSJCvun+C/kUZAOD/+oHl+WGSDycCeBqmZF7BL1qNCvfgK/
-         GHbUj415RuW52gtgP592XE/V0R/JfBoUC5ldDjM4agbRZwi2pKylcuU7FUolv2qQ08Mw
-         EyHqFvwcAUNHyFOU7Rcs4PReJFNgo5GB9ExEIGdatfqQ5zEubM+5EcC0ctW3+vc8K2eW
-         zW1w==
-X-Gm-Message-State: AOAM533ofBZBlC4iemwPSyC4JvkGZPaw7UpdrDXJQpxkmaHMYgQJw9xj
-        nuTlTJJVIoGKwepu0NoP3G7coIVR78cNseCvi4NIsrG8K15JhuSSdy63+9l2CFNemGbuVIo0YX+
-        KrIy2Rgkq2XXbMKCKPF2tr+Ck
-X-Received: by 2002:a17:906:158f:: with SMTP id k15mr1419789ejd.367.1642028174500;
-        Wed, 12 Jan 2022 14:56:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzslN7ywjh8PbuXmxEdQtB8I0bf47LWMuq0xevWYn8N1avx8AZ2QP4uOzEEVzrJFXzW9EpY6g==
-X-Received: by 2002:a17:906:158f:: with SMTP id k15mr1419770ejd.367.1642028174153;
-        Wed, 12 Jan 2022 14:56:14 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id u9sm301028ejh.195.2022.01.12.14.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 14:56:13 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 1BE561802BD; Wed, 12 Jan 2022 23:56:13 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
-        linux-crypto@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH RFC v1 1/3] bpf: move from sha1 to blake2s in tag
- calculation
-In-Reply-To: <20220112131204.800307-2-Jason@zx2c4.com>
-References: <20220112131204.800307-1-Jason@zx2c4.com>
- <20220112131204.800307-2-Jason@zx2c4.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 12 Jan 2022 23:56:13 +0100
-Message-ID: <87tue8ftrm.fsf@toke.dk>
+        id S234811AbiALW70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 17:59:26 -0500
+Received: from mga07.intel.com ([134.134.136.100]:60005 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234747AbiALW7X (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 17:59:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642028363; x=1673564363;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fzQ91e0kvTUkLIey14pwHxSkllZrr7kOgv2IcWh5jto=;
+  b=RZ56JA3iE0aDFU+o+lyoDhjPKWuRUPiAI58CmEBnCUJFlEUJQNIY5Kp4
+   evYsXl3miZ6o7eb9MQzmdPdRoZ4b3mqeDqB8Zn7Wxjlr982Ig2olYivRl
+   jqedu+wimRYV+S0aP0K2CCH3cYtgFH8V3jT1fGQ+rqOJWw1LUvdCTWTwm
+   7VZC0YinPdxX+7VQS/PawwAqKR0RATLl7tXTkMf45c3orl6x/pK3rGJn+
+   ByoCc1B3jUEXR7N7zqt/aS3MITiXItOUoKjYIj34KUTUSCqOf4uLRMxIN
+   goUoOdKEWv01XPXJb12EK7fcxfSSjlbDRNkc0vC+SRTFE06+34aOAT1sJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="307220355"
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="307220355"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 14:59:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="515689182"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 12 Jan 2022 14:59:21 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n7maO-0006WN-NR; Wed, 12 Jan 2022 22:59:20 +0000
+Date:   Thu, 13 Jan 2022 06:59:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mark:treewide/gnu99 1/1] net/netfilter/xt_hashlimit.c:608:40:
+ warning: left shift of negative value
+Message-ID: <202201130653.9pXG19yX-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ adding the bpf list - please make sure to include that when sending
-  BPF-related patches, not everyone in BPF land follows netdev ]  
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git treewide/gnu99
+head:   df0f3c59f076be0ab4a6d8de53fdeef871394594
+commit: df0f3c59f076be0ab4a6d8de53fdeef871394594 [1/1] treewide: use -std=gnu99
+config: m68k-defconfig (https://download.01.org/0day-ci/archive/20220113/202201130653.9pXG19yX-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=df0f3c59f076be0ab4a6d8de53fdeef871394594
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark treewide/gnu99
+        git checkout df0f3c59f076be0ab4a6d8de53fdeef871394594
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash drivers/block/drbd/ net/netfilter/
 
-"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> BLAKE2s is faster and more secure. SHA-1 has been broken for a long time
-> now. This also removes quite a bit of code, and lets us potentially
-> remove sha1 from lib, which would further reduce vmlinux size.
+All warnings (new ones prefixed by >>):
 
-AFAIU, the BPF tag is just used as an opaque (i.e., arbitrary) unique
-identifier for BPF programs, without any guarantees of stability. Which
-means changing it should be fine; at most we'd confuse some operators
-who have memorised the tags of their BPF programs :)
+   In file included from include/linux/byteorder/big_endian.h:5,
+                    from arch/m68k/include/uapi/asm/byteorder.h:5,
+                    from include/asm-generic/bitops/le.h:7,
+                    from arch/m68k/include/asm/bitops.h:529,
+                    from include/linux/bitops.h:33,
+                    from include/linux/thread_info.h:27,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/m68k/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from arch/m68k/include/asm/irqflags.h:6,
+                    from include/linux/irqflags.h:16,
+                    from arch/m68k/include/asm/atomic.h:6,
+                    from include/linux/atomic.h:7,
+                    from include/linux/mm_types_task.h:13,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from net/netfilter/xt_hashlimit.c:13:
+   net/netfilter/xt_hashlimit.c: In function 'maskl':
+>> net/netfilter/xt_hashlimit.c:608:40: warning: left shift of negative value [-Wshift-negative-value]
+     608 |         return l ? htonl(ntohl(a) & ~0 << (32 - l)) : 0;
+         |                                        ^~
+   include/uapi/linux/byteorder/big_endian.h:40:51: note: in definition of macro '__cpu_to_be32'
+      40 | #define __cpu_to_be32(x) ((__force __be32)(__u32)(x))
+         |                                                   ^
+   include/linux/byteorder/generic.h:139:18: note: in expansion of macro '___htonl'
+     139 | #define htonl(x) ___htonl(x)
+         |                  ^~~~~~~~
+   net/netfilter/xt_hashlimit.c:608:20: note: in expansion of macro 'htonl'
+     608 |         return l ? htonl(ntohl(a) & ~0 << (32 - l)) : 0;
+         |                    ^~~~~
+--
+   drivers/block/drbd/drbd_main.c: In function 'dcbp_set_pad_bits':
+>> drivers/block/drbd/drbd_main.c:1095:44: warning: left shift of negative value [-Wshift-negative-value]
+    1095 |         p->encoding = (p->encoding & (~0x7 << 4)) | (n << 4);
+         |                                            ^~
 
-The only other concern I could see would be if it somehow locked us into
-that particular algorithm for other future use cases for computing
-hashes of BPF programs (say, signing if that ends up being the direction
-we go in). But obviously SHA1 would not be a good fit for that anyway,
-so the algorithm choice would have to be part of that discussion in any
-case.
 
-So all in all, I don't see any issues with making this change for BPF.
+vim +608 net/netfilter/xt_hashlimit.c
 
--Toke
+817e076f61bca3 Florian Westphal 2012-05-07  605  
+09e410def64324 Jan Engelhardt   2008-01-31  606  static inline __be32 maskl(__be32 a, unsigned int l)
+09e410def64324 Jan Engelhardt   2008-01-31  607  {
+1b9b70ea2ebaab Patrick McHardy  2008-04-09 @608  	return l ? htonl(ntohl(a) & ~0 << (32 - l)) : 0;
+09e410def64324 Jan Engelhardt   2008-01-31  609  }
+09e410def64324 Jan Engelhardt   2008-01-31  610  
 
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-> Cc: linux-crypto@vger.kernel.org
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  kernel/bpf/core.c | 39 ++++-----------------------------------
->  1 file changed, 4 insertions(+), 35 deletions(-)
->
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 2405e39d800f..d01976749467 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -33,6 +33,7 @@
->  #include <linux/extable.h>
->  #include <linux/log2.h>
->  #include <linux/bpf_verifier.h>
-> +#include <crypto/blake2s.h>
->  
->  #include <asm/barrier.h>
->  #include <asm/unaligned.h>
-> @@ -265,24 +266,16 @@ void __bpf_prog_free(struct bpf_prog *fp)
->  
->  int bpf_prog_calc_tag(struct bpf_prog *fp)
->  {
-> -	const u32 bits_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
->  	u32 raw_size = bpf_prog_tag_scratch_size(fp);
-> -	u32 digest[SHA1_DIGEST_WORDS];
-> -	u32 ws[SHA1_WORKSPACE_WORDS];
-> -	u32 i, bsize, psize, blocks;
->  	struct bpf_insn *dst;
->  	bool was_ld_map;
-> -	u8 *raw, *todo;
-> -	__be32 *result;
-> -	__be64 *bits;
-> +	u8 *raw;
-> +	int i;
->  
->  	raw = vmalloc(raw_size);
->  	if (!raw)
->  		return -ENOMEM;
->  
-> -	sha1_init(digest);
-> -	memset(ws, 0, sizeof(ws));
-> -
->  	/* We need to take out the map fd for the digest calculation
->  	 * since they are unstable from user space side.
->  	 */
-> @@ -307,31 +300,7 @@ int bpf_prog_calc_tag(struct bpf_prog *fp)
->  		}
->  	}
->  
-> -	psize = bpf_prog_insn_size(fp);
-> -	memset(&raw[psize], 0, raw_size - psize);
-> -	raw[psize++] = 0x80;
-> -
-> -	bsize  = round_up(psize, SHA1_BLOCK_SIZE);
-> -	blocks = bsize / SHA1_BLOCK_SIZE;
-> -	todo   = raw;
-> -	if (bsize - psize >= sizeof(__be64)) {
-> -		bits = (__be64 *)(todo + bsize - sizeof(__be64));
-> -	} else {
-> -		bits = (__be64 *)(todo + bsize + bits_offset);
-> -		blocks++;
-> -	}
-> -	*bits = cpu_to_be64((psize - 1) << 3);
-> -
-> -	while (blocks--) {
-> -		sha1_transform(digest, todo, ws);
-> -		todo += SHA1_BLOCK_SIZE;
-> -	}
-> -
-> -	result = (__force __be32 *)digest;
-> -	for (i = 0; i < SHA1_DIGEST_WORDS; i++)
-> -		result[i] = cpu_to_be32(digest[i]);
-> -	memcpy(fp->tag, result, sizeof(fp->tag));
-> -
-> +	blake2s(fp->tag, raw, NULL, sizeof(fp->tag), bpf_prog_insn_size(fp), 0);
->  	vfree(raw);
->  	return 0;
->  }
-> -- 
-> 2.34.1
+:::::: The code at line 608 was first introduced by commit
+:::::: 1b9b70ea2ebaab26c3e4fed385dfab6fc16359ed [NETFILTER]: xt_hashlimit: fix mask calculation
 
+:::::: TO: Patrick McHardy <kaber@trash.net>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

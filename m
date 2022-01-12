@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC8F48CF25
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 00:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 309C848CF29
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 00:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235491AbiALXdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 18:33:10 -0500
-Received: from smtp-fw-80007.amazon.com ([99.78.197.218]:7551 "EHLO
-        smtp-fw-80007.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235421AbiALXdI (ORCPT
+        id S235512AbiALXe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 18:34:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235421AbiALXe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 18:33:08 -0500
+        Wed, 12 Jan 2022 18:34:57 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DB3C06173F;
+        Wed, 12 Jan 2022 15:34:57 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id k30so6987678wrd.9;
+        Wed, 12 Jan 2022 15:34:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1642030388; x=1673566388;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fc55L5MUZDiGbQZ8eZAKde645irQFkn06aL3kIXwU2k=;
-  b=D+jIjxjho6qc83Z0AbyKQimWrHH7sov8wmGEnbjmJ4+1vmsT5RotdfHV
-   DvC45EP0qMQZL6SqhA+Nz2DWQsWtX/Lw1jsA9pzFE35l9ezxIvoNL9wkV
-   sW29gPQeIBuUcXbA/rQgK+uwQ8z1iTcsPMQ7OAhX5i96T/4N1sjaF0fZi
-   g=;
-X-IronPort-AV: E=Sophos;i="5.88,284,1635206400"; 
-   d="scan'208,223";a="54973163"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 12 Jan 2022 23:33:07 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com (Postfix) with ESMTPS id A17DB811B2;
-        Wed, 12 Jan 2022 23:33:05 +0000 (UTC)
-Received: from EX13D01UWA002.ant.amazon.com (10.43.160.74) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Wed, 12 Jan 2022 23:33:04 +0000
-Received: from u46989501580c5c.ant.amazon.com (10.43.161.183) by
- EX13d01UWA002.ant.amazon.com (10.43.160.74) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Wed, 12 Jan 2022 23:33:04 +0000
-From:   Samuel Mendoza-Jonas <samjonas@amazon.com>
-To:     <netdev@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>
-CC:     Samuel Mendoza-Jonas <samjonas@amazon.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3DEFgBCX906ok4X/wdH2dxwVHpxsjiS6oUvaGjRJjSc=;
+        b=e9IAmlaSjuYmaF9CmGYif8YYLo6UNV3nMGK3jnmOsCdkSHfSTMAEAv2Ra4qJjr0NE/
+         zahrF5w/PN6y+8Eb/frfktMb/xueFL+wxRRN2R/EKKmVeg6VJ7OwPGl7UyEbwGFE+R07
+         7wsLAOO8ebbFowfkS9p9MEzKjBQQ2wz4LoM0PvPAo6zKPj56ueOHHWNWsTQux55UEtUJ
+         bGzUoHAZo99kaLq6IajDlHYr6mpB64hNiLV2xqPeVP6O/BMFBPsJALc60mzqLlgIVnCf
+         j7EKQ/2Ko2XyM9AKKM2D1nhiqucm6fymtLaWuuI7uilmjtqmpqcJEoTg/Bc9j+R03j2M
+         iGsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3DEFgBCX906ok4X/wdH2dxwVHpxsjiS6oUvaGjRJjSc=;
+        b=Sx3cTmOLDx6THlFaGiVB7ratcPFosSeMAFTChy0Tss5xcat1+Y7M6238hjc/ylSJby
+         y91FzL7MuPYkT3roY1wsoET4RLEeN26HLvvqyRtAgv4AeGddvac2QD/xuI8M9FurjGkA
+         EEO1natKimoJmWIsLcv/650lfH7tjImIpqCaCn2ASLdsjztxf0JVGOafKQGVm7znebbM
+         2vTavCnZDTVYpGjFKq5IMlP866cZ1zEAQCPu7SrKpn2mpPLuJqonNCch9uEhd12SOp0x
+         eGWYCe3jGVlxUEhaKBzZdNq8pALePKcZJJ5elCd960DnLvAWlESFdE9+x8jtxRpX7QBh
+         jbew==
+X-Gm-Message-State: AOAM530w9K+jxDHNV6cg8Mfl6bgqJhUBPFD9KDHZDIKb/KkSQocMgFXO
+        FhETVrSBk4pJXR5vmLJbM5w=
+X-Google-Smtp-Source: ABdhPJxeMow1qP7JNTiHjKD4H5i8qsaxLomu8bgbsOMr814izohrtas13g4czBsvmKybVqg0ZNUM3A==
+X-Received: by 2002:a5d:5282:: with SMTP id c2mr1705884wrv.580.1642030495750;
+        Wed, 12 Jan 2022 15:34:55 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id x6sm1051652wrt.58.2022.01.12.15.34.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 15:34:55 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "David S . Miller" <davem@davemloft.net>,
-        "Tony Nguyen" <anthony.l.nguyen@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net] ixgbevf: Require large buffers for build_skb on 82599VF
-Date:   Wed, 12 Jan 2022 15:32:31 -0800
-Message-ID: <20220112233231.317259-1-samjonas@amazon.com>
-X-Mailer: git-send-email 2.25.1
+        Nathan Chancellor <nathan@kernel.org>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] crypto: asymmetric_keys: remove redundant pointer secs
+Date:   Wed, 12 Jan 2022 23:34:54 +0000
+Message-Id: <20220112233454.1207944-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.183]
-X-ClientProxiedBy: EX13D40UWA002.ant.amazon.com (10.43.160.149) To
- EX13d01UWA002.ant.amazon.com (10.43.160.74)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From 4.17 onwards the ixgbevf driver uses build_skb() to build an skb
-around new data in the page buffer shared with the ixgbe PF.
-This uses either a 2K or 3K buffer, and offsets the DMA mapping by
-NET_SKB_PAD + NET_IP_ALIGN. When using a smaller buffer RXDCTL is set to
-ensure the PF does not write a full 2K bytes into the buffer, which is
-actually 2K minus the offset.
+The pointer secs is assigned a value but it is never read. The
+pointer is redundant and can be removed. Cleans up clang scan
+warning:
 
-However on the 82599 virtual function, the RXDCTL mechanism is not
-available. The driver attempts to work around this by using the SET_LPE
-mailbox method to lower the maximm frame size, but the ixgbe PF driver
-ignores this in order to keep the PF and all VFs in sync[0].
+crypto/asymmetric_keys/verify_pefile.c:113:14: warning: Although
+the value stored to 'secs' is used in the enclosing expression,
+the value is never actually read from 'secs' [deadcode.DeadStores]
 
-This means the PF will write up to the full 2K set in SRRCTL, causing it
-to write NET_SKB_PAD + NET_IP_ALIGN bytes past the end of the buffer.
-With 4K pages split into two buffers, this means it either writes
-NET_SKB_PAD + NET_IP_ALIGN bytes past the first buffer (and into the
-second), or NET_SKB_PAD + NET_IP_ALIGN bytes past the end of the DMA
-mapping.
-
-Avoid this by only enabling build_skb when using "large" buffers (3K).
-These are placed in each half of an order-1 page, preventing the PF from
-writing past the end of the mapping.
-
-[0]: Technically it only ever raises the max frame size, see
-ixgbe_set_vf_lpe() in ixgbe_sriov.c
-
-Signed-off-by: Samuel Mendoza-Jonas <samjonas@amazon.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ crypto/asymmetric_keys/verify_pefile.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-index 0015fcf1df2b..0f293acd17e8 100644
---- a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-+++ b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-@@ -1984,14 +1984,15 @@ static void ixgbevf_set_rx_buffer_len(struct ixgbevf_adapter *adapter,
- 	if (adapter->flags & IXGBEVF_FLAGS_LEGACY_RX)
- 		return;
+diff --git a/crypto/asymmetric_keys/verify_pefile.c b/crypto/asymmetric_keys/verify_pefile.c
+index 7553ab18db89..a660e4d68d50 100644
+--- a/crypto/asymmetric_keys/verify_pefile.c
++++ b/crypto/asymmetric_keys/verify_pefile.c
+@@ -28,7 +28,7 @@ static int pefile_parse_binary(const void *pebuf, unsigned int pelen,
+ 	const struct pe32plus_opt_hdr *pe64;
+ 	const struct data_directory *ddir;
+ 	const struct data_dirent *dde;
+-	const struct section_header *secs, *sec;
++	const struct section_header *sec;
+ 	size_t cursor, datalen = pelen;
  
--	set_ring_build_skb_enabled(rx_ring);
-+	if (PAGE_SIZE < 8192)
-+		if (max_frame > IXGBEVF_MAX_FRAME_BUILD_SKB)
-+			set_ring_uses_large_buffer(rx_ring);
+ 	kenter("");
+@@ -110,7 +110,7 @@ static int pefile_parse_binary(const void *pebuf, unsigned int pelen,
+ 	ctx->n_sections = pe->sections;
+ 	if (ctx->n_sections > (ctx->header_size - cursor) / sizeof(*sec))
+ 		return -ELIBBAD;
+-	ctx->secs = secs = pebuf + cursor;
++	ctx->secs = pebuf + cursor;
  
--	if (PAGE_SIZE < 8192) {
--		if (max_frame <= IXGBEVF_MAX_FRAME_BUILD_SKB)
--			return;
-+	/* 82599 can't rely on RXDCTL.RLPML to restrict the size of the frame */
-+	if (adapter->hw.mac.type == ixgbe_mac_82599_vf && !ring_uses_large_buffer(rx_ring))
-+		return;
- 
--		set_ring_uses_large_buffer(rx_ring);
--	}
-+	set_ring_build_skb_enabled(rx_ring);
+ 	return 0;
  }
- 
- /**
 -- 
-2.25.1
+2.33.1
 

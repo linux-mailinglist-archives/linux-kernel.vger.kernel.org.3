@@ -2,169 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8A848CA7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6521B48CA83
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355850AbiALR6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 12:58:53 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:48362 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242192AbiALR6v (ORCPT
+        id S1355899AbiALR7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 12:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348664AbiALR7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 12:58:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EDBC616C1;
-        Wed, 12 Jan 2022 17:58:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC21C36AE5;
-        Wed, 12 Jan 2022 17:58:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642010330;
-        bh=r9CJAibGsK4OZgWc2GYrncKtUPNzsfsPE8izkKbx9P4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N6isxRMP7oOqP3lPpESN3Oj6MI72FmEcqzbYL5bov91z9KSf0iLtVuUeb3FyzqNU2
-         601Kcl+EssNVGQmY52Ex0UpcN7bCLjLOF1qBqUTALHBM87G1GVBZX2DwW/lctYwqnm
-         Rw/tFKJSw1gbS51OsA1c75xthUEx1OfrWYU7VTPgg6Jx0PZr4sWzabiucDx5LwBnFN
-         2Fl4NcCsi+1dAu/HmDnkppYBmSW7CK3Lm2X9N1ZzpjcOZye0jgo3gfgSFMtpINj8kK
-         a/77fwmYuwyXsQfPMv3z1wqECE6fIez51Irpe6ib7GS2oGzl3/ryj4814fFPe7MZiA
-         arg1UlbtywwWw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A90A240714; Wed, 12 Jan 2022 14:58:47 -0300 (-03)
-Date:   Wed, 12 Jan 2022 14:58:47 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        eranian@google.com
-Subject: Re: [RFC PATCH] perf pmu-events: Don't lower case MetricExpr
-Message-ID: <Yd8W15KBArfhmqTx@kernel.org>
-References: <20211126071305.3733878-1-irogers@google.com>
- <CAP-5=fU2kEq3T8UCpX0tAmwcGhZ+1h92uRPbzyuLDNpeCD7ffQ@mail.gmail.com>
- <Yd8To1ASO73135LK@kernel.org>
- <Yd8Vpo/I7LiMyfI6@kernel.org>
+        Wed, 12 Jan 2022 12:59:33 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703F4C061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:59:33 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so6330127pji.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:59:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lxclRLr31RsJ2S0clQHvNH9FSmldpFyw3vzSNMFjSFI=;
+        b=CAWdvjx4EIviY6PjoqmwBfiBTEBiP2yCL1Zhg1c+jTo0nQbaSdZ7cavQNNpQJlxUOa
+         MqJW+H+95+zTC4n2JrC5v8O37hr5S8tJF85taoqIrK4G9YZ9aDYGfIQeLnLgxaozofVN
+         WukIDUkb/3u9HHaHemlszAkSG7/6T10REeYRLwBg/msN/qTb+dvBSWbMRXYkc21S2Tj9
+         U3B0oEeAq3fWixc1gFqo2/APlTeIlvhOtjULsGPFFm4H5mM5F4eJeoiKeLajXtjWlXtX
+         MrPe3nToRSgtNJkf0SzzB8nn88VsDDcH6YyF0rScyBlaaDb7B//tsNm540FV9QRLGm+z
+         t5RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lxclRLr31RsJ2S0clQHvNH9FSmldpFyw3vzSNMFjSFI=;
+        b=x9tu3dvtCXgEkycEQ8UqSIrDu1BZ96B5QR2+RZKyS6QxPrK97ytD9H/YoAIP3ENqYX
+         6eaRGM8/OjzDmfAxv4eIqu7BMmJ4hpUE4zKzEMEmRL0AVeX7iPDTfR9G9Yk8Ans95Bn1
+         mqlJFFpDB3rYFESY7IWV0cmlXtH2AJXnHEQd4kFfpsdqUPrmoHS1rcm3Yqr4Mi3ZDmH3
+         1meYU0suWLk7UZJRtvOqOmweIIfQKV5MBtU5ZmdSdmc5ryn8j6CLcgGiyJt7Ba+/SMUE
+         OxIDg1k51J9GxgCweZAD+NUYpwkPffRSdhstO1+y1t4a0LhDxHj1+SIFgYn+BeWMsKAC
+         I0ig==
+X-Gm-Message-State: AOAM532+IkRlHRDg0XO79LDXvteQp7TsSnAg18NCWOzuX7SK1qwy1bCT
+        2SdaTJlZLWjAZx8QewQ1SD8zJA==
+X-Google-Smtp-Source: ABdhPJyX3xmDpuVIwP3Tj2o04khmgeJrxi1LlFZLssvNNNqiBbIVjqyCDijaR55cpWlGdkK1yamSLQ==
+X-Received: by 2002:a63:35cd:: with SMTP id c196mr667720pga.623.1642010372774;
+        Wed, 12 Jan 2022 09:59:32 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u27sm275481pfg.45.2022.01.12.09.59.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 09:59:32 -0800 (PST)
+Date:   Wed, 12 Jan 2022 17:59:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, kevin.tian@intel.com,
+        tglx@linutronix.de, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] KVM: x86: Move check_processor_compatibility from
+ init ops to runtime ops
+Message-ID: <Yd8XAI7G4sEab9Nh@google.com>
+References: <20211227081515.2088920-1-chao.gao@intel.com>
+ <20211227081515.2088920-2-chao.gao@intel.com>
+ <YdzAzT5AqO0aCsHk@google.com>
+ <20220111033629.GC2175@gao-cwp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yd8Vpo/I7LiMyfI6@kernel.org>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20220111033629.GC2175@gao-cwp>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Jan 12, 2022 at 02:53:42PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Wed, Jan 12, 2022 at 02:45:07PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Wed, Jan 12, 2022 at 09:22:51AM -0800, Ian Rogers escreveu:
-> > > On Thu, Nov 25, 2021 at 11:13 PM Ian Rogers <irogers@google.com> wrote:
-> > > >
-> > > > This patch changes MetricExpr to be written out in the same case. This
-> > > > enables events in metrics to use modifiers like 'G' which currently
-> > > > yield parse errors when made lower case. To keep tests passing the
-> > > > literal #smt_on is compared in a non-case sensitive way - #SMT_on is
-> > > > present in at least SkylakeX metrics.
-> > > 
-> > > Ping.
-> > 
-> > I tried applying 20211124001231.3277836-1-irogers@google.com on top of
-> > your perf_cpu series, it failed, will check.
-> > 
-> > BTW, I got the two other patches in that series:
-> > 
-> > ⬢[acme@toolbox perf]$ git log --oneline -2
-> > 6dd8646939a770e4 (HEAD -> perf/core) perf tools: Probe non-deprecated sysfs path 1st
-> > 0ce05781f4905fcf perf tools: Fix SMT fallback with large core counts
-> > ⬢[acme@toolbox perf]$
+On Tue, Jan 11, 2022, Chao Gao wrote:
+> On Mon, Jan 10, 2022 at 11:27:09PM +0000, Sean Christopherson wrote:
+> >On Mon, Dec 27, 2021, Chao Gao wrote:
+> >> so that KVM can do compatibility checks on hotplugged CPUs. Drop __init
+> >> from check_processor_compatibility() and its callees.
+> >
+> >Losing the __init annotation on all these helpers makes me a bit sad, more from a
+> >documentation perspective than a "but we could shave a few bytes" perspective.
 > 
-> Ok, I have that one now on, but could Andi or somebody else that works
-> more frequently with that code provide an Acked-by or Reviewed-by?
-
-Its there since since MetricExpr was introduced:
-
-commit 00636c3b48e8acac2acd2601274c6eab4ecf8201
-Author: Andi Kleen <ak@linux.intel.com>
-Date:   Mon Mar 20 13:17:07 2017 -0700
-
-    perf pmu: Support MetricExpr header in JSON event list
-
-    Add support for parsing the MetricExpr header in the JSON event lists
-    and storing them in the alias structure.
-
-    Used in the next patch.
-
-    v2: Change DividedBy to MetricExpr
-    v3: Really catch all uses of DividedBy
-
-    Signed-off-by: Andi Kleen <ak@linux.intel.com>
-    Acked-by: Jiri Olsa <jolsa@kernel.org>
-    Link: http://lkml.kernel.org/r/20170320201711.14142-10-andi@firstfloor.org
-    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>o
-
------------------------------
-
-There is no explanation as to why it should be lowercased, and Ian's
-reason not to lowercase it is valid, not to lose information, so I'll
-apply the patch, please holler if there is some other subtlety I'm
-missing...
-
-- Arnaldo
-
-> > > > This patch is on top of:
-> > > > https://lore.kernel.org/lkml/20211124001231.3277836-1-irogers@google.com/
-> > > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > ---
-> > > >  tools/perf/pmu-events/jevents.c | 2 --
-> > > >  tools/perf/util/expr.c          | 2 +-
-> > > >  2 files changed, 1 insertion(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/tools/perf/pmu-events/jevents.c b/tools/perf/pmu-events/jevents.c
-> > > > index 2e7c4153875b..1a57c3f81dd4 100644
-> > > > --- a/tools/perf/pmu-events/jevents.c
-> > > > +++ b/tools/perf/pmu-events/jevents.c
-> > > > @@ -672,8 +672,6 @@ static int json_events(const char *fn,
-> > > >                                 addfield(map, &je.metric_constraint, "", "", val);
-> > > >                         } else if (json_streq(map, field, "MetricExpr")) {
-> > > >                                 addfield(map, &je.metric_expr, "", "", val);
-> > > > -                               for (s = je.metric_expr; *s; s++)
-> > > > -                                       *s = tolower(*s);
-> > > >                         } else if (json_streq(map, field, "ArchStdEvent")) {
-> > > >                                 addfield(map, &arch_std, "", "", val);
-> > > >                                 for (s = arch_std; *s; s++)
-> > > > diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
-> > > > index cdbab4f959fe..5cd6b9ff2489 100644
-> > > > --- a/tools/perf/util/expr.c
-> > > > +++ b/tools/perf/util/expr.c
-> > > > @@ -397,7 +397,7 @@ double expr__get_literal(const char *literal)
-> > > >         static struct cpu_topology *topology;
-> > > >         double result = NAN;
-> > > >
-> > > > -       if (!strcmp("#smt_on", literal)) {
-> > > > +       if (!strcasecmp("#smt_on", literal)) {
-> > > >                 result =  smt_on() > 0 ? 1.0 : 0.0;
-> > > >                 goto out;
-> > > >         }
-> > > > --
-> > > > 2.34.0.rc2.393.gf8c9666880-goog
-> > > >
-> > 
-> > -- 
-> > 
-> > - Arnaldo
+> This makes sense.
 > 
-> -- 
+> >More than once I've wondered why some bit of code isn't __init, only to realize
+> >its used for hotplug.
 > 
-> - Arnaldo
+> Same problem to some global data structures which can be __initdata if hotplug
+> isn't supported.
+> 
+> >
+> >What if we added an __init_or_hotplug annotation that is a nop if HOTPLUG_CPU=y?
+> 
+> Personally __init_or_hotplug is a little long as an annotation. How about
+> __hotplug?
+> 
+> One concern is: is it acceptable to introduce a new annotation and use it in
+> new code but not fix all places that should use it in existing code.
+> 
+> I think the right process is
+> 1. introduce a new annotation
+> 2. fix existing code to use this annotation
+> 3. add new code.
+> 
+> There is no doubt that #2 would take great effort. I'm not sure if it is really
+> worth it.
+> 
+> >At a glance, KVM could use that if the guts of kvm_online_cpu() were #idef'd out
+> >on !CONFIG_HOTPLUG_CPU.  That also give us a bit of test coverage for bots that
+> >build with SMP=n.
+> 
+> Will do with your suggested-by.
 
--- 
-
-- Arnaldo
+I don't think you should try to add a new annotation in this series.  My question
+really was just that, a question to others if there would be value in adding an
+annotation to identify symbols that are !__init only because of hotplug.  Such new
+functionality is certainly not required for fixing KVM's mishandling of hotplug,
+and trying to cram it in here will bloat and slow down this series.

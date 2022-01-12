@@ -2,108 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCE748C749
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA5948C74C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354630AbiALPgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354631AbiALPgx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:36:53 -0500
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970BDC061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:36:52 -0800 (PST)
-Received: by mail-ed1-x541.google.com with SMTP id c71so11527333edf.6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:36:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=pFQlRwVs64l+mhGnFgsqy5BuLBon+B2tD/h1013B7pA=;
-        b=QzqyPaQ29wk/535/mqu2iWnjEbZEvV5DPaoeeXxkQ+LF4iriofj5ZloKOQPaEo8mq1
-         4Ok2uSRIvsJ1dpLerR+PqrvemFbeiGCdrtYeRlA8w2gc80/B5dKsMyNMY4KhXc5tp2cR
-         znG9K0aUnnYZJlWFanPSZuUIfaCNvZzvhe8Ss=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=pFQlRwVs64l+mhGnFgsqy5BuLBon+B2tD/h1013B7pA=;
-        b=bIswPo6R1DAV0e8XNa4zvY91lGVtSo1ICcYPS37usOS1MXg0osR44fECoaQtIPQCAI
-         Mh5vROX+Eh3f/eKA7BAWSAtZrrV0DJDNgStKnRZyxGSIZHaW1dVUgl0VP9n82SUTZN4J
-         WlQr1lspER1nQoivSDnooBWgFYD3Rrv0v5YnkYBanXFI/JS6hGtr+Fp5o04z7coZinRF
-         mq42G8RZURVd5so30W52Y232oqluec6YVWZC1laiuWFJvo1aVG/PBmZBPAceA28R6FPS
-         PNNz2eLx1v2E7K5aJdmk04qdnrAj2ZTCA6sdm5t5xGEjkGRgTZrYAnnjrBodyTMwON07
-         Oltw==
-X-Gm-Message-State: AOAM5301rHc81DCqQycWJNwW3Mh5+O15TtaJCspYd1C5m8SoD+mFZIga
-        op5x2E1hLtLHEb41X4jOmWRpSw==
-X-Google-Smtp-Source: ABdhPJyhR2ASi9+GtKBfKy+OT8soYwXQEidXwNi5BGuIk/eoLc5gqe3YWIlj8uA/tAbZc4ODk8QK9Q==
-X-Received: by 2002:a05:6402:51cc:: with SMTP id r12mr172836edd.239.1642001811228;
-        Wed, 12 Jan 2022 07:36:51 -0800 (PST)
-Received: from miu.piliscsaba.redhat.com (catv-178-48-189-3.catv.broadband.hu. [178.48.189.3])
-        by smtp.gmail.com with ESMTPSA id l10sm18542ejh.102.2022.01.12.07.36.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 07:36:50 -0800 (PST)
-Date:   Wed, 12 Jan 2022 16:36:43 +0100
-From:   Miklos Szeredi <miklos@szeredi.hu>
+        id S1354645AbiALPhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:37:02 -0500
+Received: from mail-dm6nam12on2064.outbound.protection.outlook.com ([40.107.243.64]:14144
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1354643AbiALPhB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 10:37:01 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QNT8XW9j5Biv+uij7GSCOBbp5smcODWutVje/xsIqwTlTbM/HR2H/45eAey0X2n9zD09rYWODVFxxzQarZ+OzTM2bFb2MUVvdvCBGCJ1nDvLHeVVqL9fKRiJD66l6hmEXO8ANkhKQ8krI40/od1TLmP8NZES5TV/TRswRVOXxrvGm4bvChefkL3Mkf6j0v0ElYis0uAXKhe4Ox+Pa4vAEdiL6Ki26PrHPmumYVDkOh505GhfGXBg1K1Kj2fcMCuQ4PtwfUVhPB0Eu5xbIIGPxFTaBeNi26QSczI0EpiI9O8N3QgwYsAprzyv+UD/AmMeA/+eX7Exfm+iSfTNy3YZnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YDj/xRoFADL+7xyX54XAMWJTyWwqBkVJ8lv7XUMQ7DI=;
+ b=iOUibV9e1Qshicy+5WL1jaVlCL3m2+VpnHpHIZTISe9vF+j+Y1t6kqNCJxyzj+hXloOWJdysPjcWklo03d2pIiQDTnc+uHRdpCbRKJq5ScoLBtUKYgNiJquYB2L2SBjv7DPoGPIQgmqbAFWz9t02i0SQd1W761LxaRBEFC/AnxiKUIeaSXdAUvW5PyUjDVEuF2PeperfeOkgnxcDF0ftgjOr1j+Jp9a4EZgjWgslAEZZP9IXL4XATcdsUboQj+g+AhRm+a1SFJZmEIzQOL4/MOgcUiR3xUm4q1ufyV1aYgtXWyAaA6C1B5VERyRWC4suhQEIYctevwCFszvCY6v4fQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YDj/xRoFADL+7xyX54XAMWJTyWwqBkVJ8lv7XUMQ7DI=;
+ b=MkQeHXGvSzRjRIJroxEEtXFWzG3C1Sb4VE0jCPYRXnhx9cHKPTvr91zbaPHZLm9PlNTdMWRygyk7zy0O1p6SkLMSQMQJ+/Cki6qLAShBrmzDQ1Mm5yRh6j5qsXyWioLHAuPLIg9/2hCeLCq69KCEwOqyhs5NT25+6vKPY/omV74=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by BL1PR12MB5256.namprd12.prod.outlook.com (2603:10b6:208:319::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Wed, 12 Jan
+ 2022 15:36:59 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::dd4b:b67b:1688:b52]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::dd4b:b67b:1688:b52%9]) with mapi id 15.20.4888.010; Wed, 12 Jan 2022
+ 15:36:58 +0000
+Message-ID: <4dace73c-c37b-2eab-c9f3-49349ef7c0ee@amd.com>
+Date:   Wed, 12 Jan 2022 10:36:53 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [git pull] drm for 5.17-rc1 (pre-merge window pull)
+Content-Language: en-US
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [GIT PULL] fuse update for 5.17
-Message-ID: <Yd71i1Yul3rPO2Lp@miu.piliscsaba.redhat.com>
+Cc:     Alex Deucher <alexdeucher@gmail.com>, Jun Lei <Jun.Lei@amd.com>,
+        Mustapha Ghaddar <mustapha.ghaddar@amd.com>,
+        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+        meenakshikumar somasundaram <meenakshikumar.somasundaram@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dave Airlie <airlied@gmail.com>,
+        "Koenig, Christian" <christian.koenig@amd.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+References: <CAPM=9tz=_hRpQV1V3M-=KmVVEbr1K166qeb-ne64PHk9Sn-ozg@mail.gmail.com>
+ <CAHk-=wg9hDde_L3bK9tAfdJ4N=TJJ+SjO3ZDONqH5=bVoy_Mzg@mail.gmail.com>
+ <CAKMK7uEag=v-g6ygHPcT-uQJJx+5KOh2ZRzC2QtM-MCjjW67TA@mail.gmail.com>
+ <CADnq5_P9n39RQ5+Nm8O=YKXXvXh1CEzwC2fOEzEJuS2zQLUWEw@mail.gmail.com>
+ <CAHk-=wgDGcaRxUwRCR6p-rxDVO78Yj4YyM6ZsPRGiT2JOCoQ6A@mail.gmail.com>
+ <CADnq5_OYO7kq+9DBnDvbSfpouFvdLB0LPSL6+f1ZPRBsV=qEqA@mail.gmail.com>
+ <CAHk-=wiCCRG9Lwzr+Cur=K1V2GJ9ab_ket7EnG4RZhJ8jJM7xQ@mail.gmail.com>
+ <CAHk-=wi8b-YKHeNfwyYHMcgR2vJh4xpSZ0qjkv8E8Y9V8Sv2Tg@mail.gmail.com>
+ <CAHk-=whnWnB9yjVaqWNKjavSJxDOEbTAPwef=O7qjL8nKZgV6A@mail.gmail.com>
+ <CAHk-=whSAYiO_TkKut6XckdQigFj39ft1Kcs2qJe5niHWPGdwg@mail.gmail.com>
+ <CADnq5_OZR9Ft=WVVbpM_WUpFZurni4yVxGPpa4nDkhupmod_ag@mail.gmail.com>
+ <6490ec74-7de2-c3a3-d852-31b8594110d8@amd.com>
+ <CAHk-=whZW+Cy++vucKQd6Lrj7B1bhd1-pKkgV8xxPJr35Dh2UA@mail.gmail.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <CAHk-=whZW+Cy++vucKQd6Lrj7B1bhd1-pKkgV8xxPJr35Dh2UA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0085.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:4::18) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 83bb1893-3491-45a6-c405-08d9d5e15ed6
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5256:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB525671AF0D0926C1BE38B09A8C529@BL1PR12MB5256.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gxAiKtoer8+WQCMoR5LA6/N6YaM92sSdy2KLqBlN9u+ccZsRNFDUr7fItupkkABu7yNCsflDOAFMxS8OwvD9tL0DPldIh1vm02LXU9E1d3xktJxVQH5fkK++E4JsoWuXTiLGTLPo6PBmuoIH68MzgBzDeJ3aK4MOPE8sG580l/hhn6YIeii3z7mYs1/YqAY6IKbZSy10YSozOHuaQMw1msOftJsrq9rD37sk3LThnEXvKpcoxuwEJBDvo8jpQ5Ifr29xtKCu9xLqVq1aRCW2Ec0fuj7OkXbsjmScnGJzJKQnxuv4uQcW8lhFfM7TNzyh7Y+1XsOgrjnN30eCEO26qyLMbge0ADbAiDa+gtNqi9cr++nq38XRxIv+35ekcahI8wstSUdZH4zYGSh4ego4ICO9oRWD0RtOdloQriJNE0OZ73vgpDYw3LaU3GA0Kzu2veRYpJFNIZueE8NpbeW7wLirApLGdWOlWwh/ucoaLBmDqTGJKIia2spuIh5T/CONd1BlDb3HxFaR3weuUpVq7j6zmJvCHPv/tS7vUoALIRSKvHW+ylwD0DqrhOvvkfWyMaLCyuUCweFxETRRkd/pyMV04CueZsygHDfBlsa8mKl3L1xX6hwQ2QGZF+gh0rKpKlSLbHWsSb3zlUuLdnK55XHUZMUlTnsJXfItCh+U/YH0LwbYSghzDJex7idLHNWQKslHbP8EnuH+rYA6BVjpD59+wAUt/KQafH75FbrYxzZC1Hwn6lwSSVqnwI7sm1dh
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(5660300002)(6512007)(83380400001)(6916009)(53546011)(6506007)(508600001)(31686004)(66946007)(38100700002)(2906002)(86362001)(4744005)(8936002)(6486002)(36756003)(66476007)(66556008)(6666004)(186003)(31696002)(316002)(4326008)(2616005)(26005)(54906003)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L281azMrN2FPMzk5d0NhQXdwdHRWOWloYU5LM29ldWErMjg4WDFBa1FFb1Ra?=
+ =?utf-8?B?TllvRGQvNzcrN3YvalptRVpUMmlHVTIremFsYzF3d2ZRNlUzY1BDYXByU3FH?=
+ =?utf-8?B?T3JLSGxaMEpxRFRlOE9yekw1bzJUZGRGRjA2Z3hScGxNTW5ValNZQ2VlSTBK?=
+ =?utf-8?B?YUlITmZBRGZVU05wc2FKNXlrM2QyZXNxZnRScU9FcWhPV3h4OGM2dHdFMlNh?=
+ =?utf-8?B?UC9SdE9la1MwdnBnS3ltdkhyWkVXSE00YStDdWpuK3NaRE1LaUlSZzBSM2pZ?=
+ =?utf-8?B?a3NsRW53N2IrUUgwMzlsTDZXOUs4R1B5N3BEcEo4bkhyK1ZVT1FuUDA1Mklj?=
+ =?utf-8?B?R21xL0hQSzcwcTRQWG5BZVJyN3F4aDdRVExqSXN1aFpTRmhTU2dhRlVHcjNm?=
+ =?utf-8?B?Z0NaeXFEbzcvZjlCNHoySVFwL0RRT0V5YnNVRTZCQzR1MThJY0phVzhDbVNY?=
+ =?utf-8?B?NjhyeTdPMFE0WnVIemFQbGdYZVlKZ1E3S2VTY3QyRWdVT05TdEtGTktTb1ll?=
+ =?utf-8?B?bmlyK1c2NlY2bThqUDdCcU9WaEwzWTQxL05KRU1XNzRsemxpbnhrb0RpVUcy?=
+ =?utf-8?B?MGVUVTVCNkFub3VNczJxN21OQUtsdkZZZSt6N0g3STNibTBJZGxvczd6eWhj?=
+ =?utf-8?B?MUQvUktUaTJjT0JuRmd3RHNPVjloN2M0L1J1NjVTUk5LTUZtS1QxTXdJZFFV?=
+ =?utf-8?B?TUhYN3h4Sm02NytReXl2QlN1alRsL0NiTk9aYkNOcFdha2FIN0NkbStHNVJj?=
+ =?utf-8?B?MjB2OG5DajNYcTNFUjh0blJnSUptT3J0NzJ5NndrV3A4ZDVvZzVwYXl2MEF1?=
+ =?utf-8?B?d3JhRFFQMklhT3duQ001cGpWYS9NRWptbTB1cnJMdmJuSlZ5TW9TMEhpWTk1?=
+ =?utf-8?B?UHRta0RiOVpZSnQ5NENhTTF4Y0ZnZTdLMlRJaWFLVVp2V1hOM25Mb1J0Z04y?=
+ =?utf-8?B?Y25pdFRlektaTWswbkwxaDdwN2VsNjdwdDlrYy8xSTEvdFVpYlZWVW5sclRN?=
+ =?utf-8?B?dFZxY2xnUHM5aHNGOWlqOWMxNHpraExoRkdRbXE3b2Q5MjAycmhWRnI0WGww?=
+ =?utf-8?B?MytrZzRnSFVDUmo4TGlpRlJPdkFha240MFBjT2pjVHZ5d2xaUGdIRDZIeTNU?=
+ =?utf-8?B?emtSenRwZXBJWFpMKzBVMDJVN1RSaUJOS01WcU52bFptTGJMZUdqYjlWcU5a?=
+ =?utf-8?B?UFkyNDVQTjIzbGdlNEg5T01EZXg5QXFRbSs3NytFQ1hPaWxRNkF1alIrOU9O?=
+ =?utf-8?B?YXNySzRJY3lWWTBFeG1uTG81UkZsQTdkSHkzTWkvckdsY0paYmNqdGpGcXFU?=
+ =?utf-8?B?blFrYlBjdllaZTBFK2lLYkpSK3hod3dwVTl0MmdudVgxRGNzSEhHc25VSFJs?=
+ =?utf-8?B?Y016UjMvdkFpVGwrdVdseGFqYVhodUZsa2ZHUlZDVWxka2srV2Z0dGZYZEFY?=
+ =?utf-8?B?dVNSK0RtUllxdjJPNkN1d0dlUWZTR3RBL0YxYzlqYUJvNEthQytKeTl6ZkRj?=
+ =?utf-8?B?U2NzcFlHbEtpUmI1TmU0NEJQTDZpMDJGZHI1bURNUTVWemtCeXp5bDZTSVB3?=
+ =?utf-8?B?aXY3KzB3aUY3d2V6QkVzU0ZodEJ6cFp2bkVlVW9Oa3diRWFtUlkxZU9Qa3pJ?=
+ =?utf-8?B?Y3ErOTI5TFBYOUNLUE4wbTlJdWc5NkNtSGJBSFVpTTFZZjBGSWh5cGJQelYr?=
+ =?utf-8?B?Y2pBaE4yb1RzeG5icStuSVFkUUpGdG1RMlBDZngvb00vcDIrWTNWdDZocmxT?=
+ =?utf-8?B?aXEzdDIvS0V4N1RyeDE3b3ZGVkZIeGVnbzJwU0U1NE5JN1N0eEpxeExqUVhX?=
+ =?utf-8?B?V0orQ094eDNlWStTOUpXd28xeWdheVlmbzQ1cjRtSjFYUWtKWFFUdzBRR291?=
+ =?utf-8?B?bWJnd2g2N2hBVm1rMUJ0UXZsSHBvK3V5aTBlay9xYlFwL3lLRmltMzg2T29F?=
+ =?utf-8?B?MDNoTGZ2anVTbnFuYStpUU1NU0dNTVZHUzd0ZEM1MFJ3TzMwZnRIQ2g5KzZl?=
+ =?utf-8?B?bFRzdllSbjBHRE1KWmgzUlFBZkE1Sm9ydW1Edk5VbVNJMDNDdmhOdEZUdzFk?=
+ =?utf-8?B?Mk5XS3kyM3ZzRzJPaFVveVdEN3o0d3Q1RVFnTkNiRTR5T3dxS0ZOUkhIeXBP?=
+ =?utf-8?B?VzFXTXNUallZT0xyTmhxbjF0Mko5ZW9NWUpNMVBEdC9lVE5Dc09VVUpsYi93?=
+ =?utf-8?Q?uKVNf0IgcLr5wh9hAxECT6Y=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83bb1893-3491-45a6-c405-08d9d5e15ed6
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2022 15:36:58.7626
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WaXojJoGqrVa7yYdEFc8qTCy2XjyxOpMgteAO1RqPcyzmb/6k9EW1tuUvindCX6Eo6Q4AJJ8Th6cP36U16ssSw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-Please pull from:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git tags/fuse-update-5.17
+On 2022-01-11 15:51, Linus Torvalds wrote:
+> On Tue, Jan 11, 2022 at 7:38 AM Harry Wentland <harry.wentland@amd.com> wrote:
+>>
+>> Attached is a v2 of the buggy patch that should get this right.
+>> If you have a chance to try it out let us know
+> 
+> I can confirm that I do not see the horribly flickering behavior with
+> this patch.
 
-- Fix a regression introduced in 5.15.
+Thanks for testing it. The patch is up for review on the amd-gfx
+mailing list.
 
-- Extend the size of the FUSE_INIT request to accommodate for more flags.
-  There's a slight possibility of a regression for obscure fuse servers; if
-  this happens, then more complexity will need to be added to the protocol.
-
-- Allow the DAX property to be controlled by the server on a per-inode
-  basis in virtiofs.
-
-- Allow sending security context to the server when creating a file or
-  directory.
-
-Thanks,
-Miklos
-
----
-Jeffle Xu (7):
-      fuse: add fuse_should_enable_dax() helper
-      fuse: make DAX mount option a tri-state
-      fuse: support per inode DAX in fuse protocol
-      fuse: enable per inode DAX
-      fuse: negotiate per inode DAX in FUSE_INIT
-      fuse: mark inode DONT_CACHE when per inode DAX hint changes
-      Documentation/filesystem/dax: DAX on virtiofs
-
-Miklos Szeredi (1):
-      fuse: extend init flags
-
-Vivek Goyal (1):
-      fuse: send security context of inode on file
-
-Xie Yongji (1):
-      fuse: Pass correct lend value to filemap_write_and_wait_range()
-
----
- Documentation/filesystems/dax.rst | 20 ++++++++-
- fs/fuse/dax.c                     | 36 +++++++++++++++-
- fs/fuse/dir.c                     | 91 +++++++++++++++++++++++++++++++++++++++
- fs/fuse/file.c                    |  6 +--
- fs/fuse/fuse_i.h                  | 31 +++++++++++--
- fs/fuse/inode.c                   | 89 +++++++++++++++++++++++---------------
- fs/fuse/virtio_fs.c               | 18 ++++++--
- include/uapi/linux/fuse.h         | 55 +++++++++++++++++++++--
- 8 files changed, 294 insertions(+), 52 deletions(-)
+Harry

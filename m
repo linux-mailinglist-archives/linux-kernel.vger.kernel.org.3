@@ -2,211 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B22A48C908
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DC548C90E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355506AbiALRDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 12:03:49 -0500
-Received: from 8bytes.org ([81.169.241.247]:37486 "EHLO theia.8bytes.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355540AbiALRC3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 12:02:29 -0500
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id 67A4525F; Wed, 12 Jan 2022 18:02:24 +0100 (CET)
-Date:   Wed, 12 Jan 2022 18:02:23 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux-foundation.org
-Subject: [git pull] IOMMU Updates for Linux v5.17
-Message-ID: <Yd8Jn2aUqblPfRvF@8bytes.org>
+        id S1355447AbiALRFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 12:05:21 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:49002 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349872AbiALRFR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 12:05:17 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B30B2218E0;
+        Wed, 12 Jan 2022 17:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642007114; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zb6mFk8u5fWvpkJoxss3VEsUi0IprcWX5qPRtsRll/s=;
+        b=qm/QkZtahI/FG2O1CtF6VHZisgqom435ISTYkpV8REehFFvDdNxTcH3bGm9HHQoj0PSrFE
+        hmp/2InAIFDQlzn8E8W9OXvlJKyuKwHVCQQaRWmHiOPPTfuas3dsrfNCNDGaK/sdHsipre
+        FF2hqq+zqCLJKusw/sbRNZ4Hwo0iyzk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642007114;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zb6mFk8u5fWvpkJoxss3VEsUi0IprcWX5qPRtsRll/s=;
+        b=vQdR2hTPwvBAloFpCZeNHxdMIMPbEv5o250NrDWFBrw9zssinJOOudjVH8jBFH6n9FVDKy
+        5Mv2H6Hfr0HwU1Bw==
+Received: from suse.de (unknown [10.163.43.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 691B3A3B83;
+        Wed, 12 Jan 2022 17:05:14 +0000 (UTC)
+Date:   Wed, 12 Jan 2022 17:05:12 +0000
+From:   Mel Gorman <mgorman@suse.de>
+To:     Alexander Fomichev <fomichev.ru@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux@yadro.com, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [RFC] Scheduler: DMA Engine regression because of sched/fair
+ changes
+Message-ID: <20220112170512.GO3301@suse.de>
+References: <20220112152609.gg2boujeh5vv5cns@yadro.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="d8vwtHnKPut+5Js9"
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
+In-Reply-To: <20220112152609.gg2boujeh5vv5cns@yadro.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 12, 2022 at 06:26:09PM +0300, Alexander Fomichev wrote:
+> CC: Mel Gorman <mgorman@suse.de>
+> CC: linux@yadro.com
+> 
+> Hi all,
+> 
+> There's a huge regression found, which affects Intel Xeon's DMA Engine
+> performance between v4.14 LTS and modern kernels. In certain
+> circumstances the speed in dmatest is more than 6 times lower.
+> 
+> 	- Hardware -
+> I did testing on 2 systems:
+> 1) Intel(R) Xeon(R) Gold 6132 CPU @ 2.60GHz (Supermicro X11DAi-N)
+> 2) Intel(R) Xeon(R) Bronze 3204 CPU @ 1.90GHz (YADRO Vegman S220)
+> 
+> 	- Measurement -
+> The dmatest result speed decreases with almost any test settings.
+> Although the most significant impact is revealed with 64K transfers. The
+> following parameters were used:
+> 
+> modprobe dmatest iterations=1000 timeout=2000 test_buf_size=0x100000 transfer_size=0x10000 norandom=1
+> echo "dma0chan0" > /sys/module/dmatest/parameters/channel
+> echo 1 > /sys/module/dmatest/parameters/run
+> 
+> Every test csse was performed at least 3 times. All detailed results are
+> below.
+> 
+> 	- Analysis -
+> Bisecting revealed 2 different bad commits for those 2 systems, but both
+> change the same function/condition in the same file.
+> For the system (1) the bad commit is:
+> [7332dec055f2457c386032f7e9b2991eb05c2a0a] sched/fair: Only immediately migrate tasks due to interrupts if prev and target CPUs share cache
+> For the system (2) the bad commit is:
+> [806486c377e33ab662de6d47902e9e2a32b79368] sched/fair: Do not migrate if the prev_cpu is idle
+> 
+> 	- Additional check -
+> Attempting to revert the changes above, a dirty patch for the (current)
+> kernel v5.16.0-rc5 was tested too:
+> 
 
---d8vwtHnKPut+5Js9
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The consequences of the patch is allowing interrupts to migrate tasks away
+from potentially cache hot data -- L1 misses if the two CPUs share LLC
+or incurring remote memory access if migrating cross-node. The secondary
+concern is that excessive migration from interrupts that round-robin CPUs
+will mean that the CPU does not increase frequency. Minimally, the RFC
+patch introduces regressions of their own. The comments cover the two
+scenarios of interest
 
-Hi Linus,
++        * If this_cpu is idle, it implies the wakeup is from interrupt
++        * context. Only allow the move if cache is shared. Otherwise an
++        * interrupt intensive workload could force all tasks onto one
++        * node depending on the IO topology or IRQ affinity settings.
 
-The following changes since commit c9e6606c7fe92b50a02ce51dda82586ebdf99b48:
+(This one causes remote memory accesses and potentially overutilisation
+of a subset of nodes)
 
-  Linux 5.16-rc8 (2022-01-02 14:23:25 -0800)
++        * If the prev_cpu is idle and cache affine then avoid a migration.
++        * There is no guarantee that the cache hot data from an interrupt
++        * is more important than cache hot data on the prev_cpu and from
++        * a cpufreq perspective, it's better to have higher utilisation
++        * on one CPU.
 
-are available in the Git repository at:
+(This one incurs L1/L2 misses due to a migration even though LLC may be
+shared)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git iommu-update=
-s-v5.17
+The tests don't say but what CPUs to the dmatest interrupts get
+delivered to? dmatest appears to be an exception that the *only* hot
+data of concern is also related to the interrupt as the DMA operation is
+validated.
 
-for you to fetch changes up to 66dc1b791c5839d64d261c8b40250a33e6da050b:
+However, given that the point of a DMA engine is to transfer data without
+the host CPU being involved and the interrupt is delivered on completion,
+how realistic is it that the DMA data is immediately accessed on completion
+by normal workloads that happen to use the DMA engine? What impact does
+it have to tbe test is noverify or polling is used?
 
-  Merge branches 'arm/smmu', 'virtio', 'x86/amd', 'x86/vt-d' and 'core' int=
-o next (2022-01-04 10:33:45 +0100)
-
-----------------------------------------------------------------
-IOMMU Updates for Linux v5.17
-
-Including:
-
-	- Identity domain support for virtio-iommu
-
-	- Move flush queue code into iommu-dma
-
-	- Some fixes for AMD IOMMU suspend/resume support when x2apic
-	  is used
-
-	- Arm SMMU Updates from Will Deacon:
-	  - Revert evtq and priq back to their former sizes
-	  - Return early on short-descriptor page-table allocation failure
-	  - Fix page fault reporting for Adreno GPU on SMMUv2
-	  - Make SMMUv3 MMU notifier ops 'const'
-	  - Numerous new compatible strings for Qualcomm SMMUv2 implementations
-
-	- Various smaller fixes and cleanups
-
-----------------------------------------------------------------
-Christophe JAILLET (1):
-      iommu/vt-d: Use bitmap_zalloc() when applicable
-
-Dafna Hirschfeld (1):
-      iommu: Log iova range in map/unmap trace events
-
-David Heidelberg (1):
-      dt-bindings: arm-smmu: Add compatible for the SDX55 SoC
-
-Hector Martin (1):
-      iommu/io-pgtable-arm: Fix table descriptor paddr formatting
-
-Jean-Philippe Brucker (5):
-      iommu/virtio: Add definitions for VIRTIO_IOMMU_F_BYPASS_CONFIG
-      iommu/virtio: Support bypass domains
-      iommu/virtio: Sort reserved regions
-      iommu/virtio: Pass end address to viommu_add_mapping()
-      iommu/virtio: Support identity-mapped domains
-
-Joerg Roedel (3):
-      Merge tag 'arm-smmu-updates' of git://git.kernel.org/pub/scm/linux/ke=
-rnel/git/will/linux into arm/smmu
-      iommu/iova: Temporarily include dma-mapping.h from iova.h
-      Merge branches 'arm/smmu', 'virtio', 'x86/amd', 'x86/vt-d' and 'core'=
- into next
-
-John Garry via iommu (1):
-      iommu/iova: Move fast alloc size roundup into alloc_iova_fast()
-
-Kees Cook (1):
-      iommu/vt-d: Use correctly sized arguments for bit field
-
-Kefeng Wang (1):
-      iommu/vt-d: Drop duplicate check in dma_pte_free_pagetable()
-
-Lu Baolu (2):
-      iommu: Extend mutex lock scope in iommu_probe_device()
-      iommu/vt-d: Remove unused macros
-
-Matthew Wilcox (Oracle) (2):
-      iommu/amd: Use put_pages_list
-      iommu/vt-d: Use put_pages_list
-
-Maxim Levitsky (5):
-      iommu/amd: Restore GA log/tail pointer on host resume
-      iommu/amd: X2apic mode: re-enable after resume
-      iommu/amd: X2apic mode: setup the INTX registers on mask/unmask
-      iommu/amd: X2apic mode: mask/unmask interrupts on suspend/resume
-      iommu/amd: Remove useless irq affinity notifier
-
-Ma=C3=ADra Canal (1):
-      iommu/vt-d: Remove unused dma_to_mm_pfn function
-
-Paul Menzel (1):
-      iommu/amd: Fix typo in *glues =E2=80=A6 together* in comment
-
-Rikard Falkeborn (1):
-      iommu/arm-smmu-v3: Constify arm_smmu_mmu_notifier_ops
-
-Rob Clark (1):
-      iommu/arm-smmu-qcom: Fix TTBR0 read
-
-Robin Murphy (6):
-      iommu/iova: Squash entry_dtor abstraction
-      iommu/iova: Squash flush_cb abstraction
-      iommu/amd: Simplify pagetable freeing
-      iommu/iova: Consolidate flush queue code
-      iommu/iova: Move flush queue code to iommu-dma
-      iommu: Move flush queue data into iommu_dma_cookie
-
-Vinod Koul (2):
-      dt-bindings: arm-smmu: Add compatible for SM8450 SoC
-      iommu: arm-smmu-impl: Add SM8450 qcom iommu implementation
-
-Xiang wangx (1):
-      iommu/virtio: Fix typo in a comment
-
-Xiongfeng Wang (1):
-      iommu/iova: Fix race between FQ timeout and teardown
-
-Yunfei Wang (1):
-      iommu/io-pgtable-arm-v7s: Add error handle for page table allocation =
-failure
-
-Zhou Wang (1):
-      Revert "iommu/arm-smmu-v3: Decrease the queue size of evtq and priq"
-
- .../devicetree/bindings/iommu/arm,smmu.yaml        |   2 +
- drivers/iommu/amd/amd_iommu_types.h                |   2 -
- drivers/iommu/amd/init.c                           | 109 ++++----
- drivers/iommu/amd/io_pgtable.c                     | 110 +++------
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c    |   2 +-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h        |   5 +-
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |   3 +-
- drivers/iommu/dma-iommu.c                          | 274 ++++++++++++++++-=
-----
- drivers/iommu/intel/iommu.c                        | 111 +++------
- drivers/iommu/io-pgtable-arm-v7s.c                 |   6 +-
- drivers/iommu/io-pgtable-arm.c                     |   9 +-
- drivers/iommu/iommu.c                              |   3 +-
- drivers/iommu/iova.c                               | 209 +---------------
- drivers/iommu/virtio-iommu.c                       | 115 +++++++--
- drivers/vdpa/vdpa_user/iova_domain.c               |   8 -
- include/linux/intel-svm.h                          |   6 -
- include/linux/iommu.h                              |   3 +-
- include/linux/iova.h                               |  68 +----
- include/trace/events/iommu.h                       |  10 +-
- include/uapi/linux/virtio_iommu.h                  |   8 +-
- 20 files changed, 493 insertions(+), 570 deletions(-)
-
-Please pull.
-
-Thanks,
-
-	Joerg
-
---d8vwtHnKPut+5Js9
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmHfCZcACgkQK/BELZcB
-GuPYbA/8DJ3UDORB+m9PPRo59QhfMsTtrJVMNxPUYan3Nfoz+l6K8QZc8lMVG6xY
-TN7I9ptXi0TdZHbGUA/1YKgZlkXqQj60K9YK/0TBkwB/MwN2utQigbjZSRQPT3Zd
-2D6y+mnMSX+j+mCWtwpttJkgriUPtk7eDkK2ur3Ex2QocfBnH1ObuL0ufQrj5XN8
-A68YMLfl3bhn6X9RAuxBh15RZXHYyk7AK1NIFOxY4tKFiSk18QRl1y3in8o39kV2
-lkDs4ggjh+TgE65+1Rrx1Cl9FV3kbwrkAkBVCKtyQjuPsYRZpw38bg1JWOg4imSY
-sp9AXkJdmmFPECdEcE82++CCDp00S89Hh3NgoAhuhLD75h4zV2puYUdv6FgFOBif
-bSZq3/Q7psQ9cjsamkjv8fq7gfqQHGS6P3g5Wtm/MGV4Ksv/dE9MnUcdszqpVVdr
-9Hq1Fd/OvRDaqnuDIPRRTvzD5EbrnVBAEsXHXQEkZWNvlmPRnyfAnCgC5F4/6pw5
-U2w8acAk9sFZHgtEEJK/GqvMGsmZ+Z9P58EXWpZz9/ovwQNpg/LtZp9bLG7cA8vM
-xHe+HpJoEBMjZhaqVrngLBUjntZGac9aq35JRCd7/VlBD3qlEvLiQaAV6uWfomJG
-FweCzpso0Q18sxH+bqOx0b2tFXYTsCylbvygZJqLSbMiU2Jfrio=
-=gWcn
------END PGP SIGNATURE-----
-
---d8vwtHnKPut+5Js9--
+-- 
+Mel Gorman
+SUSE Labs

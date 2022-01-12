@@ -2,112 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E94C148BE74
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 07:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8296748BE7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 07:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237197AbiALGFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 01:05:47 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:12474 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiALGFp (ORCPT
+        id S1350953AbiALGHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 01:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348112AbiALGHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 01:05:45 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 20C5x3q2088074;
-        Wed, 12 Jan 2022 13:59:03 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from [192.168.2.115] (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Jan
- 2022 14:05:40 +0800
-Message-ID: <a779f1c1-e5b0-5d55-bc6c-5f253d03525d@aspeedtech.com>
-Date:   Wed, 12 Jan 2022 14:05:41 +0800
+        Wed, 12 Jan 2022 01:07:32 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922A0C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 22:07:31 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id k15so5386261edk.13
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 22:07:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=edi.works; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7Uim4PQO9GRX6Ml1nDaTb+DvyJmBeJ+eZYwrgMJj3yI=;
+        b=1LNNzA/ve9YQhIzt6mswt+L1KOC7ztP+uZRonN3zpQtMe8zsMGUM76zV3r09+Y4RDv
+         TCs/ixX6b8fHXxQWGqNp1NkolJFZ1dW/YUwuOpBQBnEgl+Mq/UP31vw5LgqtwuygtItT
+         jItgFp2TVagFEfu1tEUBVZMjK2qXEsOyob2zweFygDPXCEnB14Vd3M+QvPy4A2jvHfW0
+         mghcntQKfhuX8jClj88njP798Shb9uY70Zrz9uZoS9XhStHeqw5E5Vl4+zlbmPiCZuYD
+         05yGJ+4GOPENbEW3Ma6B4PMLMH0BUoJkXGvqtejqQGkq6/FBQftP3qz+axHBcUCvenL3
+         uw6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7Uim4PQO9GRX6Ml1nDaTb+DvyJmBeJ+eZYwrgMJj3yI=;
+        b=joKetaVyGDVHFntOpRNQWapFM7VKCRbweJg5O5x6mO00ioU7bsAWuOgkx8vBKX/lmt
+         iZwXzXopfxs88QcSVvZGN5eJcbY/6Oqj2bxYQOcLe6rnRiC6tlfXyIVMTBcLrWfJDkin
+         pKn6614A53cFN18fVjnknaQxeGOjFyr0f/VhINwwleaLjhv9X4cc+ec4cXrSiTBfzZeb
+         c16h0DmIEFLQAWyox+CHHxOe/jDIB4eQdrfjVXIbXi51iaJPvjEgBsy+ei1I7rJhR0Uv
+         37jhhgLI9V3azOxa53HmjM1wmqc5T0rXIGATSfki3TElBlXSoQx45WW+ai46GBO+S1qx
+         1B9A==
+X-Gm-Message-State: AOAM530MN0vCUkvhl4ljoWaUNJM5XlBg8/MyX70XCPjGEQrf/0v7XiWd
+        AGw8owrUwoWeg2fgldAIotBjqgMVOD9uDHa9mIVZ2Q==
+X-Google-Smtp-Source: ABdhPJw5cTsO1kWiUiVqpgI3OeCcBg5JTs4BMkeLBxLQDWWc+i6xh5tf47WN9LuD12xfZNO/D9j9J7A3wl/25P/c31s=
+X-Received: by 2002:aa7:c7cf:: with SMTP id o15mr7598673eds.176.1641967650078;
+ Tue, 11 Jan 2022 22:07:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] media: aspeed: Fix no complete irq for non-64-aligned
- width
-Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>
-CC:     Eddie James <eajames@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20211214045348.13702-1-jammy_huang@aspeedtech.com>
- <CACPK8XfkXi6M=gzfkYcuoga6WxnzSm2+mspBt4gjop7Ytm+VCA@mail.gmail.com>
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-In-Reply-To: <CACPK8XfkXi6M=gzfkYcuoga6WxnzSm2+mspBt4gjop7Ytm+VCA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 20C5x3q2088074
+References: <20220104202227.2903605-1-yuzhao@google.com> <YdSuSHa/Vjl6bPkg@google.com>
+ <Yd1Css8+jsspeZHh@google.com>
+In-Reply-To: <Yd1Css8+jsspeZHh@google.com>
+From:   Sofia Trinh <sofia.trinh@edi.works>
+Date:   Tue, 11 Jan 2022 22:07:19 -0800
+Message-ID: <CAMwLHrZi0ZGFsuc74Yj3DErT1zyG2DEudS3ZgPEsexj0XfZJyA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/9] Multigenerational LRU Framework
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Alexandre Frade <kernel@xanmod.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joel,
-
-OK, thanks for your review. I will send another updated patch per your 
-advice.
-
-On 2022/1/12 上午 08:51, Joel Stanley wrote:
-> On Tue, 14 Dec 2021 at 04:53, Jammy Huang <jammy_huang@aspeedtech.com> wrote:
->> In ast2500, engine will stop occasionally for 1360x768.
->>
->> This is a bug which has been addressed, but the workaround is specific
->> for 1680 only. Here we make it more complete.
->>
->> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
->> ---
->>   drivers/media/platform/aspeed-video.c | 12 +++++++-----
->>   1 file changed, 7 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
->> index 793b2adaa0f5..4d3e6b105d44 100644
->> --- a/drivers/media/platform/aspeed-video.c
->> +++ b/drivers/media/platform/aspeed-video.c
->> @@ -1055,18 +1055,20 @@ static void aspeed_video_set_resolution(struct aspeed_video *video)
->>          /* Set capture/compression frame sizes */
->>          aspeed_video_calc_compressed_size(video, size);
->>
->> -       if (video->active_timings.width == 1680) {
->> +       if (!IS_ALIGNED(act->width, 64)) {
->>                  /*
->>                   * This is a workaround to fix a silicon bug on A1 and A2
-> Please add:  "a AST2500 silicon bug" so we know which A1/A2 this is
-> referring to.
+On Tue, Jan 11, 2022 at 12:41 AM Yu Zhao <yuzhao@google.com> wrote:
 >
-> With that added, you can add:
+> On Tue, Jan 04, 2022 at 01:30:00PM -0700, Yu Zhao wrote:
+> > On Tue, Jan 04, 2022 at 01:22:19PM -0700, Yu Zhao wrote:
+> > > TLDR
+> > > ====
+> > > The current page reclaim is too expensive in terms of CPU usage and it
+> > > often makes poor choices about what to evict. This patchset offers an
+> > > alternative solution that is performant, versatile and
+> > > straightforward.
+> >
+> > <snipped>
+> >
+> > > Summery
+> > > =======
+> > > The facts are:
+> > > 1. The independent lab results and the real-world applications
+> > >    indicate substantial improvements; there are no known regressions.
+> > > 2. Thrashing prevention, working set estimation and proactive reclaim
+> > >    work out of the box; there are no equivalent solutions.
+> > > 3. There is a lot of new code; nobody has demonstrated smaller changes
+> > >    with similar effects.
+> > >
+> > > Our options, accordingly, are:
+> > > 1. Given the amount of evidence, the reported improvements will likely
+> > >    materialize for a wide range of workloads.
+> > > 2. Gauging the interest from the past discussions [14][15][16], the
+> > >    new features will likely be put to use for both personal computers
+> > >    and data centers.
+> > > 3. Based on Google's track record, the new code will likely be well
+> > >    maintained in the long term. It'd be more difficult if not
+> > >    impossible to achieve similar effects on top of the existing
+> > >    design.
+> >
+> > Hi Andrew, Linus,
+> >
+> > Can you please take a look at this patchset and let me know if it's
+> > 5.17 material?
+> >
+> > My goal is to get it merged asap so that users can reap the benefits
+> > and I can push the sequels. Please examine the data provided -- I
+> > think the unprecedented coverage and the magnitude of the improvements
+> > warrant a green light.
 >
->   Reviewed-by: Joel Stanley <joel@jms.id.au>
+> Downstream kernel maintainers who have been carrying MGLRU for more than
+> 3 versions, can you please provide your Acked-by tags?
 >
->>                   * revisions. Since it doesn't break capturing operation of
->>                   * other revisions, use it for all revisions without checking
->> -                * the revision ID. It picked 1728 which is a very next
->> -                * 64-pixels aligned value to 1680 to minimize memory bandwidth
->> +                * the revision ID. It picked new width which is a very next
->> +                * 64-pixels aligned value to minimize memory bandwidth
->>                   * and to get better access speed from video engine.
->>                   */
->> +               u32 width = ALIGN(act->width, 64);
->> +
->>                  aspeed_video_write(video, VE_CAP_WINDOW,
->> -                                  1728 << 16 | act->height);
->> -               size += (1728 - 1680) * video->active_timings.height;
->> +                                  width << 16 | act->height);
->> +               size = width * act->height;
-> You could make it clearer by putting the write on one line:
+> Having this patchset in the mainline will make your job easier :)
 >
->                  aspeed_video_write(video, VE_CAP_WINDOW, width << 16 |
-> act->height);
+>    Alexandre - the XanMod Kernel maintainer
+>                https://xanmod.org
+>
+>    Brian     - the Chrome OS kernel memory maintainer
+>                https://www.chromium.org
+>
+>    Jan       - the Arch Linux Zen kernel maintainer
+>                https://archlinux.org
+>
+>    Steven    - the Liquorix kernel maintainer
+>                https://liquorix.net
+>
+>    Suleiman  - the ARCVM (Android downstream) kernel memory maintainer
+>                https://chromium.googlesource.com/chromiumos/third_party/kernel
+>
+> Also my gratitude to those who have helped test MGLRU:
+>
+>    Daniel - researcher at Michigan Tech
+>             benchmarked memcached
+>
+>    Holger - who has been testing/patching/contributing to various
+>             subsystems since ~2008
+>
+>    Shuang - researcher at University of Rochester
+>             benchmarked fio and provided a report
+>
+>    Sofia  - EDI https://www.edi.works
+>             benchmarked the top eight memory hogs and provided reports
 
--- 
-Best Regards
-Jammy
-
+Tested-by: Sofia Trinh <sofia.trinh@edi.works>

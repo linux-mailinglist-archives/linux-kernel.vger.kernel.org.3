@@ -2,260 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8403948CC6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC52848CC3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357181AbiALTwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:52:09 -0500
-Received: from mail.z3ntu.xyz ([128.199.32.197]:33200 "EHLO mail.z3ntu.xyz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350031AbiALTvZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:51:25 -0500
-Received: from localhost.localdomain (ip-213-127-106-2.ip.prioritytelecom.net [213.127.106.2])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 5EBB1CDFEF;
-        Wed, 12 Jan 2022 19:42:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1642016565; bh=HWZRYlhhXb1tfEKq8CbOX4I3HGLIIpgzV2lU7Uld+qs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Ji9HW2DNqHEhuoU5FjUa1ZOVpo5H7TRb8a377zBRnm4SDrO9oWMI5Kj1Wxc/QsgQ5
-         udOCSeOBOu/3di9wTqlOYll0FoYTt9AHiOeDR87PGPGL4Sn9JYmdsDVS04M+XJCr5H
-         jsswuuBSwReIfxve5IcOt252mT545KbqU+QMOKl0=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 15/15] arm64: dts: qcom: sdm632: Add device tree for Fairphone 3
-Date:   Wed, 12 Jan 2022 20:41:04 +0100
-Message-Id: <20220112194118.178026-16-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220112194118.178026-1-luca@z3ntu.xyz>
-References: <20220112194118.178026-1-luca@z3ntu.xyz>
-MIME-Version: 1.0
+        id S1350190AbiALTqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:46:36 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:17396 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242499AbiALTnb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 14:43:31 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20CJYjBm014574;
+        Wed, 12 Jan 2022 19:43:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : in-reply-to : references : content-type : mime-version :
+ date : content-transfer-encoding; s=pp1;
+ bh=LoOm8uqxQR+nKIJB4PO8wiHFx1IfpcpGJzsbrjBhpVM=;
+ b=pSwFIlu+OanurKs6nWH6xDsDV7ctQbOxhu9pxz/yEPADS4KZL9qNmuYUox0zyzow9r9I
+ oEk5x94crpCEiNnh7mhG9RSeu/QYyeRlhhvrS4FP8L/hUrbgP1mSozpLWhnKrgcLx9Ox
+ euDareKQjDJLh6o+2GymE5ztZXUxFS8Gx4RDbiUe7pFiof4CIO6IHlfY1rdCem7o8fWp
+ QshYoEzubludAEwBpafZWOjkE2c5MCI3QdPSj6pKX+dJxVh5n/ScrdqTJHTObqGoHA1G
+ Nw9/B564GS98mi9FUt5T2TYxz+qOGBDgLsvmSKY4YEckw663YeTAQHriH09QelXE2gD7 qA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhy0ws1rk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 19:43:07 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20CJVCNi011578;
+        Wed, 12 Jan 2022 19:43:07 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhy0ws1qy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 19:43:07 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20CJh4l8011387;
+        Wed, 12 Jan 2022 19:43:04 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3df289eq95-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 19:43:04 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20CJh24b46858722
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Jan 2022 19:43:02 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7348DA404D;
+        Wed, 12 Jan 2022 19:43:02 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E890A4040;
+        Wed, 12 Jan 2022 19:43:00 +0000 (GMT)
+Received: from sig-9-65-71-51.ibm.com (unknown [9.65.71.51])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 12 Jan 2022 19:43:00 +0000 (GMT)
+Message-ID: <ef68ddaf498925dc0ff03d9463cd306f40e19119.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 2/8] integrity: Introduce a Linux keyring called
+ machine
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "pjones@redhat.com" <pjones@redhat.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>
+In-Reply-To: <eece68eba2beceeb410748c1f9f32162793d2057.camel@linux.ibm.com>
+References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
+         <20220105235012.2497118-3-eric.snowberg@oracle.com>
+         <883da244c04fcb07add9984859a09d7b1827880a.camel@linux.ibm.com>
+         <100B070F-7EB4-4BF7-B2B9-E5AE78D3066A@oracle.com>
+         <a384fcf8bdd9ff79456e9669fc61ab50ec4e1c55.camel@linux.ibm.com>
+         <F1F41DB2-171A-4A6F-9AE7-E03C4D3B7DD0@oracle.com>
+         <eece68eba2beceeb410748c1f9f32162793d2057.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Date:   Wed, 12 Jan 2022 14:41:12 -0500
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GwmGZbOFOH2exdLF7KwYYIKSDuaq9KyJ
+X-Proofpoint-ORIG-GUID: iJP1L7BbmgjwOG1QwRbUMACI0fRdXUIm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-12_05,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 phishscore=0 impostorscore=0 mlxlogscore=999
+ mlxscore=0 spamscore=0 priorityscore=1501 adultscore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201120114
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree for the Fairphone 3 smartphone which is based on
-Snapdragon 632 (sdm632).
+On Tue, 2022-01-11 at 20:14 -0500, Mimi Zohar wrote:
+> On Tue, 2022-01-11 at 21:26 +0000, Eric Snowberg wrote:
+> > 
+> > > On Jan 11, 2022, at 11:16 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > 
+> > > On Mon, 2022-01-10 at 23:25 +0000, Eric Snowberg wrote:
+> > >>> Jarkko, my concern is that once this version of the patch set is
+> > >>> upstreamed, would limiting which keys may be loaded onto the .machine
+> > >>> keyring be considered a regression?
+> > >> 
+> > >> 
+> > >> Currently certificates built into the kernel do not have a CA restriction on them.  
+> > >> IMA will trust anything in this keyring even if the CA bit is not set.  While it would 
+> > >> be advisable for a kernel to be built with a CA, nothing currently enforces it. 
+> > >> 
+> > >> My thinking for the dropped CA restriction patches was to introduce a new Kconfig.  
+> > >> This Kconfig would do the CA enforcement on the machine keyring.  However if the 
+> > >> Kconfig option was not set for enforcement, it would work as it does in this series, 
+> > >> plus it would allow IMA to work with non-CA keys.  This would be done by removing 
+> > >> the restriction placed in this patch. Let me know your thoughts on whether this would 
+> > >> be an appropriate solution.  I believe this would get around what you are identifying as 
+> > >> a possible regression.
+> > > 
+> > > True the problem currently exists with the builtin keys, but there's a
+> > > major difference between trusting the builtin keys and those being
+> > > loading via MOK.  This is an integrity gap that needs to be closed and
+> > > shouldn't be expanded to keys on the .machine keyring.
+> > > 
+> > > "plus it would allow IMA to work with non-CA keys" is unacceptable.
+> > 
+> > Ok, I’ll leave that part out.  Could you clarify the wording I should include in the future 
+> > cover letter, which adds IMA support, on why it is unacceptable for the end-user to
+> > make this decision?
+> 
+> The Kconfig IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+> "help" is very clear:
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../boot/dts/qcom/sdm632-fairphone-fp3.dts    | 189 ++++++++++++++++++
- 2 files changed, 190 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
+[Reposting the text due to email formatting issues.]
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 6b816eb33309..f67973aacd82 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -82,6 +82,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-ganges-kirin.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-discovery.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-pioneer.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-voyager.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sdm632-fairphone-fp3.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm636-sony-xperia-ganges-mermaid.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm660-xiaomi-lavender.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r1.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-new file mode 100644
-index 000000000000..34f4900c8b28
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-@@ -0,0 +1,189 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2022, Luca Weiss <luca@z3ntu.xyz>
-+ */
-+/dts-v1/;
-+
-+#include "msm8953-pm8953.dtsi"
-+#include "sdm632.dtsi"
-+
-+/ {
-+	model = "Fairphone 3";
-+	compatible = "fairphone,fp3", "qcom,sdm632";
-+	chassis-type = "handset";
-+	qcom,msm-id = <349 0>;
-+	qcom,board-id = <8 0x10000>;
-+
-+	aliases {
-+		mmc0 = &sdhc_1;
-+		mmc1 = &sdhc_2;
-+		serial0 = &uart_0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		volume-up {
-+			label = "volume_up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&tlmm 85 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	vph_pwr: vph-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&hsusb_phy {
-+	status = "okay";
-+};
-+
-+&pm8953_resin {
-+	status = "okay";
-+	linux,code = <KEY_VOLUMEDOWN>;
-+};
-+
-+&sdhc_1 {
-+	status = "okay";
-+};
-+
-+&sdhc_2 {
-+	status = "okay";
-+	cd-gpios = <&tlmm 133 GPIO_ACTIVE_LOW>;
-+};
-+
-+&smd_rpm_regulators {
-+	vdd_l1-supply = <&pm8953_s3>;
-+	vdd_l2_l3-supply = <&pm8953_s3>;
-+	vdd_l4_l5_l6_l7_l16_l19-supply = <&pm8953_s4>;
-+	vdd_l8_l11_l12_l13_l14_l15-supply = <&vph_pwr>;
-+	vdd_l9_l10_l17_l18_l22-supply = <&vph_pwr>;
-+
-+	s3 {
-+		regulator-min-microvolt = <984000>;
-+		regulator-max-microvolt = <1240000>;
-+	};
-+
-+	s4 {
-+		regulator-min-microvolt = <1036000>;
-+		regulator-max-microvolt = <2040000>;
-+	};
-+
-+	s5 {
-+		regulator-min-microvolt = <1036000>;
-+		regulator-max-microvolt = <2040000>;
-+	};
-+
-+	l1 {
-+		regulator-min-microvolt = <975000>;
-+		regulator-max-microvolt = <1050000>;
-+	};
-+
-+	l2 {
-+		regulator-min-microvolt = <975000>;
-+		regulator-max-microvolt = <1175000>;
-+	};
-+
-+	l3 {
-+		regulator-min-microvolt = <925000>;
-+		regulator-max-microvolt = <925000>;
-+	};
-+
-+	l5 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	l6 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	l7 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1900000>;
-+	};
-+
-+	l8 {
-+		regulator-min-microvolt = <2900000>;
-+		regulator-max-microvolt = <2900000>;
-+	};
-+
-+	l9 {
-+		regulator-min-microvolt = <3000000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	l10 {
-+		regulator-min-microvolt = <2800000>;
-+		regulator-max-microvolt = <3000000>;
-+	};
-+
-+	l11 {
-+		regulator-min-microvolt = <2950000>;
-+		regulator-max-microvolt = <2950000>;
-+	};
-+
-+	l12 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <2950000>;
-+	};
-+
-+	l13 {
-+		regulator-min-microvolt = <3125000>;
-+		regulator-max-microvolt = <3125000>;
-+	};
-+
-+	l16 {
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	l17 {
-+		regulator-min-microvolt = <2850000>;
-+		regulator-max-microvolt = <2850000>;
-+	};
-+
-+	l19 {
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1350000>;
-+	};
-+
-+	l22 {
-+		regulator-min-microvolt = <2800000>;
-+		regulator-max-microvolt = <2800000>;
-+	};
-+
-+	l23 {
-+		regulator-min-microvolt = <975000>;
-+		regulator-max-microvolt = <1225000>;
-+	};
-+};
-+
-+&tlmm {
-+	/*
-+	 * 0-3: unused but protected by TZ
-+	 * 135-138: fingerprint reader (SPI)
-+	 */
-+	gpio-reserved-ranges = <0 4>, <135 4>;
-+};
-+
-+&uart_0 {
-+	status = "okay";
-+};
-+
-+&usb3 {
-+	status = "okay";
-+};
-+
-+&usb3_dwc3 {
-+	dr_mode = "peripheral";
-+};
--- 
-2.34.1
+help
+  Keys may be added to the IMA or IMA blacklist keyrings, if the
+  key is validly signed by a CA cert in the system built-in or
+  secondary trusted keyrings.
+
+  Intermediate keys between those the kernel has compiled in and the 
+  IMA keys to be added may be added to the system secondary keyring,
+  provided they are validly signed by a key already resident in the
+  built-in or secondary trusted keyrings.
+
+
+The first paragraph requires "validly signed by a CA cert in the system
+built-in or secondary trusted keyrings" for keys to be loaded onto the
+IMA keyring.  This Kconfig is limited to just the builtin and secondary
+keyrings.  Changing this silently to include the ".machine" keyring
+introduces integrity risks that previously did not exist.  A new IMA
+Kconfig needs to be defined to allow all three keyrings - builtin,
+machine, and secondary.
+
+The second paragraph implies that only CA and intermediate CA keys are
+on secondary keyring, or as in our case the ".machine" keyring linked
+to the secondary keyring.
+
+Mimi
 

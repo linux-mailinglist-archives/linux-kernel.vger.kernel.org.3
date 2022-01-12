@@ -2,91 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E929348C517
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA14F48C51D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348663AbiALNql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiALNqk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:46:40 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4184C06173F;
-        Wed, 12 Jan 2022 05:46:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ab8Ka5SKJIX2VaYJDOFAW6O83Y0+hrNEcd/jemOMrtw=; b=sGwswN68LdNqbbHxAdXZ3Q95Tk
-        QIlMv/SnqIhTe5SSmqy9I5XOb+kif8qcjhUsg+s4rTS63qXiTbyK8fMwih84RK8MRgZgY2DA36VmM
-        N45Y5dcSyHemSLqcVGOBHRZ2jA/TMfmZp9a05dRCrjbRfFVWm6TxSwEdgIWZ9xLcm7bH7zQen1tJF
-        tQSSFrMceOeAorpfxeBqAExDdaY3Ggo+FpERE/TdAgbMEyTLh/+1hk8f3scyu5azxVhrG9898O3DU
-        I0gnIsM+nckhIfsRVftUqyeMFgDxV/k9i2cMIQRHyHMpaxyiClhlnPZIhoCGwQzBhjbbnj5ziprMO
-        vRTrmIBA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56674)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1n7dxM-00062r-E1; Wed, 12 Jan 2022 13:46:28 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1n7dxJ-0006wg-OT; Wed, 12 Jan 2022 13:46:25 +0000
-Date:   Wed, 12 Jan 2022 13:46:25 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Martin Schiller <ms@dev.tdt.de>, Hauke Mehrtens <hauke@hauke-m.de>,
-        martin.blumenstingl@googlemail.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, hkallweit1@gmail.com,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next v6] net: phy: intel-xway: Add RGMII internal
- delay configuration
-Message-ID: <Yd7bsbvLyIquY5jn@shell.armlinux.org.uk>
-References: <20210719082756.15733-1-ms@dev.tdt.de>
- <CAJ+vNU3_8Gk8Mj_uCudMz0=MdN3B9T9pUOvYtP7H_B0fnTfZmg@mail.gmail.com>
- <94120968908a8ab073fa2fc0dd56b17d@dev.tdt.de>
- <CAJ+vNU2Bn_eks03g191KKLx5uuuekdqovx000aqcT5=f_6Zq=w@mail.gmail.com>
+        id S1353778AbiALNtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:49:53 -0500
+Received: from mga06.intel.com ([134.134.136.31]:14395 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1353855AbiALNtm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 08:49:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641995381; x=1673531381;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4uT74+eGVQ4XFax5yE63YjVb5fZ/QUjX2nXmFMP+WRw=;
+  b=DVPjHikjBetJcMnQ2l6cgtTvgXG3kWkJ+HaQE7NhJCQp9cE2K8ohfum6
+   jx1AlMNJotPY2K4A6Qxq5ANMq8uL2tX5KFABSkQ02oqBmaUYIsLCQsU3U
+   LMWMgAkOa/LEr/hmCiNeHUYgiGHY9OF4hDIyWCBCAkCJ414PVCBcctp9y
+   fI7gRhAOhHUhI4O9XUOcpHkbEbnr6nuniDIdMh0sGvNnYDIafMo/2WUfr
+   QuzR0qheNv29NqidI/Plu3+6BE6kR2mq7GRm8nWG2oYGmTvw6m3gd2RhW
+   F/U0GapQOveBZQFkTUzsCKh5HQ3BMOtZws7u/9z75aZblnaIlPWsbBShj
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="304473145"
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="304473145"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 05:49:41 -0800
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="691390578"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 05:49:38 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1n7dzF-009hfh-BP;
+        Wed, 12 Jan 2022 15:48:25 +0200
+Date:   Wed, 12 Jan 2022 15:48:25 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thierry Reding <treding@nvidia.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH v1 1/1] gpio: tegra: Get rid of duplicate of_node
+ assignment
+Message-ID: <Yd7cKeGk4CzG3gAX@smile.fi.intel.com>
+References: <20211223122639.86923-1-andriy.shevchenko@linux.intel.com>
+ <Yd7TkUKo2g2Asbna@orome>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJ+vNU2Bn_eks03g191KKLx5uuuekdqovx000aqcT5=f_6Zq=w@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <Yd7TkUKo2g2Asbna@orome>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 11:12:33AM -0800, Tim Harvey wrote:
-> I added a debug statement in xway_gphy_rgmii_init and here you can see
-> it gets called 'before' the link comes up from the NIC on a board that
-> has a cable plugged in at power-on. I can tell from testing that the
-> rx_delay/tx_delay set in xway_gphy_rgmii_init does not actually take
-> effect unless I then bring the link down and up again manually as you
-> indicate.
+On Wed, Jan 12, 2022 at 02:11:45PM +0100, Thierry Reding wrote:
+> On Thu, Dec 23, 2021 at 02:26:39PM +0200, Andy Shevchenko wrote:
+> > GPIO library does copy the of_node from the parent device of
+> > the GPIO chip, there is no need to repeat this in the individual
+> > drivers. Remove these assignment all at once.
+
+...
+
+> Yep, this is indeed not necessary (anymore), so:
 > 
-> # dmesg | egrep "xway|nicvf"
-> [    6.855971] xway_gphy_rgmii_init mdio_thunder MDI_MIICTRL:0xb100
-> rx_delay=1500 tx_delay=500
-> [    6.999651] nicvf, ver 1.0
-> [    7.002478] nicvf 0000:05:00.1: Adding to iommu group 7
-> [    7.007785] nicvf 0000:05:00.1: enabling device (0004 -> 0006)
-> [    7.053189] nicvf 0000:05:00.2: Adding to iommu group 8
-> [    7.058511] nicvf 0000:05:00.2: enabling device (0004 -> 0006)
-> [   11.044616] nicvf 0000:05:00.2 eth1: Link is Up 1000 Mbps Full duplex
+> Reviewed-by: Thierry Reding <treding@nvidia.com>
+> 
+> I've also given this a quick spin on a Tegra124 device (Venice 2) and
+> everything seems to be working fine, so also:
+> 
+> Tested-by: Thierry Reding <treding@nvidia.com>
 
-Does the kernel message about the link coming up reflect what is going
-on physically with the link though?
+Thanks!
 
-If a network interface is down, it's entirely possible that the link is
-already established at the hardware level, buit the "Link is Up" message
-gets reported when the network interface is later brought up. So,
-debugging this by looking at the kernel messages is unreliable.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+With Best Regards,
+Andy Shevchenko
+
+

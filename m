@@ -2,376 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0184D48C481
+	by mail.lfdr.de (Postfix) with ESMTP id 94F2348C483
 	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353496AbiALNNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:13:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        id S1353449AbiALNNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:13:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353411AbiALNM3 (ORCPT
+        with ESMTP id S1353453AbiALNMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:12:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0D1C061751;
-        Wed, 12 Jan 2022 05:12:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E63BB81ECB;
-        Wed, 12 Jan 2022 13:12:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45C06C36AEA;
-        Wed, 12 Jan 2022 13:12:25 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CtiJEVe5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1641993144;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=By/tQK/8VZLYbqA4VX4X7pTOoqXILmSD8IlvO0zFDDg=;
-        b=CtiJEVe58E6TStIi0KWjif9TlOYjgW1NCCnlDbrfF3Yo2XQDR47bwXTfVM5zcVEQKsjY+9
-        D9qsmYizK37P70/1gNT/9rlZDGClAQ3qJVvotOksBdQcGxUBGdHc7SJrWl1aNbo/JcD/Wm
-        mKNoNgEPYEv2R6poOGDc0luN8HyO7Ko=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bfb5e05b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 12 Jan 2022 13:12:24 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-crypto@vger.kernel.org
-Subject: [PATCH RFC v1 3/3] crypto: sha1_generic - import lib/sha1.c locally
-Date:   Wed, 12 Jan 2022 14:12:04 +0100
-Message-Id: <20220112131204.800307-4-Jason@zx2c4.com>
-In-Reply-To: <20220112131204.800307-1-Jason@zx2c4.com>
-References: <20220112131204.800307-1-Jason@zx2c4.com>
+        Wed, 12 Jan 2022 08:12:44 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D474C06175D
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 05:12:44 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id g21so2771281qtk.4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 05:12:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=5AixT1u0DFbgGLsjAIQY4As80hr22iv0pFnHw3t2ouQ=;
+        b=JylVxGEZ9RahFuhQ8+qXMf8FutoJor3hOfEsgDMD/zv3tehovHJrGRL8YIBIafsYYU
+         3NchQ5Fgw7oxSfJ48AP8uOFExtARK+8zlGW5kjK3u9cOgslXRQknHd7Us5O7n92fYVhQ
+         /8x3JAFFIPssT7+VQPYIQPFkmxoE7Uc1Qbb7O2kUPkbQ/wYW/jNQz7IV/UHG1H2beYLy
+         BS7DXJhSeOJk6QCAnR4zbJg3wCp0YcuGeJHwfzFx6qAQq9h7fmkmERWdYbP9pezNhOA7
+         Lm7K75wkuBhryjbhxultvi+RAaVT5Idq9M2C8FpqbyIKbYFLfRLmlbIVkDJ6UDA1M9SR
+         Y+bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=5AixT1u0DFbgGLsjAIQY4As80hr22iv0pFnHw3t2ouQ=;
+        b=RbV/LOuxLSKr4/flswdoqXNQdnj3h47sGk2zRHIpThvZY6K+AdNHFQw2CW2zjNb69h
+         xFdPUwqRngHrbdVAzaByRGLmlJB22ZPbMoG9I1cGXAU0EabkcJ4GUH00MJLHPmznRmzo
+         zHOtFd7+/S+IemKdVUlQoTw9+0He+tNPC35cS5LurHapMHkMJmVdys4GVjktot4Mjnlf
+         xgmnQ8WxK6HOqoUtjdNA6ijooL83wH+CHpMABIvJsYhTrk3u2ftdmn7elwLXHWHSBuGT
+         EA8kiPJg5Yya945EmyZXRi6afm0s3naYb/9t827CpWsnbISkA/1E5fqi7MDOJf1onLUW
+         ztkg==
+X-Gm-Message-State: AOAM532EK5R1dm+jdkujnOzYQJol0PD2YCSwoXfbdfL1dWWUGGo3z1kN
+        5BZd6vuuFU7vjx7dBObmN4YPIA==
+X-Google-Smtp-Source: ABdhPJw9AM5y2mHvX9TMDhFjQIFE16cy7sHvlQa1GsGTg8oO4XKLig5keQ9bfGyvel/eu0AdnKHDig==
+X-Received: by 2002:ac8:5cc1:: with SMTP id s1mr7611444qta.220.1641993163618;
+        Wed, 12 Jan 2022 05:12:43 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id h1sm8567920qta.54.2022.01.12.05.12.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 05:12:42 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1n7dQg-00F1pc-Bb; Wed, 12 Jan 2022 09:12:42 -0400
+Date:   Wed, 12 Jan 2022 09:12:42 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
+Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
+        "aharonl@nvidia.com" <aharonl@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mbloch@nvidia.com" <mbloch@nvidia.com>,
+        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
+        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
+        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
+Subject: Re: [RFC PATCH rdma-next 08/10] RDMA/rxe: Implement flush execution
+ in responder side
+Message-ID: <20220112131242.GL6467@ziepe.ca>
+References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
+ <20211228080717.10666-9-lizhijian@cn.fujitsu.com>
+ <20220106002804.GS6467@ziepe.ca>
+ <347eb51d-6b0c-75fb-e27f-6bf4969125fe@fujitsu.com>
+ <20220106173346.GU6467@ziepe.ca>
+ <daa77a81-a518-0ba1-650c-faaaef33c1ea@fujitsu.com>
+ <20220110143419.GF6467@ziepe.ca>
+ <56234596-cb7d-bdb2-fcfd-f1fe0f25c3e3@fujitsu.com>
+ <20220111204826.GK6467@ziepe.ca>
+ <f980d32d-85b7-87b5-750f-aaa728d811c8@fujitsu.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <f980d32d-85b7-87b5-750f-aaa728d811c8@fujitsu.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With no non-crypto API users of this function, we can move it into the
-generic crypto/ code where it belongs.
+On Wed, Jan 12, 2022 at 09:50:38AM +0000, lizhijian@fujitsu.com wrote:
+> 
+> 
+> On 12/01/2022 04:48, Jason Gunthorpe wrote:
+> > On Tue, Jan 11, 2022 at 05:34:36AM +0000, lizhijian@fujitsu.com wrote:
+> >
+> >> Yes, that's true. that's because only pmem has ability to persist data.
+> >> So do you mean we don't need to prevent user to create/register a persistent
+> >> access flag to a non-pmem MR? it would be a bit confusing if so.
+> > Since these extensions seem to have a mode that is unrelated to
+> > persistent memory,
+> I can only agree with part of them, since the extensions also say that:
+> 
+> oA19-1: Responder shall successfully respond on FLUSH operation only
+> after providing the placement guarantees, as specified in the packet, of
+> preceding memory updates (for example: RDMA WRITE, Atomics and
+> ATOMIC WRITE) towards the memory region.
+> 
+> it mentions *shall successfully respond on FLUSH operation only
+> after providing the placement guarantees*. If users request a
+> persistent placement to a non-pmem MR without errors,  from view
+> of the users, they will think of their request had been *successfully responded*
+> that doesn't reflect the true(data was persisted).
 
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-crypto@vger.kernel.org
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- crypto/sha1_generic.c | 114 +++++++++++++++++++++++++++++++++++
- include/crypto/sha1.h |  10 ---
- lib/Makefile          |   2 +-
- lib/sha1.c            | 137 ------------------------------------------
- 4 files changed, 115 insertions(+), 148 deletions(-)
- delete mode 100644 lib/sha1.c
+The "placement guarentees" should obviously be variable depending on
+the type of memory being targeted.
 
-diff --git a/crypto/sha1_generic.c b/crypto/sha1_generic.c
-index 325b57fe28dc..a2b019803561 100644
---- a/crypto/sha1_generic.c
-+++ b/crypto/sha1_generic.c
-@@ -16,9 +16,123 @@
- #include <linux/module.h>
- #include <linux/mm.h>
- #include <linux/types.h>
-+#include <linux/bitops.h>
-+#include <linux/string.h>
- #include <crypto/sha1.h>
- #include <crypto/sha1_base.h>
- #include <asm/byteorder.h>
-+#include <asm/unaligned.h>
-+
-+#define SHA1_DIGEST_WORDS	(SHA1_DIGEST_SIZE / 4)
-+#define SHA1_WORKSPACE_WORDS	16
-+
-+/*
-+ * If you have 32 registers or more, the compiler can (and should)
-+ * try to change the array[] accesses into registers. However, on
-+ * machines with less than ~25 registers, that won't really work,
-+ * and at least gcc will make an unholy mess of it.
-+ *
-+ * So to avoid that mess which just slows things down, we force
-+ * the stores to memory to actually happen (we might be better off
-+ * with a 'W(t)=(val);asm("":"+m" (W(t))' there instead, as
-+ * suggested by Artur Skawina - that will also make gcc unable to
-+ * try to do the silly "optimize away loads" part because it won't
-+ * see what the value will be).
-+ *
-+ * Ben Herrenschmidt reports that on PPC, the C version comes close
-+ * to the optimized asm with this (ie on PPC you don't want that
-+ * 'volatile', since there are lots of registers).
-+ *
-+ * On ARM we get the best code generation by forcing a full memory barrier
-+ * between each SHA_ROUND, otherwise gcc happily get wild with spilling and
-+ * the stack frame size simply explode and performance goes down the drain.
-+ */
-+
-+#ifdef CONFIG_X86
-+  #define setW(x, val) (*(volatile __u32 *)&W(x) = (val))
-+#elif defined(CONFIG_ARM)
-+  #define setW(x, val) do { W(x) = (val); __asm__("":::"memory"); } while (0)
-+#else
-+  #define setW(x, val) (W(x) = (val))
-+#endif
-+
-+/* This "rolls" over the 512-bit array */
-+#define W(x) (array[(x)&15])
-+
-+/*
-+ * Where do we get the source from? The first 16 iterations get it from
-+ * the input data, the next mix it from the 512-bit array.
-+ */
-+#define SHA_SRC(t) get_unaligned_be32((__u32 *)data + t)
-+#define SHA_MIX(t) rol32(W(t+13) ^ W(t+8) ^ W(t+2) ^ W(t), 1)
-+
-+#define SHA_ROUND(t, input, fn, constant, A, B, C, D, E) do { \
-+	__u32 TEMP = input(t); setW(t, TEMP); \
-+	E += TEMP + rol32(A,5) + (fn) + (constant); \
-+	B = ror32(B, 2); \
-+	TEMP = E; E = D; D = C; C = B; B = A; A = TEMP; } while (0)
-+
-+#define T_0_15(t, A, B, C, D, E)  SHA_ROUND(t, SHA_SRC, (((C^D)&B)^D) , 0x5a827999, A, B, C, D, E )
-+#define T_16_19(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, (((C^D)&B)^D) , 0x5a827999, A, B, C, D, E )
-+#define T_20_39(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, (B^C^D) , 0x6ed9eba1, A, B, C, D, E )
-+#define T_40_59(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, ((B&C)+(D&(B^C))) , 0x8f1bbcdc, A, B, C, D, E )
-+#define T_60_79(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, (B^C^D) ,  0xca62c1d6, A, B, C, D, E )
-+
-+/**
-+ * sha1_transform - single block SHA1 transform (deprecated)
-+ *
-+ * @digest: 160 bit digest to update
-+ * @data:   512 bits of data to hash
-+ * @array:  16 words of workspace (see note)
-+ *
-+ * This function executes SHA-1's internal compression function.  It updates the
-+ * 160-bit internal state (@digest) with a single 512-bit data block (@data).
-+ *
-+ * Don't use this function.  SHA-1 is no longer considered secure.  And even if
-+ * you do have to use SHA-1, this isn't the correct way to hash something with
-+ * SHA-1 as this doesn't handle padding and finalization.
-+ *
-+ * Note: If the hash is security sensitive, the caller should be sure
-+ * to clear the workspace. This is left to the caller to avoid
-+ * unnecessary clears between chained hashing operations.
-+ */
-+static void sha1_transform(__u32 *digest, const char *data, __u32 *array)
-+{
-+	__u32 A, B, C, D, E;
-+	unsigned int i = 0;
-+
-+	A = digest[0];
-+	B = digest[1];
-+	C = digest[2];
-+	D = digest[3];
-+	E = digest[4];
-+
-+	/* Round 1 - iterations 0-16 take their input from 'data' */
-+	for (; i < 16; ++i)
-+		T_0_15(i, A, B, C, D, E);
-+
-+	/* Round 1 - tail. Input from 512-bit mixing array */
-+	for (; i < 20; ++i)
-+		T_16_19(i, A, B, C, D, E);
-+
-+	/* Round 2 */
-+	for (; i < 40; ++i)
-+		T_20_39(i, A, B, C, D, E);
-+
-+	/* Round 3 */
-+	for (; i < 60; ++i)
-+		T_40_59(i, A, B, C, D, E);
-+
-+	/* Round 4 */
-+	for (; i < 80; ++i)
-+		T_60_79(i, A, B, C, D, E);
-+
-+	digest[0] += A;
-+	digest[1] += B;
-+	digest[2] += C;
-+	digest[3] += D;
-+	digest[4] += E;
-+}
- 
- const u8 sha1_zero_message_hash[SHA1_DIGEST_SIZE] = {
- 	0xda, 0x39, 0xa3, 0xee, 0x5e, 0x6b, 0x4b, 0x0d,
-diff --git a/include/crypto/sha1.h b/include/crypto/sha1.h
-index 044ecea60ac8..118a3cad5eb3 100644
---- a/include/crypto/sha1.h
-+++ b/include/crypto/sha1.h
-@@ -33,14 +33,4 @@ extern int crypto_sha1_update(struct shash_desc *desc, const u8 *data,
- extern int crypto_sha1_finup(struct shash_desc *desc, const u8 *data,
- 			     unsigned int len, u8 *hash);
- 
--/*
-- * An implementation of SHA-1's compression function.  Don't use in new code!
-- * You shouldn't be using SHA-1, and even if you *have* to use SHA-1, this isn't
-- * the correct way to hash something with SHA-1 (use crypto_shash instead).
-- */
--#define SHA1_DIGEST_WORDS	(SHA1_DIGEST_SIZE / 4)
--#define SHA1_WORKSPACE_WORDS	16
--void sha1_init(__u32 *buf);
--void sha1_transform(__u32 *digest, const char *data, __u32 *W);
--
- #endif /* _CRYPTO_SHA1_H */
-diff --git a/lib/Makefile b/lib/Makefile
-index 364c23f15578..83ac3f0c1fbe 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -29,7 +29,7 @@ endif
- 
- lib-y := ctype.o string.o vsprintf.o cmdline.o \
- 	 rbtree.o radix-tree.o timerqueue.o xarray.o \
--	 idr.o extable.o sha1.o irq_regs.o argv_split.o \
-+	 idr.o extable.o irq_regs.o argv_split.o \
- 	 flex_proportions.o ratelimit.o show_mem.o \
- 	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
- 	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
-diff --git a/lib/sha1.c b/lib/sha1.c
-deleted file mode 100644
-index 0494766fc574..000000000000
---- a/lib/sha1.c
-+++ /dev/null
-@@ -1,137 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * SHA1 routine optimized to do word accesses rather than byte accesses,
-- * and to avoid unnecessary copies into the context array.
-- *
-- * This was based on the git SHA1 implementation.
-- */
--
--#include <linux/kernel.h>
--#include <linux/export.h>
--#include <linux/bitops.h>
--#include <linux/string.h>
--#include <crypto/sha1.h>
--#include <asm/unaligned.h>
--
--/*
-- * If you have 32 registers or more, the compiler can (and should)
-- * try to change the array[] accesses into registers. However, on
-- * machines with less than ~25 registers, that won't really work,
-- * and at least gcc will make an unholy mess of it.
-- *
-- * So to avoid that mess which just slows things down, we force
-- * the stores to memory to actually happen (we might be better off
-- * with a 'W(t)=(val);asm("":"+m" (W(t))' there instead, as
-- * suggested by Artur Skawina - that will also make gcc unable to
-- * try to do the silly "optimize away loads" part because it won't
-- * see what the value will be).
-- *
-- * Ben Herrenschmidt reports that on PPC, the C version comes close
-- * to the optimized asm with this (ie on PPC you don't want that
-- * 'volatile', since there are lots of registers).
-- *
-- * On ARM we get the best code generation by forcing a full memory barrier
-- * between each SHA_ROUND, otherwise gcc happily get wild with spilling and
-- * the stack frame size simply explode and performance goes down the drain.
-- */
--
--#ifdef CONFIG_X86
--  #define setW(x, val) (*(volatile __u32 *)&W(x) = (val))
--#elif defined(CONFIG_ARM)
--  #define setW(x, val) do { W(x) = (val); __asm__("":::"memory"); } while (0)
--#else
--  #define setW(x, val) (W(x) = (val))
--#endif
--
--/* This "rolls" over the 512-bit array */
--#define W(x) (array[(x)&15])
--
--/*
-- * Where do we get the source from? The first 16 iterations get it from
-- * the input data, the next mix it from the 512-bit array.
-- */
--#define SHA_SRC(t) get_unaligned_be32((__u32 *)data + t)
--#define SHA_MIX(t) rol32(W(t+13) ^ W(t+8) ^ W(t+2) ^ W(t), 1)
--
--#define SHA_ROUND(t, input, fn, constant, A, B, C, D, E) do { \
--	__u32 TEMP = input(t); setW(t, TEMP); \
--	E += TEMP + rol32(A,5) + (fn) + (constant); \
--	B = ror32(B, 2); \
--	TEMP = E; E = D; D = C; C = B; B = A; A = TEMP; } while (0)
--
--#define T_0_15(t, A, B, C, D, E)  SHA_ROUND(t, SHA_SRC, (((C^D)&B)^D) , 0x5a827999, A, B, C, D, E )
--#define T_16_19(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, (((C^D)&B)^D) , 0x5a827999, A, B, C, D, E )
--#define T_20_39(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, (B^C^D) , 0x6ed9eba1, A, B, C, D, E )
--#define T_40_59(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, ((B&C)+(D&(B^C))) , 0x8f1bbcdc, A, B, C, D, E )
--#define T_60_79(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, (B^C^D) ,  0xca62c1d6, A, B, C, D, E )
--
--/**
-- * sha1_transform - single block SHA1 transform (deprecated)
-- *
-- * @digest: 160 bit digest to update
-- * @data:   512 bits of data to hash
-- * @array:  16 words of workspace (see note)
-- *
-- * This function executes SHA-1's internal compression function.  It updates the
-- * 160-bit internal state (@digest) with a single 512-bit data block (@data).
-- *
-- * Don't use this function.  SHA-1 is no longer considered secure.  And even if
-- * you do have to use SHA-1, this isn't the correct way to hash something with
-- * SHA-1 as this doesn't handle padding and finalization.
-- *
-- * Note: If the hash is security sensitive, the caller should be sure
-- * to clear the workspace. This is left to the caller to avoid
-- * unnecessary clears between chained hashing operations.
-- */
--void sha1_transform(__u32 *digest, const char *data, __u32 *array)
--{
--	__u32 A, B, C, D, E;
--	unsigned int i = 0;
--
--	A = digest[0];
--	B = digest[1];
--	C = digest[2];
--	D = digest[3];
--	E = digest[4];
--
--	/* Round 1 - iterations 0-16 take their input from 'data' */
--	for (; i < 16; ++i)
--		T_0_15(i, A, B, C, D, E);
--
--	/* Round 1 - tail. Input from 512-bit mixing array */
--	for (; i < 20; ++i)
--		T_16_19(i, A, B, C, D, E);
--
--	/* Round 2 */
--	for (; i < 40; ++i)
--		T_20_39(i, A, B, C, D, E);
--
--	/* Round 3 */
--	for (; i < 60; ++i)
--		T_40_59(i, A, B, C, D, E);
--
--	/* Round 4 */
--	for (; i < 80; ++i)
--		T_60_79(i, A, B, C, D, E);
--
--	digest[0] += A;
--	digest[1] += B;
--	digest[2] += C;
--	digest[3] += D;
--	digest[4] += E;
--}
--EXPORT_SYMBOL(sha1_transform);
--
--/**
-- * sha1_init - initialize the vectors for a SHA1 digest
-- * @buf: vector to initialize
-- */
--void sha1_init(__u32 *buf)
--{
--	buf[0] = 0x67452301;
--	buf[1] = 0xefcdab89;
--	buf[2] = 0x98badcfe;
--	buf[3] = 0x10325476;
--	buf[4] = 0xc3d2e1f0;
--}
--EXPORT_SYMBOL(sha1_init);
--- 
-2.34.1
+> Further more, If we have a checking during the new MR creating/registering,
+> user who registers this MR can know if the target MR supports persistent access flag.
+> Then they can tell this information to the request side so that request side can
+> request a valid placement type later. that is similar behavior with current librpma.
 
+Then you can't use ATOMIC_WRITE with non-nvdimm memory, which is
+nonsense
+
+Jason

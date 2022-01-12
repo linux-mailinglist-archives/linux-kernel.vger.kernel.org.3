@@ -2,102 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E9248CD11
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF5348CD17
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357630AbiALUYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 15:24:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357605AbiALUX6 (ORCPT
+        id S229483AbiALU05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 15:26:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47190 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357633AbiALU03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 15:23:58 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01392C06173F;
-        Wed, 12 Jan 2022 12:23:58 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id h1so5824070pls.11;
-        Wed, 12 Jan 2022 12:23:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=n6vNoI1/a0MDiqXuZ0zXzZQChQHHajU4edJoNcbDIdQ=;
-        b=EYBoAiBSvbXwh/dJ5H4rNhojPuxcAibbjsPJvRAzDkRKcXllebozoVEKaSp/nQJpu/
-         PAv1LWNyiMTdsL1r1GASsvdIAsGwCfl4jI664YuTM8ZkV/JB4SBEdANOJijQp3wU/CSF
-         uU4pB0uPisW9xxGAtpS9g1OFpvBvS92rtOJXAK5Prk3QRLn+blfi6Pmwrb/BqHHeX95F
-         85BbQPrXuFfinz5LJF1/9B5Dxf3ujA+ugfdRtIseKhCk4X9a/BJazZE9GjyLpHyveBhV
-         tdA0SURCSyxHi416HaDCKFnaueOmPDRZm86kOAbhep7nEmvZLhV8XikCqilTvD1Wgosp
-         DcBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=n6vNoI1/a0MDiqXuZ0zXzZQChQHHajU4edJoNcbDIdQ=;
-        b=xouL/4iX1FDRRR0qYAi7+eJrht64+huD0y+fkEpAvD1D8TJHb+a8cTLcU7eobrxKTg
-         oa6S54gdHYvvkmufvLVMiCRQTqm/ZDlDOhKtIJ628c4/6fAuPsAj/LxhlKBEQjuJwPtR
-         /9ooMiV78BGFsj5xxRyHwT1STY/zdpWFyuze0tHgKS0Za8+qQffMJYrut1mSoKCrohBC
-         hFTlVD99fFRgQejRy9LOy3apSgs8AVwRm8aP9F0ykJFIju3y/oVh6gQtk+0DdbDSMCW6
-         Y7GOrnSIEt9DFFFBvmvn9V7jYxlm1a3HyVZhNaIaFCQdIm48VdeRorduxA6/604TQ/Sz
-         BQjw==
-X-Gm-Message-State: AOAM531y0zq6HKIGEpOrlIffBtSPSLVYSgZ493P88mQtIGMjCSvVOp70
-        L/3UHdMwuBIq0gaX9eX8FZs=
-X-Google-Smtp-Source: ABdhPJzKaq+5xVjxDz281axC0oFdXS8BNkH8VUtt2uJd1FqQljInB/mLkMss+Juhqg+rOgnMOccALg==
-X-Received: by 2002:a63:6908:: with SMTP id e8mr1097170pgc.587.1642019037459;
-        Wed, 12 Jan 2022 12:23:57 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id u126sm441301pgc.22.2022.01.12.12.23.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 12:23:56 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 12 Jan 2022 10:23:55 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Josh Don <joshdon@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        cgroups@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] cgroup: add cpu.stat_percpu
-Message-ID: <Yd8429VrPCay9cn4@slm.duckdns.org>
-References: <20220107234138.1765668-1-joshdon@google.com>
- <Yd189wHB2LJcK1Pv@hirez.programming.kicks-ass.net>
- <CABk29NuGs_9uxgbv678W=BGGinZNiUHO5T57FHGbOG+HP-FT2g@mail.gmail.com>
+        Wed, 12 Jan 2022 15:26:29 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D655861987;
+        Wed, 12 Jan 2022 20:26:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75F33C36AE9;
+        Wed, 12 Jan 2022 20:26:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642019188;
+        bh=cmhLy2J1afnp6gpFyGDqLtbbQq3RXm2M4Drjehcc+as=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cNSrvhelUyjndS3PPZTl/RDy22wCDC7kDValteAjswg90E0eyZVvA3cDUOwePKlEj
+         Vn+ZlFwx1m8Z/mNi0LMJoMwkUUL4+pPc16RVOAE89+xv4Z0pg4tndnCLTYGcPg5Ub0
+         pzkgeOHo80+zVQIRetMINaTl/YkoTHaeB1CQnwZrNVcPTfMjr8wGh+JLpB57SWww6X
+         YJrKdr/x4oudEb3Kty/gKtJdcbgfz6hXEOZxQosiqsOn4W2PXblFDXqoWYXUeMbQix
+         8Gcb9HwRjzua8wnsHGQoxxsAAe3bsQZFB/CLC1saAgI9jNT6Nb1d5aI8oWfY07Dzu9
+         jzdc8gdkfFEPg==
+Date:   Wed, 12 Jan 2022 20:26:22 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Daniel Beer <daniel.beer@igorinstitute.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Liu <andy-liu@ti.com>,
+        Derek Simkowiak <derek.simkowiak@igorinstitute.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH 1/2] ASoC: add support for TAS5805M digital amplifier
+Message-ID: <Yd85bjKEX9JnoOlI@sirena.org.uk>
+References: <61dccc59.1c69fb81.e1d98.02e3@mx.google.com>
+ <Yd26p8rF3arufd2R@sirena.org.uk>
+ <20220111192806.GA10345@nyquist.nev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UGyhJCW8stP9TZVM"
 Content-Disposition: inline
-In-Reply-To: <CABk29NuGs_9uxgbv678W=BGGinZNiUHO5T57FHGbOG+HP-FT2g@mail.gmail.com>
+In-Reply-To: <20220111192806.GA10345@nyquist.nev>
+X-Cookie: Bridge ahead.  Pay troll.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-On Tue, Jan 11, 2022 at 03:38:20PM -0800, Josh Don wrote:
-> Is the concern there just the extra overhead from making multiple
-> trips into this handler and re-allocating the buffer until it is large
-> enough to take all the output? In that case, we could pre-allocate
-> with a size of the right order of magnitude, similar to /proc/stat.
-> 
-> Lack of per-cpu stats is a gap between cgroup v1 and v2, for which v2
-> can easily support this interface given that it already tracks the
-> stats percpu internally. I opted to dump them all in a single file
-> here, to match the consolidation that occurred from cpuacct->cpu.stat.
+--UGyhJCW8stP9TZVM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, nack on this. That part was dropped intentionally. These text pseudo
-files aren't a great medium for this sort of (potentially large) data dump
-and they scale really badly with new fields which we may want to expose in
-the future. For detailed introspection, a better route would be using bpf
-and if that's inconvenient for some reason trying to make them more
-convenient.
+On Wed, Jan 12, 2022 at 08:28:06AM +1300, Daniel Beer wrote:
 
-Thanks.
+> The blob of register writes we get given from PPC3 contains a whole lot
+> of explicit page and book changes, and there's not an easy way to tell
+> regmap about this, as far as I know. Do you think it's acceptable to
+> stick with explicit paging for this reason, or is there a way to make
+> this work with regmap's paging?
 
--- 
-tejun
+That's probably fine.  It's *really* hard to get enthusiastic about this
+system design TBH, just injecting a stream of unverified register writes=20
+is going to make the driver very fragile against changes but I'm not
+sure you're going to much better there.
+
+--UGyhJCW8stP9TZVM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHfOW4ACgkQJNaLcl1U
+h9C27Af/ZA51Bc25kI6lte8YUiUwu/1vUA916HbEzpc+2TziDfzVZ2mmt3NxQTfK
+HdHHYFi7zHa/bpWKG8tVM5r388IyqQ+YZzBeX4PD//wdAquv1U5JQ8/zhsuatH8n
+8uFa4haY7Ww5CePjpPHWo3d7tla/3eXV6RaBz4ML+4ZkZrSYSTVPKqSsH8kiHtnA
+nhNzgM6PPCaUYZlstuq66ram2KTY2kLsga0nZqTr9ZYRp0FPunBFxJ3IXN5/wvRh
+JIUOPMEENVzWFC2L4ew98mSDn3Xo7s6cx41YRRQDt+w/O4bpMYDFrnk5MhWa7Ay8
+KI5VE72wzmr/miI2yPhTU0CHMDtXNw==
+=cyWj
+-----END PGP SIGNATURE-----
+
+--UGyhJCW8stP9TZVM--

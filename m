@@ -2,115 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 825CD48C078
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1073B48C081
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351810AbiALI4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:56:20 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:54540 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351771AbiALI4T (ORCPT
+        id S1351829AbiALI5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351855AbiALI5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:56:19 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E746B1F3C0;
-        Wed, 12 Jan 2022 08:56:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641977777; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uBzH2mVPP3ctB/WRYSae7RVF7fvvNk6lw/YieWT7XoY=;
-        b=emOHqq2ajf3XQKAtY6MDJLTTxLdgpdZuzRzgsgUybOUXZau2wtcPEN+0xr/6g9XFLCUxaN
-        gbR5sH+syOJ7AMleiVDT3t5vtqUQQUBLBKTGlufLw6GethRo+KdXM0yImTJbsHGn4+F+En
-        ITLplvGE0N3IntYNvADruyzhJCyB1uc=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9722AA3B85;
-        Wed, 12 Jan 2022 08:56:16 +0000 (UTC)
-Date:   Wed, 12 Jan 2022 09:56:15 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        akpm@linux-foundation.org, shakeelb@google.com, guro@fb.com,
-        vbabka@suse.cz, willy@infradead.org, songmuchun@bytedance.com,
-        shy828301@gmail.com, surenb@google.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 1/4] mm/memcg: use NUMA_NO_NODE to indicate allocation
- from unspecified node
-Message-ID: <Yd6Xr7K9bKGVgGtI@dhcp22.suse.cz>
-References: <20220111010302.8864-1-richard.weiyang@gmail.com>
- <Yd1CdJA5NelzoK1D@dhcp22.suse.cz>
- <20220112004634.dc5suwei4ymyxaxg@master>
+        Wed, 12 Jan 2022 03:57:00 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709F6C06175E
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:56:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ptT7Q+NrHVUneTPMfkYgw6UZZqAeVqwlWTC8DxFKkTk=; b=UZV2cTxtt3k7HAXRsH4bAADE3r
+        gavBKX8EUJ30aNEf7rNkl61lfU+/OqkBLCHNvL7+nwb5BcBgAa+WmrmrbDYQnYwfYjwi//mEb3P6c
+        KZqhqbWMKTjYNv4jsMZFLXNIxyUE4hpdwC7ryl7uxGPaweh6wDU23UeKfB+yB1oyemLoDd6S8kjhN
+        CCdF76rla+xF0sa0GMCXv3JN4GueC+rRjVKHsMR92IPrsN3WVBWTUR99UHekeEr6WtdTJ2aHocgUL
+        o2U5EjOO7TUhkE69bvDGlS3I+S3aQu5cMZqcC6ON9iOgMsT/Rii9eSrrYWMWIRLiHge9BMC7LNheq
+        IiiPkA2Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7ZQt-003xpt-Bc; Wed, 12 Jan 2022 08:56:40 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5E466300237;
+        Wed, 12 Jan 2022 09:56:39 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4DC532B35079A; Wed, 12 Jan 2022 09:56:39 +0100 (CET)
+Date:   Wed, 12 Jan 2022 09:56:39 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, boqun.feng@gmail.com, will@kernel.org
+Subject: Re: [PATCH] MAINTAINERS: add myself as reviewer for atomics
+Message-ID: <Yd6Xx4lAak1qZFVB@hirez.programming.kicks-ass.net>
+References: <20220104095018.1990058-1-mark.rutland@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220112004634.dc5suwei4ymyxaxg@master>
+In-Reply-To: <20220104095018.1990058-1-mark.rutland@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 12-01-22 00:46:34, Wei Yang wrote:
-> On Tue, Jan 11, 2022 at 09:40:20AM +0100, Michal Hocko wrote:
-> >On Tue 11-01-22 01:02:59, Wei Yang wrote:
-> >> Instead of use "-1", let's use NUMA_NO_NODE for consistency.
-> >> 
-> >> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-> >
-> >I am not really sure this is worth it. After the merge window I plan to
-> >post http://lkml.kernel.org/r/20211214100732.26335-1-mhocko@kernel.org.
+On Tue, Jan 04, 2022 at 09:50:18AM +0000, Mark Rutland wrote:
+> As I've fiddled about with the atomic infrastructure a fair bit now,
+> Peter suggested I should add myself as a reviewer or maintainer to make
+> sure I'm Cc'd on anything I might have an opinion on.
 > 
-> Give me some time to understand it :-)
+> For now, add myself as a reviewer.
+> 
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Will Deacon <will@kernel.org>
 
-Just for the record, here is what I have put on top of that series:
---- 
-From b7195eba02fe6308a6927450f4630057c05e808e Mon Sep 17 00:00:00 2001
-From: Wei Yang <richard.weiyang@gmail.com>
-Date: Tue, 11 Jan 2022 09:45:25 +0100
-Subject: [PATCH] memcg: do not tweak node in alloc_mem_cgroup_per_node_info
-
-alloc_mem_cgroup_per_node_info is allocated for each possible node and
-this used to be a problem because not !node_online nodes didn't have
-appropriate data structure allocated. This has changed by "mm: handle
-uninitialized numa nodes gracefully" so we can drop the special casing
-here.
-
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-Signed-off-by: Michal Hocko <mhocko@suse.com>
----
- mm/memcontrol.c | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 781605e92015..ed19a21ee14e 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -5044,18 +5044,8 @@ struct mem_cgroup *mem_cgroup_from_id(unsigned short id)
- static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
- {
- 	struct mem_cgroup_per_node *pn;
--	int tmp = node;
--	/*
--	 * This routine is called against possible nodes.
--	 * But it's BUG to call kmalloc() against offline node.
--	 *
--	 * TODO: this routine can waste much memory for nodes which will
--	 *       never be onlined. It's better to use memory hotplug callback
--	 *       function.
--	 */
--	if (!node_state(node, N_NORMAL_MEMORY))
--		tmp = -1;
--	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL, tmp);
-+
-+	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL, node);
- 	if (!pn)
- 		return 1;
- 
--- 
-2.30.2
-
-
--- 
-Michal Hocko
-SUSE Labs
+Must definitely! Thanks!

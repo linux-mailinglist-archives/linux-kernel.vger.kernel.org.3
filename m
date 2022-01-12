@@ -2,116 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E26A48C59E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A91F48C5A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243863AbiALOHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:07:55 -0500
-Received: from mga05.intel.com ([192.55.52.43]:9247 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242320AbiALOHy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:07:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641996474; x=1673532474;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ekJG+R3q5e1w11whW9x+IgKOhTxLlFzQODnqFxKuc6A=;
-  b=l20XHz9+9JTPBwChzHZJHQUIfMMtWxagcyP4T5xPsg1sLDRnnViD/aKB
-   dVgFH+b6s7UQmfBS6LmLjxJe+s62DGS00rMkZIeL7C9e71cPksJDtwBum
-   fKEJN9Hb71xqvgY57ihEPL+wQNnGP9tq16o5oq8h/Iblah8QL//dEu5Vt
-   pTTnB71JuUMxcK+e34IrkM0msQEIKy82xSTZKBEsm5oecvS7IwPM/DTUe
-   OgMzdgfQnweTeJu7vj5XHpNiFByO1oOw9Clea+116I+o5zqtPCY0ambsv
-   0uhkuhMvQ3OoeWo3PzrwbpG3jYEnO3uPl8l271eJddJIbti/tIgU0Hi5i
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="330085392"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="330085392"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 06:07:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="670155708"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Jan 2022 06:07:52 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n7eI4-0005uG-9q; Wed, 12 Jan 2022 14:07:52 +0000
-Date:   Wed, 12 Jan 2022 22:06:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:3827:5:
- warning: no previous prototype for 'sienna_cichlid_stb_get_data_direct'
-Message-ID: <202201122225.jnBYBKaM-lkp@intel.com>
+        id S1353956AbiALOIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:08:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45092 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353925AbiALOIL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 09:08:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44A146136C;
+        Wed, 12 Jan 2022 14:08:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72BB2C36AE5;
+        Wed, 12 Jan 2022 14:08:10 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ofmv0Gl8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1641996487;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D1SBAQbIS+MkEhG/Zk8+PAlOkBpmNXZZczD/OOiYK3Q=;
+        b=ofmv0Gl8BJEEY8jkVfszB1NXdvS569UODqNm/5KssnkRypTkb8hIe+s1KogKj6zug4G7w7
+        BEbpTmG/53coSqKfxZSGK+DDq5sTtqGUPQz+q824AY+tszuvZn2j6uakUKMSWdhvWAzUv0
+        casbD9C5DZuWSuTWWhbL5WGJ3AX6Da8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 296927be (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 12 Jan 2022 14:08:07 +0000 (UTC)
+Received: by mail-yb1-f172.google.com with SMTP id g81so6629675ybg.10;
+        Wed, 12 Jan 2022 06:08:06 -0800 (PST)
+X-Gm-Message-State: AOAM5326yPksHYuU+rygAKGATgOz976RUlkZlpm10czSB9f6fpJ+ZLQH
+        r5PbmKHxsS25U1vc0lTs7V7xAEQ+gg2k6+s0CZc=
+X-Google-Smtp-Source: ABdhPJw0DTh1gnxGW2hunILj23hYJidWEZYiGn+LeKetQoiOWBNcWcQz/+IzZMh93JVZ3BY1ivAFfw1jWvi3nCbitpU=
+X-Received: by 2002:a25:8c4:: with SMTP id 187mr12312578ybi.245.1641996485764;
+ Wed, 12 Jan 2022 06:08:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220112140137.728162-1-jforbes@fedoraproject.org>
+ <CAHmME9rJFVeWL=SFTkM8=+2te_GnH4n-THH+F3p5mnHfCkhZ4w@mail.gmail.com> <CAMj1kXHubNk3gRTOmD1rOCifCUE4O6=TvNr_XhP1tNcCBuzfBQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXHubNk3gRTOmD1rOCifCUE4O6=TvNr_XhP1tNcCBuzfBQ@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 12 Jan 2022 15:07:55 +0100
+X-Gmail-Original-Message-ID: <CAHmME9oKEawBAGSN_tdpBDe2_vRUE8Gh+GMXn+d94A6te4FJPQ@mail.gmail.com>
+Message-ID: <CAHmME9oKEawBAGSN_tdpBDe2_vRUE8Gh+GMXn+d94A6te4FJPQ@mail.gmail.com>
+Subject: Re: [PATCH v2] lib/crypto: add prompts back to crypto libraries
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Justin Forbes <jmforbes@linuxtx.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrey,
+On Wed, Jan 12, 2022 at 3:06 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Wed, 12 Jan 2022 at 15:05, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > This commit also needs this snippet:
+> >
+>
+> Why?
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   daadb3bd0e8d3e317e36bc2c1542e86c528665e5
-commit: db5b5c679e6cad2bb147337af6c378d278231b45 drm/amd/pm: Add STB support in sienna_cichlid
-date:   7 weeks ago
-config: arc-randconfig-r043-20220112 (https://download.01.org/0day-ci/archive/20220112/202201122225.jnBYBKaM-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=db5b5c679e6cad2bb147337af6c378d278231b45
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout db5b5c679e6cad2bb147337af6c378d278231b45
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/gpu/drm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:3827:5: warning: no previous prototype for 'sienna_cichlid_stb_get_data_direct' [-Wmissing-prototypes]
-    3827 | int sienna_cichlid_stb_get_data_direct(struct smu_context *smu,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/sienna_cichlid_stb_get_data_direct +3827 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c
-
-  3826	
-> 3827	int sienna_cichlid_stb_get_data_direct(struct smu_context *smu,
-  3828					       void *buf,
-  3829					       uint32_t size)
-  3830	{
-  3831		uint32_t *p = buf;
-  3832		struct amdgpu_device *adev = smu->adev;
-  3833	
-  3834		/* No need to disable interrupts for now as we don't lock it yet from ISR */
-  3835		spin_lock(&smu->stb_context.lock);
-  3836	
-  3837		/*
-  3838		 * Read the STB FIFO in units of 32bit since this is the accessor window
-  3839		 * (register width) we have.
-  3840		 */
-  3841		buf = ((char *) buf) + size;
-  3842		while ((void *)p < buf)
-  3843			*p++ = cpu_to_le32(RREG32_PCIE(MP1_Public | smnMP1_PMI_3));
-  3844	
-  3845		spin_unlock(&smu->stb_context.lock);
-  3846	
-  3847		return 0;
-  3848	}
-  3849	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+So that the menu of crypto library options is inside of the library
+menu. Otherwise this will appear inside of the _root_ menu, which
+isn't what we want.

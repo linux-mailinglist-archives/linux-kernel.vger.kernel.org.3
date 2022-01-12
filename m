@@ -2,145 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1F648C800
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFEB248C801
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354986AbiALQOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:14:11 -0500
-Received: from mail-qv1-f51.google.com ([209.85.219.51]:35567 "EHLO
-        mail-qv1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240511AbiALQOF (ORCPT
+        id S1354998AbiALQPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:15:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354996AbiALQOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:14:05 -0500
-Received: by mail-qv1-f51.google.com with SMTP id a8so3459751qvx.2;
-        Wed, 12 Jan 2022 08:14:05 -0800 (PST)
+        Wed, 12 Jan 2022 11:14:24 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0177C061751
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 08:14:23 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id p14so4751237plf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 08:14:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QzWQq20E27Vzi9uGpH2lyjhZH6GcnE726DILtQYXDnE=;
+        b=G/Epxa6o/cF1a+I2JjaNLnOmIgaTpu1NN8e6Ri5Wjq+agl3MQR9pjQl/ks7k/66qfV
+         SojtVBThpbU8yW4XtKCwhkZa7kap4QshbtWtv96Q/JCUofc35laLQIPTsEOY8xJhLiJe
+         B046CcEAaOrOKfeqMermxm1+ML9L4IcB16l4E5L3I9Z788mreifsY8Mv+xXf3NQIkZGB
+         jY03lWKPW4dXq0oAIXlb0OnXHg150iPp+Bph/88YX4Ri9e2+7SDq6PSECqfIPaxVg1gh
+         QdNyJMbT23/WNcRsVhM/BkA2YC5X41DbAi6H7pkRCFSgWVyAk7w9o0vAyssrn01ypmlq
+         +6kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o7MEgpOOxGt54/hkpy3yNzHIxHgqeMXzxGl0QBEiqQ8=;
-        b=r/WgqwG1Jmawy6A9MQxbp5uWEL+1VzIUGyWlr+jJu7zm8hnrzUsiyXeuqwK7jECOd6
-         Q9ZogepWUIft+4mfZ3stJ4Bj6wyP5/66jOnp0wqK0jOlfb7jkUR0/ElymJG8nZ4RXlyb
-         vHG3JERoO2KyhktCMd8pCWe/9+WWHhj54mrqTHuRXkb0w6sStv0uMUZega01DsdIU3wt
-         bBgcCZDV5iz/C4wFZDrWPnU1P3GoGKzoPlpWzX4bQR6446uQIfn+aYiJOFpjs38FkWkm
-         sacJx2O5RPWaO3i6XfkxVWpiirjjEFwtrKoG72bOGfIKTpmt1rX5r5O8rIy4DqWX9uCw
-         E37w==
-X-Gm-Message-State: AOAM533lB3gfDKrzEYyQ3zIKzRCNDioHNItdqTt5BIMQ+UNMwjJtszi6
-        NE9AWitmKYv+Q2o+Eub2p2WCeX0c1AO1e0L0v+o=
-X-Google-Smtp-Source: ABdhPJyS2AnOwxzgQuWUygWNfan4PYFTyozxvPlJyBn/aWQsWTeqWLf8F7Jto6lKEcKdepyZTrOWftVBmhSNLmLn9d4=
-X-Received: by 2002:ad4:5c41:: with SMTP id a1mr425140qva.130.1642004044858;
- Wed, 12 Jan 2022 08:14:04 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QzWQq20E27Vzi9uGpH2lyjhZH6GcnE726DILtQYXDnE=;
+        b=22svBP8RKrTBCuBLkNucMgHbpPYvWyIZN2kdWXee7OzI3IRE5Qx7cHoYDhxiiiaRgk
+         QrAl2Yyl8F3kKqrDStZsgQpXfIwcAJChbBV1UjeWHYef2XRtd8ieN0yxrDEN8jWdOhvh
+         dRKilAPNaHuvCuX5cSYODUQddJnc3bi74T1igOtVkzl/tj7fBDQnPj9o1G8tzv3VSrlW
+         yLxxQeU4858r3U8UfsvaSESdfuiz9W7o8DSmsH1uvDWUzgCBDzdL+7lzIgr7bJSutr+v
+         VRbmxz6qedETU5LZLLQesZBgY43+qqgXTR6I5q657C2AsRol/+2qqIaVTkZKwn2KFUu0
+         wzpw==
+X-Gm-Message-State: AOAM531oosxoNn5NtRMIRZutjukvNAnnHxPlJBgLZ2AwqqsgPFq0MSjx
+        eLGwLhnbIiH8GtMy1DFWaBXllg==
+X-Google-Smtp-Source: ABdhPJyilz9gDJSj+JPNs0NJORi1Cw+A9gLTls0R5lSDAL+XwGTrZERgTMg+z12MUL1iCuICvb2Tng==
+X-Received: by 2002:a17:903:41c1:b0:14a:695a:f372 with SMTP id u1-20020a17090341c100b0014a695af372mr354767ple.166.1642004063214;
+        Wed, 12 Jan 2022 08:14:23 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g22sm104235pfc.130.2022.01.12.08.14.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 08:14:22 -0800 (PST)
+Date:   Wed, 12 Jan 2022 16:14:19 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        lkp@lists.01.org, lkp@intel.com
+Subject: Re: [x86/entry_32]  aa93e2ad74:
+ BUG:soft_lockup-CPU##stuck_for#s![systemd-logind:#]
+Message-ID: <Yd7+W1gFbkBs5Lkd@google.com>
+References: <20220106083523.GB32167@xsang-OptiPlex-9020>
+ <Yd1l0gInc4zRcnt/@hirez.programming.kicks-ass.net>
+ <Yd4u2rVVSdpEpwwM@google.com>
+ <Yd6ssarpDknV1r9z@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com> <1641996862-26960-2-git-send-email-akhilrajeev@nvidia.com>
-In-Reply-To: <1641996862-26960-2-git-send-email-akhilrajeev@nvidia.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 12 Jan 2022 17:13:53 +0100
-Message-ID: <CAJZ5v0hW-i8+hqkQtHG2H3X7zotABEx_bKei9OFkjBuFbL6JKw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] device property: Add device_irq_get_byname
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd6ssarpDknV1r9z@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 3:14 PM Akhil R <akhilrajeev@nvidia.com> wrote:
->
-> Get interrupt by name from ACPI table as well.
->
-> Add option to use 'interrupt-names' in _DSD which can map to interrupt by
-> index. The implementation is similar to 'interrupt-names' in devicetree.
-> Also add a common routine to get irq by name from devicetree and ACPI
-> table.
->
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  drivers/base/property.c  | 35 +++++++++++++++++++++++++++++++++++
->  include/linux/property.h |  3 +++
->  2 files changed, 38 insertions(+)
->
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index cbe4fa2..414c316 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -920,6 +920,41 @@ int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index)
->  EXPORT_SYMBOL(fwnode_irq_get);
->
->  /**
-> + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
-> + * @fwnode:    Pointer to the firmware node
-> + * @name:      IRQ name in interrupt-names property in fwnode
-> + *
-> + * Returns Linux IRQ number on success, errno otherwise.
-> + */
-> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
-> +{
-> +       int index;
-> +
-> +       if (unlikely(!name))
-> +               return -EINVAL;
-> +
-> +       index = fwnode_property_match_string(fwnode, "interrupt-names",  name);
-> +       if (index < 0)
-> +               return index;
-> +
-> +       return fwnode_irq_get(fwnode, index);
-> +}
-> +EXPORT_SYMBOL(fwnode_irq_get_byname);
-> +
-> +/**
-> + * device_irq_get_byname - Get IRQ of a device using interrupt name
-> + * @dev:       Device to get the interrupt
-> + * @name:      IRQ name in interrupt-names property in fwnode
+On Wed, Jan 12, 2022, Peter Zijlstra wrote:
+> On Wed, Jan 12, 2022 at 01:28:58AM +0000, Sean Christopherson wrote:
+> > The issue is that PARANOID_EXIT_TO_KERNEL_MODE in the handle_exception_return
+> > path overwrites the entry stack data with the task stack data, restoring the "bad"
+> > segment value.
+> 
+> Oh gawd... that's terrible, and yes, that now makes perfect sense.
+> 
+> However did you find that?
 
-Which fwnode?
-
-> + *
-> + * Returns Linux IRQ number on success, errno otherwise.
-> + */
-> +int device_irq_get_byname(struct device *dev, const char *name)
-> +{
-> +       return fwnode_irq_get_byname(dev_fwnode(dev), name);
-> +}
-> +EXPORT_SYMBOL_GPL(device_irq_get_byname);
-
-This can be confusing, because it pretends to be super-generic and in
-fact it depends on an fwnode to be there.
-
-I guess I'd rather not have it at all, or use a more precise name for it.
-
-> +
-> +/**
->   * fwnode_graph_get_next_endpoint - Get next endpoint firmware node
->   * @fwnode: Pointer to the parent firmware node
->   * @prev: Previous endpoint node or %NULL to get the first
-> diff --git a/include/linux/property.h b/include/linux/property.h
-> index 16f736c..bc49350 100644
-> --- a/include/linux/property.h
-> +++ b/include/linux/property.h
-> @@ -121,6 +121,9 @@ struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode);
->  void fwnode_handle_put(struct fwnode_handle *fwnode);
->
->  int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index);
-> +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name);
-> +
-> +int device_irq_get_byname(struct device *dev, const char *name);
->
->  unsigned int device_get_child_node_count(struct device *dev);
->
-> --
-> 2.7.4
->
+printf and running under QEMU, which has a interactive "monitor" that lets you
+read/write guest memory and can also do VA=>PA translations.  Code inspection
+once I realized the value on the stack was being restored between the exception
+fixup and the POP.

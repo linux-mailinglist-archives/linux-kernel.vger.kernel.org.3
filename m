@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA7C48BCCB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D59C48BCD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348101AbiALB7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 20:59:31 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:42933 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244071AbiALB73 (ORCPT
+        id S1348123AbiALCBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 21:01:21 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:37886 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348035AbiALCBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 20:59:29 -0500
-Received: by mail-oi1-f178.google.com with SMTP id y14so1526879oia.9;
-        Tue, 11 Jan 2022 17:59:29 -0800 (PST)
+        Tue, 11 Jan 2022 21:01:19 -0500
+Received: by mail-ot1-f43.google.com with SMTP id h20-20020a9d6f94000000b0059100e01744so936537otq.4;
+        Tue, 11 Jan 2022 18:01:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=SY7Nt3LIYS+ee95IOS2lYNehaYFihAIPxIiHoAlBkr0=;
-        b=GMheOFW2O67tS0IVR9zAlAeST4u5gr5Sw/EXCDAM8bEGPnugQNnPiCuqiFEYbAKfBC
-         rZfw9sB1jDocGjmlY3NhRkdmxjVpQlvMbo465Ki5nKp/ObwFG1F1go6n+I11KGprWUOI
-         wBfJ/jGdO+AWXR5l4+AcHzwgztYtTAbGdcHxTcGsiPqLSleXhJiwENzTPw9lcYQMPF/Z
-         PCf5eRaanli4iKURkditrMKErM7YsFU+JK3Muba1nREV78V7LpDVB5ocTkfRiVaxkukl
-         uD8+iaLivIqCc78bsa0ZtrX0PMocg66iSAU02MQn/qIlPbJ1krHr7VfOEKafoBi4/jBW
-         Lgog==
-X-Gm-Message-State: AOAM532OsRRgXCmTIOAvfTfqocFj2+dHZh6jzHCkjAjQwoUgxjiFR592
-        /HRNTjbTfSbcO7OxpJykbCLwKs/7qA==
-X-Google-Smtp-Source: ABdhPJyhji8EPb5FuVMZbGyJHgSzUgoThoUKc/7Ld8ukWHPII1dRpzHjuB3StkNE/TYAj81PwYIOnQ==
-X-Received: by 2002:aca:3014:: with SMTP id w20mr2685105oiw.69.1641952768993;
-        Tue, 11 Jan 2022 17:59:28 -0800 (PST)
+        bh=Qk2OQ/ws2ks++rPbFgmN3BZmamKFSn87De142ZHrSBo=;
+        b=mm3IOCg7BE1RUDaNWUP5MzmaanQJ93Tk9NqNoF79W0OkrmDAbRazDW8ksYz+0gaN4/
+         jZnN3Tx4Jvl2bbuuzkxb0dlNwRJcj12Xj989obAT5Hi37NrhH2URi9b9dBq3SNPHNppn
+         TwsKlSPqlpgYj6k2vELHHp17qVDrUWW1+KxTtAsA3d4My7lm/28UBovoxyAR03t2IDdC
+         j3DkH9w2mNRBfZ/N7WVp1AHvqoWE7lCotZEkecBfUlStnAT1l6YA7gQOVpO9QY0hTfBi
+         leLilUA98KZiaqBNqZw1wKxw+htkbQQs6FFvXO07GRMSP7WPK6UiJxnltUUjE41nA94G
+         KVWQ==
+X-Gm-Message-State: AOAM531WJ4E9rX3uIb5rCud2gg9m0odCXy1J+otAb/fdvOeHDahk9tqE
+        xxLMv/mURWcuiivhY2HP5A==
+X-Google-Smtp-Source: ABdhPJzqarYaUXTAPE1/+tVVkQSjhrV2udoe9wYR0feu1OlMihqzlS2aPOfLf1LHnoecfVXpdiso7Q==
+X-Received: by 2002:a05:6830:2705:: with SMTP id j5mr5399966otu.204.1641952879291;
+        Tue, 11 Jan 2022 18:01:19 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id w19sm406835oiw.29.2022.01.11.17.59.27
+        by smtp.gmail.com with ESMTPSA id u14sm2369656ote.62.2022.01.11.18.01.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 17:59:28 -0800 (PST)
-Received: (nullmailer pid 3912227 invoked by uid 1000);
-        Wed, 12 Jan 2022 01:59:27 -0000
-Date:   Tue, 11 Jan 2022 19:59:27 -0600
+        Tue, 11 Jan 2022 18:01:18 -0800 (PST)
+Received: (nullmailer pid 3915021 invoked by uid 1000);
+        Wed, 12 Jan 2022 02:01:17 -0000
+Date:   Tue, 11 Jan 2022 20:01:17 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Brian Norris <briannorris@chromium.org>
 Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         Lin Huang <hl@rock-chips.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Derek Basehore <dbasehore@chromium.org>,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-Subject: Re: [PATCH 02/10] dt-bindings: devfreq: rk3399_dmc: Deprecate
- unused/redundant properties
-Message-ID: <Yd41/06PvO7DDGlO@robh.at.kernel.org>
+        devicetree@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 03/10] dt-bindings: devfreq: rk3399_dmc: Fix Hz units
+Message-ID: <Yd42bfH5skA+TZup@robh.at.kernel.org>
 References: <20220107235320.965497-1-briannorris@chromium.org>
- <20220107155215.2.I5ba582cd678d34c03d647e5500db8e33b7524d66@changeid>
+ <20220107155215.3.I9341269171c114d0e04e41d48037fd32816e2d8c@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220107155215.2.I5ba582cd678d34c03d647e5500db8e33b7524d66@changeid>
+In-Reply-To: <20220107155215.3.I9341269171c114d0e04e41d48037fd32816e2d8c@changeid>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Jan 2022 15:53:12 -0800, Brian Norris wrote:
-> These DRAM configuration properties are all handled in ARM Trusted
-> Firmware (and have been since the early days of this SoC), and there are
-> no in-tree users of the DMC binding yet. It's better to just defer to
-> firmware instead of maintaining this large list of properties.
+On Fri, 07 Jan 2022 15:53:13 -0800, Brian Norris wrote:
+> The driver and all downstream device trees [1] are using Hz units, but
+> the document claims MHz. DRAM frequency for these systems can't possibly
+> exceed 2^32-1 Hz, so the choice of unit doesn't really matter than much.
 > 
-> There's also some confusion about units: many of these are specified in
-> MHz, but the downstream users and driver code are treating them as Hz, I
-> believe. Rather than straighten all that out, I just drop them.
+> Rather than add unnecessary risk in getting the units wrong, let's just
+> go with the unofficial convention and make the docs match reality.
+> 
+> A sub-1MHz frequency is extremely unlikely, so include a minimum in the
+> schema, to help catch anybody who might have believed this was MHz.
+> 
+> [1] And notably, also those trying to upstream them:
+> https://lore.kernel.org/lkml/20210308233858.24741-3-daniel.lezcano@linaro.org/
 > 
 > Signed-off-by: Brian Norris <briannorris@chromium.org>
 > ---
 > 
->  .../bindings/devfreq/rk3399_dmc.yaml          | 42 +++++++++----------
->  1 file changed, 21 insertions(+), 21 deletions(-)
+>  .../bindings/devfreq/rk3399_dmc.yaml          | 24 +++++++++----------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,107 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8BD48BDBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 04:39:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8701B48BDBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 04:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350459AbiALDjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 22:39:05 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:57742 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234465AbiALDjE (ORCPT
+        id S1349246AbiALDqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 22:46:33 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:16702 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229770AbiALDqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 22:39:04 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R811e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=haoxu@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V1ciBBb_1641958740;
-Received: from B-25KNML85-0107.local(mailfrom:haoxu@linux.alibaba.com fp:SMTPD_---0V1ciBBb_1641958740)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 12 Jan 2022 11:39:01 +0800
-Subject: Re: [RFC v2 02/19] skbuff: pass a struct ubuf_info in msghdr
-To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
-References: <cover.1640029579.git.asml.silence@gmail.com>
- <7dae2f61ee9a1ad38822870764fcafad43a3fe4e.1640029579.git.asml.silence@gmail.com>
- <fd376342-13e2-4ce9-074a-f6b3da69be3b@linux.alibaba.com>
- <4bc0e57b-ee3b-ae77-5d5d-213a48bdf4b0@gmail.com>
-From:   Hao Xu <haoxu@linux.alibaba.com>
-Message-ID: <cf5eb67e-05dc-3b8d-3e61-ddf9a9706265@linux.alibaba.com>
-Date:   Wed, 12 Jan 2022 11:39:00 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Tue, 11 Jan 2022 22:46:32 -0500
+Received: from kwepemi100007.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JYYL55rV8zZdY4;
+        Wed, 12 Jan 2022 11:42:53 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi100007.china.huawei.com (7.221.188.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 12 Jan 2022 11:46:29 +0800
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 12 Jan 2022 11:46:29 +0800
+Subject: Re: [PATCH v6 12/15] ubi: fastmap: Add all fastmap pebs into
+ 'ai->fastmap' when fm->used_blocks>=2
+To:     Richard Weinberger <richard@nod.at>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        mcoquelin stm32 <mcoquelin.stm32@gmail.com>,
+        "kirill shutemov" <kirill.shutemov@linux.intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20211227032246.2886878-1-chengzhihao1@huawei.com>
+ <20211227032246.2886878-13-chengzhihao1@huawei.com>
+ <361758697.248157.1641857025490.JavaMail.zimbra@nod.at>
+ <6f7df7ba-9557-58a3-7978-e5d14a72f234@huawei.com>
+ <244238061.248369.1641886066066.JavaMail.zimbra@nod.at>
+ <420c7567-8926-2e8b-4da0-a9bfc8379642@huawei.com>
+ <11976804.249069.1641902225370.JavaMail.zimbra@nod.at>
+ <0a7a5cce-1ee1-70b6-d368-615dfa0a617a@huawei.com>
+ <1492514284.249466.1641909382867.JavaMail.zimbra@nod.at>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <6815e4af-9b5b-313f-5828-644722dd4d1f@huawei.com>
+Date:   Wed, 12 Jan 2022 11:46:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <4bc0e57b-ee3b-ae77-5d5d-213a48bdf4b0@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1492514284.249466.1641909382867.JavaMail.zimbra@nod.at>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/1/11 下午11:50, Pavel Begunkov 写道:
-> On 1/11/22 13:51, Hao Xu wrote:
->> 在 2021/12/21 下午11:35, Pavel Begunkov 写道:
->>> Instead of the net stack managing ubuf_info, allow to pass it in from
->>> outside in a struct msghdr (in-kernel structure), so io_uring can make
->>> use of it.
->>>
->>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->>> ---
->> Hi Pavel,
->> I've some confusions here since I have a lack of
->> network knowledge.
->> The first one is why do we make ubuf_info visible
->> for io_uring. Why not just follow the old MSG_ZEROCOPY
->> logic?
+>>> ubi_wl_init() is called in both cases, with and without fastmap.
+>> I agree.
+>>
+>>> And ai->fastmap contains all anchor PEBs that scan_fast() found.
+>>> This can be the most recent but also outdated anchor PEBs.
+>> Is it exists a case that outdated fastmap PEBs are neither counted into
+>> 'fmhdr->erase_peb_count' nor scanned into 'ai->fastmap' after attaching
+>> by fastmap.
+>>
 > 
-> I assume you mean leaving allocation up and so in socket awhile the
-> patchset let's io_uring to manage and control ubufs. In short,
-> performance and out convenience
+> [...]
+>   
+>> I think UBI attaches failed by fastmap if kernel goes here.
+>> 1870                         err = erase_aeb(ubi, aeb, sync);
 > 
-> TL;DR;
-> First, we want a nice and uniform API with io_uring, i.e. posting
-> an CQE instead of polling an err queue/etc., and for that the network
-> will need to know about io_uring ctx in some way. As an alternative it
-> may theoretically be registered in socket, but it'll quickly turn into
-> a huge mess, consider that it's a many to many relation b/w io_uring and
-> sockets. The fact that io_uring holds refs to files will only complicate
-> it.
-Make sense to me, thanks.
+> Hmm, I think the paranoia check in fastmap.c is too strict these days.
+>          if (WARN_ON(count_fastmap_pebs(ai) != ubi->peb_count -
+>                      ai->bad_peb_count - fm->used_blocks))
+>                  goto fail_bad;
 > 
-> It will also limit API. For instance, we won't be able to use a single
-> ubuf with several different sockets.
-Is there any use cases for this multiple sockets with single
-notification?
+> It does not account ai->fastmap. So if ai->fastmap contains old anchor PEBs
+> this check will trigger and force falling back to scanning mode.
+> With this check fixed, ubi_wl_init() will erase all old PEBs from ai->fastmap.
+Forgive my stubbornness, I think this strict check is good, could you 
+show me a process to trigger this WARN_ON, it would be nice to provide a 
+reproducer.
+I still insist the point(after my fix patch applied): All outdated 
+fastmap PEBs are added into 'ai->fastmap'(full scanning case) or counted 
+into 'fmhdr->erase_peb_count'(fast attached case).
 > 
-> Another problem is performance, registration or some other tricks
-> would some additional sync. It'd also need sync on use, say it's
-> just one rcu_read, but the problem that it only adds up to complexity
-> and prevents some other optimisations. E.g. we amortise to ~0 atomics
-> getting refs on skb setups based on guarantees io_uring provides, and
-> not only. SKBFL_MANAGED_FRAGS can only work with pages being controlled
-> by the issuer, and so it needs some context as currently provided by
-> ubuf. io_uring also caches ubufs, which relies on io_uring locking, so
-> it removes kmalloc/free for almost zero overhead.
-> 
-> 
->> The second one, my understanding about the buffer
->> lifecycle is that the kernel side informs
->> the userspace by a cqe generated by the ubuf_info
->> callback that all the buffers attaching to the
->> same notifier is now free to use when all the data
->> is sent, then why is the flush in 13/19 needed as
->> it is at the submission period?
-> 
-> Probably I wasn't clear enough. A user has to flush a notifier, only
-> then it's expected to post an CQE after all buffers attached to it
-> are freed. io_uring holds one ubuf ref, which will be release on flush.
-I see, I saw another ref inc in skb_zcopy_set() which I previously
-misunderstood and thus thought there was only one refcount. Thanks!
-> I also need to add a way to flush without send.
-> 
-> Will spend some time documenting for next iteration.
-> 
+> So I agree that this code path is wonky and can be cleaned up. But please be
+> extremely careful and give all your changes excessive testing with real workload
+> and power-cuts.Let's list all power-cut cases during fastmap updateing(I tried to 
+simulate some of them on nandsim), in theory, I think the WARN_ON check 
+is okay and all outdated fastmap PEBs can be erased in next attaching:
 
+ubi_update_fastmap:
+1565         for (i = 1; i < new_fm->used_blocks; i++) {
+1570                 if (!tmp_e) {
+1571                         if (old_fm && old_fm->e[i]) {
+                              /* sync erase old fm data PEBs */
+power-cut!!!
+1585                         } else {
+                              /* async erase old fm data PEBs */
+power-cut!!!
+1595                         }
+1596                 } else {
+1599                         if (old_fm && old_fm->e[i]) {
+			     /* async erase old fm data PEBs */
+power-cut!!!
+1603                         }
+1604                 }
+1605         }
+1621         if (old_fm) {
+1623                 if (!tmp_e) {
+  		     /* sync erase old fm anchor PEB */
+power-cut!!!
+1638                 } else {
+		     /* async erase old fm anchor PEB */
+power-cut!!!
+1644                 }
+1645         } else {
+1658         }
+1660         ret = ubi_write_fastmap(ubi, new_fm);
+
+ubi_write_fastmap:
+1324         ret = ubi_io_write_vid_hdr(ubi, new_fm->e[0]->pnum, avbuf);
+power-cut!!!
+1345         for (i = 1; i < new_fm->used_blocks; i++) {
+1350                 ret = ubi_io_write_vid_hdr(...);
+power-cut!!!
+1356         }
+
+1358         for (i = 0; i < new_fm->used_blocks; i++) {
+1359                 ret = ubi_io_write_data(...),
+power-cut!!!
+1366         }

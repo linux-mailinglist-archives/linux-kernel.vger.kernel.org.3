@@ -2,93 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0F448CCEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 463B548CCFC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357335AbiALUOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 15:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357325AbiALUNn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 15:13:43 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0498C061751;
-        Wed, 12 Jan 2022 12:13:42 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id oa15so7297303pjb.4;
-        Wed, 12 Jan 2022 12:13:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XMI3dbv7S6q2jB5/NVdmh3pFl60FzTgbFc2uAC8p4kQ=;
-        b=WNdGX4sWq7OTOq6tvGxIIKvH3UBlRIANC2Pv4V6m0hc0ZZLdjqFY8Jtl6Q23Qq5e2G
-         jHU+I5ciqJ8LhYAJBYBZuT6b5/cWT6ZC9iGb/q37U7Jm1bfZmKdOCueEdeUfZTqxLFVi
-         rOEmnW3bKlifhvohIlJ7VTKFccteIR9AUKP4ya1gVpsyQdE8S0EWkzp82S86jZnNSIsx
-         LtkyBbCL702Bh6BO/GgYdaEYZ9C0pvMefrKGrnGhy2SJ+Odk6MGjWfabSPV9rkGvO5RJ
-         t04P/EXDhXVjBMC+VOKTjiVetCpaDxS3nrBJQOAc6apK322tGTdZFhlhWYF+XUUhoFTJ
-         hK1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=XMI3dbv7S6q2jB5/NVdmh3pFl60FzTgbFc2uAC8p4kQ=;
-        b=Vlj8Q8zylUHyno1H/A4iruh0NyLzTRFtSoIE2jKCRwtiYIcsuHNuX+Bwf4xSZfao2I
-         g8mKFeM1DLKvPF8svAPWbZrOA2bHYzG9skHvZsoR9Bm844bzWOG350Bido4sI8WY1svi
-         9GNW7d7GVcPV3tRWRjQSMdzj9978A84p1fYjODjxW80kxRL1KyVtJf8NMmon82glI270
-         lEr8LBwAITRgtxuMUHmug1qE+KrhLqGqlhQjKEaVE/VhfhK0ZSnRcqW34l6BuWwvks7R
-         bQ8zPqNltCGOf3GcK5ZBxmLhPZ7t5dyNRx/qzDdZnku4f0fMMXmljkv3Lhc5e6REGNpT
-         pZhA==
-X-Gm-Message-State: AOAM532R7QIyuqeFtgZDYrlfaUFI06FiB/uM5uctZnuB8Va7CIKPmVds
-        csga8atBHmp5bVXAx7mgZn4=
-X-Google-Smtp-Source: ABdhPJxq26drZEE9wV2Y1XH1ljH7HvENl4m541tSkiSwjR162ek5D4RLLMtTTVviKpZ4wLCDDi12mA==
-X-Received: by 2002:a17:902:c942:b0:14a:604d:2c35 with SMTP id i2-20020a170902c94200b0014a604d2c35mr986692pla.153.1642018422294;
-        Wed, 12 Jan 2022 12:13:42 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id s8sm397048pfu.190.2022.01.12.12.13.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 12:13:41 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 12 Jan 2022 10:13:40 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Wang Jianchao <jianchao.wan9@gmail.com>
-Cc:     axboe@kernel.dk, jbacik@fb.com, bvanassche@acm.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 13/13] blk: introduce iostat per cgroup module
-Message-ID: <Yd82dJMxdQkssu4k@slm.duckdns.org>
-References: <20220110091046.17010-1-jianchao.wan9@gmail.com>
- <20220110091046.17010-14-jianchao.wan9@gmail.com>
+        id S1357314AbiALUPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 15:15:55 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:55462 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350686AbiALUPy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 15:15:54 -0500
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1n7k24-0005Dj-Rb; Wed, 12 Jan 2022 21:15:44 +0100
+Message-ID: <ab3d2bda-a704-f5d3-adee-e52b7d0a4641@maciej.szmigiero.name>
+Date:   Wed, 12 Jan 2022 21:15:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220110091046.17010-14-jianchao.wan9@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>
+References: <20220111180318.591029-1-roberto.sassu@huawei.com>
+ <ab29dd6f-1301-e012-8898-9c739ca511a3@maciej.szmigiero.name>
+ <b37f9c0e9bf941f0b778c6949538835d@huawei.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+In-Reply-To: <b37f9c0e9bf941f0b778c6949538835d@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 05:10:46PM +0800, Wang Jianchao wrote:
-> From: Wang Jianchao <wangjianchao@kuaishou.com>
+On 12.01.2022 10:16, Roberto Sassu wrote:
+>> From: Maciej S. Szmigiero [mailto:mail@maciej.szmigiero.name]
+>> Sent: Tuesday, January 11, 2022 9:33 PM
+>> On 11.01.2022 19:03, Roberto Sassu wrote:
+>>> Support for PGP keys and signatures was proposed by David long time ago,
+>>> before the decision of using PKCS#7 for kernel modules signatures
+>>> verification was made. After that, there has been not enough interest to
+>>> support PGP too.
+>>>
+>>> Lately, when discussing a proposal of introducing fsverity signatures in
+>>> Fedora [1], developers expressed their preference on not having a separate
+>>> key for signing, which would complicate the management of the distribution.
+>>> They would be more in favor of using the same PGP key, currently used for
+>>> signing RPM headers, also for file-based signatures (not only fsverity, but
+>>> also IMA ones).
+>>
+>> Aren't PGP keys simply RSA / ECC / EdDSA keys with additional metadata?
+>> Can't they be unwrapped from their (complex) PGP format in userspace and
+>> loaded raw into the kernel, in a similar way as they are sometimes used
+>> for SSH authentication?
 > 
-> iostat can only track the whole device's io statistics. This patch
-> introduces iostat per cgroup based on blk-rq-qos framework which
-> can track bw, iops, queue latency and device latency and distinguish
-> regular or meta data. The blkio.iostat per cgroup output in following
-> format,
-> vda-data bytes iops queue_lat dev_lat [ditto]  [ditto]
->     meta   \___________ ______________/    |        |
-> 	               v                   v        v
-> 	             read               write   discard
-> In particular, the blkio.iostat of root only output the statistics
-> of IOs from root cgroup. However, the non-root blkio.iostat outputs
-> all of the children cgroups. With meta stats in root cgroup, hope
-> to observe the performace of fs metadata.
+> Probably, this would be possible by introducing a new asymmetric
+> key subtype parsing PGP keys and signatures in a more simple format,
+> after conversion by user space. But still, a parser would be required.
+> To be honest, I would prefer to implement (actually David did) a
+> parser following an RFC, than developing a new one.
 
-I think using bpf is a way better solution for this kind of detailed
-statistics. What if I want to know what portions are random, or the
-distribution of IO sizes? Do I add another rq-qos policy or add another
-interface file with interface versioning?
+A parser in userspace is preferred to one in kernel since if there is
+a bug somewhere its consequences are much less severe.
+And experience shows that parsers are especially prone to bugs.
+A userspace implementation can also be tightly sandboxed for extra
+security.
 
-Thanks.
+There are many existing OpenPGP parsing libraries to choose from.
 
--- 
-tejun
+>> This will save us from having to add complex parsers (a well-known source
+>> of bugs) into the kernel - I guess there aren't any plans to add an
+>> in-kernel PGP Web of Trust implementation.
+> 
+> I extensively tested the implementation with an ad-hoc fault injector,
+> to see if the code can correctly handle errors. I also developed a
+> fuzzer to corrupt the data before it is read by the kernel. Finally,
+> I checked that there are not memory leaks. But I agree, there could
+> still be bugs.
+> 
+> If you mean that a key can be added to the kernel if is vouched for
+> by another key in the built-in keyring, I actually implemented this
+> (was missing in the original implementation). Some keyrings, e.g. .ima,
+> have this restriction.
+> 
+> The way this works is that, whenever you add a PGP key to the
+> kernel, the parser takes not only the public key and the user ID,
+> but also its signature by the same or another PGP key.
+> 
+> The signature is verified when the key is added to the keyring
+> with that restriction, and only if the verification is successful
+> the key can be added.
+
+I understand but it would be great to make use as much as possible of
+the existing in-kernel signature verification mechanisms.
+
+> Roberto
+
+Thanks,
+Maciej
+

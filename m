@@ -2,114 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7935B48BC0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDF048BC1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347455AbiALAx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 19:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
+        id S1347469AbiALBBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 20:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343866AbiALAxZ (ORCPT
+        with ESMTP id S1347278AbiALBBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 19:53:25 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EBFC06173F;
-        Tue, 11 Jan 2022 16:53:25 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id y17so1259843qtx.9;
-        Tue, 11 Jan 2022 16:53:25 -0800 (PST)
+        Tue, 11 Jan 2022 20:01:36 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA02AC061748
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:01:35 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id p7so1421848iod.2
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:01:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bn6LXYkb5vJoSA2+wYUtLd/FTU4C6AaGfIXYzaQTkB4=;
-        b=g+bG6qp7d16/Bm6fLmk9kal8e7Ni7EM3x9j7lmP2pd2eYVaNmm7hxjrEj0Ckp3yJi6
-         3lsoB8UMz04gacJAEz0UAlEF7NK4vpKAAuh7WbS9HT+KiF4VgVHpRgpP01xiYbC53dE8
-         o0lo6e1atdVhDXDcHAY7viUa+8O6LGpugkPUY=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jNmx8g8QULTnXgWyiPIunnbTModfNMXbNul38tS9+t8=;
+        b=NAulvy+CL4jLdg6in4jpNyX7o1OXHQdkwuFvwX5K7RgDZTz13OcR7WH1DzcE9KdXbA
+         nS7L/OR8QQxsClaVTxzf9z85k5DGUPK7XFCezMiE+490Ascv4a0eUEOWBTuv1nDuhdEa
+         PHmeQ9GVNAa+ra/y7o7UcKabUURkxZ962JH1oMlEaPb0qwqwexHFud8ogggWGV0SCDC4
+         KAi0rVVB2AufTMb4+Ia2SPkN3jrhN28krE3UUjdvECd6LMIq4tvHOO61cuMaCe6V6RBr
+         oL71D/7sN0O7wAfSrcaZurdbRBV7LcoPv2BEVpr10nte+y4wyG+7xGfDpqhxqv/KiPoN
+         Wdjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bn6LXYkb5vJoSA2+wYUtLd/FTU4C6AaGfIXYzaQTkB4=;
-        b=MIxchdvFX6OGlZBd3Lp08Z5gAFsdolyEou7oZSyVDAUCYaHtpXT8va1IygHnj4BgT+
-         xv+/e2TZ6qH/GLQLYBPf8w692aUYymEhGeMHV9VA25qONoGbRkRXXFrh6NWxhaNblOEH
-         ThzVNRmqE9SYeIf4uBVNEeVVpWiHYV19+b4RVRMQEa4EirU6P9ewbJfAhP5JS+FjeQRw
-         gpcnkSaN2T+rxRh9bJFwpYzQx694sHJXkVS2klYgDEkNEYjkzDI68DKllmgF99C+u0gm
-         lJDrZAZaTPmVzPnFuwIRkKpUbpBH/beOl9lTM8nRMWPxe0u5p/MVD/vdPnkBmkLbPFfF
-         9nJw==
-X-Gm-Message-State: AOAM533eCPTK2UDpB26BWtpCcR8qtaIDteacp0tbzKIM2MFIQaa/u1rk
-        9HxGIsjbwg1TQ+JChX6ZGdtQQoRc0+fKhgf+dc4=
-X-Google-Smtp-Source: ABdhPJxTg2vyG/RY3cEh3LvIQ5+6rj7Uz5GMFpvmPNspTJRCbdFJYoUg/3X4brah8OJSqaTk4qsHuqoJz1+zVF1gJUA=
-X-Received: by 2002:ac8:5a0b:: with SMTP id n11mr5879929qta.625.1641948804856;
- Tue, 11 Jan 2022 16:53:24 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jNmx8g8QULTnXgWyiPIunnbTModfNMXbNul38tS9+t8=;
+        b=A8GCekvVLnJmv4HxlgfyoVSbZlIXl0SBXPpIXVFD72ptXX0DCy9xElDhixXHHy7Z/j
+         HUzDy2s+o+/DxmBMNWt0QPcQihYcUgCLupBLYB/fkxn8S1kkssZwVzUPzg1LqmL3lQHg
+         E/bNLj9QNGPA1JggaeVZCQ/AhBq53QUkMNE2HyINI6Mt1QWtDc9bvW0ZDz8XyNjTDob4
+         3EFmh42m5PLKwj+kQfFwUNIAR2iD+eXQA9m39u/yBrYOLLlglPStr1TNE+GJrZfBfA5n
+         gldQZCuLyhG9l361a3eGN23dw0z5fd8+rZqP6tFMAifEDdHoyuinTB9HxLH04btiKGih
+         PbRw==
+X-Gm-Message-State: AOAM532x5MnmTc0EE00+5t4KCDTamQETQRTTfQoTGTdDLjoNe6oH9Ryg
+        24aSoraEPsSDV1AIE3JiKQt6Sg==
+X-Google-Smtp-Source: ABdhPJy6+Q9GpyROLohTnAHgRnpGuFaV485DidDlkI1AelSWNPEo/Rk4V8VZWl64qjBRxmXni7NRhA==
+X-Received: by 2002:a02:cc70:: with SMTP id j16mr2271558jaq.72.1641949294228;
+        Tue, 11 Jan 2022 17:01:34 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:b6b6:70f4:b540:6383])
+        by smtp.gmail.com with ESMTPSA id s6sm6758158ild.5.2022.01.11.17.01.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 17:01:33 -0800 (PST)
+Date:   Tue, 11 Jan 2022 18:01:29 -0700
+From:   Yu Zhao <yuzhao@google.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>
+Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
+Message-ID: <Yd4oaUwHkpadAKwe@google.com>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <20220104202227.2903605-7-yuzhao@google.com>
+ <Ydxlg5rI4ZvODQvF@dhcp22.suse.cz>
 MIME-Version: 1.0
-References: <20211214040239.8977-1-steven_lee@aspeedtech.com>
- <20211214040239.8977-2-steven_lee@aspeedtech.com> <CAMRc=MdAgK7zKuJ=7cA2T-mSTJD3tWSW2aEB6G=0Tz4X+iHcZQ@mail.gmail.com>
- <CAMRc=McjZZTMjR+riwjj6SLEh=fYq0yjBQYNgzGXHok6=OTz_w@mail.gmail.com>
-In-Reply-To: <CAMRc=McjZZTMjR+riwjj6SLEh=fYq0yjBQYNgzGXHok6=OTz_w@mail.gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 12 Jan 2022 00:53:12 +0000
-Message-ID: <CACPK8XdXkrTfsMoZRDjQ_-MwOQ-no_B2yG3F79_SkQ0o6mGuQg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpio: gpio-aspeed-sgpio: Fix wrong hwirq base in
- irq handler
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Steven Lee <steven_lee@aspeedtech.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Hongwei Zhang <Hongweiz@ami.com>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        Billy Tsai <billy_tsai@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydxlg5rI4ZvODQvF@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jan 2022 at 09:50, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> On Wed, Dec 22, 2021 at 10:18 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> >
-> > On Tue, Dec 14, 2021 at 5:03 AM Steven Lee <steven_lee@aspeedtech.com> wrote:
-> > >
-> > > Each aspeed sgpio bank has 64 gpio pins(32 input pins and 32 output pins).
-> > > The hwirq base for each sgpio bank should be multiples of 64 rather than
-> > > multiples of 32.
-> > >
-> > > Signed-off-by: Steven Lee <steven_lee@aspeedtech.com>
-> > > ---
-> > >  drivers/gpio/gpio-aspeed-sgpio.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/gpio/gpio-aspeed-sgpio.c b/drivers/gpio/gpio-aspeed-sgpio.c
-> > > index 3d6ef37a7702..b3a9b8488f11 100644
-> > > --- a/drivers/gpio/gpio-aspeed-sgpio.c
-> > > +++ b/drivers/gpio/gpio-aspeed-sgpio.c
-> > > @@ -395,7 +395,7 @@ static void aspeed_sgpio_irq_handler(struct irq_desc *desc)
-> > >                 reg = ioread32(bank_reg(data, bank, reg_irq_status));
-> > >
-> > >                 for_each_set_bit(p, &reg, 32)
-> > > -                       generic_handle_domain_irq(gc->irq.domain, i * 32 + p * 2);
-> > > +                       generic_handle_domain_irq(gc->irq.domain, (i * 32 + p) * 2);
-> > >         }
-> > >
-> > >         chained_irq_exit(ic, desc);
-> > > --
-> > > 2.17.1
-> > >
-> >
-> > Joel, Andrew: any comments on this? I'd like to send it upstream tomorrow.
-> >
-> > Bart
->
-> I don't want to delay it anymore, it looks good so I queued it for fixes.
+On Mon, Jan 10, 2022 at 05:57:39PM +0100, Michal Hocko wrote:
+> On Tue 04-01-22 13:22:25, Yu Zhao wrote:
+> [...]
+> > +static void walk_mm(struct lruvec *lruvec, struct mm_struct *mm, struct lru_gen_mm_walk *walk)
+> > +{
+> > +	static const struct mm_walk_ops mm_walk_ops = {
+> > +		.test_walk = should_skip_vma,
+> > +		.p4d_entry = walk_pud_range,
+> > +	};
+> > +
+> > +	int err;
+> > +#ifdef CONFIG_MEMCG
+> > +	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
+> > +#endif
+> > +
+> > +	walk->next_addr = FIRST_USER_ADDRESS;
+> > +
+> > +	do {
+> > +		unsigned long start = walk->next_addr;
+> > +		unsigned long end = mm->highest_vm_end;
+> > +
+> > +		err = -EBUSY;
+> > +
+> > +		rcu_read_lock();
+> > +#ifdef CONFIG_MEMCG
+> > +		if (memcg && atomic_read(&memcg->moving_account))
+> > +			goto contended;
+> > +#endif
+> 
+> Why do you need to check for moving_account?
 
-Thanks for queuing. We were on leave over the holiday break, so no
-time for reviewing kernel patches.
+This check, if succeeds, blocks memcg migration.
 
-Cheers,
+Our goal is to move pages between different generations of the same
+lruvec (the first arg). Meanwhile, pages can also be migrated between
+different memcgs (different lruvecs).
 
-Joel
+The active/inactive lru uses isolation to block memcg migration.
+
+Generations account pages similarly to the active/inactive lru, i.e.,
+each generation has nr_pages counter. However, unlike the active/
+inactive lru, a page can be moved to a different generation without
+getting isolated or even without being under the lru lock, as long as
+the delta is eventually accounted for (which does require the lru lock
+when it happens).
+
+The generation counter in page->flags (folio->flags to be precise)
+stores 0 when a page is isolated, to synchronize with isolation.

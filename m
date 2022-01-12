@@ -2,177 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CA948BDC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 04:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9887848BDC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 04:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350505AbiALDv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 22:51:27 -0500
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:57433 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229770AbiALDvZ (ORCPT
+        id S1350530AbiALD4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 22:56:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229770AbiALD4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 22:51:25 -0500
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id BA76E320167D;
-        Tue, 11 Jan 2022 22:51:24 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 11 Jan 2022 22:51:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=date:from:to:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=cPPCjW0++zs5j1BPECt8fbcKsS3
-        R/TgbbewmfZx6kS0=; b=Mycbv/xmkNCGIvmdvQRqd5qmGXjmN22OACHXD3vEihP
-        +wZ9PiGK7MtO/eKtnqwHZQH7s3HsbgS4Hq7F79wABVSaFTDICaMOcgZtxoakP7Yr
-        7IYxz+TmJPNj5fnzaVCl/qv6x9g1jJ2AwzSDMsqK6elihGLO1HYV5sfItMzgBPi7
-        kZVXaxChxsx5YcKKa5VieU8evfVtSGC+/xqiSul3sBgIxPdXnkvW1kGOOaGhHvIP
-        N42x3WTsjT5TcwpbPSiR/be5lB6aIShtDIS9pcnRd4JdpaE1Art4smCFz6sMwuNc
-        mG0cqcN5isN3PhQv3bjyqBxa4C1zpE4UumFxwPgPKwQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=cPPCjW
-        0++zs5j1BPECt8fbcKsS3R/TgbbewmfZx6kS0=; b=kmP4fLlO7ppe2GRHsMlvON
-        qfHmAQENdYCE+z6g9W9LIH7rg1ZCN67Qx5zAUqtwY8+ozh+2K6kGHqQIvZLNEfXo
-        9bKh5+LP97KwSDH9VzYWLGT0i/uYpFXb66WYJul+3K0CvS9/mI6vVdqtymLDQHrR
-        AuJ8jq6YWC3ic4a/wX70gl00dwqKfcfXTRgQ8gWRsiRtBZ+T/C4FTyi02YKYAzn2
-        ErJvvxreRAjCMj55CaCrxyJhZcNLqtfjZzKhFNSrXM6N6uSIovRU8r4lMeQ3p3Jk
-        hYyslVdn0IaKzoeIkf66UbMC0P/kuyeh+qa3eV7iOwe8VXYqFcEyyUEn5F9l6G8A
-        ==
-X-ME-Sender: <xms:O1DeYTI9JtqiTyLBk3hklhpMyh1A-8T314X4NJUfChZYb-Pwnv2LqQ>
-    <xme:O1DeYXIWUUvJd4g8oUFebDJrhsdYZBho3Ac22tCqfCL2W9z6BzmYQiWrzINQ_F9tv
-    BA-3zapAQVPDJzTrHI>
-X-ME-Received: <xmr:O1DeYbtSKXC4tSgdfW8Vzb02NBfq8EmKh2UQH4Ad7OZRCGsMbGDqLHaItSvKe8QwIkf53vxa0PEYrUoh0_jZSIGZ1Zj9XqFmhQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudehgedgieeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtre
-    dttddtvdenucfhrhhomhepvfgrkhgrshhhihcuufgrkhgrmhhothhouceoohdqthgrkhgr
-    shhhihesshgrkhgrmhhotggthhhirdhjpheqnecuggftrfgrthhtvghrnhepjeegieefue
-    evueefieeggeejledvgfejgeffjefgvdekleehgfdtfeetjeelkeejnecuffhomhgrihhn
-    pehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
-X-ME-Proxy: <xmx:O1DeYcanM5X5wgDAWQGKg709O0DgC6iL2S_wP6CkE1_nSrh5rBAfNA>
-    <xmx:O1DeYaYXhoq_-EX_RbkYJya82uhHoHkGwC3OjWk7r8VTlQ9904_jRQ>
-    <xmx:O1DeYQDSRbYnQ5gQRqW2UYGdWXC8tOpv6rP8lj19Q3CpjIgFtduxqg>
-    <xmx:PFDeYaF3FhyFtbVWrwImjfHw8nRRsk9yjqSuJ8lI2vAigi6JH7wI0g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 11 Jan 2022 22:51:21 -0500 (EST)
-Date:   Wed, 12 Jan 2022 12:51:18 +0900
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     stefanr@s5r6.in-berlin.de, alsa-devel@alsa-project.org,
-        linux1394-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, marcan@marcan.st
-Subject: Re: [PATCH 0/3] firewire: assist unit driver to compute packet
- timestamp
-Message-ID: <Yd5QNs/YnvzGOy0g@workstation>
-Mail-Followup-To: stefanr@s5r6.in-berlin.de, alsa-devel@alsa-project.org,
-        linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        marcan@marcan.st
-References: <20211202113457.24011-1-o-takashi@sakamocchi.jp>
- <YcGycqUrptkWYeOV@workstation>
- <YdgdfrcvhJrUXwYF@workstation>
+        Tue, 11 Jan 2022 22:56:05 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0050C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 19:56:04 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id n11so217043plf.4
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 19:56:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lVcIHrZRwmWTRw2ZVy9SM+LddmUY7SxRVXVl2VyF3ZM=;
+        b=fy4M8tiTb+wDZhdf4JuBYs/4ufOPtDgTGmOORBUGsGU4SLpl6i3/J8euvO6DjNGCO2
+         7SP51hej1l9opkuEXNWS8cE3gAzLGQF79spjt/6lPtLh+7p48qgHQ1/9xjdwh/swqzH1
+         V5x/M0nOh0zkdrev+dWr9RQfKyMLS6DQcvb77EsUA0dOghlXTsZ7T81k8rNg6TLKvzLy
+         YuXj8wOJ6Q09oxc9oIXwjFvBDCw9BBmS5k4vprTraDRCuawd/gn9NRF4zeJL3b6RN7ZR
+         ebZ9wI/TdZBfQ/6Lo/NYcLPQe5m/ExTJT7ZlPBQvrHLSkgFV1n6l6t45MMM2rz921l9z
+         yLVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lVcIHrZRwmWTRw2ZVy9SM+LddmUY7SxRVXVl2VyF3ZM=;
+        b=DxG+W1d5qgDA+QBcB8ks17dqdhlAzkeqenBP5ymqCtprzZv1HwgzxTbSGzf+DySzp2
+         qHiM9q4rlln9Yc2J83lIL5qYnv3wnfiYzXblyHtcs3CQDD1U7NyQw753RsTVk7roe4+T
+         EPbqNzYdrUbYqVtbXChuazEkNbXkgRzWKzCGwWmNZjCc4yaD+4JrENc9Yyo+cC5D6F8c
+         arIeABZmad3xb8Kh5DN+D2MSPLwhbqxYUqaDqoVTWt3IzsT8nBwwFTJszWzrRtkDZxfy
+         QmUHrml4OygpFZ6CWqskgcbfVbm+jbF/LrWo0Zh1jYmmlqIgUJ6iGoI1LxAAbByvB3ON
+         Dr4w==
+X-Gm-Message-State: AOAM533Dqy8G5Za+gwKSrhqsiRZi7Hm1pXbAZ8hUvJK5bdPKHUU2CbeI
+        OmEhTAYOc3ylGM7ydgMTvlRc
+X-Google-Smtp-Source: ABdhPJyTSBootufK4YPrKejqjZ/YePk0bzcLG6ZklPCMT8VwktRgk3JhXnkde3psz0Brbd/03ES3HQ==
+X-Received: by 2002:a17:902:d510:b0:149:3b5d:2b89 with SMTP id b16-20020a170902d51000b001493b5d2b89mr7227064plg.97.1641959764056;
+        Tue, 11 Jan 2022 19:56:04 -0800 (PST)
+Received: from localhost.localdomain ([117.193.208.172])
+        by smtp.gmail.com with ESMTPSA id b25sm775028pgs.56.2022.01.11.19.56.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 19:56:03 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmitry.baryshkov@linaro.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        stable@vger.kernel.org, Jordan Crouse <jordan@cosmicpenguin.net>
+Subject: [PATCH] arm64: dts: qcom: sm8250: Fix MSI IRQ for PCIe1 and PCIe2
+Date:   Wed, 12 Jan 2022 09:25:56 +0530
+Message-Id: <20220112035556.5108-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdgdfrcvhJrUXwYF@workstation>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
+Fix the MSI IRQ used for PCIe instances 1 and 2.
 
-I'm sorry to post messages several times for the patchset if you are
-still busy. But I'm still waiting for any reaction.
+Cc: stable@vger.kernel.org
+Fixes: e53bdfc00977 ("arm64: dts: qcom: sm8250: Add PCIe support")
+Reported-by: Jordan Crouse <jordan@cosmicpenguin.net>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I note that Linus have announced merge window for v5.17 kernel.
- * https://lore.kernel.org/lkml/CAHk-=wgUkBrUVhjixy4wvrUhPbW-DTgtQubJWVOoLW=O0wRKMA@mail.gmail.com/T/#u
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index 6f6129b39c9c..8a3373c110fc 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -1487,7 +1487,7 @@ pcie1: pci@1c08000 {
+ 			ranges = <0x01000000 0x0 0x40200000 0x0 0x40200000 0x0 0x100000>,
+ 				 <0x02000000 0x0 0x40300000 0x0 0x40300000 0x0 0x1fd00000>;
+ 
+-			interrupts = <GIC_SPI 306 IRQ_TYPE_EDGE_RISING>;
++			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "msi";
+ 			#interrupt-cells = <1>;
+ 			interrupt-map-mask = <0 0 0 0x7>;
+@@ -1593,7 +1593,7 @@ pcie2: pci@1c10000 {
+ 			ranges = <0x01000000 0x0 0x64200000 0x0 0x64200000 0x0 0x100000>,
+ 				 <0x02000000 0x0 0x64300000 0x0 0x64300000 0x0 0x3d00000>;
+ 
+-			interrupts = <GIC_SPI 236 IRQ_TYPE_EDGE_RISING>;
++			interrupts = <GIC_SPI 243 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "msi";
+ 			#interrupt-cells = <1>;
+ 			interrupt-map-mask = <0 0 0 0x7>;
+-- 
+2.25.1
 
-I'm glad if seeing your action for pull request as a response to the
-window.
-
-
-Kind Regards
-
-Takashi Sakamoto
-
-On Fri, Jan 07, 2022 at 08:01:18PM +0900, Takashi Sakamoto wrote:
-> Hi Stefan,
-> 
-> Wishing you a happy new year.
-> 
-> We are in the last week for release of v5.16 kernel, and soon merge
-> window for v5.17 kernel will be opened if thing goes well. I wish any
-> action for the review process to merge these patches into upstream.
-> 
-> 
-> Thanks
-> 
-> Takashi Sakamoto
-> 
-> On Tue, Dec 21, 2021 at 07:54:42PM +0900, Takashi Sakamoto wrote:
-> > Hi Stefan,
-> > 
-> > Thank you for your long effort to maintain Linux FireWire subsystem. I'd
-> > like to use the timestamp function for my integration in ALSA firewire
-> > stack planned at next version of Linux kernel. I'm glad if getting to
-> > your help for upstreaming.
-> > 
-> > On Thu, Dec 02, 2021 at 08:34:54PM +0900, Takashi Sakamoto wrote:
-> > > Hi,
-> > > 
-> > > In 1394 OHCI specification, each descriptor of IR/IT/AR/AT DMA context
-> > > has timeStamp field. The value of timeStamp field express the time in
-> > > which the controller accept packet. The resolution of value is isochronous
-> > > cycle count (8,000 Hz) with second up to 7.
-> > > 
-> > > I have a plan to use the value of timeStamp field for ALSA firewire stack
-> > > so that userspace ALSA PCM/Rawmidi applications can get converted timestamp
-> > > (ktime) for PCM frame/MIDI message. The timestamp can ideally express
-> > > finer granularity than the time to invoke IRQ handler (and co).
-> > > 
-> > > Current implementation of Linux FireWire subsystem delivers the value of
-> > > timeStamp field to unit driver for IR/IT/AT DMA context, but not for AR
-> > > DMA context. Additionally, the way to refer to Isochronous Cycle Timer
-> > > Register in MMIO region of 1394 OHCI controller is transaction to local
-> > > node. It includes overhead of transaction and it's preferable to add
-> > > less-overhead way available in any type of IRQ context.
-> > > 
-> > > This patchset adds two functions exposed in kernel space:
-> > > 
-> > >  * fw_card_read_cycle_time()
-> > >     * allow unit driver to access to CYCLE_TIME register in MMIO region
-> > >       without initiate transaction
-> > >  * fw_request_get_timestamp()
-> > >     * allow unit driver to get timestamp of request packet inner request
-> > >       handler
-> > > 
-> > > I note that Hector Martin found kernel null pointer dereference during
-> > > process to remove PCI card and has posted a patch:
-> > > 
-> > >  * https://lore.kernel.org/lkml/20211027113130.8802-1-marcan@marcan.st/
-> > > 
-> > > His patch is included in the series with my comment for relevant commit
-> > > 20802224298c ("firewire: core: add forgotten dummy driver methods, remove
-> > > unused ones"). The patch is required since unit driver can refer to dummy
-> > > driver between removal callback of PCI subsystem and removal callback of
-> > > FireWire subsystem.
-> > > 
-> > > Hector Martin (1):
-> > >   firewire: Add dummy read_csr/write_csr functions
-> > > 
-> > > Takashi Sakamoto (2):
-> > >   firewire: add kernel API to access CYCLE_TIME register
-> > >   firewire: add kernel API to access packet structure in request
-> > >     structure for AR context
-> > > 
-> > >  drivers/firewire/core-card.c        | 39 +++++++++++++++++++++++++++++
-> > >  drivers/firewire/core-cdev.c        |  6 +++--
-> > >  drivers/firewire/core-transaction.c | 18 +++++++++++++
-> > >  include/linux/firewire.h            |  3 +++
-> > >  4 files changed, 64 insertions(+), 2 deletions(-)
-> > > 
-> > > -- 
-> > > 2.32.0
-> > 
-> > 
-> > Sincerely yours
-> > 
-> > Takashi Sakamoto

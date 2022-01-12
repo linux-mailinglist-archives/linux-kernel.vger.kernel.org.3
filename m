@@ -2,132 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F70D48C669
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF6F48C66F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354244AbiALOrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:47:32 -0500
-Received: from mail.efficios.com ([167.114.26.124]:58838 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239916AbiALOrb (ORCPT
+        id S1354275AbiALOtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354256AbiALOtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:47:31 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 9A01E2563E2;
-        Wed, 12 Jan 2022 09:47:30 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id rWaN6AbcvVWA; Wed, 12 Jan 2022 09:47:30 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 2E065256521;
-        Wed, 12 Jan 2022 09:47:30 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 2E065256521
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1641998850;
-        bh=BcnDtVFo4lej1Dp/uixgYGKV0F0M2FHui42BqigyqPA=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=t3n+ikMe5EOtgTTOWx/7FpHB/4sDBZBhX80ljnF0WzVHKjxL0Jp54VcDXRpUMBLHb
-         KJYwio9eY3XLcSj+15Crc3zuVGDW5MvnOkSXWPZoYVuAt0ZIDpAvITUfmWlBdpA+0B
-         GRvF32v+4avJFvoiMHedC+o/79yUe5wi/TzArclpaxFJ/ooQcvIIA2WFOhVQs0rLgQ
-         Avql3s7a8BFDxqaoRWWaIbFeFil1cNd5qjItJKd4HHK9bAd6ljQUa4C+QO/RLTYhtB
-         bQMJhSBrefSNpNVb4VoqomtIAJPCbj1CkP+NBmO677gnPoS1Al0FPBYwqabwaRQome
-         i5lndUViNnEtw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5f3vQPSP2xnF; Wed, 12 Jan 2022 09:47:30 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 1785D2563E1;
-        Wed, 12 Jan 2022 09:47:30 -0500 (EST)
-Date:   Wed, 12 Jan 2022 09:47:29 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        David Laight <David.Laight@ACULAB.COM>,
-        carlos <carlos@redhat.com>
-Message-ID: <1475639366.24565.1641998849957.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20220112084617.32bjjo774n7vvyct@wittgenstein>
-References: <20220110171611.8351-1-mathieu.desnoyers@efficios.com> <20220111110556.inteixgtl5vpmka7@wittgenstein> <1626924888.21447.1641922985771.JavaMail.zimbra@efficios.com> <20220112084617.32bjjo774n7vvyct@wittgenstein>
-Subject: Re: [RFC PATCH v2 1/2] rseq: x86: implement abort-at-ip extension
+        Wed, 12 Jan 2022 09:49:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0E8C06173F;
+        Wed, 12 Jan 2022 06:49:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA745B81ED0;
+        Wed, 12 Jan 2022 14:49:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21199C36AEA;
+        Wed, 12 Jan 2022 14:49:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641998945;
+        bh=tUAj1+vcYAmzKzaI31fyw8aqfm34XHOHX4eyc4NGFyA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=morh+rIOrKybqitKRfUIUIFi2rcTWKUy8xiWifzxi1P7YtMsmq77Ua/B4yJpe4CwL
+         LL44Sai9LAt7ttDvYV0f0GoSXrXxFrChD9miO10WSgmkPTMsU1t7ashiL/xn4VeSyS
+         0H0O1fj+5ywoqBQVpnimlmNk7ZxT48qteMlH/XwJkMUvguC9ZWHgCc8mkxmahfHtTk
+         GK2jeXBr8Nlg0j1NA2sWrxBliUqs5Omm8hwikUQPENuoaqln/0Wjd+lGKZZP5VFq3T
+         WHspIKXqTAWyLqyPHMRt1t7K7U+tPTpAZjKjl3QLTqaGlllX4g+3DG5IOwih+np8R+
+         r8l2RQX+64gng==
+Date:   Wed, 12 Jan 2022 08:49:03 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lukasz Maniak <lukasz.maniak@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?Q?=C5=81ukasz?= Gieryk <lukasz.gieryk@linux.intel.com>
+Subject: Re: [PATCH] PCI: Reset IOV state on FLR to PF
+Message-ID: <20220112144903.GA253960@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4177)
-Thread-Topic: rseq: x86: implement abort-at-ip extension
-Thread-Index: wXhmkkkMiFRXr8tNEYqfVGV2Lo6qQg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211222191958.955681-1-lukasz.maniak@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Jan 12, 2022, at 3:46 AM, Christian Brauner christian.brauner@ubuntu.com wrote:
+On Wed, Dec 22, 2021 at 08:19:57PM +0100, Lukasz Maniak wrote:
+> As per PCI Express specification, FLR to a PF resets the PF state as
+> well as the SR-IOV extended capability including VF Enable which means
+> that VFs no longer exist.
 
-> On Tue, Jan 11, 2022 at 12:43:05PM -0500, Mathieu Desnoyers wrote:
-[...]
->> >> + *
->> >> + * rseq critical sections defined with the RSEQ_CS_FLAG_ABORT_AT_IP flag
->> >> + * have the following behavior on abort: when the stack grows down: the
->> >> + * stack pointer is decremented to skip the redzone, and decremented of
->> >> + * the pointer size.  The aborted address (abort-at-ip) is stored at
->> >> + * this stack pointer location.  The user-space abort handler needs to
->> >> + * pop the abort-at-ip address from the stack, and add the redzone size
->> >> + * to the stack pointer.
->> >> + *
->> >> + * TODO: describe stack grows up.
->> > 
->> > Is this intentional or did you forget? :)
->> 
->> Since I did not implement abort-at-ip on stack-grows-up architectures, I felt
->> it would be too early to describe the algorithm. I can simply remove the TODO
->> altogether and we'll take care of it when we get there ? If I had to try to
->> wordsmith it, it would look like e.g.:
->> 
->>  *                                    [...] When the stack grows up: the
->>  * stack pointer is incremented to skip the redzone, and incremented of
->>  * the pointer size.  The aborted address (abort-at-ip) is stored immediately
->>  * under this stack pointer location.  The user-space abort handler needs to
->>  * pop the abort-at-ip address from the stack, and subtract the redzone size
->>  * from the stack pointer.
->> 
->> [ Please let me know if I got somehow confused in my understanding of stack
->> grows
->> up architectures. ]
->> 
->> I'm also unsure whether any of the stack grows up architecture have redzones ?
+Can you add a specific reference to the spec, please?
+
+> Currently, the IOV state is not updated during FLR, resulting in
+> non-compliant PCI driver behavior.
+
+And include a little detail about what problem is observed?  How would
+a user know this problem is occurring?
+
+> This patch introduces a simple function, called on the FLR path, that
+> removes the virtual function devices from the PCI bus and their
+> corresponding sysfs links with a final clear of the num_vfs value in IOV
+> state.
 > 
-> I don't think so? From when I last touched that piece of arch code when
-> massaging copy_thread() I only remember parisc as having an upwards
-> growing stack.
+> Signed-off-by: Lukasz Maniak <lukasz.maniak@linux.intel.com>
+> ---
+>  drivers/pci/iov.c | 21 +++++++++++++++++++++
+>  drivers/pci/pci.c |  2 ++
+>  drivers/pci/pci.h |  4 ++++
+>  3 files changed, 27 insertions(+)
 > 
->> From a quick grep for redzone in Linux arch/, only openrisc, powerpc64 and
-> > x86-64 appear to have redzones.
-
-I figured it was kind of silly to special-case arch-agnostic comments for stack
-grows up/down, how about the following instead ?
-
- * rseq critical sections defined with the RSEQ_CS_FLAG_ABORT_AT_IP flag
- * have the following behavior on abort: the stack pointer is adjusted to
- * skip over the redzone [*], and the aborted address (abort-at-ip) is pushed
- * at this stack pointer location.  The user-space abort handler needs to pop
- * the abort-at-ip address from the stack, and adjust the stack pointer to skip
- * back over the redzone.
- *
- * [*] The openrisc, powerpc64 and x86-64 architectures define a "redzone" as a
- *     stack area beyond the stack pointer which can be used by the compiler
- *     to store local variables in leaf functions.
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
+> index 0267977c9f17..69ee321027b4 100644
+> --- a/drivers/pci/iov.c
+> +++ b/drivers/pci/iov.c
+> @@ -1013,6 +1013,27 @@ int pci_iov_bus_range(struct pci_bus *bus)
+>  	return max ? max - bus->number : 0;
+>  }
+>  
+> +/**
+> + * pci_reset_iov_state - reset the state of the IOV capability
+> + * @dev: the PCI device
+> + */
+> +void pci_reset_iov_state(struct pci_dev *dev)
+> +{
+> +	struct pci_sriov *iov = dev->sriov;
+> +
+> +	if (!dev->is_physfn)
+> +		return;
+> +	if (!iov->num_VFs)
+> +		return;
+> +
+> +	sriov_del_vfs(dev);
+> +
+> +	if (iov->link != dev->devfn)
+> +		sysfs_remove_link(&dev->dev.kobj, "dep_link");
+> +
+> +	iov->num_VFs = 0;
+> +}
+> +
+>  /**
+>   * pci_enable_sriov - enable the SR-IOV capability
+>   * @dev: the PCI device
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 3d2fb394986a..535f19d37e8d 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -4694,6 +4694,8 @@ EXPORT_SYMBOL(pci_wait_for_pending_transaction);
+>   */
+>  int pcie_flr(struct pci_dev *dev)
+>  {
+> +	pci_reset_iov_state(dev);
+> +
+>  	if (!pci_wait_for_pending_transaction(dev))
+>  		pci_err(dev, "timed out waiting for pending transaction; performing function level reset anyway\n");
+>  
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index 3d60cabde1a1..7bb144fbec76 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -480,6 +480,7 @@ void pci_iov_update_resource(struct pci_dev *dev, int resno);
+>  resource_size_t pci_sriov_resource_alignment(struct pci_dev *dev, int resno);
+>  void pci_restore_iov_state(struct pci_dev *dev);
+>  int pci_iov_bus_range(struct pci_bus *bus);
+> +void pci_reset_iov_state(struct pci_dev *dev);
+>  extern const struct attribute_group sriov_pf_dev_attr_group;
+>  extern const struct attribute_group sriov_vf_dev_attr_group;
+>  #else
+> @@ -501,6 +502,9 @@ static inline int pci_iov_bus_range(struct pci_bus *bus)
+>  {
+>  	return 0;
+>  }
+> +static inline void pci_reset_iov_state(struct pci_dev *dev)
+> +{
+> +}
+>  
+>  #endif /* CONFIG_PCI_IOV */
+>  
+> 
+> base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
+> -- 
+> 2.25.1
+> 

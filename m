@@ -2,218 +2,551 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A34148CA8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 620ED48CA92
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343692AbiALSCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 13:02:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49964 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348660AbiALSBh (ORCPT
+        id S1355978AbiALSCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 13:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348660AbiALSCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:01:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E615A61919;
-        Wed, 12 Jan 2022 18:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F21A3C36AEA;
-        Wed, 12 Jan 2022 18:01:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642010496;
-        bh=RObMG0dHmdYn2QMJjA3U/N3geP2MYfxGzJCaDrQK4zk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ZlTWqV6kXo1SbH9Rz38GYh/LQ8TqMoGyl/c2Yslw1STcKn08ObxjJuJGaKHckUIb5
-         FnLzotD9/zVlEPAsxa6CUBhJsCYP/QPqXKB426mEtfwFXULvjTbBDRro9yZmKkzsam
-         rpU/YnXEPpuPNUQ6EWOU3fGfq4d1MOSZml04sibMTAAB9gBh2tpXk/zXjz+oGwDH4I
-         BTx2mhUhN5w38aF6SOI0+uUKWkQNQE/h4jTE/XvAS9MNBDizypiKVs1qU1PlV6EJXP
-         5ptzgBDeoUrxocy+bHcW4wyATwlWd+Gk3AC1jT8oM6ABYc7i+lH3NE5rf3rJzhFfZ3
-         8Ubh4SHm4qeXw==
-Date:   Wed, 12 Jan 2022 12:01:34 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Yao Hongbo <yaohongbo@linux.alibaba.com>
-Cc:     bhelgaas@google.com, lukas@wunner.de,
-        zhangliguang@linux.alibaba.com,
-        alikernel-developer@linux.alibaba.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [RFC PATCH v2] PCI: Waiting command completed in
- get_port_device_capability()
-Message-ID: <20220112180134.GA251670@bhelgaas>
+        Wed, 12 Jan 2022 13:02:14 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034BCC061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:02:14 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id c6so7906884ybk.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:02:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fIWW/VczbJ4KvdUB39i7fIMTbXOCZoHGHhjnea3QxMU=;
+        b=rjZdB4GQQ4Xw8tELcvZRp7xQsoVLzX7bPNK7pdV4tK/BmVLALWDfi0mMtahptz+pup
+         9vMygRPN1J36+85weQxlKmBLToz4ydCLLUglv7RqWMQOTUKgcAA+CPf3N77fV+2ew1A7
+         kh26QWhj0fMkr/DLwrB3Bx9uXCe9QfsbLeNA+JuKMuw56f19IeIZGaokQHdRsFDBbFzo
+         M13VNvvV3xreqOmhjgGIJv4BmLVbPeusemBa/CzUhloNnuHoNcO7iDtYZwr/ni6HY021
+         zyW8XODHuickzf+Gzb5toB3Ejf4Kyk0yHsHIydajSY1tEg1U21iA1yhoidYx6JVKKmwd
+         bgSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fIWW/VczbJ4KvdUB39i7fIMTbXOCZoHGHhjnea3QxMU=;
+        b=2oj2UmVulPA0e0NwZlUfJLzP6rw//IavpzUNYY6wdCKXKvWDELbOnJiROYur9C6uTQ
+         aAL1SrhGIyuooQz9+aJcKqiIL6cYX5MblKmNw9plKsau5TBhyorSMPlnQjTapLX5QQtO
+         6DTULqU3GAGcDPHNV/m7MwHubZ2122lyfgG0HWBtIYn2opJkeWI2zN+O5hTDsfQsrSg1
+         Vi+b+F4KH6XI3KWQg3uCuKnaCvm4vXpyLUH8HU+40u0skSz8eTsee3CAALfWTMexRqsj
+         FiHFhB2mF4zz1WqAux0aI3nvadfMni6eOf5DGGmAkXoPMiSL8Znqd2R0c0z1y1lFrd49
+         6/0w==
+X-Gm-Message-State: AOAM532aRjaimMjkuL0o5NYQMxB99JLB2HvJOGPZ+p/Gi4P5SQcddGC1
+        go+9zfIHgSxAREGWOD7O9QyFM7Ky7mH1cUkfbU0FAg==
+X-Google-Smtp-Source: ABdhPJzDLooyCPuZJaTmx5xK1kQJi0AjQZ+FsfkL68mw2lzdFoXDMomd0T0yzhAkydCRpPRj3okS+822U+bM3sSmyTI=
+X-Received: by 2002:a25:cb13:: with SMTP id b19mr1091636ybg.497.1642010532294;
+ Wed, 12 Jan 2022 10:02:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8ecf5265-2059-1149-3f7f-916c61b20cef@linux.alibaba.com>
+References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-5-rananta@google.com>
+ <CAAeT=FztkibSajKjnpRfObx+D1r8H1s_8-5MmqjemJTfmb2mpg@mail.gmail.com>
+ <CAJHc60ywYgAPfG11Ljkj3qzLoUn9mZPKnPH0P-HYS-pfs+A__g@mail.gmail.com> <CAAeT=FwA9X9eXrF+Q31Wzah=UkM-B8bMJObjJ=oCV0rjLfX6=g@mail.gmail.com>
+In-Reply-To: <CAAeT=FwA9X9eXrF+Q31Wzah=UkM-B8bMJObjJ=oCV0rjLfX6=g@mail.gmail.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Wed, 12 Jan 2022 10:02:01 -0800
+Message-ID: <CAJHc60y6b-scY8zcPuLnjGtr6HzSBnmhi2mCnmkNm4nTxgMTUQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 04/11] KVM: arm64: Setup a framework for hypercall
+ bitmap firmware registers
+To:     Reiji Watanabe <reijiw@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 03:33:25PM +0800, Yao Hongbo wrote:
-> 
-> 
-> 在 2022/1/12 上午2:55, Bjorn Helgaas 写道:
-> > [+cc Lukas, Rafael (in case you have any recollection of 2bd50dd800b5)]
-> > 
-> > On Fri, Jan 07, 2022 at 11:22:49AM +0800, Yao Hongbo wrote:
-> >> According to the PCIe specification Revision 5.0, section
-> >> 7.5.3.11 (slot Status Register), if Command Complete notification
-> >> is supported,  a write to the slot control register needs to set
-> >> the command completed bit, which can indicate the controller is
-> >> ready to receive the next command.
-> >>
-> >> However, before probing the pcie hotplug service, there needs to set
-> >> HPIE bit in the slot ctrl register to disable hotplug interrupts,
-> >> and there is no wait currently.
-> >>
-> >> The interval between the two functions get_port_device_capability() and
-> >> pcie_disable_notification() is not long, which may cause the latter to
-> >> be interfered by the former.
-> >>
-> >> The command complete event received by pcie_disable_notification() may
-> >> belong to the operation of get_port_device_capability().
-> > 
-> > Yes, looks like a potential problem.
-> > 
-> >> Signed-off-by: Liguang Zhang <zhangliguang@linux.alibaba.com>
-> >> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
-> >> ---
-> >>  drivers/pci/pcie/portdrv_core.c | 40 ++++++++++++++++++++++++++++++++++++++--
-> >>  1 file changed, 38 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
-> >> index bda6308..ec2088b6e 100644
-> >> --- a/drivers/pci/pcie/portdrv_core.c
-> >> +++ b/drivers/pci/pcie/portdrv_core.c
-> >> @@ -15,6 +15,7 @@
-> >>  #include <linux/string.h>
-> >>  #include <linux/slab.h>
-> >>  #include <linux/aer.h>
-> >> +#include <linux/delay.h>
-> >>  
-> >>  #include "../pci.h"
-> >>  #include "portdrv.h"
-> >> @@ -190,6 +191,42 @@ static int pcie_init_service_irqs(struct pci_dev *dev, int *irqs, int mask)
-> >>  	return 0;
-> >>  }
-> >>  
-> >> +static void pcie_port_disable_hp_interrupt(struct pci_dev *dev)
-> >> +{
-> >> +	u16 slot_status;
-> >> +	u32 slot_cap;
-> >> +	int timeout = 1000;
-> >> +
-> >> +	pcie_capability_clear_word(dev, PCI_EXP_SLTCTL,
-> >> +			PCI_EXP_SLTCTL_CCIE | PCI_EXP_SLTCTL_HPIE);
-> >> +
-> >> +	/*
-> >> +	 * If the command completed notification is not supported,
-> >> +	 * we don't need to wait after writing to the slot ctrl register.
-> >> +	 */
-> >> +	pcie_capability_read_dword(dev, PCI_EXP_SLTCAP, &slot_cap);
-> >> +	if (slot_cap & PCI_EXP_SLTCAP_NCCS)
-> >> +		return;
-> >> +
-> >> +	do {
-> >> +		pcie_capability_read_word(dev, PCI_EXP_SLTSTA, &slot_status);
-> >> +		if (slot_status == (u16) ~0) {
-> >> +			pci_info(dev, "%s: no response from device\n",  __func__);
-> >> +			return;
-> >> +		}
-> >> +
-> >> +		if (slot_status & PCI_EXP_SLTSTA_CC) {
-> >> +			pcie_capability_write_word(dev, PCI_EXP_SLTSTA, PCI_EXP_SLTSTA_CC);
-> >> +			return;
-> >> +		}
-> >> +
-> >> +		msleep(10);
-> >> +		timeout -= 10;
-> >> +	} while (timeout >= 0);
-> >> +
-> >> +	pci_info(dev, "Timeout on hotplug disable interrupt!\n");
-> >> +}
-> >> +
-> >>  /**
-> >>   * get_port_device_capability - discover capabilities of a PCI Express port
-> >>   * @dev: PCI Express port to examine
-> >> @@ -213,8 +250,7 @@ static int get_port_device_capability(struct pci_dev *dev)
-> >>  		 * Disable hot-plug interrupts in case they have been enabled
-> >>  		 * by the BIOS and the hot-plug service driver is not loaded.
-> >>  		 */
-> >> -		pcie_capability_clear_word(dev, PCI_EXP_SLTCTL,
-> >> -			  PCI_EXP_SLTCTL_CCIE | PCI_EXP_SLTCTL_HPIE);
-> >> +		pcie_port_disable_hp_interrupt(dev);
-> > 
-> > This originally came from 2bd50dd800b5 ("PCI: PCIe: Disable PCIe port
-> > services during port initialization"), where we disable hotplug
-> > interrupts in case the hotplug driver is not available.
-> > 
-> > In general, I think the OS should not be responsible for disabling
-> > interrupts for feature X.  The OS may predate feature X and may not
-> > know anything about X at all.  The power-on default for interrupts
-> > related to X should be "disabled" (as it is for HPIE and CCIE), and if
-> > firmware enables them, it should disable them or arrange to handle
-> > them itself before handing off to the OS.
-> > 
-> > I don't know whether 2bd50dd800b5 was prompted by spurious hotplug
-> > interrupts or not.  If it was, I think we were seeing a firmware
-> > defect or possibly a pciehp initialization issue.
-> > 
-> > At the time of 2bd50dd800b5, we always cleared HPIE and CCIE here.
-> > 
-> > But now, on ACPI systems, we only clear HPIE and CCIE here if we *do*
-> > have the hotplug driver (because host->native_pcie_hotplug only
-> > remains set if we have been granted control via _OSC, and we only
-> > request control when CONFIG_HOTPLUG_PCI_PCIE is enabled).  On these
-> > systems, we should be able to remove this disable code because pciehp
-> > will do whatever it needs.
-> > 
-> > For non-ACPI systems, bridge->native_pcie_hotplug will always be set,
-> > so we will clear HPIE and CCIE here and then (if
-> > CONFIG_HOTPLUG_PCI_PCIE is enabled) initialize pciehp soon after,
-> > which may be a problem as you describe.
-> > 
-> > What kind of system are you seeing the problem on?  It seems like it
-> > should be safe to drop the HPIE and CCIE disable here for ACPI
-> > systems.  And *likely* we could do the same for non-ACPI systems,
-> > though I have no experience there.
-> 
-> Hi, Bjorn
-> Thanks for your comments.
-> 
-> The problem occurs on ACPI systems.
-> 
->  acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI EDR HPX-Type3]
->  acpi PNP0A08:00: _OSC: platform does not support [SHPCHotplug AER LTR DPC]
->  acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME PCIeCapability]
-> 
-> We clear HPIE and CCIE here because the firmware doesn't control
-> Hotplug via __OSC.
-> 
-> And on ACPI systems, we can also set pcie_ports=native, which will
-> also encounter such problems.
+On Tue, Jan 11, 2022 at 9:12 PM Reiji Watanabe <reijiw@google.com> wrote:
+>
+> On Mon, Jan 10, 2022 at 4:51 PM Raghavendra Rao Ananta
+> <rananta@google.com> wrote:
+> >
+> > On Sun, Jan 9, 2022 at 10:29 PM Reiji Watanabe <reijiw@google.com> wrote:
+> > >
+> > > Hi Raghu,
+> > >
+> > > On Tue, Jan 4, 2022 at 11:49 AM Raghavendra Rao Ananta
+> > > <rananta@google.com> wrote:
+> > > >
+> > > > KVM regularly introduces new hypercall services to the guests without
+> > > > any consent from the Virtual Machine Manager (VMM). This means, the
+> > > > guests can observe hypercall services in and out as they migrate
+> > > > across various host kernel versions. This could be a major problem
+> > > > if the guest discovered a hypercall, started using it, and after
+> > > > getting migrated to an older kernel realizes that it's no longer
+> > > > available. Depending on how the guest handles the change, there's
+> > > > a potential chance that the guest would just panic.
+> > > >
+> > > > As a result, there's a need for the VMM to elect the services that
+> > > > it wishes the guest to discover. VMM can elect these services based
+> > > > on the kernels spread across its (migration) fleet. To remedy this,
+> > > > extend the existing firmware psuedo-registers, such as
+> > > > KVM_REG_ARM_PSCI_VERSION, for all the hypercall services available.
+> > > >
+> > > > These firmware registers are categorized based on the service call
+> > > > owners, and unlike the existing firmware psuedo-registers, they hold
+> > > > the features supported in the form of a bitmap.
+> > > >
+> > > > The capability, KVM_CAP_ARM_HVC_FW_REG_BMAP, is used to announce
+> > > > this extension, which returns the number of psuedo-firmware
+> > > > registers supported. During the VM initialization, the registers
+> > > > holds an upper-limit of the features supported by the corresponding
+> > > > registers. It's expected that the VMMs discover the features
+> > > > provided by each register via GET_ONE_REG, and writeback the
+> > > > desired values using SET_ONE_REG. KVM allows this modification
+> > > > only until the VM has started.
+> > > >
+> > > > Older VMMs can simply ignore the capability and the hypercall services
+> > > > will be exposed unconditionally to the guests, thus ensuring backward
+> > > > compatibility.
+> > > >
+> > > > In this patch, the framework adds the register only for ARM's standard
+> > > > secure services (owner value 4). Currently, this includes support only
+> > > > for ARM True Random Number Generator (TRNG) service, with bit-0 of the
+> > > > register representing mandatory features of v1.0. Other services are
+> > > > momentarily added in the upcoming patches.
+> > > >
+> > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > > ---
+> > > >  arch/arm64/include/asm/kvm_host.h |  12 ++++
+> > > >  arch/arm64/include/uapi/asm/kvm.h |   4 ++
+> > > >  arch/arm64/kvm/arm.c              |   4 ++
+> > > >  arch/arm64/kvm/hypercalls.c       | 103 +++++++++++++++++++++++++++++-
+> > > >  arch/arm64/kvm/trng.c             |   8 +--
+> > > >  include/kvm/arm_hypercalls.h      |   6 ++
+> > > >  6 files changed, 129 insertions(+), 8 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> > > > index 2a5f7f38006f..a32cded0371b 100644
+> > > > --- a/arch/arm64/include/asm/kvm_host.h
+> > > > +++ b/arch/arm64/include/asm/kvm_host.h
+> > > > @@ -102,6 +102,15 @@ struct kvm_s2_mmu {
+> > > >  struct kvm_arch_memory_slot {
+> > > >  };
+> > > >
+> > > > +/**
+> > > > + * struct kvm_hvc_desc: KVM ARM64 hypercall descriptor
+> > > > + *
+> > > > + * @hvc_std_bmap: Bitmap of standard secure service calls
+> > > > + */
+> > > > +struct kvm_hvc_desc {
+> > > > +       u64 hvc_std_bmap;
+> > > > +};
+> > > > +
+> > > >  struct kvm_arch {
+> > > >         struct kvm_s2_mmu mmu;
+> > > >
+> > > > @@ -137,6 +146,9 @@ struct kvm_arch {
+> > > >
+> > > >         /* Memory Tagging Extension enabled for the guest */
+> > > >         bool mte_enabled;
+> > > > +
+> > > > +       /* Hypercall firmware register' descriptor */
+> > > > +       struct kvm_hvc_desc hvc_desc;
+> > > >  };
+> > > >
+> > > >  struct kvm_vcpu_fault_info {
+> > > > diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> > > > index b3edde68bc3e..0d6f29c58456 100644
+> > > > --- a/arch/arm64/include/uapi/asm/kvm.h
+> > > > +++ b/arch/arm64/include/uapi/asm/kvm.h
+> > > > @@ -281,6 +281,10 @@ struct kvm_arm_copy_mte_tags {
+> > > >  #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED       3
+> > > >  #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_ENABLED            (1U << 4)
+> > > >
+> > > > +#define KVM_REG_ARM_STD_BMAP                   KVM_REG_ARM_FW_REG(3)
+> > > > +#define KVM_REG_ARM_STD_BIT_TRNG_V1_0          BIT(0)
+> > > > +#define KVM_REG_ARM_STD_BMAP_BIT_MAX           0       /* Last valid bit */
+> > > > +
+> > > >  /* SVE registers */
+> > > >  #define KVM_REG_ARM64_SVE              (0x15 << KVM_REG_ARM_COPROC_SHIFT)
+> > > >
+> > > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > > > index e4727dc771bf..56fe81565235 100644
+> > > > --- a/arch/arm64/kvm/arm.c
+> > > > +++ b/arch/arm64/kvm/arm.c
+> > > > @@ -156,6 +156,7 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+> > > >         kvm->arch.max_vcpus = kvm_arm_default_max_vcpus();
+> > > >
+> > > >         set_default_spectre(kvm);
+> > > > +       kvm_arm_init_hypercalls(kvm);
+> > > >
+> > > >         return ret;
+> > > >  out_free_stage2_pgd:
+> > > > @@ -283,6 +284,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+> > > >         case KVM_CAP_ARM_PTRAUTH_GENERIC:
+> > > >                 r = system_has_full_ptr_auth();
+> > > >                 break;
+> > > > +       case KVM_CAP_ARM_HVC_FW_REG_BMAP:
+> > > > +               r = kvm_arm_num_fw_bmap_regs();
+> > > > +               break;
+> > >
+> > > Looking at the discussion for the v2 series,
+> > >
+> > >  https://lore.kernel.org/kvmarm/20211130101958.fcdqthphyhxzvzla@gator.home/
+> > >
+> > > I assume that the number of the pseudo-firmware bitmap registers
+> > > will be used to clear pseudo firmware bitmap registers that
+> > > userspace doesn't know.
+> > > I'm wondering how userspace can identify which pseudo-firmware
+> > > registers that KVM_GET_REG_LIST provides are the pseudo-firmware
+> > > bitmap registers that it doesn't know.
+> > > For instance, suppose pseudo-firmware registers that KVM_GET_REG_LIST
+> > > provides are KVM_REG_ARM_FW_REG(0) to KVM_REG_ARM_FW_REG(9), userspace
+> > > doesn't knows KVM_REG_ARM_FW_REG(6) to KVM_REG_ARM_FW_REG(9), and
+> > > KVM_CAP_ARM_HVC_FW_REG_BMAP returns 5, how can userspace identify
+> > > remaining two bitmap registers from those 4 (fw-reg #6 to #9)
+> > > firmware registers ?
+> > >
+> > In v3, we leave the decision upto the userspace. If the userspace
+> > encounters a register that it's unaware, it can choose either to clear
+> > it or let it get exposed to the guest as is (see the code snipped
+> > shared by Andrew in the link).
+> > Trying to understand the question better- are you asking how would
+> > userspace distinguish between bitmap and regular fw registers with
+> > intermixed sequence numbers?
+>
+> Yes, that's my question.
+>
+>
+> > If yes, do you foresee a reason why they 'unaware' registers needed to
+> > be treated differently?
+>
+> Since I'm not sure what the specification of 'unaware' (non-bitmap)
+> registers will be, it would be safer for us to assume that they might
+> need to be treated differently from the bitmap registers.
+> Considering there is KVM_REG_ARM_PSCI_VERSION, which KVM doesn't allow
+> userspace to set to 0, there might be similar registers that userspace
+> cannot set to 0 in the future.
+>
+> BTW, If you assume that all those 'unaware' firmware registers are
+> treated in the same way, I don't think userspace needs the number of
+> those bitmap registers from KVM_CAP_ARM_HVC_FW_REG_BMAP (Instead,
+> I would think it can handle the 'unaware' registers with a list of
+> firmware registers from KVM_GET_REG_LIST).
+>
+You are right; mixing these registers would create an issue for the
+VMM. Instead, we can probably have a subset of the KVM_REG_ARM_FW_REG
+space dedicated for the bitmapped firmware registers, something like:
 
-What happens if you just drop that call like the patch below?
+#define KVM_REG_ARM_FW_BMAP_BASE     KVM_REG_ARM_FW_REG(0xff00)  /*
+Upper half of the fw reg space */
+#define KVM_REG_ARM_FW_BMAP_REG(r)    (KVM_REG_ARM_FW_BMAP_BASE | (r))
 
-If that avoids the problem, then we can talk about whether we need to
-worry about broken firmware in the non-ACPI or "pcie_ports=native"
-cases.
+#define KVM_REG_ARM_STD_BMAP              KVM_REG_ARM_FW_BMAP_REG(0)
 
-diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
-index bda630889f95..76a3bd237bf9 100644
---- a/drivers/pci/pcie/portdrv_core.c
-+++ b/drivers/pci/pcie/portdrv_core.c
-@@ -208,13 +208,6 @@ static int get_port_device_capability(struct pci_dev *dev)
- 	if (dev->is_hotplug_bridge &&
- 	    (pcie_ports_native || host->native_pcie_hotplug)) {
- 		services |= PCIE_PORT_SERVICE_HP;
--
--		/*
--		 * Disable hot-plug interrupts in case they have been enabled
--		 * by the BIOS and the hot-plug service driver is not loaded.
--		 */
--		pcie_capability_clear_word(dev, PCI_EXP_SLTCTL,
--			  PCI_EXP_SLTCTL_CCIE | PCI_EXP_SLTCTL_HPIE);
- 	}
- 
- #ifdef CONFIG_PCIEAER
+With this, I think the VMM can easily detect a bitmap fw register.
+Also, if it encounters an unknown bitmapped register it can handle it
+separately if it likes.
+The minor advantage of the CAP still returning the number of bitmapped
+registers can be an inexpensive shortcut to VMM to get a general idea
+of the number of registers.
+
+> > >
+> > > >         default:
+> > > >                 r = 0;
+> > > >         }
+> > > > diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> > > > index 3c2fcf31ad3d..06243e4670eb 100644
+> > > > --- a/arch/arm64/kvm/hypercalls.c
+> > > > +++ b/arch/arm64/kvm/hypercalls.c
+> > > > @@ -58,6 +58,29 @@ static void kvm_ptp_get_time(struct kvm_vcpu *vcpu, u64 *val)
+> > > >         val[3] = lower_32_bits(cycles);
+> > > >  }
+> > > >
+> > > > +static bool kvm_arm_fw_reg_feat_enabled(u64 reg_bmap, u64 feat_bit)
+> > > > +{
+> > > > +       return reg_bmap & feat_bit;
+> > > > +}
+> > > > +
+> > > > +bool kvm_hvc_call_supported(struct kvm_vcpu *vcpu, u32 func_id)
+> > > > +{
+> > > > +       struct kvm_hvc_desc *hvc_desc = &vcpu->kvm->arch.hvc_desc;
+> > > > +
+> > > > +       switch (func_id) {
+> > > > +       case ARM_SMCCC_TRNG_VERSION:
+> > > > +       case ARM_SMCCC_TRNG_FEATURES:
+> > > > +       case ARM_SMCCC_TRNG_GET_UUID:
+> > > > +       case ARM_SMCCC_TRNG_RND32:
+> > > > +       case ARM_SMCCC_TRNG_RND64:
+> > > > +               return kvm_arm_fw_reg_feat_enabled(hvc_desc->hvc_std_bmap,
+> > > > +                                               KVM_REG_ARM_STD_BIT_TRNG_V1_0);
+> > > > +       default:
+> > > > +               /* By default, allow the services that aren't listed here */
+> > > > +               return true;
+> > > > +       }
+> > > > +}
+> > >
+> > > kvm_hvc_call_supported() could return true even for @func_id that
+> > > kvm_hvc_call_handler() returns -EINVAL for.  Is this behavior what
+> > > you really want ?
+> > Yes. My idea was to let kvm_hvc_call_supported() check for the
+> > support, while kvm_hvc_call_handler() does the real processing of the
+> > call.
+> >
+> > > If so, IMHO the function name might be a bit mis-leading.
+> > > "kvm_hvc_call_disabled" (and flip the return value)
+> > > might be closer to what it does(?).
+> > >
+> > Sorry, I'm unclear how flipping is helping. Wouldn't we return 'false'
+> > if we don't have a case for the func_id, indicating it's NOT disabled,
+> > but kvm_hvc_call_handler() can still return SMCCC_RET_NOT_SUPPORTED?
+>
+> Yes, that's fine, too.
+> Since those services are disabled (because they are enabled by default),
+> I just thought checking 'disabled' might be closer to what it does than
+> checking 'enabled'.  But, 'enabled' is also fine.
+>
+> > >
+> > > > +
+> > > >  int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> > > >  {
+> > > >         u32 func_id = smccc_get_function(vcpu);
+> > > > @@ -65,6 +88,9 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> > > >         u32 feature;
+> > > >         gpa_t gpa;
+> > > >
+> > > > +       if (!kvm_hvc_call_supported(vcpu, func_id))
+> > > > +               goto out;
+> > > > +
+> > > >         switch (func_id) {
+> > > >         case ARM_SMCCC_VERSION_FUNC_ID:
+> > > >                 val[0] = ARM_SMCCC_VERSION_1_1;
+> > > > @@ -143,6 +169,7 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> > > >                 return kvm_psci_call(vcpu);
+> > > >         }
+> > > >
+> > > > +out:
+> > > >         smccc_set_retval(vcpu, val[0], val[1], val[2], val[3]);
+> > > >         return 1;
+> > > >  }
+> > > > @@ -153,9 +180,25 @@ static const u64 kvm_arm_fw_reg_ids[] = {
+> > > >         KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
+> > > >  };
+> > > >
+> > > > +static const u64 kvm_arm_fw_reg_bmap_ids[] = {
+> > > > +       KVM_REG_ARM_STD_BMAP,
+> > > > +};
+> > > > +
+> > > > +void kvm_arm_init_hypercalls(struct kvm *kvm)
+> > > > +{
+> > > > +       struct kvm_hvc_desc *hvc_desc = &kvm->arch.hvc_desc;
+> > > > +
+> > > > +       hvc_desc->hvc_std_bmap = ARM_SMCCC_STD_FEATURES;
+> > > > +}
+> > > > +
+> > > > +int kvm_arm_num_fw_bmap_regs(void)
+> > > > +{
+> > > > +       return ARRAY_SIZE(kvm_arm_fw_reg_bmap_ids);
+> > > > +}
+> > > > +
+> > > >  int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
+> > > >  {
+> > > > -       return ARRAY_SIZE(kvm_arm_fw_reg_ids);
+> > > > +       return ARRAY_SIZE(kvm_arm_fw_reg_ids) + kvm_arm_num_fw_bmap_regs();
+> > > >  }
+> > > >
+> > > >  int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices)
+> > > > @@ -167,6 +210,11 @@ int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices)
+> > > >                         return -EFAULT;
+> > > >         }
+> > > >
+> > > > +       for (i = 0; i < ARRAY_SIZE(kvm_arm_fw_reg_bmap_ids); i++) {
+> > > > +               if (put_user(kvm_arm_fw_reg_bmap_ids[i], uindices++))
+> > > > +                       return -EFAULT;
+> > > > +       }
+> > > > +
+> > > >         return 0;
+> > > >  }
+> > > >
+> > > > @@ -211,9 +259,20 @@ static int get_kernel_wa_level(u64 regid)
+> > > >         return -EINVAL;
+> > > >  }
+> > > >
+> > > > +static void
+> > > > +kvm_arm_get_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 fw_reg_bmap, u64 *val)
+> > > > +{
+> > > > +       struct kvm *kvm = vcpu->kvm;
+> > > > +
+> > > > +       mutex_lock(&kvm->lock);
+> > > > +       *val = fw_reg_bmap;
+> > > > +       mutex_unlock(&kvm->lock);
+> > >
+> > > Why does it need to hold the lock ? (Wouldn't READ_ONCE be enough ?)
+> > >
+> > I don't have much experience with READ_ONCE at this point, but do you
+> > think this read can be protected again the read/write in
+> > kvm_arm_set_fw_reg_bmap()?
+>
+> If kvm_arm_set_fw_reg_bmap is changed to use WRITE_ONCE to
+> update hvc_desc->hvc_*_bmap (kvm_arm_set_fw_reg_bmap still needs
+> to get the lock to prevent other vCPUs from running KVM_RUN),
+> I would think using READ_ONCE in kvm_arm_get_fw_reg_bmap() without
+> getting the lock should work (will see either old or new value).
+>
+That makes sense. Thanks for the suggestion and all the reviews.
+
+Regards,
+Raghavendra
+
+> Thanks,
+> Reiji
+>
+>
+> > >
+> > > > +}
+> > > > +
+> > > >  int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> > > >  {
+> > > >         void __user *uaddr = (void __user *)(long)reg->addr;
+> > > > +       struct kvm_hvc_desc *hvc_desc = &vcpu->kvm->arch.hvc_desc;
+> > > >         u64 val;
+> > > >
+> > > >         switch (reg->id) {
+> > > > @@ -224,6 +283,9 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> > > >         case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2:
+> > > >                 val = get_kernel_wa_level(reg->id) & KVM_REG_FEATURE_LEVEL_MASK;
+> > > >                 break;
+> > > > +       case KVM_REG_ARM_STD_BMAP:
+> > > > +               kvm_arm_get_fw_reg_bmap(vcpu, hvc_desc->hvc_std_bmap, &val);
+> > > > +               break;
+> > > >         default:
+> > > >                 return -ENOENT;
+> > > >         }
+> > > > @@ -234,6 +296,43 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> > > >         return 0;
+> > > >  }
+> > > >
+> > > > +static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 reg_id, u64 val)
+> > > > +{
+> > > > +       int ret = 0;
+> > > > +       struct kvm *kvm = vcpu->kvm;
+> > > > +       struct kvm_hvc_desc *hvc_desc = &kvm->arch.hvc_desc;
+> > > > +       u64 *fw_reg_bmap, fw_reg_features;
+> > > > +
+> > > > +       switch (reg_id) {
+> > > > +       case KVM_REG_ARM_STD_BMAP:
+> > > > +               fw_reg_bmap = &hvc_desc->hvc_std_bmap;
+> > > > +               fw_reg_features = ARM_SMCCC_STD_FEATURES;
+> > > > +               break;
+> > > > +       default:
+> > > > +               return -ENOENT;
+> > > > +       }
+> > > > +
+> > > > +       /* Check for unsupported bit */
+> > > > +       if (val & ~fw_reg_features)
+> > > > +               return -EINVAL;
+> > > > +
+> > > > +       mutex_lock(&kvm->lock);
+> > > > +
+> > > > +       /*
+> > > > +        * If the VM (any vCPU) has already started running, return success
+> > > > +        * if there's no change in the value. Else, return -EBUSY.
+> > > > +        */
+> > > > +       if (kvm_vm_has_started(kvm)) {
+> > > > +               ret = *fw_reg_bmap != val ? -EBUSY : 0;
+> > > > +               goto out;
+> > > > +       }
+> > > > +
+> > > > +       *fw_reg_bmap = val;
+> > > > +out:
+> > > > +       mutex_unlock(&kvm->lock);
+> > > > +       return ret;
+> > > > +}
+> > > > +
+> > > >  int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> > > >  {
+> > > >         void __user *uaddr = (void __user *)(long)reg->addr;
+> > > > @@ -310,6 +409,8 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> > > >                         return -EINVAL;
+> > > >
+> > > >                 return 0;
+> > > > +       case KVM_REG_ARM_STD_BMAP:
+> > > > +               return kvm_arm_set_fw_reg_bmap(vcpu, reg->id, val);
+> > > >         default:
+> > > >                 return -ENOENT;
+> > > >         }
+> > > > diff --git a/arch/arm64/kvm/trng.c b/arch/arm64/kvm/trng.c
+> > > > index 99bdd7103c9c..23f912514b06 100644
+> > > > --- a/arch/arm64/kvm/trng.c
+> > > > +++ b/arch/arm64/kvm/trng.c
+> > > > @@ -60,14 +60,8 @@ int kvm_trng_call(struct kvm_vcpu *vcpu)
+> > > >                 val = ARM_SMCCC_TRNG_VERSION_1_0;
+> > > >                 break;
+> > > >         case ARM_SMCCC_TRNG_FEATURES:
+> > > > -               switch (smccc_get_arg1(vcpu)) {
+> > > > -               case ARM_SMCCC_TRNG_VERSION:
+> > > > -               case ARM_SMCCC_TRNG_FEATURES:
+> > > > -               case ARM_SMCCC_TRNG_GET_UUID:
+> > > > -               case ARM_SMCCC_TRNG_RND32:
+> > > > -               case ARM_SMCCC_TRNG_RND64:
+> > > > +               if (kvm_hvc_call_supported(vcpu, smccc_get_arg1(vcpu)))
+> > > >                         val = TRNG_SUCCESS;
+> > >
+> > > kvm_hvc_call_supported() returns true for any values that are
+> > > not explicitly listed in kvm_hvc_call_supported() (i.e. it returns
+> > > true even for @func_id that are not any of ARM_SMCCC_TRNG_*).
+> > > So, I don't think it can simply use the current kvm_hvc_call_supported.
+> > >
+> > You are right. Probably I should leave the case statements as is (or
+> > think of some better way).
+> >
+> >
+> > Thanks for the review and suggestions.
+> >
+> > Regards,
+> > Raghavendra
+> > > Thanks,
+> > > Reiji
+> > >
+> > > > -               }
+> > > >                 break;
+> > > >         case ARM_SMCCC_TRNG_GET_UUID:
+> > > >                 smccc_set_retval(vcpu, le32_to_cpu(u[0]), le32_to_cpu(u[1]),
+> > > > diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
+> > > > index 5d38628a8d04..8fe68d8d6d96 100644
+> > > > --- a/include/kvm/arm_hypercalls.h
+> > > > +++ b/include/kvm/arm_hypercalls.h
+> > > > @@ -6,6 +6,9 @@
+> > > >
+> > > >  #include <asm/kvm_emulate.h>
+> > > >
+> > > > +#define ARM_SMCCC_STD_FEATURES \
+> > > > +       GENMASK_ULL(KVM_REG_ARM_STD_BMAP_BIT_MAX, 0)
+> > > > +
+> > > >  int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
+> > > >
+> > > >  static inline u32 smccc_get_function(struct kvm_vcpu *vcpu)
+> > > > @@ -42,9 +45,12 @@ static inline void smccc_set_retval(struct kvm_vcpu *vcpu,
+> > > >
+> > > >  struct kvm_one_reg;
+> > > >
+> > > > +void kvm_arm_init_hypercalls(struct kvm *kvm);
+> > > > +int kvm_arm_num_fw_bmap_regs(void);
+> > > >  int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu);
+> > > >  int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices);
+> > > >  int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg);
+> > > >  int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg);
+> > > > +bool kvm_hvc_call_supported(struct kvm_vcpu *vcpu, u32 func_id);
+> > > >
+> > > >  #endif
+> > > > --
+> > > > 2.34.1.448.ga2b2bfdf31-goog
+> > > >

@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 165E248C303
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 718BA48C306
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:22:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352821AbiALLTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 06:19:25 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:55358 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352823AbiALLTT (ORCPT
+        id S240061AbiALLWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 06:22:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238953AbiALLWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 06:19:19 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R601e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V1f1q5U_1641986356;
-Received: from 30.225.24.55(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0V1f1q5U_1641986356)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 12 Jan 2022 19:19:17 +0800
-Message-ID: <5c820350-3dd0-5bb5-66a4-6bedb119525f@linux.alibaba.com>
-Date:   Wed, 12 Jan 2022 19:19:16 +0800
+        Wed, 12 Jan 2022 06:22:34 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BF7C06173F;
+        Wed, 12 Jan 2022 03:22:34 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id x7so6881006lfu.8;
+        Wed, 12 Jan 2022 03:22:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=i3J9e40/qw3RUUYb2b020SFx3wJaeeIDSrRZNGkXFSw=;
+        b=B/DwJAktTSBHU8JBc1OwYod+gQ8oHU59G2zVu6ltzgGb9oZ9jKl3qkivRBVYKkgsgQ
+         4UnbtFtN1ScC/nRIGs75r/D3pa9CqJQbq0TyU7HKjWzMljvj3U2yobOmNYIJbKz81r5/
+         vjs1K4ISERXlxm2gQyCFK4DjL1Iqi1fAadaSTtx3YM/R+rpvGvXEXwN8MlQtL+c6QGIw
+         OJZK5aZhG5MyMRpCpUgxQf0bGeoxc9+z6qXQVptzuAAmeScmsuAsVtYpZSwsV6hgBYm5
+         TCh61UT5LjJJsCLOFtBqQWi0ZYJ2Cgq0MKPKaqgLVPjR5xjxkPUzKomvI6utpSJB6aYl
+         joKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=i3J9e40/qw3RUUYb2b020SFx3wJaeeIDSrRZNGkXFSw=;
+        b=4lQ4chPHa968FliwMr9hMIhDavcwch2A4AAWeXw4lXsq38FkJxlzAJ20dMFtAwFxD1
+         zfV+g5kZqpCoaUXxrhK69yOg4ovr45k3KwZDV5qtmeCdKcguId+S1l6IdHjaOA2kTk6K
+         QQWJ+Rtqwnx52D+6S1+SxAH9OQUYXhNSDN5g4aKTUG9R8dahd5JhDFJRz6pVldJJPhZW
+         1tEwczmTKyZI1hg9RMd+zNbCHL/HQ2U/JpqTSRdIEBMmuXVyRVJe5R8/eDYCPSp1YON7
+         F5at2kebNMbMfkzvy6Rvxzrr8WyFUvVrb4NN793x45u9nMiNi66rTbabyDYEnWtwF5fb
+         edDw==
+X-Gm-Message-State: AOAM530Y4Z9t4F40R9WaqMRGWJOhdPRlmD3qc2qZGqmOhdWKyyCMxEE/
+        Fvl+2aDDMbZTaImxZrCfEYuffO5432g=
+X-Google-Smtp-Source: ABdhPJwi/QZFJP1f1CylCHF29BDSHvNiAczhugZC+6a/+Ffwq6BgcQKDeVkO5NYgP8eMQ09JvBuQMQ==
+X-Received: by 2002:ac2:50c6:: with SMTP id h6mr6658544lfm.420.1641986552730;
+        Wed, 12 Jan 2022 03:22:32 -0800 (PST)
+Received: from [192.168.2.145] (94-29-62-108.dynamic.spd-mgts.ru. [94.29.62.108])
+        by smtp.googlemail.com with ESMTPSA id a3sm231510lji.133.2022.01.12.03.22.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 03:22:32 -0800 (PST)
+Subject: Re: [Patch V1 3/4] memory: tegra: add mc-err support for T186
+To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org
+Cc:     Snikam@nvidia.com, vdumpa@nvidia.com
+References: <1641926750-27544-1-git-send-email-amhetre@nvidia.com>
+ <1641926750-27544-4-git-send-email-amhetre@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <0b584dfd-04f6-d7f7-f08a-003b89e557f5@gmail.com>
+Date:   Wed, 12 Jan 2022 14:22:31 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH] fs/ocfs2: remove redundant ret variable
+In-Reply-To: <1641926750-27544-4-git-send-email-amhetre@nvidia.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     cgel.zte@gmail.com, mark@fasheh.com
-Cc:     jlbec@evilplan.org, ocfs2-devel@oss.oracle.com,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220112081408.667411-1-chi.minghao@zte.com.cn>
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-In-Reply-To: <20220112081408.667411-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is obviously not right as you remove the extent tree initialization.
+11.01.2022 21:45, Ashish Mhetre пишет:
+>  #define MC_INT_DECERR_ROUTE_SANITY			BIT(20)
+>  #define MC_INT_WCAM_ERR					BIT(19)
+>  #define MC_INT_SCRUB_ECC_WR_ACK				BIT(18)
 
-Thanks,
-Joseph
-
-On 1/12/22 4:14 PM, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> Return value from ocfs2_add_clusters_in_btree() directly instead
-> of taking this in another redundant variable.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
-> ---
->  fs/ocfs2/file.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/fs/ocfs2/file.c b/fs/ocfs2/file.c
-> index fc5f780fa235..9a46dcef448c 100644
-> --- a/fs/ocfs2/file.c
-> +++ b/fs/ocfs2/file.c
-> @@ -540,15 +540,11 @@ int ocfs2_add_inode_data(struct ocfs2_super *osb,
->  			 struct ocfs2_alloc_context *meta_ac,
->  			 enum ocfs2_alloc_restarted *reason_ret)
->  {
-> -	int ret;
->  	struct ocfs2_extent_tree et;
->  
-> -	ocfs2_init_dinode_extent_tree(&et, INODE_CACHE(inode), fe_bh);
-> -	ret = ocfs2_add_clusters_in_btree(handle, &et, logical_offset,
-> +	return ocfs2_add_clusters_in_btree(handle, &et, logical_offset,
->  					  clusters_to_add, mark_unwritten,
->  					  data_ac, meta_ac, reason_ret);
-> -
-> -	return ret;
->  }
->  
->  static int ocfs2_extend_allocation(struct inode *inode, u32 logical_start,
+I don't see where these errors are handled in the code. Is documentation
+that explains these bits publicly available?

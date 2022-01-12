@@ -2,161 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8728248BF3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EB048BF43
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237866AbiALHuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:50:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbiALHuD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:50:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AC1C06173F;
-        Tue, 11 Jan 2022 23:50:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C87CB81E02;
-        Wed, 12 Jan 2022 07:50:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B24C36AEA;
-        Wed, 12 Jan 2022 07:49:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641973800;
-        bh=/zzr28pbn0mYUQ3C33VgJ093abXpWPwu5+XYGnZ7HOI=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=gOqryZE8ISgc3MSbb89OPqbHB6lIMKLRTWkJZLRLlDZHEJA/FQtD3G2PIsejf5vyO
-         lxWl5kHtlDWx+2yc/6CJmmQfiG8ge1a5br3t/cLssV7rpwVrhnob4JaBH1U0JI8tgp
-         25eSYGvcuqTn0fJwoecvD18TO+bpXoyGmxgE6J843NfM0Dl99XRgKTfhkiHWwudeGs
-         7D+149LV6SKMnsY02KSCXxco7iYDswVneC5OEeIwsKfK+dPeBzBigILcjGp/cDqASq
-         Qk5EMf32ZCO+TMplE91xnTN6iWxt2tL1yHcc5CzTv9Khp2Z5z2siK7vZ+2n2awVCAr
-         2SY6QAcVjlhug==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Jerome Pouiller <Jerome.Pouiller@silabs.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-mmc@vger.kernel.org,
-        Pali =?utf-8?Q?Roh?= =?utf-8?Q?=C3=A1r?= <pali@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v9 23/24] wfx: remove from the staging area
-References: <20220111171424.862764-1-Jerome.Pouiller@silabs.com>
-        <20220111171424.862764-24-Jerome.Pouiller@silabs.com>
-Date:   Wed, 12 Jan 2022 09:49:54 +0200
-In-Reply-To: <20220111171424.862764-24-Jerome.Pouiller@silabs.com> (Jerome
-        Pouiller's message of "Tue, 11 Jan 2022 18:14:23 +0100")
-Message-ID: <874k69jsv1.fsf@tynnyri.adurom.net>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1348719AbiALHuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:50:52 -0500
+Received: from mga07.intel.com ([134.134.136.100]:49119 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237906AbiALHut (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 02:50:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641973849; x=1673509849;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w/A8QwlNj0/nYgZRCUL0YzBzpWcnv1BTGNu1Z96AcjI=;
+  b=COWawAmnlfZJ0ujdZDCkfSeroNHIkUykT2JORJ60cbFip6MxTOruwfN2
+   xoNjLH1sOrXIfl3Vt6P3eStTwJG0ZOzkKVy7PKbYI4tGSeVcXjHiv53x7
+   bLvCk8OTCHG3Nh1IBbEWL/RRdSCKP9KZQA1kizikqY/oSEsYSQHwwMlxu
+   emuKBilRUwlPKrWLdAy5jlGdrChUeQLSisWPgWmHWcNwEL2zyQZGiTXJV
+   ebd4E0dl/5v4GZJ5qWLU1L1WxmC8rw2CtdaAegFrZ+ASL0JBIL/MePJqX
+   zmTZBOFRB1UtxXlogc6R6b3ixw45DFBb6Z81pizO4lbogQI6SvIv1PN8O
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="307032297"
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="307032297"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 23:50:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="670072590"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 11 Jan 2022 23:50:46 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 12 Jan 2022 09:50:45 +0200
+Date:   Wed, 12 Jan 2022 09:50:45 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, singhanc@nvidia.com
+Subject: Re: [PATCH v4 1/1] ucsi_ccg: Check DEV_INT bit only when starting
+ CCG4
+Message-ID: <Yd6IVb5hsc2jpXqn@kuha.fi.intel.com>
+References: <20220112054950.615341-1-waynec@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220112054950.615341-1-waynec@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jerome Pouiller <Jerome.Pouiller@silabs.com> writes:
+Hi,
 
-> From: J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com>
->
-> Signed-off-by: J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com>
+On Wed, Jan 12, 2022 at 01:49:50PM +0800, Wayne Chang wrote:
+> From: Sing-Han Chen <singhanc@nvidia.com>
+> 
+> after driver sending the UCSI_START cmd, CCGx would
+> clear Bit 0:Device Interrupt in the INTR_REG if CCGX
+> reset successfully.
+> 
+> however, there might be a chance that other bits in
+> INTR_REG are not cleared due to internal data queued
+> in PPM and cause the driver thinks CCGx reset failed.
+> 
+> the commit checks bit 0 in INTR_REG and ignore other
+> bits. ucsi driver would reset PPM later.
+> 
+> Fixes: 247c554a14aa ("usb: typec: ucsi: add support for Cypress CCGx")
+
+So... no need to take this to the stable kernel releases?
+
+> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
 > ---
->  .../bindings/net/wireless/silabs,wfx.yaml     | 125 ---
->  drivers/staging/wfx/Kconfig                   |   8 -
->  drivers/staging/wfx/Makefile                  |  25 -
->  drivers/staging/wfx/bh.c                      | 330 -------
->  drivers/staging/wfx/bh.h                      |  33 -
->  drivers/staging/wfx/bus.h                     |  38 -
->  drivers/staging/wfx/bus_sdio.c                | 272 ------
->  drivers/staging/wfx/bus_spi.c                 | 271 ------
->  drivers/staging/wfx/data_rx.c                 |  94 --
->  drivers/staging/wfx/data_rx.h                 |  18 -
->  drivers/staging/wfx/data_tx.c                 | 596 -------------
->  drivers/staging/wfx/data_tx.h                 |  68 --
->  drivers/staging/wfx/debug.c                   | 365 --------
->  drivers/staging/wfx/debug.h                   |  19 -
->  drivers/staging/wfx/fwio.c                    | 405 ---------
->  drivers/staging/wfx/fwio.h                    |  15 -
->  drivers/staging/wfx/hif_api_cmd.h             | 555 ------------
->  drivers/staging/wfx/hif_api_general.h         | 262 ------
->  drivers/staging/wfx/hif_api_mib.h             | 346 --------
->  drivers/staging/wfx/hif_rx.c                  | 416 ---------
->  drivers/staging/wfx/hif_rx.h                  |  17 -
->  drivers/staging/wfx/hif_tx.c                  | 513 -----------
->  drivers/staging/wfx/hif_tx.h                  |  60 --
->  drivers/staging/wfx/hif_tx_mib.c              | 324 -------
->  drivers/staging/wfx/hif_tx_mib.h              |  49 --
->  drivers/staging/wfx/hwio.c                    | 352 --------
->  drivers/staging/wfx/hwio.h                    |  75 --
->  drivers/staging/wfx/key.c                     | 241 -----
->  drivers/staging/wfx/key.h                     |  20 -
->  drivers/staging/wfx/main.c                    | 506 -----------
->  drivers/staging/wfx/main.h                    |  43 -
->  drivers/staging/wfx/queue.c                   | 307 -------
->  drivers/staging/wfx/queue.h                   |  45 -
->  drivers/staging/wfx/scan.c                    | 149 ----
->  drivers/staging/wfx/scan.h                    |  22 -
->  drivers/staging/wfx/sta.c                     | 833 ------------------
->  drivers/staging/wfx/sta.h                     |  73 --
->  drivers/staging/wfx/traces.h                  | 501 -----------
->  drivers/staging/wfx/wfx.h                     | 164 ----
->  39 files changed, 8555 deletions(-)
->  delete mode 100644 drivers/staging/wfx/Documentation/devicetree/bindings=
-/net/wireless/silabs,wfx.yaml
->  delete mode 100644 drivers/staging/wfx/Kconfig
->  delete mode 100644 drivers/staging/wfx/Makefile
->  delete mode 100644 drivers/staging/wfx/bh.c
->  delete mode 100644 drivers/staging/wfx/bh.h
->  delete mode 100644 drivers/staging/wfx/bus.h
->  delete mode 100644 drivers/staging/wfx/bus_sdio.c
->  delete mode 100644 drivers/staging/wfx/bus_spi.c
->  delete mode 100644 drivers/staging/wfx/data_rx.c
->  delete mode 100644 drivers/staging/wfx/data_rx.h
->  delete mode 100644 drivers/staging/wfx/data_tx.c
->  delete mode 100644 drivers/staging/wfx/data_tx.h
->  delete mode 100644 drivers/staging/wfx/debug.c
->  delete mode 100644 drivers/staging/wfx/debug.h
->  delete mode 100644 drivers/staging/wfx/fwio.c
->  delete mode 100644 drivers/staging/wfx/fwio.h
->  delete mode 100644 drivers/staging/wfx/hif_api_cmd.h
->  delete mode 100644 drivers/staging/wfx/hif_api_general.h
->  delete mode 100644 drivers/staging/wfx/hif_api_mib.h
->  delete mode 100644 drivers/staging/wfx/hif_rx.c
->  delete mode 100644 drivers/staging/wfx/hif_rx.h
->  delete mode 100644 drivers/staging/wfx/hif_tx.c
->  delete mode 100644 drivers/staging/wfx/hif_tx.h
->  delete mode 100644 drivers/staging/wfx/hif_tx_mib.c
->  delete mode 100644 drivers/staging/wfx/hif_tx_mib.h
->  delete mode 100644 drivers/staging/wfx/hwio.c
->  delete mode 100644 drivers/staging/wfx/hwio.h
->  delete mode 100644 drivers/staging/wfx/key.c
->  delete mode 100644 drivers/staging/wfx/key.h
->  delete mode 100644 drivers/staging/wfx/main.c
->  delete mode 100644 drivers/staging/wfx/main.h
->  delete mode 100644 drivers/staging/wfx/queue.c
->  delete mode 100644 drivers/staging/wfx/queue.h
->  delete mode 100644 drivers/staging/wfx/scan.c
->  delete mode 100644 drivers/staging/wfx/scan.h
->  delete mode 100644 drivers/staging/wfx/sta.c
->  delete mode 100644 drivers/staging/wfx/sta.h
->  delete mode 100644 drivers/staging/wfx/traces.h
->  delete mode 100644 drivers/staging/wfx/wfx.h
 
-I'm not sure what's your plan here, but with staging wireless drivers
-there's usually a simple simple move (git mv) of the driver from
-drivers/staging to drivers/net/wireless. An example here:
+What has changed since v3 (and v2) - there is no patch changelog here?
 
-https://git.kernel.org/linus/5625f965d764
+In case this is new to you, you list those changes under that '---'
+line so they don't become part of the permanent changelog:
 
-What you seem to do here is that you add a new driver to
-drivers/net/wireless and then remove the old driver from
-drivers/staging. And I'm guessing these two drivers are not identical
-and have differences?
+https://docs.kernel.org/process/submitting-patches.html#the-canonical-patch-format
 
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index bff96d64dddf..6db7c8ddd51c 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -325,7 +325,7 @@ static int ucsi_ccg_init(struct ucsi_ccg *uc)
+>  		if (status < 0)
+>  			return status;
+>  
+> -		if (!data)
+> +		if (!(data & DEV_INT))
+>  			return 0;
+>  
+>  		status = ccg_write(uc, CCGX_RAB_INTR_REG, &data, sizeof(data));
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
+thanks,
+
+-- 
+heikki

@@ -2,112 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C2E48CD77
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB3A48CD97
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbiALVKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 16:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbiALVKi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 16:10:38 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F5FC061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 13:10:38 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id s30so12573704lfo.7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 13:10:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KrbHF0DzPNfCOOgkFkmmAa72D7KbaWV3xb9yz2Rt3bM=;
-        b=XbEGC7g/EgPNokcJrlfE/n7WGNBoNGbLkn9yVUz8n49hP1iGzSzDburUVxqWzgYetL
-         COz/ZlUCJWiK5yJri/2IhCg1ndJTnFnyehv+Mprt6eL2Oeew+92qGEV/KveFfXjdnEw1
-         bcyL5Fm1AJCwwnMAAP5QWSjPCQpwIXptig3ePQNwTJMngcZRQHELYp3aSpr1/VYg6z4B
-         kUWObpwdXyOnu7sllSMysu6bUNXWAqVO2fvC6/tpCr6wfhxSqJeyy1MWLArmEfgQCDUI
-         rmEG9pP+T8rubzuOO2doVOrMDzWvh1XiwsS0dtiVYgSk6QImLd08N+3F1BnPP2PpGRr+
-         iczQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KrbHF0DzPNfCOOgkFkmmAa72D7KbaWV3xb9yz2Rt3bM=;
-        b=QcWAScR3whxw2nHEqmKzR58XBrD9dPfvttLi4s2t7ZACAsi6MOp3vrMNat1e3ZaLxq
-         YHoiIxTvdr6Wa2hVP+TildHbS/KNoK2GmQf4rGKP9IoSkTPLHMGYTEdZ7rtr99YUEqby
-         MydjS59ZBkxb4rCrj5DwabsFi81NkU2TSO+HVzfIv2cbu3lWm8Mqejrq8gDpe7KFYVCN
-         0o16xKSXKfLtzQUajyIiOlJP/3Eb8OFo5k3dxGYmM/kUEbU4I2Nkn9pcKDe6ZCjh5xIF
-         u5HSpGZXBs4jVsz+2EuVBCokn6igPotLq87ndGCdnIjoC4OaKhCcm8Pg/47LTj+Vn/KG
-         +ILA==
-X-Gm-Message-State: AOAM53289W+XUXWmrQssCh83jEeXozBhar2o1ijKrubqF/xGsxGv6Qa3
-        c4FbRSNbm8gfv9VFL/C1m0Qn1w==
-X-Google-Smtp-Source: ABdhPJw9RfokvC4wwM+qsCTx/+HZcVAAN/tnfXnOw39oZ0M2m9VGVeMk6Qq7nqQbK08fk1bliRmcUA==
-X-Received: by 2002:a05:6512:3a85:: with SMTP id q5mr1140468lfu.35.1642021836492;
-        Wed, 12 Jan 2022 13:10:36 -0800 (PST)
-Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id q5sm91870lfb.135.2022.01.12.13.10.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 13:10:36 -0800 (PST)
-Message-ID: <17b8de50-426a-2543-a79a-aab44c9d52cf@cogentembedded.com>
-Date:   Thu, 13 Jan 2022 00:10:35 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 2/3] arm64: dts: renesas: r8a77961: Add lvds0 device node
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     David Airlie <airlied@linux.ie>, Rob Herring <robh+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211224052309.1997096-1-nikita.yoush@cogentembedded.com>
- <20211224052309.1997096-3-nikita.yoush@cogentembedded.com>
- <YcyTV4fJqMHIeyYB@pendragon.ideasonboard.com>
- <87626d61-ada0-c220-bea5-5330f5256629@cogentembedded.com>
- <YcyXQxW3kRqQ2Yv0@pendragon.ideasonboard.com>
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-In-Reply-To: <YcyXQxW3kRqQ2Yv0@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        id S230013AbiALVUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 16:20:37 -0500
+Received: from mga03.intel.com ([134.134.136.65]:1416 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229491AbiALVUg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 16:20:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642022436; x=1673558436;
+  h=from:to:cc:subject:date:message-id;
+  bh=oxP3kSzMpQU8LS3Jv/vnJRR1g2ZKuhTNt8AONEbvO4I=;
+  b=beRX8cVocSudKRkV70l3ausB2Lo4uuawQuAahj25Y+Ej2etkQ1Yj95Qj
+   PQX9i3tRVtgKDLd+rGEF75F++zc5wX77gLFx5grL7zrwFCsHuVmEINTo2
+   KQ0EiAFirYWNbWPlU60LeSY8qa0vUc9fPilZ+nc7KpPPY1KBxTSjuICq/
+   KP2/EDEIT2BGKDqgfDUOjWvBgJk2ekVLBbQS+3sDuhPjVHDC51q73RlMT
+   6iyT8OEPogsthLizjkw50E3fshGXVgyaROm6qIBN4MJdcwwKAvh12Ia1c
+   +oLWVvfCKcezw2XePwBtDLTN7v81VBgmK0rg9OkgblrGlpu/BF1lFvn9Q
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="243810777"
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="243810777"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 13:20:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="529378212"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by orsmga008.jf.intel.com with ESMTP; 12 Jan 2022 13:20:35 -0800
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     linux-crypto@vger.kernel.org, dm-devel@redhat.com,
+        herbert@gondor.apana.org.au, ebiggers@kernel.org, ardb@kernel.org,
+        x86@kernel.org, luto@kernel.org, tglx@linutronix.de, bp@suse.de,
+        dave.hansen@linux.intel.com, mingo@kernel.org
+Cc:     linux-kernel@vger.kernel.org, dan.j.williams@intel.com,
+        charishma1.gairuboyina@intel.com, kumar.n.dwarakanath@intel.com,
+        ravi.v.shankar@intel.com, chang.seok.bae@intel.com
+Subject: [PATCH v5 00/12] x86: Support Key Locker
+Date:   Wed, 12 Jan 2022 13:12:46 -0800
+Message-Id: <20220112211258.21115-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>> +				port@1 {
->>>> +					reg = <1>;
->>>> +					lvds0_out: endpoint {
->>>>    					};
->>>
->>> Endpoints must have a remote-endpoint property. Let's drop the endpoint
->>> here and keep the port only, the endpoint can be declared in board
->>> files.
->>>
->>> If you're fine with this change I can make it when applying the patch.
->>
->> This empty endpoint is currently defined in dtsi files for other r-car
->> gen3 SoCs.
->>
->> Goal here is to define lvds0_out label that is then used in extension
->> board dtsi files to link to the port.
->>
->> In this patch I just used the same approach as in files laying nearby.
->>
->> If this approach is not appropriate, then perhaps need to fix it in
->> files for all SoCs, to make it possible for extension board dtsi to be
->> compatible with all of them.
-> 
-> I'm writing a patch to drop those right now :-) I'll CC you.
+Changes from v4 [1]:
+* Drop CBC mode support (PATCH10). (Eric Biggers)
+* Update the changelog (PATCH8). (Rafael Wysocki)
 
-This is not the only place where rcag-gen3 dtsi files are using empty-endpoint pattern.
+A couple of other things outside of these patches are still in progress:
+* Support DM-crypt/cryptsetup for Key Locker usage (Andy Lutomirski)
+  [2].
+* Understand decryption under-performance (Eric Biggers and Milan Broz)
+  [3][4].
 
-du rgb port is defined in the same way.
+This feature's usage for the threat model can be found in the previous
+cover letter [1]. This version is based on 5.16.
 
-And, I've submitted a patch some weeks ago [1] that hooked into that.
+Thanks,
+Chang
 
-[1] https://lore.kernel.org/lkml/20211225115308.2152364-1-nikita.yoush@cogentembedded.com/
+[1] V4: https://lore.kernel.org/lkml/20211214005212.20588-1-chang.seok.bae@intel.com/
+[2] https://lore.kernel.org/lkml/75ec3ad1-6234-ae1f-1b83-482793e4fd23@kernel.org/
+[3] https://lore.kernel.org/lkml/YbqRseO+TtuGQk5x@sol.localdomain/
+[4] https://lore.kernel.org/lkml/120368dc-e337-9176-936c-4db2a8bf710e@gmail.com/
 
-Since there was no reply, I am about to resubmit it.
-But, perhaps need to do something with empty-endpoint pattern first?
+Chang S. Bae (12):
+  Documentation/x86: Document Key Locker
+  x86/cpufeature: Enumerate Key Locker feature
+  x86/insn: Add Key Locker instructions to the opcode map
+  x86/asm: Add a wrapper function for the LOADIWKEY instruction
+  x86/msr-index: Add MSRs for Key Locker internal wrapping key
+  x86/keylocker: Define Key Locker CPUID leaf
+  x86/cpu/keylocker: Load an internal wrapping key at boot-time
+  x86/PM/keylocker: Restore internal wrapping key on resume from ACPI
+    S3/4
+  x86/cpu: Add a configuration and command line option for Key Locker
+  crypto: x86/aes - Prepare for a new AES implementation
+  crypto: x86/aes-kl - Support AES algorithm using Key Locker
+    instructions
+  crypto: x86/aes-kl - Support XTS mode
 
-Nikita
+ .../admin-guide/kernel-parameters.txt         |   2 +
+ Documentation/x86/index.rst                   |   1 +
+ Documentation/x86/keylocker.rst               |  98 +++
+ arch/x86/Kconfig                              |   3 +
+ arch/x86/crypto/Makefile                      |   5 +-
+ arch/x86/crypto/aes-intel_asm.S               |  26 +
+ arch/x86/crypto/aes-intel_glue.c              | 125 ++++
+ arch/x86/crypto/aes-intel_glue.h              |  48 ++
+ arch/x86/crypto/aeskl-intel_asm.S             | 633 ++++++++++++++++++
+ arch/x86/crypto/aeskl-intel_glue.c            | 216 ++++++
+ arch/x86/crypto/aesni-intel_asm.S             |  58 +-
+ arch/x86/crypto/aesni-intel_glue.c            | 239 ++-----
+ arch/x86/crypto/aesni-intel_glue.h            |  17 +
+ arch/x86/include/asm/cpufeatures.h            |   1 +
+ arch/x86/include/asm/disabled-features.h      |   8 +-
+ arch/x86/include/asm/keylocker.h              |  45 ++
+ arch/x86/include/asm/msr-index.h              |   6 +
+ arch/x86/include/asm/special_insns.h          |  32 +
+ arch/x86/include/uapi/asm/processor-flags.h   |   2 +
+ arch/x86/kernel/Makefile                      |   1 +
+ arch/x86/kernel/cpu/common.c                  |  21 +-
+ arch/x86/kernel/cpu/cpuid-deps.c              |   1 +
+ arch/x86/kernel/keylocker.c                   | 199 ++++++
+ arch/x86/kernel/smpboot.c                     |   2 +
+ arch/x86/lib/x86-opcode-map.txt               |  11 +-
+ arch/x86/power/cpu.c                          |   2 +
+ crypto/Kconfig                                |  36 +
+ tools/arch/x86/lib/x86-opcode-map.txt         |  11 +-
+ 28 files changed, 1633 insertions(+), 216 deletions(-)
+ create mode 100644 Documentation/x86/keylocker.rst
+ create mode 100644 arch/x86/crypto/aes-intel_asm.S
+ create mode 100644 arch/x86/crypto/aes-intel_glue.c
+ create mode 100644 arch/x86/crypto/aes-intel_glue.h
+ create mode 100644 arch/x86/crypto/aeskl-intel_asm.S
+ create mode 100644 arch/x86/crypto/aeskl-intel_glue.c
+ create mode 100644 arch/x86/crypto/aesni-intel_glue.h
+ create mode 100644 arch/x86/include/asm/keylocker.h
+ create mode 100644 arch/x86/kernel/keylocker.c
+
+
+base-commit: df0cc57e057f18e44dac8e6c18aba47ab53202f9
+--
+2.17.1
+

@@ -2,105 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86EB048BF43
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5328E48BF46
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 08:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348719AbiALHuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 02:50:52 -0500
-Received: from mga07.intel.com ([134.134.136.100]:49119 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237906AbiALHut (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:50:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641973849; x=1673509849;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w/A8QwlNj0/nYgZRCUL0YzBzpWcnv1BTGNu1Z96AcjI=;
-  b=COWawAmnlfZJ0ujdZDCkfSeroNHIkUykT2JORJ60cbFip6MxTOruwfN2
-   xoNjLH1sOrXIfl3Vt6P3eStTwJG0ZOzkKVy7PKbYI4tGSeVcXjHiv53x7
-   bLvCk8OTCHG3Nh1IBbEWL/RRdSCKP9KZQA1kizikqY/oSEsYSQHwwMlxu
-   emuKBilRUwlPKrWLdAy5jlGdrChUeQLSisWPgWmHWcNwEL2zyQZGiTXJV
-   ebd4E0dl/5v4GZJ5qWLU1L1WxmC8rw2CtdaAegFrZ+ASL0JBIL/MePJqX
-   zmTZBOFRB1UtxXlogc6R6b3ixw45DFBb6Z81pizO4lbogQI6SvIv1PN8O
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="307032297"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="307032297"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2022 23:50:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="670072590"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 11 Jan 2022 23:50:46 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 12 Jan 2022 09:50:45 +0200
-Date:   Wed, 12 Jan 2022 09:50:45 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Wayne Chang <waynec@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, singhanc@nvidia.com
-Subject: Re: [PATCH v4 1/1] ucsi_ccg: Check DEV_INT bit only when starting
- CCG4
-Message-ID: <Yd6IVb5hsc2jpXqn@kuha.fi.intel.com>
-References: <20220112054950.615341-1-waynec@nvidia.com>
+        id S1348850AbiALHxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 02:53:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60620 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237906AbiALHxH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 02:53:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641973986;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ns9t0MBpHKEo9l+PjwNtwXiT/Qp5fHMZFtVVafL1/oM=;
+        b=CSuBthrserbck+o/NhB58OnhxGCVjMm31LH0GFunQMTwdnKf5SS81Qs8gCAwC5NzEBGRtD
+        uIAMp4E6e9Gzp3SQYPeToFOaVxzUxYHsD5z6t8F/VHC1fLRzDpIiXGQwjITZo1+ow1lLh9
+        5pPvr/HX1NUpv9AN6u98d15p+91T7pE=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-261-tEtKfLXrP1a4Vd1xpcpsyQ-1; Wed, 12 Jan 2022 02:53:04 -0500
+X-MC-Unique: tEtKfLXrP1a4Vd1xpcpsyQ-1
+Received: by mail-lf1-f72.google.com with SMTP id s16-20020a056512215000b0042bd76cb189so1110892lfr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 23:53:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Ns9t0MBpHKEo9l+PjwNtwXiT/Qp5fHMZFtVVafL1/oM=;
+        b=4sHnHRJRP2J6t17jL8q02xwplCgNsBhIujL+6lq5VLZidofK+7Xr6NHtkuE7WSn86O
+         zKAtYM5xGS9d9FjOl4EHI337wkGVA4axYVsnDA7Ob1ZNLwUdfojdEqfN053xDBf9R85w
+         5sZDe2DdQBBWHheC147sljMuH31w0u9SKHkVd3AkdHuDKsrcPv2Q1FZFNlN9LD3RI+qL
+         My7z/w3H6x6vIqwH7Qqk7YKThhuufZmU5inh+ZHer+9BePnT26mSAkUJ4kh30wjEIfxe
+         xx8aLGOvMDQGoDpYTjMdXFUlt9RL0HstQj9obRtPuxUOWtCrrtQWbH6qftPhewuEFhxE
+         HrXw==
+X-Gm-Message-State: AOAM530ahkGT3kqB8VKytIhYAdnnish1+8b5fcJSSxfxzwu4Qn0Agwdx
+        nugBXtaIsLgNlivL+YQRh7qUJdqmqp45++jUl9pfyCVYKb3KsvVPtP4H3DzpEFTpA+h16IXVt2U
+        mQi1aU3vlyos0rDOFJT5pDe9doUVsDwEqWxNGswAc
+X-Received: by 2002:a2e:b791:: with SMTP id n17mr5365911ljo.307.1641973983370;
+        Tue, 11 Jan 2022 23:53:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzAS4eHnu7EzgPGuaFqm3MShiZCtBix4yIV1Kh9Y6VlrHnXbAYcHpDgkdS6SvoHCzGG98EktTkkUuZ0bogSlY4=
+X-Received: by 2002:a2e:b791:: with SMTP id n17mr5365902ljo.307.1641973983187;
+ Tue, 11 Jan 2022 23:53:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220112054950.615341-1-waynec@nvidia.com>
+References: <tencent_7A45E1E967F13AE14B061269@qq.com> <20220111065033-mutt-send-email-mst@kernel.org>
+ <CACGkMEuAoSwore14qnuMDgdEtWh-UOJf1=oR9vhPMff8hoEZEQ@mail.gmail.com> <20220112013018-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220112013018-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 12 Jan 2022 15:52:52 +0800
+Message-ID: <CACGkMEs6u7o4pX4ahvnfPByt1BrSfmaFfEKm5pQJsjjH+XHYxw@mail.gmail.com>
+Subject: Re: [PATCH] virtio_vdpa: Support surprise removal of virtio vdpa device
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     =?UTF-8?B?5p2O5Lic5Y2H?= <lidongsheng@dayudpu.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jan 12, 2022 at 2:30 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Wed, Jan 12, 2022 at 10:23:07AM +0800, Jason Wang wrote:
+> > On Tue, Jan 11, 2022 at 7:52 PM Michael S. Tsirkin <mst@redhat.com> wro=
+te:
+> > >
+> > > On Tue, Jan 11, 2022 at 11:36:42AM +0800, =E6=9D=8E=E4=B8=9C=E5=8D=87=
+ wrote:
+> > > > When virtio vdpa device removed, the abnormal damage of the device =
+cannot be
+> > > > perceived normally, which will cause problems similar to:
+> > > >
+> > > > 43bb40c5b926
+> > >
+> > >
+> > > Should include the subject of the patch too.
+> > >
+> > > > Hence, add the ability to abort the command on surprise removal
+> > > >
+> > > > Signed-off-by: dongsheng li <lidongsheng@dayudpu.com>
+> > >
+> > > When removing gracefully,
+> > > I am not sure we should break device unconditionally like this
+> > > before giving drivers a chance to clean up.
+> > > Should we just do it for surprise removal?
+> >
+> > That requires a new method to query whether it's a surprise removal.
+> >
+> > Thanks
+>
+> We can check pci_device_is_present like virtio does.
 
-On Wed, Jan 12, 2022 at 01:49:50PM +0800, Wayne Chang wrote:
-> From: Sing-Han Chen <singhanc@nvidia.com>
-> 
-> after driver sending the UCSI_START cmd, CCGx would
-> clear Bit 0:Device Interrupt in the INTR_REG if CCGX
-> reset successfully.
-> 
-> however, there might be a chance that other bits in
-> INTR_REG are not cleared due to internal data queued
-> in PPM and cause the driver thinks CCGx reset failed.
-> 
-> the commit checks bit 0 in INTR_REG and ignore other
-> bits. ucsi driver would reset PPM later.
-> 
-> Fixes: 247c554a14aa ("usb: typec: ucsi: add support for Cypress CCGx")
+Though the PCI device is the main user, we are vdpa transport that is
+unaware of the type of its parent.
 
-So... no need to take this to the stable kernel releases?
+So it looks to me we need a new method and PCI parent and do call this
+function when needed.
 
-> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> ---
+Thanks
 
-What has changed since v3 (and v2) - there is no patch changelog here?
+>
+> > >
+> > > > ---
+> > > >  drivers/virtio/virtio_vdpa.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_v=
+dpa.c
+> > > > index 4a9ddb44b2a7..fd930409d190 100644
+> > > > --- a/drivers/virtio/virtio_vdpa.c
+> > > > +++ b/drivers/virtio/virtio_vdpa.c
+> > > > @@ -374,6 +374,7 @@ static void virtio_vdpa_remove(struct vdpa_devi=
+ce *vdpa)
+> > > >  {
+> > > >   struct virtio_vdpa_device *vd_dev =3D vdpa_get_drvdata(vdpa);
+> > > >
+> > > > + virtio_break_device(vd_dev->vdev);
+> > > >   unregister_virtio_device(&vd_dev->vdev);
+> > > >  }
+> > > >
+> > > > --
+> > > > 2.17.1
+> > >
+>
 
-In case this is new to you, you list those changes under that '---'
-line so they don't become part of the permanent changelog:
-
-https://docs.kernel.org/process/submitting-patches.html#the-canonical-patch-format
-
->  drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> index bff96d64dddf..6db7c8ddd51c 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -325,7 +325,7 @@ static int ucsi_ccg_init(struct ucsi_ccg *uc)
->  		if (status < 0)
->  			return status;
->  
-> -		if (!data)
-> +		if (!(data & DEV_INT))
->  			return 0;
->  
->  		status = ccg_write(uc, CCGX_RAB_INTR_REG, &data, sizeof(data));
-
-thanks,
-
--- 
-heikki

@@ -2,195 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 076FC48CA62
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F26648CA5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 18:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344331AbiALRtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 12:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344086AbiALRtN (ORCPT
+        id S1344188AbiALRtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 12:49:08 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:58954 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344086AbiALRtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 12:49:13 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE365C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:49:12 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id c190so2409383qkg.9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 09:49:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FGEfHWlf9UMI6v4enCzCD7r7seKvBt4wr+xOvzAydtg=;
-        b=WbGG70yB5ix1xJm1WZIdyIccnKWNDVsMGBobYnUvRJtVGwRDFABrhR3HRodaO2H2gT
-         o+mvzdaj9LW0ogQ/fZRLZ/G14ELweRvxby5HD2yygkGanrwyi0saa1PLA/b2HANEP9wP
-         uVBQAarQx5wX6tUlOrtGMc8zeFxL6B2vOiWjnaC9BUVZle/bRqhOpgFK7qozPGiliRpF
-         KQaDAmpG3GhdrpqiN7KljC2pW8M/Z/6NhEvocoQhtnW+0wIJ3qYItndrv8QOCrbR/Jxa
-         UB+N+Y+r+k/dW13lG7nxHXxFVvAgkFh1FoS5a/O9Z9S/tPGYbuQ9WwEOG5hY/jGGrlg2
-         U5EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FGEfHWlf9UMI6v4enCzCD7r7seKvBt4wr+xOvzAydtg=;
-        b=eapshznX/pS5/nG5UeFeCh0qKmI9i66NFj6redO+M676R3HOHy/7WDjsOhw4MCvUym
-         23qCYuvTs8/nLOj4oSqDVW0VbYmwT+qwELofcmcC9uDv9id45wmIA24j1gCLPfG2cN5h
-         ESdJ3xptwa/vXWeu9U2N3OT9iZ0LWyu0pe4Tx89H0JR2y66E0X5P1NzybFmUtGP/hd3i
-         huuF+X5+iOvJUfyWK80I/9zzKg8G3guTbfaWdhJdqCUW1utigWYymBjJ/SByysc3uYDR
-         DollXBq1FqqggRX17ziMZgtiLjCYzBHI2tg1HzXEObdZhSr9zOJKmsuyN2X3QVMQIx6s
-         yZmg==
-X-Gm-Message-State: AOAM532wXej0o69fYHPjJ/XlInqylN744VGJYcRdi3bLo5nXmi++gpA8
-        YhqQMvKNIwDzIn77a5hWUyv6sNYOk3WqZjphIju+kQ==
-X-Google-Smtp-Source: ABdhPJxfN2XJ4LOiyU4hogddx6yOZvk/BIWqCAvRPuDRWYY6wyEn2p4yI9Sa7X55t3Lg1CYmOJU4b8GfjXSbXBZJY5g=
-X-Received: by 2002:a25:7807:: with SMTP id t7mr1066672ybc.488.1642009751595;
- Wed, 12 Jan 2022 09:49:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20220111232309.1786347-1-surenb@google.com> <Yd7oPlxCpnzNmFzc@cmpxchg.org>
- <CAJuCfpGHLXDvMU1GLMcgK_K72_ErPhbcFh1ZvEeHg025yinNuw@mail.gmail.com>
-In-Reply-To: <CAJuCfpGHLXDvMU1GLMcgK_K72_ErPhbcFh1ZvEeHg025yinNuw@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 12 Jan 2022 09:49:00 -0800
-Message-ID: <CAJuCfpEaM3KoPy3MUG7HW2yzcT6oJ5gdceyHPNpHrqTErq27eQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] psi: Fix uaf issue when psi trigger is destroyed
- while being polled
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Eric Biggers <ebiggers@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Ingo Molnar <mingo@redhat.com>,
+        Wed, 12 Jan 2022 12:49:06 -0500
+Date:   Wed, 12 Jan 2022 18:49:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1642009744;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HKPb/OgUpnzZpZ4ZaPFda8NZxcSKTOmxke8zHueMxac=;
+        b=1hQCpQQQ+jHY+D72ntC/E5Js8/B0BNdQPukf/gTE1gtTWD0umpu8zk8kmazRtUhScf/+C4
+        H3w+uALRaDkNI2HWGdJ/+yVrV2D54yzOl8DjmlfpvVsP5t8yJcOIhdHeldDcY8Ho4fpAHW
+        mvF6JrOBBWUmNz0qslncNKeMrjg6KuwoonPWpzskyfGOv368bLIynnxIa3ducHX0dXoaPj
+        5LQ60lUY8JICr0xXvcqBMcyXZTUeGR+Iz/f5Mr4cHvWYo6JK3u/2XQF7U2ip2xP/pqspaP
+        bjrVuwexhm0EGiQNDfpF5H7lzJRSQ4nHD5KMdI9XEHjNgmrn0OXYRf+nUeTtmA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1642009744;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HKPb/OgUpnzZpZ4ZaPFda8NZxcSKTOmxke8zHueMxac=;
+        b=IV0GB3BaIALcRkDSiM2M6ufawjT2zJkwDW0wms3ZNdsZ2piidnOHqn7fJLsWdOxnc6/NX9
+        IF8rBbUmblwOdIAQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Theodore Ts'o <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>,
-        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: Re: [PATCH 5/5] random: Defer processing of randomness on PREEMPT_RT.
+Message-ID: <Yd8Ujw4t8DKYuhZK@linutronix.de>
+References: <20211207121737.2347312-1-bigeasy@linutronix.de>
+ <20211207121737.2347312-6-bigeasy@linutronix.de>
+ <CAHmME9q2Yid56ZZ9sBQWjEWEK2B06g3H9KYRwWqExXRoCdbPdA@mail.gmail.com>
+ <20211207201037.h46573oa5nfj33xq@linutronix.de>
+ <CAHmME9pzdXyD0oRYyCoVUSqqsA9h03-oR7kcNhJuPEcEMTJYgw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAHmME9pzdXyD0oRYyCoVUSqqsA9h03-oR7kcNhJuPEcEMTJYgw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 9:43 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> )
->
-> On Wed, Jan 12, 2022 at 6:40 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> >
-> > On Tue, Jan 11, 2022 at 03:23:09PM -0800, Suren Baghdasaryan wrote:
-> > > With write operation on psi files replacing old trigger with a new one,
-> > > the lifetime of its waitqueue is totally arbitrary. Overwriting an
-> > > existing trigger causes its waitqueue to be freed and pending poll()
-> > > will stumble on trigger->event_wait which was destroyed.
-> > > Fix this by disallowing to redefine an existing psi trigger. If a write
-> > > operation is used on a file descriptor with an already existing psi
-> > > trigger, the operation will fail with EBUSY error.
-> > > Also bypass a check for psi_disabled in the psi_trigger_destroy as the
-> > > flag can be flipped after the trigger is created, leading to a memory
-> > > leak.
-> > >
-> > > Fixes: 0e94682b73bf ("psi: introduce psi monitor")
-> > > Cc: stable@vger.kernel.org
-> > > Reported-by: syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com
-> > > Analyzed-by: Eric Biggers <ebiggers@kernel.org>
-> > > Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> >
-> > Acked-by: Johannes Weiner <hannes@cmpxchg.org>
->
-> Hmm. kernel test robot notified me of new (which are not really new)
-> warnings but I don't think this patch specifically introduced them:
->
-> kernel/sched/psi.c:1112:21: warning: no previous prototype for
-> function 'psi_trigger_create' [-Wmissing-prototypes]
->    struct psi_trigger *psi_trigger_create(struct psi_group *group,
->                        ^
->    kernel/sched/psi.c:1112:1: note: declare 'static' if the function
-> is not intended to be used outside of this translation unit
->    struct psi_trigger *psi_trigger_create(struct psi_group *group,
->    ^
->    static
-> >> kernel/sched/psi.c:1182:6: warning: no previous prototype for function 'psi_trigger_destroy' [-Wmissing-prototypes]
->    void psi_trigger_destroy(struct psi_trigger *t)
->         ^
->    kernel/sched/psi.c:1182:1: note: declare 'static' if the function
-> is not intended to be used outside of this translation unit
->    void psi_trigger_destroy(struct psi_trigger *t)
->    ^
->    static
->    kernel/sched/psi.c:1249:10: warning: no previous prototype for
-> function 'psi_trigger_poll' [-Wmissing-prototypes]
->    __poll_t psi_trigger_poll(void **trigger_ptr,
->             ^
->    kernel/sched/psi.c:1249:1: note: declare 'static' if the function
-> is not intended to be used outside of this translation unit
->    __poll_t psi_trigger_poll(void **trigger_ptr,
->    ^
->
-> This happens with the following config:
->
-> CONFIG_CGROUPS=n
-> CONFIG_PSI=y
->
-> With cgroups disabled these functions are defined as non-static but
-> are not defined in the header
-> (https://elixir.bootlin.com/linux/latest/source/include/linux/psi.h#L28)
-> since the only external user cgroup.c is disabled. The cleanest way to
-> fix these I think is by doing smth like this in psi.c:
->
-> struct psi_trigger *_psi_trigger_create(struct psi_group *group, char
-> *buf, size_t nbytes, enum psi_res res)
-> {
->   // original psi_trigger_create code
-> }
->
-> #ifdef CONFIG_CGROUPS
->
-> struct psi_trigger *psi_trigger_create(struct psi_group *group, char
-> *buf, size_t nbytes, enum psi_res res)
-> {
->     return _psi_trigger_create(group, buf, nbytes, res);
-> }
->
-> #else
->
-> static struct psi_trigger *psi_trigger_create(struct psi_group *group,
-> char *buf, size_t nbytes, enum psi_res res)
-> {
->     return _psi_trigger_create(group, buf, nbytes, res);
-> }
->
-> #endif
+On 2021-12-20 15:38:58 [+0100], Jason A. Donenfeld wrote:
+> Hey Sebastian,
+Hi Jason,
 
-Actually this would be enough:
+> I think I understand the motivation for this patchset, and maybe it'll
+> turn out to be the only way of accomplishing what RT needs. But I
+> really don't like complicating the irq ingestion flow like that,
+> splitting the captured state into two pieces, and having multiple
+> entry points. It makes the whole thing more difficult to analyze and
+> maintain. Again, maybe we'll *have* to do this ultimately, but I want
+> to make sure we at least explore the alternatives fully.
 
-static struct psi_trigger *_psi_trigger_create(struct psi_group
-*group, char *buf, size_t nbytes, enum psi_res res)
-{
-   // original psi_trigger_create code
-}
+Sure.
 
-#ifdef CONFIG_CGROUPS
- struct psi_trigger *psi_trigger_create(struct psi_group *group, char
-*buf, size_t nbytes, enum psi_res res)
- {
-     return _psi_trigger_create(group, buf, nbytes, res);
- }
-#endif
+> One thing you brought up is that the place where a spinlock becomes
+> problematic for RT is if userspace goes completely nuts with
+> RNDRESEEDCRNG. If that's really the only place where contention might
+> be harmful, can't we employ other techniques there instead? For
+> example, just ratelimiting the frequency at which RNDRESEEDCRNG can be
+> called _before_ taking that lock, using the usual ratelimit.h
+> structure?
 
-and locally we use _psi_trigger_create().
+ratelimit. Didn't think about it.
+There is RNDRESEEDCRNG and RNDADDENTROPY from the user API and lets
+ignore the kernel users for the moment.
+With the DEFAULT_RATELIMIT_BURST we would allow 10 "concurrent"
+operations. This isn't as bad as previously but still not perfect (the
+latency number jumped up to 50us in a smoke test).
+Also in the !__ratelimit() case we would have to return an error. This
+in turn breaks the usecase where one invokes 11 times
+ioctl(,RNDADDENTROPY,) with a smaller buffer instead once with a big
+buffer. Not sure how bad this is but it creates corner cases=E2=80=A6
+We could also sleep & loop until __ratelimit() allows but it looks odd.
 
->
-> Two questions:
-> 1. Is this even worth fixing?
-> 2. If so, I would like to do that as a separate patch (these warnings
-> are unrelated to the changes in this patch). Would that be ok?
-> Thanks,
-> Suren.
+>            Or, alternatively, what about a lock that very heavily
+> prioritizes acquisitions from the irq path rather than from the
+> userspace path? I think Herbert might have had a suggestion there
+> related to the net stack's sock lock?
+
+Using a semaphore might work. down_trylock() can be invoked from
+hard-irq context while the preemptible context would use down() and
+sleep if needed. add_interrupt_randomness() has already a trylock. We
+have add_disk_randomness() which is invoked from IRQ-context (on !RT) so
+we would have to use trylock there, too (for its mix_pool_bytes()
+invocation).
+The sock-lock is either always invoked from preemptible context or has a
+plan B in the contended case if invoked from atomic context. I'm not
+sure what plan B could be here in atomic context. I *think* we need to
+do these things and can't delay them.
+Now that I think about it, we could add a mutex_t which is acquired
+first for the user-API part to ensure that there is only one at a time
+(instead of using ratelimit). Assuming that there is nothing else in the
+kernel that can hammer on the lock (getrandom() is kind of rate
+limited). If we really want to go that road, I would have to retest and
+see how long extract_buf() holds the lock acquired.
+
+Either way, we still need to split out the possible crng_reseed()
+invocations (if (crng_init < 2)) due to crng_state::lock which must not
+be acquired on PREEMPT_RT in hard-irq context
+(add_interrupt_randomness() -> credit_entropy_bits()). I *think* the
+other places were fine.
+
+> Jason
+
+Sebastian

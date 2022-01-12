@@ -2,114 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7999C48BC08
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7935B48BC0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347422AbiALAwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 19:52:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
+        id S1347455AbiALAx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 19:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343866AbiALAwH (ORCPT
+        with ESMTP id S1343866AbiALAxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 19:52:07 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD304C06173F;
-        Tue, 11 Jan 2022 16:52:06 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id t7so1284239qvj.0;
-        Tue, 11 Jan 2022 16:52:06 -0800 (PST)
+        Tue, 11 Jan 2022 19:53:25 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EBFC06173F;
+        Tue, 11 Jan 2022 16:53:25 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id y17so1259843qtx.9;
+        Tue, 11 Jan 2022 16:53:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=jms.id.au; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+BgWpZzbxCgBoKpAYDSuqEtaMBxXySjsMaStwtkHZLg=;
-        b=OB80mjKifIvc9EHx5zG+SkcH7yRMZSrRQfy3eaWc/DKzOeWK4e5uBMsZJIbVO0f/Cl
-         i+w7LX3TWzIbpkY+IWG4ncOGaxh0UkPRtJfoB4B5ybQtzvpgkKu15LlSR3n8tl2Q8N3b
-         mEvoTmZxcExs8mBAlxOFbFFwDWYaZ/bzYvD/o=
+        bh=bn6LXYkb5vJoSA2+wYUtLd/FTU4C6AaGfIXYzaQTkB4=;
+        b=g+bG6qp7d16/Bm6fLmk9kal8e7Ni7EM3x9j7lmP2pd2eYVaNmm7hxjrEj0Ckp3yJi6
+         3lsoB8UMz04gacJAEz0UAlEF7NK4vpKAAuh7WbS9HT+KiF4VgVHpRgpP01xiYbC53dE8
+         o0lo6e1atdVhDXDcHAY7viUa+8O6LGpugkPUY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+BgWpZzbxCgBoKpAYDSuqEtaMBxXySjsMaStwtkHZLg=;
-        b=tM1N17+mIhL8GjNUcKN23UE5u3fCSsBNzXmZgZOsrIEwiL5u1U2Jrfar96htBpNLuc
-         XxlA/pcysIpvdKiICAfficvl4+6ycXtbVBaIQ9cppJD7CszPbQwKpZzLc4fMQyR8fl5x
-         kxDJGm+epFOrD0oR8L70lInbEokEE/YuoZIn8qDhSuSn5UtEKvrVox/iuM9YvnfqDPB2
-         1cop/Oa2PCca+Ty8yPxW6QnHhz1BKS5GGJSG9/fbIqr3WfJeJp4tu8lO+HSPTKhPeTFu
-         cIxpR+dxUJW2AaU+VKy/Ty1KAJBAkDLA1ulAt6NTqJhq4K3NYJOmlTotJWJN2Q7Hw0pj
-         Ftug==
-X-Gm-Message-State: AOAM5330TB1OeZQ7bn7jDfSrHkKnwX2CTypUvnjRreLFkN3cB+ou/icb
-        9o8gaenz60MIutSB3JI/3RgVxBM7nlsp+p93IAqWIIzXGoE=
-X-Google-Smtp-Source: ABdhPJzJOUMABjpc3ziYwOsfvzN8V0NbNaMl+QXw963PVYPbHL58cyH5UiA1U0TR38v7QS3biobyspuPT3SSX4zmMi0=
-X-Received: by 2002:ad4:5dce:: with SMTP id m14mr5680680qvh.130.1641948725803;
- Tue, 11 Jan 2022 16:52:05 -0800 (PST)
+        bh=bn6LXYkb5vJoSA2+wYUtLd/FTU4C6AaGfIXYzaQTkB4=;
+        b=MIxchdvFX6OGlZBd3Lp08Z5gAFsdolyEou7oZSyVDAUCYaHtpXT8va1IygHnj4BgT+
+         xv+/e2TZ6qH/GLQLYBPf8w692aUYymEhGeMHV9VA25qONoGbRkRXXFrh6NWxhaNblOEH
+         ThzVNRmqE9SYeIf4uBVNEeVVpWiHYV19+b4RVRMQEa4EirU6P9ewbJfAhP5JS+FjeQRw
+         gpcnkSaN2T+rxRh9bJFwpYzQx694sHJXkVS2klYgDEkNEYjkzDI68DKllmgF99C+u0gm
+         lJDrZAZaTPmVzPnFuwIRkKpUbpBH/beOl9lTM8nRMWPxe0u5p/MVD/vdPnkBmkLbPFfF
+         9nJw==
+X-Gm-Message-State: AOAM533eCPTK2UDpB26BWtpCcR8qtaIDteacp0tbzKIM2MFIQaa/u1rk
+        9HxGIsjbwg1TQ+JChX6ZGdtQQoRc0+fKhgf+dc4=
+X-Google-Smtp-Source: ABdhPJxTg2vyG/RY3cEh3LvIQ5+6rj7Uz5GMFpvmPNspTJRCbdFJYoUg/3X4brah8OJSqaTk4qsHuqoJz1+zVF1gJUA=
+X-Received: by 2002:ac8:5a0b:: with SMTP id n11mr5879929qta.625.1641948804856;
+ Tue, 11 Jan 2022 16:53:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20211214045348.13702-1-jammy_huang@aspeedtech.com>
-In-Reply-To: <20211214045348.13702-1-jammy_huang@aspeedtech.com>
+References: <20211214040239.8977-1-steven_lee@aspeedtech.com>
+ <20211214040239.8977-2-steven_lee@aspeedtech.com> <CAMRc=MdAgK7zKuJ=7cA2T-mSTJD3tWSW2aEB6G=0Tz4X+iHcZQ@mail.gmail.com>
+ <CAMRc=McjZZTMjR+riwjj6SLEh=fYq0yjBQYNgzGXHok6=OTz_w@mail.gmail.com>
+In-Reply-To: <CAMRc=McjZZTMjR+riwjj6SLEh=fYq0yjBQYNgzGXHok6=OTz_w@mail.gmail.com>
 From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 12 Jan 2022 00:51:53 +0000
-Message-ID: <CACPK8XfkXi6M=gzfkYcuoga6WxnzSm2+mspBt4gjop7Ytm+VCA@mail.gmail.com>
-Subject: Re: [PATCH] media: aspeed: Fix no complete irq for non-64-aligned width
-To:     Jammy Huang <jammy_huang@aspeedtech.com>
-Cc:     Eddie James <eajames@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>, linux-media@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Wed, 12 Jan 2022 00:53:12 +0000
+Message-ID: <CACPK8XdXkrTfsMoZRDjQ_-MwOQ-no_B2yG3F79_SkQ0o6mGuQg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: gpio-aspeed-sgpio: Fix wrong hwirq base in
+ irq handler
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Steven Lee <steven_lee@aspeedtech.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hongwei Zhang <Hongweiz@ami.com>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        Billy Tsai <billy_tsai@aspeedtech.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 at 04:53, Jammy Huang <jammy_huang@aspeedtech.com> wrote:
+On Mon, 3 Jan 2022 at 09:50, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 >
-> In ast2500, engine will stop occasionally for 1360x768.
+> On Wed, Dec 22, 2021 at 10:18 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> >
+> > On Tue, Dec 14, 2021 at 5:03 AM Steven Lee <steven_lee@aspeedtech.com> wrote:
+> > >
+> > > Each aspeed sgpio bank has 64 gpio pins(32 input pins and 32 output pins).
+> > > The hwirq base for each sgpio bank should be multiples of 64 rather than
+> > > multiples of 32.
+> > >
+> > > Signed-off-by: Steven Lee <steven_lee@aspeedtech.com>
+> > > ---
+> > >  drivers/gpio/gpio-aspeed-sgpio.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/gpio/gpio-aspeed-sgpio.c b/drivers/gpio/gpio-aspeed-sgpio.c
+> > > index 3d6ef37a7702..b3a9b8488f11 100644
+> > > --- a/drivers/gpio/gpio-aspeed-sgpio.c
+> > > +++ b/drivers/gpio/gpio-aspeed-sgpio.c
+> > > @@ -395,7 +395,7 @@ static void aspeed_sgpio_irq_handler(struct irq_desc *desc)
+> > >                 reg = ioread32(bank_reg(data, bank, reg_irq_status));
+> > >
+> > >                 for_each_set_bit(p, &reg, 32)
+> > > -                       generic_handle_domain_irq(gc->irq.domain, i * 32 + p * 2);
+> > > +                       generic_handle_domain_irq(gc->irq.domain, (i * 32 + p) * 2);
+> > >         }
+> > >
+> > >         chained_irq_exit(ic, desc);
+> > > --
+> > > 2.17.1
+> > >
+> >
+> > Joel, Andrew: any comments on this? I'd like to send it upstream tomorrow.
+> >
+> > Bart
 >
-> This is a bug which has been addressed, but the workaround is specific
-> for 1680 only. Here we make it more complete.
->
-> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
-> ---
->  drivers/media/platform/aspeed-video.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-> index 793b2adaa0f5..4d3e6b105d44 100644
-> --- a/drivers/media/platform/aspeed-video.c
-> +++ b/drivers/media/platform/aspeed-video.c
-> @@ -1055,18 +1055,20 @@ static void aspeed_video_set_resolution(struct aspeed_video *video)
->         /* Set capture/compression frame sizes */
->         aspeed_video_calc_compressed_size(video, size);
->
-> -       if (video->active_timings.width == 1680) {
-> +       if (!IS_ALIGNED(act->width, 64)) {
->                 /*
->                  * This is a workaround to fix a silicon bug on A1 and A2
+> I don't want to delay it anymore, it looks good so I queued it for fixes.
 
-Please add:  "a AST2500 silicon bug" so we know which A1/A2 this is
-referring to.
+Thanks for queuing. We were on leave over the holiday break, so no
+time for reviewing kernel patches.
 
-With that added, you can add:
+Cheers,
 
- Reviewed-by: Joel Stanley <joel@jms.id.au>
-
->                  * revisions. Since it doesn't break capturing operation of
->                  * other revisions, use it for all revisions without checking
-> -                * the revision ID. It picked 1728 which is a very next
-> -                * 64-pixels aligned value to 1680 to minimize memory bandwidth
-> +                * the revision ID. It picked new width which is a very next
-> +                * 64-pixels aligned value to minimize memory bandwidth
->                  * and to get better access speed from video engine.
->                  */
-> +               u32 width = ALIGN(act->width, 64);
-> +
->                 aspeed_video_write(video, VE_CAP_WINDOW,
-> -                                  1728 << 16 | act->height);
-> -               size += (1728 - 1680) * video->active_timings.height;
-> +                                  width << 16 | act->height);
-> +               size = width * act->height;
-
-You could make it clearer by putting the write on one line:
-
-                aspeed_video_write(video, VE_CAP_WINDOW, width << 16 |
-act->height);
+Joel

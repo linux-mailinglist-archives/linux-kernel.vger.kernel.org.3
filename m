@@ -2,85 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD84448BC1F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BB148BC22
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344866AbiALBDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 20:03:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344077AbiALBDG (ORCPT
+        id S1344928AbiALBDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 20:03:30 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:35524 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344077AbiALBD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 20:03:06 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A53C06173F
-        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 17:03:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0A393CE1BBB
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 01:03:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B244C36AE3;
-        Wed, 12 Jan 2022 01:03:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641949383;
-        bh=175gygNvX/igOQyHqyBDa6ice4DXkW9ovpC1HV7NYf8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=qPbVAd37NkIJ4rKHTPYTMlgNUGKVsXrwBbVC+iJhiX9euf2gI9U1KaPjHk3Ek9hdC
-         tvxWdAa2mpx/b654GnISkJNBgNvzm0lJees8WJ2bT95CKq6fDoWP+3hgfcEgGbuEPc
-         1/C5ew0aLceZfcLxj7bF5GswGypm0TAPrAPk9m3VMYvtCmL6ABRKU0nXCbZpMO+uAd
-         +UMz47e6ZTKQ3EAAeUiv6eb9GDDpR6aIIMG+WeJxy7ZfkNd49fiXrsOD6bB4KllpRi
-         wPOwjTzUgwVgqg7djrPd5vj6A/24TRfYBN3wPxy7P2UERQle16d2A9V8CW24XOrDwn
-         w1OcXL8WpLAxA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id BA94D5C0DA1; Tue, 11 Jan 2022 17:03:02 -0800 (PST)
-Date:   Tue, 11 Jan 2022 17:03:02 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alison Chaiken <achaiken@aurora.tech>
-Cc:     tglx@linutronix.de, peterz@infradead.org,
-        valentin.schneider@arm.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org, glenn@aurora.tech,
-        alison@she-devel.com
-Subject: Re: [PATCH 0/5] handle kthread_prio kernel cmdline parameter
- consistently
-Message-ID: <20220112010302.GL947480@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220111233253.21692-1-achaiken@aurora.tech>
+        Tue, 11 Jan 2022 20:03:29 -0500
+Received: by mail-oi1-f176.google.com with SMTP id s127so1450985oig.2;
+        Tue, 11 Jan 2022 17:03:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7/xhQSNHh4barqJ4wt/GcMo2vn/zDoORZPXjcUuthMM=;
+        b=pGjdvfyoY6KQaHCGg1TXGVEEhTKbh1ZH4aACfafVKOCCTouCtu9GzmnkcWuYr+TjwF
+         me1206zVnBxWqSIKXsUaRAF3F2mT5NKx2QLLSmnK3I5mt1t+md3PfCgXItXz85+YCu7P
+         QHhHNpQF277MmHaIup2kTGNLmmKpmhxFPmSxjIE/OfVO/g+UReAjzY2FSXzRZG21qe+O
+         bL4WRbvoskOKHEbNyO+SZ1oBI0tN9j3bi6kPcVatysZtZ/pCwMmOwW3WHrwIgTvGBCkO
+         xO5girKwWiZmaRcCdhCrZgxWzxcLSQtScGvSccoVGmPeLxC9NYFdJkfEzGCtA20Ilnrw
+         7HMQ==
+X-Gm-Message-State: AOAM530d40Hip0x+ZG+/JKWlboFNQCVsujEIVOqnxDYTcUzdCQ//S/oN
+        TTaNbB945v8XTu3hsO+L3g==
+X-Google-Smtp-Source: ABdhPJyQG3Sr8fAVbKno4jniidBsST5U8vWDMar2MLFyC03TyYk9cgComi6mOlJgJjqFJeS58CCZLQ==
+X-Received: by 2002:aca:a8cb:: with SMTP id r194mr2635059oie.121.1641949409344;
+        Tue, 11 Jan 2022 17:03:29 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 184sm1974617oih.58.2022.01.11.17.03.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 17:03:28 -0800 (PST)
+Received: (nullmailer pid 3831747 invoked by uid 1000);
+        Wed, 12 Jan 2022 01:03:27 -0000
+Date:   Tue, 11 Jan 2022 19:03:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     aisheng.dong@nxp.com, linux-arm-kernel@lists.infradead.org,
+        kernel@pengutronix.de, festevam@gmail.com,
+        jassisinghbrar@gmail.com, s.hauer@pengutronix.de,
+        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        linux-imx@nxp.com, shawnguo@kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] dt-bindings: mailbox: imx-mu: add i.MX8 SECO MU
+ support
+Message-ID: <Yd4o3+LesMIc3RLP@robh.at.kernel.org>
+References: <20220104062547.2103016-1-peng.fan@oss.nxp.com>
+ <20220104062547.2103016-6-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220111233253.21692-1-achaiken@aurora.tech>
+In-Reply-To: <20220104062547.2103016-6-peng.fan@oss.nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 03:32:49PM -0800, Alison Chaiken wrote:
-> When CONFIG_PREEMPT_RT=y, RCU_SOFTIRQ work is moved to dedicated rcuc
-> per-core threads.  The rcutree.kthread_prio kernel cmdline parameter
-> controls the priority of those threads.
+On Tue, 04 Jan 2022 14:25:45 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> A provided kthread_prio kernel cmdline parameter also elevates the
-> priority of rcuog threads, but only if they are launched from
-> rcu_spawn_gp_kthread(), not if they are launched from
-> rcu_spawn_one_nocb_kthread().  Fix this inconsistency.
+> Similar to i.MX8QM/QXP SCU, i.MX8 SECO MU is dedicated for
+> communication between SECO and Cortex-A cores from hardware design,
+> it could not be reused for other purpose. To use SECO MU more
+> effectivly, add "fsl,imx8-mu-seco" compatile to support fast IPC.
 > 
-> When CONFIG_RCU_NOCB_CPU=y, an rcu_nocbs command-line parameter
-> offloads the work of rcuc on designated cores to new rcuop threads
-> that are not pinned to the cores whose expired grace-period timer
-> callbacks they run.  While rcuop threads have the same function as
-> rcuc threads, their priority is not controlled by the kthread_prio
-> parameter.  Add this feature and update the documentation accordingly.
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/mailbox/fsl,mu.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Alison Chaiken (4):
->   RCU: move kthread_prio bounds-check to a separate function
->   RCU: make priority of grace-period thread consistent
->   RCU: elevate priority of offloaded callback threads
->   RCU: update documentation regarding kthread_prio cmdline parameter
 
-I have queued these for review and testing, thank you!
-
-2/4 appears to have been produced against a pre-merge-window mainline,
-so I had to adjust it a bit to queue it on -rcu.  Please check to make
-sure that I did not mess anything up.
-
-							Thanx, Paul
+Acked-by: Rob Herring <robh@kernel.org>

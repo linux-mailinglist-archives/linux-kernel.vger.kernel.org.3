@@ -2,118 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F49C48C10C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D7448C112
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352084AbiALJdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 04:33:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238137AbiALJc5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:32:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314BAC06173F;
-        Wed, 12 Jan 2022 01:32:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB371618D3;
-        Wed, 12 Jan 2022 09:32:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95FBDC36AEA;
-        Wed, 12 Jan 2022 09:32:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641979976;
-        bh=v1hvtKAaxy/THVYhBJu+JN0Ofk0qcb2ouwGb4TAUGUE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bmilo3hyiTmaJAN04zcSML1dfLz3GMCyIU20G6F+ZYZVJMBYQWeh3Xkpwyxz2LUxf
-         9me1UCusCZ7MpXICHzSilMkPNAQLbiCLK1kTZAVUbVSNNNVpEjDulwFm0+VOb8S0dH
-         J2KklY9e45ik2C4DY0CKT6d8opUD2l5MhjW8v+vH93c3iIuMRJdJHjmlWdHmiEYRuK
-         HqsTHtKz/i1+/D121rCadNLl9yPEydPh9RIKx5xQTvZsuZl+FiwkKh/LT7sj8lUefT
-         7YtpXWsHmdcJ65XR7EDsQIl/3IosJXIx8u3Qd5paJh+qlvqheyAni5ALaTc/AvDurV
-         Cprt5SutneWNA==
-Date:   Wed, 12 Jan 2022 10:32:53 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-i2c@vger.kernel.org
-Cc:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>,
-        Konstantin Kharlamov <hi-angel@yandex.ru>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in
- adapter"
-Message-ID: <Yd6gRR0jtqhRLwtB@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>,
-        Konstantin Kharlamov <hi-angel@yandex.ru>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-References: <20220106122452.18719-1-wsa@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="khzXD0fBZjVVSddA"
-Content-Disposition: inline
-In-Reply-To: <20220106122452.18719-1-wsa@kernel.org>
+        id S1352101AbiALJep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 04:34:45 -0500
+Received: from mga06.intel.com ([134.134.136.31]:61179 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238079AbiALJee (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 04:34:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641980074; x=1673516074;
+  h=from:to:cc:subject:date:message-id;
+  bh=7Ihay+nY/RB67tVnwCfgoiyLdn5DEIMTvTTTafjGIF8=;
+  b=RCxI39Noj70U/2xGxKx340ojDl+c+2vMgf1RET7nbqSlGPbh6/cEzKY8
+   9JAwR16ZTpe5z6Qmm8zJHc8MUKqlgVtwdUlf/O9tWrB2OYkgEa6RlN7vb
+   UANW4GGC3KfwQTX6DvCI8ql0XxwJw+FoD6+fmsOKGqMyD5RiRNXkiC49a
+   pmpkAcGYgMRT7Ds6OYcVTC71o5BuniZpVKo6oCNXceWUVYxKuozLTGPPf
+   C64cWNam2tr6dJXUSMCn0RLvFIOQ5XEU/V5FkBPv7cM41qV3n4kLLRAab
+   gFpP9YbhQ0pmJQEiHLpMvz84KNGRobKf5Svky6j0RTL53ZEu0lMg3Aipj
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="304436339"
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="304436339"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 01:34:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="474852142"
+Received: from mismail5-ilbpg0.png.intel.com ([10.88.229.13])
+  by orsmga006.jf.intel.com with ESMTP; 12 Jan 2022 01:34:31 -0800
+From:   Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mohammad.athari.ismail@intel.com, stable@vger.kernel.org
+Subject: [PATCH net v2] net: phy: marvell: add Marvell specific PHY loopback
+Date:   Wed, 12 Jan 2022 17:33:44 +0800
+Message-Id: <20220112093344.27894-1-mohammad.athari.ismail@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Existing genphy_loopback() is not applicable for Marvell PHY. Besides
+configuring bit-6 and bit-13 in Page 0 Register 0 (Copper Control
+Register), it is also required to configure same bits  in Page 2
+Register 21 (MAC Specific Control Register 2) according to speed of
+the loopback is operating.
 
---khzXD0fBZjVVSddA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Tested working on Marvell88E1510 PHY for all speeds (1000/100/10Mbps).
 
-Hi everyone,
+FIXME: Based on trial and error test, it seem 1G need to have delay between
+soft reset and loopback enablement.
 
-On Thu, Jan 06, 2022 at 01:24:52PM +0100, Wolfram Sang wrote:
-> This largely reverts commit 5a7b95fb993ec399c8a685552aa6a8fc995c40bd. It
-> breaks suspend with AMD GPUs, and we couldn't incrementally fix it. So,
-> let's remove the code and go back to the drawing board. We keep the
-> header extension to not break drivers already populating the regulator.
-> We expect to re-add the code handling it soon.
->=20
-> Reported-by: "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
-> Link: https://lore.kernel.org/r/1295184560.182511.1639075777725@mail.yaho=
-o.com
-> Reported-by: Konstantin Kharlamov <hi-angel@yandex.ru>
-> Link: https://lore.kernel.org/r/7143a7147978f4104171072d9f5225d2ce355ec1.=
-camel@yandex.ru
-> BugLink: https://gitlab.freedesktop.org/drm/amd/-/issues/1850
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: 014068dcb5b1 ("net: phy: genphy_loopback: add link speed configuration")
+Cc: <stable@vger.kernel.org> # 5.15.x
+Signed-off-by: Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+---
+v2 changelog:
+- For loopback enabled, add bit-6 and bit-13 configuration in both Page
+  0 Register 0 and Page 2 Register 21. Commented by Heiner Kallweit
+<hkallweit1@gmail.com>.
+- For loopback disabled, follow genphy_loopback() implementation. 
+---
+ drivers/net/phy/marvell.c | 46 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 45 insertions(+), 1 deletion(-)
 
-So, it has been reverted now. Is someone of the original patch
-submitters interested in re-adding it? And would the reporters of the
-regression be available for further testing?
+diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+index 4fcfca4e1702..51ca2cc05e10 100644
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -189,6 +189,8 @@
+ #define MII_88E1510_GEN_CTRL_REG_1_MODE_RGMII_SGMII	0x4
+ #define MII_88E1510_GEN_CTRL_REG_1_RESET	0x8000	/* Soft reset */
+ 
++#define MII_88E1510_MSCR_2		0x15
++
+ #define MII_VCT5_TX_RX_MDI0_COUPLING	0x10
+ #define MII_VCT5_TX_RX_MDI1_COUPLING	0x11
+ #define MII_VCT5_TX_RX_MDI2_COUPLING	0x12
+@@ -1932,6 +1934,48 @@ static void marvell_get_stats(struct phy_device *phydev,
+ 		data[i] = marvell_get_stat(phydev, i);
+ }
+ 
++static int marvell_loopback(struct phy_device *phydev, bool enable)
++{
++	if (enable) {
++		u16 bmcr_ctl = 0, mscr2_ctl = 0;
++
++		if (phydev->speed == SPEED_1000)
++			bmcr_ctl = BMCR_SPEED1000;
++		else if (phydev->speed == SPEED_100)
++			bmcr_ctl = BMCR_SPEED100;
++
++		if (phydev->duplex == DUPLEX_FULL)
++			bmcr_ctl |= BMCR_FULLDPLX;
++
++		phy_modify(phydev, MII_BMCR, ~0, bmcr_ctl);
++
++		if (phydev->speed == SPEED_1000)
++			mscr2_ctl = BMCR_SPEED1000;
++		else if (phydev->speed == SPEED_100)
++			mscr2_ctl = BMCR_SPEED100;
++
++		phy_modify_paged(phydev, MII_MARVELL_MSCR_PAGE,
++				 MII_88E1510_MSCR_2, BMCR_SPEED1000 |
++				 BMCR_SPEED100, mscr2_ctl);
++
++		/* Need soft reset to have speed configuration takes effect */
++		genphy_soft_reset(phydev);
++
++		/* FIXME: Based on trial and error test, it seem 1G need to have
++		 * delay between soft reset and loopback enablement.
++		 */
++		if (phydev->speed == SPEED_1000)
++			msleep(1000);
++
++		return phy_modify(phydev, MII_BMCR, BMCR_LOOPBACK,
++				  BMCR_LOOPBACK);
++	} else {
++		phy_modify(phydev, MII_BMCR, BMCR_LOOPBACK, 0);
++
++		return phy_config_aneg(phydev);
++	}
++}
++
+ static int marvell_vct5_wait_complete(struct phy_device *phydev)
+ {
+ 	int i;
+@@ -3078,7 +3122,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		.get_sset_count = marvell_get_sset_count,
+ 		.get_strings = marvell_get_strings,
+ 		.get_stats = marvell_get_stats,
+-		.set_loopback = genphy_loopback,
++		.set_loopback = marvell_loopback,
+ 		.get_tunable = m88e1011_get_tunable,
+ 		.set_tunable = m88e1011_set_tunable,
+ 		.cable_test_start = marvell_vct7_cable_test_start,
+-- 
+2.17.1
 
-Thanks and happy hacking,
-
-   Wolfram
-
-
---khzXD0fBZjVVSddA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHeoEUACgkQFA3kzBSg
-KbbbJhAAn5xNNoemF53yiy5cNxFmZNExFWhUga4Ib3kd6rySwJtFUHhvS2YkRgc5
-FJekjLbWQuKFo3E+YWpsKyjVE+m7a+/cuFZ2y16m5FZ4iO5OPk26znW+dil1FuoA
-F6n7OrN4Xbkcu7n2MbEk28T/9E8yg693TgZvy2+I2YHbo1T7YB8HGOed/p30T20S
-iihk6udli3cnoBqYXiojwxM3FeYQkXOtWp1vcrreDzYtkGG8r/efWFoVwDj5WOn7
-hO/QtiOcYj0unc087DDA9pT7ZtM76zy/AbIuDKKTjJ5Z8w+B5/oql0pNPWzwMAc0
-/6N8MacMyoPhkBYxuysuw2NHsG9uuXEVYra0xzniHX6XJbp9fH9tkrs+cB8CO/6F
-IPj9roj82MIJsd58mSv3GHiXCwNKQPwGCOfb2JDshaJuWfcTLTq5K2VD5Jzp4uXS
-tNVQFLIu/+OtxT55NKDWRJXWWCQ7L2wTT6irBpRN86AE8sfreY5ja/7m368s9zHA
-W4kkF4CiU9YVAdBe/+auy8zsezoJDsEtPQgjfrdMGZ9O+uc6kqqMWCg7X4wKP8rX
-oSA+uBYlBNqZCkX5OVy3OJd2Q2FbzorjMIg72yCzzfw8gEXgwDctGWzpIWcgWtOn
-D8puyOhzjFazcSr7ixU++G+P9r2Boc3Kg258edrg6SF6EMMnN9s=
-=7V7P
------END PGP SIGNATURE-----
-
---khzXD0fBZjVVSddA--

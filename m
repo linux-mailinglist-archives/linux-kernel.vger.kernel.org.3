@@ -2,170 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C241848CC4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF3348CC8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345806AbiALTuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:50:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S1346165AbiALTxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357751AbiALTuL (ORCPT
+        with ESMTP id S1350393AbiALTwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:50:11 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA47C061751
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:50:10 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id h14so8639956ybe.12
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:50:10 -0800 (PST)
+        Wed, 12 Jan 2022 14:52:39 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B18C06118A
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:52:35 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id o15so11847725lfo.11
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:52:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jRJqEvb6RaoXDTGIGvfe6D9l0JWX3IBGy+0XrscHKFk=;
-        b=A05wtVt0YhyBSdDPVxnMOaffKavmT2bc7mtYBlQvpXZuCcKdvBu2pQnaPFx3DGatS3
-         dletqWECy0d2sgn8vA9vLAVgNohXHyzj9Cgqbl79LKWXgG+hE4wDbGAhWFykD9TScLom
-         RAoovIZCddTCKuxzFHyAQtyUFKl1Zj9Pah7k/alWN5AMM8RaorUkk56uf1K/F+4vbrJ1
-         tVX2xsXqH3CMuhvO/jQ0GHItrhwrslksLTTyVuEJKA47jbtOoEt6Dy2V8InbwuqJee6U
-         RtN4mRaJgakGvKhskjQGCe4cEY3Rn9j04AANjfnBq6vDTcY1WWI2cp4TB0GwIncWQef6
-         qjjQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=He7BjM6dCMMuZ+d1PaptWEfTiiaWHjufRifL/qaqDNQ=;
+        b=NCgDByj6hejwY7MuOGvvvTVFdE0SIutf2M2dNIqTnLWvTYZrGZcHThTDRYKIyu0+1a
+         v9LpidK7TVBhU34aEpmdnnkJ0neebUciWxItaGoons6aj1nBdDkqm59faz57DZlHdAWi
+         LPIyKtOTp3ok2nd2Jmr9r68FSIQcIybhJZBVkeoeiwoVX52xpNi8jiWudtU4Rn0v5Vy4
+         8DFPJi+9FV/6Y9fmLfT/OaaS+p9/y3rZQ9nG8x/au6mEU9hDtKvNeSt4FVZD88FDnGGC
+         lKUrV7JjzA4vV7c4xyOMrkgZtcCrKwwSFUyDXpWRqtpDfS1CU0A0cS5aJZY/mLd5/imR
+         1kYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jRJqEvb6RaoXDTGIGvfe6D9l0JWX3IBGy+0XrscHKFk=;
-        b=Ll/NtkWoLFGPy211X8GhYKj1aj2+JCJR+PkTQZ4rXQ0cFRJxX1xavCtXsU7LddOhqt
-         /g3ho2tu7hcWL0+7baEKrYiGW7fZalaQ2Kzt9JAu1hr+ROB15LLV9J0qolWpijjfoWUW
-         eJZgdAAszRYhnMTjrx5u5Xy9ogU+eHWSyzM5RgW0WobQaESwz/ehJY1vABJ2sncl+jF5
-         /Xd8hg7I4duFh//qv/FpiHdvvsnF+g8nbNDnOFi2pX4JWSTwnj3pZfea5hsoKBMgs4h8
-         iMsbiQBkFFy68Oc7v8Oiy820439YiMFKPqZmeEOumMcK7fsDh1ik4EWOpg1BG+gQfnS9
-         Uasw==
-X-Gm-Message-State: AOAM531Ho4W2yNJezqsg1RdGJYqYZFH/03b3WIOHWyEDVzqoEIOMi1un
-        336x+U3dvEgXnxquZSsCBfaoPn3xzUI8ZfNWcTSEtg==
-X-Google-Smtp-Source: ABdhPJx6W0X7kISJhEYdoiY21aNG29fuGIZW3ogzIBP7+xBMxjmD0lYfSi3qgeEmYg4Q7LUKrKFZmmy6/h0/7WJ3H6o=
-X-Received: by 2002:a25:c245:: with SMTP id s66mr1871016ybf.243.1642017009537;
- Wed, 12 Jan 2022 11:50:09 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=He7BjM6dCMMuZ+d1PaptWEfTiiaWHjufRifL/qaqDNQ=;
+        b=E58F7psqBmae8yjGhBEBKZx/bBB6S4zHVeyTM4aD44qZHjIqiVx4+Gbno/02XuPvs8
+         QWFxfu/XXOU3Fqr2h7T9HJeJta9TXfa/59JoO22ulyCUEBViqx9izdCkaUKkmY4hqb/B
+         O1UKuHjEITxzOYos4F6hBWcHgKf+xBBvCbaUXLRbJxhEEsAjTjWyxxOwqu9WxSDy9qbH
+         SY+xWPgVLiRQPpG8sTfPAofuOJU8aj2TCi9CgPpKkZDgb8doD6X008bBfh88nlx1LHqC
+         RBW9b8PKJGz7bHz9+H9Ur+pkUy2i9u2tgfnLKQihLIaJHPpVhpbfQRInpKfbgB1B3kZ7
+         JhmA==
+X-Gm-Message-State: AOAM530lIJHrNa8NYwrHDCnntfV0lbNhvFvqU9Z3JOktRBYcHrkzjdhZ
+        rsk/Ic8WVAgCfDpuzH6Qm7U=
+X-Google-Smtp-Source: ABdhPJzk+NRGmXVUet+lyHm2CN5FnEA2iJ4erteSkUXSDA2UFv+FYnd+7IGa8JwGGNOUHUesuS051w==
+X-Received: by 2002:ac2:4c56:: with SMTP id o22mr945861lfk.558.1642017153504;
+        Wed, 12 Jan 2022 11:52:33 -0800 (PST)
+Received: from localhost.localdomain (94-29-62-108.dynamic.spd-mgts.ru. [94.29.62.108])
+        by smtp.gmail.com with ESMTPSA id k7sm75860lfu.141.2022.01.12.11.52.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 11:52:33 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] ASoC: hdmi-codec: Fix OOB memory accesses
+Date:   Wed, 12 Jan 2022 22:50:39 +0300
+Message-Id: <20220112195039.1329-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20220111232309.1786347-1-surenb@google.com> <Yd7oPlxCpnzNmFzc@cmpxchg.org>
- <CAJuCfpGHLXDvMU1GLMcgK_K72_ErPhbcFh1ZvEeHg025yinNuw@mail.gmail.com>
- <CAJuCfpEaM3KoPy3MUG7HW2yzcT6oJ5gdceyHPNpHrqTErq27eQ@mail.gmail.com>
- <Yd8a8TdThrGHsf2o@casper.infradead.org> <CAJuCfpF45VY_7esx7p2yEK+eK-ufSMsBETEdJPF=Mzxj+BTnLA@mail.gmail.com>
- <Yd8hpPwsIT2pbKUN@gmail.com> <CAJuCfpF_aZ7OnDRYr2MNa-x=ctO-daw-U=k+-GCYkJR1_yTHQg@mail.gmail.com>
- <Yd8mIY5IxwOKTK+D@gmail.com> <CAJuCfpG9o5Z7x6hvPXy-Tfgom31sm4rjAA=f4KiY9pppGRGSHQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpG9o5Z7x6hvPXy-Tfgom31sm4rjAA=f4KiY9pppGRGSHQ@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 12 Jan 2022 11:49:58 -0800
-Message-ID: <CAJuCfpHeg9mb4oq71P6xcC9fQipWBaAy9WJZg=jM+cUnR+ouMg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] psi: Fix uaf issue when psi trigger is destroyed
- while being polled
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>,
-        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 11:06 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Wed, Jan 12, 2022 at 11:04 AM Eric Biggers <ebiggers@kernel.org> wrote:
-> >
-> > On Wed, Jan 12, 2022 at 10:53:48AM -0800, Suren Baghdasaryan wrote:
-> > > On Wed, Jan 12, 2022 at 10:44 AM Eric Biggers <ebiggers@kernel.org> wrote:
-> > > >
-> > > > On Wed, Jan 12, 2022 at 10:26:08AM -0800, Suren Baghdasaryan wrote:
-> > > > > On Wed, Jan 12, 2022 at 10:16 AM Matthew Wilcox <willy@infradead.org> wrote:
-> > > > > >
-> > > > > > On Wed, Jan 12, 2022 at 09:49:00AM -0800, Suren Baghdasaryan wrote:
-> > > > > > > > This happens with the following config:
-> > > > > > > >
-> > > > > > > > CONFIG_CGROUPS=n
-> > > > > > > > CONFIG_PSI=y
-> > > > > > > >
-> > > > > > > > With cgroups disabled these functions are defined as non-static but
-> > > > > > > > are not defined in the header
-> > > > > > > > (https://elixir.bootlin.com/linux/latest/source/include/linux/psi.h#L28)
-> > > > > > > > since the only external user cgroup.c is disabled. The cleanest way to
-> > > > > > > > fix these I think is by doing smth like this in psi.c:
-> > > > > >
-> > > > > > A cleaner way to solve these is simply:
-> > > > > >
-> > > > > > #ifndef CONFIG_CGROUPS
-> > > > > > static struct psi_trigger *psi_trigger_create(...);
-> > > > > > ...
-> > > > > > #endif
-> > > > > >
-> > > > > > I tested this works:
-> > > > > >
-> > > > > > $ cat foo5.c
-> > > > > > static int psi(void *);
-> > > > > >
-> > > > > > int psi(void *x)
-> > > > > > {
-> > > > > >         return (int)(long)x;
-> > > > > > }
-> > > > > >
-> > > > > > int bar(void *x)
-> > > > > > {
-> > > > > >         return psi(x);
-> > > > > > }
-> > > > > > $ gcc -W -Wall -O2 -c -o foo5.o foo5.c
-> > > > > > $ readelf -s foo5.o
-> > > > > >
-> > > > > > Symbol table '.symtab' contains 4 entries:
-> > > > > >    Num:    Value          Size Type    Bind   Vis      Ndx Name
-> > > > > >      0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
-> > > > > >      1: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS foo5.c
-> > > > > >      2: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text
-> > > > > >      3: 0000000000000000     3 FUNC    GLOBAL DEFAULT    1 bar
-> > > > > >
-> > > > >
-> > > > > Thanks Matthew!
-> > > > > That looks much cleaner. I'll post a separate patch to fix these. My
-> > > > > main concern was whether it's worth adding more code to satisfy this
-> > > > > warning but with this approach the code changes are minimal, so I'll
-> > > > > go ahead and post it shortly.
-> > > >
-> > > > Why not simply move the declarations of psi_trigger_create() and
-> > > > psi_trigger_destroy() in include/linux/psi.h outside of the
-> > > > '#ifdef CONFIG_CGROUPS' block, to match the .c file?
-> > >
-> > > IIRC this was done to avoid another warning that these functions are
-> > > not used outside of psi.c when CONFIG_CGROUPS=n
-> > >
-> >
-> > What tool gave that warning?
->
-> Let me double-check by building it. It has been a while since I
-> developed the code and I don't want to mislead by making false claims.
->
+Correct size of iec_status array by changing it to the size of status
+array of the struct snd_aes_iec958. This fixes out-of-bounds slab
+read accesses made by memcpy() of the hdmi-codec driver. This problem
+is reported by KASAN.
 
-No warnings, so it was probably done to keep the scope of these
-functions as local as possible.
-I agree that moving them out of #ifdef CONFIG_CGROUPS in the header
-file makes sense here. The scope unnecessarily expands when
-CONFIG_CGROUPS=n but the code is simpler. Will do that then.
+Cc: stable@vger.kernel.org
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ include/uapi/sound/asound.h   | 4 +++-
+ sound/soc/codecs/hdmi-codec.c | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-I noticed there is another warning about psi_cpu_proc_ops and similar
-structures being unused when CONFIG_PROC_FS=n. Looks like I'll need
-some more ifdefs to fix all these warnings.
+diff --git a/include/uapi/sound/asound.h b/include/uapi/sound/asound.h
+index ef0cafe295b2..2d3e5df39a59 100644
+--- a/include/uapi/sound/asound.h
++++ b/include/uapi/sound/asound.h
+@@ -56,8 +56,10 @@
+  *                                                                          *
+  ****************************************************************************/
+ 
++#define AES_IEC958_STATUS_SIZE		24
++
+ struct snd_aes_iec958 {
+-	unsigned char status[24];	/* AES/IEC958 channel status bits */
++	unsigned char status[AES_IEC958_STATUS_SIZE]; /* AES/IEC958 channel status bits */
+ 	unsigned char subcode[147];	/* AES/IEC958 subcode bits */
+ 	unsigned char pad;		/* nothing */
+ 	unsigned char dig_subframe[4];	/* AES/IEC958 subframe bits */
+diff --git a/sound/soc/codecs/hdmi-codec.c b/sound/soc/codecs/hdmi-codec.c
+index b61f980cabdc..b07607a9ecea 100644
+--- a/sound/soc/codecs/hdmi-codec.c
++++ b/sound/soc/codecs/hdmi-codec.c
+@@ -277,7 +277,7 @@ struct hdmi_codec_priv {
+ 	bool busy;
+ 	struct snd_soc_jack *jack;
+ 	unsigned int jack_status;
+-	u8 iec_status[5];
++	u8 iec_status[AES_IEC958_STATUS_SIZE];
+ };
+ 
+ static const struct snd_soc_dapm_widget hdmi_widgets[] = {
+-- 
+2.33.1
 
-> >
-> > - Eric

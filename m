@@ -2,220 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B1F48C233
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE6048C230
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346655AbiALKZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 05:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352493AbiALKZN (ORCPT
+        id S1352491AbiALKYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 05:24:49 -0500
+Received: from outbound-smtp23.blacknight.com ([81.17.249.191]:45485 "EHLO
+        outbound-smtp23.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238224AbiALKYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 05:25:13 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EB6C061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:25:12 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id x6so6441730lfa.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:25:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xhrM6Xen3w5qUruPad5ixHkqDWpBwQZqIzJeR1EkW4E=;
-        b=RrVI1hzaVukuM5jtpwWPW6kvbDwe97qGvtj8c6Kkh4uL25y89y1eaw4SgLu10ZyFnt
-         t59ET0KgYfpVvBwCrIzadJrU99X9i1l2UebcR6QOgdZTvtql7y8pHKh1ZTAm2y7PRZat
-         RC+E/JcyRya3YR2Y3FrTzYYmW+EB4PbKmqLtZmWcF9QDqhz1RzY6G+KzJ+Cwiz/jver1
-         kSIEZ5PEekwjccgRbPsJRxCojbEoFAmYA5F6UPU2YJKxfgIfQtkNciJPVPoyADPxwQu1
-         87HhyXzWf2xjB9fqqkuZwdKuDWcVFc3e9cGVRPH05U5F9h7G/nycnTDCAR7v6PVTHM/u
-         Nw5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xhrM6Xen3w5qUruPad5ixHkqDWpBwQZqIzJeR1EkW4E=;
-        b=FuqfUzetZ3D9nea/4slkgVwrXecwHXJHICOCgevjBqfktjpQ8NK7GnTJnDS5U1rNvB
-         q00UKCJVxBkOBR/u7boQhF3UPjoy4WQ87pvb6PCpRZnZfloJurHYHAOqzYY2b/ovRJ3J
-         YWQqaLqqlWxL/k5Cx89Qfxt5rT/Jwjh4xANNj+1AtShm6NCO5FKTMo5ld7aWEOzxl+mW
-         4CAD4TNuXLa6v/FjJmUXeHjtdAK2FfwFGVHK9QCAJdlUkpbXll6lmQXupYRmePiKNp76
-         fEqPK4rCGtHOuaQlniXeXFkTeFor4xru6I2SLIkdtvav6TQvsHDFjkA/ReRsXDcqj6YS
-         fQtw==
-X-Gm-Message-State: AOAM532kVuSHPjKcqqH2BCOVKx8UB4L2HlI1DiOfAR8+mkcE5aW5uy44
-        xwV3Xrruu+MKVhoiSaQMTsV0CY0sFtgKWhuZ0MyfuQ==
-X-Google-Smtp-Source: ABdhPJzoW2RQRNQJQZl+DxH2f6NELnVGEYgf+jGNvBCSTIRuWkvMAKnEMBSiHeW7eK9vFeSqeaEVLgBU/N//RxMxMUA=
-X-Received: by 2002:a2e:947:: with SMTP id 68mr2958964ljj.300.1641983111123;
- Wed, 12 Jan 2022 02:25:11 -0800 (PST)
+        Wed, 12 Jan 2022 05:24:47 -0500
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp23.blacknight.com (Postfix) with ESMTPS id 878D2BED54
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:24:45 +0000 (GMT)
+Received: (qmail 12870 invoked from network); 12 Jan 2022 10:24:45 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.197.169])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 12 Jan 2022 10:24:45 -0000
+Date:   Wed, 12 Jan 2022 10:24:43 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Valentin Schneider <Valentin.Schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when
+ SD_NUMA spans multiple LLCs
+Message-ID: <20220112102443.GZ3366@techsingularity.net>
+References: <YbcEE/mgIAhWuS+A@BLR-5CG11610CF.amd.com>
+ <20211213130131.GQ3366@techsingularity.net>
+ <YbddCcGJUpcPc8nS@BLR-5CG11610CF.amd.com>
+ <YbnW/vLgE8MmQopN@BLR-5CG11610CF.amd.com>
+ <20211215122550.GR3366@techsingularity.net>
+ <YbuGYtxRSqVkOdbj@BLR-5CG11610CF.amd.com>
+ <20211220111243.GS3366@techsingularity.net>
+ <CAKfTPtARUODOnL9X-X+09cCu_BeMbZsW9U=kHX2vrXor7Du6qQ@mail.gmail.com>
+ <20220105104207.GV3366@techsingularity.net>
+ <CAKfTPtBCdgKb7gBDoFo3ictVYhgQGcneHViEtYj8o=WVH3kTaA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211215130711.111186-1-gsomlo@gmail.com> <20211215130711.111186-4-gsomlo@gmail.com>
- <CAPDyKFqo5sZy8aVbOcfS_cxT9T5r214GKCL-FKRg_0P0yQJTFQ@mail.gmail.com>
- <YdOUbYpGFNyxz3iD@errol.ini.cmu.edu> <CAPDyKFohOHYu_bdXsAYvDmMLqnGUW=9pG+yJDwP5-db1B6F1Dw@mail.gmail.com>
- <Yd4JdBArPn9rBj5b@errol.ini.cmu.edu>
-In-Reply-To: <Yd4JdBArPn9rBj5b@errol.ini.cmu.edu>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 12 Jan 2022 11:24:34 +0100
-Message-ID: <CAPDyKFq18AWsaWHcEkU6H1Sh4NsqRfUeQhbRz9MorGfnKzxHwQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
-        kgugala@antmicro.com, mholenko@antmicro.com, krakoczy@antmicro.com,
-        mdudek@internships.antmicro.com, paulus@ozlabs.org, joel@jms.id.au,
-        shorne@gmail.com, geert@linux-m68k.org,
-        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
-        rdunlap@infradead.org, andy.shevchenko@gmail.com, hdanton@sina.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtBCdgKb7gBDoFo3ictVYhgQGcneHViEtYj8o=WVH3kTaA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
-
-> > > > [...]
-> > > >
-> > > > > +
-> > > > > +       mmc->ocr_avail = MMC_VDD_32_33 | MMC_VDD_33_34;
-> > > >
-> > > > I noticed that you use these hard coded values and don't really care
-> > > > to manage voltage changes via ->set_ios().
-> > > >
-> > > > Rather than doing it like this, I would prefer if you can hook up a
-> > > > fixed vmmc regulator in the DTS. Then call mmc_regulator_get_supply()
-> > > > to fetch it from here, which will let the mmc core create the
-> > > > mmc->ocr_avail mask, based upon the voltage level the regulator
-> > > > supports.
-> > > >
-> > > > This becomes more generic and allows more flexibility for the platform
-> > > > configuration.
-> > >
-> > > The LiteSDCard "hardware" (i.e., *gateware*) does not allow modification
-> > > or selection of voltage from the software side. When a CMD8 is issued,
-> > > the "voltage supplied" bit pattern is expected to be '0001b', which per
-> > > the spec means "2.7-3.6V".
+On Mon, Jan 10, 2022 at 04:53:26PM +0100, Vincent Guittot wrote:
+> On Wed, 5 Jan 2022 at 11:42, Mel Gorman <mgorman@techsingularity.net> wrote:
 > >
-> > If you provide a range (2.7-3.6V), that means that your hardware
-> > supports the entire range, not just one single part of it.
->
-> The "gateware" (open source migen/verilog at
-> https://github.com/enjoy-digital/litesdcard)
-> supports any value provided by the underlying FPGA dev board
-> (typically 3.3v) -- by not attempting to manage it in any way.
->
-> SD media presumably doesn't care as long as voltage is somewhere
-> within 2.7-3.6V (at least that's how I read the spec, there's only
-> one register value representing anything within that range).
->
+> > On Tue, Dec 21, 2021 at 06:13:15PM +0100, Vincent Guittot wrote:
+> > > > <SNIP>
+> > > >
+> > > > @@ -9050,9 +9054,9 @@ static bool update_pick_idlest(struct sched_group *idlest,
+> > > >   * This is an approximation as the number of running tasks may not be
+> > > >   * related to the number of busy CPUs due to sched_setaffinity.
+> > > >   */
+> > > > -static inline bool allow_numa_imbalance(int dst_running, int dst_weight)
+> > > > +static inline bool allow_numa_imbalance(int dst_running, int imb_numa_nr)
+> > > >  {
+> > > > -       return (dst_running < (dst_weight >> 2));
+> > > > +       return dst_running < imb_numa_nr;
+> > > >  }
+> > > >
+> > > >  /*
+> > > >
+> > > > <SNIP>
+> > > >
+> > > > @@ -9280,19 +9285,13 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+> > > >         }
+> > > >  }
+> > > >
+> > > > -#define NUMA_IMBALANCE_MIN 2
+> > > > -
+> > > >  static inline long adjust_numa_imbalance(int imbalance,
+> > > > -                               int dst_running, int dst_weight)
+> > > > +                               int dst_running, int imb_numa_nr)
+> > > >  {
+> > > > -       if (!allow_numa_imbalance(dst_running, dst_weight))
+> > > > +       if (!allow_numa_imbalance(dst_running, imb_numa_nr))
+> > > >                 return imbalance;
+> > > >
+> > > > -       /*
+> > > > -        * Allow a small imbalance based on a simple pair of communicating
+> > > > -        * tasks that remain local when the destination is lightly loaded.
+> > > > -        */
+> > > > -       if (imbalance <= NUMA_IMBALANCE_MIN)
+> > > > +       if (imbalance <= imb_numa_nr)
 > > >
-> > > I tried adding this to the overall DTS:
+> > > Isn't this always true ?
 > > >
-> > >         vreg_mmc: vreg_mmc_3v {
-> > >                 compatible = "regulator-fixed";
-> > >                 regulator-min-microvolt = <3300000>;
-> > >                 regulator-max-microvolt = <3300000>;
-> > >         };
+> > > imbalance is "always" < dst_running as imbalance is usually the number
+> > > of these tasks that we would like to migrate
 > > >
-> > > and then added a reference to it to the LiteSDCard "mmc0" node in DTS,
-> > > like so:
-> > >
-> > >         mmc0: mmc@12005000 {
-> > >                 compatible = "litex,mmc";
-> > >                 reg = <0x12005000 0x100>,
-> > >                         <0x12003800 0x100>,
-> > >                         <0x12003000 0x100>,
-> > >                         <0x12004800 0x100>,
-> > >                         <0x12004000 0x100>;
-> > >                 reg-names = "phy", "core", "reader", "writer", "irq";
-> > >                 clocks = <&sys_clk>;
-> > >                 vmmc-supply = <&vreg_mmc>; /* <-------- HERE !!! */
-> > >                 interrupt-parent = <&L1>;
-> > >                 interrupts = <4>;
-> > >         };
-> > >
-> > > Finally, I replaced the hardcoded setting of `mmc->ocr_avail` with a
-> > > call to `mmc_regulator_get_supply(mmc)`. Now, I get a bunch of timeouts
-> > > during attempts to send e.g., CMD8 and CMD55.
-> > > (going for 3200000 and 3400000 for min- and max-microvolt, respectively,
-> > >  -- or anything else in the allowed 2.7-3.6 range -- doesn't help either).
-> > >
-> > > I might be doing something subtly wrong in the way I set things up
-> > > above, but it feels a bit overengineered, and IMHO fragile.
 > >
-> > At a quick glance, the above looks correct to me. Maybe there is
-> > something wrong with the code in the driver instead?
->
-> After some more hacking, I learned that:
->
->         - an additional `regulator-name` line
->           (e.g. `regulator-name = "vreg_mmc";`) is required
->
->         - setting `regulator-always-on;` seems to help reduce attempts
->           by the kernel to "manage" the regulator, but does not appear
->           to be required
->
-> In other words:
->
->         ...
->         vreg_mmc: vreg_mmc {
->                 compatible = "regulator-fixed";
->                 regulator-name = "vreg_mmc";
->                 regulator-min-microvolt = <3300000>;
->                 regulator-max-microvolt = <3300000>;
->                 regulator-always-on;
->         };
->         ...
->
-> Additionally, CONFIG_REGULATOR=y and CONFIG_REGULATOR_FIXED_VOLTAGE=y
-> *MUST* be enabled in the kernel's .config file, to prevent either
-> litex_mmc_probe() from being deferred, or mmc_regulator_get_supply()
-> from simply returning 0 without having set mmc->ocr_avail to anything
-> at all!
->
-> Presumably this would also mean either `select REGULATOR_FIXED_VOLTAGE`
-> or `depends on REGULATOR_FIXED_VOLTAGE` in the mmc driver's Kconfig
-> entry.
-
-Yep, that's correct.
-
-If you don't like to manage that dependency in the Kconfig, an option
-is to check if mmc->ocr_avail is zero and if so, we could log a
-message *and* assign mmc->ocr_avail a default value.
-
->
-> Predictably, the "regulator-[min|max]-microvolt = <3300000>" setting
-> gets us
->
->         ocr_avail == MMC_VDD_32_33 | MMC_VDD_33_34
->
-> > >
-> > > OTOH, going all out and setting:
-> > >
-> > >         /* allow for generic 2.7-3.6V range, no software tuning available */
-> > >         mmc->ocr_avail = MMC_VDD_27_28 | MMC_VDD_28_29 | MMC_VDD_29_30 |
-> > >                          MMC_VDD_30_31 | MMC_VDD_31_32 | MMC_VDD_32_33 |
-> > >                          MMC_VDD_33_34 | MMC_VDD_34_35 | MMC_VDD_35_36;
-> > >
-> > > seems to work just fine... :) Please do let me know what you think!
+> > It's not necessarily true. allow_numa_imbalanced is checking if
+> > dst_running < imb_numa_nr and adjust_numa_imbalance is checking the
+> > imbalance.
 > >
-> > No, this isn't the way we want it to work. That's because it means
-> > that we would lie to the card about what voltage range the HW actually
-> > supports.
+> > imb_numa_nr = 4
+> > dst_running = 2
+> > imbalance   = 1
 > >
-> > It's better to let the DTS file give that information about the HW.
->
-> I may be needlessly concerned, but it feels a bit weird to me to drag
-> in CONFIG_REGULATOR_FIXED_VOLTAGE as an added dependency for what is
-> ultimately a roundabout way of setting a constant... :)
+> > In that case, imbalance of 1 is ok, but 2 is not.
+> 
+> I don't catch your example. Why is imbalance = 2 not ok in your
+> example above ? allow_numa_imbalance still returns true (dst-running <
+> imb_numa_nr) and we still have imbalance <= imb_numa_nr
+> 
 
-The point is, it shouldn't really be a constant set by the driver,
-because it would mean initialising a card under potentially wrong
-conditions.
+At the time I wrote it, the comparison looked like < instead of <=.
 
-However, I am fine assigning it a default value as a fallback and best
-effort, if it turns out that DT didn't provide us information about
-what the HW is capable of.
+> Also the name dst_running is quite confusing; In the case of
+> calculate_imbalance, busiest->nr_running is passed as dst_running
+> argument. But the busiest group is the src not the dst of the balance
+> 
+> Then,  imbalance < busiest->nr_running in load_balance because we try
+> to even the number of task running in each groups without emptying it
+> and allow_numa_imbalance checks that dst_running < imb_numa_nr. So we
+> have imbalance < dst_running < imb_numa_nr
+> 
 
->
-> Thanks in advance for any additional clue!
+But either way, you have a valid point. The patch as-is is too complex
+and doing too much and is failing to make progress as a result. I'm going
+to go back to the drawing board and come up with a simpler version that
+adjusts the cut-off depending on topology but only allows an imbalance
+of NUMA_IMBALANCE_MIN and tidy up the inconsistencies.
 
-Looks like there are two options, just pick one of them, then I am happy. :-)
+> > This?
+> >
+> >                                  * The 25% imbalance is an arbitrary cutoff
+> >                                  * based on SMT-2 to balance between memory
+> >                                  * bandwidth and avoiding premature sharing
+> >                                  * of HT resources and SMT-4 or SMT-8 *may*
+> >                                  * benefit from a different cutoff. nr_llcs
+> >                                  * are accounted for to mitigate premature
+> >                                  * cache eviction due to multiple tasks
+> >                                  * using one cache while a sibling cache
+> >                                  * remains relatively idle.
+> >
+> > > For example, why is it better than just 25% of the LLC weight ?
+> >
+> > Because lets say there are 2 LLCs then an imbalance based on just the LLC
+> > weight might allow 2 tasks to share one cache while another is idle. This
+> > is the original problem whereby the vanilla imbalance allowed multiple
+> > LLCs on the same node to be overloaded which hurt workloads that prefer
+> > to spread wide.
+> 
+> In this case, shouldn't it be (llc_weight >> 2) * nr_llcs to fill each
+> llc up to 25%  ? instead of dividing by nr_llcs
+> 
+> As an example, you have
+> 1 node with 1 LLC with 128 CPUs will get an imb_numa_nr = 32
+> 1 node with 2 LLC with 64 CPUs each will get an imb_numa_nr = 8
+> 1 node with 4 LLC with 32 CPUs each will get an imb_numa_nr = 2
+> 
+> sd->imb_numa_nr is used at NUMA level so the more LLC you have the
+> lower imbalance is allowed
+> 
 
-Kind regards
-Uffe
+The more LLCs, the lower the threshold where imbalances is allowed is
+deliberate given that the motivating problem was that embarassingly
+parallel problems on AMD suffer due to overloading some LLCs while
+others remain idle.
+
+-- 
+Mel Gorman
+SUSE Labs

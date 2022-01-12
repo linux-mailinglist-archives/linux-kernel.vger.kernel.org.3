@@ -2,122 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8FA48C281
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2CB48C2B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352615AbiALKtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 05:49:13 -0500
-Received: from mga03.intel.com ([134.134.136.65]:11364 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239535AbiALKtM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 05:49:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641984552; x=1673520552;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=/Ap0QBU3t/R1DSPsppRpZ66Vza8HREIl/QzjQ9in2CA=;
-  b=F852mrDD6MaVoebHZtss0jgBH+EoROfTSFlO1IsSKy09nuqnFGbydNQr
-   S4qspQGp9/rFSEmuDWlDvM/V1URMVDJFSu23mKLiKTsVf7XPKIAOviE18
-   07vhGIlI1VVHKvrpDx5ZUW8Gc+H9vpXHeI39gtluIl2dy12+ousH3M+rL
-   KX6rmxb+Xo87zk8NYBRAfX1dpxF/c1/qUKgGa9aZT6Qpr5IrIYZjAQqXk
-   6meyVTKyBU7Cyf7PErAXzp32ewbkHWi4Q6GxTYlQZVGMdl4wyOZRqlHfA
-   7NGNDFssOwulknnUowlqAR41e7cdN1Ay4tZeg/vaKjWO4AIKq0cHIJk6w
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="243663661"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="243663661"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 02:49:11 -0800
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="515442067"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.105])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 02:49:07 -0800
-Date:   Wed, 12 Jan 2022 19:00:01 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/6] KVM: x86: Remove WARN_ON in
- kvm_arch_check_processor_compat
-Message-ID: <20220112110000.GA10249@gao-cwp>
-References: <20211227081515.2088920-1-chao.gao@intel.com>
- <20211227081515.2088920-6-chao.gao@intel.com>
- <Ydy6aIyI3jFQvF0O@google.com>
- <BN9PR11MB5276DEA925C72AF585E7472C8C519@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Yd3fFxg3IjWPUIqH@google.com>
+        id S1352700AbiALLAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 06:00:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352683AbiALLAe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 06:00:34 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D01C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:00:34 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id y3so165788ila.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:00:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=7YmkmtxDmI5AblbQ3Q70VE2MpMr6ayCaG4WEOo+BW2o=;
+        b=fiCIT+R9HBpBbku87kjIe/cMtRwXfCtT2rVuboFkelCpSBJNo00CFVVUa6PTPlKYia
+         J77aoalLjWDobrnCsf6i+Tz2RL0/cCEBvKLZUXaFkjMyeIYV+OAHCmxZ0ZnLI+9PKLau
+         BugRFFyf2c44nIow/lO/uyUs9Y9EcYJvBXGj2lEr7Ssyi9JFINJTl/bPbU2vF8Tsh96Z
+         KLDS8szwBgOBQRDPAeFyyMjFdUaHW85VVrFVHMFqgFjSudvpYWa2X4fflwkcL1RoGkZJ
+         nEo0X8SC0Ggjkyt0LSTla0bmDbObemzQBX2SPyxf/9jXFQ+WHtUVbxsvgBeNqX0dXJvd
+         e4+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=7YmkmtxDmI5AblbQ3Q70VE2MpMr6ayCaG4WEOo+BW2o=;
+        b=Oyum1QqMu+l9eB2w95Y9gVmLW0I0OjjoSzBsMCg1vDdY/reKaTTzCW8rQVjFxMDtxJ
+         Sw8g3ysfIGqCbZUxy9IWBIWEs6rXUIwz7KyZvzA1YNoFW3yqQXcRaspPzqU5BscWfW5E
+         /SyqB0sHzjinFBllQboB+A+SSrTu7eEU9lkCyBMbSSj35BnOPj4xltXwaF1/E7+rSC96
+         FK4HAJS+jSjGOFxyUbDvkbUK1oZqkt+us2M7wFHrSv/GxDDAxushB3r4zfqjkUbUmnBz
+         c0bmUAqjePtilinJ69SNmgNTtiq6pcj2mdoCoVgD8tPU7q3So4bolGZaCKT1xfFJA9n4
+         M0CQ==
+X-Gm-Message-State: AOAM530u5aHTomh8SRTFgfQhYPapoqFhlIlTfYtxpLEbntwv9MbaqIDm
+        8vBcaQJu1I3fYmS4MH81+g7MJyHq1D1jWBpveQ==
+X-Google-Smtp-Source: ABdhPJwsaBpBXTCgVGF2VSTxDOO9JlG7QWv2CDhaoSJR+YV92gjpg7d0pUKRRZO/oBW0p1u6f2Wji8mfr4AZHxxy06A=
+X-Received: by 2002:a92:d48b:: with SMTP id p11mr4692522ilg.145.1641985234081;
+ Wed, 12 Jan 2022 03:00:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yd3fFxg3IjWPUIqH@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Sender: missaishacolmoammargadhafi@gmail.com
+Received: by 2002:a05:6638:d07:0:0:0:0 with HTTP; Wed, 12 Jan 2022 03:00:32
+ -0800 (PST)
+From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
+Date:   Wed, 12 Jan 2022 03:00:32 -0800
+X-Google-Sender-Auth: S0fTcIcRoVHjuPJjfq2422f4yA8
+Message-ID: <CAB-oGaiTq_5k0LR4iHFahr6q-KPitUbi25XLxp87h+DQkPHPFw@mail.gmail.com>
+Subject: Your long awaited part payment of $2.5.000.00Usd
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 07:48:39PM +0000, Sean Christopherson wrote:
->On Tue, Jan 11, 2022, Tian, Kevin wrote:
->> > From: Sean Christopherson <seanjc@google.com>
->> > Sent: Tuesday, January 11, 2022 7:00 AM
->> > 
->> > On Mon, Dec 27, 2021, Chao Gao wrote:
->> > > kvm_arch_check_processor_compat() needn't be called with interrupt
->> > > disabled, as it only reads some CRs/MSRs which won't be clobbered
->> > > by interrupt handlers or softirq.
->> > >
->> > > What really needed is disabling preemption. No additional check is
->> > > added because if CONFIG_DEBUG_PREEMPT is enabled, smp_processor_id()
->> > > (right above the WARN_ON()) can help to detect any violation.
->> > 
->> > Hrm, IIRC, the assertion that IRQs are disabled was more about detecting
->> > improper usage with respect to KVM doing hardware enabling than it was
->> > about ensuring the current task isn't migrated.  E.g. as exhibited by patch
->> > 06, extra protections (disabling of hotplug in that case) are needed if
->> > this helper is called outside of the core KVM hardware enabling flow since
->> > hardware_enable_all() does its thing via SMP function call.
->> 
->> Looks the WARN_ON() was added by you. 😊
->
->Yeah, past me owes current me a beer.
->
->> commit f1cdecf5807b1a91829a2dc4f254bfe6bafd4776
->> Author: Sean Christopherson <sean.j.christopherson@intel.com>
->> Date:   Tue Dec 10 14:44:14 2019 -0800
->> 
->>     KVM: x86: Ensure all logical CPUs have consistent reserved cr4 bits
->> 
->>     Check the current CPU's reserved cr4 bits against the mask calculated
->>     for the boot CPU to ensure consistent behavior across all CPUs.
->> 
->>     Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
->>     Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
->> 
->> But it's unclear to me how this WARN_ON() is related to what the commit
->> msg tries to explain.
->
->Ya, the changelog and lack of a comment is awful.
->
->> When I read this code it's more like a sanity check on the assumption that it
->> is currently called in SMP function call which runs the said function with
->> interrupt disabled.
->
->Yes, and as above, that assertion was more about the helper not really being safe
->for general usage as opposed to wanting to detect use from preemptible context.
->If we end up keeping the WARN_ON, I'll happily write a comment explaining the
->point of the assertion.
+Attention: Beneficiary, Your long awaited part payment of
+$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
+Dollars) is ready for immediate release to you, and it was
+electronically credited into an ATM Visa Card for easy delivery.
 
-OK. I will do following changes to keep the WARN_ON():
-1. drop this patch
-2. disable interrupt before the call site in patch 6.
+Your new Payment Reference No.- 6363836,
+Pin Code No: 1787
+Your Certificate of Merit Payment No: 05872,
+
+Person to Contact:MR KELLY HALL the Director of the International
+Audit unit ATM Payment Center,
+
+Email: unitedbankforafrica_bf011@financier.com
+TELEPHONE: +226 64865611 You can whatsApp the bank
+
+Regards.
+Mrs ORGIL BAATAR

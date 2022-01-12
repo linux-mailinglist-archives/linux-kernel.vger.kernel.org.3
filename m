@@ -2,87 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB36B48BE79
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 07:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C39A448BE8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 07:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347371AbiALGGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 01:06:50 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:52675 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237360AbiALGGu (ORCPT
+        id S1350980AbiALGX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 01:23:58 -0500
+Received: from out162-62-57-87.mail.qq.com ([162.62.57.87]:51315 "EHLO
+        out162-62-57-87.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231773AbiALGX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 01:06:50 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 20C60Bfr088741;
-        Wed, 12 Jan 2022 14:00:11 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Jan
- 2022 14:06:48 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
-        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] media: aspeed: Fix no complete irq for non-64-aligned width
-Date:   Wed, 12 Jan 2022 14:07:25 +0800
-Message-ID: <20220112060725.13751-1-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 12 Jan 2022 01:23:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1641968626;
+        bh=AFpLSdr37ru0LWxmAPC73QLpfj5oiuYqjThjLb9wsxw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=nnm9oAsnIHYCERrPtMHi18826hTqthXYw7IRFsS7rMc4cjxxpxbXbGg0oGe2ubw9x
+         m44lEd+Q/bmMvI8CGON6ZongK3JaF0kWlmhHWRp61taGA8rA7ruT3AhMGgXhYrs+Ie
+         bg39nTl1biVaFDfUZNFtAUT0fLUngU9ZANLEDDr4=
+Received: from localhost ([119.32.47.91])
+        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
+        id 41BB8A76; Wed, 12 Jan 2022 14:16:27 +0800
+X-QQ-mid: xmsmtpt1641968187tlvhrscib
+Message-ID: <tencent_236C8935F1179CB3D1788CBF3B179494D60A@qq.com>
+X-QQ-XMAILINFO: NhDhJCJPIfnTDcnTznCD9f89oc8Kla5y5v2MzY6O6cSG9gIiK9IrdR1D2zyAdn
+         0eevOWM0Gzp1keStWW2+1yuPnFR55xMhbf4VE/VnKMqNPaoxt8WVVPzOuWO8QkM5LrHjlxav/STa
+         NLaSIsTmak/NjAw41rodE0av49y7UgoIO9hdmnFVjKxqc37FSLHsNkM+c8g9DmI1gE+/6qMuGeoY
+         UjC9CkpgJJCWNVroOiv1aMvWX73iuGSnHsFJi6jTcVmQvDDF6SBAXvvJ/nMlXI7WdSZJ29Weh4sr
+         Fy9iEuvugRh4LbhP3JFnl+dFRzmlzNIAlNlcgWc1r4JXUmFYrTQO7buYKnXSlhbQiSdtGXbQj+tZ
+         bbcwdLcD15F1tMX+aJJ1GOYfe5flcx4bVJYbE1IT0rZmUycWtxau0MV5mCVPJrovk3MMhKTzz13C
+         Rhto0xY+wTqzl22lpJrFuG5OOhhV7hhYcofvpCqqS3yQqHtIu8vcstrC3MKi/Rukc/NpAAiI9Aw/
+         kXl9hQTS2yfDTZf97PPzb37VW9pdEoQYkaIwC8HJQ69QmX13ofWx9SQ9MqgXYOoQ2KiCdcWTuv7l
+         lhpc6stePTGrBece03FyX3cBhPpyiLjEVvYdyRe76WIo/+2+mZic2oUAk2gV2zsYRo+qYUghoB9e
+         gqSuFePvAniIjalpy3FqaP/qWcePpd/i3ylWDx7mC9NYOs4ttbaC0mPLeTk3IKepXrBeAyeWM+TZ
+         eDOSlPZTcUcJlGJzs3htjwYWZ2wERUqR3fkJfGB5XMw+U9jVV7Ik4T4N96dY4hjMQ7kqPYQqRs9s
+         jowG9PHQa4WCLVDQ/ua2h4SdTSm3iEetG+h2PMmcSnJ0qkN87OJPbzq/mMVpVFlIVpLrW1ryW2NA
+         ==
+Date:   Wed, 12 Jan 2022 14:16:27 +0800
+From:   Conley Lee <conleylee@foxmail.com>
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
+        wens@csie.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] net: ethernet: sun4i-emac: replace magic number with
+ macro
+X-OQ-MSGID: <Yd5yO0+T+q9gBYlj@fedora>
+References: <tencent_58B12979F0BFDB1520949A6DB536ED15940A@qq.com>
+ <tencent_71466C2135CD1780B19D7844BE3F167C940A@qq.com>
+ <Yd2xC7ZaHrTAXcZd@Red>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 20C60Bfr088741
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yd2xC7ZaHrTAXcZd@Red>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ast2500, engine will stop occasionally for 1360x768.
+On 01/11/22 at 05:32下午, Corentin Labbe wrote:
+> Date: Tue, 11 Jan 2022 17:32:11 +0100
+> From: Corentin Labbe <clabbe.montjoie@gmail.com>
+> To: Conley Lee <conleylee@foxmail.com>
+> Cc: davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
+>  wens@csie.org, netdev@vger.kernel.org,
+>  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v3] net: ethernet: sun4i-emac: replace magic number
+>  with macro
+> 
+> Le Tue, Jan 11, 2022 at 11:05:53AM +0800, Conley Lee a écrit :
+> > This patch remove magic numbers in sun4i-emac.c and replace with macros
+> > defined in sun4i-emac.h
+> > 
+> > Signed-off-by: Conley Lee <conleylee@foxmail.com>
+> 
+> Hello
+> 
+> I sent a CI job witch next-20220107+yourpatch and saw no regression.
+> 
+> Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+> Tested-on: sun4i-a10-olinuxino-lime
+> 
+> Thanks!
+> Regards
+> 
+Could you please provide more information about it ? I test it on my
+marsboard-a20 and everything work well.
 
-This is a bug which has been addressed, but the workaround is specific
-for 1680 only. Here we make it more complete.
-
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
----
- drivers/media/platform/aspeed-video.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index 4c75dc58a33c..4f5f5dd364ee 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -1068,18 +1068,19 @@ static void aspeed_video_set_resolution(struct aspeed_video *video)
- 	/* Set capture/compression frame sizes */
- 	aspeed_video_calc_compressed_size(video, size);
- 
--	if (video->active_timings.width == 1680) {
-+	if (!IS_ALIGNED(act->width, 64)) {
- 		/*
--		 * This is a workaround to fix a silicon bug on A1 and A2
--		 * revisions. Since it doesn't break capturing operation of
-+		 * This is a workaround to fix a AST2500 silicon bug on A1 and
-+		 * A2 revisions. Since it doesn't break capturing operation of
- 		 * other revisions, use it for all revisions without checking
--		 * the revision ID. It picked 1728 which is a very next
--		 * 64-pixels aligned value to 1680 to minimize memory bandwidth
-+		 * the revision ID. It picked new width which is a very next
-+		 * 64-pixels aligned value to minimize memory bandwidth
- 		 * and to get better access speed from video engine.
- 		 */
--		aspeed_video_write(video, VE_CAP_WINDOW,
--				   1728 << 16 | act->height);
--		size += (1728 - 1680) * video->active_timings.height;
-+		u32 width = ALIGN(act->width, 64);
-+
-+		aspeed_video_write(video, VE_CAP_WINDOW, width << 16 | act->height);
-+		size = width * act->height;
- 	} else {
- 		aspeed_video_write(video, VE_CAP_WINDOW,
- 				   act->width << 16 | act->height);
--- 
-2.25.1
-
+Thanks 

@@ -2,146 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9881248C6A7
+	by mail.lfdr.de (Postfix) with ESMTP id E9DCD48C6A8
 	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:02:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354399AbiALPBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:01:50 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:48586 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1354387AbiALPBt (ORCPT
+        id S1354406AbiALPCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:02:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:29541 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1354401AbiALPCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:01:49 -0500
-X-UUID: da3aa3e0ca114818b1d6d272fd8940d8-20220112
-X-UUID: da3aa3e0ca114818b1d6d272fd8940d8-20220112
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <jitao.shi@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1695475155; Wed, 12 Jan 2022 23:01:47 +0800
-Received: from MTKMBS34N1.mediatek.inc (172.27.4.172) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 12 Jan 2022 23:01:45 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS34N1.mediatek.inc
- (172.27.4.172) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Jan
- 2022 23:01:44 +0800
-Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
- MTKCAS32.mediatek.inc (172.27.4.170) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Wed, 12 Jan 2022 23:01:38 +0800
-From:   Jitao Shi <jitao.shi@mediatek.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <ck.hu@mediatek.com>,
-        <stonea168@163.com>, <huijuan.xie@mediatek.com>,
-        <rex-bc.chen@mediatek.com>, <shuijing.li@mediatek.com>,
-        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Jitao Shi <jitao.shi@mediatek.com>
-Subject: [PATCH] drm/mediatek: DP HPD Detect with debounce
-Date:   Wed, 12 Jan 2022 23:01:33 +0800
-Message-ID: <20220112150133.11275-1-jitao.shi@mediatek.com>
-X-Mailer: git-send-email 2.12.5
+        Wed, 12 Jan 2022 10:02:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641999731;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7f6mTNt7YaUSpPXZZCZPgQVj1/ZDxnN/2snqOElACbM=;
+        b=NTJ3EvJlxBB0L00CT5WQA90EHqAa2pAmgNHhseieLOyvaF26BR+m3EXCKZMgk4rqQU3O9A
+        r2+QzOHOXfAc1lUfAOAFIlJWOnybppp9dg0mJEqHuGhxJFmAzjegjDVMWIXbVndkGbzPMc
+        +sLXIrjzo/szdQneafSHETXEGnQgihQ=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-101-uqH0CxOVOMKUI5luLVj_mw-1; Wed, 12 Jan 2022 10:02:09 -0500
+X-MC-Unique: uqH0CxOVOMKUI5luLVj_mw-1
+Received: by mail-ed1-f69.google.com with SMTP id y18-20020a056402271200b003fa16a5debcso2482634edd.14
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:02:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=7f6mTNt7YaUSpPXZZCZPgQVj1/ZDxnN/2snqOElACbM=;
+        b=GX+aNfph5cYh6apOZ6SRQoprZ4T9sm6O/f+zKy3y0HSWQP0hUVCPeQeY0UVrp4BJjQ
+         r19j0QpmAm6Ls1wXmZFHPOAyQP0T+ZKZwWahXfed78+6EPIBvYa8uRrp5DJmLRcd5bHF
+         0w/jwoy6KILNAFxyuP/Vg5xly9ecjSOfJbmSWQm72ja7ab81sgWR/ASAcTP3xJxG+vgT
+         eccKV6p+uxD3Mambi5/kiLNrJ10H0SxjfTufrh4SSGO6RDzYzgITYGndfYaSQMRRw4mm
+         brtK9cpXHRe1OM3QvDdey+9LlOdTEs2dDWcLfHuJoYm5+WX+vRNBWLAZCslLglm9xuSF
+         5v6Q==
+X-Gm-Message-State: AOAM530N3iRl1hafGruv4ZIwfiZ8I8/6ekVqreqKdp14VoZXZAoxtr5p
+        Q+7uPqZEgTf4YiU5+xy7nxtpShnQWxj4DrltTum46yZMraF2qCN0A766NPY7HmM/LyD9jidlQyu
+        bjkI+qvgRliy4wO+uZSYXyhwJ
+X-Received: by 2002:a05:6402:190d:: with SMTP id e13mr54964edz.414.1641999728541;
+        Wed, 12 Jan 2022 07:02:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzQRAl2uTikFNex8JGdk4/ia/gTryowOeWKg0HXYHyybKohwCELxbZl+CxPAksdmOkmMm7hQw==
+X-Received: by 2002:a05:6402:190d:: with SMTP id e13mr54945edz.414.1641999728332;
+        Wed, 12 Jan 2022 07:02:08 -0800 (PST)
+Received: from redhat.com ([2.55.132.148])
+        by smtp.gmail.com with ESMTPSA id h13sm16749edl.96.2022.01.12.07.02.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 07:02:07 -0800 (PST)
+Date:   Wed, 12 Jan 2022 10:02:03 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     =?utf-8?B?5p2O5Lic5Y2H?= <lidongsheng@dayudpu.com>
+Cc:     jasowang <jasowang@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] virtio_vdpa: Support surprise removal of virtio vdpa
+ device
+Message-ID: <20220112100006-mutt-send-email-mst@kernel.org>
+References: <tencent_7A45E1E967F13AE14B061269@qq.com>
+ <20220111065033-mutt-send-email-mst@kernel.org>
+ <CACGkMEuAoSwore14qnuMDgdEtWh-UOJf1=oR9vhPMff8hoEZEQ@mail.gmail.com>
+ <20220112013018-mutt-send-email-mst@kernel.org>
+ <tencent_18F8A88D22E327230EF313BE@qq.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-MTK:  N
+In-Reply-To: <tencent_18F8A88D22E327230EF313BE@qq.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DP Spec 1.4a 3.3 requires dp detect the hpd with debounce.
 
-Upstream implementations should implement HPD signal de-bouncing on
-an external connection. A period of 100ms should be used for
-detecting an HPD connect event (i.e., the event, “HPD high,” is
-confirmed only after HPD has been continuously asserted for 100ms).
-Care should be taken to not implement de-bouncing on an IRQ_HPD and
-on a downstream device-generated pair of HPD disconnect/reconnect
-events (typically HPD shall be de-asserted for more than 2ms, but
-less than 100ms in this case). To cover these cases, HPD de-bounce
-should be implemented only after HPD low has been detected for 100ms.
- Timing requirements in this Standard related to the detection of
-HPD high are to be interpreted as applying from the completion of an
-implementation-dependent de-bounce period.
+On Wed, Jan 12, 2022 at 04:44:08PM +0800, 李东升 wrote:
+> Indeed, there are hidden dangers for storage devices.
+> So maybe we can break the device before virtio_net unregister_netdev and before
+> virtio_blk reset
+> 
+> Unlike pci device, there is a manufacturer-driven existence between virtio vdpa
+> and hardware devices, 
+> unless the manufacturer provides a state interface, virtio vdpa and
+> higher-level drivers cannot obtain the real hardware state.
 
-Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_dp.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+I think for surprise removal you need to propagate the presence status up.
+No way around that imho.
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
-index a256d55346a2..05f401a024a4 100644
---- a/drivers/gpu/drm/mediatek/mtk_dp.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-@@ -193,6 +193,8 @@ struct mtk_dp {
- 	struct mutex eld_lock;
- 	u8 connector_eld[MAX_ELD_BYTES];
- 	struct drm_connector *conn;
-+	bool need_debounce;
-+	struct timer_list debounce_timer;
- };
- 
- enum mtk_dp_sdp_type {
-@@ -2217,6 +2219,9 @@ static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void *dev)
- 	if (event < 0)
- 		return IRQ_HANDLED;
- 
-+	if (mtk_dp->need_debounce && mtk_dp->train_info.cable_plugged_in)
-+		msleep(100);
-+
- 	if (mtk_dp->drm_dev) {
- 		dev_info(mtk_dp->dev, "drm_helper_hpd_irq_event\n");
- 		drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
-@@ -2296,6 +2301,14 @@ static irqreturn_t mtk_dp_hpd_isr_handler(struct mtk_dp *mtk_dp)
- 		mtk_dp->train_state = MTK_DP_TRAIN_STATE_STARTUP;
- 	}
- 	train_info->cable_state_change = true;
-+
-+	if (train_info->cable_state_change) {
-+		if (!train_info->cable_plugged_in) {
-+			mod_timer(&mtk_dp->debounce_timer, jiffies + msecs_to_jiffies(100) - 1);
-+			mtk_dp->need_debounce = false;
-+		}
-+	}
-+
- 	return IRQ_WAKE_THREAD;
- }
- 
-@@ -2903,6 +2916,13 @@ static int mtk_dp_register_audio_driver(struct device *dev)
- 	return 0;
- }
- 
-+static void mtk_dp_debounce_timer(struct timer_list *t)
-+{
-+	struct mtk_dp *mtk_dp = from_timer(mtk_dp, t, debounce_timer);
-+
-+	mtk_dp->need_debounce = true;
-+}
-+
- static int mtk_dp_probe(struct platform_device *pdev)
- {
- 	struct mtk_dp *mtk_dp;
-@@ -2990,6 +3010,9 @@ static int mtk_dp_probe(struct platform_device *pdev)
- 	else
- 		mtk_dp->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
- 
-+	mtk_dp->need_debounce = true;
-+	timer_setup(&mtk_dp->debounce_timer, mtk_dp_debounce_timer, 0);
-+
- 	mtk_dp->bridge.ops =
- 		DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID | DRM_BRIDGE_OP_HPD;
- 	drm_bridge_add(&mtk_dp->bridge);
-@@ -3008,6 +3031,7 @@ static int mtk_dp_remove(struct platform_device *pdev)
- 
- 	mtk_dp_video_mute(mtk_dp, true);
- 	mtk_dp_audio_mute(mtk_dp, true);
-+	del_timer_sync(&mtk_dp->debounce_timer);
- 
- 	pm_runtime_disable(&pdev->dev);
- 
--- 
-2.12.5
+> 
+> ------------------ Original ------------------
+> From:  "mst"<mst@redhat.com>;
+> Date:  Wed, Jan 12, 2022 02:30 PM
+> To:  "jasowang"<jasowang@redhat.com>;
+> Cc:  "李东升"<lidongsheng@dayudpu.com>; "virtualization"
+> <virtualization@lists.linux-foundation.org>; "linux-kernel"
+> <linux-kernel@vger.kernel.org>;
+> Subject:  Re: [PATCH] virtio_vdpa: Support surprise removal of virtio vdpa
+> device
+>  
+> On Wed, Jan 12, 2022 at 10:23:07AM +0800, Jason Wang wrote:
+> > On Tue, Jan 11, 2022 at 7:52 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > >
+> > > On Tue, Jan 11, 2022 at 11:36:42AM +0800, 李东升 wrote:
+> > > > When virtio vdpa device removed, the abnormal damage of the device cannot
+> be
+> > > > perceived normally, which will cause problems similar to:
+> > > >
+> > > > 43bb40c5b926
+> > >
+> > >
+> > > Should include the subject of the patch too.
+> > >
+> > > > Hence, add the ability to abort the command on surprise removal
+> > > >
+> > > > Signed-off-by: dongsheng li <lidongsheng@dayudpu.com>
+> > >
+> > > When removing gracefully,
+> > > I am not sure we should break device unconditionally like this
+> > > before giving drivers a chance to clean up.
+> > > Should we just do it for surprise removal?
+> >
+> > That requires a new method to query whether it's a surprise removal.
+> >
+> > Thanks
+> 
+> We can check pci_device_is_present like virtio does.
+> 
+> > >
+> > > > ---
+> > > >  drivers/virtio/virtio_vdpa.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
+> > > > index 4a9ddb44b2a7..fd930409d190 100644
+> > > > --- a/drivers/virtio/virtio_vdpa.c
+> > > > +++ b/drivers/virtio/virtio_vdpa.c
+> > > > @@ -374,6 +374,7 @@ static void virtio_vdpa_remove(struct vdpa_device
+> *vdpa)
+> > > >  {
+> > > >   struct virtio_vdpa_device *vd_dev = vdpa_get_drvdata(vdpa);
+> > > >
+> > > > + virtio_break_device(vd_dev->vdev);
+> > > >   unregister_virtio_device(&vd_dev->vdev);
+> > > >  }
+> > > >
+> > > > --
+> > > > 2.17.1
+> > >
+> 
 

@@ -2,137 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 522A848C040
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C9548C05F
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349537AbiALIvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:51:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
+        id S1351762AbiALIxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237959AbiALIvq (ORCPT
+        with ESMTP id S237959AbiALIxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:51:46 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C26C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:51:46 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id p14so3191309plf.3
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:51:46 -0800 (PST)
+        Wed, 12 Jan 2022 03:53:44 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C84FC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:53:44 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id g11so5700092lfu.2
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:53:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zzw2OtCR4zPV/tIIl1/hV37vrWAMfZ8fJBYvnqWy2q8=;
-        b=hHECxXlMoYf14MQJ3tQJkv4kQ7uab+TTEaUemUAAkIuWjaabOadj1FMSjeYta2dCjp
-         gB0HbhfB7MLID93RZnwH0a515EiVSiyjmZPlolw+jfvnHlu5WeeZy23jAIk1AHnB+nCk
-         9magP1ZEMWU+D8gaJeSnz/i9FGS47HRhYJBJ2G/k7RTAlxY73lJsGqet7gYKpW0+G+uL
-         fHjNbSdjcWpsbt1kRndztSsCdAiHr+se1zXxYqxlXXgM7H1tihAb15Pe0rjGitAgZMJH
-         v23DvmU1ov2aUML97rlJ8HVdw/QG1cRewfebYLSdrmTKZqPYjAc/rQS+wL5w9UnbbzP9
-         RD8Q==
+        bh=QX44NtMzpgo+l2Ho0SHw53qmGi3kaH4gIg9bfUEaJf8=;
+        b=GwrhxtFMs32fVtJhHB7d1TFxrETcq3mcE7NxamZu/6SOWSIdtZ4+Srz4LvEcSQmDB9
+         LGFQ2vBPVGkMp3fk+4mJMplM1VhKxsHdEqD7JU4j3PciOrX6Zd64Jq9V2eEXn6NbELug
+         K4bzHQ4527hYt4Ei4Xt8net4BaK/oZ4fiVvYM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zzw2OtCR4zPV/tIIl1/hV37vrWAMfZ8fJBYvnqWy2q8=;
-        b=qyrBuyAyEPv2vvwUEtArrhdHovOz1JPBPYua9OawZQ+7XU+XodUE0Z8TDTMj1OklZN
-         TFS2dXTDGlMPLu5Q37k+x50ywtf0prYUw0MtEtZyC9+2jIPdFRRZ/Xt9xWrh3+p6tC/P
-         jPJyrIID2E1DjVXrZDxPvLYozMLbnC7d7XJg5oHMiBpfrjW6EjQEUBfpGQxX47mwCUNi
-         mIuNri6DqrtR2w2H79KtSo7J0H3aHbAVmHR3/Rujm5azti2A3hOGS6fWLY0dctFs0xpC
-         Wo+QebqTvOI2cXGjh5NC7r/si5vKvnTnCZ/KLF9qTSmcrW0f7K9xfcCLF/9ogrDUPTLr
-         0uPQ==
-X-Gm-Message-State: AOAM53217ml3cGgxtPtg4iMKjd1y4QCYUtIdU42On3wRKEb5o1yhahGE
-        peX7OY8eazOyqMm2NUkErcoRNxS8V0mqi1l6xBI=
-X-Google-Smtp-Source: ABdhPJzAMp0qhUOkAs8lyb7w/Cmd+w4mx+GQT+Hi8e57os8JA9Nyi+7lzew7Keed8zAsAPsBLVcpsorK+ZZ+drIuXuE=
-X-Received: by 2002:a17:90a:68c5:: with SMTP id q5mr7636274pjj.40.1641977505496;
- Wed, 12 Jan 2022 00:51:45 -0800 (PST)
+        bh=QX44NtMzpgo+l2Ho0SHw53qmGi3kaH4gIg9bfUEaJf8=;
+        b=s6DOzKUW++FdTxw1mSoHDs2cvhxe81DxCEMfzHX93L09n+iesXn7CIZYxBzU9pZeZ3
+         s0CuG01gniVYFhCwhxNFOB8LK2g7gJNfzS7dVo1BFPwuYMKVsGcQBno6sJgTBBGDirET
+         4u2ofQUnsknARV2y22YIYAwMFQlaI9b+KfSzbTDHDTjZK82ZK4A1OL8Hnsbh8wZ7B1TQ
+         Xm8btrfwizjz3675QkvdPCtz48W8nKrSA5Ggqj+aaM98GI5Q9bsP4nti3ITR0v6AdtTV
+         haN73R2oRBKfwvJ0G8C9W3nkkSk/20OzcjWuFXkQrXJ1x17R4ePzvLN8s8beI3dgP7y1
+         xyew==
+X-Gm-Message-State: AOAM533B75b3fbDjyuU7YEIbdV+sFJ/6HHF+iqbD57ai/6vKRzhokjTs
+        eyUvzLtLijFBLnYQDBP5O3rcGskg4Ag2vlKPYyRsFQ==
+X-Google-Smtp-Source: ABdhPJxEbYrAx/hnpV9Nn6yck1TYbHCWYGr7VZUmUHpP5vookcO09X5JJ9gm0O/ez/CfSZpUBOe1UT3KZO6sItHHMFc=
+X-Received: by 2002:a2e:7f1a:: with SMTP id a26mr5747639ljd.414.1641977622599;
+ Wed, 12 Jan 2022 00:53:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20220112082524.667552-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220112082524.667552-1-chi.minghao@zte.com.cn>
-From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Date:   Wed, 12 Jan 2022 09:51:34 +0100
-Message-ID: <CAMeQTsbsrg0yNQMAxgocGuHkMtwiyRoh3nPJEmeR3yVGUoBg_g@mail.gmail.com>
-Subject: Re: [PATCH] drm/gma500: remove redundant ret variable
-To:     cgel.zte@gmail.com
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
+References: <20220111112244.1483783-1-wenst@chromium.org> <20220111112244.1483783-8-wenst@chromium.org>
+In-Reply-To: <20220111112244.1483783-8-wenst@chromium.org>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 12 Jan 2022 16:53:31 +0800
+Message-ID: <CAGXv+5Gq0uH-eA799f1MRgzeUU9fsfi-Xz0XyW7ZJW==i_mcYg@mail.gmail.com>
+Subject: Re: [PATCH 7/7] pinctrl: mediatek: paris: Support generic PIN_CONFIG_DRIVE_STRENGTH_UA
+To:     Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Guodong Liu <guodong.liu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 9:25 AM <cgel.zte@gmail.com> wrote:
+On Tue, Jan 11, 2022 at 7:23 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
 >
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+> Some of the MediaTek chips that utilize the Paris pinctrl driver library
+> support a lower drive strength (<= 1mA) than the standard drive strength
+> settings (2~16 mA) on certain pins. This was previously supported by the
+> custom MTK_PIN_CONFIG_DRV_ADV parameter along with the
+> "mediatek,drive-strength-adv" device tree property.
 >
-> Return value directly instead of taking this in another redundant
-> variable.
+> The drive strength values for this hardware are 125, 250, 500, and 1000 mA,
+> and can be readily described by the existing "drive-strength-microamp",
+> which then gets parsed by the generic pinconf library into the parameter
+> PIN_CONFIG_DRIVE_STRENGTH_UA.
+
+So I am actually unsure how to implement support for this properly.
+My intention was to map "mediatek,drive-strength-adv" to
+"drive-strength-microamp". This implies using the advanced mode if
+the property is present, and vice versa.
+
+(Also unsure if such a binding would be acceptable.)
+
+However the pin configs are passed in one-by-one within the driver, so
+it doesn't seem viable to check for the absence of a certain parameter.
+This might involve a bit more rewriting.
+
+ChenYu
+
+> Add support for PIN_CONFIG_DRIVE_STRENGTH_UA while keeping the old
+> custom parameter around for backward compatibility.
 >
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
-
-Thanks for the patch. I'll apply this to drm-misc-next
-
--Patrik
-
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 > ---
->  drivers/gpu/drm/gma500/cdv_intel_dp.c | 12 +++---------
->  1 file changed, 3 insertions(+), 9 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/gma500/cdv_intel_dp.c b/drivers/gpu/drm/gma500/cdv_intel_dp.c
-> index ba6ad1466374..74e67679714e 100644
-> --- a/drivers/gpu/drm/gma500/cdv_intel_dp.c
-> +++ b/drivers/gpu/drm/gma500/cdv_intel_dp.c
-> @@ -82,7 +82,6 @@ i2c_algo_dp_aux_address(struct i2c_adapter *adapter, u16 address, bool reading)
->  {
->         struct i2c_algo_dp_aux_data *algo_data = adapter->algo_data;
->         int mode = MODE_I2C_START;
-> -       int ret;
+> The indentation in the switch/case blocks is getting somewhat out of
+> control. I also have some cleanup changes to reverse the logic of the
+> if/break statements. Not sure if it should be done before or after this
+> patch though.
 >
->         if (reading)
->                 mode |= MODE_I2C_READ;
-> @@ -90,8 +89,7 @@ i2c_algo_dp_aux_address(struct i2c_adapter *adapter, u16 address, bool reading)
->                 mode |= MODE_I2C_WRITE;
->         algo_data->address = address;
->         algo_data->running = true;
-> -       ret = i2c_algo_dp_aux_transaction(adapter, mode, 0, NULL);
-> -       return ret;
-> +       return i2c_algo_dp_aux_transaction(adapter, mode, 0, NULL);
->  }
+> ---
+>  drivers/pinctrl/mediatek/pinctrl-paris.c | 84 ++++++++++++++++++++++++
+>  1 file changed, 84 insertions(+)
 >
->  /*
-> @@ -122,13 +120,11 @@ static int
->  i2c_algo_dp_aux_put_byte(struct i2c_adapter *adapter, u8 byte)
->  {
->         struct i2c_algo_dp_aux_data *algo_data = adapter->algo_data;
-> -       int ret;
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
+> index 678c8aa33012..5a94903ae372 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-paris.c
+> +++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
+> @@ -48,6 +48,53 @@ static const char * const mtk_gpio_functions[] = {
+>         "func12", "func13", "func14", "func15",
+>  };
 >
->         if (!algo_data->running)
->                 return -EIO;
+> +/*
+> + * This section supports converting to/from custom MTK_PIN_CONFIG_DRV_ADV
+> + * and standard PIN_CONFIG_DRIVE_STRENGTH_UA pin configs.
+> + *
+> + * The custom value encodes three hardware bits as follows:
+> + *
+> + *   |           Bits           |
+> + *   | 2 (E1) | 1 (E0) | 0 (EN) | drive strength (uA)
+> + *   ------------------------------------------------
+> + *   |    x   |    x   |    0   | disabled, use standard drive strength
+> + *   -------------------------------------
+> + *   |    0   |    0   |    1   |  125 uA
+> + *   |    0   |    1   |    1   |  250 uA
+> + *   |    1   |    0   |    1   |  500 uA
+> + *   |    1   |    1   |    1   | 1000 uA
+> + */
+> +static const int mtk_drv_adv_uA[] = { 125, 250, 500, 1000 };
+> +
+> +static int mtk_drv_adv_to_uA(int val)
+> +{
+> +       /* This should never happen. */
+> +       if (WARN_ON_ONCE(val < 0 || val > 7))
+> +               return -EINVAL;
+> +
+> +       /* Bit 0 simply enables this hardware part */
+> +       if (!(val & BIT(0)))
+> +               return -EINVAL;
+> +
+> +       return mtk_drv_adv_uA[(val >> 1)];
+> +}
+> +
+> +static int mtk_drv_uA_to_adv(int val)
+> +{
+> +       switch (val) {
+> +       case 125:
+> +               return 0x1;
+> +       case 250:
+> +               return 0x3;
+> +       case 500:
+> +               return 0x5;
+> +       case 1000:
+> +               return 0x7;
+> +       }
+> +
+> +       return -EINVAL;
+> +}
+> +
+>  static int mtk_pinmux_gpio_request_enable(struct pinctrl_dev *pctldev,
+>                                           struct pinctrl_gpio_range *range,
+>                                           unsigned int pin)
+> @@ -151,11 +198,38 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
 >
-> -       ret = i2c_algo_dp_aux_transaction(adapter, MODE_I2C_WRITE, byte, NULL);
-> -       return ret;
-> +       return i2c_algo_dp_aux_transaction(adapter, MODE_I2C_WRITE, byte, NULL);
->  }
->
->  /*
-> @@ -139,13 +135,11 @@ static int
->  i2c_algo_dp_aux_get_byte(struct i2c_adapter *adapter, u8 *byte_ret)
->  {
->         struct i2c_algo_dp_aux_data *algo_data = adapter->algo_data;
-> -       int ret;
->
->         if (!algo_data->running)
->                 return -EIO;
->
-> -       ret = i2c_algo_dp_aux_transaction(adapter, MODE_I2C_READ, 0, byte_ret);
-> -       return ret;
-> +       return i2c_algo_dp_aux_transaction(adapter, MODE_I2C_READ, 0, byte_ret);
->  }
->
->  static int
+>                 break;
+>         case PIN_CONFIG_DRIVE_STRENGTH:
+> +               if (hw->soc->adv_drive_get) {
+> +                       err = hw->soc->adv_drive_get(hw, desc, &ret);
+> +                       if (!err) {
+> +                               err = mtk_drv_adv_to_uA(ret);
+> +                               if (err > 0) {
+> +                                       /* PIN_CONFIG_DRIVE_STRENGTH_UA used */
+> +                                       err = -EINVAL;
+> +                                       break;
+> +                               }
+> +                       }
+> +               }
+> +
+>                 if (hw->soc->drive_get)
+>                         err = hw->soc->drive_get(hw, desc, &ret);
+>                 else
+>                         err = -ENOTSUPP;
+>                 break;
+> +       case PIN_CONFIG_DRIVE_STRENGTH_UA:
+> +               if (hw->soc->adv_drive_get) {
+> +                       err = hw->soc->adv_drive_get(hw, desc, &ret);
+> +                       if (err)
+> +                               break;
+> +                       err = mtk_drv_adv_to_uA(ret);
+> +                       if (err < 0)
+> +                               break;
+> +
+> +                       ret = err;
+> +                       err = 0;
+> +               } else {
+> +                       err = -ENOTSUPP;
+> +               }
+> +               break;
+>         case MTK_PIN_CONFIG_TDSEL:
+>         case MTK_PIN_CONFIG_RDSEL:
+>                 reg = (param == MTK_PIN_CONFIG_TDSEL) ?
+> @@ -271,6 +345,16 @@ static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+>                 else
+>                         err = -ENOTSUPP;
+>                 break;
+> +       case PIN_CONFIG_DRIVE_STRENGTH_UA:
+> +               if (hw->soc->adv_drive_set) {
+> +                       err = mtk_drv_uA_to_adv(arg);
+> +                       if (err < 0)
+> +                               break;
+> +                       err = hw->soc->adv_drive_set(hw, desc, err);
+> +               } else {
+> +                       err = -ENOTSUPP;
+> +               }
+> +               break;
+>         case MTK_PIN_CONFIG_TDSEL:
+>         case MTK_PIN_CONFIG_RDSEL:
+>                 reg = (param == MTK_PIN_CONFIG_TDSEL) ?
 > --
-> 2.25.1
+> 2.34.1.575.g55b058a8bb-goog
 >

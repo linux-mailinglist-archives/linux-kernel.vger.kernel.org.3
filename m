@@ -2,76 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7380648BD29
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1644048BD2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 03:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348525AbiALC0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 21:26:22 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:42586 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236094AbiALC0W (ORCPT
+        id S1348538AbiALC0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 21:26:46 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:35443 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236608AbiALC0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 21:26:22 -0500
-Received: by mail-ot1-f43.google.com with SMTP id s8-20020a0568301e0800b00590a1c8cc08so959117otr.9;
-        Tue, 11 Jan 2022 18:26:21 -0800 (PST)
+        Tue, 11 Jan 2022 21:26:45 -0500
+Received: by mail-ot1-f50.google.com with SMTP id 60-20020a9d0142000000b0059103eb18d4so996429otu.2;
+        Tue, 11 Jan 2022 18:26:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=8skE+EhLiCSJlA3FJNIl/gCXTqckmqz6OxsyWaZ9u+M=;
-        b=tmO1oV3GO+vhcsQ8yT8OHaBRZTlH1WcOuKgHtf7r4G3/r6hlpi3Cw5H+5u9plI5R4l
-         CXklbq/MxOoI+f08rDh2KVldq2us/2T6Q+VumxhvbCvV7mborzFG7lvs6+9kZYjXK8hQ
-         Yr++tTWZrTBZfqFXKUGxwLlOfd4tZcKxKSIQOhvbrrmZqnjBI8OIl8gJ0XrjR6c7VSZP
-         R4qA9MagVOhm6LvXRCgK1a5saW9P/pJzreqOyRFQNMzVlwMpjjW8BI0lj11Zpl21z7T1
-         dHxRESRAcBUkJADz0jo7h8OwBuY0ZyMD8oNqQg5ivk4Q9rHNMHayR/PIdXnOyLBAKNBR
-         7tTg==
-X-Gm-Message-State: AOAM530RWrtydGCbbVEJ0JfUBEvgZk3KKI3hZX/GW3wt5QsNpb/peQbW
-        G9Md3IsoGUepMtVlKkvBvA==
-X-Google-Smtp-Source: ABdhPJzXqX8XUOXqjUnZ7YOkTfLPWni4FeR/wl9DtlyO3BTkAIqM2zIPJBqinjkEhYLiTHGtJBr/rA==
-X-Received: by 2002:a9d:6012:: with SMTP id h18mr5410418otj.203.1641954381390;
-        Tue, 11 Jan 2022 18:26:21 -0800 (PST)
+        bh=ds6wRCFPL40BKi4K6LyOPbKU8cjTciwH+ZBrh/+ERu0=;
+        b=WwEvTBcyMbj8/cYOhqblr+4kegsSKEo8TGuFdhDTV61Fhgh4bFl29mNVcaZ6hHkAAb
+         5/pl/cv/D2POrKnhHCFgDlqjoP+Ce+kYbiDe2g89DAvDcKnGW/FlkxrZjjBAvfRgaah1
+         JIfqOtbppz57Jl6NZtRkxK5SUlw0hZietJ0WsZpudJZSeazCRK4fUAiKCNFkyQc/0Uh5
+         PtXsL7WaKKK9/H4U1aLi1brdYo4AxRr926WuIQ5YJpYnfFbo0KD38WcdMSya9XdoyKms
+         4lGKjgrnSvW4sJ32U2vTHvpjDQapJyHRjuq22IBoKUIymXxN5dtWAGxuLWAHfijzqB05
+         njCg==
+X-Gm-Message-State: AOAM531oEcPheeCIHSF6guIsQYetJ61i/AyU9KktwPdpyu0tWCXk8aPc
+        qzuFJU1J0oqy/n0Er5LiTA==
+X-Google-Smtp-Source: ABdhPJz3e+MTn+AZbhQ6ZuGywkRVoXtlT796gDLOpKPvLwU3O/AtddJ8fnESqn/3CjbiOCtjZGIjHg==
+X-Received: by 2002:a9d:f04:: with SMTP id 4mr5270642ott.326.1641954404451;
+        Tue, 11 Jan 2022 18:26:44 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id s124sm515068ooa.1.2022.01.11.18.26.20
+        by smtp.gmail.com with ESMTPSA id d21sm671239oti.5.2022.01.11.18.26.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 18:26:20 -0800 (PST)
-Received: (nullmailer pid 3951142 invoked by uid 1000);
-        Wed, 12 Jan 2022 02:26:19 -0000
-Date:   Tue, 11 Jan 2022 20:26:19 -0600
+        Tue, 11 Jan 2022 18:26:43 -0800 (PST)
+Received: (nullmailer pid 3951745 invoked by uid 1000);
+        Wed, 12 Jan 2022 02:26:42 -0000
+Date:   Tue, 11 Jan 2022 20:26:42 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        linux-leds@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] dt-bindings: mfd: maxim,max77693: convert to
- dtschema
-Message-ID: <Yd48S1shnwqjs75r@robh.at.kernel.org>
-References: <20220111175017.223966-1-krzysztof.kozlowski@canonical.com>
- <20220111175017.223966-5-krzysztof.kozlowski@canonical.com>
+Cc:     Chanho Park <chanho61.park@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Alim Akhtar <alim.akhtar@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 25/28] dt-bindings: pinctrl: samsung: describe
+ Exynos850 and ExynosAutov9 wake-ups
+Message-ID: <Yd48YtTFYez0yx9N@robh.at.kernel.org>
+References: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com>
+ <20220111201722.327219-19-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220111175017.223966-5-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220111201722.327219-19-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 18:50:17 +0100, Krzysztof Kozlowski wrote:
-> Convert the MFD part of Maxim MAX77693 MUIC to DT schema format.  The
-> example DTS was copied from existing DTS (exynos4412-midas.dtsi), so
-> keep the license as GPL-2.0-only.
+On Tue, 11 Jan 2022 21:17:19 +0100, Krzysztof Kozlowski wrote:
+> Older Samsung Exynos SoC pin controller nodes (Exynos3250, Exynos4,
+> Exynos5, Exynos5433) with external wake-up interrupts, expected to have
+> one interrupt for multiplexing these wake-up interrupts.  Also they
+> expected to have exactly one pin controller capable of external wake-up
+> interrupts.
+> 
+> It seems however that newer ARMv8 Exynos SoC like Exynos850 and
+> ExynosAutov9 have differences of their pin controller node capable of
+> external wake-up interrupts:
+> 1. No multiplexed external wake-up interrupt, only direct,
+> 2. More than one pin controller capable of external wake-up interrupts.
+> 
+> Add dedicated Exynos850 and ExynosAutov9 compatibles.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  .../devicetree/bindings/mfd/max77693.txt      | 194 ------------------
->  .../bindings/mfd/maxim,max77693.yaml          | 143 +++++++++++++
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 144 insertions(+), 195 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mfd/max77693.txt
->  create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
+>  .../samsung,pinctrl-wakeup-interrupt.yaml     | 27 ++++++++++++++++---
+>  1 file changed, 24 insertions(+), 3 deletions(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>

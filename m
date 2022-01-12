@@ -2,187 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 108CC48C8DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C015B48C8E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355386AbiALQyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:54:05 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:42288 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244049AbiALQyC (ORCPT
+        id S1355402AbiALQy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355400AbiALQyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:54:02 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 041391F3A3;
-        Wed, 12 Jan 2022 16:54:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642006440; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UlUXwhz5IgifMhCXTxIB0eJXkNvd51PGEd132obgUBM=;
-        b=Tj12U0yEKazKvlgKPCg4i2/GRE9ioMuLOlUekHY2+lygso0kKTeGZHQJ81hlJdavgJyN7v
-        LBWtJFHnvvbYoUfi+VKpAi8GdY3lJbV1Q6YfPzun1caBg7QjACzmPP/B+9WLMRSyMy5bCR
-        8wgX92bPc1ryW7ohVEZWY48psnWhwlI=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9D218A3B84;
-        Wed, 12 Jan 2022 16:53:59 +0000 (UTC)
-Date:   Wed, 12 Jan 2022 17:53:56 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     mcgrof@kernel.org, cl@linux.com, mbenes@suse.cz,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        atomlin@atomlin.com, ghalat@redhat.com, allen.lkml@gmail.com,
-        live-patching@vger.kernel.org
-Subject: Re: [RFC PATCH v2 03/13] module: Move livepatch support to a
- separate file
-Message-ID: <Yd8HpK44aWhhNI/Q@alley>
-References: <20220106234319.2067842-1-atomlin@redhat.com>
- <20220106234319.2067842-4-atomlin@redhat.com>
+        Wed, 12 Jan 2022 11:54:45 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CCCC06173F;
+        Wed, 12 Jan 2022 08:54:45 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id E85B71F45406
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642006480;
+        bh=98h15yTAeCchfHlevZIufCufbR+WIqPYpWLbkpoz8gc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oW/HZVDk86/E9cS2akQLtrRrHfgHGAtsBMX7h6fKl8WFEAFDMdCXCdKNIjxnRFSRs
+         koPCJgoMt+AHsDmTKQTnjyJhTuoPWG+wS0sqQiZnTLqw7eTsj/BHtPzl/Tas0/yoz7
+         jxtnWi5VDwgpc8ANGEhjue73pgZ8K/YoMmHkY6Z83KHW1kBMmIu74JyPvF9L3N0nUK
+         DcrS/Sgz+i6yzpMDayYqYJ8Y46WkCApRZxcVskI450yP2lYfO0MAqXKECptEDyvw22
+         Z8UeXfXWpVnPTrbceN6KEKHmAsHMI+Ld3r+FdB3CsDNZ12Jhf2Tx/oU7YuhoO3ImXo
+         qCIfEACxW1miA==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Cc:     linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+Subject: [PATCH] selftests: rtc: Increase test timeout so that all tests run
+Date:   Wed, 12 Jan 2022 11:53:59 -0500
+Message-Id: <20220112165359.3206047-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106234319.2067842-4-atomlin@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-01-06 23:43:09, Aaron Tomlin wrote:
-> No functional change.
-> 
-> This patch migrates livepatch support (i.e. used during module
-> add/or load and remove/or deletion) from core module code into
-> kernel/module/livepatch.c. At the moment it contains code to
-> persist Elf information about a given livepatch module, only.
-> 
-> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-> ---
->  kernel/module/Makefile    |  1 +
->  kernel/module/internal.h  | 12 ++++++
->  kernel/module/livepatch.c | 75 +++++++++++++++++++++++++++++++++
->  kernel/module/main.c      | 89 +--------------------------------------
->  4 files changed, 89 insertions(+), 88 deletions(-)
->  create mode 100644 kernel/module/livepatch.c
-> 
-> diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-> index a9cf6e822075..47d70bb18da3 100644
-> --- a/kernel/module/Makefile
-> +++ b/kernel/module/Makefile
-> @@ -6,3 +6,4 @@
->  obj-$(CONFIG_MODULES) += main.o
->  obj-$(CONFIG_MODULE_SIG) += signing.o
->  obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
-> +obj-$(CONFIG_LIVEPATCH) += livepatch.o
-> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> index ffc50df010a7..91ef152aeffb 100644
-> --- a/kernel/module/internal.h
-> +++ b/kernel/module/internal.h
-> @@ -51,3 +51,15 @@ struct load_info {
->  };
->  
->  extern int mod_verify_sig(const void *mod, struct load_info *info);
-> +
-> +#ifdef CONFIG_LIVEPATCH
-> +extern int copy_module_elf(struct module *mod, struct load_info *info);
-> +extern void free_module_elf(struct module *mod);
-> +extern int check_modinfo_livepatch(struct module *mod, struct load_info *info);
-> +#else /* !CONFIG_LIVEPATCH */
-> +static inline int copy_module_elf(struct module *mod, struct load_info *info)
-> +{
-> +	return 0;
-> +}
-> +static inline void free_module_elf(struct module *mod) { }
+The timeout setting for the rtc kselftest is currently 90 seconds.
+However, two of the tests set alarms, which take one minute to complete
+each. So the timeout should be at least 120. Set it to 180, so that all
+tests are able to complete and still have some slack.
 
-It looks like there is no check_modinfo_livepatch() variant when
-CONFIG_LIPATCH is disabled.
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+---
 
-> +#endif /* CONFIG_LIVEPATCH */
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 2a6b859716c0..9bcaf251e109 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -3052,19 +2977,7 @@ static int copy_chunked_from_user(void *dst, const void __user *usrc, unsigned l
->  	return 0;
->  }
->  
-> -#ifdef CONFIG_LIVEPATCH
-> -static int check_modinfo_livepatch(struct module *mod, struct load_info *info)
-> -{
-> -	if (get_modinfo(info, "livepatch")) {
-> -		mod->klp = true;
-> -		add_taint_module(mod, TAINT_LIVEPATCH, LOCKDEP_STILL_OK);
-> -		pr_notice_once("%s: tainting kernel with TAINT_LIVEPATCH\n",
-> -			       mod->name);
- > -	}
-> -
-> -	return 0;
-> -}
-> -#else /* !CONFIG_LIVEPATCH */
-> +#ifndef CONFIG_LIVEPATCH
->  static int check_modinfo_livepatch(struct module *mod, struct load_info *info)
->  {
->  	if (get_modinfo(info, "livepatch")) {
+This issue was discovered as part of adding the rtc kselftest to run on KernelCI
+for the rk3399-gru-kevin device, which uses rtc-cros-ec as the RTC driver.
 
-But it exist here.
+The output log with the current timeout is shown in [1]. As can be seen, the
+whole test times out before the alarm_wkalm_set_minute test has had a chance to
+complete:
 
-It would be better to have the two variants close each other. I mean
-to have it somewhere like:
+	# #  RUN           rtc.alarm_wkalm_set_minute ...
+	# # rtctest.c:294:alarm_wkalm_set_minute:Alarm time now set to 11/01/2022 23:03:00.
+	#
+	not ok 1 selftests: rtc: rtctest # TIMEOUT 90 seconds
 
-#ifdef CONFIG_LIVEPATCH
+With the increased timeout, as shown in [2], the alarm_wkalm_set_minute test
+does complete its run:
 
-   variant A
+	# #  RUN           rtc.alarm_wkalm_set_minute ...
+	# # rtctest.c:294:alarm_wkalm_set_minute:Alarm time now set to 12/01/2022 15:54:00.
+	# #            OK  rtc.alarm_wkalm_set_minute
+	# ok 7 rtc.alarm_wkalm_set_minute
+	# # FAILED: 6 / 7 tests passed.
 
-#else
+The fact that the alarm_alm_set_minute test times out on its own is probably an
+issue with the rtc-cros-ec driver. Still, since the tests are independent, all
+of them should be able to run regardless of how long each one takes (so,
+assuming the worst case scenario).
 
-   variant B
+[1] https://lava.collabora.co.uk/scheduler/job/5409783
+[2] https://lava.collabora.co.uk/scheduler/job/5415176
 
-#endif
+ tools/testing/selftests/rtc/settings | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/rtc/settings b/tools/testing/selftests/rtc/settings
+index ba4d85f74cd6..a953c96aa16e 100644
+--- a/tools/testing/selftests/rtc/settings
++++ b/tools/testing/selftests/rtc/settings
+@@ -1 +1 @@
+-timeout=90
++timeout=180
+-- 
+2.34.1
 
-A solution would be to do it a similar way like in
-check_modinfo_retpoline(). Have a generic:
-
-static int check_modinfo_livepatch(struct module *mod, struct load_info *info)
-{
-	if (!get_modinfo(info, "livepatch"))
-		return 0;
-
-	if (set_livepatch_module(mod)) {
-		add_taint_module(mod, TAINT_LIVEPATCH, LOCKDEP_STILL_OK);
-		pr_notice_once("%s: tainting kernel with TAINT_LIVEPATCH\n",
-			       mod->name);
-		return 0;
-       }
-
-       pr_err("%s: module is marked as livepatch module, but livepatch support is disabled",
-	       mod->name);
-       return -ENOEXEC;
-}
-
-, where set_livepatch_module(mod) might be defined inline
-similar way like is_livepatch_module():
-
-#ifdef CONFIG_LIVEPATCH
-static inline bool set_livepatch_module(struct module *mod)
-{
-	mod->klp = true;
-	return true;
-}
-#else /* !CONFIG_LIVEPATCH */
-static inline bool set_livepatch_module(struct module *mod)
-{
-	return false;
-}
-#endif /* CONFIG_LIVEPATCH */
-
-
-Well, it might be matter of taste. Others might prefer another solution.
-Adding live-patching mailing list into Cc.
-
-Anyway, if we do any code refactoring, we should do it in a separate
-preparatory patch.
-
-Best Regards,
-Petr

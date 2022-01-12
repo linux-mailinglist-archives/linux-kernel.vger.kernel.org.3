@@ -2,155 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B71548C522
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2E348C531
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241186AbiALNvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:51:52 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:55829 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238942AbiALNvu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:51:50 -0500
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 135C35801F7;
-        Wed, 12 Jan 2022 08:51:50 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 12 Jan 2022 08:51:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=MLA47hZB1A4Qpb5hssg01vfnJip
-        n57xpzNo0zfRv1Sk=; b=E/XE/OAvd6p+HarUW+eHIk4TKY23snVAEnbwHiOLYoV
-        F9CJsAVNntW0Tumzl13g3HkVg4r0e60Vz+FGtjIWfBLBdCfTE8b1Ge9BN8IVdpJY
-        Eiu6eYfCNBgzDxa+I8mxP88eN7uPfhv4KzE7cR38v2umqePMcdcSvL+ePY2gGvUT
-        TlKSYH6efZmw9GzX5+ida3qBKcscmtXn2g0o28c10/usUGDoUtE/Y3B4A64qvTne
-        MDzPEyQ1nSxG2sN7VcvnLZZqBFtQPof2kGA5A6S/CrrLvbirjHnxJyFy2GYopxVQ
-        xFGmhw74Z3dkiRV+Y+0JkG7ewUTgT0QZ2Apfb4B8ndg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=MLA47h
-        ZB1A4Qpb5hssg01vfnJipn57xpzNo0zfRv1Sk=; b=GXJV4rmfo/RafX/62NIGNT
-        MQPluOvANwW2ld6EUeie+B0Jrv72rav5xYIvVAH6Gyq+dryBz9usv0Qo2zSgOMKY
-        kGTLNhdo/otTORQyq5/xOICBlruF2X4vtFH0c+AEwn8gyhM7LzEZ94oorRPIzz9H
-        HXv1F5894Rn+eCBSc4mhBFcTDCuQoTy09pc/mqWm0VwEFjeGtQZkZpfynB8PPcnW
-        e+7+/OnIhZLjvc8npJgPxnmTsazbPTdvpVApR8pj4BXccZv58SdSrjekpMyWf1QF
-        Vr7PH9Y0q4uhbSiaLIVdEe+kD7OaaoRlq1/qK4x1YrKgkqBqSY7JgDGw60ALGYoQ
-        ==
-X-ME-Sender: <xms:9dzeYUT59e-PAk2Qsb4jP6YUOCwRNbzBiq26eAVHZKc7nnWVV6_quQ>
-    <xme:9dzeYRxWVDS3h-bxENOSEyJQCFeMatNALanLOYkc_XQlE6nBv_29nqt9r5QbBAoph
-    9EbIS2mx445acbCalc>
-X-ME-Received: <xmr:9dzeYR0qdq7ImNfEpmxvgp46pjJHktMZe_8cVkR4M3rO3h9TBS5Z5EZhnBHK99XkyAOGIg52sYX4qv1B0iAepLDlyjhXrZjUUiBOmH0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrtddugdefudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeelgefhjeefjeduudduffejheehtefguedvieejjedvfefhkeevtedthedvhfek
-    vdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:9dzeYYBoxa9ihjQQQ_3rxSeJW9KRF1LOMmdfI_LwfM1sWwmCGCuoYQ>
-    <xmx:9dzeYdhCNMUL1gxuDrdCC5_xUMz6GbGiFQCU9i5Q5xJBpz5CByu00Q>
-    <xmx:9dzeYUoiVVtsIZuJHN-QPErqyql5e7R0NdLghIZ6eN5Quf-uEWrxHw>
-    <xmx:9tzeYVw-sdptMcAwBDDL214Ex6VA-HuT1YetBEUp9rqQWltcLFq--Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Jan 2022 08:51:48 -0500 (EST)
-Date:   Wed, 12 Jan 2022 14:51:47 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-clk@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Emma Anholt <emma@anholt.net>, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v2 0/3] clk: Implement a clock request API
-Message-ID: <20220112135147.dbkmsnlqyipq7urq@houat>
-References: <20210914093515.260031-1-maxime@cerno.tech>
- <a5400ae3-f181-91fc-bc35-db989584c70b@gmail.com>
+        id S1353753AbiALNxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:53:55 -0500
+Received: from mga03.intel.com ([134.134.136.65]:23395 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1353747AbiALNxu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 08:53:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641995630; x=1673531630;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=N6D+qdfRvrfBawsvcXOVpGZOEyQ1qeUWtqLbbm20rqM=;
+  b=Htvwz3mY3kFU94WNJjoIhfS8icYBfEVwiY/PPcq3tdP/5IO9QBo4YEZG
+   P7EuhthmEXI0qC3oXi2C52Y3JabPDzNTIukRBuMdMyJYRY7AAIP3EN2FE
+   5uqAyJuAamnArHbIo3OSn8pyig2ciTfem98KOTGAXRslD08SOE22CV8As
+   RZKxjpdPYesqgaMztWR762tGC48haw2ICv8RoNbhM6Gay0vN5qAyRaXjw
+   bApTDP1G7jqUohRP7bZTPP8pJMkdOdk5/V/4XNqPjMZYUjrxyIszi8c0t
+   d0y08xIEH1LK7vO1Gt3wzmAjbV8U3yTafrN7/qoWNPXhl63rtWGJTnLqN
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="243692315"
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="243692315"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 05:53:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="576555488"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Jan 2022 05:53:48 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n7e4R-0005tB-St; Wed, 12 Jan 2022 13:53:47 +0000
+Date:   Wed, 12 Jan 2022 21:53:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ f752214046a95ab5b8c1dedb1266e3532c735414
+Message-ID: <61dedd3f.iWnfqi13M7uRQfS9%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t2qv6kke3mwujz2s"
-Content-Disposition: inline
-In-Reply-To: <a5400ae3-f181-91fc-bc35-db989584c70b@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: f752214046a95ab5b8c1dedb1266e3532c735414  Merge branch into tip/master: 'x86/build'
 
---t2qv6kke3mwujz2s
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+elapsed time: 5145m
 
-Hi Dmitry,
+configs tested: 149
+configs skipped: 3
 
-On Wed, Jan 12, 2022 at 04:28:41PM +0300, Dmitry Osipenko wrote:
-> 14.09.2021 12:35, Maxime Ripard =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > Hi,
-> >=20
-> > This is a follow-up of the discussion here:
-> > https://lore.kernel.org/linux-clk/20210319150355.xzw7ikwdaga2dwhv@gilmo=
-ur/
-> >=20
-> > This implements a mechanism to raise and lower clock rates based on con=
-sumer
-> > workloads, with an example of such an implementation for the RaspberryP=
-i4 HDMI
-> > controller.
-> >=20
-> > There's a couple of things worth discussing:
-> >=20
-> >   - The name is in conflict with clk_request_rate, and even though it f=
-eels
-> >     like the right name to me, we should probably avoid any confusion
-> >=20
-> >   - The code so far implements a policy of always going for the lowest =
-rate
-> >     possible. While we don't have an use-case for something else, this =
-should
-> >     maybe be made more flexible?
->=20
-> Hello Maxime,
->=20
-> On NVIDIA Tegra we use interconnect framework for converting of
-> workload-based memory bandwidth requirement to the memory clock rate
-> [1]. All Tegra SoCs have two display controllers and other memory
-> clients, ICC takes care of summing and updating memory bandwidth for us,
-> which in the end results in a freq change of the shared memory controller.
->=20
-> [1] https://git.kernel.org/linus/04d5d5df9
->=20
-> Not so long time ago me and Thierry Reding were looking at yours v1 and
-> back then Thierry suggested that the same ICC approach might work for
-> yours case. I'm now looking at the v2 and yours discussion with Stephen
-> Boyd, and it appears that ICC is indeed what you really need. Have you
-> considered to use ICC?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-The goals seem to be similar indeed, but most of these clocks feed some
-internal state machine in those devices and are not related to the
-memory bandwidth at all. So there's no real interconnect to model there :/
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+m68k                             alldefconfig
+powerpc                 mpc8540_ads_defconfig
+um                                  defconfig
+mips                      fuloong2e_defconfig
+csky                             alldefconfig
+powerpc                       ppc64_defconfig
+powerpc                     taishan_defconfig
+sh                           se7780_defconfig
+nds32                            alldefconfig
+arc                          axs101_defconfig
+arc                     nsimosci_hs_defconfig
+sparc64                             defconfig
+powerpc                     tqm8541_defconfig
+i386                             alldefconfig
+alpha                               defconfig
+powerpc                mpc7448_hpc2_defconfig
+m68k                        stmark2_defconfig
+h8300                       h8s-sim_defconfig
+sh                           se7722_defconfig
+openrisc                            defconfig
+sh                            shmin_defconfig
+powerpc                      ppc40x_defconfig
+x86_64                           alldefconfig
+sh                        sh7757lcr_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                      cm5200_defconfig
+powerpc                    sam440ep_defconfig
+sh                ecovec24-romimage_defconfig
+x86_64                              defconfig
+powerpc                      chrp32_defconfig
+m68k                            q40_defconfig
+sh                         ecovec24_defconfig
+sh                           se7750_defconfig
+arm                           u8500_defconfig
+mips                             allmodconfig
+microblaze                      mmu_defconfig
+arm                  randconfig-c002-20220109
+arm                  randconfig-c002-20220111
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20220109
+i386                 randconfig-a001-20220109
+i386                 randconfig-a002-20220109
+i386                 randconfig-a006-20220109
+i386                 randconfig-a004-20220109
+i386                 randconfig-a005-20220109
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64               randconfig-a005-20220109
+x86_64               randconfig-a001-20220109
+x86_64               randconfig-a004-20220109
+x86_64               randconfig-a006-20220109
+x86_64               randconfig-a003-20220109
+x86_64               randconfig-a002-20220109
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+riscv                randconfig-r042-20220111
+arc                  randconfig-r043-20220111
+s390                 randconfig-r044-20220111
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           allyesconfig
 
-Maxime
+clang tested configs:
+arm                  randconfig-c002-20220109
+mips                 randconfig-c004-20220109
+i386                 randconfig-c001-20220109
+riscv                randconfig-c006-20220109
+powerpc              randconfig-c003-20220109
+x86_64               randconfig-c007-20220109
+s390                 randconfig-c005-20220109
+arm                  randconfig-c002-20220111
+x86_64                        randconfig-c007
+riscv                randconfig-c006-20220111
+powerpc              randconfig-c003-20220111
+i386                          randconfig-c001
+s390                 randconfig-c005-20220111
+mips                 randconfig-c004-20220111
+powerpc                     mpc512x_defconfig
+powerpc                 mpc832x_rdb_defconfig
+mips                     loongson1c_defconfig
+arm                            mmp2_defconfig
+arm                       versatile_defconfig
+arm                         mv78xx0_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64               randconfig-a015-20220109
+x86_64               randconfig-a012-20220109
+x86_64               randconfig-a014-20220109
+x86_64               randconfig-a013-20220109
+x86_64               randconfig-a011-20220109
+x86_64               randconfig-a016-20220109
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                 randconfig-a012-20220109
+i386                 randconfig-a016-20220109
+i386                 randconfig-a015-20220109
+i386                 randconfig-a014-20220109
+i386                 randconfig-a011-20220109
+i386                 randconfig-a013-20220109
+hexagon              randconfig-r041-20220109
+riscv                randconfig-r042-20220109
+hexagon              randconfig-r045-20220109
 
---t2qv6kke3mwujz2s
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYd7c8wAKCRDj7w1vZxhR
-xVuPAP9/9WqdgEDuYNDuYiROyAiSVfLJJPhtDldKsoecRjwokgD/ZDi8CesqnZXj
-fnIDTx+JuQiyTMzhpUz/iwl0Lx+NSQE=
-=mcMz
------END PGP SIGNATURE-----
-
---t2qv6kke3mwujz2s--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,69 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA67248CBC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF22048CBCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350032AbiALTVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:21:17 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37242 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345087AbiALTVD (ORCPT
+        id S242681AbiALTZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:25:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242548AbiALTZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:21:03 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: alyssa)
-        with ESMTPSA id 9798E1F45401
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642015262;
-        bh=lVHuJTVCQf5aCg943yBiAayu7pXkQ77QSMPJdhYfbC0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PBDxUUFsJpdNyl14wheLSRX1rijOtRWsEHWy8+cwOq/vwIcnuQ4ARBRlPnp8GrZJP
-         aUSNZrx7bFzOgK07ZCIB75he9IyAKiPZNMXOj2DaXQSKL6nCBEbCZILQkPgF5VxcCx
-         eMmugtJLiofXyXPERPP39vS61ytniy1VY1b+nTgmlNAhof7guJm8KADHARMFz6n5lI
-         lCUqbaqpn0K2L+7cv2DgekyYTP+ips7cSflfDUnQWTqLB5zf3x4IUJf5tQ1O4yzYv+
-         pBq9yG1UU4wHePivoVEdbBMvF67EycY/gbr43pEbPbP0Rt2dEL6EbRVeebEwXewsmd
-         8hvRW7GLet/Fg==
-Date:   Wed, 12 Jan 2022 14:20:54 -0500
-From:   Alyssa Rosenzweig <alyssa@collabora.com>
-To:     Steven Price <steven.price@arm.com>
-Cc:     Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] drm/panfrost: Merge some feature lists
-Message-ID: <Yd8qFqkTqzdUzOxc@maud>
-References: <20220109170920.2921-1-alyssa.rosenzweig@collabora.com>
- <20220109170920.2921-3-alyssa.rosenzweig@collabora.com>
- <c34845c7-481b-91c1-d2ae-e239324f8364@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c34845c7-481b-91c1-d2ae-e239324f8364@arm.com>
+        Wed, 12 Jan 2022 14:25:51 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A33AC061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:25:51 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id v48-20020a25abb3000000b006113ce63ed8so6294577ybi.22
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:25:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=kdM0s6QqOxdtaUmFhX2PE5X5ddjgitMB71Dm4q7m87s=;
+        b=YPsd7oUeoPQ5WuO1u+sAFfJ9blW7Z5DgdMneotr9Ra00Lfu7qd8YBWEGvd8KhtNJyd
+         mZuMoZwwW8X3tpBtQQFJ0ggAq8ipOdZYgZjI/vXLhlbeYNmDhTAqzPaq3pSH3OlcdZaX
+         qkiXYQdAlGDN9K2Ynqf2KyyLq7XY87He1WZLT1OOq9dbvHy+SjbklE0dcKhYWvYLCRrg
+         as6us6aUq+FRQi0PI7upm/QFzwb0ceqX7sy4lSwPw1eFW192n05PsRUNDVqwX/CJijTH
+         Jfp8J0U8mbsvFWuz5flUj7SEqW51+eYTlGFdWFkimi9SQHFX0+DkjbHfjpYgpgtcpSqV
+         nrNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=kdM0s6QqOxdtaUmFhX2PE5X5ddjgitMB71Dm4q7m87s=;
+        b=5rGc3M0jHCBjb6JDuLvQzmsuMXRhlON935fnvUeYI5rSYSWgT+u7PDAfjCCdH+yBUc
+         U5REBJnrS7OlIsp8+stXiu8/z+brrgIXVZr7X7GH37NW3/OQJ2oSSgH8mRKPHKtpNcEy
+         BQG/KiZKsCQ7d6iixikhmhEghY0mga35AdCmfcyKRWZ8Xzl1Ag3cFNl1jOmz8W5rkJ6B
+         Y04GCXhZ1iQeHGtrr4V+4nLT1A2t53pWuLMYL7yBxFLtL3cdvkEAv5qrMxplA7swAWK9
+         iCg0HZrT1ASPpEvW6qEQkmEHp9BFCYv+amf4ffGN4sqLjuYQdSdW7Wn/cw0fyi6HSD4D
+         u7Jg==
+X-Gm-Message-State: AOAM5304Xa0R/PVLk2IvMuz9OjSVQFQMjJIrykJ3hCz+Hg/wjz0C10VU
+        lzotWbztlFAGiHEIEz43ZvkWFQZM/9Y=
+X-Google-Smtp-Source: ABdhPJxtAzHZ+mgWbyzR0k9xGs4bfXxHTUFdGg4DbmTCP0tJF85QfjBm92ihhWSHNjPHma0ZaEpCA0N7zuU=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:ddf2:9aea:6994:df79])
+ (user=haoluo job=sendgmr) by 2002:a5b:986:: with SMTP id c6mr1577401ybq.504.1642015550298;
+ Wed, 12 Jan 2022 11:25:50 -0800 (PST)
+Date:   Wed, 12 Jan 2022 11:25:39 -0800
+Message-Id: <20220112192547.3054575-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH RESEND RFC bpf-next v1 0/8] Pinning bpf objects outside bpffs
+From:   Hao Luo <haoluo@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>, Joe@google.com,
+        Burton@google.com, jevburton.kernel@gmail.com,
+        Tejun Heo <tj@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Now that we only list features of interest to kernel space, lots of GPUs
-> > have the same feature bits. To cut down on the repetition in the file,
-> > merge feature lists that are identical between similar GPUs.
-> > 
-> > Note that this leaves some unmerged identical Bifrost feature lists, as
-> > there are more features affecting Bifrost kernel space that we do not
-> > yet hanlde.
-> 
-> NIT: s/hanlde/handle/ ;)
-> 
-> Do you have any features in mind that we're missing? The list looks very
-> similar to the kbase one. And anyway it is simple enough to split again
-> if we need to.
+Bpffs is a pseudo file system that persists bpf objects. Previously
+bpf objects can only be pinned in bpffs, this patchset extends pinning
+to allow bpf objects to be pinned (or exposed) to other file systems.
 
-Just IDVS group size. For some reason I thought there were more when I
-wrote that commit message. It's split to avoid churn in that patch.
+In particular, this patchset allows pinning bpf objects in kernfs. This
+creates a new file entry in the kernfs file system and the created file
+is able to reference the bpf object. By doing so, bpf can be used to
+customize the file's operations, such as seq_show.
 
-Logically, this series should contain three patches, with the IDVS group
-size enablement patch at the end. That was the series I wrote and
-committed to disk. For review I split it out, since the feature clean-up
-can land now, while the (RFC) IDVS group size patch needs
-testing/benchmarking.
+As a concrete usecase of this feature, this patchset introduces a
+simple new program type called 'bpf_view', which can be used to format
+a seq file by a kernel object's state. By pinning a bpf_view program
+into a cgroup directory, userspace is able to read the cgroup's state
+from file in a format defined by the bpf program.
+
+Different from bpffs, kernfs doesn't have a callback when a kernfs node
+is freed, which is problem if we allow the kernfs node to hold an extra
+reference of the bpf object, because there is no chance to dec the
+object's refcnt. Therefore the kernfs node created by pinning doesn't
+hold reference of the bpf object. The lifetime of the kernfs node
+depends on the lifetime of the bpf object. Rather than "pinning in
+kernfs", it is "exposing to kernfs". We require the bpf object to be
+pinned in bpffs first before it can be pinned in kernfs. When the
+object is unpinned from bpffs, their kernfs nodes will be removed
+automatically. This somehow treats a pinned bpf object as a persistent
+"device".
+
+We rely on fsnotify to monitor the inode events in bpffs. A new function
+bpf_watch_inode() is introduced. It allows registering a callback
+function at inode destruction. For the kernfs case, a callback that
+removes kernfs node is registered at the destruction of bpffs inodes.
+For other file systems such as sockfs, bpf_watch_inode() can monitor the
+destruction of sockfs inodes and the created file entry can hold the bpf
+object's reference. In this case, it is truly "pinning".
+
+File operations other than seq_show can also be implemented using bpf.
+For example, bpf may be of help for .poll and .mmap in kernfs.
+
+Patch organization:
+ - patch 1/8 and 2/8 are preparations. 1/8 implements bpf_watch_inode();
+   2/8 records bpffs inode in bpf object.
+ - patch 3/8 and 4/8 implement generic logic for creating bpf backed
+   kernfs file.
+ - patch 5/8 and 6/8 add a new program type for formatting output.
+ - patch 7/8 implements cgroup seq_show operation using bpf.
+ - patch 8/8 adds selftest.
+
+Hao Luo (8):
+  bpf: Support pinning in non-bpf file system.
+  bpf: Record back pointer to the inode in bpffs
+  bpf: Expose bpf object in kernfs
+  bpf: Support removing kernfs entries
+  bpf: Introduce a new program type bpf_view.
+  libbpf: Support of bpf_view prog type.
+  bpf: Add seq_show operation for bpf in cgroupfs
+  selftests/bpf: Test exposing bpf objects in kernfs
+
+ include/linux/bpf.h                           |   9 +-
+ include/uapi/linux/bpf.h                      |   2 +
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/bpf_view.c                         | 190 ++++++++++++++
+ kernel/bpf/bpf_view.h                         |  25 ++
+ kernel/bpf/inode.c                            | 219 ++++++++++++++--
+ kernel/bpf/inode.h                            |  54 ++++
+ kernel/bpf/kernfs_node.c                      | 165 ++++++++++++
+ kernel/bpf/syscall.c                          |   3 +
+ kernel/bpf/verifier.c                         |   6 +
+ kernel/trace/bpf_trace.c                      |  12 +-
+ tools/include/uapi/linux/bpf.h                |   2 +
+ tools/lib/bpf/libbpf.c                        |  21 ++
+ .../selftests/bpf/prog_tests/pinning_kernfs.c | 245 ++++++++++++++++++
+ .../selftests/bpf/progs/pinning_kernfs.c      |  72 +++++
+ 15 files changed, 995 insertions(+), 32 deletions(-)
+ create mode 100644 kernel/bpf/bpf_view.c
+ create mode 100644 kernel/bpf/bpf_view.h
+ create mode 100644 kernel/bpf/inode.h
+ create mode 100644 kernel/bpf/kernfs_node.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/pinning_kernfs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/pinning_kernfs.c
+
+-- 
+2.34.1.448.ga2b2bfdf31-goog
+

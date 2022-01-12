@@ -2,154 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E9048C64C
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED36848C652
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354221AbiALOnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:43:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S1354229AbiALOoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354224AbiALOnJ (ORCPT
+        with ESMTP id S241952AbiALOoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:43:09 -0500
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECF3C06173F;
-        Wed, 12 Jan 2022 06:43:09 -0800 (PST)
-Received: by mail-vk1-xa2b.google.com with SMTP id g5so1856527vkg.0;
-        Wed, 12 Jan 2022 06:43:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YuLML67FvMTXCFOyBy0QsGo20H8VwFueQSoBZ6wWnSQ=;
-        b=TWj8wv6JAtkU5obWQkGAQ+Xf5SmvAkdPJCv/mni2+ELsbXLTqo7KXO8vKVA0HKItYE
-         1/DgbX77M1BMcAWZAV+/nxU+/NELLORfZW1QeSu8tjt4LN/DRbCFKlFbekwBttY6qg1M
-         J4CKVorPvT905ZDZN3ntTPTkKqhNxVe5IUmWKD0VZ4R9NoB/n0jsdj2qSFKVp9+63IRQ
-         kDXlZT9lI53tPvqFzy2jQ9UJkJWe2d9xbLC6LTy8Pu4/9NWcJHhg7GHIArQyza4vdgm9
-         pQ39+vAl7kM+2T09Oh9RKMjSM5jLUc3x+q1vK+LFO2gt268Y3U3kPzLzTXZs3Eoi5NIY
-         hteg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YuLML67FvMTXCFOyBy0QsGo20H8VwFueQSoBZ6wWnSQ=;
-        b=q9vaFR6tqcZsSQkpTo7grp9whDwyjctyerFV3aySyKuj0O/GaNIjNeQiPH4wH8XfZq
-         dihG8heYQ7rtb0lb+xTcpwuF9uUkdbeZ6ubGBBSNgxawaVdPbOsnR2TBB18KaTmC5wih
-         97p2xCVQKRGzYpYMtoZskPY5Yc5JFXZ76+PD5RH9GCXQMFN21VXLK2fU6FU+OG8SyhSz
-         shVSu49lXVceb9rJ4WKtOmQc///bEVRfko0VHNkM8RQGvuuomvcVox4dVHMMpYzN4n4m
-         IBeudOgrRc3Sr1LRma+VmeW8e0qW0KZRXw1sTLf3x5FO+cWvic8LIvpb1JkrZ27/JMGE
-         Vyrw==
-X-Gm-Message-State: AOAM532ccHmQXH20kW/WN2cN2MiJ7biYgpuUX+o4pYhyVx6vvsY9TIGa
-        L5mIW8kmjJK1qlUBHQkgm0PxQpMbuXmszgBTEqxY7yPpiG4=
-X-Google-Smtp-Source: ABdhPJwqp7aTaC7M4DpP5Pl8nm2+KXgioYyrJgSrDqRuM4bQ87FjhRqqZvIdJGaEEOP6ggAh2+HZZCLhWxdyYFBn68M=
-X-Received: by 2002:a1f:fcc9:: with SMTP id a192mr2733193vki.1.1641998587825;
- Wed, 12 Jan 2022 06:43:07 -0800 (PST)
+        Wed, 12 Jan 2022 09:44:14 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD34DC06173F;
+        Wed, 12 Jan 2022 06:44:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qlFlkECPRVUfbaXMoD/8vlzFEq0cbbwMCSchJ4LcKmA=; b=ETiOH3cX3l64g4+xs3cWHLUrdN
+        7WR6s0Q0zlVj69t0YQ65pnGYn4EismXW1LBUlOOvnE31JkoIkXUv5M63Zyy4bapawDeqbgov6qqwK
+        X45/FT76S+b9mdv8iiwlis1MZ8pMQeWw4Ku9VGsU9qKu9kao7NpElqX+qFDoLwn1QshZn/sdewSVI
+        kl0pN1N86BrdV8X6dVgNvb7J4DmbHj5WCJuxwRBTbrBrmmaemjQMG2jIj5WMxdPkj8mc6mCUgjQAN
+        EiUugVc26avg9zr1YZVanW80LAZGRExwd/Yq337LmHGZ7OY7c95K81iGaYey7WzRcKrst8+gdw02p
+        wUopTTpg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7eqz-000ocW-2C; Wed, 12 Jan 2022 14:43:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AB48B3001CD;
+        Wed, 12 Jan 2022 15:43:54 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 660E82006F92B; Wed, 12 Jan 2022 15:43:54 +0100 (CET)
+Date:   Wed, 12 Jan 2022 15:43:54 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Gang Li <ligang.bdlg@bytedance.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3] sched/numa: add per-process numa_balancing
+Message-ID: <Yd7pKuvjayH4q14L@hirez.programming.kicks-ass.net>
+References: <20211206024530.11336-1-ligang.bdlg@bytedance.com>
 MIME-Version: 1.0
-References: <20211207104924.21327-1-sergio.paracuellos@gmail.com>
-In-Reply-To: <20211207104924.21327-1-sergio.paracuellos@gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 12 Jan 2022 15:42:56 +0100
-Message-ID: <CAMhs-H886ZPZED-qmMtZcWFabRLNL14Y7SSz_Ko7d45zXL+v2w@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] PCI: mt7621: Remove specific MIPS code from driver
-To:     linux-pci <linux-pci@vger.kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206024530.11336-1-ligang.bdlg@bytedance.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn, Lorenzo,
+On Mon, Dec 06, 2021 at 10:45:28AM +0800, Gang Li wrote:
+> This patch add a new api PR_NUMA_BALANCING in prctl.
+> 
+> A large number of page faults will cause performance loss when numa
+> balancing is performing. Thus those processes which care about worst-case
+> performance need numa balancing disabled. Others, on the contrary, allow a
+> temporary performance loss in exchange for higher average performance, so
+> enable numa balancing is better for them.
+> 
+> Numa balancing can only be controlled globally by
+> /proc/sys/kernel/numa_balancing. Due to the above case, we want to
+> disable/enable numa_balancing per-process instead.
+> 
+> Add numa_balancing under mm_struct. Then use it in task_tick_fair.
+> 
+> Set per-process numa balancing:
+> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_DISABLE); //disable
+> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_ENABLE);  //enable
+> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_DEFAULT); //follow global
 
-On Tue, Dec 7, 2021 at 11:49 AM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
->
-> Hi all,
->
-> MIPS specific code can be removed from driver and put into ralink mt7621
-> instead which is a more accurate place to do this. To make this possible
-> we need to have access to 'bridge->windows' in 'pcibios_root_bridge_prepa=
-re()'
-> which has been implemented for ralink mt7621 platform (there is no real
-> need to implement this for any other platforms since those ones haven't g=
-ot
-> I/O coherency units). This also allow us to properly enable this driver t=
-o
-> completely be enabled for COMPILE_TEST. This patchset appoarch:
-> - Move windows list splice in 'pci_register_host_bridge()' after function
->   'pcibios_root_bridge_prepare()' is called.
-> - Implement 'pcibios_root_bridge_prepare()' for ralink mt7621.
-> - Avoid custom MIPs code in pcie-mt7621 driver.
-> - Add missing 'MODULE_LICENSE()' to pcie-mt7621 driver to avoid compile t=
-est
->   module compilation to complain (already sent patch from Yanteng Si that
->   I have rewrite commit message and long description a bit.
-> - Remove MIPS conditional code from Kconfig and mark driver as 'tristate'=
-.
->
-> This patchset is a real fix for some errors reported by Kernel Test Robot=
- about
-> implicit mips functions used in driver code and fix errors in driver when
-> is compiled as a module [1] (mips:allmodconfig).
->
-> Changes in v3:
->  - Rebase the series on the top of the temporal fix sent for v5.16[3] for
->    the module compilation problem.
->  - Address review comments from Guenter in PATCH 2 (thanks Guenter!):
->     - Address TODO in comment about the hardware does not allow zeros
->       after 1s for the mask and WARN_ON if that's happend.
->     - Be sure mask is real valid upper 16 bits.
+This seems to imply you can prctl(ENABLE) even if the global is
+disabled, IOW sched_numa_balancing is off.
 
-What are your plans for this series? Can we merge this?
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 884f29d07963..2980f33ac61f 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -11169,8 +11169,12 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
+>  		entity_tick(cfs_rq, se, queued);
+>  	}
+>  
+> -	if (static_branch_unlikely(&sched_numa_balancing))
+> +#ifdef CONFIG_NUMA_BALANCING
+> +	if (curr->mm && (curr->mm->numab_enabled == NUMAB_ENABLED
+> +	    || (static_branch_unlikely(&sched_numa_balancing)
+> +	    && curr->mm->numab_enabled == NUMAB_DEFAULT)))
+>  		task_tick_numa(rq, curr);
+> +#endif
+>  
+>  	update_misfit_status(curr, rq);
+>  	update_overutilized_status(task_rq(curr));
 
-Best regards,
-    Sergio Paracuellos
-
->
-> Changes in v2:
->  - Collect Acked-by from Arnd Bergmann for PATCH 1.
->  - Collect Reviewed-by from Krzysztof Wilczy=C5=84ski for PATCH 4.
->  - Adjust some patches commit subject and message as pointed out by Bjorn=
- in review of v1 of the series[2].
->
-> This patchset is the good way of properly compile driver as a module remo=
-ving
-> all MIPS specific code into arch ralink mt7621 place. To avoid mips:allmo=
-dconfig reported
-> problems for v5.16 the following patch has been sent[3]. This series are =
-rebased onto this patch to provide
-> a real fix for this problem.
->
-> [0]: https://lore.kernel.org/linux-mips/CAMhs-H8ShoaYiFOOzJaGC68nZz=3DV36=
-5RXN_Kjuj=3DfPFENGJiiw@mail.gmail.com/T/#t
-> [1]: https://lkml.org/lkml/2021/11/14/436
-> [2]: https://lore.kernel.org/r/20211115070809.15529-1-sergio.paracuellos@=
-gmail.com
-> [3]: https://lore.kernel.org/linux-pci/20211203192454.32624-1-sergio.para=
-cuellos@gmail.com/T/#u
->
-> Thanks in advance for your time.
->
-> Best regards,
->    Sergio Paracuellos
->
-> Sergio Paracuellos (5):
->   PCI: Let pcibios_root_bridge_prepare() access to 'bridge->windows'
->   MIPS: ralink: implement 'pcibios_root_bridge_prepare()'
->   PCI: mt7621: Avoid custom MIPS code in driver code
->   PCI: mt7621: Add missing 'MODULE_LICENSE()' definition
->   PCI: mt7621: Allow COMPILE_TEST for all arches
->
->  arch/mips/ralink/mt7621.c            | 31 ++++++++++++++++++++++
->  drivers/pci/controller/Kconfig       |  4 +--
->  drivers/pci/controller/pcie-mt7621.c | 39 ++--------------------------
->  drivers/pci/probe.c                  |  4 +--
->  4 files changed, 37 insertions(+), 41 deletions(-)
->
-> --
-> 2.33.0
->
+There's just about everything wrong there... not least of all the
+horrific coding style.

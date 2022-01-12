@@ -2,204 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B25548C82D
+	by mail.lfdr.de (Postfix) with ESMTP id C99D648C82E
 	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355125AbiALQWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:22:01 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:44776 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243649AbiALQV7 (ORCPT
+        id S1355130AbiALQWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:22:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243649AbiALQWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:21:59 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 25979340;
-        Wed, 12 Jan 2022 17:21:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642004518;
-        bh=ZW3ETm1MzODOrkFmFW/ElfspZEWfb4Lg14fYtn9Pzp0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aM00dXvTMCpQMHoaVvCyaGiQYyHtwzSc2VqgfZzPTWAx7tTWVFqMJpb0+FhknriIh
-         UX0e201bHzN8/YOJrV++3vEDGKkGezvndEijattajelx2TkwjWGmlA+zkF//Vd4gIY
-         achpaccX3OthyyV+1VF5xc5KU1AwqoTsjsMNqDTU=
-Date:   Wed, 12 Jan 2022 18:21:47 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, dave.stevenson@raspberrypi.com
-Subject: Re: [PATCH 3/3] media: v4l: Add V4L2-PIX-FMT-Y14P format
-Message-ID: <Yd8AG3bQpJu+RHpK@pendragon.ideasonboard.com>
-References: <20220112161014.972076-1-jeanmichel.hautbois@ideasonboard.com>
- <20220112161014.972076-4-jeanmichel.hautbois@ideasonboard.com>
+        Wed, 12 Jan 2022 11:22:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC4EC06173F;
+        Wed, 12 Jan 2022 08:22:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC17061A14;
+        Wed, 12 Jan 2022 16:22:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A9CCC36AEA;
+        Wed, 12 Jan 2022 16:22:00 +0000 (UTC)
+Date:   Wed, 12 Jan 2022 11:21:59 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tao Zhou <tao.zhou@linux.dev>, Ingo Molnar <mingo@redhat.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        John Kacur <jkacur@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [for-next][PATCH 16/31] rtla: Real-Time Linux Analysis tool
+Message-ID: <20220112112159.742d258c@rorschach.local.home>
+In-Reply-To: <5f04540c-273a-c4f2-692d-9de2f1495ba9@kernel.org>
+References: <20220111173030.999527342@goodmis.org>
+        <20220111173116.190327559@goodmis.org>
+        <5f04540c-273a-c4f2-692d-9de2f1495ba9@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220112161014.972076-4-jeanmichel.hautbois@ideasonboard.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Michel
+On Wed, 12 Jan 2022 12:15:13 +0100
+Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
 
-Thank you for the patch.
-
-On Wed, Jan 12, 2022 at 05:10:14PM +0100, Jean-Michel Hautbois wrote:
-> This is a packed grey-scale image format with a depth of 14 bits per
-> pixel. Every four consecutive samples are packed into seven bytes. Each
-> of the first four bytes contain the eight high order bits of the pixels,
-> and the three following bytes contains the six least significants bits
-> of each pixel, in the same order.
+> > Link: https://lkml.kernel.org/r/f59acda8bc513c4a6c279a9bc3ad112a20690e68.1638182284.git.bristot@kernel.org  
 > 
-> As the other formats only needed 5 bytes before, append two bytes in the
-> documentation array.
+> Thanks for picking RTLA!
 > 
-> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-> ---
->  .../media/v4l/pixfmt-yuv-luma.rst             | 33 +++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
->  include/uapi/linux/videodev2.h                |  1 +
->  3 files changed, 35 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-> index d37ce6027095..1f645fde6d5c 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-> @@ -36,6 +36,8 @@ are often referred to as greyscale formats.
->        - Byte 2
->        - Byte 3
->        - Byte 4
-> +      - Byte 5
-> +      - Byte 6
->  
->      * .. _V4L2-PIX-FMT-GREY:
->  
-> @@ -47,6 +49,8 @@ are often referred to as greyscale formats.
->        - ...
->        - ...
->        - ...
-> +      - ...
-> +      - ...
->  
->      * .. _V4L2-PIX-FMT-Y10:
->  
-> @@ -58,6 +62,8 @@ are often referred to as greyscale formats.
->        - ...
->        - ...
->        - ...
-> +      - ...
-> +      - ...
->  
->      * .. _V4L2-PIX-FMT-Y10BPACK:
->  
-> @@ -69,6 +75,8 @@ are often referred to as greyscale formats.
->        - Y'\ :sub:`1`\ [3:0] Y'\ :sub:`2`\ [9:6]
->        - Y'\ :sub:`2`\ [5:0] Y'\ :sub:`3`\ [9:8]
->        - Y'\ :sub:`3`\ [7:0]
-> +      - ...
-> +      - ...
->  
->      * .. _V4L2-PIX-FMT-Y10P:
->  
-> @@ -80,6 +88,8 @@ are often referred to as greyscale formats.
->        - Y'\ :sub:`2`\ [9:2]
->        - Y'\ :sub:`3`\ [9:2]
->        - Y'\ :sub:`3`\ [1:0] Y'\ :sub:`2`\ [1:0] Y'\ :sub:`1`\ [1:0] Y'\ :sub:`0`\ [1:0]
-> +      - ...
-> +      - ...
->  
->      * .. _V4L2-PIX-FMT-Y12:
->  
-> @@ -91,6 +101,8 @@ are often referred to as greyscale formats.
->        - ...
->        - ...
->        - ...
-> +      - ...
-> +      - ...
->  
->      * .. _V4L2-PIX-FMT-Y12P:
->  
-> @@ -102,6 +114,8 @@ are often referred to as greyscale formats.
->        - Y'\ :sub:`1`\ [3:0] Y'\ :sub:`0`\ [3:0]
->        - ...
->        - ...
-> +      - ...
-> +      - ...
->  
->      * .. _V4L2-PIX-FMT-Y14:
->  
-> @@ -113,6 +127,21 @@ are often referred to as greyscale formats.
->        - ...
->        - ...
->        - ...
-> +      - ...
-> +      - ...
-> +
-> +    * .. _V4L2-PIX-FMT-Y14P:
-> +
-> +      - ``V4L2_PIX_FMT_Y14P``
-> +      - 'Y14P'
-> +
-> +      - Y'\ :sub:`0`\ [13:6]
-> +      - Y'\ :sub:`1`\ [13:6]
-> +      - Y'\ :sub:`2`\ [13:6]
-> +      - Y'\ :sub:`3`\ [13:6]
-> +      - Y'\ :sub:`1`\ [1:0] Y'\ :sub:`0`\ [5:0]
-> +      - Y'\ :sub:`2`\ [3:0] Y'\ :sub:`1`\ [5:2]
-> +      - Y'\ :sub:`3`\ [5:0] Y'\ :sub:`2`\ [1:0]
+> Just one problem, you are picking the V8, but we actually had a V9:
+>   https://lore.kernel.org/lkml/cover.1639158831.git.bristot@kernel.org/
 
-This should be
+Strange. I should have picked it up from Patchwork.
 
-      - Y'\ :sub:`3`\ [5:0] Y'\ :sub:`2`\ [5:4]
+https://patchwork.kernel.org/project/linux-trace-devel/list/?series=604588
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Not sure how that happened. As it's not kernel code, I may rebase to
+fix it.
 
->  
->      * .. _V4L2-PIX-FMT-Y16:
->  
-> @@ -124,6 +153,8 @@ are often referred to as greyscale formats.
->        - ...
->        - ...
->        - ...
-> +      - ...
-> +      - ...
->  
->      * .. _V4L2-PIX-FMT-Y16-BE:
->  
-> @@ -135,6 +166,8 @@ are often referred to as greyscale formats.
->        - ...
->        - ...
->        - ...
-> +      - ...
-> +      - ...
->  
->  .. raw:: latex
->  
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> index e90979af8efb..4e33b86c6d27 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1264,6 +1264,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_Y10BPACK:	descr = "10-bit Greyscale (Packed)"; break;
->  	case V4L2_PIX_FMT_Y10P:		descr = "10-bit Greyscale (MIPI Packed)"; break;
->  	case V4L2_PIX_FMT_Y12P:		descr = "12-bit Greyscale (MIPI Packed)"; break;
-> +	case V4L2_PIX_FMT_Y14P:		descr = "14-bit Greyscale (MIPI Packed)"; break;
->  	case V4L2_PIX_FMT_Y8I:		descr = "Interleaved 8-bit Greyscale"; break;
->  	case V4L2_PIX_FMT_Y12I:		descr = "Interleaved 12-bit Greyscale"; break;
->  	case V4L2_PIX_FMT_Z16:		descr = "16-bit Depth"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 39ab8c216fe8..581537ce12a3 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -570,6 +570,7 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_Y10BPACK    v4l2_fourcc('Y', '1', '0', 'B') /* 10  Greyscale bit-packed */
->  #define V4L2_PIX_FMT_Y10P    v4l2_fourcc('Y', '1', '0', 'P') /* 10  Greyscale, MIPI RAW10 packed */
->  #define V4L2_PIX_FMT_Y12P    v4l2_fourcc('Y', '1', '2', 'P') /* 12  Greyscale, MIPI RAW12 packed */
-> +#define V4L2_PIX_FMT_Y14P    v4l2_fourcc('Y', '1', '4', 'P') /* 14  Greyscale, MIPI RAW12 packed */
->  
->  /* Palette formats */
->  #define V4L2_PIX_FMT_PAL8    v4l2_fourcc('P', 'A', 'L', '8') /*  8  8-bit palette */
-
--- 
-Regards,
-
-Laurent Pinchart
+-- Steve

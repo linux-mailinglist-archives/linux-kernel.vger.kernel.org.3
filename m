@@ -2,153 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9DCD48C6A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7077448C6B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354406AbiALPCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:02:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:29541 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1354401AbiALPCL (ORCPT
+        id S1354420AbiALPEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348032AbiALPEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:02:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641999731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7f6mTNt7YaUSpPXZZCZPgQVj1/ZDxnN/2snqOElACbM=;
-        b=NTJ3EvJlxBB0L00CT5WQA90EHqAa2pAmgNHhseieLOyvaF26BR+m3EXCKZMgk4rqQU3O9A
-        r2+QzOHOXfAc1lUfAOAFIlJWOnybppp9dg0mJEqHuGhxJFmAzjegjDVMWIXbVndkGbzPMc
-        +sLXIrjzo/szdQneafSHETXEGnQgihQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-101-uqH0CxOVOMKUI5luLVj_mw-1; Wed, 12 Jan 2022 10:02:09 -0500
-X-MC-Unique: uqH0CxOVOMKUI5luLVj_mw-1
-Received: by mail-ed1-f69.google.com with SMTP id y18-20020a056402271200b003fa16a5debcso2482634edd.14
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:02:09 -0800 (PST)
+        Wed, 12 Jan 2022 10:04:35 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02239C061756
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:04:34 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id o15so9069416lfo.11
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 07:04:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=swEbmnyLSeN7aiIoLnsPgDG3gh2KSMSrPSEJTJTzFbQ=;
+        b=lvkw4cRKCOzBKAPvoz7fYi4Ww+7YlPfKoAgKVLsIgKF1EJ+8wEQe6UxECLKYwzDnLE
+         B6oDSef20ebGk9u85lnz7rEBAUMWRtwpyuCT7L5tzcrfQOz8wh7TZ2HKYlneuRS6vvZL
+         2mzMh6se/ObK3+x60YBQABVSeb3VrI4eHRc1v7BRB2NV0kOKjry5g7lgbvmVmJtVueJ9
+         KnDoZbh+45MmI7u5fj7DHOebV2iwZmI1uYwa1RpTgz0hD3M/CnW+fBXsXOOTtlYGu/16
+         A5HG6WxtCNk9V2MKJTFdEJHaI/4RRxI0j/0ly6jrKbitmexN4vjhY8socp2Bkpl/gWCl
+         FZYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=7f6mTNt7YaUSpPXZZCZPgQVj1/ZDxnN/2snqOElACbM=;
-        b=GX+aNfph5cYh6apOZ6SRQoprZ4T9sm6O/f+zKy3y0HSWQP0hUVCPeQeY0UVrp4BJjQ
-         r19j0QpmAm6Ls1wXmZFHPOAyQP0T+ZKZwWahXfed78+6EPIBvYa8uRrp5DJmLRcd5bHF
-         0w/jwoy6KILNAFxyuP/Vg5xly9ecjSOfJbmSWQm72ja7ab81sgWR/ASAcTP3xJxG+vgT
-         eccKV6p+uxD3Mambi5/kiLNrJ10H0SxjfTufrh4SSGO6RDzYzgITYGndfYaSQMRRw4mm
-         brtK9cpXHRe1OM3QvDdey+9LlOdTEs2dDWcLfHuJoYm5+WX+vRNBWLAZCslLglm9xuSF
-         5v6Q==
-X-Gm-Message-State: AOAM530N3iRl1hafGruv4ZIwfiZ8I8/6ekVqreqKdp14VoZXZAoxtr5p
-        Q+7uPqZEgTf4YiU5+xy7nxtpShnQWxj4DrltTum46yZMraF2qCN0A766NPY7HmM/LyD9jidlQyu
-        bjkI+qvgRliy4wO+uZSYXyhwJ
-X-Received: by 2002:a05:6402:190d:: with SMTP id e13mr54964edz.414.1641999728541;
-        Wed, 12 Jan 2022 07:02:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzQRAl2uTikFNex8JGdk4/ia/gTryowOeWKg0HXYHyybKohwCELxbZl+CxPAksdmOkmMm7hQw==
-X-Received: by 2002:a05:6402:190d:: with SMTP id e13mr54945edz.414.1641999728332;
-        Wed, 12 Jan 2022 07:02:08 -0800 (PST)
-Received: from redhat.com ([2.55.132.148])
-        by smtp.gmail.com with ESMTPSA id h13sm16749edl.96.2022.01.12.07.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 07:02:07 -0800 (PST)
-Date:   Wed, 12 Jan 2022 10:02:03 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     =?utf-8?B?5p2O5Lic5Y2H?= <lidongsheng@dayudpu.com>
-Cc:     jasowang <jasowang@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] virtio_vdpa: Support surprise removal of virtio vdpa
- device
-Message-ID: <20220112100006-mutt-send-email-mst@kernel.org>
-References: <tencent_7A45E1E967F13AE14B061269@qq.com>
- <20220111065033-mutt-send-email-mst@kernel.org>
- <CACGkMEuAoSwore14qnuMDgdEtWh-UOJf1=oR9vhPMff8hoEZEQ@mail.gmail.com>
- <20220112013018-mutt-send-email-mst@kernel.org>
- <tencent_18F8A88D22E327230EF313BE@qq.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=swEbmnyLSeN7aiIoLnsPgDG3gh2KSMSrPSEJTJTzFbQ=;
+        b=bn3FxFx3rlooNggtLEzEAu0c1oqglUZy1l/Scfi/gBU5f3YLgEIjr2Bpr15YmbYu3j
+         CfYpgCmn1/Bp72sY7TQ7fau0r/Xr2LhGuZ1zYH+HPiBhylxEBIO3f5A0RwhYigqETZic
+         UEr6MaWd7TZM2dqVpMnp1djQfF+eqkMq3Y5f2QxvhVZgKz+JxdZ37si+xHJaklPaaqcp
+         81x3Xnc8tDAcwA/8rl/D5O3G/ymCVBW9gQoLPp+NkDqgl7CNsJoHDNwffIZOsjMoqaA+
+         36pmbEswl1zF1nGpjKrbiEF8WevSA3q8dWuZuQ9RObYujua4gMp9Q2kSpiaE4vMHypU4
+         +8OA==
+X-Gm-Message-State: AOAM530ex6wQxUdhoi7W8U5J0Sj7mwOPfvTzy3GGgw7l+0kGogDut1xd
+        HaKR5A9ay/XGs2naSt6TaxUWVn9z5Ek3r01HNtcVIQ==
+X-Google-Smtp-Source: ABdhPJxWuTxHLQXjEWO9OANtBu36BWztuVV7d1EJLRw+gXvuvHBCzsnZLCgUQS4k1kJ8fOzX1Y3szncGvdkFuOkuwPI=
+X-Received: by 2002:a19:6748:: with SMTP id e8mr118080lfj.358.1641999873143;
+ Wed, 12 Jan 2022 07:04:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <tencent_18F8A88D22E327230EF313BE@qq.com>
+References: <20220111171424.862764-1-Jerome.Pouiller@silabs.com>
+ <20220111171424.862764-9-Jerome.Pouiller@silabs.com> <20220112105859.u4j76o7cpsr4znmb@pali>
+ <42104281.b1Mx7tgHyx@pc-42> <20220112114332.jadw527pe7r2j4vv@pali>
+In-Reply-To: <20220112114332.jadw527pe7r2j4vv@pali>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 12 Jan 2022 16:03:56 +0100
+Message-ID: <CAPDyKFoMj1r+bEh-MqOdTVzs0C=LCFPPbXj3jHwB4Yty=bA03Q@mail.gmail.com>
+Subject: Re: [PATCH v9 08/24] wfx: add bus_sdio.c
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <Jerome.Pouiller@silabs.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, Jan 12, 2022 at 04:44:08PM +0800, 李东升 wrote:
-> Indeed, there are hidden dangers for storage devices.
-> So maybe we can break the device before virtio_net unregister_netdev and before
-> virtio_blk reset
-> 
-> Unlike pci device, there is a manufacturer-driven existence between virtio vdpa
-> and hardware devices, 
-> unless the manufacturer provides a state interface, virtio vdpa and
-> higher-level drivers cannot obtain the real hardware state.
-
-I think for surprise removal you need to propagate the presence status up.
-No way around that imho.
-
-> 
-> ------------------ Original ------------------
-> From:  "mst"<mst@redhat.com>;
-> Date:  Wed, Jan 12, 2022 02:30 PM
-> To:  "jasowang"<jasowang@redhat.com>;
-> Cc:  "李东升"<lidongsheng@dayudpu.com>; "virtualization"
-> <virtualization@lists.linux-foundation.org>; "linux-kernel"
-> <linux-kernel@vger.kernel.org>;
-> Subject:  Re: [PATCH] virtio_vdpa: Support surprise removal of virtio vdpa
-> device
->  
-> On Wed, Jan 12, 2022 at 10:23:07AM +0800, Jason Wang wrote:
-> > On Tue, Jan 11, 2022 at 7:52 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+On Wed, 12 Jan 2022 at 12:43, Pali Roh=C3=A1r <pali@kernel.org> wrote:
+>
+> On Wednesday 12 January 2022 12:18:58 J=C3=A9r=C3=B4me Pouiller wrote:
+> > On Wednesday 12 January 2022 11:58:59 CET Pali Roh=C3=A1r wrote:
+> > > On Tuesday 11 January 2022 18:14:08 Jerome Pouiller wrote:
+> > > > +static const struct sdio_device_id wfx_sdio_ids[] =3D {
+> > > > +     { SDIO_DEVICE(SDIO_VENDOR_ID_SILABS, SDIO_DEVICE_ID_SILABS_WF=
+200) },
+> > > > +     { },
+> > > > +};
 > > >
-> > > On Tue, Jan 11, 2022 at 11:36:42AM +0800, 李东升 wrote:
-> > > > When virtio vdpa device removed, the abnormal damage of the device cannot
-> be
-> > > > perceived normally, which will cause problems similar to:
-> > > >
-> > > > 43bb40c5b926
-> > >
-> > >
-> > > Should include the subject of the patch too.
-> > >
-> > > > Hence, add the ability to abort the command on surprise removal
-> > > >
-> > > > Signed-off-by: dongsheng li <lidongsheng@dayudpu.com>
-> > >
-> > > When removing gracefully,
-> > > I am not sure we should break device unconditionally like this
-> > > before giving drivers a chance to clean up.
-> > > Should we just do it for surprise removal?
+> > > Hello! Is this table still required?
 > >
-> > That requires a new method to query whether it's a surprise removal.
+> > As far as I understand, if the driver does not provide an id_table, the
+> > probe function won't be never called (see sdio_match_device()).
 > >
-> > Thanks
-> 
-> We can check pci_device_is_present like virtio does.
-> 
-> > >
-> > > > ---
-> > > >  drivers/virtio/virtio_vdpa.c | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
-> > > > index 4a9ddb44b2a7..fd930409d190 100644
-> > > > --- a/drivers/virtio/virtio_vdpa.c
-> > > > +++ b/drivers/virtio/virtio_vdpa.c
-> > > > @@ -374,6 +374,7 @@ static void virtio_vdpa_remove(struct vdpa_device
-> *vdpa)
-> > > >  {
-> > > >   struct virtio_vdpa_device *vd_dev = vdpa_get_drvdata(vdpa);
-> > > >
-> > > > + virtio_break_device(vd_dev->vdev);
-> > > >   unregister_virtio_device(&vd_dev->vdev);
-> > > >  }
-> > > >
+> > Since, we rely on the device tree, we could replace SDIO_VENDOR_ID_SILA=
+BS
+> > and SDIO_DEVICE_ID_SILABS_WF200 by SDIO_ANY_ID. However, it does not hu=
+rt
+> > to add an extra filter here.
+>
+> Now when this particular id is not required, I'm thinking if it is still
+> required and it is a good idea to define these SDIO_VENDOR_ID_SILABS
+> macros into kernel include files. As it would mean that other broken
+> SDIO devices could define these bogus numbers too... And having them in
+> common kernel includes files can cause issues... e.g. other developers
+> could think that it is correct to use them as they are defined in common
+> header files. But as these numbers are not reliable (other broken cards
+> may have same ids as wf200) and their usage may cause issues in future.
+>
+> Ulf, any opinion?
+
+The sdio_match_device() is what is being used to match the device to
+its sdio_driver, which is being called from the sdio_bus_type's
+->match() callback.
+
+In regards to the DT compatible strings from a drivers'
+.of_match_table, that is currently left to be matched by the sdio
+driver's ->probe() function internally, by calling
+of_driver_match_device().
+
+In other words, I think what Jerome has suggested here seems
+reasonable to me. Matching on "SDIO_ANY_ID" would work too, but I
+think it's better with a poor filter like SDIO_VENDOR_ID_SILABS*,
+rather than none.
+
+An entirely different and new approach would be to extend
+sdio_match_device() to call of_driver_match_device() too. However, in
+that case we would also need to add a new corresponding ->probe()
+callback for the sdio_driver, as the current one takes a const struct
+sdio_device_id, which doesn't work when matching on DT compatibles.
+
+>
+> Btw, is there any project which maintains SDIO ids, like there is
+> pci-ids.ucw.cz for PCI or www.linux-usb.org/usb-ids.html for USB?
+>
+> > > > +MODULE_DEVICE_TABLE(sdio, wfx_sdio_ids);
+> > > > +
+> > > > +struct sdio_driver wfx_sdio_driver =3D {
+> > > > +     .name =3D "wfx-sdio",
+> > > > +     .id_table =3D wfx_sdio_ids,
+> > > > +     .probe =3D wfx_sdio_probe,
+> > > > +     .remove =3D wfx_sdio_remove,
+> > > > +     .drv =3D {
+> > > > +             .owner =3D THIS_MODULE,
+> > > > +             .of_match_table =3D wfx_sdio_of_match,
+> > > > +     }
+> > > > +};
 > > > > --
-> > > > 2.17.1
+> > > > 2.34.1
+> > > >
 > > >
-> 
+> >
+> >
+> > --
+> > J=C3=A9r=C3=B4me Pouiller
 
+Kind regards
+Uffe

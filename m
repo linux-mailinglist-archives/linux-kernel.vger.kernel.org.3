@@ -2,199 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 576FB48C488
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5AE148C48C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:16:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353441AbiALNNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:13:48 -0500
-Received: from so254-9.mailgun.net ([198.61.254.9]:50106 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353437AbiALNNZ (ORCPT
+        id S1353524AbiALNOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:14:05 -0500
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:44486 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S240900AbiALNNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:13:25 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1641993204; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=t8UcX5N7QmTU7XeUfa4gdrtpln6WbR8NBAKQ1OyJ86A=; b=REpByCKepLNeWkOYGK6DvtEw8CpduWKWwL8jls4yDPboeQUWf7/+Bp3Bd+evRGm/by/6w5CX
- HZ/OeVP/C3MK5Ac6VCljpdwFfry0ZuUKvo2+IRfMprjlbn/QRus/D2hfgHbCXblRWzcyz9X1
- 4mkYrUqxuvW+bdg4IYy3DbnwKLw=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 61ded3f369943108c5b544bf (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 12 Jan 2022 13:13:23
- GMT
-Sender: quic_vjitta=quicinc.com@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B988FC4360D; Wed, 12 Jan 2022 13:13:23 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from vjitta-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: vjitta)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1113DC4338F;
-        Wed, 12 Jan 2022 13:13:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 1113DC4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
-From:   Vijayanand Jitta <quic_vjitta@quicinc.com>
-To:     joro@8bytes.org, will@kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, vjitta@codeaurora.org,
-        Vijayanand Jitta <quic_vjitta@quicinc.com>
-Subject: [PATCH v3] iommu: Fix potential use-after-free during probe
-Date:   Wed, 12 Jan 2022 18:43:04 +0530
-Message-Id: <1641993184-1232-1-git-send-email-quic_vjitta@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 12 Jan 2022 08:13:34 -0500
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20CAOkRO017984;
+        Wed, 12 Jan 2022 05:13:13 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=qeSojkakIt2CJBAsHIRGpHge2x3MOXCLTRgC7BKst54=;
+ b=aA287crAwQDONDGJj3zl347oVjFQFgCivlnBZweRjfbcjtq+ih8QyjpcZkQTCcrrVYKz
+ RjTuDySLzVg2pbnCACB4Z1ncd49e9iAWpwQPs6Ms9wPXwbS/khXaLYgo51Ap5VrblXLP
+ loz75mqlyB5K5HMI+sWgBgQUZBLw87OEikVoCPnXFMgHQJ6DXiB6F9uI7l1zezP18QCy
+ Z51EW3LWWFZH7OuMO/2iDPEpc0CujGt4u1J/W/Z9S36AXBKiPjLH9sBALFt4VI7nfbn7
+ 9oFIVPA/T6x9+0g5GmFbHCuFMg6to41L6lzXZQ7PBUfsVIhN7aElXZI9+v7gJ3uil0w0 Uw== 
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2049.outbound.protection.outlook.com [104.47.73.49])
+        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3dgkxpr9hf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 05:13:13 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bPZKaZJ0+HVrkkDjqndBxuqqJB9Iza1u/kO939i7Iz2X44TcyCrp3iaxloYPLBR0fFmzfBmSDqYbv5y0mKJTaSaSHaCps1Maufz2P3gmglA5TzsJr2kaHSFL18/FywSBvghFoLCffEtUKCEopVdxYaPjoZUJYWztxTdq6Em+fm3NupHsmgxB/OB0lLoMFrCfCgEupK10kJCIqx1Kqay+3IZe+hzcNeHib31HJqtPYsXKr+mrpzhhgLtmJPrdgvTzrsl38ry6EsT1YCkOPuOsFMmizLbGBz7EARuvPWkHTfk1By540NWVaoNUdFP/2bGwEx/bL2nSIUeK7/wBng2k1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qeSojkakIt2CJBAsHIRGpHge2x3MOXCLTRgC7BKst54=;
+ b=e/8vvLfOgJhHrsMycMqpMYQggkD13AWGW9uVjwY18sp0SSWjovHttN3YElu1vyAHQKIobs+JhJ6Z/KsSvnVhUsdTagVwEbZ4YjNEDd4WTLIwImy/vWMcV0+3D6x9zDpX9uoW+Pn3ZrR0u3y5FKKPj4tp/nbHIcxzbdrZlDyAPJdyPed1d/4AHNBeR6u/p2u4nhZ6936Nm6I52GG7zZIj8RtFU3XWRZsj77WSVJfcrpNZEE/15PFtWQp2DaqMft0rRusTAyOy0hnFS/l73N58g2Rmc7GLin7FTsdT1OKbHrwOa4TFbLm9VkWxzj3ZCYD20eFZ6vLwipp18/UAI8310Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qeSojkakIt2CJBAsHIRGpHge2x3MOXCLTRgC7BKst54=;
+ b=hkz1larqMDPaQcfElKEyIr6Y3bGDARdYVdFS2d6NDdX5IkRRZDpTCj3YyratCMFyd7NbALCxLooPe/CKxGIVKUDd46ypsTvtTDytMBE/oJ28Pzt9ll//qJGndEt5n5APHMzxt+jHCYm590+/T2g+XoJg75K1wD800lZC08uilgY=
+Received: from BYAPR07MB5381.namprd07.prod.outlook.com (2603:10b6:a03:6d::24)
+ by MW2PR07MB4010.namprd07.prod.outlook.com (2603:10b6:907:4::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Wed, 12 Jan
+ 2022 13:13:10 +0000
+Received: from BYAPR07MB5381.namprd07.prod.outlook.com
+ ([fe80::c0b7:f4e5:466b:e90a]) by BYAPR07MB5381.namprd07.prod.outlook.com
+ ([fe80::c0b7:f4e5:466b:e90a%4]) with mapi id 15.20.4888.010; Wed, 12 Jan 2022
+ 13:13:10 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Peter Chen <peter.chen@kernel.org>
+CC:     "a-govindraju@ti.com" <a-govindraju@ti.com>,
+        "frank.li@nxp.com" <frank.li@nxp.com>,
+        "rogerq@kernel.org" <rogerq@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] usb: cdnsp: Fix segmentation fault in cdns_lost_power
+ function
+Thread-Topic: [PATCH] usb: cdnsp: Fix segmentation fault in cdns_lost_power
+ function
+Thread-Index: AQHYBsrYK4fAFdkFQkqeOjWZYn4NnaxfWfuAgAAAlzA=
+Date:   Wed, 12 Jan 2022 13:13:10 +0000
+Message-ID: <BYAPR07MB5381D8455AF977200D503D15DD529@BYAPR07MB5381.namprd07.prod.outlook.com>
+References: <20220111090737.10345-1-pawell@gli-login.cadence.com>
+ <20220112125615.GC3796@Peter>
+In-Reply-To: <20220112125615.GC3796@Peter>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctNjI0ODM2ZmEtNzNhOS0xMWVjLTg3YTgtYTQ0Y2M4MWIwYzU1XGFtZS10ZXN0XDYyNDgzNmZiLTczYTktMTFlYy04N2E4LWE0NGNjODFiMGM1NWJvZHkudHh0IiBzej0iMTgzNiIgdD0iMTMyODY0NjY3ODk1MDcwMTMwIiBoPSJUc3JnZmlveWsweCtYNnFEcktOcFNpbjZKTlk9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b9adcd7f-25cd-443e-85aa-08d9d5cd482a
+x-ms-traffictypediagnostic: MW2PR07MB4010:EE_
+x-microsoft-antispam-prvs: <MW2PR07MB40100CE06686C3C1A44569E9DD529@MW2PR07MB4010.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1hUHhTWA95lohXAhIVyMgMocKhtivCdmSo+eux9D7a8eUiiOqZ2CYybucFi6NYmQbsUof8GzRRMJ+2jANwp0RzupTofxNyh3JI1AS/ho+omJgzBO3IcWzTrxvT9KJihDmlGrvtt+iHejIojvKV6SRpW7gZEJzfJWNF2lJZkUfSyy3uyca0vrw/R8eH90wbhgDWPg891W7j638GKMHxOuVelIIvDYPC+NiZUpszDHYwe59bjX0XP71DwIozvQcWiivAsUJuWGQzqXjaICcXRSHEZYzZl7FweJk9myWo7r7I0ZJx4B/gG5CJ9HVxFkaZj67Zr3BKCspjxLeKW6no4xHn/n6ga9TxgkZGrh81oIkVJ7W3/vaVWl0vDhioL3Kwm8G50UzWCh7hmnRfIVFrGRnfA8seZ8vlZpxVIWg/XfiXV8PKkpiyIsLvcre/7eAE4044VlM7vU/epNLlbqx0A2buqJjUJEI6UVjR9YLmcx6wLs7W4ejX1gGeCMSy0rwXRo0V6oQxmGGnmOGhkfQjgz+umIAHARazKVjsBL7JWwlF89h3nlQerLJ/5QthuIXVDptIZ3SbPIZ++0CPDuFAYRZ/9DjDXbF7BlQv8Zbo91q4uNYGwN74A/SyTR7nWoEh5dqTnsCJRgQ4r9UtxSHzzs27Bw9V5kdNpPt6eJNYXluglstm37nzCx2rSsggdwpXNp5bdAhBBaCYmpO0/CdZF0YiKJO6CvPPvjgz5vDRyIRd5YhaG11QOFmJ7mV2rbNP2o
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR07MB5381.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36092001)(54906003)(55016003)(33656002)(5660300002)(186003)(52536014)(66476007)(6506007)(26005)(316002)(76116006)(86362001)(66446008)(64756008)(66946007)(71200400001)(66556008)(2906002)(9686003)(7696005)(83380400001)(122000001)(8936002)(38100700002)(8676002)(38070700005)(508600001)(4326008)(6916009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?nOgvkTW/Zw9L4iJJ1O0XD6cN6QO3DvILktTlUeJS+mVFCJUb23CNYFeXI1Wk?=
+ =?us-ascii?Q?9xznl9AyxwMtauVDw/MfRU9AE/lh4tPr1dnjXq1UYP1BY8zoKtTLB/EFDKgi?=
+ =?us-ascii?Q?mY0EjkF1wMrbA8nusCEv10oIuKt6aA9awr1dV5934nD4dF5gY0ENG7BbUU4k?=
+ =?us-ascii?Q?iStJASuQReNNts9HSOXdMxAYU8CRYjkjTAoG4Z+aobxo2mKRvtUcAbMJS1cU?=
+ =?us-ascii?Q?6WH86wIw5E3W/J6JTGAWK6F+XR6IeX+0PuwYGEX5g/QpOEzsZ9GxjtFcLcLh?=
+ =?us-ascii?Q?nfQac1Ef/KtGq20ho8DyiER7LkJBwH/9yMUzPxH3kpxBQt5RjhToghDoLWLm?=
+ =?us-ascii?Q?jZiHOjDU5PXmyQpgo7y/GCvjkdLsLuWPunsAi148LTuCF1N1OkuQAK9/5LZr?=
+ =?us-ascii?Q?KWo1AQ/SamJtSAQI8Ky5KkI9CbNmGuR75hLCO4nBZAMv0jma+zXv4pNfrnb1?=
+ =?us-ascii?Q?E5+eS9xbGKkR1Fvty3R8YYzqMcYNEEzYP0eX9+rhjWV5zo711XcxCsgFirf5?=
+ =?us-ascii?Q?a54z1xicCcg1OQbq6Jtk3PL54G5Bw6S0K9pvE7TvgjgqYlUUEtFLlspmbfrh?=
+ =?us-ascii?Q?XP1BhEL5lNJg0sRopZhLTy1YaugfUMe6mHFF20pmGaMdV8qqeOYRSQD4wyT4?=
+ =?us-ascii?Q?n2VyQ54+9LwRNruPtI5zW8lWGSUitrZBHEasXm9+LYsmA4rqaUbp5DAW5kD/?=
+ =?us-ascii?Q?eA9HelAiF0+43X6y6McjiC6tBwoozvUNuLn85hrPYPuP7VfVAAdDtzAAFE0g?=
+ =?us-ascii?Q?VaVHrfA+ULiM+RNQcZfkdDSm70VZC+ixbTK0knJHiVlYlrefN3GdjhFFcAWT?=
+ =?us-ascii?Q?D9gqCaEA2XZ+xfGoYYsMu7/GJye7w1SQepS9r0cKVFwRajrcT/KbRl2a2w3D?=
+ =?us-ascii?Q?yDbftMwpTOeb+BV8MtvuukwJGZy30DQoksgsSmRqdf410jBkqAOu28Pt8fye?=
+ =?us-ascii?Q?Ef49q/e1qwlK3v2ZdhCrsbzT87llCqxmh55nBcA1LK7A57KVz2w8L1JukIYh?=
+ =?us-ascii?Q?U7CFpU1uHL1qNh4uNEaQ+9zMBJhNIcEN9BeB3Y1IMnFrii02tKAwOWWqA+OE?=
+ =?us-ascii?Q?0prbgltJgBSXqM7yUDtgbCe7EPR+hS2fTEZAhihoL4cKQm0EzEi7akGSNvAO?=
+ =?us-ascii?Q?yTWKvojz+7pfAvbP+1RfAjROXuxPtqN/sVLALgzek7PGf79qiR+uzSisq59N?=
+ =?us-ascii?Q?VWqanGo2CntMj8gqfXezeNZF7TU/NJbwcav45BBz2W3+bJ3g1J8eJWZxaGpQ?=
+ =?us-ascii?Q?woFkassGwnK/nTjnThhebRa5RGrpMivdXJl96fnqvAHgiy7YwGgT2ab+1kwL?=
+ =?us-ascii?Q?5Kea/NODTAuGYDRcuGNjKMlGEVXAzzzDS1/gxycpjiaIRgmONqp4ADIT6nWr?=
+ =?us-ascii?Q?THydqG7U0Rh3BAadmDK9g7zVT3+PlsK4YWzP4zDQcxp5N1QLMdJd0UT22dGq?=
+ =?us-ascii?Q?Kl9q1g+g/J1HjuIgUkDOuS6quiirsPpH10/OZHsALLccxWnCK3Ykf32HtFys?=
+ =?us-ascii?Q?FHj1qMXM2JBzILZNvBB5dYMw1wOI76tJaGrMy1RgRRSyiTaJCNaf6XbXqsOt?=
+ =?us-ascii?Q?OoizP+XSlSYEt2V2WFv07yMA8j2PRztn+/6CLl7xvH5cmxy5WY93G8p3DFpK?=
+ =?us-ascii?Q?uANj67QquyfssXcJ7HVmzdZGaNYDafbu5Mxg6vwMucttI3Zw87L4KvwE3uVY?=
+ =?us-ascii?Q?DvuV9g=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR07MB5381.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9adcd7f-25cd-443e-85aa-08d9d5cd482a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2022 13:13:10.4769
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vSNa4rKjY4wC9u2puR5IpWsbi2RouKMdtukPPZ7aCp2gYDsq++LD1MpPLbET5ZIyL72/IOwUEchnTGaCkzmt6uyGkbAwg6KOJqoUL6YHwwY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR07MB4010
+X-Proofpoint-GUID: FN2tnG_q5IJhVMuv8B3KjVWBAP7xsMhr
+X-Proofpoint-ORIG-GUID: FN2tnG_q5IJhVMuv8B3KjVWBAP7xsMhr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-12_04,2022-01-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 malwarescore=0
+ suspectscore=0 clxscore=1015 priorityscore=1501 adultscore=0
+ mlxlogscore=653 impostorscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201120087
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kasan has reported the following use after free on dev->iommu.
-when a device probe fails and it is in process of freeing dev->iommu
-in dev_iommu_free function, a deferred_probe_work_func runs in parallel
-and tries to access dev->iommu->fwspec in of_iommu_configure path thus
-causing use after free.
+>
+>On 22-01-11 10:07:37, Pawel Laszczak wrote:
+>> From: Pawel Laszczak <pawell@cadence.com>
+>>
+>> CDNSP driver read not initialized cdns->otg_v0_regs
+>> which lead to segmentation fault. Patch fixes this issue.
+>>
+>> Fixes: 2cf2581cd229 ("usb: cdns3: add power lost support for system resu=
+me")
+>> cc: <stable@vger.kernel.org>
+>> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+>> ---
+>>  drivers/usb/cdns3/drd.c | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
+>> index 55c73b1d8704..d00ff98dffab 100644
+>> --- a/drivers/usb/cdns3/drd.c
+>> +++ b/drivers/usb/cdns3/drd.c
+>> @@ -483,11 +483,11 @@ int cdns_drd_exit(struct cdns *cdns)
+>>  /* Indicate the cdns3 core was power lost before */
+>>  bool cdns_power_is_lost(struct cdns *cdns)
+>>  {
+>> -	if (cdns->version =3D=3D CDNS3_CONTROLLER_V1) {
+>> -		if (!(readl(&cdns->otg_v1_regs->simulate) & BIT(0)))
+>> +	if (cdns->version =3D=3D CDNS3_CONTROLLER_V0) {
+>> +		if (!(readl(&cdns->otg_v0_regs->simulate) & BIT(0)))
+>>  			return true;
+>>  	} else {
+>> -		if (!(readl(&cdns->otg_v0_regs->simulate) & BIT(0)))
+>> +		if (!(readl(&cdns->otg_v1_regs->simulate) & BIT(0)))
+>>  			return true;
+>>  	}
+>>  	return false;
+>> --
+>
+>Pawel, may this lead cdns driver segment fault?
+>
 
-BUG: KASAN: use-after-free in of_iommu_configure+0xb4/0x4a4
-Read of size 8 at addr ffffff87a2f1acb8 by task kworker/u16:2/153
+Yes, we can observe such situation for CDNSP driver on simulation.=20
+As you know, it is a common code and driver support two version  of registe=
+r map for DRD.
 
-Workqueue: events_unbound deferred_probe_work_func
-Call trace:
- dump_backtrace+0x0/0x33c
- show_stack+0x18/0x24
- dump_stack_lvl+0x16c/0x1e0
- print_address_description+0x84/0x39c
- __kasan_report+0x184/0x308
- kasan_report+0x50/0x78
- __asan_load8+0xc0/0xc4
- of_iommu_configure+0xb4/0x4a4
- of_dma_configure_id+0x2fc/0x4d4
- platform_dma_configure+0x40/0x5c
- really_probe+0x1b4/0xb74
- driver_probe_device+0x11c/0x228
- __device_attach_driver+0x14c/0x304
- bus_for_each_drv+0x124/0x1b0
- __device_attach+0x25c/0x334
- device_initial_probe+0x24/0x34
- bus_probe_device+0x78/0x134
- deferred_probe_work_func+0x130/0x1a8
- process_one_work+0x4c8/0x970
- worker_thread+0x5c8/0xaec
- kthread+0x1f8/0x220
- ret_from_fork+0x10/0x18
+If cdns->version  =3D=3D CDNSP_CONTROLLER_V2 (for CNDSP) the cdns->otg_v0_r=
+egs is NULL.
+It will cause segmentation fault.=20
 
-Allocated by task 1:
- ____kasan_kmalloc+0xd4/0x114
- __kasan_kmalloc+0x10/0x1c
- kmem_cache_alloc_trace+0xe4/0x3d4
- __iommu_probe_device+0x90/0x394
- probe_iommu_group+0x70/0x9c
- bus_for_each_dev+0x11c/0x19c
- bus_iommu_probe+0xb8/0x7d4
- bus_set_iommu+0xcc/0x13c
- arm_smmu_bus_init+0x44/0x130 [arm_smmu]
- arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
- platform_drv_probe+0xe4/0x13c
- really_probe+0x2c8/0xb74
- driver_probe_device+0x11c/0x228
- device_driver_attach+0xf0/0x16c
- __driver_attach+0x80/0x320
- bus_for_each_dev+0x11c/0x19c
- driver_attach+0x38/0x48
- bus_add_driver+0x1dc/0x3a4
- driver_register+0x18c/0x244
- __platform_driver_register+0x88/0x9c
- init_module+0x64/0xff4 [arm_smmu]
- do_one_initcall+0x17c/0x2f0
- do_init_module+0xe8/0x378
- load_module+0x3f80/0x4a40
- __se_sys_finit_module+0x1a0/0x1e4
- __arm64_sys_finit_module+0x44/0x58
- el0_svc_common+0x100/0x264
- do_el0_svc+0x38/0xa4
- el0_svc+0x20/0x30
- el0_sync_handler+0x68/0xac
- el0_sync+0x160/0x180
+I didn't analyze why this issue was not observed on my FPGA testing board.
 
-Freed by task 1:
- kasan_set_track+0x4c/0x84
- kasan_set_free_info+0x28/0x4c
- ____kasan_slab_free+0x120/0x15c
- __kasan_slab_free+0x18/0x28
- slab_free_freelist_hook+0x204/0x2fc
- kfree+0xfc/0x3a4
- __iommu_probe_device+0x284/0x394
- probe_iommu_group+0x70/0x9c
- bus_for_each_dev+0x11c/0x19c
- bus_iommu_probe+0xb8/0x7d4
- bus_set_iommu+0xcc/0x13c
- arm_smmu_bus_init+0x44/0x130 [arm_smmu]
- arm_smmu_device_probe+0xb88/0xc54 [arm_smmu]
- platform_drv_probe+0xe4/0x13c
- really_probe+0x2c8/0xb74
- driver_probe_device+0x11c/0x228
- device_driver_attach+0xf0/0x16c
- __driver_attach+0x80/0x320
- bus_for_each_dev+0x11c/0x19c
- driver_attach+0x38/0x48
- bus_add_driver+0x1dc/0x3a4
- driver_register+0x18c/0x244
- __platform_driver_register+0x88/0x9c
- init_module+0x64/0xff4 [arm_smmu]
- do_one_initcall+0x17c/0x2f0
- do_init_module+0xe8/0x378
- load_module+0x3f80/0x4a40
- __se_sys_finit_module+0x1a0/0x1e4
- __arm64_sys_finit_module+0x44/0x58
- el0_svc_common+0x100/0x264
- do_el0_svc+0x38/0xa4
- el0_svc+0x20/0x30
- el0_sync_handler+0x68/0xac
- el0_sync+0x160/0x180
+Regards,
 
-Fix this by taking device_lock during probe_iommu_group.
-
-Signed-off-by: Vijayanand Jitta <quic_vjitta@quicinc.com>
----
- drivers/iommu/iommu.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index dd7863e..261792d 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -1617,7 +1617,7 @@ static int probe_iommu_group(struct device *dev, void *data)
- {
- 	struct list_head *group_list = data;
- 	struct iommu_group *group;
--	int ret;
-+	int ret = 0;
- 
- 	/* Device is probed already if in a group */
- 	group = iommu_group_get(dev);
-@@ -1626,9 +1626,13 @@ static int probe_iommu_group(struct device *dev, void *data)
- 		return 0;
- 	}
- 
--	ret = __iommu_probe_device(dev, group_list);
--	if (ret == -ENODEV)
--		ret = 0;
-+	ret = device_trylock(dev);
-+	if (ret) {
-+		ret = __iommu_probe_device(dev, group_list);
-+		if (ret == -ENODEV)
-+			ret = 0;
-+		device_unlock(dev);
-+	}
- 
- 	return ret;
- }
--- 
-2.7.4
-
+Pawel Laszczak =20

@@ -2,79 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E79748C35F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C761448C369
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352942AbiALLlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 06:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239705AbiALLly (ORCPT
+        id S1352950AbiALLni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 06:43:38 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57320 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239294AbiALLng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 06:41:54 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003A2C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:41:53 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id z22so8701336edd.12
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:41:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Fh6o/GOsgmj5XjpJdBv76VSM5VP8+e8FRYFpUzMgxVM=;
-        b=bsvIfRLs7Kv8pnSlvJvjmTQFC+5Z54ubGEjdH0DdgOx8dlIzS355rcdZZnBsLWM7P0
-         1QEvHFMenxaqHWPeQTLqtrY0pLG70fIcm7sGtRqcw8WWzYrt5jQTWuCjmPgwwc+DRucO
-         AHd54M8FC3G6O1hsLBE9maLk+8jyfAt+qHdMXBqvAvamTN6Uz5Fnb6/tePDm+27ATJEC
-         gxCfglKe8tYcZQtfLstcIq4Fw9jfAGA38gq7cqQYOrZFYMIw7GpT2Z8wBrrUTAouVN8E
-         CITt5oRurrkgqhP5OxkLFAidbKrIB5luQQeWUN6Ux5rHbOyd4Ep8NfTaMF7ygci8mqPN
-         T5eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Fh6o/GOsgmj5XjpJdBv76VSM5VP8+e8FRYFpUzMgxVM=;
-        b=Xm2kt6PaPJrKDmsW8lqADEXe/p2+Re2jIParp74td65WexC8JIl0fxBz8yk1taJUGd
-         2h6KjVeiE52WnQCS7f4/KHFMlUIAd6Ov7e6MDkhkk1pF3mW3HXDvhMKacTa87vqYhXoh
-         J1QG84EwY0NVoY6x3ACdd4JG2NyBRKO8PlOPItsByGlqAWMdzC1DMBUDbMWQCdtSvFzP
-         yIBDjuiYMvlwtrLW1nj6OLflTwDgFDMN+kRJGAM+JS2B65iqR1lwH1jBVtcTZ3DTugsI
-         ht3xY7lX1A+nJxuacxQ+IVvG9zK/S8mcYBalaOHLvsrYbNQ1lXx78H8khr+0ZVt1ewC0
-         7zBw==
-X-Gm-Message-State: AOAM531HUwkcNKCG9oTKQvS+ljPBID2njzqYZSgdjd2zsqBDW+6wHL/+
-        EIpBq4kbDieClnowQsxrMXl3WvQSvpkJZdmICgM=
-X-Google-Smtp-Source: ABdhPJz3VVzluvbfBIejgB88cNYGSgES0o5B3UQWMcrGB/t18rzey8vSkLZ8Gr5ENKplG6lyHCzz1gGc0tvtiH4GS28=
-X-Received: by 2002:a17:907:2d8c:: with SMTP id gt12mr7371734ejc.430.1641987712563;
- Wed, 12 Jan 2022 03:41:52 -0800 (PST)
+        Wed, 12 Jan 2022 06:43:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D466A6164C;
+        Wed, 12 Jan 2022 11:43:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C3E9C36AE9;
+        Wed, 12 Jan 2022 11:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641987815;
+        bh=nNZvPmLCj5hUY/EAI5dVhxfi/PBGWTo2PlQBAzZcUlo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DQMxxxnMGBy6NVEsiApsuYJBAUBJcIKybBu8A/KI9r+NnkFEzT8nLBqev2dR7t6PU
+         FHzCaqUwApBvErP/Kwh9/Nh0vYxKUdVEywsTsxCJlmC6AIWzQuDOPnUVf+MUsc/dHs
+         5OMJ7R6ucqR6jmV5GargzvvkdW+ZWPz0W5ksFxlqB8q5HIF6ZSWnEAAy30d1uTLXhe
+         /RsA4Idg/f69O5iCf67aYoj6Px8mf/9h80vETZUjfBpTfEAwTIoGonqXRBa3AoBQlN
+         O6qJBnSGAhs743Y1SmfwVgltsjL6ZVkizQOPlSW+juG4T8Z6WsC8waCLm75Ckvtx8L
+         u5PuHNHhgZubg==
+Received: by pali.im (Postfix)
+        id ADF7E768; Wed, 12 Jan 2022 12:43:32 +0100 (CET)
+Date:   Wed, 12 Jan 2022 12:43:32 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-mmc@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v9 08/24] wfx: add bus_sdio.c
+Message-ID: <20220112114332.jadw527pe7r2j4vv@pali>
+References: <20220111171424.862764-1-Jerome.Pouiller@silabs.com>
+ <20220111171424.862764-9-Jerome.Pouiller@silabs.com>
+ <20220112105859.u4j76o7cpsr4znmb@pali>
+ <42104281.b1Mx7tgHyx@pc-42>
 MIME-Version: 1.0
-Received: by 2002:a50:3f8f:0:0:0:0:0 with HTTP; Wed, 12 Jan 2022 03:41:52
- -0800 (PST)
-Reply-To: kodjikokou09@gmail.com
-From:   kodji kokou <musaabraham072@gmail.com>
-Date:   Wed, 12 Jan 2022 11:41:52 +0000
-Message-ID: <CANDkaB95sqDtqgn_e4nQyQYhwQd8ZxWaTbEOP7LYi8oOADCUCA@mail.gmail.com>
-Subject: Re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <42104281.b1Mx7tgHyx@pc-42>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The World Health Organization in collaboration with it=E2=80=99s Parent
-Organization United Nations Economic and Social Council has mandated
-this office to diligently disburse the covid19 Palliative/benefit
-mapped out to assist (you), persons affected by the economic meltdown
-the virus has caused.
+On Wednesday 12 January 2022 12:18:58 Jérôme Pouiller wrote:
+> On Wednesday 12 January 2022 11:58:59 CET Pali Rohár wrote:
+> > On Tuesday 11 January 2022 18:14:08 Jerome Pouiller wrote:
+> > > +static const struct sdio_device_id wfx_sdio_ids[] = {
+> > > +     { SDIO_DEVICE(SDIO_VENDOR_ID_SILABS, SDIO_DEVICE_ID_SILABS_WF200) },
+> > > +     { },
+> > > +};
+> > 
+> > Hello! Is this table still required?
+> 
+> As far as I understand, if the driver does not provide an id_table, the
+> probe function won't be never called (see sdio_match_device()).
+> 
+> Since, we rely on the device tree, we could replace SDIO_VENDOR_ID_SILABS
+> and SDIO_DEVICE_ID_SILABS_WF200 by SDIO_ANY_ID. However, it does not hurt
+> to add an extra filter here.
 
-Your Covid19 benefit of ($550,000.00) Five hundred and fifty thousand
-United States dollars is ready for disbursement, payment method is via
-Union Togolaise Bank(UTB) ATM Debit Card=E2=80=9D which will be sent to you=
- by
-Fast Link Logistics Courier company. You can only withdraw a maximum
-of $5000 daily till the full funds are totally withdrawn. contact us
-on this emails (kodjikokou09@gmail.com)
+Now when this particular id is not required, I'm thinking if it is still
+required and it is a good idea to define these SDIO_VENDOR_ID_SILABS
+macros into kernel include files. As it would mean that other broken
+SDIO devices could define these bogus numbers too... And having them in
+common kernel includes files can cause issues... e.g. other developers
+could think that it is correct to use them as they are defined in common
+header files. But as these numbers are not reliable (other broken cards
+may have same ids as wf200) and their usage may cause issues in future.
 
+Ulf, any opinion?
 
+Btw, is there any project which maintains SDIO ids, like there is
+pci-ids.ucw.cz for PCI or www.linux-usb.org/usb-ids.html for USB?
 
-Warm Regards,
-kodji kokou
-Union Togolaise Bank
+> > > +MODULE_DEVICE_TABLE(sdio, wfx_sdio_ids);
+> > > +
+> > > +struct sdio_driver wfx_sdio_driver = {
+> > > +     .name = "wfx-sdio",
+> > > +     .id_table = wfx_sdio_ids,
+> > > +     .probe = wfx_sdio_probe,
+> > > +     .remove = wfx_sdio_remove,
+> > > +     .drv = {
+> > > +             .owner = THIS_MODULE,
+> > > +             .of_match_table = wfx_sdio_of_match,
+> > > +     }
+> > > +};
+> > > --
+> > > 2.34.1
+> > >
+> > 
+> 
+> 
+> -- 
+> Jérôme Pouiller
+> 
+> 
+> 

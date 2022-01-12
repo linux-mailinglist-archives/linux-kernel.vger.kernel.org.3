@@ -2,146 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFCC48C79C
+	by mail.lfdr.de (Postfix) with ESMTP id 4436C48C79B
 	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354813AbiALPub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:50:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
+        id S1354808AbiALPu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354854AbiALPuH (ORCPT
+        with ESMTP id S1354833AbiALPtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:50:07 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8EFC06173F;
-        Wed, 12 Jan 2022 07:50:06 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id m4so11576791edb.10;
-        Wed, 12 Jan 2022 07:50:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TFgnthO3d7FtM/wAdBTZ92v0qtPDXktX81ZqG9bJ8fQ=;
-        b=oHnNrjevdOSf7DCrODGMrKZepHOtsK8oes2SyeUHeIt+wfP9iycEkNz1RsQGaRJrac
-         HogSgaWGQC0QrF8YPXmJ1GPRxJ56iWijWV7acvSETdim6p80qAVMvQwY80Xc+QCbxX7S
-         jn4X5Zd5SUF9rbltiPTehuSakvsgvoVBWIDB0Yfo19KYgBRN44GQM+C3FJgshYMBJEXO
-         jfnj649uZYEypaHs/XGOImVZC2jt5/8pKe6FlKNILwda6cjJY7xXaK2Mdu/5oDm4Zgjf
-         z7wcnuffcY0MRR2i6v0/tjQguZRLIfg7NvFSKmT+4HzC5uvzzA4J2LnTTiyViSvkNWc8
-         EZug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TFgnthO3d7FtM/wAdBTZ92v0qtPDXktX81ZqG9bJ8fQ=;
-        b=EmX/PycxocwlamQxh4mE3C48mcHm8zhIo9W1/cg9yGpPJTZm+SNPwNMcNfjmxjbFMq
-         ATCnQiKBNOYUdtJWnKrqzHkQSi1AKS1gbxqIpi3xv8j13kXutSMIkqanxLSJcA7AA0BK
-         1hQDuSFkvxEt1g9jJXmrJJ1KhTnYYQwJHUcP6iDeSxKbXWdWwc5uFPwmYIbGO1hhYgK9
-         S3UWCCwdxcYiKjmpLcAaCh+ZXhPzZucMUrtqjQuzTnthOy7vEFjXh14NNNGI22lFu8yG
-         ROoNX7tUt9kMyBwT/BtFWtlTZs+6YQNJdvQKAM6foARs4bTNFI8t+wOioHIvu0J+yNnA
-         RIfg==
-X-Gm-Message-State: AOAM531zO2Lu5pkeoCrS1vgwnKAR2ej5sMWgxmhwPc+WWPRdhijDo/JU
-        KiOD9ank/W+SbxYNb+3yj1WjcdUD6yD6d+0tu5LXEfniveqcAQ==
-X-Google-Smtp-Source: ABdhPJzFVjXJLI/i85mTVwe5RLCXGOeh2iqt8RVc5alU8UFqmMzCpW8UorxBo0fdR0maPO19R/4OcBSn4B8y+jSYA18=
-X-Received: by 2002:a05:6402:4301:: with SMTP id m1mr225773edc.125.1642002605272;
- Wed, 12 Jan 2022 07:50:05 -0800 (PST)
+        Wed, 12 Jan 2022 10:49:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D65C06173F;
+        Wed, 12 Jan 2022 07:49:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3CBAB81F71;
+        Wed, 12 Jan 2022 15:49:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24404C36AEC;
+        Wed, 12 Jan 2022 15:49:49 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QpBtYbI9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1642002586;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pshnUO5xYpkkdXPtgf9tc4a2VXTQic0G5jxH023mrV0=;
+        b=QpBtYbI90gDkx694sKwf4xo7OSjyDeiyrChbl+ipUVkvWshdRDyxB1SB1U0KDpBIiIH0Y0
+        SFap77Q61vWVUHkea8rOWo5hqErKENXaqfcKhUROpCxPJAStailtvU1ypErepvgrmIyhnu
+        +8ZlOGzt1uOmdMFt1+fpoYGnUl4VrJs=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 223ff93e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 12 Jan 2022 15:49:46 +0000 (UTC)
+Received: by mail-yb1-f175.google.com with SMTP id p5so7474998ybd.13;
+        Wed, 12 Jan 2022 07:49:45 -0800 (PST)
+X-Gm-Message-State: AOAM533/Ei4BTlJlJw5Rj25MgUYFAya+pR0ooHQ5YJEHtkS1tltQZERP
+        wDDYz+n/ti37qwhYd2cXMlD959HPCNwZwV+IUtI=
+X-Google-Smtp-Source: ABdhPJwVyAaXipSkjfhiFQhM7/wC2UupGS2Wv7UVpd1PBvAYip0LDwtp6/NNMx557OIKy+4x0swc/ZlfSyvEsLyEQ1E=
+X-Received: by 2002:a25:f90d:: with SMTP id q13mr397640ybe.32.1642002584806;
+ Wed, 12 Jan 2022 07:49:44 -0800 (PST)
 MIME-Version: 1.0
-References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com> <1641996862-26960-3-git-send-email-akhilrajeev@nvidia.com>
-In-Reply-To: <1641996862-26960-3-git-send-email-akhilrajeev@nvidia.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 12 Jan 2022 17:48:18 +0200
-Message-ID: <CAHp75VewfGiRuT4iBLWZ3YQZdmLfgGGPX180quVZu_NVjz7-cQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] docs: firmware-guide: ACPI: Add named interrupt doc
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     Christian Koenig <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+References: <20220112131204.800307-1-Jason@zx2c4.com> <20220112131204.800307-3-Jason@zx2c4.com>
+In-Reply-To: <20220112131204.800307-3-Jason@zx2c4.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 12 Jan 2022 16:49:34 +0100
+X-Gmail-Original-Message-ID: <CAHmME9p1NXemJnpZ07fAzkMMa-nQ4cBoQYP_Y+FpNFao0S5t_A@mail.gmail.com>
+Message-ID: <CAHmME9p1NXemJnpZ07fAzkMMa-nQ4cBoQYP_Y+FpNFao0S5t_A@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 2/3] ipv6: move from sha1 to blake2s in address calculation
+To:     Netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 4:15 PM Akhil R <akhilrajeev@nvidia.com> wrote:
-
-Thanks for doing this, very helpful! My comments below.
-
-> Added details and example for named interrupts in the ACPI Table
-
-Table.
-
-...
-
-> +Named Interrupts
-> +================
-> +
-> +Drivers with ACPI node can have names to interrupts in ACPI table which
-> +can be used to get the irq number in the driver.
-
-IRQ
-
-> +The interrupt name can be listed in _DSD as 'interrupt-names'. The names
-> +should be listed as an array of strings which will map to the Interrupt
-> +property in ACPI table corresponding to its index.
-
-'Interrupt property' --> 'Interrupt() resource'
-
-the ACPI
-
-> +The table below shows an example of its usage::
-> +
-> +       Device (DEV0) {
-> +               ...
-> +               Name (_CRS, ResourceTemplate() {
-> +                       ...
-> +                       Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) {
-> +                               0x20,
-> +                               0x24
-> +                       }
-> +               })
-> +
-> +               Name (_DSD, Package () {
-> +                       ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-> +                       Package () {
-> +                               Package () {"interrupt-names",
-> +                                       Package (2) {"default", "alert"}},
-> +                       }
-
-                       Package () {
-                               Package () {
-                                        "interrupt-names", Package ()
-{"default", "alert"}
-                               },
-                       }
-
-> +                       ...
-> +               })
-> +       }
-
-Please, drop the indentation to just 4 spaces.
-
-> +The interrupt name 'default' will correspond to 0x20 in Interrupt property
-
-Interrupt() resource
-
-> +and 'alert' to 0x24.
-> +
-> +The driver can call the function - device_irq_get_byname with the device
-
-device_irq_get_byname()
-
-> +and interrupt name as arguments to get the corresponding irq number.
-
-IRQ
-
--- 
-With Best Regards,
-Andy Shevchenko
+For the record, I've been able to simplify this even more in my
+remove-sha1 branch: https://git.zx2c4.com/linux-dev/log/?h=remove-sha1
+. We no longer need the packed struct and we handle that secret a bit
+better too. If this patchset moves onto a non-RFC v2, that'll be part
+of it.

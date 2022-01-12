@@ -2,126 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B008D48C30D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF0C48C30C
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352845AbiALLY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 06:24:59 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:65336 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352841AbiALLYr (ORCPT
+        id S1352838AbiALLY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 06:24:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352832AbiALLYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 06:24:47 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20CAuVkG006882;
-        Wed, 12 Jan 2022 11:24:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type : subject :
- from : in-reply-to : date : cc : message-id : references : to :
- content-transfer-encoding : mime-version; s=pp1;
- bh=BDpIW0U6GOzL0hPjy9A7jQvkzxX+o8BnOTG1KTONUDk=;
- b=VmnxEz5XODRzpHSYlqkVWSWo1JrBY6c0PkLOdTS4dzuUl060MW7r8PCcY7aCiHRcKU05
- s+MhSON7x2sTi5PgxNtnxFkCMFD9uWo+Cz1+q9dcoYKFsyxRF0FC8pOaUQKDKsVaB4ru
- miRuIYCobQj085K7W+LIqmdt/sL3NxZ/8893sNvEgpDbHyys+j1G+LiaPZ5B120ki05C
- Js6CTBD7Y3A83OEORGRopYKO7QF0afapWfe/jhjTRohc+Rf2fCq0pcdktYGkGNCnCUM4
- BJyNJh6GHGUoDKMLPSCIdkV0U1zqlG8IkDn3zikwz54ioRbSQzoeBghqGeQ88GV/JKVa +A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhwp70yg5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jan 2022 11:24:02 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20CAvW6h011008;
-        Wed, 12 Jan 2022 11:24:02 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhwp70ydw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jan 2022 11:24:02 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20CBI0V5007138;
-        Wed, 12 Jan 2022 11:23:59 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3df1vj9vb1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jan 2022 11:23:59 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20CBNuxw39321942
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jan 2022 11:23:57 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 89FDF42066;
-        Wed, 12 Jan 2022 11:23:56 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E31DB42041;
-        Wed, 12 Jan 2022 11:23:53 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.195.44.186])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 12 Jan 2022 11:23:53 +0000 (GMT)
-Content-Type: text/plain;
-        charset=us-ascii
-Subject: Re: [PATCH v3 0/4]   sched/pelt: Relax the sync of *_sum with *_avg
-From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
-In-Reply-To: <20220111134659.24961-1-vincent.guittot@linaro.org>
-Date:   Wed, 12 Jan 2022 16:53:52 +0530
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        rickyiu@google.com, odin@uged.al, naresh.kamboju@linaro.org
-Message-Id: <1D84539C-994D-4156-B6C8-BED33EE387B5@linux.vnet.ibm.com>
-References: <20220111134659.24961-1-vincent.guittot@linaro.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: q0ePLwILtUDedh-N2642z0g1K94EaUCF
-X-Proofpoint-ORIG-GUID: wAsdZzkD40zxauyiw5Re2VKp8DvfKMdd
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 12 Jan 2022 06:24:41 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E044C06173F;
+        Wed, 12 Jan 2022 03:24:40 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id br17so6922477lfb.6;
+        Wed, 12 Jan 2022 03:24:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=NbhOvUkO9g131jLa1g16YTEMtyTYHn9ZvHoBdZ3P+9E=;
+        b=TXxz5pdv0WTMvF9sFpXKkRYZj0cRwOO9fREIzpnSZTMMi+Cg/YywiZv1l0KCLx83QG
+         OGgVYHCmc5UjWFvlFxXdCrrL+NT8LiwVayJ9R+hu7SbZBm9Qyye8yvCfQHKeG3DyamQg
+         JINGIml2JzTMSoNMiaxmCJ7scCoTUv1hUe3281wW+ra1n4HDJU6IxbrBrEy5ApdCm9UJ
+         O6wpVBqQQk3qv7KgchM1Qw2yhFL/4Em1bTwAgiXbwO/oCgjvk7LIO8xYFxcghq1hSgqS
+         O1ie4goI+UpEdBZsjCAM0xRRMnO64J7bdWtFhsZ2UY5Oj94JIr6lgygdveDVz3fk2hAQ
+         x6Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=NbhOvUkO9g131jLa1g16YTEMtyTYHn9ZvHoBdZ3P+9E=;
+        b=ie9VPMOD/G5iwHxAv4mel3ukDzgvqg0T+xxOS4kGSCkFNhM7TlXfdwieLxHRY2ooPm
+         WvW/uv9pZeKuMhqkvF9mj3GjKtoTC6aRylKHEXN6e4uMMvXYWtVhnOg5AZo4CeZXCwVk
+         isbXkzMax7kCpjDgFWgefAPkUZUKDSu9AWouJRx1frd4TaIo0tIRjnE0Vbblo4aZ///+
+         tf5j4rCeY8nr8GBNsMnWRGGMPCPv2LTuyrMCfQiTCB0J8PjqOfhogegYOmLdboImYTHL
+         ccZZkqE3zBnqHGqAyFJKjNgaZaTUFdXnozFPTFmLLBxHqYzKgurUD7j/k/ByOWIbuMSQ
+         Iqgg==
+X-Gm-Message-State: AOAM532NkiZrpL6izl5YgdTkpScmFNvocR/30+ULCnkiTmVUHvUgmN9n
+        LcxAVPxq5Ge2E1uLs2wm5vc=
+X-Google-Smtp-Source: ABdhPJyf5aunjokJX6KtWkI+sbtwB39whmA1C2n4n2vD74x0zZFX84Fz71b5DvHpb8qGMCMXb9Aqzg==
+X-Received: by 2002:ac2:44d6:: with SMTP id d22mr6414152lfm.590.1641986678598;
+        Wed, 12 Jan 2022 03:24:38 -0800 (PST)
+Received: from [192.168.2.145] (94-29-62-108.dynamic.spd-mgts.ru. [94.29.62.108])
+        by smtp.googlemail.com with ESMTPSA id i9sm1611371lfe.26.2022.01.12.03.24.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 03:24:38 -0800 (PST)
+Subject: Re: [Patch V1 3/4] memory: tegra: add mc-err support for T186
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org
+Cc:     Snikam@nvidia.com, vdumpa@nvidia.com
+References: <1641926750-27544-1-git-send-email-amhetre@nvidia.com>
+ <1641926750-27544-4-git-send-email-amhetre@nvidia.com>
+ <0b584dfd-04f6-d7f7-f08a-003b89e557f5@gmail.com>
+Message-ID: <b250e2f5-b095-3767-519d-40e42e0a832b@gmail.com>
+Date:   Wed, 12 Jan 2022 14:24:37 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-12_03,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- clxscore=1011 priorityscore=1501 malwarescore=0 phishscore=0
- lowpriorityscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201120072
+In-Reply-To: <0b584dfd-04f6-d7f7-f08a-003b89e557f5@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+12.01.2022 14:22, Dmitry Osipenko пишет:
+> 11.01.2022 21:45, Ashish Mhetre пишет:
+>>  #define MC_INT_DECERR_ROUTE_SANITY			BIT(20)
+>>  #define MC_INT_WCAM_ERR					BIT(19)
+>>  #define MC_INT_SCRUB_ECC_WR_ACK				BIT(18)
+> 
+> I don't see where these errors are handled in the code. Is documentation
+> that explains these bits publicly available?
+> 
 
-> On 11-Jan-2022, at 7:16 PM, Vincent Guittot <vincent.guittot@linaro.org> =
-wrote:
->=20
-> Rick reported performance regressions in bugzilla because of cpu
-> frequency being lower than before:
->    https://bugzilla.kernel.org/show_bug.cgi?id=3D215045
->=20
-> He bisected the problem to:
-> commit 1c35b07e6d39 ("sched/fair: Ensure _sum and _avg values stay consis=
-tent")
->=20
-> More details are available in commit message of patch 1.
->=20
-> This patchset reverts the commit above and adds several checks when
-> propagating the changes in the hierarchy to make sure that we still have
-> coherent util_avg and util_sum.
->=20
-> Dietmar found a simple way to reproduce the WARN fixed by=20
-> commit 1c35b07e6d39 ("sched/fair: Ensure _sum and _avg values stay consis=
-tent")
-> by looping on hackbench in several different sched group levels.
->=20
-> This patchset as run on the reproducer with success but it probably needs
-> more tests by people who faced the WARN before.
->=20
-
-I ran scheduler regression tests(including cfg_bandwidth) from LTP
-for about 6 hours. I did not observe any (new or previously reported)
-kernel warn messages.
-
-Based on this test result for ppc64le
-Tested-by: Sachin Sant <sachinp@linux.ibm.com>
-
--Sachin=
+MC_INT_SCRUB_ECC_WR_ACK shouldn't be a error.

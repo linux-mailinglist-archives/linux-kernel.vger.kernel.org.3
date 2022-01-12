@@ -2,117 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1155248C8CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F99148C8D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355374AbiALQuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:50:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
+        id S1355363AbiALQvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:51:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355366AbiALQuD (ORCPT
+        with ESMTP id S244049AbiALQv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:50:03 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D71C06173F;
-        Wed, 12 Jan 2022 08:50:02 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso3221261wmj.0;
-        Wed, 12 Jan 2022 08:50:02 -0800 (PST)
+        Wed, 12 Jan 2022 11:51:27 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9947EC06173F;
+        Wed, 12 Jan 2022 08:51:26 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id c126-20020a1c9a84000000b00346f9ebee43so1981034wme.4;
+        Wed, 12 Jan 2022 08:51:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JJ2SF0bb6+KdUSKyCW+HpUGApp1784aHS3nTpx0Z14s=;
-        b=Q7fd1OF09Sc22CHs0JbrnbaRvJ5yz4+TzaFl2g7/XsWsE5Rfw57AryfXj9utncRj0H
-         Zeh4xr/iUYHZHwIcpI4mtCqRaa/Mv+t+3N92Os5p0TLiutWpqhjzrsui6vBXnJymFYfk
-         0LW7fyA8y6V18tbcj2fFyQa+rGR7UfnnJifG8ZhojSuVvbHei0wG5tHGqtXnc4ArCJ63
-         eKIE1d9CDnewXU3zZDaTLgCWJd+4qFEMoj82k48+KfMvidhMT2QRd23pkQRhmE9Usjil
-         FRoJMCsg7q+qPcJpnQq1T5ZX2M+JuyloKzQNkkfz0oytmhwFw3RmsPQoDC4nHWbO/s+M
-         Ly0Q==
+        bh=4ZjYXj8qv6hS2+wAqvl/1Wwk2r8Pq9/2mXi3yeFtF7s=;
+        b=G8hh+mN2ry5Cl0PdUPbwUVdIr12Ls+UpaTmKZrd8cd4bl/ww1l0YrKPrZoNwqqocx+
+         xFzIhogN9FhfLGSHoDKjxkrR78G2GFuIm1ZkLsp3HxQ7N1JLDeDOoXz7W3TovhLK4UwG
+         MSOPegKkisyPZhvXmVVyRmmhGuygElbWdv0Bahf5VF31bTBAkSUVu3gLSZf1IUvyArYg
+         6g04YWmKok+0kL6y3ZW+WbdFufYeIWnpOGtz0IdfDT7ron4g0gZbiiWs+RmpA4YohuH/
+         ra0G4g53zdx7sMBqUaejufmmW2aEIMZUwYy/yeBOV3C8MKOrzQJKAOJ+GTdBawaEwyLd
+         M9fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=JJ2SF0bb6+KdUSKyCW+HpUGApp1784aHS3nTpx0Z14s=;
-        b=dlSd92hYDAvXSe7qwbtx75FQ6vq1Tp6mLGZ1wCDOIp96X/JYzjJ9CucU6Dd41BqRbT
-         Xg4ZTu8TgEQuXw9VuYnB7Lj8fr6MamrqyId97MqhEUgVTkOrvrGUFuqhVQTpL+eDlIiP
-         EOhFo/VzyHd78LYLYPc0D/pGI3aIT4PhmLoR4hksNXli3taryhx4iE6p2PI/yhvNol+R
-         Juay7cR4zsF95Uw4jd3DgBAjn6f3TwMOD0+zOAWzHsQyJ0RI0aHp/BRQ8G5Gc+PVbThL
-         NMhsmLtGc3RZtdT7KLDb1rMFr4L+rhKosSUFim2rfQpjjZzJKZTwP14JPIBPvUdmnHof
-         QLLQ==
-X-Gm-Message-State: AOAM5328jT111NFgYvDYlklDKpN1lAi8k1pBQllmzzhJ/I0EHQsonlR2
-        dvgMpAbu7zEh3yT0onzSJNpCSHcTNns=
-X-Google-Smtp-Source: ABdhPJyhP4HoKPWfjEBmMhMTVMUw8Jkty2ipPtiCXRG3fM2rt5+S4ZMGOxM5chziNMgvkZ6UNASTWg==
-X-Received: by 2002:a1c:a9c2:: with SMTP id s185mr7378371wme.164.1642006201590;
-        Wed, 12 Jan 2022 08:50:01 -0800 (PST)
-Received: from [192.168.8.198] ([148.252.129.73])
-        by smtp.gmail.com with ESMTPSA id f9sm359230wry.115.2022.01.12.08.50.00
+        bh=4ZjYXj8qv6hS2+wAqvl/1Wwk2r8Pq9/2mXi3yeFtF7s=;
+        b=IC+H3MmjupYHmfLWakLX9wRwkhqXBzbvE57ARrrKwifXCtCThMisk7PTnYFeBUUUBR
+         OoPe24eC5WYGQWKoPoWhxN7ZnMGd6YohaUqbOoUvO1rszjuCruWws2B3Q3ZiOR/2hz2n
+         PcKpfULjsT2S62MVCwZ3/3hJzeWNn3Wun8bVmJIPIvNXCN5WFFNC8UmTNwYL9/Q0OxYV
+         4wzypROqQ+v46NmpIi4hVjKm3gum+FXcSItZmnDBkzkJPcSGbGGQ6/MIBCpDMpk18K5u
+         WS08fgSjEwAYedwIFO2wFBSjmchq7u4hAbw8HmbbyepzXCpYlutZveIz6PMQS+aS01Wq
+         9zdQ==
+X-Gm-Message-State: AOAM530CfwqA2+3q62d+Xe5ZNVkPpWDSHU7M0GINK0JLyO71re9eeh0x
+        VhrK3tiblNJVE/slePw8DG9+7+sRdUI=
+X-Google-Smtp-Source: ABdhPJwtsfyctmVr0hfiK420v1vmhZrSn70gHUl4KHbqdmHhSLTtJsJyC092jeLQk0GpCHzE1DUivw==
+X-Received: by 2002:a05:600c:4ec7:: with SMTP id g7mr310500wmq.152.1642006285088;
+        Wed, 12 Jan 2022 08:51:25 -0800 (PST)
+Received: from [192.168.0.18] (81.172.62.207.dyn.user.ono.com. [81.172.62.207])
+        by smtp.gmail.com with ESMTPSA id f9sm362657wry.115.2022.01.12.08.51.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 08:50:01 -0800 (PST)
-Message-ID: <a6217814-3762-f99a-9ee0-a4dfbe6a876d@gmail.com>
-Date:   Wed, 12 Jan 2022 16:49:12 +0000
+        Wed, 12 Jan 2022 08:51:24 -0800 (PST)
+Message-ID: <d36d276a-c3be-431b-3636-c313cabda3d4@gmail.com>
+Date:   Wed, 12 Jan 2022 17:51:23 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 09/14] ipv6: hand dst refs to cork setup
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3 0/5] Update MT8192 Clock Setting
 Content-Language: en-US
-To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <cover.1641863490.git.asml.silence@gmail.com>
- <07031c43d3e5c005fbfc76b60a58e30c66d7c620.1641863490.git.asml.silence@gmail.com>
- <48293134f179d643e9ec7bcbd7bca895df7611ac.camel@redhat.com>
- <9e3bb558-ecb1-a6aa-35e4-a2771136b3fe@gmail.com>
- <3520c1e1609d8bef103766ad03508d0060824b98.camel@redhat.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <3520c1e1609d8bef103766ad03508d0060824b98.camel@redhat.com>
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        chun-jie.chen@mediatek.com, devicetree@vger.kernel.org,
+        drinkcat@chromium.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com, Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>
+References: <20220112115542.10606-1-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220112115542.10606-1-allen-kh.cheng@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/22 11:15, Paolo Abeni wrote:
-> On Tue, 2022-01-11 at 20:39 +0000, Pavel Begunkov wrote:
->> On 1/11/22 17:11, Paolo Abeni wrote:
->>> On Tue, 2022-01-11 at 01:21 +0000, Pavel Begunkov wrote:
->>>> During cork->dst setup, ip6_make_skb() gets an additional reference to
->>>> a passed in dst. However, udpv6_sendmsg() doesn't need dst after calling
->>>> ip6_make_skb(), and so we can save two additional atomics by passing
->>>> dst references to ip6_make_skb(). udpv6_sendmsg() is the only caller, so
->>>> it's enough to make sure it doesn't use dst afterwards.
->>>
->>> What about the corked path in udp6_sendmsg()? I mean:
->>
->> It doesn't change it for callers, so the ref stays with udp6_sendmsg() when
->> corking. To compensate for ip6_setup_cork() there is an explicit dst_hold()
->> in ip6_append_data, should be fine.
-> 
-> Whoops, I underlooked that chunk, thanks for pointing it out!
-> 
-> Yes, it looks fine.
-
-perfect, thanks
 
 
->> @@ -1784,6 +1784,7 @@ int ip6_append_data(struct sock *sk,
->>    		/*
->>    		 * setup for corking
->>    		 */
->> +		dst_hold(&rt->dst);
->>    		err = ip6_setup_cork(sk, &inet->cork, &np->cork,
->>    				     ipc6, rt);
->>
->>
->> I don't care much about corking perf, but might be better to implement
->> this "handing away" for ip6_append_data() as well to be more consistent
->> with ip6_make_skb().
+On 12/01/2022 12:55, allen-kh.cheng wrote:
+> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
 > 
-> I'm personally fine with the the added dst_hold() in ip6_append_data()
--- 
-Pavel Begunkov
+> This patch is base on v5.16-rc8,
+> series "Mediatek MT8192 clock support"[1], [2] annd [3].
+> [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=521127
+> [2] https://patchwork.kernel.org/project/linux-mediatek/patch/20210727023205.20319-2-chun-jie.chen@mediatek.com/
+> [3] https://lore.kernel.org/all/20210825011120.30481-1-chun-jie.chen@mediatek.com/
+
+Please update that list to only who the patches that are not yet upstream. That 
+will help me to understand if I can take them right now or if we have to wait 
+for something to get applied first.
+
+Thanks,
+Matthias
+
+> 
+> changes since v2:
+>   - add missing "clock" at the end of commit message
+> 
+> changes since v1:
+>   - update the commit message
+> 
+> Allen-KH Cheng (5):
+>    arm64: dts: mediatek: Correct uart clock of MT8192
+>    arm64: dts: mediatek: Correct SPI clock of MT8192
+>    arm64: dts: mediatek: Correct Nor Flash clock of MT8192
+>    arm64: dts: mediatek: Correct I2C clock of MT8192
+>    arm64: dts: mediatek: Correct system timer clock of MT8192
+> 
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 92 +++++++++++++-----------
+>   1 file changed, 52 insertions(+), 40 deletions(-)
+> 

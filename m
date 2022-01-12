@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF3248C125
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9B948C12B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352121AbiALJin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 04:38:43 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:52011 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238079AbiALJim (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:38:42 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-3-d2ck_VfmPHmbJ465HcGW0A-1; Wed, 12 Jan 2022 09:38:40 +0000
-X-MC-Unique: d2ck_VfmPHmbJ465HcGW0A-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Wed, 12 Jan 2022 09:38:40 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Wed, 12 Jan 2022 09:38:40 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     =?utf-8?B?J01hcnRpbiBMacWha2En?= <mliska@suse.cz>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] objtool: Fix -Wformat-truncation seen with GCC 12.
-Thread-Topic: [PATCH] objtool: Fix -Wformat-truncation seen with GCC 12.
-Thread-Index: AQHYB5bnH5DyDcc48E6EUO/n3E/np6xfH6FA
-Date:   Wed, 12 Jan 2022 09:38:40 +0000
-Message-ID: <8ccdb9b4c55b40ba984d4dc333f7a13c@AcuMS.aculab.com>
-References: <5168172b-d6f2-a13b-5d43-175cd864ebe9@suse.cz>
-In-Reply-To: <5168172b-d6f2-a13b-5d43-175cd864ebe9@suse.cz>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1352145AbiALJkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 04:40:53 -0500
+Received: from mga09.intel.com ([134.134.136.24]:5176 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349438AbiALJkv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 04:40:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641980451; x=1673516451;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NDObU3+Yl16UQmYX4QqpeATBk95upk8QyG1bPd1Td0k=;
+  b=DcQ7MQcefJsY0smfryA8wNLbpAZuAzqhdfKm1XUuFNKpDbI2yZ8DdXIj
+   RB6H5MNi/MZxF5jj8TaNNaVdPXy7pehXHimLWqEFRhuV8gH1GJdn0gd14
+   Rq9yZm1zEuwEOOeGoLVHwZ0b8/YaWRJsSTGI/LnyKNsTORmHGXNIVpt0/
+   9e9cSYk1SodgneDixDykzb7Me+VD5PMFr2fYhHg+D/rRI7EWQw5aA9mLJ
+   aReuQQp/LIeAMhWXN3sn1Q43m7qz8dako7OSvZwgUdwoeY2N5+Atzui10
+   t3YT3F7uLCrHO4DOZEHCRlg9YKVG1c+nNXlSpNNBF2N0snX9A81dA8h6u
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="243496114"
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="243496114"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 01:40:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="623381455"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 12 Jan 2022 01:40:39 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n7a7S-0005f1-My; Wed, 12 Jan 2022 09:40:38 +0000
+Date:   Wed, 12 Jan 2022 17:40:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [intel-tdx:tdx/guest-rebased 82/133] arch/x86/kernel/kvmclock.c:
+ linux/cc_platform.h is included more than once.
+Message-ID: <202201121451.3oUHcvjs-lkp@intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTWFydGluIExpxaFrYQ0KPiBTZW50OiAxMiBKYW51YXJ5IDIwMjIgMDk6MjkNCj4gDQo+
-IFRoZSBwYXRjaCBmaXhlcyB0aGUgZm9sbG93aW5nIHdhcm5pbmcgdGhhdCBzZWVtcyByZWFzb25h
-YmxlOg0KPiANCj4gY2hlY2suYzoyODM2OjU4OiBlcnJvcjogJyVkJyBkaXJlY3RpdmUgb3V0cHV0
-IG1heSBiZSB0cnVuY2F0ZWQgd3JpdGluZyBiZXR3ZWVuIDEgYW5kIDEwIGJ5dGVzIGludG8gYQ0K
-PiByZWdpb24gb2Ygc2l6ZSA5IFstV2Vycm9yPWZvcm1hdC10cnVuY2F0aW9uPV0NCj4gMjgzNiB8
-ICAgICAgICAgICAgICAgICBzbnByaW50Zihwdm5hbWUsIHNpemVvZihwdm5hbWUpLCAicHZfb3Bz
-WyVkXSIsIGlkeCk7DQoNCkxvb2tzIHByZXR0eSB1bnJlYXNvbmFibGUgdG8gbWUgOi0pDQpUaGUg
-ZG9tYWluIG9mICdpZHgnIGlzIG11Y2ggc21hbGxlciB0aGFuIHRoYXQgb2YgJ2ludCcuDQpJbmRl
-ZWQgdGhlIG92ZXJmbG93IGNhbiBvbmx5IGFjdHVhbGx5IGhhcHBlbiBpZiBpdCBpcyBuZWdhdGl2
-ZS4NCkJ5IHRoZW4gYWxsIHNvcnRzIG9mIG90aGVyIHRoaW5ncyB3aWxsIGhhdmUgZ29uZSB3cm9u
-Zy4NCg0KT1RPSCBjaGFuZ2luZyAxNiB0byA2MCBpcyBvbmUgd2F5IHRvIFNURlUuDQoNCglEYXZp
-ZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQg
-RmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4
-NiAoV2FsZXMpDQo=
+tree:   https://github.com/intel/tdx.git tdx/guest-rebased
+head:   e3995864d37c56f431c93fc3dc454d9c65f5e9ea
+commit: 4a3880b5341dcd044ac45b1483342f005d1ec083 [82/133] x86/tdx: Disable kvmclock in TDX
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+includecheck warnings: (new ones prefixed by >>)
+>> arch/x86/kernel/kvmclock.c: linux/cc_platform.h is included more than once.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

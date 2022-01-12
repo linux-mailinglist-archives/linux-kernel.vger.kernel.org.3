@@ -2,125 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B9D48CD95
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:19:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8144348CDB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiALVTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 16:19:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        id S232695AbiALVV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 16:21:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiALVTM (ORCPT
+        with ESMTP id S231587AbiALVVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 16:19:12 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0197C06173F;
-        Wed, 12 Jan 2022 13:19:11 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id r28so6577768wrc.3;
-        Wed, 12 Jan 2022 13:19:11 -0800 (PST)
+        Wed, 12 Jan 2022 16:21:02 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DCFC061751;
+        Wed, 12 Jan 2022 13:21:02 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so7525589pjp.0;
+        Wed, 12 Jan 2022 13:21:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6TxiOntNhsCrtTXgbXmjcIfphc43hOl3QDBs0NNaLFY=;
-        b=KFiMw3MPBADupNQlBvuHMx9S77BKhdF50zxz77/j9FbgxZiOW10JkOCDEu4tDtTIUZ
-         AF2ne5pOpFtLLh0J/9OVlZ3Xk8elbrON8BeE8eBJFFtdl+rcmCx6FlCLn1TGlLjOGU1U
-         MbEepFp7jfyJPApV+rIYxxpUAJzQ5eydRVetMrqCpxYELcUkPYCWoTUG1/frTgYsvUGJ
-         ZiTlzH1EJEC+Ki3ORSUcCKfj0/d1Le+p8V28PtIAlySvlQOqa+hdOESzqWF4D3jzjQSP
-         3LTRiZFk53hsfrs+MASoRHQUwhCVAtsh7bisLyz3COXkFx2eHCyN6mzF2beFQqpPV5MI
-         6hXg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rMcwZZyzD4aLSfK+vIDiFeDvvWtNOlRHmP8s8YMbIOw=;
+        b=cFPRS+JHB1Ou8jEaT14elVfUqR6AB4wKvYBEFO27k2tF4/lrAdI4f0HyAhDpya/8aq
+         SrxqhX8tP4MI5XV07OmN2PrmxE6y7yWDkS4TX2B1INkQeStdjgsMy5W0OXIFVNWGT+gu
+         +e3d0s49VBZnfheeE9DgxcL43vHldgvfMEoYrGz21MXCYL7qgfpt56PSaDwqjGYHwSZu
+         NEd6rDSnG7qTwCZ/rOefH96fXbEToEeEUu174yrHx/F4pPyEXUUwfrDSJy9lYYawK/TL
+         7+VcwPqszEk03hVL1tXf4YEaW2ESnnOW9ZhGRWWDqjasA64N3q3tQZ9PdCxJl+AKvKIr
+         bvnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6TxiOntNhsCrtTXgbXmjcIfphc43hOl3QDBs0NNaLFY=;
-        b=AhCHq7KkOBj8cb3yqwx2hxb4C5O1Y47uNXu8Q4DJ8YcKxNTl8ScG4l1lfR++qJaOXg
-         jlBI6b5Xz3oVQ4puaQTTJfogXA1Y6WVCWh7jwnds5GgRNPBZtYs1mGa7Q9sMppW5/Ch9
-         rDsOa/HPI+s4hahrPtCBjEh+s1bifAPKk6CxihkodLWGv+INl3GMtCNPlPTMKUgD49pk
-         NvqJLGc42b0EKnuTPNvBGga+CTGK74I9QQnXzejjvd5D4prVRWYCIgvPvPeZfhOl4EgE
-         yw4uKQwojRebBitb/ozp8DlpL4xAL58fpDbztS6Vm7H94zlBDsvAAJZnjXFYryAYB22A
-         sVmw==
-X-Gm-Message-State: AOAM533w+L5sRr9qrUpYclC6VRjs/yZv0JrAVVCcaK1iDk8HoZTjay6+
-        TXdqGR6DyyW1jU5zBgP+UpOgj4osSFVAhPNZieE=
-X-Google-Smtp-Source: ABdhPJzFEuWp7Wsk8JdHQYZwsj1tBXEicac30GClml/cPixPa0nmwZPRG1lrU1uj5FLFPmz34phbSV+YiJmWRQFzecY=
-X-Received: by 2002:a5d:6488:: with SMTP id o8mr1369457wri.93.1642022349685;
- Wed, 12 Jan 2022 13:19:09 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=rMcwZZyzD4aLSfK+vIDiFeDvvWtNOlRHmP8s8YMbIOw=;
+        b=wUW9zmYr3S4d9sQ7rwy+B6zWnSyrDO0htNDvZkAeJL4vppjb+7Lc1/UoBbuPRsxbNI
+         4jyfNDdiPJgXCcSbxN2+/2Lb0OOAEYwAHxvpE8wps+uBL35pnB/lF5lRh/LkfMp++fBO
+         OQDN5gJ5IeiPk9vSMdUzANhUoyF1kqi44J9PzahFFJeRPqOYbc8eZeuuZBx4hqgYx1sa
+         oAkDQGj776ByhRXY95ITG0JIGU7S6eUS5zujWw76Ue6w4JpwAMxlm3A8UKXjDzvjlrre
+         q4XdWbKrJfON3VeQnxHtGFMdB/reDgw9txbgjVMIbzSL1i9zAHmUVTW7DSZzin8hkNZA
+         q5ZA==
+X-Gm-Message-State: AOAM532jwBYTkKVl1Aiba2KW3hN2xxQ2iga0+/wOwxVAvWL3eZ7pHWPu
+        oUOGtCORK9A/UKcv2uuDSHI=
+X-Google-Smtp-Source: ABdhPJyAf1N23q1Z+y569d/oGHSUMK3ZqiDI1J0ppOHjHBz1ppS+GNRHMMUILf7nso6azh/5JAiElQ==
+X-Received: by 2002:a17:90b:1651:: with SMTP id il17mr10096286pjb.151.1642022462103;
+        Wed, 12 Jan 2022 13:21:02 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id q18sm519156pfn.50.2022.01.12.13.21.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 13:21:01 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 12 Jan 2022 11:21:00 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <Yd9GPLytGQ6XpYK6@slm.duckdns.org>
+References: <20211205183220.818872-1-longman@redhat.com>
+ <20211205183220.818872-7-longman@redhat.com>
+ <Ybe0YWEo7Wp7wib9@slm.duckdns.org>
+ <20211215144450.GC25459@blackbody.suse.cz>
+ <96018978-6b7f-1e7f-1012-9df7f7996ec5@redhat.com>
+ <Ybo1jmNvM6sblcJq@slm.duckdns.org>
+ <58c06961-ffc4-27d7-01d2-4c91b0c9161d@redhat.com>
 MIME-Version: 1.0
-References: <20220112030115.1.Ibac66e1e0e565313bc28f192e6c94cb508f205eb@changeid>
- <20220112030115.3.I86c32730e08cba9e5c83f02ec17885124d45fa56@changeid>
-In-Reply-To: <20220112030115.3.I86c32730e08cba9e5c83f02ec17885124d45fa56@changeid>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 12 Jan 2022 13:19:07 -0800
-Message-ID: <CAF6AEGuJxdrYM5XXt6sUGmjossqZTRzwQ6Y8qYsnfCYDvGQurw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] drm/msm/adreno: Expose speedbin to userspace
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <58c06961-ffc4-27d7-01d2-4c91b0c9161d@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 1:31 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
->
-> Expose speedbin through MSM_PARAM_CHIP_ID parameter to help userspace
-> identify the sku.
->
-> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> ---
->
->  drivers/gpu/drm/msm/adreno/adreno_gpu.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> index f33cfa4..e970e6a 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> @@ -242,10 +242,11 @@ int adreno_get_param(struct msm_gpu *gpu, uint32_t param, uint64_t *value)
->                 *value = !adreno_is_a650_family(adreno_gpu) ? 0x100000 : 0;
->                 return 0;
->         case MSM_PARAM_CHIP_ID:
-> -               *value = adreno_gpu->rev.patchid |
-> -                               (adreno_gpu->rev.minor << 8) |
-> -                               (adreno_gpu->rev.major << 16) |
-> -                               (adreno_gpu->rev.core << 24);
-> +               *value = (uint64_t) adreno_gpu->rev.patchid |
-> +                               (uint64_t) (adreno_gpu->rev.minor << 8) |
-> +                               (uint64_t) (adreno_gpu->rev.major << 16) |
-> +                               (uint64_t) (adreno_gpu->rev.core << 24) |
-> +                               (((uint64_t) adreno_gpu->rev.sku) << 32);
+Hello,
 
-How about this instead, so we are only changing the behavior for
-new/unreleased devices:
+On Wed, Dec 15, 2021 at 01:55:05PM -0500, Waiman Long wrote:
+> How about we allow transition to an invalid partition state but still return
+> an error?
 
-*value = adreno_gpu->rev.patchid |
-(adreno_gpu->rev.minor << 8) |
-(adreno_gpu->rev.major << 16) |
-(adreno_gpu->rev.core << 24);
-if (!adreno_gpu->info->revn)
-*value |= (((uint64_t) adreno_gpu->rev.sku) << 32);
+Like -EAGAIN as Michal suggested? I don't know. I understand the motivation
+but one problem is that error return usually means that the operation didn't
+change the state of the system and that holds even for -EAGAIN. So, we'd be
+trading one locally jarring thing (this thing is asynchrnous and the actual
+state transitions should be monitored separately) to another one which is
+jarring in a wider context (this thing returned error but the system state
+changed anyway). To me, the latter seems noticeably worse given how common
+the assumption that an error return indicate that nothing actually happened.
 
-(sorry about the butchered indentation.. somehow gmail has become
-antagonistic about pasting code)
+We have other cases where we split operation submissions and completions
+(aios being the obvious one) but I don't think we have any where -EAGAIN
+indicates successful initiation of an operation. At least I hope not.
 
-BR,
--R
+Thanks.
 
->                 return 0;
->         case MSM_PARAM_MAX_FREQ:
->                 *value = adreno_gpu->base.fast_rate;
-> --
-> 2.7.4
->
+-- 
+tejun

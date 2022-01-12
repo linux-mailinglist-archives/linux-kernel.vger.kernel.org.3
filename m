@@ -2,617 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 561E648CDCB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FFE48CDDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbiALV26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 16:28:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
+        id S230014AbiALVdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 16:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiALV25 (ORCPT
+        with ESMTP id S233110AbiALVco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 16:28:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FB8C06173F;
-        Wed, 12 Jan 2022 13:28:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F47BB8211B;
-        Wed, 12 Jan 2022 21:28:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1613C36AE9;
-        Wed, 12 Jan 2022 21:28:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642022934;
-        bh=oxdjZBMyx19pIA18ebJD4BZ8Eyfa2ZqKr/tNRiE/6EA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Nt5DfCW4cw9Zd0rb7fD482uFbENr2aXQosGyMZeE6dmH+TCBW2wTFw39EHLvibH6o
-         fqWxbx7BQiLeLqraonfpG/FEeKSzVJm/scOpJ4/FWL1Ecgt6xrFDRGPGQPwEmpxWIF
-         PveEWyxE0Th5CqHDAigElHGi0pwg000XK5gXmShNY4Vcmk+LzDoAQqr2Q8orclRXG3
-         iIsjiDgmkzC7OU4DOcNyO3dL9C/a7kPWxVsoo7lsHpOa3YGiNSZ69+o3lrTO5LIKXy
-         UljZv1LEUgPjojDYz4KZ1N3VPvQTWF6Hjex5XJtphF7O9HTcuaH1QuaemWv/Oj/cVU
-         8f2k5ZgTVuiYA==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] clk changes for the merge window
-Date:   Wed, 12 Jan 2022 13:28:53 -0800
-Message-Id: <20220112212853.2401468-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
+        Wed, 12 Jan 2022 16:32:44 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF7EC06175A
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 13:32:43 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7lDU-0003cg-GC; Wed, 12 Jan 2022 22:31:36 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7lDG-009xGd-W3; Wed, 12 Jan 2022 22:31:22 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7lDF-0004hw-SN; Wed, 12 Jan 2022 22:31:21 +0100
+Date:   Wed, 12 Jan 2022 22:31:21 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        platform-driver-x86@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+ <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="c63mbqxqltqrb5xh"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 72a0ca203ca7fae34fe61668906fe483b97d9039:
 
-  dt-bindings: clock: Add SM8450 GCC clock bindings (2021-12-14 21:19:13 -0600)
+--c63mbqxqltqrb5xh
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-are available in the Git repository at:
+On Wed, Jan 12, 2022 at 11:27:02AM +0100, Geert Uytterhoeven wrote:
+> Hi Uwe,
+>=20
+> On Wed, Jan 12, 2022 at 9:51 AM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> > On Wed, Jan 12, 2022 at 09:33:48AM +0100, Geert Uytterhoeven wrote:
+> > > On Mon, Jan 10, 2022 at 10:20 PM Andrew Lunn <andrew@lunn.ch> wrote:
+> > > > On Mon, Jan 10, 2022 at 09:10:14PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > > > On Mon, Jan 10, 2022 at 10:54:48PM +0300, Sergey Shtylyov wrote:
+> > > > > > This patch is based on the former Andy Shevchenko's patch:
+> > > > > >
+> > > > > > https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shev=
+chenko@linux.intel.com/
+> > > > > >
+> > > > > > Currently platform_get_irq_optional() returns an error code eve=
+n if IRQ
+> > > > > > resource simply has not been found. It prevents the callers fro=
+m being
+> > > > > > error code agnostic in their error handling:
+> > > > > >
+> > > > > >     ret =3D platform_get_irq_optional(...);
+> > > > > >     if (ret < 0 && ret !=3D -ENXIO)
+> > > > > >             return ret; // respect deferred probe
+> > > > > >     if (ret > 0)
+> > > > > >             ...we get an IRQ...
+> > > > > >
+> > > > > > All other *_optional() APIs seem to return 0 or NULL in case an=
+ optional
+> > > > > > resource is not available. Let's follow this good example, so t=
+hat the
+> > > > > > callers would look like:
+> > > > > >
+> > > > > >     ret =3D platform_get_irq_optional(...);
+> > > > > >     if (ret < 0)
+> > > > > >             return ret;
+> > > > > >     if (ret > 0)
+> > > > > >             ...we get an IRQ...
+> > > > >
+> > > > > The difference to gpiod_get_optional (and most other *_optional) =
+is that
+> > > > > you can use the NULL value as if it were a valid GPIO.
+> > > > >
+> > > > > As this isn't given with for irqs, I don't think changing the ret=
+urn
+> > > > > value has much sense.
+> > > >
+> > > > We actually want platform_get_irq_optional() to look different to a=
+ll
+> > > > the other _optional() methods because it is not equivalent. If it
+> > > > looks the same, developers will assume it is the same, and get
+> > > > themselves into trouble.
+> > >
+> > > Developers already assume it is the same, and thus forget they have
+> > > to check against -ENXIO instead of zero.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
+I agree that -ENXIO is unfortunate and -ENOENT would be more in line
+with other functions. I assume it's insane to want to change that.
 
-for you to fetch changes up to 4afd2a9355a9deb16ea42b896820dacf49843a8f:
+> > Is this an ack for renaming platform_get_irq_optional() to
+> > platform_get_irq_silent()?
+>=20
+> No it isn't ;-)
+>=20
+> If an optional IRQ is not present, drivers either just ignore it (e.g.
+> for devices that can have multiple interrupts or a single muxed IRQ),
+> or they have to resort to polling. For the latter, fall-back handling
+> is needed elsewhere in the driver.
 
-  Merge branches 'clk-ingenic' and 'clk-mediatek' into clk-next (2022-01-11 18:31:00 -0800)
+I think irq are not suitable for such a dummy handling. For clocks or
+GPIOs there are cases where just doing nothing in the absence of a
+certain optional clock or GPIO is fine.
 
-----------------------------------------------------------------
-We have a couple patches in the framework core this time around but
-they're mostly minor cleanups and some debugfs stuff. The real work
-that's in here is the typical pile of clk driver updates and new SoC
-support. Per usual (or maybe just recent trends), Qualcomm gains a
-handful of SoC drivers additions and has the largest diffstat. After
-that there are quite a few updates to the Allwinner (sunxi) drivers to
-support modular drivers and Renesas is heavily updated to add more
-support for various clks. Overall it looks pretty normal.
+I checked a few users of platform_get_irq_optional() and I didn't find a
+single one that doesn't need to differentiate the irq and the no-irq
+case later. Do you know one? If you do, isn't that so exceptional that
+it doesn't justify the idea of a dummy irq value? So until proven
+otherwise I think platform_get_irq_optional() just isn't in the spirit
+of clk_get_optional() and gpiod_get_optional() because there are no use
+cases where a dummy value would be good enough. (Even if request_irq
+would be a noop for a dummy irq value.)
 
-New Drivers:
- - Add MDMA and BDMA clks to Ingenic JZ4760 and JZ4770
- - MediaTek mt7986 SoC basic support
- - Clock and reset driver for Toshiba Visconti SoCs
- - Initial clock driver for the Exynos7885 SoC (Samsung Galaxy A8)
- - Allwinner D1 clks
- - Lan966x Generic Clock Controller driver and associated DT bindings
- - Qualcomm SDX65, SM8450, and MSM8976 GCC clks
- - Qualcomm SDX65 and SM8450 RPMh clks
+The motivation why platform_get_irq_optional() was introduced was just
+that platform_get_irq() started to emit an error message (in commit
+7723f4c5ecdb8d832f049f8483beb0d1081cedf6) and the (proportional) few
+drivers where the error message was bad needed a variant that doesn't
+emit the error message. Look at
+31a8d8fa84c51d3ab00bf059158d5de6178cf890, the motivation to use
+platform_get_irq_optional() wasn't that it simplifies handling in the
+driver, but that it doesn't emit an error message. Or
+8f5783ad9eb83747471f61f94dbe209fb9fb8a7d, or
+2fd276c3ee4bd42eb034f8954964a5ae74187c6b, or
+55cc33fab5ac9f7e2a97aa7c564e8b35355886d5. Just look at the output of git
+log -Splatform_get_irq_optional to find some more.
 
-Updates:
- - Set suppress_bind_attrs to true for i.MX8ULP driver
- - Switch from do_div to div64_ul for throughout all i.MX drivers
- - Fix imx8mn_clko1_sels for i.MX8MN
- - Remove unused IPG_AUDIO_ROOT from i.MX8MP
- - Switch parent for audio_root_clk to audio ahb in i.MX8MP driver
- - Removal of all remaining uses of __clk_lookup() in drivers/clk/samsung
- - Refactoring of the CPU clocks registration to use common interface
- - An update of the Exynos850 driver (support for more clock domains)
-   required by the E850-96 development board
- - Prep for runtime PM and generic power domains on Tegra
- - Support modular Allwinner clk drivers via platform bus
- - Lan966x clock driver extended to support clock gating
- - Add serial (SCI1), watchdog (WDT), timer (OSTM), SPI (RSPI), and
-   thermal (TSU) clocks and resets on Renesas RZ/G2L
- - Rework SDHI clock handling in the Renesas R-Car Gen3 and RZ/G2 clock
-   drivers, and in the Renesas SDHI driver
- - Make the Cortex-A55 (I) clock on Renesas RZ/G2L programmable
- - Document support for the new Renesas R-Car S4-8 (R8A779F0) SoC
- - Add support for the new Renesas R-Car S4-8 (R8A779F0) SoC
- - Add GPU clock and resets on Renesas RZ/G2L
- - Add clk-provider.h to various Qualcomm clk drivers
- - devm version of clk_hw_register_gate()
- - kerneldoc fixes in a couple drivers
+That convinces me, that platform_get_irq_optional() is a bad name. The
+only difference to platform_get_irq is that it's silent. And returning
+a dummy irq value (which would make it aligned with the other _optional
+functions) isn't possible.
 
-----------------------------------------------------------------
-Adam Ford (1):
-      clk: imx8mn: Fix imx8mn_clko1_sels
+> To me it sounds much more logical for the driver to check if an
+> optional irq is non-zero (available) or zero (not available), than to
+> sprinkle around checks for -ENXIO. In addition, you have to remember
+> that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
+> (or some other error code) to indicate absence. I thought not having
+> to care about the actual error code was the main reason behind the
+> introduction of the *_optional() APIs.
 
-Ajit Kumar Pandey (5):
-      x86: clk: clk-fch: Add support for newer family of AMD's SOC
-      drivers: acpi: acpi_apd: Remove unused device property "is-rv"
-      ACPI: APD: Add a fmw property clk-name
-      clk: x86: Use dynamic con_id string during clk registration
-      clk: x86: Fix clk_gate_flags for RV_CLK_GATE
+No, the main benefit of gpiod_get_optional() (and clk_get_optional()) is
+that you can handle an absent GPIO (or clk) as if it were available.
 
-Alain Volmat (2):
-      clk: st: clkgen-fsyn: search reg within node or parent
-      clk: st: clkgen-mux: search reg within node or parent
+Best regards
+Uwe
 
-AngeloGioacchino Del Regno (3):
-      clk: qcom: Add MSM8976/56 Global Clock Controller (GCC) driver
-      clk: mediatek: clk-gate: Shrink by adding clockgating bit check helper
-      clk: mediatek: clk-gate: Use regmap_{set/clear}_bits helpers
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Biju Das (9):
-      clk: renesas: r9a07g044: Add WDT clock and reset entries
-      clk: renesas: r9a07g044: Rename CLK_PLL2_DIV16 and CLK_PLL2_DIV20 macros
-      clk: renesas: r9a07g044: Add OSTM clock and reset entries
-      clk: renesas: rzg2l: Add CPG_PL1_DDIV macro
-      clk: renesas: r9a07g044: Change core clock "I" from DEF_FIXED->DEF_DIV
-      clk: renesas: r9a07g044: Add TSU clock and reset entry
-      clk: renesas: r9a07g044: Rename CLK_PLL3_DIV4 macro
-      clk: renesas: r9a07g044: Add mux and divider for G clock
-      clk: renesas: r9a07g044: Add GPU clock and reset entries
+--c63mbqxqltqrb5xh
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Bjorn Andersson (3):
-      MAINTAINERS: Add entry for Qualcomm clock drivers
-      Merge tag 'e15509b2b7c9b600ab38c5269d4fac609c077b5b.1638861860.git.quic_vamslank@quicinc.com' into clk-for-5.17
-      Merge tag '20211207114003.100693-2-vkoul@kernel.org' into clk-for-5.17
+-----BEGIN PGP SIGNATURE-----
 
-Cai Huoqing (2):
-      clk: socfpga: agilex: Make use of the helper function devm_platform_ioremap_resource()
-      clk: socfpga: s10: Make use of the helper function devm_platform_ioremap_resource()
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHfSKAACgkQwfwUeK3K
+7AlLYgf/TzHojP4Z3A1x+jOxObpLjnDBfLk/J2fJ3fPc7MQFDJwGCubx9/Taculx
+9FL859wRU0HEqwefh3A61whyx3wDxBePJWJBBvU1jVZE12XHbvfARqHXYlZH3/rs
++NUE/+WdKRh5YlDkOacjJ2x0lj7zudpEqvRquEuCaHNFX1bshPpw723FFZSyVLV3
+8sZFHYevwi62q3h1gUPq6tUZib+WVnmCnladf6UYgGxgJQLu/YdvCm5+lp6N6H8u
+orUVG5PWROmD0F2c504T2qCD7O0hwj+667BfsU5JBAODQJm8dB47BGxjdoU52a2F
+mMckMccinC+jzqqzaJB4DTX2lMD57Q==
+=ndjr
+-----END PGP SIGNATURE-----
 
-Changcheng Deng (1):
-      clk: imx: Use div64_ul instead of do_div
-
-Colin Ian King (4):
-      clk/ti/adpll: Make const pointer error a static const array
-      clk: stm32mp1: remove redundant assignment to pointer data
-      clk: socfpga: remove redundant assignment on division
-      clk: socfpga: remove redundant assignment after a mask operation
-
-Conor Dooley (1):
-      clk: bm1880: remove kfrees on static allocations
-
-David Virag (5):
-      dt-bindings: clock: Add bindings definitions for Exynos7885 CMU
-      dt-bindings: clock: Document Exynos7885 CMU bindings
-      clk: samsung: Make exynos850_register_cmu shared
-      clk: samsung: clk-pll: Add support for pll1417x
-      clk: samsung: Add initial Exynos7885 clock driver
-
-Dillon Min (1):
-      clk: stm32: Fix ltdc's clock turn off by clk_disable_unused() after system enter shell
-
-Dmitry Osipenko (2):
-      clk: tegra: Make vde a child of pll_p on tegra114
-      clk: tegra: Support runtime PM and power domain
-
-Geert Uytterhoeven (3):
-      clk: renesas: rzg2l: Add missing kerneldoc for resets
-      mmc: renesas_sdhi: Use devm_clk_get_optional() to obtain CD clock
-      Merge tag 'renesas-r8a779f0-dt-binding-defs-tag' into HEAD
-
-Hans de Goede (1):
-      clk: Introduce clk-tps68470 driver
-
-Horatiu Vultur (4):
-      clk: gate: Add devm_clk_hw_register_gate()
-      dt-bindings: clock: lan966x: Extend for clock gate support
-      dt-bindings: clock: lan966x: Extend includes with clock gates
-      clk: lan966x: Extend lan966x clock driver for clock gating support
-
-Hui Wang (2):
-      clk: imx8mp: Remove IPG_AUDIO_ROOT from imx8mp-clock.h
-      clk: imx8mp: Fix the parent clk of the audio_root_clk
-
-Kavyasree Kotagiri (3):
-      dt-bindings: clock: lan966x: Add binding includes for lan966x SoC clock IDs
-      dt-bindings: clock: lan966x: Add LAN966X Clock Controller
-      clk: lan966x: Add lan966x SoC clock driver
-
-Lad Prabhakar (6):
-      clk: renesas: r9a07g044: Add clock and reset entry for SCI1
-      clk: renesas: r9a07g044: Add RSPI clock and reset entries
-      clk: renesas: rzg2l: Check return value of pm_genpd_init()
-      clk: renesas: rzg2l: propagate return value of_genpd_add_provider_simple()
-      clk: renesas: cpg-mssr: Check return value of pm_genpd_init()
-      clk: renesas: cpg-mssr: propagate return value of_genpd_add_provider_simple()
-
-Marek Szyprowski (2):
-      dt-bindings: clock: samsung: add IDs for some core clocks
-      clk: samsung: remove __clk_lookup() usage
-
-Marijn Suijten (1):
-      dt-bindings: clk: qcom: Document MSM8976 Global Clock Controller
-
-Martin Blumenstingl (1):
-      clk: meson: gxbb: Fix the SDM_EN bit for MPLL0 on GXBB
-
-Nathan Chancellor (1):
-      clk: visconti: Remove pointless NULL check in visconti_pll_add_lookup()
-
-Nobuhiro Iwamatsu (4):
-      dt-bindings: clock: Add DT bindings for PLL of Toshiba Visconti TMPV770x SoC
-      dt-bindings: clock: Add DT bindings for SMU of Toshiba Visconti TMPV770x SoC
-      clk: visconti: Add support common clock driver and reset driver
-      MAINTAINERS: Add entries for Toshiba Visconti PLL and clock controller
-
-Paul Cercueil (2):
-      dt-bindings: clk/ingenic: Add MDMA and BDMA clocks
-      clk: ingenic: Add MDMA and BDMA clocks
-
-Peng Fan (1):
-      clk: imx: imx8ulp: set suppress_bind_attrs to true
-
-Randy Dunlap (2):
-      clk: imx: pllv1: fix kernel-doc notation for struct clk_pllv1
-      clk: Gemini: fix struct name in kernel-doc
-
-Sam Protsenko (9):
-      dt-bindings: clock: Add bindings for Exynos850 CMU_APM
-      clk: samsung: exynos850: Implement CMU_APM domain
-      dt-bindings: clock: Add bindings for Exynos850 CMU_CMGP
-      clk: samsung: exynos850: Implement CMU_CMGP domain
-      clk: samsung: exynos850: Keep some crucial clocks running
-      clk: samsung: exynos850: Register clocks early
-      clk: Add write operation for clk_parent debugfs node
-      dt-bindings: clock: Add bindings for Exynos850 sysreg clocks
-      clk: samsung: exynos850: Add missing sysreg clocks
-
-Sam Shih (3):
-      dt-bindings: clock: mediatek: document clk bindings for mediatek mt7986 SoC
-      clk: mediatek: add mt7986 clock IDs
-      clk: mediatek: add mt7986 clock support
-
-Samuel Holland (10):
-      clk: sunxi-ng: Export symbols used by CCU drivers
-      clk: sunxi-ng: Allow drivers to be built as modules
-      clk: sunxi-ng: Convert early providers to platform drivers
-      clk: sunxi-ng: Allow the CCU core to be built as a module
-      dt-bindings: clk: Add compatibles for D1 CCUs
-      clk: sunxi-ng: div: Add macros using clk_parent_data and clk_hw
-      clk: sunxi-ng: mp: Add macros using clk_parent_data and clk_hw
-      clk: sunxi-ng: mux: Add macros using clk_parent_data and clk_hw
-      clk: sunxi-ng: gate: Add macros for gates with fixed dividers
-      clk: sunxi-ng: Add support for the D1 SoC clocks
-
-Shawn Guo (3):
-      clk: qcom: smd-rpm: Drop MFD qcom-rpm reference
-      clk: qcom: smd-rpm: Drop the use of struct rpm_cc
-      clk: qcom: smd-rpm: Drop binary value handling for buffered clock
-
-Shubhrajyoti Datta (1):
-      clk: zynq: pll: Fix kernel-doc warnings
-
-Stephen Boyd (18):
-      Merge tag 'renesas-clk-for-v5.17-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers into clk-renesas
-      Merge tag 'clk-at91-5.17' of git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into clk-at91
-      clk: clk_core_get() can also return NULL
-      clk: __clk_core_init() never takes NULL
-      clk: Emit a stern warning with writable debugfs enabled
-      Merge tag 'platform-drivers-x86-int3472-1' of git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86 into clk-x86
-      Merge tag 'clk-meson-v5.17-1' of https://github.com/BayLibre/clk-meson into clk-amlogic
-      Merge tag 'sunxi-clk-for-5.17-1' of https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into clk-allwinner
-      Merge tag 'renesas-clk-for-v5.17-tag2' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers into clk-renesas
-      Merge tag 'for-5.17-clk' of git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into clk-nvidia
-      Merge tag 'clk-imx-5.17' of git://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux into clk-imx
-      Merge tag 'clk-v5.17-samsung' of https://git.kernel.org/pub/scm/linux/kernel/git/snawrocki/clk into clk-samsung
-      Merge tag 'qcom-clk-for-5.17' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into clk-qcom
-      Merge branches 'clk-doc', 'clk-renesas', 'clk-at91', 'clk-cleanup' and 'clk-debugfs' into clk-next
-      Merge branches 'clk-x86', 'clk-stm', 'clk-amlogic' and 'clk-allwinner' into clk-next
-      Merge branches 'clk-nvidia', 'clk-imx', 'clk-samsung' and 'clk-qcom' into clk-next
-      Merge branches 'clk-socfpga', 'clk-toshiba', 'clk-st' and 'clk-bitmain' into clk-next
-      Merge branches 'clk-ingenic' and 'clk-mediatek' into clk-next
-
-Sudeep Holla (1):
-      clk: Drop unused COMMON_CLK_STM32MP157_SCMI config
-
-Sylwester Nawrocki (1):
-      clk: samsung: Remove meaningless __init and extern from header files
-
-Taniya Das (3):
-      clk: qcom: clk-alpha-pll: Increase PLL lock detect poll time
-      clk: qcom: gcc-sc7280: Mark gcc_cfg_noc_lpass_clk always enabled
-      clk: Enable/Disable runtime PM for clk_summary
-
-Vamsi Krishna Lanka (2):
-      clk: qcom: Add LUCID_EVO PLL type for SDX65
-      clk: qcom: Add SDX65 GCC support
-
-Vamsi krishna Lanka (2):
-      dt-bindings: clock: Introduce RPMHCC bindings for SDX65
-      clk: qcom: Add support for SDX65 RPMh clocks
-
-Vinod Koul (11):
-      dt-bindings: clock: Add RPMHCC bindings for SM8450
-      clk: qcom: rpmh: add support for SM8450 rpmh clocks
-      clk: qcom: Add clock driver for SM8450
-      clk: qcom: gcc-sm8350: explicitly include clk-provider.h
-      clk: qcom: gcc-msm8994: explicitly include clk-provider.h
-      clk: qcom: gcc-sm6350: explicitly include clk-provider.h
-      clk: qcom: lpasscc-sc7280: explicitly include clk-provider.h
-      clk: qcom: lpasscc-sdm845: explicitly include clk-provider.h
-      clk: qcom: mmcc-apq8084: explicitly include clk-provider.h
-      clk: qcom: q6sstop-qcs404: explicitly include clk-provider.h
-      clk: qcom: turingcc-qcs404: explicitly include clk-provider.h
-
-Will McVicker (1):
-      clk: samsung: Update CPU clk registration
-
-Wolfram Sang (9):
-      clk: renesas: rcar-gen3: Add dummy SDnH clock
-      clk: renesas: rcar-gen3: Add SDnH clock
-      clk: renesas: r8a779a0: Add SDnH clock to V3U
-      mmc: renesas_sdhi: Flag non-standard SDnH handling for V3M
-      clk: renesas: rcar-gen3: Switch to new SD clock handling
-      clk: renesas: rcar-gen3: Remove outdated SD_SKIP_FIRST
-      mmc: renesas_sdhi: Use dev_err_probe when getting clock fails
-      mmc: renesas_sdhi: Parse DT for SDnH
-      mmc: renesas_sdhi: Simplify an expression
-
-Yoshihiro Shimoda (3):
-      dt-bindings: clock: renesas,cpg-mssr: Document r8a779f0
-      clk: renesas: rcar-gen4: Introduce R-Car Gen4 CPG driver
-      clk: renesas: cpg-mssr: Add support for R-Car S4-8
-
- .../bindings/arm/mediatek/mediatek,apmixedsys.txt  |    1 +
- .../bindings/arm/mediatek/mediatek,ethsys.txt      |    1 +
- .../bindings/arm/mediatek/mediatek,infracfg.txt    |    1 +
- .../bindings/arm/mediatek/mediatek,sgmiisys.txt    |    2 +
- .../bindings/arm/mediatek/mediatek,topckgen.txt    |    1 +
- .../bindings/clock/allwinner,sun4i-a10-ccu.yaml    |    4 +
- .../bindings/clock/microchip,lan966x-gck.yaml      |   60 +
- .../bindings/clock/qcom,gcc-msm8976.yaml           |   97 +
- .../devicetree/bindings/clock/qcom,gcc-sdx65.yaml  |   80 +
- .../devicetree/bindings/clock/qcom,rpmhcc.yaml     |    2 +
- .../bindings/clock/renesas,cpg-mssr.yaml           |    1 +
- .../bindings/clock/samsung,exynos7885-clock.yaml   |  166 +
- .../bindings/clock/samsung,exynos850-clock.yaml    |   38 +
- .../bindings/clock/toshiba,tmpv770x-pipllct.yaml   |   57 +
- .../bindings/clock/toshiba,tmpv770x-pismu.yaml     |   52 +
- MAINTAINERS                                        |   12 +
- drivers/acpi/acpi_apd.c                            |   11 +-
- drivers/acpi/scan.c                                |   37 +-
- drivers/clk/Kconfig                                |   26 +-
- drivers/clk/Makefile                               |    5 +-
- drivers/clk/clk-bm1880.c                           |   20 +-
- drivers/clk/clk-gate.c                             |   35 +
- drivers/clk/clk-gemini.c                           |    2 +-
- drivers/clk/clk-lan966x.c                          |  293 ++
- drivers/clk/clk-stm32f4.c                          |    4 -
- drivers/clk/clk-stm32mp1.c                         |    2 -
- drivers/clk/clk-tps68470.c                         |  261 ++
- drivers/clk/clk.c                                  |   80 +-
- drivers/clk/imx/clk-imx8mn.c                       |    6 +-
- drivers/clk/imx/clk-imx8mp.c                       |    2 +-
- drivers/clk/imx/clk-imx8ulp.c                      |    1 +
- drivers/clk/imx/clk-pllv1.c                        |   17 +-
- drivers/clk/imx/clk-pllv3.c                        |    6 +-
- drivers/clk/ingenic/jz4760-cgu.c                   |   10 +
- drivers/clk/ingenic/jz4770-cgu.c                   |    5 +
- drivers/clk/mediatek/Kconfig                       |   17 +
- drivers/clk/mediatek/Makefile                      |    4 +
- drivers/clk/mediatek/clk-gate.c                    |   24 +-
- drivers/clk/mediatek/clk-mt7986-apmixed.c          |  100 +
- drivers/clk/mediatek/clk-mt7986-eth.c              |  132 +
- drivers/clk/mediatek/clk-mt7986-infracfg.c         |  224 ++
- drivers/clk/mediatek/clk-mt7986-topckgen.c         |  342 ++
- drivers/clk/meson/gxbb.c                           |   44 +-
- drivers/clk/qcom/Kconfig                           |   24 +
- drivers/clk/qcom/Makefile                          |    3 +
- drivers/clk/qcom/clk-alpha-pll.c                   |  166 +-
- drivers/clk/qcom/clk-alpha-pll.h                   |    3 +
- drivers/clk/qcom/clk-rpmh.c                        |   52 +
- drivers/clk/qcom/clk-smd-rpm.c                     |   31 +-
- drivers/clk/qcom/gcc-msm8976.c                     | 4155 ++++++++++++++++++++
- drivers/clk/qcom/gcc-msm8994.c                     |    1 +
- drivers/clk/qcom/gcc-sc7280.c                      |    2 +-
- drivers/clk/qcom/gcc-sdx65.c                       | 1611 ++++++++
- drivers/clk/qcom/gcc-sm6350.c                      |    1 +
- drivers/clk/qcom/gcc-sm8350.c                      |    1 +
- drivers/clk/qcom/gcc-sm8450.c                      | 3304 ++++++++++++++++
- drivers/clk/qcom/lpasscc-sc7280.c                  |    1 +
- drivers/clk/qcom/lpasscc-sdm845.c                  |    1 +
- drivers/clk/qcom/mmcc-apq8084.c                    |    1 +
- drivers/clk/qcom/q6sstop-qcs404.c                  |    1 +
- drivers/clk/qcom/turingcc-qcs404.c                 |    1 +
- drivers/clk/renesas/Kconfig                        |   13 +-
- drivers/clk/renesas/Makefile                       |    2 +
- drivers/clk/renesas/r8a774a1-cpg-mssr.c            |   12 +-
- drivers/clk/renesas/r8a774b1-cpg-mssr.c            |   12 +-
- drivers/clk/renesas/r8a774c0-cpg-mssr.c            |    9 +-
- drivers/clk/renesas/r8a774e1-cpg-mssr.c            |   12 +-
- drivers/clk/renesas/r8a7795-cpg-mssr.c             |   12 +-
- drivers/clk/renesas/r8a7796-cpg-mssr.c             |   12 +-
- drivers/clk/renesas/r8a77965-cpg-mssr.c            |   12 +-
- drivers/clk/renesas/r8a77980-cpg-mssr.c            |    3 +-
- drivers/clk/renesas/r8a77990-cpg-mssr.c            |    9 +-
- drivers/clk/renesas/r8a77995-cpg-mssr.c            |    3 +-
- drivers/clk/renesas/r8a779a0-cpg-mssr.c            |  343 +-
- drivers/clk/renesas/r8a779f0-cpg-mssr.c            |  183 +
- drivers/clk/renesas/r9a07g044-cpg.c                |   81 +-
- drivers/clk/renesas/rcar-cpg-lib.c                 |  211 +-
- drivers/clk/renesas/rcar-cpg-lib.h                 |    7 +-
- drivers/clk/renesas/rcar-gen3-cpg.c                |   24 +-
- drivers/clk/renesas/rcar-gen3-cpg.h                |    4 +
- drivers/clk/renesas/rcar-gen4-cpg.c                |  305 ++
- drivers/clk/renesas/rcar-gen4-cpg.h                |   76 +
- drivers/clk/renesas/renesas-cpg-mssr.c             |   60 +-
- drivers/clk/renesas/renesas-cpg-mssr.h             |    3 +-
- drivers/clk/renesas/rzg2l-cpg.c                    |   18 +-
- drivers/clk/renesas/rzg2l-cpg.h                    |    9 +
- drivers/clk/samsung/Makefile                       |    2 +
- drivers/clk/samsung/clk-cpu.c                      |    2 +-
- drivers/clk/samsung/clk-cpu.h                      |    7 -
- drivers/clk/samsung/clk-exynos-arm64.c             |   94 +
- drivers/clk/samsung/clk-exynos-arm64.h             |   20 +
- drivers/clk/samsung/clk-exynos3250.c               |   54 +-
- drivers/clk/samsung/clk-exynos4.c                  |   41 +-
- drivers/clk/samsung/clk-exynos5250.c               |   21 +-
- drivers/clk/samsung/clk-exynos5420.c               |   29 +-
- drivers/clk/samsung/clk-exynos7885.c               |  597 +++
- drivers/clk/samsung/clk-exynos850.c                |  366 +-
- drivers/clk/samsung/clk-pll.c                      |    1 +
- drivers/clk/samsung/clk-pll.h                      |    1 +
- drivers/clk/samsung/clk-s3c2410.c                  |    6 +-
- drivers/clk/samsung/clk-s3c64xx.c                  |    8 +-
- drivers/clk/samsung/clk-s5pv210.c                  |    8 +-
- drivers/clk/samsung/clk.c                          |   14 -
- drivers/clk/samsung/clk.h                          |   36 +-
- drivers/clk/socfpga/clk-agilex.c                   |    4 +-
- drivers/clk/socfpga/clk-gate.c                     |    4 +-
- drivers/clk/socfpga/clk-pll-s10.c                  |    2 +-
- drivers/clk/socfpga/clk-s10.c                      |    4 +-
- drivers/clk/st/clkgen-fsyn.c                       |   13 +-
- drivers/clk/st/clkgen-mux.c                        |   11 +-
- drivers/clk/sunxi-ng/Kconfig                       |   49 +-
- drivers/clk/sunxi-ng/Makefile                      |  101 +-
- drivers/clk/sunxi-ng/ccu-sun20i-d1-r.c             |  140 +
- drivers/clk/sunxi-ng/ccu-sun20i-d1-r.h             |   17 +
- drivers/clk/sunxi-ng/ccu-sun20i-d1.c               | 1390 +++++++
- drivers/clk/sunxi-ng/ccu-sun20i-d1.h               |   15 +
- drivers/clk/sunxi-ng/ccu-sun4i-a10.c               |   58 +-
- drivers/clk/sunxi-ng/ccu-sun50i-a100-r.c           |    4 +-
- drivers/clk/sunxi-ng/ccu-sun50i-a100.c             |    4 +-
- drivers/clk/sunxi-ng/ccu-sun50i-a64.c              |    7 +-
- drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c             |   56 +-
- drivers/clk/sunxi-ng/ccu-sun50i-h6.c               |    7 +-
- drivers/clk/sunxi-ng/ccu-sun50i-h616.c             |   33 +-
- drivers/clk/sunxi-ng/ccu-sun6i-a31.c               |   40 +-
- drivers/clk/sunxi-ng/ccu-sun8i-a23.c               |   35 +-
- drivers/clk/sunxi-ng/ccu-sun8i-a33.c               |   40 +-
- drivers/clk/sunxi-ng/ccu-sun8i-a83t.c              |    7 +-
- drivers/clk/sunxi-ng/ccu-sun8i-de2.c               |    9 +-
- drivers/clk/sunxi-ng/ccu-sun8i-h3.c                |   62 +-
- drivers/clk/sunxi-ng/ccu-sun8i-r.c                 |   65 +-
- drivers/clk/sunxi-ng/ccu-sun8i-r40.c               |    6 +-
- drivers/clk/sunxi-ng/ccu-sun8i-v3s.c               |   57 +-
- drivers/clk/sunxi-ng/ccu-sun9i-a80-de.c            |    7 +-
- drivers/clk/sunxi-ng/ccu-sun9i-a80-usb.c           |    7 +-
- drivers/clk/sunxi-ng/ccu-sun9i-a80.c               |    7 +-
- drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c           |   40 +-
- drivers/clk/sunxi-ng/ccu_common.c                  |    6 +
- drivers/clk/sunxi-ng/ccu_div.c                     |    1 +
- drivers/clk/sunxi-ng/ccu_div.h                     |   78 +
- drivers/clk/sunxi-ng/ccu_frac.c                    |    6 +
- drivers/clk/sunxi-ng/ccu_gate.c                    |    4 +
- drivers/clk/sunxi-ng/ccu_gate.h                    |   32 +-
- drivers/clk/sunxi-ng/ccu_mp.c                      |    2 +
- drivers/clk/sunxi-ng/ccu_mp.h                      |   49 +
- drivers/clk/sunxi-ng/ccu_mult.c                    |    1 +
- drivers/clk/sunxi-ng/ccu_mux.c                     |    6 +
- drivers/clk/sunxi-ng/ccu_mux.h                     |   33 +
- drivers/clk/sunxi-ng/ccu_nk.c                      |    1 +
- drivers/clk/sunxi-ng/ccu_nkm.c                     |    1 +
- drivers/clk/sunxi-ng/ccu_nkmp.c                    |    1 +
- drivers/clk/sunxi-ng/ccu_nm.c                      |    1 +
- drivers/clk/sunxi-ng/ccu_phase.c                   |    1 +
- drivers/clk/sunxi-ng/ccu_reset.c                   |    1 +
- drivers/clk/sunxi-ng/ccu_sdm.c                     |    6 +
- drivers/clk/tegra/Makefile                         |    1 +
- drivers/clk/tegra/clk-device.c                     |  199 +
- drivers/clk/tegra/clk-pll.c                        |    2 +-
- drivers/clk/tegra/clk-super.c                      |    2 +-
- drivers/clk/tegra/clk-tegra114.c                   |    2 +-
- drivers/clk/tegra/clk-tegra20.c                    |   77 +-
- drivers/clk/tegra/clk-tegra30.c                    |  116 +-
- drivers/clk/tegra/clk.c                            |   75 +-
- drivers/clk/tegra/clk.h                            |    2 +
- drivers/clk/ti/adpll.c                             |    2 +-
- drivers/clk/visconti/Kconfig                       |    9 +
- drivers/clk/visconti/Makefile                      |    5 +
- drivers/clk/visconti/clkc-tmpv770x.c               |  291 ++
- drivers/clk/visconti/clkc.c                        |  206 +
- drivers/clk/visconti/clkc.h                        |   76 +
- drivers/clk/visconti/pll-tmpv770x.c                |   85 +
- drivers/clk/visconti/pll.c                         |  340 ++
- drivers/clk/visconti/pll.h                         |   62 +
- drivers/clk/visconti/reset.c                       |  107 +
- drivers/clk/visconti/reset.h                       |   36 +
- drivers/clk/x86/clk-fch.c                          |   48 +-
- drivers/clk/zynq/pll.c                             |   12 +-
- drivers/i2c/i2c-core-acpi.c                        |   22 +-
- drivers/mmc/host/Kconfig                           |    1 +
- drivers/mmc/host/renesas_sdhi.h                    |    4 +
- drivers/mmc/host/renesas_sdhi_core.c               |   45 +-
- drivers/mmc/host/renesas_sdhi_internal_dmac.c      |   21 +
- drivers/platform/x86/intel/int3472/Makefile        |    9 +-
- ...472_clk_and_regulator.c => clk_and_regulator.c} |    2 +-
- drivers/platform/x86/intel/int3472/common.c        |   82 +
- .../{intel_skl_int3472_common.h => common.h}       |    6 +-
- .../{intel_skl_int3472_discrete.c => discrete.c}   |   51 +-
- .../x86/intel/int3472/intel_skl_int3472_common.c   |  106 -
- .../{intel_skl_int3472_tps68470.c => tps68470.c}   |   92 +-
- drivers/platform/x86/intel/int3472/tps68470.h      |   25 +
- .../x86/intel/int3472/tps68470_board_data.c        |  145 +
- include/acpi/acpi_bus.h                            |    5 +-
- include/dt-bindings/clock/exynos4.h                |    4 +-
- include/dt-bindings/clock/exynos5250.h             |    4 +-
- include/dt-bindings/clock/exynos7885.h             |  115 +
- include/dt-bindings/clock/exynos850.h              |   54 +-
- include/dt-bindings/clock/imx8mp-clock.h           |    1 -
- include/dt-bindings/clock/ingenic,jz4760-cgu.h     |    2 +
- include/dt-bindings/clock/ingenic,jz4770-cgu.h     |    1 +
- include/dt-bindings/clock/microchip,lan966x.h      |   34 +
- include/dt-bindings/clock/mt7986-clk.h             |  169 +
- include/dt-bindings/clock/qcom,gcc-msm8976.h       |  240 ++
- include/dt-bindings/clock/qcom,gcc-sdx65.h         |  122 +
- include/dt-bindings/clock/r8a779f0-cpg-mssr.h      |   64 +
- include/dt-bindings/clock/sun20i-d1-ccu.h          |  156 +
- include/dt-bindings/clock/sun20i-d1-r-ccu.h        |   19 +
- include/dt-bindings/clock/toshiba,tmpv770x.h       |  181 +
- include/dt-bindings/power/r8a779f0-sysc.h          |   30 +
- include/dt-bindings/reset/sun20i-d1-ccu.h          |   77 +
- include/dt-bindings/reset/sun20i-d1-r-ccu.h        |   16 +
- include/dt-bindings/reset/toshiba,tmpv770x.h       |   41 +
- include/linux/clk-provider.h                       |   23 +
- include/linux/clk/sunxi-ng.h                       |   15 -
- include/linux/i2c.h                                |   17 +-
- include/linux/mfd/tps68470.h                       |   11 +
- include/linux/platform_data/clk-fch.h              |    2 +-
- include/linux/platform_data/tps68470.h             |   35 +
- 216 files changed, 19320 insertions(+), 1401 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/microchip,lan966x-gck.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-msm8976.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sdx65.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/toshiba,tmpv770x-pipllct.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/toshiba,tmpv770x-pismu.yaml
- create mode 100644 drivers/clk/clk-lan966x.c
- create mode 100644 drivers/clk/clk-tps68470.c
- create mode 100644 drivers/clk/mediatek/clk-mt7986-apmixed.c
- create mode 100644 drivers/clk/mediatek/clk-mt7986-eth.c
- create mode 100644 drivers/clk/mediatek/clk-mt7986-infracfg.c
- create mode 100644 drivers/clk/mediatek/clk-mt7986-topckgen.c
- create mode 100644 drivers/clk/qcom/gcc-msm8976.c
- create mode 100644 drivers/clk/qcom/gcc-sdx65.c
- create mode 100644 drivers/clk/qcom/gcc-sm8450.c
- create mode 100644 drivers/clk/renesas/r8a779f0-cpg-mssr.c
- create mode 100644 drivers/clk/renesas/rcar-gen4-cpg.c
- create mode 100644 drivers/clk/renesas/rcar-gen4-cpg.h
- create mode 100644 drivers/clk/samsung/clk-exynos-arm64.c
- create mode 100644 drivers/clk/samsung/clk-exynos-arm64.h
- create mode 100644 drivers/clk/samsung/clk-exynos7885.c
- create mode 100644 drivers/clk/sunxi-ng/ccu-sun20i-d1-r.c
- create mode 100644 drivers/clk/sunxi-ng/ccu-sun20i-d1-r.h
- create mode 100644 drivers/clk/sunxi-ng/ccu-sun20i-d1.c
- create mode 100644 drivers/clk/sunxi-ng/ccu-sun20i-d1.h
- create mode 100644 drivers/clk/tegra/clk-device.c
- create mode 100644 drivers/clk/visconti/Kconfig
- create mode 100644 drivers/clk/visconti/Makefile
- create mode 100644 drivers/clk/visconti/clkc-tmpv770x.c
- create mode 100644 drivers/clk/visconti/clkc.c
- create mode 100644 drivers/clk/visconti/clkc.h
- create mode 100644 drivers/clk/visconti/pll-tmpv770x.c
- create mode 100644 drivers/clk/visconti/pll.c
- create mode 100644 drivers/clk/visconti/pll.h
- create mode 100644 drivers/clk/visconti/reset.c
- create mode 100644 drivers/clk/visconti/reset.h
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_clk_and_regulator.c => clk_and_regulator.c} (99%)
- create mode 100644 drivers/platform/x86/intel/int3472/common.c
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_common.h => common.h} (94%)
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_discrete.c => discrete.c} (91%)
- delete mode 100644 drivers/platform/x86/intel/int3472/intel_skl_int3472_common.c
- rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_tps68470.c => tps68470.c} (56%)
- create mode 100644 drivers/platform/x86/intel/int3472/tps68470.h
- create mode 100644 drivers/platform/x86/intel/int3472/tps68470_board_data.c
- create mode 100644 include/dt-bindings/clock/exynos7885.h
- create mode 100644 include/dt-bindings/clock/microchip,lan966x.h
- create mode 100644 include/dt-bindings/clock/mt7986-clk.h
- create mode 100644 include/dt-bindings/clock/qcom,gcc-msm8976.h
- create mode 100644 include/dt-bindings/clock/qcom,gcc-sdx65.h
- create mode 100644 include/dt-bindings/clock/r8a779f0-cpg-mssr.h
- create mode 100644 include/dt-bindings/clock/sun20i-d1-ccu.h
- create mode 100644 include/dt-bindings/clock/sun20i-d1-r-ccu.h
- create mode 100644 include/dt-bindings/clock/toshiba,tmpv770x.h
- create mode 100644 include/dt-bindings/power/r8a779f0-sysc.h
- create mode 100644 include/dt-bindings/reset/sun20i-d1-ccu.h
- create mode 100644 include/dt-bindings/reset/sun20i-d1-r-ccu.h
- create mode 100644 include/dt-bindings/reset/toshiba,tmpv770x.h
- create mode 100644 include/linux/platform_data/tps68470.h
-
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+--c63mbqxqltqrb5xh--

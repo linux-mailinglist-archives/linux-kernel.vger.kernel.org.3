@@ -2,84 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFBB48BBFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE0148BC04
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344294AbiALAql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 19:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343866AbiALAqg (ORCPT
+        id S1347396AbiALAtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 19:49:25 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:60912 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1343866AbiALAtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 19:46:36 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFC1C06173F;
-        Tue, 11 Jan 2022 16:46:36 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id u25so3309474edf.1;
-        Tue, 11 Jan 2022 16:46:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=YgB9W3ER2Fk3JAkU4HFtCEF3WoMMr2PxfP7Sgs5PJD0=;
-        b=PtupSkCZRZdKSmNDUGbWNksFXWjrpfe+bp3K19mEv1Fmx2j4cSpPPJhKRWn1cgPohI
-         PPkEfVVVPrGBsl3fBy6LbNz8AKw/Mn+7/2i/tgkPXnH0cFtdl5/yP+jvPTOHBZszTOHY
-         rh0C8UnwkvrFlCP+tie4bR/5NETPf6dji+imcsAX6pg/Nhhy5NrdqAfKWj9cXt5eGvIt
-         8rubtDI/vYYUHq3VFK+89ZQ2921Db/hBi+yzO5Lx43tLTR3K4R2lqaz45mrza6d+ULkJ
-         zHZcYNP/tCuz8TpUTXtkQooCLA8m5eo2D9OyVsPJAKB5qKTpPN45InBPD/Tey+Wreqz/
-         jeVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YgB9W3ER2Fk3JAkU4HFtCEF3WoMMr2PxfP7Sgs5PJD0=;
-        b=IdyZ+6YVe5iS3uNWb+epC4fbMI7/kNad7Risyreh8JKm7qN/s1/i0O/sXkmPkVxoME
-         gykkelcgsl1oeGeld1iiIID5ySdnBrwg2PCXGiRbxcxBb1tnM1oLzwulUlr/YN+0a0Fm
-         whIKw+8VDWyONWVrZIEJUTVXj46j2YuwJGQQ4/ZduPH65iaBSG3cRXgZvsnaaP+k7lvZ
-         YxzIYwck30ztHk13dqWBOwM83k6z4J2tNifelfSLq71TG5AGRUe0CPZFjg/fXYgiUil3
-         VWzPidmPB9qNkgwH8pPAvMMQyz4Pg//MdN04BljhERAI+IihOzUjkrTJNH2X8LoE8kmw
-         8M5Q==
-X-Gm-Message-State: AOAM532EP9ovht5WLowYiHyaM4gX4h+i42UKSytbbyoNtMV6GgyPmDnR
-        5D4bTs5PKcGBl8lEHsPj86c=
-X-Google-Smtp-Source: ABdhPJw5WGkyK3h0037r0/5+Z7FKq/sEb0axuzKUvRH1lKpbVEDd+P7tGOxDrvb/F3sUOUiYnQGcjA==
-X-Received: by 2002:aa7:cc83:: with SMTP id p3mr6552182edt.382.1641948394816;
-        Tue, 11 Jan 2022 16:46:34 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id 1sm3999679ejo.192.2022.01.11.16.46.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 11 Jan 2022 16:46:34 -0800 (PST)
-Date:   Wed, 12 Jan 2022 00:46:34 +0000
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Wei Yang <richard.weiyang@gmail.com>, hannes@cmpxchg.org,
-        vdavydov.dev@gmail.com, akpm@linux-foundation.org,
-        shakeelb@google.com, guro@fb.com, vbabka@suse.cz,
-        willy@infradead.org, songmuchun@bytedance.com, shy828301@gmail.com,
-        surenb@google.com, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 1/4] mm/memcg: use NUMA_NO_NODE to indicate allocation
- from unspecified node
-Message-ID: <20220112004634.dc5suwei4ymyxaxg@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20220111010302.8864-1-richard.weiyang@gmail.com>
- <Yd1CdJA5NelzoK1D@dhcp22.suse.cz>
+        Tue, 11 Jan 2022 19:49:23 -0500
+X-UUID: 987cdb94642a43c8a121c4b2a526f3e3-20220112
+X-UUID: 987cdb94642a43c8a121c4b2a526f3e3-20220112
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 733936014; Wed, 12 Jan 2022 08:49:18 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 12 Jan 2022 08:49:17 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 12 Jan 2022 08:49:16 +0800
+From:   <sean.wang@mediatek.com>
+To:     <khalid@gonehiking.org>
+CC:     <greearb@candelatech.com>, <nbd@nbd.name>,
+        <lorenzo.bianconi83@gmail.com>, <Ryder.Lee@mediatek.com>,
+        <Shayne.Chen@mediatek.com>, <Sean.Wang@mediatek.com>,
+        <kvalo@kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <matthias.bgg@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Sean Wang <sean.wang@mediatek.com>
+Subject: Re: [Bug] mt7921e driver in 5.16 causes kernel panic
+Date:   Wed, 12 Jan 2022 08:49:16 +0800
+Message-ID: <1641948556-23414-1-git-send-email-sean.wang@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <c3a66426-e6a0-4fd2-dc09-85181c96b755@gonehiking.org--annotate>
+References: <c3a66426-e6a0-4fd2-dc09-85181c96b755@gonehiking.org--annotate>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yd1CdJA5NelzoK1D@dhcp22.suse.cz>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 09:40:20AM +0100, Michal Hocko wrote:
->On Tue 11-01-22 01:02:59, Wei Yang wrote:
->> Instead of use "-1", let's use NUMA_NO_NODE for consistency.
->> 
->> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+From: Sean Wang <sean.wang@mediatek.com>
+
+>On 1/11/22 16:31, Ben Greear wrote:
+>> On 1/11/22 3:17 PM, Khalid Aziz wrote:
+>>> I am seeing an intermittent bug in mt7921e driver. When the driver
+>>> module is loaded and is being initialized, almost every other time it
+>>> seems to write to some wild memory location. This results in driver
+>>> failing to initialize with message "Timeout for driver own" and at
+>>> the same time I start to see "Bad page state" messages for random
+>>> processes. Here is the relevant part of dmesg:
+>>
+>> Please see if this helps?
+>>
+>> From: Ben Greear <greearb@candelatech.com>
+>>
+>> If the nic fails to start, it is possible that the reset_work has
+>> already been scheduled.  Ensure the work item is canceled so we do not
+>> have use-after-free crash in case cleanup is called before the work
+>> item is executed.
+>>
+>> This fixes crash on my x86_64 apu2 when mt7921k radio fails to work.
+>> Radio still fails, but OS does not crash.
+>>
+>> Signed-off-by: Ben Greear <greearb@candelatech.com>
+>> ---
+>>   drivers/net/wireless/mediatek/mt76/mt7921/main.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/main.c
+>> b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
+>> index 6073bedaa1c08..9b33002dcba4a 100644
+>> --- a/drivers/net/wireless/mediatek/mt76/mt7921/main.c
+>> +++ b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
+>> @@ -272,6 +272,7 @@ static void mt7921_stop(struct ieee80211_hw *hw)
+>>
+>>       cancel_delayed_work_sync(&dev->pm.ps_work);
+>>       cancel_work_sync(&dev->pm.wake_work);
+>> +    cancel_work_sync(&dev->reset_work);
+>>       mt76_connac_free_pending_tx_skbs(&dev->pm, NULL);
+>>
+>>       mt7921_mutex_acquire(dev);
 >
->I am not really sure this is worth it. After the merge window I plan to
->post http://lkml.kernel.org/r/20211214100732.26335-1-mhocko@kernel.org.
+>Hi Ben,
+>
+>Unfortunately that did not help. I still saw the same messages and a kernel panic. I do not see this bug if I power down the laptop before booting it up, so mt7921_stop() would make sense as the reasonable place to fix it.
 
-Give me some time to understand it :-)
+Hi, Khalid
 
+Could you try the patch below? It should be helpful to your issue
+
+https://patchwork.kernel.org/project/linux-wireless/patch/70e27cbc652cbdb78277b9c691a3a5ba02653afb.1641540175.git.objelf@gmail.com/
+
+>
+>Thanks,
+>Khalid
+>
+>

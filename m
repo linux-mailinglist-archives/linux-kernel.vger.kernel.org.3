@@ -2,78 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F4748C1E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C2A48C1EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349625AbiALKCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 05:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349547AbiALKBf (ORCPT
+        id S239681AbiALKDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 05:03:44 -0500
+Received: from ivanoab7.miniserver.com ([37.128.132.42]:38190 "EHLO
+        www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239166AbiALKDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 05:01:35 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F127C061757
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:01:34 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id u21so7722680edd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:01:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=T5yvoHZXf5sRcIr28nRZ918Ghx2PDXySAnpXVpTEeyo=;
-        b=IFnPU1h6tQdehMMmQirBcyt3PUDYvOYItJ7Gc2qM2IvjLICD+XK0IF0sEZnFTQ6aHg
-         n2++qzfy9+/2SstO58HcFlkSXrXky9rMusNMOMWIom7d7hQeTilkwcspTekZ2lKPzg4r
-         0xpEifFX8O1cCdxr8NyqVOr4UxU7UKQscxxcc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=T5yvoHZXf5sRcIr28nRZ918Ghx2PDXySAnpXVpTEeyo=;
-        b=YeIA7g07jbw2d5ggHc3uBu7yC2u7QLOaSeMw5yC6dPAeB9yWvC/FvMifkCEOmvAvfb
-         LjdBp1wKLLffxJz7wKDV1xApVxZXsxx8VLpM0JHUeMsgM2sT53oD9iK/7d7uV8ku53GA
-         DnAgtOddCiyRR4C2HUczpQlWUqJsjdrwG4vEv+jSUD7G9vuhbkPKihV3xqjjx4OA5fWZ
-         F9iu5vnYMzUHhqC/2WV4Fc7jUX7Fploz7W/28kAllB1VEvvFCJY2Ei3ddhoMORMViCEp
-         XeQ/2WD+JtWc1vGG6Wq75entSBu/WwiZyQtxNe0zls073uLitz3Fym+JkhnakHnI1NNR
-         hh9A==
-X-Gm-Message-State: AOAM5337fbqF8UzIwQFJZrQSvYMeoKzNJx0w99fmtf++YeH3FlyEdqiV
-        i1EeaSv4FWMm+IdCjEDkKKRuukJadPQQFzhLoBTTZg==
-X-Google-Smtp-Source: ABdhPJzBCKeQImyBz9RVwKOY2T54xBFQQK7yDRACZFnbHnlAKzoMjJH8dsFKhcz6QDIsGnLn67HJYp60Nwck4y9NKCk=
-X-Received: by 2002:a17:906:bc56:: with SMTP id s22mr7649762ejv.760.1641981692859;
- Wed, 12 Jan 2022 02:01:32 -0800 (PST)
+        Wed, 12 Jan 2022 05:03:43 -0500
+Received: from [192.168.18.6] (helo=jain.kot-begemot.co.uk)
+        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1n7aTb-0000Pp-57; Wed, 12 Jan 2022 10:03:35 +0000
+Received: from jain.kot-begemot.co.uk ([192.168.3.3])
+        by jain.kot-begemot.co.uk with esmtp (Exim 4.94.2)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1n7aTY-00Bvyg-Bo; Wed, 12 Jan 2022 10:03:30 +0000
+Subject: Re: [PATCH] um: fix and optimize xor select template for CONFIG64 and
+ timetravel mode
+To:     Benjamin Beichler <benjamin.beichler@uni-rostock.de>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>
+Cc:     johannes.berg@intel.com, linux-um@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220111200507.1445489-1-benjamin.beichler@uni-rostock.de>
+From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Message-ID: <1b6de9af-905c-1416-1fd3-f22748befa60@cambridgegreys.com>
+Date:   Wed, 12 Jan 2022 10:03:28 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211222090552.25972-1-jose.exposito89@gmail.com> <20211222090552.25972-7-jose.exposito89@gmail.com>
-In-Reply-To: <20211222090552.25972-7-jose.exposito89@gmail.com>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Wed, 12 Jan 2022 15:31:21 +0530
-Message-ID: <CAMty3ZD_R+Tzab-qcWEcbTKVCKq3pNTi7Mr7903Vu9a9M5EefQ@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] drm/stm: ltdc: Drop format_mod_supported function
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     contact@emersion.fr, airlied@linux.ie,
-        alexandre.torgue@foss.st.com, benjamin.gaignard@linaro.org,
-        linux-stm32@st-md-mailman.stormreply.com, marex@denx.de,
-        linux-imx@nxp.com, intel-gfx@lists.freedesktop.org,
-        tzimmermann@suse.de, s.hauer@pengutronix.de,
-        rodrigo.vivi@intel.com, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, yannick.fertre@foss.st.com,
-        linux-kernel@vger.kernel.org, philippe.cornu@foss.st.com,
-        mcoquelin.stm32@gmail.com, dmitry.baryshkov@linaro.org,
-        shawnguo@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220111200507.1445489-1-benjamin.beichler@uni-rostock.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -2.0
+X-Spam-Score: -1.0
+X-Clacks-Overhead: GNU Terry Pratchett
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 2:36 PM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gm=
-ail.com> wrote:
->
-> The "drm_plane_funcs.format_mod_supported" can be removed in favor of
-> the default implementation.
->
-> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
-> ---
 
-Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
-Tested-by: Jagan Teki <jagan@amarulasolutions.com> # i.Core STM32MP1
+
+On 11/01/2022 20:05, Benjamin Beichler wrote:
+> Due to dropped inclusion of asm-generic/xor.h, xor_block_8regs symbol is
+> missing with CONFIG64 and break compilation, as the asm/xor_64.h also did
+> not include it. The patch recreate the logic from arch/x86, which check
+> whether AVX is available and add fallbacks for 32bit and 64bit config of
+> um.
+> 
+> A very minor additional "fix" is, the return of the macro parameter
+> instead of NULL, as this is the original intent of the macro, but
+> this does not change the actual behavior.
+> 
+> Fixes: c0ecca6604b8 ("um: enable the use of optimized xor routines in UML")
+> Signed-off-by: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
+> ---
+>   arch/um/include/asm/xor.h | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/um/include/asm/xor.h b/arch/um/include/asm/xor.h
+> index f512704a9ec7..22b39de73c24 100644
+> --- a/arch/um/include/asm/xor.h
+> +++ b/arch/um/include/asm/xor.h
+> @@ -4,8 +4,10 @@
+>   
+>   #ifdef CONFIG_64BIT
+>   #undef CONFIG_X86_32
+> +#define TT_CPU_INF_XOR_DEFAULT (AVX_SELECT(&xor_block_sse_pf64))
+>   #else
+>   #define CONFIG_X86_32 1
+> +#define TT_CPU_INF_XOR_DEFAULT (AVX_SELECT(&xor_block_8regs))
+>   #endif
+>   
+>   #include <asm/cpufeature.h>
+> @@ -16,7 +18,7 @@
+>   #undef XOR_SELECT_TEMPLATE
+>   /* pick an arbitrary one - measuring isn't possible with inf-cpu */
+>   #define XOR_SELECT_TEMPLATE(x)	\
+> -	(time_travel_mode == TT_MODE_INFCPU ? &xor_block_8regs : NULL)
+> +	(time_travel_mode == TT_MODE_INFCPU ? TT_CPU_INF_XOR_DEFAULT : x))
+>   #endif
+>   
+>   #endif
+> 
+Acked-By: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+-- 
+Anton R. Ivanov
+Cambridgegreys Limited. Registered in England. Company Number 10273661
+https://www.cambridgegreys.com/

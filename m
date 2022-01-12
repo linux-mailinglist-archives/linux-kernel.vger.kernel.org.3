@@ -2,143 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7529D48CB27
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9F648CB10
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 19:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356407AbiALSkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 13:40:45 -0500
-Received: from mga09.intel.com ([134.134.136.24]:50760 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356388AbiALSkg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:40:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642012835; x=1673548835;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TZ4aM5IQQom5ar2CExCg74a13ewh2w7ChBIvKknj8NU=;
-  b=RssHCoEt/X+mxFxjuQcIN3whE7q1yaR6tACUXBLaCAP8TW29D9NjSz/2
-   bfvdz8Wi5yKAl07V5OZ1JjRS1RSmKQoGeM+cLjJy6lHcv5zUhvAXAYQnw
-   7wQyPL6UsvCJZKxtdqhKcbZlY44wMACaoIS3uWXMSbnpeqM8CT4hpHWzo
-   FHGrnv4tTJdb9yfY/i6d2bl5J+2lLfUKZh7eaKgXNga8TqoqokYhO8hRf
-   MXsie6GJ83f/lW7DhHa9o94vv17YmN+9+wLn0zUoykpC3i/jAAcS0qAYo
-   m9b6Gz2KdkVhKDSK8+YDtXAPtXSNImxxg/dpTKGBleOlWO9wd2o402IWW
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="243614442"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="243614442"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 10:33:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="475008495"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 12 Jan 2022 10:33:07 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n7iQl-0006EF-1r; Wed, 12 Jan 2022 18:33:07 +0000
-Date:   Thu, 13 Jan 2022 02:32:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [rmk-arm:zii 126/163] drivers/net/dsa/qca8k.c:1479:1: warning:
- conflicting types for 'qca8k_mac_config_setup_internal_delay'; have
- 'void(struct qca8k_priv *, int,  u32)' {aka 'void(struct qca8k_priv *, int,
-  unsigned int)'}
-Message-ID: <202201130213.dT2X0nSH-lkp@intel.com>
+        id S1356252AbiALSea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 13:34:30 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:48366 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348741AbiALSe2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 13:34:28 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2032F340;
+        Wed, 12 Jan 2022 19:34:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1642012465;
+        bh=r0JlbAYka/rfL4R9AwfiOnTQOM0NQ/mYi/0TwwUzfuE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q6ibHjl0CEbwGjQqAlh/Ct+/eQTsXadkNhaaZcHF3g4/Tl+/zAoXXHrDLOMA3uCE6
+         fDyQNuE8mBD32JGW+ohEkPt0TIj/88wTBETJonWza1+YKF+bMRbnKa271iDF5tjNTO
+         /R4pK3EEZktgvQ6Py/WimWengz5xPVTKip0tHttA=
+Date:   Wed, 12 Jan 2022 20:34:13 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
+        mchehab@kernel.org, dave.stevenson@raspberrypi.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        naush@raspberrypi.com, lukasz@jany.st, devicetree@vger.kernel.org
+Subject: Re: [RFC PATCH 1/3] media: dt-bindings: media: Add bindings for
+ bcm2835-unicam
+Message-ID: <Yd8fJd2SASGkhOjm@pendragon.ideasonboard.com>
+References: <20220112172719.1178446-1-jeanmichel.hautbois@ideasonboard.com>
+ <20220112172719.1178446-2-jeanmichel.hautbois@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220112172719.1178446-2-jeanmichel.hautbois@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm zii
-head:   75fbe1376b387397df2fa36fefb21919e1810507
-commit: 0f97877cdf828e5a96b14fbb2d9d49600d54dd8e [126/163] net: dsa: qca8k: convert to use phylink_pcs
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220113/202201130213.dT2X0nSH-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
-        git fetch --no-tags rmk-arm zii
-        git checkout 0f97877cdf828e5a96b14fbb2d9d49600d54dd8e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/
+Hi Jean-Michel,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you for the patch.
 
-All warnings (new ones prefixed by >>):
+On Wed, Jan 12, 2022 at 06:27:18PM +0100, Jean-Michel Hautbois wrote:
+> Introduce the dt-bindinds documentation for bcm2835 CCP2/CSI2 camera
+> interface. Also add a MAINTAINERS entry for it.
+> 
+> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+> ---
+> Dave: I assumed you were the maintainer for this file, as I based it on the
+> bcm2835-unicam.txt file. Are  you happy to be added directly as the
+> maintainer, or should this be specified as "Raspberry Pi Kernel
+> Maintenance <kernel-list@raspberrypi.com>"
+> ---
+>  .../bindings/media/brcm,bcm2835-unicam.yaml   | 103 ++++++++++++++++++
+>  MAINTAINERS                                   |   6 +
+>  2 files changed, 109 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> new file mode 100644
+> index 000000000000..1427514142cf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> @@ -0,0 +1,103 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom BCM283x Camera Interface (Unicam)
+> +
+> +maintainers:
+> +  - Dave Stevenson <dave.stevenson@raspberrypi.com>
+> +
+> +description: |-
+> +  The Unicam block on BCM283x SoCs is the receiver for either
+> +  CSI-2 or CCP2 data from image sensors or similar devices.
+> +
+> +  The main platform using this SoC is the Raspberry Pi family of boards.
+> +  On the Pi the VideoCore firmware can also control this hardware block,
+> +  and driving it from two different processors will cause issues.
+> +  To avoid this, the firmware checks the device tree configuration
+> +  during boot. If it finds device tree nodes called csi0 or csi1 then
+> +  it will stop the firmware accessing the block, and it can then
+> +  safely be used via the device tree binding.
+> +
+> +properties:
+> +  compatible:
+> +    const: brcm,bcm2835-unicam
+> +
+> +  reg:
+> +    description:
+> +      physical base address and length of the register sets for the device.
 
-   drivers/net/dsa/qca8k.c: In function 'qca8k_pcs_config':
-   drivers/net/dsa/qca8k.c:1185:17: error: implicit declaration of function 'qca8k_mac_config_setup_internal_delay' [-Werror=implicit-function-declaration]
-    1185 |                 qca8k_mac_config_setup_internal_delay(priv, cpu_port_index, reg);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/qca8k.c: At top level:
->> drivers/net/dsa/qca8k.c:1479:1: warning: conflicting types for 'qca8k_mac_config_setup_internal_delay'; have 'void(struct qca8k_priv *, int,  u32)' {aka 'void(struct qca8k_priv *, int,  unsigned int)'}
-    1479 | qca8k_mac_config_setup_internal_delay(struct qca8k_priv *priv, int cpu_port_index,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/qca8k.c:1479:1: error: static declaration of 'qca8k_mac_config_setup_internal_delay' follows non-static declaration
-   drivers/net/dsa/qca8k.c:1185:17: note: previous implicit declaration of 'qca8k_mac_config_setup_internal_delay' with type 'void(struct qca8k_priv *, int,  u32)' {aka 'void(struct qca8k_priv *, int,  unsigned int)'}
-    1185 |                 qca8k_mac_config_setup_internal_delay(priv, cpu_port_index, reg);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+You can drop the description, that's the default for the reg property.
 
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    description: the IRQ line for this Unicam instance.
 
-vim +1479 drivers/net/dsa/qca8k.c
+Same here.
 
-0f97877cdf828e Russell King (Oracle  2021-11-23  1477) 
-cef08115846e58 Ansuel Smith          2021-10-14  1478  static void
-cef08115846e58 Ansuel Smith          2021-10-14 @1479  qca8k_mac_config_setup_internal_delay(struct qca8k_priv *priv, int cpu_port_index,
-cef08115846e58 Ansuel Smith          2021-10-14  1480  				      u32 reg)
-cef08115846e58 Ansuel Smith          2021-10-14  1481  {
-cef08115846e58 Ansuel Smith          2021-10-14  1482  	u32 delay, val = 0;
-cef08115846e58 Ansuel Smith          2021-10-14  1483  	int ret;
-cef08115846e58 Ansuel Smith          2021-10-14  1484  
-cef08115846e58 Ansuel Smith          2021-10-14  1485  	/* Delay can be declared in 3 different way.
-cef08115846e58 Ansuel Smith          2021-10-14  1486  	 * Mode to rgmii and internal-delay standard binding defined
-cef08115846e58 Ansuel Smith          2021-10-14  1487  	 * rgmii-id or rgmii-tx/rx phy mode set.
-cef08115846e58 Ansuel Smith          2021-10-14  1488  	 * The parse logic set a delay different than 0 only when one
-cef08115846e58 Ansuel Smith          2021-10-14  1489  	 * of the 3 different way is used. In all other case delay is
-cef08115846e58 Ansuel Smith          2021-10-14  1490  	 * not enabled. With ID or TX/RXID delay is enabled and set
-cef08115846e58 Ansuel Smith          2021-10-14  1491  	 * to the default and recommended value.
-cef08115846e58 Ansuel Smith          2021-10-14  1492  	 */
-fd0bb28c547f7c Ansuel Smith          2021-10-14  1493  	if (priv->ports_config.rgmii_tx_delay[cpu_port_index]) {
-fd0bb28c547f7c Ansuel Smith          2021-10-14  1494  		delay = priv->ports_config.rgmii_tx_delay[cpu_port_index];
-cef08115846e58 Ansuel Smith          2021-10-14  1495  
-cef08115846e58 Ansuel Smith          2021-10-14  1496  		val |= QCA8K_PORT_PAD_RGMII_TX_DELAY(delay) |
-cef08115846e58 Ansuel Smith          2021-10-14  1497  			QCA8K_PORT_PAD_RGMII_TX_DELAY_EN;
-cef08115846e58 Ansuel Smith          2021-10-14  1498  	}
-cef08115846e58 Ansuel Smith          2021-10-14  1499  
-fd0bb28c547f7c Ansuel Smith          2021-10-14  1500  	if (priv->ports_config.rgmii_rx_delay[cpu_port_index]) {
-fd0bb28c547f7c Ansuel Smith          2021-10-14  1501  		delay = priv->ports_config.rgmii_rx_delay[cpu_port_index];
-cef08115846e58 Ansuel Smith          2021-10-14  1502  
-cef08115846e58 Ansuel Smith          2021-10-14  1503  		val |= QCA8K_PORT_PAD_RGMII_RX_DELAY(delay) |
-cef08115846e58 Ansuel Smith          2021-10-14  1504  			QCA8K_PORT_PAD_RGMII_RX_DELAY_EN;
-cef08115846e58 Ansuel Smith          2021-10-14  1505  	}
-cef08115846e58 Ansuel Smith          2021-10-14  1506  
-cef08115846e58 Ansuel Smith          2021-10-14  1507  	/* Set RGMII delay based on the selected values */
-cef08115846e58 Ansuel Smith          2021-10-14  1508  	ret = qca8k_rmw(priv, reg,
-cef08115846e58 Ansuel Smith          2021-10-14  1509  			QCA8K_PORT_PAD_RGMII_TX_DELAY_MASK |
-cef08115846e58 Ansuel Smith          2021-10-14  1510  			QCA8K_PORT_PAD_RGMII_RX_DELAY_MASK |
-cef08115846e58 Ansuel Smith          2021-10-14  1511  			QCA8K_PORT_PAD_RGMII_TX_DELAY_EN |
-cef08115846e58 Ansuel Smith          2021-10-14  1512  			QCA8K_PORT_PAD_RGMII_RX_DELAY_EN,
-cef08115846e58 Ansuel Smith          2021-10-14  1513  			val);
-cef08115846e58 Ansuel Smith          2021-10-14  1514  	if (ret)
-cef08115846e58 Ansuel Smith          2021-10-14  1515  		dev_err(priv->dev, "Failed to set internal delay for CPU port%d",
-cef08115846e58 Ansuel Smith          2021-10-14  1516  			cpu_port_index == QCA8K_CPU_PORT0 ? 0 : 6);
-cef08115846e58 Ansuel Smith          2021-10-14  1517  }
-cef08115846e58 Ansuel Smith          2021-10-14  1518  
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: |-
+> +      list of clock specifiers, corresponding to entries in clock-names
+> +      property.
 
-:::::: The code at line 1479 was first introduced by commit
-:::::: cef08115846e581f80ff99abf7bf218da1840616 net: dsa: qca8k: set internal delay also for sgmii
+Same here, but a description of each entry would be useful.
 
-:::::: TO: Ansuel Smith <ansuelsmth@gmail.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+  clocks:
+    items:
+      - description: Clock for foo.
+      - description: Clock for bar.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +
+> +  clock-names:
+> +    items:
+> +      - const: lp
+> +      - const: vpu
+> +
+> +  port:
+> +    $ref: /schemas/graph.yaml#/properties/port
+
+You need to use port-base and list the valid endpoint properties.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - port
+> +
+> +additionalProperties: False
+
+s/False/false/
+
+> +
+> +examples:
+> +  - |
+
+Does this validate without #include'ing headers that define the
+BCM2835_CLOCK_CAM1 macro ?
+
+> +    csi1: csi1@7e801000 {
+
+You can drop the label.
+
+> +        compatible = "brcm,bcm2835-unicam";
+> +        reg = <0x7e801000 0x800>,
+> +              <0x7e802004 0x4>;
+
+That's two items, while the bindings document one item only. Please run
+the DT bindings validation, it will validate the examples.
+
+> +        interrupts = <2 7>;
+
+On RPi 4 don't we need 3 interrupt cells ?
+
+> +        clocks = <&clocks BCM2835_CLOCK_CAM1>,
+> +                 <&firmware_clocks 4>;
+> +        clock-names = "lp", "vpu";
+
+A blank line would be good here.
+
+> +        port {
+> +                csi1_ep: endpoint {
+
+Inconsistent indentation. Same below.
+
+> +                        remote-endpoint = <&tc358743_0>;
+> +                        data-lanes = <1 2>;
+> +                };
+> +        };
+> +    };
+> +
+> +    i2c0: i2c@7e205000 {
+> +        tc358743: csi-hdmi-bridge@0f {
+
+You can drop those two labels.
+
+> +            compatible = "toshiba,tc358743";
+
+This isn't documented upstream in yaml. How about using an imx219 sensor
+instead ?
+
+> +            reg = <0x0f>;
+> +            clocks = <&tc358743_clk>;
+> +            clock-names = "refclk";
+> +
+> +            tc358743_clk: bridge-clk {
+> +                    compatible = "fixed-clock";
+> +                    #clock-cells = <0>;
+> +                    clock-frequency = <27000000>;
+> +            };
+
+You can drop this, there's no need to declare the clock in the example.
+
+> +
+> +            port {
+> +                    tc358743_0: endpoint {
+> +                            remote-endpoint = <&csi1_ep>;
+> +                            clock-lanes = <0>;
+> +                            data-lanes = <1 2>;
+> +                            clock-noncontinuous;
+> +                            link-frequencies =
+> +                                /bits/ 64 <297000000>;
+> +                    };
+> +            };
+> +        };
+> +    };
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 269aa4d6b94a..7484255cad31 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3653,6 +3653,12 @@ N:	bcm113*
+>  N:	bcm216*
+>  N:	kona
+>  
+> +BROADCOM BCM2835 CAMERA DRIVER
+> +M:	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
+> +L:	linux-media@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> +
+>  BROADCOM BCM47XX MIPS ARCHITECTURE
+>  M:	Hauke Mehrtens <hauke@hauke-m.de>
+>  M:	Rafał Miłecki <zajec5@gmail.com>
+
+-- 
+Regards,
+
+Laurent Pinchart

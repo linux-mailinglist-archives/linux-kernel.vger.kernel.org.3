@@ -2,232 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1484048C8A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A7648C8AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355298AbiALQnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:43:04 -0500
-Received: from out01.mta.xmission.com ([166.70.13.231]:43080 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349822AbiALQnD (ORCPT
+        id S1355309AbiALQob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239986AbiALQoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:43:03 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:49380)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n7giC-008Sxe-NA; Wed, 12 Jan 2022 09:43:00 -0700
-Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:41266 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n7giB-005CcX-Bl; Wed, 12 Jan 2022 09:43:00 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Alexey Gladkov <legion@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, LTP List <ltp@lists.linux.it>,
-        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
-        containers@lists.linux.dev, Sven Schnelle <svens@linux.ibm.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <CA+G9fYsMHhXJCgO-ykR0oO1kVdusGnthgj6ifxEKaGPHZJ-ZCw@mail.gmail.com>
-        <20220112131837.igsjkkttqskw4eix@wittgenstein>
-        <CADYN=9Lvm-1etZS817eZK91NUyxkFBmsu=5-q_8Ei-1eV8DuZQ@mail.gmail.com>
-        <20220112140254.cvngcwggeevwaazw@wittgenstein>
-        <20220112141445.txgrdlycvfkiwsv5@example.org>
-        <20220112142846.3b3m2dyhdtppgwrw@example.org>
-        <CADYN=9LBjp0=mqyPkTGmdeMx52cg4pM39fnXe-ODTZ=_1OP+zw@mail.gmail.com>
-Date:   Wed, 12 Jan 2022 10:42:32 -0600
-In-Reply-To: <CADYN=9LBjp0=mqyPkTGmdeMx52cg4pM39fnXe-ODTZ=_1OP+zw@mail.gmail.com>
-        (Anders Roxell's message of "Wed, 12 Jan 2022 16:56:27 +0100")
-Message-ID: <87v8yoq51j.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 12 Jan 2022 11:44:23 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C583CC06173F;
+        Wed, 12 Jan 2022 08:44:22 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id q8so5263859wra.12;
+        Wed, 12 Jan 2022 08:44:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VOF4KtBnpM2ybbffoSUARMscyXTZoj5N2lzy0vNvQy4=;
+        b=N6i4e7ZRXL/fXMy7DPHxy45GD0pjwaT0QJ4TNr1x36yruAeOQIA9AU78XEKEZ0kgaU
+         hPnAvfBBmebKnLiEeD4L8wjngyb8mn7f2aDRuLUNsMt4kpFS6K68xl37NavVV6rkKia6
+         AaCNQ2ug+XOkXLUgfDXxRoPuNKs+jnHblI+IN1oriAGQXXiibqVrjnKUD6vp9mnEMdEe
+         SQJMqLNtbF9mpIJZmX67M/0/WVRtGYLbgCGLvMJ2KQgn3Feynzh3eWgLXGlwUipQh+mF
+         Ppjb1WOR67t8y5WiKj+aWckvAEcl5nq6V30GgL60ImEkoGINmQoon9qv2TLAq64BWQ/H
+         PWFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VOF4KtBnpM2ybbffoSUARMscyXTZoj5N2lzy0vNvQy4=;
+        b=ajsG8Y2g8Kw2Cyez8DLaWZSTnJURku3hjDHrJyzSJ2J+0h03NRmHXCbVvFNxXYDIad
+         zFhyvBthWDZUOOfonP3wgi/GcwNrbfzP0rXkyYedZJeaqWVgVAXmcI8qZrfxRuQr0ZD/
+         ocMbiAaB+VeFlE8xz7CMMWNIgqVPUGMKJpcISsxR5/jR33o49gCo7qjmmE/0d15e8BxC
+         15XBU7sZxIkLpCCXsv4bzSDk1U4lACJan61Iyw1bsW79gwcir/Wuxa0KvQSeUDpptxSw
+         k3V/evTKvKqlKOx4Swv9Ni5uyqHuak3A/n1FjFxIDOmHYoeaQACR7j4l1icNH7f2D8v8
+         VA1A==
+X-Gm-Message-State: AOAM531Gey8eUp0TSG1GZ7my/OcjLIEEkQ2Z2ERuXtnuQlUSo12PO+c1
+        jcA3vbKBJBhlTe15RQWk9xg=
+X-Google-Smtp-Source: ABdhPJxZfSsF1dAlnUAaT8GITig0maLt/ooIUzj1FIRNvwQsFGt9n960qJM0jPTQcMoU7G/FSBwh7A==
+X-Received: by 2002:a5d:53d1:: with SMTP id a17mr477788wrw.629.1642005861410;
+        Wed, 12 Jan 2022 08:44:21 -0800 (PST)
+Received: from [192.168.8.198] ([148.252.129.73])
+        by smtp.gmail.com with ESMTPSA id n1sm380216wri.46.2022.01.12.08.44.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 08:44:21 -0800 (PST)
+Message-ID: <a913f4a5-866c-2779-94c2-87a1377fb4fd@gmail.com>
+Date:   Wed, 12 Jan 2022 16:43:32 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1n7giB-005CcX-Bl;;;mid=<87v8yoq51j.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19xVjhWaZhYL0/HgEx+P4VRuQZTUh+RHAs=
-X-SA-Exim-Connect-IP: 68.110.24.146
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa02.xmission.com
-X-Spam-Level: ****
-X-Spam-Status: No, score=4.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,LotsOfNums_01,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
-        T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,T_XMDrugObfuBody_08,
-        XMSubLong autolearn=disabled version=3.4.2
-X-Spam-Virus: No
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.7 XMSubLong Long Subject
-        *  1.2 LotsOfNums_01 BODY: Lots of long strings of numbers
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  1.0 T_XMDrugObfuBody_08 obfuscated drug references
-        *  0.0 T_TooManySym_03 6+ unique symbols in subject
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.0 T_TooManySym_02 5+ unique symbols in subject
-X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Anders Roxell <anders.roxell@linaro.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 663 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 3.9 (0.6%), b_tie_ro: 2.7 (0.4%), parse: 0.85
-        (0.1%), extract_message_metadata: 18 (2.7%), get_uri_detail_list: 3.3
-        (0.5%), tests_pri_-1000: 25 (3.7%), tests_pri_-950: 1.01 (0.2%),
-        tests_pri_-900: 0.83 (0.1%), tests_pri_-90: 73 (10.9%), check_bayes:
-        71 (10.8%), b_tokenize: 12 (1.8%), b_tok_get_all: 13 (1.9%),
-        b_comp_prob: 2.5 (0.4%), b_tok_touch_all: 41 (6.2%), b_finish: 0.66
-        (0.1%), tests_pri_0: 526 (79.3%), check_dkim_signature: 0.44 (0.1%),
-        check_dkim_adsp: 1.45 (0.2%), poll_dns_idle: 0.27 (0.0%),
-        tests_pri_10: 2.8 (0.4%), tests_pri_500: 10 (1.5%), rewrite_mail: 0.00
-        (0.0%)
-Subject: Re: [next]: LTP: getxattr05.c:97: TFAIL: unshare(CLONE_NEWUSER)
- failed: ENOSPC (28)
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 13/14] net: inline part of skb_csum_hwoffload_help
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <cover.1641863490.git.asml.silence@gmail.com>
+ <0bc041d2d38a08064a642c05ca8cceb0ca165f88.1641863490.git.asml.silence@gmail.com>
+ <918a937f6cef44e282353001a7fbba7a@AcuMS.aculab.com>
+ <25f5ba09-a54c-c386-e142-7b7454f1d8d4@gmail.com>
+ <f2e3693ec8d1498aa376f72ebd49e058@AcuMS.aculab.com>
+ <d9714712-075f-17af-b4f0-67f82178abae@gmail.com>
+ <941373b680b648e3be1175b23595be4a@AcuMS.aculab.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <941373b680b648e3be1175b23595be4a@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Anders Roxell <anders.roxell@linaro.org> writes:
+On 1/12/22 02:41, David Laight wrote:
+> From: Pavel Begunkov
+>> Sent: 11 January 2022 20:48
+>> On 1/11/22 17:25, David Laight wrote:
+>>> From: Pavel Begunkov
+>>>> Sent: 11 January 2022 16:59
+>>>>
+>>>> On 1/11/22 09:24, David Laight wrote:
+>>>>> From: Pavel Begunkov
+>>>>>> Sent: 11 January 2022 01:22
+>>>>>>
+>>>>>> Inline a HW csum'ed part of skb_csum_hwoffload_help().
+>>>>>>
+>>>>>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+>>>>>> ---
+>>>>>>     include/linux/netdevice.h | 16 ++++++++++++++--
+>>>>>>     net/core/dev.c            | 13 +++----------
+>>>>>>     2 files changed, 17 insertions(+), 12 deletions(-)
+>>>>>>
+>>>>>> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+>>>>>> index 3213c7227b59..fbe6c764ce57 100644
+>>>>>> --- a/include/linux/netdevice.h
+>>>>>> +++ b/include/linux/netdevice.h
+>>>>>> @@ -4596,8 +4596,20 @@ void netdev_rss_key_fill(void *buffer, size_t len);
+>>>>>>
+>>>>>>     int skb_checksum_help(struct sk_buff *skb);
+>>>>>>     int skb_crc32c_csum_help(struct sk_buff *skb);
+>>>>>> -int skb_csum_hwoffload_help(struct sk_buff *skb,
+>>>>>> -			    const netdev_features_t features);
+>>>>>> +int __skb_csum_hwoffload_help(struct sk_buff *skb,
+>>>>>> +			      const netdev_features_t features);
+>>>>>> +
+>>>>>> +static inline int skb_csum_hwoffload_help(struct sk_buff *skb,
+>>>>>> +					  const netdev_features_t features)
+>>>>>> +{
+>>>>>> +	if (unlikely(skb_csum_is_sctp(skb)))
+>>>>>> +		return !!(features & NETIF_F_SCTP_CRC) ? 0 :
+>>>>>
+>>>>> If that !! doing anything? - doesn't look like it.
+>>>>
+>>>> It doesn't, but left the original style
+>>>
+>>> It just makes you think it is needed...
+>>>
+>>>>>> +			skb_crc32c_csum_help(skb);
+>>>>>> +
+>>>>>> +	if (features & NETIF_F_HW_CSUM)
+>>>>>> +		return 0;
+>>>>>> +	return __skb_csum_hwoffload_help(skb, features);
+>>>>>> +}
+>>>>>
+>>>>> Maybe you should remove some bloat by moving the sctp code
+>>>>> into the called function.
+>>>>> This probably needs something like?
+>>>>>
+>>>>> {
+>>>>> 	if (features & NETIF_F_HW_CSUM && !skb_csum_is_sctp(skb))
+>>>>> 		return 0;
+>>>>> 	return __skb_csum_hw_offload(skb, features);
+>>>>> }
+>>>>
+>>>> I don't like inlining that sctp chunk myself. It seems your way would
+>>>> need another skb_csum_is_sctp() in __skb_csum_hw_offload(), if so I
+>>>> don't think it's worth it. Would've been great to put the
+>>>> NETIF_F_HW_CSUM check first and hide sctp, but don't think it's
+>>>> correct. Would be great to hear some ideas.
+>>>
+>>> Given the definition:
+>>>
+>>> static inline bool skb_csum_is_sctp(struct sk_buff *skb)
+>>> {
+>>> 	return skb->csum_not_inet;
+>>> }
+>>>
+>>> I wouldn't worry about doing it twice.
+>>>
+>>> Also skb_crc32_csum_help() is only called one.
+>>> Make it static (so inlined) and pass 'features' into it.
+>>>
+>>> In reality sctp is such a slow crappy protocol that a few extra
+>>> function calls will make diddly-squit difference.
+>>> (And yes, we do actually use the sctp stack.)
+>>
+>> I was more thinking about non-sctp path without NETIF_F_HW_CSUM
+> 
+> In which case you need the body of __skb_csum_hw_offload()
+> and end up doing the 'sctp' check once inside it.
+> The 'sctp' check is only done twice for sctp.
 
-> On Wed, 12 Jan 2022 at 15:28, Alexey Gladkov <legion@kernel.org> wrote:
->>
->> On Wed, Jan 12, 2022 at 03:14:45PM +0100, Alexey Gladkov wrote:
->> > On Wed, Jan 12, 2022 at 03:02:54PM +0100, Christian Brauner wrote:
->> > > On Wed, Jan 12, 2022 at 02:22:42PM +0100, Anders Roxell wrote:
->> > > > On Wed, 12 Jan 2022 at 14:18, Christian Brauner
->> > > > <christian.brauner@ubuntu.com> wrote:
->> > > > >
->> > > > > On Wed, Jan 12, 2022 at 05:15:37PM +0530, Naresh Kamboju wrote:
->> > > > > > While testing LTP syscalls with Linux next 20220110 (and till date 20220112)
->> > > > > > on x86_64, i386, arm and arm64 the following tests failed.
->> > > > > >
->> > > > > > tst_test.c:1365: TINFO: Timeout per run is 0h 15m 00s
->> > > > > > getxattr05.c:87: TPASS: Got same data when acquiring the value of
->> > > > > > system.posix_acl_access twice
->> > > > > > getxattr05.c:97: TFAIL: unshare(CLONE_NEWUSER) failed: ENOSPC (28)
->> > > > > > tst_test.c:391: TBROK: Invalid child (13545) exit value 1
->> > > > > >
->> > > > > > fanotify17.c:176: TINFO: Test #1: Global groups limit in privileged user ns
->> > > > > > fanotify17.c:155: TFAIL: unshare(CLONE_NEWUSER) failed: ENOSPC (28)
->> > > > > > tst_test.c:391: TBROK: Invalid child (14739) exit value 1
->> > > > > >
->> > > > > > sendto03.c:48: TBROK: unshare(268435456) failed: ENOSPC (28)
->> > > > > >
->> > > > > > setsockopt05.c:45: TBROK: unshare(268435456) failed: ENOSPC (28)
->> > > > > >
->> > > > > > strace output:
->> > > > > > --------------
->> > > > > > [pid   481] wait4(-1, 0x7fff52f5ae8c, 0, NULL) = -1 ECHILD (No child processes)
->> > > > > > [pid   481] clone(child_stack=NULL,
->> > > > > > flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD,
->> > > > > > child_tidptr=0x7f3af0fa7a10) = 483
->> > > > > > strace: Process 483 attached
->> > > > > > [pid   481] wait4(-1,  <unfinished ...>
->> > > > > > [pid   483] unshare(CLONE_NEWUSER)      = -1 ENOSPC (No space left on device)
->> > > > >
->> > > > > This looks like another regression in the ucount code. Reverting the
->> > > > > following commit fixes it and makes the getxattr05 test work again:
->> > > > >
->> > > > > commit 0315b634f933b0f12cfa82660322f6186c1aa0f4
->> > > > > Author: Alexey Gladkov <legion@kernel.org>
->> > > > > Date:   Fri Dec 17 15:48:23 2021 +0100
->> > > > >
->> > > > >     ucounts: Split rlimit and ucount values and max values
->> > > > >
->> > > > >     Since the semantics of maximum rlimit values are different, it would be
->> > > > >     better not to mix ucount and rlimit values. This will prevent the error
->> > > > >     of using inc_count/dec_ucount for rlimit parameters.
->> > > > >
->> > > > >     This patch also renames the functions to emphasize the lack of
->> > > > >     connection between rlimit and ucount.
->> > > > >
->> > > > >     v2:
->> > > > >     - Fix the array-index-out-of-bounds that was found by the lkp project.
->> > > > >
->> > > > >     Reported-by: kernel test robot <oliver.sang@intel.com>
->> > > > >     Signed-off-by: Alexey Gladkov <legion@kernel.org>
->> > > > >     Link: https://lkml.kernel.org/r/73ea569042babda5cee2092423da85027ceb471f.1639752364.git.legion@kernel.org
->> > > > >     Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
->> > > > >
->> > > > > The issue only surfaces if /proc/sys/user/max_user_namespaces is
->> > > > > actually written to.
->> > > >
->> > > > I did a git bisect and that pointed me to this patch too.
->> > >
->> > > Uhm, doesn't this want to be:
->> >
->> > Yes. I miss it. I tried not to mix the logic, but I myself stepped on this
->> > problem.
->>
->> It should be fixed in the four places:
->>
->> diff --git a/kernel/ucount.c b/kernel/ucount.c
->> index 22070f004e97..5c373a453f43 100644
->> --- a/kernel/ucount.c
->> +++ b/kernel/ucount.c
->> @@ -264,7 +264,7 @@ long inc_rlimit_ucounts(struct ucounts *ucounts, enum rlimit_type type, long v)
->>         long ret = 0;
->>
->>         for (iter = ucounts; iter; iter = iter->ns->ucounts) {
->> -               long new = atomic_long_add_return(v, &iter->ucount[type]);
->> +               long new = atomic_long_add_return(v, &iter->rlimit[type]);
->>                 if (new < 0 || new > max)
->>                         ret = LONG_MAX;
->>                 else if (iter == ucounts)
->> @@ -279,7 +279,7 @@ bool dec_rlimit_ucounts(struct ucounts *ucounts, enum rlimit_type type, long v)
->>         struct ucounts *iter;
->>         long new = -1; /* Silence compiler warning */
->>         for (iter = ucounts; iter; iter = iter->ns->ucounts) {
->> -               long dec = atomic_long_sub_return(v, &iter->ucount[type]);
->> +               long dec = atomic_long_sub_return(v, &iter->rlimit[type]);
->>                 WARN_ON_ONCE(dec < 0);
->>                 if (iter == ucounts)
->>                         new = dec;
->> @@ -292,7 +292,7 @@ static void do_dec_rlimit_put_ucounts(struct ucounts *ucounts,
->>  {
->>         struct ucounts *iter, *next;
->>         for (iter = ucounts; iter != last; iter = next) {
->> -               long dec = atomic_long_sub_return(1, &iter->ucount[type]);
->> +               long dec = atomic_long_sub_return(1, &iter->rlimit[type]);
->>                 WARN_ON_ONCE(dec < 0);
->>                 next = iter->ns->ucounts;
->>                 if (dec == 0)
->> @@ -313,7 +313,7 @@ long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum rlimit_type type)
->>         long dec, ret = 0;
->>
->>         for (iter = ucounts; iter; iter = iter->ns->ucounts) {
->> -               long new = atomic_long_add_return(1, &iter->ucount[type]);
->> +               long new = atomic_long_add_return(1, &iter->rlimit[type]);
->>                 if (new < 0 || new > max)
->>                         goto unwind;
->>                 if (iter == ucounts)
->> @@ -330,7 +330,7 @@ long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum rlimit_type type)
->>         }
->>         return ret;
->>  dec_unwind:
->> -       dec = atomic_long_sub_return(1, &iter->ucount[type]);
->> +       dec = atomic_long_sub_return(1, &iter->rlimit[type]);
->>         WARN_ON_ONCE(dec < 0);
->>  unwind:
->>         do_dec_rlimit_put_ucounts(ucounts, iter, type);
->>
->
-> Thank you for the fix.
-> I applied this patch and built and ran it in qemu for arm64 and x86.
-> './runltp -s getxattr05' passed on both architectures.
->
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Ah yes, might be better indeed
 
-Thank you all.
-
-For now I have dropped this from linux-next.  I will add the fix and
-will aim to get this cleanup in the next merge window.
-
-Eric
+-- 
+Pavel Begunkov

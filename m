@@ -2,189 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D0948C5CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090D148C5C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241765AbiALOPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:15:24 -0500
-Received: from mail-dm6nam10on2064.outbound.protection.outlook.com ([40.107.93.64]:64608
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S241509AbiALOPQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:15:16 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MiDykrvT7cV3y0/zkuOMPx2smXG9ydPVaTZao32Too7mM/pQiWYsNPPWGUkd0ZETCs09QfRk68hukvFxG8J0c0d21Q3RNEGOw3VJhhUFjoVaMolRXWK3D05QZxh8TNBQKrGpAE9K2/whm5Pj2uNGpofM6Cko69OvpF4I2VR4Kr51pQGg8ytJ566aVITdAKbnl4Ys52+vyZfoSNCUmIo2IVoXcHfsc8ZJj65sru2jr3Subug3NIyvgC6qGL/EsbZFxS5lOGjqhNtlsra20eZxccokR/qkoRfPwA5okZ5OOBqRK6M95K5fNRC3MUkUH8wihUckN+vwYp7DPF4+tsNaBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JrjofGNoyzqB6kIT9HKSx+BNth1yFI9Hm5WTlZi/ZSE=;
- b=Z29XJ7YerO+bEP2sTrpHh6tuA9ajK1LaA3LAQ2UfUt1F0I3+T5dm+7ks0PTR9KMKNOnzTQXTcOqAJxbt7hhUXbti921tpl3lG2yM8D0P6MWc+uQg09JJ8LO2dGHl8bN84dt0T7EkRC3jUakuSvTWtGxuVjE9r1pEeL4B+9punO4Myspk7654CWL0OMMkDW4jUyQGCCM0b34FpIhk4ChFhzCF+lubRk9H4S5HXWB60PnOWsgQo9uqTz+daB6RfSpJFBm6/FZqzxX8k+lvh94Pj4VQSyM9mrA3w0a3WS/E7VXp7Sez6y3P9yxoMFjwY7jjB1GhzfbqJiGJTCPzomcMOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JrjofGNoyzqB6kIT9HKSx+BNth1yFI9Hm5WTlZi/ZSE=;
- b=XW0nKVZ/1dIVH7mpo3FbT9B5bSUlnOKL0NY2ctmCC1vOBtQaemNPkgEkKZji+OMyZLKra6IjFduOnt7GbP/TIMqhhOFc55ZZ94lzbte3PY7/EJcM3oJN3p9pLV54Fnqp0xbTDjhXbxXTMrT81cd3VqiLXMBtsKNRkpwvPiKRptmHMopUVsCJ8YuQ0J3V40BEamvvSi4BHATQJk6x9Gyv7cToquTmb9ty555vYOTVyJl7UYvDLMuepoLfxa8XZPMqj3Aqf+kylHeTnysvGlrLsMK2y2elRqyyknvr6IkvlEKCWi+MNtHtSrSK94aOdBo+FjeuEaMJL4FJoG5smLP+PQ==
-Received: from BN6PR16CA0019.namprd16.prod.outlook.com (2603:10b6:404:f5::29)
- by BN8PR12MB3522.namprd12.prod.outlook.com (2603:10b6:408:9c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Wed, 12 Jan
- 2022 14:15:13 +0000
-Received: from BN8NAM11FT030.eop-nam11.prod.protection.outlook.com
- (2603:10b6:404:f5:cafe::fc) by BN6PR16CA0019.outlook.office365.com
- (2603:10b6:404:f5::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9 via Frontend
- Transport; Wed, 12 Jan 2022 14:15:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- BN8NAM11FT030.mail.protection.outlook.com (10.13.177.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4888.9 via Frontend Transport; Wed, 12 Jan 2022 14:15:13 +0000
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 12 Jan
- 2022 14:15:12 +0000
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 12 Jan
- 2022 14:15:12 +0000
-Received: from kyarlagadda-linux.nvidia.com (10.127.8.10) by mail.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Wed, 12 Jan 2022 06:15:08 -0800
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     <andy.shevchenko@gmail.com>, <christian.koenig@amd.com>,
-        <digetx@gmail.com>, <gregkh@linuxfoundation.org>,
-        <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <rafael@kernel.org>,
-        <sumit.semwal@linaro.org>, <thierry.reding@gmail.com>,
-        <wsa@kernel.org>, <lenb@kernel.org>, <linux-acpi@vger.kernel.org>
-CC:     <akhilrajeev@nvidia.com>
-Subject: [PATCH v2 3/3] i2c: smbus: Use device_*() functions instead of of_*()
-Date:   Wed, 12 Jan 2022 19:44:22 +0530
-Message-ID: <1641996862-26960-4-git-send-email-akhilrajeev@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com>
-References: <1641996862-26960-1-git-send-email-akhilrajeev@nvidia.com>
-X-NVConfidentiality: public
+        id S241585AbiALOPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:15:15 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48160 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354039AbiALOPB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 09:15:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 744B4615A3;
+        Wed, 12 Jan 2022 14:15:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E64C36B01;
+        Wed, 12 Jan 2022 14:15:00 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="k/fuybhK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1641996897;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q0bG03tyBiW+TFtys/zYaZD8KtKEQEo+RRgWwpyCios=;
+        b=k/fuybhK99zjwRcCn6Jq1ZGyKdmRD9QiyrcE4qDzQbSx1K2//VT4GsAz/lFF57ubfryesb
+        s3zFQCTbxxNEVrhtiFjiQWv+hlXuJxwRlyHTJUSvjOMxw+rUizRCBHBb/+CCu6/s3j+B1N
+        l8PDjDkOITbYvvP0W2XHGWa/MbP2LNo=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f36a452d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 12 Jan 2022 14:14:57 +0000 (UTC)
+Received: by mail-yb1-f179.google.com with SMTP id d7so6747496ybo.5;
+        Wed, 12 Jan 2022 06:14:57 -0800 (PST)
+X-Gm-Message-State: AOAM531WFOULZKue4ZV61OCYWgoGLeVouJmWPmbx1oNdoYr6Z/8j5/VN
+        KfFw8e1bjr20XWDHgdV3soKovUfh64CE7KX1I7M=
+X-Google-Smtp-Source: ABdhPJxWEk/fjWwRjUrzUZ/0PUBN7H4kioCkdryNaHm58QCv9stZMl0MeZMtfhzENU/cQxohaQZyBINgvceqWHuYB0w=
+X-Received: by 2002:a25:a0c4:: with SMTP id i4mr13145078ybm.457.1641996896142;
+ Wed, 12 Jan 2022 06:14:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: aaf7ab3f-7ea6-4315-6913-08d9d5d5f36b
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3522:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB35223FC78CA394D005DE5151C0529@BN8PR12MB3522.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WJBFXxCE1xwy5HGrxW0XB9vHGPLvljh3rwzooz1bhrDfQeBSpGs24XQvQ0wQFd9LQkPuO0Zqk9hqGmIBylg/jloP5axBdNGJkVerxJvYwj7cLilpW36PZN2ctQAiRaC+C/pu7agC2mD1e/TTYSsTdgnkpC3nkYkv2lMrtkTGdnBL/FbAVsf7HkGcKyaLDIHOXOtGj9VZPurgC6mceiTiP8GP/S4USqESu9M1UKGDbHnw0jO2p7j/V03DMDEdgRJe+4piypi+ygjE7F0VNGjj26cSsNXYxUp1XUgTKPYkWB/6WURR+5GosR3zO1pfAwrP1ccPJ2yRhrgraA3UWvl0S3y/3P9/JfcMwsMnMqEsPV2NuEM0onhrKI30zcp3sttyKsKc5TmgiiVvcznq3lbRpj4J4MlAUnrnz6te+tnw0nfzheLsm2Mymu38S40QnM33gtKJPz2AmazA0Nz1pat63LozZx0+hC2tsETPpgCUzK6R52cawZBwJ8z8Y4+yJeKD4howTXqzHAqK319zWtl1lkNLb+SORllhubjevkgl1M/QHBq5O3v7zrhqss2n5jK7e5fA0Xl1cNy1HIhOuczOFjrHvlvfbsgjD15M/38cfgdq8w79qYeZkxxU5uqXfW7oNOEWDok8OMWR2laUzmoroRR1Ihf3XdcCvbVXtum4/0+u8GBKyoWosnctDrD9KkxdL6/ME0WG33dfVTeTum4Wbva0PoUOYHXB7fPlKUH+e3yvJ4xH0wrZKib0wfd9wfq1l3sbDtcRWkXbyaR/x3UClg7qNXdlmN0f8Yg8PCLnpho1C6MlQDECjN01TI4N1+HyEoEhZ7gNrm5YXvu/O/gIkRXo5QXcsIirC/+tT0I76Nc=
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700002)(316002)(110136005)(4326008)(107886003)(86362001)(70206006)(8936002)(508600001)(5660300002)(36756003)(7696005)(36860700001)(70586007)(8676002)(2906002)(6666004)(2616005)(7416002)(336012)(26005)(40460700001)(426003)(83380400001)(356005)(47076005)(81166007)(82310400004)(186003)(921005)(36900700001)(83996005)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2022 14:15:13.6726
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: aaf7ab3f-7ea6-4315-6913-08d9d5d5f36b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT030.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3522
+References: <20220112140137.728162-1-jforbes@fedoraproject.org>
+ <CAHmME9rJFVeWL=SFTkM8=+2te_GnH4n-THH+F3p5mnHfCkhZ4w@mail.gmail.com>
+ <CAMj1kXHubNk3gRTOmD1rOCifCUE4O6=TvNr_XhP1tNcCBuzfBQ@mail.gmail.com>
+ <CAHmME9oKEawBAGSN_tdpBDe2_vRUE8Gh+GMXn+d94A6te4FJPQ@mail.gmail.com>
+ <CAMj1kXGzzHefRu1wcgDsYpybSDrUK__FXE-Mjm2r1fg2xiz6Jg@mail.gmail.com>
+ <CAHmME9p25W3Pg4T4Pers+hxryhAcQZEZMx5uueF3a-oCr7ABuA@mail.gmail.com> <CAMj1kXEgE-3Pnnak-RZAPch=ma399Ki4jrMb8j32x2AFyZZALA@mail.gmail.com>
+In-Reply-To: <CAMj1kXEgE-3Pnnak-RZAPch=ma399Ki4jrMb8j32x2AFyZZALA@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 12 Jan 2022 15:14:45 +0100
+X-Gmail-Original-Message-ID: <CAHmME9oTsOZCJoPUT=LwUuwWHbAa_N1MRoGjTYY5Poj4tr0+Zg@mail.gmail.com>
+Message-ID: <CAHmME9oTsOZCJoPUT=LwUuwWHbAa_N1MRoGjTYY5Poj4tr0+Zg@mail.gmail.com>
+Subject: Re: [PATCH v2] lib/crypto: add prompts back to crypto libraries
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Justin Forbes <jmforbes@linuxtx.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change of_*() functions to device_*() for firmware agnostic usage.
-This allows to have smbus_alert interrupt without any changes
-in the controller drivers using ACPI table.
+On Wed, Jan 12, 2022 at 3:13 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Wed, 12 Jan 2022 at 15:12, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > On Wed, Jan 12, 2022 at 3:08 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > >
+> > > On Wed, 12 Jan 2022 at 15:08, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > > >
+> > > > On Wed, Jan 12, 2022 at 3:06 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > >
+> > > > > On Wed, 12 Jan 2022 at 15:05, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > > > > >
+> > > > > > This commit also needs this snippet:
+> > > > > >
+> > > > >
+> > > > > Why?
+> > > >
+> > > > So that the menu of crypto library options is inside of the library
+> > > > menu. Otherwise this will appear inside of the _root_ menu, which
+> > > > isn't what we want.
+> > >
+> > > Why not? I think that's fine.
+> >
+> > It's really not appropriate there. Look:
+> >
+> > - Justin vanilla: https://i.imgur.com/14UBpML.png
+> > - Justin + Jason: https://i.imgur.com/lDfZnma.png
+> >
+> > We really don't want another top level menu. We're not that important.
+> > Rather, crypto libraries are but one ordinary subset of ordinary
+> > libraries, just like how the build system does it too.
+>
+> I disagree. The root menu is a jumble of things already, and having
+> this one at the root is really not a problem.
 
-Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
----
- drivers/i2c/i2c-core-base.c  |  2 +-
- drivers/i2c/i2c-core-smbus.c | 10 +++++-----
- drivers/i2c/i2c-smbus.c      |  2 +-
- include/linux/i2c-smbus.h    |  6 +++---
- 4 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 1072a47..8e6c7a1 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -1574,7 +1574,7 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
- 		goto out_list;
- 	}
- 
--	res = of_i2c_setup_smbus_alert(adap);
-+	res = i2c_setup_smbus_alert(adap);
- 	if (res)
- 		goto out_reg;
- 
-diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
-index e5b2d14..4c24c84 100644
---- a/drivers/i2c/i2c-core-smbus.c
-+++ b/drivers/i2c/i2c-core-smbus.c
-@@ -701,13 +701,13 @@ struct i2c_client *i2c_new_smbus_alert_device(struct i2c_adapter *adapter,
- }
- EXPORT_SYMBOL_GPL(i2c_new_smbus_alert_device);
- 
--#if IS_ENABLED(CONFIG_I2C_SMBUS) && IS_ENABLED(CONFIG_OF)
--int of_i2c_setup_smbus_alert(struct i2c_adapter *adapter)
-+#if IS_ENABLED(CONFIG_I2C_SMBUS)
-+int i2c_setup_smbus_alert(struct i2c_adapter *adapter)
- {
- 	int irq;
- 
--	irq = of_property_match_string(adapter->dev.of_node, "interrupt-names",
--				       "smbus_alert");
-+	irq = device_property_match_string(adapter->dev.parent, "interrupt-names",
-+					   "smbus_alert");
- 	if (irq == -EINVAL || irq == -ENODATA)
- 		return 0;
- 	else if (irq < 0)
-@@ -715,5 +715,5 @@ int of_i2c_setup_smbus_alert(struct i2c_adapter *adapter)
- 
- 	return PTR_ERR_OR_ZERO(i2c_new_smbus_alert_device(adapter, NULL));
- }
--EXPORT_SYMBOL_GPL(of_i2c_setup_smbus_alert);
-+EXPORT_SYMBOL_GPL(i2c_setup_smbus_alert);
- #endif
-diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-index d3d06e3..fdd6d97 100644
---- a/drivers/i2c/i2c-smbus.c
-+++ b/drivers/i2c/i2c-smbus.c
-@@ -128,7 +128,7 @@ static int smbalert_probe(struct i2c_client *ara,
- 	if (setup) {
- 		irq = setup->irq;
- 	} else {
--		irq = of_irq_get_byname(adapter->dev.of_node, "smbus_alert");
-+		irq = device_irq_get_byname(adapter->dev.parent, "smbus_alert");
- 		if (irq <= 0)
- 			return irq;
- 	}
-diff --git a/include/linux/i2c-smbus.h b/include/linux/i2c-smbus.h
-index 1ef4218..95cf902 100644
---- a/include/linux/i2c-smbus.h
-+++ b/include/linux/i2c-smbus.h
-@@ -30,10 +30,10 @@ struct i2c_client *i2c_new_smbus_alert_device(struct i2c_adapter *adapter,
- 					      struct i2c_smbus_alert_setup *setup);
- int i2c_handle_smbus_alert(struct i2c_client *ara);
- 
--#if IS_ENABLED(CONFIG_I2C_SMBUS) && IS_ENABLED(CONFIG_OF)
--int of_i2c_setup_smbus_alert(struct i2c_adapter *adap);
-+#if IS_ENABLED(CONFIG_I2C_SMBUS)
-+int i2c_setup_smbus_alert(struct i2c_adapter *adap);
- #else
--static inline int of_i2c_setup_smbus_alert(struct i2c_adapter *adap)
-+static inline int i2c_setup_smbus_alert(struct i2c_adapter *adap)
- {
- 	return 0;
- }
--- 
-2.7.4
-
+Should CRC routines also go into a submenu and be put at the root?
+What about other library functions? Library functions belong in the
+library submenu. We don't need our own top level submenu for this. The
+whole point of lib/crypto/ is that they're just boring library
+functions. Libraries! So, part of the libraries menu.

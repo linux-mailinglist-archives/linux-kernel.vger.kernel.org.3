@@ -2,128 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3265848CC3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DD848CC40
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 20:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345559AbiALTql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 14:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
+        id S1357009AbiALTqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 14:46:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344913AbiALTnj (ORCPT
+        with ESMTP id S1357630AbiALTp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:43:39 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21103C061759
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:43:37 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id br17so11838596lfb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 11:43:37 -0800 (PST)
+        Wed, 12 Jan 2022 14:45:59 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D545BC06173F;
+        Wed, 12 Jan 2022 11:45:58 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id b127so4594540qkd.0;
+        Wed, 12 Jan 2022 11:45:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HWx7ejiUd6c11eHL/2LW4rxQ9jG3blTr/paj//+W3GA=;
-        b=FXbhuy+QL6aQ+AoiJhfsAUjxL9AQtZNPH1/MjYiUg+Nx4vLGl/8M3mFWKS9FnfvuGD
-         3yyer0YkC/HwBnY+KtCefbdzX/JuU/13Qi+4vSmRZPZom99Utfn2yDm917kaPpi2hSRI
-         6/D6rlwaZv2TsttUB6JlVVKCSawSE+uVUgr/1vjRAqOsD1NEsxNfjSLJfy7xjwX8UNHw
-         2Feexa8N6Jzklhn18KjxUIxXY74qWOWd7tvy2tu8esYcDnyBvPQyTMezT8R+mepS6mYY
-         dNENprpfkaZkRJpBQXv7R3h3KhOA36hQnTqAiYgikUy9dDds9b/U+jm8tMTb1HURd1Le
-         jEaA==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+42YiBAnbZbkfyad9QQejqVpSSOXhpqv+ey5KP1Xed4=;
+        b=NQfOtKxk27bOpbI7EDPAnoA6GYnOEnpeasDwERnK9xmhhb7RicEJTB4wbrMzmyUnC8
+         SaAjmBffMcHw9IRsDJN2xHHS/nZgNOhzpmBC9NP3s2cSGDU877EqZJeuiIbqoupAlziy
+         KCBRyXvSPJInf+kzzoLj2py0B8V+7QiD8dSbtWcsfbs4mlUmPNj0PBjalZBwWLt8LxzB
+         ysX73bjnv3okzWReDwXEmVbR+794Bn5sqfWxtaDxKgqx+UdP1SefREI/QSIoVE3jDB4h
+         VVODQy4kY3rWj6eRWSOdcXyUamM1XEE0au7PkHNcbYjCstnT1H0Zi9mFe1/UJLmyqKxb
+         pzVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HWx7ejiUd6c11eHL/2LW4rxQ9jG3blTr/paj//+W3GA=;
-        b=CQKwKcY0lmF18WEaT2qL1DQSXGgqpoJfgP0Ua822mXz7zhvHQ31pX0PQ1ZNat8+KtQ
-         a9DYX+JRL0hyOYKYgUspycd+Pc6H2Ky/SJ3FMSV59a+ZrDDNN3V1pixnhCYIiwD33+8K
-         hSHSxbVQRUnsU+wTzIxfp4rWVd0Vzh3IISD6oFnCRYOXyeHUGYqBWdhoN7QUepuVghDN
-         ow+gi8jNy0voW/IsJSNonVGGq+9M+oU1N1hMqPOXbCvFqIO0I59x/oUmY1pXHk4qvgD/
-         01wXOW0CTxzyS5cOOvldqlvlbOyZad5YJmo/oiIw+QdJMDt9mL1N4WYzbDeqlOffywIL
-         BSoA==
-X-Gm-Message-State: AOAM5321pUeat7U29xb1nbkhJ09x78VcV147pOM09p80efvpiWEEvmfs
-        L1MFRXcIrHv0l0/QiyC5gJhbYw==
-X-Google-Smtp-Source: ABdhPJzS4Xf5WDj+CW236gyVeYs5tYSyEAdbNEh2R2wQCw8aCu2hEsekTBRphxyuWPJWkJiJSpH7Gg==
-X-Received: by 2002:a19:5514:: with SMTP id n20mr878945lfe.178.1642016615543;
-        Wed, 12 Jan 2022 11:43:35 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id g4sm74056lfu.137.2022.01.12.11.43.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 11:43:34 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 08C82103A6D; Wed, 12 Jan 2022 22:43:58 +0300 (+03)
-Date:   Wed, 12 Jan 2022 22:43:58 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 6/7] x86/mm: Provide helpers for unaccepted memory
-Message-ID: <20220112194358.u5akdxqrzvfepcq4@box.shutemov.name>
-References: <20220111113314.27173-1-kirill.shutemov@linux.intel.com>
- <20220111113314.27173-7-kirill.shutemov@linux.intel.com>
- <a234c061-4497-3613-d47f-80071cc0e5d4@intel.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+42YiBAnbZbkfyad9QQejqVpSSOXhpqv+ey5KP1Xed4=;
+        b=wz5HclnJVsqTgWo0q1rXHJ4HtGUC95cCyHWHDTPgyg0eYf/L+fsQ0yiqm+VfAHGf8q
+         HbDU2AGmh/yUVnTlYyHqarSJGfajo+pW2HvegkMUCG9ziXVlDcBhWBikOuS1d6hpzX8F
+         aC/jUhYSFZwOztrfcMYjQZib9QjF/7UIj7/jLlxunHCktCclyDPbY/qy8NidVeByXmOf
+         GA5xQJ+70zqTxaFMri5IfWXOi85egDXKZacskA+7gquYf3WS1xfRwlXRRVDGeBZhlSLg
+         rCr/ryV2A723oUElGSY3LjV96cIQ1fFvLX5THQvvVnZGMLg9RIKXpdb6KG8332L1iZO8
+         VfKg==
+X-Gm-Message-State: AOAM530G0fl4RLs2prCGyr4hdakFlW9wl+mhtiX/EZQlFVyMix+dKVTY
+        MJVsFnzcki9dNLZKYkrk4pU=
+X-Google-Smtp-Source: ABdhPJxZcTT47G4GxAyhyeMYObNE+7u/I0aQKJqJhJng3pe8+w5/8ndyIq2LW9OvjSe3QpspeK9zXw==
+X-Received: by 2002:a37:aa8d:: with SMTP id t135mr782641qke.152.1642016758068;
+        Wed, 12 Jan 2022 11:45:58 -0800 (PST)
+Received: from [192.168.1.49] (c-67-187-90-124.hsd1.ky.comcast.net. [67.187.90.124])
+        by smtp.gmail.com with ESMTPSA id m20sm562947qtx.39.2022.01.12.11.45.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 11:45:57 -0800 (PST)
+Subject: Re: [PATCH] scripts/dtc: dtx_diff: fix documentation for redirect
+ workaround
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220112101441.23088-1-matthias.schiffer@ew.tq-group.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+Message-ID: <1f4e0d22-efea-e2f7-4c85-78953c142c0f@gmail.com>
+Date:   Wed, 12 Jan 2022 13:45:57 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a234c061-4497-3613-d47f-80071cc0e5d4@intel.com>
+In-Reply-To: <20220112101441.23088-1-matthias.schiffer@ew.tq-group.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 12:01:56PM -0800, Dave Hansen wrote:
-> On 1/11/22 03:33, Kirill A. Shutemov wrote:
-> > Core-mm requires few helpers to support unaccepted memory:
-> > 
-> >   - accept_memory() checks the range of addresses against the bitmap and
-> >     accept memory if needed;
-> > 
-> >   - maybe_set_page_offline() checks the bitmap and marks a page with
-> >     PageOffline() if memory acceptance required on the first
-> >     allocation of the page.
-> > 
-> >   - accept_and_clear_page_offline() accepts memory for the page and clears
-> >     PageOffline().
-> > 
-> ...
-> > +void accept_memory(phys_addr_t start, phys_addr_t end)
-> > +{
-> > +	unsigned long flags;
-> > +	if (!boot_params.unaccepted_memory)
-> > +		return;
-> > +
-> > +	spin_lock_irqsave(&unaccepted_memory_lock, flags);
-> > +	__accept_memory(start, end);
-> > +	spin_unlock_irqrestore(&unaccepted_memory_lock, flags);
-> > +}
-> 
-> Not a big deal, but please cc me on all the patches in the series.  This is
-> called from the core mm patches which I wasn't cc'd on.
-> 
-> This also isn't obvious, but this introduces a new, global lock into the
-> fast path of the page allocator and holds it for extended periods of time.
-> It won't be taken any more once all memory is accepted, but you can sure bet
-> that it will be noticeable until that happens.
-> 
-> *PLEASE* document this.  It needs changelog and probably code comments.
+Hi Matthisas,
 
-Okay, will do.
+On 1/12/22 4:14 AM, Matthias Schiffer wrote:
+> dtx_diff suggests to use <(...) syntax to pipe two inputs into it, but
+> this has never worked: The /proc/self/fds/... paths passed by the shell
+> will fail the `[ -f "${dtx}" ] && [ -r "${dtx}" ]` check in compile_to_dts,
+> but even with this check removed, the function cannot work: hexdump will
+> eat up the DTB magic, making the subsequent dtc call fail, as a pipe
+> cannot be rewound.
 
--- 
- Kirill A. Shutemov
+Thanks for catching this.
+
+I would rather just remove this first workaround entirely instead of
+changing it to use 'diff'.  Can you redo the patch to do the removal?
+
+Thanks,
+
+Frank
+
+
+> 
+> Change the example to use `diff -u` directly.
+> 
+> Fixes: 10eadc253ddf ("dtc: create tool to diff device trees")
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> ---
+>  scripts/dtc/dtx_diff | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/dtc/dtx_diff b/scripts/dtc/dtx_diff
+> index d3422ee15e30..f97eb83420a4 100755
+> --- a/scripts/dtc/dtx_diff
+> +++ b/scripts/dtc/dtx_diff
+> @@ -62,7 +62,7 @@ Otherwise DTx is treated as a dts source file (aka .dts).
+>     may not work since \${ARCH} is part of the include path.  Two possible
+>     workarounds:
+>  
+> -      `basename $0` \\
+> +      diff -u \\
+>            <(ARCH=arch_of_dtx_1 `basename $0` DTx_1) \\
+>            <(ARCH=arch_of_dtx_2 `basename $0` DTx_2)
+>  
+> 
+

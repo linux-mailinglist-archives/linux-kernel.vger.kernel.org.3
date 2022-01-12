@@ -2,95 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC3E48CD72
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C2E48CD77
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbiALVIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 16:08:52 -0500
-Received: from mga07.intel.com ([134.134.136.100]:51761 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230204AbiALVIv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 16:08:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642021731; x=1673557731;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cpb44JfA4XY3GrOTk1ODmib5BqJtK0tHceVZz1ByRGg=;
-  b=hESgKsZFFRVxixxXcn/11kZRO00krqZXXk8SZeSCRE30juex4jmxOgc+
-   vsuRGgtwlVD/Ku9vkMlqFvvU/FotYdgGbdEJlWqx8+07qH9yF80WyfOp5
-   EdGO1Dv9vG/lgHr5Bb0lCap0eRkXF8VFJ9ev5W/61zsgouyva79hysmk0
-   gf3VsNY1YDbep1W8ye0zaHQKVrKrGMNqdaQd/UxakhQTdw/p919+TybPj
-   MybdcVjOIlzLlUG3aZGHYZ35E9xaCClX5fU5+3S5BfhajZedz8zCOTF49
-   qEkD8cD3UaErKdM7p4XiMNYEATAi6PqaUQSUMOuUQLLK/tYz+rqIaTF34
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="307203341"
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="307203341"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 13:08:41 -0800
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="475061669"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 13:08:38 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n7kq4-009vdf-Na;
-        Wed, 12 Jan 2022 23:07:24 +0200
-Date:   Wed, 12 Jan 2022 23:07:24 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Robert Hancock <robert.hancock@calian.com>
-Cc:     linux-kernel@vger.kernel.org, giometti@enneenne.com,
-        gregkh@linuxfoundation.org, rasm@fe.up.pt,
-        jamesnuss@nanometrics.ca, akpm@linux-foundation.org
-Subject: Re: [PATCH] pps: clients: gpio: Propagate return value from
- pps_gpio_probe
-Message-ID: <Yd9DDJ2HmptwIITA@smile.fi.intel.com>
-References: <20220112205214.2060954-1-robert.hancock@calian.com>
+        id S232994AbiALVKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 16:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232929AbiALVKi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 16:10:38 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F5FC061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 13:10:38 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id s30so12573704lfo.7
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 13:10:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KrbHF0DzPNfCOOgkFkmmAa72D7KbaWV3xb9yz2Rt3bM=;
+        b=XbEGC7g/EgPNokcJrlfE/n7WGNBoNGbLkn9yVUz8n49hP1iGzSzDburUVxqWzgYetL
+         COz/ZlUCJWiK5yJri/2IhCg1ndJTnFnyehv+Mprt6eL2Oeew+92qGEV/KveFfXjdnEw1
+         bcyL5Fm1AJCwwnMAAP5QWSjPCQpwIXptig3ePQNwTJMngcZRQHELYp3aSpr1/VYg6z4B
+         kUWObpwdXyOnu7sllSMysu6bUNXWAqVO2fvC6/tpCr6wfhxSqJeyy1MWLArmEfgQCDUI
+         rmEG9pP+T8rubzuOO2doVOrMDzWvh1XiwsS0dtiVYgSk6QImLd08N+3F1BnPP2PpGRr+
+         iczQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KrbHF0DzPNfCOOgkFkmmAa72D7KbaWV3xb9yz2Rt3bM=;
+        b=QcWAScR3whxw2nHEqmKzR58XBrD9dPfvttLi4s2t7ZACAsi6MOp3vrMNat1e3ZaLxq
+         YHoiIxTvdr6Wa2hVP+TildHbS/KNoK2GmQf4rGKP9IoSkTPLHMGYTEdZ7rtr99YUEqby
+         MydjS59ZBkxb4rCrj5DwabsFi81NkU2TSO+HVzfIv2cbu3lWm8Mqejrq8gDpe7KFYVCN
+         0o16xKSXKfLtzQUajyIiOlJP/3Eb8OFo5k3dxGYmM/kUEbU4I2Nkn9pcKDe6ZCjh5xIF
+         u5HSpGZXBs4jVsz+2EuVBCokn6igPotLq87ndGCdnIjoC4OaKhCcm8Pg/47LTj+Vn/KG
+         +ILA==
+X-Gm-Message-State: AOAM53289W+XUXWmrQssCh83jEeXozBhar2o1ijKrubqF/xGsxGv6Qa3
+        c4FbRSNbm8gfv9VFL/C1m0Qn1w==
+X-Google-Smtp-Source: ABdhPJw9RfokvC4wwM+qsCTx/+HZcVAAN/tnfXnOw39oZ0M2m9VGVeMk6Qq7nqQbK08fk1bliRmcUA==
+X-Received: by 2002:a05:6512:3a85:: with SMTP id q5mr1140468lfu.35.1642021836492;
+        Wed, 12 Jan 2022 13:10:36 -0800 (PST)
+Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id q5sm91870lfb.135.2022.01.12.13.10.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 13:10:36 -0800 (PST)
+Message-ID: <17b8de50-426a-2543-a79a-aab44c9d52cf@cogentembedded.com>
+Date:   Thu, 13 Jan 2022 00:10:35 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220112205214.2060954-1-robert.hancock@calian.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 2/3] arm64: dts: renesas: r8a77961: Add lvds0 device node
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     David Airlie <airlied@linux.ie>, Rob Herring <robh+dt@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211224052309.1997096-1-nikita.yoush@cogentembedded.com>
+ <20211224052309.1997096-3-nikita.yoush@cogentembedded.com>
+ <YcyTV4fJqMHIeyYB@pendragon.ideasonboard.com>
+ <87626d61-ada0-c220-bea5-5330f5256629@cogentembedded.com>
+ <YcyXQxW3kRqQ2Yv0@pendragon.ideasonboard.com>
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+In-Reply-To: <YcyXQxW3kRqQ2Yv0@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 02:52:14PM -0600, Robert Hancock wrote:
-> If the pps-gpio driver was probed prior to the GPIO device it uses, the
-> devm_gpiod_get call returned an -EPROBE_DEFER error, but pps_gpio_probe
-> replaced that error code with -EINVAL, causing the pps-gpio probe to
-> fail and not be retried later. Propagate the error return value so that
-> deferred probe works properly.
-
-FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Fixes: 161520451dfa (pps: new client driver using GPIO)
-> Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-> ---
->  drivers/pps/clients/pps-gpio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>> +				port@1 {
+>>>> +					reg = <1>;
+>>>> +					lvds0_out: endpoint {
+>>>>    					};
+>>>
+>>> Endpoints must have a remote-endpoint property. Let's drop the endpoint
+>>> here and keep the port only, the endpoint can be declared in board
+>>> files.
+>>>
+>>> If you're fine with this change I can make it when applying the patch.
+>>
+>> This empty endpoint is currently defined in dtsi files for other r-car
+>> gen3 SoCs.
+>>
+>> Goal here is to define lvds0_out label that is then used in extension
+>> board dtsi files to link to the port.
+>>
+>> In this patch I just used the same approach as in files laying nearby.
+>>
+>> If this approach is not appropriate, then perhaps need to fix it in
+>> files for all SoCs, to make it possible for extension board dtsi to be
+>> compatible with all of them.
 > 
-> diff --git a/drivers/pps/clients/pps-gpio.c b/drivers/pps/clients/pps-gpio.c
-> index 35799e6401c9..2f4b11b4dfcd 100644
-> --- a/drivers/pps/clients/pps-gpio.c
-> +++ b/drivers/pps/clients/pps-gpio.c
-> @@ -169,7 +169,7 @@ static int pps_gpio_probe(struct platform_device *pdev)
->  	/* GPIO setup */
->  	ret = pps_gpio_setup(dev);
->  	if (ret)
-> -		return -EINVAL;
-> +		return ret;
->  
->  	/* IRQ setup */
->  	ret = gpiod_to_irq(data->gpio_pin);
-> -- 
-> 2.31.1
-> 
+> I'm writing a patch to drop those right now :-) I'll CC you.
 
--- 
-With Best Regards,
-Andy Shevchenko
+This is not the only place where rcag-gen3 dtsi files are using empty-endpoint pattern.
 
+du rgb port is defined in the same way.
 
+And, I've submitted a patch some weeks ago [1] that hooked into that.
+
+[1] https://lore.kernel.org/lkml/20211225115308.2152364-1-nikita.yoush@cogentembedded.com/
+
+Since there was no reply, I am about to resubmit it.
+But, perhaps need to do something with empty-endpoint pattern first?
+
+Nikita

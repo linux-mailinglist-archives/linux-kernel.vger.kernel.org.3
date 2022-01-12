@@ -2,102 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CF848CF6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 00:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC2D48CF6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 00:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236065AbiALXvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 18:51:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236199AbiALXvP (ORCPT
+        id S236082AbiALXwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 18:52:13 -0500
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:33252 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236081AbiALXwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 18:51:15 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BEAC0611FD
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 15:51:15 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id k14so2064980ion.7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 15:51:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0CvvG6Sg5CRn0S0loFvtHz3tC3c34qm3FIT7bwi49zU=;
-        b=OYDJaZdUTGuRaroxFXXXNdTr51ykvM0AH51j04gwQqdJAUknTFQHloDZAwcIFCBiFZ
-         1pW9K243gh8Rv2VPOVecIhOudZ7Is2czEmGsh0yLW1ZcnF9m+HS+CKhgBKLpojiFnBcv
-         GM1lR4Pmy/iELtFjIYjkp3K09X+yrltigfhfw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0CvvG6Sg5CRn0S0loFvtHz3tC3c34qm3FIT7bwi49zU=;
-        b=dWUQP4yc4jUJEoU6ipv59b/m6D7sJLFfb7fuL9f0yFIIfkOyFSwLT8v6TlgeSiXzxr
-         A/M+etILzYlT4SwIIRgBkR6R32AWVy54Xer/gi55RD0gbSDcUTC92iAoD7f7ZCifx7e0
-         hFHbyoWBctzfVSocNt7X63RmCmgqkzvEj2cGfb5QCMxv4WBYsdnK0KV2eV1vSGBjdhZE
-         xwaZXmmgRvPNtYh/aiiqMCXtlaa45/gzqYdv5aiS5lPWnT3aeHhRjh/lSvsayZJdNA/v
-         sw1hW+y7CKS438A/XW8dq6ujWOcu8PhMk2tRMvfAIADWldrFIPbcWHI6KtNPSxw/8sW3
-         L+xA==
-X-Gm-Message-State: AOAM533T5RavLa/IAibxx9M/ycmDe6cnaIw/AT723Gmwn6/QAD5dfNFd
-        OVaIEJmRMLwPA2bsEjLNHB2vBg==
-X-Google-Smtp-Source: ABdhPJymO1uP67tDwkSLUyfdC2hMMiuA+ArDBEMBICjwJtjISNY2I19w33OarazW9fRbTnq0yUQ7Mg==
-X-Received: by 2002:a05:6602:1484:: with SMTP id a4mr979952iow.153.1642031474992;
-        Wed, 12 Jan 2022 15:51:14 -0800 (PST)
-Received: from [192.168.1.128] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id a12sm930874ilv.69.2022.01.12.15.51.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 15:51:14 -0800 (PST)
-Subject: Re: [PATCH v2] selftests: rtc: Increase test timeout so that all
- tests run
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220112194142.3276385-1-nfraprado@collabora.com>
- <Yd84cDlW9+f7wQxq@piout.net>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f286a86d-6371-d8bd-6ca9-5f622468d1a4@linuxfoundation.org>
-Date:   Wed, 12 Jan 2022 16:51:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 12 Jan 2022 18:52:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1642031532; x=1673567532;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/mqEmsBcJQ9azy/1G+hXvIN0/87aNRTsGuVkMDmO0dE=;
+  b=Bb2b8K2o/+QTPcyiMHuKCxfOChvmhNKSbgdD3349jXGHYEoEmBLC1LxQ
+   R5WfZQACG4bh8ovDY14LitzSk/5v2HqIfUp8ru3YUulFuqCzyiDVjii87
+   tf6sq/75youahiX8TTPm7x0nhcU9ZwCdg/sS6xz7VA1Y6XC6Q787B/YsM
+   cI05+TtYqU1Li0Wd4jeA4W8oG9zhsNqz1TEIMVHgUF13pQYeihKi6tojk
+   NPBTIwnOr4K8mf5VUufFui1wDEL97yWMLWf/P58KUq6akrPnq1eDYvzrS
+   f0dcg2+uqxGpmMl3NqDEhAYgq5M0IYm/IHnZEHDt/HwzmAYuq6/XeIIpX
+   g==;
+X-IronPort-AV: E=Sophos;i="5.88,284,1635177600"; 
+   d="scan'208";a="195114697"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 13 Jan 2022 07:52:11 +0800
+IronPort-SDR: 6lt5yPxEOJ7/oHgmOTYT+0JF+uYVSRxA0Dm+I8Se1QVBdAcXoPTmY1NmLJIrsHlO+6Wj6YNaWR
+ 6txn/7Im+77uB6qzkKf04PXosGx/YxyZkCE9XJnHLaGhR7iLCFUUg5mEChBuH/xiT87PxQc4FY
+ LGbqnoYaux2EmXRDgy/5CMeQIsvQxHhwfHfw1FU7Nry3l70D43LfDpgOB/0jLoBJNIJaJ4Flhd
+ cPiljfW1QAU7Hvgd9mseLbSDlzm+Njb+eFoZfa/ZUHqmO6ZoRI+8QXD9H22O3IgRCkjg9fEya1
+ Pe9FW2N3Ln61CoSMnEk3E80r
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 15:24:33 -0800
+IronPort-SDR: dlyRj6DiEA4sY7W2p07kZ4yGQU6ACO9OMQlnAcxqgNlPyRg8yQ2b0t5T7Zc4jaQokOp1CkLPDT
+ iu8w3W4JWx/t97HdzRbkBX6xYGt7CuCqE5EgEw0e9U8EifP3T2kqvllreSYHAzSPILFZf+r7SF
+ XV9K5KfcnW1wpJkIPbQN4S5F3WQSnIlU7sGXXB2w8DpF+XaCD0R5yi+9O1lfyik0dQJAzQZZgW
+ /UqXKn2e7smK7TZAaodXLfG8HXy1sDhA2t2EWbZRG4SO+8az0lq2wIqMZxbA2rBgrqNGF4ByWU
+ +lU=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 15:52:13 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JZ49R6CrTz1VSkZ
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 15:52:11 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1642031531; x=1644623532; bh=/mqEmsBcJQ9azy/1G+hXvIN0/87aNRTsGuV
+        kMDmO0dE=; b=bX+45SacwqwDbCXir+ULwzJpqD/MzXCjzrM9pB4OstZvmMIxZ6d
+        bDoK4AyMqWQZ78fAt6U/zbtUZUJoN6fWRR6YFWQRA+xl5CRrwQ4pu8HxQaWc1t6u
+        q1cH8l5Wd8sPuaIR1nOy0nueSQS0O+90Xq2uSy95+eYQGJAGHXsXUwoYqL7N3nEz
+        6yfTXRpyfJl4xOTaTZUhaqwkal8tnvasJKfS5mUEMwwylVsd96rE2JxfLtWbSG+A
+        XpLICwUZIBPN4mqdenKBJTn8tzVSnHKB2kgvrjp6b+oXCR39uNub/yfMDSexc7m8
+        cKMcvpL636p3JqX4Xv6QNEz42SZjEU9QrKQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id LViFinyOszPn for <linux-kernel@vger.kernel.org>;
+        Wed, 12 Jan 2022 15:52:11 -0800 (PST)
+Received: from [10.225.163.46] (unknown [10.225.163.46])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JZ49Q5nx5z1VSjC;
+        Wed, 12 Jan 2022 15:52:10 -0800 (PST)
+Message-ID: <2d9b4f08-967e-6040-a954-e7bfa7e4dce1@opensource.wdc.com>
+Date:   Thu, 13 Jan 2022 08:52:09 +0900
 MIME-Version: 1.0
-In-Reply-To: <Yd84cDlW9+f7wQxq@piout.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] ata: pata_ali: remove redundant return statement
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+To:     Colin Ian King <colin.i.king@gmail.com>, linux-ide@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220112234741.1232858-1-colin.i.king@gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220112234741.1232858-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/22 1:22 PM, Alexandre Belloni wrote:
-> On 12/01/2022 14:41:42-0500, Nícolas F. R. A. Prado wrote:
->> The timeout setting for the rtc kselftest is currently 90 seconds. This
->> setting is used by the kselftest runner to stop running a test if it
->> takes longer than the assigned value.
->>
->> However, two of the test cases inside rtc set alarms. These alarms are
->> set to the next beginning of the minute, so each of these test cases may
->> take up to, in the worst case, 60 seconds.
->>
->> In order to allow for all test cases in rtc to run, even in the worst
->> case, when using the kselftest runner, the timeout value should be
->> increased to at least 120. Set it to 180, so there's some additional
->> slack.
->>
->> Correct operation can be tested by running the following command right
->> after the start of a minute (low second count), and checking that all
->> test cases run:
->>
->> 	./run_kselftest.sh -c rtc
->>
->> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On 1/13/22 08:47, Colin Ian King wrote:
+> A return statement is unnecessarily complicated, currently value
+> in variable mask is bitwise-masked and the variable is being
+> updated and then returned. Just updating the mask is all that is
+> required as the following statement is a return.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/ata/pata_ali.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ata/pata_ali.c b/drivers/ata/pata_ali.c
+> index ab28a6707b94..1b90cda27246 100644
+> --- a/drivers/ata/pata_ali.c
+> +++ b/drivers/ata/pata_ali.c
+> @@ -123,7 +123,7 @@ static unsigned long ali_20_filter(struct ata_device *adev, unsigned long mask)
+>  		mask &= ~(ATA_MASK_MWDMA | ATA_MASK_UDMA);
+>  	ata_id_c_string(adev->id, model_num, ATA_ID_PROD, sizeof(model_num));
+>  	if (strstr(model_num, "WDC"))
+> -		return mask &= ~ATA_MASK_UDMA;
 
-Thank you both. Will apply this for 5.17-rc2 once the merge window
-closes.
+Yeah, not to mention that is really ugly as the return should really
+have been:
 
-thanks,
--- Shuah
+return mask & ~ATA_MASK_UDMA;
+
+> +		mask &= ~ATA_MASK_UDMA;
+>  	return mask;
+>  }
+>  
+
+Will queue this up.
+
+-- 
+Damien Le Moal
+Western Digital Research

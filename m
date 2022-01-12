@@ -2,99 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE3548CE29
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 23:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED70748CE2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 23:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234034AbiALWAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 17:00:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233996AbiALWAK (ORCPT
+        id S234089AbiALWBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 17:01:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36000 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232804AbiALWA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 17:00:10 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3199C061756
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 14:00:09 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id w188so5139578oiw.13
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 14:00:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=6NeOmXl9hUhNaWIitkpsIX1HglQL4/Owj/MEcqRWAcE=;
-        b=LgJJxLL/G4XhpqPx4yhpZb1v+2Jgfc+QEgud+DaKHh/zc3NgMgFeXIhX9quxbToXT1
-         Q0Do1sUyBhfJPGvZBSZUW6U53IoFBu7nHNG/Tj5jyqKFIqpYLpsl+esQYjUnQCo/sjY6
-         kD6Dqg4E6B+u7XAx4hO2g/yrrGFjaxw2ZBfrk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=6NeOmXl9hUhNaWIitkpsIX1HglQL4/Owj/MEcqRWAcE=;
-        b=34hJle9NDkPHkCLMFuOw0BzxYJHOgREM97p4gfS+gbjz3IK3lUytb/0rcWYnqyPbBm
-         dHSznu5Z0pTCggFYj9yFX2xbH0tc3RL1hUE5oxTx35H4CPwuMvCX2Jn4HnyK5YOl1TBK
-         1cVvC3/EcnS2RDYrWfd3eFq8pph8Y8zcE2wKXgaz1fetGt+KqVDSwesptiuc+PBndbJQ
-         H1sh0hINfEAekxPzgB192imjQHZgmfLqmfxDf3LhF+QVaI+pfOlQ0+qd97Y+qmTfoUZ5
-         81X/mYChkIH4f5BgkB8Mrkso9BTPOj12FZokFFSA/0Lsezc9ydDJ57fccv086mjw3hCI
-         R2HQ==
-X-Gm-Message-State: AOAM532OqqOiBnR0+pils5JesAh01vPCqQ8U8dz7kfzLe/e/ZBsReZBW
-        RUPUwq3LbFTC52ySPuNMm4Wzt+cCBgJWA4XEFvJnQg==
-X-Google-Smtp-Source: ABdhPJz+AWx6cmp8t/uUG2/GxehI8dLVJNeNKxV7HZRn6BYbAiO0lPgYs3R5xzVOtFYk5Ukl6Ky7xavpxW0f/9c+TTk=
-X-Received: by 2002:a05:6808:cc:: with SMTP id t12mr149580oic.32.1642024809142;
- Wed, 12 Jan 2022 14:00:09 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 12 Jan 2022 14:00:08 -0800
+        Wed, 12 Jan 2022 17:00:58 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C3ECB82141;
+        Wed, 12 Jan 2022 22:00:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C780DC36AE9;
+        Wed, 12 Jan 2022 22:00:54 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lr/xlBLC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1642024850;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x7iEe7IoxzS5LF9sUIO2C6nbsTbfn+EF6LhXMAOlaaE=;
+        b=lr/xlBLCZhYJYGE3l7rjBQs6lpPhxatKOJKXsHsFfWW3BhDx3vbC+FWBWLhVD95Lbk1THF
+        oSse5uLcPApKGTWPwssJ2FwtmJjFGDvACZbzrZlCO4liAvC4eQxuEuVrLVB2jAb8cYgDlJ
+        DrO8bK6NuGXBT8OcmyHrGhlAr4ooSIo=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 92028de6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 12 Jan 2022 22:00:50 +0000 (UTC)
+Received: by mail-yb1-f171.google.com with SMTP id d7so9581607ybo.5;
+        Wed, 12 Jan 2022 14:00:49 -0800 (PST)
+X-Gm-Message-State: AOAM530Fc3zhdBtk60l6Yed4ldWjjRgJhjAHlXwXT98ANN7NZdM/LE4i
+        I0+qYylS8zYedz6Fb+/u2tn3747HpRTJzff8/H4=
+X-Google-Smtp-Source: ABdhPJxpRMesfcwVP3cDFwxhtrXE3cWVaFTB1pgeIm7wgCjUmTGJYn0+LmHJIWiD1lpG6RAGzWa6tkk4ceurJUL7qr0=
+X-Received: by 2002:a25:8c4:: with SMTP id 187mr2224483ybi.245.1642024848755;
+ Wed, 12 Jan 2022 14:00:48 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Yd8/XdMuAVW0fM6e@google.com>
-References: <20220112191048.837236-1-mka@chromium.org> <20220112111028.v19.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
- <CAE-0n51VZobLjRGZFYquEMgDutfmsAC0j8mj6cM7fvK7Myeczw@mail.gmail.com> <Yd8/XdMuAVW0fM6e@google.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Wed, 12 Jan 2022 14:00:08 -0800
-Message-ID: <CAE-0n50TzwqM--3v7wOEP07f5x7Dk9zDayF8Q+O2MvXYWMaCBg@mail.gmail.com>
-Subject: Re: [PATCH v19 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for
- onboard USB hub
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
+Received: by 2002:a05:7110:209:b0:11c:1b85:d007 with HTTP; Wed, 12 Jan 2022
+ 14:00:48 -0800 (PST)
+In-Reply-To: <d7e206a5a03d46a69c0be3b8ed651518@AcuMS.aculab.com>
+References: <CAHmME9qbnYmhvsuarButi6s=58=FPiti0Z-QnGMJ=OsMzy1eOg@mail.gmail.com>
+ <20220111134934.324663-1-Jason@zx2c4.com> <20220111134934.324663-2-Jason@zx2c4.com>
+ <Yd8enQTocuCSQVkT@gmail.com> <CAHmME9qGs8yfYy0GVcV8XaUt9cjCqQF2D79RvrsQE+CNLCeojA@mail.gmail.com>
+ <d7e206a5a03d46a69c0be3b8ed651518@AcuMS.aculab.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 12 Jan 2022 23:00:48 +0100
+X-Gmail-Original-Message-ID: <CAHmME9p-JZS480-e3MvPsa1Q07rqX79h8oNEZsF970GjT-_nqA@mail.gmail.com>
+Message-ID: <CAHmME9p-JZS480-e3MvPsa1Q07rqX79h8oNEZsF970GjT-_nqA@mail.gmail.com>
+Subject: Re: [PATCH crypto 1/2] lib/crypto: blake2s-generic: reduce code size
+ on small systems
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        WireGuard mailing list <wireguard@lists.zx2c4.com>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        linux-usb@vger.kernel.org, Roger Quadros <rogerq@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Matthias Kaehlcke (2022-01-12 12:51:41)
-> On Wed, Jan 12, 2022 at 12:47:15PM -0800, Stephen Boyd wrote:
-> > Quoting Matthias Kaehlcke (2022-01-12 11:10:48)
->
-> > > diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> > > index d4f4441179fc..cd31460b3bd6 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> > > @@ -202,7 +202,6 @@ pp3300_hub: pp3300-hub {
-> > >                 pinctrl-names = "default";
-> > >                 pinctrl-0 = <&en_pp3300_hub>;
-> > >
-> > > -               regulator-always-on;
-> > >                 regulator-boot-on;
-> >
-> > Is regulator-boot-on necessary?
->
-> It tells the kernel that the regulator is already on at boot, and avoids an
-> off-on cycle that would happen otherwise (internal reference: b/185972336).
+Hi David,
 
-Got it! A comment here would be helpful so we know the BIOS leaves the
-regulator on.
+On 1/12/22, David Laight <David.Laight@aculab.com> wrote:
+> I think you mentioned in another thread that the buffers (eg for IPv6
+> addresses) are actually often quite short.
+>
+> For short buffers the 'rolled-up' loop may be of similar performance
+> to the unrolled one because of the time taken to read all the instructions
+> into the I-cache and decode them.
+> If the loop ends up small enough it will fit into the 'decoded loop
+> buffer' of modern Intel x86 cpu and won't even need decoding on
+> each iteration.
+>
+> I really suspect that the heavily unrolled loop is only really fast
+> for big buffers and/or when it is already in the I-cache.
+> In real life I wonder how often that actually happens?
+> Especially for the uses the kernel is making of the code.
+>
+> You need to benchmark single executions of the function
+> (doable on x86 with the performance monitor cycle counter)
+> to get typical/best clocks/byte figures rather than a
+> big average for repeated operation on a long buffer.
+>
+> 	David
+
+This patch has been dropped entirely from future revisions. The latest
+as of writing is at:
+
+https://lore.kernel.org/linux-crypto/20220111220506.742067-1-Jason@zx2c4.com/
+
+If you'd like to do something with blake2s, by all means submit a
+patch and include various rationale and metrics and benchmarks. I do
+not intend to do that myself and do not think my particular patch here
+should be merged. But if you'd like to do something, feel free to CC
+me for a review. However, as mentioned, I don't think much needs to be
+done here.
+
+Again, v3 is here:
+https://lore.kernel.org/linux-crypto/20220111220506.742067-1-Jason@zx2c4.com/
+
+Thanks,
+Jason

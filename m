@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C00748BF6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C26A48BF72
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351363AbiALIEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
+        id S1351371AbiALIFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237577AbiALIEE (ORCPT
+        with ESMTP id S237577AbiALIFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:04:04 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41930C06173F;
-        Wed, 12 Jan 2022 00:04:04 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id w27so1644203qkj.7;
-        Wed, 12 Jan 2022 00:04:04 -0800 (PST)
+        Wed, 12 Jan 2022 03:05:05 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A774DC06173F;
+        Wed, 12 Jan 2022 00:05:04 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id y17so2131533qtx.9;
+        Wed, 12 Jan 2022 00:05:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=iKcG1xCQXSx894OSDj80kVGbsOH6ABlaWdg6vUCjwJk=;
-        b=kqn7X5Ji/e/zT9xWmm9QJOB1LnmJbjjxqOYjtbdYBCD9/MQXPBYOP6QSu62TKiJWzf
-         bO/cBGKpwuIbEeIfc2VwaTe2+5SUj2qcZYFBAtd+239RoP7NP3jxvYyvZPrBX6L3/laP
-         cYie+OUvvMqc5zzlkSEAxfcELLFfqSSSyaDowKvl1kneNTLOJS1iKT52H+kSHEfBiRXW
-         9KUbAbuG4Rdmm/b4MgkctU5ZFjIdXdRLrMiDFIjCAnPxSSlC+aNJuX53JIIruwwREI9b
-         UoN9GAvq6C8Wi7Pnf8FnND414FlZQcPpJH0KDCH8u5mZ3YU/McAvzHIK7+J3iK1FXtxN
-         YWcQ==
+        bh=mX58k7wGho97Y8qH2nxAgkm3miNmVOmu/qIE3BiGfD8=;
+        b=pVYyM7tn4EJ9mmnoSSYJUqh+HgkZToErbRTUapxwbADX0u4WL8CdKvGaDX7I9cgRur
+         fAfWEM1PazmPDwPxQipDkOlDHqm9sBLkpvUsdwSbnOZnSfTo4qqqYH/CMefQVNJb3CSi
+         j7Hi44/MtLxQh50UMwBN84/GFoRHSh5LTDdnmgElfrtj0z6cKruhMkK+PdFG1fLMbD/L
+         aAG+hkECI+SVgr7RnhvaTneNbDSLQiMi8q+eluRBoXI1zYk+gUsfdR3qkf1zxjwFd2I2
+         W8XqFHBsJGwla525sO09ACNtd2352DBy8ac/qxTwPAL4CKYbNGrOGfprtxn3HRmJWV+i
+         CEhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=iKcG1xCQXSx894OSDj80kVGbsOH6ABlaWdg6vUCjwJk=;
-        b=AnacGRgbpy7lQoTysWmMokb3DFLNwnKAGYK6/uG/Ins0ORtulAql05Y+tPovj4lZaQ
-         2/tyW3Pf7wEnDp0eTG2E1l2KtuGo/KlUx4IXySz8dnH9J3JSDJGGe/IGk/LaGwa3LCgM
-         JLlmDc3sguzrB+MrILm485/bd9NPcs2szukwoqG8jwppFiCw2jyvtFVXnIfW6q1fh4BC
-         HqnDskh39znivF6/L+Fl8IpEtEyWhwfIh746DHfyzepn8Qrumu8wQB3zia9IzePdymnp
-         Xa6gyD0ArKORaf04mAIdrnvsw158gsK247W/+vH4dVhURwSbJOH0kQxs/hPAr3cT2Pt6
-         otmg==
-X-Gm-Message-State: AOAM531/7wXJ4C7CHq4IYU3sSFTszN5y1x9bwhtWP+1XFLv8ucVyKFYL
-        PIYbk7zK0i7R24QTDMEAOCCBnpzRxUg=
-X-Google-Smtp-Source: ABdhPJxxzbyNZ5BIA7SVfdszmBXrUWRaPv4dmZklaaS2eyEU6TXF1C/L1EZdYcWWxfhsWDP8YMj/fw==
-X-Received: by 2002:a05:620a:2104:: with SMTP id l4mr5618261qkl.659.1641974643499;
-        Wed, 12 Jan 2022 00:04:03 -0800 (PST)
+        bh=mX58k7wGho97Y8qH2nxAgkm3miNmVOmu/qIE3BiGfD8=;
+        b=4k/OwWiAWQhqm5ki+pq8M4I9L5MW8xg81D+eIQxouFsCwlWR1DTxyyF7DIym4DgQp1
+         PfOctol6bsvvluntoMo0/1BSfJEx7wfxF3rvrtiOh4aJTaR8OWQk7uPd252sbhULaTVC
+         Xfgsln0Ugti/NUjz4vRpksbudFGG8H8EHFJghvIo5RmprnUc4bXWz/1GPLkPKIavqe2U
+         X501c5D8Em2asFszQstL3jC9nNWGg4TFW9nCYaPL8mkYGzUQda2WKJmgwunETtlbk5O5
+         3eE/yiL/H1NvzEdYkYKniE2yDrSCt1DxeTVf3YVyYlkgb6hgmXclqTahqw/Sxtrz2+xf
+         ca5g==
+X-Gm-Message-State: AOAM530G0xSY2HyOg3jSRHqPzsT4r0LSqqYZbRSzJJOUSvYmXCNOxl9j
+        5/IKZuFNSPR3F4ntTNjVKdo=
+X-Google-Smtp-Source: ABdhPJxVnEJK5emKrDFsqI7mB9uRjjKSWfAoMptS80gvdL4Kc8qcxPPrrAFDosjbt9WvKK1jIizFSA==
+X-Received: by 2002:ac8:4e4f:: with SMTP id e15mr6654074qtw.168.1641974703918;
+        Wed, 12 Jan 2022 00:05:03 -0800 (PST)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id o10sm8698271qtx.33.2022.01.12.00.04.00
+        by smtp.gmail.com with ESMTPSA id d11sm8035371qtj.4.2022.01.12.00.05.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 00:04:03 -0800 (PST)
+        Wed, 12 Jan 2022 00:05:03 -0800 (PST)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     john.johansen@canonical.com
-Cc:     jmorris@namei.org, serge@hallyn.com,
-        linux-security-module@vger.kernel.org,
+To:     sathya.prakash@broadcom.com
+Cc:     sreekanth.reddy@broadcom.com,
+        suganath-prabu.subramani@broadcom.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] security/apparmor: remove redundant ret variable
-Date:   Wed, 12 Jan 2022 08:03:56 +0000
-Message-Id: <20220112080356.666999-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] drivers/message/fusion: remove redundant rc variable
+Date:   Wed, 12 Jan 2022 08:04:57 +0000
+Message-Id: <20220112080457.667063-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -67,33 +68,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Return value from nf_register_net_hooks() directly instead
+Return value from mptctl_do_mpt_command() directly instead
 of taking this in another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
 ---
- security/apparmor/lsm.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/message/fusion/mptctl.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index ce7d96627810..f3deeb8b712e 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1799,11 +1799,8 @@ static const struct nf_hook_ops apparmor_nf_ops[] = {
- 
- static int __net_init apparmor_nf_register(struct net *net)
+diff --git a/drivers/message/fusion/mptctl.c b/drivers/message/fusion/mptctl.c
+index ae433c150b37..dd1170cde5a8 100644
+--- a/drivers/message/fusion/mptctl.c
++++ b/drivers/message/fusion/mptctl.c
+@@ -1696,8 +1696,6 @@ mptctl_mpt_command (MPT_ADAPTER *ioc, unsigned long arg)
  {
--	int ret;
+ 	struct mpt_ioctl_command __user *uarg = (void __user *) arg;
+ 	struct mpt_ioctl_command  karg;
+-	int		rc;
 -
--	ret = nf_register_net_hooks(net, apparmor_nf_ops,
-+	return nf_register_net_hooks(net, apparmor_nf_ops,
- 				    ARRAY_SIZE(apparmor_nf_ops));
--	return ret;
+ 
+ 	if (copy_from_user(&karg, uarg, sizeof(struct mpt_ioctl_command))) {
+ 		printk(KERN_ERR MYNAM "%s@%d::mptctl_mpt_command - "
+@@ -1706,9 +1704,7 @@ mptctl_mpt_command (MPT_ADAPTER *ioc, unsigned long arg)
+ 		return -EFAULT;
+ 	}
+ 
+-	rc = mptctl_do_mpt_command (ioc, karg, &uarg->MF);
+-
+-	return rc;
++	return mptctl_do_mpt_command(ioc, karg, &uarg->MF);
  }
  
- static void __net_exit apparmor_nf_unregister(struct net *net)
+ /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
 -- 
 2.25.1
 

@@ -2,147 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC32E48C1CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 10:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E13B48C1D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239348AbiALJ7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 04:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352317AbiALJ7k (ORCPT
+        id S239476AbiALKAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 05:00:53 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:55436
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239371AbiALKAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:59:40 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0804C06173F;
-        Wed, 12 Jan 2022 01:59:39 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id k30so3147224wrd.9;
-        Wed, 12 Jan 2022 01:59:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Ut4XOU7A/03qnRMeHsMB3uFSgPcs5evwpF8EjvHosi8=;
-        b=dNp8JYbEWnmIYGrO7X9jxS6njJPxOC+R7VskhDd5eqwmBjlPkv8cBfNTwgYuKv4Nkq
-         ROJMfg4PM7nHbwgqcUECmLcA3lNUfw6+45gFWXBqG3n52LG36ORu915Fs4gvjcSKEMNR
-         WLIT61EOD4QuRGCaPqGQn1FFIQh6CUfS/SSADKLVEAb9DTq+XAxbWk5FuXHF2vQzHIU7
-         Gcyr9WlDHd/3kxLTUpyOSspcP/F66IEGHRbUqYgEDz7NubRpUOdM1p8Rlk7lpKuaupTI
-         DCPY81WwW/bYQZ1uGkstByYZjuBHmXBj9matdgWCRzvQMgyLCHmokC9utxygTIBcVusC
-         EAtg==
+        Wed, 12 Jan 2022 05:00:51 -0500
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D65DF3F1EE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641981650;
+        bh=W175jQsAVD8hOk96CzYOc00tw1PfuOzVPDQUy/HubXs=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=k9glYrqJDMl8kv5sNFpGs6wjrcIHjovV0BxJSeEXbwEbnLIyUweJG58G8RVLCK+ck
+         ee1U6ffQkrMP6KhNRzvHW7vz6aqlV/B98HkMavP0JiqsD/Kcv9MbrPDhLlwt+HoGaj
+         GvAL8T4X7vSN7a8eUmUZ6ZGIxJ8Pe1Ynyn8UngOlhVMMLmWkVjruMdjT+8W+Y8qIy7
+         26WtZbH4Wtc4MR8GdIL0l9pMt9UlbPDSLO81UC21IsLPo4TttWg26BQ44WaIVHd9Kt
+         BYptFg7ahsQB29eevU2YCmtXTlToliduMS5t4aEmdKYqRLtgvnkJBYk/3rKE9q09Di
+         nl5JOANWznopQ==
+Received: by mail-ed1-f71.google.com with SMTP id m16-20020a056402431000b003fb60bbe0e2so1820919edc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:00:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Ut4XOU7A/03qnRMeHsMB3uFSgPcs5evwpF8EjvHosi8=;
-        b=WVf8H9P/w/hfuLS38M+RNx1LLwOBIoKXbssbDvkIEW/Di9JOwPhhFpFiGngeUB+2cx
-         LnRBkACGi1qEx+ABbpKCTCdQTI0RDMTQPlnOU2vJMA1I2DqU85f4O7t35ciH7qllj7kP
-         HmGGNP7+ANO0J+6k2G0nMq0ZDA/Uiry8nIxbtGIH+EuPJcSZJyOwV1FQWdLEfCaOaouU
-         YRmNkBQhk0Uwk4tz1I36Y2RV8qRKIPNlrmpmz08P5ylx4WLLptCgiPno3CQJlSvb+Wdr
-         RmtqkMaVGIVq/k6fur8naoJFS/fHEDZR9/ixQvpg+fRKsNk3e7oeeB9hM+ypP30DKRJ+
-         cBYA==
-X-Gm-Message-State: AOAM530d3PsffkWACAxUhKgiby2gs+l2RPFZFLV3pbzZ5Yh8boBdXYb+
-        naVD2EJwwiau8tUdDOZhxow=
-X-Google-Smtp-Source: ABdhPJykJDPMEXOibXX6KVqykVjgMXjjzUz08whjSlSO0lZzpMIdPiQvLX5gB1bV7mEX3e5EPvfuqg==
-X-Received: by 2002:a05:6000:1548:: with SMTP id 8mr6980634wry.489.1641981578289;
-        Wed, 12 Jan 2022 01:59:38 -0800 (PST)
-Received: from [10.0.0.5] ([37.165.119.129])
-        by smtp.gmail.com with ESMTPSA id c3sm3851637wrd.54.2022.01.12.01.59.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 01:59:37 -0800 (PST)
-Message-ID: <571c72e8-2111-6aa0-1bd7-e0af7fc50539@gmail.com>
-Date:   Wed, 12 Jan 2022 01:59:36 -0800
+        bh=W175jQsAVD8hOk96CzYOc00tw1PfuOzVPDQUy/HubXs=;
+        b=fkygVV6IA9ixOVSrMLTS0cb2vIOXl5bE4Ub6eNSZ/upgvTSOHybPcOhWQwL5ytwwyE
+         8nqgks8HOvufxN8B1MfHjseBJmVMrXhL4ZaRvHOe5h+UsV3DDqCjP1aCasOaFRlHxn0R
+         A1mfYtJDmL00YcUdIR4eO/M1KDHs6rMa4oDq/AklP4TzueQJ/xyZGLdShkHncYcsJ1cw
+         rUY4AOYWwNH+/b77wsIaFrpr8IFRB0PHPb2/1BTRipHEwh7RUrqFTaIQ8YuMJ5g0xw4u
+         F/Aaj9Kl8tkbW03TTGyNH8tCkkcBiPGWtYp+R41YomuanJxKmbRULyBYfGR5gZguOpNm
+         631A==
+X-Gm-Message-State: AOAM531E8EJCaEf5Gt05RNefqyKGTf2oeofH4/1T1zgn2oMKB/bbsoqj
+        Y6OhNQHC0PvegG37dBGhAnfFJOhG627AFjrrKLhKRUyEvxP75ryNyfR9A2yG7D+hns3btiKQw4X
+        e+z8hBE0Zo/Ako7QUTssT5vCYmw4WiDfzGYAOAZg1dw==
+X-Received: by 2002:aa7:c584:: with SMTP id g4mr220260edq.78.1641981650587;
+        Wed, 12 Jan 2022 02:00:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyPwXb8C8jwC0AeCFbhlzmt3R55DzsEBM3z+QQv07WnckbiFJGdXv4Kanz5OlMs7VuMIKn9xw==
+X-Received: by 2002:aa7:c584:: with SMTP id g4mr220236edq.78.1641981650275;
+        Wed, 12 Jan 2022 02:00:50 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id hb11sm4311083ejc.33.2022.01.12.02.00.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 02:00:49 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>
+Subject: [PATCH v3 0/4] spi: dt-bindings: samsung: convert to dtschema
+Date:   Wed, 12 Jan 2022 11:00:42 +0100
+Message-Id: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH net] ax25: use after free in ax25_connect
-Content-Language: en-US
-To:     Hangyu Hua <hbh25y@gmail.com>, jreuter@yaina.de,
-        ralf@linux-mips.org, davem@davemloft.net, kuba@kernel.org
-Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220111042048.43532-1-hbh25y@gmail.com>
- <f35292c0-621f-3f07-87ed-2533bfd1496e@gmail.com>
- <f48850cb-8e26-afa0-576c-691bb4be5587@gmail.com>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-In-Reply-To: <f48850cb-8e26-afa0-576c-691bb4be5587@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 1/11/22 18:13, Hangyu Hua wrote:
-> I try to use ax25_release to trigger this bug like this:
-> ax25_release                 ax25_connect
-> lock_sock(sk);
-> -----------------------------sk = sock->sk;
-> -----------------------------ax25 = sk_to_ax25(sk);
-> ax25_destroy_socket(ax25);
-> release_sock(sk);
-> -----------------------------lock_sock(sk);
-> -----------------------------use ax25 again
->
-> But i failed beacause their have large speed difference. And i
-> don't have a physical device to test other function in ax25.
-> Anyway, i still think there will have a function to trigger this
-> race condition like ax25_destroy_timer. Beacause Any ohter
-> functions in ax25_proto_ops like ax25_bind protect ax25_sock by 
-> lock_sock(sk).
+Changes since v2
+================
+1. Patch 2: drop child device schema, as Rob suggested.
 
+Changes since v1
+================
+1. Patch 2: describe devices matching compatible, correct issues pointed out by
+   Rob, add reviewed-by tag.
+2. New patches 3 and 4.
 
-For a given sk pointer, sk_to_ax25(sk) is always returning the same value,
+Best regards,
+Krzysztof
 
-regardless of sk lock being held or not.
+Krzysztof Kozlowski (4):
+  ARM: dts: exynos: split dmas into array of phandles in Exynos5250
+  spi: dt-bindings: samsung: convert to dtschema
+  spi: dt-bindings: samsung: allow controller-data to be optional
+  spi: s3c64xx: allow controller-data to be optional
 
-ax25_sk(sk)->cb  is set only from ax25_create() or ax25_make_new()
+ .../spi/samsung,spi-peripheral-props.yaml     |  36 ++++
+ .../devicetree/bindings/spi/samsung,spi.yaml  | 187 ++++++++++++++++++
+ .../bindings/spi/spi-peripheral-props.yaml    |   1 +
+ .../devicetree/bindings/spi/spi-samsung.txt   | 122 ------------
+ MAINTAINERS                                   |   2 +-
+ arch/arm/boot/dts/exynos5250.dtsi             |   9 +-
+ drivers/spi/spi-s3c64xx.c                     |  14 +-
+ 7 files changed, 234 insertions(+), 137 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-samsung.txt
 
-ax25_connect can not be called until these operations have completed ?
+-- 
+2.32.0
 
-
-
->
-> Thanks.
->
->
->
->
-> On 2022/1/12 上午4:56, Eric Dumazet wrote:
->>
->> On 1/10/22 20:20, Hangyu Hua wrote:
->>> sk_to_ax25(sk) needs to be called after lock_sock(sk) to avoid UAF
->>> caused by a race condition.
->>
->> Can you describe what race condition you have found exactly ?
->>
->> sk pointer can not change.
->>
->>
->>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
->>> ---
->>>   net/ax25/af_ax25.c | 4 +++-
->>>   1 file changed, 3 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
->>> index cfca99e295b8..c5d62420a2a8 100644
->>> --- a/net/ax25/af_ax25.c
->>> +++ b/net/ax25/af_ax25.c
->>> @@ -1127,7 +1127,7 @@ static int __must_check ax25_connect(struct 
->>> socket *sock,
->>>       struct sockaddr *uaddr, int addr_len, int flags)
->>>   {
->>>       struct sock *sk = sock->sk;
->>> -    ax25_cb *ax25 = sk_to_ax25(sk), *ax25t;
->>> +    ax25_cb *ax25, *ax25t;
->>>       struct full_sockaddr_ax25 *fsa = (struct full_sockaddr_ax25 
->>> *)uaddr;
->>>       ax25_digi *digi = NULL;
->>>       int ct = 0, err = 0;
->>> @@ -1155,6 +1155,8 @@ static int __must_check ax25_connect(struct 
->>> socket *sock,
->>>       lock_sock(sk);
->>> +    ax25 = sk_to_ax25(sk);
->>> +
->>>       /* deal with restarts */
->>>       if (sock->state == SS_CONNECTING) {
->>>           switch (sk->sk_state) {

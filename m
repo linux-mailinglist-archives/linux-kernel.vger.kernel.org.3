@@ -2,137 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C41C948C889
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A43748C887
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 17:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355336AbiALQe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 11:34:58 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:38038 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1355291AbiALQel (ORCPT
+        id S1349911AbiALQew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 11:34:52 -0500
+Received: from mail-qk1-f170.google.com ([209.85.222.170]:42909 "EHLO
+        mail-qk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349922AbiALQeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:34:41 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20CAjf5I018214;
-        Wed, 12 Jan 2022 17:34:25 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=tsZZYByhBt3iMrVmHEOmuez8eGtVX2YnJRTRXajIhto=;
- b=23JDogZfQLRE+QI9XfydsgVWdlqKnI39iHWp0SDb2i7E+RITFfZ6w30kwnJm4HnnLJrp
- /w2PPtPq4s+V/1/MLOZv3gaCojb1+OWTL82FlSAYjOERHIEit6oOBMehbrxySU4bH7DZ
- bMEjVGpcQr6ISvoJuZpoYNf3qgUsDVeSWcRlp0bfQ6DGDrzplExQwCMBKEW9i19+9rTw
- VsAJlpCTvI0n0u+fI1bCi4whVYYItWaOe7TeebCQkyr3c25RICPK+zZIC72jHEZAu9Qa
- Kjp0sQVzA8Pyn4ozljZvB6DYkEKntrPRuqzfioCxpMJY0Srn9/a+YVLt6V8S3rJ1hVK/ sw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dhssdugv6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jan 2022 17:34:25 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7A0A410002A;
-        Wed, 12 Jan 2022 17:34:24 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 718E424B8BB;
-        Wed, 12 Jan 2022 17:34:24 +0100 (CET)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 12 Jan 2022 17:34:24
- +0100
-From:   Yann Gautier <yann.gautier@foss.st.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        Yann Gautier <yann.gautier@foss.st.com>
-Subject: [PATCH 10/10] ARM: dts: stm32: add sdmmc2 pins for STM32MP13
-Date:   Wed, 12 Jan 2022 17:33:56 +0100
-Message-ID: <20220112163356.25634-11-yann.gautier@foss.st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220112163356.25634-9-yann.gautier@foss.st.com>
-References: <20220112163356.25634-9-yann.gautier@foss.st.com>
+        Wed, 12 Jan 2022 11:34:14 -0500
+Received: by mail-qk1-f170.google.com with SMTP id c190so1532401qkg.9;
+        Wed, 12 Jan 2022 08:34:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0N0dPN3O3RZBULsdprAK0TPmoiFmNasZOU3EoQJ8BQo=;
+        b=p+mSBlVeeDYomG0z0/5alW2pGuSgGnm0qnbZh0OZMRtvVTq5ZOwQDeQ891qhHTiJnh
+         YfM3LkfHfMgXiNLUa/v7hQsRRLrmdgyNsSZsrWbsmgaDcr+LuEWj/PIR06AFZkxptvWa
+         BiSNZ99ogigV92Q+9f6OkE9huytWl+E+qcIi5zYqXF+IF0o/VF5xPpbzjgvOtP8hUMgG
+         iYQGRYDyukm8v5dgvGf+df3ci43JqyLPt2LQD7hKRAUUp+MEzKRvfvnQtyjo7bkfkMg5
+         BA1nWPQX/E3X6UNfLhiPSYWwa7VnTlKW6+XTPJipNbjqxwjLzD7oTCxnVrteliKth3qo
+         X2uQ==
+X-Gm-Message-State: AOAM533cET0hqCjEms5FrCULBd86VUo2S4HEGLx3VuQnO7Mr9JA2J+at
+        wXZzNgbwYwBlbehc61c1PKxskwU8y9uIcz3WWK4pUpj1
+X-Google-Smtp-Source: ABdhPJzjopvb12tK07oUFeqfdMnPiZhPPatJI4OEBTP9c5OaTnk5QUzQYpFLSvTxCVZiIabjRFyDFjoqJnHhstBxpO0=
+X-Received: by 2002:a37:b702:: with SMTP id h2mr391026qkf.135.1642005253779;
+ Wed, 12 Jan 2022 08:34:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-12_04,2022-01-11_01,2021-12-02_01
+References: <20220112080155.666868-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220112080155.666868-1-chi.minghao@zte.com.cn>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 12 Jan 2022 17:34:02 +0100
+Message-ID: <CAJZ5v0iipOm6DX3Fd8iNKF_LC6kJWCy=1LxFsh47z01UYDrRow@mail.gmail.com>
+Subject: Re: [PATCH] drivers/acpi/apei: remove redundant rc variable
+To:     cgel.zte@gmail.com
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Those pins are used for SDIO on STM32MP135F-DK board.
+On Wed, Jan 12, 2022 at 9:02 AM <cgel.zte@gmail.com> wrote:
+>
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+>
+> Return value from apei_exec_write_register() directly instead
+> of taking this in another redundant variable.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
 
-Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
----
- arch/arm/boot/dts/stm32mp13-pinctrl.dtsi | 51 ++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+Well, this doesn't look like an e-mail address of a physical person
+which is required for S-o-b tags.
 
-diff --git a/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi
-index c6f78eef3698..d2472cd8f1d0 100644
---- a/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi
-@@ -57,6 +57,57 @@
- 		};
- 	};
- 
-+	sdmmc2_b4_pins_a: sdmmc2-b4-0 {
-+		pins {
-+			pinmux = <STM32_PINMUX('B', 14, AF10)>, /* SDMMC2_D0 */
-+				 <STM32_PINMUX('B', 15, AF10)>, /* SDMMC2_D1 */
-+				 <STM32_PINMUX('B', 3, AF10)>, /* SDMMC2_D2 */
-+				 <STM32_PINMUX('B', 4, AF10)>, /* SDMMC2_D3 */
-+				 <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
-+			slew-rate = <1>;
-+			drive-push-pull;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	sdmmc2_b4_od_pins_a: sdmmc2-b4-od-0 {
-+		pins1 {
-+			pinmux = <STM32_PINMUX('B', 14, AF10)>, /* SDMMC2_D0 */
-+				 <STM32_PINMUX('B', 15, AF10)>, /* SDMMC2_D1 */
-+				 <STM32_PINMUX('B', 3, AF10)>, /* SDMMC2_D2 */
-+				 <STM32_PINMUX('B', 4, AF10)>; /* SDMMC2_D3 */
-+			slew-rate = <1>;
-+			drive-push-pull;
-+			bias-pull-up;
-+		};
-+		pins2 {
-+			pinmux = <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
-+			slew-rate = <1>;
-+			drive-open-drain;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	sdmmc2_b4_sleep_pins_a: sdmmc2-b4-sleep-0 {
-+		pins {
-+			pinmux = <STM32_PINMUX('B', 14, ANALOG)>, /* SDMMC2_D0 */
-+				 <STM32_PINMUX('B', 15, ANALOG)>, /* SDMMC2_D1 */
-+				 <STM32_PINMUX('B', 3, ANALOG)>, /* SDMMC2_D2 */
-+				 <STM32_PINMUX('B', 4, ANALOG)>, /* SDMMC2_D3 */
-+				 <STM32_PINMUX('E', 3, ANALOG)>, /* SDMMC2_CK */
-+				 <STM32_PINMUX('G', 6, ANALOG)>; /* SDMMC2_CMD */
-+		};
-+	};
-+
-+	sdmmc2_clk_pins_a: sdmmc2-clk-0 {
-+		pins {
-+			pinmux = <STM32_PINMUX('E', 3, AF10)>; /* SDMMC2_CK */
-+			slew-rate = <1>;
-+			drive-push-pull;
-+			bias-pull-up;
-+		};
-+	};
-+
- 	uart4_pins_a: uart4-0 {
- 		pins1 {
- 			pinmux = <STM32_PINMUX('D', 6, AF8)>; /* UART4_TX */
--- 
-2.17.1
-
+> ---
+>  drivers/acpi/apei/apei-base.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/drivers/acpi/apei/apei-base.c b/drivers/acpi/apei/apei-base.c
+> index c7fdb12c3310..87145b6b89aa 100644
+> --- a/drivers/acpi/apei/apei-base.c
+> +++ b/drivers/acpi/apei/apei-base.c
+> @@ -125,12 +125,9 @@ EXPORT_SYMBOL_GPL(apei_exec_write_register);
+>  int apei_exec_write_register_value(struct apei_exec_context *ctx,
+>                                    struct acpi_whea_header *entry)
+>  {
+> -       int rc;
+> -
+>         ctx->value = entry->value;
+> -       rc = apei_exec_write_register(ctx, entry);
+> +       return apei_exec_write_register(ctx, entry);
+>
+> -       return rc;
+>  }
+>  EXPORT_SYMBOL_GPL(apei_exec_write_register_value);
+>
+> --
+> 2.25.1
+>

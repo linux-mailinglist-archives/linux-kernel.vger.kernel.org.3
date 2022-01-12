@@ -2,99 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C8F48BF91
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C96848BFA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 09:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351450AbiALINO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 03:13:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237993AbiALINK (ORCPT
+        id S237609AbiALIOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 03:14:03 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40782 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237613AbiALIOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 03:13:10 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655C4C06173F;
-        Wed, 12 Jan 2022 00:13:10 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id e3so2541981lfc.9;
-        Wed, 12 Jan 2022 00:13:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ui0cHnkj5I0HD2fe+MzyyLDDYFQT+ppgbg9aYqgOGaQ=;
-        b=PK01xfrMmh5kecd+m8mNSyqTT/hhuRPndmcj70so55KnrdpEXwL/6KoItu7rAZL/XF
-         RaSCIa8OkGbCcjUUaLcWfiDXQ+mzw6SxdTQJSmYPC4H/spPzuwMh+cIiy4B9lFaLIap9
-         ASo4kJFV/AsFC+rBGLtIDCClJUKOUQsxcKueaQ224s1SCZXGqx6dk8rNWROY9JHxHQYz
-         W2DXn5kho3mqn2iXb3761ZaurglP9kmoYYLwaAMirF7FE2Ax62r+nznsvR1AMy8WVJvr
-         B7rcnUEkYcqNEGSpG3owyBKnH2waME/mbVJ3hk/uHFVdurpkpDSZbCadDDR1mCOlu47m
-         IOIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ui0cHnkj5I0HD2fe+MzyyLDDYFQT+ppgbg9aYqgOGaQ=;
-        b=JAHPE8MKY3Xj1rSWOXkV3sq0kf0P9wMWEHo9q9mXZKo47PqjVXN4HWeHdlmLji8wTG
-         OU6vHdkprg+OMDxdKC7u6gsm86eshyBBe59VnCBTfGbZ/sNYCqUf8Ll50zorfsnk+KZO
-         iU/rTNQrLZVZPh6uKbxi/4uHth6Q60dp5ofm7JlSWbuaBv3cwhiR+GmV/FW/UFh4CZCk
-         B2sSx66wE7KVpLqwU/TYKXtno3R87ozJFVUSi/QJxKpAK9CDsrsEDI+3TbTz2uR7k0J0
-         uJwFNCQ1jxIC2o7CmyHH2FQuJnp97QffWJnfFAdUa/x2adxV6aFQ+XcavKwa7j83s4ZK
-         r8ig==
-X-Gm-Message-State: AOAM530ejzck5rnUKoiDKsavurbaLgzomxQAPcgqWZM1+GjaURvn8dLW
-        oqfyRwAF1TVunhD9721iQ48=
-X-Google-Smtp-Source: ABdhPJyj7lXG9CASnnt14HBgHRh1fruIOO6aEFTwylkhyvTmZwgsEJSPtZR4Qjp3V4kzM4QEnbP/Cw==
-X-Received: by 2002:a2e:9581:: with SMTP id w1mr5744510ljh.36.1641975188762;
-        Wed, 12 Jan 2022 00:13:08 -0800 (PST)
-Received: from [192.168.2.145] (94-29-62-108.dynamic.spd-mgts.ru. [94.29.62.108])
-        by smtp.googlemail.com with ESMTPSA id a6sm1519757ljm.136.2022.01.12.00.13.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 00:13:08 -0800 (PST)
-Subject: Re: [Patch V1 1/4] memory: tegra: Add support for mc interrupts
-To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org
-Cc:     Snikam@nvidia.com, vdumpa@nvidia.com
-References: <1641926750-27544-1-git-send-email-amhetre@nvidia.com>
- <1641926750-27544-2-git-send-email-amhetre@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <1c2dacc4-566a-929c-2100-37b6f9bece98@gmail.com>
-Date:   Wed, 12 Jan 2022 11:13:07 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 12 Jan 2022 03:14:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 269E161731;
+        Wed, 12 Jan 2022 08:14:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29354C36AEC;
+        Wed, 12 Jan 2022 08:13:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641975240;
+        bh=sVNfXg6usJJoEU9t5/A5dvhFxSpMOUHjwCWedxCuoVE=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=dCMCCg6Wotk2I1eqDR1vIv9p6OqOLo4eDqR87Hgz+Qd9zUGdf6Y9+TuFBQOLT4+gh
+         HhP/aLd3SI5j2Ma/BiJWRCz2qcV7kWqFKPDd6B0EdFoxJrGqaeTvpRir0j8INXKlCp
+         2IJdJnp1Sy3Dj/0cwZXYOcG8X5R2qZuT0aPBmCVnRpeJSeYP0H91J/f0OGmPLM7ZHn
+         Kv2ToO00Gn54GXj7XuePdBs7ozKIr9bPxqU1WRftiXI5duKtSqZ3sffsch08qOA1yl
+         aI20WJGnvmgUMhMbbMcRz/noWpUPwkj1mGHNkb4X03zu6+7UG6c7kXUQLfb37z5gek
+         u8mOpyu+eHS0w==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <1641926750-27544-2-git-send-email-amhetre@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] ath5k: fix OOB in ath5k_eeprom_read_pcal_info_5111
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <YckvDdj3mtCkDRIt@a-10-27-26-18.dynapool.vpn.nyu.edu>
+References: <YckvDdj3mtCkDRIt@a-10-27-26-18.dynapool.vpn.nyu.edu>
+To:     Zekun Shen <bruceshenzk@gmail.com>
+Cc:     bruceshenzk@gmail.com, Jiri Slaby <jirislaby@kernel.org>,
+        Nick Kossifidis <mickflemm@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, brendandg@nyu.edu
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <164197523645.14338.13517394288080922684.kvalo@kernel.org>
+Date:   Wed, 12 Jan 2022 08:13:57 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-11.01.2022 21:45, Ashish Mhetre пишет:
->  
-> @@ -765,16 +768,21 @@ static int tegra_mc_probe(struct platform_device *pdev)
->  			return err;
->  	}
->  
-> -	if (mc->soc->ops && mc->soc->ops->handle_irq) {
-> +	if (mc->soc->interrupt_ops && mc->soc->interrupt_ops->handle_irq) {
->  		mc->irq = platform_get_irq(pdev, 0);
->  		if (mc->irq < 0)
->  			return mc->irq;
->  
->  		WARN(!mc->soc->client_id_mask, "missing client ID mask for this SoC\n");
->  
-> +		/* clear any mc-errs that occurred before. */
+Zekun Shen <bruceshenzk@gmail.com> wrote:
 
-s/mc-errs/Memory Controller errors/
+> The bug was found during fuzzing. Stacktrace locates it in
+> ath5k_eeprom_convert_pcal_info_5111.
+> When none of the curve is selected in the loop, idx can go
+> up to AR5K_EEPROM_N_PD_CURVES. The line makes pd out of bound.
+> pd = &chinfo[pier].pd_curves[idx];
+> 
+> There are many OOB writes using pd later in the code. So I
+> added a sanity check for idx. Checks for other loops involving
+> AR5K_EEPROM_N_PD_CURVES are not needed as the loop index is not
+> used outside the loops.
+> 
+> The patch is NOT tested with real device.
+> 
+> The following is the fuzzing report
+> 
+> BUG: KASAN: slab-out-of-bounds in ath5k_eeprom_read_pcal_info_5111+0x126a/0x1390 [ath5k]
+> Write of size 1 at addr ffff8880174a4d60 by task modprobe/214
+> 
+> CPU: 0 PID: 214 Comm: modprobe Not tainted 5.6.0 #1
+> Call Trace:
+>  dump_stack+0x76/0xa0
+>  print_address_description.constprop.0+0x16/0x200
+>  ? ath5k_eeprom_read_pcal_info_5111+0x126a/0x1390 [ath5k]
+>  ? ath5k_eeprom_read_pcal_info_5111+0x126a/0x1390 [ath5k]
+>  __kasan_report.cold+0x37/0x7c
+>  ? ath5k_eeprom_read_pcal_info_5111+0x126a/0x1390 [ath5k]
+>  kasan_report+0xe/0x20
+>  ath5k_eeprom_read_pcal_info_5111+0x126a/0x1390 [ath5k]
+>  ? apic_timer_interrupt+0xa/0x20
+>  ? ath5k_eeprom_init_11a_pcal_freq+0xbc0/0xbc0 [ath5k]
+>  ? ath5k_pci_eeprom_read+0x228/0x3c0 [ath5k]
+>  ath5k_eeprom_init+0x2513/0x6290 [ath5k]
+>  ? ath5k_eeprom_init_11a_pcal_freq+0xbc0/0xbc0 [ath5k]
+>  ? usleep_range+0xb8/0x100
+>  ? apic_timer_interrupt+0xa/0x20
+>  ? ath5k_eeprom_read_pcal_info_2413+0x2f20/0x2f20 [ath5k]
+>  ath5k_hw_init+0xb60/0x1970 [ath5k]
+>  ath5k_init_ah+0x6fe/0x2530 [ath5k]
+>  ? kasprintf+0xa6/0xe0
+>  ? ath5k_stop+0x140/0x140 [ath5k]
+>  ? _dev_notice+0xf6/0xf6
+>  ? apic_timer_interrupt+0xa/0x20
+>  ath5k_pci_probe.cold+0x29a/0x3d6 [ath5k]
+>  ? ath5k_pci_eeprom_read+0x3c0/0x3c0 [ath5k]
+>  ? mutex_lock+0x89/0xd0
+>  ? ath5k_pci_eeprom_read+0x3c0/0x3c0 [ath5k]
+>  local_pci_probe+0xd3/0x160
+>  pci_device_probe+0x23f/0x3e0
+>  ? pci_device_remove+0x280/0x280
+>  ? pci_device_remove+0x280/0x280
+>  really_probe+0x209/0x5d0
+> 
+> Reported-by: Brendan Dolan-Gavitt <brendandg@nyu.edu>
+> Signed-off-by: Zekun Shen <bruceshenzk@gmail.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-> +		if (mc->soc->interrupt_ops->clear_interrupt)
-> +			mc->soc->interrupt_ops->clear_interrupt(mc);
+Patch applied to ath-next branch of ath.git, thanks.
 
-There is no explanation of this change neither in the code, nor in the
-commit message. Please always provide detailed descriptions for a
-non-trivial changes.
+564d4eceb97e ath5k: fix OOB in ath5k_eeprom_read_pcal_info_5111
 
-Interrupts aren't cleared intentionally by the driver, otherwise you'll
-never know about early-boot memory faults which happened before the
-probe. Hence this change is incorrect.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/YckvDdj3mtCkDRIt@a-10-27-26-18.dynapool.vpn.nyu.edu/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

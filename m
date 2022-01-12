@@ -2,77 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E76348C5DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D18148C5F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242156AbiALOUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:20:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50774 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238981AbiALOUJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:20:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8E69616C6;
-        Wed, 12 Jan 2022 14:20:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 501A0C36AE5;
-        Wed, 12 Jan 2022 14:20:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641997208;
-        bh=d2KS11k5Yjjj+nDTx0R2wRrTlCpdlCZktiY5Q59oXNY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=BgdAI7gN5enr4n57ic1pM6PwIuBlYmdXZeSEv62yy+zF6ZU+2CQwUH0HjARRLcoWm
-         Y4Ns/VROMn56/RejR1SLKcbHuJZIJCW51stJoacT4m5HTg9Wsk7Xfb7xZQzNfQQ4UV
-         cA4Iw7zxCS946UFpUBwu+ljFX9ftOLN4mSNQa9Po4b8d9nBf3C3m+/+8AqDY0IM00Z
-         85AmsTgvoScDflPdFBEpEqjb5GWNhuYDQQq0aaTN8cDwHxV1pSj1lAALHd03JaPYjJ
-         N+HF1xwCDW+1gK0MoyFqs2wYUkZ1Tm3lj6kufaEU1O67vS0/z5mJBCRSs3/WrKb5R6
-         3ln8M0zKiKexg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3738AF6079A;
-        Wed, 12 Jan 2022 14:20:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S1354106AbiALO1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:27:08 -0500
+Received: from honk.sigxcpu.org ([24.134.29.49]:40592 "EHLO honk.sigxcpu.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239105AbiALO1F (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 09:27:05 -0500
+X-Greylist: delayed 386 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Jan 2022 09:27:05 EST
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id AF483FB03;
+        Wed, 12 Jan 2022 15:20:36 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id a970IfYtB6-K; Wed, 12 Jan 2022 15:20:35 +0100 (CET)
+Date:   Wed, 12 Jan 2022 15:20:27 +0100
+From:   Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Richard Zhu <hongxing.zhu@nxp.com>, Li Jun <jun.li@nxp.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] phy: freescale: i.MX8 PHYs should depend on ARCH_MXC &&
+ ARM64
+Message-ID: <Yd7jqwG/qmkSXfPz@qwark.sigxcpu.org>
+References: <393868affd830016d35f0d9aba32ccd7098c8073.1641987369.git.geert+renesas@glider.be>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] Revert "of: net: support NVMEM cells with MAC in
- text format"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164199720822.30844.4377196587092278837.git-patchwork-notify@kernel.org>
-Date:   Wed, 12 Jan 2022 14:20:08 +0000
-References: <20220111081206.2393560-1-michael@walle.cc>
-In-Reply-To: <20220111081206.2393560-1-michael@walle.cc>
-To:     Michael Walle <michael@walle.cc>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafal@milecki.pl, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, kuba@kernel.org
+In-Reply-To: <393868affd830016d35f0d9aba32ccd7098c8073.1641987369.git.geert+renesas@glider.be>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Tue, 11 Jan 2022 09:12:06 +0100 you wrote:
-> This reverts commit 9ed319e411915e882bb4ed99be3ae78667a70022.
+Hi,
+On Wed, Jan 12, 2022 at 12:40:38PM +0100, Geert Uytterhoeven wrote:
+> The Freescale/NXP i.MX8 USB3, MIPI DSI, and PCIE PHYs are only present
+> on the NXP i.MX8 family of SoCs.  Hence wrap the config symbols for
+> these PHYs inside a check for ARCH_MXC && ARM64, to prevent asking the
+> user about these drivers when configuring a kernel without NXP i.MX SoC
+> family support.
 > 
-> We can already post process a nvmem cell value in a particular driver.
-> Instead of having yet another place to convert the values, the post
-> processing hook of the nvmem provider should be used in this case.
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Sounds good to me:
+
+Reviewed-by: Guido Günther <agx@sigxcpu.org>
+
+Cheers,
+ -- Guido
+
+> ---
+>  drivers/phy/freescale/Kconfig | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+> diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
+> index c3669c28ea9fe83a..856cbec7057d9e54 100644
+> --- a/drivers/phy/freescale/Kconfig
+> +++ b/drivers/phy/freescale/Kconfig
+> @@ -1,4 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> +
+> +if (ARCH_MXC && ARM64) || COMPILE_TEST
+> +
+>  config PHY_FSL_IMX8MQ_USB
+>  	tristate "Freescale i.MX8M USB3 PHY"
+>  	depends on OF && HAS_IOMEM
+> @@ -22,3 +25,5 @@ config PHY_FSL_IMX8M_PCIE
+>  	help
+>  	  Enable this to add support for the PCIE PHY as found on
+>  	  i.MX8M family of SOCs.
+> +
+> +endif
+> -- 
+> 2.25.1
 > 
-> [...]
-
-Here is the summary with links:
-  - [net-next] Revert "of: net: support NVMEM cells with MAC in text format"
-    https://git.kernel.org/netdev/net/c/3486eb774f9d
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-

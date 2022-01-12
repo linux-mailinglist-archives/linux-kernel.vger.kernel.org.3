@@ -2,92 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBA648C71D
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1739F48C72B
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 16:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243838AbiALPVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 10:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
+        id S1343582AbiALPZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 10:25:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240982AbiALPVU (ORCPT
+        with ESMTP id S239638AbiALPZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 10:21:20 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DB1C06173F;
-        Wed, 12 Jan 2022 07:21:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PeT2LoZXZw99I6PIg4z9VVN/0YLATJTsoI1YHe2dcKg=; b=Y2RbGA40kz18bOBofpUu+nLNyz
-        71OBT4yUrBNu1aldnyDPbWRDXY2pOatTuDqzuY4Zb3CKxogY/whi+VDJZGw27whuQhrLoJUGPPR/A
-        SMl8hhueSWk2N2dLb//FURhbOz+HrZ1jtiqoqdU4KsKaa8pXqdMSX+obvMHs0mbOBvJlwXUo/YbUP
-        eFcGHx85qsqO0uFFJMjTcv1kcrKqe2JRut633rMY8gsx7Mlz9eOUtLpk9gIOxV1OF1tGaMqhUOOoc
-        AgZvDsOnRLmSZyStd9mX7FYfN0P2CTCkhhC7ye0x6TlZUJHgS3+g1VMF7mVdj7PKrbWGsCBnrw3k0
-        ccKB8yXg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7fQt-000oy1-RE; Wed, 12 Jan 2022 15:21:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5ADFB300237;
-        Wed, 12 Jan 2022 16:21:01 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F3BCE2B33E986; Wed, 12 Jan 2022 16:21:00 +0100 (CET)
-Date:   Wed, 12 Jan 2022 16:21:00 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH v9 4/7] cgroup/cpuset: Add a new isolated cpus.partition
- type
-Message-ID: <Yd7x3P+wGCVfYtza@hirez.programming.kicks-ass.net>
-References: <20211205183220.818872-1-longman@redhat.com>
- <20211205183220.818872-5-longman@redhat.com>
+        Wed, 12 Jan 2022 10:25:19 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E77C06173F;
+        Wed, 12 Jan 2022 07:25:18 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id u21so11389076edd.5;
+        Wed, 12 Jan 2022 07:25:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jb0Aws15sUqqPPF1snX5idhvSSKTtYFJ6la0GoyCYmQ=;
+        b=GSOmQ2fuM/KZtX/L7+KQQQNTzAEr4YHKm7VoHV/pBd/JE9+kVc9ii6Z0sWSZqYeWj3
+         V0bvtZKsbt0Q4DGXohdJ1HDi8squ6Gprx8MzIG8/8WfSzG+hkJLVXqNdr5bTpSoUBC5q
+         0Zd0kRRBCPgDzYuYry7vaRMBQiN3ZSr/FNO0w4fJ9k9g9nqw8v8PdEfaaZuM8RCucS5Z
+         EVmbVhrQeH06zobwpmtSL0ykVUtCAyM5jbfH++8wL8pVrJa3Xy+b/TPu8V0XBHobTzTw
+         L9gnOInzJj0y1Nc1QD8EE1Y8GZnh5jxWsZ5B5iEEXAQ5gHh9/yTDPuQe6dVgwrkxLPNq
+         ezNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jb0Aws15sUqqPPF1snX5idhvSSKTtYFJ6la0GoyCYmQ=;
+        b=P6+zITU5r5rxmEfW+UPiVYWSLTG9wdaz1YRT7FskcMyLt5RKsg9eBiOCm0Y+q7iTpt
+         jMUtq9f5j3jjwxZmIgrHXFxXDFmzIrKSqXOCye/0lqrwrkw8my7Z/76Z3uYNIWR+irpp
+         N+K3Hk/vobbeN3jwcLVGSd8zZ/jTEyc8TbL+9Kz2TArYLZ4WdaMSEA0gydzeoRb70X8P
+         ULGO6Mruudv0lDXi10rcO8icfIH86C6DLCTw/2spzUTpSUU0yGrAxs6ZFMY7Hob5KHJ1
+         cNLnFQhHWKqncTTbXAsBl2uHtgO567Xrt5557M1ETFf5ubVtXmoaQORdTFq5hgJ7we9D
+         cqjw==
+X-Gm-Message-State: AOAM532a1qI1UoPD7F8Y0Rm6XeniclAS54eb7ugOhev/PE9H79Yu8GZ2
+        kkOH8MUBQQdnUw3pHn6cwsBlcKTe5sM0IFKbFu4=
+X-Google-Smtp-Source: ABdhPJzwJY6j8De4Ww6BiJIZ9VQo11crPFItxOnoxWjRZsAMMvg1dIOXI5gplqXeHXXi9N2T2WOqBqu+HVqgLIfVOu0=
+X-Received: by 2002:a17:907:6e0b:: with SMTP id sd11mr226344ejc.132.1642001117349;
+ Wed, 12 Jan 2022 07:25:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211205183220.818872-5-longman@redhat.com>
+References: <20220111115919.14645-1-cristian.pop@analog.com> <20220111115919.14645-2-cristian.pop@analog.com>
+In-Reply-To: <20220111115919.14645-2-cristian.pop@analog.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 12 Jan 2022 17:23:31 +0200
+Message-ID: <CAHp75VcE=Ac=DAJc2t2dp5G7CM_qRDKWencNiWmb_ijhHh4NBg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] one-bit-adc-dac: Add initial version of one bit ADC-DAC
+To:     Cristian Pop <cristian.pop@analog.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-iio <linux-iio@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 01:32:17PM -0500, Waiman Long wrote:
-> Cpuset v1 uses the sched_load_balance control file to determine if load
-> balancing should be enabled.  Cpuset v2 gets rid of sched_load_balance
-> as its use may require disabling load balancing at cgroup root.
-> 
-> For workloads that require very low latency like DPDK, the latency
-> jitters caused by periodic load balancing may exceed the desired
-> latency limit.
-> 
-> When cpuset v2 is in use, the only way to avoid this latency cost is to
-> use the "isolcpus=" kernel boot option to isolate a set of CPUs. After
-> the kernel boot, however, there is no way to add or remove CPUs from
-> this isolated set. For workloads that are more dynamic in nature, that
-> means users have to provision enough CPUs for the worst case situation
-> resulting in excess idle CPUs.
-> 
-> To address this issue for cpuset v2, a new cpuset.cpus.partition type
-> "isolated" is added which allows the creation of a cpuset partition
-> without load balancing. This will allow system administrators to
-> dynamically adjust the size of isolated partition to the current need
-> of the workload without rebooting the system.
+On Wed, Jan 12, 2022 at 11:50 AM Cristian Pop <cristian.pop@analog.com> wrote:
+>
+> This allows remote reading and writing of the GPIOs. This is useful in
+> application that run on another PC, at system level, where multiple iio
+> devices and GPIO devices are integrated together.
 
-you can, ofcourse, create lots of 1 cpu partitions, which is effectively
-what you're doing, except there was a problem with that which you also
-forgot to mention.
+Should it be called GPIO-IIO proxy or something like that?
 
+...
 
+> +/*
+
+> + * one-bit-adc-dac
+> + *
+
+These two lines make no sense.
+
+> + * Copyright 2022 Analog Devices Inc.
+> + */
+
+...
+
+> +enum ch_direction {
+> +       CH_IN,
+> +       CH_OUT,
+> +};
+
+How is it different from the corresponding GPIO flag?
+
+...
+
+> +static int one_bit_adc_dac_write_raw(struct iio_dev *indio_dev,
+> +                           struct iio_chan_spec const *chan,
+> +                           int val,
+> +                           int val2,
+> +                           long info)
+
+Can be compressed to a fewer LOCs.
+
+...
+
+> +       return sprintf(label, "%s\n", st->labels[ch]);
+
+In a few releases the sysfs_emit() is present and must be used.
+
+...
+
+> +       fwnode = dev_fwnode(device);
+
+No need. See below.
+
+...
+
+> +       child_num = device_get_child_node_count(device);
+
+Error checks?
+
+...
+
+> +       st->labels = devm_kzalloc(device, sizeof(*st->labels) * child_num, GFP_KERNEL);
+
+You should use devm_kcalloc() instead, it does slightly more than
+simple multiplication.
+
+> +       if (!st->labels)
+> +               return -ENOMEM;
+
+...
+
+> +       fwnode_for_each_child_node(fwnode, child) {
+
+device_for_each_...
+
+> +               if (fwnode_property_read_u32(child, "reg", &crt_ch))
+> +                       continue;
+> +
+> +               if (crt_ch >= num_channels)
+> +                       continue;
+> +
+> +               if (fwnode_property_read_string(child, "label", &label))
+> +                       continue;
+> +
+> +               chan = &channels[crt_ch];
+> +               st->labels[--i] = label;
+> +       }
+
+...
+
+> +MODULE_LICENSE("Dual BSD/GPL");
+> \ No newline at end of file
+
+Aiaiai.
+
+-- 
+With Best Regards,
+Andy Shevchenko

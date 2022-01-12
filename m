@@ -2,103 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF6E48BB9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81DE148BBA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 01:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346881AbiALAGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 19:06:08 -0500
-Received: from mx.socionext.com ([202.248.49.38]:6014 "EHLO mx.socionext.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233810AbiALAF7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 19:05:59 -0500
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 12 Jan 2022 09:05:58 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 859602059054;
-        Wed, 12 Jan 2022 09:05:58 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 12 Jan 2022 09:05:58 +0900
-Received: from [10.212.180.44] (unknown [10.212.180.44])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 56BA9B62A1;
-        Wed, 12 Jan 2022 09:05:56 +0900 (JST)
-Subject: Re: [patch] genirq/msi: Populate sysfs entry only once
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com
-References: <20211206210600.123171746@linutronix.de>
- <20211206210749.224917330@linutronix.de> <87leznqx2a.ffs@tglx>
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Message-ID: <1d5711be-c26d-d57b-10db-1b45d279515d@socionext.com>
-Date:   Wed, 12 Jan 2022 09:05:55 +0900
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <87leznqx2a.ffs@tglx>
-Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1347348AbiALANt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 19:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347067AbiALANm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 11 Jan 2022 19:13:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE29C06173F
+        for <linux-kernel@vger.kernel.org>; Tue, 11 Jan 2022 16:13:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCEC561601
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 00:13:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 226CDC36AE3;
+        Wed, 12 Jan 2022 00:13:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641946421;
+        bh=mYFAr0fdiwChTVqjFuOpPztelIHQR5xDLGgL3UOsfRw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=kXUSvKGM9LDqJ20N+oRPOZh8UY1BWZMx1aq4RvIvKNiRuRCB1f8iMMumIVjwHrU1o
+         ct4hEdTfo17xwK7P68EJiHoMRR3xiKTgZRWwqvmpIDIADR7OxyMjbk8Ifrc+0zdRbf
+         35cMw9cPo1/TJZuoWuMj7P9SD6U9wnKMPANMKLpz/4GiRBV+ChT2ggZgZcUCR7H20H
+         cmhbbFQGf2jn0/vWzMufYBZeopDHpTM4ksFlC8dV74SR30mO2SnZ/kk2u0qPS9xL+v
+         RWeHWrt4XEV5DJIz7/6B5SaMhk5CYVQl327SHte6m+++VHMk2CSgo+cMJh0E5+TTs/
+         79YC6jINhy+NQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 087CEF60794;
+        Wed, 12 Jan 2022 00:13:41 +0000 (UTC)
+Subject: Re: [GIT PULL] erofs updates for 5.17-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220110023303.GA26979@hsiangkao-HP-ZHAN-66-Pro-G1>
+References: <20220110023303.GA26979@hsiangkao-HP-ZHAN-66-Pro-G1>
+X-PR-Tracked-List-Id: Development of Linux EROFS file system <linux-erofs.lists.ozlabs.org>
+X-PR-Tracked-Message-Id: <20220110023303.GA26979@hsiangkao-HP-ZHAN-66-Pro-G1>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.17-rc1
+X-PR-Tracked-Commit-Id: 09c543798c3cde19aae575a0f76d5fc7c130ff18
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9149fe8ba7ff798ea1c6b1fa05eeb59f95f9a94a
+Message-Id: <164194642102.21161.13755763655607396721.pr-tracker-bot@kernel.org>
+Date:   Wed, 12 Jan 2022 00:13:41 +0000
+To:     Gao Xiang <xiang@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peng Tao <tao.peng@linux.alibaba.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Yue Hu <huyue2@yulong.com>, Liu Bo <bo.liu@linux.alibaba.com>,
+        linux-erofs@lists.ozlabs.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+The pull request you sent on Mon, 10 Jan 2022 10:33:09 +0800:
 
-Is this fix the same as below?
-https://marc.info/?l=linux-kernel&m=164061119923119&w=2
+> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.17-rc1
 
-On 2022/01/11 3:12, Thomas Gleixner wrote:
-> The MSI entries for multi-MSI are populated en bloc for the MSI
-> descriptor,
-> but the current code invokes the population inside the per interrupt loop
-> which triggers a warning in the sysfs code and causes the interrupt
-> allocation to fail.
-> 
-> Move it outside of the loop so it works correctly for single and
-> multi-MSI.
-> 
-> Fixes: bf5e758f02fc ("genirq/msi: Simplify sysfs handling")
-> Reported-by: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
->   kernel/irq/msi.c |   11 +++++------
->   1 file changed, 5 insertions(+), 6 deletions(-)
-> 
-> --- a/kernel/irq/msi.c
-> +++ b/kernel/irq/msi.c
-> @@ -887,12 +887,11 @@ int __msi_domain_alloc_irqs(struct irq_d
->   			ret = msi_init_virq(domain, virq + i, vflags);
->   			if (ret)
->   				return ret;
-> -
-> -			if (info->flags & MSI_FLAG_DEV_SYSFS) {
-> -				ret = msi_sysfs_populate_desc(dev, desc);
-> -				if (ret)
-> -					return ret;
-> -			}
-> +		}
-> +		if (info->flags & MSI_FLAG_DEV_SYSFS) {
-> +			ret = msi_sysfs_populate_desc(dev, desc);
-> +			if (ret)
-> +				return ret;
->   		}
->   		allocated++;
->   	}
-> 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9149fe8ba7ff798ea1c6b1fa05eeb59f95f9a94a
 
----
-Best Regards
-Kunihiko Hayashi
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

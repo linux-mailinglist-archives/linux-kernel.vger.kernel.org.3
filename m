@@ -2,223 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2E348C531
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC7348C539
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353753AbiALNxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:53:55 -0500
-Received: from mga03.intel.com ([134.134.136.65]:23395 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353747AbiALNxu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:53:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641995630; x=1673531630;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=N6D+qdfRvrfBawsvcXOVpGZOEyQ1qeUWtqLbbm20rqM=;
-  b=Htvwz3mY3kFU94WNJjoIhfS8icYBfEVwiY/PPcq3tdP/5IO9QBo4YEZG
-   P7EuhthmEXI0qC3oXi2C52Y3JabPDzNTIukRBuMdMyJYRY7AAIP3EN2FE
-   5uqAyJuAamnArHbIo3OSn8pyig2ciTfem98KOTGAXRslD08SOE22CV8As
-   RZKxjpdPYesqgaMztWR762tGC48haw2ICv8RoNbhM6Gay0vN5qAyRaXjw
-   bApTDP1G7jqUohRP7bZTPP8pJMkdOdk5/V/4XNqPjMZYUjrxyIszi8c0t
-   d0y08xIEH1LK7vO1Gt3wzmAjbV8U3yTafrN7/qoWNPXhl63rtWGJTnLqN
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="243692315"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="243692315"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 05:53:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="576555488"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Jan 2022 05:53:48 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n7e4R-0005tB-St; Wed, 12 Jan 2022 13:53:47 +0000
-Date:   Wed, 12 Jan 2022 21:53:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- f752214046a95ab5b8c1dedb1266e3532c735414
-Message-ID: <61dedd3f.iWnfqi13M7uRQfS9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1353762AbiALNyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:54:25 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:55880 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1353747AbiALNyT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 08:54:19 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20CAbtYb018364;
+        Wed, 12 Jan 2022 14:54:10 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=sdH0K0eSe3S08hG8n1xmryhD86m71VUW2ZVs/ElIu9U=;
+ b=wnGc49ldGz4lYlfm1lDeBhRGNoC7duO7H+5A3eUCocSE0ZqXhXf3wdcDs/xlUVm+fEYc
+ pgW5+z18yO1VR6NQFXKp70LEkwBofu+JxMTT4kaCB6TeSTeN5WObQNyj4b2NwduFWjNb
+ jn3Ti8EK1AItDmLdX5sLfcAQUf6+qYz3jhJcceSsmvbfubyJZ4sEFiOTagVC7gSTy1+I
+ 7fec/xjY6JVsnNmZhQ/FhTpdhj5rE5r77FlyCOPFHHfYqpk6cTNqqVXx28Tq1YcJ9Cds
+ x77boKCBbYBEkD/CjgGVIcSaz/IrVts5BFTu0kRoXn4X/kPuNxhn94467Hi6/aPGZqjx EA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dhssdtpuc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 14:54:10 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F0E7C10002A;
+        Wed, 12 Jan 2022 14:54:09 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E42EF235F1B;
+        Wed, 12 Jan 2022 14:54:09 +0100 (CET)
+Received: from lmecxl0573.lme.st.com (10.75.127.44) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 12 Jan
+ 2022 14:54:09 +0100
+Subject: Re: spi: stm32-qspi: Update spi registering
+To:     Lukas Wunner <lukas@wunner.de>
+CC:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
+References: <20220106132052.7227-1-patrice.chotard@foss.st.com>
+ <20220108194819.GA5467@wunner.de>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+Message-ID: <ba5de6f6-a4f0-4974-cc68-abcb62ebf96e@foss.st.com>
+Date:   Wed, 12 Jan 2022 14:54:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20220108194819.GA5467@wunner.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-12_04,2022-01-11_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: f752214046a95ab5b8c1dedb1266e3532c735414  Merge branch into tip/master: 'x86/build'
+Hi Lukas
 
-elapsed time: 5145m
+On 1/8/22 8:48 PM, Lukas Wunner wrote:
+> On Thu, Jan 06, 2022 at 02:20:52PM +0100, patrice.chotard@foss.st.com wrote:
+>> --- a/drivers/spi/spi-stm32-qspi.c
+>> +++ b/drivers/spi/spi-stm32-qspi.c
+>> @@ -784,7 +784,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+>>  	pm_runtime_enable(dev);
+>>  	pm_runtime_get_noresume(dev);
+>>  
+>> -	ret = devm_spi_register_master(dev, ctrl);
+>> +	ret = spi_register_master(ctrl);
+>>  	if (ret)
+>>  		goto err_pm_runtime_free;
+>>  
+>> @@ -817,6 +817,7 @@ static int stm32_qspi_remove(struct platform_device *pdev)
+>>  	struct stm32_qspi *qspi = platform_get_drvdata(pdev);
+>>  
+>>  	pm_runtime_get_sync(qspi->dev);
+>> +	spi_unregister_master(qspi->ctrl);
+>>  	/* disable qspi */
+>>  	writel_relaxed(0, qspi->io_base + QSPI_CR);
+>>  	stm32_qspi_dma_free(qspi);
+> 
+> NAK, this introduces a use-after-free because the "qspi" allocation
+> is freed by spi_unregister_master(), yet is subsequently accessed.
+> 
+> You need to convert the driver to devm_spi_alloc_master() to avoid that.
+> Do it in the same patch to ease backporting.
 
-configs tested: 149
-configs skipped: 3
+Ok i see, spi_unregister_controller() is releasing the controller if it wasn't
+ previously devm allocated. I will make usage of devm_spi_alloc_master as you suggested.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-m68k                             alldefconfig
-powerpc                 mpc8540_ads_defconfig
-um                                  defconfig
-mips                      fuloong2e_defconfig
-csky                             alldefconfig
-powerpc                       ppc64_defconfig
-powerpc                     taishan_defconfig
-sh                           se7780_defconfig
-nds32                            alldefconfig
-arc                          axs101_defconfig
-arc                     nsimosci_hs_defconfig
-sparc64                             defconfig
-powerpc                     tqm8541_defconfig
-i386                             alldefconfig
-alpha                               defconfig
-powerpc                mpc7448_hpc2_defconfig
-m68k                        stmark2_defconfig
-h8300                       h8s-sim_defconfig
-sh                           se7722_defconfig
-openrisc                            defconfig
-sh                            shmin_defconfig
-powerpc                      ppc40x_defconfig
-x86_64                           alldefconfig
-sh                        sh7757lcr_defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                      cm5200_defconfig
-powerpc                    sam440ep_defconfig
-sh                ecovec24-romimage_defconfig
-x86_64                              defconfig
-powerpc                      chrp32_defconfig
-m68k                            q40_defconfig
-sh                         ecovec24_defconfig
-sh                           se7750_defconfig
-arm                           u8500_defconfig
-mips                             allmodconfig
-microblaze                      mmu_defconfig
-arm                  randconfig-c002-20220109
-arm                  randconfig-c002-20220111
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a003-20220109
-i386                 randconfig-a001-20220109
-i386                 randconfig-a002-20220109
-i386                 randconfig-a006-20220109
-i386                 randconfig-a004-20220109
-i386                 randconfig-a005-20220109
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64               randconfig-a005-20220109
-x86_64               randconfig-a001-20220109
-x86_64               randconfig-a004-20220109
-x86_64               randconfig-a006-20220109
-x86_64               randconfig-a003-20220109
-x86_64               randconfig-a002-20220109
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-riscv                randconfig-r042-20220111
-arc                  randconfig-r043-20220111
-s390                 randconfig-r044-20220111
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           allyesconfig
-
-clang tested configs:
-arm                  randconfig-c002-20220109
-mips                 randconfig-c004-20220109
-i386                 randconfig-c001-20220109
-riscv                randconfig-c006-20220109
-powerpc              randconfig-c003-20220109
-x86_64               randconfig-c007-20220109
-s390                 randconfig-c005-20220109
-arm                  randconfig-c002-20220111
-x86_64                        randconfig-c007
-riscv                randconfig-c006-20220111
-powerpc              randconfig-c003-20220111
-i386                          randconfig-c001
-s390                 randconfig-c005-20220111
-mips                 randconfig-c004-20220111
-powerpc                     mpc512x_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                     loongson1c_defconfig
-arm                            mmp2_defconfig
-arm                       versatile_defconfig
-arm                         mv78xx0_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64               randconfig-a015-20220109
-x86_64               randconfig-a012-20220109
-x86_64               randconfig-a014-20220109
-x86_64               randconfig-a013-20220109
-x86_64               randconfig-a011-20220109
-x86_64               randconfig-a016-20220109
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                 randconfig-a012-20220109
-i386                 randconfig-a016-20220109
-i386                 randconfig-a015-20220109
-i386                 randconfig-a014-20220109
-i386                 randconfig-a011-20220109
-i386                 randconfig-a013-20220109
-hexagon              randconfig-r041-20220109
-riscv                randconfig-r042-20220109
-hexagon              randconfig-r045-20220109
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> Please add a stable designation and a Fixes: tag.  Chances are the patch
+> needs to be backported all the way back to the release when the driver
+> was first introduced.
+> 
+> Thanks,
+> 
+> Lukas
+> 
+Thanks
+Patrice

@@ -2,120 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 573B148CDED
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 165D248CDFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 22:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbiALVkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 16:40:32 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.167]:45193 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233472AbiALVkV (ORCPT
+        id S233615AbiALVpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 16:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230245AbiALVpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 16:40:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1642023600;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=C9K3tsw1DVfAhcGDUvIMCIJJwfXNhxlv/0SrOmFPm/o=;
-    b=jLREmipLG+n1fMmuQS5UQZRs14UIigNgWXU96Mknv4q3f3yqdCTbUjhCbCX2+g4oJv
-    APnvI2q57IpsHWdgAb+94CJ6tGiHD1jJMeBG4ovUt0opPqwthTjAx1g7bBBZamsEA0N8
-    1k3SLegZtCMHxm079QNlfreM3BiGaMPFu1MOFaTxU7CkoiktQ1SJWa0CYNCgUBoKxFTd
-    cIOLAQxrSKgK0Ex0OsutkFnJXNeH+S0RjsBRkfNVrS8hT/C2zq36GS5yAGUfXr6uYR+A
-    WTYw34/tHlxMXNl/Al/R7GRRHLB8ZW+NDZGUYYEPCnAKvNlxYKyL7egSvMUQ8m99HQx6
-    Z8RQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrK85lg=="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 47.37.6 AUTH)
-    with ESMTPSA id h68d06y0CLdxbrB
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 12 Jan 2022 22:39:59 +0100 (CET)
-Date:   Wed, 12 Jan 2022 22:39:53 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH 09/15] rpmsg: smd: Drop unnecessary condition for channel
- creation
-Message-ID: <Yd9KebiZUjTuHtIM@gerhold.net>
-References: <20220112194118.178026-1-luca@z3ntu.xyz>
- <20220112194118.178026-10-luca@z3ntu.xyz>
+        Wed, 12 Jan 2022 16:45:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A93C06173F;
+        Wed, 12 Jan 2022 13:45:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA6BCB8211C;
+        Wed, 12 Jan 2022 21:45:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6540C36AE5;
+        Wed, 12 Jan 2022 21:45:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642023943;
+        bh=Rl4cYWMV8h1J8XxpmCmzqZfaoBMwLhpNARBfd20DoT4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Khszb13U1jmu+m7bsIzdnnnT1iCYGXg5GGE42/oJuMQsK9Yn6UuauPQmmihxCed8g
+         I1F6FNxWdahiv8HObXLZ1MgG9aNbNh1vuWd5lPBPEE8jOf+os+a0Eg3ZNc61OeDpAd
+         oG1pZPxuhBAj0VIDmNNIk5GiF3ZYFM98qq+jWT/t93oYg9ih3f230JowrUn42Y60WL
+         bkt6CNPh+5WsNOS7M+9MpTJWTFF/zRWDIyY+MuNMqob1T2eWMhLpwtYRPlw8g7cffu
+         gO+N6rZqa7cTguyMABuPC7x4dDwKst9lAVidnA7ik+1nWq+j4fbnhftwUHOLMDmzq6
+         MQ+g/36gi+i7A==
+Date:   Wed, 12 Jan 2022 21:45:25 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        platform-driver-x86@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <Yd9L9SZ+g13iyKab@sirena.org.uk>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+ <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bKSGz4pQDpFpvPus"
 Content-Disposition: inline
-In-Reply-To: <20220112194118.178026-10-luca@z3ntu.xyz>
+In-Reply-To: <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+X-Cookie: Bridge ahead.  Pay troll.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-+Cc Srinivas
+--bKSGz4pQDpFpvPus
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 12, 2022 at 08:40:58PM +0100, Luca Weiss wrote:
-> From: Vladimir Lypak <vladimir.lypak@gmail.com>
-> 
-> RPM Firmware on variety of newer SoCs such as MSM8917 (also likely
-> MSM8937, MSM8940, MSM8952), MSM8953 and on some MSM8916 devices) doesn't
-> initiate opening of the SMD channel if it was previously opened by
-> bootloader. This doesn't allow probing of smd-rpm driver on such devices
-> because there is a check that requires RPM this behaviour.
-> 
-> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+On Wed, Jan 12, 2022 at 10:31:21PM +0100, Uwe Kleine-K=F6nig wrote:
+> On Wed, Jan 12, 2022 at 11:27:02AM +0100, Geert Uytterhoeven wrote:
 
-This is effectively a "Revert "Revert "rpmsg: smd: Create device for all
-channels""":
+(Do we really need *all* the CCs here?)
 
-https://lore.kernel.org/linux-arm-msm/20171212235857.10432-3-bjorn.andersson@linaro.org/
-https://lore.kernel.org/linux-arm-msm/20180315181244.8859-1-bjorn.andersson@linaro.org/
+> That convinces me, that platform_get_irq_optional() is a bad name. The
+> only difference to platform_get_irq is that it's silent. And returning
+> a dummy irq value (which would make it aligned with the other _optional
+> functions) isn't possible.
 
-Won't this cause the same regression reported by Srinivas again?
+There is regulator_get_optional() which is I believe the earliest of
+these APIs, it doesn't return a dummy either (and is silent too) - this
+is because regulator_get() does return a dummy since it's the vastly
+common case that regulators must be physically present and them not
+being found is due to there being an error in the system description.
+It's unfortunate that we've ended up with these two different senses for
+_optional(), people frequently get tripped up by it.
 
-Thanks,
-Stephan
+> > To me it sounds much more logical for the driver to check if an
+> > optional irq is non-zero (available) or zero (not available), than to
+> > sprinkle around checks for -ENXIO. In addition, you have to remember
+> > that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
+> > (or some other error code) to indicate absence. I thought not having
+> > to care about the actual error code was the main reason behind the
+> > introduction of the *_optional() APIs.
 
-> ---
->  drivers/rpmsg/qcom_smd.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
-> index 8da1b5cb31b3..6a01ef932b01 100644
-> --- a/drivers/rpmsg/qcom_smd.c
-> +++ b/drivers/rpmsg/qcom_smd.c
-> @@ -1280,19 +1280,13 @@ static void qcom_channel_state_worker(struct work_struct *work)
->  	unsigned long flags;
->  
->  	/*
-> -	 * Register a device for any closed channel where the remote processor
-> -	 * is showing interest in opening the channel.
-> +	 * Register a device for any closed channel.
->  	 */
->  	spin_lock_irqsave(&edge->channels_lock, flags);
->  	list_for_each_entry(channel, &edge->channels, list) {
->  		if (channel->state != SMD_CHANNEL_CLOSED)
->  			continue;
->  
-> -		remote_state = GET_RX_CHANNEL_INFO(channel, state);
-> -		if (remote_state != SMD_CHANNEL_OPENING &&
-> -		    remote_state != SMD_CHANNEL_OPENED)
-> -			continue;
-> -
->  		if (channel->registered)
->  			continue;
->  
-> -- 
-> 2.34.1
-> 
+> No, the main benefit of gpiod_get_optional() (and clk_get_optional()) is
+> that you can handle an absent GPIO (or clk) as if it were available.
+
+Similarly for the regulator API, kind of.
+
+--bKSGz4pQDpFpvPus
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHfS/QACgkQJNaLcl1U
+h9BO/wf/X52fQIYQFCYJDsHS4pHQDXMDv8aCyyoEen4dO7d7t6fuflAYrOGj/MXP
+UkHWhHmjH5EJrD5XQQmsOLQV5qXKD/mmvAuXQzNA/aUITdBah/r9xt3Y2nYb4+zR
+Nm3ZzFmvTZVLATEdRt39LZxBwD/gCkwQpEd1tSBKsiNsq2k9eyGs6zff3Aj5xUzC
++9zfg/GCQOESdU+jRATqvdl69QGdA5N6dPgzgIQEtecGNmx02jn8bEqmaN0SX1NZ
+zQXn1ChOAI4lWDhW4uAEnD4aF8hUN//xR2DiHIjNuGFgb7vTKdJgbI0iG2iH30Nm
+zgsgo5YMgTHurpX6yL8pMaJC54r/Pg==
+=MHmO
+-----END PGP SIGNATURE-----
+
+--bKSGz4pQDpFpvPus--

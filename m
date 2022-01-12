@@ -2,209 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B632A48C542
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D140B48C549
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 14:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353784AbiALNzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 08:55:04 -0500
-Received: from mail-ua1-f49.google.com ([209.85.222.49]:41851 "EHLO
-        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353747AbiALNzA (ORCPT
+        id S1353800AbiALNzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 08:55:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353765AbiALNzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:55:00 -0500
-Received: by mail-ua1-f49.google.com with SMTP id p37so4867312uae.8;
-        Wed, 12 Jan 2022 05:54:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=liYNFdlsWo55pmV9ntmO9rGWUh5k4VTb3DRABECHgIo=;
-        b=Ce9z+0RhpEuDwV49z9nysFRxmar8MkdptVAlCU6Y1S6jDEdZJrirfhY0HMauE36KcG
-         Kne+ZSRn8NJAc80uvWUtgx86qozGED/YeDYsJkye7Q2CzapDAFaZ4r7rw9sgK0wUHpNI
-         Xg2+KPaE7rWILdGcFo2asnJy67cbHa6WppoJONwlvmWAtx0ugj/YQr4U8bCVvMNEm377
-         eQOr7tvZqOeMR68KOmpFA2V9xrBRefmQ6L+FANi8r1EguceteAD6dgw0ChQ3YaKmaBuD
-         eb6Zb+ZBoMylYBxtwaq5lI/h98jLnOTgKvfLuLbTmXdYBNOQxGumAyIkEdiEOVhuNFlE
-         5N6A==
-X-Gm-Message-State: AOAM5311zYeLx9/x9lUBAcsekjlNLX25NBaoUmOFqW9iria8gwaHsJKR
-        CiLgNacN3wmxfsC6r0z+4vdU+H5VKQiRzGNr
-X-Google-Smtp-Source: ABdhPJwnR+euX9sbAHp/A8jaywC6gBn9cqzMbafXfQIkM8VHORFCZAgtddrIuQoBO+XtvbsKhHh1Dw==
-X-Received: by 2002:a67:24c3:: with SMTP id k186mr4141265vsk.74.1641995697787;
-        Wed, 12 Jan 2022 05:54:57 -0800 (PST)
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
-        by smtp.gmail.com with ESMTPSA id w62sm7361401vkd.47.2022.01.12.05.54.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 05:54:57 -0800 (PST)
-Received: by mail-vk1-f179.google.com with SMTP id w206so1693955vkd.10;
-        Wed, 12 Jan 2022 05:54:57 -0800 (PST)
-X-Received: by 2002:ac5:c967:: with SMTP id t7mr4740789vkm.20.1641995696856;
- Wed, 12 Jan 2022 05:54:56 -0800 (PST)
+        Wed, 12 Jan 2022 08:55:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2292C061748
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 05:55:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4062E60DCE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 13:55:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00F03C36AEA;
+        Wed, 12 Jan 2022 13:55:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641995735;
+        bh=Z5lhLj7cTxwb580kLBdUVXd7cpZo5KXwzpQUv1nnKvg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Tjb7GQnB5O4aEO/COOApWpi70TYhoWErs7MYlEqMHdRiEaxtOrgGkxdB3aYOyXRKD
+         Ld82lKhp1T+cGYJbMW1tkLr5YNIetHLG/yTfnmDHbwj7m6ZgZV2ydcSFVWjN23fGcW
+         1LaYFznR8U4BaqLAx7CIjAGmetKc2teAXbrWkn/g=
+Date:   Wed, 12 Jan 2022 14:55:32 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>
+Subject: [GIT PULL] Driver core changes for 5.17-rc1
+Message-ID: <Yd7d1E/0k0IIEl0G@kroah.com>
 MIME-Version: 1.0
-References: <20220110195449.12448-1-s.shtylyov@omp.ru> <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220110201014.mtajyrfcfznfhyqm@pengutronix.de> <YdyilpjC6rtz6toJ@lunn.ch>
- <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
- <20220112085009.dbasceh3obfok5dc@pengutronix.de> <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <Yd7Z3Qwevb/lEwQZ@lunn.ch>
-In-Reply-To: <Yd7Z3Qwevb/lEwQZ@lunn.ch>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 12 Jan 2022 14:54:44 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV2cGvqMppwt9xhpze=pcnHfTozDZMjwT1DkivLD+_nbQ@mail.gmail.com>
-Message-ID: <CAMuHMdV2cGvqMppwt9xhpze=pcnHfTozDZMjwT1DkivLD+_nbQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Auger <eric.auger@redhat.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        openipmi-developer@lists.sourceforge.net,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6:
 
-On Wed, Jan 12, 2022 at 2:38 PM Andrew Lunn <andrew@lunn.ch> wrote:
-> > If an optional IRQ is not present, drivers either just ignore it (e.g.
-> > for devices that can have multiple interrupts or a single muxed IRQ),
-> > or they have to resort to polling. For the latter, fall-back handling
-> > is needed elsewhere in the driver.
-> > To me it sounds much more logical for the driver to check if an
-> > optional irq is non-zero (available) or zero (not available), than to
-> > sprinkle around checks for -ENXIO. In addition, you have to remember
-> > that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
-> > (or some other error code) to indicate absence. I thought not having
-> > to care about the actual error code was the main reason behind the
-> > introduction of the *_optional() APIs.
->
-> The *_optional() functions return an error code if there has been a
-> real error which should be reported up the call stack. This excludes
-> whatever error code indicates the requested resource does not exist,
-> which can be -ENODEV etc. If the device does not exist, a magic cookie
-> is returned which appears to be a valid resources but in fact is
-> not. So the users of these functions just need to check for an error
-> code, and fail the probe if present.
+  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
 
-Agreed.
+are available in the Git repository at:
 
-Note that in most (all?) other cases, the return type is a pointer
-(e.g. to struct clk), and NULL is the magic cookie.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-5.17-rc1
 
-> You seems to be suggesting in binary return value: non-zero
-> (available) or zero (not available)
+for you to fetch changes up to c9512fd032acfe6f5198c30b6e7e52e0a7df5d31:
 
-Only in case of success. In case of a real failure, an error code
-must be returned.
+  kobject documentation: remove default_attrs information (2022-01-07 11:23:37 +0100)
 
-> This discards the error code when something goes wrong. That is useful
-> information to have, so we should not be discarding it.
+----------------------------------------------------------------
+driver core changes for 5.17-rc1
 
-No, the error code must be retained in case of failure.
+Here is the set of changes for the driver core for 5.17-rc1.
 
-> IRQ don't currently have a magic cookie value. One option would be to
-> add such a magic cookie to the subsystem. Otherwise, since 0 is
-> invalid, return 0 to indicate the IRQ does not exist.
+Lots of little things here, including:
+	- kobj_type cleanups
+	- auxiliary_bus documentation updates
+	- auxiliary_device conversions for some drivers (relevant
+	  subsystems all have provided acks for these)
+	- kernfs lock contention reduction for some workloads
+	- other tiny cleanups and changes.
 
-Exactly. And using 0 means the similar code can be used as for other
-subsystems, where NULL would be returned.
+All of these have been in linux-next for a while with no reported
+issues.
 
-The only remaining difference is the "dummy cookie can be passed
-to other functions" behavior.  Which is IMHO a valid difference,
-as unlike with e.g. clk_prepare_enable(), you do pass extra data to
-request_irq(), and sometimes you do need to handle the absence of
-the interrupt using e.g. polling.
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-> The request for a script checking this then makes sense. However, i
-> don't know how well coccinelle/sparse can track values across function
-> calls. They probably can check for:
->
->    ret = irq_get_optional()
->    if (ret < 0)
->       return ret;
->
-> A missing if < 0 statement somewhere later is very likely to be an
-> error. A comparison of <= 0 is also likely to be an error. A check for
-> > 0 before calling any other IRQ functions would be good. I'm
-> surprised such a check does not already existing in the IRQ API, but
-> there are probably historical reasons for that.
+----------------------------------------------------------------
+Andy Shevchenko (2):
+      kobject: Replace kernel.h with the necessary inclusions
+      kernfs: Replace kernel.h with the necessary inclusions
 
-There are still a few platforms where IRQ 0 does exist.
+Cai Huoqing (1):
+      driver core: platform: Make use of the helper function dev_err_probe()
 
-Gr{oetje,eeting}s,
+Daniel Scally (1):
+      device property: Check fwnode->secondary when finding properties
 
-                        Geert
+David E. Box (7):
+      PCI: Add #defines for accessing PCIe DVSEC fields
+      driver core: auxiliary bus: Add driver data helpers
+      platform/x86/intel: Move intel_pmt from MFD to Auxiliary Bus
+      RDMA/irdma: Use auxiliary_device driver data helpers
+      soundwire: intel: Use auxiliary_device driver data helpers
+      net/mlx5e: Use auxiliary_device driver data helpers
+      vdpa/mlx5: Use auxiliary_device driver data helpers
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Greg Kroah-Hartman (8):
+      kobject: remove kset from struct kset_uevent_ops callbacks
+      nilfs2: use default_groups in kobj_type
+      sh: sq: use default_groups in kobj_type
+      firmware: memmap: use default_groups in kobj_type
+      qemu_fw_cfg: use default_groups in kobj_type
+      firmware: dmi-sysfs: use default_groups in kobj_type
+      firmware: edd: remove empty default_attrs array
+      kobject documentation: remove default_attrs information
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Heiko Carstens (4):
+      topology/sysfs: export die attributes only if an architectures has support
+      topology/sysfs: export cluster attributes only if an architectures has support
+      topology/sysfs: rework book and drawer topology ifdefery
+      topology/sysfs: get rid of htmldoc warning
+
+Ingo Molnar (1):
+      headers/uninline: Uninline single-use function: kobject_has_children()
+
+Ira Weiny (7):
+      Documentation/auxiliary_bus: Clarify auxiliary_device creation
+      Documentation/auxiliary_bus: Clarify match_name
+      Documentation/auxiliary_bus: Update Auxiliary device lifespan
+      Documentation/auxiliary_bus: Clarify __auxiliary_driver_register
+      Documentation/auxiliary_bus: Add example code for module_auxiliary_driver()
+      Documentation/auxiliary_bus: Clarify the release of devices from find device
+      Documentation/auxiliary_bus: Move the text into the code
+
+Johan Hovold (1):
+      driver core: platform: document registration-failure requirement
+
+Kees Cook (1):
+      devtmpfs: mount with noexec and nosuid
+
+Kohei Tarumizu (2):
+      docs: document the sysfs ABI for "nohz_full"
+      docs: document the sysfs ABI for "isolated"
+
+Lu Baolu (2):
+      driver core: Move driver_sysfs_remove() after driver_sysfs_add()
+      driver core: Make bus notifiers in right order in really_probe()
+
+Mark-PK Tsai (1):
+      driver core: Simplify async probe test code by using ktime_ms_delta()
+
+Miaoqian Lin (1):
+      drivers/firmware: Add missing platform_device_put() in sysfb_create_simplefb
+
+Michal Suchanek (1):
+      debugfs: lockdown: Allow reading debugfs files that are not world readable
+
+Minchan Kim (2):
+      kernfs: switch global kernfs_rwsem lock to per-fs lock
+      kernfs: prevent early freeing of root node
+
+Wedson Almeida Filho (1):
+      driver core: make kobj_type constant.
+
+ Documentation/ABI/testing/sysfs-devices-system-cpu |  15 +
+ Documentation/admin-guide/cputopology.rst          |  25 +-
+ Documentation/core-api/kobject.rst                 |  16 +-
+ Documentation/driver-api/auxiliary_bus.rst         | 236 ++----------
+ .../translations/zh_CN/core-api/kobject.rst        |  12 +-
+ MAINTAINERS                                        |  12 +-
+ arch/sh/kernel/cpu/sh4/sq.c                        |   3 +-
+ drivers/base/Kconfig                               |  11 +
+ drivers/base/auxiliary.c                           | 152 +++++++-
+ drivers/base/bus.c                                 |   4 +-
+ drivers/base/core.c                                |  30 +-
+ drivers/base/dd.c                                  |   7 +-
+ drivers/base/devtmpfs.c                            |  10 +-
+ drivers/base/platform.c                            |   9 +-
+ drivers/base/property.c                            |  13 +-
+ drivers/base/test/test_async_driver_probe.c        |  14 +-
+ drivers/base/topology.c                            |  28 +-
+ drivers/dma-buf/dma-buf-sysfs-stats.c              |   2 +-
+ drivers/firmware/dmi-sysfs.c                       |   7 +-
+ drivers/firmware/edd.c                             |   9 -
+ drivers/firmware/memmap.c                          |   3 +-
+ drivers/firmware/qemu_fw_cfg.c                     |   5 +-
+ drivers/firmware/sysfb_simplefb.c                  |   8 +-
+ drivers/infiniband/hw/irdma/main.c                 |   4 +-
+ drivers/infiniband/hw/mlx5/main.c                  |   8 +-
+ drivers/mfd/Kconfig                                |  10 -
+ drivers/mfd/Makefile                               |   1 -
+ drivers/mfd/intel_pmt.c                            | 261 -------------
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c  |   8 +-
+ drivers/platform/x86/intel/Kconfig                 |  11 +
+ drivers/platform/x86/intel/Makefile                |   2 +
+ drivers/platform/x86/intel/pmt/Kconfig             |   4 +-
+ drivers/platform/x86/intel/pmt/class.c             |  21 +-
+ drivers/platform/x86/intel/pmt/class.h             |   5 +-
+ drivers/platform/x86/intel/pmt/crashlog.c          |  47 +--
+ drivers/platform/x86/intel/pmt/telemetry.c         |  46 +--
+ drivers/platform/x86/intel/vsec.c                  | 408 +++++++++++++++++++++
+ drivers/platform/x86/intel/vsec.h                  |  43 +++
+ drivers/soundwire/intel.c                          |   8 +-
+ drivers/soundwire/intel_init.c                     |   2 +-
+ drivers/vdpa/mlx5/net/mlx5_vnet.c                  |   4 +-
+ fs/debugfs/file.c                                  |   2 +-
+ fs/dlm/lockspace.c                                 |   3 +-
+ fs/gfs2/sys.c                                      |   3 +-
+ fs/kernfs/dir.c                                    | 118 +++---
+ fs/kernfs/file.c                                   |   6 +-
+ fs/kernfs/inode.c                                  |  22 +-
+ fs/kernfs/mount.c                                  |  15 +-
+ fs/kernfs/symlink.c                                |   5 +-
+ fs/nilfs2/sysfs.c                                  |  13 +-
+ include/linux/auxiliary_bus.h                      | 174 +++++++++
+ include/linux/kernfs.h                             |   6 +-
+ include/linux/kobject.h                            |  34 +-
+ include/linux/topology.h                           |  25 ++
+ include/uapi/linux/pci_regs.h                      |   4 +
+ kernel/params.c                                    |   4 +-
+ lib/kobject.c                                      |   8 +-
+ lib/kobject_uevent.c                               |   6 +-
+ 58 files changed, 1217 insertions(+), 755 deletions(-)
+ delete mode 100644 drivers/mfd/intel_pmt.c
+ create mode 100644 drivers/platform/x86/intel/vsec.c
+ create mode 100644 drivers/platform/x86/intel/vsec.h

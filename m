@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE1148C2BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0E548C2CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 12:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352714AbiALLCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 06:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239745AbiALLCP (ORCPT
+        id S239984AbiALLEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 06:04:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24522 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239350AbiALLEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 06:02:15 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89760C06173F;
-        Wed, 12 Jan 2022 03:02:14 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id e3so3969070lfc.9;
-        Wed, 12 Jan 2022 03:02:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=09JJuYQHYFSNkDJz11ddv1sgJi4bBO6UP4Co8RuirbE=;
-        b=dBlGUI/+GJtOOdMTkK2Rk+J00wdWOU7MRoX7T6F6KrYadNEH+MjaHLN1LzmJ/eIpJL
-         z/FAFWKPI/PX7LN452hvOecPZU4qlKvqRH45NsdIPK/ShNLA+C5kXdzRYobLiy0x/ILZ
-         pQnQtIEp/R96tSA4+B3bgL2AesQIIJ4inLeQsdt05SJzZ9dUUw+LpJm7SEtXAzjFeETg
-         y6a3/AfNCUyhhfp1gC1VvlqUiI3ZheEcMIA7vapV6vYM4YTn49ewUo+yXQZUyOXqtM2t
-         M00XdGkNdi8W+CO6lN1cB2ycmBHBoEN8erGnoTz9lg51H6uY3qns6KlDukKSjQ2cj+Cy
-         eGVg==
+        Wed, 12 Jan 2022 06:04:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641985474;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eQRmWQJO7h35wGy22fa7tdbvt7nutmZtPTdgCQaUOQQ=;
+        b=ZMk023g4XJaPW8MzWRFaY/W4dbmo8E8VbCjA82gkRaSzkJ++v615edZJOdGW4DKgPsdNi9
+        VgPnQFFPJW8/qkSALIodu0874lSzDny5suxIobURJGDWHDO9tD2kDvRCJnJf47djP24wAw
+        uwZkrw25mi/q989dSJuuzLR7GPpFhJI=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-yFlQCGPVP2alIVAGwweVMw-1; Wed, 12 Jan 2022 06:04:32 -0500
+X-MC-Unique: yFlQCGPVP2alIVAGwweVMw-1
+Received: by mail-ed1-f72.google.com with SMTP id ec25-20020a0564020d5900b003fc074c5d21so1902903edb.19
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 03:04:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=09JJuYQHYFSNkDJz11ddv1sgJi4bBO6UP4Co8RuirbE=;
-        b=rBsaXQhKti4ILUM73qsjMArBViS0uv9shCoM7d3QlxXgpnMnJGIAnIBUxgEO5tvHv/
-         tS3eROJM/ovFGpHPgUgxi+v5/FXroIn1kwCPreYPoRiOPhPe8SgcbHtaH8G6Isv5vegf
-         1crULgjqvrIuON/U3t/1RP+Sp5s86+SwkASRV8/7lKihzbwjXimWpmWy3B660InHds/k
-         WKzBD9a0S90n+HpblYntV41CEafZ9yIMIxuP7tDbJQNrAGKcUldxM5XvzAHntVv3yVQV
-         cGRB200T0/djF9N7Czl6mBcP6WLm8TnsJMozgxQ0zF1cMiFh+WwVaWVfbERlg2muMRMQ
-         MlWQ==
-X-Gm-Message-State: AOAM531TkzYpxQ9MpOZCDkaAGsvHxEXFQpMvQK6dnCIj3fm/6k7vkzAM
-        ylvFOIaSqW18LIw5SYdJg7s=
-X-Google-Smtp-Source: ABdhPJyt0wH+jA39S0j3mvW1vYjy6yhjAhFU3tVcMWRdF9T9fxMosfgsDonBUiJxwLBCD3c1JBOJFg==
-X-Received: by 2002:a05:651c:1681:: with SMTP id bd1mr5624583ljb.33.1641985332952;
-        Wed, 12 Jan 2022 03:02:12 -0800 (PST)
-Received: from [192.168.2.145] (94-29-62-108.dynamic.spd-mgts.ru. [94.29.62.108])
-        by smtp.googlemail.com with ESMTPSA id o19sm1528364ljp.58.2022.01.12.03.02.12
+        bh=eQRmWQJO7h35wGy22fa7tdbvt7nutmZtPTdgCQaUOQQ=;
+        b=DyLrYXKkIzvw5Af/LY/3Tq4Rg5YpKMBBw4T74DX7bnrx7tcONRRrgf2ykr3TeHfgPr
+         caSdLcSEhUM+cgsQg3L7dgeC7Jgi0k2jZoJcIY+149zvSclxSxl/UhP+FmW31FME9+xI
+         1ETqtXQ8Y3X975gYh+kvjAr7QN5TyUE0D1Kr27jxx3/xhQvso1qO1ubewHn7w9HPldTg
+         RBnnyDuJnjCypfDBCKTuNwZxcVkwzmKd4BEbAVe7/Ml61DFJse+iqlkrtljDlORoHq1h
+         QoiQBIskT3RgrD/ycf0CKi+PdqdV1O7CfzA1neHAdGMeyOAq4sJs8MTbCoIRrOpjZOzl
+         3R6g==
+X-Gm-Message-State: AOAM533Y+KtHKYycR8YXvisgvF7AtFHVrqliBsLN1rTqKcySc1JtGq3e
+        DQuocO83H3fxNR+ZKKY0RL/kkOedztgxzYFwwBKr8fJIrCDr7n7drP9V5zRXvYSSHuGWDMet12v
+        Fd2DVlAtrhqtbShDXhd6EVUAS
+X-Received: by 2002:a05:6402:486:: with SMTP id k6mr8580288edv.330.1641985471847;
+        Wed, 12 Jan 2022 03:04:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyLu6iWsDVwPl07dmV9nmwCMbbplxs+ZFDOgPiX/VhbSWFK2LAa03DeMHirncilimRMIa9S6A==
+X-Received: by 2002:a05:6402:486:: with SMTP id k6mr8580274edv.330.1641985471689;
+        Wed, 12 Jan 2022 03:04:31 -0800 (PST)
+Received: from ?IPV6:2003:cb:c702:4700:e25f:39eb:3cb8:1dec? (p200300cbc7024700e25f39eb3cb81dec.dip0.t-ipconnect.de. [2003:cb:c702:4700:e25f:39eb:3cb8:1dec])
+        by smtp.gmail.com with ESMTPSA id qw4sm4413621ejc.55.2022.01.12.03.04.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 03:02:12 -0800 (PST)
-Subject: Re: [Patch V1 3/4] memory: tegra: add mc-err support for T186
-To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org
-Cc:     Snikam@nvidia.com, vdumpa@nvidia.com
-References: <1641926750-27544-1-git-send-email-amhetre@nvidia.com>
- <1641926750-27544-4-git-send-email-amhetre@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <e10bffa7-3b6d-fb21-583a-1a3f907ff6b9@gmail.com>
-Date:   Wed, 12 Jan 2022 14:02:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 12 Jan 2022 03:04:31 -0800 (PST)
+Message-ID: <970ca2a4-416d-7e8f-37c7-510c5b050f4b@redhat.com>
+Date:   Wed, 12 Jan 2022 12:04:30 +0100
 MIME-Version: 1.0
-In-Reply-To: <1641926750-27544-4-git-send-email-amhetre@nvidia.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH v3 3/8] mm: migrate: allocate the right size of non
+ hugetlb or THP compound pages.
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+To:     Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>
+References: <20220105214756.91065-1-zi.yan@sent.com>
+ <20220105214756.91065-4-zi.yan@sent.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220105214756.91065-4-zi.yan@sent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-11.01.2022 21:45, Ashish Mhetre пишет:
-> +static const struct tegra_mc_error int_mc_errors[] = {
-> +	{
-> +		.int_bit = MC_INT_DECERR_EMEM,
-> +		.msg = "EMEM address decode error",
-> +		.status_reg = MC_ERR_STATUS,
-> +		.addr_reg = MC_ERR_ADR,
-> +	},
-> +	{
-> +		.int_bit = MC_INT_SECURITY_VIOLATION,
-> +		.msg = "non secure access to secure region",
-> +		.status_reg = MC_ERR_STATUS,
-> +		.addr_reg = MC_ERR_ADR,
-> +	},
-> +	{
-> +		.int_bit = MC_INT_DECERR_VPR,
-> +		.msg = "MC request violates VPR requirements",
-> +		.status_reg = MC_ERR_VPR_STATUS,
-> +		.addr_reg = MC_ERR_VPR_ADR,
-> +	},
-> +	{
-> +		.int_bit = MC_INT_SECERR_SEC,
-> +		.msg = "MC request violated SEC carveout requirements",
-> +		.status_reg = MC_ERR_SEC_STATUS,
-> +		.addr_reg = MC_ERR_SEC_ADR,
-> +	},
-> +	{
-> +		.int_bit = MC_INT_DECERR_MTS,
-> +		.msg = "MTS carveout access violation",
-> +		.status_reg = MC_ERR_MTS_STATUS,
-> +		.addr_reg = MC_ERR_MTS_ADR,
-> +	},
-> +	{
-> +		.int_bit = MC_INT_DECERR_GENERALIZED_CARVEOUT,
-> +		.msg = "GSC access violation",
-> +		.status_reg = MC_ERR_GENERALIZED_CARVEOUT_STATUS,
-> +		.addr_reg = MC_ERR_GENERALIZED_CARVEOUT_ADR,
-> +	},
-> +};
-> +
-> +static irqreturn_t tegra186_mc_handle_irq(int irq, void *data)
-> +{
-> +	struct tegra_mc *mc = data;
-> +	unsigned long status;
-> +	unsigned int bit;
-> +
-> +	status = mc_readl(mc, MC_INTSTATUS) & mc->soc->intmask;
-> +	if (!status)
-> +		return IRQ_NONE;
-> +
-> +	for_each_set_bit(bit, &status, 32) {
-> +		const char *error = int_mc_errors[bit].msg ?: "unknown";
+On 05.01.22 22:47, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> alloc_migration_target() is used by alloc_contig_range() and non-LRU
+> movable compound pages can be migrated. Current code does not allocate the
+> right page size for such pages. Check THP precisely using
+> is_transparent_huge() and add allocation support for non-LRU compound
+> pages.
 
-int_mc_errors[bit] isn't what you need and .int_bit is unused, which
-suggests that all this code doesn't work and was untested. Please don't
-send untested patches.
+IIRC, we don't have any non-lru migratable pages that are coumpound
+pages. Read: not used and not supported :)
+
+Why is this required in the context of this series?
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

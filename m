@@ -2,113 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 463B548CCFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D07248CCFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 21:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357314AbiALUPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 15:15:55 -0500
-Received: from vps-vb.mhejs.net ([37.28.154.113]:55462 "EHLO vps-vb.mhejs.net"
+        id S1357419AbiALURC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 15:17:02 -0500
+Received: from mga17.intel.com ([192.55.52.151]:56843 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350686AbiALUPy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 15:15:54 -0500
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1n7k24-0005Dj-Rb; Wed, 12 Jan 2022 21:15:44 +0100
-Message-ID: <ab3d2bda-a704-f5d3-adee-e52b7d0a4641@maciej.szmigiero.name>
-Date:   Wed, 12 Jan 2022 21:15:38 +0100
+        id S1350686AbiALUQ4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 15:16:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642018615; x=1673554615;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HXPrLKJowCfeCnB9zoarH5HpzOBs10cvTFKPDQBim2o=;
+  b=klotnpYo/PE8S5W+w1IRLP3khxojND3bmLiqZ+0BHtsNv66M1Mu20QjA
+   P/A9/r8dmCYBurPUf/tw3AnIYme1v7A2FyZk+oLQ4BKRlYTw7KUlQ1GUp
+   nRXgbGTmPPMiBSvZoPhmz4aLJJYh4080GndGyzg3jvQqoK9/e4LYYIk8W
+   6ENIWoZl3bzpjUI39L7yYJJ8cSis44snOxm7h+0USKchxgrhS64VPs0b9
+   8hflntxEEGtx5AyrBc5cfl/gK1fbOu7blc8OCzrGrWTh602R0ZxLyOjAk
+   cYnVZ86Gz1ZTsyv6duXv1BAGk4G+1Pu3esMq6Cmj31JtswGQ6xLb9rVN9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="224538064"
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="224538064"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 12:16:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
+   d="scan'208";a="472966624"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 12 Jan 2022 12:16:51 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n7k2U-0006MB-Kt; Wed, 12 Jan 2022 20:16:10 +0000
+Date:   Thu, 13 Jan 2022 04:15:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:linux-5.4.y 2563/9999]
+ arch/ia64/kernel/kprobes.c:401:24: error: implicit declaration of function
+ '__kretprobe_trampoline_handler'; did you mean 'kretprobe_trampoline'?
+Message-ID: <202201130408.tdm9swhk-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>
-References: <20220111180318.591029-1-roberto.sassu@huawei.com>
- <ab29dd6f-1301-e012-8898-9c739ca511a3@maciej.szmigiero.name>
- <b37f9c0e9bf941f0b778c6949538835d@huawei.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-In-Reply-To: <b37f9c0e9bf941f0b778c6949538835d@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.01.2022 10:16, Roberto Sassu wrote:
->> From: Maciej S. Szmigiero [mailto:mail@maciej.szmigiero.name]
->> Sent: Tuesday, January 11, 2022 9:33 PM
->> On 11.01.2022 19:03, Roberto Sassu wrote:
->>> Support for PGP keys and signatures was proposed by David long time ago,
->>> before the decision of using PKCS#7 for kernel modules signatures
->>> verification was made. After that, there has been not enough interest to
->>> support PGP too.
->>>
->>> Lately, when discussing a proposal of introducing fsverity signatures in
->>> Fedora [1], developers expressed their preference on not having a separate
->>> key for signing, which would complicate the management of the distribution.
->>> They would be more in favor of using the same PGP key, currently used for
->>> signing RPM headers, also for file-based signatures (not only fsverity, but
->>> also IMA ones).
->>
->> Aren't PGP keys simply RSA / ECC / EdDSA keys with additional metadata?
->> Can't they be unwrapped from their (complex) PGP format in userspace and
->> loaded raw into the kernel, in a similar way as they are sometimes used
->> for SSH authentication?
-> 
-> Probably, this would be possible by introducing a new asymmetric
-> key subtype parsing PGP keys and signatures in a more simple format,
-> after conversion by user space. But still, a parser would be required.
-> To be honest, I would prefer to implement (actually David did) a
-> parser following an RFC, than developing a new one.
+Hi Masami,
 
-A parser in userspace is preferred to one in kernel since if there is
-a bug somewhere its consequences are much less severe.
-And experience shows that parsers are especially prone to bugs.
-A userspace implementation can also be tightly sandboxed for extra
-security.
+FYI, the error/warning still remains.
 
-There are many existing OpenPGP parsing libraries to choose from.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+head:   0a4ce4977bbeea4560a1f32632650b388c834c8a
+commit: 77fa5e15c933a1ec812de61ad709c00aa51e96ae [2563/9999] ia64: kprobes: Use generic kretprobe trampoline handler
+config: ia64-randconfig-r002-20220112 (https://download.01.org/0day-ci/archive/20220113/202201130408.tdm9swhk-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=77fa5e15c933a1ec812de61ad709c00aa51e96ae
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.4.y
+        git checkout 77fa5e15c933a1ec812de61ad709c00aa51e96ae
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash
 
->> This will save us from having to add complex parsers (a well-known source
->> of bugs) into the kernel - I guess there aren't any plans to add an
->> in-kernel PGP Web of Trust implementation.
-> 
-> I extensively tested the implementation with an ad-hoc fault injector,
-> to see if the code can correctly handle errors. I also developed a
-> fuzzer to corrupt the data before it is read by the kernel. Finally,
-> I checked that there are not memory leaks. But I agree, there could
-> still be bugs.
-> 
-> If you mean that a key can be added to the kernel if is vouched for
-> by another key in the built-in keyring, I actually implemented this
-> (was missing in the original implementation). Some keyrings, e.g. .ima,
-> have this restriction.
-> 
-> The way this works is that, whenever you add a PGP key to the
-> kernel, the parser takes not only the public key and the user ID,
-> but also its signature by the same or another PGP key.
-> 
-> The signature is verified when the key is added to the keyring
-> with that restriction, and only if the verification is successful
-> the key can be added.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I understand but it would be great to make use as much as possible of
-the existing in-kernel signature verification mechanisms.
+All errors (new ones prefixed by >>):
 
-> Roberto
+   arch/ia64/kernel/kprobes.c: In function 'get_kprobe_inst':
+   arch/ia64/kernel/kprobes.c:325:22: warning: variable 'template' set but not used [-Wunused-but-set-variable]
+     325 |         unsigned int template;
+         |                      ^~~~~~~~
+   arch/ia64/kernel/kprobes.c: At top level:
+   arch/ia64/kernel/kprobes.c:399:15: warning: no previous prototype for 'trampoline_probe_handler' [-Wmissing-prototypes]
+     399 | int __kprobes trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~
+   arch/ia64/kernel/kprobes.c: In function 'trampoline_probe_handler':
+>> arch/ia64/kernel/kprobes.c:401:24: error: implicit declaration of function '__kretprobe_trampoline_handler'; did you mean 'kretprobe_trampoline'? [-Werror=implicit-function-declaration]
+     401 |         regs->cr_iip = __kretprobe_trampoline_handler(regs, kretprobe_trampoline, NULL);
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                        kretprobe_trampoline
+   cc1: some warnings being treated as errors
 
-Thanks,
-Maciej
 
+vim +401 arch/ia64/kernel/kprobes.c
+
+   398	
+   399	int __kprobes trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
+   400	{
+ > 401		regs->cr_iip = __kretprobe_trampoline_handler(regs, kretprobe_trampoline, NULL);
+   402		/*
+   403		 * By returning a non-zero value, we are telling
+   404		 * kprobe_handler() that we don't want the post_handler
+   405		 * to run (and have re-enabled preemption)
+   406		 */
+   407		return 1;
+   408	}
+   409	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

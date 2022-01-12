@@ -2,96 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D0148C1F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAE448C1FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 11:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352346AbiALKHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 05:07:38 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:55844
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352311AbiALKHg (ORCPT
+        id S1352356AbiALKJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 05:09:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352280AbiALKJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 05:07:36 -0500
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9322C3F1EC
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 10:07:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641982055;
-        bh=KdlgmtxP+gkPgxGJtnhitWm+fuJDdU9aOghdG1MKfgY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=T2ZlTOMQeLBbpqEvIsAS0hxdOdh9CPb1vb3qegnehsyJbJ9eCcC8xi+/WMuSdSGOX
-         x7sUAJRTwJLFhb8bI5mZgKtpgU9qUBTyI2gQtH/cBHDa9qBNRCjlYO+xEhG1RXQUHT
-         S2CWyAp3dvHsyjYD+46VK9qqSLfS3DNiQBvGcH6WiELl+l1kf8IIP7lYuupM+W9Fh/
-         IBVWHv76cSDJI7bBDrYruprNn43I97VkRzbT+QhLkxRDIeccabWaq3C9VS108xCM86
-         JnjXnEJE5wZJH/F8WNWyMs3+yde+joJkpDeg0XlV93pJQIS3UQmvGIcQfQABJ9fW+D
-         Er+erExbCTgiQ==
-Received: by mail-ed1-f71.google.com with SMTP id g11-20020a056402090b00b003f8fd1ac475so1853715edz.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:07:35 -0800 (PST)
+        Wed, 12 Jan 2022 05:09:18 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8DEC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:09:17 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso11025734pje.0
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 02:09:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=weNjN/xzHEHSDO334pDbfVWSs4mNM/PupPi9g1KN1hE=;
+        b=jiCM+hPrEi1OJLok7KC6lTf2sSpMxRXrphLjSEuFeYVPjqJR6MEuMKGdMkRiXmxFE6
+         risuvb9XncZd6rbufWNOjgZ3MpyEJu+C6u9FPQUX+wEfo8z1h7LhxwcXJs5yrgY0ORmk
+         hmzNpIXEP0HdMeZYxolP7W9PBLw7wpM34+VG2NIcPYSwqZjmfSnOvQ9NNSzcQztpxr8Y
+         TH9FGhTefEQ9rosu/FYuujV2qfcfH5hG4j2/E61TeORyjtODPMGM6MdQRm2iScSUUJG6
+         E+Kyj0qJiPi3wZ5l9rizfWxT12xfne7cj4FPqb5I8IiYsIcIDLdyEXrLwCWf7Sh4u1om
+         kLcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KdlgmtxP+gkPgxGJtnhitWm+fuJDdU9aOghdG1MKfgY=;
-        b=kCPrPp9lkLRZXSrphgsMy21k8pv8mBdFPlKpZPP3y7jtpqvDyhdN6eOXlfKVwRzZES
-         wLPtxXQFgM7k5JEIVM6d7kZ5kT7NPMQcR7dw2qbyq7qMFc0Z1qunj5kuvoUBt+iVNyzS
-         +iWrvr+zNBTSBvRYq2G3frxtqrvgwQ1aH8+vLyHeHNY4v7PeIWD0e6i2kpsiqmwmYhpA
-         8amcMhxcKrafWhSHa26OnL5Y2Vn6sOK+1rv4XTRMgEpjLyJcDBMs8dzv/ZPzyIjTSEH4
-         Tt6KXNB4EnHlR/B0sg2EXjicMsv4AFJxb6151ztcsB/0VnCi9ZDcRXteDP073BVkhEqR
-         TFGA==
-X-Gm-Message-State: AOAM5313xa+4C3t+wI9BKTWrBhIRyPOoYWzhkzt24VwmBmYt69RKq7o7
-        4CtK82xEs/l6okvUFKkELVB6eiGlSLNZL4LyQtTJK4etF3a+noEn9gXlaytCHi8ew7XZfrXLvCv
-        nN7sPmO/+I31ZAxmgrS+Xz/fQTBn+2sE8IR6Psbuaeg==
-X-Received: by 2002:a17:907:7da5:: with SMTP id oz37mr7398775ejc.586.1641982055126;
-        Wed, 12 Jan 2022 02:07:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzdUaXBJsgnJXOpWStI3VRIBs4g9c6w5851GHMpkrWcLcfgjGOZHWdQmw3wExTZW8Thm6aQ+w==
-X-Received: by 2002:a17:907:7da5:: with SMTP id oz37mr7398766ejc.586.1641982054933;
-        Wed, 12 Jan 2022 02:07:34 -0800 (PST)
-Received: from [192.168.0.29] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id go35sm4302409ejc.191.2022.01.12.02.07.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 02:07:34 -0800 (PST)
-Message-ID: <b47eba60-9d02-2901-2759-b2230087193c@canonical.com>
-Date:   Wed, 12 Jan 2022 11:07:34 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=weNjN/xzHEHSDO334pDbfVWSs4mNM/PupPi9g1KN1hE=;
+        b=f66uvyA3w6tKqSyxAFPUxjSayURJyVbRBTJn9pDiT52JWq6LXQ081x4jo+V4XNmjHm
+         cKdUDE4ASYkAfGD/z1zEnCkO6PjwG2MPvZgV6FIpJRK/FhrbJ6STZ13bQJdK2Tmie4fJ
+         D4o9+MXwG3H2+BfZ6GufPLzuxEE6cZs8vhCU6u5FQanDvya5HjNmSDkIi3sh4yNMLKeo
+         tieANK9Qa2iZTgEcHq40XDhK/+lGP7uUAFrWUlo1ZMGhm15b3WGKWpWtl0sP7CCohQFH
+         KI3CTjU8yePV5+gHO8+sSA82pXN6GWNiZ7MD8gIBYIbLDS5MzyxUUU0xbWX5VsRogVRd
+         78Uw==
+X-Gm-Message-State: AOAM530En3W0XiiQp4r4u8cUcUE5xsVmwPbQnoXwphBAnTE9gwROI37v
+        eYfHK5f6k+AR9Cky1PO/ibknRissA4nXdGfgpeszug==
+X-Google-Smtp-Source: ABdhPJwcbK22Ix9fd+ET1Pl7Cn1AzTSRRfd6vqqM6VwNy0agpUuC3dmSCsO7/PAKrF1qM5/LOorWQz4QQmZrUnz07oI=
+X-Received: by 2002:a17:902:b189:b0:149:6c45:24c with SMTP id
+ s9-20020a170902b18900b001496c45024cmr8488385plr.21.1641982157326; Wed, 12 Jan
+ 2022 02:09:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v3] nfc: st21nfca: Fix potential buffer overflows in
- EVT_TRANSACTION
-Content-Language: en-US
-To:     Jordy Zomer <jordy@pwning.systems>
-Cc:     kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20211117171706.2731410-1-jordy@pwning.systems>
- <20220111164451.3232987-1-jordy@pwning.systems>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220111164451.3232987-1-jordy@pwning.systems>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220109204105.51878-1-colin.i.king@gmail.com> <Ydtoib+OCyaPhrOH@pendragon.ideasonboard.com>
+In-Reply-To: <Ydtoib+OCyaPhrOH@pendragon.ideasonboard.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Wed, 12 Jan 2022 11:09:06 +0100
+Message-ID: <CAG3jFyu3aB0QnQfa-fu6_Zy_=R=9dnVLmW3RBXLv3bD=gUzQEA@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: adv7533: make array clock_div_by_lanes static const
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Colin Ian King <colin.i.king@gmail.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 17:44, Jordy Zomer wrote:
-> It appears that there are some buffer overflows in EVT_TRANSACTION.
-> This happens because the length parameters that are passed to memcpy
-> come directly from skb->data and are not guarded in any way.
-> 
-> Signed-off-by: Jordy Zomer <jordy@pwning.systems>
-> ---
->  drivers/nfc/st21nfca/se.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
+On Sun, 9 Jan 2022 at 23:58, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Colin,
+>
+> Thank you for the patch.
+>
+> On Sun, Jan 09, 2022 at 08:41:05PM +0000, Colin Ian King wrote:
+> > Don't populate the read-only array clock_div_by_lanes on the stack but
+> > instead it static const. Also makes the object code a little smaller.
+> >
+> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> > ---
+> >  drivers/gpu/drm/bridge/adv7511/adv7533.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/bridge/adv7511/adv7533.c b/drivers/gpu/drm/bridge/adv7511/adv7533.c
+> > index eb7579dec40a..ef6270806d1d 100644
+> > --- a/drivers/gpu/drm/bridge/adv7511/adv7533.c
+> > +++ b/drivers/gpu/drm/bridge/adv7511/adv7533.c
+> > @@ -29,7 +29,7 @@ static void adv7511_dsi_config_timing_gen(struct adv7511 *adv)
+> >       struct mipi_dsi_device *dsi = adv->dsi;
+> >       struct drm_display_mode *mode = &adv->curr_mode;
+> >       unsigned int hsw, hfp, hbp, vsw, vfp, vbp;
+> > -     u8 clock_div_by_lanes[] = { 6, 4, 3 };  /* 2, 3, 4 lanes */
+> > +     static const u8 clock_div_by_lanes[] = { 6, 4, 3 };     /* 2, 3, 4 lanes */
+>
+> It's not mandatory, but I have a tendency to declare static const
+> variable first before all mutable variables.
+>
+> >
+> >       hsw = mode->hsync_end - mode->hsync_start;
+> >       hfp = mode->hsync_start - mode->hdisplay;
+>
+> I wonder if
+>
+>         /* set pixel clock divider mode */
+>         regmap_write(adv->regmap_cec, 0x16, (12 / dsi->lanes) << 3);
+>
+> would be even better, or if it would be too much black magic. Either
+> way,
+>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-
-Looks ok.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof
+Applied to drm-misc-next.

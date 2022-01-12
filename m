@@ -2,82 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D18148C5F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2206948C5DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 15:21:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354106AbiALO1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 09:27:08 -0500
-Received: from honk.sigxcpu.org ([24.134.29.49]:40592 "EHLO honk.sigxcpu.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239105AbiALO1F (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:27:05 -0500
-X-Greylist: delayed 386 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Jan 2022 09:27:05 EST
-Received: from localhost (localhost [127.0.0.1])
-        by honk.sigxcpu.org (Postfix) with ESMTP id AF483FB03;
-        Wed, 12 Jan 2022 15:20:36 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
-Received: from honk.sigxcpu.org ([127.0.0.1])
-        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id a970IfYtB6-K; Wed, 12 Jan 2022 15:20:35 +0100 (CET)
-Date:   Wed, 12 Jan 2022 15:20:27 +0100
-From:   Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Richard Zhu <hongxing.zhu@nxp.com>, Li Jun <jun.li@nxp.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-phy@lists.infradead.org,
+        id S1347612AbiALOUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 09:20:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242224AbiALOUm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 09:20:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFED4C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 06:20:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58413615CE
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 14:20:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8FC0C36AEA;
+        Wed, 12 Jan 2022 14:20:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641997239;
+        bh=RRhmaQsH91uHTw71wtOmZx3VIMdk1PxtBkkRzyfrfzc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UYbz0uXPInouIEqplR6A9hPjOld8c0c8CYH/JiMN8KLMHaYRs4infv05/HmmzSBsy
+         po1SBDs4Pxh/Tem2uVpLaqdB+XSMuN3j897nqD6TrJB0RVGkYFuUuwalRHGeUKQ0So
+         bjJBmjTJmQ4STq2PAc3Fg4IvyphLvTiYNP2en6adwMnGieQjlaGHkNIxfEt46IOUhU
+         9n6lbhkk0ogGDrF8e/9Q5pcJc5ZNd4Ko+iXCLcdK2ffHB/zVPIpBcTLHcaqLeK/YKW
+         wtFkTJ58wtE+xizv7mbdfSsttoumIjIb1k31dsGm67fz5Fn9gcM+sz+7562dE8kwP6
+         sUH/coXQjLCQQ==
+Date:   Wed, 12 Jan 2022 14:20:34 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     cezary.rojewski@intel.com, srinivas.kandagatla@linaro.org,
+        bgoswami@codeaurora.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] phy: freescale: i.MX8 PHYs should depend on ARCH_MXC &&
- ARM64
-Message-ID: <Yd7jqwG/qmkSXfPz@qwark.sigxcpu.org>
-References: <393868affd830016d35f0d9aba32ccd7098c8073.1641987369.git.geert+renesas@glider.be>
+Subject: Re: [PATCH] ASoC: codecs: Check for error pointer after calling
+ devm_regmap_init_mmio
+Message-ID: <Yd7jsoTqhdzldOHT@sirena.org.uk>
+References: <20220111013215.494516-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yFTNbuUxyqjoLy6G"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <393868affd830016d35f0d9aba32ccd7098c8073.1641987369.git.geert+renesas@glider.be>
+In-Reply-To: <20220111013215.494516-1-jiasheng@iscas.ac.cn>
+X-Cookie: //GO.SYSIN DD *, DOODAH, DOODAH
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-On Wed, Jan 12, 2022 at 12:40:38PM +0100, Geert Uytterhoeven wrote:
-> The Freescale/NXP i.MX8 USB3, MIPI DSI, and PCIE PHYs are only present
-> on the NXP i.MX8 family of SoCs.  Hence wrap the config symbols for
-> these PHYs inside a check for ARCH_MXC && ARM64, to prevent asking the
-> user about these drivers when configuring a kernel without NXP i.MX SoC
-> family support.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Sounds good to me:
+--yFTNbuUxyqjoLy6G
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Guido Günther <agx@sigxcpu.org>
+On Tue, Jan 11, 2022 at 09:32:15AM +0800, Jiasheng Jiang wrote:
+> The devm_regmap_init_mmio() may return error pointer under certain
+> circumstances, for example the possible failure of the kzalloc() in
+> regmap_mmio_gen_context(), which is called by devm_regmap_init_mmio().
 
-Cheers,
- -- Guido
+This doesn't apply against current code, please check and resend.
 
-> ---
->  drivers/phy/freescale/Kconfig | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
-> index c3669c28ea9fe83a..856cbec7057d9e54 100644
-> --- a/drivers/phy/freescale/Kconfig
-> +++ b/drivers/phy/freescale/Kconfig
-> @@ -1,4 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
-> +
-> +if (ARCH_MXC && ARM64) || COMPILE_TEST
-> +
->  config PHY_FSL_IMX8MQ_USB
->  	tristate "Freescale i.MX8M USB3 PHY"
->  	depends on OF && HAS_IOMEM
-> @@ -22,3 +25,5 @@ config PHY_FSL_IMX8M_PCIE
->  	help
->  	  Enable this to add support for the PCIE PHY as found on
->  	  i.MX8M family of SOCs.
-> +
-> +endif
-> -- 
-> 2.25.1
-> 
+--yFTNbuUxyqjoLy6G
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHe47EACgkQJNaLcl1U
+h9Dt+gf9Eb/xv7Ke6BmtuB7TbiXVjloQqaMz+eAF1LXUtO/K/ChdrowhQSMHLeRa
+wkiUVm8zh/+rAiN9g/ZcaCECI4/yv7VIyWbgSUAEy6GCZfCsYuSAO1b0KpyQTWDd
+Nb6Gd/QNEDrOOXQN6utAWk2X0SYY5B1kaJAKjBtGDFEoRCDJ8XgD2LFjJQkjZi7O
+aHMISkOB8//AWGXkz3z9xeB3uMLmama8Chc1gV34Knvl3l3f5TJAEnJ5RnWjk5GQ
+pKFkNJ5HFCeYjHAY/+pEnHsvRwp+Nspot1O+gK3DNfbKFRMMmm+BJt6ON0dnxQtb
+0TWOLm+pZDyERLLtLl7TeYDSQwaN9g==
+=635e
+-----END PGP SIGNATURE-----
+
+--yFTNbuUxyqjoLy6G--

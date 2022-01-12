@@ -2,159 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C846F48BC59
-	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D7E48BC47
+	for <lists+linux-kernel@lfdr.de>; Wed, 12 Jan 2022 02:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347660AbiALBUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 11 Jan 2022 20:20:18 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:20362 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235700AbiALBUQ (ORCPT
+        id S1347607AbiALBQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 11 Jan 2022 20:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235242AbiALBQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 11 Jan 2022 20:20:16 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20C0O5t4023011;
-        Wed, 12 Jan 2022 01:15:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=c42CtGU/CpVjRehZZ2MVHeZM67AscNu6P87M6JA8AyU=;
- b=JE4QF4i2R+iyDN++sAxz9S67ziujTnVwlAgALgXsZcX1vnvdY+Ntbg/qKegisTjzmxxN
- BrOfepKxUQWITyWymnTCOb8QiAJqAZogBsjo9uQD6Yadv7NbUabEkUfkT3OZa5HT0wbG
- UWp/pWvhhgwKghQazp5mXMVkooM9jD9UOxy9ChtIYC2y11IZ1TpjXOpyAdj+hSdNteZd
- v6/R11ZrChpYeVFH1Exc+tsiGR36lLcaBOxA40bqShxuJS9ajhLrK6mKTjL28W2exqk1
- 6IKRg8DdSRjb17/vrq+fOCRPmTXrY17sgK9f9qoicA0bYYmH1zRyS35zyxhMrLyHtMGY Qw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhes3qc5d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jan 2022 01:15:00 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20C0tRnF017092;
-        Wed, 12 Jan 2022 01:14:59 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dhes3qc4x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jan 2022 01:14:59 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20C17x3s013496;
-        Wed, 12 Jan 2022 01:14:57 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3df28a3705-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jan 2022 01:14:57 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20C1EsS245023524
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Jan 2022 01:14:54 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B1C31A405D;
-        Wed, 12 Jan 2022 01:14:54 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 754B2A404D;
-        Wed, 12 Jan 2022 01:14:52 +0000 (GMT)
-Received: from sig-9-65-73-162.ibm.com (unknown [9.65.73.162])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 12 Jan 2022 01:14:52 +0000 (GMT)
-Message-ID: <eece68eba2beceeb410748c1f9f32162793d2057.camel@linux.ibm.com>
-Subject: Re: [PATCH v9 2/8] integrity: Introduce a Linux keyring called
- machine
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "pjones@redhat.com" <pjones@redhat.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>
-Date:   Tue, 11 Jan 2022 20:14:51 -0500
-In-Reply-To: <F1F41DB2-171A-4A6F-9AE7-E03C4D3B7DD0@oracle.com>
-References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
-         <20220105235012.2497118-3-eric.snowberg@oracle.com>
-         <883da244c04fcb07add9984859a09d7b1827880a.camel@linux.ibm.com>
-         <100B070F-7EB4-4BF7-B2B9-E5AE78D3066A@oracle.com>
-         <a384fcf8bdd9ff79456e9669fc61ab50ec4e1c55.camel@linux.ibm.com>
-         <F1F41DB2-171A-4A6F-9AE7-E03C4D3B7DD0@oracle.com>
+        Tue, 11 Jan 2022 20:16:48 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD924C06173F;
+        Tue, 11 Jan 2022 17:16:47 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id v6so1361103wra.8;
+        Tue, 11 Jan 2022 17:16:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2WFaQHwGYemgRuoryNl/kDaYw3Pbbcx3NJK2rTFSTn4=;
+        b=UaAfRHVGXaaaZp7ZnoOH8MAWPITqzOg6FEaIlht9bOWQ/hHUT2Ag8V+Cxm0eL6d7+k
+         YRcF/celrxW7rTbu89gi8QVA37GV6CWMcYdk7T+bzu6LPzX9lpFDuCqHjrnbqpDvZQ+C
+         2jLKygskhuCJgZ1y1+o4Sf0uG33sS1BwNnti5z4Y4sY5K/127mxplSblfNGjhqb7Wk2k
+         2Z/1cyJTaXbniGREbFJUTCrW5sn1j9FJ06txRGyjj+f2Oq3xAcZfTuKuF4rd5qRB0eJj
+         CrLqF/JVbSCa+1mbBUO9mGC1WQG2kaZR5jaUHDFsux7stnZQYJ9BW8J4fCPh/zILAO5+
+         Yc9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2WFaQHwGYemgRuoryNl/kDaYw3Pbbcx3NJK2rTFSTn4=;
+        b=aGXPC0pl2me+xpDHlLax0P5SHCwozNNqcfuRZObAZ4Jeb4RSvkfMDznR6ctRgZNRUb
+         8pROY3fq43vLqQWGW+7EZme46nvACmgFK4cc4nDzBlMgQRYN5lcNGoj31m1VMYnS5xHP
+         KHVr3A9PeUHfF2YbRlDoERLYDBDl6ucsTntMKjXz55NFCXFJiWhn0LHyWajZaGeHpviE
+         4AXTlfavZraL7FwzEyxM4fYjm3uGnzyVO4GRBJ9gnOe7QZ9oqLZ3pPomZYEbdGii1CJB
+         gJli/CZ61MH25yP7KzI4Bfwdb93VZq4bIrlY/hoLxTiFtkE16QX9tuVMz0hG+XLdl6Yu
+         h3Xg==
+X-Gm-Message-State: AOAM531IE3FhIyYsjCoQL9GrmDbtqbi+ySwcMjiBR1gWYjppQ+k72EbJ
+        aeDzM2vsdXzEP/3yyUcH4A6hQM9My8qFTvegJNLGKyjzxSo=
+X-Google-Smtp-Source: ABdhPJzKaDqrVJKj7598b+iGgM6svfycVAV0gRSaBb6VyM8xzLuCS4Hx8MOXrvPfzF+VVo8Y43tgi5VJah/Zxx+v5PI=
+X-Received: by 2002:a5d:5987:: with SMTP id n7mr5855481wri.1.1641950206316;
+ Tue, 11 Jan 2022 17:16:46 -0800 (PST)
+MIME-Version: 1.0
+References: <20220106234319.2067842-1-atomlin@redhat.com> <CAOMdWSJHm9bRAcrB6U+FsRiK6Fg2bbtbUH82w54VD7kbFmnVsA@mail.gmail.com>
+In-Reply-To: <CAOMdWSJHm9bRAcrB6U+FsRiK6Fg2bbtbUH82w54VD7kbFmnVsA@mail.gmail.com>
+From:   Allen <allen.lkml@gmail.com>
+Date:   Tue, 11 Jan 2022 17:16:35 -0800
+Message-ID: <CAOMdWS+Sn1sZJt8ocig5U7d7qG3N8oJBW-D1ey0qbZ3AXF-JWg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/13] module: core code clean up
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-modules@vger.kernel.org, atomlin@atomlin.com,
+        ghalat@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: v9ZfVTaGX5SLpgVQ9968umT3K05CbvOz
-X-Proofpoint-ORIG-GUID: aVHwVUm7wn-qLpmoBh9aVGHeQyc7Ibxh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-11_04,2022-01-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 clxscore=1015 suspectscore=0 mlxlogscore=999
- bulkscore=0 adultscore=0 mlxscore=0 impostorscore=0 phishscore=0
- spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201120002
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-11 at 21:26 +0000, Eric Snowberg wrote:
-> 
-> > On Jan 11, 2022, at 11:16 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > 
-> > On Mon, 2022-01-10 at 23:25 +0000, Eric Snowberg wrote:
-> >>> Jarkko, my concern is that once this version of the patch set is
-> >>> upstreamed, would limiting which keys may be loaded onto the .machine
-> >>> keyring be considered a regression?
-> >> 
-> >> 
-> >> Currently certificates built into the kernel do not have a CA restriction on them.  
-> >> IMA will trust anything in this keyring even if the CA bit is not set.  While it would 
-> >> be advisable for a kernel to be built with a CA, nothing currently enforces it. 
-> >> 
-> >> My thinking for the dropped CA restriction patches was to introduce a new Kconfig.  
-> >> This Kconfig would do the CA enforcement on the machine keyring.  However if the 
-> >> Kconfig option was not set for enforcement, it would work as it does in this series, 
-> >> plus it would allow IMA to work with non-CA keys.  This would be done by removing 
-> >> the restriction placed in this patch. Let me know your thoughts on whether this would 
-> >> be an appropriate solution.  I believe this would get around what you are identifying as 
-> >> a possible regression.
-> > 
-> > True the problem currently exists with the builtin keys, but there's a
-> > major difference between trusting the builtin keys and those being
-> > loading via MOK.  This is an integrity gap that needs to be closed and
-> > shouldn't be expanded to keys on the .machine keyring.
-> > 
-> > "plus it would allow IMA to work with non-CA keys" is unacceptable.
-> 
-> Ok, I’ll leave that part out.  Could you clarify the wording I should include in the future 
-> cover letter, which adds IMA support, on why it is unacceptable for the end-user to
-> make this decision?
+Hi Aaron,
 
-The Kconfig IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
-"help" is very clear:
+  Was the code compile tested?
 
-        help
-          Keys may be added to the IMA or IMA blacklist keyrings, if
-the
-          key is validly signed by a CA cert in the system built-in or
-          secondary trusted keyrings.
+  Unfortunately, I could not apply the series cleanly on top of the
+latest 5.17-rc1.
+  I did rebase the patches and fixed minor compile time failures as
+well a few small checkpatch errors.
+  I have pushed the series to
+https://github.com/allenpais/Linux/commits/refactor_module_v3
+  [The series now is based on
+   84bfcc0b6994 2022-01-11 Merge tag 'integrity-v5.17' of
+git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity]
 
-          Intermediate keys between those the kernel has compiled in
-and the
-          IMA keys to be added may be added to the system secondary
-keyring,
-          provided they are validly signed by a key already resident in
-the
-          built-in or secondary trusted keyrings.
+  So far I could only manage to compile test the patches. Will test it
+on BM(x86/arm) in a day or two.
 
-Mimi
+Thanks,
+- Allen
 
+
+On Tue, Jan 11, 2022 at 6:55 AM Allen <allen.lkml@gmail.com> wrote:
+>
+> Hi Aaron,
+>
+>   My apologies for not replying earlier.
+>
+>   Thank you so much for doing this. I had a very similar approach, to
+> move code out based on the
+>   flags. I will am in the process of reviewing and testing the changes
+> you have posted.
+>
+> Thanks.
+>
+> On Thu, Jan 6, 2022 at 3:43 PM Aaron Tomlin <atomlin@redhat.com> wrote:
+> >
+> > Hi Luis,
+> >
+> > As per your suggestion [1], this is an attempt to refactor and split
+> > optional code out of core module support code into separate components.
+> > Unfortunately, nothing has been thoroughly tested yet. Please let me know
+> > your thoughts.
+> >
+> > Changes since v1 [2]:
+> >
+> >   - Moved module version support code into a new file
+> >
+> > [1]: https://lore.kernel.org/lkml/YbEZ4HgSYQEPuRmS@bombadil.infradead.org/
+> > [2]: https://lore.kernel.org/lkml/20211228213041.1356334-1-atomlin@redhat.com/
+> >
+> > Aaron Tomlin (13):
+> >   module: Move all into module/
+> >   module: Simple refactor in preparation for split
+> >   module: Move livepatch support to a separate file
+> >   module: Move latched RB-tree support to a separate file
+> >   module: Move arch strict rwx support to a separate file
+> >   module: Move strict rwx support to a separate file
+> >   module: Move extra signature support out of core code
+> >   module: Move kmemleak support to a separate file
+> >   module: Move kallsyms support into a separate file
+> >   module: Move procfs support into a separate file
+> >   module: Move sysfs support into a separate file
+> >   module: Move kdb_modules list out of core code
+> >   module: Move version support into a separate file
+> >
+> >  include/linux/module.h                        |   76 +-
+> >  kernel/Makefile                               |    4 +-
+> >  kernel/debug/kdb/kdb_main.c                   |    5 +
+> >  kernel/module-internal.h                      |   31 -
+> >  kernel/module/Makefile                        |   17 +
+> >  kernel/module/arch_strict_rwx.c               |   44 +
+> >  kernel/module/debug_kmemleak.c                |   30 +
+> >  kernel/module/internal.h                      |  169 ++
+> >  kernel/module/kallsyms.c                      |  506 +++++
+> >  kernel/module/livepatch.c                     |   75 +
+> >  kernel/{module.c => module/main.c}            | 1872 +----------------
+> >  kernel/module/procfs.c                        |  111 +
+> >  .../signature.c}                              |    0
+> >  kernel/module/signing.c                       |  120 ++
+> >  kernel/module/strict_rwx.c                    |   83 +
+> >  kernel/module/sysfs.c                         |  426 ++++
+> >  kernel/module/tree_lookup.c                   |  108 +
+> >  kernel/module/version.c                       |  113 +
+> >  kernel/module_signing.c                       |   45 -
+> >  19 files changed, 1968 insertions(+), 1867 deletions(-)
+> >  delete mode 100644 kernel/module-internal.h
+> >  create mode 100644 kernel/module/Makefile
+> >  create mode 100644 kernel/module/arch_strict_rwx.c
+> >  create mode 100644 kernel/module/debug_kmemleak.c
+> >  create mode 100644 kernel/module/internal.h
+> >  create mode 100644 kernel/module/kallsyms.c
+> >  create mode 100644 kernel/module/livepatch.c
+> >  rename kernel/{module.c => module/main.c} (63%)
+> >  create mode 100644 kernel/module/procfs.c
+> >  rename kernel/{module_signature.c => module/signature.c} (100%)
+> >  create mode 100644 kernel/module/signing.c
+> >  create mode 100644 kernel/module/strict_rwx.c
+> >  create mode 100644 kernel/module/sysfs.c
+> >  create mode 100644 kernel/module/tree_lookup.c
+> >  create mode 100644 kernel/module/version.c
+> >  delete mode 100644 kernel/module_signing.c
+> >
+> > --
+> > 2.31.1
+> >
+>
+>
+> --
+>        - Allen
+
+
+
+-- 
+       - Allen

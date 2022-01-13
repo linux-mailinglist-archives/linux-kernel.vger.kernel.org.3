@@ -2,782 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9011548D082
+	by mail.lfdr.de (Postfix) with ESMTP id D9C3048D083
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 03:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231814AbiAMCle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 21:41:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbiAMCk5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 21:40:57 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71EAC06175B;
-        Wed, 12 Jan 2022 18:40:56 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso4730513otf.12;
-        Wed, 12 Jan 2022 18:40:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kFIncbn+G5xIG+MXoHKSsCj1pABa92y1v9WoBCPkPB0=;
-        b=UHUbhEcsYTj8H4LD8WCJQvLxh0ZxmX4ME5BTKxpOam0RHkk5ZX3Vq/8xyEDEGauHg2
-         jjP5RnKEu2Qw122fSfuGoe+na9TaVV5/5IrzNw4gg2xjlEjoK3LcANQp0NESdLsDW1wb
-         bOrPSrvoSjJ3dBqYMwtHh8x2LJCNRWEBCS0k6Z2udxByT50ppiyXPNvIIZey9MaIvmEo
-         A1soQDAeYj3JY9cbw7fTW+Y9RipvfL/Tls+Z/8xxGWXpDUEkVg1WGdtMlwPxesNbg+HT
-         hoxZKaVo7nLEtOjTDRkjVTbG9CfvbvnyfTMI3sLP5Ak5LBnU4lgPOnVsw0Tzk/6j0ARX
-         XNaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=kFIncbn+G5xIG+MXoHKSsCj1pABa92y1v9WoBCPkPB0=;
-        b=epgdCzZeX2DFo0vntN5az8cePr7ErI8LN1CQAwGpMm3fJZFa1VaVYcCBfeDpaHjShn
-         swUKJM7Gxi/R+Ie2Meumt7JbTIdxabUcgyCem+lNlJGQNRQKnjrsExC23gn3r0d3fsLb
-         UZ81G2mwWaNZGv0jielcw9ELsyZv13WfrDSzwMKHWyT4PAsJYAqipxMWBPGhA/WYWjqp
-         lQ2xnZexidv/8WYUAM3eOrOrHzRqa41S2X5NyYOrb8q4Dbzwqq8FLos8Cko1eayBS8e9
-         ncXxdkg1OwXZR7n/vyqDX63GNY/Z8hVv9yXlAAzdEN2Vj/eKaKn3mpmBrW+dLqHRw1iI
-         TZaQ==
-X-Gm-Message-State: AOAM530LDqQjPBdmpzPmDCMByRJ6TiQXrjTELSf35PymiObUXMWhS+E/
-        Qk8/c67jZfNlOUFivbf+0m3ZUu731RQ=
-X-Google-Smtp-Source: ABdhPJx/Vn1avvqH/695eJGFpEs/UZaWIL3lseKLnblSicS1MBejbfukidvkR85YcSeV3Fy6r4QRmA==
-X-Received: by 2002:a05:6830:349d:: with SMTP id c29mr1763593otu.379.1642041655937;
-        Wed, 12 Jan 2022 18:40:55 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c2sm402203oiw.57.2022.01.12.18.40.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 18:40:55 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 12 Jan 2022 18:40:53 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Iwona Winiarska <iwona.winiarska@intel.com>
-Cc:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Borislav Petkov <bp@alien8.de>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Zev Weiss <zweiss@equinix.com>,
-        David Muller <d.mueller@elsoft.ch>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: Re: [PATCH v5 11/13] hwmon: peci: Add dimmtemp driver
-Message-ID: <20220113024053.GA413166@roeck-us.net>
-References: <20220112230247.982212-1-iwona.winiarska@intel.com>
- <20220112230247.982212-12-iwona.winiarska@intel.com>
+        id S231778AbiAMClv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 21:41:51 -0500
+Received: from mga06.intel.com ([134.134.136.31]:21073 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231805AbiAMClY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 21:41:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642041684; x=1673577684;
+  h=to:cc:subject:references:date:mime-version:
+   content-transfer-encoding:from:message-id:in-reply-to;
+  bh=2TRqlbMLunChKaYsEtSl7g62THDdi2D+AG1qUnTuMDg=;
+  b=hPXXNHnd13RiAmobIxs2uu/TQTef9MM13Pffw7IEvh3DSHECFuwHAy8G
+   LsCPa3npmW/3C/w6yhbp84i0i4NGI/vXHL+fEoiwO2sXjE3zNQ0182nva
+   bywMKLppKXcRrbzm/h+KA6pS3sT7NbiCHf4sorcDNRuvh0Fd9fGuH3Khp
+   zpb4fZPHWx4NO47iqB8NZc7Jggwy18gPEPxxJIGLPHeCvT9b484CMjyuT
+   MUotLd+igWJ5/CKCURpl51e7lMa2SIPnAiKCieEtLfeAUPd8dQA/gBFch
+   0nbWJYvOouYtfl3VR9j7/ZanHHrAyjYI55LvZvlyTX+IcuyjBhrrBTrdA
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="304648656"
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="304648656"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 18:41:23 -0800
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="529472448"
+Received: from hhuan26-mobl1.amr.corp.intel.com (HELO hhuan26-mobl1.mshome.net) ([10.255.33.250])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-SHA; 12 Jan 2022 18:41:21 -0800
+Content-Type: text/plain; charset=iso-8859-15; format=flowed; delsp=yes
+To:     "Jarkko Sakkinen" <jarkko@kernel.org>
+Cc:     "Reinette Chatre" <reinette.chatre@intel.com>,
+        "Andy Lutomirski" <luto@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+References: <op.1fmvdehpwjvjmi@hhuan26-mobl1.mshome.net>
+ <YdmxpTVM1JG8nxQ3@iki.fi> <YdmzDy1BOHgh8CII@iki.fi> <Ydm6RiIwuh3IspRI@iki.fi>
+ <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net> <YdzjEzjF0YKn+pZ6@iki.fi>
+ <YdzjrIxrVfgrlzWH@iki.fi> <YdzldMXO2LrssnER@iki.fi> <YdzoQJknQK5r6xLK@iki.fi>
+ <op.1ftbip0cwjvjmi@hhuan26-mobl1.mshome.net> <Yd9o4BJWNtK5AxoB@iki.fi>
+Date:   Wed, 12 Jan 2022 20:41:18 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220112230247.982212-12-iwona.winiarska@intel.com>
+Content-Transfer-Encoding: 7bit
+From:   "Haitao Huang" <haitao.huang@linux.intel.com>
+Organization: Intel Corp
+Message-ID: <op.1fwxk0flwjvjmi@hhuan26-mobl1.mshome.net>
+In-Reply-To: <Yd9o4BJWNtK5AxoB@iki.fi>
+User-Agent: Opera Mail/1.0 (Win32)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 12:02:45AM +0100, Iwona Winiarska wrote:
-> Add peci-dimmtemp driver for Temperature Sensor on DIMM readings that
-> are accessible via the processor PECI interface.
-> 
-> The main use case for the driver (and PECI interface) is out-of-band
-> management, where we're able to obtain thermal readings from an external
-> entity connected with PECI, e.g. BMC on server platforms.
-> 
-> Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+On Wed, 12 Jan 2022 17:48:48 -0600, Jarkko Sakkinen <jarkko@kernel.org>  
+wrote:
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+> On Mon, Jan 10, 2022 at 09:48:15PM -0600, Haitao Huang wrote:
+>> On Mon, 10 Jan 2022 20:15:28 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+>> wrote:
+>>
+>> > On Tue, Jan 11, 2022 at 04:03:32AM +0200, Jarkko Sakkinen wrote:
+>> > > On Tue, Jan 11, 2022 at 03:55:59AM +0200, Jarkko Sakkinen wrote:
+>> > > > On Tue, Jan 11, 2022 at 03:53:26AM +0200, Jarkko Sakkinen wrote:
+>> > > > > On Mon, Jan 10, 2022 at 04:05:21PM -0600, Haitao Huang wrote:
+>> > > > > > On Sat, 08 Jan 2022 10:22:30 -0600, Jarkko Sakkinen
+>> > > <jarkko@kernel.org>
+>> > > > > > wrote:
+>> > > > > >
+>> > > > > > > On Sat, Jan 08, 2022 at 05:51:46PM +0200, Jarkko Sakkinen  
+>> wrote:
+>> > > > > > > > On Sat, Jan 08, 2022 at 05:45:44PM +0200, Jarkko Sakkinen
+>> > > wrote:
+>> > > > > > > > > On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang
+>> > > wrote:
+>> > > > > > > > > > > > > OK, so the question is: do we need both or  
+>> would a
+>> > > > > > > > mechanism just
+>> > > > > > > > > > > > to extend
+>> > > > > > > > > > > > > permissions be sufficient?
+>> > > > > > > > > > > >
+>> > > > > > > > > > > > I do believe that we need both in order to support
+>> > > pages
+>> > > > > > > > having only
+>> > > > > > > > > > > > the permissions required to support their  
+>> intended use
+>> > > > > > > > during the
+>> > > > > > > > > > > > time the
+>> > > > > > > > > > > > particular access is required. While technically  
+>> it is
+>> > > > > > > > possible to grant
+>> > > > > > > > > > > > pages all permissions they may need during their
+>> > > lifetime it
+>> > > > > > > > is safer to
+>> > > > > > > > > > > > remove permissions when no longer required.
+>> > > > > > > > > > >
+>> > > > > > > > > > > So if we imagine a run-time: how EMODPR would be
+>> > > useful, and
+>> > > > > > > > how using it
+>> > > > > > > > > > > would make things safer?
+>> > > > > > > > > > >
+>> > > > > > > > > > In scenarios of JIT compilers, once code is generated
+>> > > into RW pages,
+>> > > > > > > > > > modifying both PTE and EPCM permissions to RX would be
+>> > > a good
+>> > > > > > > > defensive
+>> > > > > > > > > > measure. In that case, EMODPR is useful.
+>> > > > > > > > >
+>> > > > > > > > > What is the exact threat we are talking about?
+>> > > > > > > >
+>> > > > > > > > To add: it should be *significantly* critical thread,
+>> > > given that not
+>> > > > > > > > supporting only EAUG would leave us only one complex call
+>> > > pattern with
+>> > > > > > > > EACCEPT involvement.
+>> > > > > > > >
+>> > > > > > > > I'd even go to suggest to leave EMODPR out of the patch
+>> > > set, and
+>> > > > > > > > introduce
+>> > > > > > > > it when there is PoC code for any of the existing run-time
+>> > > that
+>> > > > > > > > demonstrates the demand for it. Right now this way too
+>> > > speculative.
+>> > > > > > > >
+>> > > > > > > > Supporting EMODPE is IMHO by factors more critical.
+>> > > > > > >
+>> > > > > > > At least it does not protected against enclave code because
+>> > > an enclave
+>> > > > > > > can
+>> > > > > > > always choose not to EACCEPT any of the EMODPR requests. I'm
+>> > > not only
+>> > > > > > > confused here about the actual threat but also the potential
+>> > > adversary
+>> > > > > > > and
+>> > > > > > > target.
+>> > > > > > >
+>> > > > > > I'm not sure I follow your thoughts here. The sequence should
+>> > > be for enclave
+>> > > > > > to request  EMODPR in the first place through runtime to
+>> > > kernel, then to
+>> > > > > > verify with EACCEPT that the OS indeed has done EMODPR.
+>> > > > > > If enclave does not verify with EACCEPT, then its own code has
+>> > > > > > vulnerability. But this does not justify OS not providing the
+>> > > mechanism to
+>> > > > > > request EMODPR.
+>> > > > >
+>> > > > > The question is really simple: what is the threat scenario? In
+>> > > order to use
+>> > > > > the word "vulnerability", you would need one.
+>> > > > >
+>> > > > > Given the complexity of the whole dance with EMODPR it is
+>> > > mandatory to have
+>> > > > > one, in order to ack it to the mainline.
+>> > > > >
+>> > > > > > Similar to how we don't want have RWX code pages for normal  
+>> Linux
+>> > > > > > application, when an enclave loads code pages (either directly
+>> > > or JIT
+>> > > > > > compiled from high level code ) into EAUG'd page (which has
+>> > > RW), we do not
+>> > > > > > want leave pages to be RWX for code to be executable, hence
+>> > > the need of
+>> > > > > > EMODPR request OS to reduce the permissions to RX once the
+>> > > code is ready to
+>> > > > > > execute.
+>> > > > >
+>> > > > > You cannot compare *enforced* permissions outside the enclave,
+>> > > and claim that
+>> > > > > they would be equivalent to the permissions of the already
+>> > > sandboxed code
+>> > > > > inside the enclave, with permissions that are not enforced but
+>> > > are based
+>> > > > > on good will of the enclave code.
+>> > > >
+>> > > > To add, you can already do "EMODPR" by simply adjusting VMA
+>> > > permissions to be
+>> > > > more restrictive. How this would be worse than this collaboration
+>> > > based
+>> > > > thing?
+>> > >
+>> > > ... or you could even make soft version of EMODPR without using that
+>> > > opcode
+>> > > by writing an ioctl to update our xarray to allow lower permissions.
+>> > > That
+>> > > ties the hands of the process who is doing the mmap() already.
+>> >
+>> > E.g. why not just
+>> >
+>> > #define SGX_IOC_ENCLAVE_RESTRICT_PAGE_PERMISSIONS \
+>> > 	_IOW(SGX_MAGIC, 0x05, struct sgx_enclave_modify_page_permissions)
+>> > #define SGX_IOC_ENCLAVE_EXTEND_PAGE_PERMISSIONS \
+>> > 	_IOW(SGX_MAGIC, 0x06, struct sgx_enclave_modify_page_permissions)
+>> >
+>> > struct sgx_enclave_restrict_page_permissions {
+>> > 	__u64 src;
+>> > 	__u64 offset;
+>> > 	__u64 length;
+>> > 	__u64 secinfo;
+>> > 	__u64 count;
+>> > };
+>> > struct sgx_enclave_extend_page_permissions {
+>> > 	__u64 src;
+>> > 	__u64 offset;
+>> > 	__u64 length;
+>> > 	__u64 secinfo;
+>> > 	__u64 count;
+>> > };
+>> >
+>> > These would simply update the xarray and nothing else. I'd go with two
+>> > ioctls (with the necessary checks for secinfo) in order to provide  
+>> hook
+>> > up points in the future for LSMs.
+>> >
+>> > This leaves only EAUG and EMODT requiring the EACCEPT handshake.
+>> >
+>> > /Jarkko
+>> The trusted code base here is the enclave. It can't trust any code  
+>> outside
+>> for enforcement. There is also need for TLB shootdown.
+>>
+>> To answer your earlier question about threat, the threat is
+>> malicious/compromised code inside enclave. Yes, you can say the whole  
+>> thing
+>> is sand-boxed, but the runtime inside enclave could load complex upper  
+>> layer
+>> code.  Therefore the runtime needs to have a trusted mechanism to ensure
+>> code pages not writable so that there is less/no chance for compromised
+>> malicious enclave to modify existing code pages. I still consider it to  
+>> be
+>> similar to normal Linux elf-loader/dynamic linker relying on  
+>> mmap/mprotect
+>> and trusting OS to enforce permissions, but here the enclave runtime  
+>> only
+>> trust the HW provided mechanism: EMODPR to change EPCM records and  
+>> EACCEPT
+>> to verify.
+>
+> So what if:
+>
+> 1. User space does EMODPR ioctl.
+> 2. Enclave does EACCEPT.
+> 3. Enclave does EMODPE.
+>
+Could you elaborate on your exact concern here? EMODPE won't be able to  
+restrict permissions, only add, so no way to cancel what's done by EMODPR  
+if that's your concern.
 
-> ---
->  drivers/hwmon/peci/Kconfig    |  13 +
->  drivers/hwmon/peci/Makefile   |   2 +
->  drivers/hwmon/peci/dimmtemp.c | 630 ++++++++++++++++++++++++++++++++++
->  3 files changed, 645 insertions(+)
->  create mode 100644 drivers/hwmon/peci/dimmtemp.c
-> 
-> diff --git a/drivers/hwmon/peci/Kconfig b/drivers/hwmon/peci/Kconfig
-> index e10eed68d70a..9d32a57badfe 100644
-> --- a/drivers/hwmon/peci/Kconfig
-> +++ b/drivers/hwmon/peci/Kconfig
-> @@ -14,5 +14,18 @@ config SENSORS_PECI_CPUTEMP
->  	  This driver can also be built as a module. If so, the module
->  	  will be called peci-cputemp.
->  
-> +config SENSORS_PECI_DIMMTEMP
-> +	tristate "PECI DIMM temperature monitoring client"
-> +	depends on PECI
-> +	select SENSORS_PECI
-> +	select PECI_CPU
-> +	help
-> +	  If you say yes here you get support for the generic Intel PECI hwmon
-> +	  driver which provides Temperature Sensor on DIMM readings that are
-> +	  accessible via the processor PECI interface.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called peci-dimmtemp.
-> +
->  config SENSORS_PECI
->  	tristate
-> diff --git a/drivers/hwmon/peci/Makefile b/drivers/hwmon/peci/Makefile
-> index e8a0ada5ab1f..191cfa0227f3 100644
-> --- a/drivers/hwmon/peci/Makefile
-> +++ b/drivers/hwmon/peci/Makefile
-> @@ -1,5 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  
->  peci-cputemp-y := cputemp.o
-> +peci-dimmtemp-y := dimmtemp.o
->  
->  obj-$(CONFIG_SENSORS_PECI_CPUTEMP)	+= peci-cputemp.o
-> +obj-$(CONFIG_SENSORS_PECI_DIMMTEMP)	+= peci-dimmtemp.o
-> diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
-> new file mode 100644
-> index 000000000000..c8222354c005
-> --- /dev/null
-> +++ b/drivers/hwmon/peci/dimmtemp.c
-> @@ -0,0 +1,630 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +// Copyright (c) 2018-2021 Intel Corporation
-> +
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/bitops.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/module.h>
-> +#include <linux/peci.h>
-> +#include <linux/peci-cpu.h>
-> +#include <linux/units.h>
-> +#include <linux/workqueue.h>
-> +
-> +#include "common.h"
-> +
-> +#define DIMM_MASK_CHECK_DELAY_JIFFIES	msecs_to_jiffies(5000)
-> +
-> +/* Max number of channel ranks and DIMM index per channel */
-> +#define CHAN_RANK_MAX_ON_HSX	8
-> +#define DIMM_IDX_MAX_ON_HSX	3
-> +#define CHAN_RANK_MAX_ON_BDX	4
-> +#define DIMM_IDX_MAX_ON_BDX	3
-> +#define CHAN_RANK_MAX_ON_BDXD	2
-> +#define DIMM_IDX_MAX_ON_BDXD	2
-> +#define CHAN_RANK_MAX_ON_SKX	6
-> +#define DIMM_IDX_MAX_ON_SKX	2
-> +#define CHAN_RANK_MAX_ON_ICX	8
-> +#define DIMM_IDX_MAX_ON_ICX	2
-> +#define CHAN_RANK_MAX_ON_ICXD	4
-> +#define DIMM_IDX_MAX_ON_ICXD	2
-> +
-> +#define CHAN_RANK_MAX		CHAN_RANK_MAX_ON_HSX
-> +#define DIMM_IDX_MAX		DIMM_IDX_MAX_ON_HSX
-> +#define DIMM_NUMS_MAX		(CHAN_RANK_MAX * DIMM_IDX_MAX)
-> +
-> +#define CPU_SEG_MASK		GENMASK(23, 16)
-> +#define GET_CPU_SEG(x)		(((x) & CPU_SEG_MASK) >> 16)
-> +#define CPU_BUS_MASK		GENMASK(7, 0)
-> +#define GET_CPU_BUS(x)		((x) & CPU_BUS_MASK)
-> +
-> +#define DIMM_TEMP_MAX		GENMASK(15, 8)
-> +#define DIMM_TEMP_CRIT		GENMASK(23, 16)
-> +#define GET_TEMP_MAX(x)		(((x) & DIMM_TEMP_MAX) >> 8)
-> +#define GET_TEMP_CRIT(x)	(((x) & DIMM_TEMP_CRIT) >> 16)
-> +
-> +#define NO_DIMM_RETRY_COUNT_MAX	5
-> +
-> +struct peci_dimmtemp;
-> +
-> +struct dimm_info {
-> +	int chan_rank_max;
-> +	int dimm_idx_max;
-> +	u8 min_peci_revision;
-> +	int (*read_thresholds)(struct peci_dimmtemp *priv, int dimm_order,
-> +			       int chan_rank, u32 *data);
-> +};
-> +
-> +struct peci_dimm_thresholds {
-> +	long temp_max;
-> +	long temp_crit;
-> +	struct peci_sensor_state state;
-> +};
-> +
-> +enum peci_dimm_threshold_type {
-> +	temp_max_type,
-> +	temp_crit_type,
-> +};
-> +
-> +struct peci_dimmtemp {
-> +	struct peci_device *peci_dev;
-> +	struct device *dev;
-> +	const char *name;
-> +	const struct dimm_info *gen_info;
-> +	struct delayed_work detect_work;
-> +	struct {
-> +		struct peci_sensor_data temp;
-> +		struct peci_dimm_thresholds thresholds;
-> +	} dimm[DIMM_NUMS_MAX];
-> +	char **dimmtemp_label;
-> +	DECLARE_BITMAP(dimm_mask, DIMM_NUMS_MAX);
-> +	u8 no_dimm_retry_count;
-> +};
-> +
-> +static u8 __dimm_temp(u32 reg, int dimm_order)
-> +{
-> +	return (reg >> (dimm_order * 8)) & 0xff;
-> +}
-> +
-> +static int get_dimm_temp(struct peci_dimmtemp *priv, int dimm_no, long *val)
-> +{
-> +	int dimm_order = dimm_no % priv->gen_info->dimm_idx_max;
-> +	int chan_rank = dimm_no / priv->gen_info->dimm_idx_max;
-> +	int ret = 0;
-> +	u32 data;
-> +
-> +	mutex_lock(&priv->dimm[dimm_no].temp.state.lock);
-> +	if (!peci_sensor_need_update(&priv->dimm[dimm_no].temp.state))
-> +		goto skip_update;
-> +
-> +	ret = peci_pcs_read(priv->peci_dev, PECI_PCS_DDR_DIMM_TEMP, chan_rank, &data);
-> +	if (ret)
-> +		goto unlock;
-> +
-> +	priv->dimm[dimm_no].temp.value = __dimm_temp(data, dimm_order) * MILLIDEGREE_PER_DEGREE;
-> +
-> +	peci_sensor_mark_updated(&priv->dimm[dimm_no].temp.state);
-> +
-> +skip_update:
-> +	*val = priv->dimm[dimm_no].temp.value;
-> +unlock:
-> +	mutex_unlock(&priv->dimm[dimm_no].temp.state.lock);
-> +	return ret;
-> +}
-> +
-> +static int update_thresholds(struct peci_dimmtemp *priv, int dimm_no)
-> +{
-> +	int dimm_order = dimm_no % priv->gen_info->dimm_idx_max;
-> +	int chan_rank = dimm_no / priv->gen_info->dimm_idx_max;
-> +	u32 data;
-> +	int ret;
-> +
-> +	if (!peci_sensor_need_update(&priv->dimm[dimm_no].thresholds.state))
-> +		return 0;
-> +
-> +	ret = priv->gen_info->read_thresholds(priv, dimm_order, chan_rank, &data);
-> +	if (ret == -ENODATA) /* Use default or previous value */
-> +		return 0;
-> +	if (ret)
-> +		return ret;
-> +
-> +	priv->dimm[dimm_no].thresholds.temp_max = GET_TEMP_MAX(data) * MILLIDEGREE_PER_DEGREE;
-> +	priv->dimm[dimm_no].thresholds.temp_crit = GET_TEMP_CRIT(data) * MILLIDEGREE_PER_DEGREE;
-> +
-> +	peci_sensor_mark_updated(&priv->dimm[dimm_no].thresholds.state);
-> +
-> +	return 0;
-> +}
-> +
-> +static int get_dimm_thresholds(struct peci_dimmtemp *priv, enum peci_dimm_threshold_type type,
-> +			       int dimm_no, long *val)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&priv->dimm[dimm_no].thresholds.state.lock);
-> +	ret = update_thresholds(priv, dimm_no);
-> +	if (ret)
-> +		goto unlock;
-> +
-> +	switch (type) {
-> +	case temp_max_type:
-> +		*val = priv->dimm[dimm_no].thresholds.temp_max;
-> +		break;
-> +	case temp_crit_type:
-> +		*val = priv->dimm[dimm_no].thresholds.temp_crit;
-> +		break;
-> +	default:
-> +		ret = -EOPNOTSUPP;
-> +		break;
-> +	}
-> +unlock:
-> +	mutex_unlock(&priv->dimm[dimm_no].thresholds.state.lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int dimmtemp_read_string(struct device *dev,
-> +				enum hwmon_sensor_types type,
-> +				u32 attr, int channel, const char **str)
-> +{
-> +	struct peci_dimmtemp *priv = dev_get_drvdata(dev);
-> +
-> +	if (attr != hwmon_temp_label)
-> +		return -EOPNOTSUPP;
-> +
-> +	*str = (const char *)priv->dimmtemp_label[channel];
-> +
-> +	return 0;
-> +}
-> +
-> +static int dimmtemp_read(struct device *dev, enum hwmon_sensor_types type,
-> +			 u32 attr, int channel, long *val)
-> +{
-> +	struct peci_dimmtemp *priv = dev_get_drvdata(dev);
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +		return get_dimm_temp(priv, channel, val);
-> +	case hwmon_temp_max:
-> +		return get_dimm_thresholds(priv, temp_max_type, channel, val);
-> +	case hwmon_temp_crit:
-> +		return get_dimm_thresholds(priv, temp_crit_type, channel, val);
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static umode_t dimmtemp_is_visible(const void *data, enum hwmon_sensor_types type,
-> +				   u32 attr, int channel)
-> +{
-> +	const struct peci_dimmtemp *priv = data;
-> +
-> +	if (test_bit(channel, priv->dimm_mask))
-> +		return 0444;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops peci_dimmtemp_ops = {
-> +	.is_visible = dimmtemp_is_visible,
-> +	.read_string = dimmtemp_read_string,
-> +	.read = dimmtemp_read,
-> +};
-> +
-> +static int check_populated_dimms(struct peci_dimmtemp *priv)
-> +{
-> +	int chan_rank_max = priv->gen_info->chan_rank_max;
-> +	int dimm_idx_max = priv->gen_info->dimm_idx_max;
-> +	u32 chan_rank_empty = 0;
-> +	u64 dimm_mask = 0;
-> +	int chan_rank, dimm_idx, ret;
-> +	u32 pcs;
-> +
-> +	BUILD_BUG_ON(BITS_PER_TYPE(chan_rank_empty) < CHAN_RANK_MAX);
-> +	BUILD_BUG_ON(BITS_PER_TYPE(dimm_mask) < DIMM_NUMS_MAX);
-> +	if (chan_rank_max * dimm_idx_max > DIMM_NUMS_MAX) {
-> +		WARN_ONCE(1, "Unsupported number of DIMMs - chan_rank_max: %d, dimm_idx_max: %d",
-> +			  chan_rank_max, dimm_idx_max);
-> +		return -EINVAL;
-> +	}
-> +
-> +	for (chan_rank = 0; chan_rank < chan_rank_max; chan_rank++) {
-> +		ret = peci_pcs_read(priv->peci_dev, PECI_PCS_DDR_DIMM_TEMP, chan_rank, &pcs);
-> +		if (ret) {
-> +			/*
-> +			 * Overall, we expect either success or -EINVAL in
-> +			 * order to determine whether DIMM is populated or not.
-> +			 * For anything else we fall back to deferring the
-> +			 * detection to be performed at a later point in time.
-> +			 */
-> +			if (ret == -EINVAL) {
-> +				chan_rank_empty |= BIT(chan_rank);
-> +				continue;
-> +			}
-> +
-> +			return -EAGAIN;
-> +		}
-> +
-> +		for (dimm_idx = 0; dimm_idx < dimm_idx_max; dimm_idx++)
-> +			if (__dimm_temp(pcs, dimm_idx))
-> +				dimm_mask |= BIT(chan_rank * dimm_idx_max + dimm_idx);
-> +	}
-> +
-> +	/*
-> +	 * If we got all -EINVALs, it means that the CPU doesn't have any
-> +	 * DIMMs. Unfortunately, it may also happen at the very start of
-> +	 * host platform boot. Retrying a couple of times lets us make sure
-> +	 * that the state is persistent.
-> +	 */
-> +	if (chan_rank_empty == GENMASK(chan_rank_max - 1, 0)) {
-> +		if (priv->no_dimm_retry_count < NO_DIMM_RETRY_COUNT_MAX) {
-> +			priv->no_dimm_retry_count++;
-> +
-> +			return -EAGAIN;
-> +		}
-> +
-> +		return -ENODEV;
-> +	}
-> +
-> +	/*
-> +	 * It's possible that memory training is not done yet. In this case we
-> +	 * defer the detection to be performed at a later point in time.
-> +	 */
-> +	if (!dimm_mask) {
-> +		priv->no_dimm_retry_count = 0;
-> +		return -EAGAIN;
-> +	}
-> +
-> +	dev_dbg(priv->dev, "Scanned populated DIMMs: %#llx\n", dimm_mask);
-> +
-> +	bitmap_from_u64(priv->dimm_mask, dimm_mask);
-> +
-> +	return 0;
-> +}
-> +
-> +static int create_dimm_temp_label(struct peci_dimmtemp *priv, int chan)
-> +{
-> +	int rank = chan / priv->gen_info->dimm_idx_max;
-> +	int idx = chan % priv->gen_info->dimm_idx_max;
-> +
-> +	priv->dimmtemp_label[chan] = devm_kasprintf(priv->dev, GFP_KERNEL,
-> +						    "DIMM %c%d", 'A' + rank,
-> +						    idx + 1);
-> +	if (!priv->dimmtemp_label[chan])
-> +		return -ENOMEM;
-> +
-> +	return 0;
-> +}
-> +
-> +static const u32 peci_dimmtemp_temp_channel_config[] = {
-> +	[0 ... DIMM_NUMS_MAX - 1] = HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT,
-> +	0
-> +};
-> +
-> +static const struct hwmon_channel_info peci_dimmtemp_temp_channel = {
-> +	.type = hwmon_temp,
-> +	.config = peci_dimmtemp_temp_channel_config,
-> +};
-> +
-> +static const struct hwmon_channel_info *peci_dimmtemp_temp_info[] = {
-> +	&peci_dimmtemp_temp_channel,
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info peci_dimmtemp_chip_info = {
-> +	.ops = &peci_dimmtemp_ops,
-> +	.info = peci_dimmtemp_temp_info,
-> +};
-> +
-> +static int create_dimm_temp_info(struct peci_dimmtemp *priv)
-> +{
-> +	int ret, i, channels;
-> +	struct device *dev;
-> +
-> +	/*
-> +	 * We expect to either find populated DIMMs and carry on with creating
-> +	 * sensors, or find out that there are no DIMMs populated.
-> +	 * All other states mean that the platform never reached the state that
-> +	 * allows to check DIMM state - causing us to retry later on.
-> +	 */
-> +	ret = check_populated_dimms(priv);
-> +	if (ret == -ENODEV) {
-> +		dev_dbg(priv->dev, "No DIMMs found\n");
-> +		return 0;
-> +	} else if (ret) {
-> +		schedule_delayed_work(&priv->detect_work, DIMM_MASK_CHECK_DELAY_JIFFIES);
-> +		dev_dbg(priv->dev, "Deferred populating DIMM temp info\n");
-> +		return ret;
-> +	}
-> +
-> +	channels = priv->gen_info->chan_rank_max * priv->gen_info->dimm_idx_max;
-> +
-> +	priv->dimmtemp_label = devm_kzalloc(priv->dev, channels * sizeof(char *), GFP_KERNEL);
-> +	if (!priv->dimmtemp_label)
-> +		return -ENOMEM;
-> +
-> +	for_each_set_bit(i, priv->dimm_mask, DIMM_NUMS_MAX) {
-> +		ret = create_dimm_temp_label(priv, i);
-> +		if (ret)
-> +			return ret;
-> +		mutex_init(&priv->dimm[i].thresholds.state.lock);
-> +		mutex_init(&priv->dimm[i].temp.state.lock);
-> +	}
-> +
-> +	dev = devm_hwmon_device_register_with_info(priv->dev, priv->name, priv,
-> +						   &peci_dimmtemp_chip_info, NULL);
-> +	if (IS_ERR(dev)) {
-> +		dev_err(priv->dev, "Failed to register hwmon device\n");
-> +		return PTR_ERR(dev);
-> +	}
-> +
-> +	dev_dbg(priv->dev, "%s: sensor '%s'\n", dev_name(dev), priv->name);
-> +
-> +	return 0;
-> +}
-> +
-> +static void create_dimm_temp_info_delayed(struct work_struct *work)
-> +{
-> +	struct peci_dimmtemp *priv = container_of(to_delayed_work(work),
-> +						  struct peci_dimmtemp,
-> +						  detect_work);
-> +	int ret;
-> +
-> +	ret = create_dimm_temp_info(priv);
-> +	if (ret && ret != -EAGAIN)
-> +		dev_err(priv->dev, "Failed to populate DIMM temp info\n");
-> +}
-> +
-> +static void remove_delayed_work(void *_priv)
-> +{
-> +	struct peci_dimmtemp *priv = _priv;
-> +
-> +	cancel_delayed_work_sync(&priv->detect_work);
-> +}
-> +
-> +static int peci_dimmtemp_probe(struct auxiliary_device *adev, const struct auxiliary_device_id *id)
-> +{
-> +	struct device *dev = &adev->dev;
-> +	struct peci_device *peci_dev = to_peci_device(dev->parent);
-> +	struct peci_dimmtemp *priv;
-> +	int ret;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->name = devm_kasprintf(dev, GFP_KERNEL, "peci_dimmtemp.cpu%d",
-> +				    peci_dev->info.socket_id);
-> +	if (!priv->name)
-> +		return -ENOMEM;
-> +
-> +	priv->dev = dev;
-> +	priv->peci_dev = peci_dev;
-> +	priv->gen_info = (const struct dimm_info *)id->driver_data;
-> +
-> +	/*
-> +	 * This is just a sanity check. Since we're using commands that are
-> +	 * guaranteed to be supported on a given platform, we should never see
-> +	 * revision lower than expected.
-> +	 */
-> +	if (peci_dev->info.peci_revision < priv->gen_info->min_peci_revision)
-> +		dev_warn(priv->dev,
-> +			 "Unexpected PECI revision %#x, some features may be unavailable\n",
-> +			 peci_dev->info.peci_revision);
-> +
-> +	INIT_DELAYED_WORK(&priv->detect_work, create_dimm_temp_info_delayed);
-> +
-> +	ret = devm_add_action_or_reset(priv->dev, remove_delayed_work, priv);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = create_dimm_temp_info(priv);
-> +	if (ret && ret != -EAGAIN) {
-> +		dev_err(dev, "Failed to populate DIMM temp info\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +read_thresholds_hsx(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
-> +{
-> +	u8 dev, func;
-> +	u16 reg;
-> +	int ret;
-> +
-> +	/*
-> +	 * Device 20, Function 0: IMC 0 channel 0 -> rank 0
-> +	 * Device 20, Function 1: IMC 0 channel 1 -> rank 1
-> +	 * Device 21, Function 0: IMC 0 channel 2 -> rank 2
-> +	 * Device 21, Function 1: IMC 0 channel 3 -> rank 3
-> +	 * Device 23, Function 0: IMC 1 channel 0 -> rank 4
-> +	 * Device 23, Function 1: IMC 1 channel 1 -> rank 5
-> +	 * Device 24, Function 0: IMC 1 channel 2 -> rank 6
-> +	 * Device 24, Function 1: IMC 1 channel 3 -> rank 7
-> +	 */
-> +	dev = 20 + chan_rank / 2 + chan_rank / 4;
-> +	func = chan_rank % 2;
-> +	reg = 0x120 + dimm_order * 4;
-> +
-> +	ret = peci_pci_local_read(priv->peci_dev, 1, dev, func, reg, data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +read_thresholds_bdxd(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
-> +{
-> +	u8 dev, func;
-> +	u16 reg;
-> +	int ret;
-> +
-> +	/*
-> +	 * Device 10, Function 2: IMC 0 channel 0 -> rank 0
-> +	 * Device 10, Function 6: IMC 0 channel 1 -> rank 1
-> +	 * Device 12, Function 2: IMC 1 channel 0 -> rank 2
-> +	 * Device 12, Function 6: IMC 1 channel 1 -> rank 3
-> +	 */
-> +	dev = 10 + chan_rank / 2 * 2;
-> +	func = (chan_rank % 2) ? 6 : 2;
-> +	reg = 0x120 + dimm_order * 4;
-> +
-> +	ret = peci_pci_local_read(priv->peci_dev, 2, dev, func, reg, data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +read_thresholds_skx(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
-> +{
-> +	u8 dev, func;
-> +	u16 reg;
-> +	int ret;
-> +
-> +	/*
-> +	 * Device 10, Function 2: IMC 0 channel 0 -> rank 0
-> +	 * Device 10, Function 6: IMC 0 channel 1 -> rank 1
-> +	 * Device 11, Function 2: IMC 0 channel 2 -> rank 2
-> +	 * Device 12, Function 2: IMC 1 channel 0 -> rank 3
-> +	 * Device 12, Function 6: IMC 1 channel 1 -> rank 4
-> +	 * Device 13, Function 2: IMC 1 channel 2 -> rank 5
-> +	 */
-> +	dev = 10 + chan_rank / 3 * 2 + (chan_rank % 3 == 2 ? 1 : 0);
-> +	func = chan_rank % 3 == 1 ? 6 : 2;
-> +	reg = 0x120 + dimm_order * 4;
-> +
-> +	ret = peci_pci_local_read(priv->peci_dev, 2, dev, func, reg, data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +read_thresholds_icx(struct peci_dimmtemp *priv, int dimm_order, int chan_rank, u32 *data)
-> +{
-> +	u32 reg_val;
-> +	u64 offset;
-> +	int ret;
-> +	u8 dev;
-> +
-> +	ret = peci_ep_pci_local_read(priv->peci_dev, 0, 13, 0, 2, 0xd4, &reg_val);
-> +	if (ret || !(reg_val & BIT(31)))
-> +		return -ENODATA; /* Use default or previous value */
-> +
-> +	ret = peci_ep_pci_local_read(priv->peci_dev, 0, 13, 0, 2, 0xd0, &reg_val);
-> +	if (ret)
-> +		return -ENODATA; /* Use default or previous value */
-> +
-> +	/*
-> +	 * Device 26, Offset 224e0: IMC 0 channel 0 -> rank 0
-> +	 * Device 26, Offset 264e0: IMC 0 channel 1 -> rank 1
-> +	 * Device 27, Offset 224e0: IMC 1 channel 0 -> rank 2
-> +	 * Device 27, Offset 264e0: IMC 1 channel 1 -> rank 3
-> +	 * Device 28, Offset 224e0: IMC 2 channel 0 -> rank 4
-> +	 * Device 28, Offset 264e0: IMC 2 channel 1 -> rank 5
-> +	 * Device 29, Offset 224e0: IMC 3 channel 0 -> rank 6
-> +	 * Device 29, Offset 264e0: IMC 3 channel 1 -> rank 7
-> +	 */
-> +	dev = 26 + chan_rank / 2;
-> +	offset = 0x224e0 + dimm_order * 4 + (chan_rank % 2) * 0x4000;
-> +
-> +	ret = peci_mmio_read(priv->peci_dev, 0, GET_CPU_SEG(reg_val), GET_CPU_BUS(reg_val),
-> +			     dev, 0, offset, data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct dimm_info dimm_hsx = {
-> +	.chan_rank_max	= CHAN_RANK_MAX_ON_HSX,
-> +	.dimm_idx_max	= DIMM_IDX_MAX_ON_HSX,
-> +	.min_peci_revision = 0x33,
-> +	.read_thresholds = &read_thresholds_hsx,
-> +};
-> +
-> +static const struct dimm_info dimm_bdx = {
-> +	.chan_rank_max	= CHAN_RANK_MAX_ON_BDX,
-> +	.dimm_idx_max	= DIMM_IDX_MAX_ON_BDX,
-> +	.min_peci_revision = 0x33,
-> +	.read_thresholds = &read_thresholds_hsx,
-> +};
-> +
-> +static const struct dimm_info dimm_bdxd = {
-> +	.chan_rank_max	= CHAN_RANK_MAX_ON_BDXD,
-> +	.dimm_idx_max	= DIMM_IDX_MAX_ON_BDXD,
-> +	.min_peci_revision = 0x33,
-> +	.read_thresholds = &read_thresholds_bdxd,
-> +};
-> +
-> +static const struct dimm_info dimm_skx = {
-> +	.chan_rank_max	= CHAN_RANK_MAX_ON_SKX,
-> +	.dimm_idx_max	= DIMM_IDX_MAX_ON_SKX,
-> +	.min_peci_revision = 0x33,
-> +	.read_thresholds = &read_thresholds_skx,
-> +};
-> +
-> +static const struct dimm_info dimm_icx = {
-> +	.chan_rank_max	= CHAN_RANK_MAX_ON_ICX,
-> +	.dimm_idx_max	= DIMM_IDX_MAX_ON_ICX,
-> +	.min_peci_revision = 0x40,
-> +	.read_thresholds = &read_thresholds_icx,
-> +};
-> +
-> +static const struct dimm_info dimm_icxd = {
-> +	.chan_rank_max	= CHAN_RANK_MAX_ON_ICXD,
-> +	.dimm_idx_max	= DIMM_IDX_MAX_ON_ICXD,
-> +	.min_peci_revision = 0x40,
-> +	.read_thresholds = &read_thresholds_icx,
-> +};
-> +
-> +static const struct auxiliary_device_id peci_dimmtemp_ids[] = {
-> +	{
-> +		.name = "peci_cpu.dimmtemp.hsx",
-> +		.driver_data = (kernel_ulong_t)&dimm_hsx,
-> +	},
-> +	{
-> +		.name = "peci_cpu.dimmtemp.bdx",
-> +		.driver_data = (kernel_ulong_t)&dimm_bdx,
-> +	},
-> +	{
-> +		.name = "peci_cpu.dimmtemp.bdxd",
-> +		.driver_data = (kernel_ulong_t)&dimm_bdxd,
-> +	},
-> +	{
-> +		.name = "peci_cpu.dimmtemp.skx",
-> +		.driver_data = (kernel_ulong_t)&dimm_skx,
-> +	},
-> +	{
-> +		.name = "peci_cpu.dimmtemp.icx",
-> +		.driver_data = (kernel_ulong_t)&dimm_icx,
-> +	},
-> +	{
-> +		.name = "peci_cpu.dimmtemp.icxd",
-> +		.driver_data = (kernel_ulong_t)&dimm_icxd,
-> +	},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(auxiliary, peci_dimmtemp_ids);
-> +
-> +static struct auxiliary_driver peci_dimmtemp_driver = {
-> +	.probe		= peci_dimmtemp_probe,
-> +	.id_table	= peci_dimmtemp_ids,
-> +};
-> +
-> +module_auxiliary_driver(peci_dimmtemp_driver);
-> +
-> +MODULE_AUTHOR("Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>");
-> +MODULE_AUTHOR("Iwona Winiarska <iwona.winiarska@intel.com>");
-> +MODULE_DESCRIPTION("PECI dimmtemp driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PECI_CPU);
-> -- 
-> 2.31.1
-> 
+And EMODPE would only affect EPCM not PTE. So if OS set PTE no matching  
+EPCM, the enclave won't be able to use the page for added access.
+
+> The problem here is the asymmetry of these operations. If EMODPE also
+> required EACCEPT from the run-time, EMODPR would also make sense.
+>
+
+The asymmetry is on the user space side as Reinette stated in her reply. I  
+could not see why this a relevant concern for kernel.
+
+> Please give a code example on how EMODPR improves trust.
+>
+It's not that EMODPR itself improves trust. What I try to say is that the  
+enclave runtime can use EACCET to verify EPCM permissions which is  
+trusted, and not relying on PTE permissions which is controlled by OS. It  
+must do EACCEPT for EMODPR and other ENCLS ops like EMODT,EAUG, etc. as  
+enclave security model considers OS untrusted.
+
+EMODPR is the only way to restrict permissions in EPCM for enclave pages.  
+So if it is not supported by kernel then there is no way for enclave  
+runtimes to support the use cases I stated previously. That means RWX  
+required in EPCM for dynamic loaded/JIT compiled code pages.
+
+Thanks
+Haitao

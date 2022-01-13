@@ -2,183 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8258948D613
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B5648D615
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbiAMKux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiAMKuu (ORCPT
+        id S233148AbiAMKvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:51:03 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:35994 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233140AbiAMKvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:50:50 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8F4C06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:50:50 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id m3so4002018lfu.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:50:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NYdzsGyEzIJrHP8JYJwpG+jE5+s3oneWhUEBd32KPfc=;
-        b=DhhsZ4FcY1ymdPypyg+ee+pcqdiHSzGlYLuwyZma/jDW9t3eFFml3cIDRE+Xfvh99+
-         +4oBLTJzqus8vayylwYSGzQKdoQjicyTib8TNKHtenL7vge/5KER7iSIJlAE22OHhGJe
-         x26kaaSxBgB6/8hltdzilL4tnDFYGvTapV+X0GXSpKGaE1H9QCc424YeLyw+l6/UYVla
-         wQtNgHr259qGkouEiYzjKPAtE/9phQmnDoID2v36ht4co+cvmhsonWjWDetrDg23Ae8Y
-         oYC9lNdWL0QXBuHtQ0w3FPum0JejOV6lgCawUm6ESNZY8+czHxksEfkBGAloMBHoU6PX
-         K0CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NYdzsGyEzIJrHP8JYJwpG+jE5+s3oneWhUEBd32KPfc=;
-        b=kgeIrrTqEUeSUk0o78c69OdKk+rTr8X5qqBCVC6UDa+TOn5UkUEg6piNO0LKjIDDdM
-         JmPl02uCSkOkaPMbgQS02i61Y18a2go8xQHk7wA3JDNfpUsZreQgXpLQLwK8xBHA0pDI
-         Uw3KnCLZBr3TPA7rv5xALJEBlW7NBMfVBWwMWm1/jLpo85RA7u4V5HUfpIMeHg3Jh0gA
-         3sSSoCCUhovuwDg9sslCRIIv3w5hnouixpL2Vv2Kh0uc4Z+M68Nb0efkIaNCcCGnEHG0
-         +jZM3eKsMpeTLwe27p1QPfZ/AZG+9WeIrReWWJkER33RbK7UDQyGUsEnHlbpu103VNqc
-         Gl7A==
-X-Gm-Message-State: AOAM533okh9hQpEq0TRsZZmPVuMt88o2i0kYfRfSQ2DTIqMhrsWOuNx1
-        oLVjqsvvzSdGEEzrlXVCuSMe6DFnaHHbWGiul/sKcQ==
-X-Google-Smtp-Source: ABdhPJyhIUaFCImjQEUT36hwyszgx3JmEnCBpsaSjbzQZGA3S2YuSL/rPG5RGeiNf1e3gQIc9S9mjOGoHwjjuLtLZ6g=
-X-Received: by 2002:a2e:9ec9:: with SMTP id h9mr2544065ljk.122.1642071048268;
- Thu, 13 Jan 2022 02:50:48 -0800 (PST)
+        Thu, 13 Jan 2022 05:51:01 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20DAogyU7001521, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20DAogyU7001521
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 13 Jan 2022 18:50:42 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 13 Jan 2022 18:50:42 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 13 Jan 2022 18:50:42 +0800
+Received: from RTEXMBS01.realtek.com.tw ([fe80::a5c6:3ded:8fd8:286a]) by
+ RTEXMBS01.realtek.com.tw ([fe80::a5c6:3ded:8fd8:286a%5]) with mapi id
+ 15.01.2308.020; Thu, 13 Jan 2022 18:50:41 +0800
+From:   Ricky WU <ricky_wu@realtek.com>
+To:     "arnd@arndb.de" <arnd@arndb.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Ricky WU <ricky_wu@realtek.com>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
+        "yang.lee@linux.alibaba.com" <yang.lee@linux.alibaba.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] misc: rtsx: modify rtd3 flow
+Thread-Topic: [PATCH] misc: rtsx: modify rtd3 flow
+Thread-Index: AQHYCGrv53PrNO0bY0ew2A940nWAjA==
+Date:   Thu, 13 Jan 2022 10:50:41 +0000
+Message-ID: <c4525b4738f94483b9b8f8571fc80646@realtek.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.81.102]
+x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEvMTMgpFekyCAwOTo0NTowMA==?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <c05749d0-4c24-8763-a459-27257b2524ed@amd.com> <20220105063643.119874-1-guangming.cao@mediatek.com>
-In-Reply-To: <20220105063643.119874-1-guangming.cao@mediatek.com>
-From:   Sumit Semwal <sumit.semwal@linaro.org>
-Date:   Thu, 13 Jan 2022 16:20:36 +0530
-Message-ID: <CAO_48GF=ttKqSOm9GRoA3Mq+-RQOtRjWp449XPcz-wH=kjaTjw@mail.gmail.com>
-Subject: Re: [PATCH v2] dma-buf: dma-heap: Add a size check for allocation
-To:     guangming.cao@mediatek.com
-Cc:     christian.koenig@amd.com, brian.starkey@arm.com,
-        benjamin.gaignard@linaro.org, bo.song@mediatek.com,
-        dri-devel@lists.freedesktop.org, jianjiao.zeng@mediatek.com,
-        john.stultz@linaro.org, labbott@redhat.com, libo.kang@mediatek.com,
-        linaro-mm-sig@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        lmark@codeaurora.org, matthias.bgg@gmail.com,
-        mingyuan.ma@mediatek.com, wsd_upstream@mediatek.com,
-        yf.wang@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Guangming,
-
-On Wed, 5 Jan 2022 at 12:05, <guangming.cao@mediatek.com> wrote:
->
-> From: Guangming.Cao <guangming.cao@mediatek.com>
->
-> On Tue, 2022-01-04 at 08:47 +0100, Christian K=E9=B0=8Aig wrote:
-> > Am 03.01.22 um 19:57 schrieb John Stultz:
-> > > On Mon, Dec 27, 2021 at 1:52 AM <guangming.cao@mediatek.com> wrote:
-> > > > From: Guangming <Guangming.Cao@mediatek.com>
-> > > >
-> > >
-> > > Thanks for submitting this!
-> > >
-> > > > Add a size check for allcation since the allocation size is
-> > >
-> > > nit: "allocation" above.
-> > >
-> > > > always less than the total DRAM size.
-> > >
-> > > In general, it might be good to add more context to the commit
-> > > message
-> > > to better answer *why* this change is needed rather than what the
-> > > change is doing.  ie: What negative thing happens without this
-> > > change?
-> > > And so how does this change avoid or improve things?
-> >
-> > Completely agree, just one little addition: Could you also add this
-> > why
-> > as comment to the code?
-> >
-> > When we stumble over this five years from now it is absolutely not
-> > obvious why we do this.
-> >
-> > Thanks,
-> > Christian.
-> >
-> Thanks for your reply!
-> I will update the related reason in the patch later.
->
-> The reason for adding this check is that we met a case that the user
-> sent an invalid size(It seems it's a negative value, MSB is 0xff, it's
-> larger than DRAM size after convert it to size_t) to dma-heap to alloc
-> memory, and this allocation was running on a process(such as "gralloc"
-> on Android device) can't be killed by OOM flow, and we also couldn't
-> find the related dmabuf in "dma_buf_debug_show" because the related
-> dmabuf was not exported yet since the allocation is still on going.
->
-> Since this invalid argument case can be prevented at dma-heap side, so,
-> I added this size check, and moreover, to let debug it easily, I also
-> added logs when size is bigger than a threshold we set in mtk system
-> heap.
-> If you think that print logs in dma-heap framework is better, I will
-> update it in next version.
->
-> If you have better solution(such as dump the size under allocating
-> in "dma_buf_debug_show", which maybe need add global variable to record
-> it), please kindly let me know.
-
-Thank you for the patch!
-
-I think just adding the reasoning above as the commit message and a
-comment in the code should be enough for now; the debug parts may be
-easy to add in case someone runs into issues.
-
-> Thanks :)
-> Guangming
-
-Best,
-Sumit.
-
->
-> > >
-> > >
-> > > > Signed-off-by: Guangming <Guangming.Cao@mediatek.com>
-> > > > Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
-> > > > ---
-> > > > v2: 1. update size limitation as total_dram page size.
-> > > >      2. update commit message
-> > > > ---
-> > > >   drivers/dma-buf/dma-heap.c | 2 ++
-> > > >   1 file changed, 2 insertions(+)
-> > > >
-> > > > diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-
-> > > > heap.c
-> > > > index 56bf5ad01ad5..e39d2be98d69 100644
-> > > > --- a/drivers/dma-buf/dma-heap.c
-> > > > +++ b/drivers/dma-buf/dma-heap.c
-> > > > @@ -55,6 +55,8 @@ static int dma_heap_buffer_alloc(struct
-> > > > dma_heap *heap, size_t len,
-> > > >          struct dma_buf *dmabuf;
-> > > >          int fd;
-> > > >
-> > > > +       if (len / PAGE_SIZE > totalram_pages())
-> > > > +               return -EINVAL;
-> > >
-> > > This seems sane. I know ION used to have some 1/2 of memory cap to
-> > > avoid unnecessary memory pressure on crazy allocations.
-> > >
-> > > Could you send again with an improved commit message?
-> > >
-> > > thanks
-> > > -john
-> >
-> >
-
-
-
---
-Thanks and regards,
-
-Sumit Semwal (he / him)
-Tech Lead - LCG, Vertical Technologies
-Linaro.org =E2=94=82 Open source software for ARM SoCs
+bW92ZSBwbV9ydW50aW1lX2dldCgpIHRvIF9ydW50aW1lX3Jlc3VtZQ0Kd2hlbiBTeXN0ZW0gZW50
+ZXIgUzMsIGRvIG5vdCBoYXZlIHNkX3JlcXVlc3QgYW5kIGRvIG5vdA0KY2FsbCBzdGFydF9ydW4g
+dG8gcG1fcnVudGltZV9nZXQoKSBjYXVzZSBpc19ydW50aW1lX3N1c3BlbmRlZCBzdGF0dXMNCm5v
+dCBjb3JyZWN0DQoNCnNldCBtb3JlIHJlZ2lzdGVyIGluIHBvd2VyX2Rvd24gZmxvdyB0byBtYWtl
+IHBsdWdpbiBvciB1bnBsdWcNCmNhcmQgZG8gbm90IHdha2UgdXAgc3lzdGVtIHdoZW4gc3lzdGVt
+IGlzIGF0IFMzDQoNClNpZ25lZC1vZmYtYnk6IFJpY2t5IFd1IDxyaWNreV93dUByZWFsdGVrLmNv
+bT4NCi0tLQ0KIGRyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0czUyNDkuYyAgfCAzMSArKysrKysr
+KysrKysrKysrKysrKysrKysrKysrLS0NCiBkcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHN4X3Bj
+ci5jIHwgMTcgKysrKysrKystLS0tLS0tLQ0KIGRyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0c3hf
+cGNyLmggfCAgMSArDQogMyBmaWxlcyBjaGFuZ2VkLCAzOCBpbnNlcnRpb25zKCspLCAxMSBkZWxl
+dGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0czUyNDku
+YyBiL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0czUyNDkuYw0KaW5kZXggNTNmM2ExZjQ1YzRh
+Li42OWUzMmYwNzVjYTkgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHM1
+MjQ5LmMNCisrKyBiL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0czUyNDkuYw0KQEAgLTc0LDcg
+Kzc0LDggQEAgc3RhdGljIHZvaWQgcnRzeF9iYXNlX2ZldGNoX3ZlbmRvcl9zZXR0aW5ncyhzdHJ1
+Y3QgcnRzeF9wY3IgKnBjcikNCiAJcGNpX3JlYWRfY29uZmlnX2R3b3JkKHBkZXYsIFBDUl9TRVRU
+SU5HX1JFRzIsICZyZWcpOw0KIAlwY3JfZGJnKHBjciwgIkNmZyAweCV4OiAweCV4XG4iLCBQQ1Jf
+U0VUVElOR19SRUcyLCByZWcpOw0KIA0KLQlwY3ItPnJ0ZDNfZW4gPSBydHN4X3JlZ190b19ydGQz
+X3Voc2lpKHJlZyk7DQorCWlmIChDSEtfUENJX1BJRChwY3IsIFBJRF81MjRBKSB8fCBDSEtfUENJ
+X1BJRChwY3IsIFBJRF81MjVBKSkNCisJCXBjci0+cnRkM19lbiA9IHJ0c3hfcmVnX3RvX3J0ZDNf
+dWhzaWkocmVnKTsNCiANCiAJaWYgKHJ0c3hfY2hlY2tfbW1jX3N1cHBvcnQocmVnKSkNCiAJCXBj
+ci0+ZXh0cmFfY2FwcyB8PSBFWFRSQV9DQVBTX05PX01NQzsNCkBAIC0xNDMsNiArMTQ0LDI3IEBA
+IHN0YXRpYyBpbnQgcnRzNTI0OV9pbml0X2Zyb21faHcoc3RydWN0IHJ0c3hfcGNyICpwY3IpDQog
+CXJldHVybiAwOw0KIH0NCiANCitzdGF0aWMgdm9pZCBydHM1MnhhX2ZvcmNlX3Bvd2VyX2Rvd24o
+c3RydWN0IHJ0c3hfcGNyICpwY3IsIHU4IHBtX3N0YXRlKQ0KK3sNCisJLyogU2V0IHJlbGlua190
+aW1lIHRvIDAgKi8NCisJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBBVVRPTE9BRF9DRkdf
+QkFTRSArIDEsIE1BU0tfOF9CSVRfREVGLCAwKTsNCisJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIo
+cGNyLCBBVVRPTE9BRF9DRkdfQkFTRSArIDIsIE1BU0tfOF9CSVRfREVGLCAwKTsNCisJcnRzeF9w
+Y2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBBVVRPTE9BRF9DRkdfQkFTRSArIDMsDQorCQkJCVJFTElO
+S19USU1FX01BU0ssIDApOw0KKw0KKwlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIFJUUzUy
+NEFfUE1fQ1RSTDMsDQorCQkJRDNfREVMSU5LX01PREVfRU4sIEQzX0RFTElOS19NT0RFX0VOKTsN
+CisNCisJaWYgKCFwY3ItPmlzX3J1bnRpbWVfc3VzcGVuZGVkKSB7DQorCQlydHN4X3BjaV93cml0
+ZV9yZWdpc3RlcihwY3IsIFJUUzUyNEFfQVVUT0xPQURfQ0ZHMSwNCisJCQkJQ0RfUkVTVU1FX0VO
+X01BU0ssIDApOw0KKwkJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBSVFM1MjRBX1BNX0NU
+UkwzLCAweDAxLCAweDAwKTsNCisJCXJ0c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKHBjciwgUlRTNTI0
+QV9QTUVfRk9SQ0VfQ1RMLCAweDMwLCAweDIwKTsNCisJfQ0KKw0KKwlydHN4X3BjaV93cml0ZV9y
+ZWdpc3RlcihwY3IsIEZQRENUTCwgQUxMX1BPV0VSX0RPV04sIEFMTF9QT1dFUl9ET1dOKTsNCit9
+DQorDQogc3RhdGljIHZvaWQgcnRzNTJ4YV9zYXZlX2NvbnRlbnRfZnJvbV9lZnVzZShzdHJ1Y3Qg
+cnRzeF9wY3IgKnBjcikNCiB7DQogCXU4IGNudCwgc3Y7DQpAQCAtMjgxLDggKzMwMywxMSBAQCBz
+dGF0aWMgaW50IHJ0czUyNDlfZXh0cmFfaW5pdF9odyhzdHJ1Y3QgcnRzeF9wY3IgKnBjcikNCiAN
+CiAJcnRzeF9wY2lfc2VuZF9jbWQocGNyLCBDTURfVElNRU9VVF9ERUYpOw0KIA0KLQlpZiAoQ0hL
+X1BDSV9QSUQocGNyLCBQSURfNTI0QSkgfHwgQ0hLX1BDSV9QSUQocGNyLCBQSURfNTI1QSkpDQor
+CWlmIChDSEtfUENJX1BJRChwY3IsIFBJRF81MjRBKSB8fCBDSEtfUENJX1BJRChwY3IsIFBJRF81
+MjVBKSkgew0KIAkJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBSRUdfVlJFRiwgUFdEX1NV
+U1BORF9FTiwgUFdEX1NVU1BORF9FTik7DQorCQlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3Is
+IFJUUzUyNEFfQVVUT0xPQURfQ0ZHMSwNCisJCQlDRF9SRVNVTUVfRU5fTUFTSywgQ0RfUkVTVU1F
+X0VOX01BU0spOw0KKwl9DQogDQogCWlmIChwY3ItPnJ0ZDNfZW4pIHsNCiAJCWlmIChDSEtfUENJ
+X1BJRChwY3IsIFBJRF81MjRBKSB8fCBDSEtfUENJX1BJRChwY3IsIFBJRF81MjVBKSkgew0KQEAg
+LTcyNCw2ICs3NDksNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHBjcl9vcHMgcnRzNTI0YV9wY3Jf
+b3BzID0gew0KIAkuY2FyZF9wb3dlcl9vbiA9IHJ0c3hfYmFzZV9jYXJkX3Bvd2VyX29uLA0KIAku
+Y2FyZF9wb3dlcl9vZmYgPSBydHN4X2Jhc2VfY2FyZF9wb3dlcl9vZmYsDQogCS5zd2l0Y2hfb3V0
+cHV0X3ZvbHRhZ2UgPSBydHN4X2Jhc2Vfc3dpdGNoX291dHB1dF92b2x0YWdlLA0KKwkuZm9yY2Vf
+cG93ZXJfZG93biA9IHJ0czUyeGFfZm9yY2VfcG93ZXJfZG93biwNCiAJLnNldF9sMW9mZl9jZmdf
+c3ViX2QwID0gcnRzNTI1MF9zZXRfbDFvZmZfY2ZnX3N1Yl9kMCwNCiB9Ow0KIA0KQEAgLTg0MSw2
+ICs4NjcsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHBjcl9vcHMgcnRzNTI1YV9wY3Jfb3BzID0g
+ew0KIAkuY2FyZF9wb3dlcl9vbiA9IHJ0czUyNWFfY2FyZF9wb3dlcl9vbiwNCiAJLmNhcmRfcG93
+ZXJfb2ZmID0gcnRzeF9iYXNlX2NhcmRfcG93ZXJfb2ZmLA0KIAkuc3dpdGNoX291dHB1dF92b2x0
+YWdlID0gcnRzNTI1YV9zd2l0Y2hfb3V0cHV0X3ZvbHRhZ2UsDQorCS5mb3JjZV9wb3dlcl9kb3du
+ID0gcnRzNTJ4YV9mb3JjZV9wb3dlcl9kb3duLA0KIAkuc2V0X2wxb2ZmX2NmZ19zdWJfZDAgPSBy
+dHM1MjUwX3NldF9sMW9mZl9jZmdfc3ViX2QwLA0KIH07DQogDQpkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy9taXNjL2NhcmRyZWFkZXIvcnRzeF9wY3IuYyBiL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0
+c3hfcGNyLmMNCmluZGV4IDZhYzUwOWMxODIxYy4uYTgzYWRmYjEyMmRjIDEwMDY0NA0KLS0tIGEv
+ZHJpdmVycy9taXNjL2NhcmRyZWFkZXIvcnRzeF9wY3IuYw0KKysrIGIvZHJpdmVycy9taXNjL2Nh
+cmRyZWFkZXIvcnRzeF9wY3IuYw0KQEAgLTE1MiwxMiArMTUyLDYgQEAgdm9pZCBydHN4X3BjaV9z
+dGFydF9ydW4oc3RydWN0IHJ0c3hfcGNyICpwY3IpDQogCWlmIChwY3ItPnJlbW92ZV9wY2kpDQog
+CQlyZXR1cm47DQogDQotCWlmIChwY3ItPnJ0ZDNfZW4pDQotCQlpZiAocGNyLT5pc19ydW50aW1l
+X3N1c3BlbmRlZCkgew0KLQkJCXBtX3J1bnRpbWVfZ2V0KCYocGNyLT5wY2ktPmRldikpOw0KLQkJ
+CXBjci0+aXNfcnVudGltZV9zdXNwZW5kZWQgPSBmYWxzZTsNCi0JCX0NCi0NCiAJaWYgKHBjci0+
+c3RhdGUgIT0gUERFVl9TVEFUX1JVTikgew0KIAkJcGNyLT5zdGF0ZSA9IFBERVZfU1RBVF9SVU47
+DQogCQlpZiAocGNyLT5vcHMtPmVuYWJsZV9hdXRvX2JsaW5rKQ0KQEAgLTE1OTcsNiArMTU5MSw3
+IEBAIHN0YXRpYyBpbnQgcnRzeF9wY2lfcHJvYmUoc3RydWN0IHBjaV9kZXYgKnBjaWRldiwNCiAJ
+cGNyLT5ob3N0X3NnX3RibF9hZGRyID0gcGNyLT5ydHN4X3Jlc3ZfYnVmX2FkZHIgKyBIT1NUX0NN
+RFNfQlVGX0xFTjsNCiAJcGNyLT5jYXJkX2luc2VydGVkID0gMDsNCiAJcGNyLT5jYXJkX3JlbW92
+ZWQgPSAwOw0KKwlwY3ItPnJ0ZDNfZW4gPSAwOw0KIAlJTklUX0RFTEFZRURfV09SSygmcGNyLT5j
+YXJkZGV0X3dvcmssIHJ0c3hfcGNpX2NhcmRfZGV0ZWN0KTsNCiAJSU5JVF9ERUxBWUVEX1dPUkso
+JnBjci0+aWRsZV93b3JrLCBydHN4X3BjaV9pZGxlX3dvcmspOw0KIA0KQEAgLTE3OTYsMTcgKzE3
+OTEsMTYgQEAgc3RhdGljIGludCBydHN4X3BjaV9ydW50aW1lX3N1c3BlbmQoc3RydWN0IGRldmlj
+ZSAqZGV2aWNlKQ0KIAlwY3IgPSBoYW5kbGUtPnBjcjsNCiAJZGV2X2RiZygmKHBjaWRldi0+ZGV2
+KSwgIi0tPiAlc1xuIiwgX19mdW5jX18pOw0KIA0KKwlwY3ItPmlzX3J1bnRpbWVfc3VzcGVuZGVk
+ID0gdHJ1ZTsNCisNCiAJY2FuY2VsX2RlbGF5ZWRfd29yaygmcGNyLT5jYXJkZGV0X3dvcmspOw0K
+IAljYW5jZWxfZGVsYXllZF93b3JrKCZwY3ItPnJ0ZDNfd29yayk7DQogCWNhbmNlbF9kZWxheWVk
+X3dvcmsoJnBjci0+aWRsZV93b3JrKTsNCiANCiAJbXV0ZXhfbG9jaygmcGNyLT5wY3JfbXV0ZXgp
+Ow0KIAlydHN4X3BjaV9wb3dlcl9vZmYocGNyLCBIT1NUX0VOVEVSX1MzKTsNCi0NCiAJbXV0ZXhf
+dW5sb2NrKCZwY3ItPnBjcl9tdXRleCk7DQogDQotCXBjci0+aXNfcnVudGltZV9zdXNwZW5kZWQg
+PSB0cnVlOw0KLQ0KIAlyZXR1cm4gMDsNCiB9DQogDQpAQCAtMTgyMCw2ICsxODE0LDExIEBAIHN0
+YXRpYyBpbnQgcnRzeF9wY2lfcnVudGltZV9yZXN1bWUoc3RydWN0IGRldmljZSAqZGV2aWNlKQ0K
+IAlwY3IgPSBoYW5kbGUtPnBjcjsNCiAJZGV2X2RiZygmKHBjaWRldi0+ZGV2KSwgIi0tPiAlc1xu
+IiwgX19mdW5jX18pOw0KIA0KKwlpZiAocGNyLT5pc19ydW50aW1lX3N1c3BlbmRlZCkgew0KKwkJ
+cG1fcnVudGltZV9nZXQoJihwY3ItPnBjaS0+ZGV2KSk7DQorCQlwY3ItPmlzX3J1bnRpbWVfc3Vz
+cGVuZGVkID0gZmFsc2U7DQorCX0NCisNCiAJbXV0ZXhfbG9jaygmcGNyLT5wY3JfbXV0ZXgpOw0K
+IA0KIAlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIEhPU1RfU0xFRVBfU1RBVEUsIDB4MDMs
+IDB4MDApOw0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0c3hfcGNyLmgg
+Yi9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHN4X3Bjci5oDQppbmRleCBkYWYwNTdjNGVlYTYu
+LmI5Mzk3NTI2OGU2ZCAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0c3hf
+cGNyLmgNCisrKyBiL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0c3hfcGNyLmgNCkBAIC0yNSw2
+ICsyNSw3IEBADQogI2RlZmluZSBSRUdfRUZVU0VfUE9XRVJPRkYJCTB4MDANCiAjZGVmaW5lIFJU
+UzUyNTBfQ0xLX0NGRzMJCTB4RkY3OQ0KICNkZWZpbmUgUlRTNTI1QV9DRkdfTUVNX1BECQkweEYw
+DQorI2RlZmluZSBSVFM1MjRBX0FVVE9MT0FEX0NGRzEJMHhGRjdDDQogI2RlZmluZSBSVFM1MjRB
+X1BNX0NUUkwzCQkweEZGN0UNCiAjZGVmaW5lIFJUUzUyNUFfQklPU19DRkcJCTB4RkYyRA0KICNk
+ZWZpbmUgUlRTNTI1QV9MT0FEX0JJT1NfRkxBRwkweDAxDQotLSANCjIuMjUuMQ==

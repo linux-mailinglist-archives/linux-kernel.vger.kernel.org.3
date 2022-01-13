@@ -2,140 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA33248DF26
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 21:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC4048DF2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 21:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbiAMUoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 15:44:21 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:22289 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbiAMUoU (ORCPT
+        id S234633AbiAMUq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 15:46:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230515AbiAMUqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 15:44:20 -0500
+        Thu, 13 Jan 2022 15:46:55 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182D5C061574;
+        Thu, 13 Jan 2022 12:46:55 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id 66so3575867ybf.4;
+        Thu, 13 Jan 2022 12:46:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642106660; x=1673642660;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=57MqfI7dB+tsBDAjgRqB/dMauShg7UH+ZvEMZcujzw4=;
-  b=x/KTwNB3+RSHFVdwVaHHEXvYGKgCf2LRJPdXUrNiG+s9Q7mCKBqsGZMV
-   0fwM9jDCiQQ0GlxPjv011XpOt0PzuWsOyzpuozkh97AH4NzPOcXxNGXth
-   TCy2fOTm/FIyc111L9BGVff7fcYsTkfk6sbIxcTh+nfd6949QUhCrz6u4
-   Q=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 13 Jan 2022 12:44:19 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 12:44:18 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 13 Jan 2022 12:44:18 -0800
-Received: from [10.110.125.36] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 13 Jan
- 2022 12:44:16 -0800
-Message-ID: <64ad7053-beac-0c28-7d09-ea32a4f7fbad@quicinc.com>
-Date:   Thu, 13 Jan 2022 12:44:16 -0800
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tc4bxrdsSda67cQFkrLy1YQGDEwzONREQeowDYF99lg=;
+        b=MeYw7As0Uuxhnn4BTl5ziXrnvOGnueayzjx+JgreS+F52AGzWmnC/Nab14WQjBkA4s
+         aMZKV2jVn9yOGUmjS4yic+HKdijStb/tEwpE2rxLPqvCdhe703O2sF6cNeZYfI5y4v2S
+         xMDws6mlLB57/0uNJf0zyj+XSUCCRcmfiNGufny0SGcQkURzxqXyXu9uZsPiJ8iP1AZG
+         zPtZVJNzrNiYDXqhCbuwClj05HOoTrGolFLWIAXyyQIMcWvLXY/UhsXEux81meSAsyWC
+         105QtUdrC7eYMUSGF4fdQQ1ZjhFdnY7AoUTTAn5uzlVJUw21QaNP9qzekRZd/h8HcNjq
+         uW0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tc4bxrdsSda67cQFkrLy1YQGDEwzONREQeowDYF99lg=;
+        b=ZdkAu2DsI/9AS0IMF8Vl5IQ4rGvggOMfYrG8EMUCoh9DWTgZIn5OADrCoii7qvrw8Y
+         vEsnB9NSLTUXgh7rzSMFmY66f29wYpPMAQJfLKwVcmkF2lX+DVwzPZJ6nCBysLgreLr2
+         jgRjvcJJhs7viebfRF9E1UkSIzFsCqy6yQ3YzyTrVipR9cHMvOkSMfD7e4YIJLYpUGcr
+         w492wbXE4sMEuBIQNkH8SB0evJrUmQkaTq0MesbtEibeTYMoW222tyxMwGqPneIuBETT
+         eWk94HHkIdhGxkp315KUwfE0VvGAuu2SDf+wHKD63b9/+SRpsPzJNKKkUbgK7Tqt6v2+
+         5zjw==
+X-Gm-Message-State: AOAM530UFdCjkMX5qAbzI4tfgw2sih/iR0APWF6UojQFZ8kWYr6msE2J
+        RPI5JdF0HTUskQtW73gOU+eFIkF3Vf6kfqeSPPo=
+X-Google-Smtp-Source: ABdhPJz7n3P1HjlOjdK6te/OAZBRlVgx79lCGxCc8EuDaPN9aWmq87rw+LLwg/K6AGBBtGBiCFmRU4mZxAurLwfhP3k=
+X-Received: by 2002:a25:7287:: with SMTP id n129mr8260040ybc.351.1642106814153;
+ Thu, 13 Jan 2022 12:46:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v11 1/4] drm/msm/dp: do not initialize phy until plugin
- interrupt received
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
-        <daniel@ffwll.ch>, <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1641926606-1012-1-git-send-email-quic_khsieh@quicinc.com>
- <1641926606-1012-2-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n53hrPYR3ThwxM_+fzyRSB+6W1drFymW5n_RKmg_gf8z-w@mail.gmail.com>
- <84ee17f9-2597-86b6-1517-2358d443f65b@quicinc.com>
- <CAE-0n5134H0puMicozjdfTY+zXVUZyrebjv7Hto3EWcQAELO4A@mail.gmail.com>
- <338ae657-e8ed-e620-0aa7-4ad05df18ad1@quicinc.com>
- <CAE-0n51QbJHnOses5sF6xECR0gRZB1Fbi1KqoLG+61ZWH9BtOA@mail.gmail.com>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <CAE-0n51QbJHnOses5sF6xECR0gRZB1Fbi1KqoLG+61ZWH9BtOA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+References: <20220113164042.259990-1-soenke.huster@eknoes.de>
+In-Reply-To: <20220113164042.259990-1-soenke.huster@eknoes.de>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Thu, 13 Jan 2022 12:46:43 -0800
+Message-ID: <CABBYNZ+5XxOAEBKXZ1va-G6WNYAL_NQ0Fw3JLckB4zP7wgT3xA@mail.gmail.com>
+Subject: Re: [PATCH v2] Bluetooth: fix null ptr deref on hci_sync_conn_complete_evt
+To:     Soenke Huster <soenke.huster@eknoes.de>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Soenke,
 
-On 1/13/2022 11:47 AM, Stephen Boyd wrote:
-> Quoting Kuogee Hsieh (2022-01-13 09:51:42)
->> On 1/12/2022 8:13 PM, Stephen Boyd wrote:
->>>>>> -       if (dp->usbpd->orientation == ORIENTATION_CC2)
->>>>>> -               flip = true;
->>>>>> +       dp_power_init(dp->power, false);
->>>>>> +       dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
->>>>>> +
->>>>>> +       /*
->>>>>> +        * eDP is the embedded primary display and has its own phy
->>>>>> +        * initialize phy immediately
->>>>> Question still stands why we can't wait for hpd high from the eDP panel.
->>>>> Also, I think "has its own phy" means that it's not part of a combo
->>>>> USB+DP phy? Can you please clarify?
-Correct, eDP has its dedicated phy which is not part of combo phy.
->>>>>> +        */
->>>>>> +       if (dp->dp_display.connector_type == DRM_MODE_CONNECTOR_eDP)
->>>>>> +               dp_display_host_phy_init(dp);
->>>>>>
->>>>>> -       dp_power_init(dp->power, flip);
->>>>>> -       dp_ctrl_host_init(dp->ctrl, flip, reset);
->>>>>>            dp_aux_init(dp->aux);
->>>>>>            dp->core_initialized = true;
->>>>>>     }
->>>>>> @@ -1306,20 +1330,23 @@ static int dp_pm_resume(struct device *dev)
->>>>>>            dp->hpd_state = ST_DISCONNECTED;
->>>>>>
->>>>>>            /* turn on dp ctrl/phy */
->>>>>> -       dp_display_host_init(dp, true);
->>>>>> +       dp_display_host_init(dp);
->>>>>>
->>>>>>            dp_catalog_ctrl_hpd_config(dp->catalog);
->>>>>>
->>>>>> -       /*
->>>>>> -        * set sink to normal operation mode -- D0
->>>>>> -        * before dpcd read
->>>>>> -        */
->>>>>> -       dp_link_psm_config(dp->link, &dp->panel->link_info, false);
->>>>>>
->>>>>>            if (dp_catalog_link_is_connected(dp->catalog)) {
->>>>>> +               /*
->>>>>> +                * set sink to normal operation mode -- D0
->>>>>> +                * before dpcd read
->>>>>> +                */
->>>>>> +               dp_display_host_phy_init(dp);
->>>>>> +               dp_link_psm_config(dp->link, &dp->panel->link_info, false);
->>>>>>                    sink_count = drm_dp_read_sink_count(dp->aux);
->>>>>>                    if (sink_count < 0)
->>>>>>                            sink_count = 0;
->>>>>> +
->>>>>> +               dp_display_host_phy_exit(dp);
->>>>> Why is the phy exited on resume when the link is still connected? Is
->>>>> this supposed to be done only when the sink_count is 0? And how does
->>>>> this interact with eDP where the phy is initialized by the call to
->>>>> dp_display_host_init() earlier in this function.
+On Thu, Jan 13, 2022 at 8:41 AM Soenke Huster <soenke.huster@eknoes.de> wrote:
+>
+> This event is specified just for SCO and eSCO link types.
+> On the reception of a HCI_Synchronous_Connection_Complete for a BDADDR
+> of an existing LE connection, LE link type and a status that triggers the
+> second case of the packet processing a NULL pointer dereference happens,
+> as conn->link is NULL.
+>
+> Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
+> ---
+> v2: Fixed the obviously wrong boolean comparison
+>
+> I found this null pointer dereference while fuzzing bluetooth-next.
+> On the described behaviour, a null ptr deref in line 4723 happens, as
+> conn->link is NULL. According to the Core spec, Link_Type must be SCO or eSCO,
+> all other values are reserved for future use. Checking that mitigates a null
+> pointer dereference.
+>
+>  net/bluetooth/hci_event.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> index 05997dff5666..d68f5640fb38 100644
+> --- a/net/bluetooth/hci_event.c
+> +++ b/net/bluetooth/hci_event.c
+> @@ -4661,6 +4661,11 @@ static void hci_sync_conn_complete_evt(struct hci_dev *hdev, void *data,
+>         struct hci_ev_sync_conn_complete *ev = data;
+>         struct hci_conn *conn;
+>
+> +       if (!(ev->link_type == SCO_LINK || ev->link_type == ESCO_LINK)) {
+> +               bt_dev_err(hdev, "Ignoring connect complete event for invalid link type");
+> +               return;
+> +       }
 
-At beginning of dp_pm_resume bot core_initialized and phy_initialized 
-should be off.
+I rather have this as a switch statement:
 
-However at the case of dongle still connected to DUT, we have to read 
-dongle dpcd to decided any hdmi connect to dongle (sink_count != 0). in 
-this case, we have to turn on phy to perform dpcd read and  turn off phy 
-after read so the following plugged-in interrupt can be handled correctly.
+switch (ev->link_type)
+case SCO_LINK:
+case ESCO_LINK:
+  break;
+default:
+  /* Add comment where the spec states this is invalid */
+  bt_dev_err(hdev, "Ignoring connect complete event for invalid link type");
+  return;
 
->>>>>>            }
->>>>>>
->>>>>>            dp->link->sink_count = sink_count;
->>> Any response to the above two comments?
-> ??
+>         bt_dev_dbg(hdev, "status 0x%2.2x", ev->status);
+>
+>         hci_dev_lock(hdev);
+> --
+> 2.34.1
+>
+
+
+-- 
+Luiz Augusto von Dentz

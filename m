@@ -2,172 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE58B48D48F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED84E48D499
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233582AbiAMI6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 03:58:49 -0500
-Received: from mail-vk1-f170.google.com ([209.85.221.170]:41614 "EHLO
-        mail-vk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbiAMI5y (ORCPT
+        id S233665AbiAMI7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 03:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233392AbiAMI6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 03:57:54 -0500
-Received: by mail-vk1-f170.google.com with SMTP id n9so2397598vkq.8;
-        Thu, 13 Jan 2022 00:57:53 -0800 (PST)
+        Thu, 13 Jan 2022 03:58:14 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83C0C029820
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 00:57:49 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id e9so8831213wra.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 00:57:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0EWMr6KitlRWDO5arnJCvWClLIIvkp/yLaDhRRbKQPU=;
+        b=KrDvC0T2RkDm2S10PdyyDxIPGujwx2mMzNvpQr5OeKbYdtmkeeiJTrvkYNCTpxFztK
+         FYFI1+5uWv9k7dbdh06gSvpB07XseM31gcJsHImOSvdONPW9kGVcnqkgaTIvC3l7D4cd
+         Hx3BrEI/pOHsRKnJ9rCpP8uEC/Yxl2TI/ibTx4m8gGtJFg4zJ+nwZihosW9of4MnRmCB
+         3JcucSDwWvrUegVoxpLg9RJm/Xtdx1TpXWM0TtJk/IBJIrtEWiQ6CHIryUAf1qyG0adz
+         yQrhVOQqTg5hi+ySeIL3Qoe7AYI/7dxVZ3lhmCcydZf50dc1NYZkKRobOqZZGzS5ZUj+
+         ab1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wbBEPLACDWPlnwwenFhgzoqyYNOO9jVGdUxMfFLqZ1s=;
-        b=YDNx9R2PJHTPQRoxOSRCAwrZLZH4IrLLdD1icaHLJmy/AbGjYcfwImjzQ+bX07VNni
-         sCdNNMIYJODD50avJSrUpe1KCZFGpMnzXTA7zRQR6o78lS1FPV4dcrdGNlNm+7dEBAoR
-         0y6D4hsZ7ewszumkynFmnTHId1Ot441RXoE//FlDpn/A4QLqrm9eQXQI2icjFuUePq3L
-         sZ8pp+4nidbOXFI4LUBY0f2KOBygVAxp1uj3SzMrYpJDxOIEYICB4E5NdC+ZQys05O3b
-         SDzXO0TbqpQFMftGAUJ8Tm1zX51paOs67NDud6UrBPnMKVNtt2bl6Uo2E8Q0AVMgPfjv
-         VGcQ==
-X-Gm-Message-State: AOAM532x0yvN9FTloEbHwi0ud93DGg7fiJW0Fl19JQOFNEDG0rwK/oeA
-        DulES3lyJmz8+ok7PuzXcfRzI3zRZX1Qql0I
-X-Google-Smtp-Source: ABdhPJytBiW0pWRPd3E20XdPL953mPOAKx2u0ydk0wECE35NIiIc34qfuJl9Xd4B2Vfprw3HYh/Ejw==
-X-Received: by 2002:a05:6122:90a:: with SMTP id j10mr1686160vka.12.1642064273381;
-        Thu, 13 Jan 2022 00:57:53 -0800 (PST)
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
-        by smtp.gmail.com with ESMTPSA id s25sm1312780vsk.20.2022.01.13.00.57.51
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=0EWMr6KitlRWDO5arnJCvWClLIIvkp/yLaDhRRbKQPU=;
+        b=OmiDK7eMOLtGyJ1CopriLd2gCTAksLBF1EbWKf8FhrhPSNEkbj2zf2JfKQ2oygCQGg
+         ZwvsN3Zx9iQRWu/K+ce7n4M45hDD157TRMBGFz9sIW+C/1mdHzaRGWEAUMdZcHl7WPe8
+         wayl8BaLKCtp7zubcbaLi1V5+ij/yXd1KqVgM6+2BGTefBfazFQZfYx0xdc+dvupfbwQ
+         /3JX4PbJ76UCfkzY8XFylOYMJlna1ch7VzeI7JIVDJ+k01TYXABa9JSvloePHXpCVmRP
+         30oGhFxBsQk0um0Xlx8TcjeSUwX5MgMWp95mdNqv+1xys/xu7jeVwCPHcNJUDVnGl2Xs
+         iOTQ==
+X-Gm-Message-State: AOAM530NrVBgmOOBAg9h6NF0udSzRfJobvncZhfnbv41FUko2NAwKafy
+        I1p9ZjN4/toP8voHARRTRaB0O3XAEnOliQ==
+X-Google-Smtp-Source: ABdhPJwzp7BlKb4wIp3XPCOF5PL3ihQEqq3SYQ39aZWcM7ZbYisYAeReeY5uo9mESQLZDRWV0YfjxQ==
+X-Received: by 2002:a05:6000:1a85:: with SMTP id f5mr2179980wry.463.1642064267839;
+        Thu, 13 Jan 2022 00:57:47 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:bece:ab45:7469:4195? ([2001:861:44c0:66c0:bece:ab45:7469:4195])
+        by smtp.gmail.com with ESMTPSA id o11sm7392798wmq.15.2022.01.13.00.57.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 00:57:52 -0800 (PST)
-Received: by mail-ua1-f44.google.com with SMTP id m90so9815541uam.2;
-        Thu, 13 Jan 2022 00:57:51 -0800 (PST)
-X-Received: by 2002:a05:6102:3581:: with SMTP id h1mr1708060vsu.5.1642064271439;
- Thu, 13 Jan 2022 00:57:51 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1641890718.git.zong.li@sifive.com> <78cfa00a02cbd10202040058af22a73caa9c5ae8.1641890718.git.zong.li@sifive.com>
- <CAMuHMdUogbyjU=vBuvocxofGFCwzdQndk9OTnVdP+RNA8HEFZQ@mail.gmail.com>
- <CANXhq0qpkArvELBDqOT=bnVCwvR47cxHN7oH1hYKr1Yt7zaGOQ@mail.gmail.com> <CANXhq0rKsAsm4oSvnVqy385shoY2uTQOGUSqYdf-D=2xJ5vgWg@mail.gmail.com>
-In-Reply-To: <CANXhq0rKsAsm4oSvnVqy385shoY2uTQOGUSqYdf-D=2xJ5vgWg@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 13 Jan 2022 09:57:40 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXUa8VCyocHzXGrQevEHiMVs_-p+qGpw_5ZFdOT66pv=Q@mail.gmail.com>
-Message-ID: <CAMuHMdXUa8VCyocHzXGrQevEHiMVs_-p+qGpw_5ZFdOT66pv=Q@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] dmaengine: sf-pdma: Get number of channel by
- device tree
-To:     Zong Li <zong.li@sifive.com>
+        Thu, 13 Jan 2022 00:57:47 -0800 (PST)
+Subject: Re: [PATCH v2 3/3] arm64: dts: meson-g12-common: add uart_ao_b pins
+ muxing
+To:     Gary Bisson <gary.bisson@boundarydevices.com>,
+        linux-amlogic@lists.infradead.org
 Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Green Wan <green.wan@sifive.com>, Vinod <vkoul@kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220103154616.308376-1-gary.bisson@boundarydevices.com>
+ <20220112211642.2248901-1-gary.bisson@boundarydevices.com>
+ <20220112211642.2248901-4-gary.bisson@boundarydevices.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <78e5049b-5e39-ff70-7c77-9f233c7b2fd2@baylibre.com>
+Date:   Thu, 13 Jan 2022 09:57:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20220112211642.2248901-4-gary.bisson@boundarydevices.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zong,
+On 12/01/2022 22:16, Gary Bisson wrote:
+> - RX/TX signals can be mapped on 2 different pairs of pins so supporting
+>   both options
+> - RTS/CTS signals however only have 1 option available
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+> Changes v1->v2:
+> - renamed nodes as suggested by Neil
+> 
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>  .../boot/dts/amlogic/meson-g12-common.dtsi    | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+> index af1357c48bee..62350c408e16 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+> @@ -1952,6 +1952,33 @@ mux {
+>  						};
+>  					};
+>  
+> +					uart_ao_b_2_3_pins: uart-ao-b-2-3 {
+> +						mux {
+> +							groups = "uart_ao_b_tx_2",
+> +								 "uart_ao_b_rx_3";
+> +							function = "uart_ao_b";
+> +							bias-disable;
+> +						};
+> +					};
+> +
+> +					uart_ao_b_8_9_pins: uart-ao-b-8-9 {
+> +						mux {
+> +							groups = "uart_ao_b_tx_8",
+> +								 "uart_ao_b_rx_9";
+> +							function = "uart_ao_b";
+> +							bias-disable;
+> +						};
+> +					};
+> +
+> +					uart_ao_b_cts_rts_pins: uart-ao-b-cts-rts {
+> +						mux {
+> +							groups = "uart_ao_b_cts",
+> +								 "uart_ao_b_rts";
+> +							function = "uart_ao_b";
+> +							bias-disable;
+> +						};
+> +					};
+> +
+>  					pwm_a_e_pins: pwm-a-e {
+>  						mux {
+>  							groups = "pwm_a_e";
+> 
 
-On Thu, Jan 13, 2022 at 8:26 AM Zong Li <zong.li@sifive.com> wrote:
-> On Thu, Jan 13, 2022 at 2:53 PM Zong Li <zong.li@sifive.com> wrote:
-> > On Wed, Jan 12, 2022 at 4:28 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Tue, Jan 11, 2022 at 9:51 AM Zong Li <zong.li@sifive.com> wrote:
-> > > > It currently assumes that there are always four channels, it would
-> > > > cause the error if there is actually less than four channels. Change
-> > > > that by getting number of channel from device tree.
-> > > >
-> > > > For backwards-compatible, it uses the default value (i.e. 4) when there
-> > > > is no 'dma-channels' information in dts.
-> > > >
-> > > > Signed-off-by: Zong Li <zong.li@sifive.com>
-> > >
-> > > Thanks for your patch!
-> > >
-> > > > --- a/drivers/dma/sf-pdma/sf-pdma.c
-> > > > +++ b/drivers/dma/sf-pdma/sf-pdma.c
-> > > > @@ -484,21 +484,24 @@ static int sf_pdma_probe(struct platform_device *pdev)
-> > > >         struct sf_pdma *pdma;
-> > > >         struct sf_pdma_chan *chan;
-> > > >         struct resource *res;
-> > > > -       int len, chans;
-> > > > -       int ret;
-> > > > +       int len, ret;
-> > > >         const enum dma_slave_buswidth widths =
-> > > >                 DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
-> > > >                 DMA_SLAVE_BUSWIDTH_4_BYTES | DMA_SLAVE_BUSWIDTH_8_BYTES |
-> > > >                 DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
-> > > >                 DMA_SLAVE_BUSWIDTH_64_BYTES;
-> > > >
-> > > > -       chans = PDMA_NR_CH;
-> > > > -       len = sizeof(*pdma) + sizeof(*chan) * chans;
-> > > > +       len = sizeof(*pdma) + sizeof(*chan) * PDMA_MAX_NR_CH;
-> > >
-> > > Why is the last part added (yes, this is a pre-existing issue)?
-> > > struct sf_pdma already contains space for chans[PDMA_MAX_NR_CH].
-> > > Either drop the last part, or change sf_pdma.chans[] to a flexible
-> > > array member.
-> > >
-> > > BTW, you can use the struct_size() or flex_array_size() helper
-> > > to calculate len.
-> >
-> > Thanks for your suggestions, let me fix it in the next version.
-> >
-> > >
-> > > >         pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
-> > > >         if (!pdma)
-> > > >                 return -ENOMEM;
-> > > >
-> > > > -       pdma->n_chans = chans;
-> > > > +       ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
-> > > > +                                  &pdma->n_chans);
-> > > > +       if (ret) {
-> > > > +               dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
-> > > > +               pdma->n_chans = PDMA_MAX_NR_CH;
-> > > > +       }
-> > > >
-> > > >         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > > >         pdma->membase = devm_ioremap_resource(&pdev->dev, res);
-> > > > @@ -556,7 +559,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
-> > > >         struct sf_pdma_chan *ch;
-> > > >         int i;
-> > > >
-> > > > -       for (i = 0; i < PDMA_NR_CH; i++) {
-> > > > +       for (i = 0; i < pdma->n_chans; i++) {
-> > > >                 ch = &pdma->chans[i];
-> > >
-> > > If dma-channels in DT > PDMA_NR_CH, this becomes an out-of-bound
-> > > access.
-> > >
-> >
-> > Okay, let me get the min() between pdma->chans and PDMA_MAX_NR_CH,
-> > please let me know if it isn't good to you.
->
-> Please allow me give more details on it, I would compare the value of
-> pdma->chans with PDMA_MAX_NR_CH in probe function, and set the
-> pdma->chans to PDMA_MAX_NR_CH if the value in DT is bigger than
-> PDMA_MAX_NR_CH.
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
 
-Silently limiting "dma-channels" to PDMA_MAX_NR_CH is not a good idea,
-as that may lead to hard-to-track problems.
-
-Basically you have two options:
-  1. Just use the value of "dma-channels" if present.
-     This has the advantage that it will work automatically with
-     future variants that have more channels, but allows the
-     developer to trigger memory exhaustion by providing a very large value.
-  2. Return -EINVAL if "dma-channels" is larger than PDMA_MAX_NR_CH.
-     This is the safest, but requires driver changes for a future variant
-      that has more channels.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks !
+Neil

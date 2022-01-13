@@ -2,87 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A06648DE3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 20:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A4E48DE56
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 20:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238003AbiAMToc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 14:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
+        id S233075AbiAMTry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 14:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbiAMTo3 (ORCPT
+        with ESMTP id S230187AbiAMTrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 14:44:29 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0B7C06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 11:44:29 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id v6so9842134iom.6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 11:44:29 -0800 (PST)
+        Thu, 13 Jan 2022 14:47:53 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B180C06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 11:47:53 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso7502960otf.12
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 11:47:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ea4P9vweLE2SQFqPi7PjYF9kIagB0cMOvz4tZQraiC4=;
-        b=Nz7vkKdlw29rBglxW3mOaZDXAgpV25TK0O3qcJ0pruSaQgX8kZUAiG9gf4KaWKp2ul
-         xVdxpfmUPvrTcxaw06NWcAQwceRjd+z7m/WUgX57zXsdQyQJw4rnHceBq72Gr+xumF9z
-         M4cFwN/E+xeS+U5wUJ58ZdqyzDMAXvb5EG+ped+fRBYmxnfeSGCCMw7dZDEPH/3hB6qI
-         MsMr1PT5PMa1Lqg2oy/RKKHN+L61DWbgLV10pDJGLVA3/X9KXa1jko5ulhyo0E++pLpm
-         2YNW/5wwdHHpyR2mX5JSmp7Cpf0cbXjg3j9/k4FEW5WE2g5pw+1xujQvji+x2accBNbt
-         Jk4g==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=LveOCAOmqB/h+YVzSFKmHbwc26AOHfpIvWRnUMitU1c=;
+        b=kVEP29epgvvIK6dun2PAdR68NYQ3/uzqBwFqt5+xXQE56p7Idpymv7GY5NGJ3pttS8
+         C1bw9YyQ0g+LShcqDw9WRWWa5rf1pmLBdIFJ14M9Rs36rgalrhCmzJZLu+IY14hcAsV/
+         Ea1na8Sg5YF8BWGQLrpgTqpbmHKSavW2aG3q4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ea4P9vweLE2SQFqPi7PjYF9kIagB0cMOvz4tZQraiC4=;
-        b=WLrmTLwt2U9dSzAS/hK4oHjpc5VsyVe6zyykCBtO3rnnhXKXBzp0OjZP/0ZcwHHCJ4
-         g8+Mp+LDomhRNyH/y1PIvBsHz9s/QK8nw/vminbykDJypoqgffyaNCCUo2dCyy1TE/DW
-         T9J8dN8QzB6nk1zPCiiaFvj88MilOziRooWFm+WOOcLvEdTZdN3kUNfbuZBNQ69aixeE
-         PC+jyZm6cLSIWsFujREoLwIBVtQbMHg51l0qw00SusZyryk2J9zMdmZrRUnBQv7OqCrj
-         M0o+dJsxqGuJcKEjCTqqZsurym4v4qnH4rLoDJLaZlgqh5p7Z3Az3pW3wOjk4h9oJ6+o
-         zjDA==
-X-Gm-Message-State: AOAM532FbIcgj3VB/4UnvIx9ZizUD7P9XMfBFAUlZ56I4lE7qdLAmLQS
-        IwOaKF+x0mRj18oGhf3ZTg50pg==
-X-Google-Smtp-Source: ABdhPJwsNb3ZiH58suG+DB/4lvlmZ7kIYG2TRMdN1CpyrJlJk8DJUJZS5exigjqqUYyXWVvcgE2p6w==
-X-Received: by 2002:a05:6602:1228:: with SMTP id z8mr2283548iot.82.1642103068589;
-        Thu, 13 Jan 2022 11:44:28 -0800 (PST)
-Received: from [192.168.1.30] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id s9sm3626334ilu.3.2022.01.13.11.44.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 11:44:28 -0800 (PST)
-Subject: Re: [PATCH] io_uring: Remove unused function req_ref_put
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220113162005.3011-1-jiapeng.chong@linux.alibaba.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <56e8a470-4141-c965-4967-dcecf480563a@kernel.dk>
-Date:   Thu, 13 Jan 2022 12:44:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=LveOCAOmqB/h+YVzSFKmHbwc26AOHfpIvWRnUMitU1c=;
+        b=juLYdf0tGnN9DtW1ua3sxakTtlchGFy+30phpRy4kNRkvzgm9OLUR7EqvCAD1FA7Zm
+         Z9uTKA9/AClx12eG8vJp544Ci3RnFwo32Jp33kLDZe8BtHkJWABfIJ1Osv0deo2QgR4i
+         2nBFYamWpzduvrxjLImtwSIyuxnT1VPNiQfSh0TtwpoDuviejjB7sGH+bi5Z7IJfOOgJ
+         Q63Me5TXTDzjfz41r8zlXneO5UTt8N7Dq/LUtyQIYSsGzb/iFWykPJAy0VXp1XA5MYJX
+         9w+RyfaUapAJv3Lv9vrhU+KTVrq33pn+1o0Cy5VcVR5ZGK7npoPPPzcldsy5QaCuQmS4
+         xymg==
+X-Gm-Message-State: AOAM533ahhAaS8puzK3Pg6EpwGNWATIWufzjLr4tnvzR6ZMWHkESyxtP
+        8Eh28JfTRqDpvscKel/BFeABK37KEU0SXvS7X3chZQ==
+X-Google-Smtp-Source: ABdhPJxRQB/uv0ujnf5NZkqZ46QWuW2o3HqwoQ+L6pFQvnd2vuIjHOpP+nH1s1VZt5t3QaBJW5HC+uJuKc9fC2MlXQg=
+X-Received: by 2002:a9d:7451:: with SMTP id p17mr4148931otk.159.1642103272468;
+ Thu, 13 Jan 2022 11:47:52 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 13 Jan 2022 11:47:52 -0800
 MIME-Version: 1.0
-In-Reply-To: <20220113162005.3011-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <338ae657-e8ed-e620-0aa7-4ad05df18ad1@quicinc.com>
+References: <1641926606-1012-1-git-send-email-quic_khsieh@quicinc.com>
+ <1641926606-1012-2-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n53hrPYR3ThwxM_+fzyRSB+6W1drFymW5n_RKmg_gf8z-w@mail.gmail.com>
+ <84ee17f9-2597-86b6-1517-2358d443f65b@quicinc.com> <CAE-0n5134H0puMicozjdfTY+zXVUZyrebjv7Hto3EWcQAELO4A@mail.gmail.com>
+ <338ae657-e8ed-e620-0aa7-4ad05df18ad1@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Thu, 13 Jan 2022 11:47:51 -0800
+Message-ID: <CAE-0n51QbJHnOses5sF6xECR0gRZB1Fbi1KqoLG+61ZWH9BtOA@mail.gmail.com>
+Subject: Re: [PATCH v11 1/4] drm/msm/dp: do not initialize phy until plugin
+ interrupt received
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/13/22 9:20 AM, Jiapeng Chong wrote:
-> Fix the following clang warnings:
-> 
-> fs/io_uring.c:1195:20: warning: unused function 'req_ref_put'
-> [-Wunused-function].
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Quoting Kuogee Hsieh (2022-01-13 09:51:42)
+>
+> On 1/12/2022 8:13 PM, Stephen Boyd wrote:
+> >>>> -       if (dp->usbpd->orientation == ORIENTATION_CC2)
+> >>>> -               flip = true;
+> >>>> +       dp_power_init(dp->power, false);
+> >>>> +       dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
+> >>>> +
+> >>>> +       /*
+> >>>> +        * eDP is the embedded primary display and has its own phy
+> >>>> +        * initialize phy immediately
+> >>> Question still stands why we can't wait for hpd high from the eDP panel.
+> >>> Also, I think "has its own phy" means that it's not part of a combo
+> >>> USB+DP phy? Can you please clarify?
+> >>>
+> >>>> +        */
+> >>>> +       if (dp->dp_display.connector_type == DRM_MODE_CONNECTOR_eDP)
+> >>>> +               dp_display_host_phy_init(dp);
+> >>>>
+> >>>> -       dp_power_init(dp->power, flip);
+> >>>> -       dp_ctrl_host_init(dp->ctrl, flip, reset);
+> >>>>           dp_aux_init(dp->aux);
+> >>>>           dp->core_initialized = true;
+> >>>>    }
+> >>>> @@ -1306,20 +1330,23 @@ static int dp_pm_resume(struct device *dev)
+> >>>>           dp->hpd_state = ST_DISCONNECTED;
+> >>>>
+> >>>>           /* turn on dp ctrl/phy */
+> >>>> -       dp_display_host_init(dp, true);
+> >>>> +       dp_display_host_init(dp);
+> >>>>
+> >>>>           dp_catalog_ctrl_hpd_config(dp->catalog);
+> >>>>
+> >>>> -       /*
+> >>>> -        * set sink to normal operation mode -- D0
+> >>>> -        * before dpcd read
+> >>>> -        */
+> >>>> -       dp_link_psm_config(dp->link, &dp->panel->link_info, false);
+> >>>>
+> >>>>           if (dp_catalog_link_is_connected(dp->catalog)) {
+> >>>> +               /*
+> >>>> +                * set sink to normal operation mode -- D0
+> >>>> +                * before dpcd read
+> >>>> +                */
+> >>>> +               dp_display_host_phy_init(dp);
+> >>>> +               dp_link_psm_config(dp->link, &dp->panel->link_info, false);
+> >>>>                   sink_count = drm_dp_read_sink_count(dp->aux);
+> >>>>                   if (sink_count < 0)
+> >>>>                           sink_count = 0;
+> >>>> +
+> >>>> +               dp_display_host_phy_exit(dp);
+> >>> Why is the phy exited on resume when the link is still connected? Is
+> >>> this supposed to be done only when the sink_count is 0? And how does
+> >>> this interact with eDP where the phy is initialized by the call to
+> >>> dp_display_host_init() earlier in this function.
+> >>>
+> >>>>           }
+> >>>>
+> >>>>           dp->link->sink_count = sink_count;
+> > Any response to the above two comments?
 
-This was introduced by:
-
-aa43477b0402 ("io_uring: poll rework")
-
-so I added a Fixes line for that. Applied, thanks.
-
--- 
-Jens Axboe
-
+??

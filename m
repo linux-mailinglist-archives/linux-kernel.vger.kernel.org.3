@@ -2,94 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C021A48D5A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D59D48D5A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbiAMKVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:21:15 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:47674 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231673AbiAMKVO (ORCPT
+        id S231673AbiAMK0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:26:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229715AbiAMK03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:21:14 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20D8S77O017161;
-        Thu, 13 Jan 2022 11:21:07 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=4DuleFFceRfbztWmfYxXFQO+YBMNDqqrJdOpBXrPzcs=;
- b=u7QfE7iKoPzbNhsK2eB0TQJrDGBm30ie9dAkp+9S0Wa+VdUpNwoXjpgZ5sKwrrQmyaTH
- F//Ff9fsaxvEmNTASmhaD9ZExvAio81iyaQPBNNlYaWqG+3vU104WQ3WWOJ6klnyrE1I
- mn3Uja60eNt8Xsu32dW3S78C8w/2VX8jOvDACS6V1CIGXit5bmjXmC1knsYD59gQMn9D
- +D9Kcl7lEaaijjZnTvDuu11jzDvtpIRM9KBJvXA2ip7egjC0GyAsH5GjfEK4J1uTDNcG
- CjK42rS8AqxRlB3KJjpwFvBouzJ+KYccPJE6T3hD0vX7Er9lLFj3rSyK6ro77x+fwL+C Sw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3djgkkrqmu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 11:21:07 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E244D100034;
-        Thu, 13 Jan 2022 11:21:06 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DB1AB20D18E;
-        Thu, 13 Jan 2022 11:21:06 +0100 (CET)
-Received: from lmecxl1137.lme.st.com (10.75.127.44) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 13 Jan
- 2022 11:21:06 +0100
-Subject: Re: [PATCH 4/5] drm/stm: ltdc: add support of flexible pixel formats
-To:     Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211215214835.20593-1-yannick.fertre@foss.st.com>
-From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-Message-ID: <9a718ddb-163b-6c9a-b83b-a52df94805cf@foss.st.com>
-Date:   Thu, 13 Jan 2022 11:21:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 13 Jan 2022 05:26:29 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C09C06173F;
+        Thu, 13 Jan 2022 02:26:28 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id c71so21289043edf.6;
+        Thu, 13 Jan 2022 02:26:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=DwMuqUmXYlR2GaYYSfQP01V+oZIjMgFSYkUX0ZCqdlM=;
+        b=OV8Mez2AjciehpAOr00nyvDb4Q4GWJH2Ts7Ke7IpoKHUijGliUUjnTjNNs3sznvO3i
+         IEnr+UkfjcXKUUSWehRlZm5+vUnZ74FX+afKc36lgor+2sFsj/sWKAGvOQceN0y7mBoV
+         Vsl1hIYZdKyHF2fRAQH/UhWrhBMQLRwfgVfvfDtqdmTLMRGir9Hi+k38re6pg8/rFQJo
+         i9/jjTf00X0l8tfHC4diKbexx0dV04XqqFAhjfbJBIrs/yD7LkDLN9wUEiU6KVxlxfjU
+         4iCeb5OhLxHSVT/+ZdWwdoFrpPblkf1nwFEaTeqPq9iTG1WFR+tRGJsyxNJ/7jaRph0r
+         lI0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=DwMuqUmXYlR2GaYYSfQP01V+oZIjMgFSYkUX0ZCqdlM=;
+        b=BOBiHb3gy0keUF6LiygNa+jCsmm8MXSNZEjT4odLDEWJ6QoT0Tu9l8NQek6fzlpO4C
+         gNi9p18nEwVmnQemeYgOrfVZTm14/1tTeAJ7sG7dSSBmofQe5C9R6o07Hqe+cov/MPIQ
+         55x16ochZUkObcS0ZnN2ls4mgQMX9qVizwtBzyLnzx4flq0OIQ76P6yrMFRUVd1HALR0
+         u2+Hq6TXGw3EbAu0LcX4k1fDpqcQHc/fIH+6YQB5DeFLtmoZY2VJv1PuWlZd2KtspQ6A
+         onwcChIYbXxWWuW8IRxai+GgN1YSWXzIZcG1eBmeYYhv5KOVzIf2PGSKueOAbxAP9jwa
+         DKgw==
+X-Gm-Message-State: AOAM531O+2wvTw493jdufEakjYjU7kpiFEVDkNYEDsayA7gDR4/6oN5E
+        +vdVXX4z1t0Oetj/DGAB8a4gGvzdNwiRggoCvHE=
+X-Google-Smtp-Source: ABdhPJxbt7fzvkaekB8W9YzBhSXsfm5NiDkJE4l52p3nVzrO7bDC8JCiFe3oxPctIGwhHWWRl1pm8lS/0WfOu/iWVhY=
+X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr2970333ejc.497.1642069587473;
+ Thu, 13 Jan 2022 02:26:27 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211215214835.20593-1-yannick.fertre@foss.st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-13_02,2022-01-13_01,2021-12-02_01
+References: <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com> <c28ab909-99b4-b43c-e330-b07e35afb981@amd.com>
+ <ebee1239-4ed4-8c68-54e0-f684cea71e93@roeck-us.net> <YdoG+en5Z/MaS/wu@ninjato>
+ <CAHp75VfC2XsF2j=obXu7RLNZkKSsZ20eOH2-UMA9AoMAemKa9Q@mail.gmail.com>
+ <Yd16cw0AaYcf7eSf@kunai> <811d6ec7-7eac-dfd3-5927-4adcc2251fab@amd.com>
+ <CAHp75Vfv9kgxu5u1YfjEuRmwj=jSybmZ92bpt30jB8MX4LFHaQ@mail.gmail.com>
+ <CAHp75Vf3G1ftL6VrCchCTC7UbEyWD65wdjRjYOwxY9ONxZ=DCQ@mail.gmail.com>
+ <74eb7c8f-7072-495a-fc26-b60bf0a1f51a@amd.com> <Yd/X6DlWjACLODe2@ninjato>
+In-Reply-To: <Yd/X6DlWjACLODe2@ninjato>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 13 Jan 2022 12:24:41 +0200
+Message-ID: <CAHp75VeR4sL1URhf+Vj6_fUjw3wgG98nZd8Mu20NzH1zM590SQ@mail.gmail.com>
+Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
+ io accesses with mmio accesses
+To:     Wolfram Sang <wsa@kernel.org>, Terry Bowman <Terry.Bowman@amd.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.de>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Robert Richter <rrichter@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 12/15/21 10:48 PM, Yannick Fertre wrote:
-> This feature allows the generation of any RGB pixel format.
-> The list of supported formats is no longer linked to the
-> register LXPFCR_PF, that the reason why a list of drm formats is
-> defined for each display controller version.
+On Thu, Jan 13, 2022 at 9:42 AM Wolfram Sang <wsa@kernel.org> wrote:
 >
-> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
-> ---
->  drivers/gpu/drm/stm/ltdc.c | 196 ++++++++++++++++++++++++++-----------
->  drivers/gpu/drm/stm/ltdc.h |   5 +-
->  2 files changed, 145 insertions(+), 56 deletions(-)
+>
+> > > On top of that I'm wondering why slow I/O is used? Do we have anything
+> > > that really needs that or is it simply a cargo-cult?
+> >
+> > The efch SMBUS & WDT previously only supported a port I/O interface
+> > (until recently) and thus dictated the HW access method.
+>
+> Is this enough information to start v2 of this series? Or does the
+> approach need more discussion?
 
+I dunno why slow I/O is chosen, but it only affects design (read:
+ugliness) of the new code.
 
-Hello Yannick,
-
-
-Reviewed-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-Tested-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-
-Many thanks, this is an interesting patch.
-
-Raphaël
-
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,117 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B68E948D631
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AAF48D636
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233847AbiAMK6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:58:05 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:43218 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233820AbiAMK6C (ORCPT
+        id S233857AbiAMK6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:58:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44416 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230160AbiAMK6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:58:02 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 40CE71F3BC;
-        Thu, 13 Jan 2022 10:58:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642071481; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jG2YBmKxjGm7yo2Ve7nOVVYEHMKVyhyJf6tIbfNxbRM=;
-        b=xaEBgzRALckvYaXQWmg0Sp787ke7YPnqaZ2GgC2sp/walSexq0QHRNs0E/6sHmlx5xKelc
-        NJwoBZHbGMGjjvn8yqZOEkz6Pm7YPZEjkL2e9/TdOBj4pSVS0ClGKRovoBa2m4Ju5FEeJj
-        NP9UcuF/PnucO4i6INRvlydh1kAC4tI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642071481;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jG2YBmKxjGm7yo2Ve7nOVVYEHMKVyhyJf6tIbfNxbRM=;
-        b=Cgjr6zCU/nrJzGkMdXvSwhSSk8ftcCjcJRB60rbuIKLIGSNQnZ08zAVL9Migzjyi+z7MMB
-        z2RbVJL13CZSbVAw==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
+        Thu, 13 Jan 2022 05:58:21 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2F9F6A3B83;
-        Thu, 13 Jan 2022 10:58:01 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CCCB2A05E2; Thu, 13 Jan 2022 11:58:00 +0100 (CET)
-Date:   Thu, 13 Jan 2022 11:58:00 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jan Kara <jack@suse.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>, tytso@mit.edu,
-        Eric Whitney <enwlinux@gmail.com>
-Subject: Re: [PATCH 2/6] ext4: Remove redundant max inline_size check in
- ext4_da_write_inline_data_begin()
-Message-ID: <20220113105800.onazeyrdh3mr2bjw@quack3.lan>
-References: <cover.1642044249.git.riteshh@linux.ibm.com>
- <fc7f7b3ad709da48c49ab14a2ce86e00a7defe0e.1642044249.git.riteshh@linux.ibm.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE740B82249
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 10:58:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E36C36AE3;
+        Thu, 13 Jan 2022 10:58:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642071499;
+        bh=W0tlPns/8hh5t5dUxhS9ruGELjPjP1Kr5hSt7g/w3vQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d+MD2cjzacJMicw8gLVRcdOSdtt+9XFMWOEz6ZjPS0Pn26hdTQbIDN6yiPdtoITLM
+         bRZsg5TveoZfNXCDStZpnMiZ/iLyh9M2K8Hn0mWiaPolfyZm9yUrANwNUjzpl0ycEt
+         mWTAaNPH/UIpMZSCSYGZwJ+fQzC5r/7NwJveg0Rc=
+Date:   Thu, 13 Jan 2022 11:58:16 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     tj@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] kernfs: Reduce contention around global per-fs
+ kernfs_rwsem.
+Message-ID: <YeAFyOR61+c+FyMn@kroah.com>
+References: <20220113104259.1584491-1-imran.f.khan@oracle.com>
+ <20220113104259.1584491-3-imran.f.khan@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fc7f7b3ad709da48c49ab14a2ce86e00a7defe0e.1642044249.git.riteshh@linux.ibm.com>
+In-Reply-To: <20220113104259.1584491-3-imran.f.khan@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 13-01-22 08:56:25, Ritesh Harjani wrote:
-> ext4_prepare_inline_data() already checks for ext4_get_max_inline_size()
-> and returns -ENOSPC. So there is no need to check it twice within
-> ext4_da_write_inline_data_begin(). This patch removes the extra check.
+On Thu, Jan 13, 2022 at 09:42:59PM +1100, Imran Khan wrote:
+> Right now a global per file system based rwsem (kernfs_rwsem)
+> synchronizes multiple kernfs operations. On a large system with
+> few hundred CPUs and few hundred applications simultaenously trying
+> to access sysfs, this results in multiple sys_open(s) contending on
+> kernfs_rwsem via kernfs_iop_permission and kernfs_dop_revalidate.
 > 
-> It also makes it more clean.
+> -   21.42%    21.34%  showgids   [kernel.kallsyms]     [k] up_read
+>      21.34% __libc_start_main
+>         __GI___libc_open
+>         entry_SYSCALL_64_after_hwframe
+>         do_syscall_64
+>         sys_open
+>         do_sys_open
+>         do_filp_open
+>       - path_openat
+>          - 20.05% link_path_walk
+>             - 9.76% walk_component
+>                  lookup_fast
+>                - d_revalidate.part.24
+>                   - 9.75% kernfs_dop_revalidate
+>                        up_read
+>             - 9.46% inode_permission
+>                - __inode_permission
+>                   - 9.46% kernfs_iop_permission
+>                        up_read
+>             - 0.83% kernfs_iop_get_link
+>                  up_read
+>          - 0.80% lookup_fast
+>               d_revalidate.part.24
+>               kernfs_dop_revalidate
+>               up_read
 > 
-> No functionality change in this patch.
+> -   21.31%    21.21%  showgids   [kernel.kallsyms]    [k] down_read
+>      21.21% __libc_start_main
+>         __GI___libc_open
+>         entry_SYSCALL_64_after_hwframe
+>         do_syscall_64
+>         sys_open
+>         do_sys_open
+>         do_filp_open
+>       - path_openat
+>          - 19.78% link_path_walk
+>             - 10.62% inode_permission
+>                - __inode_permission
+>                   - 10.62% kernfs_iop_permission
+>                        down_read
+>             - 8.45% walk_component
+>                  lookup_fast
+>                - d_revalidate.part.24
+>                   - 8.45% kernfs_dop_revalidate
+>                        down_read
+>             - 0.71% kernfs_iop_get_link
+>                  down_read
+>          - 0.72% lookup_fast
+>             - d_revalidate.part.24
+>                - 0.72% kernfs_dop_revalidate
+>                     down_read
+>          - 0.71% may_open
+>               inode_permission
+>               __inode_permission
+>               kernfs_iop_permission
+>               down_read
 > 
-> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+> Since permission is specific to a kernfs_node we can use a hashed
+> lock to access/modify permission. Also use kernfs reference counting
+> to ensure we are accessing/modifying permissions for an existing
+> kernfs_node object.
+> 
+> Using this change brings down the above mentioned down_read/up_read
+> numbers to ~8%, thus indicating that contention around kernfs_rwsem
+> has reduced to about 1/3rd of earlier value.
 
-Looks good. Feel free to add:
+Ah, nevermind, you do post the results here, I should have kept reading.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Nice work!
 
-								Honza
+I'll look at these after 5.17-rc1 is out, thanks!
 
-> ---
->  fs/ext4/inline.c | 13 ++++---------
->  1 file changed, 4 insertions(+), 9 deletions(-)
-> 
-> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
-> index 31741e8a462e..c52b0037983d 100644
-> --- a/fs/ext4/inline.c
-> +++ b/fs/ext4/inline.c
-> @@ -913,7 +913,7 @@ int ext4_da_write_inline_data_begin(struct address_space *mapping,
->  				    struct page **pagep,
->  				    void **fsdata)
->  {
-> -	int ret, inline_size;
-> +	int ret;
->  	handle_t *handle;
->  	struct page *page;
->  	struct ext4_iloc iloc;
-> @@ -930,14 +930,9 @@ int ext4_da_write_inline_data_begin(struct address_space *mapping,
->  		goto out;
->  	}
->  
-> -	inline_size = ext4_get_max_inline_size(inode);
-> -
-> -	ret = -ENOSPC;
-> -	if (inline_size >= pos + len) {
-> -		ret = ext4_prepare_inline_data(handle, inode, pos + len);
-> -		if (ret && ret != -ENOSPC)
-> -			goto out_journal;
-> -	}
-> +	ret = ext4_prepare_inline_data(handle, inode, pos + len);
-> +	if (ret && ret != -ENOSPC)
-> +		goto out_journal;
->  
->  	/*
->  	 * We cannot recurse into the filesystem as the transaction
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+greg k-h

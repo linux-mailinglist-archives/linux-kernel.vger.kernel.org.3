@@ -2,336 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 247E248D9DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 536DF48D9EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235732AbiAMOnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 09:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbiAMOnK (ORCPT
+        id S235752AbiAMOpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:45:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59708 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233723AbiAMOpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:43:10 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E70C06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 06:43:10 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id a5so10526399wrh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 06:43:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9i7HlgQ1EBTmH3FI2DN5Tf9iSGv1/GZJ08Nce3djOg0=;
-        b=FQW3iuI+DR+Bj22u6L46VOUCQW4K0x7yWbZQSTk8JYRYVjE4Vppd+KbVXLaB+FcyJ/
-         TJA7MmgDZn0fRzy7qv0d1xCSgG/Ib2i+alhmBcZOO3T1+6bo7HG9hjPjSLMcDleZY4O9
-         WS9kxxehCN+S9XowbtfGEqEh5NLOLVNtNI0bDhTzRRXUijHNklc67E/XNli39ARAESmo
-         HxJWtptrKIBHUwCYMvL4OCe/INiZDg06DRKEojVqeoqm0jmEq5iXQHGuUeyO/jM3QE57
-         nDubWVqJ9rR9Gx6n/O+2Nh5GtVmzQYna5PfCe8+kAQTIrEBchiCASI9JdE8JBkKGFWgZ
-         wwrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9i7HlgQ1EBTmH3FI2DN5Tf9iSGv1/GZJ08Nce3djOg0=;
-        b=a9M0rHQOvLHNFoRXB1HSJzAIb5AC7lLQB0pQ3sDJhdDv4a4lK4cghxeDfE5obZ9lMd
-         1UriCkTplxq281p3oWpaMMyRNpd2W44KYUrhKJzJGIw5M08ks61W21Zqo01c1RcvKtGG
-         dPdfsbE3eIOxge7N1czzcd18/tbqnK8E9zRSaCeqxK5G7QW082YG9Ff9qA1Xn4bwVVLt
-         6xJeqbff7+066H66Bx8VGokvKdXUoIDNzs/jWKLnJeuWMKaEyyEU0i62KLNIS+gVSWY9
-         kJcWxqQ0KBZ5qXOjnni/GVwrxTt2JgzWe8P/zNNk54g/PNaQh9XqTwVmhQPUKDgLzNUo
-         h3Jg==
-X-Gm-Message-State: AOAM5308RYKUJH0IQOJw0hUtrQqANQ88ti07k1WxKOuIt4yXShm8y/TE
-        x5RQqn0hHhncBgaLN2UWutHSYQ==
-X-Google-Smtp-Source: ABdhPJxW7WlGCAT/Jkep3H4hAf3HkmzqZ1bksk1n8ggy9XenQ1KZwjAwjelWgrUmWQnFAxjigHGjTg==
-X-Received: by 2002:a5d:648e:: with SMTP id o14mr4309484wri.667.1642084988914;
-        Thu, 13 Jan 2022 06:43:08 -0800 (PST)
-Received: from localhost.localdomain ([2001:861:44c0:66c0:bece:ab45:7469:4195])
-        by smtp.gmail.com with ESMTPSA id n7sm2731209wms.46.2022.01.13.06.43.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 06:43:08 -0800 (PST)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     andrzej.hajda@intel.com, robert.foss@linaro.org
-Cc:     Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH] drm/bridge: sii902x: add support for DRM_BRIDGE_ATTACH_NO_CONNECTOR
-Date:   Thu, 13 Jan 2022 15:43:05 +0100
-Message-Id: <20220113144305.1074389-1-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 13 Jan 2022 09:45:50 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 534FB61CFC;
+        Thu, 13 Jan 2022 14:45:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA3CC36AEB;
+        Thu, 13 Jan 2022 14:45:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642085148;
+        bh=qGUpScSrM6PHOQ9896+ovOSrylwTkuQlIpt7KlyEp5s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rIF3lS/tm9sqFT+BginWJM2+mt1t0i+1rbRTwFGO/b5RO54FFqysidEmT2WSnXujo
+         cGDZLPUBbnFnBovZVRCzJE12OIxe0UaqPbmDiXkUfgTiIFTn2YGRAzH3LqjFaP+tZD
+         stowk5nOSDH2HzMR+0nMTCmGiZrfOpEXlbtFzEEyyHKSnxaKn6wp5i+0CBOwWaYud8
+         h6IHjIqf66cMB/zCEPF7AQwqZAp9MkoApoumfwu6VFfqqNiQcfv/H1IDJvKTA9xbou
+         r4uQpom3hKk5szByYDLACU4vgN5e9UWDsM5Igx38QRWaZyToUoz1pHBLnnGGGgQZOi
+         t54X3kfj11igw==
+Date:   Thu, 13 Jan 2022 14:45:30 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Auger <eric.auger@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <YeA7CjOyJFkpuhz/@sirena.org.uk>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+ <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="W6TsDGUCC61npB/4"
+Content-Disposition: inline
+In-Reply-To: <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+X-Cookie: Slow day.  Practice crawling.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds support for DRM_BRIDGE_ATTACH_NO_CONNECTOR by adding the
-bridge get_edid() and detect() callbacks after refactoring the connector
-get_modes() and connector_detect() callbacks.
 
-In order to keep the bridge working, extra code in get_modes() has been
-moved to more logical places.
+--W6TsDGUCC61npB/4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- drivers/gpu/drm/bridge/sii902x.c | 129 ++++++++++++++++++++++++-------
- 1 file changed, 99 insertions(+), 30 deletions(-)
+On Thu, Jan 13, 2022 at 12:08:31PM +0100, Uwe Kleine-K=F6nig wrote:
 
-diff --git a/drivers/gpu/drm/bridge/sii902x.c b/drivers/gpu/drm/bridge/sii902x.c
-index 89558e581530..65549fbfdc87 100644
---- a/drivers/gpu/drm/bridge/sii902x.c
-+++ b/drivers/gpu/drm/bridge/sii902x.c
-@@ -166,10 +166,12 @@ struct sii902x {
- 	struct i2c_client *i2c;
- 	struct regmap *regmap;
- 	struct drm_bridge bridge;
-+	struct drm_bridge *next_bridge;
- 	struct drm_connector connector;
- 	struct gpio_desc *reset_gpio;
- 	struct i2c_mux_core *i2cmux;
- 	struct regulator_bulk_data supplies[2];
-+	bool sink_is_hdmi;
- 	/*
- 	 * Mutex protects audio and video functions from interfering
- 	 * each other, by keeping their i2c command sequences atomic.
-@@ -245,10 +247,8 @@ static void sii902x_reset(struct sii902x *sii902x)
- 	gpiod_set_value(sii902x->reset_gpio, 0);
- }
- 
--static enum drm_connector_status
--sii902x_connector_detect(struct drm_connector *connector, bool force)
-+static enum drm_connector_status sii902x_detect(struct sii902x *sii902x)
- {
--	struct sii902x *sii902x = connector_to_sii902x(connector);
- 	unsigned int status;
- 
- 	mutex_lock(&sii902x->mutex);
-@@ -261,6 +261,14 @@ sii902x_connector_detect(struct drm_connector *connector, bool force)
- 	       connector_status_connected : connector_status_disconnected;
- }
- 
-+static enum drm_connector_status
-+sii902x_connector_detect(struct drm_connector *connector, bool force)
-+{
-+	struct sii902x *sii902x = connector_to_sii902x(connector);
-+
-+	return sii902x_detect(sii902x);
-+}
-+
- static const struct drm_connector_funcs sii902x_connector_funcs = {
- 	.detect = sii902x_connector_detect,
- 	.fill_modes = drm_helper_probe_single_connector_modes,
-@@ -270,42 +278,40 @@ static const struct drm_connector_funcs sii902x_connector_funcs = {
- 	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
- };
- 
--static int sii902x_get_modes(struct drm_connector *connector)
-+static struct edid *sii902x_get_edid(struct sii902x *sii902x,
-+				     struct drm_connector *connector)
- {
--	struct sii902x *sii902x = connector_to_sii902x(connector);
--	u32 bus_format = MEDIA_BUS_FMT_RGB888_1X24;
--	u8 output_mode = SII902X_SYS_CTRL_OUTPUT_DVI;
- 	struct edid *edid;
--	int num = 0, ret;
- 
- 	mutex_lock(&sii902x->mutex);
- 
- 	edid = drm_get_edid(connector, sii902x->i2cmux->adapter[0]);
--	drm_connector_update_edid_property(connector, edid);
- 	if (edid) {
- 		if (drm_detect_hdmi_monitor(edid))
--			output_mode = SII902X_SYS_CTRL_OUTPUT_HDMI;
--
--		num = drm_add_edid_modes(connector, edid);
--		kfree(edid);
-+			sii902x->sink_is_hdmi = true;
-+		else
-+			sii902x->sink_is_hdmi = false;
- 	}
- 
--	ret = drm_display_info_set_bus_formats(&connector->display_info,
--					       &bus_format, 1);
--	if (ret)
--		goto error_out;
-+	mutex_unlock(&sii902x->mutex);
- 
--	ret = regmap_update_bits(sii902x->regmap, SII902X_SYS_CTRL_DATA,
--				 SII902X_SYS_CTRL_OUTPUT_MODE, output_mode);
--	if (ret)
--		goto error_out;
-+	return edid;
-+}
- 
--	ret = num;
-+static int sii902x_get_modes(struct drm_connector *connector)
-+{
-+	struct sii902x *sii902x = connector_to_sii902x(connector);
-+	struct edid *edid;
-+	int num = 0;
- 
--error_out:
--	mutex_unlock(&sii902x->mutex);
-+	edid = sii902x_get_edid(sii902x, connector);
-+	drm_connector_update_edid_property(connector, edid);
-+	if (edid) {
-+		num = drm_add_edid_modes(connector, edid);
-+		kfree(edid);
-+	}
- 
--	return ret;
-+	return num;
- }
- 
- static enum drm_mode_status sii902x_mode_valid(struct drm_connector *connector,
-@@ -354,12 +360,16 @@ static void sii902x_bridge_mode_set(struct drm_bridge *bridge,
- 				    const struct drm_display_mode *adj)
- {
- 	struct sii902x *sii902x = bridge_to_sii902x(bridge);
-+	u8 output_mode = SII902X_SYS_CTRL_OUTPUT_DVI;
- 	struct regmap *regmap = sii902x->regmap;
- 	u8 buf[HDMI_INFOFRAME_SIZE(AVI)];
- 	struct hdmi_avi_infoframe frame;
- 	u16 pixel_clock_10kHz = adj->clock / 10;
- 	int ret;
- 
-+	if (sii902x->sink_is_hdmi)
-+		output_mode = SII902X_SYS_CTRL_OUTPUT_HDMI;
-+
- 	buf[0] = pixel_clock_10kHz & 0xff;
- 	buf[1] = pixel_clock_10kHz >> 8;
- 	buf[2] = drm_mode_vrefresh(adj);
-@@ -375,6 +385,11 @@ static void sii902x_bridge_mode_set(struct drm_bridge *bridge,
- 
- 	mutex_lock(&sii902x->mutex);
- 
-+	ret = regmap_update_bits(sii902x->regmap, SII902X_SYS_CTRL_DATA,
-+				 SII902X_SYS_CTRL_OUTPUT_MODE, output_mode);
-+	if (ret)
-+		goto out;
-+
- 	ret = regmap_bulk_write(regmap, SII902X_TPI_VIDEO_DATA, buf, 10);
- 	if (ret)
- 		goto out;
-@@ -405,13 +420,13 @@ static int sii902x_bridge_attach(struct drm_bridge *bridge,
- 				 enum drm_bridge_attach_flags flags)
- {
- 	struct sii902x *sii902x = bridge_to_sii902x(bridge);
-+	u32 bus_format = MEDIA_BUS_FMT_RGB888_1X24;
- 	struct drm_device *drm = bridge->dev;
- 	int ret;
- 
--	if (flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR) {
--		DRM_ERROR("Fix bridge driver to make connector optional!");
--		return -EINVAL;
--	}
-+	if (flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR)
-+		return drm_bridge_attach(bridge->encoder, sii902x->next_bridge,
-+					 bridge, flags);
- 
- 	drm_connector_helper_add(&sii902x->connector,
- 				 &sii902x_connector_helper_funcs);
-@@ -433,16 +448,38 @@ static int sii902x_bridge_attach(struct drm_bridge *bridge,
- 	else
- 		sii902x->connector.polled = DRM_CONNECTOR_POLL_CONNECT;
- 
-+	ret = drm_display_info_set_bus_formats(&sii902x->connector.display_info,
-+					       &bus_format, 1);
-+	if (ret)
-+		return ret;
-+
- 	drm_connector_attach_encoder(&sii902x->connector, bridge->encoder);
- 
- 	return 0;
- }
- 
-+static enum drm_connector_status sii902x_bridge_detect(struct drm_bridge *bridge)
-+{
-+	struct sii902x *sii902x = bridge_to_sii902x(bridge);
-+
-+	return sii902x_detect(sii902x);
-+}
-+
-+static struct edid *sii902x_bridge_get_edid(struct drm_bridge *bridge,
-+					    struct drm_connector *connector)
-+{
-+	struct sii902x *sii902x = bridge_to_sii902x(bridge);
-+
-+	return sii902x_get_edid(sii902x, connector);
-+}
-+
- static const struct drm_bridge_funcs sii902x_bridge_funcs = {
- 	.attach = sii902x_bridge_attach,
- 	.mode_set = sii902x_bridge_mode_set,
- 	.disable = sii902x_bridge_disable,
- 	.enable = sii902x_bridge_enable,
-+	.detect = sii902x_bridge_detect,
-+	.get_edid = sii902x_bridge_get_edid,
- };
- 
- static int sii902x_mute(struct sii902x *sii902x, bool mute)
-@@ -829,8 +866,12 @@ static irqreturn_t sii902x_interrupt(int irq, void *data)
- 
- 	mutex_unlock(&sii902x->mutex);
- 
--	if ((status & SII902X_HOTPLUG_EVENT) && sii902x->bridge.dev)
-+	if ((status & SII902X_HOTPLUG_EVENT) && sii902x->bridge.dev) {
- 		drm_helper_hpd_irq_event(sii902x->bridge.dev);
-+		drm_bridge_hpd_notify(&sii902x->bridge, (status & SII902X_PLUGGED_STATUS)
-+								? connector_status_connected
-+								: connector_status_disconnected);
-+	}
- 
- 	return IRQ_HANDLED;
- }
-@@ -1001,6 +1042,11 @@ static int sii902x_init(struct sii902x *sii902x)
- 	sii902x->bridge.funcs = &sii902x_bridge_funcs;
- 	sii902x->bridge.of_node = dev->of_node;
- 	sii902x->bridge.timings = &default_sii902x_timings;
-+	sii902x->bridge.ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID;
-+
-+	if (sii902x->i2c->irq > 0)
-+		sii902x->bridge.ops |= DRM_BRIDGE_OP_HPD;
-+
- 	drm_bridge_add(&sii902x->bridge);
- 
- 	sii902x_audio_codec_init(sii902x, dev);
-@@ -1022,6 +1068,7 @@ static int sii902x_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
- 	struct device *dev = &client->dev;
-+	struct device_node *endpoint;
- 	struct sii902x *sii902x;
- 	int ret;
- 
-@@ -1049,6 +1096,28 @@ static int sii902x_probe(struct i2c_client *client,
- 		return PTR_ERR(sii902x->reset_gpio);
- 	}
- 
-+	endpoint = of_graph_get_endpoint_by_regs(dev->of_node, 1, -1);
-+	if (endpoint) {
-+		struct device_node *remote = of_graph_get_remote_port_parent(endpoint);
-+
-+		of_node_put(endpoint);
-+		if (!remote) {
-+			dev_err(dev, "Endpoint in port@1 unconnected\n");
-+			return -ENODEV;
-+		}
-+
-+		if (!of_device_is_available(remote)) {
-+			dev_err(dev, "port@1 remote device is disabled\n");
-+			of_node_put(remote);
-+			return -ENODEV;
-+		}
-+
-+		sii902x->next_bridge = of_drm_find_bridge(remote);
-+		of_node_put(remote);
-+		if (!sii902x->next_bridge)
-+			return -EPROBE_DEFER;
-+	}
-+
- 	mutex_init(&sii902x->mutex);
- 
- 	sii902x->supplies[0].supply = "iovcc";
--- 
-2.25.1
+> This is all very unfortunate. In my eyes b) is the most sensible
+> sense, but the past showed that we don't agree here. (The most annoying
+> part of regulator_get is the warning that is emitted that regularily
+> makes customers ask what happens here and if this is fixable.)
 
+Fortunately it can be fixed, and it's safer to clearly specify things.
+The prints are there because when the description is wrong enough to
+cause things to blow up we can fail to boot or run messily and
+forgetting to describe some supplies (or typoing so they haven't done
+that) and people were having a hard time figuring out what might've
+happened.
+
+> I think at least c) is easy to resolve because
+> platform_get_irq_optional() isn't that old yet and mechanically
+> replacing it by platform_get_irq_silent() should be easy and safe.
+> And this is orthogonal to the discussion if -ENOXIO is a sensible return
+> value and if it's as easy as it could be to work with errors on irq
+> lookups.
+
+It'd certainly be good to name anything that doesn't correspond to one
+of the existing semantics for the API (!) something different rather
+than adding yet another potentially overloaded meaning.
+
+--W6TsDGUCC61npB/4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHgOwoACgkQJNaLcl1U
+h9DB2wf+MsmuWAbFkx7w6dSqBFg+5BMfRX917lHiCsn2CYARHwyaPL5M5EVrbehK
+70/euCaJWItviAfkx+6AAOYCmbHs8mt+zpvgLriDTnZOumRiZfiGXMZHt85uxFOg
++CON0NcPugM2d7SZyRdxLTQBcBJt3wzMoV71nZv43fG+BMfssZy/ADYB75p648wU
+r7n86P+i3Kh+8hkINY1UdrfNXf7GkWehj0fZhkQ6PO+sH6jH8JFft+mMsKvTkCfp
+th2g66aUCkHb8ML7wNc5DEOQZlW9A7QyBKZpFWcduJs7uD92dqsoRJ7ch05zM3z/
+HtLt6l6YJ3XD702pvFQA2C4cb/OGkA==
+=d1L9
+-----END PGP SIGNATURE-----
+
+--W6TsDGUCC61npB/4--

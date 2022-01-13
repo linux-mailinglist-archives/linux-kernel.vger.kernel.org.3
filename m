@@ -2,404 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DD348D34F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E9348D349
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbiAMIBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 03:01:15 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:14082 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbiAMIBI (ORCPT
+        id S232556AbiAMIAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 03:00:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37497 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229912AbiAMIAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 03:01:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1642060868; x=1673596868;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=UBonp6ZYX9A4/hS9KoaKbKV+rCTi/qoRpFz8Zl4MQKQ=;
-  b=fPHY/dMhFKsA5NoISfp6/eKoRioTt6+eR5shA4mUtGGD/HJkya/Q7jDy
-   1XkgOrXuTpqGrQJpzFpz8Av6HBGzWhde+hkCgIU2epv2S5718kr8pk9ZJ
-   7eiox/ANitFJ8CK95ztRIMcqPGSdpAOSgKgq+VuZznUu9TFH8Mfx01Iu/
-   Iag8DrBCRdWg05vnEcybEwK6fYiljNZxU3CkFiJLL02kxRllF4btngvm4
-   VRJDq6o6kyoBtaoBx82A8m0EpJqta2mF2HoOAZp7V3VTAgXjrv/zXFAFM
-   XZS8oXCgFzQIalH3bsc2r5Z1V0XV/0pw3nyvTe2xqV8P1115CewlP7CNg
-   w==;
-IronPort-SDR: 3Xzrd3a81j5pcFkexPk96F/w/wb+GAajfH613l/ta7M6/dlBn02vh8iYtuO3G3NWibSijYURyV
- NmfvLNL2uhymf/naGPT4LhcQ9ErBp9BUhMGdT9E31JTmP1Z/w7oBi5/9uG0hQaQAhKy8w0dHOs
- k9mvzBC5j5nDehkV5LRZXN2eId0Ls9qmU4zVkJxM7PC1x0bNc6kSP3gtPTYqYfiFjlCU+36Da1
- +p2W4+TfwWZ4Rl3KNd+duk1QRZrN3eEwziC2FtjGJ72pIoLGKE/yNhTQK0511Ta9gEXSgSiUGa
- qoH9ulHZmqAAGHUuVM/+5N/8
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="142562463"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jan 2022 01:01:06 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 13 Jan 2022 01:01:06 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 13 Jan 2022 01:01:03 -0700
-From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-To:     <arnd@arndb.de>, <olof@lixom.net>, <soc@kernel.org>,
-        <robh+dt@kernel.org>, <nicolas.ferre@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <Kavyasree.Kotagiri@microchip.com>
-Subject: [PATCH v3] ARM: dts: add DT for lan966x SoC and 2-port board pcb8291
-Date:   Thu, 13 Jan 2022 13:30:17 +0530
-Message-ID: <20220113080017.30155-1-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 13 Jan 2022 03:00:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642060852;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yrpcw7YUTOUtHCgNDfajqgyLxv5jTMntW/pzZ7ls5fc=;
+        b=GRw32gOrb9EIM94PCpClHHhWRczDt1sXp6E2T9gH93lOXsytRTYnVloj57yIrNq5eRAuo7
+        CsKerfKGYacl0ewlec0f6gx9/35GjLtdOzoSM9JYMXUVBsW1TjC4HuXHRQHSzJWJxmFCwM
+        UeGQfL8uv0ajzWB2QsSXwMI+I+lepXU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-511-ythulDzxPZaGrVntYfIi7g-1; Thu, 13 Jan 2022 03:00:48 -0500
+X-MC-Unique: ythulDzxPZaGrVntYfIi7g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EAE5F100C611;
+        Thu, 13 Jan 2022 08:00:46 +0000 (UTC)
+Received: from [10.72.13.202] (ovpn-13-202.pek2.redhat.com [10.72.13.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 018266E1EF;
+        Thu, 13 Jan 2022 08:00:38 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v4 06/15] KVM: arm64: Add paravirtualization header files
+To:     Eric Auger <eauger@redhat.com>, kvmarm@lists.cs.columbia.edu
+Cc:     kvm@vger.kernel.org, maz@kernel.org, linux-kernel@vger.kernel.org,
+        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
+References: <20210815005947.83699-1-gshan@redhat.com>
+ <20210815005947.83699-7-gshan@redhat.com>
+ <82506a31-7b32-f8e2-c0cb-0f39d204ef3a@redhat.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <0335878f-2dc0-edc3-97ec-3f4d6ed01b48@redhat.com>
+Date:   Thu, 13 Jan 2022 16:00:35 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <82506a31-7b32-f8e2-c0cb-0f39d204ef3a@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds basic DT for Microchip lan966x SoC and associated board
-pcb8291(2-port EVB). Adds peripherals required to allow booting: IRQs,
-clocks, timers, memory, flexcoms, GPIOs. Also adds other peripherals like
-crypto(AES,SHA), DMA and watchdog.
+Hi Eric,
 
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
----
-v2 -> v3:
-- Enabling trng in dtsi itself.
-- Removed "status=okay" dma0.
-- Add gpio pin settings for can0(missed adding this in previous version)
+On 11/11/21 2:06 AM, Eric Auger wrote:
+> On 8/15/21 2:59 AM, Gavin Shan wrote:
+>> We need put more stuff in the paravirtualization header files when
+>> the asynchronous page fault is supported. The generic header files
+>> can't meet the goal.
+> you need to explain why
+>   This duplicate the generic header files to be
+> s/This duplicate/Duplicate
 
-v1 -> v2:
-- Moved flx3 usart0 node to dtsi file.
-- Removed status="okay" for dma0 to maintain consistency across nodes
-  (which means enabling dma0 by default)
+Ok.
 
- arch/arm/boot/dts/Makefile            |   2 +
- arch/arm/boot/dts/lan966x.dtsi        | 242 ++++++++++++++++++++++++++
- arch/arm/boot/dts/lan966x_pcb8291.dts |  53 ++++++
- 3 files changed, 297 insertions(+)
- create mode 100644 arch/arm/boot/dts/lan966x.dtsi
- create mode 100644 arch/arm/boot/dts/lan966x_pcb8291.dts
+>> our platform specific header files. It's the preparatory work to
+>> support the asynchronous page fault in the subsequent patches:
+> why duplication and not move. Shouldn't it be squashed with another
+> subsequent patch?
+> 
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 235ad559acb2..2040a990f08c 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -735,6 +735,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
- dtb-$(CONFIG_SOC_IMX7ULP) += \
- 	imx7ulp-com.dtb \
- 	imx7ulp-evk.dtb
-+dtb-$(CONFIG_SOC_LAN966) += \
-+	lan966x_pcb8291.dtb
- dtb-$(CONFIG_SOC_LS1021A) += \
- 	ls1021a-moxa-uc-8410a.dtb \
- 	ls1021a-qds.dtb \
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-new file mode 100644
-index 000000000000..d7bc36a998bc
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -0,0 +1,242 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * lan966x.dtsi - Device Tree Include file for Microchip LAN966x family SoC
-+ *
-+ * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
-+ *
-+ * Author: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-+ *
-+ */
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/mfd/atmel-flexcom.h>
-+#include <dt-bindings/dma/at91.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/clock/microchip,lan966x.h>
-+
-+/ {
-+	model = "Microchip LAN966x family SoC";
-+	compatible = "microchip,lan966x";
-+	interrupt-parent = <&gic>;
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a7";
-+			clock-frequency = <600000000>;
-+			reg = <0x0>;
-+		};
-+	};
-+
-+	memory@60000000 {
-+		device_type = "memory";
-+		reg = <0x60000000 0x40000000>;  /* 1GB */
-+	};
-+
-+	clocks {
-+		sys_clk: sys_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <162500000>;
-+		};
-+
-+		cpu_clk: cpu_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <600000000>;
-+		};
-+
-+		ddr_clk: ddr_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <300000000>;
-+		};
-+
-+		nic_clk: nic_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <200000000>;
-+		};
-+	};
-+
-+	clks: clock-controller@e00c00a8 {
-+		compatible = "microchip,lan966x-gck";
-+		#clock-cells = <1>;
-+		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
-+		clock-names = "cpu", "ddr", "sys";
-+		reg = <0xe00c00a8 0x38>;
-+	};
-+
-+	timer {
-+		compatible = "arm,armv7-timer";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
-+		clock-frequency = <37500000>;
-+		arm,cpu-registers-not-fw-configured;
-+	};
-+
-+	soc {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		flx0: flexcom@e0040000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0040000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM0>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0040000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		flx1: flexcom@e0044000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0044000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM1>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0044000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		trng: trng@e0048000 {
-+			compatible = "atmel,at91sam9g45-trng";
-+			reg = <0xe0048000 0x100>;
-+			clocks = <&nic_clk>;
-+		};
-+
-+		aes: aes@e004c000 {
-+			compatible = "atmel,at91sam9g46-aes";
-+			reg = <0xe004c000 0x100>;
-+			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
-+			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
-+			dma-names = "rx", "tx";
-+			clocks = <&nic_clk>;
-+			clock-names = "aes_clk";
-+		};
-+
-+		flx2: flexcom@e0060000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0060000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM2>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0060000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		flx3: flexcom@e0064000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0064000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM3>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0064000 0x800>;
-+			status = "disabled";
-+
-+			usart0: serial@200 {
-+				compatible = "atmel,at91sam9260-usart";
-+				reg = <0x200 0x200>;
-+				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&nic_clk>;
-+				clock-names = "usart";
-+				atmel,fifo-size = <32>;
-+				status = "disabled";
-+			};
-+		};
-+
-+		dma0: dma-controller@e0068000 {
-+			compatible = "microchip,sama7g5-dma";
-+			reg = <0xe0068000 0x1000>;
-+			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			clocks = <&nic_clk>;
-+			clock-names = "dma_clk";
-+		};
-+
-+		sha: sha@e006c000 {
-+			compatible = "atmel,at91sam9g46-sha";
-+			reg = <0xe006c000 0xec>;
-+			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(14)>;
-+			dma-names = "tx";
-+			clocks = <&nic_clk>;
-+			clock-names = "sha_clk";
-+		};
-+
-+		flx4: flexcom@e0070000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0070000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM4>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0070000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		timer0: timer@e008c000 {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xe008c000 0x400>;
-+			clocks = <&nic_clk>;
-+			clock-names = "timer";
-+			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+
-+		watchdog: watchdog@e0090000 {
-+			compatible = "snps,dw-wdt";
-+			reg = <0xe0090000 0x1000>;
-+			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&nic_clk>;
-+		};
-+
-+		can0: can@e081c000 {
-+			compatible = "bosch,m_can";
-+			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
-+			reg-names = "m_can", "message_ram";
-+			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "int0", "int1";
-+			clocks = <&clks GCK_ID_MCAN0>, <&clks GCK_ID_MCAN0>;
-+			clock-names = "hclk", "cclk";
-+			assigned-clocks = <&clks GCK_ID_MCAN0>;
-+			assigned-clock-rates = <40000000>;
-+			bosch,mram-cfg = <0x0 0 0 64 0 0 32 32>;
-+			status = "disabled";
-+		};
-+
-+		gpio: pinctrl@e2004064 {
-+			compatible = "microchip,lan966x-pinctrl";
-+			reg = <0xe2004064 0xb4>,
-+			    <0xe2010024 0x138>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&gpio 0 0 78>;
-+			interrupt-controller;
-+			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gic: interrupt-controller@e8c11000 {
-+			compatible = "arm,gic-400", "arm,cortex-a7-gic";
-+			#interrupt-cells = <3>;
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-controller;
-+			reg = <0xe8c11000 0x1000>,
-+			      <0xe8c12000 0x2000>,
-+			      <0xe8c14000 0x2000>,
-+			      <0xe8c16000 0x2000>;
-+		};
-+	};
-+};
-diff --git a/arch/arm/boot/dts/lan966x_pcb8291.dts b/arch/arm/boot/dts/lan966x_pcb8291.dts
-new file mode 100644
-index 000000000000..cf54f42c763d
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x_pcb8291.dts
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * lan966x_pcb8291.dts - Device Tree file for PCB8291
-+ */
-+/dts-v1/;
-+#include "lan966x.dtsi"
-+
-+/ {
-+	model = "Microchip EVB - LAN9662";
-+	compatible = "microchip,lan9662-pcb8291", "microchip,lan9662", "microchip,lan966";
-+};
-+
-+&gpio {
-+	fc_shrd7_pins: fc_shrd7-pins {
-+		pins = "GPIO_49";
-+		function = "fc_shrd7";
-+	};
-+
-+	fc_shrd8_pins: fc_shrd8-pins {
-+		pins = "GPIO_54";
-+		function = "fc_shrd8";
-+	};
-+
-+	fc3_b_pins: fcb3-spi-pins {
-+		/* SCK, RXD, TXD */
-+		pins = "GPIO_51", "GPIO_52", "GPIO_53";
-+		function = "fc3_b";
-+	};
-+
-+	can0_b_pins:  can0_b_pins {
-+		/* RX, TX */
-+		pins = "GPIO_35", "GPIO_36";
-+		function = "can0_b";
-+	};
-+};
-+
-+&can0 {
-+	pinctrl-0 = <&can0_b_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&flx3 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
-+	status = "okay";
-+
-+	usart0: serial@200 {
-+		pinctrl-0 = <&fc3_b_pins>, <&fc_shrd7_pins>, <&fc_shrd8_pins>;
-+		pinctrl-names = "default";
-+		status = "okay";
-+	};
-+};
-+
--- 
-2.17.1
+It's also fine to squash this one to PATCH[v4 07/15]. My intent was
+to keep them separate to make PATCH[v4 07/17] a bit easier to be
+reviewed. So lets keep it as separate patch :)
+
+>>
+>>     include/uapi/asm-generic/kvm_para.h
+>>     include/asm-generic/kvm_para.h
+>>
+>>     arch/arm64/include/uapi/asm/kvm_para.h
+>>     arch/arm64/include/asm/kvm_para.h
+>>
+>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>> ---
+>>   arch/arm64/include/asm/kvm_para.h      | 27 ++++++++++++++++++++++++++
+>>   arch/arm64/include/uapi/asm/Kbuild     |  2 --
+>>   arch/arm64/include/uapi/asm/kvm_para.h |  5 +++++
+>>   3 files changed, 32 insertions(+), 2 deletions(-)
+>>   create mode 100644 arch/arm64/include/asm/kvm_para.h
+>>   create mode 100644 arch/arm64/include/uapi/asm/kvm_para.h
+>>
+>> diff --git a/arch/arm64/include/asm/kvm_para.h b/arch/arm64/include/asm/kvm_para.h
+>> new file mode 100644
+>> index 000000000000..0ea481dd1c7a
+>> --- /dev/null
+>> +++ b/arch/arm64/include/asm/kvm_para.h
+>> @@ -0,0 +1,27 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef _ASM_ARM_KVM_PARA_H
+>> +#define _ASM_ARM_KVM_PARA_H
+>> +
+>> +#include <uapi/asm/kvm_para.h>
+>> +
+>> +static inline bool kvm_check_and_clear_guest_paused(void)
+>> +{
+>> +	return false;
+>> +}
+>> +
+>> +static inline unsigned int kvm_arch_para_features(void)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static inline unsigned int kvm_arch_para_hints(void)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static inline bool kvm_para_available(void)
+>> +{
+>> +	return false;
+>> +}
+>> +
+>> +#endif /* _ASM_ARM_KVM_PARA_H */
+>> diff --git a/arch/arm64/include/uapi/asm/Kbuild b/arch/arm64/include/uapi/asm/Kbuild
+>> index 602d137932dc..f66554cd5c45 100644
+>> --- a/arch/arm64/include/uapi/asm/Kbuild
+>> +++ b/arch/arm64/include/uapi/asm/Kbuild
+>> @@ -1,3 +1 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>> -
+>> -generic-y += kvm_para.h
+>> diff --git a/arch/arm64/include/uapi/asm/kvm_para.h b/arch/arm64/include/uapi/asm/kvm_para.h
+>> new file mode 100644
+>> index 000000000000..cd212282b90c
+>> --- /dev/null
+>> +++ b/arch/arm64/include/uapi/asm/kvm_para.h
+>> @@ -0,0 +1,5 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+>> +#ifndef _UAPI_ASM_ARM_KVM_PARA_H
+>> +#define _UAPI_ASM_ARM_KVM_PARA_H
+>> +
+>> +#endif /* _UAPI_ASM_ARM_KVM_PARA_H */
+>>
+
+Thanks,
+Gavin
 

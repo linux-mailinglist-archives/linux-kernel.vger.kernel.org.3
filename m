@@ -2,318 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD62048D929
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D18648D92C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbiAMNih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 08:38:37 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:38391 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229755AbiAMNif (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 08:38:35 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V1kApJc_1642081110;
-Received: from 30.240.112.63(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V1kApJc_1642081110)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 13 Jan 2022 21:38:32 +0800
-Message-ID: <8e6ee387-7dc1-6c8a-c13f-ec06621e3efa@linux.alibaba.com>
-Date:   Thu, 13 Jan 2022 21:38:30 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [RESEND PATCH v4] ACPI: Move sdei_init and ghes_init ahead to
- handle platform errors earlier
+        id S235313AbiAMNim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 08:38:42 -0500
+Received: from mail-dm3nam07on2074.outbound.protection.outlook.com ([40.107.95.74]:32224
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229755AbiAMNij (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 08:38:39 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ev/fScW7fkHwiUxcS7TCqX+b/aOnsUBGkHlYu9v5n0YmgGRO29uCtypw0GF6AMhAxOyaJT2T4LpwUEQB+AwlK8hBAYTbKwvDskc4kQxLFZ/SXgoeXw5cSt1REb7dmlqpNqdoPuoy1Qnm/UdKiaDQEBZHndt9YZRZxWRuCBuiaqXjTIm6wzky5f/SA1X2SaQ/oOH33WIXkqGBHOxEUMtJCEwwMNhJZEDMI9Y8PqZAkNlNLiR18I/fR0J3u6pFEIqX+znKDiJHbmOQtRAthhzRvIXGUY52F8i3Wer8pkEU0wOanvAcTjR5hKXRd9FpL1IKp65zh+qlr3S1tKz956UAtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OPglWRqMAZ3hTMCF5nDYBijXc9N7/n7m3j3RzFw3oLI=;
+ b=CM9pkiLkd6RZIOYM6vp1sT/BvVeZQYcKyyDki6uc0asxQ3OGprsTffuQ4duLU4grVP3OcG1n2ZEUYfG8Gi9maeqsJZtzyI8Edph/n7h3RASL3Gj4UnuecNIx+BO+QpGxokgS3iWMP59DPdsMZu5DMXspOYTirJw+lqSPrc+oRvBtZhzIa3UnGyZW4filicIKISacg//+vZyWZBocZZmSLFMBciQBZgZioT3C5LsVrJ0jZde/hJwkvGUQLYiQEAVCzPCqusbTEjJ6A+QXD5IxmnP9eoe/euq/zH9MRMHozX9acduKAvanx67TxYZ8/G/JQtr/zz0Ub2L0mn9aWfGEnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OPglWRqMAZ3hTMCF5nDYBijXc9N7/n7m3j3RzFw3oLI=;
+ b=f4jo8RGiFCnX43nH+WETcWFxrVugGKYNanIUQm0tS8+wTcUPax1tPchlGUn2tO9ZKGpJBuQ1JDKh8HPhZY/EHG8wnVZIpU8siu6ebxcWZW9nFfyLwJvsNicxmJ+O53up+gO67m8DSNx3AyNUnn4syToTwppgiXyW6cm5ZV6IUv4=
+Received: from DM5PR12MB2469.namprd12.prod.outlook.com (2603:10b6:4:af::38) by
+ BL0PR12MB5011.namprd12.prod.outlook.com (2603:10b6:208:1c9::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10; Thu, 13 Jan
+ 2022 13:38:37 +0000
+Received: from DM5PR12MB2469.namprd12.prod.outlook.com
+ ([fe80::1500:4b8c:efd6:672]) by DM5PR12MB2469.namprd12.prod.outlook.com
+ ([fe80::1500:4b8c:efd6:672%4]) with mapi id 15.20.4888.011; Thu, 13 Jan 2022
+ 13:38:37 +0000
+From:   "Chen, Guchun" <Guchun.Chen@amd.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>,
+        "airlied@linux.ie" <airlied@linux.ie>
+CC:     "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: RE: [PATCH -next 1/2 v2] drm/amdgpu: remove unneeded semicolon
+Thread-Topic: [PATCH -next 1/2 v2] drm/amdgpu: remove unneeded semicolon
+Thread-Index: AQHYCEzPNizi1d5FOkmtgDT5jd+N3Kxg9Qvg
+Date:   Thu, 13 Jan 2022 13:38:37 +0000
+Message-ID: <DM5PR12MB246922D4EC5729F76E481CD2F1539@DM5PR12MB2469.namprd12.prod.outlook.com>
+References: <20220113071132.70647-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20220113071132.70647-1-yang.lee@linux.alibaba.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
-        lenb@kernel.org, bhelgaas@google.com,
-        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org
-References: <20211224001716.GA1324143@bhelgaas>
- <75dedf3a-41c7-980e-a8a8-74d116ae6663@linux.alibaba.com>
-In-Reply-To: <75dedf3a-41c7-980e-a8a8-74d116ae6663@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ada8f9f1-2ab1-44c5-4cd2-08d9d69a0096
+x-ms-traffictypediagnostic: BL0PR12MB5011:EE_
+x-microsoft-antispam-prvs: <BL0PR12MB50119DA03D762C615572F116F1539@BL0PR12MB5011.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:813;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yF8X4+3bxAxiPkgGkyCldyvczdblDVqzS5UTRVGIr8h2lyT92DNaK9y8D8LD+IMXdzWvftAAIYX11eD5rh2DGMxYHtKVMnmR14eW+scuXCnGSL9aX7i3xjaSRAViT4q+zKEi3I7T2DaKLmL/jQ9WZpKJ90TaeleBGgyyZWTztNIky+WW0/2J3Ivrd8oJ55hEzGg4KfBY8ipKnPb+elH2cIMD0S4PG6cAzFdQVD8B/UkoZQoOPT1ecLBEJB2OnTS0NYKAr9aj9uc5ksaN/5xgFzQJBb9hrVppqHjO8IyObLty4FbWITPAr+MGhINrO5Kx1TOTwvJBQHU2pWiZMIsb2Ej1mOg9AryGnDMjA53YCBPscbpTcZowcvPHvnI35sA5P/3QADJsh4+NRn6A+Nq2/QUeM49+J21sD2c1Ro11C646tQqkNir0hwP+S/Muhj83dkVbo1FxpN3qu9PrknBsLMYDIIMwEAeQHEMS337JEIsPUoYCkZPOLz9HOYsaHhknsTsYJIZv0wh80b0+1HtEpsi/UiP+w+nBBGf+Q+/7c4ODmc1lLq9JppmcWU67ufsksUp3BmEpVLpeT3iGyrngiMfnEhRgQLIj/UXVmhdiHxlmKG1HNRKujMTHqMztFUFE4Y77Zo4VJnZYI+G1fi8SKgdRqrXxiNn+6YpI4+ME+W2yKbBJaj3jMtq3OvDeGGcX3D3AtGK3WCXVahIMT2JYiA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2469.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(76116006)(66446008)(66556008)(66946007)(64756008)(186003)(55016003)(86362001)(26005)(508600001)(5660300002)(8676002)(33656002)(7696005)(83380400001)(53546011)(54906003)(8936002)(38100700002)(9686003)(38070700005)(2906002)(6506007)(71200400001)(52536014)(110136005)(4326008)(316002)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IZoOPUfV5/U0CcmcpHjPWJivgIL1zfZbjNm3KMONmUdCofUrWh59vHS7A2i9?=
+ =?us-ascii?Q?X82hihcia8kMrEUIvcSYj76cx5klnglot5TcCToPHPyAj5SQ2+bxvNlL3jbf?=
+ =?us-ascii?Q?5cJCfcF7n2HduABElnF/jg70ZKgeUelEuvQA1r2FNNUAKZDDtwVBCcxCLctw?=
+ =?us-ascii?Q?vQpkCZdi3Wwiw9bsujzZB7RxRFj7X/fFdmpF6tHKQ+Wa0qXK2iTaWuQtJ9ZN?=
+ =?us-ascii?Q?Mne4Zr3U5aI2OY7mOR1tSnVvXzPTiTWXUJvKIR3YEvXSm7ejexNiZpzDjIqc?=
+ =?us-ascii?Q?KJgeX8UdHZ7jWDcBcgjb38fpxUHupVEXHxpVvTIJKbRYl5YkHTnWFvTK2Bzv?=
+ =?us-ascii?Q?GWKbi8t/vlIhiSYmfgs1T18tfcp5IL0i/EKRYjfOTgwS++GGkot/S4lm0reV?=
+ =?us-ascii?Q?zZQUQ0XfxYpuxTo4PxhGHqIC98iVf+W8S42z2yIYyemqcx/Jgvu9Qo0WEsBN?=
+ =?us-ascii?Q?70drH9m1mcvCuMtzi6P0et8pzXU0/S55bb8BzsySNIEKf7mURADkNFvN4vct?=
+ =?us-ascii?Q?gG8lmPX0M7STQ+LlnkWT4NIEdIAiPYbjrf9HD6is3D3FWqQinqVJDz0ec8Z/?=
+ =?us-ascii?Q?z/ok9o/3DzNaI8uNhzOUXJ/bKrcs48urdd58C9+2hwNxwcYPrTDDWkzj2Gim?=
+ =?us-ascii?Q?DV1YVJ1lwl2RYDp9lUyUaozqa7n6Sp31NRPvVJ5WySiGljq6+gAryZ96GPlZ?=
+ =?us-ascii?Q?pdPQ3oGFSQnLaQcdlaaWoGtU66uBgndBR0vhXNQmg7zCwZexr7H3t0VMBb+g?=
+ =?us-ascii?Q?7mdqtqgv5GS9KbAqVJT140mqxMl8aKsZKwycZSDI9HT47bLzl9vtof14iYiE?=
+ =?us-ascii?Q?MhMbVH+lR0IUcu3gRvCsVcXI1oXYTycbiWWvtsM4FwTxZ/dmZkqLHH8fAN5q?=
+ =?us-ascii?Q?sqK15bRhSwrmlEQVHY2rbQcVX/DQV1Ehe4u3t25tibmxY9A2FqBl8HYnlf9c?=
+ =?us-ascii?Q?4cR3YneUGpeLwNT95i52NAhNVWRjBMGBcGjNjH1S+SWfozQfrYTME5dbSvGD?=
+ =?us-ascii?Q?uevV1//A/12e04KYbetWbTFPzcY47niMWBHPB20BPiXUomlQ/NY4KhgFlp2X?=
+ =?us-ascii?Q?O/QsbHYPOEL8PaiMcBoGzdFMxslxc3iv1cmyyeN8dFf/hBzcHOmdbyq76J7d?=
+ =?us-ascii?Q?mNy8/c2tvsprAXKd0b7gRehHF9cdp779fF0TuGVqMEvSnFbwxX6G7nfG9/RY?=
+ =?us-ascii?Q?nQazNj7+ZCl6m6If5xiijEZWVtlksvQUgB+1lGG15+tOK20zH7Cqgsym0dJw?=
+ =?us-ascii?Q?6OGNDZ3My2h0UbZNtozjtg23Vihg5o3hc+Rs5Uwf5B8Uhj+qlWBR9Z9GjjyF?=
+ =?us-ascii?Q?+aeVkn9H96Cb7xRQcluq/dJypwzFIPT5tJaKabGymMxIFXpiKGhUpOmec/1B?=
+ =?us-ascii?Q?rJEKBHKDJ5pMYr9NxcPdKaVZwqN79FbzHUe40/C/09US4oI4X+XVfktByjZi?=
+ =?us-ascii?Q?6MnkeYC2qFdWGopq4bpM7/0RkUwVTL49dtcyZsYt9AryAmQZNMohwh7cqyNF?=
+ =?us-ascii?Q?+FTFiNZ9RA9jplUBnuGjYbFEO1N+du9OFvGPqROJB/Y17R6xK2sFWHlKlGTq?=
+ =?us-ascii?Q?Q7C3dS3unS/3Zv4nzE0hi4WVTVuRMRbVmRaAAMTVPnikcosRU2+LO3UxcbIm?=
+ =?us-ascii?Q?yF5ujQPawR41r6eT+2qavYY=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2469.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ada8f9f1-2ab1-44c5-4cd2-08d9d69a0096
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jan 2022 13:38:37.2012
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wT8EWAhg7DP0Mn71z/kcgs6BGfDlS0Yz10MJxf8t8QLACC1dXmwvCQTfmOZT+dspSwv0YJxHjx6/vihM+5DBug==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5011
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bjorn, Rafael,
+Series is:
+Reviewed-by: Guchun Chen <guchun.chen@amd.com>
 
-Happy New Year :)
+Regards,
+Guchun
 
-I am wondering that do you have any comment to this implementation？ Any feedback
-are welcomed.
+-----Original Message-----
+From: Yang Li <yang.lee@linux.alibaba.com>=20
+Sent: Thursday, January 13, 2022 3:12 PM
+To: airlied@linux.ie; Chen, Guchun <Guchun.Chen@amd.com>
+Cc: daniel@ffwll.ch; Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig=
+, Christian <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; a=
+md-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-kernel=
+@vger.kernel.org; Yang Li <yang.lee@linux.alibaba.com>; Abaci Robot <abaci@=
+linux.alibaba.com>
+Subject: [PATCH -next 1/2 v2] drm/amdgpu: remove unneeded semicolon
 
-Thank you.
+Eliminate the following coccicheck warning:
+./drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2725:16-17: Unneeded semicolon
 
-Best regrads,
-Shuai
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-在 2021/12/24 PM4:55, Shuai Xue 写道:
-> Hi, Bjorn,
-> 
-> Thank you for your comments.
-> 
-> 在 2021/12/24 AM8:17, Bjorn Helgaas 写道:
->> [+to Rafael, question about HEST/GHES/SDEI init]
->>
->> On Thu, Dec 23, 2021 at 04:11:11PM +0800, Shuai Xue wrote:
->>> 在 2021/12/22 AM7:17, Bjorn Helgaas 写道:
->>>> On Thu, Dec 16, 2021 at 09:34:56PM +0800, Shuai Xue wrote:
->>>>> On an ACPI system, ACPI is initialised very early from a subsys_initcall(),
->>>>> while SDEI is not ready until a subsys_initcall_sync().
->>>>>
->>>>> The SDEI driver provides functions (e.g. apei_sdei_register_ghes,
->>>>> apei_sdei_unregister_ghes) to register or unregister event callback for
->>>>> dispatcher in firmware. When the GHES driver probing, it registers the
->>>>> corresponding callback according to the notification type specified by
->>>>> GHES. If the GHES notification type is SDEI, the GHES driver will call
->>>>> apei_sdei_register_ghes to register event call.
->>>>>
->>>>> When the firmware emits an event, it migrates the handling of the event
->>>>> into the kernel at the registered entry-point __sdei_asm_handler. And
->>>>> finally, the kernel will call the registered event callback and return
->>>>> status_code to indicate the status of event handling. SDEI_EV_FAILED
->>>>> indicates that the kernel failed to handle the event.
->>>>>
->>>>> Consequently, when an error occurs during kernel booting, the kernel is
->>>>> unable to handle and report errors until the GHES driver is initialized by
->>>>> device_initcall(), in which the event callback is registered. All errors
->>>>> that occurred before GHES initialization are missed and there is no chance
->>>>> to report and find them again.
->>>>>
->>>>> From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
->>>>> memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
->>>>> the estatus memory pool. On the other hand, ghes_init() relies on
->>>>> sdei_init() to detect the SDEI version and the framework for registering
->>>>> and unregistering events.
->>>>
->>>>> By the way, I don't figure out why acpi_hest_init is called in
->>>>> acpi_pci_root_init, it don't rely on any other thing. May it could
->>>>> be moved further, following acpi_iort_init in acpi_init.
->>
->>>>> sdei_init() relies on ACPI table which is initialized
->>>>> subsys_initcall(): acpi_init(), acpi_bus_init(), acpi_load_tables(),
->>>>> acpi_tb_laod_namespace().  May it should be also moved further,
->>>>> after acpi_load_tables.
->>
->>>>> In this patch, move sdei_init and ghes_init as far ahead as
->>>>> possible, right after acpi_hest_init().
->>>>
->>>> I'm having a hard time figuring out the reason for this patch.
->>>>
->>>> Apparently the relevant parts are sdei_init() and ghes_init().
->>>> Today they are executed in that order:
->>>>
->>>>   subsys_initcall_sync(sdei_init);
->>>>   device_initcall(ghes_init);
->>>>
->>>> After this patch, they would be executed in the same order, but called
->>>> explicitly instead of as initcalls:
->>>>
->>>>   acpi_pci_root_init()
->>>>   {
->>>>     acpi_hest_init();
->>>>     sdei_init();
->>>>     ghes_init();
->>>>     ...
->>>>
->>>> Explicit calls are certainly better than initcalls, but that doesn't
->>>> seem to be the reason for this patch.
->>>>
->>>> Does this patch fix a bug?  If so, what is the bug?
->>>
->>> Yes. When the kernel booting, the console logs many times from firmware
->>> before GHES drivers init:
->>>
->>> 	Trip in MM PCIe RAS handle(Intr:910)
->>>   	Clean PE[1.1.1] ERR_STS:0x4000100 -> 0 INT_STS:F0000000
->>> 	Find RP(98:1.0)
->>> 	--Walk dev(98:1.0) CE:0 UCE:4000
->>> 	...
->>> 	ERROR:   sdei_dispatch_event(32a) ret:-1
->>> 	--handler(910) end
->>>
->>> This is because the callback function has not been registered yet.
->>> Previously reported errors will be overwritten by new ones. Therefore,
->>> all errors that occurred before GHES initialization are missed
->>> and there is no chance to report and find them again.
->>>
->>>> You say that currently "errors that occur before GHES initialization
->>>> are missed".  Isn't that still true after this patch?  Does this patch
->>>> merely reduce the time before GHES initialization?  If so, I'm
->>>> dubious, because we have to tolerate an arbitrary amount of time
->>>> there.
->>>
->>> After this patch, there are still errors missing. As you mentioned,
->>> we have to tolerate it until the software reporting capability is built.
->>>
->>> Yes, this patch merely reduce the time before GHES initialization.
->>
->> It's not a bug that errors that happen before the callback are lost.
->> At least, it's not a *Linux* bug.  It might be a poor design of the
->> firmware error reporting interface.
->>
->> If the only point of this patch is to reduce the time before GHES
->> initialization, the commit log should clearly say that.
-> 
-> Yep, it is a design defect of firmware. I will explicitly document
-> the purpose of this patch in next version.
-> 
->>> The boot dmesg before this patch:
->>>
->>> 	[    3.688586] HEST: Table parsing has been initialized.
->>> 	...
->>> 	[   33.204340] calling  sdei_init+0x0/0x120 @ 1
->>> 	[   33.208645] sdei: SDEIv1.0 (0x0) detected in firmware.
->>> 	...
->>> 	[   36.005390] calling  ghes_init+0x0/0x11c @ 1
->>> 	[   36.190021] GHES: APEI firmware first mode is enabled by APEI bit and WHEA _OSC.
->>>
->>>
->>> After this patch, the boot dmesg like bellow:
->>>
->>> 	[    3.688664] HEST: Table parsing has been initialized.
->>> 	[    3.688691] sdei: SDEIv1.0 (0x0) detected in firmware.
->>> 	[    3.694557] GHES: APEI firmware first mode is enabled by APEI bit and WHEA _OSC.
-> 
-> After this patch, we use explicit call to init GHES rather than initcall.
-> The GHES message here is just to prove that GHES initialization is
-> advanced to 3.694557 seconds.
-> 
-> 
->> [Tangent: I think this GHES message is confusing.  What "APEI bit"
->> does this refer to?  The only bits I remember are the Flags bits in
->> HEST Error Source Descriptor Entries, e.g., ACPI v6.3, sec 18.3.2.
-> 
-> From the log code behavior, the APEI bit refers to OSC_SB_APEI_SUPPORT.
-> (BIT 4, ACPI v6.4, sec 6.2.11.2,  table Table 6.13 Platform-Wide _OSC
-> Capabilities DWORD 2. [1])
-> 
->     /* code in drivers/acpi/apei/ghes.c */
->     if (rc == 0 && osc_sb_apei_support_acked)
->         pr_info(GHES_PFX "APEI firmware first mode is enabled by APEI bit and WHEA _OSC.\n");
-> 
->     /* code in drivers/acpi/bus.c */
->     osc_sb_apei_support_acked =
->         capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
-> 
-> 
->> "WHEA _OSC" means nothing to me, and I didn't find anything useful
->> with grep, other than that "WHEA" might be an obsolete name for what
->> we now call "APEI".
-> 
-> Yep, WHEA is an obsolete name. I think apei_osc_setup() is added for compatibility
-> in commit eccddd32ced0 ("ACPI, APEI, Add APEI bit support in generic _OSC call")'
-> 
-> The ACPI spec Platform-Wide OSPM Capabilities defines
-> UUID "0811B06E-4A27-44F9-8D60-3CBBC22E7B48" is used in
-> acpi_bus_osc_support(). The Microsoft WHEA defines
-> UUID "ed855e0c-6c90-47bf-a62a-26de0fc5ad5c" that is used
-> in apei_osc_setup(). [2][3]
-> 
-> From the discussion[4], the GHES message is to distinguish between
-> the two specs.
-> 
->     To avoid confusion, can we change the message as follow.
-> 
->     - generic _OSC succeeded, APEI _OSC failed: APEI firmware first mode is
->     enabled by APEI bit.
->     - generic _OSC failed, APEI _OSC succeeded: APEI firmware first mode is
->     enabled by WHEA _OSC.
->     - both succeeded: APEI firmware first mode is enabled by APEI bit and
->     WHEA _OSC.
->     - both failed: Failed to enable APEI firmware first mode!
-> 
-> 
->> I don't think there's anything in _OSC that mentions "firmware first."
->>
->> I don't remember anything in the spec about a way to *enable* Firmware
->> First Error Handling needing (I'm looking at ACPI v6.3, sec 18.4).
->>
->> I think the "firmware first" information is useless to the OS -- as
->> far as I can tell, the spec says nothing about anything the OS should
->> do based on the FIRMWARE_FIRST bits.]
-> 
-> GHES works in "Firmware First" mode to report platform hardware error
-> and it depends on APEI interface. (drivers/acpi/apei/ghes.c)
-> 
->    * Generic Hardware Error Source provides a way to report platform
->    * hardware errors (such as that from chipset). It works in so called
->    * "Firmware First" mode, that is, hardware errors are reported to
->    * firmware firstly, then reported to Linux by firmware.
-> 
-> Based on above, I think the GHES message just means that this booting
-> kernel supports APEI or WHEA, and GHES report Firmware first errors on
-> this machine. Is it fine to keep the message?
-> 
-> 
->>> As we can see, the initialization of GHES is advanced by 33 seconds.
->>> So, in my opinion, this patch is necessary, right?
->>> (It should be noted that the effect of optimization varies with the platform.)
->>
->>>>> -device_initcall(ghes_init);
->>>>
->>>>>  void __init acpi_pci_root_init(void)
->>>>>  {
->>>>>  	acpi_hest_init();
->>>>> +	sdei_init();
->>>>> +	ghes_init();
->>>>
->>>> What's the connection between PCI, SDEI, and GHES?  As far as I can
->>>> tell, SDEI and GHES are not PCI-specific, so it doesn't seem like they
->>>> should be initialized here in acpi_pci_root_init().
->>>
->>> The only reason is that acpi_hest_init() is initialized here.
->>>
->>> From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
->>> memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
->>> the estatus memory pool. On the other hand, ghes_init() relies on
->>> sdei_init() to detect the SDEI version and the framework for registering
->>> and unregistering events. The dependencies are as follows
->>>
->>> 	ghes_init() => acpi_hest_init()
->>> 	ghes_init() => sdei_init()
->>>
->>> I don't figure out why acpi_hest_init() is called in
->>> acpi_pci_root_init(), it don't rely on any other thing.
->>> I am wondering that should we moved all of them further? e.g.
->>> following acpi_iort_init() in acpi_init().
->>
->> I don't know why acpi_hest_init() is called from acpi_pci_root_init().
->> It looks like HEST can support error sources other than PCI (IA-32
->> Machine Checks, NMIs, GHES, etc.)  It was added by 415e12b23792
->> ("PCI/ACPI: Request _OSC control once for each root bridge (v3)");
->> maybe Rafael remembers why.
->>
->> Seem like acpi_hest_init(), sdei_init(), and ghes_init() should all go
->> somewhere else, but I don't know where.  Maybe somewhere in
->> acpi_init()?
-> 
-> I tried to move them into acpi_init(), and it works well.
-> 
-> @@ -1251,6 +1251,9 @@ static int __init acpi_init(void)
-> 
->         pci_mmcfg_late_init();
->         acpi_iort_init();
-> +       acpi_hest_init();
-> +       sdei_init();
-> +       ghes_init();
->         acpi_scan_init();
->         acpi_ec_init();
-> 
-> What's your opinion?
-> 
-> Best Regards,
-> 
-> Shuai
-> 
-> 
-> [1] https://uefi.org/specs/ACPI/6.4/06_Device_Configuration/Device_Configuration.html#platform-wide-osc-capabilities-dword-2
-> [2] https://www.mail-archive.com/ubuntu-bugs@lists.ubuntu.com/msg4718503.html
-> [3] http://www.guyreams.com/PDF/whea.pdf
-> [4] https://patchwork.kernel.org/project/linux-acpi/patch/1308640587-24502-5-git-send-email-ying.huang@intel.com/#1978922
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c b/drivers/gpu/drm/amd/=
+amdgpu/amdgpu_ras.c
+index d4d9b9ea8bbd..ff9bd5a844fe 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+@@ -2722,7 +2722,7 @@ struct amdgpu_ras* amdgpu_ras_get_context(struct amdg=
+pu_device *adev)  int amdgpu_ras_set_context(struct amdgpu_device *adev, st=
+ruct amdgpu_ras* ras_con)  {
+ 	if (!adev)
+-	return -EINVAL;;
++		return -EINVAL;
+=20
+ 	adev->psp.ras_context.ras =3D ras_con;
+ 	return 0;
+--
+2.20.1.7.g153144c
+

@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5F348D808
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E07B48D80E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234591AbiAMMd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:33:28 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:38102 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233633AbiAMMd0 (ORCPT
+        id S232871AbiAMMfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229991AbiAMMfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:33:26 -0500
-X-UUID: a357bcd85de4422e9e90e55554a8dd4d-20220113
-X-UUID: a357bcd85de4422e9e90e55554a8dd4d-20220113
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <guangming.cao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1167861225; Thu, 13 Jan 2022 20:33:19 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 13 Jan 2022 20:33:17 +0800
-Received: from mszswglt01.gcn.mediatek.inc (10.16.20.20) by
- mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Thu, 13 Jan 2022 20:33:16 +0800
-From:   <guangming.cao@mediatek.com>
-To:     <sumit.semwal@linaro.org>
-CC:     <benjamin.gaignard@linaro.org>, <bo.song@mediatek.com>,
-        <brian.starkey@arm.com>, <christian.koenig@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <guangming.cao@mediatek.com>,
-        <jianjiao.zeng@mediatek.com>, <john.stultz@linaro.org>,
-        <labbott@redhat.com>, <libo.kang@mediatek.com>,
-        <linaro-mm-sig@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <lmark@codeaurora.org>,
-        <matthias.bgg@gmail.com>, <mingyuan.ma@mediatek.com>,
-        <wsd_upstream@mediatek.com>, <yf.wang@mediatek.com>,
-        Guangming <Guangming.Cao@mediatek.com>
-Subject: [PATCH v3] dma-buf: dma-heap: Add a size check for allocation
-Date:   Thu, 13 Jan 2022 20:34:06 +0800
-Message-ID: <20220113123406.11520-1-guangming.cao@mediatek.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CAO_48GF=ttKqSOm9GRoA3Mq+-RQOtRjWp449XPcz-wH=kjaTjw@mail.gmail.com>
-References: <CAO_48GF=ttKqSOm9GRoA3Mq+-RQOtRjWp449XPcz-wH=kjaTjw@mail.gmail.com>
+        Thu, 13 Jan 2022 07:35:34 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47474C06173F;
+        Thu, 13 Jan 2022 04:35:34 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id t24so22438622edi.8;
+        Thu, 13 Jan 2022 04:35:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LftLg0r0Faw+W6UND9T0SXsUaqtJ0ZRucKUPsxlKlXc=;
+        b=hYIWlIYnpsLWMFOV8ltzNbs8XDcKpvGbzs+nnSbI/PBIgULVwJ7cEpXfqH+d4nHJh1
+         rEGAf0ZTTkAwky3PhZfJXabZaUcy9Khsn/GsO5ift9lfdrcPPKXOA/TaI+qJKpWNgTjk
+         7H19U57b2TiDXmtRVczH+sYbHveb2BJvXk+OnE69uzL8um5TBqqlKT+Z0Jf2Wj7Vmgt+
+         FwUjaB8v3YVh7zbdqFrC/dSM2qXDz9Tt7MAVKXDcDWza0ttWs+OSWrsHqMOLk4IvCNhv
+         AJhKj+ARGsf+K9wcw11aJzcQ/FVIzdhDvKD1N0WvjOg4NBF+tGTf8iJbQZef2/J6pPIo
+         HZ7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LftLg0r0Faw+W6UND9T0SXsUaqtJ0ZRucKUPsxlKlXc=;
+        b=We8gh/sQhhnaHWIBT+VM9mJ5tas56p/PIVZUWjGs778XTXLAx+GzLZCQ5MmauJoy5u
+         iLhONUcOLsIEb81SlidnoPEie+o5h2PEsfWHhmVdfyOpTwTVr9rMDSOBYr3n+x2xyQ24
+         HGFrTtRy71QaRigQf0PClO9y4PEPFU5KUWGLX4pU8MjPNmkqfXJCZq1dFheFKjoQ8fa0
+         kKGyI78Up6GSC84Z7f6Si6jYsOB8v0wmkH555O4S9F2VTpWBHdAHEs/qqXf1iHPQ4kMQ
+         /ex+ZWCGn3+X/Qo8J2zvOJiu7vk3iVn7GJRAjpOpuCBTQNES+GyewQDIZ9UrmSuY1aZa
+         TCYQ==
+X-Gm-Message-State: AOAM533jeVBDPg1j1Xg60fBVt7Q+OiBTl72aWnbLvmqyIW5d6xuNky5Q
+        24EY8kx0vwRxNT8KLV3+7tQ=
+X-Google-Smtp-Source: ABdhPJyqdzUl4Aa3NbTKIeeuDRq1eL9MwIEfCFaL0CYvjb77VO6b8ZIIh7qD5UrrkpxX6b75E6U1RA==
+X-Received: by 2002:a17:906:4fcc:: with SMTP id i12mr3386976ejw.529.1642077332873;
+        Thu, 13 Jan 2022 04:35:32 -0800 (PST)
+Received: from skbuf ([188.25.255.2])
+        by smtp.gmail.com with ESMTPSA id lb11sm829889ejc.216.2022.01.13.04.35.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 04:35:32 -0800 (PST)
+From:   Vladimir Oltean <olteanv@gmail.com>
+X-Google-Original-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+Date:   Thu, 13 Jan 2022 14:35:30 +0200
+To:     Maxim Kiselev <bigunclemax@gmail.com>
+Cc:     fido_max@inbox.ru, Rob Herring <robh+dt@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, devicetree@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc: dts: t104xrdb: fix phy type for FMAN 4/5
+Message-ID: <20220113123530.dn33ze7yvg2jlnfv@skbuf>
+References: <20211230151123.1258321-1-bigunclemax@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211230151123.1258321-1-bigunclemax@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guangming <Guangming.Cao@mediatek.com>
+On Thu, Dec 30, 2021 at 06:11:21PM +0300, Maxim Kiselev wrote:
+> T1040RDB has two RTL8211E-VB phys which requires setting
+> of internal delays for correct work.
+> 
+> Changing the phy-connection-type property to `rgmii-id`
+> will fix this issue.
+> 
+> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+> Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+> ---
 
-Add a size check for allocation since the allocation size is
-always less than the total DRAM size.
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Without this check, once the invalid size allocation runs on a process that
-can't be killed by OOM flow(such as "gralloc" on Android devices), it will
-cause a kernel exception, and to make matters worse, we can't find who are using
-so many memory with "dma_buf_debug_show" since the relevant dma-buf hasn't exported.
-
-To make OOM issue easier, maybe need dma-buf framework to dump the buffer size
-under allocating in "dma_buf_debug_show".
-
-Signed-off-by: Guangming <Guangming.Cao@mediatek.com>
-Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
----
-v3: 1. update patch, use right shift to replace division.
-    2. update patch, add reason in code and commit message.
-v2: 1. update size limitation as total_dram page size.
-    2. update commit message
----
- drivers/dma-buf/dma-heap.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
-index 56bf5ad01ad5..1fd382712584 100644
---- a/drivers/dma-buf/dma-heap.c
-+++ b/drivers/dma-buf/dma-heap.c
-@@ -55,6 +55,16 @@ static int dma_heap_buffer_alloc(struct dma_heap *heap, size_t len,
- 	struct dma_buf *dmabuf;
- 	int fd;
- 
-+	/*
-+	 * Invalid size check. The "len" should be less than totalram.
-+	 *
-+	 * Without this check, once the invalid size allocation runs on a process that
-+	 * can't be killed by OOM flow(such as "gralloc" on Android devices), it will
-+	 * cause a kernel exception, and to make matters worse, we can't find who are using
-+	 * so many memory with "dma_buf_debug_show" since the relevant dma-buf hasn't exported.
-+	 */
-+	if (len >> PAGE_SHIFT > totalram_pages())
-+		return -EINVAL;
- 	/*
- 	 * Allocations from all heaps have to begin
- 	 * and end on page boundaries.
--- 
-2.17.1
+>  arch/powerpc/boot/dts/fsl/t104xrdb.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/powerpc/boot/dts/fsl/t104xrdb.dtsi b/arch/powerpc/boot/dts/fsl/t104xrdb.dtsi
+> index 099a598c74c00..bfe1ed5be3374 100644
+> --- a/arch/powerpc/boot/dts/fsl/t104xrdb.dtsi
+> +++ b/arch/powerpc/boot/dts/fsl/t104xrdb.dtsi
+> @@ -139,12 +139,12 @@ pca9546@77 {
+>  		fman@400000 {
+>  			ethernet@e6000 {
+>  				phy-handle = <&phy_rgmii_0>;
+> -				phy-connection-type = "rgmii";
+> +				phy-connection-type = "rgmii-id";
+>  			};
+>  
+>  			ethernet@e8000 {
+>  				phy-handle = <&phy_rgmii_1>;
+> -				phy-connection-type = "rgmii";
+> +				phy-connection-type = "rgmii-id";
+>  			};
+>  
+>  			mdio0: mdio@fc000 {
+> -- 
+> 2.32.0
+> 
 

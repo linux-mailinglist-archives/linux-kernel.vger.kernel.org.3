@@ -2,134 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2746F48D7F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACD648D7F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbiAMM3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:29:49 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44010 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234618AbiAMM3h (ORCPT
+        id S232339AbiAMM34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:29:56 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57400 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231301AbiAMM3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:29:37 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20DCT98R006942;
-        Thu, 13 Jan 2022 12:29:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=GPE0+NPk+GB/qIL5sDb+b3pXMDEKGb/c2amWoZ/lzq4=;
- b=ciypoH3AX1pN/Q5qsogTlvwY6gGw70ckMZ3S5rPIWeyKiHGog1SG5xiuGDYiCvM+JX3m
- jNOsvC1UlzOBleMstHPZD+qM11f56WrW7rQCpHWBN9OMt9zBBrg6s7PzBpE7Th/VyQEm
- 2VF6s4HrIly7ozhIZlFwH/3ae0DJbaIOO7QAUESFXPZSEjqKtDm88rLvCczrAEqBBm1+
- HAHw8ypF27PeK6tmSmJCbqyd1AhH4EsqhO+m53v8cNso2vnaeAiCt6fISqRQ379q2Wnu
- WCzm3gGBJUz6oCY+WoaGkdhnIvpmIPPvIzlOLTCysdrUGxwMFqjB4JWIUWbUT65WHDgO AQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3djkpdrk7r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:29:32 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20DCTPZ0007632;
-        Thu, 13 Jan 2022 12:29:31 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3djkpdrk73-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:29:31 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20DCSJcM013918;
-        Thu, 13 Jan 2022 12:29:29 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3df1vjmdky-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:29:29 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20DCTQZV39256548
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Jan 2022 12:29:26 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3893E42052;
-        Thu, 13 Jan 2022 12:29:26 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 21EC042042;
-        Thu, 13 Jan 2022 12:29:26 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 13 Jan 2022 12:29:26 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 25651)
-        id AAB7BE03A3; Thu, 13 Jan 2022 13:29:25 +0100 (CET)
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-To:     dwmw2@infradead.org, pbonzini@redhat.com
-Cc:     butterflyhuangxx@gmail.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, seanjc@google.com,
-        Cornelia Huck <cohuck@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Thomas Huth <thuth@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: [PATCH] KVM: avoid warning on s390 in mark_page_dirty
-Date:   Thu, 13 Jan 2022 13:29:24 +0100
-Message-Id: <20220113122924.740496-1-borntraeger@linux.ibm.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <e9e5521d-21e5-8f6f-902c-17b0516b9839@redhat.com>
-References: <e9e5521d-21e5-8f6f-902c-17b0516b9839@redhat.com>
+        Thu, 13 Jan 2022 07:29:55 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE2BCB8226C;
+        Thu, 13 Jan 2022 12:29:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEFB1C36AEF;
+        Thu, 13 Jan 2022 12:29:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642076992;
+        bh=X5jETQgkQZS/2fpSntJpBBFhReQIN06u1o0hN2hor78=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cm0l6TUG4CMMmVUp+jXxaKjNQyOVhj//O8GkLtbxT1csqRchAoKfMSsjZj228V4TM
+         chNGd7GNKBS0UVgZX/FWjNvTNZ/QA/JD3E4n9H9x3cHB5bGkWKQUzh+HSb++jm1827
+         RIK6RZYwgJopXuPX7MZ4S7YH8Dk9I148EVxeKLeKEcaF8YTleX+nFSqiN+Ja/iZ4sK
+         yA9OXCWOPfNswtKqUFLQPlRVmBS7TNJ8lLqIX6c9NNJIHFPfWz3AA6iIC7pyjLvn4m
+         GDaFm6XZTBTkNn6yE8ER+1kaOGUtTzIwDoC8OTwpnqcO4r+i/XTRPGEMFH04mqsdmi
+         QjsnxVMtkuKAA==
+Received: by mail-wr1-f53.google.com with SMTP id l25so9735844wrb.13;
+        Thu, 13 Jan 2022 04:29:52 -0800 (PST)
+X-Gm-Message-State: AOAM533Sq8el3gUZcNzIxJF9a9uO5FiDMuOTQQghhtZ02gMmVXc4hfuW
+        tj4m0oL2E1y3u7LzVPPPHPL2WrxUsBPEni4hk1Y=
+X-Google-Smtp-Source: ABdhPJzbEoF8BcekTlsuwHwDqGMGCkjXPqt10iYsm5hjT9bV1vFHGcxLmw+JEzXMd4aIE7HlJHP7IuBXHZh6PSFwxss=
+X-Received: by 2002:adf:f287:: with SMTP id k7mr3883893wro.417.1642076991005;
+ Thu, 13 Jan 2022 04:29:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: MAP5mWyygcCwYNeatHCNi8WojDYS3er7
-X-Proofpoint-GUID: VMAYwqNOkptejPYOdpa7xFi2pIryeSei
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-13_04,2022-01-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 suspectscore=0 mlxlogscore=999 lowpriorityscore=0
- clxscore=1015 adultscore=0 mlxscore=0 phishscore=0 spamscore=0
- malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201130073
+References: <20220112131204.800307-1-Jason@zx2c4.com> <20220112131204.800307-3-Jason@zx2c4.com>
+ <87r19cftbr.fsf@toke.dk> <CAHmME9pieaBBhKc1uKABjTmeKAL_t-CZa_WjCVnUr_Y1_D7A0g@mail.gmail.com>
+ <55d185a8-31ea-51d0-d9be-debd490cd204@stressinduktion.org>
+ <CAMj1kXGz7_98B_b=SJER6-Q2g-nOT5X3cfN=nfhYoH0eHep5bw@mail.gmail.com> <CAHmME9paa0Z+wBza4gDT3xPzKqhGk9AoL433sOu9H=NHxiZA_Q@mail.gmail.com>
+In-Reply-To: <CAHmME9paa0Z+wBza4gDT3xPzKqhGk9AoL433sOu9H=NHxiZA_Q@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 13 Jan 2022 13:29:39 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHHvm6jeoWZVcRuRtxos3MJajMkuFj4-Hu6ZADjxu=y3A@mail.gmail.com>
+Message-ID: <CAMj1kXHHvm6jeoWZVcRuRtxos3MJajMkuFj4-Hu6ZADjxu=y3A@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 2/3] ipv6: move from sha1 to blake2s in address calculation
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Hannes Frederic Sowa <hannes@stressinduktion.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Erik Kline <ek@google.com>,
+        Fernando Gont <fgont@si6networks.com>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        hideaki.yoshifuji@miraclelinux.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid warnings on s390 like
-[ 1801.980931] CPU: 12 PID: 117600 Comm: kworker/12:0 Tainted: G            E     5.17.0-20220113.rc0.git0.32ce2abb03cf.300.fc35.s390x+next #1
-[ 1801.980938] Workqueue: events irqfd_inject [kvm]
-[...]
-[ 1801.981057] Call Trace:
-[ 1801.981060]  [<000003ff805f0f5c>] mark_page_dirty_in_slot+0xa4/0xb0 [kvm]
-[ 1801.981083]  [<000003ff8060e9fe>] adapter_indicators_set+0xde/0x268 [kvm]
-[ 1801.981104]  [<000003ff80613c24>] set_adapter_int+0x64/0xd8 [kvm]
-[ 1801.981124]  [<000003ff805fb9aa>] kvm_set_irq+0xc2/0x130 [kvm]
-[ 1801.981144]  [<000003ff805f8d86>] irqfd_inject+0x76/0xa0 [kvm]
-[ 1801.981164]  [<0000000175e56906>] process_one_work+0x1fe/0x470
-[ 1801.981173]  [<0000000175e570a4>] worker_thread+0x64/0x498
-[ 1801.981176]  [<0000000175e5ef2c>] kthread+0x10c/0x110
-[ 1801.981180]  [<0000000175de73c8>] __ret_from_fork+0x40/0x58
-[ 1801.981185]  [<000000017698440a>] ret_from_fork+0xa/0x40
+On Thu, 13 Jan 2022 at 13:22, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> On 1/13/22, Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > The question is not whether but when we can/will change this.
+> >
+> > SHA-1 is broken and should be removed at *some* point, so unless the
+> > feature itself is going to be obsolete, its implementation will need
+> > to switch to a PRF that fulfils the requirements in RFC7217 once SHA-1
+> > ceases to do so.
+> >
+> > And I should also point out that the current implementation does not
+> > even use SHA-1 correctly, as it omits the finalization step. This may
+> > or may not matter in practice, but it deviates from crypto best
+> > practices, as well as from RFC7217
+> >
+> > I already pointed out to Jason (in private) that the PRF does not need
+> > to be based on a cryptographic hash, so as far as I can tell, siphash
+> > would be a suitable candidate here as well, and I already switched the
+> > TCP fastopen code to that in the past. But SHA-1 definitely has to go.
+> >
+>
+> Correction: this should be a cryptographically secure.
 
-when writing to a guest from an irqfd worker as long as we do not have
-the dirty ring.
+Of course. I said it does not need to be based on a cryptographic *hash*.
 
-Signed-off-by: Christian Borntraeger <borntraeger@linux.ibm.com>
----
- virt/kvm/kvm_main.c | 2 ++
- 1 file changed, 2 insertions(+)
+> That's part of
+> the point of moving away from SHA-1 of course. But fortunately,
+> siphash *is*
+> considered to be cryptographically secure. Whether you want blake2s's
+> keyed mode or siphash doesn't really matter to me. I thought the
+> former's API mapped a bit neater here.
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 504158f0e131..1a682d3e106d 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -3163,8 +3163,10 @@ void mark_page_dirty_in_slot(struct kvm *kvm,
- {
- 	struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
- 
-+#ifdef CONFIG_HAVE_KVM_DIRTY_RING
- 	if (WARN_ON_ONCE(!vcpu) || WARN_ON_ONCE(vcpu->kvm != kvm))
- 		return;
-+#endif
- 
- 	if (memslot && kvm_slot_dirty_track_enabled(memslot)) {
- 		unsigned long rel_gfn = gfn - memslot->base_gfn;
--- 
-2.33.1
-
+Fair enough. This is not on a hot path anyway, so it doesn't really
+matter performance wise.

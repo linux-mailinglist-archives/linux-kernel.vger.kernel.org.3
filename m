@@ -2,138 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0CE48E09D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 23:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EE248E0A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 23:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238074AbiAMWpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 17:45:11 -0500
-Received: from mga12.intel.com ([192.55.52.136]:27900 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233052AbiAMWpK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 17:45:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642113910; x=1673649910;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Y2l0foejg18xzae54Csuj3bO4WRTw2nhXxs5WAHogro=;
-  b=JYnOa57mGtV0/j+YVi2b7YdKeQ0//2KfCVLFsc6ZIcXSo8+AfyKPdY3R
-   bAaG+dnMxDUg95GKTY1KVf8Gmh74f48K+JViEzKlRY7aZ2C/dF4ljQEY1
-   Et3+P6vTS6UTVKFxRRISGkpmMQWkzT87dIhHxPxaCws3Z/BELhjuhifFb
-   Zm5lExtfCwkrDGdKM+yKb6b947JFAA2iJqtqhQ4Jdh3h4RFZgxcvlhcwx
-   j9r8urikOzHU38myNtVIdvDHl8Ho8EI+MuecPO8piImHNALE3jUJ+YKKK
-   XErZRCafP1OvqYGW3C2itTZW4m6gzXDs6o/afP+0PKigyCyTv3gZSNHu1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="224110914"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="224110914"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 14:45:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="624029794"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 13 Jan 2022 14:45:08 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n88q9-0007jE-KE; Thu, 13 Jan 2022 22:45:05 +0000
-Date:   Fri, 14 Jan 2022 06:44:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [intel-tdx:tdx/guest-rebased 118/133]
- arch/x86/kernel/acpi/boot.c:1160: undefined reference to `swiotlb_hint_cpus'
-Message-ID: <202201140642.CNEqitYj-lkp@intel.com>
+        id S238108AbiAMWpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 17:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231467AbiAMWpr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 17:45:47 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD38FC061574;
+        Thu, 13 Jan 2022 14:45:47 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id g11-20020a17090a7d0b00b001b2c12c7273so6363411pjl.0;
+        Thu, 13 Jan 2022 14:45:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/4RRqBrmw4TBe6Qmao1QkNx5bovUudrxDbFnqUSc0p4=;
+        b=d+AMNGi3pmM56Gw2ANsf4dVZkxxu9gTZDnubAuMgpsTG1TYyOSubjwAIJj3gchZ4gI
+         0B77/wPoI6sJdx0dYzH9e+lPKGTrWqDi6uyscCT0NnwL12r9kMf7UvNqXJap9Ww9h00X
+         ++eNBUvCUuailZefL6xUS4zuY/+i3LJ2umXQPcvLL5HwHhiKShI/TzgHyVvAtT9o+ZSK
+         EV02hfsBZNw7tUb03GMWe5SwiQU5xrCuj5K+pvBnluwXB33LxlPrTMAfibhBsOZOmd2P
+         oGea+Ra0tvVuvCYZOfjqrRNi6jwwrixOt69WwOVKo/qnSAZsLEczPsUnUk+MGwTjlCJC
+         V5fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/4RRqBrmw4TBe6Qmao1QkNx5bovUudrxDbFnqUSc0p4=;
+        b=fFrph2ERd2e+6lFzehpoRYBhTLYqkgWHu+KU6hNW/GVTwMGeFv0eGh4xLPiaYInnGh
+         pqN6tkyXaeQZ7rr/cMKByISdBdS/JtNAqdEOuOtiuTN/uqM92IHlLf8OJjFY8kHKlVMv
+         waSfiRIT0Bo8xhOPiAaCbL/NSqgzhImjrNR67sXg/7XQCP/6VKiaCmCUY8MlpCONyzxC
+         2n3KNJxQigfhnhREfzZhhGEsfbofHNyCyrw8wnoXSBWLaaeGGpwYHEP55HDz0+LqdXbq
+         iTOw9VjGpdsztHWLjsR4Vue9M+WcxorfGVq1Gc3IRmvfeeq0ufYDNuNRlv4WZgVWh/ft
+         mGsA==
+X-Gm-Message-State: AOAM532B6ztdSeDHShCQMLXruKT2QUOR2of4si6pA8rMtvfG9d+IqC12
+        eaZgW7qGrLfU0WadGlnNhIwqdgnGoJcquF7uHyk=
+X-Google-Smtp-Source: ABdhPJyxLxthKpfUVIlwPxInPsYgz0dcn/oER61I63Kniua6f0bKm2UEhXy0QS1Rmwj+6QC6d9YSVxj1zeyLuLfEOK0=
+X-Received: by 2002:a17:90b:3a82:: with SMTP id om2mr7541963pjb.138.1642113947224;
+ Thu, 13 Jan 2022 14:45:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220112131204.800307-1-Jason@zx2c4.com> <20220112131204.800307-2-Jason@zx2c4.com>
+ <87tue8ftrm.fsf@toke.dk> <CAADnVQJqoHy+EQ-G5fUtkPpeHaA6YnqsOjjhUY6UW0v7eKSTZw@mail.gmail.com>
+ <CAHmME9ork6wh-T=sRfX6X0B4j-Vb36GVO0v=Yda0Hac1hiN_KA@mail.gmail.com>
+In-Reply-To: <CAHmME9ork6wh-T=sRfX6X0B4j-Vb36GVO0v=Yda0Hac1hiN_KA@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 13 Jan 2022 14:45:36 -0800
+Message-ID: <CAADnVQLF_tmNmNk+H+jP1Ubmw-MBhG1FevFmtZY6yw5xk2314g@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 1/3] bpf: move from sha1 to blake2s in tag calculation
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git tdx/guest-rebased
-head:   e3995864d37c56f431c93fc3dc454d9c65f5e9ea
-commit: 8c696e48187c5ffa881e639e1108622debbe6741 [118/133] swiotlb: Split up single swiotlb lock
-config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220114/202201140642.CNEqitYj-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/8c696e48187c5ffa881e639e1108622debbe6741
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx tdx/guest-rebased
-        git checkout 8c696e48187c5ffa881e639e1108622debbe6741
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Thu, Jan 13, 2022 at 4:27 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Hi Alexei,
+>
+> On 1/13/22, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > Nack.
+> > It's part of api. We cannot change it.
+>
+> This is an RFC patchset, so there's no chance that it'll actually be
+> applied as-is, and hence there's no need for the strong hammer nack.
+> The point of "request for comments" is comments. Specifically here,
+> I'm searching for information on the ins and outs of *why* it might be
+> hard to change. How does userspace use this? Why must this 64-bit
+> number be unchanged? Why did you do things this way originally? Etc.
+> If you could provide a bit of background, we might be able to shake
+> out a solution somewhere in there.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   ld: arch/x86/kernel/acpi/boot.o: in function `acpi_parse_madt_lapic_entries':
->> arch/x86/kernel/acpi/boot.c:1160: undefined reference to `swiotlb_hint_cpus'
-
-
-vim +1160 arch/x86/kernel/acpi/boot.c
-
-  1118	
-  1119	static int __init acpi_parse_madt_lapic_entries(void)
-  1120	{
-  1121		int count;
-  1122		int x2count = 0;
-  1123		int ret;
-  1124		struct acpi_subtable_proc madt_proc[2];
-  1125	
-  1126		if (!boot_cpu_has(X86_FEATURE_APIC))
-  1127			return -ENODEV;
-  1128	
-  1129		count = acpi_table_parse_madt(ACPI_MADT_TYPE_LOCAL_SAPIC,
-  1130					      acpi_parse_sapic, MAX_LOCAL_APIC);
-  1131	
-  1132		if (!count) {
-  1133			memset(madt_proc, 0, sizeof(madt_proc));
-  1134			madt_proc[0].id = ACPI_MADT_TYPE_LOCAL_APIC;
-  1135			madt_proc[0].handler = acpi_parse_lapic;
-  1136			madt_proc[1].id = ACPI_MADT_TYPE_LOCAL_X2APIC;
-  1137			madt_proc[1].handler = acpi_parse_x2apic;
-  1138			ret = acpi_table_parse_entries_array(ACPI_SIG_MADT,
-  1139					sizeof(struct acpi_table_madt),
-  1140					madt_proc, ARRAY_SIZE(madt_proc), MAX_LOCAL_APIC);
-  1141			if (ret < 0) {
-  1142				pr_err("Error parsing LAPIC/X2APIC entries\n");
-  1143				return ret;
-  1144			}
-  1145	
-  1146			count = madt_proc[0].count;
-  1147			x2count = madt_proc[1].count;
-  1148		}
-  1149		if (!count && !x2count) {
-  1150			pr_err("No LAPIC entries present\n");
-  1151			/* TBD: Cleanup to allow fallback to MPS */
-  1152			return -ENODEV;
-  1153		} else if (count < 0 || x2count < 0) {
-  1154			pr_err("Error parsing LAPIC entry\n");
-  1155			/* TBD: Cleanup to allow fallback to MPS */
-  1156			return count;
-  1157		}
-  1158	
-  1159		/* This does not take overrides into consideration */
-> 1160		swiotlb_hint_cpus(max(count, x2count));
-  1161	
-  1162		x2count = acpi_table_parse_madt(ACPI_MADT_TYPE_LOCAL_X2APIC_NMI,
-  1163						acpi_parse_x2apic_nmi, 0);
-  1164		count = acpi_table_parse_madt(ACPI_MADT_TYPE_LOCAL_APIC_NMI,
-  1165					      acpi_parse_lapic_nmi, 0);
-  1166		if (count < 0 || x2count < 0) {
-  1167			pr_err("Error parsing LAPIC NMI entry\n");
-  1168			/* TBD: Cleanup to allow fallback to MPS */
-  1169			return count;
-  1170		}
-  1171		return 0;
-  1172	}
-  1173	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+There is no problem with the code and nothing to be fixed.

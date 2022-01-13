@@ -2,67 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 012DA48DAC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2EC48DAEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236171AbiAMPkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 10:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236163AbiAMPkR (ORCPT
+        id S231844AbiAMPqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 10:46:38 -0500
+Received: from h01mx15.reliablemail.org ([173.236.5.211]:39814 "EHLO
+        h01mx15.reliablemail.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232062AbiAMPqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 10:40:17 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBDCC06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 07:40:16 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id x7so20876972lfu.8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 07:40:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=QN0N+AKpheanluf1vTzub6eAJJLvzk1oql8qt6U8QbY=;
-        b=FLG2bk2rGjruq9CXFGV6JRVO/dqp8qnYR3M4YRY1ww5XDBWcjOQqyC4lEl0xESYJZA
-         0BsOjXNRm6P4mXgDBTqbM0+xa4Eyz1+oi0+z7v6pXvMojErvZCwFRD3G8IfzV2oPuxgm
-         D+WKx8ZwUINJus9YTqC5QqAjqZ4dMMdyGsiW2r+BjhhG04jsyflHwYq8mQ2JQZFkIF1K
-         MaIwqAwcLGqJMmGTwW6F8yknGlNlrafGvGQSshUPOiZWvwTJJVJ3kqj622Szgtwp4ma1
-         xJgSLKrhngQH8YRZxS7kN7cNtejma6doii3jIA6maFF/mwKJKbZfFl563mJzXiLBE11r
-         IGpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=QN0N+AKpheanluf1vTzub6eAJJLvzk1oql8qt6U8QbY=;
-        b=ffEU5wHXdf5Bsnj4hUcZ7KzFW3uZf2pY04a9rRKA8lBsvQ40Z+JCYhBZMNUa9sS0O8
-         B6E0I+rZ2yWyuBV3a+l4AaHExAoXk8mNg7rRWKZeb9iNKTUGGqqwp32X20A6ZthcS+et
-         aGpjJPhRfB8dVE7NL/32XHUKRrCwNOsEuRKQOMPR+t+UP6YLcRi1it6c6rsBMLG2QSU2
-         XciCPHDbv/yX43AlEfMywjBvkeR6R/HikYKpmeZ2ygIMZH04k0iuh+aqP5Di8Mdywcjs
-         YoBhRXFZcEjKyUhSAjdrq8v06Vdb2D5SbmBu4y91kSoE3IxOJSgBKg5PeSyyMZl2gHLo
-         T68Q==
-X-Gm-Message-State: AOAM530KtIgVlQXmyouIG0HBR3KNn3KeJo7M2UDbmR+kCxT20QqsGnO/
-        v0S7FohEqI5p2fF8HgV6XpD3OTim5910BjvFTG4=
-X-Google-Smtp-Source: ABdhPJx7rC9ShIGmyFMvpbhKpYYqCRJEFsx7MXSDEUgdEbDGR+n/HInouw7y5EcqNLATZaop0fxnhAfe+vdUBrEfFys=
-X-Received: by 2002:a05:6512:6c4:: with SMTP id u4mr3868813lff.297.1642088415095;
- Thu, 13 Jan 2022 07:40:15 -0800 (PST)
+        Thu, 13 Jan 2022 10:46:37 -0500
+X-Halon-Out: 25006da8-7487-11ec-90dc-00163c81f1a9
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=grimler.se;
+        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=E3H2b1siBtWNfs0FHzAhtIUMbRbOex7ugO9PAMm8rUY=; b=tQR5XVOPvCFZKEhYA0goMbE2ep
+        a+D7tdu3nIfTWwJA6mYCVes4bYZFky6OISA5GksfNtzdHPdLu7dhrEQk3wSTDyWJD0OU7i9CqNj40
+        HeYfe4fJRkBudQpewUTYapH1vuJHEDq72OCJAw/MCinjcHIUTZdW9ooJxiKqHWi02S7QykcKQliwA
+        PZdxd6Z0UjWUFOytdOlggGmDM92uySnYgaXFVKsG88kG2WoBdL9mIZnCU6Jr3a7+uo9PlO71hcxQ9
+        /sf3bu3CN6Z/zGGZIc6CTUGa5vjHPlU8eQ0c+43Bc0Xd2vdaG2uP+/55zCM5KLKg+Cut995btJPtN
+        uyMNpXCw==;
+From:   Henrik Grimler <henrik@grimler.se>
+To:     semen.protsenko@linaro.org, virag.david003@gmail.com,
+        martin.juecker@gmail.com, cw00.choi@samsung.com,
+        m.szyprowski@samsung.com, alim.akhtar@samsung.com,
+        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     Henrik Grimler <henrik@grimler.se>
+Subject: [PATCH 0/3] Add initial support for exynos5420-chagallwifi
+Date:   Thu, 13 Jan 2022 16:40:16 +0100
+Message-Id: <20220113154019.74434-1-henrik@grimler.se>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:ac2:4db2:0:0:0:0:0 with HTTP; Thu, 13 Jan 2022 07:40:14
- -0800 (PST)
-Reply-To: mrsbillchantal2022@mail.com
-From:   "Mrs. bill Chantal" <chigoziechukwuekezie@gmail.com>
-Date:   Thu, 13 Jan 2022 16:40:14 +0100
-Message-ID: <CAPnr8MEZkELndXWecFhOg2-eLkRAiQq30Jssm6C2CrtH0Y3cLg@mail.gmail.com>
-Subject: Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpsrv07.misshosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - grimler.se
+X-Get-Message-Sender-Via: cpsrv07.misshosting.com: authenticated_id: henrik@grimler.se
+X-Authenticated-Sender: cpsrv07.misshosting.com: henrik@grimler.se
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello my Dearest
-You have been compensated with the sum of 5.4 million dollars in this
-united nation the payment will be Issue into ATM visa card and send to
-you from the bank,we need your address, passport and your WhatsApp
-Number.
+Samsung's tablet Galaxy Tab S 10.5" (wifi) has codename chagallwifi
+and is one of several tablets released in 2013 - 2014 based on Exynos
+5420.  This initial devicetree adds support for accessing device over
+USB or UART, and allows using a rootfs in either the internal eMMC or
+an external sdcard.  4 out of 8 CPUs are brought up when device boots,
+which is the same as on the somewhat similar device
+exynos5420-arndale-octa.
 
-Thanks
+Patch 2 is necessary after a secure-firmware node is added, otherwise
+device hangs during the CPU1BOOT secure monitor call. Without the
+secure-firmware node we are not able to bring up any secondary CPUs.
 
-Mrs.Bill Chantal
+Henrik Grimler (3):
+  dt-bindings: arm: samsung: document chagallwifi board binding
+  ARM: exynos: only do SMC_CMD_CPU1BOOT call on Exynos4
+  ARM: dts: Add support for Samsung Chagallwifi
+
+ .../bindings/arm/samsung/samsung-boards.yaml  |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/exynos5420-chagallwifi.dts  |  57 ++
+ .../dts/exynos5420-galaxy-tab-common.dtsi     | 647 ++++++++++++++++++
+ arch/arm/mach-exynos/firmware.c               |   4 +-
+ 5 files changed, 709 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/exynos5420-chagallwifi.dts
+ create mode 100644 arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi
+
+
+base-commit: b1cbda0fc3431b464aa78b5f335a5d35428f10c8
+-- 
+2.34.1
+

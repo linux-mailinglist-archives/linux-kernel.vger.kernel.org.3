@@ -2,114 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D705448E016
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 23:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 389C148E017
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 23:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236746AbiAMWJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 17:09:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235193AbiAMWJi (ORCPT
+        id S237018AbiAMWLo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 13 Jan 2022 17:11:44 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:56574 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233023AbiAMWLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 17:09:38 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADFAC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 14:09:38 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id i17so1091125pfk.11
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 14:09:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AC2HTFJ1ATzCZyLtom4XJg0IJvKzl0TNNBtGMizTd8Q=;
-        b=U+T4F26wkMoKmJIJ1QTUZgPt3LYcSKtsHbd7REnwzpdUxVIhXc1VGzxKOTWPI/T42o
-         /22qUfEf209ZLOY0KUQ2v6LedfQ8tKtsUQjHtebLySJIPezt6kftoGGvXNiNUhO4cKyo
-         U6Mw6T+i2lJxtSjkt4IzCQEvIEp47zj5YQLxgqsdutt10cPRQCG16PT4/hEixtm6voRx
-         /nNf1s0FOttaN9D2C1QLSK0Fm1FZi8CMNufXrnwf4yBxOSgoEEAiAXQYwRBntEl7jnVE
-         ODD+o76Juw2dJS8kRdTpVn0SYm4g782O8ehDCTHXVmKUvbwG8c2Ng8PJRv5ZX2PgTyWH
-         mwyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AC2HTFJ1ATzCZyLtom4XJg0IJvKzl0TNNBtGMizTd8Q=;
-        b=r+lRUAhaQPAUCXxA9Oyfa4qIib4jMu4AJeRN2vBR4U5m5ZvxudYnbmwDxHfoatB6BV
-         F0H4+VcvtnHa1aoB8r0S4XAc/tH3HKXtVpaBK5d8C9l0jKkq6i+ENK/jlofsvf38pkln
-         p2EtgbWnPACcky3rXoUVPnEhCiCYzP4rzxxGV1JkbucLGx/UCUhLcrZuYHi5d/m2DeTL
-         0tME6NwYTxgc7lArRwaYIuQxtlM/gQYffO2WQSdmEAA7fn9jG5y/zwePhGP0JOHQeE2Q
-         B8vILYsybmAjnk9IN3nQOVTCpU7BUGhqNpcXzFzdD/A5dI060bwVEYSTlM/O19wMSdTe
-         cZ5w==
-X-Gm-Message-State: AOAM531s6fp1fthmiEjQxmbQVF7Ny9UPVKIWgopWqc2iWhBm8HvSBYwT
-        9j0OQpwqZ+2w5h5YfNxUvboaKQ==
-X-Google-Smtp-Source: ABdhPJwn/TmRC2ZoREFVED7MDc2QJTqiBDWq2zTBbSNYy5uyZEWJariDsNSuc5VL4Ix8KcssmQIwcQ==
-X-Received: by 2002:a63:ae4b:: with SMTP id e11mr5548909pgp.386.1642111777586;
-        Thu, 13 Jan 2022 14:09:37 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id n5sm3512558pfo.39.2022.01.13.14.09.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 14:09:37 -0800 (PST)
-Date:   Thu, 13 Jan 2022 22:09:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
-        Gao Chao <chao.gao@intel.com>
-Subject: Re: [PATCH v5 8/8] KVM: VMX: Resize PID-ponter table on demand for
- IPI virtualization
-Message-ID: <YeCjHbdAikyIFQc9@google.com>
-References: <20211231142849.611-1-guang.zeng@intel.com>
- <20211231142849.611-9-guang.zeng@intel.com>
+        Thu, 13 Jan 2022 17:11:43 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-140-S1wWihjPMYGfmUu8_x_IuQ-1; Thu, 13 Jan 2022 22:11:36 +0000
+X-MC-Unique: S1wWihjPMYGfmUu8_x_IuQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Thu, 13 Jan 2022 22:11:35 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Thu, 13 Jan 2022 22:11:35 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Sven Schnelle' <svens@linux.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "deller@gmx.de" <deller@gmx.de>
+Subject: RE: [PATCH v2] tracing: Add test for user space strings when
+ filtering on  string pointers
+Thread-Topic: [PATCH v2] tracing: Add test for user space strings when
+ filtering on  string pointers
+Thread-Index: AQHYCMRx7AQ+C6qOvkCW4jNyMLz0qKxhghEQ
+Date:   Thu, 13 Jan 2022 22:11:35 +0000
+Message-ID: <e66911061f9344fa8de2da982ab98a7b@AcuMS.aculab.com>
+References: <20220110115532.536088fd@gandalf.local.home>
+        <31c11a47a8bc4e34a1a64d54a54bb944@AcuMS.aculab.com>
+        <20220110122436.5302128f@gandalf.local.home>
+        <7a0fefb7ed3542b4a49dee1e78b1668b@AcuMS.aculab.com>
+        <yt9d8rvmt2jq.fsf@linux.ibm.com>        <20220113125754.0cb5273f@gandalf.local.home>
+ <yt9dwnj3wcke.fsf@linux.ibm.com>
+In-Reply-To: <yt9dwnj3wcke.fsf@linux.ibm.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211231142849.611-9-guang.zeng@intel.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 31, 2021, Zeng Guang wrote:
-> +static int vmx_expand_pid_table(struct kvm_vmx *kvm_vmx, int entry_idx)
-> +{
-> +	u64 *last_pid_table;
-> +	int last_table_size, new_order;
-> +
-> +	if (entry_idx <= kvm_vmx->pid_last_index)
-> +		return 0;
-> +
-> +	last_pid_table = kvm_vmx->pid_table;
-> +	last_table_size = table_index_to_size(kvm_vmx->pid_last_index + 1);
-> +	new_order = get_order(table_index_to_size(entry_idx + 1));
-> +
-> +	if (vmx_alloc_pid_table(kvm_vmx, new_order))
-> +		return -ENOMEM;
-> +
-> +	memcpy(kvm_vmx->pid_table, last_pid_table, last_table_size);
-> +	kvm_make_all_cpus_request(&kvm_vmx->kvm, KVM_REQ_PID_TABLE_UPDATE);
-> +
-> +	/* Now old PID table can be freed safely as no vCPU is using it. */
-> +	free_pages((unsigned long)last_pid_table, get_order(last_table_size));
+From: Sven Schnelle
+> Sent: 13 January 2022 21:28
+> 
+> Hi Steve,
+> 
+> Steven Rostedt <rostedt@goodmis.org> writes:
+> 
+> > On Tue, 11 Jan 2022 21:55:53 +0100
+> > Sven Schnelle <svens@linux.ibm.com> wrote:
+> >
+> >> > Isn't there also at least one architecture where you can't differentiate
+> >> > between user and kernel pointers by looking at the address?
+> >> > (Something like sparc ASI is used for user accesses so both user
+> >> > and kernel get the full 4G address range. But it isn't sparc (or pdp/11))
+> >> > ISTR it causing issues with the code for kernel_setsockopt() and
+> >> > required a separate flag.
+> >>
+> >> On s390 TASK_SIZE is defined as -PAGE_SIZE, so with the patch above the
+> >> kernel would always try to fetch it from user space. I think it would be
+> >> the same for parisc.
+> >
+> > As a work around for these cases, would something like this work?
+> 
+> Hmm, i don't see how. On s390, TASK_SIZE is -PAGE_SIZE, which means
+> 0xfffffffffffff000 so i think the if() condition below is always true.
 
-This is terrifying.  I think it's safe?  But it's still terrifying.
+Isn't TASK_SIZE also dependant on current->xxxx on at least one architecture?
+Possibly even x86-64.
 
-Rather than dynamically react as vCPUs are created, what about we make max_vcpus
-common[*], extend KVM_CAP_MAX_VCPUS to allow userspace to override max_vcpus,
-and then have the IPIv support allocate the PID table on first vCPU creation
-instead of in vmx_vm_init()?
+> Too bad that the __user attribute is stripped during a normal compile.
+> But couldn't we add the information whether a pointer belongs to user
+> or kernel space in the trace event definition? For syscall tracing it's
+> easy, because pointer types in SYSCALL_DEFINE() and friends are always
+> userspace pointers?
 
-That will give userspace an opportunity to lower max_vcpus to reduce memory
-consumption without needing to dynamically muck with the table in KVM.  Then
-this entire patch goes away.
+Also, when the __user pointer is saved it MUST be checked for being
+a valid user pointer (eg with access_ok(ptr, 1).
+
+You really do need to remember whether the pointer is user or kernel
+when you save it.
+
+I also suspect that you need to check for contexts where 'current'
+isn't really valid (eg any kind on interrupt) and ensure the user
+reads aren't even attempted.
+The excuse of being 'root' in order to request/read trace isn't
+really a very good one.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

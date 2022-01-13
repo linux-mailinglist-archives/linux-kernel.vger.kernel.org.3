@@ -2,130 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3945848D909
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A47B48D90D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235197AbiAMNcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 08:32:20 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:54664 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233472AbiAMNcR (ORCPT
+        id S233661AbiAMNde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 08:33:34 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:56488
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232568AbiAMNdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 08:32:17 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Thu, 13 Jan 2022 08:33:33 -0500
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AB499218E2;
-        Thu, 13 Jan 2022 13:32:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642080735; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=coXO123D8kHY82TozlDE/TedXBQ//Bv+wiDunrMH7W4=;
-        b=HUg0+y2hUGnKSUklhNidjyI6lMGamBNM1plssFsXXlpWH2yqTGhMQbBRPY/vcrL8HLqFUH
-        SdWcJX8GmXcE5Ov8PubBS22RYXggtMlayqbHejR05ZgUIsrxJk2OjzT7idHLUWUyb7LQtk
-        TjMzRy6Mog79uW/M/0PrNUBriluqLxI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 62CAD1330C;
-        Thu, 13 Jan 2022 13:32:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tguPF98p4GH2YAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 13 Jan 2022 13:32:15 +0000
-Date:   Thu, 13 Jan 2022 14:32:14 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <guro@fb.com>, Yang Shi <shy828301@gmail.com>,
-        Alex Shi <alexs@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Dave Chinner <david@fromorbit.com>,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org,
-        Kari Argillander <kari.argillander@gmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-Subject: Re: [PATCH v5 10/16] mm: list_lru: allocate list_lru_one only when
- needed
-Message-ID: <20220113133213.GA28468@blackbody.suse.cz>
-References: <20211220085649.8196-1-songmuchun@bytedance.com>
- <20211220085649.8196-11-songmuchun@bytedance.com>
- <20220106110051.GA470@blackbody.suse.cz>
- <CAMZfGtXZA+rLMUw5yLSW=eUncT0BjH++Dpi1EzKwXvV9zwqF1w@mail.gmail.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C13203F1EA
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 13:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642080812;
+        bh=2AZxHTRlLvm3ZGGogebXDNWe5vJdA0bdD7/jvlL6me8=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=i1B/S4cEE2kEQPo8sUjndaVgWCZErCjOLOILk8oFmhGTfs5vM14aIBDfhBQ/QwLq7
+         mdPVeWiwzU6UWZOCde04d0rIbTs4Kj3MqOrGL2gpE/YxzAPyS1e6wMjWLfrA4t1bpB
+         /UKeKstMtL6TU/YNHZPN0oPaM5Vcaiuo89VS9kBm5BIKUM7pBptkulnm+MJORD5ypy
+         O7oXXj0lWvim2lOb0Ar5fvhP3rCwaHYei9Bpl/s421TksvX7TKgBk/eiRkPaY7lmkv
+         kk4WoE/ISFkNtOHC7WVWXegAIBLxpKW/UIjTQFrZdRGZAnkhG7kEp3c3ZR/ffbux0f
+         qpe0c+G23VdCQ==
+Received: by mail-wm1-f70.google.com with SMTP id z13-20020a05600c0a0d00b003457d6619f8so3622011wmp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 05:33:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2AZxHTRlLvm3ZGGogebXDNWe5vJdA0bdD7/jvlL6me8=;
+        b=aH8HAmhUqwCQBtRh4QM1dOXUiF7Qv1NHh8egCVpc+Z96tKYm6+sRuoKMqhPwlk9Jq6
+         P2k9B6ldr1gYpRzx7FfjjCiIhbYK3DBJRz9BGct/iCusL+9LQNoqkdJSc5Z7a1rbE525
+         nqZmAulCPHbyIYYxxmZ9LPJU8jSCvh1Nxrd+gyD6ht2eS8Y6Tntwu7QNIDNJJuCL0u8i
+         8V5YEImaKVNIYbfNx/gNp1mD2z73DI6QuiD3BeIs4sL776TaPyRQtSN9PesYHuJlqyqE
+         aC5GPGbqVedx0nPTXzWFsVXrZ70y1m4M0Kmkhz7JUce6+/OYBG2lIdu6PwPTTOiU3r2s
+         +eMg==
+X-Gm-Message-State: AOAM530GXwBaIJeDxpeJUiLVwgFEWEuTSGl8WCVfR0a9GN79ltt9mC+J
+        JytGnXD+PRfLIXGFZfqUgHXjIIs9MznkCm8IvFSGOuzM9JMIz+rvucivs4nQqlzLkxQPKbaRABX
+        0lAKMZoa/EXUqlyL+RfMX2SA640Dlmq8ejeKM8pJ4Dw==
+X-Received: by 2002:adf:fecc:: with SMTP id q12mr3999421wrs.510.1642080812441;
+        Thu, 13 Jan 2022 05:33:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx4dIKRpTtfD07xSz5+2nbmXQZf2eX9cv3ujygsjXdEyYvntQPkXEKJq+e836RN3/ma2EAGLw==
+X-Received: by 2002:adf:fecc:: with SMTP id q12mr3999404wrs.510.1642080812290;
+        Thu, 13 Jan 2022 05:33:32 -0800 (PST)
+Received: from [192.168.0.30] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id a2sm3542426wri.17.2022.01.13.05.33.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 05:33:31 -0800 (PST)
+Message-ID: <7431da93-d3df-9c32-f614-0b6c95ed016a@canonical.com>
+Date:   Thu, 13 Jan 2022 14:33:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZfGtXZA+rLMUw5yLSW=eUncT0BjH++Dpi1EzKwXvV9zwqF1w@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 22/23] arm64: dts: fsd: Add ADC device tree node
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, olof@lixom.net,
+        linus.walleij@linaro.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org, s.nawrocki@samsung.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com, Tamseel Shams <m.shams@samsung.com>
+References: <20220113121143.22280-1-alim.akhtar@samsung.com>
+ <CGME20220113122456epcas5p35f6406ab03af58d2e56b0b7304d4d002@epcas5p3.samsung.com>
+ <20220113121143.22280-23-alim.akhtar@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220113121143.22280-23-alim.akhtar@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 09:22:36PM +0800, Muchun Song <songmuchun@bytedance.com> wrote:
->   root(-1) -> A(0) -> B(1) -> C(2)
+On 13/01/2022 13:11, Alim Akhtar wrote:
+> This patch adds ADC device tree node and enables the same
+> on fsd platform.
 > 
-> CPU0:                                   CPU1:
-> memcg_list_lru_alloc(C)
->                                         memcg_drain_all_list_lrus(C)
->                                         memcg_drain_all_list_lrus(B)
->                                         // Now C and B are offline. The
->                                         // kmemcg_id becomes the following if
->                                         // we do not the kmemcg_id of its
->                                         // descendants in
->                                         // memcg_drain_all_list_lrus().
->                                         //
->                                         // root(-1) -> A(0) -> B(0) -> C(1)
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Tamseel Shams <m.shams@samsung.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+>  arch/arm64/boot/dts/tesla/fsd.dts  |  4 ++++
+>  arch/arm64/boot/dts/tesla/fsd.dtsi | 11 +++++++++++
+>  2 files changed, 15 insertions(+)
 > 
->   for (i = 0; memcg; memcg = parent_mem_cgroup(memcg), i++) {
->       // allocate struct list_lru_per_memcg for memcg C
->       table[i].mlru = memcg_init_list_lru_one(gfp);
->   }
-> 
->   spin_lock_irqsave(&lru->lock, flags);
->   while (i--) {
->       // here index = 1
->       int index = table[i].memcg->kmemcg_id;
-> 
->       struct list_lru_per_memcg *mlru = table[i].mlru;
->       if (index < 0 || rcu_dereference_protected(mlrus->mlru[index], true))
->           kfree(mlru);
->       else
->           // mlrus->mlru[index] will be assigned a new value regardless
->           // memcg C is already offline.
->           rcu_assign_pointer(mlrus->mlru[index], mlru);
->   }
->   spin_unlock_irqrestore(&lru->lock, flags);
+> diff --git a/arch/arm64/boot/dts/tesla/fsd.dts b/arch/arm64/boot/dts/tesla/fsd.dts
+> index 7f3bb6212e50..dd6c75fc3221 100644
+> --- a/arch/arm64/boot/dts/tesla/fsd.dts
+> +++ b/arch/arm64/boot/dts/tesla/fsd.dts
+> @@ -150,3 +150,7 @@
+>  &spi_2 {
+>  	status = "okay";
+>  };
+> +
+> +&adc {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> index 7e687c6f74f6..058a9d381aed 100644
+> --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
+> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> @@ -788,6 +788,17 @@
+>  			num-cs = <1>;
+>  			status = "disabled";
+>  		};
+> +
+> +		adc: adc@141A0000 {
+
+lowercase hex numbers please.
+
+> +			compatible = "samsung,exynos-adc-v3";
+> +			reg = <0x0 0x141A0000 0x0 0x100>;
+> +			interrupts = <GIC_SPI 173 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clock_peric PERIC_PCLK_ADCIF>;
+> +			clock-names = "adc";
+> +			#io-channel-cells = <1>;
+> +			io-channel-ranges;
+> +			status = "disabled";
+
+This does not pass dtschema. NAK.
+
+> +		};
+>  	};
+>  };
+>  
 > 
 
-> So changing ->kmemcg_id of all its descendants can prevent
-> memcg_list_lru_alloc() from allocating list lrus for the offlined
-> cgroup after memcg_list_lru_free() calling.
 
-Thanks for the illustrative example. I can see how this can be a problem
-in a general call of memcg_list_lru_alloc(C).
-
-However, the code, as I understand it, resolves the memcg to which lru
-allocation should be associated via get_mem_cgroup_from_objcg() and
-memcg_reparent_list_lrus(C) comes after memcg_reparent_objcgs(C, B),
-i.e. the allocation would target B (or even A if after
-memcg_reparent_objcgs(B, A))?
-
-It seems to me like "wasting" the existing objcg reparenting mechanism.
-Or what do you think could be a problem relying on it?
-
-Thanks,
-Michal
+Best regards,
+Krzysztof

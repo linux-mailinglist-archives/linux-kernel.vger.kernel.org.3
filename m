@@ -2,170 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 603B348D52A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA9F48D52C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233520AbiAMJsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
+        id S233519AbiAMJuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbiAMJr6 (ORCPT
+        with ESMTP id S232227AbiAMJuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:47:58 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB41C06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:47:58 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id e9so9057151wra.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:47:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CX43QDixuqKZIQi1caGIH9xkhhuEjj8Yo37fB7bYrCU=;
-        b=mS9c7WYPOjEYqY0z57OkohJfYKxS1sEbS5dh95i5/ktJjsnhE1OBl3a5empJ57Tc9+
-         vXCdKF1aVlgN8Ya60KTvtQP65EZshzhtsyMuurpf3VVMBT4OVClDdAkZZgBaoU3Pbn63
-         OQonlsVQO/NJOuw0vFQ/RM0ORIylaNF+BoErifIu6Mfl+bjdN1qCJIsj4dQBPJGCHt03
-         ZFZhAXiQ7hVZFVhdH0mB00lten0AvuI2nqcLRy1MGja7axieY+SWi0RKUAcDxJsDtT8W
-         qToO9nCQSq+jcdo48D7L/ujhj6MVZKsZSk0YW5LeEZo1UEbqkFWVQcrtuPnew8DAgaOB
-         iLNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CX43QDixuqKZIQi1caGIH9xkhhuEjj8Yo37fB7bYrCU=;
-        b=wdmQjJslQfNIO0jbAC9tJI/8xDyV80yE8MN9s4OInpcahrkaC0sZbzXSzhSzgonIVz
-         V0qmLu07i0ATE1l+0gzHEF5IA6LQNgbP9/R5hkVIBhGubQW/OQrypbJxqcFdrMlGlkGE
-         5MEn/8/Y+Ybt8kK27xugyUbCspgIEDcYaJGDlzwuRxA3hV46Px/N8q/iGBicyRbwYEUE
-         fz4EF92NpoAjwcxihGdlFXlfVx8hjbT0j1oHLZZYEy/8fQragkayKFi9xG/Jxf2ib+QG
-         iY5KW5uyYY1rYSjgu9uHYda3Gd4AceHPqXrcyz6Jr405cU6AhRgD83iFPj0cB40XvZiG
-         OXJQ==
-X-Gm-Message-State: AOAM532tkNfw7O57XbEQ6FZWaLDqfjNK7SDEAirEhpXy9rFxUQziHKlc
-        bIVnQwBTjejWpm/xZjmAmOXGHA==
-X-Google-Smtp-Source: ABdhPJwCxOjHGND3tEMn9aaulcJoj7F5nN7KMLPFRCkl/nTB3ab+vx5Miz06ZRUi4IOldmbTlMKmew==
-X-Received: by 2002:a05:6000:1a85:: with SMTP id f5mr2365884wry.463.1642067277004;
-        Thu, 13 Jan 2022 01:47:57 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id o11sm7519813wmq.15.2022.01.13.01.47.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 01:47:56 -0800 (PST)
-Date:   Thu, 13 Jan 2022 09:47:54 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v5 08/10] ARM: uaccess: add __{get,put}_kernel_nofault
-Message-ID: <20220113094754.6ei6ssiqbuw7tfj7@maple.lan>
-References: <20210726141141.2839385-1-arnd@kernel.org>
- <20210726141141.2839385-9-arnd@kernel.org>
- <Yd8P37V/N9EkwmYq@wychelm>
- <Yd8ZEbywqjXkAx9k@shell.armlinux.org.uk>
+        Thu, 13 Jan 2022 04:50:03 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DD6C06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:50:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Y37C9xvvw/+7WYQ3rc48UmYY6uDeLG7OzcDKXO2aqx8=; b=FQO6F2qWxXEJz8BMcWRuli8cMy
+        8Ym7pvpLbxxPiSTyrIlxpr51JWAIMB0e7atvLKsX1XRWccANpc+6TuUOffaLwmD6XI5zUBAHw5pd+
+        TrxNxT/esx6y3izT6ZguUPXNbOoGcNfDsk1AglqaPHCegIRlK5cQgwr5sd+5LAMhvcIaRA58oTMH/
+        4ZZhlOKHuOgc0C99s0wTaz5CisUMbxgvopMbJUmp9i/mghHAGsNI25veMPrk/+7enJ4ofwHG4gQi9
+        vArxbx4HmCaDBhZoPSQpYI7DgwwFeowvaekwohV2nmKbN1+1+7PjvewxBTDe+R5QAq4Ge5sRFPlHj
+        FTiBzahA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n7wji-000x4a-Ok; Thu, 13 Jan 2022 09:49:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DC92D3000E6;
+        Thu, 13 Jan 2022 10:49:35 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B562A264EE43D; Thu, 13 Jan 2022 10:49:35 +0100 (CET)
+Date:   Thu, 13 Jan 2022 10:49:35 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Mel Gorman <mgorman@suse.de>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Hasan Al Maruf <hasanalmaruf@fb.com>
+Subject: Re: [PATCH -V10 RESEND 0/6] NUMA balancing: optimize memory
+ placement for memory tiering system
+Message-ID: <Yd/1r49RKgwCXCQL@hirez.programming.kicks-ass.net>
+References: <20211207022757.2523359-1-ying.huang@intel.com>
+ <Yd79b6PptQMNzDRw@hirez.programming.kicks-ass.net>
+ <87sftsumqd.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yd8ZEbywqjXkAx9k@shell.armlinux.org.uk>
+In-Reply-To: <87sftsumqd.fsf@yhuang6-desk2.ccr.corp.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 06:08:17PM +0000, Russell King (Oracle) wrote:
-> On Wed, Jan 12, 2022 at 05:29:03PM +0000, Daniel Thompson wrote:
-> > On Mon, Jul 26, 2021 at 04:11:39PM +0200, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > > 
-> > > These mimic the behavior of get_user and put_user, except
-> > > for domain switching, address limit checking and handling
-> > > of mismatched sizes, none of which are relevant here.
-> > > 
-> > > To work with pre-Armv6 kernels, this has to avoid TUSER()
-> > > inside of the new macros, the new approach passes the "t"
-> > > string along with the opcode, which is a bit uglier but
-> > > avoids duplicating more code.
-> > > 
-> > > As there is no __get_user_asm_dword(), I work around it
-> > > by copying 32 bit at a time, which is possible because
-> > > the output size is known.
-> > > 
-> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > I've just been bisecting some regressions running the kgdbts tests on
-> > arm and this patch came up.
+On Thu, Jan 13, 2022 at 03:19:06PM +0800, Huang, Ying wrote:
+> Hi, Peter,
 > 
-> So the software PAN code is working :)
-
-Interesting. I noticed it was odd that kgdbts works just fine
-if launched from kernel command line. I guess that runs before
-PAN is activated. Neat.
-
-
-> The kernel attempted to access an address that is in the userspace
-> domain (NULL pointer) and took an exception.
+> Peter Zijlstra <peterz@infradead.org> writes:
 > 
-> I suppose we should handle a domain fault more gracefully - what are
-> the required semantics if the kernel attempts a userspace access
-> using one of the _nofault() accessors?
+> > On Tue, Dec 07, 2021 at 10:27:51AM +0800, Huang Ying wrote:
+> >> After commit c221c0b0308f ("device-dax: "Hotplug" persistent memory
+> >> for use like normal RAM"), the PMEM could be used as the
+> >> cost-effective volatile memory in separate NUMA nodes.  In a typical
+> >> memory tiering system, there are CPUs, DRAM and PMEM in each physical
+> >> NUMA node.  The CPUs and the DRAM will be put in one logical node,
+> >> while the PMEM will be put in another (faked) logical node.
+> >
+> > So what does a system like that actually look like, SLIT table wise, and
+> > how does that affect init_numa_topology_type() ?
+> 
+> The SLIT table is as follows,
+> 
+> [000h 0000   4]                    Signature : "SLIT"    [System Locality Information Table]
+> [004h 0004   4]                 Table Length : 0000042C
+> [008h 0008   1]                     Revision : 01
+> [009h 0009   1]                     Checksum : 59
+> [00Ah 0010   6]                       Oem ID : "INTEL "
+> [010h 0016   8]                 Oem Table ID : "S2600WF "
+> [018h 0024   4]                 Oem Revision : 00000001
+> [01Ch 0028   4]              Asl Compiler ID : "INTL"
+> [020h 0032   4]        Asl Compiler Revision : 20091013
+> 
+> [024h 0036   8]                   Localities : 0000000000000004
+> [02Ch 0044   4]                 Locality   0 : 0A 15 11 1C
+> [030h 0048   4]                 Locality   1 : 15 0A 1C 11
+> [034h 0052   4]                 Locality   2 : 11 1C 0A 1C
+> [038h 0056   4]                 Locality   3 : 1C 11 1C 0A
+> 
+> The `numactl -H` output is as follows,
+> 
+> available: 4 nodes (0-3)
+> node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
+> node 0 size: 64136 MB
+> node 0 free: 5981 MB
+> node 1 cpus: 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95
+> node 1 size: 64466 MB
+> node 1 free: 10415 MB
+> node 2 cpus:
+> node 2 size: 253952 MB
+> node 2 free: 253920 MB
+> node 3 cpus:
+> node 3 size: 253952 MB
+> node 3 free: 253951 MB
+> node distances:
+> node   0   1   2   3 
+>   0:  10  21  17  28 
+>   1:  21  10  28  17 
+>   2:  17  28  10  28 
+>   3:  28  17  28  10 
+> 
+> init_numa_topology_type() set sched_numa_topology_type to NUMA_DIRECT.
+> 
+> The node 0 and node 1 are onlined during boot.  While the PMEM node,
+> that is, node 2 and node 3 are onlined later.  As in the following dmesg
+> snippet.
 
-I think the best answer might well be that, if the arch provides
-implementations of hooks such as copy_from_kernel_nofault_allowed()
-then the kernel should never attempt a userspace access using the
-_nofault() accessors. That means they can do whatever they like!
+But how? sched_init_numa() scans the *whole* SLIT table to determine
+nr_levels / sched_domains_numa_levels, even offline nodes. Therefore it
+should find 4 distinct distance values and end up not selecting
+NUMA_DIRECT.
 
-In other words something like the patch below looks like a promising
-approach.
-
-
-Daniel.
-
-
-From f66a63b504ff582f261a506c54ceab8c0e77a98c Mon Sep 17 00:00:00 2001
-From: Daniel Thompson <daniel.thompson@linaro.org>
-Date: Thu, 13 Jan 2022 09:34:45 +0000
-Subject: [PATCH] arm: mm: Implement copy_from_kernel_nofault_allowed()
-
-Currently copy_from_kernel_nofault() can actually fault (due to software
-PAN) if we attempt userspace access. In any case, the documented
-behaviour for this function is to return -ERANGE if we attempt an access
-outside of kernel space.
-
-Implementing copy_from_kernel_nofault_allowed() solves both these
-problems.
-
-Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
----
- arch/arm/mm/Makefile  | 2 +-
- arch/arm/mm/maccess.c | 9 +++++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/mm/maccess.c
-
-diff --git a/arch/arm/mm/Makefile b/arch/arm/mm/Makefile
-index 3510503bc5e6..d1c5f4f256de 100644
---- a/arch/arm/mm/Makefile
-+++ b/arch/arm/mm/Makefile
-@@ -3,7 +3,7 @@
- # Makefile for the linux arm-specific parts of the memory manager.
- #
- 
--obj-y				:= extable.o fault.o init.o iomap.o
-+obj-y				:= extable.o fault.o init.o iomap.o maccess.o
- obj-y				+= dma-mapping$(MMUEXT).o
- obj-$(CONFIG_MMU)		+= fault-armv.o flush.o idmap.o ioremap.o \
- 				   mmap.o pgd.o mmu.o pageattr.o
-diff --git a/arch/arm/mm/maccess.c b/arch/arm/mm/maccess.c
-new file mode 100644
-index 000000000000..0251062cb40d
---- /dev/null
-+++ b/arch/arm/mm/maccess.c
-@@ -0,0 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <linux/uaccess.h>
-+#include <linux/kernel.h>
-+
-+bool copy_from_kernel_nofault_allowed(const void *unsafe_src, size_t size)
-+{
-+	return (unsigned long)unsafe_src >= TASK_SIZE;
-+}
--- 
-2.33.1
+Similarly for the other types it uses for_each_online_node(), which
+would include the pmem nodes once they've been onlined, but I'm thinking
+we explicitly want to skip CPU-less nodes in that iteration.

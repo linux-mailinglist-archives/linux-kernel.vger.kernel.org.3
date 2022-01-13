@@ -2,82 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DFE48DA39
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D546A48DA35
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235859AbiAMO5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 09:57:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25658 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234079AbiAMO5o (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:57:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642085864;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XPQLNQPANIIPTQKapMJiZGqrO9RpNgEkn+C1aN7vbUw=;
-        b=STT/RHJbafvwDwPih53K0gMLMTSpQInl1HxL8Blojv1WeJ2LGnJs1/DT0jVCT+4U+0zCnn
-        2HMqLo4d0x4pu56sGdJfhNZgCFbH1AUXX6YAxMZRoxqzhp9szM2zm5PDpnhp1Djpnay/TP
-        qvQSe9m1qAlOyCW1DwOh0B2fJUXVnIs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-naW7issGM7GEdZAvkdEntQ-1; Thu, 13 Jan 2022 09:57:41 -0500
-X-MC-Unique: naW7issGM7GEdZAvkdEntQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1A022100D842;
-        Thu, 13 Jan 2022 14:57:40 +0000 (UTC)
-Received: from steredhat.redhat.com (unknown [10.64.242.242])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4FD665E498;
-        Thu, 13 Jan 2022 14:57:04 +0000 (UTC)
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     netdev@vger.kernel.org, stefanha@redhat.com,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>
-Subject: [RFC PATCH] vhost: cache avail index in vhost_enable_notify()
-Date:   Thu, 13 Jan 2022 15:56:42 +0100
-Message-Id: <20220113145642.205388-1-sgarzare@redhat.com>
+        id S234015AbiAMO5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:57:24 -0500
+Received: from mail-mw2nam08on2071.outbound.protection.outlook.com ([40.107.101.71]:38560
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232444AbiAMO5X (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 09:57:23 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SFzQ+T2A4jw97G27gDBXBvzIVg0DqveVVkzqRsQmvcf++hFXZi1N8tc+6CfNz2kvWEg0Ch2ug2E8hglKMFZIK+AMlgBdB5Y3QK/JJNgecI16HzYrq2yDd+7iiKzGZBZ4b6ejpk3aSGyWr6aRfOTbZJJtlEnfzpMmLq5DhSzmphIPW0BC4X/Vy+eT+URB2befJxcLE7crZcP9BKVa+J5rRxlVSM3KqpNHArrq2vUcBfS2YfIDuBGaVZeeGQPfHlrw0PAop8RqlSACT5OIhlDmEGI2WPxxL17MIXh//0qQOfc8inm+fGi6FSTSEs3RNZAOtvpDv1rH9CzVok13PlJnOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f3MDOxmOwdcBx+Q5mcqS+pvsBdqdWAVkku8IKzLKPM8=;
+ b=I16zRVz6PKVkFPscFo2eh0GojvF30C30oIz5kI1KxlzXQhIcuWlDmqz9jzTriAV161jewwRtbgpqhdR59wFjpmF8bv1Wp64icX+TqppFg9IlZ69VAh3JL/Bmu688MwAcm/Y78nvCvmhEveSPO/lOYg83I3S/HZRPQWRQRgaY2s5xDYBIcblMCCnvRG9LiTWoZ9Ko6T2KqqrDk5TuyFyYH7T7iHgBRO22huVxO0wS3Q/BL5z82jDp8HtO7CmLdazbn6un69qvyE1UftG6915YwxcbMjd9b725E4QY5PcCyHW7ubosXUMyCeZlvKnhyIsjIma8bDJt/VgPcJEfN5B/YQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f3MDOxmOwdcBx+Q5mcqS+pvsBdqdWAVkku8IKzLKPM8=;
+ b=oeEuBSxg0b5QqhgqkpFT+Gn7FXNKb33Ho4wXMde/s9i6n4fHjJVIP/fszdAx28II2YTQx0wZRtTtM8ZB9WfBGrLdSFdcgIxloMeLp6uCDQkjbmWHOPKKpzfceGYw2EA3PtW+28mU0PZK84RGTJP+1oSWiokGiBrQ1P7xuSZHJhKiSZKEd6XdLdgrBrm9RR+EHojOMGhj+n/0hIeQ9TchdpPZIEJrWf7rn9Vp93jqRS6VGfbfaFrbB5+7n2TaXTqvgDv2e2lJ8Pr6AS7v2Ao4oNVpUd67un5HWNhtaLHsN1pbgfpqJ30Zkda8seHTavvDT61hUXNgbRR1LnZHJN/+8Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
+ by CH2PR12MB4327.namprd12.prod.outlook.com (2603:10b6:610:7d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10; Thu, 13 Jan
+ 2022 14:57:21 +0000
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::a9db:9c46:183e:c213]) by MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::a9db:9c46:183e:c213%3]) with mapi id 15.20.4888.011; Thu, 13 Jan 2022
+ 14:57:21 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>
+Subject: Re: [RFC PATCH v3 2/8] mm: compaction: handle non-lru compound pages properly in isolate_migratepages_block().
+Date:   Thu, 13 Jan 2022 09:57:19 -0500
+X-Mailer: MailMate (1.14r5853)
+Message-ID: <71108865-5368-4725-AA5A-35A57C350D77@nvidia.com>
+In-Reply-To: <a5e029e8-f646-a414-f4f4-ba573171642f@redhat.com>
+References: <20220105214756.91065-1-zi.yan@sent.com>
+ <20220105214756.91065-3-zi.yan@sent.com>
+ <a5e029e8-f646-a414-f4f4-ba573171642f@redhat.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_BA084EF7-8F49-427B-A329-5E14F071473D_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: BLAPR03CA0102.namprd03.prod.outlook.com
+ (2603:10b6:208:32a::17) To MN2PR12MB3823.namprd12.prod.outlook.com
+ (2603:10b6:208:168::26)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7b95390b-b933-4d19-53b7-08d9d6a5004e
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4327:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB43271AAFCEAE76E1D0F04A02C2539@CH2PR12MB4327.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: v23XqVRWlw9uClwBc6OPEzJW5v4BAaaW6FYJhhGEb5B52/Zogn7DmbKN1bzUwrwmGSB5YkROvOtxjUh5MQDYrogEQ7Yd10RlRIeiSbtNJpX9wSzQMgkfiyDaheU5uqZjzktrj9LsuJU/K4Qxtt/QL/T+KN/Vf4NxGHgD+AL37TUxDIARPYMYcfIG8R5E+WPe0YT58rQS+EeZ075LqqSY9tUx/Ki+rudbLG0zAfaSa1axGcx8fHkFy2e/dBf/56oloSbfkPKlo2WE+fpeWdZ7C6jmUTlwMe7S9M3O4KIvmXMX5y6qa4Ew3zn3X3I6IVahuBeSRWHzVlvli4JvD+O0JrCN3wDhA8EHwMJsNy3v0v6vsCpIl9Bwh7O46Qn0Qe+0BYJLnQZCMKYSZlFnrP0TpNXiN9w3jEhsaphqf+qNOlc1F9yieMh7WIG3PC+B4E/63nSl658cozPczdC4GcH7NThdVvNgO55v6NZ5Esydq/SW779HSJr6rnra1IdOvDyRa4XkbWU4sXMEVcVDp/JcHjvoivq2oOebjEVqbTv0nRBKnpHSEK6iSeEsbCylN7l+aMmFPGzL98dlCBwva0WzGyfBazuGo2sLzf95a0j/9YMD7aWh3eF2Tc3KPZ5y7npPPMwNoQ2tycXrdB/6nIxuSXLh6ebPpW+RmCn/s0uOs87lfGLY2bNd1IhsNGvH1MJXkBzqyPzhEPj2D2QNQvXWnAG9ODfxFZtqysKYjBndVh8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(66946007)(54906003)(316002)(2616005)(2906002)(8676002)(66556008)(26005)(6916009)(235185007)(83380400001)(6486002)(7416002)(508600001)(6506007)(4326008)(86362001)(33656002)(38100700002)(186003)(36756003)(21480400003)(5660300002)(6512007)(53546011)(8936002)(72826004)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Xoq3LOSxiXXrInazAGK3VZCxganp4HOJOMgxGSDR4uNuTI96KcjsIjSm9Vnu?=
+ =?us-ascii?Q?PoEwAXx7VxtfORwiX1cVZUCPdKen7ncFdYKHo6/OfTHWQMc3PjgH8IWH0ro7?=
+ =?us-ascii?Q?VJc36ghdyYdfMYrPlX5gSlTk4JXxq1zSCDnzTeGVZR+Marg0kGUP3eY4668M?=
+ =?us-ascii?Q?v+9bOlkBIViZppO6R9nLljEjbsFDDRHoQirAm19BWC2PXff7aJbeWj/0eDHX?=
+ =?us-ascii?Q?EYXse2VBSG2iOtulTjvUjAIRo9VIsbo6fFb69tkMgbR5xzdnIGDNnweFZ++2?=
+ =?us-ascii?Q?UmkeTupU80ICpbcWWF0Gv8bs8sGGBkl8sEZ043dMrSH604i2u5KLZ5rhV4fP?=
+ =?us-ascii?Q?8GsJqUJyYHZa3Q1RW62cwyQy83l2J2FdEBKUN/gNEL+2baK7PFixS/mxrXm1?=
+ =?us-ascii?Q?y3JcESB4fPbejg3PC07L4ew6Nb+tjia/0qOnjIMA4jD6uA5Aaduhzi6Y0vnD?=
+ =?us-ascii?Q?ZOEunNmTb4sU5EdnJ+e0qtte/xjdi4SgkRkL7e6y51KwX12VHGaxsEQ8evnr?=
+ =?us-ascii?Q?76mJfQVfaKwg7Numu1u02y4omUj/wdBwiSlpMMgXQg9pBAnPZ6k/2XKgVtqf?=
+ =?us-ascii?Q?iuBl67aX+YaTOj69KUvZUTCGc8kujYA9yIYi1ClkwtA0QohclW52KtvCXmuY?=
+ =?us-ascii?Q?n+9PAXcURGhDL8AoPbZWR9Y0/rDSlq7B/xuZEjbFCs9xeARcoNhAdntDyYv0?=
+ =?us-ascii?Q?frKfQmHHn/ymVhJtyxd9jSFVJ5cIMAdgfn1tnM0e5PzzXFVxvZd54TZ/PcF8?=
+ =?us-ascii?Q?8oth5lkEYzo+gfaA80p4VbTM94nPEkBMmcCGpS1x6oYbCXxMNS1lTRuN8w49?=
+ =?us-ascii?Q?o2YxponfQXNWeY0L37WQvBGC7DJGB6k+JcCHBj/Cc/Q2ClsHC6/Sx6upRCac?=
+ =?us-ascii?Q?1eqc1AGCsu97f9ePFfTzP7v0WYHYuoO0uPV7GJjVb4UHSppuQFDnak70SCnW?=
+ =?us-ascii?Q?O5Dbhd4lCktv8wpMopbJIWaFj6sORjrqGpOeHZ7fJZ/AHIm7OH8927HzLM1r?=
+ =?us-ascii?Q?TU2dUnNiTheMzwT2Rn/ns20gbmpPwhbVeis1ain+KcB+GfEHwublSxEY2xyo?=
+ =?us-ascii?Q?BtUn35tkK0b4RsYmiHacjjZng7Viz8cUQC3iSfdykh4IHtkgJlMSGJJj1MF/?=
+ =?us-ascii?Q?QuQCkOtYFGedZ8Hf4CcFuJucYv3vUlQ4/Cvi0KQRKRCz9y8gqlQUJEK2wKE3?=
+ =?us-ascii?Q?HxMPXWnAC1CGRj8fI1QuQxBRI3jWdb8a5wxeET4e0VGdkHM9EtCaY44ZAeaE?=
+ =?us-ascii?Q?8Cxwz83mGEMQIZa+RJuYggF6B9pUHmbI27jQ3E7xraAbTnC2LIR3Jmmphw7j?=
+ =?us-ascii?Q?iu3rF2Nu7/DZM2FqIPfs/oYXPk7c0A4Q/3YiDymEdCSzxmwu23D9R/BzrbWw?=
+ =?us-ascii?Q?XVAnxbguK8fn/xR1ZUO1YzLnqxcPWEb/gFeCgTSgx84mBq3iiiTcwQ/xLaM9?=
+ =?us-ascii?Q?9kTYjlFJq8fzZbc0SIfyfgyG6gK72H32UcnrlLH5P6nuQT4sf0BM00R16hA5?=
+ =?us-ascii?Q?r/Y89iUjhrCUjWrcn1OrFpAWBgr86vnyM0LP7LxE7MA/V9giiR2EwtlISvo1?=
+ =?us-ascii?Q?0bfSfLaJZ+Yqt9FmVp0=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b95390b-b933-4d19-53b7-08d9d6a5004e
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2022 14:57:21.4279
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SkqAqCmpDq0SueC42kfB1QBPf3kZ1ZkHXiU/sScXRtdQc4oQ4NoN+/Bj4doIR6BL
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4327
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In vhost_enable_notify() we enable the notifications and we read
-the avail index to check if new buffers have become available in
-the meantime. In this case, the device would go to re-read avail
-index to access the descriptor.
+--=_MailMate_BA084EF7-8F49-427B-A329-5E14F071473D_=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-As we already do in other place, we can cache the value in `avail_idx`
-and compare it with `last_avail_idx` to check if there are new
-buffers available.
+On 12 Jan 2022, at 6:01, David Hildenbrand wrote:
 
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
----
- drivers/vhost/vhost.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> On 05.01.22 22:47, Zi Yan wrote:
+>> From: Zi Yan <ziy@nvidia.com>
+>>
+>> In isolate_migratepages_block(), a !PageLRU tail page can be encounter=
+ed
+>> when the page is larger than a pageblock. Use compound head page for t=
+he
+>> checks inside and skip the entire compound page when isolation succeed=
+s.
+>>
+>
+> This will currently never happen, due to the way we always isolate
+> MAX_ORDER -1 ranges, correct?
 
-diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index 59edb5a1ffe2..07363dff559e 100644
---- a/drivers/vhost/vhost.c
-+++ b/drivers/vhost/vhost.c
-@@ -2543,8 +2543,9 @@ bool vhost_enable_notify(struct vhost_dev *dev, struct vhost_virtqueue *vq)
- 		       &vq->avail->idx, r);
- 		return false;
- 	}
-+	vq->avail_idx = vhost16_to_cpu(vq, avail_idx);
- 
--	return vhost16_to_cpu(vq, avail_idx) != vq->avail_idx;
-+	return vq->avail_idx != vq->last_avail_idx;
- }
- EXPORT_SYMBOL_GPL(vhost_enable_notify);
- 
--- 
-2.31.1
+You are right.
 
+>
+> Better note that in the patch description, because currently it reads
+> like it's an actual fix "can be encountered".
+>
+
+Will do. This is a preparation patch for the upcoming commits.
+
+
+>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>> ---
+>>  mm/compaction.c | 10 +++++++---
+>>  1 file changed, 7 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/mm/compaction.c b/mm/compaction.c
+>> index b4e94cda3019..ad9053fbbe06 100644
+>> --- a/mm/compaction.c
+>> +++ b/mm/compaction.c
+>> @@ -979,19 +979,23 @@ isolate_migratepages_block(struct compact_contro=
+l *cc, unsigned long low_pfn,
+>>  		 * Skip any other type of page
+>>  		 */
+>>  		if (!PageLRU(page)) {
+>> +			struct page *head =3D compound_head(page);
+>>  			/*
+>>  			 * __PageMovable can return false positive so we need
+>>  			 * to verify it under page_lock.
+>>  			 */
+>> -			if (unlikely(__PageMovable(page)) &&
+>> -					!PageIsolated(page)) {
+>> +			if (unlikely(__PageMovable(head)) &&
+>> +					!PageIsolated(head)) {
+>>  				if (locked) {
+>>  					unlock_page_lruvec_irqrestore(locked, flags);
+>>  					locked =3D NULL;
+>>  				}
+>>
+>> -				if (!isolate_movable_page(page, isolate_mode))
+>> +				if (!isolate_movable_page(head, isolate_mode)) {
+>> +					low_pfn +=3D (1 << compound_order(head)) - 1 - (page - head);
+>> +					page =3D head;
+>>  					goto isolate_success;
+>> +				}
+>>  			}
+>>
+>>  			goto isolate_fail;
+>
+>
+> -- =
+
+> Thanks,
+>
+> David / dhildenb
+
+
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_BA084EF7-8F49-427B-A329-5E14F071473D_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmHgPc8PHHppeUBudmlk
+aWEuY29tAAoJEJ2yUfNrYfqKyHQP/iWvPT4lj+TNQb291Ozfkz7dwHHHfZmK2V0f
+08Qhlyn2PGaOHUfkzKeiBi26VSSjhjqnmxux0WVB5Nbkigy7gVhm+tp+Udlk87g2
+xut+k/7O8ClA1GE2AQs4u3jK86pr1g5zqc5cf93YUpVP5locItAexGpN9cW4sxNs
+vEcwAWftvPTKhE79tW4iwoOPo+glzZulO5B5sBGeLvkZ1XKvbif0s0Z122BuzMPn
+2vvkD1cM6Q098wNbGCUriLu5jmUhSxZ9HhKAFTSbQw6Iz2mGrrkhW4zn8/oO1YRS
+UfORSAcfqyyfedTm3bJsG8H4U0/FIOXh9fyS+LsiO/H6b89xQzCfGyU3Q9+JW6pT
+ZfqW/rih92zzyFz/YoN1LIJez6gy9vrpLI1C9NZ6eM+fkHt9CZStFePpHCnrpM8I
+7JmaAbp+jEo/lq3RxvTeyEpEp80XLE45K5eiKEQOwb2O+W142IbfsJ/lTrdCqzQ/
+olsbw/O/wQ9kauv0uRYSyfdLKAFrib+TXrVl1OsHNQTxpH+OPdnG8ij+RtixcPw8
+F47IcAvirMeOcuizV+mWGIOZ5+FnKfjqKAWSbIJ6mB8Fp59FTagLH7pSW5TrRDEv
+ONt/9abtWevRYqLMdyNmkXDZ0yP8tbwz653J8xVaJCnBHPYaHiq96yrYgittogHR
+uvofxgp6
+=on9X
+-----END PGP SIGNATURE-----
+
+--=_MailMate_BA084EF7-8F49-427B-A329-5E14F071473D_=--

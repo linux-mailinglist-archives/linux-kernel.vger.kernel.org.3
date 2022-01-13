@@ -2,182 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD89E48D1A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 05:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0A648D1B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 05:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbiAMEZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 23:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
+        id S232632AbiAMEhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 23:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbiAMEZl (ORCPT
+        with ESMTP id S232608AbiAMEhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 23:25:41 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23A1C061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 20:25:40 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id i9so6202052oih.4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 20:25:40 -0800 (PST)
+        Wed, 12 Jan 2022 23:37:15 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E53C06173F;
+        Wed, 12 Jan 2022 20:37:14 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so9194691pji.3;
+        Wed, 12 Jan 2022 20:37:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=hOJyvOSbThwu+QP4lcC5VRMHJ9Gf10Mr2Em/YOYWYbk=;
-        b=AKNXIEa3uoJszAFx/Q8Df9Kg5xa2u6fKenb78GUjwdXWtnCteJh6avAiS8oevT+s+k
-         NHaj16xl+Qwpi5gJy++7R7G6iwvQJHH+vGP4Lm+68/0d0ThWDP+DDzM02nwmlHeL6P20
-         e75y/SI2FfHqxsUfa+CudWEm56BTNYGveV2+s=
+        d=gmail.com; s=20210112;
+        h=user-agent:date:subject:from:to:cc:message-id:thread-topic
+         :mime-version:content-transfer-encoding;
+        bh=ReiPRdKbAYAz8Wc20+YlwwNALS1tww0ehBQWUS0whF8=;
+        b=bY7wLtla31MrkOvjjur337QduwBukT7caLe3dbp7PphL6nCRu89nqr+Ru++uRDlMA7
+         1xWOej8F4poERw0ZxR/i7A1CriafC/8W4vdsiIcCOJGLEWPf4czlgQxBYcA8sUa+D0D8
+         Bp6sY3Wf1WoGKlVPLDOKnkgXlUDMDDV16Ss1eMhffzrGAGbbN+57HAtrEdSuhmcvjFpZ
+         r2f0xsfdcD8VhT+CV+jIeocw0ZJUdv8EJ1zuDSqUJMAW3KqIX1BfetoaIgyt151vvt7F
+         AWIBmDG5aM02gLg2PzLZK5s2FZzIKQ31Q7EMoCuJ6p9v7Vqo32g1uH+qmtMBCa6m7G+X
+         oq8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=hOJyvOSbThwu+QP4lcC5VRMHJ9Gf10Mr2Em/YOYWYbk=;
-        b=5609IOqjsusRz+z3jUK0FcmHjJAKRj1QI7MmVeL6SEPllvaU07ca+dU6w3wt5JWQAU
-         AWBkZ0E2oa5O/z8sydbJ7l99Szwtt0sOZJ+FVW362DLFLYHdiJSLhDEV5h46l92T7TUL
-         GO0tQdkyLYzSkd6J7G6e3kpOtZIaDn/IOjtIcOy8nrSr6O7SClsQh06PY54xOlJLodID
-         JZyvd9x+QZDlEHfXrNGWa5lns32wCBAzGbvEDfZClBhjeAwgRGEq5sLYBBlrYwdwkLeD
-         e6/cZSyrQQY/bHmrGA1BlUd0ijK/VfxDliUep8llPWfZWyhcYzv7sUz3Zl9+wu+vob/4
-         hJ/g==
-X-Gm-Message-State: AOAM530UDxCSELSRjvXiG12x3Fi6vFdviRmQaVrSIN5JQmDkqFaQ15p/
-        Ly4ZkWEIE66Dhqj46nSriql4u53b4kU1DrYU2T7GZA==
-X-Google-Smtp-Source: ABdhPJxrvJfe4npB2ZG64Di6xVANLUpa34m0XDfE47xF6cHvLcUVRQzP10HeZhAPB9Nbe7sVFir4+/cMqLM98w7inas=
-X-Received: by 2002:aca:a953:: with SMTP id s80mr7557861oie.164.1642047939842;
- Wed, 12 Jan 2022 20:25:39 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 12 Jan 2022 20:25:39 -0800
-MIME-Version: 1.0
-In-Reply-To: <ff81bc1fe1f1c2060fcf03ba14f1bef584c47599.camel@mediatek.com>
-References: <20220106214556.2461363-1-swboyd@chromium.org> <20220106214556.2461363-26-swboyd@chromium.org>
- <1a3b368eb891ca55c33265397cffab0b9f128737.camel@mediatek.com>
- <CAE-0n53Y3WRy4_QvUm9k9wjjWV7adMDQcK_+1ji4+W25SSeGwg@mail.gmail.com> <ff81bc1fe1f1c2060fcf03ba14f1bef584c47599.camel@mediatek.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Wed, 12 Jan 2022 20:25:39 -0800
-Message-ID: <CAE-0n53FAHDmCznJ35Xh2aTwXBVwukAM3ioKx8SU9VowSaQSqA@mail.gmail.com>
-Subject: Re: [PATCH v5 25/32] iommu/mtk: Migrate to aggregate driver
-To:     Yong Wu <yong.wu@mediatek.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Saravana Kannan <saravanak@google.com>,
-        linux-mediatek@lists.infradead.org,
-        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:user-agent:date:subject:from:to:cc:message-id
+         :thread-topic:mime-version:content-transfer-encoding;
+        bh=ReiPRdKbAYAz8Wc20+YlwwNALS1tww0ehBQWUS0whF8=;
+        b=lUsMXHK5usag27fU2QEGye4itVgBD9qbdb+9SnpcyoLB7cuS7eg72WqwLwBXshqjAf
+         b0Go8AW3wjKczV/O5JjaHMUNx7b/H0jRE1wtTH3Fe1v4ToPP+zK9v8r8fn7XWKjdVqTc
+         WzAKInD+Xo94rn3aApFeoJ44sFqdnUo2nq8CUZdqAPB9YJSuwKlEfiHzVOJV9VsTKvOG
+         0jnIVOrWqoOHCPAulEA8UbE1612KSZoHbjXCk0uEXaFbv1/343A7UFcvGrbpc2l7xalE
+         /nVkJJVz9GIhIYUIXqHT6twYg6rRh8TEIpKlZDD978HUUWNs2iX4DrG9VE3/W2Tayuyt
+         O1Ng==
+X-Gm-Message-State: AOAM533NpRyz3CJj8Qo/NbQRyLqC1cUQ1gcUHDK4hc48GV3ryevUh9CB
+        XGJwLPdQjAkpv5Ic0lNXKQ9FbSIHmPcDkgQV
+X-Google-Smtp-Source: ABdhPJwnFXHDphKTT3j0Pa1yPv0kR/uHBrwOVCIJNMHKVOXfmuphY3aLf5qyULHOOQngZ8XeXPV1tw==
+X-Received: by 2002:a17:903:1110:b0:149:a428:19f1 with SMTP id n16-20020a170903111000b00149a42819f1mr2735333plh.120.1642048634371;
+        Wed, 12 Jan 2022 20:37:14 -0800 (PST)
+Received: from [30.135.82.253] ([8.218.232.85])
+        by smtp.gmail.com with ESMTPSA id b4sm7137900pjh.44.2022.01.12.20.37.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 12 Jan 2022 20:37:13 -0800 (PST)
+User-Agent: Microsoft-MacOutlook/16.56.21121100
+Date:   Thu, 13 Jan 2022 12:37:10 +0800
+Subject: mlx5: memory leaks
+From:   Ryan Cai <ryancaicse@gmail.com>
+To:     <leon@kernel.org>, <jgg@ziepe.ca>
+CC:     <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Message-ID: <76193B8E-6A8B-4FF9-B6BB-A3A17FB74A61@gmail.com>
+Thread-Topic: mlx5: memory leaks
+Mime-version: 1.0
+Content-type: text/plain;
+        charset="UTF-8"
+Content-transfer-encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Yong Wu (2022-01-12 01:09:19)
-> On Tue, 2022-01-11 at 16:27 -0800, Stephen Boyd wrote:
-> > ---8<---
-> > diff --git a/drivers/base/component.c b/drivers/base/component.c
-> > index 64ad7478c67a..97f253a41bdf 100644
-> > --- a/drivers/base/component.c
-> > +++ b/drivers/base/component.c
-> > @@ -492,15 +492,30 @@ static struct aggregate_device
-> > *__aggregate_find(struct device *parent)
-> >       return dev ? to_aggregate_device(dev) : NULL;
-> >  }
-> >
-> > +static DEFINE_MUTEX(aggregate_mutex);
-> > +
-> >  static int aggregate_driver_register(struct aggregate_driver *adrv)
-> >  {
-> > -     adrv->driver.bus = &aggregate_bus_type;
-> > -     return driver_register(&adrv->driver);
-> > +     int ret = 0;
-> > +
-> > +     mutex_lock(&aggregate_mutex);
-> > +     if (!refcount_inc_not_zero(&adrv->count)) {
-> > +             adrv->driver.bus = &aggregate_bus_type;
-> > +             ret = driver_register(&adrv->driver);
-> > +             if (!ret)
-> > +                     refcount_inc(&adrv->count);
->
-> This should be refcount_set(&adrv->count, 1)?
->
-> Otherwise, it will warning like this:
+Hi, Kernel Maintainers,
 
-Yeah I'll fix it, thanks.
+    In method mlx5_ib_destroy_gsi of gsi.c, there are memory leaks when ret = ib_destroy_qp(gsi->rx_qp); returns true? I think, ib_free_cq(gsi->cq); kfree(gsi->outstanding_wrs); kfree(gsi->tx_qps); should also be put before return ret before Line 180. If this is a real bug, I can send a patch. Thanks!
 
->
-> [    2.654526] ------------[ cut here ]------------
-> [    2.655558] refcount_t: addition on 0; use-after-free.
->
-> After this patch, the aggregate_driver flow looks ok. But our driver
-> still aborts like this:
->
-> [    2.721316] Unable to handle kernel NULL pointer dereference at
-> virtual address 0000000000000000
-> ...
-> [    2.731658] pc : mtk_smi_larb_config_port_gen2_general+0xa4/0x138
-> [    2.732434] lr : mtk_smi_larb_resume+0x54/0x98
-> ...
-> [    2.742457] Call trace:
-> [    2.742768]  mtk_smi_larb_config_port_gen2_general+0xa4/0x138
-> [    2.743496]  pm_generic_runtime_resume+0x2c/0x48
-> [    2.744090]  __genpd_runtime_resume+0x30/0xa8
-> [    2.744648]  genpd_runtime_resume+0x94/0x2c8
-> [    2.745191]  __rpm_callback+0x44/0x150
-> [    2.745669]  rpm_callback+0x6c/0x78
-> [    2.746114]  rpm_resume+0x314/0x558
-> [    2.746559]  __pm_runtime_resume+0x3c/0x88
-> [    2.747080]  pm_runtime_get_suppliers+0x7c/0x110
-> [    2.747668]  __driver_probe_device+0x4c/0xe8
-> [    2.748212]  driver_probe_device+0x44/0x130
-> [    2.748745]  __device_attach_driver+0x98/0xd0
-> [    2.749300]  bus_for_each_drv+0x68/0xd0
-> [    2.749787]  __device_attach+0xec/0x148
-> [    2.750277]  device_attach+0x14/0x20
-> [    2.750733]  bus_rescan_devices_helper+0x50/0x90
-> [    2.751319]  bus_for_each_dev+0x7c/0xd8
-> [    2.751806]  bus_rescan_devices+0x20/0x30
-> [    2.752315]  __component_add+0x7c/0xa0
-> [    2.752795]  component_add+0x14/0x20
-> [    2.753253]  mtk_smi_larb_probe+0xe0/0x120
->
-> This is because the device runtime_resume is called before the bind
-> operation(In our case this detailed function is mtk_smi_larb_bind).
-> The issue doesn't happen without this patchset. I'm not sure the right
-> sequence. If we should fix in mediatek driver, the patch could be:
 
-Oh, the runtime PM is moved around with these patches. The aggregate
-device is runtime PM enabled before the probe is called, and there are
-supplier links made to each component, so each component is runtime
-resumed before the aggregate probe function is called. It means that all
-the component drivers need to have their resources ready to power on
-before their component_bind() callback is made. Thinking more about it
-that may be wrong if something from the aggregate device is needed to
-fully power on the component. Is that what is happening here?
 
->
->
-> diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
-> index b883dcc0bbfa..288841555067 100644
-> --- a/drivers/memory/mtk-smi.c
-> +++ b/drivers/memory/mtk-smi.c
-> @@ -483,8 +483,9 @@ static int __maybe_unused
-> mtk_smi_larb_resume(struct device *dev)
->         if (ret < 0)
->                 return ret;
->
-> -       /* Configure the basic setting for this larb */
-> -       larb_gen->config_port(dev);
-> +       /* Configure the basic setting for this larb after it binds
-> with iommu */
-> +       if (larb->mmu)
-> +               larb_gen->config_port(dev);
->
->         return 0;
->  }
->
->
-> Another nitpick, the title should be: iommu/mediatek: xxxx
->
+Locations: https://github.com/torvalds/linux/blob/master/drivers/infiniband/hw/mlx5/gsi.c#L168-L197
 
-Fixed it.
+Best,
+Ryan
+
+
+

@@ -2,135 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB6948D86B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7232148D868
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234916AbiAMNBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 08:01:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbiAMNBH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 08:01:07 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E92C06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 05:01:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Y6HJF6oLf+uuPOOcPyE3SINVVAUQoRNIhsQLAe8u8cY=; b=aqL2i/Liplp4+SKIt8U3RtDmb0
-        BpRErl4guZy52b+mc9K/VUgNWHCNJBj/dNT/cWbJpawWzxzDxgeXWI0n32vFj0NBg+roXHH3DVwUk
-        z2ZA+5l2IRanVLPI+oaxM+2EBrtvqifjNC+O1CEF6edMHXXhut7btEDpQQtPAK0BtliqlRnEmKhMY
-        CyBQQSiSUsdpuGoKA0B4q/mc7jilQdJfEVJQlEzpRK3mc/7vbbm63GR3Sqta1OOSHSUklm1SW59tW
-        m5LV8lYgAxuxItHFkl/hMBkJCYAovKCYDiWnErGTSWVYPpQ+QcoMom9f647H/UzwopwZ1lNd+AMge
-        lTOc093A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n7zic-000y5l-9n; Thu, 13 Jan 2022 13:00:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 98DE93001E1;
-        Thu, 13 Jan 2022 14:00:39 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 462CC20DECE22; Thu, 13 Jan 2022 14:00:39 +0100 (CET)
-Date:   Thu, 13 Jan 2022 14:00:39 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Mel Gorman <mgorman@suse.de>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Hasan Al Maruf <hasanalmaruf@fb.com>
-Subject: Re: [PATCH -V10 RESEND 0/6] NUMA balancing: optimize memory
- placement for memory tiering system
-Message-ID: <YeAid+EXvmH9WAbq@hirez.programming.kicks-ass.net>
-References: <20211207022757.2523359-1-ying.huang@intel.com>
- <Yd79b6PptQMNzDRw@hirez.programming.kicks-ass.net>
- <87sftsumqd.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Yd/1r49RKgwCXCQL@hirez.programming.kicks-ass.net>
- <87o84fu9f3.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        id S234874AbiAMNAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 08:00:49 -0500
+Received: from mga02.intel.com ([134.134.136.20]:15194 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229948AbiAMNAs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 08:00:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642078848; x=1673614848;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=32/jYdeCU2X6mvfWD1NZQLh3feFmBCWh91f1bLsYOlw=;
+  b=Bn/NaI1mycPcV6As/WMhEQlI+zPvGIYBWYn5WNQqsf3yWV0oUZyYiHs6
+   tuVU+aFuv3gOfpivLJzbgT9glB3hxgPEbfjpVTQ4YxjxfDtx/Pdodk9in
+   pVnK7EToKE9giIp/M+bq5bRc9kOy1Rlx6OcNMUtevgnaXtY/b2Fer5HWl
+   PCknP04ti3r9gVeqW2SU61Et5iP6p2TKc3V45j1qa6+jZny6x8gVUDuIT
+   7fJKxNgkP/bZwm/RZugKivo7CdcSeUGQW4UTguh4jsIIMJRs+eZbNqnNB
+   D+9GrUqvc7kbbD8e866CDeUu6yaO2piaa0WAnFgNK90JGP4/Nmr+eVScl
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="231348587"
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="231348587"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 05:00:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="473208325"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by orsmga003.jf.intel.com with ESMTP; 13 Jan 2022 05:00:47 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 13 Jan 2022 05:00:47 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 13 Jan 2022 05:00:46 -0800
+Received: from orsmsx611.amr.corp.intel.com ([10.22.229.24]) by
+ ORSMSX611.amr.corp.intel.com ([10.22.229.24]) with mapi id 15.01.2308.020;
+ Thu, 13 Jan 2022 05:00:46 -0800
+From:   "Ruhl, Michael J" <michael.j.ruhl@intel.com>
+To:     "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
+        "guangming.cao@mediatek.com" <guangming.cao@mediatek.com>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>
+CC:     "jianjiao.zeng@mediatek.com" <jianjiao.zeng@mediatek.com>,
+        "lmark@codeaurora.org" <lmark@codeaurora.org>,
+        "wsd_upstream@mediatek.com" <wsd_upstream@mediatek.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "yf.wang@mediatek.com" <yf.wang@mediatek.com>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "libo.kang@mediatek.com" <libo.kang@mediatek.com>,
+        "benjamin.gaignard@linaro.org" <benjamin.gaignard@linaro.org>,
+        "bo.song@mediatek.com" <bo.song@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "labbott@redhat.com" <labbott@redhat.com>,
+        "mingyuan.ma@mediatek.com" <mingyuan.ma@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+Subject: RE: [PATCH v3] dma-buf: dma-heap: Add a size check for allocation
+Thread-Topic: [PATCH v3] dma-buf: dma-heap: Add a size check for allocation
+Thread-Index: AQHYCHnKJjUnVmCmlECrXD1d8qRuLKxg6T0QgAAAbjA=
+Date:   Thu, 13 Jan 2022 13:00:46 +0000
+Message-ID: <e657f5257cbf4955817b0bbf037de9f9@intel.com>
+References: <CAO_48GF=ttKqSOm9GRoA3Mq+-RQOtRjWp449XPcz-wH=kjaTjw@mail.gmail.com>
+ <20220113123406.11520-1-guangming.cao@mediatek.com>
+ <4f88205c1b344aea8608960e2f85b8f4@intel.com>
+In-Reply-To: <4f88205c1b344aea8608960e2f85b8f4@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o84fu9f3.fsf@yhuang6-desk2.ccr.corp.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 08:06:40PM +0800, Huang, Ying wrote:
-> Peter Zijlstra <peterz@infradead.org> writes:
-> > On Thu, Jan 13, 2022 at 03:19:06PM +0800, Huang, Ying wrote:
-> >> Peter Zijlstra <peterz@infradead.org> writes:
-> >> > On Tue, Dec 07, 2021 at 10:27:51AM +0800, Huang Ying wrote:
 
-> >> >> After commit c221c0b0308f ("device-dax: "Hotplug" persistent memory
-> >> >> for use like normal RAM"), the PMEM could be used as the
-> >> >> cost-effective volatile memory in separate NUMA nodes.  In a typical
-> >> >> memory tiering system, there are CPUs, DRAM and PMEM in each physical
-> >> >> NUMA node.  The CPUs and the DRAM will be put in one logical node,
-> >> >> while the PMEM will be put in another (faked) logical node.
-> >> >
-> >> > So what does a system like that actually look like, SLIT table wise, and
-> >> > how does that affect init_numa_topology_type() ?
-> >> 
-> >> The SLIT table is as follows,
+>-----Original Message-----
+>From: dri-devel <dri-devel-bounces@lists.freedesktop.org> On Behalf Of
+>Ruhl, Michael J
+>Sent: Thursday, January 13, 2022 7:58 AM
+>To: guangming.cao@mediatek.com; sumit.semwal@linaro.org
+>Cc: jianjiao.zeng@mediatek.com; lmark@codeaurora.org;
+>wsd_upstream@mediatek.com; christian.koenig@amd.com; linux-
+>kernel@vger.kernel.org; dri-devel@lists.freedesktop.org;
+>yf.wang@mediatek.com; linaro-mm-sig@lists.linaro.org; linux-
+>mediatek@lists.infradead.org; libo.kang@mediatek.com;
+>benjamin.gaignard@linaro.org; bo.song@mediatek.com;
+>matthias.bgg@gmail.com; labbott@redhat.com;
+>mingyuan.ma@mediatek.com; linux-arm-kernel@lists.infradead.org; linux-
+>media@vger.kernel.org
+>Subject: RE: [PATCH v3] dma-buf: dma-heap: Add a size check for allocation
+>
+>
+>>-----Original Message-----
+>>From: dri-devel <dri-devel-bounces@lists.freedesktop.org> On Behalf Of
+>>guangming.cao@mediatek.com
+>>Sent: Thursday, January 13, 2022 7:34 AM
+>>To: sumit.semwal@linaro.org
+>>Cc: linux-arm-kernel@lists.infradead.org; mingyuan.ma@mediatek.com;
+>>Guangming <Guangming.Cao@mediatek.com>;
+>>wsd_upstream@mediatek.com; linux-kernel@vger.kernel.org; dri-
+>>devel@lists.freedesktop.org; linaro-mm-sig@lists.linaro.org;
+>>yf.wang@mediatek.com; libo.kang@mediatek.com;
+>>benjamin.gaignard@linaro.org; bo.song@mediatek.com;
+>>matthias.bgg@gmail.com; linux-mediatek@lists.infradead.org;
+>>lmark@codeaurora.org; labbott@redhat.com; christian.koenig@amd.com;
+>>jianjiao.zeng@mediatek.com; linux-media@vger.kernel.org
+>>Subject: [PATCH v3] dma-buf: dma-heap: Add a size check for allocation
+>>
+>>From: Guangming <Guangming.Cao@mediatek.com>
+>>
+>>Add a size check for allocation since the allocation size is
+>>always less than the total DRAM size.
+>>
+>>Without this check, once the invalid size allocation runs on a process th=
+at
+>>can't be killed by OOM flow(such as "gralloc" on Android devices), it wil=
+l
+>>cause a kernel exception, and to make matters worse, we can't find who ar=
+e
+>>using
+>>so many memory with "dma_buf_debug_show" since the relevant dma-buf
+>>hasn't exported.
+>>
+>>To make OOM issue easier, maybe need dma-buf framework to dump the
+>>buffer size
+>>under allocating in "dma_buf_debug_show".
+>>
+>>Signed-off-by: Guangming <Guangming.Cao@mediatek.com>
+>>Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
+>>---
+>>v3: 1. update patch, use right shift to replace division.
+>>    2. update patch, add reason in code and commit message.
+>>v2: 1. update size limitation as total_dram page size.
+>>    2. update commit message
+>>---
+>> drivers/dma-buf/dma-heap.c | 10 ++++++++++
+>> 1 file changed, 10 insertions(+)
+>>
+>>diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+>>index 56bf5ad01ad5..1fd382712584 100644
+>>--- a/drivers/dma-buf/dma-heap.c
+>>+++ b/drivers/dma-buf/dma-heap.c
+>>@@ -55,6 +55,16 @@ static int dma_heap_buffer_alloc(struct dma_heap
+>>*heap, size_t len,
+>> 	struct dma_buf *dmabuf;
+>> 	int fd;
+>>
+>>+	/*
+>>+	 * Invalid size check. The "len" should be less than totalram.
+>>+	 *
+>>+	 * Without this check, once the invalid size allocation runs on a proce=
+ss
+>>that
+>>+	 * can't be killed by OOM flow(such as "gralloc" on Android devices), i=
+t
+>>will
+>>+	 * cause a kernel exception, and to make matters worse, we can't find
+>>who are using
+>>+	 * so many memory with "dma_buf_debug_show" since the relevant
+>>dma-buf hasn't exported.
+>>+	 */
+>>+	if (len >> PAGE_SHIFT > totalram_pages())
+>
+>If your "heap" is from cma, is this still a valid check?
 
-<snip>
+And thinking a bit further, if I create a heap from something else (say dev=
+ice memory),
+you will need to be able to figure out the maximum allowable check for the =
+specific
+heap.
 
-> >> node distances:
-> >> node   0   1   2   3 
-> >>   0:  10  21  17  28 
-> >>   1:  21  10  28  17 
-> >>   2:  17  28  10  28 
-> >>   3:  28  17  28  10 
-> >> 
-> >> init_numa_topology_type() set sched_numa_topology_type to NUMA_DIRECT.
-> >> 
-> >> The node 0 and node 1 are onlined during boot.  While the PMEM node,
-> >> that is, node 2 and node 3 are onlined later.  As in the following dmesg
-> >> snippet.
-> >
-> > But how? sched_init_numa() scans the *whole* SLIT table to determine
-> > nr_levels / sched_domains_numa_levels, even offline nodes. Therefore it
-> > should find 4 distinct distance values and end up not selecting
-> > NUMA_DIRECT.
-> >
-> > Similarly for the other types it uses for_each_online_node(), which
-> > would include the pmem nodes once they've been onlined, but I'm thinking
-> > we explicitly want to skip CPU-less nodes in that iteration.
-> 
-> I used the debug patch as below, and get the log in dmesg as follows,
-> 
-> [    5.394577][    T1] sched_numa_topology_type: 0, levels: 4, max_distance: 28
-> 
-> I found that I forget another caller of init_numa_topology_type() run
-> during hotplug.  I will add another printk() to show it.  Sorry about
-> that.
+Maybe the heap needs a callback for max size?
 
-Can you try with this on?
+m
+>M
+>
+>>+		return -EINVAL;
+>> 	/*
+>> 	 * Allocations from all heaps have to begin
+>> 	 * and end on page boundaries.
+>>--
+>>2.17.1
 
-I'm suspecting there's a problem with init_numa_topology_type(); it will
-never find the max distance due to the _online_ clause in the iteration,
-since you said the pmem nodes are not online yet.
-
----
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index d201a7052a29..53ab9c63c185 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1756,6 +1756,8 @@ static void init_numa_topology_type(void)
- 			return;
- 		}
- 	}
-+
-+	WARN(1, "no NUMA type determined");
- }

@@ -2,189 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EEA48D9AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB8B48D9B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbiAMOZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 09:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235649AbiAMOZD (ORCPT
+        id S235666AbiAMO3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:29:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60213 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231161AbiAMO3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:25:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0080AC06173F;
-        Thu, 13 Jan 2022 06:25:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 13 Jan 2022 09:29:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642084146;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KD9x1FnPOWiMxqn8PJ52imgGWmsMrgv0XjSE1mjBD5E=;
+        b=hHPi/4dD52evyAxlt/0dQTLVkN4zCbCW5Vl/ZiYSnPaIpwgMojfq47xlpcn5I4i5xWzZ6f
+        ErOwpC0l9vmriNSKGAFe3be8KpWo3qXpy/zkkMy66PDbo2S4yc2VghCz3GMwrGkhKDKfQE
+        BNEZMFl9lV3XcIITCEg32m0wq88gbvI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-104-teqkYBZ0P3mt-ceJzowZSw-1; Thu, 13 Jan 2022 09:29:03 -0500
+X-MC-Unique: teqkYBZ0P3mt-ceJzowZSw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9494761CF4;
-        Thu, 13 Jan 2022 14:25:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEAC3C36AEC;
-        Thu, 13 Jan 2022 14:25:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642083902;
-        bh=R7O26QARYFC2+NZtQgSc/PXXXQY3dDAFIVKM0Qllbvg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OkG66TkKqRTqNszT97b/LmZRUewvv11KTyGZZuhqqGnotd6VTVh4ZVyTaFJcQokZX
-         XsY7HZxMKo5jDNSfCN67JOVuV3p06w86JLymXybeSazQwh9TP2PnLGA032BPo6dqzS
-         EDJORS731uJP9iywevllvSawuzfQWCux1eH/XDzCOIjH2/4H2pFg35jCNlNoYC0631
-         IVKke7WhJSvjs3EwfqjG3LbyuglkPamVFrthRquN2jEcfXxD5U/x1JVQYvNcgNSv+P
-         oS9dJt6TuGBD8qgX5hZlbqYdjJdRy4FwPdgsM+apemR91Hk2o4CoWMg2wHdeH2KwvX
-         QUunxcqGDVfZQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 1C97140C99; Thu, 13 Jan 2022 11:25:00 -0300 (-03)
-Date:   Thu, 13 Jan 2022 11:25:00 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH 1/1 FYI] tools arch x86: Sync the msr-index.h copy with the
- kernel sources
-Message-ID: <YeA2PAvHV+uHRhLj@kernel.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2A4EB8024C7;
+        Thu, 13 Jan 2022 14:29:02 +0000 (UTC)
+Received: from starship (unknown [10.40.192.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 028AD108C0;
+        Thu, 13 Jan 2022 14:28:51 +0000 (UTC)
+Message-ID: <7e7c7e22f8b1b1695d26d9e19a767b87c679df93.camel@redhat.com>
+Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Igor Mammedov <imammedo@redhat.com>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
+Date:   Thu, 13 Jan 2022 16:28:49 +0200
+In-Reply-To: <87bl0gnfy5.fsf@redhat.com>
+References: <20211122175818.608220-1-vkuznets@redhat.com>
+         <20211122175818.608220-3-vkuznets@redhat.com>
+         <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
+         <20211227183253.45a03ca2@redhat.com>
+         <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
+         <87mtkdqm7m.fsf@redhat.com> <20220103104057.4dcf7948@redhat.com>
+         <875yr1q8oa.fsf@redhat.com>
+         <ceb63787-b057-13db-4624-b430c51625f1@redhat.com>
+         <87o84qpk7d.fsf@redhat.com> <877dbbq5om.fsf@redhat.com>
+         <5505d731-cf87-9662-33f3-08844d92877c@redhat.com>
+         <20220111090022.1125ffb5@redhat.com> <87fsptnjic.fsf@redhat.com>
+         <50136685-706e-fc6a-0a77-97e584e74f93@redhat.com>
+         <87bl0gnfy5.fsf@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To pick up the changes in:
+On Thu, 2022-01-13 at 10:27 +0100, Vitaly Kuznetsov wrote:
+> Paolo Bonzini <pbonzini@redhat.com> writes:
+> 
+> > On 1/12/22 14:58, Vitaly Kuznetsov wrote:
+> > > -	best = kvm_find_cpuid_entry(vcpu, 0xD, 1);
+> > > +	best = cpuid_entry2_find(entries, nent, 0xD, 1);
+> > >   	if (best && (cpuid_entry_has(best, X86_FEATURE_XSAVES) ||
+> > >   		     cpuid_entry_has(best, X86_FEATURE_XSAVEC)))
+> > >   		best->ebx = xstate_required_size(vcpu->arch.xcr0, true);
+> > >   
+> > > -	best = kvm_find_kvm_cpuid_features(vcpu);
+> > > +	best = __kvm_find_kvm_cpuid_features(vcpu, vcpu->arch.cpuid_entries,
+> > > +					     vcpu->arch.cpuid_nent);
+> > >   	if (kvm_hlt_in_guest(vcpu->kvm) && best &&
+> > 
+> > I think this should be __kvm_find_kvm_cpuid_features(vcpu, entries, nent).
+> > 
+> 
+> Of course.
+> 
+> > > +		case 0x1:
+> > > +			/* Only initial LAPIC id is allowed to change */
+> > > +			if (e->eax ^ best->eax || ((e->ebx ^ best->ebx) >> 24) ||
+> > > +			    e->ecx ^ best->ecx || e->edx ^ best->edx)
+> > > +				return -EINVAL;
+> > > +			break;
+> > 
+> > This XOR is a bit weird.  In addition the EBX test is checking the wrong 
+> > bits (it checks whether 31:24 change and ignores changes to 23:0).
+> 
+> Indeed, however, I've tested CPU hotplug with QEMU trying different
+> CPUs in random order and surprisingly othing blew up, feels like QEMU
+> was smart enough to re-use the right fd)
+> 
+> > You can write just "(e->ebx & ~0xff000000u) != (best->ebx ~0xff000000u)".
+> > 
+> > > +		default:
+> > > +			if (e->eax ^ best->eax || e->ebx ^ best->ebx ||
+> > > +			    e->ecx ^ best->ecx || e->edx ^ best->edx)
+> > > +				return -EINVAL;
+> > 
+> > This one even more so.
+> 
+> Thanks for the early review, I'm going to prepare a selftest and send
+> this out.
+> 
+I also looked at this recently (due to other reasons) and I found out that
+qemu picks a parked vcpu by its vcpu_id which is its initial apic id,
+thus apic id related features should not change.
 
-  89aa94b4a218339b ("x86/msr: Add AMD CPPC MSR definitions")
+Take a look at 'kvm_get_vcpu' in qemu source.
+Maybe old qemu versions didn't do this?
 
-Addressing these tools/perf build warnings:
-
-    diff -u tools/arch/x86/include/asm/msr-index.h arch/x86/include/asm/msr-index.h
-    Warning: Kernel ABI header at 'tools/arch/x86/include/asm/msr-index.h' differs from latest version at 'arch/x86/include/asm/msr-index.h'
-
-That makes the beautification scripts to pick some new entries:
-
-  $ tools/perf/trace/beauty/tracepoints/x86_msr.sh > before
-  $ cp arch/x86/include/asm/msr-index.h tools/arch/x86/include/asm/msr-index.h
-  $ tools/perf/trace/beauty/tracepoints/x86_msr.sh > after
-  $ diff -u before after
-  --- before	2022-01-13 10:59:51.743416890 -0300
-  +++ after	2022-01-13 11:00:00.776644178 -0300
-  @@ -303,6 +303,11 @@
- 	  [0xc0010299 - x86_AMD_V_KVM_MSRs_offset] = "AMD_RAPL_POWER_UNIT",
- 	  [0xc001029a - x86_AMD_V_KVM_MSRs_offset] = "AMD_CORE_ENERGY_STATUS",
- 	  [0xc001029b - x86_AMD_V_KVM_MSRs_offset] = "AMD_PKG_ENERGY_STATUS",
-  +       [0xc00102b0 - x86_AMD_V_KVM_MSRs_offset] = "AMD_CPPC_CAP1",
-  +       [0xc00102b1 - x86_AMD_V_KVM_MSRs_offset] = "AMD_CPPC_ENABLE",
-  +       [0xc00102b2 - x86_AMD_V_KVM_MSRs_offset] = "AMD_CPPC_CAP2",
-  +       [0xc00102b3 - x86_AMD_V_KVM_MSRs_offset] = "AMD_CPPC_REQ",
-  +       [0xc00102b4 - x86_AMD_V_KVM_MSRs_offset] = "AMD_CPPC_STATUS",
- 	  [0xc00102f0 - x86_AMD_V_KVM_MSRs_offset] = "AMD_PPIN_CTL",
- 	  [0xc00102f1 - x86_AMD_V_KVM_MSRs_offset] = "AMD_PPIN",
-   };
-  $
-
-And this gets rebuilt:
-
-  CC       /tmp/build/perf/trace/beauty/tracepoints/x86_msr.o
-  INSTALL  trace_plugins
-  LD       /tmp/build/perf/trace/beauty/tracepoints/perf-in.o
-  LD       /tmp/build/perf/trace/beauty/perf-in.o
-  LD       /tmp/build/perf/perf-in.o
-  LINK     /tmp/build/perf/perf
-
-Now one can trace systemwide asking to see backtraces to where those
-MSRs are being read/written with:
-
-  # perf trace -e msr:*_msr/max-stack=32/ --filter="msr>=AMD_CPPC_CAP1 && msr<="
-  Failed to set filter "(msr>=0xc00102b0 && msr<=) && (common_pid != 2612094 && common_pid != 3841)" on event msr:read_msr with 22 (Invalid argument)
-  # ^C
-
-If we use -v (verbose mode) we can see what it does behind the scenes:
-
-  # perf trace -v -e msr:*_msr/max-stack=32/ --filter="msr>=AMD_CPPC_CAP1 && msr<=AMD_CPPC_STATUS"
-  <SNIP>
-  New filter for msr:read_msr: (msr>=0xc00102b0 && msr<=0xc00102b4) && (common_pid != 2612102 && common_pid != 3841)
-  New filter for msr:write_msr: (msr>=0xc00102b0 && msr<=0xc00102b4) && (common_pid != 2612102 && common_pid != 3841)
-  <SNIP>
-  ^C[root@five ~]#
-
-Example with a frequent msr:
-
-  # perf trace -v -e msr:*_msr/max-stack=32/ --filter="msr==IA32_SPEC_CTRL" --max-events 2
-  Using CPUID AuthenticAMD-25-21-0
-  0x48
-  New filter for msr:read_msr: (msr==0x48) && (common_pid != 2612129 && common_pid != 3841)
-  0x48
-  New filter for msr:write_msr: (msr==0x48) && (common_pid != 2612129 && common_pid != 3841)
-  mmap size 528384B
-  Looking at the vmlinux_path (8 entries long)
-  symsrc__init: build id mismatch for vmlinux.
-  Using /proc/kcore for kernel data
-  Using /proc/kallsyms for symbols
-       0.000 Timer/2525383 msr:write_msr(msr: IA32_SPEC_CTRL, val: 6)
-                                         do_trace_write_msr ([kernel.kallsyms])
-                                         do_trace_write_msr ([kernel.kallsyms])
-                                         __switch_to_xtra ([kernel.kallsyms])
-                                         __switch_to ([kernel.kallsyms])
-                                         __schedule ([kernel.kallsyms])
-                                         schedule ([kernel.kallsyms])
-                                         futex_wait_queue_me ([kernel.kallsyms])
-                                         futex_wait ([kernel.kallsyms])
-                                         do_futex ([kernel.kallsyms])
-                                         __x64_sys_futex ([kernel.kallsyms])
-                                         do_syscall_64 ([kernel.kallsyms])
-                                         entry_SYSCALL_64_after_hwframe ([kernel.kallsyms])
-                                         __futex_abstimed_wait_common64 (/usr/lib64/libpthread-2.33.so)
-       0.030 :0/0 msr:write_msr(msr: IA32_SPEC_CTRL, val: 2)
-                                         do_trace_write_msr ([kernel.kallsyms])
-                                         do_trace_write_msr ([kernel.kallsyms])
-                                         __switch_to_xtra ([kernel.kallsyms])
-                                         __switch_to ([kernel.kallsyms])
-                                         __schedule ([kernel.kallsyms])
-                                         schedule_idle ([kernel.kallsyms])
-                                         do_idle ([kernel.kallsyms])
-                                         cpu_startup_entry ([kernel.kallsyms])
-                                         secondary_startup_64_no_verify ([kernel.kallsyms])
-  #
-
-Cc: Huang Rui <ray.huang@amd.com>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/x86/include/asm/msr-index.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/tools/arch/x86/include/asm/msr-index.h b/tools/arch/x86/include/asm/msr-index.h
-index 01e2650b958591e0..3faf0f97edb1bcd3 100644
---- a/tools/arch/x86/include/asm/msr-index.h
-+++ b/tools/arch/x86/include/asm/msr-index.h
-@@ -486,6 +486,23 @@
- 
- #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
- 
-+/* AMD Collaborative Processor Performance Control MSRs */
-+#define MSR_AMD_CPPC_CAP1		0xc00102b0
-+#define MSR_AMD_CPPC_ENABLE		0xc00102b1
-+#define MSR_AMD_CPPC_CAP2		0xc00102b2
-+#define MSR_AMD_CPPC_REQ		0xc00102b3
-+#define MSR_AMD_CPPC_STATUS		0xc00102b4
-+
-+#define AMD_CPPC_LOWEST_PERF(x)		(((x) >> 0) & 0xff)
-+#define AMD_CPPC_LOWNONLIN_PERF(x)	(((x) >> 8) & 0xff)
-+#define AMD_CPPC_NOMINAL_PERF(x)	(((x) >> 16) & 0xff)
-+#define AMD_CPPC_HIGHEST_PERF(x)	(((x) >> 24) & 0xff)
-+
-+#define AMD_CPPC_MAX_PERF(x)		(((x) & 0xff) << 0)
-+#define AMD_CPPC_MIN_PERF(x)		(((x) & 0xff) << 8)
-+#define AMD_CPPC_DES_PERF(x)		(((x) & 0xff) << 16)
-+#define AMD_CPPC_ENERGY_PERF_PREF(x)	(((x) & 0xff) << 24)
-+
- /* Fam 17h MSRs */
- #define MSR_F17H_IRPERF			0xc00000e9
- 
--- 
-2.31.1
-
+Best regards,
+Thanks,
+	Maxim Levitsky
 

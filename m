@@ -2,186 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5940D48D4A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A6E48D4AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiAMJA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:00:57 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17346 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbiAMJAx (ORCPT
+        id S230436AbiAMJBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:01:19 -0500
+Received: from mail-ua1-f51.google.com ([209.85.222.51]:41685 "EHLO
+        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229451AbiAMJBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:00:53 -0500
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JZJKC2KDdz9s7h;
-        Thu, 13 Jan 2022 16:59:43 +0800 (CST)
-Received: from dggpeml500011.china.huawei.com (7.185.36.84) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 13 Jan 2022 17:00:52 +0800
-Received: from DESKTOP-9883QJJ.china.huawei.com (10.136.114.155) by
- dggpeml500011.china.huawei.com (7.185.36.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 13 Jan 2022 17:00:51 +0800
-From:   Di Zhu <zhudi2@huawei.com>
-To:     <ast@kernel.org>, <davem@davemloft.net>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <jakub@cloudflare.com>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhudi2@huawei.com>, <luzhihao@huawei.com>, <rose.chen@huawei.com>
-Subject: [PATCH bpf-next v5 2/2] selftests: bpf: test BPF_PROG_QUERY for progs attached to sockmap
-Date:   Thu, 13 Jan 2022 17:00:29 +0800
-Message-ID: <20220113090029.1055-2-zhudi2@huawei.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220113090029.1055-1-zhudi2@huawei.com>
-References: <20220113090029.1055-1-zhudi2@huawei.com>
+        Thu, 13 Jan 2022 04:01:17 -0500
+Received: by mail-ua1-f51.google.com with SMTP id p37so9740965uae.8;
+        Thu, 13 Jan 2022 01:01:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MPUkI5LvvxCzghzBeHMxuJ5P/rCrBrsO0aS+FYZgtrE=;
+        b=2l55pHQPbbCrdl+JxOCbLeCyJBJjMfOi5ni3Iddf6CFswzXL2ZVrBLH+BiU20iVWV/
+         9YDovQfhIh8lA8bY/0CdZ+Nfs8rKWkV2uluXKlsWBZjtsns0oiMeaIVC/zXVLqYr0Sbm
+         aR5dCrpmUDSqHMEHp1NqRtYZMvw0kmVNDA7CdryhTWduBWfxSTljLykSgTEmQFGPlzt9
+         cz/JFeC9EVCjIdxNuQN+zjemkjkvr3+smyBIo8MfDIa6K8y/RnjFQjsHuuVjJ9r5qO/A
+         6Lst3jUhwav6prbo7hO6/pWxtIxqI8pqm303kCp7HrNbgI0w3b2sO/aD08xjCYaAaWga
+         J40Q==
+X-Gm-Message-State: AOAM532mEn+mVKC0sP6mzOub1vUv8iWnM4+IPQcKbEFVCbxzRj4F3hkq
+        uDIJqWDaA+mzRxmT8dX+tdu9Vi2SNJRr52jj
+X-Google-Smtp-Source: ABdhPJyz/SikRbdFufc5nbzL8LFgpjuKBxIpBrIVAeLzjWOKSkk/tzbxCrac9zAA2NIWmBMXdyHFow==
+X-Received: by 2002:a05:6102:354e:: with SMTP id e14mr817154vss.41.1642064476911;
+        Thu, 13 Jan 2022 01:01:16 -0800 (PST)
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
+        by smtp.gmail.com with ESMTPSA id k135sm1085656vke.53.2022.01.13.01.01.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 01:01:16 -0800 (PST)
+Received: by mail-ua1-f45.google.com with SMTP id h11so9776783uar.5;
+        Thu, 13 Jan 2022 01:01:16 -0800 (PST)
+X-Received: by 2002:a9f:3e01:: with SMTP id o1mr1810579uai.89.1642064476050;
+ Thu, 13 Jan 2022 01:01:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.136.114.155]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500011.china.huawei.com (7.185.36.84)
-X-CFilter-Loop: Reflected
+References: <20211224052309.1997096-1-nikita.yoush@cogentembedded.com>
+ <20211224052309.1997096-3-nikita.yoush@cogentembedded.com>
+ <YcyTV4fJqMHIeyYB@pendragon.ideasonboard.com> <87626d61-ada0-c220-bea5-5330f5256629@cogentembedded.com>
+ <YcyXQxW3kRqQ2Yv0@pendragon.ideasonboard.com> <17b8de50-426a-2543-a79a-aab44c9d52cf@cogentembedded.com>
+In-Reply-To: <17b8de50-426a-2543-a79a-aab44c9d52cf@cogentembedded.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 13 Jan 2022 10:01:04 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVVj9k8W_FHtW5G+aYug-VvonMnyWyXteqhLONBBSKLZw@mail.gmail.com>
+Message-ID: <CAMuHMdVVj9k8W_FHtW5G+aYug-VvonMnyWyXteqhLONBBSKLZw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] arm64: dts: renesas: r8a77961: Add lvds0 device node
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add test for querying progs attached to sockmap. we use an existing
-libbpf query interface to query prog cnt before and after progs
-attaching to sockmap and check whether the queried prog id is right.
+Hi Nikita,
 
-Signed-off-by: Di Zhu <zhudi2@huawei.com>
-Acked-by: Yonghong Song <yhs@fb.com>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 70 +++++++++++++++++++
- .../bpf/progs/test_sockmap_progs_query.c      | 24 +++++++
- 2 files changed, 94 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c
+On Wed, Jan 12, 2022 at 10:10 PM Nikita Yushchenko
+<nikita.yoush@cogentembedded.com> wrote:
+> > I'm writing a patch to drop those right now :-) I'll CC you.
+>
+> This is not the only place where rcag-gen3 dtsi files are using empty-endpoint pattern.
+>
+> du rgb port is defined in the same way.
+>
+> And, I've submitted a patch some weeks ago [1] that hooked into that.
+>
+> [1] https://lore.kernel.org/lkml/20211225115308.2152364-1-nikita.yoush@cogentembedded.com/
+>
+> Since there was no reply, I am about to resubmit it.
+> But, perhaps need to do something with empty-endpoint pattern first?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 85db0f4cdd95..06923ea44bad 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -8,6 +8,7 @@
- #include "test_sockmap_update.skel.h"
- #include "test_sockmap_invalid_update.skel.h"
- #include "test_sockmap_skb_verdict_attach.skel.h"
-+#include "test_sockmap_progs_query.skel.h"
- #include "bpf_iter_sockmap.skel.h"
- 
- #define TCP_REPAIR		19	/* TCP sock is under repair right now */
-@@ -315,6 +316,69 @@ static void test_sockmap_skb_verdict_attach(enum bpf_attach_type first,
- 	test_sockmap_skb_verdict_attach__destroy(skel);
- }
- 
-+static __u32 query_prog_id(int prog_fd)
-+{
-+	struct bpf_prog_info info = {};
-+	__u32 info_len = sizeof(info);
-+	int err;
-+
-+	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd") ||
-+	    !ASSERT_EQ(info_len, sizeof(info), "bpf_obj_get_info_by_fd"))
-+		return 0;
-+
-+	return info.id;
-+}
-+
-+static void test_sockmap_progs_query(enum bpf_attach_type attach_type)
-+{
-+	struct test_sockmap_progs_query *skel;
-+	int err, map_fd, verdict_fd, duration = 0;
-+	__u32 attach_flags = 0;
-+	__u32 prog_ids[3] = {};
-+	__u32 prog_cnt = 3;
-+
-+	skel = test_sockmap_progs_query__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_sockmap_progs_query__open_and_load"))
-+		return;
-+
-+	map_fd = bpf_map__fd(skel->maps.sock_map);
-+
-+	if (attach_type == BPF_SK_MSG_VERDICT)
-+		verdict_fd = bpf_program__fd(skel->progs.prog_skmsg_verdict);
-+	else
-+		verdict_fd = bpf_program__fd(skel->progs.prog_skb_verdict);
-+
-+	err = bpf_prog_query(map_fd, attach_type, 0 /* query flags */,
-+			     &attach_flags, prog_ids, &prog_cnt);
-+	if (!ASSERT_OK(err, "bpf_prog_query failed"))
-+		goto out;
-+
-+	if (!ASSERT_EQ(attach_flags,  0, "wrong attach_flags on query"))
-+		goto out;
-+
-+	if (!ASSERT_EQ(prog_cnt, 0, "wrong program count on query"))
-+		goto out;
-+
-+	err = bpf_prog_attach(verdict_fd, map_fd, attach_type, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach failed"))
-+		goto out;
-+
-+	prog_cnt = 1;
-+	err = bpf_prog_query(map_fd, attach_type, 0 /* query flags */,
-+			     &attach_flags, prog_ids, &prog_cnt);
-+
-+	ASSERT_OK(err, "bpf_prog_query failed");
-+	ASSERT_EQ(attach_flags, 0, "wrong attach_flags on query");
-+	ASSERT_EQ(prog_cnt, 1, "wrong program count on query");
-+	ASSERT_EQ(prog_ids[0], query_prog_id(verdict_fd),
-+		  "wrong prog_ids on query");
-+
-+	bpf_prog_detach2(verdict_fd, map_fd, attach_type);
-+out:
-+	test_sockmap_progs_query__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -341,4 +405,10 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_attach(BPF_SK_SKB_STREAM_VERDICT,
- 						BPF_SK_SKB_VERDICT);
- 	}
-+	if (test__start_subtest("sockmap progs query")) {
-+		test_sockmap_progs_query(BPF_SK_MSG_VERDICT);
-+		test_sockmap_progs_query(BPF_SK_SKB_STREAM_PARSER);
-+		test_sockmap_progs_query(BPF_SK_SKB_STREAM_VERDICT);
-+		test_sockmap_progs_query(BPF_SK_SKB_VERDICT);
-+	}
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c b/tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c
-new file mode 100644
-index 000000000000..9d58d61c0dee
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} sock_map SEC(".maps");
-+
-+SEC("sk_skb")
-+int prog_skb_verdict(struct __sk_buff *skb)
-+{
-+	return SK_PASS;
-+}
-+
-+SEC("sk_msg")
-+int prog_skmsg_verdict(struct sk_msg_md *msg)
-+{
-+	return SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.27.0
+No need to resend for now, it is still in my review backlog
+(Hi Xmas/NY ;-).
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

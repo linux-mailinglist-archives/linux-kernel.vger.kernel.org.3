@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DEA48DB05
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1E548DB0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232798AbiAMPuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 10:50:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37656 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231585AbiAMPum (ORCPT
+        id S236173AbiAMPxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 10:53:03 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:2960 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234645AbiAMPxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 10:50:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642089041;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0RQ3puUcYuHO/5UfsU4Xhhp2Gu/t2oxOAbK9fU144eE=;
-        b=RwcpVaOQpoP3+Jj5f1l3w6B8jXiSIQ40wz45tKZzM54sRhUJyTkeYAENGk7VoN7J0yQnwq
-        Rf7o4qiSSmFyQd2XwCKgivDua/xvusrPRcoYdu2yFKgYHuZSMsx7vyKYWlBUWmi2Pp7qax
-        GejVf5xk6yZ70cHIDzqdmSENEPQ84e0=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-553-XJJuOZR5NqOroUYvac_F4A-1; Thu, 13 Jan 2022 10:50:40 -0500
-X-MC-Unique: XJJuOZR5NqOroUYvac_F4A-1
-Received: by mail-ed1-f69.google.com with SMTP id r8-20020a05640251c800b003f9a52daa3fso5696804edd.22
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 07:50:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=0RQ3puUcYuHO/5UfsU4Xhhp2Gu/t2oxOAbK9fU144eE=;
-        b=rBKLMF5xVtF7UE1fVkxwEXCZYWG36jYG74rQ7D6uaPrqgWYjw4blpc44XNnV+GfvgJ
-         vQV8xRXNSHKpxv0qB27et4s5Njx/MOBNtHmwTjHYLokKiKwH5AQI1dhIGxs70j8iRF6n
-         bLae/Sk6UqgE1WoF7gGmJTX7KYTk1Xy3+QpcmsgksxLgN0FaJSYO76B0H1r/tkkpraMU
-         KjWZFT54Hj5GNlEVwCMgFi/FGMaXPZyQQ7h+7Bn3eY6fbjCqbgiXPVx+yjGhAxCxCAVk
-         qdT4QAshygQtTtPWddPWdnoCyw9dNXSDpNIrKUHIr/PaB9hHiqdgo1/OLl5ArRFW0kwj
-         Xg8w==
-X-Gm-Message-State: AOAM533Ta18KWwQ3gJv3pgBRdqHgLD8vZ+rO63yB7IopfvE6KrAfeUqP
-        nDhF2vUON+sXCfcKycVYP7K6hSar6kep1F4TkoEHyj7YBidmZJjqbDioGY1eFIvAwVdH9xvTG5r
-        mauypU0w8aElejgIt9jBRq8RB
-X-Received: by 2002:a05:6402:3588:: with SMTP id y8mr4824683edc.147.1642089039283;
-        Thu, 13 Jan 2022 07:50:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwNFlqW+90z8MqJGfmQJtPI4aVOG3CgxuC8pcaaa86GGnEzwNl0A4gvDtrNM26vya8mfn/rVA==
-X-Received: by 2002:a05:6402:3588:: with SMTP id y8mr4824671edc.147.1642089039121;
-        Thu, 13 Jan 2022 07:50:39 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:e200:8511:ed0f:ac2c:42f7? (p200300cbc703e2008511ed0fac2c42f7.dip0.t-ipconnect.de. [2003:cb:c703:e200:8511:ed0f:ac2c:42f7])
-        by smtp.gmail.com with ESMTPSA id qw4sm1026745ejc.55.2022.01.13.07.50.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 07:50:38 -0800 (PST)
-Message-ID: <5da2e9ae-24bc-a146-053d-a43063bad73e@redhat.com>
-Date:   Thu, 13 Jan 2022 16:50:29 +0100
+        Thu, 13 Jan 2022 10:53:02 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20D7TDuT015302;
+        Thu, 13 Jan 2022 09:52:45 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : from : to : subject : references : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=3eTAYHBuhkXwQz8GvoKIzHu0Qzy8xDbMNp5+VdUW3zk=;
+ b=AAI8iCsXQITSaMOXUqVVhEiEw/fqjtjbbPiPdS+szivZVOlqq41wNxroy4/J+hveNKJy
+ FQ96juaehR22MAGPU1yB1zb0uJ61VFU7uU9fQ6lCsZKUphhe8SqU+ff8rRR5Sifvb4B5
+ dxGeJglcIXmTfPdkzIEytQVhGM+WxaxBCl1yxhcJ3wpj4yO0MoDEUdh1RKjB7Ky93dLV
+ L13WwAvd+Iy41e2YAB0wReBGHI8z5n0DW8DwX6I9FQ5wwOFwNLQlwXKGIp0p/vpNJKA9
+ mk4Q/g9QQvLCfMCZBZiZDVC3w+CxrjF5lZo5TM4L5HZKbybm3yhPUTgTGlo2wU7A79vo CA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3dhejy26sq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 13 Jan 2022 09:52:45 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 13 Jan
+ 2022 15:52:43 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Thu, 13 Jan 2022 15:52:43 +0000
+Received: from [198.61.65.50] (unknown [198.61.65.50])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id DE79CB0E;
+        Thu, 13 Jan 2022 15:52:36 +0000 (UTC)
+Message-ID: <bfe7b97b-4ec9-13a0-aed4-e15d18b03df3@opensource.cirrus.com>
+Date:   Thu, 13 Jan 2022 15:52:36 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH v3 3/8] mm: migrate: allocate the right size of non
- hugetlb or THP compound pages.
-Content-Language: en-US
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>
-References: <20220105214756.91065-1-zi.yan@sent.com>
- <20220105214756.91065-4-zi.yan@sent.com>
- <970ca2a4-416d-7e8f-37c7-510c5b050f4b@redhat.com>
- <15E26B9B-8AE2-4916-94E7-D0BBB2491B1B@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <15E26B9B-8AE2-4916-94E7-D0BBB2491B1B@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/91.5.0
+From:   <tanureal@opensource.cirrus.com>
+To:     Cameron Berkenpas <cam@neo-zeon.de>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        'Hans de Goede' <hdegoede@redhat.com>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>, 'moderated list:
+        "SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM...'" 
+        <alsa-devel@alsa-project.org>,
+        'Liam Girdwood' <lgirdwood@gmail.com>,
+        <patches@opensource.cirrus.com>, 'Takashi Iwai' <tiwai@suse.com>,
+        'Mark Gross' <markgross@kernel.org>,
+        'ACPI Devel Maling List' <linux-acpi@vger.kernel.org>,
+        'Mark Brown' <broonie@kernel.org>,
+        'Platform Driver' <platform-driver-x86@vger.kernel.org>,
+        'Linux Kernel Mailing List' <linux-kernel@vger.kernel.org>,
+        'Len Brown' <lenb@kernel.org>, ;
+Illegal-Object: Syntax error in To: address found on vger.kernel.org:
+        To:     ;
+                        ^-missing semicolon to end mail group, extraneous tokens in mailbox, missing end of mailbox
+Subject: Re: [PATCH v6 08/10] ACPI / scan: Create platform device for CLSA0100
+ and CSC3551 ACPI nodes
+References: <20211217115708.882525-1-tanureal@opensource.cirrus.com>
+ <20211217115708.882525-9-tanureal@opensource.cirrus.com>
+ <CAJZ5v0jTELqFeO6q6w_mYNo_yf1R9SX66RrEz0ZSe27w7E6kog@mail.gmail.com>
+ <4b5506b1-20c6-3983-d541-86dc2388b2a7@redhat.com>
+ <004001d7f5c6$7329d4d0$597d7e70$@opensource.cirrus.com>
+ <e2d39d52-c139-a94a-94cc-88841d3638e3@opensource.cirrus.com>
+ <3f042293-05de-d472-dd6e-ce5ca3a8331b@neo-zeon.de>
+In-Reply-To: <3f042293-05de-d472-dd6e-ce5ca3a8331b@neo-zeon.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: hoxzO8VJxXFJMNQMRsDgldZyIoHMplz3
+X-Proofpoint-ORIG-GUID: hoxzO8VJxXFJMNQMRsDgldZyIoHMplz3
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.01.22 16:46, Zi Yan wrote:
-> On 12 Jan 2022, at 6:04, David Hildenbrand wrote:
+On 1/12/22 8:00 PM, Cameron Berkenpas <cam@neo-zeon.de> wrote:
+> Hello,
 > 
->> On 05.01.22 22:47, Zi Yan wrote:
->>> From: Zi Yan <ziy@nvidia.com>
->>>
->>> alloc_migration_target() is used by alloc_contig_range() and non-LRU
->>> movable compound pages can be migrated. Current code does not allocate the
->>> right page size for such pages. Check THP precisely using
->>> is_transparent_huge() and add allocation support for non-LRU compound
->>> pages.
->>
->> IIRC, we don't have any non-lru migratable pages that are coumpound
->> pages. Read: not used and not supported :)
+> Will this also include adding support for ID's matching CLSA0101?
 > 
-> OK, but nothing prevents one writing a driver that allocates compound
-> pages and provides address_space->migratepage() and address_space->isolate_page().
+> Thanks,
 > 
-> Actually, to test this series, I write a kernel module that allocates
-> an order-10 page, gives it a fake address_space with migratepage() and
-> isolate_page(), __SetPageMovable() on it, then call alloc_contig_range()
-> on the page range. Apparently, my kernel module is not supported by
-> the kernel, thus, I added this patch.
+> -Cameron
 > 
-> Do you have an alternative test to my kernel module, so that I do not
-> even need this patch myself?
+> On 1/12/22 05:05, Lucas tanure wrote:
+> > As the ic2-multi-instantiate patch chain is still being worked out, we 
+> > would like to submit a new chain for CLSA0100 id and a few fixes for 
+> > the HDA cs35l41 driver.
+> > And to avoid conflicts the ic2-multi-instantiate patch chain will wait 
+> > for this new patch chain to be merged.
+> >
+> > Thanks,
+> > Lucas Tanure 
 > 
->> Why is this required in the context of this series?
 > 
-> It might not be required. I will drop it.
-
-That's why I think it would be best dropping it. If you need it in
-different context, better submit it in different context.
-
-Makes this series easier to digest :)
-
-
--- 
-Thanks,
-
-David / dhildenb
+Hi, 
+We have the plan to support CLSA0101 in the near future, but not for this current patch series.
+Lucas
 

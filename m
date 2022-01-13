@@ -2,73 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B11F48D937
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2B548D933
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235460AbiAMNje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 08:39:34 -0500
-Received: from mx2.didiglobal.com ([111.202.154.82]:25446 "HELO
-        mailgate02.didichuxing.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with SMTP id S229915AbiAMNjc (ORCPT
+        id S235433AbiAMNjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 08:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235343AbiAMNjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 08:39:32 -0500
-Received: from mail.didiglobal.com (unknown [172.20.36.211])
-        by mailgate02.didichuxing.com (Maildata Gateway V2.8) with ESMTP id 3E3BD6005E800;
-        Thu, 13 Jan 2022 21:39:28 +0800 (CST)
-Received: from localhost.localdomain (172.20.16.101) by
- BJSGEXMBX11.didichuxing.com (172.20.15.141) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 13 Jan 2022 21:39:27 +0800
-X-MD-Sfrom: wanghonglei@didiglobal.com
-X-MD-SrcIP: 172.20.36.211
-From:   Honglei Wang <wanghonglei@didichuxing.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Honglei Wang <jameshongleiwang@126.com>
-Subject: [PATCH] sched/numa: initialize numa statistics when forking new task
-Date:   Thu, 13 Jan 2022 21:39:20 +0800
-Message-ID: <20220113133920.49900-1-wanghonglei@didichuxing.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        Thu, 13 Jan 2022 08:39:24 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5078CC06173F;
+        Thu, 13 Jan 2022 05:39:24 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id a18so23141961edj.7;
+        Thu, 13 Jan 2022 05:39:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lo7RqmvVE3qGhY8Rz5lRe01h/4O84xF8iBhO2A51oDQ=;
+        b=YW1us8THCvj2uGkbpxk7y+T8DrBp9tHBT0mTMVX+r4wknVkZ9ZGzEKt7fGywC0O8Yc
+         Su73ePWkGv6q1DE6RqyVSLM7VauMd/P50E535xyFy1D+DweVl6FGrHAnXWKaDwVX90Bs
+         rPEpLr7DrZin/g0YYeTisMdds3DSRWgJMn2oByxpyriVAB8xiBfI/kFmZ0/VZAqTyb8m
+         4wbff0K2l3onrIW7qi4NFOmtMpdjcKjouibg01pNNTcHFGyiuJua06X5gLbu7hvzAXb/
+         T6sW8kyhKzxUHsMzuZV8qsQK8i4DKHFTzFXESVaE9X3Qp4vmbLKEyyFl7gTqV7+PM4XV
+         q0aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lo7RqmvVE3qGhY8Rz5lRe01h/4O84xF8iBhO2A51oDQ=;
+        b=AUJwlCvWTEfP5bWUtbXiV/FEhlv656TLaf76imnzwW4xVw2GF3+kzNrSlhmOQYJIvD
+         lgmQccYVQdlwgbZ+pX7VOlSN64FLWoVHkDQm4i7W6uBubcMMwQ6WYQiFI03/gmb0v30y
+         xZMvfS1DJKP/pzbHQF3vjMXJmdcVDWRGcTflClLAW21qt4tG0LL7s55RuKE8+nIutHZf
+         wdWaWzQBMfdpHfrIehE+lcnexyfRu1VIf0m3W90aYn0/u8P9sbkW18742t++ifcAQRZv
+         ssvtZtDR3JIxtUz2mfv2aCHu19eO3PQiT3K5hFysUhkDzKrAA6f6qiDHghnBMqUNmeeH
+         6dxg==
+X-Gm-Message-State: AOAM5327YMFpQiCeIAFmsQEpSw4hixxm2iDfRkat9NMhR8M/j31kjAWV
+        t1iIY05yMoD/i9wqArHMkEEVA6nkz4o=
+X-Google-Smtp-Source: ABdhPJzebkwtl8Z93/oPbjUpe1mWgmIKZCmjRa3IZRoZxloJQq23aQZqBlRv1RpAY0Is/frdqyzaCQ==
+X-Received: by 2002:a17:906:158f:: with SMTP id k15mr3492493ejd.367.1642081162894;
+        Thu, 13 Jan 2022 05:39:22 -0800 (PST)
+Received: from standask-GA-A55M-S2HP ([188.123.115.255])
+        by smtp.gmail.com with ESMTPSA id gb35sm894149ejc.36.2022.01.13.05.39.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 05:39:22 -0800 (PST)
+Date:   Thu, 13 Jan 2022 14:39:20 +0100
+From:   Stanislav Jakubek <stano.jakubek@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/3] dt-bindings: trivial-devices: fix double spaces in
+ comments
+Message-ID: <13b3f66efd3b20f1d9bbb9eff1eca00757ac5367.1642080090.git.stano.jakubek@gmail.com>
+References: <cover.1642080090.git.stano.jakubek@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.20.16.101]
-X-ClientProxiedBy: BJEXCAS02.didichuxing.com (172.20.36.211) To
- BJSGEXMBX11.didichuxing.com (172.20.15.141)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1642080090.git.stano.jakubek@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The child processes will inherit numa_pages_migrated and
-total_numa_faults from the parent. It means even if there is no numa
-fault happen on the child, the statistics in /proc/$pid of the child
-process might show huge amount. This is a bit weird. Let's initialize
-them when do fork.
+Cleanup double spaces in some of the comments.
 
-Signed-off-by: Honglei Wang <wanghonglei@didichuxing.com>
+Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
 ---
- kernel/sched/fair.c | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/trivial-devices.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 6e476f6d9435..1aa0ec123a4b 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -2826,6 +2826,8 @@ void init_numa_balancing(unsigned long clone_flags, struct task_struct *p)
- 	/* Protect against double add, see task_tick_numa and task_numa_work */
- 	p->numa_work.next		= &p->numa_work;
- 	p->numa_faults			= NULL;
-+	p->numa_pages_migrated		= 0;
-+	p->total_numa_faults		= 0;
- 	RCU_INIT_POINTER(p->numa_group, NULL);
- 	p->last_task_numa_placement	= 0;
- 	p->last_sum_exec_runtime	= 0;
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 098811b7aa97..091792ba993e 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -31,7 +31,7 @@ properties:
+       - enum:
+             # SMBus/I2C Digital Temperature Sensor in 6-Pin SOT with SMBus Alert and Over Temperature Pin
+           - ad,ad7414
+-            # ADM9240:  Complete System Hardware Monitor for uProcessor-Based Systems
++            # ADM9240: Complete System Hardware Monitor for uProcessor-Based Systems
+           - ad,adm9240
+             # AD5110 - Nonvolatile Digital Potentiometer
+           - adi,ad5110
+@@ -43,7 +43,7 @@ properties:
+           - adi,adp5589
+             # AMS iAQ-Core VOC Sensor
+           - ams,iaq-core
+-            # i2c serial eeprom  (24cxx)
++            # i2c serial eeprom (24cxx)
+           - at,24c08
+             # i2c trusted platform module (TPM)
+           - atmel,at97sc3204t
+@@ -305,7 +305,7 @@ properties:
+           - socionext,synquacer-tpm-mmio
+             # SparkFun Qwiic Joystick (COM-15168) with i2c interface
+           - sparkfun,qwiic-joystick
+-            # i2c serial eeprom  (24cxx)
++            # i2c serial eeprom (24cxx)
+           - st,24c256
+             # Ambient Light Sensor with SMBUS/Two Wire Serial Interface
+           - taos,tsl2550
 -- 
-2.14.1
+2.25.1
 

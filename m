@@ -2,86 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CDD48DFF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4CF48DFFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbiAMVxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 16:53:07 -0500
-Received: from mga07.intel.com ([134.134.136.100]:17147 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231158AbiAMVxG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 16:53:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642110786; x=1673646786;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0fGFoFWKMES/l7JcNKt/2InvA6ZJ2EexIpo9cyiZTjk=;
-  b=AF1UxvHXQuylcTfbDCsaBKoaAHx1y+Q/loBFGUyyMxXDjXNenZK8V+bz
-   YkeEnfGFi6VpTC12U/ayOthGGhxqGznpynQt0tdGZiU4eFlertp66v/tZ
-   B9ZnPouTvXKin1GKTCu5xOOlHwqSmDEexWxPfA8LNrP/OhrHA2NHF6B3+
-   KaEBZNnJmcqbks6FtUwQHG+2IlFQR3ESwKouJlrCyxy27C3qdNNHAdikK
-   1RsfKEIzck+qDXzwHN6/9B3IfRVqBFv20+hB90rh8OTIJ7lIj2uW8mSY1
-   yuB+wqZnLLunT0HccMp6KgtsZ1yTqyevxITQCV5MkUuIZvq2Al2d+7it7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="307465379"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="307465379"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 13:53:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="577083882"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Jan 2022 13:53:04 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n881o-0007gF-7N; Thu, 13 Jan 2022 21:53:04 +0000
-Date:   Fri, 14 Jan 2022 05:53:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [intel-tdx:tdx/guest-rebased 126/133]
- arch/x86/kernel/tdx-tests.c:66:12: warning: no previous prototype for
- 'kvm_unit_test_debug_init'
-Message-ID: <202201140556.6bywMkqW-lkp@intel.com>
+        id S233145AbiAMV5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 16:57:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34250 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232985AbiAMV5c (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 16:57:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642111052;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TMX/kWIlUA1AE1kmxxn6oC9JgTpebsg3ohbjH9GEsvI=;
+        b=QCy0z4QKlCt2xk5bhBdER2Um5YkPf6Fu8Tba23UZaZXhCp/Zc1iQompjvFpPRrBHr2i8a0
+        AsFFdIbvsBLZPAaZZsxKMiODaivolV/fRy4FB3pz8+e5ikzTJrW+ByQ3ulSnnspGEJqy+G
+        vYbuENM8MWr0Yt5+DWAol7lqFtwl8K0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-49-L8FNEgkdMraDDmpSMaBG_A-1; Thu, 13 Jan 2022 16:57:28 -0500
+X-MC-Unique: L8FNEgkdMraDDmpSMaBG_A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 62A1F1853028;
+        Thu, 13 Jan 2022 21:57:26 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.49])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 013154698C;
+        Thu, 13 Jan 2022 21:57:22 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
+        linux-x86_64@vger.kernel.org, kernel-hardening@lists.openwall.com,
+        linux-mm@kvack.org, the arch/x86 maintainers <x86@kernel.org>,
+        musl@lists.openwall.com, libc-alpha@sourceware.org,
+        linux-kernel@vger.kernel.org, Dave Hansen <dave.hansen@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrei Vagin <avagin@gmail.com>
+Subject: Re: [PATCH v3 3/3] x86: Add test for arch_prctl(ARCH_VSYSCALL_CONTROL)
+References: <3a1c8280967b491bf6917a18fbff6c9b52e8df24.1641398395.git.fweimer@redhat.com>
+        <54ae0e1f8928160c1c4120263ea21c8133aa3ec4.1641398395.git.fweimer@redhat.com>
+        <564ba9d6b8f88d139be556d039aadb4b8e078eba.1641398395.git.fweimer@redhat.com>
+        <4db8cff9-8bf8-0c45-6956-4b1b19b53b2f@kernel.org>
+Date:   Thu, 13 Jan 2022 22:57:20 +0100
+In-Reply-To: <4db8cff9-8bf8-0c45-6956-4b1b19b53b2f@kernel.org> (Andy
+        Lutomirski's message of "Thu, 13 Jan 2022 13:31:04 -0800")
+Message-ID: <87pmovxprz.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git tdx/guest-rebased
-head:   e3995864d37c56f431c93fc3dc454d9c65f5e9ea
-commit: a7d35a3976c3ad98bc3c6522a92f5eb4e3c68fc9 [126/133] x86/tdx-tests: Add a port of a kvm unit test
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220114/202201140556.6bywMkqW-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/a7d35a3976c3ad98bc3c6522a92f5eb4e3c68fc9
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx tdx/guest-rebased
-        git checkout a7d35a3976c3ad98bc3c6522a92f5eb4e3c68fc9
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
+* Andy Lutomirski:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> On 1/5/22 08:03, Florian Weimer wrote:
+>> Signed-off-by: Florian Weimer <fweimer@redhat.com>
+>
+> This seems like a respectable test case, but why does it work so hard
+> to avoid using libc?
 
-All warnings (new ones prefixed by >>):
+Back when this was still a true lockout and not a toggle, it was
+necessary to bypass the startup code, so that the test still works once
+the (g)libc startup starts activating the lockout.  The /proc mounting
+is there to support running as init in a VM (which makes development so
+much easier).
 
->> arch/x86/kernel/tdx-tests.c:66:12: warning: no previous prototype for 'kvm_unit_test_debug_init' [-Wmissing-prototypes]
-      66 | int __init kvm_unit_test_debug_init(void)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~
+I could ditch the /proc mounting, perform some limited data gathering in
+a pre-_start routine, undo a potential lockout before the tests, and
+then use libc functions for the actual test.  It would probably be a bit
+less code (printf is nice), but I'd probably have to use direct system
+calls for the early data gathering anyway, so those parts would still be
+there.
 
+Thanks,
+Florian
 
-vim +/kvm_unit_test_debug_init +66 arch/x86/kernel/tdx-tests.c
-
-    65	
-  > 66	int __init kvm_unit_test_debug_init(void)
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

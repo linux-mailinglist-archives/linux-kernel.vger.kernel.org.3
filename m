@@ -2,135 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 236D548DF32
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 21:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161AD48DF37
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 21:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234713AbiAMUuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 15:50:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbiAMUuG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 15:50:06 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB80C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:50:05 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id 59-20020a17090a09c100b001b34a13745eso19972968pjo.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:50:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tPApFU58dR1gZgJEEILu+tDGM+PxSeVinprQhzYCrE0=;
-        b=U5Eh4w8ILAYJhQL+8Y6Z9iDTqQsglioZ0VFEHhm4/BwRgFS4oNhLFLsxsFiqlA1zAo
-         itCSCSrzIrhpEMme3G0z47NlGBGRbIr3+D6R8O9kJYKVUl+9+hrsaIrhEl6DjOdbMJWS
-         AR6WaLHIXm35aP+AH3hszxZzhlxt84R4zE/VauBiZSf/Z6Yf9MExY1Qvyoax8K/hUwzD
-         dPyMhx9SSUuu5dJ2HOILw6gEdj4UEyNjES+8O/F4y9lTCglxf6WMFliRv5OYa44NoyQ2
-         DSgceVnFXObalfg6opXRXYJGjc2XUbF6hGNavkF5+6GwIlrMhmtCeTLQ0nkAvmDBvSsB
-         nsCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tPApFU58dR1gZgJEEILu+tDGM+PxSeVinprQhzYCrE0=;
-        b=Usf7eYb/OuRua9gIb75yLBbiv9T/xIa6UxkOVqHq/UkUJVNWAukdCUuqYKKagMWDdt
-         QvxaFTKyriOielwgy03Xk2h+SM43U9apZ6TQ3Xa9HfA20fcsRC7OhNSKxN5ZeRYSw9N6
-         C+q/zrIrJsXd7qDxafzkeWDpDwLXh7hw7U3PxhZsgmmjBirckc/hsjw/O8DyLkglst9Y
-         fX1oMvUdKC+4V7IxH/lXkUkdlrPxe7DnWFbrKYeogeHiXvbPFzKpabf6+CEheRmQW6As
-         TjN/nG/s4mwIovo0oX9QB3l0J5BR/o/BmexohT3WPSJ0mq6g7Wz1u3DAQSZB4soTlAqa
-         ZO8Q==
-X-Gm-Message-State: AOAM531yZAaDAk13Fi/FMd/+ou9KNEN2VXtj5Jm8NbryOjhhqgXwZBGE
-        DqG6pZRfgJo1a68JbIlgYskdQg==
-X-Google-Smtp-Source: ABdhPJwJYCD5/Syd/w/87DQlTR6TI+0Jvof2BT19Yr+6weO4P+lZR1M9vsvHVuZlgMkc5peAaklPcw==
-X-Received: by 2002:a17:90b:1651:: with SMTP id il17mr15571035pjb.151.1642107004976;
-        Thu, 13 Jan 2022 12:50:04 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id y69sm3549018pfg.171.2022.01.13.12.50.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 12:50:04 -0800 (PST)
-Date:   Thu, 13 Jan 2022 20:50:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
-        alexandru.elisei@arm.com, anup.patel@wdc.com,
-        aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de,
-        catalin.marinas@arm.com, chenhuacai@kernel.org,
-        dave.hansen@linux.intel.com, david@redhat.com,
-        frankja@linux.ibm.com, frederic@kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, imbrenda@linux.ibm.com, james.morse@arm.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        maz@kernel.org, mingo@redhat.com, mpe@ellerman.id.au,
-        nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org,
-        paulus@samba.org, paul.walmsley@sifive.com, pbonzini@redhat.com,
-        suzuki.poulose@arm.com, tglx@linutronix.de,
-        tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-Subject: Re: [PATCH 5/5] kvm/x86: rework guest entry logic
-Message-ID: <YeCQeHbswboaosoV@google.com>
-References: <20220111153539.2532246-1-mark.rutland@arm.com>
- <20220111153539.2532246-6-mark.rutland@arm.com>
+        id S232851AbiAMUwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 15:52:05 -0500
+Received: from mga03.intel.com ([134.134.136.65]:46063 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232824AbiAMUwE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 15:52:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642107124; x=1673643124;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TyGG8SSO0WgBdeeKAnSyaHcAZKgECByDY2HpggnR1Hs=;
+  b=b7Q/MaK/IBKu6oJR+DbHCX4SFdPGpnoD2tAHnEAgbyBQJ5tIDKIyEbcr
+   I/ddmJOdNiobGGLYxrz7CxQgiaXaUCPfYm3SrPl31qQ6qPWhlptTswGRP
+   f8PouZ671RwlYfEzH8eEZ7kUFkrcou19t+SAg5EfZNCVgRct783Kz2Lk9
+   V9Ex011/Xuum/IUMzv02jteN67/yzGLIw9QCeDz9mbD2KpxoiGGctjjoy
+   MsqVXIzv58m2TIlWx0o4vd+Kb4K9wWeLV7s8qX+cTJDch0VD7lvkMtDei
+   hKKsITmkeCXnhFNUUPoQbNvU4m0T24T7uXm6yzvkDLgPd49cVoVjqfz2m
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244065131"
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="244065131"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 12:52:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="475489557"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 13 Jan 2022 12:52:02 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n874j-0007cx-VO; Thu, 13 Jan 2022 20:52:01 +0000
+Date:   Fri, 14 Jan 2022 04:51:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [intel-tdx:tdx/guest-rebased 108/133] arch/x86/kernel/tdx.c:692:15:
+ warning: no previous prototype for 'tdx_mmio_readq'
+Message-ID: <202201140431.dg81It8G-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220111153539.2532246-6-mark.rutland@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022, Mark Rutland wrote:
-> For consistency and clarity, migrate x86 over to the generic helpers for
-> guest timing and lockdep/RCU/tracing management, and remove the
-> x86-specific helpers.
-> 
-> Prior to this patch, the guest timing was entered in
-> kvm_guest_enter_irqoff() (called by svm_vcpu_enter_exit() and
-> svm_vcpu_enter_exit()), and was exited by the call to
-> vtime_account_guest_exit() within vcpu_enter_guest().
-> 
-> To minimize duplication and to more clearly balance entry and exit, both
-> entry and exit of guest timing are placed in vcpu_enter_guest(), using
-> the new guest_timing_{enter,exit}_irqoff() helpers. This may result in a
-> small amount of additional time being acounted towards guests.
+tree:   https://github.com/intel/tdx.git tdx/guest-rebased
+head:   e3995864d37c56f431c93fc3dc454d9c65f5e9ea
+commit: 756e9ea1c2ce5a460d5e3edc980255eea5f0fecf [108/133] x86/tdx: Enable direct iomap MMIO optimizations
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220114/202201140431.dg81It8G-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/756e9ea1c2ce5a460d5e3edc980255eea5f0fecf
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx tdx/guest-rebased
+        git checkout 756e9ea1c2ce5a460d5e3edc980255eea5f0fecf
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
 
-This can be further qualified to state that it only affects time accounting when
-using context tracking; tick-based accounting is unaffected because IRQs are
-disabled the entire time.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-And this might actually be a (benign?) bug fix for context tracking accounting in
-the EXIT_FASTPATH_REENTER_GUEST case (commits ae95f566b3d2 "KVM: X86: TSCDEADLINE
-MSR emulation fastpath" and 26efe2fd92e5, "KVM: VMX: Handle preemption timer
-fastpath").  In those cases, KVM will enter the guest multiple times without
-bouncing through vtime_account_guest_exit().  That means vtime_guest_enter() will
-be called when the CPU is already "in guest", and call vtime_account_system()
-when it really should call vtime_account_guest().  account_system_time() does
-check PF_VCPU and redirect to account_guest_time(), so it appears to be benign,
-but it's at least odd.
+All warnings (new ones prefixed by >>):
 
-> Other than this, there should be no functional change as a result of
-> this patch.
+   arch/x86/kernel/tdx.c:268:5: warning: no previous prototype for 'tdx_hcall_set_notify_intr' [-Wmissing-prototypes]
+     268 | int tdx_hcall_set_notify_intr(u8 vector)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/tdx.c:509:14: warning: no previous prototype for 'tdx_write_msr' [-Wmissing-prototypes]
+     509 | void notrace tdx_write_msr(unsigned int msr, u32 low, u32 high)
+         |              ^~~~~~~~~~~~~
+>> arch/x86/kernel/tdx.c:692:15: warning: no previous prototype for 'tdx_mmio_readq' [-Wmissing-prototypes]
+     692 | unsigned long tdx_mmio_readq(void __iomem *addr)
+         |               ^~~~~~~~~~~~~~
 
-...
 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index e50e97ac4408..bd3873b90889 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -9876,6 +9876,8 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  		set_debugreg(0, 7);
->  	}
->  
-> +	guest_timing_enter_irqoff();
-> +
->  	for (;;) {
->  		/*
->  		 * Assert that vCPU vs. VM APICv state is consistent.  An APICv
-> @@ -9949,7 +9951,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  	 * of accounting via context tracking, but the loss of accuracy is
->  	 * acceptable for all known use cases.
->  	 */
-> -	vtime_account_guest_exit();
-> +	guest_timing_exit_irqoff();
->  
->  	if (lapic_in_kernel(vcpu)) {
->  		s64 delta = vcpu->arch.apic->lapic_timer.advance_expire_delta;
+vim +/tdx_mmio_readq +692 arch/x86/kernel/tdx.c
+
+   691	
+ > 692	unsigned long tdx_mmio_readq(void __iomem *addr)
+   693	{
+   694		unsigned long val;
+   695	
+   696		if (tdx_virt_mmio(8, false, (unsigned long)addr, &val))
+   697			return 0xffffffffffffffff;
+   698		return val;
+   699	}
+   700	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

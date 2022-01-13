@@ -2,85 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF28F48E012
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 23:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D705448E016
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 23:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236962AbiAMWIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 17:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
+        id S236746AbiAMWJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 17:09:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236852AbiAMWI1 (ORCPT
+        with ESMTP id S235193AbiAMWJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 17:08:27 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3EAC06161C;
-        Thu, 13 Jan 2022 14:08:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=q9nFMAXidlMSlpH4UFL2WxiRClvDd+0fOTOBK1//bNg=; b=LclWvncTGXFpwXn41udv2Z9LpA
-        Sifs0222WJ1sP6F8XvF70+De+xZ/JfE2ktsvrnR6XanUpZXi/Msvr5hrOaGfDjFdAA24yvNRRrdWw
-        oMnTEVutC0iSvJ7/ER5DuO/HzTuwFKRBiW+2QBe+TWmYin5KEsArjAiKsKtpWQwNyPrtjPwqOAt7V
-        ga5oa4bkwRtmxMvUzVP8pSH/ZLWUaL+L5bzMdOWb9RhQCKrqpL3s+mk/ERKiCUHscGh3Eo88YYddS
-        0YqLIOcTeLhEyGesHGO2l2qwzTcWILDpsrjWOERd9tOZIpnj6wYiIXU0ovm6qtj1yqP3nyyFtfnOR
-        w0Mo5p8A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n88Gc-005HEY-Fq; Thu, 13 Jan 2022 22:08:22 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: [PATCH 2/2] filemap: Use folio_put_refs() in filemap_free_folio()
-Date:   Thu, 13 Jan 2022 22:08:16 +0000
-Message-Id: <20220113220816.1257657-3-willy@infradead.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220113220816.1257657-1-willy@infradead.org>
-References: <20220113220816.1257657-1-willy@infradead.org>
+        Thu, 13 Jan 2022 17:09:38 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADFAC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 14:09:38 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id i17so1091125pfk.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 14:09:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AC2HTFJ1ATzCZyLtom4XJg0IJvKzl0TNNBtGMizTd8Q=;
+        b=U+T4F26wkMoKmJIJ1QTUZgPt3LYcSKtsHbd7REnwzpdUxVIhXc1VGzxKOTWPI/T42o
+         /22qUfEf209ZLOY0KUQ2v6LedfQ8tKtsUQjHtebLySJIPezt6kftoGGvXNiNUhO4cKyo
+         U6Mw6T+i2lJxtSjkt4IzCQEvIEp47zj5YQLxgqsdutt10cPRQCG16PT4/hEixtm6voRx
+         /nNf1s0FOttaN9D2C1QLSK0Fm1FZi8CMNufXrnwf4yBxOSgoEEAiAXQYwRBntEl7jnVE
+         ODD+o76Juw2dJS8kRdTpVn0SYm4g782O8ehDCTHXVmKUvbwG8c2Ng8PJRv5ZX2PgTyWH
+         mwyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AC2HTFJ1ATzCZyLtom4XJg0IJvKzl0TNNBtGMizTd8Q=;
+        b=r+lRUAhaQPAUCXxA9Oyfa4qIib4jMu4AJeRN2vBR4U5m5ZvxudYnbmwDxHfoatB6BV
+         F0H4+VcvtnHa1aoB8r0S4XAc/tH3HKXtVpaBK5d8C9l0jKkq6i+ENK/jlofsvf38pkln
+         p2EtgbWnPACcky3rXoUVPnEhCiCYzP4rzxxGV1JkbucLGx/UCUhLcrZuYHi5d/m2DeTL
+         0tME6NwYTxgc7lArRwaYIuQxtlM/gQYffO2WQSdmEAA7fn9jG5y/zwePhGP0JOHQeE2Q
+         B8vILYsybmAjnk9IN3nQOVTCpU7BUGhqNpcXzFzdD/A5dI060bwVEYSTlM/O19wMSdTe
+         cZ5w==
+X-Gm-Message-State: AOAM531s6fp1fthmiEjQxmbQVF7Ny9UPVKIWgopWqc2iWhBm8HvSBYwT
+        9j0OQpwqZ+2w5h5YfNxUvboaKQ==
+X-Google-Smtp-Source: ABdhPJwn/TmRC2ZoREFVED7MDc2QJTqiBDWq2zTBbSNYy5uyZEWJariDsNSuc5VL4Ix8KcssmQIwcQ==
+X-Received: by 2002:a63:ae4b:: with SMTP id e11mr5548909pgp.386.1642111777586;
+        Thu, 13 Jan 2022 14:09:37 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n5sm3512558pfo.39.2022.01.13.14.09.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 14:09:37 -0800 (PST)
+Date:   Thu, 13 Jan 2022 22:09:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
+        Gao Chao <chao.gao@intel.com>
+Subject: Re: [PATCH v5 8/8] KVM: VMX: Resize PID-ponter table on demand for
+ IPI virtualization
+Message-ID: <YeCjHbdAikyIFQc9@google.com>
+References: <20211231142849.611-1-guang.zeng@intel.com>
+ <20211231142849.611-9-guang.zeng@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211231142849.611-9-guang.zeng@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This shrinks filemap_free_folio() by 55 bytes in my .config; 24 bytes
-from removing the VM_BUG_ON_FOLIO() and 31 bytes from unifying the
-small/large folio paths.
+On Fri, Dec 31, 2021, Zeng Guang wrote:
+> +static int vmx_expand_pid_table(struct kvm_vmx *kvm_vmx, int entry_idx)
+> +{
+> +	u64 *last_pid_table;
+> +	int last_table_size, new_order;
+> +
+> +	if (entry_idx <= kvm_vmx->pid_last_index)
+> +		return 0;
+> +
+> +	last_pid_table = kvm_vmx->pid_table;
+> +	last_table_size = table_index_to_size(kvm_vmx->pid_last_index + 1);
+> +	new_order = get_order(table_index_to_size(entry_idx + 1));
+> +
+> +	if (vmx_alloc_pid_table(kvm_vmx, new_order))
+> +		return -ENOMEM;
+> +
+> +	memcpy(kvm_vmx->pid_table, last_pid_table, last_table_size);
+> +	kvm_make_all_cpus_request(&kvm_vmx->kvm, KVM_REQ_PID_TABLE_UPDATE);
+> +
+> +	/* Now old PID table can be freed safely as no vCPU is using it. */
+> +	free_pages((unsigned long)last_pid_table, get_order(last_table_size));
 
-We could just use folio_ref_sub() here since the caller should hold a
-reference (as the VM_BUG_ON_FOLIO() was asserting), but that's fragile.
+This is terrifying.  I think it's safe?  But it's still terrifying.
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- mm/filemap.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+Rather than dynamically react as vCPUs are created, what about we make max_vcpus
+common[*], extend KVM_CAP_MAX_VCPUS to allow userspace to override max_vcpus,
+and then have the IPIv support allocate the PID table on first vCPU creation
+instead of in vmx_vm_init()?
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 2fd9b2f24025..afc8f5ca85ac 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -231,17 +231,15 @@ void __filemap_remove_folio(struct folio *folio, void *shadow)
- void filemap_free_folio(struct address_space *mapping, struct folio *folio)
- {
- 	void (*freepage)(struct page *);
-+	int refs = 1;
- 
- 	freepage = mapping->a_ops->freepage;
- 	if (freepage)
- 		freepage(&folio->page);
- 
--	if (folio_test_large(folio) && !folio_test_hugetlb(folio)) {
--		folio_ref_sub(folio, folio_nr_pages(folio));
--		VM_BUG_ON_FOLIO(folio_ref_count(folio) <= 0, folio);
--	} else {
--		folio_put(folio);
--	}
-+	if (folio_test_large(folio) && !folio_test_hugetlb(folio))
-+		refs = folio_nr_pages(folio);
-+	folio_put_refs(folio, refs);
- }
- 
- /**
--- 
-2.33.0
-
+That will give userspace an opportunity to lower max_vcpus to reduce memory
+consumption without needing to dynamically muck with the table in KVM.  Then
+this entire patch goes away.

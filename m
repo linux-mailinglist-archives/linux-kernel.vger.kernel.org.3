@@ -2,219 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D19B848DFB8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C8048DFBA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235155AbiAMVdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 16:33:06 -0500
-Received: from mga17.intel.com ([192.55.52.151]:27567 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235099AbiAMVdF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 16:33:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642109585; x=1673645585;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TgiLW+8Wk+C/BgpfspFXdOiypaOVTwczDZU3AJd5Oyw=;
-  b=T8+UlMXgGwUJ7vxB2qEwMijZICwp1S1V5Qr6CrHbvbOJ5bdiLpHeD5Bl
-   D5tbCx0rCs5lu5C/amroAmm0HwkK66M0Q1Wo7TpdAuEJX4kteAOtG0C66
-   q6cNs7EPTROz8qiDPne4J8o1Q2KmnQD958sVVxcm48f7vCUtmXQ2sMg3w
-   sdx6UME0wQ/dxYRYQ+7O60BXNe6F3qcjhFZS0DMZhlhlO1GQYnyhPrRwM
-   KKrxH9Ymu6nux7q+9nhtXaG3uczaXO51qZz9cONXHyQWTU0ZIuW/rYqgj
-   KTnn7LDRXnz5KbQKZJrL0VlMgZLrLUZ+EkR+3e1UxRIKz5fptbSAAZmjG
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="224806802"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="224806802"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 13:33:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="593520584"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Jan 2022 13:33:03 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n87iR-0007ex-3i; Thu, 13 Jan 2022 21:33:03 +0000
-Date:   Fri, 14 Jan 2022 05:32:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [intel-tdx:tdx/guest-rebased 118/133] kernel/dma/swiotlb.c:388:15:
- warning: cast to 'struct io_tlb_area *' from smaller integer type 'int'
-Message-ID: <202201140505.rrWmRq01-lkp@intel.com>
+        id S235166AbiAMVfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 16:35:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58390 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232075AbiAMVfQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 16:35:16 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2997B822C8;
+        Thu, 13 Jan 2022 21:35:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9819AC36AEA;
+        Thu, 13 Jan 2022 21:35:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642109713;
+        bh=kBzzd4YU14o+Y5Yg58a6FnXb4N5XBBZe+VK8mCrDl00=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=SePOwZPgneYtIm/CvArHR98JFE2W+OWmNtUAgFOLfnqlkd4qrBUUQM5QMItyVjEsF
+         eZncjxMMu4Wz+AosNcYldGSauLzS3Q93BIWkIfAjg0MF9mVHNyq0miM1UEyxKGUmAb
+         Wec2NCWYymQWueb9cWusUrtOm0uWCe6TRgCIEgnNmuiW6xFTlAlF6Z3wzfqr+GCjBu
+         cH2eZ6rw3ql+Qugnsvt8e8QQunSOoglsG4IBIWXOt4RCof/7UyYVkQeN7/V9WBYU/u
+         abJjdej14Yml8HNa3diXqBqeE+zOYmu6Rlfaxxkcv9rBv9TYoCL+eEVBKuMOWdfmFI
+         nVb9lE1lno8Pw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220113115745.45826-5-liang.yang@amlogic.com>
+References: <20220113115745.45826-1-liang.yang@amlogic.com> <20220113115745.45826-5-liang.yang@amlogic.com>
+Subject: Re: [PATCH v9 4/4] clk: meson: add sub MMC clock controller driver
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org
+Date:   Thu, 13 Jan 2022 13:35:12 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20220113213513.9819AC36AEA@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git tdx/guest-rebased
-head:   e3995864d37c56f431c93fc3dc454d9c65f5e9ea
-commit: 8c696e48187c5ffa881e639e1108622debbe6741 [118/133] swiotlb: Split up single swiotlb lock
-config: s390-randconfig-r033-20220113 (https://download.01.org/0day-ci/archive/20220114/202201140505.rrWmRq01-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel/tdx/commit/8c696e48187c5ffa881e639e1108622debbe6741
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx tdx/guest-rebased
-        git checkout 8c696e48187c5ffa881e639e1108622debbe6741
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/dma/
+Quoting Liang Yang (2022-01-13 03:57:45)
+> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+> index bb0f59eea366..3de6f3b24461 100644
+> --- a/drivers/clk/meson/Kconfig
+> +++ b/drivers/clk/meson/Kconfig
+> @@ -39,6 +39,20 @@ config COMMON_CLK_MESON_AO_CLKC
+>         select COMMON_CLK_MESON_REGMAP
+>         select RESET_CONTROLLER
+> =20
+> +config COMMON_CLK_MMC_MESON
+> +       tristate "Meson MMC Sub Clock Controller Driver"
+> +       depends on ARCH_MESON || COMPILE_TEST
+> +       select MFD_SYSCON
+> +       select COMMON_CLK_AMLOGIC
+> +       select COMMON_CLK_MESON_PHASE
+> +       select COMMON_CLK_MESON_PHASE_DELAY
+> +       select COMMON_CLK_MESON_SCLK_DIV
+> +       help
+> +         Support for the MMC sub clock controller on
+> +         Amlogic Meson Platform, which includes S905 (GXBB, GXL),
+> +         A113D/X (AXG) devices . Say Y if you want this
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+s/devices /devices/
 
-All warnings (new ones prefixed by >>):
+> +         clock enabled.
+> +
+>  config COMMON_CLK_MESON_EE_CLKC
+>         tristate
+>         select COMMON_CLK_MESON_REGMAP
+> diff --git a/drivers/clk/meson/mmc-clkc.c b/drivers/clk/meson/mmc-clkc.c
+> new file mode 100644
+> index 000000000000..f53977f61390
+> --- /dev/null
+> +++ b/drivers/clk/meson/mmc-clkc.c
+> @@ -0,0 +1,300 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/module.h>
+> +#include <linux/regmap.h>
+> +#include <linux/slab.h>
+> +#include <linux/of_device.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/platform_device.h>
+> +#include <dt-bindings/clock/amlogic,mmc-clkc.h>
+> +
+> +#include "sclk-div.h"
+> +#include "clk-phase-delay.h"
+> +#include "clk-regmap.h"
+> +#include "clk-phase.h"
+> +
+> +/* clock ID used by internal driver */
+> +
+> +#define SD_EMMC_CLOCK          0
+> +#define CLK_DELAY_STEP_PS_GX   200
+> +#define CLK_DELAY_STEP_PS_AXG  78
+> +#define MUX_CLK_NUM_PARENTS    2
+> +#define MMC_MAX_CLKS           4
+> +
+> +struct mmc_clkc_data {
+> +       struct meson_clk_phase_delay_data tx;
+> +       struct meson_clk_phase_delay_data rx;
+> +};
+> +
+> +static struct clk_regmap_mux_data mmc_clkc_mux_data =3D {
+> +       .offset =3D SD_EMMC_CLOCK,
+> +       .mask   =3D 0x3,
+> +       .shift  =3D 6,
+> +};
+> +
+> +static const struct meson_sclk_div_data mmc_clkc_div_data =3D {
+> +       .div =3D {
+> +               .reg_off =3D SD_EMMC_CLOCK,
+> +               .width   =3D 6,
+> +       },
+> +       .flags =3D MESON_SCLK_ONE_BASED,
+> +};
+> +
+> +static struct meson_clk_phase_data mmc_clkc_core_phase =3D {
+> +       .ph =3D {
+> +               .reg_off =3D SD_EMMC_CLOCK,
+> +               .shift   =3D 8,
+> +               .width   =3D 2,
+> +       }
+> +};
+> +
+> +static const struct mmc_clkc_data mmc_clkc_gx_data =3D {
+> +       .tx =3D {
+> +               .phase =3D {
+> +                       .reg_off =3D SD_EMMC_CLOCK,
+> +                       .shift   =3D 10,
+> +                       .width   =3D 2,
+> +               },
+> +               .delay =3D {
+> +                       .reg_off =3D SD_EMMC_CLOCK,
+> +                       .shift   =3D 16,
+> +                       .width   =3D 4,
+> +               },
+> +               .delay_step_ps =3D CLK_DELAY_STEP_PS_GX,
+> +       },
+> +       .rx =3D {
+> +               .phase =3D {
+> +                       .reg_off =3D SD_EMMC_CLOCK,
+> +                       .shift   =3D 12,
+> +                       .width   =3D 2,
+> +               },
+> +               .delay =3D {
+> +                       .reg_off =3D SD_EMMC_CLOCK,
+> +                       .shift   =3D 20,
+> +                       .width   =3D 4,
+> +               },
+> +               .delay_step_ps   =3D CLK_DELAY_STEP_PS_GX,
+> +       },
+> +};
+> +
+> +static const struct mmc_clkc_data mmc_clkc_axg_data =3D {
+> +       .tx =3D {
+> +               .phase =3D {
+> +                       .reg_off =3D SD_EMMC_CLOCK,
+> +                       .shift   =3D 10,
+> +                       .width   =3D 2,
+> +               },
+> +               .delay =3D {
+> +                       .reg_off =3D SD_EMMC_CLOCK,
+> +                       .shift   =3D 16,
+> +                       .width   =3D 6,
+> +               },
+> +               .delay_step_ps   =3D CLK_DELAY_STEP_PS_AXG,
+> +       },
+> +       .rx =3D {
+> +               .phase =3D {
+> +                       .reg_off =3D SD_EMMC_CLOCK,
+> +                       .shift   =3D 12,
+> +                       .width   =3D 2,
+> +               },
+> +               .delay =3D {
+> +                       .reg_off =3D SD_EMMC_CLOCK,
+> +                       .shift   =3D 22,
+> +                       .width   =3D 6,
+> +               },
+> +               .delay_step_ps   =3D CLK_DELAY_STEP_PS_AXG,
+> +       },
+> +};
+> +
+> +static const struct of_device_id mmc_clkc_match_table[] =3D {
+> +       {
+> +               .compatible     =3D "amlogic,gx-mmc-clkc",
+> +               .data           =3D &mmc_clkc_gx_data
+> +       },
+> +       {
+> +               .compatible     =3D "amlogic,axg-mmc-clkc",
+> +               .data           =3D &mmc_clkc_axg_data
+> +       },
+> +       {}
+> +};
+> +MODULE_DEVICE_TABLE(of, mmc_clkc_match_table);
+> +
+> +static struct clk_regmap *
+> +mmc_clkc_register_clk(struct device *dev, struct regmap *map,
+> +                     struct clk_init_data *init,
+> +                     const char *suffix, void *data)
+> +{
+> +       struct clk_regmap *clk;
+> +       char *name;
+> +       int ret;
+> +
+> +       clk =3D devm_kzalloc(dev, sizeof(*clk), GFP_KERNEL);
+> +       if (!clk)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       name =3D kasprintf(GFP_KERNEL, "%s#%s", dev_name(dev), suffix);
+> +       if (!name)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       init->name =3D name;
+> +       clk->map =3D map;
+> +       clk->data =3D data;
+> +       clk->hw.init =3D init;
+> +       ret =3D devm_clk_hw_register(dev, &clk->hw);
+> +       if (ret)
+> +               clk =3D ERR_PTR(ret);
+> +
+> +       kfree(name);
+> +       return clk;
+> +}
+> +
+> +static struct clk_regmap *mmc_clkc_register_mux(struct device *dev,
+> +                                               struct regmap *map)
+> +{
+> +       const char *parent_names[MUX_CLK_NUM_PARENTS];
+> +       struct clk_init_data init;
+> +       struct clk_regmap *mux;
+> +       struct clk *clk;
+> +       int i;
+> +
+> +       for (i =3D 0; i < MUX_CLK_NUM_PARENTS; i++) {
+> +               char name[8];
+> +
+> +               snprintf(name, sizeof(name), "clkin%d", i);
+> +               clk =3D devm_clk_get(dev, name);
+> +               if (IS_ERR(clk)) {
+> +                       if (clk !=3D ERR_PTR(-EPROBE_DEFER))
+> +                               dev_err(dev, "Missing clock %s\n", name);
 
-   In file included from kernel/dma/swiotlb.c:24:
-   In file included from include/linux/dma-direct.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/dma/swiotlb.c:24:
-   In file included from include/linux/dma-direct.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/dma/swiotlb.c:24:
-   In file included from include/linux/dma-direct.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   kernel/dma/swiotlb.c:379:16: error: implicit declaration of function 'kzalloc' [-Werror,-Wimplicit-function-declaration]
-           mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-                         ^
-   kernel/dma/swiotlb.c:379:16: note: did you mean 'vzalloc'?
-   include/linux/vmalloc.h:140:14: note: 'vzalloc' declared here
-   extern void *vzalloc(unsigned long size) __alloc_size(1);
-                ^
-   kernel/dma/swiotlb.c:379:14: warning: incompatible integer to pointer conversion assigning to 'unsigned long *' from 'int' [-Wint-conversion]
-           mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/dma/swiotlb.c:383:3: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
-                   kfree(mem->bitmap);
-                   ^
-   kernel/dma/swiotlb.c:383:3: note: did you mean 'vfree'?
-   include/linux/vmalloc.h:155:13: note: 'vfree' declared here
-   extern void vfree(const void *addr);
-               ^
-   kernel/dma/swiotlb.c:388:37: error: implicit declaration of function 'kcalloc' [-Werror,-Wimplicit-function-declaration]
-           mem->areas = (struct io_tlb_area *)kcalloc(num_areas,
-                                              ^
-   kernel/dma/swiotlb.c:388:37: note: did you mean 'kzalloc'?
-   kernel/dma/swiotlb.c:379:16: note: 'kzalloc' declared here
-           mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-                         ^
->> kernel/dma/swiotlb.c:388:15: warning: cast to 'struct io_tlb_area *' from smaller integer type 'int' [-Wint-to-pointer-cast]
-           mem->areas = (struct io_tlb_area *)kcalloc(num_areas,
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/dma/swiotlb.c:420:3: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
-                   kfree(mem->areas);
-                   ^
-   14 warnings and 4 errors generated.
+Use dev_err_probe()?
 
+> +                       return ERR_CAST(clk);
+> +               }
+> +
+> +               parent_names[i] =3D __clk_get_name(clk);
 
-vim +388 kernel/dma/swiotlb.c
+Why can't we use clk_parent_data?
 
-   364	
-   365	int
-   366	swiotlb_late_init_with_tbl(char *tlb, unsigned long nslabs)
-   367	{
-   368		struct io_tlb_mem *mem = &io_tlb_default_mem;
-   369		unsigned long bytes = nslabs << IO_TLB_SHIFT;
-   370		int order;
-   371	
-   372		if (swiotlb_force == SWIOTLB_NO_FORCE)
-   373			return 0;
-   374	
-   375		/* protect against double initialization */
-   376		if (WARN_ON_ONCE(mem->nslabs))
-   377			return -ENOMEM;
-   378	
-   379		mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-   380		order = get_order(array_size(sizeof(*mem->slots), nslabs));
-   381		mem->slots = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, order);
-   382		if (!mem->slots || !mem->bitmap) {
-   383			kfree(mem->bitmap);
-   384			kfree(mem->slots);
-   385			return -ENOMEM;
-   386		}
-   387	
- > 388		mem->areas = (struct io_tlb_area *)kcalloc(num_areas,
-   389							   sizeof(struct io_tlb_area),
-   390							   GFP_KERNEL);
-   391		if (!mem->areas) {
-   392			free_pages((unsigned long)mem->slots, order);
-   393			return -ENOMEM;
-   394		}
-   395	
-   396		set_memory_decrypted((unsigned long)tlb, bytes >> PAGE_SHIFT);
-   397		swiotlb_init_io_tlb_mem(mem, virt_to_phys(tlb), nslabs, true);
-   398	
-   399		swiotlb_print_info();
-   400		swiotlb_set_max_segment(mem->nslabs << IO_TLB_SHIFT);
-   401		return 0;
-   402	}
-   403	
+> +       }
+> +
+> +       init.ops =3D &clk_regmap_mux_ops;
+> +       init.flags =3D CLK_SET_RATE_PARENT;
+> +       init.parent_names =3D parent_names;
+> +       init.num_parents =3D MUX_CLK_NUM_PARENTS;
+> +
+> +       mux =3D mmc_clkc_register_clk(dev, map, &init, "mux", &mmc_clkc_m=
+ux_data);
+> +       if (IS_ERR(mux))
+> +               dev_err(dev, "Mux clock registration failed\n");
+> +
+> +       return mux;
+> +}
+> +
+> +static struct clk_regmap *
+> +mmc_clkc_register_clk_with_parent(struct device *dev, struct regmap *map,
+> +                                 char *suffix, const struct clk_hw *hw,
+> +                                 unsigned long flags,
+> +                                 const struct clk_ops *ops, void *data)
+> +{
+> +       struct clk_init_data init;
+> +       struct clk_regmap *clk;
+> +       const char *parent_name =3D clk_hw_get_name(hw);
+> +
+> +       init.ops =3D ops;
+> +       init.flags =3D flags;
+> +       init.parent_names =3D &parent_name;
+> +       init.num_parents =3D 1;
+> +
+> +       clk =3D mmc_clkc_register_clk(dev, map, &init, suffix, data);
+> +       if (IS_ERR(clk))
+> +               dev_err(dev, "%s clock registration failed\n", suffix);
+> +
+> +       return clk;
+> +}
+> +
+> +static int mmc_clkc_probe(struct platform_device *pdev)
+> +{
+> +       struct clk_hw_onecell_data *onecell_data;
+> +       struct device *dev =3D &pdev->dev;
+> +       struct mmc_clkc_data *data;
+> +       struct regmap *map;
+> +       struct clk_regmap *clk, *core;
+> +       struct meson_sclk_div_data *div_data;
+> +
+> +       /*cast to drop the const in match->data*/
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Space after *, also why do we need to cast away const? The user of this
+pointer passes it all the way down to mmc_clkc_register_clk() which
+could take the data as const void pointer and decide to cast away const
+there.
+
+> +       data =3D (struct mmc_clkc_data *)of_device_get_match_data(dev);
+> +       if (!data)
+> +               return -ENODEV;
+> +
+> +       map =3D syscon_node_to_regmap(dev->of_node);
+> +       if (IS_ERR(map)) {
+> +               dev_err(dev, "could not find mmc clock controller\n");
+> +               return PTR_ERR(map);
+> +       }
+> +
+> +       onecell_data =3D devm_kzalloc(dev,
+> +                                   struct_size(onecell_data, hws,
+> +                                               MMC_MAX_CLKS),
+> +                                   GFP_KERNEL);
+> +       if (!onecell_data)
+> +               return -ENOMEM;
+> +
+> +       clk =3D mmc_clkc_register_mux(dev, map);
+> +       if (IS_ERR(clk))
+> +               return PTR_ERR(clk);
+> +
+> +       div_data =3D devm_kzalloc(dev, sizeof(*div_data), GFP_KERNEL);
+> +       if (!div_data)
+> +               return -ENOMEM;
+> +
+> +       memcpy(div_data, &mmc_clkc_div_data, sizeof(*div_data));
+> +       clk =3D mmc_clkc_register_clk_with_parent(dev, map, "div",
+> +                                               &clk->hw,
+> +                                               CLK_SET_RATE_PARENT,
+> +                                               &meson_sclk_div_ops,
+> +                                               div_data);
+> +       if (IS_ERR(clk))
+> +               return PTR_ERR(clk);
+> +
+> +       onecell_data->hws[CLKID_MMC_DIV] =3D &clk->hw;
+> +       core =3D mmc_clkc_register_clk_with_parent(dev, map, "core",
+> +                                                &clk->hw,
+> +                                                CLK_SET_RATE_PARENT,
+> +                                                &meson_clk_phase_ops,
+> +                                                &mmc_clkc_core_phase);
+> +       if (IS_ERR(core))
+> +               return PTR_ERR(core);
+> +
+> +       onecell_data->hws[CLKID_MMC_PHASE_CORE] =3D &core->hw;
+> +       clk =3D mmc_clkc_register_clk_with_parent(dev, map, "rx",
+> +                                               &core->hw,  0,
+> +                                               &meson_clk_phase_delay_op=
+s,
+> +                                               &data->rx);
+> +       if (IS_ERR(clk))
+> +               return PTR_ERR(clk);
+> +
+> +       onecell_data->hws[CLKID_MMC_PHASE_RX] =3D &clk->hw;
+> +       clk =3D mmc_clkc_register_clk_with_parent(dev, map, "tx",
+> +                                               &core->hw,  0,
+> +                                               &meson_clk_phase_delay_op=
+s,
+> +                                               &data->tx);
+> +       if (IS_ERR(clk))
+> +               return PTR_ERR(clk);
+> +
+> +       onecell_data->hws[CLKID_MMC_PHASE_TX] =3D &clk->hw;
+> +       onecell_data->num =3D MMC_MAX_CLKS;
+> +       return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
+> +                                          onecell_data);
+> +}
+> +
+> +static struct platform_driver mmc_clkc_driver =3D {
+> +       .probe          =3D mmc_clkc_probe,
+> +       .driver         =3D {
+> +               .name   =3D "meson-mmc-clkc",
+> +               .of_match_table =3D of_match_ptr(mmc_clkc_match_table),
+> +       },
+> +};
+> +
+> +module_platform_driver(mmc_clkc_driver);
+> +
+> +MODULE_DESCRIPTION("Amlogic AXG MMC clock driver");
+> +MODULE_AUTHOR("Jianxin Pan <jianxin.pan@amlogic.com>");
+> +MODULE_LICENSE("GPL v2");

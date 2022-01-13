@@ -2,189 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B055D48DFFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF7E48E000
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234961AbiAMV5s convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 13 Jan 2022 16:57:48 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:5638 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232985AbiAMV5r (ORCPT
+        id S236301AbiAMV6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 16:58:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232985AbiAMV6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 16:57:47 -0500
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20DKUdsR027614;
-        Thu, 13 Jan 2022 16:57:26 -0500
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3dj0k5vjcr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 16:57:25 -0500
-Received: from m0167089.ppops.net (m0167089.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 20DLse1P009765;
-        Thu, 13 Jan 2022 16:57:25 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3dj0k5vjcn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 16:57:25 -0500
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 20DLvNZT041894
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 13 Jan 2022 16:57:23 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 13 Jan
- 2022 16:57:22 -0500
-Received: from ASHBMBX9.ad.analog.com ([fe80::5d54:bde3:ae3a:70bb]) by
- ASHBMBX9.ad.analog.com ([fe80::5d54:bde3:ae3a:70bb%20]) with mapi id
- 15.02.0986.014; Thu, 13 Jan 2022 16:57:22 -0500
-From:   "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-CC:     "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: RE: [PATCH v2] iio: addac: ad74413r: Do not reference negative array
- offsets
-Thread-Topic: [PATCH v2] iio: addac: ad74413r: Do not reference negative array
- offsets
-Thread-Index: AQHYB/PhZsR0gqWiSk2h2Z3Z9M1zDqxhgPYg
-Date:   Thu, 13 Jan 2022 21:57:22 +0000
-Message-ID: <8e6a081daeb54be38fdd658c796ec120@analog.com>
-References: <20220112203456.3950884-1-keescook@chromium.org>
-In-Reply-To: <20220112203456.3950884-1-keescook@chromium.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcY3RhbmlzbGFc?=
- =?us-ascii?Q?YXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRi?=
- =?us-ascii?Q?YTI5ZTM1Ylxtc2dzXG1zZy1jNzkwNDViNi03NGJiLTExZWMtYjZkNS00MTU2?=
- =?us-ascii?Q?NDUwMDAwMzBcYW1lLXRlc3RcYzc5MDQ1YjgtNzRiYi0xMWVjLWI2ZDUtNDE1?=
- =?us-ascii?Q?NjQ1MDAwMDMwYm9keS50eHQiIHN6PSIzMzAwIiB0PSIxMzI4NjU4NDY0MDc2?=
- =?us-ascii?Q?MjkyMjciIGg9IlNSTHM4N0wyQksrZk5aOERuYmFtbVpMSUlTVT0iIGlkPSIi?=
- =?us-ascii?Q?IGJsPSIwIiBibz0iMSIgY2k9ImNBQUFBRVJIVTFSU1JVRk5DZ1VBQUVvQ0FB?=
- =?us-ascii?Q?Q3JpZWlKeUFqWUFlOStWYi9VQTRWTDczNVZ2OVFEaFVzREFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFIQUFBQURhQVFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFFQUFRQUJBQUFBVklFdm9RQUFBQUFBQUFBQUFBQUFBSjRBQUFCaEFHUUFh?=
- =?us-ascii?Q?UUJmQUhNQVpRQmpBSFVBY2dCbEFGOEFjQUJ5QUc4QWFnQmxBR01BZEFCekFG?=
- =?us-ascii?Q?OEFaZ0JoQUd3QWN3QmxBRjhBWmdCdkFITUFhUUIwQUdrQWRnQmxBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBR0VBWkFCcEFGOEFjd0JsQUdNQWRR?=
- =?us-ascii?Q?QnlBR1VBWHdCd0FISUFid0JxQUdVQVl3QjBBSE1BWHdCMEFHa0FaUUJ5QURF?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FB?=
- =?us-ascii?Q?QUFBQUNlQUFBQVlRQmtBR2tBWHdCekFHVUFZd0IxQUhJQVpRQmZBSEFBY2dC?=
- =?us-ascii?Q?dkFHb0FaUUJqQUhRQWN3QmZBSFFBYVFCbEFISUFNZ0FBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFBPT0iLz48L21l?=
- =?us-ascii?Q?dGE+?=
-x-dg-rorf: true
-x-originating-ip: [10.32.224.39]
-x-adiruleop-newscl: Rule Triggered
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-Proofpoint-GUID: WVOoT-p8GNM3EipZlYpV3JAPzINjmD0q
-X-Proofpoint-ORIG-GUID: woJTYeWF4q6t1m8UWy_euaXCo5cicPKi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-13_10,2022-01-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 bulkscore=0 clxscore=1015 spamscore=0 mlxlogscore=999
- phishscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201130135
+        Thu, 13 Jan 2022 16:58:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225FEC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 13:58:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0AB2B822C8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 21:58:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38428C36AE3;
+        Thu, 13 Jan 2022 21:58:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642111118;
+        bh=fvJjT8tvooCZLW7hRAzPYYagFNBEQaCwtqOS9vG6ws0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=oC3ZFWniDyymw+N0lNIzQdymKVopt1ZZiuKg/Wj5elYyhcbQoQJipwWzfa3nNevhw
+         +5hZYDxkcWMziawX+pq3fY/HEd5wx0VTfgymHjLSow87oUMB3thHpGwb+wOIoMwt5B
+         KPbka/Spvnjgz6CINZOxl0fS49bHxOR0GpbGfAT+frBRP0D5HpEI4hhjCgQRWzHrjK
+         fVeReaM1KZnYUodRsgp0FOlJbMZjDO9eGTOwjDlGaYPwpqn5bOCBPOed3Z+xxnnYEw
+         0uyBUQ2aizYHGAXSZPgJWg3sPaici4itMCxaPm8iQE0b2XbF2/7EWuy8uQ4xmPkwBb
+         US1nLq1hdqlvw==
+Message-ID: <6cd817c8de439d62741aef3cb2c0914801f0f962.camel@kernel.org>
+Subject: Re: [for-next][PATCH 05/31] tracing: Have existing
+ event_command.parse() implementations use helpers
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 13 Jan 2022 15:58:36 -0600
+In-Reply-To: <20220113162058.04731caf@gandalf.local.home>
+References: <20220111173030.999527342@goodmis.org>
+         <20220111173114.155260134@goodmis.org>
+         <388b9922-4231-6e34-1305-f0b439d9d07c@kernel.org>
+         <20220113162058.04731caf@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+Hi Steve,
 
-> -----Original Message-----
-> From: Kees Cook <keescook@chromium.org>
-> Sent: Wednesday, January 12, 2022 10:35 PM
-> To: Lars-Peter Clausen <lars@metafoo.de>
-> Cc: Kees Cook <keescook@chromium.org>; Hennerich, Michael
-> <Michael.Hennerich@analog.com>; Jonathan Cameron <jic23@kernel.org>;
-> linux-iio@vger.kernel.org; Tanislav, Cosmin <Cosmin.Tanislav@analog.com>;
-> Jonathan Cameron <Jonathan.Cameron@huawei.com>; Linus Walleij
-> <linus.walleij@linaro.org>; linux-kernel@vger.kernel.org; linux-
-> hardening@vger.kernel.org
-> Subject: [PATCH v2] iio: addac: ad74413r: Do not reference negative array
-> offsets
+On Thu, 2022-01-13 at 16:20 -0500, Steven Rostedt wrote:
+> On Thu, 13 Jan 2022 18:03:07 +0100
+> Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
 > 
-> [External]
+> > I did some debug, and found that the histogram is working. The
+> > problem is that,
+> > to read the histogram I pause it to have consistent data:
+> > 
+> > in tools/tracing/rtla/osnoise_hist.c:
+> > osnoise_read_trace_hist() {
+> >  [...]
+> >         tracefs_hist_pause(tool->trace.inst, data->trace_hist);
+> > 
+> >         content = tracefs_event_file_read(tool->trace.inst,
+> > "osnoise",
+> >                                           "sample_threshold",
+> >                                           "hist", NULL);
+> >  [...]
+> > }
+> > 
+> > and, as far as I got, after this patch, pausing the histogram makes
+> > it to clear
+> > up. If I comment the "tracefs_hist_pause" line, "rtla osnoise hist"
+> > start
+> > working back again.
+> > 
+> > Thoughts?
 > 
-> Instead of aiming rx_buf at an invalid array-boundary-crossing location,
-> just skip the first increment. Seen when building with -Warray-bounds:
+> This is all messed up. I'm removing this patch completely.
 > 
-> drivers/iio/addac/ad74413r.c: In function 'ad74413r_update_scan_mode':
-> drivers/iio/addac/ad74413r.c:843:22: warning: array subscript -4 is below
-> array bounds of 'u8[16]' { aka 'unsigned char[16]'} [-Warray-bounds]
->   843 |         u8 *rx_buf = &st->adc_samples_buf.rx_buf[-1 *
-> AD74413R_FRAME_SIZE];
->       |
-> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/iio/addac/ad74413r.c:84:20: note: while referencing 'rx_buf'
->    84 |                 u8 rx_buf[AD74413R_FRAME_SIZE *
-> AD74413R_CHANNEL_MAX];
->       |                    ^~~~~~
+> Tom, can you fix this. The issue is that it's putting too much policy
+> into
+> the helper functions, which is big no no.
 > 
-> Cc: Lars-Peter Clausen <lars@metafoo.de>
-> Cc: Michael Hennerich <Michael.Hennerich@analog.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: linux-iio@vger.kernel.org
-> Fixes: fea251b6a5db ("iio: addac: add AD74413R driver")
-> Reviewed-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> v1: https://urldefense.com/v3/__https://lore.kernel.org/linux-
-> hardening/20220105180214.2435001-1-
-> keescook@chromium.org/__;!!A3Ni8CS0y2Y!oWs0KcGPANFn-
-> L0qJPZgP47AQIYpBXJxg5LHiLDFGa_-SI2DwmSMzjgl3ehyu-8JYPgq$
-> v2:
->  - Update commit Subject prefix
->  - add Reviewed-by
-> ---
->  drivers/iio/addac/ad74413r.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> Specifically, we have:
 > 
-> diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
-> index 5271073bb74e..aba9a643a4ca 100644
-> --- a/drivers/iio/addac/ad74413r.c
-> +++ b/drivers/iio/addac/ad74413r.c
-> @@ -840,7 +840,7 @@ static int ad74413r_update_scan_mode(struct iio_dev
-> *indio_dev,
->  {
->  	struct ad74413r_state *st = iio_priv(indio_dev);
->  	struct spi_transfer *xfer = st->adc_samples_xfer;
-> -	u8 *rx_buf = &st->adc_samples_buf.rx_buf[-1 *
-> AD74413R_FRAME_SIZE];
-> +	u8 *rx_buf = st->adc_samples_buf.rx_buf;
->  	u8 *tx_buf = st->adc_samples_tx_buf;
->  	unsigned int channel;
->  	int ret = -EINVAL;
-> @@ -894,9 +894,10 @@ static int ad74413r_update_scan_mode(struct
-> iio_dev *indio_dev,
+> int event_trigger_register(struct event_command *cmd_ops,
+> 			   struct trace_event_file *file,
+> 			   char *glob,
+> 			   char *cmd,
+> 			   char *param,
+> 			   struct event_trigger_data *trigger_data,
+> 			   int *n_registered)
+> {
+> 	int ret;
 > 
->  		spi_message_add_tail(xfer, &st->adc_samples_msg);
+> 	if (n_registered)
+> 		*n_registered = 0;
 > 
-> -		xfer++;
->  		tx_buf += AD74413R_FRAME_SIZE;
-> -		rx_buf += AD74413R_FRAME_SIZE;
-> +		if (xfer != st->adc_samples_xfer)
-> +			rx_buf += AD74413R_FRAME_SIZE;
-> +		xfer++;
->  	}
+> 	ret = cmd_ops->reg(glob, trigger_data, file);
+> 	/*
+> 	 * The above returns on success the # of functions enabled,
+> 	 * but if it didn't find any functions it returns zero.
+> 	 * Consider no functions a failure too.
+> 	 */
+> 	if (!ret) {
+> 		cmd_ops->unreg(glob, trigger_data, file);
+> 		ret = -ENOENT;
+> 	} else if (ret > 0) {
+> 		if (n_registered)
+> 			*n_registered = ret;
+> 		/* Just return zero, not the number of enabled
+> functions */
+> 		ret = 0;
+> 	}
 > 
->  	xfer->rx_buf = rx_buf;
-> --
-> 2.30.2
+> 	return ret;
+> }
+> 
+> 
+> And in the case of pause, this *will* have ret = 0 on return. And
+> what
+> happens is that it removes the trigger completely.
+> 
+> Look at the code in the histogram on the return:
+> 
+> 	ret = event_trigger_register(cmd_ops, file, glob, cmd, param,
+> trigger_data, &n_registered);
+> 	if (ret < 0)
+> 		goto out_free;
+> 	if ((ret == 0) && (n_registered == 0)) {
+> 		if (!(attrs->pause || attrs->cont || attrs->clear))
+> 			ret = -ENOENT;
+> 		goto out_free;
+> 	}
+> 
+> It checks for 0 and 0 and only errors if it's not pause, cont, or
+> clear.
+> Hence, all three are now broken due to this patch.
+> 
+> I will not be adding this to this merge window.
+
+Yes, you're right, event_trigger_register() is trying to do a little
+too much, and shouldn't be doing the unreg().
+
+Thanks for finding and figuring that out.  I'll fix this and send a new
+version after the merge window.
+
+Tom
+
+> 
+> -- Steve
 

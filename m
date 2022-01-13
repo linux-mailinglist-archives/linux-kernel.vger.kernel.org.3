@@ -2,157 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB80448D578
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDE848D57A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbiAMKMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:12:21 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.167]:44691 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbiAMKMT (ORCPT
+        id S231352AbiAMKNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229536AbiAMKNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:12:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1642068733;
-    s=strato-dkim-0002; d=mades.net;
-    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=gjSeIaAVPPUOlY0waP3Qt3bcY7tgnjSTzfK/vzsotbk=;
-    b=W6jVuclrIweWyP3Tk9Ry3jRW8ZMFFe8YWpxygzZPa0Sb0G19l+h6Zo0sGGvauzcWPW
-    s4oGisDgwCL7TCn8UK1ZmHoFlVoTs/TvqW/rTg92Q14+f8StKhjmlo1nRCAAOrJx6KxR
-    l+KjveyU9mDfS4JyGoMqowzIo4J0ABaFOTf5Y2M44CYriMhWAmjSfFiS7HjMtANck0eV
-    allkxys2WEKi2zz6N2WsVDpJeW9hDnKJaxiHWOCD6txN4GtzZ+/8MEWZ5P/D7wWsChXT
-    XhvfTI/kWEAJ/yDjCDTAlG+AifocRmXZ1oTggsBhsYqhrGdMZLC8n4GI+I1cVSxzvEFh
-    z30g==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JmMHfUWmW/JCZ5q3rSbjoqaGiJoG2nOuw/BEppjnAC9QlFFS7UbO3fgyYpMDJqZr"
-X-RZG-CLASS-ID: mo00
-Received: from oxapp04-01.back.ox.d0m.de
-    by smtp.strato.de (RZmta 47.37.6 AUTH)
-    with ESMTPSA id Y49088y0DACCQvK
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 13 Jan 2022 11:12:12 +0100 (CET)
-Date:   Thu, 13 Jan 2022 11:12:12 +0100 (CET)
-From:   Jochen Mades <jochen@mades.net>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     gregkh@linuxfoundation.org, Russell King <linux@armlinux.org.uk>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>
-Message-ID: <1489312180.3256431.1642068732902@webmail.strato.com>
-In-Reply-To: <20220102100710.GA29858@wunner.de>
-References: <20211231171516.18407-1-jochen@mades.net>
- <20220102100710.GA29858@wunner.de>
-Subject: Re: [PATCH] Bugfix RTS line config in RS485 mode is overwritten in
- pl011_set_mctrl() function.
+        Thu, 13 Jan 2022 05:13:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B62C06173F;
+        Thu, 13 Jan 2022 02:13:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDF5C61B77;
+        Thu, 13 Jan 2022 10:13:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76821C36AE3;
+        Thu, 13 Jan 2022 10:13:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642068794;
+        bh=ijdFSU0tzgbikdiQ4EWHXgHfcS6vqCI0UuxTBUw4W9s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C2fK+bIjUxWYxYBb9nvhY8+rSIgYzTw9h+wGOuaNdP3zJjS+caEui876bQSejC7lF
+         0XArfr/GLDNt2m4mIyMBmTi4gNtNGKL1DU0DU3v3kaeXpw9IZnCk+Bw24iJNaXoBg7
+         V3/AixbWHwZDFnUytl4q2Gnc+snkzm3W1G57c/3dOlxK50e5PqgQuWtYbE19AEbBCR
+         Xf/8GM6nb7ZVNlpV2hL7oxzs96vOrtIz3awBL0L/1Oh1EWHNOf0c3USVhRtn92ZAfr
+         n8dzmt4rOTAEA8SvZN/izu5vPPLAc7Mvts+Vnkk87nkiappaVWay+mt7ch/W/e8CtP
+         KuclZGw63F0hQ==
+Date:   Thu, 13 Jan 2022 12:13:09 +0200
+From:   Abel Vesa <abelvesa@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        peter.chen@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lznuaa@gmail.com
+Subject: Re: [PATCH 1/1] usb: xhci-plat: fix crash when suspend if remote
+ wake enable
+Message-ID: <Yd/7NQLgoEU17TzI@abelvesa>
+References: <20220110172738.31686-1-Frank.Li@nxp.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-        boundary="----=_Part_3256430_984438116.1642068732902"
-X-Priority: 3
-Importance: Normal
-X-Mailer: Open-Xchange Mailer v7.10.5-Rev33
-X-Originating-Client: open-xchange-appsuite
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110172738.31686-1-Frank.Li@nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------=_Part_3256430_984438116.1642068732902
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On 22-01-10 11:27:38, Frank Li wrote:
+> Crashed at i.mx8qm platform when suspend if enable remote wakeup
+> 
+> Internal error: synchronous external abort: 96000210 [#1] PREEMPT SMP
+> Modules linked in:
+> CPU: 2 PID: 244 Comm: kworker/u12:6 Not tainted 5.15.5-dirty #12
+> Hardware name: Freescale i.MX8QM MEK (DT)
+> Workqueue: events_unbound async_run_entry_fn
+> pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : xhci_disable_hub_port_wake.isra.62+0x60/0xf8
+> lr : xhci_disable_hub_port_wake.isra.62+0x34/0xf8
+> sp : ffff80001394bbf0
+> x29: ffff80001394bbf0 x28: 0000000000000000 x27: ffff00081193b578
+> x26: ffff00081193b570 x25: 0000000000000000 x24: 0000000000000000
+> x23: ffff00081193a29c x22: 0000000000020001 x21: 0000000000000001
+> x20: 0000000000000000 x19: ffff800014e90490 x18: 0000000000000000
+> x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> x14: 0000000000000000 x13: 0000000000000002 x12: 0000000000000000
+> x11: 0000000000000000 x10: 0000000000000960 x9 : ffff80001394baa0
+> x8 : ffff0008145d1780 x7 : ffff0008f95b8e80 x6 : 000000001853b453
+> x5 : 0000000000000496 x4 : 0000000000000000 x3 : ffff00081193a29c
+> x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffff000814591620
+> Call trace:
+>  xhci_disable_hub_port_wake.isra.62+0x60/0xf8
+>  xhci_suspend+0x58/0x510
+>  xhci_plat_suspend+0x50/0x78
+>  platform_pm_suspend+0x2c/0x78
+>  dpm_run_callback.isra.25+0x50/0xe8
+>  __device_suspend+0x108/0x3c0
+> 
+> The basic flow:
+> 	1. run time suspend call xhci_suspend, xhci parent devices gate the clock.
+>         2. echo mem >/sys/power/state, system _device_suspend call xhci_suspend
+>         3. xhci_suspend call xhci_disable_hub_port_wake, which access register,
+> 	   but clock already gated by run time suspend.
+> 
+> This problem was hidden by power domain driver, which call run time resume before it.
+> 
+> But the below commit remove it and make this issue happen.
+> 	commit c1df456d0f06e ("PM: domains: Don't runtime resume devices at genpd_prepare()")
+> 
+> This patch call run time resume before suspend to make sure clock is on
+> before access register.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 
-Hi Lukas,
+Tested on i.MX8QM.
 
-> Patch is correct, but commit message could be improved:
-> 
-> * Subject should be in imperative mood (by convention), it should be
->   prepended by "serial: pl011: " (in line with previous commits touching
->   this driver, use "git log --oneline amba-pl011.c") and the trailing dot
->   is unnecessary, e.g.:
-> 
->   "serial: pl011: Fix incorrect rs485 RTS polarity on set_mctrl"
-> 
-> * Commit message should be wrapped at 72 characters (so that it appears
->   centered when displayed with "git log" on an 80 chars terminal).
->   The reference to "0001-serial-amba-pl011-add-RS485-support.patch"
->   should be replaced with a reference to the offending commit, e.g.:
->
->   "Commit 8d479237727c ("serial: amba-pl011: add RS485 support") sought
->   to keep RTS deasserted on set_mctrl if rs485 is enabled.  However it
->   did so only if deasserted RTS polarity is high.  Fix it in case it's
->   low."
->
->   Feel free to copy this to a v2 of your patch and amend as you see fit.
-> 
+Testeb-by: Abel Vesa <abel.vesa@nxp.com>
 
-Find attached the patch with the new subject and corretced commit message.
-
-> * Add tags for the offending commit:
+> ---
+>  drivers/usb/host/xhci-plat.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
->   Fixes: 8d479237727c ("serial: amba-pl011: add RS485 support")
->   Cc: stable@vger.kernel.org # v5.15+
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index c6b791a83ad18..7d2f665271310 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -442,6 +442,9 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+>  	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+>  	int ret;
+>  
+> +	if (pm_runtime_suspended(dev))
+> +		pm_runtime_resume(dev);
+> +
+>  	ret = xhci_priv_suspend_quirk(hcd);
+>  	if (ret)
+>  		return ret;
+> -- 
+> 2.24.0.rc1
 > 
-> * Be sure to cc the author of the offending commit.
-
-Sorry I don't know how to do that correctly. Can you please give support/hints?
-
- 
-> Thanks,
-> 
-> Lukas
-> 
-> > ---
-> >  drivers/tty/serial/amba-pl011.c | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-> > index 537f37ac4..1749c1498 100644
-> > --- a/drivers/tty/serial/amba-pl011.c
-> > +++ b/drivers/tty/serial/amba-pl011.c
-> > @@ -1646,8 +1646,12 @@ static void pl011_set_mctrl(struct uart_port *port, unsigned int mctrl)
-> >  	    container_of(port, struct uart_amba_port, port);
-> >  	unsigned int cr;
-> >  
-> > -	if (port->rs485.flags & SER_RS485_ENABLED)
-> > -		mctrl &= ~TIOCM_RTS;
-> > +	if (port->rs485.flags & SER_RS485_ENABLED) {
-> > +		if (port->rs485.flags & SER_RS485_RTS_AFTER_SEND)
-> > +			mctrl &= ~TIOCM_RTS;
-> > +		else
-> > +			mctrl |= TIOCM_RTS;
-> > +	}
-> >  
-> >  	cr = pl011_read(uap, REG_CR);
-------=_Part_3256430_984438116.1642068732902
-Content-Type: application/octet-stream;
- name=0001-serial-pl011-Fix-incorrect-rs485-RTS-polarity-on-set.patch
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename=0001-serial-pl011-Fix-incorrect-rs485-RTS-polarity-on-set.patch
-X-Part-Id: f1625624c73e46c9af41987e48acb7b2
-
-RnJvbSA5MDY5MGIzZThhZmJkZmJiYjVjZWIwZjZjZWY0MGVkMjgyYjFjMDA0IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBqbWFkZXMgPGpvY2hlbkBtYWRlcy5uZXQ+CkRhdGU6IE1vbiwg
-MjcgRGVjIDIwMjEgMDg6Mzc6MjYgKzAwMDAKU3ViamVjdDogW1BBVENIXSBzZXJpYWw6IHBsMDEx
-OiBGaXggaW5jb3JyZWN0IHJzNDg1IFJUUyBwb2xhcml0eSBvbiBzZXRfbWN0cmwKCkNvbW1pdCA4
-ZDQ3OTIzNzcyN2MgKCJzZXJpYWw6IGFtYmEtcGwwMTE6IGFkZCBSUzQ4NSBzdXBwb3J0Iikgc291
-Z2h0CnRvIGtlZXAgUlRTIGRlYXNzZXJ0ZWQgb24gc2V0X21jdHJsIGlmIHJzNDg1IGlzIGVuYWJs
-ZWQuIEhvd2V2ZXIgaXQgZGlkCnNvIG9ubHkgaWYgZGVhc3NlcnRlZCBSVFMgcG9sYXJpdHkgaXMg
-aGlnaC4gRml4IGl0IGluIGNhc2UgaXQncyBsb3cuCgpTaWduZWQtb2ZmLWJ5OiBqbWFkZXMgPGpv
-Y2hlbkBtYWRlcy5uZXQ+Ci0tLQogZHJpdmVycy90dHkvc2VyaWFsL2FtYmEtcGwwMTEuYyB8IDgg
-KysrKysrLS0KIDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0p
-CgpkaWZmIC0tZ2l0IGEvZHJpdmVycy90dHkvc2VyaWFsL2FtYmEtcGwwMTEuYyBiL2RyaXZlcnMv
-dHR5L3NlcmlhbC9hbWJhLXBsMDExLmMKaW5kZXggNTM3ZjM3YWM0Li4xNzQ5YzE0OTggMTAwNjQ0
-Ci0tLSBhL2RyaXZlcnMvdHR5L3NlcmlhbC9hbWJhLXBsMDExLmMKKysrIGIvZHJpdmVycy90dHkv
-c2VyaWFsL2FtYmEtcGwwMTEuYwpAQCAtMTY0Niw4ICsxNjQ2LDEyIEBAIHN0YXRpYyB2b2lkIHBs
-MDExX3NldF9tY3RybChzdHJ1Y3QgdWFydF9wb3J0ICpwb3J0LCB1bnNpZ25lZCBpbnQgbWN0cmwp
-CiAJICAgIGNvbnRhaW5lcl9vZihwb3J0LCBzdHJ1Y3QgdWFydF9hbWJhX3BvcnQsIHBvcnQpOwog
-CXVuc2lnbmVkIGludCBjcjsKIAotCWlmIChwb3J0LT5yczQ4NS5mbGFncyAmIFNFUl9SUzQ4NV9F
-TkFCTEVEKQotCQltY3RybCAmPSB+VElPQ01fUlRTOworCWlmIChwb3J0LT5yczQ4NS5mbGFncyAm
-IFNFUl9SUzQ4NV9FTkFCTEVEKSB7CisJCWlmIChwb3J0LT5yczQ4NS5mbGFncyAmIFNFUl9SUzQ4
-NV9SVFNfQUZURVJfU0VORCkKKwkJCW1jdHJsICY9IH5USU9DTV9SVFM7CisJCWVsc2UKKwkJCW1j
-dHJsIHw9IFRJT0NNX1JUUzsKKwl9CiAKIAljciA9IHBsMDExX3JlYWQodWFwLCBSRUdfQ1IpOwog
-Ci0tIAoyLjIwLjEKCg==
-------=_Part_3256430_984438116.1642068732902--

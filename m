@@ -2,134 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 265DD48D8D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E42C48D97B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235103AbiAMNZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 08:25:34 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:34906 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiAMNZd (ORCPT
+        id S235575AbiAMOIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:08:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229611AbiAMOIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 08:25:33 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JZQC74vn1zccTr;
-        Thu, 13 Jan 2022 21:24:51 +0800 (CST)
-Received: from dggpemm500003.china.huawei.com (7.185.36.56) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 13 Jan 2022 21:25:31 +0800
-Received: from huawei.com (10.175.104.170) by dggpemm500003.china.huawei.com
- (7.185.36.56) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 13 Jan
- 2022 21:25:31 +0800
-From:   Liang Zhang <zhangliang5@huawei.com>
-To:     <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <wangzhigang17@huawei.com>, <zhangliang5@huawei.com>
-Subject: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
-Date:   Thu, 13 Jan 2022 22:03:18 +0800
-Message-ID: <20220113140318.11117-1-zhangliang5@huawei.com>
-X-Mailer: git-send-email 2.30.0
+        Thu, 13 Jan 2022 09:08:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8FCC06173F;
+        Thu, 13 Jan 2022 06:08:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADB00B82244;
+        Thu, 13 Jan 2022 14:08:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78CE6C36AE9;
+        Thu, 13 Jan 2022 14:08:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642082896;
+        bh=AGXrB6RyRlJGlxXBTGJ56tVcl5sCtnIbd+sOvFKcyCs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JacG3I6VacRn9ssc1DqBNDh/6vt2laJIPLsgwmfG+tz5afXRM5WWshvos8zBoShl1
+         nCBUJVi5AqhbRox0EAJN5UKOlRPptcJVL/hD0rOW1U3Qrjfem6qu/aFpy9SsB9exK6
+         OfQ11o89t5mB9ZeZihirdKjIikuC9GwFt0cEOLd5y8mGVt27pN8XyX1tNxgBblmnXQ
+         XpKzTNVgF34QoCzwoaw11xD3kv3RXe/1CNh7of3vy99PexXY1SsW6BkW7j5CbOjBZf
+         8nGABQIeFJUGyIRHULR/AM4PaqHlqWtUX605+Pv5LJZlf/m/S8KzGdfa7TT8qg8N+a
+         QODIDMMi48Uvg==
+Received: by mail-ed1-f44.google.com with SMTP id 30so23543712edv.3;
+        Thu, 13 Jan 2022 06:08:16 -0800 (PST)
+X-Gm-Message-State: AOAM5328Ndem5EHAsstTKa8lVRXzkpMGKN0rwEgQ6Ev/AriVjaCFBsIq
+        x/Rg/YAfwVFjebLK7kMDfq+YXoZBhjvG9khO8g==
+X-Google-Smtp-Source: ABdhPJz+GHMwRV43sdBzHOeq12c86XZ9NFpJ+TiS7boAD3AIss0eauOXeqU8D6mHwfFBb9xoSuThXxy1UPREBNztaR4=
+X-Received: by 2002:a50:cf4e:: with SMTP id d14mr4349160edk.2.1642082894743;
+ Thu, 13 Jan 2022 06:08:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.170]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500003.china.huawei.com (7.185.36.56)
-X-CFilter-Loop: Reflected
+References: <20220110214456.67087-1-sander@svanheule.net> <Yd46ayLnvT/3ch9e@robh.at.kernel.org>
+ <71fffde0704d240f5ec8773fe0e738b6e069a6b8.camel@svanheule.net>
+In-Reply-To: <71fffde0704d240f5ec8773fe0e738b6e069a6b8.camel@svanheule.net>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 13 Jan 2022 08:08:03 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ--59aMz1YaWTP=ZJDw9=uxRNDG-ZJ1wTCL5gZAKsRSA@mail.gmail.com>
+Message-ID: <CAL_JsqJ--59aMz1YaWTP=ZJDw9=uxRNDG-ZJ1wTCL5gZAKsRSA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: power: reset: gpio-restart: Correct default priority
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In current implementation, process's read requestions will fault in pages
-with WP flags in PTEs. Next, if process emit a write requestion will go
-into do_wp_page() and copy data to a new allocated page from the old one
-due to refcount > 1 (page table mapped and swapcache), which could be
-result in performance degradation. In fact, this page is exclusively owned
-by this process and the duplication from old to a new allocated page is
-really unnecessary.
+On Wed, Jan 12, 2022 at 2:49 PM Sander Vanheule <sander@svanheule.net> wrote:
+>
+> Hi Rob,
+>
+> On Tue, 2022-01-11 at 20:18 -0600, Rob Herring wrote:
+> > On Mon, 10 Jan 2022 22:44:56 +0100, Sander Vanheule wrote:
+> > > Commit bcd56fe1aa97 ("power: reset: gpio-restart: increase priority
+> > > slightly") changed the default restart priority 129, but did not update
+> > > the documentation. Correct this, so the driver and documentation have
+> > > the same default value.
+> > >
+> > > Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> > > ---
+> > > This is a resubmission of RFC:
+> > > https://lore.kernel.org/all/cfcd00257daba5aa30b8d20a62ba542be1a6914c.1640887456.git.sander@svanheule.net/
+> > >
+> > > The commit message for bcd56fe1aa97 mentions that it is a workaround for
+> > > rk3288-veryon boards. However, commit e28ea9dbc52d3 ("ARM: dts:
+> > > rockchip: add shared rk3288-veyron files") later adds a gpio-restart
+> > > node with a priority value of <200> for those boards, effectively
+> > > rendering bcd56fe1aa97 obsolete (for their use case).
+> > >
+> > > Perhaps bcd56fe1aa97 could just be reverted instead of updating the
+> > > documentation.
+> > >
+> > > An argument against reverting (a 6 year old patch) is that other boards
+> > > may have come to depend on the default value of 129. I don't know about
+> > > out-of-tree user of gpio-restart, but there are a few in-tree users of
+> > > gpio-restart /without/ an explicit priority:
+> > >
+> > > arch/arm/boot/dts/imx53-ppd.dts (commit 2952d67637716)
+> > >   DTS submitted after changed default, but DTS copyright predates the
+> > >   changed default.
+> > >
+> > > arch/microblaze/boot/dts/system.dts (commit 7cca9b8b7c5bc)
+> > >   The original DTS commit predates the changed default, but didn't use
+> > >   gpio-restart. The commit adding gpio-restart appears to indicate no
+> > >   other restart handlers are present on this platform, although it could
+> > >   be these were just being shadowed by the custom restart code.
+> > >
+> > > arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts (commit 0a91330b2af9f)
+> > >   Recently added board; couldn't find any obvious alternative restart
+> > >   handlers.
+> > >
+> > > Best,
+> > > Sander
+> > >
+> > >  .../devicetree/bindings/power/reset/gpio-restart.yaml         | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> >
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+>
+> Thanks for the review!
+>
+> I've noticed the devicetree patchwork has this patch marked as "Not  applicable", but
+> linux-pm patchwork has it marked "Handled elsewhere". Since you merged the gpio-restart
+> conversion patch, can you also take this one, Rob?
 
-So In this situation, these unshared pages can be reused by its process.
+Yes, I'll pick it up.
 
-Signed-off-by: Liang Zhang <zhangliang5@huawei.com>
----
-This patch has been tested with redis benchmark. Here is the test
-result.
-
-Hardware
-========
-Memory (GB): 512G
-CPU (total #): 88
-NVMe SSD (GB): 1024
-
-OS
-==
-kernel 5.10.0
-
-Testcase
-========
-step 1:
-  Run 16 VMs (4U8G), each running with redis-server, in a cgroup 
-  limiting memory.limit_in_bytes to 100G. 
-step 2:
-  Run memtier_bemchmark in host with params "--threads=1 --clients=1 \
---pipeline=256 --data-size=2048 --requests=allkeys --key-minimum=1 \
---key-maximum=30000000 --key-prefix=memtier-benchmark-prefix-redistests"
-  to test every VM concurrently.
-
-Workset size
-============
-cat memory.memsw.usage_in_bytes
-125403303936
-
-Result
-======
-Comparing with Baseline, this patch can achieved 41% more Ops/sec, 
-41% more Hits/sec, 41% more Misses/sec, 30% less Latency and 
-41% more KB/sec. 
-
-  Index(average)        Baseline kernel        Patched kernel
-  Ops/sec               109497                 155428
-  Hits/sec              8653                   12283
-  Misses/sec            90889                  129014
-  Latency               2.297                  1.603
-  KB/sec                44569                  63186
-
-
- mm/memory.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/mm/memory.c b/mm/memory.c
-index 23f2f1300d42..fd4d868b1c2d 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3291,10 +3291,16 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
- 		struct page *page = vmf->page;
- 
- 		/* PageKsm() doesn't necessarily raise the page refcount */
--		if (PageKsm(page) || page_count(page) != 1)
-+		if (PageKsm(page))
- 			goto copy;
- 		if (!trylock_page(page))
- 			goto copy;
-+
-+		/* reuse the unshared swapcache page */
-+		if (PageSwapCache(page) && reuse_swap_page(page, NULL)) {
-+			goto reuse;
-+		}
-+
- 		if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1) {
- 			unlock_page(page);
- 			goto copy;
-@@ -3304,6 +3310,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
- 		 * page count reference, and the page is locked,
- 		 * it's dark out, and we're wearing sunglasses. Hit it.
- 		 */
-+reuse:
- 		unlock_page(page);
- 		wp_page_reuse(vmf);
- 		return VM_FAULT_WRITE;
--- 
-2.30.0
-
+Rob

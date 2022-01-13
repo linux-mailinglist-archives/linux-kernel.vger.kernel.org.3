@@ -2,119 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D6348DF2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 21:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 236D548DF32
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 21:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234677AbiAMUrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 15:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
+        id S234713AbiAMUuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 15:50:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbiAMUru (ORCPT
+        with ESMTP id S230515AbiAMUuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 15:47:50 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F7AC061574;
-        Thu, 13 Jan 2022 12:47:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fwMgN18aax/qpl7xV/FJbxBhoGCoQyfFo229GjBsU3M=; b=EYLOMZPmcXiCQJbBDc2q2Lj2cd
-        jt0irnZ6EgmlzGId8/WydFe8x/MYw/2W751TAHyzP58Yfuf6uV4IX2xuon3d/hADvga0UX/PgdoLY
-        SVUvppusL4AzHKRqKZ4VE4zo1ydlUGKcFPmN7p4lJpfdTTIvlu+dRfsZiMpJ8eNGVY7VR9sPGsUXo
-        PidMDAwWcXqOjiSH+h+odcVmUcNjaO9yb0G2yT9bUUMouHFIxauDS7ZINFqtXo5tPb1SNeF/oeriI
-        9Dd+iSW86EyDSmVxykfD6e2C6RGuPV2yMVvpBDlvDfFmd4jKFlJcVPvXRcX203yMRupwosz7HH0Vt
-        sCscdYUQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n870a-005ENc-29; Thu, 13 Jan 2022 20:47:44 +0000
-Date:   Thu, 13 Jan 2022 20:47:44 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: linux-next: Tree for Jan 13 (UBSAN: invalid-load in
- ../mm/swap.c:996:11)
-Message-ID: <YeCP8Kh+4y7NR1K+@casper.infradead.org>
-References: <20220113152247.3f7c6c49@canb.auug.org.au>
- <56c04e36-ff53-10c7-34dd-1c1385639de6@infradead.org>
+        Thu, 13 Jan 2022 15:50:06 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB80C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:50:05 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id 59-20020a17090a09c100b001b34a13745eso19972968pjo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:50:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tPApFU58dR1gZgJEEILu+tDGM+PxSeVinprQhzYCrE0=;
+        b=U5Eh4w8ILAYJhQL+8Y6Z9iDTqQsglioZ0VFEHhm4/BwRgFS4oNhLFLsxsFiqlA1zAo
+         itCSCSrzIrhpEMme3G0z47NlGBGRbIr3+D6R8O9kJYKVUl+9+hrsaIrhEl6DjOdbMJWS
+         AR6WaLHIXm35aP+AH3hszxZzhlxt84R4zE/VauBiZSf/Z6Yf9MExY1Qvyoax8K/hUwzD
+         dPyMhx9SSUuu5dJ2HOILw6gEdj4UEyNjES+8O/F4y9lTCglxf6WMFliRv5OYa44NoyQ2
+         DSgceVnFXObalfg6opXRXYJGjc2XUbF6hGNavkF5+6GwIlrMhmtCeTLQ0nkAvmDBvSsB
+         nsCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tPApFU58dR1gZgJEEILu+tDGM+PxSeVinprQhzYCrE0=;
+        b=Usf7eYb/OuRua9gIb75yLBbiv9T/xIa6UxkOVqHq/UkUJVNWAukdCUuqYKKagMWDdt
+         QvxaFTKyriOielwgy03Xk2h+SM43U9apZ6TQ3Xa9HfA20fcsRC7OhNSKxN5ZeRYSw9N6
+         C+q/zrIrJsXd7qDxafzkeWDpDwLXh7hw7U3PxhZsgmmjBirckc/hsjw/O8DyLkglst9Y
+         fX1oMvUdKC+4V7IxH/lXkUkdlrPxe7DnWFbrKYeogeHiXvbPFzKpabf6+CEheRmQW6As
+         TjN/nG/s4mwIovo0oX9QB3l0J5BR/o/BmexohT3WPSJ0mq6g7Wz1u3DAQSZB4soTlAqa
+         ZO8Q==
+X-Gm-Message-State: AOAM531yZAaDAk13Fi/FMd/+ou9KNEN2VXtj5Jm8NbryOjhhqgXwZBGE
+        DqG6pZRfgJo1a68JbIlgYskdQg==
+X-Google-Smtp-Source: ABdhPJwJYCD5/Syd/w/87DQlTR6TI+0Jvof2BT19Yr+6weO4P+lZR1M9vsvHVuZlgMkc5peAaklPcw==
+X-Received: by 2002:a17:90b:1651:: with SMTP id il17mr15571035pjb.151.1642107004976;
+        Thu, 13 Jan 2022 12:50:04 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y69sm3549018pfg.171.2022.01.13.12.50.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 12:50:04 -0800 (PST)
+Date:   Thu, 13 Jan 2022 20:50:00 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
+        alexandru.elisei@arm.com, anup.patel@wdc.com,
+        aou@eecs.berkeley.edu, atish.patra@wdc.com,
+        benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de,
+        catalin.marinas@arm.com, chenhuacai@kernel.org,
+        dave.hansen@linux.intel.com, david@redhat.com,
+        frankja@linux.ibm.com, frederic@kernel.org, gor@linux.ibm.com,
+        hca@linux.ibm.com, imbrenda@linux.ibm.com, james.morse@arm.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        maz@kernel.org, mingo@redhat.com, mpe@ellerman.id.au,
+        nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org,
+        paulus@samba.org, paul.walmsley@sifive.com, pbonzini@redhat.com,
+        suzuki.poulose@arm.com, tglx@linutronix.de,
+        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org
+Subject: Re: [PATCH 5/5] kvm/x86: rework guest entry logic
+Message-ID: <YeCQeHbswboaosoV@google.com>
+References: <20220111153539.2532246-1-mark.rutland@arm.com>
+ <20220111153539.2532246-6-mark.rutland@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <56c04e36-ff53-10c7-34dd-1c1385639de6@infradead.org>
+In-Reply-To: <20220111153539.2532246-6-mark.rutland@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 12:12:52PM -0800, Randy Dunlap wrote:
-> [    1.561983] UBSAN: invalid-load in ../mm/swap.c:996:11
-> [    1.561986] load of value 221 is not a valid value for type '_Bool'
-
-Ooh.  This one's mine.  Randy, does it repeat easily?  This should
-fix it:
-
-diff --git a/include/linux/pagevec.h b/include/linux/pagevec.h
-index dda8d5868c81..67b1246f136b 100644
---- a/include/linux/pagevec.h
-+++ b/include/linux/pagevec.h
-@@ -111,6 +111,7 @@ static_assert(offsetof(struct pagevec, pages) ==
- static inline void folio_batch_init(struct folio_batch *fbatch)
- {
- 	fbatch->nr = 0;
-+	fbatch->percpu_pvec_drained = false;
- }
- 
- static inline unsigned int folio_batch_count(struct folio_batch *fbatch)
-
-> [    1.561988] CPU: 1 PID: 7 Comm: kworker/u16:0 Not tainted 5.16.0-next-20220113 #1
-> [    1.561992] Hardware name: TOSHIBA PORTEGE R835/Portable PC, BIOS Version 4.10   01/08/2013
-> [    1.561994] Workqueue: events_unbound async_run_entry_fn
-> [    1.562001] Call Trace:
-> [    1.562003]  <TASK>
-> [    1.562004]  dump_stack_lvl+0x38/0x49
-> [    1.562010]  dump_stack+0x10/0x12
-> [    1.562014]  ubsan_epilogue+0x9/0x45
-> [    1.562018]  __ubsan_handle_load_invalid_value+0x53/0x5c
-> [    1.562023]  __pagevec_release+0x24/0x47
-> [    1.562028]  pagevec_release+0xe/0x11
-> [    1.562031]  truncate_inode_pages_range+0x1d9/0x410
-> [    1.562036]  ? __filemap_fdatawait_range+0x77/0x108
-> [    1.562041]  ? __invalidate_bh_lrus+0x2b/0x2b
-> [    1.562045]  ? put_bh+0x5/0x5
-> [    1.562050]  truncate_inode_pages+0xd/0xf
-> [    1.562054]  kill_bdev.isra.0+0x21/0x25
-> [    1.562059]  blkdev_flush_mapping+0x3d/0xd3
-> [    1.562063]  ? filemap_fdatawait_range+0x17/0x19
-> [    1.562067]  blkdev_put_whole+0x16/0x36
-> [    1.562071]  blkdev_put+0x128/0x152
-> [    1.562075]  disk_scan_partitions+0x4c/0x64
-> [    1.562081]  device_add_disk+0x236/0x2d5
-> [    1.562085]  sd_probe+0x308/0x3c4
-> [    1.562088]  really_probe+0x17f/0x3c3
-> [    1.562092]  __driver_probe_device+0xcf/0x14d
-> [    1.562095]  driver_probe_device+0x1e/0x8f
-> [    1.562097]  __device_attach_driver+0xc7/0x104
-> [    1.562100]  ? driver_allows_async_probing+0x5d/0x5d
-> [    1.562103]  ? driver_allows_async_probing+0x5d/0x5d
-> [    1.562106]  bus_for_each_drv+0x8c/0xb3
-> [    1.562111]  __device_attach_async_helper+0x75/0xd4
-> [    1.562114]  async_run_entry_fn+0x58/0xe3
-> [    1.562118]  process_one_work+0x129/0x1cc
-> [    1.562121]  worker_thread+0x183/0x22a
-> [    1.562124]  kthread+0xe0/0xe8
-> [    1.562128]  ? rescuer_thread+0x24c/0x24c
-> [    1.562130]  ? kthread_complete_and_exit+0x1b/0x1b
-> [    1.562135]  ret_from_fork+0x22/0x30
-> [    1.562139]  </TASK>
-> [    1.562140] ================================================================================
+On Tue, Jan 11, 2022, Mark Rutland wrote:
+> For consistency and clarity, migrate x86 over to the generic helpers for
+> guest timing and lockdep/RCU/tracing management, and remove the
+> x86-specific helpers.
 > 
+> Prior to this patch, the guest timing was entered in
+> kvm_guest_enter_irqoff() (called by svm_vcpu_enter_exit() and
+> svm_vcpu_enter_exit()), and was exited by the call to
+> vtime_account_guest_exit() within vcpu_enter_guest().
 > 
-> Full boot log and kernel config file are attached.
-> 
-> -- 
-> ~Randy
+> To minimize duplication and to more clearly balance entry and exit, both
+> entry and exit of guest timing are placed in vcpu_enter_guest(), using
+> the new guest_timing_{enter,exit}_irqoff() helpers. This may result in a
+> small amount of additional time being acounted towards guests.
 
+This can be further qualified to state that it only affects time accounting when
+using context tracking; tick-based accounting is unaffected because IRQs are
+disabled the entire time.
 
+And this might actually be a (benign?) bug fix for context tracking accounting in
+the EXIT_FASTPATH_REENTER_GUEST case (commits ae95f566b3d2 "KVM: X86: TSCDEADLINE
+MSR emulation fastpath" and 26efe2fd92e5, "KVM: VMX: Handle preemption timer
+fastpath").  In those cases, KVM will enter the guest multiple times without
+bouncing through vtime_account_guest_exit().  That means vtime_guest_enter() will
+be called when the CPU is already "in guest", and call vtime_account_system()
+when it really should call vtime_account_guest().  account_system_time() does
+check PF_VCPU and redirect to account_guest_time(), so it appears to be benign,
+but it's at least odd.
 
+> Other than this, there should be no functional change as a result of
+> this patch.
+
+...
+
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index e50e97ac4408..bd3873b90889 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9876,6 +9876,8 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  		set_debugreg(0, 7);
+>  	}
+>  
+> +	guest_timing_enter_irqoff();
+> +
+>  	for (;;) {
+>  		/*
+>  		 * Assert that vCPU vs. VM APICv state is consistent.  An APICv
+> @@ -9949,7 +9951,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  	 * of accounting via context tracking, but the loss of accuracy is
+>  	 * acceptable for all known use cases.
+>  	 */
+> -	vtime_account_guest_exit();
+> +	guest_timing_exit_irqoff();
+>  
+>  	if (lapic_in_kernel(vcpu)) {
+>  		s64 delta = vcpu->arch.apic->lapic_timer.advance_expire_delta;

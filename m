@@ -2,132 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9083648D4FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3006F48D4FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbiAMJ1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:27:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37943 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232318AbiAMJ1f (ORCPT
+        id S233182AbiAMJ16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:27:58 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:35690 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232318AbiAMJ15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:27:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642066054;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9u4mM8xpzGhQTXqNOSpCIuqLOs+p1DjaP1wP5fvTV0U=;
-        b=IGTl/4ydkniQ6wNVIR+8qXrh4DokGBwHBSjS/Z8O7IWEezsanFv/U42DXxbHDHdfqLJSbS
-        6jsH7jv+KV0POTu5D/aBgStNfZDfa4hqeZ28nG0nB6Yncu+C/PKrNcGKjl4KlEe9IreKn3
-        FspqY313LyvosI2DmIZx0LAfrPQ3pjk=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-324-S_2mIq58N66MSvhjAtZifA-1; Thu, 13 Jan 2022 04:27:33 -0500
-X-MC-Unique: S_2mIq58N66MSvhjAtZifA-1
-Received: by mail-ed1-f72.google.com with SMTP id q15-20020a056402518f00b003f87abf9c37so4789396edd.15
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:27:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=9u4mM8xpzGhQTXqNOSpCIuqLOs+p1DjaP1wP5fvTV0U=;
-        b=5yWLtoch3TkclCUtyPBu65MBxo2SzFPlpx0ZYHYw9VjDRyWNcIRNZHqaJAW8ocYhuT
-         duTzBgQZ9YWov5GgJUorUx3QxurP0Sec1am/6+JBKjB2va8M/oZobW2U2KmTlCyyzjVT
-         VvdYbQPU3ePVdUYkrdzx7egFKttCNWRWovToh4H5bgRWuXiD6/MqJli1qcT+2d8qrIj4
-         TiqbcUne9CNGO6gCG1WjKc4g1OTJkGESTq0TreNLK9ZxNUHyd6Dk9PxGXqEnyT4IoUk6
-         rspx1mfL6rtrE1oslBQ21Ki55AKt2xzn4CfeCvgx3cJDK5ievnFPmpZdXoaaqE/LP1aq
-         tZCQ==
-X-Gm-Message-State: AOAM532w9CPKnLCpgmAlotB+mZh+DKqbZojdv5VxACYG17chzAk/tGXg
-        dsXsFoumOlRVccH8GeXpo5ez8fLbXY0Azl/qGDP6JsAmX+qkCmwDkcbeRhprrHoMrB0vYNIawCI
-        lUN1rLaSstJKbL5ePrjglzpucv2qhOxcqhDUnAr6OKw9kxwse4+OEmPC4R5nBzjpQBYfN6XUJm5
-        nr
-X-Received: by 2002:a50:d74e:: with SMTP id i14mr3257725edj.243.1642066052573;
-        Thu, 13 Jan 2022 01:27:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyxknbT0PRuA/sllWl1GxiPU1rPaJrzQ/P32/YPeYZnMkI87/uDO/WsTaCwyYZr8gCuLccFgA==
-X-Received: by 2002:a50:d74e:: with SMTP id i14mr3257708edj.243.1642066052360;
-        Thu, 13 Jan 2022 01:27:32 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id oz31sm671867ejc.35.2022.01.13.01.27.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 01:27:31 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Igor Mammedov <imammedo@redhat.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
-In-Reply-To: <50136685-706e-fc6a-0a77-97e584e74f93@redhat.com>
-References: <20211122175818.608220-1-vkuznets@redhat.com>
- <20211122175818.608220-3-vkuznets@redhat.com>
- <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
- <20211227183253.45a03ca2@redhat.com>
- <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
- <87mtkdqm7m.fsf@redhat.com> <20220103104057.4dcf7948@redhat.com>
- <875yr1q8oa.fsf@redhat.com>
- <ceb63787-b057-13db-4624-b430c51625f1@redhat.com>
- <87o84qpk7d.fsf@redhat.com> <877dbbq5om.fsf@redhat.com>
- <5505d731-cf87-9662-33f3-08844d92877c@redhat.com>
- <20220111090022.1125ffb5@redhat.com> <87fsptnjic.fsf@redhat.com>
- <50136685-706e-fc6a-0a77-97e584e74f93@redhat.com>
-Date:   Thu, 13 Jan 2022 10:27:30 +0100
-Message-ID: <87bl0gnfy5.fsf@redhat.com>
+        Thu, 13 Jan 2022 04:27:57 -0500
+Received: from [IPV6:2a01:e0a:169:7140:2ab9:bf59:c61a:cf11] (unknown [IPv6:2a01:e0a:169:7140:2ab9:bf59:c61a:cf11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9754797;
+        Thu, 13 Jan 2022 10:27:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1642066075;
+        bh=jZwNUuB0RkUpIVsIVx20fm0PYu8Gumih0ZisNs+gWYA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=shMJ3AUPJ5hsEZfKXmibxhQXzMG4eW7UCuGEmtiGXjHlkRUy8DKq/e6gL9zcg7uJR
+         P4fLr5rGZJYeQC97lDW57wWNWKfn2YqwzwPNOUYTEJFLhuWLDWi3l8NzG3jIsSdQmi
+         nfNooz+kJa8L4LNiafM0z9f1VKSRf4QaIpicTb38=
+Message-ID: <bcd1b7f6-e18c-d01c-aaea-b98026056c71@ideasonboard.com>
+Date:   Thu, 13 Jan 2022 10:27:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 0/3] Add 12bit and 14bit luma-only formats
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        dave.stevenson@raspberrypi.com
+References: <20220112161014.972076-1-jeanmichel.hautbois@ideasonboard.com>
+ <be18b2bb-f334-1f31-50df-9935929281f6@xs4all.nl>
+From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+In-Reply-To: <be18b2bb-f334-1f31-50df-9935929281f6@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo Bonzini <pbonzini@redhat.com> writes:
+Hi Hans !
 
-> On 1/12/22 14:58, Vitaly Kuznetsov wrote:
->> -	best = kvm_find_cpuid_entry(vcpu, 0xD, 1);
->> +	best = cpuid_entry2_find(entries, nent, 0xD, 1);
->>   	if (best && (cpuid_entry_has(best, X86_FEATURE_XSAVES) ||
->>   		     cpuid_entry_has(best, X86_FEATURE_XSAVEC)))
->>   		best->ebx = xstate_required_size(vcpu->arch.xcr0, true);
->>   
->> -	best = kvm_find_kvm_cpuid_features(vcpu);
->> +	best = __kvm_find_kvm_cpuid_features(vcpu, vcpu->arch.cpuid_entries,
->> +					     vcpu->arch.cpuid_nent);
->>   	if (kvm_hlt_in_guest(vcpu->kvm) && best &&
->
-> I think this should be __kvm_find_kvm_cpuid_features(vcpu, entries, nent).
->
+On 13/01/2022 10:15, Hans Verkuil wrote:
+> Hi Jean-Michel,
+> 
+> On 12/01/2022 17:10, Jean-Michel Hautbois wrote:
+>> Hello,
+>>
+>> While working on adding the V4L2-PIX-FMT-Y12P and V4L2-PIX-FMT-Y14P
+>> formats, I noticed an issue in the way V4L2-PIX-FMT-Y10P is described.
+>> This series aims to solve it before adding Y12P and Y14P.
+>>
+>> Those two formats are needed for the next-to-come bcm2835 unicam driver.
+>>
+>> Jean-Michel Hautbois (3):
+>>    media: doc: pixfmt-yuv: Fix V4L2-PIX-FMT-Y10P format
+>>    media: v4l: Add V4L2-PIX-FMT-Y12P format
+>>    media: v4l: Add V4L2-PIX-FMT-Y14P format
+>>
+>>   .../media/v4l/pixfmt-yuv-luma.rst             | 48 ++++++++++++++++++-
+>>   drivers/media/v4l2-core/v4l2-ioctl.c          |  2 +
+>>   include/uapi/linux/videodev2.h                |  2 +
+>>   3 files changed, 50 insertions(+), 2 deletions(-)
+>>
+> 
+> I'll take the first patch, but it is better to add patches 2 and 3 to the unicam RFC
+> series. Adding pixelformats that are not used by any existing driver isn't a good idea
+> and I'd like to avoid that.
 
-Of course.
+Thanks, I will take those two patches back in the unicam RFC v2 series then.
 
->> 
->> +		case 0x1:
->> +			/* Only initial LAPIC id is allowed to change */
->> +			if (e->eax ^ best->eax || ((e->ebx ^ best->ebx) >> 24) ||
->> +			    e->ecx ^ best->ecx || e->edx ^ best->edx)
->> +				return -EINVAL;
->> +			break;
->
-> This XOR is a bit weird.  In addition the EBX test is checking the wrong 
-> bits (it checks whether 31:24 change and ignores changes to 23:0).
-
-Indeed, however, I've tested CPU hotplug with QEMU trying different
-CPUs in random order and surprisingly othing blew up, feels like QEMU
-was smart enough to re-use the right fd)
-
->
-> You can write just "(e->ebx & ~0xff000000u) != (best->ebx ~0xff000000u)".
->
->> 
->> +		default:
->> +			if (e->eax ^ best->eax || e->ebx ^ best->ebx ||
->> +			    e->ecx ^ best->ecx || e->edx ^ best->edx)
->> +				return -EINVAL;
->
-> This one even more so.
-
-Thanks for the early review, I'm going to prepare a selftest and send
-this out.
-
--- 
-Vitaly
-
+> 
+> Regards,
+> 
+> 	Hans
+> 

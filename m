@@ -2,173 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC44A48D2B1
+	by mail.lfdr.de (Postfix) with ESMTP id 6926E48D2B0
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiAMHOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 02:14:38 -0500
-Received: from mga17.intel.com ([192.55.52.151]:4483 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230388AbiAMHOh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 02:14:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642058077; x=1673594077;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KiSpcj4/NnMSpwRSVYPskvjQBtfgudtdmZCRio0Iomk=;
-  b=UqQZD3tFQ8xaJW8x20Rx8zoIhBuP+Z3q8mlkF+KnKs0d0LQ39A1s2khA
-   giPtCQaAwaDKheeZIRR9V5tvc04Y9jmGsmYsJW4soob2oY3ls8QzEPjo5
-   C/JUKwN/I4JiK3QLzzeOZcJWdPNs9V15jeUrQYv6gFiaKr8yXKOAHiHea
-   ljvW3PF3K7nBbhkhuIrxAzEB6IJMBF9d20CyIEZX6je1eXSkx8xZ/qmfi
-   vqa+A0GMyEvRNWjNtgXFHyUZd7wEgGdsRk70/+BFq1OOHh1HuzTicl6IJ
-   aUiDa2Pv6zXxTslzUOouGem0CgL7foqXuq4hsT9elnmJ5Ua7ffnv5dSO8
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="224639230"
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="224639230"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 23:14:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="691703763"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 12 Jan 2022 23:14:35 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n7uJe-0006wN-M6; Thu, 13 Jan 2022 07:14:34 +0000
-Date:   Thu, 13 Jan 2022 15:13:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anatolij Gustschin <agust@denx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>
-Subject: drivers/dma/bestcomm/gen_bd.c:145:22: sparse: sparse: incorrect type
- in argument 1 (different address spaces)
-Message-ID: <202201131500.CJesWOtX-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S230384AbiAMHOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 02:14:31 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:52454 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230373AbiAMHOa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 02:14:30 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 62779212B9;
+        Thu, 13 Jan 2022 07:14:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642058069; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=68BPiA9q74CYVpmbvqf14shCqahIvJ0BJK1IwaLqeeQ=;
+        b=SCPGJPa5Tq7C++7BQwJ193k7gp3DVEm2jBQNWEGliSztiScMm9VY30+I5Etev0yyWgsffd
+        rqQ0MhGCuTTsom0+h2SNv//ohxhb6rr62BBAPtdaMxKJzFy5XpAUjU45K/OVLh5CmtQA+u
+        tEjMwUYi5vdzcaqwNLovKyWHck27iG4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642058069;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=68BPiA9q74CYVpmbvqf14shCqahIvJ0BJK1IwaLqeeQ=;
+        b=0N6bdpLiJjUWUzXNHa1SnPNHkoQh96eub9mYWeMAbFrMCZj9gRDZ5hXAD4qZt9e1t1AT8S
+        617rNmvoMSS0H1CA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 1AEA5A3B83;
+        Thu, 13 Jan 2022 07:14:29 +0000 (UTC)
+Date:   Thu, 13 Jan 2022 08:14:29 +0100
+Message-ID: <s5h8rvk85uy.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Alexander Sergeyev <sergeev917@gmail.com>
+Cc:     Jeremy Szu <jeremy.szu@canonical.com>, tiwai@suse.com,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        Kailang Yang <kailang@realtek.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jian-Hong Pan <jhp@endlessos.org>,
+        Hui Wang <hui.wang@canonical.com>,
+        PeiSen Hou <pshou@realtek.com>
+Subject: Re: [PATCH 1/4] ALSA: hda/realtek: fix mute/micmute LEDs for HP 855 G8
+In-Reply-To: <20220112201824.qmphnz2hx4frda6e@localhost.localdomain>
+References: <20210519170357.58410-1-jeremy.szu@canonical.com>
+        <20220111195229.a77wrpjclqwrx4bx@localhost.localdomain>
+        <s5ho84h9tit.wl-tiwai@suse.de>
+        <20220112101249.ya73jvpmqmeh4ggg@localhost.localdomain>
+        <s5hilup9s87.wl-tiwai@suse.de>
+        <20220112104827.4aymoth7ua65nwge@localhost.localdomain>
+        <20220112201824.qmphnz2hx4frda6e@localhost.localdomain>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   455e73a07f6e288b0061dfcf4fcf54fa9fe06458
-commit: adec566b05288f2787a1f88dbaf77ed8b0c644fa dmaengine: bestcomm: fix system boot lockups
-date:   3 months ago
-config: powerpc-randconfig-s032-20220113 (https://download.01.org/0day-ci/archive/20220113/202201131500.CJesWOtX-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=adec566b05288f2787a1f88dbaf77ed8b0c644fa
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout adec566b05288f2787a1f88dbaf77ed8b0c644fa
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/dma/bestcomm/
+On Wed, 12 Jan 2022 21:18:24 +0100,
+Alexander Sergeyev wrote:
+> 
+> On Wed, Jan 12, 2022 at 01:48:28PM +0300, Alexander Sergeyev wrote:
+> >On Wed, Jan 12, 2022 at 11:13:44AM +0100, Takashi Iwai wrote:
+> >> You may try to get the codec proc dump with COEF by passing
+> >> snd_hda_codec.dump_coef=1 module option for both working and
+> >> non-working cases.
+> >>You can unbind and re-bind the PCI (HD-audio controller) device via sysfs.
+> >
+> >I'll try both options later today when able, thank you!
+> 
+> First, about unbind and bind via sysfs -- attempts to unbind the
+> HD-audio controller immediately trigger BUGs:
+> 
+> 05:00.6 Audio device [0403]: Advanced Micro Devices, Inc. [AMD] Family
+> 17h (Models 10h-1fh) HD Audio Controller [1022:15e3]
+> 
+> echo -n '0000:05:00.6' > /sys/bus/pci/drivers/snd_hda_intel/unbind
+> 
+> BUG: unable to handle page fault for address 000000000000173c
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 0 P4D 0
+> Oops: 0000 [#1] SMP NOPTI
+> CPU: 2 PID: 167 Comm: kworker/2:3 Tainted: G  T 5.16.0-dirty #3
+> Workqueue: events set_brightness_delayed
+> RIP: 0010:coef_micmute_led_set+0xf/0x60
+> ...
+> Call Trace:
+>   <TASK>
+>   set_brightness_delayed+0x6f/0xb0
+>   process_one_work+0x1e1/0x380
+>   worker_thread+0x4b/0x3b0
+>   ? rescuer_thread+0x370/0x370
+>   kthread+0x142/0x160
+>   ? set_kthread_struct+0x50/0x50
+>   ret_from_work+0x22/0x30
+>   </TASK>
+> 
+> Is it normal/expected?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+A sort of.  The sysfs unbind is little tested and may be still buggy
+if done during the stream operation.
+
+To be sure, could you check with my latest sound.git tree for-linus
+branch?  There are a few fixes that harden the dynamic unbind.
+
+Though, the code path is from the leds class, and it might not be
+covered yet.  It's managed via devm, so it should have been cleared,
+but there may be still some ordering problem...
+
+> Second, about dump_coef. I've collected a bunch of samples from
+> /proc/asound/Generic_1/codec#0. Overall, there are 6 different
+> versions across 196 samples, two versions are with working sound (and
+> micmute LED).
+> 
+> 
+> Differences between _non-working_ versions:
+> 
+> Node 0x02 [Audio Output] wcaps 0x41d: Stereo Amp-Out
+> Amp-Out vals:  [0x3c 0x3c] // (!) OR [0x53 0x53]
+> Converter: stream=5, channel=0 // (!) OR stream=0, channel=0
+> 
+> Node 0x03 [Audio Output] wcaps 0x41d: Stereo Amp-Out
+> Amp-Out vals:  [0x3c 0x3c] // (!) OR [0x53 0x53]
+> Converter: stream=5, channel=0 // (!) OR stream=0, channel=0
+> 
+> Node 0x20 [Vendor Defined Widget] wcaps 0xf00040: Mono
+> Processing caps: benign=0, ncoeff=142
+> Coeff 0x0b: 0x8003 // (!) OR 0x7770
+> Coeff 0x19: 0x01e3 // (!) OR 0x21e3
+> 
+> Node 0x08 [Audio Input] wcaps 0x10051b: Stereo Amp-In
+> Amp-In vals:  [0x27 0x27] // (!) OR [0xa7 0xa7]
+> 
+> 
+> Differences between _working_ versions:
+> 
+> Node 0x20 [Vendor Defined Widget] wcaps 0xf00040: Mono
+> Processing caps: benign=0, ncoeff=142
+> Coeff 0x0b: 0x8003 // (!) OR 0x7770
+> 
+> 
+> Differences between _non_working_ and _working_ versions:
+> 
+> Node 0x20 [Vendor Defined Widget] wcaps 0xf00040: Mono
+> Processing caps: benign=0, ncoeff=142
+> Coeff 0x19: 0x01e3 OR 0x21e3 // (!) 0x8e11 for working versions
+> 
+> 
+> In short:
+> 1) Coeff 0x0b is flapping between 0x8003 and 0x7770 and does not seem
+> to have any effect in both non-working and working versions. Not sure
+> about this, maybe microphone is not operational since I haven't
+> checked it yet.
+> 2) Coeff 0x19 with 0x8e11 value makes speakers work. Non-working
+> values are 0x01e3 and 0x21e3.
+> 
+> Running the following commands makes speakers and micmute LED work
+> (0x20 is the node id, which is mentioned in the snippets above):
+> 
+> hda-verb /dev/snd/hwC1D0 0x20 SET_COEF_INDEX 0x19
+> hda-verb /dev/snd/hwC1D0 0x20 SET_PROC_COEF 0x8e11
+> 
+> Is it possible to somehow trace this particular coefficient to hunt
+> the timing issue? It would be great to have a proper fix.
+
+Those might be some codec init values, which aren't set up properly by
+whatever reason, e.g. it might need a bit more wait time for init,
+etc.  You can fix it rather by issuing those explicitly at the fixup.
 
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/dma/bestcomm/gen_bd.c:169:25: sparse: sparse: function 'bcom_gen_bd_tx_init' with external linkage has definition
->> drivers/dma/bestcomm/gen_bd.c:145:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *a @@     got struct bcom_bd *bd @@
-   drivers/dma/bestcomm/gen_bd.c:145:22: sparse:     expected void volatile [noderef] __iomem *a
-   drivers/dma/bestcomm/gen_bd.c:145:22: sparse:     got struct bcom_bd *bd
-   drivers/dma/bestcomm/gen_bd.c:229:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *a @@     got struct bcom_bd *bd @@
-   drivers/dma/bestcomm/gen_bd.c:229:22: sparse:     expected void volatile [noderef] __iomem *a
-   drivers/dma/bestcomm/gen_bd.c:229:22: sparse:     got struct bcom_bd *bd
---
->> drivers/dma/bestcomm/bestcomm.c:98:30: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *a @@     got struct bcom_bd *bd @@
-   drivers/dma/bestcomm/bestcomm.c:98:30: sparse:     expected void volatile [noderef] __iomem *a
-   drivers/dma/bestcomm/bestcomm.c:98:30: sparse:     got struct bcom_bd *bd
->> drivers/dma/bestcomm/bestcomm.c:189:19: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *a @@     got unsigned int [usertype] *[assigned] var @@
-   drivers/dma/bestcomm/bestcomm.c:189:19: sparse:     expected void volatile [noderef] __iomem *a
-   drivers/dma/bestcomm/bestcomm.c:189:19: sparse:     got unsigned int [usertype] *[assigned] var
->> drivers/dma/bestcomm/bestcomm.c:190:19: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *a @@     got unsigned int [usertype] *[assigned] inc @@
-   drivers/dma/bestcomm/bestcomm.c:190:19: sparse:     expected void volatile [noderef] __iomem *a
-   drivers/dma/bestcomm/bestcomm.c:190:19: sparse:     got unsigned int [usertype] *[assigned] inc
->> drivers/dma/bestcomm/bestcomm.c:196:21: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *d @@     got unsigned int [usertype] *[assigned] desc @@
-   drivers/dma/bestcomm/bestcomm.c:196:21: sparse:     expected void volatile [noderef] __iomem *d
-   drivers/dma/bestcomm/bestcomm.c:196:21: sparse:     got unsigned int [usertype] *[assigned] desc
->> drivers/dma/bestcomm/bestcomm.c:197:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *d @@     got unsigned int [usertype] * @@
-   drivers/dma/bestcomm/bestcomm.c:197:25: sparse:     expected void volatile [noderef] __iomem *d
-   drivers/dma/bestcomm/bestcomm.c:197:25: sparse:     got unsigned int [usertype] *
->> drivers/dma/bestcomm/bestcomm.c:198:21: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *d @@     got unsigned int [usertype] *[assigned] inc @@
-   drivers/dma/bestcomm/bestcomm.c:198:21: sparse:     expected void volatile [noderef] __iomem *d
-   drivers/dma/bestcomm/bestcomm.c:198:21: sparse:     got unsigned int [usertype] *[assigned] inc
->> drivers/dma/bestcomm/bestcomm.c:305:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *a @@     got struct bcom_tdt *tdt @@
-   drivers/dma/bestcomm/bestcomm.c:305:27: sparse:     expected void volatile [noderef] __iomem *a
-   drivers/dma/bestcomm/bestcomm.c:305:27: sparse:     got struct bcom_tdt *tdt
->> drivers/dma/bestcomm/bestcomm.c:306:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *a @@     got unsigned int [usertype] *ctx @@
-   drivers/dma/bestcomm/bestcomm.c:306:27: sparse:     expected void volatile [noderef] __iomem *a
-   drivers/dma/bestcomm/bestcomm.c:306:27: sparse:     got unsigned int [usertype] *ctx
->> drivers/dma/bestcomm/bestcomm.c:307:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *a @@     got unsigned int [usertype] *var @@
-   drivers/dma/bestcomm/bestcomm.c:307:27: sparse:     expected void volatile [noderef] __iomem *a
-   drivers/dma/bestcomm/bestcomm.c:307:27: sparse:     got unsigned int [usertype] *var
->> drivers/dma/bestcomm/bestcomm.c:308:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *a @@     got unsigned int [usertype] *fdt @@
-   drivers/dma/bestcomm/bestcomm.c:308:27: sparse:     expected void volatile [noderef] __iomem *a
-   drivers/dma/bestcomm/bestcomm.c:308:27: sparse:     got unsigned int [usertype] *fdt
-   drivers/dma/bestcomm/bestcomm.c:311:35: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *d @@     got unsigned int [usertype] * @@
-   drivers/dma/bestcomm/bestcomm.c:311:35: sparse:     expected void volatile [noderef] __iomem *d
-   drivers/dma/bestcomm/bestcomm.c:311:35: sparse:     got unsigned int [usertype] *
-
-vim +145 drivers/dma/bestcomm/gen_bd.c
-
-   112	
-   113	int
-   114	bcom_gen_bd_rx_reset(struct bcom_task *tsk)
-   115	{
-   116		struct bcom_gen_bd_priv *priv = tsk->priv;
-   117		struct bcom_gen_bd_rx_var *var;
-   118		struct bcom_gen_bd_rx_inc *inc;
-   119	
-   120		/* Shutdown the task */
-   121		bcom_disable_task(tsk->tasknum);
-   122	
-   123		/* Reset the microcode */
-   124		var = (struct bcom_gen_bd_rx_var *) bcom_task_var(tsk->tasknum);
-   125		inc = (struct bcom_gen_bd_rx_inc *) bcom_task_inc(tsk->tasknum);
-   126	
-   127		if (bcom_load_image(tsk->tasknum, bcom_gen_bd_rx_task))
-   128			return -1;
-   129	
-   130		var->enable	= bcom_eng->regs_base +
-   131					offsetof(struct mpc52xx_sdma, tcr[tsk->tasknum]);
-   132		var->fifo	= (u32) priv->fifo;
-   133		var->bd_base	= tsk->bd_pa;
-   134		var->bd_last	= tsk->bd_pa + ((tsk->num_bd-1) * tsk->bd_size);
-   135		var->bd_start	= tsk->bd_pa;
-   136		var->buffer_size = priv->maxbufsize;
-   137	
-   138		inc->incr_bytes	= -(s16)sizeof(u32);
-   139		inc->incr_dst	= sizeof(u32);
-   140	
-   141		/* Reset the BDs */
-   142		tsk->index = 0;
-   143		tsk->outdex = 0;
-   144	
- > 145		memset_io(tsk->bd, 0x00, tsk->num_bd * tsk->bd_size);
-   146	
-   147		/* Configure some stuff */
-   148		bcom_set_task_pragma(tsk->tasknum, BCOM_GEN_RX_BD_PRAGMA);
-   149		bcom_set_task_auto_start(tsk->tasknum, tsk->tasknum);
-   150	
-   151		out_8(&bcom_eng->regs->ipr[priv->initiator], priv->ipr);
-   152		bcom_set_initiator(tsk->tasknum, priv->initiator);
-   153	
-   154		out_be32(&bcom_eng->regs->IntPend, 1<<tsk->tasknum);	/* Clear ints */
-   155	
-   156		return 0;
-   157	}
-   158	EXPORT_SYMBOL_GPL(bcom_gen_bd_rx_reset);
-   159	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Takashi

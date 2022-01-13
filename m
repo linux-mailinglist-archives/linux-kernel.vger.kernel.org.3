@@ -2,131 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 998D348D805
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8066F48D80B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:34:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbiAMMd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:33:26 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:50634
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233490AbiAMMdZ (ORCPT
+        id S233270AbiAMMe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:34:29 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:48688 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231406AbiAMMe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:33:25 -0500
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5A03D3F1E1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:33:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642077204;
-        bh=nozrRCJhGpJqmbYvCljGg8HZE9Dh507qEQxDTQiFa2Q=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=bvyACTi3VRML/vNzNujIiRL/UNvvEId7jXblbignsf0Gy+mzIYbt1XIaO4cgqL0UA
-         Iu53zNhWnGiF84o7iPCunSalA6u3phH24dhOl+3MbS37Uql2Fg4F7NZJ3Ax2bVEi0C
-         Uj6lNbaWOsAXeM+UAEBadOr3opTZ5GGTHaSULmT+1fUcsleO6av2VtJ45xusKf0/up
-         8N03sLZNfNZSstEWItKtRyujzp3hEvGtd/SljxKp0r0JBojC3tejgoK6pZOCa9+36r
-         RH4A74dhojD7bW3HEt0rkwm81jP367bpgz2T1zWK0e0ZQHCoKdE7vWi/vha166SSPz
-         Wo2WiK2MBcupQ==
-Received: by mail-wm1-f70.google.com with SMTP id s17-20020a7bc0d1000000b00348737ba2a2so3532777wmh.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:33:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nozrRCJhGpJqmbYvCljGg8HZE9Dh507qEQxDTQiFa2Q=;
-        b=h/keTBUrMRzWSof2qbz5UWCu9OO2Y3dOuBuEQXIwiK085jwL72rH4rsWIYsORFQ+WL
-         97tktZjqGE4d6fhW84NgkU5m2gDKGvEA+jT22bHv9C4r2VxxOrRitfgj25iKXUbKCviY
-         5EcMG8eT4hyNNsfiqDNaXbxFUaKIVqr4TjRzXn7Bv+pnDblUsOuel/iEs5aLh5Aem82B
-         Ufq2jY7EAGu8JRyCMtZ5Jav1WoHDYNKog4UnuPAuEeccdifG3Fe/5EAKwQ81Cq0hqBTI
-         MaoyYmjec+brz945CMSjUnGzXN5+qHaoQ0fV0+lHhEXCYLzQZIh5PfVxlh69CLnE0e0G
-         fKHQ==
-X-Gm-Message-State: AOAM5338YcK0ZGI9Han43iD50+/aUIxf/AeT6TF81nCLN4TkQjNmaYkt
-        LQhoIqIr4BrjkXPl+wYH2jAoox2l7ScDVuaZ6YNuRFN7pNaCx4Re5JOX4jUT1XstoPjq2+PhDSk
-        2lnlnpF1wmmgEvo6hnoiSo4K2wlFatOyEMcsHemnxVw==
-X-Received: by 2002:a1c:9acb:: with SMTP id c194mr8382273wme.89.1642077203729;
-        Thu, 13 Jan 2022 04:33:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzeidcGH6+/SbUKslGVBMnrfh5gtJs/MXVIuoTJHveED+blfQR9Xg8ks+7ZxN0rNokZjqLksw==
-X-Received: by 2002:a1c:9acb:: with SMTP id c194mr8382259wme.89.1642077203579;
-        Thu, 13 Jan 2022 04:33:23 -0800 (PST)
-Received: from [192.168.0.29] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id r205sm1395682wma.26.2022.01.13.04.33.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 04:33:23 -0800 (PST)
-Message-ID: <53c17ddc-a049-72ed-7237-de23db7889da@canonical.com>
-Date:   Thu, 13 Jan 2022 13:33:22 +0100
+        Thu, 13 Jan 2022 07:34:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=wQtWtM09iBZmv9xk/tKCHMTRNvqGx3TjjRoBe9wm/LU=; b=T/nlGduKLAmP914ehy5z6eigbO
+        HE+Udp55VhMN/ysDgyvboww/3sO6Guh6kuase0068mrKcRuJcMuZOOOYaqkv6teyNLF5IDJzyGRZC
+        SbG1g04uyz0CekByOMKONs4DGkSMVvjntDjmKDaBzpgpyNwi6YSKasSgV7IMAFreDQR8CuVq/dhuS
+        7iVOE3TC824sBA3sX9PMpL1XI8gsX4e5tCk12Ou9Q7QXDsHSSdHhO89NxAXiwGo5jd8mGDnYh66sY
+        PkjyW/la5XPjIbJ+/GV9hAIK1YFxP54O1hZjGQkmlFOYTtWns21tM9g2UMIiJCFGhCwnQCW5oH+G2
+        fVpRJWDQ==;
+Received: from [179.113.53.20] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1n7zJ7-0006eF-Fv; Thu, 13 Jan 2022 13:34:21 +0100
+Message-ID: <ba0e29ba-0e08-df6e-ade5-eb58ae2495e3@igalia.com>
+Date:   Thu, 13 Jan 2022 09:34:01 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 13/23] dt-bindings: arm: add Tesla FSD ARM SoC
+ Thunderbird/91.4.1
+Subject: Re: [PATCH V2] panic: Move panic_print before kmsg dumpers
 Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, s.nawrocki@samsung.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
- <CGME20220113122408epcas5p45053d1bf0acf2d8233a98b6c1abab6eb@epcas5p4.samsung.com>
- <20220113121143.22280-14-alim.akhtar@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220113121143.22280-14-alim.akhtar@samsung.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        kernel@gpiccoli.net, senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, feng.tang@intel.com,
+        kexec@lists.infradead.org, dyoung@redhat.com,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com
+References: <20220106212835.119409-1-gpiccoli@igalia.com>
+ <Yd/0K1x7ILw3Qa46@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <Yd/0K1x7ILw3Qa46@alley>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2022 13:11, Alim Akhtar wrote:
-> Add device tree bindings for the Tesla FSD ARM SoC.
+On 13/01/2022 08:50, Petr Mladek wrote:
+>> @@ -249,7 +252,7 @@ void panic(const char *fmt, ...)
+>>  	 * show some extra information on kernel log if it was set...
+>>  	 */
+>>  	if (kexec_crash_loaded())
+>> -		panic_print_sys_info();
+>> +		panic_print_sys_info(false);
 > 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  .../devicetree/bindings/arm/tesla.yaml        | 25 +++++++++++++++++++
->  1 file changed, 25 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/tesla.yaml
+> panic_print_sys_info(false) will be called twice when both
+> kexec_crash_loaded() and _crash_kexec_post_notifiers are true.
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/tesla.yaml b/Documentation/devicetree/bindings/arm/tesla.yaml
-> new file mode 100644
-> index 000000000000..9f89cde76c85
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/tesla.yaml
-> @@ -0,0 +1,25 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/tesla.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Tesla Full Self Driving(FSD) platforms device tree bindings
-> +
-> +maintainers:
-> +  - Alim Akhtar <alim.akhtar@samsung.com>
-> +  - linux-fsd@tesla.com
-> +
-> +properties:
-> +  $nodename:
-> +    const: '/'
-> +  compatible:
-> +    oneOf:
-> +
-> +      - description: FSD SoC board
-> +        items:
-> +          - const: tesla,fsd
-
-Either this is a SoC or a board compatible... Cannot be both.
-
-> +
-> +additionalProperties: true
-> +
-> +...
+> Do we really need to call panic_print_sys_info() here? All information
+> provided by panic_print_sys_info(false) can be found also in
+> the crash dump.
 > 
+>>  	/*
+>>  	 * If we have crashed and we have a crash kernel loaded let it handle
+>> @@ -283,6 +286,8 @@ void panic(const char *fmt, ...)
+>>  	 */
+>>  	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
+>>  
+>> +	panic_print_sys_info(false);
+> 
+> This is where the info might be printed 2nd time.
+> 
+>> +
+>>  	kmsg_dump(KMSG_DUMP_PANIC);
+>>  
+>>  	/*
+> 
+> Otherwise, the change makes sense to me.
+> 
+> Best Regards,
+> Petr
+
+Hi Petr, thanks for your great review!
+I see you also commented in the thread of the patch introducing the
+panic_print_sys_info() before kdump.
+
+Thanks for catching this issue - indeed, if
+"_crash_kexec_post_notifiers" is true, with this patch we print stuff
+twice. I will submit a V3 that guards against that, using a bool, makes
+sense to you?
+
+The interesting question here is:
+> Do we really need to call panic_print_sys_info() here? All information
+> provided by panic_print_sys_info(false) can be found also in
+> the crash dump.
+
+So, we indeed need that in our use case. Crash is meant to be used
+post-mortem, i.e., you made a full vmcore collection and then, of
+course, you have basically all the data you need accessible though the
+crash tool.
+
+Problem is: in our use case, we want more data than a regular dmesg in a
+panic event (hence we use panic_print), but we don't collect a full
+crash dump, due to its big size. Also, as you can imagine, we do favor
+pstore over kdump, but it might fail due to a variety of reasons (like
+not having a free RAM buffer for ramoops), so kdump is our fallback.
+Hence, we'd like to be able to use panic_print with both kdump and
+pstore, and for that, both patches are needed.
+
+Cheers,
 
 
-Best regards,
-Krzysztof
+Guilherme

@@ -2,179 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F9E48D5DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5539F48D5DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbiAMKgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:36:15 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:56143 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbiAMKgM (ORCPT
+        id S232429AbiAMKhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:37:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231825AbiAMKhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:36:12 -0500
-Received: from quad ([82.142.23.158]) by mrelayeu.kundenserver.de (mreue109
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1N6srB-1mH9zg468N-018LVz; Thu, 13
- Jan 2022 11:36:04 +0100
-From:   Laurent Vivier <laurent@vivier.eu>
-To:     linux-kernel@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, Laurent Vivier <laurent@vivier.eu>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v5 3/3] m68k: virt: Remove LEGACY_TIMER_TICK
-Date:   Thu, 13 Jan 2022 11:35:59 +0100
-Message-Id: <20220113103559.2577216-4-laurent@vivier.eu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220113103559.2577216-1-laurent@vivier.eu>
-References: <20220113103559.2577216-1-laurent@vivier.eu>
+        Thu, 13 Jan 2022 05:37:13 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14390C06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:37:13 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id 127so13656453ybb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:37:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Pcwd0o/26YoPrQed2bMaVusigU9jUu5+1hxvi1dx9eA=;
+        b=eiE/4vxrwAyEqLAcK8lt1x0Bo/2tsYee/5RGDAMJTBGU4VgU+jvZU6QHprO/gOMK2j
+         XEYYkWdvsoZhMisixvkDxgejfJ6tBlmqbos1V81QF78A9G6AjCwcxSEY2aBBBXxZTz5X
+         24hHJbE+T6zj25YuDIg7E92dfA92TFcdN3npU3ItbSpmgP6bjkwQsmRgEpheEYeNHEU2
+         SuJlUT2ggaEA1yqUtpJRg4GyrZyvV2YqwJbLub1svtTo9OxSf/+SsvNtY+T0Y/rWOJJC
+         vCBLC56UrYh515nTmcv+vVJqHTbgEf/m2GAflxhhgbSp5cOla06Nj1ScYxvA1w7eOuFF
+         nblA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Pcwd0o/26YoPrQed2bMaVusigU9jUu5+1hxvi1dx9eA=;
+        b=gTMfafFFsH+Zp/YXcrw0uyqvxeGT6LYXK6djOk3sf6cm48NMFJFfA9mpg+rWsbkIDA
+         9x1F1Jeg353pnb0GRT5Ar4yB5+CglsymcN4PzhLYR/vSWmep0wak3rBd/85WOuJHVYaC
+         F8pQYoOh7+2F9X9uxlyIwxtXcEkaIKWQiG+Z6GWQJcjxnKotlLGldFRBbKLqk+jnT5/3
+         J2h9k2Fh35mCcYPBz3TUB+gR38bxaHOoeYrAt1q0KAL7cw499WGsosBv3cfnBJv3SoPp
+         3awPW7bcAwoH6vcDgbh/wqjOq3QOijqfFvrI/5yunAwBfW0klYeaUMt6fcPJ7XpLstuc
+         bobg==
+X-Gm-Message-State: AOAM530qIvMKDoLfXKur4iYOeHNGsm0czLvt9dAMgwohUvYFg9b/8Pbi
+        yTnQOy4sZkhCGOZLz78Lrcw9Aqik32exy9ShwKQ=
+X-Google-Smtp-Source: ABdhPJzb6NUEa4SeF/8acpoMxm1Vtp1R52peVYMA1y3VCXvXJ/1kSrQRTJEORfGDQjFjg+TOx/6gxOlfPNVP+zn06Ao=
+X-Received: by 2002:a25:abcf:: with SMTP id v73mr4839803ybi.459.1642070231876;
+ Thu, 13 Jan 2022 02:37:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:CxVx98xeVEfHEM6vPf1+SJx0Fa5YyWVWggpaPIfWOJJOJARZwmk
- kT1krpbVTeQXpDnjLoSbF4AIqyopWeI4VX7a3+0QfilteKz/G8a3eKHA3gYyBgJ5hRliaYx
- dg+GTBeRqBlkd0xlXQXga1tI7CBlGdX5Rhq07U/YssoWRH1eF9IL/Xxavy9BWRjXuFgNFAq
- ssuRFI8KXDyF5GHwmeyzQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JB+uTI4NO90=:DzncB3KMar501Wxfs34FCc
- a2FwheJ9+4gVzLXI2/pY3xXFMJFvxfMJ8esJ9YMhRDCinNoD6YLhiXDFsm8ChjNl1NzQmIKDj
- 6s4cs0kUhoDo3DH4kkpgEdv29qP7uk16BRDSzmduIS4Ij0A86wm3YwTcj7ybgP5FrEU4f8Jz/
- 4q+cROTPEDgj5H7mP4lyenxHOeNnruCD/AMdHtEOitH1C1alvdtahO/xAZcRv9HRm0d8f8rdv
- Vg/uNz2bKoVPzwyBZ88aAFHmsOThFOWAcRaUfSKKOy1pY717+wsAskUAIgpp/O90BlojJpeBM
- Zo04uGgjkZhmx4zXl98R+4Y3uP804of95iHj4dbPzdZEr/vliMYSxUq02XgvEdsJBqjAdRkHo
- DKphlTt1jD0CRlVZTMsPiS26aB6IJqAHz3Ya0RWi8PMeaaxiEK7EX0W6VuJ5u2JIcTAbvwIhz
- FZToaoike1RwKqg8R7DqTG7FRuPq2e01RzBddZJK5fXgJtUKW4QAkYq1aThqeb0uIdKjDzWng
- GYSixr1zrdDSZXbgllTSH5F+yWXDP+xe6161maA+kc5si0SYkwkH+Gpf0xV4Rm54P7nagwep2
- x/zDfLdbIVraYhbuTPoW0x9jIamIhI0dId66DMPzVhPx3Ke3kMDRMT7AvpKDuXDfN6N7bPfPN
- sBqhZFHi1BvMP0Hx2juQx8qs1sV+PGUzrh42Wtd7DTwqAI1b720/J/p9e2myRpMP3/eo=
+Received: by 2002:a05:7000:760c:0:0:0:0 with HTTP; Thu, 13 Jan 2022 02:37:11
+ -0800 (PST)
+Reply-To: mrselizabethedward28@gmail.com
+From:   Elizabeth Edward <hon.victor.kabore@gmail.com>
+Date:   Thu, 13 Jan 2022 10:37:11 +0000
+Message-ID: <CAOEYS_cGq3wrksNXPESc-xMcYDa4oiueyMNmX03zsY_OFM3Hvw@mail.gmail.com>
+Subject: I NEED YOUR URGENT ASSISTANCE.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move virt machine to generic clockevents.
+My Dear Friend,
 
-cc: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Laurent Vivier <laurent@vivier.eu>
----
- arch/m68k/Kconfig.machine |  2 +-
- arch/m68k/virt/timer.c    | 56 ++++++++++++++++++++++++++++++---------
- 2 files changed, 44 insertions(+), 14 deletions(-)
+Please forgive me for stressing you with my predicaments and am sorry
+to approach you through this media, it is because it serves the
+fastest means of communication. I came across your E-mail from my
+personal search and I decided to contact you believing you will be
+honest to fulfill my final wish before I die.
 
-diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
-index 769c5b38fe16..03e5254ed73a 100644
---- a/arch/m68k/Kconfig.machine
-+++ b/arch/m68k/Kconfig.machine
-@@ -152,7 +152,7 @@ config SUN3
- config VIRT
- 	bool "Virtual M68k Machine support"
- 	depends on MMU
--	select LEGACY_TIMER_TICK
-+	select GENERIC_CLOCKEVENTS
- 	select M68040
- 	select MMU_MOTOROLA if MMU
- 	select GOLDFISH
-diff --git a/arch/m68k/virt/timer.c b/arch/m68k/virt/timer.c
-index 843bf6ed7e1a..767b01f75abb 100644
---- a/arch/m68k/virt/timer.c
-+++ b/arch/m68k/virt/timer.c
-@@ -3,6 +3,7 @@
- #include <linux/interrupt.h>
- #include <linux/ioport.h>
- #include <linux/clocksource.h>
-+#include <linux/clockchips.h>
- #include <asm/virt.h>
- 
- struct goldfish_timer {
-@@ -41,7 +42,25 @@ static struct clocksource goldfish_timer = {
- 	.max_idle_ns	= LONG_MAX,
- };
- 
--static irqreturn_t golfish_timer_handler(int irq, void *dev_id)
-+static int goldfish_timer_set_oneshot(struct clock_event_device *evt)
-+{
-+	gf_timer->alarm_high = 0;
-+	gf_timer->alarm_low = 0;
-+
-+	gf_timer->irq_enabled = 1;
-+
-+	return 0;
-+}
-+
-+static int goldfish_timer_shutdown(struct clock_event_device *evt)
-+{
-+	gf_timer->irq_enabled = 0;
-+
-+	return 0;
-+}
-+
-+static int goldfish_timer_next_event(unsigned long delta,
-+				     struct clock_event_device *evt)
- {
- 	u64 now;
- 
-@@ -49,19 +68,35 @@ static irqreturn_t golfish_timer_handler(int irq, void *dev_id)
- 
- 	now = goldfish_timer_read(NULL);
- 
--	legacy_timer_tick(1);
-+	now += delta;
- 
--	now += NSEC_PER_SEC / HZ;
- 	gf_timer->alarm_high = upper_32_bits(now);
- 	gf_timer->alarm_low = lower_32_bits(now);
- 
-+	return 0;
-+}
-+
-+struct clock_event_device goldfish_timer_clockevent = {
-+	.name			= "goldfish_timer",
-+	.features		= CLOCK_EVT_FEAT_ONESHOT,
-+	.set_state_shutdown	= goldfish_timer_shutdown,
-+	.set_state_oneshot      = goldfish_timer_set_oneshot,
-+	.set_next_event		= goldfish_timer_next_event,
-+	.shift			= 32,
-+};
-+
-+static irqreturn_t golfish_timer_tick(int irq, void *dev_id)
-+{
-+	struct clock_event_device *evt = &goldfish_timer_clockevent;
-+
-+	evt->event_handler(evt);
-+
- 	return IRQ_HANDLED;
- }
- 
- void __init virt_sched_init(void)
- {
- 	static struct resource sched_res;
--	u64 now;
- 
- 	sched_res.name  = "goldfish_timer";
- 	sched_res.start = virt_bi_data.rtc.mmio;
-@@ -72,19 +107,14 @@ void __init virt_sched_init(void)
- 		return;
- 	}
- 
--	if (request_irq(virt_bi_data.rtc.irq, golfish_timer_handler, IRQF_TIMER,
-+	clockevents_config_and_register(&goldfish_timer_clockevent, NSEC_PER_SEC,
-+					1, 0xffffffff);
-+
-+	if (request_irq(virt_bi_data.rtc.irq, golfish_timer_tick, IRQF_TIMER,
- 			"timer", NULL)) {
- 		pr_err("Couldn't register timer interrupt\n");
- 		return;
- 	}
- 
--	now = goldfish_timer_read(NULL);
--	now += NSEC_PER_SEC / HZ;
--
--	gf_timer->clear_interrupt = 1;
--	gf_timer->alarm_high = upper_32_bits(now);
--	gf_timer->alarm_low = lower_32_bits(now);
--	gf_timer->irq_enabled = 1;
--
- 	clocksource_register_hz(&goldfish_timer, NSEC_PER_SEC);
- }
--- 
-2.34.1
+I am Mrs. Elizabeth Edward, 63 years, from USA, I am childless and I
+am suffering from a pro-long critical cancer, my doctors confirmed I
+may not live beyond two months from now as my ill health has defiled
+all forms of medical treatment.
 
+Since my days are numbered, I=E2=80=99ve decided, willingly to fulfill my
+long-time promise to donate you the sum ($5.000.000.00) million
+dollars I inherited from my late husband Mr. Edward Herbart, foreign
+bank account over years. I need a very honest person who can assist in
+transfer of this money to his or her account and use the funds for
+charities work of God while you use 50% for yourself. I want you to
+know there are no risks involved; it is 100% hitch free & safe. If you
+will be interesting to assist in getting this fund into your account
+for charity project to fulfill my promise before I die please let me
+know immediately. I will appreciate your utmost confidentiality as I
+wait for your reply.
+
+
+
+Best Regards
+
+Mrs. Elizabeth Edward.

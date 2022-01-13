@@ -2,129 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FBD48DA45
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DAE48DA48
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235882AbiAMO6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 09:58:54 -0500
-Received: from mga09.intel.com ([134.134.136.24]:45230 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232357AbiAMO6x (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:58:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642085933; x=1673621933;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QdalcrLT+EXEFCP4SwYxznovdQL1Uvdbiea5hcb4Qoc=;
-  b=EoBkgmEWWgRQp/MikOgcDuaefaOpXJkU7GnmXRf4ScM61bPoesWyBMU+
-   RZyGMF2C9PrV00NtYh/WqZHnnae27pG6QYx9YcQLjV/4HYO9L7n9UyfEP
-   jWa4/xRXkJJ5VAGHESs5Q55zrpH6FnLs7tPQWT51LPSdSx/W5JaBAkf4j
-   y9p1zrzrqBm+TSsbsn10iUrk2k7ujgrgDR3NrrKJrRK73s5Wl69B8lm4h
-   9e8BZGw1nRkarzT5Lm6ir5ykWvXbtdv1B4Q4PD9QMWQx9zv5BsNnICDN6
-   QoRQ+lgGNnQT208B6mwU0dv0VPlJCCasZnB8ULVujVCmsC8xLDDKL9zxL
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="243820689"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="243820689"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 06:58:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="593364567"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Jan 2022 06:58:51 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n81Yw-0007Jl-Ri; Thu, 13 Jan 2022 14:58:50 +0000
-Date:   Thu, 13 Jan 2022 22:58:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: include/linux/compiler_types.h:319:45: error: call to
- '__compiletime_assert_221' declared with attribute error: BUILD_BUG_ON
- failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
-Message-ID: <202201132244.7zrKls77-lkp@intel.com>
+        id S235906AbiAMO7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:59:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37700 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232357AbiAMO7C (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 09:59:02 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAD98B822C7;
+        Thu, 13 Jan 2022 14:59:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49354C36AEB;
+        Thu, 13 Jan 2022 14:58:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642085939;
+        bh=0+/Y0CsIVcYpaYWcjiIcMKL5vH+XhHAvce7jccMD//g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Ten1AGEIZchYGDLcl70PhaCzp5aZnCEEh25RgJDFU4On1fdX9CqAfBMysRaeuLqOp
+         j7oa7IeH8jnEssSY9HXYUf4Vh3z+O8ezQpCr50gfsoP+rhKbienR0+3jUAZ/hlN1M/
+         GIqmACUZfPqODrqUzv9qysO2FFLGWEqvJZOEEB+JVuNRZUiPlrdhFMF/Hl+1amZTNl
+         G2va5P0lu96Fb2nTBn+ftiD3NVU4Lddb5OL4ngskX60FK/OtGFh1Mlt7B8dfPKjsRA
+         bEasHyVIK813Jsv301IqY8q+sN+VrkBT+w4RBnbjmAFJILM82EeR2NP7skYAkxrw6w
+         JSNJlkAs9d83Q==
+Date:   Thu, 13 Jan 2022 08:58:57 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Yao Hongbo <yaohongbo@linux.alibaba.com>
+Cc:     bhelgaas@google.com, lukas@wunner.de,
+        zhangliguang@linux.alibaba.com,
+        alikernel-developer@linux.alibaba.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [RFC PATCH v2] PCI: Waiting command completed in
+ get_port_device_capability()
+Message-ID: <20220113145857.GA347384@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d47e5af3-d339-01b6-5925-a2037b177be2@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Thu, Jan 13, 2022 at 03:34:41PM +0800, Yao Hongbo wrote:
+> 在 2022/1/13 上午2:01, Bjorn Helgaas 写道:
+> > On Wed, Jan 12, 2022 at 03:33:25PM +0800, Yao Hongbo wrote:
+> >> 在 2022/1/12 上午2:55, Bjorn Helgaas 写道:
 
-FYI, the error/warning still remains.
+> >>> What kind of system are you seeing the problem on?  It seems like it
+> >>> should be safe to drop the HPIE and CCIE disable here for ACPI
+> >>> systems.  And *likely* we could do the same for non-ACPI systems,
+> >>> though I have no experience there.
+> >>
+> >> Hi, Bjorn
+> >> Thanks for your comments.
+> >>
+> >> The problem occurs on ACPI systems.
+> >>
+> >>  acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI EDR HPX-Type3]
+> >>  acpi PNP0A08:00: _OSC: platform does not support [SHPCHotplug AER LTR DPC]
+> >>  acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME PCIeCapability]
+> >>
+> >> We clear HPIE and CCIE here because the firmware doesn't control
+> >> Hotplug via __OSC.
+> >>
+> >> And on ACPI systems, we can also set pcie_ports=native, which will
+> >> also encounter such problems.
+> > 
+> > What happens if you just drop that call like the patch below?
+> > 
+> > If that avoids the problem, then we can talk about whether we need to
+> > worry about broken firmware in the non-ACPI or "pcie_ports=native"
+> > cases.
+> 
+> Hi, Bjorn.
+> This can avoid the problem currently.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   455e73a07f6e288b0061dfcf4fcf54fa9fe06458
-commit: 6e799cb69a70eedbb41561b750f7180c12cff280 mm/highmem: Provide and use CONFIG_DEBUG_KMAP_LOCAL
-date:   1 year, 2 months ago
-config: arc-randconfig-r024-20220113 (https://download.01.org/0day-ci/archive/20220113/202201132244.7zrKls77-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6e799cb69a70eedbb41561b750f7180c12cff280
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6e799cb69a70eedbb41561b750f7180c12cff280
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash arch/arc/mm/
+Thanks for collecting that data!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> But i'm not sure if removing this code will introduce other problems,
+> such as suprious hotplug before probing hotplug service.
 
-All errors (new ones prefixed by >>):
+I don't think spurious hotplug before probing the hotplug service is
+an issue because there is always a window like this.  It's either
+between:
 
-   In file included from <command-line>:
-   arch/arc/mm/highmem.c: In function 'kmap_init':
->> include/linux/compiler_types.h:319:45: error: call to '__compiletime_assert_221' declared with attribute error: BUILD_BUG_ON failed: FIX_KMAP_SLOTS > PTRS_PER_PTE
-     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:300:25: note: in definition of macro '__compiletime_assert'
-     300 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:319:9: note: in expansion of macro '_compiletime_assert'
-     319 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   arch/arc/mm/highmem.c:69:9: note: in expansion of macro 'BUILD_BUG_ON'
-      69 |         BUILD_BUG_ON(FIX_KMAP_SLOTS > PTRS_PER_PTE);
-         |         ^~~~~~~~~~~~
+  A: Handoff from firmware to OS
+  B: get_port_device_capability()
 
+or between:
 
-vim +/__compiletime_assert_221 +319 include/linux/compiler_types.h
+  A: Handoff from firmware to OS
+  C: pciehp initialization
 
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  305  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  306  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  307  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  308  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  309  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  310   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  311   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  312   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  314   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  315   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  316   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  317   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  318  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @319  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  320  
+Either way there is *some* window, and we have to decide how to deal
+with it.  The exact duration is not very important.
 
-:::::: The code at line 319 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Bjorn

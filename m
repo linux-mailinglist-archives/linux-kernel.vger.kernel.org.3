@@ -2,462 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6579848D194
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 05:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA62C48D197
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 05:21:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiAMEQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 23:16:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
+        id S229740AbiAMESH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 23:18:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiAMEOb (ORCPT
+        with ESMTP id S229671AbiAMERw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 23:14:31 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476B6C029829
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 20:13:19 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso5017820otf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 20:13:19 -0800 (PST)
+        Wed, 12 Jan 2022 23:17:52 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0FAC061748;
+        Wed, 12 Jan 2022 20:17:51 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id o6so18322181edc.4;
+        Wed, 12 Jan 2022 20:17:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=YF7ErIifg0iNFmv3Em8vDBYKQaapOqJDovasJQSWbpA=;
-        b=NsO0FAPcfuf76qmzLWx4b4wp9dZYO/2A0enzd2W7mGqYopIfyShUBWU31br441BgPy
-         JSchsqrzO71SDf4RpRz/LJeafAZxEr7tcYMl7on+Rh5p+7b77LQ/ji5LbYXPSxiIjRBW
-         +wpVajqKE+9XNf55wZft5f0zLsWXN2V42TdoE=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=twLiFQrtbAYLfqOjLvfLPkX6xypVZRiVautRxIHyT/A=;
+        b=c8Kj4oWAQVw0mFePyWCPL8+5DCzIwQn7FRB1qQbiOqJFBRyOXcYne+XDoUHL+cTrik
+         JaOZBzxOaGHAFR3+Ok20jQ+CndVAgLBzwf+wxFY8f7ZWhOU6dyRZm91/mUSVwARAIQDS
+         WMDxOahdIqJ3KHj3UaDZWQ4tnNT6IB8Ad+etYvZYoTewo9d2oNAWevY0qemegDbeBX1/
+         fhsrMdHge5yUQhTwMeCQfb5VG5V3m6pfxjC7nI9EF2QHC0rGPqyJxzgN8DUWDnx4zJ0D
+         baDttos4NNTcPvDygTxvBfUrEFEACVbgyO0yxPXdoAKAy14aW7mnL/a3coITkLT181WF
+         yDIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=YF7ErIifg0iNFmv3Em8vDBYKQaapOqJDovasJQSWbpA=;
-        b=3ZaJWQUbZAb/9YZeePQToGvik/2x0MWsnmVtaW7R6r1R4l+Arzi1lyXHL5oOG21IQF
-         ///68VAjQ4qrUqFQ19C4E4D65Lqt4Zh7b1PuMVagdjMYhk9EeZjhVjuLT8Nk+wLPYI0R
-         tDaU6jZ60o/782PXV6X5y/84YawJnUIaLuXwcVmleToVkKkxxlz73ug4tnqs0MTl0B8M
-         lhlNXb15TbB2z8PRSMTYpSuPdGsukx1GJW3TLNJhB/jSdqD/0Ws7huEfNHCPPpvOOI/1
-         AjgJp3LEI82MOChxfiEIzodTEbXkDv05MR/8iaC2Ff9bvDED2wVqF0G/WQxSwrh0mA+R
-         Iv2A==
-X-Gm-Message-State: AOAM5325qEDWd2rGp43L7B9I1FPM8FfMHx1IvSUPxlgIV3H43/GYD+kB
-        65lZ4IhKwzewi2ubKKMzGIZmxpEe7T3sDmI1O4RxbA==
-X-Google-Smtp-Source: ABdhPJwtEE8y/SBCOBJZ0IZoluimP5IFNxmqLTvXIV0GunkKcWIBztLpgd9HRnIJMsrJXnHPCQnnZLReZsQXlk0AaEE=
-X-Received: by 2002:a9d:7451:: with SMTP id p17mr1921284otk.159.1642047198573;
- Wed, 12 Jan 2022 20:13:18 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 12 Jan 2022 20:13:18 -0800
-MIME-Version: 1.0
-In-Reply-To: <84ee17f9-2597-86b6-1517-2358d443f65b@quicinc.com>
-References: <1641926606-1012-1-git-send-email-quic_khsieh@quicinc.com>
- <1641926606-1012-2-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n53hrPYR3ThwxM_+fzyRSB+6W1drFymW5n_RKmg_gf8z-w@mail.gmail.com> <84ee17f9-2597-86b6-1517-2358d443f65b@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Wed, 12 Jan 2022 20:13:18 -0800
-Message-ID: <CAE-0n5134H0puMicozjdfTY+zXVUZyrebjv7Hto3EWcQAELO4A@mail.gmail.com>
-Subject: Re: [PATCH v11 1/4] drm/msm/dp: do not initialize phy until plugin
- interrupt received
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=twLiFQrtbAYLfqOjLvfLPkX6xypVZRiVautRxIHyT/A=;
+        b=VpEwJlp72Q/6OLuMv5c3IulRWbFP5+XWtP+jw6pkE/LtHCW+IHnGaD/5FgLOS8PH5O
+         uAAOJNnpBS9jVFucxvaY9fJj6EyfgkzD0YKSrrD2MsToLARlyBzvIEg3QZWvGStPKsK0
+         nzP6BU5ocTAcKoPrYW/kxzq56DmY1ufTlO2iDSnVdEf/Zkd6Tm4Q9oizbntbjvtfTKm3
+         zJReZ9VK00yw2wSI2F9CS16n1rXgbHnQlf7giFreKJKuVgdyYffYrqBruxe7pa80uzRV
+         BUbdElwwkeLYXiIVNaPHsapJYQ8mowqFhd1XUiOLDf2AhCesZN3/n6wPa1vhuxPb00mP
+         Qw5g==
+X-Gm-Message-State: AOAM531r3sX6qE/fffT4BNf4sTPOBYn+Ay4dThqfV1mtVghqqAb6NKF1
+        18AB2NkQm73sjcC32oI9lAM=
+X-Google-Smtp-Source: ABdhPJwHXyyikak4mGI38dwfDFK/WiLjVYqkErNhxTzcCuRXPUx3hM6QBBqmMmKClFKZxf8S4JQkew==
+X-Received: by 2002:a17:906:4fc7:: with SMTP id i7mr2152409ejw.652.1642047470421;
+        Wed, 12 Jan 2022 20:17:50 -0800 (PST)
+Received: from localhost.localdomain ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id eb14sm651822edb.16.2022.01.12.20.17.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 20:17:50 -0800 (PST)
+From:   Christian Hewitt <christianshewitt@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>
+Subject: [PATCH 0/3] arm64: dts: meson: minor P212/VIM1 fixups
+Date:   Thu, 13 Jan 2022 04:17:43 +0000
+Message-Id: <20220113041746.16040-1-christianshewitt@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-01-12 14:17:54)
->
-> On 1/12/2022 12:00 PM, Stephen Boyd wrote:
-> > Quoting Kuogee Hsieh (2022-01-11 10:43:23)
-> >> Current DP drivers have regulators, clocks, irq and phy are grouped
-> >> together within a function and executed not in a symmetric manner.
-> >> This increase difficulty of code maintenance and limited code scalabil=
-ity.
-> >> This patch divides the driver life cycle of operation into four states=
-,
-> >> resume (including booting up), dongle plugin, dongle unplugged and sus=
-pend.
-> >> Regulators, core clocks and irq are grouped together and enabled at re=
-sume
-> >> (or booting up) so that the DP controller is armed and ready to receiv=
-e HPD
-> >> plugin interrupts. HPD plugin interrupt is generated when a dongle plu=
-gs
-> >> into DUT (device under test). Once HPD plugin interrupt is received, D=
-P
-> >> controller will initialize phy so that dpcd read/write will function a=
-nd
-> >> following link training can be proceeded successfully. DP phy will be
-> >> disabled after main link is teared down at end of unplugged HPD interr=
-upt
-> >> handle triggered by dongle unplugged out of DUT. Finally regulators, c=
-ode
-> >> clocks and irq are disabled at corresponding suspension.
->
-> 0) Please note that=C2=A0 dongles are behavior differently.
->
-> 1) Apple dongle will generate plug-in interrupt only if no hdmi monitor
-> atatched to dongle. it will generate irq-hpd interrupt once hdmi monitor
-> connect to dongle later.
->
-> 2) Apple dongle will generate plugged-in interrupt followed by irq-hpd
-> interrupt if dongle has hdmi monitor attached when connects to DUT.
->
-> 3) other dongle will not generate plug-in interrupt unless dongle has
-> hdmi monitor attached when connects to DUT. It only generate plug-in
-> interrupt only and no irq-hpd interrupt=C2=A0 generated on this case.
+The P212 (S905X reference board) dts is used with a number of no-name
+Android boxes that follow the reference design, and users had noticed
+that BT worked but WiFi did not. While investigating and adding the
+missing WiFi bits to the dtsi for testing I spotted that VIM1 inherits
+from the p212 dtsi and has the BT node duplicated, so we can clean that
+up too. And since we're tidying things, the pwm_ef node can be moved
+to maintain normal alpha sorting.
 
-Ok. The test scenarios can be reworded in terms of plugin irq and
-irq-hpd if that makes it easier.
+Christian Hewitt (3):
+  arm64: dts: meson: add Broadcom WiFi to P212 dtsi
+  arm64: dts: meson: move pwm_ef node in P212 dtsi
+  arm64: dts: meson: remove Broadcom WiFi/BT nodes from Khadas VIM1
 
->
-> 4) Note: phy_initialized only associated with plugged-in interrupt
->
-> 5) irq-hpd interrupt must happen after plugged-in interrupt and before
-> unplugged interrupt
+ .../amlogic/meson-gxl-s905x-khadas-vim.dts    | 19 ---------------
+ .../dts/amlogic/meson-gxl-s905x-p212.dtsi     | 23 +++++++++++--------
+ 2 files changed, 14 insertions(+), 28 deletions(-)
 
-More precisely it's that plugged-in interrupt must be handled before
-irq-hpd but plugged-in and irq-hpd can both be pending at the device
-concurrently unless they're masked and unmasked in some particular
-order. I thought the driver ensures that only irq-hpd is unmasked once
-the plugged in irq is handled. Can you confirm? Similarly, unplugged irq
-is unmasked after plugged in irq is handled, but irq-hpd and unplugged
-can both be pending if the irq handler is delayed?
+-- 
+2.17.1
 
->
-> I will fill up below question with Apple dongle case with the order of
-> event happen timing.
->
-> > I'll write out the various scenarios
-> >
-> > #1
-> >       dongle plugged in with HDMI cable attached
-> >       driver probe
->
-> 1) driver probe =3D=3D> core_initialized =3D false;    phy_initialized =
-=3D false;
-> 2) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 3) generate plugged-in interrupt triggers handler
-> 4) dp_display_phy_init() =3D=3D> phy_initialized =3D true;
->
-> >
-> >
-> > #2
-> >       dongle unplugged
-> >       driver probe
->
-> 1) driver probe =3D=3D> core_initialized =3D false;    phy_initialized =
-=3D false;
-> 2) dp_display_host_init() =3D=3D> core_initialized =3D true;
->
->
-> >
-> > #3
-> >       dongle plugged in without HDMI cable attached
-> >       driver probe
->
-> 1) driver probe =3D=3D> core_initialized =3D false;    phy_initialized =
-=3D false;
-> 2) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 3) generate plug-in interrupt triggers handler
-> 4) dp_display_phy_init() =3D=3D> phy_initialized =3D true;
->
-> Note: same as case #1
-> > #4
-> >       driver probe
-> >       dongle plugged in without HDMI cable attached
->
-> 1) driver probe =3D=3D> core_initialized =3D false;    phy_initialized =
-=3D false;
-> 2) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 3) dongle plugged in
-> 4) generate plug-in interrupt triggers handler
-> 5) dp_display_phy_init() =3D=3D> phy_initialized =3D true;
->
-> >
-> >
-> > #5
-> >       driver probe
-> >       dongle plugged in with HDMI cable attached
->
-> 1) driver probe =3D=3D> core_initialized =3D false;    phy_initialized =
-=3D false;
-> 2) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 3) dongle plugged in
-> 4) generate plug-in interrupt trigger handler
-> 5) dp_display_phy_init() =3D=3D> phy_initialized =3D true;
->
-> Note: same as case #4
->
-> >
-> > #6
-> >       driver probe
-> >       dongle plugged in
-> >       suspend
-> >       resume
->
-> 1) driver probe =3D=3D> core_initialized =3D false;    phy_initialized =
-=3D false;
-> 2) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 3) dongle plug in
-> 4) generate plug-in interrupt triggers handler
-> 5) dp_display_phy_init() =3D=3D> phy_initialized =3D true;
-> 6) suspend
-> 7) dp_display_host_deinit() =3D=3D> core_initialized =3D false;
-> 8) dp_display_host_phy_exit() =3D=3D> phy_initialize =3D false;
-> 9) resume
-> 10) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 11) generate plug-in interrupt
-> 12) dp_display_phy_init() =3D=3D> phy_initialize =3D true;
->
-> >
-> > #7
-> >       driver probe
-> >       dongle plugged in
-> >       suspend
-> >       dongle unplugged
-> >       resume
->
-> 1) driver probe =3D=3D> core_initialized =3D false;    phy_initialized =
-=3D false;
-> 2) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 3) dongle plugged in
-> 4) generate plug-in interrupt triggers handler
-> 5) dp_display_phy_init() =3D=3D> phy_initialized =3D true;
-> 6) suspend
-> 7) dp_display_host_deinit() =3D=3D> core_initialized =3D false;
-> 8) dp_display_host_phy_exit() =3D=3D> phy_initialize =3D false;
-
-Why is the order of operations swapped? During probe core_initialized
-is done first and then phy_initialized but then on suspend
-core_initialized is done first again before phy_initialized. That's
-asymmetric.
-
-> 9) dongle unplugged
-> 10) resume
-> 11) dp_display_host_init() =3D=3D> core_initialized =3D true;
->
-> #8
->         driver probe
->         dongle plugged in without HDMI cable attached
->         suspend
->         resume
->
-> 1) driver probe =3D=3D> core_initialized =3D false;    phy_initialized =
-=3D false;
-> 2) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 3) dongle plug in
-> 4) generate plug-in interrupt triggers handler
-> 5) dp_display_phy_init() =3D=3D> phy_initialized =3D true;
-> 6) suspend
-> 7) dp_display_host_deinit() =3D=3D> core_initialized =3D false;
-> 8) dp_display_host_phy_exit() =3D=3D> phy_initialize =3D false;
-> 9) resume
-> 10) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 11) generate plug-in interrupt
-> 12) dp_display_phy_init() =3D=3D> phy_initialize =3D true;
->
->
-> NOTE: same case #6
->
-> #9
->         driver probe
->         dongle plugged in without HDMI cable attached
->         suspend
->         HDMI cable attached during suspend
->         resume
->
-> 1) driver probe =3D=3D> core_initialized =3D false;    phy_initialized =
-=3D false;
-> 2) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 3) dongle plugged in
-> 4) generate plug-in interrupt triggers handler
-> 5) dp_display_phy_init() =3D=3D> phy_initialized =3D true;
-> 6) suspend
-> 7) dp_display_host_deinit() =3D=3D> core_initialized =3D false;
-> 8) dp_display_host_phy_exit() =3D=3D> phy_initialize =3D false;
-> 9) HDMI cable attached
-> 10) resume
-> 11) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 12) generate plug-in interrupt
-> 13) dp_display_phy_init() =3D=3D> phy_initialize =3D true;
->
->
-> What's the state of the phy and core initialized variable at the end of
-> each of these scenarios? Please fill out the truth table.
->
->                   +-----------------+------------------------
->                    |    false        |       true            |
->                   +-----------------+------------------------
->   phy_initialized  |                 |                       |
->                   +-----------------+------------------------
->   core_initialized |                 | #1,                   |
->                   +-----------------+------------------------
->
-> I guess we also need eDP scenarios, but that's probably simpler
->
-> #10
->         eDP panel connected
->         driver probe
->
-> 1) driver probe =3D=3D> core_initialized =3D false;    phy_initialized =
-=3D false;
-> 2) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 3) generate plug-in interrupt triggers handler
-
-I think this is more like "dp_display_config_hpd() is called by hpd
-kthread"?
-
-> 4) dp_display_phy_init() =3D=3D> phy_initialized =3D true;
->
->
->
-> #11
->         eDP panel disconnected
->         driver probe
->
-> NOTE: eDP panel can not be disconnected
-
-The panel can certainly be disconnected in the sense that the ribbon
-cable to the panel is busted or not working properly. That's what this
-scenario is for.
-
->
-> #12
->         eDP panel disconnected
->         driver probe
->         suspend
->         resume
->
-> NOTE: assume edp panel connected
-> 1) driver probe =3D=3D> core_initialized =3D false;    phy_initialized =
-=3D false;
-> 2) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 3) generate plug-in interrupt triggers handler
-> 4) dp_display_phy_init() =3D=3D> phy_initialized =3D true;
-> 5) suspend
-> 6) dp_display_host_deinit() =3D=3D> core_initialized =3D false;
-> 7) dp_display_host_phy_exit() =3D=3D> phy_initialize =3D false;
-> 8) resume
-> 9) dp_display_host_init() =3D=3D> core_initialized =3D true;
-> 10) generate plug-in interrupt
-> 11) dp_display_phy_init() =3D=3D> phy_initialize =3D true;
-
-Thanks. It really helps to see the various scenarios.
-
->
-> >> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm=
-/dp/dp_display.c
-> >> index 7cc4d21..f6bb4bc 100644
-> >> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> >> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> >> @@ -83,6 +83,7 @@ struct dp_display_private {
-> >>
-> >>          /* state variables */
-> >>          bool core_initialized;
-> >> +       bool phy_initialized;
-> >>          bool hpd_irq_on;
-> >>          bool audio_supported;
-> >>
-> >> @@ -372,21 +373,46 @@ static int dp_display_process_hpd_high(struct dp=
-_display_private *dp)
-> >>          return rc;
-> >>   }
-> >>
-> >> -static void dp_display_host_init(struct dp_display_private *dp, int r=
-eset)
-> >> +static void dp_display_host_phy_init(struct dp_display_private *dp)
-> >>   {
-> >> -       bool flip =3D false;
-> >> +       DRM_DEBUG_DP("core_init=3D%d phy_init=3D%d\n",
-> >> +                       dp->core_initialized, dp->phy_initialized);
-> >>
-> >> +       if (!dp->phy_initialized) {
-> >> +               dp_ctrl_phy_init(dp->ctrl);
-> >> +               dp->phy_initialized =3D true;
-> >> +       }
-> >> +}
-> >> +
-> >> +static void dp_display_host_phy_exit(struct dp_display_private *dp)
-> >> +{
-> >> +       DRM_DEBUG_DP("core_init=3D%d phy_init=3D%d\n",
-> >> +                       dp->core_initialized, dp->phy_initialized);
-> >> +
-> >> +       if (dp->phy_initialized) {
-> >> +               dp_ctrl_phy_exit(dp->ctrl);
-> >> +               dp->phy_initialized =3D false;
-> >> +       }
-> >> +}
-> >> +
-> >> +static void dp_display_host_init(struct dp_display_private *dp)
-> >> +{
-> >>          DRM_DEBUG_DP("core_initialized=3D%d\n", dp->core_initialized)=
-;
-> >>          if (dp->core_initialized) {
-> >>                  DRM_DEBUG_DP("DP core already initialized\n");
-> >>                  return;
-> >>          }
-> >>
-> >> -       if (dp->usbpd->orientation =3D=3D ORIENTATION_CC2)
-> >> -               flip =3D true;
-> >> +       dp_power_init(dp->power, false);
-> >> +       dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
-> >> +
-> >> +       /*
-> >> +        * eDP is the embedded primary display and has its own phy
-> >> +        * initialize phy immediately
-> > Question still stands why we can't wait for hpd high from the eDP panel=
-.
-> > Also, I think "has its own phy" means that it's not part of a combo
-> > USB+DP phy? Can you please clarify?
-> >
-> >> +        */
-> >> +       if (dp->dp_display.connector_type =3D=3D DRM_MODE_CONNECTOR_eD=
-P)
-> >> +               dp_display_host_phy_init(dp);
-> >>
-> >> -       dp_power_init(dp->power, flip);
-> >> -       dp_ctrl_host_init(dp->ctrl, flip, reset);
-> >>          dp_aux_init(dp->aux);
-> >>          dp->core_initialized =3D true;
-> >>   }
-> >> @@ -1306,20 +1330,23 @@ static int dp_pm_resume(struct device *dev)
-> >>          dp->hpd_state =3D ST_DISCONNECTED;
-> >>
-> >>          /* turn on dp ctrl/phy */
-> >> -       dp_display_host_init(dp, true);
-> >> +       dp_display_host_init(dp);
-> >>
-> >>          dp_catalog_ctrl_hpd_config(dp->catalog);
-> >>
-> >> -       /*
-> >> -        * set sink to normal operation mode -- D0
-> >> -        * before dpcd read
-> >> -        */
-> >> -       dp_link_psm_config(dp->link, &dp->panel->link_info, false);
-> >>
-> >>          if (dp_catalog_link_is_connected(dp->catalog)) {
-> >> +               /*
-> >> +                * set sink to normal operation mode -- D0
-> >> +                * before dpcd read
-> >> +                */
-> >> +               dp_display_host_phy_init(dp);
-> >> +               dp_link_psm_config(dp->link, &dp->panel->link_info, fa=
-lse);
-> >>                  sink_count =3D drm_dp_read_sink_count(dp->aux);
-> >>                  if (sink_count < 0)
-> >>                          sink_count =3D 0;
-> >> +
-> >> +               dp_display_host_phy_exit(dp);
-> > Why is the phy exited on resume when the link is still connected? Is
-> > this supposed to be done only when the sink_count is 0? And how does
-> > this interact with eDP where the phy is initialized by the call to
-> > dp_display_host_init() earlier in this function.
-> >
-> >>          }
-> >>
-> >>          dp->link->sink_count =3D sink_count;
-
-Any response to the above two comments?

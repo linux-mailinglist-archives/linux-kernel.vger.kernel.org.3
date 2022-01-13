@@ -2,110 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0564A48DC23
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E523B48DC2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236866AbiAMQoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 11:44:13 -0500
-Received: from mout.gmx.net ([212.227.17.20]:48803 "EHLO mout.gmx.net"
+        id S236896AbiAMQrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 11:47:39 -0500
+Received: from mga14.intel.com ([192.55.52.115]:22127 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236855AbiAMQoM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 11:44:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642092244;
-        bh=+GT3R0iprMihU+thXl1YC3ClEpv0BXdo+4Olk8WRQdE=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=PGdCnM39NUfx1conBvPAesCqWWZo3zpNdo5Rp64SlNVX/q5cZ+T1XOFGmHct/t9MD
-         u/Xz5pXUN+lG67aSzcoJvl76WdiGbM2azuBXblZtd2MZgMmoiYXBdbH+9siY8xs40/
-         HrSv8RC2gRQUBy0yjKbjaa505doB5uNrX7AaPM3c=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.168.79]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1ML9yc-1mqvlG05D8-00IF42; Thu, 13
- Jan 2022 17:44:04 +0100
-Message-ID: <078e9d59-d6b5-797b-5701-6292fc588bef@gmx.de>
-Date:   Thu, 13 Jan 2022 17:42:58 +0100
+        id S234714AbiAMQri (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 11:47:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642092458; x=1673628458;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yC1aTVPT0hdsL/SN5OhB5oxW83SlaYQWk3o87ylsEKk=;
+  b=PdlRsv7zG0J5wRAmX3JtAxFm2DSUQ7W6KeUJauOGKFJsQ2I0yxiJH8xM
+   JCB16e543pBk/ZL09Hc/TE5p6G+r8ppvJ1NZ21B61WALnI/PWbfYI2QOI
+   CG34c0jsDqFKeEEms9FagQyvrKSaOJi8U1xjsdBFEKpBbcNWb2TkrWD2i
+   2xeKMKpJC9S1FbieBoN8SPJS/AoaDixJ2jto7EgbH5FHJE89fa26OHSIt
+   ODgUvVIbksmnCfBcDffwOOhj478E6bbt9dcpDuYr+OohHpQZQsW4FvYez
+   kqcfu1Yn06/fziTYOtkgH+VSkaYmIdzyXGE7qoQz4EU7D7QLj/M6ZS2bv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="244255008"
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="244255008"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 08:47:37 -0800
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="691860033"
+Received: from lmaniak-dev.igk.intel.com ([10.55.249.72])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 08:47:36 -0800
+Date:   Thu, 13 Jan 2022 17:45:38 +0100
+From:   Lukasz Maniak <lukasz.maniak@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?Q?=C5=81ukasz?= Gieryk <lukasz.gieryk@linux.intel.com>
+Subject: Re: [PATCH] PCI: Reset IOV state on FLR to PF
+Message-ID: <20220113164538.GA577231@lmaniak-dev.igk.intel.com>
+References: <20211222191958.955681-1-lukasz.maniak@linux.intel.com>
+ <20220112144903.GA253960@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 0/7] agp: Various minor fixes
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, airlied@linux.ie,
-        daniel.vetter@ffwll.ch, arnd@arndb.de, gregkh@linuxfoundation.org,
-        James.Bottomley@HansenPartnership.com
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20211201114645.15384-1-tzimmermann@suse.de>
- <aba1a416-cfec-dadb-fff6-48b95346173d@suse.de>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <aba1a416-cfec-dadb-fff6-48b95346173d@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:XW0GanP14yP4WB70CLBZJK+JNRUnOz4GIsF5A+XX1QUATxOpwK0
- 21NOOiqaSFWKHqRgIZEddksnyG2cfBrkqO3oKqxQ1PXtunv71V09QxxabzPNH/yKco/sOlW
- wYVoyRNgIZAaPZIvsYnSN8U2MErKsALvchez1duUDT0ozftVPDr3aGwHpMKJsEtwFsIJOio
- CE6E1cAUn4lw+U0bF+1Xg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZLdOMzogqXo=:pWkaW+F50Qi7ZjRCHoOR4D
- BVpQUAzWkcMZHMLFI0byrl3sJMJnFiL00N8TkHQ9rK9De11u89biMo8NylPbdmhLJuw9RuB86
- T4pBM6we/SiD9+L7/2t4TwCIEGdBDwh9WgJ/qakzVxPBuW6d4Kt93QHNjWv+nuo1VSHgeBDBZ
- wt1AoftD893zZDORawTT3M0AJCncfd7goP/P7PHuGpvIeMM+FV/1fnqkMODdkhKtBMdbi009n
- SWeLltMKf5rNCKTJOknZwp0t494fFNQUXElw4uOOI9qgvDgdwsCQHBvdi/M5cF4Zf7XRwV1pd
- pX3cVkxWvsiMHNJ18vmfEQy4FwSIsJbZ3Iun0eBqquUTMGm1KWv1POKTbUtfAdo9+pbbTXZCb
- YEjZKpSVSbTN9jil3kLg8YKen/jD7Jb3NIxd/4eDJoh25vw/EtwbxlNH8AoxiWV5cI9QI+fiv
- uQC1ZdYTLVK58nDJkBemH/9Ad/1DESQrbw3YPUqoBRQlVdaUcw69o9UfHXYmJNqa/9GL5lRCw
- 5EIKo3srWonabIqolQhRWf6mlL9NsW3ptJh5by3TxNmj8hZsFSWNIMbLTpke6J2+vjLNAVvU5
- Rgdm3B+jL7clKufhmQgJ/7vUd99LpYPhp01ho2DneRVSaus4GuJf32g6HGqDe1f+3lfpapXj0
- Y6RXjnK2CQabN8o5EjoUCERosb0PnHxB3Y1Z8GJUODb1FnMSywbIeyRCJxcprPzPtGoI1mEXe
- BzTOkES+//DmOvQxHa2f+m95neFFS6uUWfziaFwfjwJ6d9jBcson2VBSCDFbdWqBFVf7pfjL8
- nd2IW7Z3OV7gDGKyf+9BTWOt1KaMbR3ZXi3jTGjErh5I1302fhKojvlGDW3NEiScBSxuEqveo
- Vy9cycQbGqMJHaFhXWHQCTUBFk6QJIJ4fai2xE3go58iXO+MuV9zDbe9ASbxLJe8o+fUvRdsb
- 5lfUpb7ZfKL4l0bwHtryNBl1roVXZJ0bpBi9yiQAmJ8gAne0u4lggL+KMz9NGAc1xO5EbnEyr
- +mmiqtGAEKNsWGTh1aQmrujT6qvMUqCY9t9rGwD2T3cdjOUgDjqfI2GGFOcta+nO9uNIxM2Ds
- zy5BgfZh0QQcxI=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220112144903.GA253960@bhelgaas>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/13/22 09:51, Thomas Zimmermann wrote:
-> ping!
->
-> This patchset got lost. Patches 4 and 5 still need a review.
+On Wed, Jan 12, 2022 at 08:49:03AM -0600, Bjorn Helgaas wrote:
+> On Wed, Dec 22, 2021 at 08:19:57PM +0100, Lukasz Maniak wrote:
+> > As per PCI Express specification, FLR to a PF resets the PF state as
+> > well as the SR-IOV extended capability including VF Enable which means
+> > that VFs no longer exist.
+> 
+> Can you add a specific reference to the spec, please?
+> 
+Following the Single Root I/O Virtualization and Sharing Specification:
+2.2.3. FLR That Targets a PF
+PFs must support FLR.
+FLR to a PF resets the PF state as well as the SR-IOV extended
+capability including VF Enable which means that VFs no longer exist.
 
-for patches 4 & 5:
-Acked-by: Helge Deller <deller@gmx.de>
+For PCI Express Base Specification Revision 5.0 and later, this is
+section 9.2.2.3.
 
-Helge
+> > Currently, the IOV state is not updated during FLR, resulting in
+> > non-compliant PCI driver behavior.
+> 
+> And include a little detail about what problem is observed?  How would
+> a user know this problem is occurring?
+> 
+The problem is that the state of the kernel and HW as to the number of
+VFs gets out of sync after FLR.
 
->
-> Am 01.12.21 um 12:46 schrieb Thomas Zimmermann:
->> Fix a number of compiler warnings in the AGP drivers. No functional
->> changes.
->>
->> v2:
->> =C2=A0=C2=A0=C2=A0=C2=A0* ati-agp: free page in error branch (Helge)
->> =C2=A0=C2=A0=C2=A0=C2=A0* nvidia-agp: Mark temp as __maybe_unused (Helg=
-e)
->>
->> Thomas Zimmermann (7):
->> =C2=A0=C2=A0 agp: Remove trailing whitespaces
->> =C2=A0=C2=A0 agp: Include "compat_ioctl.h" where necessary
->> =C2=A0=C2=A0 agp: Documentation fixes
->> =C2=A0=C2=A0 agp/ati: Return error from ati_create_page_map()
->> =C2=A0=C2=A0 agp/nvidia: Declare value returned by readl() as unused
->> =C2=A0=C2=A0 agp/sworks: Remove unused variable 'current_size'
->> =C2=A0=C2=A0 agp/via: Remove unused variable 'current_size'
->>
->> =C2=A0 drivers/char/agp/ati-agp.c=C2=A0=C2=A0=C2=A0 | 8 ++++++--
->> =C2=A0 drivers/char/agp/backend.c=C2=A0=C2=A0=C2=A0 | 2 ++
->> =C2=A0 drivers/char/agp/frontend.c=C2=A0=C2=A0 | 4 +++-
->> =C2=A0 drivers/char/agp/nvidia-agp.c | 3 ++-
->> =C2=A0 drivers/char/agp/sworks-agp.c | 5 +----
->> =C2=A0 drivers/char/agp/via-agp.c=C2=A0=C2=A0=C2=A0 | 3 ---
->> =C2=A0 6 files changed, 14 insertions(+), 11 deletions(-)
->>
->>
->> base-commit: 6a8f90ec433e2f5de5fc16d7a4839771b7027cc0
->> --
->> 2.34.0
->>
->
+This results in further listing, after the FLR is performed by the HW,
+of VFs that actually no longer exist and should no longer be reported on
+the PCI bus. lspci return FFs for these VFs.
 
+sriov_numvfs in sysfs returns old invalid value and does not allow
+setting a new value before explicitly setting 0 in the first place.
+
+> > This patch introduces a simple function, called on the FLR path, that
+> > removes the virtual function devices from the PCI bus and their
+> > corresponding sysfs links with a final clear of the num_vfs value in IOV
+> > state.
+> > 
+> > Signed-off-by: Lukasz Maniak <lukasz.maniak@linux.intel.com>
+> > ---
+> >  drivers/pci/iov.c | 21 +++++++++++++++++++++
+> >  drivers/pci/pci.c |  2 ++
+> >  drivers/pci/pci.h |  4 ++++
+> >  3 files changed, 27 insertions(+)
+> > 
+> > diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
+> > index 0267977c9f17..69ee321027b4 100644
+> > --- a/drivers/pci/iov.c
+> > +++ b/drivers/pci/iov.c
+> > @@ -1013,6 +1013,27 @@ int pci_iov_bus_range(struct pci_bus *bus)
+> >  	return max ? max - bus->number : 0;
+> >  }
+> >  
+> > +/**
+> > + * pci_reset_iov_state - reset the state of the IOV capability
+> > + * @dev: the PCI device
+> > + */
+> > +void pci_reset_iov_state(struct pci_dev *dev)
+> > +{
+> > +	struct pci_sriov *iov = dev->sriov;
+> > +
+> > +	if (!dev->is_physfn)
+> > +		return;
+> > +	if (!iov->num_VFs)
+> > +		return;
+> > +
+> > +	sriov_del_vfs(dev);
+> > +
+> > +	if (iov->link != dev->devfn)
+> > +		sysfs_remove_link(&dev->dev.kobj, "dep_link");
+> > +
+> > +	iov->num_VFs = 0;
+> > +}
+> > +
+> >  /**
+> >   * pci_enable_sriov - enable the SR-IOV capability
+> >   * @dev: the PCI device
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index 3d2fb394986a..535f19d37e8d 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -4694,6 +4694,8 @@ EXPORT_SYMBOL(pci_wait_for_pending_transaction);
+> >   */
+> >  int pcie_flr(struct pci_dev *dev)
+> >  {
+> > +	pci_reset_iov_state(dev);
+> > +
+> >  	if (!pci_wait_for_pending_transaction(dev))
+> >  		pci_err(dev, "timed out waiting for pending transaction; performing function level reset anyway\n");
+> >  
+> > diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> > index 3d60cabde1a1..7bb144fbec76 100644
+> > --- a/drivers/pci/pci.h
+> > +++ b/drivers/pci/pci.h
+> > @@ -480,6 +480,7 @@ void pci_iov_update_resource(struct pci_dev *dev, int resno);
+> >  resource_size_t pci_sriov_resource_alignment(struct pci_dev *dev, int resno);
+> >  void pci_restore_iov_state(struct pci_dev *dev);
+> >  int pci_iov_bus_range(struct pci_bus *bus);
+> > +void pci_reset_iov_state(struct pci_dev *dev);
+> >  extern const struct attribute_group sriov_pf_dev_attr_group;
+> >  extern const struct attribute_group sriov_vf_dev_attr_group;
+> >  #else
+> > @@ -501,6 +502,9 @@ static inline int pci_iov_bus_range(struct pci_bus *bus)
+> >  {
+> >  	return 0;
+> >  }
+> > +static inline void pci_reset_iov_state(struct pci_dev *dev)
+> > +{
+> > +}
+> >  
+> >  #endif /* CONFIG_PCI_IOV */
+> >  
+> > 
+> > base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
+> > -- 
+> > 2.25.1
+> > 

@@ -2,176 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C83248D720
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D1D48D723
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234378AbiAMMHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:07:00 -0500
-Received: from mga07.intel.com ([134.134.136.100]:29254 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234383AbiAMMGv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:06:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642075611; x=1673611611;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=4fWpAMCkMJpXx/DYwwFItfouhoPnra/h+mOm6olLclQ=;
-  b=G9c+jNIzfDpIVqKokYhAX9q/6r37xAOokbjdUxVaYF4JGHHpNJzBUhz+
-   sRYx4wURnbOpbNDRM9NCMjkNJJXMJZG6nLlPkKE/7t89DwHei7eOCXnAm
-   uyw1Jh8URn3FskhP0UBpsDwjq3oAnwspx9h3JGVmfDhj/MEF4KTcRxsio
-   DIIeqqjnF9k6Kq50f4FohyCmNimHEYJLimfuXXGbPlyonPMG0jYEMQSrT
-   wd4Bt9YsmxpJc6ZSmlc7JdXzWSAXbJJVeMaG1lI8MfKpRNah9UK0x75Qp
-   8DrVbekRMlIN7BI/6Oy5egP1FpInpe2zSW60gSxIXhEeXPB8EaN9cIsQ6
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="307339456"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="307339456"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 04:06:46 -0800
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="475290041"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 04:06:42 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mel Gorman <mgorman@suse.de>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Hasan Al Maruf <hasanalmaruf@fb.com>
-Subject: Re: [PATCH -V10 RESEND 0/6] NUMA balancing: optimize memory
- placement for memory tiering system
-References: <20211207022757.2523359-1-ying.huang@intel.com>
-        <Yd79b6PptQMNzDRw@hirez.programming.kicks-ass.net>
-        <87sftsumqd.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Yd/1r49RKgwCXCQL@hirez.programming.kicks-ass.net>
-Date:   Thu, 13 Jan 2022 20:06:40 +0800
-In-Reply-To: <Yd/1r49RKgwCXCQL@hirez.programming.kicks-ass.net> (Peter
-        Zijlstra's message of "Thu, 13 Jan 2022 10:49:35 +0100")
-Message-ID: <87o84fu9f3.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S232803AbiAMMHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230310AbiAMMHq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 07:07:46 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6E0C06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:07:45 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id g11so18747821lfu.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:07:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=yAP1FMAcpDzFu2Al3uF90uC2rPxA7nQ6In3o8LmKt5s=;
+        b=qpmGhEHzag2mgXSZKa5TAnx3QaK1NbGnAER0oaVqrs4235lfxcPYEu6RkZZSJCOoPv
+         fPoBNLE1aUJ9aRcwT7ubxdZ7LLxN9JWAOCAia51t3hCZHXDctKsSq3DKxK4DrIxUroFK
+         tjjKbu+vV2oHJuYMHZGk5ky3D5wThluYs7C+51WPc9XiU8XOBH+0iAYGryx20S8qu6Ku
+         fy1xI80rk8VYsjWTdipBraXmPvbtN/ESxHap5ICZG+ZMzrtbCQMbgG+QXs2kT1r39Cm2
+         eHBQPtVFcE/nACv6lSC5hfV2IXGd7VAmKmLMtwIVSX/nhteT4iwRZNtmmqVQGnlKqNfn
+         7oPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=yAP1FMAcpDzFu2Al3uF90uC2rPxA7nQ6In3o8LmKt5s=;
+        b=waQAgnkBiWRCPxnLEnMFSFhOARxHffZUf/bAhdEg3SO3FSXXZQvIfUeXxGjH7vFEl2
+         SMBgrXovoqbrrBlvS1GvpCnEYOtAWd8EsbtA1iDJRiMdL6pGKJjmw/n/L/d9HGRiYths
+         x3KoOC9EUyvb2P56fnzOcZuvgU+ymWF9IcDTXGfFf30fh1cBFeP+pSZOj/coHqeKQxLs
+         gW6YRS1ZEwJajY2Kog1JDN/YZKcbU5rRpjEvJ+56GGFTeazz+3wGy2Oj/dU0FIqJm+Kb
+         p1QeKdVwl+4q+oAxwb6Jeobv046UvI59765nq9XEfa7owtz5i3s1F5bq8DJK196jgMz/
+         TOXA==
+X-Gm-Message-State: AOAM531rrhYO6aknz4GLLp0Fpt64LI7zxxXjIKfuPZrmGrw6I3SjXhLk
+        XuIqF9TT0QRX/UbEfgv96Q217v0woTTWktKHPeothw==
+X-Google-Smtp-Source: ABdhPJzxAe/t75YtFir2L4jJA4G2mrPispiMgqp0nFdc982lOD9tckYYL9T6XUM9QO4bDrmKBqAue0W3sTdc9U0ygKE=
+X-Received: by 2002:a05:6512:20ca:: with SMTP id u10mr3035788lfr.71.1642075664297;
+ Thu, 13 Jan 2022 04:07:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+References: <20220111171424.862764-1-Jerome.Pouiller@silabs.com>
+ <2680707.qJCEgCfB62@pc-42> <20220112174848.db5osolurllpc7du@pali> <1655654.vHqhSpDN13@pc-42>
+In-Reply-To: <1655654.vHqhSpDN13@pc-42>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 13 Jan 2022 13:07:06 +0100
+Message-ID: <CAPDyKFpP-Ta=wUuOE1m4wqsoKACV564nhJ=c2OeL0H5LjG2yrg@mail.gmail.com>
+Subject: Re: [PATCH v9 08/24] wfx: add bus_sdio.c
+To:     =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <Jerome.Pouiller@silabs.com>
+Cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra <peterz@infradead.org> writes:
-
-> On Thu, Jan 13, 2022 at 03:19:06PM +0800, Huang, Ying wrote:
->> Hi, Peter,
->> 
->> Peter Zijlstra <peterz@infradead.org> writes:
->> 
->> > On Tue, Dec 07, 2021 at 10:27:51AM +0800, Huang Ying wrote:
->> >> After commit c221c0b0308f ("device-dax: "Hotplug" persistent memory
->> >> for use like normal RAM"), the PMEM could be used as the
->> >> cost-effective volatile memory in separate NUMA nodes.  In a typical
->> >> memory tiering system, there are CPUs, DRAM and PMEM in each physical
->> >> NUMA node.  The CPUs and the DRAM will be put in one logical node,
->> >> while the PMEM will be put in another (faked) logical node.
->> >
->> > So what does a system like that actually look like, SLIT table wise, and
->> > how does that affect init_numa_topology_type() ?
->> 
->> The SLIT table is as follows,
->> 
->> [000h 0000   4]                    Signature : "SLIT"    [System Locality Information Table]
->> [004h 0004   4]                 Table Length : 0000042C
->> [008h 0008   1]                     Revision : 01
->> [009h 0009   1]                     Checksum : 59
->> [00Ah 0010   6]                       Oem ID : "INTEL "
->> [010h 0016   8]                 Oem Table ID : "S2600WF "
->> [018h 0024   4]                 Oem Revision : 00000001
->> [01Ch 0028   4]              Asl Compiler ID : "INTL"
->> [020h 0032   4]        Asl Compiler Revision : 20091013
->> 
->> [024h 0036   8]                   Localities : 0000000000000004
->> [02Ch 0044   4]                 Locality   0 : 0A 15 11 1C
->> [030h 0048   4]                 Locality   1 : 15 0A 1C 11
->> [034h 0052   4]                 Locality   2 : 11 1C 0A 1C
->> [038h 0056   4]                 Locality   3 : 1C 11 1C 0A
->> 
->> The `numactl -H` output is as follows,
->> 
->> available: 4 nodes (0-3)
->> node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
->> node 0 size: 64136 MB
->> node 0 free: 5981 MB
->> node 1 cpus: 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95
->> node 1 size: 64466 MB
->> node 1 free: 10415 MB
->> node 2 cpus:
->> node 2 size: 253952 MB
->> node 2 free: 253920 MB
->> node 3 cpus:
->> node 3 size: 253952 MB
->> node 3 free: 253951 MB
->> node distances:
->> node   0   1   2   3 
->>   0:  10  21  17  28 
->>   1:  21  10  28  17 
->>   2:  17  28  10  28 
->>   3:  28  17  28  10 
->> 
->> init_numa_topology_type() set sched_numa_topology_type to NUMA_DIRECT.
->> 
->> The node 0 and node 1 are onlined during boot.  While the PMEM node,
->> that is, node 2 and node 3 are onlined later.  As in the following dmesg
->> snippet.
+On Wed, 12 Jan 2022 at 19:24, J=C3=A9r=C3=B4me Pouiller
+<jerome.pouiller@silabs.com> wrote:
 >
-> But how? sched_init_numa() scans the *whole* SLIT table to determine
-> nr_levels / sched_domains_numa_levels, even offline nodes. Therefore it
-> should find 4 distinct distance values and end up not selecting
-> NUMA_DIRECT.
+> On Wednesday 12 January 2022 18:48:48 CET Pali Roh=C3=A1r wrote:
+> > CAUTION: This email originated from outside of the organization. Do not=
+ click links or open attachments unless you recognize the sender and know t=
+he content is safe.
+> >
+> >
+> > On Wednesday 12 January 2022 17:45:45 J=C3=A9r=C3=B4me Pouiller wrote:
+> > > On Wednesday 12 January 2022 12:43:32 CET Pali Roh=C3=A1r wrote:
+> > > >
+> > > > On Wednesday 12 January 2022 12:18:58 J=C3=A9r=C3=B4me Pouiller wro=
+te:
+> > > > > On Wednesday 12 January 2022 11:58:59 CET Pali Roh=C3=A1r wrote:
+> > > > > > On Tuesday 11 January 2022 18:14:08 Jerome Pouiller wrote:
+> > > > > > > +static const struct sdio_device_id wfx_sdio_ids[] =3D {
+> > > > > > > +     { SDIO_DEVICE(SDIO_VENDOR_ID_SILABS, SDIO_DEVICE_ID_SIL=
+ABS_WF200) },
+> > > > > > > +     { },
+> > > > > > > +};
+> > > > > >
+> > > > > > Hello! Is this table still required?
+> > > > >
+> > > > > As far as I understand, if the driver does not provide an id_tabl=
+e, the
+> > > > > probe function won't be never called (see sdio_match_device()).
+> > > > >
+> > > > > Since, we rely on the device tree, we could replace SDIO_VENDOR_I=
+D_SILABS
+> > > > > and SDIO_DEVICE_ID_SILABS_WF200 by SDIO_ANY_ID. However, it does =
+not hurt
+> > > > > to add an extra filter here.
+> > > >
+> > > > Now when this particular id is not required, I'm thinking if it is =
+still
+> > > > required and it is a good idea to define these SDIO_VENDOR_ID_SILAB=
+S
+> > > > macros into kernel include files. As it would mean that other broke=
+n
+> > > > SDIO devices could define these bogus numbers too... And having the=
+m in
+> > > > common kernel includes files can cause issues... e.g. other develop=
+ers
+> > > > could think that it is correct to use them as they are defined in c=
+ommon
+> > > > header files. But as these numbers are not reliable (other broken c=
+ards
+> > > > may have same ids as wf200) and their usage may cause issues in fut=
+ure.
+> > >
+> > > In order to make SDIO_VENDOR_ID_SILABS less official, do you prefer t=
+o
+> > > define it in wfx/bus_sdio.c instead of mmc/sdio_ids.h?
+> > >
+> > > Or even not defined at all like:
+> > >
+> > >     static const struct sdio_device_id wfx_sdio_ids[] =3D {
+> > >          /* WF200 does not have official VID/PID */
+> > >          { SDIO_DEVICE(0x0000, 0x1000) },
+> > >          { },
+> > >     };
+> >
+> > This has advantage that it is explicitly visible that this device does
+> > not use any officially assigned ids.
 >
-> Similarly for the other types it uses for_each_online_node(), which
-> would include the pmem nodes once they've been onlined, but I'm thinking
-> we explicitly want to skip CPU-less nodes in that iteration.
+> Ulf, are you also agree?
 
-I used the debug patch as below, and get the log in dmesg as follows,
+Sure, that works for me too.
 
-[    5.394577][    T1] sched_numa_topology_type: 0, levels: 4, max_distance: 28
-
-I found that I forget another caller of init_numa_topology_type() run
-during hotplug.  I will add another printk() to show it.  Sorry about
-that.
-
-Best Regards,
-Huang, Ying
-
--------------------------------8<------------------------------------
-From 11cea4be2db6220333d84f5b168174f534ac0933 Mon Sep 17 00:00:00 2001
-From: Huang Ying <ying.huang@intel.com>
-Date: Thu, 13 Jan 2022 09:53:15 +0800
-Subject: [PATCH] dbg: show sched_numa_topology_type
-
----
- kernel/sched/topology.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index d201a7052a29..9d92191fd62d 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1914,6 +1914,10 @@ void sched_init_numa(void)
- 
- 	init_numa_topology_type();
- 
-+	pr_info("sched_numa_topology_type: %d, levels: %d, max_distance: %d\n",
-+		sched_numa_topology_type, sched_domains_numa_levels,
-+		sched_max_numa_distance);
-+
- 	sched_numa_onlined_nodes = bitmap_alloc(nr_node_ids, GFP_KERNEL);
- 	if (!sched_numa_onlined_nodes)
- 		return;
--- 
-2.30.2
-
+Kind regards
+Uffe

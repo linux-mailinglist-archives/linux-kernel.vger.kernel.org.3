@@ -2,119 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8066F48D80B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5F348D808
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233270AbiAMMe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:34:29 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:48688 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiAMMe1 (ORCPT
+        id S234591AbiAMMd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:33:28 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:38102 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233633AbiAMMd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:34:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wQtWtM09iBZmv9xk/tKCHMTRNvqGx3TjjRoBe9wm/LU=; b=T/nlGduKLAmP914ehy5z6eigbO
-        HE+Udp55VhMN/ysDgyvboww/3sO6Guh6kuase0068mrKcRuJcMuZOOOYaqkv6teyNLF5IDJzyGRZC
-        SbG1g04uyz0CekByOMKONs4DGkSMVvjntDjmKDaBzpgpyNwi6YSKasSgV7IMAFreDQR8CuVq/dhuS
-        7iVOE3TC824sBA3sX9PMpL1XI8gsX4e5tCk12Ou9Q7QXDsHSSdHhO89NxAXiwGo5jd8mGDnYh66sY
-        PkjyW/la5XPjIbJ+/GV9hAIK1YFxP54O1hZjGQkmlFOYTtWns21tM9g2UMIiJCFGhCwnQCW5oH+G2
-        fVpRJWDQ==;
-Received: from [179.113.53.20] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1n7zJ7-0006eF-Fv; Thu, 13 Jan 2022 13:34:21 +0100
-Message-ID: <ba0e29ba-0e08-df6e-ade5-eb58ae2495e3@igalia.com>
-Date:   Thu, 13 Jan 2022 09:34:01 -0300
+        Thu, 13 Jan 2022 07:33:26 -0500
+X-UUID: a357bcd85de4422e9e90e55554a8dd4d-20220113
+X-UUID: a357bcd85de4422e9e90e55554a8dd4d-20220113
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <guangming.cao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1167861225; Thu, 13 Jan 2022 20:33:19 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 13 Jan 2022 20:33:17 +0800
+Received: from mszswglt01.gcn.mediatek.inc (10.16.20.20) by
+ mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Thu, 13 Jan 2022 20:33:16 +0800
+From:   <guangming.cao@mediatek.com>
+To:     <sumit.semwal@linaro.org>
+CC:     <benjamin.gaignard@linaro.org>, <bo.song@mediatek.com>,
+        <brian.starkey@arm.com>, <christian.koenig@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <guangming.cao@mediatek.com>,
+        <jianjiao.zeng@mediatek.com>, <john.stultz@linaro.org>,
+        <labbott@redhat.com>, <libo.kang@mediatek.com>,
+        <linaro-mm-sig@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <lmark@codeaurora.org>,
+        <matthias.bgg@gmail.com>, <mingyuan.ma@mediatek.com>,
+        <wsd_upstream@mediatek.com>, <yf.wang@mediatek.com>,
+        Guangming <Guangming.Cao@mediatek.com>
+Subject: [PATCH v3] dma-buf: dma-heap: Add a size check for allocation
+Date:   Thu, 13 Jan 2022 20:34:06 +0800
+Message-ID: <20220113123406.11520-1-guangming.cao@mediatek.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CAO_48GF=ttKqSOm9GRoA3Mq+-RQOtRjWp449XPcz-wH=kjaTjw@mail.gmail.com>
+References: <CAO_48GF=ttKqSOm9GRoA3Mq+-RQOtRjWp449XPcz-wH=kjaTjw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V2] panic: Move panic_print before kmsg dumpers
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        kernel@gpiccoli.net, senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, feng.tang@intel.com,
-        kexec@lists.infradead.org, dyoung@redhat.com,
-        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com
-References: <20220106212835.119409-1-gpiccoli@igalia.com>
- <Yd/0K1x7ILw3Qa46@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <Yd/0K1x7ILw3Qa46@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2022 08:50, Petr Mladek wrote:
->> @@ -249,7 +252,7 @@ void panic(const char *fmt, ...)
->>  	 * show some extra information on kernel log if it was set...
->>  	 */
->>  	if (kexec_crash_loaded())
->> -		panic_print_sys_info();
->> +		panic_print_sys_info(false);
-> 
-> panic_print_sys_info(false) will be called twice when both
-> kexec_crash_loaded() and _crash_kexec_post_notifiers are true.
-> 
-> Do we really need to call panic_print_sys_info() here? All information
-> provided by panic_print_sys_info(false) can be found also in
-> the crash dump.
-> 
->>  	/*
->>  	 * If we have crashed and we have a crash kernel loaded let it handle
->> @@ -283,6 +286,8 @@ void panic(const char *fmt, ...)
->>  	 */
->>  	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
->>  
->> +	panic_print_sys_info(false);
-> 
-> This is where the info might be printed 2nd time.
-> 
->> +
->>  	kmsg_dump(KMSG_DUMP_PANIC);
->>  
->>  	/*
-> 
-> Otherwise, the change makes sense to me.
-> 
-> Best Regards,
-> Petr
+From: Guangming <Guangming.Cao@mediatek.com>
 
-Hi Petr, thanks for your great review!
-I see you also commented in the thread of the patch introducing the
-panic_print_sys_info() before kdump.
+Add a size check for allocation since the allocation size is
+always less than the total DRAM size.
 
-Thanks for catching this issue - indeed, if
-"_crash_kexec_post_notifiers" is true, with this patch we print stuff
-twice. I will submit a V3 that guards against that, using a bool, makes
-sense to you?
+Without this check, once the invalid size allocation runs on a process that
+can't be killed by OOM flow(such as "gralloc" on Android devices), it will
+cause a kernel exception, and to make matters worse, we can't find who are using
+so many memory with "dma_buf_debug_show" since the relevant dma-buf hasn't exported.
 
-The interesting question here is:
-> Do we really need to call panic_print_sys_info() here? All information
-> provided by panic_print_sys_info(false) can be found also in
-> the crash dump.
+To make OOM issue easier, maybe need dma-buf framework to dump the buffer size
+under allocating in "dma_buf_debug_show".
 
-So, we indeed need that in our use case. Crash is meant to be used
-post-mortem, i.e., you made a full vmcore collection and then, of
-course, you have basically all the data you need accessible though the
-crash tool.
+Signed-off-by: Guangming <Guangming.Cao@mediatek.com>
+Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
+---
+v3: 1. update patch, use right shift to replace division.
+    2. update patch, add reason in code and commit message.
+v2: 1. update size limitation as total_dram page size.
+    2. update commit message
+---
+ drivers/dma-buf/dma-heap.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Problem is: in our use case, we want more data than a regular dmesg in a
-panic event (hence we use panic_print), but we don't collect a full
-crash dump, due to its big size. Also, as you can imagine, we do favor
-pstore over kdump, but it might fail due to a variety of reasons (like
-not having a free RAM buffer for ramoops), so kdump is our fallback.
-Hence, we'd like to be able to use panic_print with both kdump and
-pstore, and for that, both patches are needed.
+diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+index 56bf5ad01ad5..1fd382712584 100644
+--- a/drivers/dma-buf/dma-heap.c
++++ b/drivers/dma-buf/dma-heap.c
+@@ -55,6 +55,16 @@ static int dma_heap_buffer_alloc(struct dma_heap *heap, size_t len,
+ 	struct dma_buf *dmabuf;
+ 	int fd;
+ 
++	/*
++	 * Invalid size check. The "len" should be less than totalram.
++	 *
++	 * Without this check, once the invalid size allocation runs on a process that
++	 * can't be killed by OOM flow(such as "gralloc" on Android devices), it will
++	 * cause a kernel exception, and to make matters worse, we can't find who are using
++	 * so many memory with "dma_buf_debug_show" since the relevant dma-buf hasn't exported.
++	 */
++	if (len >> PAGE_SHIFT > totalram_pages())
++		return -EINVAL;
+ 	/*
+ 	 * Allocations from all heaps have to begin
+ 	 * and end on page boundaries.
+-- 
+2.17.1
 
-Cheers,
-
-
-Guilherme

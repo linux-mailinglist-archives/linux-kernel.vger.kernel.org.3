@@ -2,144 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7669648D5A1
+	by mail.lfdr.de (Postfix) with ESMTP id C021A48D5A2
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbiAMKUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:20:46 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41004 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbiAMKUp (ORCPT
+        id S232994AbiAMKVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:21:15 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:47674 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231673AbiAMKVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:20:45 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 544A261BE6;
-        Thu, 13 Jan 2022 10:20:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1456CC36AE9;
-        Thu, 13 Jan 2022 10:20:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642069244;
-        bh=9l4YiTzis5EX2SbFlAJNIL7bN9QTMaOyqHcEuSDbCVE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FA+eauo75VUVRV4J+OZEz7sUf05vB0tLcQ+0A+VoOy/43Peu41YMAKQMWmByj514c
-         /QpQviQ+Ofgv4AymrOGZaYbwpXu272z0//Gt0UWyKmxAPUGAyYachjIsBKW/DSZnQk
-         tM+up+YtDH6DL82B2c58A1CntyKeQmFsMWdmp8Kw=
-Date:   Thu, 13 Jan 2022 11:20:41 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jochen Mades <jochen@mades.net>
-Cc:     Lukas Wunner <lukas@wunner.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>
-Subject: Re: [PATCH] Bugfix RTS line config in RS485 mode is overwritten in
- pl011_set_mctrl() function.
-Message-ID: <Yd/8+YR549pvmOHS@kroah.com>
-References: <20211231171516.18407-1-jochen@mades.net>
- <20220102100710.GA29858@wunner.de>
- <1489312180.3256431.1642068732902@webmail.strato.com>
+        Thu, 13 Jan 2022 05:21:14 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20D8S77O017161;
+        Thu, 13 Jan 2022 11:21:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=4DuleFFceRfbztWmfYxXFQO+YBMNDqqrJdOpBXrPzcs=;
+ b=u7QfE7iKoPzbNhsK2eB0TQJrDGBm30ie9dAkp+9S0Wa+VdUpNwoXjpgZ5sKwrrQmyaTH
+ F//Ff9fsaxvEmNTASmhaD9ZExvAio81iyaQPBNNlYaWqG+3vU104WQ3WWOJ6klnyrE1I
+ mn3Uja60eNt8Xsu32dW3S78C8w/2VX8jOvDACS6V1CIGXit5bmjXmC1knsYD59gQMn9D
+ +D9Kcl7lEaaijjZnTvDuu11jzDvtpIRM9KBJvXA2ip7egjC0GyAsH5GjfEK4J1uTDNcG
+ CjK42rS8AqxRlB3KJjpwFvBouzJ+KYccPJE6T3hD0vX7Er9lLFj3rSyK6ro77x+fwL+C Sw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3djgkkrqmu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Jan 2022 11:21:07 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E244D100034;
+        Thu, 13 Jan 2022 11:21:06 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DB1AB20D18E;
+        Thu, 13 Jan 2022 11:21:06 +0100 (CET)
+Received: from lmecxl1137.lme.st.com (10.75.127.44) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 13 Jan
+ 2022 11:21:06 +0100
+Subject: Re: [PATCH 4/5] drm/stm: ltdc: add support of flexible pixel formats
+To:     Yannick Fertre <yannick.fertre@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211215214835.20593-1-yannick.fertre@foss.st.com>
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+Message-ID: <9a718ddb-163b-6c9a-b83b-a52df94805cf@foss.st.com>
+Date:   Thu, 13 Jan 2022 11:21:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1489312180.3256431.1642068732902@webmail.strato.com>
+In-Reply-To: <20211215214835.20593-1-yannick.fertre@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-13_02,2022-01-13_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 11:12:12AM +0100, Jochen Mades wrote:
-> Hi Lukas,
-> 
-> > Patch is correct, but commit message could be improved:
-> > 
-> > * Subject should be in imperative mood (by convention), it should be
-> >   prepended by "serial: pl011: " (in line with previous commits touching
-> >   this driver, use "git log --oneline amba-pl011.c") and the trailing dot
-> >   is unnecessary, e.g.:
-> > 
-> >   "serial: pl011: Fix incorrect rs485 RTS polarity on set_mctrl"
-> > 
-> > * Commit message should be wrapped at 72 characters (so that it appears
-> >   centered when displayed with "git log" on an 80 chars terminal).
-> >   The reference to "0001-serial-amba-pl011-add-RS485-support.patch"
-> >   should be replaced with a reference to the offending commit, e.g.:
-> >
-> >   "Commit 8d479237727c ("serial: amba-pl011: add RS485 support") sought
-> >   to keep RTS deasserted on set_mctrl if rs485 is enabled.  However it
-> >   did so only if deasserted RTS polarity is high.  Fix it in case it's
-> >   low."
-> >
-> >   Feel free to copy this to a v2 of your patch and amend as you see fit.
-> > 
-> 
-> Find attached the patch with the new subject and corretced commit message.
-> 
-> > * Add tags for the offending commit:
-> > 
-> >   Fixes: 8d479237727c ("serial: amba-pl011: add RS485 support")
-> >   Cc: stable@vger.kernel.org # v5.15+
-> > 
-> > * Be sure to cc the author of the offending commit.
-> 
-> Sorry I don't know how to do that correctly. Can you please give support/hints?
-> 
->  
-> > Thanks,
-> > 
-> > Lukas
-> > 
-> > > ---
-> > >  drivers/tty/serial/amba-pl011.c | 8 ++++++--
-> > >  1 file changed, 6 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-> > > index 537f37ac4..1749c1498 100644
-> > > --- a/drivers/tty/serial/amba-pl011.c
-> > > +++ b/drivers/tty/serial/amba-pl011.c
-> > > @@ -1646,8 +1646,12 @@ static void pl011_set_mctrl(struct uart_port *port, unsigned int mctrl)
-> > >  	    container_of(port, struct uart_amba_port, port);
-> > >  	unsigned int cr;
-> > >  
-> > > -	if (port->rs485.flags & SER_RS485_ENABLED)
-> > > -		mctrl &= ~TIOCM_RTS;
-> > > +	if (port->rs485.flags & SER_RS485_ENABLED) {
-> > > +		if (port->rs485.flags & SER_RS485_RTS_AFTER_SEND)
-> > > +			mctrl &= ~TIOCM_RTS;
-> > > +		else
-> > > +			mctrl |= TIOCM_RTS;
-> > > +	}
-> > >  
-> > >  	cr = pl011_read(uap, REG_CR);
+
+On 12/15/21 10:48 PM, Yannick Fertre wrote:
+> This feature allows the generation of any RGB pixel format.
+> The list of supported formats is no longer linked to the
+> register LXPFCR_PF, that the reason why a list of drm formats is
+> defined for each display controller version.
+>
+> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+> ---
+>  drivers/gpu/drm/stm/ltdc.c | 196 ++++++++++++++++++++++++++-----------
+>  drivers/gpu/drm/stm/ltdc.h |   5 +-
+>  2 files changed, 145 insertions(+), 56 deletions(-)
 
 
-Hi,
+Hello Yannick,
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Reviewed-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+Tested-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
 
-- Your patch was attached, please place it inline so that it can be
-  applied directly from the email message itself.
+Many thanks, this is an interesting patch.
 
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file, Documentation/SubmittingPatches
-  for how to do this correctly.
+Raphaël
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot

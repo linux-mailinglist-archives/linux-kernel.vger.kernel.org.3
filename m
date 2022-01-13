@@ -2,176 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E45B648D9AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58EEA48D9AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235643AbiAMOYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 09:24:50 -0500
-Received: from mga04.intel.com ([192.55.52.120]:33180 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235638AbiAMOYt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:24:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642083889; x=1673619889;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=2lwgn5Ak8FrAWeuWC+qm8/A59fs8zZe6onPZCttDNOQ=;
-  b=RpBHXndfJxHylY3WJKztzC/Db88ST7wrhouNuIuXzkaTL5gBnTYMcNry
-   EP2oJf7pwmNNujLmPn3DlmMvilAc13ul07vMyI6JtvhR+YfpZsVr6oxpw
-   oCp9uzgxKNdQGtjqrT1rQFq8tFhaVBXte5pQVL7HbplJkxFxMZVz+FaMi
-   AY8pGKjRNtC+6N/1aTAo2MUIOW3Y3InCeUhQX+MFLaq+f/+NVdf0jOidr
-   46Sa0Jbjd/uA1kDilrj+5086PHKczTTSvJBZHcr8ChzuPwraL9e0JIddp
-   vGbOKK6coGfXxJlwhy+7lBy2Jowh6pul9NLSsoHPM5P3xmyEJLky9wAXJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="242832398"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="242832398"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 06:24:49 -0800
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="529674005"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 06:24:45 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mel Gorman <mgorman@suse.de>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Hasan Al Maruf <hasanalmaruf@fb.com>
-Subject: Re: [PATCH -V10 RESEND 0/6] NUMA balancing: optimize memory
- placement for memory tiering system
-References: <20211207022757.2523359-1-ying.huang@intel.com>
-        <Yd79b6PptQMNzDRw@hirez.programming.kicks-ass.net>
-        <87sftsumqd.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Yd/1r49RKgwCXCQL@hirez.programming.kicks-ass.net>
-        <87o84fu9f3.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <YeAid+EXvmH9WAbq@hirez.programming.kicks-ass.net>
-Date:   Thu, 13 Jan 2022 22:24:43 +0800
-In-Reply-To: <YeAid+EXvmH9WAbq@hirez.programming.kicks-ass.net> (Peter
-        Zijlstra's message of "Thu, 13 Jan 2022 14:00:39 +0100")
-Message-ID: <871r1bu310.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S235662AbiAMOZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235649AbiAMOZD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 09:25:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0080AC06173F;
+        Thu, 13 Jan 2022 06:25:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9494761CF4;
+        Thu, 13 Jan 2022 14:25:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEAC3C36AEC;
+        Thu, 13 Jan 2022 14:25:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642083902;
+        bh=R7O26QARYFC2+NZtQgSc/PXXXQY3dDAFIVKM0Qllbvg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OkG66TkKqRTqNszT97b/LmZRUewvv11KTyGZZuhqqGnotd6VTVh4ZVyTaFJcQokZX
+         XsY7HZxMKo5jDNSfCN67JOVuV3p06w86JLymXybeSazQwh9TP2PnLGA032BPo6dqzS
+         EDJORS731uJP9iywevllvSawuzfQWCux1eH/XDzCOIjH2/4H2pFg35jCNlNoYC0631
+         IVKke7WhJSvjs3EwfqjG3LbyuglkPamVFrthRquN2jEcfXxD5U/x1JVQYvNcgNSv+P
+         oS9dJt6TuGBD8qgX5hZlbqYdjJdRy4FwPdgsM+apemR91Hk2o4CoWMg2wHdeH2KwvX
+         QUunxcqGDVfZQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1C97140C99; Thu, 13 Jan 2022 11:25:00 -0300 (-03)
+Date:   Thu, 13 Jan 2022 11:25:00 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 1/1 FYI] tools arch x86: Sync the msr-index.h copy with the
+ kernel sources
+Message-ID: <YeA2PAvHV+uHRhLj@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra <peterz@infradead.org> writes:
+To pick up the changes in:
 
-> On Thu, Jan 13, 2022 at 08:06:40PM +0800, Huang, Ying wrote:
->> Peter Zijlstra <peterz@infradead.org> writes:
->> > On Thu, Jan 13, 2022 at 03:19:06PM +0800, Huang, Ying wrote:
->> >> Peter Zijlstra <peterz@infradead.org> writes:
->> >> > On Tue, Dec 07, 2021 at 10:27:51AM +0800, Huang Ying wrote:
->
->> >> >> After commit c221c0b0308f ("device-dax: "Hotplug" persistent memory
->> >> >> for use like normal RAM"), the PMEM could be used as the
->> >> >> cost-effective volatile memory in separate NUMA nodes.  In a typical
->> >> >> memory tiering system, there are CPUs, DRAM and PMEM in each physical
->> >> >> NUMA node.  The CPUs and the DRAM will be put in one logical node,
->> >> >> while the PMEM will be put in another (faked) logical node.
->> >> >
->> >> > So what does a system like that actually look like, SLIT table wise, and
->> >> > how does that affect init_numa_topology_type() ?
->> >> 
->> >> The SLIT table is as follows,
->
-> <snip>
->
->> >> node distances:
->> >> node   0   1   2   3 
->> >>   0:  10  21  17  28 
->> >>   1:  21  10  28  17 
->> >>   2:  17  28  10  28 
->> >>   3:  28  17  28  10 
->> >> 
->> >> init_numa_topology_type() set sched_numa_topology_type to NUMA_DIRECT.
->> >> 
->> >> The node 0 and node 1 are onlined during boot.  While the PMEM node,
->> >> that is, node 2 and node 3 are onlined later.  As in the following dmesg
->> >> snippet.
->> >
->> > But how? sched_init_numa() scans the *whole* SLIT table to determine
->> > nr_levels / sched_domains_numa_levels, even offline nodes. Therefore it
->> > should find 4 distinct distance values and end up not selecting
->> > NUMA_DIRECT.
->> >
->> > Similarly for the other types it uses for_each_online_node(), which
->> > would include the pmem nodes once they've been onlined, but I'm thinking
->> > we explicitly want to skip CPU-less nodes in that iteration.
->> 
->> I used the debug patch as below, and get the log in dmesg as follows,
->> 
->> [    5.394577][    T1] sched_numa_topology_type: 0, levels: 4, max_distance: 28
->> 
->> I found that I forget another caller of init_numa_topology_type() run
->> during hotplug.  I will add another printk() to show it.  Sorry about
->> that.
->
-> Can you try with this on?
->
-> I'm suspecting there's a problem with init_numa_topology_type(); it will
-> never find the max distance due to the _online_ clause in the iteration,
-> since you said the pmem nodes are not online yet.
->
-> ---
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index d201a7052a29..53ab9c63c185 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -1756,6 +1756,8 @@ static void init_numa_topology_type(void)
->  			return;
->  		}
->  	}
-> +
-> +	WARN(1, "no NUMA type determined");
->  }
+  89aa94b4a218339b ("x86/msr: Add AMD CPPC MSR definitions")
 
-Hi, Peter,
+Addressing these tools/perf build warnings:
 
-I have run the test, the warning is triggered in the dmesg as follows.
-I will continue to debug hotplug tomorrow.
+    diff -u tools/arch/x86/include/asm/msr-index.h arch/x86/include/asm/msr-index.h
+    Warning: Kernel ABI header at 'tools/arch/x86/include/asm/msr-index.h' differs from latest version at 'arch/x86/include/asm/msr-index.h'
 
-[    5.400923][    T1] ------------[ cut here ]------------
-[    5.401917][    T1] no NUMA type determined
-[    5.401921][    T1] WARNING: CPU: 0 PID: 1 at kernel/sched/topology.c:1760 init_numa_topology_type+0x199/0x1c0
-[    5.403918][    T1] Modules linked in:
-[    5.404917][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc8-00053-gbe30433a13c0 #1
-[    5.405917][    T1] Hardware name: Intel Corporation S2600WFD/S2600WFD, BIOS SE5C620.86B.0D.01.0286.011120190816 01/11/2019
-[    5.406917][    T1] RIP: 0010:init_numa_topology_type+0x199/0x1c0
-[    5.407917][    T1] Code: de 82 41 89 dc e8 07 4f 4e 00 3d 00 04 00 00 44 0f 4e e0 3d ff 03 00 00 0f 8e ca fe ff ff 48 c7 c7 a7 88 55 82 e8 0c e5 b3 00 <0f> 0b e9 74 ff ff ff 66 66 2e 0f 1f 84 00 00 00 00 00 66 66 2e 0f
-[    5.408917][    T1] RSP: 0000:ffffc900000b7e00 EFLAGS: 00010286
-[    5.409917][    T1] RAX: 0000000000000000 RBX: 0000000000000400 RCX: c0000000ffff7fff
-[    5.410917][    T1] RDX: ffffc900000b7c28 RSI: 00000000ffff7fff RDI: 0000000000000000
-[    5.411917][    T1] RBP: 000000000000001c R08: 0000000000000000 R09: ffffc900000b7c20
-[    5.412917][    T1] R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000400
-[    5.413917][    T1] R13: 0000000000000400 R14: 0000000000000400 R15: 000000000000000c
-[    5.414917][    T1] FS:  0000000000000000(0000) GS:ffff88903f600000(0000) knlGS:0000000000000000
-[    5.415917][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    5.416917][    T1] CR2: ffff88df7fc01000 CR3: 0000005f7ec0a001 CR4: 00000000007706f0
-[    5.417917][    T1] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[    5.418917][    T1] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[    5.419917][    T1] PKRU: 55555554
-[    5.420917][    T1] Call Trace:
-[    5.421919][    T1]  <TASK>
-[    5.422919][    T1]  sched_init_numa+0x4a7/0x5c0
-[    5.423918][    T1]  sched_init_smp+0x18/0x79
-[    5.424918][    T1]  kernel_init_freeable+0x136/0x276
-[    5.425918][    T1]  ? rest_init+0x100/0x100
-[    5.426917][    T1]  kernel_init+0x16/0x140
-[    5.427917][    T1]  ret_from_fork+0x1f/0x30
-[    5.428918][    T1]  </TASK>
-[    5.429919][    T1] ---[ end trace aa5563c4363f1ba3 ]---
-[    5.430917][    T1] sched_numa_topology_type: 0, levels: 4, max_distance: 28
+That makes the beautification scripts to pick some new entries:
 
-Best Regards,
-Huang, Ying
+  $ tools/perf/trace/beauty/tracepoints/x86_msr.sh > before
+  $ cp arch/x86/include/asm/msr-index.h tools/arch/x86/include/asm/msr-index.h
+  $ tools/perf/trace/beauty/tracepoints/x86_msr.sh > after
+  $ diff -u before after
+  --- before	2022-01-13 10:59:51.743416890 -0300
+  +++ after	2022-01-13 11:00:00.776644178 -0300
+  @@ -303,6 +303,11 @@
+ 	  [0xc0010299 - x86_AMD_V_KVM_MSRs_offset] = "AMD_RAPL_POWER_UNIT",
+ 	  [0xc001029a - x86_AMD_V_KVM_MSRs_offset] = "AMD_CORE_ENERGY_STATUS",
+ 	  [0xc001029b - x86_AMD_V_KVM_MSRs_offset] = "AMD_PKG_ENERGY_STATUS",
+  +       [0xc00102b0 - x86_AMD_V_KVM_MSRs_offset] = "AMD_CPPC_CAP1",
+  +       [0xc00102b1 - x86_AMD_V_KVM_MSRs_offset] = "AMD_CPPC_ENABLE",
+  +       [0xc00102b2 - x86_AMD_V_KVM_MSRs_offset] = "AMD_CPPC_CAP2",
+  +       [0xc00102b3 - x86_AMD_V_KVM_MSRs_offset] = "AMD_CPPC_REQ",
+  +       [0xc00102b4 - x86_AMD_V_KVM_MSRs_offset] = "AMD_CPPC_STATUS",
+ 	  [0xc00102f0 - x86_AMD_V_KVM_MSRs_offset] = "AMD_PPIN_CTL",
+ 	  [0xc00102f1 - x86_AMD_V_KVM_MSRs_offset] = "AMD_PPIN",
+   };
+  $
+
+And this gets rebuilt:
+
+  CC       /tmp/build/perf/trace/beauty/tracepoints/x86_msr.o
+  INSTALL  trace_plugins
+  LD       /tmp/build/perf/trace/beauty/tracepoints/perf-in.o
+  LD       /tmp/build/perf/trace/beauty/perf-in.o
+  LD       /tmp/build/perf/perf-in.o
+  LINK     /tmp/build/perf/perf
+
+Now one can trace systemwide asking to see backtraces to where those
+MSRs are being read/written with:
+
+  # perf trace -e msr:*_msr/max-stack=32/ --filter="msr>=AMD_CPPC_CAP1 && msr<="
+  Failed to set filter "(msr>=0xc00102b0 && msr<=) && (common_pid != 2612094 && common_pid != 3841)" on event msr:read_msr with 22 (Invalid argument)
+  # ^C
+
+If we use -v (verbose mode) we can see what it does behind the scenes:
+
+  # perf trace -v -e msr:*_msr/max-stack=32/ --filter="msr>=AMD_CPPC_CAP1 && msr<=AMD_CPPC_STATUS"
+  <SNIP>
+  New filter for msr:read_msr: (msr>=0xc00102b0 && msr<=0xc00102b4) && (common_pid != 2612102 && common_pid != 3841)
+  New filter for msr:write_msr: (msr>=0xc00102b0 && msr<=0xc00102b4) && (common_pid != 2612102 && common_pid != 3841)
+  <SNIP>
+  ^C[root@five ~]#
+
+Example with a frequent msr:
+
+  # perf trace -v -e msr:*_msr/max-stack=32/ --filter="msr==IA32_SPEC_CTRL" --max-events 2
+  Using CPUID AuthenticAMD-25-21-0
+  0x48
+  New filter for msr:read_msr: (msr==0x48) && (common_pid != 2612129 && common_pid != 3841)
+  0x48
+  New filter for msr:write_msr: (msr==0x48) && (common_pid != 2612129 && common_pid != 3841)
+  mmap size 528384B
+  Looking at the vmlinux_path (8 entries long)
+  symsrc__init: build id mismatch for vmlinux.
+  Using /proc/kcore for kernel data
+  Using /proc/kallsyms for symbols
+       0.000 Timer/2525383 msr:write_msr(msr: IA32_SPEC_CTRL, val: 6)
+                                         do_trace_write_msr ([kernel.kallsyms])
+                                         do_trace_write_msr ([kernel.kallsyms])
+                                         __switch_to_xtra ([kernel.kallsyms])
+                                         __switch_to ([kernel.kallsyms])
+                                         __schedule ([kernel.kallsyms])
+                                         schedule ([kernel.kallsyms])
+                                         futex_wait_queue_me ([kernel.kallsyms])
+                                         futex_wait ([kernel.kallsyms])
+                                         do_futex ([kernel.kallsyms])
+                                         __x64_sys_futex ([kernel.kallsyms])
+                                         do_syscall_64 ([kernel.kallsyms])
+                                         entry_SYSCALL_64_after_hwframe ([kernel.kallsyms])
+                                         __futex_abstimed_wait_common64 (/usr/lib64/libpthread-2.33.so)
+       0.030 :0/0 msr:write_msr(msr: IA32_SPEC_CTRL, val: 2)
+                                         do_trace_write_msr ([kernel.kallsyms])
+                                         do_trace_write_msr ([kernel.kallsyms])
+                                         __switch_to_xtra ([kernel.kallsyms])
+                                         __switch_to ([kernel.kallsyms])
+                                         __schedule ([kernel.kallsyms])
+                                         schedule_idle ([kernel.kallsyms])
+                                         do_idle ([kernel.kallsyms])
+                                         cpu_startup_entry ([kernel.kallsyms])
+                                         secondary_startup_64_no_verify ([kernel.kallsyms])
+  #
+
+Cc: Huang Rui <ray.huang@amd.com>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/arch/x86/include/asm/msr-index.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/tools/arch/x86/include/asm/msr-index.h b/tools/arch/x86/include/asm/msr-index.h
+index 01e2650b958591e0..3faf0f97edb1bcd3 100644
+--- a/tools/arch/x86/include/asm/msr-index.h
++++ b/tools/arch/x86/include/asm/msr-index.h
+@@ -486,6 +486,23 @@
+ 
+ #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
+ 
++/* AMD Collaborative Processor Performance Control MSRs */
++#define MSR_AMD_CPPC_CAP1		0xc00102b0
++#define MSR_AMD_CPPC_ENABLE		0xc00102b1
++#define MSR_AMD_CPPC_CAP2		0xc00102b2
++#define MSR_AMD_CPPC_REQ		0xc00102b3
++#define MSR_AMD_CPPC_STATUS		0xc00102b4
++
++#define AMD_CPPC_LOWEST_PERF(x)		(((x) >> 0) & 0xff)
++#define AMD_CPPC_LOWNONLIN_PERF(x)	(((x) >> 8) & 0xff)
++#define AMD_CPPC_NOMINAL_PERF(x)	(((x) >> 16) & 0xff)
++#define AMD_CPPC_HIGHEST_PERF(x)	(((x) >> 24) & 0xff)
++
++#define AMD_CPPC_MAX_PERF(x)		(((x) & 0xff) << 0)
++#define AMD_CPPC_MIN_PERF(x)		(((x) & 0xff) << 8)
++#define AMD_CPPC_DES_PERF(x)		(((x) & 0xff) << 16)
++#define AMD_CPPC_ENERGY_PERF_PREF(x)	(((x) & 0xff) << 24)
++
+ /* Fam 17h MSRs */
+ #define MSR_F17H_IRPERF			0xc00000e9
+ 
+-- 
+2.31.1
+
+

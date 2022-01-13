@@ -2,101 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66EBA48D6E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 12:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B6F48D6EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 12:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234260AbiAMLrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 06:47:52 -0500
-Received: from mout.kundenserver.de ([212.227.17.10]:52119 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbiAMLrv (ORCPT
+        id S234270AbiAMLuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 06:50:11 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:43758 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231260AbiAMLuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 06:47:51 -0500
-Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N94uf-1mEvwn1zCZ-0169nN for <linux-kernel@vger.kernel.org>; Thu, 13 Jan
- 2022 12:47:50 +0100
-Received: by mail-wr1-f47.google.com with SMTP id l25so9533714wrb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 03:47:50 -0800 (PST)
-X-Gm-Message-State: AOAM5324yvPqz/VUG0ev7/i3+I1T23ESeqx/URwwBCDtEQvE/g1Vldqn
-        tkVJ6e2r9dp4SKk1h95NAkQqb3l4rGeRRlgVDr4=
-X-Google-Smtp-Source: ABdhPJzb++o7mEl0JUsZFNNn3m6fdbZLXZhy0y69c9tneidZNnmp+bkycxivwtp1vUiNmHvh9hJwKnjln77tPfd2M8U=
-X-Received: by 2002:adf:d1c8:: with SMTP id b8mr2456597wrd.317.1642074469929;
- Thu, 13 Jan 2022 03:47:49 -0800 (PST)
+        Thu, 13 Jan 2022 06:50:10 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id EF6E0218F0;
+        Thu, 13 Jan 2022 11:50:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642074608; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=24r93SzAjmsGRtc8iOT17b7/d8HkYubjNVUajwDDyfM=;
+        b=XWkkKOuj70ajKM/ENePvjr4SPNtxrS/xmYmrCr5SRBXApVZBmx+5qZjVHo0PmHMU75jN0T
+        kJWxqq7e4dxBmWOwt2cRBE+MKM9WHFfKTlf4lwMtdYj6zqjAeR9Mg4xTVE//jb0MLrCq9w
+        83S/tt5dbT6KrxR6iokZaoJlNrAwRfY=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 485ABA3B87;
+        Thu, 13 Jan 2022 11:50:08 +0000 (UTC)
+Date:   Thu, 13 Jan 2022 12:50:06 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        kernel@gpiccoli.net, senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, feng.tang@intel.com,
+        kexec@lists.infradead.org, dyoung@redhat.com,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com
+Subject: Re: [PATCH V2] panic: Move panic_print before kmsg dumpers
+Message-ID: <Yd/0K1x7ILw3Qa46@alley>
+References: <20220106212835.119409-1-gpiccoli@igalia.com>
 MIME-Version: 1.0
-References: <1641980099-20315-1-git-send-email-anshuman.khandual@arm.com>
- <1641980099-20315-2-git-send-email-anshuman.khandual@arm.com>
- <CAK8P3a1cDF=jEVGchU8LNBdjdtROmHHHpebOASreR=WOuZ4Z1A@mail.gmail.com> <00e28671-8d3a-f789-91c4-109814792a07@arm.com>
-In-Reply-To: <00e28671-8d3a-f789-91c4-109814792a07@arm.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 13 Jan 2022 12:47:34 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2Q+iN1O6FEdUJRt=0bQu=6fkWAD3RCECfdhu4DKHq0pg@mail.gmail.com>
-Message-ID: <CAK8P3a2Q+iN1O6FEdUJRt=0bQu=6fkWAD3RCECfdhu4DKHq0pg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arm64: Add Cortex-X2 CPU part definition
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ujqCp3gAYFlmY+iftBxV0857EDjE/IPmAg4L+WG0pn8EBa5hqxO
- KZPVTRX+ehguH8rph3XBAXF0brsTdunbIYoPp1yKKV640GHFWLGvhpLnHhdc/QsssI97cb4
- zz0onhEtJZjwlg354EfbWQTuoQTn6a9qNtcfXpBm0BffWvsHEhEoK2et0pHdi4grUgGrclW
- Q3jaDzECeXLv/8umrByCA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:riUzJJmGYYo=:xZzqPtVRGKA3UzftccTLFy
- 7AGycAdbJFDgW+i/rNJucCGytCZfFR/GdzAHgGl/lpZVfS57h4AeAiP89ZVOiyCt1wHWCCTol
- W5XnGYd+Zl4CR8a+ebF9gRhUVBk+jiSOkGM/rbTxFRAOoFYE4i/2Rr7ZAQqec71bgxkHX+GSZ
- QFudA2HNDVW39bMSKAV5VOVPihpFAA5Umf8n741Stk0IKmwOHmL8+JD3zNZPbcK3g12Uuycv/
- LkPGF/ImYIAVa3tnz98KpEmwYrsfFvUr22C5suYr8CCmp3W9zYiOJjXVf8mxV22x13QjPWnkq
- Yl1hbHHVZvRrB0/2Gc+cXaPhv/hBf8tctB3BHdYPisK1V/75b96Zu64j4S9aydD93Oe4ZzKcX
- D9CkZC49PNdS71yDCSBsFHWonpCIA2N4b1P/dLcYjZHgnGBB6RzHhp296ybaGDSuIID7cDNVJ
- v15qdAcs4DhPnm3NSDq7fSklcZySdfX6XDh8Gj2eKq1MxQjxTkZpmT2WnUUc5lpoJwV5Xasfz
- uoHvrIR7mBfpmqMRq4FYG0+NTNwQBeP14EQMAzn0+ta718R9J53K9re0m2/TFWhzVSk0zHrBd
- 1aSG1pWwz+hru901XaSyDyha5ntDtnSU/IQZE6s7nCi1skqalZx7dBzEuR4Zr0uzwWwbwty70
- WAhwWEzGVKaIPH08xeTcQt9i/ro4cP4Kdm+jyvoT66V0u7JYMuJv/0YwYTF7lx8Cg/4nQA42y
- uMnU3Xgo0SPwHWuNg8p4JhCYtFUHAXcTEGNCBBct07KjVG83f/vCaWknf2pYBP2CZWYZDY/fG
- issiidON1pXsHqwa6lHTx+i/YT7Z5LaMkug8730PfuP8HT3xbI=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220106212835.119409-1-gpiccoli@igalia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 4:03 AM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
-> On 1/12/22 4:20 PM, Arnd Bergmann wrote:
-> > On Wed, Jan 12, 2022 at 10:34 AM Anshuman Khandual <anshuman.khandual@arm.com> wrote:
-> >> Add the CPU Partnumbers for the new Arm designs.
-> >> @@ -74,6 +74,7 @@
-> >>  #define ARM_CPU_PART_NEOVERSE_N1       0xD0C
-> >>  #define ARM_CPU_PART_CORTEX_A77                0xD0D
-> >>  #define ARM_CPU_PART_CORTEX_A710       0xD47
-> >> +#define ARM_CPU_PART_CORTEX_X2         0xD48
-> >>  #define ARM_CPU_PART_NEOVERSE_N2       0xD49
-> >
-> > No objections to the patch, but would it be possible to just add all the missing
-> > ones here to the degree that they are known already? I don't see any entries for
-> > Cortex-A34, Cortex-A65AE, Cortex-A78, Cortex-A78C, Cortex-A78AE,
-> > Neoverse-E1, Neoverse-V1, Cortex-X1, Cortex-X2, Cortex-A510, Cortex-A710
-> > and Cortex-R82 among the Arm-designed cores that can run Linux, and there
-> > are probably others that I missed going through the list.
->
-> Hi Arnd,
->
-> IIUC the part numbers are enumerated here only if there is an errata
-> applicable for them which needs to be detected at boot. I am not sure
-> whether all cpu versions that can run Linux, needs to be defined here.
-> But then I might be missing something.
+On Thu 2022-01-06 18:28:35, Guilherme G. Piccoli wrote:
+> The panic_print setting allows users to collect more information in a
+> panic event, like memory stats, tasks, CPUs backtraces, etc.
+> This is a pretty interesting debug mechanism, but currently the print
+> event happens *after* kmsg_dump(), meaning that pstore, for example,
+> cannot collect a dmesg with the panic_print information.
 
-They clearly don't need to be defined here, and for other constants such
-as the system registers we may not want to list them all, but I think for
-the CPU IDs it makes sense to just list them all here rather than adding
-them one at a time, as we tend to need them sooner or later anyway.
+> --- a/kernel/panic.c
+> +++ b/kernel/panic.c
+> @@ -249,7 +252,7 @@ void panic(const char *fmt, ...)
+>  	 * show some extra information on kernel log if it was set...
+>  	 */
+>  	if (kexec_crash_loaded())
+> -		panic_print_sys_info();
+> +		panic_print_sys_info(false);
 
-It also helps me personally to have a known place to look up the names
-by value rather than chasing through reference manuals.
+panic_print_sys_info(false) will be called twice when both
+kexec_crash_loaded() and _crash_kexec_post_notifiers are true.
 
-      Arnd
+Do we really need to call panic_print_sys_info() here? All information
+provided by panic_print_sys_info(false) can be found also in
+the crash dump.
+
+>  	/*
+>  	 * If we have crashed and we have a crash kernel loaded let it handle
+> @@ -283,6 +286,8 @@ void panic(const char *fmt, ...)
+>  	 */
+>  	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
+>  
+> +	panic_print_sys_info(false);
+
+This is where the info might be printed 2nd time.
+
+> +
+>  	kmsg_dump(KMSG_DUMP_PANIC);
+>  
+>  	/*
+
+Otherwise, the change makes sense to me.
+
+Best Regards,
+Petr

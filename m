@@ -2,87 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0039E48D051
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 03:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F9E48D052
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 03:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiAMB7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 20:59:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbiAMB7M (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 20:59:12 -0500
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB06DC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 17:59:11 -0800 (PST)
-Received: by mail-pl1-x641.google.com with SMTP id t18so7302747plg.9
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 17:59:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2cfldz1eeMJcpNwnXB66nvpkQHd9gmRZUm2/X7KhHco=;
-        b=Mcv5lolFdSbDXkT5MmOyiFVbSDEhQP6xFuTYgJIgjLIEP9dHEXmbNOvVyWwKNzTAYU
-         +uDPFnAfMp2Dgbzev83JzwnbBhVGG3Uf1My4/U/mDEnnc0gkyb5TmtQMyUXR7kujOnEg
-         wvssxHq/rXYplwqVtv6Of+djQJN/HpFhmz4gRHyRK1nHuEmxsgjiZ41g8Q81oaRh4Qmk
-         3KEGA0pIEvGN34ODVnqwMUcYjQK1ljscU20CHhe9wuS7aetl/yNPIlATq5wsZO3Ddxm5
-         PwauI67kFWdiFnzY4YVjlcZPVkEC0ixHTNIgez8JA9jpt6JV6XeoBQyPPEVq5EOab5sO
-         Hr4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2cfldz1eeMJcpNwnXB66nvpkQHd9gmRZUm2/X7KhHco=;
-        b=u1DGGRWmhPqD8pz3ubZEqjCB7iD+53+8X7q3qWV+ytpVbpNkcibxPdVYShSF69JxLM
-         TR+XZhySljuYIsBd05Sn/+MDp/6xWZz6GQ6nLEk00Dtle0e6vc/ruF2fu2qDtqmd/Gv7
-         VbEkub5NFtDjibjyvCi4NPobkp/byRqYHw6n8t1N2IWiRbUxPcCG0aUKi7e1oNKvb/Hr
-         90G7aO5EtbrDCp9YN8GOXMzojVJa/YU6sVUqmNIi6IRitez7StT+m3CXkW5iNySyJhFt
-         0QzOLXklYtMU64lqUOtJDM8IXwmMY0b2LhKFr6OHznTPWyjXd0Nu4dgihsqUt6rCh0EA
-         Iuuw==
-X-Gm-Message-State: AOAM530RQjSrLZkFY9CLrVieHGtBwZXh/aiqAGiS9KJ4Eqxf++YWPqhY
-        LOkETbEngoCrfHa3ivQcwKIWhH4yEtWumJcw
-X-Google-Smtp-Source: ABdhPJw0+d7mdGrxuYxATKHc66u8ysbhM4k83yTUQVUKqthfB24t3zzJ+IP08lUeBIrx/D5cWtktJQ==
-X-Received: by 2002:a65:6a0f:: with SMTP id m15mr2094339pgu.391.1642039151314;
-        Wed, 12 Jan 2022 17:59:11 -0800 (PST)
-Received: from slim.das-security.cn ([103.84.139.54])
-        by smtp.gmail.com with ESMTPSA id b9sm753326pgb.17.2022.01.12.17.59.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 17:59:11 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     geert@linux-m68k.org
-Cc:     schwab@linux-m68k.org, gerg@linux-m68k.org,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH v2 RESEND] m68k/kernel: array out of bound access in process_uboot_commandline
-Date:   Thu, 13 Jan 2022 09:58:54 +0800
-Message-Id: <20220113015854.9326-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S231547AbiAMCAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 21:00:54 -0500
+Received: from mga05.intel.com ([192.55.52.43]:10404 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231528AbiAMCAx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 21:00:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642039253; x=1673575253;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yKzcsErOlaAl5BAEg+mgbVtS8VvF2vEozWEkVuvjUuM=;
+  b=fuHvcGK17F+6Ct+a8P2227E7qlwPBYcYgoNKWezaIwRVUv8z5hlCF+5W
+   iMn4rfu0hFULblphX+HnWNymhcAtEYrYvsZIlscmAXGqwmLC1sktit/Ko
+   IPYOAhzanhSs7I10Up+0o6CYkrgArq0BZT8CGX8hKQ7YXIVlpV0Ok7E4t
+   geai+pkauKQTMpEmpdIpEA7CTVW6At3gSHwS01NKSLmfHh3Avdri0hSmF
+   E2SFtYZHy3+xaw3BDh6MpwY8pyGwS2tcJt98OQEUcuDUYRCoN4XHUKiNu
+   kaPt0gel1TuRDCCmIXWhN8wbqao2y2L7kjHTJY251X2QNZsYLddoB2NgW
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="330254991"
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="330254991"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 18:00:53 -0800
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="576780006"
+Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.146])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 18:00:53 -0800
+Date:   Wed, 12 Jan 2022 18:00:51 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Youquan Song <youquan.song@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+Subject: Re: [PATCH] mm/hwpoison: Fix error page recovered but reported "not
+ recovered"
+Message-ID: <Yd+H00eSqZb+RsTv@agluck-desk2.amr.corp.intel.com>
+References: <20220107194450.1687264-1-tony.luck@intel.com>
+ <20220112121145.GA889650@u2004>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220112121145.GA889650@u2004>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the size of commandp >= size, array out of bound write occurs because
-len == 0.
+On Wed, Jan 12, 2022 at 09:11:45PM +0900, Naoya Horiguchi wrote:
+> On Fri, Jan 07, 2022 at 11:44:50AM -0800, Tony Luck wrote:
+> > From: Youquan Song <youquan.song@intel.com>
 
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- arch/m68k/kernel/uboot.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 14ae5c18e776..4c9bd1d37301 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -707,8 +707,10 @@ static int kill_accessing_process(struct task_struct *p, unsigned long pfn,
+>  			      (void *)&priv);
+>  	if (ret == 1 && priv.tk.addr)
+>  		kill_proc(&priv.tk, pfn, flags);
+> +	else
+> +		ret = 0;
+>  	mmap_read_unlock(p->mm);
+> -	return ret ? -EFAULT : -EHWPOISON;
+> +	return ret > 0 ? -EHWPOISON : -EFAULT;
+>  }
+>  
+>  static const char *action_name[] = {
 
-diff --git a/arch/m68k/kernel/uboot.c b/arch/m68k/kernel/uboot.c
-index 928dbd33fc4a..63eaf3c3ddcd 100644
---- a/arch/m68k/kernel/uboot.c
-+++ b/arch/m68k/kernel/uboot.c
-@@ -101,5 +101,6 @@ __init void process_uboot_commandline(char *commandp, int size)
- 	}
- 
- 	parse_uboot_commandline(commandp, len);
--	commandp[len - 1] = 0;
-+	if (len > 0)
-+		commandp[len - 1] = 0;
- }
--- 
-2.25.1
+Yes. This fixes the problem (and your explanation helped
+me understand this code better).
 
+Fell free to take any words you need from the original patch
+comment and switch to:
+
+Reported-by: Youquan Song <youquan.song@intel.com>
+
+Thanks for looking (and fixing!)
+
+-Tony

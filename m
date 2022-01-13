@@ -2,224 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5590148DFD5
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0DD648DFDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:47:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236147AbiAMVoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 16:44:32 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33760 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233007AbiAMVo3 (ORCPT
+        id S235720AbiAMVrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 16:47:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233007AbiAMVrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 16:44:29 -0500
+        Thu, 13 Jan 2022 16:47:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C14C061574;
+        Thu, 13 Jan 2022 13:47:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2351B8239D;
-        Thu, 13 Jan 2022 21:44:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95292C36AEA;
-        Thu, 13 Jan 2022 21:44:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BA6F6124E;
+        Thu, 13 Jan 2022 21:47:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A3D4C36AE3;
+        Thu, 13 Jan 2022 21:47:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642110266;
-        bh=9f4pER1EuDbwag5Si4PfYatM5rJz9h3g9M3ZIfhUhBQ=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=fQus3Ie+WJB1Um+S0EEXE8L78sVxgEQok9HYXMzxUxW81RlzWJHN2EhwdnWtzPoiM
-         oXBHkz2SIZLl0exHs6uVsKzNHVqCWpN1jJb0cENqw+s1ahro1kmeNfGfr5rlAVWJke
-         083kWT8Wf4nPoFnl07YBMm9IW9241iRjY0qKMcuWAmYH6hQ+BtLLK/sKGu7bXYIxVt
-         OkIz6kXsBTxo2nY/1Jk2diBRFQ+ZZ8uYnqlcbsgOs419vMo+ktfwmIAKJMX/vvauCp
-         Ex4RaFKnECi9DWGAfGXtex/AZWrtAqPWTIRJKegVGoQDzki75atrWXPuI3y9u5qPbT
-         G6M724eYOIfAA==
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1642110453;
+        bh=mhvc/TtRX/W/HwVS0Gz9WmgUd95cMfFsAeoEdm3+0Wk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BAHULMDLmD4Nx4jsI5NkR4AD2iFGCDjTfWig0XgJI7/nWbgANiqssXhckQ+23Dpu/
+         Zp/U9LxjrukdI9+Ng4SkQYMC2Jx2VKBAWIq0U3a+AKHUoSDYU7tDFqU7XWv/mUXg0g
+         KYeCXjPDKWkYdR8StFj/t6OeCxh1Lsr7ccp2woIzJ00SQ1dpzqMgfVCIYnhnbFLlYz
+         w+joMc5+scnyKTZOl2MRFZ2QFt3J6MjP1DldHs8+Xzu3I719TUjectap2k1MchtZHs
+         XWVJV36e6o8v9nhOKbHDw4NK/OE4TuqtB4KezT+m/gn3jlB2j2xGlx6mo+TCIfFYUK
+         UmrM3oRqgQLAw==
+Message-ID: <e431fa42-26ec-8ac6-f954-e681b1e0e9a6@kernel.org>
+Date:   Thu, 13 Jan 2022 13:47:26 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220112114652.hmfdcpqil5jg2vz6@houat>
-References: <20210914093515.260031-1-maxime@cerno.tech> <20210914093515.260031-2-maxime@cerno.tech> <20220112033716.63631C36AEA@smtp.kernel.org> <20220112114652.hmfdcpqil5jg2vz6@houat>
-Subject: Re: [PATCH v2 1/3] clk: Introduce a clock request API
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-clk@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Emma Anholt <emma@anholt.net>, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>
-To:     Maxime Ripard <maxime@cerno.tech>
-Date:   Thu, 13 Jan 2022 13:44:25 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20220113214426.95292C36AEA@smtp.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3 1/3] x86: Implement arch_prctl(ARCH_VSYSCALL_CONTROL)
+ to disable vsyscall
+Content-Language: en-US
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
+        linux-x86_64@vger.kernel.org, kernel-hardening@lists.openwall.com,
+        linux-mm@kvack.org, the arch/x86 maintainers <x86@kernel.org>,
+        musl@lists.openwall.com, libc-alpha@sourceware.org,
+        linux-kernel@vger.kernel.org, Dave Hansen <dave.hansen@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrei Vagin <avagin@gmail.com>
+References: <3a1c8280967b491bf6917a18fbff6c9b52e8df24.1641398395.git.fweimer@redhat.com>
+From:   Andy Lutomirski <luto@kernel.org>
+In-Reply-To: <3a1c8280967b491bf6917a18fbff6c9b52e8df24.1641398395.git.fweimer@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Maxime Ripard (2022-01-12 03:46:52)
-> Hi Stephen,
->=20
-> Thanks for your answer
->=20
-> On Tue, Jan 11, 2022 at 07:37:15PM -0800, Stephen Boyd wrote:
-> > Sorry for being super delayed on response here. I'm buried in other
-> > work. +Jerome for exclusive clk API.
-> >=20
-> > Quoting Maxime Ripard (2021-09-14 02:35:13)
-> > > It's not unusual to find clocks being shared across multiple devices
-> > > that need to change the rate depending on what the device is doing at=
- a
-> > > given time.
-> > >=20
-> > > The SoC found on the RaspberryPi4 (BCM2711) is in such a situation
-> > > between its two HDMI controllers that share a clock that needs to be
-> > > raised depending on the output resolution of each controller.
-> > >=20
-> > > The current clk_set_rate API doesn't really allow to support that case
-> > > since there's really no synchronisation between multiple users, it's
-> > > essentially a fire-and-forget solution.
-> >=20
-> > I'd also say a "last caller wins"
-> >=20
-> > >=20
-> > > clk_set_min_rate does allow for such a synchronisation, but has anoth=
-er
-> > > drawback: it doesn't allow to reduce the clock rate once the work is
-> > > over.
-> >=20
-> > What does "work over" mean specifically? Does it mean one of the clk
-> > consumers has decided to stop using the clk?
->=20
-> That, or it doesn't need to enforce that minimum anymore. We have
-> several cases like this on the RPi. For example, during a change of
-> display mode a (shared) clock needs to be raised to a minimum, but
-> another shared one needs to raise its minimum based on the resolution.
->=20
-> In the former case, we only need the minimum to be enforced during the
-> resolution change, so it's fairly quick, but the latter requires its
-> minimum for as long as the display is on.
->=20
-> > Why doesn't clk_set_rate_range() work? Or clk_set_rate_range() combined
-> > with clk_set_rate_exclusive()?
->=20
-> clk_set_rate_range could work (it's what we have right now in mainline
-> after all), but it's suboptimal since the clock is never scaled down.
+On 1/5/22 08:02, Florian Weimer wrote:
+> Distributions struggle with changing the default for vsyscall
+> emulation because it is a clear break of userspace ABI, something
+> that should not happen.
+> 
+> The legacy vsyscall interface is supposed to be used by libcs only,
+> not by applications.  This commit adds a new arch_prctl request,
+> ARCH_VSYSCALL_CONTROL, with one argument.  If the argument is 0,
+> executing vsyscalls will cause the process to terminate.  Argument 1
+> turns vsyscall back on (this is mostly for a largely theoretical
+> CRIU use case).
+> 
+> Newer libcs can use a zero ARCH_VSYSCALL_CONTROL at startup to disable
+> vsyscall for the process.  Legacy libcs do not perform this call, so
+> vsyscall remains enabled for them.  This approach should achieves
+> backwards compatibility (perfect compatibility if the assumption that
+> only libcs use vsyscall is accurate), and it provides full hardening
+> for new binaries.
+> 
+> The chosen value of ARCH_VSYSCALL_CONTROL should avoid conflicts
+> with other x86-64 arch_prctl requests.  The fact that with
+> vsyscall=emulate, reading the vsyscall region is still possible
+> even after a zero ARCH_VSYSCALL_CONTROL is considered limitation
+> in the current implementation and may change in a future kernel
+> version.
+> 
+> Future arch_prctls requests commonly used at process startup can imply
+> ARCH_VSYSCALL_CONTROL with a zero argument, so that a separate system
+> call for disabling vsyscall is avoided.
+> 
+> Signed-off-by: Florian Weimer <fweimer@redhat.com>
+> Acked-by: Andrei Vagin <avagin@gmail.com>
+> ---
+> v3: Remove warning log message.  Split out test.
+> v2: ARCH_VSYSCALL_CONTROL instead of ARCH_VSYSCALL_LOCKOUT.  New tests
+>      for the toggle behavior.  Implement hiding [vsyscall] in
+>      /proc/PID/maps and test it.  Various other test fixes cleanups
+>      (e.g., fixed missing second argument to gettimeofday).
+> 
+> arch/x86/entry/vsyscall/vsyscall_64.c | 7 ++++++-
+>   arch/x86/include/asm/mmu.h            | 6 ++++++
+>   arch/x86/include/uapi/asm/prctl.h     | 2 ++
+>   arch/x86/kernel/process_64.c          | 7 +++++++
+>   4 files changed, 21 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
+> index fd2ee9408e91..6fc524b9f232 100644
+> --- a/arch/x86/entry/vsyscall/vsyscall_64.c
+> +++ b/arch/x86/entry/vsyscall/vsyscall_64.c
+> @@ -174,6 +174,9 @@ bool emulate_vsyscall(unsigned long error_code,
+>   
+>   	tsk = current;
+>   
+> +	if (tsk->mm->context.vsyscall_disabled)
+> +		goto sigsegv;
+> +
 
-Alright, I didn't see any mention of clk_set_rate_range() in the commit
-text so did I miss it? Maybe it's used interchangeably with
-clk_set_min_rate()?
+Is there a reason you didn't just change the check earlier in the 
+function to:
 
->=20
-> It's especially showing in my first example where we need to raise the
-> clock only for the duration of the resolution change. Using
-> clk_set_min_rate works but we end up with that fairly high clock (at
-> least 500MHz) for the rest of the system life even though we usually can
-> get away with using a clock around 200MHz outside of that (short) window.
->=20
-> This is fairly inefficient, and is mostly what I'm trying to address.
+if (vsyscall_mode == NONE || current->mm->context.vsyscall_disabled)
 
-Got it!
+Also, I still think the prctl should not be available if 
+vsyscall=emulate.  Either we should fully implement it or we should not 
+implement.  We could even do:
 
->=20
-> > > In our previous example, this means that if we were to raise the
-> > > resolution of one HDMI controller to the largest resolution and then
-> > > changing for a smaller one, we would still have the clock running at =
-the
-> > > largest resolution rate resulting in a poor power-efficiency.
-> >=20
-> > Does this example have two HDMI controllers where they share one clk and
-> > want to use the most efficient frequency for both of the HDMI devices? I
-> > think I'm following along but it's hard. It would be clearer if there
-> > was some psuedo-code explaining how it is both non-workable with current
-> > APIs and workable with the new APIs.
->=20
-> The fact that we have two HDMI controllers that share one clock is why
-> we use clk_set_min_rate in the first place, but you can have that
-> behavior with clk_set_min_rate only with a single user.
->=20
-> With pseudo-code, if you do something like
->=20
-> clk =3D clk_get(NULL);
-> clk_set_min_rate(600 * 1000 * 1000);
-> clk_set_min_rate(1000);
->=20
-> The clock will still remain at 600MHz, even though you would be totally
-> fine with the clock running at 1kHz.
+pr_warn_once("userspace vsyscall hardening request ignored because you 
+have vsyscall=emulate.  Unless you absolutely need vsyscall=emulate, 
+update your system to use vsyscall=xonly.\n");
 
-That looks like a bug. While we could happily ignore the rate floor
-being lowered because we're still within constraints, it looks like we
-should always re-evaluate the constraints when they change.
+and thus encourage good behavior.
 
->=20
-> If you really wanted to make the clock run at 1kHz, you'd need to have:
->=20
-> clk =3D clk_get(NULL);
-> clk_set_min_rate(600 * 1000 * 1000);
-> clk_set_min_rate(1000);
-> clk_set_rate(1000);
->=20
-> And that works fine for a single user.
->=20
-> If you have a clock shared by multiple drivers though, things get
-> tricky. Indeed, you can't really find out what the minimum for that
-> clock is, so figuring out the rate to pass to the clk_set_rate call
-> would be difficult already. And it wouldn't be atomic anyway.
-
-Right.
-
->=20
-> It's made even more difficult since in clk_calc_new_rates the core
-> checks that the rate is within the boundaries and will error out if it
-> isn't, so even using clk_set_rate(0) wouldn't work.
-
-clk_set_rate(0) is pretty gross!
-
->=20
-> It could work if the clock driver makes sure in round/determine_rate
-> that the rate passed in within the boundaries of the clock, but then you
-> start working around the core and relying on the behavior of clock
-> drivers, which is a fairly significant abstraction violation.
->=20
-> > > In order to address both issues, let's create an API that allows user=
- to
-> > > create temporary requests to increase the rate to a minimum, before
-> > > going back to the initial rate once the request is done.
-> > >=20
-> > > This introduces mainly two side-effects:
-> > >=20
-> > >   * There's an interaction between clk_set_rate and requests. This has
-> > >     been addressed by having clk_set_rate increasing the rate if it's
-> > >     greater than what the requests asked for, and in any case changing
-> > >     the rate the clock will return to once all the requests are done.
-> > >=20
-> > >   * Similarly, clk_round_rate has been adjusted to take the requests
-> > >     into account and return a rate that will be greater or equal to t=
-he
-> > >     requested rates.
-> > >=20
-> >=20
-> > I believe clk_set_rate_range() is broken but it can be fixed. I'm
-> > forgetting the details though. If the intended user of this new API
-> > can't use that range API then it would be good to understand why it
-> > can't be used. I imagine it would be something like
-> >=20
-> >       struct clk *clk_hdmi1, *clk_hdmi2;
-> >=20
-> >       clk_set_rate_range(&clk_hdmi1, HDMI1_MIN, HDMI1_MAX);
-> >       clk_set_rate_range(&clk_hdmi2, HDMI2_MIN, HDMI2_MAX);
-> >       clk_set_rate_range(&clk_hdmi2, 0, UINT_MAX);
-> >=20
-> > and then the goal would be for HDMI1_MIN to be used, or at the least for
-> > the last call to clk_set_rate_range() to drop the rate constraint and
-> > re-evaluate the frequency of the clk again based on hdmi1's rate range.
->=20
-> This is pretty much what this series was doing. I was being conservative
-> and didn't really want to modify the behavior of existing functions, but
-> that will work fine.
->=20
-
-I don't see a problem with re-evaluating the rate every time we call
-clk_set_rate_range(). That's probably the bug that I can't recall. Can
-you fix the API so it works that way?
+--Andy

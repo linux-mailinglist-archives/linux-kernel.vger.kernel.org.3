@@ -2,223 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8743D48DFD2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5590148DFD5
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbiAMVnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 16:43:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235254AbiAMVnE (ORCPT
+        id S236147AbiAMVoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 16:44:32 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33760 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233007AbiAMVo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 16:43:04 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F8CC06161C;
-        Thu, 13 Jan 2022 13:43:03 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id o3so11765216pjs.1;
-        Thu, 13 Jan 2022 13:43:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=chMleOaZP5LLYybKEvqzaEnOntGIKeyxzv8RxEMS/pU=;
-        b=oOc3d8quuL+d364W7KNWQtMdgtUPWTOWcsp8cMWNvHDxrhgRW2/iqLsZTnFsASrpLY
-         68f6X/M1x+sO4IK/5z8GRukqDLM7CHf4rk2qB/zOlWi9G1eAn8tq+zp6RKqI0IPYCVAa
-         hUGAgdHmZB/tYYdmRvOmZ4JNl+7KaTpFtgGI83AIVn9odjlTyVtSNxGjna9I3MmeJxnP
-         LOezyDSKBJbwulklkuNOKWH9DWBVEMZVRl505lf6yiD2x6vDvZWbGecOdmYT0deqt9nE
-         7oj6Lo5rPX0mYmnixNE6GUUU70z4K2CwYIE2HI3Z8c69J6dTeJP+r1nvFkXQlYsjlWb9
-         Puog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=chMleOaZP5LLYybKEvqzaEnOntGIKeyxzv8RxEMS/pU=;
-        b=QHOYRG/nrfl4koWEJiDfqsnGR7cx6gwQoWB3GZrWGV5Jm+mGhgU2oJBOVGs1d91qFs
-         YKEalHAq/WhDO3wKhvAAiS8zdXatfsHpJGeNM11Yknr/paokwUvDUHQMS1EqVMpXSTpQ
-         8JCyWBHqGUEw0SsWI1aDjNvTNarBcn8bW0URJoDmK3TttnoZYva4YHb5nvGBAhftrWiV
-         oN8MSxY/igu+98YFqlmUpz+jxUppzDTy73SFLux8bq9KheaibR+lrzuir7LrZGEGQvmf
-         +gxLyfQcrmZV2rSPj7BhsihZT4GMwq0Il/WkiIqdgS8bHoO+pCI2mOqy3naSVNeCkFCm
-         Yo/A==
-X-Gm-Message-State: AOAM531lftljLgVSLheaLb+KOHwuzjHS5UQVSYczmzkfm72T5DlB4KDo
-        pPFmwv0thZJf359F6AMOKl0=
-X-Google-Smtp-Source: ABdhPJza7nTyxaYu7zMa+CS3ya6yZ7jUqwYQkOFFet8Qv/maBjKZ7v19D4TMGEeuYYibqr5z1N9W+A==
-X-Received: by 2002:a17:902:e790:b0:149:7a3f:826a with SMTP id cp16-20020a170902e79000b001497a3f826amr6595655plb.76.1642110183142;
-        Thu, 13 Jan 2022 13:43:03 -0800 (PST)
-Received: from ?IPV6:2600:8802:b00:4a48:c1d3:c1c0:b78e:9e36? ([2600:8802:b00:4a48:c1d3:c1c0:b78e:9e36])
-        by smtp.gmail.com with ESMTPSA id r26sm2983811pgu.65.2022.01.13.13.42.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 13:43:02 -0800 (PST)
-Message-ID: <745c601f-c782-0904-f786-c9bfced8f11c@gmail.com>
-Date:   Thu, 13 Jan 2022 13:42:57 -0800
+        Thu, 13 Jan 2022 16:44:29 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2351B8239D;
+        Thu, 13 Jan 2022 21:44:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95292C36AEA;
+        Thu, 13 Jan 2022 21:44:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642110266;
+        bh=9f4pER1EuDbwag5Si4PfYatM5rJz9h3g9M3ZIfhUhBQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=fQus3Ie+WJB1Um+S0EEXE8L78sVxgEQok9HYXMzxUxW81RlzWJHN2EhwdnWtzPoiM
+         oXBHkz2SIZLl0exHs6uVsKzNHVqCWpN1jJb0cENqw+s1ahro1kmeNfGfr5rlAVWJke
+         083kWT8Wf4nPoFnl07YBMm9IW9241iRjY0qKMcuWAmYH6hQ+BtLLK/sKGu7bXYIxVt
+         OkIz6kXsBTxo2nY/1Jk2diBRFQ+ZZ8uYnqlcbsgOs419vMo+ktfwmIAKJMX/vvauCp
+         Ex4RaFKnECi9DWGAfGXtex/AZWrtAqPWTIRJKegVGoQDzki75atrWXPuI3y9u5qPbT
+         G6M724eYOIfAA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] driver core: platform: Rename platform_get_irq_optional()
- to platform_get_irq_silent()
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        platform-driver-x86@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev@vger.kernel.org
-References: <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220110201014.mtajyrfcfznfhyqm@pengutronix.de> <YdyilpjC6rtz6toJ@lunn.ch>
- <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
- <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
- <YeA7CjOyJFkpuhz/@sirena.org.uk>
- <20220113194358.xnnbhsoyetihterb@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220113194358.xnnbhsoyetihterb@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220112114652.hmfdcpqil5jg2vz6@houat>
+References: <20210914093515.260031-1-maxime@cerno.tech> <20210914093515.260031-2-maxime@cerno.tech> <20220112033716.63631C36AEA@smtp.kernel.org> <20220112114652.hmfdcpqil5jg2vz6@houat>
+Subject: Re: [PATCH v2 1/3] clk: Introduce a clock request API
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Tim Gover <tim.gover@raspberrypi.com>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Emma Anholt <emma@anholt.net>, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>
+To:     Maxime Ripard <maxime@cerno.tech>
+Date:   Thu, 13 Jan 2022 13:44:25 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20220113214426.95292C36AEA@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Maxime Ripard (2022-01-12 03:46:52)
+> Hi Stephen,
+>=20
+> Thanks for your answer
+>=20
+> On Tue, Jan 11, 2022 at 07:37:15PM -0800, Stephen Boyd wrote:
+> > Sorry for being super delayed on response here. I'm buried in other
+> > work. +Jerome for exclusive clk API.
+> >=20
+> > Quoting Maxime Ripard (2021-09-14 02:35:13)
+> > > It's not unusual to find clocks being shared across multiple devices
+> > > that need to change the rate depending on what the device is doing at=
+ a
+> > > given time.
+> > >=20
+> > > The SoC found on the RaspberryPi4 (BCM2711) is in such a situation
+> > > between its two HDMI controllers that share a clock that needs to be
+> > > raised depending on the output resolution of each controller.
+> > >=20
+> > > The current clk_set_rate API doesn't really allow to support that case
+> > > since there's really no synchronisation between multiple users, it's
+> > > essentially a fire-and-forget solution.
+> >=20
+> > I'd also say a "last caller wins"
+> >=20
+> > >=20
+> > > clk_set_min_rate does allow for such a synchronisation, but has anoth=
+er
+> > > drawback: it doesn't allow to reduce the clock rate once the work is
+> > > over.
+> >=20
+> > What does "work over" mean specifically? Does it mean one of the clk
+> > consumers has decided to stop using the clk?
+>=20
+> That, or it doesn't need to enforce that minimum anymore. We have
+> several cases like this on the RPi. For example, during a change of
+> display mode a (shared) clock needs to be raised to a minimum, but
+> another shared one needs to raise its minimum based on the resolution.
+>=20
+> In the former case, we only need the minimum to be enforced during the
+> resolution change, so it's fairly quick, but the latter requires its
+> minimum for as long as the display is on.
+>=20
+> > Why doesn't clk_set_rate_range() work? Or clk_set_rate_range() combined
+> > with clk_set_rate_exclusive()?
+>=20
+> clk_set_rate_range could work (it's what we have right now in mainline
+> after all), but it's suboptimal since the clock is never scaled down.
 
+Alright, I didn't see any mention of clk_set_rate_range() in the commit
+text so did I miss it? Maybe it's used interchangeably with
+clk_set_min_rate()?
 
-On 1/13/2022 11:43 AM, Uwe Kleine-König wrote:
-> The subsystems regulator, clk and gpio have the concept of a dummy
-> resource. For regulator, clk and gpio there is a semantic difference
-> between the regular _get() function and the _get_optional() variant.
-> (One might return the dummy resource, the other won't. Unfortunately
-> which one implements which isn't the same for these three.) The
-> difference between platform_get_irq() and platform_get_irq_optional() is
-> only that the former might emit an error message and the later won't.
-> 
-> To prevent people's expectations that there is a semantic difference
-> between these too, rename platform_get_irq_optional() to
-> platform_get_irq_silent() to make the actual difference more obvious.
-> 
-> The #define for the old name can and should be removed once all patches
-> currently in flux still relying on platform_get_irq_optional() are
-> fixed.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
-> Hello,
-> 
-> On Thu, Jan 13, 2022 at 02:45:30PM +0000, Mark Brown wrote:
->> On Thu, Jan 13, 2022 at 12:08:31PM +0100, Uwe Kleine-König wrote:
->>
->>> This is all very unfortunate. In my eyes b) is the most sensible
->>> sense, but the past showed that we don't agree here. (The most annoying
->>> part of regulator_get is the warning that is emitted that regularily
->>> makes customers ask what happens here and if this is fixable.)
->>
->> Fortunately it can be fixed, and it's safer to clearly specify things.
->> The prints are there because when the description is wrong enough to
->> cause things to blow up we can fail to boot or run messily and
->> forgetting to describe some supplies (or typoing so they haven't done
->> that) and people were having a hard time figuring out what might've
->> happened.
-> 
-> Yes, that's right. I sent a patch for such a warning in 2019 and pinged
-> occationally. Still waiting for it to be merged :-\
-> (https://lore.kernel.org/r/20190625100412.11815-1-u.kleine-koenig@pengutronix.de)
-> 
->>> I think at least c) is easy to resolve because
->>> platform_get_irq_optional() isn't that old yet and mechanically
->>> replacing it by platform_get_irq_silent() should be easy and safe.
->>> And this is orthogonal to the discussion if -ENOXIO is a sensible return
->>> value and if it's as easy as it could be to work with errors on irq
->>> lookups.
->>
->> It'd certainly be good to name anything that doesn't correspond to one
->> of the existing semantics for the API (!) something different rather
->> than adding yet another potentially overloaded meaning.
-> 
-> It seems we're (at least) three who agree about this. Here is a patch
-> fixing the name.
+>=20
+> It's especially showing in my first example where we need to raise the
+> clock only for the duration of the resolution change. Using
+> clk_set_min_rate works but we end up with that fairly high clock (at
+> least 500MHz) for the rest of the system life even though we usually can
+> get away with using a clock around 200MHz outside of that (short) window.
+>=20
+> This is fairly inefficient, and is mostly what I'm trying to address.
 
- From an API naming perspective this does not make much sense anymore 
-with the name chosen, it is understood that whent he function is called 
-platform_get_irq_optional(), optional applies to the IRQ. An optional 
-IRQ is something people can reason about because it makes sense.
+Got it!
 
-What is a a "silent" IRQ however? It does not apply to the object it is 
-trying to fetch to anymore, but to the message that may not be printed 
-in case the resource failed to be obtained, because said resource is 
-optional. Woah, that's quite a stretch.
+>=20
+> > > In our previous example, this means that if we were to raise the
+> > > resolution of one HDMI controller to the largest resolution and then
+> > > changing for a smaller one, we would still have the clock running at =
+the
+> > > largest resolution rate resulting in a poor power-efficiency.
+> >=20
+> > Does this example have two HDMI controllers where they share one clk and
+> > want to use the most efficient frequency for both of the HDMI devices? I
+> > think I'm following along but it's hard. It would be clearer if there
+> > was some psuedo-code explaining how it is both non-workable with current
+> > APIs and workable with the new APIs.
+>=20
+> The fact that we have two HDMI controllers that share one clock is why
+> we use clk_set_min_rate in the first place, but you can have that
+> behavior with clk_set_min_rate only with a single user.
+>=20
+> With pseudo-code, if you do something like
+>=20
+> clk =3D clk_get(NULL);
+> clk_set_min_rate(600 * 1000 * 1000);
+> clk_set_min_rate(1000);
+>=20
+> The clock will still remain at 600MHz, even though you would be totally
+> fine with the clock running at 1kHz.
 
-Following the discussion and original 2 patches set from Sergey, it is 
-not entirely clear to me anymore what is it that we are trying to fix.
+That looks like a bug. While we could happily ignore the rate floor
+being lowered because we're still within constraints, it looks like we
+should always re-evaluate the constraints when they change.
 
-I nearly forgot, I would paint it blue, sky blue, not navy blue, not 
-light blue ;)
--- 
-Florian
+>=20
+> If you really wanted to make the clock run at 1kHz, you'd need to have:
+>=20
+> clk =3D clk_get(NULL);
+> clk_set_min_rate(600 * 1000 * 1000);
+> clk_set_min_rate(1000);
+> clk_set_rate(1000);
+>=20
+> And that works fine for a single user.
+>=20
+> If you have a clock shared by multiple drivers though, things get
+> tricky. Indeed, you can't really find out what the minimum for that
+> clock is, so figuring out the rate to pass to the clk_set_rate call
+> would be difficult already. And it wouldn't be atomic anyway.
+
+Right.
+
+>=20
+> It's made even more difficult since in clk_calc_new_rates the core
+> checks that the rate is within the boundaries and will error out if it
+> isn't, so even using clk_set_rate(0) wouldn't work.
+
+clk_set_rate(0) is pretty gross!
+
+>=20
+> It could work if the clock driver makes sure in round/determine_rate
+> that the rate passed in within the boundaries of the clock, but then you
+> start working around the core and relying on the behavior of clock
+> drivers, which is a fairly significant abstraction violation.
+>=20
+> > > In order to address both issues, let's create an API that allows user=
+ to
+> > > create temporary requests to increase the rate to a minimum, before
+> > > going back to the initial rate once the request is done.
+> > >=20
+> > > This introduces mainly two side-effects:
+> > >=20
+> > >   * There's an interaction between clk_set_rate and requests. This has
+> > >     been addressed by having clk_set_rate increasing the rate if it's
+> > >     greater than what the requests asked for, and in any case changing
+> > >     the rate the clock will return to once all the requests are done.
+> > >=20
+> > >   * Similarly, clk_round_rate has been adjusted to take the requests
+> > >     into account and return a rate that will be greater or equal to t=
+he
+> > >     requested rates.
+> > >=20
+> >=20
+> > I believe clk_set_rate_range() is broken but it can be fixed. I'm
+> > forgetting the details though. If the intended user of this new API
+> > can't use that range API then it would be good to understand why it
+> > can't be used. I imagine it would be something like
+> >=20
+> >       struct clk *clk_hdmi1, *clk_hdmi2;
+> >=20
+> >       clk_set_rate_range(&clk_hdmi1, HDMI1_MIN, HDMI1_MAX);
+> >       clk_set_rate_range(&clk_hdmi2, HDMI2_MIN, HDMI2_MAX);
+> >       clk_set_rate_range(&clk_hdmi2, 0, UINT_MAX);
+> >=20
+> > and then the goal would be for HDMI1_MIN to be used, or at the least for
+> > the last call to clk_set_rate_range() to drop the rate constraint and
+> > re-evaluate the frequency of the clk again based on hdmi1's rate range.
+>=20
+> This is pretty much what this series was doing. I was being conservative
+> and didn't really want to modify the behavior of existing functions, but
+> that will work fine.
+>=20
+
+I don't see a problem with re-evaluating the rate every time we call
+clk_set_rate_range(). That's probably the bug that I can't recall. Can
+you fix the API so it works that way?

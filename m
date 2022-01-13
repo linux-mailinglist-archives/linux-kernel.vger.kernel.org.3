@@ -2,119 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C84A948DAE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B75D48DAE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236391AbiAMPo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 10:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236288AbiAMPoo (ORCPT
+        id S236302AbiAMPpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 10:45:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40164 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232699AbiAMPpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 10:44:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06D0C06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 07:44:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80BBE60AF5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 15:44:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6D92C36AEB;
-        Thu, 13 Jan 2022 15:44:42 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="l8jcayDs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1642088682;
+        Thu, 13 Jan 2022 10:45:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642088722;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=LHRHZ2DmZlajNxmwLMwsAzCzT3jhXz6vdabZy1NYR/I=;
-        b=l8jcayDscAwo8aPrUPpAdn6Mw9OBhfaBPk5SE1sF8X/M5DYwvnQr9eepqVmbvsUE3sdNvC
-        FKLcOPeA1sFSPCPUR/M+lgkfz9VqFcfxGCo/ZgXk20IBIc7g/m0TzBSN3NISGOU6T8y1ot
-        UgS6I0/3YvK6TfFHzqo40DRt+o5wNEg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8c000dd5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 13 Jan 2022 15:44:42 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, tytso@mit.edu
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 7/7] random: de-duplicate INPUT_POOL constants
-Date:   Thu, 13 Jan 2022 16:44:13 +0100
-Message-Id: <20220113154413.29513-8-Jason@zx2c4.com>
-In-Reply-To: <20220113154413.29513-1-Jason@zx2c4.com>
-References: <20220113154413.29513-1-Jason@zx2c4.com>
+        bh=XOQmkcxnHsUnotvr77pJAq4wKyjZXJltLlB+w8uHbjI=;
+        b=KK/gyAfe2hkZR59jS8uWZ5KkJGDPMQpTPZ1ak5G/oKNVFpWR2QsddcwSUKbJKfaqK13PcL
+        40NexyEudGDxx+iKzHwUa4YDu8MwRWQbHDpSG2oOX7rz7xmuaGn+90bWCCa13ZNPifkqtW
+        Q8m/uw+UQui4tcQMcageyvJaFiAzupM=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-364-qjZIfvIVMOWm9lGJEQojQA-1; Thu, 13 Jan 2022 10:45:21 -0500
+X-MC-Unique: qjZIfvIVMOWm9lGJEQojQA-1
+Received: by mail-pg1-f200.google.com with SMTP id t1-20020a6564c1000000b002e7f31cf59fso117775pgv.14
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 07:45:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XOQmkcxnHsUnotvr77pJAq4wKyjZXJltLlB+w8uHbjI=;
+        b=AwqY+dtHCwc+gguV1DmQRRSa82eGRXw4ImAxh94wjjC7B1VNBEOvK1eCsK+JCkmaDT
+         5pAVMzLrXkMbzOX2vKptnAYWF2OluMPUW9sZyZBwkv4hGSIbY/J94UtxT2uM5nuehbJK
+         SLH5zoTUx9fKrDPzGfn9dWvRj4av5EXyeZw0eAitVBmiJvpgYtLJyy2lmyzDabmY/Gbo
+         4tUZKfvbwaXZfJIhCMahXAWAPP2dUK9xVHNVxN2itXffCkFpx0inUlaAhPVVc6MNfiSc
+         YhXb4yOLG5fhubWL3MLri6HrIazmYL+zGN+gE2XGemI8FW2reC20DfaSnFvDB4qNJCAj
+         WkZg==
+X-Gm-Message-State: AOAM531wGWrYx2DZBsE4DtWvr7iCsJkEq6xIGMZCBghfTSOULilHVHow
+        yEsLHbtiaQvsSfHeqpn8puQmQzuXSS/5lHHGCMH4JvobuoYW3B5LzY664KaZCvqtK/vhaC63fPi
+        NUL2MUebEKjM5kAtIO/mztcF9
+X-Received: by 2002:a63:4186:: with SMTP id o128mr4373788pga.450.1642088719908;
+        Thu, 13 Jan 2022 07:45:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwoTVzJmaQMaCWyrTgeBzpvTXnZncov7SOddrWkGnSqiIzv5eZXOkdcIXRKCxNIrGEynwLc4Q==
+X-Received: by 2002:a63:4186:: with SMTP id o128mr4373770pga.450.1642088719635;
+        Thu, 13 Jan 2022 07:45:19 -0800 (PST)
+Received: from steredhat (host-79-51-11-180.retail.telecomitalia.it. [79.51.11.180])
+        by smtp.gmail.com with ESMTPSA id n28sm2603973pgl.7.2022.01.13.07.45.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 07:45:19 -0800 (PST)
+Date:   Thu, 13 Jan 2022 16:44:47 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        stefanha@redhat.com, Jason Wang <jasowang@redhat.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [RFC PATCH] vhost: cache avail index in vhost_enable_notify()
+Message-ID: <20220113154301.qd3ayuhrcjnsaim7@steredhat>
+References: <20220113145642.205388-1-sgarzare@redhat.com>
+ <20220113101922-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220113101922-mutt-send-email-mst@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We already had the POOL_* constants, so deduplicate the older INPUT_POOL
-ones. As well, fold EXTRACT_SIZE into the poolinfo enum, since it's
-related.
+On Thu, Jan 13, 2022 at 10:19:46AM -0500, Michael S. Tsirkin wrote:
+>On Thu, Jan 13, 2022 at 03:56:42PM +0100, Stefano Garzarella wrote:
+>> In vhost_enable_notify() we enable the notifications and we read
+>> the avail index to check if new buffers have become available in
+>> the meantime. In this case, the device would go to re-read avail
+>> index to access the descriptor.
+>>
+>> As we already do in other place, we can cache the value in `avail_idx`
+>> and compare it with `last_avail_idx` to check if there are new
+>> buffers available.
+>>
+>> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>
+>I guess we can ... but what's the point?
+>
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+That without this patch if avail index is new, then device when will 
+call vhost_get_vq_desc() will find old value in cache and will read it 
+again.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 46aee3dcd807..839c231485f2 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -358,13 +358,6 @@
- 
- /* #define ADD_INTERRUPT_BENCH */
- 
--/*
-- * Configuration information
-- */
--#define INPUT_POOL_SHIFT	12
--#define INPUT_POOL_WORDS	(1 << (INPUT_POOL_SHIFT-5))
--#define EXTRACT_SIZE		(BLAKE2S_HASH_SIZE / 2)
--
- /*
-  * To allow fractional bits to be tracked, the entropy_count field is
-  * denominated in units of 1/8th bits.
-@@ -440,7 +433,9 @@ enum poolinfo {
- 	POOL_TAP2 = 76,
- 	POOL_TAP3 = 51,
- 	POOL_TAP4 = 25,
--	POOL_TAP5 = 1
-+	POOL_TAP5 = 1,
-+
-+	EXTRACT_SIZE = BLAKE2S_HASH_SIZE / 2
- };
- 
- /*
-@@ -503,7 +498,7 @@ MODULE_PARM_DESC(ratelimit_disable, "Disable random ratelimit suppression");
-  *
-  **********************************************************************/
- 
--static u32 input_pool_data[INPUT_POOL_WORDS] __latent_entropy;
-+static u32 input_pool_data[POOL_WORDS] __latent_entropy;
- 
- static struct {
- 	/* read-only data: */
-@@ -1961,7 +1956,7 @@ SYSCALL_DEFINE3(getrandom, char __user *, buf, size_t, count,
- #include <linux/sysctl.h>
- 
- static int min_write_thresh;
--static int max_write_thresh = INPUT_POOL_WORDS * 32;
-+static int max_write_thresh = POOL_WORDS * 32;
- static int random_min_urandom_seed = 60;
- static char sysctl_bootid[16];
- 
-@@ -2018,7 +2013,7 @@ static int proc_do_entropy(struct ctl_table *table, int write,
- 	return proc_dointvec(&fake_table, write, buffer, lenp, ppos);
- }
- 
--static int sysctl_poolsize = INPUT_POOL_WORDS * 32;
-+static int sysctl_poolsize = POOL_BITS;
- extern struct ctl_table random_table[];
- struct ctl_table random_table[] = {
- 	{
--- 
-2.34.1
+With this patch we also do the same path and update the cache every time 
+we read avail index.
+
+I marked it RFC because I don't know if it's worth it :-)
+
+Stefano
 

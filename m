@@ -2,128 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9272548D37E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0EC548D386
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbiAMIVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 03:21:24 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55734 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232930AbiAMIVX (ORCPT
+        id S232959AbiAMIXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 03:23:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26139 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229685AbiAMIXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 03:21:23 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DCC261C1D;
-        Thu, 13 Jan 2022 08:21:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F2EC36AE3;
-        Thu, 13 Jan 2022 08:21:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642062082;
-        bh=fX/nWZScQTmUqIw2Cq7C1GzYpE8hxVmOiMEjPokZ9v0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wfkto1UK/V1x9kr+AQ6EhVxlBTp9ZBgPZZ6ca+y+RE3Biw+CgVzCMgQGIWeDZnmmi
-         T18Q3RzRDxTbTHbgsbhlEYvbvAfk/n1FZyvmj0kwXVz9H2prSpdtLUCQ24uvT7K7N9
-         508+wgFvVzB8OD/xB8kU6JOinJCdzLkxJ5h/VhdE=
-Date:   Thu, 13 Jan 2022 09:21:19 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Puma Hsu <pumahsu@google.com>
-Cc:     mathias.nyman@intel.com, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Albert Wang <albertccwang@google.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v3] xhci: re-initialize the HC during resume if HCE was
- set
-Message-ID: <Yd/g/ywBWZG7gF8v@kroah.com>
-References: <20211229112551.3483931-1-pumahsu@google.com>
- <Yd1tUKhyZf26OVNQ@kroah.com>
- <CAGCq0LZb8nQDvcz=LswWi4qKd-65ys6iPjTKh=46dVtYLDEUVw@mail.gmail.com>
+        Thu, 13 Jan 2022 03:23:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642062219;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XYvDNCqrzjNQi1i94ndAiCZSNdRpN6HLa1QDjOS6xvo=;
+        b=hamDK02SpYb/8AGkrZa1/uhLiVO1GNObnQSw8iAY+QJE2BRSIezH0rE/c/YKzy1XA7l1iF
+        J47UTJUMc1M9IaZTLMkbbWmmekf1k9/3Zdmv20S9JPkGwoE0B26cSE3LtfHfJAldvNJdUq
+        lNXJjK6OnLElByTrCzVms8ZYJQ/XigU=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-261-JBFki6HuMWaVbybtEwmKqw-1; Thu, 13 Jan 2022 03:23:38 -0500
+X-MC-Unique: JBFki6HuMWaVbybtEwmKqw-1
+Received: by mail-ed1-f70.google.com with SMTP id r8-20020a05640251c800b003f9a52daa3fso4625986edd.22
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 00:23:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XYvDNCqrzjNQi1i94ndAiCZSNdRpN6HLa1QDjOS6xvo=;
+        b=fmj+mOAcx0SWIhmPxM4GzvqXRYWjCejMg5LI+4Dp26YeKSop9FpynK5jI7fner98bt
+         p8hlrj+cymZAi72LuQTMHTEWox+cHF9GyPvbScY7/a9nBYWGMed32iRGXQS3mhnj10XP
+         teUUDdLAAR9lLagzOs5An4K3XVKI98NkkMRnyEufl+nhXu6FkIzDokqOa1+oitAzdZL1
+         IGCDwl/1aOJ9Mswj04aCxQdpZIolXj/orwtqeJmh2I7SKWtO7OGrhxiJF9c4AkvS3jP1
+         A/Y3lMpMOmMaj8EWKYJ26ZFMRylzF6LCtrZvBiEXX4bBQHlRdBp3O1d9zqpWq1hqpYaO
+         ya3A==
+X-Gm-Message-State: AOAM531aoJoMic4n4WDs35IY1HhJ4X/y45VNbGJOulV2+4fP6JDa7wM5
+        egrjweUtba6VvpTi84KktjNP4qgEjqmp6il5FH1d4clepuDy4kWHZLfOaCGpiM5yF2/fBRL0qqN
+        W4WfTxNt9U7SzpX7GNe4kk264
+X-Received: by 2002:a05:6402:d44:: with SMTP id ec4mr3203026edb.109.1642062216953;
+        Thu, 13 Jan 2022 00:23:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJziKJ5OG3S6i4OF7ONpfKZ/LR7Ux0jYsJnPLJkhb4dchu4epXcviB/vcR0lYiYyrvFAxYCpEg==
+X-Received: by 2002:a05:6402:d44:: with SMTP id ec4mr3203011edb.109.1642062216777;
+        Thu, 13 Jan 2022 00:23:36 -0800 (PST)
+Received: from [10.0.0.88] (host-79-47-126-144.retail.telecomitalia.it. [79.47.126.144])
+        by smtp.gmail.com with ESMTPSA id 17sm623390eju.65.2022.01.13.00.23.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 00:23:36 -0800 (PST)
+Message-ID: <8f37120b-9980-115b-3b7c-9351600b62b2@redhat.com>
+Date:   Thu, 13 Jan 2022 09:23:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGCq0LZb8nQDvcz=LswWi4qKd-65ys6iPjTKh=46dVtYLDEUVw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] kernel/sched: remove dl_boosted flag comment
+Content-Language: en-US
+To:     Hui Su <suhui_kernel@163.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        linux-kernel@vger.kernel.org
+References: <20220107095254.GA49258@localhost.localdomain>
+From:   Daniel Bristot de Oliveira <bristot@redhat.com>
+In-Reply-To: <20220107095254.GA49258@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 03:54:27PM +0800, Puma Hsu wrote:
-> On Tue, Jan 11, 2022 at 7:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Dec 29, 2021 at 07:25:51PM +0800, Puma Hsu wrote:
-> > > When HCE(Host Controller Error) is set, it means an internal
-> > > error condition has been detected. It needs to re-initialize
-> > > the HC too.
-> >
-> > What is "It" in the last sentence?
+On 1/7/22 10:52, Hui Su wrote:
+> since commit 2279f540ea7d ("sched/deadline: Fix priority
+> inheritance with multiple scheduling classes"), we should not
+> keep it here.
 > 
-> Maybe I can change "It" to "Software", xHCI specification uses
-> "Software" when describing this.
+> Signed-off-by: Hui Su <suhui_kernel@163.com>
 
-Please change it to something better :)
+Reviewed-by: Daniel Bristot de Oliveira <bristot@redhat.com>
 
-> > >
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Puma Hsu <pumahsu@google.com>
-> >
-> > What commit id does this fix?
+Thanks!
+
+-- Daniel
+
+> ---
+>  include/linux/sched.h | 4 ----
+>  1 file changed, 4 deletions(-)
 > 
-> This commit is not used to fix a specific commit. We find a condition
-> that when XHCI runs the resume process but the HCE flag is set, then
-> the Run/Stop bit of USBCMD cannot be set so that HC would not be
-> enabled. In fact, HC may already meet a problem at this moment.
-> Besides, in xHCI requirements specification revision 1.2, Table 5-21
-> BIT(12) claims that Software should re-initialize the xHC when HCE is
-> set. Therefore, I think this commit could be the error handling for
-> HCE.
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 78c351e35fec..64426351d424 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -610,10 +610,6 @@ struct sched_dl_entity {
+>  	 * task has to wait for a replenishment to be performed at the
+>  	 * next firing of dl_timer.
+>  	 *
+> -	 * @dl_boosted tells if we are boosted due to DI. If so we are
+> -	 * outside bandwidth enforcement mechanism (but only until we
+> -	 * exit the critical section);
+> -	 *
+>  	 * @dl_yielded tells if task gave up the CPU before consuming
+>  	 * all its available runtime during the last job.
+>  	 *
 
-So this problem has been there since the driver was first added to the
-kernel?  Should it go to stable kernels as well?  If so, how far back in
-time?
-
-> > > ---
-> > > v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
-> > > v3: Add stable@vger.kernel.org for stable release.
-> > >
-> > >  drivers/usb/host/xhci.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> > > index dc357cabb265..ab440ce8420f 100644
-> > > --- a/drivers/usb/host/xhci.c
-> > > +++ b/drivers/usb/host/xhci.c
-> > > @@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
-> > >               temp = readl(&xhci->op_regs->status);
-> > >       }
-> > >
-> > > -     /* If restore operation fails, re-initialize the HC during resume */
-> > > -     if ((temp & STS_SRE) || hibernated) {
-> > > +     /* If restore operation fails or HC error is detected, re-initialize the HC during resume */
-> > > +     if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
-> >
-> > But if STS_HCE is set on suspend, that means the suspend was broken so
-> > you wouldn't get here, right?
-> 
-> In xhci_suspend(), it seems doesn't really check whether STS_HCE is
-> set and then break the suspend(The only case for checking HCE is when
-> STS_SAVE setting failed). So suspend function may be still able to
-> finish even if HCE is set? Then xhci_resume will still be called.
-
-Is this a problem?
-
-> > Or can the error happen between suspend and resume?
-> >
-> > This seems like a big hammer for when the host controller throws an
-> > error.  Why is this the only place that it should be checked for?  What
-> > caused the error that can now allow it to be fixed?
-> 
-> I believe this is not the only place that the host controller may set
-> HCE, the host controller may set HCE anytime it sees an error in my
-> opinion, not only in suspend or resume.
-
-Then where else should it be checked?  Where else will your silicon set
-this bit as part of the normal operating process?
-
-thanks,
-
-greg k-h

@@ -2,87 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F6648D4F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B4948D4F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234094AbiAMJYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:24:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
+        id S230508AbiAMJZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231805AbiAMJYU (ORCPT
+        with ESMTP id S229451AbiAMJZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:24:20 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BA3C06173F;
-        Thu, 13 Jan 2022 01:24:19 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id r28so8940062wrc.3;
-        Thu, 13 Jan 2022 01:24:19 -0800 (PST)
+        Thu, 13 Jan 2022 04:25:37 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DD9C06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:25:36 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id v1so7568222ioj.10
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:25:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GCkVJzyBm9DkekZ2srPt2opWmyZGjkyE6LY+JDVYLMc=;
-        b=MsEIc3Ul3dQHDwDf72c+U1apAqZ/UZChA40f5xPrGXMuNIeszzQ2ga75db/EC5nwQZ
-         Bj7kDO6oTSLkU3aesgaL9ILia2lxZysY9XmPUiUFEa8uCtUXRUoFmggNsTxKFX1lBf6N
-         APpNAwShwQesTa6CXS4Z+VfDm6EmUwgiKeiXHHkyE1Aw7byNdHxIbTEBLsQdEnfmQzs9
-         8Z8FYMxNwg0BciquMWt5UO8ev8l9bFqKUHTqGNuuuAWDZA7x+XTQ8W/VaAFuA1Or0i3L
-         V0v9YzUqttEkBvQMwNPTC4DLInyXdV+w8mF/EWLxZip7N8xUxvroftV6POWJi6W6DXbb
-         tflQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=buO1MWlrsiI4ThiE8ebM/qEepT6gBkUde7jyQkyjwsk=;
+        b=KMAEG9ziKENxPP1OUvgV8H9b9riW0zf1s8l6B8uIy7wERxSV6hUC7vq3U5MlfoI6SZ
+         hiSVecAggVpDg6qiv5KFgTnfy7Czx0NQA/RaFx5G1DaUMLKMliLi916tEEesAq6vHJaE
+         YGLSdVuRxoJGBBWUzrLdilBviof2yDJjhzavjFJawr11Nt7WhL/omEZ7LjA/7Q3+udtG
+         bjJIrtPHwC66r3gB18NPzQEttfS7SKkOHYiBZdsjIACvA2WdLSqswqepyseE1KYgd4Oi
+         4cJIyV8BaKn1Oi07itiSTJxh/yIJbeuP6tRmHWUfnzSyAAeDldkgqO25AknZu+VRbPGM
+         bA1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GCkVJzyBm9DkekZ2srPt2opWmyZGjkyE6LY+JDVYLMc=;
-        b=Y15xZd87oIj9TT5I1Hkvb4xlOOqBxbj2imZxLyXmdeA+yLBgUzVz14IrVhzkrA+SO2
-         JOO/IgTgx7pasTOH1QnHqdGUJNgttQymQ4hrKKm51QWKT6Nv09xzqGHWehXqwNytVOn/
-         yxvrATUnXLLBQn4lgj4num0d342TJRV2rvcmqJUGpUQ/fwcyj+CsGl+qrZP9cXwor0Bl
-         jNVe8ufCajiE0ZkZrwtLX8VlLjhZN/2h/rBITVjzSa+Q+s+IKQGswvZtXXdbwSBMGYGf
-         7cRtf5VX2o/PBSX55XVgSLgH6cksM/ZBg/Uxp8KwezVwqSLerkM+ZquMMEHw4Os4UtDg
-         lDKQ==
-X-Gm-Message-State: AOAM5316bv98PLVxWpmvwRRyKCNmqvpidQC/1r5NKt7uYsBl5TUQYFcn
-        tCDDLVfZRRm2kACPDKtRaYDSjT7wlB0EfOHE
-X-Google-Smtp-Source: ABdhPJyS3TMFMdJLERgMpQrmKP5ReJTdSxtyerLoyjHay7GNS9ARuJkSbPijRSZNowPJ4AcmuFrs2A==
-X-Received: by 2002:adf:d23b:: with SMTP id k27mr3368042wrh.517.1642065858592;
-        Thu, 13 Jan 2022 01:24:18 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id r13sm1938459wrn.101.2022.01.13.01.24.17
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=buO1MWlrsiI4ThiE8ebM/qEepT6gBkUde7jyQkyjwsk=;
+        b=WD8Kbj5TAvBVip02xSE1P4zvks7k0J8s85Cf5eVqznWfUTCcWqATp3/qoINZ+05erK
+         +g2Nrpn9BOETNxTHLugqLdJh1Lb1QW8W+TmRPopyo2YqrK9vN+V+mQYzQKK/ZfXpl2Ni
+         1evuIakFUBnFzlJ06DNcVepusTt2UX8WLDCQ2DIC0zIP4MgReAEV9Wpv14uRrIlzSPsF
+         Lz2XoOClv9v3sn7SMdDCEAKlhkbtg3dW8iS6selrI96uNnvQ3sbSVljQ1+BvJ9s0ggYb
+         Qe/1ICV/wXlINhoP3zFd/mzDG4+i0C6IfdHDgUnI8drFE2btoyzJVN+X24rJAh/d2BbY
+         GQig==
+X-Gm-Message-State: AOAM533xRCIolfQ0uCDKl//6flyZOUDtYHXTIgz0lHUo0AAgUSbsffg6
+        MMpt/x4ZGOCGnbl6JFmeAJ9pEA==
+X-Google-Smtp-Source: ABdhPJxpdfdhJM+DmhBp7LTkz0JGkOoR+uvxcCvDtUCxvIxN1P5mrcrBrzRFrIMyX49jOdAeRASeog==
+X-Received: by 2002:a05:6638:2246:: with SMTP id m6mr1626108jas.292.1642065935899;
+        Thu, 13 Jan 2022 01:25:35 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:ac2b:c4ef:2b56:374c])
+        by smtp.gmail.com with ESMTPSA id b17sm2192509iow.6.2022.01.13.01.25.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 01:24:18 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] kernel: Fix spelling mistake "compresser" -> "compressor"
-Date:   Thu, 13 Jan 2022 09:24:17 +0000
-Message-Id: <20220113092417.1354537-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Thu, 13 Jan 2022 01:25:35 -0800 (PST)
+Date:   Thu, 13 Jan 2022 02:25:31 -0700
+From:   Yu Zhao <yuzhao@google.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>
+Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
+Message-ID: <Yd/wC8K3+0pE+3UZ@google.com>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <20220104202227.2903605-7-yuzhao@google.com>
+ <YdcU4P+XWkbDUUoO@dhcp22.suse.cz>
+ <YdxKORU9OWCv114O@dhcp22.suse.cz>
+ <Yd4P6bEJI8YlXq0H@google.com>
+ <Yd6tafG3CS7BoRYn@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd6tafG3CS7BoRYn@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a pr_err error message. Fix it.
+On Wed, Jan 12, 2022 at 11:28:57AM +0100, Michal Hocko wrote:
+> On Tue 11-01-22 16:16:57, Yu Zhao wrote:
+> > On Mon, Jan 10, 2022 at 04:01:13PM +0100, Michal Hocko wrote:
+> > > On Thu 06-01-22 17:12:18, Michal Hocko wrote:
+> > > > On Tue 04-01-22 13:22:25, Yu Zhao wrote:
+> > > > > +static struct lru_gen_mm_walk *alloc_mm_walk(void)
+> > > > > +{
+> > > > > +	if (!current->reclaim_state || !current->reclaim_state->mm_walk)
+> > > > > +		return kvzalloc(sizeof(struct lru_gen_mm_walk), GFP_KERNEL);
+> > > 
+> > > One thing I have overlooked completely.
+> > 
+> > I appreciate your attention to details but GFP_KERNEL is legit in the
+> > reclaim path. It's been used many years in our production, e.g.,
+> >   page reclaim
+> >     swap_writepage()
+> >       frontswap_store()
+> >         zswap_frontswap_store()
+> >           zswap_entry_cache_alloc(GFP_KERNEL)
+> > 
+> > (And I always test my changes with lockdep, kasan, DEBUG_VM, etc., no
+> >  warnings ever seen from using GFP_KERNEL in the reclaim path.)
+> 
+> OK, I can see it now. __need_reclaim will check for PF_MEMALLOC and skip
+> the fs_reclaim tracking.
+> 
+> I still maintain I am not really happy about (nor in the zswap example)
+> allocations from the direct reclaim context. I would really recommend
+> using a pre-allocated pool of objects.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- kernel/module_decompress.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Not trying to argue anything -- there are many other places in the
+reclaim path that must allocate memory to make progress, e.g.,
 
-diff --git a/kernel/module_decompress.c b/kernel/module_decompress.c
-index aeefd95a3337..b01c69c2ff99 100644
---- a/kernel/module_decompress.c
-+++ b/kernel/module_decompress.c
-@@ -106,7 +106,7 @@ static ssize_t module_gzip_decompress(struct load_info *info,
- 
- 	rc = zlib_inflateInit2(&s, -MAX_WBITS);
- 	if (rc != Z_OK) {
--		pr_err("failed to initialize decompresser: %d\n", rc);
-+		pr_err("failed to initialize decompressor: %d\n", rc);
- 		retval = -EINVAL;
- 		goto out;
- 	}
--- 
-2.33.1
+  add_to_swap_cache()
+    xas_nomem()
 
+  __swap_writepage()
+    bio_alloc()
+
+The only way to not allocate memory is drop clean pages. Writing dirty
+pages (not swap) might require allocations as well. (But we only write
+dirty pages in kswapd, not in the direct reclaim path.)
+
+> If there are strong reasons for not doing so then at lease change that
+> to kzalloc.
+
+Consider it done.

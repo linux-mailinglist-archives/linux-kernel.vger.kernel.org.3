@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4A248D3AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E80E48D3B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbiAMIfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 03:35:25 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:54398 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbiAMIfY (ORCPT
+        id S232774AbiAMIgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 03:36:53 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:58698 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231140AbiAMIgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 03:35:24 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id ED85D1F3A3;
-        Thu, 13 Jan 2022 08:35:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642062922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3+acst920SK3qzTnoBwJe+3mbyuBsbHiwAYWkKKVkus=;
-        b=ttyrgBrp0/sdEzOUgEVjmF1MyTAiniGDsD7Yv4z2jMNv28rD2ZDHN7v3Guc5QAQNBaN5qV
-        BFdaZy56mQt5YSGsGsCJsXruAUUKbZAcxCFco7wAiSY2MN+fW+OpUPWk27lZwje60S6FJu
-        PxVR2tZtC8qJy+R+OzLkw7ZRuRCg/0Y=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 736C0A3B85;
-        Thu, 13 Jan 2022 08:35:22 +0000 (UTC)
-Date:   Thu, 13 Jan 2022 09:35:21 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     jim.cromie@gmail.com
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Chris Down <chris@chrisdown.name>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Scull <ascull@google.com>,
-        Will Deacon <will@kernel.org>, Jason Baron <jbaron@akamai.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jessica Yu <jeyu@kernel.org>
-Subject: Re: [RFC 1/2] printk/dynamic_debug: Remove cyclic dependency between
- printk.h and dynamic_debug.h
-Message-ID: <Yd/kSVaFyn2/huaf@alley>
-References: <20220111143046.14680-1-pmladek@suse.com>
- <20220111143046.14680-2-pmladek@suse.com>
- <996a7cf5-b047-5038-c86b-f10820364465@rasmusvillemoes.dk>
- <Yd7Fq6V1/Ynff6Qx@alley>
- <CAJfuBxzKZYBf_CGzHGjL_Jn2M=x_NH_j89kFX2UGxr8Sr4=fVw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJfuBxzKZYBf_CGzHGjL_Jn2M=x_NH_j89kFX2UGxr8Sr4=fVw@mail.gmail.com>
+        Thu, 13 Jan 2022 03:36:53 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R471e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V1imC6N_1642063002;
+Received: from e02h04404.eu6sqa(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0V1imC6N_1642063002)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 13 Jan 2022 16:36:51 +0800
+From:   Wen Gu <guwen@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net v2 0/3] net/smc: Fixes for race in smc link group termination
+Date:   Thu, 13 Jan 2022 16:36:39 +0800
+Message-Id: <1642063002-45688-1-git-send-email-guwen@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-01-12 20:38:57, jim.cromie@gmail.com wrote:
-> On Wed, Jan 12, 2022 at 5:12 AM Petr Mladek <pmladek@suse.com> wrote:
-> >
-> > On Tue 2022-01-11 17:01:35, Rasmus Villemoes wrote:
-> > > On 11/01/2022 15.30, Petr Mladek wrote:
-> 
-> 
-> > > >  static inline int dynamic_debug_exec_queries(const char *query, const char *modname)
-> > > >  {
-> > > > -   pr_warn("kernel not built with CONFIG_DYNAMIC_DEBUG_CORE\n");
-> > > > +   /* Use raw _printk() to avoid cyclic dependency. */
-> > > > +   _printk(KERN_WARNING "kernel not built with CONFIG_DYNAMIC_DEBUG_CORE\n");
-> > > >     return 0;
-> > > >  }
-> > >
-> > > And for this one I think the solution is even simpler, as I can't find
-> > > any in-tree callers. Perhaps just nuke it entirely?
-> >
-> > Adding Jim into Cc whether he still has any plans to use this API.
-> >
-> > Best Regards,
-> > Petr
-> 
-> This EXPORT can go.
+We encountered some crashes recently and they are caused by the
+race between the access and free of link/link group in abnormal
+smc link group termination. The crashes can be reproduced in
+frequent abnormal link group termination, like setting RNICs up/down.
 
-Does it mean that the entire function might be removed or just
-EXPORT_SYMBOL_GPL() macro, please?
+This set of patches tries to fix this by extending the life cycle
+of link/link group to ensure that they won't be referred to after
+cleared or freed.
 
-I am especially interested whether we could remove pr_warn()
-from the header file. It would help us the get rid of the
-cyclic header dependency an easy way.
+v1 -> v2:
+- Improve some comments.
 
-Best Regards,
-Petr
+- Move codes of waking up lgrs_deleted wait queue from smc_lgr_free()
+  to __smc_lgr_free().
+
+- Move codes of waking up links_deleted wait queue from smcr_link_clear()
+  to __smcr_link_clear().
+
+- Move codes of smc_ibdev_cnt_dec() and put_device() from smcr_link_clear()
+  to __smcr_link_clear()
+
+- Move smc_lgr_put() to the end of __smcr_link_clear().
+
+- Call smc_lgr_put() after 'out' tag in smcr_link_init() when link
+  initialization fails.
+
+- Modify the location where smc connection holds the lgr or link.
+
+    before:
+      * hold lgr in smc_lgr_register_conn().
+      * hold link in smcr_lgr_conn_assign_link().
+    after:
+      * hold both lgr and link in smc_conn_create().
+
+  Modify the location to symmetrical with the place where smc connections
+  put the lgr or link, which is smc_conn_free().
+
+- Initialize conn->freed as zero in smc_conn_create().
+
+Wen Gu (3):
+  net/smc: Resolve the race between link group access and termination
+  net/smc: Introduce a new conn->lgr validity check helper
+  net/smc: Resolve the race between SMC-R link access and clear
+
+ net/smc/af_smc.c   |   6 ++-
+ net/smc/smc.h      |   1 +
+ net/smc/smc_cdc.c  |   3 +-
+ net/smc/smc_clc.c  |   2 +-
+ net/smc/smc_core.c | 120 +++++++++++++++++++++++++++++++++++++++++------------
+ net/smc/smc_core.h |  12 ++++++
+ net/smc/smc_diag.c |   6 +--
+ 7 files changed, 118 insertions(+), 32 deletions(-)
+
+-- 
+1.8.3.1
+

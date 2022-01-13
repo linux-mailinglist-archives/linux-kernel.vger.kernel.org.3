@@ -2,118 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4A048D858
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D1748D85C
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234853AbiAMM6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S234818AbiAMM6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:58:16 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:51560
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234852AbiAMM6O (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 13 Jan 2022 07:58:14 -0500
-Received: from foss.arm.com ([217.140.110.172]:44488 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234818AbiAMM6N (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:58:13 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D85B7106F;
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A7EEF3F1C9
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:58:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642078693;
+        bh=hJY+iTJXxh7N+a9cAeVo6uxkvEx09OIa8izcVhHm85o=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=IpiOiteyx37tD2UyrUeK5mNYpNoOsKisp5MwmGQKRd5q6ykDlmeiueHw/f25wzcwS
+         dRPq/SZ/syX4AAoDuTH/KZTtZuDjZY8vqqnsXWBZQcDyZyO+Su6ElqbZduexksAmwE
+         wf6QdyWj8bKiLVtgTU7rhMADdx1wimlHMO8CJfSizAhs+YVUnck6LAshzCkOM/yM+V
+         YiAp795fOuRixIXN+PXSmPtWcZMX3eVJdLUTVpZ8IH7Dt5hAfSqKJ6aqOJiUK/jTrM
+         IeyLJS+/yyGgeH17+MZgAo8A9MIS4e88AT+FYiyzJa+nQ9EGs9l4TBLPRR7VuuxBre
+         FElAl+lC6W5bA==
+Received: by mail-ed1-f69.google.com with SMTP id z8-20020a056402274800b003f8580bfb99so5264751edd.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:58:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hJY+iTJXxh7N+a9cAeVo6uxkvEx09OIa8izcVhHm85o=;
+        b=PQIto5kS5q/qxuYr+6tmfAt1YBi/NeYBvRTWFrAFcLY5f7zRmX3JQAf4bsCI2uCLSd
+         FrWgPxn2wVqrmnTq3GRKrU67O60eSniUaJ0SpyMuPbWAiGv7DKGREVFi7fJEI940h+OE
+         OR2wRDR5trRmHx0rx4iHwXpQvGrJ+ULlX52fC0ZSGnK2n/rCQvWlXW1c0OMya6taUAu/
+         gmlqORmsyLSoyVqfZNvfD8f3nG5r7jQhccKSI9N36SdzhV0eNouBq2We7SpR94Wkxv9b
+         9Tb4xh+lZZeXQPnvLx4lInTa3qPKxF2IauzN3VQciE+lUwBbTtK590zQbV7uDI4aq11S
+         XxHQ==
+X-Gm-Message-State: AOAM532sBpPjK3/jRcSh5rNXBNqj8W3ODNkWSW3rGpjpj2jY83cMIFgI
+        YbQ4IO3dJak3exd5b/B7uvmDSYzIDT8mVYjgl9I3TCqeSUJht0TK8oGBeJ+MTFvv/AuQtKVbw8w
+        WBXT4pgUepGrWdc8s8pMAlYp8TjdowFRBsY54ufxXZA==
+X-Received: by 2002:a17:906:2890:: with SMTP id o16mr3429775ejd.99.1642078693389;
+        Thu, 13 Jan 2022 04:58:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzJz/KUtwGDsFrbTAXt/C7unJ3bAy1RqQ2PDpyX9XObENafua0PnOgc/W74tPU9CS4vGKDuoQ==
+X-Received: by 2002:a17:906:2890:: with SMTP id o16mr3429764ejd.99.1642078693221;
+        Thu, 13 Jan 2022 04:58:13 -0800 (PST)
+Received: from [192.168.0.29] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id kx19sm865643ejc.112.2022.01.13.04.58.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Thu, 13 Jan 2022 04:58:12 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.5.145])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CE4E3F766;
-        Thu, 13 Jan 2022 04:58:07 -0800 (PST)
-Date:   Thu, 13 Jan 2022 12:58:00 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
-        alexandru.elisei@arm.com, anup.patel@wdc.com,
-        aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de,
-        catalin.marinas@arm.com, chenhuacai@kernel.org,
-        dave.hansen@linux.intel.com, david@redhat.com,
-        frankja@linux.ibm.com, frederic@kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, imbrenda@linux.ibm.com, james.morse@arm.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        mingo@redhat.com, mpe@ellerman.id.au, nsaenzju@redhat.com,
-        palmer@dabbelt.com, paulmck@kernel.org, paulus@samba.org,
-        paul.walmsley@sifive.com, pbonzini@redhat.com, seanjc@google.com,
-        suzuki.poulose@arm.com, tglx@linutronix.de,
-        tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-Subject: Re: [PATCH 2/5] kvm/arm64: rework guest entry logic
-Message-ID: <YeAh2PX5PFcBl9y6@FVFF77S0Q05N>
-References: <20220111153539.2532246-1-mark.rutland@arm.com>
- <20220111153539.2532246-3-mark.rutland@arm.com>
- <87tuearwc7.wl-maz@kernel.org>
- <YeAKYUQcHc0+LJ/P@FVFF77S0Q05N>
- <87r19b97z1.wl-maz@kernel.org>
+Message-ID: <176af0b0-a324-da39-2848-1c2e01cfadf5@canonical.com>
+Date:   Thu, 13 Jan 2022 13:58:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87r19b97z1.wl-maz@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 12/23] dt-bindings: add vendor prefix for Tesla
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, olof@lixom.net,
+        linus.walleij@linaro.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org, s.nawrocki@samsung.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com
+References: <20220113121143.22280-1-alim.akhtar@samsung.com>
+ <CGME20220113122404epcas5p4aa1c3ac09510eb55cce5fdd0791993a6@epcas5p4.samsung.com>
+ <20220113121143.22280-13-alim.akhtar@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220113121143.22280-13-alim.akhtar@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 11:43:30AM +0000, Marc Zyngier wrote:
-> On Thu, 13 Jan 2022 11:17:53 +0000,
-> Mark Rutland <mark.rutland@arm.com> wrote:
-> > 
-> > On Tue, Jan 11, 2022 at 05:55:20PM +0000, Marc Zyngier wrote:
-> > > On Tue, 11 Jan 2022 15:35:36 +0000,
-> > > Mark Rutland <mark.rutland@arm.com> wrote:
+On 13/01/2022 13:11, Alim Akhtar wrote:
+> Add vendor prefix for the Tesla (https://www.tesla.com)
 > 
-> [...]
-> 
-> > > > @@ -891,26 +909,23 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
-> > > >  		kvm_arch_vcpu_ctxsync_fp(vcpu);
-> > > >  
-> > > >  		/*
-> > > > -		 * We may have taken a host interrupt in HYP mode (ie
-> > > > -		 * while executing the guest). This interrupt is still
-> > > > -		 * pending, as we haven't serviced it yet!
-> > > > +		 * We must ensure that any pending interrupts are taken before
-> > > > +		 * we exit guest timing so that timer ticks are accounted as
-> > > > +		 * guest time. Transiently unmask interrupts so that any
-> > > > +		 * pending interrupts are taken.
-> > > >  		 *
-> > > > -		 * We're now back in SVC mode, with interrupts
-> > > > -		 * disabled.  Enabling the interrupts now will have
-> > > > -		 * the effect of taking the interrupt again, in SVC
-> > > > -		 * mode this time.
-> > > > +		 * Per ARM DDI 0487G.b section D1.13.4, an ISB (or other
-> > > > +		 * context synchronization event) is necessary to ensure that
-> > > > +		 * pending interrupts are taken.
-> > > >  		 */
-> > > >  		local_irq_enable();
-> > > > +		isb();
-> > > > +		local_irq_disable();
-> > > 
-> > > Small nit: we may be able to elide this enable/isb/disable dance if a
-> > > read of ISR_EL1 returns 0.
-> > 
-> > Wouldn't that be broken when using GIC priority masking, since that
-> > can prevent IRQS being signalled ot the PE?
-> 
-> You're right. But this can be made even simpler. We already know if
-> we've exited the guest because of an IRQ (ret tells us that), and
-> that's true whether we're using priority masking or not. It could be
-> as simple as:
-> 
-> 	if (ARM_EXCEPTION_CODE(ret) == ARM_EXCEPTION_IRQ) {
-> 		// We exited because of an interrupt. Let's take
-> 		// it now to account timer ticks to the guest.
-> 	 	local_irq_enable();
->  		isb();
->  		local_irq_disable();
-> 	}
-> 
-> and that would avoid accounting the interrupt to the guest if it fired
-> after the exit took place.
-> 
-> > I'm happy to rework this, but I'll need to think a bit harder about
-> > it. Would you be happy if we did that as a follow-up?
-> 
-> Oh, absolutely. I want the flow to be correct before we make it
-> fast(-ish).
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(
 
-Cool; I'll leave that for now on the assumption we'll address that with a
-follow-up patch, though your suggestion above looks "obviously" correct to me.
+This should be the first patch in the series.
 
-Thanks,
-Mark.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+Best regards,
+Krzysztof

@@ -2,104 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F3748DDA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 19:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C7B48DDAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 19:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237528AbiAMS10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 13:27:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40952 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiAMS1Z (ORCPT
+        id S237520AbiAMS2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 13:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230289AbiAMS2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 13:27:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAB55B82325;
-        Thu, 13 Jan 2022 18:27:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52EBFC36AEB;
-        Thu, 13 Jan 2022 18:27:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642098442;
-        bh=lDz34ZVMgLLYfOQXsCEzJ1y3tKvlqRylg8PQrj64Y3M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=legVsKhNla0DjVT16LpymMWEOD/el6BUbR1lkXh6vnRmx5LwOpSgvhh1PEjxXYIXP
-         jZoi4wQJp1Mt10znUjq75E1oRP545XzJfqGBNtvlJLP97dn+6sMnPSRpq1PM+NnD1l
-         m7R4zxo0oB5RLOLSnauJLC5OJEnfGXsi6ufJQ4vTNSBmxd67TfrHNaeI3KtRys8jem
-         +YI3foEEbOyaHbl0iQMM/AMTwa/2mw2gLJlfyTdTnzfMuznbnKJkZfln7eVu03klHT
-         AnDp6kZMWR+3Suo632zjz0chEB4qP3KTlsyZ9w/JcQuUOXE4T2Sly7TYlXbk4pAjMV
-         eLQ8+nQ2QP5ug==
-Received: by pali.im (Postfix)
-        id BE629778; Thu, 13 Jan 2022 19:27:19 +0100 (CET)
-Date:   Thu, 13 Jan 2022 19:27:19 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] of: net: Add helper function of_get_ethdev_label()
-Message-ID: <20220113182719.ixgysemitp5cuidn@pali>
-References: <20220107161222.14043-1-pali@kernel.org>
- <Ydhqa+9ya6nHsvLq@shell.armlinux.org.uk>
- <Ydhwfa/ECqTE3rLx@lunn.ch>
+        Thu, 13 Jan 2022 13:28:48 -0500
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64431C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 10:28:48 -0800 (PST)
+Received: by mail-oo1-xc33.google.com with SMTP id b15-20020a4a9bcf000000b002dc83a61053so1867994ook.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 10:28:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=TwN0a2e4fIau6wBUpvIJm3eDy35/hH3kfFq237STDTg=;
+        b=Eo4f+XqQO6PfJPSSqW2tSlTO+bRvdY2DWl5E4hlUWBNYozRCiG46dnKf2MRfymBvJu
+         Ir1G0f5s7s7dTXTPQtgXa3O5FN6Fg7On50G+Z95IWyTtg/+gst9e6dmnyW8lhn1l/DzH
+         AZW0cyu7C2BhkSCJnXh8HigIZKwMZvsA5rJfd9vgoQsbg3cU01usNRYYDFRyGeub7dAA
+         Iwcv5eg313Ri064koctKwGHbKotc7aqlBMp3NQaLE6IVkEewwM3ucSQfrgJt7SisylnB
+         nao6PvI75BXgKhTOvyQzUwXdFQgWSuIz/2aaSYgt4Rr1R8tllWCodVYyLEaZJQRo87h3
+         /Anw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TwN0a2e4fIau6wBUpvIJm3eDy35/hH3kfFq237STDTg=;
+        b=Bq92b8bw3I6xU9KV8YEGnYqx24nPsKr2vU5jNueTCBZl6pnhIxJdmhgrW552LcxI7R
+         RnvCKFnOm20E66YJOTKLZ3nC4w3wQmjbt+x7VGibsTjo+kfzCj4iT5+W7uZuPyrCYWcY
+         o7zPVtH1Ar4nJIHJWzGOmDKIpOXic2mVXnNf/E64pmBDjp98/0yyMgZOjeSC4bVpnH9q
+         spEO+4fsqfdK6Q0ftfXZlaaXmRzu52sRciB6xmSjhqeYcP+Ey1ppZJiMRtfZrfPbR1xP
+         kA4zidrpO/Y/s2/hQSityE99MKiF7N+be4QxIfCqHaxyw9wEOx4C+3sqR+asiilodJjn
+         mFvA==
+X-Gm-Message-State: AOAM530WJrmGErdF10r/a+IWpmt2eC2nLZoJND/CUTjXlfBbyIvoM8fz
+        xB0pCaIB72NnE3eVjH7Hu9qvUwbnBMVrpDuJINvJAdoM
+X-Google-Smtp-Source: ABdhPJzWbHC/EWrSaiSqufm7TdYhQCSUNjjs/NfiCg4SoYTWgvaJ/P4DJQy1crUNBRQRIEFqdx5lQk5BQxYKmV2vMsE=
+X-Received: by 2002:a4a:3412:: with SMTP id b18mr3729013ooa.23.1642098527456;
+ Thu, 13 Jan 2022 10:28:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ydhwfa/ECqTE3rLx@lunn.ch>
-User-Agent: NeoMutt/20180716
+References: <20220113071132.70647-1-yang.lee@linux.alibaba.com> <DM5PR12MB246922D4EC5729F76E481CD2F1539@DM5PR12MB2469.namprd12.prod.outlook.com>
+In-Reply-To: <DM5PR12MB246922D4EC5729F76E481CD2F1539@DM5PR12MB2469.namprd12.prod.outlook.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 13 Jan 2022 13:28:36 -0500
+Message-ID: <CADnq5_NKKOjJCoi3qCBUGpy+HWgcUnVniSmRnMBfQ6V504Hemg@mail.gmail.com>
+Subject: Re: [PATCH -next 1/2 v2] drm/amdgpu: remove unneeded semicolon
+To:     "Chen, Guchun" <Guchun.Chen@amd.com>
+Cc:     Yang Li <yang.lee@linux.alibaba.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 07 January 2022 17:55:25 Andrew Lunn wrote:
-> On Fri, Jan 07, 2022 at 04:29:31PM +0000, Russell King (Oracle) wrote:
-> > On Fri, Jan 07, 2022 at 05:12:21PM +0100, Pali Rohár wrote:
-> > > Adds a new helper function of_get_ethdev_label() which sets initial name of
-> > > specified netdev interface based on DT "label" property. It is same what is
-> > > doing DSA function dsa_port_parse_of() for DSA ports.
-> > > 
-> > > This helper function can be useful for drivers to make consistency between
-> > > DSA and netdev interface names.
-> > > 
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > 
-> > Doesn't this also need a patch to update the DT binding document
-> > Documentation/devicetree/bindings/net/ethernet-controller.yaml ?
-> > 
-> > Also it needs a covering message for the series, and a well thought
-> > out argument why this is required. Consistency with DSA probably
-> > isn't a good enough reason.
-> > 
-> > >From what I remember, there have been a number of network interface
-> > naming proposals over the years, and as you can see, none of them have
-> > been successful... but who knows what will happen this time.
-> 
-> I agree with Russell here. I doubt this is going to be accepted.
-> 
-> DSA is special because DSA is very old, much older than DT, and maybe
-> older than udev. The old DSA platform drivers had a mechanism to
-> supply the interface name to the DSA core. When we added a DT binding
-> to DSA we kept that mechanism, since that mechanism had been used for
-> a long time.
-> 
-> Even if you could show there was a generic old mechanism, from before
-> the days of DT, that allowed interface names to be set from platform
-> drivers, i doubt it would be accepted because there is no continuity,
-> which DSA has.
+Applied.  Thanks!
 
-Well, DT should universally describe HW board wiring. From HW point of
-view, it is really does not matter if RJ45 port is connected to embedded
-PHY on SoC itself or to the external PHY chip, or to the switch chip
-with embedded PHY. And if board has mix of these options, also labels
-(as printed on product box) should be in DTS described in the same way,
-independently of which software solution / driver is used for particular
-chip. It really should not matter for DTS if kernel is using for
-particular HW part DSA driver or ethernet driver.
+Alex
 
-So there really should be some common way. And if the one which DSA is
-using is the old mechanism, what is the new mechanism then?
+On Thu, Jan 13, 2022 at 8:38 AM Chen, Guchun <Guchun.Chen@amd.com> wrote:
+>
+> Series is:
+> Reviewed-by: Guchun Chen <guchun.chen@amd.com>
+>
+> Regards,
+> Guchun
+>
+> -----Original Message-----
+> From: Yang Li <yang.lee@linux.alibaba.com>
+> Sent: Thursday, January 13, 2022 3:12 PM
+> To: airlied@linux.ie; Chen, Guchun <Guchun.Chen@amd.com>
+> Cc: daniel@ffwll.ch; Deucher, Alexander <Alexander.Deucher@amd.com>; Koen=
+ig, Christian <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;=
+ amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-kern=
+el@vger.kernel.org; Yang Li <yang.lee@linux.alibaba.com>; Abaci Robot <abac=
+i@linux.alibaba.com>
+> Subject: [PATCH -next 1/2 v2] drm/amdgpu: remove unneeded semicolon
+>
+> Eliminate the following coccicheck warning:
+> ./drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2725:16-17: Unneeded semicolon
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c b/drivers/gpu/drm/am=
+d/amdgpu/amdgpu_ras.c
+> index d4d9b9ea8bbd..ff9bd5a844fe 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+> @@ -2722,7 +2722,7 @@ struct amdgpu_ras* amdgpu_ras_get_context(struct am=
+dgpu_device *adev)  int amdgpu_ras_set_context(struct amdgpu_device *adev, =
+struct amdgpu_ras* ras_con)  {
+>         if (!adev)
+> -       return -EINVAL;;
+> +               return -EINVAL;
+>
+>         adev->psp.ras_context.ras =3D ras_con;
+>         return 0;
+> --
+> 2.20.1.7.g153144c
+>

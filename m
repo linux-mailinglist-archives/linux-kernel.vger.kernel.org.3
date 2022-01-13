@@ -2,102 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C87548DF9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B84248DF9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbiAMVaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 16:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
+        id S235553AbiAMVam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 16:30:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbiAMVaA (ORCPT
+        with ESMTP id S235020AbiAMVal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 16:30:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2296C061574;
-        Thu, 13 Jan 2022 13:29:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B145EB821C3;
-        Thu, 13 Jan 2022 21:29:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 768FFC36AE3;
-        Thu, 13 Jan 2022 21:29:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642109397;
-        bh=yW9AcQzuoUaR989bsxK4TgDY9aBm1cvbSwLkItbJe+Y=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=ZQThfKK7ttBmAVSKpY2YgYBHP94O7LeXCIJUdl8+pjbRPJ5abqlr9/PQ0a51XddUZ
-         8LbcU3NMrR/Ywb8RRYOYLmOmKw2LexzZdyKzP+MTJ58lp+s7BSqHY7+ujWai4G68sz
-         vo1epPK0h4ahadtDZ02MF5PsftcG2/N7C7U3/haig6JBbTsJClSXKHxlVbjHMN0cbc
-         DFxt8ZH+FqVSbvnA2R9QQsM3xwuRJuJgt4INQ7G/7J5h8YV2nRjCHTXyNHH/LvgnIs
-         4z1jzXa0SUpD1P7s4xOHuZ/RJ3rv4X0NNURdLQEVfwqP6hBg/llz6vLHQ1squwWF9R
-         CC/IPehM0jiGA==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 13 Jan 2022 16:30:41 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFFCC06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 13:30:41 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id w188so9598329oiw.13
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 13:30:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3+Fd7rp5Rw8E6vOhlPr2SanZQN2IlO+HYowr2SyJ/Xw=;
+        b=W8SaOj8iTNTqE5QdYYhRGj3tb+pFzJyNeZHbkn+yaacsD4KKm9rsVpHbD+GZqOrdgF
+         qznRMrzhjbzQUPKhuBVWYXGTN/Y1Gc9Wih9yFcFxROtXWUtd/y7fsdCGTZz3TygFZllm
+         0KhcKGJtY8NJtgDE0jBVYcKluVVFJfZfK9p6zjmYPaJE6jaP2VsZ91X+iZL5vbeiVond
+         mJBeTg6ZmYksXGHIDBz5y7+wxb4eBCmBkuRhWgX3+c1/Mn0URdeGXyfq8bQsarQz3Pnp
+         Aym3bDz/tsRfwygihqgSJImm+P8y8hLhOJT8UDlDnCSjny2rcw6sE+L+LeUrbR2f8BWx
+         +F2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3+Fd7rp5Rw8E6vOhlPr2SanZQN2IlO+HYowr2SyJ/Xw=;
+        b=Fjc9g9yhfJEl+lIySyQz+3SBCoj4Pl6Wg6Cwwrpp6DspK44/32cs5OXDdoSj1VULOI
+         Cnskpvvgz5u9IIpUR3QqV4E4Vj+gZQ1b8L6XBVHugxJi7F6la/C++16DAQ0DHuubYEB5
+         V5OgASwMyMSSYB19qGeYUYOSp4oIEV8sQZjda/MjwIAKn4noUyEbQSP/AICu/LhPfhB7
+         ioANVPu8HhAkr/tkMzTlucx5b/n31coiTRaEIKh9rC+dz2y6ja+7MVAtuLJOOSDo9Xyy
+         8i4dr3nPdRH7mWUYcE7Ae2O4W2M9YnAYkV/T8/WoJSFQ4f3jSEUvjHKLNYlP7j5Mi+7L
+         pYhw==
+X-Gm-Message-State: AOAM5316OJ4i+tjPvtdsYykF7P1QO3MPww+mcSGTYsLyH6OYeLXLxv+B
+        MKf7edxdMiZQTVNwQdKPbkNUb/TmdvVGzEIgIqcMZZJ/Q+I0HHJnYyyZpaPY+zohsvcolaEVLZo
+        bevTiZYXTO2jc8PnBRtVAbsgelY7RfAK0qW4+bfra2YOYwbKSpcAxgs8JD+Lrl0up+d6ocMJ5vG
+        Uhb7NL96szBRksDtwbOOw=
+X-Google-Smtp-Source: ABdhPJxIdnb8HNddOnTxQtJlBHkZ84/nUreBjj84aywl09w8wKLzUlG6D1R3Eng+/IKirEHSCeShWQ==
+X-Received: by 2002:aca:62d7:: with SMTP id w206mr10567069oib.90.1642109440190;
+        Thu, 13 Jan 2022 13:30:40 -0800 (PST)
+Received: from localhost (115-127-16-190.fibertel.com.ar. [190.16.127.115])
+        by smtp.gmail.com with ESMTPSA id bf15sm1145713oib.38.2022.01.13.13.30.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 13:30:39 -0800 (PST)
+From:   Martin Fernandez <martin.fernandez@eclypsium.com>
+To:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
+        alison.schofield@intel.com,
+        Martin Fernandez <martin.fernandez@eclypsium.com>
+Subject: [PATCH v5 0/5] x86: Show in sysfs if a memory node is able to do encryption
+Date:   Thu, 13 Jan 2022 18:30:22 -0300
+Message-Id: <20220113213027.457282-1-martin.fernandez@eclypsium.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220113115745.45826-4-liang.yang@amlogic.com>
-References: <20220113115745.45826-1-liang.yang@amlogic.com> <20220113115745.45826-4-liang.yang@amlogic.com>
-Subject: Re: [PATCH v9 3/4] clk: meson: add DT documentation for emmc clock controller
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org
-Date:   Thu, 13 Jan 2022 13:29:56 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20220113212957.768FFC36AE3@smtp.kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Liang Yang (2022-01-13 03:57:44)
-> Document the MMC sub clock controller driver, the potential consumer
-> of this driver is MMC or NAND. Also add four clock bindings IDs which
-> provided by this driver.
->=20
-> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
-> ---
->  .../bindings/clock/amlogic,mmc-clkc.yaml      | 64 +++++++++++++++++++
->  include/dt-bindings/clock/amlogic,mmc-clkc.h  | 14 ++++
->  2 files changed, 78 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,mmc-c=
-lkc.yaml
->  create mode 100644 include/dt-bindings/clock/amlogic,mmc-clkc.h
->=20
-> diff --git a/Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yam=
-l b/Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
-> new file mode 100644
-> index 000000000000..a274c3d5fc2e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/amlogic,mmc-clkc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic MMC Sub Clock Controller Driver Device Tree Bindings
-> +
-> +maintainers:
-> +  - jianxin.pan@amlogic.com
-> +  - liang.yang@amlogic.com
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - "amlogic,axg-mmc-clkc", "syscon"
+Show for each node if every memory descriptor in that node has the
+EFI_MEMORY_CPU_CRYPTO attribute.
 
-Why is it a syscon?
+fwupd project plans to use it as part of a check to see if the users
+have properly configured memory hardware encryption
+capabilities. fwupd's people have seen cases where it seems like there
+is memory encryption because all the hardware is capable of doing it,
+but on a closer look there is not, either because of system firmware
+or because some component requires updating to enable the feature.
+
+It's planned to make it part of a specification that can be passed to
+people purchasing hardware
+
+These checks will run at every boot. The specification is called Host
+Security ID: https://fwupd.github.io/libfwupdplugin/hsi.html.
+
+We choosed to do it a per-node basis because although an ABI that
+shows that the whole system memory is capable of encryption would be
+useful for the fwupd use case, doing it in a per-node basis gives also
+the capability to the user to target allocations from applications to
+NUMA nodes which have encryption capabilities.
+
+
+Changes since v4:
+
+Add enum to represent the cryptographic capabilities in e820:
+e820_crypto_capabilities.
+
+Revert __e820__range_update, only adding the new argument for
+__e820__range_add about crypto capabilities.
+
+Add a function __e820__range_update_crypto similar to
+__e820__range_update but to only update this new field.
+
+
+Changes since v3:
+
+Update date in Doc/ABI file.
+
+More information about the fwupd usecase and the rationale behind
+doing it in a per-NUMA-node.
+
+
+Changes since v2:
+
+e820__range_mark_crypto -> e820__range_mark_crypto_capable.
+
+In e820__range_remove: Create a region with crypto capabilities
+instead of creating one without it and then mark it.
+
+
+Changes since v1:
+
+Modify __e820__range_update to update the crypto capabilities of a
+range; now this function will change the crypto capability of a range
+if it's called with the same old_type and new_type. Rework
+efi_mark_e820_regions_as_crypto_capable based on this.
+
+Update do_add_efi_memmap to mark the regions as it creates them.
+
+Change the type of crypto_capable in e820_entry from bool to u8.
+
+Fix e820__update_table changes.
+
+Remove memblock_add_crypto_capable. Now you have to add the region and
+mark it then.
+
+Better place for crypto_capable in pglist_data.
+
+
+Martin Fernandez (5):
+  mm/memblock: Tag memblocks with crypto capabilities
+  mm/mmzone: Tag pg_data_t with crypto capabilities
+  x86/e820: Tag e820_entry with crypto capabilities
+  x86/efi: Tag e820_entries as crypto capable from EFI memmap
+  drivers/node: Show in sysfs node's crypto capabilities
+
+ Documentation/ABI/testing/sysfs-devices-node |  10 ++
+ arch/x86/include/asm/e820/api.h              |   1 +
+ arch/x86/include/asm/e820/types.h            |  12 +-
+ arch/x86/kernel/e820.c                       | 112 +++++++++++++++++--
+ arch/x86/platform/efi/efi.c                  |  26 +++++
+ drivers/base/node.c                          |  10 ++
+ include/linux/memblock.h                     |   5 +
+ include/linux/mmzone.h                       |   3 +
+ mm/memblock.c                                |  49 ++++++++
+ mm/page_alloc.c                              |   1 +
+ 10 files changed, 219 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-node
+
+-- 
+2.30.2
+

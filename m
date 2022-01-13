@@ -2,88 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 589C148DE89
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 21:00:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B46648DED9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 21:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232105AbiAMUAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 15:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
+        id S233578AbiAMUYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 15:24:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232022AbiAMUAs (ORCPT
+        with ESMTP id S232597AbiAMUYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 15:00:48 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AF6C06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:00:48 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id p7so9939806iod.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:00:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=+bXcVsuUppNYKhF9ZtC6Trbv8FtRnS305N6GIULbySM=;
-        b=R5DKTup50Gfl9IeMM2VI0sXMqVCI6jAQ1VCCrulnjDdxtBlxd2jnkFCiaMivfhwbvH
-         22r1SW7pjHYmHZKN4rsBsJrFm2NU8krSUBPRUerLberQyIkQkuJX6Kwz0uLubLSyjQy/
-         46RChVlrUEsZNIloLoJ8GGbbXCXqrMVIolV6pfEZwcdEQsCeDGSr8Klr+l/yW+xOM7Td
-         BUaHx980l8luPOqghwwo92UOi+HVcCi0Dq+ivpGK90EkzermJ45Vk/RrjuO1WADJUUus
-         m8SRmsnmRZHKzmW/p/4NfoIByeZjUjaIEbBkva4X4WVI3Pgh3XqV4n3A3KBHzQC5JnPZ
-         XChQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=+bXcVsuUppNYKhF9ZtC6Trbv8FtRnS305N6GIULbySM=;
-        b=coCLMoJDAhXdAeA8RzoCxkN8Wy1FfCMAmYYC8NlI4xf9FWEizp5hAv0FAKhK8/hmNG
-         hayFF9UEBP1fpcJHbqr/XuM64NhxRUBTL/T7dtTGOLYrkAk4FCwdACFTM97iCvMmZSIb
-         Th/pg7Z1EZcNPT2vpW6+DFnwpfDJ4O4myUDH75eUwAc8Z2mbdu9CeNI1xFDpyyoikyde
-         ++1K0eyWj2eBEE0YpYIfPr86qx/Dxxq4hW96DO/2wqiha6e7YpE+Vosc7eD7hsVq2SR8
-         MO4JZXqXk00Q6jz7+S3jhoQR/hUL+rlQijMlmvX4R83NMYseVGFyiKWF3PebD3r9J55Z
-         QGNw==
-X-Gm-Message-State: AOAM5303ToJs/Gju+TZc+d1KNnFX3nafADlbRyqCryUUjbM2bwsAJFNJ
-        Vj90itpza5WwgReHGtVCWN8VWA==
-X-Google-Smtp-Source: ABdhPJwqANTtW8FxiE2ZK0CCdiycPJ1uIvNavWUQqzW2r03sG7uU/KIYOsUbGKs+I+4yN0BdsqPNpw==
-X-Received: by 2002:a05:6602:1409:: with SMTP id t9mr2808021iov.166.1642104048027;
-        Thu, 13 Jan 2022 12:00:48 -0800 (PST)
-Received: from x1.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id n5sm3887025ilk.44.2022.01.13.12.00.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 12:00:47 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Justin Sanders <justin@coraid.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        linux-block@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220113000545.1307091-1-colin.i.king@gmail.com>
-References: <20220113000545.1307091-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH] aoe: remove redundant assignment on variable n
-Message-Id: <164210404746.172546.12306036907222392441.b4-ty@kernel.dk>
-Date:   Thu, 13 Jan 2022 13:00:47 -0700
+        Thu, 13 Jan 2022 15:24:41 -0500
+X-Greylist: delayed 1238 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Jan 2022 12:24:40 PST
+Received: from wp126.webpack.hosteurope.de (wp126.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8485::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88499C061574;
+        Thu, 13 Jan 2022 12:24:40 -0800 (PST)
+Received: from p5098d998.dip0.t-ipconnect.de ([80.152.217.152] helo=hermes.fivetechno.de); authenticated
+        by wp126.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1n86KF-0006EQ-11; Thu, 13 Jan 2022 21:03:59 +0100
+X-Virus-Scanned: by amavisd-new 2.12.1 using newest ClamAV at
+        linuxbbg.five-lan.de
+Received: from odroid-x2.fritz.box (pd9e89d11.dip0.t-ipconnect.de [217.232.157.17])
+        (authenticated bits=0)
+        by hermes.fivetechno.de (8.15.2/8.16.1/SUSE Linux 0.8) with ESMTPSA id 20DK3shg011127
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Thu, 13 Jan 2022 21:03:55 +0100
+From:   Markus Reichl <m.reichl@fivetechno.de>
+To:     Steve Glendinning <steve.glendinning@shawell.net>,
+        UNGLinuxDriver@microchip.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Martyn Welch <martyn.welch@collabora.com>
+Cc:     Markus Reichl <m.reichl@fivetechno.de>,
+        Gabriel Hojda <ghojda@yo2urs.ro>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: usb: Correct reset handling of smsc95xx
+Date:   Thu, 13 Jan 2022 21:01:11 +0100
+Message-Id: <20220113200113.30702-1-m.reichl@fivetechno.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;m.reichl@fivetechno.de;1642105480;11327132;
+X-HE-SMSGID: 1n86KF-0006EQ-11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Jan 2022 00:05:45 +0000, Colin Ian King wrote:
-> The variable n is being bit-wise or'd with a value and reassigned
-> before being returned. The update of n is redundant, replace
-> the |= operator with | instead. Cleans up clang scan warning:
-> 
-> drivers/block/aoe/aoecmd.c:125:9: warning: Although the value stored
-> to 'n' is used in the enclosing expression, the value is never
-> actually read from 'n' [deadcode.DeadStores]
-> 
-> [...]
+On boards with LAN9514 and no preconfigured MAC address we don't get an
+ip address from DHCP after commit a049a30fc27c ("net: usb: Correct PHY handling
+of smsc95xx") anymore. Adding an explicit reset before starting the phy
+fixes the issue.
 
-Applied, thanks!
+[1]
+https://lore.kernel.org/netdev/199eebbd6b97f52b9119c9fa4fd8504f8a34de18.camel@collabora.com/
 
-[1/1] aoe: remove redundant assignment on variable n
-      commit: a6431e351c6ec5bb6800787d259b343088f369a3
+From: Gabriel Hojda <ghojda@yo2urs.ro>
+Fixes: a049a30fc27c ("net: usb: Correct PHY handling of smsc95xx")
+Signed-off-by: Gabriel Hojda <ghojda@yo2urs.ro>
+Signed-off-by: Markus Reichl <m.reichl@fivetechno.de>
+---
+ drivers/net/usb/smsc95xx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Best regards,
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index abe0149ed917..bc1e3dd67c04 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -1962,7 +1962,8 @@ static const struct driver_info smsc95xx_info = {
+ 	.bind		= smsc95xx_bind,
+ 	.unbind		= smsc95xx_unbind,
+ 	.link_reset	= smsc95xx_link_reset,
+-	.reset		= smsc95xx_start_phy,
++	.reset		= smsc95xx_reset,
++	.check_connect	= smsc95xx_start_phy,
+ 	.stop		= smsc95xx_stop,
+ 	.rx_fixup	= smsc95xx_rx_fixup,
+ 	.tx_fixup	= smsc95xx_tx_fixup,
 -- 
-Jens Axboe
-
+2.30.2
 

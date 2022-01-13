@@ -2,139 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1458748DDAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 19:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D3848DDA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 19:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237540AbiAMS3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 13:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
+        id S237458AbiAMS0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 13:26:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiAMS3G (ORCPT
+        with ESMTP id S230329AbiAMS0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 13:29:06 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206B8C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 10:29:06 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id pj2so11423090pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 10:29:06 -0800 (PST)
+        Thu, 13 Jan 2022 13:26:03 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54167C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 10:26:03 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id o12so5911964lfu.12
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 10:26:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GNbIhnDu8mbLRfTXlwtBvscLfboFwv21ObpyqMknyMU=;
-        b=l4lXFAvPwW8ptxy2c92znFTwv5GsqM4IWfYUgkhhMcp1Pwk9cZeNmv1nWmiKNpG1pS
-         uVEQ8lRvKYFGHNpC7aW2avDuuHb2/xXtNHRvyQYQ3riMGlcSs6yYg89/yL1boexm0oQz
-         Qav0Txllf4/MZlJyWhkghlFTqMUlquKTz0IAk=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:user-agent:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=B5TgjevVKySYpGG9iiTbPrO6S1lbtFaG1P8WhSMYH4c=;
+        b=UzRFXjsLQqyBBJrZpn6riJa0F6IToDXEXWwsDdd0iKURLbdOw7f8L0+GWNZCQTn26A
+         ZbI1FRb/JGmh0sMLsheiYLNVjajxsUWngD6tJ2l+yWy6Q58sVO6mGxu2KnBos7yRFkbB
+         oJarzLK8mWpTPs6HqXiqYwPFjXnzGQQA+k6C1A1CQ6RGYCsZRFSaIPShe7btB/EJLqp8
+         jjn4hvuYePMXnS4J2T5S2A4lu0QvwZZs/jsOUEK+Qz5MQ1rl69Hg3yDEY9T2N6ZeQjBL
+         nDV/Dhv+w8HQ3D35QzDQEqZ3EcxReThKkqGXl/SvozsOb/hL6/GS3oCQ+67iPZc7O80g
+         6Ueg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GNbIhnDu8mbLRfTXlwtBvscLfboFwv21ObpyqMknyMU=;
-        b=kjJBRFTK0h1cEd++2s3szdxo6jRZMmxx012CNk3ZEikc+v8QX4xwNUvRGyd3sdxxzf
-         xy6me6Ht/OMLHEGC+lvMrqOClaY8izKSH+7gdbXXI82iWpErBwef4IGHx/9jk12P8x2m
-         DyFDJek030DgwJ9NqagU0dXtBh7BoHvkubVdhHPmkErHS0JidtWclsruHyb+ZY7zLpa3
-         R/vWsItOxVMlRPdtwAp5LjLCzpvOCaNmB53CWl/VvYtgHUjTbK/69PoKraH9t9jlXJUa
-         /kjlZuXdbHlSdM8vgDgeJ0/vOCCKlplykl0C82I0hoZE+jch6TEIVjQEDwHFRYLYKpHU
-         RA+g==
-X-Gm-Message-State: AOAM531L1feNcZfIQ1zbyd6EsCsNJKqc7hrqj0wsr2eWYjIG/078OonE
-        1tSqCBtS5tmPj2Q5aEXwppumRg==
-X-Google-Smtp-Source: ABdhPJxbEiRlNgouAu1xXHQaBLC6lvNqbdwcbBhm0vZPbQdO6PK0RrNQGS6ckHyBEZKhLggIwJtG9w==
-X-Received: by 2002:a17:903:404a:b0:14a:501b:8c92 with SMTP id n10-20020a170903404a00b0014a501b8c92mr5952668pla.86.1642098545687;
-        Thu, 13 Jan 2022 10:29:05 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q2sm3660966pfu.66.2022.01.13.10.29.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 10:29:05 -0800 (PST)
-Date:   Thu, 13 Jan 2022 10:29:04 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-staging@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Marco Cesati <marcocesati@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8723bs: Check for NULL header value
-Message-ID: <202201131027.FCAC3072E4@keescook>
-References: <20220113002001.3498383-1-keescook@chromium.org>
- <Yd/tSpnpb4vWp6OP@kroah.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=B5TgjevVKySYpGG9iiTbPrO6S1lbtFaG1P8WhSMYH4c=;
+        b=5t7xpa2ptAvvTACFdcSCqD+1Ow1+xUthJYd8agw/keb16vVZffSztSiTbd6D0Z2j0y
+         ZCzqi3Ggm2FtzvHcIyDR+dCJkZf5JUSeym0SNXnQli18NZYcjGvwkwBottGHbZkKmhbP
+         cN21pRJ7BR/zrDoIisC9SpcEyx2ssp0v4/0fpbpf+uU+D6q3YV1xv4ai1ZondjPGxGhz
+         s7aGh2Yp13TkF8SGKzPoXlNOLGMhT5+CaGq84PPBlkNRCridRJNX1l1GSOC1NCWKizQZ
+         2NLU4+6SYLVMIdcug4lMv1th9zIDZm7EY4wzsDYOwB/n74Kgtq7tpNIeznKcJAvAdI+5
+         +ADg==
+X-Gm-Message-State: AOAM530UXE13jjMEvdAAULOW1XguHThY3KZWnJ9UaizkvRGmF9kkcoYm
+        EUXYE7zXXGJxxX9wRt5tC/M=
+X-Google-Smtp-Source: ABdhPJy27IUTBd+Z8Rh7lbHoBqnHWejZI2QSJ3yGabDrmkSjP71QVVenPekZHZMOk95hjmya4tSwTg==
+X-Received: by 2002:a05:6512:1512:: with SMTP id bq18mr1275324lfb.13.1642098361725;
+        Thu, 13 Jan 2022 10:26:01 -0800 (PST)
+Received: from localhost.localdomain (broadband-95-84-228-163.ip.moscow.rt.ru. [95.84.228.163])
+        by smtp.gmail.com with ESMTPSA id p9sm358906lfu.83.2022.01.13.10.26.00
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Thu, 13 Jan 2022 10:26:01 -0800 (PST)
+Date:   Thu, 13 Jan 2022 21:31:41 +0300
+From:   Alexander Sergeyev <sergeev917@gmail.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Jeremy Szu <jeremy.szu@canonical.com>, tiwai@suse.com,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        Kailang Yang <kailang@realtek.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jian-Hong Pan <jhp@endlessos.org>,
+        Hui Wang <hui.wang@canonical.com>,
+        PeiSen Hou <pshou@realtek.com>
+Subject: Re: [PATCH 1/4] ALSA: hda/realtek: fix mute/micmute LEDs for HP 855
+ G8
+Message-ID: <20220113183141.kla37mbqmo4x6wxp@localhost.localdomain>
+User-Agent: mtt
+References: <20210519170357.58410-1-jeremy.szu@canonical.com>
+ <20220111195229.a77wrpjclqwrx4bx@localhost.localdomain>
+ <s5ho84h9tit.wl-tiwai@suse.de>
+ <20220112101249.ya73jvpmqmeh4ggg@localhost.localdomain>
+ <s5hilup9s87.wl-tiwai@suse.de>
+ <20220112104827.4aymoth7ua65nwge@localhost.localdomain>
+ <20220112201824.qmphnz2hx4frda6e@localhost.localdomain>
+ <s5h8rvk85uy.wl-tiwai@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <Yd/tSpnpb4vWp6OP@kroah.com>
+In-Reply-To: <s5h8rvk85uy.wl-tiwai@suse.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 10:13:46AM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Jan 12, 2022 at 04:20:01PM -0800, Kees Cook wrote:
-> > When building with -Warray-bounds, the following warning is emitted:
-> > 
-> > In file included from ./include/linux/string.h:253,
-> >                  from ./arch/x86/include/asm/page_32.h:22,
-> >                  from ./arch/x86/include/asm/page.h:14,
-> >                  from ./arch/x86/include/asm/thread_info.h:12,
-> >                  from ./include/linux/thread_info.h:60,
-> >                  from ./arch/x86/include/asm/preempt.h:7,
-> >                  from ./include/linux/preempt.h:78,
-> >                  from ./include/linux/rcupdate.h:27,
-> >                  from ./include/linux/rculist.h:11,
-> >                  from ./include/linux/sched/signal.h:5,
-> >                  from ./drivers/staging/rtl8723bs/include/drv_types.h:17,
-> >                  from drivers/staging/rtl8723bs/core/rtw_recv.c:7:
-> > In function 'memcpy',
-> >     inlined from 'wlanhdr_to_ethhdr' at drivers/staging/rtl8723bs/core/rtw_recv.c:1554:2:
-> > ./include/linux/fortify-string.h:41:33: warning: '__builtin_memcpy' offset [0, 5] is out of the bounds [0, 0] [-Warray-bounds]
-> >    41 | #define __underlying_memcpy     __builtin_memcpy
-> >       |                                 ^
-> > 
-> > This is because the compiler sees it is possible for "ptr" to be a NULL
-> > value, and concludes that it has zero size and attempts to copy to it
-> > would overflow. Instead, detect the NULL return and error out early.
-> > 
-> > Cc: Larry Finger <Larry.Finger@lwfinger.net>
-> > Cc: Phillip Potter <phil@philpotter.co.uk>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Michael Straube <straube.linux@gmail.com>
-> > Cc: Fabio Aiuto <fabioaiuto83@gmail.com>
-> > Cc: linux-staging@lists.linux.dev
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  drivers/staging/rtl8723bs/core/rtw_recv.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/staging/rtl8723bs/core/rtw_recv.c b/drivers/staging/rtl8723bs/core/rtw_recv.c
-> > index 41bfca549c64..61135c49322b 100644
-> > --- a/drivers/staging/rtl8723bs/core/rtw_recv.c
-> > +++ b/drivers/staging/rtl8723bs/core/rtw_recv.c
-> > @@ -1513,6 +1513,9 @@ static signed int wlanhdr_to_ethhdr(union recv_frame *precvframe)
-> >  	u8 *ptr = get_recvframe_data(precvframe) ; /*  point to frame_ctrl field */
-> >  	struct rx_pkt_attrib *pattrib = &precvframe->u.hdr.attrib;
-> >  
-> > +	if (!ptr)
-> > +		return _FAIL;
-> 
-> This will never happen, so let's not paper over compiler issues with
-> stuff like this please.
-> 
-> As the call to get_recvframe_data() is only done in one place in this
-> driver (in all drivers that look like this as well), it can just be
-> replaced with the real code instead of the nonsensical test for NULL and
-> then the compiler should be happy.
-> 
-> I'll gladly take that fix instead of this one, as that would be the
-> correct solution here.
+On Thu, Jan 13, 2022 at 08:14:29AM +0100, Takashi Iwai wrote:
+>> First, about unbind and bind via sysfs -- attempts to unbind the
+>> HD-audio controller immediately trigger BUGs:
+>> Is it normal/expected?
+>
+>A sort of. The sysfs unbind is little tested and may be still buggy
+>if done during the stream operation.
+>
+>To be sure, could you check with my latest sound.git tree for-linus
+>branch?  There are a few fixes that harden the dynamic unbind.
 
-I changed it around, but it doesn't help. I assume this is because we
-build with -fno-delete-null-pointer-checks, so the compiler continues
-to assume it's possible for the incoming argument to be NULL.
+I assume that the referred repository is the one at [1]. I've tried 
+081c73701ef0 "ALSA: hda: intel-dsp-config: reorder the config table". It 
+crashed with nearly identical logs.
 
-Should I rearrange this to do a NULL check for precvframe before all the
-assignments in addition to removing get_recvframe_data()?
+>> 1) Coeff 0x0b is flapping between 0x8003 and 0x7770 and does not seem
+>> to have any effect in both non-working and working versions. Not sure
+>> about this, maybe microphone is not operational since I haven't
+>> checked it yet.
 
--Kees
+I got some time to poke the internal microphone. It works, but oddities are 
+there as well. Initially I get "Mic Boost", "Capture" and "Internal Mic Boost" 
+controls in alsamixer. When I run arecord, "Digital" control appears, but it 
+cannot be changed until arecord is stopped. Subsequent arecord calls do not 
+lock "Digital" control. This control affects sensitivity of the microphone and 
+seems useful.
 
--- 
-Kees Cook
+/proc/asound/card1/codec#0:
+  Node 0x08 [Audio Input] wcaps 0x10051b: Stereo Amp-In
+    Control: name="Capture Volume", index=0, device=0
+      ControlAmp: chs=3, dir=In, idx=0, ofs=0
+    Control: name="Capture Switch", index=0, device=0
+      ControlAmp: chs=3, dir=In, idx=0, ofs=0
+    Device: name="ALC285 Analog", type="Audio", device=0
+    Amp-In caps: ofs=0x17, nsteps=0x3f, stepsize=0x02, mute=1
+    Amp-In vals:  [0x27 0x27]
+-  Converter: stream=0, channel=0
++  Converter: stream=1, channel=0
+
+This is the only change in /proc/asound after the first arecord run. Overall, 
+seems like a small annoyance, but I'm curious -- is it how it's supposed to 
+work?
+
+[1]https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git/?h=for-linus

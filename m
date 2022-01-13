@@ -2,106 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E45E48D4EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 503CB48D4F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234024AbiAMJVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:21:23 -0500
-Received: from mga01.intel.com ([192.55.52.88]:1346 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230397AbiAMJVV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:21:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642065681; x=1673601681;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=kJXpkD0TqGstWjsq8Z/m8Tr6Aqf885r5vhHL1qEhWr4=;
-  b=KjkzXh5hmBv52PLnwlztZyHpCcmXgCVtjInEJtdJNv/yMpLNr3pCzmkx
-   Yq5tlH26qyWg5LH3h1WgkaLjJNGFsJID7zDufqKP3uCN1uQM++DWGl0WF
-   Ki6jMwgDKKTJxzP2aKn8CabVy5uW13ozKRUWJ3BPWLuh0tNqapNaj8LVO
-   8hedctvlEW1Y303JLw0NHa6BMidjJmzudm7xCAh2Cr4d5mq2FdPRfUdTO
-   xW2+rxvDwVcjNuAJsNiACimO9zg+vClZ4eIAk6SKByWgpD0CLIsnsPMd5
-   Ojh91lhK3OVUavt1THX7qG/82cIq53N702F7ypRcVRQD5Ng6s3/poONb2
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="268321358"
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="268321358"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 01:21:21 -0800
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="529590256"
-Received: from joneil3-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.0.221])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 01:21:17 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][RESEND] i915: make array flex_regs static const
-In-Reply-To: <20220112223435.949071-1-colin.i.king@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220112223435.949071-1-colin.i.king@gmail.com>
-Date:   Thu, 13 Jan 2022 11:21:15 +0200
-Message-ID: <87h7a86lf8.fsf@intel.com>
+        id S234080AbiAMJXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:23:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37319 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233868AbiAMJXJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 04:23:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642065789;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1hPX2NhGvNI/hltjD58R6gX5RpgFP8ru9lDgC/nr++s=;
+        b=DOiCo18c1hphvPEUTnnCSRsd6+U0EL7475ugQr+hc6IcjwJGWotYL852tl1Di+RuhgxMx7
+        VKLDT7vpPJxwyWtkCVE8VtWaQt/cWWdUJkGQXovfnNwaVTszafDR3SN8C7kkRJU9gBbFA7
+        WOm9cwwTV9HV7cu1P3Y3ER7VSge8dS4=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-311-RqJMMLM_OWadO_M7oNUCBw-1; Thu, 13 Jan 2022 04:23:07 -0500
+X-MC-Unique: RqJMMLM_OWadO_M7oNUCBw-1
+Received: by mail-wr1-f71.google.com with SMTP id e4-20020adfa444000000b001a667c09a23so976078wra.6
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:23:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1hPX2NhGvNI/hltjD58R6gX5RpgFP8ru9lDgC/nr++s=;
+        b=vIQ+ymiF+tMWZo88iMRCIqF1/Ajna4DKfouE8fL0aHy/CJDnxPdydNMVizjWnSfD/b
+         k4oii2GbF/XHJ4t9Qd1IcTwjM2ZAEhFxqmVzhRAk8NzazAtBpjJqKZBuMSgLf8ZNuLFo
+         fnT+Ydnin+JN8uMPbWU+X53glSGxMoZICFtBz+jXkMuyaqvF7AGq5QONhztx8uGb9eXW
+         GZdufa/4ipcD37K/3sBjsfQpGw/rrwvaXkECpYTkMEpNu/nUUbETKk1cyd+SSbONeLxc
+         cnLCj57tgJtT8mJmYaZPGQZJYnVGwZ8ASN43kGuIOIM5thllZ4n2e3YT2gVL11Qq7chx
+         8+xw==
+X-Gm-Message-State: AOAM532ARTB35pY9F7yfsnLPukUt+j1n1CbW8kv/zC7VQhhDuLdXtxlW
+        UqrcwF1GK6lf9UhXi5tQCdIWPt/S/p4VHVWQ+t+ARIukzxW25xEW0CGk7ImzqWYYg0fCoeyDJbp
+        gznSjwEWZ68dEoCPWtAKiCi8=
+X-Received: by 2002:a1c:f616:: with SMTP id w22mr2937443wmc.75.1642065786704;
+        Thu, 13 Jan 2022 01:23:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxpYM5wf8R2hHTozXrisz5AtIoPofliMJ4qxbH+yf3kHAG+gYnDOXLO2pwW5bFiIBUseKX59w==
+X-Received: by 2002:a1c:f616:: with SMTP id w22mr2937429wmc.75.1642065786481;
+        Thu, 13 Jan 2022 01:23:06 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id j11sm2690364wmq.23.2022.01.13.01.23.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 01:23:05 -0800 (PST)
+Date:   Thu, 13 Jan 2022 09:23:05 +0000
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Allen <allen.lkml@gmail.com>, Christoph Lameter <cl@linux.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-modules@vger.kernel.org, atomlin@atomlin.com,
+        ghalat@redhat.com
+Subject: Re: [RFC PATCH v2 00/13] module: core code clean up
+Message-ID: <20220113092305.vx3kexfqhplxirmh@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220106234319.2067842-1-atomlin@redhat.com>
+ <CAOMdWSJHm9bRAcrB6U+FsRiK6Fg2bbtbUH82w54VD7kbFmnVsA@mail.gmail.com>
+ <CAOMdWS+Sn1sZJt8ocig5U7d7qG3N8oJBW-D1ey0qbZ3AXF-JWg@mail.gmail.com>
+ <20220112132104.7emyelwuv3jmmhdt@ava.usersys.com>
+ <Yd75OzrhrjDp7CVa@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yd75OzrhrjDp7CVa@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jan 2022, Colin Ian King <colin.i.king@gmail.com> wrote:
-> Don't populate the read-only array flex_regs on the stack but
-> instead it static const. Also makes the object code a little smaller.
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->
-> ---
->
-> RESEND: Use correct e-mail address for sign-off and From: in e-mail.
+On Wed 2022-01-12 07:52 -0800, Luis Chamberlain wrote:
+> On Wed, Jan 12, 2022 at 01:21:04PM +0000, Aaron Tomlin wrote:
+> Please work off of modules-next tree:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
+> 
+> That is, this tree on the modules-next branch:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
 
-There are a number of things at play here:
-
-- Our tooling checks for certain things, such as author/signed-off-by
-  match, after applying the patch.
-
-- You have an entry in the kernel git .mailmap.
-
-- The git log.mailmap config default has changed from false to true.
-
-We apply the patch, and, with the default options, git show will display
-a different author than the signed-off-by.
-
-We should use --no-use-mailmap when examining a commit to ensure the
-commit is internally consistent, regardless of .mailmap.
+Understood.
 
 
-BR,
-Jani.
-
-
->
-> ---
->  drivers/gpu/drm/i915/i915_perf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
-> index e27f3b7cf094..df698960fdc0 100644
-> --- a/drivers/gpu/drm/i915/i915_perf.c
-> +++ b/drivers/gpu/drm/i915/i915_perf.c
-> @@ -2114,7 +2114,7 @@ gen8_update_reg_state_unlocked(const struct intel_context *ce,
->  	u32 ctx_oactxctrl = stream->perf->ctx_oactxctrl_offset;
->  	u32 ctx_flexeu0 = stream->perf->ctx_flexeu0_offset;
->  	/* The MMIO offsets for Flex EU registers aren't contiguous */
-> -	i915_reg_t flex_regs[] = {
-> +	static const i915_reg_t flex_regs[] = {
->  		EU_PERF_CNTL0,
->  		EU_PERF_CNTL1,
->  		EU_PERF_CNTL2,
+Kind regards,
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Aaron Tomlin
+

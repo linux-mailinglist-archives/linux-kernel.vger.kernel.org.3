@@ -2,171 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9011548D853
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4A048D858
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234811AbiAMM55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:57:57 -0500
-Received: from mga09.intel.com ([134.134.136.24]:35525 "EHLO mga09.intel.com"
+        id S234853AbiAMM6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:58:14 -0500
+Received: from foss.arm.com ([217.140.110.172]:44488 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234818AbiAMM5x (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:57:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642078673; x=1673614673;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=iycjm2C+Mf7QsOANPLMYnMeG7Nklub2C0BsuRJJMnhc=;
-  b=jJaTHLTlG0OEH0zaRjpsLlQH+DyQNr0GXLCZYehDZZDSYYusknLhP+Jx
-   8kB9plpM8nWZdADWsMkC5ytTLBgiAmuXWhJjxO6oTgeKcvWW5IBNoEGqB
-   IrSwW+1VsXsU9iWCgKOGGXz51JNJ8/40upNCVq5u/FdDze4eXo4yYPGPX
-   SKQ/DB02yx/X1Zfip2DTfNGaZLeiFxZtmSANgxJRuTtyYXYzk2hOqXG8s
-   9L6W5Nfah3I0WmcifJ3iKJdK9+adGXo4J6UZZuEcc8YjyNQuYuiNJ5aqk
-   S3yV7rlLtD3g8pnAXMMwFroM6YW8cgt77eEZtFsdEmvQpsiO8XRCDTx+3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="243798547"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="243798547"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 04:57:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="691791936"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by orsmga005.jf.intel.com with ESMTP; 13 Jan 2022 04:57:52 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 13 Jan 2022 04:57:51 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 13 Jan 2022 04:57:51 -0800
-Received: from orsmsx611.amr.corp.intel.com ([10.22.229.24]) by
- ORSMSX611.amr.corp.intel.com ([10.22.229.24]) with mapi id 15.01.2308.020;
- Thu, 13 Jan 2022 04:57:51 -0800
-From:   "Ruhl, Michael J" <michael.j.ruhl@intel.com>
-To:     "guangming.cao@mediatek.com" <guangming.cao@mediatek.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "mingyuan.ma@mediatek.com" <mingyuan.ma@mediatek.com>,
-        "wsd_upstream@mediatek.com" <wsd_upstream@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        "yf.wang@mediatek.com" <yf.wang@mediatek.com>,
-        "libo.kang@mediatek.com" <libo.kang@mediatek.com>,
-        "benjamin.gaignard@linaro.org" <benjamin.gaignard@linaro.org>,
-        "bo.song@mediatek.com" <bo.song@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "lmark@codeaurora.org" <lmark@codeaurora.org>,
-        "labbott@redhat.com" <labbott@redhat.com>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "jianjiao.zeng@mediatek.com" <jianjiao.zeng@mediatek.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-Subject: RE: [PATCH v3] dma-buf: dma-heap: Add a size check for allocation
-Thread-Topic: [PATCH v3] dma-buf: dma-heap: Add a size check for allocation
-Thread-Index: AQHYCHnKJjUnVmCmlECrXD1d8qRuLKxg6T0Q
-Date:   Thu, 13 Jan 2022 12:57:51 +0000
-Message-ID: <4f88205c1b344aea8608960e2f85b8f4@intel.com>
-References: <CAO_48GF=ttKqSOm9GRoA3Mq+-RQOtRjWp449XPcz-wH=kjaTjw@mail.gmail.com>
- <20220113123406.11520-1-guangming.cao@mediatek.com>
-In-Reply-To: <20220113123406.11520-1-guangming.cao@mediatek.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S234818AbiAMM6N (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 07:58:13 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D85B7106F;
+        Thu, 13 Jan 2022 04:58:12 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.5.145])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CE4E3F766;
+        Thu, 13 Jan 2022 04:58:07 -0800 (PST)
+Date:   Thu, 13 Jan 2022 12:58:00 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
+        alexandru.elisei@arm.com, anup.patel@wdc.com,
+        aou@eecs.berkeley.edu, atish.patra@wdc.com,
+        benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de,
+        catalin.marinas@arm.com, chenhuacai@kernel.org,
+        dave.hansen@linux.intel.com, david@redhat.com,
+        frankja@linux.ibm.com, frederic@kernel.org, gor@linux.ibm.com,
+        hca@linux.ibm.com, imbrenda@linux.ibm.com, james.morse@arm.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        mingo@redhat.com, mpe@ellerman.id.au, nsaenzju@redhat.com,
+        palmer@dabbelt.com, paulmck@kernel.org, paulus@samba.org,
+        paul.walmsley@sifive.com, pbonzini@redhat.com, seanjc@google.com,
+        suzuki.poulose@arm.com, tglx@linutronix.de,
+        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org
+Subject: Re: [PATCH 2/5] kvm/arm64: rework guest entry logic
+Message-ID: <YeAh2PX5PFcBl9y6@FVFF77S0Q05N>
+References: <20220111153539.2532246-1-mark.rutland@arm.com>
+ <20220111153539.2532246-3-mark.rutland@arm.com>
+ <87tuearwc7.wl-maz@kernel.org>
+ <YeAKYUQcHc0+LJ/P@FVFF77S0Q05N>
+ <87r19b97z1.wl-maz@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87r19b97z1.wl-maz@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 13, 2022 at 11:43:30AM +0000, Marc Zyngier wrote:
+> On Thu, 13 Jan 2022 11:17:53 +0000,
+> Mark Rutland <mark.rutland@arm.com> wrote:
+> > 
+> > On Tue, Jan 11, 2022 at 05:55:20PM +0000, Marc Zyngier wrote:
+> > > On Tue, 11 Jan 2022 15:35:36 +0000,
+> > > Mark Rutland <mark.rutland@arm.com> wrote:
+> 
+> [...]
+> 
+> > > > @@ -891,26 +909,23 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+> > > >  		kvm_arch_vcpu_ctxsync_fp(vcpu);
+> > > >  
+> > > >  		/*
+> > > > -		 * We may have taken a host interrupt in HYP mode (ie
+> > > > -		 * while executing the guest). This interrupt is still
+> > > > -		 * pending, as we haven't serviced it yet!
+> > > > +		 * We must ensure that any pending interrupts are taken before
+> > > > +		 * we exit guest timing so that timer ticks are accounted as
+> > > > +		 * guest time. Transiently unmask interrupts so that any
+> > > > +		 * pending interrupts are taken.
+> > > >  		 *
+> > > > -		 * We're now back in SVC mode, with interrupts
+> > > > -		 * disabled.  Enabling the interrupts now will have
+> > > > -		 * the effect of taking the interrupt again, in SVC
+> > > > -		 * mode this time.
+> > > > +		 * Per ARM DDI 0487G.b section D1.13.4, an ISB (or other
+> > > > +		 * context synchronization event) is necessary to ensure that
+> > > > +		 * pending interrupts are taken.
+> > > >  		 */
+> > > >  		local_irq_enable();
+> > > > +		isb();
+> > > > +		local_irq_disable();
+> > > 
+> > > Small nit: we may be able to elide this enable/isb/disable dance if a
+> > > read of ISR_EL1 returns 0.
+> > 
+> > Wouldn't that be broken when using GIC priority masking, since that
+> > can prevent IRQS being signalled ot the PE?
+> 
+> You're right. But this can be made even simpler. We already know if
+> we've exited the guest because of an IRQ (ret tells us that), and
+> that's true whether we're using priority masking or not. It could be
+> as simple as:
+> 
+> 	if (ARM_EXCEPTION_CODE(ret) == ARM_EXCEPTION_IRQ) {
+> 		// We exited because of an interrupt. Let's take
+> 		// it now to account timer ticks to the guest.
+> 	 	local_irq_enable();
+>  		isb();
+>  		local_irq_disable();
+> 	}
+> 
+> and that would avoid accounting the interrupt to the guest if it fired
+> after the exit took place.
+> 
+> > I'm happy to rework this, but I'll need to think a bit harder about
+> > it. Would you be happy if we did that as a follow-up?
+> 
+> Oh, absolutely. I want the flow to be correct before we make it
+> fast(-ish).
 
->-----Original Message-----
->From: dri-devel <dri-devel-bounces@lists.freedesktop.org> On Behalf Of
->guangming.cao@mediatek.com
->Sent: Thursday, January 13, 2022 7:34 AM
->To: sumit.semwal@linaro.org
->Cc: linux-arm-kernel@lists.infradead.org; mingyuan.ma@mediatek.com;
->Guangming <Guangming.Cao@mediatek.com>;
->wsd_upstream@mediatek.com; linux-kernel@vger.kernel.org; dri-
->devel@lists.freedesktop.org; linaro-mm-sig@lists.linaro.org;
->yf.wang@mediatek.com; libo.kang@mediatek.com;
->benjamin.gaignard@linaro.org; bo.song@mediatek.com;
->matthias.bgg@gmail.com; linux-mediatek@lists.infradead.org;
->lmark@codeaurora.org; labbott@redhat.com; christian.koenig@amd.com;
->jianjiao.zeng@mediatek.com; linux-media@vger.kernel.org
->Subject: [PATCH v3] dma-buf: dma-heap: Add a size check for allocation
->
->From: Guangming <Guangming.Cao@mediatek.com>
->
->Add a size check for allocation since the allocation size is
->always less than the total DRAM size.
->
->Without this check, once the invalid size allocation runs on a process tha=
-t
->can't be killed by OOM flow(such as "gralloc" on Android devices), it will
->cause a kernel exception, and to make matters worse, we can't find who are
->using
->so many memory with "dma_buf_debug_show" since the relevant dma-buf
->hasn't exported.
->
->To make OOM issue easier, maybe need dma-buf framework to dump the
->buffer size
->under allocating in "dma_buf_debug_show".
->
->Signed-off-by: Guangming <Guangming.Cao@mediatek.com>
->Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
->---
->v3: 1. update patch, use right shift to replace division.
->    2. update patch, add reason in code and commit message.
->v2: 1. update size limitation as total_dram page size.
->    2. update commit message
->---
-> drivers/dma-buf/dma-heap.c | 10 ++++++++++
-> 1 file changed, 10 insertions(+)
->
->diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
->index 56bf5ad01ad5..1fd382712584 100644
->--- a/drivers/dma-buf/dma-heap.c
->+++ b/drivers/dma-buf/dma-heap.c
->@@ -55,6 +55,16 @@ static int dma_heap_buffer_alloc(struct dma_heap
->*heap, size_t len,
-> 	struct dma_buf *dmabuf;
-> 	int fd;
->
->+	/*
->+	 * Invalid size check. The "len" should be less than totalram.
->+	 *
->+	 * Without this check, once the invalid size allocation runs on a proces=
-s
->that
->+	 * can't be killed by OOM flow(such as "gralloc" on Android devices), it
->will
->+	 * cause a kernel exception, and to make matters worse, we can't find
->who are using
->+	 * so many memory with "dma_buf_debug_show" since the relevant
->dma-buf hasn't exported.
->+	 */
->+	if (len >> PAGE_SHIFT > totalram_pages())
+Cool; I'll leave that for now on the assumption we'll address that with a
+follow-up patch, though your suggestion above looks "obviously" correct to me.
 
-If your "heap" is from cma, is this still a valid check?
-
-M
-
->+		return -EINVAL;
-> 	/*
-> 	 * Allocations from all heaps have to begin
-> 	 * and end on page boundaries.
->--
->2.17.1
-
+Thanks,
+Mark.

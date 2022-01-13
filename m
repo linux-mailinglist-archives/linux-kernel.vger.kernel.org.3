@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBD648D8AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CE748D8B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235048AbiAMNSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 08:18:05 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:46852 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235045AbiAMNSD (ORCPT
+        id S235059AbiAMNSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 08:18:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232021AbiAMNSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 08:18:03 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20D8S0ZJ016882;
-        Thu, 13 Jan 2022 14:17:07 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=vWWHFsuh46D5SfaO0k2X8hLjowrmWXVkxsmKvyUtw8U=;
- b=hX0hu6/JJ425axfDUuOLyU5Q2bDitArl2sA2zP3byEiWLNAuAGFdRudKDa3iSapIWLYb
- b4OREpi6MyUZDlONmJYlwHbMZ6ICffVepyGiaZaH4owWq+7BeFv3aMC1FDPvKwOm7/NE
- kFkV/J7IiaQvH6o17y47gYgbgnqZeba8Vns41Eu6Oyx/UuvPWlCKONNJlpxJlZQT6+QE
- nPZSEFipCOM3dvOx9r+1ywGjLkcyIoX7qqjhad0UqkYkuqn/aLyN5k352eREvP7CVNZ5
- L72ek77bk+iQEUZpWpJx46+JC++VIioplW0hLTxjV7uUbMLhq78Byk7oASPRvrtmEY/L kw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3djgkksh8y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 14:17:07 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9CBCA10002A;
-        Thu, 13 Jan 2022 14:17:05 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8A87220D186;
-        Thu, 13 Jan 2022 14:17:05 +0100 (CET)
-Received: from lmecxl0993.lme.st.com (10.75.127.50) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 13 Jan
- 2022 14:17:03 +0100
-Subject: Re: [PATCH v3 2/6] drm/plane: Fix typo in format_mod_supported
- documentation
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Simon Ser <contact@emersion.fr>
-CC:     <ville.syrjala@linux.intel.com>, <dmitry.baryshkov@linaro.org>,
-        <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <jani.nikula@linux.intel.com>, <joonas.lahtinen@linux.intel.com>,
-        <rodrigo.vivi@intel.com>, <marex@denx.de>, <stefan@agner.ch>,
-        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
-        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
-        <yannick.fertre@foss.st.com>, <benjamin.gaignard@linaro.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <intel-gfx@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20211226112503.31771-1-jose.exposito89@gmail.com>
- <20211226112503.31771-3-jose.exposito89@gmail.com>
- <3DdB6YPUQr4O063yNreefZcIm6p5Z6HORoVVbk5RTMmjz8qvnxMse42hLvfDmA323KG-TWLc_JUFZEEEIkoINXQuAzjLVe2jRRM01tQgYOU=@emersion.fr>
- <20220107172601.GA122757@elementary>
-From:   Philippe CORNU <philippe.cornu@foss.st.com>
-Message-ID: <735432ff-d9a7-aff0-e94a-13035e944570@foss.st.com>
-Date:   Thu, 13 Jan 2022 14:16:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20220107172601.GA122757@elementary>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-13_04,2022-01-13_01,2021-12-02_01
+        Thu, 13 Jan 2022 08:18:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED11C06173F;
+        Thu, 13 Jan 2022 05:18:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AD2161CBF;
+        Thu, 13 Jan 2022 13:18:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C56C36AEC;
+        Thu, 13 Jan 2022 13:18:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642079930;
+        bh=lMkWyLlAlXOZIe4Kwuf6/+sc7/oLafybf89vU4uIgeI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Y5IbiB8W8SRoLO0l6HK+RQn6J3ptj4Wu1Gl8zh57OojMkHSWf9xuUQ/BXNJXD1X9p
+         rqtJ9QT40y2NOhXLOnS15P50BgLIlOuAISAG6ZNVQHYPfv3umikHeDO/Ie82Gd9Sw4
+         K6chRQnd7RXcGZ47AObJzyzQsYz+F3Y0cpDqsOkHPWpWF/O+kfTEMzyhVrR6uujL74
+         mGuNBKhYLYKHPNgRk/qZOQkcPvw2h0b4FLizFCWnWBnXIBnKxJ3ZmU3/fA3wijmmtr
+         tRQ50ievPyPmmJhdeXcTeKpkQrxUitKXDeVTj97CKJXjOWqpNB8FKftsbXiN8QHnM5
+         BjMVTnntIaiKg==
+Date:   Thu, 13 Jan 2022 22:18:45 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v2 0/8] fprobe: Introduce fprobe function entry/exit
+ probe
+Message-Id: <20220113221845.1d4564212fe401ad3d624d0d@kernel.org>
+In-Reply-To: <YeAatqQTKsrxmUkS@krava>
+References: <164199616622.1247129.783024987490980883.stgit@devnote2>
+        <Yd77SYWgtrkhFIYz@krava>
+        <YeAatqQTKsrxmUkS@krava>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 13 Jan 2022 13:27:34 +0100
+Jiri Olsa <jolsa@redhat.com> wrote:
 
+> On Wed, Jan 12, 2022 at 05:01:15PM +0100, Jiri Olsa wrote:
+> > On Wed, Jan 12, 2022 at 11:02:46PM +0900, Masami Hiramatsu wrote:
+> > > Hi Jiri and Alexei,
+> > > 
+> > > Here is the 2nd version of fprobe. This version uses the
+> > > ftrace_set_filter_ips() for reducing the registering overhead.
+> > > Note that this also drops per-probe point private data, which
+> > > is not used anyway.
+> > > 
+> > > This introduces the fprobe, the function entry/exit probe with
+> > > multiple probe point support. This also introduces the rethook
+> > > for hooking function return as same as kretprobe does. This
+> > 
+> > nice, I was going through the multi-user-graph support 
+> > and was wondering that this might be a better way
+> > 
+> > > abstraction will help us to generalize the fgraph tracer,
+> > > because we can just switch it from rethook in fprobe, depending
+> > > on the kernel configuration.
+> > > 
+> > > The patch [1/8] and [7/8] are from your series[1]. Other libbpf
+> > > patches will not be affected by this change.
+> > 
+> > I'll try the bpf selftests on top of this
+> 
+> I'm getting crash and stall when running bpf selftests,
+> the fprobe sample module works fine, I'll check on that
 
-On 1/7/22 6:26 PM, José Expósito wrote:
-> Hi Simon,
-> 
-> On Wed, Jan 05, 2022 at 11:54:43PM +0000, Simon Ser wrote:
->> Pushed patches 1 & 2 to drm-misc-next. Thanks for your contribution!
-> 
-> Thanks a lot for the review and for applying the changes, appreciate it.
-> 
-> Is there something that needs to improve in the other 4 patches?
-> Or just waiting on maintainers input?
-> 
-> Thanks,
-> José Expósito
-> 
+Hmm, would you mean tools/testing/selftests/bpf/prog_tests/ ?
+Let me check it too.
 
-Hi José,
-for the drm/stm part,
-Applied on drm-misc-next.
-Many thanks for your patches,
-Philippe :-)
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

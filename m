@@ -2,133 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 649B048D5E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880AE48D5E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbiAMKin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:38:43 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4004 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231825AbiAMKil (ORCPT
+        id S232729AbiAMKjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:39:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231825AbiAMKju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:38:41 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20DARQjJ006992;
-        Thu, 13 Jan 2022 10:38:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=3HmBQb7XO9KZ+/0xjR1dhFAy4NqdJHgq5yScIoHxlDU=;
- b=rP9zrS9iJDOgTQBvhweFQDPr2o8NSdIPzN/UH/6ss7oihyZ4j6xEHxiYCPPCj+TQszne
- GsEtzxr7ZKb/2WJzpazEYhFcVyB9G0shumRJ8ixgYRO3RGuYon2bZOMIxq97W3ENiy1M
- awSlp/grpPY146n3KlER1WYIxyCruQaE3rwhGCgaB0279xzb58U1HAfJ4z2280OGZkTY
- HKcrheim8DsnKIslAj6YsCBSeVT6IWgH4lkySimFeW8Af9VHt9ElTo5ByDal2pJ9IN9C
- caM8rfSt+WhHJ3hAqP7kxLQNH1vSaLWRlgIBXeNt6ZE6Q+gbqgTBdEMQHfo3HPxaAF3r 9A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3djjbj87dj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 10:38:41 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20DAYhhB012989;
-        Thu, 13 Jan 2022 10:38:41 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3djjbj87cr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 10:38:40 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20DAXk6l011936;
-        Thu, 13 Jan 2022 10:38:38 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3df1vk1gv1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 10:38:38 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20DAcZJi44695890
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Jan 2022 10:38:35 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3DB474C071;
-        Thu, 13 Jan 2022 10:38:35 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BE7074C070;
-        Thu, 13 Jan 2022 10:38:34 +0000 (GMT)
-Received: from [9.145.16.55] (unknown [9.145.16.55])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 13 Jan 2022 10:38:34 +0000 (GMT)
-Message-ID: <096cf759-5859-f073-2641-3c8527210045@linux.ibm.com>
-Date:   Thu, 13 Jan 2022 11:38:34 +0100
+        Thu, 13 Jan 2022 05:39:50 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9A9C061748
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:39:50 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id t20so1788718wrb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:39:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=D6v29IF5ynl4LtatwkL+aWAs6JBK13MEYBvlVFMZquU=;
+        b=5E/rRDm8VAePAEyXX2CiCjdULP1GlaSRlCL6rP1OFm9NtTcT/ZfHPSri7GAsFYooGM
+         e2qNDpxVfENa2JMngQsDUOjXgZ3o5XLR0qX0fgev0eMWSDe0Suu4v5WNdQE4UDR0mXXa
+         kkKHuxoejXna0MEXcK4iXXEpfcEqg9UG7JdiILDdWWIZ8ceKfXzhOmHLN3imRfvKC8VD
+         SnACzgmeN3L1Z+W4gevDeBd0yj4MAmFBfDu+qM/w3B5Xjs1hskbyi+RkG7h/JE69UMIU
+         9TUgJD73bM3CaCNrP1KwcjKvQwl39rjNWnQVm8osulfvAcS4cazQgb75PcZOrpgSAKoj
+         B+uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=D6v29IF5ynl4LtatwkL+aWAs6JBK13MEYBvlVFMZquU=;
+        b=HDjWnB99u/zAFucpDId+HPov6BjjI9Nqb5doa3YS2TT0peqAOEBRMREWWnWqlceqIb
+         68yT2KBThS7nIg8dTSh9y49mg4zbOgIsYlZToTYTuiG4+jWKS8DntirXy9KixNMoTQYp
+         OUGoMoMsPp8og/j2F6qvQw/r55IkRaAGtEo71+Wf5znuQPIz5c6F/DeLiyctGR8scB1B
+         KQYda0n7g8oc33QY9CoWTLLAy1TZuvdHa2KiJdBFBoHWki8XFhrgdP/oumGI7YdLEqHb
+         6/rVCs32u6VeDtLZbnY0C8EXytJoOl/q9WMlWh8pKNRFcjy+CFipNpDxjxyfsFWlNWHu
+         YTsQ==
+X-Gm-Message-State: AOAM533sVPOL8/7d87R3gYbKnE7AkvD9NN69cQrd0D7r3vP4eUbPB1Nh
+        qvvTAwGSA/pSz8u9dlwvQ/fsA6JoMMoFqQ==
+X-Google-Smtp-Source: ABdhPJz6q0lW1Um0SBfgQk6QTnCEXbTZmY8UEIgCUZe0rFIhVUDt/FUZhC1I/awTcNLmGS51ZbyFQw==
+X-Received: by 2002:a05:6000:1d91:: with SMTP id bk17mr3370944wrb.684.1642070388799;
+        Thu, 13 Jan 2022 02:39:48 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:bece:ab45:7469:4195? ([2001:861:44c0:66c0:bece:ab45:7469:4195])
+        by smtp.gmail.com with ESMTPSA id y4sm2667120wrd.50.2022.01.13.02.39.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 02:39:48 -0800 (PST)
+Subject: Re: [PATCH] arm64: dts: amlogic: meson-s4-aq222: fix waring for
+ leading 0s
+To:     Anders Roxell <anders.roxell@linaro.org>, robh+dt@kernel.org,
+        khilman@baylibre.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220113102746.598763-1-anders.roxell@linaro.org>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <e0a8be1b-025f-a599-0298-3521066860b0@baylibre.com>
+Date:   Thu, 13 Jan 2022 11:39:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v6 11/17] s390/mm: KVM: pv: when tearing down, try to
- destroy protected pages
+In-Reply-To: <20220113102746.598763-1-anders.roxell@linaro.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     cohuck@redhat.com, borntraeger@de.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211203165814.73016-1-imbrenda@linux.ibm.com>
- <20211203165814.73016-12-imbrenda@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20211203165814.73016-12-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: rPl4-xpE9FrEx1U2o7KOnwtlMybZhBtL
-X-Proofpoint-GUID: oaXAR14KS5X6UCL9kBNhiKPEaqgvdpyq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-13_02,2022-01-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- adultscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 spamscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201130062
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 17:58, Claudio Imbrenda wrote:
-> When ptep_get_and_clear_full is called for a mm teardown, we will now
-> attempt to destroy the secure pages. This will be faster than export.
-> 
-> In case it was not a teardown, or if for some reason the destroy page
-> UVC failed, we try with an export page, like before.
-> 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Hi,
 
-Acked-by: Janosch Frank <frankja@linux.ibm.com>
 
+On 13/01/2022 11:27, Anders Roxell wrote:
+> When building allmodconfig the following waring shows up:
+> 
+> arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts:21.18-24.4: Warning (unit_address_format): /memory@00000000: unit name should not have leading 0s
+> 
+> Fixing the waring by dropping all the '0' except one.
+> 
+> Fixes: 1c1475389af0 ("arm64: dts: add support for S4 based Amlogic AQ222")
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 > ---
->   arch/s390/include/asm/pgtable.h | 9 +++++++--
->   1 file changed, 7 insertions(+), 2 deletions(-)
+>  arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-> index 23ca0d8e058a..c008b354573e 100644
-> --- a/arch/s390/include/asm/pgtable.h
-> +++ b/arch/s390/include/asm/pgtable.h
-> @@ -1118,9 +1118,14 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
->   	} else {
->   		res = ptep_xchg_lazy(mm, addr, ptep, __pte(_PAGE_INVALID));
->   	}
-> +	/* Nothing to do */
-> +	if (!mm_is_protected(mm) || !pte_present(res))
-> +		return res;
->   	/* At this point the reference through the mapping is still present */
-> -	if (mm_is_protected(mm) && pte_present(res))
-> -		uv_convert_owned_from_secure(pte_val(res) & PAGE_MASK);
-
-Add comment:
-The notifier should have tried to destroy the cpus which allows us to 
-destroy pages. So here we'll try to destroy the pages but if that fails 
-we fall back to a normal but slower export.
-
-> +	if (full && !uv_destroy_owned_page(pte_val(res) & PAGE_MASK))
-> +		return res;
-> +	/* If could not destroy, we try export */
-> +	uv_convert_owned_from_secure(pte_val(res) & PAGE_MASK);
->   	return res;
->   }
->   
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts b/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
+> index a942d7e06d6e..8ffbcb2b1ac5 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
+> @@ -18,7 +18,7 @@ aliases {
+>  		serial0 = &uart_B;
+>  	};
+>  
+> -	memory@00000000 {
+> +	memory@0 {
+>  		device_type = "memory";
+>  		reg = <0x0 0x0 0x0 0x40000000>;
+>  	};
 > 
 
+
+Thanks, I also noticed and fixed in the commit directly, it should be fixed on next -next
+
+Neil

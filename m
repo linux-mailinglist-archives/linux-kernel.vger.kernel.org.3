@@ -2,90 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F13A48D891
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6783148D88E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235040AbiAMNNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 08:13:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiAMNNP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 08:13:15 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2591C06173F;
-        Thu, 13 Jan 2022 05:13:14 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id i68so96362ybg.7;
-        Thu, 13 Jan 2022 05:13:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2g1mOmaucLb7XHs8JQUVqK6opVNl2Di7/j45TJR+WOs=;
-        b=GUkpUVFLcgKxF9APCPN+kpP9/OgHaz3ibPzyeczCSWzl/VApI+iGGZcYDqvSgtz3PP
-         GOYVr9+LmHsvoCh8KyhOxLq8jDf00dyNAoGIqH62Y2flIeUN+Mzsj8Hs6C8g7CHRt8di
-         UGZ+NFc5kCHdgCRoVW4O5s9TWtT8sr4YONnBSXyK5PjVLMxMuN2WbksYpkkomFYy4HwT
-         5Y0LPfRNOkUHbFCWJbf2azHgrxE7NH0qOS7qDJF6Kwa+IBzTfs3M4r4uMPggO1VZzCLZ
-         AGk3DrXcTriTZhqluocUNWIa9s9+fVvuDUt9bI35ghl8pefvyjvGIuV2eYFdTAnPsNwd
-         2WUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2g1mOmaucLb7XHs8JQUVqK6opVNl2Di7/j45TJR+WOs=;
-        b=XZzMaOUQdF2GepUxQZXcDMjEgFutsGz/w0lXr2avjM5qCc1W0JWX6koO5F5OBIqR3v
-         F2dA3lJdP3j+yHnteW/jTVBoG0dJAiBI55B0WGkVzMgV/hP0j2oeQ9KuIRgE/c0Z10Me
-         Jico3jqOHajJ1XlUXOBHs31dqGxixeasKsfY0M0DcwORqMIQwC4IAMIVB74e59xymKwS
-         gHx9KNhN33I02K00yhlKeSm4GBCrd1sSObRbg0fEdbCTKIkBuO8B4SxBeZr0AflGqYWn
-         8sG499UA27MxKM1BSXQDQiS4xsNUf+aDzbRlFy0K0I5lRqP46t2MsJfSTRhSwODRNviL
-         7Npw==
-X-Gm-Message-State: AOAM533SX/qY1izRqHMMvQHBeTc0oLT4piJ6Gwe5RDDcHRiQfk58YY5h
-        Izd5OPfijyLkMaflaQbHKANyhWXolcTB5oYj+88=
-X-Google-Smtp-Source: ABdhPJy6/bFgiqUi0Vw/oTvUtA1ZdJOqxBOpdRCOAxD3OyBZrdffGioQDjLfY1gmbMNtOi5Sw1oQ0oJ7FIxILzyauSs=
-X-Received: by 2002:a5b:281:: with SMTP id x1mr5627475ybl.41.1642079593957;
- Thu, 13 Jan 2022 05:13:13 -0800 (PST)
+        id S235004AbiAMNNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 08:13:11 -0500
+Received: from mga04.intel.com ([192.55.52.120]:27860 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232585AbiAMNNK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 08:13:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642079590; x=1673615590;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=P7SqfMIQavu0yrwD8s9MeLaVxZ3QPqiVCiYAzsTDB+A=;
+  b=V9vPnlaYpVU+OPgj683780e3RVpJEB9LDC6lB28oFmIHaonCvwluTy6q
+   FCWSxqztyaX71LaRxpbZBRu/l2Oxt11Wt3WCMds8dgnMYxPW6yQ23WTgV
+   9uNIzBjREVxSogSD/6rqoDLupz9FYjh7u0nlqd5ld1J3nq71iX/vW2Hut
+   R2u/8pIo7onzqoi7lVVEuNV8/b2jfGOWRyqlozdQ4IaR6XmONOooJujV2
+   BdGlx0yD3hkS9vFhGrwYjVQfwYmiMpQV8LOV35umONYftzgJ6K4e+/ME9
+   0YRHr3KisN2a0BeJsf7GG7b0VLPX1XMj3gvg36s/vMNjRcPNiSA7fycYd
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="242820184"
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="242820184"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 05:13:09 -0800
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="623844473"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 05:13:06 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mel Gorman <mgorman@suse.de>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Hasan Al Maruf <hasanalmaruf@fb.com>
+Subject: Re: [PATCH -V10 RESEND 0/6] NUMA balancing: optimize memory
+ placement for memory tiering system
+References: <20211207022757.2523359-1-ying.huang@intel.com>
+        <Yd79b6PptQMNzDRw@hirez.programming.kicks-ass.net>
+        <87sftsumqd.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <Yd/1r49RKgwCXCQL@hirez.programming.kicks-ass.net>
+        <87o84fu9f3.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <YeAid+EXvmH9WAbq@hirez.programming.kicks-ass.net>
+Date:   Thu, 13 Jan 2022 21:13:04 +0800
+In-Reply-To: <YeAid+EXvmH9WAbq@hirez.programming.kicks-ass.net> (Peter
+        Zijlstra's message of "Thu, 13 Jan 2022 14:00:39 +0100")
+Message-ID: <878rvju6cf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220111002314.15213-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220111002314.15213-10-prabhakar.mahadev-lad.rj@bp.renesas.com> <d66a7182-825f-b9a3-afc9-c0117ea846a2@xs4all.nl>
-In-Reply-To: <d66a7182-825f-b9a3-afc9-c0117ea846a2@xs4all.nl>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 13 Jan 2022 13:12:48 +0000
-Message-ID: <CA+V-a8s9s9Q=-NiwZYhpUNuiHyTzREqzMrH60mkdcR9uUYN+2A@mail.gmail.com>
-Subject: Re: [PATCH v2 09/13] media: mtk-vcodec: Drop unnecessary call to platform_get_resource()
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=ascii
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+Peter Zijlstra <peterz@infradead.org> writes:
 
-On Thu, Jan 13, 2022 at 1:05 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+> On Thu, Jan 13, 2022 at 08:06:40PM +0800, Huang, Ying wrote:
+>> Peter Zijlstra <peterz@infradead.org> writes:
+>> > On Thu, Jan 13, 2022 at 03:19:06PM +0800, Huang, Ying wrote:
+>> >> Peter Zijlstra <peterz@infradead.org> writes:
+>> >> > On Tue, Dec 07, 2021 at 10:27:51AM +0800, Huang Ying wrote:
 >
-> Hi Prabhakar,
+>> >> >> After commit c221c0b0308f ("device-dax: "Hotplug" persistent memory
+>> >> >> for use like normal RAM"), the PMEM could be used as the
+>> >> >> cost-effective volatile memory in separate NUMA nodes.  In a typical
+>> >> >> memory tiering system, there are CPUs, DRAM and PMEM in each physical
+>> >> >> NUMA node.  The CPUs and the DRAM will be put in one logical node,
+>> >> >> while the PMEM will be put in another (faked) logical node.
+>> >> >
+>> >> > So what does a system like that actually look like, SLIT table wise, and
+>> >> > how does that affect init_numa_topology_type() ?
+>> >> 
+>> >> The SLIT table is as follows,
 >
-> I'm skipping this patch since if I am not mistaken this patch fixes this as well
-> (as part of a larger overhaul):
+> <snip>
 >
-> https://patchwork.linuxtv.org/project/linux-media/patch/20220113041055.25213-9-yunfei.dong@mediatek.com/
+>> >> node distances:
+>> >> node   0   1   2   3 
+>> >>   0:  10  21  17  28 
+>> >>   1:  21  10  28  17 
+>> >>   2:  17  28  10  28 
+>> >>   3:  28  17  28  10 
+>> >> 
+>> >> init_numa_topology_type() set sched_numa_topology_type to NUMA_DIRECT.
+>> >> 
+>> >> The node 0 and node 1 are onlined during boot.  While the PMEM node,
+>> >> that is, node 2 and node 3 are onlined later.  As in the following dmesg
+>> >> snippet.
+>> >
+>> > But how? sched_init_numa() scans the *whole* SLIT table to determine
+>> > nr_levels / sched_domains_numa_levels, even offline nodes. Therefore it
+>> > should find 4 distinct distance values and end up not selecting
+>> > NUMA_DIRECT.
+>> >
+>> > Similarly for the other types it uses for_each_online_node(), which
+>> > would include the pmem nodes once they've been onlined, but I'm thinking
+>> > we explicitly want to skip CPU-less nodes in that iteration.
+>> 
+>> I used the debug patch as below, and get the log in dmesg as follows,
+>> 
+>> [    5.394577][    T1] sched_numa_topology_type: 0, levels: 4, max_distance: 28
+>> 
+>> I found that I forget another caller of init_numa_topology_type() run
+>> during hotplug.  I will add another printk() to show it.  Sorry about
+>> that.
 >
-> I posted a PR for that series, so that's on the way in.
+> Can you try with this on?
 >
-> Please confirm so I can mark your patch as Superseded.
+> I'm suspecting there's a problem with init_numa_topology_type(); it will
+> never find the max distance due to the _online_ clause in the iteration,
+> since you said the pmem nodes are not online yet.
 >
-Ack.
+> ---
+> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> index d201a7052a29..53ab9c63c185 100644
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -1756,6 +1756,8 @@ static void init_numa_topology_type(void)
+>  			return;
+>  		}
+>  	}
+> +
+> +	WARN(1, "no NUMA type determined");
+>  }
 
-Cheers,
-Prabhakar
+Sure.  Will do this.
+
+Best Regards,
+Huang, Ying

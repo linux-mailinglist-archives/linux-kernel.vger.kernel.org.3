@@ -2,65 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1D048D29D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D65BF48D2A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbiAMHHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 02:07:06 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:59736 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230058AbiAMHHF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 02:07:05 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowAAXH1t+z99hqZR7BQ--.10684S2;
-        Thu, 13 Jan 2022 15:06:38 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     hverkuil-cisco@xs4all.nl, narmstrong@baylibre.com,
-        mchehab@kernel.org, gregkh@linuxfoundation.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com, p.zabel@pengutronix.de
-Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re: [PATCH v3] media: meson: vdec: Fix a NULL pointer dereference in amvdec_add_ts()
-Date:   Thu, 13 Jan 2022 15:06:37 +0800
-Message-Id: <20220113070637.1198179-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S230298AbiAMHJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 02:09:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55413 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229684AbiAMHJt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 02:09:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642057788;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7V9fKZCDVzeOOG8kZLX9cFIbWO+ukoGgMFPdyggLbxc=;
+        b=ImYma3jTdZqTcQRGyg2hAgTqTSsQnIoNJ4I0XeRDXnyTReT9Y3cK5xB8TygSB2Il9sZrt3
+        GVJf6R5aR2xQZMy+pGEV7eyw3Cob1COECfC8bPBzywM3X4di6keEnG5Q+LvHJVXDi5upd+
+        DS7DnbTw43d4uBZ7eQ7xz5b9tOVCo3M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-70-qG4GOHG_MrWKoSBuXCn5Mg-1; Thu, 13 Jan 2022 02:09:43 -0500
+X-MC-Unique: qG4GOHG_MrWKoSBuXCn5Mg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EA4221006AA4;
+        Thu, 13 Jan 2022 07:09:41 +0000 (UTC)
+Received: from [10.72.13.202] (ovpn-13-202.pek2.redhat.com [10.72.13.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 528C278DE9;
+        Thu, 13 Jan 2022 07:09:37 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v4 02/21] KVM: arm64: Add SDEI virtualization
+ infrastructure
+To:     Shannon Zhao <shannon.zhaosl@gmail.com>,
+        kvmarm@lists.cs.columbia.edu
+Cc:     maz@kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan.Cameron@huawei.com, pbonzini@redhat.com, will@kernel.org
+References: <20210815001352.81927-1-gshan@redhat.com>
+ <20210815001352.81927-3-gshan@redhat.com>
+ <89165079-d2a6-fad8-3a9c-dcb46a8acdc7@gmail.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <41ccffa1-4094-7e71-246f-ac11023f741a@redhat.com>
+Date:   Thu, 13 Jan 2022 15:09:32 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
+In-Reply-To: <89165079-d2a6-fad8-3a9c-dcb46a8acdc7@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAAXH1t+z99hqZR7BQ--.10684S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYq7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87
-        Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
-        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx
-        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIF
-        xwACI402YVCY1x02628vn2kIc2xKxwCY02Avz4vE14v_GF4l42xK82IYc2Ij64vIr41l4I
-        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-        cIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOPEfUUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 05:04:41PM +0800, Hans Verkuil wrote:
-> I changed the status of this patch to 'Changes Requested'. Jiasheng,
-> can you post a v3 with
-> the requested changes?
+Hi Shannon,
 
-Thanks, I have sent the v3 with the correct indentation.
-And I am sorry that I sent two patches, and the first one is
-lack of 'v3' tag.
-So please ignore it.
-And the later one is right.
+On 1/11/22 5:40 PM, Shannon Zhao wrote:
+> On 2021/8/15 8:13, Gavin Shan wrote:
+>> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+>> index e9a2b8f27792..2f021aa41632 100644
+>> --- a/arch/arm64/kvm/arm.c
+>> +++ b/arch/arm64/kvm/arm.c
+>> @@ -150,6 +150,8 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+>>       kvm_vgic_early_init(kvm);
+>> +    kvm_sdei_init_vm(kvm);
+>> +
+>>       /* The maximum number of VCPUs is limited by the host's GIC model */
+>>       kvm->arch.max_vcpus = kvm_arm_default_max_vcpus();
+> Hi, Is it possible to let user space to choose whether enabling SEDI or not rather than enable it by default?
+> 
 
-Sincerely thanks,
-Jiang
+It's possible, but what's the benefit to do so. I think about it for
+a while and I don't think it's not necessary, at least for now. First
+of all, the SDEI event is injected from individual modules in userspace
+(QEMU) or host kernel (Async PF). If we really want the function to be
+disabled, the individual modules can accept parameter, used to indicate
+the SDEI event injection is allowed or not. In this case, SDEI is enabled
+by default, but the individual modules can choose not to use it :)
+
+Thanks,
+Gavin
 

@@ -2,125 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CDE48D59B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7669648D5A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbiAMKR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:17:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiAMKR6 (ORCPT
+        id S232795AbiAMKUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:20:46 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41004 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231673AbiAMKUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:17:58 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389EBC06173F;
-        Thu, 13 Jan 2022 02:17:58 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 45B681F45862
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642069076;
-        bh=T7qkUHIGvD2MBe7s1NOE5lt53pqK04MKOvifdF0rNoY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=CyaAEO9rKcBvrFhGLZAoimPcLxSMEm92hJLMuMf+HJhwZKp4K+aDCaMMjizvaR73Q
-         Inqb0z4Oz2NjS6TY824HPwSZlfAHNcxjIM3WWAawNuH4gMOfwLkOmN+2WDz5h+EZv8
-         1+ifhD4rF61qu6rdox/qBG8zvqGFvGZwhrYJoyw8ohTL4g/pZtH4nT7f6V468ia4Tn
-         5xuSfcNlzHQWInMD+bcG5dDvl+bPVWshrAptVXkEJt78UZjM8CImZgMC4Hd9hCeLda
-         pI1WdpGlX+smpBtL/nBLQT3l3OFJZddqzu9xFL3EF2XfSemxDCqF6A72RKzQCtgBxG
-         sYToruJydriyQ==
-Subject: Re: [PATCH v9 12/15] media: mtk-vcodec: enc: Remove
- mtk_vcodec_release_enc_pm
-To:     Hans Verkuil <hverkuil@xs4all.nl>, Yong Wu <yong.wu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        David Airlie <airlied@linux.ie>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        dri-devel@lists.freedesktop.org, yf.wang@mediatek.com,
-        anthony.huang@mediatek.com, youlin.pei@mediatek.com,
-        Irui Wang <irui.wang@mediatek.com>,
-        Evan Green <evgreen@chromium.org>,
-        Eizan Miyamoto <eizan@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, mingyuan.ma@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>, libo.kang@mediatek.com,
-        yi.kuo@mediatek.com, linux-mediatek@lists.infradead.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>, anan.sun@mediatek.com,
-        srv_heupstream@mediatek.com, acourbot@chromium.org,
-        linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
-        iommu@lists.linux-foundation.org, Daniel Vetter <daniel@ffwll.ch>,
-        Robin Murphy <robin.murphy@arm.com>
-References: <20211112105509.12010-1-yong.wu@mediatek.com>
- <20211112105509.12010-13-yong.wu@mediatek.com>
- <68c3a573-8453-38e9-93b2-2067bedcd06f@collabora.com>
- <4bd9e849-96dd-6f1c-2841-979459366ee5@collabora.com>
- <fa9b2b73-c6bb-5737-93ac-ba2ab6b3b771@xs4all.nl>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <d3f4896f-d254-e0fb-0d2a-e78fbe50d84d@collabora.com>
-Date:   Thu, 13 Jan 2022 11:17:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Thu, 13 Jan 2022 05:20:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 544A261BE6;
+        Thu, 13 Jan 2022 10:20:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1456CC36AE9;
+        Thu, 13 Jan 2022 10:20:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642069244;
+        bh=9l4YiTzis5EX2SbFlAJNIL7bN9QTMaOyqHcEuSDbCVE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FA+eauo75VUVRV4J+OZEz7sUf05vB0tLcQ+0A+VoOy/43Peu41YMAKQMWmByj514c
+         /QpQviQ+Ofgv4AymrOGZaYbwpXu272z0//Gt0UWyKmxAPUGAyYachjIsBKW/DSZnQk
+         tM+up+YtDH6DL82B2c58A1CntyKeQmFsMWdmp8Kw=
+Date:   Thu, 13 Jan 2022 11:20:41 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jochen Mades <jochen@mades.net>
+Cc:     Lukas Wunner <lukas@wunner.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>
+Subject: Re: [PATCH] Bugfix RTS line config in RS485 mode is overwritten in
+ pl011_set_mctrl() function.
+Message-ID: <Yd/8+YR549pvmOHS@kroah.com>
+References: <20211231171516.18407-1-jochen@mades.net>
+ <20220102100710.GA29858@wunner.de>
+ <1489312180.3256431.1642068732902@webmail.strato.com>
 MIME-Version: 1.0
-In-Reply-To: <fa9b2b73-c6bb-5737-93ac-ba2ab6b3b771@xs4all.nl>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1489312180.3256431.1642068732902@webmail.strato.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 13/01/22 11:15, Hans Verkuil ha scritto:
-> On 13/01/2022 11:11, AngeloGioacchino Del Regno wrote:
->> Il 11/01/22 11:57, AngeloGioacchino Del Regno ha scritto:
->>> Il 12/11/21 11:55, Yong Wu ha scritto:
->>>> After this patchset, mtk_vcodec_release_enc_pm has only one line.
->>>> then remove that function, use pm_runtime_disable instead.
->>>>
->>>> meanwhile, mtk_vcodec_init_enc_pm only operate for the clocks,
->>>> rename it from the _pm to _clk.
->>>>
->>>> No functional change.
->>>>
->>>> CC: Tiffany Lin <tiffany.lin@mediatek.com>
->>>> CC: Irui Wang <irui.wang@mediatek.com>
->>>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
->>>
->>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>>
->>
->> Hello Yong,
->> the mtk-vcodec patches were merged in Yunfei's vcodec patch series and Hans has
->> scheduled that for v5.18.
->>
->> Can you please send a v10 and drop patches 10/15, 11/15, 12/15 (all of the
->> media: mtk-vcodec: *) from this series?
->>
->> For the records, I think that after sending v10 this series is ready to be merged,
->> as it was well reviewed and also tested on many MTK platforms.
+On Thu, Jan 13, 2022 at 11:12:12AM +0100, Jochen Mades wrote:
+> Hi Lukas,
 > 
-> Good to know. When I have the v10 I'll try to prioritize reviewing it and running
-> my usual tests.
+> > Patch is correct, but commit message could be improved:
+> > 
+> > * Subject should be in imperative mood (by convention), it should be
+> >   prepended by "serial: pl011: " (in line with previous commits touching
+> >   this driver, use "git log --oneline amba-pl011.c") and the trailing dot
+> >   is unnecessary, e.g.:
+> > 
+> >   "serial: pl011: Fix incorrect rs485 RTS polarity on set_mctrl"
+> > 
+> > * Commit message should be wrapped at 72 characters (so that it appears
+> >   centered when displayed with "git log" on an 80 chars terminal).
+> >   The reference to "0001-serial-amba-pl011-add-RS485-support.patch"
+> >   should be replaced with a reference to the offending commit, e.g.:
+> >
+> >   "Commit 8d479237727c ("serial: amba-pl011: add RS485 support") sought
+> >   to keep RTS deasserted on set_mctrl if rs485 is enabled.  However it
+> >   did so only if deasserted RTS polarity is high.  Fix it in case it's
+> >   low."
+> >
+> >   Feel free to copy this to a v2 of your patch and amend as you see fit.
+> > 
+> 
+> Find attached the patch with the new subject and corretced commit message.
+> 
+> > * Add tags for the offending commit:
+> > 
+> >   Fixes: 8d479237727c ("serial: amba-pl011: add RS485 support")
+> >   Cc: stable@vger.kernel.org # v5.15+
+> > 
+> > * Be sure to cc the author of the offending commit.
+> 
+> Sorry I don't know how to do that correctly. Can you please give support/hints?
+> 
+>  
+> > Thanks,
+> > 
+> > Lukas
+> > 
+> > > ---
+> > >  drivers/tty/serial/amba-pl011.c | 8 ++++++--
+> > >  1 file changed, 6 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
+> > > index 537f37ac4..1749c1498 100644
+> > > --- a/drivers/tty/serial/amba-pl011.c
+> > > +++ b/drivers/tty/serial/amba-pl011.c
+> > > @@ -1646,8 +1646,12 @@ static void pl011_set_mctrl(struct uart_port *port, unsigned int mctrl)
+> > >  	    container_of(port, struct uart_amba_port, port);
+> > >  	unsigned int cr;
+> > >  
+> > > -	if (port->rs485.flags & SER_RS485_ENABLED)
+> > > -		mctrl &= ~TIOCM_RTS;
+> > > +	if (port->rs485.flags & SER_RS485_ENABLED) {
+> > > +		if (port->rs485.flags & SER_RS485_RTS_AFTER_SEND)
+> > > +			mctrl &= ~TIOCM_RTS;
+> > > +		else
+> > > +			mctrl |= TIOCM_RTS;
+> > > +	}
+> > >  
+> > >  	cr = pl011_read(uap, REG_CR);
 
-Thank you Hans, that's very much appreciated!
 
-> 
-> Yong, please make sure you run 'checkpatch.pl --strict' over the v10 patches and fix
-> any issues (using common sense).
-> 
-> Regards,
-> 
-> 	Hans
-> 
->>
->> Thank you,
->> - Angelo
-> 
+Hi,
 
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch was attached, please place it inline so that it can be
+  applied directly from the email message itself.
+
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file, Documentation/SubmittingPatches
+  for how to do this correctly.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

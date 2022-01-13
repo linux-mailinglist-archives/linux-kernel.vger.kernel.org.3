@@ -2,39 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD3D48DF99
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C87548DF9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235510AbiAMV3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 16:29:30 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42964 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiAMV33 (ORCPT
+        id S235662AbiAMVaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 16:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231888AbiAMVaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 16:29:29 -0500
+        Thu, 13 Jan 2022 16:30:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2296C061574;
+        Thu, 13 Jan 2022 13:29:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA3EA61A35;
-        Thu, 13 Jan 2022 21:29:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28C10C36AE3;
-        Thu, 13 Jan 2022 21:29:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B145EB821C3;
+        Thu, 13 Jan 2022 21:29:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 768FFC36AE3;
+        Thu, 13 Jan 2022 21:29:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642109368;
-        bh=9/oOB+KtddzUtsBpBbqkWxiDI2s1C2hymkyNpoOLJTc=;
+        s=k20201202; t=1642109397;
+        bh=yW9AcQzuoUaR989bsxK4TgDY9aBm1cvbSwLkItbJe+Y=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=OsIKhQXyXasXp2N/sLLW7xq2ve1JZOCWXYONBZAC9Pbr2YnDa8XP00CIsmsEw2rVH
-         3ohIB/eR+QbS0Ptg3jkXLYTWwYBHfk11lCSnPJHOkp6sAkQNaasknv3BWNxT0fiSIp
-         /rIBrToENKK7ytyp1rtOxycWciEtY7yOWXtjSk/G/Qvk/Ca4JNOqeK4stSg1erxZ7E
-         GXj/ZKGSIb1UBAB3qw9++K5IhOE/Dwrriq5hAxNGqBikjoqM2F8G5TAEdQLX3+NQsP
-         P3G5FgkELvVyf/dzNgCbrkvhawHAo6I9IXgqRnIKlqxm+UhjxIOBnrZpZRbR8NKcPu
-         n+kG2Du4suSvA==
+        b=ZQThfKK7ttBmAVSKpY2YgYBHP94O7LeXCIJUdl8+pjbRPJ5abqlr9/PQ0a51XddUZ
+         8LbcU3NMrR/Ywb8RRYOYLmOmKw2LexzZdyKzP+MTJ58lp+s7BSqHY7+ujWai4G68sz
+         vo1epPK0h4ahadtDZ02MF5PsftcG2/N7C7U3/haig6JBbTsJClSXKHxlVbjHMN0cbc
+         DFxt8ZH+FqVSbvnA2R9QQsM3xwuRJuJgt4INQ7G/7J5h8YV2nRjCHTXyNHH/LvgnIs
+         4z1jzXa0SUpD1P7s4xOHuZ/RJ3rv4X0NNURdLQEVfwqP6hBg/llz6vLHQ1squwWF9R
+         CC/IPehM0jiGA==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220113115745.45826-3-liang.yang@amlogic.com>
-References: <20220113115745.45826-1-liang.yang@amlogic.com> <20220113115745.45826-3-liang.yang@amlogic.com>
-Subject: Re: [PATCH v9 2/4] clk: meson: add emmc sub clock phase delay driver
+In-Reply-To: <20220113115745.45826-4-liang.yang@amlogic.com>
+References: <20220113115745.45826-1-liang.yang@amlogic.com> <20220113115745.45826-4-liang.yang@amlogic.com>
+Subject: Re: [PATCH v9 3/4] clk: meson: add DT documentation for emmc clock controller
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     Liang Yang <liang.yang@amlogic.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
@@ -52,26 +55,49 @@ To:     Jerome Brunet <jbrunet@baylibre.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org
-Date:   Thu, 13 Jan 2022 13:29:26 -0800
+Date:   Thu, 13 Jan 2022 13:29:56 -0800
 User-Agent: alot/0.9.1
-Message-Id: <20220113212928.28C10C36AE3@smtp.kernel.org>
+Message-Id: <20220113212957.768FFC36AE3@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Liang Yang (2022-01-13 03:57:43)
-> diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
-> index b3ef5f67820f..c450f38d3801 100644
-> --- a/drivers/clk/meson/Makefile
-> +++ b/drivers/clk/meson/Makefile
-> @@ -11,6 +11,7 @@ obj-$(CONFIG_COMMON_CLK_MESON_PLL) +=3D clk-pll.o
->  obj-$(CONFIG_COMMON_CLK_MESON_REGMAP) +=3D clk-regmap.o
->  obj-$(CONFIG_COMMON_CLK_MESON_SCLK_DIV) +=3D sclk-div.o
->  obj-$(CONFIG_COMMON_CLK_MESON_VID_PLL_DIV) +=3D vid-pll-div.o
-> +obj-$(CONFIG_COMMON_CLK_MESON_PHASE_DELAY) +=3D clk-phase-delay.o
+Quoting Liang Yang (2022-01-13 03:57:44)
+> Document the MMC sub clock controller driver, the potential consumer
+> of this driver is MMC or NAND. Also add four clock bindings IDs which
+> provided by this driver.
+>=20
+> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
+> ---
+>  .../bindings/clock/amlogic,mmc-clkc.yaml      | 64 +++++++++++++++++++
+>  include/dt-bindings/clock/amlogic,mmc-clkc.h  | 14 ++++
+>  2 files changed, 78 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,mmc-c=
+lkc.yaml
+>  create mode 100644 include/dt-bindings/clock/amlogic,mmc-clkc.h
+>=20
+> diff --git a/Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yam=
+l b/Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
+> new file mode 100644
+> index 000000000000..a274c3d5fc2e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/amlogic,mmc-clkc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic MMC Sub Clock Controller Driver Device Tree Bindings
+> +
+> +maintainers:
+> +  - jianxin.pan@amlogic.com
+> +  - liang.yang@amlogic.com
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - "amlogic,axg-mmc-clkc", "syscon"
 
-Sort by Kconfig symbol?
-
-> =20
->  # Amlogic Clock controllers
->
+Why is it a syscon?

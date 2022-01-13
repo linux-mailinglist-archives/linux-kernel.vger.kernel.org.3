@@ -2,169 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B5348DF83
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C9E48DF85
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235172AbiAMVTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 16:19:42 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30176 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235144AbiAMVTj (ORCPT
+        id S234812AbiAMVVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 16:21:03 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37898 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231472AbiAMVVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 16:19:39 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20DKS908012145;
-        Thu, 13 Jan 2022 21:19:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=gglTjkJQfUQeW1de/xy1Uu37Ciw6EQP2ZvTjwgTy8g8=;
- b=Pn+xY/c0IJINFihRCVKn6Bcv2cZD1xtU+ilXssjX57BMGpsk82WltbrXBPLceEHH3t0n
- XK/4BM3taLSTqdsxGKp/bte4pauyJ1q3VX2ElUnL1dDLHO1JLSn5aBKpNsgpCQ3+QAiO
- e2rLaQSbvhG/XvYb7228Nxghkx45mqkfoUiXLgzMJGn3LJXdl5t+2rvWWlJZ2DSgRvha
- SEvv4uOdUVBNSP89zmcsJHSYg07ERt+dus4GVMiWD1ATbSus96cSCdB5i9Iba8ij25g7
- NFbessQqN3BZI8h+yGmbhW/J2mxKqDrtMGasgKB9/ral1FnPzGgkY3aesoeBQcuM5u9K 1Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dju55h1fn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 21:19:35 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20DLDuhc031078;
-        Thu, 13 Jan 2022 21:19:35 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dju55h1fe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 21:19:35 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20DLHwQX019673;
-        Thu, 13 Jan 2022 21:19:34 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02dal.us.ibm.com with ESMTP id 3df28cnncj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 21:19:34 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20DLJXQU33292630
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Jan 2022 21:19:33 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 83D3913604F;
-        Thu, 13 Jan 2022 21:19:33 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C2E37136061;
-        Thu, 13 Jan 2022 21:19:32 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 13 Jan 2022 21:19:32 +0000 (GMT)
-Message-ID: <4b59d305-6858-1514-751a-37853ad777be@linux.ibm.com>
-Date:   Thu, 13 Jan 2022 16:19:32 -0500
+        Thu, 13 Jan 2022 16:21:02 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC95261770
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 21:21:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CE38C36AE3;
+        Thu, 13 Jan 2022 21:21:00 +0000 (UTC)
+Date:   Thu, 13 Jan 2022 16:20:58 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Tom Zanussi <zanussi@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [for-next][PATCH 05/31] tracing: Have existing
+ event_command.parse() implementations use helpers
+Message-ID: <20220113162058.04731caf@gandalf.local.home>
+In-Reply-To: <388b9922-4231-6e34-1305-f0b439d9d07c@kernel.org>
+References: <20220111173030.999527342@goodmis.org>
+        <20220111173114.155260134@goodmis.org>
+        <388b9922-4231-6e34-1305-f0b439d9d07c@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] tpm: vtpm_proxy: Avoid device-originated buffer overflow
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, Peter Huewe <peterhuewe@gmx.de>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20220113002727.3709495-1-keescook@chromium.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220113002727.3709495-1-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: uN_XodsZ-6rQp0VYokR1dUX0tyVpPSlM
-X-Proofpoint-GUID: wApIpmcjT2Lfp7eHeYAXTbKLYI-eziLm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-13_09,2022-01-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- bulkscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
- suspectscore=0 phishscore=0 clxscore=1011 spamscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201130129
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 13 Jan 2022 18:03:07 +0100
+Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
 
-On 1/12/22 19:27, Kees Cook wrote:
-> When building with -Warray-bounds, this warning was emitted:
->
-> In function 'memset',
->      inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtpm_proxy.c:102:2:
-> ./include/linux/fortify-string.h:43:33: warning: '__builtin_memset' pointer overflow between offset 164 and size [2147483648, 4294967295]
-> [-Warray-bounds]
->     43 | #define __underlying_memset     __builtin_memset
->        |                                 ^
->
-> There was no checking of the req_len value from the device. A malicious
-> (or buggy) device could end up leaking (and when wiping) memory contents
-> beyond the end of the proxy buffer.
->
-> Cc: Peter Huewe <peterhuewe@gmx.de>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: linux-integrity@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->   drivers/char/tpm/tpm_vtpm_proxy.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
-> index 91c772e38bb5..5c865987ba5c 100644
-> --- a/drivers/char/tpm/tpm_vtpm_proxy.c
-> +++ b/drivers/char/tpm/tpm_vtpm_proxy.c
-> @@ -91,7 +91,7 @@ static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
->   
->   	len = proxy_dev->req_len;
->   
-> -	if (count < len) {
-> +	if (count < len || len > sizeof(proxy_dev->buffer)) {
->   		mutex_unlock(&proxy_dev->buf_lock);
->   		pr_debug("Invalid size in recv: count=%zd, req_len=%zd\n",
->   			 count, len);
+> I did some debug, and found that the histogram is working. The problem is that,
+> to read the histogram I pause it to have consistent data:
+> 
+> in tools/tracing/rtla/osnoise_hist.c:
+> osnoise_read_trace_hist() {
+>  [...]
+>         tracefs_hist_pause(tool->trace.inst, data->trace_hist);
+> 
+>         content = tracefs_event_file_read(tool->trace.inst, "osnoise",
+>                                           "sample_threshold",
+>                                           "hist", NULL);
+>  [...]
+> }
+> 
+> and, as far as I got, after this patch, pausing the histogram makes it to clear
+> up. If I comment the "tracefs_hist_pause" line, "rtla osnoise hist" start
+> working back again.
+> 
+> Thoughts?
 
+This is all messed up. I'm removing this patch completely.
 
-Thanks for this patch.
+Tom, can you fix this. The issue is that it's putting too much policy into
+the helper functions, which is big no no.
 
-I just want to clarify this. In vtpm_proxy_tpm_op_send() we have the 
-only place that sets req_len to a value larger than 0:
+Specifically, we have:
 
-static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t 
-count)
+int event_trigger_register(struct event_command *cmd_ops,
+			   struct trace_event_file *file,
+			   char *glob,
+			   char *cmd,
+			   char *param,
+			   struct event_trigger_data *trigger_data,
+			   int *n_registered)
 {
-     struct proxy_dev *proxy_dev = dev_get_drvdata(&chip->dev);
+	int ret;
 
-     if (count > sizeof(proxy_dev->buffer)) {
-         dev_err(&chip->dev,
-             "Invalid size in send: count=%zd, buffer size=%zd\n",
-             count, sizeof(proxy_dev->buffer));
-         return -EIO;
-     }
+	if (n_registered)
+		*n_registered = 0;
 
-[...]
+	ret = cmd_ops->reg(glob, trigger_data, file);
+	/*
+	 * The above returns on success the # of functions enabled,
+	 * but if it didn't find any functions it returns zero.
+	 * Consider no functions a failure too.
+	 */
+	if (!ret) {
+		cmd_ops->unreg(glob, trigger_data, file);
+		ret = -ENOENT;
+	} else if (ret > 0) {
+		if (n_registered)
+			*n_registered = ret;
+		/* Just return zero, not the number of enabled functions */
+		ret = 0;
+	}
 
-     proxy_dev->req_len = count;
-     memcpy(proxy_dev->buffer, buf, count);
-
-[...]
-
+	return ret;
 }
 
 
-The above makes sure that we cannot copy more bytes into the 
-proxy_dev->buffer than the what the buffer has bytes for.
+And in the case of pause, this *will* have ret = 0 on return. And what
+happens is that it removes the trigger completely.
 
-It then sets req_len to a valid value that is less or equal to the 
-buffer size.
+Look at the code in the histogram on the return:
 
-Considering this your check above seems to only be there to make the 
-compiler happy but otherwise I don't see that this is a real problem 
-with a buffer overflow?!
+	ret = event_trigger_register(cmd_ops, file, glob, cmd, param, trigger_data, &n_registered);
+	if (ret < 0)
+		goto out_free;
+	if ((ret == 0) && (n_registered == 0)) {
+		if (!(attrs->pause || attrs->cont || attrs->clear))
+			ret = -ENOENT;
+		goto out_free;
+	}
 
-Nevertheless, let all those compilers be happy:
+It checks for 0 and 0 and only errors if it's not pause, cont, or clear.
+Hence, all three are now broken due to this patch.
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+I will not be adding this to this merge window.
 
-
+-- Steve

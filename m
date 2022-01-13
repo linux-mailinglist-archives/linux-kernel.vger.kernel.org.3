@@ -2,114 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E5648DCE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 18:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D12048DCEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 18:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234317AbiAMR13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 12:27:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38442 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234255AbiAMR11 (ORCPT
+        id S234380AbiAMR1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 12:27:49 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45498 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234255AbiAMR1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 12:27:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642094847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6JAs1cBVKVd9apEjPFkt89/bQIVFWGiLVSiodneQbkU=;
-        b=Y2WKTAT6tW0wu7nySC3npPZqrEVOfUICkoDZRu154eKuITMH1drMoCGS0WBRi9egjb3bwH
-        wy+dr3mtZOBFq7HpD8nTuITHwSsH/n+lDTdFfBXsdRJWmXGjdbVWjCKxbuCDZ/1KnCavLt
-        32/4FfOwe67LvyjwwB6a5UGPQLPowxg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-3VuFLHQSP1u5wqMgynuaxw-1; Thu, 13 Jan 2022 12:27:23 -0500
-X-MC-Unique: 3VuFLHQSP1u5wqMgynuaxw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 13 Jan 2022 12:27:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 800AD1023F4E;
-        Thu, 13 Jan 2022 17:27:21 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.192.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C6C5485F0C;
-        Thu, 13 Jan 2022 17:27:17 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     "Andy Lutomirski" <luto@kernel.org>
-Cc:     linux-arch@vger.kernel.org,
-        "Linux API" <linux-api@vger.kernel.org>,
-        linux-x86_64@vger.kernel.org, kernel-hardening@lists.openwall.com,
-        linux-mm@kvack.org, "the arch/x86 maintainers" <x86@kernel.org>,
-        musl@lists.openwall.com, <libc-alpha@sourceware.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        Andrei Vagin <avagin@gmail.com>
-Subject: Re: [PATCH v3 1/3] x86: Implement arch_prctl(ARCH_VSYSCALL_CONTROL)
- to disable vsyscall
-References: <3a1c8280967b491bf6917a18fbff6c9b52e8df24.1641398395.git.fweimer@redhat.com>
-Date:   Thu, 13 Jan 2022 18:27:15 +0100
-In-Reply-To: <3a1c8280967b491bf6917a18fbff6c9b52e8df24.1641398395.git.fweimer@redhat.com>
-        (Florian Weimer's message of "Wed, 05 Jan 2022 17:02:48 +0100")
-Message-ID: <874k67zguk.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CB6DB822D6;
+        Thu, 13 Jan 2022 17:27:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A2FC36AEB;
+        Thu, 13 Jan 2022 17:27:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642094865;
+        bh=Xm0k0hBuHh7dvJeIyDxX/w+rbC6J3wxBnImdzwoZAeo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=C15N4mFkPjl6hjxZ4AQ1Yf4A7Q+eKCVpxdtCm6XK9kh1oxa+6s459b66i+dsKdAX9
+         /yOKQg17ZL97nj4wpNW8dAMSWjhTf5YTFWuF/cNlC24i8JaDPObcjbUS9oVYX+46XX
+         YVRHAR+e1qbQq4aVliKJPcrMOTyhZ2209OlSZau9jm5ck8VKdAp4mtKYHdMQ9Z5Z+o
+         P9OfV6UMzuMhso1p2ctq6XcRUNF7rqco7kTMS2kYouX+D4ODm2qgMIFPIVyv+wyOdI
+         H32Ntos7dVv3caduRH2ONXdjVhSgZ5yQBPJgsJ/PvEmYOEme3OZAAqXlOMqp0Q6T2a
+         hCX4NAf60l5SA==
+Date:   Thu, 13 Jan 2022 09:27:43 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Joseph CHAMG <josright123@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Leon Romanovsky <leon@kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v11, 2/2] net: Add dm9051 driver
+Message-ID: <20220113092743.00c25fdc@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <CAHp75VeRx8X+5i7SG4KMKADAUj=tkbjfmFDwup5dQ64SLq4yvw@mail.gmail.com>
+References: <20220113074614.407-1-josright123@gmail.com>
+        <20220113074614.407-3-josright123@gmail.com>
+        <CAHp75VeRx8X+5i7SG4KMKADAUj=tkbjfmFDwup5dQ64SLq4yvw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Florian Weimer:
+On Thu, 13 Jan 2022 12:16:38 +0200 Andy Shevchenko wrote:
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Andrew Lunn <andrew@lunn.ch>
+> > Cc: Leon Romanovsky <leon@kernel.org>
+> > Cc: andy Shevchenko <andy.shevchenko@gmail.com>  
+> 
+> Instead, utilize --cc parameter to `git send-email ...`
 
-> Distributions struggle with changing the default for vsyscall
-> emulation because it is a clear break of userspace ABI, something
-> that should not happen.
->
-> The legacy vsyscall interface is supposed to be used by libcs only,
-> not by applications.  This commit adds a new arch_prctl request,
-> ARCH_VSYSCALL_CONTROL, with one argument.  If the argument is 0,
-> executing vsyscalls will cause the process to terminate.  Argument 1
-> turns vsyscall back on (this is mostly for a largely theoretical
-> CRIU use case).
->
-> Newer libcs can use a zero ARCH_VSYSCALL_CONTROL at startup to disable
-> vsyscall for the process.  Legacy libcs do not perform this call, so
-> vsyscall remains enabled for them.  This approach should achieves
-> backwards compatibility (perfect compatibility if the assumption that
-> only libcs use vsyscall is accurate), and it provides full hardening
-> for new binaries.
->
-> The chosen value of ARCH_VSYSCALL_CONTROL should avoid conflicts
-> with other x86-64 arch_prctl requests.  The fact that with
-> vsyscall=emulate, reading the vsyscall region is still possible
-> even after a zero ARCH_VSYSCALL_CONTROL is considered limitation
-> in the current implementation and may change in a future kernel
-> version.
->
-> Future arch_prctls requests commonly used at process startup can imply
-> ARCH_VSYSCALL_CONTROL with a zero argument, so that a separate system
-> call for disabling vsyscall is avoided.
->
-> Signed-off-by: Florian Weimer <fweimer@redhat.com>
-> Acked-by: Andrei Vagin <avagin@gmail.com>
-> ---
-> v3: Remove warning log message.  Split out test.
-> v2: ARCH_VSYSCALL_CONTROL instead of ARCH_VSYSCALL_LOCKOUT.  New tests
->     for the toggle behavior.  Implement hiding [vsyscall] in
->     /proc/PID/maps and test it.  Various other test fixes cleanups
->     (e.g., fixed missing second argument to gettimeofday).
->
-> arch/x86/entry/vsyscall/vsyscall_64.c | 7 ++++++-
->  arch/x86/include/asm/mmu.h            | 6 ++++++
->  arch/x86/include/uapi/asm/prctl.h     | 2 ++
->  arch/x86/kernel/process_64.c          | 7 +++++++
->  4 files changed, 21 insertions(+), 1 deletion(-)
-
-Hello,
-
-sorry to bother you again.  What can I do to move this forward?
-
-Thanks,
-Florian
-
+.. or put them under the --- so git cuts them off when patch is applied.

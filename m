@@ -2,131 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C3748DD6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 19:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5F948DD68
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 19:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237452AbiAMSEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 13:04:13 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54866 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237440AbiAMSEL (ORCPT
+        id S237422AbiAMSEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 13:04:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44566 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237391AbiAMSEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 13:04:11 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20DHqsod027852;
-        Thu, 13 Jan 2022 18:04:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : from : to : cc : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=h7PGYmYGOaS7whOzz2krlo4qhHm2j2+iN2wg1u9LGzo=;
- b=IugUQjNZbqI3tZpwi2Y5jTuSZwFgqmdjxbunCKZCJYFV56Gmj8Js7Ztgs2mCqhZ9DoV7
- ZmZfPRMgjpb3S6SJNopcGbp2WdHvyt73Vp705LYD60xXZ9ShaeAKXWPpCR9uzywhd/qo
- +ojjK6Ce0skaNzRPmJnVDG/jFFjE6UF/kXOLEMa74PJgaieNk44xZPM6oBgDztH4jVhf
- CYLZRwjyU6KkaI6LjC8THxoaHUsVp33k+Oc9ME4dIh7b9y4vSTJrkrOWdp/kNFAyIhf7
- kPHVXXSr64tLFiP08Vf7zo8uxA2heOpVbz4Y7jRa/wrCI1X0QZ+DTiKPMBzpKlLDS7mO gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3djrv98716-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 18:04:07 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20DHu1qC009802;
-        Thu, 13 Jan 2022 18:04:07 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3djrv9870x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 18:04:07 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20DI3qek007408;
-        Thu, 13 Jan 2022 18:04:05 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma02wdc.us.ibm.com with ESMTP id 3df28bya1m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 18:04:05 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20DI447v27066710
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Jan 2022 18:04:04 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F7F32806A;
-        Thu, 13 Jan 2022 18:04:04 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3544A28064;
-        Thu, 13 Jan 2022 18:04:04 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 13 Jan 2022 18:04:04 +0000 (GMT)
-Message-ID: <1e3b1e6f-6600-d77f-843b-f3d60e062192@linux.ibm.com>
-Date:   Thu, 13 Jan 2022 13:04:03 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v4 1/2] selftests: tpm2: Determine available PCR bank
-Content-Language: en-US
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
- <20211128041052.1395504-2-stefanb@linux.vnet.ibm.com>
- <YaVkw5dnCewnFybR@iki.fi>
- <eaad369c-f02e-8d83-94b1-fdac7ae84388@linux.ibm.com>
-In-Reply-To: <eaad369c-f02e-8d83-94b1-fdac7ae84388@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: VhrntTOZ2fUnC6cHeX1xOWCtbKldnM9b
-X-Proofpoint-ORIG-GUID: eYe9VVJM1UlquiHJWHJU8lBVaQ_VmqMM
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 13 Jan 2022 13:04:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E121961D45
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 18:04:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2BBC36AE9;
+        Thu, 13 Jan 2022 18:04:05 +0000 (UTC)
+Date:   Thu, 13 Jan 2022 13:04:04 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Pingfan Liu <kernelfans@gmail.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH v2] tracing: Add test for user space strings when
+ filtering on  string pointers
+Message-ID: <20220113130404.6fa21951@gandalf.local.home>
+In-Reply-To: <Yd5VTy0UW1tOcjTD@piliu.users.ipa.redhat.com>
+References: <20220110115532.536088fd@gandalf.local.home>
+        <31c11a47a8bc4e34a1a64d54a54bb944@AcuMS.aculab.com>
+        <20220110122436.5302128f@gandalf.local.home>
+        <Yd5VTy0UW1tOcjTD@piliu.users.ipa.redhat.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-13_08,2022-01-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- adultscore=0 priorityscore=1501 spamscore=0 phishscore=0 mlxlogscore=822
- clxscore=1015 malwarescore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201130112
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jarkko,
+On Wed, 12 Jan 2022 12:13:03 +0800
+Pingfan Liu <kernelfans@gmail.com> wrote:
 
-   can you take this patch 1/2?
+> Hi Steven,
+> 
+> Sorry that I am out of office, and not reply in time.
 
-  https://lore.kernel.org/lkml/20211128041052.1395504-1-stefanb@linux.vnet.ibm.com/T/#m21209a978c237368499ce5f082f3c0fc03bcbbeb
+And I've been very sick for the last few days :-p
 
-   Stefan
+> 
+> On Mon, Jan 10, 2022 at 12:24:36PM -0500, Steven Rostedt wrote:
+> > On Mon, 10 Jan 2022 17:11:52 +0000
+> > David Laight <David.Laight@ACULAB.COM> wrote:
+> >   
+> > > From: Steven Rostedt  
+> > > > Sent: 10 January 2022 16:56
+> > > > 
+> > > > From: Steven Rostedt <rostedt@goodmis.org>
+> > > > 
+> > > > Pingfan reported that the following causes a fault:
+> > > > 
+> > > >   echo "filename ~ \"cpu\"" > events/syscalls/sys_enter_openat/filter
+> > > >   echo 1 > events/syscalls/sys_enter_at/enable
+> > > > 
+> > > > The reason is that trace event filter treats the user space pointer
+> > > > defined by "filename" as a normal pointer to compare against the "cpu"
+> > > > string. If the string is not loaded into memory yet, it will trigger a
+> > > > fault in kernel space:    
+> 
+> For accurate commit log, the swapped-out user page is not the root cause
+> of this bug is "supervisor read access in kernel mode". And it is trueth
+> that swapped-out user page can trigger a bug here, but it should be a
+> different a stack.
 
+Yeah, it's true that the bug that triggered is the supervisor access, but
+that's more of a security concern (and an option that triggers this, to
+find bugs of this kind :-)  To me, the real bug is the random read of a
+pointer. I can update the change log to be a bit more specific.
 
-On 12/23/21 20:12, Stefan Berger wrote:
-> Shuah,
->
->   are you going to take this fix here - only 1/2 ?
->
-> https://lore.kernel.org/lkml/20211128041052.1395504-1-stefanb@linux.vnet.ibm.com/T/#m21209a978c237368499ce5f082f3c0fc03bcbbeb 
->
->
->   Stefan
->
-> On 11/29/21 18:39, Jarkko Sakkinen wrote:
->> On Sat, Nov 27, 2021 at 11:10:51PM -0500, Stefan Berger wrote:
->>> From: Stefan Berger <stefanb@linux.ibm.com>
->>>
->>> Determine an available PCR bank to be used by a test case by 
->>> querying the
->>> capability TPM2_GET_CAP. The TPM2 returns TPML_PCR_SELECTIONS that
->>> contains an array of TPMS_PCR_SELECTIONs indicating available PCR banks
->>> and the bitmasks that show which PCRs are enabled in each bank. Collect
->>> the data in a dictionary. From the dictionary determine the PCR bank 
->>> that
->>> has the PCRs enabled that the test needs. This avoids test failures 
->>> with
->>> TPM2's that either to not have a SHA-1 bank or whose SHA-1 bank is
->>> disabled.
->>>
->>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
->>
->> /Jarkko
+> 
+> > > 
+> > > If a userspace pointer can end up the kernel structure then presumably
+> > > a 'dodgy' user program can supply an arbitrary kernel address instead?
+> > > This may give the user the ability to read arbitrary kernel addresses
+> > > (including ones that are mapped to PCIe IO addresses).
+> > > Doesn't sound good at all.  
+> > 
+> > Only root has access to the information read here. All tracing requires
+> > root or those explicitly given access to the tracing data, which pretty
+> > much allows all access to kernel internals (including all memory). So
+> > nothing to worry about here ;-)
+> >   
+> 
+> I am not sure about the opposite way. Since kernel is not allowed to
+> access userspace most of the time, then is it an leakage, which looks
+> like:
+>     use tracepoint as trampoline to uaccess.
+>     read out user info from ustring_per_cpu
+> 
+> But any kernel code can call copy_from_user() function family freely, so
+> it is not a problem caused by this patch, right? Or ustring_per_cpu
+> should be zeroed out.
+
+And you can use tracing to create a kprobe that can read user space at
+almost any place in the kernel. Hence, we have API that allows root to do
+this, which is why I'm not concerned about it.
+
+> 
+> For V2, feel free to add "Tested-by"
+> 
+> 
+
+Thanks,
+
+-- Steve

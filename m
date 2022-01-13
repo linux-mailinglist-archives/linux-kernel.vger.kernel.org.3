@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9422F48DC0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB2348DC0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236828AbiAMQmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 11:42:08 -0500
-Received: from foss.arm.com ([217.140.110.172]:48516 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231919AbiAMQmE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S236821AbiAMQmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 11:42:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236816AbiAMQmE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 13 Jan 2022 11:42:04 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3223E106F;
-        Thu, 13 Jan 2022 08:42:04 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED6483F774;
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52B1C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 08:42:03 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id f13so359667plg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 08:42:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0RghS5in1nYPx/uEnl/bNk9uJrbAUCko5BnNI6t0d7A=;
+        b=bd3akMxtoY9qvnWlzDOgFdInNxVVmO3jCTQLlz+Cnj32CwJ/Sd+XulfUMvK2MYIbDK
+         7PCplGYtZY46Gasvui4ntsgcBBZkej6h3k9GHvHaa7sE6jGx59JWCDaGVT7CA3KpzJU7
+         yHl93n7/RD4QoBPDhY3u3w1pAsrcjwfomlVc+eSMtHdZLUceGAp85X6gloMAtk+GooNA
+         MG/XziYC8b8Ive3teUvzEGvWddQVX4HuwoT+Fqh5EfunOv/Gie4zAeeC2Dro78ZnzhRd
+         G3MQqVYcoqWZR5I85Q9TOhGFHxWFJt0/U66P/53E3RtF79RQiakO+kPK4SSPH8PRNIls
+         m1bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=0RghS5in1nYPx/uEnl/bNk9uJrbAUCko5BnNI6t0d7A=;
+        b=tFSI+HMzxL145R9ePgP+4yNj17rrp9XSmczipWMYJ5k6q7LSzAogBzvRQMtXYOL7aU
+         DEXAeDsDl0BLEBz/0NYY8e9Q/EnhhnmX44igmZbCCyf5WWAb7el5FB+bEgOWREQBPIiG
+         QCiI+kN99F1ll2nRl4ZBaAcchvoWxR+EKLw8fEZ4YnoxJy3qG2oG1DRwOmG1CA+8GuBX
+         iZXCwmOm3SszlTVVRrUgr2Cj3OxrOIWp/K/fj5yAseGC1CTRIZR2K/j854KMlBSeNHDM
+         RDZ+jw5uTmjR9Yg24bF5CD1dB0Dz8UckVPED7hdYoRENe3oifI7FZUPoB8oKtyJbAHZM
+         dWdQ==
+X-Gm-Message-State: AOAM530kD17YU4sfceuzSm+aS7Tak1vN/hhAcmR4HCs/KWTcnvprvfqs
+        KzdTL+0HrGfXsSuf/+P56s3XOuiEj8YRhQ==
+X-Google-Smtp-Source: ABdhPJxLuSieBetOIm6dcQtHfslT5H9JQcUa7G0tZf3pMJQrfLp/pmtvJyCqg1YC06fJYRbB8wg8ng==
+X-Received: by 2002:a17:90a:b281:: with SMTP id c1mr6047150pjr.221.1642092123302;
+        Thu, 13 Jan 2022 08:42:03 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id a14sm3660044pfv.18.2022.01.13.08.42.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 13 Jan 2022 08:42:02 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Josef Bacik <josef@toxicpanda.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, guro@fb.com, clm@fb.com
-Subject: Re: [REGRESSION] 5-10% increase in IO latencies with nohz balance patch
-In-Reply-To: <YdMhQRq1K8tW+S05@localhost.localdomain>
-References: <87bl22byq2.mognet@arm.com> <YaUuyN3h07xlEx8j@localhost.localdomain> <878rx6bia5.mognet@arm.com> <87wnklaoa8.mognet@arm.com> <YappSLDS2EvRJmr9@localhost.localdomain> <87lf0y9i8x.mognet@arm.com> <87v8zx8zia.mognet@arm.com> <YbJWBGaGAW/MenOn@localhost.localdomain> <99452126-661e-9a0c-6b51-d345ed0f76ee@leemhuis.info> <87tuf07hdk.mognet@arm.com> <YdMhQRq1K8tW+S05@localhost.localdomain>
-Date:   Thu, 13 Jan 2022 16:41:57 +0000
-Message-ID: <87k0f37fl6.mognet@arm.com>
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 13 Jan 2022 06:42:01 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] kernfs: Reduce contention around global per-fs
+ kernfs_rwsem.
+Message-ID: <YeBWWWa030xTftWe@slm.duckdns.org>
+References: <20220113104259.1584491-1-imran.f.khan@oracle.com>
+ <20220113104259.1584491-3-imran.f.khan@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220113104259.1584491-3-imran.f.khan@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/22 11:16, Josef Bacik wrote:
-> On Wed, Dec 22, 2021 at 04:07:35PM +0000, Valentin Schneider wrote:
->> 
->> Hi,
->> 
->> On 22/12/21 13:42, Thorsten Leemhuis wrote:
->> > What's the status here? Just wondering, because there hasn't been any
->> > activity in this thread since 11 days and the festive season is upon us.
->> >
->> > Was the discussion moved elsewhere? Or is this still a mystery? And if
->> > it is: how bad is it, does it need to be fixed before Linus releases 5.16?
->> >
->> 
->> I got to the end of bisect #3 yesterday, the incriminated commit doesn't
->> seem to make much sense but I've just re-tested it and there is a clear
->> regression between that commit and its parent (unlike bisect #1 and #2):
->> 
->> 2127d22509aec3a83dffb2a3c736df7ba747a7ce mm, slub: fix two bugs in slab_debug_trace_open()
->> write_clat_ns_p99     195395.92     199638.20      4797.01    2.17%
->> write_iops             17305.79      17188.24       250.66   -0.68%
->> 
->> write_clat_ns_p99     195543.84     199996.70      5122.88    2.28%
->> write_iops             17300.61      17241.86       251.56   -0.34%
->> 
->> write_clat_ns_p99     195543.84     200724.48      5122.88    2.65%
->> write_iops             17300.61      17246.63       251.56   -0.31%
->> 
->> write_clat_ns_p99     195543.84     200445.41      5122.88    2.51%
->> write_iops             17300.61      17215.47       251.56   -0.49%
->> 
->> 6d2aec9e123bb9c49cb5c7fc654f25f81e688e8c mm/mempolicy: do not allow illegal MPOL_F_NUMA_BALANCING | MPOL_LOCAL in mbind() 
->> write_clat_ns_p99     195395.92     197942.30      4797.01    1.30%
->> write_iops             17305.79      17246.56       250.66   -0.34%
->> 
->> write_clat_ns_p99     195543.84     196183.92      5122.88    0.33%
->> write_iops             17300.61      17310.33       251.56    0.06%
->> 
->> write_clat_ns_p99     195543.84     196990.71      5122.88    0.74%
->> write_iops             17300.61      17346.32       251.56    0.26%
->> 
->> write_clat_ns_p99     195543.84     196362.24      5122.88    0.42%
->> write_iops             17300.61      17315.71       251.56    0.09%
->> 
->> It's pure debug stuff and AFAICT is a correct fix...
->> @Josef, could you test that on your side?
->
-> Sorry, holidays and all that.  I see 0 difference between the two commits, and
-> no regression from baseline.  It'll take me a few days to recover from the
-> holidays, but I'll put some more effort into actively debugging wtf is going on
-> here on my side since we're all having trouble pinning down what's going
-> on.
+Hello,
 
-Humph, that's unfortunate... I just came back from my holidays, so I'll be
-untangling my inbox for the next few days. Do keep us posted!
+On Thu, Jan 13, 2022 at 09:42:59PM +1100, Imran Khan wrote:
+> @@ -748,11 +749,14 @@ int kernfs_add_one(struct kernfs_node *kn)
+>  		goto out_unlock;
+>  
+>  	/* Update timestamps on the parent */
+> +	rwsem = iattr_rwsem_ptr(parent);
+> +	down_write(rwsem);
+>  	ps_iattr = parent->iattr;
+>  	if (ps_iattr) {
+>  		ktime_get_real_ts64(&ps_iattr->ia_ctime);
+>  		ps_iattr->ia_mtime = ps_iattr->ia_ctime;
+>  	}
+> +	up_write(rwsem);
+>  
+>  	up_write(&root->kernfs_rwsem);
 
-> Thanks,
->
-> Josef
+Hmmm, so the additions / removals are still fs-global lock protected. Would
+it be possible to synchronize them through hashed locks too? We can provide
+double locking helpers - look up locks for both parent and child and if
+different lock in the defined order (parent first most likely) and record
+what happened in a token so that it can be undone later.
+
+Without going through the code carefully, I don't remember whether there's
+something which depends on global locking but I'm sure we can fix them too.
+It'd be really nice if we can make all operations similarly scalable cuz
+with heavy stacking addition/removals can get pretty hot too.
+
+Thanks.
+
+-- 
+tejun

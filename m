@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC86048D862
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0424648D865
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbiAMNAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 08:00:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41888 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiAMNAN (ORCPT
+        id S234920AbiAMNAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 08:00:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234886AbiAMNAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 08:00:13 -0500
+        Thu, 13 Jan 2022 08:00:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C916C061748;
+        Thu, 13 Jan 2022 05:00:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F89B61C50;
-        Thu, 13 Jan 2022 13:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DBC04C36AEF;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 982ECCE2023;
+        Thu, 13 Jan 2022 13:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CAE1AC36AED;
         Thu, 13 Jan 2022 13:00:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1642078811;
-        bh=s+duKtAVtGsUQyltgq7UzQG59GI6tZ6fWYE6VAu1CG0=;
+        bh=Pcp2+IA9W2UqzZ3KCK/QZsr41sDDGaYv1iGIzsGnkLs=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=IvZsycrtYAxO6Krl//JYJPjlQRz5AgQcv30DTXCALXbs0iAtT3mJPsD7gueHWZYr3
-         577OTEN5Ql+WEpG/yr4rRH40T/wJCQUo0Nr+FmLb7jMf2So4Mboxk3c+TMhNpkJaZY
-         Ff1BYNfDKL3n6xt1TyF+zPzM8haZz9Fp63snOG7/wxEVxzM8s90e2W72PXumJ3bTyX
-         IHLqJ6pYnYM69mkEaUqS/yngn2H/irSDWQ8RNPPdPOwnoHEyBW0u4u1Fc5uzPc4UA/
-         LtdhwiuaoqvFPseLjK2/m2Dbj4smgwSWj6/khDdWaWOmY3wT/mu0i5GNp11KYQArMN
-         J4JG3O6EpEAZw==
+        b=s8ZP0yPIW7qxXczd2S0UYyU9alNOJpDj7xal5H32hGZOLikRbL6oSOjundaYXguca
+         6ECNw+vcRp5DZgPzNmIYJ63V8/K9ECuePte7DoUrzbcfoIrLbvBR102G0W+2CoII5O
+         dOOtAfXFPh2ewin57jcaRutJdz+2oOPChOUq5Zxn2skN5SeVTSbh30OiqNC/HyMu/a
+         J/fcLVP5n9O8AFm3UgHCKaO6GGUgiBs4tDWXotU1JzlT0rFYGuf7wrei7Ti0Pqp9GE
+         qUpw5l747cYcgJmd4pdsLHAWEmnW56HuUEuO0qDUJzw1FFoafGQtE0r/jlDDB5Ixbv
+         pSgRgE9hX1dNg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C1B2CF6079C;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B627AF6078E;
         Thu, 13 Jan 2022 13:00:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] kselftests/net: adapt the timeout to the largest runtime
+Subject: Re: [PATCH] atm: iphase: remove redundant pointer skb
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164207881178.26897.5058098241493061619.git-patchwork-notify@kernel.org>
+Message-Id: <164207881173.26897.4543675322027026942.git-patchwork-notify@kernel.org>
 Date:   Thu, 13 Jan 2022 13:00:11 +0000
-References: <20220113072859.3431-1-lizhijian@fujitsu.com>
-In-Reply-To: <20220113072859.3431-1-lizhijian@fujitsu.com>
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhoujie2011@fujitsu.com
+References: <20220112235533.1281944-1-colin.i.king@gmail.com>
+In-Reply-To: <20220112235533.1281944-1-colin.i.king@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     3chas3@gmail.com, linux-atm-general@lists.sourceforge.net,
+        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -54,25 +57,19 @@ Hello:
 This patch was applied to netdev/net.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Thu, 13 Jan 2022 15:28:59 +0800 you wrote:
-> timeout in settings is used by each case under the same directory, so
-> it should adapt to the maximum runtime.
+On Wed, 12 Jan 2022 23:55:33 +0000 you wrote:
+> The pointer skb is redundant, it is assigned a value that is never
+> read and hence can be removed. Cleans up clang scan warning:
 > 
-> A normally running net/fib_nexthops.sh may be killed by this unsuitable
-> timeout. Furthermore, since the defect[1] of kselftests framework,
-> net/fib_nexthops.sh which might take at least (300 * 4) seconds would
-> block the whole kselftests framework previously.
-> $ git grep -w 'sleep 300' tools/testing/selftests/net
-> tools/testing/selftests/net/fib_nexthops.sh:    sleep 300
-> tools/testing/selftests/net/fib_nexthops.sh:    sleep 300
-> tools/testing/selftests/net/fib_nexthops.sh:    sleep 300
-> tools/testing/selftests/net/fib_nexthops.sh:    sleep 300
+> drivers/atm/iphase.c:205:18: warning: Although the value stored
+> to 'skb' is used in the enclosing expression, the value is never
+> actually read from 'skb' [deadcode.DeadStores]
 > 
 > [...]
 
 Here is the summary with links:
-  - kselftests/net: adapt the timeout to the largest runtime
-    https://git.kernel.org/netdev/net/c/de0e444706ed
+  - atm: iphase: remove redundant pointer skb
+    https://git.kernel.org/netdev/net/c/d7b430341102
 
 You are awesome, thank you!
 -- 

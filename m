@@ -2,133 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F0348D9A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5E248D9A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235626AbiAMOWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 09:22:34 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:37540 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbiAMOWd (ORCPT
+        id S235636AbiAMOYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:24:16 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:42539 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230165AbiAMOYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:22:33 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 0E4D21F3BC;
-        Thu, 13 Jan 2022 14:22:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642083750; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Iyvqg/dBXTkYBEXdGm9XZJEu9w+DMloEYh8FExa/h6k=;
-        b=IXBVlqj6nBc2M94zAKEdE7uSiJV4VfLqm6EJDEKI+9RgOhbCjzbdJoP71t4eK6l9OpwRDw
-        Mh2ZQ5RJYNADEHO0XoHcDCwckv3dstu+TUTwgj6mND/yoF5oobAP3JXEzSsBGL2TrEH6v6
-        JS5c9U0ZI9NdU7l/QX0te9RZ5IlsF4w=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9D152A3B84;
-        Thu, 13 Jan 2022 14:22:29 +0000 (UTC)
-Date:   Thu, 13 Jan 2022 15:22:29 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        kernel@gpiccoli.net, senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, feng.tang@intel.com,
-        kexec@lists.infradead.org, dyoung@redhat.com,
-        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com
-Subject: Re: [PATCH V2] panic: Move panic_print before kmsg dumpers
-Message-ID: <YeA1pXz7f0wqSnah@alley>
-References: <20220106212835.119409-1-gpiccoli@igalia.com>
- <Yd/0K1x7ILw3Qa46@alley>
- <ba0e29ba-0e08-df6e-ade5-eb58ae2495e3@igalia.com>
+        Thu, 13 Jan 2022 09:24:15 -0500
+Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MBjA4-1n2UBW0DSm-00C9MI; Thu, 13 Jan 2022 15:24:14 +0100
+Received: by mail-wr1-f48.google.com with SMTP id k18so10355889wrg.11;
+        Thu, 13 Jan 2022 06:24:13 -0800 (PST)
+X-Gm-Message-State: AOAM533tEZAwRlPx4iIUeWVpit2fa8o/mS27pINOdlThUZ7S/RiVKHz2
+        V8MmMrWiunOqBsZrvU8fCzADPvgD4hXe2W2szV4=
+X-Google-Smtp-Source: ABdhPJzwdYNeuVL1yYVlSfvEK+FTNzOKpNJueoBQfapcDBGMQlXdww3vJ6mdjQ5Vf5ltdNIbHFcn1y8+QiEEWUP219Q=
+X-Received: by 2002:a5d:6ac7:: with SMTP id u7mr4238291wrw.219.1642083853640;
+ Thu, 13 Jan 2022 06:24:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ba0e29ba-0e08-df6e-ade5-eb58ae2495e3@igalia.com>
+References: <20220113121143.22280-1-alim.akhtar@samsung.com>
+ <CGME20220113122413epcas5p46cb2cafb73936c423017240f98f72845@epcas5p4.samsung.com>
+ <20220113121143.22280-15-alim.akhtar@samsung.com> <55c22c3a-57ea-3320-ccb9-f03643563235@canonical.com>
+In-Reply-To: <55c22c3a-57ea-3320-ccb9-f03643563235@canonical.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 13 Jan 2022 15:23:57 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0etf+AybUe5O9uRLAbo4J145t0-ThkEccNtKzue+0-qA@mail.gmail.com>
+Message-ID: <CAK8P3a0etf+AybUe5O9uRLAbo4J145t0-ThkEccNtKzue+0-qA@mail.gmail.com>
+Subject: Re: [PATCH 14/23] arm64: dts: fsd: Add initial device tree support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SoC Team <soc@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Pankaj Dubey <pankaj.dubey@samsung.com>, linux-fsd@tesla.com,
+        Arjun K V <arjun.kv@samsung.com>,
+        Aswani Reddy <aswani.reddy@samsung.com>,
+        Ajay Kumar <ajaykumar.rs@samsung.com>,
+        Sriranjani P <sriranjani.p@samsung.com>,
+        Chandrasekar R <rcsekar@samsung.com>,
+        Shashank Prashar <s.prashar@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:7BPRVd2KsOfp6FWr24wAaVhirUW9rNpHQv7NpYpVUsp7tt30Dha
+ j23Kxt68dpwB+bLGGHBrcSzKIQ4yWozz8SrjACzkvHE+i6sYk/WuegjVFQk/clMoW+sBV66
+ dxzEdNexgwNZQOZc72vSJlCuhYLKhfGujPiZx9AcNC8A8Yz3AQ25InyytdgH2u9UdAJ1Cnw
+ HoL0wZwLRKqo1TtUXoTOQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/Lf+mNMsya4=:ODGibD+HcJW7nRTYSF9hYn
+ NnndQEhNXlcWzFS0FC5kjCBHUwmGWi3JBWpP4E3ojJjycuh+WQZF2dZ3X8pM5G1PW/Pa2q4mz
+ h7CvoTb8whYSKYbWpcf2GqqyJS63UbdJwfrQgY+RmljmcL8O+ubi1+FLTmxAU8GKMJbZ5Y+Oe
+ jkRpXagkJ1FvcD7T0FYD6/utdUIrsAQ0DHWmh1Q7SJ1ZGnkMwW0GQ6YB1kx9uf1nZykkBSZiq
+ OD9S2iP4reWW7HrhZxog69dGoG1VqSNQTFBzyND4NXwwjsmmtVdhIwp3jS0P7v84rKOO0xbnT
+ DSw8vmVMXFNXk9ND7OSCuc1t++ZuVpGN8VEA+ue4IXzXYDTWMjfIWIRRcxB572mad4LzX15UO
+ +L26WPBEnftclnZB1FO71dq5yejhJtHOSdZygvNlpIDsg9GdN8AFCPI6wEKGbU3oCWI4ivB7J
+ v33R/zIKq4Nd3u8NE2J+vphKXc6p8kSjoV9b/HF2v16fo7lwX5Cdw5YEw0hoezzFHnnnLpfrY
+ H6gq2ioZCCLqyzqCuXllY7rlzZcU8AsZLigNpjUHFH6QlCjr08jeuf1re8ngqSVT6sK216tuP
+ dyP0c+3Rxdg2tNh+0beQxAk6sact2u9B/MU9JoHthtNeHoE+DbvFdWXmvP4ssDlxaQBVv/UIL
+ JYe2Xl10EUnvLI8wkRwVb/B/M+7d6gWPoOtWUX6Cc7Z03k4OigwIfSTUy7knrxki2fJ4=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-01-13 09:34:01, Guilherme G. Piccoli wrote:
-> On 13/01/2022 08:50, Petr Mladek wrote:
-> >> @@ -249,7 +252,7 @@ void panic(const char *fmt, ...)
-> >>  	 * show some extra information on kernel log if it was set...
-> >>  	 */
-> >>  	if (kexec_crash_loaded())
-> >> -		panic_print_sys_info();
-> >> +		panic_print_sys_info(false);
-> > 
-> > panic_print_sys_info(false) will be called twice when both
-> > kexec_crash_loaded() and _crash_kexec_post_notifiers are true.
-> > 
-> > Do we really need to call panic_print_sys_info() here? All information
-> > provided by panic_print_sys_info(false) can be found also in
-> > the crash dump.
-> > 
-> >>  	/*
-> >>  	 * If we have crashed and we have a crash kernel loaded let it handle
-> >> @@ -283,6 +286,8 @@ void panic(const char *fmt, ...)
-> >>  	 */
-> >>  	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
-> >>  
-> >> +	panic_print_sys_info(false);
-> > 
-> > This is where the info might be printed 2nd time.
-> > 
-> >> +
-> >>  	kmsg_dump(KMSG_DUMP_PANIC);
+On Thu, Jan 13, 2022 at 2:16 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+> >  ARM/TETON BGA MACHINE SUPPORT
+> >  M:   "Mark F. Brown" <mark.brown314@gmail.com>
+> >  L:   linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> > diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> > index 54e3910e8b9b..bb8a047c2359 100644
+> > --- a/arch/arm64/Kconfig.platforms
+> > +++ b/arch/arm64/Kconfig.platforms
+> > @@ -267,6 +267,12 @@ config ARCH_TEGRA
+> >       help
+> >         This enables support for the NVIDIA Tegra SoC family.
+> >
+> > +config ARCH_TESLA_FSD
+> > +     bool "ARMv8 based Tesla platform"
+> > +     select ARCH_EXYNOS
+>
+> How similar it is? I think it is better to duplicate Exynos
+> selections/options here, instead of selecting entire ARCH. If this would
+> require "depends on ARCH_EXYNOS || ARCH_TESLA_FSD" everywhere in the
+> drivers, it's a hint that it is not a separate SoC but it is an Exynos,
+> so it might not need a new sub-architecture.
 
-> Thanks for catching this issue - indeed, if
-> "_crash_kexec_post_notifiers" is true, with this patch we print stuff
-> twice. I will submit a V3 that guards against that, using a bool, makes
-> sense to you?
+Agreed, the SoC family options mainly exist so we can quickly enable or
+disable drivers based on what a kernel is built for. If most of the drivers
+for this SoC are shared with Exynos, I think having a single option is
+sufficient, but it may be worth pointing out both in the help text.
 
-It might be possible to check kexec_crash_loaded() on the two
-locations. But I think about even easier solution, see below.
+If we want to have a separate option (mainly to help users find it), maybe
+a 'depends on ARCH_EXYNOS' would be better. How many uses of
+ARCH_TESLA_FSD are there?
 
-
-> The interesting question here is:
-> > Do we really need to call panic_print_sys_info() here? All information
-> > provided by panic_print_sys_info(false) can be found also in
-> > the crash dump.
-> 
-> So, we indeed need that in our use case. Crash is meant to be used
-> post-mortem, i.e., you made a full vmcore collection and then, of
-> course, you have basically all the data you need accessible though the
-> crash tool.
-> 
-> Problem is: in our use case, we want more data than a regular dmesg in a
-> panic event (hence we use panic_print), but we don't collect a full
-> crash dump, due to its big size. Also, as you can imagine, we do favor
-> pstore over kdump, but it might fail due to a variety of reasons (like
-> not having a free RAM buffer for ramoops), so kdump is our fallback.
-> Hence, we'd like to be able to use panic_print with both kdump and
-> pstore, and for that, both patches are needed.
-
-Fair enough.
-
-OK, do we have any specific reason why panic_print_sys_info()
-should get called right before kmsg_dump() when this code patch
-is used?
-
-Alternative solution would be to remove the check of
-kexec_crash_loaded() and always call panic_print_sys_info(false)
-at the beginning (after kgdb_panic(buf)).
-
-The advantage is that panic_print_sys_info(false) will be always
-called on the same location. It will give the same results
-in all code paths so that it will be easier to interpret them.
-And it will have the same problems so it should be easier
-to debug and maintain.
-
-It is possible that it will not work for some users. Also it is
-possible that it might cause some problems. But it is hard to
-guess at least for me.
-
-I think that we might try it and see if anyone complains.
-Honestly, I think that only few people use panic_printk_sys_info().
-And your use-case makes sense.
-
-Best Regards,
-Petr
+        Arnd

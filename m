@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B1B48D035
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 02:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E1248D036
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 02:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiAMBi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 20:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
+        id S231410AbiAMBjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 20:39:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbiAMBiy (ORCPT
+        with ESMTP id S231406AbiAMBi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 20:38:54 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0B4C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 17:38:54 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id a1-20020a17090a688100b001b3fd52338eso7430156pjd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 17:38:54 -0800 (PST)
+        Wed, 12 Jan 2022 20:38:57 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD41C06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 17:38:57 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so8505852pji.3
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 17:38:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bX0J0QvBkrSACNB0AIqODgrORCPOYwdsklTN5tXEe1U=;
-        b=fpAHsAVXw5UCngeHLrb7wP1mpvyfVGHjpjP1W+L4U4shgZsZBw658JfalDvxgr4k/b
-         lJg5KHyHxSBbplP27z4SMQI9+2dFhPIchO6mO4rC9XNwuNNTkyFoE7Dgaqcm1BIGflFM
-         beTAdQfOi89WS0bjAph8Of77zoswIJANkwoQmrvpebBy2vCau5qWn6FpkRWSo/q2l59s
-         X3bWPZ0EXwwboowzK+2D7zasV7ct++tSsCGZ70Q7FI63/vSGR6jPZq7USLS+gUBQklV8
-         Eh5uH2E4hoPl1U50VqIijEQs0Z+LX9OlsCef/c1U1WN2oKG27/DSxUTv46yBE4bvx8z5
-         ga+g==
+        bh=kryIRj8itYCF1TTsF9+Gx7ZLlBZd5qrSWyChaI+fLhg=;
+        b=coAPwOqiiQXqDLnQJHZghIMfurOOSA/kL6ULbmhw0jkGFdTvcflOkqj4RbMWaPBidm
+         G5S0SfDfRQsHUW41U6NyKQ4CHfYCIQ5iTrXWHm+fVd5zFVFi58TaqpLnL9jacFYu8Fff
+         GtKDClPQkFlKU971PtKkeqG6iFj0XKo6ridlM6wfM4XTt2fG7aiCnz9rS8kfUq1c76F9
+         1KNoNckxuWnQLqzZ7I084YnQZCu9ANVjZy80Z/OwJ/jAs7wAF8t/mILDwkeJ6pAsUKtt
+         nvA4W1ha8lWXrZdXeH6P5WAuKM1gcc+3eL6KRw91GahiAlozoF362MUBtM8k4v5dYnAW
+         4v2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bX0J0QvBkrSACNB0AIqODgrORCPOYwdsklTN5tXEe1U=;
-        b=tM/3Z4VsN26Pt4NvmgPCEfyB9l4GlHTl8itJHteHnLrbC7xkN/iXvWMRTmu4yLdCo1
-         IasfocghilVV/PZF3cub+gFm9IkV5TvLMStG46wXj87VszjUN7tdr/iIbBZXCmCdiDeU
-         D60x3uNUJ3TSbnjJlbou+33FLvQUG1xbJp/4IYSGSLoH7knna/JoZq00KSoUmWfhS3rQ
-         Fes4OijqshM8kIe6L7ZCOuJ8QFUydcWi6uZhEO5n+BfV+8Px+A99d8UayV6UG+srmlGv
-         /mCyhfK2HcEtxQ4TIoqtDtA/rV/CIeGqRx5wGk6T/slD+RptkPuNP1o6rVZjykuOhIPk
-         TkPQ==
-X-Gm-Message-State: AOAM533urLvzRStAaHhv0UkwLLCgpoNG+PrQi8aAHa6RrReCHU1WFw7u
-        stIq46GZgvp7euiMDlPnrCWaSwf21TDntw==
-X-Google-Smtp-Source: ABdhPJwl3dReaxYrIgKriTiuS0gfAyEWhjC3HjF/5IcIOFCTmGGc0eGPoj8cLHZ8JQVi5jx58r6wnA==
-X-Received: by 2002:a63:470a:: with SMTP id u10mr2046918pga.346.1642037934349;
-        Wed, 12 Jan 2022 17:38:54 -0800 (PST)
+        bh=kryIRj8itYCF1TTsF9+Gx7ZLlBZd5qrSWyChaI+fLhg=;
+        b=Q0gO11sgrGBTwLbaM2o+8DpVkohq0+myrvCahPJ0Mw+FQDljVrJHk2iotLNN1xfY/B
+         vwSXIq42yORma6BDmHYSTPFZkPg7vc2AV616FP8jsrN8UmZhC47SH2AB2YfzU8/Ij9rN
+         blif4MPM6hNNOxB5XVgdu4TXINlr3x4/cp3NZnlEEblY5YhkPcb3rfTgMd+z8azpHVLm
+         jnulDpaAwXTOHCgRJPSgkCqOEfxPOt0l1qkH6isq/e+KeP0UoLX0ujWYkEsFRjITwKzX
+         CAGU1hYScCLnNEPnNn2kYYVjuWjREHXeJjat01TPcl/5X+k5QL9Tv3KaOthxTE6CElxW
+         h3Vg==
+X-Gm-Message-State: AOAM533X2+sYK6rniury4Vm6SVN6TXPC2V4yw6KrmcWqNfFwsg5X8vue
+        aPn1uktnkuOyUPHP0Mr7f+Y=
+X-Google-Smtp-Source: ABdhPJxTcev08Xzdeh3YZqERwYxHpi7tG1M7pgvAu/On7naj+Y+gLn05OPwqS1yLr/o3ltL93GgoBA==
+X-Received: by 2002:a17:902:c651:b0:148:b0af:6f80 with SMTP id s17-20020a170902c65100b00148b0af6f80mr2206709pls.130.1642037937222;
+        Wed, 12 Jan 2022 17:38:57 -0800 (PST)
 Received: from localhost.localdomain (li567-56.members.linode.com. [192.155.81.56])
-        by smtp.gmail.com with ESMTPSA id b4sm799990pfl.101.2022.01.12.17.38.51
+        by smtp.gmail.com with ESMTPSA id b4sm799990pfl.101.2022.01.12.17.38.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 17:38:53 -0800 (PST)
+        Wed, 12 Jan 2022 17:38:56 -0800 (PST)
 From:   Jeff Xie <xiehuan09@gmail.com>
 To:     rostedt@goodmis.org
 Cc:     mhiramat@kernel.org, mingo@redhat.com, zanussi@kernel.org,
         linux-kernel@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>
-Subject: [PATCH v7 2/4] trace/objtrace: get the value of the object
-Date:   Thu, 13 Jan 2022 09:38:33 +0800
-Message-Id: <20220113013835.503285-3-xiehuan09@gmail.com>
+Subject: [PATCH v7 3/4] trace/objtrace: Add testcases for objtrace
+Date:   Thu, 13 Jan 2022 09:38:34 +0800
+Message-Id: <20220113013835.503285-4-xiehuan09@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220113013835.503285-1-xiehuan09@gmail.com>
 References: <20220113013835.503285-1-xiehuan09@gmail.com>
@@ -64,409 +64,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using objtrace trigger to get the value of the object which from the kernel
-function parameter.
-
-Syntax:
-	objtrace:add:obj[,offset][:type][:count][if <filter>]
-
-Usage:
-	# echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-	# gdb vmlinux
-	(gdb) p &(((struct bio *)0)->bi_iter.bi_size)
-	$1 = (unsigned int *) 0x28
-	# echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
-		 p_bio_add_page_0/trigger
-	# cat /test.txt
+Add a series of testcases to illustrate correct and incorrect usage of
+objtrace trigger.
 
 Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
 ---
- kernel/trace/trace.c         |   2 +-
- kernel/trace/trace_entries.h |   5 +-
- kernel/trace/trace_object.c  | 190 +++++++++++++++++++++++++++++------
- kernel/trace/trace_output.c  |   6 +-
- 4 files changed, 169 insertions(+), 34 deletions(-)
+ .../ftrace/test.d/trigger/trigger-objtrace.tc | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 0b627963e343..d5332ece4c67 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -5591,7 +5591,7 @@ static const char readme_msg[] =
- 	"\t            disable_hist:<system>:<event>\n"
- #endif
- #ifdef CONFIG_TRACE_OBJECT
--	"\t            objtrace:add:obj[:count][if <filter>]\n"
-+	"\t            objtrace:add:obj[,offset][:type][:count][if <filter>]\n"
- #endif
- #ifdef CONFIG_STACKTRACE
- 	"\t\t    stacktrace\n"
-diff --git a/kernel/trace/trace_entries.h b/kernel/trace/trace_entries.h
-index bb120d9498a9..2407c45a568c 100644
---- a/kernel/trace/trace_entries.h
-+++ b/kernel/trace/trace_entries.h
-@@ -413,8 +413,9 @@ FTRACE_ENTRY(object, trace_object_entry,
- 		__field(	unsigned long,		ip		)
- 		__field(	unsigned long,		parent_ip	)
- 		__field(	unsigned long,		object		)
-+		__field(	unsigned long,		value		)
- 	),
- 
--	F_printk(" %ps <-- %ps object:%lx\n",
--		 (void *)__entry->ip, (void *)__entry->parent_ip, __entry->object)
-+	F_printk(" %ps <-- %ps object:%lx value:%lx\n", (void *)__entry->ip,
-+	       (void *)__entry->parent_ip, __entry->object, __entry->value)
- );
-diff --git a/kernel/trace/trace_object.c b/kernel/trace/trace_object.c
-index 4af1c117cbfa..774a9dff4d0a 100644
---- a/kernel/trace/trace_object.c
-+++ b/kernel/trace/trace_object.c
-@@ -11,7 +11,6 @@
- #define MAX_TRACED_OBJECT 5
- static DEFINE_RAW_SPINLOCK(trace_obj_lock);
- static struct trace_event_file event_trace_file;
--static const int max_args_num = 6;
- static atomic_t trace_object_ref;
- static atomic_t num_traced_obj;
- static int exit_trace_object(void);
-@@ -19,8 +18,22 @@ static int init_trace_object(void);
- 
- static struct object_instance {
- 	void *obj;
-+	int obj_type_size;
- } traced_obj[MAX_TRACED_OBJECT];
- 
-+/* objtrace private data */
-+struct objtrace_trigger_data {
-+	struct ftrace_event_field *field;
-+	int offset;
-+	int obj_type_size;
-+};
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
+new file mode 100644
+index 000000000000..d71eb157c51f
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
+@@ -0,0 +1,39 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: event trigger - test objtrace-trigger
++# requires: kprobe_events "objtrace":README
 +
-+/* get the type size for the special object */
-+struct objtrace_fetch_type {
-+	char *name;
-+	int type_size;
-+};
-+
- static bool object_exist(void *obj)
- {
- 	int i, max;
-@@ -39,7 +52,7 @@ static bool object_empty(void)
- 	return !atomic_read(&num_traced_obj);
- }
- 
--static void set_trace_object(void *obj)
-+static void set_trace_object(void *obj, int obj_type_size)
- {
- 	unsigned long flags;
- 
-@@ -59,6 +72,7 @@ static void set_trace_object(void *obj)
- 		goto out;
- 	}
- 	traced_obj[atomic_read(&num_traced_obj)].obj = obj;
-+	traced_obj[atomic_read(&num_traced_obj)].obj_type_size = obj_type_size;
- 	/* make sure the num_traced_obj update always appears after traced_obj update */
- 	smp_wmb();
- 	atomic_inc(&num_traced_obj);
-@@ -67,7 +81,7 @@ static void set_trace_object(void *obj)
- }
- 
- static void submit_trace_object(unsigned long ip, unsigned long parent_ip,
--				 unsigned long object)
-+				 unsigned long object, unsigned long value)
- {
- 
- 	struct trace_buffer *buffer;
-@@ -84,18 +98,66 @@ static void submit_trace_object(unsigned long ip, unsigned long parent_ip,
- 	entry->ip                       = ip;
- 	entry->parent_ip                = parent_ip;
- 	entry->object			= object;
-+	entry->value			= value;
- 
- 	event_trigger_unlock_commit(&event_trace_file, buffer, event,
- 		entry, pc);
- }
- 
-+static inline long get_object_value(unsigned long *val, void *obj, int type_size)
-+{
-+	long ret = 0;
-+
-+	switch (type_size) {
-+	case 1: {
-+		u8 tmp;
-+
-+		ret = copy_from_kernel_nofault(&tmp, obj, sizeof(tmp));
-+		if (ret)
-+			goto out;
-+		*val = tmp;
-+		break;
-+	}
-+	case 2: {
-+		u16 tmp;
-+
-+		ret = copy_from_kernel_nofault(&tmp, obj, sizeof(tmp));
-+		if (ret)
-+			goto out;
-+		*val = tmp;
-+		break;
-+	}
-+	case 4: {
-+		u32 tmp;
-+
-+		ret = copy_from_kernel_nofault(&tmp, obj, sizeof(tmp));
-+		if (ret)
-+			goto out;
-+		*val = tmp;
-+		break;
-+	}
-+	case 8: {
-+		u64 tmp;
-+
-+		ret = copy_from_kernel_nofault(&tmp, obj, sizeof(tmp));
-+		if (ret)
-+			goto out;
-+		*val = tmp;
-+		break;
-+	}
-+	default:
-+		return -EINVAL;
-+	}
-+out:
-+	return ret;
++fail() { #msg
++    echo $1
++    exit_fail
 +}
 +
- static void
- trace_object_events_call(unsigned long ip, unsigned long parent_ip,
- 		struct ftrace_ops *op, struct ftrace_regs *fregs)
- {
--	struct pt_regs *pt_regs = ftrace_get_regs(fregs);
--	unsigned long obj;
--	int bit, n;
-+	unsigned long val = 0;
-+	int bit, n, max;
- 
- 	bit = ftrace_test_recursion_trylock(ip, parent_ip);
- 	if (bit < 0)
-@@ -104,11 +166,12 @@ trace_object_events_call(unsigned long ip, unsigned long parent_ip,
- 	if (object_empty())
- 		goto out;
- 
--	for (n = 0; n < max_args_num; n++) {
--		obj = regs_get_kernel_argument(pt_regs, n);
--		if (object_exist((void *)obj))
--			submit_trace_object(ip, parent_ip, obj);
--	/* The parameters of a function may match multiple objects */
-+	max = atomic_read(&num_traced_obj);
-+	smp_rmb();
-+	for (n = 0; n < max; n++) {
-+		if (get_object_value(&val, traced_obj[n].obj, traced_obj[n].obj_type_size))
-+			goto out;
-+		submit_trace_object(ip, parent_ip, (unsigned long)traced_obj[n].obj, val);
- 	}
- out:
- 	ftrace_test_recursion_unlock(bit);
-@@ -124,12 +187,15 @@ trace_object_trigger(struct event_trigger_data *data,
- 		   struct trace_buffer *buffer,  void *rec,
- 		   struct ring_buffer_event *event)
- {
-+	struct objtrace_trigger_data *obj_data = data->private_data;
-+	struct ftrace_event_field *field;
-+	void *obj, *val = NULL;
- 
--	struct ftrace_event_field *field = data->private_data;
--	void *obj = NULL;
--
--	memcpy(&obj, rec + field->offset, sizeof(obj));
--	set_trace_object(obj);
-+	field = obj_data->field;
-+	memcpy(&val, rec + field->offset, sizeof(val));
-+	/* get the final object */
-+	obj = val + obj_data->offset;
-+	set_trace_object(obj, obj_data->obj_type_size);
- }
- 
- static void
-@@ -140,8 +206,10 @@ trace_object_trigger_free(struct event_trigger_ops *ops,
- 		return;
- 
- 	data->ref--;
--	if (!data->ref)
-+	if (!data->ref) {
-+		kfree(data->private_data);
- 		trigger_data_free(data);
-+	}
- }
- 
- static void
-@@ -276,6 +344,22 @@ static void unregister_object_trigger(char *glob, struct event_trigger_ops *ops,
- 	}
- }
- 
-+static const struct objtrace_fetch_type objtrace_fetch_types[] = {
-+	{"u8", 1},
-+	{"s8", 1},
-+	{"x8", 1},
-+	{"u16", 2},
-+	{"s16", 2},
-+	{"x16", 2},
-+	{"u32", 4},
-+	{"s32", 4},
-+	{"x32", 4},
-+	{"u64", 8},
-+	{"s64", 8},
-+	{"x64", 8},
-+	{}
-+};
++echo 'p bio_add_page arg1=$arg1' > kprobe_events
 +
- static int
- event_object_trigger_callback(struct event_command *cmd_ops,
- 		       struct trace_event_file *file,
-@@ -283,19 +367,22 @@ event_object_trigger_callback(struct event_command *cmd_ops,
- {
- 	struct event_trigger_data *trigger_data;
- 	struct event_trigger_ops *trigger_ops;
-+	struct objtrace_trigger_data *obj_data;
- 	struct trace_event_call *call;
- 	struct ftrace_event_field *field;
--	char *objtrace_cmd;
--	char *trigger = NULL;
--	char *arg;
--	char *number;
--	int ret;
-+	char *type, *tr, *obj, *tmp, *trigger = NULL;
-+	char *number, *objtrace_cmd;
-+	int ret, i, def_type_size, obj_type_size = 0;
-+	long offset = 0;
- 
- 	ret = -EINVAL;
- 	if (!param)
- 		goto out;
- 
--	/* separate the trigger from the filter (c:a:n [if filter]) */
-+	/*
-+	 * separate the trigger from the filter:
-+	 * objtrace:add:OBJ[,OFFS][:TYPE][:COUNT] [if filter]
-+	 */
- 	trigger = strsep(&param, " \t");
- 	if (!trigger)
- 		goto out;
-@@ -309,33 +396,79 @@ event_object_trigger_callback(struct event_command *cmd_ops,
- 	if (!objtrace_cmd || strcmp(objtrace_cmd, "add"))
- 		goto out;
- 
--	arg = strsep(&trigger, ":");
--	if (!arg)
-+	obj = strsep(&trigger, ":");
-+	if (!obj)
- 		goto out;
++FEATURE=`grep objtrace events/kprobes/p_bio_add_page_0/trigger`
++if [ -z "$FEATURE" ]; then
++    echo "objtrace trigger is not supported"
++    exit_unsupported
++fi
 +
-+	tr = strchr(obj, ',');
-+	if (!tr)
-+		offset = 0;
-+	else {
-+		*tr++ = '\0';
-+		ret = kstrtol(tr, 0, &offset);
-+		if (ret)
-+			goto out;
-+	}
++echo "Test objtrace trigger"
++echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > \
++	events/kprobes/p_bio_add_page_0/trigger
++if [ -z $? ]; then
++	fail "objtrace trigger syntax error"
++fi
 +
-+	ret = -EINVAL;
- 	call = file->event_call;
--	field = trace_find_event_field(call, arg);
-+	field = trace_find_event_field(call, obj);
- 	if (!field)
- 		goto out;
- 
- 	if (field->size != sizeof(void *))
- 		goto out;
-+	def_type_size = sizeof(void *);
-+	if (!trigger) {
-+		obj_type_size = def_type_size;
-+		goto skip_get_type;
-+	}
- 
-+	tmp = trigger;
-+	type = strsep(&trigger, ":");
-+	if (!type)
-+		obj_type_size = def_type_size;
-+	else if (isdigit(type[0])) {
-+		obj_type_size = def_type_size;
-+		trigger = tmp;
-+	} else {
-+		for (i = 0; objtrace_fetch_types[i].name; i++) {
-+			if (strcmp(objtrace_fetch_types[i].name, type) == 0) {
-+				obj_type_size = objtrace_fetch_types[i].type_size;
-+				break;
-+			}
-+		}
-+	}
-+	if (!obj_type_size)
-+		goto out;
-+skip_get_type:
- 	trigger_ops = cmd_ops->get_trigger_ops(cmd, trigger);
- 
- 	ret = -ENOMEM;
-+	obj_data = kzalloc(sizeof(*obj_data), GFP_KERNEL);
-+	if (!obj_data)
-+		goto out;
++echo "Test objtrace semantic errors"
 +
-+	obj_data->field = field;
-+	obj_data->offset = offset;
-+	obj_data->obj_type_size = obj_type_size;
++# Being lack of objtrace command
++! echo 'objtrace:arg1,0x28:u32:1' > events/kprobes/p_bio_add_page_0/trigger
++# Bad parameter name
++! echo 'objtrace:add:argx:u32:1' > events/kprobes/p_bio_add_page_0/trigger
 +
- 	trigger_data = kzalloc(sizeof(*trigger_data), GFP_KERNEL);
--	if (!trigger_data)
-+	if (!trigger_data) {
-+		kfree(obj_data);
- 		goto out;
-+	}
- 
- 	trigger_data->count = -1;
- 	trigger_data->ops = trigger_ops;
- 	trigger_data->cmd_ops = cmd_ops;
--	trigger_data->private_data = field;
-+	trigger_data->private_data = obj_data;
- 	INIT_LIST_HEAD(&trigger_data->list);
- 	INIT_LIST_HEAD(&trigger_data->named_list);
- 
- 	if (glob[0] == '!') {
- 		cmd_ops->unreg(glob+1, trigger_ops, trigger_data, file);
-+		kfree(obj_data);
- 		kfree(trigger_data);
- 		ret = 0;
- 		goto out;
-@@ -390,6 +523,7 @@ event_object_trigger_callback(struct event_command *cmd_ops,
-  out_free:
- 	if (cmd_ops->set_filter)
- 		cmd_ops->set_filter(NULL, trigger_data, NULL);
-+	kfree(obj_data);
- 	kfree(trigger_data);
- 	goto out;
- }
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index d747aed27104..12a971927d8c 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -1553,6 +1553,7 @@ static enum print_line_t trace_object_print(struct trace_iterator *iter, int fla
- 	trace_assign_type(field, iter->ent);
- 	print_fn_trace(s, field->ip, field->parent_ip, flags);
- 	trace_seq_printf(s, " object:0x%lx", field->object);
-+	trace_seq_printf(s, " value:0x%lx", field->value);
- 	trace_seq_putc(s, '\n');
- 
- 	return trace_handle_return(s);
-@@ -1565,9 +1566,8 @@ static enum print_line_t trace_object_raw(struct trace_iterator *iter, int flags
- 
- 	trace_assign_type(field, iter->ent);
- 
--	trace_seq_printf(&iter->seq, "%lx %lx\n",
--			 field->ip,
--			 field->parent_ip);
-+	trace_seq_printf(&iter->seq, "%lx %lx %lx %lx\n", field->ip,
-+			field->parent_ip, field->object, field->value);
- 
- 	return trace_handle_return(&iter->seq);
- }
++echo "reset objtrace trigger"
++
++echo '!objtrace:add:arg1,0x28:u32' > \
++	events/kprobes/p_bio_add_page_0/trigger
++echo '-:p_bio_add_page_0' >> ./kprobe_events
++
++exit 0
 -- 
 2.25.1
 

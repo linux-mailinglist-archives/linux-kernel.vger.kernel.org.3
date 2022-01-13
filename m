@@ -2,101 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCB548DD97
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 19:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F7048DD9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 19:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237293AbiAMSV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 13:21:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiAMSV2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 13:21:28 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C80BC061574;
-        Thu, 13 Jan 2022 10:21:28 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id m4so26174696edb.10;
-        Thu, 13 Jan 2022 10:21:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yMHtdvU9XeJ3wjSZJWX9SQTYtWlQlU+oMcR+hFhhTs0=;
-        b=PJY7Zvl/ThfQH8zKW3lnHfZoumnkwhOusZ+9kOji5+/FBwsaW2S2SjYTSd6Qnw65q+
-         ECQzmssJDalmRBn2fIKreTTTotSHVjnN0qd9Q3aG0i/diFUQSf0noTB18PdpRoM7fNE6
-         QfwisMrbjyDvUqvsrMjJQhnk/mR+DEwd7Qd2NNJr/0E67yp5O5uKQgHk11Xdts+yL+y7
-         +1ETJG1nV/bR7OHzBS5dTu6OndnAiupFN6jf8bR/rGP1hZYgvGKNwrUoCXJY+On8h3ZD
-         d+U6rluPrxoVoPmOlKWUqc4bctLxPwQi8hpA+mejp4Zwlnw3GCn14uQjXauWyNevNnZV
-         a2cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yMHtdvU9XeJ3wjSZJWX9SQTYtWlQlU+oMcR+hFhhTs0=;
-        b=pNM59R6SBLNIWoELZ7cQR1nbwzWRjGjC97Llnu8vGw0XslIYnmukXRmT57l0YU6ION
-         CRhwqkSP8mWQnhIXsiXmNvn1nfAHtMKcX30jbfH9Sxjr1eedKc6hmSZKlpfuSJ4YejHN
-         SzW66adyKRoZcJ83iYDfMeTavQsZoMHY2UydVcq3Etg+i9BjAy2YLjainw/2xRTT3Jsc
-         p9jQOuzbVU11+gty2XMysMaj51SnzDPiIKdLsJ/FJ8pv1egdTIeUmBgrwQLfxYu3vAoo
-         nkYUIGxO74LCXDszxYc8N+FKyL1lVNxkW8oTyDJQOPkogGqrpznRSR23Wf3m0F4Ujd+N
-         LdDQ==
-X-Gm-Message-State: AOAM5308QEtQItOMmYbwYTuKD/2Q4kZy2R+eXrObaei8qg035KNzMVaW
-        Fk7WPvrHRg2AF9xQmfFDejBjUcinStLAQ8n7s5U=
-X-Google-Smtp-Source: ABdhPJwkWP3y+Mykb97iSqNB1kWesZW1rkM7lpPOwVdCiKu991wkE1sXidQ8ZIAbtKxYNQZ3jHEEoq6WzX7zZv9X1rc=
-X-Received: by 2002:a05:6402:34cb:: with SMTP id w11mr5218180edc.158.1642098086061;
- Thu, 13 Jan 2022 10:21:26 -0800 (PST)
+        id S237389AbiAMSZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 13:25:20 -0500
+Received: from mga09.intel.com ([134.134.136.24]:2904 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230329AbiAMSZS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 13:25:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642098318; x=1673634318;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IGrTbcmhXoLA+UxYUlRJGOMkwvHc3LyXd5ONO1maOjY=;
+  b=GfeuXA3CM/5RMTBmWMQvuLbPPbaCwferx4UpXIecumCJ9kSHiUYuV8Y8
+   YTntMkwQTF+Pa8iuUcxDrYdUJgXhGG76dbzL992PZOk8bLqO2slfKXVoB
+   gwMPmaRxo9+2EMjmEgxucdqzBBosDRQ0tyk2aguE5WTDoaTq9YkSyNDeV
+   HoxQ/HCxlhhgNt7RsQdJK5af+5ko0Zu0OxcICE/q9ewZ+8nDyDe47Z5wt
+   Qo1SAjHM4LBxP5YL6JAHO1LK8GCo09NV6fp/3ExlMg7qqPVR2ginomoqL
+   146XJf1Cw8e7O8KtrNCU5jAp29YA7YE+RUu3i7PPw7KYC7TGb354qWy0O
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="243880429"
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="243880429"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 10:25:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="475444201"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 13 Jan 2022 10:24:59 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n84mR-0007XC-2f; Thu, 13 Jan 2022 18:24:59 +0000
+Date:   Fri, 14 Jan 2022 02:24:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 583/2382] kernel/kallsyms.c:895:81: error: invalid
+ application of 'sizeof' to an incomplete type 'struct kallsyms_entry'
+Message-ID: <202201140216.czBUwf1E-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211217115708.882525-1-tanureal@opensource.cirrus.com>
- <20211217115708.882525-8-tanureal@opensource.cirrus.com> <CAHp75VdQGBixkUStPiq3VuoL+9TJo946ObfRA-L-D72DaFHnrw@mail.gmail.com>
- <66351fd6-f434-775f-d8d5-2a6baf098269@opensource.cirrus.com> <CAHp75Vc=x0AanRhkGHvbgs0M9VLdZfEFKJUxRTEMFvT5YwDtzA@mail.gmail.com>
-In-Reply-To: <CAHp75Vc=x0AanRhkGHvbgs0M9VLdZfEFKJUxRTEMFvT5YwDtzA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 13 Jan 2022 20:19:40 +0200
-Message-ID: <CAHp75Vc_Y+1SRryQn+=qpGqfNpRYS7ymGL+RifHdOwKcwsmF-Q@mail.gmail.com>
-Subject: Re: [PATCH v6 07/10] hda: cs35l41: Add support for CS35L41 in HDA systems
-To:     Lucas tanure <tanureal@opensource.cirrus.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        patches@opensource.cirrus.com,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 8:13 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Thu, Jan 13, 2022 at 6:53 PM Lucas tanure
-> <tanureal@opensource.cirrus.com> wrote:
-> > On 1/6/22 12:29, Andy Shevchenko wrote:
-> > > On Fri, Dec 17, 2021 at 5:45 PM Lucas Tanure
-> > > <tanureal@opensource.cirrus.com> wrote:
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   1a880941a087613ed42f77001229edfcf75ea8a5
+commit: 4357bf918816f743b593665e792f78913f0da47b [583/2382] kallsyms/objtool: Process entries
+config: x86_64-randconfig-a015-20220109 (https://download.01.org/0day-ci/archive/20220114/202201140216.czBUwf1E-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 244dd2913a43a200f5a6544d424cdc37b771028b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=4357bf918816f743b593665e792f78913f0da47b
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout 4357bf918816f743b593665e792f78913f0da47b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > >> +        * Device CLSA0100 doesn't have _DSD so a gpiod_get by the label reset won't work.
-> > >
-> > > So, you need to add mapping tables and switch to regular APIs, tell
-> > > me, why it won't work.
+Note: the mingo-tip/master HEAD 1a880941a087613ed42f77001229edfcf75ea8a5 builds fine.
+      It only hurts bisectability.
 
-> > The part about how the driver access the ACPI table is going to be
-> > improved later if possible.
-> > The laptop has already shipped and doesn't have a _DSD node, so the
-> > driver needs to read the reset GPIO from a hard coded index inside a
-> > node that contains more than one cs35l41.
->
-> We have a lot of cases like this, hint: `git grep -n -w
-> devm_acpi_dev_add_driver_gpios`.
+All errors (new ones prefixed by >>):
 
-It's all described here: Documentation/firmware-guide/acpi/gpio-properties.rst
+   kernel/kallsyms.c:586:12: warning: no previous prototype for function 'arch_get_kallsym' [-Wmissing-prototypes]
+   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+              ^
+   kernel/kallsyms.c:586:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+   ^
+   static 
+>> kernel/kallsyms.c:895:81: error: invalid application of 'sizeof' to an incomplete type 'struct kallsyms_entry'
+           nr_entries = ((long)&__kallsyms_offsets_end - (long)&__kallsyms_offsets_begin)/sizeof(struct kallsyms_entry);
+                                                                                          ^     ~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/kallsyms.c:889:9: note: forward declaration of 'struct kallsyms_entry'
+           struct kallsyms_entry *entries;
+                  ^
+   kernel/kallsyms.c:905:85: error: subscript of pointer to incomplete type 'struct kallsyms_entry'
+                   printk("# kallsyms entry %6ld/%6ld: [%016Lx]: {%s}\n", i, nr_entries, (u64)entries[i].offset, str);
+                                                                                              ~~~~~~~^
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                              ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                                   ^~~~~~~~~~~
+   kernel/kallsyms.c:889:9: note: forward declaration of 'struct kallsyms_entry'
+           struct kallsyms_entry *entries;
+                  ^
+   1 warning and 2 errors generated.
 
--- 
-With Best Regards,
-Andy Shevchenko
+
+vim +895 kernel/kallsyms.c
+
+   886	
+   887	static void __init kallsyms_objtool_init(void)
+   888	{
+   889		struct kallsyms_entry *entries;
+   890		long nr_entries, i;
+   891		char *str;
+   892	
+   893		printk("# kallsyms_objtool_init()\n");
+   894	
+ > 895		nr_entries = ((long)&__kallsyms_offsets_end - (long)&__kallsyms_offsets_begin)/sizeof(struct kallsyms_entry);
+   896	
+   897		printk("# kallsyms: %ld entries.\n", nr_entries);
+   898	
+   899		BUG_ON(nr_entries <= 0);
+   900	
+   901		str = &__kallsyms_strs_begin;
+   902		entries = (void *) &__kallsyms_offsets_begin;
+   903	
+   904		for (i = 0; i < nr_entries; i++) {
+   905			printk("# kallsyms entry %6ld/%6ld: [%016Lx]: {%s}\n", i, nr_entries, (u64)entries[i].offset, str);
+   906	
+   907			str += strlen(str) + 1;
+   908	
+   909		}
+   910		printk("# kallsyms, last str:             %p\n", str);
+   911		printk("# kallsyms, &__kallsyms_strs_end: %p\n", &__kallsyms_strs_end);
+   912	
+   913		BUG_ON(str != &__kallsyms_strs_end);
+   914	}
+   915	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

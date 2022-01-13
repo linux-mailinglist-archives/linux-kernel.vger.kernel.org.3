@@ -2,91 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D64CD48D9C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 884C348D9CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235720AbiAMOga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 09:36:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44936 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235711AbiAMOgV (ORCPT
+        id S235704AbiAMOjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:39:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235679AbiAMOjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:36:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642084581;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IgjOVeBDkVjVu0DqCL0W103eS8yEjSifpQfplyuzn/Y=;
-        b=C6AMoAJ++bbJukIIgXarjgKgt+SQiDuY2zunoOpdc/aHvHVxhi/egTrMr7Cp10yPYFD3u9
-        JfIg7fylWpgiA2NpNCvJC44RPsxxsQx5qy84m6ge8WwIV7byfYVECfl3GuIaauE0o82afv
-        WV22IMncmPAwyGbyWD6FSD8/DfJm0Qs=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-664-2pMctT0iM12yXY7kDNd_aA-1; Thu, 13 Jan 2022 09:36:20 -0500
-X-MC-Unique: 2pMctT0iM12yXY7kDNd_aA-1
-Received: by mail-ed1-f70.google.com with SMTP id s7-20020a056402520700b003f841380832so5531308edd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 06:36:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IgjOVeBDkVjVu0DqCL0W103eS8yEjSifpQfplyuzn/Y=;
-        b=8A8CZUNlqZFqkEI87qQozjzptm+Hqgsw+TTh+DNv/JHOKTCH6h9qlUqspItsUEvIqr
-         aV5VmyahsUDLlzYVDPhnX3m6H3fBFYJ52MFgIHE6fBdQ63tj32dcyjYeybPoOPrQJa1u
-         qGdge5NslRjY3z7cdvr2wL9XliogKqokn7uWCrnUIyssBwlfUi8uu3Vfv39QUHID8HZl
-         9X+qhyTS9F/ZZCuAdEnVMO1HHQfCxBvrtKTeJffnUBeC97eHpig37wcm14TvOLhN33P/
-         vApcncKNmRd1JgAN1iyc9/ZgbPaVhQu+QRTjMhxizVGDYnyLV9QXlyK+LzNHtqPeSOOG
-         5zCw==
-X-Gm-Message-State: AOAM533ttMjrJRTikbR1jVl0i7k5bZaWyVqrH5vfubT5cOYjHWuTIOb3
-        1wnm7SU+2eKA9gdxdRR7qyW+AC8gDJIOzlJ2fYVKY0AtwKpNYryAFPvBheVvb79sGwWH6Yu6lG1
-        m8S9r3RZ+YYTcPpLYudstQ3iH
-X-Received: by 2002:a17:907:6e0c:: with SMTP id sd12mr3795826ejc.536.1642084578972;
-        Thu, 13 Jan 2022 06:36:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzOD4ZuNaqfWJsHOyQAzWBVTLHAz0c77AXhRgw1f3/AHOJfF9Qynw12hmuu+NaWD8zPJOqGKw==
-X-Received: by 2002:a17:907:6e0c:: with SMTP id sd12mr3795799ejc.536.1642084578695;
-        Thu, 13 Jan 2022 06:36:18 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id gb35sm941164ejc.36.2022.01.13.06.36.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 06:36:17 -0800 (PST)
-Message-ID: <bdad7add-408f-e649-c796-6f83420077fc@redhat.com>
-Date:   Thu, 13 Jan 2022 15:36:16 +0100
+        Thu, 13 Jan 2022 09:39:40 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2833DC06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 06:39:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0SdL7L2aAS0NahjbAspySorF63SX/dfOiFW0ONSeOV8=; b=pWz9PYP3Z6ZR8z8GSM3iX2LNuI
+        PEOkkCU5mJnCNptQuWhIkBumyhg5NvkAo+FROnfbHc5hlxghXPVZ/k/MtisI/W1/4qQBs+tv13FB5
+        tlXCNQ8MbXC5XxkK5R249n9uMXKPx62EPpJq+hxc6QSyLZc09lNnZ7w2tImmQfL5xL9wpWwLX1Whw
+        ZSkA3BUwesAhgxf0H2AAOizB2RUgs4d8l2BgJzxvzTlAFB4AKPSVl1KXnYtQYy4AWcB3w91fYLI5b
+        s5XEsOZtyFA1Q1ehiTXJxLwMP5BY1mLWwiqr0NAKtyFwxbjvIKQ0yya2VhrGxDvO0IMyx/pWuGtdO
+        TuZ03l6g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n81GC-004zsl-Va; Thu, 13 Jan 2022 14:39:29 +0000
+Date:   Thu, 13 Jan 2022 14:39:28 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Liang Zhang <zhangliang5@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, wangzhigang17@huawei.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
+Message-ID: <YeA5oP/iaxtVPHb3@casper.infradead.org>
+References: <20220113140318.11117-1-zhangliang5@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: KVM: Warn if mark_page_dirty() is called without an active vCPU
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     butterflyhuangxx@gmail.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, seanjc@google.com,
-        Cornelia Huck <cohuck@redhat.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Thomas Huth <thuth@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-References: <e8f40b8765f2feefb653d8a67e487818f66581aa.camel@infradead.org>
- <20220113120609.736701-1-borntraeger@linux.ibm.com>
- <e9e5521d-21e5-8f6f-902c-17b0516b9839@redhat.com>
- <b6d9785d769f98da0b057fac643b0f088e346a94.camel@infradead.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <b6d9785d769f98da0b057fac643b0f088e346a94.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220113140318.11117-1-zhangliang5@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/13/22 13:30, David Woodhouse wrote:
-> Are you proposing that as an officially documented part of the already
-> horrid API, or a temporary measure:)
+On Thu, Jan 13, 2022 at 10:03:18PM +0800, Liang Zhang wrote:
+> In current implementation, process's read requestions will fault in pages
+> with WP flags in PTEs. Next, if process emit a write requestion will go
+> into do_wp_page() and copy data to a new allocated page from the old one
+> due to refcount > 1 (page table mapped and swapcache), which could be
+> result in performance degradation. In fact, this page is exclusively owned
+> by this process and the duplication from old to a new allocated page is
+> really unnecessary.
+> 
+> So In this situation, these unshared pages can be reused by its process.
 
-Hopefully temporary, but honestly you never know how these things go.
+Let's bring Linus in on this, but I think this reintroduces all of the
+mapcount problems that we've been discussing recently.
 
-Paolo
+How about this as an alternative?
 
++++ b/mm/memory.c
+@@ -3291,11 +3291,11 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+                struct page *page = vmf->page;
+
+                /* PageKsm() doesn't necessarily raise the page refcount */
+-               if (PageKsm(page) || page_count(page) != 1)
++               if (PageKsm(page) || page_count(page) != 1 + PageSwapCache(page))
+                        goto copy;
+                if (!trylock_page(page))
+                        goto copy;
+-               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1) {
++               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1 + PageSwapCache(page)) {
+                        unlock_page(page);
+                        goto copy;
+                }
+
+
+> Signed-off-by: Liang Zhang <zhangliang5@huawei.com>
+> ---
+> This patch has been tested with redis benchmark. Here is the test
+> result.
+> 
+> Hardware
+> ========
+> Memory (GB): 512G
+> CPU (total #): 88
+> NVMe SSD (GB): 1024
+> 
+> OS
+> ==
+> kernel 5.10.0
+> 
+> Testcase
+> ========
+> step 1:
+>   Run 16 VMs (4U8G), each running with redis-server, in a cgroup 
+>   limiting memory.limit_in_bytes to 100G. 
+> step 2:
+>   Run memtier_bemchmark in host with params "--threads=1 --clients=1 \
+> --pipeline=256 --data-size=2048 --requests=allkeys --key-minimum=1 \
+> --key-maximum=30000000 --key-prefix=memtier-benchmark-prefix-redistests"
+>   to test every VM concurrently.
+> 
+> Workset size
+> ============
+> cat memory.memsw.usage_in_bytes
+> 125403303936
+> 
+> Result
+> ======
+> Comparing with Baseline, this patch can achieved 41% more Ops/sec, 
+> 41% more Hits/sec, 41% more Misses/sec, 30% less Latency and 
+> 41% more KB/sec. 
+> 
+>   Index(average)        Baseline kernel        Patched kernel
+>   Ops/sec               109497                 155428
+>   Hits/sec              8653                   12283
+>   Misses/sec            90889                  129014
+>   Latency               2.297                  1.603
+>   KB/sec                44569                  63186
+> 
+> 
+>  mm/memory.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 23f2f1300d42..fd4d868b1c2d 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3291,10 +3291,16 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+>  		struct page *page = vmf->page;
+>  
+>  		/* PageKsm() doesn't necessarily raise the page refcount */
+> -		if (PageKsm(page) || page_count(page) != 1)
+> +		if (PageKsm(page))
+>  			goto copy;
+>  		if (!trylock_page(page))
+>  			goto copy;
+> +
+> +		/* reuse the unshared swapcache page */
+> +		if (PageSwapCache(page) && reuse_swap_page(page, NULL)) {
+> +			goto reuse;
+> +		}
+> +
+>  		if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1) {
+>  			unlock_page(page);
+>  			goto copy;
+> @@ -3304,6 +3310,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+>  		 * page count reference, and the page is locked,
+>  		 * it's dark out, and we're wearing sunglasses. Hit it.
+>  		 */
+> +reuse:
+>  		unlock_page(page);
+>  		wp_page_reuse(vmf);
+>  		return VM_FAULT_WRITE;
+> -- 
+> 2.30.0
+> 
+> 

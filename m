@@ -2,140 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F3A48D2AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDBB48D2AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiAMHNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 02:13:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbiAMHNM (ORCPT
+        id S230345AbiAMHNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 02:13:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56406 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230316AbiAMHNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 02:13:12 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D1EC061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 23:13:11 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id c10so6092661qte.2
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 23:13:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8M7DHNqIGb8T38MhtK9zvNv2bpY/lvWtx3YDXV9Tj8I=;
-        b=qIohtgfLM8Muy/S/qrETPOgzJmX+T5sA52nuKD/xxF+ot3vn2MIoZBE68IfKR1a+45
-         TyXpS/HG+q56nfitHBfuPmvvx0Mu8UwbVEMk4evAy7/yUat4phet2r+zUyk3JgQ4dw7Z
-         u5bu/qzWNCTZQuqY8ty/ufTcD2i59VwX/+iJ72rzYOD1jSDUc7mTWBe93TdLyPe9QlGg
-         iGig5sX3ELfg2m707GTjJV1ib2bewI/C9ydgL9UPMRr6Y39CEnHy++ZbY0n2tqnne3yP
-         +K37pfg+jPJsjwJ8A8IxbGnR1MGqgrpgG1vwZjzKI95/TO/0ha/lBkzZ/sk2jWZmBe1w
-         ByjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8M7DHNqIGb8T38MhtK9zvNv2bpY/lvWtx3YDXV9Tj8I=;
-        b=YWIgVBNZHBHPKXsCU/2M4qaTavYsln7kr0xCgbhGsTLuQ9bh840DJ8mqNBrlAtLXoM
-         U3Zb69njAd4Neh6IBYOumCi17FWNAnxCXEyDGxn5ZD1shiQ+m5ALQcPDcCuGXVXghjYx
-         rlT9AovgthH8mOmrpOpUGbBc9o3xQrBTQarCVytO3F1gH7jo2a83GTRdemh1zhdTgGHt
-         KZvlPtjwpT/cY5jaHkEBxvk5nroQ2PixUjdYd257UUsyVUBlS5W+7kTTMCt8vV6PkXeB
-         B9nhIsjH3BT2ugA6OiHuEjxr1c/pDq/zkrU+PssIwNyMx6s6sd8RNKpxospUVN4iYGHY
-         I1kg==
-X-Gm-Message-State: AOAM53059tn9lQyVOQonIIcNfqZQqOSFMr1OL6lZrmQ2VAbK4mpMt5AQ
-        /2MqJYumhf/Fg1T5Fu4cj3+IsfIA4eqAJf/9ICqR3A==
-X-Google-Smtp-Source: ABdhPJx1y+5qzqGkdufL1lymNEVHc7WenfzCCuu3h0YYxZ5tyyugQGLAy7qBvf0pJG+6kg1ogk/QxcaYNvPlUCDNeXE=
-X-Received: by 2002:a05:622a:1883:: with SMTP id v3mr2520046qtc.682.1642057991028;
- Wed, 12 Jan 2022 23:13:11 -0800 (PST)
+        Thu, 13 Jan 2022 02:13:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642058022;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ArUbr7W7ik02hU0NABKd25g1aVuXZ4WkMZc8n6qsFfo=;
+        b=RPA6WLd1FGQqNQtpfnMy2l7ZUUST1bibnSrGmeGeIg7hx7fmVyGfsNq+uWiEt85Rz6XT/s
+        xwLgb8odS2RGoilIm2935R6MDVoBxilrFNvfah7WZEk/740lnwr9xy6JmQyk9dn/cr8ye0
+        OTYc1YzCpnNqro+4CK3G36+C/KtytX8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-642-ttrmkoK6M72JdX4nAPg7JA-1; Thu, 13 Jan 2022 02:13:39 -0500
+X-MC-Unique: ttrmkoK6M72JdX4nAPg7JA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 30AD883DD21;
+        Thu, 13 Jan 2022 07:13:38 +0000 (UTC)
+Received: from [10.72.13.202] (ovpn-13-202.pek2.redhat.com [10.72.13.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4DA3D16A50;
+        Thu, 13 Jan 2022 07:13:33 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v4 06/21] KVM: arm64: Support SDEI_EVENT_CONTEXT hypercall
+From:   Gavin Shan <gshan@redhat.com>
+To:     Shannon Zhao <shannon.zhaosl@gmail.com>,
+        kvmarm@lists.cs.columbia.edu
+Cc:     maz@kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan.Cameron@huawei.com, pbonzini@redhat.com, will@kernel.org
+References: <20210815001352.81927-1-gshan@redhat.com>
+ <20210815001352.81927-7-gshan@redhat.com>
+ <40d818a2-0c91-e06e-6ce8-ac8123b8d1d4@gmail.com>
+ <798ecbb0-f369-f3e7-ad50-78acfd902d1d@redhat.com>
+Message-ID: <71b87778-ea60-b01d-9010-789feb1e16fa@redhat.com>
+Date:   Thu, 13 Jan 2022 15:13:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-References: <20220112030115.1.Ibac66e1e0e565313bc28f192e6c94cb508f205eb@changeid>
- <20220112030115.3.I86c32730e08cba9e5c83f02ec17885124d45fa56@changeid> <CAF6AEGuJxdrYM5XXt6sUGmjossqZTRzwQ6Y8qYsnfCYDvGQurw@mail.gmail.com>
-In-Reply-To: <CAF6AEGuJxdrYM5XXt6sUGmjossqZTRzwQ6Y8qYsnfCYDvGQurw@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 13 Jan 2022 10:13:00 +0300
-Message-ID: <CAA8EJpokgiUbqj9BOF52a9QjJK53PinNHfxy_6nbNq53JnO2Og@mail.gmail.com>
-Subject: Re: [PATCH 3/4] drm/msm/adreno: Expose speedbin to userspace
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <798ecbb0-f369-f3e7-ad50-78acfd902d1d@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Jan 2022 at 00:19, Rob Clark <robdclark@gmail.com> wrote:
->
-> On Tue, Jan 11, 2022 at 1:31 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
-> >
-> > Expose speedbin through MSM_PARAM_CHIP_ID parameter to help userspace
-> > identify the sku.
-> >
-> > Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> > ---
-> >
-> >  drivers/gpu/drm/msm/adreno/adreno_gpu.c | 9 +++++----
-> >  1 file changed, 5 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> > index f33cfa4..e970e6a 100644
-> > --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> > +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> > @@ -242,10 +242,11 @@ int adreno_get_param(struct msm_gpu *gpu, uint32_t param, uint64_t *value)
-> >                 *value = !adreno_is_a650_family(adreno_gpu) ? 0x100000 : 0;
-> >                 return 0;
-> >         case MSM_PARAM_CHIP_ID:
-> > -               *value = adreno_gpu->rev.patchid |
-> > -                               (adreno_gpu->rev.minor << 8) |
-> > -                               (adreno_gpu->rev.major << 16) |
-> > -                               (adreno_gpu->rev.core << 24);
-> > +               *value = (uint64_t) adreno_gpu->rev.patchid |
-> > +                               (uint64_t) (adreno_gpu->rev.minor << 8) |
-> > +                               (uint64_t) (adreno_gpu->rev.major << 16) |
-> > +                               (uint64_t) (adreno_gpu->rev.core << 24) |
-> > +                               (((uint64_t) adreno_gpu->rev.sku) << 32);
->
-> How about this instead, so we are only changing the behavior for
-> new/unreleased devices:
->
-> *value = adreno_gpu->rev.patchid |
-> (adreno_gpu->rev.minor << 8) |
-> (adreno_gpu->rev.major << 16) |
-> (adreno_gpu->rev.core << 24);
-> if (!adreno_gpu->info->revn)
-> *value |= (((uint64_t) adreno_gpu->rev.sku) << 32);
->
-> (sorry about the butchered indentation.. somehow gmail has become
-> antagonistic about pasting code)
+Hi Shannon,
 
-I assume that you would like to keep userspace compat for older chips.
-thus the if.
-Maybe we should introduce MSM_PARAM_CHIP_ID_SKU instead (and gradually
-make userspace switch to it)?
+On 1/13/22 3:02 PM, Gavin Shan wrote:
+> On 1/11/22 5:43 PM, Shannon Zhao wrote:
+>> On 2021/8/15 8:13, Gavin Shan wrote:
+>>> +static unsigned long kvm_sdei_hypercall_context(struct kvm_vcpu *vcpu)
+>>> +{
+>>> +    struct kvm *kvm = vcpu->kvm;
+>>> +    struct kvm_sdei_kvm *ksdei = kvm->arch.sdei;
+>>> +    struct kvm_sdei_vcpu *vsdei = vcpu->arch.sdei;
+>>> +    struct kvm_sdei_vcpu_regs *regs;
+>>> +    unsigned long index = smccc_get_arg1(vcpu);
+>>> +    unsigned long ret = SDEI_SUCCESS;
+>>> +
+>>> +    /* Sanity check */
+>>> +    if (!(ksdei && vsdei)) {
+>>> +        ret = SDEI_NOT_SUPPORTED;
+>>> +        goto out;
+>>> +    }
+>> Maybe we could move these common sanity check codes to kvm_sdei_hypercall to save some lines.
+>>
+> 
+> Not all hypercalls need this check. For example, COMPLETE/COMPLETE_RESUME/CONTEXT don't
+> have SDEI event number as the argument. If we really want move this check into function
+> kvm_sdei_hypercall(), we would have code like below. Too much duplicated snippets will
+> be seen. I don't think it's better than what we have if I fully understand your comments.
+> 
 
->
-> BR,
-> -R
->
-> >                 return 0;
-> >         case MSM_PARAM_MAX_FREQ:
-> >                 *value = adreno_gpu->base.fast_rate;
-> > --
-> > 2.7.4
-> >
+oops... sorry. Please ignore my previous reply. I thought you talk about
+the check on the SDEI event number wrongly. Yes, you're correct that the
+check should be moved to kvm_sdei_hypercall().
 
+Thanks,
+Gavin
 
-
--- 
-With best wishes
-Dmitry

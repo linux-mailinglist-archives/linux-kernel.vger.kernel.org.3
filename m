@@ -2,947 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D37DD48DED1
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 21:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DF848DED3
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 21:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234163AbiAMUUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 15:20:04 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:35301 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233890AbiAMUTy (ORCPT
+        id S233408AbiAMUWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 15:22:45 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:36392 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232597AbiAMUWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 15:19:54 -0500
-Received: from quad ([82.142.23.158]) by mrelayeu.kundenserver.de (mreue108
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1MY64R-1mpnPP34xx-00YVXf; Thu, 13
- Jan 2022 21:19:27 +0100
-From:   Laurent Vivier <laurent@vivier.eu>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-m68k@lists.linux-m68k.org,
-        John Stultz <john.stultz@linaro.org>,
-        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Laurent Vivier <laurent@vivier.eu>
-Subject: [PATCH v6 4/4] m68k: introduce a virtual m68k machine
-Date:   Thu, 13 Jan 2022 21:19:20 +0100
-Message-Id: <20220113201920.3201760-5-laurent@vivier.eu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220113201920.3201760-1-laurent@vivier.eu>
-References: <20220113201920.3201760-1-laurent@vivier.eu>
+        Thu, 13 Jan 2022 15:22:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1642105364;
+        bh=4yb8S0SxF8mGdKyBVLWgGJ233ht8yYKx9q1qC9d0u4g=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=pvvFblrbu95wmakZe5SvH+BjyayKoLzQypb5jGk7L4TNBxagpgnIBUvlryudbUF4F
+         RDLb4cwxwwJp5hmSbYA5+JK/qS5Dx0uOqmxS9QX6tDRUlmwsfORuDmZlu+tMMDABZ1
+         VxM5AkQT5/6Xj6bMmUz45hNyCUQocC+VMiAc3iLo=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7385C1280E57;
+        Thu, 13 Jan 2022 15:22:44 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 725_tg9aG2Ea; Thu, 13 Jan 2022 15:22:44 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1642105364;
+        bh=4yb8S0SxF8mGdKyBVLWgGJ233ht8yYKx9q1qC9d0u4g=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=pvvFblrbu95wmakZe5SvH+BjyayKoLzQypb5jGk7L4TNBxagpgnIBUvlryudbUF4F
+         RDLb4cwxwwJp5hmSbYA5+JK/qS5Dx0uOqmxS9QX6tDRUlmwsfORuDmZlu+tMMDABZ1
+         VxM5AkQT5/6Xj6bMmUz45hNyCUQocC+VMiAc3iLo=
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id E1F4A1280E1C;
+        Thu, 13 Jan 2022 15:22:43 -0500 (EST)
+Message-ID: <31f8716fbb4f1e2a332b2b3e3243a170e8b01145.camel@HansenPartnership.com>
+Subject: [GIT PULL] first round of SCSI updates for the 5.15+ merge window
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Thu, 13 Jan 2022 15:22:42 -0500
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:mBnT/6oPzEjZqyiKLM5RpnXlEUN4g2wjhw7/FKGn54jyZutsJWO
- DrnwdczIYMwV5/TXZSNNuxWgYsfJs2HjlLF5LC505qJBi04TjdDVwDPNPH8heNXAOIl5AXn
- 7o/UKiGWFpDid1IovPaP8erV4Gn/CBFFHDHrmuYfZlLF5IVyu6KVbT8nPcj6pDEFMhvWDzN
- fMmd76lWDgDY+ollFfg6g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PeglEh983Uc=:JU3akBfA45Wshz0EeMjpQb
- 2QeJVyWI5DKWN709hhpl4efwpol6OiXbFfqTYVgoG2V1qJiBzzNdoQvTXjHpvWL/SsQV8CHG2
- G3TJV+ibSA23PGxK5XvAsvqVnDEULJX0tQZUTbIqSsdKgHeuNq71eh2+4AgD5k7rZp0Qz4oP6
- wN6/B+NHL2wS2GzmOCb3t4x+rnnTy7DzAA6e0y+lpjY7Wpc3TAva0nScoMLx9paqqCq0GIz7M
- zaHD2xG4K77H0ViL+Cx98acULZqeVDzUfSAwqGY9Yh8whmFuCLghOBXvj1I6CsCAP0iBrSImC
- k21sCrpVw9b/9fg5XDgeiWpZ8BVulCnXhKx8cKb7WPP0SOphMXMx6tfqP8/iWq0LIFSK50Coh
- 9XMKEz7jEfrqHkLVHmjIs25CLkfMNrnOYHuocYqnVVPzDQ1tYTgHTnZE8Jj61X0SJ4fqJ67Po
- AwTP21oBoRc2IT/WcNw0kN5rgFeZGAGb5tJSxlFltkr/3Gx5xrinJwPssHwX5/CxrSRdXtYC6
- 6IyWx0zIA61iQzmGLn6G+1P/s4FhXI+NG6ncqzdZL41s8wOxxGEFsrakyirCOwBLs2taJiqkV
- yBWiv1fu/AAwjYrFsISP5PNW0s8QSg3+sh6viGmYEGSWCfz9URuAehgcK8PaPja6KREurKe8H
- L+3195hoX4TeDkL4cQx0R8ntZcMZ0G69XvG+SGUskvngoK3/xubZwdisxn2jUnidCNcI=
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This machine allows to have up to 3.2 GiB and 128 Virtio devices.
+This series consists of the usual driver updates (ufs, pm80xx, lpfc,
+mpi3mr, mpt3sas, hisi_sas, libsas) and minor updates and bug
+fixes.  The most impactful change is likely the switch from GFP_DMA to
+GFP_KERNEL in a bunch of drivers, but even that shouldn't affect too
+many people.
 
-It is based on android goldfish devices.
+The patch is available here:
 
-Signed-off-by: Laurent Vivier <laurent@vivier.eu>
----
- arch/m68k/Kbuild                           |   1 +
- arch/m68k/Kconfig.machine                  |  15 +++
- arch/m68k/configs/virt_defconfig           |  65 +++++++++++
- arch/m68k/include/asm/config.h             |   2 +
- arch/m68k/include/asm/irq.h                |   3 +-
- arch/m68k/include/asm/pgtable_mm.h         |   7 ++
- arch/m68k/include/asm/setup.h              |  44 ++++++--
- arch/m68k/include/asm/virt.h               |  25 +++++
- arch/m68k/include/uapi/asm/bootinfo-virt.h |  18 ++++
- arch/m68k/include/uapi/asm/bootinfo.h      |   1 +
- arch/m68k/kernel/Makefile                  |   1 +
- arch/m68k/kernel/head.S                    |  31 ++++++
- arch/m68k/kernel/setup_mm.c                |   7 ++
- arch/m68k/mm/kmap.c                        |  23 ++--
- arch/m68k/virt/Makefile                    |   6 ++
- arch/m68k/virt/config.c                    | 119 ++++++++++++++++++++
- arch/m68k/virt/ints.c                      | 120 +++++++++++++++++++++
- arch/m68k/virt/platform.c                  |  72 +++++++++++++
- 18 files changed, 542 insertions(+), 18 deletions(-)
- create mode 100644 arch/m68k/configs/virt_defconfig
- create mode 100644 arch/m68k/include/asm/virt.h
- create mode 100644 arch/m68k/include/uapi/asm/bootinfo-virt.h
- create mode 100644 arch/m68k/virt/Makefile
- create mode 100644 arch/m68k/virt/config.c
- create mode 100644 arch/m68k/virt/ints.c
- create mode 100644 arch/m68k/virt/platform.c
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
 
-diff --git a/arch/m68k/Kbuild b/arch/m68k/Kbuild
-index 18abb35c26a1..7762af9f6def 100644
---- a/arch/m68k/Kbuild
-+++ b/arch/m68k/Kbuild
-@@ -17,3 +17,4 @@ obj-$(CONFIG_M68060)		+= ifpsp060/
- obj-$(CONFIG_M68KFPU_EMU)	+= math-emu/
- obj-$(CONFIG_M68000)		+= 68000/
- obj-$(CONFIG_COLDFIRE)		+= coldfire/
-+obj-$(CONFIG_VIRT)		+= virt/
-diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
-index eeab4f3e6c19..0a2c5d61567d 100644
---- a/arch/m68k/Kconfig.machine
-+++ b/arch/m68k/Kconfig.machine
-@@ -149,6 +149,21 @@ config SUN3
- 
- 	  If you don't want to compile a kernel exclusively for a Sun 3, say N.
- 
-+config VIRT
-+	bool "Virtual M68k Machine support"
-+	depends on MMU
-+	select GENERIC_CLOCKEVENTS
-+	select M68040
-+	select MMU_MOTOROLA if MMU
-+	select GOLDFISH
-+	select GOLDFISH_TIMER
-+	select GOLDFISH_TTY
-+	select TTY
-+	select VIRTIO_MMIO
-+	help
-+	  This options enable a pure virtual machine based on m68k,
-+	  VIRTIO MMIO devices and GOLDFISH interfaces (TTY, RTC, PIC)
-+
- config PILOT
- 	bool
- 
-diff --git a/arch/m68k/configs/virt_defconfig b/arch/m68k/configs/virt_defconfig
-new file mode 100644
-index 000000000000..462e51ef69eb
---- /dev/null
-+++ b/arch/m68k/configs/virt_defconfig
-@@ -0,0 +1,65 @@
-+CONFIG_LOCALVERSION="-virt"
-+CONFIG_SYSVIPC=y
-+CONFIG_CGROUPS=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_RDMA=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_VIRT=y
-+CONFIG_PROC_HARDWARE=y
-+CONFIG_PARTITION_ADVANCED=y
-+CONFIG_AMIGA_PARTITION=y
-+CONFIG_ATARI_PARTITION=y
-+CONFIG_MAC_PARTITION=y
-+CONFIG_BSD_DISKLABEL=y
-+CONFIG_MINIX_SUBPARTITION=y
-+CONFIG_SOLARIS_X86_PARTITION=y
-+CONFIG_UNIXWARE_DISKLABEL=y
-+CONFIG_LDM_PARTITION=y
-+CONFIG_LDM_DEBUG=y
-+CONFIG_SUN_PARTITION=y
-+CONFIG_SYSV68_PARTITION=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IP_PNP_BOOTP=y
-+CONFIG_CGROUP_NET_PRIO=y
-+CONFIG_CGROUP_NET_CLASSID=y
-+CONFIG_NET_9P=y
-+CONFIG_NET_9P_VIRTIO=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_SCSI=y
-+CONFIG_BLK_DEV_SR=y
-+CONFIG_SCSI_VIRTIO=y
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_INPUT_MOUSEDEV=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_VIRTIO_CONSOLE=y
-+CONFIG_HW_RANDOM_VIRTIO=y
-+CONFIG_DRM=y
-+CONFIG_DRM_VIRTIO_GPU=y
-+CONFIG_FB=y
-+CONFIG_VIRT_DRIVERS=y
-+CONFIG_VIRTIO_INPUT=y
-+CONFIG_EXT4_FS=y
-+CONFIG_AUTOFS_FS=y
-+CONFIG_ISO9660_FS=y
-+CONFIG_JOLIET=y
-+CONFIG_ZISOFS=y
-+CONFIG_UDF_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_9P_FS=y
-+CONFIG_9P_FS_POSIX_ACL=y
-+CONFIG_9P_FS_SECURITY=y
-+CONFIG_EARLY_PRINTK=y
-diff --git a/arch/m68k/include/asm/config.h b/arch/m68k/include/asm/config.h
-index aae61070628b..b9dacc52f2c8 100644
---- a/arch/m68k/include/asm/config.h
-+++ b/arch/m68k/include/asm/config.h
-@@ -17,6 +17,7 @@ extern int mvme16x_parse_bootinfo(const struct bi_record *record);
- extern int mvme147_parse_bootinfo(const struct bi_record *record);
- extern int hp300_parse_bootinfo(const struct bi_record *record);
- extern int apollo_parse_bootinfo(const struct bi_record *record);
-+extern int virt_parse_bootinfo(const struct bi_record *record);
- 
- extern void config_amiga(void);
- extern void config_atari(void);
-@@ -29,5 +30,6 @@ extern void config_bvme6000(void);
- extern void config_hp300(void);
- extern void config_q40(void);
- extern void config_sun3x(void);
-+extern void config_virt(void);
- 
- #endif /* _M68K_CONFIG_H */
-diff --git a/arch/m68k/include/asm/irq.h b/arch/m68k/include/asm/irq.h
-index 91dd493791d7..7829e955ca04 100644
---- a/arch/m68k/include/asm/irq.h
-+++ b/arch/m68k/include/asm/irq.h
-@@ -12,7 +12,8 @@
-  */
- #if defined(CONFIG_COLDFIRE)
- #define NR_IRQS 256
--#elif defined(CONFIG_VME) || defined(CONFIG_SUN3) || defined(CONFIG_SUN3X)
-+#elif defined(CONFIG_VME) || defined(CONFIG_SUN3) || \
-+      defined(CONFIG_SUN3X) || defined(CONFIG_VIRT)
- #define NR_IRQS 200
- #elif defined(CONFIG_ATARI)
- #define NR_IRQS 141
-diff --git a/arch/m68k/include/asm/pgtable_mm.h b/arch/m68k/include/asm/pgtable_mm.h
-index 143ba7de9bda..9b4e2fe2ac82 100644
---- a/arch/m68k/include/asm/pgtable_mm.h
-+++ b/arch/m68k/include/asm/pgtable_mm.h
-@@ -80,6 +80,9 @@
- #elif defined(CONFIG_COLDFIRE)
- #define KMAP_START	0xe0000000
- #define KMAP_END	0xf0000000
-+#elif defined(CONFIG_VIRT)
-+#define	KMAP_START	0xdf000000
-+#define	KMAP_END	0xff000000
- #else
- #define	KMAP_START	0xd0000000
- #define	KMAP_END	0xf0000000
-@@ -92,6 +95,10 @@ extern unsigned long m68k_vmalloc_end;
- #elif defined(CONFIG_COLDFIRE)
- #define VMALLOC_START	0xd0000000
- #define VMALLOC_END	0xe0000000
-+#elif defined(CONFIG_VIRT)
-+#define VMALLOC_OFFSET	PAGE_SIZE
-+#define VMALLOC_START (((unsigned long) high_memory + VMALLOC_OFFSET) & ~(VMALLOC_OFFSET-1))
-+#define VMALLOC_END     KMAP_START
- #else
- /* Just any arbitrary offset to the start of the vmalloc VM area: the
-  * current 8MB value just means that there will be a 8MB "hole" after the
-diff --git a/arch/m68k/include/asm/setup.h b/arch/m68k/include/asm/setup.h
-index 8f2023f8c1c4..2c99477aaf89 100644
---- a/arch/m68k/include/asm/setup.h
-+++ b/arch/m68k/include/asm/setup.h
-@@ -37,7 +37,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_ATARI) || defined(CONFIG_MAC) || defined(CONFIG_APOLLO) \
- 	|| defined(CONFIG_MVME16x) || defined(CONFIG_BVME6000)               \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                      \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                  \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_AMIGA (m68k_machtype == MACH_AMIGA)
- #else
- #  define MACH_AMIGA_ONLY
-@@ -50,7 +51,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_APOLLO) \
- 	|| defined(CONFIG_MVME16x) || defined(CONFIG_BVME6000)               \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                      \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                  \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_ATARI (m68k_machtype == MACH_ATARI)
- #else
- #  define MACH_ATARI_ONLY
-@@ -63,7 +65,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_ATARI) || defined(CONFIG_APOLLO) \
- 	|| defined(CONFIG_MVME16x) || defined(CONFIG_BVME6000)                 \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                        \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                    \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_MAC (m68k_machtype == MACH_MAC)
- #else
- #  define MACH_MAC_ONLY
-@@ -84,7 +87,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_MVME16x) || defined(CONFIG_BVME6000)              \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                     \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_APOLLO (m68k_machtype == MACH_APOLLO)
- #else
- #  define MACH_APOLLO_ONLY
-@@ -97,7 +101,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_BVME6000)               \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                     \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME16x)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME16x)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_MVME147 (m68k_machtype == MACH_MVME147)
- #else
- #  define MACH_MVME147_ONLY
-@@ -110,7 +115,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_BVME6000)               \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                     \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_MVME16x (m68k_machtype == MACH_MVME16x)
- #else
- #  define MACH_MVME16x_ONLY
-@@ -123,7 +129,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x)                \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                     \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_BVME6000 (m68k_machtype == MACH_BVME6000)
- #else
- #  define MACH_BVME6000_ONLY
-@@ -136,7 +143,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x) \
- 	|| defined(CONFIG_BVME6000) || defined(CONFIG_Q40) \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147) \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_HP300 (m68k_machtype == MACH_HP300)
- #else
- #  define MACH_HP300_ONLY
-@@ -149,7 +157,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x)                \
- 	|| defined(CONFIG_BVME6000) || defined(CONFIG_HP300)                \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_Q40 (m68k_machtype == MACH_Q40)
- #else
- #  define MACH_Q40_ONLY
-@@ -162,7 +171,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x)                \
- 	|| defined(CONFIG_BVME6000) || defined(CONFIG_HP300)                \
--	|| defined(CONFIG_Q40) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_Q40) || defined(CONFIG_MVME147)                   \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_SUN3X (m68k_machtype == MACH_SUN3X)
- #else
- #  define CONFIG_SUN3X_ONLY
-@@ -170,6 +180,20 @@ extern unsigned long m68k_machtype;
- #  define MACH_TYPE (MACH_SUN3X)
- #endif
- 
-+#if !defined(CONFIG_VIRT)
-+#  define MACH_IS_VIRT (0)
-+#elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
-+	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x)                \
-+	|| defined(CONFIG_BVME6000) || defined(CONFIG_HP300)                \
-+	|| defined(CONFIG_Q40) || defined(CONFIG_SUN3X)                     \
-+	|| defined(CONFIG_MVME147)
-+#  define MACH_IS_VIRT (m68k_machtype == MACH_VIRT)
-+#else
-+#  define MACH_VIRT_ONLY
-+#  define MACH_IS_VIRT (1)
-+#  define MACH_TYPE (MACH_VIRT)
-+#endif
-+
- #ifndef MACH_TYPE
- #  define MACH_TYPE (m68k_machtype)
- #endif
-diff --git a/arch/m68k/include/asm/virt.h b/arch/m68k/include/asm/virt.h
-new file mode 100644
-index 000000000000..87647c17afd7
---- /dev/null
-+++ b/arch/m68k/include/asm/virt.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_VIRT_H
-+#define __ASM_VIRT_H
-+
-+#define NUM_VIRT_SOURCES 200
-+
-+struct virt_booter_device_data {
-+	unsigned long mmio;
-+	unsigned long irq;
-+};
-+
-+struct virt_booter_data {
-+	unsigned long qemu_version;
-+	struct virt_booter_device_data pic;
-+	struct virt_booter_device_data rtc;
-+	struct virt_booter_device_data tty;
-+	struct virt_booter_device_data ctrl;
-+	struct virt_booter_device_data virtio;
-+};
-+
-+extern struct virt_booter_data virt_bi_data;
-+
-+extern void __init virt_init_IRQ(void);
-+
-+#endif
-diff --git a/arch/m68k/include/uapi/asm/bootinfo-virt.h b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-new file mode 100644
-index 000000000000..ab17fd9d200d
---- /dev/null
-+++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * asm/bootinfo-virt.h -- Virtual-m68k-specific boot information definitions
-+ */
-+
-+#ifndef _UAPI_ASM_M68K_BOOTINFO_VIRT_H
-+#define _UAPI_ASM_M68K_BOOTINFO_VIRT_H
-+
-+#define BI_VIRT_QEMU_VERSION	0x8000
-+#define BI_VIRT_GF_PIC_BASE	0x8001
-+#define BI_VIRT_GF_RTC_BASE	0x8002
-+#define BI_VIRT_GF_TTY_BASE	0x8003
-+#define BI_VIRT_VIRTIO_BASE	0x8004
-+#define BI_VIRT_CTRL_BASE       0x8005
-+
-+#define VIRT_BOOTI_VERSION	MK_BI_VERSION(2, 0)
-+
-+#endif /* _UAPI_ASM_M68K_BOOTINFO_MAC_H */
-diff --git a/arch/m68k/include/uapi/asm/bootinfo.h b/arch/m68k/include/uapi/asm/bootinfo.h
-index 38d3140381fa..203d9cbf9630 100644
---- a/arch/m68k/include/uapi/asm/bootinfo.h
-+++ b/arch/m68k/include/uapi/asm/bootinfo.h
-@@ -83,6 +83,7 @@ struct mem_info {
- #define MACH_SUN3X		11
- #define MACH_M54XX		12
- #define MACH_M5441X		13
-+#define MACH_VIRT		14
- 
- 
-     /*
-diff --git a/arch/m68k/kernel/Makefile b/arch/m68k/kernel/Makefile
-index dbac7f8743fc..c0833da6a2ca 100644
---- a/arch/m68k/kernel/Makefile
-+++ b/arch/m68k/kernel/Makefile
-@@ -11,6 +11,7 @@ extra-$(CONFIG_VME)	:= head.o
- extra-$(CONFIG_HP300)	:= head.o
- extra-$(CONFIG_Q40)	:= head.o
- extra-$(CONFIG_SUN3X)	:= head.o
-+extra-$(CONFIG_VIRT)	:= head.o
- extra-$(CONFIG_SUN3)	:= sun3-head.o
- extra-y			+= vmlinux.lds
- 
-diff --git a/arch/m68k/kernel/head.S b/arch/m68k/kernel/head.S
-index 493c95db0e51..ca9ccf23de86 100644
---- a/arch/m68k/kernel/head.S
-+++ b/arch/m68k/kernel/head.S
-@@ -262,6 +262,7 @@
- #include <asm/bootinfo-hp300.h>
- #include <asm/bootinfo-mac.h>
- #include <asm/bootinfo-q40.h>
-+#include <asm/bootinfo-virt.h>
- #include <asm/bootinfo-vme.h>
- #include <asm/setup.h>
- #include <asm/entry.h>
-@@ -534,6 +535,7 @@ func_define	putn,1
- #define is_not_apollo(lab) cmpl &MACH_APOLLO,%pc@(m68k_machtype); jne lab
- #define is_not_q40(lab) cmpl &MACH_Q40,%pc@(m68k_machtype); jne lab
- #define is_not_sun3x(lab) cmpl &MACH_SUN3X,%pc@(m68k_machtype); jne lab
-+#define is_not_virt(lab) cmpl &MACH_VIRT,%pc@(m68k_machtype); jne lab
- 
- #define hasnt_leds(lab) cmpl &MACH_HP300,%pc@(m68k_machtype); \
- 			jeq 42f; \
-@@ -647,6 +649,14 @@ ENTRY(__start)
- L(test_notmac):
- #endif /* CONFIG_MAC */
- 
-+#ifdef CONFIG_VIRT
-+	is_not_virt(L(test_notvirt))
-+
-+	get_bi_record BI_VIRT_GF_TTY_BASE
-+	lea	%pc@(L(virt_gf_tty_base)),%a1
-+	movel	%a0@,%a1@
-+L(test_notvirt):
-+#endif /* CONFIG_VIRT */
- 
- /*
-  * There are ultimately two pieces of information we want for all kinds of
-@@ -1237,6 +1247,13 @@ L(mmu_init_not_mac):
- L(notsun3x):
- #endif
- 
-+#ifdef CONFIG_VIRT
-+	is_not_virt(L(novirt))
-+	mmu_map_tt	#1,#0xFF000000,#0x01000000,#_PAGE_NOCACHE_S
-+	jbra    L(mmu_init_done)
-+L(novirt):
-+#endif
-+
- #ifdef CONFIG_APOLLO
- 	is_not_apollo(L(notapollo))
- 
-@@ -3186,6 +3203,14 @@ func_start	serial_putc,%d0/%d1/%a0/%a1
- 3:
- #endif
- 
-+#ifdef CONFIG_VIRT
-+	is_not_virt(1f)
-+
-+	movel L(virt_gf_tty_base),%a1
-+	moveb %d0,%a1@(GF_PUT_CHAR)
-+1:
-+#endif
-+
- L(serial_putc_done):
- func_return	serial_putc
- 
-@@ -3865,3 +3890,9 @@ q40_mem_cptr:
- L(q40_do_debug):
- 	.long	0
- #endif
-+
-+#if defined(CONFIG_VIRT)
-+GF_PUT_CHAR = 0x00
-+L(virt_gf_tty_base):
-+	.long 0
-+#endif /* CONFIG_VIRT */
-diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
-index 226dc3750397..b4ece3b05504 100644
---- a/arch/m68k/kernel/setup_mm.c
-+++ b/arch/m68k/kernel/setup_mm.c
-@@ -182,6 +182,8 @@ static void __init m68k_parse_bootinfo(const struct bi_record *record)
- 				unknown = hp300_parse_bootinfo(record);
- 			else if (MACH_IS_APOLLO)
- 				unknown = apollo_parse_bootinfo(record);
-+			else if (MACH_IS_VIRT)
-+				unknown = virt_parse_bootinfo(record);
- 			else
- 				unknown = 1;
- 		}
-@@ -312,6 +314,11 @@ void __init setup_arch(char **cmdline_p)
- 		cf_mmu_context_init();
- 		config_BSP(NULL, 0);
- 		break;
-+#endif
-+#ifdef CONFIG_VIRT
-+	case MACH_VIRT:
-+		config_virt();
-+		break;
- #endif
- 	default:
- 		panic("No configuration setup");
-diff --git a/arch/m68k/mm/kmap.c b/arch/m68k/mm/kmap.c
-index 20ddf71b43d0..39729f40d106 100644
---- a/arch/m68k/mm/kmap.c
-+++ b/arch/m68k/mm/kmap.c
-@@ -179,6 +179,12 @@ void __iomem *__ioremap(unsigned long physaddr, unsigned long size, int cachefla
- 			return (void __iomem *)physaddr;
- 	}
- #endif
-+#ifdef CONFIG_VIRT
-+	if (MACH_IS_VIRT) {
-+		if (physaddr >= 0xff000000 && cacheflag == IOMAP_NOCACHE_SER)
-+			return (void __iomem *)physaddr;
-+	}
-+#endif
- #ifdef CONFIG_COLDFIRE
- 	if (__cf_internalio(physaddr))
- 		return (void __iomem *) physaddr;
-@@ -292,18 +298,21 @@ EXPORT_SYMBOL(__ioremap);
-  */
- void iounmap(void __iomem *addr)
- {
--#ifdef CONFIG_AMIGA
--	if ((!MACH_IS_AMIGA) ||
--	    (((unsigned long)addr < 0x40000000) ||
--	     ((unsigned long)addr > 0x60000000)))
--			free_io_area((__force void *)addr);
--#else
-+#if defined(CONFIG_AMIGA)
-+	if (MACH_IS_AMIGA &&
-+	    ((unsigned long)addr >= 0x40000000) &&
-+	    ((unsigned long)addr < 0x60000000))
-+		return;
-+#endif
-+#if defined(CONFIG_VIRT)
-+	if (MACH_IS_VIRT && (unsigned long)addr >= 0xff000000)
-+		return;
-+#endif
- #ifdef CONFIG_COLDFIRE
- 	if (cf_internalio(addr))
- 		return;
- #endif
- 	free_io_area((__force void *)addr);
--#endif
- }
- EXPORT_SYMBOL(iounmap);
- 
-diff --git a/arch/m68k/virt/Makefile b/arch/m68k/virt/Makefile
-new file mode 100644
-index 000000000000..54b9b2866654
---- /dev/null
-+++ b/arch/m68k/virt/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Makefile for Linux arch/m68k/virt source directory
-+#
-+
-+obj-y		:= config.o ints.o platform.o
-diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
-new file mode 100644
-index 000000000000..fa769669db07
---- /dev/null
-+++ b/arch/m68k/virt/config.c
-@@ -0,0 +1,119 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/serial_core.h>
-+#include <clocksource/timer-goldfish.h>
-+
-+#include <asm/bootinfo.h>
-+#include <asm/bootinfo-virt.h>
-+#include <asm/byteorder.h>
-+#include <asm/machdep.h>
-+#include <asm/virt.h>
-+#include <asm/config.h>
-+
-+struct virt_booter_data virt_bi_data;
-+
-+struct virt_ctrl {
-+	u32 features;
-+	u32 cmd;
-+};
-+
-+enum {
-+	CMD_NOOP,
-+	CMD_RESET,
-+	CMD_HALT,
-+	CMD_PANIC,
-+};
-+
-+#define virt_ctrl ((volatile struct virt_ctrl *)virt_bi_data.ctrl.mmio)
-+
-+static void virt_get_model(char *str)
-+{
-+	/* str is 80 characters long */
-+	sprintf(str, "QEMU Virtual M68K Machine (%u.%u.%u)",
-+		(u8)(virt_bi_data.qemu_version >> 24),
-+		(u8)(virt_bi_data.qemu_version >> 16),
-+		(u8)(virt_bi_data.qemu_version >> 8));
-+}
-+
-+static void virt_halt(void)
-+{
-+	virt_ctrl->cmd = CMD_HALT;
-+	local_irq_disable();
-+	while (1)
-+		;
-+}
-+
-+static void virt_reset(void)
-+{
-+	virt_ctrl->cmd = CMD_RESET;
-+	local_irq_disable();
-+	while (1)
-+		;
-+}
-+
-+/*
-+ * Parse a virtual-m68k-specific record in the bootinfo
-+ */
-+
-+int __init virt_parse_bootinfo(const struct bi_record *record)
-+{
-+	int unknown = 0;
-+	const void *data = record->data;
-+
-+	switch (be16_to_cpu(record->tag)) {
-+	case BI_VIRT_QEMU_VERSION:
-+		virt_bi_data.qemu_version = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_GF_PIC_BASE:
-+		virt_bi_data.pic.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.pic.irq = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_GF_RTC_BASE:
-+		virt_bi_data.rtc.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.rtc.irq = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_GF_TTY_BASE:
-+		virt_bi_data.tty.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.tty.irq = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_CTRL_BASE:
-+		virt_bi_data.ctrl.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.ctrl.irq = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_VIRTIO_BASE:
-+		virt_bi_data.virtio.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.virtio.irq = be32_to_cpup(data);
-+		break;
-+	default:
-+		unknown = 1;
-+		break;
-+	}
-+	return unknown;
-+}
-+
-+static void __init virt_sched_init(void)
-+{
-+	goldfish_timer_init(virt_bi_data.rtc.irq,
-+			    (void *)virt_bi_data.rtc.mmio);
-+}
-+
-+void __init config_virt(void)
-+{
-+	char earlycon[24];
-+
-+	snprintf(earlycon, sizeof(earlycon), "early_gf_tty,0x%08lx",
-+		 virt_bi_data.tty.mmio);
-+	setup_earlycon(earlycon);
-+
-+	mach_init_IRQ = virt_init_IRQ;
-+	mach_sched_init = virt_sched_init;
-+	mach_get_model = virt_get_model;
-+	mach_reset = virt_reset;
-+	mach_halt = virt_halt;
-+	mach_power_off = virt_halt;
-+}
-diff --git a/arch/m68k/virt/ints.c b/arch/m68k/virt/ints.c
-new file mode 100644
-index 000000000000..7b2827f84b09
---- /dev/null
-+++ b/arch/m68k/virt/ints.c
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/kernel.h>
-+#include <linux/sched.h>
-+#include <linux/sched/debug.h>
-+#include <linux/types.h>
-+
-+#include <asm/hwtest.h>
-+#include <asm/irq.h>
-+#include <asm/irq_regs.h>
-+#include <asm/virt.h>
-+
-+struct goldfish_pic {
-+	u32 status;
-+	u32 irq_pending;
-+	u32 irq_diable_all;
-+	u32 disable;
-+	u32 enable;
-+	u32 pad[1019];
-+};
-+
-+extern void show_registers(struct pt_regs *);
-+
-+#define gf_pic ((volatile struct goldfish_pic *)virt_bi_data.pic.mmio)
-+
-+#define GF_PIC(irq) (gf_pic[(irq - IRQ_USER) / 32])
-+#define GF_IRQ(irq) ((irq - IRQ_USER) % 32)
-+
-+static void virt_irq_enable(struct irq_data *data)
-+{
-+	GF_PIC(data->irq).enable = 1 << GF_IRQ(data->irq);
-+}
-+
-+static void virt_irq_disable(struct irq_data *data)
-+{
-+	GF_PIC(data->irq).disable = 1 << GF_IRQ(data->irq);
-+}
-+
-+static unsigned int virt_irq_startup(struct irq_data *data)
-+{
-+	virt_irq_enable(data);
-+	return 0;
-+}
-+
-+static irqreturn_t virt_nmi_handler(int irq, void *dev_id)
-+{
-+	static volatile int in_nmi;
-+
-+	if (in_nmi)
-+		return IRQ_HANDLED;
-+	in_nmi = 1;
-+
-+	pr_warn("Non-Maskable Interrupt\n");
-+	show_registers(get_irq_regs());
-+
-+	in_nmi = 0;
-+	return IRQ_HANDLED;
-+}
-+
-+static struct irq_chip virt_irq_chip = {
-+	.name		= "virt",
-+	.irq_enable	= virt_irq_enable,
-+	.irq_disable	= virt_irq_disable,
-+	.irq_startup	= virt_irq_startup,
-+	.irq_shutdown	= virt_irq_disable,
-+};
-+
-+static void goldfish_pic_irq(struct irq_desc *desc)
-+{
-+	u32 irq_pending;
-+	int irq_num;
-+
-+	irq_pending = gf_pic[desc->irq_data.irq - 1].irq_pending;
-+	irq_num = IRQ_USER + (desc->irq_data.irq - 1) * 32;
-+
-+	do {
-+		if (irq_pending & 1)
-+			generic_handle_irq(irq_num);
-+		++irq_num;
-+		irq_pending >>= 1;
-+	} while (irq_pending);
-+}
-+
-+/*
-+ * 6 goldfish-pic for CPU IRQ #1 to IRQ #6
-+ * CPU IRQ #1 -> PIC #1
-+ *               IRQ #1 to IRQ #31 -> unused
-+ *               IRQ #32 -> goldfish-tty
-+ * CPU IRQ #2 -> PIC #2
-+ *               IRQ #1 to IRQ #32 -> virtio-mmio from 1 to 32
-+ * CPU IRQ #3 -> PIC #3
-+ *               IRQ #1 to IRQ #32 -> virtio-mmio from 33 to 64
-+ * CPU IRQ #4 -> PIC #4
-+ *               IRQ #1 to IRQ #32 -> virtio-mmio from 65 to 96
-+ * CPU IRQ #5 -> PIC #5
-+ *               IRQ #1 to IRQ #32 -> virtio-mmio from 97 to 128
-+ * CPU IRQ #6 -> PIC #6
-+ *               IRQ #1 -> goldfish-rtc
-+ *               IRQ #2 to IRQ #32 -> unused
-+ * CPU IRQ #7 -> NMI
-+ */
-+void __init virt_init_IRQ(void)
-+{
-+	int i;
-+
-+	m68k_setup_irq_controller(&virt_irq_chip, handle_simple_irq, IRQ_USER,
-+				  NUM_VIRT_SOURCES - IRQ_USER);
-+
-+	for (i = 0; i < 6; i++) {
-+		irq_set_chained_handler(virt_bi_data.pic.irq + i,
-+					goldfish_pic_irq);
-+	}
-+
-+	if (request_irq(IRQ_AUTO_7, virt_nmi_handler, 0, "NMI",
-+			virt_nmi_handler))
-+		pr_err("Couldn't register NMI\n");
-+}
-diff --git a/arch/m68k/virt/platform.c b/arch/m68k/virt/platform.c
-new file mode 100644
-index 000000000000..c16158e7a9ca
---- /dev/null
-+++ b/arch/m68k/virt/platform.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/platform_device.h>
-+#include <linux/interrupt.h>
-+#include <asm/virt.h>
-+#include <asm/irq.h>
-+
-+#define VIRTIO_BUS_NB	128
-+
-+static int __init virt_virtio_init(int id)
-+{
-+	const struct resource res[] = {
-+		DEFINE_RES_MEM(virt_bi_data.virtio.mmio + id * 0x200, 0x200),
-+		DEFINE_RES_IRQ(virt_bi_data.virtio.irq + id),
-+	};
-+	struct platform_device *pdev;
-+
-+	pdev = platform_device_register_simple("virtio-mmio", id,
-+					       res, ARRAY_SIZE(res));
-+	if (IS_ERR(pdev))
-+		return PTR_ERR(pdev);
-+
-+	return 0;
-+}
-+
-+static int __init virt_platform_init(void)
-+{
-+	const struct resource goldfish_tty_res[] = {
-+		DEFINE_RES_MEM(virt_bi_data.tty.mmio, 1),
-+		DEFINE_RES_IRQ(virt_bi_data.tty.irq),
-+	};
-+	/* this is the second gf-rtc, the first one is used by the scheduler */
-+	const struct resource goldfish_rtc_res[] = {
-+		DEFINE_RES_MEM(virt_bi_data.rtc.mmio + 0x1000, 0x1000),
-+		DEFINE_RES_IRQ(virt_bi_data.rtc.irq + 1),
-+	};
-+	extern unsigned long min_low_pfn;
-+	struct platform_device *pdev;
-+	int i;
-+
-+	if (!MACH_IS_VIRT)
-+		return -ENODEV;
-+
-+	/* We need this to have DMA'able memory provided to goldfish-tty */
-+	min_low_pfn = 0;
-+
-+	pdev = platform_device_register_simple("goldfish_tty",
-+					       PLATFORM_DEVID_NONE,
-+					       goldfish_tty_res,
-+					       ARRAY_SIZE(goldfish_tty_res));
-+	if (IS_ERR(pdev))
-+		return PTR_ERR(pdev);
-+
-+	pdev = platform_device_register_simple("goldfish_rtc",
-+					       PLATFORM_DEVID_NONE,
-+					       goldfish_rtc_res,
-+					       ARRAY_SIZE(goldfish_rtc_res));
-+	if (IS_ERR(pdev))
-+		return PTR_ERR(pdev);
-+
-+	for (i = 0; i < VIRTIO_BUS_NB; i++) {
-+		int err;
-+
-+		err = virt_virtio_init(i);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
-+arch_initcall(virt_platform_init);
--- 
-2.34.1
+Adrian Hunter (4):
+      scsi: ufs: ufs-pci: Add support for Intel ADL
+      scsi: ufs: Let devices remain runtime suspended during system suspend
+      scsi: ufs: core: Fix another task management completion race
+      scsi: ufs: core: Fix task management completion timeout race
+
+Alan Stern (1):
+      scsi: block: pm: Always set request queue runtime active in blk_post_runtime_resume()
+
+Bart Van Assche (31):
+      scsi: ufs: Implement polling support
+      scsi: ufs: Optimize the command queueing code
+      scsi: ufs: Stop using the clock scaling lock in the error handler
+      scsi: ufs: Fix a kernel crash during shutdown
+      scsi: ufs: Improve SCSI abort handling further
+      scsi: ufs: Introduce ufshcd_release_scsi_cmd()
+      scsi: ufs: Remove the 'update_scaling' local variable
+      scsi: ufs: Remove hba->cmd_queue
+      scsi: ufs: Fix a deadlock in the error handler
+      scsi: ufs: Rework ufshcd_change_queue_depth()
+      scsi: ufs: Remove ufshcd_any_tag_in_use()
+      scsi: ufs: Fix race conditions related to driver data
+      scsi: ufs: Remove dead code
+      scsi: ufs: Remove the sdev_rpmb member
+      scsi: ufs: Remove is_rpmb_wlun()
+      scsi: ufs: Rename a function argument
+      scsi: core: Fix scsi_device_max_queue_depth()
+      scsi: Remove superfluous #include <linux/async.h> directives
+      scsi: pmcraid: Fix a kernel-doc warning
+      scsi: pm8001: Fix kernel-doc warnings
+      scsi: megaraid: Fix a kernel-doc warning
+      scsi: initio: Fix a kernel-doc warning
+      scsi: dc395x: Fix a kernel-doc warning
+      scsi: bfa: Declare 'bfad_im_vport_attrs' static
+      scsi: atp870u: Fix a kernel-doc warning
+      scsi: a100u2w: Fix a kernel-doc warning
+      scsi: core: Show SCMD_LAST in text form
+      scsi: core: Declare 'scsi_scan_type' static
+      scsi: core: Suppress a kernel-doc warning
+      scsi: core: Remove Scsi_Host.shost_dev_attr_groups
+      scsi: ufs: core: Improve SCSI abort handling
+
+Bean Huo (2):
+      scsi: ufs: core: Fix deadlock issue in ufshcd_wait_for_doorbell_clr()
+      scsi: ufs: ufshpb: Fix warning in ufshpb_set_hpb_read_to_upiu()
+
+Changyuan Lyu (2):
+      scsi: pm80xx: Add pm80xx_mpi_build_cmd() tracepoint
+      scsi: pm80xx: Add tracepoints
+
+Christoph Hellwig (8):
+      scsi: pmcraid: Don't use GFP_DMA in pmcraid_alloc_sglist()
+      scsi: snic: Don't use GFP_DMA in snic_queue_report_tgt_req()
+      scsi: myrs: Don't use GFP_DMA
+      scsi: myrb: Don't use GFP_DMA in myrb_pdev_slave_alloc()
+      scsi: initio: Don't use GFP_DMA in initio_probe_one()
+      scsi: sr: Don't use GFP_DMA
+      scsi: ch: Don't use GFP_DMA
+      scsi: efct: Don't pass GFP_DMA to dma_alloc_coherent()
+
+Christophe JAILLET (4):
+      scsi: hpsa: Remove an unused variable in hpsa_update_scsi_devices()
+      scsi: hisi_sas: Use non-atomic bitmap functions when possible
+      scsi: hisi_sas: Remove some useless code in hisi_sas_alloc()
+      scsi: hisi_sas: Use devm_bitmap_zalloc() when applicable
+
+Chunguang Xu (1):
+      scsi: core: Use eh_timeout for START STOP UNIT
+
+Colin Ian King (1):
+      scsi: mptfusion: Remove redundant variable r
+
+Dan Carpenter (2):
+      scsi: target: configfs: Delete unnecessary checks for NULL
+      scsi: qla2xxx: edif: Fix off by one bug in qla_edif_app_getfcinfo()
+
+Ewan D. Milne (2):
+      scsi: core: Simplify control flow in scmd_eh_abort_handler()
+      scsi: qla2xxx: Fix mailbox direction flags in qla2xxx_get_adapter_id()
+
+Florian Fainelli (3):
+      scsi: qla4xxx: Format SYSFS_FLAG_FW_SEL_BOOT as byte
+      scsi: qedi: Fix SYSFS_FLAG_FW_SEL_BOOT formatting
+      scsi: qedi: Remove set but unused 'page' variable
+
+Geert Uytterhoeven (2):
+      scsi: ufs: Fix double space in SCSI_UFS_HWMON description
+      scsi: ufs: Wrap Universal Flash Storage drivers in SCSI_UFSHCD
+
+George Kennedy (2):
+      scsi: scsi_debug: Sanity check block descriptor length in resp_mode_select()
+      scsi: scsi_debug: Fix type in min_t to avoid stack OOB
+
+Hannes Reinecke (1):
+      scsi: qla2xxx: Synchronize rport dev_loss_tmo setting
+
+Igor Pylypiv (5):
+      scsi: pm80xx: Do not call scsi_remove_host() in pm8001_alloc()
+      scsi: pm80xx: Use bitmap_zalloc() for tags bitmap allocation
+      scsi: pm80xx: Update WARN_ON check in pm8001_mpi_build_cmd()
+      scsi: pm80xx: Do not check the address-of value for NULL
+      scsi: pm80xx: Apply byte mask for phy ID in mpi_phy_start_resp()
+
+James Smart (10):
+      scsi: lpfc: Update lpfc version to 14.0.0.4
+      scsi: lpfc: Add additional debugfs support for CMF
+      scsi: lpfc: Cap CMF read bytes to MBPI
+      scsi: lpfc: Adjust CMF total bytes and rxmonitor
+      scsi: lpfc: Trigger SLI4 firmware dump before doing driver cleanup
+      scsi: lpfc: Fix NPIV port deletion crash
+      scsi: lpfc: Fix lpfc_force_rscn ndlp kref imbalance
+      scsi: lpfc: Change return code on I/Os received during link bounce
+      scsi: lpfc: Fix leaked lpfc_dmabuf mbox allocations with NPIV
+      scsi: lpfc: Fix non-recovery of remote ports following an unsolicited LOGO
+
+John Garry (7):
+      scsi: Revert "scsi: hisi_sas: Filter out new PHY up events during suspend"
+      scsi: libsas: Don't always drain event workqueue for HA resume
+      scsi: libsas: Decode SAM status and host byte codes
+      scsi: hisi_sas: Factor out task prep and delivery code
+      scsi: hisi_sas: Pass abort structure for internal abort
+      scsi: hisi_sas: Make internal abort have no task proto
+      scsi: hisi_sas: Start delivery hisi_sas_task_exec() directly
+
+Kees Cook (2):
+      scsi: lpfc: Use struct_group to isolate cast to larger object
+      scsi: lpfc: Use struct_group() to initialize struct lpfc_cgn_info
+
+Manish Rangankar (1):
+      scsi: qedi: Fix cmd_cleanup_cmpl counter mismatch issue
+
+Mike Christie (4):
+      scsi: core: sysfs: Fix setting device state to SDEV_RUNNING
+      scsi: target: core: Use RCU helpers for INQUIRY t10_alua_tg_pt_gp
+      scsi: core: sysfs: Fix hang when device state is set via sysfs
+      scsi: iscsi: Unblock session then wake up error handler
+
+Niklas Cassel (2):
+      scsi: sd_zbc: Clean up sd_zbc_parse_report() setting of wp
+      scsi: sd_zbc: Simplify zone full condition check
+
+Qi Liu (3):
+      scsi: hisi_sas: Fix phyup timeout on FPGA
+      scsi: hisi_sas: Prevent parallel FLR and controller reset
+      scsi: hisi_sas: Prevent parallel controller reset and control phy command
+
+Roman Bolshakov (1):
+      scsi: qla2xxx: Format log strings only if needed
+
+Sebastian Andrzej Siewior (1):
+      scsi: be2iscsi: Remove maintainers
+
+Shin'ichiro Kawasaki (2):
+      scsi: scsi_debug: Fix buffer size of REPORT ZONES command
+      scsi: scsi_debug: Zero clear zones at reset write pointer
+
+Sreekanth Reddy (28):
+      scsi: mpi3mr: Bump driver version to 8.0.0.61.0
+      scsi: mpi3mr: Fixes around reply request queues
+      scsi: mpi3mr: Enhanced Task Management Support Reply handling
+      scsi: mpi3mr: Use TM response codes from MPI3 headers
+      scsi: mpi3mr: Add io_uring interface support in I/O-polled mode
+      scsi: mpi3mr: Print cable mngnt and temp threshold events
+      scsi: mpi3mr: Support Prepare for Reset event
+      scsi: mpi3mr: Add Event acknowledgment logic
+      scsi: mpi3mr: Gracefully handle online FW update operation
+      scsi: mpi3mr: Detect async reset that occurred in firmware
+      scsi: mpi3mr: Add IOC reinit function
+      scsi: mpi3mr: Handle offline FW activation in graceful manner
+      scsi: mpi3mr: Code refactor of IOC init - part2
+      scsi: mpi3mr: Code refactor of IOC init - part1
+      scsi: mpi3mr: Fault IOC when internal command gets timeout
+      scsi: mpi3mr: Display IOC firmware package version
+      scsi: mpi3mr: Handle unaligned PLL in unmap cmnds
+      scsi: mpi3mr: Increase internal cmnds timeout to 60s
+      scsi: mpi3mr: Do access status validation before adding devices
+      scsi: mpi3mr: Add support for PCIe Managed Switch SES device
+      scsi: mpi3mr: Update MPI3 headers - part2
+      scsi: mpi3mr: Update MPI3 headers - part1
+      scsi: mpi3mr: Don't reset IOC if cmnds flush with reset status
+      scsi: mpi3mr: Replace spin_lock() with spin_lock_irqsave()
+      scsi: mpi3mr: Add debug APIs based on logging_level bits
+      scsi: mpt3sas: Fix incorrect system timestamp
+      scsi: mpt3sas: Fix system going into read-only mode
+      scsi: mpt3sas: Fix kernel panic during drive powercycle test
+
+Xiang Chen (12):
+      scsi: hisi_sas: Use autosuspend for the host controller
+      scsi: libsas: Keep host active while processing events
+      scsi: hisi_sas: Keep controller active between ISR of phyup and the event being processed
+      scsi: libsas: Defer works of new phys during suspend
+      scsi: libsas: Refactor sas_queue_deferred_work()
+      scsi: libsas: Add flag SAS_HA_RESUMING
+      scsi: libsas: Resume host while sending SMP I/Os
+      scsi: hisi_sas: Add more logs for runtime suspend/resume
+      scsi: libsas: Insert PORTE_BROADCAST_RCVD event for resuming host
+      scsi: mvsas: Add spin_lock/unlock() to protect asd_sas_port->phy_list
+      scsi: hisi_sas: Fix some issues related to asd_sas_port->phy_list
+      scsi: libsas: Add spin_lock/unlock() to protect asd_sas_port->phy_list
+
+Ye Guojin (1):
+      scsi: ufs: ufs-mediatek: Add put_device() after of_find_device_by_node()
+
+And the diffstat:
+
+ MAINTAINERS                                  |    2 -
+ block/blk-pm.c                               |   22 +-
+ drivers/message/fusion/mptbase.c             |    6 +-
+ drivers/scsi/a100u2w.c                       |    2 -
+ drivers/scsi/atp870u.c                       |    1 -
+ drivers/scsi/bfa/bfad_attr.c                 |    2 +-
+ drivers/scsi/ch.c                            |    6 +-
+ drivers/scsi/dc395x.c                        |    3 +-
+ drivers/scsi/elx/efct/efct_driver.c          |    2 +-
+ drivers/scsi/elx/efct/efct_hw.c              |   10 +-
+ drivers/scsi/elx/efct/efct_io.c              |    2 +-
+ drivers/scsi/elx/libefc/efc_cmds.c           |    4 +-
+ drivers/scsi/elx/libefc/efc_els.c            |    4 +-
+ drivers/scsi/elx/libefc_sli/sli4.c           |   14 +-
+ drivers/scsi/hisi_sas/hisi_sas.h             |    7 +-
+ drivers/scsi/hisi_sas/hisi_sas_main.c        |  396 ++++---
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c       |   35 +-
+ drivers/scsi/hosts.c                         |   15 +-
+ drivers/scsi/hpsa.c                          |    2 -
+ drivers/scsi/initio.c                        |    5 +-
+ drivers/scsi/libsas/sas_discover.c           |    1 -
+ drivers/scsi/libsas/sas_event.c              |   77 +-
+ drivers/scsi/libsas/sas_expander.c           |    3 +
+ drivers/scsi/libsas/sas_init.c               |   49 +-
+ drivers/scsi/libsas/sas_internal.h           |    2 +
+ drivers/scsi/libsas/sas_scsi_host.c          |    7 +-
+ drivers/scsi/lpfc/lpfc.h                     |   97 +-
+ drivers/scsi/lpfc/lpfc_attr.c                |   62 +-
+ drivers/scsi/lpfc/lpfc_debugfs.c             |   27 +-
+ drivers/scsi/lpfc/lpfc_debugfs.h             |    2 +-
+ drivers/scsi/lpfc/lpfc_els.c                 |   31 +-
+ drivers/scsi/lpfc/lpfc_hbadisc.c             |   10 +-
+ drivers/scsi/lpfc/lpfc_hw.h                  |   29 +-
+ drivers/scsi/lpfc/lpfc_init.c                |   41 +-
+ drivers/scsi/lpfc/lpfc_nportdisc.c           |    6 +
+ drivers/scsi/lpfc/lpfc_scsi.c                |    8 +-
+ drivers/scsi/lpfc/lpfc_sli.c                 |   38 +-
+ drivers/scsi/lpfc/lpfc_version.h             |    2 +-
+ drivers/scsi/lpfc/lpfc_vport.c               |   83 +-
+ drivers/scsi/megaraid/megaraid_mbox.c        |    1 -
+ drivers/scsi/mpi3mr/mpi/mpi30_cnfg.h         |  603 +++++++++--
+ drivers/scsi/mpi3mr/mpi/mpi30_image.h        |   59 +-
+ drivers/scsi/mpi3mr/mpi/mpi30_init.h         |   15 +-
+ drivers/scsi/mpi3mr/mpi/mpi30_ioc.h          |  128 ++-
+ drivers/scsi/mpi3mr/mpi/mpi30_pci.h          |   44 +
+ drivers/scsi/mpi3mr/mpi/mpi30_sas.h          |   14 +
+ drivers/scsi/mpi3mr/mpi/mpi30_transport.h    |   31 +-
+ drivers/scsi/mpi3mr/mpi3mr.h                 |  126 ++-
+ drivers/scsi/mpi3mr/mpi3mr_debug.h           |  133 ++-
+ drivers/scsi/mpi3mr/mpi3mr_fw.c              | 1451 +++++++++++++++++---------
+ drivers/scsi/mpi3mr/mpi3mr_os.c              |  771 +++++++++++---
+ drivers/scsi/mpt3sas/mpt3sas_base.c          |    4 +-
+ drivers/scsi/mpt3sas/mpt3sas_base.h          |    4 +
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c         |   59 +-
+ drivers/scsi/mvsas/mv_sas.c                  |    5 +
+ drivers/scsi/myrb.c                          |    2 +-
+ drivers/scsi/myrs.c                          |   10 +-
+ drivers/scsi/pm8001/Makefile                 |    7 +-
+ drivers/scsi/pm8001/pm8001_ctl.c             |   24 +-
+ drivers/scsi/pm8001/pm8001_hwi.c             |   33 +-
+ drivers/scsi/pm8001/pm8001_init.c            |   10 +-
+ drivers/scsi/pm8001/pm8001_sas.c             |   16 +
+ drivers/scsi/pm8001/pm80xx_hwi.c             |   38 +-
+ drivers/scsi/pm8001/pm80xx_tracepoints.c     |   10 +
+ drivers/scsi/pm8001/pm80xx_tracepoints.h     |  113 ++
+ drivers/scsi/pmcraid.c                       |    5 +-
+ drivers/scsi/qedi/qedi_fw.c                  |   37 +-
+ drivers/scsi/qedi/qedi_iscsi.c               |    2 +-
+ drivers/scsi/qedi/qedi_iscsi.h               |    2 +-
+ drivers/scsi/qedi/qedi_main.c                |    8 +-
+ drivers/scsi/qla2xxx/qla_attr.c              |    6 +
+ drivers/scsi/qla2xxx/qla_dbg.c               |    3 +
+ drivers/scsi/qla2xxx/qla_edif.c              |    2 +-
+ drivers/scsi/qla2xxx/qla_init.c              |   10 +-
+ drivers/scsi/qla2xxx/qla_mbx.c               |    6 +-
+ drivers/scsi/qla2xxx/qla_nvme.c              |    5 +-
+ drivers/scsi/qla4xxx/ql4_os.c                |    4 +-
+ drivers/scsi/scsi.c                          |    5 +-
+ drivers/scsi/scsi_debug.c                    |   45 +-
+ drivers/scsi/scsi_debugfs.c                  |    1 +
+ drivers/scsi/scsi_error.c                    |  112 +-
+ drivers/scsi/scsi_pm.c                       |    3 +-
+ drivers/scsi/scsi_priv.h                     |    3 +-
+ drivers/scsi/scsi_scan.c                     |    4 +-
+ drivers/scsi/scsi_sysfs.c                    |   37 +-
+ drivers/scsi/scsi_transport_iscsi.c          |    6 +-
+ drivers/scsi/sd.c                            |    1 -
+ drivers/scsi/sd_zbc.c                        |    6 +-
+ drivers/scsi/snic/snic_disc.c                |    2 +-
+ drivers/scsi/sr.c                            |    2 +-
+ drivers/scsi/sr_vendor.c                     |    4 +-
+ drivers/scsi/ufs/Kconfig                     |   15 +-
+ drivers/scsi/ufs/tc-dwc-g210-pci.c           |    1 -
+ drivers/scsi/ufs/ufs-exynos.c                |    4 +-
+ drivers/scsi/ufs/ufs-hisi.c                  |    8 +-
+ drivers/scsi/ufs/ufs-mediatek.c              |    1 +
+ drivers/scsi/ufs/ufshcd-pci.c                |   20 +-
+ drivers/scsi/ufs/ufshcd-pltfrm.c             |    2 -
+ drivers/scsi/ufs/ufshcd.c                    |  354 ++++---
+ drivers/scsi/ufs/ufshcd.h                    |   20 +-
+ drivers/scsi/ufs/ufshpb.c                    |    3 +-
+ drivers/target/target_core_fabric_configfs.c |   16 +-
+ drivers/target/target_core_spc.c             |   14 +-
+ include/linux/blk-pm.h                       |    2 +-
+ include/scsi/libsas.h                        |    2 +
+ include/scsi/scsi_host.h                     |    6 -
+ 106 files changed, 3889 insertions(+), 1726 deletions(-)
+ create mode 100644 drivers/scsi/mpi3mr/mpi/mpi30_pci.h
+ create mode 100644 drivers/scsi/pm8001/pm80xx_tracepoints.c
+ create mode 100644 drivers/scsi/pm8001/pm80xx_tracepoints.h
+
+James
+
 

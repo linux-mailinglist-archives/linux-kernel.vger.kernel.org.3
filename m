@@ -2,141 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6783148D88E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71D748D897
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235004AbiAMNNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 08:13:11 -0500
-Received: from mga04.intel.com ([192.55.52.120]:27860 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232585AbiAMNNK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 08:13:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642079590; x=1673615590;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=P7SqfMIQavu0yrwD8s9MeLaVxZ3QPqiVCiYAzsTDB+A=;
-  b=V9vPnlaYpVU+OPgj683780e3RVpJEB9LDC6lB28oFmIHaonCvwluTy6q
-   FCWSxqztyaX71LaRxpbZBRu/l2Oxt11Wt3WCMds8dgnMYxPW6yQ23WTgV
-   9uNIzBjREVxSogSD/6rqoDLupz9FYjh7u0nlqd5ld1J3nq71iX/vW2Hut
-   R2u/8pIo7onzqoi7lVVEuNV8/b2jfGOWRyqlozdQ4IaR6XmONOooJujV2
-   BdGlx0yD3hkS9vFhGrwYjVQfwYmiMpQV8LOV35umONYftzgJ6K4e+/ME9
-   0YRHr3KisN2a0BeJsf7GG7b0VLPX1XMj3gvg36s/vMNjRcPNiSA7fycYd
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="242820184"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="242820184"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 05:13:09 -0800
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="623844473"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 05:13:06 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mel Gorman <mgorman@suse.de>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Hasan Al Maruf <hasanalmaruf@fb.com>
-Subject: Re: [PATCH -V10 RESEND 0/6] NUMA balancing: optimize memory
- placement for memory tiering system
-References: <20211207022757.2523359-1-ying.huang@intel.com>
-        <Yd79b6PptQMNzDRw@hirez.programming.kicks-ass.net>
-        <87sftsumqd.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Yd/1r49RKgwCXCQL@hirez.programming.kicks-ass.net>
-        <87o84fu9f3.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <YeAid+EXvmH9WAbq@hirez.programming.kicks-ass.net>
-Date:   Thu, 13 Jan 2022 21:13:04 +0800
-In-Reply-To: <YeAid+EXvmH9WAbq@hirez.programming.kicks-ass.net> (Peter
-        Zijlstra's message of "Thu, 13 Jan 2022 14:00:39 +0100")
-Message-ID: <878rvju6cf.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+        id S235024AbiAMNPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 08:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229464AbiAMNPj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 08:15:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1D9C06173F;
+        Thu, 13 Jan 2022 05:15:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D17AE616C9;
+        Thu, 13 Jan 2022 13:15:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E14CEC36AE3;
+        Thu, 13 Jan 2022 13:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642079738;
+        bh=xQVTKDZzsFtlhCL8BzwYKaH2UmaQPcZ7CBG/VUdwYIk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=b2gQ9meTpLGrX0Ciip0/ORIKxjmNs3QOgS38E4v6w/yxxEM9WXNY39gU6TQEAXfc6
+         bQoCz3wOuGK88hxIpumnx6F+8/+1uD2N8mpvqKgyhibLwjuq1ShXG3v1getRHfd++b
+         zxSoxdlf2IA07lxAHlNQ2pneVvJU3XpheL5GAssD3EJbxQ1oPaxHYMCF2Eddbn6u34
+         PgDVORFkcAJQKcLwgFJrknnKNKLyikJtzICJKH9nDYx66DWYOwa/9x9sa5ZOX3wQAE
+         pnGk/VPsSBdNpVIffCZIELB0EqrlPFni7FEIp8v6xOdzf4iMB6vP5lmg0oeRx5kKkd
+         vPGKZiPwUuTOQ==
+Date:   Thu, 13 Jan 2022 22:15:32 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v2 3/8] rethook: Add a generic return hook
+Message-Id: <20220113221532.c48abf7f56d29ba95dcb0dc6@kernel.org>
+In-Reply-To: <YeAaUN8aUip3MUn8@krava>
+References: <164199616622.1247129.783024987490980883.stgit@devnote2>
+        <164199620208.1247129.13021391608719523669.stgit@devnote2>
+        <YeAaUN8aUip3MUn8@krava>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra <peterz@infradead.org> writes:
+On Thu, 13 Jan 2022 13:25:52 +0100
+Jiri Olsa <jolsa@redhat.com> wrote:
 
-> On Thu, Jan 13, 2022 at 08:06:40PM +0800, Huang, Ying wrote:
->> Peter Zijlstra <peterz@infradead.org> writes:
->> > On Thu, Jan 13, 2022 at 03:19:06PM +0800, Huang, Ying wrote:
->> >> Peter Zijlstra <peterz@infradead.org> writes:
->> >> > On Tue, Dec 07, 2021 at 10:27:51AM +0800, Huang Ying wrote:
->
->> >> >> After commit c221c0b0308f ("device-dax: "Hotplug" persistent memory
->> >> >> for use like normal RAM"), the PMEM could be used as the
->> >> >> cost-effective volatile memory in separate NUMA nodes.  In a typical
->> >> >> memory tiering system, there are CPUs, DRAM and PMEM in each physical
->> >> >> NUMA node.  The CPUs and the DRAM will be put in one logical node,
->> >> >> while the PMEM will be put in another (faked) logical node.
->> >> >
->> >> > So what does a system like that actually look like, SLIT table wise, and
->> >> > how does that affect init_numa_topology_type() ?
->> >> 
->> >> The SLIT table is as follows,
->
-> <snip>
->
->> >> node distances:
->> >> node   0   1   2   3 
->> >>   0:  10  21  17  28 
->> >>   1:  21  10  28  17 
->> >>   2:  17  28  10  28 
->> >>   3:  28  17  28  10 
->> >> 
->> >> init_numa_topology_type() set sched_numa_topology_type to NUMA_DIRECT.
->> >> 
->> >> The node 0 and node 1 are onlined during boot.  While the PMEM node,
->> >> that is, node 2 and node 3 are onlined later.  As in the following dmesg
->> >> snippet.
->> >
->> > But how? sched_init_numa() scans the *whole* SLIT table to determine
->> > nr_levels / sched_domains_numa_levels, even offline nodes. Therefore it
->> > should find 4 distinct distance values and end up not selecting
->> > NUMA_DIRECT.
->> >
->> > Similarly for the other types it uses for_each_online_node(), which
->> > would include the pmem nodes once they've been onlined, but I'm thinking
->> > we explicitly want to skip CPU-less nodes in that iteration.
->> 
->> I used the debug patch as below, and get the log in dmesg as follows,
->> 
->> [    5.394577][    T1] sched_numa_topology_type: 0, levels: 4, max_distance: 28
->> 
->> I found that I forget another caller of init_numa_topology_type() run
->> during hotplug.  I will add another printk() to show it.  Sorry about
->> that.
->
-> Can you try with this on?
->
-> I'm suspecting there's a problem with init_numa_topology_type(); it will
-> never find the max distance due to the _online_ clause in the iteration,
-> since you said the pmem nodes are not online yet.
->
-> ---
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index d201a7052a29..53ab9c63c185 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -1756,6 +1756,8 @@ static void init_numa_topology_type(void)
->  			return;
->  		}
->  	}
-> +
-> +	WARN(1, "no NUMA type determined");
->  }
+> On Wed, Jan 12, 2022 at 11:03:22PM +0900, Masami Hiramatsu wrote:
+> > Add a return hook framework which hooks the function
+> > return. Most of the idea came from the kretprobe, but
+> > this is independent from kretprobe.
+> > Note that this is expected to be used with other
+> > function entry hooking feature, like ftrace, fprobe,
+> > adn kprobes. Eventually this will replace the
+> > kretprobe (e.g. kprobe + rethook = kretprobe), but
+> > at this moment, this is just a additional hook.
+> 
+> this looks similar to the code kretprobe is using now
 
-Sure.  Will do this.
+Yes, I've mostly re-typed the code :)
 
-Best Regards,
-Huang, Ying
+> would it make sense to incrementaly change current code to provide
+> this rethook interface? instead of big switch of current kretprobe
+> to kprobe + new rethook interface in future?
+
+Would you mean modifying the kretprobe instance code to provide
+similar one, and rename it at some point?
+My original idea is to keep the current kretprobe code and build
+up the similar one, and switch to it at some point. Actually,
+I don't want to change the current kretprobe interface itself,
+but the backend will be changed. For example, current kretprobe
+has below interface.
+
+struct kretprobe {
+        struct kprobe kp;
+        kretprobe_handler_t handler;
+        kretprobe_handler_t entry_handler;
+        int maxactive;
+        int nmissed;
+        size_t data_size;
+        struct freelist_head freelist;
+        struct kretprobe_holder *rph;
+};
+
+My idea is switching it to below.
+
+struct kretprobe {
+        struct kprobe kp;
+        kretprobe_handler_t handler;
+        kretprobe_handler_t entry_handler;
+        int maxactive;
+        int nmissed;
+        size_t data_size;
+        struct rethook *rethook;
+};
+
+Of course 'kretprobe_instance' may need to be changed...
+
+struct kretprobe_instance {
+	struct rethook_node;
+	char data[];
+};
+
+But even though, since there is 'get_kretprobe(ri)' wrapper, user
+will be able to access the 'struct kretprobe' from kretprobe_instance
+transparently.
+
+Thank you,
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

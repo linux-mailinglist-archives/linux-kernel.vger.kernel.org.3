@@ -2,165 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B5648D615
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF4748D61D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbiAMKvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:51:03 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:35994 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233140AbiAMKvB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:51:01 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20DAogyU7001521, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20DAogyU7001521
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 13 Jan 2022 18:50:42 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 13 Jan 2022 18:50:42 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 13 Jan 2022 18:50:42 +0800
-Received: from RTEXMBS01.realtek.com.tw ([fe80::a5c6:3ded:8fd8:286a]) by
- RTEXMBS01.realtek.com.tw ([fe80::a5c6:3ded:8fd8:286a%5]) with mapi id
- 15.01.2308.020; Thu, 13 Jan 2022 18:50:41 +0800
-From:   Ricky WU <ricky_wu@realtek.com>
-To:     "arnd@arndb.de" <arnd@arndb.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Ricky WU <ricky_wu@realtek.com>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
-        "yang.lee@linux.alibaba.com" <yang.lee@linux.alibaba.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH] misc: rtsx: modify rtd3 flow
-Thread-Topic: [PATCH] misc: rtsx: modify rtd3 flow
-Thread-Index: AQHYCGrv53PrNO0bY0ew2A940nWAjA==
-Date:   Thu, 13 Jan 2022 10:50:41 +0000
-Message-ID: <c4525b4738f94483b9b8f8571fc80646@realtek.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.81.102]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEvMTMgpFekyCAwOTo0NTowMA==?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        id S233408AbiAMKwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:52:49 -0500
+Received: from mga04.intel.com ([192.55.52.120]:18428 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229780AbiAMKwr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 05:52:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642071167; x=1673607167;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f+3DK8tcDzxN/KnQ4WDFNfYsiYO589Q11iMRonfrLto=;
+  b=fCxYUKdHVX4ERE17edP0Jf5HV1qt/HEXQdoI4uOSA1U3Ba9IYE6HTeZH
+   N9CJPYxu49Z9Ssfjob1hFAEFkoKuh6WZnhD6IbmKvd6lEBqJN2v8Fvbbr
+   K1TzFMt7YIbNNuQASTihcuneW6Gj3cyXV4b9N8U3ipSGMO4paruevoe+E
+   G62d6pTyUcf+OyGK71FZcWtsZigungDi/YJLH8VHqNnmqSSJqzIzDpcD3
+   Sy7sAVa3JHXM1iFsIs3wVWXFsv8so3ZLlHLzqqV+mlpZ7lfObRN8s17T7
+   CTsp2RNUNGLvpXjJERK8+ru/Hnt9emjAv0AMC4c7dNJ3T04a56oi/feS/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="242800979"
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="242800979"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 02:52:47 -0800
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="473181819"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 02:52:44 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1n7xhb-00AA2N-C2;
+        Thu, 13 Jan 2022 12:51:31 +0200
+Date:   Thu, 13 Jan 2022 12:51:31 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Laibin Qiu <qiulaibin@huawei.com>
+Cc:     axboe@kernel.dk, ming.lei@redhat.com, john.garry@huawei.com,
+        martin.petersen@oracle.com, hare@suse.de,
+        akpm@linux-foundation.org, bvanassche@acm.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next V5] blk-mq: fix tag_get wait task can't be awakened
+Message-ID: <YeAEM5k+KjqTj0iN@smile.fi.intel.com>
+References: <20220113025536.1479653-1-qiulaibin@huawei.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220113025536.1479653-1-qiulaibin@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bW92ZSBwbV9ydW50aW1lX2dldCgpIHRvIF9ydW50aW1lX3Jlc3VtZQ0Kd2hlbiBTeXN0ZW0gZW50
-ZXIgUzMsIGRvIG5vdCBoYXZlIHNkX3JlcXVlc3QgYW5kIGRvIG5vdA0KY2FsbCBzdGFydF9ydW4g
-dG8gcG1fcnVudGltZV9nZXQoKSBjYXVzZSBpc19ydW50aW1lX3N1c3BlbmRlZCBzdGF0dXMNCm5v
-dCBjb3JyZWN0DQoNCnNldCBtb3JlIHJlZ2lzdGVyIGluIHBvd2VyX2Rvd24gZmxvdyB0byBtYWtl
-IHBsdWdpbiBvciB1bnBsdWcNCmNhcmQgZG8gbm90IHdha2UgdXAgc3lzdGVtIHdoZW4gc3lzdGVt
-IGlzIGF0IFMzDQoNClNpZ25lZC1vZmYtYnk6IFJpY2t5IFd1IDxyaWNreV93dUByZWFsdGVrLmNv
-bT4NCi0tLQ0KIGRyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0czUyNDkuYyAgfCAzMSArKysrKysr
-KysrKysrKysrKysrKysrKysrKysrLS0NCiBkcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHN4X3Bj
-ci5jIHwgMTcgKysrKysrKystLS0tLS0tLQ0KIGRyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0c3hf
-cGNyLmggfCAgMSArDQogMyBmaWxlcyBjaGFuZ2VkLCAzOCBpbnNlcnRpb25zKCspLCAxMSBkZWxl
-dGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0czUyNDku
-YyBiL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0czUyNDkuYw0KaW5kZXggNTNmM2ExZjQ1YzRh
-Li42OWUzMmYwNzVjYTkgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHM1
-MjQ5LmMNCisrKyBiL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0czUyNDkuYw0KQEAgLTc0LDcg
-Kzc0LDggQEAgc3RhdGljIHZvaWQgcnRzeF9iYXNlX2ZldGNoX3ZlbmRvcl9zZXR0aW5ncyhzdHJ1
-Y3QgcnRzeF9wY3IgKnBjcikNCiAJcGNpX3JlYWRfY29uZmlnX2R3b3JkKHBkZXYsIFBDUl9TRVRU
-SU5HX1JFRzIsICZyZWcpOw0KIAlwY3JfZGJnKHBjciwgIkNmZyAweCV4OiAweCV4XG4iLCBQQ1Jf
-U0VUVElOR19SRUcyLCByZWcpOw0KIA0KLQlwY3ItPnJ0ZDNfZW4gPSBydHN4X3JlZ190b19ydGQz
-X3Voc2lpKHJlZyk7DQorCWlmIChDSEtfUENJX1BJRChwY3IsIFBJRF81MjRBKSB8fCBDSEtfUENJ
-X1BJRChwY3IsIFBJRF81MjVBKSkNCisJCXBjci0+cnRkM19lbiA9IHJ0c3hfcmVnX3RvX3J0ZDNf
-dWhzaWkocmVnKTsNCiANCiAJaWYgKHJ0c3hfY2hlY2tfbW1jX3N1cHBvcnQocmVnKSkNCiAJCXBj
-ci0+ZXh0cmFfY2FwcyB8PSBFWFRSQV9DQVBTX05PX01NQzsNCkBAIC0xNDMsNiArMTQ0LDI3IEBA
-IHN0YXRpYyBpbnQgcnRzNTI0OV9pbml0X2Zyb21faHcoc3RydWN0IHJ0c3hfcGNyICpwY3IpDQog
-CXJldHVybiAwOw0KIH0NCiANCitzdGF0aWMgdm9pZCBydHM1MnhhX2ZvcmNlX3Bvd2VyX2Rvd24o
-c3RydWN0IHJ0c3hfcGNyICpwY3IsIHU4IHBtX3N0YXRlKQ0KK3sNCisJLyogU2V0IHJlbGlua190
-aW1lIHRvIDAgKi8NCisJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBBVVRPTE9BRF9DRkdf
-QkFTRSArIDEsIE1BU0tfOF9CSVRfREVGLCAwKTsNCisJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIo
-cGNyLCBBVVRPTE9BRF9DRkdfQkFTRSArIDIsIE1BU0tfOF9CSVRfREVGLCAwKTsNCisJcnRzeF9w
-Y2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBBVVRPTE9BRF9DRkdfQkFTRSArIDMsDQorCQkJCVJFTElO
-S19USU1FX01BU0ssIDApOw0KKw0KKwlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIFJUUzUy
-NEFfUE1fQ1RSTDMsDQorCQkJRDNfREVMSU5LX01PREVfRU4sIEQzX0RFTElOS19NT0RFX0VOKTsN
-CisNCisJaWYgKCFwY3ItPmlzX3J1bnRpbWVfc3VzcGVuZGVkKSB7DQorCQlydHN4X3BjaV93cml0
-ZV9yZWdpc3RlcihwY3IsIFJUUzUyNEFfQVVUT0xPQURfQ0ZHMSwNCisJCQkJQ0RfUkVTVU1FX0VO
-X01BU0ssIDApOw0KKwkJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBSVFM1MjRBX1BNX0NU
-UkwzLCAweDAxLCAweDAwKTsNCisJCXJ0c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKHBjciwgUlRTNTI0
-QV9QTUVfRk9SQ0VfQ1RMLCAweDMwLCAweDIwKTsNCisJfQ0KKw0KKwlydHN4X3BjaV93cml0ZV9y
-ZWdpc3RlcihwY3IsIEZQRENUTCwgQUxMX1BPV0VSX0RPV04sIEFMTF9QT1dFUl9ET1dOKTsNCit9
-DQorDQogc3RhdGljIHZvaWQgcnRzNTJ4YV9zYXZlX2NvbnRlbnRfZnJvbV9lZnVzZShzdHJ1Y3Qg
-cnRzeF9wY3IgKnBjcikNCiB7DQogCXU4IGNudCwgc3Y7DQpAQCAtMjgxLDggKzMwMywxMSBAQCBz
-dGF0aWMgaW50IHJ0czUyNDlfZXh0cmFfaW5pdF9odyhzdHJ1Y3QgcnRzeF9wY3IgKnBjcikNCiAN
-CiAJcnRzeF9wY2lfc2VuZF9jbWQocGNyLCBDTURfVElNRU9VVF9ERUYpOw0KIA0KLQlpZiAoQ0hL
-X1BDSV9QSUQocGNyLCBQSURfNTI0QSkgfHwgQ0hLX1BDSV9QSUQocGNyLCBQSURfNTI1QSkpDQor
-CWlmIChDSEtfUENJX1BJRChwY3IsIFBJRF81MjRBKSB8fCBDSEtfUENJX1BJRChwY3IsIFBJRF81
-MjVBKSkgew0KIAkJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBSRUdfVlJFRiwgUFdEX1NV
-U1BORF9FTiwgUFdEX1NVU1BORF9FTik7DQorCQlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3Is
-IFJUUzUyNEFfQVVUT0xPQURfQ0ZHMSwNCisJCQlDRF9SRVNVTUVfRU5fTUFTSywgQ0RfUkVTVU1F
-X0VOX01BU0spOw0KKwl9DQogDQogCWlmIChwY3ItPnJ0ZDNfZW4pIHsNCiAJCWlmIChDSEtfUENJ
-X1BJRChwY3IsIFBJRF81MjRBKSB8fCBDSEtfUENJX1BJRChwY3IsIFBJRF81MjVBKSkgew0KQEAg
-LTcyNCw2ICs3NDksNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHBjcl9vcHMgcnRzNTI0YV9wY3Jf
-b3BzID0gew0KIAkuY2FyZF9wb3dlcl9vbiA9IHJ0c3hfYmFzZV9jYXJkX3Bvd2VyX29uLA0KIAku
-Y2FyZF9wb3dlcl9vZmYgPSBydHN4X2Jhc2VfY2FyZF9wb3dlcl9vZmYsDQogCS5zd2l0Y2hfb3V0
-cHV0X3ZvbHRhZ2UgPSBydHN4X2Jhc2Vfc3dpdGNoX291dHB1dF92b2x0YWdlLA0KKwkuZm9yY2Vf
-cG93ZXJfZG93biA9IHJ0czUyeGFfZm9yY2VfcG93ZXJfZG93biwNCiAJLnNldF9sMW9mZl9jZmdf
-c3ViX2QwID0gcnRzNTI1MF9zZXRfbDFvZmZfY2ZnX3N1Yl9kMCwNCiB9Ow0KIA0KQEAgLTg0MSw2
-ICs4NjcsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHBjcl9vcHMgcnRzNTI1YV9wY3Jfb3BzID0g
-ew0KIAkuY2FyZF9wb3dlcl9vbiA9IHJ0czUyNWFfY2FyZF9wb3dlcl9vbiwNCiAJLmNhcmRfcG93
-ZXJfb2ZmID0gcnRzeF9iYXNlX2NhcmRfcG93ZXJfb2ZmLA0KIAkuc3dpdGNoX291dHB1dF92b2x0
-YWdlID0gcnRzNTI1YV9zd2l0Y2hfb3V0cHV0X3ZvbHRhZ2UsDQorCS5mb3JjZV9wb3dlcl9kb3du
-ID0gcnRzNTJ4YV9mb3JjZV9wb3dlcl9kb3duLA0KIAkuc2V0X2wxb2ZmX2NmZ19zdWJfZDAgPSBy
-dHM1MjUwX3NldF9sMW9mZl9jZmdfc3ViX2QwLA0KIH07DQogDQpkaWZmIC0tZ2l0IGEvZHJpdmVy
-cy9taXNjL2NhcmRyZWFkZXIvcnRzeF9wY3IuYyBiL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0
-c3hfcGNyLmMNCmluZGV4IDZhYzUwOWMxODIxYy4uYTgzYWRmYjEyMmRjIDEwMDY0NA0KLS0tIGEv
-ZHJpdmVycy9taXNjL2NhcmRyZWFkZXIvcnRzeF9wY3IuYw0KKysrIGIvZHJpdmVycy9taXNjL2Nh
-cmRyZWFkZXIvcnRzeF9wY3IuYw0KQEAgLTE1MiwxMiArMTUyLDYgQEAgdm9pZCBydHN4X3BjaV9z
-dGFydF9ydW4oc3RydWN0IHJ0c3hfcGNyICpwY3IpDQogCWlmIChwY3ItPnJlbW92ZV9wY2kpDQog
-CQlyZXR1cm47DQogDQotCWlmIChwY3ItPnJ0ZDNfZW4pDQotCQlpZiAocGNyLT5pc19ydW50aW1l
-X3N1c3BlbmRlZCkgew0KLQkJCXBtX3J1bnRpbWVfZ2V0KCYocGNyLT5wY2ktPmRldikpOw0KLQkJ
-CXBjci0+aXNfcnVudGltZV9zdXNwZW5kZWQgPSBmYWxzZTsNCi0JCX0NCi0NCiAJaWYgKHBjci0+
-c3RhdGUgIT0gUERFVl9TVEFUX1JVTikgew0KIAkJcGNyLT5zdGF0ZSA9IFBERVZfU1RBVF9SVU47
-DQogCQlpZiAocGNyLT5vcHMtPmVuYWJsZV9hdXRvX2JsaW5rKQ0KQEAgLTE1OTcsNiArMTU5MSw3
-IEBAIHN0YXRpYyBpbnQgcnRzeF9wY2lfcHJvYmUoc3RydWN0IHBjaV9kZXYgKnBjaWRldiwNCiAJ
-cGNyLT5ob3N0X3NnX3RibF9hZGRyID0gcGNyLT5ydHN4X3Jlc3ZfYnVmX2FkZHIgKyBIT1NUX0NN
-RFNfQlVGX0xFTjsNCiAJcGNyLT5jYXJkX2luc2VydGVkID0gMDsNCiAJcGNyLT5jYXJkX3JlbW92
-ZWQgPSAwOw0KKwlwY3ItPnJ0ZDNfZW4gPSAwOw0KIAlJTklUX0RFTEFZRURfV09SSygmcGNyLT5j
-YXJkZGV0X3dvcmssIHJ0c3hfcGNpX2NhcmRfZGV0ZWN0KTsNCiAJSU5JVF9ERUxBWUVEX1dPUkso
-JnBjci0+aWRsZV93b3JrLCBydHN4X3BjaV9pZGxlX3dvcmspOw0KIA0KQEAgLTE3OTYsMTcgKzE3
-OTEsMTYgQEAgc3RhdGljIGludCBydHN4X3BjaV9ydW50aW1lX3N1c3BlbmQoc3RydWN0IGRldmlj
-ZSAqZGV2aWNlKQ0KIAlwY3IgPSBoYW5kbGUtPnBjcjsNCiAJZGV2X2RiZygmKHBjaWRldi0+ZGV2
-KSwgIi0tPiAlc1xuIiwgX19mdW5jX18pOw0KIA0KKwlwY3ItPmlzX3J1bnRpbWVfc3VzcGVuZGVk
-ID0gdHJ1ZTsNCisNCiAJY2FuY2VsX2RlbGF5ZWRfd29yaygmcGNyLT5jYXJkZGV0X3dvcmspOw0K
-IAljYW5jZWxfZGVsYXllZF93b3JrKCZwY3ItPnJ0ZDNfd29yayk7DQogCWNhbmNlbF9kZWxheWVk
-X3dvcmsoJnBjci0+aWRsZV93b3JrKTsNCiANCiAJbXV0ZXhfbG9jaygmcGNyLT5wY3JfbXV0ZXgp
-Ow0KIAlydHN4X3BjaV9wb3dlcl9vZmYocGNyLCBIT1NUX0VOVEVSX1MzKTsNCi0NCiAJbXV0ZXhf
-dW5sb2NrKCZwY3ItPnBjcl9tdXRleCk7DQogDQotCXBjci0+aXNfcnVudGltZV9zdXNwZW5kZWQg
-PSB0cnVlOw0KLQ0KIAlyZXR1cm4gMDsNCiB9DQogDQpAQCAtMTgyMCw2ICsxODE0LDExIEBAIHN0
-YXRpYyBpbnQgcnRzeF9wY2lfcnVudGltZV9yZXN1bWUoc3RydWN0IGRldmljZSAqZGV2aWNlKQ0K
-IAlwY3IgPSBoYW5kbGUtPnBjcjsNCiAJZGV2X2RiZygmKHBjaWRldi0+ZGV2KSwgIi0tPiAlc1xu
-IiwgX19mdW5jX18pOw0KIA0KKwlpZiAocGNyLT5pc19ydW50aW1lX3N1c3BlbmRlZCkgew0KKwkJ
-cG1fcnVudGltZV9nZXQoJihwY3ItPnBjaS0+ZGV2KSk7DQorCQlwY3ItPmlzX3J1bnRpbWVfc3Vz
-cGVuZGVkID0gZmFsc2U7DQorCX0NCisNCiAJbXV0ZXhfbG9jaygmcGNyLT5wY3JfbXV0ZXgpOw0K
-IA0KIAlydHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIEhPU1RfU0xFRVBfU1RBVEUsIDB4MDMs
-IDB4MDApOw0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0c3hfcGNyLmgg
-Yi9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHN4X3Bjci5oDQppbmRleCBkYWYwNTdjNGVlYTYu
-LmI5Mzk3NTI2OGU2ZCAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0c3hf
-cGNyLmgNCisrKyBiL2RyaXZlcnMvbWlzYy9jYXJkcmVhZGVyL3J0c3hfcGNyLmgNCkBAIC0yNSw2
-ICsyNSw3IEBADQogI2RlZmluZSBSRUdfRUZVU0VfUE9XRVJPRkYJCTB4MDANCiAjZGVmaW5lIFJU
-UzUyNTBfQ0xLX0NGRzMJCTB4RkY3OQ0KICNkZWZpbmUgUlRTNTI1QV9DRkdfTUVNX1BECQkweEYw
-DQorI2RlZmluZSBSVFM1MjRBX0FVVE9MT0FEX0NGRzEJMHhGRjdDDQogI2RlZmluZSBSVFM1MjRB
-X1BNX0NUUkwzCQkweEZGN0UNCiAjZGVmaW5lIFJUUzUyNUFfQklPU19DRkcJCTB4RkYyRA0KICNk
-ZWZpbmUgUlRTNTI1QV9MT0FEX0JJT1NfRkxBRwkweDAxDQotLSANCjIuMjUuMQ==
+On Thu, Jan 13, 2022 at 10:55:36AM +0800, Laibin Qiu wrote:
+> In case of shared tags, there might be more than one hctx which
+> allocates from the same tags, and each hctx is limited to allocate at
+> most:
+>         hctx_max_depth = max((bt->sb.depth + users - 1) / users, 4U);
+> 
+> tag idle detection is lazy, and may be delayed for 30sec, so there
+> could be just one real active hctx(queue) but all others are actually
+> idle and still accounted as active because of the lazy idle detection.
+> Then if wake_batch is > hctx_max_depth, driver tag allocation may wait
+> forever on this real active hctx.
+> 
+> Fix this by recalculating wake_batch when inc or dec active_queues.
+
+FWIW,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Thanks!
+
+> Fixes: 0d2602ca30e41 ("blk-mq: improve support for shared tags maps")
+> Suggested-by: Ming Lei <ming.lei@redhat.com>
+> Suggested-by: John Garry <john.garry@huawei.com>
+> Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
+> ---
+>  block/blk-mq-tag.c      | 40 +++++++++++++++++++++++++++++++++-------
+>  include/linux/sbitmap.h | 11 +++++++++++
+>  lib/sbitmap.c           | 25 ++++++++++++++++++++++---
+>  3 files changed, 66 insertions(+), 10 deletions(-)
+> 
+> diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
+> index e55a6834c9a6..845f74e8dd7b 100644
+> --- a/block/blk-mq-tag.c
+> +++ b/block/blk-mq-tag.c
+> @@ -16,6 +16,21 @@
+>  #include "blk-mq-sched.h"
+>  #include "blk-mq-tag.h"
+>  
+> +/*
+> + * Recalculate wakeup batch when tag is shared by hctx.
+> + */
+> +static void blk_mq_update_wake_batch(struct blk_mq_tags *tags,
+> +		unsigned int users)
+> +{
+> +	if (!users)
+> +		return;
+> +
+> +	sbitmap_queue_recalculate_wake_batch(&tags->bitmap_tags,
+> +			users);
+> +	sbitmap_queue_recalculate_wake_batch(&tags->breserved_tags,
+> +			users);
+> +}
+> +
+>  /*
+>   * If a previously inactive queue goes active, bump the active user count.
+>   * We need to do this before try to allocate driver tag, then even if fail
+> @@ -24,18 +39,26 @@
+>   */
+>  bool __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
+>  {
+> +	unsigned int users;
+> +
+>  	if (blk_mq_is_shared_tags(hctx->flags)) {
+>  		struct request_queue *q = hctx->queue;
+>  
+> -		if (!test_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags) &&
+> -		    !test_and_set_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags))
+> -			atomic_inc(&hctx->tags->active_queues);
+> +		if (test_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags) ||
+> +		    test_and_set_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags)) {
+> +			return true;
+> +		}
+>  	} else {
+> -		if (!test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state) &&
+> -		    !test_and_set_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
+> -			atomic_inc(&hctx->tags->active_queues);
+> +		if (test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state) ||
+> +		    test_and_set_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state)) {
+> +			return true;
+> +		}
+>  	}
+>  
+> +	users = atomic_inc_return(&hctx->tags->active_queues);
+> +
+> +	blk_mq_update_wake_batch(hctx->tags, users);
+> +
+>  	return true;
+>  }
+>  
+> @@ -56,6 +79,7 @@ void blk_mq_tag_wakeup_all(struct blk_mq_tags *tags, bool include_reserve)
+>  void __blk_mq_tag_idle(struct blk_mq_hw_ctx *hctx)
+>  {
+>  	struct blk_mq_tags *tags = hctx->tags;
+> +	unsigned int users;
+>  
+>  	if (blk_mq_is_shared_tags(hctx->flags)) {
+>  		struct request_queue *q = hctx->queue;
+> @@ -68,7 +92,9 @@ void __blk_mq_tag_idle(struct blk_mq_hw_ctx *hctx)
+>  			return;
+>  	}
+>  
+> -	atomic_dec(&tags->active_queues);
+> +	users = atomic_dec_return(&tags->active_queues);
+> +
+> +	blk_mq_update_wake_batch(tags, users);
+>  
+>  	blk_mq_tag_wakeup_all(tags, false);
+>  }
+> diff --git a/include/linux/sbitmap.h b/include/linux/sbitmap.h
+> index fc0357a6e19b..95df357ec009 100644
+> --- a/include/linux/sbitmap.h
+> +++ b/include/linux/sbitmap.h
+> @@ -415,6 +415,17 @@ static inline void sbitmap_queue_free(struct sbitmap_queue *sbq)
+>  	sbitmap_free(&sbq->sb);
+>  }
+>  
+> +/**
+> + * sbitmap_queue_recalculate_wake_batch() - Recalculate wake batch
+> + * @sbq: Bitmap queue to recalculate wake batch.
+> + * @users: Number of shares.
+> + *
+> + * Like sbitmap_queue_update_wake_batch(), this will calculate wake batch
+> + * by depth. This interface is for HCTX shared tags or queue shared tags.
+> + */
+> +void sbitmap_queue_recalculate_wake_batch(struct sbitmap_queue *sbq,
+> +					    unsigned int users);
+> +
+>  /**
+>   * sbitmap_queue_resize() - Resize a &struct sbitmap_queue.
+>   * @sbq: Bitmap queue to resize.
+> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+> index 2709ab825499..6220fa67fb7e 100644
+> --- a/lib/sbitmap.c
+> +++ b/lib/sbitmap.c
+> @@ -457,10 +457,9 @@ int sbitmap_queue_init_node(struct sbitmap_queue *sbq, unsigned int depth,
+>  }
+>  EXPORT_SYMBOL_GPL(sbitmap_queue_init_node);
+>  
+> -static void sbitmap_queue_update_wake_batch(struct sbitmap_queue *sbq,
+> -					    unsigned int depth)
+> +static inline void __sbitmap_queue_update_wake_batch(struct sbitmap_queue *sbq,
+> +					    unsigned int wake_batch)
+>  {
+> -	unsigned int wake_batch = sbq_calc_wake_batch(sbq, depth);
+>  	int i;
+>  
+>  	if (sbq->wake_batch != wake_batch) {
+> @@ -476,6 +475,26 @@ static void sbitmap_queue_update_wake_batch(struct sbitmap_queue *sbq,
+>  	}
+>  }
+>  
+> +static void sbitmap_queue_update_wake_batch(struct sbitmap_queue *sbq,
+> +					    unsigned int depth)
+> +{
+> +	unsigned int wake_batch;
+> +
+> +	wake_batch = sbq_calc_wake_batch(sbq, depth);
+> +	__sbitmap_queue_update_wake_batch(sbq, wake_batch);
+> +}
+> +
+> +void sbitmap_queue_recalculate_wake_batch(struct sbitmap_queue *sbq,
+> +					    unsigned int users)
+> +{
+> +	unsigned int wake_batch;
+> +
+> +	wake_batch = clamp_val((sbq->sb.depth + users - 1) /
+> +			users, 4, SBQ_WAKE_BATCH);
+> +	__sbitmap_queue_update_wake_batch(sbq, wake_batch);
+> +}
+> +EXPORT_SYMBOL_GPL(sbitmap_queue_recalculate_wake_batch);
+> +
+>  void sbitmap_queue_resize(struct sbitmap_queue *sbq, unsigned int depth)
+>  {
+>  	sbitmap_queue_update_wake_batch(sbq, depth);
+> -- 
+> 2.22.0
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

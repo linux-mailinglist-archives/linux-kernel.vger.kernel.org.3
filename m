@@ -2,102 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFEE48E11F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 00:46:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8448748E11E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 00:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238273AbiAMXqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 18:46:16 -0500
-Received: from mga09.intel.com ([134.134.136.24]:28667 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229870AbiAMXqP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 18:46:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642117575; x=1673653575;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jXQMqB5M1B1k0ZRciPQ8qceliwv38BwKOA73t7XuYu8=;
-  b=TgXpTxxwzLmR/3IwBp8/lcyhEJL8ngPb9WPgc4wRyU6EKJurxY/7tW4D
-   SF/qnZmGf2fYLJLIcZSw2ceoYKozaIjyWznnBeTDlwkLTenkb+4Rqhjb6
-   uSooiDur4LQr7K629zCGG6Bf8uEt1ISlR3aYzYnidbYYs6w8quu4BFxjl
-   zapLzg/jRh6+veTywUTRlenyrodAxkAwK74ALHVle1lE4WY2v5YJuk62l
-   jvEbIZ3j+r2DN0/ReGPay3Xg6N30YktaOCtB0xeRElVHowRN39Qksf8TK
-   9gtva8bCPDDR+IJLyqtUmlYMO2WCSMdTUNFDNzlRdfPA8A6Vsjpcnsb1e
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="243936699"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="243936699"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 15:46:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="473436275"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 13 Jan 2022 15:46:14 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n89nJ-0007mw-NR; Thu, 13 Jan 2022 23:46:13 +0000
-Date:   Fri, 14 Jan 2022 07:45:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eric Biggers <ebiggers@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [ebiggers:blk-crypto-sysfs-testing 4/4]
- drivers/block/virtio_blk.c:763:5: error: no member named 'crypto_profile' in
- 'struct request_queue'
-Message-ID: <202201140721.JP8Zzews-lkp@intel.com>
+        id S235807AbiAMXpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 18:45:53 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:42231 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229870AbiAMXpw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 18:45:52 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JZgzc15Rlz4xdl;
+        Fri, 14 Jan 2022 10:45:48 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642117548;
+        bh=P1oHUqqn/eV0/p46wXQ8gE8oaGC8GZ689Js6UJbblhc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XGH1Q+BLcCQljQLz3QcfohVToAjnNUjZ/dthDThjt3/8RI454ASKqSw86Y7q7OpwB
+         IDpPanaIR8wf1DI/zrdBnyDDa3W5DRZ+NWmA65HDhDu+CARQm1b35DQKOY2bfV8Zm1
+         Sexgnb4ttiodx9YAAREvohrpVP8B+tws4VJAJtgCjgOPWBBE8139RZtdKOyMBrp5w+
+         59amqshf3EzTK/Qytf4GavqbGXDPaDZJIFw+bRKGpfFOc8AaITqcoum6XCD06umskE
+         49HVMrgQN8L4yg6MCAJbDuVBud4pziuQwUwgelGIGtSMZK0PJt8grRKN4PwqIJx09F
+         uJJdG4v2lhYnw==
+Date:   Fri, 14 Jan 2022 10:45:47 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Subject: linux-next: manual merge of the pci tree with Linus' tree
+Message-ID: <20220114104547.55e2f188@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/17_McLNeUpDca94VKUnrm4M";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git blk-crypto-sysfs-testing
-head:   59eaf05f0496aed45c6825a931254a94381d36ac
-commit: 59eaf05f0496aed45c6825a931254a94381d36ac [4/4] virtio-blk: add fake crypto profile for testing
-config: hexagon-randconfig-r045-20220113 (https://download.01.org/0day-ci/archive/20220114/202201140721.JP8Zzews-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=59eaf05f0496aed45c6825a931254a94381d36ac
-        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
-        git fetch --no-tags ebiggers blk-crypto-sysfs-testing
-        git checkout 59eaf05f0496aed45c6825a931254a94381d36ac
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/block/
+--Sig_/17_McLNeUpDca94VKUnrm4M
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi all,
 
-All errors (new ones prefixed by >>):
+Today's linux-next merge of the pci tree got a conflict in:
 
->> drivers/block/virtio_blk.c:763:5: error: no member named 'crypto_profile' in 'struct request_queue'
-           q->crypto_profile = profile;
-           ~  ^
-   1 error generated.
+  drivers/pci/controller/Kconfig
 
+between commit:
 
-vim +763 drivers/block/virtio_blk.c
+  aa50faff4416 ("PCI: mt7621: Convert driver into 'bool'")
 
-   751	
-   752	static void virtblk_add_crypto_profile(struct request_queue *q)
-   753	{
-   754		struct blk_crypto_profile *profile;
-   755	
-   756		profile = kzalloc(sizeof(*profile), GFP_KERNEL);
-   757	
-   758		blk_crypto_profile_init(profile, 32);
-   759		profile->modes_supported[BLK_ENCRYPTION_MODE_AES_256_XTS] =
-   760			4096 | 8192;
-   761		profile->max_dun_bytes_supported = 8;
-   762	
- > 763		q->crypto_profile = profile;
-   764	}
-   765	
+from Linus' tree and commit:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+  44ddb791f8f4 ("PCI: mt7621: Allow COMPILE_TEST for all arches")
+
+from the pci tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/pci/controller/Kconfig
+index aec8c9a3488b,f7e44d9c6965..000000000000
+--- a/drivers/pci/controller/Kconfig
++++ b/drivers/pci/controller/Kconfig
+@@@ -332,8 -332,8 +332,8 @@@ config PCIE_APPL
+  	  If unsure, say Y if you have an Apple Silicon system.
+ =20
+  config PCIE_MT7621
+ -	tristate "MediaTek MT7621 PCIe Controller"
+ +	bool "MediaTek MT7621 PCIe Controller"
+- 	depends on SOC_MT7621 || (MIPS && COMPILE_TEST)
++ 	depends on SOC_MT7621 || COMPILE_TEST
+  	select PHY_MT7621_PCI
+  	default SOC_MT7621
+  	help
+
+--Sig_/17_McLNeUpDca94VKUnrm4M
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHguasACgkQAVBC80lX
+0GwuYwf/YU/sj+Gt7e7zbdWhxExASLAdhpBUvPwoPUJr2z1JyP5aY5hiuobGAHZ2
+SIhjfZe5mZQVH5Pfjs4Ro/Wgx/U8JVVSNe+sPundOERrLhJU730eIb/PA53JGMr9
+kJNsIS1pXriQWE3XsIuvhDT5tHOVxypC0EY3IXL+wtVisziYJemBH5Z8AvmHuO/O
+qpcZmO54aJUGEzFRKwNHPXXn4gvCarxg2Ys5+OU+UpiqROManBnoZj67vkCUV0cX
+d0sFM5mQAq1a2OwhIDuIP8SDnA9nks97MfzHloDkUssCLLh2mxxjLZkvvoJPgCpy
+5ezx1ZFsJSrDspDZcIRHqLvz6o8g4g==
+=XfED
+-----END PGP SIGNATURE-----
+
+--Sig_/17_McLNeUpDca94VKUnrm4M--

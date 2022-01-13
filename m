@@ -2,227 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A5948D347
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0DD348D34F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbiAMH7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 02:59:00 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:59944 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229991AbiAMH67 (ORCPT
+        id S232608AbiAMIBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 03:01:15 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:14082 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232564AbiAMIBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 02:58:59 -0500
-X-UUID: 7b4a774f1a2b4abb957ef1b2f881ed9f-20220113
-X-UUID: 7b4a774f1a2b4abb957ef1b2f881ed9f-20220113
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1854924994; Thu, 13 Jan 2022 15:58:56 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 13 Jan 2022 15:58:55 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 13 Jan
- 2022 15:58:55 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 13 Jan 2022 15:58:52 +0800
-Message-ID: <83670f12a4eda1d8aecde3c0bf225642106d1267.camel@mediatek.com>
-Subject: Re: [PATCH v2 3/3] mmc: mediatek: add support for SDIO eint irq
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Yoshihiro Shimoda" <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Lucas Stach" <dev@lynxeye.de>, Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Thu, 13 Jan 2022 15:58:52 +0800
-In-Reply-To: <Yd1uJ+dX2CTEJfYY@smile.fi.intel.com>
-References: <20220111014046.5864-1-axe.yang@mediatek.com>
-         <20220111014046.5864-4-axe.yang@mediatek.com>
-         <Yd1uJ+dX2CTEJfYY@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 13 Jan 2022 03:01:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1642060868; x=1673596868;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=UBonp6ZYX9A4/hS9KoaKbKV+rCTi/qoRpFz8Zl4MQKQ=;
+  b=fPHY/dMhFKsA5NoISfp6/eKoRioTt6+eR5shA4mUtGGD/HJkya/Q7jDy
+   1XkgOrXuTpqGrQJpzFpz8Av6HBGzWhde+hkCgIU2epv2S5718kr8pk9ZJ
+   7eiox/ANitFJ8CK95ztRIMcqPGSdpAOSgKgq+VuZznUu9TFH8Mfx01Iu/
+   Iag8DrBCRdWg05vnEcybEwK6fYiljNZxU3CkFiJLL02kxRllF4btngvm4
+   VRJDq6o6kyoBtaoBx82A8m0EpJqta2mF2HoOAZp7V3VTAgXjrv/zXFAFM
+   XZS8oXCgFzQIalH3bsc2r5Z1V0XV/0pw3nyvTe2xqV8P1115CewlP7CNg
+   w==;
+IronPort-SDR: 3Xzrd3a81j5pcFkexPk96F/w/wb+GAajfH613l/ta7M6/dlBn02vh8iYtuO3G3NWibSijYURyV
+ NmfvLNL2uhymf/naGPT4LhcQ9ErBp9BUhMGdT9E31JTmP1Z/w7oBi5/9uG0hQaQAhKy8w0dHOs
+ k9mvzBC5j5nDehkV5LRZXN2eId0Ls9qmU4zVkJxM7PC1x0bNc6kSP3gtPTYqYfiFjlCU+36Da1
+ +p2W4+TfwWZ4Rl3KNd+duk1QRZrN3eEwziC2FtjGJ72pIoLGKE/yNhTQK0511Ta9gEXSgSiUGa
+ qoH9ulHZmqAAGHUuVM/+5N/8
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="142562463"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jan 2022 01:01:06 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 13 Jan 2022 01:01:06 -0700
+Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 13 Jan 2022 01:01:03 -0700
+From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+To:     <arnd@arndb.de>, <olof@lixom.net>, <soc@kernel.org>,
+        <robh+dt@kernel.org>, <nicolas.ferre@microchip.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <Kavyasree.Kotagiri@microchip.com>
+Subject: [PATCH v3] ARM: dts: add DT for lan966x SoC and 2-port board pcb8291
+Date:   Thu, 13 Jan 2022 13:30:17 +0530
+Message-ID: <20220113080017.30155-1-kavyasree.kotagiri@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch adds basic DT for Microchip lan966x SoC and associated board
+pcb8291(2-port EVB). Adds peripherals required to allow booting: IRQs,
+clocks, timers, memory, flexcoms, GPIOs. Also adds other peripherals like
+crypto(AES,SHA), DMA and watchdog.
 
-Andy, thank you for the review.
-But for the comment for 'dev_dbg', can you explain more about that?
+Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+---
+v2 -> v3:
+- Enabling trng in dtsi itself.
+- Removed "status=okay" dma0.
+- Add gpio pin settings for can0(missed adding this in previous version)
 
-On Tue, 2022-01-11 at 13:46 +0200, Andy Shevchenko wrote:
-> On Tue, Jan 11, 2022 at 09:40:46AM +0800, Axe Yang wrote:
-> > Add support for eint irq when MSDC is used as an SDIO host. This
-> 
-> IRQ
-> 
-> > feature requires SDIO device support async irq function. With this
-> 
-> IRQ
-> 
-> > feature,SDIO host can be awakened by SDIO card in suspend state,
-> 
-> feature, SDIO
-> 
-> > without additional pin.
-> > 
-> > MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
-> > turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
-> > resume, switch GPIO function back to DAT1 mode then turn on clock.
-> > 
-> > Some device tree property should be added or modified in msdc node
-> 
-> MSDC
-> 
-> > to support SDIO eint irq. Pinctrls named state_dat1 and state_eint
-> 
-> IRQ
-> 
-> > are mandatory. And cap-sdio-async-irq flag is necessary since this
-> > feature depends on asynchronous interrupt:
-> >         &mmcX {
-> >                 ...
-> >                 pinctrl-names = "default", "state_uhs",
-> > "state_eint",
-> >                                 "state_dat1";
-> >                 ...
-> >                 pinctrl-2 = <&mmc2_pins_eint>;
-> >                 pinctrl-3 = <&mmc2_pins_dat1>;
-> >                 ...
-> >                 cap-sdio-async-irq;
-> >                 ...
-> >         };
-> 
-> ...
-> 
-> > - * Copyright (c) 2014-2015 MediaTek Inc.
-> > + * Copyright (c) 2014-2022 MediaTek Inc.
-> 
-> Shouldn't it be rather like
-> 
->  * Copyright (c) 2014-2015,2022 MediaTek Inc.
-> 
-> ?
-> 
-> ...
-> 
-> > +static irqreturn_t msdc_sdio_eint_irq(int irq, void *dev_id)
-> > +{
-> > +	unsigned long flags;
-> > +	struct msdc_host *host = (struct msdc_host *)dev_id;
-> 
-> No casting is needed.
-> 
-> > +	struct mmc_host *mmc = mmc_from_priv(host);
-> 
-> Perhaps reversed xmas tree order
-> 
-> 	struct msdc_host *host = dev_id;
-> 	struct mmc_host *mmc = mmc_from_priv(host);
-> 	unsigned long flags;
-> 
-> ?
-> 
-> But hey, why do you need flags?
-> 
-> > +	spin_lock_irqsave(&host->lock, flags);
-> > +	if (likely(host->sdio_irq_cnt > 0)) {
-> > +		disable_irq_nosync(host->eint_irq);
-> > +		disable_irq_wake(host->eint_irq);
-> > +		host->sdio_irq_cnt--;
-> > +	}
-> > +	spin_unlock_irqrestore(&host->lock, flags);
-> > +
-> > +	sdio_signal_irq(mmc);
-> > +
-> > +	return IRQ_HANDLED;
-> > +}
-> 
-> ...
-> 
-> > +static int msdc_request_dat1_eint_irq(struct msdc_host *host)
-> > +{
-> > +	struct gpio_desc *desc;
-> > +	int irq, ret;
-> > +
-> > +	desc = devm_gpiod_get(host->dev, "eint", GPIOD_IN);
-> > +	if (IS_ERR(desc))
-> > +		return PTR_ERR(desc);
-> > +
-> > +	ret = gpiod_to_irq(desc);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	irq = ret;
-> > +	ret = devm_request_threaded_irq(host->dev, irq, NULL,
-> > msdc_sdio_eint_irq,
-> > +					IRQF_TRIGGER_LOW | IRQF_ONESHOT
-> > | IRQF_NO_AUTOEN,
-> > +					"sdio-eint", host);
-> > +
-> 
-> Redundant blank line.
-> 
-> > +	if (!ret)
-> > +		host->eint_irq = irq;
-> > +
-> > +	return ret;
-> 
-> I guess I have already commented on this, i.e. use standard pattern
-> 
-> 	if (ret)
-> 		return ret;
-> 
-> 	...
-> 	return 0;
-> 
-> > +}
-> 
-> ...
-> 
-> > +		host->pins_eint = pinctrl_lookup_state(host->pinctrl,
-> > "state_eint");
-> > +		if (IS_ERR(host->pins_eint)) {
-> > +			dev_dbg(&pdev->dev, "Cannot find pinctrl
-> > eint!\n");
-> 
-> In debug mode of pin control this will bring a duplicate message.
+v1 -> v2:
+- Moved flx3 usart0 node to dtsi file.
+- Removed status="okay" for dma0 to maintain consistency across nodes
+  (which means enabling dma0 by default)
 
-Can you explain more about this comment? 
-I don't understand what the 'duplicate message' refers for.
+ arch/arm/boot/dts/Makefile            |   2 +
+ arch/arm/boot/dts/lan966x.dtsi        | 242 ++++++++++++++++++++++++++
+ arch/arm/boot/dts/lan966x_pcb8291.dts |  53 ++++++
+ 3 files changed, 297 insertions(+)
+ create mode 100644 arch/arm/boot/dts/lan966x.dtsi
+ create mode 100644 arch/arm/boot/dts/lan966x_pcb8291.dts
 
-> 
-> > +		} else {
-> > +			host->pins_dat1 = pinctrl_lookup_state(host-
-> > >pinctrl, "state_dat1");
-> > +			if (IS_ERR(host->pins_dat1)) {
-> > +				ret = dev_err_probe(&pdev->dev,
-> > PTR_ERR(host->pins_dat1),
-> > +						    "Cannot find
-> > pinctrl dat1!\n");
-> > +				goto host_free;
-> > +			}
-> > +
-> > +			host->sdio_eint_ready = true;
-> > +		}
-> > +	}
-> 
-> 
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 235ad559acb2..2040a990f08c 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -735,6 +735,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
+ dtb-$(CONFIG_SOC_IMX7ULP) += \
+ 	imx7ulp-com.dtb \
+ 	imx7ulp-evk.dtb
++dtb-$(CONFIG_SOC_LAN966) += \
++	lan966x_pcb8291.dtb
+ dtb-$(CONFIG_SOC_LS1021A) += \
+ 	ls1021a-moxa-uc-8410a.dtb \
+ 	ls1021a-qds.dtb \
+diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
+new file mode 100644
+index 000000000000..d7bc36a998bc
+--- /dev/null
++++ b/arch/arm/boot/dts/lan966x.dtsi
+@@ -0,0 +1,242 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * lan966x.dtsi - Device Tree Include file for Microchip LAN966x family SoC
++ *
++ * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
++ *
++ * Author: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
++ *
++ */
++
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/mfd/atmel-flexcom.h>
++#include <dt-bindings/dma/at91.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/clock/microchip,lan966x.h>
++
++/ {
++	model = "Microchip LAN966x family SoC";
++	compatible = "microchip,lan966x";
++	interrupt-parent = <&gic>;
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a7";
++			clock-frequency = <600000000>;
++			reg = <0x0>;
++		};
++	};
++
++	memory@60000000 {
++		device_type = "memory";
++		reg = <0x60000000 0x40000000>;  /* 1GB */
++	};
++
++	clocks {
++		sys_clk: sys_clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <162500000>;
++		};
++
++		cpu_clk: cpu_clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <600000000>;
++		};
++
++		ddr_clk: ddr_clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <300000000>;
++		};
++
++		nic_clk: nic_clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <200000000>;
++		};
++	};
++
++	clks: clock-controller@e00c00a8 {
++		compatible = "microchip,lan966x-gck";
++		#clock-cells = <1>;
++		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
++		clock-names = "cpu", "ddr", "sys";
++		reg = <0xe00c00a8 0x38>;
++	};
++
++	timer {
++		compatible = "arm,armv7-timer";
++		interrupt-parent = <&gic>;
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
++		clock-frequency = <37500000>;
++		arm,cpu-registers-not-fw-configured;
++	};
++
++	soc {
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		flx0: flexcom@e0040000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0040000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM0>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0040000 0x800>;
++			status = "disabled";
++		};
++
++		flx1: flexcom@e0044000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0044000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM1>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0044000 0x800>;
++			status = "disabled";
++		};
++
++		trng: trng@e0048000 {
++			compatible = "atmel,at91sam9g45-trng";
++			reg = <0xe0048000 0x100>;
++			clocks = <&nic_clk>;
++		};
++
++		aes: aes@e004c000 {
++			compatible = "atmel,at91sam9g46-aes";
++			reg = <0xe004c000 0x100>;
++			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
++			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
++			dma-names = "rx", "tx";
++			clocks = <&nic_clk>;
++			clock-names = "aes_clk";
++		};
++
++		flx2: flexcom@e0060000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0060000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM2>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0060000 0x800>;
++			status = "disabled";
++		};
++
++		flx3: flexcom@e0064000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0064000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM3>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0064000 0x800>;
++			status = "disabled";
++
++			usart0: serial@200 {
++				compatible = "atmel,at91sam9260-usart";
++				reg = <0x200 0x200>;
++				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&nic_clk>;
++				clock-names = "usart";
++				atmel,fifo-size = <32>;
++				status = "disabled";
++			};
++		};
++
++		dma0: dma-controller@e0068000 {
++			compatible = "microchip,sama7g5-dma";
++			reg = <0xe0068000 0x1000>;
++			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
++			#dma-cells = <1>;
++			clocks = <&nic_clk>;
++			clock-names = "dma_clk";
++		};
++
++		sha: sha@e006c000 {
++			compatible = "atmel,at91sam9g46-sha";
++			reg = <0xe006c000 0xec>;
++			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dma0 AT91_XDMAC_DT_PERID(14)>;
++			dma-names = "tx";
++			clocks = <&nic_clk>;
++			clock-names = "sha_clk";
++		};
++
++		flx4: flexcom@e0070000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0070000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM4>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0070000 0x800>;
++			status = "disabled";
++		};
++
++		timer0: timer@e008c000 {
++			compatible = "snps,dw-apb-timer";
++			reg = <0xe008c000 0x400>;
++			clocks = <&nic_clk>;
++			clock-names = "timer";
++			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
++		};
++
++		watchdog: watchdog@e0090000 {
++			compatible = "snps,dw-wdt";
++			reg = <0xe0090000 0x1000>;
++			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&nic_clk>;
++		};
++
++		can0: can@e081c000 {
++			compatible = "bosch,m_can";
++			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
++			reg-names = "m_can", "message_ram";
++			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "int0", "int1";
++			clocks = <&clks GCK_ID_MCAN0>, <&clks GCK_ID_MCAN0>;
++			clock-names = "hclk", "cclk";
++			assigned-clocks = <&clks GCK_ID_MCAN0>;
++			assigned-clock-rates = <40000000>;
++			bosch,mram-cfg = <0x0 0 0 64 0 0 32 32>;
++			status = "disabled";
++		};
++
++		gpio: pinctrl@e2004064 {
++			compatible = "microchip,lan966x-pinctrl";
++			reg = <0xe2004064 0xb4>,
++			    <0xe2010024 0x138>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-ranges = <&gpio 0 0 78>;
++			interrupt-controller;
++			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
++			#interrupt-cells = <2>;
++		};
++
++		gic: interrupt-controller@e8c11000 {
++			compatible = "arm,gic-400", "arm,cortex-a7-gic";
++			#interrupt-cells = <3>;
++			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-controller;
++			reg = <0xe8c11000 0x1000>,
++			      <0xe8c12000 0x2000>,
++			      <0xe8c14000 0x2000>,
++			      <0xe8c16000 0x2000>;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/lan966x_pcb8291.dts b/arch/arm/boot/dts/lan966x_pcb8291.dts
+new file mode 100644
+index 000000000000..cf54f42c763d
+--- /dev/null
++++ b/arch/arm/boot/dts/lan966x_pcb8291.dts
+@@ -0,0 +1,53 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * lan966x_pcb8291.dts - Device Tree file for PCB8291
++ */
++/dts-v1/;
++#include "lan966x.dtsi"
++
++/ {
++	model = "Microchip EVB - LAN9662";
++	compatible = "microchip,lan9662-pcb8291", "microchip,lan9662", "microchip,lan966";
++};
++
++&gpio {
++	fc_shrd7_pins: fc_shrd7-pins {
++		pins = "GPIO_49";
++		function = "fc_shrd7";
++	};
++
++	fc_shrd8_pins: fc_shrd8-pins {
++		pins = "GPIO_54";
++		function = "fc_shrd8";
++	};
++
++	fc3_b_pins: fcb3-spi-pins {
++		/* SCK, RXD, TXD */
++		pins = "GPIO_51", "GPIO_52", "GPIO_53";
++		function = "fc3_b";
++	};
++
++	can0_b_pins:  can0_b_pins {
++		/* RX, TX */
++		pins = "GPIO_35", "GPIO_36";
++		function = "can0_b";
++	};
++};
++
++&can0 {
++	pinctrl-0 = <&can0_b_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&flx3 {
++	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
++	status = "okay";
++
++	usart0: serial@200 {
++		pinctrl-0 = <&fc3_b_pins>, <&fc_shrd7_pins>, <&fc_shrd8_pins>;
++		pinctrl-names = "default";
++		status = "okay";
++	};
++};
++
+-- 
+2.17.1
 

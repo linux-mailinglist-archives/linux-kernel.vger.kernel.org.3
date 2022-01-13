@@ -2,103 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D913648D0B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 04:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCC848D0B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 04:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231924AbiAMDOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 22:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
+        id S231945AbiAMDQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 22:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbiAMDOo (ORCPT
+        with ESMTP id S231894AbiAMDQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 22:14:44 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AFEC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 19:14:44 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id s89-20020a25aa62000000b00611afc92630so4486812ybi.17
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 19:14:44 -0800 (PST)
+        Wed, 12 Jan 2022 22:16:41 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1E4C06173F;
+        Wed, 12 Jan 2022 19:16:40 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id g21so5390267qtk.4;
+        Wed, 12 Jan 2022 19:16:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Vn5oKbnGZSK29/TeD2jdsTWSsU6BDg6nOy220ST8fyE=;
-        b=ZAVJQmK76ka/sB9vdoEgbpDzHHvQ9eaRaksI3ggjA9gVsDwXmYzobW1WITyq+eXbJ7
-         d0EPMyljiyJTxGq4RZ4LdlWDk5U/f27wU+O+CI+bpJrKu6DWTwONrF4XF/dI+5spLRJJ
-         FMJOwro7nKdAhO0EPrCEagaEgRODbulo/AfI8Ip2y+/40eZyHd3uS8EaKOxk8dtDUxAT
-         EdYGdxK08jPgIaXE8gb2qJwaJnY8ZcAPgbA8nqk43dlGBVnXfgXaKu/nuTKvwyqMv0+e
-         r72JnMbrVNDCxFAdcNs+NJGc4m0I5192QGjfFQAX4xji6GWCU1dSEzfNXjyE5IsgG45s
-         KBXg==
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=N/gINneDYHArTmYDuiZroEiN0ihwxBALKaNwAenOfdY=;
+        b=UQF/0vh5YPu246CIaKrZq34eNz6twmswUX900v6ezJ3ZkA0EvZMJFkdOdMbmrWOSPF
+         sRH9L/o642dayg4As32yFaNLh/rANq3I8gi9nI51O2JLNCaBxHJIp9QwI7mW1JpO8cE4
+         DWBPbv9TqflPKoTkBsY7ymSqB3bzoBWMheUK8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Vn5oKbnGZSK29/TeD2jdsTWSsU6BDg6nOy220ST8fyE=;
-        b=Smio80Bx60HE1EDCgjARd5ctMTs/AcfIA6UUFSeRs9O26xLI5SiDm95yOfz3+lp3nM
-         zfmp7+b2QhV0dCZ0b22S5Cib6MWuVN18e0OcWNzzMcqYPnai9iatXAK5+psgibS4gYXk
-         nW0UGtoty5uihFuvEgYRA4EGLWAoPOGHPQ2aSnO85tawrZIrdtz/qUr7Cy9QG6jDv1iW
-         jgmJ98Bxlt8mVZl8HwMlGGN3QWOopZm/AcbuVTpopw6Hl78BQWuambyNdqVMT9wBnJSb
-         5XrA388lLQk5jEGttYCzCrB5Ji6wf6hLYCrKyvZ2ZgJTwzWdAZwWfJdnIExy9iVYO9Nl
-         E1jQ==
-X-Gm-Message-State: AOAM530N3Z40j0jigtj+7oL+xwoX/OPxx40KyFRpBQzerDZe+d3z5WLn
-        iQlF586DqvE8AUA9x95gQdm5bbM=
-X-Google-Smtp-Source: ABdhPJwo+5zEuBBP9DSC2b29Tuo0F0jw0Ox/T3uvpDRiQLRasor571HDpoxgJoDoibMecszhSTXgi4E=
-X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:55e2:d4be:752f:9807])
- (user=pcc job=sendgmr) by 2002:a05:6902:725:: with SMTP id
- l5mr3323683ybt.575.1642043683429; Wed, 12 Jan 2022 19:14:43 -0800 (PST)
-Date:   Wed, 12 Jan 2022 19:14:34 -0800
-Message-Id: <20220113031434.464992-1-pcc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
-Subject: [PATCH] mm: use compare-exchange operation to set KASAN page tag
-From:   Peter Collingbourne <pcc@google.com>
-To:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N/gINneDYHArTmYDuiZroEiN0ihwxBALKaNwAenOfdY=;
+        b=3RvkmC1xzeVJkds8VZsfoAnmewLv/Gb0lOAMv4gtpxzYsqp6yEVNcmZSUbvGp50YC5
+         /TceCwaD/i7fV12hRj3+Cz/5Z4j+PJfcfOqV7uycd0FRJuibfjnOXfK3Rho7DWLeB+D+
+         xnnr7lTOpSU05LtgbD0HZ42th8va4q/sG8FQuTzqfA8cwtQfGRfiv4lIlgKCcRifkqI+
+         fozQiNbE5dJWqGWnrRuwS8PfHTKNwTvr4aH1c5hcCbb1IlwPLgL+8PTsqp5uKJ4WebgS
+         FMxs/KHFHIPeUtSIpJ15cpznplpraemWClF59zmCQ+7B44by8mBP7wWnTze3bL8ozRwa
+         4uaw==
+X-Gm-Message-State: AOAM532egMyEIS4dJgkbv+McX25iPURWCNhLo1yebx5YiLohO/bYrJT7
+        zZrISTRHP1CFakRuFblO7TjCZSYiCY1W6CqX4VFSDQa8
+X-Google-Smtp-Source: ABdhPJwjC8vJ9oEqVShEVmfTLImiXZ9NACvdnYSMgbS//mqpu0MoR8m4WgqPkDXWDI1ELo+mE0NL/IvUF8RDNd8G80k=
+X-Received: by 2002:ac8:5a0b:: with SMTP id n11mr2134767qta.625.1642043799724;
+ Wed, 12 Jan 2022 19:16:39 -0800 (PST)
+MIME-Version: 1.0
+References: <20220112230247.982212-1-iwona.winiarska@intel.com> <20220112230247.982212-4-iwona.winiarska@intel.com>
+In-Reply-To: <20220112230247.982212-4-iwona.winiarska@intel.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Thu, 13 Jan 2022 03:16:25 +0000
+Message-ID: <CACPK8XfL8-TovFWBxXo7ryijPXeS+sFwejxz-fKNNwxgD1N+oA@mail.gmail.com>
+Subject: Re: [PATCH v5 03/13] ARM: dts: aspeed: Add PECI controller nodes
+To:     Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Borislav Petkov <bp@alien8.de>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Zev Weiss <zweiss@equinix.com>,
+        David Muller <d.mueller@elsoft.ch>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Billy Tsai <billy_tsai@aspeedtech.com>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It has been reported that the tag setting operation on newly-allocated
-pages can cause the page flags to be corrupted when performed
-concurrently with other flag updates as a result of the use of
-non-atomic operations. Fix the problem by using a compare-exchange
-loop to update the tag.
+On Wed, 12 Jan 2022 at 23:04, Iwona Winiarska <iwona.winiarska@intel.com> wrote:
+>
+> Add PECI controller nodes with all required information.
+>
+> Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
 
-Signed-off-by: Peter Collingbourne <pcc@google.com>
-Link: https://linux-review.googlesource.com/id/I456b24a2b9067d93968d43b4bb3351c0cec63101
-Fixes: 2813b9c02962 ("kasan, mm, arm64: tag non slab memory allocated via pagealloc")
-Cc: stable@vger.kernel.org
----
- include/linux/mm.h | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index c768a7c81b0b..b544b0a9f537 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1531,11 +1531,17 @@ static inline u8 page_kasan_tag(const struct page *page)
- 
- static inline void page_kasan_tag_set(struct page *page, u8 tag)
- {
--	if (kasan_enabled()) {
--		tag ^= 0xff;
--		page->flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
--		page->flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
--	}
-+	unsigned long old_flags, flags;
-+
-+	if (!kasan_enabled())
-+		return;
-+
-+	tag ^= 0xff;
-+	do {
-+		old_flags = flags = page->flags;
-+		flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
-+		flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
-+	} while (unlikely(cmpxchg(&page->flags, old_flags, flags) != old_flags));
- }
- 
- static inline void page_kasan_tag_reset(struct page *page)
--- 
-2.34.1.575.g55b058a8bb-goog
-
+> ---
+>  arch/arm/boot/dts/aspeed-g4.dtsi | 11 +++++++++++
+>  arch/arm/boot/dts/aspeed-g5.dtsi | 11 +++++++++++
+>  arch/arm/boot/dts/aspeed-g6.dtsi | 11 +++++++++++
+>  3 files changed, 33 insertions(+)
+>
+> diff --git a/arch/arm/boot/dts/aspeed-g4.dtsi b/arch/arm/boot/dts/aspeed-g4.dtsi
+> index b313a1cf5f73..3c2961da6272 100644
+> --- a/arch/arm/boot/dts/aspeed-g4.dtsi
+> +++ b/arch/arm/boot/dts/aspeed-g4.dtsi
+> @@ -391,6 +391,17 @@ uart_routing: uart-routing@9c {
+>                                 };
+>                         };
+>
+> +                       peci0: peci-controller@1e78b000 {
+> +                               compatible = "aspeed,ast2400-peci";
+> +                               reg = <0x1e78b000 0x60>;
+> +                               interrupts = <15>;
+> +                               clocks = <&syscon ASPEED_CLK_GATE_REFCLK>;
+> +                               resets = <&syscon ASPEED_RESET_PECI>;
+> +                               cmd-timeout-ms = <1000>;
+> +                               clock-frequency = <1000000>;
+> +                               status = "disabled";
+> +                       };
+> +
+>                         uart2: serial@1e78d000 {
+>                                 compatible = "ns16550a";
+>                                 reg = <0x1e78d000 0x20>;
+> diff --git a/arch/arm/boot/dts/aspeed-g5.dtsi b/arch/arm/boot/dts/aspeed-g5.dtsi
+> index c7049454c7cb..aab1c3ecb4dc 100644
+> --- a/arch/arm/boot/dts/aspeed-g5.dtsi
+> +++ b/arch/arm/boot/dts/aspeed-g5.dtsi
+> @@ -511,6 +511,17 @@ ibt: ibt@140 {
+>                                 };
+>                         };
+>
+> +                       peci0: peci-controller@1e78b000 {
+> +                               compatible = "aspeed,ast2500-peci";
+> +                               reg = <0x1e78b000 0x60>;
+> +                               interrupts = <15>;
+> +                               clocks = <&syscon ASPEED_CLK_GATE_REFCLK>;
+> +                               resets = <&syscon ASPEED_RESET_PECI>;
+> +                               cmd-timeout-ms = <1000>;
+> +                               clock-frequency = <1000000>;
+> +                               status = "disabled";
+> +                       };
+> +
+>                         uart2: serial@1e78d000 {
+>                                 compatible = "ns16550a";
+>                                 reg = <0x1e78d000 0x20>;
+> diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
+> index 5106a424f1ce..564f1292993f 100644
+> --- a/arch/arm/boot/dts/aspeed-g6.dtsi
+> +++ b/arch/arm/boot/dts/aspeed-g6.dtsi
+> @@ -507,6 +507,17 @@ wdt4: watchdog@1e7850c0 {
+>                                 status = "disabled";
+>                         };
+>
+> +                       peci0: peci-controller@1e78b000 {
+> +                               compatible = "aspeed,ast2600-peci";
+> +                               reg = <0x1e78b000 0x100>;
+> +                               interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+> +                               clocks = <&syscon ASPEED_CLK_GATE_REF0CLK>;
+> +                               resets = <&syscon ASPEED_RESET_PECI>;
+> +                               cmd-timeout-ms = <1000>;
+> +                               clock-frequency = <1000000>;
+> +                               status = "disabled";
+> +                       };
+> +
+>                         lpc: lpc@1e789000 {
+>                                 compatible = "aspeed,ast2600-lpc-v2", "simple-mfd", "syscon";
+>                                 reg = <0x1e789000 0x1000>;
+> --
+> 2.31.1
+>

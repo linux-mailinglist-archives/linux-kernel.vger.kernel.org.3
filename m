@@ -2,100 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75FFC48D4E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 156A348D4E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiAMJPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:15:41 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58078 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233868AbiAMJON (ORCPT
+        id S230264AbiAMJPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:15:55 -0500
+Received: from ewsoutbound.kpnmail.nl ([195.121.94.168]:43774 "EHLO
+        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233799AbiAMJPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:14:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2240761ADE;
-        Thu, 13 Jan 2022 09:14:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC344C36AE9;
-        Thu, 13 Jan 2022 09:14:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642065251;
-        bh=LJtbUSGwM4wxW/dO+RjsUM6nIXC1v7DVBzKecDlu4Vk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XY0KuFTcfYqTV5fty2JXdq8KUdN6gESStr/sv1UmR0NHhCDXG0O/zfSEJjEZ8CjTj
-         FwrphoeUjiaXAcVjYctGDsYwzi5jKH134tG6lWfdWVULI07yzYjV+1pBv0gR3OC1qF
-         39rx5aQ6M26WivHGSvvAOr2i3dR3FNJKAgVGBn5w=
-Date:   Thu, 13 Jan 2022 10:14:08 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-staging@lists.linux.dev, Martin Kaiser <martin@kaiser.cx>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] staging: r8188eu: Check for NULL header value
-Message-ID: <Yd/tYOJZ3rhxsHBY@kroah.com>
-References: <20220113001934.3455851-1-keescook@chromium.org>
+        Thu, 13 Jan 2022 04:15:50 -0500
+X-KPN-MessageId: 4d6d0fcc-7451-11ec-8862-005056aba152
+Received: from smtp.kpnmail.nl (unknown [10.31.155.39])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 4d6d0fcc-7451-11ec-8862-005056aba152;
+        Thu, 13 Jan 2022 10:15:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:from:to:subject:mime-version:date:message-id;
+        bh=TQ7FE+1TjZcJGjtMAVu+kQkmET1q3eqI0l54ENHmGms=;
+        b=jFf9n6j//i//fR56AiPlDynZ5khCa/Ljcw/Yt4FgbewWc/i2aPGiFWvWVsoXoZjB/HBm5L3SbTrkm
+         Y0qsxmF37VlCoisr3jpi92BDbo2ESimXFnxZOJiArFQh0Anwdkvi9usan9rjVN/znOR80LqJ12CwzU
+         Abs+Gssx4iIi5jgvG2BLE5tYVhQzype7PcoA9RHQm8qdB3F436fBdJklfTQV0yXUL78LvR8jGtG1Ku
+         0xjSRvMZHFkc695HkSdDXz5g9fymKV2EaVTmPkE2DGbLsn8sgDh70p31pkMqFzvNqr1e1O2u3e3CnJ
+         2LN6yCYd9JhW2JxS5lMKoGZrrx7wDpg==
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|NoljMPYKvCOOH3Wb/96mqwbwjcPoL5W9Jbh+BtI7FHq1T2UXLepcez+3Q9QFmcq
+ MD9v85OzErt64FGF0rMeP4w==
+X-Originating-IP: 193.91.129.219
+Received: from [192.168.2.10] (cdb815bc1.dhcp.as2116.net [193.91.129.219])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id 65606294-7451-11ec-81f5-005056ab7447;
+        Thu, 13 Jan 2022 10:15:48 +0100 (CET)
+Message-ID: <be18b2bb-f334-1f31-50df-9935929281f6@xs4all.nl>
+Date:   Thu, 13 Jan 2022 10:15:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220113001934.3455851-1-keescook@chromium.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.4.1
+Subject: Re: [PATCH 0/3] Add 12bit and 14bit luma-only formats
+Content-Language: en-US
+To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        dave.stevenson@raspberrypi.com
+References: <20220112161014.972076-1-jeanmichel.hautbois@ideasonboard.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220112161014.972076-1-jeanmichel.hautbois@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 04:19:34PM -0800, Kees Cook wrote:
-> When building with -Warray-bounds, the following warning is emitted:
-> 
-> In file included from ./include/linux/string.h:253,
->                  from ./arch/x86/include/asm/page_32.h:22,
->                  from ./arch/x86/include/asm/page.h:14,
->                  from ./arch/x86/include/asm/thread_info.h:12,
->                  from ./include/linux/thread_info.h:60,
->                  from ./arch/x86/include/asm/preempt.h:7,
->                  from ./include/linux/preempt.h:78,
->                  from ./include/linux/rcupdate.h:27,
->                  from ./include/linux/rculist.h:11,
->                  from ./include/linux/sched/signal.h:5,
->                  from ./drivers/staging/rtl8723bs/include/drv_types.h:17,
->                  from drivers/staging/rtl8723bs/core/rtw_recv.c:7:
-> In function 'memcpy',
->     inlined from 'wlanhdr_to_ethhdr' at drivers/staging/rtl8723bs/core/rtw_recv.c:1554:2:
-> ./include/linux/fortify-string.h:41:33: warning: '__builtin_memcpy' offset [0, 5] is out of the bounds [0, 0] [-Warray-bounds]
->    41 | #define __underlying_memcpy     __builtin_memcpy
->       |                                 ^
-> 
-> This is because the compiler sees it is possible for "ptr" to be a NULL
-> value, and concludes that it has zero size and attempts to copy to it
-> would overflow. Instead, detect the NULL return and error out early.
-> 
-> Cc: Larry Finger <Larry.Finger@lwfinger.net>
-> Cc: Phillip Potter <phil@philpotter.co.uk>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Michael Straube <straube.linux@gmail.com>
-> Cc: Fabio Aiuto <fabioaiuto83@gmail.com>
-> Cc: linux-staging@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/staging/r8188eu/core/rtw_recv.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-> index 51a13262a226..93b0aa5688e3 100644
-> --- a/drivers/staging/r8188eu/core/rtw_recv.c
-> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
-> @@ -1191,6 +1191,9 @@ static int wlanhdr_to_ethhdr(struct recv_frame *precvframe)
->  	u8	*ptr = get_recvframe_data(precvframe); /*  point to frame_ctrl field */
->  	struct rx_pkt_attrib *pattrib = &precvframe->attrib;
->  
-> +	if (!ptr)
-> +		return _FAIL;
+Hi Jean-Michel,
 
-Same objection as on the other staging driver change, this is not the
-correct way to solve this.
+On 12/01/2022 17:10, Jean-Michel Hautbois wrote:
+> Hello,
+> 
+> While working on adding the V4L2-PIX-FMT-Y12P and V4L2-PIX-FMT-Y14P
+> formats, I noticed an issue in the way V4L2-PIX-FMT-Y10P is described.
+> This series aims to solve it before adding Y12P and Y14P.
+> 
+> Those two formats are needed for the next-to-come bcm2835 unicam driver.
+> 
+> Jean-Michel Hautbois (3):
+>   media: doc: pixfmt-yuv: Fix V4L2-PIX-FMT-Y10P format
+>   media: v4l: Add V4L2-PIX-FMT-Y12P format
+>   media: v4l: Add V4L2-PIX-FMT-Y14P format
+> 
+>  .../media/v4l/pixfmt-yuv-luma.rst             | 48 ++++++++++++++++++-
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |  2 +
+>  include/uapi/linux/videodev2.h                |  2 +
+>  3 files changed, 50 insertions(+), 2 deletions(-)
+> 
 
-thanks,
+I'll take the first patch, but it is better to add patches 2 and 3 to the unicam RFC
+series. Adding pixelformats that are not used by any existing driver isn't a good idea
+and I'd like to avoid that.
 
-greg k-h
+Regards,
+
+	Hans

@@ -2,259 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA0D48D10C
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 04:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92E348D110
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 04:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbiAMDp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 22:45:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
+        id S232311AbiAMDsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 22:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbiAMDpw (ORCPT
+        with ESMTP id S232272AbiAMDr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 22:45:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA68C061748;
-        Wed, 12 Jan 2022 19:45:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D2E5B821BF;
-        Thu, 13 Jan 2022 03:45:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09AF1C36AEA;
-        Thu, 13 Jan 2022 03:45:47 +0000 (UTC)
-From:   Clark Williams <williams@redhat.com>
-Subject: [ANNOUNCE] 4.19.225-rt101
-Date:   Thu, 13 Jan 2022 03:45:12 -0000
-Message-ID: <164204551290.1795235.14392385656999546066@puck.lan>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Pavel Machek <pavel@denx.de>
+        Wed, 12 Jan 2022 22:47:58 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FDEC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 19:47:57 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id g2so5864500qkp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 19:47:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=rc1Ly7Pd8061A8nyWPTpaP5j7vWx/PTFMzfDrwzJ5nM=;
+        b=LJo9IRat2r6gVPTDNHI+RfsNshBpwjyutSW9EbDC5tIg+PRrEvbqS09lRV28AcsNsx
+         5N6fbnv5MdnX3CdtkMT9+R5g7k1rrLGlYMsgbFmBPk12ykgMfkF3rqVHw9moZKsFw0EL
+         xqdbnOzetaHjsk2Wgcxa1cN0AzfkxYUcd2So2vDWs5F1RnLpxG3rHDFrbs5jRz62iYqx
+         r3Pb4CqYUfAWJwzESaX7IeWXNYVs1hdYJXHHSlrclnTIjOPnhdCfGTqQHcyGhLJMDlsY
+         PhGFAroru5oHvK2v31r9B8u2RJbAZVAtPk8qkFZCUf/25TyjFXGG/cT6FpLEp1HmTo/r
+         8cMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=rc1Ly7Pd8061A8nyWPTpaP5j7vWx/PTFMzfDrwzJ5nM=;
+        b=5H0u1ZxZA5q7yfupoVWSqkjqz3cAcSgNc9LBR8JuADkKp5yhFHHM04dURSMgNAKcte
+         qIR9gbItLobctQZqA3VeKTypnEmtIGkB653WrZNVQffBfDJ3bxkDGiqunypcOrfsYyuO
+         M79jKd3HgBih+i4gqptkoUNHFQy+nh83533Kd2TO/qZX7K6ezXIYjCZ1dg4N5xDSLJRe
+         r1DvluKXsptjllF5b7vmTuwh0CJiLh8UicvNJ2qA41MK6RAyS52FjLrUPAGXrztGcSr9
+         5Y+pY7o+Ze3RD+xrx2Z14XdkAe4HNi8QVBOLNthlCW53sJ+c4Weqc+63djuMqtT9bcEG
+         eziA==
+X-Gm-Message-State: AOAM532PLJZDdGplz/egeKqonSTtkd4scaaz9kXMd8LFhAHavEFK01xb
+        e48sNtPCft9wwkBIi8gWW7t+6dhku0KunA==
+X-Google-Smtp-Source: ABdhPJyeFZIflD9rELkDbSsYH9BBvtGU6DHBrpQAltIfLBueFXQPjq2ImC9V4gG+x0q8dqkp8Sj8lQ==
+X-Received: by 2002:a05:620a:2955:: with SMTP id n21mr1939048qkp.285.1642045676710;
+        Wed, 12 Jan 2022 19:47:56 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id d77sm1093898qkg.55.2022.01.12.19.47.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 19:47:56 -0800 (PST)
+Date:   Wed, 12 Jan 2022 19:47:40 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Peter Xu <peterx@redhat.com>
+cc:     Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH RFC v2 1/2] mm: Don't skip swap entry even if zap_details
+ specified
+In-Reply-To: <Yd7W6ndSPkXQjurY@xz-m1.local>
+Message-ID: <391aa58d-ce84-9d4-d68d-d98a9c533255@google.com>
+References: <20211115134951.85286-1-peterx@redhat.com> <20211115134951.85286-2-peterx@redhat.com> <9937aaa-d9ab-2839-b0b7-691d85c9141@google.com> <Yd7VEXI+/Lu8MVOo@xz-m1.local> <Yd7W6ndSPkXQjurY@xz-m1.local>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+On Wed, 12 Jan 2022, Peter Xu wrote:
+> On Wed, Jan 12, 2022 at 09:18:09PM +0800, Peter Xu wrote:
+> > On Sat, Jan 08, 2022 at 05:19:04PM -0800, Hugh Dickins wrote:
+> > > On Mon, 15 Nov 2021, Peter Xu wrote:
+> > > 
+> > > You are absolutely right to clean this up and fix the bugs that
+> > > have crept in, but I think the patch itself is not quite right yet.
+> > 
+> > Do you mean the pmd path on checking mapping?
 
-I'm pleased to announce the 4.19.225-rt101 stable release.
+Sorry, no, I don't mean that at all. We agree that we cannot see an actual
+bug there, so nothing to fix; and re-exporting all the zap_details stuff
+to make it available to mm/huge_memory.c would be rather sad.  You might
+wish to do some future-proofing, but let's just leave that to the future.
 
-You can get this release via the git tree at:
+I mean that the handling of swap-like entries in zap_pte_range(), after
+you've removed the "if (unlikely(details)) continue;", is not right yet.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+> > If so I agree, and I'll add that
+> > in v2 (even if as you pointed out that shouldn't be a real bug, iiuc, as you
+> > analyzed below).
+> > 
+> > Let me know if I missed anything else..
 
-  branch: v4.19-rt
-  Head SHA1: 4cb25e562978b1cbf4e129d72816728a0bf405dd
+> > What I can do, though, is if with below patch applied to current linux master:
+> > 
+> > =============
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index 8f1de811a1dc..51fe02a22ea9 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -1383,8 +1383,10 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+> >                 }
+> >  
+> >                 /* If details->check_mapping, we leave swap entries. */
+> > -               if (unlikely(details))
+> > +               if (unlikely(details)) {
+> > +                       WARN_ON_ONCE(is_migration_entry(entry));
+> >                         continue;
+> > +               }
+> >  
+> >                 if (!non_swap_entry(entry))
+> >                         rss[MM_SWAPENTS]--;
+> > =============
+> > 
+> > Then I can easily trigger it if with the help of a test program attached
+> > (zap-migrate.c).
+> 
+> (Attaching for real; also copy Matthew)
 
-Or to build 4.19.225-rt101 directly, the following patches should be applied:
+Yes, I'm not at all surprised that you can see migration entries there.
 
-  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz
+> 
+> > 
+> > IMHO it won't really reproduce because it seems all relevant shmem operations
+> > (e.g. hole punch, unmap..) will take the page lock so it won't really race with
+> > migration (which needs the page lock too), as mentioned in previous cover
+> > letters when I was still working on the old versions of this.  But it could be
+> > possible that I missed something.
 
-  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.19.225.xz
+The latter.
 
-  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/patch-4.19.225-rt101.patch.xz
+There may still be some cases in which unmap_mapping_range() is called
+on a single page with that page held locked, I have not checked; but in
+general it is called on a range of pages, and would not have them locked.
 
+The usual pattern when truncating/hole-punching/invalidating is to call
+unmap_mapping_range() first, to do the bulk of the work efficiently,
+scanning down the page tables without holding any page lock; but then
+unmap racily faulted stragglers one by one while holding page lock
+using unmap_mapping_page() just before deleting each from page cache.
 
-You can also build from 4.19.223-rt100 by applying the incremental patch:
+So some relevant operations are done without page lock and some relevant
+operations are done with page lock: both need to be considered, but you
+are right that the page-locked ones will not encounter a migration entry
+of that page (I haven't tried to see if that fact is useful here or not).
 
-  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/incr/patch-4.19.223-rt100-rt101.patch.xz
+You may need to substitute "pages" or "page" or "folio" in the above.
 
-Enjoy!
-Clark
+> > 
+> > While the WARN_ON_ONCE() can trigger only because of the fast path in hole
+> > punching we have the pre-unmap without lock:
+> > 
+> > 		if ((u64)unmap_end > (u64)unmap_start)
+> > 			unmap_mapping_range(mapping, unmap_start,
+> > 					    1 + unmap_end - unmap_start, 0);
+> > 		shmem_truncate_range(inode, offset, offset + len - 1);
 
-Changes from v4.19.223-rt100:
----
+Oh, I should have read on, I've been wasting my time explaining above:
+there you said the page must be locked, here you find that is not so.
 
-Alexey Makhalov (1):
-      scsi: vmw_pvscsi: Set residual data length conditionally
+> > 
+> > But that will be fixed up right afterwards in shmem_truncate_range(), afaict,
+> > which is with-lock.  Hence we have a small window to at least trigger the
+> > warning above, even if it won't really mess up the accounting finally.
 
-Chunfeng Yun (2):
-      usb: mtu3: set interval of FS intr and isoc endpoint
-      usb: mtu3: fix interval value for intr and isoc
+Well, there is still an opportunity to do the wrong thing.
 
-Clark Williams (2):
-      Merge tag 'v4.19.225' into v4.19-rt
-      Linux 4.19.225-rt101
+> > > > --- a/mm/memory.c
+> > > > +++ b/mm/memory.c
+> > > > @@ -1382,16 +1382,14 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+> > > >  			continue;
+> > > >  		}
+> > > >  
+> > > > -		/* If details->check_mapping, we leave swap entries. */
+> > > > -		if (unlikely(details))
+> > > > -			continue;
+> > > > -
+> > > 
+> > > Good.
+> > > 
+> > > >  		if (!non_swap_entry(entry))
+> > > >  			rss[MM_SWAPENTS]--;
 
-Coco Li (2):
-      udp: using datalen to cap ipv6 udp max gso segments
-      selftests: Calculate udpgso segment count without header adjustment
+Right, I did not say at all what is wrong here, I suppose I intended
+to come back but then got tired - sorry.  Here we are dealing with a
+genuine swap entry.  No problem for exit or munmap or MADV_DONTNEED.
+No problem for truncation (but apparently there has been an unnoticed
+problem, that swapped-out COWed pages beyond the truncation point were
+not being deleted, while that "details continue" was still there).  But
+a problem for hole-punching: without the "details continue", this will
+go on to delete COWed pages which ought to be preserved - needs a
+should_zap_page() check, as you do with the migration entry.
 
-Dan Carpenter (1):
-      scsi: lpfc: Terminate string in lpfc_debugfs_nvmeio_trc_write()
+Except that here we have no page to check, so it looks like you'll
+have to change should_zap_page() to deal with this case too, or just
+check details->check_mapping directly.  Which raises the question again
+of why I did not just use a boolean flag there originally: aah, I think
+I've found why.  In those days there was a horrible "optimization", for
+better performance on some benchmark I guess, which when you read from
+/dev/zero into a private mapping, would map the zero page there (look
+up read_zero_pagealigned() and zeromap_page_range() if you dare).  So
+there was another category of page to be skipped along with the anon
+COWs, and I didn't want multiple tests in the zap loop, so checking
+check_mapping against page->mapping did both.  I think nowadays you
+could do it by checking for PageAnon page (or genuine swap entry)
+instead.
 
-Darrick J. Wong (1):
-      xfs: map unwritten blocks in XFS_IOC_{ALLOC,FREE}SP just like fallocate
+> > > >  		else if (is_migration_entry(entry)) {
+> > > >  			struct page *page;
+> > > >  
+> > > >  			page = pfn_swap_entry_to_page(entry);
+> > > > +			if (unlikely(zap_skip_check_mapping(details, page)))
+> > > > +				continue;
+> > > 
+> > > Good; though I don't think it's worth an "unlikely", and I say again,
+> > 
+> > Sure, I'll drop this "unlikely".  Meanwhile, shall we drop all the rest of the
+> > "unlikely" too around this check?
+> > 
+> > > more forcefully, that "zap_skip_check_mapping" is a terrible name.
+> > > 
+> > > David suggested naming its inversion should_zap_page(), yes, that's
+> > > much better; I'd toyed with do_not_zap_page() and zap_skip_page(),
+> > > but should_zap_page() for the inversion sounds good to me.
+> > 
+> > Ah sure, I'll rename it to should_zap_page() in a new patch before this.
 
-David Ahern (4):
-      ipv6: Check attribute length for RTA_GATEWAY in multipath route
-      ipv6: Check attribute length for RTA_GATEWAY when deleting multipath route
-      ipv6: Continue processing multipath route even if gateway attribute is invalid
-      ipv6: Do cleanup if attribute validation fails in multipath route
+Thanks; though now even that name is looking dubious - should_zap_entry()?
 
-Di Zhu (1):
-      i40e: fix use-after-free in i40e_sync_filters_subtask()
+> > 
+> > > 
+> > > And I'm pleased to see in one of Matthew's diffs that he intends to
+> > > bring zap_details and zap_skip_check_mapping() back into mm/memory.c
+> > > from include/linux/mm.h.
+> > 
+> > Yeah it's only used in memory.c.  I put it there initially because I wanted
+> > zap_details user can reference what's that check mapping is all about, but
+> > maybe that's not necessary.
+> > 
+> > If you or Matthew could provide a link to that patch, I'll be happy to pick
+> > that up too with this series.  Or I can also do nothing assuming Matthew will
+> > handle it elsewhere.
 
-Dmitry V. Levin (1):
-      uapi: fix linux/nfc.h userspace compilation errors
+In Linus's tree today: 3506659e18a6 ("mm: Add unmap_mapping_folio()").
 
-Eric Dumazet (1):
-      sch_qfq: prevent shift-out-of-bounds in qfq_init_qdisc
+> > 
+> > > 
+> > > >  			rss[mm_counter(page)]--;
+> > > >  		}
 
-Gal Pressman (1):
-      net/mlx5e: Fix wrong features assignment in case of error
+I have given no thought as to whether more "else"s are needed there.
 
-Greg Kroah-Hartman (2):
-      Linux 4.19.224
-      Linux 4.19.225
+> > > >  		if (unlikely(!free_swap_and_cache(entry)))
 
-Hangyu Hua (1):
-      phonet: refcount leak in pep_sock_accep
+(I think you moved that to a more relevant place in a later patch: good.)
 
-Hans de Goede (1):
-      HID: asus: Add depends on USB_HID to HID_ASUS Kconfig option
+I know you're also asking for test suggestions, but I'll leave it to you:
+hole-punching, truncation, swapping, compaction (to force migration).
 
-Heiko Carstens (1):
-      recordmcount.pl: fix typo in s390 mcount regex
-
-Jedrzej Jagielski (1):
-      i40e: Fix incorrect netdev's real number of RX/TX queues
-
-Jens Wiklander (1):
-      tee: handle lookup of shm with reference count 0
-
-Krzysztof Kozlowski (1):
-      nfc: uapi: use kernel size_t to fix user-space builds
-
-Leo L. Schwab (1):
-      Input: spaceball - fix parsing of movement data packets
-
-Leon Romanovsky (1):
-      RDMA/core: Don't infoleak GRH fields
-
-Lixiaokeng (1):
-      scsi: libiscsi: Fix UAF in iscsi_conn_get_param()/iscsi_conn_teardown()
-
-Mathias Nyman (1):
-      xhci: Fresco FL1100 controller should not have BROKEN_MSI quirk set.
-
-Matthias-Christian Ott (1):
-      net: usb: pegasus: Do not drop long Ethernet frames
-
-Miaoqian Lin (1):
-      fsl/fman: Fix missing put_device() call in fman_port_probe
-
-Muchun Song (1):
-      net: fix use-after-free in tw_timer_handler
-
-Nathan Chancellor (1):
-      power: reset: ltc2952: Fix use of floating point literals
-
-Naveen N. Rao (2):
-      tracing: Fix check for trace_percpu_buffer validity in get_trace_buf()
-      tracing: Tag trace_percpu_buffer as a percpu pointer
-
-Pavel Skripkin (3):
-      i2c: validate user data in compat ioctl
-      Input: appletouch - initialize work before device registration
-      ieee802154: atusb: fix uninit value in atusb_set_extended_addr
-
-Samuel Čavoj (1):
-      Input: i8042 - enable deferred probe quirk for ASUS UM325UA
-
-Takashi Iwai (1):
-      Input: i8042 - add deferred probe support
-
-Thomas Toye (1):
-      rndis_host: support Hytera digital radios
-
-Todd Kjos (1):
-      binder: fix async_free_space accounting for empty parcels
-
-Tom Rix (2):
-      selinux: initialize proto variable in selinux_ip_postroute_compat()
-      mac80211: initialize variable have_higher_than_11mbit
-
-Vincent Pelletier (1):
-      usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_clear.
-
-Wang Qing (1):
-      platform/x86: apple-gmux: use resource_size() with res
-
-Wei Yongjun (1):
-      NFC: st21nfca: Fix memory leak in device probe and remove
-
-William Zhao (1):
-      ip6_vti: initialize __ip6_tnl_parm struct in vti6_siocdevprivate
-
-Xin Long (1):
-      sctp: use call_rcu to free endpoint
-
-wolfgang huang (1):
-      mISDN: change function names to avoid conflicts
-
-wujianguo (1):
-      selftests/net: udpgso_bench_tx: fix dst ip argument
-
-yangxingwu (1):
-      net: udp: fix alignment problem in udp4_seq_show()
----
-Documentation/admin-guide/kernel-parameters.txt   |   2 +
- Makefile                                          |   2 +-
- drivers/android/binder_alloc.c                    |   2 +-
- drivers/hid/Kconfig                               |   1 +
- drivers/i2c/i2c-dev.c                             |   3 +
- drivers/infiniband/core/uverbs_marshall.c         |   2 +-
- drivers/input/joystick/spaceball.c                |  11 +-
- drivers/input/mouse/appletouch.c                  |   4 +-
- drivers/input/serio/i8042-x86ia64io.h             |  21 +++
- drivers/input/serio/i8042.c                       |  54 ++++---
- drivers/isdn/mISDN/core.c                         |   6 +-
- drivers/isdn/mISDN/core.h                         |   4 +-
- drivers/isdn/mISDN/layer1.c                       |   4 +-
- drivers/net/ethernet/freescale/fman/fman_port.c   |  12 +-
- drivers/net/ethernet/intel/i40e/i40e_main.c       |  56 ++++++-
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c |  11 +-
- drivers/net/ieee802154/atusb.c                    |  10 +-
- drivers/net/usb/pegasus.c                         |   4 +-
- drivers/net/usb/rndis_host.c                      |   5 +
- drivers/nfc/st21nfca/i2c.c                        |  29 ++--
- drivers/platform/x86/apple-gmux.c                 |   2 +-
- drivers/power/reset/ltc2952-poweroff.c            |   4 +-
- drivers/scsi/libiscsi.c                           |   6 +-
- drivers/scsi/lpfc/lpfc_debugfs.c                  |   4 +-
- drivers/scsi/vmw_pvscsi.c                         |   7 +-
- drivers/tee/tee_shm.c                             | 177 ++++++++--------------
- drivers/usb/gadget/function/f_fs.c                |   9 +-
- drivers/usb/host/xhci-pci.c                       |   5 +-
- drivers/usb/mtu3/mtu3_gadget.c                    |  11 +-
- fs/xfs/xfs_ioctl.c                                |   3 +-
- include/linux/tee_drv.h                           |   4 +-
- include/net/sctp/sctp.h                           |   6 +-
- include/net/sctp/structs.h                        |   3 +-
- include/uapi/linux/nfc.h                          |   6 +-
- kernel/trace/trace.c                              |   6 +-
- localversion-rt                                   |   2 +-
- net/ipv4/af_inet.c                                |  10 +-
- net/ipv4/udp.c                                    |   2 +-
- net/ipv6/ip6_vti.c                                |   2 +
- net/ipv6/route.c                                  |  28 +++-
- net/ipv6/udp.c                                    |   2 +-
- net/mac80211/mlme.c                               |   2 +-
- net/phonet/pep.c                                  |   1 +
- net/sched/sch_qfq.c                               |   6 +-
- net/sctp/diag.c                                   |  12 +-
- net/sctp/endpointola.c                            |  23 ++-
- net/sctp/socket.c                                 |  23 ++-
- scripts/recordmcount.pl                           |   2 +-
- security/selinux/hooks.c                          |   2 +-
- tools/testing/selftests/net/udpgso.c              |  12 +-
- tools/testing/selftests/net/udpgso_bench_tx.c     |   8 +-
- 51 files changed, 382 insertions(+), 251 deletions(-)
----
+Hugh

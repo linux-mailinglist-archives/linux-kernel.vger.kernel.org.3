@@ -2,114 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E00CE48D29A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1D048D29D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbiAMHGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 02:06:25 -0500
-Received: from mail-ed1-f53.google.com ([209.85.208.53]:39852 "EHLO
-        mail-ed1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiAMHGY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 02:06:24 -0500
-Received: by mail-ed1-f53.google.com with SMTP id c71so19529036edf.6;
-        Wed, 12 Jan 2022 23:06:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Mvd9n/r2q1EVHYqTjA0mQkCbJUoPmzaEOBWZ8LJyPcI=;
-        b=Ub0S/Hd3lVLY/uG61yrX+6dGmsBvsXfhp2NIvXkFWTaCAw9pvf/8neKamr1Ymr7YR7
-         VmZPbKYNFRCqhL/sAfW0JaJ/bUT/LD6AHEOwVNHi8ikZQC79wgrOvZIjL6453Md52wE8
-         3+hsxzyBfgxgBfiQqT1k0NsMl2iQnj2S369r+69PYJH4qSpAEt80wW/WMqcMRg/rB/8V
-         8csroAqOJAUYzKyKWtDWQIPSSyltdfKiqiV7T2ka0wniPhy24vvnOUd7IHLxuU+dOWdl
-         3Jl9owWHuzQvY8OSAZ734cvnOZjUmP3elQyzcXdVw6bGtbr2L+dgYyeE2Tj3diT2Fn4e
-         Dh9g==
-X-Gm-Message-State: AOAM5338Tkq0qd3MvBkPbolWNCn/TktcD1W2y6+gaMKAezWZc2Qn6DYQ
-        gS2vGH69G06slPGTV+LG8Ro=
-X-Google-Smtp-Source: ABdhPJyZQj1Tl2/g2XPWJstoDpyR1bE6HvQH348hrfsdVJhRH4iaZAYq+D5wgsaCj0K55YBJBjppNg==
-X-Received: by 2002:a17:906:9a52:: with SMTP id aj18mr2378613ejc.511.1642057582744;
-        Wed, 12 Jan 2022 23:06:22 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id b1sm561325ejb.51.2022.01.12.23.06.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 23:06:22 -0800 (PST)
-Message-ID: <fcd43c65-6201-9e44-061c-f04e39cef726@kernel.org>
-Date:   Thu, 13 Jan 2022 08:06:20 +0100
+        id S230263AbiAMHHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 02:07:06 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:59736 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230058AbiAMHHF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 02:07:05 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowAAXH1t+z99hqZR7BQ--.10684S2;
+        Thu, 13 Jan 2022 15:06:38 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     hverkuil-cisco@xs4all.nl, narmstrong@baylibre.com,
+        mchehab@kernel.org, gregkh@linuxfoundation.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com, p.zabel@pengutronix.de
+Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH v3] media: meson: vdec: Fix a NULL pointer dereference in amvdec_add_ts()
+Date:   Thu, 13 Jan 2022 15:06:37 +0800
+Message-Id: <20220113070637.1198179-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v6 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
-Content-Language: en-US
-To:     Hammer Hsieh <hammerh0314@gmail.com>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de
-Cc:     wells.lu@sunplus.com, hammer.hsieh@sunplus.com
-References: <1641979444-11661-1-git-send-email-hammerh0314@gmail.com>
- <1641979444-11661-3-git-send-email-hammerh0314@gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <1641979444-11661-3-git-send-email-hammerh0314@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowAAXH1t+z99hqZR7BQ--.10684S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYq7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87
+        Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
+        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx
+        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIF
+        xwACI402YVCY1x02628vn2kIc2xKxwCY02Avz4vE14v_GF4l42xK82IYc2Ij64vIr41l4I
+        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
+        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
+        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
+        cIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
+        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOPEfUUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jan 12, 2022 at 05:04:41PM +0800, Hans Verkuil wrote:
+> I changed the status of this patch to 'Changes Requested'. Jiasheng,
+> can you post a v3 with
+> the requested changes?
 
-On 12. 01. 22, 10:24, Hammer Hsieh wrote:
-> Add Sunplus SoC UART Driver
-...
-> --- /dev/null
-> +++ b/drivers/tty/serial/sunplus-uart.c
-> @@ -0,0 +1,756 @@
-...
-> +/* Register offsets */
-> +#define SUP_UART_DATA			0x00
-> +#define SUP_UART_LSR			0x04
-> +#define SUP_UART_MSR			0x08
-> +#define SUP_UART_LCR			0x0C
-> +#define SUP_UART_MCR			0x10
-> +#define SUP_UART_DIV_L			0x14
-> +#define SUP_UART_DIV_H			0x18
-> +#define SUP_UART_ISC			0x1C
-> +#define SUP_UART_TX_RESIDUE		0x20
-> +#define SUP_UART_RX_RESIDUE		0x24
-> +
-> +/* Line Status Register bits */
-> +#define SUP_UART_LSR_BC			BIT(5) /* break condition status */
-> +#define SUP_UART_LSR_FE			BIT(4) /* frame error status */
-> +#define SUP_UART_LSR_OE			BIT(3) /* overrun error status */
-> +#define SUP_UART_LSR_PE			BIT(2) /* parity error status */
+Thanks, I have sent the v3 with the correct indentation.
+And I am sorry that I sent two patches, and the first one is
+lack of 'v3' tag.
+So please ignore it.
+And the later one is right.
 
-I just wonder why do the HW creators feel so creative to redefine the 
-world...
+Sincerely thanks,
+Jiang
 
-> +static void sunplus_shutdown(struct uart_port *port)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&port->lock, flags);
-> +	writel(0, port->membase + SUP_UART_ISC);
-> +	spin_unlock_irqrestore(&port->lock, flags);
-
-I asked last time:
-* What bus is this -- posting?
-
-You replied:
-* Here just clear interrupt.
-* Not really understand your comment?
-
-So I am asking again:
-What bus is this? Isn't a posted write a problem here? I mean, shouldn't 
-you read from the register so that the write hits the device? That 
-depends on the bus this sits on, so just asking.
-
-Other than that the driver looks much better now, i.e. LGTM.
-
-thanks,
--- 
-js
-suse labs

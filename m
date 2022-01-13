@@ -2,112 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A6548E0B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 00:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A27B48E0BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 00:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238145AbiAMXCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 18:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238121AbiAMXCU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 18:02:20 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1B1C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 15:02:20 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id w7so5217501ioj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 15:02:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5pDJzk1dQsu0Qk8opYITEZv6dz4zcJdUZeTWjVZhptE=;
-        b=i7ChxMb5M3oaC8H54OCxVrXkfUa7WLgJX+ltnKBKDBkjz66N9TQzyDZinEbP79ixk3
-         tjxIfvWEOm33MpTaaKvOx4EL+geVEPBg41GOv1jJcsOf82ZVYdqOCCMbuTEYc63fpvWM
-         Fa5uXRS0je7t11ma8khJr08jVW6zsrFZPFOlVJy2ygnz1T9ihu4jgB6FGN0sRF5G6yCi
-         fd2qj4c8tGnOxXO3bE7g56BWoJt0S9gFYxFLez/ONgOdsBCLZlZ4/yxZSx7FztJNAFH/
-         QMQJIUw/J5MakijV5N5CuCnnJiT803PyaWh1w/qzi76wpuAMLwvKkYffhOfO/RUxjjJB
-         1kOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5pDJzk1dQsu0Qk8opYITEZv6dz4zcJdUZeTWjVZhptE=;
-        b=32R01vwuXIfrf+fB5tZIuoLwBKyTJ+0Iy6G8DYYV0TmRC8XbzAvwo5o9TVOHEB0+FP
-         aEtXchRZs8vHlw0T0mt724jOFCUMny9+EIZ6ogCiHNfEiX7CUNVib1jew02gXpQ6uso5
-         sng6AR5KGdkGMDgpJHkalAaL+n3eqreqL2tVy/nqm7lCojlt4yzh4fcAQyBmKLW6aH/U
-         IrpEgoM7gXcPz/+5WUQ60VoMgsnrSXyffhlta5OqPLESBlVQGosczd5D0PMG9/6S5WOz
-         7o6dAHSYEP1cy5O5ZjRUONVhhbIU2WyOWm8r9LO+roiB201MbiHEHFTuEDxyqLKLVKWW
-         TZ2Q==
-X-Gm-Message-State: AOAM531qVXuxh/01RXn9zx3qspgCr6owDuftALmS+ehkzuek+XJk8CKe
-        jxdWZgwmSumU+TnhbpkhqNbTTA==
-X-Google-Smtp-Source: ABdhPJzMMAQXbahgizkqdtfjZ2i9Fvd2grW2x1BACOTg5wkyiMKd17pDOdTjWFpfP/ndoI6nBLGJew==
-X-Received: by 2002:a02:a982:: with SMTP id q2mr3158600jam.220.1642114939372;
-        Thu, 13 Jan 2022 15:02:19 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:2ee3:2c3c:a8c8:b1bf])
-        by smtp.gmail.com with ESMTPSA id i20sm3830279iov.43.2022.01.13.15.02.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 15:02:18 -0800 (PST)
-Date:   Thu, 13 Jan 2022 16:02:15 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        id S238169AbiAMXFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 18:05:10 -0500
+Received: from mga17.intel.com ([192.55.52.151]:34654 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238121AbiAMXFJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 18:05:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642115109; x=1673651109;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=y852HQMw4u5D0ubyX1gpYlrd4r/IGyxUerARi8FfLFM=;
+  b=D4e6FnayyzT1FZaRmtiAzid3EO7iVzsu3ouwegqlp3fIfILTsgldgJQG
+   Ro5qMSDqMdZhIfv4lFeAitNSt694btuOuqeL7/yU2xJ6A6c3sj5IGGKt1
+   R/+y1iIQtGimY3r9DAGd7KawMCpLiK4SLS4CjQTtCYQcPLWsR0clwJVBZ
+   5D9MjZNEaeKKdv7vdSvkuKxxgp8LldmXfxlbJHay8IGfIVwiX8y8hO1fE
+   xRmtFlzvtsLDUUqA9WVibHBJVk2I4N3GZ/SWVG/M0gT0Yu4sa02lS4rx9
+   xwMGH/TNGyfA9MKtJ916+voY0gnhMyIGrqyTOCN7xwy6/5tqihsuRGs7x
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="224821183"
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="224821183"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 15:05:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="765699287"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Jan 2022 15:05:06 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n899W-0007kZ-9W; Thu, 13 Jan 2022 23:05:06 +0000
+Date:   Fri, 14 Jan 2022 07:04:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
         Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 8/9] mm: multigenerational lru: user interface
-Message-ID: <YeCvd4UBPy27SYGZ@google.com>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-9-yuzhao@google.com>
- <87a6g0nczg.fsf@linux.ibm.com>
+        Tony Luck <tony.luck@intel.com>
+Subject: [intel-tdx:guest-upstream 25/33]
+ arch/x86/mm/pat/set_memory.c:2012:6: warning: variable 'ret' set but not
+ used
+Message-ID: <202201140659.QkMQQEy9-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87a6g0nczg.fsf@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 04:01:31PM +0530, Aneesh Kumar K.V wrote:
-> Yu Zhao <yuzhao@google.com> writes:
-> 
-> > Add /sys/kernel/mm/lru_gen/enabled as a runtime kill switch.
-> 
-> 
-> Got the below lockdep warning while using the above kill/enable switch
-> 
-> 
-> [   84.252952] ======================================================
-> [   84.253012] WARNING: possible circular locking dependency detected
-> [   84.253074] 5.16.0-rc8-16204-g1cdcf1120b31 #511 Not tainted
-> [   84.253135] ------------------------------------------------------
-> [   84.253194] bash/2862 is trying to acquire lock:
-> [   84.253243] c0000000021ff740 (cgroup_mutex){+.+.}-{3:3}, at: store_enable+0x80/0x1510
-> [   84.253340]
->                but task is already holding lock:
-> [   84.253410] c000000002221348 (mem_hotplug_lock){++++}-{0:0}, at: mem_hotplug_begin+0x30/0x50
-> [   84.253503]
->                which lock already depends on the new lock.
-> 
-> [   84.255933] Chain exists of:
->                  cgroup_mutex --> cpu_hotplug_lock --> mem_hotplug_lock
+tree:   https://github.com/intel/tdx.git guest-upstream
+head:   33b1329c49e6d5f961b29c5cafd6571a5de523f0
+commit: 5364ea9ede9af9f08041cacf140f8feef077d375 [25/33] x86/mm/cpa: Add support for TDX shared memory
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220114/202201140659.QkMQQEy9-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/5364ea9ede9af9f08041cacf140f8feef077d375
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-upstream
+        git checkout 5364ea9ede9af9f08041cacf140f8feef077d375
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/mm/pat/
 
-Thanks. Will reverse the order between mem_hotplug_lock and
-cgroup_mutex in the next spin.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   arch/x86/mm/pat/set_memory.c: In function '__set_memory_enc_pgtable':
+>> arch/x86/mm/pat/set_memory.c:2012:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+    2012 |  int ret;
+         |      ^~~
+
+
+vim +/ret +2012 arch/x86/mm/pat/set_memory.c
+
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2004  
+810a521265023a1 arch/x86/mm/pat/set_memory.c Tianyu Lan         2021-10-25  2005  /*
+810a521265023a1 arch/x86/mm/pat/set_memory.c Tianyu Lan         2021-10-25  2006   * __set_memory_enc_pgtable() is used for the hypervisors that get
+810a521265023a1 arch/x86/mm/pat/set_memory.c Tianyu Lan         2021-10-25  2007   * informed about "encryption" status via page tables.
+810a521265023a1 arch/x86/mm/pat/set_memory.c Tianyu Lan         2021-10-25  2008   */
+810a521265023a1 arch/x86/mm/pat/set_memory.c Tianyu Lan         2021-10-25  2009  static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2010  {
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2011  	struct cpa_data cpa;
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17 @2012  	int ret;
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2013  
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2014  	/* Should not be working on unaligned addresses */
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2015  	if (WARN_ONCE(addr & ~PAGE_MASK, "misaligned address: %#lx\n", addr))
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2016  		addr &= PAGE_MASK;
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2017  
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2018  	memset(&cpa, 0, sizeof(cpa));
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2019  	cpa.vaddr = &addr;
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2020  	cpa.numpages = numpages;
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2021  
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2022  	cpa.mask_set = pgprot_cc_mask(enc);
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2023  	cpa.mask_clr = pgprot_cc_mask(!enc);
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2024  
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2025  	cpa.pgd = init_mm.pgd;
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2026  
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2027  	/* Must avoid aliasing mappings in the highmem code */
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2028  	kmap_flush_unused();
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2029  	vm_unmap_aliases();
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2030  
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2031  	/*
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2032  	 * Before changing the encryption attribute, flush caches.
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2033  	 *
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2034  	 * For TDX, guest is responsible for flushing caches on private->shared
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2035  	 * transition. VMM is responsible for flushing on shared->private.
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2036  	 */
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2037  	if (cc_platform_has(CC_ATTR_GUEST_TDX)) {
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2038  		if (!enc)
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2039  			cpa_flush(&cpa, 1);
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2040  	} else {
+75d1cc0e05af579 arch/x86/mm/pat/set_memory.c Krish Sadhukhan    2020-09-17  2041  		cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2042  	}
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2043  
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2044  	ret = __change_page_attr_set_clr(&cpa, 1);
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2045  
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2046  	/*
+fe0937b24ff5d7b arch/x86/mm/pageattr.c       Peter Zijlstra     2018-12-03  2047  	 * After changing the encryption attribute, we need to flush TLBs again
+fe0937b24ff5d7b arch/x86/mm/pageattr.c       Peter Zijlstra     2018-12-03  2048  	 * in case any speculative TLB caching occurred (but no need to flush
+fe0937b24ff5d7b arch/x86/mm/pageattr.c       Peter Zijlstra     2018-12-03  2049  	 * caches again).  We could just use cpa_flush_all(), but in case TLB
+fe0937b24ff5d7b arch/x86/mm/pageattr.c       Peter Zijlstra     2018-12-03  2050  	 * flushing gets optimized in the cpa_flush() path use the same logic
+fe0937b24ff5d7b arch/x86/mm/pageattr.c       Peter Zijlstra     2018-12-03  2051  	 * as above.
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2052  	 */
+fe0937b24ff5d7b arch/x86/mm/pageattr.c       Peter Zijlstra     2018-12-03  2053  	cpa_flush(&cpa, 0);
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2054  
+064ce6c550a0630 arch/x86/mm/pat/set_memory.c Brijesh Singh      2021-08-24  2055  	/*
+064ce6c550a0630 arch/x86/mm/pat/set_memory.c Brijesh Singh      2021-08-24  2056  	 * Notify hypervisor that a given memory range is mapped encrypted
+064ce6c550a0630 arch/x86/mm/pat/set_memory.c Brijesh Singh      2021-08-24  2057  	 * or decrypted.
+064ce6c550a0630 arch/x86/mm/pat/set_memory.c Brijesh Singh      2021-08-24  2058  	 */
+5364ea9ede9af9f arch/x86/mm/pat/set_memory.c Kirill A. Shutemov 2020-03-30  2059  	return notify_range_enc_status_changed(addr, numpages, enc);
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2060  }
+77bd2342d4304bd arch/x86/mm/pageattr.c       Tom Lendacky       2017-07-17  2061  
+
+:::::: The code at line 2012 was first introduced by commit
+:::::: 77bd2342d4304bda7896c953d424d15deb314ca3 x86/mm: Add support for changing the memory encryption attribute
+
+:::::: TO: Tom Lendacky <thomas.lendacky@amd.com>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

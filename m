@@ -2,107 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E537948D377
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9272548D37E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbiAMITg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 03:19:36 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:17132 "EHLO mx1.tq-group.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231249AbiAMITf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 03:19:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1642061975; x=1673597975;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8bp8FKrTEUjqpGTGgV1by4+xj1+qlkc5SGm08bGMoT4=;
-  b=HXsfB4NHSEOvrOLU3kalkwqrc5T+/dbJRhjVJ+AxakL6jIa9j21ccAHw
-   PLWtTKqWHUybLmMBwkL1RKtGacejuKwPX8gGgSPRdV8u+F97qYmoeS9yp
-   Pi37+nH4IhW5k2HhNM83qGxHGz8tpqgCv6pnurvWMLjZ227HXIiZXfn6h
-   OpLGK8Zc400md/VlSwHYcXly4nB/JyZrhqS5b+nRdwUO0aIp6RlViAhXD
-   jEED7rwvLoR6M7tpcP7NX4bdundLv5VnezoGiO0r4kTKVElZHT5OiMa1R
-   8B93hmCU7ZOo4ol3WyK9evSpPOfLBqIbou7xrsTEbF27MSpqu+RaQkmB9
-   w==;
-X-IronPort-AV: E=Sophos;i="5.88,284,1635199200"; 
-   d="scan'208";a="21474406"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 13 Jan 2022 09:19:34 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 13 Jan 2022 09:19:34 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 13 Jan 2022 09:19:34 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1642061974; x=1673597974;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8bp8FKrTEUjqpGTGgV1by4+xj1+qlkc5SGm08bGMoT4=;
-  b=Bwrxvf6wgVTZutEgv9eBhNR2h/uk0/6kzFJl5NsltWagk3WTYNtm+oPa
-   pCtxRJGs+ciRU5mOLeg8DHSJR8KUUUu+ov241d6+Ljjx2SOnsRrGZvp67
-   4r4AcvMtRF7ZU5zrfg1AH2GYsDr+B+sGQ8AN5V2uXDVFeR/ZNT1+G769C
-   W+MB4wNoXR4hMJ83A0rDq/4J2dJDx7o0wkR3JOmfK/8Iduu48vlKpXQ85
-   3Fvb4d7cTO+TgKOmhnQpqi/YkplYoIe/9YA/efDu8wvzD8Q4rJGIesqpU
-   +dzGM96jhI9gatxNJVp40hdGw9PUymh1XMfnlXePRCWDiSEtPHCnfwicE
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,284,1635199200"; 
-   d="scan'208";a="21474405"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 13 Jan 2022 09:19:34 +0100
-Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.201.138])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 83E2F280065;
-        Thu, 13 Jan 2022 09:19:33 +0100 (CET)
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH v2] scripts/dtc: dtx_diff: remove broken example from help text
-Date:   Thu, 13 Jan 2022 09:19:18 +0100
-Message-Id: <20220113081918.10387-1-matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
+        id S232953AbiAMIVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 03:21:24 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55734 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232930AbiAMIVX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 03:21:23 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DCC261C1D;
+        Thu, 13 Jan 2022 08:21:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F2EC36AE3;
+        Thu, 13 Jan 2022 08:21:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642062082;
+        bh=fX/nWZScQTmUqIw2Cq7C1GzYpE8hxVmOiMEjPokZ9v0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wfkto1UK/V1x9kr+AQ6EhVxlBTp9ZBgPZZ6ca+y+RE3Biw+CgVzCMgQGIWeDZnmmi
+         T18Q3RzRDxTbTHbgsbhlEYvbvAfk/n1FZyvmj0kwXVz9H2prSpdtLUCQ24uvT7K7N9
+         508+wgFvVzB8OD/xB8kU6JOinJCdzLkxJ5h/VhdE=
+Date:   Thu, 13 Jan 2022 09:21:19 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Puma Hsu <pumahsu@google.com>
+Cc:     mathias.nyman@intel.com, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Albert Wang <albertccwang@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3] xhci: re-initialize the HC during resume if HCE was
+ set
+Message-ID: <Yd/g/ywBWZG7gF8v@kroah.com>
+References: <20211229112551.3483931-1-pumahsu@google.com>
+ <Yd1tUKhyZf26OVNQ@kroah.com>
+ <CAGCq0LZb8nQDvcz=LswWi4qKd-65ys6iPjTKh=46dVtYLDEUVw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGCq0LZb8nQDvcz=LswWi4qKd-65ys6iPjTKh=46dVtYLDEUVw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dtx_diff suggests to use <(...) syntax to pipe two inputs into it, but
-this has never worked: The /proc/self/fds/... paths passed by the shell
-will fail the `[ -f "${dtx}" ] && [ -r "${dtx}" ]` check in compile_to_dts,
-but even with this check removed, the function cannot work: hexdump will
-eat up the DTB magic, making the subsequent dtc call fail, as a pipe
-cannot be rewound.
+On Thu, Jan 13, 2022 at 03:54:27PM +0800, Puma Hsu wrote:
+> On Tue, Jan 11, 2022 at 7:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Dec 29, 2021 at 07:25:51PM +0800, Puma Hsu wrote:
+> > > When HCE(Host Controller Error) is set, it means an internal
+> > > error condition has been detected. It needs to re-initialize
+> > > the HC too.
+> >
+> > What is "It" in the last sentence?
+> 
+> Maybe I can change "It" to "Software", xHCI specification uses
+> "Software" when describing this.
 
-Simply remove this broken example, as there is already an alternative one
-that works fine.
+Please change it to something better :)
 
-Fixes: 10eadc253ddf ("dtc: create tool to diff device trees")
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
----
- scripts/dtc/dtx_diff | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+> > >
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Puma Hsu <pumahsu@google.com>
+> >
+> > What commit id does this fix?
+> 
+> This commit is not used to fix a specific commit. We find a condition
+> that when XHCI runs the resume process but the HCE flag is set, then
+> the Run/Stop bit of USBCMD cannot be set so that HC would not be
+> enabled. In fact, HC may already meet a problem at this moment.
+> Besides, in xHCI requirements specification revision 1.2, Table 5-21
+> BIT(12) claims that Software should re-initialize the xHC when HCE is
+> set. Therefore, I think this commit could be the error handling for
+> HCE.
 
-diff --git a/scripts/dtc/dtx_diff b/scripts/dtc/dtx_diff
-index d3422ee15e30..f2bbde4bba86 100755
---- a/scripts/dtc/dtx_diff
-+++ b/scripts/dtc/dtx_diff
-@@ -59,12 +59,8 @@ Otherwise DTx is treated as a dts source file (aka .dts).
-    or '/include/' to be processed.
- 
-    If DTx_1 and DTx_2 are in different architectures, then this script
--   may not work since \${ARCH} is part of the include path.  Two possible
--   workarounds:
--
--      `basename $0` \\
--          <(ARCH=arch_of_dtx_1 `basename $0` DTx_1) \\
--          <(ARCH=arch_of_dtx_2 `basename $0` DTx_2)
-+   may not work since \${ARCH} is part of the include path.  The following
-+   workaround can be used:
- 
-       `basename $0` ARCH=arch_of_dtx_1 DTx_1 >tmp_dtx_1.dts
-       `basename $0` ARCH=arch_of_dtx_2 DTx_2 >tmp_dtx_2.dts
--- 
-2.25.1
+So this problem has been there since the driver was first added to the
+kernel?  Should it go to stable kernels as well?  If so, how far back in
+time?
 
+> > > ---
+> > > v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
+> > > v3: Add stable@vger.kernel.org for stable release.
+> > >
+> > >  drivers/usb/host/xhci.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > > index dc357cabb265..ab440ce8420f 100644
+> > > --- a/drivers/usb/host/xhci.c
+> > > +++ b/drivers/usb/host/xhci.c
+> > > @@ -1146,8 +1146,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+> > >               temp = readl(&xhci->op_regs->status);
+> > >       }
+> > >
+> > > -     /* If restore operation fails, re-initialize the HC during resume */
+> > > -     if ((temp & STS_SRE) || hibernated) {
+> > > +     /* If restore operation fails or HC error is detected, re-initialize the HC during resume */
+> > > +     if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
+> >
+> > But if STS_HCE is set on suspend, that means the suspend was broken so
+> > you wouldn't get here, right?
+> 
+> In xhci_suspend(), it seems doesn't really check whether STS_HCE is
+> set and then break the suspend(The only case for checking HCE is when
+> STS_SAVE setting failed). So suspend function may be still able to
+> finish even if HCE is set? Then xhci_resume will still be called.
+
+Is this a problem?
+
+> > Or can the error happen between suspend and resume?
+> >
+> > This seems like a big hammer for when the host controller throws an
+> > error.  Why is this the only place that it should be checked for?  What
+> > caused the error that can now allow it to be fixed?
+> 
+> I believe this is not the only place that the host controller may set
+> HCE, the host controller may set HCE anytime it sees an error in my
+> opinion, not only in suspend or resume.
+
+Then where else should it be checked?  Where else will your silicon set
+this bit as part of the normal operating process?
+
+thanks,
+
+greg k-h

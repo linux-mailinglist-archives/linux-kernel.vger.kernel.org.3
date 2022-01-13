@@ -2,121 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E42C48D97B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816CD48D987
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235575AbiAMOIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 09:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        id S235597AbiAMOLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:11:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiAMOIT (ORCPT
+        with ESMTP id S235590AbiAMOLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:08:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8FCC06173F;
-        Thu, 13 Jan 2022 06:08:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADB00B82244;
-        Thu, 13 Jan 2022 14:08:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78CE6C36AE9;
-        Thu, 13 Jan 2022 14:08:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642082896;
-        bh=AGXrB6RyRlJGlxXBTGJ56tVcl5sCtnIbd+sOvFKcyCs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JacG3I6VacRn9ssc1DqBNDh/6vt2laJIPLsgwmfG+tz5afXRM5WWshvos8zBoShl1
-         nCBUJVi5AqhbRox0EAJN5UKOlRPptcJVL/hD0rOW1U3Qrjfem6qu/aFpy9SsB9exK6
-         OfQ11o89t5mB9ZeZihirdKjIikuC9GwFt0cEOLd5y8mGVt27pN8XyX1tNxgBblmnXQ
-         XpKzTNVgF34QoCzwoaw11xD3kv3RXe/1CNh7of3vy99PexXY1SsW6BkW7j5CbOjBZf
-         8nGABQIeFJUGyIRHULR/AM4PaqHlqWtUX605+Pv5LJZlf/m/S8KzGdfa7TT8qg8N+a
-         QODIDMMi48Uvg==
-Received: by mail-ed1-f44.google.com with SMTP id 30so23543712edv.3;
-        Thu, 13 Jan 2022 06:08:16 -0800 (PST)
-X-Gm-Message-State: AOAM5328Ndem5EHAsstTKa8lVRXzkpMGKN0rwEgQ6Ev/AriVjaCFBsIq
-        x/Rg/YAfwVFjebLK7kMDfq+YXoZBhjvG9khO8g==
-X-Google-Smtp-Source: ABdhPJz+GHMwRV43sdBzHOeq12c86XZ9NFpJ+TiS7boAD3AIss0eauOXeqU8D6mHwfFBb9xoSuThXxy1UPREBNztaR4=
-X-Received: by 2002:a50:cf4e:: with SMTP id d14mr4349160edk.2.1642082894743;
- Thu, 13 Jan 2022 06:08:14 -0800 (PST)
+        Thu, 13 Jan 2022 09:11:38 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6CAC061748
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 06:11:38 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n80pD-0004V4-Ph; Thu, 13 Jan 2022 15:11:35 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n80pC-00A5Lh-0y; Thu, 13 Jan 2022 15:11:33 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n80pA-0006ua-DG; Thu, 13 Jan 2022 15:11:32 +0100
+Date:   Thu, 13 Jan 2022 15:11:32 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     vishakha.joshi@intel.com, thierry.reding@gmail.com,
+        lee.jones@linaro.org, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        vijayakannan.ayyathurai@intel.com, bala.senthil@intel.com,
+        tamal.saha@intel.com, lakshmi.bai.raja.subramanian@intel.com
+Subject: Re: [PATCH v1 1/2] pwm: Add count to sysfs for Intel PWM driver
+Message-ID: <20220113141132.vec2zisfdkrznyis@pengutronix.de>
+References: <20220103081610.6656-1-vishakha.joshi@intel.com>
+ <20220103081610.6656-2-vishakha.joshi@intel.com>
+ <20220103121454.rduz4jftean4hkaw@pengutronix.de>
+ <YdRSnxqIJf1C14+x@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20220110214456.67087-1-sander@svanheule.net> <Yd46ayLnvT/3ch9e@robh.at.kernel.org>
- <71fffde0704d240f5ec8773fe0e738b6e069a6b8.camel@svanheule.net>
-In-Reply-To: <71fffde0704d240f5ec8773fe0e738b6e069a6b8.camel@svanheule.net>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 13 Jan 2022 08:08:03 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ--59aMz1YaWTP=ZJDw9=uxRNDG-ZJ1wTCL5gZAKsRSA@mail.gmail.com>
-Message-ID: <CAL_JsqJ--59aMz1YaWTP=ZJDw9=uxRNDG-ZJ1wTCL5gZAKsRSA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: power: reset: gpio-restart: Correct default priority
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="u72jbzcajrumdalo"
+Content-Disposition: inline
+In-Reply-To: <YdRSnxqIJf1C14+x@smile.fi.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 2:49 PM Sander Vanheule <sander@svanheule.net> wrote:
->
-> Hi Rob,
->
-> On Tue, 2022-01-11 at 20:18 -0600, Rob Herring wrote:
-> > On Mon, 10 Jan 2022 22:44:56 +0100, Sander Vanheule wrote:
-> > > Commit bcd56fe1aa97 ("power: reset: gpio-restart: increase priority
-> > > slightly") changed the default restart priority 129, but did not update
-> > > the documentation. Correct this, so the driver and documentation have
-> > > the same default value.
-> > >
-> > > Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> > > ---
-> > > This is a resubmission of RFC:
-> > > https://lore.kernel.org/all/cfcd00257daba5aa30b8d20a62ba542be1a6914c.1640887456.git.sander@svanheule.net/
-> > >
-> > > The commit message for bcd56fe1aa97 mentions that it is a workaround for
-> > > rk3288-veryon boards. However, commit e28ea9dbc52d3 ("ARM: dts:
-> > > rockchip: add shared rk3288-veyron files") later adds a gpio-restart
-> > > node with a priority value of <200> for those boards, effectively
-> > > rendering bcd56fe1aa97 obsolete (for their use case).
-> > >
-> > > Perhaps bcd56fe1aa97 could just be reverted instead of updating the
-> > > documentation.
-> > >
-> > > An argument against reverting (a 6 year old patch) is that other boards
-> > > may have come to depend on the default value of 129. I don't know about
-> > > out-of-tree user of gpio-restart, but there are a few in-tree users of
-> > > gpio-restart /without/ an explicit priority:
-> > >
-> > > arch/arm/boot/dts/imx53-ppd.dts (commit 2952d67637716)
-> > >   DTS submitted after changed default, but DTS copyright predates the
-> > >   changed default.
-> > >
-> > > arch/microblaze/boot/dts/system.dts (commit 7cca9b8b7c5bc)
-> > >   The original DTS commit predates the changed default, but didn't use
-> > >   gpio-restart. The commit adding gpio-restart appears to indicate no
-> > >   other restart handlers are present on this platform, although it could
-> > >   be these were just being shadowed by the custom restart code.
-> > >
-> > > arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts (commit 0a91330b2af9f)
-> > >   Recently added board; couldn't find any obvious alternative restart
-> > >   handlers.
-> > >
-> > > Best,
-> > > Sander
-> > >
-> > >  .../devicetree/bindings/power/reset/gpio-restart.yaml         | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> >
-> > Reviewed-by: Rob Herring <robh@kernel.org>
->
-> Thanks for the review!
->
-> I've noticed the devicetree patchwork has this patch marked as "Not  applicable", but
-> linux-pm patchwork has it marked "Handled elsewhere". Since you merged the gpio-restart
-> conversion patch, can you also take this one, Rob?
 
-Yes, I'll pick it up.
+--u72jbzcajrumdalo
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Rob
+Hello,
+
+On Tue, Jan 04, 2022 at 03:58:55PM +0200, Andy Shevchenko wrote:
+> On Mon, Jan 03, 2022 at 01:14:54PM +0100, Uwe Kleine-K=F6nig wrote:
+> > If we really want to support a count, I request that all drivers that
+> > don't support it get updated to refuse a request with count !=3D 0.
+>=20
+> Hmm... Not sure it worth it, perhaps taking into account above the -1
+> (in unsigned type) returned on ->get_state() can suffice as not supporting
+> feature?
+
+In my eyes that's a bad idea. You have to touch most drivers anyhow to
+set the -1. So the outcome is the worst possible combination: Many
+changes and still much implicit logic distributed between the drivers
+and the core about what is supported and what not.
+
+(Or you have to initialize .count =3D -1 before calling the get_state
+callback. Then you get rid of "have to touch most drivers". But that's
+still ugly IMO.)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--u72jbzcajrumdalo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHgMxAACgkQwfwUeK3K
+7AmDBQf7B23shrh6K5S5ryerAtQS5Hv4ZvlQkTE8d0pz8YXutZTfHVgj5xnaF94f
+4Q2orikGdjr9iSCmc64nxpcYLTBuTBScU1DGdUcplnr/o2xj0wkjlbcHDSYN/cl7
+ulTv1hWy14Ux7F5n6jHRJR16U6pn4Vl3PiCCXUO0iTpZe7/I38bgHLcX+EgCzm1t
+VWBxwr2Kza5c0ph4q8NSY/cPHoBsxJFB2pHnqfTJl5FyA3wCKaA/S+4TjXmI4H+F
+NtZqUoCBnKzJoClrL50v4EOWJPp6WSSS77nyxtv4Ni4stC4mBw4spo9a2An4LOvm
+dQtt5mCoKGZm7IzAp/xr2NYXjviKrw==
+=f3+d
+-----END PGP SIGNATURE-----
+
+--u72jbzcajrumdalo--

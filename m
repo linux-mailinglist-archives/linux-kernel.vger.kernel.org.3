@@ -2,338 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8C848D265
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 07:43:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B4348D267
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 07:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231800AbiAMGnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 01:43:39 -0500
-Received: from mga14.intel.com ([192.55.52.115]:14235 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230003AbiAMGnj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 01:43:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642056218; x=1673592218;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BOrkV33rjJw4g+fhq7eTTJEHnUunciYxIbP79TYzYEw=;
-  b=I68Swf6SUkWvilEnm0lrlCQZGOqsbKssiG/ZK3CROFCBKodntt0InRfV
-   F5rHLvxSSx60NWDpf5+HJPE/isBrQtYAh6OrybuHfvwyyoseVXsInrwhz
-   HdQuam/l2mpFEQ9VzAyTmIIE25nD1VN5jUsNqI4+XMeqrChBrKI4HKMKm
-   U/wf7p8mCHWl7M53Ne9UMz+6YTBcUcynmzDWGJ3SSJ0XsHjQOveknxnVA
-   FDIJDY/FPWtnJTXwD/xZoXqZBA1dtUFWgEhaAzzHN2hg+0ZZL6luzZupa
-   UbJaKYHDsHYa/JnKkoOMkUNBhA2MRPQ7NBYSs6ayIgXszMYfIht8I3Bdo
+        id S231847AbiAMGnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 01:43:43 -0500
+Received: from esa18.fujitsucc.c3s2.iphmx.com ([216.71.158.38]:1452 "EHLO
+        esa18.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230003AbiAMGnm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 01:43:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1642056223; x=1673592223;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=DZ/fiqe01JhbAAxWJhA8SCQXcsCtV5Nd7AH01bDqwoQ=;
+  b=PxY21CRcUC+lXDnjbKXqoL91P43E5VTj1lnhT7et7OfJoT7pNGPccZXR
+   +aeEfnrcJvc8Pv4w3rNBWU+fyuTVbrPwGlSaVVx1dYK85D2vH8wmmYz7u
+   Z/RyJva4q0uVqtqHRjC2AFyggWkhmaQABkbHQZzuTFDsvEWtokvpaZtrH
+   lWv1E2UJIhRvsW0vB/zsBcYGhpukJsrassCUIZhVuXYM6LVTyu9oI9AQ8
+   DkfC2sQr6EjKzGYzzGJZXjhlldEDH7d3Ih3hD6A78l9kMzWW047c3qqnk
+   ErATq9SYvqB9zUqPWXcnvX+P4n/bqKRjNvMVE1papX5pD3k+af7Er0YO3
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="244148538"
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="244148538"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 22:43:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="491030796"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 12 Jan 2022 22:43:34 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n7tpe-0006v3-4a; Thu, 13 Jan 2022 06:43:34 +0000
-Date:   Thu, 13 Jan 2022 14:42:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Iouri Tarassov <iourit@linux.microsoft.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        linux-hyperv@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH v1 1/9] drivers: hv: dxgkrnl: Driver initialization and
- creation of dxgadapter
-Message-ID: <202201131405.tgtilUdq-lkp@intel.com>
-References: <1b26482b50832b95a9d8532c493cee6c97323b87.1641937419.git.iourit@linux.microsoft.com>
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="48499226"
+X-IronPort-AV: E=Sophos;i="5.88,284,1635174000"; 
+   d="scan'208";a="48499226"
+Received: from mail-os0jpn01lp2113.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.113])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 15:43:38 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=He7JinS+MrDKrdDDz8SZcvFRi+re8sEBk3PdMQ+DZJMF6k9Mk9NH+CX7F+G5rXL9OnZZ/ZINAAAWFfi0lkVIpDzuG4S+shv9eUNPoEZ47QlUDVO0wz8wEK0DsfHwp3xLcdekejeZD4cyOLtvM69sMdKeR6EDZQ8NUOzrO0LSDSWjxidNbs4lTZqp3gJ4nJP3jkUwAMgCBhfV6raMtfDAnoKN+fGgwMmCQpl1fHnqQ0OvFqB+fRed902n066N+V7dBBt/P/CwLrhIo35+usA57u3+k5Z3F5kaZkz6/pMHZrZWaXe+UsIs5I5gbEwnzu/bbYWGUgOFUdks4L6g4VsGlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DZ/fiqe01JhbAAxWJhA8SCQXcsCtV5Nd7AH01bDqwoQ=;
+ b=I1Qyg7XkfJWwONav3K/R1W0HLkztNZGQ1ZLjmAmbwUx1ZI1jfv0xvjmd3iAQvoCs7BGykPMdnPN4bl6KbiOykuvI/R/4hon0Oi6H3f8Coh3Dqy5qe+joeZTDwUwboDlQ5hiIcjWsaONBgLT0HjIje/Uuvl2rNX0cXRa7UBotPEYhEm7sxVIJedgyLJvZARx+ht8dSFs4ZSbau+eL4K5hIXh0+XZWezjkljVz9YyvHPObnjOCwtJ5cQTk50H3OP6YgE4neopvrCo/BTOoDS6UAtq7FMGW1O+060orwGjcel1qV/7FC/Lr4zD1i0gN0lHIrCnmulZ3cYM+0TDIWxU0AQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DZ/fiqe01JhbAAxWJhA8SCQXcsCtV5Nd7AH01bDqwoQ=;
+ b=cSklNBl63HxDgsKKd3VLLd+fYIMocFwg8pPJItqr72B26vw4Oo1W2sZ4JnIc5N0pZjzLmApUlKg/svJc1f6dD76By3AnMEcWIm6RLTtyfTY/ZyMTQPd+ml26Sc8XvgUfU+/SA8hu+aWuSn82dVreLjUWftT3CiTwjvclahvRUkI=
+Received: from TYCPR01MB9305.jpnprd01.prod.outlook.com (2603:1096:400:196::10)
+ by OSZPR01MB8548.jpnprd01.prod.outlook.com (2603:1096:604:18d::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Thu, 13 Jan
+ 2022 06:43:34 +0000
+Received: from TYCPR01MB9305.jpnprd01.prod.outlook.com
+ ([fe80::8110:65ae:1467:2141]) by TYCPR01MB9305.jpnprd01.prod.outlook.com
+ ([fe80::8110:65ae:1467:2141%4]) with mapi id 15.20.4888.011; Thu, 13 Jan 2022
+ 06:43:34 +0000
+From:   "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "aharonl@nvidia.com" <aharonl@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>, Tom Talpey <tom@talpey.com>,
+        "Gromadzki, Tomasz" <tomasz.gromadzki@intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mbloch@nvidia.com" <mbloch@nvidia.com>,
+        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
+        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
+        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
+Subject: Re: [RFC PATCH rdma-next 03/10] RDMA/rxe: Allow registering FLUSH
+ flags for supported device only
+Thread-Topic: [RFC PATCH rdma-next 03/10] RDMA/rxe: Allow registering FLUSH
+ flags for supported device only
+Thread-Index: AQHX+8Er95KpI1UKtUu28PtoB5n6zaxgmkSA
+Date:   Thu, 13 Jan 2022 06:43:34 +0000
+Message-ID: <45600750-5c50-2ee4-4f7c-e03510a799a7@fujitsu.com>
+References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
+ <20211228080717.10666-4-lizhijian@cn.fujitsu.com>
+In-Reply-To: <20211228080717.10666-4-lizhijian@cn.fujitsu.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: eeb5b216-e562-4fde-f163-08d9d6600588
+x-ms-traffictypediagnostic: OSZPR01MB8548:EE_
+x-microsoft-antispam-prvs: <OSZPR01MB8548C4860716AAF6C156A49BA5539@OSZPR01MB8548.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1824;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: i2S7IJDe+afF0sI2sajxIbNn+Vt9FrY7p2sspg5UhIseVtd+1lfjoHPF4P2Ziy27kuUzmS2nhYcDbqowJgc3FiMEWFSbbX41SQq6Y/JzjrdfdAfXCU9gQ/DpHVnRqDp1QQdPNSIDeyiesqkOdEmmDiTAZ72Xxnuf8VAUVuEubkFmNnfDuC6FF9L+glOrXVUYObAi3aAhOxXcKVWJis9Eoa+cXxvwDTuxXDjsXwBWgHktyfHU5j2/EHQGxtoJThBgeqt2pBUV3NJTBRfUuEbTINplyIA/3xNx5LKJj04zIigE+Gr4nXMuIu48n3TJxRBgUCdWUrhDL3VgrGxHSVVvh/E3lKWcbSKqJg+kXhrdQH03j6LGJIDjFfZN1iLQ2dYAFy+HP25BRoX06AL2KP7sY0ONIMEEqbT77W7mAXqYtCuhyF+0m8aQhNfd/hPCx0A1Wfx7p3SlWetawE6UsFtblTRmtdL7n0LXWtcKcYWAD3hj2SNCC3LqcJcT/MllsHlMxi1U7RN8Jc+UsLGvz5/udbrNT/GC7qaTCelDYeH5hsmKgrIxBT3TdL7BKoIopZfoxEnTljpohevBb0HdWydEp5mFXqFOgdwhDAwY8YL24HN0csqE6ewqL/seRW4VvxkLaDAMB0knH4KH49xJ+hBj58lRT1YlBJn5Y+0AVcNbRLRrFBrzZarbUC/cJmpv2TZeF339His7wzYZlmCBj1rUeQck7RREflik9GYMZithMgdEnwwwLLs3JS4QhwU/HcrfqOKk9rb4HSEXMIQO16C9lws0Cd5inYfWcM28qJo5U7U=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB9305.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(122000001)(83380400001)(53546011)(6506007)(26005)(85182001)(5660300002)(2616005)(66476007)(66946007)(82960400001)(66446008)(6486002)(76116006)(36756003)(66556008)(186003)(91956017)(64756008)(7416002)(86362001)(110136005)(54906003)(316002)(8936002)(4326008)(6512007)(71200400001)(921005)(8676002)(107886003)(38100700002)(508600001)(38070700005)(31696002)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eG84WVdIb1FZeVQwenlKeldXZkNtVzVkaVc3UXB2T3F0SjMwZXVIaUs2SldM?=
+ =?utf-8?B?SGtaeTJzc3BXQ0NrekZ0V2oyNWI1OTFLOW9LbFFFMWhiWjE1ckY1REcyeTBJ?=
+ =?utf-8?B?Q21mWFdzUS9lMEVOU041dnFSUkRIMFBLWnR1VDBVbGw3R2w0QVUwRzBwcGNr?=
+ =?utf-8?B?NDVjUzVDbE5DT0I3NVJVY3hMY3gwdXpDb2YvamRySmp6SnYzcnZ2NlNFSDVJ?=
+ =?utf-8?B?M3IyV1hHb0h2MTB5S0pjQlRPcnBNR1MyQy9BaitpdWFsQUcrU2h4dHMrUG9N?=
+ =?utf-8?B?U0txMm4xS1UvL3RyWDVleDlBM2N3UjlSaE1iZjVmb080anRmWEVRYXFCL2l1?=
+ =?utf-8?B?S0I0TzdLR3o4aHpaVUxYdXRkUFJYWUNFS2FQVmIyTFVSTmtsRHlYczIzNGpF?=
+ =?utf-8?B?OTNDSDlEa2F1Z0phdDMvZnNHaVhyVjNpZWJubVB4QURsN3FqKzB6amNMVDhF?=
+ =?utf-8?B?ZlZxTDhDNDhCZ09WK1VKdVhySGQwRUtDQWE0WDY5aXdJdEg1cTVQUXVkOXJD?=
+ =?utf-8?B?MSt6dWtscXRLbGFjdTdtRlZsUWlDUkovQWZsWFNBeUVWRGVTNjlxV2dLSVVr?=
+ =?utf-8?B?Z3gwOXM5Yng4TFVxRENGQlY3Rk5mR29qS0t5QTNXYWIrY21rKzJWRG9JYUg2?=
+ =?utf-8?B?RCtDY01aVzViemtZeG96ZzNNc2NJT05FbVFyWk5nK1pRRE93a2Vtenh4N20v?=
+ =?utf-8?B?NGY1MVpOYjRrK0ZQVUg5UWlSSmRqc1JRWVZHc2ZGeDQ2NUluK0ZqVzhUSmN1?=
+ =?utf-8?B?K2lMakxhbEJoejB0dVRpa21jSFpWN250VUVWbVV0N2R2WklRQVhmclI1RkxO?=
+ =?utf-8?B?ZHFjQkVOODAvY2tiTTBJazZxOE1YOUNnQmxldkFvUmpxU1hDOEFZNVZjZnJI?=
+ =?utf-8?B?SXZ0dGRLZEMycDg4MEpSY1RMZmpGcUt6by90SWk3NGp2OXJldzdtNmlmOWJv?=
+ =?utf-8?B?eDFDdFBhTUZzT1FBT1FZNlNUS2V6Nmp0RHZwYWNQVU9RSHQ4djJkYTl0Mm9G?=
+ =?utf-8?B?eTFqNWFUYWkySllmdUpSVmhMbncybVNBSVZ1VWxhYjZ0bHdwQ29hK3pLNXR6?=
+ =?utf-8?B?MTNjQXN1Z2tNNVlIaW9kRC8yVlprMStoR2dDYXdJb1U4MStRR0FjQk9SYmdP?=
+ =?utf-8?B?TTBKRHdML2pUZkxmQngvQWpqOFA2MDJQSlBCYW5EaTdtajArN3A0cDB3Y1lB?=
+ =?utf-8?B?NnVKNTkxaXVkSnBJYy91MVZiODNoQlVScU16dUhUaHBNZE1CeDhOQjdDYmZN?=
+ =?utf-8?B?Z1dPNVlmQ1BmSFo5Y3NzRDN0cjFsWGZnSWpwZjJWSUloM2RWcXRTODJPYWlt?=
+ =?utf-8?B?TTVpSzJseVl3SUVVMW1BaGsxQi82bTR0dksxdmJJWVl6ZGxpV0k3VThiaml6?=
+ =?utf-8?B?VThGRktpaDFSakEzZmd5TllnaloxdTEySkVydUN0NXVSdzYxU21IY05WNnNv?=
+ =?utf-8?B?dkY1YTdUVS9td1R2dDJPMkZMVTF4OVNSNS9VN0t2NU5tRHdlWUtOZmFidXRU?=
+ =?utf-8?B?ZFo1NDRxRWhnaG5rRHRLc3BlWU9WSC9VNTJwcU9SZitwUDVaZGs0VDVOSWZl?=
+ =?utf-8?B?WUF0MmlwSGV1Q1BqWXZlZStyOFp1ZzMwY1kwdmZ1VW80NUJPMlZ3d2V2MC9Q?=
+ =?utf-8?B?U1NwOVMvVDQxYlQ2emI1UVZIaGZnaEkzbUE1TWc0bE5qRzJSQlB1UXVjMVVq?=
+ =?utf-8?B?YVJYcHh5Yyt6YjZVejk0aG9BS2ZXV3c5YTZEb1VPNEdBaEFXcmRWeHBrUGFJ?=
+ =?utf-8?B?NEsybisyeTRYRW5VRlZoeDU0enhIMFpNTDhjSnFJN29zUjlheGFueVNUNW44?=
+ =?utf-8?B?TmxPRy9ZM0Vwbm5QTlcvSmxQMHU3TVdEdy85YkUrc2R3RmZoTlFVNFlkazZr?=
+ =?utf-8?B?USsrcjFOb2s2Z1krR1l0UFFsSjJpN21xbE9wakE1aU9mSHdIWXlCS0pySCtw?=
+ =?utf-8?B?NU53ZDhYS2JMM3lkem1vbjh2dnlpSDYvSUFJYmlyQ0VsMFlDcHZRbzdvU1B6?=
+ =?utf-8?B?WVZaVjFtR1FPWGF0NGlJay84azZWZ1ZsUzNJdzFrR2JXMmRydE1SWXhXeVlp?=
+ =?utf-8?B?MURmekE1Lyt6UkRmTmxOeUZ6YXY2dVI3QWFTOXB1bkVVeS9lVXg3RVlhTll2?=
+ =?utf-8?B?UmljVnluczlYZ0ZYbW5ZcDFvUmVabmYrczI4U2xnM1FpNWgrU250WGgzdWp4?=
+ =?utf-8?Q?+bUhQ0fttzsAzSNO5AdmerU=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DF0A1F3DBFCB1A4F88CBEE5394F98581@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b26482b50832b95a9d8532c493cee6c97323b87.1641937419.git.iourit@linux.microsoft.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB9305.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eeb5b216-e562-4fde-f163-08d9d6600588
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jan 2022 06:43:34.6763
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CFFUi3qXNk50S4Ls9/2iOe36+Y4ZWTrmw2otWCLFUbK+054H6Dvpj2xcLaKGbOm0p65xad2HhkLVz5TRQITdpA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB8548
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Iouri,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.16 next-20220113]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Iouri-Tarassov/drivers-hv-dxgkrnl-Driver-overview/20220113-035836
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e3084ed48fd6b661fe434da0cb36d7d6706cf27f
-config: arm64-randconfig-r032-20220113 (https://download.01.org/0day-ci/archive/20220113/202201131405.tgtilUdq-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/00f97c12e2cf0ba4ba1108e2fce9a3d0e287cc8c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Iouri-Tarassov/drivers-hv-dxgkrnl-Driver-overview/20220113-035836
-        git checkout 00f97c12e2cf0ba4ba1108e2fce9a3d0e287cc8c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hv/dxgkrnl/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hv/dxgkrnl/dxgmodule.c:79:20: warning: no previous prototype for function 'find_pci_adapter' [-Wmissing-prototypes]
-   struct dxgadapter *find_pci_adapter(struct pci_dev *dev)
-                      ^
-   drivers/hv/dxgkrnl/dxgmodule.c:79:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct dxgadapter *find_pci_adapter(struct pci_dev *dev)
-   ^
-   static 
->> drivers/hv/dxgkrnl/dxgmodule.c:135:6: warning: no previous prototype for function 'signal_host_cpu_event' [-Wmissing-prototypes]
-   void signal_host_cpu_event(struct dxghostevent *eventhdr)
-        ^
-   drivers/hv/dxgkrnl/dxgmodule.c:135:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void signal_host_cpu_event(struct dxghostevent *eventhdr)
-   ^
-   static 
->> drivers/hv/dxgkrnl/dxgmodule.c:219:5: warning: no previous prototype for function 'dxgglobal_create_adapter' [-Wmissing-prototypes]
-   int dxgglobal_create_adapter(struct pci_dev *dev, guid_t *guid,
-       ^
-   drivers/hv/dxgkrnl/dxgmodule.c:219:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int dxgglobal_create_adapter(struct pci_dev *dev, guid_t *guid,
-   ^
-   static 
-   3 warnings generated.
---
-   In file included from drivers/hv/dxgkrnl/dxgvmbus.c:22:
-   drivers/hv/dxgkrnl/dxgvmbus.h:867:26: warning: implicit conversion from enumeration type 'enum dxgkvmb_commandtype' to different enumeration type 'enum dxgkvmb_commandtype_global' [-Wenum-conversion]
-           command->command_type   = DXGK_VMBCOMMAND_INVALID;
-                                   ~ ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hv/dxgkrnl/dxgvmbus.c:116:5: warning: no previous prototype for function 'ntstatus2int' [-Wmissing-prototypes]
-   int ntstatus2int(struct ntstatus status)
-       ^
-   drivers/hv/dxgkrnl/dxgvmbus.c:116:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ntstatus2int(struct ntstatus status)
-   ^
-   static 
->> drivers/hv/dxgkrnl/dxgvmbus.c:219:6: warning: no previous prototype for function 'process_inband_packet' [-Wmissing-prototypes]
-   void process_inband_packet(struct dxgvmbuschannel *channel,
-        ^
-   drivers/hv/dxgkrnl/dxgvmbus.c:219:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void process_inband_packet(struct dxgvmbuschannel *channel,
-   ^
-   static 
->> drivers/hv/dxgkrnl/dxgvmbus.c:237:6: warning: no previous prototype for function 'process_completion_packet' [-Wmissing-prototypes]
-   void process_completion_packet(struct dxgvmbuschannel *channel,
-        ^
-   drivers/hv/dxgkrnl/dxgvmbus.c:237:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void process_completion_packet(struct dxgvmbuschannel *channel,
-   ^
-   static 
->> drivers/hv/dxgkrnl/dxgvmbus.c:363:5: warning: no previous prototype for function 'dxgvmb_send_async_msg' [-Wmissing-prototypes]
-   int dxgvmb_send_async_msg(struct dxgvmbuschannel *channel,
-       ^
-   drivers/hv/dxgkrnl/dxgvmbus.c:363:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int dxgvmb_send_async_msg(struct dxgvmbuschannel *channel,
-   ^
-   static 
-   drivers/hv/dxgkrnl/dxgvmbus.c:199:20: warning: unused function 'command_vm_to_host_init0' [-Wunused-function]
-   static inline void command_vm_to_host_init0(struct dxgkvmb_command_vm_to_host
-                      ^
-   6 warnings generated.
-
-
-vim +/find_pci_adapter +79 drivers/hv/dxgkrnl/dxgmodule.c
-
-    78	
-  > 79	struct dxgadapter *find_pci_adapter(struct pci_dev *dev)
-    80	{
-    81		struct dxgadapter *entry;
-    82		struct dxgadapter *adapter = NULL;
-    83	
-    84		dxgglobal_acquire_adapter_list_lock(DXGLOCK_EXCL);
-    85	
-    86		list_for_each_entry(entry, &dxgglobal->adapter_list_head,
-    87				    adapter_list_entry) {
-    88			if (dev == entry->pci_dev) {
-    89				adapter = entry;
-    90				break;
-    91			}
-    92		}
-    93	
-    94		dxgglobal_release_adapter_list_lock(DXGLOCK_EXCL);
-    95		return adapter;
-    96	}
-    97	
-    98	static struct dxgadapter *find_adapter(struct winluid *luid)
-    99	{
-   100		struct dxgadapter *entry;
-   101		struct dxgadapter *adapter = NULL;
-   102	
-   103		dxgglobal_acquire_adapter_list_lock(DXGLOCK_EXCL);
-   104	
-   105		list_for_each_entry(entry, &dxgglobal->adapter_list_head,
-   106				    adapter_list_entry) {
-   107			if (memcmp(luid, &entry->luid, sizeof(struct winluid)) == 0) {
-   108				adapter = entry;
-   109				break;
-   110			}
-   111		}
-   112	
-   113		dxgglobal_release_adapter_list_lock(DXGLOCK_EXCL);
-   114		return adapter;
-   115	}
-   116	
-   117	void dxgglobal_add_host_event(struct dxghostevent *event)
-   118	{
-   119		spin_lock_irq(&dxgglobal->host_event_list_mutex);
-   120		list_add_tail(&event->host_event_list_entry,
-   121			      &dxgglobal->host_event_list_head);
-   122		spin_unlock_irq(&dxgglobal->host_event_list_mutex);
-   123	}
-   124	
-   125	void dxgglobal_remove_host_event(struct dxghostevent *event)
-   126	{
-   127		spin_lock_irq(&dxgglobal->host_event_list_mutex);
-   128		if (event->host_event_list_entry.next != NULL) {
-   129			list_del(&event->host_event_list_entry);
-   130			event->host_event_list_entry.next = NULL;
-   131		}
-   132		spin_unlock_irq(&dxgglobal->host_event_list_mutex);
-   133	}
-   134	
- > 135	void signal_host_cpu_event(struct dxghostevent *eventhdr)
-   136	{
-   137		struct  dxghosteventcpu *event = (struct  dxghosteventcpu *)eventhdr;
-   138	
-   139		if (event->remove_from_list ||
-   140			event->destroy_after_signal) {
-   141			list_del(&eventhdr->host_event_list_entry);
-   142			eventhdr->host_event_list_entry.next = NULL;
-   143		}
-   144		if (event->cpu_event) {
-   145			dev_dbg(dxgglobaldev, "signal cpu event\n");
-   146			eventfd_signal(event->cpu_event, 1);
-   147			if (event->destroy_after_signal)
-   148				eventfd_ctx_put(event->cpu_event);
-   149		} else {
-   150			dev_dbg(dxgglobaldev, "signal completion\n");
-   151			complete(event->completion_event);
-   152		}
-   153		if (event->destroy_after_signal) {
-   154			dev_dbg(dxgglobaldev, "destroying event %p\n",
-   155				event);
-   156			vfree(event);
-   157		}
-   158	}
-   159	
-   160	void dxgglobal_signal_host_event(u64 event_id)
-   161	{
-   162		struct dxghostevent *event;
-   163		unsigned long flags;
-   164	
-   165		dev_dbg(dxgglobaldev, "%s %lld\n", __func__, event_id);
-   166	
-   167		spin_lock_irqsave(&dxgglobal->host_event_list_mutex, flags);
-   168		list_for_each_entry(event, &dxgglobal->host_event_list_head,
-   169				    host_event_list_entry) {
-   170			if (event->event_id == event_id) {
-   171				dev_dbg(dxgglobaldev, "found event to signal %lld\n",
-   172					    event_id);
-   173				if (event->event_type == dxghostevent_cpu_event)
-   174					signal_host_cpu_event(event);
-   175				else
-   176					pr_err("Unknown host event type");
-   177				break;
-   178			}
-   179		}
-   180		spin_unlock_irqrestore(&dxgglobal->host_event_list_mutex, flags);
-   181		dev_dbg(dxgglobaldev, "dxgglobal_signal_host_event_end %lld\n",
-   182			event_id);
-   183	}
-   184	
-   185	struct dxghostevent *dxgglobal_get_host_event(u64 event_id)
-   186	{
-   187		struct dxghostevent *entry;
-   188		struct dxghostevent *event = NULL;
-   189	
-   190		spin_lock_irq(&dxgglobal->host_event_list_mutex);
-   191		list_for_each_entry(entry, &dxgglobal->host_event_list_head,
-   192				    host_event_list_entry) {
-   193			if (entry->event_id == event_id) {
-   194				list_del(&entry->host_event_list_entry);
-   195				entry->host_event_list_entry.next = NULL;
-   196				event = entry;
-   197				break;
-   198			}
-   199		}
-   200		spin_unlock_irq(&dxgglobal->host_event_list_mutex);
-   201		return event;
-   202	}
-   203	
-   204	u64 dxgglobal_new_host_event_id(void)
-   205	{
-   206		return atomic64_inc_return(&dxgglobal->host_event_id);
-   207	}
-   208	
-   209	void dxgglobal_acquire_process_adapter_lock(void)
-   210	{
-   211		mutex_lock(&dxgglobal->process_adapter_mutex);
-   212	}
-   213	
-   214	void dxgglobal_release_process_adapter_lock(void)
-   215	{
-   216		mutex_unlock(&dxgglobal->process_adapter_mutex);
-   217	}
-   218	
- > 219	int dxgglobal_create_adapter(struct pci_dev *dev, guid_t *guid,
-   220				     struct winluid host_vgpu_luid)
-   221	{
-   222		struct dxgadapter *adapter;
-   223		int ret = 0;
-   224	
-   225		adapter = vzalloc(sizeof(struct dxgadapter));
-   226		if (adapter == NULL) {
-   227			ret = -ENOMEM;
-   228			goto cleanup;
-   229		}
-   230	
-   231		adapter->adapter_state = DXGADAPTER_STATE_WAITING_VMBUS;
-   232		adapter->host_vgpu_luid = host_vgpu_luid;
-   233		kref_init(&adapter->adapter_kref);
-   234		init_rwsem(&adapter->core_lock);
-   235	
-   236		INIT_LIST_HEAD(&adapter->adapter_process_list_head);
-   237		INIT_LIST_HEAD(&adapter->shared_resource_list_head);
-   238		INIT_LIST_HEAD(&adapter->adapter_shared_syncobj_list_head);
-   239		INIT_LIST_HEAD(&adapter->syncobj_list_head);
-   240		init_rwsem(&adapter->shared_resource_list_lock);
-   241		adapter->pci_dev = dev;
-   242		guid_to_luid(guid, &adapter->luid);
-   243	
-   244		dxgglobal_acquire_adapter_list_lock(DXGLOCK_EXCL);
-   245	
-   246		list_add_tail(&adapter->adapter_list_entry,
-   247			      &dxgglobal->adapter_list_head);
-   248		dxgglobal->num_adapters++;
-   249		dxgglobal_release_adapter_list_lock(DXGLOCK_EXCL);
-   250	
-   251		dev_dbg(dxgglobaldev, "new adapter added %p %x-%x\n", adapter,
-   252			    adapter->luid.a, adapter->luid.b);
-   253	cleanup:
-   254		dev_dbg(dxgglobaldev, "%s end: %d", __func__, ret);
-   255		return ret;
-   256	}
-   257	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+SGV5IFRvbSwgVG9tYXMsIGFsbA0KDQpJIHJlY2FsbCB0aGF0IHRoZSBTUEVDIHNheXM6DQo+IEEx
+OS40LjMuMSBIQ0EgUkVTT1VSQ0VTDQo+IFRoaXMgQW5uZXggaW50cm9kdWNlcyB0aGUgZm9sbG93
+aW5nIG5ldyBIQ0EgYXR0cmlidXRlczoNCj4g4oCiIEFiaWxpdHkgdG8gc3VwcG9ydCBNZW1vcnkg
+UGxhY2VtZW50IEV4dGVuc2lvbnMNCj4gYSkgQWJpbGl0eSB0byBzdXBwb3J0IEZMVVNIDQo+IGkp
+IEFiaWxpdHkgdG8gc3VwcG9ydCBGTFVTSCB3aXRoIFBMVCBHbG9iYWwgVmlzaWJpbGl0eQ0KPiBp
+aSkgQWJpbGl0eSB0byBzdXBwb3J0IEZMVVNIIHdpdGggUExUIFBlcnNpc3RlbmNlDQoNCkRvIHlv
+dSBoYXZlIGFueSBpZGVhIHRoYXQgY2FuIHRoZSBIQ0Egc3VwcG9ydCBqdXN0IHBhcnQgb2YgdGhl
+IEZMVVNIIGNhcGFiaWxpdGllcy4NCkZvciBleGFtcGxlLMKgIEhDQV9mb28gb25seSBzdXBwb3J0
+cyBQTFQgR2xvYmFsIFZpc2liaWxpdHksIG5vIFBMVCBQZXJzaXN0ZW5jZSBzdXBwb3J0Lg0KDQpU
+aGFua3MNClpoaWppYW4NCg0KDQoNCk9uIDI4LzEyLzIwMjEgMTY6MDcsIExpIFpoaWppYW4gd3Jv
+dGU6DQo+IERldmljZSBzaG91bGQgZW5hYmxlIElCX0RFVklDRV9SRE1BX0ZMVVNIIGNhcGFiaWxp
+dHkgaWYgaXQgd2FudCB0bw0KPiBzdXBwb3J0IFJETUEgRkxVU0guDQo+DQo+IFNpZ25lZC1vZmYt
+Ynk6IExpIFpoaWppYW4gPGxpemhpamlhbkBjbi5mdWppdHN1LmNvbT4NCj4gLS0tDQo+ICAgaW5j
+bHVkZS9yZG1hL2liX3ZlcmJzLmggfCA1ICsrKysrDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDUgaW5z
+ZXJ0aW9ucygrKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9yZG1hL2liX3ZlcmJzLmggYi9p
+bmNsdWRlL3JkbWEvaWJfdmVyYnMuaA0KPiBpbmRleCBmMDRkNjY1Mzk4NzkuLjUxZDU4YjY0MTIw
+MSAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9yZG1hL2liX3ZlcmJzLmgNCj4gKysrIGIvaW5jbHVk
+ZS9yZG1hL2liX3ZlcmJzLmgNCj4gQEAgLTI5MSw2ICsyOTEsNyBAQCBlbnVtIGliX2RldmljZV9j
+YXBfZmxhZ3Mgew0KPiAgIAkvKiBUaGUgZGV2aWNlIHN1cHBvcnRzIHBhZGRpbmcgaW5jb21pbmcg
+d3JpdGVzIHRvIGNhY2hlbGluZS4gKi8NCj4gICAJSUJfREVWSUNFX1BDSV9XUklURV9FTkRfUEFE
+RElORwkJPSAoMVVMTCA8PCAzNiksDQo+ICAgCUlCX0RFVklDRV9BTExPV19VU0VSX1VOUkVHCQk9
+ICgxVUxMIDw8IDM3KSwNCj4gKwlJQl9ERVZJQ0VfUkRNQV9GTFVTSAkJCT0gKDFVTEwgPDwgMzgp
+LA0KPiAgIH07DQo+ICAgDQo+ICAgZW51bSBpYl9hdG9taWNfY2FwIHsNCj4gQEAgLTQzMTksNiAr
+NDMyMCwxMCBAQCBzdGF0aWMgaW5saW5lIGludCBpYl9jaGVja19tcl9hY2Nlc3Moc3RydWN0IGli
+X2RldmljZSAqaWJfZGV2LA0KPiAgIAlpZiAoZmxhZ3MgJiBJQl9BQ0NFU1NfT05fREVNQU5EICYm
+DQo+ICAgCSAgICAhKGliX2Rldi0+YXR0cnMuZGV2aWNlX2NhcF9mbGFncyAmIElCX0RFVklDRV9P
+Tl9ERU1BTkRfUEFHSU5HKSkNCj4gICAJCXJldHVybiAtRUlOVkFMOw0KPiArDQo+ICsJaWYgKGZs
+YWdzICYgSUJfQUNDRVNTX0ZMVVNIICYmDQo+ICsJICAgICEoaWJfZGV2LT5hdHRycy5kZXZpY2Vf
+Y2FwX2ZsYWdzICYgSUJfREVWSUNFX1JETUFfRkxVU0gpKQ0KPiArCQlyZXR1cm4gLUVJTlZBTDsN
+Cj4gICAJcmV0dXJuIDA7DQo+ICAgfQ0KPiAgIA0K

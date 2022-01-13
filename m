@@ -2,176 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 536DF48D9EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D8348D9F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235752AbiAMOpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 09:45:51 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59708 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbiAMOpu (ORCPT
+        id S235766AbiAMOrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:47:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53776 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233723AbiAMOrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:45:50 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 534FB61CFC;
-        Thu, 13 Jan 2022 14:45:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA3CC36AEB;
-        Thu, 13 Jan 2022 14:45:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642085148;
-        bh=qGUpScSrM6PHOQ9896+ovOSrylwTkuQlIpt7KlyEp5s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rIF3lS/tm9sqFT+BginWJM2+mt1t0i+1rbRTwFGO/b5RO54FFqysidEmT2WSnXujo
-         cGDZLPUBbnFnBovZVRCzJE12OIxe0UaqPbmDiXkUfgTiIFTn2YGRAzH3LqjFaP+tZD
-         stowk5nOSDH2HzMR+0nMTCmGiZrfOpEXlbtFzEEyyHKSnxaKn6wp5i+0CBOwWaYud8
-         h6IHjIqf66cMB/zCEPF7AQwqZAp9MkoApoumfwu6VFfqqNiQcfv/H1IDJvKTA9xbou
-         r4uQpom3hKk5szByYDLACU4vgN5e9UWDsM5Igx38QRWaZyToUoz1pHBLnnGGGgQZOi
-         t54X3kfj11igw==
-Date:   Thu, 13 Jan 2022 14:45:30 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Auger <eric.auger@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        netdev@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <YeA7CjOyJFkpuhz/@sirena.org.uk>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
- <YdyilpjC6rtz6toJ@lunn.ch>
- <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
- <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+        Thu, 13 Jan 2022 09:47:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642085221;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lSDQWCPWVjF9NlavrTbv8hqhD4ANM1MfQ/emEeuv7nY=;
+        b=ZfAu+WpJPiV0n9F3HdvgUenvus3nwYeYHVqpcxH5uvMAMiEDmWNREHufQu+KCJJhtYOlHb
+        L/CUu0qoYBOZUEiB9j/690i0BG0SAZ0/2LL4emPyMxHHqdkt4gnnAjsUF2H5L7afWKmClF
+        C5oag0Q6GYl9aC6IMnSLcgeSJ0B1raI=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-673-fTbcgoGpNk2zE4YutVutUg-1; Thu, 13 Jan 2022 09:46:58 -0500
+X-MC-Unique: fTbcgoGpNk2zE4YutVutUg-1
+Received: by mail-ed1-f71.google.com with SMTP id z9-20020a05640240c900b003fea688a17eso5557705edb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 06:46:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=lSDQWCPWVjF9NlavrTbv8hqhD4ANM1MfQ/emEeuv7nY=;
+        b=f+1NJVl8bYwAB6vEnGcg3vINf7bIwqKVQbyxxxjgZzhNVT7CE2rnIuuSAuolpI2t9P
+         bXbL0OGbD9m8mXvlsQzRw++/bACi6R7DHmlejnVD0VWW5yJIm1YFpJAzaW8VkDJA8HRB
+         meq2fmQitEubYYNIXLFnloMKiDIfO7/EOBbuNKyk91N/4/usi1vFH0O3Q8/sikfxDaOw
+         SzYbY/PQLEqZtDkjm6MH/aPqM4lXYlTsuxkhzm1pIpenQqv6Bt9UQmDRxLJj9TW7SCe2
+         0L/Q4lMdN6v5ziteNycJ8GdxV3svmcOuMST6SLtjUr5RvE7oV+VLz8TSQ4rdl7lk8XjK
+         EVGA==
+X-Gm-Message-State: AOAM5300S5vjA0K2MIbKZQJpdjiDh0ic4SfLEeyKhAT0ehGZLyEJGBGw
+        vBgqeDv7m0AdZPoSncSIdqM9K3XHdOkYjovRQ9FGrIUS2m0wW3UVAICs5EBCRvfxuo5BAvcKuk+
+        TNF/alpnElubWATF++I1Rky1n
+X-Received: by 2002:a17:906:36da:: with SMTP id b26mr3560777ejc.213.1642085217038;
+        Thu, 13 Jan 2022 06:46:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz/38BHGBrb6Tyf8n/r/vXXRORwnLjRqkhkzTt2dZhCdq1sN4eIg2NQzE+YI3p2tvbF891lHA==
+X-Received: by 2002:a17:906:36da:: with SMTP id b26mr3560766ejc.213.1642085216813;
+        Thu, 13 Jan 2022 06:46:56 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:e200:8511:ed0f:ac2c:42f7? (p200300cbc703e2008511ed0fac2c42f7.dip0.t-ipconnect.de. [2003:cb:c703:e200:8511:ed0f:ac2c:42f7])
+        by smtp.gmail.com with ESMTPSA id g9sm938257ejo.222.2022.01.13.06.46.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 06:46:56 -0800 (PST)
+Message-ID: <ec0f57e6-f1f6-b9d9-b507-20e845fe7f17@redhat.com>
+Date:   Thu, 13 Jan 2022 15:46:54 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="W6TsDGUCC61npB/4"
-Content-Disposition: inline
-In-Reply-To: <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
-X-Cookie: Slow day.  Practice crawling.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>,
+        Liang Zhang <zhangliang5@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, wangzhigang17@huawei.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220113140318.11117-1-zhangliang5@huawei.com>
+ <YeA5oP/iaxtVPHb3@casper.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
+In-Reply-To: <YeA5oP/iaxtVPHb3@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 13.01.22 15:39, Matthew Wilcox wrote:
+> On Thu, Jan 13, 2022 at 10:03:18PM +0800, Liang Zhang wrote:
+>> In current implementation, process's read requestions will fault in pages
+>> with WP flags in PTEs. Next, if process emit a write requestion will go
+>> into do_wp_page() and copy data to a new allocated page from the old one
+>> due to refcount > 1 (page table mapped and swapcache), which could be
+>> result in performance degradation. In fact, this page is exclusively owned
+>> by this process and the duplication from old to a new allocated page is
+>> really unnecessary.
+>>
+>> So In this situation, these unshared pages can be reused by its process.
+> 
+> Let's bring Linus in on this, but I think this reintroduces all of the
+> mapcount problems that we've been discussing recently.
+> 
+> How about this as an alternative?
+> 
+> +++ b/mm/memory.c
+> @@ -3291,11 +3291,11 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+>                 struct page *page = vmf->page;
+> 
+>                 /* PageKsm() doesn't necessarily raise the page refcount */
+> -               if (PageKsm(page) || page_count(page) != 1)
+> +               if (PageKsm(page) || page_count(page) != 1 + PageSwapCache(page))
+>                         goto copy;
+>                 if (!trylock_page(page))
+>                         goto copy;
+> -               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1) {
+> +               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1 + PageSwapCache(page)) {
+>                         unlock_page(page);
+>                         goto copy;
+>                 }
 
---W6TsDGUCC61npB/4
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Funny, I was staring at swap reuse code as I received this mail ...
+because if we're not using reuse_swap_page() here anymore, we shouldn't
+really be reusing it anywhere for consistency, most prominently in
+do_swap_page() when we handle vmf->flags & FAULT_FLAG_WRITE just
+similarly as we do here ...
 
-On Thu, Jan 13, 2022 at 12:08:31PM +0100, Uwe Kleine-K=F6nig wrote:
+And that's where things get hairy and I am still trying to figure out
+all of the details.
 
-> This is all very unfortunate. In my eyes b) is the most sensible
-> sense, but the past showed that we don't agree here. (The most annoying
-> part of regulator_get is the warning that is emitted that regularily
-> makes customers ask what happens here and if this is fixable.)
+Regarding above: If the page is swapped out in multiple processes but
+was only faulted into the current process R/O, and then we try to write:
 
-Fortunately it can be fixed, and it's safer to clearly specify things.
-The prints are there because when the description is wrong enough to
-cause things to blow up we can fail to boot or run messily and
-forgetting to describe some supplies (or typoing so they haven't done
-that) and people were having a hard time figuring out what might've
-happened.
+1. Still in the swapcache: PageSwapCache()
+2. Mapped only by one process: page_mapcount(page) == 1
+3. Reference from one page table and the swap cache: page_count(page) ==
 
-> I think at least c) is easy to resolve because
-> platform_get_irq_optional() isn't that old yet and mechanically
-> replacing it by platform_get_irq_silent() should be easy and safe.
-> And this is orthogonal to the discussion if -ENOXIO is a sensible return
-> value and if it's as easy as it could be to work with errors on irq
-> lookups.
+But other processes could read-fault on the swapcache page, no?
 
-It'd certainly be good to name anything that doesn't correspond to one
-of the existing semantics for the API (!) something different rather
-than adding yet another potentially overloaded meaning.
+I think we'd really have to check against the swapcount as well ...
+essentially reuse_swap_page(), no?
 
---W6TsDGUCC61npB/4
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+Thanks,
 
------BEGIN PGP SIGNATURE-----
+David / dhildenb
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHgOwoACgkQJNaLcl1U
-h9DB2wf+MsmuWAbFkx7w6dSqBFg+5BMfRX917lHiCsn2CYARHwyaPL5M5EVrbehK
-70/euCaJWItviAfkx+6AAOYCmbHs8mt+zpvgLriDTnZOumRiZfiGXMZHt85uxFOg
-+CON0NcPugM2d7SZyRdxLTQBcBJt3wzMoV71nZv43fG+BMfssZy/ADYB75p648wU
-r7n86P+i3Kh+8hkINY1UdrfNXf7GkWehj0fZhkQ6PO+sH6jH8JFft+mMsKvTkCfp
-th2g66aUCkHb8ML7wNc5DEOQZlW9A7QyBKZpFWcduJs7uD92dqsoRJ7ch05zM3z/
-HtLt6l6YJ3XD702pvFQA2C4cb/OGkA==
-=d1L9
------END PGP SIGNATURE-----
-
---W6TsDGUCC61npB/4--

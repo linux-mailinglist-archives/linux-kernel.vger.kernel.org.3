@@ -2,102 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE19B48DF8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F21C48DF90
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235086AbiAMVXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 16:23:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39016 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbiAMVXN (ORCPT
+        id S235178AbiAMV1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 16:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231472AbiAMV1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 16:23:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0558619D7;
-        Thu, 13 Jan 2022 21:23:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19D85C36AE3;
-        Thu, 13 Jan 2022 21:23:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642108992;
-        bh=cUCtebEbEkYh9sbWVWDJtzkSdylvZxNVVHxQYeHkfvU=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=EkbbGQ39JoG2q69FY3jPZnUyJ4PyM8pr3M4CFiY27lcgHKc6XXKt+dMubMWvLP60H
-         ur32KHJ06fnu0K1qG0Yva18JvH11lyGBVA25luIhKbaOn6/OaBojSJpUhGKJ1Lb8c8
-         1ZehMyK1e3BCP2DuJTKlmTFp1a/0FQ9zyQa83XByuDfMhwc/h9P4PWXSb/4VH5JQVc
-         vOKZgKkD6/tCG1DcL9DfB8bgYzNaQw+ji9QTNfwzc05WSFBd3V4uyv+xzjk/93yvSj
-         0QpnojQt8UFwLd3FfjrJyyBRq4lVP8U64Lv1W5b1uia/PK/j7q0qF8Z366ltJcMsh0
-         PUL3VFzBB6PcA==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 13 Jan 2022 16:27:02 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F8EC061574;
+        Thu, 13 Jan 2022 13:27:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=ayS3prurjAu/ZPuhb/qI34CN7+Mgs9bDXWUscUrqSMk=; b=ZJ7Hm/hT9j+Jgq31XRQ8PdnWLQ
+        zlxQMkNuR1Yap1HH9DQx0bri7HCa/TsoTd6cu02X5haj7+F2a8Qa64M5CfJByBeEib0E0IMqkhKkh
+        ZA6EnQAuIGSjDim9BgQoBeLQ8B8DPHdXxQ/VSD9ZHOjvU5ctmy6cl/cC+LJPW4iOXTn8zpeFdpCoC
+        uwOM83bQNnyW58yosvLtJMCQ+DLHwqxWaY4LSsXvCAo0Nedssw7tmsl9EvFQFsLCyU3piMNauliTF
+        k3/3oLN/RtVEQGC1PT4d58GR6Peh60T/uznSKPHSXDPYTmvV+yM1j1Hl4l0WWRpcJsXeVzlpRrSI5
+        sW5Jrziw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n87cT-0011Xg-JH; Thu, 13 Jan 2022 21:26:53 +0000
+Message-ID: <24d83e9c-a4d5-176b-1ff3-909d0ad56302@infradead.org>
+Date:   Thu, 13 Jan 2022 13:26:48 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211203141125.2447520-1-dev_public@wujek.eu>
-References: <20211203141125.2447520-1-dev_public@wujek.eu>
-Subject: Re: [PATCH] clk: si5341: fix reported clk_rate when output divider is 2
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Adam Wujek <dev_public@wujek.eu>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Adam Wujek <dev_public@wujek.eu>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Robert Hancock <robert.hancock@calian.com>
-Date:   Thu, 13 Jan 2022 13:23:10 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20220113212312.19D85C36AE3@smtp.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: linux-next: Tree for Jan 13 (UBSAN: invalid-load in
+ ../mm/swap.c:996:11)
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220113152247.3f7c6c49@canb.auug.org.au>
+ <56c04e36-ff53-10c7-34dd-1c1385639de6@infradead.org>
+ <YeCP8Kh+4y7NR1K+@casper.infradead.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <YeCP8Kh+4y7NR1K+@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Robert
 
-Please review
 
-Quoting Adam Wujek (2021-12-03 06:12:07)
-> SI5341_OUT_CFG_RDIV_FORCE2 shall be checked first to distinguish whether
-> a divider for a given output is set to 2 (SI5341_OUT_CFG_RDIV_FORCE2
-> is set) or the output is disabled (SI5341_OUT_CFG_RDIV_FORCE2 not set,
-> SI5341_OUT_R_REG is set 0).
-> Before the change, divider set to 2 (SI5341_OUT_R_REG set to 0) was
-> interpreted as output is disabled.
->=20
-> Signed-off-by: Adam Wujek <dev_public@wujek.eu>
-> ---
->  drivers/clk/clk-si5341.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/clk/clk-si5341.c b/drivers/clk/clk-si5341.c
-> index b7641abe6747..15b1c90cafe5 100644
-> --- a/drivers/clk/clk-si5341.c
-> +++ b/drivers/clk/clk-si5341.c
-> @@ -798,6 +798,15 @@ static unsigned long si5341_output_clk_recalc_rate(s=
-truct clk_hw *hw,
->         u32 r_divider;
->         u8 r[3];
->=20
-> +       err =3D regmap_read(output->data->regmap,
-> +                       SI5341_OUT_CONFIG(output), &val);
-> +       if (err < 0)
-> +               return err;
-> +
-> +       /* If SI5341_OUT_CFG_RDIV_FORCE2 is set, r_divider is 2 */
-> +       if (val & SI5341_OUT_CFG_RDIV_FORCE2)
-> +               return parent_rate / 2;
-> +
->         err =3D regmap_bulk_read(output->data->regmap,
->                         SI5341_OUT_R_REG(output), r, 3);
->         if (err < 0)
-> @@ -814,13 +823,6 @@ static unsigned long si5341_output_clk_recalc_rate(s=
-truct clk_hw *hw,
->         r_divider +=3D 1;
->         r_divider <<=3D 1;
->=20
-> -       err =3D regmap_read(output->data->regmap,
-> -                       SI5341_OUT_CONFIG(output), &val);
-> -       if (err < 0)
-> -               return err;
-> -
-> -       if (val & SI5341_OUT_CFG_RDIV_FORCE2)
-> -               r_divider =3D 2;
->=20
->         return parent_rate / r_divider;
+On 1/13/22 12:47, Matthew Wilcox wrote:
+> On Thu, Jan 13, 2022 at 12:12:52PM -0800, Randy Dunlap wrote:
+>> [    1.561983] UBSAN: invalid-load in ../mm/swap.c:996:11
+>> [    1.561986] load of value 221 is not a valid value for type '_Bool'
+> 
+> Ooh.  This one's mine.  Randy, does it repeat easily?  This should
+> fix it:
+
+Yes, 100% of the time (for N = 3).
+
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+
+Fixed 100% of the time (for N = 3).
+
+Thanks.
+
+> diff --git a/include/linux/pagevec.h b/include/linux/pagevec.h
+> index dda8d5868c81..67b1246f136b 100644
+> --- a/include/linux/pagevec.h
+> +++ b/include/linux/pagevec.h
+> @@ -111,6 +111,7 @@ static_assert(offsetof(struct pagevec, pages) ==
+>  static inline void folio_batch_init(struct folio_batch *fbatch)
+>  {
+>  	fbatch->nr = 0;
+> +	fbatch->percpu_pvec_drained = false;
 >  }
+>  
+>  static inline unsigned int folio_batch_count(struct folio_batch *fbatch)
+> 
+
+
+-- 
+~Randy

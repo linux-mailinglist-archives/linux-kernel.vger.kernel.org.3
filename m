@@ -2,175 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7A548D528
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603B348D52A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbiAMJr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S233520AbiAMJsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:48:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbiAMJr4 (ORCPT
+        with ESMTP id S233491AbiAMJr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:47:56 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8AAC061756
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:47:56 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id d14so5174035ila.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:47:56 -0800 (PST)
+        Thu, 13 Jan 2022 04:47:58 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB41C06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:47:58 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id e9so9057151wra.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:47:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=VWo9B0Tv8mi43ViWq+aiDlDVmkwKs71GLUZpT36kOp4=;
-        b=OCPaMrLllRjPp0Q3sosTUuMWsMCfxUXcjgAnnv2JVOLJ7hkMIQmKJNzpLX4oeE3fWs
-         lSwomygEO9uUL1/4mE4jHw8AMOvS3o+SRrDUnQw9uZD0NpLzs735YD8UIyb3YQpGYvUF
-         bQsPo3MsajhcYkPhKGR8zMoyojl1NUGyD+5gW0aExAdbwMwxyjhjVOWqp7nkwGuwqM6T
-         YyCFe+edDV8DL2ALzNAPvBc33BfNR4YtwNKnhDJQz6TLNDOIG4rDiE13fRgSh1uHfyqR
-         wyzKz+wE/1lSZYpE5Zs8AQ0btVWIldQaceFKLCoV8hyqnKfM6YB5i8TWQgr31YUtAFcz
-         xgjA==
+        bh=CX43QDixuqKZIQi1caGIH9xkhhuEjj8Yo37fB7bYrCU=;
+        b=mS9c7WYPOjEYqY0z57OkohJfYKxS1sEbS5dh95i5/ktJjsnhE1OBl3a5empJ57Tc9+
+         vXCdKF1aVlgN8Ya60KTvtQP65EZshzhtsyMuurpf3VVMBT4OVClDdAkZZgBaoU3Pbn63
+         OQonlsVQO/NJOuw0vFQ/RM0ORIylaNF+BoErifIu6Mfl+bjdN1qCJIsj4dQBPJGCHt03
+         ZFZhAXiQ7hVZFVhdH0mB00lten0AvuI2nqcLRy1MGja7axieY+SWi0RKUAcDxJsDtT8W
+         qToO9nCQSq+jcdo48D7L/ujhj6MVZKsZSk0YW5LeEZo1UEbqkFWVQcrtuPnew8DAgaOB
+         iLNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=VWo9B0Tv8mi43ViWq+aiDlDVmkwKs71GLUZpT36kOp4=;
-        b=PWiUcRqujpi91//B0KW1dIfwTADWaus/43k39G6Le3vh/SnmPO0rJ8tm8DZwN0Scky
-         3jTdCkZOkIQacUwuXiVF/AwEgaA87QXmDO2FGJFe2CyWOhIEAmsdaIP9hCfNmaH6gSBR
-         NapRd+CDCseZKASsXFZlanuvL/VK89+k3dzgp98Ji3pggUEjt06FEzus04vmS1kKb5q4
-         UgQ8f1LCqEsrrsqJe72F9+78oOOBqGPSSeowBG846Wl95PXaqUVMl8y4/CCpyoZJH6kZ
-         dLd31mu9pDEEzQYJYEvVBYcOJwqfPTrOHKZWMK0+h/wrbfwcne8PoTJwhypQkG2nJ8LN
-         C/9Q==
-X-Gm-Message-State: AOAM533qPGuReVBJ9KIBwBGZkqxV4gQplRJmGfTz6w1PVbUP0IBvbtlY
-        b8zdeTguaEZfBo7a4zjfxf0mCQ==
-X-Google-Smtp-Source: ABdhPJx0pnjkze3Ecby+3gkeeznELAZw2UJxt0ED2UO8PQR+olhMLA+rgGA4hoiD3ynF6pquSaR/aA==
-X-Received: by 2002:a92:c26c:: with SMTP id h12mr2016453ild.229.1642067275914;
-        Thu, 13 Jan 2022 01:47:55 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:ac2b:c4ef:2b56:374c])
-        by smtp.gmail.com with ESMTPSA id g6sm2357262iow.34.2022.01.13.01.47.54
+        bh=CX43QDixuqKZIQi1caGIH9xkhhuEjj8Yo37fB7bYrCU=;
+        b=wdmQjJslQfNIO0jbAC9tJI/8xDyV80yE8MN9s4OInpcahrkaC0sZbzXSzhSzgonIVz
+         V0qmLu07i0ATE1l+0gzHEF5IA6LQNgbP9/R5hkVIBhGubQW/OQrypbJxqcFdrMlGlkGE
+         5MEn/8/Y+Ybt8kK27xugyUbCspgIEDcYaJGDlzwuRxA3hV46Px/N8q/iGBicyRbwYEUE
+         fz4EF92NpoAjwcxihGdlFXlfVx8hjbT0j1oHLZZYEy/8fQragkayKFi9xG/Jxf2ib+QG
+         iY5KW5uyYY1rYSjgu9uHYda3Gd4AceHPqXrcyz6Jr405cU6AhRgD83iFPj0cB40XvZiG
+         OXJQ==
+X-Gm-Message-State: AOAM532tkNfw7O57XbEQ6FZWaLDqfjNK7SDEAirEhpXy9rFxUQziHKlc
+        bIVnQwBTjejWpm/xZjmAmOXGHA==
+X-Google-Smtp-Source: ABdhPJwCxOjHGND3tEMn9aaulcJoj7F5nN7KMLPFRCkl/nTB3ab+vx5Miz06ZRUi4IOldmbTlMKmew==
+X-Received: by 2002:a05:6000:1a85:: with SMTP id f5mr2365884wry.463.1642067277004;
+        Thu, 13 Jan 2022 01:47:57 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id o11sm7519813wmq.15.2022.01.13.01.47.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 01:47:55 -0800 (PST)
-Date:   Thu, 13 Jan 2022 02:47:51 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 8/9] mm: multigenerational lru: user interface
-Message-ID: <Yd/1Rz+ne38Mh8R9@google.com>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-9-yuzhao@google.com>
- <YdwKB3SfF7hkB9Xv@kernel.org>
- <Yd6S6Js1W4AnFFmv@google.com>
- <Yd73pDkMOMVHhXzu@kernel.org>
+        Thu, 13 Jan 2022 01:47:56 -0800 (PST)
+Date:   Thu, 13 Jan 2022 09:47:54 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v5 08/10] ARM: uaccess: add __{get,put}_kernel_nofault
+Message-ID: <20220113094754.6ei6ssiqbuw7tfj7@maple.lan>
+References: <20210726141141.2839385-1-arnd@kernel.org>
+ <20210726141141.2839385-9-arnd@kernel.org>
+ <Yd8P37V/N9EkwmYq@wychelm>
+ <Yd8ZEbywqjXkAx9k@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yd73pDkMOMVHhXzu@kernel.org>
+In-Reply-To: <Yd8ZEbywqjXkAx9k@shell.armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 05:45:40PM +0200, Mike Rapoport wrote:
-> On Wed, Jan 12, 2022 at 01:35:52AM -0700, Yu Zhao wrote:
-> > On Mon, Jan 10, 2022 at 12:27:19PM +0200, Mike Rapoport wrote:
-> > > Hi,
+On Wed, Jan 12, 2022 at 06:08:17PM +0000, Russell King (Oracle) wrote:
+> On Wed, Jan 12, 2022 at 05:29:03PM +0000, Daniel Thompson wrote:
+> > On Mon, Jul 26, 2021 at 04:11:39PM +0200, Arnd Bergmann wrote:
+> > > From: Arnd Bergmann <arnd@arndb.de>
 > > > 
-> > > On Tue, Jan 04, 2022 at 01:22:27PM -0700, Yu Zhao wrote:
-> > > > Add /sys/kernel/mm/lru_gen/enabled as a runtime kill switch.
-> > > > 
-> > > > Add /sys/kernel/mm/lru_gen/min_ttl_ms for thrashing prevention.
-> > > > Compared with the size-based approach, e.g., [1], this time-based
-> > > > approach has the following advantages:
-> > > > 1) It's easier to configure because it's agnostic to applications and
-> > > >    memory sizes.
-> > > > 2) It's more reliable because it's directly wired to the OOM killer.
-> > > > 
-> > > > Add /sys/kernel/debug/lru_gen for working set estimation and proactive
-> > > > reclaim. Compared with the page table-based approach and the PFN-based
-> > > > approach, e.g., mm/damon/[vp]addr.c, this lruvec-based approach has
-> > > > the following advantages:
-> > > > 1) It offers better choices because it's aware of memcgs, NUMA nodes,
-> > > >    shared mappings and unmapped page cache.
-> > > > 2) It's more scalable because it's O(nr_hot_evictable_pages), whereas
-> > > >    the PFN-based approach is O(nr_total_pages).
-> > > > 
-> > > > Add /sys/kernel/debug/lru_gen_full for debugging.
-> > > > 
-> > > > [1] https://lore.kernel.org/lkml/20211130201652.2218636d@mail.inbox.lv/
-> > > > 
-> > > > Signed-off-by: Yu Zhao <yuzhao@google.com>
-> > > > Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
-> > > > ---
-> > > >  Documentation/vm/index.rst        |   1 +
-> > > >  Documentation/vm/multigen_lru.rst |  62 +++++
+> > > These mimic the behavior of get_user and put_user, except
+> > > for domain switching, address limit checking and handling
+> > > of mismatched sizes, none of which are relevant here.
 > > > 
-> > > The description of user visible interfaces should go to
-> > > Documentation/admin-guide/mm
+> > > To work with pre-Armv6 kernels, this has to avoid TUSER()
+> > > inside of the new macros, the new approach passes the "t"
+> > > string along with the opcode, which is a bit uglier but
+> > > avoids duplicating more code.
 > > > 
-> > > Documentation/vm/multigen_lru.rst should have contained design description
-> > > and the implementation details and it would be great to actually have such
-> > > document.
+> > > As there is no __get_user_asm_dword(), I work around it
+> > > by copying 32 bit at a time, which is possible because
+> > > the output size is known.
+> > > 
+> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > > 
-> > Will do, thanks.
-> > 
-> > > >  include/linux/nodemask.h          |   1 +
-> > > >  mm/vmscan.c                       | 415 ++++++++++++++++++++++++++++++
-> > > >  4 files changed, 479 insertions(+)
-> > > >  create mode 100644 Documentation/vm/multigen_lru.rst
-> > > > 
-> > > > diff --git a/Documentation/vm/index.rst b/Documentation/vm/index.rst
-> > > > index 6f5ffef4b716..f25e755b4ff4 100644
-> > > > --- a/Documentation/vm/index.rst
-> > > > +++ b/Documentation/vm/index.rst
-> > > > @@ -38,3 +38,4 @@ algorithms.  If you are looking for advice on simply allocating memory, see the
-> > > >     unevictable-lru
-> > > >     z3fold
-> > > >     zsmalloc
-> > > > +   multigen_lru
-> > > > diff --git a/Documentation/vm/multigen_lru.rst b/Documentation/vm/multigen_lru.rst
-> > > > new file mode 100644
-> > > > index 000000000000..6f9e0181348b
-> > > > --- /dev/null
-> > > > +++ b/Documentation/vm/multigen_lru.rst
-> > > > @@ -0,0 +1,62 @@
-> > > > +.. SPDX-License-Identifier: GPL-2.0
-> > > > +
-> > > > +=====================
-> > > > +Multigenerational LRU
-> > > > +=====================
-> > > > +
-> > > > +Quick start
-> > > > +===========
-> > > > +Runtime configurations
-> > > > +----------------------
-> > > > +:Required: Write ``1`` to ``/sys/kernel/mm/lru_gen/enable`` if the
-> > > > + feature wasn't enabled by default.
-> > > 
-> > > Required for what? This sentence seem to lack context. Maybe add an
-> > > overview what is Multigenerational LRU so that users will have an idea what
-> > > these knobs control.
-> > 
-> > Apparently I left an important part of this quick start in the next
-> > patch, where Kconfig options are added. I'm wonder whether I should
-> > squash the next patch into this one.
+> > I've just been bisecting some regressions running the kgdbts tests on
+> > arm and this patch came up.
 > 
-> I think documentation deserves a separate patch.
+> So the software PAN code is working :)
 
-Will do.
+Interesting. I noticed it was odd that kgdbts works just fine
+if launched from kernel command line. I guess that runs before
+PAN is activated. Neat.
+
+
+> The kernel attempted to access an address that is in the userspace
+> domain (NULL pointer) and took an exception.
+> 
+> I suppose we should handle a domain fault more gracefully - what are
+> the required semantics if the kernel attempts a userspace access
+> using one of the _nofault() accessors?
+
+I think the best answer might well be that, if the arch provides
+implementations of hooks such as copy_from_kernel_nofault_allowed()
+then the kernel should never attempt a userspace access using the
+_nofault() accessors. That means they can do whatever they like!
+
+In other words something like the patch below looks like a promising
+approach.
+
+
+Daniel.
+
+
+From f66a63b504ff582f261a506c54ceab8c0e77a98c Mon Sep 17 00:00:00 2001
+From: Daniel Thompson <daniel.thompson@linaro.org>
+Date: Thu, 13 Jan 2022 09:34:45 +0000
+Subject: [PATCH] arm: mm: Implement copy_from_kernel_nofault_allowed()
+
+Currently copy_from_kernel_nofault() can actually fault (due to software
+PAN) if we attempt userspace access. In any case, the documented
+behaviour for this function is to return -ERANGE if we attempt an access
+outside of kernel space.
+
+Implementing copy_from_kernel_nofault_allowed() solves both these
+problems.
+
+Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+---
+ arch/arm/mm/Makefile  | 2 +-
+ arch/arm/mm/maccess.c | 9 +++++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/mm/maccess.c
+
+diff --git a/arch/arm/mm/Makefile b/arch/arm/mm/Makefile
+index 3510503bc5e6..d1c5f4f256de 100644
+--- a/arch/arm/mm/Makefile
++++ b/arch/arm/mm/Makefile
+@@ -3,7 +3,7 @@
+ # Makefile for the linux arm-specific parts of the memory manager.
+ #
+ 
+-obj-y				:= extable.o fault.o init.o iomap.o
++obj-y				:= extable.o fault.o init.o iomap.o maccess.o
+ obj-y				+= dma-mapping$(MMUEXT).o
+ obj-$(CONFIG_MMU)		+= fault-armv.o flush.o idmap.o ioremap.o \
+ 				   mmap.o pgd.o mmu.o pageattr.o
+diff --git a/arch/arm/mm/maccess.c b/arch/arm/mm/maccess.c
+new file mode 100644
+index 000000000000..0251062cb40d
+--- /dev/null
++++ b/arch/arm/mm/maccess.c
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/uaccess.h>
++#include <linux/kernel.h>
++
++bool copy_from_kernel_nofault_allowed(const void *unsafe_src, size_t size)
++{
++	return (unsigned long)unsafe_src >= TASK_SIZE;
++}
+-- 
+2.33.1

@@ -2,121 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6664F48D257
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 07:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9206648D260
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 07:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbiAMGcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 01:32:41 -0500
-Received: from mxout70.expurgate.net ([91.198.224.70]:16495 "EHLO
-        mxout70.expurgate.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiAMGck (ORCPT
+        id S231747AbiAMGjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 01:39:17 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:41132
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231248AbiAMGjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 01:32:40 -0500
-Received: from [127.0.0.1] (helo=localhost)
-        by relay.expurgate.net with smtp (Exim 4.92)
-        (envelope-from <ms@dev.tdt.de>)
-        id 1n7tep-000UBk-HS; Thu, 13 Jan 2022 07:32:23 +0100
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-        by relay.expurgate.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ms@dev.tdt.de>)
-        id 1n7teo-000K55-Gc; Thu, 13 Jan 2022 07:32:22 +0100
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-        by securemail.tdt.de (Postfix) with ESMTP id BBEE324004F;
-        Thu, 13 Jan 2022 07:32:19 +0100 (CET)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-        by securemail.tdt.de (Postfix) with ESMTP id 16A23240049;
-        Thu, 13 Jan 2022 07:32:19 +0100 (CET)
-Received: from mail.dev.tdt.de (localhost [IPv6:::1])
-        by mail.dev.tdt.de (Postfix) with ESMTP id 7399A23BE5;
-        Thu, 13 Jan 2022 07:32:13 +0100 (CET)
+        Thu, 13 Jan 2022 01:39:16 -0500
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D1E9140033
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 06:39:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642055954;
+        bh=Z/d7ON8aStCCPS5HD+SrrIVpBpxi2CdKa+GaDG4iK0o=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=Unf3GggJb9/z+ZWX4zMCO3vyZ88JE0j7Tj1rgYF7XhjtSx/SgoAYre4OGmrUHr4JF
+         09L7VgSs1lxZV3sFTrL46b2PlqAxzn8pYUOuYr851gZKFB7Y1LtoF1b8LogpTOLZtH
+         EZoV+ROAb+mogLwMnTnNyd9jnqhcc9KN24XXIQuegrJLT4he5xbsrUb4vYvbTeHbcL
+         iJvWa6osQwYBKYR8bW97+D1YNoj6WNXNeYWaIqhnEAqs7+x1LBDNchZv7olsx02rnr
+         yULzQZeyw19N7DDpdko9/GqgoQ98pQEDeIukiTQi7tqhz8mzlkvRQxBphZkOoebToS
+         gsZRB19xujorw==
+Received: by mail-oo1-f71.google.com with SMTP id s14-20020a4aa54e000000b002db004adebdso3450672oom.4
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 22:39:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z/d7ON8aStCCPS5HD+SrrIVpBpxi2CdKa+GaDG4iK0o=;
+        b=Xiszxn8QUCq6nobLdvHy3Ihp61f0hOA0jO8fBPerb+y0tqnR1MiE9apxn49cmUBeuO
+         EX2CeSh/3EcWvblpCjRZAGfuqaUCmlucBm/SYBaGA0kOCkEZw613GPP4KouZIpYHI5lc
+         0yJbLHqqPN3Yq4L45OfbZjrBODGOooN8RcpW7wwjhGtEDL+/kHQ5y07vpN/dU8KzNRFE
+         oVPwKYBN0a1WHqvwvYGfYh8ik2m41smOEMD2Ycv87HFFlXgidHbTFWVX84xn6rWCwKAL
+         if02a20v00TEtpE6GPSHa9eihpKfpemdUEmxHJktx3cTNE/LXuOhnylk/CrUf1NMyDGa
+         JUvw==
+X-Gm-Message-State: AOAM5322wfnViqQ3DHyU5igPYEl0bvNtItt56VyDQYGKxuptlNDC0+FM
+        A7f4Ouf230bEnw8EPlyYDjlbUTn6wSKFvOkJXMeH8uHQYtDmf3YneD81Lf4reF1xMBQA1/Tpsy+
+        9KHk/5An+0Oq5Wm5A9C2dUU/YrJ/TghUD8hab+Yk9ty0jtMcpxfjUR6uGaw==
+X-Received: by 2002:a4a:ba90:: with SMTP id d16mr2034220oop.80.1642055953616;
+        Wed, 12 Jan 2022 22:39:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzEMpazgYUKs+xSD8KDd1iXrFDQ8M0eRXsEmPqcnb56gtzNC3Fy7zUJntyN9v+/auUMk2mULVsKUj/6+1novVI=
+X-Received: by 2002:a4a:ba90:: with SMTP id d16mr2034216oop.80.1642055953371;
+ Wed, 12 Jan 2022 22:39:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 13 Jan 2022 07:32:13 +0100
-From:   Martin Schiller <ms@dev.tdt.de>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        martin.blumenstingl@googlemail.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, hkallweit1@gmail.com,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next v6] net: phy: intel-xway: Add RGMII internal
- delay configuration
-Organization: TDT AG
-In-Reply-To: <CAJ+vNU1R8fGssHjfoz-jN1zjBLPz4Kg8XEUsy4z4bByKS1PqQA@mail.gmail.com>
-References: <20210719082756.15733-1-ms@dev.tdt.de>
- <CAJ+vNU3_8Gk8Mj_uCudMz0=MdN3B9T9pUOvYtP7H_B0fnTfZmg@mail.gmail.com>
- <94120968908a8ab073fa2fc0dd56b17d@dev.tdt.de>
- <CAJ+vNU2Bn_eks03g191KKLx5uuuekdqovx000aqcT5=f_6Zq=w@mail.gmail.com>
- <Yd7bsbvLyIquY5jn@shell.armlinux.org.uk>
- <CAJ+vNU1R8fGssHjfoz-jN1zjBLPz4Kg8XEUsy4z4bByKS1PqQA@mail.gmail.com>
-Message-ID: <81cce37d4222bbbd941fcc78ff9cacca@dev.tdt.de>
-X-Sender: ms@dev.tdt.de
-User-Agent: Roundcube Webmail/1.3.17
-X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.dev.tdt.de
-X-purgate-ID: 151534::1642055543-0000E498-6EE9F38F/0/0
-X-purgate-type: clean
-X-purgate: clean
+References: <20220112013154.1210480-1-kai.heng.feng@canonical.com>
+ <20220112071659.GA4502@lst.de> <CAAd53p4+WjhPM6VKZOZKQ4WcgNWjR7Eh_7Kjs1HZ_wiKov6Ctw@mail.gmail.com>
+ <20220112140304.GA27446@lst.de>
+In-Reply-To: <20220112140304.GA27446@lst.de>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 13 Jan 2022 14:39:02 +0800
+Message-ID: <CAAd53p5Qo3+-sXMLLPxe3ckY4ySxRvaLZkv=0zgKc=EVun9uYg@mail.gmail.com>
+Subject: Re: [PATCH] nvme: Mark external NVMe devices as removable
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kbusch@kernel.org, axboe@fb.com, sagi@grimberg.me,
+        Rajat Jain <rajatja@google.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-12 19:25, Tim Harvey wrote:
-> On Wed, Jan 12, 2022 at 5:46 AM Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
->> 
->> On Tue, Jan 11, 2022 at 11:12:33AM -0800, Tim Harvey wrote:
->> > I added a debug statement in xway_gphy_rgmii_init and here you can see
->> > it gets called 'before' the link comes up from the NIC on a board that
->> > has a cable plugged in at power-on. I can tell from testing that the
->> > rx_delay/tx_delay set in xway_gphy_rgmii_init does not actually take
->> > effect unless I then bring the link down and up again manually as you
->> > indicate.
->> >
->> > # dmesg | egrep "xway|nicvf"
->> > [    6.855971] xway_gphy_rgmii_init mdio_thunder MDI_MIICTRL:0xb100
->> > rx_delay=1500 tx_delay=500
->> > [    6.999651] nicvf, ver 1.0
->> > [    7.002478] nicvf 0000:05:00.1: Adding to iommu group 7
->> > [    7.007785] nicvf 0000:05:00.1: enabling device (0004 -> 0006)
->> > [    7.053189] nicvf 0000:05:00.2: Adding to iommu group 8
->> > [    7.058511] nicvf 0000:05:00.2: enabling device (0004 -> 0006)
->> > [   11.044616] nicvf 0000:05:00.2 eth1: Link is Up 1000 Mbps Full duplex
->> 
->> Does the kernel message about the link coming up reflect what is going
->> on physically with the link though?
->> 
->> If a network interface is down, it's entirely possible that the link 
->> is
->> already established at the hardware level, buit the "Link is Up" 
->> message
->> gets reported when the network interface is later brought up. So,
->> debugging this by looking at the kernel messages is unreliable.
->> 
-> 
-> Russell,
-> 
-> You are correct... the link doesn't come up at that point its already
-> linked. So we need to force a reset or an auto negotiation reset after
-> modifying the delays.
-> 
-> Tim
+On Wed, Jan 12, 2022 at 10:03 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Wed, Jan 12, 2022 at 08:50:33PM +0800, Kai-Heng Feng wrote:
+> > USB thumb drives also use this flag, so I am not sure why it's not
+> > applicable to NVMe?
+>
+> They shouldn't report this flag and might need fixing.
 
-Setting BMCR_ANRESTART would work, but only if BMCR_ANENABLE is also or
-already set. Otherwise BMCR_ANRESTART has no effect (see the note in the
-datasheet).
+So what should we do? Introduce a different flag but with identical
+usage for external USB and NVMe storages?
 
-This is the reason why I came up with the idea of BMCR_PDOWN.
-
-Personally I would have no problem with setting BMCR_ANRESTART and
-BMCR_ANENABLE, but it would possibly change the existing configuration
-if (e.g. by the bootloader) aneg should be disabled.
-
-Martin
+Kai-Heng

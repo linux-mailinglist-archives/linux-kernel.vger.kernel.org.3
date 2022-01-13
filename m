@@ -2,114 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F20B48D57F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F1948D585
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbiAMKOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
+        id S232526AbiAMKOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbiAMKOe (ORCPT
+        with ESMTP id S232474AbiAMKOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:14:34 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4299DC06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:14:34 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id a7so6171178plh.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:14:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TkZGo4ib8VZZ8ihxuuV6YmzTOBkymNznVCB4ykbKHBg=;
-        b=uODuKrRl1kYEThI/weFKqxAvCbXumiOqI9vUSZUZJXGstj2DtxeU5fADGwhPsjGE3F
-         BOByd07tgtRdxlbSjo6q0kKfh3yhgF2D//MQ+HsUDDFpFasPJQjqoDUzGdpwyMPkR3vh
-         WMKIaoGpV1SI8iMAY2uWbwhWDMNtji6KtkEe5Dsi5ppjmtxGSbd5tTY/FRN3RchIe6oN
-         74abPUv1Cr62B4zACwpwvgkNhSNQFE6bQyR7VkCcYbAg0gswZblsr9iIcicwf6rj+ShS
-         umE+eXieXXccy3jm4zcXhK1BXbRDuYG9DlUR6SvtC3tdZLWHnU/X+w5yySgkdCmUyoKA
-         ePNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TkZGo4ib8VZZ8ihxuuV6YmzTOBkymNznVCB4ykbKHBg=;
-        b=J23qjNB7QzjOVcdIqT3Imi5WphH96lOAM92xxmv2YBy5+XEK3V+87ea1T2Y7Z89yrj
-         OCPA/hB9MpdmjnfInyE62K81QxfnP2ZHatpf3+iaDlHRY+e1D+J4MBZ2rwLgj52Leamn
-         SxYali0PBijuWaLNsz654LA4fge4aTEzhHFWNyxoK0Apa3/aOHvmzRHFa1sfRxypIC/U
-         xEsI9JauHQeHQTKwtn5KTK3M9rO9j2RHAsGz2UA9ezEpHI2Ff51yiq9g+n1Iy1OXdutO
-         Kmkz5kP4ibI6O1SuoFwOJSrCvnSHmyr+29SYzOTbvgg2+OlB+J2qCDrHROILrtTRY8sY
-         4M7g==
-X-Gm-Message-State: AOAM530f1Pq7fu5TPvclUHAokEpyKg7a258NvaGU3+iH+bWh9KlSJX3k
-        DO/7FZJmNZ39VV4xy35xMlgSAzDzlXERM/bc7/1X3g==
-X-Google-Smtp-Source: ABdhPJyOJSTy7FXKwD4Q5dhcJsbga5MTLbhco1lMH1GPghjvgriT6iCmZrF2YwxQHVoWar3BhUS+RPW7JyVq1wUJV/g=
-X-Received: by 2002:a17:90b:4b0f:: with SMTP id lx15mr4366831pjb.232.1642068873774;
- Thu, 13 Jan 2022 02:14:33 -0800 (PST)
+        Thu, 13 Jan 2022 05:14:52 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5DCC061757
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:14:52 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7x83-0007tK-Gn; Thu, 13 Jan 2022 11:14:47 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7x81-00A3Dd-Ow; Thu, 13 Jan 2022 11:14:45 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7x80-0002tF-F0; Thu, 13 Jan 2022 11:14:44 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Tony Lindgren <tony@atomide.com>, Lee Jones <lee.jones@linaro.org>
+Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 0/2] mfd: twlx030: i2c remove callback cleanup
+Date:   Thu, 13 Jan 2022 11:14:28 +0100
+Message-Id: <20220113101430.12869-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220111034051.28913-1-lzmlzmhh@gmail.com>
-In-Reply-To: <20220111034051.28913-1-lzmlzmhh@gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Thu, 13 Jan 2022 11:14:22 +0100
-Message-ID: <CAG3jFyuZQko8gj6NXnHQ2GoFNfHSYDwkgmb3Wi+upDZFZpPM4Q@mail.gmail.com>
-Subject: Re: [PATCH] Remove extra device acquisition method of i2c client in
- lt9611 driver
-To:     lzmlzm <lzmlzmhh@gmail.com>
-Cc:     a.hajda@samsung.com, narmstrong@baylibre.com,
-        laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1243; h=from:subject; bh=h1AGTbJiqD6mNVPm86tnmKjfzwpli/WoUAJ8VpKyJz4=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBh3/t1ozSKdNQiQvwLzA8pStVPmFR4uHP0sIea4Rzg 0IrRIaWJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYd/7dQAKCRDB/BR4rcrsCQnCB/ 4vshV+1qe4siSLghsoe8xVQ1vEYOoCo1npRqsyt0PDccBXGOsHPUDc1zTLf+/YL+UpwGt//fYCY0II Zpg0O/7O9bX7BnoxJp3/8R0oBQ9OG6dLRgwiHkWXStxEVAhY8E9IPHeig6J2Xy1BGD+ts8uyF3A1Me zyxs1w0oJ/45OQdfc/7/hSW1/T4KCaYX4cGyVe9NQWbPxAh0/T/8da6npEXrSC9sj2ls/dMJdXgTbB fODYPprqVwG0nXeDGjG1q27bUnhawvEkdKl5XmVAXDZXHVuRlKyWoB7uv1G116sIA7UX8xFVhcmOEc LoAnX0hd0RqpDbEI3oNUUl4TPJt6lQ
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello,
 
-Thanks for submitting this cleanup patch.
+the remove paths of the twl4030 chip can fail and then returns an error
+code in twl_remove() early. This isn't a good thing, because the device
+will still go away with some resources not freed.
+For the twl6030 this cannot happen, and the first patch is just a small
+cleanup. For the twl4030 the situation is improved a bit: When the
+failure happens, the dummy slave devices are removed now.
 
-On Tue, 11 Jan 2022 at 04:41, lzmlzm <lzmlzmhh@gmail.com> wrote:
->
+Note that twl4030_exit_irq() is incomplete. The irq isn't freed and
+maybe some more cleanup is missing which might boom if an irq triggers
+after the device is removed. Not sure that twl6030_exit_irq() is better
+in this regard.
 
-A commit message is necessary for all changes, no matter how trivial.
+I noticed this issue because I work on making i2c_driver::remove return
+void as returning a value != 0 there is almost always an error attached
+to wrong expectations.
 
-> Signed-off-by: lzmlzm <lzmlzmhh@gmail.com>
+Best regards
+Uwe
 
-Is your name listed correctly above? For the 'Signed-off-by' tag to be
-meaningful, a real name needs to be supplied.
+Uwe Kleine-König (2):
+  mfd: twl6030: Make twl6030_exit_irq() return void
+  mfd: twl4030: Make twl4030_exit_irq() return void
 
-> ---
->  drivers/gpu/drm/bridge/lontium-lt9611.c    | 2 +-
->  drivers/gpu/drm/bridge/lontium-lt9611uxc.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/lontium-lt9611.c b/drivers/gpu/drm/bridge/lontium-lt9611.c
-> index dafb1b47c15f..e0feb4fd9780 100644
-> --- a/drivers/gpu/drm/bridge/lontium-lt9611.c
-> +++ b/drivers/gpu/drm/bridge/lontium-lt9611.c
-> @@ -1090,7 +1090,7 @@ static int lt9611_probe(struct i2c_client *client,
->         if (!lt9611)
->                 return -ENOMEM;
->
-> -       lt9611->dev = &client->dev;
-> +       lt9611->dev = dev;
->         lt9611->client = client;
->         lt9611->sleep = false;
->
-> diff --git a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-> index 33f9716da0ee..e50e42312e82 100644
-> --- a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-> +++ b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-> @@ -860,7 +860,7 @@ static int lt9611uxc_probe(struct i2c_client *client,
->         if (!lt9611uxc)
->                 return -ENOMEM;
->
-> -       lt9611uxc->dev = &client->dev;
-> +       lt9611uxc->dev = dev;
->         lt9611uxc->client = client;
->         mutex_init(&lt9611uxc->ocm_lock);
->
-> --
+ drivers/mfd/twl-core.c    | 8 ++------
+ drivers/mfd/twl-core.h    | 4 ++--
+ drivers/mfd/twl4030-irq.c | 7 ++-----
+ drivers/mfd/twl6030-irq.c | 3 +--
+ 4 files changed, 7 insertions(+), 15 deletions(-)
 
-With these two issues fixed, please submit a v2 of this patch.
+base-commit: 455e73a07f6e288b0061dfcf4fcf54fa9fe06458
+-- 
+2.34.1
 
-
-Rob.

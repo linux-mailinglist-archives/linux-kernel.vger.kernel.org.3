@@ -2,151 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F3348D835
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE6348D83B
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:51:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234741AbiAMMuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:50:01 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:51050
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231395AbiAMMuA (ORCPT
+        id S234757AbiAMMv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:51:29 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:32990 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231395AbiAMMv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:50:00 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0D0A93F1C8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:49:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642078199;
-        bh=tnCA4HRIcZvjskoSMkqJWo8kfiQaZS4+GQyiSop+DyI=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=ReQJIthL4k4uPa7DmcHUFzmc+J92246+elVCDzJXUHRU9IaNnLQ7HNf9Csr98CfSa
-         nkh9DF3eqlpTIh2IOJZvdNbkr7ZCiG6qHS8267lc0n+k6e8vlCIw/ELCyh9COng+Zt
-         NT5gQoRfFJPWBD8aJ8ngiQVY9238Dnpmyow1SPRUMFDEIUSClMKqJNjszDhHUGWyqj
-         bEO2Mz6LKpu23Dwd81jn6hZqgh+oMmj1KCQSy99oXjalTiwNpV9k7J9rKhuGB3qZy9
-         B5Yd0NLgeSayiE6eeiNpCLY5ln04MgPitBV7QwJ5DLwN8igJHbGYifbat8X0hSNyC1
-         0g0tuEH5sv1hA==
-Received: by mail-ed1-f69.google.com with SMTP id x11-20020aa7d38b000000b004004e4fc8fdso2717615edq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:49:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tnCA4HRIcZvjskoSMkqJWo8kfiQaZS4+GQyiSop+DyI=;
-        b=Z/Qvn9uoDIERmYt83x+3N0mQrUyZPSBYyNeChYKLTSxBBrIEkKEny3b2Z5D/XpkVxL
-         TkN1mzym7jvCI4/cuGWZw2DiH+4jDaXkDxXZzHOR/hKMeF7hzS0wAEuc5lbcOaSn6gYj
-         Otb4ktYVMxwXKkDIaSYBfS7rs5rFZq6PZLNpE8GoM7JkS9xbOtmra0Wy/cVlg0jAYSKu
-         XU/N6i/2YVoES2wQ8JY/pZcz4a4Bzm10pspIMrmAdPqBClHA+RhnSLuOJ4XswnFn1HgQ
-         9ITiRmoNuCl3xeXGTRCwcAV+QORYg3QY4riMqeLbcObdAR2Ds0WZXl+/Z1XUaSGV1U87
-         TTEQ==
-X-Gm-Message-State: AOAM533HCowl0HaGuaR+ztg5h9ojvM+58bV+00BYfqTT4Cl3k91i3yDx
-        YqTtQRKYm8TojGECdHNGpjTUFD3voSTUKmtJspu4Sc9TXmulpGFixjULDkZYzj3SzIIKhWuoZeU
-        TcIyJjHNLjqbrGkmUYNUb2kA6X/tWqaq4LFCjnK/17w==
-X-Received: by 2002:a17:906:4317:: with SMTP id j23mr3386183ejm.748.1642078198630;
-        Thu, 13 Jan 2022 04:49:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxnkCV8uVHvDvXo+BCsjQfovQrpVX/2Vi4aZsv65zQFi8pZnKx+YHr+3j+KDUCy3wNPScYbjQ==
-X-Received: by 2002:a17:906:4317:: with SMTP id j23mr3386170ejm.748.1642078198466;
-        Thu, 13 Jan 2022 04:49:58 -0800 (PST)
-Received: from [192.168.0.29] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id hq35sm849073ejc.54.2022.01.13.04.49.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 04:49:58 -0800 (PST)
-Message-ID: <b9fac286-9227-b26b-221b-7f54b63e6b0b@canonical.com>
-Date:   Thu, 13 Jan 2022 13:49:57 +0100
+        Thu, 13 Jan 2022 07:51:26 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20DCn9Og001663;
+        Thu, 13 Jan 2022 12:51:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=OUQP2stId/EOB/wxRLm7yCb2lgiL+l6gyI1v5rvppyQ=;
+ b=aStqTlwJB0dnCSbWBTU5mTnBTq2Hfou8Qq28rkamx0KpV2NyHsGL1jtb7xKzcznUvDfZ
+ W+llRB4neeN4e9tPyKOJwkRGHrpA2QM1I+0X51cVIVLvNULtuckxZBNrio881976iidc
+ /9bAWmLzqs6yTmUkLkgXnxfmVs9/mG6TsGU4dehB/F32oagzUfRTT5QAPeaocT/qiqRc
+ gDSJsr1DjPBNAxHGocHFnT3oO3YV0sk4DwQnVqnduFZDduCLszqIxD1vFbJy/oU8OSus
+ 5L0ySkV+YyV8uGEHFlje9XprH7YyJ0573wlWKA9qi8RZAKZZKR1WzuRdqtBW+R7v0Sq4 Hw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3djk81hk6b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Jan 2022 12:51:23 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20DComKb010708;
+        Thu, 13 Jan 2022 12:51:22 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3djk81hk5g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Jan 2022 12:51:22 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20DClwXt012308;
+        Thu, 13 Jan 2022 12:51:20 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3dfwhjnkkx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Jan 2022 12:51:20 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20DCpH4b36438430
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Jan 2022 12:51:17 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7527AAE057;
+        Thu, 13 Jan 2022 12:51:17 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D7520AE053;
+        Thu, 13 Jan 2022 12:51:16 +0000 (GMT)
+Received: from [9.171.57.64] (unknown [9.171.57.64])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 13 Jan 2022 12:51:16 +0000 (GMT)
+Message-ID: <c685a543-a524-9c95-4b85-f53a0ff744a9@linux.ibm.com>
+Date:   Thu, 13 Jan 2022 13:51:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 03/23] clk: samsung: fsd: Add initial clock support
+ Thunderbird/91.4.0
+Subject: Re: KVM: Warn if mark_page_dirty() is called without an active vCPU
 Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, s.nawrocki@samsung.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, Jayati Sahu <jayati.sahu@samsung.com>,
-        Ajay Kumar <ajaykumar.rs@samsung.com>
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
- <CGME20220113122324epcas5p105c53b448b5801813a02a88c6107a2f3@epcas5p1.samsung.com>
- <20220113121143.22280-4-alim.akhtar@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220113121143.22280-4-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     butterflyhuangxx@gmail.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, seanjc@google.com,
+        Cornelia Huck <cohuck@redhat.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Thomas Huth <thuth@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+References: <e8f40b8765f2feefb653d8a67e487818f66581aa.camel@infradead.org>
+ <20220113120609.736701-1-borntraeger@linux.ibm.com>
+ <e9e5521d-21e5-8f6f-902c-17b0516b9839@redhat.com>
+ <b6d9785d769f98da0b057fac643b0f088e346a94.camel@infradead.org>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <b6d9785d769f98da0b057fac643b0f088e346a94.camel@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LInZdk1R9qzpJwCKnTvjKe1c1g8R-FXF
+X-Proofpoint-ORIG-GUID: 2hMcZ-v_hvIoORWGH8eudJACKmiq7Kvx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-13_04,2022-01-13_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0
+ spamscore=0 lowpriorityscore=0 mlxscore=0 clxscore=1015 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201130075
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2022 13:11, Alim Akhtar wrote:
-> Add initial clock support for FSD (Full Self-Driving) SoC
-> which is required to bring-up platforms based on this SoC.
+
+
+Am 13.01.22 um 13:30 schrieb David Woodhouse:
+> On Thu, 2022-01-13 at 13:14 +0100, Paolo Bonzini wrote:
+>> On 1/13/22 13:06, Christian Borntraeger wrote:
+>>> From: Christian Borntraeger<
+>>> borntraeger@de.ibm.com
+>>>>
+>>>
+>>> Quick heads-up.
+>>> The new warnon triggers on s390. Here we write to the guest from an
+>>> irqfd worker. Since we do not use dirty_ring yet this might be an
+>>> over-indication.
+>>> Still have to look into that.
+>>
+>> Yes, it's okay to add an #ifdef around the warning.
 > 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Jayati Sahu <jayati.sahu@samsung.com>
-> Signed-off-by: Ajay Kumar <ajaykumar.rs@samsung.com>
-> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  drivers/clk/samsung/Makefile  |   1 +
->  drivers/clk/samsung/clk-fsd.c | 308 ++++++++++++++++++++++++++++++++++
->  drivers/clk/samsung/clk-pll.c |   1 +
->  drivers/clk/samsung/clk-pll.h |   1 +
->  4 files changed, 311 insertions(+)
->  create mode 100644 drivers/clk/samsung/clk-fsd.c
+> That would be #ifndef CONFIG_HAVE_KVM_DIRTY_RING, yes?
 > 
-> diff --git a/drivers/clk/samsung/Makefile b/drivers/clk/samsung/Makefile
-> index c46cf11e4d0b..d66b2ede004c 100644
-> --- a/drivers/clk/samsung/Makefile
-> +++ b/drivers/clk/samsung/Makefile
-> @@ -18,6 +18,7 @@ obj-$(CONFIG_EXYNOS_AUDSS_CLK_CON) += clk-exynos-audss.o
->  obj-$(CONFIG_EXYNOS_CLKOUT)	+= clk-exynos-clkout.o
->  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos7.o
->  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos850.o
-> +obj-$(CONFIG_ARCH_TESLA_FSD)         += clk-fsd.o
+> I already found it hard to write down the rules around how
+> kvm_vcpu_write_guest() doesn't use the vCPU it's passed, and how both
+> it and kvm_write_guest() need to be invoked on a pCPU which currently
+> owns *a* vCPU belonging to the same KVM... if we add "unless you're on
+> an architecture that doesn't support dirty ring logging", you may have
+> to pass me a bucket.
+> 
+> Are you proposing that as an officially documented part of the already
+> horrid API, or a temporary measure :)
+> 
+> Btw, that get_map_page() in arch/s390/kvm/interrupt.c looks like it has
+> the same use-after-free problem that kvm_map_gfn() used to have. It
+> probably wants converting to the new gfn_to_pfn_cache.
+> 
+> Take a look at how I resolve the same issue for delivering Xen event
+> channel interrupts.
 
-It should be rather it's own CONFIG_TESLA_FSD_CLK option, just like
-other Exynos designs. This keeps unified approach with existing Samsung
-clock Kconfig.
+Do you have a commit ID for your Xen event channel fix?
 
->  obj-$(CONFIG_S3C2410_COMMON_CLK)+= clk-s3c2410.o
->  obj-$(CONFIG_S3C2410_COMMON_DCLK)+= clk-s3c2410-dclk.o
->  obj-$(CONFIG_S3C2412_COMMON_CLK)+= clk-s3c2412.o
-> diff --git a/drivers/clk/samsung/clk-fsd.c b/drivers/clk/samsung/clk-fsd.c
-> new file mode 100644
-> index 000000000000..e47523106d9e
-> --- /dev/null
-> +++ b/drivers/clk/samsung/clk-fsd.c
-> @@ -0,0 +1,308 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Common Clock Framework support for FSD SoC.
-> + *
-> + * Copyright (c) 2017-2022 Samsung Electronics Co., Ltd.
-> + *             https://www.samsung.com
-> + * Copyright (c) 2017-2022 Tesla, Inc.
-> + *             https://www.tesla.com
-> + *
-
-Drop the line break with empty * comment.
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/of.h>
-> +
-> +#include "clk.h"
-> +#include <dt-bindings/clock/fsd-clk.h>
-
-dt-bindings headers before local clk.h.
-
-> +
-> +/* Register Offset definitions for CMU_CMU (0x11c10000) */
-
-
-
-Best regards,
-Krzysztof
+> 
+> Although I gave myself a free pass on the dirty marking in that case,
+> by declaring that the shinfo page doesn't get marked dirty; it should
+> be considered *always* dirty. You might have less fun declaring that
+> retrospectively in your case.

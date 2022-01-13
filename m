@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9111D48D845
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037C048D850
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbiAMMzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:55:08 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:54578
+        id S234808AbiAMM5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:57:46 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:54788
         "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234771AbiAMMzH (ORCPT
+        by vger.kernel.org with ESMTP id S234787AbiAMM5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:55:07 -0500
+        Thu, 13 Jan 2022 07:57:45 -0500
 Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 2428A4001E
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:55:06 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 82017402A8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:57:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642078506;
-        bh=PXcIYZEVRPMHXKWkXgjZM50R+tkU0aMoN3mUJ6g2+cY=;
+        s=20210705; t=1642078664;
+        bh=XykCHjye4PKyxXgJO3MC0n+RYOsNv5yCNxf0ZTkuzFM=;
         h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=VmiSUgOCW7wPyXPHc22irfKKj9vgIqovg6J+yqnxyUyisqZfhM+yORM7SnJDkMqSj
-         NdIs71JEuGQa4xPPpmhsr6rTAe22JgPEafo5NyWNT0HYa3Qu8Oz4ckaj/V3pym9c9D
-         yomN7BblFk+/Lfh+h9qUuYnouLPOuzryh37/x0dGnotmGe6C9u1DJ0iVkMYsX2CJdM
-         L4wCprzrLhuFmTicFJm1i7FuK0Cq0v2XtVMfpMga0pzETc/MBzwG2k9p8xVtEMhKHG
-         SNdWXf+9nCo0r8pJXAtskNx5bOLknvQGW+Gv0C17lC4Ks7JE550f0lzj1kUu/wo5/m
-         Lu4u8nD2sVS4w==
-Received: by mail-ed1-f70.google.com with SMTP id o20-20020a056402439400b003f83cf1e472so5242908edc.18
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:55:06 -0800 (PST)
+        b=LvqVQ/w5vvFKEAH3kNMaammVz48o7TwG9KYbIyWAuhIDO2uR/qnWECvbj05nnfidu
+         AmfGl7RItrg7KCLAmJRdCSyfogQmQphV7tGbE0NbRJShOd4ijEmSdhDqLZw9mZGs+1
+         b2wh52aWfprO/1OE7l+naor/3lffx8cBrWcyGRJFpTIK9BV9R2cyoqZzDT0YJFlybx
+         WR+FjI701gs7OKvRfLxMk+y+y+TNUgwP3bbB3Rno0+eetDkImJQ9PmzxZXBbmnVMHg
+         AaYhtuM7HLhBcAY2bLbQ9YrHN5UkQts0gw1BJkdMnMWUufTkwx018b69RMUGt9dCxk
+         nAZGK2ZLSGmXw==
+Received: by mail-ed1-f70.google.com with SMTP id y18-20020a056402271200b003fa16a5debcso5251947edd.14
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:57:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=PXcIYZEVRPMHXKWkXgjZM50R+tkU0aMoN3mUJ6g2+cY=;
-        b=6WuaFTYavq2gNNWBfEJi529uybbwUTn+RCzmEwuvodUF4WoTBMYp114W6D1OVxyWVs
-         ttTZX7p/OnhRhz8DtTGMzh6eu7sZ0Nam5hyK2bm5h1fTPWUZpxUcZbkfCd87hBSR0Q4z
-         C1M47hjfDLwktg8h/eBjGPcCHQghyxpYYtMVBGgGDzSRz7CtOWGfKmwTlVQWkjFJErUD
-         Yz3HE+e2qE6rwsGdV8X6FdV0VXi8aDTfb1tbpofiaJ9p6IDU0pA0qn3OrAKz51Wrq5CU
-         HLfE8buFgSegIPEwBXJGK4DTAcmgsgYp0wJtjXWUfKNSmDZU3Wn2fnBB4hzCal3wB1Wf
-         QcIQ==
-X-Gm-Message-State: AOAM532DgNBQirMkTdbXC7YVrSqwoecye4KNQITmZKzOpkeAB6Dwbgcf
-        ngac35oFJTvmO9gYvLEAbFZPD7k1qhnpF6U3sYp+qaboj+1TAOFYtLD1ko1aVCWjDazHPCQcTUI
-        0dnY6cWrj3mZ26Z86df0iZTph9dCrq7JKjqH9WTinBg==
-X-Received: by 2002:a17:907:1b06:: with SMTP id mp6mr3562348ejc.275.1642078505599;
-        Thu, 13 Jan 2022 04:55:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy/PYHSMLu1FwH6kqjx8H1obDsFC+1nj4fmqsLiCntlQc4FNn1c4c8k0043PmwcL4VmrIyrgw==
-X-Received: by 2002:a17:907:1b06:: with SMTP id mp6mr3562334ejc.275.1642078505371;
-        Thu, 13 Jan 2022 04:55:05 -0800 (PST)
+        bh=XykCHjye4PKyxXgJO3MC0n+RYOsNv5yCNxf0ZTkuzFM=;
+        b=FQMjBeo2sDi3+cDEe6VYvwul6TCN5R8IEBPck8MVde18WfpaTVVrLzcBVz/qe8jKtX
+         f6mURI+Gzl2RE+zmoNWHmDRm+2/ECnKc5No2bXrZm19Ly8qpJwDK9lbw+XKuWilWFaCc
+         GnHtgH5ofRB+mVE6Six2HNG7P4rlDZQj7uhegllfsKhDd4SQat4ZoWFg2wlte5M3fXa9
+         w81ScMnYIDkwKgt+8jVDtWeGC05A5m61ONqgdWCkeFq0VnLx65ypXTf34V683z3DyWp0
+         6ePRo90D1QPFuWho3V/DtXg24erbe/oqLD0Q2OtodlWnM3kFKn5MgVPeO2twOcbTyL5c
+         39Mg==
+X-Gm-Message-State: AOAM532znQtziLo1eX6zG9BRV68CgpgMCznkQP5bldF1/FaS7I7mLf4m
+        fOrdgEvPVkm4uy7ofmqmq76VcfZK3HiedSKix8VJKx88AZYBIVqwqIv3J5LUiOaJayjyqmb/7zD
+        FgeJlOTSNZ2LDyEwp4jvFGzqy4XUosmKWbeGerEaxiw==
+X-Received: by 2002:a17:907:16a8:: with SMTP id hc40mr3325139ejc.210.1642078664150;
+        Thu, 13 Jan 2022 04:57:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwqDqj73QTr7awMwMImwrv690LattEX7bVhb23zjB/pqzjFWBLNXPedpeJ8s8RHApVDZww0WQ==
+X-Received: by 2002:a17:907:16a8:: with SMTP id hc40mr3325128ejc.210.1642078663980;
+        Thu, 13 Jan 2022 04:57:43 -0800 (PST)
 Received: from [192.168.0.29] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id jg41sm869622ejc.101.2022.01.13.04.55.04
+        by smtp.gmail.com with ESMTPSA id la21sm856948ejc.137.2022.01.13.04.57.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 04:55:04 -0800 (PST)
-Message-ID: <1b246ad6-5b65-a02f-e887-5a07e8f12ec7@canonical.com>
-Date:   Thu, 13 Jan 2022 13:55:03 +0100
+        Thu, 13 Jan 2022 04:57:43 -0800 (PST)
+Message-ID: <4b8cc931-1d87-dd8b-133e-106dd987e0b0@canonical.com>
+Date:   Thu, 13 Jan 2022 13:57:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.1
-Subject: Re: [PATCH 04/23] clk: samsung: fsd: Add cmu_peric block clock
- information
+Subject: Re: [PATCH 11/23] pinctrl: samsung: add FSD SoC specific data
 Content-Language: en-US
 To:     Alim Akhtar <alim.akhtar@samsung.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
@@ -70,17 +69,12 @@ Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
         linus.walleij@linaro.org, catalin.marinas@arm.com,
         robh+dt@kernel.org, s.nawrocki@samsung.com,
         linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, Aswani Reddy <aswani.reddy@samsung.com>,
-        Niyas Ahmed S T <niyas.ahmed@samsung.com>,
-        Chandrasekar R <rcsekar@samsung.com>,
-        Jayati Sahu <jayati.sahu@samsung.com>,
-        Sriranjani P <sriranjani.p@samsung.com>,
-        Ajay Kumar <ajaykumar.rs@samsung.com>
+        linux-fsd@tesla.com, Ajay Kumar <ajaykumar.rs@samsung.com>
 References: <20220113121143.22280-1-alim.akhtar@samsung.com>
- <CGME20220113122330epcas5p46ae5cd30950b1d9126479231dcf5da49@epcas5p4.samsung.com>
- <20220113121143.22280-5-alim.akhtar@samsung.com>
+ <CGME20220113122400epcas5p34363ba8f477b4c273d601d0b64324afa@epcas5p3.samsung.com>
+ <20220113121143.22280-12-alim.akhtar@samsung.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220113121143.22280-5-alim.akhtar@samsung.com>
+In-Reply-To: <20220113121143.22280-12-alim.akhtar@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -88,158 +82,85 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 13/01/2022 13:11, Alim Akhtar wrote:
-> This patch adds CMU_PERIC block clock information needed
-> for various IPs functions found in this block.
-
-Here and in all other commits, please do not use "This patch". Instead:
-https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst#L89
-
+> This patch adds Tesla FSD SoC specific data to enable pinctrl.
+> FSD SoC has similar pinctrl controller as found in the most
+> samsung/exynos SoCs.
 > 
 > Cc: linux-fsd@tesla.com
-> Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
-> Signed-off-by: Niyas Ahmed S T <niyas.ahmed@samsung.com>
-> Signed-off-by: Chandrasekar R <rcsekar@samsung.com>
-> Signed-off-by: Jayati Sahu <jayati.sahu@samsung.com>
-> Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
 > Signed-off-by: Ajay Kumar <ajaykumar.rs@samsung.com>
-> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
 > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 > ---
->  drivers/clk/samsung/clk-fsd.c | 464 +++++++++++++++++++++++++++++++++-
->  1 file changed, 463 insertions(+), 1 deletion(-)
+>  .../pinctrl/samsung/pinctrl-exynos-arm64.c    | 71 +++++++++++++++++++
+>  drivers/pinctrl/samsung/pinctrl-samsung.c     |  2 +
+>  drivers/pinctrl/samsung/pinctrl-samsung.h     |  1 +
+>  3 files changed, 74 insertions(+)
 > 
-> diff --git a/drivers/clk/samsung/clk-fsd.c b/drivers/clk/samsung/clk-fsd.c
-> index e47523106d9e..6da20966ba99 100644
-> --- a/drivers/clk/samsung/clk-fsd.c
-> +++ b/drivers/clk/samsung/clk-fsd.c
-> @@ -9,12 +9,59 @@
->   *
->   */
->  
-> -#include <linux/clk-provider.h>
->  #include <linux/of.h>
-> +#include <linux/clk.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_device.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/platform_device.h>
-
-Please order the includes alphabetically.
-
->  
->  #include "clk.h"
->  #include <dt-bindings/clock/fsd-clk.h>
->  
-> +/* Gate register bits */
-> +#define GATE_MANUAL		BIT(20)
-> +#define GATE_ENABLE_HWACG	BIT(28)
+> diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> index 6b77fd24571e..b9175b4911ac 100644
+> --- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> +++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> @@ -646,3 +646,74 @@ const struct samsung_pinctrl_of_match_data exynosautov9_of_data __initconst = {
+>  	.ctrl		= exynosautov9_pin_ctrl,
+>  	.num_ctrl	= ARRAY_SIZE(exynosautov9_pin_ctrl),
+>  };
 > +
-> +/* Gate register offsets range */
-> +#define GATE_OFF_START		0x2000
-> +#define GATE_OFF_END		0x2fff
-> +
-> +/**
-> + * fsd_init_clocks - Set clocks initial configuration
-> + * @np:			CMU device tree node with "reg" property (CMU addr)
-> + * @reg_offs:		Register offsets array for clocks to init
-> + * @reg_offs_len:	Number of register offsets in reg_offs array
-> + *
-> + * Set manual control mode for all gate clocks.
+> +/*
+> + * Pinctrl driver data for Tesla FSD SoC. FSD SoC includes three
+> + * gpio/pin-mux/pinconfig controllers.
 > + */
-> +static void __init fsd_init_clocks(struct device_node *np,
-> +		const unsigned long *reg_offs, size_t reg_offs_len)
-
-The same as exynos_arm64_init_clocks - please re-use instead of duplicating.
-
-> +{
-> +	void __iomem *reg_base;
-> +	size_t i;
 > +
-> +	reg_base = of_iomap(np, 0);
-> +	if (!reg_base)
-> +		panic("%s: failed to map registers\n", __func__);
+> +/* pin banks of FSD pin-controller 0 (FSYS) */
+> +static const struct samsung_pin_bank_data fsd_pin_banks0[] __initconst = {
+> +	EXYNOS850_PIN_BANK_EINTG(7, 0x00, "gpf0", 0x00),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x20, "gpf1", 0x04),
+> +	EXYNOS850_PIN_BANK_EINTG(3, 0x40, "gpf6", 0x08),
+> +	EXYNOS850_PIN_BANK_EINTG(2, 0x60, "gpf4", 0x0c),
+> +	EXYNOS850_PIN_BANK_EINTG(6, 0x80, "gpf5", 0x10),
+> +};
 > +
-> +	for (i = 0; i < reg_offs_len; ++i) {
-> +		void __iomem *reg = reg_base + reg_offs[i];
-> +		u32 val;
+> +/* pin banks of FSD pin-controller 1 (PERIC) */
+> +static const struct samsung_pin_bank_data fsd_pin_banks1[] __initconst = {
+> +	EXYNOS850_PIN_BANK_EINTG(4, 0x000, "gpc8", 0x00),
+> +	EXYNOS850_PIN_BANK_EINTG(7, 0x020, "gpf2", 0x04),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x040, "gpf3", 0x08),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x060, "gpd0", 0x0c),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x080, "gpb0", 0x10),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x0a0, "gpb1", 0x14),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x0c0, "gpb4", 0x18),
+> +	EXYNOS850_PIN_BANK_EINTG(4, 0x0e0, "gpb5", 0x1c),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x100, "gpb6", 0x20),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x120, "gpb7", 0x24),
+> +	EXYNOS850_PIN_BANK_EINTG(5, 0x140, "gpd1", 0x28),
+> +	EXYNOS850_PIN_BANK_EINTG(5, 0x160, "gpd2", 0x2c),
+> +	EXYNOS850_PIN_BANK_EINTG(7, 0x180, "gpd3", 0x30),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x1a0, "gpg0", 0x34),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x1c0, "gpg1", 0x38),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x1e0, "gpg2", 0x3c),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x200, "gpg3", 0x40),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x220, "gpg4", 0x44),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x240, "gpg5", 0x48),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x260, "gpg6", 0x4c),
+> +	EXYNOS850_PIN_BANK_EINTG(8, 0x280, "gpg7", 0x50),
+> +};
 > +
-> +		/* Modify only gate clock registers */
-> +		if (reg_offs[i] < GATE_OFF_START || reg_offs[i] > GATE_OFF_END)
-> +			continue;
+> +/* pin banks of FSD pin-controller 2 (PMU) */
+> +static const struct samsung_pin_bank_data fsd_pin_banks2[] __initconst = {
+> +	EXYNOS850_PIN_BANK_EINTN(3, 0x00, "gpq0"),
+> +};
 > +
-> +		val = readl(reg);
-> +		val |= GATE_MANUAL;
-> +		val &= ~GATE_ENABLE_HWACG;
-> +		writel(val, reg);
-> +	}
-> +
-> +	iounmap(reg_base);
-> +}
-> +
-
-(...)
-
-> +/**
-> + * fsd_cmu_probe - Probe function for FSD platform clocks
-> + * @pdev: Pointer to platform device
-> + *
-> + * Configure clock hierarchy for clock domains of FSD platform
-> + */
-> +static int __init fsd_cmu_probe(struct platform_device *pdev)
-> +{
-> +	const struct samsung_cmu_info *info;
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +
-> +	info = of_device_get_match_data(dev);
-> +	fsd_init_clocks(np, info->clk_regs, info->nr_clk_regs);
-> +	samsung_cmu_register_one(np, info);
-> +
-> +	/* Keep bus clock running, so it's possible to access CMU registers */
-> +	if (info->clk_name) {
-> +		struct clk *bus_clk;
-> +
-> +		bus_clk = clk_get(dev, info->clk_name);
-> +		if (IS_ERR(bus_clk)) {
-> +			pr_err("%s: could not find bus clock %s; err = %ld\n",
-> +			       __func__, info->clk_name, PTR_ERR(bus_clk));
-> +		} else {
-> +			clk_prepare_enable(bus_clk);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-
-Please re-use exynos_arm64_register_cmu(). This will also solve my
-previous comment about exynos_arm64_init_clocks().
-
-> +
-> +/* CMUs which belong to Power Domains and need runtime PM to be implemented */
-> +static const struct of_device_id fsd_cmu_of_match[] = {
+> +const struct samsung_pin_ctrl fsd_pin_ctrl[] __initconst = {
 > +	{
-> +		.compatible = "tesla,fsd-clock-peric",
-> +		.data = &peric_cmu_info,
-> +	}, {
-> +	},
-> +};
-> +
-> +static struct platform_driver fsd_cmu_driver __refdata = {
-> +	.driver	= {
-> +		.name = "fsd-cmu",
-> +		.of_match_table = fsd_cmu_of_match,
-> +		.suppress_bind_attrs = true,
-> +	},
-> +	.probe = fsd_cmu_probe,
-> +};
-> +
-> +static int __init fsd_cmu_init(void)
-> +{
-> +	return platform_driver_register(&fsd_cmu_driver);
-> +}
-> +core_initcall(fsd_cmu_init);
-> 
+> +		/* pin-controller instance 0 FSYS0 data */
+> +		.pin_banks	= fsd_pin_banks0,
+> +		.nr_banks	= ARRAY_SIZE(fsd_pin_banks0),
 
+No wake-up interrupts (eint_wkup_init)? It's fine not to have them but
+just looks incomplete.
 
+In general looks ok, except discussion about compatibles.
+
+> +		.eint_gpio_init = exynos_eint_gpio_init,
+> +		.suspend	= exynos_pinctrl_suspend,
+> +		.resume		= exynos_pinctrl_resume,
 Best regards,
 Krzysztof

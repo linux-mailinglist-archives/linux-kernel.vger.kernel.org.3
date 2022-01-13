@@ -2,392 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE56148DE1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 20:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC3048DE1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 20:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbiAMTXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 14:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234513AbiAMTXT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 14:23:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534A4C06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 11:23:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE283B82345
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 19:23:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36A02C36AE9;
-        Thu, 13 Jan 2022 19:23:16 +0000 (UTC)
-Date:   Thu, 13 Jan 2022 14:23:14 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing: Use trace_create_file() to simplify creation
- of tracefs entry
-Message-ID: <20220113142314.2bd7eebe@gandalf.local.home>
-In-Reply-To: <20220113162513.422350-1-ytcoode@gmail.com>
-References: <20220113162513.422350-1-ytcoode@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S234525AbiAMTbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 14:31:09 -0500
+Received: from mail-dm3nam07on2047.outbound.protection.outlook.com ([40.107.95.47]:35216
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231237AbiAMTbH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 14:31:07 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aCipy2cVm++q9IbRz0U7Q5TojrWB4YpprkxmYR5bvnyd8por/0sEczdjX8VXYMhrbZcCdHjfN3Kj33IaIpE4//tXsaRncJV6KPSFToh1dIBp0kWMOH9bsSxdiTwt3/p/+sJ8CWo62/TergQ6Za0CeSZ5wrcW542UDnxV9jnUhBUee7LjFeDQjCMvRrgh1vxHblPfm7396WMwfo6MTAA9cShppuxMdP4Gu1JF9YVpJyhP0QkIGXe4s46fjE9DQL2VWVSKzSKp7rQhtERPD26lgyU/cL5MNmWz4DNJq94CWPPOSGyH5nFGGqP4/ekspRCJDlICkoPfFMufBeXuuAnhgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iZInvT3T2VG7obMXDcYonG4zskdsODt0Vn6+3xVSgbg=;
+ b=oThnfgYlD3sA9vI/l2067XKlOzg1JW67BI0Y0NlC3uzK98VloRF0znFUKd6sPJlzmzkMlswgKyMDG0twb8ZoJms0lMl6HPn0mBNqdAa1cB2ogfps7kwuPwKd1pxY6Aps0rWPUVniMQs4v0hyBeSQ23pPV2KMfq7UJ6q2G8e54IUYEUi1eT/F/V+iPy0DkRV7v7xdlpWUDvkX3oAbUfhZh70HrHwKSm2JEiaRTgV4yAlF3bVCIRHWihbW1Xmwl7KW3ZxN4MNy/1SqSnDSlc/7lPO7zB2dQums5V9V8MTxEnPNRfefSat64rkdr1ssdli6jbJ8rfMx1bNzSh6Sd6zcJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iZInvT3T2VG7obMXDcYonG4zskdsODt0Vn6+3xVSgbg=;
+ b=FAEs9cUgx163mPzsO3GC5lx/RkRUyWer1J/kFZJbCokDPkwOk3dlxBt25usl9Kc73NVBVWyFBpV7eyfCKg+iRO/0qjRNe+j7iGBG3jJdrLW/3EE/JHnmWAp79yThknNROD5uIilskKvQHDXTZHgB29wql0LQTgTmpswJUnu3iByCAmWui8q0x2QFBKJEQfg5VIAkRd4cRYFPT/RNmYJpcp8wDX0d3t75MRjs4NpQHangzsrfGZYtkI0oX1pR7XUgEBlKPh+DdVXtcGlDyRJUaeb68y1NHSmfGXJHbD8KH3Kfu4CiDNXquW0vfGxtUndZQ5FkSDEivzc5XjZfVmwsqA==
+Received: from BY5PR12MB4209.namprd12.prod.outlook.com (2603:10b6:a03:20d::22)
+ by DM5PR12MB1499.namprd12.prod.outlook.com (2603:10b6:4:8::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4888.9; Thu, 13 Jan 2022 19:31:06 +0000
+Received: from BY5PR12MB4209.namprd12.prod.outlook.com
+ ([fe80::35a1:8b68:d0f7:7496]) by BY5PR12MB4209.namprd12.prod.outlook.com
+ ([fe80::35a1:8b68:d0f7:7496%4]) with mapi id 15.20.4888.011; Thu, 13 Jan 2022
+ 19:31:06 +0000
+From:   Saeed Mahameed <saeedm@nvidia.com>
+To:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "leon@kernel.org" <leon@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [GIT pull] irq/core for v5.17-rc1
+Thread-Topic: [GIT pull] irq/core for v5.17-rc1
+Thread-Index: AQHYCJ9AzonJzIc80k6Mu0LEzduHc6xhVveA
+Date:   Thu, 13 Jan 2022 19:31:06 +0000
+Message-ID: <dc342ecda69fab39d754c0ba71ae1ca472320611.camel@nvidia.com>
+References: <164206863083.82661.4520085707599437707.tglx@xen13.tec.linutronix.de>
+         <CAHk-=whvPxG2Sje_OBSeDODiD68ke+ta118xeYskNxkv-kAtyA@mail.gmail.com>
+In-Reply-To: <CAHk-=whvPxG2Sje_OBSeDODiD68ke+ta118xeYskNxkv-kAtyA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d64f40be-a8d9-44e3-f3f7-08d9d6cb3e4f
+x-ms-traffictypediagnostic: DM5PR12MB1499:EE_
+x-microsoft-antispam-prvs: <DM5PR12MB149916AFE5554CED5DC1E4CDB3539@DM5PR12MB1499.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zkIGHMS+uVvV7VTpbrhDcNf7v90KnwtYKRV+Eyu6yR7ocZlNVYaLKoRfkKeXypjj1j7YUCiiuo1VoWAyPmw2IuZ3sGg8L84T9ISN276HKJVgvosBfSo8vFJNpvTwdhodJ5hWPSuHOVE95NndOP8iNsfUT4+iPYSyfeekrKdvKnaVGlYyHmybVZOvnczQt6rdDcMN8eBVFwuR+86/mwz6Ot36Yi/yDpDif+gGXiYCa85L2XVqgCeCjQcZspbhKZBLBpnDXR6vjxtt4071XQ1HblYP8lPLfKoXI+RN9Wg0roV3ZnyDGZI0NBlYrkn6SBd+R3RFzTn8FtjhBoYr/MTT+83xX4AG8bBB1OnRfr42OLpRMSEMt5lpGr4Bb6Tmq/n5hpqFOaIaDppxO7N1qIWHwFCQ3oDAjSkSX1nzKqFBWGpAM3NjkmSK8bnDpfUqjXjI5oAK6UQRNyKpJRTXtbBuvAtJmrDUcP7K7o9AUMVXvtmUfXKsGgJFNu52haft8f9c3S5GAIhwoeJBqnOurK7mnjOR4kQ5x6N9Eu1sk/Zj8DmVi7gkMtzcT6uJ6H+csO8zrPpxFVx+P3MCxJFf1l2HvP0QdJo08jtQmn33ozpG/wMSao6AjR7/3wANdNPf3DcTqFSsoUAuY6mmU1k54zOFTltSL/mji45WIr0GgXf2fIG+X4LYEHwnOOSpQ9/Ucz38PhvudHMT2OWRW4JWk418/g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4209.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(76116006)(66556008)(86362001)(316002)(64756008)(66946007)(6506007)(66476007)(53546011)(71200400001)(66446008)(26005)(186003)(38100700002)(36756003)(4326008)(122000001)(6486002)(8676002)(8936002)(38070700005)(2616005)(110136005)(508600001)(4744005)(83380400001)(54906003)(6512007)(2906002)(5660300002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RzBJUEFtdWxhUUI5S3EzUzBhWGdPKzBlaDRxUFpFTUlWMjdGYWczcU0xMzdV?=
+ =?utf-8?B?SXN2c2t6N0ord2NzbkJHbkdOcFl1YjZVb2FGTGV3RitQcWlQL1ppaTZhM2F0?=
+ =?utf-8?B?bzBKWmlKOXZyNkliYmxja1BKTGswRDBqZTdiWUNoZ21lbWxRYjVqV0xZMVlJ?=
+ =?utf-8?B?YkNiUWdBVVloNDFJTnlPUS9GWGtHNGFmakVJZGh4QXA4dVZkNG5IejhGQXRK?=
+ =?utf-8?B?dmxMbm5mTjlqTWpTU1RTTXh2bjhRd0d2aXZIZUJ4N2lZWjdOYzNuNVd5Ymth?=
+ =?utf-8?B?bUhhbERGdTU0TVZvUTZOcXlBMXhIZ0loQ1FSalJaRFZFRk1yYVpjQ1VNYmFT?=
+ =?utf-8?B?VExCVEFYcnZ3SDFxRnVFZllpdkFCNENldVZxVXdodjZDM0ptZnp6TXJOK2Yr?=
+ =?utf-8?B?eEg4T0pVOU5IQXBFVDMydDRDc0ZhazdWbUIvL1d0bThuZlV6RWxpRnd6bTUx?=
+ =?utf-8?B?M0I2TVNiODRXNlAxZDNjNGJGNzV1c25VdDdyL3FVK0VEL0pzNEZXaEk3bjlV?=
+ =?utf-8?B?UnFWeGhORmxTY21lTk0yK1Z4SS9ObzFwT1diSHRlM3pYOW9RNGZHQ2k0cmJT?=
+ =?utf-8?B?ODk3UGJ5TmxtUHBIZnV6WTJ3TTdOcVRzZXRESUJ0dDZUS2pXOXJ4MEZMcnJs?=
+ =?utf-8?B?ZXkrSXJvam4xNlZaQ21QWm8wWE5lVGkxVy8weUY4MFgxc2FVdjVlMG8zUmM3?=
+ =?utf-8?B?ZTZMSTdzaUt0S2p6T3IvMjdnak9DMTdNYUdnaTZYSW5PZWNvT25jQ1loRHVa?=
+ =?utf-8?B?Umt5Nm9KdEtlTENLdWRzZHMreERUeHF0VkpRTTdYa1FMOG1rdTdJTWZKQXI4?=
+ =?utf-8?B?amFGbGtNbnlNS2ZONXBzSlkvQ3l2UEVQaU1zd04zV1FpNHhuQXZ2WnNBYjUw?=
+ =?utf-8?B?RTdDVEd1ZXhPcnhiRmVhZ3R3YkhhNXRjMWRpOGNIRXNOWG1PeWpFUHlUZ1dZ?=
+ =?utf-8?B?K3ltazVSbUNGQ0VMMDBMeVVacitOQjkrZnAxemJXV2s5WVZJNkcxUXZoT091?=
+ =?utf-8?B?b1EwS1QySnpnWkRJQmVTS3ZQQmJMdTBsUlFXWVhYM1dDZjR2ZnArMlFTREVW?=
+ =?utf-8?B?ZnUzYzcyOXhTbEJBcVlLVXg2YzZCa0xNWE1DVnZKZnNnbXY0SjJ2bFRDMENu?=
+ =?utf-8?B?V3B4blZmdmRTVW5PazBkM0xVamI1MHdkRnhHTnJYcXhlejZhQ016ZUpSRGsv?=
+ =?utf-8?B?ZjJFcTdRMWEyWTlFOVg4WDRIM0NGNHd2KzROOFA3T1BOaE5kb0xKRklwNkl6?=
+ =?utf-8?B?L0J1Z1AyOUVFdXRnWU14UU1kYjlGNVRBc1VxZmc1Zi9ZZDk0VkdycFlXQWNW?=
+ =?utf-8?B?RXdRb1V3cUlSWm4vYWNEeUZ5ZmN0M1NpWGlYbDYwdEtna0tGMGNBMEFlWnlP?=
+ =?utf-8?B?Vm1CVWUrSzlTYWdSVUZ2WCtQcGVtOFp5Q1ZFOCtud05jYy9wMkhkOTZ5c095?=
+ =?utf-8?B?U2x1c3R3ZThvZEowN3ZZblZVRlZ3UG1CNDBZVVM5dDZNYjJkbVVmWnVlR2Ja?=
+ =?utf-8?B?RU04Q2YyamJsbWptRlVZSXh1cGlkdm5HNjBpaGtQRFZ0TE5BVUxvVmZHQnJD?=
+ =?utf-8?B?Z2puT2tKbThQa244K3VRTmVUTC85UTkvRkZNRTlobUJGdDlJbSs1N2dqNjNM?=
+ =?utf-8?B?YWdOYWZSdjM3NzlXUkVzeXFyK09qK3JHem9kS0NMWWc3VzJYcFIyalZJSmha?=
+ =?utf-8?B?UGhzalJvckVKa1VxUFp3S1A1LzZocVRKSUlJTWEvTUR2V041MHcvWFdtcHJE?=
+ =?utf-8?B?NmhPRFA3WFBvQy9mMkEyZFR2Uk5zRUVRanlKL0RXMXEwNEFvVTY4NEhsOWNX?=
+ =?utf-8?B?dGpmdHI2aWhiZHlmOVZPV1FwYnczeCtObGlZdWJtbHpTN2lIaGlXTWdXS2ht?=
+ =?utf-8?B?Ny9QTFhYZkhVeWFCdzZHVDlUemZsZUpHR3ppek9tZTNwTVpsWFI5bGFlNmt0?=
+ =?utf-8?B?R3F4N0V4R3gralo2Qy9NR0NSQjNQTHA1dVQ0ZlRXemhYckN2VHM5VDRJVXQx?=
+ =?utf-8?B?dHdheE9na3JTUWJPdy9Hak1xWDc2NDhOaFk0dDQ0MmdwZFBnVkdFaE5TQWcz?=
+ =?utf-8?B?U0YwaUV6UVF3MkRhcWtiOEZBK2ZBYTc3K2RMK29HNU5rMmt0LzNMSVVsZDh0?=
+ =?utf-8?B?RkpRc3hVVmVDMEw0SGFTRzZpK2R1WDJvOGtMV2dOUk5CTk1ubUxpMmVkZmdI?=
+ =?utf-8?Q?x+dS9eRWD0Bgn19Uwr2pan0=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F238672D7F1CD846BDFD24BEA26CBC06@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4209.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d64f40be-a8d9-44e3-f3f7-08d9d6cb3e4f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jan 2022 19:31:06.0987
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kbQsWUtcdJgAo0mmhz2Yht8QUYxB8yFsYdycQlWI4YYVVySPVHBiMI4YDEGPcxISkOkj3bi4xz9neLyeoHMgHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1499
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Jan 2022 00:25:13 +0800
-Yuntao Wang <ytcoode@gmail.com> wrote:
-
-> Creating tracefs entries with tracefs_create_file() followed by pr_warn()
-> is tedious and repetitive, we can use trace_create_file() to simplify
-> this process and make the code more readable.
-> 
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> ---
->  kernel/trace/ftrace.c                 | 17 +++++-------
->  kernel/trace/trace.c                  | 16 ++++++------
->  kernel/trace/trace_dynevent.c         |  8 ++----
->  kernel/trace/trace_events.c           | 37 ++++++++++-----------------
->  kernel/trace/trace_hwlat.c            |  2 +-
->  kernel/trace/trace_kprobe.c           | 14 +++-------
->  kernel/trace/trace_osnoise.c          |  2 +-
->  kernel/trace/trace_printk.c           |  2 +-
->  kernel/trace/trace_recursion_record.c |  7 ++---
->  kernel/trace/trace_stack.c            |  4 +--
->  kernel/trace/trace_uprobe.c           |  4 +--
->  11 files changed, 44 insertions(+), 69 deletions(-)
-> 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 403e485bf091..3c5e3838772d 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -983,11 +983,9 @@ static __init void ftrace_profile_tracefs(struct dentry *d_tracer)
->  		}
->  	}
->  
-> -	entry = tracefs_create_file("function_profile_enabled",
-> -				    TRACE_MODE_WRITE, d_tracer, NULL,
-> -				    &ftrace_profile_fops);
-> -	if (!entry)
-> -		pr_warn("Could not create tracefs 'function_profile_enabled' entry\n");
-> +	trace_create_file("function_profile_enabled",
-> +			  TRACE_MODE_WRITE, d_tracer, NULL,
-> +			  &ftrace_profile_fops);
->  }
->  
->  #else /* CONFIG_FUNCTION_PROFILER */
-> @@ -6366,11 +6364,10 @@ static __init int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
->  
->  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->  	trace_create_file("set_graph_function", TRACE_MODE_WRITE, d_tracer,
-> -				    NULL,
-> -				    &ftrace_graph_fops);
-> +			  NULL, &ftrace_graph_fops);
-> +
->  	trace_create_file("set_graph_notrace", TRACE_MODE_WRITE, d_tracer,
-> -				    NULL,
-> -				    &ftrace_graph_notrace_fops);
-> +			  NULL, &ftrace_graph_notrace_fops);
-
-What's with all the format change updates?
-
-Could you resend with just the code changes? There's no reason to update
-white space where the code isn't being touched.
-
-Thanks,
-
--- Steve
-
-
->  #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
->  
->  	return 0;
-> @@ -7744,7 +7741,7 @@ static const struct file_operations ftrace_no_pid_fops = {
->  void ftrace_init_tracefs(struct trace_array *tr, struct dentry *d_tracer)
->  {
->  	trace_create_file("set_ftrace_pid", TRACE_MODE_WRITE, d_tracer,
-> -			    tr, &ftrace_pid_fops);
-> +			  tr, &ftrace_pid_fops);
->  	trace_create_file("set_ftrace_notrace_pid", TRACE_MODE_WRITE,
->  			  d_tracer, tr, &ftrace_no_pid_fops);
->  }
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index a73d78dcda2c..5d66e79f43e7 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -9422,10 +9422,10 @@ init_tracer_tracefs(struct trace_array *tr, struct dentry *d_tracer)
->  	int cpu;
->  
->  	trace_create_file("available_tracers", TRACE_MODE_READ, d_tracer,
-> -			tr, &show_traces_fops);
-> +			  tr, &show_traces_fops);
->  
->  	trace_create_file("current_tracer", TRACE_MODE_WRITE, d_tracer,
-> -			tr, &set_tracer_fops);
-> +			  tr, &set_tracer_fops);
->  
->  	trace_create_file("tracing_cpumask", TRACE_MODE_WRITE, d_tracer,
->  			  tr, &tracing_cpumask_fops);
-> @@ -9472,7 +9472,7 @@ init_tracer_tracefs(struct trace_array *tr, struct dentry *d_tracer)
->  	tr->buffer_percent = 50;
->  
->  	trace_create_file("buffer_percent", TRACE_MODE_READ, d_tracer,
-> -			tr, &buffer_percent_fops);
-> +			  tr, &buffer_percent_fops);
->  
->  	create_trace_options_dir(tr);
->  
-> @@ -9680,19 +9680,19 @@ static __init int tracer_init_tracefs(void)
->  	ftrace_init_tracefs_toplevel(&global_trace, NULL);
->  
->  	trace_create_file("tracing_thresh", TRACE_MODE_WRITE, NULL,
-> -			&global_trace, &tracing_thresh_fops);
-> +			  &global_trace, &tracing_thresh_fops);
->  
->  	trace_create_file("README", TRACE_MODE_READ, NULL,
-> -			NULL, &tracing_readme_fops);
-> +			  NULL, &tracing_readme_fops);
->  
->  	trace_create_file("saved_cmdlines", TRACE_MODE_READ, NULL,
-> -			NULL, &tracing_saved_cmdlines_fops);
-> +			  NULL, &tracing_saved_cmdlines_fops);
->  
->  	trace_create_file("saved_cmdlines_size", TRACE_MODE_WRITE, NULL,
->  			  NULL, &tracing_saved_cmdlines_size_fops);
->  
->  	trace_create_file("saved_tgids", TRACE_MODE_READ, NULL,
-> -			NULL, &tracing_saved_tgids_fops);
-> +			  NULL, &tracing_saved_tgids_fops);
->  
->  	trace_eval_init();
->  
-> @@ -9704,7 +9704,7 @@ static __init int tracer_init_tracefs(void)
->  
->  #ifdef CONFIG_DYNAMIC_FTRACE
->  	trace_create_file("dyn_ftrace_total_info", TRACE_MODE_READ, NULL,
-> -			NULL, &tracing_dyn_info_fops);
-> +			  NULL, &tracing_dyn_info_fops);
->  #endif
->  
->  	create_trace_instances(NULL);
-> diff --git a/kernel/trace/trace_dynevent.c b/kernel/trace/trace_dynevent.c
-> index e34e8182ee4b..6f6ee1d9e247 100644
-> --- a/kernel/trace/trace_dynevent.c
-> +++ b/kernel/trace/trace_dynevent.c
-> @@ -262,12 +262,8 @@ static __init int init_dynamic_event(void)
->  	if (ret)
->  		return 0;
->  
-> -	entry = tracefs_create_file("dynamic_events", TRACE_MODE_WRITE, NULL,
-> -				    NULL, &dynamic_events_ops);
-> -
-> -	/* Event list interface */
-> -	if (!entry)
-> -		pr_warn("Could not create tracefs 'dynamic_events' entry\n");
-> +	trace_create_file("dynamic_events", TRACE_MODE_WRITE, NULL,
-> +			  NULL, &dynamic_events_ops);
->  
->  	return 0;
->  }
-> diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-> index 3147614c1812..408f8a8a7723 100644
-> --- a/kernel/trace/trace_events.c
-> +++ b/kernel/trace/trace_events.c
-> @@ -3446,12 +3446,10 @@ create_event_toplevel_files(struct dentry *parent, struct trace_array *tr)
->  	struct dentry *d_events;
->  	struct dentry *entry;
->  
-> -	entry = tracefs_create_file("set_event", TRACE_MODE_WRITE, parent,
-> -				    tr, &ftrace_set_event_fops);
-> -	if (!entry) {
-> -		pr_warn("Could not create tracefs 'set_event' entry\n");
-> +	entry = trace_create_file("set_event", TRACE_MODE_WRITE, parent,
-> +				  tr, &ftrace_set_event_fops);
-> +	if (!entry)
->  		return -ENOMEM;
-> -	}
->  
->  	d_events = tracefs_create_dir("events", parent);
->  	if (!d_events) {
-> @@ -3466,25 +3464,21 @@ create_event_toplevel_files(struct dentry *parent, struct trace_array *tr)
->  
->  	/* There are not as crucial, just warn if they are not created */
->  
-> -	entry = tracefs_create_file("set_event_pid", TRACE_MODE_WRITE, parent,
-> -				    tr, &ftrace_set_event_pid_fops);
-> -	if (!entry)
-> -		pr_warn("Could not create tracefs 'set_event_pid' entry\n");
-> +	trace_create_file("set_event_pid", TRACE_MODE_WRITE, parent,
-> +			  tr, &ftrace_set_event_pid_fops);
->  
-> -	entry = tracefs_create_file("set_event_notrace_pid",
-> -				    TRACE_MODE_WRITE, parent, tr,
-> -				    &ftrace_set_event_notrace_pid_fops);
-> -	if (!entry)
-> -		pr_warn("Could not create tracefs 'set_event_notrace_pid' entry\n");
-> +	trace_create_file("set_event_notrace_pid",
-> +			  TRACE_MODE_WRITE, parent, tr,
-> +			  &ftrace_set_event_notrace_pid_fops);
->  
->  	/* ring buffer internal formats */
->  	trace_create_file("header_page", TRACE_MODE_READ, d_events,
-> -				  ring_buffer_print_page_header,
-> -				  &ftrace_show_header_fops);
-> +			  ring_buffer_print_page_header,
-> +			  &ftrace_show_header_fops);
->  
->  	trace_create_file("header_event", TRACE_MODE_READ, d_events,
-> -				  ring_buffer_print_entry_header,
-> -				  &ftrace_show_header_fops);
-> +			  ring_buffer_print_entry_header,
-> +			  &ftrace_show_header_fops);
->  
->  	tr->event_dir = d_events;
->  
-> @@ -3690,17 +3684,14 @@ static __init int event_trace_init_fields(void)
->  __init int event_trace_init(void)
->  {
->  	struct trace_array *tr;
-> -	struct dentry *entry;
->  	int ret;
->  
->  	tr = top_trace_array();
->  	if (!tr)
->  		return -ENODEV;
->  
-> -	entry = tracefs_create_file("available_events", TRACE_MODE_READ,
-> -				    NULL, tr, &ftrace_avail_fops);
-> -	if (!entry)
-> -		pr_warn("Could not create tracefs 'available_events' entry\n");
-> +	trace_create_file("available_events", TRACE_MODE_READ,
-> +			  NULL, tr, &ftrace_avail_fops);
->  
->  	ret = early_event_add_tracer(NULL, tr);
->  	if (ret)
-> diff --git a/kernel/trace/trace_hwlat.c b/kernel/trace/trace_hwlat.c
-> index 56bb7b890578..7bab09a6bd0a 100644
-> --- a/kernel/trace/trace_hwlat.c
-> +++ b/kernel/trace/trace_hwlat.c
-> @@ -796,7 +796,7 @@ static int init_tracefs(void)
->  	if (!hwlat_sample_width)
->  		goto err;
->  
-> -	hwlat_thread_mode = trace_create_file("mode", TRACE_MODE_WRITE,
-> +	hwlat_thread_mode = tracefs_create_file("mode", TRACE_MODE_WRITE,
->  					      top_dir,
->  					      NULL,
->  					      &thread_mode_fops);
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index 3d85323278ed..d13826ea490b 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -1912,19 +1912,13 @@ static __init int init_kprobe_trace(void)
->  	if (ret)
->  		return 0;
->  
-> -	entry = tracefs_create_file("kprobe_events", TRACE_MODE_WRITE,
-> -				    NULL, NULL, &kprobe_events_ops);
-> -
->  	/* Event list interface */
-> -	if (!entry)
-> -		pr_warn("Could not create tracefs 'kprobe_events' entry\n");
-> +	trace_create_file("kprobe_events", TRACE_MODE_WRITE,
-> +			  NULL, NULL, &kprobe_events_ops);
->  
->  	/* Profile interface */
-> -	entry = tracefs_create_file("kprobe_profile", TRACE_MODE_READ,
-> -				    NULL, NULL, &kprobe_profile_ops);
-> -
-> -	if (!entry)
-> -		pr_warn("Could not create tracefs 'kprobe_profile' entry\n");
-> +	trace_create_file("kprobe_profile", TRACE_MODE_READ,
-> +			  NULL, NULL, &kprobe_profile_ops);
->  
->  	setup_boot_kprobe_events();
->  
-> diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-> index 36d9d5be08b4..d0aa23bcbf85 100644
-> --- a/kernel/trace/trace_osnoise.c
-> +++ b/kernel/trace/trace_osnoise.c
-> @@ -2075,7 +2075,7 @@ static int init_tracefs(void)
->  	if (!tmp)
->  		goto err;
->  
-> -	tmp = trace_create_file("cpus", TRACE_MODE_WRITE, top_dir, NULL, &cpus_fops);
-> +	tmp = tracefs_create_file("cpus", TRACE_MODE_WRITE, top_dir, NULL, &cpus_fops);
->  	if (!tmp)
->  		goto err;
->  
-> diff --git a/kernel/trace/trace_printk.c b/kernel/trace/trace_printk.c
-> index 29f6e95439b6..5422ac74537a 100644
-> --- a/kernel/trace/trace_printk.c
-> +++ b/kernel/trace/trace_printk.c
-> @@ -385,7 +385,7 @@ static __init int init_trace_printk_function_export(void)
->  		return 0;
->  
->  	trace_create_file("printk_formats", TRACE_MODE_READ, NULL,
-> -				    NULL, &ftrace_formats_fops);
-> +			  NULL, &ftrace_formats_fops);
->  
->  	return 0;
->  }
-> diff --git a/kernel/trace/trace_recursion_record.c b/kernel/trace/trace_recursion_record.c
-> index 4d4b78c8ca25..a520b11afb0d 100644
-> --- a/kernel/trace/trace_recursion_record.c
-> +++ b/kernel/trace/trace_recursion_record.c
-> @@ -224,12 +224,9 @@ static const struct file_operations recursed_functions_fops = {
->  
->  __init static int create_recursed_functions(void)
->  {
-> -	struct dentry *dentry;
->  
-> -	dentry = trace_create_file("recursed_functions", TRACE_MODE_WRITE,
-> -				   NULL, NULL, &recursed_functions_fops);
-> -	if (!dentry)
-> -		pr_warn("WARNING: Failed to create recursed_functions\n");
-> +	trace_create_file("recursed_functions", TRACE_MODE_WRITE,
-> +			  NULL, NULL, &recursed_functions_fops);
->  	return 0;
->  }
->  
-> diff --git a/kernel/trace/trace_stack.c b/kernel/trace/trace_stack.c
-> index 5a48dba912ea..2337470e9ae0 100644
-> --- a/kernel/trace/trace_stack.c
-> +++ b/kernel/trace/trace_stack.c
-> @@ -560,10 +560,10 @@ static __init int stack_trace_init(void)
->  		return 0;
->  
->  	trace_create_file("stack_max_size", TRACE_MODE_WRITE, NULL,
-> -			&stack_trace_max_size, &stack_max_size_fops);
-> +			  &stack_trace_max_size, &stack_max_size_fops);
->  
->  	trace_create_file("stack_trace", TRACE_MODE_READ, NULL,
-> -			NULL, &stack_trace_fops);
-> +			  NULL, &stack_trace_fops);
->  
->  #ifdef CONFIG_DYNAMIC_FTRACE
->  	trace_create_file("stack_trace_filter", TRACE_MODE_WRITE, NULL,
-> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-> index 08b0e8417302..58feb4ab34d1 100644
-> --- a/kernel/trace/trace_uprobe.c
-> +++ b/kernel/trace/trace_uprobe.c
-> @@ -1652,10 +1652,10 @@ static __init int init_uprobe_trace(void)
->  		return 0;
->  
->  	trace_create_file("uprobe_events", TRACE_MODE_WRITE, NULL,
-> -				    NULL, &uprobe_events_ops);
-> +			  NULL, &uprobe_events_ops);
->  	/* Profile interface */
->  	trace_create_file("uprobe_profile", TRACE_MODE_READ, NULL,
-> -				    NULL, &uprobe_profile_ops);
-> +			  NULL, &uprobe_profile_ops);
->  	return 0;
->  }
->  
-
+T24gVGh1LCAyMDIyLTAxLTEzIGF0IDA5OjAxIC0wODAwLCBMaW51cyBUb3J2YWxkcyB3cm90ZToN
+Cj4gT24gVGh1LCBKYW4gMTMsIDIwMjIgYXQgMjoxMyBBTSBUaG9tYXMgR2xlaXhuZXIgPHRnbHhA
+bGludXRyb25peC5kZT4NCj4gd3JvdGU6DQo+ID4gDQo+ID4gwqDCoCBnaXQ6Ly9naXQua2VybmVs
+Lm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdGlwL3RpcC5naXQgaXJxLQ0KPiA+IGNvcmUt
+MjAyMi0wMS0xMw0KPiANCj4gSG1tLg0KPiANCj4gSSBnb3QgYSBjb25mbGljdCBpbiB0aGUgbWx4
+IGRyaXZlci4gSXQgbG9va2VkIHRyaXZpYWwsIGJ1dCBqdXN0IHRvDQo+IG1ha2Ugc3VyZSBJIGNv
+bXBhcmVkIGFnYWluc3QgdGhlIHJlc29sdXRpb24gaW4gbGludXgtbmV4dC4NCj4gDQo+IE15IGNv
+bmZsaWN0IHJlc29sdXRpb24gaXMgZGlmZmVyZW50LCB0aG91Z2gsIGFuZCBJIHRoaW5rIG1pbmUg
+aXMgdGhlDQo+IGNvcnJlY3Qgb25lIChhbHRob3VnaCBtYXliZSB0aGV5IGVuZCB1cCBib3RoIGJl
+aW5nIGZpbmUpLg0KPiANCj4gQnV0IEknbSBqdXN0IGFib3V0IHRvIGxlYXZlIGZvciB0cmF2ZWws
+IGFuZCBtYXliZSBJJ20gd3JvbmcsIHNvIEkNCj4ganVzdA0KPiB3YW50ZWQgdG8gcGVvcGxlIHRv
+IHZlcmlmeS4uLg0KDQpCb3RoIHdpbGwgZW5kIHVwIHRoZSBzYW1lIHNpbmNlIG1hc2sgaXMgTlVM
+TC4NCkJvbiBWb3lhZ2UhDQoNCj4gDQo+IEl0J3MNCj4gDQo+IMKgwqAgZHJpdmVycy9uZXQvZXRo
+ZXJuZXQvbWVsbGFub3gvbWx4NS9jb3JlL3BjaV9pcnEuYw0KPiANCj4gYW5kIGluIHBhcnRpY3Vs
+YXIgdGhlICdlcnJfeGEnIHJlbGVhc2UgcGFydCBvZiBtbHg1X2lycV9hbGxvYygpIC0gSQ0KPiBt
+YWRlIGl0IHVzZSBpcnFfdXBkYXRlX2FmZmluaXR5X2hpbnQoKSB0byBtYXRjaCB0aGUgaXJxX3Jl
+bGVhc2UoKQ0KPiBwYXRocy4NCj4gDQoNCkFncmVlZCwgY29kZSBzeW1tZXRyeSBpcyBhbiBpbXBv
+cnRhbnQgc3RhbmRhcmQgaW4gbWx4NSAhIFRoYW5rcyEuDQoNCg==

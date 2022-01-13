@@ -2,105 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 816CD48D987
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 275CE48D98A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:12:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235597AbiAMOLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 09:11:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235590AbiAMOLi (ORCPT
+        id S235614AbiAMOMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:12:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31256 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235590AbiAMOMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:11:38 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6CAC061748
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 06:11:38 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n80pD-0004V4-Ph; Thu, 13 Jan 2022 15:11:35 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n80pC-00A5Lh-0y; Thu, 13 Jan 2022 15:11:33 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n80pA-0006ua-DG; Thu, 13 Jan 2022 15:11:32 +0100
-Date:   Thu, 13 Jan 2022 15:11:32 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     vishakha.joshi@intel.com, thierry.reding@gmail.com,
-        lee.jones@linaro.org, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        vijayakannan.ayyathurai@intel.com, bala.senthil@intel.com,
-        tamal.saha@intel.com, lakshmi.bai.raja.subramanian@intel.com
-Subject: Re: [PATCH v1 1/2] pwm: Add count to sysfs for Intel PWM driver
-Message-ID: <20220113141132.vec2zisfdkrznyis@pengutronix.de>
-References: <20220103081610.6656-1-vishakha.joshi@intel.com>
- <20220103081610.6656-2-vishakha.joshi@intel.com>
- <20220103121454.rduz4jftean4hkaw@pengutronix.de>
- <YdRSnxqIJf1C14+x@smile.fi.intel.com>
+        Thu, 13 Jan 2022 09:12:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642083119;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xCYpNTbO554QGVwnOrW/uIVMk9yK3DSR4H4rxcM8uH8=;
+        b=XP0INRmItVZ7qBKFN+s9F/72jKiAQt3Md567XnT1bSVQinAdDiW57foDbAzPJjLeaWQVXb
+        8nF64704fkNfFzbAYSBdydfJ04qcG967664R0VVUKGU1lysrGgRThGVc98HaWL6EqhHIww
+        gp2rPeLFCSNNCPWdKB7F+U/IyAE40Rg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-553-fm-pjm88NTydB7XZ6ad7Jw-1; Thu, 13 Jan 2022 09:11:56 -0500
+X-MC-Unique: fm-pjm88NTydB7XZ6ad7Jw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 504A581EE64;
+        Thu, 13 Jan 2022 14:11:55 +0000 (UTC)
+Received: from steredhat.redhat.com (unknown [10.64.242.242])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DA7F92B5A5;
+        Thu, 13 Jan 2022 14:11:37 +0000 (UTC)
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     virtualization@lists.linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        kvm@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
+        netdev@vger.kernel.org
+Subject: [PATCH] vhost: remove avail_event arg from vhost_update_avail_event()
+Date:   Thu, 13 Jan 2022 15:11:34 +0100
+Message-Id: <20220113141134.186773-1-sgarzare@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u72jbzcajrumdalo"
-Content-Disposition: inline
-In-Reply-To: <YdRSnxqIJf1C14+x@smile.fi.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In vhost_update_avail_event() we never used the `avail_event` argument,
+since its introduction in commit 2723feaa8ec6 ("vhost: set log when
+updating used flags or avail event").
 
---u72jbzcajrumdalo
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Let's remove it to clean up the code.
 
-Hello,
+Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+---
+ drivers/vhost/vhost.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, Jan 04, 2022 at 03:58:55PM +0200, Andy Shevchenko wrote:
-> On Mon, Jan 03, 2022 at 01:14:54PM +0100, Uwe Kleine-K=F6nig wrote:
-> > If we really want to support a count, I request that all drivers that
-> > don't support it get updated to refuse a request with count !=3D 0.
->=20
-> Hmm... Not sure it worth it, perhaps taking into account above the -1
-> (in unsigned type) returned on ->get_state() can suffice as not supporting
-> feature?
+diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+index 59edb5a1ffe2..ee171e663a18 100644
+--- a/drivers/vhost/vhost.c
++++ b/drivers/vhost/vhost.c
+@@ -1981,7 +1981,7 @@ static int vhost_update_used_flags(struct vhost_virtqueue *vq)
+ 	return 0;
+ }
+ 
+-static int vhost_update_avail_event(struct vhost_virtqueue *vq, u16 avail_event)
++static int vhost_update_avail_event(struct vhost_virtqueue *vq)
+ {
+ 	if (vhost_put_avail_event(vq))
+ 		return -EFAULT;
+@@ -2527,7 +2527,7 @@ bool vhost_enable_notify(struct vhost_dev *dev, struct vhost_virtqueue *vq)
+ 			return false;
+ 		}
+ 	} else {
+-		r = vhost_update_avail_event(vq, vq->avail_idx);
++		r = vhost_update_avail_event(vq);
+ 		if (r) {
+ 			vq_err(vq, "Failed to update avail event index at %p: %d\n",
+ 			       vhost_avail_event(vq), r);
+-- 
+2.31.1
 
-In my eyes that's a bad idea. You have to touch most drivers anyhow to
-set the -1. So the outcome is the worst possible combination: Many
-changes and still much implicit logic distributed between the drivers
-and the core about what is supported and what not.
-
-(Or you have to initialize .count =3D -1 before calling the get_state
-callback. Then you get rid of "have to touch most drivers". But that's
-still ugly IMO.)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---u72jbzcajrumdalo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHgMxAACgkQwfwUeK3K
-7AmDBQf7B23shrh6K5S5ryerAtQS5Hv4ZvlQkTE8d0pz8YXutZTfHVgj5xnaF94f
-4Q2orikGdjr9iSCmc64nxpcYLTBuTBScU1DGdUcplnr/o2xj0wkjlbcHDSYN/cl7
-ulTv1hWy14Ux7F5n6jHRJR16U6pn4Vl3PiCCXUO0iTpZe7/I38bgHLcX+EgCzm1t
-VWBxwr2Kza5c0ph4q8NSY/cPHoBsxJFB2pHnqfTJl5FyA3wCKaA/S+4TjXmI4H+F
-NtZqUoCBnKzJoClrL50v4EOWJPp6WSSS77nyxtv4Ni4stC4mBw4spo9a2An4LOvm
-dQtt5mCoKGZm7IzAp/xr2NYXjviKrw==
-=f3+d
------END PGP SIGNATURE-----
-
---u72jbzcajrumdalo--

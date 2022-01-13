@@ -2,204 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B4948D657
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 12:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F36E248D655
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 12:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbiAMLJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 06:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231831AbiAMLJw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 06:09:52 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA407C061748
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 03:09:51 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n7xyF-0006Q7-HJ; Thu, 13 Jan 2022 12:08:43 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n7xy5-00A3Hi-BT; Thu, 13 Jan 2022 12:08:32 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n7xy3-0005lb-Nu; Thu, 13 Jan 2022 12:08:31 +0100
-Date:   Thu, 13 Jan 2022 12:08:31 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Auger <eric.auger@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        netdev@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
- <YdyilpjC6rtz6toJ@lunn.ch>
- <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
- <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zcdy7nemyxfoojub"
+        id S233962AbiAMLJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 06:09:53 -0500
+Received: from mail-dm6nam10on2133.outbound.protection.outlook.com ([40.107.93.133]:13543
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230045AbiAMLJv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 06:09:51 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y1iLPUIyd1jzGHuKBENxNFKSR72+tlrtrqWejTWpV22rSvZSr9vTCCl+TUlvVWybyGzf3IvYAusupTMvrk7ijIMzclXuNeuv1UgZxGnS5iLOZlfqOP5RJpqfMjGfvDTZU7CO7sTjcD7qdGoatNmNFZs2cddhvFEfyLe3SqmCmtZbTEGymXTZQB49iuxQDqgd+2/cGNm5Zh8zR0ujtQ/RMOkHktVruE893GFdhC9GNtyQZkkqb3DxCSg3Q7ci3mf2vbeuvU1Bcihufzh2baQ/4FSZHZweJ4GjaBpvBjbgCGgx4p7yNkQPHCYv5J9mf4bv18c0M9Hu5/MJMnJRM+6Zmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1PaQYlNOv43X1+3BPIn9V/3jqu6v7Z4NB5vDWwMukI4=;
+ b=VpfBu+rNcbF928gLqJdky5NT5tum7ULUMfyQ0IDKwKBH7eSTnNog5skI9pl+B6pNklQsqRK+bbapeHp5F7vXIChWzQ+1OGEEs1Knajbv/upk8dyUgpf/XKj1Lj8wG3Fz2Id1XkZqig6eoqaOyih5z4hUUxtoqQyMb9tM8aDGN8cixw0rY8xmZAS7N0oCVod7xtzwIXZZHCeScG3rEA9973cKnQaXpp+b6KRSbDaHenK6xXnRJs8jYZGa90DFPhewG3VbmiQpAcbEy3ar/PCUVfBkCHmUKfxNN4QCZqBeN2NUWHFfxBSYwaOEX5B+3lrKgbQpvaXcnxrmL8vWOt6/LQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1PaQYlNOv43X1+3BPIn9V/3jqu6v7Z4NB5vDWwMukI4=;
+ b=PosGQM/D5B4+OSAIe7qLC9nv3NPA4GBH8sCRb55BAYyNf79DGxG45PHJtIhm6hpihsV7KCJ3ppZVtTQBcurX56LCH8LSIjv6g3eOCFNAOG2x1q1kfioEGwbj672D2w8/yjIj34cSVMR5cOz4rD2gQ1W2ma2Sj86BEB3XFFNZF9Q=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by BN0PR04MB7934.namprd04.prod.outlook.com (2603:10b6:408:151::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Thu, 13 Jan
+ 2022 11:09:48 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::8c2c:1b0f:8516:a941]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::8c2c:1b0f:8516:a941%4]) with mapi id 15.20.4888.011; Thu, 13 Jan 2022
+ 11:09:48 +0000
+Date:   Thu, 13 Jan 2022 19:09:41 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        chunkuang.hu@kernel.org, matthias.bgg@gmail.com,
+        narmstrong@baylibre.com, robert.foss@linaro.org, daniel@ffwll.ch,
+        airlied@linux.ie, p.zabel@pengutronix.de
+Cc:     jitao.shi@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [v8, PATCH 1/3] drm/dsi: transfer DSI HS packets ending at the
+ same time
+Message-ID: <20220113110941.GA2480843@anxtwsw-Precision-3640-Tower>
+References: <20220112153639.12343-1-rex-bc.chen@mediatek.com>
+ <20220112153639.12343-2-rex-bc.chen@mediatek.com>
+ <2f0fd4a9-4d24-a6b7-12ae-51763f304761@intel.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yd9L9SZ+g13iyKab@sirena.org.uk>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <2f0fd4a9-4d24-a6b7-12ae-51763f304761@intel.com>
+X-ClientProxiedBy: HK2PR03CA0056.apcprd03.prod.outlook.com
+ (2603:1096:202:17::26) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1b6869c7-1625-4697-5e8f-08d9d6853651
+X-MS-TrafficTypeDiagnostic: BN0PR04MB7934:EE_
+X-Microsoft-Antispam-PRVS: <BN0PR04MB79349927338C469F4BFB70ADC7539@BN0PR04MB7934.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kCjVDB2T8iiugSAcKm7fvxBxopnwVu5yGnHiqPE73T3PKGP5mlO/oK0NURjFLaOaGUoBfxWTdWAaoQdXvOl+5Mi733iif/ZKJz5VXBHfyC5W1FYxErtUbYQvGn3LJNTid+CHE9o3aUrLyPxfuzB58/C3nT/oNX5HQCVojP4W0NIAvtRIpauYUJDevyVBYF5fUPfSvFqHd334zIq0Nxn1BoD8KOX+MutLzrbS30oqZpA+coRYHykUNEZa+ZaLTs6yrZguOQLSKYFmrA1o5hUBt5mFIEVfEFpvzv9Wd4MaQB7aLScjDUYrKs8QVe6/fS9GhTMlTjqQcvbNO4BTWJ+5W2X0OFsfsHu4Wh6FN0TlNcfSf38WxA+sBXd6jWTglgxJuNt2ArKdhoHHbTZdaXrN7TtnqdVJ8DIJZJUozOBaZxzvGSBQWXEUg0O+rfsZp8A4KSkhT8K0uY0y8qXN08odONNRZnALSfOxMJtS+bcTuTYkisjJj+yOM6fwkUwXPrPXQeziQaPX2HL1LHNY7ZwQKdnAybrrp0Q4rNgsHUt5T46F2A2BC1FpWAUgx2BOrYSnt2VN2kvKtOuFyC1SeJMwOuoY0tR+uqATpxac8MEyhU5KPGIHt23Pojw3YYBfoREph2fGi2Xxq3pIL2z9ptjjc5Ckf3Hf60CD+LMtZm3uqHcrrSjhoyX/CVTkBvts+noqX6iDSnlCTWmtPoirTDysTQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(33656002)(4326008)(186003)(6666004)(55236004)(26005)(110136005)(7416002)(52116002)(508600001)(83380400001)(66476007)(66946007)(5660300002)(8676002)(9686003)(6512007)(2906002)(33716001)(8936002)(86362001)(66556008)(6486002)(6506007)(1076003)(53546011)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZKBKNnJ+rZ96N9F2QxS7ecwmvJD2qENePFVKV3eF5FoQgymqie1A2sF0lfoF?=
+ =?us-ascii?Q?IuWknPjisqvABGvug46soLIziKothESZanqkBWzZN5H9ceWFx99TG2FTys66?=
+ =?us-ascii?Q?FBSlNNeg4rHGYSbjChL2EPIF+AWN7z9CyyFSS1eGxm/SspjDIOHBt2B4piv+?=
+ =?us-ascii?Q?qy3vF5GKt8KsQCyuOE78wimCrD9PSw6hWppSqQAQoGWTjGFDtIk0khHFQ63b?=
+ =?us-ascii?Q?sr+eZWkYJxyoK6a+QZXTDEgqnZz8hyXk+O1NlsOEBUgyFh54/ixNgbHH4Q8i?=
+ =?us-ascii?Q?QrE9NeeHhFxJ5PnqdLCamPpBytkXPfGvI0ZiesEi2u7LtJ/mIbTtajaz7oEk?=
+ =?us-ascii?Q?Ad4Jdsb9LsThAqvYbLd1Yqcy3ecRY1JeoC0doEvOFGTfdrnwgVX7DkHFQCyG?=
+ =?us-ascii?Q?9RVfZcS92NBWhFFz0RlxXRS+0nTRmf5+gd91sfd1XvMsLswDYxKAfOBqLYqS?=
+ =?us-ascii?Q?JW9iiZ+/9KXXhw3IbFvrz7v7X0innaBfFniPAAcTxAD3W82bqjjPLXNqb/DJ?=
+ =?us-ascii?Q?+fuuBR4gWoAl7enqsj6kyqNO7VE/nYG4sO8d2nLsQ7+yM0NPSGHGpoI03n4l?=
+ =?us-ascii?Q?AtRwH5pIt9TdEwd1JistmuLEq/ZuhYeATIR64Hy6dMm6D9vFFXKaealiFeaK?=
+ =?us-ascii?Q?uQuBsX6tigIe2+9XQp00g8tHl3O1sMPzbNb5r5zGYZrkCl40cvL9QdRDuTla?=
+ =?us-ascii?Q?69G0qn6A+n7c14yGW7B+enwzpZLChcPBvP2Z9k2aHKWUd64nEygMzIBvaK+N?=
+ =?us-ascii?Q?DTND0KKNH87x9ds7o7Hd74vibud1kquCkawunQJ0ZAtTtEfEMCCvM1dzR2Ex?=
+ =?us-ascii?Q?t21TDhmNb2SLrXYh6aGhN6VysGTBYFoxZKZ1eB55gi5MtmW+cJlgAsRLnt7a?=
+ =?us-ascii?Q?DAO9eBGfUyLfkzQ0ZFT24aGezzrhA02hyhuw+FkPV29/G62scn5OjBqRnHrr?=
+ =?us-ascii?Q?Ai/w4tZ3L9PPyEE0yq8BApgSYMCYj5TWOdougmlh19lK2pYcWkHuW7YX2lbg?=
+ =?us-ascii?Q?RqtetSgKbkTtwSrERyosyD0D12SliDy19tTXOR0QhNdxAguXpfTtY8dA2rMr?=
+ =?us-ascii?Q?DW9QdPXTmukQbQhmK9+vx+KiN5DwHbYcjLdVyYrX11GfOI8z8jznnv53RebJ?=
+ =?us-ascii?Q?j222mx8yyJb5xhjggc9lwqbcrJ4oca8MHR4TuUCcii2tYKrv+p46UNoRI5ML?=
+ =?us-ascii?Q?91jSw1ESWE4PgrOcgFZ00wXzp7YrlDcReJTivKc5gGRRyU47mP/q9J9ApFby?=
+ =?us-ascii?Q?Un1D/EilhYQy1oZ0qkognCf9boC/pSTEUnTz5nq9DZDinzHP5E1RgRtnMaK3?=
+ =?us-ascii?Q?X5mz93qnqyRvC/J/C8+uJc7mFFmPpTJN9Ib1LujbE8mtMLZVBQ/drdZYF5sh?=
+ =?us-ascii?Q?MFBcaAHJ7G7oYGTeGUYeQr4ohiTS0fLgy+N1gkiGt/FN11XEeeDLdBx4hlhs?=
+ =?us-ascii?Q?xkBO0J8JjgkFkK6y3eva9OGdSxVuqCMuVlDF/EhgH0PSryj2N+FdiHh+uSK0?=
+ =?us-ascii?Q?R5PLjH6kozLnYYrZJ6guxNDNQNm1SFxRD1hHZkLs6/K5p6ym10jhsosdg199?=
+ =?us-ascii?Q?b11aDls+3BlvAD7S7L2b0qmD3w71o+umOXQhwWqVsONIjFwhg53GHBDGoHb3?=
+ =?us-ascii?Q?XKSjW9sepYBsF+FJZK6L5Hs=3D?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b6869c7-1625-4697-5e8f-08d9d6853651
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2022 11:09:48.3994
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YTML3jCppFanrSPEez2+mv8aPUHDFAMTa8/1JZE9RSUBgEk0jxJ54yUGlSbh8pP0v/v5AGvHQYaNLtUz3iYbNg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR04MB7934
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andrzej Hajda,
 
---zcdy7nemyxfoojub
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jan 13, 2022 at 01:14:14AM +0100, Andrzej Hajda wrote:
+> Hi,
+> 
+> On 12.01.2022 16:36, Rex-BC Chen wrote:
+> > Since a HS transmission is composed of an arbitrary number
+> > of bytes that may not be an integer multiple of lanes, some
+> > lanes may run out of data before others.
+> > (Defined in 6.1.3 of mipi_DSI_specification_v.01-02-00)
+> > 
+> > However, for some DSI RX devices (for example, anx7625),
+> > there is a limitation that packet number should be the same
+> > on all DSI lanes. In other words, they need to end a HS at
+> > the same time.
+> 
+> 
+> Is it documented in anx7625 manual? Is it confirmed with hw team?
+We have application note, and it is confirmed by designer, hw team.
+> 
+> If not, how it was detected? Have you tried to find workaround for it by
+> inspecting registers, maybe it is just matter of clock gating deferral,
+> timings or sth similar ???.
+> 
+> > 
+> > Because this limitation is for some specific DSI RX devices,
+> > it is more reasonable to put the enable control in these
+> > DSI RX drivers. If DSI TX driver knows the information,
+> > they can adjust the setting for this situation.
+> > 
+> > Therefore, add a flag to control this situation beacuse the
+> > mipi DSI specification is not forbidden this situation.
+> 
+> 
+> I am not sure what you mean here.
+> 
+> I have an impression (according t 6.1.3 of spec) that devices should allow
+> transmission of arbitrary number of bytes, so this is bug in hw/fw.
+This is anx7625 bridge chip design limitation.
 
-On Wed, Jan 12, 2022 at 09:45:25PM +0000, Mark Brown wrote:
-> On Wed, Jan 12, 2022 at 10:31:21PM +0100, Uwe Kleine-K=F6nig wrote:
-> > On Wed, Jan 12, 2022 at 11:27:02AM +0100, Geert Uytterhoeven wrote:
->=20
-> (Do we really need *all* the CCs here?)
+> 
+> The question if it can be fixed. If not patches are welcome.
+> 
+> 
+> > 
+> > Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> > Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> > ---
+> >   include/drm/drm_mipi_dsi.h | 2 ++
+> >   1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/include/drm/drm_mipi_dsi.h b/include/drm/drm_mipi_dsi.h
+> > index 147e51b6d241..df4d15345326 100644
+> > --- a/include/drm/drm_mipi_dsi.h
+> > +++ b/include/drm/drm_mipi_dsi.h
+> > @@ -177,6 +177,8 @@ struct mipi_dsi_device_info {
+> >    * @lp_rate: maximum lane frequency for low power mode in hertz, this should
+> >    * be set to the real limits of the hardware, zero is only accepted for
+> >    * legacy drivers
+> > + * @hs_packet_end_aligned: transfer DSI HS packets ending at the same time
+> > + * for all DSI lanes
+> >    */
+> >   struct mipi_dsi_device {
+> >   	struct mipi_dsi_host *host;
+> > @@ -189,6 +191,7 @@ struct mipi_dsi_device {
+> >   	unsigned long mode_flags;
+> >   	unsigned long hs_rate;
+> >   	unsigned long lp_rate;
+> > +	bool hs_packet_end_aligned;
+> 
+> 
+> Maybe it would be better to add another mode_flag.
+mode_flag should be OK.
 
-It's probably counteractive to finding an agreement because there are
-too many opinions on that matter. But I didn't dare to strip it down,
-too :-)
-
-> > That convinces me, that platform_get_irq_optional() is a bad name. The
-> > only difference to platform_get_irq is that it's silent. And returning
-> > a dummy irq value (which would make it aligned with the other _optional
-> > functions) isn't possible.
->=20
-> There is regulator_get_optional() which is I believe the earliest of
-> these APIs, it doesn't return a dummy either (and is silent too) - this
-> is because regulator_get() does return a dummy since it's the vastly
-> common case that regulators must be physically present and them not
-> being found is due to there being an error in the system description.
-> It's unfortunate that we've ended up with these two different senses for
-> _optional(), people frequently get tripped up by it.
-
-Yeah, I tripped over that one already, too. And according to my counting
-this results in three different senses now :-\ :
-
- a) regulator
-    regulator_get returns a dummy, regulator_get_optional returns ERR_PTR(-=
-ENODEV)
- b) clk + gpiod
-    ..._get returns ERR_PTR(-ENODEV), ..._get_optional returns a dummy
- c) platform_get_irq()
-    platform_get_irq_optional() is just a silent variant of
-    platform_get_irq(); the return values are identical.
-   =20
-This is all very unfortunate. In my eyes b) is the most sensible
-sense, but the past showed that we don't agree here. (The most annoying
-part of regulator_get is the warning that is emitted that regularily
-makes customers ask what happens here and if this is fixable.)
-
-I think at least c) is easy to resolve because
-platform_get_irq_optional() isn't that old yet and mechanically
-replacing it by platform_get_irq_silent() should be easy and safe.
-And this is orthogonal to the discussion if -ENOXIO is a sensible return
-value and if it's as easy as it could be to work with errors on irq
-lookups.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---zcdy7nemyxfoojub
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHgCCsACgkQwfwUeK3K
-7AktbAf/UzNin6+fnXTmkdrTvXWaXCV8TB76EIUtIdNWwJEjmXxWes5jyBpp/jXj
-7gSmYT3gi4oK0wjB6dKmqF6jba5/RPL4cdS6/8iQDp32Xey0hzWymBPENLc/Nxt5
-Ge81cdot6EFxqSkuW1Zbe55wzmNUmEsez7+e+8gJAviPB6zQndDE/zAkwxczzb04
-GfD6Uixgm4a29NwXNIignwNm8pACez/px2A8cVhILZ8135X0rdwYM17BiQtfM5Uq
-s2hZsLfxWm9ZvdyxA7gGvsfefPmiPfS3k/HWagHMDB8nQq4vqnMmPTu01YJs34dM
-+ycJZkglW3eJnCZ9Fr5sjnuP6uLExw==
-=5Hn7
------END PGP SIGNATURE-----
-
---zcdy7nemyxfoojub--
+Thanks,
+Xin
+> 
+> 
+> Regards
+> 
+> Andrzej
+> 
+> 
+> 
+> >   };
+> >   #define MIPI_DSI_MODULE_PREFIX "mipi-dsi:"

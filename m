@@ -2,78 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD2548DC0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9422F48DC0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236806AbiAMQlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 11:41:24 -0500
-Received: from giacobini.uberspace.de ([185.26.156.129]:34838 "EHLO
-        giacobini.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236805AbiAMQlX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 11:41:23 -0500
-Received: (qmail 25316 invoked by uid 990); 13 Jan 2022 16:41:22 -0000
-Authentication-Results: giacobini.uberspace.de;
-        auth=pass (plain)
-From:   Soenke Huster <soenke.huster@eknoes.de>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Soenke Huster <soenke.huster@eknoes.de>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] Bluetooth: fix null ptr deref on hci_sync_conn_complete_evt
-Date:   Thu, 13 Jan 2022 17:40:42 +0100
-Message-Id: <20220113164042.259990-1-soenke.huster@eknoes.de>
-X-Mailer: git-send-email 2.34.1
+        id S236828AbiAMQmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 11:42:08 -0500
+Received: from foss.arm.com ([217.140.110.172]:48516 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231919AbiAMQmE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 11:42:04 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3223E106F;
+        Thu, 13 Jan 2022 08:42:04 -0800 (PST)
+Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED6483F774;
+        Thu, 13 Jan 2022 08:42:02 -0800 (PST)
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     Josef Bacik <josef@toxicpanda.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, guro@fb.com, clm@fb.com
+Subject: Re: [REGRESSION] 5-10% increase in IO latencies with nohz balance patch
+In-Reply-To: <YdMhQRq1K8tW+S05@localhost.localdomain>
+References: <87bl22byq2.mognet@arm.com> <YaUuyN3h07xlEx8j@localhost.localdomain> <878rx6bia5.mognet@arm.com> <87wnklaoa8.mognet@arm.com> <YappSLDS2EvRJmr9@localhost.localdomain> <87lf0y9i8x.mognet@arm.com> <87v8zx8zia.mognet@arm.com> <YbJWBGaGAW/MenOn@localhost.localdomain> <99452126-661e-9a0c-6b51-d345ed0f76ee@leemhuis.info> <87tuf07hdk.mognet@arm.com> <YdMhQRq1K8tW+S05@localhost.localdomain>
+Date:   Thu, 13 Jan 2022 16:41:57 +0000
+Message-ID: <87k0f37fl6.mognet@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Bar: ++
-X-Rspamd-Report: BAYES_HAM(-0.045106) R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) SUSPICIOUS_RECIPS(1.5)
-X-Rspamd-Score: 2.854893
-Received: from unknown (HELO unkown) (::1)
-        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Thu, 13 Jan 2022 17:41:22 +0100
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This event is specified just for SCO and eSCO link types.
-On the reception of a HCI_Synchronous_Connection_Complete for a BDADDR
-of an existing LE connection, LE link type and a status that triggers the
-second case of the packet processing a NULL pointer dereference happens,
-as conn->link is NULL.
+On 03/01/22 11:16, Josef Bacik wrote:
+> On Wed, Dec 22, 2021 at 04:07:35PM +0000, Valentin Schneider wrote:
+>> 
+>> Hi,
+>> 
+>> On 22/12/21 13:42, Thorsten Leemhuis wrote:
+>> > What's the status here? Just wondering, because there hasn't been any
+>> > activity in this thread since 11 days and the festive season is upon us.
+>> >
+>> > Was the discussion moved elsewhere? Or is this still a mystery? And if
+>> > it is: how bad is it, does it need to be fixed before Linus releases 5.16?
+>> >
+>> 
+>> I got to the end of bisect #3 yesterday, the incriminated commit doesn't
+>> seem to make much sense but I've just re-tested it and there is a clear
+>> regression between that commit and its parent (unlike bisect #1 and #2):
+>> 
+>> 2127d22509aec3a83dffb2a3c736df7ba747a7ce mm, slub: fix two bugs in slab_debug_trace_open()
+>> write_clat_ns_p99     195395.92     199638.20      4797.01    2.17%
+>> write_iops             17305.79      17188.24       250.66   -0.68%
+>> 
+>> write_clat_ns_p99     195543.84     199996.70      5122.88    2.28%
+>> write_iops             17300.61      17241.86       251.56   -0.34%
+>> 
+>> write_clat_ns_p99     195543.84     200724.48      5122.88    2.65%
+>> write_iops             17300.61      17246.63       251.56   -0.31%
+>> 
+>> write_clat_ns_p99     195543.84     200445.41      5122.88    2.51%
+>> write_iops             17300.61      17215.47       251.56   -0.49%
+>> 
+>> 6d2aec9e123bb9c49cb5c7fc654f25f81e688e8c mm/mempolicy: do not allow illegal MPOL_F_NUMA_BALANCING | MPOL_LOCAL in mbind() 
+>> write_clat_ns_p99     195395.92     197942.30      4797.01    1.30%
+>> write_iops             17305.79      17246.56       250.66   -0.34%
+>> 
+>> write_clat_ns_p99     195543.84     196183.92      5122.88    0.33%
+>> write_iops             17300.61      17310.33       251.56    0.06%
+>> 
+>> write_clat_ns_p99     195543.84     196990.71      5122.88    0.74%
+>> write_iops             17300.61      17346.32       251.56    0.26%
+>> 
+>> write_clat_ns_p99     195543.84     196362.24      5122.88    0.42%
+>> write_iops             17300.61      17315.71       251.56    0.09%
+>> 
+>> It's pure debug stuff and AFAICT is a correct fix...
+>> @Josef, could you test that on your side?
+>
+> Sorry, holidays and all that.  I see 0 difference between the two commits, and
+> no regression from baseline.  It'll take me a few days to recover from the
+> holidays, but I'll put some more effort into actively debugging wtf is going on
+> here on my side since we're all having trouble pinning down what's going
+> on.
 
-Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
----
-v2: Fixed the obviously wrong boolean comparison
+Humph, that's unfortunate... I just came back from my holidays, so I'll be
+untangling my inbox for the next few days. Do keep us posted!
 
-I found this null pointer dereference while fuzzing bluetooth-next.
-On the described behaviour, a null ptr deref in line 4723 happens, as
-conn->link is NULL. According to the Core spec, Link_Type must be SCO or eSCO,
-all other values are reserved for future use. Checking that mitigates a null
-pointer dereference.
-
- net/bluetooth/hci_event.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index 05997dff5666..d68f5640fb38 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -4661,6 +4661,11 @@ static void hci_sync_conn_complete_evt(struct hci_dev *hdev, void *data,
- 	struct hci_ev_sync_conn_complete *ev = data;
- 	struct hci_conn *conn;
- 
-+	if (!(ev->link_type == SCO_LINK || ev->link_type == ESCO_LINK)) {
-+		bt_dev_err(hdev, "Ignoring connect complete event for invalid link type");
-+		return;
-+	}
-+
- 	bt_dev_dbg(hdev, "status 0x%2.2x", ev->status);
- 
- 	hci_dev_lock(hdev);
--- 
-2.34.1
-
+> Thanks,
+>
+> Josef

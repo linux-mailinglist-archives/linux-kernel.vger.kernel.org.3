@@ -2,168 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF3448D571
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8966148D575
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbiAMKKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiAMKKf (ORCPT
+        id S231278AbiAMKLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:11:47 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44366 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229762AbiAMKLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:10:35 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EFAC06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:10:34 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id e3so14889924lfc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:10:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RadJqXCNgJSuxrAQxYqXMQELWeTlrMxxcxtdQOTtr8I=;
-        b=KOvWWdg4A6g44OmDCoCZvBPZQEI06nFjYj0Pw7ezvtKVkrF/I1gr5ijlDWIufHUr2v
-         LH2Ehr3FvEMxB55ftrqKAiSs2ncdLIO3FRGyCoNnpE6D8CpD3Wa4aan01lDy7AC214Vm
-         pZyet1QGfcz9b6tgyiWBMy15Q2n38nRXJYjZpRuYQfln/gieeGCzhaAvi0Vwmn5tOY1N
-         N/hmtiy4BNsqVvpUMoyV+K+AOAv4Fn6Gy6p6Me/PEv4bPJWOjVJdwj71FKcpJ/T1y6Ii
-         schqddqevKrc8eZiZAR93pqgVxItnyfWhPQnK7t/FIbLY78oJEWdg0HLh3fonHFMBpu6
-         sVYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RadJqXCNgJSuxrAQxYqXMQELWeTlrMxxcxtdQOTtr8I=;
-        b=HJI2JpIoPjRoV1/MjvC/JtF4mWU4d70HU+mK2xW7p+7atJRoxcHRAaO3Nyftuj0ZgK
-         jQ1N94MgV14X4z278VT/sOMz3/d1nrt2PjPztANeW49KYoAAViQH8Vsv7pxXXuB/H/Jw
-         QkC9xW1+Dq0BCbvf+wSKL3zkNLMIUYt5yO0nzeOZ6eiOX55QncdAoqdRzi/98Q+N2TOh
-         fJiRPPJqQwnTjoHNkrMZgOryY3MTtDeECHsQ65/CLjvFU7gqWfH86hrzL4+0TcP4fcc6
-         ANgMF+JsRMFbxdEMOTlBDAUMlEcJOXsIunScA/pTd/oZfBDE9k8ssU+d9gHvsKSXG4fV
-         78Og==
-X-Gm-Message-State: AOAM5320JhydLkm81zL18cQjhaMzNOLgaPza6OwtDyCDmf2Aewr6G8HP
-        9Gc/cTLGZ7TCAJD8ipVTjRYaM4ah4Ikbe2IdRzSp2+ftMXpSLQ==
-X-Google-Smtp-Source: ABdhPJwh+EyRBzFDdoNIF6CuwmhbkxgFXBjne0410iYswXwVmwIk0qa395loxmGEQ4bdDlanGDsU9P7A1mHz/x422Ng=
-X-Received: by 2002:a2e:8751:: with SMTP id q17mr920669ljj.235.1642068632823;
- Thu, 13 Jan 2022 02:10:32 -0800 (PST)
+        Thu, 13 Jan 2022 05:11:46 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id E4E661F4585E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642068704;
+        bh=D/XYC6ZGl5zYQW2bPb5HgmDBOTYg/Taj7564Kp6Xo1w=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=mE4sw4YvYqPtPCeGgdYDQbOGYr1D0sRwnP4JUyOyjhZj86DL2KdqFn53kzdPhLzVf
+         Bw1VvaPOhimlqvAni2KTggbrrVF2tMVgZUYZ8GT3HumFLMHl/swIw8OEmuB63xYT9D
+         ry4EVMAhrR1d8HMl2egIRfzRMjosarxVeMM5DKaB83CPATfsl/FDKcekgbGiXopEIL
+         MnHuCbLxWgj6rZKBy6qsMzCkq0MxYh4lCNn7zCBOc/+l8UBmSPACrlbKg9pzt44nrH
+         jFeTmjYUIPMAWJwQeXwYslmZrcg0H+P/WZvI2jlUHmT8gdPkXem6ziG4wdUDcl9DH5
+         E8ZqIX9/NoQSw==
+Subject: Re: [PATCH v9 12/15] media: mtk-vcodec: enc: Remove
+ mtk_vcodec_release_enc_pm
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        David Airlie <airlied@linux.ie>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Will Deacon <will.deacon@arm.com>,
+        dri-devel@lists.freedesktop.org, yf.wang@mediatek.com,
+        anthony.huang@mediatek.com, youlin.pei@mediatek.com,
+        Irui Wang <irui.wang@mediatek.com>,
+        Evan Green <evgreen@chromium.org>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, mingyuan.ma@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>, libo.kang@mediatek.com,
+        yi.kuo@mediatek.com, linux-mediatek@lists.infradead.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>, anan.sun@mediatek.com,
+        srv_heupstream@mediatek.com, acourbot@chromium.org,
+        linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
+        iommu@lists.linux-foundation.org, Daniel Vetter <daniel@ffwll.ch>,
+        Robin Murphy <robin.murphy@arm.com>
+References: <20211112105509.12010-1-yong.wu@mediatek.com>
+ <20211112105509.12010-13-yong.wu@mediatek.com>
+ <68c3a573-8453-38e9-93b2-2067bedcd06f@collabora.com>
+Message-ID: <4bd9e849-96dd-6f1c-2841-979459366ee5@collabora.com>
+Date:   Thu, 13 Jan 2022 11:11:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20220112215625.4144871-1-shy828301@gmail.com>
-In-Reply-To: <20220112215625.4144871-1-shy828301@gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 13 Jan 2022 11:10:04 +0100
-Message-ID: <CAG48ez3y2YGfKRJ6ocR1GT9w9iuGfyypbE+cQgYVZhSta89WUg@mail.gmail.com>
-Subject: Re: [PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     kirill.shutemov@linux.intel.com, willy@infradead.org,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <68c3a573-8453-38e9-93b2-2067bedcd06f@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 10:56 PM Yang Shi <shy828301@gmail.com> wrote:
-> The syzbot reported the below BUG:
->
-> kernel BUG at include/linux/page-flags.h:785!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 4392 Comm: syz-executor560 Not tainted 5.16.0-rc6-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
-> RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
-> Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
-> RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
-> RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
-> R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
-> R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
-> FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  page_mapcount include/linux/mm.h:837 [inline]
->  smaps_account+0x470/0xb10 fs/proc/task_mmu.c:466
->  smaps_pte_entry fs/proc/task_mmu.c:538 [inline]
->  smaps_pte_range+0x611/0x1250 fs/proc/task_mmu.c:601
->  walk_pmd_range mm/pagewalk.c:128 [inline]
->  walk_pud_range mm/pagewalk.c:205 [inline]
->  walk_p4d_range mm/pagewalk.c:240 [inline]
->  walk_pgd_range mm/pagewalk.c:277 [inline]
->  __walk_page_range+0xe23/0x1ea0 mm/pagewalk.c:379
->  walk_page_vma+0x277/0x350 mm/pagewalk.c:530
->  smap_gather_stats.part.0+0x148/0x260 fs/proc/task_mmu.c:768
->  smap_gather_stats fs/proc/task_mmu.c:741 [inline]
->  show_smap+0xc6/0x440 fs/proc/task_mmu.c:822
->  seq_read_iter+0xbb0/0x1240 fs/seq_file.c:272
->  seq_read+0x3e0/0x5b0 fs/seq_file.c:162
->  vfs_read+0x1b5/0x600 fs/read_write.c:479
->  ksys_read+0x12d/0x250 fs/read_write.c:619
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7faa2af6c969
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007faa2aefd288 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-> RAX: ffffffffffffffda RBX: 00007faa2aff4418 RCX: 00007faa2af6c969
-> RDX: 0000000000002025 RSI: 0000000020000100 RDI: 0000000000000003
-> RBP: 00007faa2aff4410 R08: 00007faa2aefd700 R09: 0000000000000000
-> R10: 00007faa2aefd700 R11: 0000000000000246 R12: 00007faa2afc20ac
-> R13: 00007fff7e6632bf R14: 00007faa2aefd400 R15: 0000000000022000
->  </TASK>
-> Modules linked in:
-> ---[ end trace 24ec93ff95e4ac3d ]---
-> RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
-> RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
-> Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
-> RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
-> RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
-> R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
-> R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
-> FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->
-> The reproducer was trying to reading /proc/$PID/smaps when calling
-> MADV_FREE at the mean time.  MADV_FREE may split THPs if it is called
-> for partial THP.  It may trigger the below race:
->
->          CPU A                         CPU B
->          -----                         -----
-> smaps walk:                      MADV_FREE:
-> page_mapcount()
->   PageCompound()
->                                  split_huge_page()
->   page = compound_head(page)
->   PageDoubleMap(page)
->
-> When calling PageDoubleMap() this page is not a tail page of THP anymore
-> so the BUG is triggered.
->
-> This could be fixed by elevated refcount of the page before calling
-> mapcount, but it prevents from counting migration entries, and it seems
-> overkilling because the race just could happen when PMD is split so all
-> PTE entries of tail pages are actually migration entries, and
-> smaps_account() does treat migration entries as mapcount == 1 as Kirill
-> pointed out.
->
-> Add a new parameter for smaps_account() to tell this entry is migration
-> entry then skip calling page_mapcount().  Don't skip getting mapcount for
-> device private entries since they do track references with mapcount.
->
-> Reported-by: syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com
+Il 11/01/22 11:57, AngeloGioacchino Del Regno ha scritto:
+> Il 12/11/21 11:55, Yong Wu ha scritto:
+>> After this patchset, mtk_vcodec_release_enc_pm has only one line.
+>> then remove that function, use pm_runtime_disable instead.
+>>
+>> meanwhile, mtk_vcodec_init_enc_pm only operate for the clocks,
+>> rename it from the _pm to _clk.
+>>
+>> No functional change.
+>>
+>> CC: Tiffany Lin <tiffany.lin@mediatek.com>
+>> CC: Irui Wang <irui.wang@mediatek.com>
+>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> 
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
 
-maybe add:
+Hello Yong,
+the mtk-vcodec patches were merged in Yunfei's vcodec patch series and Hans has
+scheduled that for v5.18.
 
-Fixes: b1d4d9e0cbd0 ("proc/smaps: carefully handle migration entries")
+Can you please send a v10 and drop patches 10/15, 11/15, 12/15 (all of the
+media: mtk-vcodec: *) from this series?
 
-> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
+For the records, I think that after sending v10 this series is ready to be merged,
+as it was well reviewed and also tested on many MTK platforms.
+
+Thank you,
+- Angelo

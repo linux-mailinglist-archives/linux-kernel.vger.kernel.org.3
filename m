@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B39EA48D368
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE2548D38E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232901AbiAMII5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 03:08:57 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35046 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiAMII4 (ORCPT
+        id S232992AbiAMIZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 03:25:07 -0500
+Received: from smtpcmd15176.aruba.it ([62.149.156.176]:60404 "EHLO
+        smtpcmd15176.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229821AbiAMIZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 03:08:56 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D1FACB821C6;
-        Thu, 13 Jan 2022 08:08:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A500C36AED;
-        Thu, 13 Jan 2022 08:08:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642061333;
-        bh=fGppOKwts/UQmumuyGu94Gr0B26R/oF5wecYItkERg8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W2OF8mrKVIDoTiDK9H5MbNyXDJqp0Vl8NQoNzRCNwQwhZihdx+8aC0JWv49J+0dc3
-         +gimKBiGOedrAgCE2f6qs5ncHJ2ta++mvFWVgy9a1urzB/XhIJDXQw1wDgE4e8BekF
-         aBlbe+u3szNiZuBVXhnz0DWa1cj4BeMdPGuBbo+mnDfz/xMQeTylDzGKmNjYuDsOLe
-         gXrDcecO5zrPna1JosAZiucdVAoSwDLdqtjryAELBCg2EiZ7O2jQGSKIoLTOlYdmlR
-         lHFD0Jodk6LWuHD1aNb/ucIqa7K7db5too5VqhRhE7DOx5Sgi3sc9r831PwYh/oTi6
-         ApVSqaTMoms7g==
-Received: by mail-wm1-f48.google.com with SMTP id ay4-20020a05600c1e0400b0034a81a94607so2188153wmb.1;
-        Thu, 13 Jan 2022 00:08:53 -0800 (PST)
-X-Gm-Message-State: AOAM533eEqnMcyOUTrUv8PZc8c5fh6WJ/FYaW1Bw5mfys3aT6PAzZbMW
-        U/9qXuLpOgYcbrf7wf87nO4oLwRfXuTqmra+XvI=
-X-Google-Smtp-Source: ABdhPJzlNo9hTJdUbMaTWVOxiNCg8wO+mgluAAlRvMgO8203Q/53p5OTdqryVdIpOQWuQAu5yGLLVe93Y/DA2+fPsVs=
-X-Received: by 2002:a05:600c:3c9c:: with SMTP id bg28mr2718897wmb.190.1642061331868;
- Thu, 13 Jan 2022 00:08:51 -0800 (PST)
+        Thu, 13 Jan 2022 03:25:06 -0500
+X-Greylist: delayed 422 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Jan 2022 03:25:06 EST
+Received: from [192.168.1.56] ([79.0.204.227])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id 7vJ0n0l5QXfnt7vJ0nCTuY; Thu, 13 Jan 2022 09:18:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1642061882; bh=E8QqJWxJWNAWd8iW7hzgzQw25jkEtuY2BJyXz7LyYzE=;
+        h=Subject:To:From:Date:MIME-Version:Content-Type;
+        b=ZnHF7yMEDPTw/dtoXIUyLttFaQJyVadjjw19HKqVH3wL8aSOw9FDSiC0ADysr+RYd
+         ONODmQApDuJa+jBCmdebpkmD9+/LFEnHK2LFw73NK+cM2GME8ndQT/4zDVHivVQiIL
+         /fn53eLG20BDPGGqLDbahItjqex7zIsIHpJSgjMA2eSpVGEEWznJ1TNPzAlDTeXtRv
+         e0LqQCuOJTW8gFvt6lY5J6o6Eyvvh6eD5hwFjSFEwJ4vpjM9lwyVSGVTta9GgQIk4a
+         I56Kd0aNV3AxLYi2EdYy5JhBsX/g7opEnhmnbOfvSm8LZLsAveo/PfTqYqYK4I65Oa
+         a5p8x5PoFQEWg==
+Subject: Re: [PATCH] pps: clients: gpio: Propagate return value from
+ pps_gpio_probe
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Robert Hancock <robert.hancock@calian.com>
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        rasm@fe.up.pt, jamesnuss@nanometrics.ca, akpm@linux-foundation.org
+References: <20220112205214.2060954-1-robert.hancock@calian.com>
+ <Yd9DDJ2HmptwIITA@smile.fi.intel.com>
+From:   Rodolfo Giometti <giometti@enneenne.com>
+Message-ID: <d21aeae0-f75d-f8b9-032a-f4751696d467@enneenne.com>
+Date:   Thu, 13 Jan 2022 09:17:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220112131204.800307-1-Jason@zx2c4.com> <CACXcFmkauHRkTdD1zkr9QRCwG-uD8=7q9=Wk0_VFueRy-Oy+Nw@mail.gmail.com>
-In-Reply-To: <CACXcFmkauHRkTdD1zkr9QRCwG-uD8=7q9=Wk0_VFueRy-Oy+Nw@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 13 Jan 2022 09:08:40 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFhoyADsW9+79boCEV6zG7RZ3HquFStBUbGZoKEWVJAwQ@mail.gmail.com>
-Message-ID: <CAMj1kXFhoyADsW9+79boCEV6zG7RZ3HquFStBUbGZoKEWVJAwQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v1 0/3] remove remaining users of SHA-1
-To:     Sandy Harris <sandyinchina@gmail.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "Ted Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <Yd9DDJ2HmptwIITA@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfM+u+afPtUMvhHcHaGGnnOVaadRY15Ikdv31n6AVW3Mv9sr+eD4HlAVYl4XOLCfKqDo5/KW4XpXNYnsH5Zjag3auTetC9lIFguSkb8k1Kt502b/qBizV
+ xCgsOLtJ0ckxxjdcYE7RJ+Vfr9hPECdXeZ9tUroM8KH7bycs6GWe/ZldCnkEAA63jFn/EoS4xs5iWBF1x3pPr+5ofgcsIx+IKkc04deB1C56TL/9SLT2y7QV
+ Pu7sSoHWIReHGFxKTEgMWjGOrfunZjxGoC8r9tZHfpaNDixpMSb/wh/g/owsvZWRBC0kI8x2SXXvqjiEYKJMrVDPWsla2/4sknxxaXaScx34UqUBy689cz4U
+ tX8xZH2TElhf/yt41DNSPe69iICtU1DQY2jM04ZPHHcH7YZDCVhNx+n22pRsRHtbuR3LvfKS
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Jan 2022 at 04:24, Sandy Harris <sandyinchina@gmail.com> wrote:
->
-> Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> > There are currently two remaining users of SHA-1 left in the kernel: bpf
-> > tag generation, and ipv6 address calculation.
->
-> I think there are three, since drivers/char/random.c also uses it.
-> Moreover, there's some inefficiency there (or was last time I
-> looked) since it produces a 160-bit hash then folds it in half
-> to give an 80-bit output.
->
+On 12/01/22 22:07, Andy Shevchenko wrote:
+> On Wed, Jan 12, 2022 at 02:52:14PM -0600, Robert Hancock wrote:
+>> If the pps-gpio driver was probed prior to the GPIO device it uses, the
+>> devm_gpiod_get call returned an -EPROBE_DEFER error, but pps_gpio_probe
+>> replaced that error code with -EINVAL, causing the pps-gpio probe to
+>> fail and not be retried later. Propagate the error return value so that
+>> deferred probe works properly.
+> 
+> FWIW,
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-That code was removed, hence the two /remaining/ users.
+Acked-by: Rodolfo Giometti <giometti@enneenne.com>
+> 
+>> Fixes: 161520451dfa (pps: new client driver using GPIO)
+>> Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+>> ---
+>>  drivers/pps/clients/pps-gpio.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/pps/clients/pps-gpio.c b/drivers/pps/clients/pps-gpio.c
+>> index 35799e6401c9..2f4b11b4dfcd 100644
+>> --- a/drivers/pps/clients/pps-gpio.c
+>> +++ b/drivers/pps/clients/pps-gpio.c
+>> @@ -169,7 +169,7 @@ static int pps_gpio_probe(struct platform_device *pdev)
+>>  	/* GPIO setup */
+>>  	ret = pps_gpio_setup(dev);
+>>  	if (ret)
+>> -		return -EINVAL;
+>> +		return ret;
+>>  
+>>  	/* IRQ setup */
+>>  	ret = gpiod_to_irq(data->gpio_pin);
+>> -- 
+>> 2.31.1
+>>
+> 
 
-> A possible fix would be to use a more modern 512-bit hash.
-> SHA3 would be the obvious one, but Blake2 would work,
-> Blake3 might be faster & there are several other possibilities.
-> Hash context size would then match ChaCha so you could
-> update the whole CC context at once, maybe even use the
-> same context for both.
->
-> That approach has difficulties, Extracting 512 bits every
-> time might drain the input pool too quickly & it is overkill
-> for ChaCha which should be secure with smaller rekeyings.
->
-> If you look at IPsec, SSL & other such protocols, many
-> have now mostly replaced the hash-based HMAC
-> constructions used in previous generations with things
-> like Galois field calculations (e.g. AES-GCM) or other
-> strange math (e,g. poly 1305). These have most of the
-> desirable properties of hashes & are much faster. As
-> far as I know, they all give 128-bit outputs.
->
-> I think we should replace SHA-1 with GCM. Give
-> ChaCha 128 bits somewhat more often than current
-> code gives it 256.
 
-You are conflating MACs with hashes. A MAC does is not suitable for
-backtrack resistance, and GHASH in particular is really only suited to
-be used in the context of GCM.
+-- 
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming                     skype:  rodolfo.giometti

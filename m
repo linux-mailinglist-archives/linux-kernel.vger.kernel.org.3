@@ -2,81 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBAD48D2CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054F648D2CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbiAMHZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 02:25:53 -0500
-Received: from mail-ed1-f50.google.com ([209.85.208.50]:41864 "EHLO
-        mail-ed1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbiAMHZw (ORCPT
+        id S230495AbiAMH0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 02:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230417AbiAMH0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 02:25:52 -0500
-Received: by mail-ed1-f50.google.com with SMTP id t24so19643656edi.8;
-        Wed, 12 Jan 2022 23:25:51 -0800 (PST)
+        Thu, 13 Jan 2022 02:26:07 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EBEC061751
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 23:26:07 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id o15so16347521lfo.11
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 23:26:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LqEz1tdi+Dd5kBFVgy7VzOmS5HR1fqUYps8D18GxVbY=;
+        b=cINt8NPb6J2QETAMUVvusHlCVGnH2oeK/jZ+W0YX50kGkDXF01Wdu6JPkeqwhjLpSp
+         YYji7kjsL7guNBXqSVodAvb32hBKB4e7XboR0VXXP37z1ABNQ8WhZYIWNal1LEWy6JRE
+         9Qsn72zK951tYkCBa8jZelBOsNb9JEQcwHeMe85fiDcOkkRi+P2Khsu3kPtQSTnPCd+a
+         7InBhMnmSBDqo0/0vYYAXTFjYMAMK6158NP32i8K/HSvpzzYS7rj2mms17rdquThvMeV
+         9u+zKppd96fVmuu6Mo0kk4JecUzPrXD7rzjehpsCPNVZ3FTiIb7An6As+BP00yAHsIxE
+         wj3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=str16FI/F5xFD0n2C9n5hc+OZX67vqcPfd5sJFbgdGI=;
-        b=5mJpsgnVihoftp+cmLaknRVDMvmgfZzzwzLaW2wip55WaMQDgAEBcUIVVXvWza9BNw
-         BVuUiIuEbSil3hyvCxeilbYW4q4oz7xHiMI2SY5sHVFiBRiSAXLN6NDDmbdAZcwpBprV
-         UuZDQ3qENg/UGwT/VGcoUsvGSwQQeMaCdjHrEQdMIKkEI/J9sg/nXmyZjcGT1SzBavg6
-         l/DCicg642Gc0TL6ZDaTMpyRJqRFLQCo3wTv/L919off2sy0f71JyQikOWO1x+hUAH6c
-         mxOkxoiSZwowmq5Kgxd2BcFKlPDC6mg+3T3CFSPDFVCJC/GFF0SN+JjTLxgBizo0s2a3
-         u/0Q==
-X-Gm-Message-State: AOAM533/chsynU8Py8TWH5LFbeY7UkxfyYl60jTN8iycykxxCrfYcku8
-        nN9bzAr+ns1Cx0y6MiXOcHA=
-X-Google-Smtp-Source: ABdhPJxKV6lDv8a8uMbMek/SWb8lQRWHNN5x+2X9xP0AmxTdpAmdqC2KIsyXwzOuWYYYr1gfrpB/MQ==
-X-Received: by 2002:aa7:dbc2:: with SMTP id v2mr3053045edt.59.1642058750696;
-        Wed, 12 Jan 2022 23:25:50 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id g2sm587549ejt.43.2022.01.12.23.25.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 23:25:50 -0800 (PST)
-Message-ID: <efce614d-c8e6-bb06-e3c1-cb67b26bbc6a@kernel.org>
-Date:   Thu, 13 Jan 2022 08:25:49 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LqEz1tdi+Dd5kBFVgy7VzOmS5HR1fqUYps8D18GxVbY=;
+        b=PUaIjYsCxoWCcRVmHWUQIzm8o8se41vtRK2x2JPCc7PmZ1RzfyQbJb3zHPEe42miqj
+         eunXGlAUe/guMN+Gd6wEvdSegMScDEDB9V4UlJb1eNZuoCCytgg8cOT9TF+QA3iF6esz
+         El9ib1feSUoDcmnL/dU11DcrJgcux7/o8a3g3GG5Uqe5erdzEropqnkOHuGmQ33PjSoQ
+         I7hm6a7zZmSh9EoZG1JZUX3FiFFTcDkf03i2iqIt6zFvi6nBHbYuEXBOJB7KwzHkgBV9
+         Zg7yEkcR1zlHoQOQwlHJPw9gnjvjJxIEHtx3YgIaSCCf3bZeXwzLYZteNPnqF4Pf6x/O
+         wWLg==
+X-Gm-Message-State: AOAM530KtCl5U/CFhLPtygyFYXNX+he4aQaPIUrrD1PADMF8aW88YVTI
+        hhl613JsFWLKPhj3QG9sR9htIWxkM5ypouR0bxb2mQ==
+X-Google-Smtp-Source: ABdhPJx45gF1826s11G22AXgxEBxocaiU3nnPiirOQSz78+oGy8yoaupoJL4uFZMsf60KHnBhTNzsVhUmkhYr5xXbCE=
+X-Received: by 2002:a05:6512:ea9:: with SMTP id bi41mr2519011lfb.510.1642058765513;
+ Wed, 12 Jan 2022 23:26:05 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V5 2/5] tty: serial: meson: Move request the register
- region.
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220110104214.25321-1-yu.tu@amlogic.com>
- <20220110104214.25321-3-yu.tu@amlogic.com>
- <01066e66-5d97-ab40-b4a6-99e962b47073@kernel.org>
- <cad33ab0-26d3-5b78-3bcf-62217aa70871@amlogic.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <cad33ab0-26d3-5b78-3bcf-62217aa70871@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1641890718.git.zong.li@sifive.com> <78cfa00a02cbd10202040058af22a73caa9c5ae8.1641890718.git.zong.li@sifive.com>
+ <CAMuHMdUogbyjU=vBuvocxofGFCwzdQndk9OTnVdP+RNA8HEFZQ@mail.gmail.com> <CANXhq0qpkArvELBDqOT=bnVCwvR47cxHN7oH1hYKr1Yt7zaGOQ@mail.gmail.com>
+In-Reply-To: <CANXhq0qpkArvELBDqOT=bnVCwvR47cxHN7oH1hYKr1Yt7zaGOQ@mail.gmail.com>
+From:   Zong Li <zong.li@sifive.com>
+Date:   Thu, 13 Jan 2022 15:25:54 +0800
+Message-ID: <CANXhq0rKsAsm4oSvnVqy385shoY2uTQOGUSqYdf-D=2xJ5vgWg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] dmaengine: sf-pdma: Get number of channel by
+ device tree
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Bin Meng <bin.meng@windriver.com>,
+        Green Wan <green.wan@sifive.com>, Vinod <vkoul@kernel.org>,
+        dmaengine <dmaengine@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11. 01. 22, 3:48, Yu Tu wrote:
->> And no, do not resend a new version in the next few days. Having v5 in 
->> 20 days is a bit too much. Give maintainers and reviewers some more 
->> space to express themselves.
-> I am so sorry if PATCH is sent too frequently, which has disturbed you.
-> How often should I send it? Or under what circumstances can I send the 
-> next version?
+On Thu, Jan 13, 2022 at 2:53 PM Zong Li <zong.li@sifive.com> wrote:
+>
+> On Wed, Jan 12, 2022 at 4:28 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >
+> > Hi Zong,
+> >
+> > On Tue, Jan 11, 2022 at 9:51 AM Zong Li <zong.li@sifive.com> wrote:
+> > > It currently assumes that there are always four channels, it would
+> > > cause the error if there is actually less than four channels. Change
+> > > that by getting number of channel from device tree.
+> > >
+> > > For backwards-compatible, it uses the default value (i.e. 4) when there
+> > > is no 'dma-channels' information in dts.
+> > >
+> > > Signed-off-by: Zong Li <zong.li@sifive.com>
+> >
+> > Thanks for your patch!
+> >
+> > > --- a/drivers/dma/sf-pdma/sf-pdma.c
+> > > +++ b/drivers/dma/sf-pdma/sf-pdma.c
+> > > @@ -484,21 +484,24 @@ static int sf_pdma_probe(struct platform_device *pdev)
+> > >         struct sf_pdma *pdma;
+> > >         struct sf_pdma_chan *chan;
+> > >         struct resource *res;
+> > > -       int len, chans;
+> > > -       int ret;
+> > > +       int len, ret;
+> > >         const enum dma_slave_buswidth widths =
+> > >                 DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
+> > >                 DMA_SLAVE_BUSWIDTH_4_BYTES | DMA_SLAVE_BUSWIDTH_8_BYTES |
+> > >                 DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
+> > >                 DMA_SLAVE_BUSWIDTH_64_BYTES;
+> > >
+> > > -       chans = PDMA_NR_CH;
+> > > -       len = sizeof(*pdma) + sizeof(*chan) * chans;
+> > > +       len = sizeof(*pdma) + sizeof(*chan) * PDMA_MAX_NR_CH;
+> >
+> > Why is the last part added (yes, this is a pre-existing issue)?
+> > struct sf_pdma already contains space for chans[PDMA_MAX_NR_CH].
+> > Either drop the last part, or change sf_pdma.chans[] to a flexible
+> > array member.
+> >
+> > BTW, you can use the struct_size() or flex_array_size() helper
+> > to calculate len.
+>
+> Thanks for your suggestions, let me fix it in the next version.
+>
+> >
+> > >         pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
+> > >         if (!pdma)
+> > >                 return -ENOMEM;
+> > >
+> > > -       pdma->n_chans = chans;
+> > > +       ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
+> > > +                                  &pdma->n_chans);
+> > > +       if (ret) {
+> > > +               dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
+> > > +               pdma->n_chans = PDMA_MAX_NR_CH;
+> > > +       }
+> > >
+> > >         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> > >         pdma->membase = devm_ioremap_resource(&pdev->dev, res);
+> > > @@ -556,7 +559,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
+> > >         struct sf_pdma_chan *ch;
+> > >         int i;
+> > >
+> > > -       for (i = 0; i < PDMA_NR_CH; i++) {
+> > > +       for (i = 0; i < pdma->n_chans; i++) {
+> > >                 ch = &pdma->chans[i];
+> >
+> > If dma-channels in DT > PDMA_NR_CH, this becomes an out-of-bound
+> > access.
+> >
+>
+> Okay, let me get the min() between pdma->chans and PDMA_MAX_NR_CH,
+> please let me know if it isn't good to you.
 
-~ one week after the last reply to your previous patchset is about fine. 
-You could see that people were still responding to v4 while v5 was 
-already on the list.
+Please allow me give more details on it, I would compare the value of
+pdma->chans with PDMA_MAX_NR_CH in probe function, and set the
+pdma->chans to PDMA_MAX_NR_CH if the value in DT is bigger than
+PDMA_MAX_NR_CH.
 
-thanks,
--- 
-js
+>
+> > >
+> > >                 devm_free_irq(&pdev->dev, ch->txirq, ch);
+> > > diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
+> > > index 0c20167b097d..8127d792f639 100644
+> > > --- a/drivers/dma/sf-pdma/sf-pdma.h
+> > > +++ b/drivers/dma/sf-pdma/sf-pdma.h
+> > > @@ -22,11 +22,7 @@
+> > >  #include "../dmaengine.h"
+> > >  #include "../virt-dma.h"
+> > >
+> > > -#define PDMA_NR_CH                                     4
+> > > -
+> > > -#if (PDMA_NR_CH != 4)
+> > > -#error "Please define PDMA_NR_CH to 4"
+> > > -#endif
+> > > +#define PDMA_MAX_NR_CH                                 4
+> > >
+> > >  #define PDMA_BASE_ADDR                                 0x3000000
+> > >  #define PDMA_CHAN_OFFSET                               0x1000
+> > > @@ -118,7 +114,7 @@ struct sf_pdma {
+> > >         void __iomem            *membase;
+> > >         void __iomem            *mappedbase;
+> > >         u32                     n_chans;
+> > > -       struct sf_pdma_chan     chans[PDMA_NR_CH];
+> > > +       struct sf_pdma_chan     chans[PDMA_MAX_NR_CH];
+> > >  };
+> > >
+> > >  #endif /* _SF_PDMA_H */
+> > -
+> > Gr{oetje,eeting}s,
+> >
+> >                         Geert
+> >
+> > --
+> > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> >
+> > In personal conversations with technical people, I call myself a hacker. But
+> > when I'm talking to journalists I just say "programmer" or something like that.
+> >                                 -- Linus Torvalds

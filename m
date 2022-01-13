@@ -2,90 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F21C48DF90
+	by mail.lfdr.de (Postfix) with ESMTP id C7E4E48DF91
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235178AbiAMV1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 16:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        id S235353AbiAMV1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 16:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbiAMV1C (ORCPT
+        with ESMTP id S235271AbiAMV1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 16:27:02 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F8EC061574;
-        Thu, 13 Jan 2022 13:27:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=ayS3prurjAu/ZPuhb/qI34CN7+Mgs9bDXWUscUrqSMk=; b=ZJ7Hm/hT9j+Jgq31XRQ8PdnWLQ
-        zlxQMkNuR1Yap1HH9DQx0bri7HCa/TsoTd6cu02X5haj7+F2a8Qa64M5CfJByBeEib0E0IMqkhKkh
-        ZA6EnQAuIGSjDim9BgQoBeLQ8B8DPHdXxQ/VSD9ZHOjvU5ctmy6cl/cC+LJPW4iOXTn8zpeFdpCoC
-        uwOM83bQNnyW58yosvLtJMCQ+DLHwqxWaY4LSsXvCAo0Nedssw7tmsl9EvFQFsLCyU3piMNauliTF
-        k3/3oLN/RtVEQGC1PT4d58GR6Peh60T/uznSKPHSXDPYTmvV+yM1j1Hl4l0WWRpcJsXeVzlpRrSI5
-        sW5Jrziw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n87cT-0011Xg-JH; Thu, 13 Jan 2022 21:26:53 +0000
-Message-ID: <24d83e9c-a4d5-176b-1ff3-909d0ad56302@infradead.org>
-Date:   Thu, 13 Jan 2022 13:26:48 -0800
+        Thu, 13 Jan 2022 16:27:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFE2C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 13:27:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A452B8239F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 21:27:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9ADC36AE3;
+        Thu, 13 Jan 2022 21:27:03 +0000 (UTC)
+Date:   Thu, 13 Jan 2022 16:27:02 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Tom Zanussi <zanussi@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [for-next][PATCH 05/31] tracing: Have existing
+ event_command.parse() implementations use helpers
+Message-ID: <20220113162702.695d34a0@gandalf.local.home>
+In-Reply-To: <20220113162058.04731caf@gandalf.local.home>
+References: <20220111173030.999527342@goodmis.org>
+        <20220111173114.155260134@goodmis.org>
+        <388b9922-4231-6e34-1305-f0b439d9d07c@kernel.org>
+        <20220113162058.04731caf@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: linux-next: Tree for Jan 13 (UBSAN: invalid-load in
- ../mm/swap.c:996:11)
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220113152247.3f7c6c49@canb.auug.org.au>
- <56c04e36-ff53-10c7-34dd-1c1385639de6@infradead.org>
- <YeCP8Kh+4y7NR1K+@casper.infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YeCP8Kh+4y7NR1K+@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 13 Jan 2022 16:20:58 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
+> I will not be adding this to this merge window.
 
-On 1/13/22 12:47, Matthew Wilcox wrote:
-> On Thu, Jan 13, 2022 at 12:12:52PM -0800, Randy Dunlap wrote:
->> [    1.561983] UBSAN: invalid-load in ../mm/swap.c:996:11
->> [    1.561986] load of value 221 is not a valid value for type '_Bool'
-> 
-> Ooh.  This one's mine.  Randy, does it repeat easily?  This should
-> fix it:
+And it appears that "tracing: Remove redundant trigger_ops params" does not
+apply cleanly without this patch, so I'm dropping that one too.
 
-Yes, 100% of the time (for N = 3).
-
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-
-Fixed 100% of the time (for N = 3).
-
-Thanks.
-
-> diff --git a/include/linux/pagevec.h b/include/linux/pagevec.h
-> index dda8d5868c81..67b1246f136b 100644
-> --- a/include/linux/pagevec.h
-> +++ b/include/linux/pagevec.h
-> @@ -111,6 +111,7 @@ static_assert(offsetof(struct pagevec, pages) ==
->  static inline void folio_batch_init(struct folio_batch *fbatch)
->  {
->  	fbatch->nr = 0;
-> +	fbatch->percpu_pvec_drained = false;
->  }
->  
->  static inline unsigned int folio_batch_count(struct folio_batch *fbatch)
-> 
-
-
--- 
-~Randy
+-- Steve

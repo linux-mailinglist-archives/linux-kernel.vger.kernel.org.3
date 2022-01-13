@@ -2,107 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41DF748DA5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3689548DA62
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:03:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235938AbiAMPCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 10:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235923AbiAMPCp (ORCPT
+        id S235951AbiAMPDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 10:03:14 -0500
+Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:33795 "EHLO
+        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233641AbiAMPDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 10:02:45 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A6AC06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 07:02:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=B11Ie4xk5bhkeIzwoNtpBIh4wfJJi+YAtt7ECX6UPrY=; b=ArD+YXOtK+Dd+ZwEFfcxBbHWnF
-        Dya1ULbAXp7RamN0GjE2Kgzg89oG7QnUUzlMRA4cdna4LXlT/9UOyIz0rXNsLbTx9XfMTduNV1thA
-        nJfuybt91e6f3Nw9/HADphhEABf99j1DS8XHfw6+rupshBWxaiRgCp9GthZU60QaNC0ymo/fxnd2Z
-        PT4Zal1qlgYrq/V9K9zf+f34zRYZGQ4FYLAUc2QpJ3CVpoSDhka0+ED6c0oKFuq/wiRHpZkSi2rGY
-        1OXEmyfGHHLJ2CZTd10cugWVtV45FhDSTllVPtWUnd4hQHLnbmAdsx5JQrowip3qQIXyJ+nHK70ct
-        trymDh4w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n81cb-0050k2-TX; Thu, 13 Jan 2022 15:02:37 +0000
-Date:   Thu, 13 Jan 2022 15:02:37 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Liang Zhang <zhangliang5@huawei.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        wangzhigang17@huawei.com,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
-Message-ID: <YeA/DQptAz3fl6ym@casper.infradead.org>
-References: <20220113140318.11117-1-zhangliang5@huawei.com>
- <YeA5oP/iaxtVPHb3@casper.infradead.org>
- <ec0f57e6-f1f6-b9d9-b507-20e845fe7f17@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ec0f57e6-f1f6-b9d9-b507-20e845fe7f17@redhat.com>
+        Thu, 13 Jan 2022 10:03:08 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V1k7W57_1642086178;
+Received: from e02h04404.eu6sqa(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0V1k7W57_1642086178)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 13 Jan 2022 23:03:06 +0800
+From:   Wen Gu <guwen@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net] net/smc: Transitional solution for clcsock race issue
+Date:   Thu, 13 Jan 2022 23:02:57 +0800
+Message-Id: <1642086177-130611-1-git-send-email-guwen@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 03:46:54PM +0100, David Hildenbrand wrote:
-> On 13.01.22 15:39, Matthew Wilcox wrote:
-> > On Thu, Jan 13, 2022 at 10:03:18PM +0800, Liang Zhang wrote:
-> >> In current implementation, process's read requestions will fault in pages
-> >> with WP flags in PTEs. Next, if process emit a write requestion will go
-> >> into do_wp_page() and copy data to a new allocated page from the old one
-> >> due to refcount > 1 (page table mapped and swapcache), which could be
-> >> result in performance degradation. In fact, this page is exclusively owned
-> >> by this process and the duplication from old to a new allocated page is
-> >> really unnecessary.
-> >>
-> >> So In this situation, these unshared pages can be reused by its process.
-> > 
-> > Let's bring Linus in on this, but I think this reintroduces all of the
-> > mapcount problems that we've been discussing recently.
-> > 
-> > How about this as an alternative?
-> > 
-> > +++ b/mm/memory.c
-> > @@ -3291,11 +3291,11 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
-> >                 struct page *page = vmf->page;
-> > 
-> >                 /* PageKsm() doesn't necessarily raise the page refcount */
-> > -               if (PageKsm(page) || page_count(page) != 1)
-> > +               if (PageKsm(page) || page_count(page) != 1 + PageSwapCache(page))
-> >                         goto copy;
-> >                 if (!trylock_page(page))
-> >                         goto copy;
-> > -               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1) {
-> > +               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1 + PageSwapCache(page)) {
-> >                         unlock_page(page);
-> >                         goto copy;
-> >                 }
-> 
-> Funny, I was staring at swap reuse code as I received this mail ...
-> because if we're not using reuse_swap_page() here anymore, we shouldn't
-> really be reusing it anywhere for consistency, most prominently in
-> do_swap_page() when we handle vmf->flags & FAULT_FLAG_WRITE just
-> similarly as we do here ...
-> 
-> And that's where things get hairy and I am still trying to figure out
-> all of the details.
-> 
-> Regarding above: If the page is swapped out in multiple processes but
-> was only faulted into the current process R/O, and then we try to write:
-> 
-> 1. Still in the swapcache: PageSwapCache()
-> 2. Mapped only by one process: page_mapcount(page) == 1
-> 3. Reference from one page table and the swap cache: page_count(page) ==
-> 
-> But other processes could read-fault on the swapcache page, no?
-> 
-> I think we'd really have to check against the swapcount as well ...
-> essentially reuse_swap_page(), no?
+We encountered a crash in smc_setsockopt() and it is caused by
+accessing smc->clcsock after clcsock was released.
 
-Unfortunately the last digit is missing from your "3.", but I
-think you're absolutely right; we need to check swapcount.  So
-once reuse_swap_page() checks page_count instead of mapcount, we'll
-be good?
+ BUG: kernel NULL pointer dereference, address: 0000000000000020
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 0 P4D 0
+ Oops: 0000 [#1] PREEMPT SMP PTI
+ CPU: 1 PID: 50309 Comm: nginx Kdump: loaded Tainted: G E     5.16.0-rc4+ #53
+ RIP: 0010:smc_setsockopt+0x59/0x280 [smc]
+ Call Trace:
+  <TASK>
+  __sys_setsockopt+0xfc/0x190
+  __x64_sys_setsockopt+0x20/0x30
+  do_syscall_64+0x34/0x90
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+ RIP: 0033:0x7f16ba83918e
+  </TASK>
+
+This patch tries to fix it by holding clcsock_release_lock and
+checking whether clcsock has already been released before access.
+
+In case that a crash of the same reason happens in smc_getsockopt()
+or smc_switch_to_fallback(), this patch also checkes smc->clcsock
+in them too. And the caller of smc_switch_to_fallback() will identify
+whether fallback succeeds according to the return value.
+
+Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+---
+ net/smc/af_smc.c | 63 +++++++++++++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 51 insertions(+), 12 deletions(-)
+
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 12c52c7..c625af3 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -566,12 +566,17 @@ static void smc_stat_fallback(struct smc_sock *smc)
+ 	mutex_unlock(&net->smc.mutex_fback_rsn);
+ }
+ 
+-static void smc_switch_to_fallback(struct smc_sock *smc, int reason_code)
++static int smc_switch_to_fallback(struct smc_sock *smc, int reason_code)
+ {
+ 	wait_queue_head_t *smc_wait = sk_sleep(&smc->sk);
+-	wait_queue_head_t *clc_wait = sk_sleep(smc->clcsock->sk);
++	wait_queue_head_t *clc_wait;
+ 	unsigned long flags;
+ 
++	mutex_lock(&smc->clcsock_release_lock);
++	if (!smc->clcsock) {
++		mutex_unlock(&smc->clcsock_release_lock);
++		return -EBADF;
++	}
+ 	smc->use_fallback = true;
+ 	smc->fallback_rsn = reason_code;
+ 	smc_stat_fallback(smc);
+@@ -586,18 +591,30 @@ static void smc_switch_to_fallback(struct smc_sock *smc, int reason_code)
+ 		 * smc socket->wq, which should be removed
+ 		 * to clcsocket->wq during the fallback.
+ 		 */
++		clc_wait = sk_sleep(smc->clcsock->sk);
+ 		spin_lock_irqsave(&smc_wait->lock, flags);
+ 		spin_lock_nested(&clc_wait->lock, SINGLE_DEPTH_NESTING);
+ 		list_splice_init(&smc_wait->head, &clc_wait->head);
+ 		spin_unlock(&clc_wait->lock);
+ 		spin_unlock_irqrestore(&smc_wait->lock, flags);
+ 	}
++	mutex_unlock(&smc->clcsock_release_lock);
++	return 0;
+ }
+ 
+ /* fall back during connect */
+ static int smc_connect_fallback(struct smc_sock *smc, int reason_code)
+ {
+-	smc_switch_to_fallback(smc, reason_code);
++	struct net *net = sock_net(&smc->sk);
++	int rc = 0;
++
++	rc = smc_switch_to_fallback(smc, reason_code);
++	if (rc) { /* fallback fails */
++		this_cpu_inc(net->smc.smc_stats->clnt_hshake_err_cnt);
++		if (smc->sk.sk_state == SMC_INIT)
++			sock_put(&smc->sk); /* passive closing */
++		return rc;
++	}
+ 	smc_copy_sock_settings_to_clc(smc);
+ 	smc->connect_nonblock = 0;
+ 	if (smc->sk.sk_state == SMC_INIT)
+@@ -1518,11 +1535,12 @@ static void smc_listen_decline(struct smc_sock *new_smc, int reason_code,
+ {
+ 	/* RDMA setup failed, switch back to TCP */
+ 	smc_conn_abort(new_smc, local_first);
+-	if (reason_code < 0) { /* error, no fallback possible */
++	if (reason_code < 0 ||
++	    smc_switch_to_fallback(new_smc, reason_code)) {
++		/* error, no fallback possible */
+ 		smc_listen_out_err(new_smc);
+ 		return;
+ 	}
+-	smc_switch_to_fallback(new_smc, reason_code);
+ 	if (reason_code && reason_code != SMC_CLC_DECL_PEERDECL) {
+ 		if (smc_clc_send_decline(new_smc, reason_code, version) < 0) {
+ 			smc_listen_out_err(new_smc);
+@@ -1964,8 +1982,11 @@ static void smc_listen_work(struct work_struct *work)
+ 
+ 	/* check if peer is smc capable */
+ 	if (!tcp_sk(newclcsock->sk)->syn_smc) {
+-		smc_switch_to_fallback(new_smc, SMC_CLC_DECL_PEERNOSMC);
+-		smc_listen_out_connected(new_smc);
++		rc = smc_switch_to_fallback(new_smc, SMC_CLC_DECL_PEERNOSMC);
++		if (rc)
++			smc_listen_out_err(new_smc);
++		else
++			smc_listen_out_connected(new_smc);
+ 		return;
+ 	}
+ 
+@@ -2254,7 +2275,9 @@ static int smc_sendmsg(struct socket *sock, struct msghdr *msg, size_t len)
+ 
+ 	if (msg->msg_flags & MSG_FASTOPEN) {
+ 		if (sk->sk_state == SMC_INIT && !smc->connect_nonblock) {
+-			smc_switch_to_fallback(smc, SMC_CLC_DECL_OPTUNSUPP);
++			rc = smc_switch_to_fallback(smc, SMC_CLC_DECL_OPTUNSUPP);
++			if (rc)
++				goto out;
+ 		} else {
+ 			rc = -EINVAL;
+ 			goto out;
+@@ -2447,6 +2470,11 @@ static int smc_setsockopt(struct socket *sock, int level, int optname,
+ 	/* generic setsockopts reaching us here always apply to the
+ 	 * CLC socket
+ 	 */
++	mutex_lock(&smc->clcsock_release_lock);
++	if (!smc->clcsock) {
++		mutex_unlock(&smc->clcsock_release_lock);
++		return -EBADF;
++	}
+ 	if (unlikely(!smc->clcsock->ops->setsockopt))
+ 		rc = -EOPNOTSUPP;
+ 	else
+@@ -2456,6 +2484,7 @@ static int smc_setsockopt(struct socket *sock, int level, int optname,
+ 		sk->sk_err = smc->clcsock->sk->sk_err;
+ 		sk_error_report(sk);
+ 	}
++	mutex_unlock(&smc->clcsock_release_lock);
+ 
+ 	if (optlen < sizeof(int))
+ 		return -EINVAL;
+@@ -2472,7 +2501,7 @@ static int smc_setsockopt(struct socket *sock, int level, int optname,
+ 	case TCP_FASTOPEN_NO_COOKIE:
+ 		/* option not supported by SMC */
+ 		if (sk->sk_state == SMC_INIT && !smc->connect_nonblock) {
+-			smc_switch_to_fallback(smc, SMC_CLC_DECL_OPTUNSUPP);
++			rc = smc_switch_to_fallback(smc, SMC_CLC_DECL_OPTUNSUPP);
+ 		} else {
+ 			rc = -EINVAL;
+ 		}
+@@ -2515,13 +2544,23 @@ static int smc_getsockopt(struct socket *sock, int level, int optname,
+ 			  char __user *optval, int __user *optlen)
+ {
+ 	struct smc_sock *smc;
++	int rc;
+ 
+ 	smc = smc_sk(sock->sk);
++	mutex_lock(&smc->clcsock_release_lock);
++	if (!smc->clcsock) {
++		mutex_unlock(&smc->clcsock_release_lock);
++		return -EBADF;
++	}
+ 	/* socket options apply to the CLC socket */
+-	if (unlikely(!smc->clcsock->ops->getsockopt))
++	if (unlikely(!smc->clcsock->ops->getsockopt)) {
++		mutex_unlock(&smc->clcsock_release_lock);
+ 		return -EOPNOTSUPP;
+-	return smc->clcsock->ops->getsockopt(smc->clcsock, level, optname,
+-					     optval, optlen);
++	}
++	rc = smc->clcsock->ops->getsockopt(smc->clcsock, level, optname,
++					   optval, optlen);
++	mutex_unlock(&smc->clcsock_release_lock);
++	return rc;
+ }
+ 
+ static int smc_ioctl(struct socket *sock, unsigned int cmd,
+-- 
+1.8.3.1
+

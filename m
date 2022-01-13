@@ -2,187 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A0248D27A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 07:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFBD48D283
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 07:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbiAMGyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 01:54:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiAMGyM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 01:54:12 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDD8C061748
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 22:54:11 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id o15so16133062lfo.11
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 22:54:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+/xflG/TvWV3/3iWK2yYutqh016Xap1/1t8bC2k14nw=;
-        b=B4a5Gw4Katx70iQLDcTIOZAdb8/hF/KQLUA7YMhUQkd4qqdtgRwvnBLLZyYbCt0TVC
-         4T22TMK9TfNQbfcgqZLs9zf9TqZ8g7joGToZggXtaiq2mrq1qa7Git7p0XHZEGCwpP0p
-         sDj/zInNAhAqj1Fkm510wzky2K4dihOirU4/NxGojfiFjrR1DOA3KWz96cIcaS42aWNH
-         xDUZi+C4kFx6cDhoR9N5ljg09vXECubRHjBOLCJjjJnt9yBHh6XrUUre3f1vG2WEaDqn
-         5qqkio2TXcAiFZv+8YIWrdnTtP+uYi4qU/AG+HR6DMEwwEMA7J1tFlM2Jeq78kUlPY1i
-         +H2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+/xflG/TvWV3/3iWK2yYutqh016Xap1/1t8bC2k14nw=;
-        b=YNlk4aC8nbm7Ic9yz95FK7sPMJ/NnO/wnsSSGxGuVX2ex/YiTfVl+U4Z/nUA0NQIpD
-         6My76vDev7P17pW4umnP/m7WKogvdeKRIc3SRhzLQyVIQocWtFU+q67sE3f1HLxAV3PT
-         XRzmd9+KnMbvuKRkql73VHuXae5aqec1Cg2u9/Xft1GwMVVA4yvtOyvJZcCLtVHrlQ/B
-         KlA+szcSWeptTtds6E4uGTiuHO5HGTKW+wbIT0K1RrAlezQCQCAZga/j/ZOI9TonTJX3
-         KBbhGzzzdr4Iyg7XjPpAviiheYf7kDrFriVwK5n2CyejyaVpi/QZf6ontS/dWivZ7PY7
-         Td3Q==
-X-Gm-Message-State: AOAM532kPn9q2Ba5D09Upful7aFudc0jpQ3UzWHzKoYr7SmM5+WByRi2
-        vlNd6gULWQnDfUAOA3s0lbuBST1bIs2vLg9umDH9OQ==
-X-Google-Smtp-Source: ABdhPJzTYhl9vfK8sy2lvc56F1BQs63yY++onXm7/N0EwHT1Fj2YlJrOC/YLE0mn/OWWjY7DRlU6aKderF3ihd8gpPk=
-X-Received: by 2002:a2e:bba1:: with SMTP id y33mr2060235lje.274.1642056849691;
- Wed, 12 Jan 2022 22:54:09 -0800 (PST)
+        id S230052AbiAMG5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 01:57:32 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:58216 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229870AbiAMG5b (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 01:57:31 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowABnby8lzd9hYoF7BQ--.64251S2;
+        Thu, 13 Jan 2022 14:56:37 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     hverkuil-cisco@xs4all.nl, narmstrong@baylibre.com,
+        mchehab@kernel.org, gregkh@linuxfoundation.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com, p.zabel@pengutronix.de
+Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] media: meson: vdec: potential dereference of null pointer
+Date:   Thu, 13 Jan 2022 14:56:36 +0800
+Message-Id: <20220113065636.1198072-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cover.1641890718.git.zong.li@sifive.com> <78cfa00a02cbd10202040058af22a73caa9c5ae8.1641890718.git.zong.li@sifive.com>
- <CAMuHMdUogbyjU=vBuvocxofGFCwzdQndk9OTnVdP+RNA8HEFZQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdUogbyjU=vBuvocxofGFCwzdQndk9OTnVdP+RNA8HEFZQ@mail.gmail.com>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Thu, 13 Jan 2022 14:53:58 +0800
-Message-ID: <CANXhq0qpkArvELBDqOT=bnVCwvR47cxHN7oH1hYKr1Yt7zaGOQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] dmaengine: sf-pdma: Get number of channel by
- device tree
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Green Wan <green.wan@sifive.com>, Vinod <vkoul@kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowABnby8lzd9hYoF7BQ--.64251S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWr43tFW5uF4DXrWxJF1DKFg_yoW5tF48pF
+        10v342gFyUtFyUAr4UJw1kXayaq348GFyI9a9rWw1fZryakF17XFsayFWjgr98Jr1S9a1r
+        CFyFg3y7uw4jqrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjfUndb1UUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 4:28 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Zong,
->
-> On Tue, Jan 11, 2022 at 9:51 AM Zong Li <zong.li@sifive.com> wrote:
-> > It currently assumes that there are always four channels, it would
-> > cause the error if there is actually less than four channels. Change
-> > that by getting number of channel from device tree.
-> >
-> > For backwards-compatible, it uses the default value (i.e. 4) when there
-> > is no 'dma-channels' information in dts.
-> >
-> > Signed-off-by: Zong Li <zong.li@sifive.com>
->
-> Thanks for your patch!
->
-> > --- a/drivers/dma/sf-pdma/sf-pdma.c
-> > +++ b/drivers/dma/sf-pdma/sf-pdma.c
-> > @@ -484,21 +484,24 @@ static int sf_pdma_probe(struct platform_device *pdev)
-> >         struct sf_pdma *pdma;
-> >         struct sf_pdma_chan *chan;
-> >         struct resource *res;
-> > -       int len, chans;
-> > -       int ret;
-> > +       int len, ret;
-> >         const enum dma_slave_buswidth widths =
-> >                 DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
-> >                 DMA_SLAVE_BUSWIDTH_4_BYTES | DMA_SLAVE_BUSWIDTH_8_BYTES |
-> >                 DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
-> >                 DMA_SLAVE_BUSWIDTH_64_BYTES;
-> >
-> > -       chans = PDMA_NR_CH;
-> > -       len = sizeof(*pdma) + sizeof(*chan) * chans;
-> > +       len = sizeof(*pdma) + sizeof(*chan) * PDMA_MAX_NR_CH;
->
-> Why is the last part added (yes, this is a pre-existing issue)?
-> struct sf_pdma already contains space for chans[PDMA_MAX_NR_CH].
-> Either drop the last part, or change sf_pdma.chans[] to a flexible
-> array member.
->
-> BTW, you can use the struct_size() or flex_array_size() helper
-> to calculate len.
+As the possible failure of the kzalloc(), the 'new_ts' could be NULL
+pointer.
+Therefore, it should be better to check it in order to avoid the
+dereference of the NULL pointer.
+Also, the caller esparser_queue() needs to deal with the return value of
+the amvdec_add_ts().
 
-Thanks for your suggestions, let me fix it in the next version.
+Fixes: 876f123b8956 ("media: meson: vdec: bring up to compliance")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/staging/media/meson/vdec/esparser.c     | 7 ++++++-
+ drivers/staging/media/meson/vdec/vdec_helpers.c | 8 ++++++--
+ drivers/staging/media/meson/vdec/vdec_helpers.h | 4 ++--
+ 3 files changed, 14 insertions(+), 5 deletions(-)
 
->
-> >         pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
-> >         if (!pdma)
-> >                 return -ENOMEM;
-> >
-> > -       pdma->n_chans = chans;
-> > +       ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
-> > +                                  &pdma->n_chans);
-> > +       if (ret) {
-> > +               dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
-> > +               pdma->n_chans = PDMA_MAX_NR_CH;
-> > +       }
-> >
-> >         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> >         pdma->membase = devm_ioremap_resource(&pdev->dev, res);
-> > @@ -556,7 +559,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
-> >         struct sf_pdma_chan *ch;
-> >         int i;
-> >
-> > -       for (i = 0; i < PDMA_NR_CH; i++) {
-> > +       for (i = 0; i < pdma->n_chans; i++) {
-> >                 ch = &pdma->chans[i];
->
-> If dma-channels in DT > PDMA_NR_CH, this becomes an out-of-bound
-> access.
->
+diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
+index db7022707ff8..86ccc8937afc 100644
+--- a/drivers/staging/media/meson/vdec/esparser.c
++++ b/drivers/staging/media/meson/vdec/esparser.c
+@@ -328,7 +328,12 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
+ 
+ 	offset = esparser_get_offset(sess);
+ 
+-	amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
++	ret = amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
++	if (ret) {
++		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
++		return ret;
++	}
++
+ 	dev_dbg(core->dev, "esparser: ts = %llu pld_size = %u offset = %08X flags = %08X\n",
+ 		vb->timestamp, payload_size, offset, vbuf->flags);
+ 
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
+index 203d7afa085d..7d2a75653250 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.c
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
+@@ -227,13 +227,16 @@ int amvdec_set_canvases(struct amvdec_session *sess,
+ }
+ EXPORT_SYMBOL_GPL(amvdec_set_canvases);
+ 
+-void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+-		   struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
++int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
++		  struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
+ {
+ 	struct amvdec_timestamp *new_ts;
+ 	unsigned long flags;
+ 
+ 	new_ts = kzalloc(sizeof(*new_ts), GFP_KERNEL);
++	if (!new_ts)
++		return -ENOMEM;
++
+ 	new_ts->ts = ts;
+ 	new_ts->tc = tc;
+ 	new_ts->offset = offset;
+@@ -242,6 +245,7 @@ void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+ 	spin_lock_irqsave(&sess->ts_spinlock, flags);
+ 	list_add_tail(&new_ts->list, &sess->timestamps);
+ 	spin_unlock_irqrestore(&sess->ts_spinlock, flags);
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(amvdec_add_ts);
+ 
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
+index 88137d15aa3a..4bf3e61d081b 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.h
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
+@@ -56,8 +56,8 @@ void amvdec_dst_buf_done_offset(struct amvdec_session *sess,
+  * @offset: offset in the VIFIFO where the associated packet was written
+  * @flags: the vb2_v4l2_buffer flags
+  */
+-void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+-		   struct v4l2_timecode tc, u32 offset, u32 flags);
++int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
++		  struct v4l2_timecode tc, u32 offset, u32 flags);
+ void amvdec_remove_ts(struct amvdec_session *sess, u64 ts);
+ 
+ /**
+-- 
+2.25.1
 
-Okay, let me get the min() between pdma->chans and PDMA_MAX_NR_CH,
-please let me know if it isn't good to you.
-
-> >
-> >                 devm_free_irq(&pdev->dev, ch->txirq, ch);
-> > diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
-> > index 0c20167b097d..8127d792f639 100644
-> > --- a/drivers/dma/sf-pdma/sf-pdma.h
-> > +++ b/drivers/dma/sf-pdma/sf-pdma.h
-> > @@ -22,11 +22,7 @@
-> >  #include "../dmaengine.h"
-> >  #include "../virt-dma.h"
-> >
-> > -#define PDMA_NR_CH                                     4
-> > -
-> > -#if (PDMA_NR_CH != 4)
-> > -#error "Please define PDMA_NR_CH to 4"
-> > -#endif
-> > +#define PDMA_MAX_NR_CH                                 4
-> >
-> >  #define PDMA_BASE_ADDR                                 0x3000000
-> >  #define PDMA_CHAN_OFFSET                               0x1000
-> > @@ -118,7 +114,7 @@ struct sf_pdma {
-> >         void __iomem            *membase;
-> >         void __iomem            *mappedbase;
-> >         u32                     n_chans;
-> > -       struct sf_pdma_chan     chans[PDMA_NR_CH];
-> > +       struct sf_pdma_chan     chans[PDMA_MAX_NR_CH];
-> >  };
-> >
-> >  #endif /* _SF_PDMA_H */
-> -
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds

@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DC148DBE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AFE48DBE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236759AbiAMQfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 11:35:33 -0500
-Received: from mail-co1nam11on2075.outbound.protection.outlook.com ([40.107.220.75]:35137
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        id S236788AbiAMQfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 11:35:42 -0500
+Received: from mail-mw2nam10on2055.outbound.protection.outlook.com ([40.107.94.55]:51040
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236737AbiAMQfc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 11:35:32 -0500
+        id S236787AbiAMQfk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 11:35:40 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FOF6F8fsX37+lmaR6pPJI6ApgspgsIgcw8yv0eRtR2pAV6vZ5cp2VASEd1Kh446vO0kS9IBFzVhvT9enju0zYjNWWZvWbjbtHhLo+ioMqCGZVPRTW+jEP4q5tZLltLNnLR0JeCBJUJWYgctS/zHVyZ+vB9rJcfi1TJ9s7LF4oFG/JcapooNeZR5Ad9YRhHSd3UW2klZonDd9qfBpqmApZEr9by1R7P0jaLjSs/2SYgq5NldpeTUJfNNUAT9Qffq+vYCuwHMV0BuhY+g9XFaFD40mkDd3NZRdFkJhX6rf7Sjly2stlw7Hn9KZLogQwdJBSiChBbx5+kdAm8JuQmVACA==
+ b=U/HWsp8cmLngxaHlw9HKpjDrDiZix4MLLXSm1UhnP9Itidg1FZ+4TjNgigd99JISsB5j0L6GJcWPsBwgFgtQ2iI/27zQt1ptj5yFwhlDEK3hBFPvFDzw/9Or5dUyAgqNp+edZQrd/eHTVUDTnRfqNsiXx2/i7P1t0ttuxer6IZxbhhmmlIdTy9Lk2eIe3B7uicAcYLfjSJT2DL4ipwzKF1WmwMDGK0kta9XWBk3cbYBNJf+7wg4NriVmJH+P2ZL/Wz3dEm783WS1BhE5P7ucQeeq2YykHATIzCUvurX6pB3uCtPQI2YtQ+6XgcJ0YjKUBmIexMG9D0Qwys/27kaXYQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7QsjnhVQQdJ6icA/lVkJK190jwIitICsAqVkpGc5wYU=;
- b=THadA3jNEyNwKYro/YldYROEMqotzQRvQKkz/g50/MK0+zpxf2jOPCfMrP9/94DwKtyX68DnhXRSsF6XV4s4t20SelMCnty3zvgLwG6CZGaojlQaB8cU5xn4m/V0epFctcNZBPFt1kh820S5+gztjHeMNttjRItrYe+mHzH77/bsz+DLMFcK4h6XME9GxLHnP+GMkqvZTrq2e/3GsevmGTv4qeUoNGCxC99tfJX/y0uG3lBpZ95miE4y3zbrpRAQeG+pf/49WabceoIIEjnKtlA2TcGD1VH2SPebUFNdmHypVrYYXXqop4SXQaAmSFylrM3sIgjxZIzmlR8lKU/Jcg==
+ bh=J0zrcuPd4mY9R/L4Zs9eqA5JLpYh4Qq+f12LdA0fmIE=;
+ b=DBaROG2tF+QmzhRCFv3voz3+7HpY7/3nsTVx2FmwXMX4vjjpjJbKhIPjYFPSl43XqETQhf+yh2oLQt8fCddm/om2x7afR6noDtObZzyY8hFOcAwW6V8mVvYij8rdw4wLSMC77n6u3zxekBmbsZjhePwj0LtjKcuW7XqLRc7dSlFhpGbe0rrMtrtzB4V347NEsylVfM06LccPpy+eak/mR13mMPEmldjYVDizQgV4svWImee7hRXRxba82e39+BRC48S1E/nKMaRZvp5uDvLApSGlU3E8M1o61Bcl1SHdsZY+XXElTzYyF5BUXXCvSiX8NIXeouYFtXxE7l/xOTz8MA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7QsjnhVQQdJ6icA/lVkJK190jwIitICsAqVkpGc5wYU=;
- b=UNXbfKRdz+a2TxPrwYrv1MSUUe/0mmxDs3IawIBHJlltkISDdfQzrnmgoMwRNIbC/PAJsEknLdt630Zw5oH5cK0xqll8Xxt0DOzO9cAGGQOIkhnV6M7ujdasJrYcKLFZvwS0L+hfuuZlDOf5XTbsSRfOy5Sbe8YpYn20Qy/KNPo=
-Received: from MWHPR15CA0042.namprd15.prod.outlook.com (2603:10b6:300:ad::28)
- by BN8PR12MB4595.namprd12.prod.outlook.com (2603:10b6:408:72::17) with
+ bh=J0zrcuPd4mY9R/L4Zs9eqA5JLpYh4Qq+f12LdA0fmIE=;
+ b=hLA8+6RF6m7Lx8NvbZ7mnRpFBI6BQI/Ev4J0g64VwNxPpsPow3TceoQqCHu/TpuQByCLEQC//3g0BzNZwHX3AdqnWqIUBE7lhDWfIBOZZkB1BQVnMzslCRP/Eg8bTiFP8B08kd9kSoDkIGZZ7qRQcBcu8f9LAy1ZR0jxT1Sp1es=
+Received: from DM6PR13CA0040.namprd13.prod.outlook.com (2603:10b6:5:134::17)
+ by DM4PR12MB5181.namprd12.prod.outlook.com (2603:10b6:5:394::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9; Thu, 13 Jan
- 2022 16:35:28 +0000
-Received: from CO1NAM11FT061.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:ad:cafe::ab) by MWHPR15CA0042.outlook.office365.com
- (2603:10b6:300:ad::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.9 via Frontend
- Transport; Thu, 13 Jan 2022 16:35:27 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Thu, 13 Jan
+ 2022 16:35:38 +0000
+Received: from DM6NAM11FT029.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:134:cafe::c2) by DM6PR13CA0040.outlook.office365.com
+ (2603:10b6:5:134::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.2 via Frontend
+ Transport; Thu, 13 Jan 2022 16:35:38 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT061.mail.protection.outlook.com (10.13.175.200) with Microsoft SMTP
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT029.mail.protection.outlook.com (10.13.173.23) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4888.9 via Frontend Transport; Thu, 13 Jan 2022 16:35:27 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.4888.9 via Frontend Transport; Thu, 13 Jan 2022 16:35:38 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 13 Jan
- 2022 10:35:26 -0600
+ 2022 10:35:38 -0600
 Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
  (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 13 Jan
- 2022 10:35:26 -0600
+ 2022 10:35:37 -0600
 Received: from chrome.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 13 Jan 2022 10:35:22 -0600
+ Transport; Thu, 13 Jan 2022 10:35:34 -0600
 From:   Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
 To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
 CC:     <Vijendar.Mukunda@amd.com>, <Alexander.Deucher@amd.com>,
@@ -66,10 +66,11 @@ CC:     <Vijendar.Mukunda@amd.com>, <Alexander.Deucher@amd.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
+        "V sujith kumar Reddy" <vsujithkumar.reddy@amd.com>,
         open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 4/6] ASoC: amd: acp: Add ACP init()/deinit() callback for Renoir.
-Date:   Thu, 13 Jan 2022 22:03:46 +0530
-Message-ID: <20220113163348.434108-5-AjitKumar.Pandey@amd.com>
+Subject: [PATCH v2 5/6] ASoC: amd: acp: acp-legacy: Add DMIC dai link support for Renoir
+Date:   Thu, 13 Jan 2022 22:03:47 +0530
+Message-ID: <20220113163348.434108-6-AjitKumar.Pandey@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220113163348.434108-1-AjitKumar.Pandey@amd.com>
 References: <20220113163348.434108-1-AjitKumar.Pandey@amd.com>
@@ -78,257 +79,88 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f517c5d1-484b-4d9f-db4a-08d9d6b2b4ee
-X-MS-TrafficTypeDiagnostic: BN8PR12MB4595:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB459520CC933DF246612CE0CD82539@BN8PR12MB4595.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1388;
+X-MS-Office365-Filtering-Correlation-Id: cb4d5506-3fc6-4fdf-4c87-08d9d6b2bb75
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5181:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB51818E9D288E8A089036F6D082539@DM4PR12MB5181.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1169;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: x1F15wBlEvrZ3AEUISfUmrgg4wGm+7N/BJAlb/YTtQYmSqjo0EnzrXvp3OmKpxMlbUgKwrntbKk2q3YD19rLeOOsOieZwaRALmq2gQFEjSd+6wnVO+yqwM+9eZ+oZdUmK0SLFcwsUaBdI6Mb5jKqYhoezPIdNqeygEblsmNUim3qodVOZBCoqnVENLPK2hZTd6W9inqkU4lLyL9HzksM50NCwRXb2JWZmYoNKECwGJXK1+FL2LRqke5lppQs6VBpgPwiEJji1rhyj2XvnOVOXbFly0Y4EDStADCl2cDq9S35hj0oQ1NXbB3OWvViOSQT9/LOWAbXknbTNt1qfJyJU1Xx5BpatLo74l2f7AMyb84jtPbO9wkuTY9pK+9ronG4fGWrOxUZuO5uJ7vjGyz2PUEhLcsEuAGwocGR9a7DUZovMBbxu/H7Z+BUu9J1jd8kXHHb4qK70aBrEED+XHLzhV1sINtRCDzsX2/Cqsevo1Y1WD7aniVAoCblVn1gMzynSoyjrP9xmtYdrh4y2Ef1fOLj82rQP67oLaA0gdSop268/FSFrt0DrR8+S0vnKzIEH8jM+7hJtKZJcGOMZdu2kZoNyTpgqlj7tG7Nbbg0OHY9Aixw9kWwmFdkAQVV1S+SUo7eyHJYkANxhMXm3fdcRcBuWTtVAVETqfc5BxLXRrxYRj3MQkVYddCsRT3WgtkDQIisBXnYMJEnKeSOlApngkEWF62OnY3gDU1QslUSLAkHXMoBHNZ3n5PSgPpIEXTaXnzjoZf/bRRw6kTcxp0R7s1ZJuu/ZLVLw87OAnTicNI=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(40470700002)(46966006)(70586007)(86362001)(47076005)(82310400004)(316002)(81166007)(40460700001)(70206006)(26005)(36860700001)(186003)(36756003)(83380400001)(6666004)(8676002)(336012)(8936002)(2906002)(426003)(110136005)(2616005)(508600001)(356005)(54906003)(7696005)(4326008)(1076003)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: EJow5ApciIzL9vjd8dIJj0xMmZCAbvwiE0RkWnoQhDtsfT4FJ/auJcVV4zZbZKevVYGyyEUo11ED/IZVwc1HLwOfZ0DO93bTlg96r9QHLxeZKnFBzQknumTKMoBU62nK7pij1qao1B+CGFgIwSH+Yfz9kOKcAkjoH7W985V3Ds3bFDnI02Le6cRRPxRN/wwUPGGV7Fc/OcgNPekA3crU7Ik82wEognBTKy0SR7Z9NAvIDehA7sh90s7l0H/twmz89YCQwrdQbF1YNhSRehzvNCioTU+pi0BIbfugEC/9Wa2c57bbz/VT5fPuj/z58pqo2zbe24oZtt/6kUy3gVFPI83UGj9ikgFJCHK2370786mXwkyQPrHFMHhulcYueHLjcwco/9YhVgCxD8WQ6I5dZhb7TtY41Nt+sa0ylPQwDaJKu4ExOEr9TbGPsbH43vxDISIzcH/SlBCiNS9pgbSbzKYXL1U/zfMHXdieCyzlz5/djLg465GNCvZWGHnQIgkVQB17k2Fb4ibCY+wWaK0HBwBf8lZElxPGbbJYK+ovfV9RhrzxlPvd0TSac4vZ0ptDAzZX+OPEld2APAsNePrl2dDOaZ3N8Vqgx39KXHm0jsbOMLjQ1SEbsxawbzQymbwebsW6Wn6gjVJv6ELj68tZx0KsRkPOokDcWPiwRJsjsZowM6xmSHfO69khBlvn/u3+brORRHg/BrlIHBP4Lp3bdQ8i5Njqpg7IarDJtB+pmkyVtUT5rsx7/vOAteGu2YT/+nY6TPwFJC2Fa31P8ApMEEsOOKz4Wj15K2z2JG9o5+0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(36860700001)(5660300002)(508600001)(4326008)(70586007)(36756003)(81166007)(2616005)(6666004)(336012)(47076005)(356005)(426003)(70206006)(110136005)(54906003)(186003)(40460700001)(26005)(83380400001)(2906002)(8936002)(8676002)(7696005)(86362001)(1076003)(316002)(82310400004)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2022 16:35:27.6148
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2022 16:35:38.6560
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f517c5d1-484b-4d9f-db4a-08d9d6b2b4ee
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb4d5506-3fc6-4fdf-4c87-08d9d6b2bb75
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT061.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT029.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB4595
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5181
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ACP hardware has PGFSM control registers that can be configured to
-power On/Off the ACP IP block. Add acp init()/de_init() callbacks
-in renoir platform driver probe()/remove() respectively to power
-on and off ACP IP block on ACP3X device.
+Add DMIC related dai link for pdm-dmic dai on Renoir platform with
+generic dmic codec dai.
 
 Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
 ---
- sound/soc/amd/acp/acp-renoir.c       | 170 +++++++++++++++++++++++++++
- sound/soc/amd/acp/chip_offset_byte.h |   6 +
- 2 files changed, 176 insertions(+)
+ sound/soc/amd/acp/acp-legacy-mach.c |  4 ++--
+ sound/soc/amd/acp/acp-mach-common.c | 15 +++++++++++++++
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/amd/acp/acp-renoir.c b/sound/soc/amd/acp/acp-renoir.c
-index 770a57a0677b..a29f910f25d1 100644
---- a/sound/soc/amd/acp/acp-renoir.c
-+++ b/sound/soc/amd/acp/acp-renoir.c
-@@ -25,6 +25,19 @@
- 
- #define DRV_NAME "acp_asoc_renoir"
- 
-+#define ACP_SOFT_RST_DONE_MASK	0x00010001
-+
-+#define ACP_PWR_ON_MASK		0x01
-+#define ACP_PWR_OFF_MASK	0x00
-+#define ACP_PGFSM_STAT_MASK	0x03
-+#define ACP_POWERED_ON		0x00
-+#define ACP_PWR_ON_IN_PROGRESS	0x01
-+#define ACP_POWERED_OFF		0x02
-+
-+
-+#define ACP_ERROR_MASK 0x20000000
-+#define ACP_EXT_INTR_STAT_CLEAR_MASK 0xFFFFFFFF
-+
- static struct snd_soc_acpi_codecs amp_rt1019 = {
- 	.num_codecs = 1,
- 	.codecs = {"10EC1019"}
-@@ -112,11 +125,154 @@ static struct snd_soc_dai_driver acp_renoir_dai[] = {
- },
+diff --git a/sound/soc/amd/acp/acp-legacy-mach.c b/sound/soc/amd/acp/acp-legacy-mach.c
+index 0ad1cf41b308..91140d15691b 100644
+--- a/sound/soc/amd/acp/acp-legacy-mach.c
++++ b/sound/soc/amd/acp/acp-legacy-mach.c
+@@ -23,10 +23,10 @@
+ static struct acp_card_drvdata rt5682_rt1019_data = {
+ 	.hs_cpu_id = I2S_SP,
+ 	.amp_cpu_id = I2S_SP,
+-	.dmic_cpu_id = NONE,
++	.dmic_cpu_id = DMIC,
+ 	.hs_codec_id = RT5682,
+ 	.amp_codec_id = RT1019,
+-	.dmic_codec_id = NONE,
++	.dmic_codec_id = DMIC,
+ 	.gpio_spkr_en = EN_SPKR_GPIO_GB,
  };
  
-+static int acp3x_power_on(void __iomem *base)
-+{
-+	u32 val;
-+	int timeout = 0;
-+
-+	val = readl(base + ACP_PGFSM_STATUS);
-+
-+	if (val == ACP_POWERED_ON)
-+		return 0;
-+
-+	if ((val & ACP_PGFSM_STAT_MASK) != ACP_PWR_ON_IN_PROGRESS)
-+		writel(ACP_PWR_ON_MASK, base + ACP_PGFSM_CONTROL);
-+
-+	while (++timeout < 500) {
-+		val = readl(base + ACP_PGFSM_STATUS);
-+		if (!val)
-+			return 0;
-+		udelay(1);
-+	}
-+
-+	return -ETIMEDOUT;
-+}
-+
-+static int acp3x_power_off(void __iomem *base)
-+{
-+	u32 val;
-+	int timeout = 0;
-+
-+	writel(ACP_PWR_OFF_MASK, base + ACP_PGFSM_CONTROL);
-+
-+	while (++timeout < 500) {
-+		val = readl(base + ACP_PGFSM_STATUS);
-+		if ((val & ACP_PGFSM_STAT_MASK) == ACP_POWERED_OFF)
-+			return 0;
-+		udelay(1);
-+	}
-+
-+	return -ETIMEDOUT;
-+}
-+
-+static int acp3x_reset(void __iomem *base)
-+{
-+	u32 val;
-+	int timeout = 0;
-+
-+	writel(1, base + ACP_SOFT_RESET);
-+
-+	while (++timeout < 500) {
-+		val = readl(base + ACP_SOFT_RESET);
-+		if (val & ACP_SOFT_RST_DONE_MASK)
-+			break;
-+		cpu_relax();
-+	}
-+
-+	writel(0, base + ACP_SOFT_RESET);
-+
-+	timeout = 0;
-+	while (++timeout < 500) {
-+		val = readl(base + ACP_SOFT_RESET);
-+		if (!val)
-+			return 0;
-+		cpu_relax();
-+	}
-+
-+	return -ETIMEDOUT;
-+}
-+
-+static void acp3x_enable_interrupts(void __iomem *base)
-+{
-+	u32 ext_intr_ctrl;
-+
-+	writel(0x01, base + ACP_EXTERNAL_INTR_ENB);
-+	ext_intr_ctrl = readl(base + ACP_EXTERNAL_INTR_CNTL);
-+	ext_intr_ctrl |= ACP_ERROR_MASK;
-+	writel(ext_intr_ctrl, base + ACP_EXTERNAL_INTR_CNTL);
-+}
-+
-+static void acp3x_disable_interrupts(void __iomem *base)
-+{
-+	writel(ACP_EXT_INTR_STAT_CLEAR_MASK, base + ACP_EXTERNAL_INTR_STAT);
-+	writel(0x00, base + ACP_EXTERNAL_INTR_ENB);
-+}
-+
-+static int rn_acp_init(void __iomem *base)
-+{
-+	int ret;
-+
-+	/* power on */
-+	ret = acp3x_power_on(base);
-+	if (ret)
-+		return ret;
-+
-+	writel(0x01, base + ACP_CONTROL);
-+
-+	/* Reset */
-+	ret = acp3x_reset(base);
-+	if (ret)
-+		return ret;
-+
-+	acp3x_enable_interrupts(base);
-+
-+	return 0;
-+}
-+
-+static int rn_acp_deinit(void __iomem *base)
-+{
-+	int ret = 0;
-+
-+	acp3x_disable_interrupts(base);
-+
-+	/* Reset */
-+	ret = acp3x_reset(base);
-+	if (ret)
-+		return ret;
-+
-+	writel(0x00, base + ACP_CONTROL);
-+
-+	/* power off */
-+	ret = acp3x_power_off(base);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
- static int renoir_audio_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-+	struct acp_chip_info *chip;
- 	struct acp_dev_data *adata;
- 	struct resource *res;
-+	int ret;
-+
-+	chip = dev_get_platdata(&pdev->dev);
-+	if (!chip || !chip->base) {
-+		dev_err(&pdev->dev, "ACP chip data is NULL\n");
-+		return -ENODEV;
-+	}
-+
-+	if (chip->acp_rev != ACP3X_DEV) {
-+		dev_err(&pdev->dev, "Un-supported ACP Revision %d\n", chip->acp_rev);
-+		return -ENODEV;
-+	}
-+
-+	ret = rn_acp_init(chip->base);
-+	if (ret) {
-+		dev_err(&pdev->dev, "ACP Init failed\n");
-+		return -EINVAL;
-+	}
+diff --git a/sound/soc/amd/acp/acp-mach-common.c b/sound/soc/amd/acp/acp-mach-common.c
+index c9caade5cb74..b163e3a68166 100644
+--- a/sound/soc/amd/acp/acp-mach-common.c
++++ b/sound/soc/amd/acp/acp-mach-common.c
+@@ -438,6 +438,8 @@ SND_SOC_DAILINK_DEF(sof_sp,
+ 	DAILINK_COMP_ARRAY(COMP_CPU("acp-sof-sp")));
+ SND_SOC_DAILINK_DEF(sof_dmic,
+ 	DAILINK_COMP_ARRAY(COMP_CPU("acp-sof-dmic")));
++SND_SOC_DAILINK_DEF(pdm_dmic,
++	DAILINK_COMP_ARRAY(COMP_CPU("acp-pdm-dmic")));
  
- 	adata = devm_kzalloc(dev, sizeof(struct acp_dev_data), GFP_KERNEL);
- 	if (!adata)
-@@ -155,6 +311,20 @@ static int renoir_audio_probe(struct platform_device *pdev)
- static int renoir_audio_remove(struct platform_device *pdev)
+ int acp_sofdsp_dai_links_create(struct snd_soc_card *card)
  {
- 	struct device *dev = &pdev->dev;
-+	struct acp_chip_info *chip;
-+	int ret;
-+
-+	chip = dev_get_platdata(&pdev->dev);
-+	if (!chip || !chip->base) {
-+		dev_err(&pdev->dev, "ACP chip data is NULL\n");
-+		return -ENODEV;
+@@ -613,6 +615,19 @@ int acp_legacy_dai_links_create(struct snd_soc_card *card)
+ 			links[i].ops = &acp_card_maxim_ops;
+ 			links[i].init = acp_card_maxim_init;
+ 		}
++		i++;
 +	}
 +
-+	ret = rn_acp_deinit(chip->base);
-+	if (ret) {
-+		dev_err(&pdev->dev, "ACP de-init Failed\n");
-+		return -EINVAL;
-+	}
++	if (drv_data->dmic_cpu_id == DMIC) {
++		links[i].name = "acp-dmic-codec";
++		links[i].id = DMIC_BE_ID;
++		links[i].codecs = dmic_codec;
++		links[i].num_codecs = ARRAY_SIZE(dmic_codec);
++		links[i].cpus = pdm_dmic;
++		links[i].num_cpus = ARRAY_SIZE(pdm_dmic);
++		links[i].platforms = platform_component;
++		links[i].num_platforms = ARRAY_SIZE(platform_component);
++		links[i].dpcm_capture = 1;
+ 	}
  
- 	acp_platform_unregister(dev);
- 	return 0;
-diff --git a/sound/soc/amd/acp/chip_offset_byte.h b/sound/soc/amd/acp/chip_offset_byte.h
-index e38589a142e9..88f6fa597cd6 100644
---- a/sound/soc/amd/acp/chip_offset_byte.h
-+++ b/sound/soc/amd/acp/chip_offset_byte.h
-@@ -14,6 +14,12 @@
- #define ACPAXI2AXI_ATU_CTRL                           0xC40
- #define ACPAXI2AXI_ATU_PAGE_SIZE_GRP_5                0xC20
- #define ACPAXI2AXI_ATU_BASE_ADDR_GRP_5                0xC24
-+
-+#define ACP_PGFSM_CONTROL			0x141C
-+#define ACP_PGFSM_STATUS                        0x1420
-+#define ACP_SOFT_RESET                          0x1000
-+#define ACP_CONTROL                             0x1004
-+
- #define ACP_EXTERNAL_INTR_ENB                         0x1800
- #define ACP_EXTERNAL_INTR_CNTL                        0x1804
- #define ACP_EXTERNAL_INTR_STAT                        0x1808
+ 	card->dai_link = links;
 -- 
 2.25.1
 

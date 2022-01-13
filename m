@@ -2,121 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA9148D821
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBD048D825
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234674AbiAMMkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234660AbiAMMkT (ORCPT
+        id S232806AbiAMMkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:40:40 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:50820
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232977AbiAMMki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:40:19 -0500
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6F3C06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:40:18 -0800 (PST)
-Received: by mail-oi1-x243.google.com with SMTP id w188so7396749oiw.13
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:40:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=oWW6ORNyIaqSSB1YUh/ULmMzj9/DL4c8sVdQpgJj44s=;
-        b=no7OQO4QWJe7+Gvt/fbnMJdbR4U/5AOphWxsTgKjYX0rmphyVPhpltHl2CEVgkoX4x
-         hhLB0SaocG7b4Dq/SJRxuKkb7Dk770SPF6bdMKmNu6oRmeKATZJ/WFmehtc/KgZp4B0O
-         qZticmR3dDOnRpPhBfBy1xz+yBiaYC52ewpAh8YKktw1Oh+yEGsupYlA9XATDDYGVKW+
-         hv4PSg7gOrYLQ5/fbiYpxT4TYnTGaFggUWK08/v8IKv7atqXrMndPrhT4MPejHOrKcBF
-         xMewhDPR2L7s+EIkHXQDJzP1ocSDGuwlBDM0xA7vj4JBBfVpD0dBDLbL7y8Z73jB0T1U
-         h12A==
+        Thu, 13 Jan 2022 07:40:38 -0500
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D2FCF3F198
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:40:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642077637;
+        bh=NtF9Qcv8dCyv4imQqdPZ0gphBbiJgf6BkMwibu0qdek=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=FylfRzFpYWYgd4WO09AQsPJqT5Q1Ge7coeHBZga3wuxwXc2pUqBtINPpHyQkh5mbF
+         Q2hmNQOuK7lk6TAJ0wVYyPnJCmJ3PRV2QilTTkRgDU8Xn6oPKKTYP/dHXw3FcT7wvV
+         KgiP0gTBbg/AcgEGSwu4FTriqdMU1Nl46Wcql9FomQViOjrThtg1EBARDEJndnH0nL
+         LlZNysBO3TuD9KHm52N6FAr8Qhje1+5ihw0yCJ5cL7+LEeSr3gF3Vj0xvr2zzu439J
+         0ZDTKrNbv53U7UhsyUCNQu1Q7yp4/VLJgNppWQuEtA547Jx3Y75VIaTzk8leaS+2yg
+         MqsxOSBIo5sqg==
+Received: by mail-ed1-f72.google.com with SMTP id y18-20020a056402271200b003fa16a5debcso5215499edd.14
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:40:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=oWW6ORNyIaqSSB1YUh/ULmMzj9/DL4c8sVdQpgJj44s=;
-        b=R9LRPSV8JLBfDRb8yBzx0nBD/lZthU+wIoUfLN4kWYK8nTeZAmlfo5ZTsxJ++miyW7
-         oKp+6006+Hdhkg6EljocaKcxvxP7phvw9M50ND9dMO2sQGrKdB3AwJtfJMlle1AyTDyL
-         pyRzfVETh5ownNa8Q4XiERCyjlMNGGd3GTKw7/tqHM5aqoFPwNLO3r8P6l2uNMC6aKmv
-         GmjOozCUrxB6mLSisuFxEARhUqglClO0CHO0zylCNfk06KyQQG4rV7dRSlY/o5Z+nH2/
-         G28P0zlc4MaT+vGR+fsmGeD4nNBnkpYcQVjZCLQpgBPg34/L+21SZzqxhsFL/GG5Su9/
-         umGg==
-X-Gm-Message-State: AOAM533W5vYinXCdBzOfGrKny0EMBJaIa1E8t/AxRFGTIKKIXOY/Xk1i
-        tbJiUFDwQ2xK36eUZMaaIxhfM7FIzGaUGvtWWRM=
-X-Google-Smtp-Source: ABdhPJz3+lRLpl2AXk2JaeZYoyHWKMqyDL5xCy4GWtbOUzot3ynarfILMpNtre5m42scYjheywWj3AnfMVa7eRht0P4=
-X-Received: by 2002:aca:b342:: with SMTP id c63mr8629081oif.121.1642077618159;
- Thu, 13 Jan 2022 04:40:18 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NtF9Qcv8dCyv4imQqdPZ0gphBbiJgf6BkMwibu0qdek=;
+        b=frJ7IxQ/c79J53DFDf7Lb2AFrpOFf79Udt3BuF0QBkWe69xz6t35pbxMO5FTEiE6FO
+         vzxldLgZjN5cRmWPAt7YhV9QFcHyI9yoFY5FicZXU1DqMiJDsC3dVmDqzgX1CDooLxBP
+         /58xKgiLwLtbB6BS5tbHr6lecMZIEuAYJjG3+/TdToTpxNjGzMrj0VkaCiooRtV6MZDe
+         Dn3xMtVraKwWaYe4TV693jIn/apAn4Dcy98lZgrHVvuWmgkV4aY9LRDSMD79QTrdhRnC
+         nyTt+38w/czIvxRNOkoe6gFOG6oLn2SvSWVfTYbUfNi8sjCRMJINFEjcikmXA4UuUxQd
+         0zSQ==
+X-Gm-Message-State: AOAM5301lUhCbM2qh7nAR3Qbwh9i8gMvrwi6Dfs35qRdi4YS8TmiT6Ov
+        D3tcKcXiOLkBMAtSGN8hbkbjA37m/q2vL+9lSj8LvKgmaRVB2XYI/SV3Yt6Py92VcUmfiadIJJ3
+        6fg92CIghfNYsaBhDQGVQIAf0JMs8rfimujuBZ8Jmjw==
+X-Received: by 2002:a05:6402:655:: with SMTP id u21mr4010428edx.30.1642077637575;
+        Thu, 13 Jan 2022 04:40:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzysO4hAvoMYoJ/ruIH66z8VzH4bfZ21Ozb1u+/RRfHvZ0YP4DJm75J85RG/HrmE+6HlqV7UQ==
+X-Received: by 2002:a05:6402:655:: with SMTP id u21mr4010406edx.30.1642077637409;
+        Thu, 13 Jan 2022 04:40:37 -0800 (PST)
+Received: from [192.168.0.29] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id sa13sm858440ejc.28.2022.01.13.04.40.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 04:40:37 -0800 (PST)
+Message-ID: <c87f500e-e43e-465c-94fa-050c2b0de083@canonical.com>
+Date:   Thu, 13 Jan 2022 13:40:36 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6838:3032:0:0:0:0 with HTTP; Thu, 13 Jan 2022 04:40:17
- -0800 (PST)
-Reply-To: barr.christiankossi10@gmail.com
-From:   Christian Kossi <barr.christiankossi7@gmail.com>
-Date:   Thu, 13 Jan 2022 04:40:17 -0800
-Message-ID: <CAGyGehdXeX9YwyspFtZ=j7CuuKb0CF1c3r+BBBAwmK=zhH0U=g@mail.gmail.com>
-Subject: =?UTF-8?B?TMWrZHp1LCBzYXppbmlldGllcyBhciBtYW5pLCBsYWkgaWVnxat0dSBzxKtrxIFrdSBpbg==?=
-        =?UTF-8?B?Zm9ybcSBY2lqdS4uLi4=?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 01/23] dt-bindings: clock: Document FSD CMU bindings
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, olof@lixom.net,
+        linus.walleij@linaro.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org, s.nawrocki@samsung.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com
+References: <20220113121143.22280-1-alim.akhtar@samsung.com>
+ <CGME20220113122311epcas5p4b7c253b49dce3bd3580407fcf312e70e@epcas5p4.samsung.com>
+ <20220113121143.22280-2-alim.akhtar@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220113121143.22280-2-alim.akhtar@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sveika laba diena
-Divreiz nos=C5=ABt=C4=ABju jums neatbild=C4=93tu e-pastu. Ar =C5=A1o p=C4=
-=81rliec=C4=ABbu un
-sirsn=C4=ABba sazin=C4=81ties ar jums, l=C5=ABdzu, pie=C5=86emiet atvaino=
-=C5=A1anos, ja mans e-pasts
-p=C4=81rk=C4=81pj j=C5=ABsu person=C4=ABgo mor=C4=81li. Mani sauc Kristians=
- Kosi, es esmu kalpone
-Advok=C4=81ts atrodas Lom=C4=93, Togo.
+On 13/01/2022 13:11, Alim Akhtar wrote:
+> Add dt-schema documentation for Tesla FSD SoC clock controller.
+> 
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+>  .../bindings/clock/tesla,fsd-clock.yaml       | 212 ++++++++++++++++++
+>  1 file changed, 212 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml b/Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
+> new file mode 100644
+> index 000000000000..58f341e5004d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
+> @@ -0,0 +1,212 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/tesla,fsd-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Tesla FSD (Full Self-Driving) SoC clock controller
+> +
+> +maintainers:
+> +  - Alim Akhtar <alim.akhtar@samsung.com>
+> +  - linux-fsd@tesla.com
+> +
+> +description: |
+> +  FSD clock controller consist of several clock management unit
+> +  (CMU), which generates clocks for various inteernal SoC blocks.
+> +  The root clock comes from external OSC clock (24 MHz).
+> +
+> +  All available clocks are defined as preprocessor macros in
+> +  'dt-bindings/clock/fsd-clk.h' header.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - tesla,fsd-clock-cmu
+> +      - tesla,fsd-clock-imem
+> +      - tesla,fsd-clock-peric
+> +      - tesla,fsd-clock-fsys0
+> +      - tesla,fsd-clock-fsys1
+> +      - tesla,fsd-clock-mfc
+> +      - tesla,fsd-clock-cam_csi
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 6
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 6
+> +
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: tesla,fsd-clock-cmu
+> +
 
-Sazinos ar jums uzv=C4=81rda l=C4=ABdz=C4=ABbas d=C4=93=C4=BC
-dal=C4=ABties ar manu miru=C5=A1o klientu, kur=C5=A1 ir j=C5=ABsu valsts pi=
-lsonis
-$9,600,000,00 banku noguld=C4=ABjumi Togo Republik=C4=81. V=C4=ABrietis
-Boj=C4=81g=C4=81ju=C5=A1ais klients g=C4=81ja boj=C4=81 ce=C4=BCu satiksmes=
- negad=C4=ABjum=C4=81 2011.gada 21.apr=C4=ABl=C4=AB.
-Tuvi radinieki nav re=C4=A3istr=C4=93ti. Tika veikti da=C5=BE=C4=81di m=C4=
-=93=C4=A3in=C4=81jumi vi=C5=86u atrast.
-Papildu =C4=A3imene caur neaugl=C4=ABgu v=C4=93stniec=C4=ABbu.
+Nitpick: Drop the white-spaces between if-then. It's easier to spot the
+if-blocks if they are together.
 
-Sa=C5=86=C4=93mu ofici=C4=81lu v=C4=93stuli no bankas, kur=C4=81 ieteikts =
-=C5=A1=C4=81ds variants
-Proced=C5=ABra konta padar=C4=AB=C5=A1anai nelietojama un ie=C4=B7=C4=ABl=
-=C4=81=C5=A1anai Fonda ietvaros
-saska=C5=86=C4=81 ar piem=C4=93rojamajiem ties=C4=ABbu aktiem banka, kur=C4=
-=81 mans klients
-noguld=C4=ABja naudu
-Summa ir 9,6 miljoni ASV dol=C4=81ru. =C5=A0eit p=C4=93c vald=C4=ABbas liku=
-miem, tad
-P=C4=93c 10 gadu perioda beig=C4=81m fonds atgriez=C4=ABsies uz=C5=86=C4=93=
-muma =C4=ABpa=C5=A1um=C4=81.
-Togo vald=C4=ABba. 10 gadu termi=C5=86=C5=A1 beidz=C4=81s pag=C4=81ju=C5=A1=
-=C4=81 gada apr=C4=ABl=C4=AB.
-2021, un neviens nav veicis dar=C4=ABjumus vai piepras=C4=ABjis j=C5=ABsu k=
-ontu
-fonds, kapit=C4=81ls.
+> +    then:
+> +      properties:
+> +        clocks:
+> +          items:
+> +            - description: External reference clock (24 MHz)
+> +
 
-Mans ieteikums jums ir iepaz=C4=ABstin=C4=81t j=C5=ABs ar tuv=C4=81ko banku=
-.
-mana miru=C5=A1=C4=81 klienta radinieks samaks=C4=81ja bankai =C5=A1os 9,6 =
-USD
-miljoniem jums k=C4=81 pirc=C4=93jiem. Kad p=C4=81rs=C5=ABt=C4=AB=C5=A1ana =
-ir pabeigta,
-Es ierosinu fondu sadal=C4=ABt ar saska=C5=86otu procentu.
-apmierinot abas puses un ar=C4=AB ziedot labdar=C4=ABbai.
+Drop this whitespace as well.
 
-Es iesnieg=C5=A1u visus juridiskos dokumentus, kas pamato j=C5=ABsu pras=C4=
-=ABbu. Viss
-Lai m=C4=93s to paveiktu, man ir nepiecie=C5=A1ama j=C5=ABsu god=C4=ABg=C4=
-=81 sadarb=C4=ABba.
-process. Es ar=C4=AB garant=C4=93ju, ka tas tiks dar=C4=ABts saska=C5=86=C4=
-=81 ar noteikumiem.
-juridisks l=C4=ABgums, kas pasarg=C4=81s j=C5=ABs no jebk=C4=81diem p=C4=81=
-rk=C4=81pumiem
-likumu =C5=A1eit vai j=C5=ABsu valst=C4=AB.
+Rest looks good to me, except the discussion about the compatible.
 
-L=C5=ABdzu, sazinieties ar mani, lai varu sniegt visu inform=C4=81ciju.
 
-Sveiki
-Kristians Kossi, jurists,
-Galvenais padomnieks: Kossi & Co Associates
+Best regards,
+Krzysztof

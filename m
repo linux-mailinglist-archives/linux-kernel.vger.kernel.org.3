@@ -2,99 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B14A948DAAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E6348DAD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:44:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236112AbiAMP1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 10:27:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234077AbiAMP1u (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 10:27:50 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004BDC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 07:27:49 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id l25so10717298wrb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 07:27:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=forissier-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3teCKMCWiTKibV9NJF6sI2UlLTztwiagclBsxXmy4Rg=;
-        b=QcT3/xkGHJgTFwbVusORhBurI0G3iM0877j5CCtXLQE5fRUzYkrTDUIzJIel0V2+KR
-         js17NeEYwitLjXTTrGhOV+Pwglvfq5hNPM/K1Iu+LOxUPVxXz4qNY95T3ZwbYQsdk0L6
-         gJo5Rb19H9Ku1DspGsuRRaHddYqGIo2HHHHoPX60Bzi1HV8hYub+y6f3IMj7DB2VDuGS
-         KYz0B+fO/bBpISA4mDnIo002AOMsn9PAAQBW1Pn2eCRFnXVWVlWAj2HQKxW0w30oZgFE
-         HJ/hJzfLLdAJNrM2Yyhi4hH/PN8LkaFXMXK2zYiEmrPaoK4tIfF3QEm226VTUY9bSE5o
-         hzpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3teCKMCWiTKibV9NJF6sI2UlLTztwiagclBsxXmy4Rg=;
-        b=eABbLo4j7WWwFwDHwiFPj4zSROY7jGDo9ueY8NMkJFfiJu7SonSzHgPaSoub5yN7S2
-         Jet+cufGDhYt/QVswExCKzfJ8vPyq+KYwAMRd+quObVe08sdILHbYEKvSlq6xiLz27St
-         y0HrPfq67ViD74EVKnJsnMQ25GwaNtmXn6zbPLyoj13gw4QG8Uge/H2DErLx8cb5O5l+
-         0WSWIOzIdKWbIVye53U8q5FSIgWfjQoEPlPqd30KQbNAghQq9rUtOXYUkS4ymX8dge82
-         Vc798AdDUw2wY2E3+nNGDNIySW3WeYWalio+7HvmrjEj77JayPQ3wctoBQI38g2Gdbw2
-         Ejeg==
-X-Gm-Message-State: AOAM533ESuCVezOvRcRXJAaWPZWiVshaaeyFnGo/vUdMGeE2SYG1fq6N
-        6BXAFXI/Cjz64mgXRnXb0zCaZg==
-X-Google-Smtp-Source: ABdhPJwCKCFfn14es8NKKjDu9uZMBVLMmCuVsDSNnAEcuaDxtkJ1wQgZZF8GMq7AspQIG+2tcGgMXA==
-X-Received: by 2002:adf:eec9:: with SMTP id a9mr4372290wrp.178.1642087668411;
-        Thu, 13 Jan 2022 07:27:48 -0800 (PST)
-Received: from matebook.. ([2a01:e0a:3cb:7bb0:b076:68c6:c37b:4160])
-        by smtp.gmail.com with ESMTPSA id bg12sm3661435wmb.5.2022.01.13.07.27.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 07:27:47 -0800 (PST)
-From:   Jerome Forissier <jerome@forissier.org>
-To:     Jens Wiklander <jens.wiklander@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org
-Cc:     Jerome Forissier <jerome@forissier.org>
-Subject: [PATCH] tee: optee: do not check memref size on return from Secure World
-Date:   Thu, 13 Jan 2022 16:27:13 +0100
-Message-Id: <a4e48364368cce3c91005a3bd4fdacee086ef00d.1642087405.git.jerome@forissier.org>
-X-Mailer: git-send-email 2.32.0
+        id S236226AbiAMPoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 10:44:15 -0500
+Received: from mga02.intel.com ([134.134.136.20]:29323 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233305AbiAMPoN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 10:44:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642088652; x=1673624652;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=m75ld79nt8TPm8DDWMvOut/woD0VIiTUU3VSnhxSZAQ=;
+  b=kLcWrcJEZ81fUTy1gOnvx5G1SlahtYPU0Lm2EBvxWf6sBF1/vbABS59/
+   gtqT7mlwE+RoKlZx8tt2PfRDVWJOB8imxb2YDiW/9qQ0vHRFw2kl31NhY
+   WuI6C36HHHumMNWcSMi95O67kftjuEMaEePEbKCUPGp54yADil0V6+uJw
+   Fmp5Rx4afh85qb3JJHEhQ5ARcueNY4aXbyx25QTkdGIpwjji4ZEHrwXw+
+   rNsHKwRAdBmP9gERiV6nICEeZZ5FNwYwNI3BwNBR3agFXqMxM1nCiuu+W
+   qc1IOH/jTdWruj43pwmivKcinDLQEep+lJ0VkeH+jd2oQ6pQ7YBya8fsx
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="231380963"
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="231380963"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 07:44:12 -0800
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="620639268"
+Received: from ypchen-mobl.amr.corp.intel.com (HELO [10.212.66.70]) ([10.212.66.70])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 07:44:11 -0800
+Subject: Re: [PATCH 3/6] ASoC: amd: acp: Add generic PCI driver module for ACP
+ device
+To:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>, broonie@kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     Sunil-kumar.Dommati@amd.com,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        open list <linux-kernel@vger.kernel.org>,
+        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        V sujith kumar Reddy <vsujithkumar.reddy@amd.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Vijendar.Mukunda@amd.com, Alexander.Deucher@amd.com,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Bard Liao <bard.liao@intel.com>
+References: <20220113092842.432101-1-AjitKumar.Pandey@amd.com>
+ <20220113092842.432101-4-AjitKumar.Pandey@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <9da4d004-5fc3-125a-4e60-f0a6a4007d2b@linux.intel.com>
+Date:   Thu, 13 Jan 2022 09:27:22 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220113092842.432101-4-AjitKumar.Pandey@amd.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c650b8dc7a79 ("tee: optee: do not check memref size on return
-from Secure World") was mistakenly lost in commit 4602c5842f64 ("optee:
-refactor driver with internal callbacks"). Remove the unwanted code
-again.
 
-Fixes: 4602c5842f64 ("optee: refactor driver with internal callbacks")
-Signed-off-by: Jerome Forissier <jerome@forissier.org>
----
- drivers/tee/optee/smc_abi.c | 10 ----------
- 1 file changed, 10 deletions(-)
+> +static int acp_pci_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
+> +{
+> +	struct platform_device_info pdevinfo;
+> +	struct device *dev = &pci->dev;
+> +	const struct resource *res_acp;
+> +	struct acp_chip_info *chip;
+> +	struct resource *res;
+> +	unsigned int flag, addr, num_res, i;
+> +	int ret;
+> +
+> +	flag = snd_amd_acp_find_config(pci);
+> +	if (flag != FLAG_AMD_LEGACY)
+> +		return -ENODEV;
+> +
+> +	chip = devm_kzalloc(&pci->dev, sizeof(*chip), GFP_KERNEL);
+> +	if (!chip)
+> +		return -ENOMEM;
+> +
+> +	if (pci_enable_device(pci)) {
+> +		dev_err(&pci->dev, "pci_enable_device failed\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	ret = pci_request_regions(pci, "AMD ACP3x audio");
+> +	if (ret < 0) {
+> +		dev_err(&pci->dev, "pci_request_regions failed\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	pci_set_master(pci);
+> +
+> +	switch (pci->revision) {
+> +	case 0x01:
+> +		res_acp = acp3x_res;
+> +		num_res = ARRAY_SIZE(acp3x_res);
+> +		chip->name = "acp_asoc_renoir";
+> +		chip->acp_rev = ACP3X_DEV;
+> +		break;
+> +	default:
+> +		dev_err(dev, "Unsupported device revision:0x%x\n", pci->revision);
+> +		return -EINVAL;
+> +	}
+> +
+> +	dmic_dev = platform_device_register_data(dev, "dmic-codec", PLATFORM_DEVID_NONE, NULL, 0);
+> +	if (IS_ERR(dmic_dev)) {
+> +		dev_err(dev, "failed to create DMIC device\n");
+> +		return PTR_ERR(dmic_dev);
+> +	}
 
-diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index cf2e3293567d..09e7ec673bb6 100644
---- a/drivers/tee/optee/smc_abi.c
-+++ b/drivers/tee/optee/smc_abi.c
-@@ -71,16 +71,6 @@ static int from_msg_param_tmp_mem(struct tee_param *p, u32 attr,
- 	p->u.memref.shm_offs = mp->u.tmem.buf_ptr - pa;
- 	p->u.memref.shm = shm;
- 
--	/* Check that the memref is covered by the shm object */
--	if (p->u.memref.size) {
--		size_t o = p->u.memref.shm_offs +
--			   p->u.memref.size - 1;
--
--		rc = tee_shm_get_pa(shm, o, NULL);
--		if (rc)
--			return rc;
--	}
--
- 	return 0;
- }
- 
--- 
-2.32.0
+Past this point, any error handling needs to use
+platform_device_unregister(dmic_dev);
+...
+
+> +	addr = pci_resource_start(pci, 0);
+> +	chip->base = devm_ioremap(&pci->dev, addr, pci_resource_len(pci, 0));
+> +
+> +	res = devm_kzalloc(&pci->dev, sizeof(struct resource) * num_res, GFP_KERNEL);
+> +	if (!res)
+> +		return -ENOMEM;
+
+...which is missed here.
+
+> +
+> +	for (i = 0; i < num_res; i++, res_acp++) {
+> +		res[i].name = res_acp->name;
+> +		res[i].flags = res_acp->flags;
+> +		res[i].start = addr + res_acp->start;
+> +		res[i].end = addr + res_acp->end;
+> +		if (res_acp->flags == IORESOURCE_IRQ) {
+> +			res[i].start = pci->irq;
+> +			res[i].end = res[i].start;
+> +		}
+> +	}
+> +
+> +	memset(&pdevinfo, 0, sizeof(pdevinfo));
+> +
+> +	pdevinfo.name = chip->name;
+> +	pdevinfo.id = 0;
+> +	pdevinfo.parent = &pci->dev;
+> +	pdevinfo.num_res = num_res;
+> +	pdevinfo.res = &res[0];
+> +	pdevinfo.data = chip;
+> +	pdevinfo.size_data = sizeof(*chip);
+> +
+> +	pdev = platform_device_register_full(&pdevinfo);
+> +	if (IS_ERR(pdev)) {
+> +		dev_err(&pci->dev, "cannot register %s device\n", pdevinfo.name);
+> +		platform_device_unregister(dmic_dev);
+> +		ret = PTR_ERR(pdev);
+> +	}
+> +
+> +	return ret;
+> +};
 

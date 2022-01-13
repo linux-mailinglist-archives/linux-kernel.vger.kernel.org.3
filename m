@@ -2,110 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2370548D30D
+	by mail.lfdr.de (Postfix) with ESMTP id B68CD48D30F
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbiAMHmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 02:42:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54782 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232242AbiAMHmS (ORCPT
+        id S232369AbiAMHmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 02:42:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56601 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232273AbiAMHmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 02:42:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 13 Jan 2022 02:42:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642059757;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ue1d/msd5vIMJ1AqIu2LNoBMek//LGkHnqyUgH09KUQ=;
+        b=JRXNO2tX9VLrb345kSVdv/Qm/SaKHgttigzFN5rgwqSfyZhLa9LdAvzU5cH1sd49MxKyqX
+        fSyQIQPtCcoJOkI1LOWwKlDuHWG5ZFcA9FCdEBnmaqbMieYmc8v++jY2H7x9qCv8HNLUVL
+        cbCetkGIi7ErCMPjHQF3SpiVhAgCa1w=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-343-4QNDXphRPzy9ZrcT1PZEhw-1; Thu, 13 Jan 2022 02:42:33 -0500
+X-MC-Unique: 4QNDXphRPzy9ZrcT1PZEhw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58890B821C6;
-        Thu, 13 Jan 2022 07:42:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED3DC36AE3;
-        Thu, 13 Jan 2022 07:42:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642059735;
-        bh=YhsgT/VGvn7iC/tWrV+hAmkAlLPkGfoehuUgvcT8PxQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=afoWXEa6BISUUp8I9HVzp7qlC7k1nW4vb1wONJSckOZNzpBEk2Oen3EtDwVSw+1El
-         xx/9f2+bKgCToDN1Ictko8OP+u9pyjh/q/zt+zKsQVvdlXPBCDftMBwEwoY8FPrLl+
-         mqWoagur7cWNCiXf2mElwp9eAucVF9q6l5MR9tFNzKo9blsdwM6pOUsjwOaE9BcUnH
-         k6KMX/cJqDVsW+SjUZPwz/hbJWpiqDejLZ1u+472+BTau+8USPjn7TZYy0xCdpZeBl
-         RjMDP9/liJmWJNYCG6p9FTPgT7dhKIskJ9f0/hvhdygA/icU/xPh7pN+9ce/lyO4zh
-         GeoIpPIGhXuJw==
-Date:   Thu, 13 Jan 2022 09:42:03 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 1/7] mm: Add support for unaccepted memory
-Message-ID: <Yd/Xy+L61YewxE21@kernel.org>
-References: <20220111113314.27173-1-kirill.shutemov@linux.intel.com>
- <20220111113314.27173-2-kirill.shutemov@linux.intel.com>
- <3a68fabd-eaff-2164-5609-3a71fd4a7257@intel.com>
- <20220112183054.uedczc4ldntrj25j@box.shutemov.name>
- <af7ceba3-c27e-9f18-6c1b-c251428d8da4@intel.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 70C4C193F560;
+        Thu, 13 Jan 2022 07:42:32 +0000 (UTC)
+Received: from [10.72.13.202] (ovpn-13-202.pek2.redhat.com [10.72.13.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 727AB5F917;
+        Thu, 13 Jan 2022 07:42:23 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v4 03/15] KVM: async_pf: Make GFN slot management generic
+To:     Eric Auger <eauger@redhat.com>, kvmarm@lists.cs.columbia.edu
+Cc:     kvm@vger.kernel.org, maz@kernel.org, linux-kernel@vger.kernel.org,
+        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
+References: <20210815005947.83699-1-gshan@redhat.com>
+ <20210815005947.83699-4-gshan@redhat.com>
+ <06cb06c0-13e7-906b-9b88-543a58bb5590@redhat.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <8bc39e08-abb9-91ba-3862-d5b2ccb0b7f5@redhat.com>
+Date:   Thu, 13 Jan 2022 15:42:19 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <af7ceba3-c27e-9f18-6c1b-c251428d8da4@intel.com>
+In-Reply-To: <06cb06c0-13e7-906b-9b88-543a58bb5590@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 10:40:53AM -0800, Dave Hansen wrote:
-> On 1/12/22 10:30, Kirill A. Shutemov wrote:
-> > On Tue, Jan 11, 2022 at 11:46:37AM -0800, Dave Hansen wrote:
-> > > > diff --git a/mm/memblock.c b/mm/memblock.c
-> > > > index 1018e50566f3..6dfa594192de 100644
-> > > > --- a/mm/memblock.c
-> > > > +++ b/mm/memblock.c
-> > > > @@ -1400,6 +1400,7 @@ phys_addr_t __init memblock_alloc_range_nid(phys_addr_t size,
-> > > >    		 */
-> > > >    		kmemleak_alloc_phys(found, size, 0, 0);
-> > > > +	accept_memory(found, found + size);
-> > > >    	return found;
-> > > >    }
-> > > 
-> > > This could use a comment.
-> > 
-> > How about this:
-> > 
-> > 	/*
-> > 	 * Some Virtual Machine platforms, such as Intel TDX or AMD SEV-SNP,
-> > 	 * requiring memory to be accepted before it can be used by the
-> > 	 * guest.
-> > 	 *
-> > 	 * Accept the memory of the allocated buffer.
-> > 	 */
-> 
-> I think a one-liner that might cue the reader to go look at accept_memory()
-> itself would be fine.  Maybe:
-> 
-> 	/* Make the memblock usable when running in picky VM guests: */
+Hi Eric,
 
-I'd s/memblock/found range/ or something like that, memblock is too vague
-IMO
- 
-> That implies that the memory isn't usable without doing this and also points
-> out that it's related to running in a guest.
+On 11/11/21 1:00 AM, Eric Auger wrote:
+> On 8/15/21 2:59 AM, Gavin Shan wrote:
+>> It's not allowed to fire duplicate notification for same GFN on
+>> x86 platform, with help of a hash table. This mechanism is going
+> s/, with help of a hash table/this is achieved through a hash table
+>> to be used by arm64 and this makes the code generic and shareable
+> s/and this makes/.\n Turn the code generic
+>> by multiple platforms.
+>>
+>>     * As this mechanism isn't needed by all platforms, a new kernel
+>>       config option (CONFIG_ASYNC_PF_SLOT) is introduced so that it
+>>       can be disabled at compiling time.
+> compile time
 
--- 
-Sincerely yours,
-Mike.
+Ok.
+
+>>
+>>     * The code is basically copied from x86 platform and the functions
+>>       are renamed to reflect the fact: (a) the input parameters are
+>>       vCPU and GFN.
+> not for reset
+> (b) The operations are resetting, searching, adding
+
+Ok.
+
+>>       and removing.
+> find, add, remove ops are renamed with _slot suffix
+
+Ok. The commit log will be improved based on your suggestions in
+next respin :)
+
+>>
+>>     * Helper stub is also added on !CONFIG_KVM_ASYNC_PF because we're
+>>       going to use IS_ENABLED() instead of #ifdef on arm64 when the
+>>       asynchronous page fault is supported.
+>>
+>> This is preparatory work to use the newly introduced functions on x86
+>> platform and arm64 in subsequent patches.
+>>
+>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>> ---
+>>   include/linux/kvm_host.h | 18 +++++++++
+>>   virt/kvm/Kconfig         |  3 ++
+>>   virt/kvm/async_pf.c      | 85 ++++++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 106 insertions(+)
+>>
+>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+>> index a5f990f6dc35..a9685c2b2250 100644
+>> --- a/include/linux/kvm_host.h
+>> +++ b/include/linux/kvm_host.h
+>> @@ -298,6 +298,9 @@ struct kvm_vcpu {
+>>   
+>>   #ifdef CONFIG_KVM_ASYNC_PF
+>>   	struct {
+>> +#ifdef CONFIG_KVM_ASYNC_PF_SLOT
+>> +		gfn_t gfns[ASYNC_PF_PER_VCPU];
+>> +#endif
+>>   		u32 queued;
+>>   		struct list_head queue;
+>>   		struct list_head done;
+>> @@ -339,6 +342,13 @@ struct kvm_async_pf {
+>>   	bool				notpresent_injected;
+>>   };
+>>   
+>> +#ifdef CONFIG_KVM_ASYNC_PF_SLOT
+>> +void kvm_async_pf_reset_slot(struct kvm_vcpu *vcpu);
+> this does not reset a "slot" but the whole hash table. So to me this
+> shouldn't be renamed with _slot suffix. reset_hash or reset_all_slots?
+
+Sure, lets have kvm_async_pf_reset_all_slots() in next respin.
+
+>> +void kvm_async_pf_add_slot(struct kvm_vcpu *vcpu, gfn_t gfn);
+>> +void kvm_async_pf_remove_slot(struct kvm_vcpu *vcpu, gfn_t gfn);
+>> +bool kvm_async_pf_find_slot(struct kvm_vcpu *vcpu, gfn_t gfn);
+>> +#endif
+>> +
+>>   static inline bool kvm_check_async_pf_completion_queue(struct kvm_vcpu *vcpu)
+>>   {
+>>   	return !list_empty_careful(&vcpu->async_pf.done);
+>> @@ -350,6 +360,14 @@ bool kvm_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>>   			unsigned long hva, struct kvm_arch_async_pf *arch);
+>>   int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
+>>   #else
+>> +static inline void kvm_async_pf_reset_slot(struct kvm_vcpu *vcpu) { }
+>> +static inline void kvm_async_pf_add_slot(struct kvm_vcpu *vcpu, gfn_t gfn) { }
+>> +static inline void kvm_async_pf_remove_slot(struct kvm_vcpu *vcpu, gfn_t gfn) { }
+>> +static inline bool kvm_async_pf_find_slot(struct kvm_vcpu *vcpu, gfn_t gfn)
+>> +{
+>> +	return false;
+>> +}
+>> +
+>>   static inline bool kvm_check_async_pf_completion_queue(struct kvm_vcpu *vcpu)
+>>   {
+>>   	return false;
+>> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
+>> index 62b39149b8c8..59b518c8c205 100644
+>> --- a/virt/kvm/Kconfig
+>> +++ b/virt/kvm/Kconfig
+>> @@ -23,6 +23,9 @@ config KVM_MMIO
+>>   config KVM_ASYNC_PF
+>>          bool
+>>   
+>> +config KVM_ASYNC_PF_SLOT
+>> +	bool
+>> +
+>>   # Toggle to switch between direct notification and batch job
+>>   config KVM_ASYNC_PF_SYNC
+>>          bool
+>> diff --git a/virt/kvm/async_pf.c b/virt/kvm/async_pf.c
+>> index d145a61a046a..0d1fdb2932af 100644
+>> --- a/virt/kvm/async_pf.c
+>> +++ b/virt/kvm/async_pf.c
+>> @@ -13,12 +13,97 @@
+>>   #include <linux/module.h>
+>>   #include <linux/mmu_context.h>
+>>   #include <linux/sched/mm.h>
+>> +#ifdef CONFIG_KVM_ASYNC_PF_SLOT
+>> +#include <linux/hash.h>
+>> +#endif
+>>   
+>>   #include "async_pf.h"
+>>   #include <trace/events/kvm.h>
+>>   
+>>   static struct kmem_cache *async_pf_cache;
+>>   
+>> +#ifdef CONFIG_KVM_ASYNC_PF_SLOT
+>> +static inline u32 kvm_async_pf_hash(gfn_t gfn)
+>> +{
+>> +	BUILD_BUG_ON(!is_power_of_2(ASYNC_PF_PER_VCPU));
+>> +
+>> +	return hash_32(gfn & 0xffffffff, order_base_2(ASYNC_PF_PER_VCPU));
+>> +}
+>> +
+>> +static inline u32 kvm_async_pf_next_slot(u32 key)
+>> +{
+>> +	return (key + 1) & (ASYNC_PF_PER_VCPU - 1);
+>> +}
+>> +
+>> +static u32 kvm_async_pf_slot(struct kvm_vcpu *vcpu, gfn_t gfn)
+>> +{
+>> +	u32 key = kvm_async_pf_hash(gfn);
+>> +	int i;
+>> +
+>> +	for (i = 0; i < ASYNC_PF_PER_VCPU &&
+>> +		(vcpu->async_pf.gfns[key] != gfn &&
+>> +		vcpu->async_pf.gfns[key] != ~0); i++)
+>> +		key = kvm_async_pf_next_slot(key);
+>> +
+>> +	return key;
+>> +}
+>> +
+>> +void kvm_async_pf_reset_slot(struct kvm_vcpu *vcpu)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; i < ASYNC_PF_PER_VCPU; i++)
+>> +		vcpu->async_pf.gfns[i] = ~0;
+>> +}
+>> +
+>> +void kvm_async_pf_add_slot(struct kvm_vcpu *vcpu, gfn_t gfn)
+>> +{
+>> +	u32 key = kvm_async_pf_hash(gfn);
+>> +
+>> +	while (vcpu->async_pf.gfns[key] != ~0)
+>> +		key = kvm_async_pf_next_slot(key);
+>> +
+>> +	vcpu->async_pf.gfns[key] = gfn;
+>> +}
+>> +
+>> +void kvm_async_pf_remove_slot(struct kvm_vcpu *vcpu, gfn_t gfn)
+>> +{
+>> +	u32 i, j, k;
+>> +
+>> +	i = j = kvm_async_pf_slot(vcpu, gfn);
+>> +
+>> +	if (WARN_ON_ONCE(vcpu->async_pf.gfns[i] != gfn))
+>> +		return;
+>> +
+>> +	while (true) {
+>> +		vcpu->async_pf.gfns[i] = ~0;
+>> +
+>> +		do {
+>> +			j = kvm_async_pf_next_slot(j);
+>> +			if (vcpu->async_pf.gfns[j] == ~0)
+>> +				return;
+>> +
+>> +			k = kvm_async_pf_hash(vcpu->async_pf.gfns[j]);
+>> +			/*
+>> +			 * k lies cyclically in ]i,j]
+>> +			 * |    i.k.j |
+>> +			 * |....j i.k.| or  |.k..j i...|
+>> +			 */
+>> +		} while ((i <= j) ? (i < k && k <= j) : (i < k || k <= j));
+>> +
+>> +		vcpu->async_pf.gfns[i] = vcpu->async_pf.gfns[j];
+>> +		i = j;
+>> +	}
+>> +}
+>> +
+>> +bool kvm_async_pf_find_slot(struct kvm_vcpu *vcpu, gfn_t gfn)
+>> +{
+>> +	u32 key = kvm_async_pf_slot(vcpu, gfn);
+>> +
+>> +	return vcpu->async_pf.gfns[key] == gfn;
+>> +}
+>> +#endif /* CONFIG_KVM_ASYNC_PF_SLOT */
+>> +
+>>   int kvm_async_pf_init(void)
+>>   {
+>>   	async_pf_cache = KMEM_CACHE(kvm_async_pf, 0);
+>>
+
+Thanks,
+Gavin
+

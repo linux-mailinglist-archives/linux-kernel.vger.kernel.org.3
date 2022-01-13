@@ -2,65 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1470048D322
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3CD48D325
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbiAMHqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 02:46:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37276 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbiAMHqJ (ORCPT
+        id S232726AbiAMHq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 02:46:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231946AbiAMHq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 02:46:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0011361BF7;
-        Thu, 13 Jan 2022 07:46:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E293C36AE3;
-        Thu, 13 Jan 2022 07:46:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642059968;
-        bh=lpGDNOjF9PS4ksE1JbP35kchrQbMp1z3OOJmzOtFQr8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lDQ3A8NfxKXdOOY6FCt963ToivHNmAobE1x5iZgCj0rSy9DKon9Vf2b4HzMt5UcOc
-         0N9WnVIHQfQl7Is4MWRWOpOC1eaKV8etTn1AhcNdeRVcHQ4p/db0/7++85D1lvVrNI
-         25Mv3QVLfHzHHPhr31A/9ecfRw4mrRgPI74JG164=
-Date:   Thu, 13 Jan 2022 08:46:05 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Iouri Tarassov <iourit@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, spronovo@microsoft.com
-Subject: Re: [PATCH v1 1/9] drivers: hv: dxgkrnl: Driver initialization and
- creation of dxgadapter
-Message-ID: <Yd/YvU5RQOAvLOhC@kroah.com>
-References: <cover.1641937419.git.iourit@linux.microsoft.com>
- <1b26482b50832b95a9d8532c493cee6c97323b87.1641937419.git.iourit@linux.microsoft.com>
+        Thu, 13 Jan 2022 02:46:26 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992E7C06173F;
+        Wed, 12 Jan 2022 23:46:26 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id p14so8459651plf.3;
+        Wed, 12 Jan 2022 23:46:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gsDpZO2eSBO5vB4C+Ee93IE1Uh37uNXx2ALiI/rHI7A=;
+        b=NpzumxFKlXJGOCmDcgYMEwdFZrUPaX20NGeuTinlv5AfWl0EdF8XREyNgUKRljJFd5
+         ekAoKGrAh5g2w93DdcACJzb0ttATY9PU/LWpUq09ucSXDVOLyJ8QahiAnH9+194ig8GW
+         fY/wt6tFc8Zd3rzxH1WRHm57hEtsNFA51KVUSgotfgmmN2zHStc3oIK6sS4iP+XyceRi
+         VGtExBJAB8m6OTMKN4JX8t0yGdIkqPrfwNppz8x69T9w+jtTmAxenm7S9d5uBVpovZN2
+         NEUPf9Ez+4lnWBRuZKo3aS1Xzl+WWcYc2USNoMY9LuNZznzxGZQ70vAtwL0StxqQpCza
+         xWMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gsDpZO2eSBO5vB4C+Ee93IE1Uh37uNXx2ALiI/rHI7A=;
+        b=DgeFVyqU8WBujYLhIUf2Hps6K+OX/rYe/hzy/sI96/ASMf1AAXhORAun/YRFfkWJWs
+         R+T3YfcK0P5zqnsUZaElmeVSVfNrsWzt6mYGEskBv7X7nSPD4buLsxZ3jXSM6aTRei5p
+         HWZXG8cC4+49Uzh+/HU7G3HQhcsY9nuLb5fLLvUWl9bf/c4Mnl21zjrbB8a4DKhUnMHr
+         /TKoPS4LvYIXpSlv9fpvl8wumQ2ohivToNdUay9SPUU2YyI/YF2tyUREyPO369eqFvsd
+         QdxOJ3xQ5tK76DO1DcA9Ekxc/whJLauVP9hEEb1UIvCHHbyB53tRM1ZE2SooN6NYOK8y
+         NS6Q==
+X-Gm-Message-State: AOAM533fH+ZkxTtRg4vjWtSpqoRJ3hKIFa/SpI42yRKoExVaqZoIes3i
+        deI5+lsHgHeRt6VorIohM0I=
+X-Google-Smtp-Source: ABdhPJx4RQVOqcJN2/8dckTvs3XQJPBPjvg77NsuhM69I0yfoLYSgXtIz3ZTnTHdPH5P/WXmSs0C1w==
+X-Received: by 2002:a17:90b:3906:: with SMTP id ob6mr13331953pjb.170.1642059985924;
+        Wed, 12 Jan 2022 23:46:25 -0800 (PST)
+Received: from localhost.localdomain (61-231-99-230.dynamic-ip.hinet.net. [61.231.99.230])
+        by smtp.gmail.com with ESMTPSA id d2sm1864602pfu.76.2022.01.12.23.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 23:46:25 -0800 (PST)
+From:   Joseph CHAMG <josright123@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joseph CHANG <josright123@gmail.com>,
+        joseph_chang@davicom.com.tw
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v11, 0/2] ADD DM9051 ETHERNET DRIVER
+Date:   Thu, 13 Jan 2022 15:46:12 +0800
+Message-Id: <20220113074614.407-1-josright123@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b26482b50832b95a9d8532c493cee6c97323b87.1641937419.git.iourit@linux.microsoft.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 11:55:06AM -0800, Iouri Tarassov wrote:
-> +	dev_dbg(dxgglobaldev, "%s: %x:%x %p %pUb\n",
-> +		    __func__, adapter->luid.b, adapter->luid.a, hdev->channel,
-> +		    &hdev->channel->offermsg.offer.if_instance);
+DM9051 is a spi interface chip,
+need cs/mosi/miso/clock with an interrupt gpio pin
 
-When I see something like "global device pointer", that is a HUGE red
-flag.
+Joseph CHAMG (1):
+  net: Add dm9051 driver
 
-No driver should ever have anything that is static to the driver like
-this, it should always be per-device.  Please use the correct device
-model here, which does not include a global pointer, but rather unique
-ones that are given to you by the driver core.  That way you are never
-tied to only "one device per system" as that is a constraint that you
-will have to fix eventually, might as well do it all correctly the first
-time as it is not any extra effort to do so.
+JosephCHANG (2):
+  yaml: Add dm9051 SPI network yaml file
+  net: Add dm9051 driver
 
-thanks,
+ .../bindings/net/davicom,dm9051.yaml          |   62 +
+ drivers/net/ethernet/davicom/Kconfig          |   29 +
+ drivers/net/ethernet/davicom/Makefile         |    1 +
+ drivers/net/ethernet/davicom/dm9051.c         | 1169 +++++++++++++++++
+ drivers/net/ethernet/davicom/dm9051.h         |  198 +++
+ 5 files changed, 1459 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/davicom,dm9051.yaml
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.c
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.h
 
-greg k-h
+
+base-commit: 9d922f5df53844228b9f7c62f2593f4f06c0b69b
+-- 
+2.20.1
+

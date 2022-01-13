@@ -2,132 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F6B48D06E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 03:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCD448D06F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 03:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbiAMC3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 21:29:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbiAMC3H (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 21:29:07 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40788C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 18:29:06 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id n137so457383iod.4
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 18:29:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=VuJFJ1rkgmwkLED1mbUou+DAwQnhI8SNKN9Yz8Tg4dI=;
-        b=SgdhpWV5CsUbR+KONcpbCpxM/ACm3aMPVCcPz7KY4z4bmWVeybkjsa3QtUiXsVwCwh
-         frwyFaaiRmVlUR2kOUQ6s6cSx74q7L6LPX9YuyXKp3CvMYP2OkTrXfr5oKEYcFNORZTN
-         wPrM4jsLom2RJjWBUYyl81wlzWW/ziMgvWBfE1n3FATGp/FCJNUNGJGUti2hTtCnT3w/
-         hOejj2rpSkFn+oMUsldvA+ebEOUFKH9UX0sxMOjPnccuNiX7e4lkB8KUFqrmyEsD6gpW
-         KnOE6nbBZAsbuMeH4eJuLP2l0F4k+hOMZneh6OcicLg4S2aBU2xEww75O3Mk9Ibg68DR
-         ngVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=VuJFJ1rkgmwkLED1mbUou+DAwQnhI8SNKN9Yz8Tg4dI=;
-        b=KofUjogypd+rS7QvxmUNZcMBzmu/mRvxeUErKhdB+8t9q9HpmXGw3VuEwSQRAyNsf0
-         iifDZZhG216i1LY8Z7XuzO0gmTxmRuJzmHnVJI9uVhsQ4LktXjS8Fv9HciV+DAPDmIEC
-         PIbt9o0mWFl+XiSaWy9/gNGpJfznYQ6mYSAFyis6ndywdcSoH9kNRV4e/IEOCCdvKppE
-         00JgFS9Su6Wwrp4b+DNSnvUYPUqgtLQzG1Fcx8oTTkkGGI4qndASl11qimI6K8wbGDo0
-         Gx03okpIGRLDaB5CJ/gQv4TqOrrvXBZBNR/GWHiAvWQd8gYOOwq338Eapde2rLpDZTTG
-         pHTQ==
-X-Gm-Message-State: AOAM531Tr32nBy7AQ2lxQ/w1GxIvua5CDz8p81XOaiUsFNsascukDgvv
-        JmhFeYAMr3z/IfOHBgySn7ZxuM/41OmZqZmpnmgjyXvjzpg=
-X-Google-Smtp-Source: ABdhPJyGNmxTUZfoWJg3j2dI63SoLOzF5fQiJEewJSouusSuRnwFlO78uCkLUVvfr+9tgrm4lg7upWDd+O+ewmUPpn8=
-X-Received: by 2002:a02:9992:: with SMTP id a18mr1047560jal.189.1642040945674;
- Wed, 12 Jan 2022 18:29:05 -0800 (PST)
+        id S231712AbiAMCad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 21:30:33 -0500
+Received: from mga14.intel.com ([192.55.52.115]:62274 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231593AbiAMCab (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 21:30:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642041031; x=1673577031;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CCNDGKbmKQFYdJA5L4AqvM30QQMdoQ8PaBFXygVVKE4=;
+  b=Tz2wRXKFH6kVoVhzw3cw5yZ9eYIJZ4SWtoosvYVxufWNoZ7kKXML+ppu
+   HPN6Qx5cFlhbYHN8TPjVFhqCPsUZQ+tXII9vGTpiHFWgyDxMrZMLbBEQu
+   9vv1SoR4h3bXuHzeL/ZrvaH9+MxGkMH+zfDjbCaymJcQmaKRxiueYiR/s
+   sa7+wucOoTZP0f5COg/ZqB3zj9TdnRhfKUaXM0OFGagzcX9ZITSshdfeJ
+   nPIQfQVARgA6smYBGDdL4PFDDIRoNURqgHb3Il1QuKojgDAj1JwbnZj4c
+   2bBZOlt+HtX0N2j4tgp9FuSTA8bZGD/o2sCoAA//3GFCsQ94/C2/OlcVf
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="244115369"
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="244115369"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 18:30:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="623694290"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 12 Jan 2022 18:30:29 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n7psi-0006jy-IN; Thu, 13 Jan 2022 02:30:28 +0000
+Date:   Thu, 13 Jan 2022 10:29:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/platform/x86/asus-tf103c-dock.c:253:22: sparse: sparse:
+ symbol 'tf103c_dock_hid_ll_driver' was not declared. Should it be static?
+Message-ID: <202201131019.hPdr89Fv-lkp@intel.com>
 MIME-Version: 1.0
-From:   Jassi Brar <jassisinghbrar@gmail.com>
-Date:   Wed, 12 Jan 2022 20:28:54 -0600
-Message-ID: <CABb+yY3o9pOY1EbedNRM_++MxM8TNFrB3EbrZ+07h_p3O4i1LA@mail.gmail.com>
-Subject: [GIT PULL] Mailbox changes for v5.17
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   362f533a2a1098fe95020cb59340023e9b11d062
+commit: 0a6509b0926dea5ebbd2c86551b7681b00585961 platform/x86: Add Asus TF103C dock driver
+date:   8 days ago
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220113/202201131019.hPdr89Fv-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0a6509b0926dea5ebbd2c86551b7681b00585961
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0a6509b0926dea5ebbd2c86551b7681b00585961
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/x86/
 
-The following changes since commit c9e6606c7fe92b50a02ce51dda82586ebdf99b48:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  Linux 5.16-rc8 (2022-01-02 14:23:25 -0800)
 
-are available in the Git repository at:
+sparse warnings: (new ones prefixed by >>)
+>> drivers/platform/x86/asus-tf103c-dock.c:253:22: sparse: sparse: symbol 'tf103c_dock_hid_ll_driver' was not declared. Should it be static?
+>> drivers/platform/x86/asus-tf103c-dock.c:924:1: sparse: sparse: symbol 'tf103c_dock_pm_ops' was not declared. Should it be static?
 
-  git://git.linaro.org/landing-teams/working/fujitsu/integration.git
-tags/mailbox-v5.17
+vim +/tf103c_dock_hid_ll_driver +253 drivers/platform/x86/asus-tf103c-dock.c
 
-for you to fetch changes up to 869b6ca39c08c5b10eeb29d4b3c4bc433bf8ba5e:
+   252	
+ > 253	struct hid_ll_driver tf103c_dock_hid_ll_driver = {
+   254		.parse = tf103c_dock_hid_parse,
+   255		.start = tf103c_dock_hid_start,
+   256		.stop = tf103c_dock_hid_stop,
+   257		.open = tf103c_dock_hid_open,
+   258		.close = tf103c_dock_hid_close,
+   259		.raw_request = tf103c_dock_hid_raw_request,
+   260	};
+   261	
 
-  dt-bindings: mailbox: Add more protocol and client ID (2022-01-11
-23:47:33 -0600)
-
-----------------------------------------------------------------
-- qcom: misc updates to qcom-ipcc driver
-- mpfs: change compatible string
-- pcc: fix handling of subtypes
-avoid uninit variable
-- mtk: add missing of_node_put
-enable control_by_sw
-silent probe-defer prints
-fix gce_num for mt8192
-- zynq: add missing of_node_put
-- imx: check for NULL instead of IS_ERR
-- appple: switch to generic compatibles
-- hi3660: convert comments to kernel-doc notation
-
-----------------------------------------------------------------
-Conor Dooley (1):
-      mailbox: change mailbox-mpfs compatible string
-
-Dan Carpenter (1):
-      mailbox: imx: Fix an IS_ERR() vs NULL bug
-
-Hector Martin (2):
-      dt-bindings: mailbox: apple,mailbox: Add generic and t6000 compatibles
-      mailbox: apple: Bind to generic compatibles
-
-Hsin-Yi Wang (1):
-      mailbox: mtk-cmdq: Silent EPROBE_DEFER errors for clks
-
-Huang Yiwei (4):
-      mailbox: qcom-ipcc: Dynamic alloc for channel arrangement
-      mailbox: qcom-ipcc: Support more IPCC instance
-      mailbox: qcom-ipcc: Support interrupt wake up from suspend
-      dt-bindings: mailbox: Add more protocol and client ID
-
-Randy Dunlap (1):
-      mailbox: hi3660: convert struct comments to kernel-doc notation
-
-Sudeep Holla (2):
-      mailbox: pcc: Avoid using the uninitialized variable 'dev'
-      mailbox: pcc: Handle all PCC subtypes correctly in pcc_mbox_irq
-
-Wang Qing (2):
-      mailbox: zynq: add missing of_node_put before return
-      mailbox: mtk: add missing of_node_put before return
-
-jason-jh.lin (2):
-      mailbox: fix gce_num of mt8192 driver data
-      mailbox: add control_by_sw for mt8195
-
- .../devicetree/bindings/mailbox/apple,mailbox.yaml | 12 ++-
- drivers/mailbox/apple-mailbox.c                    |  4 +-
- drivers/mailbox/hi3660-mailbox.c                   | 18 ++--
- drivers/mailbox/imx-mailbox.c                      |  4 +-
- drivers/mailbox/mailbox-mpfs.c                     |  2 +-
- drivers/mailbox/mtk-cmdq-mailbox.c                 | 15 ++--
- drivers/mailbox/pcc.c                              | 10 ++-
- drivers/mailbox/qcom-ipcc.c                        | 99 +++++++++++++++++-----
- drivers/mailbox/zynqmp-ipi-mailbox.c               |  1 +
- include/dt-bindings/mailbox/qcom-ipcc.h            |  2 +
- 10 files changed, 116 insertions(+), 51 deletions(-)
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,123 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B86D48D08D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 03:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC9548D07A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 03:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbiAMCvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 21:51:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbiAMCvv (ORCPT
+        id S231771AbiAMCk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 21:40:26 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:17343 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231758AbiAMCkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 21:51:51 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ED0C06173F;
-        Wed, 12 Jan 2022 18:51:50 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id i9so5970627oih.4;
-        Wed, 12 Jan 2022 18:51:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5FspLJRD1mfTtVmG8jofxIl0TqdWH9PjoPfFz13cPbY=;
-        b=bMTVHbnmenwmjEpx9DAXoNej8qPqk/ly5dOLsu4w0cQBnhvLKcDGPyESIm06BaF/8e
-         LkfSzfIpZvCH0FnkT3u+y3OlvP0Bu6DdcQQrhI9H50ESuEYuzDW+WGe4BoLWPwU9hS+d
-         rWofWWTSSZXYRcBQdn8uXCysp/HOfNjGuEAIijB6O1fHdW0l6SwcEvCZGmkOCvNGL33A
-         koXayCxl3Z8BDLBS4lNBZ5bbEztT5HWTfJNnJz6Ld3dpHuQaVws3XWs5+Kh4IWA8RVtG
-         WRKfq9qI/8DAgZleZeL84caxKKPcjQRBBG5zTJhducLNlf1qEVQAG5JKsO+Fh7KvEt7Z
-         g3uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5FspLJRD1mfTtVmG8jofxIl0TqdWH9PjoPfFz13cPbY=;
-        b=iE/YudLr84ElVN0TlNwV6KmHZ1GBCBnDCB/prME1NhxYUGiX8nIaW28ReHrewA3dPt
-         OZdZ+uRmdNq/z2J2D2+OfWoof5pt64zT1ziJyv2pjlWQdiXYbtwxPGv06dvul7inJS6u
-         bKj4B/J/f9EJTvInmosEWgqOE8CDKCIIxPEh8zSAIoMvFWgc9ZVx8R+0hOrd/ZXEck5t
-         IPx1F7SP8KQpT3IxaPOIJTcrXqkFgzoay8sFrIcEFgrMEtoH7uWSimlQtZYG9aux9DIz
-         bWWiaVqhF5fXSQVbEVgo1lq3mYr6Q/iLSaT/oyL+sFX2+DDun1LU4CeUeAgsDcejH1RY
-         +FqQ==
-X-Gm-Message-State: AOAM5302aBE4hkMNphpzf+kJ1/RpnHubG5iAWkIxJoSUiS+ufxa5AHgQ
-        F+qFPlvVQSb/tThrseglNkD3X3L4fxU=
-X-Google-Smtp-Source: ABdhPJyfuKmp30/9hMSNIJDjRDN2Q2GXHpOZoNENUHbo8yamhaGDueRih+aUQwpJj7oudpzShoBHhQ==
-X-Received: by 2002:a05:6808:1119:: with SMTP id e25mr1790235oih.30.1642042310046;
-        Wed, 12 Jan 2022 18:51:50 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 4sm298923otl.26.2022.01.12.18.51.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 18:51:49 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <20220111180347.1245774-1-eugene.shalygin@gmail.com>
- <20220111180347.1245774-4-eugene.shalygin@gmail.com>
- <2224186.ElGaqSPkdT@natalenko.name>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v5 3/3] hwmon: deprecate asis_wmi_ec_sensors driver
-Message-ID: <a95919c0-6a89-18bc-e8ba-2165414e096b@roeck-us.net>
-Date:   Wed, 12 Jan 2022 18:51:47 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 12 Jan 2022 21:40:24 -0500
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JZ7t84RZDz9sBn;
+        Thu, 13 Jan 2022 10:39:12 +0800 (CST)
+Received: from dggpemm500004.china.huawei.com (7.185.36.219) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 13 Jan 2022 10:40:21 +0800
+Received: from huawei.com (10.175.124.27) by dggpemm500004.china.huawei.com
+ (7.185.36.219) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 13 Jan
+ 2022 10:40:20 +0800
+From:   Laibin Qiu <qiulaibin@huawei.com>
+To:     <axboe@kernel.dk>, <ming.lei@redhat.com>, <john.garry@huawei.com>
+CC:     <martin.petersen@oracle.com>, <hare@suse.de>,
+        <akpm@linux-foundation.org>, <bvanassche@acm.org>,
+        <andriy.shevchenko@linux.intel.com>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next V5] blk-mq: fix tag_get wait task can't be awakened
+Date:   Thu, 13 Jan 2022 10:55:36 +0800
+Message-ID: <20220113025536.1479653-1-qiulaibin@huawei.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-In-Reply-To: <2224186.ElGaqSPkdT@natalenko.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500004.china.huawei.com (7.185.36.219)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/22 1:51 PM, Oleksandr Natalenko wrote:
-> Hello.
-> 
-> On úterý 11. ledna 2022 19:03:46 CET Eugene Shalygin wrote:
->> ---
->>   drivers/hwmon/Kconfig | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->> index 2c16b19d2c03..5e693c93d43a 100644
->> --- a/drivers/hwmon/Kconfig
->> +++ b/drivers/hwmon/Kconfig
->> @@ -2243,13 +2243,16 @@ config SENSORS_ASUS_WMI
->>   
->>   config SENSORS_ASUS_WMI_EC
->>   	tristate "ASUS WMI B550/X570"
->> -	depends on ACPI_WMI
->> +	depends on ACPI_WMI && !SENSORS_ASUS_EC
-> 
-> Not sure how it handles `SENSORS_ASUS_EC=m`. Probably, it should be:
-> 
-> ```
-> depends on ACPI_WMI && SENSORS_ASUS_EC=n
-> ```
-> 
+In case of shared tags, there might be more than one hctx which
+allocates from the same tags, and each hctx is limited to allocate at
+most:
+        hctx_max_depth = max((bt->sb.depth + users - 1) / users, 4U);
 
-Odd language, and good catch. If I understand correctly, the result
-of !SENSORS_ASUS_EC is 'm' if SENSORS_ASUS_EC=m. So, yes, it looks
-like this needs to be "ACPI_WMI && SENSORS_ASUS_EC=n".
+tag idle detection is lazy, and may be delayed for 30sec, so there
+could be just one real active hctx(queue) but all others are actually
+idle and still accounted as active because of the lazy idle detection.
+Then if wake_batch is > hctx_max_depth, driver tag allocation may wait
+forever on this real active hctx.
 
-Guenter
+Fix this by recalculating wake_batch when inc or dec active_queues.
 
-> ?
-> 
->>   	help
->>   	  If you say yes here you get support for the ACPI embedded controller
->>   	  hardware monitoring interface found in B550/X570 ASUS motherboards.
->>   	  This driver will provide readings of fans, voltages and temperatures
->>   	  through the system firmware.
->>   
->> +	  This driver is deprecated in favor of the ASUS EC Sensors driver
->> +	  which provides fully compatible output.
->> +
->>   	  This driver can also be built as a module. If so, the module
->>   	  will be called asus_wmi_sensors_ec.
-> 
-> Thanks.
-> 
+Fixes: 0d2602ca30e41 ("blk-mq: improve support for shared tags maps")
+Suggested-by: Ming Lei <ming.lei@redhat.com>
+Suggested-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
+---
+ block/blk-mq-tag.c      | 40 +++++++++++++++++++++++++++++++++-------
+ include/linux/sbitmap.h | 11 +++++++++++
+ lib/sbitmap.c           | 25 ++++++++++++++++++++++---
+ 3 files changed, 66 insertions(+), 10 deletions(-)
+
+diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
+index e55a6834c9a6..845f74e8dd7b 100644
+--- a/block/blk-mq-tag.c
++++ b/block/blk-mq-tag.c
+@@ -16,6 +16,21 @@
+ #include "blk-mq-sched.h"
+ #include "blk-mq-tag.h"
+ 
++/*
++ * Recalculate wakeup batch when tag is shared by hctx.
++ */
++static void blk_mq_update_wake_batch(struct blk_mq_tags *tags,
++		unsigned int users)
++{
++	if (!users)
++		return;
++
++	sbitmap_queue_recalculate_wake_batch(&tags->bitmap_tags,
++			users);
++	sbitmap_queue_recalculate_wake_batch(&tags->breserved_tags,
++			users);
++}
++
+ /*
+  * If a previously inactive queue goes active, bump the active user count.
+  * We need to do this before try to allocate driver tag, then even if fail
+@@ -24,18 +39,26 @@
+  */
+ bool __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
+ {
++	unsigned int users;
++
+ 	if (blk_mq_is_shared_tags(hctx->flags)) {
+ 		struct request_queue *q = hctx->queue;
+ 
+-		if (!test_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags) &&
+-		    !test_and_set_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags))
+-			atomic_inc(&hctx->tags->active_queues);
++		if (test_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags) ||
++		    test_and_set_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags)) {
++			return true;
++		}
+ 	} else {
+-		if (!test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state) &&
+-		    !test_and_set_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
+-			atomic_inc(&hctx->tags->active_queues);
++		if (test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state) ||
++		    test_and_set_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state)) {
++			return true;
++		}
+ 	}
+ 
++	users = atomic_inc_return(&hctx->tags->active_queues);
++
++	blk_mq_update_wake_batch(hctx->tags, users);
++
+ 	return true;
+ }
+ 
+@@ -56,6 +79,7 @@ void blk_mq_tag_wakeup_all(struct blk_mq_tags *tags, bool include_reserve)
+ void __blk_mq_tag_idle(struct blk_mq_hw_ctx *hctx)
+ {
+ 	struct blk_mq_tags *tags = hctx->tags;
++	unsigned int users;
+ 
+ 	if (blk_mq_is_shared_tags(hctx->flags)) {
+ 		struct request_queue *q = hctx->queue;
+@@ -68,7 +92,9 @@ void __blk_mq_tag_idle(struct blk_mq_hw_ctx *hctx)
+ 			return;
+ 	}
+ 
+-	atomic_dec(&tags->active_queues);
++	users = atomic_dec_return(&tags->active_queues);
++
++	blk_mq_update_wake_batch(tags, users);
+ 
+ 	blk_mq_tag_wakeup_all(tags, false);
+ }
+diff --git a/include/linux/sbitmap.h b/include/linux/sbitmap.h
+index fc0357a6e19b..95df357ec009 100644
+--- a/include/linux/sbitmap.h
++++ b/include/linux/sbitmap.h
+@@ -415,6 +415,17 @@ static inline void sbitmap_queue_free(struct sbitmap_queue *sbq)
+ 	sbitmap_free(&sbq->sb);
+ }
+ 
++/**
++ * sbitmap_queue_recalculate_wake_batch() - Recalculate wake batch
++ * @sbq: Bitmap queue to recalculate wake batch.
++ * @users: Number of shares.
++ *
++ * Like sbitmap_queue_update_wake_batch(), this will calculate wake batch
++ * by depth. This interface is for HCTX shared tags or queue shared tags.
++ */
++void sbitmap_queue_recalculate_wake_batch(struct sbitmap_queue *sbq,
++					    unsigned int users);
++
+ /**
+  * sbitmap_queue_resize() - Resize a &struct sbitmap_queue.
+  * @sbq: Bitmap queue to resize.
+diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+index 2709ab825499..6220fa67fb7e 100644
+--- a/lib/sbitmap.c
++++ b/lib/sbitmap.c
+@@ -457,10 +457,9 @@ int sbitmap_queue_init_node(struct sbitmap_queue *sbq, unsigned int depth,
+ }
+ EXPORT_SYMBOL_GPL(sbitmap_queue_init_node);
+ 
+-static void sbitmap_queue_update_wake_batch(struct sbitmap_queue *sbq,
+-					    unsigned int depth)
++static inline void __sbitmap_queue_update_wake_batch(struct sbitmap_queue *sbq,
++					    unsigned int wake_batch)
+ {
+-	unsigned int wake_batch = sbq_calc_wake_batch(sbq, depth);
+ 	int i;
+ 
+ 	if (sbq->wake_batch != wake_batch) {
+@@ -476,6 +475,26 @@ static void sbitmap_queue_update_wake_batch(struct sbitmap_queue *sbq,
+ 	}
+ }
+ 
++static void sbitmap_queue_update_wake_batch(struct sbitmap_queue *sbq,
++					    unsigned int depth)
++{
++	unsigned int wake_batch;
++
++	wake_batch = sbq_calc_wake_batch(sbq, depth);
++	__sbitmap_queue_update_wake_batch(sbq, wake_batch);
++}
++
++void sbitmap_queue_recalculate_wake_batch(struct sbitmap_queue *sbq,
++					    unsigned int users)
++{
++	unsigned int wake_batch;
++
++	wake_batch = clamp_val((sbq->sb.depth + users - 1) /
++			users, 4, SBQ_WAKE_BATCH);
++	__sbitmap_queue_update_wake_batch(sbq, wake_batch);
++}
++EXPORT_SYMBOL_GPL(sbitmap_queue_recalculate_wake_batch);
++
+ void sbitmap_queue_resize(struct sbitmap_queue *sbq, unsigned int depth)
+ {
+ 	sbitmap_queue_update_wake_batch(sbq, depth);
+-- 
+2.22.0
 

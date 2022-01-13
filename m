@@ -2,209 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB7548D2FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B59A48D305
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbiAMHjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 02:39:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:22886 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231629AbiAMHjA (ORCPT
+        id S231830AbiAMHkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 02:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229768AbiAMHkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 02:39:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642059539;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OdLpJvNEkB5EtIgJu5Fk+IznHpl1+RfhPzWuZl70/Hw=;
-        b=Tu1faHSe/96VFBFqib1BrD8RjPA8f5Nh12Hwwhwu1jGfx8Dzf7bYe9XWfBC3jkoY5ymeHi
-        zwVuTInO5rz4Epdy68f6YVLLj57Onr747YUy8juFQd/R4FEM5OV+UUzOt8kZsvjCMQP2Im
-        l1kei+VOzLi1qhvX6PphrQ0geDXpbU4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-b7TpizchPdur0bTQEXW4CQ-1; Thu, 13 Jan 2022 02:38:55 -0500
-X-MC-Unique: b7TpizchPdur0bTQEXW4CQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4F7CD100C61F;
-        Thu, 13 Jan 2022 07:38:54 +0000 (UTC)
-Received: from [10.72.13.202] (ovpn-13-202.pek2.redhat.com [10.72.13.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 366B44EC7F;
-        Thu, 13 Jan 2022 07:38:46 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v4 02/15] KVM: async_pf: Add helper function to check
- completion queue
-To:     Eric Auger <eauger@redhat.com>, kvmarm@lists.cs.columbia.edu
-Cc:     kvm@vger.kernel.org, maz@kernel.org, linux-kernel@vger.kernel.org,
-        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org
-References: <20210815005947.83699-1-gshan@redhat.com>
- <20210815005947.83699-3-gshan@redhat.com>
- <56d8dbec-a8fd-b109-0c0f-b01c1aef4741@redhat.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <2543ace0-444a-7777-460b-c3eab9eb612a@redhat.com>
-Date:   Thu, 13 Jan 2022 15:38:43 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Thu, 13 Jan 2022 02:40:21 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3697BC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 23:40:21 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id k30so8458742wrd.9
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 23:40:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=buKjcK+IXnIm9l70+VE2Pd1TwmP+HREbH5mPn//N1/s=;
+        b=U6u5ny1x1930C4i86B9mZmmN+OeFxlt4taZmAUPY0nPo+3V5vF2bHuFlVx4IBTI9Hs
+         SjbpRYhcn/bfjOa8WXlWPcZTnEfnN6kSKvJ8dxhHFgjymAPYgFkf+9DETw72fBRBeT6e
+         uFeMirNLCD/22zFNFgBGJ4xewk3H3A4CJdUasyKpUuzpcn76oAC4DbNzDxeS24In5KXS
+         iwk5TCYD+UQu3C/N1lrqeb+2dm7AfeHRM5eaZjzBEZv/uskwbEPLwOpIkrGeMbXRhx9r
+         WX/jRQMJW4dofjEITi24/k7S3T9dnanonsSG5TGu4IcmLcdcLQe2QrX8DTn65FR0aoAM
+         oP6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=buKjcK+IXnIm9l70+VE2Pd1TwmP+HREbH5mPn//N1/s=;
+        b=CYmQfszsvW3ZXAStq8ICqO2+scsPSCraa1aFNFy0rJuF03KGNb2WknqYvpgPf+7+8Z
+         Ml1X+22zcegDstBJ3f2cSv5+n+4p23uplNLZ6JHIUkV1AY+t473zTkdpMJrHlqKlF9na
+         2ZTNrsPPFjcDqQTIAAfqITFUTEHUaU+BaBOPwDS5Yy7um6iWt39mjJF0Op8LPAA9AGTZ
+         svYH0JEU7Q0OYRVSThT1RLDIbkZ5Mgaq5ZJ3eQkGPjIMxtCgvn8ewy9PcuMqAUAZd9OA
+         /m07Zz4NtFLg4zXVDXzMtvSBTI8TYhdkSRhJA1+3pFIW85v9cPrXPTEmqKeptEjiYAXQ
+         JULQ==
+X-Gm-Message-State: AOAM531mxvw4/IomAAQAdVlbUh8KSWKpKdVujdzonvfqixwCXW1cTUbs
+        Fy1I6PIS/0sG4VMD+mMVz+VPDjKh1J4=
+X-Google-Smtp-Source: ABdhPJw9rRvlw41oWPiG5HPFAMzWLrSluCrJvwTTDo5ClFzc0W1zHtIe5n8UE60FCSlzybYJfUzxWQ==
+X-Received: by 2002:adf:f784:: with SMTP id q4mr2909175wrp.655.1642059619533;
+        Wed, 12 Jan 2022 23:40:19 -0800 (PST)
+Received: from localhost.localdomain.at (62-178-82-229.cable.dynamic.surfer.at. [62.178.82.229])
+        by smtp.gmail.com with ESMTPSA id o1sm6303046wmc.38.2022.01.12.23.40.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 23:40:19 -0800 (PST)
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Joe Hershberger <joe.hershberger@ni.com>,
+        Ramon Fried <rfried.dev@gmail.com>,
+        Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        Heiko Schocher <hs@denx.de>,
+        Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>,
+        Michal Simek <michal.simek@xilinx.com>, u-boot@lists.denx.de
+Subject: [PATCH] net: fastboot: make UDP port net: configurable
+Date:   Thu, 13 Jan 2022 08:40:06 +0100
+Message-Id: <20220113074016.15163-1-christian.gmeiner@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <56d8dbec-a8fd-b109-0c0f-b01c1aef4741@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+The fastboot protocol uses per default the UDP port 5554. In some cases
+it might be needed to change the used port. The fastboot utility provides
+a way to specifiy an other port number to use already.
 
-On 11/10/21 11:37 PM, Eric Auger wrote:
-> On 8/15/21 2:59 AM, Gavin Shan wrote:
->> This adds inline helper kvm_check_async_pf_completion_queue() to
->> check if there are pending completion in the queue. The empty stub
->> is also added on !CONFIG_KVM_ASYNC_PF so that the caller needn't
->> consider if CONFIG_KVM_ASYNC_PF is enabled.
->>
->> All checks on the completion queue is done by the newly added inline
->> function since list_empty() and list_empty_careful() are interchangeable.
-> why is it interchangeable?
->
+  fastboot -s udp:192.168.1.76:1234 boot fastboot.img
 
-I think the commit log is misleading. list_empty_careful() is more strict
-than list_empty(). In this patch, we replace list_empty() with list_empty_careful().
-I will correct the commit log in next respin like below:
+Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+---
+ drivers/fastboot/Kconfig | 7 +++++++
+ net/fastboot.c           | 5 +----
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-    All checks on the completion queue is done by the newly added inline
-    function where list_empty_careful() instead of list_empty() is used.
-  
->>
->> Signed-off-by: Gavin Shan <gshan@redhat.com>
->> ---
->>   arch/x86/kvm/x86.c       |  2 +-
->>   include/linux/kvm_host.h | 10 ++++++++++
->>   virt/kvm/async_pf.c      | 10 +++++-----
->>   virt/kvm/kvm_main.c      |  4 +---
->>   4 files changed, 17 insertions(+), 9 deletions(-)
->>
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index e5d5c5ed7dd4..7f35d9324b99 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -11591,7 +11591,7 @@ static inline bool kvm_guest_apic_has_interrupt(struct kvm_vcpu *vcpu)
->>   
->>   static inline bool kvm_vcpu_has_events(struct kvm_vcpu *vcpu)
->>   {
->> -	if (!list_empty_careful(&vcpu->async_pf.done))
->> +	if (kvm_check_async_pf_completion_queue(vcpu))
->>   		return true;
->>   
->>   	if (kvm_apic_has_events(vcpu))
->> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
->> index 85b61a456f1c..a5f990f6dc35 100644
->> --- a/include/linux/kvm_host.h
->> +++ b/include/linux/kvm_host.h
->> @@ -339,12 +339,22 @@ struct kvm_async_pf {
->>   	bool				notpresent_injected;
->>   };
->>   
->> +static inline bool kvm_check_async_pf_completion_queue(struct kvm_vcpu *vcpu)
->> +{
->> +	return !list_empty_careful(&vcpu->async_pf.done);
->> +}
->> +
->>   void kvm_clear_async_pf_completion_queue(struct kvm_vcpu *vcpu);
->>   void kvm_check_async_pf_completion(struct kvm_vcpu *vcpu);
->>   bool kvm_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->>   			unsigned long hva, struct kvm_arch_async_pf *arch);
->>   int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
->>   #else
->> +static inline bool kvm_check_async_pf_completion_queue(struct kvm_vcpu *vcpu)
->> +{
->> +	return false;
->> +}
->> +
->>   static inline void kvm_check_async_pf_completion(struct kvm_vcpu *vcpu) { }
->>   #endif
->>   
->> diff --git a/virt/kvm/async_pf.c b/virt/kvm/async_pf.c
->> index dd777688d14a..d145a61a046a 100644
->> --- a/virt/kvm/async_pf.c
->> +++ b/virt/kvm/async_pf.c
->> @@ -70,7 +70,7 @@ static void async_pf_execute(struct work_struct *work)
->>   		kvm_arch_async_page_present(vcpu, apf);
->>   
->>   	spin_lock(&vcpu->async_pf.lock);
->> -	first = list_empty(&vcpu->async_pf.done);
->> +	first = !kvm_check_async_pf_completion_queue(vcpu);
->>   	list_add_tail(&apf->link, &vcpu->async_pf.done);
->>   	apf->vcpu = NULL;
->>   	spin_unlock(&vcpu->async_pf.lock);
->> @@ -122,7 +122,7 @@ void kvm_clear_async_pf_completion_queue(struct kvm_vcpu *vcpu)
->>   		spin_lock(&vcpu->async_pf.lock);
->>   	}
->>   
->> -	while (!list_empty(&vcpu->async_pf.done)) {
->> +	while (kvm_check_async_pf_completion_queue(vcpu)) {
-> this is replaced by a stronger check. Please can you explain why is it
-> equivalent?
-
-Access to the completion queue is protected by spinlock. So the additional
-check in list_empty_careful() to verify the head's prev/next are modified
-on the fly shouldn't happen. It means they're same in our case.
-
->>   		struct kvm_async_pf *work =
->>   			list_first_entry(&vcpu->async_pf.done,
->>   					 typeof(*work), link);
->> @@ -138,7 +138,7 @@ void kvm_check_async_pf_completion(struct kvm_vcpu *vcpu)
->>   {
->>   	struct kvm_async_pf *work;
->>   
->> -	while (!list_empty_careful(&vcpu->async_pf.done) &&
->> +	while (kvm_check_async_pf_completion_queue(vcpu) &&
->>   	      kvm_arch_can_dequeue_async_page_present(vcpu)) {
->>   		spin_lock(&vcpu->async_pf.lock);
->>   		work = list_first_entry(&vcpu->async_pf.done, typeof(*work),
->> @@ -205,7 +205,7 @@ int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu)
->>   	struct kvm_async_pf *work;
->>   	bool first;
->>   
->> -	if (!list_empty_careful(&vcpu->async_pf.done))
->> +	if (kvm_check_async_pf_completion_queue(vcpu))
->>   		return 0;
->>   
->>   	work = kmem_cache_zalloc(async_pf_cache, GFP_ATOMIC);
->> @@ -216,7 +216,7 @@ int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu)
->>   	INIT_LIST_HEAD(&work->queue); /* for list_del to work */
->>   
->>   	spin_lock(&vcpu->async_pf.lock);
->> -	first = list_empty(&vcpu->async_pf.done);
->> +	first = !kvm_check_async_pf_completion_queue(vcpu);
->>   	list_add_tail(&work->link, &vcpu->async_pf.done);
->>   	spin_unlock(&vcpu->async_pf.lock);
->>   
->> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
->> index b50dbe269f4b..8795503651b1 100644
->> --- a/virt/kvm/kvm_main.c
->> +++ b/virt/kvm/kvm_main.c
->> @@ -3282,10 +3282,8 @@ static bool vcpu_dy_runnable(struct kvm_vcpu *vcpu)
->>   	if (kvm_arch_dy_runnable(vcpu))
->>   		return true;
->>   
->> -#ifdef CONFIG_KVM_ASYNC_PF
->> -	if (!list_empty_careful(&vcpu->async_pf.done))
->> +	if (kvm_check_async_pf_completion_queue(vcpu))
->>   		return true;
->> -#endif
->>   
->>   	return false;
->>   }
->>
-
-Thanks,
-Gavin
+diff --git a/drivers/fastboot/Kconfig b/drivers/fastboot/Kconfig
+index d5e4a02098..b97c67bf60 100644
+--- a/drivers/fastboot/Kconfig
++++ b/drivers/fastboot/Kconfig
+@@ -21,6 +21,13 @@ config UDP_FUNCTION_FASTBOOT
+ 	help
+ 	  This enables the fastboot protocol over UDP.
+ 
++config UDP_FUNCTION_FASTBOOT_PORT
++	depends on UDP_FUNCTION_FASTBOOT
++	int "Define FASTBOOT UDP port"
++	default 5554
++	help
++	  The fastboot protocol requires a UDP port number.
++
+ if FASTBOOT
+ 
+ config FASTBOOT_BUF_ADDR
+diff --git a/net/fastboot.c b/net/fastboot.c
+index 7e7a601b9f..139233b86c 100644
+--- a/net/fastboot.c
++++ b/net/fastboot.c
+@@ -9,9 +9,6 @@
+ #include <net.h>
+ #include <net/fastboot.h>
+ 
+-/* Fastboot port # defined in spec */
+-#define WELL_KNOWN_PORT 5554
+-
+ enum {
+ 	FASTBOOT_ERROR = 0,
+ 	FASTBOOT_QUERY = 1,
+@@ -310,7 +307,7 @@ void fastboot_start_server(void)
+ 	printf("Using %s device\n", eth_get_name());
+ 	printf("Listening for fastboot command on %pI4\n", &net_ip);
+ 
+-	fastboot_our_port = WELL_KNOWN_PORT;
++	fastboot_our_port = CONFIG_UDP_FUNCTION_FASTBOOT_PORT;
+ 
+ #if CONFIG_IS_ENABLED(FASTBOOT_FLASH)
+ 	fastboot_set_progress_callback(fastboot_timed_send_info);
+-- 
+2.34.1
 

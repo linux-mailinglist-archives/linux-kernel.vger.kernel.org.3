@@ -2,98 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A48C48E147
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 00:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EA848E157
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 00:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238332AbiAMXyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 18:54:06 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:19784 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238287AbiAMXx5 (ORCPT
+        id S238340AbiAMX7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 18:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238330AbiAMX7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 18:53:57 -0500
+        Thu, 13 Jan 2022 18:59:22 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE522C06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 15:59:21 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id e8so7057506ilm.13
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 15:59:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642118037; x=1673654037;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=z+JIuWKxJODjguXs3yWrhfZnFZJClraM9Lc/R80g5pc=;
-  b=QK6qoU5pIwqH0Iyvf40ejPjAXRFgZTohaU64ZV8h4fHjSrvdiCjfbovA
-   1xf+y5Xg2F+Bx9PpLE4YcyAMNsxi8wxA3I5O18uHc6etH1RtpWSE56n0m
-   aeHK4+OFxesqPHup50/wYb1/L95KkznCF7pJINP7NZSqkZmR2xo2Mlp9L
-   8=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 13 Jan 2022 15:53:57 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 15:53:56 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 13 Jan 2022 15:53:56 -0800
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 13 Jan 2022 15:53:55 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
-        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v13 4/4] drm/msm/dp: stop link training after link training 2 failed
-Date:   Thu, 13 Jan 2022 15:53:39 -0800
-Message-ID: <1642118019-18673-5-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1642118019-18673-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1642118019-18673-1-git-send-email-quic_khsieh@quicinc.com>
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=swIc/YWTqbGW2vcyyUIZkfdZFHgU9akpO8dYNy7F6xA=;
+        b=EjkzCDcgo7ZyV4PO+uVAMn4JDhGaueEGmMc0OYkIWH9ILkxltTpF196jvdmKTwXb23
+         zPjjQSH4wOpZI+g7y9bFKClM7qYSMvCWUjTpWBvOQC1nL1yR3g/W4TE6JfpBNqjHilgH
+         /X/v4HdHgMmjH310RdfzAadJNFuKbntDv2xP8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=swIc/YWTqbGW2vcyyUIZkfdZFHgU9akpO8dYNy7F6xA=;
+        b=NDjUpjmsibVG95crLFQmNxpvMThSqUsa/GMbUqfvolKhf8vCPoyFtbckxZW5N0ZXh6
+         AhNEZh10/tNynBR3DLc6rgPYT9SdxEy06IVTRBuUTu+GhSqE0v6lM/+tEo6R7cMRK6E8
+         NpFTBAddVjeP9EgBHvOcOkLqkvC/FnDUpHdwwJg70G94brujNeR5KpnFco8xDsWq9Cps
+         9tsPa5DPQINMFxAFthW+9SznSJMdyfaUb6le+TsGiaFYiEQ5JISiu4J0v/RrcXN6QdPz
+         k74cGiU9t3yqAyu564KANzNQ5HKWqRYzcZtfHyPA9QSawONbZP4pYLCplnLju8lZbIXW
+         VQ2g==
+X-Gm-Message-State: AOAM531W6ojyi/Fm1ETJihiTUKXDgAieGrjBymWYLjzz+XkFI3E4DX3R
+        sipJIQJqQNpz6DREdaVkvUuyVxOAUbIBiQ==
+X-Google-Smtp-Source: ABdhPJzDHLOSyOax1GhTgStxhLju0caF9rP0jVEniJyFKNs9csqCfSRTcFC7gIlTIxTjgf5RFBVa1A==
+X-Received: by 2002:a05:6e02:1809:: with SMTP id a9mr3558019ilv.102.1642118361191;
+        Thu, 13 Jan 2022 15:59:21 -0800 (PST)
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com. [209.85.166.178])
+        by smtp.gmail.com with ESMTPSA id e10sm3704557ilu.36.2022.01.13.15.59.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 15:59:19 -0800 (PST)
+Received: by mail-il1-f178.google.com with SMTP id z17so5065396ilm.3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 15:59:17 -0800 (PST)
+X-Received: by 2002:a92:c202:: with SMTP id j2mr3338009ilo.165.1642118357532;
+ Thu, 13 Jan 2022 15:59:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+References: <1639587963-22503-1-git-send-email-bgodavar@codeaurora.org> <164036941060.3935440.13095761506560620701.b4-ty@linaro.org>
+In-Reply-To: <164036941060.3935440.13095761506560620701.b4-ty@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 13 Jan 2022 15:59:05 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=Vdjw-6GytO=Rpt==OYbnrNon3pYQnrZtUT4vX11S6ykw@mail.gmail.com>
+Message-ID: <CAD=FV=Vdjw-6GytO=Rpt==OYbnrNon3pYQnrZtUT4vX11S6ykw@mail.gmail.com>
+Subject: Re: [PATCH v4] arm64: dts: qcom: sc7280: Add bluetooth node on SC7280
+ IDP boards
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Balakrishna Godavarthi <bgodavar@codeaurora.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>, rjliao@codeaurora.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+        saluvala@codeaurora.org, LKML <linux-kernel@vger.kernel.org>,
+        hbandi@codeaurora.org, BlueZ <linux-bluetooth@vger.kernel.org>,
+        mcchou@chromium.org, hemantg@codeaurora.org,
+        Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Each DP link training contains link training 1 followed by link
-training 2.  There is maximum of 5 retries of DP link training
-before declared link training failed. It is required to stop link
-training at end of link training 2 if it is failed so that next
-link training 1 can start freshly. This patch fixes link compliance
-test  case 4.3.1.13 (Source Device Link Training EQ Fallback Test).
+Hi,
 
-Changes in v10:
---  group into one series
+On Fri, Dec 24, 2021 at 10:10 AM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Wed, 15 Dec 2021 22:36:03 +0530, Balakrishna Godavarthi wrote:
+> > Add bluetooth SoC WCN6750 node for SC7280 IDP boards.
+> >
+> >
+>
+> Applied, thanks!
+>
+> [1/1] arm64: dts: qcom: sc7280: Add bluetooth node on SC7280 IDP boards
+>       commit: 3a89ff3087c03c2295250c07234efa75873c7b51
 
-Changes in v11:
--- drop drm/msm/dp: dp_link_parse_sink_count() return immediately if aux read
+Just to confirm, this later got dropped, right? I don't see it in the
+Qualcomm git tree, so presumably it'll land once the merge window
+closes.
 
-Fixes: 2e0adc765d88 ("drm/msm/dp: do not end dp link training until video is ready")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/gpu/drm/msm/dp/dp_ctrl.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index f98df93..245e1b9 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1755,6 +1755,9 @@ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl)
- 				/* end with failure */
- 				break; /* lane == 1 already */
- 			}
-+
-+			/* stop link training before start re training  */
-+			dp_ctrl_clear_training_pattern(ctrl);
- 		}
- 	}
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+-Doug

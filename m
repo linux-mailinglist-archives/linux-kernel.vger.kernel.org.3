@@ -2,130 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE18A48D719
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D16A948D71D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbiAMMG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:06:28 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58236 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231705AbiAMMG0 (ORCPT
+        id S231705AbiAMMGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:06:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234337AbiAMMGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:06:26 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20DBSDD4016832;
-        Thu, 13 Jan 2022 12:06:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=EFtsyeAfsTzzfYSWbF3pit3u+MKCLgwDllpn85f81R0=;
- b=n7IgqPGP0TDq85lNNynqQgB1P+UM5ZacwO+YBvjELUfilwhasNo/1r73sOphU3kB/lfw
- kmzSf79nn5bamLVUcrl0sGXANrFEluEhKHu7kQyafNdeMmUs8AxB75XcsCahUmSJTxU6
- 1APNGGddCDuv3o8LE/wxu+SWz3kfUtq+wj+/rN0QHZT5M/jvm7xKPOtmvZUWJnQcl7ol
- HmKgPESY56tGLHYOp+pmooLqmSkQodQqR3jcG++iIaGteAeN9thKqq92sgSnXSCFYnqE
- g24e55RX0epJV9XDlMvouiRSwmp182RfsMO6E0btWOyhV1TtSdd9Okus+i0QeCtZqUcE mA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3djk81gnrr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:06:16 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20DBU02X019625;
-        Thu, 13 Jan 2022 12:06:16 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3djk81gnrb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:06:16 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20DC2HL1007193;
-        Thu, 13 Jan 2022 12:06:14 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3df28a42xk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:06:14 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20DC6BQY41746874
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Jan 2022 12:06:11 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2D867A406B;
-        Thu, 13 Jan 2022 12:06:11 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 21AB6A405B;
-        Thu, 13 Jan 2022 12:06:11 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 13 Jan 2022 12:06:11 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 25651)
-        id 857EFE03A3; Thu, 13 Jan 2022 13:06:10 +0100 (CET)
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-To:     dwmw2@infradead.org
-Cc:     butterflyhuangxx@gmail.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        seanjc@google.com, Cornelia Huck <cohuck@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Thomas Huth <thuth@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: KVM: Warn if mark_page_dirty() is called without an active vCPU
-Date:   Thu, 13 Jan 2022 13:06:09 +0100
-Message-Id: <20220113120609.736701-1-borntraeger@linux.ibm.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <e8f40b8765f2feefb653d8a67e487818f66581aa.camel@infradead.org>
-References: <e8f40b8765f2feefb653d8a67e487818f66581aa.camel@infradead.org>
+        Thu, 13 Jan 2022 07:06:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2A2C06173F;
+        Thu, 13 Jan 2022 04:06:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2C90619F7;
+        Thu, 13 Jan 2022 12:06:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C97FC36AE9;
+        Thu, 13 Jan 2022 12:06:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642075595;
+        bh=RgWni6LqPjl7/Jpt8i2S8g4ZDYjkMn/V4Ho5ACe93Sg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oNVpHqPNHOATYSR5XjkS6VOg2OnhzMuQH50/qmDCtZe9oAPiZvlznmwfPcsLn0AcD
+         YWUdQMjzZP0fiJq7xZcsNaGMvjBWpnJP2pHhOWeapFCJpFptd0waFqDLFu5hLG0jJ9
+         xJBL3KkUyrdUX8VQpujKDuMVX40ljpMrh0cc7MIe2lnxbwA4BxH15+WgILRcUbZbeR
+         /hm6GzcBls0KDxy9mKJ2N6G04h86ETlWRYgESpXEsMoo19EXszxd6vxxIxSs1rdoo2
+         RPu8q/W5V4wq9erWlNUsr0p2NFnn7XCt7uXFcbnenGtEBK693w9Sst9KrZgagDs+su
+         qgp1o4z7rslAQ==
+Received: by mail-wr1-f48.google.com with SMTP id h10so9722751wrb.1;
+        Thu, 13 Jan 2022 04:06:35 -0800 (PST)
+X-Gm-Message-State: AOAM53151ymfEd47hbWNWPQdcGg0jGTeDynWGKHZMf/SPPlWLcnLfnup
+        hC82zu/hwHR5+VCwQRbjsZDinQupT+RhCdxTVBg=
+X-Google-Smtp-Source: ABdhPJy0Pn2iuF5yVcjcvxDoW/UYW/fi7cHyKrpSuw+7inPMuZ4pLI4PPSLoo85XQYx26oM7ei6px2KQFxi1oB97Km8=
+X-Received: by 2002:adf:f287:: with SMTP id k7mr3800465wro.417.1642075593549;
+ Thu, 13 Jan 2022 04:06:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nd-OLcRjum13P0XnqeaPh7PLB8yz2KSK
-X-Proofpoint-ORIG-GUID: 8Tr4RSrypsmJQ4MKNPYLJTUBF4w-RnY1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-13_04,2022-01-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 impostorscore=0 malwarescore=0 mlxlogscore=637 bulkscore=0
- spamscore=0 lowpriorityscore=0 mlxscore=0 clxscore=1011 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201130073
+References: <20220112131204.800307-1-Jason@zx2c4.com> <20220112131204.800307-3-Jason@zx2c4.com>
+ <87r19cftbr.fsf@toke.dk> <CAHmME9pieaBBhKc1uKABjTmeKAL_t-CZa_WjCVnUr_Y1_D7A0g@mail.gmail.com>
+ <55d185a8-31ea-51d0-d9be-debd490cd204@stressinduktion.org>
+In-Reply-To: <55d185a8-31ea-51d0-d9be-debd490cd204@stressinduktion.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 13 Jan 2022 13:06:22 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGz7_98B_b=SJER6-Q2g-nOT5X3cfN=nfhYoH0eHep5bw@mail.gmail.com>
+Message-ID: <CAMj1kXGz7_98B_b=SJER6-Q2g-nOT5X3cfN=nfhYoH0eHep5bw@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 2/3] ipv6: move from sha1 to blake2s in address calculation
+To:     Hannes Frederic Sowa <hannes@stressinduktion.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Erik Kline <ek@google.com>,
+        Fernando Gont <fgont@si6networks.com>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        hideaki.yoshifuji@miraclelinux.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Borntraeger <borntraeger@de.ibm.com>
+On Thu, 13 Jan 2022 at 12:15, Hannes Frederic Sowa
+<hannes@stressinduktion.org> wrote:
+>
+> Hello,
+>
+> On 13.01.22 00:31, Jason A. Donenfeld wrote:
+> > On 1/13/22, Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> wrote:
+> >> However, if we make this change, systems setting a stable_secret and
+> >> using addr_gen_mode 2 or 3 will come up with a completely different
+> >> address after a kernel upgrade. Which would be bad for any operator
+> >> expecting to be able to find their machine again after a reboot,
+> >> especially if it is accessed remotely.
+> >>
+> >> I haven't ever used this feature myself, though, or seen it in use. So=
+ I
+> >> don't know if this is purely a theoretical concern, or if the
+> >> stable_address feature is actually used in this way in practice. If it
+> >> is, I guess the switch would have to be opt-in, which kinda defeats th=
+e
+> >> purpose, no (i.e., we'd have to keep the SHA1 code around
+>
+> Yes, it is hard to tell if such a change would have real world impact
+> due to not knowing its actual usage in the field - but I would avoid
+> such a change. The reason for this standard is to have stable addresses
+> across reboots. The standard is widely used but most servers or desktops
+> might get their stable privacy addresses being generated by user space
+> network management systems (NetworkManager/networkd) nowadays. I would
+> guess it could be used in embedded installations.
+>
+> The impact of this change could be annoying though: users could suddenly
+> lose connectivity due to e.g. changes to the default gateway after an
+> upgrade.
+>
+> > I'm not even so sure that's true. That was my worry at first, but
+> > actually, looking at this more closely, DAD means that the address can
+> > be changed anyway - a byte counter is hashed in - so there's no
+> > gurantee there.
+>
+> The duplicate address detection counter is a way to merely provide basic
+> network connectivity in case of duplicate addresses on the network
+> (maybe some kind misconfiguration or L2 attack). Such detected addresses
+> would show up in the kernel log and an administrator should investigate
+> and clean up the situation. Afterwards bringing the interface down and
+> up again should revert the interface to its initial (dad_counter =3D=3D 0=
+)
+> address.
+>
+> > There's also the other aspect that open coding sha1_transform like
+> > this and prepending it with the secret (rather than a better
+> > construction) isn't so great... Take a look at the latest version of
+> > this in my branch to see a really nice simplification and security
+> > improvement:
+> >
+> > https://git.zx2c4.com/linux-dev/log/?h=3Dremove-sha1
+>
+> All in all, I consider the hash produced here as being part of uAPI
+> unfortunately and thus cannot be changed. It is unfortunate that it
+> can't easily be improved (I assume a separate mode for this is not
+> reasonable). The patches definitely look like a nice cleanup.
+>
+> Would this be the only user of sha_transform left?
+>
 
-Quick heads-up.
-The new warnon triggers on s390. Here we write to the guest from an
-irqfd worker. Since we do not use dirty_ring yet this might be an over-indication.
-Still have to look into that.
+The question is not whether but when we can/will change this.
 
-[ 1801.980777] WARNING: CPU: 12 PID: 117600 at arch/s390/kvm/../../../virt/kvm/kvm_main.c:3166 mark_page_dirty_in_slot+0xa0/0xb0 [kvm]
-[ 1801.980839] Modules linked in: xt_CHECKSUM(E) xt_MASQUERADE(E) xt_conntrack(E) ipt_REJECT(E) xt_tcpudp(E) nft_compat(E) nf_nat_tftp(E) nft_objref(E) vhost_vsock(E) vmw_vsock_virtio_transport_common(E) vsock(E) vhost(E) vhost_iotlb(E) nf_conntrack_tftp(E) crc32_generic(E) algif_hash(E) af_alg(E) paes_s390(E) dm_crypt(E) encrypted_keys(E) loop(E) lcs(E) ctcm(E) fsm(E) kvm(E) nft_fib_inet(E) nft_fib_ipv4(E) nft_fib_ipv6(E) nft_fib(E) nft_reject_inet(E) nf_reject_ipv4(E) nf_reject_ipv6(E) nft_reject(E) nft_ct(E) nft_chain_nat(E) nf_nat(E) nf_conntrack(E) nf_defrag_ipv6(E) nf_defrag_ipv4(E) ip_set(E) nf_tables(E) nfnetlink(E) sunrpc(E) dm_service_time(E) dm_multipath(E) scsi_dh_rdac(E) scsi_dh_emc(E) scsi_dh_alua(E) zfcp(E) scsi_transport_fc(E) ism(E) smc(E) ib_core(E) eadm_sch(E) vfio_ccw(E) mdev(E) vfio_iommu_type1(E) vfio(E) sch_fq_codel(E) configfs(E) ip_tables(E) x_tables(E) ghash_s39 [...truncated...]
-[ 1801.980915]  sha1_s390(E) sha_common(E) pkey(E) zcrypt(E) rng_core(E) autofs4(E) [last unloaded: vfio_ap]
-[ 1801.980931] CPU: 12 PID: 117600 Comm: kworker/12:0 Tainted: G            E     5.17.0-20220113.rc0.git0.32ce2abb03cf.300.fc35.s390x+next #1
-[ 1801.980935] Hardware name: IBM 2964 NC9 712 (LPAR)
-[ 1801.980938] Workqueue: events irqfd_inject [kvm]
-[ 1801.980959] Krnl PSW : 0704e00180000000 000003ff805f0f5c (mark_page_dirty_in_slot+0xa4/0xb0 [kvm])
-[ 1801.980981]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
-[ 1801.980985] Krnl GPRS: 000003ff298e9040 000000017754a660 0000000000000000 0000000000000000
-[ 1801.980988]            000000003fefcc36 ffffffffffffff68 0000000000000000 0000000177871500
-[ 1801.980990]            00000001d1918000 000000003fefcc36 00000001d1918000 0000000000000000
-[ 1801.980993]            00000001375b0000 00000001d191a838 000003ff805f0ee6 0000038000babb48
-[ 1801.981003] Krnl Code: 000003ff805f0f4c: eb9ff0a00004	lmg	%r9,%r15,160(%r15)
-                          000003ff805f0f52: c0f400018c61	brcl	15,000003ff80622814
-                         #000003ff805f0f58: af000000		mc	0,0
-                         >000003ff805f0f5c: eb9ff0a00004	lmg	%r9,%r15,160(%r15)
-                          000003ff805f0f62: c0f400018c59	brcl	15,000003ff80622814
-                          000003ff805f0f68: c004ffe37b10	brcl	0,000003ff80260588
-                          000003ff805f0f6e: ec360033007c	cgij	%r3,0,6,000003ff805f0fd4
-                          000003ff805f0f74: e31020100012	lt	%r1,16(%r2)
-[ 1801.981057] Call Trace:
-[ 1801.981060]  [<000003ff805f0f5c>] mark_page_dirty_in_slot+0xa4/0xb0 [kvm]
-[ 1801.981083]  [<000003ff8060e9fe>] adapter_indicators_set+0xde/0x268 [kvm]
-[ 1801.981104]  [<000003ff80613c24>] set_adapter_int+0x64/0xd8 [kvm]
-[ 1801.981124]  [<000003ff805fb9aa>] kvm_set_irq+0xc2/0x130 [kvm]
-[ 1801.981144]  [<000003ff805f8d86>] irqfd_inject+0x76/0xa0 [kvm]
-[ 1801.981164]  [<0000000175e56906>] process_one_work+0x1fe/0x470
-[ 1801.981173]  [<0000000175e570a4>] worker_thread+0x64/0x498
-[ 1801.981176]  [<0000000175e5ef2c>] kthread+0x10c/0x110
-[ 1801.981180]  [<0000000175de73c8>] __ret_from_fork+0x40/0x58
-[ 1801.981185]  [<000000017698440a>] ret_from_fork+0xa/0x40
+SHA-1 is broken and should be removed at *some* point, so unless the
+feature itself is going to be obsolete, its implementation will need
+to switch to a PRF that fulfils the requirements in RFC7217 once SHA-1
+ceases to do so.
+
+And I should also point out that the current implementation does not
+even use SHA-1 correctly, as it omits the finalization step. This may
+or may not matter in practice, but it deviates from crypto best
+practices, as well as from RFC7217
+
+I already pointed out to Jason (in private) that the PRF does not need
+to be based on a cryptographic hash, so as far as I can tell, siphash
+would be a suitable candidate here as well, and I already switched the
+TCP fastopen code to that in the past. But SHA-1 definitely has to go.

@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFBD48D283
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 07:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D397848D289
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiAMG5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 01:57:32 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:58216 "EHLO cstnet.cn"
+        id S230234AbiAMHAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 02:00:01 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:58622 "EHLO cstnet.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229870AbiAMG5b (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 01:57:31 -0500
+        id S230225AbiAMHAA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 02:00:00 -0500
 Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowABnby8lzd9hYoF7BQ--.64251S2;
-        Thu, 13 Jan 2022 14:56:37 +0800 (CST)
+        by APP-03 (Coremail) with SMTP id rQCowAAXHlrRzd9hz4d7BQ--.64571S2;
+        Thu, 13 Jan 2022 14:59:29 +0800 (CST)
 From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
 To:     hverkuil-cisco@xs4all.nl, narmstrong@baylibre.com,
         mchehab@kernel.org, gregkh@linuxfoundation.org,
@@ -23,29 +23,29 @@ Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
         linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] media: meson: vdec: potential dereference of null pointer
-Date:   Thu, 13 Jan 2022 14:56:36 +0800
-Message-Id: <20220113065636.1198072-1-jiasheng@iscas.ac.cn>
+Subject: [PATCH v3] media: meson: vdec: potential dereference of null pointer
+Date:   Thu, 13 Jan 2022 14:59:28 +0800
+Message-Id: <20220113065928.1198125-1-jiasheng@iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowABnby8lzd9hYoF7BQ--.64251S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr43tFW5uF4DXrWxJF1DKFg_yoW5tF48pF
-        10v342gFyUtFyUAr4UJw1kXayaq348GFyI9a9rWw1fZryakF17XFsayFWjgr98Jr1S9a1r
-        CFyFg3y7uw4jqrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: rQCowAAXHlrRzd9hz4d7BQ--.64571S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWr43tFW5uF4DWF4rZryDGFg_yoWrJFW3pF
+        10q3sFgFyUtFyUCr48Jr1kXFWaq348JFyI9a97Xw1fZryakF17XFnayFWjgr98Jr1S9a1r
+        AFyFg3y7uw1jqrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVW8AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI
         42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjfUndb1UUUUU
+        evJa73UjIFyTuYvjfUYeHqDUUUU
 X-Originating-IP: [124.16.138.126]
 X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
@@ -61,6 +61,18 @@ the amvdec_add_ts().
 
 Fixes: 876f123b8956 ("media: meson: vdec: bring up to compliance")
 Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog
+
+v1 -> v2
+
+* Change 1. Change the return type of amvdec_add_ts from void to int.
+* Change 2. Return -ENOMEN if alloc fail and return 0 if not.
+* Change 3. Modify the caller to deal with the error.
+
+v2 -> v3
+
+* Change 1. Fix the indentation and refine the commit message.
 ---
  drivers/staging/media/meson/vdec/esparser.c     | 7 ++++++-
  drivers/staging/media/meson/vdec/vdec_helpers.c | 8 ++++++--

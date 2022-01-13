@@ -2,77 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F2B48D70D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA2648D710
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234199AbiAMMCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:02:08 -0500
-Received: from phobos.denx.de ([85.214.62.61]:43820 "EHLO phobos.denx.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232725AbiAMMCH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:02:07 -0500
-Received: from [192.168.1.107] (91-82-25-109.pool.digikabel.hu [91.82.25.109])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        id S234325AbiAMMCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:02:34 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:44496 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234322AbiAMMC3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 07:02:29 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5EA34210E8;
+        Thu, 13 Jan 2022 12:02:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642075347; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LZVuyyTRSpRE6S8FOnrto8JpNJcnle8TpJ/IrQ16lRc=;
+        b=keRZklNq4LxORySqWTBm2nBLk9YWgDGDuwL/AQ+Mai2k802cEBoIYsNa3oXRyNH0HTIcwI
+        V0Cx9P6UsQ3SnsnAARYqz2HSalqMY0kXU8ZFunLpj8tmOa6xB7yoJbMInasHRJzL0REQLn
+        mjW8NuZF0+swe/oGVE1356UI19oPou0=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: hs@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 765DA830EA;
-        Thu, 13 Jan 2022 13:02:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1642075326;
-        bh=arm8PkFrmPzmdiojhk3EnDHMB4znORMQ+KrfI1SH7ZY=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=HjflkBIoQ7W7/vWz2JFhH+2dWoYij9PMAV7nCDKActDz8fTPM0sC/C3IC0jPCYpwh
-         KR91yBijjH6vJ3/xf2bl7DrSJvinkVEPjzAhTxUps+HdFyEV/MXt52oXyBnBXRs5KB
-         WFnmGoEsE7VccQol0F5tTCU1fH/wRkSp47i7yq6nHaTpyOjJ7HcwXb3nN23Kk9FyWI
-         5ZijkmyhiPTBt6y0kX3zUD8Ozqf7+aHacgYCyg8llsZSKJ8RDjbfwPN1XuKTgvyeUm
-         1McmNh/W45Qv/qjCJVBkrFg6KQTYEU9mNaqSTKQQU7dnzW4gZiPjRy0qEInsvlLoqJ
-         FK9zgcSrmPzvA==
-Reply-To: hs@denx.de
-Subject: Re: [PATCH] net: fastboot: make UDP port net: configurable
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Joe Hershberger <joe.hershberger@ni.com>,
-        Ramon Fried <rfried.dev@gmail.com>,
-        Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>,
-        Michal Simek <michal.simek@xilinx.com>, u-boot@lists.denx.de
-References: <20220113074016.15163-1-christian.gmeiner@gmail.com>
-From:   Heiko Schocher <hs@denx.de>
-Message-ID: <c88a1dc4-afbd-bc52-1320-8f3d0e951121@denx.de>
-Date:   Thu, 13 Jan 2022 13:02:13 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        by relay2.suse.de (Postfix) with ESMTPS id E510FA3B87;
+        Thu, 13 Jan 2022 12:02:26 +0000 (UTC)
+Date:   Thu, 13 Jan 2022 13:02:26 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>
+Subject: Re: [PATCH v6 6/9] mm: multigenerational lru: aging
+Message-ID: <YeAU0n1puxyr4N6Y@dhcp22.suse.cz>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <20220104202227.2903605-7-yuzhao@google.com>
+ <YdcU4P+XWkbDUUoO@dhcp22.suse.cz>
+ <Yddh+APQGg8dKRgw@google.com>
+ <Ydf/7DDu94fMs0CG@dhcp22.suse.cz>
+ <YdgBL1dRk1KmyXJS@dhcp22.suse.cz>
+ <Yduuyrk/AZG717Hs@google.com>
+ <YdxEqFPLDf+wI0xX@dhcp22.suse.cz>
+ <Yd/0Sgxy+jLm5cqd@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20220113074016.15163-1-christian.gmeiner@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd/0Sgxy+jLm5cqd@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Christian,
-
-On 13.01.22 08:40, Christian Gmeiner wrote:
-> The fastboot protocol uses per default the UDP port 5554. In some cases
-> it might be needed to change the used port. The fastboot utility provides
-> a way to specifiy an other port number to use already.
+On Thu 13-01-22 02:43:38, Yu Zhao wrote:
+[...]
+> > > The bottom line is I can try various optimizations, e.g., preallocate
+> > > a few buffers for a limited number of page walkers and if this number
+> > > has been reached, fallback to the rmap-based function. But I have yet
+> > > to see evidence that calls for additional complexity.
+> > 
+> > I would disagree here. This is not an optimization. You should be
+> > avoiding allocations from the memory reclaim because any allocation just
+> > add a runtime behavior complexity and potential corner cases.
 > 
->   fastboot -s udp:192.168.1.76:1234 boot fastboot.img
-> 
-> Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
-> ---
->  drivers/fastboot/Kconfig | 7 +++++++
->  net/fastboot.c           | 5 +----
->  2 files changed, 8 insertions(+), 4 deletions(-)
+> Would __GFP_NOMEMALLOC address your concern? It prevents allocations
+> from accessing the reserves even under PF_MEMALLOC.
 
-Reviewed-by: Heiko Schocher <hs@denx.de>
+__GFP_NOMEMALLOC would deal with the complete memory depletion concern
+for sure but I am not sure how any of these allocations would succeed
+when called from the direct reclaim. Some access to memory reserves is
+necessary if you insist on allocating from the reclaim process.
 
-bye,
-Heiko
+You can have a look at the limited memory reserves access by oom victims
+for an example of how this can be done.
+
 -- 
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: +49-8142-66989-52   Fax: +49-8142-66989-80   Email: hs@denx.de
+Michal Hocko
+SUSE Labs

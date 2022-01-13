@@ -2,107 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1E848DCE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 18:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C79548DC86
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 18:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234205AbiAMR0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 12:26:18 -0500
-Received: from gateway33.websitewelcome.com ([192.185.145.82]:33216 "EHLO
-        gateway33.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232267AbiAMR0R (ORCPT
+        id S230155AbiAMRD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 12:03:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230099AbiAMRDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 12:26:17 -0500
-X-Greylist: delayed 1381 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Jan 2022 12:26:17 EST
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway33.websitewelcome.com (Postfix) with ESMTP id 0FC68416AB
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 11:03:15 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id 83VLnVEn1b6UB83VLni59g; Thu, 13 Jan 2022 11:03:15 -0600
-X-Authority-Reason: nr=8
-Received: from host-79-47-126-144.retail.telecomitalia.it ([79.47.126.144]:49966 helo=[10.0.0.101])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1n83VK-003z8s-Ny; Thu, 13 Jan 2022 11:03:15 -0600
-Message-ID: <388b9922-4231-6e34-1305-f0b439d9d07c@kernel.org>
-Date:   Thu, 13 Jan 2022 18:03:07 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [for-next][PATCH 05/31] tracing: Have existing
- event_command.parse() implementations use helpers
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-References: <20220111173030.999527342@goodmis.org>
- <20220111173114.155260134@goodmis.org>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220111173114.155260134@goodmis.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 79.47.126.144
-X-Source-L: No
-X-Exim-ID: 1n83VK-003z8s-Ny
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-79-47-126-144.retail.telecomitalia.it ([10.0.0.101]) [79.47.126.144]:49966
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 1
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
+        Thu, 13 Jan 2022 12:03:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10F3C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 09:03:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88180B822CB
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 17:03:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 45935C36AE9;
+        Thu, 13 Jan 2022 17:03:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642093399;
+        bh=91izWOf7ssGOFobj/+vA4zeuJR3qJ9lUZOknWOSvPS8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=c7isNucNXVLCFpPpvi+cFiBDWqLFiog3qyIxBztOVb4IhUkmpZeKjPyiDrE2/Hjtv
+         iIw4FTC8AmktFbPFIFmzDSv/VBlNhPnh8agLwCCkkDYXRt7HFjKs+8ZzoxypRtLuWJ
+         bxok/srZGAhMsltc2c5b1+whvbFYdEFcp5wmdkoaUoKxSmhS2dY9alsRNdeKVq5kkt
+         twfHcKGzanIULs5nzp0yovT4wF1U+znioyXN5Qd9NN0CgUvflTmJVAjRVNwMmtohW2
+         vtQd1quhARNvqBGGBbVKusMJGOM6KaWD51aC2BorjAz1jgYrZs9E8AQ0m0Xjje/YOh
+         jXibRXtT3vWHg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 32744F6078E;
+        Thu, 13 Jan 2022 17:03:19 +0000 (UTC)
+Subject: Re: [GIT pull] irq/core for v5.17-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <164206863083.82661.4520085707599437707.tglx@xen13.tec.linutronix.de>
+References: <164206863083.82661.4520085707599437707.tglx@xen13.tec.linutronix.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <164206863083.82661.4520085707599437707.tglx@xen13.tec.linutronix.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-core-2022-01-13
+X-PR-Tracked-Commit-Id: 67d50b5f9114ae55d45e08e1fd1d6ae152622bf3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 147cc5838c0f5c76e908b816e924ca378e0d4735
+Message-Id: <164209339919.24335.7954037392130234314.pr-tracker-bot@kernel.org>
+Date:   Thu, 13 Jan 2022 17:03:19 +0000
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+The pull request you sent on Thu, 13 Jan 2022 11:13:19 +0100 (CET):
 
-On 1/11/22 18:30, Steven Rostedt wrote:
-> From: Tom Zanussi <zanussi@kernel.org>
-> 
-> Simplify the existing event_command.parse() implementations by having
-> them make use of the helper functions previously introduced.
+> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-core-2022-01-13
 
-While testing rtla with all for-next changes, I noticed this patch breaks:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/147cc5838c0f5c76e908b816e924ca378e0d4735
 
-# rtla osnoise hist -d 5
+Thank you!
 
-Before this patch, osnoise hist is able to enable histograms and collect data.
-After this patch it does not work.
-
-The event I am creating the histogram is osnoise:sample_threshold, and the
-trigger command is:
-
-hist:keys=duration.buckets=1000,common_cpu:vals=hitcount:sort=hitcount:size=2048
-
-I did some debug, and found that the histogram is working. The problem is that,
-to read the histogram I pause it to have consistent data:
-
-in tools/tracing/rtla/osnoise_hist.c:
-osnoise_read_trace_hist() {
- [...]
-        tracefs_hist_pause(tool->trace.inst, data->trace_hist);
-
-        content = tracefs_event_file_read(tool->trace.inst, "osnoise",
-                                          "sample_threshold",
-                                          "hist", NULL);
- [...]
-}
-
-and, as far as I got, after this patch, pausing the histogram makes it to clear
-up. If I comment the "tracefs_hist_pause" line, "rtla osnoise hist" start
-working back again.
-
-Thoughts?
-
--- Daniel
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

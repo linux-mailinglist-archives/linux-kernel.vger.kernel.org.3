@@ -2,152 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A91948D0AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 04:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D913648D0B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 04:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbiAMDLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 22:11:06 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:57093 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231916AbiAMDLC (ORCPT
+        id S231924AbiAMDOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 22:14:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231894AbiAMDOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 22:11:02 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R581e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V1i735m_1642043457;
-Received: from 30.225.24.62(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V1i735m_1642043457)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 13 Jan 2022 11:10:58 +0800
-Message-ID: <9eafb56b-809c-c340-5627-a54a6265122b@linux.alibaba.com>
-Date:   Thu, 13 Jan 2022 11:10:57 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [Linux-cachefs] [PATCH v1 05/23] netfs: add inode parameter to
- netfs_alloc_read_request()
-Content-Language: en-US
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     tao.peng@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        linux-fsdevel@vger.kernel.org, eguan@linux.alibaba.com,
-        gerry@linux.alibaba.com, linux-cachefs@redhat.com,
-        xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
-References: <20211227125444.21187-1-jefflexu@linux.alibaba.com>
- <20211227125444.21187-6-jefflexu@linux.alibaba.com>
-In-Reply-To: <20211227125444.21187-6-jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Wed, 12 Jan 2022 22:14:44 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AFEC06173F
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 19:14:44 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id s89-20020a25aa62000000b00611afc92630so4486812ybi.17
+        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 19:14:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Vn5oKbnGZSK29/TeD2jdsTWSsU6BDg6nOy220ST8fyE=;
+        b=ZAVJQmK76ka/sB9vdoEgbpDzHHvQ9eaRaksI3ggjA9gVsDwXmYzobW1WITyq+eXbJ7
+         d0EPMyljiyJTxGq4RZ4LdlWDk5U/f27wU+O+CI+bpJrKu6DWTwONrF4XF/dI+5spLRJJ
+         FMJOwro7nKdAhO0EPrCEagaEgRODbulo/AfI8Ip2y+/40eZyHd3uS8EaKOxk8dtDUxAT
+         EdYGdxK08jPgIaXE8gb2qJwaJnY8ZcAPgbA8nqk43dlGBVnXfgXaKu/nuTKvwyqMv0+e
+         r72JnMbrVNDCxFAdcNs+NJGc4m0I5192QGjfFQAX4xji6GWCU1dSEzfNXjyE5IsgG45s
+         KBXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Vn5oKbnGZSK29/TeD2jdsTWSsU6BDg6nOy220ST8fyE=;
+        b=Smio80Bx60HE1EDCgjARd5ctMTs/AcfIA6UUFSeRs9O26xLI5SiDm95yOfz3+lp3nM
+         zfmp7+b2QhV0dCZ0b22S5Cib6MWuVN18e0OcWNzzMcqYPnai9iatXAK5+psgibS4gYXk
+         nW0UGtoty5uihFuvEgYRA4EGLWAoPOGHPQ2aSnO85tawrZIrdtz/qUr7Cy9QG6jDv1iW
+         jgmJ98Bxlt8mVZl8HwMlGGN3QWOopZm/AcbuVTpopw6Hl78BQWuambyNdqVMT9wBnJSb
+         5XrA388lLQk5jEGttYCzCrB5Ji6wf6hLYCrKyvZ2ZgJTwzWdAZwWfJdnIExy9iVYO9Nl
+         E1jQ==
+X-Gm-Message-State: AOAM530N3Z40j0jigtj+7oL+xwoX/OPxx40KyFRpBQzerDZe+d3z5WLn
+        iQlF586DqvE8AUA9x95gQdm5bbM=
+X-Google-Smtp-Source: ABdhPJwo+5zEuBBP9DSC2b29Tuo0F0jw0Ox/T3uvpDRiQLRasor571HDpoxgJoDoibMecszhSTXgi4E=
+X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:55e2:d4be:752f:9807])
+ (user=pcc job=sendgmr) by 2002:a05:6902:725:: with SMTP id
+ l5mr3323683ybt.575.1642043683429; Wed, 12 Jan 2022 19:14:43 -0800 (PST)
+Date:   Wed, 12 Jan 2022 19:14:34 -0800
+Message-Id: <20220113031434.464992-1-pcc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
+Subject: [PATCH] mm: use compare-exchange operation to set KASAN page tag
+From:   Peter Collingbourne <pcc@google.com>
+To:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+It has been reported that the tag setting operation on newly-allocated
+pages can cause the page flags to be corrupted when performed
+concurrently with other flag updates as a result of the use of
+non-atomic operations. Fix the problem by using a compare-exchange
+loop to update the tag.
 
-What would you think about this cleanup? We need this in prep for the
-following fscache-based on-demand reading feature. It would be great if
-it could be cherry picked in advance.
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+Link: https://linux-review.googlesource.com/id/I456b24a2b9067d93968d43b4bb3351c0cec63101
+Fixes: 2813b9c02962 ("kasan, mm, arm64: tag non slab memory allocated via pagealloc")
+Cc: stable@vger.kernel.org
+---
+ include/linux/mm.h | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-I also simplify the commit message as suggested by Gao Xiang. I could
-resend a v2 patch with the updated commit message if you'd like.
-
-    netfs: add inode parameter to netfs_alloc_read_request()
-
-    Make the @file parameter optional, and derive inode from the @folio
-    parameter instead.
-
-    @file parameter can't be removed completely, since it also works as
-    the private data of ops->init_rreq().
-
-    Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-
-
-On 12/27/21 8:54 PM, Jeffle Xu wrote:
-> When working as the local cache, the @file parameter of
-> netfs_alloc_read_request() represents the backed file inside netfs. It
-> is for two use: 1) we can derive the corresponding inode from file,
-> 2) works as the argument for ops->init_rreq().
-> 
-> In the new introduced demand-read mode, netfs_readpage() will be called
-> by the upper fs to read from backing files. However in this new mode,
-> the backed file may not be opened, and thus the @file argument is NULL
-> in this case.
-> 
-> For netfs_readpage(), @file parameter represents the backed file inside
-> netfs, while @folio parameter represents one page cache inside the
-> address space of this backed file. We can still derive the inode from
-> the @folio parameter, even when @file parameter is NULL.
-> 
-> Thus refactor netfs_alloc_read_request() somewhat for this change.
-> 
-> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-> ---
->  fs/netfs/read_helper.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/fs/netfs/read_helper.c b/fs/netfs/read_helper.c
-> index 8c58cff420ba..ca84918b6b5d 100644
-> --- a/fs/netfs/read_helper.c
-> +++ b/fs/netfs/read_helper.c
-> @@ -39,7 +39,7 @@ static void netfs_put_subrequest(struct netfs_read_subrequest *subreq,
->  
->  static struct netfs_read_request *netfs_alloc_read_request(
->  	const struct netfs_read_request_ops *ops, void *netfs_priv,
-> -	struct file *file)
-> +	struct inode *inode, struct file *file)
->  {
->  	static atomic_t debug_ids;
->  	struct netfs_read_request *rreq;
-> @@ -48,7 +48,7 @@ static struct netfs_read_request *netfs_alloc_read_request(
->  	if (rreq) {
->  		rreq->netfs_ops	= ops;
->  		rreq->netfs_priv = netfs_priv;
-> -		rreq->inode	= file_inode(file);
-> +		rreq->inode	= inode;
->  		rreq->i_size	= i_size_read(rreq->inode);
->  		rreq->debug_id	= atomic_inc_return(&debug_ids);
->  		INIT_LIST_HEAD(&rreq->subrequests);
-> @@ -870,6 +870,7 @@ void netfs_readahead(struct readahead_control *ractl,
->  		     void *netfs_priv)
->  {
->  	struct netfs_read_request *rreq;
-> +	struct inode *inode = file_inode(ractl->file);
->  	unsigned int debug_index = 0;
->  	int ret;
->  
-> @@ -878,7 +879,7 @@ void netfs_readahead(struct readahead_control *ractl,
->  	if (readahead_count(ractl) == 0)
->  		goto cleanup;
->  
-> -	rreq = netfs_alloc_read_request(ops, netfs_priv, ractl->file);
-> +	rreq = netfs_alloc_read_request(ops, netfs_priv, inode, ractl->file);
->  	if (!rreq)
->  		goto cleanup;
->  	rreq->mapping	= ractl->mapping;
-> @@ -948,12 +949,13 @@ int netfs_readpage(struct file *file,
->  		   void *netfs_priv)
->  {
->  	struct netfs_read_request *rreq;
-> +	struct inode *inode = folio_file_mapping(folio)->host;
->  	unsigned int debug_index = 0;
->  	int ret;
->  
->  	_enter("%lx", folio_index(folio));
->  
-> -	rreq = netfs_alloc_read_request(ops, netfs_priv, file);
-> +	rreq = netfs_alloc_read_request(ops, netfs_priv, inode, file);
->  	if (!rreq) {
->  		if (netfs_priv)
->  			ops->cleanup(folio_file_mapping(folio), netfs_priv);
-> @@ -1122,7 +1124,7 @@ int netfs_write_begin(struct file *file, struct address_space *mapping,
->  	}
->  
->  	ret = -ENOMEM;
-> -	rreq = netfs_alloc_read_request(ops, netfs_priv, file);
-> +	rreq = netfs_alloc_read_request(ops, netfs_priv, inode, file);
->  	if (!rreq)
->  		goto error;
->  	rreq->mapping		= folio_file_mapping(folio);
-> 
-
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index c768a7c81b0b..b544b0a9f537 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1531,11 +1531,17 @@ static inline u8 page_kasan_tag(const struct page *page)
+ 
+ static inline void page_kasan_tag_set(struct page *page, u8 tag)
+ {
+-	if (kasan_enabled()) {
+-		tag ^= 0xff;
+-		page->flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
+-		page->flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
+-	}
++	unsigned long old_flags, flags;
++
++	if (!kasan_enabled())
++		return;
++
++	tag ^= 0xff;
++	do {
++		old_flags = flags = page->flags;
++		flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
++		flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
++	} while (unlikely(cmpxchg(&page->flags, old_flags, flags) != old_flags));
+ }
+ 
+ static inline void page_kasan_tag_reset(struct page *page)
 -- 
-Thanks,
-Jeffle
+2.34.1.575.g55b058a8bb-goog
+

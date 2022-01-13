@@ -2,76 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9E048D4B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E97648D4BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbiAMJGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:06:07 -0500
-Received: from giacobini.uberspace.de ([185.26.156.129]:44600 "EHLO
-        giacobini.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232280AbiAMJGG (ORCPT
+        id S233220AbiAMJIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:08:17 -0500
+Received: from mail-ed1-f47.google.com ([209.85.208.47]:43643 "EHLO
+        mail-ed1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232404AbiAMJIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:06:06 -0500
-Received: (qmail 1960 invoked by uid 990); 13 Jan 2022 09:06:04 -0000
-Authentication-Results: giacobini.uberspace.de;
-        auth=pass (plain)
-From:   Soenke Huster <soenke.huster@eknoes.de>
-To:     me@eknoes.de, Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Soenke Huster <soenke.huster@eknoes.de>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Bluetooth: fix null ptr deref on hci_sync_conn_complete_evt
-Date:   Thu, 13 Jan 2022 10:05:52 +0100
-Message-Id: <20220113090553.40362-1-soenke.huster@eknoes.de>
-X-Mailer: git-send-email 2.34.1
+        Thu, 13 Jan 2022 04:08:14 -0500
+Received: by mail-ed1-f47.google.com with SMTP id m4so20460216edb.10;
+        Thu, 13 Jan 2022 01:08:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wC2KgNOyavftb+JH6q0bbSSTyPPUp1FHUEoqTU+2oII=;
+        b=SOnD2sGfqZsRZXBYWXVODzMnFQBlc4FE4Hi5xuglrYlrAadZlzgCX6k/kkBP1zAOM2
+         gKoUEs7xA2EiPxI912UDla9wOJOE6NzyHVRXoTIs7Bu6vwnFz/Xp2At4WeXLDA3nGMEv
+         7UUzfX19eKfMMf1gbFPOzoVC0hzNoFoGPNz2A/qyLCcJhFX864BcNJonImNCPRRCCYdF
+         qiy+FCCB+Fe1uKeUBxf1YYJH+S1b6vuiixcPFHQEa/8UK62zckClf3PpUg+fSx1QCeWO
+         fjSf+F4yl4eQQHVwBLMGkavF8zmendCk8krhUqddO/YnNdQtVIXVUV8KhFwOUD8Aalhy
+         9ffA==
+X-Gm-Message-State: AOAM5329hbOFW6d+UrKbMlWMOTfdlwsJvDhXLxz2ebMHFDGSq/tx/we5
+        sO1ZCpAMLR2skfNoXgM0Oaw=
+X-Google-Smtp-Source: ABdhPJxDvbw8uDi/CZCHdNVb8ZF0cm/dXO5wxlQuyJkPUYQmVI9ihlrf7qz1xLinH94LB5ZX9C933w==
+X-Received: by 2002:a05:6402:6cf:: with SMTP id n15mr3235992edy.353.1642064893088;
+        Thu, 13 Jan 2022 01:08:13 -0800 (PST)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id 20sm656699ejy.105.2022.01.13.01.08.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 01:08:12 -0800 (PST)
+Message-ID: <d6d3aa07-7bf1-2b6d-356f-ae13c7b9d6cd@kernel.org>
+Date:   Thu, 13 Jan 2022 10:08:11 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Bar: ++
-X-Rspamd-Report: BAYES_HAM(-0.044325) R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) SUSPICIOUS_RECIPS(1.5)
-X-Rspamd-Score: 2.855674
-Received: from unknown (HELO unkown) (::1)
-        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Thu, 13 Jan 2022 10:06:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v6 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
+Content-Language: en-US
+To:     hammer hsieh <hammerh0314@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        wells.lu@sunplus.com, "hammer.hsieh" <hammer.hsieh@sunplus.com>
+References: <1641979444-11661-1-git-send-email-hammerh0314@gmail.com>
+ <1641979444-11661-3-git-send-email-hammerh0314@gmail.com>
+ <fcd43c65-6201-9e44-061c-f04e39cef726@kernel.org>
+ <CAOX-t54oA9V94d3901w2xKSagSzmXc9r=TDTtbgaSLfL1DxNbw@mail.gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <CAOX-t54oA9V94d3901w2xKSagSzmXc9r=TDTtbgaSLfL1DxNbw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This event is specified just for SCO and eSCO link types.
-On the reception of a HCI_Synchronous_Connection_Complete for a BDADDR
-of an existing LE connection, LE link type and a status that triggers the
-second case of the packet processing a NULL pointer dereference happens,
-as conn->link is NULL.
+On 13. 01. 22, 9:54, hammer hsieh wrote:
+>>> +static void sunplus_shutdown(struct uart_port *port)
+>>> +{
+>>> +     unsigned long flags;
+>>> +
+>>> +     spin_lock_irqsave(&port->lock, flags);
+>>> +     writel(0, port->membase + SUP_UART_ISC);
+>>> +     spin_unlock_irqrestore(&port->lock, flags);
+>>
+>> I asked last time:
+>> * What bus is this -- posting?
+>>
+>> You replied:
+>> * Here just clear interrupt.
+>> * Not really understand your comment?
+>>
+>> So I am asking again:
+>> What bus is this? Isn't a posted write a problem here? I mean, shouldn't
+>> you read from the register so that the write hits the device? That
+>> depends on the bus this sits on, so just asking.
+>>
+> 
+> Each UART has its own ISC register.
+> Ex.
+> dev/ttySUP0 base_adr = 0x9C00-0000 , isc_addr = 0x9C00-001C
+> dev/ttySUP1 base_adr = 0x9C00-0080 , isc_addr = 0x9C00-009C
+> dev/ttySUP2 base_adr = 0x9C00-0100 , isc_addr = 0x9C00-011C
+> dev/ttySUP3 base_adr = 0x9C00-0180 , isc_addr = 0x9C00-019C
+> dev/ttySUP4 base_adr = 0x9C00-0200 , isc_addr = 0x9C00-021C
+> So sunplus_shutdown() just simply turn off its own device isc only.
+> That's why I didn't read register value, just write 0 for it.
 
-Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
----
-I found this null pointer dereference while fuzzing bluetooth-next. 
-On the described behaviour, a null ptr deref in line 4723 happens, as 
-conn->link is NULL. According to the Core spec, Link_Type must be SCO or eSCO,
-all other values are reserved for future use. Checking that mitigates a null 
-pointer dereference.
+Could you explain me what posted write is and how does it not matter in 
+this case?
 
- net/bluetooth/hci_event.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index fc30f4c03d29..fc3f29d195d2 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -4661,6 +4661,11 @@ static void hci_sync_conn_complete_evt(struct hci_dev *hdev, void *data,
- 	struct hci_ev_sync_conn_complete *ev = data;
- 	struct hci_conn *conn;
- 
-+	if (ev->link_type != SCO_LINK || ev->link_type != ESCO_LINK) {
-+		bt_dev_err(hdev, "Ignoring connect complete event for invalid link type");
-+		return;
-+	}
-+
- 	bt_dev_dbg(hdev, "status 0x%2.2x", ev->status);
- 
- 	hci_dev_lock(hdev);
+thanks,
 -- 
-2.34.1
-
+js
+suse labs

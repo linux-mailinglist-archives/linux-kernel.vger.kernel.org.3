@@ -2,104 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5488748D4AE
+	by mail.lfdr.de (Postfix) with ESMTP id B672E48D4AF
 	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbiAMJCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:02:25 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:56284 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbiAMJCV (ORCPT
+        id S232419AbiAMJCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231372AbiAMJCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:02:21 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A88C21F3A8;
-        Thu, 13 Jan 2022 09:02:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642064539; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=maRJiYWWsej6VtzU8BY/ZSUfh+jtG5r9ye7Nqwr2LU4=;
-        b=row7JZbSGynM/P4rzOyrZA53mgeZpQ9CUH1boo32eLI2QtXUzdCwIHjzi8q1ZEUlZC5Mky
-        HH8OAdNQh9fpQ5v7SgDnlIj22beb+/UbCbwZQNCioCJPlb9z0KC/o5zZ0HtSWttQYPnVaz
-        047dfsye0991We8g9UV70dKfxUcsJoI=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 822C7A3B88;
-        Thu, 13 Jan 2022 09:02:19 +0000 (UTC)
-Date:   Thu, 13 Jan 2022 10:02:19 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, feng.tang@intel.com,
-        siglesias@igalia.com, kernel@gpiccoli.net
-Subject: Re: [PATCH 3/3] panic: Allow printing extra panic information on
- kdump
-Message-ID: <Yd/qmyz+qSuoUwbs@alley>
-References: <20211109202848.610874-1-gpiccoli@igalia.com>
- <20211109202848.610874-4-gpiccoli@igalia.com>
+        Thu, 13 Jan 2022 04:02:37 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC8AC06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:02:35 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id x6so17144174lfa.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 01:02:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7LyCS0IC5WFJqwSvmXcfoKgU+BI6lkWxIXEP7Epi/No=;
+        b=I85TVLUwM33r3jhdgLIfrpTW4f9xNGRKZckAr0Ffq64qFMs6wcp2jkwrPFVS6v/qOC
+         t3l3ZG2I/T+BQ7uc3Zc/h1k7nc8sB4yMM9w+2ftyyXFfTraE13aSTCMDhuM6OC0h20kz
+         zNtTBAUfHPU1lwoL1eiFA2U6ejiDW4IsgGP/s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7LyCS0IC5WFJqwSvmXcfoKgU+BI6lkWxIXEP7Epi/No=;
+        b=vcu6oRHaKlghQVhr7b9U5dIU41oAUq4ZVaK3JIFJf63j/fM5bTShLFreVL54y9KyCZ
+         aIgvW6qFCvFQTd2Pz74bumBBCxH3bt5Wzd7zxtrc3SSNMINkwkkADvCU+FsHDbK7BA5Y
+         waz7T80W45jc4al3Ox2CpeueV7KYICsSHHcSUmq3PUfg4mePashm2+T9e47yPutnvt5z
+         ywDpN2TIMu+rYZmp4eL0xQe4Ei/+iA/VMKwecvwEZnfdifh9U/bMxj1CDoja5wgvDkRb
+         NVO4e49wFZ4OHfEUZMG22U7rVGtTtvPg51PsxPKLaTAh1vYD7jZXK8zQd16/InSFf1gS
+         CCAg==
+X-Gm-Message-State: AOAM533TSxjngBALk/ZmaiE2ORdNASqZzjCu5kmYbrhLtScgLNOZpOpe
+        JH44LyrDio1x0h9v/iYzKpkLqg==
+X-Google-Smtp-Source: ABdhPJxkeLJMNpbod4X8FBgzPNIwqQ762R9bGcRA5nLjPpXoOEfcZsdSkgYlY1MtdNtzg1ddVEzEbA==
+X-Received: by 2002:a2e:b947:: with SMTP id 7mr2253104ljs.268.1642064554046;
+        Thu, 13 Jan 2022 01:02:34 -0800 (PST)
+Received: from [172.16.11.17] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id b19sm226156lfb.292.2022.01.13.01.02.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 01:02:33 -0800 (PST)
+Subject: Re: [RFC 1/2] printk/dynamic_debug: Remove cyclic dependency between
+ printk.h and dynamic_debug.h
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Chris Down <chris@chrisdown.name>,
+        Marc Zyngier <maz@kernel.org>,
+        Andrew Scull <ascull@google.com>,
+        Will Deacon <will@kernel.org>, Jason Baron <jbaron@akamai.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jessica Yu <jeyu@kernel.org>, Jim Cromie <jim.cromie@gmail.com>
+References: <20220111143046.14680-1-pmladek@suse.com>
+ <20220111143046.14680-2-pmladek@suse.com>
+ <996a7cf5-b047-5038-c86b-f10820364465@rasmusvillemoes.dk>
+ <Yd7Fq6V1/Ynff6Qx@alley>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <614b08c0-268e-c688-2d99-33e96e5b9730@rasmusvillemoes.dk>
+Date:   Thu, 13 Jan 2022 10:02:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211109202848.610874-4-gpiccoli@igalia.com>
+In-Reply-To: <Yd7Fq6V1/Ynff6Qx@alley>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2021-11-09 17:28:48, Guilherme G. Piccoli wrote:
-> Currently we have the "panic_print" parameter/sysctl to allow some extra
-> information to be printed in a panic event. On the other hand, the kdump
-> mechanism allows to kexec a new kernel to collect a memory dump for the
-> running kernel in case of panic.
-> Right now these options are incompatible: the user either sets the kdump
-> or makes use of "panic_print". The code path of "panic_print" isn't
-> reached when kdump is configured.
+On 12/01/2022 13.12, Petr Mladek wrote:
+> On Tue 2022-01-11 17:01:35, Rasmus Villemoes wrote:
+>> On 11/01/2022 15.30, Petr Mladek wrote:
+>>> `make headerdep` reports many circular dependencies with the same
+>>> pattern:
+>>>
+>>> In file included from linux/printk.h,
+>>>                  from linux/dynamic_debug.h:188
+>>>                  from linux/printk.h:559 <-- here
+>>>
+>>> It looks like false positive:
+>>>
+>>>    + printk.h includes dynamic_debug.h when CONFIG_DYNAMIC_DEBUG_CORE
+>>>    + dynamic_debug.h includes printk.h when !CONFIG_DYNAMIC_DEBUG_CORE
+>>>
+>>> Instead, this patch adds 'include/linux/printk_core.h' and moves some
+>>> lowlevel printk API there. Then the raw _printk() can be called from
+>>> the inlined code in 'dynamic_debug.h'.
+>>
+>> Urgh, this doesn't look like the right approach.
 > 
-> There are situations though in which this would be interesting: for
-> example, in systems that are very memory constrained, a handcrafted
-> tiny kernel/initrd for kdump might be used in order to only collect the
-> dmesg in kdump kernel. Even more common, systems with no disk space for
-> the full (compressed) memory dump might very well rely in this
-> functionality too, dumping only the dmesg with the additional information
-> provided by "panic_print".
+> It is not ideal. But it allows to handle these cycles without
+> complicating external code. It is not only about dynamic_debug.h.
 
-Is anyone really using this approach? kmsg_dump() looks like a better
-choice when there are memory constrains. It does not need to reserve
-memory for booting the crash kernel.
+I'm not against splitting up printk.h, I'm very familiar with the
+problems with too-large headers. But I think the specific problem with
+dynamic_debug.h has a much smaller and simpler resolution (as I've
+suggested), which would also clean up the code a bit, and make a later
+refactoring of printk.h simpler - because there's one less user to care
+about.
 
-I would not mind much but this change depends on a not fully reliable
-assumption, see below.
-
-Also it will also complicate the solution for the kmsg_dump() code path.
-It would be better to discuss this togeter with the other patch
-https://lore.kernel.org/r/20220106212835.119409-1-gpiccoli@igalia.com
-
-
-> So, this is what the patch does: allows both functionality to co-exist;
-> if "panic_print" is set and the system performs a kdump, the extra
-> information is printed on dmesg before the kexec. Some notes about the
-> design choices here:
+> Another small advantage is that printk_core.h might define other
+> printk API that is not intended for general use.
 > 
-> (a) We could have introduced a sysctl or an extra bit on "panic_print"
-> to allow enabling the co-existence of kdump and "panic_print", but seems
-> that would be over-engineering; we have 3 cases, let's check how this
-> patch change things:
 > 
-> - if the user have kdump set and not "panic_print", nothing changes;
-> - if the user have "panic_print" set and not kdump, nothing changes;
-> - if both are enabled, now we print the extra information before kdump,
-> which is exactly the goal of the patch (and should be the goal of the
-> user, since they enabled both options).
+>>>  static inline int ddebug_add_module(struct _ddebug *tab, unsigned int n,
+>>>  				    const char *modname)
+>>> @@ -202,9 +202,8 @@ static inline int ddebug_dyndbg_module_param_cb(char *param, char *val,
+>>>  						const char *modname)
+>>>  {
+>>>  	if (strstr(param, "dyndbg")) {
+>>> -		/* avoid pr_warn(), which wants pr_fmt() fully defined */
+>>> -		printk(KERN_WARNING "dyndbg param is supported only in "
+>>> -			"CONFIG_DYNAMIC_DEBUG builds\n");
+>>> +		/* Use raw _printk() to avoid cyclic dependency. */
+>>> +		_printk(KERN_WARNING "dyndbg param is supported only in CONFIG_DYNAMIC_DEBUG builds\n");
+>>>  		return 0; /* allow and ignore */
+>>>  	}
+>>>  	return -EINVAL;
+>>
+>> It looks like this has only one caller, kernel/module.c. I suggest
+>> simply moving the match logic into unknown_module_param_cb(), making it
+>> on par with the other "generic" module parameter async_probe. That is,
+>> do something like
+>>
+>>   if (strstr(param, "dyndbg")) {
+>>     if (IS_ENABLED(CONFIG_DYNAMIC_DEBUG)) {
+>>       return ddebug_dyndbg_module_param_cb(param, val, modname)
+>>     }
+>>     pr_warn("dyndbg param is supported only in ...");
+>>     return 0; /* allow and ignore */
+>>   }
+>>
+>>   pr_warn("%s: unknown parameter '%s' ignored\n", modname, param);
+>>   return 0;
+>>
+>> That makes it simpler to add more magic/generic module parameters in
+>> unknown_module_param_cb(). No need for a static inline stub, and no need
+>> for conditionally declaring ddebug_dyndbg_module_param_cb(). So all that
+>> is needed in dynamic_debug.h is to remove the static inline definition,
+>> and pull the declaration outside #if defined(CONFIG_DYNAMIC_DEBUG_CORE)
+>> protection.
 > 
-> (b) We assume that the code path won't return from __crash_kexec()
-> so we didn't guard against double execution of panic_print_sys_info().
+> I do not have strong opinion here. The advantage of the current code
+> is that it keeps the complexity in dynamic_debug code.
 
-This sounds suspiciously. There is small race window but it actually works.
-__crash_kexec() really never returns when @kexec_crash_image is
-loaded. Well, it might break in the future if the code is modified.
+No, not really, anything in dynamic_debug.h is part of every TU that
+includes that header, even if the static inline is only used by one of
+them. And since the module code anyway needs to have some knowledge of
+dyndbg, I don't see why we can't move the meat of that static inline
+into module.c.
 
-Best Regards,
-Petr
+> Adding Jessica into CC to know her preferences.
+> 
+> 
+>> What's with the strstr, btw? Shouldn't it just be !strcmp()?
+> 
+> "dyndbg" parameter might be used as <module>.dyndbg[="val"].
+
+No, not if I'm reading the code and the old commit logs right. For a
+built-in module, that thing gets handled by
+ddebug_dyndbg_boot_param_cb(), just as the comment in
+ddebug_dyndbg_param_cb() says.
+
+But in the call from ddebug_dyndbg_module_param_cb(), param is expected
+to be the plain parameter name; it is (userspace) modprobe which parses
+/proc/cmdline for any occurrence of <module>.foo=bar and passes that on,
+in the format foo=bar, along with any other module parameters given
+explicitly in the modprobe call. So if I'm reading the code right, a
+CONFIG_DYNAMIC_DEBUG=n kernel would print the "dyndbg param is supported
+only in ..." warning if one loads a module and gives a
+HALLEdyndbgLUJA=123 parameter.
+
+Rasmus

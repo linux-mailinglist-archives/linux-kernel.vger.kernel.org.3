@@ -2,115 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DFB48D2E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CE448D2F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbiAMHcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 02:32:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiAMHcK (ORCPT
+        id S231208AbiAMHep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 02:34:45 -0500
+Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:43282 "EHLO
+        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231175AbiAMHep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 02:32:10 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605C8C06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 23:32:10 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id l15so8366653pls.7
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 23:32:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fJ7jhTxZtYx2s5hY3iEvxpmsU4PPvMVmZGrdRkEcvPI=;
-        b=IJSx48yyim2T+/autKNyiGUP5WVCIa2LnzXnNoCi6Gr8LHqpcsTey0lxosDSWWukoQ
-         Itwtn9aJjQ8QeRk28BDdMwEOfJrG3FrUz3yPlgbA3Abg3QwKfQW5QmZvkriKl39DdQQU
-         MwSLZ6ACdE1JK6QSgl/1slJLqLO9rP6cq5P8E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fJ7jhTxZtYx2s5hY3iEvxpmsU4PPvMVmZGrdRkEcvPI=;
-        b=ggMfeOyxDCjABv92aY0DmFuIP5CBB5kqxs2YOdRBkwOnjwDujdE0XG3IxBOxA5/ZyV
-         LRPhnHLZ6kVO2QibPkNeRIN1i9KPlhUdbm53R6PqX78dn2RXYhdR26Ps+JSniz0Vt+g3
-         V9387F0KkmbpdURt4mm7fHGWiBMyOLEmRixGoxCGD6vdwDgY/vX/a+ys5khfrhKVr+cK
-         br/7y6kqck+DxZsG7QlKQ5980+2Ky9J7/iwiqPQ7f3bjQwg6zwFADb9yXGT1tD6aIEaW
-         l8Aj2UdXwu78DlL9r7Aiwx1rstzedcL6pGeFoVxHk9ssG4aeMlxW2lQEPsfs9JJqpiog
-         m0iA==
-X-Gm-Message-State: AOAM5323FKVJ/qTyeJO+KkpIZXbVEak1JExomHBJdJhkRtBuwax2EPmQ
-        HnQiENC3v4KjukvUGf7Ra7HAUg==
-X-Google-Smtp-Source: ABdhPJziGsBxli+6Iq6w6hS+WQ2CJbZK7AzLfAwT/ACq/ydScWMRWwiOoZBeFrG0UOgEMIqdg1xPcg==
-X-Received: by 2002:a17:902:904b:b0:143:73ff:eb7d with SMTP id w11-20020a170902904b00b0014373ffeb7dmr3518103plz.85.1642059129830;
-        Wed, 12 Jan 2022 23:32:09 -0800 (PST)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:3ced:e0da:4852:430c])
-        by smtp.gmail.com with ESMTPSA id om3sm7747701pjb.49.2022.01.12.23.32.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 23:32:09 -0800 (PST)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v2 3/3] dt-bindings: drm/bridge: anx7625: Add aux-bus node
-Date:   Thu, 13 Jan 2022 15:31:58 +0800
-Message-Id: <20220113073158.2171673-3-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.34.1.575.g55b058a8bb-goog
-In-Reply-To: <20220113073158.2171673-1-hsinyi@chromium.org>
-References: <20220113073158.2171673-1-hsinyi@chromium.org>
+        Thu, 13 Jan 2022 02:34:45 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R321e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yaohongbo@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V1ilgbl_1642059281;
+Received: from 30.225.24.138(mailfrom:yaohongbo@linux.alibaba.com fp:SMTPD_---0V1ilgbl_1642059281)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 13 Jan 2022 15:34:42 +0800
+Message-ID: <d47e5af3-d339-01b6-5925-a2037b177be2@linux.alibaba.com>
+Date:   Thu, 13 Jan 2022 15:34:41 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [RFC PATCH v2] PCI: Waiting command completed in
+ get_port_device_capability()
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, lukas@wunner.de,
+        zhangliguang@linux.alibaba.com,
+        alikernel-developer@linux.alibaba.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+References: <20220112180134.GA251670@bhelgaas>
+From:   Yao Hongbo <yaohongbo@linux.alibaba.com>
+In-Reply-To: <20220112180134.GA251670@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-List panel under aux-bus node if it's connected to anx7625's aux bus.
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Reviewed-by: Xin Ji <xji@analogixsemi.com>
----
- .../display/bridge/analogix,anx7625.yaml        | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-index 1d3e88daca041a..0d38d6fe39830f 100644
---- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-+++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-@@ -83,6 +83,9 @@ properties:
-     type: boolean
-     description: let the driver enable audio HDMI codec function or not.
- 
-+  aux-bus:
-+    $ref: /schemas/display/dp-aux-bus.yaml#
-+
-   ports:
-     $ref: /schemas/graph.yaml#/properties/ports
- 
-@@ -167,5 +170,19 @@ examples:
-                     };
-                 };
-             };
-+
-+            aux-bus {
-+                panel {
-+                    compatible = "innolux,n125hce-gn1";
-+                    power-supply = <&pp3300_disp_x>;
-+                    backlight = <&backlight_lcd0>;
-+
-+                    port {
-+                        panel_in: endpoint {
-+                            remote-endpoint = <&anx7625_out>;
-+                        };
-+                    };
-+                };
-+            };
-         };
-     };
--- 
-2.34.1.575.g55b058a8bb-goog
+在 2022/1/13 上午2:01, Bjorn Helgaas 写道:
+> On Wed, Jan 12, 2022 at 03:33:25PM +0800, Yao Hongbo wrote:
+>>
+>>
+>> 在 2022/1/12 上午2:55, Bjorn Helgaas 写道:
+>>> [+cc Lukas, Rafael (in case you have any recollection of 2bd50dd800b5)]
+>>>
+>>> On Fri, Jan 07, 2022 at 11:22:49AM +0800, Yao Hongbo wrote:
+>>>> According to the PCIe specification Revision 5.0, section
+>>>> 7.5.3.11 (slot Status Register), if Command Complete notification
+>>>> is supported,  a write to the slot control register needs to set
+>>>> the command completed bit, which can indicate the controller is
+>>>> ready to receive the next command.
+>>>>
+>>>> However, before probing the pcie hotplug service, there needs to set
+>>>> HPIE bit in the slot ctrl register to disable hotplug interrupts,
+>>>> and there is no wait currently.
+>>>>
+>>>> The interval between the two functions get_port_device_capability() and
+>>>> pcie_disable_notification() is not long, which may cause the latter to
+>>>> be interfered by the former.
+>>>>
+>>>> The command complete event received by pcie_disable_notification() may
+>>>> belong to the operation of get_port_device_capability().
+>>>
+>>> Yes, looks like a potential problem.
+>>>
+>>>> Signed-off-by: Liguang Zhang <zhangliguang@linux.alibaba.com>
+>>>> Signed-off-by: Yao Hongbo <yaohongbo@linux.alibaba.com>
+>>>> ---
+>>>>  drivers/pci/pcie/portdrv_core.c | 40 ++++++++++++++++++++++++++++++++++++++--
+>>>>  1 file changed, 38 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
+>>>> index bda6308..ec2088b6e 100644
+>>>> --- a/drivers/pci/pcie/portdrv_core.c
+>>>> +++ b/drivers/pci/pcie/portdrv_core.c
+>>>> @@ -15,6 +15,7 @@
+>>>>  #include <linux/string.h>
+>>>>  #include <linux/slab.h>
+>>>>  #include <linux/aer.h>
+>>>> +#include <linux/delay.h>
+>>>>  
+>>>>  #include "../pci.h"
+>>>>  #include "portdrv.h"
+>>>> @@ -190,6 +191,42 @@ static int pcie_init_service_irqs(struct pci_dev *dev, int *irqs, int mask)
+>>>>  	return 0;
+>>>>  }
+>>>>  
+>>>> +static void pcie_port_disable_hp_interrupt(struct pci_dev *dev)
+>>>> +{
+>>>> +	u16 slot_status;
+>>>> +	u32 slot_cap;
+>>>> +	int timeout = 1000;
+>>>> +
+>>>> +	pcie_capability_clear_word(dev, PCI_EXP_SLTCTL,
+>>>> +			PCI_EXP_SLTCTL_CCIE | PCI_EXP_SLTCTL_HPIE);
+>>>> +
+>>>> +	/*
+>>>> +	 * If the command completed notification is not supported,
+>>>> +	 * we don't need to wait after writing to the slot ctrl register.
+>>>> +	 */
+>>>> +	pcie_capability_read_dword(dev, PCI_EXP_SLTCAP, &slot_cap);
+>>>> +	if (slot_cap & PCI_EXP_SLTCAP_NCCS)
+>>>> +		return;
+>>>> +
+>>>> +	do {
+>>>> +		pcie_capability_read_word(dev, PCI_EXP_SLTSTA, &slot_status);
+>>>> +		if (slot_status == (u16) ~0) {
+>>>> +			pci_info(dev, "%s: no response from device\n",  __func__);
+>>>> +			return;
+>>>> +		}
+>>>> +
+>>>> +		if (slot_status & PCI_EXP_SLTSTA_CC) {
+>>>> +			pcie_capability_write_word(dev, PCI_EXP_SLTSTA, PCI_EXP_SLTSTA_CC);
+>>>> +			return;
+>>>> +		}
+>>>> +
+>>>> +		msleep(10);
+>>>> +		timeout -= 10;
+>>>> +	} while (timeout >= 0);
+>>>> +
+>>>> +	pci_info(dev, "Timeout on hotplug disable interrupt!\n");
+>>>> +}
+>>>> +
+>>>>  /**
+>>>>   * get_port_device_capability - discover capabilities of a PCI Express port
+>>>>   * @dev: PCI Express port to examine
+>>>> @@ -213,8 +250,7 @@ static int get_port_device_capability(struct pci_dev *dev)
+>>>>  		 * Disable hot-plug interrupts in case they have been enabled
+>>>>  		 * by the BIOS and the hot-plug service driver is not loaded.
+>>>>  		 */
+>>>> -		pcie_capability_clear_word(dev, PCI_EXP_SLTCTL,
+>>>> -			  PCI_EXP_SLTCTL_CCIE | PCI_EXP_SLTCTL_HPIE);
+>>>> +		pcie_port_disable_hp_interrupt(dev);
+>>>
+>>> This originally came from 2bd50dd800b5 ("PCI: PCIe: Disable PCIe port
+>>> services during port initialization"), where we disable hotplug
+>>> interrupts in case the hotplug driver is not available.
+>>>
+>>> In general, I think the OS should not be responsible for disabling
+>>> interrupts for feature X.  The OS may predate feature X and may not
+>>> know anything about X at all.  The power-on default for interrupts
+>>> related to X should be "disabled" (as it is for HPIE and CCIE), and if
+>>> firmware enables them, it should disable them or arrange to handle
+>>> them itself before handing off to the OS.
+>>>
+>>> I don't know whether 2bd50dd800b5 was prompted by spurious hotplug
+>>> interrupts or not.  If it was, I think we were seeing a firmware
+>>> defect or possibly a pciehp initialization issue.
+>>>
+>>> At the time of 2bd50dd800b5, we always cleared HPIE and CCIE here.
+>>>
+>>> But now, on ACPI systems, we only clear HPIE and CCIE here if we *do*
+>>> have the hotplug driver (because host->native_pcie_hotplug only
+>>> remains set if we have been granted control via _OSC, and we only
+>>> request control when CONFIG_HOTPLUG_PCI_PCIE is enabled).  On these
+>>> systems, we should be able to remove this disable code because pciehp
+>>> will do whatever it needs.
+>>>
+>>> For non-ACPI systems, bridge->native_pcie_hotplug will always be set,
+>>> so we will clear HPIE and CCIE here and then (if
+>>> CONFIG_HOTPLUG_PCI_PCIE is enabled) initialize pciehp soon after,
+>>> which may be a problem as you describe.
+>>>
+>>> What kind of system are you seeing the problem on?  It seems like it
+>>> should be safe to drop the HPIE and CCIE disable here for ACPI
+>>> systems.  And *likely* we could do the same for non-ACPI systems,
+>>> though I have no experience there.
+>>
+>> Hi, Bjorn
+>> Thanks for your comments.
+>>
+>> The problem occurs on ACPI systems.
+>>
+>>  acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI EDR HPX-Type3]
+>>  acpi PNP0A08:00: _OSC: platform does not support [SHPCHotplug AER LTR DPC]
+>>  acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME PCIeCapability]
+>>
+>> We clear HPIE and CCIE here because the firmware doesn't control
+>> Hotplug via __OSC.
+>>
+>> And on ACPI systems, we can also set pcie_ports=native, which will
+>> also encounter such problems.
+> 
+> What happens if you just drop that call like the patch below?
+> 
+> If that avoids the problem, then we can talk about whether we need to
+> worry about broken firmware in the non-ACPI or "pcie_ports=native"
+> cases.
 
+Hi, Bjorn.
+This can avoid the problem currently.
+
+But i'm not sure if removing this code will introduce other problems,
+such as suprious hotplug before probing hotplug service.
+
+Thanks,
+Hongbo.
+
+
+> diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
+> index bda630889f95..76a3bd237bf9 100644
+> --- a/drivers/pci/pcie/portdrv_core.c
+> +++ b/drivers/pci/pcie/portdrv_core.c
+> @@ -208,13 +208,6 @@ static int get_port_device_capability(struct pci_dev *dev)
+>  	if (dev->is_hotplug_bridge &&
+>  	    (pcie_ports_native || host->native_pcie_hotplug)) {
+>  		services |= PCIE_PORT_SERVICE_HP;
+> -
+> -		/*
+> -		 * Disable hot-plug interrupts in case they have been enabled
+> -		 * by the BIOS and the hot-plug service driver is not loaded.
+> -		 */
+> -		pcie_capability_clear_word(dev, PCI_EXP_SLTCTL,
+> -			  PCI_EXP_SLTCTL_CCIE | PCI_EXP_SLTCTL_HPIE);
+>  	}
+>  
+>  #ifdef CONFIG_PCIEAER

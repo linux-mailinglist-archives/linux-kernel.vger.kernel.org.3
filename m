@@ -2,154 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F118C48DA65
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4DF48DA75
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:09:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235950AbiAMPE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 10:04:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34515 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229554AbiAMPE0 (ORCPT
+        id S235978AbiAMPJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 10:09:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234003AbiAMPJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 10:04:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642086266;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cRTsijcpTTyHraoR+V3O1Mi16FiVJpK3PKf++RerMpw=;
-        b=Zk1KP2duy8hLUAqFuOLaXE5CcRc7FdYbGsUUXGVKO5HPs4GLrRmZdRptupinvXLyUjejwX
-        6razHT8L/zC1AslnAeMYQ+6EmW8m9VuevU+wEKgudRQxT51ZV30sLpumdfVrB32q6itgvR
-        sMEWSOOv0bqoFhXRMw30vWmGaKAobH4=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-377-SXOjhBofNNGntp7JKul0JQ-1; Thu, 13 Jan 2022 10:04:24 -0500
-X-MC-Unique: SXOjhBofNNGntp7JKul0JQ-1
-Received: by mail-ed1-f69.google.com with SMTP id y18-20020a056402271200b003fa16a5debcso5593096edd.14
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 07:04:24 -0800 (PST)
+        Thu, 13 Jan 2022 10:09:03 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9395C06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 07:09:02 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id d19so10782931wrb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 07:09:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ql4EI1XSM0uXLPj22057boBbVTjDFxU3Ac7+ONvGaos=;
+        b=dZ6QLVEiARHm99AsYDxNAadMtIE1VYZMXP7J3LMhIFqlLD+3KzY1dhoyY69kpmhV0K
+         +xOT1a3dRNn2WyEFtdPscD/GHNFkJ75cn2F9Szr8pTxXzavuwm2d6VMzqxZTtRnaReGW
+         LKOw5WvAnZ6UxP25/qeBcxk1rRHNRqNHkxTp4aR4efYxbfGLhtVQDw5eXFdoryw87vr5
+         3R4E45LcfbXPFnE+DCCekqJpDEPvZ4ns6UizOly2rylJpCTrUQyW3bHAIYmEKduukNNn
+         +oy+7mzzezdgjBYewUU2DTVxD/xa4BtqRp56wTa8g1G3L/mA/PvevwAOA6Z2mC/Aenla
+         N2rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=cRTsijcpTTyHraoR+V3O1Mi16FiVJpK3PKf++RerMpw=;
-        b=hvSTflwYkjGty6G1xfyVWYcdX+8JjeX0gkgaIHBfz/8F+A81vOnnzySoa4y4vH4RW8
-         vA5U189U/21RqgyTo2kvOe3UhD+rrgPbkOU9hmq+t3Czi+Y4sw3HjhtI9xvmbYwVQ7fp
-         0nyMteFyCOpVqu5OOE3QyMY4UwT8e99QD4+qoP5FqwpYiqml71GHsWrd9P20tHK0Mj9E
-         8Kie9SXy5tHzlGlliwc+i9AfJV9Aj66KJ4Uvjz7QE8CnmD3aVLMvLGxRuuRqsbtzXko6
-         DvAM26HadmVBcZLL+EaZjstAqqpbD2S/P4sZeWj27uprqScCHGoAntFFBNpYdutkAcqc
-         20DA==
-X-Gm-Message-State: AOAM530JfQSv1aTPgjGWJL7c26asKd7UcZgoapVkJ8j64qX9vaKihyJW
-        USZBzDcfQQ76jfNltyO57W+0xlXi3PuHSpoDIqQ9YEYLSYBJHXq9uVedUsHjbr11eK+z9cd+eXi
-        v80FQl3zSB0Cxmt4+SXKX4/m0
-X-Received: by 2002:a17:907:a411:: with SMTP id sg17mr3970383ejc.386.1642086263415;
-        Thu, 13 Jan 2022 07:04:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwjs3sI3lBKoJfQelsLOUNn03wgAPiabACCHXkb0MaN1/2AMIGOdqbV88alKCvlLM5aoh0wdg==
-X-Received: by 2002:a17:907:a411:: with SMTP id sg17mr3970358ejc.386.1642086263121;
-        Thu, 13 Jan 2022 07:04:23 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:e200:8511:ed0f:ac2c:42f7? (p200300cbc703e2008511ed0fac2c42f7.dip0.t-ipconnect.de. [2003:cb:c703:e200:8511:ed0f:ac2c:42f7])
-        by smtp.gmail.com with ESMTPSA id d27sm953104ejd.117.2022.01.13.07.04.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 07:04:22 -0800 (PST)
-Message-ID: <79e04824-73d5-c69f-64fb-f67051f4e124@redhat.com>
-Date:   Thu, 13 Jan 2022 16:04:21 +0100
+        bh=Ql4EI1XSM0uXLPj22057boBbVTjDFxU3Ac7+ONvGaos=;
+        b=dw+ULBcCKzJ88mqhxEcS3b+JjZdAQ1Riy2yRWR/+DYPVyWfrgV2bQ7R4LJ7bJ9yoDY
+         DtI3BDSix76BT+WrRw5pQ1E3hg2zSMrvXVWaNAb/Oy1xFZTzeBj50qbe4wg1a6Q9dxyL
+         F6RGANqVQC7F1dm7Ko1vER6/roatJdAcrMQWWtWsddqrnuur6Nd9jCOudlUlBAucWyiM
+         iuGkL0vDLCtt7/rMqq52q21ydNVd4m3FBgiUTpvhijqFQBNWN8i3RJr+FcHauzxZmTv9
+         ixBVxz5eV7eV++7RnUWPICY2Z9N/7S8sG2nFNUOa3/nIqyl08I+jvcIoBDMoefhy2bc6
+         /Xeg==
+X-Gm-Message-State: AOAM532Dz4saC7pEycfcpWORCnAJ0qpZICB2JDl3gkAkbvrJb4Z72gz6
+        7d5kmtoHhsXunMWFNiAFqcCRBw==
+X-Google-Smtp-Source: ABdhPJw3cDg0UjpHYSc2HIZ9VUjivIidWpuZYLj29b56lStR6I+gO3NMVqx/7T+1Agvu97DhFz78sA==
+X-Received: by 2002:a5d:6884:: with SMTP id h4mr4417294wru.640.1642086541238;
+        Thu, 13 Jan 2022 07:09:01 -0800 (PST)
+Received: from biernacki.c.googlers.com.com (105.168.195.35.bc.googleusercontent.com. [35.195.168.105])
+        by smtp.gmail.com with ESMTPSA id w12sm3269620wrm.36.2022.01.13.07.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 07:09:00 -0800 (PST)
+From:   Radoslaw Biernacki <rad@semihalf.com>
+X-Google-Original-From: Radoslaw Biernacki <rad@semihalf.ocm>
+To:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Cc:     CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
+        Archie Pusaka <apusaka@chromium.org>,
+        Miao-chen Chou <mcchou@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        upstream@semihalf.com, Radoslaw Biernacki <rad@semihalf.com>,
+        Angela Czubak <acz@semihalf.com>,
+        Marek Maslanka <mm@semihalf.com>
+Subject: [PATCH] Bluetooth: Fix skb allocation in mgmt_remote_name()
+Date:   Thu, 13 Jan 2022 15:08:46 +0000
+Message-Id: <20220113150846.1570738-1-rad@semihalf.ocm>
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Liang Zhang <zhangliang5@huawei.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        wangzhigang17@huawei.com,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220113140318.11117-1-zhangliang5@huawei.com>
- <YeA5oP/iaxtVPHb3@casper.infradead.org>
- <ec0f57e6-f1f6-b9d9-b507-20e845fe7f17@redhat.com>
- <YeA/DQptAz3fl6ym@casper.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YeA/DQptAz3fl6ym@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.01.22 16:02, Matthew Wilcox wrote:
-> On Thu, Jan 13, 2022 at 03:46:54PM +0100, David Hildenbrand wrote:
->> On 13.01.22 15:39, Matthew Wilcox wrote:
->>> On Thu, Jan 13, 2022 at 10:03:18PM +0800, Liang Zhang wrote:
->>>> In current implementation, process's read requestions will fault in pages
->>>> with WP flags in PTEs. Next, if process emit a write requestion will go
->>>> into do_wp_page() and copy data to a new allocated page from the old one
->>>> due to refcount > 1 (page table mapped and swapcache), which could be
->>>> result in performance degradation. In fact, this page is exclusively owned
->>>> by this process and the duplication from old to a new allocated page is
->>>> really unnecessary.
->>>>
->>>> So In this situation, these unshared pages can be reused by its process.
->>>
->>> Let's bring Linus in on this, but I think this reintroduces all of the
->>> mapcount problems that we've been discussing recently.
->>>
->>> How about this as an alternative?
->>>
->>> +++ b/mm/memory.c
->>> @@ -3291,11 +3291,11 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
->>>                 struct page *page = vmf->page;
->>>
->>>                 /* PageKsm() doesn't necessarily raise the page refcount */
->>> -               if (PageKsm(page) || page_count(page) != 1)
->>> +               if (PageKsm(page) || page_count(page) != 1 + PageSwapCache(page))
->>>                         goto copy;
->>>                 if (!trylock_page(page))
->>>                         goto copy;
->>> -               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1) {
->>> +               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1 + PageSwapCache(page)) {
->>>                         unlock_page(page);
->>>                         goto copy;
->>>                 }
->>
->> Funny, I was staring at swap reuse code as I received this mail ...
->> because if we're not using reuse_swap_page() here anymore, we shouldn't
->> really be reusing it anywhere for consistency, most prominently in
->> do_swap_page() when we handle vmf->flags & FAULT_FLAG_WRITE just
->> similarly as we do here ...
->>
->> And that's where things get hairy and I am still trying to figure out
->> all of the details.
->>
->> Regarding above: If the page is swapped out in multiple processes but
->> was only faulted into the current process R/O, and then we try to write:
->>
->> 1. Still in the swapcache: PageSwapCache()
->> 2. Mapped only by one process: page_mapcount(page) == 1
->> 3. Reference from one page table and the swap cache: page_count(page) ==
->>
->> But other processes could read-fault on the swapcache page, no?
->>
->> I think we'd really have to check against the swapcount as well ...
->> essentially reuse_swap_page(), no?
-> 
-> Unfortunately the last digit is missing from your "3.", but I
+From: Radoslaw Biernacki <rad@semihalf.com>
 
-Sorry, == 2.
+This patch fixes skb allocation, as lack of space for ev might push skb
+tail beyond its end.
+Also introduce eir_precalc_len() that can be used instead of magic
+numbers for similar eir operations on skb.
 
-> think you're absolutely right; we need to check swapcount.  So
-> once reuse_swap_page() checks page_count instead of mapcount, we'll
-> be good?
-> 
+Fixes: cf1bce1de7eeb ("Bluetooth: mgmt: Make use of mgmt_send_event_skb in MGMT_EV_DEVICE_FOUND")
+Signed-off-by: Angela Czubak <acz@semihalf.com>
+Signed-off-by: Marek Maslanka <mm@semihalf.com>
+Signed-off-by: Radoslaw Biernacki <rad@semihalf.com>
+---
+ net/bluetooth/eir.h  |  5 +++++
+ net/bluetooth/mgmt.c | 12 ++++--------
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-That's something I've been thinking of. Either get rid of
-reuse_swap_page() completely or make it obey the same rules everywhere.
-
-It's highly inconsistent how we handle COW.
-
+diff --git a/net/bluetooth/eir.h b/net/bluetooth/eir.h
+index 05e2e917fc25..e5876751f07e 100644
+--- a/net/bluetooth/eir.h
++++ b/net/bluetooth/eir.h
+@@ -15,6 +15,11 @@ u8 eir_create_scan_rsp(struct hci_dev *hdev, u8 instance, u8 *ptr);
+ u8 eir_append_local_name(struct hci_dev *hdev, u8 *eir, u8 ad_len);
+ u8 eir_append_appearance(struct hci_dev *hdev, u8 *ptr, u8 ad_len);
+ 
++static inline u16 eir_precalc_len(u8 data_len)
++{
++	return sizeof(u8) * 2 + data_len;
++}
++
+ static inline u16 eir_append_data(u8 *eir, u16 eir_len, u8 type,
+ 				  u8 *data, u8 data_len)
+ {
+diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+index 37087cf7dc5a..d517fd847730 100644
+--- a/net/bluetooth/mgmt.c
++++ b/net/bluetooth/mgmt.c
+@@ -9680,13 +9680,11 @@ void mgmt_remote_name(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
+ {
+ 	struct sk_buff *skb;
+ 	struct mgmt_ev_device_found *ev;
+-	u16 eir_len;
+-	u32 flags;
++	u16 eir_len = 0;
++	u32 flags = 0;
+ 
+-	if (name_len)
+-		skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND, 2 + name_len);
+-	else
+-		skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND, 0);
++	skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND,
++			     sizeof(*ev) + (name ? eir_precalc_len(name_len) : 0));
+ 
+ 	ev = skb_put(skb, sizeof(*ev));
+ 	bacpy(&ev->addr.bdaddr, bdaddr);
+@@ -9696,10 +9694,8 @@ void mgmt_remote_name(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
+ 	if (name) {
+ 		eir_len = eir_append_data(ev->eir, 0, EIR_NAME_COMPLETE, name,
+ 					  name_len);
+-		flags = 0;
+ 		skb_put(skb, eir_len);
+ 	} else {
+-		eir_len = 0;
+ 		flags = MGMT_DEV_FOUND_NAME_REQUEST_FAILED;
+ 	}
+ 
 -- 
-Thanks,
-
-David / dhildenb
+2.34.1.703.g22d0c6ccf7-goog
 

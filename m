@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F39D48E0AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 23:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C8C48E0B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 23:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238120AbiAMW4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 17:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
+        id S238140AbiAMW5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 17:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238088AbiAMW4y (ORCPT
+        with ESMTP id S238125AbiAMW45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 17:56:54 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF942C06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 14:56:53 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id m1so701618ybo.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 14:56:53 -0800 (PST)
+        Thu, 13 Jan 2022 17:56:57 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057A9C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 14:56:57 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id c10so19440201ybb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 14:56:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=pdLBfNgvUFOklxfhjYz1A331Y+Tddvzy2s727R0/HE8=;
-        b=PaOKxkfRo0RD1yP5Lci3dW1kXB/cJTOcNZQvZ9RQUkQKshA0+wDBoSVu93Vdd4sjCQ
-         ZN0YK0AAeNpUNnEffpHDVQQ9cWvFob1RfEBnrE4h3c0I6h5Gp0gEpBH6jmlozSQzy8re
-         Zuw+nuGbKb9Y5sf9F0vUT2gdUp9S5evflDKg0=
+        bh=Bon9YcmX/y5D1KBEnXS+OkpAMntSiR3cXQ8BTUvnYhM=;
+        b=gJjEeWN2CtncUTotnkgzNkHxlG72MyBpgrLJb9Nl2PNDxicwcmCK0a9uCErJ06dpzA
+         CQEXTevDF/ZVeyTZXMfu3luczwEvZKZB0OeYNXJzV21s9lo3uhsOj3wPSdSfLYJMeJ7M
+         fvhD6aC7wD3rFe9beiG0O+3SYJv4WuEVkdGHw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=pdLBfNgvUFOklxfhjYz1A331Y+Tddvzy2s727R0/HE8=;
-        b=SjXFkyA+hekJyP51J0S+MPcB3yXha91VJ9+E8Ag6WJepYTwbdkUk6oiDeUR6Gd2s1W
-         qtRmKlub5yb2tJ3uV2qEO8bvIw00ZW7OND67tV23E/kb/CMoZL18DL1BN/MTJ9tlpTu4
-         tfj7URlM5zsN9Htwy74wi1uCHj0CZVcTo9NBo04aPfFBKFpZz66lIsQMgliTQ9FoWkI2
-         aTfQF0Ej+Tc/LpYwPAB5XF8s+Zw1fX3X+tLWk2GlpKXaSfTNZu/+ct/jqqRCBfnGK93Y
-         tQLoPnJvXCLkgzhlSHIUe3QhBlB9dEOh008w9xfjQDJybuLvDbth65Q7+eWUaCzQQEtT
-         a6uA==
-X-Gm-Message-State: AOAM531ZteCBggRj+TxAL7Zg6/z4BE5vlrtgvWf3EkPTRqAhe2aGNf39
-        GztaBED/J8SFCy6sZpqYwkMoPjj2Wvjme/VNQ9M4zQ==
-X-Google-Smtp-Source: ABdhPJzGbrMynQ7+aMQIVDpW80Bpn1ZGmuWQ9yG5AskVlcM5ahCzRUbFTotiM58HTj+CFF9MGCzUOQ3Jrtn2rS/lwO8=
-X-Received: by 2002:a25:7482:: with SMTP id p124mr8486408ybc.266.1642114612866;
- Thu, 13 Jan 2022 14:56:52 -0800 (PST)
+        bh=Bon9YcmX/y5D1KBEnXS+OkpAMntSiR3cXQ8BTUvnYhM=;
+        b=Ank6J3r2ThbbquCSOPCI4K7CGemqpcWgZzOGlHNG+ciwypUcGktDwm8tw1IT06JD+N
+         hK86iMY+C3j+WCdJRQjOamTk6f6spcNEuU+2MGqFmD20xgrIiE0q8l/meHxTTtnueJDe
+         /BKQQ8pwdGX9NWTXN0LXlNj5Ajh25KPyzAYwca2YrHkScKUDu4sm2uIiWDGe+VM/UnbS
+         ePbFE1NRUgjH8HfFnc/ldIpQ60FyRMYAiv7YI64ptg2AILhVp9Qk3jtC43wvfx6qFRKt
+         ZVuvRQexg53clokO4OUAxPckhCJ2hTn/dQRRZ+cn1y7zUl8L0bz4HK4RP5dtkjc8kODz
+         vqPg==
+X-Gm-Message-State: AOAM532ULpVMtxdAVB4r87wekO1IFFI9oqm5cxiJe7LpuBIgxlpqu5YZ
+        jzMJIn061ZPptwpZTHFUwl6DsUUguaSTp9kU7D5VHg==
+X-Google-Smtp-Source: ABdhPJzjrCAifnr19GnfNi4829y4uYxHdb0KmI+Wiwk1pCGhRpocjwX2ciPGWC4WNw2pbw4hx/4vPh/xbofjDbU4c9o=
+X-Received: by 2002:a25:5088:: with SMTP id e130mr9213643ybb.158.1642114616327;
+ Thu, 13 Jan 2022 14:56:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20220111192952.49040-1-ivan@cloudflare.com> <CAA93jw6HKLh857nuh2eX2N=siYz5wwQknMaOtpkqLzpfWTGhuA@mail.gmail.com>
-In-Reply-To: <CAA93jw6HKLh857nuh2eX2N=siYz5wwQknMaOtpkqLzpfWTGhuA@mail.gmail.com>
+References: <20220111192952.49040-1-ivan@cloudflare.com> <CAPhsuW5ynK+XZkUm2jDE2LcpMbqPcQJDJHmFyU_WbBQyBKN38g@mail.gmail.com>
+In-Reply-To: <CAPhsuW5ynK+XZkUm2jDE2LcpMbqPcQJDJHmFyU_WbBQyBKN38g@mail.gmail.com>
 From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Thu, 13 Jan 2022 14:56:42 -0800
-Message-ID: <CABWYdi0ZHYvzzP9SFOCJhnfyMP12Ot9ALEmXg75oeXBWRAD8KQ@mail.gmail.com>
+Date:   Thu, 13 Jan 2022 14:56:45 -0800
+Message-ID: <CABWYdi27jpMC=trg1PDzFVPkOUyMshWUzdmKLc7tq35hCnjdAA@mail.gmail.com>
 Subject: Re: [PATCH bpf-next] tcp: bpf: Add TCP_BPF_RCV_SSTHRESH for bpf_setsockopt
-To:     Dave Taht <dave.taht@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+To:     Song Liu <song@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
         kernel-team <kernel-team@cloudflare.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -63,37 +62,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 1:02 PM Dave Taht <dave.taht@gmail.com> wrote:
-> I would not use the word "latency" in this way, I would just say
-> potentially reducing
-> roundtrips...
+On Tue, Jan 11, 2022 at 1:48 PM Song Liu <song@kernel.org> wrote:
+>
+> I guess this is [1] mentioned above. Please use lore link instead, e.g.
+>
+> [1] https://lore.kernel.org/all/CABWYdi0qBQ57OHt4ZbRxMtdSzhubzkPaPKkYzdNfu4+cgPyXCA@mail.gmail.com/
 
-Roundtrips translate directly into latency on high latency links.
+Will do in the next iteration, thanks.
 
-> and potentially massively increasing packet loss, oversaturating
-> links, and otherwise
-> hurting latency for other applications sharing the link, including the
-> application
-> that advertised an extreme window like this.
+> Can we add a selftests for this? Something similar to
+>
+> tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
 
-The receive window is going to scale up to tcp_rmem[2] with traffic,
-and packet loss won't stop it. That's around 3MiB on anything that's
-not embedded these days.
-
-My understanding is that congestion control on the sender side deals
-with packet loss, bottleneck saturation, and packet pacing. This patch
-only touches the receiving side, letting the client scale up faster if
-they choose to do so. I don't think any out of the box sender will
-make use of this, even if we enable it on the receiver, just because
-the sender's congestion control constraints are lower (like
-initcwnd=10).
-
-Let me know if any of this doesn't look right to you.
-
-> This overall focus tends to freak me out somewhat, especially when
-> faced with further statements that cloudflare is using an initcwnd of 250!???
-
-Congestion window is a learned property, not a static number. You
-won't get a large initcwnd towards a poor connection.
-
-We have a dedicated backbone with different properties.
+I have the test based on the tcp_rtt selftest. Do you want me to amend
+my commit with the test and resend it as v2 or make it a series of two
+commits?

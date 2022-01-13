@@ -2,115 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FAA48D8CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 658C948D8D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235118AbiAMNYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 08:24:39 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:52492
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235103AbiAMNYi (ORCPT
+        id S235134AbiAMN1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 08:27:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229534AbiAMN1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 08:24:38 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C2C373F1C6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 13:24:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642080277;
-        bh=jgEXa3jIbZdSwQdiBctgazOr3O8giX16P/36cdj/vYs=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=A+LcaMb+vNTyK+jwIwwLGaLyoopwwYV3qwNAditX8h4dAEcI41gQQNz9929fTppK7
-         GjrlUgpStGWwRirmQc0nrzKlWav7en1kd/352Q73YZYL8ZI9jAfhdiFwyOC/McVB/p
-         mtjs/SwQwmrljHB+5gLjopSwIgcWG4N9+4WvmEYv56wyRZOXR+78ctTid/iWFJgD7Z
-         +QJMiCUOayb/c9I8WkXG/giqJezVsaKtQFq1uRpdDdPeZQIUL/8AM91edlVWy7cKLT
-         88n5lyC9td3g/f1C7xbS8IR+Cm4OzKUdamKwZhZOX/qUo9klOGi84UIiQMHCIFyvIt
-         NkJeS0qmTfTkg==
-Received: by mail-ed1-f69.google.com with SMTP id s7-20020a056402520700b003f841380832so5339640edd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 05:24:37 -0800 (PST)
+        Thu, 13 Jan 2022 08:27:15 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC88EC06173F;
+        Thu, 13 Jan 2022 05:27:14 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id x22so19361461lfd.10;
+        Thu, 13 Jan 2022 05:27:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G72ZDsNgZpbxHJadsjYOpB+FuUHajnp+ihIWoz3Zf7k=;
+        b=fsF2iaPxk6cXPdIJJNtjHoUWgG22LpQspTstEjGJSoo/KxQwWNLpIFYiTsGi24gmFk
+         Wjx2JxC/zQZ1tit5p0pPr1dhn3otpuuqCavM0C/KVvgQAZNVTOZOyoJ2D7NcSz9ejXnk
+         UrbqB1XBObkBYX0kxwF1W8JdKN6HoHicXOPt6IHNuKEmHNo7v2hVO5UOLr4r7gsxCLvV
+         JlKgh3t9bZ4wnNLIsTGC3LIUNS0F40KH/O3etUT7azgI0hX/9aHf9KSIoRN7VGcy0+x8
+         jn9LJ5+04A2CelKckZGIHmwjiqhOgJC1Uilcu4Tvz9v3lgf45nUszw1HxbfdxmKJz9PG
+         AFYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=jgEXa3jIbZdSwQdiBctgazOr3O8giX16P/36cdj/vYs=;
-        b=W9UpFm9Hs4Wp2ybFHMU0qp7yqHl0/Z1xBK2H0tYnuGejU/giIvurTymQOoJopDLqCq
-         sVDbPkI05HON2gC0WLWXtjl1vcRPtQa0+sb9mLLtL6BFOmySi5nJoM7wnHkNC/jhO2/m
-         crAvwDtllYt4xB2meQ0fDSDp3sNsKKUNo/N0/4QL0q1rrBtlKq5fM03uUF1gwLgtz2dH
-         Ln0mkUviUSKOnHgI95ra2dIQcBFb3hFB04bMsEAZiMiOjCOQIJFEJftFhUGTfh6g70bn
-         zAwiu8o4KnsMVGHOgKMJftG0GtRpHfLerX8EpHOXNsvWd4orO3IbbNeaa/uckCxZUppS
-         Pd2Q==
-X-Gm-Message-State: AOAM5335agCzziz7PQsZysdZB0RdQwhdPic7WpJlEetU8S+JBfWiBvRq
-        mMqQYupO69l0/OPPq1a9nipPwHXZmaxTzYhegPPxZCNPRpWs58dKFBlOqkw613OWHK53LeC95KG
-        WjW92+6Ckj1K0qFkKLcD6kJ6LkPl+9gQMde/Cn+RqRg==
-X-Received: by 2002:a17:906:7e57:: with SMTP id z23mr3540856ejr.674.1642080277480;
-        Thu, 13 Jan 2022 05:24:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwS4LnTV4+PzPZuQbqmHmEZJRNcweUCHmK6aMYoKKN4T0AB3VCXZZ9fkpjjEJwNNdQtq4JXPQ==
-X-Received: by 2002:a17:906:7e57:: with SMTP id z23mr3540832ejr.674.1642080277270;
-        Thu, 13 Jan 2022 05:24:37 -0800 (PST)
-Received: from [192.168.0.30] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id mp12sm905633ejc.19.2022.01.13.05.24.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 05:24:36 -0800 (PST)
-Message-ID: <0d4c7a40-5eec-2cc5-82bc-d0ba4910d665@canonical.com>
-Date:   Thu, 13 Jan 2022 14:24:35 +0100
+        bh=G72ZDsNgZpbxHJadsjYOpB+FuUHajnp+ihIWoz3Zf7k=;
+        b=Rss5aUUASV4XwQXo6kojNU5fUnwb6eq1YQz7Wt/HiyePsHl3mkhuJwg9NKcLpgLpTz
+         h3HvgsJo0Q5sTBH1exC2kKKyyNpD5T+uI23miWq4KKoJgZsrdolDQ6QuPNdKce+CPM4m
+         e3PHQxlWUZ11J8H3dZCRrj0sDyWOtrarzgSicVjqqJDyvrD0FOxNehpqFNJJgk8l9+Ee
+         wdl9ffUhgm1M4Krlxfc9IuwaCKvWi+YVLM4VhQdTJAYgvBhp3HrPGj/YHEX2NsazwWyO
+         EPm5CYDZRkAbpOG/lhx2c8qMDJyNEPDyX23JtWfK0zw1maC/5SzDN4RK4RbiacK+ex9H
+         5wag==
+X-Gm-Message-State: AOAM531ki9P3OmnGgOd03CfgwNHu+/LpjZV2u8dKs6gUBwCsDzMDE9LV
+        fxmRL7vDanjZoiM/4tgr5s8=
+X-Google-Smtp-Source: ABdhPJy62I8/4CY0JCMHFdEmot2tO5odHLO82mfhXJ5VDMK3ffOrqBI7GKkTXmTzSayP+nyE+lPHog==
+X-Received: by 2002:a05:651c:2059:: with SMTP id t25mr3001801ljo.427.1642080433041;
+        Thu, 13 Jan 2022 05:27:13 -0800 (PST)
+Received: from localhost.localdomain ([217.117.245.67])
+        by smtp.gmail.com with ESMTPSA id e4sm267609ljj.97.2022.01.13.05.27.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 05:27:12 -0800 (PST)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        lukas@wunner.de
+Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Yiru Xu <xyru1999@gmail.com>
+Subject: [PATCH] Bluetooth: hci_serdev: call init_rwsem() before p->open()
+Date:   Thu, 13 Jan 2022 16:27:04 +0300
+Message-Id: <20220113132704.4354-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 17/23] Documentation: bindings: Add fsd spi compatible in
- dt-bindings document
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, s.nawrocki@samsung.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, Adithya K V <adithya.kv@samsung.com>
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
- <CGME20220113122427epcas5p1885d8b3b735e8f127b6694a309796e5a@epcas5p1.samsung.com>
- <20220113121143.22280-18-alim.akhtar@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220113121143.22280-18-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2022 13:11, Alim Akhtar wrote:
-> This patch adds spi controller dt-binding compatible information for
-> Tesla Full Self-Driving SoC.
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Adithya K V <adithya.kv@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  Documentation/devicetree/bindings/spi/spi-samsung.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
+kvartet reported, that hci_uart_tx_wakeup() uses uninitialized rwsem.
+The problem was in wrong place for percpu_init_rwsem() call.
 
-Also: subject prefix:
-spi: dt-bindings: samsung:
+hci_uart_proto::open() may register a timer whose callback may call
+hci_uart_tx_wakeup(). There is a chance, that hci_uart_register_device()
+thread won't be fast enough to call percpu_init_rwsem().
 
-> diff --git a/Documentation/devicetree/bindings/spi/spi-samsung.txt b/Documentation/devicetree/bindings/spi/spi-samsung.txt
-> index 49028a4f5df1..3af2408454b4 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-samsung.txt
-> +++ b/Documentation/devicetree/bindings/spi/spi-samsung.txt
-> @@ -11,6 +11,7 @@ Required SoC Specific Properties:
->      - samsung,s5pv210-spi: for s5pv210 and s5pc110 platforms
->      - samsung,exynos5433-spi: for exynos5433 compatible controllers
->      - samsung,exynos7-spi: for exynos7 platforms <DEPRECATED>
-> +    - tesla,fsd-spi: spi controller support for Tesla Full Self-Driving SoC
->  
->  - reg: physical base address of the controller and length of memory mapped
->    region.
-> 
+Fix it my moving percpu_init_rwsem() call before p->open().
 
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 2 PID: 18524 Comm: syz-executor.5 Not tainted 5.16.0-rc6 #9
+...
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ assign_lock_key kernel/locking/lockdep.c:951 [inline]
+ register_lock_class+0x148d/0x1950 kernel/locking/lockdep.c:1263
+ __lock_acquire+0x106/0x57e0 kernel/locking/lockdep.c:4906
+ lock_acquire kernel/locking/lockdep.c:5637 [inline]
+ lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5602
+ percpu_down_read_trylock include/linux/percpu-rwsem.h:92 [inline]
+ hci_uart_tx_wakeup+0x12e/0x490 drivers/bluetooth/hci_ldisc.c:124
+ h5_timed_event+0x32f/0x6a0 drivers/bluetooth/hci_h5.c:188
+ call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
 
-Best regards,
-Krzysztof
+Fixes: d73e17281665 ("Bluetooth: hci_serdev: Init hci_uart proto_lock to avoid oops")
+Reported-by: Yiru Xu <xyru1999@gmail.com>
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
+ drivers/bluetooth/hci_serdev.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/bluetooth/hci_serdev.c b/drivers/bluetooth/hci_serdev.c
+index 9e03402ef1b3..e9a44ab3812d 100644
+--- a/drivers/bluetooth/hci_serdev.c
++++ b/drivers/bluetooth/hci_serdev.c
+@@ -305,6 +305,8 @@ int hci_uart_register_device(struct hci_uart *hu,
+ 	if (err)
+ 		return err;
+ 
++	percpu_init_rwsem(&hu->proto_lock);
++
+ 	err = p->open(hu);
+ 	if (err)
+ 		goto err_open;
+@@ -327,7 +329,6 @@ int hci_uart_register_device(struct hci_uart *hu,
+ 
+ 	INIT_WORK(&hu->init_ready, hci_uart_init_work);
+ 	INIT_WORK(&hu->write_work, hci_uart_write_work);
+-	percpu_init_rwsem(&hu->proto_lock);
+ 
+ 	/* Only when vendor specific setup callback is provided, consider
+ 	 * the manufacturer information valid. This avoids filling in the
+-- 
+2.34.1
+

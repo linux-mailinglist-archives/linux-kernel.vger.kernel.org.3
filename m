@@ -2,75 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5483B48D680
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 12:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E18848D686
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 12:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234048AbiAMLMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 06:12:40 -0500
-Received: from mail-ed1-f48.google.com ([209.85.208.48]:42889 "EHLO
-        mail-ed1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiAMLMj (ORCPT
+        id S234044AbiAMLPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 06:15:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229670AbiAMLPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 06:12:39 -0500
-Received: by mail-ed1-f48.google.com with SMTP id i5so21702926edf.9;
-        Thu, 13 Jan 2022 03:12:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+I640+M7ZrIju3BDmTll+98qG/6MsN0P8dYMqkWxIVA=;
-        b=6OTDxeG4ZiZXVAGIz2mruI61Ycb6IebAplVUDd834ScEBp6C7U1ZsFglQGjoTmMv0r
-         iSLtjV/qHbszYaXYLqXsYfmysF19dcSb/G0hpY0LddJIyz/N2vtnYvSqQFmcFBOvLTFo
-         jmkbjqQTfS9tjQjaJb6x5mGW8OErhFq8cr1UxnHPCsEkHkogtItTxmVOk4qxGwyVydD5
-         OFwqbveCA3GP86y83pRQX987cAGV4KLIvatEn9OQv71+frc6wECGphneMDOC9vdElsc6
-         hzlewbGxwLyYqObKADmYOb4UTu/9FRGv/Tg5hVe5JZ0zMuHiZ4RIFnpTx0B3ELpAVIyj
-         YmfQ==
-X-Gm-Message-State: AOAM533d277zclM5nJGqOubHtTC6DdC6anD/4yhxXqadAhqS3Sp7mfQb
-        D6IgWofYKJoJK+y59t0lDuE=
-X-Google-Smtp-Source: ABdhPJz2jyQ9iYcZAeaS/pWcrDxuda4YOQusK6OFqAKFAgoWpZR8W9h3cNgpKyQimCRjw6iha60Gng==
-X-Received: by 2002:a17:906:6996:: with SMTP id i22mr3234069ejr.293.1642072358424;
-        Thu, 13 Jan 2022 03:12:38 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id qk34sm758939ejc.143.2022.01.13.03.12.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 03:12:37 -0800 (PST)
-Message-ID: <2cde3ff0-5180-7c1e-82fd-7b58e41d462a@kernel.org>
-Date:   Thu, 13 Jan 2022 12:12:36 +0100
+        Thu, 13 Jan 2022 06:15:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA67C06173F;
+        Thu, 13 Jan 2022 03:15:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 364F961203;
+        Thu, 13 Jan 2022 11:15:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99751C36AF4;
+        Thu, 13 Jan 2022 11:15:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642072508;
+        bh=tmokVRuMXpkRXv8oyzytWI3owOE0aSeiLqaiU0qB/+Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=F/jx0aBe8ep2hAZigf+cBZzT5PCjEoM6TUCokq1sCt6wGpHi8Au3IqVQrAmWU0IzB
+         7/nQh7AA/oTI3LZIWixmZbLTfKU6QgoMURzFf+10m9VhA7c7bEFErwuYBmu7SjmdMx
+         LmxgkVX8OCtZkDdEuNRQMjcsEbeGsJQl3lL8W0g4tfDTwiKf+jzPBj8Y6cyLH9Cwkq
+         2WiPrUlDRfuOwe/noRrmCVAIXrDSue6P+PyOtIB1yU936ZcwGoslCx1DLXMYLG0MQY
+         9bGyqoXCC0E/2dmEUGkpqH7M/A7tq4wSX4hL1nFB3UxK1QcsQkqC/aRQ5hv1bu0kge
+         iY6bBlzU20uSQ==
+Received: by mail-wm1-f42.google.com with SMTP id d187-20020a1c1dc4000000b003474b4b7ebcso3389830wmd.5;
+        Thu, 13 Jan 2022 03:15:08 -0800 (PST)
+X-Gm-Message-State: AOAM533EArxmwq4ADz6ZzYiIXW5RP6s3hL6EypH5Tx4w1ZyYmP/sgmdy
+        D5OQPpV1x/hCJYlDvVFy4KXEZQBl+E6tUwk8h3s=
+X-Google-Smtp-Source: ABdhPJwst+Tin12ujQYauaQcgLDiP82T5o8Qz/3cNaqDiW6X+iWOz0mouWb+fJ3aWoJYBb323ZOOm+CRoGY0Ep7lBUY=
+X-Received: by 2002:a1c:4c19:: with SMTP id z25mr10512756wmf.173.1642072506896;
+ Thu, 13 Jan 2022 03:15:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v6 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
-Content-Language: en-US
-To:     hammer hsieh <hammerh0314@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        wells.lu@sunplus.com, "hammer.hsieh" <hammer.hsieh@sunplus.com>
-References: <1641979444-11661-1-git-send-email-hammerh0314@gmail.com>
- <1641979444-11661-3-git-send-email-hammerh0314@gmail.com>
- <fcd43c65-6201-9e44-061c-f04e39cef726@kernel.org>
- <CAOX-t54oA9V94d3901w2xKSagSzmXc9r=TDTtbgaSLfL1DxNbw@mail.gmail.com>
- <d6d3aa07-7bf1-2b6d-356f-ae13c7b9d6cd@kernel.org>
- <CAOX-t57KZb0hNDuhPsabkmkf_qOOLqyH3yuvkHP6UNwhLodWDg@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CAOX-t57KZb0hNDuhPsabkmkf_qOOLqyH3yuvkHP6UNwhLodWDg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20210726141141.2839385-1-arnd@kernel.org> <20210726141141.2839385-9-arnd@kernel.org>
+ <Yd8P37V/N9EkwmYq@wychelm> <Yd8ZEbywqjXkAx9k@shell.armlinux.org.uk> <20220113094754.6ei6ssiqbuw7tfj7@maple.lan>
+In-Reply-To: <20220113094754.6ei6ssiqbuw7tfj7@maple.lan>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 13 Jan 2022 12:14:50 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0=OkFcKbL+utDPTPf+RskFNdR8Vt-3BEWkO9g_FqSj5w@mail.gmail.com>
+Message-ID: <CAK8P3a0=OkFcKbL+utDPTPf+RskFNdR8Vt-3BEWkO9g_FqSj5w@mail.gmail.com>
+Subject: Re: [PATCH v5 08/10] ARM: uaccess: add __{get,put}_kernel_nofault
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13. 01. 22, 11:56, hammer hsieh wrote:
->> Could you explain me what posted write is and how does it not matter in
->> this case?
->>
-> 
-> Each UART ISC register contains
+On Thu, Jan 13, 2022 at 10:47 AM Daniel Thompson
+<daniel.thompson@linaro.org> wrote:
+> On Wed, Jan 12, 2022 at 06:08:17PM +0000, Russell King (Oracle) wrote:
+>
+> > The kernel attempted to access an address that is in the userspace
+> > domain (NULL pointer) and took an exception.
+> >
+> > I suppose we should handle a domain fault more gracefully - what are
+> > the required semantics if the kernel attempts a userspace access
+> > using one of the _nofault() accessors?
+>
+> I think the best answer might well be that, if the arch provides
+> implementations of hooks such as copy_from_kernel_nofault_allowed()
+> then the kernel should never attempt a userspace access using the
+> _nofault() accessors. That means they can do whatever they like!
+>
+> In other words something like the patch below looks like a promising
+> approach.
 
-No, you still don't follow what I write. Use your favorite web search 
-for "posted write" and/or consult with your HW team.
+Right, it seems this is the same as on x86.
 
--- 
-js
-suse labs
+> From f66a63b504ff582f261a506c54ceab8c0e77a98c Mon Sep 17 00:00:00 2001
+> From: Daniel Thompson <daniel.thompson@linaro.org>
+> Date: Thu, 13 Jan 2022 09:34:45 +0000
+> Subject: [PATCH] arm: mm: Implement copy_from_kernel_nofault_allowed()
+>
+> Currently copy_from_kernel_nofault() can actually fault (due to software
+> PAN) if we attempt userspace access. In any case, the documented
+> behaviour for this function is to return -ERANGE if we attempt an access
+> outside of kernel space.
+>
+> Implementing copy_from_kernel_nofault_allowed() solves both these
+> problems.
+>
+> Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

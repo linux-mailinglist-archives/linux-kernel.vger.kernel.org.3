@@ -2,162 +2,383 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A921548D4D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71AD548D4DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234016AbiAMJMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:12:06 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4409 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233890AbiAMJLf (ORCPT
+        id S233919AbiAMJMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233987AbiAMJLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:11:35 -0500
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JZJZk6BsVz67lZV;
-        Thu, 13 Jan 2022 17:11:26 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 13 Jan 2022 10:11:31 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.020;
- Thu, 13 Jan 2022 10:11:31 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-CC:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>
-Subject: RE: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Thread-Topic: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Thread-Index: AQHYBxWUAJoIvMeqLk2UYoD6PZRMZ6xeNfyAgADgBLCAAK1lAIAA3Hrw
-Date:   Thu, 13 Jan 2022 09:11:31 +0000
-Message-ID: <f30d8240a38b48bb92f86a6e4c951918@huawei.com>
-References: <20220111180318.591029-1-roberto.sassu@huawei.com>
- <ab29dd6f-1301-e012-8898-9c739ca511a3@maciej.szmigiero.name>
- <b37f9c0e9bf941f0b778c6949538835d@huawei.com>
- <ab3d2bda-a704-f5d3-adee-e52b7d0a4641@maciej.szmigiero.name>
-In-Reply-To: <ab3d2bda-a704-f5d3-adee-e52b7d0a4641@maciej.szmigiero.name>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 13 Jan 2022 04:11:53 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250EAC06175A;
+        Thu, 13 Jan 2022 01:11:53 -0800 (PST)
+Date:   Thu, 13 Jan 2022 10:11:49 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1642065111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=bkLv8g6w0TK9FD6MWRWaSV3d1ILPZF2nMQbKml4DduA=;
+        b=ZMZJce93S/l7kTAfZP+cPPh6gRhZgWevdltSirzHHvWqfjbwKPMeouRC7wU5b+CY45n0x2
+        vqkvMgd1FMTM33DAZrQjfH33Ld94SG+B0KjXsi+KXbywxM0uxkFF1aTsKtCkzy2xeb0ufg
+        AHCu2iYvOTTUW84KaJSgCAmuunDwMq370DfjiOOsHl/7+9aSQni8RhaZi396/+w8ek1kSL
+        3/DGCPi8i+197XVjOCzIdPVbTtCtlKUkfj/mUK9DJcZtPQDm+zPXl8VoW7b6EuY75k+jIz
+        5iqlt66s/R90z1ibyDIfXShLdFnvmTrv+GWJcwTtzwNl/Fx5d3viklMtILyj+g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1642065111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=bkLv8g6w0TK9FD6MWRWaSV3d1ILPZF2nMQbKml4DduA=;
+        b=Rf0gIsKwbJsoGoMuryR6bpC7RABuFQlF7WqtsOJYOn0cNWUgn596/FwosO/mbLl17eDRu8
+        7PmQgMQjsN7X6/AA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [ANNOUNCE] v5.16-rt15
+Message-ID: <Yd/s1R06cRdX+J5P@linutronix.de>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBNYWNpZWogUy4gU3ptaWdpZXJvIFttYWlsdG86bWFpbEBtYWNpZWouc3ptaWdpZXJv
-Lm5hbWVdDQo+IFNlbnQ6IFdlZG5lc2RheSwgSmFudWFyeSAxMiwgMjAyMiA5OjE2IFBNDQo+IE9u
-IDEyLjAxLjIwMjIgMTA6MTYsIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4+IEZyb206IE1hY2ll
-aiBTLiBTem1pZ2llcm8gW21haWx0bzptYWlsQG1hY2llai5zem1pZ2llcm8ubmFtZV0NCj4gPj4g
-U2VudDogVHVlc2RheSwgSmFudWFyeSAxMSwgMjAyMiA5OjMzIFBNDQo+ID4+IE9uIDExLjAxLjIw
-MjIgMTk6MDMsIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4+PiBTdXBwb3J0IGZvciBQR1Aga2V5
-cyBhbmQgc2lnbmF0dXJlcyB3YXMgcHJvcG9zZWQgYnkgRGF2aWQgbG9uZyB0aW1lIGFnbywNCj4g
-Pj4+IGJlZm9yZSB0aGUgZGVjaXNpb24gb2YgdXNpbmcgUEtDUyM3IGZvciBrZXJuZWwgbW9kdWxl
-cyBzaWduYXR1cmVzDQo+ID4+PiB2ZXJpZmljYXRpb24gd2FzIG1hZGUuIEFmdGVyIHRoYXQsIHRo
-ZXJlIGhhcyBiZWVuIG5vdCBlbm91Z2ggaW50ZXJlc3QgdG8NCj4gPj4+IHN1cHBvcnQgUEdQIHRv
-by4NCj4gPj4+DQo+ID4+PiBMYXRlbHksIHdoZW4gZGlzY3Vzc2luZyBhIHByb3Bvc2FsIG9mIGlu
-dHJvZHVjaW5nIGZzdmVyaXR5IHNpZ25hdHVyZXMgaW4NCj4gPj4+IEZlZG9yYSBbMV0sIGRldmVs
-b3BlcnMgZXhwcmVzc2VkIHRoZWlyIHByZWZlcmVuY2Ugb24gbm90IGhhdmluZyBhIHNlcGFyYXRl
-DQo+ID4+PiBrZXkgZm9yIHNpZ25pbmcsIHdoaWNoIHdvdWxkIGNvbXBsaWNhdGUgdGhlIG1hbmFn
-ZW1lbnQgb2YgdGhlDQo+IGRpc3RyaWJ1dGlvbi4NCj4gPj4+IFRoZXkgd291bGQgYmUgbW9yZSBp
-biBmYXZvciBvZiB1c2luZyB0aGUgc2FtZSBQR1Aga2V5LCBjdXJyZW50bHkgdXNlZCBmb3INCj4g
-Pj4+IHNpZ25pbmcgUlBNIGhlYWRlcnMsIGFsc28gZm9yIGZpbGUtYmFzZWQgc2lnbmF0dXJlcyAo
-bm90IG9ubHkgZnN2ZXJpdHksIGJ1dA0KPiA+Pj4gYWxzbyBJTUEgb25lcykuDQo+ID4+DQo+ID4+
-IEFyZW4ndCBQR1Aga2V5cyBzaW1wbHkgUlNBIC8gRUNDIC8gRWREU0Ega2V5cyB3aXRoIGFkZGl0
-aW9uYWwgbWV0YWRhdGE/DQo+ID4+IENhbid0IHRoZXkgYmUgdW53cmFwcGVkIGZyb20gdGhlaXIg
-KGNvbXBsZXgpIFBHUCBmb3JtYXQgaW4gdXNlcnNwYWNlIGFuZA0KPiA+PiBsb2FkZWQgcmF3IGlu
-dG8gdGhlIGtlcm5lbCwgaW4gYSBzaW1pbGFyIHdheSBhcyB0aGV5IGFyZSBzb21ldGltZXMgdXNl
-ZA0KPiA+PiBmb3IgU1NIIGF1dGhlbnRpY2F0aW9uPw0KPiA+DQo+ID4gUHJvYmFibHksIHRoaXMg
-d291bGQgYmUgcG9zc2libGUgYnkgaW50cm9kdWNpbmcgYSBuZXcgYXN5bW1ldHJpYw0KPiA+IGtl
-eSBzdWJ0eXBlIHBhcnNpbmcgUEdQIGtleXMgYW5kIHNpZ25hdHVyZXMgaW4gYSBtb3JlIHNpbXBs
-ZSBmb3JtYXQsDQo+ID4gYWZ0ZXIgY29udmVyc2lvbiBieSB1c2VyIHNwYWNlLiBCdXQgc3RpbGws
-IGEgcGFyc2VyIHdvdWxkIGJlIHJlcXVpcmVkLg0KPiA+IFRvIGJlIGhvbmVzdCwgSSB3b3VsZCBw
-cmVmZXIgdG8gaW1wbGVtZW50IChhY3R1YWxseSBEYXZpZCBkaWQpIGENCj4gPiBwYXJzZXIgZm9s
-bG93aW5nIGFuIFJGQywgdGhhbiBkZXZlbG9waW5nIGEgbmV3IG9uZS4NCj4gDQo+IEEgcGFyc2Vy
-IGluIHVzZXJzcGFjZSBpcyBwcmVmZXJyZWQgdG8gb25lIGluIGtlcm5lbCBzaW5jZSBpZiB0aGVy
-ZSBpcw0KPiBhIGJ1ZyBzb21ld2hlcmUgaXRzIGNvbnNlcXVlbmNlcyBhcmUgbXVjaCBsZXNzIHNl
-dmVyZS4NCj4gQW5kIGV4cGVyaWVuY2Ugc2hvd3MgdGhhdCBwYXJzZXJzIGFyZSBlc3BlY2lhbGx5
-IHByb25lIHRvIGJ1Z3MuDQo+IEEgdXNlcnNwYWNlIGltcGxlbWVudGF0aW9uIGNhbiBhbHNvIGJl
-IHRpZ2h0bHkgc2FuZGJveGVkIGZvciBleHRyYQ0KPiBzZWN1cml0eS4NCj4gDQo+IFRoZXJlIGFy
-ZSBtYW55IGV4aXN0aW5nIE9wZW5QR1AgcGFyc2luZyBsaWJyYXJpZXMgdG8gY2hvb3NlIGZyb20u
-DQoNCkkgdW5kZXJzdGFuZCB5b3VyIHBvaW50LiBIb3dldmVyLCBpdCBkb2VzIG5vdCBzZWVtIHRv
-IG1lIGxlc3MNCnJpc2t5IHRvIGRlZmluZSBhIG5ldyBmb3JtYXQgdG8gdXBsb2FkIHRoZSBSU0Eg
-a2V5IGFuZCB0aGUgc2lnbmF0dXJlDQp0byBhdm9pZCB0aGUgY29tcGxleGl0eSBvZiBQR1AuIEFs
-c28sIGl0IGRvZXMgbm90IHNlZW0gbW9yZQ0KY29tcGxleCB0aGFuIFBLQ1MjNywgd2hpY2ggaXMg
-YWxyZWFkeSBpbiB0aGUga2VybmVsLg0KDQpJbiBhZGRpdGlvbiwgdGhlcmUgYXJlIGFzcGVjdHMg
-b2YgUEdQIHRoYXQgYW55d2F5IGhhdmUgdG8gYmUgdGFrZW4NCmludG8gYWNjb3VudC4gT25lIGV4
-YW1wbGUgaXMgdGhlIGRpZ2VzdCBjYWxjdWxhdGlvbiwgd2hpY2ggZGVwZW5kcw0KYWxzbyBvbiB0
-aGUgUEdQIHBhY2tldC4gV2hlbmV2ZXIgdGhlIGtlcm5lbCB2ZXJpZmllcyB0aGUgc2lnbmF0dXJl
-LA0KdGhlIGFkZGl0aW9uYWwgZGF0YSBuZWVkIHRvIGJlIGFwcGVuZGVkIHRvIHRoZSBvcmlnaW5h
-bCBkYXRhLiBUaGlzDQpyaXNrcyB0byBjcmVhdGUgbW9yZSBjb25mdXNpb24sIGFzIHRoZSBjb25z
-dW1lciBvZiB0aGUgZGF0YSBiZWluZw0KdmVyaWZpZWQgbWlnaHQgbm90IGJlIHByZXBhcmVkIHRv
-IGhhbmRsZSB0aGUgYWRkaXRpb25hbCBkYXRhDQpyZXF1aXJlZCBmb3Igc2lnbmF0dXJlIHZlcmlm
-aWNhdGlvbi4NCg0KVGhlIGtlcm5lbCBoYXMgYWxyZWFkeSBhIHdlbGwtZGVmaW5lZCB3YXkgdG8g
-cHJvY2VzcyBkYXRhIHdpdGgNCmEgc2lnbmF0dXJlLiBJdCBleHBlY3RzIGEgZGF0YSBzdHJ1Y3R1
-cmUgY2FsbGVkIG1vZHVsZV9zaWduYXR1cmUNCmF0IHRoZSBlbmQgb2YgdGhlIGRhdGEgdG8gdmVy
-aWZ5LCB3aGljaCBpbmNsdWRlIGluZm9ybWF0aW9uIHJlcXVpcmVkDQpmb3IgdGhlIHZlcmlmaWNh
-dGlvbiBzdWNoIGFzIHRoZSBkaWdlc3QgYWxnb3JpdGhtLCBrZXkgSUQsIGV0Yy4gSXQNCmFsc28g
-aGFzIGEgc2VsZWN0b3IgY2FsbGVkIFBLRVlfSURfUEdQLCBzbyB0aGF0IHRoZSBjb2RlIHdvdWxk
-DQpoYW5kbGUgYSBQR1Agc2lnbmF0dXJlLiBUaGlzIGRhdGEgc3RydWN0dXJlIGRvZXMgbm90IGlu
-Y2x1ZGUgc3BhY2UNCmZvciB0aGUgYWRkaXRpb25hbCBkYXRhIHJlcXVpcmVkIGZvciB0aGUgc2ln
-bmF0dXJlIHZlcmlmaWNhdGlvbi4NCg0KVGhpcyBwYXRjaCBzZXQgaW5zdGVhZCBvZmZlcnMgdGhl
-IG5ldyBmdW5jdGlvbiB2ZXJpZnlfcGdwX3NpZ25hdHVyZSgpLA0Kd2hpY2ggdGFrZXMgdGhlIHNh
-bWUgYXJndW1lbnRzIGFzIHZlcmlmeV9wa2NzN19zaWduYXR1cmUoKSwgYW5kDQpjYW4gYmUgdXNl
-ZCBhcyBpbiB0aGUgZXhhbXBsZSBJIG1lbnRpb25lZCBhYm92ZSBpbiBhIHN3aXRjaCgpIHdoZXJl
-DQp0aGUgc2VsZWN0b3IgaXMgdGhlIHNpZ25hdHVyZSB0eXBlLg0KDQpUaGlzIHBhdGNoIHNldCBh
-bHNvIG9mZmVycyB0aGUgaW5kaXZpZHVhbCBmdW5jdGlvbnMgY2FsbGVkIGluc2lkZQ0KdmVyaWZ5
-X3BncF9zaWduYXR1cmUoKSwgdG8gc3VwcG9ydCB0aGUgY2FzZSB3aGVyZSB0aGUgc2lnbmF0dXJl
-DQp2ZXJpZmljYXRpb24gcHJvY2VzcyBpcyBzcGxpdCBpbiBtdWx0aXBsZSBwYXJ0cw0KKGUuZy4g
-c2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfbW9kc2lnLmMpLiBBbHNvIGluIHRoaXMgY2FzZSwN
-CnRoZSBhcmd1bWVudHMgcGFzc2VkIHRvIHRoZSBQR1AtcmVsYXRlZCBmdW5jdGlvbnMgYXJlIHNp
-bWlsYXINCnRvIHRoZSBQS0NTIzcgb25lcy4NCg0KQW5vdGhlciBjb25jZXJuIHRoYXQgSSBoYXZl
-IGlzIHRoYXQsIHRoZSBhcHByb2FjaCBvZiB1c2luZyBhbg0KT3BlblBHUCBsaWJyYXJ5IHN0aWxs
-IHJlcXVpcmVzIHRoZSBMaW51eCBkaXN0cmlidXRpb24gdmVuZG9ycyB0bw0KZG8gYSB0cmFuc2Zv
-cm1hdGlvbiBmcm9tIHRoZSBzb3VyY2UgZGF0YSB0aGV5IGhhdmUgdG8gYW5vdGhlcg0KZm9ybWF0
-LiBUaGV5IGhhdmUgYW55d2F5IHRvIGNlcnRpZnkgdGhpcyB0cmFuc2Zvcm1hdGlvbiwgZXZlbg0K
-aWYgaXQgaXMgZG9uZSBpbiB1c2VyIHNwYWNlLiBNYXliZSBpdCBpcyBlYXNpZXIgdG8ga2VlcCB0
-aGUgb3JpZ2luYWwNCmRhdGEgYW5kIHZlcmlmeSB0aGUgbWluaW11bSBuZWNlc3NhcnkgdG8gaGFu
-ZGxlIFBHUCBrZXlzIGFuZA0Kc2lnbmF0dXJlIGluIHRoZSBrZXJuZWwsIHJhdGhlciB0aGFuIHZl
-cmlmeWluZyBhIGxpYnJhcnkgcnVubmluZw0KaW4gdXNlciBzcGFjZSB3aXRoIG1hbnkgb3RoZXIg
-ZnVuY3Rpb25zLg0KDQo+ID4+IFRoaXMgd2lsbCBzYXZlIHVzIGZyb20gaGF2aW5nIHRvIGFkZCBj
-b21wbGV4IHBhcnNlcnMgKGEgd2VsbC1rbm93biBzb3VyY2UNCj4gPj4gb2YgYnVncykgaW50byB0
-aGUga2VybmVsIC0gSSBndWVzcyB0aGVyZSBhcmVuJ3QgYW55IHBsYW5zIHRvIGFkZCBhbg0KPiA+
-PiBpbi1rZXJuZWwgUEdQIFdlYiBvZiBUcnVzdCBpbXBsZW1lbnRhdGlvbi4NCj4gPg0KPiA+IEkg
-ZXh0ZW5zaXZlbHkgdGVzdGVkIHRoZSBpbXBsZW1lbnRhdGlvbiB3aXRoIGFuIGFkLWhvYyBmYXVs
-dCBpbmplY3RvciwNCj4gPiB0byBzZWUgaWYgdGhlIGNvZGUgY2FuIGNvcnJlY3RseSBoYW5kbGUg
-ZXJyb3JzLiBJIGFsc28gZGV2ZWxvcGVkIGENCj4gPiBmdXp6ZXIgdG8gY29ycnVwdCB0aGUgZGF0
-YSBiZWZvcmUgaXQgaXMgcmVhZCBieSB0aGUga2VybmVsLiBGaW5hbGx5LA0KPiA+IEkgY2hlY2tl
-ZCB0aGF0IHRoZXJlIGFyZSBub3QgbWVtb3J5IGxlYWtzLiBCdXQgSSBhZ3JlZSwgdGhlcmUgY291
-bGQNCj4gPiBzdGlsbCBiZSBidWdzLg0KPiA+DQo+ID4gSWYgeW91IG1lYW4gdGhhdCBhIGtleSBj
-YW4gYmUgYWRkZWQgdG8gdGhlIGtlcm5lbCBpZiBpcyB2b3VjaGVkIGZvcg0KPiA+IGJ5IGFub3Ro
-ZXIga2V5IGluIHRoZSBidWlsdC1pbiBrZXlyaW5nLCBJIGFjdHVhbGx5IGltcGxlbWVudGVkIHRo
-aXMNCj4gPiAod2FzIG1pc3NpbmcgaW4gdGhlIG9yaWdpbmFsIGltcGxlbWVudGF0aW9uKS4gU29t
-ZSBrZXlyaW5ncywgZS5nLiAuaW1hLA0KPiA+IGhhdmUgdGhpcyByZXN0cmljdGlvbi4NCj4gPg0K
-PiA+IFRoZSB3YXkgdGhpcyB3b3JrcyBpcyB0aGF0LCB3aGVuZXZlciB5b3UgYWRkIGEgUEdQIGtl
-eSB0byB0aGUNCj4gPiBrZXJuZWwsIHRoZSBwYXJzZXIgdGFrZXMgbm90IG9ubHkgdGhlIHB1Ymxp
-YyBrZXkgYW5kIHRoZSB1c2VyIElELA0KPiA+IGJ1dCBhbHNvIGl0cyBzaWduYXR1cmUgYnkgdGhl
-IHNhbWUgb3IgYW5vdGhlciBQR1Aga2V5Lg0KPiA+DQo+ID4gVGhlIHNpZ25hdHVyZSBpcyB2ZXJp
-ZmllZCB3aGVuIHRoZSBrZXkgaXMgYWRkZWQgdG8gdGhlIGtleXJpbmcNCj4gPiB3aXRoIHRoYXQg
-cmVzdHJpY3Rpb24sIGFuZCBvbmx5IGlmIHRoZSB2ZXJpZmljYXRpb24gaXMgc3VjY2Vzc2Z1bA0K
-PiA+IHRoZSBrZXkgY2FuIGJlIGFkZGVkLg0KPiANCj4gSSB1bmRlcnN0YW5kIGJ1dCBpdCB3b3Vs
-ZCBiZSBncmVhdCB0byBtYWtlIHVzZSBhcyBtdWNoIGFzIHBvc3NpYmxlIG9mDQo+IHRoZSBleGlz
-dGluZyBpbi1rZXJuZWwgc2lnbmF0dXJlIHZlcmlmaWNhdGlvbiBtZWNoYW5pc21zLg0KDQpZZXMu
-IEkgdGhpbmsgdGhpcyBpcyB0aGUgcHVycG9zZSBvZiB0aGUgYXN5bW1ldHJpYyBzdWJ0eXBlcy4g
-VGhleQ0KaW50cm9kdWNlIGEgcGFyc2VyIGZvciB0aGUgc3BlY2lmaWMgZm9ybWF0LCBidXQgb25j
-ZSB0aGUgcmVsZXZhbnQNCmluZm9ybWF0aW9uIGFyZSBleHRyYWN0ZWQsIHRoZSBpbi1rZXJuZWwg
-bWVjaGFuaXNtcyBhcmUgdXNlZC4NCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1
-ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIFpo
-b25nIFJvbmdodWENCg0KPiA+IFJvYmVydG8NCj4gDQo+IFRoYW5rcywNCj4gTWFjaWVqDQoNCg==
+Dear RT folks!
+
+I'm pleased to announce the v5.16-rt15 patch set. 
+
+Changes since v5.16-rt14:
+
+  - Backport a write_lock_nested() fix. Introduced by the zsmalloc
+    patches, leading to build failure in certain configurations.
+
+  - In memcg patch, pass a bool instead of a pointer.
+
+Known issues
+     - netconsole triggers WARN.
+
+     - Valentin Schneider reported a few splats on ARM64, see
+          https://lkml.kernel.org/r/20210810134127.1394269-1-valentin.schneider@arm.com
+
+The delta patch against v5.16-rt14 is appended below and can be found here:
+ 
+     https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.16/incr/patch-5.16-rt14-rt15.patch.xz
+
+You can get this release via the git tree at:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v5.16-rt15
+
+The RT patch against v5.16 can be found here:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.16/older/patch-5.16-rt15.patch.xz
+
+The split quilt queue is available at:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.16/older/patches-5.16-rt15.tar.xz
+
+Sebastian
+
+diff --git a/include/linux/rwlock_api_smp.h b/include/linux/rwlock_api_smp.h
+index f0c535ec4e654..dceb0a59b6927 100644
+--- a/include/linux/rwlock_api_smp.h
++++ b/include/linux/rwlock_api_smp.h
+@@ -47,7 +47,6 @@ _raw_write_unlock_irqrestore(rwlock_t *lock, unsigned long flags)
+ 
+ #ifdef CONFIG_INLINE_WRITE_LOCK
+ #define _raw_write_lock(lock) __raw_write_lock(lock)
+-#define _raw_write_lock_nested(lock, subclass) __raw_write_lock_nested(lock, subclass)
+ #endif
+ 
+ #ifdef CONFIG_INLINE_READ_LOCK_BH
+diff --git a/kernel/locking/spinlock.c b/kernel/locking/spinlock.c
+index 996811efa6d6e..7f49baaa49793 100644
+--- a/kernel/locking/spinlock.c
++++ b/kernel/locking/spinlock.c
+@@ -301,6 +301,10 @@ void __lockfunc _raw_write_lock(rwlock_t *lock)
+ }
+ EXPORT_SYMBOL(_raw_write_lock);
+ 
++#ifndef CONFIG_DEBUG_LOCK_ALLOC
++#define __raw_write_lock_nested(lock, subclass)	__raw_write_lock(((void)(subclass), (lock)))
++#endif
++
+ void __lockfunc _raw_write_lock_nested(rwlock_t *lock, int subclass)
+ {
+ 	__raw_write_lock_nested(lock, subclass);
+diff --git a/localversion-rt b/localversion-rt
+index 08b3e75841adc..18777ec0c27d4 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt14
++-rt15
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 92180f1aa9edc..bfb99225527fe 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -264,7 +264,7 @@ bool mem_cgroup_kmem_disabled(void)
+ struct memcg_stock_pcp;
+ static void obj_cgroup_uncharge_pages(struct obj_cgroup *objcg,
+ 				      unsigned int nr_pages,
+-				      struct memcg_stock_pcp *stock_pcp);
++				      bool stock_lock_acquried);
+ 
+ static void obj_cgroup_release(struct percpu_ref *ref)
+ {
+@@ -298,7 +298,7 @@ static void obj_cgroup_release(struct percpu_ref *ref)
+ 	nr_pages = nr_bytes >> PAGE_SHIFT;
+ 
+ 	if (nr_pages)
+-		obj_cgroup_uncharge_pages(objcg, nr_pages, NULL);
++		obj_cgroup_uncharge_pages(objcg, nr_pages, false);
+ 
+ 	spin_lock_irqsave(&css_set_lock, flags);
+ 	list_del(&objcg->list);
+@@ -2147,13 +2147,13 @@ static DEFINE_MUTEX(percpu_charge_mutex);
+ 
+ #ifdef CONFIG_MEMCG_KMEM
+ static struct obj_cgroup *drain_obj_stock(struct obj_stock *stock,
+-					  struct memcg_stock_pcp *stock_pcp);
++					  bool stock_lock_acquried);
+ static bool obj_stock_flush_required(struct memcg_stock_pcp *stock,
+ 				     struct mem_cgroup *root_memcg);
+ 
+ #else
+ static inline struct obj_cgroup *drain_obj_stock(struct obj_stock *stock,
+-						 struct memcg_stock_pcp *stock_pcp)
++						 bool stock_lock_acquried)
+ {
+ 	return NULL;
+ }
+@@ -2252,11 +2252,11 @@ static void drain_local_stock(struct work_struct *dummy)
+  * Cache charges(val) to local per_cpu area.
+  * This will be consumed by consume_stock() function, later.
+  */
+-static void __refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages,
+-			   struct memcg_stock_pcp *stock)
++static void __refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
+ {
+-	lockdep_assert_held(&stock->stock_lock);
++	struct memcg_stock_pcp *stock = this_cpu_ptr(&memcg_stock);
+ 
++	lockdep_assert_held(&stock->stock_lock);
+ 	if (stock->cached != memcg) { /* reset if necessary */
+ 		drain_stock(stock);
+ 		css_get(&memcg->css);
+@@ -2269,16 +2269,16 @@ static void __refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages,
+ }
+ 
+ static void refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages,
+-			 struct memcg_stock_pcp *stock_pcp)
++			 bool stock_lock_acquried)
+ {
+ 	unsigned long flags;
+ 
+-	if (stock_pcp) {
+-		__refill_stock(memcg, nr_pages, stock_pcp);
++	if (stock_lock_acquried) {
++		__refill_stock(memcg, nr_pages);
+ 		return;
+ 	}
+ 	local_lock_irqsave(&memcg_stock.stock_lock, flags);
+-	__refill_stock(memcg, nr_pages, this_cpu_ptr(&memcg_stock));
++	__refill_stock(memcg, nr_pages);
+ 	local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
+ }
+ 
+@@ -2719,7 +2719,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 
+ done_restock:
+ 	if (batch > nr_pages)
+-		refill_stock(memcg, batch - nr_pages, NULL);
++		refill_stock(memcg, batch - nr_pages, false);
+ 
+ 	/*
+ 	 * If the hierarchy is above the normal consumption range, schedule
+@@ -2833,34 +2833,35 @@ static struct mem_cgroup *get_mem_cgroup_from_objcg(struct obj_cgroup *objcg)
+  * access interrupt object stock, but not vice versa.
+  */
+ static inline struct obj_stock *get_obj_stock(unsigned long *pflags,
+-					      struct memcg_stock_pcp **stock_pcp)
++					      bool *stock_lock_acquried)
+ {
+ 	struct memcg_stock_pcp *stock;
+ 
+ #ifndef CONFIG_PREEMPTION
+ 	if (likely(in_task())) {
+ 		*pflags = 0UL;
+-		*stock_pcp = NULL;
++		*stock_lock_acquried = false;
+ 		local_lock(&memcg_stock.task_obj_lock);
+ 		stock = this_cpu_ptr(&memcg_stock);
+ 		return &stock->task_obj;
+ 	}
+ #endif
++	*stock_lock_acquried = true;
+ 	local_lock_irqsave(&memcg_stock.stock_lock, *pflags);
+ 	stock = this_cpu_ptr(&memcg_stock);
+-	*stock_pcp = stock;
+ 	return &stock->irq_obj;
+ }
+ 
+ static inline void put_obj_stock(unsigned long flags,
+-				 struct memcg_stock_pcp *stock_pcp)
++				 bool stock_lock_acquried)
+ {
+ #ifndef CONFIG_PREEMPTION
+-	if (likely(!stock_pcp))
++	if (likely(!stock_lock_acquried)) {
+ 		local_unlock(&memcg_stock.task_obj_lock);
+-	else
++		return;
++	}
+ #endif
+-		local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
++	local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
+ }
+ 
+ /*
+@@ -3039,7 +3040,7 @@ static void memcg_free_cache_id(int id)
+  */
+ static void obj_cgroup_uncharge_pages(struct obj_cgroup *objcg,
+ 				      unsigned int nr_pages,
+-				      struct memcg_stock_pcp *stock_pcp)
++				      bool stock_lock_acquried)
+ {
+ 	struct mem_cgroup *memcg;
+ 
+@@ -3047,7 +3048,7 @@ static void obj_cgroup_uncharge_pages(struct obj_cgroup *objcg,
+ 
+ 	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
+ 		page_counter_uncharge(&memcg->kmem, nr_pages);
+-	refill_stock(memcg, nr_pages, stock_pcp);
++	refill_stock(memcg, nr_pages, stock_lock_acquried);
+ 
+ 	css_put(&memcg->css);
+ }
+@@ -3121,7 +3122,7 @@ void __memcg_kmem_uncharge_page(struct page *page, int order)
+ 		return;
+ 
+ 	objcg = __folio_objcg(folio);
+-	obj_cgroup_uncharge_pages(objcg, nr_pages, NULL);
++	obj_cgroup_uncharge_pages(objcg, nr_pages, false);
+ 	folio->memcg_data = 0;
+ 	obj_cgroup_put(objcg);
+ }
+@@ -3129,20 +3130,20 @@ void __memcg_kmem_uncharge_page(struct page *page, int order)
+ void mod_objcg_state(struct obj_cgroup *objcg, struct pglist_data *pgdat,
+ 		     enum node_stat_item idx, int nr)
+ {
+-	struct memcg_stock_pcp *stock_pcp;
++	bool stock_lock_acquried;
+ 	unsigned long flags;
+ 	struct obj_cgroup *old = NULL;
+ 	struct obj_stock *stock;
+ 	int *bytes;
+ 
+-	stock = get_obj_stock(&flags, &stock_pcp);
++	stock = get_obj_stock(&flags, &stock_lock_acquried);
+ 	/*
+ 	 * Save vmstat data in stock and skip vmstat array update unless
+ 	 * accumulating over a page of vmstat data or when pgdat or idx
+ 	 * changes.
+ 	 */
+ 	if (stock->cached_objcg != objcg) {
+-		old = drain_obj_stock(stock, stock_pcp);
++		old = drain_obj_stock(stock, stock_lock_acquried);
+ 
+ 		obj_cgroup_get(objcg);
+ 		stock->nr_bytes = atomic_read(&objcg->nr_charged_bytes)
+@@ -3187,31 +3188,31 @@ void mod_objcg_state(struct obj_cgroup *objcg, struct pglist_data *pgdat,
+ 	if (nr)
+ 		mod_objcg_mlstate(objcg, pgdat, idx, nr);
+ 
+-	put_obj_stock(flags, stock_pcp);
++	put_obj_stock(flags, stock_lock_acquried);
+ 	if (old)
+ 		obj_cgroup_put(old);
+ }
+ 
+ static bool consume_obj_stock(struct obj_cgroup *objcg, unsigned int nr_bytes)
+ {
+-	struct memcg_stock_pcp *stock_pcp;
++	bool stock_lock_acquried;
+ 	unsigned long flags;
+ 	struct obj_stock *stock;
+ 	bool ret = false;
+ 
+-	stock = get_obj_stock(&flags, &stock_pcp);
++	stock = get_obj_stock(&flags, &stock_lock_acquried);
+ 	if (objcg == stock->cached_objcg && stock->nr_bytes >= nr_bytes) {
+ 		stock->nr_bytes -= nr_bytes;
+ 		ret = true;
+ 	}
+ 
+-	put_obj_stock(flags, stock_pcp);
++	put_obj_stock(flags, stock_lock_acquried);
+ 
+ 	return ret;
+ }
+ 
+ static struct obj_cgroup *drain_obj_stock(struct obj_stock *stock,
+-					  struct memcg_stock_pcp *stock_pcp)
++					  bool stock_lock_acquried)
+ {
+ 	struct obj_cgroup *old = stock->cached_objcg;
+ 
+@@ -3223,7 +3224,7 @@ static struct obj_cgroup *drain_obj_stock(struct obj_stock *stock,
+ 		unsigned int nr_bytes = stock->nr_bytes & (PAGE_SIZE - 1);
+ 
+ 		if (nr_pages)
+-			obj_cgroup_uncharge_pages(old, nr_pages, stock_pcp);
++			obj_cgroup_uncharge_pages(old, nr_pages, stock_lock_acquried);
+ 
+ 		/*
+ 		 * The leftover is flushed to the centralized per-memcg value.
+@@ -3286,15 +3287,15 @@ static bool obj_stock_flush_required(struct memcg_stock_pcp *stock,
+ static void refill_obj_stock(struct obj_cgroup *objcg, unsigned int nr_bytes,
+ 			     bool allow_uncharge)
+ {
+-	struct memcg_stock_pcp *stock_pcp;
++	bool stock_lock_acquried;
+ 	unsigned long flags;
+ 	struct obj_stock *stock;
+ 	unsigned int nr_pages = 0;
+ 	struct obj_cgroup *old = NULL;
+ 
+-	stock = get_obj_stock(&flags, &stock_pcp);
++	stock = get_obj_stock(&flags, &stock_lock_acquried);
+ 	if (stock->cached_objcg != objcg) { /* reset if necessary */
+-		old = drain_obj_stock(stock, stock_pcp);
++		old = drain_obj_stock(stock, stock_lock_acquried);
+ 		obj_cgroup_get(objcg);
+ 		stock->cached_objcg = objcg;
+ 		stock->nr_bytes = atomic_read(&objcg->nr_charged_bytes)
+@@ -3308,12 +3309,12 @@ static void refill_obj_stock(struct obj_cgroup *objcg, unsigned int nr_bytes,
+ 		stock->nr_bytes &= (PAGE_SIZE - 1);
+ 	}
+ 
+-	put_obj_stock(flags, stock_pcp);
++	put_obj_stock(flags, stock_lock_acquried);
+ 	if (old)
+ 		obj_cgroup_put(old);
+ 
+ 	if (nr_pages)
+-		obj_cgroup_uncharge_pages(objcg, nr_pages, NULL);
++		obj_cgroup_uncharge_pages(objcg, nr_pages, false);
+ }
+ 
+ int obj_cgroup_charge(struct obj_cgroup *objcg, gfp_t gfp, size_t size)
+@@ -7114,7 +7115,7 @@ void mem_cgroup_uncharge_skmem(struct mem_cgroup *memcg, unsigned int nr_pages)
+ 
+ 	mod_memcg_state(memcg, MEMCG_SOCK, -nr_pages);
+ 
+-	refill_stock(memcg, nr_pages, NULL);
++	refill_stock(memcg, nr_pages, false);
+ }
+ 
+ static int __init cgroup_memory(char *s)

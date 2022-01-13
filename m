@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A91048CFFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 02:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB4848CFFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 02:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiAMBHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 20:07:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S230174AbiAMBKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 20:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbiAMBHP (ORCPT
+        with ESMTP id S230226AbiAMBKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 20:07:15 -0500
-X-Greylist: delayed 17104 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Jan 2022 17:07:15 PST
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EEAC06173F
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 17:07:15 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 486C1200002;
-        Thu, 13 Jan 2022 01:07:12 +0000 (UTC)
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     bbrezillon@kernel.org, trix@redhat.com, ndesaulniers@google.com,
-        vitor.soares@synopsys.com, nathan@kernel.org
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] i3c: master: dw: check return of dw_i3c_master_get_free_pos()
-Date:   Thu, 13 Jan 2022 02:07:11 +0100
-Message-Id: <164203602351.2985932.12500501407570919307.b4-ty@bootlin.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220108150948.3988790-1-trix@redhat.com>
-References: <20220108150948.3988790-1-trix@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 12 Jan 2022 20:10:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B9FC06118A;
+        Wed, 12 Jan 2022 17:10:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EF2D61BFD;
+        Thu, 13 Jan 2022 01:10:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 009BEC36AEC;
+        Thu, 13 Jan 2022 01:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642036206;
+        bh=Oi3L6T0Z7c7/LTjIOuBTTR76Edq6/I/nmHwS9okQd2g=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=uku839bOif2qO5qRuxvSjp5bCDhKeAgAZhd/LTZyh5mj0StgWT+Xltvz9FGuX2tHD
+         tjDpBvsfBhWlgOrBmeu2NQE2bCOl1z2WWzwClH6PCoDiFWJMW7zbN0u+YIA7D3W4xF
+         GqMpS1p31DuMtRHBTvYDkXJHDfd36ZHXnCvIqDysLg8e7DZO/Rm+7VR0j0WzwDZSuP
+         hYISKdMyHmibsqRuVP1v8P8K3MPue8JgR2pUzA0w5hryYlNEfXhjdENI463vO52a3H
+         T63lyhVSy2uMIhTjs2nkVK16VzQzLaZB0qMvseSceLXC4pWy8Buk5Q7jc9CmoPqvBh
+         IbRnhMQ/8h+Kw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E000DF60794;
+        Thu, 13 Jan 2022 01:10:05 +0000 (UTC)
+Subject: Re: [GIT PULL] LEDs changes for v5.17-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220112184611.GA2187@duo.ucw.cz>
+References: <20220112184611.GA2187@duo.ucw.cz>
+X-PR-Tracked-List-Id: <linux-leds.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220112184611.GA2187@duo.ucw.cz>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/ tags/leds-5.17-rc1
+X-PR-Tracked-Commit-Id: 9e87a8da747bf72365abb79e6f64fcca955b4f56
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d9b5941bb5933932051e315de18a43db7d3c9e13
+Message-Id: <164203620587.494.17294799514865274194.pr-tracker-bot@kernel.org>
+Date:   Thu, 13 Jan 2022 01:10:05 +0000
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        jacek.anaszewski@gmail.com, linux-leds@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 8 Jan 2022 07:09:48 -0800, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Clang static analysis reports this problem
-> dw-i3c-master.c:799:9: warning: The result of the left shift is
->   undefined because the left operand is negative
->                       COMMAND_PORT_DEV_INDEX(pos) |
->                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> [...]
+The pull request you sent on Wed, 12 Jan 2022 19:46:11 +0100:
 
-Applied, thanks!
+> git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/ tags/leds-5.17-rc1
 
-[1/1] i3c: master: dw: check return of dw_i3c_master_get_free_pos()
-      commit: 13462ba1815db5a96891293a9cfaa2451f7bd623
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d9b5941bb5933932051e315de18a43db7d3c9e13
 
-Best regards,
+Thank you!
+
 -- 
-Alexandre Belloni <alexandre.belloni@bootlin.com>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

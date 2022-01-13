@@ -2,130 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8168E48D623
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C065148D626
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233783AbiAMKzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:55:42 -0500
-Received: from mga07.intel.com ([134.134.136.100]:24902 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233747AbiAMKzk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:55:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642071340; x=1673607340;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=K42JSa+QW3UaIuzTP0hhO/S5VNVEbXBxl5jgOoJNEY8=;
-  b=GnN89BfGgDqOilpz2wBtgsXVWNmrN/FbxA/Q4v6E7fngvZ9PZ2tjFkOl
-   6GaClIOMvYezV4ZWlBu8zqam0BLx9bcxaKVA2DdkIPtIPsR9PkSUN1AlQ
-   /6kbkRE4rAl8B3pJShvyZ+FTP0EXhyP0vM0tU7xZZxTUDeKNvuVHuJFin
-   UufpfmEcCJQcODCEBYs+FrURsrGS+a7/J9C2Efu6xbi2oko0EqIkTCVNo
-   0pV1UvANXuaUOiDUnST6UUcGxnpcL42RKnoUS+/L7sqjfGB7s9tYwwUOp
-   l9IKjW50IDYbQXc6EmPdrdhZhPhifKHKSd0+voMqN3hE/OeXHFRhlRGH9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="307330242"
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="307330242"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 02:55:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="475267073"
-Received: from brentlu-brix.itwn.intel.com ([10.5.253.25])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jan 2022 02:55:21 -0800
-From:   Brent Lu <brent.lu@intel.com>
-To:     alsa-devel@alsa-project.org
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Bard Liao <bard.liao@intel.com>, Brent Lu <brent.lu@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] ALSA: hda: intel-dsp-config: reorder the config table
-Date:   Thu, 13 Jan 2022 18:52:20 +0800
-Message-Id: <20220113105220.1114694-3-brent.lu@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220113105220.1114694-1-brent.lu@intel.com>
-References: <20220113105220.1114694-1-brent.lu@intel.com>
+        id S233791AbiAMK4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230349AbiAMK4f (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 05:56:35 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99252C06173F;
+        Thu, 13 Jan 2022 02:56:35 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id u15so9143176ple.2;
+        Thu, 13 Jan 2022 02:56:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=oJN4J8iu8PnOEhGvfSZZbeVmWmfK/UHswq06bUpnhww=;
+        b=FCOLTh9HE7z4yI4p4kO4gjamu+UemBWoBBBlEfR75KI/z+1LGYSGemNx50G0/92gad
+         yQgrFSbW5AKtRXtcm6HSebEpz+xon99EKrAIMM6VoH7cfuZt4K0GdRi0f47J2J8Esp/a
+         xCjAoGOJLIKQEbLFWLVpmKcurdjZLpZt5JuN3tVeo6PJVnrSz7WJNBB++UUtBLIfS7k/
+         vIycNVyWkW60I5KvE0u3M7d7clLiUk1ARAsfGTgLeSJgyxhTBoS0yFL06X3ioFV4KI2S
+         s6xB8ThZ5zN8r9eNiMbQ40oNU+XL5eEvLodxI6FvGwvo+dfN8Vg/soJRwRUw/t8D74Gx
+         1Y8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=oJN4J8iu8PnOEhGvfSZZbeVmWmfK/UHswq06bUpnhww=;
+        b=sie/UPGrbKiSPbDYGKrt3R6UCE2N0wHY0uxrgn7VQaVZGbk5CuwpfZLShpJBp2ndoB
+         t5mgTplgTwALPnPalOBMAA/vfZJbmwJGNapBkiNgaaLlgits/NUuLRJ6AodiPIh4enaa
+         GM8+viZ7dmOn3uEf6p6YP1JmhpWi3cE/a5m/Xhs2MwGQMxdCQf2rajBrrJm9moEuQPLF
+         oxlxD4IezfpDas7NKaNZYWOJlQyhBm7spHQ8gmOaLDj/YoKMKTGYyS4YzfXwLutLvbtw
+         CIsaxWoeKABkb2o48iA/iJyZdTBKynGWn4IoHiuUYJsc/v6cu0grQhMLbu03ZBhiXzuF
+         5W9A==
+X-Gm-Message-State: AOAM5319UoaJUg4e8zyiI5i3suYRhjD8Ga8hcJQuIaQxJdtHwjJelTeX
+        0dzrgW1qI+hGt0coyp2jRN9B9ADR5+KQTzMvILQ=
+X-Google-Smtp-Source: ABdhPJwLsBJSMyCZLung9morGRLOKMNW3NWd77lPXM9jNrofI1B2dzn/JSHbib0QgGsOYg/UK/Ya2i30o6BWxvwI0bE=
+X-Received: by 2002:a63:7f55:: with SMTP id p21mr3402265pgn.338.1642071395080;
+ Thu, 13 Jan 2022 02:56:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1641979444-11661-1-git-send-email-hammerh0314@gmail.com>
+ <1641979444-11661-3-git-send-email-hammerh0314@gmail.com> <fcd43c65-6201-9e44-061c-f04e39cef726@kernel.org>
+ <CAOX-t54oA9V94d3901w2xKSagSzmXc9r=TDTtbgaSLfL1DxNbw@mail.gmail.com> <d6d3aa07-7bf1-2b6d-356f-ae13c7b9d6cd@kernel.org>
+In-Reply-To: <d6d3aa07-7bf1-2b6d-356f-ae13c7b9d6cd@kernel.org>
+From:   hammer hsieh <hammerh0314@gmail.com>
+Date:   Thu, 13 Jan 2022 18:56:44 +0800
+Message-ID: <CAOX-t57KZb0hNDuhPsabkmkf_qOOLqyH3yuvkHP6UNwhLodWDg@mail.gmail.com>
+Subject: Re: [PATCH v6 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        wells.lu@sunplus.com, "hammer.hsieh" <hammer.hsieh@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Entries without dmi_table nor codec_hid field need to be placed after
-entries with these two fields or they will be always selected.
+Jiri Slaby <jirislaby@kernel.org> =E6=96=BC 2022=E5=B9=B41=E6=9C=8813=E6=97=
+=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=885:08=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On 13. 01. 22, 9:54, hammer hsieh wrote:
+> >>> +static void sunplus_shutdown(struct uart_port *port)
+> >>> +{
+> >>> +     unsigned long flags;
+> >>> +
+> >>> +     spin_lock_irqsave(&port->lock, flags);
+> >>> +     writel(0, port->membase + SUP_UART_ISC);
+> >>> +     spin_unlock_irqrestore(&port->lock, flags);
+> >>
+> >> I asked last time:
+> >> * What bus is this -- posting?
+> >>
+> >> You replied:
+> >> * Here just clear interrupt.
+> >> * Not really understand your comment?
+> >>
+> >> So I am asking again:
+> >> What bus is this? Isn't a posted write a problem here? I mean, shouldn=
+'t
+> >> you read from the register so that the write hits the device? That
+> >> depends on the bus this sits on, so just asking.
+> >>
+> >
+> > Each UART has its own ISC register.
+> > Ex.
+> > dev/ttySUP0 base_adr =3D 0x9C00-0000 , isc_addr =3D 0x9C00-001C
+> > dev/ttySUP1 base_adr =3D 0x9C00-0080 , isc_addr =3D 0x9C00-009C
+> > dev/ttySUP2 base_adr =3D 0x9C00-0100 , isc_addr =3D 0x9C00-011C
+> > dev/ttySUP3 base_adr =3D 0x9C00-0180 , isc_addr =3D 0x9C00-019C
+> > dev/ttySUP4 base_adr =3D 0x9C00-0200 , isc_addr =3D 0x9C00-021C
+> > So sunplus_shutdown() just simply turn off its own device isc only.
+> > That's why I didn't read register value, just write 0 for it.
+>
+> Could you explain me what posted write is and how does it not matter in
+> this case?
+>
 
-Signed-off-by: Brent Lu <brent.lu@intel.com>
----
- sound/hda/intel-dsp-config.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+Each UART ISC register contains
 
-diff --git a/sound/hda/intel-dsp-config.c b/sound/hda/intel-dsp-config.c
-index 3a3026fa4a17..4fb90ceb4053 100644
---- a/sound/hda/intel-dsp-config.c
-+++ b/sound/hda/intel-dsp-config.c
-@@ -249,13 +249,13 @@ static const struct config_entry config_table[] = {
- 		}
- 	},
- 	{
--		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
-+		.flags = FLAG_SOF,
- 		.device = 0x02c8,
-+		.codec_hid = "ESSX8336",
- 	},
- 	{
--		.flags = FLAG_SOF,
-+		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
- 		.device = 0x02c8,
--		.codec_hid = "ESSX8336",
- 	},
- /* Cometlake-H */
- 	{
-@@ -278,14 +278,14 @@ static const struct config_entry config_table[] = {
- 		}
- 	},
- 	{
--		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
--		.device = 0x06c8,
--	},
--		{
- 		.flags = FLAG_SOF,
- 		.device = 0x06c8,
- 		.codec_hid = "ESSX8336",
- 	},
-+	{
-+		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
-+		.device = 0x06c8,
-+	},
- #endif
- 
- /* Icelake */
-@@ -351,17 +351,17 @@ static const struct config_entry config_table[] = {
- 		}
- 	},
- 	{
--		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
-+		.flags = FLAG_SOF,
- 		.device = 0xa0c8,
-+		.codec_hid = "ESSX8336",
- 	},
- 	{
- 		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
--		.device = 0x43c8,
-+		.device = 0xa0c8,
- 	},
- 	{
--		.flags = FLAG_SOF,
--		.device = 0xa0c8,
--		.codec_hid = "ESSX8336",
-+		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
-+		.device = 0x43c8,
- 	},
- #endif
- 
--- 
-2.25.1
+Bit7 MSM(Modem Status) INT enable / disable (Access type RW) not use
+now (0: default)
+Bit6 LSM(Line Status) INT  enable / disable  (Access type RW) not use
+now(0: default)
+Bit5 RXM INT enable / disable  (Access type RW) set this
+Bit4 TXM INT enable / disable  (Access type RW) set this
 
+Bit3 MS(Modem Status) INT flag (Access type Read only) not use now (0: defa=
+ult)
+Bit2 LS(Line Status) INT flag (Access type Read only) not use now (0: defau=
+lt)
+Bit1 RX INT flag (Access type Read only) read this
+Bit0 TX INT flag (Access type Read only) read this
+
+sunplus_shutdown()
+main purpose is to turn off TX INT(bit4) and RX INT(bit5)
+bit7 and bit6 not used, should be 0.
+bit3 ~ bit0 read only, no effect while writing 0 to them.
+
+> thanks,
+> --
+> js
+> suse labs

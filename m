@@ -2,104 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8522048DBE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A84F48DBF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236785AbiAMQfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 11:35:41 -0500
-Received: from foss.arm.com ([217.140.110.172]:48398 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236772AbiAMQfk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 11:35:40 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 641E36D;
-        Thu, 13 Jan 2022 08:35:39 -0800 (PST)
-Received: from FVFF7649Q05P (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 836CF3F774;
-        Thu, 13 Jan 2022 08:35:37 -0800 (PST)
-Date:   Thu, 13 Jan 2022 16:35:29 +0000
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-To:     Chitti Babu Theegala <quic_ctheegal@quicinc.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, joel@joelfernandes.org,
-        linux-arm-msm@vger.kernel.org, quic_lingutla@quicinc.com,
-        linux-kernel@vger.kernel.org, quic_rjendra@quicinc.com
-Subject: Re: [PATCH] sched/fair: Prefer small idle cores for forkees
-Message-ID: <YeBRD9zKSLPBFX+j@FVFF7649Q05P>
-References: <20220112143902.13239-1-quic_ctheegal@quicinc.com>
+        id S236726AbiAMQiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 11:38:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229515AbiAMQiE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 11:38:04 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998E9C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 08:38:03 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id u21so25212549edd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 08:38:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1Cw+BPG1jU+zkMoF65IWzxVy0JjRkQm3f4AM/UiMJ3w=;
+        b=cAQMLvY1l+pxTUzA5wD4375Pjo+U8FLdlE1SAXOB4zC66tjEqU49Kkv1M3vtcRqvX/
+         y7ehbaOeOoLvUewb1BgOa33+reC3WKmZaGzF/ik+pMaZoN8NBPjb3ZMM6WdV5jYPAPCO
+         MCVR3XG4DBGrpONMVQnSsmcNWF0/dsXOu63gc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1Cw+BPG1jU+zkMoF65IWzxVy0JjRkQm3f4AM/UiMJ3w=;
+        b=e6wXx77xGUYiL5ZrdWqAs6y8Is9KQEIU+vgzyKDX3ihlHTQRW6oLPMnxQ3Y0fqdlLu
+         Sl+qPTVcVpHQMtiuYvJ8nBanVPGCHH8yEZ0Ny/KTauw9WUwKRHRHiy632RtGavseoZx9
+         BFR2mz81sPzxMyjrW8ARnyK8E5NwWXMOxVK+Iy8Lz2On4j5fvepzC9VtSf0pBQyaR9VL
+         ZFeVN6PZgofYTV1C8ar8VIYoCpWW+TAEga0D94SSG5WBGdOKl7YFGD1vB7ew+Zpe7ZW4
+         OUSWccSGvHGPl9jUk81C5Jg1UBn/hxnloDSR5jjSocJ/21MegP2oQZQoSha0b0JpKDuc
+         OLbQ==
+X-Gm-Message-State: AOAM532bIpUFqY0/mQRr7MAYDYwMbfJbArr0ReYrmFujVcv8eppk7ZfJ
+        1bSK2QQHoiczxKG8p83X+OeiLcQarAMXsL87
+X-Google-Smtp-Source: ABdhPJxFiW/XwpkBXIzRtLNMmDtVJ5OC5BunlLgVPgSbd0X2YPwIOND/VryhZEyHBdSeFd1QXlUJcQ==
+X-Received: by 2002:a17:907:9709:: with SMTP id jg9mr4067830ejc.397.1642091882022;
+        Thu, 13 Jan 2022 08:38:02 -0800 (PST)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
+        by smtp.gmail.com with ESMTPSA id e16sm1356623edu.15.2022.01.13.08.37.59
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 08:38:00 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id s6-20020a7bc386000000b0034a89445406so1877706wmj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 08:37:59 -0800 (PST)
+X-Received: by 2002:a7b:ca42:: with SMTP id m2mr4583261wml.144.1642091879565;
+ Thu, 13 Jan 2022 08:37:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220112143902.13239-1-quic_ctheegal@quicinc.com>
+References: <20220113140318.11117-1-zhangliang5@huawei.com> <YeA5oP/iaxtVPHb3@casper.infradead.org>
+In-Reply-To: <YeA5oP/iaxtVPHb3@casper.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 13 Jan 2022 08:37:43 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjB0i-B=U-DhpAajQx3f6bp1X==neLOrg0jwq29mgz=3g@mail.gmail.com>
+Message-ID: <CAHk-=wjB0i-B=U-DhpAajQx3f6bp1X==neLOrg0jwq29mgz=3g@mail.gmail.com>
+Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Liang Zhang <zhangliang5@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        wangzhigang17@huawei.com, David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 08:09:02PM +0530, Chitti Babu Theegala wrote:
-> Newly forked threads don't have any useful utilization data yet and
-> it's not possible to forecast their impact on energy consumption.
->update_pick_idlest These forkees (though very small, most times) end up waking big
-> cores from deep sleep for that very small durations.
-> 
-> Bias all forkees to small cores to prevent waking big cores from deep
-> sleep to save power.
+On Thu, Jan 13, 2022 at 6:39 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> Let's bring Linus in on this, but I think this reintroduces all of the
+> mapcount problems that we've been discussing recently.
+>
+> How about this as an alternative?
 
-This bias might be interesting for some workloads, but what about the
-others? (see find_energy_efficient_cpu() comment, which discusses forkees).
+No, at that point reuse_swap_page() is the better thing to do.
 
-> 
-> Signed-off-by: Chitti Babu Theegala <quic_ctheegal@quicinc.com>
-> ---
->  kernel/sched/fair.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 6e476f6..d407bbc 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -5976,7 +5976,7 @@ static int wake_affine(struct sched_domain *sd, struct task_struct *p,
->  }
->  
->  static struct sched_group *
-> -find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu);
-> +find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu, int sd_flag);
->  
->  /*
->   * find_idlest_group_cpu - find the idlest CPU among the CPUs in the group.
-> @@ -6063,7 +6063,7 @@ static inline int find_idlest_cpu(struct sched_domain *sd, struct task_struct *p
->  			continue;
->  		}
->  
-> -		group = find_idlest_group(sd, p, cpu);
-> +		group = find_idlest_group(sd, p, cpu, sd_flag);
->  		if (!group) {
->  			sd = sd->child;
->  			continue;
-> @@ -8997,7 +8997,8 @@ static inline void update_sg_wakeup_stats(struct sched_domain *sd,
->  static bool update_pick_idlest(struct sched_group *idlest,
->  			       struct sg_lb_stats *idlest_sgs,
->  			       struct sched_group *group,
-> -			       struct sg_lb_stats *sgs)
-> +			       struct sg_lb_stats *sgs,
-> +			       int sd_flag)
->  {
->  	if (sgs->group_type < idlest_sgs->group_type)
->  		return true;
-> @@ -9034,6 +9035,11 @@ static bool update_pick_idlest(struct sched_group *idlest,
->  		if (idlest_sgs->idle_cpus > sgs->idle_cpus)
->  			return false;
->  
-> +		/* Select smaller cpu group for newly woken up forkees */
-> +		if ((sd_flag & SD_BALANCE_FORK) && (idlest_sgs->idle_cpus &&
-> +			!capacity_greater(idlest->sgc->max_capacity, group->sgc->max_capacity)))
-> +			return false;
-> +
+Don't play games with page_count() (or even worse games with
+swap_count). The page count is only stable if it's 1. Any other value
+means that it can fluctuate due to concurrent lookups, some of which
+can be done locklessly under RCU.
 
-Energy biased placement should probably be applied only when EAS is enabled.
+The biggest problem in the COW path used to be that it was completely
+incomprehensible. Plus it had that pointless synchronization if the
+page was locked for entirely unrelated reasons.
 
-It's especially true here, if all CPUs have the same capacity, capacity_greater
-would be always false. So unless I missed something, we wouldn't let the group_util
-evaluation happen, would we?
+Doing a "trylock()" - and just copying if it fails fixes that
+pointless "let's wait because we know somebody else is doing something
+to this page".
 
-[...]
+And doing the
+
+               if (PageSwapCache(page) && reuse_swap_page(page, NULL)) {
+
+thing after holding the lock is certainly not incomprehensible.
+
+I just wanted to try to avoid that on the assumption that swap really
+isn't all that relevant any more - even swap cache.
+
+The most incomprehensible part in that sequence is actually the KSM
+tests. I think they are BS and should be removed (the page_count()
+check should be sufficient), but they are so incomprehensible that I
+left them when I did my crapectomy.
+
+             Linus

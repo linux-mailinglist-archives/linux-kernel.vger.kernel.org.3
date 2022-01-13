@@ -2,217 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF32948D3B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D2748D3BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbiAMIg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 03:36:58 -0500
-Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:45972 "EHLO
-        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232784AbiAMIgz (ORCPT
+        id S231199AbiAMIlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 03:41:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230280AbiAMIlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 03:36:55 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V1imC6N_1642063002;
-Received: from e02h04404.eu6sqa(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0V1imC6N_1642063002)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 13 Jan 2022 16:36:52 +0800
-From:   Wen Gu <guwen@linux.alibaba.com>
-To:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 3/3] net/smc: Resolve the race between SMC-R link access and clear
-Date:   Thu, 13 Jan 2022 16:36:42 +0800
-Message-Id: <1642063002-45688-4-git-send-email-guwen@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1642063002-45688-1-git-send-email-guwen@linux.alibaba.com>
-References: <1642063002-45688-1-git-send-email-guwen@linux.alibaba.com>
+        Thu, 13 Jan 2022 03:41:21 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D483C061748
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 00:41:21 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so10062592pji.3
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 00:41:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igorinstitute-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:from:date:subject:to:cc;
+        bh=NeKX+1gLQKYhB0X8obuHvvXl9+4b5UGzNCpMXUeeI7M=;
+        b=EuLWrAWWL34z4THDqjvCl+hOYXkOn4Y5dAt7+FsPmXSAAtt7fvtA0K9qX2/Zhu/K1U
+         qN8uNswHkHpRoHcIKEEzRELN+WTMlpQtgSSB9IWcCUmFsNCLPz4pMZEyMNuUBvXFWmwa
+         GQ8vIGSdEsHkGGEY4Fgq3YwbU0dci8bJNJ9MyKGMWa7UUm5EOs8oNH4r1GGLw2DbJUr3
+         bGLGpEWsJYar+oW9NmdrRj+8W+wYcpGGrLOgX5PGe9JHc/ZydYXStXZEIHmA1zzfUpex
+         3BcpfNKiCSZv+R1fXILlooiT0mhqhPuc4yOmOOyISxcfnEIs8cIPvTkT5GKR3M+Q6vzX
+         EJsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:from:date:subject:to:cc;
+        bh=NeKX+1gLQKYhB0X8obuHvvXl9+4b5UGzNCpMXUeeI7M=;
+        b=gyTi0AuYyFQEZh/lppWd9dHik2IjhZ83bd9AoDJLopHoPyIq+err8JMDt4aU9m8Uuc
+         NZBTBcpVI+K3ulr/I4XyyLQtW+3cDwdsgtGQfqfrHJvAdYW1qOQexlQJT50P/Ij5UUQS
+         oyga9rQ978pACerjnWVlOtOLCMN6AoM2QFPGJWM+cD+39xnoDoYfPSXiG8oOgEIlQLae
+         ucISWJ1S3rHvLHzaxt+dCtbuGtc5cXRKDff3C8LNwzWrx2IXSxWslUv5Si6vTiorFo7w
+         kGC18pJBKB/VvXOvMxsVBN30KQ230QDVkmnIWqhOx3Bn00jUkpwm7Zl2Y0i8Z7Q5OcKt
+         qxtg==
+X-Gm-Message-State: AOAM531zkDH/hBdzemfmTzNCyu8KaspylHju1arVjA0q0XG5UdBbhMHp
+        Vw6rrv9ksY9+h7tQx2Nt3R0+4g==
+X-Google-Smtp-Source: ABdhPJwk9ggoW0sH7LTM1lwbSOp4qCilmpuUzLoJ9HMp9f+NS1JYqbfKLULFnY4W/+uAfyCibfdT8A==
+X-Received: by 2002:a17:90b:33d0:: with SMTP id lk16mr2452797pjb.45.1642063280574;
+        Thu, 13 Jan 2022 00:41:20 -0800 (PST)
+Received: from localhost ([121.99.145.49])
+        by smtp.gmail.com with ESMTPSA id 6sm1704902pgr.88.2022.01.13.00.41.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 00:41:20 -0800 (PST)
+Message-Id: <cover.1642063121.git.daniel.beer@igorinstitute.com>
+From:   Daniel Beer <daniel.beer@igorinstitute.com>
+Date:   Thu, 13 Jan 2022 21:38:41 +1300
+Subject: [PATCH v2 0/2] ASoC: add support for TAS5805M digital amplifier
+To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Andy Liu <andy-liu@ti.com>,
+        Daniel Beer <daniel.beer@igorinstitute.com>,
+        Derek Simkowiak <derek.simkowiak@igorinstitute.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We encountered some crashes caused by the race between SMC-R
-link access and link clear that triggered by abnormal link
-group termination, such as port error.
+This pair of patches implements support for the TAS5805M class D audio
+amplifier. This driver, and the example configuration in the device-tree
+file, were originally based on a 4.19 series kernel and have been
+modified slightly from the tested version.
 
-Here is an example of this kind of crashes:
+This resubmission differs from the first as follows:
 
- BUG: kernel NULL pointer dereference, address: 0000000000000000
- Workqueue: smc_hs_wq smc_listen_work [smc]
- RIP: 0010:smc_llc_flow_initiate+0x44/0x190 [smc]
- Call Trace:
-  <TASK>
-  ? __smc_buf_create+0x75a/0x950 [smc]
-  smcr_lgr_reg_rmbs+0x2a/0xbf [smc]
-  smc_listen_work+0xf72/0x1230 [smc]
-  ? process_one_work+0x25c/0x600
-  process_one_work+0x25c/0x600
-  worker_thread+0x4f/0x3a0
-  ? process_one_work+0x600/0x600
-  kthread+0x15d/0x1a0
-  ? set_kthread_struct+0x40/0x40
-  ret_from_fork+0x1f/0x30
-  </TASK>
+  - Some explanatory comments and constants have been introduced
+  - The volume control allows L/R to be set independently
+  - gpiod is used, and regmap is used directly
+  - .trigger is used instead of DAPM to coordinate DSP boot
+  - The component is manually registered after power-on, and explicitly
+    deregistered prior to power-off
+  - Corrections have been made to the bindings file
 
-smc_listen_work()                     __smc_lgr_terminate()
----------------------------------------------------------------
-                                    | smc_lgr_free()
-                                    |  |- smcr_link_clear()
-                                    |      |- memset(lnk, 0)
-smc_listen_rdma_reg()               |
- |- smcr_lgr_reg_rmbs()             |
-     |- smc_llc_flow_initiate()     |
-         |- access lnk->lgr (panic) |
+Daniel Beer (2):
+  ASoC: add support for TAS5805M digital amplifier
+  ASoC: dt-bindings: add bindings for TI TAS5805M.
 
-These crashes are similarly caused by clearing SMC-R link
-resources when some functions is still accessing to them.
-This patch tries to fix the issue by introducing reference
-count of SMC-R links and ensuring that the sensitive resources
-of links won't be cleared until reference count reaches zero.
+ .../devicetree/bindings/sound/tas5805m.yaml   | 204 +++++++
+ sound/soc/codecs/Kconfig                      |   9 +
+ sound/soc/codecs/Makefile                     |   2 +
+ sound/soc/codecs/tas5805m.c                   | 554 ++++++++++++++++++
+ 4 files changed, 769 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/tas5805m.yaml
+ create mode 100644 sound/soc/codecs/tas5805m.c
 
-The operation to the SMC-R link reference count can be concluded
-as follows:
-
-object          [hold or initialized as 1]         [put]
---------------------------------------------------------------------
-links           smcr_link_init()                   smcr_link_clear()
-connections     smc_conn_create()                  smc_conn_free()
-
-Through this way, the clear of SMC-R links is later than the
-free of all the smc connections above it, thus avoiding the
-unsafe reference to SMC-R links.
-
-Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
----
- net/smc/smc_core.c | 52 ++++++++++++++++++++++++++++++++++++++++------------
- net/smc/smc_core.h |  4 ++++
- 2 files changed, 44 insertions(+), 12 deletions(-)
-
-diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
-index bc4c615..4ceee96 100644
---- a/net/smc/smc_core.c
-+++ b/net/smc/smc_core.c
-@@ -745,6 +745,8 @@ int smcr_link_init(struct smc_link_group *lgr, struct smc_link *lnk,
- 	}
- 	get_device(&lnk->smcibdev->ibdev->dev);
- 	atomic_inc(&lnk->smcibdev->lnk_cnt);
-+	refcount_set(&lnk->refcnt, 1); /* link refcnt is set to 1 */
-+	lnk->clearing = 0;
- 	lnk->path_mtu = lnk->smcibdev->pattr[lnk->ibport - 1].active_mtu;
- 	lnk->link_id = smcr_next_link_id(lgr);
- 	lnk->lgr = lgr;
-@@ -994,8 +996,12 @@ void smc_switch_link_and_count(struct smc_connection *conn,
- 			       struct smc_link *to_lnk)
- {
- 	atomic_dec(&conn->lnk->conn_cnt);
-+	/* link_hold in smc_conn_create() */
-+	smcr_link_put(conn->lnk);
- 	conn->lnk = to_lnk;
- 	atomic_inc(&conn->lnk->conn_cnt);
-+	/* link_put in smc_conn_free() */
-+	smcr_link_hold(conn->lnk);
- }
- 
- struct smc_link *smc_switch_conns(struct smc_link_group *lgr,
-@@ -1152,6 +1158,8 @@ void smc_conn_free(struct smc_connection *conn)
- 	if (!lgr->conns_num)
- 		smc_lgr_schedule_free_work(lgr);
- lgr_put:
-+	if (!lgr->is_smcd)
-+		smcr_link_put(conn->lnk); /* link_hold in smc_conn_create() */
- 	smc_lgr_put(lgr); /* lgr_hold in smc_conn_create() */
- }
- 
-@@ -1208,22 +1216,11 @@ static void smcr_rtoken_clear_link(struct smc_link *lnk)
- 	}
- }
- 
--/* must be called under lgr->llc_conf_mutex lock */
--void smcr_link_clear(struct smc_link *lnk, bool log)
-+static void __smcr_link_clear(struct smc_link *lnk)
- {
- 	struct smc_link_group *lgr = lnk->lgr;
- 	struct smc_ib_device *smcibdev;
- 
--	if (!lgr || lnk->state == SMC_LNK_UNUSED)
--		return;
--	lnk->peer_qpn = 0;
--	smc_llc_link_clear(lnk, log);
--	smcr_buf_unmap_lgr(lnk);
--	smcr_rtoken_clear_link(lnk);
--	smc_ib_modify_qp_error(lnk);
--	smc_wr_free_link(lnk);
--	smc_ib_destroy_queue_pair(lnk);
--	smc_ib_dealloc_protection_domain(lnk);
- 	smc_wr_free_link_mem(lnk);
- 	smc_ibdev_cnt_dec(lnk);
- 	put_device(&lnk->smcibdev->ibdev->dev);
-@@ -1235,6 +1232,35 @@ void smcr_link_clear(struct smc_link *lnk, bool log)
- 	smc_lgr_put(lgr); /* lgr_hold in smcr_link_init() */
- }
- 
-+/* must be called under lgr->llc_conf_mutex lock */
-+void smcr_link_clear(struct smc_link *lnk, bool log)
-+{
-+	if (!lnk->lgr || lnk->clearing ||
-+	    lnk->state == SMC_LNK_UNUSED)
-+		return;
-+	lnk->clearing = 1;
-+	lnk->peer_qpn = 0;
-+	smc_llc_link_clear(lnk, log);
-+	smcr_buf_unmap_lgr(lnk);
-+	smcr_rtoken_clear_link(lnk);
-+	smc_ib_modify_qp_error(lnk);
-+	smc_wr_free_link(lnk);
-+	smc_ib_destroy_queue_pair(lnk);
-+	smc_ib_dealloc_protection_domain(lnk);
-+	smcr_link_put(lnk); /* theoretically last link_put */
-+}
-+
-+void smcr_link_hold(struct smc_link *lnk)
-+{
-+	refcount_inc(&lnk->refcnt);
-+}
-+
-+void smcr_link_put(struct smc_link *lnk)
-+{
-+	if (refcount_dec_and_test(&lnk->refcnt))
-+		__smcr_link_clear(lnk);
-+}
-+
- static void smcr_buf_free(struct smc_link_group *lgr, bool is_rmb,
- 			  struct smc_buf_desc *buf_desc)
- {
-@@ -1877,6 +1903,8 @@ int smc_conn_create(struct smc_sock *smc, struct smc_init_info *ini)
- 		}
- 	}
- 	smc_lgr_hold(conn->lgr); /* lgr_put in smc_conn_free() */
-+	if (!conn->lgr->is_smcd)
-+		smcr_link_hold(conn->lnk); /* link_put in smc_conn_free() */
- 	conn->freed = 0;
- 	conn->local_tx_ctrl.common.type = SMC_CDC_MSG_TYPE;
- 	conn->local_tx_ctrl.len = SMC_WR_TX_SIZE;
-diff --git a/net/smc/smc_core.h b/net/smc/smc_core.h
-index 630298b..cbf0fc1 100644
---- a/net/smc/smc_core.h
-+++ b/net/smc/smc_core.h
-@@ -137,6 +137,8 @@ struct smc_link {
- 	u8			peer_link_uid[SMC_LGR_ID_SIZE]; /* peer uid */
- 	u8			link_idx;	/* index in lgr link array */
- 	u8			link_is_asym;	/* is link asymmetric? */
-+	u8			clearing : 1;	/* link is being cleared */
-+	refcount_t		refcnt;		/* link reference count */
- 	struct smc_link_group	*lgr;		/* parent link group */
- 	struct work_struct	link_down_wrk;	/* wrk to bring link down */
- 	char			ibname[IB_DEVICE_NAME_MAX]; /* ib device name */
-@@ -509,6 +511,8 @@ void smc_rtoken_set2(struct smc_link_group *lgr, int rtok_idx, int link_id,
- int smcr_link_init(struct smc_link_group *lgr, struct smc_link *lnk,
- 		   u8 link_idx, struct smc_init_info *ini);
- void smcr_link_clear(struct smc_link *lnk, bool log);
-+void smcr_link_hold(struct smc_link *lnk);
-+void smcr_link_put(struct smc_link *lnk);
- void smc_switch_link_and_count(struct smc_connection *conn,
- 			       struct smc_link *to_lnk);
- int smcr_buf_map_lgr(struct smc_link *lnk);
 -- 
-1.8.3.1
+2.30.2
 

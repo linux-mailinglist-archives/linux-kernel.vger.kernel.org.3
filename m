@@ -2,131 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D09F848D2FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CFA48D33E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:57:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbiAMHhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 02:37:51 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17345 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbiAMHhq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 02:37:46 -0500
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JZGTJ2K6mz9s5d;
-        Thu, 13 Jan 2022 15:36:36 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
- (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 13 Jan
- 2022 15:37:44 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <richard@nod.at>, <dwmw2@infradead.org>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     <libaokun1@huawei.com>, <yukuai3@huawei.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH -next v2 2/2] jffs2: fix memory leak in jffs2_scan_medium
-Date:   Thu, 13 Jan 2022 15:48:48 +0800
-Message-ID: <20220113074848.1308414-3-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220113074848.1308414-1-libaokun1@huawei.com>
-References: <20220113074848.1308414-1-libaokun1@huawei.com>
+        id S232846AbiAMHyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 02:54:41 -0500
+Received: from mga04.intel.com ([192.55.52.120]:4776 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229533AbiAMHyk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 02:54:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642060480; x=1673596480;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tBSjCUr5LQ/WmW8KrgBUGf3PU+8WqY/65bcLq1A2bvk=;
+  b=LOY91u2qL5NheFbGAl+yXrXoXvWKt9xQbN5wYA6pTXxyWMhq4w8MCVgo
+   0E4Y//D//4i/jAY0Teut3eUB7ENDnXDsLTD7ex2Kh05L+kdlw0yvQZ8kO
+   ecjdykkqnWDYjkvOI73rlrO8AmJOq2jCYjzf+1UbafFc+/JECCKaRrwxF
+   MQFCmXfJKdpuJcFiwbTg6dDY5icudY5J1SqsGxZ2ed+em8tU9YSyqCIJO
+   ExReC7Q7YnHNQtF/tGge+RB/Av+DG95YZ9AuVa2yJ0DrxhoqwsFqEheIN
+   nZz8WHqJa2c49IsJoLYJ6awn3AlvgmOQFT+4riOqvEPvOBkYLQQqzhQ2u
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="242770800"
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="242770800"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 23:54:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="623769451"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 12 Jan 2022 23:54:36 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n7uwN-0006yg-Jf; Thu, 13 Jan 2022 07:54:35 +0000
+Date:   Thu, 13 Jan 2022 15:54:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Iwona Winiarska <iwona.winiarska@intel.com>,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>
+Subject: Re: [PATCH v5 08/13] peci: Add support for PECI device drivers
+Message-ID: <202201131534.HcDrC30f-lkp@intel.com>
+References: <20220112230247.982212-9-iwona.winiarska@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220112230247.982212-9-iwona.winiarska@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an error is returned in jffs2_scan_eraseblock() and some memory
-has been added to the jffs2_summary *s, we can observe the following
-kmemleak report:
+Hi Iwona,
 
---------------------------------------------
-unreferenced object 0xffff88812b889c40 (size 64):
-  comm "mount", pid 692, jiffies 4294838325 (age 34.288s)
-  hex dump (first 32 bytes):
-    40 48 b5 14 81 88 ff ff 01 e0 31 00 00 00 50 00  @H........1...P.
-    00 00 01 00 00 00 01 00 00 00 02 00 00 00 09 08  ................
-  backtrace:
-    [<ffffffffae93a3a3>] __kmalloc+0x613/0x910
-    [<ffffffffaf423b9c>] jffs2_sum_add_dirent_mem+0x5c/0xa0
-    [<ffffffffb0f3afa8>] jffs2_scan_medium.cold+0x36e5/0x4794
-    [<ffffffffb0f3dbe1>] jffs2_do_mount_fs.cold+0xa7/0x2267
-    [<ffffffffaf40acf3>] jffs2_do_fill_super+0x383/0xc30
-    [<ffffffffaf40c00a>] jffs2_fill_super+0x2ea/0x4c0
-    [<ffffffffb0315d64>] mtd_get_sb+0x254/0x400
-    [<ffffffffb0315f5f>] mtd_get_sb_by_nr+0x4f/0xd0
-    [<ffffffffb0316478>] get_tree_mtd+0x498/0x840
-    [<ffffffffaf40bd15>] jffs2_get_tree+0x25/0x30
-    [<ffffffffae9f358d>] vfs_get_tree+0x8d/0x2e0
-    [<ffffffffaea7a98f>] path_mount+0x50f/0x1e50
-    [<ffffffffaea7c3d7>] do_mount+0x107/0x130
-    [<ffffffffaea7c5c5>] __se_sys_mount+0x1c5/0x2f0
-    [<ffffffffaea7c917>] __x64_sys_mount+0xc7/0x160
-    [<ffffffffb10142f5>] do_syscall_64+0x45/0x70
-unreferenced object 0xffff888114b54840 (size 32):
-  comm "mount", pid 692, jiffies 4294838325 (age 34.288s)
-  hex dump (first 32 bytes):
-    c0 75 b5 14 81 88 ff ff 02 e0 02 00 00 00 02 00  .u..............
-    00 00 84 00 00 00 44 00 00 00 6b 6b 6b 6b 6b a5  ......D...kkkkk.
-  backtrace:
-    [<ffffffffae93be24>] kmem_cache_alloc_trace+0x584/0x880
-    [<ffffffffaf423b04>] jffs2_sum_add_inode_mem+0x54/0x90
-    [<ffffffffb0f3bd44>] jffs2_scan_medium.cold+0x4481/0x4794
-    [...]
-unreferenced object 0xffff888114b57280 (size 32):
-  comm "mount", pid 692, jiffies 4294838393 (age 34.357s)
-  hex dump (first 32 bytes):
-    10 d5 6c 11 81 88 ff ff 08 e0 05 00 00 00 01 00  ..l.............
-    00 00 38 02 00 00 28 00 00 00 6b 6b 6b 6b 6b a5  ..8...(...kkkkk.
-  backtrace:
-    [<ffffffffae93be24>] kmem_cache_alloc_trace+0x584/0x880
-    [<ffffffffaf423c34>] jffs2_sum_add_xattr_mem+0x54/0x90
-    [<ffffffffb0f3a24f>] jffs2_scan_medium.cold+0x298c/0x4794
-    [...]
-unreferenced object 0xffff8881116cd510 (size 16):
-  comm "mount", pid 692, jiffies 4294838395 (age 34.355s)
-  hex dump (first 16 bytes):
-    00 00 00 00 00 00 00 00 09 e0 60 02 00 00 6b a5  ..........`...k.
-  backtrace:
-    [<ffffffffae93be24>] kmem_cache_alloc_trace+0x584/0x880
-    [<ffffffffaf423cc4>] jffs2_sum_add_xref_mem+0x54/0x90
-    [<ffffffffb0f3b2e3>] jffs2_scan_medium.cold+0x3a20/0x4794
-    [...]
---------------------------------------------
+I love your patch! Perhaps something to improve:
 
-Therefore, when processing errors, it is necessary to determine whether
-s->sum_list_head is NULL. If not, call jffs2_sum_reset_collected(s) to
-release the memory added in s.
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linux/master linus/master v5.16 next-20220112]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Fixes: e631ddba5887 ("[JFFS2] Add erase block summary support (mount time improvement)")
-Cc: stable@vger.kernel.org
-Co-developed-with: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
+url:    https://github.com/0day-ci/linux/commits/Iwona-Winiarska/Introduce-PECI-subsystem/20220113-071131
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: hexagon-randconfig-r033-20220113 (https://download.01.org/0day-ci/archive/20220113/202201131534.HcDrC30f-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/0c9888d465568adc8526df1407c9a75be5ce6cd4
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Iwona-Winiarska/Introduce-PECI-subsystem/20220113-071131
+        git checkout 0c9888d465568adc8526df1407c9a75be5ce6cd4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/peci/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/peci/request.c:111:23: warning: address of array 'req->rx.buf' will always evaluate to 'true' [-Wpointer-bool-conversion]
+           if (WARN_ON(!req->rx.buf))
+                       ~~~~~~~~~^~~
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   1 warning generated.
+
+
+vim +111 drivers/peci/request.c
+
+   101	
+   102	static int peci_request_xfer_retry(struct peci_request *req)
+   103	{
+   104		long wait_interval = PECI_RETRY_INTERVAL_MIN;
+   105		struct peci_device *device = req->device;
+   106		struct peci_controller *controller = to_peci_controller(device->dev.parent);
+   107		unsigned long start = jiffies;
+   108		int ret;
+   109	
+   110		/* Don't try to use it for ping */
+ > 111		if (WARN_ON(!req->rx.buf))
+   112			return 0;
+   113	
+   114		do {
+   115			ret = peci_request_xfer(req);
+   116			if (ret) {
+   117				dev_dbg(&controller->dev, "xfer error: %d\n", ret);
+   118				return ret;
+   119			}
+   120	
+   121			if (peci_request_status(req) != -EAGAIN)
+   122				return 0;
+   123	
+   124			/* Set the retry bit to indicate a retry attempt */
+   125			req->tx.buf[1] |= PECI_RETRY_BIT;
+   126	
+   127			if (schedule_timeout_interruptible(wait_interval))
+   128				return -ERESTARTSYS;
+   129	
+   130			wait_interval = min_t(long, wait_interval * 2, PECI_RETRY_INTERVAL_MAX);
+   131		} while (time_before(jiffies, start + PECI_RETRY_TIMEOUT));
+   132	
+   133		dev_dbg(&controller->dev, "request timed out\n");
+   134	
+   135		return -ETIMEDOUT;
+   136	}
+   137	
+
 ---
-V1->V2:
-	Check whether s is NULL to prevent NULL pointer dereference
-
- fs/jffs2/scan.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/fs/jffs2/scan.c b/fs/jffs2/scan.c
-index b676056826be..e00a10661c44 100644
---- a/fs/jffs2/scan.c
-+++ b/fs/jffs2/scan.c
-@@ -281,6 +281,8 @@ int jffs2_scan_medium(struct jffs2_sb_info *c)
- 	else
- 		mtd_unpoint(c->mtd, 0, c->mtd->size);
- #endif
-+	if (s && s->sum_list_head)
-+		jffs2_sum_reset_collected(s);
- 	kfree(s);
- 	return ret;
- }
--- 
-2.31.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

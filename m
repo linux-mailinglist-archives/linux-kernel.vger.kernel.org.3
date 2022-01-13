@@ -2,93 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A6E48D4AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5488748D4AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbiAMJBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:01:19 -0500
-Received: from mail-ua1-f51.google.com ([209.85.222.51]:41685 "EHLO
-        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiAMJBR (ORCPT
+        id S231705AbiAMJCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:02:25 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:56284 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232380AbiAMJCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:01:17 -0500
-Received: by mail-ua1-f51.google.com with SMTP id p37so9740965uae.8;
-        Thu, 13 Jan 2022 01:01:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MPUkI5LvvxCzghzBeHMxuJ5P/rCrBrsO0aS+FYZgtrE=;
-        b=2l55pHQPbbCrdl+JxOCbLeCyJBJjMfOi5ni3Iddf6CFswzXL2ZVrBLH+BiU20iVWV/
-         9YDovQfhIh8lA8bY/0CdZ+Nfs8rKWkV2uluXKlsWBZjtsns0oiMeaIVC/zXVLqYr0Sbm
-         aR5dCrpmUDSqHMEHp1NqRtYZMvw0kmVNDA7CdryhTWduBWfxSTljLykSgTEmQFGPlzt9
-         cz/JFeC9EVCjIdxNuQN+zjemkjkvr3+smyBIo8MfDIa6K8y/RnjFQjsHuuVjJ9r5qO/A
-         6Lst3jUhwav6prbo7hO6/pWxtIxqI8pqm303kCp7HrNbgI0w3b2sO/aD08xjCYaAaWga
-         J40Q==
-X-Gm-Message-State: AOAM532mEn+mVKC0sP6mzOub1vUv8iWnM4+IPQcKbEFVCbxzRj4F3hkq
-        uDIJqWDaA+mzRxmT8dX+tdu9Vi2SNJRr52jj
-X-Google-Smtp-Source: ABdhPJyz/SikRbdFufc5nbzL8LFgpjuKBxIpBrIVAeLzjWOKSkk/tzbxCrac9zAA2NIWmBMXdyHFow==
-X-Received: by 2002:a05:6102:354e:: with SMTP id e14mr817154vss.41.1642064476911;
-        Thu, 13 Jan 2022 01:01:16 -0800 (PST)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
-        by smtp.gmail.com with ESMTPSA id k135sm1085656vke.53.2022.01.13.01.01.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 01:01:16 -0800 (PST)
-Received: by mail-ua1-f45.google.com with SMTP id h11so9776783uar.5;
-        Thu, 13 Jan 2022 01:01:16 -0800 (PST)
-X-Received: by 2002:a9f:3e01:: with SMTP id o1mr1810579uai.89.1642064476050;
- Thu, 13 Jan 2022 01:01:16 -0800 (PST)
+        Thu, 13 Jan 2022 04:02:21 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A88C21F3A8;
+        Thu, 13 Jan 2022 09:02:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642064539; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=maRJiYWWsej6VtzU8BY/ZSUfh+jtG5r9ye7Nqwr2LU4=;
+        b=row7JZbSGynM/P4rzOyrZA53mgeZpQ9CUH1boo32eLI2QtXUzdCwIHjzi8q1ZEUlZC5Mky
+        HH8OAdNQh9fpQ5v7SgDnlIj22beb+/UbCbwZQNCioCJPlb9z0KC/o5zZ0HtSWttQYPnVaz
+        047dfsye0991We8g9UV70dKfxUcsJoI=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 822C7A3B88;
+        Thu, 13 Jan 2022 09:02:19 +0000 (UTC)
+Date:   Thu, 13 Jan 2022 10:02:19 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, mcgrof@kernel.org,
+        keescook@chromium.org, yzaikin@google.com,
+        akpm@linux-foundation.org, feng.tang@intel.com,
+        siglesias@igalia.com, kernel@gpiccoli.net
+Subject: Re: [PATCH 3/3] panic: Allow printing extra panic information on
+ kdump
+Message-ID: <Yd/qmyz+qSuoUwbs@alley>
+References: <20211109202848.610874-1-gpiccoli@igalia.com>
+ <20211109202848.610874-4-gpiccoli@igalia.com>
 MIME-Version: 1.0
-References: <20211224052309.1997096-1-nikita.yoush@cogentembedded.com>
- <20211224052309.1997096-3-nikita.yoush@cogentembedded.com>
- <YcyTV4fJqMHIeyYB@pendragon.ideasonboard.com> <87626d61-ada0-c220-bea5-5330f5256629@cogentembedded.com>
- <YcyXQxW3kRqQ2Yv0@pendragon.ideasonboard.com> <17b8de50-426a-2543-a79a-aab44c9d52cf@cogentembedded.com>
-In-Reply-To: <17b8de50-426a-2543-a79a-aab44c9d52cf@cogentembedded.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 13 Jan 2022 10:01:04 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVVj9k8W_FHtW5G+aYug-VvonMnyWyXteqhLONBBSKLZw@mail.gmail.com>
-Message-ID: <CAMuHMdVVj9k8W_FHtW5G+aYug-VvonMnyWyXteqhLONBBSKLZw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] arm64: dts: renesas: r8a77961: Add lvds0 device node
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211109202848.610874-4-gpiccoli@igalia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikita,
+On Tue 2021-11-09 17:28:48, Guilherme G. Piccoli wrote:
+> Currently we have the "panic_print" parameter/sysctl to allow some extra
+> information to be printed in a panic event. On the other hand, the kdump
+> mechanism allows to kexec a new kernel to collect a memory dump for the
+> running kernel in case of panic.
+> Right now these options are incompatible: the user either sets the kdump
+> or makes use of "panic_print". The code path of "panic_print" isn't
+> reached when kdump is configured.
+> 
+> There are situations though in which this would be interesting: for
+> example, in systems that are very memory constrained, a handcrafted
+> tiny kernel/initrd for kdump might be used in order to only collect the
+> dmesg in kdump kernel. Even more common, systems with no disk space for
+> the full (compressed) memory dump might very well rely in this
+> functionality too, dumping only the dmesg with the additional information
+> provided by "panic_print".
 
-On Wed, Jan 12, 2022 at 10:10 PM Nikita Yushchenko
-<nikita.yoush@cogentembedded.com> wrote:
-> > I'm writing a patch to drop those right now :-) I'll CC you.
->
-> This is not the only place where rcag-gen3 dtsi files are using empty-endpoint pattern.
->
-> du rgb port is defined in the same way.
->
-> And, I've submitted a patch some weeks ago [1] that hooked into that.
->
-> [1] https://lore.kernel.org/lkml/20211225115308.2152364-1-nikita.yoush@cogentembedded.com/
->
-> Since there was no reply, I am about to resubmit it.
-> But, perhaps need to do something with empty-endpoint pattern first?
+Is anyone really using this approach? kmsg_dump() looks like a better
+choice when there are memory constrains. It does not need to reserve
+memory for booting the crash kernel.
 
-No need to resend for now, it is still in my review backlog
-(Hi Xmas/NY ;-).
+I would not mind much but this change depends on a not fully reliable
+assumption, see below.
 
-Gr{oetje,eeting}s,
+Also it will also complicate the solution for the kmsg_dump() code path.
+It would be better to discuss this togeter with the other patch
+https://lore.kernel.org/r/20220106212835.119409-1-gpiccoli@igalia.com
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> So, this is what the patch does: allows both functionality to co-exist;
+> if "panic_print" is set and the system performs a kdump, the extra
+> information is printed on dmesg before the kexec. Some notes about the
+> design choices here:
+> 
+> (a) We could have introduced a sysctl or an extra bit on "panic_print"
+> to allow enabling the co-existence of kdump and "panic_print", but seems
+> that would be over-engineering; we have 3 cases, let's check how this
+> patch change things:
+> 
+> - if the user have kdump set and not "panic_print", nothing changes;
+> - if the user have "panic_print" set and not kdump, nothing changes;
+> - if both are enabled, now we print the extra information before kdump,
+> which is exactly the goal of the patch (and should be the goal of the
+> user, since they enabled both options).
+> 
+> (b) We assume that the code path won't return from __crash_kexec()
+> so we didn't guard against double execution of panic_print_sys_info().
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+This sounds suspiciously. There is small race window but it actually works.
+__crash_kexec() really never returns when @kexec_crash_image is
+loaded. Well, it might break in the future if the code is modified.
+
+Best Regards,
+Petr

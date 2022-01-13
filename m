@@ -2,100 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D47548DBC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E002348DBCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236695AbiAMQ3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 11:29:41 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:45761 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236675AbiAMQ3k (ORCPT
+        id S236714AbiAMQa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 11:30:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38288 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236698AbiAMQa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 11:29:40 -0500
-Received: by mail-oi1-f173.google.com with SMTP id t9so8312525oie.12;
-        Thu, 13 Jan 2022 08:29:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=HPY1d3LBzusi60LPkFQAJPHyy0tMLA3KHv2rcOpufdU=;
-        b=hXLXs1KuTXHLZdSctoA8pcmaWayU7uuNZNbTAFGFaYbczHMlnRsPRJSpZ/LW8JPv4e
-         MhHjx/4gVfk1f/cGvoz4hJh0l6K08B4pmRzSDqsceGiD4QGxo2Mhpp4h2Eb5kJDtXZym
-         8VMFv86SaWAXh5PbgCeUjEHfJkEAPO9S8jsk1IW3r1VzGjFlckDx37AfBjcluZgLmXce
-         b4tARyhXuWdBcdVScSsoRairJl2nd7GoRt9TxUrc2mVzDTx0LKFLjbUFSKiwK1y0upb1
-         aYGZIh52LxV1xSBzpZu5FJYC8GpQ5N62eCc0eRoyKAz/suq2uTviiaKDfseiVnffuvks
-         jvOw==
-X-Gm-Message-State: AOAM532lvcc6uRB6PitL60ilErpZoxXX04PAa489hJcVBK0WuNV5uZ9d
-        dP9P6+myAFd9ABQQscII4g==
-X-Google-Smtp-Source: ABdhPJyTYyL8a/znyc0/EIpQtk1tXZE428dMD1N++wlm/cG2UjCETDsuEpTGIHZimgJsHIucC3Wlaw==
-X-Received: by 2002:a54:4588:: with SMTP id z8mr5113850oib.108.1642091379811;
-        Thu, 13 Jan 2022 08:29:39 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t15sm569504otc.17.2022.01.13.08.29.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 08:29:39 -0800 (PST)
-Received: (nullmailer pid 3647185 invoked by uid 1000);
-        Thu, 13 Jan 2022 16:29:34 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Cc:     linux-rpi-kernel@lists.infradead.org, kernel-list@raspberrypi.com,
-        linux-kernel@vger.kernel.org, naush@raspberrypi.com,
-        dave.stevenson@raspberrypi.com,
-        linux-arm-kernel@lists.infradead.org, mchehab@kernel.org,
-        laurent.pinchart@ideasonboard.com, lukasz@jany.st,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20220112172719.1178446-2-jeanmichel.hautbois@ideasonboard.com>
-References: <20220112172719.1178446-1-jeanmichel.hautbois@ideasonboard.com> <20220112172719.1178446-2-jeanmichel.hautbois@ideasonboard.com>
-Subject: Re: [RFC PATCH 1/3] media: dt-bindings: media: Add bindings for bcm2835-unicam
-Date:   Thu, 13 Jan 2022 10:29:34 -0600
-Message-Id: <1642091374.239763.3647184.nullmailer@robh.at.kernel.org>
+        Thu, 13 Jan 2022 11:30:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642091455;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4H2G/AcFCWNIo4a7X3Hpex/LEo4UsnyCD4gzRSNQTAQ=;
+        b=iS7qhr2ZU2Jf7Q/u02AJ/TnxnjtKJPDFFN4B6uGiWsvrdpSdxbtNZAOHgWTbP0uuxFfdo8
+        jYMedgFWvEUzQ3uoVJRTvR/D6EYLm+q3qehToo0vjKG/JD/PkzFv/lMaBmWiamFiQglO73
+        /jL/3ta2iN/v7MVaW8iSzU1lNpLYlgQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-498-Ax1e_eeJPauRyoBTaav1KA-1; Thu, 13 Jan 2022 11:30:54 -0500
+X-MC-Unique: Ax1e_eeJPauRyoBTaav1KA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4D54810AF8C2;
+        Thu, 13 Jan 2022 16:30:53 +0000 (UTC)
+Received: from starship (unknown [10.40.192.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 95131858A0;
+        Thu, 13 Jan 2022 16:30:50 +0000 (UTC)
+Message-ID: <d3cc3cd1a90d7ee9a31e40fbe2db9f3f338d5004.camel@redhat.com>
+Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Igor Mammedov <imammedo@redhat.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
+Date:   Thu, 13 Jan 2022 18:30:49 +0200
+In-Reply-To: <YeBSrcNawgzvTzQ6@google.com>
+References: <877dbbq5om.fsf@redhat.com>
+         <5505d731-cf87-9662-33f3-08844d92877c@redhat.com>
+         <20220111090022.1125ffb5@redhat.com> <87fsptnjic.fsf@redhat.com>
+         <50136685-706e-fc6a-0a77-97e584e74f93@redhat.com>
+         <87bl0gnfy5.fsf@redhat.com>
+         <7e7c7e22f8b1b1695d26d9e19a767b87c679df93.camel@redhat.com>
+         <87zgnzn1nr.fsf@redhat.com>
+         <6ae7e64c53727f9f00537d787e9612c292c4e244.camel@redhat.com>
+         <87wnj3n0k0.fsf@redhat.com> <YeBSrcNawgzvTzQ6@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jan 2022 18:27:18 +0100, Jean-Michel Hautbois wrote:
-> Introduce the dt-bindinds documentation for bcm2835 CCP2/CSI2 camera
-> interface. Also add a MAINTAINERS entry for it.
+On Thu, 2022-01-13 at 16:26 +0000, Sean Christopherson wrote:
+> On Thu, Jan 13, 2022, Vitaly Kuznetsov wrote:
+> > Maxim Levitsky <mlevitsk@redhat.com> writes:
+> > > For my nested AVIC work I would really want the APIC ID of a VCPU to be read-only
+> > > and be equal to vcpu_id.
+> > > 
+> > 
+> > Doesn't APIC ID have topology encoded in it?
 > 
-> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
-> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-> ---
-> Dave: I assumed you were the maintainer for this file, as I based it on the
-> bcm2835-unicam.txt file. Are  you happy to be added directly as the
-> maintainer, or should this be specified as "Raspberry Pi Kernel
-> Maintenance <kernel-list@raspberrypi.com>"
-> ---
->  .../bindings/media/brcm,bcm2835-unicam.yaml   | 103 ++++++++++++++++++
->  MAINTAINERS                                   |   6 +
->  2 files changed, 109 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> Yeah, APIC IDs are derived from the topology.  From the SDM (this doesn't
+> talk about core/SMT info, but that's included as well):
 > 
+>   The hardware assigned APIC ID is based on system topology and includes encoding
+>   for socket position and cluster information.
+> 
+> The SDM also says:
+> 
+>   Some processors permit software to modify the APIC ID. However, the ability of
+>   software to modify the APIC ID is processor model specific.
+> 
+> So I _think_ we could define KVM behavior to ignore writes from the _guest_, but
+> the APIC_ID == vcpu_id requirement won't fly as userspace expects to be able to
+> stuff virtual toplogy info into the APIC ID.
+> 
+That is a very good piece of information! Thanks!
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.example.dts:24.31-32 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1413: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1579262
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+Best regards,
+	Maxim Levitsky
 

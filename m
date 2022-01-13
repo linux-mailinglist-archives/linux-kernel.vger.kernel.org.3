@@ -2,216 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC4C48D03B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 02:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C4F48D03F
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 02:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbiAMBnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 20:43:37 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16707 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbiAMBnf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 20:43:35 -0500
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JZ6Ym18hCzZfBq;
-        Thu, 13 Jan 2022 09:39:56 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 13 Jan 2022 09:43:33 +0800
-Received: from [10.67.102.185] (10.67.102.185) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 13 Jan 2022 09:43:32 +0800
-Subject: Re: [PATCH v5] arm64: kprobe: Enable OPTPROBE for arm64
-To:     Jianhua Liu <jianhua.ljh@gmail.com>
-CC:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Linuxarm <linuxarm@huawei.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>, <robin.murphy@arm.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20211207124002.59877-1-liuqi115@huawei.com>
- <20211213183851.GD12405@willie-the-truck>
- <20211214092657.5b9c26b4e3852602eced4fda@kernel.org>
- <CAAgTQPUKqFn9_ENKbfJkFjT3v9L2NiFAY2xvULEj_6wguqWYNg@mail.gmail.com>
- <f4552c3e-8f1a-bef1-9396-39aa2405b486@huawei.com>
- <CAAgTQPWAK==cYPKeYNGE7nPGh0Y7Py4TcUoMPz76h15YNBNsLQ@mail.gmail.com>
- <CAAgTQPWomoiGdVJxwYBmXOj7RegHM4TSa2+yKVTQFhBFg8PtLg@mail.gmail.com>
- <20220104113559.7dd1ff2cb575f62e0b01fb47@kernel.org>
- <dbcbc161-228d-ee78-e1f0-b59ad9b0a36f@huawei.com>
- <CAAgTQPUEgSf-E_GOUNY_=4Piiy0K_-5U_YVbnoMAZ94Q3ducOg@mail.gmail.com>
-From:   "liuqi (BA)" <liuqi115@huawei.com>
-Message-ID: <dad6f2e1-732f-4456-a77c-ea937082c87f@huawei.com>
-Date:   Thu, 13 Jan 2022 09:43:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S231463AbiAMBtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 20:49:32 -0500
+Received: from mga05.intel.com ([192.55.52.43]:9581 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231452AbiAMBta (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 12 Jan 2022 20:49:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642038570; x=1673574570;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IGcBXmDavEDF4tJbBG6LgESiku0mGLX28XESGtQ8168=;
+  b=kPmWbtH1ZfcXoJd+djTF5pjXFdiFdhmmvVtqWCO3SKu+C1w+HqyZaS2G
+   fDp4cBdDldE7sYQWscyEfZQeGk+2/XVnNNErxLYeYxLdSa6HXpUk6KMfi
+   83n6/nihZeihjKMILP+BniCaJqppD3/UajDy+XCksgQzWEJkUfSAbjNQD
+   UuW2LzQEpjAsEZ+Inu4caG3Y849M9PEPPJkewbwyCCghO6tc4M5lcX3AW
+   PvonNNHKTukepmqnNNELBkLwy3f6YgbQuE4t0QcjnYlxeiXe4hGoxXiUs
+   F3KAQ+6sAv1C9ta+LHcDYdmF/XWPfZa5Hj74MYJ2HJMosXdPr7dqMYY9t
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="330253500"
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="330253500"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 17:49:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="593201335"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Jan 2022 17:49:28 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n7pF1-0006hE-Be; Thu, 13 Jan 2022 01:49:27 +0000
+Date:   Thu, 13 Jan 2022 09:49:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Wang Jianchao <jianchao.wan9@gmail.com>, axboe@kernel.dk
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, jbacik@fb.com,
+        tj@kernel.org, bvanassche@acm.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/13] blk: make blk-rq-qos support pluggable and modular
+ policy
+Message-ID: <202201130903.7ZvBIOs4-lkp@intel.com>
+References: <20220110091046.17010-2-jianchao.wan9@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAAgTQPUEgSf-E_GOUNY_=4Piiy0K_-5U_YVbnoMAZ94Q3ducOg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.185]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110091046.17010-2-jianchao.wan9@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Wang,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on tj-cgroup/for-next]
+[also build test WARNING on v5.16]
+[cannot apply to axboe-block/for-next next-20220112]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Wang-Jianchao/blk-make-blk-rq-qos-policies-pluggable-and-modular/20220110-171347
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-next
+config: arm-randconfig-r006-20220112 (https://download.01.org/0day-ci/archive/20220113/202201130903.7ZvBIOs4-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 244dd2913a43a200f5a6544d424cdc37b771028b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/8bef9fba59d8d47ecaebbeff3e62ee550d89b017
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Wang-Jianchao/blk-make-blk-rq-qos-policies-pluggable-and-modular/20220110-171347
+        git checkout 8bef9fba59d8d47ecaebbeff3e62ee550d89b017
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   block/blk-iocost.c:1244:6: warning: variable 'last_period' set but not used [-Wunused-but-set-variable]
+           u64 last_period, cur_period;
+               ^
+>> block/blk-iocost.c:3348:7: warning: variable 'ioc' is uninitialized when used here [-Wuninitialized]
+           if (!ioc) {
+                ^~~
+   block/blk-iocost.c:3337:17: note: initialize the variable 'ioc' to silence this warning
+           struct ioc *ioc;
+                          ^
+                           = NULL
+   2 warnings generated.
 
 
-On 2022/1/12 20:21, Jianhua Liu wrote:
-> On Wed, Jan 12, 2022 at 9:31 AM liuqi (BA) <liuqi115@huawei.com> wrote:
->>
->>
->>
->> On 2022/1/4 10:35, Masami Hiramatsu wrote:
->>> Hi Jianhua,
->>>
->>> On Mon, 3 Jan 2022 17:03:33 +0800
->>> Jianhua Liu <jianhua.ljh@gmail.com> wrote:
->>>
->>>> Hi Qi,
->>>> I have tested your patch on UNISOC s9863a.
->>>> Test case "kprobe_example & kretprobe_example" is OK.
->>>>
->>>> Two point:
->>>> 1. backtrace is not perfect.
->>>>      optprobe_common does not saved frame pointer,
->>>>      backtrace lacks two calls.
->>>> such as for dup_mm: lack copy_process-->dup_mm
->>>> dup_mm backtrace from your patch:
->>>> [  832.387066] CPU: 0 PID: 296 Comm: sh Not tainted 5.16.0-rc5+ #8
->>>> [  832.387078] Hardware name: Spreadtrum SP9863A-1H10 Board (DT)
->>>> [  832.387083] Call trace:
->>>> [  832.387086]  dump_backtrace+0x0/0x1e0
->>>> [  832.387103]  show_stack+0x24/0x30
->>>> [  832.387112]  dump_stack_lvl+0x68/0x84
->>>> [  832.387123]  dump_stack+0x18/0x34
->>>> [  832.387131]  handler_pre+0x40/0x50 [kprobe_example]
->>>> [  832.387143]  opt_pre_handler+0x84/0xc0
->>>> [  832.387154]  optprobe_optimized_callback+0xec/0x164
->>>> [  832.387164]  optprobe_common+0x70/0xc4
->>>> [  832.387173]  kernel_clone+0x98/0x440
->>>> [  832.387182]  __do_sys_clone+0x54/0x80
->>>> [  832.387191]  __arm64_sys_clone+0x2c/0x40
->>>> [  832.387199]  invoke_syscall+0x50/0x120
->>>> [  832.387208]  el0_svc_common.constprop.0+0x4c/0xf4
->>>> [  832.387217]  do_el0_svc+0x30/0x9c
->>>> [  832.387225]  el0_svc+0x20/0x60
->>>> [  832.387235]  el0t_64_sync_handler+0xe8/0xf0
->>>> [  832.387242]  el0t_64_sync+0x1a0/0x1a4
->>>>
->>>>
->>>> dup_mm backtrace from other:
->>>> [  173.352294] CPU: 6 PID: 309 Comm: sh Not tainted 5.16.0-rc5+ #19
->>>> [  173.352301] Hardware name: Spreadtrum SP9863A-1H10 Board (DT)
->>>> [  173.352304] Call trace:
->>>> [  173.352307]  dump_backtrace+0x0/0x1d4
->>>> [  173.352319]  show_stack+0x18/0x24
->>>> [  173.352326]  dump_stack_lvl+0x68/0x84
->>>> [  173.352333]  dump_stack+0x18/0x34
->>>> [  173.352338]  handler_pre+0x38/0x48 [kprobe_example]
->>>> [  173.352347]  opt_pre_handler+0x74/0xb0
->>>> [  173.352354]  optimized_callback+0x108/0x130
->>>> [  173.352361]  optinsn_slot+0x258/0x1000
->>>> [  173.352366]  dup_mm+0x4/0x4b0
->>>> [  173.352373]  copy_process+0x1284/0x1360
->>>> [  173.352378]  kernel_clone+0x5c/0x3c0
->>>> [  173.352384]  __do_sys_clone+0x54/0x80
->>>> [  173.352390]  __arm64_sys_clone+0x24/0x30
->>>> [  173.352396]  invoke_syscall+0x48/0x114
->>>> [  173.352402]  el0_svc_common.constprop.0+0x44/0xec
->>>> [  173.352408]  do_el0_svc+0x24/0x90
->>>> [  173.352413]  el0_svc+0x20/0x60
->>>> [  173.352420]  el0t_64_sync_handler+0xe8/0xf0
->>>> [  173.352427]  el0t_64_sync+0x1a0/0x1a4
->>>
->>
->> Hi Masami and Jianhua,
->>
->> optprobe_common() is added to minize size of code in trampoline, but
->> each trampoline is alloced as PAGE_SIZE, so optprobe_common() seems
->> unnecessary, and will make optprobe_trampoline.S much more complicated.
->> How about drop optprobe_common() and use a maro to reduce duplicate code .
->>
-> 1. each trampoline is allocated as
-> (MAX_OPTINSN_SIZE*sizeof(kprobe_opcode_t)), not PAGE_SIZE
-> 2. MAX_OPTINSN_SIZE should be "((unsigned long)(optprobe_template_end
-> - optprobe_template_entry)),
->     your MAX_OPTINSN_SIZE  is not accurate.
-> 
+vim +/ioc +3348 block/blk-iocost.c
 
-Hi Jianhua,
+7caa47151ab2e64 Tejun Heo         2019-08-28  3331  
+7caa47151ab2e64 Tejun Heo         2019-08-28  3332  static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
+7caa47151ab2e64 Tejun Heo         2019-08-28  3333  				    size_t nbytes, loff_t off)
+7caa47151ab2e64 Tejun Heo         2019-08-28  3334  {
+22ae8ce8b89241c Christoph Hellwig 2020-11-26  3335  	struct block_device *bdev;
+8bef9fba59d8d47 Wang Jianchao     2022-01-10  3336  	struct rq_qos *rqos;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3337  	struct ioc *ioc;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3338  	u64 u[NR_I_LCOEFS];
+7caa47151ab2e64 Tejun Heo         2019-08-28  3339  	bool user;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3340  	char *p;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3341  	int ret;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3342  
+22ae8ce8b89241c Christoph Hellwig 2020-11-26  3343  	bdev = blkcg_conf_open_bdev(&input);
+22ae8ce8b89241c Christoph Hellwig 2020-11-26  3344  	if (IS_ERR(bdev))
+22ae8ce8b89241c Christoph Hellwig 2020-11-26  3345  		return PTR_ERR(bdev);
+7caa47151ab2e64 Tejun Heo         2019-08-28  3346  
+8bef9fba59d8d47 Wang Jianchao     2022-01-10  3347  	rqos = rq_qos_get(bdev_get_queue(bdev), RQ_QOS_COST);
+7caa47151ab2e64 Tejun Heo         2019-08-28 @3348  	if (!ioc) {
+ed6cddefdfd361a Pavel Begunkov    2021-10-14  3349  		ret = blk_iocost_init(bdev_get_queue(bdev));
+7caa47151ab2e64 Tejun Heo         2019-08-28  3350  		if (ret)
+7caa47151ab2e64 Tejun Heo         2019-08-28  3351  			goto err;
+8bef9fba59d8d47 Wang Jianchao     2022-01-10  3352  		rqos = rq_qos_get(bdev_get_queue(bdev), RQ_QOS_COST);
+7caa47151ab2e64 Tejun Heo         2019-08-28  3353  	}
+7caa47151ab2e64 Tejun Heo         2019-08-28  3354  
+8bef9fba59d8d47 Wang Jianchao     2022-01-10  3355  	ioc = rqos_to_ioc(rqos);
+7caa47151ab2e64 Tejun Heo         2019-08-28  3356  	spin_lock_irq(&ioc->lock);
+7caa47151ab2e64 Tejun Heo         2019-08-28  3357  	memcpy(u, ioc->params.i_lcoefs, sizeof(u));
+7caa47151ab2e64 Tejun Heo         2019-08-28  3358  	user = ioc->user_cost_model;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3359  	spin_unlock_irq(&ioc->lock);
+7caa47151ab2e64 Tejun Heo         2019-08-28  3360  
+7caa47151ab2e64 Tejun Heo         2019-08-28  3361  	while ((p = strsep(&input, " \t\n"))) {
+7caa47151ab2e64 Tejun Heo         2019-08-28  3362  		substring_t args[MAX_OPT_ARGS];
+7caa47151ab2e64 Tejun Heo         2019-08-28  3363  		char buf[32];
+7caa47151ab2e64 Tejun Heo         2019-08-28  3364  		int tok;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3365  		u64 v;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3366  
+7caa47151ab2e64 Tejun Heo         2019-08-28  3367  		if (!*p)
+7caa47151ab2e64 Tejun Heo         2019-08-28  3368  			continue;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3369  
+7caa47151ab2e64 Tejun Heo         2019-08-28  3370  		switch (match_token(p, cost_ctrl_tokens, args)) {
+7caa47151ab2e64 Tejun Heo         2019-08-28  3371  		case COST_CTRL:
+7caa47151ab2e64 Tejun Heo         2019-08-28  3372  			match_strlcpy(buf, &args[0], sizeof(buf));
+7caa47151ab2e64 Tejun Heo         2019-08-28  3373  			if (!strcmp(buf, "auto"))
+7caa47151ab2e64 Tejun Heo         2019-08-28  3374  				user = false;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3375  			else if (!strcmp(buf, "user"))
+7caa47151ab2e64 Tejun Heo         2019-08-28  3376  				user = true;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3377  			else
+7caa47151ab2e64 Tejun Heo         2019-08-28  3378  				goto einval;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3379  			continue;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3380  		case COST_MODEL:
+7caa47151ab2e64 Tejun Heo         2019-08-28  3381  			match_strlcpy(buf, &args[0], sizeof(buf));
+7caa47151ab2e64 Tejun Heo         2019-08-28  3382  			if (strcmp(buf, "linear"))
+7caa47151ab2e64 Tejun Heo         2019-08-28  3383  				goto einval;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3384  			continue;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3385  		}
+7caa47151ab2e64 Tejun Heo         2019-08-28  3386  
+7caa47151ab2e64 Tejun Heo         2019-08-28  3387  		tok = match_token(p, i_lcoef_tokens, args);
+7caa47151ab2e64 Tejun Heo         2019-08-28  3388  		if (tok == NR_I_LCOEFS)
+7caa47151ab2e64 Tejun Heo         2019-08-28  3389  			goto einval;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3390  		if (match_u64(&args[0], &v))
+7caa47151ab2e64 Tejun Heo         2019-08-28  3391  			goto einval;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3392  		u[tok] = v;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3393  		user = true;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3394  	}
+7caa47151ab2e64 Tejun Heo         2019-08-28  3395  
+7caa47151ab2e64 Tejun Heo         2019-08-28  3396  	spin_lock_irq(&ioc->lock);
+7caa47151ab2e64 Tejun Heo         2019-08-28  3397  	if (user) {
+7caa47151ab2e64 Tejun Heo         2019-08-28  3398  		memcpy(ioc->params.i_lcoefs, u, sizeof(u));
+7caa47151ab2e64 Tejun Heo         2019-08-28  3399  		ioc->user_cost_model = true;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3400  	} else {
+7caa47151ab2e64 Tejun Heo         2019-08-28  3401  		ioc->user_cost_model = false;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3402  	}
+7caa47151ab2e64 Tejun Heo         2019-08-28  3403  	ioc_refresh_params(ioc, true);
+7caa47151ab2e64 Tejun Heo         2019-08-28  3404  	spin_unlock_irq(&ioc->lock);
+7caa47151ab2e64 Tejun Heo         2019-08-28  3405  
+8bef9fba59d8d47 Wang Jianchao     2022-01-10  3406  	rq_qos_put(rqos);
+22ae8ce8b89241c Christoph Hellwig 2020-11-26  3407  	blkdev_put_no_open(bdev);
+7caa47151ab2e64 Tejun Heo         2019-08-28  3408  	return nbytes;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3409  
+7caa47151ab2e64 Tejun Heo         2019-08-28  3410  einval:
+7caa47151ab2e64 Tejun Heo         2019-08-28  3411  	ret = -EINVAL;
+8bef9fba59d8d47 Wang Jianchao     2022-01-10  3412  	rq_qos_put(rqos);
+7caa47151ab2e64 Tejun Heo         2019-08-28  3413  err:
+22ae8ce8b89241c Christoph Hellwig 2020-11-26  3414  	blkdev_put_no_open(bdev);
+7caa47151ab2e64 Tejun Heo         2019-08-28  3415  	return ret;
+7caa47151ab2e64 Tejun Heo         2019-08-28  3416  }
+7caa47151ab2e64 Tejun Heo         2019-08-28  3417  
 
-Maybe I didn't express myself exactly, I mean that we use 
-alloc_optinsn_page() to alloc PAGE_SIZE for each slot, and each time we 
-copy instructions from a trampoline (which size of MAX_OPTINSN_SIZE) to 
-slot.
-
-So does the size of trampoline matters a lot? I mean I'm not sure 
-minimize the size of trampoline by adding optprobe_common() could save 
-memory...
-
-> 3.optprobe_template_val in different kprobe may not be aligned with 8 byte.
->     ldr instruction for this value, may use address that not aligned 8 byte.
->     "ldr x0, 1f
->     .global optprobe_template_common"
-
-uh I misunderstood. not sure I've missed something.Does 
-optprobe_template_val aligned with 8 byte or not influence optprobe? We 
-just load this address to X0 and use it as a input parameter.
-
-Thanks,
-Qi
-> 
-> Thanks,
-> Jianhua
->> Thanks,
->> Qi
->>> Is the second one with your patch?
->>>
->>>>
->>>> 2. The reserve memory "OPT_SLOT_SIZE - PAGE_SIZE"  is waste.
->>>>      kernel/kprobe.c used only one PAGE_SIZE slot memory.
->>>
->>> Good catch!
->>> Qi, can you make an array (or bit map) of usage flags and
->>> manage the reserved memory?
->>>
->>> #define OPT_INSN_PAGES (OPT_SLOT_SIZE/PAGE_SIZE)
->>> static bool insn_page_in_use[OPT_INSN_PAGES];
->>>
->>> void *alloc_optinsn_page(void)
->>> {
->>>        int i;
->>>
->>>        for (i = 0; i < OPT_INSN_PAGES; i++)
->>>                if (!insn_page_in_use[i])
->>>                        goto found;
->>>        return NULL;
->>> found:
->>>        insn_page_in_use[i] = true;
->>>        return (void *)((unsigned long)optinsn_slot + PAGE_SIZE * i);
->>> }
->>>
->>> void free_optinsn_page(void *page)
->>> {
->>>        unsigned long idx = (unsigned long)page - (unsigned long)optinsn_slot;
->>>
->>>        WARN_ONCE(idx & (PAGE_SIZE - 1));
->>>        idx >>= PAGE_SHIFT;
->>>        if (WARN_ONCE(idx >= OPT_INSN_PAGES))
->>>                return;
->>>        insn_page_in_use[idx] = false;
->>> }
->>>
->>> Thank you,
->>>
->>>
->>>
->>>
-> .
-> 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

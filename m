@@ -2,90 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D59D48D5A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1866D48D5AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbiAMK0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:26:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        id S229688AbiAMK17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:27:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiAMK03 (ORCPT
+        with ESMTP id S229533AbiAMK14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:26:29 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C09C06173F;
-        Thu, 13 Jan 2022 02:26:28 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id c71so21289043edf.6;
-        Thu, 13 Jan 2022 02:26:28 -0800 (PST)
+        Thu, 13 Jan 2022 05:27:56 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1583BC061748
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:27:56 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id o6so21352624edc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:27:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=DwMuqUmXYlR2GaYYSfQP01V+oZIjMgFSYkUX0ZCqdlM=;
-        b=OV8Mez2AjciehpAOr00nyvDb4Q4GWJH2Ts7Ke7IpoKHUijGliUUjnTjNNs3sznvO3i
-         IEnr+UkfjcXKUUSWehRlZm5+vUnZ74FX+afKc36lgor+2sFsj/sWKAGvOQceN0y7mBoV
-         Vsl1hIYZdKyHF2fRAQH/UhWrhBMQLRwfgVfvfDtqdmTLMRGir9Hi+k38re6pg8/rFQJo
-         i9/jjTf00X0l8tfHC4diKbexx0dV04XqqFAhjfbJBIrs/yD7LkDLN9wUEiU6KVxlxfjU
-         4iCeb5OhLxHSVT/+ZdWwdoFrpPblkf1nwFEaTeqPq9iTG1WFR+tRGJsyxNJ/7jaRph0r
-         lI0g==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ew4uKUNam8kJO5439QWHJkc6LyiFyd+nrUpEzZPoFAU=;
+        b=YMVg152aDvsUA5jMW9ANbVaRYdw9xsgt4shC2uDV2+B0kRcooMDvq+P4AmdjurudAv
+         YBFZPL1XfVxd2THmP1uFUA0+wROIe+gq7gviKWRkKtcG13mAM3FBNvNnAF4xS74MWG96
+         LLe338A4aFxeUPYY6isr+ggMZPYdAXFF1/GglXVFrBxr2I+I2MA5Q4lCigRUhkxUIqvQ
+         8M083oLrQkI97tKDrK0xI0E/v8IIaMrCoiZP15jDBvZbOj5X6H7d1adG/KvNMwlBDBhw
+         PL5IVR2xZs5t7eORUhnDYyT6cw2FjqG2amwUhuPYyErJRYgZNGL8mQ0K7Atn4i+MzO95
+         Aafg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=DwMuqUmXYlR2GaYYSfQP01V+oZIjMgFSYkUX0ZCqdlM=;
-        b=BOBiHb3gy0keUF6LiygNa+jCsmm8MXSNZEjT4odLDEWJ6QoT0Tu9l8NQek6fzlpO4C
-         gNi9p18nEwVmnQemeYgOrfVZTm14/1tTeAJ7sG7dSSBmofQe5C9R6o07Hqe+cov/MPIQ
-         55x16ochZUkObcS0ZnN2ls4mgQMX9qVizwtBzyLnzx4flq0OIQ76P6yrMFRUVd1HALR0
-         u2+Hq6TXGw3EbAu0LcX4k1fDpqcQHc/fIH+6YQB5DeFLtmoZY2VJv1PuWlZd2KtspQ6A
-         onwcChIYbXxWWuW8IRxai+GgN1YSWXzIZcG1eBmeYYhv5KOVzIf2PGSKueOAbxAP9jwa
-         DKgw==
-X-Gm-Message-State: AOAM531O+2wvTw493jdufEakjYjU7kpiFEVDkNYEDsayA7gDR4/6oN5E
-        +vdVXX4z1t0Oetj/DGAB8a4gGvzdNwiRggoCvHE=
-X-Google-Smtp-Source: ABdhPJxbt7fzvkaekB8W9YzBhSXsfm5NiDkJE4l52p3nVzrO7bDC8JCiFe3oxPctIGwhHWWRl1pm8lS/0WfOu/iWVhY=
-X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr2970333ejc.497.1642069587473;
- Thu, 13 Jan 2022 02:26:27 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ew4uKUNam8kJO5439QWHJkc6LyiFyd+nrUpEzZPoFAU=;
+        b=JMH9g+NSHX7a1zQue8K39uHYBM/O/FQB2WrZFqWkUx0TpNMQLXcII6WG/QgdDPbC0p
+         xKo4NqYefKsdaUmfBvoXSAbDSVE2+99kzzpISWyD+SxLMFi0A2+xtYMRrVKNgfq6w6gO
+         ot60yplnl5voxIyB7DyHk+4KWB0+Sr2gnhnVM34SwgsTDL4W5rKope7m3+i2DEkTgqEE
+         ehPM6biJSbctWO5dqCo6L96469Vl99xpHgLfvYAqtPcCLM5uFgA2qwO+edOv/AMBBsKf
+         QPFm8rM/SBUoOrRl7dhnDqa8CRSHgEBvKXKxXvuOETPYZHT1u+vTXWIgkndZ1TPqHK0C
+         dMjw==
+X-Gm-Message-State: AOAM530vQgvoGgC6hh2p+Sp+dDQ2uOJzYg60zo0QB2Gz4EhAgXFh0xK6
+        5D6wU92aHsudolrdnCqPLBf4Kg==
+X-Google-Smtp-Source: ABdhPJyPWTZtV91PFW9Cdo+2mJExh4qrBWd9u1cf4eCMhGrOMHYRaDJhZ4hq9tQAqeerG5TmZKKfXA==
+X-Received: by 2002:a05:6402:68b:: with SMTP id f11mr3590479edy.121.1642069674677;
+        Thu, 13 Jan 2022 02:27:54 -0800 (PST)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id f13sm728072ejf.53.2022.01.13.02.27.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 02:27:54 -0800 (PST)
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     robh+dt@kernel.org, narmstrong@baylibre.com, khilman@baylibre.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH] arm64: dts: amlogic: meson-s4-aq222: fix waring for leading 0s
+Date:   Thu, 13 Jan 2022 11:27:46 +0100
+Message-Id: <20220113102746.598763-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <33a0cd08-a336-34b3-d36c-f827b8054e9e@amd.com> <c28ab909-99b4-b43c-e330-b07e35afb981@amd.com>
- <ebee1239-4ed4-8c68-54e0-f684cea71e93@roeck-us.net> <YdoG+en5Z/MaS/wu@ninjato>
- <CAHp75VfC2XsF2j=obXu7RLNZkKSsZ20eOH2-UMA9AoMAemKa9Q@mail.gmail.com>
- <Yd16cw0AaYcf7eSf@kunai> <811d6ec7-7eac-dfd3-5927-4adcc2251fab@amd.com>
- <CAHp75Vfv9kgxu5u1YfjEuRmwj=jSybmZ92bpt30jB8MX4LFHaQ@mail.gmail.com>
- <CAHp75Vf3G1ftL6VrCchCTC7UbEyWD65wdjRjYOwxY9ONxZ=DCQ@mail.gmail.com>
- <74eb7c8f-7072-495a-fc26-b60bf0a1f51a@amd.com> <Yd/X6DlWjACLODe2@ninjato>
-In-Reply-To: <Yd/X6DlWjACLODe2@ninjato>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 13 Jan 2022 12:24:41 +0200
-Message-ID: <CAHp75VeR4sL1URhf+Vj6_fUjw3wgG98nZd8Mu20NzH1zM590SQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: piix4: Replace piix4_smbus driver's cd6h/cd7h port
- io accesses with mmio accesses
-To:     Wolfram Sang <wsa@kernel.org>, Terry Bowman <Terry.Bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.de>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Robert Richter <rrichter@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 9:42 AM Wolfram Sang <wsa@kernel.org> wrote:
->
->
-> > > On top of that I'm wondering why slow I/O is used? Do we have anything
-> > > that really needs that or is it simply a cargo-cult?
-> >
-> > The efch SMBUS & WDT previously only supported a port I/O interface
-> > (until recently) and thus dictated the HW access method.
->
-> Is this enough information to start v2 of this series? Or does the
-> approach need more discussion?
+When building allmodconfig the following waring shows up:
 
-I dunno why slow I/O is chosen, but it only affects design (read:
-ugliness) of the new code.
+arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts:21.18-24.4: Warning (unit_address_format): /memory@00000000: unit name should not have leading 0s
 
+Fixing the waring by dropping all the '0' except one.
+
+Fixes: 1c1475389af0 ("arm64: dts: add support for S4 based Amlogic AQ222")
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts b/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
+index a942d7e06d6e..8ffbcb2b1ac5 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
+@@ -18,7 +18,7 @@ aliases {
+ 		serial0 = &uart_B;
+ 	};
+ 
+-	memory@00000000 {
++	memory@0 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x0 0x0 0x40000000>;
+ 	};
 -- 
-With Best Regards,
-Andy Shevchenko
+2.34.1
+

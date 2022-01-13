@@ -2,150 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E52DF48D7D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B4448D747
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234910AbiAMMZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:25:57 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:59734 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234790AbiAMMZH (ORCPT
+        id S234400AbiAMMNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:13:49 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:33721 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230310AbiAMMNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:25:07 -0500
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220113122506epoutp048983460b078217b193f96a3729e52bad~J1BB2XMVu2753527535epoutp04B
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:25:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220113122506epoutp048983460b078217b193f96a3729e52bad~J1BB2XMVu2753527535epoutp04B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642076706;
-        bh=K8vTbIvFIBqHtyyqH6gBJua5O8SlNOOefAJIAr14Cl8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qHNBy2aKz0QjFpiYdBn3z76ataNtd5dBWQbkKH8wnTW5I74A5vNhfqsOALjjb0LDC
-         btar4iYmPSrOtzQtuHNdQI16jE8CTk3Jftm41Qvso9hQMy4s9O4TXcR/r/e15WMrQR
-         r808U/IIrf1Xz9PpW/BDgDaz1VJFdwirL5yqwbQ8=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220113122505epcas5p1c815dc2d2ae118cae897ce96e82e58b7~J1BBNhJCe2652426524epcas5p1g;
-        Thu, 13 Jan 2022 12:25:05 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.178]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4JZNt65JQYz4x9Pp; Thu, 13 Jan
-        2022 12:25:02 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8F.D6.06423.E1A10E16; Thu, 13 Jan 2022 21:25:02 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220113122502epcas5p37747b0c5c242c0571d294b9245963a1c~J1A94d_951006210062epcas5p3p;
-        Thu, 13 Jan 2022 12:25:02 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220113122502epsmtrp28d725e966cfd99cee4a4c476022a6bf5~J1A95ADUY3235332353epsmtrp2d;
-        Thu, 13 Jan 2022 12:25:02 +0000 (GMT)
-X-AuditID: b6c32a49-b01ff70000001917-3d-61e01a1ee6cf
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C2.B8.29871.D1A10E16; Thu, 13 Jan 2022 21:25:01 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.108.73.139]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220113122459epsmtip2e5b4002f52af13c0bc060d4cb53c7683~J1A7RzPuN1246812468epsmtip2J;
-        Thu, 13 Jan 2022 12:24:59 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        s.nawrocki@samsung.com, linux-samsung-soc@vger.kernel.org,
-        pankaj.dubey@samsung.com, Aswani Reddy <aswani.reddy@samsung.com>,
-        linux-fsd@tesla.com, Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH 23/23] clocksource: exynos_mct: Add support for handling
- three clusters
-Date:   Thu, 13 Jan 2022 17:41:43 +0530
-Message-Id: <20220113121143.22280-24-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220113121143.22280-1-alim.akhtar@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAJsWRmVeSWpSXmKPExsWy7bCmlq6c1INEg/VfRCwezNvGZnFo81Z2
-        i/fLehgt5h85x2qx8e0PJospf5YzWWx6fI3V4mPPPVaLh6/CLS7vmsNmMeP8PiaLU9c/s1ks
-        2vqF3aJ17xF2i8Nv2lktHl//w+Yg4LFm3hpGj1kNvWwem1Z1snncubaHzWPzknqPKyeaWD36
-        tqxi9PjXNJfd4/MmuQDOqGybjNTElNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWFvMTc
-        VFslF58AXbfMHKAvlBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkFJgV6xYm5xaV5
-        6Xp5qSVWhgYGRqZAhQnZGTeXv2cqeMJeseXdDtYGxn1sXYycHBICJhK7p/eygthCArsZJT7N
-        re5i5AKyPzFKtK34ygzhfGOU+DF9GSNMx7PDG9khEnsZJe6+7IFyWpgkVrW3soBUsQloS9yd
-        voUJxBYRcJO40djBBFLELNDOLHFnwl4gh4NDWCBS4tgqc5AaFgFViUu7v4HdwStgK/Fx2SGo
-        bfISqzccYAYp5wSK312VBzJGQmAph8Sir5dZIWpcJM5s3swCYQtLvDq+hR3ClpL4/G4vG0iv
-        hEC2RM8uY4hwjcTSecegyu0lDlyZwwJSwiygKbF+lz5ImFmAT6L39xMmiE5eiY42IYhqVYnm
-        d1ehOqUlJnZ3Qx3gITGpYys0FCYwShw+e419AqPsLISpCxgZVzFKphYU56anFpsWGOallsOj
-        KTk/dxMjOGlqee5gvPvgg94hRiYOxkOMEhzMSiK8/UX3E4V4UxIrq1KL8uOLSnNSiw8xmgJD
-        bCKzlGhyPjBt55XEG5pYGpiYmZmZWBqbGSqJ855O35AoJJCeWJKanZpakFoE08fEwSnVwNSv
-        NeNB7xGtNb7FB1o3Tvt7YPPEVVFNN6b3HGBTWc6437VJTGWmMjPvC8aNSuFLyh7siAyxzpNI
-        6MwX/3S+w3+zv8GKxPlxNb/38Mr9Y+Xx2SfI8OxH3NrMvhmdrw9X5hycHPlXnuEOR4tfZaT5
-        x45VJrnZ55/ZPLOZwhInxmTEIece9Mpb4FbcFm+dOeuYeHZqGSZqhdotrGMKyZzje9hn6cGL
-        eY/0WPa/3ZLyJVRq62GTLIZzj/5zznp5vo3zuRbrnAdtfiVv1x5iyUv6osnRFtaq7SQZ7bm5
-        6r/omtWzzBLS7LJeZ8qaBu2/tKBMdEdRX9VDWbfX226fk33m9yElUWrada438+sKFzRzKbEU
-        ZyQaajEXFScCAPi3N+0jBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrCLMWRmVeSWpSXmKPExsWy7bCSvK6s1INEg32zVC0ezNvGZnFo81Z2
-        i/fLehgt5h85x2qx8e0PJospf5YzWWx6fI3V4mPPPVaLh6/CLS7vmsNmMeP8PiaLU9c/s1ks
-        2vqF3aJ17xF2i8Nv2lktHl//w+Yg4LFm3hpGj1kNvWwem1Z1snncubaHzWPzknqPKyeaWD36
-        tqxi9PjXNJfd4/MmuQDOKC6blNSczLLUIn27BK6Mm8vfMxU8Ya/Y8m4HawPjPrYuRk4OCQET
-        iWeHN7J3MXJxCAnsZpR4cfAfVEJa4vrGCewQtrDEyn/PwWwhgSYmia+7TEBsNgFtibvTtzCB
-        2CICHhJt/+4xgwxiFpjOLHFg2zeWLkYODmGBcIn9fZ4gNSwCqhKXdn9jBbF5BWwlPi47xAgx
-        X15i9YYDzCDlnEDxu6vyIFbZSJx7tZ5tAiPfAkaGVYySqQXFuem5xYYFhnmp5XrFibnFpXnp
-        esn5uZsYwQGvpbmDcfuqD3qHGJk4GA8xSnAwK4nw9hfdTxTiTUmsrEotyo8vKs1JLT7EKM3B
-        oiTOe6HrZLyQQHpiSWp2ampBahFMlomDU6qBKVtCMUj4/q1jm4O6V9st4F3CH1lg3CARo/FO
-        Jy013OjaW8fFFftlHos+u5bFsHSDFFdfnG3U3s7FvK3T0n+7nzSMuBWspW77sXu+/7LLU36L
-        Hk566KD5beua4FVfBJJ/CkvFS3IY3WEIanbeJ/Poh9PZvO//2q8v2cFpsqE/yv5U7I2mvnmW
-        Z0Kskq5Es6eFm8yblnWa50Lb96abbE/abh1JfX/5lZF77ZXeQxskgpMlg91P/apP6hafL/++
-        8/n0J1krjz/ZqGi8SLZUXH/67Ls2zyz37b+yzGAOv9viWX71nOdXRz4ra/KSramsnXFiy1TG
-        WVb68yNLuW559Xoz+t7/HDNxO9OUlcopfUttlFiKMxINtZiLihMBC8F3kOcCAAA=
-X-CMS-MailID: 20220113122502epcas5p37747b0c5c242c0571d294b9245963a1c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220113122502epcas5p37747b0c5c242c0571d294b9245963a1c
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
-        <CGME20220113122502epcas5p37747b0c5c242c0571d294b9245963a1c@epcas5p3.samsung.com>
+        Thu, 13 Jan 2022 07:13:49 -0500
+Received: from [192.168.100.1] ([82.142.23.158]) by mrelayeu.kundenserver.de
+ (mreue109 [213.165.67.119]) with ESMTPSA (Nemesis) id
+ 1MC2sF-1n2nNI1SaD-00CNUR; Thu, 13 Jan 2022 13:13:25 +0100
+Message-ID: <9683b9b7-22f8-dd59-b8f5-3294002c9dda@vivier.eu>
+Date:   Thu, 13 Jan 2022 13:13:23 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v5 3/3] m68k: virt: Remove LEGACY_TIMER_TICK
+Content-Language: fr
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <20220113103559.2577216-1-laurent@vivier.eu>
+ <20220113103559.2577216-4-laurent@vivier.eu>
+ <CAK8P3a2_cJi9+SNi9gK6+5kpBo4wmVw4hz42Bq_jm1+s6AvENQ@mail.gmail.com>
+ <8c0b3146-35ee-b0b2-468b-1c8dcdaf64ee@vivier.eu>
+ <CAK8P3a0GYm=Q5aPJuJJ7JoBQw4+QokgkMKv_D+YgYfzPODRYSQ@mail.gmail.com>
+From:   Laurent Vivier <laurent@vivier.eu>
+In-Reply-To: <CAK8P3a0GYm=Q5aPJuJJ7JoBQw4+QokgkMKv_D+YgYfzPODRYSQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:gWqV6o1Xyy0Ag042sc9wQK/RLfj3E36EMp30cmMNVBJDeNyGU85
+ aIJZuFvosWUhWyoOHmiJVEmNFtvR2r4JlxxaS64tkuL1pMffKw4tQaXesW5U/Ypz58LBkRC
+ woKxw5weVLe0WEStN/VmUsaylE5iJvr3YHYa5RAFraushdwNs8RgyauJgAORVVC508THUMs
+ cx5PSs31Fkqt0BxyPdZIw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cXQBwq5M7Nk=:WsbMwMa4YHlmaMQW7gqTjY
+ /6V6FHG+p1TnGszo/P+hbJKzT6c9PGf1XOdhhZZpNsltdMC9wGJ4q893loHS2Qwt+MH6aV9XS
+ uX8ZtyahyOvvolvuZAKhY/jRaNouL0zy8whiwQRJ3DD+oqhzCnEn3uqwtk3w1yyxYQSquPA3R
+ zeYO+4OYfFgp/KyO90HrAKn9HwNG8hXRz8l6vm8l5qHm0URidZjhO4oNrYNyyUW9e7VRrhOXd
+ wNXG/tFGxDkova74hHTJEitFgCOEDIj/5ssIafBJ1w0n93dCjaZB9LPexcrTlh1kTNgjRgN6v
+ 19yRMQ9lnzSCHGk7wPWSWMZOD0YsVmiN5JICJweY1rekQdDQIdgHm1ml7tusOEj9OsRaMYm1l
+ Ny1r+AbM/0GifVSlltA267F7us2TcFCTC7GCUPgghkFQ9dvRJcfgMkFtJEBkpGjD1bnlMOyii
+ +oiWD33hOnXX0eetenbs0VR2pkpsZHImAwbunmHO2BfLigF1o3CUlg4U5DGW9R4iBmcez5MOP
+ //qb60ZR3uNhhDCNHtLKNV8hZX8LAWro6AP4hvHea/cjN9ehqVz4gfg21kn2LKhvdtNkLQUEa
+ KQ2Kh5BxDWAibXYZRKpZg1PVUme+IllFltXUHq5vax4Aznjm8VBz7EmT1zkSlL6Aii5pelp6t
+ 7fYefoCMEJy4Bi3l2/8p4jScMdj5apojpvZcRqEkZxVXtGn+RFYwKdQUEPGb37af51OA=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aswani Reddy <aswani.reddy@samsung.com>
+Le 13/01/2022 à 12:42, Arnd Bergmann a écrit :
+> On Thu, Jan 13, 2022 at 12:32 PM Laurent Vivier <laurent@vivier.eu> wrote:
+>> Le 13/01/2022 à 12:20, Arnd Bergmann a écrit :
+>>> On Thu, Jan 13, 2022 at 11:35 AM Laurent Vivier <laurent@vivier.eu> wrote:
+>>>>
+>>>> Move virt machine to generic clockevents.
+>>>>
+>>>> cc: Arnd Bergmann <arnd@arndb.de>
+>>>> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+>>>
+>>> The change looks good, but it appears that you only just add the legacy code
+>>> in the same series, and it would be easier to just add the correct version
+>>> first.
+>>
+>> In fact, I'd like to keep it separated for two reasons:
+>> - it can be used as an example for people that want to move from legacy to clockevents,
+>> - the machine with legacy timer tick is in use for more than one year by debian to propose a m68k
+>> buildd and dev machine, so it is really well tested and robust. If there is a bug in my clockevents
+>> use it will be easier to detect.
+> 
+> In general, it should be easier to do a correct generic driver than
+> an implementation for the legacy interface.
+> 
+>>>> diff --git a/arch/m68k/virt/timer.c b/arch/m68k/virt/timer.c
+>>>> index 843bf6ed7e1a..767b01f75abb 100644
+>>>> --- a/arch/m68k/virt/timer.c
+>>>> +++ b/arch/m68k/virt/timer.c
+>>>
+>>> How about moving the entire file to drivers/clocksource/timer-goldfish.c?
+>>> It shouldn't even be architecture specific any more at this point. It probably
+>>> still is in practice, but that could be addressed when another architecture
+>>> wants to share the implementation.
+>>
+>> For the moment I'd like to have my m68k virt machine merged, and I think it will be easier if I hit
+>> only one subsystem/maintainer. Moreover I don't know if I use correctly the goldfish-rtc,  so for
+>> the moment I think it's better if I keep it hidden in arch/m68k/virt.
+>>
+>> But I can propose to send a patch to move this code to drivers/clocksource/timer-goldfish.c once the
+>> machine is merged.
+> 
+> If you are not sure about that implementation, I would think that's an
+> extra reason to
+> submit it to the clocksource maintainers for review (added to Cc
+> here). You should still
+> be able to merge the driver in the new location through the m68k tree
+> as part of your
+> series, but regardless of where it goes I think it needs an Ack from them.
+> 
 
-This patch adds support for handling thress clusters
-(upto 12 CPUs)
+OK, I move my code to drivers/clocksource/timer-goldfish.c and send a new version of the series.
 
-Cc: linux-fsd@tesla.com
-Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
----
- drivers/clocksource/exynos_mct.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
-index 5e3e96d3d1b9..ba3af940a687 100644
---- a/drivers/clocksource/exynos_mct.c
-+++ b/drivers/clocksource/exynos_mct.c
-@@ -78,6 +78,10 @@ enum {
- 	MCT_L5_IRQ,
- 	MCT_L6_IRQ,
- 	MCT_L7_IRQ,
-+	MCT_L8_IRQ,
-+	MCT_L9_IRQ,
-+	MCT_L10_IRQ,
-+	MCT_L11_IRQ,
- 	MCT_NR_IRQS,
- };
- 
-@@ -89,7 +93,7 @@ static int mct_irqs[MCT_NR_IRQS];
- struct mct_clock_event_device {
- 	struct clock_event_device evt;
- 	unsigned long base;
--	char name[10];
-+	char name[11];
- };
- 
- static void exynos4_mct_write(unsigned int value, unsigned long offset)
--- 
-2.17.1
-
+Thanks,
+Laurent

@@ -2,139 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE6348D83B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8550048D83D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234757AbiAMMv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:51:29 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:32990 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231395AbiAMMv0 (ORCPT
+        id S234769AbiAMMwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231395AbiAMMwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:51:26 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20DCn9Og001663;
-        Thu, 13 Jan 2022 12:51:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=OUQP2stId/EOB/wxRLm7yCb2lgiL+l6gyI1v5rvppyQ=;
- b=aStqTlwJB0dnCSbWBTU5mTnBTq2Hfou8Qq28rkamx0KpV2NyHsGL1jtb7xKzcznUvDfZ
- W+llRB4neeN4e9tPyKOJwkRGHrpA2QM1I+0X51cVIVLvNULtuckxZBNrio881976iidc
- /9bAWmLzqs6yTmUkLkgXnxfmVs9/mG6TsGU4dehB/F32oagzUfRTT5QAPeaocT/qiqRc
- gDSJsr1DjPBNAxHGocHFnT3oO3YV0sk4DwQnVqnduFZDduCLszqIxD1vFbJy/oU8OSus
- 5L0ySkV+YyV8uGEHFlje9XprH7YyJ0573wlWKA9qi8RZAKZZKR1WzuRdqtBW+R7v0Sq4 Hw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3djk81hk6b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:51:23 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20DComKb010708;
-        Thu, 13 Jan 2022 12:51:22 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3djk81hk5g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:51:22 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20DClwXt012308;
-        Thu, 13 Jan 2022 12:51:20 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3dfwhjnkkx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:51:20 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20DCpH4b36438430
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Jan 2022 12:51:17 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7527AAE057;
-        Thu, 13 Jan 2022 12:51:17 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D7520AE053;
-        Thu, 13 Jan 2022 12:51:16 +0000 (GMT)
-Received: from [9.171.57.64] (unknown [9.171.57.64])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 13 Jan 2022 12:51:16 +0000 (GMT)
-Message-ID: <c685a543-a524-9c95-4b85-f53a0ff744a9@linux.ibm.com>
-Date:   Thu, 13 Jan 2022 13:51:16 +0100
+        Thu, 13 Jan 2022 07:52:17 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D45C06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:52:16 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id h1so9612966pls.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:52:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=swVaXzBx+PrfXmAvvghZ6HgBvKOJ7/EddkA4pJ4xeEI=;
+        b=TuiWl8Oz+foIhj0GKYCXsYw7/LOB74AzRk0AVyxvHDwjucLVBvmxatrq9l5GOniEHu
+         D1NRALEoW8UGcqLlffH0hW3xTegREfsqqwBMMTC3Clh4Ue7l0yhzkFZ+EcswgGgSVH4J
+         ri4Q6Vlsr5Ww7S6jCz1q1L+sU66m4+Wg0ZkhIT6D3PMuAbRrmkI0gqtmu54GhpirQp8j
+         N52ujwYK4q6VnoC0TrauHF3sNxhS2M/SbeLXAtrxfKolM7CFOZJavgBSsIHs064ISdtY
+         lTXQFZwc92PJEuIMEPdGOiiWouK5fod0HnsOkQDc/UINixC5N0WdmEC2ScxPAj/f5Lzl
+         Rd3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=swVaXzBx+PrfXmAvvghZ6HgBvKOJ7/EddkA4pJ4xeEI=;
+        b=RfFf0yi2V7WJaG2gM7gk/nknSUxYwkMpsw6GzmyYeRiO+FxAc5Y9MlTAqTNw7atiOK
+         M6faG9FNQVKJpjY1g+OcNYOCdzXRE+ANrWEjx7tvxWLunWHodgxDaPtVUDQ12we2NOIB
+         vJLh1QkGg2GeK3YTbHTBfDELZrg856qi4IuODkYTLxcBVkS3U4zABYpeuTdy5zTXFRMN
+         7miwWLgPxB0KYg3Z78UbiLsboHYegyQ5ejo37A9ABRAvxh6xxLbKaTvg40jJVE+3864y
+         5DcLobC9LRPhW6RkgMvWGsy+wA8G0P+f420YyYB6D9XEQgO5bPlM61fApYapMP8fml4R
+         BOzw==
+X-Gm-Message-State: AOAM532/qVRCyDrUqi1C/w+J6GJS0+G6s9RHY0LVvFeaxwoybMBFMOqE
+        c2MuvlAgKLbutzde3VYlHVA=
+X-Google-Smtp-Source: ABdhPJzaqVUc5iwgSTLDxoA1+5ZByWOicwSgsG6MgN2setHwniTm0Jy8BKkS+NCGatVoAAyt2otLbw==
+X-Received: by 2002:a63:700c:: with SMTP id l12mr3682836pgc.559.1642078336413;
+        Thu, 13 Jan 2022 04:52:16 -0800 (PST)
+Received: from localhost.localdomain ([103.144.149.199])
+        by smtp.gmail.com with ESMTPSA id g6sm2311406pgk.37.2022.01.13.04.52.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 04:52:15 -0800 (PST)
+From:   Zhiming Liu <lzmlzmhh@gmail.com>
+To:     narmstrong@baylibre.com, robert.foss@linaro.org
+Cc:     Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Zhiming Liu <lzmlzmhh@gmail.com>
+Subject: [PATCH v2] Remove extra device acquisition method of i2c client in lt9611 driver
+Date:   Thu, 13 Jan 2022 20:52:01 +0800
+Message-Id: <20220113125201.22544-1-lzmlzmhh@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: KVM: Warn if mark_page_dirty() is called without an active vCPU
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     butterflyhuangxx@gmail.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, seanjc@google.com,
-        Cornelia Huck <cohuck@redhat.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Thomas Huth <thuth@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-References: <e8f40b8765f2feefb653d8a67e487818f66581aa.camel@infradead.org>
- <20220113120609.736701-1-borntraeger@linux.ibm.com>
- <e9e5521d-21e5-8f6f-902c-17b0516b9839@redhat.com>
- <b6d9785d769f98da0b057fac643b0f088e346a94.camel@infradead.org>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <b6d9785d769f98da0b057fac643b0f088e346a94.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: LInZdk1R9qzpJwCKnTvjKe1c1g8R-FXF
-X-Proofpoint-ORIG-GUID: 2hMcZ-v_hvIoORWGH8eudJACKmiq7Kvx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-13_04,2022-01-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0
- spamscore=0 lowpriorityscore=0 mlxscore=0 clxscore=1015 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201130075
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Signed-off-by: Zhiming Liu <lzmlzmhh@gmail.com>
 
+bridge : drm : Remove extra device acquisition method of i2c client in lt9611 driver.
 
-Am 13.01.22 um 13:30 schrieb David Woodhouse:
-> On Thu, 2022-01-13 at 13:14 +0100, Paolo Bonzini wrote:
->> On 1/13/22 13:06, Christian Borntraeger wrote:
->>> From: Christian Borntraeger<
->>> borntraeger@de.ibm.com
->>>>
->>>
->>> Quick heads-up.
->>> The new warnon triggers on s390. Here we write to the guest from an
->>> irqfd worker. Since we do not use dirty_ring yet this might be an
->>> over-indication.
->>> Still have to look into that.
->>
->> Yes, it's okay to add an #ifdef around the warning.
-> 
-> That would be #ifndef CONFIG_HAVE_KVM_DIRTY_RING, yes?
-> 
-> I already found it hard to write down the rules around how
-> kvm_vcpu_write_guest() doesn't use the vCPU it's passed, and how both
-> it and kvm_write_guest() need to be invoked on a pCPU which currently
-> owns *a* vCPU belonging to the same KVM... if we add "unless you're on
-> an architecture that doesn't support dirty ring logging", you may have
-> to pass me a bucket.
-> 
-> Are you proposing that as an officially documented part of the already
-> horrid API, or a temporary measure :)
-> 
-> Btw, that get_map_page() in arch/s390/kvm/interrupt.c looks like it has
-> the same use-after-free problem that kvm_map_gfn() used to have. It
-> probably wants converting to the new gfn_to_pfn_cache.
-> 
-> Take a look at how I resolve the same issue for delivering Xen event
-> channel interrupts.
+We have get the device of i2c client in probe function.So we should
+remove extra device acquisition method of i2c client.
+---
+ drivers/gpu/drm/bridge/lontium-lt9611.c    | 4 ++--
+ drivers/gpu/drm/bridge/lontium-lt9611uxc.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Do you have a commit ID for your Xen event channel fix?
+diff --git a/drivers/gpu/drm/bridge/lontium-lt9611.c b/drivers/gpu/drm/bridge/lontium-lt9611.c
+index dafb1b47c15f..feb128a4557d 100644
+--- a/drivers/gpu/drm/bridge/lontium-lt9611.c
++++ b/drivers/gpu/drm/bridge/lontium-lt9611.c
+@@ -1090,7 +1090,7 @@ static int lt9611_probe(struct i2c_client *client,
+ 	if (!lt9611)
+ 		return -ENOMEM;
+ 
+-	lt9611->dev = &client->dev;
++	lt9611->dev = dev;
+ 	lt9611->client = client;
+ 	lt9611->sleep = false;
+ 
+@@ -1100,7 +1100,7 @@ static int lt9611_probe(struct i2c_client *client,
+ 		return PTR_ERR(lt9611->regmap);
+ 	}
+ 
+-	ret = lt9611_parse_dt(&client->dev, lt9611);
++	ret = lt9611_parse_dt(dev, lt9611);
+ 	if (ret) {
+ 		dev_err(dev, "failed to parse device tree\n");
+ 		return ret;
+diff --git a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
+index 33f9716da0ee..3d62e6bf6892 100644
+--- a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
++++ b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
+@@ -860,7 +860,7 @@ static int lt9611uxc_probe(struct i2c_client *client,
+ 	if (!lt9611uxc)
+ 		return -ENOMEM;
+ 
+-	lt9611uxc->dev = &client->dev;
++	lt9611uxc->dev = dev;
+ 	lt9611uxc->client = client;
+ 	mutex_init(&lt9611uxc->ocm_lock);
+ 
+@@ -870,7 +870,7 @@ static int lt9611uxc_probe(struct i2c_client *client,
+ 		return PTR_ERR(lt9611uxc->regmap);
+ 	}
+ 
+-	ret = lt9611uxc_parse_dt(&client->dev, lt9611uxc);
++	ret = lt9611uxc_parse_dt(dev, lt9611uxc);
+ 	if (ret) {
+ 		dev_err(dev, "failed to parse device tree\n");
+ 		return ret;
+-- 
+2.25.1
 
-> 
-> Although I gave myself a free pass on the dirty marking in that case,
-> by declaring that the shinfo page doesn't get marked dirty; it should
-> be considered *always* dirty. You might have less fun declaring that
-> retrospectively in your case.

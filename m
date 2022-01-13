@@ -2,81 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4CCF48D557
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6866F48D55D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbiAMKBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:01:43 -0500
-Received: from mga04.intel.com ([192.55.52.120]:14926 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232699AbiAMKBk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:01:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642068100; x=1673604100;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XiJnz2HvbclBbjtnG/Bu+gUXsSJjh4bYfAYYOcAa/kA=;
-  b=mj77h6Jq29uToDWS57P7qxxM0zSvSyDJ32xkW3OLUG5bZ4cAsaZd+k1d
-   bf6KULe0+QrA+vcS4mnTNhmj2D4O1F1nbYWmfasExmzyaFOGD826NoaF+
-   JqSVlRCa2o395RT0d1xIGtjPvzwAW+ctY6bTGrX7he26RwqxJ+K3HLwq8
-   PklMLUtEzwEywsbcoj87EKipphcNLytagOz33nWvGX8ExPfnt4N0Sa9Fc
-   /s5T1s5yVVEfZClvmYWvZqwKvP1EeEWN9BQvksCtELCE1idv7e3EACdE2
-   HeNhw7R2pDjLZYs1ywNPR4DPGgXOE+eF7RdTn1JdKDN5xqzl0A31D4zH5
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="242793202"
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="242793202"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 02:01:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="691748471"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 13 Jan 2022 02:01:38 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n7wvJ-00074T-R3; Thu, 13 Jan 2022 10:01:37 +0000
-Date:   Thu, 13 Jan 2022 18:01:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [cel:topic-rpc-with-tls-upcall 18/19] xprtsock.c:undefined reference
- to `tls_client_hello_user'
-Message-ID: <202201131717.0cAQPcmU-lkp@intel.com>
+        id S233710AbiAMKDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:03:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233654AbiAMKDL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 05:03:11 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4113C06173F;
+        Thu, 13 Jan 2022 02:03:10 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 812D71F45859
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642068189;
+        bh=5ieh+AI9nLafp/BCA/vxAMNQqRDFiZ9V6lcGw3F7r9Q=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=mtRZidLzCsunTl6BiP4P0m1w3+IEE5orE/aFNHE7C/ZjM9lf/d0o4l2aiGhKi1ORJ
+         RFxhHSeNXnd2BisTbr9OnxwPKYoI5rQXmUN4VtGhaf/1phRyM2vCYgfrRjGxF3mN/I
+         qMixpjZa6euybAK9yOJXEVy4cMHnGGwCxf8BzfcbzRbVVU7KXU5rVZ5IycYRjtcnXp
+         7bKOh+e6Y0FVElSm06A8LApFyxO8MFZBKFmZMQOCFQx7FH+68dtbDrO89Exdver9fr
+         V7s7M1RLDnWq1mmN+2DqAgUVO+uJ2KGlMPVyqbgTZoeXvOvHNA/KOP8Z/8PMzyomYL
+         fyplk4HfWeovg==
+Subject: Re: [PATCH v4 5/5] arm64: dts: mediatek: Correct system timer clock
+ of MT8192
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        chun-jie.chen@mediatek.com, devicetree@vger.kernel.org,
+        drinkcat@chromium.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com, Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>
+References: <20220113065822.11809-1-allen-kh.cheng@mediatek.com>
+ <20220113065822.11809-6-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <963c8993-a63e-2282-66e3-415ac897bded@collabora.com>
+Date:   Thu, 13 Jan 2022 11:03:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220113065822.11809-6-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux topic-rpc-with-tls-upcall
-head:   0fd328ea53e7d539bf8bb160d773e1d027c60fea
-commit: adb54a631895e050da6ed9a18f9b503f927b642d [18/19] SUNRPC: RPC client support for TLS handshake upcall
-config: m68k-mvme16x_defconfig (https://download.01.org/0day-ci/archive/20220113/202201131717.0cAQPcmU-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=adb54a631895e050da6ed9a18f9b503f927b642d
-        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-        git fetch --no-tags cel topic-rpc-with-tls-upcall
-        git checkout adb54a631895e050da6ed9a18f9b503f927b642d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
+Il 13/01/22 07:58, allen-kh.cheng ha scritto:
+> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> 
+> When the initial devicetree for mt8192 was added in 48489980e27e ("arm64:
+> dts: Add Mediatek SoC MT8192 and evaluation board dts and Makefile"), the
+> clock driver for mt8192 was not yet upstream, so the clock property nodes
+> were set to the clk26m clock as a placeholder.
+> 
+> Given that the clock driver has since been added through 710573dee31b ("clk:
+> mediatek: Add MT8192 basic clocks support"), as well as its dt-bindings
+> through f35f1a23e0e1 ("clk: mediatek: Add dt-bindings of MT8192 clocks") and
+> devicetree nodes through 5d2b897bc6f5 ("arm64: dts: mediatek: Add mt8192
+> clock controllers"), fix the systimer clock property to point to the actual
+> clock.
+> 
+> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   m68k-linux-ld: net/sunrpc/xprtsock.o: in function `xs_tcp_tls_handshake_async':
->> xprtsock.c:(.text+0x8cc): undefined reference to `tls_client_hello_user'
-   m68k-linux-ld: net/sunrpc/xprtsock.o: in function `xs_tcp_tls_handshake_sync':
-   xprtsock.c:(.text+0x958): undefined reference to `tls_client_hello_user'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

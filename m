@@ -2,76 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD9D48DA32
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7D048DA34
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235771AbiAMOz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 09:55:59 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36848 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232728AbiAMOz6 (ORCPT
+        id S235816AbiAMO4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:56:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232444AbiAMO4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:55:58 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C33C61D19
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 14:55:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3DA0C36AE9;
-        Thu, 13 Jan 2022 14:55:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642085757;
-        bh=WeS5bElinXfzmmxF8Rr8m+76QZElMklZ2mCYbdsIY7Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LU/NLnP58ZyhqgotKfZdy6XNJOOVzgoRATmla/0o8wlolQt/iFWzdrj9vxc7S0hIF
-         5A4jAo03bsqybLUqApcAQZnZJYrnuv+X0dHa3EwAM7D8a6Z/G0JhKk9dwFUp81T1FI
-         Yjc2rMOkLCdKvlf5BzN9bkdDwiWdjqrq+KG+Em6e+xOpD5tThl3VAVDN+BSLhBUIwA
-         O48dQUDTOiQh5HqMQDKtFYI7xgJH1Xs8YLa6UDGSUPAlmh2ndTywY3vheQOK7WIoig
-         f8JyJFM1lJ8BdqVfHkKztVsgGFxX3otZ8nhixA3qT8/msx+PUEvMpnJ/hTxJ0c0KEG
-         lV2/hErW8Cxxw==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jianhua Liu <jianhua.ljh@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
-Subject: [PATCH 3/3] ia64: kprobes: Cleanup unused 'template' local variable
-Date:   Thu, 13 Jan 2022 23:55:54 +0900
-Message-Id: <164208575387.1590449.8278421820882450166.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <164208572899.1590449.14007562142219520042.stgit@devnote2>
-References: <164208572899.1590449.14007562142219520042.stgit@devnote2>
-User-Agent: StGit/0.19
+        Thu, 13 Jan 2022 09:56:22 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD62EC06161C;
+        Thu, 13 Jan 2022 06:56:21 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id u25so24089123edf.1;
+        Thu, 13 Jan 2022 06:56:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=kFk46LMUsbPXmYDjluK2WhJE06qBR7w0lhPTkMyBJXc=;
+        b=JyRpTA8c52bH57ISx/V51sjYq8XK1zznYGqVySa+JYdvfBKzDfHsT0egHReWwXAicx
+         g3IVg6DTOCBlivNAOoqoLSRbx3R4qW6Y9xQerBHwzFXEsUJfCfIxkgQb7KHK8b44GXsF
+         SWAVM8WfS37RFsnGtnpiGqtwicakDUeXnKNp1wIjBdsMrOZ5qt8ssealLHKK3OksrtT5
+         xQRN3A72dj9hQSws0BZlm81ecr6KT8+rY3HY8Cjgg9CruBFEff7RS2ABjrxkf1KgZJly
+         NtM2tFcbtSXAACl1QJK5gLo7kfFKMT8SiQhxckEnfA05eYxDjChglnfKv8NOb+gthoX1
+         /gxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kFk46LMUsbPXmYDjluK2WhJE06qBR7w0lhPTkMyBJXc=;
+        b=rOBzu85aTaFC+gaeitd5Rano+idYU3S9LJJilpBkj6ZxoFQE0ENBeNgpcjDTSCY9lo
+         O93Hu5NLsDkUyVKqznaZa4QiM42933JLCfVlSQd10bHN6KhdnH63cw80HrDm+qm50GMA
+         cmtdLdAfyZ5LFRM57y8ugQIMMYT/GVKkf4qgcn5UoGH95pF++lU6gzbYrHlUrLHl55CE
+         Qi7d090HXwo4mwN/1PcYPf23cI0fEwL+Yq9YBNZgg/nO/s7PQfPLhiX7QGDOKlNZwIAt
+         nKTD4S1Ih3Y/YOcouIRzNbx+WpakYa27epLENDEzRmMBIYkypdRnFgS+Qig3PzZNenGg
+         i5Bw==
+X-Gm-Message-State: AOAM530Jb4+DdTsJtVvldfoNc0RuXMZsKqyfU/TPxTDTNQH+gEWLdogJ
+        dXZYAs/nmTTBBKgO8eXI4b6SMP0BT5fI6FOICNobsY4bT2qSu+To
+X-Google-Smtp-Source: ABdhPJxmhJBwsEUB9im91Ska6okmWvIz7U96owI2/BkkW+H1gz0RxU8A4v0KB6dFDtRLVDQb3SoSbNcA5qDDRRcexpk=
+X-Received: by 2002:a50:ab1a:: with SMTP id s26mr4627668edc.182.1642085780451;
+ Thu, 13 Jan 2022 06:56:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <1642003482-48935-1-git-send-email-wang.yong12@zte.com.cn> <CAMU9jJquKLfzLOjN3xTLHgPJFWONpeVgUDG-0vsf_8ia3r3ALQ@mail.gmail.com>
+In-Reply-To: <CAMU9jJquKLfzLOjN3xTLHgPJFWONpeVgUDG-0vsf_8ia3r3ALQ@mail.gmail.com>
+From:   yong w <yongw.pur@gmail.com>
+Date:   Thu, 13 Jan 2022 22:56:09 +0800
+Message-ID: <CAOH5QeBxnK-vOwVh9HNeu5PjMPJrHtWCyTK_y43iCbfzN+aoEg@mail.gmail.com>
+Subject: Re: [PATCH] docs/zh_CN: Update zh_CN/accounting/delay-accounting.rst
+To:     teng sterling <sterlingteng@gmail.com>
+Cc:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, wang.yong12@zte.com.cn,
+        yang.yang29@zte.com.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused 'template' local variable. This seems to be introduced
-accidentally by a cleanup patch.
-
-Fixes: a5403183d84d ("[PATCH] Kprobes IA64: arch_prepare_kprobes() cleanup")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
----
- arch/ia64/kernel/kprobes.c |    3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/arch/ia64/kernel/kprobes.c b/arch/ia64/kernel/kprobes.c
-index 1a7bab1c5d7c..31ed086d61c9 100644
---- a/arch/ia64/kernel/kprobes.c
-+++ b/arch/ia64/kernel/kprobes.c
-@@ -322,9 +322,6 @@ static void __kprobes get_kprobe_inst(bundle_t *bundle, uint slot,
- 	       	unsigned long *kprobe_inst, uint *major_opcode)
- {
- 	unsigned long kprobe_inst_p0, kprobe_inst_p1;
--	unsigned int template;
--
--	template = bundle->quad0.template;
- 
- 	switch (slot) {
- 	  case 0:
-
+Hello,
+teng sterling <sterlingteng@gmail.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=8813=
+=E6=97=A5=E5=91=A8=E5=9B=9B 10:11=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi Yong,
+> <yongw.pur@gmail.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=8813=E6=97=A5=E5=91=
+=A8=E5=9B=9B 07:27=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > From: wangyong <wang.yong12@zte.com.cn>
+> >
+> > Update zh_CN/accounting/delay-accounting.rst.
+> > The document modification has been merged which refers to the following=
+ link:
+> > https://lore.kernel.org/all/1639583021-92977-1-git-send-email-wang.yong=
+12@zte.com.cn/
+> The normal way to handle this is to add an appropriate Fixes tag.
+>
+> By the way, this patch should be submitted together as part of that
+> patch series where you modified the original documentation. Also check
+> out the documentation for other languages and send it in the same way.
+> If you get stuck, simply --CC the maintainer is an elegant way to
+> handle it. >_<
+The previous patch has been merged into linux-next. There was no
+Chinese translation when I submitted it.
+At present, this document is only translated into Chinese, which was
+translated not long ago.
+So I update it in this patch.
+>
+> >
+> > Signed-off-by: wangyong <wang.yong12@zte.com.cn>
+> > Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+> This looks like the first version of the patch and doesn't seem to
+> have been reviewed by anyone yet, so you can't sign it instead of
+> someone else.
+Yang Yang reviewed it offline.
+>
+> Thanks,
+> Yanteng
+Thanks for your reply.

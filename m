@@ -2,76 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F85F48DB5D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BACF48DB6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236556AbiAMQI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 11:08:29 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:47970 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236540AbiAMQI0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 11:08:26 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id A8AC11F45F4A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642090105;
-        bh=u1O/U7YD4Kl4wSWXG/O8l3CcfMGb5TKv0nVc/p9yQ3k=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=nE3fDQfLSX/lrp+onum9slsO0zpEtyzLhGtJEVnwBF6K+jrx4R0QVfPuw0G+FblA6
-         51DduSB0U0Earej9RCFlH46lG3s6xFmXiKlYw/eU29uA+sjWWPf8WG7fp3ALe6sxVt
-         MpKFLxRJVFnG5JBbfTrTYQye3h9ohy46LMQu8XouXkz6exFSD0cBMZO21EjuqN5Zsr
-         nIFn6dvE0U4c2ichmL+TFX0VWuyK1OO9OkQQaM2uUfkrJ3pdJbRu/oe9bTD5ZFgChH
-         7n8XMFfMIJIx3H2R6newwaLKHphxGz82jypXEBbMP0PqnwWmflsUEr7kHuUaq1ouUO
-         wtZfmox2lwAaQ==
-Subject: Re: [PATCH v11 07/22] soc: mediatek: add cmdq support of mtk-mmsys
- config API for mt8195 vdosys1
-To:     "Nancy.Lin" <nancy.lin@mediatek.com>, CK Hu <ck.hu@mediatek.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        singo.chang@mediatek.com, srv_heupstream@mediatek.com
-References: <20220110084645.31191-1-nancy.lin@mediatek.com>
- <20220110084645.31191-8-nancy.lin@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <98929c87-75d2-41a4-6f50-7dbe29aeb1f3@collabora.com>
-Date:   Thu, 13 Jan 2022 17:08:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S236268AbiAMQKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 11:10:49 -0500
+Received: from mga14.intel.com ([192.55.52.115]:18040 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229580AbiAMQKs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 11:10:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642090248; x=1673626248;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CbtqcAL9sNRjSWYeVnC2OMJQxy7u/fu+lEXsTp92Wuk=;
+  b=mA0QX2l2mEOBSDYMsVH+9leribnEXP9p28enYc54KueAKeuVsD+/OVhA
+   BsFKQCgxgad8l+yyajTSaC49BewWGIHmFjfat9f66hINrf+lpZh41q0F6
+   mwmhxA5zXCTGYNTGe2zVUIQZuOPt7x6znucgStBSZjk4bv7Mhi1lM7Qvl
+   rgYun0A1yINmMMh9dXmL44zsGYVnZy/hhU5HMd8Ydo3mlxDxejjlcF03e
+   a6iFLdkmkgCqam77z/mRF+Smfm+bOkDCnSr9jrjK0Kf13pz1TxSS0TrpI
+   EXsebZ2TUBjVlFViGsmYjFwCyDOCpjAW8o97JJKTVx3VyB1hX/K+4WD/R
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="244245748"
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="244245748"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 08:09:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="670557059"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Jan 2022 08:09:56 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n82fj-0007Pp-Kq; Thu, 13 Jan 2022 16:09:55 +0000
+Date:   Fri, 14 Jan 2022 00:09:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dongjin Kim <tobetter@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [tobetter:odroid-5.16.y 36/39]
+ drivers/gpu/drm/tiny/ili9488_pio.c:335:36: sparse: sparse: Using plain
+ integer as NULL pointer
+Message-ID: <202201140003.Wboc0MzQ-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220110084645.31191-8-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/01/22 09:46, Nancy.Lin ha scritto:
-> Add cmdq support for mtk-mmsys config API.
-> The mmsys config register settings need to take effect with the other
-> HW settings(like OVL_ADAPTOR...) at the same vblanking time.
-> 
-> If we use CPU to write the mmsys reg, we can't guarantee all the
-> settings can be written in the same vblanking time.
-> Cmdq is used for this purpose. We prepare all the related HW settings
-> in one cmdq packet. The first command in the packet is "wait stream done",
-> and then following with all the HW settings. After the cmdq packet is
-> flush to GCE HW. The GCE waits for the "stream done event" to coming
-> and then starts flushing all the HW settings. This can guarantee all
-> the settings flush in the same vblanking.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+Hi Dongjin,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+First bad commit (maybe != root cause):
 
+tree:   https://github.com/tobetter/linux odroid-5.16.y
+head:   cb59f7f629212302d4136a919ef9822aa9c84aac
+commit: d5c3ea72c0e7fde4122fa642dc8c5169ac68fb01 [36/39] ODROID-COMMON: Revert "drm/dbi: Print errors for mipi_dbi_command()"
+config: csky-randconfig-s032-20220113 (https://download.01.org/0day-ci/archive/20220114/202201140003.Wboc0MzQ-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/tobetter/linux/commit/d5c3ea72c0e7fde4122fa642dc8c5169ac68fb01
+        git remote add tobetter https://github.com/tobetter/linux
+        git fetch --no-tags tobetter odroid-5.16.y
+        git checkout d5c3ea72c0e7fde4122fa642dc8c5169ac68fb01
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky SHELL=/bin/bash drivers/gpu/drm/tiny/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/gpu/drm/tiny/ili9488_pio.c:335:36: sparse: sparse: Using plain integer as NULL pointer
+   drivers/gpu/drm/tiny/ili9488_pio.c:336:47: sparse: sparse: Using plain integer as NULL pointer
+   drivers/gpu/drm/tiny/ili9488_pio.c: note: in included file (through arch/csky/include/asm/io.h, include/linux/io.h, include/linux/dma-buf-map.h, ...):
+   include/asm-generic/io.h:267:16: sparse: sparse: cast to restricted __le32
+   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
+   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
+   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
+   include/asm-generic/io.h:299:22: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
+   include/asm-generic/io.h:299:22: sparse:     expected unsigned int [usertype] value
+   include/asm-generic/io.h:299:22: sparse:     got restricted __le32 [usertype]
+
+vim +335 drivers/gpu/drm/tiny/ili9488_pio.c
+
+2ce4016e1804ca Dongjin Kim 2021-02-09  333  
+2ce4016e1804ca Dongjin Kim 2021-02-09  334  static const struct of_device_id ili9488_dt_ids[] = {
+2ce4016e1804ca Dongjin Kim 2021-02-09 @335  	{ .compatible = "ili9488", 0 },
+2ce4016e1804ca Dongjin Kim 2021-02-09  336  	{ .compatible = "hardkernel,ili9488", 0 },
+2ce4016e1804ca Dongjin Kim 2021-02-09  337  	{ },
+2ce4016e1804ca Dongjin Kim 2021-02-09  338  };
+2ce4016e1804ca Dongjin Kim 2021-02-09  339  
+
+:::::: The code at line 335 was first introduced by commit
+:::::: 2ce4016e1804ca6fb2285e3164d848d6975bad07 ODROID-COMMON: gpu/drm: Add new Tiny DRM driver with Ili9488
+
+:::::: TO: Dongjin Kim <tobetter@gmail.com>
+:::::: CC: Dongjin Kim <tobetter@gmail.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,83 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4336348D062
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 03:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D9B48D065
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 03:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbiAMCRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 21:17:33 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:38272 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231591AbiAMCRZ (ORCPT
+        id S231633AbiAMCSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 21:18:23 -0500
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:60148 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231591AbiAMCSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 21:17:25 -0500
-X-UUID: 1f0b2121f4214d3982b0d380d1cb5b20-20220113
-X-UUID: 1f0b2121f4214d3982b0d380d1cb5b20-20220113
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 493848900; Thu, 13 Jan 2022 10:17:22 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 13 Jan 2022 10:17:21 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 13 Jan 2022 10:17:21 +0800
-Message-ID: <903a27d5d68dddb23b9ace2708689a55f22714e8.camel@mediatek.com>
-Subject: Re: [PATCH v9 0/3] Add basic SoC support for mediatek mt8195
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <ryder.lee@kernel.org>, <wenst@chromium.org>,
-        <chunfeng.yun@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "David Matlack" <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        "Marc Zyngier" <maz@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Sean Wang <sean.wang@mediatek.com>
-Date:   Thu, 13 Jan 2022 10:17:21 +0800
-In-Reply-To: <e4f20498-3685-207f-2b94-0cb0ada725a4@oracle.com>
-References: <20220112114724.1953-1-tinghan.shen@mediatek.com>
-         <e4f20498-3685-207f-2b94-0cb0ada725a4@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 12 Jan 2022 21:18:15 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V1hSvEW_1642040292;
+Received: from 30.225.24.43(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0V1hSvEW_1642040292)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 13 Jan 2022 10:18:13 +0800
+Message-ID: <dc5c3f04-b13f-6c32-9836-8d9f9783b81f@linux.alibaba.com>
+Date:   Thu, 13 Jan 2022 10:18:12 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [PATCH] ocfs2: remove redundant assignment to variable free_space
+Content-Language: en-US
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>, ocfs2-devel@oss.oracle.com,
+        akpm <akpm@linux-foundation.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220112230411.1090761-1-colin.i.king@gmail.com>
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+In-Reply-To: <20220112230411.1090761-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maciej,
 
-On Wed, 2022-01-12 at 15:54 +0100, Maciej S. Szmigiero wrote:
-> On 12.01.2022 12:47, Tinghan Shen wrote:
-> > This series adds basic SoC support for Mediatek's SoC MT8195.
+
+On 1/13/22 7:04 AM, Colin Ian King wrote:
+> Variable free_space is being initialized with a value that is not read,
+> it is being re-assigned later in the two paths of an if statement. The
+> early initialization is redundant and can be removed.
 > 
-> Nice patchset Tinghan, however I can't stop wondering why I was CCed
-> on
-> it (and Paolo and Sean, too) - this isn't KVM related at all.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+
+Acked-by: Joseph Qi <joseph.qi@linux.alibaba.com>
+> ---
+>  fs/ocfs2/dir.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> scripts/get_maintainer.pl going wild?
-> 
-Thanks,
-Maciej
-
-I'm sorry. I just find out that the file pattern I used includes
-unrelated files to this series.
-
-I'll clean up the CC list at next version.
-
-Best regards,
-TingHan
-
+> diff --git a/fs/ocfs2/dir.c b/fs/ocfs2/dir.c
+> index bd8d534f11cb..f2cc1ff29e6d 100644
+> --- a/fs/ocfs2/dir.c
+> +++ b/fs/ocfs2/dir.c
+> @@ -3343,7 +3343,7 @@ static int ocfs2_find_dir_space_id(struct inode *dir, struct buffer_head *di_bh,
+>  	struct ocfs2_dir_entry *de, *last_de = NULL;
+>  	char *de_buf, *limit;
+>  	unsigned long offset = 0;
+> -	unsigned int rec_len, new_rec_len, free_space = dir->i_sb->s_blocksize;
+> +	unsigned int rec_len, new_rec_len, free_space;
+>  
+>  	/*
+>  	 * This calculates how many free bytes we'd have in block zero, should

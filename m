@@ -2,92 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F11A48DC98
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 18:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2002D48DCA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 18:08:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233617AbiAMRHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 12:07:47 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46012 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiAMRHp (ORCPT
+        id S233899AbiAMRIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 12:08:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237003AbiAMRIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 12:07:45 -0500
+        Thu, 13 Jan 2022 12:08:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34916C061574;
+        Thu, 13 Jan 2022 09:08:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5545861CE3;
-        Thu, 13 Jan 2022 17:07:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B475BC36AEF;
-        Thu, 13 Jan 2022 17:07:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3BB2B822C7;
+        Thu, 13 Jan 2022 17:08:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D89C36AEB;
+        Thu, 13 Jan 2022 17:08:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642093664;
-        bh=Dx0IclD0tXg+B85btv+baN4OXf8B48NeAIY0q+sv920=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EOCCUQVHJTxVv7/QtyIHGEaxPkCkQNEN8CVjaOSKRx/z9bjFVCfp9TsvgYAi24Fco
-         HmdxBL5cICZ1H0R4hkSHMk4/g+YevWqLOl8s24G7rik9jlVjiMRS3EbLtPrUMEUe6k
-         fydjEb7Lu5xKexGm3vxwEXFq8WIgcLHjP6UbR0XFKajVUO0lVVUiaT/O8RIwn4Vosx
-         NTGS1Nw3IXBc11B5/iPNu10ZvQVT1K/KEGP3qDjbgQBmnCi/evXOVWPi9cFgDQXB+h
-         8+G2G6mT89UEHf0f44Fkx4qarggQhgumCRfv5aSOU+YBsLiKDnQhIexRX/H+WFr4aJ
-         A2nigoTxZpftg==
-Received: by mail-yb1-f181.google.com with SMTP id c10so16967795ybb.2;
-        Thu, 13 Jan 2022 09:07:44 -0800 (PST)
-X-Gm-Message-State: AOAM530LvruR4aahudg7Gr9f3DGMBX99HtcRmR881oNI+g8a1kXCihSe
-        5ZaQjzmESEtfdH43UUT0yxVUhh6bhrj8Up+m1xI=
-X-Google-Smtp-Source: ABdhPJx5751HYvm6d/DQxy//XcTquoSjPD2H5p3LnBRwIC5C70ChPpnQLrQMSJYixxSRVsf4oaRMoG1NcBL8zTNVs6M=
-X-Received: by 2002:a25:fd6:: with SMTP id 205mr7112590ybp.654.1642093663795;
- Thu, 13 Jan 2022 09:07:43 -0800 (PST)
+        s=k20201202; t=1642093709;
+        bh=dygNr80wMXp+UwmgpjOaiLbn3AABVgQIS8MjdeeyX1Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qEuoT1/T6TTqqKVDVsD8XFUDmA2AlXGwyCyA7uaS+waEHNJ+iR68ar4wlGBG8hIrC
+         L5/+yLBCVvnGEDalwTrVXA14daXV6g1aa4a+xI6XquXDW/eal+XtUCNXgGiaYw+s/Z
+         doFYXfWwz3VAVOr7qlBc8TrCIGYn9qMOPrjLMwoFTWsl5YZ/WYw/y9oez7SLTWIvhx
+         ql7HfVehabJB71qvw5Qe4uGwsofc8uJkey2kDY2bh7SVZgxO75R07xDg9gPEkw1j54
+         o74/vTwXhnTl3bysBufzgtjxGmFN62uTWXESbhIVV/G61LTUlq5qCTS/e4lEZsYeUk
+         HtSMGVBjtFH2A==
+Received: by pali.im (Postfix)
+        id DAC8A778; Thu, 13 Jan 2022 18:08:26 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Gregory Clement <gregory.clement@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: marvell: armada-37xx: Increase PCIe IO size from 64 KiB to 1 MiB
+Date:   Thu, 13 Jan 2022 18:07:55 +0100
+Message-Id: <20220113170755.11856-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220113031658.633290-1-imagedong@tencent.com>
-In-Reply-To: <20220113031658.633290-1-imagedong@tencent.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 13 Jan 2022 09:07:32 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5HLK=DoNWmROXrce+9AcNBDLhjuoXQy2T0A_DQ34PBfQ@mail.gmail.com>
-Message-ID: <CAPhsuW5HLK=DoNWmROXrce+9AcNBDLhjuoXQy2T0A_DQ34PBfQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] test: selftests: remove unused various in sockmap_verdict_prog.c
-To:     menglong8.dong@gmail.com
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, davemarchevsky@fb.com,
-        linux-kselftest@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, imagedong@tencent.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 7:17 PM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> 'lport' and 'rport' in bpf_prog1() of sockmap_verdict_prog.c is not
-> used, just remove them.
->
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+Commit 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM
+space") increased size of PCIe MEM to 127 MiB, which is the maximal
+possible size for allocated 128 MiB PCIe window. PCIe IO size in that
+commit was unchanged.
 
-Acked-by: Song Liu <songliubraving@fb.com>
+Armada 3720 PCIe controller supports 32-bit IO space mapping so it is
+possible to assign more than 64 KiB if address space for IO.
 
-> ---
->  tools/testing/selftests/bpf/progs/sockmap_parse_prog.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/progs/sockmap_parse_prog.c b/tools/testing/selftests/bpf/progs/sockmap_parse_prog.c
-> index 95d5b941bc1f..c9abfe3a11af 100644
-> --- a/tools/testing/selftests/bpf/progs/sockmap_parse_prog.c
-> +++ b/tools/testing/selftests/bpf/progs/sockmap_parse_prog.c
-> @@ -7,8 +7,6 @@ int bpf_prog1(struct __sk_buff *skb)
->  {
->         void *data_end = (void *)(long) skb->data_end;
->         void *data = (void *)(long) skb->data;
-> -       __u32 lport = skb->local_port;
-> -       __u32 rport = skb->remote_port;
->         __u8 *d = data;
->         int err;
->
-> --
-> 2.34.1
->
+Currently controller has assigned 127 MiB + 64 KiB memory and therefore
+there is 960 KiB of unused memory. So assign it to IO space by increasing
+IO window from 64 KiB to 1 MiB.
+
+DTS file armada-3720-turris-mox.dts already uses whole 128 MiB space, so
+only update comment about 32-bit IO space mapping.
+
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Fixes: 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM space")
+---
+ arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts | 2 +-
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi           | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+index dd01409d4bb7..23e1b07c060a 100644
+--- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
++++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+@@ -153,7 +153,7 @@
+ 	 * 2 size cells and also expects that the second range starts at 16 MB offset. If these
+ 	 * conditions are not met then U-Boot crashes during loading kernel DTB file. PCIe address
+ 	 * space is 128 MB long, so the best split between MEM and IO is to use fixed 16 MB window
+-	 * for IO and the rest 112 MB (64+32+16) for MEM, despite that maximal IO size is just 64 kB.
++	 * for IO and the rest 112 MB (64+32+16) for MEM. Controller supports 32-bit IO mapping.
+ 	 * This bug is not present in U-Boot ports for other Armada 3700 devices and is fixed in
+ 	 * U-Boot version 2021.07. See relevant U-Boot commits (the last one contains fix):
+ 	 * https://source.denx.de/u-boot/u-boot/-/commit/cb2ddb291ee6fcbddd6d8f4ff49089dfe580f5d7
+diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+index 1c74f02535c6..8d59eabadce6 100644
+--- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
++++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+@@ -508,12 +508,12 @@
+ 			/*
+ 			 * The 128 MiB address range [0xe8000000-0xf0000000] is
+ 			 * dedicated for PCIe and can be assigned to 8 windows
+-			 * with size a power of two. Use one 64 KiB window for
++			 * with size a power of two. Use one 1 MiB window for
+ 			 * IO at the end and the remaining seven windows
+ 			 * (totaling 127 MiB) for MEM.
+ 			 */
+ 			ranges = <0x82000000 0 0xe8000000   0 0xe8000000   0 0x07f00000   /* Port 0 MEM */
+-				  0x81000000 0 0xefff0000   0 0xefff0000   0 0x00010000>; /* Port 0 IO */
++				  0x81000000 0 0xeff00000   0 0xeff00000   0 0x00100000>; /* Port 0 IO*/
+ 			interrupt-map-mask = <0 0 0 7>;
+ 			interrupt-map = <0 0 0 1 &pcie_intc 0>,
+ 					<0 0 0 2 &pcie_intc 1>,
+-- 
+2.20.1
+

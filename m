@@ -2,101 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBE748D945
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5C248D94A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 14:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235034AbiAMNqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 08:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiAMNqV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 08:46:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A474AC06173F;
-        Thu, 13 Jan 2022 05:46:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 800BAB82192;
-        Thu, 13 Jan 2022 13:46:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5259C36AED;
-        Thu, 13 Jan 2022 13:46:16 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="nr1wVcyN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1642081572;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZDOEmJ/+j9elr0DybCikYtZEeZoImIpow5xqJFYgrf4=;
-        b=nr1wVcyNt+isfDsyUsVmED0FfvcK8Pje9K+YaEHYuBWB+GmnJqx+0hlTypFGGSfxch3Ha7
-        JeQsVLcZZFgpZ8+wXHK+x7NdAoyehpv/0l3sTPIPWDXABAHYC3TlXgCcDEoy0iGTzzZNV4
-        kgjR/mdp76cq2Z2/D62V6rnHhQzQiAk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 37d63b2e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 13 Jan 2022 13:46:12 +0000 (UTC)
-Received: by mail-yb1-f175.google.com with SMTP id i68so374302ybg.7;
-        Thu, 13 Jan 2022 05:46:12 -0800 (PST)
-X-Gm-Message-State: AOAM530O3+ZsEwNWdGAATgAlj/j5enaIBlsvoMtumdBCzs/Hj+Ojmsq+
-        SL5Ey4x4IbqX8uyixDTPY1qXm4oDt9v8KDUp4UM=
-X-Google-Smtp-Source: ABdhPJztE9spksv6CQCLnB+dBbXGVk+3Cc3jcgbnD4ieM23/u7v/2fuOkMasB3pjmeMN2MRVs2vc98KAn2ie/iqOzq0=
-X-Received: by 2002:a25:ae8d:: with SMTP id b13mr6747304ybj.255.1642081570673;
- Thu, 13 Jan 2022 05:46:10 -0800 (PST)
+        id S235462AbiAMNrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 08:47:51 -0500
+Received: from mga07.intel.com ([134.134.136.100]:36001 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235091AbiAMNrv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 08:47:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642081671; x=1673617671;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/4uRvoTvLfeiMbp8As2cFKlxzm+YR8u6juEOamjmJX0=;
+  b=YB0Q0NTeERlXCa+/684l4GCOZFMlOJ/jV/1YTqAMV9E6+56dWvuKkrjT
+   KsZLdEgyp84Y1e17z22HGZqbshSf9M6H4va1XYbGIaqWzXOYPua7uBbzl
+   JwuN7D81Gjx8T6TQkSTDzKm8vgKmoU9S81SglJpPwlKK2apg+SHt6FMhu
+   3f3NvDgRSL5X1Zdx1UKmXqe2k3rjBnuXGYka5eg0YRq2Nkm5qiEKpDDOG
+   zCCeqha8rTYBPkW+l147DMFrg6BuytzB7NPiITaoNi7wCEzaohkpY7K6O
+   Osr3gnu5a7MYTkx6GzvBO8Lz2GbklqQQ7sT8XiroKqKhlxsqF2L2+8Am6
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="307353883"
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="307353883"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 05:47:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
+   d="scan'208";a="691805013"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 13 Jan 2022 05:47:49 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n80SC-0007Fj-NV; Thu, 13 Jan 2022 13:47:48 +0000
+Date:   Thu, 13 Jan 2022 21:47:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: fs/iomap/buffered-io.c:1098 iomap_finish_ioends() warn: inconsistent
+ indenting
+Message-ID: <202201132101.AoT0bCj5-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220112131204.800307-1-Jason@zx2c4.com> <20220112131204.800307-3-Jason@zx2c4.com>
- <87r19cftbr.fsf@toke.dk> <CAHmME9pieaBBhKc1uKABjTmeKAL_t-CZa_WjCVnUr_Y1_D7A0g@mail.gmail.com>
- <55d185a8-31ea-51d0-d9be-debd490cd204@stressinduktion.org>
- <CAMj1kXGz7_98B_b=SJER6-Q2g-nOT5X3cfN=nfhYoH0eHep5bw@mail.gmail.com> <87ilung3uo.fsf@toke.dk>
-In-Reply-To: <87ilung3uo.fsf@toke.dk>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 13 Jan 2022 14:45:59 +0100
-X-Gmail-Original-Message-ID: <CAHmME9onde38SNBBsmypzr_QDSDiQ_0opPiqJ7sU5X-iMDtncQ@mail.gmail.com>
-Message-ID: <CAHmME9onde38SNBBsmypzr_QDSDiQ_0opPiqJ7sU5X-iMDtncQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v1 2/3] ipv6: move from sha1 to blake2s in address calculation
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Hannes Frederic Sowa <hannes@stressinduktion.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Erik Kline <ek@google.com>,
-        Fernando Gont <fgont@si6networks.com>,
-        Lorenzo Colitti <lorenzo@google.com>,
-        YOSHIFUJI Hideaki <hideaki.yoshifuji@miraclelinux.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Toke,
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220111-073805/trondmy-kernel-org/iomap-Address-soft-lockup-in-iomap_finish_ioend/20211231-034313
+head:   f1c8b8b2e616895aa0f5be4e53d4cd1ffa751001
+commit: f1c8b8b2e616895aa0f5be4e53d4cd1ffa751001 iomap: Address soft lockup in iomap_finish_ioend()
+date:   3 days ago
+config: arm-randconfig-m031-20220113 (https://download.01.org/0day-ci/archive/20220113/202201132101.AoT0bCj5-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
 
-On Thu, Jan 13, 2022 at 2:30 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
-at.com> wrote:
-> Right, but that implies we need to work on a transition mechanism. For
-> newly deployed systems changing the hash is obviously fine, it's the
-> "reboot and you have a new address" problem.
->
-> We could introduce new values to the addr_gen_mode? I.e. values of 4 and
-> 5 would be equivalent to 2 and 3 (respectively), but with the new
-> hashing algorithm? And then document that 2 and 3 are considered
-> deprecated to be removed at some point in the future...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Right, so this is exactly the flow of conversation I anticipated.
-"Let's change it!" "No, we can't." "Okay, let's add a knob."
+New smatch warnings:
+fs/iomap/buffered-io.c:1098 iomap_finish_ioends() warn: inconsistent indenting
+fs/iomap/buffered-io.c:1330 iomap_add_to_ioend() warn: inconsistent indenting
 
-The knob I was thinking about, though, was actually a compile-time one
-CONFIG_NET_OBSOLETE_INSECURE_ADDRCONF_HASH, which itself is a `depends
-on CONFIG_OLD_N_CRUSTY` or something. This way we could gate the
-inclusion of sha1.c/sha1.o on that at compile time, and shave down
-vmlinux a bit, which would make Geert happy.
+Old smatch warnings:
+fs/iomap/buffered-io.c:1434 iomap_writepage_map() warn: inconsistent indenting
 
-Then, at some point down the road, we can talk about removing
-CONFIG_NET_OBSOLETE_INSECURE_ADDRCONF_HASH too.
+vim +1098 fs/iomap/buffered-io.c
 
-Jason
+  1072	
+  1073	/*
+  1074	 * Ioend completion routine for merged bios. This can only be called from task
+  1075	 * contexts as merged ioends can be of unbound length. Hence we have to break up
+  1076	 * the page writeback completion into manageable chunks to avoid long scheduler
+  1077	 * holdoffs. We aim to keep scheduler holdoffs down below 10ms so that we get
+  1078	 * good batch processing throughput without creating adverse scheduler latency
+  1079	 * conditions.
+  1080	 */
+  1081	void
+  1082	iomap_finish_ioends(struct iomap_ioend *ioend, int error)
+  1083	{
+  1084		struct list_head tmp;
+  1085		u32 pages;
+  1086	
+  1087		might_sleep();
+  1088	
+  1089		list_replace_init(&ioend->io_list, &tmp);
+  1090		pages = iomap_finish_ioend(ioend, error);
+  1091	
+  1092		while (!list_empty(&tmp)) {
+  1093		trace_printk("pages %u, start sector 0x%llx size %lu pcnt %u",
+  1094			ioend->io_pages,
+  1095			ioend->io_sector,
+  1096			ioend->io_size,
+  1097			pages);
+> 1098			if (pages > 32768) {
+  1099				cond_resched();
+  1100				pages = 0;
+  1101			}
+  1102			ioend = list_first_entry(&tmp, struct iomap_ioend, io_list);
+  1103			list_del_init(&ioend->io_list);
+  1104			pages += iomap_finish_ioend(ioend, error);
+  1105		}
+  1106		trace_printk("pages %u, start sector 0x%llx size %lu pcnt %u",
+  1107			ioend->io_pages,
+  1108			ioend->io_sector,
+  1109			ioend->io_size,
+  1110			pages);
+  1111	}
+  1112	EXPORT_SYMBOL_GPL(iomap_finish_ioends);
+  1113	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

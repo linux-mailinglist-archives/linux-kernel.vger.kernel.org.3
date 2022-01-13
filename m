@@ -2,91 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B6F48D6EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 12:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9233148D6ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 12:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234270AbiAMLuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 06:50:11 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:43758 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbiAMLuK (ORCPT
+        id S234281AbiAMLub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 06:50:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231260AbiAMLua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 06:50:10 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id EF6E0218F0;
-        Thu, 13 Jan 2022 11:50:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642074608; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=24r93SzAjmsGRtc8iOT17b7/d8HkYubjNVUajwDDyfM=;
-        b=XWkkKOuj70ajKM/ENePvjr4SPNtxrS/xmYmrCr5SRBXApVZBmx+5qZjVHo0PmHMU75jN0T
-        kJWxqq7e4dxBmWOwt2cRBE+MKM9WHFfKTlf4lwMtdYj6zqjAeR9Mg4xTVE//jb0MLrCq9w
-        83S/tt5dbT6KrxR6iokZaoJlNrAwRfY=
-Received: from suse.cz (unknown [10.100.216.66])
+        Thu, 13 Jan 2022 06:50:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E28C06173F;
+        Thu, 13 Jan 2022 03:50:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 485ABA3B87;
-        Thu, 13 Jan 2022 11:50:08 +0000 (UTC)
-Date:   Thu, 13 Jan 2022 12:50:06 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        kernel@gpiccoli.net, senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, feng.tang@intel.com,
-        kexec@lists.infradead.org, dyoung@redhat.com,
-        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com
-Subject: Re: [PATCH V2] panic: Move panic_print before kmsg dumpers
-Message-ID: <Yd/0K1x7ILw3Qa46@alley>
-References: <20220106212835.119409-1-gpiccoli@igalia.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC6DB61982;
+        Thu, 13 Jan 2022 11:50:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F2D2C36AE9;
+        Thu, 13 Jan 2022 11:50:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642074629;
+        bh=5f0a/xRY41Y6k3AVP6APcWpAYz/w3ntzIrhp4l6IuEc=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=eIefB+vQ9n5nU42IW8t1/J4YrhdpbXA0kvRFzSkdRmB7OiCen0U91Dj9hZJhY/bMc
+         6jQZ6d8cBx2qR3Kf4fLezo6Jotu34w7SHPKnIX5YUV/+qaxd5RN1wnp//hA7zyFM+u
+         2zEEEePvXzjegrnpy77rXhwzABsc2SL+v4ML7y7Zx01MeEuaIVxbQfa33NrG3YmyQV
+         //W8ZV43PwLYNh39Z4PPmQ4iol1FpkkhZNdlh1vQ4kUkFgQsJJvXoE1mB92JVPOAYb
+         KbKEEHC/9Gp3f4nXHm5y+pyFpc42GycXlLuhALg5Um1lOXQm55AXXtT5dV9gwgb3tt
+         BjmYnYTQM5VoQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Jerome Pouiller <Jerome.Pouiller@silabs.com>
+Cc:     devel@driverdev.osuosl.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 02/31] staging: wfx: fix HIF API license
+References: <20220113085524.1110708-1-Jerome.Pouiller@silabs.com>
+        <20220113085524.1110708-3-Jerome.Pouiller@silabs.com>
+Date:   Thu, 13 Jan 2022 13:50:23 +0200
+In-Reply-To: <20220113085524.1110708-3-Jerome.Pouiller@silabs.com> (Jerome
+        Pouiller's message of "Thu, 13 Jan 2022 09:54:55 +0100")
+Message-ID: <877db3ua68.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106212835.119409-1-gpiccoli@igalia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-01-06 18:28:35, Guilherme G. Piccoli wrote:
-> The panic_print setting allows users to collect more information in a
-> panic event, like memory stats, tasks, CPUs backtraces, etc.
-> This is a pretty interesting debug mechanism, but currently the print
-> event happens *after* kmsg_dump(), meaning that pstore, for example,
-> cannot collect a dmesg with the panic_print information.
+Jerome Pouiller <Jerome.Pouiller@silabs.com> writes:
 
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -249,7 +252,7 @@ void panic(const char *fmt, ...)
->  	 * show some extra information on kernel log if it was set...
->  	 */
->  	if (kexec_crash_loaded())
-> -		panic_print_sys_info();
-> +		panic_print_sys_info(false);
+> From: J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com>
+>
+> Apache-2.0 is not allowed in the kernel.
+>
+> Signed-off-by: J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com>
+> ---
+>  drivers/staging/wfx/hif_api_cmd.h     | 2 +-
+>  drivers/staging/wfx/hif_api_general.h | 2 +-
+>  drivers/staging/wfx/hif_api_mib.h     | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/staging/wfx/hif_api_cmd.h b/drivers/staging/wfx/hif_=
+api_cmd.h
+> index b0aa13b23a51..b1829d01a5d9 100644
+> --- a/drivers/staging/wfx/hif_api_cmd.h
+> +++ b/drivers/staging/wfx/hif_api_cmd.h
+> @@ -1,4 +1,4 @@
+> -/* SPDX-License-Identifier: Apache-2.0 */
+> +/* SPDX-License-Identifier: GPL-2.0-only or Apache-2.0 */
 
-panic_print_sys_info(false) will be called twice when both
-kexec_crash_loaded() and _crash_kexec_post_notifiers are true.
+Is the Apache-2.0 license really mandatory? LICENSES/dual/Apache-2.0 is
+not really supportive.
 
-Do we really need to call panic_print_sys_info() here? All information
-provided by panic_print_sys_info(false) can be found also in
-the crash dump.
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
 
->  	/*
->  	 * If we have crashed and we have a crash kernel loaded let it handle
-> @@ -283,6 +286,8 @@ void panic(const char *fmt, ...)
->  	 */
->  	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
->  
-> +	panic_print_sys_info(false);
-
-This is where the info might be printed 2nd time.
-
-> +
->  	kmsg_dump(KMSG_DUMP_PANIC);
->  
->  	/*
-
-Otherwise, the change makes sense to me.
-
-Best Regards,
-Petr
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes

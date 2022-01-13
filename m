@@ -2,148 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 501DD48D755
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C50D48D765
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234435AbiAMMRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:17:34 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:5920 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232859AbiAMMRd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:17:33 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20DBxS7W016291;
-        Thu, 13 Jan 2022 12:17:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=9aPU+stAVNBLD4l18gFpeDNu8lWn5ruJ8jdovoj7DjY=;
- b=gpZyAiNxrTgTJRUCXQIxGMnU5l23EMwCLXWGd2hsbf5WYK+SV3dcQ8IR8HpetqzwDlmg
- 9+fRdmnwdg4lLDvDeZpuOcXsyuCoT69JVVvFt1zE/TAaKbbUZOhMld8Gjj9Y1PdCd2qG
- xSl6pA0ix1d8vZgMdRWdyUm6CpnbV8Caf0iIsbu5uZw0nzHwmMLSfFth1IH14RyWDpVa
- r5FlopY3Nw2s/pwchASynoL5KLpaVcNrZ5ddwlI9RWcuR0jiBYD3N2MYgUZzvxNVqnWQ
- s3ksBKi8ho55QASRBtrzlAIoJG+Qb8UnmSL+AlrL9jsZ9CY6HunKLMuAqt/D9gwo+HSn +g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3djkpdrbr2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:17:27 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20DC9kOS027389;
-        Thu, 13 Jan 2022 12:17:27 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3djkpdrbqh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:17:27 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20DCCHwn022191;
-        Thu, 13 Jan 2022 12:17:25 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3df28a45t9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:17:25 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20DC8HJb44958108
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Jan 2022 12:08:17 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CE7954C052;
-        Thu, 13 Jan 2022 12:17:22 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 62CE24C046;
-        Thu, 13 Jan 2022 12:17:22 +0000 (GMT)
-Received: from localhost (unknown [9.43.54.234])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 13 Jan 2022 12:17:22 +0000 (GMT)
-Date:   Thu, 13 Jan 2022 17:47:21 +0530
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jan Kara <jack@suse.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>, tytso@mit.edu,
-        Eric Whitney <enwlinux@gmail.com>
-Subject: Re: [PATCH 5/6] jbd2: Refactor wait logic for transaction updates
- into a common function
-Message-ID: <20220113121721.nyn7kdmr6boaazvp@riteshh-domain>
-References: <cover.1642044249.git.riteshh@linux.ibm.com>
- <95fa94cbeb4bb0275430a6721a588bd738d5a9aa.1642044249.git.riteshh@linux.ibm.com>
- <20220113113051.5ehxl2ap3v64eyya@quack3.lan>
+        id S234457AbiAMMVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:21:53 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:36178 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234441AbiAMMVw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 07:21:52 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6F5531EC0354;
+        Thu, 13 Jan 2022 13:21:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1642076506;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ZAoUL5a30Wp0xdYKJeBn+tmpm7PgO5BS6psMkuvBq8M=;
+        b=CqlnEkYObcIR43yDYw3C2KJS5WHJlpnJqJMuMnLMlIrYSUNOCpVOEdyX6D3+R3zbMYU5zH
+        A/vKSe0rHv8F1ICeR/Lr3Sk2KzaAY9hlbqsY7gHNJXmYwxVkGGiq5PUfhWLTzg+LlbVkun
+        3Mfw2yZnU4tNkYNsospcmMwNxxEYsm0=
+Date:   Thu, 13 Jan 2022 13:21:50 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 20/40] x86/sev: Use SEV-SNP AP creation to start
+ secondary CPUs
+Message-ID: <YeAZXgW6G/0aVlXn@zn.tnic>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-21-brijesh.singh@amd.com>
+ <Yc8jerEP5CrxfFi4@zn.tnic>
+ <75c0605f-7ed0-abcc-4855-dae5d87d0861@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220113113051.5ehxl2ap3v64eyya@quack3.lan>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6uWLuj5I2dF1xXvNSG00zmpRusw9winC
-X-Proofpoint-GUID: oECPVMpELi1QaZM75eOM1n1l1knGAp_B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-13_04,2022-01-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 suspectscore=0 mlxlogscore=724 lowpriorityscore=0
- clxscore=1015 adultscore=0 mlxscore=0 phishscore=0 spamscore=0
- malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201130073
+In-Reply-To: <75c0605f-7ed0-abcc-4855-dae5d87d0861@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/01/13 12:30PM, Jan Kara wrote:
-> On Thu 13-01-22 08:56:28, Ritesh Harjani wrote:
-> > No functionality change as such in this patch. This only refactors the
-> > common piece of code which waits for t_updates to finish into a common
-> > function named as jbd2_journal_wait_updates(journal_t *)
-> >
-> > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
->
-> Just one nit, otherwise. Feel free to add:
->
-> Reviewed-by: Jan Kara <jack@suse.cz>
->
-> > @@ -1757,6 +1757,35 @@ static inline unsigned long jbd2_log_space_left(journal_t *journal)
-> >  	return max_t(long, free, 0);
-> >  }
-> >
-> > +/*
-> > + * Waits for any outstanding t_updates to finish.
-> > + * This is called with write j_state_lock held.
-> > + */
-> > +static inline void jbd2_journal_wait_updates(journal_t *journal)
-> > +{
-> > +	transaction_t *commit_transaction = journal->j_running_transaction;
-> > +
-> > +	if (!commit_transaction)
-> > +		return;
-> > +
-> > +	spin_lock(&commit_transaction->t_handle_lock);
-> > +	while (atomic_read(&commit_transaction->t_updates)) {
-> > +		DEFINE_WAIT(wait);
-> > +
-> > +		prepare_to_wait(&journal->j_wait_updates, &wait,
-> > +					TASK_UNINTERRUPTIBLE);
-> > +		if (atomic_read(&commit_transaction->t_updates)) {
-> > +			spin_unlock(&commit_transaction->t_handle_lock);
-> > +			write_unlock(&journal->j_state_lock);
-> > +			schedule();
-> > +			write_lock(&journal->j_state_lock);
-> > +			spin_lock(&commit_transaction->t_handle_lock);
-> > +		}
-> > +		finish_wait(&journal->j_wait_updates, &wait);
-> > +	}
-> > +	spin_unlock(&commit_transaction->t_handle_lock);
-> > +}
-> > +
->
-> I don't think making this inline makes sence. Neither the commit code nor
-> jbd2_journal_lock_updates() are so hot that it would warrant this large
-> inline function...
+On Wed, Jan 12, 2022 at 10:33:40AM -0600, Brijesh Singh wrote:
+> Yes, the SEV-SNP feature is required. Anyway, I will improve a check. We
+> will reach to AP creation only after SEV-SNP feature is checked, so, in AP
+> creation routine we just need to check for the AP_CREATION specific feature
+> flag; I will add comment about it.
 
-Yes, make sense. Thanks for the review.
-Will do the needful in v2.
+Right, at least a comment explaining why the bits are ORed.
+> 
+> > You can still enforce that requirement in the test though.
+> > 
+> > Or all those SEV features should not be bits but masks -
+> > GHCB_HV_FT_SNP_AP_CREATION_MASK for example, seeing how the others
+> > require the previous bits to be set too.
 
--ritesh
+Thinking about this more, calling it a "mask" might not be optimal here
+as you use masks usually to, well, mask out bits, etc. So I guess a
+comment explaning why the OR-in of bit 0...
 
->
-> 								Honza
->
-> --
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

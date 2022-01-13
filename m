@@ -2,140 +2,424 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2DF48D3A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA2D48D3AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 09:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233072AbiAMIar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 03:30:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233039AbiAMIaq (ORCPT
+        id S233079AbiAMIdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 03:33:53 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:39304 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231576AbiAMIdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 03:30:46 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3275C061748
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 00:30:46 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id z19so1809085ioj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 00:30:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=y5adlxntEYi2bnudQTucURekR8+PW27N0Rz8bbantH4=;
-        b=jb7FRwDCCwtlzdLBCME9hmSLl6t7/jrRvUs1KMP4s2xtHys/g1zhAKVvFhafLd1MEf
-         gqGDsX1bWdGx6ZF0ePXExEcMJ7tFz+5LAyXjBd7hCpx4gRUoxc4DCkZRhD4V9sKPWT6k
-         FquTEMFAWvmQ+r/J7JsjlbXmLTwevYe+dYn5c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=y5adlxntEYi2bnudQTucURekR8+PW27N0Rz8bbantH4=;
-        b=LTa7cep3FKfhFzBi63bSkgSNeH8va/t3jzvPQCi86rxUVrRnojMg9LmeNM3PILGt/7
-         ppyqAUezW1M4Fned+SuQpboEikvQjtFhIKAjLacpDXcuW2Y1W2t1mpZ1Za2p5MXxHA0t
-         Z0Y6eQGxDAM2DTg/ybiQl+RSohMudKAl25m6n9wvllAOW0P0fwKBSYsxM0Of+7dWZEwk
-         yGha28CUcejQiYZX4S0gWVr1bVBbt3OG1RlJFFeHzBBKbbUgQ6vf8dduzP15TR/a66/y
-         EF2juQEgdSTXlrqN5MsJsFeWnpWukGrPUPoTQnUxiriGAq6uyka9GKWFFJh6uyMoV0uG
-         0QWg==
-X-Gm-Message-State: AOAM531AJnWd7C7WOUijbrtwPXcsMzVpDwpb/m8J8wHL4W7/gftZKry7
-        or8eNNk/pqA6ieO9ooLCHCf7iKJ1rD9uo5oWOZi0Vg==
-X-Google-Smtp-Source: ABdhPJzxd5OkVm/ge397TAbNMmK+9iaTRpcp6F/fGx99WpqbPLJMhgOV7b8m/VuiIwqFY4GBST05XnrVQezh3f0Nqbo=
-X-Received: by 2002:a6b:7b49:: with SMTP id m9mr415723iop.204.1642062646094;
- Thu, 13 Jan 2022 00:30:46 -0800 (PST)
+        Thu, 13 Jan 2022 03:33:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1642062832; x=1673598832;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6AWYjbFjPdPRK/eNAT9yVMWChYldalFgXsQC0udfYaE=;
+  b=xY8A8EtlUAHGlggMgiSbn9CUaVlc2biw+1/X03wsael67yA0E/rT5YTl
+   FmE8clFeYkLIDnYfid7DoCcdA/ezI8DxeaDLey8FZdNFfMJH+ahmXkUtU
+   yTOjwHVRV/KCvJVxltY11rtlpe51StihAr1AKU5WGNxAT/cx4lwHuYDmg
+   +N8Ot1Kq7+lfsohMmeidyEzH0XlxODghQPe/I5EOUAB/2JuLv17fE2RWL
+   jp3fh7DLzCyqwnRlBfcnnjwWJuMrW7vdHBGFYM8Qt850P7LU0UN7n/BgW
+   b7ccuqkhqIcwbhKakz2uYMt6BKdq0m/Y0686WyOI+g1FbKkTbtPWTEF1q
+   A==;
+IronPort-SDR: zRUq+km2BCNrJCiCp9OKjGj479KjKUkEDwtAQCw+pKgCnuuDIvwGe9LRLCmNsjiqiCRqQ2LPOy
+ +U+EJNvQsrNleRDN8OuGeTYzBYkpimUzZEesdpvRWSebSkkvyiUuSNDOKapS3sQOZHqhZfsf7s
+ f8oa/OvtaEsJ6SWRjM/0m2a2BvgqQ5XvKTLEVcRHsRgvy7WTko4+SkXqh1VPOPTSZyzW/WQY9B
+ sgASsW9IcFppvseJGVHUg4mjyPOPtjcBl4kion9wh8oQ3Dov62u/KiOuiVrjpeSp0g8NeuH64+
+ lbNF5bT+Z4R0mRoRA+wIgHVr
+X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
+   d="scan'208";a="158523714"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jan 2022 01:33:51 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 13 Jan 2022 01:33:51 -0700
+Received: from [10.12.88.83] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 13 Jan 2022 01:33:49 -0700
+Message-ID: <f8b83cf0-7ebf-1ecd-b544-f0d0079d9dde@microchip.com>
+Date:   Thu, 13 Jan 2022 09:33:48 +0100
 MIME-Version: 1.0
-References: <20220113073158.2171673-1-hsinyi@chromium.org> <2e676870-11f2-b5fa-faf1-d6633e801a5a@wanadoo.fr>
-In-Reply-To: <2e676870-11f2-b5fa-faf1-d6633e801a5a@wanadoo.fr>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Thu, 13 Jan 2022 16:30:20 +0800
-Message-ID: <CAJMQK-jZgw0Kw0ON8sY=+FFf_Z_Pys48DN+r+g6cCUqcw_7-8A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] drm/bridge: anx7625: Convert to use devm_kzalloc
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Xin Ji <xji@analogixsemi.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v3] ARM: dts: add DT for lan966x SoC and 2-port board
+ pcb8291
+Content-Language: en-US
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        <arnd@arndb.de>, <olof@lixom.net>, <soc@kernel.org>,
+        <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>
+References: <20220113080017.30155-1-kavyasree.kotagiri@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20220113080017.30155-1-kavyasree.kotagiri@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 4:04 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Le 13/01/2022 =C3=A0 08:31, Hsin-Yi Wang a =C3=A9crit :
-> > Use devm_kzalloc instead of kzalloc and drop kfree(). Let the memory
-> > handled by driver detach.
-> >
-> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > Reviewed-by: Xin Ji <xji@analogixsemi.com>
-> > ---
-> >   drivers/gpu/drm/bridge/analogix/anx7625.c | 9 +++------
-> >   1 file changed, 3 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/dr=
-m/bridge/analogix/anx7625.c
-> > index 0b858c78abe8b6..dbe708eb3bcf11 100644
-> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > @@ -2515,7 +2515,7 @@ static int anx7625_i2c_probe(struct i2c_client *c=
-lient,
-> >               return -ENODEV;
-> >       }
-> >
-> > -     platform =3D kzalloc(sizeof(*platform), GFP_KERNEL);
-> > +     platform =3D devm_kzalloc(dev, sizeof(*platform), GFP_KERNEL);
-> >       if (!platform) {
-> >               DRM_DEV_ERROR(dev, "fail to allocate driver data\n");
-> >               return -ENOMEM;
-> > @@ -2527,7 +2527,7 @@ static int anx7625_i2c_probe(struct i2c_client *c=
-lient,
-> >       if (ret) {
-> >               if (ret !=3D -EPROBE_DEFER)
-> >                       DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret=
-);
-> > -             goto free_platform;
-> > +             return ret;
-> >       }
-> >
-> >       platform->client =3D client;
-> > @@ -2552,7 +2552,7 @@ static int anx7625_i2c_probe(struct i2c_client *c=
-lient,
-> >       if (!platform->hdcp_workqueue) {
-> >               dev_err(dev, "fail to create work queue\n");
-> >               ret =3D -ENOMEM;
-> > -             goto free_platform;
-> > +             return ret;
-> >       }
-> >
-> >       platform->pdata.intp_irq =3D client->irq;
-> > @@ -2637,9 +2637,6 @@ static int anx7625_i2c_probe(struct i2c_client *c=
-lient,
-> >       if (platform->hdcp_workqueue)
-> >               destroy_workqueue(platform->hdcp_workqueue);
-> >
-> > -free_platform:
-> > -     kfree(platform);
-> > -
-> >       return ret;
-> >   }
-> >
->
-> Hi,
->
-> you also need to update anx7625_i2c_remove() accordingly, otherwise you
-> introduce a double free.
->
-Hi,
+On 13/01/2022 at 09:00, Kavyasree Kotagiri wrote:
+> This patch adds basic DT for Microchip lan966x SoC and associated board
+> pcb8291(2-port EVB). Adds peripherals required to allow booting: IRQs,
+> clocks, timers, memory, flexcoms, GPIOs. Also adds other peripherals like
+> crypto(AES,SHA), DMA and watchdog.
+> 
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
 
-Updated in v3.
-> CJ
->
->
+Looks good to me:
+Reviewed-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+
+Best regards,
+   Nicolas
+
+
+> ---
+> v2 -> v3:
+> - Enabling trng in dtsi itself.
+> - Removed "status=okay" dma0.
+> - Add gpio pin settings for can0(missed adding this in previous version)
+> 
+> v1 -> v2:
+> - Moved flx3 usart0 node to dtsi file.
+> - Removed status="okay" for dma0 to maintain consistency across nodes
+>    (which means enabling dma0 by default)
+> 
+>   arch/arm/boot/dts/Makefile            |   2 +
+>   arch/arm/boot/dts/lan966x.dtsi        | 242 ++++++++++++++++++++++++++
+>   arch/arm/boot/dts/lan966x_pcb8291.dts |  53 ++++++
+>   3 files changed, 297 insertions(+)
+>   create mode 100644 arch/arm/boot/dts/lan966x.dtsi
+>   create mode 100644 arch/arm/boot/dts/lan966x_pcb8291.dts
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 235ad559acb2..2040a990f08c 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -735,6 +735,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
+>   dtb-$(CONFIG_SOC_IMX7ULP) += \
+>   	imx7ulp-com.dtb \
+>   	imx7ulp-evk.dtb
+> +dtb-$(CONFIG_SOC_LAN966) += \
+> +	lan966x_pcb8291.dtb
+>   dtb-$(CONFIG_SOC_LS1021A) += \
+>   	ls1021a-moxa-uc-8410a.dtb \
+>   	ls1021a-qds.dtb \
+> diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
+> new file mode 100644
+> index 000000000000..d7bc36a998bc
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/lan966x.dtsi
+> @@ -0,0 +1,242 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * lan966x.dtsi - Device Tree Include file for Microchip LAN966x family SoC
+> + *
+> + * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
+> + *
+> + * Author: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> + *
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/mfd/atmel-flexcom.h>
+> +#include <dt-bindings/dma/at91.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/clock/microchip,lan966x.h>
+> +
+> +/ {
+> +	model = "Microchip LAN966x family SoC";
+> +	compatible = "microchip,lan966x";
+> +	interrupt-parent = <&gic>;
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpu@0 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a7";
+> +			clock-frequency = <600000000>;
+> +			reg = <0x0>;
+> +		};
+> +	};
+> +
+> +	memory@60000000 {
+> +		device_type = "memory";
+> +		reg = <0x60000000 0x40000000>;  /* 1GB */
+> +	};
+> +
+> +	clocks {
+> +		sys_clk: sys_clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <162500000>;
+> +		};
+> +
+> +		cpu_clk: cpu_clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <600000000>;
+> +		};
+> +
+> +		ddr_clk: ddr_clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <300000000>;
+> +		};
+> +
+> +		nic_clk: nic_clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <200000000>;
+> +		};
+> +	};
+> +
+> +	clks: clock-controller@e00c00a8 {
+> +		compatible = "microchip,lan966x-gck";
+> +		#clock-cells = <1>;
+> +		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
+> +		clock-names = "cpu", "ddr", "sys";
+> +		reg = <0xe00c00a8 0x38>;
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv7-timer";
+> +		interrupt-parent = <&gic>;
+> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
+> +		clock-frequency = <37500000>;
+> +		arm,cpu-registers-not-fw-configured;
+> +	};
+> +
+> +	soc {
+> +		compatible = "simple-bus";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges;
+> +
+> +		flx0: flexcom@e0040000 {
+> +			compatible = "atmel,sama5d2-flexcom";
+> +			reg = <0xe0040000 0x100>;
+> +			clocks = <&clks GCK_ID_FLEXCOM0>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0x0 0xe0040000 0x800>;
+> +			status = "disabled";
+> +		};
+> +
+> +		flx1: flexcom@e0044000 {
+> +			compatible = "atmel,sama5d2-flexcom";
+> +			reg = <0xe0044000 0x100>;
+> +			clocks = <&clks GCK_ID_FLEXCOM1>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0x0 0xe0044000 0x800>;
+> +			status = "disabled";
+> +		};
+> +
+> +		trng: trng@e0048000 {
+> +			compatible = "atmel,at91sam9g45-trng";
+> +			reg = <0xe0048000 0x100>;
+> +			clocks = <&nic_clk>;
+> +		};
+> +
+> +		aes: aes@e004c000 {
+> +			compatible = "atmel,at91sam9g46-aes";
+> +			reg = <0xe004c000 0x100>;
+> +			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
+> +			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
+> +			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
+> +			dma-names = "rx", "tx";
+> +			clocks = <&nic_clk>;
+> +			clock-names = "aes_clk";
+> +		};
+> +
+> +		flx2: flexcom@e0060000 {
+> +			compatible = "atmel,sama5d2-flexcom";
+> +			reg = <0xe0060000 0x100>;
+> +			clocks = <&clks GCK_ID_FLEXCOM2>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0x0 0xe0060000 0x800>;
+> +			status = "disabled";
+> +		};
+> +
+> +		flx3: flexcom@e0064000 {
+> +			compatible = "atmel,sama5d2-flexcom";
+> +			reg = <0xe0064000 0x100>;
+> +			clocks = <&clks GCK_ID_FLEXCOM3>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0x0 0xe0064000 0x800>;
+> +			status = "disabled";
+> +
+> +			usart0: serial@200 {
+> +				compatible = "atmel,at91sam9260-usart";
+> +				reg = <0x200 0x200>;
+> +				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
+> +				clocks = <&nic_clk>;
+> +				clock-names = "usart";
+> +				atmel,fifo-size = <32>;
+> +				status = "disabled";
+> +			};
+> +		};
+> +
+> +		dma0: dma-controller@e0068000 {
+> +			compatible = "microchip,sama7g5-dma";
+> +			reg = <0xe0068000 0x1000>;
+> +			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
+> +			#dma-cells = <1>;
+> +			clocks = <&nic_clk>;
+> +			clock-names = "dma_clk";
+> +		};
+> +
+> +		sha: sha@e006c000 {
+> +			compatible = "atmel,at91sam9g46-sha";
+> +			reg = <0xe006c000 0xec>;
+> +			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
+> +			dmas = <&dma0 AT91_XDMAC_DT_PERID(14)>;
+> +			dma-names = "tx";
+> +			clocks = <&nic_clk>;
+> +			clock-names = "sha_clk";
+> +		};
+> +
+> +		flx4: flexcom@e0070000 {
+> +			compatible = "atmel,sama5d2-flexcom";
+> +			reg = <0xe0070000 0x100>;
+> +			clocks = <&clks GCK_ID_FLEXCOM4>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0x0 0xe0070000 0x800>;
+> +			status = "disabled";
+> +		};
+> +
+> +		timer0: timer@e008c000 {
+> +			compatible = "snps,dw-apb-timer";
+> +			reg = <0xe008c000 0x400>;
+> +			clocks = <&nic_clk>;
+> +			clock-names = "timer";
+> +			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> +		};
+> +
+> +		watchdog: watchdog@e0090000 {
+> +			compatible = "snps,dw-wdt";
+> +			reg = <0xe0090000 0x1000>;
+> +			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&nic_clk>;
+> +		};
+> +
+> +		can0: can@e081c000 {
+> +			compatible = "bosch,m_can";
+> +			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
+> +			reg-names = "m_can", "message_ram";
+> +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "int0", "int1";
+> +			clocks = <&clks GCK_ID_MCAN0>, <&clks GCK_ID_MCAN0>;
+> +			clock-names = "hclk", "cclk";
+> +			assigned-clocks = <&clks GCK_ID_MCAN0>;
+> +			assigned-clock-rates = <40000000>;
+> +			bosch,mram-cfg = <0x0 0 0 64 0 0 32 32>;
+> +			status = "disabled";
+> +		};
+> +
+> +		gpio: pinctrl@e2004064 {
+> +			compatible = "microchip,lan966x-pinctrl";
+> +			reg = <0xe2004064 0xb4>,
+> +			    <0xe2010024 0x138>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +			gpio-ranges = <&gpio 0 0 78>;
+> +			interrupt-controller;
+> +			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
+> +			#interrupt-cells = <2>;
+> +		};
+> +
+> +		gic: interrupt-controller@e8c11000 {
+> +			compatible = "arm,gic-400", "arm,cortex-a7-gic";
+> +			#interrupt-cells = <3>;
+> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-controller;
+> +			reg = <0xe8c11000 0x1000>,
+> +			      <0xe8c12000 0x2000>,
+> +			      <0xe8c14000 0x2000>,
+> +			      <0xe8c16000 0x2000>;
+> +		};
+> +	};
+> +};
+> diff --git a/arch/arm/boot/dts/lan966x_pcb8291.dts b/arch/arm/boot/dts/lan966x_pcb8291.dts
+> new file mode 100644
+> index 000000000000..cf54f42c763d
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/lan966x_pcb8291.dts
+> @@ -0,0 +1,53 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * lan966x_pcb8291.dts - Device Tree file for PCB8291
+> + */
+> +/dts-v1/;
+> +#include "lan966x.dtsi"
+> +
+> +/ {
+> +	model = "Microchip EVB - LAN9662";
+> +	compatible = "microchip,lan9662-pcb8291", "microchip,lan9662", "microchip,lan966";
+> +};
+> +
+> +&gpio {
+> +	fc_shrd7_pins: fc_shrd7-pins {
+> +		pins = "GPIO_49";
+> +		function = "fc_shrd7";
+> +	};
+> +
+> +	fc_shrd8_pins: fc_shrd8-pins {
+> +		pins = "GPIO_54";
+> +		function = "fc_shrd8";
+> +	};
+> +
+> +	fc3_b_pins: fcb3-spi-pins {
+> +		/* SCK, RXD, TXD */
+> +		pins = "GPIO_51", "GPIO_52", "GPIO_53";
+> +		function = "fc3_b";
+> +	};
+> +
+> +	can0_b_pins:  can0_b_pins {
+> +		/* RX, TX */
+> +		pins = "GPIO_35", "GPIO_36";
+> +		function = "can0_b";
+> +	};
+> +};
+> +
+> +&can0 {
+> +	pinctrl-0 = <&can0_b_pins>;
+> +	pinctrl-names = "default";
+> +	status = "okay";
+> +};
+> +
+> +&flx3 {
+> +	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
+> +	status = "okay";
+> +
+> +	usart0: serial@200 {
+> +		pinctrl-0 = <&fc3_b_pins>, <&fc_shrd7_pins>, <&fc_shrd8_pins>;
+> +		pinctrl-names = "default";
+> +		status = "okay";
+> +	};
+> +};
+> +
+> 
+
+
+-- 
+Nicolas Ferre

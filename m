@@ -2,115 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B4448D747
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BC548D74A
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234400AbiAMMNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:13:49 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:33721 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbiAMMNt (ORCPT
+        id S234409AbiAMMO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:14:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52362 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230310AbiAMMO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:13:49 -0500
-Received: from [192.168.100.1] ([82.142.23.158]) by mrelayeu.kundenserver.de
- (mreue109 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1MC2sF-1n2nNI1SaD-00CNUR; Thu, 13 Jan 2022 13:13:25 +0100
-Message-ID: <9683b9b7-22f8-dd59-b8f5-3294002c9dda@vivier.eu>
-Date:   Thu, 13 Jan 2022 13:13:23 +0100
+        Thu, 13 Jan 2022 07:14:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642076066;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+0lIRoOhUZRcmverl2fS/N58QWJmAbrDo4GjOCnd6uY=;
+        b=FnLpWe6YqOj0xlt1BTO7bzrlAKJySL7kJt7Cji8CaTp8exbknJYriigq+88/ArNLFsc2jm
+        b4iNRJxfCDgtAV9B/biddxi3koT3goP80HiFQo1HCcpl//9RyFbVehMlKXwUGdX2ralXki
+        oMoxGTI91WShClfreSZo52eNcJHLRvU=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-386-H6eRGF6BPMmKlZ0fx6-phg-1; Thu, 13 Jan 2022 07:14:25 -0500
+X-MC-Unique: H6eRGF6BPMmKlZ0fx6-phg-1
+Received: by mail-ed1-f69.google.com with SMTP id c8-20020a05640227c800b003fdc1684cdeso5188985ede.12
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:14:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+0lIRoOhUZRcmverl2fS/N58QWJmAbrDo4GjOCnd6uY=;
+        b=1pXWkePhGmA9VIo+Aq2Hk6K6nyTlPJ++DntQD4l+9/xGWRr4I+31605zCficwbwN5i
+         cSjagwVtrdF51v8p+8HAPKxHqYftSCZ2D+sJo4n8gCVGyeKyjdYbNvJm1qWUwYWa+nCm
+         OV0MHPCsKSySuE03iZvOw/JkAKXr3RrSediod+NKOKjbPlnT2fYDemEMZieYegKVREDR
+         eW9q9KdaOTNwjNBwTJMrljWe2z/m29pEMCUyRvThezpaC35OEiS5JQEz8Dm46DG7pgTc
+         PSbO14S6NChwpfb8n8mHoXNwtgnc0KKBe5RYttcZGmsoq8X/zquX0e5N8Qs9+53mCDph
+         09KQ==
+X-Gm-Message-State: AOAM533fAvk/0uCWif7wjnX9vn2qKl6NOmy6HDQ7I0T/Jg5KhQ/7r4IO
+        4DZTCu+Kdcm2DcTG7Ol2pyG+jpGXBuEZkKRYDjvk46HMQMw1PZUXkXQVmmoncYbOoDl37EPqou1
+        4QgRPy6uFNQzsBEPr7v5mUjeO
+X-Received: by 2002:a17:906:dc94:: with SMTP id cs20mr3224678ejc.316.1642076063775;
+        Thu, 13 Jan 2022 04:14:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxPQMF6TGaiElXpWlkkYzbwGgnKNg/CxUKtTPr6TZd994YwTxRDTgzO+5g21JW/xapJL8Xr3w==
+X-Received: by 2002:a17:906:dc94:: with SMTP id cs20mr3224656ejc.316.1642076063508;
+        Thu, 13 Jan 2022 04:14:23 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id c9sm839546ejf.10.2022.01.13.04.14.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 04:14:22 -0800 (PST)
+Message-ID: <e9e5521d-21e5-8f6f-902c-17b0516b9839@redhat.com>
+Date:   Thu, 13 Jan 2022 13:14:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH v5 3/3] m68k: virt: Remove LEGACY_TIMER_TICK
-Content-Language: fr
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-References: <20220113103559.2577216-1-laurent@vivier.eu>
- <20220113103559.2577216-4-laurent@vivier.eu>
- <CAK8P3a2_cJi9+SNi9gK6+5kpBo4wmVw4hz42Bq_jm1+s6AvENQ@mail.gmail.com>
- <8c0b3146-35ee-b0b2-468b-1c8dcdaf64ee@vivier.eu>
- <CAK8P3a0GYm=Q5aPJuJJ7JoBQw4+QokgkMKv_D+YgYfzPODRYSQ@mail.gmail.com>
-From:   Laurent Vivier <laurent@vivier.eu>
-In-Reply-To: <CAK8P3a0GYm=Q5aPJuJJ7JoBQw4+QokgkMKv_D+YgYfzPODRYSQ@mail.gmail.com>
+Subject: Re: KVM: Warn if mark_page_dirty() is called without an active vCPU
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        dwmw2@infradead.org
+Cc:     butterflyhuangxx@gmail.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, seanjc@google.com,
+        Cornelia Huck <cohuck@redhat.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Thomas Huth <thuth@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+References: <e8f40b8765f2feefb653d8a67e487818f66581aa.camel@infradead.org>
+ <20220113120609.736701-1-borntraeger@linux.ibm.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220113120609.736701-1-borntraeger@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:gWqV6o1Xyy0Ag042sc9wQK/RLfj3E36EMp30cmMNVBJDeNyGU85
- aIJZuFvosWUhWyoOHmiJVEmNFtvR2r4JlxxaS64tkuL1pMffKw4tQaXesW5U/Ypz58LBkRC
- woKxw5weVLe0WEStN/VmUsaylE5iJvr3YHYa5RAFraushdwNs8RgyauJgAORVVC508THUMs
- cx5PSs31Fkqt0BxyPdZIw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cXQBwq5M7Nk=:WsbMwMa4YHlmaMQW7gqTjY
- /6V6FHG+p1TnGszo/P+hbJKzT6c9PGf1XOdhhZZpNsltdMC9wGJ4q893loHS2Qwt+MH6aV9XS
- uX8ZtyahyOvvolvuZAKhY/jRaNouL0zy8whiwQRJ3DD+oqhzCnEn3uqwtk3w1yyxYQSquPA3R
- zeYO+4OYfFgp/KyO90HrAKn9HwNG8hXRz8l6vm8l5qHm0URidZjhO4oNrYNyyUW9e7VRrhOXd
- wNXG/tFGxDkova74hHTJEitFgCOEDIj/5ssIafBJ1w0n93dCjaZB9LPexcrTlh1kTNgjRgN6v
- 19yRMQ9lnzSCHGk7wPWSWMZOD0YsVmiN5JICJweY1rekQdDQIdgHm1ml7tusOEj9OsRaMYm1l
- Ny1r+AbM/0GifVSlltA267F7us2TcFCTC7GCUPgghkFQ9dvRJcfgMkFtJEBkpGjD1bnlMOyii
- +oiWD33hOnXX0eetenbs0VR2pkpsZHImAwbunmHO2BfLigF1o3CUlg4U5DGW9R4iBmcez5MOP
- //qb60ZR3uNhhDCNHtLKNV8hZX8LAWro6AP4hvHea/cjN9ehqVz4gfg21kn2LKhvdtNkLQUEa
- KQ2Kh5BxDWAibXYZRKpZg1PVUme+IllFltXUHq5vax4Aznjm8VBz7EmT1zkSlL6Aii5pelp6t
- 7fYefoCMEJy4Bi3l2/8p4jScMdj5apojpvZcRqEkZxVXtGn+RFYwKdQUEPGb37af51OA=
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 13/01/2022 à 12:42, Arnd Bergmann a écrit :
-> On Thu, Jan 13, 2022 at 12:32 PM Laurent Vivier <laurent@vivier.eu> wrote:
->> Le 13/01/2022 à 12:20, Arnd Bergmann a écrit :
->>> On Thu, Jan 13, 2022 at 11:35 AM Laurent Vivier <laurent@vivier.eu> wrote:
->>>>
->>>> Move virt machine to generic clockevents.
->>>>
->>>> cc: Arnd Bergmann <arnd@arndb.de>
->>>> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
->>>
->>> The change looks good, but it appears that you only just add the legacy code
->>> in the same series, and it would be easier to just add the correct version
->>> first.
->>
->> In fact, I'd like to keep it separated for two reasons:
->> - it can be used as an example for people that want to move from legacy to clockevents,
->> - the machine with legacy timer tick is in use for more than one year by debian to propose a m68k
->> buildd and dev machine, so it is really well tested and robust. If there is a bug in my clockevents
->> use it will be easier to detect.
+On 1/13/22 13:06, Christian Borntraeger wrote:
+> From: Christian Borntraeger<borntraeger@de.ibm.com>
 > 
-> In general, it should be easier to do a correct generic driver than
-> an implementation for the legacy interface.
-> 
->>>> diff --git a/arch/m68k/virt/timer.c b/arch/m68k/virt/timer.c
->>>> index 843bf6ed7e1a..767b01f75abb 100644
->>>> --- a/arch/m68k/virt/timer.c
->>>> +++ b/arch/m68k/virt/timer.c
->>>
->>> How about moving the entire file to drivers/clocksource/timer-goldfish.c?
->>> It shouldn't even be architecture specific any more at this point. It probably
->>> still is in practice, but that could be addressed when another architecture
->>> wants to share the implementation.
->>
->> For the moment I'd like to have my m68k virt machine merged, and I think it will be easier if I hit
->> only one subsystem/maintainer. Moreover I don't know if I use correctly the goldfish-rtc,  so for
->> the moment I think it's better if I keep it hidden in arch/m68k/virt.
->>
->> But I can propose to send a patch to move this code to drivers/clocksource/timer-goldfish.c once the
->> machine is merged.
-> 
-> If you are not sure about that implementation, I would think that's an
-> extra reason to
-> submit it to the clocksource maintainers for review (added to Cc
-> here). You should still
-> be able to merge the driver in the new location through the m68k tree
-> as part of your
-> series, but regardless of where it goes I think it needs an Ack from them.
-> 
+> Quick heads-up.
+> The new warnon triggers on s390. Here we write to the guest from an
+> irqfd worker. Since we do not use dirty_ring yet this might be an over-indication.
+> Still have to look into that.
 
-OK, I move my code to drivers/clocksource/timer-goldfish.c and send a new version of the series.
+Yes, it's okay to add an #ifdef around the warning.
 
-Thanks,
-Laurent
+Paolo
+

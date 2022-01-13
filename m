@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0885F48DB8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A689D48DB90
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236587AbiAMQTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 11:19:03 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:49797 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229533AbiAMQSz (ORCPT
+        id S236582AbiAMQTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 11:19:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229533AbiAMQTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 11:18:55 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V1kwl3w_1642090727;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V1kwl3w_1642090727)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 14 Jan 2022 00:18:53 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     rafael@kernel.org
-Cc:     lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] ACPI: PCC: make pcc_ctx static
-Date:   Fri, 14 Jan 2022 00:18:46 +0800
-Message-Id: <20220113161846.1932-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 13 Jan 2022 11:19:43 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C628DC061574;
+        Thu, 13 Jan 2022 08:19:43 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 68DFF2B0;
+        Thu, 13 Jan 2022 16:19:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 68DFF2B0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1642090783; bh=3xTeg/mcRJ6jj1tM41hsqtdxji8c0oQ9bVtrSi/02NU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=hMetqMN57yFlHq3sM/I40DDe/NgBItpFkdb5pO/w1DjoE5S/t6QVcFa8M2tBWNRfg
+         ehzSV4K93FCH0d8/4wS6B7tv5joiChlUczjobLgmOPQ5NfYFXUFA8kg87KduhD5fME
+         X2xUl4JKzhqj1zIqygiG2CZrORYbN9zqV5bEGdpSsBYTngpYrjs4gno568X1mJQ03D
+         nIzHLKMiPe8znpjOhWqlO0gnDW4CJ3d4sMCudN7ZrTJflce6yHK4gY5IHUPsn0BfaH
+         ibBMNw9Zxp0hsWDGJDKdKzNJDTFO8Dpf9+INB/V07udxLhi0LscQ6MeZtk69L7AybR
+         MSagzJg6bWdIg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Tomasz =?utf-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 00/15] Transform documentation into POD
+In-Reply-To: <20220113074116.3c9883d0@fuji.fritz.box>
+References: <20220104015946.529524-1-tomasz.warniello@gmail.com>
+ <20220113074116.3c9883d0@fuji.fritz.box>
+Date:   Thu, 13 Jan 2022 09:19:57 -0700
+Message-ID: <87tue7d2vm.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This symbol is not used outside of acpi_pcc.c, so marks it static.
+Tomasz Warnie=C5=82=C5=82o <tomasz.warniello@gmail.com> writes:
 
-Fix the following sparse warning:
+> Any news here?
 
-drivers/acpi/acpi_pcc.c:34:22: warning: symbol 'pcc_ctx' was not
-declared. Should it be static?
+Merge window is open; I'll look more closely at stuff like this toward
+the end.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/acpi/acpi_pcc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
 
-diff --git a/drivers/acpi/acpi_pcc.c b/drivers/acpi/acpi_pcc.c
-index 41e3ebd204ff..a12b55d81209 100644
---- a/drivers/acpi/acpi_pcc.c
-+++ b/drivers/acpi/acpi_pcc.c
-@@ -31,7 +31,7 @@ struct pcc_data {
- 	struct acpi_pcc_info ctx;
- };
- 
--struct acpi_pcc_info pcc_ctx;
-+static struct acpi_pcc_info pcc_ctx;
- 
- static void pcc_rx_callback(struct mbox_client *cl, void *m)
- {
--- 
-2.20.1.7.g153144c
-
+jon

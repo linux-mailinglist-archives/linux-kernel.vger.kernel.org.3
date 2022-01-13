@@ -2,124 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D057048DC11
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0564A48DC23
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 17:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231919AbiAMQmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 11:42:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236831AbiAMQmi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 11:42:38 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9221BC061574;
-        Thu, 13 Jan 2022 08:42:38 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id bp39so7440729qtb.6;
-        Thu, 13 Jan 2022 08:42:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YDBFBN45E0LghCivDsoa7Pk9qU2TzMpXvbqtD8ADANo=;
-        b=M9GRXqJh3cFStpViu1P2owizAUgP4j/B5cl2eBO2Nplw5yzftWIB8mpT/RBIYG0iNA
-         T4HYYXFJD1AeHE7sB7fnG/ZqJD1LJxPqxJwTiSoFfPI5jdAoDHRu+Xze6CB1pX9czBCn
-         hVgC7uF0BmP/lSLSm2ldISI+7VRSfDo1XeczuB3/mbtFxdowxV26sdzyXocJkfSk9FfR
-         +TMl4djexIg1rpexsT9ImxF1DF39h/fJtp8FnOGIrKtvGNIRrcugO1IZswe7CYkMwXZ/
-         awQm8N6SQLX3Sqd10KkS4TmxjKOhWJrpLHsrW5fWAhvoMFRbDuUDe3mqCWIqf59f9JdA
-         Rs7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YDBFBN45E0LghCivDsoa7Pk9qU2TzMpXvbqtD8ADANo=;
-        b=h73tppLzuXMXLCHAlzXSoH6HPw8j2XGLGamb56E3ta2WhnVE4Y5HAu2PzgMYD6t9yR
-         DsmxjI0ELO9i9eHR0vtzIto4zxcEulDtMheCJ+Ex3TXXUOrnfpqkNojB0nw818XOmJUk
-         gl1ClbJ9gfr1U51Mk1vfxDUjkOL71lX9xJkSpfoSuYcRAHXbmLZQuLpRbof6WNbqiLX4
-         B4yE0qrADyXMvmflVCdSq8VLVfp1TAhyBXIgHCQOSIKD3o0+9X+sJnIGmOFpM+MzfuBK
-         xNJBlmp1SuOwSVuoudZA5D8Dzr+F49/UWCnDoQm9/hK5KlppE8sc2Gd3tfQV4YS2okIZ
-         YnZg==
-X-Gm-Message-State: AOAM530APMdABT7k5ye8K1e9KfZeUYF8Tc83rhwRlBoR5As+/giGzA7Q
-        oKcfg4rVcXwhKx9BG3QmD80=
-X-Google-Smtp-Source: ABdhPJwU79U0kwTzVyoc+56owTMIvspy8QysLsgYlzEwi7nv74KQOYMmACjDxFsTtm0WEtX6Ph3KeA==
-X-Received: by 2002:a05:622a:652:: with SMTP id a18mr4285127qtb.10.1642092157657;
-        Thu, 13 Jan 2022 08:42:37 -0800 (PST)
-Received: from errol.ini.cmu.edu (pool-108-39-235-221.pitbpa.fios.verizon.net. [108.39.235.221])
-        by smtp.gmail.com with ESMTPSA id h11sm2167272qko.59.2022.01.13.08.42.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 08:42:37 -0800 (PST)
-Date:   Thu, 13 Jan 2022 11:42:34 -0500
-From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     david.abdurachmanov@sifive.com, geert@linux-m68k.org,
-        ulf.hansson@linaro.org, linux-kernel@vger.kernel.org,
-        mdudek@internships.antmicro.com, shorne@gmail.com,
-        paulus@ozlabs.org, joel@jms.id.au, andy.shevchenko@gmail.com,
-        kgugala@antmicro.com, florent@enjoy-digital.fr, hdanton@sina.com,
-        devicetree@vger.kernel.org, mholenko@antmicro.com,
-        linux-mmc@vger.kernel.org, krakoczy@antmicro.com,
-        robh+dt@kernel.org, rdunlap@infradead.org
-Subject: Re: [PATCH v13 2/3] dt-bindings: mmc: Add bindings for LiteSDCard
-Message-ID: <YeBWeqCAWxVXXrLE@errol.ini.cmu.edu>
-References: <20220112222747.3135585-1-gsomlo@gmail.com>
- <20220112222747.3135585-3-gsomlo@gmail.com>
- <1642091374.254625.3647188.nullmailer@robh.at.kernel.org>
+        id S236866AbiAMQoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 11:44:13 -0500
+Received: from mout.gmx.net ([212.227.17.20]:48803 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236855AbiAMQoM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 11:44:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642092244;
+        bh=+GT3R0iprMihU+thXl1YC3ClEpv0BXdo+4Olk8WRQdE=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=PGdCnM39NUfx1conBvPAesCqWWZo3zpNdo5Rp64SlNVX/q5cZ+T1XOFGmHct/t9MD
+         u/Xz5pXUN+lG67aSzcoJvl76WdiGbM2azuBXblZtd2MZgMmoiYXBdbH+9siY8xs40/
+         HrSv8RC2gRQUBy0yjKbjaa505doB5uNrX7AaPM3c=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.168.79]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1ML9yc-1mqvlG05D8-00IF42; Thu, 13
+ Jan 2022 17:44:04 +0100
+Message-ID: <078e9d59-d6b5-797b-5701-6292fc588bef@gmx.de>
+Date:   Thu, 13 Jan 2022 17:42:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1642091374.254625.3647188.nullmailer@robh.at.kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 0/7] agp: Various minor fixes
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>, airlied@linux.ie,
+        daniel.vetter@ffwll.ch, arnd@arndb.de, gregkh@linuxfoundation.org,
+        James.Bottomley@HansenPartnership.com
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20211201114645.15384-1-tzimmermann@suse.de>
+ <aba1a416-cfec-dadb-fff6-48b95346173d@suse.de>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <aba1a416-cfec-dadb-fff6-48b95346173d@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:XW0GanP14yP4WB70CLBZJK+JNRUnOz4GIsF5A+XX1QUATxOpwK0
+ 21NOOiqaSFWKHqRgIZEddksnyG2cfBrkqO3oKqxQ1PXtunv71V09QxxabzPNH/yKco/sOlW
+ wYVoyRNgIZAaPZIvsYnSN8U2MErKsALvchez1duUDT0ozftVPDr3aGwHpMKJsEtwFsIJOio
+ CE6E1cAUn4lw+U0bF+1Xg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZLdOMzogqXo=:pWkaW+F50Qi7ZjRCHoOR4D
+ BVpQUAzWkcMZHMLFI0byrl3sJMJnFiL00N8TkHQ9rK9De11u89biMo8NylPbdmhLJuw9RuB86
+ T4pBM6we/SiD9+L7/2t4TwCIEGdBDwh9WgJ/qakzVxPBuW6d4Kt93QHNjWv+nuo1VSHgeBDBZ
+ wt1AoftD893zZDORawTT3M0AJCncfd7goP/P7PHuGpvIeMM+FV/1fnqkMODdkhKtBMdbi009n
+ SWeLltMKf5rNCKTJOknZwp0t494fFNQUXElw4uOOI9qgvDgdwsCQHBvdi/M5cF4Zf7XRwV1pd
+ pX3cVkxWvsiMHNJ18vmfEQy4FwSIsJbZ3Iun0eBqquUTMGm1KWv1POKTbUtfAdo9+pbbTXZCb
+ YEjZKpSVSbTN9jil3kLg8YKen/jD7Jb3NIxd/4eDJoh25vw/EtwbxlNH8AoxiWV5cI9QI+fiv
+ uQC1ZdYTLVK58nDJkBemH/9Ad/1DESQrbw3YPUqoBRQlVdaUcw69o9UfHXYmJNqa/9GL5lRCw
+ 5EIKo3srWonabIqolQhRWf6mlL9NsW3ptJh5by3TxNmj8hZsFSWNIMbLTpke6J2+vjLNAVvU5
+ Rgdm3B+jL7clKufhmQgJ/7vUd99LpYPhp01ho2DneRVSaus4GuJf32g6HGqDe1f+3lfpapXj0
+ Y6RXjnK2CQabN8o5EjoUCERosb0PnHxB3Y1Z8GJUODb1FnMSywbIeyRCJxcprPzPtGoI1mEXe
+ BzTOkES+//DmOvQxHa2f+m95neFFS6uUWfziaFwfjwJ6d9jBcson2VBSCDFbdWqBFVf7pfjL8
+ nd2IW7Z3OV7gDGKyf+9BTWOt1KaMbR3ZXi3jTGjErh5I1302fhKojvlGDW3NEiScBSxuEqveo
+ Vy9cycQbGqMJHaFhXWHQCTUBFk6QJIJ4fai2xE3go58iXO+MuV9zDbe9ASbxLJe8o+fUvRdsb
+ 5lfUpb7ZfKL4l0bwHtryNBl1roVXZJ0bpBi9yiQAmJ8gAne0u4lggL+KMz9NGAc1xO5EbnEyr
+ +mmiqtGAEKNsWGTh1aQmrujT6qvMUqCY9t9rGwD2T3cdjOUgDjqfI2GGFOcta+nO9uNIxM2Ds
+ zy5BgfZh0QQcxI=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 10:29:34AM -0600, Rob Herring wrote:
-> On Wed, 12 Jan 2022 17:27:46 -0500, Gabriel Somlo wrote:
-> > LiteSDCard is a small footprint, configurable SDCard core for
-> > FPGA based SoCs.
-> > 
-> > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > Reviewed-by: Joel Stanley <joel@jms.id.au>
-> > ---
-> > 
-> > New in v13:
-> >   - add `vmmc-supply` requirement
-> > 
-> >  .../devicetree/bindings/mmc/litex,mmc.yaml    | 77 +++++++++++++++++++
-> >  1 file changed, 77 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mmc/litex,mmc.yaml
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/litex,mmc.example.dt.yaml: mmc@12005000: 'vmmc-supply' is a required property
+On 1/13/22 09:51, Thomas Zimmermann wrote:
+> ping!
+>
+> This patchset got lost. Patches 4 and 5 still need a review.
 
-Oh, I forgot to add `vmmc-suply = ...` to the `examples` section --
-sorry about that. Version 14 will be out shortly with a fix.
+for patches 4 & 5:
+Acked-by: Helge Deller <deller@gmx.de>
 
-Thanks,
---Gabriel
+Helge
 
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/litex,mmc.yaml
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/patch/1579360
-> 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
+>
+> Am 01.12.21 um 12:46 schrieb Thomas Zimmermann:
+>> Fix a number of compiler warnings in the AGP drivers. No functional
+>> changes.
+>>
+>> v2:
+>> =C2=A0=C2=A0=C2=A0=C2=A0* ati-agp: free page in error branch (Helge)
+>> =C2=A0=C2=A0=C2=A0=C2=A0* nvidia-agp: Mark temp as __maybe_unused (Helg=
+e)
+>>
+>> Thomas Zimmermann (7):
+>> =C2=A0=C2=A0 agp: Remove trailing whitespaces
+>> =C2=A0=C2=A0 agp: Include "compat_ioctl.h" where necessary
+>> =C2=A0=C2=A0 agp: Documentation fixes
+>> =C2=A0=C2=A0 agp/ati: Return error from ati_create_page_map()
+>> =C2=A0=C2=A0 agp/nvidia: Declare value returned by readl() as unused
+>> =C2=A0=C2=A0 agp/sworks: Remove unused variable 'current_size'
+>> =C2=A0=C2=A0 agp/via: Remove unused variable 'current_size'
+>>
+>> =C2=A0 drivers/char/agp/ati-agp.c=C2=A0=C2=A0=C2=A0 | 8 ++++++--
+>> =C2=A0 drivers/char/agp/backend.c=C2=A0=C2=A0=C2=A0 | 2 ++
+>> =C2=A0 drivers/char/agp/frontend.c=C2=A0=C2=A0 | 4 +++-
+>> =C2=A0 drivers/char/agp/nvidia-agp.c | 3 ++-
+>> =C2=A0 drivers/char/agp/sworks-agp.c | 5 +----
+>> =C2=A0 drivers/char/agp/via-agp.c=C2=A0=C2=A0=C2=A0 | 3 ---
+>> =C2=A0 6 files changed, 14 insertions(+), 11 deletions(-)
+>>
+>>
+>> base-commit: 6a8f90ec433e2f5de5fc16d7a4839771b7027cc0
+>> --
+>> 2.34.0
+>>
+>
+

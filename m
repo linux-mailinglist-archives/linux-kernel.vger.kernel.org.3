@@ -2,89 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A07F748D64E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 12:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B4948D657
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 12:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbiAMLID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 06:08:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S233974AbiAMLJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 06:09:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231831AbiAMLIB (ORCPT
+        with ESMTP id S231831AbiAMLJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 06:08:01 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12909C061748
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 03:08:01 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id m3so4152420lfu.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 03:08:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uHTsUg3HEau620/3Kt1gAirKaZRBvN3yED5BHth3EE8=;
-        b=dAGW/+aPFYxzL5NwBWOLkEHowvoffuEhYijSaiZkmNoQ7tuOanFh14QMD1SolHX+Od
-         ZcQGJCoWKfare85WMgR9oIfvWZRXuXjz3JN/hl2iXKThx6a7qflq5E+NjfIWKHYvVMnJ
-         0L23TtFXT1C33VTjgoMo5ehRQnuCZL1YbCxvF4lV0i8UWUx6MOouRyFUypddAC1MK1c7
-         sl0ID7467dkjgodXqgUhP1qHr9sjR15RC2lnPV4sknEKUu3H8/MDtGh5HT3skdCRu1d4
-         FkjJgtrnEkOa5XbAr8Vs2+79TeXdJ6w99SGIbEt+kaxRJZ9c6z6NglWMO3XiJvM1/T3c
-         flZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uHTsUg3HEau620/3Kt1gAirKaZRBvN3yED5BHth3EE8=;
-        b=q+PtFckUsq7s7RownIEUUASAugsyWJxl4xWYp1oLDKOoiwIwNdSTbX1m16fx8iCmvM
-         X5veXEIdF2OwQ7MxWmeBXHZuZ6OoCOEGaK4xvkEY5dLrJa0IJhSP7GVJPvzI2xrY+ikv
-         mRKeL8RZOqvR3YKCfrtvz0dUAto1Sds1uj6uDdpTtQr7CebyuGmmJYpHUw6QZbnBOy/K
-         1HpD78fZjzjUvp81B3NgbBOY3tVynsSBDcbaFz5JXy0C2JzrkhZmjzQNtSNDM0cSUsi8
-         hY9fJOSBpbqYV+IO7+tLb8N3rWJ3boC0wFoPx+gr12urYSyU/LUpjiMuLGgySFuZKy7K
-         +OwA==
-X-Gm-Message-State: AOAM532BDW3s0lFTTDDDiZs+GzvPRZMiz7D6qeRCH2bMPRaQ/rJqJuF4
-        UD592IKzZB69e1FBgY6HRVFV58sKiviWoemtB8gCIQ==
-X-Google-Smtp-Source: ABdhPJyRSSwu/fXZpwOWb9PbbQDN2SucJ/Z3pJ3GPSqtm5fyS7O/knAwPvWu/fu3VvtFCd2Fz4E2+/3NTNhYY5/F8U0=
-X-Received: by 2002:a2e:93c9:: with SMTP id p9mr2661168ljh.63.1642072079166;
- Thu, 13 Jan 2022 03:07:59 -0800 (PST)
+        Thu, 13 Jan 2022 06:09:52 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA407C061748
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 03:09:51 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7xyF-0006Q7-HJ; Thu, 13 Jan 2022 12:08:43 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7xy5-00A3Hi-BT; Thu, 13 Jan 2022 12:08:32 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n7xy3-0005lb-Nu; Thu, 13 Jan 2022 12:08:31 +0100
+Date:   Thu, 13 Jan 2022 12:08:31 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Auger <eric.auger@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+ <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
 MIME-Version: 1.0
-References: <20220104073545.124244-1-o451686892@gmail.com> <CALAqxLVSaZywOOnF=67X+gu9eo+ZmKQmW3wUOOKEM0rUZ4K5gg@mail.gmail.com>
-In-Reply-To: <CALAqxLVSaZywOOnF=67X+gu9eo+ZmKQmW3wUOOKEM0rUZ4K5gg@mail.gmail.com>
-From:   Sumit Semwal <sumit.semwal@linaro.org>
-Date:   Thu, 13 Jan 2022 16:37:47 +0530
-Message-ID: <CAO_48GHsoixQ8kpdMTnKy--jC+vphLEmf7L_1eDivRV=tdwZog@mail.gmail.com>
-Subject: Re: [PATCH] dma-buf: cma_heap: Fix mutex locking section
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Weizhao Ouyang <o451686892@gmail.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Brian Starkey <brian.starkey@arm.com>,
-        christian.koenig@amd.com, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zcdy7nemyxfoojub"
+Content-Disposition: inline
+In-Reply-To: <Yd9L9SZ+g13iyKab@sirena.org.uk>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Weizhao,
 
-On Tue, 4 Jan 2022 at 13:13, John Stultz <john.stultz@linaro.org> wrote:
->
-> On Mon, Jan 3, 2022 at 11:36 PM Weizhao Ouyang <o451686892@gmail.com> wrote:
-> >
-> > Fix cma_heap_buffer mutex locking critical section to protect vmap_cnt
-> > and vaddr.
-> >
-> > Fixes: a5d2d29e24be ("dma-buf: heaps: Move heap-helper logic into the cma_heap implementation")
-> > Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
->
-> Looks good to me!  Thanks so much for sending this in!
-Thanks for the patch; it's merged to drm-misc-fixes.
->
-> Acked-by: John Stultz <john.stultz@linaro.org>
->
-> thanks again
-> -john
+--zcdy7nemyxfoojub
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Jan 12, 2022 at 09:45:25PM +0000, Mark Brown wrote:
+> On Wed, Jan 12, 2022 at 10:31:21PM +0100, Uwe Kleine-K=F6nig wrote:
+> > On Wed, Jan 12, 2022 at 11:27:02AM +0100, Geert Uytterhoeven wrote:
+>=20
+> (Do we really need *all* the CCs here?)
 
-Best,
-Sumit.
+It's probably counteractive to finding an agreement because there are
+too many opinions on that matter. But I didn't dare to strip it down,
+too :-)
+
+> > That convinces me, that platform_get_irq_optional() is a bad name. The
+> > only difference to platform_get_irq is that it's silent. And returning
+> > a dummy irq value (which would make it aligned with the other _optional
+> > functions) isn't possible.
+>=20
+> There is regulator_get_optional() which is I believe the earliest of
+> these APIs, it doesn't return a dummy either (and is silent too) - this
+> is because regulator_get() does return a dummy since it's the vastly
+> common case that regulators must be physically present and them not
+> being found is due to there being an error in the system description.
+> It's unfortunate that we've ended up with these two different senses for
+> _optional(), people frequently get tripped up by it.
+
+Yeah, I tripped over that one already, too. And according to my counting
+this results in three different senses now :-\ :
+
+ a) regulator
+    regulator_get returns a dummy, regulator_get_optional returns ERR_PTR(-=
+ENODEV)
+ b) clk + gpiod
+    ..._get returns ERR_PTR(-ENODEV), ..._get_optional returns a dummy
+ c) platform_get_irq()
+    platform_get_irq_optional() is just a silent variant of
+    platform_get_irq(); the return values are identical.
+   =20
+This is all very unfortunate. In my eyes b) is the most sensible
+sense, but the past showed that we don't agree here. (The most annoying
+part of regulator_get is the warning that is emitted that regularily
+makes customers ask what happens here and if this is fixable.)
+
+I think at least c) is easy to resolve because
+platform_get_irq_optional() isn't that old yet and mechanically
+replacing it by platform_get_irq_silent() should be easy and safe.
+And this is orthogonal to the discussion if -ENOXIO is a sensible return
+value and if it's as easy as it could be to work with errors on irq
+lookups.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--zcdy7nemyxfoojub
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHgCCsACgkQwfwUeK3K
+7AktbAf/UzNin6+fnXTmkdrTvXWaXCV8TB76EIUtIdNWwJEjmXxWes5jyBpp/jXj
+7gSmYT3gi4oK0wjB6dKmqF6jba5/RPL4cdS6/8iQDp32Xey0hzWymBPENLc/Nxt5
+Ge81cdot6EFxqSkuW1Zbe55wzmNUmEsez7+e+8gJAviPB6zQndDE/zAkwxczzb04
+GfD6Uixgm4a29NwXNIignwNm8pACez/px2A8cVhILZ8135X0rdwYM17BiQtfM5Uq
+s2hZsLfxWm9ZvdyxA7gGvsfefPmiPfS3k/HWagHMDB8nQq4vqnMmPTu01YJs34dM
++ycJZkglW3eJnCZ9Fr5sjnuP6uLExw==
+=5Hn7
+-----END PGP SIGNATURE-----
+
+--zcdy7nemyxfoojub--

@@ -2,195 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 054F648D2CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF3148D2D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 08:30:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbiAMH0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 02:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbiAMH0H (ORCPT
+        id S231139AbiAMH3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 02:29:06 -0500
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:44522 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230176AbiAMH3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 02:26:07 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EBEC061751
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 23:26:07 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id o15so16347521lfo.11
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 23:26:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LqEz1tdi+Dd5kBFVgy7VzOmS5HR1fqUYps8D18GxVbY=;
-        b=cINt8NPb6J2QETAMUVvusHlCVGnH2oeK/jZ+W0YX50kGkDXF01Wdu6JPkeqwhjLpSp
-         YYji7kjsL7guNBXqSVodAvb32hBKB4e7XboR0VXXP37z1ABNQ8WhZYIWNal1LEWy6JRE
-         9Qsn72zK951tYkCBa8jZelBOsNb9JEQcwHeMe85fiDcOkkRi+P2Khsu3kPtQSTnPCd+a
-         7InBhMnmSBDqo0/0vYYAXTFjYMAMK6158NP32i8K/HSvpzzYS7rj2mms17rdquThvMeV
-         9u+zKppd96fVmuu6Mo0kk4JecUzPrXD7rzjehpsCPNVZ3FTiIb7An6As+BP00yAHsIxE
-         wj3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LqEz1tdi+Dd5kBFVgy7VzOmS5HR1fqUYps8D18GxVbY=;
-        b=PUaIjYsCxoWCcRVmHWUQIzm8o8se41vtRK2x2JPCc7PmZ1RzfyQbJb3zHPEe42miqj
-         eunXGlAUe/guMN+Gd6wEvdSegMScDEDB9V4UlJb1eNZuoCCytgg8cOT9TF+QA3iF6esz
-         El9ib1feSUoDcmnL/dU11DcrJgcux7/o8a3g3GG5Uqe5erdzEropqnkOHuGmQ33PjSoQ
-         I7hm6a7zZmSh9EoZG1JZUX3FiFFTcDkf03i2iqIt6zFvi6nBHbYuEXBOJB7KwzHkgBV9
-         Zg7yEkcR1zlHoQOQwlHJPw9gnjvjJxIEHtx3YgIaSCCf3bZeXwzLYZteNPnqF4Pf6x/O
-         wWLg==
-X-Gm-Message-State: AOAM530KtCl5U/CFhLPtygyFYXNX+he4aQaPIUrrD1PADMF8aW88YVTI
-        hhl613JsFWLKPhj3QG9sR9htIWxkM5ypouR0bxb2mQ==
-X-Google-Smtp-Source: ABdhPJx45gF1826s11G22AXgxEBxocaiU3nnPiirOQSz78+oGy8yoaupoJL4uFZMsf60KHnBhTNzsVhUmkhYr5xXbCE=
-X-Received: by 2002:a05:6512:ea9:: with SMTP id bi41mr2519011lfb.510.1642058765513;
- Wed, 12 Jan 2022 23:26:05 -0800 (PST)
+        Thu, 13 Jan 2022 02:29:06 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3Auv5Ahq3c2ZxYqp1vjvbD5Vtzkn2cJEfYwER7XOP?=
+ =?us-ascii?q?LsXnJ3D1z3jAEy2AaXGCEb/iOZ2Twc40nbo7n90IP68XUxtU2QQE+nZ1PZygU8?=
+ =?us-ascii?q?JKaX7x1DatR0xu6d5SFFAQ+hyknQoGowPscEzmM9n9BDpC79SMmjfjRHeKlYAL?=
+ =?us-ascii?q?5EnsZqTFMGX5JZS1Ly7ZRbr5A2bBVMivV0T/Ai5S31GyNh1aYBlkpB5er83uDi?=
+ =?us-ascii?q?hhdVAQw5TTSbdgT1LPXeuJ84Jg3fcldJFOgKmVY83LTegrN8F251juxExYFAdX?=
+ =?us-ascii?q?jnKv5c1ERX/jZOg3mZnh+AvDk20Yd4HdplPtT2Pk0MC+7jx2NnsJxyddMvJqYR?=
+ =?us-ascii?q?xorP7HXhaIWVBww/yRWZPceo+eXfSTu2SCU5wicG5f2+N1iBV87OKUU8/h6BGV?=
+ =?us-ascii?q?J++BeLj0RBjiAmui/6LG2UO9hgoIkNsaDFJgfp3hg5TLUF/ArRdbEWaqizdtZ2?=
+ =?us-ascii?q?iogw8NDB/DTY+IHZjd1KhfNeRtCPhEQEp1WtOOpgGTvNj5DpVabuacs/0DNwwF?=
+ =?us-ascii?q?rlrvgKtzYfpqNX8o9tkCVum7L4UznDRwAct+S0zyI9jSrnOCnoM9RcOr+D5Xhr?=
+ =?us-ascii?q?rgz3gLVnTdVVXUruZKAiaHRoiaDtxh3cST4IhYTkJU=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Ac4adv68JfVls0fRZO1Juk+DkI+orL9Y04lQ7?=
+ =?us-ascii?q?vn2ZKCYlFvBw8vrCoB1173HJYUkqMk3I9ergBEDiewK4yXcW2/hzAV7KZmCP11?=
+ =?us-ascii?q?dAR7sSj7cKrQeBJwTOssZZ1YpFN5N1EcDMCzFB5vrS0U2VFMkBzbC8nJyVuQ?=
+ =?us-ascii?q?=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,284,1635177600"; 
+   d="scan'208";a="120308449"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 13 Jan 2022 15:29:03 +0800
+Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
+        by cn.fujitsu.com (Postfix) with ESMTP id 13D9E4D15A4A;
+        Thu, 13 Jan 2022 15:29:02 +0800 (CST)
+Received: from G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) by
+ G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Thu, 13 Jan 2022 15:29:03 +0800
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Thu, 13 Jan 2022 15:29:02 +0800
+Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Thu, 13 Jan 2022 15:29:02 +0800
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <shuah@kernel.org>,
+        <netdev@vger.kernel.org>
+CC:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Li Zhijian" <lizhijian@fujitsu.com>,
+        Zhou Jie <zhoujie2011@fujitsu.com>
+Subject: [PATCH] kselftests/net: adapt the timeout to the largest runtime
+Date:   Thu, 13 Jan 2022 15:28:59 +0800
+Message-ID: <20220113072859.3431-1-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <cover.1641890718.git.zong.li@sifive.com> <78cfa00a02cbd10202040058af22a73caa9c5ae8.1641890718.git.zong.li@sifive.com>
- <CAMuHMdUogbyjU=vBuvocxofGFCwzdQndk9OTnVdP+RNA8HEFZQ@mail.gmail.com> <CANXhq0qpkArvELBDqOT=bnVCwvR47cxHN7oH1hYKr1Yt7zaGOQ@mail.gmail.com>
-In-Reply-To: <CANXhq0qpkArvELBDqOT=bnVCwvR47cxHN7oH1hYKr1Yt7zaGOQ@mail.gmail.com>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Thu, 13 Jan 2022 15:25:54 +0800
-Message-ID: <CANXhq0rKsAsm4oSvnVqy385shoY2uTQOGUSqYdf-D=2xJ5vgWg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] dmaengine: sf-pdma: Get number of channel by
- device tree
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Green Wan <green.wan@sifive.com>, Vinod <vkoul@kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: 13D9E4D15A4A.ADFC2
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 2:53 PM Zong Li <zong.li@sifive.com> wrote:
->
-> On Wed, Jan 12, 2022 at 4:28 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >
-> > Hi Zong,
-> >
-> > On Tue, Jan 11, 2022 at 9:51 AM Zong Li <zong.li@sifive.com> wrote:
-> > > It currently assumes that there are always four channels, it would
-> > > cause the error if there is actually less than four channels. Change
-> > > that by getting number of channel from device tree.
-> > >
-> > > For backwards-compatible, it uses the default value (i.e. 4) when there
-> > > is no 'dma-channels' information in dts.
-> > >
-> > > Signed-off-by: Zong Li <zong.li@sifive.com>
-> >
-> > Thanks for your patch!
-> >
-> > > --- a/drivers/dma/sf-pdma/sf-pdma.c
-> > > +++ b/drivers/dma/sf-pdma/sf-pdma.c
-> > > @@ -484,21 +484,24 @@ static int sf_pdma_probe(struct platform_device *pdev)
-> > >         struct sf_pdma *pdma;
-> > >         struct sf_pdma_chan *chan;
-> > >         struct resource *res;
-> > > -       int len, chans;
-> > > -       int ret;
-> > > +       int len, ret;
-> > >         const enum dma_slave_buswidth widths =
-> > >                 DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
-> > >                 DMA_SLAVE_BUSWIDTH_4_BYTES | DMA_SLAVE_BUSWIDTH_8_BYTES |
-> > >                 DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
-> > >                 DMA_SLAVE_BUSWIDTH_64_BYTES;
-> > >
-> > > -       chans = PDMA_NR_CH;
-> > > -       len = sizeof(*pdma) + sizeof(*chan) * chans;
-> > > +       len = sizeof(*pdma) + sizeof(*chan) * PDMA_MAX_NR_CH;
-> >
-> > Why is the last part added (yes, this is a pre-existing issue)?
-> > struct sf_pdma already contains space for chans[PDMA_MAX_NR_CH].
-> > Either drop the last part, or change sf_pdma.chans[] to a flexible
-> > array member.
-> >
-> > BTW, you can use the struct_size() or flex_array_size() helper
-> > to calculate len.
->
-> Thanks for your suggestions, let me fix it in the next version.
->
-> >
-> > >         pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
-> > >         if (!pdma)
-> > >                 return -ENOMEM;
-> > >
-> > > -       pdma->n_chans = chans;
-> > > +       ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
-> > > +                                  &pdma->n_chans);
-> > > +       if (ret) {
-> > > +               dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
-> > > +               pdma->n_chans = PDMA_MAX_NR_CH;
-> > > +       }
-> > >
-> > >         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > >         pdma->membase = devm_ioremap_resource(&pdev->dev, res);
-> > > @@ -556,7 +559,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
-> > >         struct sf_pdma_chan *ch;
-> > >         int i;
-> > >
-> > > -       for (i = 0; i < PDMA_NR_CH; i++) {
-> > > +       for (i = 0; i < pdma->n_chans; i++) {
-> > >                 ch = &pdma->chans[i];
-> >
-> > If dma-channels in DT > PDMA_NR_CH, this becomes an out-of-bound
-> > access.
-> >
->
-> Okay, let me get the min() between pdma->chans and PDMA_MAX_NR_CH,
-> please let me know if it isn't good to you.
+timeout in settings is used by each case under the same directory, so
+it should adapt to the maximum runtime.
 
-Please allow me give more details on it, I would compare the value of
-pdma->chans with PDMA_MAX_NR_CH in probe function, and set the
-pdma->chans to PDMA_MAX_NR_CH if the value in DT is bigger than
-PDMA_MAX_NR_CH.
+A normally running net/fib_nexthops.sh may be killed by this unsuitable
+timeout. Furthermore, since the defect[1] of kselftests framework,
+net/fib_nexthops.sh which might take at least (300 * 4) seconds would
+block the whole kselftests framework previously.
+$ git grep -w 'sleep 300' tools/testing/selftests/net
+tools/testing/selftests/net/fib_nexthops.sh:    sleep 300
+tools/testing/selftests/net/fib_nexthops.sh:    sleep 300
+tools/testing/selftests/net/fib_nexthops.sh:    sleep 300
+tools/testing/selftests/net/fib_nexthops.sh:    sleep 300
 
->
-> > >
-> > >                 devm_free_irq(&pdev->dev, ch->txirq, ch);
-> > > diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
-> > > index 0c20167b097d..8127d792f639 100644
-> > > --- a/drivers/dma/sf-pdma/sf-pdma.h
-> > > +++ b/drivers/dma/sf-pdma/sf-pdma.h
-> > > @@ -22,11 +22,7 @@
-> > >  #include "../dmaengine.h"
-> > >  #include "../virt-dma.h"
-> > >
-> > > -#define PDMA_NR_CH                                     4
-> > > -
-> > > -#if (PDMA_NR_CH != 4)
-> > > -#error "Please define PDMA_NR_CH to 4"
-> > > -#endif
-> > > +#define PDMA_MAX_NR_CH                                 4
-> > >
-> > >  #define PDMA_BASE_ADDR                                 0x3000000
-> > >  #define PDMA_CHAN_OFFSET                               0x1000
-> > > @@ -118,7 +114,7 @@ struct sf_pdma {
-> > >         void __iomem            *membase;
-> > >         void __iomem            *mappedbase;
-> > >         u32                     n_chans;
-> > > -       struct sf_pdma_chan     chans[PDMA_NR_CH];
-> > > +       struct sf_pdma_chan     chans[PDMA_MAX_NR_CH];
-> > >  };
-> > >
-> > >  #endif /* _SF_PDMA_H */
-> > -
-> > Gr{oetje,eeting}s,
-> >
-> >                         Geert
-> >
-> > --
-> > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> >
-> > In personal conversations with technical people, I call myself a hacker. But
-> > when I'm talking to journalists I just say "programmer" or something like that.
-> >                                 -- Linus Torvalds
+Enlarge the timeout by plus 300 based on the obvious largest runtime
+to avoid the blocking.
+
+[1]: https://www.spinics.net/lists/kernel/msg4185370.html
+
+Signed-off-by: Zhou Jie <zhoujie2011@fujitsu.com>
+Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+---
+ tools/testing/selftests/net/settings | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/settings b/tools/testing/selftests/net/settings
+index 694d70710ff0..dfc27cdc6c05 100644
+--- a/tools/testing/selftests/net/settings
++++ b/tools/testing/selftests/net/settings
+@@ -1 +1 @@
+-timeout=300
++timeout=1500
+-- 
+2.33.0
+
+
+

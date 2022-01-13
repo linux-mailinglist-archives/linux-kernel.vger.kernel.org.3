@@ -2,88 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDEA48D56E
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF3448D571
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiAMKJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 05:09:19 -0500
-Received: from ewsoutbound.kpnmail.nl ([195.121.94.168]:31014 "EHLO
-        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiAMKJQ (ORCPT
+        id S231573AbiAMKKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 05:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230013AbiAMKKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 05:09:16 -0500
-X-KPN-MessageId: c4b65610-7458-11ec-8862-005056aba152
-Received: from smtp.kpnmail.nl (unknown [10.31.155.39])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id c4b65610-7458-11ec-8862-005056aba152;
-        Thu, 13 Jan 2022 11:08:34 +0100 (CET)
+        Thu, 13 Jan 2022 05:10:35 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EFAC06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:10:34 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id e3so14889924lfc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 02:10:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:from:to:subject:mime-version:date:message-id;
-        bh=3T/HKHFxjeunEssHrg2roWSWvU5aHHqCJVybm4QtGj0=;
-        b=WNPj3QT/CgbFQAm5xcAv+o+uBsNkJBToPWHS3Qh9yggr9C2hnZBdtDADFBd1oTjMbFViscQ7dmGxG
-         lWGDVDtFXZ9s81xNOlgH5y96qyfqa7YSiMG6hgjw7Ti4HimI41QBFZ7WrOfQ/AKnwGNfWdRkpONswu
-         P9oSEjNjFU2e4E6DK3t4maVDIV7syG/uTjmg41lVK51mH7HthGDrGshR4jLZIUqKUHJYqMFWsfrrDM
-         H88Gl97bC8lHw3H0mZV9hfiva71LVvKFoMPYzKmF1B8JX1kz+K2RAGFnSF7IgJCJoO+0ADEfmpTlr1
-         T3McRuXKqMtAEhRVZe+LhasAz4hFBQA==
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|vGuEdGoB77J0Odt/rWdNlYkIXWAWAbuja0doN16FgfcQpTL9Z20qIZNk3JGwbuc
- RvPPNZE6bMi2OlG7MxfeLpA==
-X-Originating-IP: 193.91.129.219
-Received: from [192.168.2.10] (cdb815bc1.dhcp.as2116.net [193.91.129.219])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id dcacec19-7458-11ec-81f5-005056ab7447;
-        Thu, 13 Jan 2022 11:09:15 +0100 (CET)
-Message-ID: <dff360d3-ff6b-b90c-89aa-2e21120f9a3f@xs4all.nl>
-Date:   Thu, 13 Jan 2022 11:09:14 +0100
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RadJqXCNgJSuxrAQxYqXMQELWeTlrMxxcxtdQOTtr8I=;
+        b=KOvWWdg4A6g44OmDCoCZvBPZQEI06nFjYj0Pw7ezvtKVkrF/I1gr5ijlDWIufHUr2v
+         LH2Ehr3FvEMxB55ftrqKAiSs2ncdLIO3FRGyCoNnpE6D8CpD3Wa4aan01lDy7AC214Vm
+         pZyet1QGfcz9b6tgyiWBMy15Q2n38nRXJYjZpRuYQfln/gieeGCzhaAvi0Vwmn5tOY1N
+         N/hmtiy4BNsqVvpUMoyV+K+AOAv4Fn6Gy6p6Me/PEv4bPJWOjVJdwj71FKcpJ/T1y6Ii
+         schqddqevKrc8eZiZAR93pqgVxItnyfWhPQnK7t/FIbLY78oJEWdg0HLh3fonHFMBpu6
+         sVYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RadJqXCNgJSuxrAQxYqXMQELWeTlrMxxcxtdQOTtr8I=;
+        b=HJI2JpIoPjRoV1/MjvC/JtF4mWU4d70HU+mK2xW7p+7atJRoxcHRAaO3Nyftuj0ZgK
+         jQ1N94MgV14X4z278VT/sOMz3/d1nrt2PjPztANeW49KYoAAViQH8Vsv7pxXXuB/H/Jw
+         QkC9xW1+Dq0BCbvf+wSKL3zkNLMIUYt5yO0nzeOZ6eiOX55QncdAoqdRzi/98Q+N2TOh
+         fJiRPPJqQwnTjoHNkrMZgOryY3MTtDeECHsQ65/CLjvFU7gqWfH86hrzL4+0TcP4fcc6
+         ANgMF+JsRMFbxdEMOTlBDAUMlEcJOXsIunScA/pTd/oZfBDE9k8ssU+d9gHvsKSXG4fV
+         78Og==
+X-Gm-Message-State: AOAM5320JhydLkm81zL18cQjhaMzNOLgaPza6OwtDyCDmf2Aewr6G8HP
+        9Gc/cTLGZ7TCAJD8ipVTjRYaM4ah4Ikbe2IdRzSp2+ftMXpSLQ==
+X-Google-Smtp-Source: ABdhPJwh+EyRBzFDdoNIF6CuwmhbkxgFXBjne0410iYswXwVmwIk0qa395loxmGEQ4bdDlanGDsU9P7A1mHz/x422Ng=
+X-Received: by 2002:a2e:8751:: with SMTP id q17mr920669ljj.235.1642068632823;
+ Thu, 13 Jan 2022 02:10:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.4.1
-Subject: Re: [PATCH] media: vidtv: Add the missing kfree to avoid the memory
- leak
-Content-Language: en-US
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, dwlsalmeida@gmail.com,
-        mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220112020555.692057-1-jiasheng@iscas.ac.cn>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220112020555.692057-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220112215625.4144871-1-shy828301@gmail.com>
+In-Reply-To: <20220112215625.4144871-1-shy828301@gmail.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 13 Jan 2022 11:10:04 +0100
+Message-ID: <CAG48ez3y2YGfKRJ6ocR1GT9w9iuGfyypbE+cQgYVZhSta89WUg@mail.gmail.com>
+Subject: Re: [PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     kirill.shutemov@linux.intel.com, willy@infradead.org,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/01/2022 03:05, Jiasheng Jiang wrote:
-> Since kstrdup() allocate a space for e->name and will not automatically
-> free.
-> If kzalloc() fails, we just kfree e without e->name.
-> Then we cannot get the pointer 'e->name' and cause the memory leak.
-> 
-> Fixes: 3d1387b3b8f6 ("media: vidtv: fix some warnings")
-> Reported-by: Hans Verkuil <hverkuil@xs4all.nl>
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/media/test-drivers/vidtv/vidtv_s302m.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.c b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
-> index ddaff46c440f..433fc0c7fdfa 100644
-> --- a/drivers/media/test-drivers/vidtv/vidtv_s302m.c
-> +++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
-> @@ -474,6 +474,7 @@ struct vidtv_encoder
->  
->  	ctx = kzalloc(priv_sz, GFP_KERNEL);
->  	if (!ctx) {
-> +		kfree(e->name);
+On Wed, Jan 12, 2022 at 10:56 PM Yang Shi <shy828301@gmail.com> wrote:
+> The syzbot reported the below BUG:
+>
+> kernel BUG at include/linux/page-flags.h:785!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 4392 Comm: syz-executor560 Not tainted 5.16.0-rc6-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+> RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+> Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+> RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+> RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+> R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+> R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+> FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  page_mapcount include/linux/mm.h:837 [inline]
+>  smaps_account+0x470/0xb10 fs/proc/task_mmu.c:466
+>  smaps_pte_entry fs/proc/task_mmu.c:538 [inline]
+>  smaps_pte_range+0x611/0x1250 fs/proc/task_mmu.c:601
+>  walk_pmd_range mm/pagewalk.c:128 [inline]
+>  walk_pud_range mm/pagewalk.c:205 [inline]
+>  walk_p4d_range mm/pagewalk.c:240 [inline]
+>  walk_pgd_range mm/pagewalk.c:277 [inline]
+>  __walk_page_range+0xe23/0x1ea0 mm/pagewalk.c:379
+>  walk_page_vma+0x277/0x350 mm/pagewalk.c:530
+>  smap_gather_stats.part.0+0x148/0x260 fs/proc/task_mmu.c:768
+>  smap_gather_stats fs/proc/task_mmu.c:741 [inline]
+>  show_smap+0xc6/0x440 fs/proc/task_mmu.c:822
+>  seq_read_iter+0xbb0/0x1240 fs/seq_file.c:272
+>  seq_read+0x3e0/0x5b0 fs/seq_file.c:162
+>  vfs_read+0x1b5/0x600 fs/read_write.c:479
+>  ksys_read+0x12d/0x250 fs/read_write.c:619
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7faa2af6c969
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007faa2aefd288 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> RAX: ffffffffffffffda RBX: 00007faa2aff4418 RCX: 00007faa2af6c969
+> RDX: 0000000000002025 RSI: 0000000020000100 RDI: 0000000000000003
+> RBP: 00007faa2aff4410 R08: 00007faa2aefd700 R09: 0000000000000000
+> R10: 00007faa2aefd700 R11: 0000000000000246 R12: 00007faa2afc20ac
+> R13: 00007fff7e6632bf R14: 00007faa2aefd400 R15: 0000000000022000
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 24ec93ff95e4ac3d ]---
+> RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+> RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+> Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+> RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+> RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+> R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+> R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+> FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>
+> The reproducer was trying to reading /proc/$PID/smaps when calling
+> MADV_FREE at the mean time.  MADV_FREE may split THPs if it is called
+> for partial THP.  It may trigger the below race:
+>
+>          CPU A                         CPU B
+>          -----                         -----
+> smaps walk:                      MADV_FREE:
+> page_mapcount()
+>   PageCompound()
+>                                  split_huge_page()
+>   page = compound_head(page)
+>   PageDoubleMap(page)
+>
+> When calling PageDoubleMap() this page is not a tail page of THP anymore
+> so the BUG is triggered.
+>
+> This could be fixed by elevated refcount of the page before calling
+> mapcount, but it prevents from counting migration entries, and it seems
+> overkilling because the race just could happen when PMD is split so all
+> PTE entries of tail pages are actually migration entries, and
+> smaps_account() does treat migration entries as mapcount == 1 as Kirill
+> pointed out.
+>
+> Add a new parameter for smaps_account() to tell this entry is migration
+> entry then skip calling page_mapcount().  Don't skip getting mapcount for
+> device private entries since they do track references with mapcount.
+>
+> Reported-by: syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com
 
-It should also free e->encoder_buf.
+maybe add:
 
-Regards,
+Fixes: b1d4d9e0cbd0 ("proc/smaps: carefully handle migration entries")
 
-	Hans
-
->  		kfree(e);
->  		return NULL;
->  	}
-
+> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Yang Shi <shy828301@gmail.com>

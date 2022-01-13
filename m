@@ -2,109 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8448748E11E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 00:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C4848E135
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 00:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235807AbiAMXpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 18:45:53 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:42231 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiAMXpw (ORCPT
+        id S235807AbiAMXxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 18:53:50 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:19874 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229870AbiAMXxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 18:45:52 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JZgzc15Rlz4xdl;
-        Fri, 14 Jan 2022 10:45:48 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642117548;
-        bh=P1oHUqqn/eV0/p46wXQ8gE8oaGC8GZ689Js6UJbblhc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XGH1Q+BLcCQljQLz3QcfohVToAjnNUjZ/dthDThjt3/8RI454ASKqSw86Y7q7OpwB
-         IDpPanaIR8wf1DI/zrdBnyDDa3W5DRZ+NWmA65HDhDu+CARQm1b35DQKOY2bfV8Zm1
-         Sexgnb4ttiodx9YAAREvohrpVP8B+tws4VJAJtgCjgOPWBBE8139RZtdKOyMBrp5w+
-         59amqshf3EzTK/Qytf4GavqbGXDPaDZJIFw+bRKGpfFOc8AaITqcoum6XCD06umskE
-         49HVMrgQN8L4yg6MCAJbDuVBud4pziuQwUwgelGIGtSMZK0PJt8grRKN4PwqIJx09F
-         uJJdG4v2lhYnw==
-Date:   Fri, 14 Jan 2022 10:45:47 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Subject: linux-next: manual merge of the pci tree with Linus' tree
-Message-ID: <20220114104547.55e2f188@canb.auug.org.au>
+        Thu, 13 Jan 2022 18:53:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642118029; x=1673654029;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=cLZfx71HsIHMJqhxNxw2OQZF1FgZr0sHYUmOJh/12/Q=;
+  b=hpv5mvNdVaMOnZNhxPu1C97NN1mxpKBtEItPRZQ5KrNnamDtVbcuVaJx
+   VEyWmpUvQu0YLGmS0JfR+UqjGzlFBI5A4oi9VFteqWdO8wRsDYIjsS6Rn
+   9h1j7eCasoL4zwoXHT7w2Mk6N/nlfZLXRatoLSqWsoqefosC7jJM0+bJG
+   E=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Jan 2022 15:53:49 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 15:53:48 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 13 Jan 2022 15:53:48 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 13 Jan 2022 15:53:47 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
+        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v13 0/4] group dp driver related patches into one series
+Date:   Thu, 13 Jan 2022 15:53:35 -0800
+Message-ID: <1642118019-18673-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/17_McLNeUpDca94VKUnrm4M";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/17_McLNeUpDca94VKUnrm4M
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Group below 4 dp driver related patches into one series.
 
-Hi all,
+Kuogee Hsieh (4):
+  drm/msm/dp: do not initialize phy until plugin interrupt received
+  drm/msm/dp:  populate connector of struct  dp_panel
+  drm/msm/dp: add support of tps4 (training pattern 4) for HBR3
+  drm/msm/dp: stop link training after link training 2 failed
 
-Today's linux-next merge of the pci tree got a conflict in:
+ drivers/gpu/drm/msm/dp/dp_catalog.c |  12 ++---
+ drivers/gpu/drm/msm/dp/dp_catalog.h |   2 +-
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    | 100 ++++++++++++++++--------------------
+ drivers/gpu/drm/msm/dp/dp_ctrl.h    |   8 +--
+ drivers/gpu/drm/msm/dp/dp_display.c |  90 +++++++++++++++++++++-----------
+ 5 files changed, 116 insertions(+), 96 deletions(-)
 
-  drivers/pci/controller/Kconfig
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-between commit:
-
-  aa50faff4416 ("PCI: mt7621: Convert driver into 'bool'")
-
-from Linus' tree and commit:
-
-  44ddb791f8f4 ("PCI: mt7621: Allow COMPILE_TEST for all arches")
-
-from the pci tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/pci/controller/Kconfig
-index aec8c9a3488b,f7e44d9c6965..000000000000
---- a/drivers/pci/controller/Kconfig
-+++ b/drivers/pci/controller/Kconfig
-@@@ -332,8 -332,8 +332,8 @@@ config PCIE_APPL
-  	  If unsure, say Y if you have an Apple Silicon system.
- =20
-  config PCIE_MT7621
- -	tristate "MediaTek MT7621 PCIe Controller"
- +	bool "MediaTek MT7621 PCIe Controller"
-- 	depends on SOC_MT7621 || (MIPS && COMPILE_TEST)
-+ 	depends on SOC_MT7621 || COMPILE_TEST
-  	select PHY_MT7621_PCI
-  	default SOC_MT7621
-  	help
-
---Sig_/17_McLNeUpDca94VKUnrm4M
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHguasACgkQAVBC80lX
-0GwuYwf/YU/sj+Gt7e7zbdWhxExASLAdhpBUvPwoPUJr2z1JyP5aY5hiuobGAHZ2
-SIhjfZe5mZQVH5Pfjs4Ro/Wgx/U8JVVSNe+sPundOERrLhJU730eIb/PA53JGMr9
-kJNsIS1pXriQWE3XsIuvhDT5tHOVxypC0EY3IXL+wtVisziYJemBH5Z8AvmHuO/O
-qpcZmO54aJUGEzFRKwNHPXXn4gvCarxg2Ys5+OU+UpiqROManBnoZj67vkCUV0cX
-d0sFM5mQAq1a2OwhIDuIP8SDnA9nks97MfzHloDkUssCLLh2mxxjLZkvvoJPgCpy
-5ezx1ZFsJSrDspDZcIRHqLvz6o8g4g==
-=XfED
------END PGP SIGNATURE-----
-
---Sig_/17_McLNeUpDca94VKUnrm4M--

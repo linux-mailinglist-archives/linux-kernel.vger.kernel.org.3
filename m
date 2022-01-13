@@ -2,93 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1526C48DF70
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B5348DF83
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 22:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234979AbiAMVN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 16:13:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiAMVNZ (ORCPT
+        id S235172AbiAMVTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 16:19:42 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30176 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235144AbiAMVTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 16:13:25 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE87CC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 13:13:24 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id s30so23992106lfo.7
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 13:13:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:user-agent:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HmqAYxgpA0scTJAvK7dTWukaikRwll6NfdHgV3FJwSE=;
-        b=cWMt40jsjwER7A5AR26Fw81PawiMyOYQkOmbMQK1h/V+J+quNTA61VI1dxXtxjbbx7
-         L5PIuCaAqT1XPrREVjJF3uUNG5mzo4aC/H1zafdm6YssoUdpoUeQPdsOE+7b4/iBxkDr
-         R/CT05wxx2wWFLPjp2wjkr6/kFhXHFlQueks08IbprrsgEgBZ7msVKjHOE3nXLaM4jL4
-         QunC41morUIb54/tnsr4lqy2O1OuDFpQj7l8YIuoJr7nJ45L5rkC4531rmK95RCYiLAp
-         Im4CNh1Gu3FTpD602hrlF6JFmzxq6VvkBcgAVot06/L+8cdvJ9hXCUbqqWMLdNWExkAd
-         Uacg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=HmqAYxgpA0scTJAvK7dTWukaikRwll6NfdHgV3FJwSE=;
-        b=QZX5fiCjSRCi6HRd1KpPt4qU3jtROUpwD41QRE+JbZxpoRVZk5ge2Bg4fK0oGy7a15
-         Et/MpwnowLxbEa0cUxFPXzKn/nKGdJRrgdbrcbjeDgUJ360DjQeX1yDlTjvJtSXOuOGT
-         fcLYMhQRM26l79txdXFdHtxIX887bbeOAOn7KbCHbYdrE+28XTktp4YOaFPdshPySjVx
-         uZJMoebaTblb5CKU/QhpmV9WSIKrjFAuX4yoR8jjelvqa/ccPe9/galgyK5qXub831yY
-         gIvDNvz4GHFraiRJgz9G0spGVnI8xDkuzvXHZEtAeoNZXNZwh7vfdkQvgetKF0zXrfIF
-         pCiw==
-X-Gm-Message-State: AOAM530spmusueTy1+YaPPOz5dVD3VjGAWVZpbtHMCzvjPn2iGIbsqHp
-        vj1FTsypRy3OAP/G1znXmXE=
-X-Google-Smtp-Source: ABdhPJzo2yBEzqR+x98qeSJ+QK3EJNKY4unSx1UssoA3XS3l68P0mc2CwWCtakAy4/Egc5F8Zn2GHg==
-X-Received: by 2002:a05:6512:33d0:: with SMTP id d16mr4050141lfg.28.1642108403326;
-        Thu, 13 Jan 2022 13:13:23 -0800 (PST)
-Received: from localhost.localdomain (ntd06459.static.corbina.ru. [95.31.14.149])
-        by smtp.gmail.com with ESMTPSA id p9sm391807lfu.83.2022.01.13.13.13.22
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Thu, 13 Jan 2022 13:13:22 -0800 (PST)
-Date:   Fri, 14 Jan 2022 00:19:03 +0300
-From:   Alexander Sergeyev <sergeev917@gmail.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Jeremy Szu <jeremy.szu@canonical.com>, tiwai@suse.com,
-        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
-        Kailang Yang <kailang@realtek.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jian-Hong Pan <jhp@endlessos.org>,
-        Hui Wang <hui.wang@canonical.com>,
-        PeiSen Hou <pshou@realtek.com>
-Subject: Re: [PATCH 1/4] ALSA: hda/realtek: fix mute/micmute LEDs for HP 855
- G8
-Message-ID: <20220113211903.tnzyqxb47lf3uw7z@localhost.localdomain>
-User-Agent: mtt
-References: <20210519170357.58410-1-jeremy.szu@canonical.com>
- <20220111195229.a77wrpjclqwrx4bx@localhost.localdomain>
- <s5ho84h9tit.wl-tiwai@suse.de>
- <20220112101249.ya73jvpmqmeh4ggg@localhost.localdomain>
- <s5hilup9s87.wl-tiwai@suse.de>
- <20220112104827.4aymoth7ua65nwge@localhost.localdomain>
- <20220112201824.qmphnz2hx4frda6e@localhost.localdomain>
- <s5h8rvk85uy.wl-tiwai@suse.de>
- <20220113183141.kla37mbqmo4x6wxp@localhost.localdomain>
+        Thu, 13 Jan 2022 16:19:39 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20DKS908012145;
+        Thu, 13 Jan 2022 21:19:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=gglTjkJQfUQeW1de/xy1Uu37Ciw6EQP2ZvTjwgTy8g8=;
+ b=Pn+xY/c0IJINFihRCVKn6Bcv2cZD1xtU+ilXssjX57BMGpsk82WltbrXBPLceEHH3t0n
+ XK/4BM3taLSTqdsxGKp/bte4pauyJ1q3VX2ElUnL1dDLHO1JLSn5aBKpNsgpCQ3+QAiO
+ e2rLaQSbvhG/XvYb7228Nxghkx45mqkfoUiXLgzMJGn3LJXdl5t+2rvWWlJZ2DSgRvha
+ SEvv4uOdUVBNSP89zmcsJHSYg07ERt+dus4GVMiWD1ATbSus96cSCdB5i9Iba8ij25g7
+ NFbessQqN3BZI8h+yGmbhW/J2mxKqDrtMGasgKB9/ral1FnPzGgkY3aesoeBQcuM5u9K 1Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dju55h1fn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Jan 2022 21:19:35 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20DLDuhc031078;
+        Thu, 13 Jan 2022 21:19:35 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dju55h1fe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Jan 2022 21:19:35 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20DLHwQX019673;
+        Thu, 13 Jan 2022 21:19:34 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma02dal.us.ibm.com with ESMTP id 3df28cnncj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Jan 2022 21:19:34 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20DLJXQU33292630
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Jan 2022 21:19:33 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 83D3913604F;
+        Thu, 13 Jan 2022 21:19:33 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C2E37136061;
+        Thu, 13 Jan 2022 21:19:32 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 13 Jan 2022 21:19:32 +0000 (GMT)
+Message-ID: <4b59d305-6858-1514-751a-37853ad777be@linux.ibm.com>
+Date:   Thu, 13 Jan 2022 16:19:32 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220113183141.kla37mbqmo4x6wxp@localhost.localdomain>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] tpm: vtpm_proxy: Avoid device-originated buffer overflow
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, Peter Huewe <peterhuewe@gmx.de>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20220113002727.3709495-1-keescook@chromium.org>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220113002727.3709495-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: uN_XodsZ-6rQp0VYokR1dUX0tyVpPSlM
+X-Proofpoint-GUID: wApIpmcjT2Lfp7eHeYAXTbKLYI-eziLm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-13_09,2022-01-13_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
+ suspectscore=0 phishscore=0 clxscore=1011 spamscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201130129
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 09:31:43PM +0300, Alexander Sergeyev wrote:
->This is the only change in /proc/asound after the first arecord run. Overall, 
->seems like a small annoyance, but I'm curious -- is it how it's supposed to 
->work?
 
-Just to clarify, this particular Digital control behavior is the same on live 
-Ubuntu (which uses modules and supposedly works correctly).
+On 1/12/22 19:27, Kees Cook wrote:
+> When building with -Warray-bounds, this warning was emitted:
+>
+> In function 'memset',
+>      inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtpm_proxy.c:102:2:
+> ./include/linux/fortify-string.h:43:33: warning: '__builtin_memset' pointer overflow between offset 164 and size [2147483648, 4294967295]
+> [-Warray-bounds]
+>     43 | #define __underlying_memset     __builtin_memset
+>        |                                 ^
+>
+> There was no checking of the req_len value from the device. A malicious
+> (or buggy) device could end up leaking (and when wiping) memory contents
+> beyond the end of the proxy buffer.
+>
+> Cc: Peter Huewe <peterhuewe@gmx.de>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: linux-integrity@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>   drivers/char/tpm/tpm_vtpm_proxy.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+> index 91c772e38bb5..5c865987ba5c 100644
+> --- a/drivers/char/tpm/tpm_vtpm_proxy.c
+> +++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+> @@ -91,7 +91,7 @@ static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
+>   
+>   	len = proxy_dev->req_len;
+>   
+> -	if (count < len) {
+> +	if (count < len || len > sizeof(proxy_dev->buffer)) {
+>   		mutex_unlock(&proxy_dev->buf_lock);
+>   		pr_debug("Invalid size in recv: count=%zd, req_len=%zd\n",
+>   			 count, len);
 
-Also, I've posted a patch for review. It adds the quirk for my PCI subdevice id 
-which is not present in the current set of SND_PCI_QUIRK. The former micmute 
-quirk was picked up by the codec SSID and not PCI id. The patch fixes the 
-speakers problem for me (including the built-in drivers usecase).
+
+Thanks for this patch.
+
+I just want to clarify this. In vtpm_proxy_tpm_op_send() we have the 
+only place that sets req_len to a value larger than 0:
+
+static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t 
+count)
+{
+     struct proxy_dev *proxy_dev = dev_get_drvdata(&chip->dev);
+
+     if (count > sizeof(proxy_dev->buffer)) {
+         dev_err(&chip->dev,
+             "Invalid size in send: count=%zd, buffer size=%zd\n",
+             count, sizeof(proxy_dev->buffer));
+         return -EIO;
+     }
+
+[...]
+
+     proxy_dev->req_len = count;
+     memcpy(proxy_dev->buffer, buf, count);
+
+[...]
+
+}
+
+
+The above makes sure that we cannot copy more bytes into the 
+proxy_dev->buffer than the what the buffer has bytes for.
+
+It then sets req_len to a valid value that is less or equal to the 
+buffer size.
+
+Considering this your check above seems to only be there to make the 
+compiler happy but otherwise I don't see that this is a real problem 
+with a buffer overflow?!
+
+Nevertheless, let all those compilers be happy:
+
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+
+

@@ -2,173 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F50A48D81B
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2C248D81E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234627AbiAMMi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:38:58 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51442 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232900AbiAMMi5 (ORCPT
+        id S234658AbiAMMkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:40:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33072 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233055AbiAMMkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:38:57 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20DCT15d015119;
-        Thu, 13 Jan 2022 12:38:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=D7+ZKGdHs7N8lXUJv5riuyYwvPvtWC0CcxPd3Kx/t2M=;
- b=CjkjQEHzRIKn+FO/5EdM4KNrEIU72bxQZIW4c83MlLCdqn/5gs2hgVe5oAiK1+EYMrNs
- nmRG8p67kPFapLB65MOJd+KVFn+t2aCQya/T8I3tI7z2PhcfgOwzkN2q6ylFmPtOOi2L
- XO5fnQHXuwUUHArrP46CCfyGo9oR3iZq/Fz/J2DqJyqMVV9zS940ma4u3LHqd9aFupRE
- aliC8Cxs6YALIZNLy9RG4XdWmn4bieY9MjVKB/GQZ2oxH22iZUX1gwg/tQOKu61HN3rF
- bFpEySVE+UFDDf4lRfV4arEaQgY+MOyOmX8RVuhBF8Uv8JU9LCk6kTSqkkIMdW2BBif1 Xg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3djjbxj89w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:38:49 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20DCUXAf024113;
-        Thu, 13 Jan 2022 12:38:48 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3djjbxj89d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:38:48 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20DCcIwD031705;
-        Thu, 13 Jan 2022 12:38:46 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3df1vjmhdd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 12:38:46 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20DCciuB45613526
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Jan 2022 12:38:44 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0B869A406E;
-        Thu, 13 Jan 2022 12:38:44 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 940F8A4065;
-        Thu, 13 Jan 2022 12:38:43 +0000 (GMT)
-Received: from localhost (unknown [9.43.54.234])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 13 Jan 2022 12:38:43 +0000 (GMT)
-Date:   Thu, 13 Jan 2022 18:08:42 +0530
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jan Kara <jack@suse.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>, tytso@mit.edu,
-        Eric Whitney <enwlinux@gmail.com>
-Subject: Re: [PATCH 6/6] jbd2: No need to use t_handle_lock in
- jbd2_journal_wait_updates
-Message-ID: <20220113123842.3rpfcyecylt5n3wo@riteshh-domain>
-References: <cover.1642044249.git.riteshh@linux.ibm.com>
- <e7e0f8c54306591a3a9c8fead1e0e54358052ab6.1642044249.git.riteshh@linux.ibm.com>
- <20220113112749.d5tfszcksvxvshnn@quack3.lan>
+        Thu, 13 Jan 2022 07:40:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 803D761C18;
+        Thu, 13 Jan 2022 12:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DF2A1C36AEC;
+        Thu, 13 Jan 2022 12:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642077609;
+        bh=188HWT1CkxrwlSeVx4VHEbaaD4KJ+ccLjOYC5mXrvY4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AISn/NZ6B27ZlACncbGXBr4gRX6qLlhoSQODl95aWH80M3n97WupOPafhF/YUsLuB
+         nt3S1EVYA/C/TMvtoCgr1ZxHNP1mtOlytCJ8z+WE2gaaPHqz6OTP1NsCceQ5DTFoc3
+         V6x7dtcG2KNoUeK4eoRwtmIQv2cNJSmx2wW2LPjAZWtKebiyK0gB3saJ3vJZ7uacuV
+         CyQWB6K5ClMFTIoZARkg29EvB/yBwiMYvhSM1nRzWf5Ghb8N5lnTq+uIW3CYtg2z4S
+         FP80fkqe8ZfcpSNCXHyR88YuGWYBTz8zTupWIyV9XxSxKjOmNGkXkoo4+5GDwbD4GW
+         4ltfDIeuv4Mng==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C7A0CF6078E;
+        Thu, 13 Jan 2022 12:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220113112749.d5tfszcksvxvshnn@quack3.lan>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6Cn2v6OG7A4s6QRjewK07qtJCT-HNgvi
-X-Proofpoint-GUID: S08JEU3Z0S9v0cMSbxsI7xEy65BB9m0d
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-13_04,2022-01-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 malwarescore=0 phishscore=0 adultscore=0
- impostorscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201130075
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: qmi_wwan: add ZTE MF286D modem 19d2:1485
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164207760981.15302.4251167681503025563.git-patchwork-notify@kernel.org>
+Date:   Thu, 13 Jan 2022 12:40:09 +0000
+References: <20220111221132.14586-1-paweldembicki@gmail.com>
+In-Reply-To: <20220111221132.14586-1-paweldembicki@gmail.com>
+To:     Pawel Dembicki <paweldembicki@gmail.com>
+Cc:     linux-usb@vger.kernel.org, bjorn@mork.no, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/01/13 12:27PM, Jan Kara wrote:
-> On Thu 13-01-22 08:56:29, Ritesh Harjani wrote:
-> > Since jbd2_journal_wait_updates() uses waitq based on t_updates atomic_t
-> > variable. So from code review it looks like we don't need to use
-> > t_handle_lock spinlock for checking t_updates value.
-> > Hence this patch gets rid of the spinlock protection in
-> > jbd2_journal_wait_updates()
-> >
-> > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
->
-> This patch looks good. Feel free to add:
->
-> Reviewed-by: Jan Kara <jack@suse.cz>
->
-> Actually looking at it, t_handle_lock seems to be very much unused. I agree
+Hello:
 
-I too had this thought in mind. Thanks for taking a deeper look into it :)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
->
-> we don't need it when waiting for outstanding handles but the only
-> remaining uses are:
->
-> 1) jbd2_journal_extend() where it is not needed either - we use
-> atomic_add_return() to manipulate t_outstanding_credits and hold
-> j_state_lock for reading which provides us enough exclusion.
->
-> 2) update_t_max_wait() - this is the only valid use of t_handle_lock but we
-> can just switch it to cmpxchg loop with a bit of care. Something like:
->
-> 	unsigned long old;
->
-> 	ts = jbd2_time_diff(ts, transaction->t_start);
-> 	old = transaction->t_max_wait;
-> 	while (old < ts)
-> 		old = cmpxchg(&transaction->t_max_wait, old, ts);
->
-> So perhaps you can add two more patches to remove other t_handle_lock uses
-> and drop it completely.
+On Tue, 11 Jan 2022 23:11:32 +0100 you wrote:
+> Modem from ZTE MF286D is an Qualcomm MDM9250 based 3G/4G modem.
+> 
+> T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
+> D:  Ver= 3.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+> P:  Vendor=19d2 ProdID=1485 Rev=52.87
+> S:  Manufacturer=ZTE,Incorporated
+> S:  Product=ZTE Technologies MSM
+> S:  SerialNumber=MF286DZTED000000
+> C:* #Ifs= 7 Cfg#= 1 Atr=80 MxPwr=896mA
+> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
+> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=02 Prot=ff Driver=rndis_host
+> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+> I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+> E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=86(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+> E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+> E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+> E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=89(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> 
+> [...]
 
-Thanks for providing the details Jan :)
-Agree with jbd2_journal_extend(). I did looked a bit around t_max_wait and
-I agree that something like above could work. I will spend some more time around
-that code and will submit those changes together in v2.
+Here is the summary with links:
+  - net: qmi_wwan: add ZTE MF286D modem 19d2:1485
+    https://git.kernel.org/netdev/net/c/078c6a1cbd4c
 
--ritesh
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
->
-> 								Honza
->
-> > ---
-> >  include/linux/jbd2.h | 4 ----
-> >  1 file changed, 4 deletions(-)
-> >
-> > diff --git a/include/linux/jbd2.h b/include/linux/jbd2.h
-> > index 34b051aa9009..9bef47622b9d 100644
-> > --- a/include/linux/jbd2.h
-> > +++ b/include/linux/jbd2.h
-> > @@ -1768,22 +1768,18 @@ static inline void jbd2_journal_wait_updates(journal_t *journal)
-> >  	if (!commit_transaction)
-> >  		return;
-> >
-> > -	spin_lock(&commit_transaction->t_handle_lock);
-> >  	while (atomic_read(&commit_transaction->t_updates)) {
-> >  		DEFINE_WAIT(wait);
-> >
-> >  		prepare_to_wait(&journal->j_wait_updates, &wait,
-> >  					TASK_UNINTERRUPTIBLE);
-> >  		if (atomic_read(&commit_transaction->t_updates)) {
-> > -			spin_unlock(&commit_transaction->t_handle_lock);
-> >  			write_unlock(&journal->j_state_lock);
-> >  			schedule();
-> >  			write_lock(&journal->j_state_lock);
-> > -			spin_lock(&commit_transaction->t_handle_lock);
-> >  		}
-> >  		finish_wait(&journal->j_wait_updates, &wait);
-> >  	}
-> > -	spin_unlock(&commit_transaction->t_handle_lock);
-> >  }
-> >
-> >  /*
-> > --
-> > 2.31.1
-> >
-> --
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
+

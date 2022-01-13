@@ -2,194 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA91148DDE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 19:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4E348DDE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 19:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237704AbiAMSyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 13:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
+        id S237722AbiAMSz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 13:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237692AbiAMSys (ORCPT
+        with ESMTP id S237707AbiAMSz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 13:54:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AFBC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 10:54:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D119B80934
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 18:54:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5CDBC36AE9;
-        Thu, 13 Jan 2022 18:54:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642100086;
-        bh=rCUdRaTSb8GfdnHOsKtSKTzULAtvOQFjNg2WYEzRTwk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LesfkV1xdZr+v4Suvf2d4cWgd5ueBU20g7FQTLIxF+Kf0GqlHRXsxNbdfnO+jZ/Os
-         /owO2w1SvI7AOykzq7dQobZKAKzOzOKEz+m5jsk2VjRqIy1Nk6daRY6IcE9ef7if4g
-         DaQQvgoZE6r40ZeTkv96Pcp57Yq7BeKpfGkbByClxGjzzzIoL1cP1vDIqretb3Xmps
-         08Pa6g8eP2r2UwQkFwbd3+OnceUiNLMM3Dn9lc4lFE8EFPPI9ojlNhryZ3x1guzTdH
-         gRZGiods3/ing3HXFYwOjqGx/Dm1neCosdOXYliE0UpP5UOEt1g58uPRYne0SMSrC9
-         xFqQXNWVCN9hg==
-Message-ID: <73020277-d49f-7aae-22db-945e040a31a2@kernel.org>
-Date:   Thu, 13 Jan 2022 10:54:39 -0800
+        Thu, 13 Jan 2022 13:55:27 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F54C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 10:55:26 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id u25so26649302edf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 10:55:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oRiVpEhqgJD+mGewiIi65w1fedUbfZZFb7W9HHAZRIE=;
+        b=ct37F4+kNDa/5rStIs6q5gEJQHPbgNgsFIIOgbhuczvIpsihHXfdAvP0aHiEsoL+rp
+         aPk9bagtKhFcdssAU0zK/53zynLDefrVybrhHiJe3LQ/Knt24pwdimn7uebHLTPlJyAJ
+         LhzOFrLz/C7Lwij0on65wfikAZho0IiSAc/+Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oRiVpEhqgJD+mGewiIi65w1fedUbfZZFb7W9HHAZRIE=;
+        b=rUjBrCPRPW8xvReB7H1vT2QRpzeOFEdpWA5kr1gIJdzwJjyPloV+lGi++61sZ9j8k2
+         6auChXG4KsSA4IKSsOFnJS5ekZqRcVkHYYF90YwvUREGEIxYGjungEtY83veTX1OqEZT
+         /UzUeiCHkSUu9XxIII9ElR5W4iDUg0hwmp+sJ56L3s6C26Pk55n/UstM/d7sGXOZxGI5
+         T67zSokdR+UGrLBpqW1uLksccHDPdtmTU9aa5wFPcWfx7rjFzzQp4MFH3lorDROBKEno
+         bRPtSA/YAT64oQ7nM5T2vJ6Mlpj2Q5w6zLtBKhgptGWMv968vusM8v3nCr5zirHVB1wK
+         zXJg==
+X-Gm-Message-State: AOAM533/lz0fJ2EJ90ei1RRiWPjzRNmOEiakO8O6w+bOWpijEQcyqGnb
+        otMdyxXAri5vKmRnCJZqHyKSp6ArmWWpe+fF
+X-Google-Smtp-Source: ABdhPJyLTZCBi3heFHewHk8trDegBWC08Vmun98vSfG2bT5gSmu8Vy5oqW/omdkBPzxfYvevdOZSfw==
+X-Received: by 2002:a17:906:c0d6:: with SMTP id bn22mr1302484ejb.740.1642100124998;
+        Thu, 13 Jan 2022 10:55:24 -0800 (PST)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
+        by smtp.gmail.com with ESMTPSA id j5sm1133797ejo.171.2022.01.13.10.55.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 10:55:23 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso5995850wmj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 10:55:22 -0800 (PST)
+X-Received: by 2002:a05:600c:4f13:: with SMTP id l19mr12264326wmq.152.1642100122506;
+ Thu, 13 Jan 2022 10:55:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] x86/entry_32: Fix segment exceptions
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        lkp@lists.01.org, lkp@intel.com
-References: <20220106083523.GB32167@xsang-OptiPlex-9020>
- <Yd1l0gInc4zRcnt/@hirez.programming.kicks-ass.net>
- <Yd4u2rVVSdpEpwwM@google.com>
- <Yd6zrbFBzSn3ducx@hirez.programming.kicks-ass.net> <Yd724f1Uv1GTZ+46@zn.tnic>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <Yd724f1Uv1GTZ+46@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220113140318.11117-1-zhangliang5@huawei.com>
+ <YeA5oP/iaxtVPHb3@casper.infradead.org> <CAHk-=wjB0i-B=U-DhpAajQx3f6bp1X==neLOrg0jwq29mgz=3g@mail.gmail.com>
+ <172ccfbb-7e24-db21-7d84-8c8d8c3805fd@redhat.com> <CAHk-=wi21DZ4H5uLnn2QgAeAUqg0wNPboijC0OgDDk1e7TdkPw@mail.gmail.com>
+ <c3f34084-7315-e0c5-55db-d1cb006979f4@redhat.com> <CAHk-=wjv+beg2gRNdERANGfaGcqwDzzVD5RDD07FcrE5c6k-XA@mail.gmail.com>
+ <0c44a89d-06a7-d0bb-e71e-7947d651f4d1@redhat.com>
+In-Reply-To: <0c44a89d-06a7-d0bb-e71e-7947d651f4d1@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 13 Jan 2022 10:55:06 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wg-FvLd9Vyg1+n47gDSSDmHJnjmW0-FaQGJcbrtgbYALg@mail.gmail.com>
+Message-ID: <CAHk-=wg-FvLd9Vyg1+n47gDSSDmHJnjmW0-FaQGJcbrtgbYALg@mail.gmail.com>
+Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        wangzhigang17@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/22 07:42, Borislav Petkov wrote:
-> On Wed, Jan 12, 2022 at 11:55:41AM +0100, Peter Zijlstra wrote:
->> Full and proper patch below. Boris, if you could merge in x86/core that
->> branch should then be ready for a pull req.
-> 
-> I've got this as the final version. Scream if something's wrong.
+On Thu, Jan 13, 2022 at 9:55 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> However, reuse_swap_page() currently does multiple things, and that's part of the issue.
 
-AAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHH!!!!!!!!!!!
+Yeah, I think it's a horrible function. The COW path was explicitly
+changed not to use it because it's so confusing.
 
+> While we're at it, is there a real reason we can't simplify to
+>
+> diff --git a/mm/memory.c b/mm/memory.c
+> index e8e2144cbfa6..ab114a5862a0 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3295,7 +3295,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+> -               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1) {
+> +               if (PageKsm(page) || page_count(page) != 1) {
 
-> 
-> ---
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Tue, 11 Jan 2022 12:11:14 +0100
-> Subject: [PATCH] x86/entry_32: Fix segment exceptions
-> 
-> The LKP robot reported that commit in Fixes: caused a failure. Turns out
-> the ldt_gdt_32 selftest turns into an infinite loop trying to clear the
-> segment.
-> 
-> As discovered by Sean, what happens is that PARANOID_EXIT_TO_KERNEL_MODE
-> in the handle_exception_return path overwrites the entry stack data with
-> the task stack data, restoring the "bad" segment value.
-> 
-> Instead of having the exception retry the instruction, have it emulate
-> the full instruction. Replace EX_TYPE_POP_ZERO with EX_TYPE_POP_REG
-> which will do the equivalent of: POP %reg; MOV $imm, %reg.
-> 
-> In order to encode the segment registers, add them as registers 8-11 for
-> 32-bit.
-> 
-> By setting regs->[defg]s the (nested) RESTORE_REGS will pop this value
-> at the end of the exception handler and by increasing regs->sp, it will
-> have skipped the stack slot.
-> 
-> This was debugged by Sean Christopherson <seanjc@google.com>.
-> 
->   [ bp: Add EX_REG_GS too. ]
-> 
-> Fixes: aa93e2ad7464 ("x86/entry_32: Remove .fixup usage")
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> Link: https://lore.kernel.org/r/Yd1l0gInc4zRcnt/@hirez.programming.kicks-ass.net
-> ---
->   arch/x86/entry/entry_32.S                  | 13 +++++++++----
->   arch/x86/include/asm/extable_fixup_types.h | 11 ++++++++++-
->   arch/x86/lib/insn-eval.c                   |  5 +++++
->   arch/x86/mm/extable.c                      | 17 +++--------------
->   4 files changed, 27 insertions(+), 19 deletions(-)
-> 
-> diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-> index e0a95d8a6553..a7ec22b1d06c 100644
-> --- a/arch/x86/entry/entry_32.S
-> +++ b/arch/x86/entry/entry_32.S
-> @@ -268,11 +268,16 @@
->   1:	popl	%ds
->   2:	popl	%es
->   3:	popl	%fs
-> -	addl	$(4 + \pop), %esp	/* pop the unused "gs" slot */
-> +4:	addl	$(4 + \pop), %esp	/* pop the unused "gs" slot */
->   	IRET_FRAME
-> -	_ASM_EXTABLE_TYPE(1b, 1b, EX_TYPE_POP_ZERO)
-> -	_ASM_EXTABLE_TYPE(2b, 2b, EX_TYPE_POP_ZERO)
-> -	_ASM_EXTABLE_TYPE(3b, 3b, EX_TYPE_POP_ZERO)
-> +
-> +	/*
-> +	 * There is no _ASM_EXTABLE_TYPE_REG() for ASM, however since this is
-> +	 * ASM the registers are known and we can trivially hard-code them.
-> +	 */
-> +	_ASM_EXTABLE_TYPE(1b, 2b, EX_TYPE_POP_ZERO|EX_REG_DS)
-> +	_ASM_EXTABLE_TYPE(2b, 3b, EX_TYPE_POP_ZERO|EX_REG_ES)
-> +	_ASM_EXTABLE_TYPE(3b, 4b, EX_TYPE_POP_ZERO|EX_REG_FS)
+No, I think both the mapcount and the ksm check are bogus and should
+be removed, but they are both examples of "get rid of the nastiest
+complexity, leave the stuff that doesn't much matter".
 
-Aside from POP_ZERO being a bit mystifying to a naive reader...
+Somebody who really knows the ksm logic should check all the ksm
+tests. I really think they are pointless, and came from the old and
+horribly broken page_mapcount() logic that did *not* check
+page_count().
 
->   .endm
->   
->   .macro RESTORE_ALL_NMI cr3_reg:req pop=0
-> diff --git a/arch/x86/include/asm/extable_fixup_types.h b/arch/x86/include/asm/extable_fixup_types.h
-> index b5ab333e064a..503622627400 100644
-> --- a/arch/x86/include/asm/extable_fixup_types.h
-> +++ b/arch/x86/include/asm/extable_fixup_types.h
-> @@ -16,9 +16,16 @@
->   #define EX_DATA_FLAG_SHIFT		12
->   #define EX_DATA_IMM_SHIFT		16
->   
-> +#define EX_DATA_REG(reg)		((reg) << EX_DATA_REG_SHIFT)
->   #define EX_DATA_FLAG(flag)		((flag) << EX_DATA_FLAG_SHIFT)
->   #define EX_DATA_IMM(imm)		((imm) << EX_DATA_IMM_SHIFT)
->   
-> +/* segment regs */
-> +#define EX_REG_DS			EX_DATA_REG(8)
-> +#define EX_REG_ES			EX_DATA_REG(9)
-> +#define EX_REG_FS			EX_DATA_REG(10)
+When you think page_mapcount() matters, suddenly you have to worry
+about all the other non-mapping uses of a page, which is why I think
+that ksm test still exists. But I didn't mind keeping a couple of
+extraneous tests that I didn't see the point of , as long as the core
+page-count-based logfc was solid
 
-These three seem likely to work
-
-> +#define EX_REG_GS			EX_DATA_REG(11)
-
-But not this one.
-
-> +
->   /* flags */
->   #define EX_FLAG_CLEAR_AX		EX_DATA_FLAG(1)
->   #define EX_FLAG_CLEAR_DX		EX_DATA_FLAG(2)
-> @@ -41,7 +48,9 @@
->   #define	EX_TYPE_RDMSR_IN_MCE		13
->   #define	EX_TYPE_DEFAULT_MCE_SAFE	14
->   #define	EX_TYPE_FAULT_MCE_SAFE		15
-> -#define	EX_TYPE_POP_ZERO		16
-> +
-> +#define	EX_TYPE_POP_REG			16 /* sp += sizeof(long) */
-> +#define EX_TYPE_POP_ZERO		(EX_TYPE_POP_REG | EX_DATA_IMM(0))
->   
->   #define	EX_TYPE_IMM_REG			17 /* reg := (long)imm */
->   #define	EX_TYPE_EFAULT_REG		(EX_TYPE_IMM_REG | EX_DATA_IMM(-EFAULT))
-> diff --git a/arch/x86/lib/insn-eval.c b/arch/x86/lib/insn-eval.c
-> index 7760d228041b..c8a962c2e653 100644
-> --- a/arch/x86/lib/insn-eval.c
-> +++ b/arch/x86/lib/insn-eval.c
-> @@ -430,6 +430,11 @@ static const int pt_regoff[] = {
->   	offsetof(struct pt_regs, r13),
->   	offsetof(struct pt_regs, r14),
->   	offsetof(struct pt_regs, r15),
-> +#else
-> +	offsetof(struct pt_regs, ds),
-> +	offsetof(struct pt_regs, es),
-> +	offsetof(struct pt_regs, fs),
-> +	offsetof(struct pt_regs, gs),
-
-See the comment in asm/ptrace.h over gs :)
-
-Fortunately nothing uses EX_REG_GS.  Maybe just remove all the gs bits 
-and leave the rest alone?
+          Linus

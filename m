@@ -2,164 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9C048D54D
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F8248D54E
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 11:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233577AbiAMJ5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:57:00 -0500
-Received: from mga07.intel.com ([134.134.136.100]:21256 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232227AbiAMJ4z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:56:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642067815; x=1673603815;
-  h=from:to:cc:subject:date:message-id;
-  bh=1F6Syt4etkdduZ3B/BUPPh56aIVAn6EAxdLQbjXRbPs=;
-  b=f18j+xNg93PbXTQgyZMih7OeLSigGr5wkk61PPQWpAtsofJysdrMw9k1
-   2tfJVipAgMB/dBmuLSycLhS5QnRlcRswxihNLChrxtXsj9i2ohUOu4cLH
-   MiPlpFc53U9a4t/gqDzQjqBOXXAUJs6eHxUzUqACZu8kJP3BPQPAK553O
-   6HBdFB8Hlf1Z05tj+jbYz11CUHrtXuuqG60VVQ4rL9OCiifm6gEt34Jfy
-   7uVMLa5+tMOS5hJk/oEgiQSC2kzKhmuoi0wAg82u7DUE7eZsAigUHS0AJ
-   IeaWeCtMeDJN1kjM74utvFTb3SlRdgapld2EueIlyl71qxgdIo3dT94AC
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10225"; a="307321915"
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="307321915"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 01:56:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,284,1635231600"; 
-   d="scan'208";a="613897881"
-Received: from mismail5-ilbpg0.png.intel.com ([10.88.229.13])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Jan 2022 01:56:52 -0800
-From:   Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mohammad.athari.ismail@intel.com, stable@vger.kernel.org
-Subject: [PATCH net v3] net: phy: marvell: add Marvell specific PHY loopback
-Date:   Thu, 13 Jan 2022 17:56:04 +0800
-Message-Id: <20220113095604.31827-1-mohammad.athari.ismail@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S233591AbiAMJ5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:57:31 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:45146 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233581AbiAMJ50 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 04:57:26 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20D7k9qV024293;
+        Thu, 13 Jan 2022 10:57:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=yHEJ9y2I9Ge5c7kYI6alfueclq+ZM0p0Ht8YLzDrn0M=;
+ b=pLdBVar0Hw3Z/4fZL8Y1kSvbfC4vbNDiHuiefH3CI4XWhL37Wy3ncIT4A3UVEPdEMFU3
+ mWIgk2vCjrkIe1lmTGXveeTeQpgrrwFWzG1VIz9Tolk0sKGDQj8Ugg3kYFJWhC174s/t
+ rPFiRIDPcc45M9AeP6++cUMtquZVKhdMf+d6fpiE9bQe7L8Q1LX0/DeIQkfh5Fr50+DX
+ Z4mlgy/YRDGJZZnOiLHQBQRNyHJxxxwcU3sEbFpsPA5pY+NjbfSqsjk4+8O3MjqnVA4k
+ TzWuXJbOSrGR+K0Pjw9aN94bBtMxuPfL3tijt57z1piYLzyTEqfWB5CYaeduCYKb2vKS Lw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3djfywrt4v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Jan 2022 10:57:18 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6873810003A;
+        Thu, 13 Jan 2022 10:57:03 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6137620C0F4;
+        Thu, 13 Jan 2022 10:57:03 +0100 (CET)
+Received: from lmecxl1137.lme.st.com (10.75.127.45) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 13 Jan
+ 2022 10:57:02 +0100
+Subject: Re: [PATCH 2/5] drm/stm: ltdc: add YCbCr 422 output support
+To:     Yannick Fertre <yannick.fertre@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211215214750.20105-1-yannick.fertre@foss.st.com>
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+Message-ID: <71eb2c1d-e2d6-7c4a-e66d-3f43c296eac7@foss.st.com>
+Date:   Thu, 13 Jan 2022 10:57:02 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20211215214750.20105-1-yannick.fertre@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-13_02,2022-01-13_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Existing genphy_loopback() is not applicable for Marvell PHY. Besides
-configuring bit-6 and bit-13 in Page 0 Register 0 (Copper Control
-Register), it is also required to configure same bits  in Page 2
-Register 21 (MAC Specific Control Register 2) according to speed of
-the loopback is operating.
 
-Tested working on Marvell88E1510 PHY for all speeds (1000/100/10Mbps).
+On 12/15/21 10:47 PM, Yannick Fertre wrote:
+> LTDC 40100 hw version supports the YCbCr 422 output,
+> reducing the output pins from 24 to 16. This feature
+> is useful for some external devices like HDMI bridges.
+>
+> Both ITU-R BT.601 & ITU-R BT.709 are supported.
+>
+> It is also possible to choose the chrominance order between
+> * Cb is output first (Y0Cb, then Y1Cr, Y2Cb and so on).
+> * Cr is output first (Y0Cr, then Y1Cb, Y2Cr and so on).
+>
+> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+> ---
+>  drivers/gpu/drm/stm/ltdc.c | 44 +++++++++++++++++++++++++++++++++++++-
+>  drivers/gpu/drm/stm/ltdc.h |  1 +
+>  2 files changed, 44 insertions(+), 1 deletion(-)
 
-FIXME: Based on trial and error test, it seem 1G need to have delay between
-soft reset and loopback enablement.
 
-Fixes: 014068dcb5b1 ("net: phy: genphy_loopback: add link speed configuration")
-Cc: <stable@vger.kernel.org> # 5.15.x
-Signed-off-by: Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
----
-v3 changelog:
-- Use phy_write() to configure speed for BMCR.
-- Add error handling.
-All commented by Russell King <linux@armlinux.org.uk>
+Hello Yannick,
 
-v2 changelog:
-- For loopback enabled, add bit-6 and bit-13 configuration in both Page
-  0 Register 0 and Page 2 Register 21. Commented by Heiner Kallweit
-<hkallweit1@gmail.com>.
-- For loopback disabled, follow genphy_loopback() implementation
----
- drivers/net/phy/marvell.c | 56 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 55 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
-index 4fcfca4e1702..5c371c2de9a0 100644
---- a/drivers/net/phy/marvell.c
-+++ b/drivers/net/phy/marvell.c
-@@ -189,6 +189,8 @@
- #define MII_88E1510_GEN_CTRL_REG_1_MODE_RGMII_SGMII	0x4
- #define MII_88E1510_GEN_CTRL_REG_1_RESET	0x8000	/* Soft reset */
- 
-+#define MII_88E1510_MSCR_2		0x15
-+
- #define MII_VCT5_TX_RX_MDI0_COUPLING	0x10
- #define MII_VCT5_TX_RX_MDI1_COUPLING	0x11
- #define MII_VCT5_TX_RX_MDI2_COUPLING	0x12
-@@ -1932,6 +1934,58 @@ static void marvell_get_stats(struct phy_device *phydev,
- 		data[i] = marvell_get_stat(phydev, i);
- }
- 
-+static int marvell_loopback(struct phy_device *phydev, bool enable)
-+{
-+	int err;
-+
-+	if (enable) {
-+		u16 bmcr_ctl = 0, mscr2_ctl = 0;
-+
-+		if (phydev->speed == SPEED_1000)
-+			bmcr_ctl = BMCR_SPEED1000;
-+		else if (phydev->speed == SPEED_100)
-+			bmcr_ctl = BMCR_SPEED100;
-+
-+		if (phydev->duplex == DUPLEX_FULL)
-+			bmcr_ctl |= BMCR_FULLDPLX;
-+
-+		err = phy_write(phydev, MII_BMCR, bmcr_ctl);
-+		if (err < 0)
-+			return err;
-+
-+		if (phydev->speed == SPEED_1000)
-+			mscr2_ctl = BMCR_SPEED1000;
-+		else if (phydev->speed == SPEED_100)
-+			mscr2_ctl = BMCR_SPEED100;
-+
-+		err = phy_modify_paged(phydev, MII_MARVELL_MSCR_PAGE,
-+				       MII_88E1510_MSCR_2, BMCR_SPEED1000 |
-+				       BMCR_SPEED100, mscr2_ctl);
-+		if (err < 0)
-+			return err;
-+
-+		/* Need soft reset to have speed configuration takes effect */
-+		err = genphy_soft_reset(phydev);
-+		if (err < 0)
-+			return err;
-+
-+		/* FIXME: Based on trial and error test, it seem 1G need to have
-+		 * delay between soft reset and loopback enablement.
-+		 */
-+		if (phydev->speed == SPEED_1000)
-+			msleep(1000);
-+
-+		return phy_modify(phydev, MII_BMCR, BMCR_LOOPBACK,
-+				  BMCR_LOOPBACK);
-+	} else {
-+		err = phy_modify(phydev, MII_BMCR, BMCR_LOOPBACK, 0);
-+		if (err < 0)
-+			return err;
-+
-+		return phy_config_aneg(phydev);
-+	}
-+}
-+
- static int marvell_vct5_wait_complete(struct phy_device *phydev)
- {
- 	int i;
-@@ -3078,7 +3132,7 @@ static struct phy_driver marvell_drivers[] = {
- 		.get_sset_count = marvell_get_sset_count,
- 		.get_strings = marvell_get_strings,
- 		.get_stats = marvell_get_stats,
--		.set_loopback = genphy_loopback,
-+		.set_loopback = marvell_loopback,
- 		.get_tunable = m88e1011_get_tunable,
- 		.set_tunable = m88e1011_set_tunable,
- 		.cable_test_start = marvell_vct7_cable_test_start,
--- 
-2.17.1
+Reviewed-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+
+Thanks,
+
+Raphaël
 

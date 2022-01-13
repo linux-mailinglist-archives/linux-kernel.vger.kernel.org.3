@@ -2,103 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AFF48E004
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 23:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6238748E007
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 23:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233168AbiAMWAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 17:00:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44806 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235068AbiAMWAT (ORCPT
+        id S236791AbiAMWCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 17:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233026AbiAMWCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 17:00:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642111219;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iYMosw5qYefWLA9YPdhAGhJH1W9UqqKjH99qcPpNMYc=;
-        b=Bd5JEtqrVKAJ3QWw6xlmhPhWQxqioUUqnMkBGLiegRESBzrG5jfBRsj3nO+jbpwpk9XmiI
-        s+SvUPQU4jktFomdsLNrSf41qzHY9PnARj2iVckLTpRknnxnVDaohy1NMizEBSgjYVGjQt
-        2U2y6zIJrRI+4kT3YBREpM7FfKT1pgI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-56-w9wVhzADN9q-FApepbjLOg-1; Thu, 13 Jan 2022 17:00:14 -0500
-X-MC-Unique: w9wVhzADN9q-FApepbjLOg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 13 Jan 2022 17:02:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D090C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 14:02:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 305738042E0;
-        Thu, 13 Jan 2022 22:00:12 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.192.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1ABD35BE37;
-        Thu, 13 Jan 2022 22:00:08 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
-        linux-x86_64@vger.kernel.org, kernel-hardening@lists.openwall.com,
-        linux-mm@kvack.org, the arch/x86 maintainers <x86@kernel.org>,
-        musl@lists.openwall.com, libc-alpha@sourceware.org,
-        linux-kernel@vger.kernel.org, Dave Hansen <dave.hansen@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrei Vagin <avagin@gmail.com>
-Subject: Re: [PATCH v3 2/3] selftests/x86/Makefile: Support per-target
- $(LIBS) configuration
-References: <3a1c8280967b491bf6917a18fbff6c9b52e8df24.1641398395.git.fweimer@redhat.com>
-        <54ae0e1f8928160c1c4120263ea21c8133aa3ec4.1641398395.git.fweimer@redhat.com>
-        <034075bd-aac5-9b97-6d09-02d9dd658a0b@kernel.org>
-Date:   Thu, 13 Jan 2022 23:00:07 +0100
-In-Reply-To: <034075bd-aac5-9b97-6d09-02d9dd658a0b@kernel.org> (Andy
-        Lutomirski's message of "Thu, 13 Jan 2022 13:31:58 -0800")
-Message-ID: <87lezjxpnc.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AAD48B8239D
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95F2FC36AEB;
+        Thu, 13 Jan 2022 22:02:34 +0000 (UTC)
+Date:   Thu, 13 Jan 2022 17:02:33 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Pingfan Liu <kernelfans@gmail.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH v2] tracing: Add test for user space strings when
+ filtering on  string pointers
+Message-ID: <20220113170233.08e5866f@gandalf.local.home>
+In-Reply-To: <Yd5VTy0UW1tOcjTD@piliu.users.ipa.redhat.com>
+References: <20220110115532.536088fd@gandalf.local.home>
+        <31c11a47a8bc4e34a1a64d54a54bb944@AcuMS.aculab.com>
+        <20220110122436.5302128f@gandalf.local.home>
+        <Yd5VTy0UW1tOcjTD@piliu.users.ipa.redhat.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andy Lutomirski:
+On Wed, 12 Jan 2022 12:13:03 +0800
+Pingfan Liu <kernelfans@gmail.com> wrote:
 
-> On 1/5/22 08:03, Florian Weimer wrote:
->> And avoid compiling PCHs by accident.
->> 
->
-> The patch seems fine, but I can't make heads or tails of the
-> $SUBJECT. Can you help me?
+> > > > The reason is that trace event filter treats the user space pointer
+> > > > defined by "filename" as a normal pointer to compare against the "cpu"
+> > > > string. If the string is not loaded into memory yet, it will trigger a
+> > > > fault in kernel space:    
+> 
+> For accurate commit log, the swapped-out user page is not the root cause
+> of this bug is "supervisor read access in kernel mode". And it is trueth
+> that swapped-out user page can trigger a bug here, but it should be a
+> different a stack.
 
-What about this?
+I updated the change log.
 
-selftests/x86/Makefile: Set linked libraries using $(LIBS)
+> 
+> For V2, feel free to add "Tested-by"
 
-I guess that it's possible to use make features to set this per target
-isn't important.
+Thanks.
 
-Thanks,
-Florian
+I also added a comment in the code. Here's v3:
 
->> Signed-off-by: Florian Weimer <fweimer@redhat.com>
->> ---
->> v3: Patch split out.
->>   tools/testing/selftests/x86/Makefile | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->> diff --git a/tools/testing/selftests/x86/Makefile
->> b/tools/testing/selftests/x86/Makefile
->> index 8a1f62ab3c8e..0993d12f2c38 100644
->> --- a/tools/testing/selftests/x86/Makefile
->> +++ b/tools/testing/selftests/x86/Makefile
->> @@ -72,10 +72,12 @@ all_64: $(BINARIES_64)
->>   EXTRA_CLEAN := $(BINARIES_32) $(BINARIES_64)
->>     $(BINARIES_32): $(OUTPUT)/%_32: %.c helpers.h
->> -	$(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl -lm
->> +	$(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $(filter-out %.h, $^) \
->> +		$(or $(LIBS), -lrt -ldl -lm)
->>     $(BINARIES_64): $(OUTPUT)/%_64: %.c helpers.h
->> -	$(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl
->> +	$(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $(filter-out %.h, $^) \
->> +		$(or $(LIBS), -lrt -ldl -lm)
->>     # x86_64 users should be encouraged to install 32-bit libraries
->>   ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),01)
+-- Steve
+
+From: Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH] tracing: Add test for user space strings when filtering on
+ string pointers
+
+Pingfan reported that the following causes a fault:
+
+  echo "filename ~ \"cpu\"" > events/syscalls/sys_enter_openat/filter
+  echo 1 > events/syscalls/sys_enter_at/enable
+
+The reason is that trace event filter treats the user space pointer
+defined by "filename" as a normal pointer to compare against the "cpu"
+string. The following bug happened:
+
+ kvm-03-guest16 login: [72198.026181] BUG: unable to handle page fault for address: 00007fffaae8ef60
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0001) - permissions violation
+ PGD 80000001008b7067 P4D 80000001008b7067 PUD 2393f1067 PMD 2393ec067 PTE 8000000108f47867
+ Oops: 0001 [#1] PREEMPT SMP PTI
+ CPU: 1 PID: 1 Comm: systemd Kdump: loaded Not tainted 5.14.0-32.el9.x86_64 #1
+ Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
+ RIP: 0010:strlen+0x0/0x20
+ Code: 48 89 f9 74 09 48 83 c1 01 80 39 00 75 f7 31 d2 44 0f b6 04 16 44 88 04 11
+       48 83 c2 01 45 84 c0 75 ee c3 0f 1f 80 00 00 00 00 <80> 3f 00 74 10 48 89 f8
+       48 83 c0 01 80 38 00 75 f7 48 29 f8 c3 31
+ RSP: 0018:ffffb5b900013e48 EFLAGS: 00010246
+ RAX: 0000000000000018 RBX: ffff8fc1c49ede00 RCX: 0000000000000000
+ RDX: 0000000000000020 RSI: ffff8fc1c02d601c RDI: 00007fffaae8ef60
+ RBP: 00007fffaae8ef60 R08: 0005034f4ddb8ea4 R09: 0000000000000000
+ R10: ffff8fc1c02d601c R11: 0000000000000000 R12: ffff8fc1c8a6e380
+ R13: 0000000000000000 R14: ffff8fc1c02d6010 R15: ffff8fc1c00453c0
+ FS:  00007fa86123db40(0000) GS:ffff8fc2ffd00000(0000) knlGS:0000000000000000
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 00007fffaae8ef60 CR3: 0000000102880001 CR4: 00000000007706e0
+ DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+ DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+ PKRU: 55555554
+ Call Trace:
+  filter_pred_pchar+0x18/0x40
+  filter_match_preds+0x31/0x70
+  ftrace_syscall_enter+0x27a/0x2c0
+  syscall_trace_enter.constprop.0+0x1aa/0x1d0
+  do_syscall_64+0x16/0x90
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+ RIP: 0033:0x7fa861d88664
+
+The above happened because the kernel tried to access user space directly
+and triggered a "supervisor read access in kernel mode" fault. Worse yet,
+the memory could not even be loaded yet, and a SEGFAULT could happen as
+well. This could be true for kernel space accessing as well.
+
+To be even more robust, test both kernel and user space strings. If the
+string fails to read, then simply have the filter fail.
+
+Note, TASK_SIZE is used to determine if the pointer is user or kernel space
+and the appropriate strncpy_from_kernel/user_nofault() function is used to
+copy the memory. For some architectures, the compare to TASK_SIZE may always
+pick user space or kernel space. If it gets it wrong, the only thing is that
+the filter will fail to match. In the future, this needs to be fixed to have
+the event denote which should be used. But failing a filter is much better
+than panicing the machine, and that can be solved later.
+
+Link: https://lore.kernel.org/all/20220107044951.22080-1-kernelfans@gmail.com/
+Link: https://lkml.kernel.org/r/20220110115532.536088fd@gandalf.local.home
+
+Cc: stable@vger.kernel.org
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Tom Zanussi <zanussi@kernel.org>
+Reported-by: Pingfan Liu <kernelfans@gmail.com>
+Tested-by: Pingfan Liu <kernelfans@gmail.com>
+Fixes: 87a342f5db69d ("tracing/filters: Support filtering for char * strings")
+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+---
+ Documentation/trace/events.rst     | 10 +++++
+ kernel/trace/trace_events_filter.c | 66 ++++++++++++++++++++++++++++--
+ 2 files changed, 73 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
+index 8ddb9b09451c..45e66a60a816 100644
+--- a/Documentation/trace/events.rst
++++ b/Documentation/trace/events.rst
+@@ -230,6 +230,16 @@ Currently the caret ('^') for an error always appears at the beginning of
+ the filter string; the error message should still be useful though
+ even without more accurate position info.
+ 
++5.2.1 Filter limitations
++------------------------
++
++If a filter is placed on a string pointer ``(char *)`` that does not point
++to a string on the ring buffer, but instead points to kernel or user space
++memory, then, for safety reasons, at most 1024 bytes of the content is
++copied onto a temporary buffer to do the compare. If the copy of the memory
++faults (the pointer points to memory that should not be accessed), then the
++string compare will be treated as not matching.
++
+ 5.3 Clearing filters
+ --------------------
+ 
+diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
+index 996920ed1812..2e9ef64e9ee9 100644
+--- a/kernel/trace/trace_events_filter.c
++++ b/kernel/trace/trace_events_filter.c
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2009 Tom Zanussi <tzanussi@gmail.com>
+  */
+ 
++#include <linux/uaccess.h>
+ #include <linux/module.h>
+ #include <linux/ctype.h>
+ #include <linux/mutex.h>
+@@ -654,6 +655,47 @@ DEFINE_EQUALITY_PRED(32);
+ DEFINE_EQUALITY_PRED(16);
+ DEFINE_EQUALITY_PRED(8);
+ 
++/* user space strings temp buffer */
++#define USTRING_BUF_SIZE	1024
++
++struct ustring_buffer {
++	char		buffer[USTRING_BUF_SIZE];
++};
++
++static __percpu struct ustring_buffer *ustring_per_cpu;
++
++static __always_inline char *test_string(char *str)
++{
++	struct ustring_buffer *ubuf;
++	char __user *ustr;
++	char *kstr;
++
++	if (!ustring_per_cpu)
++		return NULL;
++
++	ubuf = this_cpu_ptr(ustring_per_cpu);
++	kstr = ubuf->buffer;
++
++	/*
++	 * We use TASK_SIZE to denote user or kernel space, but this will
++	 * not work for all architectures. If it picks the wrong one, it may
++	 * just fail the filter (but will not bug).
++	 *
++	 * TODO: Have a way to properly denote which one this is for.
++	 */
++	if (likely((unsigned long)str >= TASK_SIZE)) {
++		/* For safety, do not trust the string pointer */
++		if (!strncpy_from_kernel_nofault(kstr, str, USTRING_BUF_SIZE))
++			return NULL;
++	} else {
++		/* user space address? */
++		ustr = (char __user *)str;
++		if (!strncpy_from_user_nofault(kstr, ustr, USTRING_BUF_SIZE))
++			return NULL;
++	}
++	return kstr;
++}
++
+ /* Filter predicate for fixed sized arrays of characters */
+ static int filter_pred_string(struct filter_pred *pred, void *event)
+ {
+@@ -671,10 +713,16 @@ static int filter_pred_string(struct filter_pred *pred, void *event)
+ static int filter_pred_pchar(struct filter_pred *pred, void *event)
+ {
+ 	char **addr = (char **)(event + pred->offset);
++	char *str;
+ 	int cmp, match;
+-	int len = strlen(*addr) + 1;	/* including tailing '\0' */
++	int len;
+ 
+-	cmp = pred->regex.match(*addr, &pred->regex, len);
++	str = test_string(*addr);
++	if (!str)
++		return 0;
++
++	len = strlen(str) + 1;	/* including tailing '\0' */
++	cmp = pred->regex.match(str, &pred->regex, len);
+ 
+ 	match = cmp ^ pred->not;
+ 
+@@ -1348,8 +1396,17 @@ static int parse_pred(const char *str, void *data,
+ 			pred->fn = filter_pred_strloc;
+ 		} else if (field->filter_type == FILTER_RDYN_STRING)
+ 			pred->fn = filter_pred_strrelloc;
+-		else
++		else {
++
++			if (!ustring_per_cpu) {
++				/* Once allocated, keep it around for good */
++				ustring_per_cpu = alloc_percpu(struct ustring_buffer);
++				if (!ustring_per_cpu)
++					goto err_mem;
++			}
++
+ 			pred->fn = filter_pred_pchar;
++		}
+ 		/* go past the last quote */
+ 		i++;
+ 
+@@ -1415,6 +1472,9 @@ static int parse_pred(const char *str, void *data,
+ err_free:
+ 	kfree(pred);
+ 	return -EINVAL;
++err_mem:
++	kfree(pred);
++	return -ENOMEM;
+ }
+ 
+ enum {
+-- 
+2.33.0
 

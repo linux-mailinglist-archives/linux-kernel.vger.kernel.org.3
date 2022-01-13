@@ -2,131 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9352748DD0A
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 18:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D71248DD12
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 18:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237201AbiAMRmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 12:42:25 -0500
-Received: from mga02.intel.com ([134.134.136.20]:45201 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229702AbiAMRmY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 12:42:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642095744; x=1673631744;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5drOxuCpnu6NcqTrQ54+q8TNEj3JwEJ/XfBKw8Jw7Pc=;
-  b=Ra526i+tEpMgwEWwjmoGPQ12yHJWdGAN5dzijKjldnBdOm/MM39neMdG
-   0vAfnMiIShpE2flSZKeKqAVtdwx6AJjOnEetTANnsEd65LxHh4AT0GpK/
-   Cj6tWGku7G2VCqmLqfiK8mWPUzefhLqMixJcpqlA6FTGMuuORBDoM1uzQ
-   u9ZxyuRFOvV9WXzODmpCIV36MitU3kQ06amCSQja+hUbDJxETj3WldpNA
-   kOuNcTt3rlTan3ZvorfVIjcy5bz1TRuNdAkwsgGrgBB5P0wVRDAXp8urw
-   dtnuYpTVIlL3pAwP+57+XAs9sKN/hQNe6mjZifM9mfzdImRGha6QxMSZa
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="231419497"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="231419497"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 09:42:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="473288535"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 13 Jan 2022 09:41:59 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n846o-0007VH-Fx; Thu, 13 Jan 2022 17:41:58 +0000
-Date:   Fri, 14 Jan 2022 01:41:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lyude Paul <lyude@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Karol Herbst <kherbst@redhat.com>,
-        Ben Skeggs <bskeggs@redhat.com>
-Subject: drivers/gpu/drm/nouveau/dispnv50/crcc57d.c:40:17: sparse: sparse:
- cast removes address space '__iomem' of expression
-Message-ID: <202201140142.b2CYChpW-lkp@intel.com>
+        id S237226AbiAMRo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 12:44:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229702AbiAMRoZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 12:44:25 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED810C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 09:44:24 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id t24so25880074edi.8
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 09:44:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vFoGln4GPtAHnUxFY/ors8ny9KKsd5+31evPartr4oQ=;
+        b=KedncrSCaadRSyFLntxCTXi9z2IIgRLPvIJOHrOOwaHKy8Aobcpbbyw/o5qWtHsFx9
+         1pQ8ax77ONX1HZ0kM7HrZfEUKEXngbnBIhIQAggDl9GgDj0PTV0AzdaB/O6FG/igexaP
+         tLSO/1ZeLhoMPWJuSxTlzmJxuVLGSMYD4NEh4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vFoGln4GPtAHnUxFY/ors8ny9KKsd5+31evPartr4oQ=;
+        b=QnlCNj04M3159WxhqXnOCMFG9Q3pg+8ePY0I+3Oxd9V2S/IMUTYOzTEO0BjZmZVhTo
+         k3Jont4C+Y8pxN/DH5hMZCnF7qXYbO2fzhji35bFkAwJHxUK4t4s9W/v89GCZ60kYXss
+         e4jY9U7akqJBTbADQGwxqwShaGMXxVYmDHdhEX0w3pOggy1QqSJGEp+hSduOMaW87jfT
+         RcAB9Cg6r6Ox+n5qdoDdl3MdmICj70UAozLVLtnRsfxIAb5E1vIbmi8e2qkYq+IECLxh
+         RsKK/xItYkc3hkhiZP98Zcb5ZKNa0b+FF3l5tJ6e2OcP5cxluF5NZM59Y0c8hnN1dC03
+         4/Bg==
+X-Gm-Message-State: AOAM531bReUxfx0Suk4u/+6vinByeMBFk4/FfijnaWwA7ZJSPjKW2QN5
+        73XSxVQyPLEx85QybLzHhsI4xyE1nTfmgAV/
+X-Google-Smtp-Source: ABdhPJypNZvoq1AG/poHu1gSWx75Uets384pNlHuu+Wz66EtSP+NWnYlpXbDHJtNpyi/JM+QjSAfGA==
+X-Received: by 2002:a50:ff10:: with SMTP id a16mr5135373edu.275.1642095863355;
+        Thu, 13 Jan 2022 09:44:23 -0800 (PST)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
+        by smtp.gmail.com with ESMTPSA id k22sm1445084edv.22.2022.01.13.09.44.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 09:44:21 -0800 (PST)
+Received: by mail-wr1-f48.google.com with SMTP id o3so11483177wrh.10
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 09:44:21 -0800 (PST)
+X-Received: by 2002:a5d:6951:: with SMTP id r17mr4798730wrw.274.1642095861186;
+ Thu, 13 Jan 2022 09:44:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220113140318.11117-1-zhangliang5@huawei.com>
+ <YeA5oP/iaxtVPHb3@casper.infradead.org> <CAHk-=wjB0i-B=U-DhpAajQx3f6bp1X==neLOrg0jwq29mgz=3g@mail.gmail.com>
+ <172ccfbb-7e24-db21-7d84-8c8d8c3805fd@redhat.com> <CAHk-=wi21DZ4H5uLnn2QgAeAUqg0wNPboijC0OgDDk1e7TdkPw@mail.gmail.com>
+ <c3f34084-7315-e0c5-55db-d1cb006979f4@redhat.com>
+In-Reply-To: <c3f34084-7315-e0c5-55db-d1cb006979f4@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 13 Jan 2022 09:44:04 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjv+beg2gRNdERANGfaGcqwDzzVD5RDD07FcrE5c6k-XA@mail.gmail.com>
+Message-ID: <CAHk-=wjv+beg2gRNdERANGfaGcqwDzzVD5RDD07FcrE5c6k-XA@mail.gmail.com>
+Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        wangzhigang17@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   455e73a07f6e288b0061dfcf4fcf54fa9fe06458
-commit: 57cbdbe65e5f9ba9bfd67b66bc3ce24ef1c54643 drm/nouveau/kms/nv140-: Use hard-coded wndws or core channel for CRC channel
-date:   9 weeks ago
-config: sparc64-randconfig-s032-20220113 (https://download.01.org/0day-ci/archive/20220114/202201140142.b2CYChpW-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57cbdbe65e5f9ba9bfd67b66bc3ce24ef1c54643
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 57cbdbe65e5f9ba9bfd67b66bc3ce24ef1c54643
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/gpu/drm/
+On Thu, Jan 13, 2022 at 9:25 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> I might be missing something, but it's not only about whether we can remove
+> the page from the swap cache, it's about whether we can reuse the page
+> exclusively in a process with write access, avoiding a COW. And for that we
+> have to check if it's mapped somewhere else already (readable).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+No.
 
+The "try to remove from swap cache" is one thing. That uses the swap count.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/nouveau/dispnv50/crcc57d.c:40:17: sparse: sparse: cast removes address space '__iomem' of expression
->> drivers/gpu/drm/nouveau/dispnv50/crcc57d.c:40:17: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/dispnv50/crcc57d.c:41:17: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/dispnv50/crcc57d.c:41:17: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/dispnv50/crcc57d.c:43:17: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/dispnv50/crcc57d.c:43:17: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/dispnv50/crcc57d.c:44:17: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/gpu/drm/nouveau/dispnv50/crcc57d.c:44:17: sparse: sparse: cast removes address space '__iomem' of expression
+The "see if we can reuse this page for COW" is a completely different
+test, and that's the "page_count() == 1" one.
 
-vim +/__iomem +40 drivers/gpu/drm/nouveau/dispnv50/crcc57d.c
+The two should not be mixed up with each other. Just don't do it.
+There's no reason - except for legacy confusion that should be
+actively avoided and removed.
 
-    12	
-    13	static int crcc57d_set_src(struct nv50_head *head, int or, enum nv50_crc_source_type source,
-    14				   struct nv50_crc_notifier_ctx *ctx)
-    15	{
-    16		struct nvif_push *push = nv50_disp(head->base.base.dev)->core->chan.push;
-    17		const int i = head->base.index;
-    18		u32 crc_args = NVDEF(NVC57D, HEAD_SET_CRC_CONTROL, CONTROLLING_CHANNEL, CORE) |
-    19			       NVDEF(NVC57D, HEAD_SET_CRC_CONTROL, EXPECT_BUFFER_COLLAPSE, FALSE) |
-    20			       NVDEF(NVC57D, HEAD_SET_CRC_CONTROL, SECONDARY_CRC, NONE) |
-    21			       NVDEF(NVC57D, HEAD_SET_CRC_CONTROL, CRC_DURING_SNOOZE, DISABLE);
-    22		int ret;
-    23	
-    24		switch (source) {
-    25		case NV50_CRC_SOURCE_TYPE_SOR:
-    26			crc_args |= NVDEF(NVC57D, HEAD_SET_CRC_CONTROL, PRIMARY_CRC, SOR(or));
-    27			break;
-    28		case NV50_CRC_SOURCE_TYPE_SF:
-    29			crc_args |= NVDEF(NVC57D, HEAD_SET_CRC_CONTROL, PRIMARY_CRC, SF);
-    30			break;
-    31		default:
-    32			break;
-    33		}
-    34	
-    35		ret = PUSH_WAIT(push, 4);
-    36		if (ret)
-    37			return ret;
-    38	
-    39		if (source) {
-  > 40			PUSH_MTHD(push, NVC57D, HEAD_SET_CONTEXT_DMA_CRC(i), ctx->ntfy.handle);
-    41			PUSH_MTHD(push, NVC57D, HEAD_SET_CRC_CONTROL(i), crc_args);
-    42		} else {
-    43			PUSH_MTHD(push, NVC57D, HEAD_SET_CRC_CONTROL(i), 0);
-    44			PUSH_MTHD(push, NVC57D, HEAD_SET_CONTEXT_DMA_CRC(i), 0);
-    45		}
-    46	
-    47		return 0;
-    48	}
-    49	
+IOW, the COW path would do
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ trylock - copy if fails
+ try to remove from swap cache
+ if page_count() is now 1, we can reuse it
+
+Note how the "try to remove from swap cache" is entirely independent
+of whether we then reuse it or not.
+
+And yes, we can have optimistic other tests - like not even bothering
+to trylock if we can see that the page-count is so elevated that it
+makes no difference and trying to remove from swap cache would be just
+pointless extra work (both the removal itself, and then potentially
+later re-additions).
+
+But those should be seen for what they are - not important for
+semantics, only a "don't bother, this page has so many users that we
+already know that removing the swapcache one doesn't make any
+difference at all".
+
+Now, it's possible that I'm missing something, but I think this kind
+of clarity is very much what we should aim for. Clear rules, no mixing
+of "can I COW this" with "can I remove this from the swap cache".
+
+And now I need to start my travel nightmare, so I'll be effectively
+offline for the next 24 hours ;(
+
+              Linus

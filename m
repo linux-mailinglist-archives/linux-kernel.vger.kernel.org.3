@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EE548DDA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 19:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F3748DDA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 19:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237514AbiAMS1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 13:27:19 -0500
-Received: from mga17.intel.com ([192.55.52.151]:63222 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230289AbiAMS1S (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 13:27:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642098438; x=1673634438;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xmMxOhuDgDR80zFi6/Sqos4w73CoL3keesfZU0Ro/DA=;
-  b=eMLlfGikrgCYQUofNjc+GHCHCxxls2hPfc4lFd6LTeGnbBxZ9AjdOUt9
-   N/6o0EgaPoObk28TWLQUMvTVqj0+am4vwCLyyjRrzGqwGymE151d9LaBx
-   zXeTlsJp6aDHujcIcSXadVWlgftxrxXPQ2/W/0uqZtCBmcGGJUCrFNOmP
-   toNsDQoXF/CF6qbzFiAVzMlZu1NEzhAkj61LdZzb9r1kf+2jFTF1/Rq60
-   r0xgNjmMlPGkwOrCdygI6CCEF8b8oxleG7V1rReG59OztYzdRN921/ZJz
-   xLTc9lVBRy7WvbDn5NiNiwdc2IfXcZmJYYVUqEKI6hGc3rxtvPLGQl+tf
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="224773433"
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="224773433"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 10:25:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,286,1635231600"; 
-   d="scan'208";a="623951642"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 13 Jan 2022 10:24:59 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n84mR-0007XE-3m; Thu, 13 Jan 2022 18:24:59 +0000
-Date:   Fri, 14 Jan 2022 02:24:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 1863/2382]
- arch/x86/entry/vsyscall/vsyscall_64.c:323:24: warning: no previous prototype
- for 'get_gate_vma'
-Message-ID: <202201140224.O4rqby5c-lkp@intel.com>
+        id S237528AbiAMS10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 13:27:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40952 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230289AbiAMS1Z (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 13:27:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAB55B82325;
+        Thu, 13 Jan 2022 18:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52EBFC36AEB;
+        Thu, 13 Jan 2022 18:27:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642098442;
+        bh=lDz34ZVMgLLYfOQXsCEzJ1y3tKvlqRylg8PQrj64Y3M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=legVsKhNla0DjVT16LpymMWEOD/el6BUbR1lkXh6vnRmx5LwOpSgvhh1PEjxXYIXP
+         jZoi4wQJp1Mt10znUjq75E1oRP545XzJfqGBNtvlJLP97dn+6sMnPSRpq1PM+NnD1l
+         m7R4zxo0oB5RLOLSnauJLC5OJEnfGXsi6ufJQ4vTNSBmxd67TfrHNaeI3KtRys8jem
+         +YI3foEEbOyaHbl0iQMM/AMTwa/2mw2gLJlfyTdTnzfMuznbnKJkZfln7eVu03klHT
+         AnDp6kZMWR+3Suo632zjz0chEB4qP3KTlsyZ9w/JcQuUOXE4T2Sly7TYlXbk4pAjMV
+         eLQ8+nQ2QP5ug==
+Received: by pali.im (Postfix)
+        id BE629778; Thu, 13 Jan 2022 19:27:19 +0100 (CET)
+Date:   Thu, 13 Jan 2022 19:27:19 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] of: net: Add helper function of_get_ethdev_label()
+Message-ID: <20220113182719.ixgysemitp5cuidn@pali>
+References: <20220107161222.14043-1-pali@kernel.org>
+ <Ydhqa+9ya6nHsvLq@shell.armlinux.org.uk>
+ <Ydhwfa/ECqTE3rLx@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Ydhwfa/ECqTE3rLx@lunn.ch>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   1a880941a087613ed42f77001229edfcf75ea8a5
-commit: 8c564323537ccfe86a2423a4b98a423ab2182c9e [1863/2382] headers/deps: mm: Optimize <linux/mm_api.h>, remove the <linux/mm_api_gate_area.h> header
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220114/202201140224.O4rqby5c-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=8c564323537ccfe86a2423a4b98a423ab2182c9e
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout 8c564323537ccfe86a2423a4b98a423ab2182c9e
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/entry/vsyscall/
+On Friday 07 January 2022 17:55:25 Andrew Lunn wrote:
+> On Fri, Jan 07, 2022 at 04:29:31PM +0000, Russell King (Oracle) wrote:
+> > On Fri, Jan 07, 2022 at 05:12:21PM +0100, Pali Rohár wrote:
+> > > Adds a new helper function of_get_ethdev_label() which sets initial name of
+> > > specified netdev interface based on DT "label" property. It is same what is
+> > > doing DSA function dsa_port_parse_of() for DSA ports.
+> > > 
+> > > This helper function can be useful for drivers to make consistency between
+> > > DSA and netdev interface names.
+> > > 
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > 
+> > Doesn't this also need a patch to update the DT binding document
+> > Documentation/devicetree/bindings/net/ethernet-controller.yaml ?
+> > 
+> > Also it needs a covering message for the series, and a well thought
+> > out argument why this is required. Consistency with DSA probably
+> > isn't a good enough reason.
+> > 
+> > >From what I remember, there have been a number of network interface
+> > naming proposals over the years, and as you can see, none of them have
+> > been successful... but who knows what will happen this time.
+> 
+> I agree with Russell here. I doubt this is going to be accepted.
+> 
+> DSA is special because DSA is very old, much older than DT, and maybe
+> older than udev. The old DSA platform drivers had a mechanism to
+> supply the interface name to the DSA core. When we added a DT binding
+> to DSA we kept that mechanism, since that mechanism had been used for
+> a long time.
+> 
+> Even if you could show there was a generic old mechanism, from before
+> the days of DT, that allowed interface names to be set from platform
+> drivers, i doubt it would be accepted because there is no continuity,
+> which DSA has.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Well, DT should universally describe HW board wiring. From HW point of
+view, it is really does not matter if RJ45 port is connected to embedded
+PHY on SoC itself or to the external PHY chip, or to the switch chip
+with embedded PHY. And if board has mix of these options, also labels
+(as printed on product box) should be in DTS described in the same way,
+independently of which software solution / driver is used for particular
+chip. It really should not matter for DTS if kernel is using for
+particular HW part DSA driver or ethernet driver.
 
-All warnings (new ones prefixed by >>):
-
->> arch/x86/entry/vsyscall/vsyscall_64.c:323:24: warning: no previous prototype for 'get_gate_vma' [-Wmissing-prototypes]
-     323 | struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
-         |                        ^~~~~~~~~~~~
->> arch/x86/entry/vsyscall/vsyscall_64.c:334:5: warning: no previous prototype for 'in_gate_area' [-Wmissing-prototypes]
-     334 | int in_gate_area(struct mm_struct *mm, unsigned long addr)
-         |     ^~~~~~~~~~~~
->> arch/x86/entry/vsyscall/vsyscall_64.c:349:5: warning: no previous prototype for 'in_gate_area_no_mm' [-Wmissing-prototypes]
-     349 | int in_gate_area_no_mm(unsigned long addr)
-         |     ^~~~~~~~~~~~~~~~~~
-
-
-vim +/get_gate_vma +323 arch/x86/entry/vsyscall/vsyscall_64.c
-
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  322  
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23 @323  struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  324  {
-c338867d0e4224 arch/x86/entry/vsyscall/vsyscall_64.c Brian Gerst             2015-06-22  325  #ifdef CONFIG_COMPAT
-ff170cd0595398 arch/x86/entry/vsyscall/vsyscall_64.c Gabriel Krisman Bertazi 2020-10-03  326  	if (!mm || !(mm->context.flags & MM_CONTEXT_HAS_VSYSCALL))
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  327  		return NULL;
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  328  #endif
-87983c66bc02c9 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-10-29  329  	if (vsyscall_mode == NONE)
-87983c66bc02c9 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-10-29  330  		return NULL;
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  331  	return &gate_vma;
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  332  }
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  333  
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23 @334  int in_gate_area(struct mm_struct *mm, unsigned long addr)
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  335  {
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  336  	struct vm_area_struct *vma = get_gate_vma(mm);
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  337  
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  338  	if (!vma)
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  339  		return 0;
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  340  
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  341  	return (addr >= vma->vm_start) && (addr < vma->vm_end);
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  342  }
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  343  
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  344  /*
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  345   * Use this when you have no reliable mm, typically from interrupt
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  346   * context. It is less reliable than using a task's mm and may give
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  347   * false positives.
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  348   */
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23 @349  int in_gate_area_no_mm(unsigned long addr)
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  350  {
-87983c66bc02c9 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-10-29  351  	return vsyscall_mode != NONE && (addr & PAGE_MASK) == VSYSCALL_ADDR;
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  352  }
-b93590901a01a6 arch/x86/kernel/vsyscall_64.c         Andy Lutomirski         2014-09-23  353  
-
-:::::: The code at line 323 was first introduced by commit
-:::::: b93590901a01a6d036b3b7c856bcc5724fdb9911 x86_64/vsyscall: Move all of the gate_area code to vsyscall_64.c
-
-:::::: TO: Andy Lutomirski <luto@amacapital.net>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+So there really should be some common way. And if the one which DSA is
+using is the old mechanism, what is the new mechanism then?

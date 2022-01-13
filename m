@@ -2,92 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E59DB48D0D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 04:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A26748D0DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 04:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbiAMDUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 12 Jan 2022 22:20:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53095 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232024AbiAMDT6 (ORCPT
+        id S232024AbiAMDY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 12 Jan 2022 22:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231983AbiAMDYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 12 Jan 2022 22:19:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642043998;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jm5clb8xIHCpD5vaQkgGsXDJRBF8humGdGQtxPy4P88=;
-        b=W0eKP+y9m2GdIMWAdG0B8hUIAwN4IedRtDidcUte/1NA4s4mqY6QrwuJDigLhXphaRePAS
-        +BzYi9Q0b00u4jn2rSqB3gZK3/ZRstK8kSsNFlf+xKGutODPE9WAZworATYA/URBH4GZcl
-        gYcnUY7RUrFlmJp8mHYE+QNrhCRM90A=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-139-F9LhNR4aPn-T4J0iLrswjA-1; Wed, 12 Jan 2022 22:19:56 -0500
-X-MC-Unique: F9LhNR4aPn-T4J0iLrswjA-1
-Received: by mail-lf1-f70.google.com with SMTP id b7-20020ac25e87000000b0042ce6d38b71so3023407lfq.10
-        for <linux-kernel@vger.kernel.org>; Wed, 12 Jan 2022 19:19:56 -0800 (PST)
+        Wed, 12 Jan 2022 22:24:24 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC9EC06173F;
+        Wed, 12 Jan 2022 19:24:24 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id ay4-20020a05600c1e0400b0034a81a94607so1889752wmb.1;
+        Wed, 12 Jan 2022 19:24:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JSMd2i1J9AcZD7Z3Rw6ULKwjTXX7SBdExO4O6TrXQeM=;
+        b=Nwx5hbt1nqbJLYEqQOrmek2+mHZHSkkaw2ys4lY0uxDxDe/urrP4UEXfjJhaRsaDas
+         GbeUqwGlKLASaZaSCBa7JO6rkMIowlCaAmEo8S0bk1MdguYwNRtcDrkcHrS6m67UA/Ny
+         RZ4AY69E254yQ7FtXIj8wJFDI/WNNTkHd1mgaSmCCipBs0I7XIEjZajBmemZE+BlPFUi
+         OJiVlWRySfQvEg+VNiYRcBNaKy/wHTs3qqqvVxoy1Pz7VomzpxJraiM7iIBawTxlu+UW
+         z5Hj1H5US9JFV+qVD/HpK4dfrM0CzF+lUgideijb+F8IAGcmqR3X8a+STShjikVc5Gp1
+         uKAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jm5clb8xIHCpD5vaQkgGsXDJRBF8humGdGQtxPy4P88=;
-        b=Xi8eukaEaCjpPGzyC7rakxzpGWE1UW06q2psw8ImR/mNTSxVpGwt7tmr+fJs7sA1+T
-         NxWJN0ro0qOXiuzCsT2Ijo9I6VffRXrdi5eUkgWFo7rTFHxSIFeTv9uNlW76gjN1gG8I
-         SGqUUJ1gD4gSxq/xbT6kddeDykZqzV+S+R/jvVcLnjhUXul9tvgHhIDcG1akMF6t9xC7
-         fderVcLxul8xVt73AhsOm5PsauSdWEOW00VIR41NuXAl/D38sxdA+63mIIYLZAmHemRz
-         S56HYPdnejdXaNkLvR0GI8LvGYyM5wS0l5PTuops8UqfIxKFvAi3w0blr38Mku98CzeV
-         a9EQ==
-X-Gm-Message-State: AOAM533C1L8EBK1xKIf3Y3QCNHtFllB/VYcixvPoZY2hu3XiriezFknv
-        Qv/+UiRenvVq52ur9hzPnS8RJZqnBsMPc3ccZNL6Fq/W/x1DWHXK8BPFMKFHG/DVrh4Pql4LFZ8
-        76eXsKnnUGwBCX7TCJ1uL9ogMH9SrPOMbvh/5Uoyz
-X-Received: by 2002:a2e:947:: with SMTP id 68mr1793927ljj.300.1642043995217;
-        Wed, 12 Jan 2022 19:19:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw5cHa/DU7QyIA+QmQtXpznmnfrd2+vdQCDxWpWS7tHq+wUGhwbB0Mc8Mc7keQjtAIC037LniGxAkqy5XbXWaM=
-X-Received: by 2002:a2e:947:: with SMTP id 68mr1793905ljj.300.1642043994973;
- Wed, 12 Jan 2022 19:19:54 -0800 (PST)
+        bh=JSMd2i1J9AcZD7Z3Rw6ULKwjTXX7SBdExO4O6TrXQeM=;
+        b=lYsXWlW2HV4ymDzqrNX3QKeaTp+jZRAiGamYLoft+n17q7HTLPUpz8V+Ro6tGxQS+X
+         isRCrXF/MLY6qC7S4FpXVqAA6FAZhN4Tr9J5SGQb1HHx3KJei4Kt61iXv0rhsZDEiVQ3
+         w8CiryFEosV6I46cL947FG5ZBEtJ9+dp9RQFvDejpJr1dosxXjcLnitAgEzRtOaNF27N
+         YVoWpGTIzjrEPa2QVUQT5FeTZSpUuY6rPwfc+2nqUS1A9MqXt1mb8NSCEPAYVA7Ub4Wv
+         QZYjbLHkT5zFw63vTyROfxXCXlVJFi10/HmSv5iCKQSaEd4cqRx+c30iytmeqVuEfFe9
+         AZuw==
+X-Gm-Message-State: AOAM5322IiApIGW6ZnDm3yCguIfK78VX28kBRswAnbDWCESxxaAQlzun
+        cEt0MlFgVuViB8KGOOdqpnWR0ISFTCXfOFgybf55/0JL
+X-Google-Smtp-Source: ABdhPJwTXGUKA7wZhgTc8YR5+JDazq/sLt8QMWaphJFMMz7CT5KV5ic+NPT04Hi1TDCOp0a7ipRt5he1vz1bXcp48xA=
+X-Received: by 2002:a1c:7316:: with SMTP id d22mr9220707wmb.5.1642044262824;
+ Wed, 12 Jan 2022 19:24:22 -0800 (PST)
 MIME-Version: 1.0
-References: <00000000000081b56205d54c6667@google.com>
-In-Reply-To: <00000000000081b56205d54c6667@google.com>
-From:   Ming Lei <ming.lei@redhat.com>
-Date:   Thu, 13 Jan 2022 11:19:44 +0800
-Message-ID: <CAFj5m9LujfHUMv+DuCLUfrevPHuF1NxtMiu_-N-C0VTiY-KNbw@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in srcu_invoke_callbacks
-To:     syzbot <syzbot+4f789823c1abc5accf13@syzkaller.appspotmail.com>
-Cc:     andrii@kernel.org, ast@kernel.org, Jens Axboe <axboe@kernel.dk>,
-        bpf@vger.kernel.org, daniel@iogearbox.net,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
+References: <20220112131204.800307-1-Jason@zx2c4.com>
+In-Reply-To: <20220112131204.800307-1-Jason@zx2c4.com>
+From:   Sandy Harris <sandyinchina@gmail.com>
+Date:   Thu, 13 Jan 2022 11:24:10 +0800
+Message-ID: <CACXcFmkauHRkTdD1zkr9QRCwG-uD8=7q9=Wk0_VFueRy-Oy+Nw@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 0/3] remove remaining users of SHA-1
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     netdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        "Ted Ts'o" <tytso@mit.edu>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 7:03 PM syzbot
-<syzbot+4f789823c1abc5accf13@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    3770333b3f8c Add linux-next specific files for 20220106
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=171aa4e3b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=f9eb40d9f910b474
-> dashboard link: https://syzkaller.appspot.com/bug?extid=4f789823c1abc5accf13
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b08f53b00000
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+4f789823c1abc5accf13@syzkaller.appspotmail.com
+Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 
-BTW, the report should be addressed by the patch:
+> There are currently two remaining users of SHA-1 left in the kernel: bpf
+> tag generation, and ipv6 address calculation.
 
-https://lore.kernel.org/linux-block/20220111123401.520192-1-ming.lei@redhat.com/T/#u
+I think there are three, since drivers/char/random.c also uses it.
+Moreover, there's some inefficiency there (or was last time I
+looked) since it produces a 160-bit hash then folds it in half
+to give an 80-bit output.
 
-Thanks,
-Ming
+A possible fix would be to use a more modern 512-bit hash.
+SHA3 would be the obvious one, but Blake2 would work,
+Blake3 might be faster & there are several other possibilities.
+Hash context size would then match ChaCha so you could
+update the whole CC context at once, maybe even use the
+same context for both.
 
+That approach has difficulties, Extracting 512 bits every
+time might drain the input pool too quickly & it is overkill
+for ChaCha which should be secure with smaller rekeyings.
+
+If you look at IPsec, SSL & other such protocols, many
+have now mostly replaced the hash-based HMAC
+constructions used in previous generations with things
+like Galois field calculations (e.g. AES-GCM) or other
+strange math (e,g. poly 1305). These have most of the
+desirable properties of hashes & are much faster. As
+far as I know, they all give 128-bit outputs.
+
+I think we should replace SHA-1 with GCM. Give
+ChaCha 128 bits somewhat more often than current
+code gives it 256.

@@ -2,161 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 884C348D9CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6655548D9D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 15:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235704AbiAMOjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 09:39:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235679AbiAMOjk (ORCPT
+        id S235705AbiAMOmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 09:42:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50729 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233723AbiAMOmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 09:39:40 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2833DC06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 06:39:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0SdL7L2aAS0NahjbAspySorF63SX/dfOiFW0ONSeOV8=; b=pWz9PYP3Z6ZR8z8GSM3iX2LNuI
-        PEOkkCU5mJnCNptQuWhIkBumyhg5NvkAo+FROnfbHc5hlxghXPVZ/k/MtisI/W1/4qQBs+tv13FB5
-        tlXCNQ8MbXC5XxkK5R249n9uMXKPx62EPpJq+hxc6QSyLZc09lNnZ7w2tImmQfL5xL9wpWwLX1Whw
-        ZSkA3BUwesAhgxf0H2AAOizB2RUgs4d8l2BgJzxvzTlAFB4AKPSVl1KXnYtQYy4AWcB3w91fYLI5b
-        s5XEsOZtyFA1Q1ehiTXJxLwMP5BY1mLWwiqr0NAKtyFwxbjvIKQ0yya2VhrGxDvO0IMyx/pWuGtdO
-        TuZ03l6g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n81GC-004zsl-Va; Thu, 13 Jan 2022 14:39:29 +0000
-Date:   Thu, 13 Jan 2022 14:39:28 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Liang Zhang <zhangliang5@huawei.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, wangzhigang17@huawei.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH] mm: reuse the unshared swapcache page in do_wp_page
-Message-ID: <YeA5oP/iaxtVPHb3@casper.infradead.org>
-References: <20220113140318.11117-1-zhangliang5@huawei.com>
+        Thu, 13 Jan 2022 09:42:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642084924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bI1J+F/xPUtTeAmv7i8RngLz7AnC9Brnx+j8BC+IvkI=;
+        b=Ev2HJ4QFGOWp5XuKJp1rGAbxIqUe0kA+caczAnhcGEPS0FfGgH7EdPzsDfWMi4WvOKsyuh
+        sJ+Gk9BD/LXOFXbU8zqoJhMKLpW2eZV4H8QTHBX0qnf7Ncmj31b6zs0NGkaGCujQqFjAXL
+        qy/yHgT+F5fTpsn0qf6evYr/YQoJU5I=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-675-1ZYmFKY5OtKKDv5B7LzIEA-1; Thu, 13 Jan 2022 09:42:01 -0500
+X-MC-Unique: 1ZYmFKY5OtKKDv5B7LzIEA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A73AF1016781;
+        Thu, 13 Jan 2022 14:41:59 +0000 (UTC)
+Received: from starship (unknown [10.40.192.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B199374EA6;
+        Thu, 13 Jan 2022 14:41:55 +0000 (UTC)
+Message-ID: <6ae7e64c53727f9f00537d787e9612c292c4e244.camel@redhat.com>
+Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Igor Mammedov <imammedo@redhat.com>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
+Date:   Thu, 13 Jan 2022 16:41:54 +0200
+In-Reply-To: <87zgnzn1nr.fsf@redhat.com>
+References: <20211122175818.608220-1-vkuznets@redhat.com>
+         <20211122175818.608220-3-vkuznets@redhat.com>
+         <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
+         <20211227183253.45a03ca2@redhat.com>
+         <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
+         <87mtkdqm7m.fsf@redhat.com> <20220103104057.4dcf7948@redhat.com>
+         <875yr1q8oa.fsf@redhat.com>
+         <ceb63787-b057-13db-4624-b430c51625f1@redhat.com>
+         <87o84qpk7d.fsf@redhat.com> <877dbbq5om.fsf@redhat.com>
+         <5505d731-cf87-9662-33f3-08844d92877c@redhat.com>
+         <20220111090022.1125ffb5@redhat.com> <87fsptnjic.fsf@redhat.com>
+         <50136685-706e-fc6a-0a77-97e584e74f93@redhat.com>
+         <87bl0gnfy5.fsf@redhat.com>
+         <7e7c7e22f8b1b1695d26d9e19a767b87c679df93.camel@redhat.com>
+         <87zgnzn1nr.fsf@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220113140318.11117-1-zhangliang5@huawei.com>
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 10:03:18PM +0800, Liang Zhang wrote:
-> In current implementation, process's read requestions will fault in pages
-> with WP flags in PTEs. Next, if process emit a write requestion will go
-> into do_wp_page() and copy data to a new allocated page from the old one
-> due to refcount > 1 (page table mapped and swapcache), which could be
-> result in performance degradation. In fact, this page is exclusively owned
-> by this process and the duplication from old to a new allocated page is
-> really unnecessary.
+On Thu, 2022-01-13 at 15:36 +0100, Vitaly Kuznetsov wrote:
+> Maxim Levitsky <mlevitsk@redhat.com> writes:
 > 
-> So In this situation, these unshared pages can be reused by its process.
+> > On Thu, 2022-01-13 at 10:27 +0100, Vitaly Kuznetsov wrote:
+> > > Paolo Bonzini <pbonzini@redhat.com> writes:
+> > > 
+> > > > On 1/12/22 14:58, Vitaly Kuznetsov wrote:
+> > > > > -	best = kvm_find_cpuid_entry(vcpu, 0xD, 1);
+> > > > > +	best = cpuid_entry2_find(entries, nent, 0xD, 1);
+> > > > >   	if (best && (cpuid_entry_has(best, X86_FEATURE_XSAVES) ||
+> > > > >   		     cpuid_entry_has(best, X86_FEATURE_XSAVEC)))
+> > > > >   		best->ebx = xstate_required_size(vcpu->arch.xcr0, true);
+> > > > >   
+> > > > > -	best = kvm_find_kvm_cpuid_features(vcpu);
+> > > > > +	best = __kvm_find_kvm_cpuid_features(vcpu, vcpu->arch.cpuid_entries,
+> > > > > +					     vcpu->arch.cpuid_nent);
+> > > > >   	if (kvm_hlt_in_guest(vcpu->kvm) && best &&
+> > > > 
+> > > > I think this should be __kvm_find_kvm_cpuid_features(vcpu, entries, nent).
+> > > > 
+> > > 
+> > > Of course.
+> > > 
+> > > > > +		case 0x1:
+> > > > > +			/* Only initial LAPIC id is allowed to change */
+> > > > > +			if (e->eax ^ best->eax || ((e->ebx ^ best->ebx) >> 24) ||
+> > > > > +			    e->ecx ^ best->ecx || e->edx ^ best->edx)
+> > > > > +				return -EINVAL;
+> > > > > +			break;
+> > > > 
+> > > > This XOR is a bit weird.  In addition the EBX test is checking the wrong 
+> > > > bits (it checks whether 31:24 change and ignores changes to 23:0).
+> > > 
+> > > Indeed, however, I've tested CPU hotplug with QEMU trying different
+> > > CPUs in random order and surprisingly othing blew up, feels like QEMU
+> > > was smart enough to re-use the right fd)
+> > > 
+> > > > You can write just "(e->ebx & ~0xff000000u) != (best->ebx ~0xff000000u)".
+> > > > 
+> > > > > +		default:
+> > > > > +			if (e->eax ^ best->eax || e->ebx ^ best->ebx ||
+> > > > > +			    e->ecx ^ best->ecx || e->edx ^ best->edx)
+> > > > > +				return -EINVAL;
+> > > > 
+> > > > This one even more so.
+> > > 
+> > > Thanks for the early review, I'm going to prepare a selftest and send
+> > > this out.
+> > > 
+> > I also looked at this recently (due to other reasons) and I found out that
+> > qemu picks a parked vcpu by its vcpu_id which is its initial apic id,
+> > thus apic id related features should not change.
+> > 
+> > Take a look at 'kvm_get_vcpu' in qemu source.
+> > Maybe old qemu versions didn't do this?
+> 
+> I took Igor's word on this, I didn't check QEMU code :-)
+> 
+> In the v1 I've just sent [L,x2]APIC ids are allowed to change. This
+> shouldn't screw the MMU (which was the main motivation for forbidding
+> KVM_SET_CPUID{,2} after KVM_RUN in the first place) but maybe we don't
+> really need to be so permissive.
+> 
 
-Let's bring Linus in on this, but I think this reintroduces all of the
-mapcount problems that we've been discussing recently.
+For my nested AVIC work I would really want the APIC ID of a VCPU to be read-only
+and be equal to vcpu_id.
 
-How about this as an alternative?
+That simplifies lot of things, and in practice it is hightly likely that no guests
+change their APIC id, and likely that qemu doesn't as well.
 
-+++ b/mm/memory.c
-@@ -3291,11 +3291,11 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
-                struct page *page = vmf->page;
-
-                /* PageKsm() doesn't necessarily raise the page refcount */
--               if (PageKsm(page) || page_count(page) != 1)
-+               if (PageKsm(page) || page_count(page) != 1 + PageSwapCache(page))
-                        goto copy;
-                if (!trylock_page(page))
-                        goto copy;
--               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1) {
-+               if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1 + PageSwapCache(page)) {
-                        unlock_page(page);
-                        goto copy;
-                }
+Best regards,
+	Maxim Levitsky
 
 
-> Signed-off-by: Liang Zhang <zhangliang5@huawei.com>
-> ---
-> This patch has been tested with redis benchmark. Here is the test
-> result.
-> 
-> Hardware
-> ========
-> Memory (GB): 512G
-> CPU (total #): 88
-> NVMe SSD (GB): 1024
-> 
-> OS
-> ==
-> kernel 5.10.0
-> 
-> Testcase
-> ========
-> step 1:
->   Run 16 VMs (4U8G), each running with redis-server, in a cgroup 
->   limiting memory.limit_in_bytes to 100G. 
-> step 2:
->   Run memtier_bemchmark in host with params "--threads=1 --clients=1 \
-> --pipeline=256 --data-size=2048 --requests=allkeys --key-minimum=1 \
-> --key-maximum=30000000 --key-prefix=memtier-benchmark-prefix-redistests"
->   to test every VM concurrently.
-> 
-> Workset size
-> ============
-> cat memory.memsw.usage_in_bytes
-> 125403303936
-> 
-> Result
-> ======
-> Comparing with Baseline, this patch can achieved 41% more Ops/sec, 
-> 41% more Hits/sec, 41% more Misses/sec, 30% less Latency and 
-> 41% more KB/sec. 
-> 
->   Index(average)        Baseline kernel        Patched kernel
->   Ops/sec               109497                 155428
->   Hits/sec              8653                   12283
->   Misses/sec            90889                  129014
->   Latency               2.297                  1.603
->   KB/sec                44569                  63186
-> 
-> 
->  mm/memory.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 23f2f1300d42..fd4d868b1c2d 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3291,10 +3291,16 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
->  		struct page *page = vmf->page;
->  
->  		/* PageKsm() doesn't necessarily raise the page refcount */
-> -		if (PageKsm(page) || page_count(page) != 1)
-> +		if (PageKsm(page))
->  			goto copy;
->  		if (!trylock_page(page))
->  			goto copy;
-> +
-> +		/* reuse the unshared swapcache page */
-> +		if (PageSwapCache(page) && reuse_swap_page(page, NULL)) {
-> +			goto reuse;
-> +		}
-> +
->  		if (PageKsm(page) || page_mapcount(page) != 1 || page_count(page) != 1) {
->  			unlock_page(page);
->  			goto copy;
-> @@ -3304,6 +3310,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
->  		 * page count reference, and the page is locked,
->  		 * it's dark out, and we're wearing sunglasses. Hit it.
->  		 */
-> +reuse:
->  		unlock_page(page);
->  		wp_page_reuse(vmf);
->  		return VM_FAULT_WRITE;
-> -- 
-> 2.30.0
-> 
-> 
+
+

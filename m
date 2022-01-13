@@ -2,152 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E2E4A49C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 15:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9A64A4C07
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Jan 2022 17:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349226AbiAaO6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 09:58:39 -0500
-Received: from mga03.intel.com ([134.134.136.65]:12947 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232149AbiAaO6d (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 09:58:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643641112; x=1675177112;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BxH+tZ/fu2IEVr/ao5807gbpeXmiy9cIQ6HmY7vsj8A=;
-  b=h/lKA8rwBqH9QijjbZk6acVqASFgEs+U/ue3KPsvQJZX/NYkeiV7mrG9
-   dr56FjyJNOlCLYo72N9hr6hvin821+YlsRFMZSPhDFTPcIRJjCjC53RtA
-   AWWcKvBnleA5XlBYhmS8j/Ntc4RKP8EossvwD65GkRq4t6V/5VfUH8VXB
-   Q46Kuyd9rZuMZNZyLwDh4TuaYLmJ1Nl0SI/HPO+mYt8DGDZ+kwmlFLraF
-   5iQGb6qSNFSK17lNxQ3zfvkveKhf/IaXrVU4B5V++xa/Ttchx9T3gqEah
-   DUE9MRtPpo8mGFXXh+FKAKlqMpNbFOXdzMSoAVN6jtUdiOrTcVKMzxKFd
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="247429261"
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="247429261"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 06:58:31 -0800
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="626388374"
-Received: from yeidelbe-mobl1.ger.corp.intel.com (HELO [10.249.254.103]) ([10.249.254.103])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 06:58:29 -0800
-Message-ID: <8ecf5706-84c2-2e30-9ee3-0f428ed95961@linux.intel.com>
-Date:   Mon, 31 Jan 2022 15:58:26 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [Intel-gfx] [PATCH v5 1/5] drm/i915: add needs_compact_pt flag
-Content-Language: en-US
-To:     Robert Beckett <bob.beckett@collabora.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Matthew Auld <matthew.auld@intel.com>
-References: <20220125193530.3272386-1-bob.beckett@collabora.com>
- <20220125193530.3272386-2-bob.beckett@collabora.com>
- <6d0a57e7-daf7-6436-e806-7cc8794c2d50@shipmail.org>
- <19bf8290-9308-b5c6-eb73-4020fa81aa66@collabora.com>
- <ce91e091-0df1-5c4d-a070-7b82d74d3f42@shipmail.org>
- <094b3a2d-0829-c34c-3a3d-e9639095f469@collabora.com>
-From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>
-In-Reply-To: <094b3a2d-0829-c34c-3a3d-e9639095f469@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S1380412AbiAaQ2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 11:28:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42044 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380358AbiAaQ2j (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 11:28:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC544614BE;
+        Mon, 31 Jan 2022 16:28:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C48CC340ED;
+        Mon, 31 Jan 2022 16:28:38 +0000 (UTC)
+X-Mailbox-Line: From 9f0ed270b80b0209ff781027712c0c46e3f085d6 Mon Sep 17 00:00:00 2001
+From:   Clark Williams <williams@redhat.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 13 Jan 2022 17:12:15 -0600
+Subject: [RFC PATCH PREEMPT_RT 4.19 STABLE] net: Fix compiler warnings on 4.19 PREEMPT_RT with xmit_lock_owner
+Message-Id: <20220131162838.1C48CC340ED@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+GCC 11 has started complaining about the PREEMPT_RT changes to 2fd949365fe6628fb2
+which change the xmit_lock_owner from an integer to a pointer to struct
+task_struct. These changes are from the patch:
 
-On 1/31/22 15:19, Robert Beckett wrote:
->
->
-> On 27/01/2022 09:37, Thomas Hellström (Intel) wrote:
->>
->> On 1/26/22 18:11, Robert Beckett wrote:
->>>
->>>
->>> On 26/01/2022 13:49, Thomas Hellström (Intel) wrote:
->>>>
->>>> On 1/25/22 20:35, Robert Beckett wrote:
->>>>> From: Ramalingam C <ramalingam.c@intel.com>
->>>>>
->>>>> Add a new platform flag, needs_compact_pt, to mark the requirement of
->>>>> compact pt layout support for the ppGTT when using 64K GTT pages.
->>>>>
->>>>> With this flag has_64k_pages will only indicate requirement of 64K
->>>>> GTT page sizes or larger for device local memory access.
->>>>>
->>>>> Suggested-by: Matthew Auld <matthew.auld@intel.com>
->>>>> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
->>>>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
->>>>> ---
->>>>>   drivers/gpu/drm/i915/i915_drv.h          | 10 +++++++---
->>>>>   drivers/gpu/drm/i915/i915_pci.c          |  2 ++
->>>>>   drivers/gpu/drm/i915/intel_device_info.h |  1 +
->>>>>   3 files changed, 10 insertions(+), 3 deletions(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/i915/i915_drv.h 
->>>>> b/drivers/gpu/drm/i915/i915_drv.h
->>>>> index 44c1f98144b4..1258b7779705 100644
->>>>> --- a/drivers/gpu/drm/i915/i915_drv.h
->>>>> +++ b/drivers/gpu/drm/i915/i915_drv.h
->>>>> @@ -1512,12 +1512,16 @@ IS_SUBPLATFORM(const struct 
->>>>> drm_i915_private *i915,
->>>>>   /*
->>>>>    * Set this flag, when platform requires 64K GTT page sizes or 
->>>>> larger for
->>>>> - * device local memory access. Also this flag implies that we 
->>>>> require or
->>>>> - * at least support the compact PT layout for the ppGTT when 
->>>>> using the 64K
->>>>> - * GTT pages.
->>>>
->>>> Why do we remove these comment lines?
->>> Because HAS_64K_PAGES now means just 64K page, it no longer means 
->>> also requires compact pt.
->>> This is to support other products that will have 64K but not have 
->>> the PDE non-sharing restriction in future.
->>>
->>> Those lines moved to the next change NEEDS_COMPACT_PT, which is now 
->>> separate.
->>
->> Yes, NEEDS_COMPACT_PT indicates that compact is *required* but does 
->> "HAS_64K_PAGES" still mean compact is supported? That information is 
->> lost.
-> Not any more.
-> I discussed the ambiguity of the original wording with mauld on irc.
-> We came to the conclusion that HAS_64K_PAGES should mean just that, 
-> that the hw has support for 64K pages, and says nothing about 
-> compact-pt at all.
->
-> NEEDS_COMPACT_PT means that the hw has compact-pt support and the 
-> driver is required to use it as it is a hw limitation.
->
-> There will be other devices that can support compact-pt but do not 
-> mandate its use. In this case, the current code would not use them, 
-> but there is potential for some future opportunistic use of that in 
-> the driver if desired (currently expected to include accelerated 
-> move/clear). If any opportunistic use is added to the driver, a new 
-> flag can be added along with the code that uses it to indicate 
-> compact-pt availability that is not mandatory (HAS_COMPACT_PT most 
-> likely), but as there is no code requiring it currently it should not 
-> be added yet, and the comments left as this patch does.
->
-Ok, Thanks for the clarification.
+	     net: move xmit_recursion to per-task variable on -RT
 
-Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+The below patch is ugly but fixes the compiler warnings.
 
+I'd be happy to entertain a better/cleaner solution
 
+Signed-off-by: Clark Williams <williams@redhat.com>
+---
+ include/linux/netdevice.h | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
->>
->> /Thomas
->>
->>
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 7b34ce34114a..fa2a52d24218 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3921,7 +3921,11 @@ static inline void __netif_tx_lock(struct netdev_queue *txq, int cpu)
+ {
+ 	spin_lock(&txq->_xmit_lock);
+ 	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++#ifdef CONFIG_PREEMPT_RT_FULL
++	WRITE_ONCE(txq->xmit_lock_owner, current);
++#else
+ 	WRITE_ONCE(txq->xmit_lock_owner, cpu);
++#endif
+ }
+ 
+ static inline bool __netif_tx_acquire(struct netdev_queue *txq)
+@@ -3939,7 +3943,11 @@ static inline void __netif_tx_lock_bh(struct netdev_queue *txq)
+ {
+ 	spin_lock_bh(&txq->_xmit_lock);
+ 	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++#ifdef CONFIG_PREEMPT_RT_FULL
++	WRITE_ONCE(txq->xmit_lock_owner, current);
++#else
+ 	WRITE_ONCE(txq->xmit_lock_owner, smp_processor_id());
++#endif
+ }
+ 
+ static inline bool __netif_tx_trylock(struct netdev_queue *txq)
+@@ -3948,7 +3956,11 @@ static inline bool __netif_tx_trylock(struct netdev_queue *txq)
+ 
+ 	if (likely(ok)) {
+ 		/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++#ifdef CONFIG_PREEMPT_RT_FULL
++		WRITE_ONCE(txq->xmit_lock_owner, current);
++#else
+ 		WRITE_ONCE(txq->xmit_lock_owner, smp_processor_id());
++#endif
+ 	}
+ 	return ok;
+ }
+@@ -3956,14 +3968,22 @@ static inline bool __netif_tx_trylock(struct netdev_queue *txq)
+ static inline void __netif_tx_unlock(struct netdev_queue *txq)
+ {
+ 	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++#ifdef CONFIG_PREEMPT_RT_FULL
++	WRITE_ONCE(txq->xmit_lock_owner, NULL);
++#else
+ 	WRITE_ONCE(txq->xmit_lock_owner, -1);
++#endif
+ 	spin_unlock(&txq->_xmit_lock);
+ }
+ 
+ static inline void __netif_tx_unlock_bh(struct netdev_queue *txq)
+ {
+ 	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++#ifdef CONFIG_PREEMPT_RT_FULL
++	WRITE_ONCE(txq->xmit_lock_owner, NULL);
++#else
+ 	WRITE_ONCE(txq->xmit_lock_owner, -1);
++#endif
+ 	spin_unlock_bh(&txq->_xmit_lock);
+ }
+ 
+-- 
+2.34.1
+

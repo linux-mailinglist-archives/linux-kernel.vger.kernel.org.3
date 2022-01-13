@@ -2,112 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C98948D7E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C4948D7E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 13:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbiAMM1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 07:27:34 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:50372
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229660AbiAMM1b (ORCPT
+        id S231452AbiAMM1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 07:27:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54608 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231301AbiAMM1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 07:27:31 -0500
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5D69F3F1C8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 12:27:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642076850;
-        bh=nWMCwBQ8qvto3g6GTsUmmbjQ5M6s0nUnB5kDMDyzI/g=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=NY2XkyypJfAUe+CR4evsCF0239IV6QOdkIjIG6Z0SDuWUOEmuXSP4aKUHCiUQiTRv
-         KOz42HUCybFssrJcYYyJGXQC2KeVjmt6MdLxsxgSaHZiv/oD6TN64k2kzCzN2kff3X
-         1YPhUYKjauzNSREqMoY6fS2dEDAJ9r/8q/93wSuFxSJWO3xZkUUp1Xe4sq7dmXzp8b
-         5J2SkFWMkKe+nqFlWGj9P3/Uihe1MpKe/9BdR18WpnmYCUlycDSD0AGq4DGFeEgdu2
-         sxC/ZMvhYu9fYi8JnMWz63GLGO/GTaxNALPbezrAL7CxqH8ZgKEVkFtIz3mH0YRW68
-         VDN54OKE1XHwA==
-Received: by mail-wm1-f71.google.com with SMTP id d4-20020a05600c34c400b00345d5d47d54so3528706wmq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:27:30 -0800 (PST)
+        Thu, 13 Jan 2022 07:27:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642076859;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ViQVHhS9TeU1GADrKolwOU4MxQRPJUjTMiV4znToNZg=;
+        b=S61E3PMcSiNkDJkvPVCzceJ9qfyhEJ3C2wN/Xz/GedDMNaGaHDfquIyBgQXMkdL0rs8cFq
+        2qb53tWtXcxZuBkuXe5+9VTWyycoRiAvJ6p07PdHpIXvFjLyr4iGGfbMkAMet3UBZCnVXl
+        a2gOjpm0nItJ+3FeJZ19ngUvXNuCu+A=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-298-UZZXdyusPF2Pbdi3Me8o6w-1; Thu, 13 Jan 2022 07:27:37 -0500
+X-MC-Unique: UZZXdyusPF2Pbdi3Me8o6w-1
+Received: by mail-ed1-f71.google.com with SMTP id h1-20020aa7cdc1000000b0040042dd2fe4so3926741edw.17
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 04:27:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nWMCwBQ8qvto3g6GTsUmmbjQ5M6s0nUnB5kDMDyzI/g=;
-        b=jefgm9Ey7YUVEltDUZL6CCDu9kh0qyIlFfMU//LH/v/zvwyQ4dELnDnRkf1hdsmefv
-         2WGbMuSSZl1+PjyFDH6Y+4HV6lJAV0zyImiYad/ViaJMNZ3RZIVAe+0LqDwKyuAE0NNq
-         02PxdEb9y+RHp0uXPfC7s70YbvVTHpfFVHo4HBubK0kQ1uPyY2ykJmztIyQhENJ1ghHu
-         rTnKhVlLywY9UOaBNjQqW/9esS6jbg15Jd+dTOLBQL//L8QXAtIkzuVn94Qru71b0n9q
-         6yBJSidMscfZmCmRPPgZz7jm905TrkyzHFriJLcYE1W8q5+5AKhdKK3BPpow81D13ISc
-         8E5Q==
-X-Gm-Message-State: AOAM530gKccIo2/hQy4kptqkHIKvAURHohQuSkClSNXu/RtC5RGU4p4R
-        b3DwkO45CUWJrvoyAtvi9BErqzh8I1Lf7VNqkz2l90LCU2x5rw+3l6LESiJK7PcIbYja5fKngi3
-        YX2YZGXwPg2hnDKStO3sSELFQQIbgSciNoL/x9ud3Gg==
-X-Received: by 2002:a05:600c:602a:: with SMTP id az42mr3740579wmb.27.1642076849971;
-        Thu, 13 Jan 2022 04:27:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzedcYD/WlL7vOvIVMshZ/IWP+2akJUFLDFNrlxlTqOjVhXt7ld4JHBwe6pD2xPZ5jcRCsI9A==
-X-Received: by 2002:a05:600c:602a:: with SMTP id az42mr3740566wmb.27.1642076849775;
-        Thu, 13 Jan 2022 04:27:29 -0800 (PST)
-Received: from [192.168.0.29] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id c7sm3267537wri.21.2022.01.13.04.27.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 04:27:29 -0800 (PST)
-Message-ID: <849c7772-0f7e-32ff-6ea6-c46aa6837bb4@canonical.com>
-Date:   Thu, 13 Jan 2022 13:27:28 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ViQVHhS9TeU1GADrKolwOU4MxQRPJUjTMiV4znToNZg=;
+        b=Tiy5kHe7bcWlMZeurLNP2d0JbZUmlmqdN61+qe248Tp4yv8cD+xeS8AvnK+Hn4lshs
+         qWk6eAMlqhpPQGmHAKiUY9ZanzVGux7sxG1ZHXLmclYEteXdMsIHxuJF3JA53TEP6Gjh
+         XIpzTIo6m+nYCK8O/Rle/C4C7XviX8+4T+LNeil88BGaQmJtLpihOsES52O/DC2PfgUd
+         eddNqXlEeiw7H0J6JFZ0XnUv+sofzgVR8zHlCGnmgGk3x8wlaW08aMEzViNbqbpPBBQB
+         uqkqdC1Y1ZhBvu1hOTkIOzAii0xtC82+Mn1QPdG3HspInH8mMtW7eNG0qYlmlifKCgoa
+         blmg==
+X-Gm-Message-State: AOAM531CB6Kij6plOKh9YhEOWNhMrrUMq6THjglmg8Axzq0BZd1Sx0aA
+        6fBb0NwVev91yB4ZwJqwFm1wZK35DkTUtlpm4WxzUSBJX/ax/o7BZoJxbo2cojfB+iW15H0L772
+        VPU2IZU35d2EKUPT8Go9cqKPM
+X-Received: by 2002:a17:906:da1b:: with SMTP id fi27mr3480783ejb.68.1642076856777;
+        Thu, 13 Jan 2022 04:27:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzzq8hitOmNz+ym3vvwJSFT3GdzZkSBYpwA288q5gf8tRuG+8tKBO7yzTkkVxcdxI0Vag+s+w==
+X-Received: by 2002:a17:906:da1b:: with SMTP id fi27mr3480767ejb.68.1642076856599;
+        Thu, 13 Jan 2022 04:27:36 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id qa35sm836380ejc.67.2022.01.13.04.27.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 04:27:36 -0800 (PST)
+Date:   Thu, 13 Jan 2022 13:27:34 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v2 0/8] fprobe: Introduce fprobe function entry/exit
+ probe
+Message-ID: <YeAatqQTKsrxmUkS@krava>
+References: <164199616622.1247129.783024987490980883.stgit@devnote2>
+ <Yd77SYWgtrkhFIYz@krava>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 10/23] dt-bindings: pinctrl: samsung: Add compatible for
- Tesla FSD SoC
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, s.nawrocki@samsung.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
- <CGME20220113122354epcas5p19e5cebe9e85e9ba1758fa0b9d7d1ef75@epcas5p1.samsung.com>
- <20220113121143.22280-11-alim.akhtar@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220113121143.22280-11-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd77SYWgtrkhFIYz@krava>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2022 13:11, Alim Akhtar wrote:
-> Add compatible for Tesla Full Self-Driving SoC. The
-> pinctrl hardware IP is similar to what found on most of the
-> exynos series of SoC, so this new compatible is added in
-> samsung pinctrl binding.
+On Wed, Jan 12, 2022 at 05:01:15PM +0100, Jiri Olsa wrote:
+> On Wed, Jan 12, 2022 at 11:02:46PM +0900, Masami Hiramatsu wrote:
+> > Hi Jiri and Alexei,
+> > 
+> > Here is the 2nd version of fprobe. This version uses the
+> > ftrace_set_filter_ips() for reducing the registering overhead.
+> > Note that this also drops per-probe point private data, which
+> > is not used anyway.
+> > 
+> > This introduces the fprobe, the function entry/exit probe with
+> > multiple probe point support. This also introduces the rethook
+> > for hooking function return as same as kretprobe does. This
 > 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt | 1 +
->  1 file changed, 1 insertion(+)
+> nice, I was going through the multi-user-graph support 
+> and was wondering that this might be a better way
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt
-> index b8b475967ff9..ba972998a0e4 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt
-> +++ b/Documentation/devicetree/bindings/pinctrl/samsung-pinctrl.txt
-> @@ -24,6 +24,7 @@ Required Properties:
->    - "samsung,exynos7-pinctrl": for Exynos7 compatible pin-controller.
->    - "samsung,exynos850-pinctrl": for Exynos850 compatible pin-controller.
->    - "samsung,exynosautov9-pinctrl": for ExynosAutov9 compatible pin-controller.
-> +  - "tesla,fsd-pinctrl": for Tesla FSD SoC compatible pin-controller.
->  
+> > abstraction will help us to generalize the fgraph tracer,
+> > because we can just switch it from rethook in fprobe, depending
+> > on the kernel configuration.
+> > 
+> > The patch [1/8] and [7/8] are from your series[1]. Other libbpf
+> > patches will not be affected by this change.
+> 
+> I'll try the bpf selftests on top of this
 
-Please rebase this on my latest Samsung pinctrl dtschema patches. You
-also need a tesla vendor prefix patch (separate).
+I'm getting crash and stall when running bpf selftests,
+the fprobe sample module works fine, I'll check on that
 
+jirka
 
-Best regards,
-Krzysztof

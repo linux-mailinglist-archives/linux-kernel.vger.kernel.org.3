@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D812848D4CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6F548D4CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 10:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233870AbiAMJLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 04:11:21 -0500
-Received: from foss.arm.com ([217.140.110.172]:41416 "EHLO foss.arm.com"
+        id S233884AbiAMJLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 04:11:22 -0500
+Received: from foss.arm.com ([217.140.110.172]:41440 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230181AbiAMJLQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 04:11:16 -0500
+        id S233796AbiAMJLT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 04:11:19 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2229E113E;
-        Thu, 13 Jan 2022 01:11:15 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE7D06D;
+        Thu, 13 Jan 2022 01:11:18 -0800 (PST)
 Received: from e121896.arm.com (unknown [10.57.35.134])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 929B83F766;
-        Thu, 13 Jan 2022 01:11:12 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2B9413F766;
+        Thu, 13 Jan 2022 01:11:16 -0800 (PST)
 From:   James Clark <james.clark@arm.com>
 To:     suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
         coresight@lists.linaro.org, leo.yan@linaro.com,
@@ -30,9 +30,9 @@ Cc:     James Clark <james.clark@arm.com>, Leo Yan <leo.yan@linaro.org>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: [PATCH v2 3/6] perf cs-etm: Update deduction of TRCCONFIGR register for branch broadcast
-Date:   Thu, 13 Jan 2022 09:10:52 +0000
-Message-Id: <20220113091056.1297982-4-james.clark@arm.com>
+Subject: [PATCH v2 4/6] Documentation: coresight: Turn numbered subsections into real subsections
+Date:   Thu, 13 Jan 2022 09:10:53 +0000
+Message-Id: <20220113091056.1297982-5-james.clark@arm.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20220113091056.1297982-1-james.clark@arm.com>
 References: <20220113091056.1297982-1-james.clark@arm.com>
@@ -42,51 +42,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that a config flag for branch broadcast has been added, take it into
-account when trying to deduce what the driver would have programmed the
-TRCCONFIGR register to.
+This is to allow them to be referenced in a later commit. There was
+also a mistake where sysFS was introduced as section 2, but numbered
+as section 1. And vice versa for 'Using perf framework'. This can't
+happen with unnumbered sections.
 
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- tools/include/linux/coresight-pmu.h | 2 ++
- tools/perf/arch/arm/util/cs-etm.c   | 3 +++
- 2 files changed, 5 insertions(+)
+ Documentation/trace/coresight/coresight.rst | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/tools/include/linux/coresight-pmu.h b/tools/include/linux/coresight-pmu.h
-index 4ac5c081af93..6c2fd6cc5a98 100644
---- a/tools/include/linux/coresight-pmu.h
-+++ b/tools/include/linux/coresight-pmu.h
-@@ -18,6 +18,7 @@
-  * ETMv3.5/PTM doesn't define ETMCR config bits with prefix "ETM3_" and
-  * directly use below macros as config bits.
-  */
-+#define ETM_OPT_BRANCH_BROADCAST 8
- #define ETM_OPT_CYCACC		12
- #define ETM_OPT_CTXTID		14
- #define ETM_OPT_CTXTID2		15
-@@ -25,6 +26,7 @@
- #define ETM_OPT_RETSTK		29
+diff --git a/Documentation/trace/coresight/coresight.rst b/Documentation/trace/coresight/coresight.rst
+index a15571d96cc8..db66ff45ff4c 100644
+--- a/Documentation/trace/coresight/coresight.rst
++++ b/Documentation/trace/coresight/coresight.rst
+@@ -339,7 +339,8 @@ Preference is given to the former as using the sysFS interface
+ requires a deep understanding of the Coresight HW.  The following sections
+ provide details on using both methods.
  
- /* ETMv4 CONFIGR programming bits for the ETM OPTs */
-+#define ETM4_CFG_BIT_BB         3
- #define ETM4_CFG_BIT_CYCACC	4
- #define ETM4_CFG_BIT_CTXTID	6
- #define ETM4_CFG_BIT_VMID	7
-diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
-index 293a23bf8be3..c7ef4e9b4a3a 100644
---- a/tools/perf/arch/arm/util/cs-etm.c
-+++ b/tools/perf/arch/arm/util/cs-etm.c
-@@ -527,6 +527,9 @@ static u64 cs_etmv4_get_config(struct auxtrace_record *itr)
- 	if (config_opts & BIT(ETM_OPT_CTXTID2))
- 		config |= BIT(ETM4_CFG_BIT_VMID) |
- 			  BIT(ETM4_CFG_BIT_VMID_OPT);
-+	if (config_opts & BIT(ETM_OPT_BRANCH_BROADCAST))
-+		config |= BIT(ETM4_CFG_BIT_BB);
+-1) Using the sysFS interface:
++Using the sysFS interface
++~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+ Before trace collection can start, a coresight sink needs to be identified.
+ There is no limit on the amount of sinks (nor sources) that can be enabled at
+@@ -446,7 +447,8 @@ wealth of possibilities that coresight provides.
+     Instruction     0       0x8026B588      E8BD8000        true    LDM      sp!,{pc}
+     Timestamp                                       Timestamp: 17107041535
+ 
+-2) Using perf framework:
++Using perf framework
++~~~~~~~~~~~~~~~~~~~~
+ 
+ Coresight tracers are represented using the Perf framework's Performance
+ Monitoring Unit (PMU) abstraction.  As such the perf framework takes charge of
+@@ -495,7 +497,11 @@ More information on the above and other example on how to use Coresight with
+ the perf tools can be found in the "HOWTO.md" file of the openCSD gitHub
+ repository [#third]_.
+ 
+-2.1) AutoFDO analysis using the perf tools:
++Advanced perf framework usage
++-----------------------------
 +
- 	return config;
- }
++AutoFDO analysis using the perf tools
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  
+ perf can be used to record and analyze trace of programs.
+ 
+@@ -513,7 +519,8 @@ The --itrace option controls the type and frequency of synthesized events
+ Note that only 64-bit programs are currently supported - further work is
+ required to support instruction decode of 32-bit Arm programs.
+ 
+-2.2) Tracing PID
++Tracing PID
++~~~~~~~~~~~
+ 
+ The kernel can be built to write the PID value into the PE ContextID registers.
+ For a kernel running at EL1, the PID is stored in CONTEXTIDR_EL1.  A PE may
+@@ -547,7 +554,7 @@ wants to trace PIDs for both host and guest, the two configs "contextid1" and
+ 
+ 
+ Generating coverage files for Feedback Directed Optimization: AutoFDO
+----------------------------------------------------------------------
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+ 'perf inject' accepts the --itrace option in which case tracing data is
+ removed and replaced with the synthesized events. e.g.
 -- 
 2.28.0
 

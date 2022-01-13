@@ -2,126 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E02D48DB21
-	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3271548DB2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 13 Jan 2022 16:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236379AbiAMPyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 10:54:03 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:40754 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234645AbiAMPyB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 10:54:01 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 898461EC05BF;
-        Thu, 13 Jan 2022 16:53:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642089239;
+        id S236413AbiAMP5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 10:57:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35774 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236394AbiAMP47 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 10:56:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642089418;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=c3WxvIM+chylBioAStDvt0vYgg3pt0TRyWRuNCOlV2U=;
-        b=prjZDSlkHxF2qI5mfp/VW603jkDVJhY78j/UQOgpc8FpywBZ7D7j6mU12HlOPU4YNbqNWn
-        ugpJ33X4nWaQSYvOgqEeRxONG5P615PkZP2Ank9txbQg+AMHdIyo6lyN+v9t+yhOR5DO2m
-        plh6IZ+sEAWzc+02rI7L6JoWvW1GNCg=
-From:   Borislav Petkov <bp@alien8.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>,
-        Marco Elver <elver@google.com>,
-        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
-        Will Deacon <will@kernel.org>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] cpumask: Always inline helpers which use bit manipulation functions
-Date:   Thu, 13 Jan 2022 16:53:57 +0100
-Message-Id: <20220113155357.4706-3-bp@alien8.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220113155357.4706-1-bp@alien8.de>
-References: <20220113155357.4706-1-bp@alien8.de>
+        bh=iVjjhSTO5jv7G5CNfPQaqxy98s1YUf5RmxMVGvagrRU=;
+        b=Xa2IvCLSn1NJkghg+fHEUAg3CaorunNZLNb70+nOfuukIZ0/qwV5xeHgBDgnoi+1BgZ1lS
+        5P/Zz/Vh3MsmkAnkYM4JoHlGODVsmy9MtOjTCBXhN2K98eytlr5IelRtgIOgjOmeP0cxOE
+        yJz+OCg2tmDW+hncUv5+KaS5OxnPWX4=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-460-71wX__fQPh6qs77Rqs_UFg-1; Thu, 13 Jan 2022 10:56:56 -0500
+X-MC-Unique: 71wX__fQPh6qs77Rqs_UFg-1
+Received: by mail-ed1-f70.google.com with SMTP id h1-20020aa7cdc1000000b0040042dd2fe4so4473388edw.17
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 07:56:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=iVjjhSTO5jv7G5CNfPQaqxy98s1YUf5RmxMVGvagrRU=;
+        b=VZZznXkWr+tniyRfweVIqiZdmHZLI4NoXcLqlTcd+VLBfF5x0rcR7R/GREfv0DfX7N
+         BBoD0OhgF32rly7wg7jMAL8UmHV9uujoy/AaDq/FmclVti0/YqOwm9YLMuGlcB/1ltKz
+         w+YKetqqCGXacTcLinjpnUGZwz1aT3Q5ZhrOBzA5uzR8X94kBM6odj67Ud2+hxOIdHnp
+         1ESLQpjVTSNMeF0lDNXI57bS8bllHM3/4LkOjsowSPSFjE4b+3ndyPtqXVpafXov4kjB
+         TPEDQVX8LQbsb8YWvbXZc0mYfv+XgAhlu0F7eE7DsyagrBa3Do8ENQxdOrsIguASg8gA
+         Qwkg==
+X-Gm-Message-State: AOAM5304Xpkm9ygtb/3T8Cw9XeeMOmzszLww/i7WIYpB8huB8kdwSUCU
+        RCCkj9Zb/Fd9qS5hcUwppBherTD2Mf78DZrArWUu+XRXLdMa5b/XfSeYDi1OKAcPPkGt9bz3jeN
+        h37oiiIKmbhfQGsOnf/LL+z7+
+X-Received: by 2002:a17:907:3ea2:: with SMTP id hs34mr3985616ejc.191.1642089415174;
+        Thu, 13 Jan 2022 07:56:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxdEZGBZ+SY0OUOH5+ulUWsavApWdL/E+Vnbzgt7kPf6DLvU3IuDpfFk7n3gAZ11fQX3pswoQ==
+X-Received: by 2002:a17:907:3ea2:: with SMTP id hs34mr3985577ejc.191.1642089414855;
+        Thu, 13 Jan 2022 07:56:54 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:e200:8511:ed0f:ac2c:42f7? (p200300cbc703e2008511ed0fac2c42f7.dip0.t-ipconnect.de. [2003:cb:c703:e200:8511:ed0f:ac2c:42f7])
+        by smtp.gmail.com with ESMTPSA id f29sm986699ejj.209.2022.01.13.07.56.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 07:56:54 -0800 (PST)
+Message-ID: <0893e873-20c4-7e07-e7e4-3971dbb79118@redhat.com>
+Date:   Thu, 13 Jan 2022 16:56:53 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3 kvm/queue 01/16] mm/shmem: Introduce
+ F_SEAL_INACCESSIBLE
+Content-Language: en-US
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com
+References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
+ <20211223123011.41044-2-chao.p.peng@linux.intel.com>
+ <7eb40902-45dd-9193-37f1-efaca381529b@redhat.com>
+ <20220106130638.GB43371@chaop.bj.intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220106130638.GB43371@chaop.bj.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+On 06.01.22 14:06, Chao Peng wrote:
+> On Tue, Jan 04, 2022 at 03:22:07PM +0100, David Hildenbrand wrote:
+>> On 23.12.21 13:29, Chao Peng wrote:
+>>> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+>>>
+>>> Introduce a new seal F_SEAL_INACCESSIBLE indicating the content of
+>>> the file is inaccessible from userspace in any possible ways like
+>>> read(),write() or mmap() etc.
+>>>
+>>> It provides semantics required for KVM guest private memory support
+>>> that a file descriptor with this seal set is going to be used as the
+>>> source of guest memory in confidential computing environments such
+>>> as Intel TDX/AMD SEV but may not be accessible from host userspace.
+>>>
+>>> At this time only shmem implements this seal.
+>>>
+>>> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>>> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+>>> ---
+>>>  include/uapi/linux/fcntl.h |  1 +
+>>>  mm/shmem.c                 | 37 +++++++++++++++++++++++++++++++++++--
+>>>  2 files changed, 36 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
+>>> index 2f86b2ad6d7e..e2bad051936f 100644
+>>> --- a/include/uapi/linux/fcntl.h
+>>> +++ b/include/uapi/linux/fcntl.h
+>>> @@ -43,6 +43,7 @@
+>>>  #define F_SEAL_GROW	0x0004	/* prevent file from growing */
+>>>  #define F_SEAL_WRITE	0x0008	/* prevent writes */
+>>>  #define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
+>>> +#define F_SEAL_INACCESSIBLE	0x0020  /* prevent file from accessing */
+>>
+>> I think this needs more clarification: the file content can still be
+>> accessed using in-kernel mechanisms such as MEMFD_OPS for KVM. It
+>> effectively disallows traditional access to a file (read/write/mmap)
+>> that will result in ordinary MMU access to file content.
+>>
+>> Not sure how to best clarify that: maybe, prevent ordinary MMU access
+>> (e.g., read/write/mmap) to file content?
+> 
+> Or: prevent userspace access (e.g., read/write/mmap) to file content?
 
-Former are always inlined so do that for the latter too, for
-consistency.
+The issue with that phrasing is that userspace will be able to access
+that content, just via a different mechanism eventually ... e.g., via
+the KVM MMU indirectly. If that makes it clearer what I mean :)
 
-Size impact is a whopping 5 bytes increase! :-)
+>>
+>>>  /* (1U << 31) is reserved for signed error codes */
+>>>  
+>>>  /*
+>>> diff --git a/mm/shmem.c b/mm/shmem.c
+>>> index 18f93c2d68f1..faa7e9b1b9bc 100644
+>>> --- a/mm/shmem.c
+>>> +++ b/mm/shmem.c
+>>> @@ -1098,6 +1098,10 @@ static int shmem_setattr(struct user_namespace *mnt_userns,
+>>>  		    (newsize > oldsize && (info->seals & F_SEAL_GROW)))
+>>>  			return -EPERM;
+>>>  
+>>> +		if ((info->seals & F_SEAL_INACCESSIBLE) &&
+>>> +		    (newsize & ~PAGE_MASK))
+>>> +			return -EINVAL;
+>>> +
+>>
+>> What happens when sealing and there are existing mmaps?
+> 
+> I think this is similar to ftruncate, in either case we just allow that.
+> The existing mmaps will be unmapped and KVM will be notified to
+> invalidate the mapping in the secondary MMU as well. This assume we
+> trust the userspace even though it can not access the file content.
 
-   text    data     bss     dec     hex filename
-22350551        8213184 1917164 32480899        1ef9e83 vmlinux.x86-64.defconfig.before
-22350556        8213152 1917164 32480872        1ef9e68 vmlinux.x86-64.defconfig.after
+Can't we simply check+forbid instead?
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- include/linux/cpumask.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index 1e7399fc69c0..676ada1fbccd 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -306,12 +306,12 @@ extern int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool
-  * @cpu: cpu number (< nr_cpu_ids)
-  * @dstp: the cpumask pointer
-  */
--static inline void cpumask_set_cpu(unsigned int cpu, struct cpumask *dstp)
-+static __always_inline void cpumask_set_cpu(unsigned int cpu, struct cpumask *dstp)
- {
- 	set_bit(cpumask_check(cpu), cpumask_bits(dstp));
- }
- 
--static inline void __cpumask_set_cpu(unsigned int cpu, struct cpumask *dstp)
-+static __always_inline void __cpumask_set_cpu(unsigned int cpu, struct cpumask *dstp)
- {
- 	__set_bit(cpumask_check(cpu), cpumask_bits(dstp));
- }
-@@ -322,12 +322,12 @@ static inline void __cpumask_set_cpu(unsigned int cpu, struct cpumask *dstp)
-  * @cpu: cpu number (< nr_cpu_ids)
-  * @dstp: the cpumask pointer
-  */
--static inline void cpumask_clear_cpu(int cpu, struct cpumask *dstp)
-+static __always_inline void cpumask_clear_cpu(int cpu, struct cpumask *dstp)
- {
- 	clear_bit(cpumask_check(cpu), cpumask_bits(dstp));
- }
- 
--static inline void __cpumask_clear_cpu(int cpu, struct cpumask *dstp)
-+static __always_inline void __cpumask_clear_cpu(int cpu, struct cpumask *dstp)
- {
- 	__clear_bit(cpumask_check(cpu), cpumask_bits(dstp));
- }
-@@ -339,7 +339,7 @@ static inline void __cpumask_clear_cpu(int cpu, struct cpumask *dstp)
-  *
-  * Returns 1 if @cpu is set in @cpumask, else returns 0
-  */
--static inline int cpumask_test_cpu(int cpu, const struct cpumask *cpumask)
-+static __always_inline int cpumask_test_cpu(int cpu, const struct cpumask *cpumask)
- {
- 	return test_bit(cpumask_check(cpu), cpumask_bits((cpumask)));
- }
-@@ -353,7 +353,7 @@ static inline int cpumask_test_cpu(int cpu, const struct cpumask *cpumask)
-  *
-  * test_and_set_bit wrapper for cpumasks.
-  */
--static inline int cpumask_test_and_set_cpu(int cpu, struct cpumask *cpumask)
-+static __always_inline int cpumask_test_and_set_cpu(int cpu, struct cpumask *cpumask)
- {
- 	return test_and_set_bit(cpumask_check(cpu), cpumask_bits(cpumask));
- }
-@@ -367,7 +367,7 @@ static inline int cpumask_test_and_set_cpu(int cpu, struct cpumask *cpumask)
-  *
-  * test_and_clear_bit wrapper for cpumasks.
-  */
--static inline int cpumask_test_and_clear_cpu(int cpu, struct cpumask *cpumask)
-+static __always_inline int cpumask_test_and_clear_cpu(int cpu, struct cpumask *cpumask)
- {
- 	return test_and_clear_bit(cpumask_check(cpu), cpumask_bits(cpumask));
- }
 -- 
-2.29.2
+Thanks,
+
+David / dhildenb
 

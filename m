@@ -2,156 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1715348E19E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC1D48E1A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238463AbiANAjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 19:39:14 -0500
-Received: from mail.hallyn.com ([178.63.66.53]:41346 "EHLO mail.hallyn.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233782AbiANAjN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 19:39:13 -0500
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id EC79C69C; Thu, 13 Jan 2022 18:39:10 -0600 (CST)
-Date:   Thu, 13 Jan 2022 18:39:10 -0600
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Francis Laniel <flaniel@linux.microsoft.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [RFC PATCH v1 1/2] capability: Add cap_strings.
-Message-ID: <20220114003910.GA19319@mail.hallyn.com>
-References: <20211227205500.214777-1-flaniel@linux.microsoft.com>
- <20211227205500.214777-2-flaniel@linux.microsoft.com>
- <289c4134-1ac4-48fc-58ec-cab0bcb63268@schaufler-ca.com>
- <18436829.ogB85pbuhf@machine>
+        id S238476AbiANAmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 19:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235727AbiANAmf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 19:42:35 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B859C06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 16:42:35 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id z22so19429780ybi.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 16:42:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=icBlwwG2S2E04P2qTRk86rIfnSaHc8RFayb+HCWMsy8=;
+        b=tKuXvh3Jl6y3jS3nNpMOtk5TYed9in2+9l0MQDWeBPTgmc9SfhBhxTcP+2aSyAp96d
+         6Iuq865Zw7Rv6MeKqikBZeELMIR3n1NXcsa49mOnzXgLfaBe2NVGgJGlfwI+8ti9Gmna
+         PTbc/eW26Nz3E3gyxZf+B2y6zSNCWJ9SQz6us+FTQFdkT5aLcAXPU3xX6/bhFErjBd8W
+         XcCBIxd+0ZDk0DQpEt4x+iNtipwd6dDLD40i1xllnZ1fsSbTiuARx8VsDYRj+5WdiBen
+         nZBCp+ypPa5GJ11ow81b7st46ISyajSOqdIv4ZoUhDBN3yzG7OfkEKaFm5mGxaViCAWZ
+         I7TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=icBlwwG2S2E04P2qTRk86rIfnSaHc8RFayb+HCWMsy8=;
+        b=Pu5WxD1I98Z5ri74+LdjcNHEyFr6sS+WyzEq933+Nb5PBU6+iQHWb/oghAOkYyasib
+         WvW1/o8rE7hTnl47BlGQhSmj7hWRiKgLqtoe/PcsIah26bG6MFn+Y6gxzzLWalpuTmq5
+         7L+8h8zGPrFpuBVrSVq+8QHnyf4MXZ2LVppHuOiCaBZ8tDManku9qSDtBnxc//U1zk2d
+         0ZeGtCORylT3vAHjS6BwP1fFjW47YaB3NROqwxmW+dss8pRBHeNud8+6JCcbJjc88dva
+         fyfA0xILUp8/Qy2UKJbJbBBiOnSAhWm9zwXM9qNxXoI4lobaxnnKyGRkD9JHrkfTvWDO
+         jRSg==
+X-Gm-Message-State: AOAM532vEVjUftnE0Qvy2I0joeH2KmEoppTXHWMxOA81eUtK0SB3W95p
+        bX1crWLIw9LMao9ORL02e7n6H3MGhw2zfRJuvGcJvQ==
+X-Google-Smtp-Source: ABdhPJzA5ysrjGHDfSMMHKV/CX9xt6B+hEhmXIe4BPrNn8IqXhCDlvsfXi2BIWVHktBVEEvOLNqxRSnYpiZnTbZ78qg=
+X-Received: by 2002:a25:d801:: with SMTP id p1mr6233026ybg.543.1642120954230;
+ Thu, 13 Jan 2022 16:42:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <18436829.ogB85pbuhf@machine>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
+ <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com>
+ <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
+ <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
+ <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
+ <CALMp9eTPJZDtMiHZ5XRiYw2NR9EBKSfcP5CYddzyd2cgWsJ9hw@mail.gmail.com>
+ <CAJHc60xD2U36pM4+Dq3yZw6Cokk-16X83JHMPXj4aFnxOJ3BUQ@mail.gmail.com>
+ <CALMp9eR+evJ+w9VTSvR2KHciQDgTsnS=bh=1OUL4yy8gG6O51A@mail.gmail.com>
+ <CAJHc60zw1o=JdUJ+sNNtv3mc_JTRMKG3kPp=-cchWkHm74hUYA@mail.gmail.com> <YeBfj89mIf8SezfD@google.com>
+In-Reply-To: <YeBfj89mIf8SezfD@google.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Thu, 13 Jan 2022 16:42:23 -0800
+Message-ID: <CAJHc60wRrgnvwqPWdXdvoqT0V9isXW5xH=btgdjPWQkqVW31Pw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        kvmarm@lists.cs.columbia.edu,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 02:27:56PM +0100, Francis Laniel wrote:
-> Hi.
-> 
-> 
-> Le lundi 27 décembre 2021, 23:26:29 CET Casey Schaufler a écrit :
-> > On 12/27/2021 12:54 PM, Francis Laniel wrote:
-> > > This array contains the capability names for the given capabilitiy.
-> > > For example, index CAP_BPF contains "CAP_BPF".
-> > > 
-> > > Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-> > > ---
-> > > 
-> > >   include/uapi/linux/capability.h |  1 +
-> > >   kernel/capability.c             | 45 +++++++++++++++++++++++++++++++++
-> > >   2 files changed, 46 insertions(+)
-> > > 
-> > > diff --git a/include/uapi/linux/capability.h
-> > > b/include/uapi/linux/capability.h index 463d1ba2232a..9646654d5111 100644
-> > > --- a/include/uapi/linux/capability.h
-> > > +++ b/include/uapi/linux/capability.h
-> > > @@ -428,5 +428,6 @@ struct vfs_ns_cap_data {
-> > > 
-> > >   #define CAP_TO_INDEX(x)     ((x) >> 5)        /* 1 << 5 == bits in __u32
-> > >   */
-> > >   #define CAP_TO_MASK(x)      (1 << ((x) & 31)) /* mask for indexed __u32
-> > >   */
-> > > 
-> > > +extern const char *cap_strings[];
-> > > 
-> > >   #endif /* _UAPI_LINUX_CAPABILITY_H */
-> > > 
-> > > diff --git a/kernel/capability.c b/kernel/capability.c
-> > > index 46a361dde042..5a2e71dcd87b 100644
-> > > --- a/kernel/capability.c
-> > > +++ b/kernel/capability.c
-> > > @@ -15,6 +15,7 @@
-> > > 
-> > >   #include <linux/mm.h>
-> > >   #include <linux/export.h>
-> > >   #include <linux/security.h>
-> > > 
-> > > +#include <linux/stringify.h>
-> > > 
-> > >   #include <linux/syscalls.h>
-> > >   #include <linux/pid_namespace.h>
-> > >   #include <linux/user_namespace.h>
-> > > 
-> > > @@ -27,6 +28,50 @@
-> > > 
-> > >   const kernel_cap_t __cap_empty_set = CAP_EMPTY_SET;
-> > >   EXPORT_SYMBOL(__cap_empty_set);
-> > > 
-> > > +const char *cap_strings[] = {
-> > > +	[CAP_CHOWN] = __stringify_1(CAP_CHOWN),
-> > 
-> > I may just be old and slow, but why is this better than
-> > 
-> > 	[CAP_CHOWN] = "CAP_CHOWN",
-> 
-> Good catch, thank you for it, I just replaced the __stringify_1() by quotes.
-> I thought of using __stringify_() because at first I thought of adding a new 
-> macro which would both define a new capability as well as adding to this array.
+On Thu, Jan 13, 2022 at 9:21 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Wed, Jan 12, 2022, Raghavendra Rao Ananta wrote:
+> > On Tue, Jan 11, 2022 at 11:16 AM Jim Mattson <jmattson@google.com> wrote:
+> > > Perhaps it would help if you explained *why* you are doing this. It
+> > > sounds like you are either trying to protect against a malicious
+> > > userspace, or you are trying to keep userspace from doing something
+> > > stupid. In general, kvm only enforces constraints that are necessary
+> > > to protect the host. If that's what you're doing, I don't understand
+> > > why live migration doesn't provide an end-run around your protections.
+> > It's mainly to safeguard the guests. With respect to migration, KVM
+> > and the userspace are collectively playing a role here. It's up to the
+> > userspace to ensure that the registers are configured the same across
+> > migrations and KVM ensures that the userspace doesn't modify the
+> > registers after KVM_RUN so that they don't see features turned OFF/ON
+> > during execution. I'm not sure if it falls into the definition of
+> > protecting the host. Do you see a value in adding this extra
+> > protection from KVM?
+>
+> Short answer: probably not?
+>
+> There is precedent for disallowing userspace from doing stupid things, but that's
+> either for KVM's protection (as Jim pointed out), or because KVM can't honor the
+> change, e.g. x86 is currently in the process of disallowing most CPUID changes
+> after KVM_RUN because KVM itself consumes the CPUID information and KVM doesn't
+> support updating some of it's own internal state (because removing features like
+> GB hugepage support is nonsensical and would require a large pile of complicated,
+> messy code).
+>
+> Restricing CPUID changes does offer some "protection" to the guest, but that's
+> not the goal.  E.g. KVM won't detect CPUID misconfiguration in the migration
+> case, and trying to do so is a fool's errand.
+>
+> If restricting updates in the arm64 is necessary to ensure KVM provides sane
+> behavior, then it could be justified.  But if it's purely a sanity check on
+> behalf of the guest, then it's not justified.
+Agreed that KVM doesn't really safeguard the guests, but just curious,
+is there really a downside in adding this thin layer of safety check?
+On the bright side, the guests would be safe, and it could save the
+developers some time in hunting down the bugs in this path, no?
 
-I think you are saying you have a new version of the patch where you do
-what Casey suggests, but I don't see it.  Have you sent an updated patch,
-or am I misunderstanding?
-
-> But I think it is better to with this simple way rather than doing complicated 
-> stuff.
-> 
-> > > +	[CAP_DAC_OVERRIDE] = __stringify_1(CAP_DAC_OVERRIDE),
-> > > +	[CAP_DAC_READ_SEARCH] = __stringify_1(CAP_DAC_READ_SEARCH),
-> > > +	[CAP_FOWNER] = __stringify_1(CAP_FOWNER),
-> > > +	[CAP_FSETID] = __stringify_1(CAP_FSETID),
-> > > +	[CAP_KILL] = __stringify_1(CAP_KILL),
-> > > +	[CAP_SETGID] = __stringify_1(CAP_SETGID),
-> > > +	[CAP_SETUID] = __stringify_1(CAP_SETUID),
-> > > +	[CAP_SETPCAP] = __stringify_1(CAP_SETPCAP),
-> > > +	[CAP_LINUX_IMMUTABLE] = __stringify_1(CAP_LINUX_IMMUTABLE),
-> > > +	[CAP_NET_BIND_SERVICE] = __stringify_1(CAP_NET_BIND_SERVICE),
-> > > +	[CAP_NET_BROADCAST] = __stringify_1(CAP_NET_BROADCAST),
-> > > +	[CAP_NET_ADMIN] = __stringify_1(CAP_NET_ADMIN),
-> > > +	[CAP_NET_RAW] = __stringify_1(CAP_NET_RAW),
-> > > +	[CAP_IPC_LOCK] = __stringify_1(CAP_IPC_LOCK),
-> > > +	[CAP_IPC_OWNER] = __stringify_1(CAP_IPC_OWNER),
-> > > +	[CAP_SYS_MODULE] = __stringify_1(CAP_SYS_MODULE),
-> > > +	[CAP_SYS_RAWIO] = __stringify_1(CAP_SYS_RAWIO),
-> > > +	[CAP_SYS_CHROOT] = __stringify_1(CAP_SYS_CHROOT),
-> > > +	[CAP_SYS_PTRACE] = __stringify_1(CAP_SYS_PTRACE),
-> > > +	[CAP_SYS_PACCT] = __stringify_1(CAP_SYS_PACCT),
-> > > +	[CAP_SYS_ADMIN] = __stringify_1(CAP_SYS_ADMIN),
-> > > +	[CAP_SYS_BOOT] = __stringify_1(CAP_SYS_BOOT),
-> > > +	[CAP_SYS_NICE] = __stringify_1(CAP_SYS_NICE),
-> > > +	[CAP_SYS_RESOURCE] = __stringify_1(CAP_SYS_RESOURCE),
-> > > +	[CAP_SYS_TIME] = __stringify_1(CAP_SYS_TIME),
-> > > +	[CAP_SYS_TTY_CONFIG] = __stringify_1(CAP_SYS_TTY_CONFIG),
-> > > +	[CAP_MKNOD] = __stringify_1(CAP_MKNOD),
-> > > +	[CAP_LEASE] = __stringify_1(CAP_LEASE),
-> > > +	[CAP_AUDIT_WRITE] = __stringify_1(CAP_AUDIT_WRITE),
-> > > +	[CAP_AUDIT_CONTROL] = __stringify_1(CAP_AUDIT_CONTROL),
-> > > +	[CAP_SETFCAP] = __stringify_1(CAP_SETFCAP),
-> > > +	[CAP_MAC_OVERRIDE] = __stringify_1(CAP_MAC_OVERRIDE),
-> > > +	[CAP_MAC_ADMIN] = __stringify_1(CAP_MAC_ADMIN),
-> > > +	[CAP_SYSLOG] = __stringify_1(CAP_SYSLOG),
-> > > +	[CAP_WAKE_ALARM] = __stringify_1(CAP_WAKE_ALARM),
-> > > +	[CAP_BLOCK_SUSPEND] = __stringify_1(CAP_BLOCK_SUSPEND),
-> > > +	[CAP_AUDIT_READ] = __stringify_1(CAP_AUDIT_READ),
-> > > +	[CAP_PERFMON] = __stringify_1(CAP_PERFMON),
-> > > +	[CAP_BPF] = __stringify_1(CAP_BPF),
-> > > +	[CAP_CHECKPOINT_RESTORE] = __stringify_1(CAP_CHECKPOINT_RESTORE),
-> > > +};
-> > > +
-> > > 
-> > >   int file_caps_enabled = 1;
-> > >   
-> > >   static int __init file_caps_disable(char *str)
-> 
-> 
-> 
+Regards,
+Raghavendra

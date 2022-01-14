@@ -2,157 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7E048E65A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EA848E56F
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237817AbiANI0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:26:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240811AbiANIYm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:24:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F1DC06175B;
-        Fri, 14 Jan 2022 00:23:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F7C0B82448;
-        Fri, 14 Jan 2022 08:23:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8072FC36AE9;
-        Fri, 14 Jan 2022 08:23:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148586;
-        bh=gqA5DvM7iufFFeKiwPPhmqQ/Opiz/rJd18h1wVAhjDI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FDCMeyZa+IarRm7OVQ45NReqNzDiJBlCMzneDFSXMBRWaw+nsddiMeecBOGCk2j2d
-         FUPQEoxEJestoVINHaHfA0ttjQLXo+qEP/31/kbTSsLQvYOTji1Kf4d3EbO8dAJBTa
-         Khx79O1sa7s3+Osl+0U3mrfUYYgmNXcMM1bAoIrI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.16 37/37] parisc: Fix pdc_toc_pim_11 and pdc_toc_pim_20 definitions
-Date:   Fri, 14 Jan 2022 09:16:51 +0100
-Message-Id: <20220114081546.057590359@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
-References: <20220114081544.849748488@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S237029AbiANISG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:18:06 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:56980 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239625AbiANIRt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 03:17:49 -0500
+Received: from localhost.localdomain (unknown [124.16.141.244])
+        by APP-05 (Coremail) with SMTP id zQCowADX3n6aMeFhQrwxBg--.43992S2;
+        Fri, 14 Jan 2022 16:17:30 +0800 (CST)
+From:   Xu Wang <vulab@iscas.ac.cn>
+To:     dmitry.torokhov@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Input: synaptics-rmi4 - Remove redundant 'flush_workqueue()' calls
+Date:   Fri, 14 Jan 2022 08:17:10 +0000
+Message-Id: <20220114081710.41524-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowADX3n6aMeFhQrwxBg--.43992S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKF17Cr15KF4DXw43Jw45GFg_yoW3Wwb_Ga
+        4fJrZ7trWjkryv9a4DWr98ZFWvya4qqFWrGF4Yvr98try8ZwsYvrWDZF4qvrW7Z345A3Zr
+        u347Wa4xZrsxGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb7AYjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_GFyl42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU5dR63UUUUU==
+X-Originating-IP: [124.16.141.244]
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiCgkGA1z4kSyNQwAAsR
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+'destroy_workqueue()' already drains the queue before destroying it, so
+there is no need to flush it explicitly.
 
-commit 712a270d2db967b387338c26c3dc04ccac3fcec3 upstream.
+Remove the redundant 'flush_workqueue()' calls.
 
-The definitions for pdc_toc_pim_11 and pdc_toc_pim_20 are wrong since they
-include an entry for a hversion field which doesn't exist in the specification.
-
-Fix this and clean up some whitespaces so that the whole file will be in
-sync with it's copy in the SeaBIOS-hppa sources.
-
-Signed-off-by: Helge Deller <deller@gmx.de>
-Cc: stable@vger.kernel.org # v5.16
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
 ---
- arch/parisc/include/uapi/asm/pdc.h |   32 +++++++++++++++++++++++---------
- 1 file changed, 23 insertions(+), 9 deletions(-)
+ drivers/input/rmi4/rmi_f54.c | 1 -
+ 1 file changed, 1 deletion(-)
 
---- a/arch/parisc/include/uapi/asm/pdc.h
-+++ b/arch/parisc/include/uapi/asm/pdc.h
-@@ -4,7 +4,7 @@
- 
- /*
-  *	PDC return values ...
-- *	All PDC calls return a subset of these errors. 
-+ *	All PDC calls return a subset of these errors.
-  */
- 
- #define PDC_WARN		  3	/* Call completed with a warning */
-@@ -165,7 +165,7 @@
- #define PDC_PSW_GET_DEFAULTS	1	/* Return defaults              */
- #define PDC_PSW_SET_DEFAULTS	2	/* Set default                  */
- #define PDC_PSW_ENDIAN_BIT	1	/* set for big endian           */
--#define PDC_PSW_WIDE_BIT	2	/* set for wide mode            */ 
-+#define PDC_PSW_WIDE_BIT	2	/* set for wide mode            */
- 
- #define PDC_SYSTEM_MAP	22		/* find system modules		*/
- #define PDC_FIND_MODULE 	0
-@@ -274,7 +274,7 @@
- #define PDC_PCI_PCI_INT_ROUTE_SIZE	13
- #define PDC_PCI_GET_INT_TBL_SIZE	PDC_PCI_PCI_INT_ROUTE_SIZE
- #define PDC_PCI_PCI_INT_ROUTE		14
--#define PDC_PCI_GET_INT_TBL		PDC_PCI_PCI_INT_ROUTE 
-+#define PDC_PCI_GET_INT_TBL		PDC_PCI_PCI_INT_ROUTE
- #define PDC_PCI_READ_MON_TYPE		15
- #define PDC_PCI_WRITE_MON_TYPE		16
- 
-@@ -345,7 +345,7 @@
- 
- /* constants for PDC_CHASSIS */
- #define OSTAT_OFF		0
--#define OSTAT_FLT		1 
-+#define OSTAT_FLT		1
- #define OSTAT_TEST		2
- #define OSTAT_INIT		3
- #define OSTAT_SHUT		4
-@@ -403,7 +403,7 @@ struct zeropage {
- 	int	vec_pad1[6];
- 
- 	/* [0x040] reserved processor dependent */
--	int	pad0[112];
-+	int	pad0[112];              /* in QEMU pad0[0] holds "SeaBIOS\0" */
- 
- 	/* [0x200] reserved */
- 	int	pad1[84];
-@@ -691,6 +691,22 @@ struct pdc_hpmc_pim_20 { /* PDC_PIM */
- 	unsigned long long fr[32];
- };
- 
-+struct pim_cpu_state_cf {
-+	union {
-+	unsigned int
-+		iqv : 1,	/* IIA queue Valid */
-+		iqf : 1,	/* IIA queue Failure */
-+		ipv : 1,	/* IPRs Valid */
-+		grv : 1,	/* GRs Valid */
-+		crv : 1,	/* CRs Valid */
-+		srv : 1,	/* SRs Valid */
-+		trv : 1,	/* CR24 through CR31 valid */
-+		pad : 24,	/* reserved */
-+		td  : 1;	/* TOC did not cause any damage to the system state */
-+	unsigned int val;
-+	};
-+};
-+
- struct pdc_toc_pim_11 {
- 	unsigned int gr[32];
- 	unsigned int cr[32];
-@@ -698,8 +714,7 @@ struct pdc_toc_pim_11 {
- 	unsigned int iasq_back;
- 	unsigned int iaoq_back;
- 	unsigned int check_type;
--	unsigned int hversion;
--	unsigned int cpu_state;
-+	struct pim_cpu_state_cf cpu_state;
- };
- 
- struct pdc_toc_pim_20 {
-@@ -709,8 +724,7 @@ struct pdc_toc_pim_20 {
- 	unsigned long long iasq_back;
- 	unsigned long long iaoq_back;
- 	unsigned int check_type;
--	unsigned int hversion;
--	unsigned int cpu_state;
-+	struct pim_cpu_state_cf cpu_state;
- };
- 
- #endif /* !defined(__ASSEMBLY__) */
-
+diff --git a/drivers/input/rmi4/rmi_f54.c b/drivers/input/rmi4/rmi_f54.c
+index 93b328c796c6..c5ce907535ef 100644
+--- a/drivers/input/rmi4/rmi_f54.c
++++ b/drivers/input/rmi4/rmi_f54.c
+@@ -733,7 +733,6 @@ static int rmi_f54_probe(struct rmi_function *fn)
+ 	v4l2_device_unregister(&f54->v4l2);
+ remove_wq:
+ 	cancel_delayed_work_sync(&f54->work);
+-	flush_workqueue(f54->workqueue);
+ 	destroy_workqueue(f54->workqueue);
+ 	return ret;
+ }
+-- 
+2.25.1
 

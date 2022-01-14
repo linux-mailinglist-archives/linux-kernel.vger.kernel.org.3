@@ -2,77 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E60FD48E2D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 04:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7C948E2D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 04:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239004AbiANDIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 22:08:07 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:6736 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236150AbiANDIG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 22:08:06 -0500
-Received: from [10.28.39.106] (10.28.39.106) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Fri, 14 Jan
- 2022 11:08:05 +0800
-Message-ID: <34b86361-a823-4de0-0426-0e0fbc79e550@amlogic.com>
-Date:   Fri, 14 Jan 2022 11:08:05 +0800
+        id S238991AbiANDGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 22:06:47 -0500
+Received: from mga03.intel.com ([134.134.136.65]:8463 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236150AbiANDGq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 22:06:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642129606; x=1673665606;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6aJ6oA9KZ9H5+yC8/t8/dEXbjQd4pxgYYBjq4dVBGz4=;
+  b=ZKW18vlzOghny866oBDb3iI/KJXPOI0PYBtV3lFWh4xDi85kn/HvHq1x
+   f91O6wGqirQyeBC0IQi3MFKmWbv/u9GU/BU6QUCbLNHv9qYgslhRIGn9g
+   v/PexDd8tamZyjRYyXmDBBQmnBSZM3UO0lQycWY7KXHxEpVDyMRrz2LKZ
+   g7iRz6sgPRvxDyE+3EXqOuIca8X7E6eXCQ6hYh1KBu2aUz97Q3Cf7Jld4
+   S3MSQV/+30s1cy//UsEdnRGN/UnDPnR6yAiTFsZFRHC3/TIkqxvxzJN9v
+   QIfFUyqvJdnlYI26LHS/pYyxGHQwaYG1oW5E/WRB4SNacU2Jyctrk9uVX
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244128025"
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="244128025"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 19:06:45 -0800
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="670725195"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 19:06:45 -0800
+Date:   Thu, 13 Jan 2022 19:11:22 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH] iommu/vt-d: Fix PCI bus rescan device hot add
+Message-ID: <20220113191122.53bc6ac0@jacob-builder>
+In-Reply-To: <b2139255-2463-c62f-4746-8df7f3f49221@linux.intel.com>
+References: <1642080198-10971-1-git-send-email-jacob.jun.pan@linux.intel.com>
+        <b2139255-2463-c62f-4746-8df7f3f49221@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v9 2/4] clk: meson: add emmc sub clock phase delay driver
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-clk@vger.kernel.org>
-CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20220113115745.45826-1-liang.yang@amlogic.com>
- <20220113115745.45826-3-liang.yang@amlogic.com>
- <20220113212928.28C10C36AE3@smtp.kernel.org>
-From:   Liang Yang <liang.yang@amlogic.com>
-In-Reply-To: <20220113212928.28C10C36AE3@smtp.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.28.39.106]
-X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
- (10.28.11.5)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi BaoLu,
+
+On Fri, 14 Jan 2022 08:58:53 +0800, Lu Baolu <baolu.lu@linux.intel.com>
+wrote:
+
+> Hi Jacob,
+> 
+> On 1/13/22 9:23 PM, Jacob Pan wrote:
+> > During PCI bus rescan, adding new devices involve two notifiers.
+> > 1. dmar_pci_bus_notifier()
+> > 2. iommu_bus_notifier()
+> > The current code sets #1 as low priority (INT_MIN) which resulted in #2
+> > being invoked first. The result is that struct device pointer cannot be
+> > found in DRHD search for the new device's DMAR/IOMMU. Subsequently, the
+> > device is put under the "catch-all" IOMMU instead of the correct one.
+> > 
+> > This could cause system hang when device TLB invalidation is sent to the
+> > wrong IOMMU. Invalidation timeout error or hard lockup can be observed.
+> > 
+> > This patch fixes the issue by setting a higher priority for
+> > dmar_pci_bus_notifier. DRHD search for a new device will find the
+> > correct IOMMU.
+> > 
+> > Fixes: 59ce0515cdaf ("iommu/vt-d: Update DRHD/RMRR/ATSR device scope")
+> > Reported-by: Zhang, Bernice <bernice.zhang@intel.com>
+> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > ---
+> >   drivers/iommu/intel/dmar.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
+> > index 915bff76fe96..5d07e5b89c2e 100644
+> > --- a/drivers/iommu/intel/dmar.c
+> > +++ b/drivers/iommu/intel/dmar.c
+> > @@ -385,7 +385,7 @@ static int dmar_pci_bus_notifier(struct
+> > notifier_block *nb, 
+> >   static struct notifier_block dmar_pci_bus_nb = {
+> >   	.notifier_call = dmar_pci_bus_notifier,
+> > -	.priority = INT_MIN,
+> > +	.priority = INT_MAX,
+> >   };
+> >   
+> >   static struct dmar_drhd_unit *
+> >   
+> 
+> Nice catch! dmar_pci_bus_add_dev() should take place *before*
+> iommu_probe_device(). This change enforces this with a higher notifier
+> priority for dmar callback.
+> 
+> Comparably, dmar_pci_bus_del_dev() should take place *after*
+> iommu_release_device(). Perhaps we can use two notifiers, one for
+> ADD_DEVICE (with .priority=INT_MAX) and the other for REMOVE_DEVICE
+> (with .priority=INT_MIN)?
+> 
+
+Since device_to_iommu() lookup in intel_iommu_release_device() only
+checks if device is under "an" IOMMU, not "the" IOMMU. Then the remove path
+order is not needed, right?
+
+I know this is not robust, but having so many notifiers with implicit
+priority is not clean either.
+
+Perhaps, we should have explicit priority defined around iommu_bus
+notifier? i.e.
+
+@@ -1841,6 +1841,7 @@ static int iommu_bus_init(struct bus_type *bus, const
+struct iommu_ops *ops) return -ENOMEM; 
+        nb->notifier_call = iommu_bus_notifier;
+                       
++       nb->priority = IOMMU_BUS_NOTIFY_PRIORITY;
+                       
+
+ static struct notifier_block dmar_pci_bus_add_nb = {  
+        .notifier_call = dmar_pci_bus_notifier,    
+-       .priority = INT_MIN,                       
++       .priority = IOMMU_BUS_NOTIFY_PRIORITY + 1,                       
+ };    
+
+ static struct notifier_block dmar_pci_bus_remove_nb = {  
+        .notifier_call = dmar_pci_bus_notifier,    
+-       .priority = INT_MIN,                       
++       .priority = IOMMU_BUS_NOTIFY_PRIORITY - 1,                       
+ };   
+               
+
+> Best regards,
+> baolu
 
 
-On 2022/1/14 5:29, Stephen Boyd wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> Quoting Liang Yang (2022-01-13 03:57:43)
->> diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
->> index b3ef5f67820f..c450f38d3801 100644
->> --- a/drivers/clk/meson/Makefile
->> +++ b/drivers/clk/meson/Makefile
->> @@ -11,6 +11,7 @@ obj-$(CONFIG_COMMON_CLK_MESON_PLL) += clk-pll.o
->>   obj-$(CONFIG_COMMON_CLK_MESON_REGMAP) += clk-regmap.o
->>   obj-$(CONFIG_COMMON_CLK_MESON_SCLK_DIV) += sclk-div.o
->>   obj-$(CONFIG_COMMON_CLK_MESON_VID_PLL_DIV) += vid-pll-div.o
->> +obj-$(CONFIG_COMMON_CLK_MESON_PHASE_DELAY) += clk-phase-delay.o
-> 
-> Sort by Kconfig symbol?
-ok, it will fix it.
-> 
->>   
->>   # Amlogic Clock controllers
->>
-> 
-> .
+Thanks,
+
+Jacob

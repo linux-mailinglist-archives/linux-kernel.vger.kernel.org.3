@@ -2,157 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCC148ED09
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A9048ED1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242588AbiANPTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:19:33 -0500
-Received: from mga03.intel.com ([134.134.136.65]:7202 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239376AbiANPTb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:19:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642173571; x=1673709571;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qowLRleV7CksEzwRd59cyb0/LxsFQr8gPBqQKIbcK5c=;
-  b=EXt8v70+q6m2THRpnpSwViRnC4s13fZBpv4er5u9aQCwkVYr6y4G1pCI
-   QtLduMnfql/WIp8fddhnihPtE++pX6kcd0sboOPtkQnZcZL+60ZhyZKpe
-   GQsoTzoYCfoOq9+RvrmyomtaK/i2CGgpDhdEI+lluzRx+xiTiQSbr0e4j
-   nZg7MH9PErPrR/cn6AD+lO2HgDp/hhtUjeoNMrPgGoiRXZOVOz9MljPQN
-   MhkHFaQSYW/vBYb6HRs1K69G1i+jwPzUCC/XKHbajcW8FEiFanRC+nUrS
-   yKBOr4jMEjp7TLgDf7aTm63pMZrm8kL/vlflVhXq9B1pfWgD1S0b4RsaC
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244218732"
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="244218732"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 07:19:30 -0800
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="530279733"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.199.155])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 07:19:30 -0800
-Date:   Fri, 14 Jan 2022 07:24:07 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH] iommu/vt-d: Fix PCI bus rescan device hot add
-Message-ID: <20220114072407.290691fa@jacob-builder>
-In-Reply-To: <1b8d3145-c404-e952-e61e-5cdc2f6a92a6@linux.intel.com>
-References: <1642080198-10971-1-git-send-email-jacob.jun.pan@linux.intel.com>
-        <b2139255-2463-c62f-4746-8df7f3f49221@linux.intel.com>
-        <20220113191122.53bc6ac0@jacob-builder>
-        <1b8d3145-c404-e952-e61e-5cdc2f6a92a6@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S242177AbiANPZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:25:45 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:40338
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243498AbiANPZc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 10:25:32 -0500
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EFDA83F1E4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 15:25:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642173930;
+        bh=1r53LGbRrCdIDFkdFatBJl+cYRNX8emZDBqZeKrVhA0=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=WF6xMjWZ8ZBKCWeqPYriEsqqlXaD86sZgG2N67dKGDFAUgpOLSirTy0YOCFFbmsGZ
+         Ym3Q5to0NGs+xPjASooHN3MYHYvtXa0TUJnigDJWd+4ckkLoeWupU0mPBWK7Q+hheD
+         2s1EuGEdb5sl6DesBuhzRuqTy5xh3hJ3Q+Pk06PKk8Lt/BQrrOeqbtCZXm5n6bC13p
+         3sqnkQowhifIsHslyWD88lOWScswL/QM9s56PRv58RGu+7zHYxcjaUv0j5QklluvqX
+         YJeZMpNN5JW23A8PGNL4a+znkSfVE1qoOt1Fex5DxVyGa2NfW0e5jawDpIqwaTUBM8
+         S6spDvXhC9rXw==
+Received: by mail-oi1-f197.google.com with SMTP id v72-20020acaac4b000000b002c8dd559f44so6202412oie.8
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:25:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1r53LGbRrCdIDFkdFatBJl+cYRNX8emZDBqZeKrVhA0=;
+        b=qQKrI3xAas0l9MR3N79sSPnYyBXT7yZV3r7RZiMlDHIgGiC85o84Lam66vwUZw2/r8
+         xNPWgiSrVg7zPGA5ZayyYjYuztaPCh1tdBCrYEr0T84yi/rTVoiQXTNm1O0MFtrCwuj7
+         ngS4Tnx467d7dCT58e8gmgM3h9aISF30Glj913+2HtGfxeYa4+AhOnz0tHbbSAyvmwc8
+         x1oeUhBtiV3ZanSut3LZTC9+IPTjVCIhiLzZimru8Q/ZR4sa4LW91LcUiWD11DUOOpXD
+         0zkRtHuIKUWIltH/3dMHURBeobT/x2aD6IzU/ZXbW7dGiPLEB90x/tM12MTXHP5OOIiw
+         r7SA==
+X-Gm-Message-State: AOAM533Sc0O4mah3ivtLziRc46AidHVZOsNMw5sEPLtZRGNGB+V4olSf
+        raOdq58ffdaf21KT6LeQXOPpAfBbQmQCjX3SHhowm9AcJaMexyE2L1Nt2c5HCLErP6RU8vcD2D6
+        iEOVUahOESjqvGazNmGcceXtWVeBsusRTdmhIZNi6tppA5hKQiJ3L7GpCww==
+X-Received: by 2002:a05:6808:199a:: with SMTP id bj26mr13097381oib.98.1642173929766;
+        Fri, 14 Jan 2022 07:25:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwjc8OhFrl0+4UKcBWR0AvxTCF+lZaB9wkXprPPao3yjX3bM54hzP09Hoph4ybKCG+Gsz+cmAnQZkDe5pkkoW8=
+X-Received: by 2002:a05:6808:199a:: with SMTP id bj26mr13097353oib.98.1642173929496;
+ Fri, 14 Jan 2022 07:25:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220114040755.1314349-1-kai.heng.feng@canonical.com>
+ <20220114040755.1314349-2-kai.heng.feng@canonical.com> <YeF4kbsqag+kZ7ji@lunn.ch>
+In-Reply-To: <YeF4kbsqag+kZ7ji@lunn.ch>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 14 Jan 2022 23:25:17 +0800
+Message-ID: <CAAd53p4P9STxTUsZ2fXNqOnmwLMfOBXpYR5hvcJHk5-0V7MPgA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] stmmac: intel: Honor phy LED set by system firmware
+ on a Dell hardware
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lu,
+On Fri, Jan 14, 2022 at 9:20 PM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> >  static void marvell_config_led(struct phy_device *phydev)
+> >  {
+> > -     u16 def_config;
+> > +     struct marvell_priv *priv = phydev->priv;
+> >       int err;
+> >
+> > -     switch (MARVELL_PHY_FAMILY_ID(phydev->phy_id)) {
+> > -     /* Default PHY LED config: LED[0] .. Link, LED[1] .. Activity */
+> > -     case MARVELL_PHY_FAMILY_ID(MARVELL_PHY_ID_88E1121R):
+> > -     case MARVELL_PHY_FAMILY_ID(MARVELL_PHY_ID_88E1318S):
+> > -             def_config = MII_88E1121_PHY_LED_DEF;
+> > -             break;
+> > -     /* Default PHY LED config:
+> > -      * LED[0] .. 1000Mbps Link
+> > -      * LED[1] .. 100Mbps Link
+> > -      * LED[2] .. Blink, Activity
+> > -      */
+> > -     case MARVELL_PHY_FAMILY_ID(MARVELL_PHY_ID_88E1510):
+> > -             if (phydev->dev_flags & MARVELL_PHY_LED0_LINK_LED1_ACTIVE)
+> > -                     def_config = MII_88E1510_PHY_LED0_LINK_LED1_ACTIVE;
+> > -             else
+> > -                     def_config = MII_88E1510_PHY_LED_DEF;
+> > -             break;
+> > -     default:
+> > +     if (priv->led_def_config == -1)
+> >               return;
+> > +
+> > +     if (priv->led_def_config)
+> > +             goto write;
+>
+> Really?
+>
+> Please restructure this code. Take it apart into helpers. You need:
+>
+> A function to set the actual LED configuration.
+> A function to decide what, if any, configuration to set
+> A function to store the current configuration on suspend.
+> A function to restore the current configuration on resume.
+>
+> Lots of little functions will make it much easier to understand, and
+> avoid 1980s BASIC style.
 
-On Fri, 14 Jan 2022 11:12:45 +0800, Lu Baolu <baolu.lu@linux.intel.com>
-wrote:
+Sure, will turn these into helper functions.
 
-> On 1/14/22 11:11 AM, Jacob Pan wrote:
-> > On Fri, 14 Jan 2022 08:58:53 +0800, Lu Baolu<baolu.lu@linux.intel.com>
-> > wrote:
-> >   
-> >> Hi Jacob,
-> >>
-> >> On 1/13/22 9:23 PM, Jacob Pan wrote:  
-> >>> During PCI bus rescan, adding new devices involve two notifiers.
-> >>> 1. dmar_pci_bus_notifier()
-> >>> 2. iommu_bus_notifier()
-> >>> The current code sets #1 as low priority (INT_MIN) which resulted in
-> >>> #2 being invoked first. The result is that struct device pointer
-> >>> cannot be found in DRHD search for the new device's DMAR/IOMMU.
-> >>> Subsequently, the device is put under the "catch-all" IOMMU instead
-> >>> of the correct one.
-> >>>
-> >>> This could cause system hang when device TLB invalidation is sent to
-> >>> the wrong IOMMU. Invalidation timeout error or hard lockup can be
-> >>> observed.
-> >>>
-> >>> This patch fixes the issue by setting a higher priority for
-> >>> dmar_pci_bus_notifier. DRHD search for a new device will find the
-> >>> correct IOMMU.
-> >>>
-> >>> Fixes: 59ce0515cdaf ("iommu/vt-d: Update DRHD/RMRR/ATSR device scope")
-> >>> Reported-by: Zhang, Bernice<bernice.zhang@intel.com>
-> >>> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
-> >>> ---
-> >>>    drivers/iommu/intel/dmar.c | 2 +-
-> >>>    1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-> >>> index 915bff76fe96..5d07e5b89c2e 100644
-> >>> --- a/drivers/iommu/intel/dmar.c
-> >>> +++ b/drivers/iommu/intel/dmar.c
-> >>> @@ -385,7 +385,7 @@ static int dmar_pci_bus_notifier(struct
-> >>> notifier_block *nb,
-> >>>    static struct notifier_block dmar_pci_bus_nb = {
-> >>>    	.notifier_call = dmar_pci_bus_notifier,
-> >>> -	.priority = INT_MIN,
-> >>> +	.priority = INT_MAX,
-> >>>    };
-> >>>    
-> >>>    static struct dmar_drhd_unit *
-> >>>      
-> >> Nice catch! dmar_pci_bus_add_dev() should take place*before*
-> >> iommu_probe_device(). This change enforces this with a higher notifier
-> >> priority for dmar callback.
-> >>
-> >> Comparably, dmar_pci_bus_del_dev() should take place*after*
-> >> iommu_release_device(). Perhaps we can use two notifiers, one for
-> >> ADD_DEVICE (with .priority=INT_MAX) and the other for REMOVE_DEVICE
-> >> (with .priority=INT_MIN)?
-> >>  
-> > Since device_to_iommu() lookup in intel_iommu_release_device() only
-> > checks if device is under "an" IOMMU, not "the" IOMMU. Then the remove
-> > path order is not needed, right?
-> > 
-> > I know this is not robust, but having so many notifiers with implicit
-> > priority is not clean either.
-> > 
-> > Perhaps, we should have explicit priority defined around iommu_bus
-> > notifier? i.e.
-> > 
-> > @@ -1841,6 +1841,7 @@ static int iommu_bus_init(struct bus_type *bus,
-> > const struct iommu_ops *ops) return -ENOMEM;
-> >          nb->notifier_call = iommu_bus_notifier;
-> >                         
-> > +       nb->priority = IOMMU_BUS_NOTIFY_PRIORITY;
-> >                         
-> > 
-> >   static struct notifier_block dmar_pci_bus_add_nb = {
-> >          .notifier_call = dmar_pci_bus_notifier,
-> > -       .priority = INT_MIN,
-> > +       .priority = IOMMU_BUS_NOTIFY_PRIORITY + 1,
-> >   };
-> > 
-> >   static struct notifier_block dmar_pci_bus_remove_nb = {
-> >          .notifier_call = dmar_pci_bus_notifier,
-> > -       .priority = INT_MIN,
-> > +       .priority = IOMMU_BUS_NOTIFY_PRIORITY - 1,
-> >   };  
-> 
-> IOMMU_BUS_NOTIFY_PRIORITY by default is 0. So you can simply use 1 and
-> -1? Adding a comment around it will be helpful.
-> 
-Yeah, I will add comment.
+>
+> I'm also surprised you need to deal with suspend/resume. Why does the
+> BIOS not set the LED mode on resume, same as it does on power up?
 
+I was told this is a BIOS limitation. I'll ask vendor _why_ the LED
+can't be restored by BIOS.
 
-Thanks,
+Kai-Heng
 
-Jacob
+>
+>       Andrew

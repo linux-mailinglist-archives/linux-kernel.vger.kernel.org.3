@@ -2,74 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5FF48E980
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4387948E984
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240905AbiANL4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 06:56:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35104 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiANL4o (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 06:56:44 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9AFF61EFA;
-        Fri, 14 Jan 2022 11:56:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A65FC36AE5;
-        Fri, 14 Jan 2022 11:56:42 +0000 (UTC)
-Date:   Fri, 14 Jan 2022 11:56:39 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Cc:     arnd@arndb.de, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, huangguangbin2@huawei.com
-Subject: Re: [PATCH] asm-generic: Add missing brackets for io_stop_wc macro
-Message-ID: <YeFk9w9AFJxkZziq@arm.com>
-References: <20220114105857.126300-1-wangxiongfeng2@huawei.com>
+        id S240913AbiANL5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 06:57:21 -0500
+Received: from smtp2.axis.com ([195.60.68.18]:46503 "EHLO smtp2.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229579AbiANL5U (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 06:57:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1642161440;
+  x=1673697440;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GxYdK86AwVncAjnPJuoy99CKiKtTmvQPJrbjyinZXo0=;
+  b=fuhnfa740wVhRpBmlkOadHSOYsZV1rA7WeI2JrrTonfnC4lu6cT3Zv2Q
+   s//sfq9O2U8dmUf7Q8hORFYe+sezgQM4LsiLeuoBZra4HjoplTWPiereE
+   0y0f3bL4K3O6nRa/kOAosg3aYIDUxe+lcgKUYPo+aRt60tVWFAruvT7EX
+   /EYeRGPwqDL4FrkC8iiM60LUV8Nk8Kg52g1EQlrK3U9PBSyrPHgngg3/z
+   DA7HAom2YPzytUv7pOOPGWEwSb7ihMm1c5As0wF4Phdqjf51yTC5OyO7Q
+   QqoxzyYnfVqEP3OMnqvHMoshqfWO0fl9frAoTWXxzSpwUDbhj7tsVFBUA
+   Q==;
+Date:   Fri, 14 Jan 2022 12:57:18 +0100
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Jim Cromie <jim.cromie@gmail.com>
+CC:     "jbaron@akamai.com" <jbaron@akamai.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "seanpaul@chromium.org" <seanpaul@chromium.org>,
+        "robdclark@gmail.com" <robdclark@gmail.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "quic_saipraka@quicinc.com" <quic_saipraka@quicinc.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "quic_psodagud@quicinc.com" <quic_psodagud@quicinc.com>,
+        "maz@kernel.org" <maz@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>
+Subject: Re: [PATCH v11 01/19] dyndbg: add _DPRINTK_FLAGS_ENABLED
+Message-ID: <20220114115718.GB23983@axis.com>
+References: <20220107052942.1349447-1-jim.cromie@gmail.com>
+ <20220107052942.1349447-2-jim.cromie@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220114105857.126300-1-wangxiongfeng2@huawei.com>
+In-Reply-To: <20220107052942.1349447-2-jim.cromie@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 06:58:57PM +0800, Xiongfeng Wang wrote:
-> After using io_stop_wc(), drivers reports following compile error when
-> compiled on X86.
+On Fri, Jan 07, 2022 at 06:29:24AM +0100, Jim Cromie wrote:
+>  #ifdef CONFIG_JUMP_LABEL
+> -			if (dp->flags & _DPRINTK_FLAGS_PRINT) {
+> -				if (!(modifiers->flags & _DPRINTK_FLAGS_PRINT))
+> +			if (dp->flags & _DPRINTK_FLAGS_ENABLED) {
+> +				if (!(modifiers->flags & _DPRINTK_FLAGS_ENABLED))
+>  					static_branch_disable(&dp->key.dd_key_true);
+> -			} else if (modifiers->flags & _DPRINTK_FLAGS_PRINT)
+> +			} else if (modifiers->flags & _DPRINTK_FLAGS_ENABLED)
+>  				static_branch_enable(&dp->key.dd_key_true);
+>  #endif
+>  			dp->flags = newflags;
+> -- 
+> 2.33.1
 > 
->   drivers/net/ethernet/hisilicon/hns3/hns3_enet.c: In function ‘hns3_tx_push_bd’:
->   drivers/net/ethernet/hisilicon/hns3/hns3_enet.c:2058:12: error: expected ‘;’ before ‘(’ token
->     io_stop_wc();
->               ^
-> It is because I missed to add the brackets after io_stop_wc macro. So
-> let's add the missing brackets.
-> 
-> Fixes: d5624bb29f49 ("asm-generic: introduce io_stop_wc() and add implementation for ARM64")
-> Reported-by: Guangbin Huang <huangguangbin2@huawei.com>
-> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-> ---
->  include/asm-generic/barrier.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index 3d503e74037f..fd7e8fbaeef1 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
-> @@ -285,7 +285,7 @@ do {									\
->   * write-combining memory accesses before this macro with those after it.
->   */
->  #ifndef io_stop_wc
-> -#define io_stop_wc do { } while (0)
-> +#define io_stop_wc() do { } while (0)
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+I haven't tested it so I could be mistaken, but when
+_DPRINTK_FLAGS_ENABLED gets two flags in the next patch, it looks like
+this code still has the problem which I mentioned in
+https://lore.kernel.org/lkml/20211209150910.GA23668@axis.com/?
 
-Arnd, do you plan to take this fix or you'd like me to?
-
-Thanks.
-
--- 
-Catalin
+| I noticed a bug inside the CONFIG_JUMP_LABEL handling (also present
+| in the last version I posted) which should be fixed as part of the
+| diff below (I've added a comment).
+| [...] 
+|  #ifdef CONFIG_JUMP_LABEL
+| -			if (dp->flags & _DPRINTK_FLAGS_PRINT) {
+| -				if (!(modifiers->flags & _DPRINTK_FLAGS_PRINT))
+| +			if (dp->flags & _DPRINTK_FLAGS_ENABLE) {
+| +				/*
+| +				 * The newflags check is to ensure that the
+| +				 * static branch doesn't get disabled in step
+| +				 * 3:
+| +				 *
+| +				 * (1) +pf
+| +				 * (2) +x
+| +				 * (3) -pf
+| +				 */
+| +				if (!(modifiers->flags & _DPRINTK_FLAGS_ENABLE) &&
+| +				    !(newflags & _DPRINTK_FLAGS_ENABLE)) {
+|  					static_branch_disable(&dp->key.dd_key_true);
+| -			} else if (modifiers->flags & _DPRINTK_FLAGS_PRINT)
+| +				}
+| +			} else if (modifiers->flags & _DPRINTK_FLAGS_ENABLE) {
+|  				static_branch_enable(&dp->key.dd_key_true);
+| +			}
+|  #endif

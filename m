@@ -2,124 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D7A48EDA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9429248EDA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243107AbiANQIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:08:16 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53226 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235975AbiANQIP (ORCPT
+        id S243118AbiANQIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243103AbiANQIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:08:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2034AB8295B;
-        Fri, 14 Jan 2022 16:08:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85631C36AE5;
-        Fri, 14 Jan 2022 16:08:12 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hDSUo+JS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1642176489;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XoNUXMlaRqSo24jNIM6x457GTTkIBsbsy3/xGdNoalA=;
-        b=hDSUo+JSm4fTUnqQuKoBzcj4s5AQotzneqf9qiUme6TdpQHHx1K5IUI6AMnHRsdYqtK0KI
-        nt9CEVmGTx5D2MKkx00+x++Wfzdo7EPVyP8PuskmZ1isyip1Tf1lMUU01+21X409M+8BJ/
-        2iwR//63+rOWaVYTVOwpcoe1hwOYVy4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7e8d5275 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 14 Jan 2022 16:08:09 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id v186so25183225ybg.1;
-        Fri, 14 Jan 2022 08:08:08 -0800 (PST)
-X-Gm-Message-State: AOAM531ibQ2WEeWXeJ2tTjKwBN4xV2wJkzFCAI9GCRLc4jgVhu76zled
-        yXgY9U6tFoXanky2Pt5xofldSeoXZT/IGKLSp3k=
-X-Google-Smtp-Source: ABdhPJwGHZubbMwimiyTKVZS5c/4gn9gtnOaoqmNV1fWQS9PD37kKZRkuLqJFdbKfzhQARBKDrL8wWD0WBXScsUTNCs=
-X-Received: by 2002:a25:aae2:: with SMTP id t89mr13844397ybi.638.1642176487356;
- Fri, 14 Jan 2022 08:08:07 -0800 (PST)
+        Fri, 14 Jan 2022 11:08:16 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F52EC061574;
+        Fri, 14 Jan 2022 08:08:16 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id k18so16357685wrg.11;
+        Fri, 14 Jan 2022 08:08:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mauDon0Ze5CNx6RqfAB2vnManqQEoFIWda3Z8TQdMiQ=;
+        b=eS6/nLFcn9omwLcw30gS4TmgrYFjVKhGHyOxJcP/JSojk+7Wo9TlL5CJ1K0dpDu3XY
+         cWLAMHOLexHyo51Im3O3uwUPnh+OWnPpZJZoslh3/wJAzFNhRs2qDOEl0Zdo208fYzhn
+         NArk2vAHlhr7YIiu6g+NxCFgu5H2jqZPQ9xheUVF/tIo1V7YvOoTMILOMhtgSvsWe9Z7
+         f0bcFOBR1T2yhn0bYRqlOY1IBTmBoy+muFV8BVKWT0N//whW9yoMWcOXcYAHWjT1bRYK
+         2zJgVAkaPwC08ivxQhgsZERjL7/NsgigdtNWinxZ52RwZpTLCpHgI1pqQ2Fd1E4w7aoV
+         gJGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mauDon0Ze5CNx6RqfAB2vnManqQEoFIWda3Z8TQdMiQ=;
+        b=oHOW99F0/LbiD/7efQAmeAdqt5A9ENw+mifyChlvMCvmcEWP080k0R+bGo0G2+iW3r
+         yOkwEBrL+4hmOOsQoRksq56mv3Ale0c47DWUrnm4J7FmB1b//rhlPQxValK+a+Wu9QjX
+         zqnMzp1V3cJQycp4YGl0MiYlBj/kqTNuf23i7DN/nxUS++g2zt6vcYdV0uf6Ho6vHn4q
+         XRBNKn6hjHQAuzg+gJgI4bAw8FezuRDpxF8vYXjnK0T/l1zmlMqZOnfJSWeck1YW4hle
+         5Gtiv+KbxcSd1SHcz71FSsBvafcI7eZw/+BESXrkoWwGwIcSeHQ0piYVQ+sVvp72fC1j
+         3g6Q==
+X-Gm-Message-State: AOAM532JUQiYU0krww8e38NFyDureL+0c0+bwsljBfBQZfbiyDKGNMyA
+        d94XLkAnna4V1sADSUO+/Tc=
+X-Google-Smtp-Source: ABdhPJyx5zzmW3QSzrf42uEBroN2Jf7QfRH7+1gCWzHYLdFxaoMN2nY//QiK+84m+z1JGChBInza2w==
+X-Received: by 2002:adf:9789:: with SMTP id s9mr8015378wrb.271.1642176494702;
+        Fri, 14 Jan 2022 08:08:14 -0800 (PST)
+Received: from [192.168.0.14] ([37.223.145.74])
+        by smtp.gmail.com with ESMTPSA id u12sm1117827wrm.106.2022.01.14.08.08.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jan 2022 08:08:14 -0800 (PST)
+Message-ID: <58601613-9aac-97ef-265f-fb27e5d6b2e4@gmail.com>
+Date:   Fri, 14 Jan 2022 17:08:13 +0100
 MIME-Version: 1.0
-References: <20220112131204.800307-1-Jason@zx2c4.com> <20220112131204.800307-3-Jason@zx2c4.com>
- <87r19cftbr.fsf@toke.dk> <CAHmME9pieaBBhKc1uKABjTmeKAL_t-CZa_WjCVnUr_Y1_D7A0g@mail.gmail.com>
- <55d185a8-31ea-51d0-d9be-debd490cd204@stressinduktion.org>
-In-Reply-To: <55d185a8-31ea-51d0-d9be-debd490cd204@stressinduktion.org>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 14 Jan 2022 17:07:56 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pR+qTn72vyANq8Nxx0BtGy7a_+dRvZS_F7RCag8Rvxng@mail.gmail.com>
-Message-ID: <CAHmME9pR+qTn72vyANq8Nxx0BtGy7a_+dRvZS_F7RCag8Rvxng@mail.gmail.com>
-Subject: Re: [PATCH RFC v1 2/3] ipv6: move from sha1 to blake2s in address calculation
-To:     Hannes Frederic Sowa <hannes@stressinduktion.org>
-Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Erik Kline <ek@google.com>,
-        Fernando Gont <fgont@si6networks.com>,
-        Lorenzo Colitti <lorenzo@google.com>,
-        YOSHIFUJI Hideaki <hideaki.yoshifuji@miraclelinux.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 1/2] soc: mediatek: pwrap: add pwrap driver for MT8186
+ SoC
+Content-Language: en-US
+To:     Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220107104633.7500-1-johnson.wang@mediatek.com>
+ <20220107104633.7500-2-johnson.wang@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220107104633.7500-2-johnson.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hannes,
+Hi Johnson,
 
-On Thu, Jan 13, 2022 at 12:15 PM Hannes Frederic Sowa
-<hannes@stressinduktion.org> wrote:
-> > I'm not even so sure that's true. That was my worry at first, but
-> > actually, looking at this more closely, DAD means that the address can
-> > be changed anyway - a byte counter is hashed in - so there's no
-> > guarantee there.
->
-> The duplicate address detection counter is a way to merely provide basic
-> network connectivity in case of duplicate addresses on the network
-> (maybe some kind misconfiguration or L2 attack). Such detected addresses
-> would show up in the kernel log and an administrator should investigate
-> and clean up the situation.
+It looks like my review from a few minutes got lost, so here again:
 
-I don't mean to belabor a point where I'm likely wrong anyway, but
-this DAD business has kept me thinking...
+On 07/01/2022 11:46, Johnson Wang wrote:
+> MT8186 are highly integrated SoC and use PMIC_MT6366 for
+> power management. This patch adds pwrap master driver to
+> access PMIC_MT6366.
+> 
+> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> ---
+>   drivers/soc/mediatek/mtk-pmic-wrap.c | 72 ++++++++++++++++++++++++++++
+>   1 file changed, 72 insertions(+)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> index 952bc554f443..78866ebf7f04 100644
+> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
+> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> @@ -30,6 +30,7 @@
+>   #define PWRAP_GET_WACS_REQ(x)		(((x) >> 19) & 0x00000001)
+>   #define PWRAP_STATE_SYNC_IDLE0		BIT(20)
+>   #define PWRAP_STATE_INIT_DONE0		BIT(21)
+> +#define PWRAP_STATE_INIT_DONE0_V2	BIT(22)
 
-Attacker is hanging out on the network sending DAD responses, forcing
-those counters to increment, and thus making SHA1(stuff || counter)
-result in a different IPv6 address than usual. Outcomes:
-1) The administrator cannot handle this, did not understand the
-semantics of this address generation feature, and will now have a
-broken network;
-2) The administrator knows what he's doing, and will be able to handle
-a different IPv6 address coming up.
+This name is rather strange. Is the reason that the datasheet names it like this?
 
-Do we really care about case (1)? That sounds like emacs spacebar
-heating https://xkcd.com/1172/. And case (2) seems like something that
-would tolerate us changing the hash function.
+>   #define PWRAP_STATE_INIT_DONE1		BIT(15)
+>   
+>   /* macro for WACS FSM */
+> @@ -77,6 +78,8 @@
+>   #define PWRAP_CAP_INT1_EN	BIT(3)
+>   #define PWRAP_CAP_WDT_SRC1	BIT(4)
+>   #define PWRAP_CAP_ARB		BIT(5)
+> +#define PWRAP_CAP_MONITOR_V2	BIT(6)
 
-> Afterwards bringing the interface down and
-> up again should revert the interface to its initial (dad_counter == 0)
-> address.
+Not used capability, please drop.
 
-Except the attacker is still on the network, and the administrator
-can't figure it out because the mac addresses keep changing and it's
-arriving from seemingly random switches! Plot twist: the attack is
-being conducted from an implant in the switch firmware. There are a
-lot of creative different takes on the same basic scenario. The point
-is - the administrator really _can't_ rely on the address always being
-the same, because it's simply out of his control.
+Regards,
+Matthias
 
-Given that the admin already *must* be prepared for the address to
-change, doesn't that give us some leeway to change the algorithm used
-between kernels?
-
-Or to put it differently, are there _actually_ braindead deployments
-out there that truly rely on the address never ever changing, and
-should we be going out of our way to support what is arguably a
-misreading and misdeployment of the feature?
-
-(Feel free to smack this line of argumentation down if you disagree. I
-just thought it should be a bit more thoroughly explored.)
-
-Jason
+> +#define PWRAP_CAP_ARB_V2	BIT(8)
+>   
+>   /* defines for slave device wrapper registers */
+>   enum dew_regs {
+> @@ -1063,6 +1066,55 @@ static int mt8516_regs[] = {
+>   	[PWRAP_MSB_FIRST] =		0x170,
+>   };
+>   
+> +static int mt8186_regs[] = {
+> +	[PWRAP_MUX_SEL] =		0x0,
+> +	[PWRAP_WRAP_EN] =		0x4,
+> +	[PWRAP_DIO_EN] =		0x8,
+> +	[PWRAP_RDDMY] =			0x20,
+> +	[PWRAP_CSHEXT_WRITE] =		0x24,
+> +	[PWRAP_CSHEXT_READ] =		0x28,
+> +	[PWRAP_CSLEXT_WRITE] =		0x2C,
+> +	[PWRAP_CSLEXT_READ] =		0x30,
+> +	[PWRAP_EXT_CK_WRITE] =		0x34,
+> +	[PWRAP_STAUPD_CTRL] =		0x3C,
+> +	[PWRAP_STAUPD_GRPEN] =		0x40,
+> +	[PWRAP_EINT_STA0_ADR] =		0x44,
+> +	[PWRAP_EINT_STA1_ADR] =		0x48,
+> +	[PWRAP_INT_CLR] =		0xC8,
+> +	[PWRAP_INT_FLG] =		0xC4,
+> +	[PWRAP_MAN_EN] =		0x7C,
+> +	[PWRAP_MAN_CMD] =		0x80,
+> +	[PWRAP_WACS0_EN] =		0x8C,
+> +	[PWRAP_WACS1_EN] =		0x94,
+> +	[PWRAP_WACS2_EN] =		0x9C,
+> +	[PWRAP_INIT_DONE0] =		0x90,
+> +	[PWRAP_INIT_DONE1] =		0x98,
+> +	[PWRAP_INIT_DONE2] =		0xA0,
+> +	[PWRAP_INT_EN] =		0xBC,
+> +	[PWRAP_INT1_EN] =		0xCC,
+> +	[PWRAP_INT1_FLG] =		0xD4,
+> +	[PWRAP_INT1_CLR] =		0xD8,
+> +	[PWRAP_TIMER_EN] =		0xF0,
+> +	[PWRAP_WDT_UNIT] =		0xF8,
+> +	[PWRAP_WDT_SRC_EN] =		0xFC,
+> +	[PWRAP_WDT_SRC_EN_1] =		0x100,
+> +	[PWRAP_WDT_FLG] =		0x104,
+> +	[PWRAP_SPMINF_STA] =		0x1B4,
+> +	[PWRAP_DCM_EN] =		0x1EC,
+> +	[PWRAP_DCM_DBC_PRD] =		0x1F0,
+> +	[PWRAP_GPSINF_0_STA] =		0x204,
+> +	[PWRAP_GPSINF_1_STA] =		0x208,
+> +	[PWRAP_WACS0_CMD] =		0xC00,
+> +	[PWRAP_WACS0_RDATA] =		0xC04,
+> +	[PWRAP_WACS0_VLDCLR] =		0xC08,
+> +	[PWRAP_WACS1_CMD] =		0xC10,
+> +	[PWRAP_WACS1_RDATA] =		0xC14,
+> +	[PWRAP_WACS1_VLDCLR] =		0xC18,
+> +	[PWRAP_WACS2_CMD] =		0xC20,
+> +	[PWRAP_WACS2_RDATA] =		0xC24,
+> +	[PWRAP_WACS2_VLDCLR] =		0xC28,
+> +};
+> +
+>   enum pmic_type {
+>   	PMIC_MT6323,
+>   	PMIC_MT6351,
+> @@ -1083,6 +1135,7 @@ enum pwrap_type {
+>   	PWRAP_MT8135,
+>   	PWRAP_MT8173,
+>   	PWRAP_MT8183,
+> +	PWRAP_MT8186,
+>   	PWRAP_MT8195,
+>   	PWRAP_MT8516,
+>   };
+> @@ -1535,6 +1588,7 @@ static int pwrap_init_cipher(struct pmic_wrapper *wrp)
+>   	case PWRAP_MT6779:
+>   	case PWRAP_MT6797:
+>   	case PWRAP_MT8173:
+> +	case PWRAP_MT8186:
+>   	case PWRAP_MT8516:
+>   		pwrap_writel(wrp, 1, PWRAP_CIPHER_EN);
+>   		break;
+> @@ -2069,6 +2123,19 @@ static struct pmic_wrapper_type pwrap_mt8516 = {
+>   	.init_soc_specific = NULL,
+>   };
+>   
+> +static struct pmic_wrapper_type pwrap_mt8186 = {
+> +	.regs = mt8186_regs,
+> +	.type = PWRAP_MT8186,
+> +	.arb_en_all = 0xfb27f,
+> +	.int_en_all = 0xfffffffe, /* disable WatchDog Timeout for bit 1 */
+> +	.int1_en_all =  0x000017ff, /* disable Matching interrupt for bit 13 */
+> +	.spi_w = PWRAP_MAN_CMD_SPI_WRITE,
+> +	.wdt_src = PWRAP_WDT_SRC_MASK_ALL,
+> +	.caps = PWRAP_CAP_INT1_EN | PWRAP_CAP_MONITOR_V2 | PWRAP_CAP_ARB_V2,
+> +	.init_reg_clock = pwrap_common_init_reg_clock,
+> +	.init_soc_specific = NULL,
+> +};
+> +
+>   static const struct of_device_id of_pwrap_match_tbl[] = {
+>   	{
+>   		.compatible = "mediatek,mt2701-pwrap",
+> @@ -2097,6 +2164,9 @@ static const struct of_device_id of_pwrap_match_tbl[] = {
+>   	}, {
+>   		.compatible = "mediatek,mt8183-pwrap",
+>   		.data = &pwrap_mt8183,
+> +	}, {
+> +		.compatible = "mediatek,mt8186-pwrap",
+> +		.data = &pwrap_mt8186,
+>   	}, {
+>   		.compatible = "mediatek,mt8195-pwrap",
+>   		.data = &pwrap_mt8195,
+> @@ -2209,6 +2279,8 @@ static int pwrap_probe(struct platform_device *pdev)
+>   
+>   	if (HAS_CAP(wrp->master->caps, PWRAP_CAP_ARB))
+>   		mask_done = PWRAP_STATE_INIT_DONE1;
+> +	else if (HAS_CAP(wrp->master->caps, PWRAP_CAP_ARB_V2))
+> +		mask_done = PWRAP_STATE_INIT_DONE0_V2;
+>   	else
+>   		mask_done = PWRAP_STATE_INIT_DONE0;
+>   
+> 

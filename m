@@ -2,281 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1470648F2FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CEB48F304
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbiANXZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 18:25:08 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:39949 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiANXZG (ORCPT
+        id S229772AbiANX1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 18:27:34 -0500
+Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:60308 "EHLO
+        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229471AbiANX1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 18:25:06 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JbHTC5KhSz4y4c;
-        Sat, 15 Jan 2022 10:25:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642202704;
-        bh=S/xwmXo/YzNqKT1dwiPfnnu5ocUbhfK0VxfOdQ8giZY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=b04M5qQ1qTlQhTuqPg2XqdfNG0hjq0I+Wf0WS4gOspi/P/Km8dwqJ4NtRSyJLYoub
-         A/kM2NnBlZ29JDHK4oJYcUNhS+gQaYoD1t3l7/lneBGytCMnamKDwdVESCciMnhnNQ
-         ghgV4o/0Aq4+4HwXLYESywT2yFHI+5wvXCvTWx70/JSondJGZUCMkTiKQZuCC5DEyx
-         CUohffCiD6m2YT+JVALePJKmR++CpEdbgBCnyLq1Sb9bbwMDTURRdmJ8xKZ+/vHVH2
-         LsvaXJ0LPUKo4/Pkaa99U+gW7ZaRyP0gHvh9SWISCgtFSg97vVuW4Nuk1U+kuMWyVe
-         klZG6JrXlB1jw==
-Date:   Sat, 15 Jan 2022 10:25:01 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Dave Airlie <airlied@linux.ie>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220115102501.70c416c9@canb.auug.org.au>
-In-Reply-To: <20220114113639.2e2cc115@canb.auug.org.au>
-References: <20220114113639.2e2cc115@canb.auug.org.au>
+        Fri, 14 Jan 2022 18:27:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1642202853; x=1673738853;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=Mm62JXSl5zeICS/ifss0xt6fgpw3EJrv2ma2nrDfxt8=;
+  b=iXErR/n0Uho4F6+bJctxxHzEAhrObbIKInQNag4TxE1E6Du4/YYA5L31
+   eu5Or8MKqksTD/APrC+Ft3IzD+X2E9h8jpUKI1iw5momFXfi0jkmTuwG1
+   zhvZncV9ESg2cSpGJv8lGFY1soRwGuj+ke72ED6qWWczMP8mpaGFWB9us
+   Q=;
+X-IronPort-AV: E=Sophos;i="5.88,290,1635206400"; 
+   d="scan'208";a="170572735"
+Subject: Re: [PATCH 1/3] memblock: define functions to set the usable memory range
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 14 Jan 2022 23:27:31 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com (Postfix) with ESMTPS id 8AB4841615;
+        Fri, 14 Jan 2022 23:27:30 +0000 (UTC)
+Received: from EX13D35UWB004.ant.amazon.com (10.43.161.230) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Fri, 14 Jan 2022 23:27:30 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13D35UWB004.ant.amazon.com (10.43.161.230) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.26; Fri, 14 Jan 2022 23:27:30 +0000
+Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
+ (172.19.206.175) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.28 via Frontend Transport; Fri, 14 Jan 2022 23:27:30
+ +0000
+Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
+        id 20DD5FC; Fri, 14 Jan 2022 23:27:29 +0000 (UTC)
+Date:   Fri, 14 Jan 2022 23:27:29 +0000
+From:   Frank van der Linden <fllinden@amazon.com>
+To:     Mike Rapoport <rppt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
+        <frowand.list@gmail.com>, <ardb@kernel.org>, <linux-mm@kvack.org>,
+        <devicetree@vger.kernel.org>, <linux-efi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kexec@lists.infradead.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <geert+renesas@glider.be>
+Message-ID: <20220114232729.GA35066@dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com>
+References: <20220110210809.3528-1-fllinden@amazon.com>
+ <20220110210809.3528-2-fllinden@amazon.com> <Yd1cnquQFZoNE7FP@kernel.org>
+ <20220111204441.GA36458@dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com>
+ <YeBiV8fuCCLWyHYb@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Wm9tp1.NuXUDN8CqDkuqvwl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YeBiV8fuCCLWyHYb@kernel.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Wm9tp1.NuXUDN8CqDkuqvwl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jan 13, 2022 at 07:33:11PM +0200, Mike Rapoport wrote:
+> On Tue, Jan 11, 2022 at 08:44:41PM +0000, Frank van der Linden wrote:
+> > On Tue, Jan 11, 2022 at 12:31:58PM +0200, Mike Rapoport wrote:
+> > > > --- a/include/linux/memblock.h
+> > > > +++ b/include/linux/memblock.h
+> > > > @@ -481,6 +481,8 @@ phys_addr_t memblock_reserved_size(void);
+> > > >  phys_addr_t memblock_start_of_DRAM(void);
+> > > >  phys_addr_t memblock_end_of_DRAM(void);
+> > > >  void memblock_enforce_memory_limit(phys_addr_t memory_limit);
+> > > > +void memblock_set_usable_range(phys_addr_t base, phys_addr_t size);
+> > > > +void memblock_enforce_usable_range(void);
+> > > >  void memblock_cap_memory_range(phys_addr_t base, phys_addr_t size);
+> > > >  void memblock_mem_limit_remove_map(phys_addr_t limit);
+> > >
+> > > We already have 3 very similar interfaces that deal with memory capping.
+> > > Now you suggest to add fourth that will "generically" solve a single use
+> > > case of DT, EFI and kdump interaction on arm64.
+> > >
+> > > Looks like a workaround for a fundamental issue of incompatibility between
+> > > DT and EFI wrt memory registration.
+> >
+> > Yep, I figured this would be the main argument against this - arm64
+> > already added several other more-or-less special cased interfaces over
+> > time.
+> >
+> > I'm more than happy to solve this in a different way.
+> >
+> > What would you suggest:
+> >
+> > 1) Try to merge the similar interfaces in to one.
+> > 2) Just deal with it at a lower (arm64) level?
+> > 3) Some other way?
+> 
+> We've discussed this with Ard on IRC, and our conclusion was that on arm64
+> kdump kernel should have memblock.memory exactly the same as the normal
+> kernel. Then, the memory outside usable-memory-range should be reserved so
+> that kdump kernel won't step over it.
+> 
+> With that, simple (untested) patch below could be what we need:
+> 
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index bdca35284ceb..371418dffaf1 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -1275,7 +1275,8 @@ void __init early_init_dt_scan_nodes(void)
+>         of_scan_flat_dt(early_init_dt_scan_memory, NULL);
+> 
+>         /* Handle linux,usable-memory-range property */
+> -       memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
+> +       memblock_reserve(0, cap_mem_addr);
+> +       memblock_reserve(cap_mem_addr + cap_mem_size, PHYS_ADDR_MAX);
+>  }
+> 
+>  bool __init early_init_dt_scan(void *params)
 
-Hi all,
+Ok, tested this on 5.17-rc, and it's working OK there. Main kernel has
+32G, crash kernel gets 512M:
 
-On Fri, 14 Jan 2022 11:36:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the amdgpu tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c: In function 'program_=
-timing_sync':
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1409:17: error: 'struc=
-t dc_config' has no member named 'use_pipe_ctx_sync_logic'
->  1409 |   if (dc->config.use_pipe_ctx_sync_logic) {
->       |                 ^
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1412:20: error: 'struc=
-t pipe_ctx' has no member named 'pipe_idx_syncd'
->  1412 |     if (pipe_set[j]->pipe_idx_syncd =3D=3D pipe_set[0]->pipe_idx_=
-syncd) {
->       |                    ^~
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1412:51: error: 'struc=
-t pipe_ctx' has no member named 'pipe_idx_syncd'
->  1412 |     if (pipe_set[j]->pipe_idx_syncd =3D=3D pipe_set[0]->pipe_idx_=
-syncd) {
->       |                                                   ^~
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1418:17: error: 'struc=
-t pipe_ctx' has no member named 'pipe_idx_syncd'
->  1418 |      pipe_set[j]->pipe_idx_syncd =3D pipe_set[0]->pipe_idx_syncd;
->       |                 ^~
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1418:47: error: 'struc=
-t pipe_ctx' has no member named 'pipe_idx_syncd'
->  1418 |      pipe_set[j]->pipe_idx_syncd =3D pipe_set[0]->pipe_idx_syncd;
->       |                                               ^~
->=20
-> Caused by git doing a bad automatic merge with Linus' tree because commit
->=20
->   75b950ef6166 ("Revert "drm/amd/display: Fix for otg synchronization log=
-ic"")
->=20
-> has been cherry-picked into the amdgpu tree and then a fixed version of
-> the reverted commit applied on top.  It would be easier if just a
-> fix up for the oriingal commit was added to the amdgpu tree, or Linus'
-> tree was merged into the amdgpu tree and then the fixed version applied.
->=20
-> I have used the amdgpu tree from next-20220113 for today.
+Main kernel:
 
-This is what I have had to apply as a merge fix up to make this work:
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+[    0.000000]   DMA32    empty
+[    0.000000]   Normal   [mem 0x0000000100000000-0x0000000b96ffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000040000000-0x00000000786effff]
+[    0.000000]   node   0: [mem 0x00000000786f0000-0x000000007872ffff]
+[    0.000000]   node   0: [mem 0x0000000078730000-0x000000007bbfffff]
+[    0.000000]   node   0: [mem 0x000000007bc00000-0x000000007bfdffff]
+[    0.000000]   node   0: [mem 0x000000007bfe0000-0x000000007fffffff]
+[    0.000000]   node   0: [mem 0x0000000400000000-0x0000000b96ffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000040000000-0x0000000b96ffffff]
+[    0.000000] On node 0, zone Normal: 4096 pages in unavailable ranges
+[    0.000000] cma: Reserved 64 MiB at 0x000000007c000000
+[    0.000000] crashkernel reserved: 0x0000000054400000 - 0x0000000074400000 (512 MB)
 
-(This is basically all the files that were not changed by the revert and
-fix pair of patches)
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Sat, 15 Jan 2022 10:01:47 +1100
-Subject: [PATCH] fix up for bad merge due to cherry-picked and fixed commit
+Crash kernel:
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- .../gpu/drm/amd/display/dc/core/dc_resource.c | 54 +++++++++++++++++++
- drivers/gpu/drm/amd/display/dc/dc.h           |  1 +
- .../display/dc/dce110/dce110_hw_sequencer.c   |  8 +++
- .../drm/amd/display/dc/dcn31/dcn31_resource.c |  3 ++
- .../gpu/drm/amd/display/dc/inc/core_types.h   |  1 +
- 5 files changed, 67 insertions(+)
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000054400000-0x000000007bfdffff]
+[    0.000000]   DMA32    empty
+[    0.000000]   Normal   empty
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000054400000-0x00000000743fffff]
+[    0.000000]   node   0: [mem 0x00000000786f0000-0x000000007872ffff]
+[    0.000000]   node   0: [mem 0x000000007bc00000-0x000000007bfdffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000054400000-0x000000007bfdffff]
+[    0.000000] On node 0, zone DMA: 17408 pages in unavailable ranges
+[    0.000000] On node 0, zone DMA: 17136 pages in unavailable ranges
+[    0.000000] On node 0, zone DMA: 13520 pages in unavailable ranges
+[    0.000000] On node 0, zone DMA: 16416 pages in unavailable ranges
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c b/drivers/gp=
-u/drm/amd/display/dc/core/dc_resource.c
-index d4ff6cc6b8d9..b3912ff9dc91 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
-@@ -3217,6 +3217,60 @@ struct hpo_dp_link_encoder *resource_get_hpo_dp_link=
-_enc_for_det_lt(
- }
- #endif
-=20
-+void reset_syncd_pipes_from_disabled_pipes(struct dc *dc,
-+		struct dc_state *context)
-+{
-+	int i, j;
-+	struct pipe_ctx *pipe_ctx_old, *pipe_ctx, *pipe_ctx_syncd;
-+
-+	/* If pipe backend is reset, need to reset pipe syncd status */
-+	for (i =3D 0; i < dc->res_pool->pipe_count; i++) {
-+		pipe_ctx_old =3D	&dc->current_state->res_ctx.pipe_ctx[i];
-+		pipe_ctx =3D &context->res_ctx.pipe_ctx[i];
-+
-+		if (!pipe_ctx_old->stream)
-+			continue;
-+
-+		if (pipe_ctx_old->top_pipe || pipe_ctx_old->prev_odm_pipe)
-+			continue;
-+
-+		if (!pipe_ctx->stream ||
-+				pipe_need_reprogram(pipe_ctx_old, pipe_ctx)) {
-+
-+			/* Reset all the syncd pipes from the disabled pipe */
-+			for (j =3D 0; j < dc->res_pool->pipe_count; j++) {
-+				pipe_ctx_syncd =3D &context->res_ctx.pipe_ctx[j];
-+				if ((GET_PIPE_SYNCD_FROM_PIPE(pipe_ctx_syncd) =3D=3D pipe_ctx_old->pip=
-e_idx) ||
-+					!IS_PIPE_SYNCD_VALID(pipe_ctx_syncd))
-+					SET_PIPE_SYNCD_TO_PIPE(pipe_ctx_syncd, j);
-+			}
-+		}
-+	}
-+}
-+
-+void check_syncd_pipes_for_disabled_master_pipe(struct dc *dc,
-+	struct dc_state *context,
-+	uint8_t disabled_master_pipe_idx)
-+{
-+	int i;
-+	struct pipe_ctx *pipe_ctx, *pipe_ctx_check;
-+
-+	pipe_ctx =3D &context->res_ctx.pipe_ctx[disabled_master_pipe_idx];
-+	if ((GET_PIPE_SYNCD_FROM_PIPE(pipe_ctx) !=3D disabled_master_pipe_idx) ||
-+		!IS_PIPE_SYNCD_VALID(pipe_ctx))
-+		SET_PIPE_SYNCD_TO_PIPE(pipe_ctx, disabled_master_pipe_idx);
-+
-+	/* for the pipe disabled, check if any slave pipe exists and assert */
-+	for (i =3D 0; i < dc->res_pool->pipe_count; i++) {
-+		pipe_ctx_check =3D &context->res_ctx.pipe_ctx[i];
-+
-+		if ((GET_PIPE_SYNCD_FROM_PIPE(pipe_ctx_check) =3D=3D disabled_master_pip=
-e_idx) &&
-+			IS_PIPE_SYNCD_VALID(pipe_ctx_check) && (i !=3D disabled_master_pipe_idx=
-))
-+			DC_ERR("DC: Failure: pipe_idx[%d] syncd with disabled master pipe_idx[%=
-d]\n",
-+				i, disabled_master_pipe_idx);
-+	}
-+}
-+
- uint8_t resource_transmitter_to_phy_idx(const struct dc *dc, enum transmit=
-ter transmitter)
- {
- 	/* TODO - get transmitter to phy idx mapping from DMUB */
-diff --git a/drivers/gpu/drm/amd/display/dc/dc.h b/drivers/gpu/drm/amd/disp=
-lay/dc/dc.h
-index da2c78ce14d6..288e7b01f561 100644
---- a/drivers/gpu/drm/amd/display/dc/dc.h
-+++ b/drivers/gpu/drm/amd/display/dc/dc.h
-@@ -344,6 +344,7 @@ struct dc_config {
- 	uint8_t  vblank_alignment_max_frame_time_diff;
- 	bool is_asymmetric_memory;
- 	bool is_single_rank_dimm;
-+	bool use_pipe_ctx_sync_logic;
- };
-=20
- enum visual_confirm {
-diff --git a/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c b/=
-drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
-index 78192ecba102..f1593186e964 100644
---- a/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
-+++ b/drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c
-@@ -1566,6 +1566,10 @@ static enum dc_status apply_single_controller_ctx_to=
-_hw(
- 				&pipe_ctx->stream->audio_info);
- 	}
-=20
-+	/* make sure no pipes syncd to the pipe being enabled */
-+	if (!pipe_ctx->stream->apply_seamless_boot_optimization && dc->config.use=
-_pipe_ctx_sync_logic)
-+		check_syncd_pipes_for_disabled_master_pipe(dc, context, pipe_ctx->pipe_i=
-dx);
-+
- #if defined(CONFIG_DRM_AMD_DC_DCN)
- 	/* DCN3.1 FPGA Workaround
- 	 * Need to enable HPO DP Stream Encoder before setting OTG master enable.
-@@ -2297,6 +2301,10 @@ enum dc_status dce110_apply_ctx_to_hw(
- 	enum dc_status status;
- 	int i;
-=20
-+	/* reset syncd pipes from disabled pipes */
-+	if (dc->config.use_pipe_ctx_sync_logic)
-+		reset_syncd_pipes_from_disabled_pipes(dc, context);
-+
- 	/* Reset old context */
- 	/* look up the targets that have been removed since last commit */
- 	hws->funcs.reset_hw_ctx_wrap(dc, context);
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c b/driver=
-s/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
-index 42ed47e8133d..8d64187478e4 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
-@@ -2260,6 +2260,9 @@ static bool dcn31_resource_construct(
- 	dc->caps.color.mpc.ogam_rom_caps.hlg =3D 0;
- 	dc->caps.color.mpc.ocsc =3D 1;
-=20
-+	/* Use pipe context based otg sync logic */
-+	dc->config.use_pipe_ctx_sync_logic =3D true;
-+
- 	/* read VBIOS LTTPR caps */
- 	{
- 		if (ctx->dc_bios->funcs->get_lttpr_caps) {
-diff --git a/drivers/gpu/drm/amd/display/dc/inc/core_types.h b/drivers/gpu/=
-drm/amd/display/dc/inc/core_types.h
-index 890280026e69..943240e2809e 100644
---- a/drivers/gpu/drm/amd/display/dc/inc/core_types.h
-+++ b/drivers/gpu/drm/amd/display/dc/inc/core_types.h
-@@ -382,6 +382,7 @@ struct pipe_ctx {
- 	struct pll_settings pll_settings;
-=20
- 	uint8_t pipe_idx;
-+	uint8_t pipe_idx_syncd;
-=20
- 	struct pipe_ctx *top_pipe;
- 	struct pipe_ctx *bottom_pipe;
---=20
-2.33.0
+Not sure why I had trouble with the same on 5.15, I'll have to look
+at that again. But this seems fine for 5.16+
 
---=20
-Cheers,
-Stephen Rothwell
+Thanks,
 
---Sig_/Wm9tp1.NuXUDN8CqDkuqvwl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHiBk0ACgkQAVBC80lX
-0Gwh3wf8DAF2beKH8ziM7h4VnNDLAaZRKMdKHJgH0h15seqdY9D3QmO/J85d3q7e
-zUuBH3JX+VqslfjyQVBGJdhbcGL7bbb76Skpf3D5Ydpc9ou3iAEYU3NpQwDw2sXG
-8jj9rY7DoLaO5uq6+JL1P+j57iaiO2DjgP1qj0TKHBksGN+uPlxE+Wd1hA/jDbi2
-5nnhyft/DgYXtB7VQYPa/PPBXysuAPilBwU1/DYl/GlaFht2PY5imG0FhBiLJQxO
-uxC/os7CmuDGIVfvAP3lolG3g80vbI+xonGCp91l6UwfH8p3MRFb/JJkvAFpyk5/
-fkMhk8helTujmFeQVYNqd3adtKK3hw==
-=lSH3
------END PGP SIGNATURE-----
-
---Sig_/Wm9tp1.NuXUDN8CqDkuqvwl--
+- Frank

@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCB448EF5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B566248EF5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235013AbiANRrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:47:33 -0500
-Received: from mga07.intel.com ([134.134.136.100]:28612 "EHLO mga07.intel.com"
+        id S243918AbiANRvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:51:18 -0500
+Received: from mga02.intel.com ([134.134.136.20]:24959 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229449AbiANRra (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:47:30 -0500
+        id S229449AbiANRvR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 12:51:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642182450; x=1673718450;
+  t=1642182677; x=1673718677;
   h=message-id:subject:from:to:cc:date:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QKLok4O8gbmxxCS7GWWlHZnGROUrPQjA9Bmw8BFFUUs=;
-  b=L+mlIwGi3F/yrLeEMVMbpWGr8cIUIeI3CqfwseyYEP5tzxlCfQv5LT0t
-   C1roUnZ13v1itcbJKHc+3ofv6DYRLcVms/LKZkjIRTzU05Ff2rXdnsQAR
-   LgBB1UjORa01LE3ikA/CCMUVXyMpEwKdLopHEqA6qHIKHFcseK0eaR9Bs
-   9ljUbTKItW3bi2gOmtLGslottww7XfqWsiOSpg4/mfc1BihSOR401swHU
-   6HX+H+FlHON0n+vejy0msxjnzMiBr8OivnpFzDE6Oaxj4ywgdV8R/LnOI
-   x2M4t6e2J3/ag3l7XVi0MldXOnFydDQy4U3WDzCPsqy6JMxPaMPwmDYxe
+  bh=oA7p8R5TuXBUb23c1P3IgwuuI4bHsWSCIwT6D7uo+GM=;
+  b=lesRs14LN48luz9W2pXyLpliKHa6W1sInG/omZA95IgSIQguYmUp0Z/L
+   H+ZBhxz1iHwk6+3rKFGeizySWQmaKI4SqAFazEoEKYwT8Q0roGaVFq0NY
+   n8mdbiXYIBq7/YdgZiV85DUxfNzPlBxZ+osov3XAxLfulFywkql36ECnV
+   t/bAEsPqUqswNyxcSgZV2rhykpfPz/uoo94vs4nhyWsuM6MoyOm4lew79
+   E6NDz2AJ1bZli0UigOWvuiAm1u711tgyF+jZKzUwjCVFv5F5tLsnIQJiK
+   mVNczIWQAPqTx2TxXgm8yf8+dTJTBwAUfBBepJQ0fNZx1dFNJemyPp7z7
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="307635721"
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="231644316"
 X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="307635721"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 09:47:29 -0800
+   d="scan'208";a="231644316"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 09:51:16 -0800
 X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="692291399"
-Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.212.237.206])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 09:47:28 -0800
-Message-ID: <280c234da5678ae8d38fd27fe36559f8d5921a48.camel@linux.intel.com>
-Subject: Re: [PATCH v2 1/2] x86/sgx: Add accounting for tracking overcommit
+   d="scan'208";a="670922797"
+Received: from agonz1-mobl3.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.212.237.206])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 09:51:15 -0800
+Message-ID: <fda3bb7bd557a37112a4f7c6c205871addda1bd3.camel@linux.intel.com>
+Subject: Re: [PATCH v2 2/2] x86/sgx: account backing pages
 From:   Kristen Carlson Accardi <kristen@linux.intel.com>
 To:     Jarkko Sakkinen <jarkko@kernel.org>
 Cc:     linux-sgx@vger.kernel.org,
@@ -43,10 +43,10 @@ Cc:     linux-sgx@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         linux-kernel@vger.kernel.org
-Date:   Fri, 14 Jan 2022 09:47:24 -0800
-In-Reply-To: <Ydm08b9+gPnJoQgF@iki.fi>
+Date:   Fri, 14 Jan 2022 09:51:14 -0800
+In-Reply-To: <Ydm2Qk8JFwgdueZa@iki.fi>
 References: <20220107181618.6597-1-kristen@linux.intel.com>
-         <20220107181618.6597-2-kristen@linux.intel.com> <Ydm08b9+gPnJoQgF@iki.fi>
+         <20220107181618.6597-3-kristen@linux.intel.com> <Ydm2Qk8JFwgdueZa@iki.fi>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
@@ -55,189 +55,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-01-08 at 17:59 +0200, Jarkko Sakkinen wrote:
-> On Fri, Jan 07, 2022 at 10:16:16AM -0800, Kristen Carlson Accardi
+On Sat, 2022-01-08 at 18:05 +0200, Jarkko Sakkinen wrote:
+> On Fri, Jan 07, 2022 at 10:16:17AM -0800, Kristen Carlson Accardi
 > wrote:
-> > When the system runs out of enclave memory, SGX can reclaim EPC
-> > pages
-> > by swapping to normal RAM. This normal RAM is allocated via a
-> > per-enclave shared memory area. The shared memory area is not
-> > mapped
-> > into the enclave or the task mapping it, which makes its memory use
-> > opaque (including to the OOM killer). Having lots of hard to find
-> > memory around is problematic, especially when there is no limit.
+> > SGX may allow EPC pages to be overcommitted. If the system is
+> > out of enclave memory, EPC pages are swapped to normal RAM via
+> > a per enclave shared memory area. This shared memory is not
+> > charged to the enclave or the task mapping it, making it hard
+> > to account for using normal methods.
 > > 
-> > Introduce a global counter that can be used to limit the number of
-> > pages
-> > that enclaves are able to consume for backing storage.  This
-> > parameter
-> > is a percentage value that is used in conjunction with the number
-> > of
-> > EPC pages in the system to set a cap on the amount of backing RAM
-> > that
-> > can be consumed.
+> > In order to avoid unlimited usage of normal RAM, enclaves must be
+> > charged for each new page used for backing storage, and uncharged
+> > when they are no longer using a backing page.
 > > 
-> > The overcommit percentage value is 150, which limits the total
-> > number of
-> > shared memory pages that may be consumed by all enclaves as backing
-> > pages
-> > to 1.5X of EPC pages on the system.
+> > Modify the existing flow for requesting backing pages to reduce the
+> > available backing page counter and confirm that the limit has not
+> > been exceeded. Backing page usage for loading EPC pages back out of
+> > the shared memory do not incur a charge.
 > > 
-> > For example, on an SGX system that has 128MB of EPC, this would
-> > cap the amount of normal RAM that SGX consumes for its shared
-> > memory
-> > areas at 192MB.
+> > When a backing page is released from usage, increment the available
+> > backing page counter.
 > > 
-> > The SGX overcommit percent works differently than the core VM
-> > overcommit
-> > limit. Enclaves request backing pages one page at a time, and the
-> > number
-> > of in use backing pages that are allowed is a global resource that
-> > is
-> > limited for all enclaves.
+> > When swapping EPC pages to RAM, in addition to storing the page
+> > contents, SGX must store some additional metadata to protect
+> > against a malicious kernel when the page is swapped back in. This
+> > additional metadata is called Paging Crypto MetaData. PCMD is
+> > allocated from the same shared memory area as the backing page
+> > contents and consumes RAM the same way.
 > > 
-> > Introduce a pair of functions which can be used by callers when
-> > requesting
-> > backing RAM pages. These functions are responsible for accounting
-> > the
-> > page charges. A request may return an error if the request will
-> > cause the
-> > counter to exceed the backing page cap.
+> > PCMD is 128 bytes in size, and there is one PCMD structure per
+> > page written to shared RAM. The page index for the PCMD page is
+> > calculated from the page index of the backing page, so it is
+> > possible
+> > that the PCMD structures are not packed into the minimum number of
+> > pages possible. If 32 PCMDs can fit onto a single page, then PCMD
+> > usage is 1/32 of total EPC pages. In the worst case, PCMD can
+> > consume the same amount of RAM as EPC backing pages (1:1). For
+> > simplicity, this implementation does not account for PCMD page
+> > usage.
 > > 
 > > Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
 > > ---
-> >  arch/x86/kernel/cpu/sgx/main.c | 46
-> > ++++++++++++++++++++++++++++++++++
-> >  arch/x86/kernel/cpu/sgx/sgx.h  |  2 ++
-> >  2 files changed, 48 insertions(+)
+> >  arch/x86/kernel/cpu/sgx/encl.c | 76
+> > ++++++++++++++++++++++++++++++++--
+> >  arch/x86/kernel/cpu/sgx/encl.h |  6 ++-
+> >  arch/x86/kernel/cpu/sgx/main.c |  6 +--
+> >  3 files changed, 80 insertions(+), 8 deletions(-)
 > > 
-> > diff --git a/arch/x86/kernel/cpu/sgx/main.c
-> > b/arch/x86/kernel/cpu/sgx/main.c
-> > index 2857a49f2335..8a7bfe0d9023 100644
-> > --- a/arch/x86/kernel/cpu/sgx/main.c
-> > +++ b/arch/x86/kernel/cpu/sgx/main.c
-> > @@ -43,6 +43,45 @@ static struct sgx_numa_node *sgx_numa_nodes;
+> > diff --git a/arch/x86/kernel/cpu/sgx/encl.c
+> > b/arch/x86/kernel/cpu/sgx/encl.c
+> > index 001808e3901c..8be6f0592bdc 100644
+> > --- a/arch/x86/kernel/cpu/sgx/encl.c
+> > +++ b/arch/x86/kernel/cpu/sgx/encl.c
+> > @@ -32,7 +32,7 @@ static int __sgx_encl_eldu(struct sgx_encl_page
+> > *encl_page,
+> >  	else
+> >  		page_index = PFN_DOWN(encl->size);
 > >  
-> >  static LIST_HEAD(sgx_dirty_page_list);
+> > -	ret = sgx_encl_get_backing(encl, page_index, &b);
+> > +	ret = sgx_encl_lookup_backing(encl, page_index, &b);
+> >  	if (ret)
+> >  		return ret;
 > >  
-> > +/*
-> > + * Limits the amount of normal RAM that SGX can consume for EPC
-> > + * overcommit to the total EPC pages * sgx_overcommit_percent /
-> > 100
-> > + */
-> > +static int sgx_overcommit_percent = 150;
-> > +
-> > +/* The number of pages that can be allocated globally for backing
-> > storage. */
-> > +static atomic_long_t sgx_nr_available_backing_pages;
-> > +
-> > +/**
-> > + * sgx_charge_mem() - charge for a page used for backing storage
-> > + *
-> > + * Backing storage usage is capped by the
-> > sgx_nr_available_backing_pages.
-> > + * If the backing storage usage is over the overcommit limit,
-> > + * return an error.
-> > + *
-> > + * Return:
-> > + * 0:		The page requested does not exceed the limit
-> > + * -ENOMEM:	The page requested exceeds the overcommit limit
-> > + */
-> > +int sgx_charge_mem(void)
-> > +{
-> > +	if (!atomic_long_add_unless(&sgx_nr_available_backing_pages,
-> > -1, 0))
-> > +		return -ENOMEM;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +/**
-> > + * sgx_uncharge_mem() - uncharge a page previously used for
-> > backing storage
-> > + *
-> > + * When backing storage is no longer in use, increment the
-> > + * sgx_nr_available_backing_pages counter.
-> > + */
-> > +void sgx_uncharge_mem(void)
-> > +{
-> > +	atomic_long_inc(&sgx_nr_available_backing_pages);
-> > +}
-> > +
-> >  /*
-> >   * Reset post-kexec EPC pages to the uninitialized state. The
-> > pages are removed
-> >   * from the input list, and made available for the page allocator.
-> > SECS pages
-> > @@ -786,6 +825,8 @@ static bool __init sgx_page_cache_init(void)
-> >  	u64 pa, size;
-> >  	int nid;
-> >  	int i;
-> > +	u64 total_epc_bytes = 0;
-> > +	u64 available_backing_bytes;
-> 
-> Use reverse-christmas-tree declaration order here. This was required
-> for
-> the original patch set, so I expect this to still hold.
-
-sure.
-
-> 
+> > @@ -407,6 +407,12 @@ void sgx_encl_release(struct kref *ref)
+> >  			sgx_encl_free_epc_page(entry->epc_page);
+> >  			encl->secs_child_cnt--;
+> >  			entry->epc_page = NULL;
+> > +		} else {
+> > +			/*
+> > +			 * If there is no epc_page, it means it has
+> > been
+> > +			 * swapped out. Uncharge the backing storage.
+> > +			 */
+> > +			sgx_uncharge_mem();
+> >  		}
 > >  
-> >  	sgx_numa_nodes = kmalloc_array(num_possible_nodes(),
-> > sizeof(*sgx_numa_nodes), GFP_KERNEL);
-> >  	if (!sgx_numa_nodes)
-> > @@ -830,6 +871,7 @@ static bool __init sgx_page_cache_init(void)
-> >  
-> >  		sgx_epc_sections[i].node =  &sgx_numa_nodes[nid];
-> >  		sgx_numa_nodes[nid].size += size;
-> > +		total_epc_bytes += size;
-> >  
-> >  		sgx_nr_epc_sections++;
-> >  	}
-> > @@ -839,6 +881,10 @@ static bool __init sgx_page_cache_init(void)
-> >  		return false;
-> >  	}
-> >  
-> > +	available_backing_bytes = total_epc_bytes *
-> > (sgx_overcommit_percent / 100);
-> > +
-> 
-> IMHO this empty line could be removed, and group these statements
-> together.
-
-ok.
-
-> 
-> > +	atomic_long_set(&sgx_nr_available_backing_pages,
-> > available_backing_bytes >> PAGE_SHIFT);
-> > +
-> >  	return true;
+> >  		kfree(entry);
+> > @@ -574,8 +580,8 @@ static struct page
+> > *sgx_encl_get_backing_page(struct sgx_encl *encl,
+> >   *   0 on success,
+> >   *   -errno otherwise.
+> >   */
+> > -int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long
+> > page_index,
+> > -			 struct sgx_backing *backing)
+> > +static int sgx_encl_get_backing(struct sgx_encl *encl, unsigned
+> > long page_index,
+> > +				struct sgx_backing *backing)
+> >  {
+> >  	pgoff_t pcmd_index = PFN_DOWN(encl->size) + 1 + (page_index >>
+> > 5);
+> >  	struct page *contents;
+> > @@ -601,6 +607,62 @@ int sgx_encl_get_backing(struct sgx_encl
+> > *encl, unsigned long page_index,
+> >  	return 0;
 > >  }
 > >  
-> > diff --git a/arch/x86/kernel/cpu/sgx/sgx.h
-> > b/arch/x86/kernel/cpu/sgx/sgx.h
-> > index 0f17def9fe6f..3507a9983fc1 100644
-> > --- a/arch/x86/kernel/cpu/sgx/sgx.h
-> > +++ b/arch/x86/kernel/cpu/sgx/sgx.h
-> > @@ -89,6 +89,8 @@ void sgx_free_epc_page(struct sgx_epc_page
-> > *page);
-> >  void sgx_mark_page_reclaimable(struct sgx_epc_page *page);
-> >  int sgx_unmark_page_reclaimable(struct sgx_epc_page *page);
-> >  struct sgx_epc_page *sgx_alloc_epc_page(void *owner, bool
-> > reclaim);
-> > +int sgx_charge_mem(void);
-> > +void sgx_uncharge_mem(void);
-> >  
-> >  #ifdef CONFIG_X86_SGX_KVM
-> >  int __init sgx_vepc_init(void);
-> > -- 
-> > 2.20.1
-> > 
+> > +/**
+> > + * sgx_encl_alloc_backing() - allocate a new backing storage page
+> > + * @encl:	an enclave pointer
+> > + * @page_index:	enclave page index
+> > + * @backing:	data for accessing backing storage for the page
+> > + *
+> > + * Confirm that the global overcommit limit has not been reached
+> > before
+> > + * requesting a new backing storage page for storing the encrypted
+> > contents
+> > + * and Paging Crypto MetaData (PCMD) of an enclave page. This is
+> > called when
+> > + * there is no existing backing page, just before writing to the
+> > backing
+> > + * storage with EWB.
+> > + *
+> > + * Return:
+> > + *   0 on success,
+> > + *   -errno otherwise.
+> > + */
+> > +int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long
+> > page_index,
+> > +			   struct sgx_backing *backing)
+> > +{
+> > +	int ret;
+> > +
+> > +	if (sgx_charge_mem())
+> > +		return -ENOMEM;
+> > +
+> > +	ret = sgx_encl_get_backing(encl, page_index, backing);
+> > +	if (ret)
+> > +		sgx_uncharge_mem();
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +/**
+> > + * sgx_encl_lookup_backing() - retrieve an existing backing
+> > storage page
+> > + * @encl:	an enclave pointer
+> > + * @page_index:	enclave page index
+> > + * @backing:	data for accessing backing storage for the page
+> > + *
+> > + * Retrieve a backing page for loading data back into an EPC page
+> > with ELDU.
+> > + * This call does not cause a charge to the overcommit limit
+> > because a page
+> > + * has already been allocated, but has been swapped out or is in
+> > RAM
+> > + *
+> > + * It is the caller's responsibility to ensure that it is
+> > appropriate to
+> > + * use sgx_encl_lookup_backing() rather than
+> > sgx_encl_alloc_backing(). If
+> > + * lookup is not used correctly, this will cause an allocation
+> > that is
+> > + * not accounted for.
+> > + *
+> > + * Return:
+> > + *   0 on success,
+> > + *   -errno otherwise.
+> > + */
+> > +int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long
+> > page_index,
+> > +			    struct sgx_backing *backing)
+> > +{
+> > +	return sgx_encl_get_backing(encl, page_index, backing);
+> > +}
 > 
-> Other than that, looks good to me.
+> IMHO, sgx_encl_backing() should be open-coded here.
 
-thanks for taking another look. I will incorporate your suggestions
-into the next revision.
+I can understand your hesitation, but I agree with Dave here that
+wrapping the function makes the code more clear. I would prefer to keep
+this the way it is.
 
 

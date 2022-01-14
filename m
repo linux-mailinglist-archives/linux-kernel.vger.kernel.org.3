@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 349A048E5D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EBA48E569
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239713AbiANIVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:21:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60476 "EHLO
+        id S239606AbiANIR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:17:59 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58810 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239868AbiANIUM (ORCPT
+        with ESMTP id S239582AbiANIRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:20:12 -0500
+        Fri, 14 Jan 2022 03:17:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CA0BB8242B;
-        Fri, 14 Jan 2022 08:20:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D3FC36AEA;
-        Fri, 14 Jan 2022 08:20:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA523B8243C;
+        Fri, 14 Jan 2022 08:17:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD377C36AE9;
+        Fri, 14 Jan 2022 08:17:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148408;
-        bh=ODmlybYA1X7PI5hQpMANYj3jMI3VYtYjGZ0QCd3yevE=;
+        s=korg; t=1642148266;
+        bh=fkWBs+tHg381zRy0d/uSCHjtDaY/THjnHkR65O3vJXI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MNDuqDhS6riwuih4eS+LTWygkQHNQl50jgnBHU8Sc9kKOIyzyUWE221bW627gSHp9
-         0gf9DOdtqeKjujd6jvD8/zdaFkoVRVK3/J3cAnweTevqNcTqz5W/3VWA3LL+CfP4IS
-         lwe4gRd8vxqwdlHlFrxlzGARHhaVinoZnM/Q4sbw=
+        b=k3CY9pDoYZILfxHOLdfglYB+f6cJl70e7d3c1Q8BFzvPXqZ45ZE7vRHHlDzRB7br/
+         onvs5xvlM8sb8HSe4iCJVSDbU84yqrmzd9EgcvkqMYTjZZRP+/QOe402fkOoUYCzfd
+         CvURhaUabkXBc+F2Z1u+G2hLle5MCVr67Q7GXXc4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
-Subject: [PATCH 5.15 22/41] USB: Fix "slab-out-of-bounds Write" bug in usb_hcd_poll_rh_status
+        stable@vger.kernel.org, Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 5.4 15/18] media: Revert "media: uvcvideo: Set unique vdev name based in type"
 Date:   Fri, 14 Jan 2022 09:16:22 +0100
-Message-Id: <20220114081545.899865905@linuxfoundation.org>
+Message-Id: <20220114081541.982054932@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081545.158363487@linuxfoundation.org>
-References: <20220114081545.158363487@linuxfoundation.org>
+In-Reply-To: <20220114081541.465841464@linuxfoundation.org>
+References: <20220114081541.465841464@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,65 +48,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: Ricardo Ribalda <ribalda@chromium.org>
 
-commit 1d7d4c07932e04355d6e6528d44a2f2c9e354346 upstream.
+commit f66dcb32af19faf49cc4a9222c3152b10c6ec84a upstream.
 
-When the USB core code for getting root-hub status reports was
-originally written, it was assumed that the hub driver would be its
-only caller.  But this isn't true now; user programs can use usbfs to
-communicate with root hubs and get status reports.  When they do this,
-they may use a transfer_buffer that is smaller than the data returned
-by the HCD, which will lead to a buffer overflow error when
-usb_hcd_poll_rh_status() tries to store the status data.  This was
-discovered by syzbot:
+A lot of userspace depends on a descriptive name for vdev. Without this
+patch, users have a hard time figuring out which camera shall they use
+for their video conferencing.
 
-BUG: KASAN: slab-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
-BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x5f4/0x780 drivers/usb/core/hcd.c:776
-Write of size 2 at addr ffff88801da403c0 by task syz-executor133/4062
+This reverts commit e3f60e7e1a2b451f538f9926763432249bcf39c4.
 
-This patch fixes the bug by reducing the amount of status data if it
-won't fit in the transfer_buffer.  If some data gets discarded then
-the URB's completion status is set to -EOVERFLOW rather than 0, to let
-the user know what happened.
-
-Reported-and-tested-by: syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/linux-media/20211207003840.1212374-2-ribalda@chromium.org
 Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/Yc+3UIQJ2STbxNua@rowland.harvard.edu
+Fixes: e3f60e7e1a2b ("media: uvcvideo: Set unique vdev name based in type")
+Reported-by: Nicolas Dufresne <nicolas@ndufresne.ca>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/hcd.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/media/usb/uvc/uvc_driver.c |    7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -753,6 +753,7 @@ void usb_hcd_poll_rh_status(struct usb_h
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -1972,7 +1972,6 @@ int uvc_register_video_device(struct uvc
+ 			      const struct v4l2_file_operations *fops,
+ 			      const struct v4l2_ioctl_ops *ioctl_ops)
  {
- 	struct urb	*urb;
- 	int		length;
-+	int		status;
- 	unsigned long	flags;
- 	char		buffer[6];	/* Any root hubs with > 31 ports? */
+-	const char *name;
+ 	int ret;
  
-@@ -770,11 +771,17 @@ void usb_hcd_poll_rh_status(struct usb_h
- 		if (urb) {
- 			clear_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
- 			hcd->status_urb = NULL;
-+			if (urb->transfer_buffer_length >= length) {
-+				status = 0;
-+			} else {
-+				status = -EOVERFLOW;
-+				length = urb->transfer_buffer_length;
-+			}
- 			urb->actual_length = length;
- 			memcpy(urb->transfer_buffer, buffer, length);
+ 	/* Initialize the video buffers queue. */
+@@ -2001,20 +2000,16 @@ int uvc_register_video_device(struct uvc
+ 	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+ 	default:
+ 		vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
+-		name = "Video Capture";
+ 		break;
+ 	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
+ 		vdev->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
+-		name = "Video Output";
+ 		break;
+ 	case V4L2_BUF_TYPE_META_CAPTURE:
+ 		vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
+-		name = "Metadata";
+ 		break;
+ 	}
  
- 			usb_hcd_unlink_urb_from_ep(hcd, urb);
--			usb_hcd_giveback_urb(hcd, urb, 0);
-+			usb_hcd_giveback_urb(hcd, urb, status);
- 		} else {
- 			length = 0;
- 			set_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
+-	snprintf(vdev->name, sizeof(vdev->name), "%s %u", name,
+-		 stream->header.bTerminalLink);
++	strscpy(vdev->name, dev->name, sizeof(vdev->name));
+ 
+ 	/*
+ 	 * Set the driver data before calling video_register_device, otherwise
 
 

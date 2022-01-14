@@ -2,100 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0730148E479
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E613E48E47B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235791AbiANGw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:52:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
+        id S235832AbiANGxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239416AbiANGwq (ORCPT
+        with ESMTP id S233603AbiANGxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:52:46 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F87C061756
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:52:20 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id q8so13904847wra.12
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:52:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+aCUMeN/pwTcI/jyjtGOazClrsdePBfCZ+NCC3aiwEs=;
-        b=aUKBmK/6hNZ2b+ctMk82PTZdXNBuzhcJZQReqNLHaSdJsdLJ2NGTwLMC2Wk+d3NNNR
-         clvqKdXxFA8IfvDv0yNh+ng/RUFL8rtFENQVe/VsHkEXo+BQDrQBqsMfMxOJPEU/op5N
-         koDJuv5TGWxT30DxXrRc9FEPdCiHPakienRqWKbqfNxTKG5o+a4A8ZuRWz5CSE6Jr8u1
-         tidDwMvOkZADGChPdI5d95nxtyHSaxu+961rz2oovYTeEiYtmywkoF2ZoKGrlH2RDbrb
-         dDEjEsxHPjnhfMCI7etCUQLB3ehiSXuLPtMgXUUVoZ2zLpuGZbm57QJG0KJyDbg1YppP
-         AwCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+aCUMeN/pwTcI/jyjtGOazClrsdePBfCZ+NCC3aiwEs=;
-        b=sZ6llyevzKB5uExBsOd05fM9O0QgaRDwp8odFiTFb0sjYpBWojPQJPunvrc/VZNQ3a
-         yJVaOZ26Euk3YuER7dupTOTTSC3jaOWvgLdnP4n+KyteuwD3ezMr4Xe9oSHIgFhmMcI9
-         6d+NF0AGvzbpD1RDnUdRiLtteA5V2njnqFuGr6s9TJabq2dtTFwr1XZ923d4cRTF7bfO
-         oIzmQWc4D6OEEDDvFYdGTTvE7edEtwX1bUcKiVG7E8imHFbQnaw9zIPxLoX2bzXChchz
-         5y8tnxLSxrTWhOfoGa0Lha9e1Q4UcAuwuWTZsyFTfY2W8exGv+ZkDnhdAurfcZMFeFle
-         /kZw==
-X-Gm-Message-State: AOAM533QxRfnmf+lD+wGyMyanHAebucFusK7qdgtTGvakaRpZh2m4kCg
-        Elfs3SlwAjyS2kwzEMZzUc8=
-X-Google-Smtp-Source: ABdhPJxfoWycRSPJTt9RbgHaKC2zlzA1CwchyupHnqyvPMjwVA1z+jBZI5L/jsmjtYSdazMaPF5WTA==
-X-Received: by 2002:a5d:4343:: with SMTP id u3mr6705543wrr.504.1642143138969;
-        Thu, 13 Jan 2022 22:52:18 -0800 (PST)
-Received: from lukas-pc.fritz.box (p200300f6671a9600e06cd1ebd7837a58.dip0.t-ipconnect.de. [2003:f6:671a:9600:e06c:d1eb:d783:7a58])
-        by smtp.gmail.com with ESMTPSA id e12sm897903wrg.33.2022.01.13.22.52.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 22:52:18 -0800 (PST)
-From:   Lukas Fink <lukas.fink1@gmail.com>
-To:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Lukas Fink <lukas.fink1@gmail.com>
-Subject: [PATCH] drm/amdgpu: Fix rejecting Tahiti GPUs
-Date:   Fri, 14 Jan 2022 07:51:41 +0100
-Message-Id: <20220114065141.14506-1-lukas.fink1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 14 Jan 2022 01:53:10 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F73DC06161C;
+        Thu, 13 Jan 2022 22:53:05 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JZsSb6jFMz4y41;
+        Fri, 14 Jan 2022 17:53:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642143184;
+        bh=FC/gcaUj4Bla6XhT/Z9qZVENyMyJnOINAeghnQpDQqY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=U9VTikiP6yiDQm5gfZSROuXTIdIklPW8OgX1+4NVftnznfVJCsGvwdzL2uQylcqzu
+         yHf3nDtiv2rapUNkkkLFWwSFUg/d2gXHCa9vRNj1NL0o98k0ka9O31FOkRlPIl0O2J
+         ZE1oLYJwZmRi6QswRkgSc6diMJ3fAF1zKcD0YiDXLbAhWhqTu+pg6VRKHjsGvrys0g
+         NFZX61OhIFkJZdwbF4ySogNm0BXBlj/qK9f52xI6RU88a2O2hk/JW7vuNcfZu0wIYr
+         k7zkZozaTkIGcOXWvup/+BJY9EL39gzZwhhUkzDsMUunBBdXp1dHZU37+Fk74ANiL5
+         gClesyKxAD5+Q==
+Date:   Fri, 14 Jan 2022 17:53:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the pci tree with Linus' tree
+Message-ID: <20220114175303.07569259@canb.auug.org.au>
+In-Reply-To: <CAMhs-H_u42MSPpkwFEQCVghHWVjMqdJ1aKXXhbhxKWrejZLqRA@mail.gmail.com>
+References: <20220114104547.55e2f188@canb.auug.org.au>
+        <CAMhs-H_u42MSPpkwFEQCVghHWVjMqdJ1aKXXhbhxKWrejZLqRA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/G0PV1MF+i06VhPb1ocACOND";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-eb4fd29afd4a ("drm/amdgpu: bind to any 0x1002 PCI diplay class device") added
-generic bindings to amdgpu so that that it binds to all display class devices
-with VID 0x1002 and then rejects those in amdgpu_pci_probe.
+--Sig_/G0PV1MF+i06VhPb1ocACOND
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Unfortunately it reuses a driver_data value of 0 to detect those new bindings,
-which is already used to denote CHIP_TAHITI ASICs.
+Hi Sergio,
 
-The driver_data value given to those new bindings was changed in
-dd0761fd24ea1 ("drm/amdgpu: set CHIP_IP_DISCOVERY as the asic type by default")
-to CHIP_IP_DISCOVERY (=36), but it seems that the check in amdgpu_pci_probe
-was forgotten to be changed. Therefore, it still rejects Tahiti GPUs.
+On Fri, 14 Jan 2022 06:48:08 +0100 Sergio Paracuellos <sergio.paracuellos@g=
+mail.com> wrote:
+>
+> On Fri, Jan 14, 2022 at 12:45 AM Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+> >
+> > diff --cc drivers/pci/controller/Kconfig
+> > index aec8c9a3488b,f7e44d9c6965..000000000000
+> > --- a/drivers/pci/controller/Kconfig
+> > +++ b/drivers/pci/controller/Kconfig
+> > @@@ -332,8 -332,8 +332,8 @@@ config PCIE_APPL
+> >           If unsure, say Y if you have an Apple Silicon system.
+> >
+> >   config PCIE_MT7621
+> >  -      tristate "MediaTek MT7621 PCIe Controller"
+> >  +      bool "MediaTek MT7621 PCIe Controller" =20
+>=20
+> This should be tristate.
+>=20
+> > -       depends on SOC_MT7621 || (MIPS && COMPILE_TEST)
+> > +       depends on SOC_MT7621 || COMPILE_TEST =20
+>=20
+> This is correct,
+>=20
+> >         select PHY_MT7621_PCI
+> >         default SOC_MT7621
+> >         help =20
 
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1860
-Fixes: eb4fd29afd4a ("drm/amdgpu: bind to any 0x1002 PCI diplay class device")
+Thanks, I have fixed up my merge resolution for Monday.
 
-Signed-off-by: Lukas Fink <lukas.fink1@gmail.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index 9ec58bf74012..224d073022ac 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -1903,7 +1903,7 @@ static int amdgpu_pci_probe(struct pci_dev *pdev,
- 			return -ENODEV;
- 	}
- 
--	if (flags == 0) {
-+	if (flags == CHIP_IP_DISCOVERY) {
- 		DRM_INFO("Unsupported asic.  Remove me when IP discovery init is in place.\n");
- 		return -ENODEV;
- 	}
--- 
-2.34.1
+--Sig_/G0PV1MF+i06VhPb1ocACOND
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHhHc8ACgkQAVBC80lX
+0Gzkpgf/XlnD7bw2gF3AejWkjbuhP3vCnwUrBasadvFxWKrPWGgxMsVB9uBl3hrV
+6zKl7scSY5xnExLv1PCxvpd1KQxWTb2d6FvSFAe/JpWeCQlAnKUxS5La+KhgYjNE
+IBqdvabhzPVOw/+OCR5Xa4oXdBlZt7yRsYX1V4yBEp9blWBC5TX0EAMOYZrGUr0G
+pZAaZHLn5IVH+xvv2MzPuGMgxd7ION7e3LcPRqc26+EuSuPj0WjRHLg9kygd0w6Y
+KceJNsCLGp2oDy+bMpIihMmzJ/g4yKURGNGD46+4Jgq44Qzwv2HMcLs8XD5R/Xnl
+BOOrCDxIN/cj+YJViIiwnFqn5nIC7Q==
+=SWcT
+-----END PGP SIGNATURE-----
+
+--Sig_/G0PV1MF+i06VhPb1ocACOND--

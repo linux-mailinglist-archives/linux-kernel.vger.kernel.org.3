@@ -2,137 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB9148EDE0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB7248EDE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243241AbiANQSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239095AbiANQSd (ORCPT
+        id S243266AbiANQS4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Jan 2022 11:18:56 -0500
+Received: from mail-0201.mail-europe.com ([51.77.79.158]:36237 "EHLO
+        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243243AbiANQSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:18:33 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAF8C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:18:32 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id f8so3141579pgf.8
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:18:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7VMdD/jG1OhLf0ccWBGGvDrHOZitMiDuwr1tmbzaiPk=;
-        b=dtsLpROvyW71vMsAeyUDpkELOk3IIZsyrBrQaMpABVKaCHSph5MPHi31CrLCVeFCfb
-         qAC8978AT1Bv5z7usNwPhes62xlyu6fWhXnwKyXTmJavoREl5nY0j+RfLOSKddAbTqdj
-         LYGlpYwRYf5bA/XS28pQ1V6/seMux030uA/Hf6VJF3ShDFU3OvNV8TiwSagntC0z1q43
-         KfvTqyoCJFhpjhe1qjy+ZS6RsNEVqWo1FcwAsKrWyP9er3vkh3pF+r2I8z1BllSkoWYS
-         gwf4XuPebfTzvVx22RBy0MsH8/gwrfnKt6wCT6WLLZWZh+E3wRBL8j6/U/y+zS0L3gVL
-         cDcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7VMdD/jG1OhLf0ccWBGGvDrHOZitMiDuwr1tmbzaiPk=;
-        b=CjkVWKDlcceLqfM+aPC+U2auz49A19sXLe/+flhRVuHhfknjRTEz3AH9PgSGGSXF4+
-         kaHOYw/v8C8jXuaZ7+lhwsDIoiFfxyDaMBY+LrLofSNwBgBb8cNNT436rjy9rGWsH1+y
-         MKXj+osrbDnTXKvUuKyv35TCLIwpOV3ihaB4Amh8A3tQOQnoqzLsOwIWURv44r/vC45N
-         dc4MzYw49UlQrzW6JKkOxl7tgAHLHzFSEZYDNjyjmJuRyaUrFNIjLk9FKLl22+wNSoqC
-         R/RJd4CAYVo8pcuIFLqsmMApnsGg4EujhIpGUd9F6uQVOqtg8RP1Gl6Hp6PkC5Bhvoxc
-         z0WQ==
-X-Gm-Message-State: AOAM530obucSrspEAMrdYqE9WTveQ8fttqW12X3pF24x/EyPiLOLCtI5
-        s/jOsEbI5HrZG2PqAPWYT3kDfQ==
-X-Google-Smtp-Source: ABdhPJw8er2uWFApX4KapuD5tBwh7MswU/QprQpkNs5xP88OBelj+H2tdzEm9pgcSKcQ4Kwt7Xhxrw==
-X-Received: by 2002:a63:8548:: with SMTP id u69mr6595782pgd.306.1642177112043;
-        Fri, 14 Jan 2022 08:18:32 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m14sm5985121pff.151.2022.01.14.08.18.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 08:18:31 -0800 (PST)
-Date:   Fri, 14 Jan 2022 16:18:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-Subject: Re: [PATCH v5 8/8] KVM: VMX: Resize PID-ponter table on demand for
- IPI virtualization
-Message-ID: <YeGiVCn0wNH9eqxX@google.com>
-References: <20211231142849.611-1-guang.zeng@intel.com>
- <20211231142849.611-9-guang.zeng@intel.com>
- <YeCjHbdAikyIFQc9@google.com>
- <43200b86-aa40-f7a3-d571-dc5fc3ebd421@intel.com>
+        Fri, 14 Jan 2022 11:18:55 -0500
+Date:   Fri, 14 Jan 2022 16:18:50 +0000
+Authentication-Results: mail-4018.proton.ch; dkim=none
+To:     conor.dooley@microchip.com
+From:   conor dooley <mail@conchuod.ie>
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        robh+dt@kernel.org, jassisinghbrar@gmail.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        atishp@rivosinc.com
+Reply-To: conor dooley <mail@conchuod.ie>
+Subject: Re: [PATCH v3 01/15] dt-bindings: soc/microchip: update syscontroller compatibles
+Message-ID: <nK7Z7oZFnoE0yhMjColrEPJvSFc7SpHv54Ftu3PJzQjpLA0s1F0Rwa3P5qEQrcFhJVbcUvY3TOFppyaIAS9QX09qg5nPMiilhvOO_W0fmHQ=@conchuod.ie>
+In-Reply-To: <20220114151727.2319915-2-conor.dooley@microchip.com>
+References: <20220114151727.2319915-1-conor.dooley@microchip.com> <20220114151727.2319915-2-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <43200b86-aa40-f7a3-d571-dc5fc3ebd421@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.0 required=10.0 tests=ALL_TRUSTED shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022, Zeng Guang wrote:
-> On 1/14/2022 6:09 AM, Sean Christopherson wrote:
-> > On Fri, Dec 31, 2021, Zeng Guang wrote:
-> > > +static int vmx_expand_pid_table(struct kvm_vmx *kvm_vmx, int entry_idx)
-> > > +{
-> > > +	u64 *last_pid_table;
-> > > +	int last_table_size, new_order;
-> > > +
-> > > +	if (entry_idx <= kvm_vmx->pid_last_index)
-> > > +		return 0;
-> > > +
-> > > +	last_pid_table = kvm_vmx->pid_table;
-> > > +	last_table_size = table_index_to_size(kvm_vmx->pid_last_index + 1);
-> > > +	new_order = get_order(table_index_to_size(entry_idx + 1));
-> > > +
-> > > +	if (vmx_alloc_pid_table(kvm_vmx, new_order))
-> > > +		return -ENOMEM;
-> > > +
-> > > +	memcpy(kvm_vmx->pid_table, last_pid_table, last_table_size);
-> > > +	kvm_make_all_cpus_request(&kvm_vmx->kvm, KVM_REQ_PID_TABLE_UPDATE);
-> > > +
-> > > +	/* Now old PID table can be freed safely as no vCPU is using it. */
-> > > +	free_pages((unsigned long)last_pid_table, get_order(last_table_size));
-> > This is terrifying.  I think it's safe?  But it's still terrifying.
-> 
-> Free old PID table here is safe as kvm making request KVM_REQ_PI_TABLE_UPDATE
-> with KVM_REQUEST_WAIT flag force all vcpus trigger vm-exit to update vmcs
-> field to new allocated PID table. At this time, it makes sure old PID table
-> not referenced by any vcpu.
-> Do you mean it still has potential problem?
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> The Polarfire SoC is currently using two different compatible string
+> prefixes. Fix this by changing "polarfire-soc-*" strings to "mpfs-*" in
+> its system controller in order to match the compatible string used in
+> the soc binding and device tree
+>
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  ...larfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} | 6 +++---
+>  ...s-controller.yaml => microchip,mpfs-sys-controller.yaml} | 6 +++---
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+>  rename Documentation/devicetree/bindings/mailbox/{microchip,polarfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} (82%)
+>  rename Documentation/devicetree/bindings/soc/microchip/{microchip,polarfire-soc-sys-controller.yaml => microchip,mpfs-sys-controller.yaml} (75%)
+>
+> diff --git a/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
+> similarity index 82%
+> rename from Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
+> rename to Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
+> index bbb173ea483c..9251c2218c68 100644
+> --- a/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
+> +++ b/Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>  %YAML 1.2
+>  ---
+> -$id: "http://devicetree.org/schemas/mailbox/microchip,polarfire-soc-mailbox.yaml#"
+> +$id: "http://devicetree.org/schemas/mailbox/microchip,mpfs-mailbox.yaml#"
+>  $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>
+>  title: Microchip PolarFire SoC (MPFS) MSS (microprocessor subsystem) mailbox controller
+> @@ -11,7 +11,7 @@ maintainers:
+>
+>  properties:
+>    compatible:
+> -    const: microchip,polarfire-soc-mailbox
+> +    const: microchip,mpfs-mailbox
+>
+>    reg:
+>      items:
+> @@ -38,7 +38,7 @@ examples:
+>        #address-cells = <2>;
+>        #size-cells = <2>;
+>        mbox: mailbox@37020000 {
+> -        compatible = "microchip,polarfire-soc-mailbox";
+> +        compatible = "mpfs-mailbox";
 
-No, I do think it's safe, but it is still terrifying :-)
+Example is wrong, should read "microchip,mpfs-mailbox".
 
-> > Rather than dynamically react as vCPUs are created, what about we make max_vcpus
-> > common[*], extend KVM_CAP_MAX_VCPUS to allow userspace to override max_vcpus,
-> > and then have the IPIv support allocate the PID table on first vCPU creation
-> > instead of in vmx_vm_init()?
-> > 
-> > That will give userspace an opportunity to lower max_vcpus to reduce memory
-> > consumption without needing to dynamically muck with the table in KVM.  Then
-> > this entire patch goes away.
-> IIUC, it's risky if relying on userspace .
+Will resubmit Monday.
 
-That's why we have cgroups, rlimits, etc...
+>          reg = <0x0 0x37020000 0x0 0x1000>, <0x0 0x2000318c 0x0 0x40>;
+>          interrupt-parent = <&L1>;
+>          interrupts = <96>;
 
-> In this way userspace also have chance to assign large max_vcpus but not use
-> them at all. This cannot approach the goal to save memory as much as possible
-> just similar as using KVM_MAX_VCPU_IDS to allocate PID table.
-
-Userspace can simply do KVM_CREATE_VCPU until it hits KVM_MAX_VCPU_IDS...

@@ -2,96 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 586C648F289
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 23:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8C148F29C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 23:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiANWmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 17:42:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiANWmC (ORCPT
+        id S231223AbiANWp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 17:45:58 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:53496 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231132AbiANWpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 17:42:02 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76E8C061574;
-        Fri, 14 Jan 2022 14:42:01 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id h23so3876987pgk.11;
-        Fri, 14 Jan 2022 14:42:01 -0800 (PST)
+        Fri, 14 Jan 2022 17:45:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Lv3lA8SvlVmISJSLyktGARSgPbJOqFseutvaR6jlKNk=;
-        b=RMrv1v6/uquseT1gJS3yoz/gzo2H4tOyT3V1rax7BoH62ol88JVl2rm7p8VTqHQKjf
-         riVNpvVAFB7Uh6pbJJUFLFmJnc2jJi2acZtlH/ataW6CX+eszSwWjYi7K3/zXc7jL5UV
-         l4LHlhuCScYKbozuzquwyztYFYhz9KFZzOstgaRRpCpeTU8HIkMIfjIi29Nc69Xx5OFx
-         MjDT2xAimhPPPRSnBFbJBRWXXt2KW+Wvd1fCS3lIQEOtEaPhWRef44O8cSOpkhXN/UqB
-         YAN7gJP/XgZH8DNzgD8r5y0rDhG1osSk0NAAnC0fPfF+168lB97K6i4kNFo+lNXluG/l
-         5hsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Lv3lA8SvlVmISJSLyktGARSgPbJOqFseutvaR6jlKNk=;
-        b=RY4mVoerjzzlK2FxABDgnAWTzCWZwd2yQ5f37J9vF8w2RSr6qBZE4sW7Ooh4nbhfrh
-         x+rLAhV72HfmsZx54uGnHVAH7W4AuRGcmiWahkBlUY0C2rzYO+rHhojWDp+asYpBKj2v
-         X56BvR92vlclunqX/+2ZSkaTFRrEFKVcvKdsSiKjKUZcQ8Qk0hgSu8Q6r1ZRDxNVgBOM
-         bxTQHVJ4+/byLNIplVBH14Vgi4dsXFC6Svq6/Yk6s//7rkHz9FOpdorhm9BuUSGEBrmV
-         qxxCysV/vvLsLg7AT5a5ZQkCiAklVNPBaOyms7A0UPB8Q9eDgVNCBrogqgFKftNXSSQS
-         ksdQ==
-X-Gm-Message-State: AOAM533vcKYyt1EhIruEudle2Qzlw8xWkRvSYM5dbnP4k4R3GqwbH3Fc
-        xrKzAyiMeGZebSZG6Ig4YT/yeGIt7RI=
-X-Google-Smtp-Source: ABdhPJz7O0Culpd+LPEIRnLOk3Z381ZLp5s+B7zENLUAwjXyVg7JfngqJlqIDZ4MyKCvswgdNnZVDw==
-X-Received: by 2002:aa7:8499:0:b0:4be:f48e:b144 with SMTP id u25-20020aa78499000000b004bef48eb144mr10899376pfn.66.1642200120910;
-        Fri, 14 Jan 2022 14:42:00 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id rj1sm6184792pjb.36.2022.01.14.14.41.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 14:42:00 -0800 (PST)
-Subject: Re: [PATCH 5.16 00/37] 5.16.1-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20220114081544.849748488@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <bbba4edb-684c-b8fb-5578-14d823aed189@gmail.com>
-Date:   Fri, 14 Jan 2022 14:41:57 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642200349; x=1673736349;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ksYLqz0eH0c7lu+/5gpgi1S1z9/Q5rUjnTx7GGJAqLI=;
+  b=R6VXbyLR2ePinWhzZwGxmZSGOpxPOKYghT3dA0LPjlCs0ljQseASbMi/
+   sjR9xqjlZYqsWxT3BPE7tXPQLXrRyKyWPBmiRqyYnCtSmc5f5SsEUYkBw
+   AE9rKaXwudz8kFMW2oDOay7Mw+BzXF7YIMtY+aNqJlcsuNebK0rvrWUie
+   I=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 14 Jan 2022 14:45:48 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 14:45:47 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 14 Jan 2022 14:45:31 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 14 Jan 2022 14:45:30 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
+        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v16 0/4] group dp driver related patches into one series
+Date:   Fri, 14 Jan 2022 14:45:16 -0800
+Message-ID: <1642200320-28499-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/14/22 12:16 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.1 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.1-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Group below 4 dp driver related patches into one series.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Kuogee Hsieh (4):
+  drm/msm/dp: do not initialize phy until plugin interrupt received
+  drm/msm/dp:  populate connector of struct  dp_panel
+  drm/msm/dp: add support of tps4 (training pattern 4) for HBR3
+  drm/msm/dp: stop link training after link training 2 failed
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+ drivers/gpu/drm/msm/dp/dp_catalog.c |  12 ++---
+ drivers/gpu/drm/msm/dp/dp_catalog.h |   2 +-
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    | 100 ++++++++++++++++------------------
+ drivers/gpu/drm/msm/dp/dp_ctrl.h    |   8 +--
+ drivers/gpu/drm/msm/dp/dp_display.c | 103 +++++++++++++++++++++---------------
+ 5 files changed, 116 insertions(+), 109 deletions(-)
+
 -- 
-Florian
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

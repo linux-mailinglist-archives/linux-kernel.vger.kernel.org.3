@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EBA48E569
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A169148E644
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239606AbiANIR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:17:59 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58810 "EHLO
+        id S239772AbiANIZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:25:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34084 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239582AbiANIRt (ORCPT
+        with ESMTP id S240239AbiANIWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:17:49 -0500
+        Fri, 14 Jan 2022 03:22:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA523B8243C;
-        Fri, 14 Jan 2022 08:17:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD377C36AE9;
-        Fri, 14 Jan 2022 08:17:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80331B82436;
+        Fri, 14 Jan 2022 08:22:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 914E4C36AEA;
+        Fri, 14 Jan 2022 08:22:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148266;
-        bh=fkWBs+tHg381zRy0d/uSCHjtDaY/THjnHkR65O3vJXI=;
+        s=korg; t=1642148564;
+        bh=2umMD07aAb2cIL1bLIQ6obfEYTptUCgi0c5F3wOPRv0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k3CY9pDoYZILfxHOLdfglYB+f6cJl70e7d3c1Q8BFzvPXqZ45ZE7vRHHlDzRB7br/
-         onvs5xvlM8sb8HSe4iCJVSDbU84yqrmzd9EgcvkqMYTjZZRP+/QOe402fkOoUYCzfd
-         CvURhaUabkXBc+F2Z1u+G2hLle5MCVr67Q7GXXc4=
+        b=Zh11WJ0elAB8iKAxDRTQidNyFn0UBMr7wtS+feLGnTyOuMSDY7TXWTnbBpvfkHhR6
+         HamoB0/NDKjLsNlZvgWM/ZJCLa7hRAdMnUxeAozHFuklyGHF9Fahh6ImF31H+qFNW7
+         2jiZT7/mGK8zJ/jTszOuKE4DmR59qdxCRQGMFoQo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 5.4 15/18] media: Revert "media: uvcvideo: Set unique vdev name based in type"
+        stable@vger.kernel.org, "mark-yw.chen" <mark-yw.chen@mediatek.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: [PATCH 5.16 08/37] Bluetooth: btusb: enable Mediatek to support AOSP extension
 Date:   Fri, 14 Jan 2022 09:16:22 +0100
-Message-Id: <20220114081541.982054932@linuxfoundation.org>
+Message-Id: <20220114081545.135045434@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081541.465841464@linuxfoundation.org>
-References: <20220114081541.465841464@linuxfoundation.org>
+In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
+References: <20220114081544.849748488@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,60 +45,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ricardo Ribalda <ribalda@chromium.org>
+From: mark-yw.chen <mark-yw.chen@mediatek.com>
 
-commit f66dcb32af19faf49cc4a9222c3152b10c6ec84a upstream.
+commit 28491d7ef4af471841e454f8c1f77384f93c6fef upstream.
 
-A lot of userspace depends on a descriptive name for vdev. Without this
-patch, users have a hard time figuring out which camera shall they use
-for their video conferencing.
+This patch enables AOSP extension for Mediatek Chip (MT7921 & MT7922).
 
-This reverts commit e3f60e7e1a2b451f538f9926763432249bcf39c4.
-
-Link: https://lore.kernel.org/linux-media/20211207003840.1212374-2-ribalda@chromium.org
-Cc: <stable@vger.kernel.org>
-Fixes: e3f60e7e1a2b ("media: uvcvideo: Set unique vdev name based in type")
-Reported-by: Nicolas Dufresne <nicolas@ndufresne.ca>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: mark-yw.chen <mark-yw.chen@mediatek.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/usb/uvc/uvc_driver.c |    7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/bluetooth/btusb.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1972,7 +1972,6 @@ int uvc_register_video_device(struct uvc
- 			      const struct v4l2_file_operations *fops,
- 			      const struct v4l2_ioctl_ops *ioctl_ops)
- {
--	const char *name;
- 	int ret;
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -2884,6 +2884,7 @@ static int btusb_mtk_setup(struct hci_de
+ 		}
  
- 	/* Initialize the video buffers queue. */
-@@ -2001,20 +2000,16 @@ int uvc_register_video_device(struct uvc
- 	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+ 		hci_set_msft_opcode(hdev, 0xFD30);
++		hci_set_aosp_capable(hdev);
+ 		goto done;
  	default:
- 		vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
--		name = "Video Capture";
- 		break;
- 	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
- 		vdev->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
--		name = "Video Output";
- 		break;
- 	case V4L2_BUF_TYPE_META_CAPTURE:
- 		vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
--		name = "Metadata";
- 		break;
- 	}
- 
--	snprintf(vdev->name, sizeof(vdev->name), "%s %u", name,
--		 stream->header.bTerminalLink);
-+	strscpy(vdev->name, dev->name, sizeof(vdev->name));
- 
- 	/*
- 	 * Set the driver data before calling video_register_device, otherwise
+ 		bt_dev_err(hdev, "Unsupported hardware variant (%08x)",
 
 

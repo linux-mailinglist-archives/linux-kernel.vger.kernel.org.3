@@ -2,150 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EA248E418
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A52C348E41C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239304AbiANGMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:12:31 -0500
-Received: from mga06.intel.com ([134.134.136.31]:37965 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239297AbiANGMa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:12:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642140750; x=1673676750;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iH2bAUjpJnt2I7vkj9k8oAio1FRAu/W0AFiLzFSvBWA=;
-  b=gIY55ZRFKbs6BNXDf4JKGEvPHVpr75jKqHLCs7iWydabcp3RycvqNioW
-   s39n6yPtDJ7yOhNEc3WC/yPgFNIDzTO4S9FDOxkcIyy1v/awtxGLKDkh6
-   sBgay2tsiPq4L3sSZDl3s6+K2vLu1u8CR027bHKxvZ+6bb5uO3mHz09U6
-   WUvfJf0S9WeWwQi0OsJ+RaTxLtTnAe8TibE+HWJ4OdHQapCy4tGKcgHnE
-   xy4zt/zsOdjYqt7q0ydjLPc6qLwS//vdD8bj1m3/L+Noes3BvEU211SbM
-   C74aHXZa/MWnv6IhNWFZtG6XJuQZsFbD96lbrEVzGrfsgMYMF28fUefSb
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="304922756"
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="304922756"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 22:12:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="614241326"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Jan 2022 22:12:28 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8Fp5-0008Ba-HV; Fri, 14 Jan 2022 06:12:27 +0000
-Date:   Fri, 14 Jan 2022 14:12:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: kernel/time/hrtimer.c:650:19: warning: unused function
- 'hrtimer_hres_active'
-Message-ID: <202201141442.FVgxOEDt-lkp@intel.com>
+        id S239314AbiANGPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:15:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239291AbiANGPL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 01:15:11 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBADC06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:15:11 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id k4-20020a056830168400b00593d4bbb028so275041otr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:15:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=+rs9ib3g33qLU8AiFD4BXM4f1mQTvOuGI7OOGqMW8N0=;
+        b=HQeHa183ss2xwvQGgBFFyDJIQp+7ijobwLR5NxByE8gCac3Jax7HEx9VX9BSyZISRT
+         2uG/NcCoeEx8mR91DRlBPOZWbXHIkLQjNxtWoXIvFFQN360+ZB22UHzNeeUORs2ogXdy
+         CWZTGLlpk9an7/T91xXpqnSQt3cf0Z0XX1hGc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=+rs9ib3g33qLU8AiFD4BXM4f1mQTvOuGI7OOGqMW8N0=;
+        b=y5pKBt2p0ErJw7FRXiH3Ors2P5jTPCONbJ9FzlUz5GIP4x+o2omGLYYZ17KOHFllgm
+         H21NdddyIR4e2Rt4xO1XFNaARSAXmB1eADdwHd8aD0lOKu8X3KG4yhuhsgqpS4xgHARD
+         N+RIOP0nVMjJ7yM3xRYd8onM6TXElw3oRRuQ9tQDSbFEXvt52D8IPB+2CMfE4gfGGs+o
+         68DgFVCXfHmoj9PiEhtLuYNfu93TVTK1FlOQgYTGnR9bx+F2nmXEaOt1nBLIz5CibCXG
+         i0uqUugd7fV+HUE9tK3bkoHjEW1I6PiOsr1WTXAxaFacGOJDAIT8Nw7OyShFclVBH77W
+         FgzQ==
+X-Gm-Message-State: AOAM533IgunBmUi4f0j53jSUQMYPrsZoru97zCbayy8s4Q3Gcpw8k3Ee
+        guSYw4A+ffeugqdP2PN12K9SVJSlNvxZlMc09nNjmw==
+X-Google-Smtp-Source: ABdhPJzm2wgY+NMsHJ0/4tH0BadICR5mj3FOiJj6GgxeTjHljLVrIA8pvFs9jP14eFguOM+jj+Hkb+jkwnCm1mWwxaU=
+X-Received: by 2002:a05:6830:1614:: with SMTP id g20mr4785522otr.77.1642140910672;
+ Thu, 13 Jan 2022 22:15:10 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 13 Jan 2022 22:15:10 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220113164233.3.Iac012fa8d727be46448d47027a1813ea716423ce@changeid>
+References: <20220114004303.905808-1-dianders@chromium.org> <20220113164233.3.Iac012fa8d727be46448d47027a1813ea716423ce@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 13 Jan 2022 22:15:09 -0800
+Message-ID: <CAE-0n51e=rYtC3KyhpiO7KSJArxw2pmvh5v8TZ8Yrf-ToTv3Bw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: sc7280: Factor out Chrome common fragment
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     quic_rjendra@quicinc.com, sibis@codeaurora.org,
+        kgodara1@codeaurora.org, mka@chromium.org, pmaliset@codeaurora.org,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+Quoting Douglas Anderson (2022-01-13 16:43:02)
+> This factors out a device tree fragment from some sc7280 device
+> trees. It represents the device tree bits that should be included for
+> "Chrome" based sc7280 boards. On these boards the bootloader (Coreboot
+> + Depthcharge) configures things slightly different than the
+> bootloader that Qualcomm provides. The modem firmware on these boards
+> also works differently than on other Qulacomm products and thus the
+> reserved memory map needs to be adjusted.
+>
+> NOTES:
+> - This is _not_ quite a no-op change. The "herobrine" and "idp"
+>   fragments here were different and it looks like someone simply
+>   forgot to update the herobrine version. This updates a few numbers
+>   to match IDP. This will also cause the `pmk8350_pon` to be disabled
+>   on idp/crd, which I belive is a correct change.
+> - At the moment this assumes LTE skus. Once it's clearer how WiFi SKUs
+>   will work (how much of the memory map they can reclaim) we may add
+>   an extra fragment that will rejigger one way or the other.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 
-FYI, the error/warning still remains.
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fb3b0673b7d5b477ed104949450cd511337ba3c6
-commit: 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429 hrtimer: Use raw_cpu_ptr() in clock_was_set()
-date:   5 months ago
-config: mips-randconfig-r032-20220114 (https://download.01.org/0day-ci/archive/20220114/202201141442.FVgxOEDt-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/time/
+One comment below.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+> new file mode 100644
+> index 000000000000..9d4f25f77152
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+> @@ -0,0 +1,97 @@
+[...]
+> +
+> +/* Modem setup is different on Chrome setups than typical Qualcomm setup */
+> +&remoteproc_mpss {
+> +       status = "okay";
+> +       compatible = "qcom,sc7280-mss-pil";
+> +       iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
+> +       memory-region = <&mba_mem &mpss_mem>;
 
-All warnings (new ones prefixed by >>):
+I'd prefer this be
 
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_REALTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_MONOTONIC,
-   ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_BOOTTIME,
-   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
-   = HRTIMER_BASE_TAI,
-   ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
-   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
-   static inline bool is_migration_base(struct hrtimer_clock_base
-   ^
->> kernel/time/hrtimer.c:650:19: warning: unused function 'hrtimer_hres_active'
-   static inline int hrtimer_hres_active(void)
-   ^
-   kernel/time/hrtimer.c:1887:20: warning: unused function '__hrtimer_peek_ahead_timers'
-   static inline void __hrtimer_peek_ahead_timers(void) { }
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1
-   or $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 14.0.0 (git://gitmirror/llvm_project 82c8aca93488730ce8f66101e0f3538f14b551dd)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-82c8aca934/bin
-   clang-14: note: diagnostic msg:
-   Makefile arch include kernel nr_bisected scripts source usr
+	memory-region = <&mba_mem>, <&mpss_mem>;
 
+so that we know mpss_mem isn't an "argument" or cell for mba_mem. I see
+that this is just moving around in this patch though so probably can be
+done in a followup.
 
-vim +/hrtimer_hres_active +650 kernel/time/hrtimer.c
-
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  649  
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21 @650  static inline int hrtimer_hres_active(void)
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  651  {
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  652  	return __hrtimer_hres_active(this_cpu_ptr(&hrtimer_bases));
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  653  }
-28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  654  
-
-:::::: The code at line 650 was first introduced by commit
-:::::: 28bfd18bf3daa5db8bb3422ea7138c8b7d2444ac hrtimer: Make the hrtimer_cpu_base::hres_active field unconditional, to simplify the code
-
-:::::: TO: Anna-Maria Gleixner <anna-maria@linutronix.de>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +};
+> +
+> +/* Increase the size from 2.5MB to 8MB */
+> +&rmtfs_mem {
+> +       reg = <0x0 0x9c900000 0x0 0x800000>;
+> +};

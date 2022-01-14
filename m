@@ -2,235 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CC448E3F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 06:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1CD48E411
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239201AbiANFsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 00:48:31 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:39371 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239178AbiANFsY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 00:48:24 -0500
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220114054821epoutp034bcc1b3878f5252e669e28eb18f07205~KDP6Xk5hg3209632096epoutp03Y
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:48:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220114054821epoutp034bcc1b3878f5252e669e28eb18f07205~KDP6Xk5hg3209632096epoutp03Y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642139301;
-        bh=X1p948d3urtpJlqPdW8m16ZXR/ar2loRfYP3r8Kfsl8=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=d8LqBGm5XUnBVtBaLXpUf4bcHlpl/X+ZVzm8y5AOwNI7Jwro+xeAdP5RP7n6uMsiI
-         URNwn7FLi8K/AQrbDqY+58IbuX4csy0vHvfjf5NE3q59TDlsp/P71ajrPsicmwANIq
-         ERIrVBenfsqoYqmSBimbzhT4ZySzTWvKSLX+iHTE=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220114054821epcas5p4b47e131c31988fd6037a9a84b043455a~KDP578VlL1083810838epcas5p4h;
-        Fri, 14 Jan 2022 05:48:21 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4JZr1p47bNz4x9Q0; Fri, 14 Jan
-        2022 05:48:14 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1E.07.46822.E9E01E16; Fri, 14 Jan 2022 14:48:14 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220114054814epcas5p3616ca028567371af18120160419632b6~KDPzPMTlN2280222802epcas5p30;
-        Fri, 14 Jan 2022 05:48:14 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220114054814epsmtrp2402acd7717c9c658516bb090dc187e1c~KDPzOLyhv3095230952epsmtrp2y;
-        Fri, 14 Jan 2022 05:48:14 +0000 (GMT)
-X-AuditID: b6c32a4a-dfbff7000000b6e6-c8-61e10e9e00d9
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A5.B9.29871.D9E01E16; Fri, 14 Jan 2022 14:48:14 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220114054811epsmtip25906b32e7d241eede493cc5f22ad5104~KDPw9j-7u2435124351epsmtip2e;
-        Fri, 14 Jan 2022 05:48:11 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Cc:     <soc@kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <olof@lixom.net>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <robh+dt@kernel.org>, <s.nawrocki@samsung.com>,
-        <linux-samsung-soc@vger.kernel.org>, <pankaj.dubey@samsung.com>,
-        <linux-fsd@tesla.com>
-In-Reply-To: <c87f500e-e43e-465c-94fa-050c2b0de083@canonical.com>
-Subject: RE: [PATCH 01/23] dt-bindings: clock: Document FSD CMU bindings
-Date:   Fri, 14 Jan 2022 11:18:10 +0530
-Message-ID: <076201d8090a$5208eff0$f61acfd0$@samsung.com>
+        id S239281AbiANGLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:11:00 -0500
+Received: from mga11.intel.com ([192.55.52.93]:41075 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234997AbiANGK7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 01:10:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642140659; x=1673676659;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=vFkrUx7JlBhH8tQHdr680ZVtcCkoqOiY56p9j5M74UM=;
+  b=cjaPPKNK9hWLEikc2M+MeiR/Nr8cD17Ly/AEtI2UV2rh7b9Lw6QF0VXh
+   MsaPvYPVsmV1o5dwpVk/mq9tAYDHSw2RVyoZQb7U25rq+amiBnVeVKDQg
+   wozjzPLjV2ag33t6B+bBEroy8M9NYD/w9prrVdrcaDjQBGYXs0YgIk8ud
+   AgfozJJXcnwo45gRPCZDprUYeGv2SND92NNb9py5gRWW727VJAn2luT7m
+   T9WBI2S0FYYjdJN71zLM2A79TRavcNTlQqfPguJ1bNoTQROvzqKmDbmAh
+   q1a70HqKWOWRYh4fhURXzksbsEJR2hcSASGcmjjDI9YynIA2xnFroEomL
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="241751127"
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="241751127"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 22:10:59 -0800
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="559370934"
+Received: from yzhao56-desk.sh.intel.com ([10.239.159.43])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 22:10:52 -0800
+Date:   Fri, 14 Jan 2022 13:53:15 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v3 kvm/queue 14/16] KVM: Handle page fault for private
+ memory
+Message-ID: <20220114055315.GA29165@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
+ <20211223123011.41044-15-chao.p.peng@linux.intel.com>
+ <20220104014629.GA2330@yzhao56-desk.sh.intel.com>
+ <20220104091008.GA21806@chaop.bj.intel.com>
+ <20220104100612.GA19947@yzhao56-desk.sh.intel.com>
+ <20220105062810.GB25283@chaop.bj.intel.com>
+ <20220105075356.GB19947@yzhao56-desk.sh.intel.com>
+ <YdYFFzlPTvgFdSXL@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKuNmZ/+9PJHbdzezyQqzGEXzr0sgK+Rz8NAfWcy00CRGI64ap95Tsg
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHJsWRmVeSWpSXmKPExsWy7bCmhu48voeJBnsXylm8X9bDaDH/yDlW
-        i41vfzBZTPmznMli0+NrrBYfe+6xWjx8FW5xedccNosZ5/cxWZy6/pnNYtHWL+wWrXuPsFsc
-        ftPOavH4+h82Bz6PNfPWMHrMauhl89i0qpPN4861PWwem5fUe1w50cTq0bdlFaPHv6a57B6f
-        N8kFcEZl22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYA
-        3a6kUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKTAp0CtOzC0uzUvXy0stsTI0MDAy
-        BSpMyM5oOv2RqWCSTEXj3n/MDYwfxLoYOTgkBEwk2q/kdjFycQgJ7GaUWPn6FAuE84lRYt2u
-        K6wQzjdGie935gI5nGAdn86/ZIRI7GWUOL96IVhCSOAlo8T1exIgNpuArsSOxW1sIEUiAp2M
-        Equ//2QCcZgFVjBJzD91lwWkilPAUeJA3xYmEFtYwENi5+cZbCA2i4CqxLGl89hADuQVsJTY
-        P9MeJMwrIChxcuYTsFZmAXmJ7W/nMENcpCDx8+kysCNEBNwkNvztYIOoEZd4efQIO8heCYEX
-        HBLPDq+CesFF4vjdP2wQtrDEq+Nb2CFsKYnP7/ayQQImW6JnlzFEuEZi6bxjLBC2vcSBK3NY
-        QEqYBTQl1u/Sh1jFJ9H7+wkTRCevREebEES1qkTzu6tQndISE7u7oQ7wkFh6djH7BEbFWUge
-        m4XksVlIHpiFsGwBI8sqRsnUguLc9NRi0wKjvNRyeHQn5+duYgQnbC2vHYwPH3zQO8TIxMF4
-        iFGCg1lJhLe/6H6iEG9KYmVValF+fFFpTmrxIUZTYGBPZJYSTc4H5oy8knhDE0sDEzMzMxNL
-        YzNDJXHe0+kbEoUE0hNLUrNTUwtSi2D6mDg4pRqYlp19+k52vTvXCsWVj6d/OzR7TqbaiZsW
-        Xlrp6yQ3Kl2VNr6WvvwV+7zVVU5iu5bb/PzJulj5aG3zslPNH17unuEsmmoTV39Nqvj3vlP3
-        SmWryvZn7r8uEVvqpH9UR0VLK8zHjJ+r/1hQ2oKlRZK29c4nN184qu4g6ijzdcLpPY2Nmhd3
-        qJTemHGkZU6gDW+10bWdRvZedtGKF/rSGbKmvFq8foHFdg2X6wL79Oun79iiwZFlkvvrX6t7
-        rF+3t0/TjRMM8r2Lb2f6Lgh8z98Z0jO3aaOa2u2tS4SvrdyffITde+q3WPnMHXM2WE8XtPmz
-        8POG6DMffuv2GFduaeNeZCvvz6wvsffMwnecSwytlViKMxINtZiLihMBLwQdMWEEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJIsWRmVeSWpSXmKPExsWy7bCSvO48voeJBjebGS3eL+thtJh/5Byr
-        xca3P5gspvxZzmSx6fE1VouPPfdYLR6+Cre4vGsOm8WM8/uYLE5d/8xmsWjrF3aL1r1H2C0O
-        v2lntXh8/Q+bA5/HmnlrGD1mNfSyeWxa1cnmcefaHjaPzUvqPa6caGL16NuyitHjX9Ncdo/P
-        m+QCOKO4bFJSczLLUov07RK4MppOf2QqmCRT0bj3H3MD4wexLkZODgkBE4lP518ydjFycQgJ
-        7GaUOPb0PzNEQlri+sYJ7BC2sMTKf8/BbCGB54wS73v1QWw2AV2JHYvb2ECaRQS6GSWu9MwE
-        m8QssIVJovPFGWaIsV8YJY7P/MMC0sIp4ChxoG8LE4gtLOAhsfPzDDYQm0VAVeLY0nlANgcH
-        r4ClxP6Z9iBhXgFBiZMzn4C1MgtoS/Q+bGWEsOUltr+dA3WpgsTPp8tYQWwRATeJDX872CBq
-        xCVeHj3CPoFReBaSUbOQjJqFZNQsJC0LGFlWMUqmFhTnpucWGxYY5qWW6xUn5haX5qXrJefn
-        bmIEx66W5g7G7as+6B1iZOJgPMQowcGsJMLbX3Q/UYg3JbGyKrUoP76oNCe1+BCjNAeLkjjv
-        ha6T8UIC6YklqdmpqQWpRTBZJg5OqQam3W28UQtP7Wg/b21TY3T2ePtnv2yeLYXtbTvdZXZ2
-        LMu97NIWmBp35E5O6JPLuvELkrb9Mm+oEalOWuWlfPRO9RRHnt5Cd8mkH6+rLCa9nJsu/MBz
-        dtGxpYdmRDIX2e1b26tUeGLbauHo45f+rOh/EaQk/FWY17SDiT8xXnRuYflkST/7Fc+vGS8y
-        9DBiPMrA+HtJQPGz9ms2uzwkG93NdmQ3u8xjNAlKff/Jw/tK34z3Clqm/4v3NZllViUcybiS
-        zHZU5l6+VJvBY//WeRK1E4VTSnYYh0dPnbyM8Wz/zY/79Q/lCjSkr1aSYX0aKLNS3HBFYSjX
-        r8d/k6XOHhXj1q+x9Fl1a/ulMuX3GkosxRmJhlrMRcWJAGN4rGVMAwAA
-X-CMS-MailID: 20220114054814epcas5p3616ca028567371af18120160419632b6
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220113122311epcas5p4b7c253b49dce3bd3580407fcf312e70e
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
-        <CGME20220113122311epcas5p4b7c253b49dce3bd3580407fcf312e70e@epcas5p4.samsung.com>
-        <20220113121143.22280-2-alim.akhtar@samsung.com>
-        <c87f500e-e43e-465c-94fa-050c2b0de083@canonical.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdYFFzlPTvgFdSXL@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+hi Sean,
+Sorry for the late reply. I just saw this mail in my mailbox.
+
+On Wed, Jan 05, 2022 at 08:52:39PM +0000, Sean Christopherson wrote:
+> On Wed, Jan 05, 2022, Yan Zhao wrote:
+> > Sorry, maybe I didn't express it clearly.
+> > 
+> > As in the kvm_faultin_pfn_private(), 
+> > static bool kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
+> > 				    struct kvm_page_fault *fault,
+> > 				    bool *is_private_pfn, int *r)
+> > {
+> > 	int order;
+> > 	int mem_convert_type;
+> > 	struct kvm_memory_slot *slot = fault->slot;
+> > 	long pfn = kvm_memfd_get_pfn(slot, fault->gfn, &order);
+> > 	...
+> > }
+> > Currently, kvm_memfd_get_pfn() is called unconditionally.
+> > However, if the backend of a private memslot is not memfd, and is device
+> > fd for example, a different xxx_get_pfn() is required here.
+> 
+> Ya, I've complained about this in a different thread[*].  This should really be
+> something like kvm_private_fd_get_pfn(), where the underlying ops struct can point
+> at any compatible backing store.
+> 
+> https://lore.kernel.org/all/YcuMUemyBXFYyxCC@google.com/
+>
+ok. 
+
+> > Further, though mapped to a private gfn, it might be ok for QEMU to
+> > access the device fd in hva-based way (or call it MMU access way, e.g.
+> > read/write/mmap), it's desired that it could use the traditional to get
+> > pfn without convert the range to a shared one.
+> 
+> No, this is expressly forbidden.  The backing store for a private gfn must not
+> be accessible by userspace.  It's possible a backing store could support both, but
+> not concurrently, and any conversion must be done without KVM being involved.
+> In other words, resolving a private gfn must either succeed or fail (exit to
+> userspace), KVM cannot initiate any conversions.
+>
+When it comes to a device passthrough via VFIO, there might be more work
+related to the device fd as a backend.
+
+First, unlike memfd which can allocate one private fd for a set of PFNs,
+and one shared fd for another set of PFNs, for device fd, it needs to open
+the same physical device twice, one for shared fd, and one for private fd.
+
+Then, for private device fd, now its ramblock has to use qemu_ram_alloc_from_fd()
+instead of current qemu_ram_alloc_from_ptr().
+And as in VFIO, this private fd is shared by several ramblocks (each locating from
+a different base offset), the base offsets also need to be kept somewhere 
+in order to call get_pfn successfully. (this info is kept in
+vma through mmap() previously, so without mmap(), a new interface might
+be required). 
+
+Also, for shared device fd,  mmap() is required in order to allocate the
+ramblock with qemu_ram_alloc_from_ptr(), and more importantly to make
+the future gfn_to_hva, and hva_to_pfn possible.
+But as the shared and private fds are based on the same physical device,
+the vfio driver needs to record which vma ranges are allowed for the actual
+mmap_fault, which vma area are not.
+
+With the above changes, it only prevents the host user space from accessing
+the device mapped to private GFNs.
+For memory backends, host kernel space accessing is prevented via MKTME.
+And for device, the device needs to the work to disallow host kernel
+space access.
+However, unlike memory side, the device side would not cause any MCE. 
+Thereby, host user space access to the device also would not cause MCEs, either. 
+
+So, I'm not sure if the above work is worthwhile to the device fd.
 
 
->-----Original Message-----
->From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
->Sent: Thursday, January 13, 2022 6:11 PM
->To: Alim Akhtar <alim.akhtar@samsung.com>; linux-arm-
->kernel@lists.infradead.org; linux-kernel@vger.kernel.org
->Cc: soc@kernel.org; linux-clk@vger.kernel.org; devicetree@vger.kernel.org;
->olof@lixom.net; linus.walleij@linaro.org; catalin.marinas@arm.com;
->robh+dt@kernel.org; s.nawrocki@samsung.com; linux-samsung-
->soc@vger.kernel.org; pankaj.dubey@samsung.com; linux-fsd@tesla.com
->Subject: Re: [PATCH 01/23] dt-bindings: clock: Document FSD CMU bindings
->
->On 13/01/2022 13:11, Alim Akhtar wrote:
->> Add dt-schema documentation for Tesla FSD SoC clock controller.
->>
->> Cc: linux-fsd@tesla.com
->> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
->> ---
->>  .../bindings/clock/tesla,fsd-clock.yaml       | 212 ++++++++++++++++++
->>  1 file changed, 212 insertions(+)
->>  create mode 100644
->> Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
->>
->> diff --git
->> a/Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
->> b/Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
->> new file mode 100644
->> index 000000000000..58f341e5004d
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
->> @@ -0,0 +1,212 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
->> +---
->> +$id:
->> +https://protect2.fireeye.com/v1/url?k=7e607c7a-1f1d943d-7e61f735-74fe
->> +485fff30-a4acf0e03cbf256d&q=1&e=05b30de9-b535-49f7-9359-
->77edd951da07&
->> +u=http%3A%2F%2Fdevicetree.org%2Fschemas%2Fclock%2Ftesla%2Cfsd-
->clock.y
->> +aml%23
->> +$schema:
->> +https://protect2.fireeye.com/v1/url?k=5c769dcb-3d0b758c-5c771684-74fe
->> +485fff30-b4007a892a5a3e44&q=1&e=05b30de9-b535-49f7-9359-
->77edd951da07&
->> +u=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23
->> +
->> +title: Tesla FSD (Full Self-Driving) SoC clock controller
->> +
->> +maintainers:
->> +  - Alim Akhtar <alim.akhtar@samsung.com>
->> +  - linux-fsd@tesla.com
->> +
->> +description: |
->> +  FSD clock controller consist of several clock management unit
->> +  (CMU), which generates clocks for various inteernal SoC blocks.
->> +  The root clock comes from external OSC clock (24 MHz).
->> +
->> +  All available clocks are defined as preprocessor macros in
->> + 'dt-bindings/clock/fsd-clk.h' header.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - tesla,fsd-clock-cmu
->> +      - tesla,fsd-clock-imem
->> +      - tesla,fsd-clock-peric
->> +      - tesla,fsd-clock-fsys0
->> +      - tesla,fsd-clock-fsys1
->> +      - tesla,fsd-clock-mfc
->> +      - tesla,fsd-clock-cam_csi
->> +
->> +  clocks:
->> +    minItems: 1
->> +    maxItems: 6
->> +
->> +  clock-names:
->> +    minItems: 1
->> +    maxItems: 6
->> +
->> +  "#clock-cells":
->> +    const: 1
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: tesla,fsd-clock-cmu
->> +
->
->Nitpick: Drop the white-spaces between if-then. It's easier to spot the if-
->blocks if they are together.
->
-Thanks will fix in next version
+> > pfn = __gfn_to_pfn_memslot(slot, fault->gfn, ...)
+> > 	|->addr = __gfn_to_hva_many (slot, gfn,...)
+> > 	|  pfn = hva_to_pfn (addr,...)
+> > 
+> > 
+> > So, is it possible to recognize such kind of backends in KVM, and to get
+> > the pfn in traditional way without converting them to shared?
+> > e.g.
+> > - specify KVM_MEM_PRIVATE_NONPROTECT to memory regions with such kind
+> > of backends, or
+> > - detect the fd type and check if get_pfn is provided. if no, go the
+> >   traditional way.
+> 
+> No, because the whole point of this is to make guest private memory inaccessible
+> to host userspace.  Or did I misinterpret your questions?
+I think the host unmap series is based on the assumption that host user
+space access to the memory based to private guest GFNs would cause fatal
+MCEs.
+So, I hope for backends who will not bring this fatal error can keep
+using traditional way to get pfn and be mapped to private GFNs at the
+same time.
 
->> +    then:
->> +      properties:
->> +        clocks:
->> +          items:
->> +            - description: External reference clock (24 MHz)
->> +
->
->Drop this whitespace as well.
->
-Noted
-
->Rest looks good to me, except the discussion about the compatible.
->
-Have replied to the original question thread. 
->
->Best regards,
->Krzysztof
-
+Thanks
+Yan

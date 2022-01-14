@@ -2,109 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A792048E1DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E115248E1E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 02:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238580AbiANA7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 19:59:44 -0500
-Received: from mga05.intel.com ([192.55.52.43]:47905 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238575AbiANA7n (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 19:59:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642121983; x=1673657983;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=2hx55kwfIWu4BSocaSTJeZJkPD2S4RuJhH5Nypbo44k=;
-  b=j4UqaBtUHmkaH4iCpXP/pa124SLL5bgk1ezCeyHrxpLvi062g8K7KveR
-   Bj1V6uuJR/kr389fm8l+zpjN+CNK+H7B4Ge+u7Qh/ISE5GuvXMsOGnYQI
-   i7xPKSaTGLteYLS/Pa8TpIrDa9/OV3+RGGWbDx+iE3eF9JSuOlpXtfJit
-   uPUlOLMu4yvdHjfpN4GKy2OyX+DnCdInhYIX/BoouIyYwdTisQGHibaMe
-   FKeuCnuGFD0LKgjURNuuFPJuqPAtOeWJdbN2xgEjhp/scAECpTntToG8Z
-   b6yaktLQHBFMB8VHKaum9J3jnwonv7kvpineDi6yNOvjxaOHFPNFN252i
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="330501322"
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="330501322"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 16:59:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="529929327"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 13 Jan 2022 16:59:40 -0800
-Cc:     baolu.lu@linux.intel.com, Jacob Pan <jacob.jun.pan@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>
-Subject: Re: [PATCH] iommu/vt-d: Fix PCI bus rescan device hot add
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>
-References: <1642080198-10971-1-git-send-email-jacob.jun.pan@linux.intel.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <b2139255-2463-c62f-4746-8df7f3f49221@linux.intel.com>
-Date:   Fri, 14 Jan 2022 08:58:53 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S233688AbiANBCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 20:02:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233398AbiANBCq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 20:02:46 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0848C061574;
+        Thu, 13 Jan 2022 17:02:43 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JZjhK5l4fz4xtf;
+        Fri, 14 Jan 2022 12:02:41 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642122162;
+        bh=M141uA0Im2Hud7b7HD5pRH7hxR5HLZew7H/Em0uz5F8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aBX9q3LT7VgKBq97UcsruZbxQEEEqtRyPRC6pMB8NTmuYzZW+Wwnu2o6BNI96nxA5
+         fJCqCgapfXI7tAY/Sb6z306cNo/ydkFXiRLsRluFzmp3Ew33fvrB2bJKrqNIFVwl1y
+         2pj43GM0koK+PAK+XfI0nrGSJkkDck0gyd8yWFcxiOdSZ8KFjtd/MzsgSQqYSt3zE1
+         //h/sYIRPGwV0yiB+QvhNa+nG3rbim69KXjfoF3071dveechIpPSQmREZoqfHoVR8u
+         y9KhPjcaX7WLkWRLZLOXVAsRtg714EZjTtMhec50ySQaOgTLlUxauWmDWtd6MwK00g
+         wwCt9ATDwdj/A==
+Date:   Fri, 14 Jan 2022 12:02:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Yinan Liu <yinan@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the ftrace tree
+Message-ID: <20220114120240.4b592480@canb.auug.org.au>
+In-Reply-To: <20220112113103.7e03448f@canb.auug.org.au>
+References: <20220112113103.7e03448f@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <1642080198-10971-1-git-send-email-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/wnYUD+_he4wYAMN/08IXqt_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacob,
+--Sig_/wnYUD+_he4wYAMN/08IXqt_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 1/13/22 9:23 PM, Jacob Pan wrote:
-> During PCI bus rescan, adding new devices involve two notifiers.
-> 1. dmar_pci_bus_notifier()
-> 2. iommu_bus_notifier()
-> The current code sets #1 as low priority (INT_MIN) which resulted in #2
-> being invoked first. The result is that struct device pointer cannot be
-> found in DRHD search for the new device's DMAR/IOMMU. Subsequently, the
-> device is put under the "catch-all" IOMMU instead of the correct one.
-> 
-> This could cause system hang when device TLB invalidation is sent to the
-> wrong IOMMU. Invalidation timeout error or hard lockup can be observed.
-> 
-> This patch fixes the issue by setting a higher priority for
-> dmar_pci_bus_notifier. DRHD search for a new device will find the
-> correct IOMMU.
-> 
-> Fixes: 59ce0515cdaf ("iommu/vt-d: Update DRHD/RMRR/ATSR device scope")
-> Reported-by: Zhang, Bernice <bernice.zhang@intel.com>
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> ---
->   drivers/iommu/intel/dmar.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-> index 915bff76fe96..5d07e5b89c2e 100644
-> --- a/drivers/iommu/intel/dmar.c
-> +++ b/drivers/iommu/intel/dmar.c
-> @@ -385,7 +385,7 @@ static int dmar_pci_bus_notifier(struct notifier_block *nb,
->   
->   static struct notifier_block dmar_pci_bus_nb = {
->   	.notifier_call = dmar_pci_bus_notifier,
-> -	.priority = INT_MIN,
-> +	.priority = INT_MAX,
->   };
->   
->   static struct dmar_drhd_unit *
-> 
+Hi all,
 
-Nice catch! dmar_pci_bus_add_dev() should take place *before*
-iommu_probe_device(). This change enforces this with a higher notifier
-priority for dmar callback.
+On Wed, 12 Jan 2022 11:31:03 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the ftrace tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+>=20
+> Inconsistent kallsyms data
+> Try make KALLSYMS_EXTRA_PASS=3D1 as a workaround
+>=20
+> I am not sure what caused this - maybe commit
+>=20
+>   4f1f18311591 ("scripts: ftrace - move the sort-processing in ftrace_ini=
+t")
+>=20
+> I have used the ftrace tree from next-20220111 for today.
 
-Comparably, dmar_pci_bus_del_dev() should take place *after*
-iommu_release_device(). Perhaps we can use two notifiers, one for
-ADD_DEVICE (with .priority=INT_MAX) and the other for REMOVE_DEVICE
-(with .priority=INT_MIN)?
+I am still getting this.
 
-Best regards,
-baolu
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/wnYUD+_he4wYAMN/08IXqt_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHgy7AACgkQAVBC80lX
+0GywVQf+IhUpgidbLaQEOV6MPgWQ8cxv8mMsZ7gaNLc/sYZ1Q7wBv8qA01SxnDCB
+xEpML44palAVdC2Vc0hV2NosJjxFPEIM+aCWT1MPPLEp6IYITivuMk8tCZL2ztQ0
+l9ityiL4izNpOhi90+7PebKMA1OMHWPgUrPIE8hvwPtSpz1R1ifXbKlvbIXQgYQt
+itKdl7/8w0XGR6qPlNystJwzp2K5Sg2M/frxCjvfptCxlXHqALClEibmw1sYdGiR
+wmfog3D8SrRV34cLemugYx/xuy1CYlY7ytjWSHfye7PVit1OwlVQlOuIEBfEY2cv
+26hvv6DGrm/8psO20RYr9XoXeApGaA==
+=9VNf
+-----END PGP SIGNATURE-----
+
+--Sig_/wnYUD+_he4wYAMN/08IXqt_--

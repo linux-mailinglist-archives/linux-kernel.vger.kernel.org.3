@@ -2,93 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C25F648EA6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBA748EA82
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241171AbiANNPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 08:15:48 -0500
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:39815 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231283AbiANNPr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 08:15:47 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id A14385C00F7;
-        Fri, 14 Jan 2022 08:15:46 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 14 Jan 2022 08:15:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-type:content-transfer-encoding; s=fm1; bh=
-        s5NFdGeraYGYTX3ECjtHqze22e4ZVJLmziZZwnrxWWM=; b=GGN2/Gvz4mBeyZjM
-        vjwimBFMpu4PtmKqqjU+o3wIQaWlHGWWuvDLjKXBvTngtWyzUJPHbbTpdGfaXCCy
-        4gnE48eqkq+phV7VfGYB/A57ZFojatRPmPKE9Fh1PRFzbQGLGcrtkDmlvh03KJuI
-        gDHKnIdtjFTALtC66IyriL0DLpuBFVQL5ICeHrHdeRrm8PRvj/r8GPzfzsu5w7/u
-        Cp1kTZE6CgQqamNyBZY44ZLnDtCLtziNtsHfJC/t02hYt3gY76todU68iZvmR2SV
-        mqi1YAkjN06FPdXW5iSlCSFizxxgH0KwBYrFpz27AChN4ja+50ID66lq04oxI0rZ
-        CRWg1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=s5NFdGeraYGYTX3ECjtHqze22e4ZVJLmziZZwnrxW
-        WM=; b=HXb+LuFjDml9IjOqxx2b0V0UO6VA23X9lx3HUjXQLZbnYjHEwC8IQMeHk
-        9hyyc74cC9t0p/s7jGxraxrkD+mi6IwR2rM22RNz6eN+WjyOOxwI/RORzlg85ISs
-        YKFLqh8FdRu3S8jFTzlMpIgC8Pkf/1KqIt2BLMLY6uZ2JUXbpEBRj3T5dWu6PwBk
-        T1IjuAaOAalCEa3NfUUCIhZi4QuaWskes+V+r3MKyUoFfSiuek3hr32MueekS98W
-        Zlr0d1FAZvk+v9Us1HZ48Z0VJXM6kSABN4LCm503clcnjXHbEpve7utvjmW1Z1CD
-        Jfizu05ABQYm5fl3TyOc2qUz6hHYw==
-X-ME-Sender: <xms:gnfhYR7NwbZ0CTHeNs2lZUNrp_5gL0kPTcZpXHPtsQKNLkM-q7J5nw>
-    <xme:gnfhYe5la1LUv18QPQeCxt5IWEmwi4f-GLhi4f5aZ1r-DLZBSRH_ZrDTBlu8JEBA3
-    Hsyw-lGBIVBTsg2WaM>
-X-ME-Received: <xmr:gnfhYYeSFugeAdIdFy_AmTOm-7AwKCLjuJELyRVhT8cgiH8kJ1WAy8t_T_faQB5VOQQbU_HND91vvy7uoncsBLLarEXKt2MYY_OqJ5g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrtdehgdehudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepjeeugfegkeffgfeuvedtvddufffhjeffjeejvddvudduteehhfefhfefgeei
-    keeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:gnfhYaIZmYQXwzmixXpeGkZBD-37ZscbQHEK4VlLwhpjlXpQgcpbfA>
-    <xmx:gnfhYVI601t0OKv85yuKIGioKXjDl9X3J6uVCg4ajGM0dyLXZlBpPg>
-    <xmx:gnfhYTwd1D_ETMsl190ge5AGlkkALdaH_i6DRkCXvsn6Yqwq_WgEZg>
-    <xmx:gnfhYc8qu1dYTSLag23s-JnP_eDpLuroYvbHQoZy-qvjRW2mXkaSoQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Jan 2022 08:15:45 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org
-Cc:     Maxime Ripard <maxime@cerno.tech>, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: (subset) [PATCH] drm/vc4: remove redundant assignment of variable size
-Date:   Fri, 14 Jan 2022 14:15:43 +0100
-Message-Id: <164216613944.47574.10826927845700954933.b4-ty@cerno.tech>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220112232036.1182846-1-colin.i.king@gmail.com>
-References: <20220112232036.1182846-1-colin.i.king@gmail.com>
+        id S241204AbiANNUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 08:20:35 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:37844 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231278AbiANNUd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 08:20:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=rWZLer/iLNWHxUeBPp4gf/3AhfEUJd6bEpSN2CeHfZQ=; b=qUoxmfyQiBP1i+i1+kkftR2pR9
+        KcaTxqvAnHzmipxu6FVKzpKw1AhMQauwsg4PEC87+YzmXanJ7MVFkP+Nt/KDkQKNvIvEPygZHbZBR
+        iQmrqZKw6IPPU1WBPAi8V3Of+7uJ/AomEODzfQIHg3ImI1iIR3Fd4SlEot4drtwZjgxc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1n8MV7-001Pgy-CB; Fri, 14 Jan 2022 14:20:17 +0100
+Date:   Fri, 14 Jan 2022 14:20:17 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] stmmac: intel: Honor phy LED set by system firmware
+ on a Dell hardware
+Message-ID: <YeF4kbsqag+kZ7ji@lunn.ch>
+References: <20220114040755.1314349-1-kai.heng.feng@canonical.com>
+ <20220114040755.1314349-2-kai.heng.feng@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220114040755.1314349-2-kai.heng.feng@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jan 2022 23:20:36 +0000, Colin Ian King wrote:
-> The variable 'size' is being assigned a value that is never read,
-> the assignment is redundant and can be removed. Cleans up clang-scan
-> warning:
-> 
-> drivers/gpu/drm/vc4/vc4_bo.c:358:2: warning: Value stored to 'size'
-> is never read [deadcode.DeadStores]
->         size = roundup(size, PAGE_SIZE);
-> 
-> [...]
+>  static void marvell_config_led(struct phy_device *phydev)
+>  {
+> -	u16 def_config;
+> +	struct marvell_priv *priv = phydev->priv;
+>  	int err;
+>  
+> -	switch (MARVELL_PHY_FAMILY_ID(phydev->phy_id)) {
+> -	/* Default PHY LED config: LED[0] .. Link, LED[1] .. Activity */
+> -	case MARVELL_PHY_FAMILY_ID(MARVELL_PHY_ID_88E1121R):
+> -	case MARVELL_PHY_FAMILY_ID(MARVELL_PHY_ID_88E1318S):
+> -		def_config = MII_88E1121_PHY_LED_DEF;
+> -		break;
+> -	/* Default PHY LED config:
+> -	 * LED[0] .. 1000Mbps Link
+> -	 * LED[1] .. 100Mbps Link
+> -	 * LED[2] .. Blink, Activity
+> -	 */
+> -	case MARVELL_PHY_FAMILY_ID(MARVELL_PHY_ID_88E1510):
+> -		if (phydev->dev_flags & MARVELL_PHY_LED0_LINK_LED1_ACTIVE)
+> -			def_config = MII_88E1510_PHY_LED0_LINK_LED1_ACTIVE;
+> -		else
+> -			def_config = MII_88E1510_PHY_LED_DEF;
+> -		break;
+> -	default:
+> +	if (priv->led_def_config == -1)
+>  		return;
+> +
+> +	if (priv->led_def_config)
+> +		goto write;
 
-Applied to drm/drm-misc (drm-misc-next).
+Really?
 
-Thanks!
-Maxime
+Please restructure this code. Take it apart into helpers. You need:
+
+A function to set the actual LED configuration.
+A function to decide what, if any, configuration to set
+A function to store the current configuration on suspend.
+A function to restore the current configuration on resume.
+
+Lots of little functions will make it much easier to understand, and
+avoid 1980s BASIC style.
+
+I'm also surprised you need to deal with suspend/resume. Why does the
+BIOS not set the LED mode on resume, same as it does on power up?
+
+      Andrew

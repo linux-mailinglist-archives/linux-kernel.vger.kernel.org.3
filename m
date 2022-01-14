@@ -2,73 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE5F48E8DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7894D48E8E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240686AbiANLHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 06:07:05 -0500
-Received: from outpost1.zedat.fu-berlin.de ([130.133.4.66]:35933 "EHLO
-        outpost1.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237845AbiANLHE (ORCPT
+        id S240703AbiANLHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 06:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237845AbiANLHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 06:07:04 -0500
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.94)
-          with esmtps (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1n8KQA-003OF5-08; Fri, 14 Jan 2022 12:07:02 +0100
-Received: from p57bd9aec.dip0.t-ipconnect.de ([87.189.154.236] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.94)
-          with esmtpsa (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1n8KQ9-000SRd-Q1; Fri, 14 Jan 2022 12:07:01 +0100
-Message-ID: <10b80ee9-b180-45e7-77bc-8420908a4b21@physik.fu-berlin.de>
-Date:   Fri, 14 Jan 2022 12:07:01 +0100
+        Fri, 14 Jan 2022 06:07:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B80FC061574;
+        Fri, 14 Jan 2022 03:07:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D12BC61EF4;
+        Fri, 14 Jan 2022 11:07:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26181C36AE5;
+        Fri, 14 Jan 2022 11:07:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642158434;
+        bh=rg04tT8R1FkbVTYI0SCSCtVRaw71c3Km2IEW1JE51T4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QmK6P2ERTNTveN2AIVdc6Lnz3VzhcoPkYWRz3fR9Y0QTcs/iKutdB1GOzjm5pX3CO
+         7edBo8SNpYe4DWdGV73ntqSi+gUcrRdeUS5ahZ/R5+z5R2GKqgDimdxk2/vXM0XxKZ
+         hDdW+Iiq8p8Jjd8OuWUonO7ylUrE2cl9VXuKNk5GhadV2F7gwcrmUk/CZhBXSWb0+8
+         W4j0mKwZHQOLAM3MZGm0BgctEep/5hg1fsr9vPGpVEb3me3N6+e0RAYOpjppChkMM1
+         KLjsilIw3SY9lAipeHc/tICBEHJBwvl1pGkKlTefDkI5s7pagKZnsZVNWMPG4Xv73F
+         T1UCuSqIlcBRg==
+Date:   Fri, 14 Jan 2022 13:07:05 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Wei Yang <richard.weiyang@gmail.com>
+Cc:     hannes@cmpxchg.org, mhocko@kernel.org, vdavydov.dev@gmail.com,
+        akpm@linux-foundation.org, shakeelb@google.com, guro@fb.com,
+        vbabka@suse.cz, willy@infradead.org, songmuchun@bytedance.com,
+        shy828301@gmail.com, surenb@google.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 1/4] mm/memcg: use NUMA_NO_NODE to indicate allocation
+ from unspecified node
+Message-ID: <YeFZWQn79xMG6Z3L@kernel.org>
+References: <20220111010302.8864-1-richard.weiyang@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 2/4] rtc: goldfish: use __raw_writel()/__raw_readl()
-Content-Language: en-US
-To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-m68k@lists.linux-m68k.org,
-        John Stultz <john.stultz@linaro.org>,
-        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-References: <20220113201920.3201760-1-laurent@vivier.eu>
- <20220113201920.3201760-3-laurent@vivier.eu>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <20220113201920.3201760-3-laurent@vivier.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.154.236
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220111010302.8864-1-richard.weiyang@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent!
+On Tue, Jan 11, 2022 at 01:02:59AM +0000, Wei Yang wrote:
+> Instead of use "-1", let's use NUMA_NO_NODE for consistency.
+> 
+> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
 
-On 1/13/22 21:19, Laurent Vivier wrote:
-> As android implementation defines the endianness of the device is the one
-> of the architecture replace all writel()/readl() by
-> __raw_writel()/__raw_readl()
+Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
 
-I think this sentence is a little hard to understand. Can you rephrase it in
-case you are sending another version of the series?
-
-Adrian
+> ---
+>  mm/memcontrol.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 2ed5f2a0879d..11715f7323c0 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -5054,7 +5054,7 @@ static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
+>  	 *       function.
+>  	 */
+>  	if (!node_state(node, N_NORMAL_MEMORY))
+> -		tmp = -1;
+> +		tmp = NUMA_NO_NODE;
+>  	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL, tmp);
+>  	if (!pn)
+>  		return 1;
+> -- 
+> 2.33.1
+> 
+> 
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
-
+Sincerely yours,
+Mike.

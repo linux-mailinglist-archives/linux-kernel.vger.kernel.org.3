@@ -2,117 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF4548E6F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F3148E6ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239494AbiANIxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:53:32 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:35884 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S239410AbiANIxb (ORCPT
+        id S237985AbiANIxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:53:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230177AbiANIxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:53:31 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20E6PDAM006968;
-        Fri, 14 Jan 2022 09:53:05 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=gtiMw+AjYwKRQijtvO+tqdQ46WboA1+9BaWCAalpETA=;
- b=N3hjNMJLw4PAcChzVe0eLdgwzS+KbmOdH4FVDZdu0TfjSF5BWfh9DsvnlwCNqg7ACsGI
- WDqR0eej8fCLz9KXayX9esqP5bUia7ARSZrceTeaR42n1fCwUUSfSQ22oeOxLDrdNwzW
- pDYWT0YOlnbDrZepNuMOp5jBrkGxwyfWSBGMNuVoC3iosG1X1k40mX6yBRA0Nlk6ddeJ
- liT+aTJW05KeFxzuQTjSLZND0zEtqlC+NaoZM3HPskjLLGel1nv9F6Rr4WnwdtZsVIN5
- U2eTAieduxMsqETheEo/GQ4KhAYtvCS1qnE4MInTYXw1ukeG4uJjlAamryF1lcshIJUX dQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dk3vygrqf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Jan 2022 09:53:05 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1663710002A;
-        Fri, 14 Jan 2022 09:53:05 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0B10520ED1F;
-        Fri, 14 Jan 2022 09:53:05 +0100 (CET)
-Received: from lmecxl0993.lme.st.com (10.75.127.50) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 14 Jan
- 2022 09:53:03 +0100
-Subject: Re: [PATCH 1/2] MAINTAINERS: Update Benjamin Gaignard maintainer
- status
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Yannick Fertre <yannick.fertre@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Christian Konig <christian.koenig@amd.com>,
-        SoC Team <soc@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        <linaro-mm-sig@lists.linaro.org>
-References: <20220113171921.17466-1-philippe.cornu@foss.st.com>
- <20220113171921.17466-2-philippe.cornu@foss.st.com>
- <CAK8P3a0Nn3fwEMtb9f0DZhbyY+mLva5XR332XfXqX=WSmB9a8w@mail.gmail.com>
-From:   Philippe CORNU <philippe.cornu@foss.st.com>
-Message-ID: <0733379c-65b7-c9a8-4dc5-c84502426e9f@foss.st.com>
-Date:   Fri, 14 Jan 2022 09:53:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 14 Jan 2022 03:53:11 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0A7C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 00:53:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XDdFiFYcMGjCRySrjyxXHgb42tImQV0MD5bVeKoPEFU=; b=U7F/KxmsVN8BvK8HHguJBC5oND
+        ZjWbpqt+Jb0lYCWHk3f+4H2bPtpy08rL/7ImuspsyEqzM3FAKdBdKHrvzprUlXew8zugXXoXtbkT+
+        do9Eop2wMDfMK0k7+isOSyGetFbnNBy1T2hR8Gf41MEgmv6DrwAWsNAl8ozO/wBiQGv7KBNf91NXq
+        bUD2Pb9T575+cToGoIs4UlHUSlINnRZvkLGlMi2JG9Bsqxwi6pJBo1mAjZ4IPhm8/yuZ4rwueESQl
+        tchc3b/yKGFDURRX5yNRGIAV1QTuP4heE90zBba4NIf9F72mo3JYEB9keMaP4wvyTGFLNvnzKJ9dZ
+        UV2UqBCw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n8IKa-0017Cv-3Q; Fri, 14 Jan 2022 08:53:08 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BC3D23002C1;
+        Fri, 14 Jan 2022 09:53:07 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A0C9B3023C766; Fri, 14 Jan 2022 09:53:07 +0100 (CET)
+Date:   Fri, 14 Jan 2022 09:53:07 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sergei Trofimovich <slyich@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] objtool: check: give big enough buffer for pv_ops
+Message-ID: <YeE588tXLrgWoUu4@hirez.programming.kicks-ass.net>
+References: <20220114075756.838243-1-slyich@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a0Nn3fwEMtb9f0DZhbyY+mLva5XR332XfXqX=WSmB9a8w@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-14_03,2022-01-13_01,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220114075756.838243-1-slyich@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/14/22 1:45 AM, Arnd Bergmann wrote:
-> On Thu, Jan 13, 2022 at 6:19 PM Philippe Cornu
-> <philippe.cornu@foss.st.com> wrote:
->>
->>   DRM DRIVERS FOR STI
->> -M:     Benjamin Gaignard <benjamin.gaignard@linaro.org>
->>   L:     dri-devel@lists.freedesktop.org
->>   S:     Maintained
->>   T:     git git://anongit.freedesktop.org/drm/drm-misc
+On Fri, Jan 14, 2022 at 07:57:56AM +0000, Sergei Trofimovich wrote:
+> On gcc-12 build fails flagging possible buffer overflow:
 > 
-> If there is no longer a maintainer, I suppose it should also be marked as
+>     check.c: In function 'validate_call':
+>     check.c:2865:58: error: '%d' directive output may be truncated writing between 1 and 10 bytes into a region of size 9 [-Werror=format-truncation=]
+>      2865 |                 snprintf(pvname, sizeof(pvname), "pv_ops[%d]", idx);
+>           |                                                          ^~
 > 
-> S: Orphaned
+> I think it's a valid warning:
 > 
->           Arnd
+>     static char pvname[16];
+>     int idx;
+>     ...
+>     idx = (rel->addend / sizeof(void *));
+>     snprintf(pvname, sizeof(pvname), "pv_ops[%d]", idx);
 > 
+> we have only 7 chars for %d while it could take up to 9.
 
+Right, very unlikely to have that many pv_ops, but it doesn't hurt to
+fix this.
 
-Hi Arnd,
-I sent a serie of 2 patches containing first the original/unmodified 
-patch from Benjamin (see [1]) + a new patch to avoid this "orphaned 
-driver" situation.
-
-Many thanks
-Philippe :-)
-
-[1] 
-https://lore.kernel.org/lkml/20210706163033.795805-1-benjamin.gaignard@collabora.com/
+Thanks!

@@ -2,519 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1750B48EB4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 478F448EB56
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237452AbiANOKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 09:10:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
+        id S241332AbiANOMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 09:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbiANOKi (ORCPT
+        with ESMTP id S230191AbiANOMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:10:38 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB14FC061574;
-        Fri, 14 Jan 2022 06:10:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=00gnKZzNat2QdmQR8Oe1xgTfylUYzk2oj+Q2hjgiK+Y=; b=W/jjhKq3gAED8iYq2GUoPYlma5
-        bD4Egg6Ado/KCN/dlsmOI2hKH0jz9losKIDaVgmzo4G/K/xnUNOGuqxnMROu/2Hd0Lq0qxtthR5Bn
-        JZ02gHYtYaviEjAo7c2kS6vIJ9RQaKYGUqhVTHlgEfwpMDU7pvAGIybqBOEflOVmQyeptPP2n8pjb
-        Nlo6L/G/jnaWW25g0JHYZ5dKBWydPn0O39BppGXKyPhqsvSwC1oLHYEImOJY0ynEWdQwShJiwbmcJ
-        j4Mz5frMtfbA5NIkyH7OshdYKCDASvrmeY4Wi6wsDTKiT6SnZqjZzUEFVn1w4c2+WGiS6wYwNfr6o
-        K64vkH4A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n8NHC-0019ca-Lo; Fri, 14 Jan 2022 14:10:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D982D3002C1;
-        Fri, 14 Jan 2022 15:09:55 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 875452B323542; Fri, 14 Jan 2022 15:09:55 +0100 (CET)
-Date:   Fri, 14 Jan 2022 15:09:55 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Peter Oskolkov <posk@posk.io>
-Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
-        pjt@google.com, posk@google.com, avagin@google.com,
-        jannh@google.com, tdelisle@uwaterloo.ca
-Subject: Re: [RFC][PATCH 3/3] sched: User Mode Concurency Groups
-Message-ID: <YeGEM7TP3tekBVEh@hirez.programming.kicks-ass.net>
-References: <20211214204445.665580974@infradead.org>
- <20211214205358.701701555@infradead.org>
- <20211221171900.GA580323@dev-hv>
+        Fri, 14 Jan 2022 09:12:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C348C061574;
+        Fri, 14 Jan 2022 06:12:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD7C861CB0;
+        Fri, 14 Jan 2022 14:12:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE92AC36AEC;
+        Fri, 14 Jan 2022 14:12:52 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FN49HvIi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1642169570;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LIMH262hTr1jVdFOs326DIRgfGVgp0+2qWG3fNbUYe0=;
+        b=FN49HvIikRDwacVw+jUnmDgVYcLelNrJn6xdc3L00w4crPBYyNsMYLqjINzqIHNbYf59TJ
+        rHLePFEWS6PBSSFZbgFPz9Z3naOs8TTB4bfFHn3pMp2cGZrsE1mTdzsVIb5x3vyLmqaXo3
+        aeo9UqGrMg7CilyInPMwdReEE58rE54=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9a5dd7a9 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 14 Jan 2022 14:12:49 +0000 (UTC)
+Received: by mail-yb1-f182.google.com with SMTP id c10so24307987ybb.2;
+        Fri, 14 Jan 2022 06:12:49 -0800 (PST)
+X-Gm-Message-State: AOAM532wJ36Dti313ntlYd7xM3bHE5KMZlUB4MB9H1/9u4iZAdGEMbsk
+        vT0wi3jfBHrQRzRJ4jA4Vq4eBCe4aWqc0BKvjy8=
+X-Google-Smtp-Source: ABdhPJyK1aAnC+0tJZUV+DCA0RieE3QpF7oJw379/gdehyvjAagEN9wrY6yMkVRSf7JT1ik4kf+4v/JTpiaLNxm2gpY=
+X-Received: by 2002:a25:a0c4:: with SMTP id i4mr13252823ybm.457.1642169568253;
+ Fri, 14 Jan 2022 06:12:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211221171900.GA580323@dev-hv>
+References: <20220112131204.800307-1-Jason@zx2c4.com> <20220112131204.800307-2-Jason@zx2c4.com>
+ <87tue8ftrm.fsf@toke.dk> <CAADnVQJqoHy+EQ-G5fUtkPpeHaA6YnqsOjjhUY6UW0v7eKSTZw@mail.gmail.com>
+ <CAHmME9ork6wh-T=sRfX6X0B4j-Vb36GVO0v=Yda0Hac1hiN_KA@mail.gmail.com> <CAADnVQLF_tmNmNk+H+jP1Ubmw-MBhG1FevFmtZY6yw5xk2314g@mail.gmail.com>
+In-Reply-To: <CAADnVQLF_tmNmNk+H+jP1Ubmw-MBhG1FevFmtZY6yw5xk2314g@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 14 Jan 2022 15:12:37 +0100
+X-Gmail-Original-Message-ID: <CAHmME9oq36JdV8ap9sPZ=CDfNyaQd6mXd21ztAaZiL7pJh8RCw@mail.gmail.com>
+Message-ID: <CAHmME9oq36JdV8ap9sPZ=CDfNyaQd6mXd21ztAaZiL7pJh8RCw@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 1/3] bpf: move from sha1 to blake2s in tag calculation
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Alexei,
 
-Hi!
+On Thu, Jan 13, 2022 at 11:45 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> On Thu, Jan 13, 2022 at 4:27 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > Hi Alexei,
+> >
+> > On 1/13/22, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > > Nack.
+> > > It's part of api. We cannot change it.
+> >
+> > This is an RFC patchset, so there's no chance that it'll actually be
+> > applied as-is, and hence there's no need for the strong hammer nack.
+> > The point of "request for comments" is comments. Specifically here,
+> > I'm searching for information on the ins and outs of *why* it might be
+> > hard to change. How does userspace use this? Why must this 64-bit
+> > number be unchanged? Why did you do things this way originally? Etc.
+> > If you could provide a bit of background, we might be able to shake
+> > out a solution somewhere in there.
+>
+> There is no problem with the code and nothing to be fixed.
 
-I've seen you send a new version based on this, but I figured I ought to
-reply to this first.
+Yes yes, my mama says I'm the specialist snowflake of a boy too. That
+makes two of us ice crystals, falling from the winter heavens,
+blessing vim with our beautiful shapes and frosty code.
 
-On Tue, Dec 21, 2021 at 05:19:00PM +0000, Peter Oskolkov wrote:
+Anyway, back to reality, as Geert points out, we're hoping to be able
+to remove lib/sha1.c from vmlinux (see 3/3 of this series) for
+codesize, and this bpf usage here is one of two remaining usages of
+it. So I was hoping that by sending this RFC, it might elicit a bit
+more information about the ecosystem around the usage of the function,
+so that we can start trying to think of creative solutions to sunset
+it.
 
-> > +/* pre-schedule() */
-> > +void umcg_wq_worker_sleeping(struct task_struct *tsk)
-> > +{
-> > +	struct umcg_task __user *self = READ_ONCE(tsk->umcg_task);
-> > +
-> > +	/* Must not fault, mmap_sem might be held. */
-> > +	pagefault_disable();
-> > +
-> > +	if (WARN_ON_ONCE(!tsk->umcg_server))
-> > +		UMCG_DIE_PF("no server");
-> 
-> We can get here if a running worker (no pinned pages) gets a pagefault
-> in the userspace. Is umcg_sys_enter() called for pagefaults? If not,
-> we should not kill the worker; also the userspace won't be able to
-> detect this worker blocking on a pagefault...
+I started trying to figure out what's up there and wound up with some
+more questions. My primary one is why you're okay with such a weak
+"checksum" -- the thing is only 64-bits, and as you told Andy Polyakov
+in 2016 when he tried to stop you from using SHA-1, "Andy, please read
+the code. \ we could have used jhash there just as well. \ Collisions
+are fine."
 
-Ufff.. good one. No #PF doesn't pass through sys_enter, I'll have to go
-fix that.
+Looking at https://github.com/iovisor/bcc/blob/e17c4f7324d8fc5cc24ba8ee1db451666cd7ced3/src/cc/bpf_module.cc#L571
+I see:
 
-> Why don't you like my approach of pinning pages on exit_to_userspace
-> and unpinning on going to sleep? Yes, the pins will last longer,
-> but only for scheduled on CPU tasks, so bounded both by time and number
-> (of course, if umcg_sys_enter() is called on pagefaults/signals/other
-> interrupts, pinning in umcg_sys_enter() is better).
+  err = bpf_prog_compute_tag(insns, prog_len, &tag1);
+  if (err)
+    return err;
+  err = bpf_prog_get_tag(prog_fd, &tag2);
+  if (err)
+    return err;
+  if (tag1 != tag2) {
+    fprintf(stderr, "prog tag mismatch %llx %llx\n", tag1, tag2);
 
-Well, in general I would not call userspace bounded. There's plenty
-userspace that doesn't do syscalls for indeterminate amounts of time.
-Now, such userspace might not be the immediate target for UMCG, but we
-also should not rule it out.
+So it's clearly a check for something. A collision there might prove pesky:
 
-Having been an mm/ developer in a previous lifetime, I still think
-page-pins should be as short as possible. They can get in the way of
-other things, like CMA.
+  char buf[128];
+  ::snprintf(buf, sizeof(buf), BCC_PROG_TAG_DIR "/bpf_prog_%llx", tag1);
+  err = mkdir(buf, 0777);
 
-> On the other hand, doing nothing on pagefaults and similar, and having
-> to only worry about blocking in syscalls, does make things much simpler
-> (no unexpected concurrency and such). I think most of the things
-> you found complicated in my patchset, other than the SMP remote-idle wakeup,
-> were driven by making sure spurious pagefaults are properly handled.
-> 
-> I can't tell now whether keeping workers RUNNING during pagefaults
-> vs waking their servers to run pending workers is a net gain or loss
-> re: performance. I'll have to benchmark this when my large test is ready.
+Maybe you don't really see a security problem here, because these
+programs are root loadable anyway? But I imagine things will
+ultimately get more complicated later on down the road when bpf
+becomes more modular and less privileged and more namespaced -- the
+usual evolution of these sorts of features.
 
-I'll go fix the non syscall things that can schedule.
+So I'm wondering - why not just do this in a more robust way entirely,
+and always export a sufficiently sized blake2s hash? That way we'll
+never have these sorts of shenanigans to care about. If that's not a
+sensible thing to do, it's likely that I _still_ don't quite grok the
+purpose of the program tag, in which case, I'd be all ears to an
+explanation.
 
-> > +int umcg_wait(u64 timo)
-> > +{
-> > +	struct task_struct *tsk = current;
-> > +	struct umcg_task __user *self = tsk->umcg_task;
-> > +	struct page *page = NULL;
-> > +	u32 state;
-> > +	int ret;
-> > +
-> > +	for (;;) {
-> > +		set_current_state(TASK_INTERRUPTIBLE);
-> > +
-> > +		ret = -EINTR;
-> > +		if (signal_pending(current))
-> > +			break;
-> > +
-> > +		/*
-> > +		 * Faults can block and scribble our wait state.
-> > +		 */
-> > +		pagefault_disable();
-> > +		if (get_user(state, &self->state)) {
-> > +			pagefault_enable();
-> > +
-> > +			ret = -EFAULT;
-> > +			if (page) {
-> > +				unpin_user_page(page);
-> > +				page = NULL;
-> > +				break;
-> > +			}
-> > +
-> > +			if (pin_user_pages_fast((unsigned long)self, 1, 0, &page) != 1) {
-> 
-> I believe that the task should not be TASK_INTERRUPTIBLE here,
-> as pin_user_pages_fast may fault, and might_fault complains via __might_sleep.
+Jason
 
-Fair enough; can easily mark the task __set_current_state(TASK_RUNNING)
-right near pagefault_enable() or something.
-
-> > +				page = NULL;
-> > +				break;
-> > +			}
-> > +
-> > +			continue;
-> > +		}
-
-> > +void umcg_sys_exit(struct pt_regs *regs)
-> > +{
-> > +	struct task_struct *tsk = current;
-> > +	struct umcg_task __user *self = READ_ONCE(tsk->umcg_task);
-> > +	long syscall = syscall_get_nr(tsk, regs);
-> > +
-> > +	if (syscall == __NR_umcg_wait)
-> > +		return;
-> > +
-> > +	/*
-> > +	 * sys_umcg_ctl() will get here without having called umcg_sys_enter()
-> > +	 * as such it will look like a syscall that blocked.
-> > +	 */
-> > +
-> > +	if (tsk->umcg_server) {
-> > +		/*
-> > +		 * Didn't block, we done.
-> > +		 */
-> > +		umcg_unpin_pages();
-> > +		return;
-> > +	}
-> > +
-> > +	/* avoid recursion vs schedule() */
-> > +	current->flags &= ~PF_UMCG_WORKER;
-> > +
-> > +	if (umcg_pin_pages())
-> > +		UMCG_DIE("pin");
-> > +
-> > +	if (umcg_update_state(tsk, self, UMCG_TASK_BLOCKED, UMCG_TASK_RUNNABLE))
-> > +		UMCG_DIE_UNPIN("state");
-> > +
-> > +	if (umcg_enqueue_runnable(tsk))
-> > +		UMCG_DIE_UNPIN("enqueue");
-> > +
-> > +	/* Server might not be RUNNABLE, means it's already running */
-> > +	if (umcg_wake_server(tsk))
-> > +		UMCG_DIE_UNPIN("wake-server");
-> 
-> So this here breaks the assumption that servers+workers never run
-> on more CPUs than the number of servers, which I've gone through
-> a lot of pain to ensure in my patchset.
-
-Yes, but you also completely wrecked signals afaict. But yes, this
-preemption thing also causes that, which is why I proposed that LAZY
-crud earlier, but I never got that in a shape I was happy with -- it
-quickly becomes a mess :/
-
-> I think the assumption is based on the idea that a process
-> using UMCG will get affined to N CPUs, will have N servers and
-> a number of workers, and they will all happily cooperate and not
-> get any extra threads running.
-> 
-> Of course the pretty picture was not completely true, as the unblocked
-> tasks do consume extra threads in the kernel, though never in the
-> userspace.
-
-Right, there is some unmanaged time anyway.
-
-> So this patch may result in all servers running due to wakeups
-> in umcg_sys_exit(), with also their currently designated workers
-> running as well, so the userspace may see N+N running threads.
-
-I think this was already true, the servers could be running and all
-workers could be woken from their in-kernel slumber, entering unmamanged
-time, seeing N+M running tasks as worst possible case.
-
-But yes, the 2N case is more common now.
-
-> For now I think this may be OK, but as I mentioned above, I need to
-> run a larger test with a real workload to see if anything is missing.
-> 
-> What does worry me is that in this wakeup the server calls sys_umcg_wait()
-> with another worker in next_tid, so now the server will have two
-> workers running: the current kernel API seems to allow this to happen.
-> In my patchset the invariant that no more than one worker running
-> per server was enforced by the kernel.
-
-So one of the things I've started, but didn't finished, is to forward
-port the Proxy-Execution patches to a current kernel and play with the
-PE+UMCG interaction.
-
-Thinking about that interaction I've ran into that exact problem.
-
-The 'nice' solution is to actually block the worker, but that's also the
-slow solution :/
-
-The other solution seems to be to keep kernel state; track the current
-worker associated with the server. I haven't (so far) done that due to
-my futex trauma.
-
-So yes, the current API can be used to do the wrong thing, but the
-kernel doesn't care and you get to keep the pieces in userspace. And I
-much prefer user pieces over kernel pieces.
-
-> > +
-> > +	umcg_unpin_pages();
-> > +
-> > +	switch (umcg_wait(0)) {
-> > +	case -EFAULT:
-> > +	case -EINVAL:
-> > +	case -ETIMEDOUT: /* how!?! */
-> > +	default:
-> 
-> This "default" coming before "case 0" below feels weird... can we do
-> 
-> 	switch (umcg_wait()) {
-> 	case 0:
-> 	case -EINTR:
-> 		/* ... */
-> 		break;
-> 	default:
-> 		UMCG_DIE("wait");
-> 	}
-
-Sure.
-
-> > +		/*
-> > +		 * XXX do we want a preemption consuming ::next_tid ?
-> > +		 * I'm currently leaning towards no.
-> 
-> I don't think so: preemption is a sched-type event, so a server
-> should handle it; next_tid has nothing to do with it.
-
-We agree, I'll update the comment.
-
-> > +SYSCALL_DEFINE2(umcg_wait, u32, flags, u64, timo)
-> > +{
-> > +	struct task_struct *tsk = current;
-> > +	struct umcg_task __user *self = READ_ONCE(tsk->umcg_task);
-> > +	bool worker = tsk->flags & PF_UMCG_WORKER;
-> > +	int ret;
-> > +
-> > +	if (!self || flags)
-> > +		return -EINVAL;
-> > +
-> > +	if (worker) {
-> > +		tsk->flags &= ~PF_UMCG_WORKER;
-> > +		if (timo)
-> > +			return -ERANGE;
-> 
-> Worker sleeps timing out is a valid and a real use case. Similar
-> to futex timeouts, mutex timeouts, condvar timeouts. I do not believe
-> there is a fundamental problem here, so I'll add worker timeout
-> handling in my larger test.
-
-I don't understand worker timeout, also see:
-
-  https://lkml.kernel.org/r/Ya34S2JCQg+81h4t@hirez.programming.kicks-ass.net
-
-> In addition, shouldn't we NOT clear PF_UMCG_WORKER flag if we
-> return an error?
-
-Why? Userspace can do umcg_ctl() if they want, no?
-
-> > +	}
-> > +
-> > +	/* see umcg_sys_{enter,exit}() syscall exceptions */
-> > +	ret = umcg_pin_pages();
-> 
-> I do not think we need to pin pages for servers, only for workers. Yes,
-> this makes things easier/simpler, so ok for now, but maybe later we will
-> need to be a bit more fine-grained here.
-
-Right.
-
-> > +	if (ret)
-> > +		goto unblock;
-> > +
-> > +	/*
-> > +	 * Clear UMCG_TF_COND_WAIT *and* check state == RUNNABLE.
-> > +	 */
-> > +	ret = umcg_update_state(tsk, self, UMCG_TASK_RUNNABLE, UMCG_TASK_RUNNABLE);
-> > +	if (ret)
-> > +		goto unpin;
-> > +
-> > +	if (worker) {
-> > +		ret = umcg_enqueue_runnable(tsk);
-> > +		if (ret)
-> > +			goto unpin;
-> > +	}
-> > +
-> > +	if (worker)
-> 
-> Should this "if" be merged with the one above?
-
-Yes, I think I've done that at least once, but clearly it didn't stick.
-
-Ah, here it is:
-
-  https://lkml.kernel.org/r/Ybm+HJzkO%2F0BB4Va@hirez.programming.kicks-ass.net
-
-but since that LAZY thing didn't live that cleanup seems to have gone
-out the window too.
-
-> > +		ret = umcg_wake(tsk);
-> > +	else if (tsk->umcg_next)
-> > +		ret = umcg_wake_next(tsk);
-> > +
-> > +	if (ret) {
-> > +		/*
-> > +		 * XXX already enqueued ourself on ::server_tid; failing now
-> > +		 * leaves the lot in an inconsistent state since it'll also
-> > +		 * unblock self in order to return the error. !?!?
-> > +		 */
-> 
-> It looks like only EFAULT can be here. I'd ensure that, and then just DIE.
-
-Can also be -EAGAIN if the target task isn't in an expected state.
-
-I also wanted to avoid DIE from the syscalls(). DIE really isn't nice,
-we shouldn't do it if it can be avoided.
-
-> > +		goto unpin;
-> > +	}
-> > +
-> > +	umcg_unpin_pages();
-> > +
-> > +	ret = umcg_wait(timo);
-> > +	switch (ret) {
-> > +	case 0:		/* all done */
-> > +	case -EINTR:	/* umcg_notify_resume() will continue the wait */
-> > +		ret = 0;
-> > +		break;
-> 
-> Why not let workers have timeouts, and keep -ETIMEDOUT here? Just set
-> UMCG_TF_PREEMPT, or another flag with similar behavior, and
-> umcg_notify_resume will properly wake the server?
-
-I really don't understand timeouts on workers, see above.
-
-TF_PREEMPT must only be set on RUNNING, but if we're in wait, we're
-RUNNABLE.
-
-> > +
-> > +	default:
-> > +		goto unblock;
-> > +	}
-> > +out:
-> > +	if (worker)
-> > +		tsk->flags |= PF_UMCG_WORKER;
-> > +	return ret;
-> > +
-> > +unpin:
-> > +	umcg_unpin_pages();
-> > +unblock:
-> > +	/*
-> > +	 * Workers will still block in umcg_notify_resume() before they can
-> > +	 * consume their error, servers however need to get the error asap.
-> > +	 *
-> > +	 * Still, things might be unrecoverably screwy after this. Not our
-> > +	 * problem.
-> 
-> I think we should explicitly document the unrecoverable screwiness
-> of errors here, so that the userspace proactively kills itself
-> to avoid badness. The only reason that returning an error here is
-> mildly preferable to just killing the task (we already do that
-> in other places) is to give the userspace an opportunity to
-> log an error, with more state/info than we can do here.
-
-Bah, I should've written a better comment, because I can't quite
-remember the case I had in mind. Also, again from the LAZY patch, I
-think we can actually do better in some of the cases here.
-
-Specifically, currently we'll enqueue on ::runnable_workers_ptr and fail
-waking ::next_tid and leave it at that. While I think waking
-::server_tid in that case makes sense.
-
-I'll go prod at this.
-
-> > +	 */
-> > +	if (!worker)
-> > +		umcg_update_state(tsk, self, UMCG_TASK_RUNNABLE, UMCG_TASK_RUNNING);
-> > +	goto out;
-> > +}
-> > +
-> > +/**
-> > + * sys_umcg_ctl: (un)register the current task as a UMCG task.
-> > + * @flags:       ORed values from enum umcg_ctl_flag; see below;
-> > + * @self:        a pointer to struct umcg_task that describes this
-> > + *               task and governs the behavior of sys_umcg_wait if
-> > + *               registering; must be NULL if unregistering.
-> 
-> @which_clock is not documented. Why do we need the option in the first
-> place?
-
-Well, you had CLOCK_REALTIME, which I think is quite daft, but Thomas
-also wanted CLOCK_TAI, so here we are.
-
-I'll add the comment.
-
-> > +SYSCALL_DEFINE3(umcg_ctl, u32, flags, struct umcg_task __user *, self, clockid_t, which_clock)
-> > +{
-> > +	struct task_struct *server;
-> > +	struct umcg_task ut;
-> > +
-> > +	if ((unsigned long)self % UMCG_TASK_ALIGN)
-> > +		return -EINVAL;
-> > +
-> > +	if (flags & ~(UMCG_CTL_REGISTER |
-> > +		      UMCG_CTL_UNREGISTER |
-> > +		      UMCG_CTL_WORKER))
-> > +		return -EINVAL;
-> > +
-> > +	if (flags == UMCG_CTL_UNREGISTER) {
-> > +		if (self || !current->umcg_task)
-> > +			return -EINVAL;
-> > +
-> > +		if (current->flags & PF_UMCG_WORKER)
-> > +			umcg_worker_exit();
-> 
-> The server should be woken here. Imagine: one server, one worker.
-> The server is sleeping, the worker is running. The worker unregisters,
-> the server keeps sleeping forever?
-> 
-> I'm OK re: NOT waking the server if the worker thread exits without
-> unregistering, as this is the userspace breaking the contract/protocol.
-> But here we do need to notify the server. At the minimum so that the
-> server can schedule a worker to run in its place.
-> 
-> (Why is this important? Worker count can fluctuate considerably:
-> on load spikes many new workers may be created, and later in
-> quiet times they exit to free resources.)
-
-Fair enough. Will do.
-
-> > +	if (flags == UMCG_CTL_WORKER) {
-> > +		if ((ut.state & (UMCG_TASK_MASK | UMCG_TF_MASK)) != UMCG_TASK_BLOCKED)
-> > +			return -EINVAL;
-> > +
-> > +		WRITE_ONCE(current->umcg_task, self);
-> > +		current->flags |= PF_UMCG_WORKER;	/* hook schedule() */
-> > +		set_syscall_work(SYSCALL_UMCG);		/* hook syscall */
-> > +		set_thread_flag(TIF_UMCG);		/* hook return-to-user */
-> 
-> Too many flags, I'd say. Not a big deal, just a mild preference:
-> I have only a single flag.
-
-Yeah, you overloaded TIF_NOTIFY_RESUME, I prefer an explicit flag. And
-the syscall things already have their own flag word, so that simply
-needs another one.
-
-> > +
-> > +		/* umcg_sys_exit() will transition to RUNNABLE and wait */
-> > +
-> > +	} else {
-> > +		if ((ut.state & (UMCG_TASK_MASK | UMCG_TF_MASK)) != UMCG_TASK_RUNNING)
-> > +			return -EINVAL;
-> > +
-> > +		WRITE_ONCE(current->umcg_task, self);
-> > +		set_thread_flag(TIF_UMCG);		/* hook return-to-user */
-> 
-> Why do we need to hook server's return to user? I did not need it in my
-> version.
-
-Signals; server could be blocked in sys_umcg_wait() and get a signal,
-then we should resume waiting after the signal.
-
-I hate signals as much as the next guy, but we gotta do something with
-them.
-
-Anyway, let me go poke at this code again..
+[ PS: As an aside, I noticed some things in the userspace tag
+calculation code at
+https://github.com/iovisor/bcc/blob/aa7200b9b2a7a2ce2e8a6f0dc1f456f3f93af1da/src/cc/libbpf.c#L536
+- you probably shouldn't use AF_ALG for things that are software based
+and can be done in userspace faster. And the unconditional
+__builtin_bswap64 there means that the code will fail on big endian
+systems. I know you mostly only care about x86 and all, but <endian.h>
+might make this easy to fix. ]

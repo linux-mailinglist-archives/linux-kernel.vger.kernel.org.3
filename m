@@ -2,107 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2512748E427
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C0E48E42B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239324AbiANGSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:18:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36467 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229717AbiANGSP (ORCPT
+        id S239330AbiANGSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:18:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236454AbiANGSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:18:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642141095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YawaJX8lTftoOW61Y7U6IA50jMGmbdQaYnSxlW1+tHw=;
-        b=iYMZJ06Ov2MIwtjGo2PkdfMaiiH6PXBVB7rHMu+VFtchAv02b1AYAU7Pil/cgNyKjyn5dy
-        nVRYx7NTiESJRK3UfWGYu8KuJmqT42gxNAm7xbq4UJ/N4E+FIjQWY+mmA7SfH2uyrTbGvb
-        iz+jG1HNv4OjybxNEqufpEOOfubsnwQ=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-380-jd7chlQgPbKom_wRYui7Gw-1; Fri, 14 Jan 2022 01:18:13 -0500
-X-MC-Unique: jd7chlQgPbKom_wRYui7Gw-1
-Received: by mail-lf1-f71.google.com with SMTP id z23-20020a0565120c1700b004258a35caf2so5525895lfu.13
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:18:13 -0800 (PST)
+        Fri, 14 Jan 2022 01:18:43 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620B4C061574;
+        Thu, 13 Jan 2022 22:18:43 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id f144so1147491pfa.6;
+        Thu, 13 Jan 2022 22:18:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=P7I6VaE87nRYEstDp+uq11bjIAOgfEzIQh4DoOK5I2k=;
+        b=qe9as3lG4cg4d11XtFLXqvRFNvZMNnNnIdE+gPaK3SFr4zp6zwuxYyFC5i0tv5TtTz
+         zjAIcTezNFAI1yJWMHmkN1gY+NfhHuwweyxUCtK5fno4YDIU3Kuz1cHXFkym6XCxBAWI
+         iqlPFhlAEN4dSWh61WkITrZRSp0TDfjnNOTc6shj9xNYue1dTBZXx6HSFx4V++8sU+55
+         2xRcARCv7ky1ZRin/ot+OaQb6GEOsnk3Ym0u0GWKxLHsmFeCIKe+mfwEHpZtNfVQoLO0
+         rqTYQk/DGCw1e3mQENDa3EFAvRjo+ZzBNdtdTSHyz6x6GHWL7ArD4fXIVa7svdTCm2Re
+         yCLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YawaJX8lTftoOW61Y7U6IA50jMGmbdQaYnSxlW1+tHw=;
-        b=Q6PNCtrx7wL84wePhJAd7IVYX3gkVYlgu9fh+1AtUBMubYHcBQjcOSvm1ijIxSssoU
-         suaGFZh826NzwPmb0Xy4isVesocmWOaf0o4b6m6yFb9zOX12QcKHc9MMUGaQbdyhoul5
-         TM+j5dy8sstsSneSvHNeUXTj9SOlm1qTTrA5EU+agBWNTWvFPsZhtBKsfUJKJ1e8s9PC
-         SJcwlT7JDET0gN9OzqIotk6z4SzsU6iKJPkZHe3HwAua1OE1brUlFgaWX99e0a82032o
-         Ltc1eZG0de/NdgtA7HbmGBvCJxa4x2ICZs5mpKaW2gszbkw08ZBFlgtNTOP1wcs2zK9G
-         ClVQ==
-X-Gm-Message-State: AOAM530He7gdxGaenxj1FYmxfLMEh0foCRqRKbSepEqd6vOGz3ouAqKr
-        4CI+x1e3Q+ochtmqFrGP/czzkeX7y/U5kkJeJb4Fx6/jgJUAmQDyvHbKbZO1GyNR2lzVoLY9zFx
-        ZuFhjrPqXxRtNW3g+6vF6N4NcNOqaDLXnd5qc52dk
-X-Received: by 2002:a2e:8645:: with SMTP id i5mr2054347ljj.420.1642141092220;
-        Thu, 13 Jan 2022 22:18:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx6Nfbams2KnY3qknpeMJm2YPphc5XVQuPf+9aKqnItDdPeixnxkwbf4f/KJ8Znvhi0j4XtHNEKy5oo568WAt4=
-X-Received: by 2002:a2e:8645:: with SMTP id i5mr2054339ljj.420.1642141092040;
- Thu, 13 Jan 2022 22:18:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20220113145642.205388-1-sgarzare@redhat.com>
-In-Reply-To: <20220113145642.205388-1-sgarzare@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 14 Jan 2022 14:18:01 +0800
-Message-ID: <CACGkMEsqY5RHL=9=iny6xRVs_=EdACUCfX-Rmpq+itpdoT_rrg@mail.gmail.com>
-Subject: Re: [RFC PATCH] vhost: cache avail index in vhost_enable_notify()
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=P7I6VaE87nRYEstDp+uq11bjIAOgfEzIQh4DoOK5I2k=;
+        b=IrwpumvxVvyrO6vcztlir85cyB2gnx8MPIPKb7VUFTFxCYr87ze/oNSXThfQzrqJiD
+         u6yo5BtTCF1ebHXQeRMVV1jVIARmntFsUMidg5cUG8Bn2ORnI8H4jGzC83PztjaCL8ST
+         SRJm7vE5p7UC6tsa7p0LYnATCyuNMSKJxjKL47RfApBnb+fxdQrGlSoBp6VCzsBmOJyU
+         kPkjeioKx6Md5u1ylHRM+E3FD3ZiTzIALxgtDzIsoc0u9utVYNUazTxC0BAOw/9316ZH
+         /I8ELuGvT9JH/MqfmZCz09jrUhIVdy2rky72DiAJORP7/2UrmVaiqSnCAjBckw3ak28M
+         bKyQ==
+X-Gm-Message-State: AOAM533nlWZKMMlDEIl8oVd9nCEaEmFEFeSb94/RSgZkw9Hr28YqIFpr
+        R4Gy1uNbLvPIaVVxVvwM74g=
+X-Google-Smtp-Source: ABdhPJxDVsI0xYs0EXSiOjEYrv7EF3fAnGjGjUzRXG0ePAETn2CzuaiK1U+JTS0VUpNjF5BAA5/L5Q==
+X-Received: by 2002:a63:6bc3:: with SMTP id g186mr6897880pgc.192.1642141122952;
+        Thu, 13 Jan 2022 22:18:42 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id pi7sm1871131pjb.23.2022.01.13.22.18.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 22:18:42 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sagar Dharia <sdharia@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] slimbus: qcom:  Fix IRQ check in qcom_slim_probe
+Date:   Fri, 14 Jan 2022 06:18:29 +0000
+Message-Id: <20220114061830.13456-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 10:57 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->
-> In vhost_enable_notify() we enable the notifications and we read
-> the avail index to check if new buffers have become available in
-> the meantime. In this case, the device would go to re-read avail
-> index to access the descriptor.
->
-> As we already do in other place, we can cache the value in `avail_idx`
-> and compare it with `last_avail_idx` to check if there are new
-> buffers available.
->
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+platform_get_irq() returns negative error number instead 0 on failure.
+And the doc of platform_get_irq() provides a usage example:
 
-Patch looks fine but I guess we won't get performance improvement
-since it doesn't save any userspace/VM memory access?
+    int irq = platform_get_irq(pdev, 0);
+    if (irq < 0)
+        return irq;
 
-Thanks
+Fix the check of return value to catch errors correctly.
 
-> ---
->  drivers/vhost/vhost.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index 59edb5a1ffe2..07363dff559e 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -2543,8 +2543,9 @@ bool vhost_enable_notify(struct vhost_dev *dev, struct vhost_virtqueue *vq)
->                        &vq->avail->idx, r);
->                 return false;
->         }
-> +       vq->avail_idx = vhost16_to_cpu(vq, avail_idx);
->
-> -       return vhost16_to_cpu(vq, avail_idx) != vq->avail_idx;
-> +       return vq->avail_idx != vq->last_avail_idx;
->  }
->  EXPORT_SYMBOL_GPL(vhost_enable_notify);
->
-> --
-> 2.31.1
->
+Fixes: ad7fcbc308b0 ("slimbus: qcom: Add Qualcomm Slimbus controller driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/slimbus/qcom-ctrl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/slimbus/qcom-ctrl.c b/drivers/slimbus/qcom-ctrl.c
+index f04b961b96cd..ec58091fc948 100644
+--- a/drivers/slimbus/qcom-ctrl.c
++++ b/drivers/slimbus/qcom-ctrl.c
+@@ -510,9 +510,9 @@ static int qcom_slim_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	ctrl->irq = platform_get_irq(pdev, 0);
+-	if (!ctrl->irq) {
++	if (ctrl->irq < 0) {
+ 		dev_err(&pdev->dev, "no slimbus IRQ\n");
+-		return -ENODEV;
++		return ctrl->irq;
+ 	}
+ 
+ 	sctrl = &ctrl->ctrl;
+-- 
+2.17.1
 

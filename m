@@ -2,90 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 857C248EB9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDBA48EBB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237300AbiANOYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 09:24:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235609AbiANOYw (ORCPT
+        id S237597AbiANOcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 09:32:42 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33096 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233926AbiANOcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:24:52 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AB6C06173E
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 06:24:51 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id j27so2897615pgj.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 06:24:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+kK5YwD4X+KlkJJ9sy7/5Wbvm6efis2jkyS4KfuvH1M=;
-        b=eskFAvJmnTLDaFwlYBQjIYxtLYmAijE6kQEd40yeBmgZCR6ZFM1lgC7JYwNV0qiVSH
-         bisxPt84r2TJYVJcGpQZ/ylargfbLuygaQ9RGYaHZYY3MDQN7Q7GhDsqOvyz0PePGgak
-         YppO8SFsTxlpY6D0bvXlA2KX81yy+MFmftsUg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+kK5YwD4X+KlkJJ9sy7/5Wbvm6efis2jkyS4KfuvH1M=;
-        b=JRV/qiuXSJ3KVtRxdXtpsfEzyWoMDXhBQ6/iUekmcdv8eDi5EX1XvvIXWk5jyHTMNt
-         OA1A7252CTfmD72i3suY3uT4yM3YJpOX4DdvPK1cEr5ViSffbnfv55Ho0owwoIEk4o8K
-         J56zgtPvj3eDcf3bMCMmohmGCipdROlC7NoUpV8oKmvIXEwTewqn+VYCHcvtoNESGc+u
-         Mk/KQgp6tY6VvEqRwF/xYWuLFL82Cae4OH1bsTEeoWHffIzCx9Icl1ZKWp/+xj+kmzRT
-         hdj9v6eOuyLwS+rfxQK8KyoghPiFuBt48cEqUlHOtklC8U1D4m9Y83cTZIdANfmaT4tc
-         oxAQ==
-X-Gm-Message-State: AOAM531sQAz55okTFG0GGaWik4+XSnb6PeGOCoILFfNa+qyXZv0ypdkS
-        kWD0cZEBs+BZQcgSt0xmXG5BPQ==
-X-Google-Smtp-Source: ABdhPJwowuy25u83s4Ys0CVAnNZ0sgafPxHTT3qzJIleNFV5sQXWe1qEeqp2jMrEU/nk7pAYzvnxrQ==
-X-Received: by 2002:a63:7415:: with SMTP id p21mr8227558pgc.284.1642170291534;
-        Fri, 14 Jan 2022 06:24:51 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:d9fc:bf52:3ca:199b])
-        by smtp.gmail.com with UTF8SMTPSA id l13sm4874933pgq.34.2022.01.14.06.24.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 06:24:51 -0800 (PST)
-Date:   Fri, 14 Jan 2022 06:24:49 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        quic_rjendra@quicinc.com, sibis@codeaurora.org,
-        kgodara1@codeaurora.org, swboyd@chromium.org,
-        pmaliset@codeaurora.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] arm64: dts: qcom: sc7280: Factor out Chrome common
- fragment
-Message-ID: <YeGHsTLT/CD8D9rH@google.com>
-References: <20220114004303.905808-1-dianders@chromium.org>
- <20220113164233.3.Iac012fa8d727be46448d47027a1813ea716423ce@changeid>
+        Fri, 14 Jan 2022 09:32:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64AC1B82604;
+        Fri, 14 Jan 2022 14:32:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBEB6C36AEB;
+        Fri, 14 Jan 2022 14:32:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642170759;
+        bh=c0/3UrkMbjuUslXbgnUMa3dSP3+Nnia5iZzFb0NTNBk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JiP7IqOn6qn2bx8lkr/PMrpyoVcpOkYWfbt7xgwW9EImWS60JvI2VTLMzNivT/EXN
+         HjOA/Fny0KlbTpUndeJPinDfh0csnrKqI7t8rKFVQ42BQuRjJPxdMwlQHbb0EXgftU
+         yzm5ZfgmVZen/41DW9IqNicT1SiF5tjf7VqEEN+ycylmjWsgNM+ky+tOwDZuPtilDN
+         b44K2TS3nbx8sB7cgaCXy02Byl7GxADbcohtMV15vns7XoHNvgtfu99pIkAtOUmHkj
+         7xdUjNoWKZ5+XRG12ko9vqEgfAX4PRgvRGwmwuZXhrw+f8N5opCwWO9xmWBWI/p2qu
+         35QZdgtUoZ99g==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3DE7240714; Fri, 14 Jan 2022 11:32:37 -0300 (-03)
+Date:   Fri, 14 Jan 2022 11:32:37 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     German Gomez <german.gomez@arm.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf arm: Fix off-by-one directory path.
+Message-ID: <YeGJhWmiS04diOvf@kernel.org>
+References: <20220114064822.1806019-1-irogers@google.com>
+ <42fbdd13-c8a8-404b-a452-1e796c2e5a8b@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220113164233.3.Iac012fa8d727be46448d47027a1813ea716423ce@changeid>
+In-Reply-To: <42fbdd13-c8a8-404b-a452-1e796c2e5a8b@arm.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 04:43:02PM -0800, Douglas Anderson wrote:
-> This factors out a device tree fragment from some sc7280 device
-> trees. It represents the device tree bits that should be included for
-> "Chrome" based sc7280 boards. On these boards the bootloader (Coreboot
-> + Depthcharge) configures things slightly different than the
-> bootloader that Qualcomm provides. The modem firmware on these boards
-> also works differently than on other Qulacomm products and thus the
-> reserved memory map needs to be adjusted.
+Em Fri, Jan 14, 2022 at 09:26:29AM +0000, German Gomez escreveu:
+> Hi Ian,
 > 
-> NOTES:
-> - This is _not_ quite a no-op change. The "herobrine" and "idp"
->   fragments here were different and it looks like someone simply
->   forgot to update the herobrine version. This updates a few numbers
->   to match IDP. This will also cause the `pmk8350_pon` to be disabled
->   on idp/crd, which I belive is a correct change.
-> - At the moment this assumes LTE skus. Once it's clearer how WiFi SKUs
->   will work (how much of the memory map they can reclaim) we may add
->   an extra fragment that will rejigger one way or the other.
+> I think there's another include in "utils/intel-pt.c" that may need the same treatment.
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> On 14/01/2022 06:48, Ian Rogers wrote:
+> > Relative path include works in the regular build due to -I paths but may
+> > fail in other situations.
+> >
+> > Fixes: 83869019c74c ("perf arch: Support register names from all archs")
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> Reviewed-by: German Gomez <german.gomez@arm.com>
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Thanks, applied.
+
+- Arnaldo
+
+ 
+> Thanks,
+> German
+> > ---
+> >  tools/perf/util/arm64-frame-pointer-unwind-support.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/perf/util/arm64-frame-pointer-unwind-support.c b/tools/perf/util/arm64-frame-pointer-unwind-support.c
+> > index 4f5ecf51ed38..2242a885fbd7 100644
+> > --- a/tools/perf/util/arm64-frame-pointer-unwind-support.c
+> > +++ b/tools/perf/util/arm64-frame-pointer-unwind-support.c
+> > @@ -6,7 +6,7 @@
+> >  #include "unwind.h"
+> >  
+> >  #define perf_event_arm_regs perf_event_arm64_regs
+> > -#include "../arch/arm64/include/uapi/asm/perf_regs.h"
+> > +#include "../../arch/arm64/include/uapi/asm/perf_regs.h"
+> >  #undef perf_event_arm_regs
+> >  
+> >  struct entries {
+
+-- 
+
+- Arnaldo

@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BAE48E7FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 11:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 732B048E800
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 11:01:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240192AbiANKAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 05:00:04 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:58050 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240103AbiANJ7y (ORCPT
+        id S237537AbiANKBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 05:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230329AbiANKBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:59:54 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id BFEC51F3D3;
-        Fri, 14 Jan 2022 09:59:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642154391; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qmwbDXCD1IYxhc8Rn4/92BZfIPK0fFdxSVgthJ5taA4=;
-        b=J4BVfOXcoK+w1RCl2Zw4sZxvBV7m3oaac6fwGpQXId2pL+KIV+ughVxTxQ2zeit4y/cv0k
-        6RGNq6gHnAVqsCAHjqgmOfRRuSumWxuEWMrajJ5Rh7hvcmCILmaG2n+qCTD+0gJruobjkP
-        Jje0H/AIsgcT22TnebB7nLPWxCJtEaM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642154391;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qmwbDXCD1IYxhc8Rn4/92BZfIPK0fFdxSVgthJ5taA4=;
-        b=puAmxENJ+nE7lagW0XsW5t1PTGbkxEpFb9sBE4MLPvZEWOdNSvddqAQV1h7jvkwy1BGs0C
-        6k5WF/eEsv6GEkBQ==
-Received: from quack3.suse.cz (unknown [10.163.43.118])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 73AF0A3B8F;
-        Fri, 14 Jan 2022 09:59:51 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id EA7A8A05D7; Fri, 14 Jan 2022 10:59:50 +0100 (CET)
-Date:   Fri, 14 Jan 2022 10:59:50 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-Cc:     jack@suse.cz, tj@kernel.org, axboe@kernel.dk,
-        paolo.valente@linaro.org, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH v2 0/3] block, bfq: minor cleanup and fix
-Message-ID: <20220114095950.fa3gofecmryztivs@quack3.lan>
-References: <20211231032354.793092-1-yukuai3@huawei.com>
- <5696c767-8248-09a4-f04e-ac93138d30ef@huawei.com>
- <1cdb99ba-ed52-c755-fec4-86ee5f9bc61d@huawei.com>
+        Fri, 14 Jan 2022 05:01:30 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FD0C06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 02:01:29 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso6988524wmj.2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 02:01:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DcACr8Bd+mNZvnu1O74OohObZ0GddAZiXwcQTYhmUQY=;
+        b=p8xafJDL5i8uvPfKnstNQWZ9evJZVA7UxSY4oqdA6G4x/Evelpj/oHt+NLas34INpx
+         XNXJJghAC3Vl1rb1MOO1xHFMklmAD76kv8xB3JLIQ01DyzbUSuyOg5x90oagYmdO+RPw
+         uGbhqCfr/xmk99FjGbLezVxStHqEvNUKdFz8qLPTaoEIGjtb6s2Wedvb/R/8zH/HwTuS
+         c+iwgqBFr6jngXx3CFlT1Ppkn7TV8asB6XXywFA6pGr0O2LgydiTjBvGG8GjHfdlLB7Y
+         vXJPbRmVJt3PQxTw9sE0wjBvgIowondxtBER7pqsT0TfpRRneCv4LdRoPJganioaGSZs
+         6Fyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DcACr8Bd+mNZvnu1O74OohObZ0GddAZiXwcQTYhmUQY=;
+        b=n3eYEn429OmDRQNgzAd7tg01xhtu2hF66Pob/E7J0lcYHwzUQFP3pvLiv2/KiZA8f/
+         2JUJjqBfoWEhCwIzvrdhbIXWBLKVAPvoTmHN5SVoFpOcLwkKwqJcl8jyjuIe/K2IiF9O
+         QZl++yAX0kljhJWogAj5X8leYZ0A6GOret3X41LnKHYDTTCOwep4uH/5GX45sImJftwM
+         9RmOMHp4ujxUtqZS9e9ROStjjsq0GtZT+gpfICzyJ7+8zHpgG+0GFlQbMSRhOb19q/Oq
+         loC+A1qv3q+GjQZ+/PvXLu7JBERACxEXoXrDFdi8/xok4RVfkcNyjk/06ZcT25ToPzUH
+         vRSQ==
+X-Gm-Message-State: AOAM533tsam3DHx9k2Ic6QwDuXPEHAnKSnhRU+bsZ/BTkrpPHH7aCmny
+        otJbjD4yzYrlXoFu4v2DwV8DYPxBDYmIAXkVJiMSyw==
+X-Google-Smtp-Source: ABdhPJwe5ihRS+8JPaUHiM2gWpjslK40TLTyJ5Wm2IxkKjXyp5F5glRNDdvkaM6MX+lKXVyxeolziQq6bwiytBCmeLk=
+X-Received: by 2002:a05:600c:4f49:: with SMTP id m9mr14636872wmq.8.1642154488280;
+ Fri, 14 Jan 2022 02:01:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1cdb99ba-ed52-c755-fec4-86ee5f9bc61d@huawei.com>
+References: <0e30e1f1bde74bc95085093fb0289007d510a68c.1640529121.git.christophe.jaillet@wanadoo.fr>
+ <CAFA6WYOZtMW7bq98JXm8AqgajaYmythiDQ53k-zgew6zE63YCg@mail.gmail.com>
+In-Reply-To: <CAFA6WYOZtMW7bq98JXm8AqgajaYmythiDQ53k-zgew6zE63YCg@mail.gmail.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Fri, 14 Jan 2022 11:01:17 +0100
+Message-ID: <CAHUa44Ghzbtj_YUQxAjq7cKmmJW8hRrYvq+9UwZn9CHkHO8_PQ@mail.gmail.com>
+Subject: Re: [PATCH] optee: Use bitmap_free() to free bitmap
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 14-01-22 16:23:36, yukuai (C) wrote:
-> 在 2022/01/11 9:40, yukuai (C) 写道:
-> > 在 2021/12/31 11:23, Yu Kuai 写道:
-> > > Chagnes in v2:
-> > >   - add comment in patch 2
-> > >   - remove patch 4, since the problem do not exist.
-> > > 
-> > friendly ping ...
-> 
-> Hi, Jens
-> 
-> Can this patchset be applied?
+On Mon, Dec 27, 2021 at 6:36 AM Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> On Sun, 26 Dec 2021 at 20:02, Christophe JAILLET
+> <christophe.jaillet@wanadoo.fr> wrote:
+> >
+> > kfree() and bitmap_free() are the same. But using the latter is more
+> > consistent when freeing memory allocated with bitmap_zalloc().
+> >
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > ---
+> >  drivers/tee/optee/notif.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+>
+> Looks reasonable to me.
+>
+> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+>
 
-Maybe Jens is waiting for Paolo's ack as a BFQ maintainer. Paolo, what do
-you think about the cleanups? They seem mostly obvious to me...
+Looks good, picking up this.
 
-								Honza
-
-> 
-> Thanks
-> > > Yu Kuai (3):
-> > >    block, bfq: cleanup bfq_bfqq_to_bfqg()
-> > >    block, bfq: avoid moving bfqq to it's parent bfqg
-> > >    block, bfq: don't move oom_bfqq
-> > > 
-> > >   block/bfq-cgroup.c  | 16 +++++++++++++++-
-> > >   block/bfq-iosched.c |  4 ++--
-> > >   block/bfq-iosched.h |  1 -
-> > >   block/bfq-wf2q.c    | 15 ---------------
-> > >   4 files changed, 17 insertions(+), 19 deletions(-)
-> > > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Thanks,
+Jens

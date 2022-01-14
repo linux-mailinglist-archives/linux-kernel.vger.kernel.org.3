@@ -2,233 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9559E48EF65
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 624B748EF6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243943AbiANRxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243937AbiANRxf (ORCPT
+        id S243956AbiANRzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:55:06 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:46153 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243937AbiANRzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:53:35 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4895BC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:53:35 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id h14so25847550ybe.12
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:53:35 -0800 (PST)
+        Fri, 14 Jan 2022 12:55:04 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=iPiLzn8DvcR9mQ6SMaZnf4sCbYQHKuql8njzAXaalFU=;
-        b=o/bOr+ZplfKp3Nw+3iAzhjo4u4vX62vI3uvbwlDd00IXK+HAdO2mE41x8KQ5atuU3h
-         936vxM0U3QJSOBJNWGiREjDzEEg0VuYnpUejRmd8k3TUdXLyZjQGB6Zw7lT1306kb3qA
-         hfO6fp8Defr3qZuVxJLIPSBzpjV20FAxPCbgTYxvtbl5xp/Oj16bQy65+YDhLB51+LkN
-         s9/4K30gPXIhWh2igi0rPl7wk1seL+VrBMEC+vTjIRUNaJofrzmi87zUDsts3aqTKj4j
-         vRXa49ymDP53Z8k2fEyMFtdfzrcxIah4JdX+/KisXCH1HjccQYja9IgUPFvdGyqt4mh7
-         4gfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=iPiLzn8DvcR9mQ6SMaZnf4sCbYQHKuql8njzAXaalFU=;
-        b=205bB9NoMb9FxYVA06zxerunzvdG5ooYPpl2rNdfu35JG2bMf8ekg+LJEWvUP/wcGx
-         qxcwzbDFv5KpU0g+wfFuy5hrqSdkTMMffoL4RN/lVn0hlU59vimsFVX7BYDIoFkvidxu
-         yFnBdaL9omP/sxwg6xUtdQ7jBGM+iT/xb0EAVn+GjOdtkADXkG+6QFK25O5tLbWVg02A
-         aGIfWsLUBgsv4MYr+xJVy4SRSNSLAaWJWA+t2qEyE0xIha5GV1uor5JOvM9LRwjakD28
-         SARUQOycAJzavaUWUXOv2YpLHW8w0D04I37xXkB8fN8TUmub4Gg/fO9Y9uNI3HTq5FJV
-         9qiQ==
-X-Gm-Message-State: AOAM530ZuYITWVOtwNdsIweMCONeXn8GsLFd5pOxiaiK6UXQz4Z75KhP
-        oR8SL7UA/k6zVKfDNYuJGHSgZbt4XZUlGWSEpHDKhg==
-X-Google-Smtp-Source: ABdhPJz0OZK3FHU82OSDrd5jS4IvbdEZeDUQVGueOTpxnUUSbF3rnMys4n4SJMpYO16fOh39plpZAQ9pg8BSBaD7Adk=
-X-Received: by 2002:a25:dcc6:: with SMTP id y189mr4485265ybe.684.1642182814288;
- Fri, 14 Jan 2022 09:53:34 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642182905; x=1673718905;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=uqJ5CmOT3PvUyNa00Cv5sc/GONEvZmWWJpcg0wzd2HA=;
+  b=miMm3KUOooaB7mTOv1oMTR2mqFeHb1F+gt7tdc4UzNxoz5Xl88pPJkCB
+   xEzuX2MYz1HSajNeim7VdwgF3WMsMWofNUTwQEFZmSUMR3IR+egjvDjog
+   b/ETyEcBwTbaNqlJBxEGBvKdWnYZ4mhidqyjCOer3fh4/xE5AUbHpf9I2
+   g=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 14 Jan 2022 09:55:04 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 09:55:04 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 14 Jan 2022 09:54:43 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 14 Jan 2022 09:54:43 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
+        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v14 0/4] group dp driver related patches into one series
+Date:   Fri, 14 Jan 2022 09:54:30 -0800
+Message-ID: <1642182874-27296-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220114081544.849748488@linuxfoundation.org>
-In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 14 Jan 2022 23:23:23 +0530
-Message-ID: <CA+G9fYuoW0_pc9Qd9BTq8hxPC1idc=HKviWhDX-LgYXqgVOB4Q@mail.gmail.com>
-Subject: Re: [PATCH 5.16 00/37] 5.16.1-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Jan 2022 at 13:52, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.1 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.16.1-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Group below 4 dp driver related patches into one series.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Kuogee Hsieh (4):
+  drm/msm/dp: do not initialize phy until plugin interrupt received
+  drm/msm/dp:  populate connector of struct  dp_panel
+  drm/msm/dp: add support of tps4 (training pattern 4) for HBR3
+  drm/msm/dp: stop link training after link training 2 failed
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+ drivers/gpu/drm/msm/dp/dp_catalog.c |  12 ++---
+ drivers/gpu/drm/msm/dp/dp_catalog.h |   2 +-
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    | 100 ++++++++++++++++--------------------
+ drivers/gpu/drm/msm/dp/dp_ctrl.h    |   8 +--
+ drivers/gpu/drm/msm/dp/dp_display.c |  97 +++++++++++++++++++++-------------
+ 5 files changed, 118 insertions(+), 101 deletions(-)
 
-## Build
-* kernel: 5.16.1-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.16.y
-* git commit: c8e806b92342da77315e4d60ad7dc4b9c41824a4
-* git describe: v5.16-38-gc8e806b92342
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
--38-gc8e806b92342
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-## Test Regressions (compared to v5.16)
-No test regressions found.
-
-## Metric Regressions (compared to v5.16)
-No metric regressions found.
-
-## Test Fixes (compared to v5.16)
-No test fixes found.
-
-## Metric Fixes (compared to v5.16)
-No metric fixes found.
-
-## Test result summary
-total: 98263, pass: 83437, fail: 2222, skip: 12604, xfail: 0
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 255 passed, 4 failed
-* arm64: 37 total, 37 passed, 0 failed
-* i386: 35 total, 35 passed, 0 failed
-* mips: 34 total, 30 passed, 4 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 48 passed, 4 failed
-* riscv: 24 total, 20 passed, 4 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 37 total, 37 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org

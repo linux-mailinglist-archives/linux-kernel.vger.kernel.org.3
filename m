@@ -2,126 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C2D48EED1
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DD148EED4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243644AbiANQ5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
+        id S243650AbiANQ6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiANQ5n (ORCPT
+        with ESMTP id S229717AbiANQ6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:57:43 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA911C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:57:42 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id k30so16600365wrd.9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:57:42 -0800 (PST)
+        Fri, 14 Jan 2022 11:58:09 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9F6C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:58:09 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id h15so6915140qtx.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:58:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8tlmhR9a+oSiQxYgTs9TSjEyT0cpPnO4gBCG7leedNI=;
-        b=QcCsaXmaZFWsArkyS5ubMHNqwdV+bONwmyEp85ScjOc2CF/42wJGz4jjT+ad/Ry611
-         083GxGtKg4TJ79eMUo3dC2J+XtNJ9+5FfgSuwjcmtvOR/4zwkboYinLPZ2YyT7IQEcX6
-         O4+0Ww9RTbJquWrvJBsU4RGpdabqbKvq6Eo4w=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3/LknUee5tShvPQdGCDJMgZycBj7j7tFq0oVBnp2e2k=;
+        b=iVbeHVWMHHQPD1rqqEEZ8DrfcGbToE5o1zbVM35kRg/Odick5qpphoDqLNEV9QsqWM
+         MdJuBLZpxmVZUGKZ/U+RT1Dz9gF35kE9KGSv9DtH01kx/MVKsj0th6OCGg44bRFur3do
+         owooPCV25uNhuTReUXOtvctS+yL0qqIjAuYoQWs4Z/fXicEeTIVphCSjEonP+DaPuugh
+         iRERJ3q7mKRJ4tiaWnKlZ7vUZPO83bjO7ijrkCdhr1Td21bxGEASeVEyhxiK2/fZmGpC
+         HdiecBrry7MYtklo3Uo9OBTlnElF/8Q4Pd8a6vxoN6d9aP8OLwdBZQ6B3ug4ThoM3j8K
+         v2ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=8tlmhR9a+oSiQxYgTs9TSjEyT0cpPnO4gBCG7leedNI=;
-        b=xvd43ibIEOyq+sbmJwSY/AkCGvbPad3vgxL/n6y5M90SSlL+nsRBrDm4KmaMmUmoLj
-         HBGI1N/Oo7Bue6i1ft+26HpxML+2xKST4PF8SjMdJ5IScSjwxdee805QEdw/QAIGeuVb
-         LnR+26nSfUJZPL/J2Qa2dE6c72ezPAyXqYu3v5L3/t9Lougnk9G3I1KdmC0yvX+/+F9z
-         blSOur5adu1JMRxPdQ5R6eQ6Pl9bFshGRQRWbNN1NuHI8faD2HK1Sd///mLdtCjC0Auc
-         cL2FSVkbnEt83qM6yfkYiCMs9w5nmbQxKPnbDlEZTMUd6TPzdw289glLrWVIiJqiWItF
-         lU9g==
-X-Gm-Message-State: AOAM531e6dvE5wdrsRGQPh0NWs8fsm2Wzwze7Wgim/FhM/PWhC+D2IPA
-        6+gRuc8VjYjxuhw98/G/btFtdQ==
-X-Google-Smtp-Source: ABdhPJwJs+M7uqymw5kPe5LWbLvcWEC9656nwi+iTRgHPrTpBHgrVMtYX3b6p8Xz5qk20YpoKPr0gw==
-X-Received: by 2002:a5d:6e09:: with SMTP id h9mr9098120wrz.116.1642179461451;
-        Fri, 14 Jan 2022 08:57:41 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id s10sm10546434wmr.30.2022.01.14.08.57.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 08:57:40 -0800 (PST)
-Date:   Fri, 14 Jan 2022 17:57:38 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     kraxel@redhat.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, daniel.vetter@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
-Subject: Re: [PATCH] udmabuf: validate ubuf->pagecount
-Message-ID: <YeGrgs+4PXM2ud+n@phenom.ffwll.local>
-Mail-Followup-To: Pavel Skripkin <paskripkin@gmail.com>, kraxel@redhat.com,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
-References: <20211230142649.23022-1-paskripkin@gmail.com>
- <c5ae2a68-070f-884c-c82a-2d3f4b8e06b1@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3/LknUee5tShvPQdGCDJMgZycBj7j7tFq0oVBnp2e2k=;
+        b=khlSwPhwuZrx5QYv9Ewy/+jt6r5VwtlBPwUaODjlKOMrtk4wS8bs8jLBDjWcjzlU2q
+         ALG7voBUa+8jgnQgNEbZpdbQYFqee3wimZ2Yg0xuj47ufp+mxEk7KmY3WM4nZSmmg2Cc
+         t+QCzLFl9CgfGUM4X/5p/vmb0JEQzbv/QYAnHnmg4OxXJgT6TIeXvI5uEqRbj5QLnTD0
+         1dsCxDO6xm7jWEz/3fwIfF3x2rh7aSnceWvY02NPSqlsRgb6JidJMfnFwPJU5XBN33GA
+         r+x8608jzbROaFPEvcIYU4G1bRsc+PtJlylXbi5au6JPmTVRhPu/DWpoPUHs4uP9XP6d
+         z7Og==
+X-Gm-Message-State: AOAM530jqXFmitu9cTcIGNlRKWp/HxIqEKMgofEG5zQInYToYWtTTYsQ
+        eVvTf2JQHl/HGvQxrUkYzSIpLmgIZJs5f/2yoOMj5Q==
+X-Google-Smtp-Source: ABdhPJxLfPwEEBa+Ap9zKOritX0zyA/zOHrcclb56wSl9nFh7Fse60RiU41+kwlDQ+/tbTFIav2jJw6+dJm7B0eVyJU=
+X-Received: by 2002:ac8:5c8e:: with SMTP id r14mr8329561qta.42.1642179488381;
+ Fri, 14 Jan 2022 08:58:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5ae2a68-070f-884c-c82a-2d3f4b8e06b1@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+References: <20220114114633.742-1-allen-kh.cheng@mediatek.com> <20220114114633.742-3-allen-kh.cheng@mediatek.com>
+In-Reply-To: <20220114114633.742-3-allen-kh.cheng@mediatek.com>
+From:   Curtis Malainey <cujomalainey@google.com>
+Date:   Fri, 14 Jan 2022 08:57:58 -0800
+Message-ID: <CAOReqxiSAhrSjXVW=D+ndXko95qLuHGkkNs5Wf-yVEcv1YompQ@mail.gmail.com>
+Subject: Re: [PATCH v14 2/2] mailbox: mediatek: add support for adsp mailbox controller
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        sound-open-firmware@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 09:08:46PM +0300, Pavel Skripkin wrote:
-> On 12/30/21 17:26, Pavel Skripkin wrote:
-> > Syzbot has reported GPF in sg_alloc_append_table_from_pages(). The
-> > problem was in ubuf->pages == ZERO_PTR.
-> > 
-> > ubuf->pagecount is calculated from arguments passed from user-space. If
-> > user creates udmabuf with list.size == 0 then ubuf->pagecount will be
-> > also equal to zero; it causes kmalloc_array() to return ZERO_PTR.
-> > 
-> > Fix it by validating ubuf->pagecount before passing it to
-> > kmalloc_array().
-> > 
-> > Fixes: fbb0de795078 ("Add udmabuf misc device")
-> > Reported-and-tested-by: syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
-> > Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> > ---
-> > 
-> 
-> Gentle ping :)
+> +
+> +static struct mtk_adsp_mbox_priv *get_mtk_adsp_mbox_priv(struct mbox_controller *mbox)
+> +{
+> +       return container_of(mbox, struct mtk_adsp_mbox_priv, mbox);
+> +}
 
-Gerd Hoffmann should pick this one up, pls holler again if it doesn't
-happen.
--Daniel
+this could probably be inline
 
-> 
-> > 
-> > ---
-> >   drivers/dma-buf/udmabuf.c | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-> > index c57a609db75b..e7330684d3b8 100644
-> > --- a/drivers/dma-buf/udmabuf.c
-> > +++ b/drivers/dma-buf/udmabuf.c
-> > @@ -190,6 +190,10 @@ static long udmabuf_create(struct miscdevice *device,
-> >   		if (ubuf->pagecount > pglimit)
-> >   			goto err;
-> >   	}
-> > +
-> > +	if (!ubuf->pagecount)
-> > +		goto err;
-> > +
-> >   	ubuf->pages = kmalloc_array(ubuf->pagecount, sizeof(*ubuf->pages),
-> >   				    GFP_KERNEL);
-> >   	if (!ubuf->pages) {
-> 
-> With regards,
-> Pavel Skripkin
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> +
+> +static struct mbox_chan *mtk_adsp_mbox_xlate(struct mbox_controller *mbox,
+> +                                            const struct of_phandle_args *sp)
+> +{
+> +       return mbox->chans;
+> +}
+
+also could probably benefit from inline

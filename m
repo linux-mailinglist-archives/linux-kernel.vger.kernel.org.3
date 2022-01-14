@@ -2,146 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B08048E2E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 04:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 154E148E2E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 04:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238931AbiANDNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 22:13:37 -0500
-Received: from mga04.intel.com ([192.55.52.120]:36017 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238885AbiANDNf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 22:13:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642130015; x=1673666015;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=Szmsi12k0LI7khEwP6fZbgXfWxt5yjoq0TShGWuPc+o=;
-  b=ee7+WMhAbDKX5x3TFYIZq0aUI8TNxfTveC/cQxVnYFqS4jOwE23Gc4ME
-   NTPpAd8u4WAcxo8oN4NbsgjAXIhdXsNzn69AP0K7CHEgdGNM5mAHvlvvG
-   Q7U+eyKwFZ3o5rZvql9rszCRiDanzrdZp39DwqdRCmLG4CigU0UqC+dTc
-   qXo7/CfW0BzUUBH0GVJ7q9l0ElsaqgxrM1Iu+zne5caLUpXgvH9p39TLB
-   P6oh+rKoq6ali/kjuOnbFzUoDBCnQe4GZOl5bOfBpmLJlY3DGe0EuSF+b
-   UzBTo8BiaA/ZYss9UcOpYLUsbCPEap2RYpA9+jkgtFz+Yhi3LnQZKexrx
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="242989193"
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="242989193"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 19:13:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="529971183"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 13 Jan 2022 19:13:33 -0800
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>
-Subject: Re: [PATCH] iommu/vt-d: Fix PCI bus rescan device hot add
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-References: <1642080198-10971-1-git-send-email-jacob.jun.pan@linux.intel.com>
- <b2139255-2463-c62f-4746-8df7f3f49221@linux.intel.com>
- <20220113191122.53bc6ac0@jacob-builder>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <1b8d3145-c404-e952-e61e-5cdc2f6a92a6@linux.intel.com>
-Date:   Fri, 14 Jan 2022 11:12:45 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20220113191122.53bc6ac0@jacob-builder>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S238987AbiANDOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 22:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38948 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238850AbiANDOc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 22:14:32 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F492C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 19:14:32 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id ie23-20020a17090b401700b001b38a5318easo12930795pjb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 19:14:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=squareup.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=UihRxFe06/0BjCUwssSJVg8d5/WcnG6d9hupQZOxDOM=;
+        b=bvFNtVjXhWZB/QjtYGDuou+oOg1zbJqHE1lCE03Hzcg28YrENTk5LeMPjwFoPicoEe
+         dbwRbVpTpkrsdZ6/AFx3QdXgpAqiNTrs7UvI7Jty+mhxz0/S38uG1uQVYYNYGuuhvtjx
+         GEvqRCLqVIahMktERqUiahUAQSw5kybTBwSmg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=UihRxFe06/0BjCUwssSJVg8d5/WcnG6d9hupQZOxDOM=;
+        b=3OfWShbyxlSAgqN8mlqWXtKeeLlXc3pquJdgiyafgA9nq/pWrraFdJyAbjg685WmZC
+         XLc5kGNj5M+Ib5D37pYlDg2gaCaGSZMFJexIp2UpfeJOsL3e/MPXffikV6Or0KSxVcr8
+         UIga3/Iyj/q6tIWtH4WmiLi5DOv+3Fn/IGtIr+4hI+GhLcX24/uMWNU36nyiZaVlXCit
+         QmNRRiyc/8F6PShz0fpjNXjcGkQy6K4dR35ZXZMSOANaWx08iK61Z+efwwFxKpdFb0yQ
+         pFV7P4BLBpMpIFnugQ4ZddYdmooAwtYgO5rU1/r6YxKcMSz0CG/v9IyecCsGf7Ob6Vne
+         1P7A==
+X-Gm-Message-State: AOAM530OPhTd5DK3k0Sbi4oN53JDZ/c2hd0KLrjpwG5QO92EHthYfArr
+        WRecyhkE5g+7gC8pYaczIG+MuA==
+X-Google-Smtp-Source: ABdhPJw5u7fOl1HCNeFx7xfSaQq53IeVfxaVK7JmWpf7VCgW+7WNldHq5Yw2s90BuxCArGbxNtnweg==
+X-Received: by 2002:a17:902:d505:b0:14a:77ac:1e8b with SMTP id b5-20020a170902d50500b0014a77ac1e8bmr7292312plg.1.1642130071939;
+        Thu, 13 Jan 2022 19:14:31 -0800 (PST)
+Received: from localhost (99-47-69-49.lightspeed.sntcca.sbcglobal.net. [99.47.69.49])
+        by smtp.gmail.com with ESMTPSA id m3sm3813484pfa.183.2022.01.13.19.14.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 13 Jan 2022 19:14:31 -0800 (PST)
+From:   Benjamin Li <benl@squareup.com>
+To:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Benjamin Li <benl@squareup.com>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers: thermal: tsens: respect thermal_device_mode in threshold irq reporting
+Date:   Thu, 13 Jan 2022 19:13:37 -0800
+Message-Id: <20220114031337.24741-1-benl@squareup.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/14/22 11:11 AM, Jacob Pan wrote:
-> On Fri, 14 Jan 2022 08:58:53 +0800, Lu Baolu<baolu.lu@linux.intel.com>
-> wrote:
-> 
->> Hi Jacob,
->>
->> On 1/13/22 9:23 PM, Jacob Pan wrote:
->>> During PCI bus rescan, adding new devices involve two notifiers.
->>> 1. dmar_pci_bus_notifier()
->>> 2. iommu_bus_notifier()
->>> The current code sets #1 as low priority (INT_MIN) which resulted in #2
->>> being invoked first. The result is that struct device pointer cannot be
->>> found in DRHD search for the new device's DMAR/IOMMU. Subsequently, the
->>> device is put under the "catch-all" IOMMU instead of the correct one.
->>>
->>> This could cause system hang when device TLB invalidation is sent to the
->>> wrong IOMMU. Invalidation timeout error or hard lockup can be observed.
->>>
->>> This patch fixes the issue by setting a higher priority for
->>> dmar_pci_bus_notifier. DRHD search for a new device will find the
->>> correct IOMMU.
->>>
->>> Fixes: 59ce0515cdaf ("iommu/vt-d: Update DRHD/RMRR/ATSR device scope")
->>> Reported-by: Zhang, Bernice<bernice.zhang@intel.com>
->>> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
->>> ---
->>>    drivers/iommu/intel/dmar.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
->>> index 915bff76fe96..5d07e5b89c2e 100644
->>> --- a/drivers/iommu/intel/dmar.c
->>> +++ b/drivers/iommu/intel/dmar.c
->>> @@ -385,7 +385,7 @@ static int dmar_pci_bus_notifier(struct
->>> notifier_block *nb,
->>>    static struct notifier_block dmar_pci_bus_nb = {
->>>    	.notifier_call = dmar_pci_bus_notifier,
->>> -	.priority = INT_MIN,
->>> +	.priority = INT_MAX,
->>>    };
->>>    
->>>    static struct dmar_drhd_unit *
->>>    
->> Nice catch! dmar_pci_bus_add_dev() should take place*before*
->> iommu_probe_device(). This change enforces this with a higher notifier
->> priority for dmar callback.
->>
->> Comparably, dmar_pci_bus_del_dev() should take place*after*
->> iommu_release_device(). Perhaps we can use two notifiers, one for
->> ADD_DEVICE (with .priority=INT_MAX) and the other for REMOVE_DEVICE
->> (with .priority=INT_MIN)?
->>
-> Since device_to_iommu() lookup in intel_iommu_release_device() only
-> checks if device is under "an" IOMMU, not "the" IOMMU. Then the remove path
-> order is not needed, right?
-> 
-> I know this is not robust, but having so many notifiers with implicit
-> priority is not clean either.
-> 
-> Perhaps, we should have explicit priority defined around iommu_bus
-> notifier? i.e.
-> 
-> @@ -1841,6 +1841,7 @@ static int iommu_bus_init(struct bus_type *bus, const
-> struct iommu_ops *ops) return -ENOMEM;
->          nb->notifier_call = iommu_bus_notifier;
->                         
-> +       nb->priority = IOMMU_BUS_NOTIFY_PRIORITY;
->                         
-> 
->   static struct notifier_block dmar_pci_bus_add_nb = {
->          .notifier_call = dmar_pci_bus_notifier,
-> -       .priority = INT_MIN,
-> +       .priority = IOMMU_BUS_NOTIFY_PRIORITY + 1,
->   };
-> 
->   static struct notifier_block dmar_pci_bus_remove_nb = {
->          .notifier_call = dmar_pci_bus_notifier,
-> -       .priority = INT_MIN,
-> +       .priority = IOMMU_BUS_NOTIFY_PRIORITY - 1,
->   };
+'echo disabled > .../thermal_zoneX/mode' will disable the thermal core's
+polling mechanism to check for threshold trips. However, tsens supports
+an interrupt mechanism to receive notification of trips, implemented in
+commit 634e11d5b450 ("drivers: thermal: tsens: Add interrupt support").
+This is used sometimes to run performance test cases.
 
-IOMMU_BUS_NOTIFY_PRIORITY by default is 0. So you can simply use 1 and
--1? Adding a comment around it will be helpful.
+Currently the thermal zone mode that's set by userspace is not checked
+before propagating threshold trip events from IRQs. Let's fix this to
+restore the abilty to disable thermal throttling at runtime.
 
-Best regards,
-baolu
+====================
+
+Tested on MSM8939 running 5.16.0. This platform has 8 cores; the first
+four thermal zones control cpu0-3 and the last zone is for the other four
+CPUs together.
+
+  for f in /sys/class/thermal/thermal_zone*; do
+    echo "disabled" > $f/mode
+    echo $f | paste - $f/type $f/mode
+  done
+
+/sys/class/thermal/thermal_zone0	cpu0-thermal	disabled
+/sys/class/thermal/thermal_zone1	cpu1-thermal	disabled
+/sys/class/thermal/thermal_zone2	cpu2-thermal	disabled
+/sys/class/thermal/thermal_zone3	cpu3-thermal	disabled
+/sys/class/thermal/thermal_zone4	cpu4567-thermal	disabled
+
+With mitigation thresholds at 75 degC and load running, we can now cruise
+past temp=75000 without CPU throttling kicking in.
+
+  watch -n 1 "grep '' /sys/class/thermal/*/temp
+      /sys/class/thermal/*/cur_state
+      /sys/bus/cpu/devices/cpu*/cpufreq/cpuinfo_cur_freq"
+
+/sys/class/thermal/thermal_zone0/temp:82000
+/sys/class/thermal/thermal_zone1/temp:84000
+/sys/class/thermal/thermal_zone2/temp:87000
+/sys/class/thermal/thermal_zone3/temp:84000
+/sys/class/thermal/thermal_zone4/temp:84000
+/sys/class/thermal/cooling_device0/cur_state:0
+/sys/class/thermal/cooling_device1/cur_state:0
+/sys/bus/cpu/devices/cpu0/cpufreq/cpuinfo_cur_freq:1113600
+/sys/bus/cpu/devices/cpu1/cpufreq/cpuinfo_cur_freq:1113600
+/sys/bus/cpu/devices/cpu2/cpufreq/cpuinfo_cur_freq:1113600
+/sys/bus/cpu/devices/cpu3/cpufreq/cpuinfo_cur_freq:1113600
+/sys/bus/cpu/devices/cpu4/cpufreq/cpuinfo_cur_freq:800000
+/sys/bus/cpu/devices/cpu5/cpufreq/cpuinfo_cur_freq:800000
+/sys/bus/cpu/devices/cpu6/cpufreq/cpuinfo_cur_freq:800000
+/sys/bus/cpu/devices/cpu7/cpufreq/cpuinfo_cur_freq:800000
+
+Reported-by: Zac Crosby <zac@squareup.com>
+Signed-off-by: Benjamin Li <benl@squareup.com>
+---
+ drivers/thermal/qcom/tsens.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 99a8d9f3e03c..0b6299512e7c 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -509,13 +509,16 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
+ 		spin_unlock_irqrestore(&priv->ul_lock, flags);
+ 
+ 		if (trigger) {
+-			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+-				hw_id, __func__, temp);
+-			thermal_zone_device_update(s->tzd,
+-						   THERMAL_EVENT_UNSPECIFIED);
++			if (s->tzd->mode == THERMAL_DEVICE_ENABLED) {
++				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
++					hw_id, __func__, temp);
++				thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
++			} else {
++				dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC) skipped as zone disabled\n",
++					hw_id, __func__, temp);
++			}
+ 		} else {
+-			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
+-				hw_id, __func__, temp);
++			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n", hw_id, __func__, temp);
+ 		}
+ 
+ 		if (tsens_version(priv) < VER_0_1) {
+-- 
+2.17.1
+

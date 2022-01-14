@@ -2,93 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C30E48ED32
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC9048ED39
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242491AbiANPgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:36:36 -0500
-Received: from mail-vk1-f178.google.com ([209.85.221.178]:47077 "EHLO
-        mail-vk1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiANPgf (ORCPT
+        id S242764AbiANPjK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Jan 2022 10:39:10 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:49052 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229884AbiANPjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:36:35 -0500
-Received: by mail-vk1-f178.google.com with SMTP id bj47so6010278vkb.13;
-        Fri, 14 Jan 2022 07:36:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YJjdZDOE3o2kL7hMCs+KcBi0cfqKaf561XO1uO98LqA=;
-        b=jKv34m9Xik7cvyi1qWqtZFBtdMR88awmRcZkLEeA7XZVZba4y6gszFTE0s7E7Ab5Rq
-         5KbNZpjvdKNOxDg4xz9jgl7+OHQeR/PExvzxfv2nDvGrmNwPQrEIwHvkueMXgAWgPK4p
-         +xBfj9vHjMlB6DxV2djQmKxrjPKNY0LJoXOuf6lMbVz4K1CBIJAF1zUY4xMa2Y/jy0Zv
-         IQ1/WLMbUc/T96jbZeYyhO9Yery8eGN+P6av1B+bd+MeRxXboyU89eoHLd2wkokKC2xH
-         uhiy3uAmRmA//jXvOC9bhSWbnawimCdWsminunYrNO5F/AopKAzLAUbRrlA4GGmxtACY
-         cOIw==
-X-Gm-Message-State: AOAM531aYTh8dRH+GIFLosy6g05xKRC6fwSl3uzaz0ra1gAWe/qPt6GU
-        04MspgBmR/9UgUmktrhagk4g3OR+Zg6Xewrv
-X-Google-Smtp-Source: ABdhPJz9d1jGDGtXclbJT1JVstQJwp3ulw7+h2mXY52hq6cOelrhOpLJ+gL4rOiKf0M61CISDB/+Bg==
-X-Received: by 2002:ac5:c18f:: with SMTP id z15mr2784842vkb.24.1642174594644;
-        Fri, 14 Jan 2022 07:36:34 -0800 (PST)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id o12sm2172193uae.1.2022.01.14.07.36.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 07:36:34 -0800 (PST)
-Received: by mail-ua1-f47.google.com with SMTP id p1so17529862uap.9;
-        Fri, 14 Jan 2022 07:36:34 -0800 (PST)
-X-Received: by 2002:a9f:3e01:: with SMTP id o1mr4495386uai.89.1642174593855;
- Fri, 14 Jan 2022 07:36:33 -0800 (PST)
+        Fri, 14 Jan 2022 10:39:09 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-312-5jlSIvp6O4S49Qxj-dKL-Q-1; Fri, 14 Jan 2022 15:39:06 +0000
+X-MC-Unique: 5jlSIvp6O4S49Qxj-dKL-Q-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Fri, 14 Jan 2022 15:39:06 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Fri, 14 Jan 2022 15:39:06 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>
+Subject: RE: [PATCH] random: cleanup fractional entropy shift constants
+Thread-Topic: [PATCH] random: cleanup fractional entropy shift constants
+Thread-Index: AQHYCVwNJeBTmh3+qEWqVcWV8TuSV6xipq1A
+Date:   Fri, 14 Jan 2022 15:39:06 +0000
+Message-ID: <18ec4b57aecc4fa18d8e3bb6e090af1b@AcuMS.aculab.com>
+References: <20220113154413.29513-1-Jason@zx2c4.com>
+ <20220114153305.98505-1-Jason@zx2c4.com>
+In-Reply-To: <20220114153305.98505-1-Jason@zx2c4.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220112131204.800307-1-Jason@zx2c4.com> <20220112131204.800307-2-Jason@zx2c4.com>
- <87tue8ftrm.fsf@toke.dk> <CAADnVQJqoHy+EQ-G5fUtkPpeHaA6YnqsOjjhUY6UW0v7eKSTZw@mail.gmail.com>
- <CAHmME9ork6wh-T=sRfX6X0B4j-Vb36GVO0v=Yda0Hac1hiN_KA@mail.gmail.com>
- <CAADnVQLF_tmNmNk+H+jP1Ubmw-MBhG1FevFmtZY6yw5xk2314g@mail.gmail.com>
- <CAHmME9oq36JdV8ap9sPZ=CDfNyaQd6mXd21ztAaZiL7pJh8RCw@mail.gmail.com>
- <CAMj1kXE3JtNjgF3FZjbL-GOQG41yODup4+XdEFP063F=-AWg8A@mail.gmail.com> <CAHmME9oa8dAeRQfgj-U00gUtVOJ_CTGwtyBxUB4=8+XO_fFjNQ@mail.gmail.com>
-In-Reply-To: <CAHmME9oa8dAeRQfgj-U00gUtVOJ_CTGwtyBxUB4=8+XO_fFjNQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 14 Jan 2022 16:36:22 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXDmwHaJuvNo8vkzudfhL0E3b=0b4mP_OqDCYFqm82J5Q@mail.gmail.com>
-Message-ID: <CAMuHMdXDmwHaJuvNo8vkzudfhL0E3b=0b4mP_OqDCYFqm82J5Q@mail.gmail.com>
-Subject: Re: [PATCH RFC v1 1/3] bpf: move from sha1 to blake2s in tag calculation
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+From: Jason A. Donenfeld
+> Sent: 14 January 2022 15:33
+> 
+> The entropy estimator is calculated in terms of 1/8 bits, which means
+> there are various constants where things are shifted by 3. Move these
+> into our pool info enum with the other relevant constants, and normalize
+> the name a bit, prepending a POOL_ like the rest. While we're at it,
+> move an English assertion about sizes into a proper BUILD_BUG_ON so
+> that the compiler can ensure this invariant.
+> 
+...
+> -#define ENTROPY_SHIFT 3
+> -#define ENTROPY_BITS() (input_pool.entropy_count >> ENTROPY_SHIFT)
+..
+> +	POOL_ENTROPY_SHIFT = 3,
+> +#define POOL_ENTROPY_BITS() (input_pool.entropy_count >> POOL_ENTROPY_SHIFT)
 
-On Fri, Jan 14, 2022 at 4:20 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> I think the reason that Alexei doesn't think that the SHA-1 choice
-> really matters is because the result is being truncated to 64-bits, so
-> collisions are easy anyway, regardless of which hash function is
-> chosen (birthday bound and all). But from Geert's perspective, that
-> SHA-1 is still taking up precious bytes in m68k builds. And from my
-> perspective, it's poor form and clutters vmlinux, and plus, now I'm
-> curious about why this isn't using a more appropriately sized tag in
-> the first place.
+The rename ought to be a different patch.
 
-Not just on m68k. Same on other architectures.
-Yes, people do make products with SoCs with 8 MiB of builtin SRAM,
-running Linux. They might stay away from BPF, though ;-)
+	David
 
-Gr{oetje,eeting}s,
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

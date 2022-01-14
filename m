@@ -2,112 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7A148F016
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 19:45:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C40548F021
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 19:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243172AbiANSpn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Jan 2022 13:45:43 -0500
-Received: from lithops.sigma-star.at ([195.201.40.130]:53236 "EHLO
-        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236181AbiANSpm (ORCPT
+        id S243329AbiANSqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 13:46:16 -0500
+Received: from mxout04.lancloud.ru ([45.84.86.114]:39038 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236181AbiANSqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 13:45:42 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 8538062DA5EE;
-        Fri, 14 Jan 2022 19:45:40 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 2yi8__Y-zI1Z; Fri, 14 Jan 2022 19:45:39 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id B1DCB62DA5F5;
-        Fri, 14 Jan 2022 19:45:39 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id NHvsiMO3jAHb; Fri, 14 Jan 2022 19:45:39 +0100 (CET)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 850F462DA5EE;
-        Fri, 14 Jan 2022 19:45:39 +0100 (CET)
-Date:   Fri, 14 Jan 2022 19:45:39 +0100 (CET)
-From:   Richard Weinberger <richard@nod.at>
-To:     chengzhihao1 <chengzhihao1@huawei.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Fri, 14 Jan 2022 13:46:13 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru CAE4720A74BC
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     Mark Brown <broonie@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+CC:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        mcoquelin stm32 <mcoquelin.stm32@gmail.com>,
-        kirill shutemov <kirill.shutemov@linux.intel.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <23886736.260777.1642185939371.JavaMail.zimbra@nod.at>
-In-Reply-To: <6815e4af-9b5b-313f-5828-644722dd4d1f@huawei.com>
-References: <20211227032246.2886878-1-chengzhihao1@huawei.com> <6f7df7ba-9557-58a3-7978-e5d14a72f234@huawei.com> <244238061.248369.1641886066066.JavaMail.zimbra@nod.at> <420c7567-8926-2e8b-4da0-a9bfc8379642@huawei.com> <11976804.249069.1641902225370.JavaMail.zimbra@nod.at> <0a7a5cce-1ee1-70b6-d368-615dfa0a617a@huawei.com> <1492514284.249466.1641909382867.JavaMail.zimbra@nod.at> <6815e4af-9b5b-313f-5828-644722dd4d1f@huawei.com>
-Subject: Re: [PATCH v6 12/15] ubi: fastmap: Add all fastmap pebs into
- 'ai->fastmap' when fm->used_blocks>=2
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-iio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Amit Kucheria" <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-phy@lists.infradead.org>, <netdev@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        <openipmi-developer@lists.sourceforge.net>,
+        "Khuong Dinh" <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        "Lee Jones" <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "John Garry" <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        "William Breathitt Gray" <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Takashi Iwai" <tiwai@suse.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "Linux MMC List" <linux-mmc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "James Morse" <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-mediatek@lists.infradead.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de> <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <3a6b7348-ffcf-e26a-1874-830e78ae2d57@omp.ru>
+Date:   Fri, 14 Jan 2022 21:46:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF96 (Linux)/8.8.12_GA_3809)
-Thread-Topic: fastmap: Add all fastmap pebs into 'ai->fastmap' when fm->used_blocks>=2
-Thread-Index: qjDxBwu4U/Pr6n7nEomfbCBiAoFFQQ==
+In-Reply-To: <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ Ursprüngliche Mail -----
-> Von: "chengzhihao1" <chengzhihao1@huawei.com>
-> An: "richard" <richard@nod.at>
-> CC: "Miquel Raynal" <miquel.raynal@bootlin.com>, "Vignesh Raghavendra" <vigneshr@ti.com>, "mcoquelin stm32"
-> <mcoquelin.stm32@gmail.com>, "kirill shutemov" <kirill.shutemov@linux.intel.com>, "Sascha Hauer"
-> <s.hauer@pengutronix.de>, "linux-mtd" <linux-mtd@lists.infradead.org>, "linux-kernel" <linux-kernel@vger.kernel.org>
-> Gesendet: Mittwoch, 12. Januar 2022 04:46:28
-> Betreff: Re: [PATCH v6 12/15] ubi: fastmap: Add all fastmap pebs into 'ai->fastmap' when fm->used_blocks>=2
+On 1/13/22 11:35 PM, Sergey Shtylyov wrote:
 
->>>> ubi_wl_init() is called in both cases, with and without fastmap.
->>> I agree.
->>>
->>>> And ai->fastmap contains all anchor PEBs that scan_fast() found.
->>>> This can be the most recent but also outdated anchor PEBs.
->>> Is it exists a case that outdated fastmap PEBs are neither counted into
->>> 'fmhdr->erase_peb_count' nor scanned into 'ai->fastmap' after attaching
->>> by fastmap.
->>>
->> 
->> [...]
->>   
->>> I think UBI attaches failed by fastmap if kernel goes here.
->>> 1870                         err = erase_aeb(ubi, aeb, sync);
->> 
->> Hmm, I think the paranoia check in fastmap.c is too strict these days.
->>          if (WARN_ON(count_fastmap_pebs(ai) != ubi->peb_count -
->>                      ai->bad_peb_count - fm->used_blocks))
->>                  goto fail_bad;
->> 
->> It does not account ai->fastmap. So if ai->fastmap contains old anchor PEBs
->> this check will trigger and force falling back to scanning mode.
->> With this check fixed, ubi_wl_init() will erase all old PEBs from ai->fastmap.
-> Forgive my stubbornness, I think this strict check is good, could you
-> show me a process to trigger this WARN_ON, it would be nice to provide a
-> reproducer.
+[...]
+>> (Do we really need *all* the CCs here?)
+> 
+>    Yeah, 25 files were changed and that resulted in 75 persons/lists addressed.
+> I didn't expect such a wide audience myself... :-)
 
-You can trigger this by interrupting UBI.
-e.g. When UBI writes a new fastmap to the NAND, it schedules the old fastmap
-PEBs for erasure. PEB erasure is asynchronous in UBI. So this can be delayed
-for a very long time.
-While developing UBI fastmap and performing powercut tests I saw this often
-on targets.
+   And, of course, I specified --nogit-fallback to scripts/get_maintainers.pl, so
+there's no random people...
 
-> I still insist the point(after my fix patch applied): All outdated
-> fastmap PEBs are added into 'ai->fastmap'(full scanning case) or counted
-> into 'fmhdr->erase_peb_count'(fast attached case).
+[...]
 
-Yes. But if you look into ubi_wl_init() you see that fastmap anchor PEBs
-get erases synchronously(!). The comment before the erasure explains why.
-To complicate things, this code is currently unreachable because the WARN_ON()
-is not right. I misses to count ai->fastmap.
-So, when there are old fastmap PEBs found, the counter does not match
-and UBI falls back to full scanning while it could to an attach by fastmap.
-
-Fastmap is full with corner cases that have been found by massive amount of testing, sadly.
-
-Thanks,
-//richard
+MBR, Sergey

@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D52DF48EEDB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BC348EEDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243669AbiANQ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
+        id S243650AbiANRAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243655AbiANQ7D (ORCPT
+        with ESMTP id S243483AbiANRAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:59:03 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28163C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:59:03 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id v6so16613902wra.8
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:59:03 -0800 (PST)
+        Fri, 14 Jan 2022 12:00:32 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79090C06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:00:31 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id x20so3223338pgk.1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:00:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tg4oCMG6li+TDjSwe6u86VlYXa8liJ00jWszISs+oTI=;
-        b=XEOBIwW/kQkclrF8e9c9xVwCab3wDlckLrQdSpSP8Q6g248n17tpuLNk/YrLR5DN5G
-         polByyx+FxbcK+p4gvaiqo0wiHU6seMH9LcQqa7YxAMPHhQcjYrh6Vgp7B4/6dVr6OKN
-         TU6gfhObqGnrBwxCL2NDWL66X4p7lARMmmf0Q=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xjoS4K/y8gkwtFetlOk0sMfpyN0++LCc7AkNoF1EEeA=;
+        b=IKLEf9fy+XV5ibto796ufUUVkuOXmiAe1Ec1lM7Z3daI4YOtmL6CWQG9prdrfb7oup
+         I98bnXfMazE1cMqeBEAsn6oKT/rUhI80S2prPVp/AhX8ICntJmz5AJWQ/XRV2CCwXO3M
+         TVYw4crJyR8WLi8lOK9POPQQ6JjM+g19AP1dddsS1z3Dq7g36cWQNpAdPIaHuC3/p4n6
+         WzaubIq1mLt+jn9fLoMcSt6Ovf8zUad/zHf7O3mpUigEyTF3WmnRmYCyOQ51QP/ld1Sp
+         qZa5acJbXlHJgNm9yxDginU0uGaj1DZXxV5NEd3qnX1n9t0K3lWv2OjUXnZ073W+WtPY
+         LfhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=tg4oCMG6li+TDjSwe6u86VlYXa8liJ00jWszISs+oTI=;
-        b=1sf4wSm7VnmlKNWfwP47HAyBMBdnyUdWiCNKfZF4l6C/ZbfodQk7quaUvvme0K8x6+
-         CQ3lQCiG4c66heI36cuzf+4oDgJnWEyrKClJkVDCVEqONu/15g5kFGurlZkqC+8sd9Nv
-         0VBnPz5hxHVWkeFGWhh61hpsjnbn3wqkrgUxPXWv8ZWsXTL8cJeNVyMCyMSLoorpYzY3
-         OBlQj4rdf/DCCamYU58Zgd8JfKmTVueNiJcI57lNKITOSxD32Lsy4mY9bhAtiPTqYr7+
-         o4fkTgWBPG3UGoVCd5uHPQ4gedzoccroObkUf6Fq1Le40PUqFpNCW5VLUoY2QKB9WtYG
-         oHPw==
-X-Gm-Message-State: AOAM5304PXA0jmd5ZuWtrZRfbDuDevbz2JPxPGKJMrP8t1eUFPJMcYzi
-        b2jn5+GuIXM8yh1T1zY7sxgX/A==
-X-Google-Smtp-Source: ABdhPJyKiq9MKoMx2tCGoLdeoS50UBy5IjTi4zD8ToVwJYkKEf3eHDu/vOLA1ET+NX5npL0uE0wh8w==
-X-Received: by 2002:a5d:6903:: with SMTP id t3mr8826258wru.353.1642179541790;
-        Fri, 14 Jan 2022 08:59:01 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id u17sm1549490wrt.37.2022.01.14.08.59.00
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xjoS4K/y8gkwtFetlOk0sMfpyN0++LCc7AkNoF1EEeA=;
+        b=sRNq55+jpRE/qw23qLXcCWG0ANBNZ5kyBtbBFosFnSb8spvile+sIcbfq5CIxduWYB
+         clxeP9a5ztZBgp1hQMiOVG1oB4J2VTKlHDV6hOhYzqf2FHvhhyVymIQFphGrV1ZOFB1L
+         FYjTqIYSDjPvvaWvOd3tFna/uPbQNF1QtL4n/eHPDdU56gUfH4hPBn6Uas0dhsHCAFJX
+         GWa1FkvoBUPJO1dd3Npu51nhr0H9CM+bGPhXpe0OytpeysRlgK/HTsXuqg9FWM5hVS4A
+         iWoaXn+TdtRJfoJ4VzA91dd4xxd/nOWoSmkGYt7vKPHesPo1hSng6ASPDNFQq+iQ2Yym
+         gUNQ==
+X-Gm-Message-State: AOAM530qGtpszBM8ZZFlq/rttVKO+40Zp1n2JUY6eTewYrv+B/qtRAKR
+        sc2UOz8hxVA8vh2jDxr5uR+YXQ==
+X-Google-Smtp-Source: ABdhPJyK4NO0IRQqUFtpgmMoDjmV9qYii4Ns5cvsdau/cVTvulWI3OU+4pc/o5/DiidW5EAys9uOLQ==
+X-Received: by 2002:a63:6c01:: with SMTP id h1mr8913390pgc.233.1642179630783;
+        Fri, 14 Jan 2022 09:00:30 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id m13sm4985630pga.38.2022.01.14.09.00.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 08:59:01 -0800 (PST)
-Date:   Fri, 14 Jan 2022 17:58:59 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] video: fbdev: s3c-fb: remove redundant initialization of
- pointer bufs
-Message-ID: <YeGr01WGTSy+PYXr@phenom.ffwll.local>
-Mail-Followup-To: Colin Ian King <colin.i.king@gmail.com>,
-        Jingoo Han <jingoohan1@gmail.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211230160626.404072-1-colin.i.king@gmail.com>
+        Fri, 14 Jan 2022 09:00:29 -0800 (PST)
+Date:   Fri, 14 Jan 2022 17:00:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Igor Mammedov <imammedo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+Message-ID: <YeGsKslt7hbhQZPk@google.com>
+References: <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
+ <20211227183253.45a03ca2@redhat.com>
+ <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
+ <87mtkdqm7m.fsf@redhat.com>
+ <20220103104057.4dcf7948@redhat.com>
+ <YeCowpPBEHC6GJ59@google.com>
+ <20220114095535.0f498707@redhat.com>
+ <87ilummznd.fsf@redhat.com>
+ <20220114122237.54fa8c91@redhat.com>
+ <87ee5amrmh.fsf@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211230160626.404072-1-colin.i.king@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+In-Reply-To: <87ee5amrmh.fsf@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 04:06:26PM +0000, Colin Ian King wrote:
-> Pointer bufs is being initialized with a value that is never read, it
-> is being re-assigned with a different value later on. The assignment
-> is redundant and can be removed. Cleans up clang-scan warning:
+On Fri, Jan 14, 2022, Vitaly Kuznetsov wrote:
+> Igor Mammedov <imammedo@redhat.com> writes:
 > 
-> drivers/video/fbdev/s3c-fb.c:492:16: warning: Value stored to 'buf'
-> during its initialization is never read [deadcode.DeadStores]
->         void __iomem *buf = regs;
+> > On Fri, 14 Jan 2022 10:31:50 +0100
+> > Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+> >
+> >> Igor Mammedov <imammedo@redhat.com> writes:
+> >> 
+> >> 
+> >> > However, a problem of failing KVM_SET_CPUID2 during VCPU re-plug
+> >> > is still there and re-plug will fail if KVM rejects repeated KVM_SET_CPUID2
+> >> > even if ioctl called with exactly the same CPUID leafs as the 1st call.
+> >> >  
+> >> 
+> >> Assuming APIC id change doesn not need to be supported, I can send v2
+> >> here with an empty allowlist.
+> > As you mentioned in another thread black list would be better
+> > to address Sean's concerns or just revert problematic commit.
+> >
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Personally, I'm leaning towards the blocklist approach even if just for
+> 'documenting' the fact that KVM doesn't correctly handle the
+> change. Compared to a comment in the code, such approach could help
+> someone save tons of debugging time (if anyone ever decides do something
+> weird, like changing MAXPHYADDR on the fly).
 
-Both of your dead store fixes queued up in drm-misc-next for 5.18.
--Daniel
+I assume the blocklist approach is let userspace opt into rejecting KVM_SET_CPUID{,2},
+but allow all CPUID leafs and sub-leafs to be modified at will by default?  I don't
+dislike the idea, but I wonder if it's unnecessarily fancy.
 
-> ---
->  drivers/video/fbdev/s3c-fb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/video/fbdev/s3c-fb.c b/drivers/video/fbdev/s3c-fb.c
-> index 3b134e1bbc38..68408c499627 100644
-> --- a/drivers/video/fbdev/s3c-fb.c
-> +++ b/drivers/video/fbdev/s3c-fb.c
-> @@ -489,7 +489,7 @@ static int s3c_fb_set_par(struct fb_info *info)
->  	struct s3c_fb_win *win = info->par;
->  	struct s3c_fb *sfb = win->parent;
->  	void __iomem *regs = sfb->regs;
-> -	void __iomem *buf = regs;
-> +	void __iomem *buf;
->  	int win_no = win->index;
->  	u32 alpha = 0;
->  	u32 data;
-> -- 
-> 2.33.1
-> 
+What if we instead provide an ioctl/capability to let userspace toggle disabling
+of KVM_SET_CPUID{,2}, a la STAC/CLAC to override SMAP?  E.g. QEMU could enable
+protections after initially creating the vCPU, then temporarily disable protections
+only for the hotplug path?
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+That'd provide solid protections for minimal effort, and if userspace can restrict
+the danger zone to one specific path, then userspace can easily do its own auditing
+for that one path.

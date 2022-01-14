@@ -2,85 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC2C48E53D
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3378048E541
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235410AbiANIMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:12:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbiANIMX (ORCPT
+        id S236846AbiANIMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:12:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48201 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236790AbiANIMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:12:23 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58390C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 00:12:23 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id h16so10199924qkp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 00:12:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hKrZ7aea6T8UW10yLp5/RF48EailUZuU/n1ieIhEdB4=;
-        b=NLl+qHtU5qjQlWu53hZvddcTiKV2JDQH41oiXBk0vJXn7zNznC24LrQC0kXr687FYD
-         bL6mfOSiY6U2v86xc4ZAYI+gS9nkFiuaHFpcWFtS0wCRuCFUsJAT7DixF3PJG+RaJ0Zn
-         r6NXW4Wgfo0jTHrYzbCtlGWLLlTJrO06bzA/yXRwiQMJFEAjWozxhoJx/DLYby1SqPVe
-         LfA4GmMCfyCu7WllH0cPZYd1KAPzomY5p0jVHpvOq1W3Ujh6INP3H+J360PRiHA1/uHa
-         3wXLLGBbXHrVVUDqwsd/VKnDktPuKpR+I68QKzoYzYvFL6GtyFbZuuuepOrdDQvdB4as
-         MX/g==
+        Fri, 14 Jan 2022 03:12:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642147961;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dwuxbIX1i5Dfm9gk8fkBbEk0Kx7vWseXfNpMD4fzRhg=;
+        b=LerQaxZYEwsB+fJc2Yy26XiSYXvSVZuDChqnuvSBfbEMsL1JHGg2h35gt8GqST7lSxV79D
+        GE4XAx9le4Zg8tbViM6FV9M2zi1agLn8cOy+mxXHU2oK1fesWIFb+nXDdQspFJCsce/R8n
+        hknbuoQi0GBP0g8a2+2HG0n7epXRUIE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-614-Sz1_lUJ7OsCMNu3F1LIAjQ-1; Fri, 14 Jan 2022 03:12:40 -0500
+X-MC-Unique: Sz1_lUJ7OsCMNu3F1LIAjQ-1
+Received: by mail-wm1-f69.google.com with SMTP id a3-20020a05600c348300b0034a0dfc86aaso4936169wmq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 00:12:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hKrZ7aea6T8UW10yLp5/RF48EailUZuU/n1ieIhEdB4=;
-        b=EH7DMidjllLdF4/OgCZ/xgmPTFVK87KhWDKLkRTdEEe7JkJwIWs6RLsinSH8IMlPv1
-         3dosHDNRqoQtKOWf8QRbcWng3EWQVg+xOOjdztDN63iFmXtO64cVdc/PWy5x9OhF38cM
-         nJXp56NACScNdz5XOb6ltmpop0T9bEqQE7vst1xOr/h7mJmwl9O+j07+l5E2xtl0ry+k
-         3W50O3RtOdvzB87Rbqlm5lgYxr89Sowiewopt2fgtBb/ItDB4kL+XyI4iuB4UyuFwvOX
-         oNv+L1cZ/VvbO6St6sb+uJkrJxT7rxb0xu8p4w72vRzsRG0L1yK6SbSPC538M3soj0oP
-         x9qg==
-X-Gm-Message-State: AOAM5327AKKB0R5UXWoZDuIJBO17PPAD8xAA3Rs9DXb4N6jtyOHX8IAv
-        mRJ6BcKYwuRFrRTqay1MiHE8YRYhKv7GQg==
-X-Google-Smtp-Source: ABdhPJwi9hdZAQa/zdRa7r+1SWbMbyosqkq5IyAbPq4njrNrH0QrdGqnkfsTUV7Bs7pU8kqQtDECvw==
-X-Received: by 2002:a05:620a:1a91:: with SMTP id bl17mr5755213qkb.175.1642147942437;
-        Fri, 14 Jan 2022 00:12:22 -0800 (PST)
-Received: from localhost (ec2-3-142-145-253.us-east-2.compute.amazonaws.com. [3.142.145.253])
-        by smtp.gmail.com with ESMTPSA id s1sm3506643qtw.25.2022.01.14.00.12.21
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=dwuxbIX1i5Dfm9gk8fkBbEk0Kx7vWseXfNpMD4fzRhg=;
+        b=B/kbx6I3jVjXSEiapKsgAr82p6p9eR+tGCKIvLHAJFkinscg+RWrv9ARTkN8sF/gzy
+         fWZ809V1oHqwuVhVtI+0+OrhQlKa/Pt3/CETn1B1/J3a/QOkr46u+2jl7YtJ6Y/e2SrQ
+         ShauYnCYORBp122UqGjyt4XY0dNGOuAfssuNHFKrNHjdO9PpPtvRAW68i+QxBfxog5On
+         qKNG1QxNA6GyiX3DFwjEEC/sjRs2R9a4AsMk8/NGk9Tsh7qxQw4ZYnOU542x4QTvE0U0
+         LATQT02I/eMYAl4oyn9fQBENUrVTD5JB36NzL9j1Xoq+ctFuDN2WD0mXQfFjHmj+bziE
+         eWNg==
+X-Gm-Message-State: AOAM533D4BM+LBY8nFSnM7YkO1g7MAf3Hys+LJ/bNx5/8Oh5waqJVY6P
+        VKuVhT+4uqeErfTIkXpOzyegi0MG5NF7YOacSNziAMSqpLGuDTSe2xnDEvj6Kj/fttgt+Mm3Pnk
+        9lD6O9Jj39GbJrEw3tKXz1rbDbd9ZuwsUI8KKnP2B/XNppohxOkS6KNJQoiewFXYMDh4HQpuQkj
+        VF
+X-Received: by 2002:a5d:6586:: with SMTP id q6mr7426430wru.62.1642147958989;
+        Fri, 14 Jan 2022 00:12:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyYS3u4Ps5fXTlLgsznvhnty33P7q3kjewzPzh1N7ViZUtbk0nln9x6reL1Wi8sEumeVB28mQ==
+X-Received: by 2002:a5d:6586:: with SMTP id q6mr7426403wru.62.1642147958704;
+        Fri, 14 Jan 2022 00:12:38 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id e4sm1807548wrq.51.2022.01.14.00.12.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 00:12:22 -0800 (PST)
-From:   Schspa Shi <schspa@gmail.com>
-To:     tytso@mit.edu, Jason@zx2c4.com
-Cc:     linux-kernel@vger.kernel.org, Schspa Shi <schspa@gmail.com>
-Subject: [PATCH] random: fix typo in comments
-Date:   Fri, 14 Jan 2022 16:12:16 +0800
-Message-Id: <20220114081216.60403-1-schspa@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 14 Jan 2022 00:12:37 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Igor Mammedov <imammedo@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] KVM: x86: Partially allow KVM_SET_CPUID{,2} after
+ KVM_RUN for CPU hotplug
+In-Reply-To: <YeCEyNz/xqcJBcU/@google.com>
+References: <20220113133703.1976665-1-vkuznets@redhat.com>
+ <YeCEyNz/xqcJBcU/@google.com>
+Date:   Fri, 14 Jan 2022 09:12:37 +0100
+Message-ID: <87o84en3be.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-s/or/for
+Sean Christopherson <seanjc@google.com> writes:
 
-Signed-off-by: Schspa Shi <schspa@gmail.com>
----
- drivers/char/random.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On Thu, Jan 13, 2022, Vitaly Kuznetsov wrote:
+>> Recently, KVM made it illegal to change CPUID after KVM_RUN but
+>> unfortunately this change is not fully compatible with existing VMMs.
+>> In particular, QEMU reuses vCPU fds for CPU hotplug after unplug and it
+>> calls KVM_SET_CPUID2. Relax the requirement by implementing an allowlist
+>> of entries which are allowed to change.
+>
+> Honestly, I'd prefer we give up and just revert feb627e8d6f6 ("KVM: x86: Forbid
+> KVM_SET_CPUID{,2} after KVM_RUN").  Attempting to retroactively restrict the
+> existing ioctls is becoming a mess, and I'm more than a bit concerned that this
+> will be a maintenance nightmare in the future, without all that much benefit to
+> anyone.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 227fb78027387..ba8d63f52c058 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -101,7 +101,7 @@
-  * ===============================
-  *
-  * There are four exported interfaces; two for use within the kernel,
-- * and two or use from userspace.
-+ * and two for use from userspace.
-  *
-  * Exported interfaces ---- userspace output
-  * -----------------------------------------
+I cannot say I disagree)
+
+>
+> I also don't love that the set of volatile entries is nothing more than "this is
+> what QEMU needs today".  There's no architectural justification, and the few cases
+> that do architecturally allow CPUID bits to change are disallowed.  E.g. OSXSAVE,
+> MONITOR/MWAIT, CPUID.0x12.EAX.SGX1 are all _architecturally_ defined scenarios
+> where CPUID can change, yet none of those appear in this list.  Some of those are
+> explicitly handled by KVM (runtime CPUID updates), but why should it be illegal
+> for userspace to intercept writes to MISC_ENABLE and do its own CPUID emulation?
+
+I see. Another approach would be to switch from the current allowlist
+approach to a blocklist of things which we forbid to change
+("MAXPHYADDR, GBPAGES support, AMD reserved bit behavior, ...") after the
+first KVM_RUN.
+
 -- 
-2.34.1
+Vitaly
 

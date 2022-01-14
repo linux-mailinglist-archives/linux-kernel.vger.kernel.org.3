@@ -2,204 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A23248EF58
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB42948EF51
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243927AbiANRoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:44:13 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:42241 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243918AbiANRoM (ORCPT
+        id S243898AbiANRnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:43:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230300AbiANRnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:44:12 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 2FEE5580183;
-        Fri, 14 Jan 2022 12:44:09 -0500 (EST)
-Received: from imap48 ([10.202.2.98])
-  by compute4.internal (MEProxy); Fri, 14 Jan 2022 12:44:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        stressinduktion.org; h=mime-version:message-id:in-reply-to
-        :references:date:from:to:cc:subject:content-type; s=fm2; bh=XC8x
-        7KXAcVBSo+8COeedpg7cEMYqOq1otu+UETusZEE=; b=JkO4dr9OnXIi2E5oBM5K
-        t66ge8M1MdOaiKC+cg+WCGTYPSOwvSHo58qUkzgvqULeHC1fZrOPnn3cvQ6Tf2vJ
-        lxuoYGE4+5Ec0LULpqmhcN2kcyeEzlo7N3cuBeWugdDNbK13fRUuNVqeM0rCBS9b
-        ddQIRMTYADY49oMEc1U0JRssBs8MX9sL49QHb196zqP8yHGD/7xEhyZhu+6QXv8A
-        cQ8KNKhfmiBKqDOibsRYi711kfuBvekag0zW6rYmT8bEAiG+iHctt5F8n1b0PEuj
-        U+mgmXBnQUnahqUky2UZczB84TlelCxsWyhg2kxr97EWeAqib+DNq+7QYnKEDYCn
-        2g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=XC8x7K
-        XAcVBSo+8COeedpg7cEMYqOq1otu+UETusZEE=; b=XxcYTeuCtnlGC7MarUYPyU
-        ddvAlD8qIyyumQtLdcNmyBqPSY6bdaBIdld6+Mgc0lD4ShzjMtBhh8AeP+30iO9G
-        rxqYC6i9zUuEd02xgX143G5o2jNxd3YwEDEhlLNCoUI20plomMgnylK5AsGt2NpB
-        N4nERzqjE6+bMxjDK8l3kkILv7mmwWc4qevzfVe2+fVDbxeYc66U3KxxsUcXAWwH
-        Zs92EJTLSbS/L6ZPkMj3fZUsNLGuq74mJR+xEllfbYqIUNrx1h3O4Agv0B/5jo61
-        pYMOQTXo0ACFFHhAtqR/WT6X2ziLjVzed/Cg0wLbebL4JCawb2QhdVTUGpdT2G0w
-        ==
-X-ME-Sender: <xms:Z7bhYawjmLXYGTgJAKyZ1FGbCylbfWwK1B1aQqIKvBHVTlf-zVILWg>
-    <xme:Z7bhYWTUWVR8aUIp1eK-sS1ALJZ0M7SDFoISDWpvpnpV1yYqr1PX0HK5yJ23j_MWs
-    HdQg1FIvemwLZzHEA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrtdehgddutdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfjrghn
-    nhgvshcuhfhrvgguvghrihgtucfuohifrgdfuceohhgrnhhnvghssehsthhrvghsshhinh
-    guuhhkthhiohhnrdhorhhgqeenucggtffrrghtthgvrhhnpeehieeggeethedtgfdvtdek
-    ffduudegueevffekheefjeegvedugeetveffteetleenucffohhmrghinhepgihktggurd
-    gtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
-    hhgrnhhnvghssehsthhrvghsshhinhguuhhkthhiohhnrdhorhhg
-X-ME-Proxy: <xmx:Z7bhYcWeoRrx3NNL4AJ4L4l3e6fjFBT30oc09LqJ9b3p5GoqjvS0gA>
-    <xmx:Z7bhYQgE9QO-Zr2NhLl6GESvsvLlyiGDi-mgXrqLbIM48Yeeb90tCA>
-    <xmx:Z7bhYcCrlbSm9vbPNpS9oYGCuspUQKDONypysdZK9dFUxFmO1Gshmw>
-    <xmx:abbhYQ6uvmjAsuMFEM_JKvAwKKdZW48Ck8X5NcK9TwWNLoqyy1eV5A>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7B93821E006E; Fri, 14 Jan 2022 12:44:07 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4569-g891f756243-fm-20220111.001-g891f7562
-Mime-Version: 1.0
-Message-Id: <3db9c306-ea22-444f-b932-f66f800a7a28@www.fastmail.com>
-In-Reply-To: <CAHmME9pR+qTn72vyANq8Nxx0BtGy7a_+dRvZS_F7RCag8Rvxng@mail.gmail.com>
-References: <20220112131204.800307-1-Jason@zx2c4.com>
- <20220112131204.800307-3-Jason@zx2c4.com> <87r19cftbr.fsf@toke.dk>
- <CAHmME9pieaBBhKc1uKABjTmeKAL_t-CZa_WjCVnUr_Y1_D7A0g@mail.gmail.com>
- <55d185a8-31ea-51d0-d9be-debd490cd204@stressinduktion.org>
- <CAHmME9pR+qTn72vyANq8Nxx0BtGy7a_+dRvZS_F7RCag8Rvxng@mail.gmail.com>
-Date:   Fri, 14 Jan 2022 18:41:58 +0100
-From:   "Hannes Frederic Sowa" <hannes@stressinduktion.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Herbert Xu" <herbert@gondor.apana.org.au>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Jean-Philippe Aumasson" <jeanphilippe.aumasson@gmail.com>,
-        "Linux Crypto Mailing List" <linux-crypto@vger.kernel.org>,
-        "Erik Kline" <ek@google.com>,
-        "Fernando Gont" <fgont@si6networks.com>,
-        "Lorenzo Colitti" <lorenzo@google.com>,
-        "Hideaki Yoshifuji" <hideaki.yoshifuji@miraclelinux.com>
-Subject: Re: [PATCH RFC v1 2/3] ipv6: move from sha1 to blake2s in address calculation
-Content-Type: text/plain
+        Fri, 14 Jan 2022 12:43:09 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235E3C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:43:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=p/a5sC8wCu6QRDPDeSoazAGcfWn/EQU27wXVoKv6HDE=; b=yrRF1LMIPSF4YoxoTtfB4vstpd
+        e+UML2knqn2aSgdNakEzx150lxccbItspIZ2QhooXV4TpbqNCi4ukFGA1f1yvO5Skcl7e28SM7yev
+        iEfZimQrMDHb/cU39Eu/pFXxpNMvKRJQwbQza6EJkRyilgSUK8zKdD6ybnZAtpamZ7VkmCKe3/EYA
+        a0YY3/YLdKROsP92gP3Sbc5qpWnRe6TNxdp6ro6AqEDm7Bd4waXABXSXYMZ9hWwu41utbepcaZC8f
+        IO9puCyxnQu9lXSUcv8LdmiPbgKFqo+3DwK56gSbWpBfv1q1iTDj3MG/xtMbddCQ/tiQ+u5tlCzi5
+        JmGtObqg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n8QbT-009xOM-Qc; Fri, 14 Jan 2022 17:43:07 +0000
+Date:   Fri, 14 Jan 2022 09:43:07 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] module: fix signature check failures when using
+ in-kernel decompression
+Message-ID: <YeG2Ky8nLGMIyqe3@bombadil.infradead.org>
+References: <YeDJKNTYVu/Fe9VS@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YeDJKNTYVu/Fe9VS@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Jan 13, 2022 at 04:51:52PM -0800, Dmitry Torokhov wrote:
+> The new flag MODULE_INIT_COMPRESSED_FILE unintentionally trips check in
+> module_sig_check(). The check was supposed to catch case when version
+> info or magic was removed from a signed module, making signature
+> invalid, but it was coded too broadly and was catching this new flag as
+> well.
+> 
+> Change the check to only test the 2 particular flags affecting signature
+> validity.
+> 
+> Fixes: b1ae6dc41eaa ("module: add in-kernel support for decompressing")
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-On Fri, Jan 14, 2022, at 17:07, Jason A. Donenfeld wrote:
-> On Thu, Jan 13, 2022 at 12:15 PM Hannes Frederic Sowa
-> <hannes@stressinduktion.org> wrote:
->> > I'm not even so sure that's true. That was my worry at first, but
->> > actually, looking at this more closely, DAD means that the address can
->> > be changed anyway - a byte counter is hashed in - so there's no
->> > guarantee there.
->>
->> The duplicate address detection counter is a way to merely provide basic
->> network connectivity in case of duplicate addresses on the network
->> (maybe some kind misconfiguration or L2 attack). Such detected addresses
->> would show up in the kernel log and an administrator should investigate
->> and clean up the situation.
->
-> I don't mean to belabor a point where I'm likely wrong anyway, but
-> this DAD business has kept me thinking...
->
-> Attacker is hanging out on the network sending DAD responses, forcing
-> those counters to increment, and thus making SHA1(stuff || counter)
-> result in a different IPv6 address than usual. Outcomes:
-> 1) The administrator cannot handle this, did not understand the
-> semantics of this address generation feature, and will now have a
-> broken network;
-> 2) The administrator knows what he's doing, and will be able to handle
-> a different IPv6 address coming up.
->
-> Do we really care about case (1)? That sounds like emacs spacebar
-> heating https://xkcd.com/1172/. And case (2) seems like something that
-> would tolerate us changing the hash function.
+Queued on to modules-next.
 
-Taking a step back, there is the base case where we don't have duplicate
-addresses on the network nor an attack is on-going. We would break those
-setups with that patch. And those are the ones that matter most. In
-particular those stable-random addresses are being used in router
-advertisements for announcing the next-hop/default gateway on the
-broadcast domain. During my time in IPv6 land I have seen lots of setups
-where those automatic advertisements got converted into static
-configuration for the sake of getting hands on a cool looking IPv6
-address on another host (I did that as well ;) ). In particular, in the
-last example, you might not only have one administrator at hand to
-handle the issue, but probably multiple roles are involved (host admin
-and network admin maybe from different organizations - how annoying -
-but that's a worst case scenario).
-
-Furthermore most L2 attacks nowadays are stopped by smarter switches or
-wifi access points(?) anyway with per-port MAC learning and other
-hardening features. Obviously this only happens in more managed
-environments but probably already also at smaller home networks
-nowadays. Datacenters probably already limit access to the Layer 2 raw
-network in such a way that this attack is probably not possible either.
-Same for IoT stuff where you probably have a point-to-point IPv6
-connection anyway.
-
-The worst case scenario is someone upgrading their kernel during a
-trip away from home, rebooting, and losing access to their system. If we
-experience just one of those cases we have violated Linux strict uAPI
-rules (in my opinion). Thus, yes, we care about both, (1) and (2) cases.
-
-I don't think we can argue our way out of this by stating that there are
-no guarantees anyway, as much as I would like to change the hash
-function as well.
-
-As much as I know about the problems with SHA1 and would like to see it
-removed from the kernel as well, I fear that in this case it seems hard
-to do. I would propose putting sha1 into a compilation unit and
-overwrite the compiler flags to optimize the function optimized for size
-and maybe add another mode or knob to switch the hashing algorithm if
-necessary.
-
->> Afterwards bringing the interface down and
->> up again should revert the interface to its initial (dad_counter == 0)
->> address.
->
-> Except the attacker is still on the network, and the administrator
-> can't figure it out because the mac addresses keep changing and it's
-> arriving from seemingly random switches! Plot twist: the attack is
-> being conducted from an implant in the switch firmware. There are a
-> lot of creative different takes on the same basic scenario. The point
-> is - the administrator really _can't_ rely on the address always being
-> the same, because it's simply out of his control.
-
-This is a very pessimistic scenario bordering a nightmare. I hope the
-new hashing algorithm will protect them. ;)
-
-> Given that the admin already *must* be prepared for the address to
-> change, doesn't that give us some leeway to change the algorithm used
-> between kernels?
->
-> Or to put it differently, are there _actually_ braindead deployments
-> out there that truly rely on the address never ever changing, and
-> should we be going out of our way to support what is arguably a
-> misreading and misdeployment of the feature?
-
-Given the example above, users might hardcode this generated IP address
-as a default gateway in their configs on other hosts. This is actually a
-very common thing to do.
-
-> (Feel free to smack this line of argumentation down if you disagree. I
-> just thought it should be a bit more thoroughly explored.)
-
-I haven't investigated recent research into breakage of SHA1, I mostly
-remember the chosen-image and collision attacks against it. Given the
-particular usage of SHA1 in this case, do you think switching the
-hashing function increases security? I am asking because of the desire
-to decrease the instruction size of the kernel, but adding a switch
-will actually increase the size in the foreseeable future (and I agree
-with Toke that offloading this decision to distributions is probably
-not fair).
-
-Maybe at some point the networking subsystem will adapt a generic knob
-like LD_ASSUME_KERNEL? ;)
-
-Bye,
-Hannes
+  Luis

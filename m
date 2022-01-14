@@ -2,170 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9236648E3D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 06:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 755F648E3D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 06:41:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234904AbiANFih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 00:38:37 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:53938 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234763AbiANFig (ORCPT
+        id S235548AbiANFk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 00:40:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39740 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234418AbiANFk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 00:38:36 -0500
-X-UUID: 3abcf59a8c2d45249804e5ded4671120-20220114
-X-UUID: 3abcf59a8c2d45249804e5ded4671120-20220114
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1136806152; Fri, 14 Jan 2022 13:38:27 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 14 Jan 2022 13:38:25 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 14 Jan 2022 13:38:24 +0800
-Message-ID: <14636842a61bb7631584315901bcc06ccbdb0f90.camel@mediatek.com>
-Subject: Re: [PATCH net-next v10 6/6] net: dt-bindings: dwmac: add support
- for mt8195
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     srv_heupstream <srv_heupstream@mediatek.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        David Miller <davem@davemloft.net>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        netdev <netdev@vger.kernel.org>, <dkirjanov@suse.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <devicetree@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>
-Date:   Fri, 14 Jan 2022 13:38:24 +0800
-In-Reply-To: <CAL_JsqLo7z-KWtwFx+Kng2aQuCpQwJaO6mHnyBzmCKCJDK5n+Q@mail.gmail.com>
-References: <20211216055328.15953-1-biao.huang@mediatek.com>
-         <20211216055328.15953-7-biao.huang@mediatek.com>
-         <1639662782.987227.4004875.nullmailer@robh.at.kernel.org>
-         <be023f9d2fb2a8f947bd0075e8732ba07cfd7b89.camel@mediatek.com>
-         <CAL_JsqLo7z-KWtwFx+Kng2aQuCpQwJaO6mHnyBzmCKCJDK5n+Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 14 Jan 2022 00:40:56 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7647D61B96;
+        Fri, 14 Jan 2022 05:40:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD44C36AE9;
+        Fri, 14 Jan 2022 05:40:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642138855;
+        bh=5ynOtxpC/iRlH/SpvjqDeqkPdDCbd0uMSJZvuowCo0s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vra0REH2HiRvsiMCKnd/+8jqBhnII4z99Zx8onwrV/tcHLtnzcqMui+Xv/0m/1UPv
+         Catj9Ebb3Ym1AgrgbfEk9OKf5KULtj4lFn1q0pIUbfqJCNX0etxyKvNU6zotVDN5Ij
+         Tm454mlC1116JyITvypig6OLkJjKSbl/vTh4QXl0=
+Date:   Fri, 14 Jan 2022 06:40:53 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Iouri Tarassov <iourit@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, spronovo@microsoft.com
+Subject: Re: [PATCH v1 1/9] drivers: hv: dxgkrnl: Driver initialization and
+ creation of dxgadapter
+Message-ID: <YeEM5asW5XtqD0Pi@kroah.com>
+References: <cover.1641937419.git.iourit@linux.microsoft.com>
+ <1b26482b50832b95a9d8532c493cee6c97323b87.1641937419.git.iourit@linux.microsoft.com>
+ <Yd/YvU5RQOAvLOhC@kroah.com>
+ <19e524e6-d0fc-20a7-03c6-c1094681a2a6@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <19e524e6-d0fc-20a7-03c6-c1094681a2a6@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-11 at 17:36 -0600, Rob Herring wrote:
-> On Thu, Dec 16, 2021 at 8:06 PM Biao Huang <biao.huang@mediatek.com>
-> wrote:
-> > 
-> > Dear Rob,
-> >   Thanks for your comments~
-> > 
-> >   For mt8195, the eth device node will look like:
-> >   eth: ethernet@11021000 {
-> >     compatible = "mediatek,mt8195-gmac", "snps,dwmac-5.10a";
-> >     ...
-> >     clock-names = "axi",
-> >                   "apb",
-> >                   "mac_cg",
-> >                   "mac_main",
-> >                   "ptp_ref",
-> >                   "rmii_internal";
-> >     clocks = <&pericfg_ao CLK_PERI_AO_ETHERNET>,
-> >              <&pericfg_ao CLK_PERI_AO_ETHERNET_BUS>,
-> >              <&pericfg_ao CLK_PERI_AO_ETHERNET_MAC>,
-> >              <&topckgen CLK_TOP_SNPS_ETH_250M>,
-> >              <&topckgen CLK_TOP_SNPS_ETH_62P4M_PTP>,
-> >              <&topckgen CLK_TOP_SNPS_ETH_50M_RMII>;
-> >     ...
-> >   }
-> > 
-> > 1. "rmii_internal" is a special clock only required for
-> >    RMII phy interface, dwmac-mediatek.c will enable clocks
-> >    invoking clk_bulk_prepare_enable(xx, 6) for RMII,
-> >    and clk_bulk_prepare_enable(xx, 5) for other phy interfaces.
-> >    so, mt2712/mt8195 all put "rmii_internal" clock to the
-> >    end of clock list to simplify clock handling.
-> > 
-> >    If I put mac_cg as described above, a if condition is required
-> > for clocks description in dt-binding, just like what I do in v7
-> > send:
-> >   - if:
-> >       properties:
-> >         compatible:
-> >           contains:
-> >             enum:
-> >               - mediatek,mt2712-gmac
-> > 
-> >     then:
-> >       properties:
-> >         clocks:
-> >           minItems: 5
-> >           items:
-> >             - description: AXI clock
-> >             - description: APB clock
-> >             - description: MAC Main clock
-> >             - description: PTP clock
-> >             - description: RMII reference clock provided by MAC
-> > 
-> >         clock-names:
-> >           minItems: 5
-> >           items:
-> >             - const: axi
-> >             - const: apb
-> >             - const: mac_main
-> >             - const: ptp_ref
-> >             - const: rmii_internal
-> > 
-> >   - if:
-> >       properties:
-> >         compatible:
-> >           contains:
-> >             enum:
-> >               - mediatek,mt8195-gmac
-> > 
-> >     then:
-> >       properties:
-> >         clocks:
-> >           minItems: 6
-> >           items:
-> >             - description: AXI clock
-> >             - description: APB clock
-> >             - description: MAC clock gate
-> >             - description: MAC Main clock
-> >             - description: PTP clock
-> >             - description: RMII reference clock provided by MAC
-> > 
-> >    This introduces some duplicated description.
-> > 
-> > 2. If I put "mac_cg" to the end of clock list,
-> >    the dt-binding file can be simple just like
-> >    what we do in this v10 patch(need fix warnings reported by "make
-> > DT_CHECKER_FLAGS=-m dt_binding_check").
-> > 
-> >    But for mt8195:
-> >      the eth node in dts should be modified,
+On Thu, Jan 13, 2022 at 04:08:07PM -0800, Iouri Tarassov wrote:
 > 
-> I hope you are defining the binding before you use it... That's not
-> good practice and not a valid argument.
+> On 1/12/2022 11:46 PM, Greg KH wrote:
+> > On Wed, Jan 12, 2022 at 11:55:06AM -0800, Iouri Tarassov wrote:
+> > > +	dev_dbg(dxgglobaldev, "%s: %x:%x %p %pUb\n",
+> > > +		    __func__, adapter->luid.b, adapter->luid.a, hdev->channel,
+> > > +		    &hdev->channel->offermsg.offer.if_instance);
+> > 
+> > When I see something like "global device pointer", that is a HUGE red
+> > flag.
+> > 
+> > No driver should ever have anything that is static to the driver like
+> > this, it should always be per-device.  Please use the correct device
+> > model here, which does not include a global pointer, but rather unique
+> > ones that are given to you by the driver core.  That way you are never
+> > tied to only "one device per system" as that is a constraint that you
+> > will have to fix eventually, might as well do it all correctly the first
+> > time as it is not any extra effort to do so
+> Hi Greg,
 > 
-> >      and eth driver clock handling will be complex;
-> 
-> How so?
-> 
-> Rob
-OK, I'll add a driver patch to make clock setting more reasonable,
-and modify this patch as previous comments.
+> dxgglobaldev is a pointer to the global driver data. By design there is a
+> single hyper-v VM bus and a single corresponding /dev/dxg device.
 
-Thanks for your comments~
+That's fine, but use the pointer that you create based on your bus
+device, not some static pointer please.
 
+> Virtual GPU adapters are present on the VM bus. /dev/dxg device is used
+> to enumerate all virtual GPUs, which are accessible only via IOCTLs
+> to /dev/dxg. dxgglobaldev has a list of all vGPU adapters and
+> other global driver state. This follows the design on Windows where a single
+> global object in dxgkrnl.sys driver is used to enumerate and access all
+> GPU devices. This is also how the public D3DKMT interface to dxgkrnl is
+> structured.
+
+First off, remember this isn't Windows, let's not make the same mistakes
+they have made there please :)
+
+Secondly, this isn't the problem, the issue is that you have a
+non-dynamic device here, which is not how Linux drivers should ever
+work.  It's fine to have a "mux" device like this, but create it
+properly, based on the device that the driver core gives you as you must
+respect that lifetime, not the lifetime of a static pointer embedded in
+a module.
+
+thanks,
+
+greg k-h

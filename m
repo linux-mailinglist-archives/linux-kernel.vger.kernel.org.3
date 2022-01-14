@@ -2,137 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A41F48ED9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF1D48ED70
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239053AbiANQC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:02:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        id S242989AbiANPvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:51:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238931AbiANQCy (ORCPT
+        with ESMTP id S235921AbiANPvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:02:54 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D67CC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:02:53 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id x4so16369311wru.7
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:02:53 -0800 (PST)
+        Fri, 14 Jan 2022 10:51:52 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CC8C06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:51:51 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id f144so2323968pfa.6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:51:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xZzF8jRq/y/h9eqJLnj+PjpGmcmPav5EfqP3FY3NYi8=;
-        b=V0aYU9lM2tThUDewNR5coBOdW+kY8Mvww7QlK8ifg2d/pqtYeCEz5U18blbnxmXsRy
-         b6z8n+PdphvpY4Tp4G6aZdBMmPDk/T/RpWFhkivQbwBkJWBldglHGky8IK9cwu51HzmM
-         w+gzXxJo47L/wEUJgiKP80YTs73vI2MwAgaJJ3G2Tzhuqkbk1LRvGyU5oe0r3XBUpwd/
-         aMgkUxQDGnprMTKsym76aHy5xGHCeefPwBcN2QBwspbHnjnLrXCrOwUDndgDadLg1bRB
-         b3pNBcnqBxsEY3hWK9Ifxgk1i3tuJwnYZuF8n60p4fOF4c18zsf7ovExSTxgz9qGF5Ms
-         DWPA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jNaxVdqcvxk4ig8CiPTI/3ybr3pqmqtJQMGQjw9Y0e4=;
+        b=Zvo62ixuU8bmNF6Y5DE2DlhCbe5x4+tyC0ye65STw4lO4Ah8L9UYJk+zp8t55vM6ZD
+         GN+fwIJz3c7F4cmvcdxjlrZ4S/98M78y1JgqeJ969ySE1bOBR8uC57y1PBg75jrkb6mf
+         HjqKBtKe31DVfoQilcoDIJhlboTPE7XsZYlU4uZchLeUHmVZrUB3XJbSG2t6GlMsN3ag
+         bLC0ZgPjRtdp6FX3VJpiWiA2jmO6oRS9CKk8KPH0EOn7TgHRjvKEF1RVqLumID/bv7cc
+         Ze6zX1RAzbquCMJTFGy4JqtLA7nfdKBKH9eZ3JHJJmmfj7r/G0JrTLuPdLd4Guky8GKK
+         VYXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xZzF8jRq/y/h9eqJLnj+PjpGmcmPav5EfqP3FY3NYi8=;
-        b=Cq+PW8JzBQHMBu9chZnglwx7Cqv2mSge5kmbctZpqdfjshbVnjQsr1JXKUEUJhCnRE
-         j3XWVBKJ3qWni2+RTQT4z2zmwcfqFkriP3flm8DjuSM3hrXUuZdgP6LAHoiywSw/Mvma
-         uKGOM/nYW9ahPelr6iBetImJssAmwoydLQt5rsJ3+jRs5sHywjOZMnSgnGtZEkRX4FwH
-         PbaAoL5jUwkmbLHaGmqPc/JgoAsMoUwWYpe640d4cvPYZLnT5fjJHrioLYdllUdoUHvn
-         MANeenmWogaIbFrSchLCLGiAZ95Fq7Pka8TFePhgofvWBtk3zPn6qB0xbAnPwnfEhcas
-         dVUQ==
-X-Gm-Message-State: AOAM530vUd/NYcktKGP3WzREQ5rB7stNtLTMbjVis9iP9hTtHtGtfEnW
-        pSwysWp5UCAPlOq+N8YsIuY=
-X-Google-Smtp-Source: ABdhPJz3vgPy4mEKsWeLWZJldjyCHIe5FYzFAjuNKRgD2AKZZB7ntFwrYzveqy5NL+dYmtVd2No7Xw==
-X-Received: by 2002:adf:ce07:: with SMTP id p7mr9023006wrn.329.1642176172085;
-        Fri, 14 Jan 2022 08:02:52 -0800 (PST)
-Received: from [192.168.0.14] ([37.223.145.74])
-        by smtp.gmail.com with ESMTPSA id x8sm5487523wru.102.2022.01.14.08.02.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 08:02:51 -0800 (PST)
-Message-ID: <56d0a5d3-65e7-db59-7704-e9868952bb45@gmail.com>
-Date:   Fri, 14 Jan 2022 17:02:50 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jNaxVdqcvxk4ig8CiPTI/3ybr3pqmqtJQMGQjw9Y0e4=;
+        b=1hlOCGYq3Bd4QrKRwzL3wDHzV94YJ3kyfUpIIPcLdji0gSy6+chS1ftaaxTqrP0LS7
+         4KGG9J/Bi3VO9oYeQ0C3Q1mPuNWknwenv1YHExOjVo2NtGNdetTj1XjbO627vrRQmsfg
+         wMptS2GkHhy5Qm47fiWPnXeqigtMwLh1Fw+Eni/zhVrKmxVnr0dPVHpd0pS4JEvebdd5
+         FVmLdGL+Woh7DNI69eGDwpZ1pUZqHDUZJCExI1WoTyownsYrlOeNd5lIY9o63RzS2gKN
+         pEDmymmNozBuXCdZHceqiikpSZW7Of9IkySjEsAlm0kWpxhZ02CIeAUSC7bXpxTqSx6L
+         3goA==
+X-Gm-Message-State: AOAM531IF1fPlMkDmcLdxfYIqJe2JPYMsCqWif5muB4Mg6oSNafoerb5
+        x5mrN1d2/nJPKjGE5RUbym2fJjSHYsQUZnSXgb2O0qFs/gQ=
+X-Google-Smtp-Source: ABdhPJzgHZqeEWqDXUo85yK/4TLC9lKPbuYydlH4vKlf0ew0eMz5Gxm3aqldYzdN8gM7ew8yiXzsRhsGiu1QDwCgWUc=
+X-Received: by 2002:a63:255:: with SMTP id 82mr8575780pgc.167.1642175510948;
+ Fri, 14 Jan 2022 07:51:50 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v4] drm/mediatek: Fix mtk_cec_mask()
-Content-Language: en-US
-To:     Miles Chen <miles.chen@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Junzhi Zhao <junzhi.zhao@mediatek.com>,
-        Jie Qiu <jie.qiu@mediatek.com>
-Cc:     Zhiqiang Lin <zhiqiang.lin@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220103054706.8072-1-miles.chen@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220103054706.8072-1-miles.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220114100731.4033-1-slark_xiao@163.com>
+In-Reply-To: <20220114100731.4033-1-slark_xiao@163.com>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Fri, 14 Jan 2022 17:03:39 +0100
+Message-ID: <CAMZdPi8g2VxBFzS7Lw=TAN_NPQSuzwLuhEGB2akqn-Tjqer7vQ@mail.gmail.com>
+Subject: Re: [PATCH] Fix MRU mismatch issue which may lead to data connection lost
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     ryazanov.s.a@gmail.com, johannes@sipsolutions.net,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Shujun Wang <wsj20369@163.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 14 Jan 2022 at 11:07, Slark Xiao <slark_xiao@163.com> wrote:
+>
+> In pci_generic.c there is a 'mru_default' in struct mhi_pci_dev_info.
+> This value shall be used for whole mhi if it's given a value for a specific product.
+> But in function mhi_net_rx_refill_work(), it's still using hard code value MHI_DEFAULT_MRU.
+> 'mru_default' shall have higher priority than MHI_DEFAULT_MRU.
+> And after checking, this change could help fix a data connection lost issue.
+
+Interesting, not sure why it fixes data issues, since the device
+should comply with any size.Can you add a Fixes tag then? and add the
+correct [PATCH net] suffix in the subject:
+https://www.kernel.org/doc/html/latest/networking/netdev-FAQ.html
+
+With that:
+
+Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+
+Thanks,
+Loic
 
 
-On 03/01/2022 06:47, Miles Chen wrote:
-> In current implementation, mtk_cec_mask() writes val into target register
-> and ignores the mask. After talking to our hdmi experts, mtk_cec_mask()
-> should read a register, clean only mask bits, and update (val | mask) bits
-> to the register.
-> 
-> Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
-> 
 
-Normally there is no new line here.
 
-> Cc: Zhiqiang Lin <zhiqiang.lin@mediatek.com>
-> Cc: CK Hu <ck.hu@mediatek.com>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> 
-
-Neither here.
-
-> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
-> 
-
-But that are nit-picks. I leave it to the maintainer to decide if he want to fix 
-that when applying the patch:
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
-Thanks a lot,
-Matthias
-
+>
+> Signed-off-by: Shujun Wang <wsj20369@163.com>
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
 > ---
-> 
-> Change since v1:
-> add Fixes tag
-> 
-> Change since v2:
-> add explanation of mtk_cec_mask()
-> 
-> Change since v3:
-> change misleading subject and modify the commit message since this is a bug fix patch
-> 
-> ---
->   drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediatek/mtk_cec.c
-> index e9cef5c0c8f7..cdfa648910b2 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_cec.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_cec.c
-> @@ -85,7 +85,7 @@ static void mtk_cec_mask(struct mtk_cec *cec, unsigned int offset,
->   	u32 tmp = readl(cec->regs + offset) & ~mask;
->   
->   	tmp |= val & mask;
-> -	writel(val, cec->regs + offset);
-> +	writel(tmp, cec->regs + offset);
->   }
->   
->   void mtk_cec_set_hpd_event(struct device *dev,
-> 
+>  drivers/net/wwan/mhi_wwan_mbim.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/wwan/mhi_wwan_mbim.c b/drivers/net/wwan/mhi_wwan_mbim.c
+> index 71bf9b4f769f..6872782e8dd8 100644
+> --- a/drivers/net/wwan/mhi_wwan_mbim.c
+> +++ b/drivers/net/wwan/mhi_wwan_mbim.c
+> @@ -385,13 +385,13 @@ static void mhi_net_rx_refill_work(struct work_struct *work)
+>         int err;
+>
+>         while (!mhi_queue_is_full(mdev, DMA_FROM_DEVICE)) {
+> -               struct sk_buff *skb = alloc_skb(MHI_DEFAULT_MRU, GFP_KERNEL);
+> +               struct sk_buff *skb = alloc_skb(mbim->mru, GFP_KERNEL);
+>
+>                 if (unlikely(!skb))
+>                         break;
+>
+>                 err = mhi_queue_skb(mdev, DMA_FROM_DEVICE, skb,
+> -                                   MHI_DEFAULT_MRU, MHI_EOT);
+> +                                   mbim->mru, MHI_EOT);
+>                 if (unlikely(err)) {
+>                         kfree_skb(skb);
+>                         break;
+> --
+> 2.25.1
+>

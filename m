@@ -2,112 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 529DE48E70E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8202D48E715
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237897AbiANJFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 04:05:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42341 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232562AbiANJFY (ORCPT
+        id S239554AbiANJGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 04:06:38 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:39652 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231254AbiANJGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:05:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642151123;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=QSqhd5EHQVjGBS9+fRjPxVdCzG4rtUKAbc2JLGcS0M8=;
-        b=i9+LecqlDdg2ey2y8zapEpM9kN/KzyoJPivYHNsVMCP5f8qJ/VDUxA5J3fnkKX+RXJWuw8
-        UEzUYecLYZRTE9TjCNIPWAswNio4PisVlkhrvw4aaJzu04UgzY3GA0F4Sok3Y5TWVORZym
-        k/ogyKduhugxQI1+6m96ksABO2K9EjQ=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-IZikK4zsM2u4QwtmfqRqMg-1; Fri, 14 Jan 2022 04:05:21 -0500
-X-MC-Unique: IZikK4zsM2u4QwtmfqRqMg-1
-Received: by mail-pl1-f198.google.com with SMTP id x6-20020a170902ea8600b0014a7ff76da7so2861414plb.14
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 01:05:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QSqhd5EHQVjGBS9+fRjPxVdCzG4rtUKAbc2JLGcS0M8=;
-        b=B6NyTjyg92G+z6KyclUJUTaPXc783rQKOqL4b23FEuHm7Cdt+iIu6HMkE642YOaxFf
-         KYq8g/eUmdio9uVjQTlwE8yHlA38HuA0OdxJOojVWyALpcGlcQhi2LGX/Xci517r+XRa
-         3h+Vw5hWK7oZuGPvjKb/tEDtLjSXlKrGgsyI+TTjSEa89q5OOUEtVCX1TUaY00sgis1k
-         BbnlL+//yWfknuQ4vbAvgmQzcQKN8hcMWaeZXO1VrkqFLJR8yjs6syHJYzyoOfMhHaM5
-         a1Ro6fSU53d7QrhJ9aQ1GvHOYzVEq5YqmWiVQa78LaE+l2ovPaAlhpfcQUsaiDOUBQbd
-         GW2A==
-X-Gm-Message-State: AOAM531VLEXVWhq8HK2RHjdCDOOqTO4MNUXuz6m8yu5ZCa36o6TZxTZ4
-        mwQECbrgECMxOf+gnRXNKV7vB3KKGigpjHj4FdH/17iNNE5wad3A/AWSzBMttuPgf0jGeEZgYpT
-        FIcMWgsZnMMSKY2KyHQtKREnX
-X-Received: by 2002:a17:902:7603:b0:148:daa7:ed7e with SMTP id k3-20020a170902760300b00148daa7ed7emr8569168pll.150.1642151119913;
-        Fri, 14 Jan 2022 01:05:19 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxW79PSPSMG4VhQolpshd54Loc7rye/TOYMJd/7+9JvMi8g1YuVwpqwFGtXO0bt0SuSVXZouw==
-X-Received: by 2002:a17:902:7603:b0:148:daa7:ed7e with SMTP id k3-20020a170902760300b00148daa7ed7emr8569146pll.150.1642151119627;
-        Fri, 14 Jan 2022 01:05:19 -0800 (PST)
-Received: from steredhat.redhat.com (host-95-238-125-214.retail.telecomitalia.it. [95.238.125.214])
-        by smtp.gmail.com with ESMTPSA id c6sm5217474pfv.62.2022.01.14.01.05.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 01:05:18 -0800 (PST)
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, stefanha@redhat.com,
-        kvm@vger.kernel.org, netdev@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>
-Subject: [PATCH v1] vhost: cache avail index in vhost_enable_notify()
-Date:   Fri, 14 Jan 2022 10:05:08 +0100
-Message-Id: <20220114090508.36416-1-sgarzare@redhat.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 14 Jan 2022 04:06:37 -0500
+X-UUID: 7bded12a5a9841fc8e08ca81fa4b3dbd-20220114
+X-UUID: 7bded12a5a9841fc8e08ca81fa4b3dbd-20220114
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2126194223; Fri, 14 Jan 2022 17:06:33 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 14 Jan 2022 17:06:32 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 14 Jan 2022 17:06:31 +0800
+Message-ID: <69a10908622512c60790f97942731a8ab989b727.camel@mediatek.com>
+Subject: Re: [PATCH v5 25/32] iommu/mtk: Migrate to aggregate driver
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, Joerg Roedel <joro@8bytes.org>,
+        "Will Deacon" <will@kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Saravana Kannan <saravanak@google.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <iommu@lists.linux-foundation.org>, <youlin.pei@mediatek.com>
+Date:   Fri, 14 Jan 2022 17:06:31 +0800
+In-Reply-To: <CAE-0n53FAHDmCznJ35Xh2aTwXBVwukAM3ioKx8SU9VowSaQSqA@mail.gmail.com>
+References: <20220106214556.2461363-1-swboyd@chromium.org>
+         <20220106214556.2461363-26-swboyd@chromium.org>
+         <1a3b368eb891ca55c33265397cffab0b9f128737.camel@mediatek.com>
+         <CAE-0n53Y3WRy4_QvUm9k9wjjWV7adMDQcK_+1ji4+W25SSeGwg@mail.gmail.com>
+         <ff81bc1fe1f1c2060fcf03ba14f1bef584c47599.camel@mediatek.com>
+         <CAE-0n53FAHDmCznJ35Xh2aTwXBVwukAM3ioKx8SU9VowSaQSqA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In vhost_enable_notify() we enable the notifications and we read
-the avail index to check if new buffers have become available in
-the meantime.
+On Wed, 2022-01-12 at 20:25 -0800, Stephen Boyd wrote:
+> > 
+> > [    2.654526] ------------[ cut here ]------------
+> > [    2.655558] refcount_t: addition on 0; use-after-free.
+> > 
+> > After this patch, the aggregate_driver flow looks ok. But our
+> > driver
+> > still aborts like this:
+> > 
+> > [    2.721316] Unable to handle kernel NULL pointer dereference at
+> > virtual address 0000000000000000
+> > ...
+> > [    2.731658] pc :
+> > mtk_smi_larb_config_port_gen2_general+0xa4/0x138
+> > [    2.732434] lr : mtk_smi_larb_resume+0x54/0x98
+> > ...
+> > [    2.742457] Call trace:
+> > [    2.742768]  mtk_smi_larb_config_port_gen2_general+0xa4/0x138
+> > [    2.743496]  pm_generic_runtime_resume+0x2c/0x48
+> > [    2.744090]  __genpd_runtime_resume+0x30/0xa8
+> > [    2.744648]  genpd_runtime_resume+0x94/0x2c8
+> > [    2.745191]  __rpm_callback+0x44/0x150
+> > [    2.745669]  rpm_callback+0x6c/0x78
+> > [    2.746114]  rpm_resume+0x314/0x558
+> > [    2.746559]  __pm_runtime_resume+0x3c/0x88
+> > [    2.747080]  pm_runtime_get_suppliers+0x7c/0x110
+> > [    2.747668]  __driver_probe_device+0x4c/0xe8
+> > [    2.748212]  driver_probe_device+0x44/0x130
+> > [    2.748745]  __device_attach_driver+0x98/0xd0
+> > [    2.749300]  bus_for_each_drv+0x68/0xd0
+> > [    2.749787]  __device_attach+0xec/0x148
+> > [    2.750277]  device_attach+0x14/0x20
+> > [    2.750733]  bus_rescan_devices_helper+0x50/0x90
+> > [    2.751319]  bus_for_each_dev+0x7c/0xd8
+> > [    2.751806]  bus_rescan_devices+0x20/0x30
+> > [    2.752315]  __component_add+0x7c/0xa0
+> > [    2.752795]  component_add+0x14/0x20
+> > [    2.753253]  mtk_smi_larb_probe+0xe0/0x120
+> > 
+> > This is because the device runtime_resume is called before the bind
+> > operation(In our case this detailed function is mtk_smi_larb_bind).
+> > The issue doesn't happen without this patchset. I'm not sure the
+> > right
+> > sequence. If we should fix in mediatek driver, the patch could be:
+> 
+> Oh, the runtime PM is moved around with these patches. The aggregate
+> device is runtime PM enabled before the probe is called, 
 
-We are not caching the avail index, so when the device will call
-vhost_get_vq_desc(), it will find the old value in the cache and
-it will read the avail index again.
+In our case, the component device may probe before the aggregate
+device. thus the component device runtime PM has already been enabled
+when aggregate device probe.
 
-It would be better to refresh the cache every time we read avail
-index, so let's change vhost_enable_notify() caching the value in
-`avail_idx` and compare it with `last_avail_idx` to check if there
-are new buffers available.
+> and there are
+> supplier links made to each component, so each component is runtime
+> resumed before the aggregate probe function is called. 
 
-Anyway, we don't expect a significant performance boost because
-the above path is not very common, indeed vhost_enable_notify()
-is often called with unlikely(), expecting that avail index has
-not been updated.
+Yes. This is the current flow.
 
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
----
-v1:
-- improved the commit description [MST, Jason]
----
- drivers/vhost/vhost.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> It means that all
+> the component drivers need to have their resources ready to power on
+> before their component_bind() callback is made. 
 
-diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index 59edb5a1ffe2..07363dff559e 100644
---- a/drivers/vhost/vhost.c
-+++ b/drivers/vhost/vhost.c
-@@ -2543,8 +2543,9 @@ bool vhost_enable_notify(struct vhost_dev *dev, struct vhost_virtqueue *vq)
- 		       &vq->avail->idx, r);
- 		return false;
- 	}
-+	vq->avail_idx = vhost16_to_cpu(vq, avail_idx);
- 
--	return vhost16_to_cpu(vq, avail_idx) != vq->avail_idx;
-+	return vq->avail_idx != vq->last_avail_idx;
- }
- EXPORT_SYMBOL_GPL(vhost_enable_notify);
- 
--- 
-2.31.1
+Sorry, I don't understand here well. In this case, The component
+drivers prepare the resource for power on in the component_bind since
+the resource comes from the aggregate driver. Thus, we expect the
+component_bind run before the runtime resume callback.
+
+Another solution is moving the component's pm_runtime_enable into the
+component_bind(It's mtk_smi_larb_bind here), then the runtime callback
+is called after component_bind in which the resource for power on is
+ready.
+
+> Thinking more about it
+> that may be wrong if something from the aggregate device is needed to
+> fully power on the component. Is that what is happening here?
+> 
+> > diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
+> > index b883dcc0bbfa..288841555067 100644
+> > --- a/drivers/memory/mtk-smi.c
+> > +++ b/drivers/memory/mtk-smi.c
+> > @@ -483,8 +483,9 @@ static int __maybe_unused
+> > mtk_smi_larb_resume(struct device *dev)
+> >         if (ret < 0)
+> >                 return ret;
+> > 
+> > -       /* Configure the basic setting for this larb */
+> > -       larb_gen->config_port(dev);
+> > +       /* Configure the basic setting for this larb after it binds
+> > with iommu */
+> > +       if (larb->mmu)
+> > +               larb_gen->config_port(dev);
+> > 
+> >         return 0;
+> >  }
+> > 
 

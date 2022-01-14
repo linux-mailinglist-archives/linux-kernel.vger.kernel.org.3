@@ -2,44 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD89A48E632
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:25:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D8048E5CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:21:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240518AbiANIY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:24:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240515AbiANIW3 (ORCPT
+        id S239948AbiANIVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:21:05 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58478 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237123AbiANITM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:22:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ECCC061381;
-        Fri, 14 Jan 2022 00:22:05 -0800 (PST)
+        Fri, 14 Jan 2022 03:19:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6B14B82432;
-        Fri, 14 Jan 2022 08:22:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE063C36AEA;
-        Fri, 14 Jan 2022 08:22:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CFD561E03;
+        Fri, 14 Jan 2022 08:19:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03ECEC36AE9;
+        Fri, 14 Jan 2022 08:19:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148522;
-        bh=PqTjD/Nbf5u8y6yLhStG0y8yvB+cexBcboNJqtvmuLk=;
+        s=korg; t=1642148351;
+        bh=Uh/Bhv7AqgNt1MvA67kKhA3mQZvo44UFqagmaBRB8yc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B5Bhp9Krnu3eiYlfnIVE8cuQrhonhWxBKxxYvMQ8Z3uGOai6ApUDUbrpaxKY4vGgQ
-         Yp6taBbnhKAmTzk20JSzcme/mcnQeihgaPQ8qiviAEk7b1xMmL/6+v1s2KKL95rN2v
-         z3qWAbyODg82Ov+6Dz0kpUNnUraxLmGdTxETiUW4=
+        b=T0JBax1gjwBT0hvswuRKwKSth+ci194SEO1ZgrGd2WlaUc4Hp69a43uno8IFfcJKk
+         2O6UfXSOBg4TR0uSwEyoQsb+26PTE57BaxxAaoswlgEGh5fYOVfwCeYCqwtcyaOmWU
+         5+uxxDaw+/olgZe7W1Ih/liTJxvWcbwHd7fEVgWE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan McDowell <noodles@earth.li>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH 5.16 17/37] USB: core: Fix bug in resuming hubs handling of wakeup requests
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 5.10 23/25] staging: wlan-ng: Avoid bitwise vs logical OR warning in hfa384x_usb_throttlefn()
 Date:   Fri, 14 Jan 2022 09:16:31 +0100
-Message-Id: <20220114081545.416350135@linuxfoundation.org>
+Message-Id: <20220114081543.489065294@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
-References: <20220114081544.849748488@linuxfoundation.org>
+In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
+References: <20220114081542.698002137@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,69 +44,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: Nathan Chancellor <nathan@kernel.org>
 
-commit 0f663729bb4afc92a9986b66131ebd5b8a9254d1 upstream.
+commit 502408a61f4b7eb4713f44bd77f4a48e6cb1b59a upstream.
 
-Bugzilla #213839 reports a 7-port hub that doesn't work properly when
-devices are plugged into some of the ports; the kernel goes into an
-unending disconnect/reinitialize loop as shown in the bug report.
+A new warning in clang points out a place in this file where a bitwise
+OR is being used with boolean expressions:
 
-This "7-port hub" comprises two four-port hubs with one plugged into
-the other; the failures occur when a device is plugged into one of the
-downstream hub's ports.  (These hubs have other problems too.  For
-example, they bill themselves as USB-2.0 compliant but they only run
-at full speed.)
+In file included from drivers/staging/wlan-ng/prism2usb.c:2:
+drivers/staging/wlan-ng/hfa384x_usb.c:3787:7: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+            ((test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
+            ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/staging/wlan-ng/hfa384x_usb.c:3787:7: note: cast one or both operands to int to silence this warning
+1 warning generated.
 
-It turns out that the failures are caused by bugs in both the kernel
-and the hub.  The hub's bug is that it reports a different
-bmAttributes value in its configuration descriptor following a remote
-wakeup (0xe0 before, 0xc0 after -- the wakeup-support bit has
-changed).
+The comment explains that short circuiting here is undesirable, as the
+calls to test_and_{clear,set}_bit() need to happen for both sides of the
+expression.
 
-The kernel's bug is inside the hub driver's resume handler.  When
-hub_activate() sees that one of the hub's downstream ports got a
-wakeup request from a child device, it notes this fact by setting the
-corresponding bit in the hub->change_bits variable.  But this variable
-is meant for connection changes, not wakeup events; setting it causes
-the driver to believe the downstream port has been disconnected and
-then connected again (in addition to having received a wakeup
-request).
+Clang's suggestion would work to silence the warning but the readability
+of the expression would suffer even more. To clean up the warning and
+make the block more readable, use a variable for each side of the
+bitwise expression.
 
-Because of this, the hub driver then tries to check whether the device
-currently plugged into the downstream port is the same as the device
-that had been attached there before.  Normally this check succeeds and
-wakeup handling continues with no harm done (which is why the bug
-remained undetected until now).  But with these dodgy hubs, the check
-fails because the config descriptor has changed.  This causes the hub
-driver to reinitialize the child device, leading to the
-disconnect/reinitialize loop described in the bug report.
-
-The proper way to note reception of a downstream wakeup request is
-to set a bit in the hub->event_bits variable instead of
-hub->change_bits.  That way the hub driver will realize that something
-has happened to the port but will not think the port and child device
-have been disconnected.  This patch makes that change.
-
-Cc: <stable@vger.kernel.org>
-Tested-by: Jonathan McDowell <noodles@earth.li>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/YdCw7nSfWYPKWQoD@rowland.harvard.edu
+Link: https://github.com/ClangBuiltLinux/linux/issues/1478
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/r/20211014215703.3705371-1-nathan@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/hub.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/wlan-ng/hfa384x_usb.c |   22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -1225,7 +1225,7 @@ static void hub_activate(struct usb_hub
- 			 */
- 			if (portchange || (hub_is_superspeed(hub->hdev) &&
- 						port_resumed))
--				set_bit(port1, hub->change_bits);
-+				set_bit(port1, hub->event_bits);
+--- a/drivers/staging/wlan-ng/hfa384x_usb.c
++++ b/drivers/staging/wlan-ng/hfa384x_usb.c
+@@ -3779,18 +3779,18 @@ static void hfa384x_usb_throttlefn(struc
  
- 		} else if (udev->persist_enabled) {
- #ifdef CONFIG_PM
+ 	spin_lock_irqsave(&hw->ctlxq.lock, flags);
+ 
+-	/*
+-	 * We need to check BOTH the RX and the TX throttle controls,
+-	 * so we use the bitwise OR instead of the logical OR.
+-	 */
+ 	pr_debug("flags=0x%lx\n", hw->usb_flags);
+-	if (!hw->wlandev->hwremoved &&
+-	    ((test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
+-	      !test_and_set_bit(WORK_RX_RESUME, &hw->usb_flags)) |
+-	     (test_and_clear_bit(THROTTLE_TX, &hw->usb_flags) &&
+-	      !test_and_set_bit(WORK_TX_RESUME, &hw->usb_flags))
+-	    )) {
+-		schedule_work(&hw->usb_work);
++	if (!hw->wlandev->hwremoved) {
++		bool rx_throttle = test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
++				   !test_and_set_bit(WORK_RX_RESUME, &hw->usb_flags);
++		bool tx_throttle = test_and_clear_bit(THROTTLE_TX, &hw->usb_flags) &&
++				   !test_and_set_bit(WORK_TX_RESUME, &hw->usb_flags);
++		/*
++		 * We need to check BOTH the RX and the TX throttle controls,
++		 * so we use the bitwise OR instead of the logical OR.
++		 */
++		if (rx_throttle | tx_throttle)
++			schedule_work(&hw->usb_work);
+ 	}
+ 
+ 	spin_unlock_irqrestore(&hw->ctlxq.lock, flags);
 
 

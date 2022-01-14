@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE9048EC4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB1D48EC4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242343AbiANPJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:09:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S242322AbiANPJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242228AbiANPIs (ORCPT
+        with ESMTP id S242257AbiANPIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:08:48 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C458AC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:08:47 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id b14so12738648lff.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:08:47 -0800 (PST)
+        Fri, 14 Jan 2022 10:08:49 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7834C06173E
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:08:48 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id m3so17174810lfu.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:08:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=z+PMrt9ZoFFUyS+nI8cuBydf4l/fJgxfwN4fEj0TGMU=;
-        b=lzW8KWNoC1fqc7SLWfi4NlHlo4piN1ZDgKk2ofcWfVdLPQ2kIaUFYEvGPHI3gowT6E
-         13RCNdmP7OKfdix2j61FC129j/LIGiSpc5HHvQpRE47x/GEvx0QjB7Z1v2/463iz5G3O
-         ZXZBcht1c8rYbiJHJScCXvSf1D7x/IuPbikVm6yboktWlyGKY/LVUQWDRM7GUewbPsbK
-         F4/Yl5XhZWfofuVVACdLi5heb0iPMOrltKZjKhtDbBbM/sMUbPMZ5Js3sVPp1ufGXTg/
-         8eC+ktqhOG3mi7+UqQZPyCx/lOGxJjr6RALVDKVQ1FZB2eNP3nXZDSZRM4RR8uEkzcgR
-         Zo2A==
+        bh=BMWnTZVzVzGElJzU5xNhyaOzPG95n804pR9dUD0UpSM=;
+        b=sVLNnZCk9v2uts1VfyjtyPuUOiD7rH1nXPNLXPa5/tQOdmj2DQU3+bQTWb+BAuFGlr
+         VVC6BJP2Fe/uhcwCMCh0y4NxqXHs9uApS0Fqe/SeCl7wh9bF4COVPu9vsN55gSGCUEmF
+         jIovWSaoItjipFLRJP1fzQ8HKS4f6ywI1oGO/0/9KtM5ZBlultFFJ5nUC73TIxulCUS1
+         OPiAuFGLlaNavNsZViuRDNwnczbRedoFobsOCqa4LQ68XqoHrxVU1EjWAHZD7owNUuzR
+         1qJmpt+/qV+BRfZ+GTN74Q3xhXBoqvL7NE+uvptIhOZrGQxckaaGegsGQAOSkHR3jIZs
+         Hogg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=z+PMrt9ZoFFUyS+nI8cuBydf4l/fJgxfwN4fEj0TGMU=;
-        b=DCxZT+omLDxls9SlKFXd9GCNBPrz+gxE6vTkc2GNTIUaupPynIoINsDSjRDL6DtJ+l
-         a1dAKqRdzcjvMAC73fYfV+Cs3uNdAYO9G+IpAs0RQYjAYMCKuqg2TXBYC4GgD9xDaSsy
-         o3DNqd5/b/rFMUh8qgpojbl38Tg+Y8BN5MJhC3Aof3etckKQVQ6Grn29XZzJ0welfVX2
-         zd/ErVtUDWeY1puCoJKzurk0zPZ/8lVKDxdCWWFGWV9fSWpOFv2hdmrKO2I3LSpsow6L
-         hGSW+4VXio7VzOd1K8tYRkaNX1m5FWTYmPXPGy5ASsZmMjSmHCn7CoIRtwnpSx2YoFk2
-         2q3w==
-X-Gm-Message-State: AOAM533t3lHCpAQ0XJiD7BjiKcUrtcE6aFs0M94tBIKlIF6gdNXpYqaX
-        qtrd6xgkQwYo/sJZupymnY4V+65zc+T+mQ==
-X-Google-Smtp-Source: ABdhPJw4fN0F/Y5WwdJ22CSUtFiug4nes1etBlslC/SO1RTgBbbw6W4pXxWHWNGQhD34PYFAyPSTVg==
-X-Received: by 2002:a2e:9bcd:: with SMTP id w13mr6721364ljj.360.1642172925879;
-        Fri, 14 Jan 2022 07:08:45 -0800 (PST)
+        bh=BMWnTZVzVzGElJzU5xNhyaOzPG95n804pR9dUD0UpSM=;
+        b=rTa516sGAAyDV/cbOuhuamUL41JJyT5XtJXwIikR7TT8HYGkjGTqx9KXcp2JnbZJhM
+         ROkstZagy55YUVyqhIrZPUCXEoifU5x1aJFisnRgtGbjScr6/pvk1jaePAO+RbJ0mk7I
+         qIMhs64r232GD1ayuHyVrdWEhMf2J3KCKNScCH+JJhavCO/Rt4cPKZeY5Xpw9i45S9wn
+         4jux96ZtZA0ovyloKN1zMoN45kBbAAI+Bnj9OoNaXsMj0eI1LwpmwsM2zQvtbueMnaJi
+         G3quqjsfDRgXWZJUOQcMpC3xAf5p8i5gJkQ9YXPTXRkfS2m5RLbvveAnrMWPg3IY38wJ
+         gK6Q==
+X-Gm-Message-State: AOAM533rZQggGWwtbbEEBmTgMMcT+sbVtMgFyCWmmUPqQPxU//eHKXo9
+        nS1hv3uSw7lj6xRWRvv8xrodHBmaONNAwQ==
+X-Google-Smtp-Source: ABdhPJzNNelaOvKCjbTz781HW+mCw6BOTdGWUPuqwyazCvQa+Y9odiI9bj86aLnmytCbAevWYtcKXg==
+X-Received: by 2002:a05:651c:508:: with SMTP id o8mr6440057ljp.99.1642172926707;
+        Fri, 14 Jan 2022 07:08:46 -0800 (PST)
 Received: from jade.urgonet (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
-        by smtp.gmail.com with ESMTPSA id i31sm40517lfv.67.2022.01.14.07.08.45
+        by smtp.gmail.com with ESMTPSA id i31sm40517lfv.67.2022.01.14.07.08.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 07:08:45 -0800 (PST)
+        Fri, 14 Jan 2022 07:08:46 -0800 (PST)
 From:   Jens Wiklander <jens.wiklander@linaro.org>
 To:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
 Cc:     Sumit Garg <sumit.garg@linaro.org>,
@@ -57,9 +57,9 @@ Cc:     Sumit Garg <sumit.garg@linaro.org>,
         David Howells <dhowells@redhat.com>,
         Tyler Hicks <tyhicks@linux.microsoft.com>,
         Jens Wiklander <jens.wiklander@linaro.org>
-Subject: [PATCH v2 08/12] optee: add optee_pool_op_free_helper()
-Date:   Fri, 14 Jan 2022 16:08:20 +0100
-Message-Id: <20220114150824.3578829-9-jens.wiklander@linaro.org>
+Subject: [PATCH v2 09/12] tee: add tee_shm_register_{user,kernel}_buf()
+Date:   Fri, 14 Jan 2022 16:08:21 +0100
+Message-Id: <20220114150824.3578829-10-jens.wiklander@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220114150824.3578829-1-jens.wiklander@linaro.org>
 References: <20220114150824.3578829-1-jens.wiklander@linaro.org>
@@ -69,85 +69,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds a common helper function to free a tee_shm allocated using the
-helper function optee_pool_op_alloc_helper().
+Adds the two new functions tee_shm_register_user_buf() and
+tee_shm_register_kernel_buf() which should be used instead of the old
+tee_shm_register().
+
+This avoids having the caller supplying the flags parameter which
+exposes a bit more than desired of the internals of the TEE subsystem.
 
 Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 ---
- drivers/tee/optee/core.c          | 10 ++++++++++
- drivers/tee/optee/ffa_abi.c       |  4 +---
- drivers/tee/optee/optee_private.h |  3 +++
- drivers/tee/optee/smc_abi.c       |  7 +++----
- 4 files changed, 17 insertions(+), 7 deletions(-)
+ drivers/tee/tee_core.c  |  3 +--
+ drivers/tee/tee_shm.c   | 34 ++++++++++++++++++++++++++++++++++
+ include/linux/tee_drv.h |  4 ++++
+ 3 files changed, 39 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tee/optee/core.c b/drivers/tee/optee/core.c
-index f4bccb5f0e93..daf947e98d14 100644
---- a/drivers/tee/optee/core.c
-+++ b/drivers/tee/optee/core.c
-@@ -69,6 +69,16 @@ int optee_pool_op_alloc_helper(struct tee_shm_pool *pool, struct tee_shm *shm,
- 	return rc;
- }
+diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
+index a15812baaeb1..8aa1a4836b92 100644
+--- a/drivers/tee/tee_core.c
++++ b/drivers/tee/tee_core.c
+@@ -334,8 +334,7 @@ tee_ioctl_shm_register(struct tee_context *ctx,
+ 	if (data.flags)
+ 		return -EINVAL;
  
-+void optee_pool_op_free_helper(struct tee_shm_pool *pool, struct tee_shm *shm,
-+			       int (*shm_unregister)(struct tee_context *ctx,
-+						     struct tee_shm *shm))
+-	shm = tee_shm_register(ctx, data.addr, data.length,
+-			       TEE_SHM_DMA_BUF | TEE_SHM_USER_MAPPED);
++	shm = tee_shm_register_user_buf(ctx, data.addr, data.length);
+ 	if (IS_ERR(shm))
+ 		return PTR_ERR(shm);
+ 
+diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+index d51bf97ce7e5..6a1dbce75616 100644
+--- a/drivers/tee/tee_shm.c
++++ b/drivers/tee/tee_shm.c
+@@ -301,6 +301,40 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
+ }
+ EXPORT_SYMBOL_GPL(tee_shm_register);
+ 
++/**
++ * tee_shm_register_user_buf() - Register a userspace shared memory buffer
++ * @ctx:	Context that registers the shared memory
++ * @addr:	The userspace address of the shared buffer
++ * @length:	Length of the shared buffer
++ *
++ * @returns a pointer to 'struct tee_shm'
++ */
++struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
++					  unsigned long addr, size_t length)
 +{
-+	if (shm_unregister)
-+		shm_unregister(shm->ctx, shm);
-+	free_pages((unsigned long)shm->kaddr, get_order(shm->size));
-+	shm->kaddr = NULL;
++	return tee_shm_register(ctx, addr, length,
++				TEE_SHM_DMA_BUF | TEE_SHM_USER_MAPPED);
 +}
++EXPORT_SYMBOL_GPL(tee_shm_register_user_buf);
 +
- static void optee_bus_scan(struct work_struct *work)
++/**
++ * tee_shm_register_kernel_buf() - Register kernel memory to be shared with
++ *				   secure world
++ * @ctx:	Context that registers the shared memory
++ * @addr:	The buffer
++ * @length:	Length of the buffer
++ *
++ * @returns a pointer to 'struct tee_shm'
++ */
++
++struct tee_shm *tee_shm_register_kernel_buf(struct tee_context *ctx,
++					    void *addr, size_t length)
++{
++	return tee_shm_register(ctx, (unsigned long)addr, length,
++				TEE_SHM_DMA_BUF | TEE_SHM_KERNEL_MAPPED);
++}
++EXPORT_SYMBOL_GPL(tee_shm_register_kernel_buf);
++
+ static int tee_shm_fop_release(struct inode *inode, struct file *filp)
  {
- 	WARN_ON(optee_enumerate_devices(PTA_CMD_GET_DEVICES_SUPP));
-diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-index 5ec484b42432..4cbc45035f92 100644
---- a/drivers/tee/optee/ffa_abi.c
-+++ b/drivers/tee/optee/ffa_abi.c
-@@ -379,9 +379,7 @@ static int pool_ffa_op_alloc(struct tee_shm_pool *pool,
- static void pool_ffa_op_free(struct tee_shm_pool *pool,
- 			     struct tee_shm *shm)
- {
--	optee_ffa_shm_unregister(shm->ctx, shm);
--	free_pages((unsigned long)shm->kaddr, get_order(shm->size));
--	shm->kaddr = NULL;
-+	optee_pool_op_free_helper(pool, shm, optee_ffa_shm_unregister);
- }
+ 	tee_shm_put(filp->private_data);
+diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
+index e71cb0411e9c..029c9a0590cc 100644
+--- a/include/linux/tee_drv.h
++++ b/include/linux/tee_drv.h
+@@ -289,6 +289,10 @@ struct tee_shm *tee_shm_alloc_kernel_buf(struct tee_context *ctx, size_t size);
+  */
+ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
+ 				 size_t length, u32 flags);
++struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
++					  unsigned long addr, size_t length);
++struct tee_shm *tee_shm_register_kernel_buf(struct tee_context *ctx,
++					    void *addr, size_t length);
  
- static void pool_ffa_op_destroy_pool(struct tee_shm_pool *pool)
-diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-index df3a483bbf46..e77765c78878 100644
---- a/drivers/tee/optee/optee_private.h
-+++ b/drivers/tee/optee/optee_private.h
-@@ -236,6 +236,9 @@ int optee_pool_op_alloc_helper(struct tee_shm_pool *pool, struct tee_shm *shm,
- 						   struct page **pages,
- 						   size_t num_pages,
- 						   unsigned long start));
-+void optee_pool_op_free_helper(struct tee_shm_pool *pool, struct tee_shm *shm,
-+			       int (*shm_unregister)(struct tee_context *ctx,
-+						     struct tee_shm *shm));
- 
- 
- void optee_remove_common(struct optee *optee);
-diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index f2ef76451443..0b27688d1e97 100644
---- a/drivers/tee/optee/smc_abi.c
-+++ b/drivers/tee/optee/smc_abi.c
-@@ -548,10 +548,9 @@ static void pool_op_free(struct tee_shm_pool *pool,
- 			 struct tee_shm *shm)
- {
- 	if (!(shm->flags & TEE_SHM_PRIV))
--		optee_shm_unregister(shm->ctx, shm);
--
--	free_pages((unsigned long)shm->kaddr, get_order(shm->size));
--	shm->kaddr = NULL;
-+		optee_pool_op_free_helper(pool, shm, optee_shm_unregister);
-+	else
-+		optee_pool_op_free_helper(pool, shm, NULL);
- }
- 
- static void pool_op_destroy_pool(struct tee_shm_pool *pool)
+ /**
+  * tee_shm_is_registered() - Check if shared memory object in registered in TEE
 -- 
 2.31.1
 

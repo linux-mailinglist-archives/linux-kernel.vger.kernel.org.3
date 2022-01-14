@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E258C48ECF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3DB48ED06
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242684AbiANPSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:18:36 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:50786 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242435AbiANPSR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:18:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1642173497; x=1673709497;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=raOPInPiNpoFYNkwMgusjdwrbKTRJG+aT7u9K7/NxHA=;
-  b=gPxIQ9NE9Q2L2/TckQMPVAJTxdlePIeLqS84z/5QPH6sHfgEqz1KzVXC
-   4ZIrqSk7/apcKiFYrMVe6zhZa9WeW5mdOum6O7gv09b+bJOnSk4PRnDKh
-   wK3ej4E/JHBJCBPW4ZUJQdf1D/t9af4PXgpICKSEInyENHjc1ydUi3eU0
-   ZnA/taSOPnW19CJ1AxA+K2Lu1qV3vruDnxl4AjlnFHbebL5f1RHwfViXr
-   NptbQXlRD+Fw5VjghfrTKQ9bInQcJwxOx2MxCYqFgaTIxIQqZmTHAJZ32
-   rFxoL9aB4DTw6DR2LJLGNVCS95dIvgi4JiJ/CoeEAbybi36KhdIKEmtoH
-   A==;
-IronPort-SDR: PX/LMa5zroMvcheRMvJmmSuZSQ4sURh5136X1G6xQgzxW+k26UjOZuRymXExNiqT9MCt5VX4W+
- AITDwg3MLwbCnItLQFpO/R+A9JMURhbkHUw4cDD1w20+qK621kaXO0imVRuudpe0ht0LdeslGR
- H7JI6VySU4LTBFkJHiDczDH8KiRWEiUTurnx64EtRNyL9r54En3q5d1QEP//8ZqwWLLUL+sIR7
- NZ7YeM+nd/fNB4GkOb7mogKwvEwd1Jar8nxRkLZsMPBPHcRqvwC284lX5xB2ew4f4wryjeHDUC
- PQhuzBuwhVlxjnPA0qPqREqZ
+        id S242688AbiANPT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:19:26 -0500
+Received: from mga01.intel.com ([192.55.52.88]:57555 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239340AbiANPTO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 10:19:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642173554; x=1673709554;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gQypZeKb20iK6V4Fo2vqovMOcW37eXRpK9D4ZpMA80M=;
+  b=BtH88BUhEmWlwFXXte+qLw3Vvhv3gqQk8ax+w+tSh2xstShTBvIDV56V
+   PUsCKlImoNoj6t9b8S+UNiO0BR3jgJ7IY/cbAugfXLJNoOW4Sprdt2JsP
+   zl6J1rREoHd4keoQ3+fBLgZH9RcNG/GdtqpMUxE2Q1U5X7k/QtPu23Gx4
+   PbVH6zuztG2ajbheN8fq/nneNzygRZ+qXiALSn5Ql8FXpYrMcHGWJYick
+   c+osJESBMt+vxSnZqnCajDT8Hsw7+1MUBnfB8t8SovAWIECC6uh3Ksm4J
+   xeUbUHUZ81YgYvHNGcjjd94PPxp7dHS3EwB+rm4QYWW/T6BxeZ8lbtHit
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="268628145"
 X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="142730993"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jan 2022 08:18:15 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 14 Jan 2022 08:18:13 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 14 Jan 2022 08:18:07 -0700
-From:   <conor.dooley@microchip.com>
-To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
-        <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <broonie@kernel.org>,
-        <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
-        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-crypto@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
-        <bin.meng@windriver.com>, <heiko@sntech.de>,
-        <lewis.hanly@microchip.com>, <conor.dooley@microchip.com>,
-        <daire.mcnamara@microchip.com>, <ivan.griffin@microchip.com>,
-        <atishp@rivosinc.com>
-Subject: [PATCH v3 15/15] MAINTAINERS: update riscv/microchip entry
-Date:   Fri, 14 Jan 2022 15:17:27 +0000
-Message-ID: <20220114151727.2319915-16-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220114151727.2319915-1-conor.dooley@microchip.com>
-References: <20220114151727.2319915-1-conor.dooley@microchip.com>
+   d="scan'208";a="268628145"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 07:19:13 -0800
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="594058641"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 07:19:07 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1n8OKv-00AgJa-UJ;
+        Fri, 14 Jan 2022 17:17:53 +0200
+Date:   Fri, 14 Jan 2022 17:17:53 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Simon Ser <contact@emersion.fr>
+Cc:     Tomohito Esaki <etom@igel.co.jp>, dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Michel =?iso-8859-1?Q?D=E4nzer?= <mdaenzer@redhat.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        Mark Yacoub <markyacoub@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Evan Quan <evan.quan@amd.com>, Petr Mladek <pmladek@suse.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org, Daniel Stone <daniel@fooishbar.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
+        Takanari Hayama <taki@igel.co.jp>
+Subject: Re: [RFC PATCH v3 2/3] drm: add support modifiers for drivers whose
+ planes only support linear layout
+Message-ID: <YeGUIYK3hYo7wLJt@smile.fi.intel.com>
+References: <20220114101753.24996-1-etom@igel.co.jp>
+ <20220114101753.24996-3-etom@igel.co.jp>
+ <YeGFugZvwbF7l2I/@smile.fi.intel.com>
+ <7eljcd3F4aWL2jjBRwr3DISmyt0XPWFIH1_kebFGqZTJXLZRx0bm_8c8yaIuEuH8rS0MaJhU6SY1y-fc6U_zCLaKgoLM124nZpr0H91nSjw=@emersion.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7eljcd3F4aWL2jjBRwr3DISmyt0XPWFIH1_kebFGqZTJXLZRx0bm_8c8yaIuEuH8rS0MaJhU6SY1y-fc6U_zCLaKgoLM124nZpr0H91nSjw=@emersion.fr>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On Fri, Jan 14, 2022 at 03:07:21PM +0000, Simon Ser wrote:
+> On Friday, January 14th, 2022 at 15:16, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> 
+> > Why not enum?
+> 
+> There is no enum for DRM format modifiers.
 
-Update the RISC-V/Microchip entry by adding the microchip dts
-directory and myself as maintainer
+I'm not sure how this prevents to use enum in the code instead of const u64.
+Any specific reason for that?
 
-Reviewed-by: Lewis Hanly <lewis.hanly@microchip.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7a2345ce8521..3b1d6be7bd56 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16348,8 +16348,10 @@ K:	riscv
- 
- RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
- M:	Lewis Hanly <lewis.hanly@microchip.com>
-+M:	Conor Dooley <conor.dooley@microchip.com>
- L:	linux-riscv@lists.infradead.org
- S:	Supported
-+F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
 -- 
-2.32.0
+With Best Regards,
+Andy Shevchenko
+
 

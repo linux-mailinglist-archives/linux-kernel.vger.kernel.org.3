@@ -2,76 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E4E48ECC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD4F48EC6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239131AbiANPRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242585AbiANPR0 (ORCPT
+        id S242372AbiANPPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:15:17 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:1499 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242295AbiANPPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:17:26 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC8DC06173F;
-        Fri, 14 Jan 2022 07:17:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HIRvcwlSl4Hp1A2rT9yMEOxIWfhwKnmROPnxOG/25YE=; b=MLdEMXb4SCvNvAol4jQBhoZrDw
-        ls0LbGXaMsBPr5myQwSrS7mm891UDbP7d0aB9f4apmNBECNtiID+VWfx52VHds1RymMbnwNkWl3UZ
-        uXqRMmCE7eCW15t3NcyRYgr40FR9PAbyMpDMKo+4VVqlAo6j3Za51gppGoB6xxlmWLgexYnbKyFOX
-        FQssGbBTPx6anq/Gxt2YEa+gHIqTTeO/DpsQLsAiLPvbwHucX3ZFedtzFE04M0xVHMJJmtGuB3QtZ
-        0YORWbZUwdCE60GdjX4gvo5ZhMwkhQ84SmqyNXAk5H+iQhQdIYyGA07EH7KLCc24+jKSIgsY3CCIQ
-        wGoiQw4g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n8OK0-005tS8-Ou; Fri, 14 Jan 2022 15:16:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D88AD3002C1;
-        Fri, 14 Jan 2022 16:16:53 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B4C2923CDA75B; Fri, 14 Jan 2022 16:16:53 +0100 (CET)
-Date:   Fri, 14 Jan 2022 16:16:53 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Peter Oskolkov <posk@posk.io>
-Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
-        pjt@google.com, posk@google.com, avagin@google.com,
-        jannh@google.com, tdelisle@uwaterloo.ca
-Subject: Re: [RFC][PATCH 3/3] sched: User Mode Concurency Groups
-Message-ID: <YeGT5dvA8KFeW+69@hirez.programming.kicks-ass.net>
-References: <20211214204445.665580974@infradead.org>
- <20211214205358.701701555@infradead.org>
- <20211221171900.GA580323@dev-hv>
- <YeGEM7TP3tekBVEh@hirez.programming.kicks-ass.net>
+        Fri, 14 Jan 2022 10:15:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1642173315; x=1673709315;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=scvS3ncjwqYao/YGwe70xpmeP3AaUlpv9xiTi+7gh/Y=;
+  b=Y8sdnxoz0vfmapGkrHwSKrn8UOH3sZ8E8DTU47DtEYCJZFBtlax2EAAK
+   ijaHcRsUfTsnkMW6yDYz+d+bKRDrVDRQz539MAQNYbfiuBD+0FpHpWjTd
+   uRi827D1IUtIkK7sfdgF0j0RhVaRnBFi8rOcxRtBR+dEK+TsBr2W089rC
+   3upFBWtU4ZdpCzQ+iuyn67Ur8HzK8HUwwumlDUqV84atAKpf/t1U6OFXg
+   xGmkfKxBjk61nGbN9SPwRtQe0a5RF7j9MQeEU+5IxuBcjkFLRIU9/adZ2
+   6EfvfobzZyWA5J3imug1CH+j+VErtKWmDMMIigD5ec18vIpGutS4AsOVI
+   w==;
+IronPort-SDR: D0VJuxheRQlQxnDJvUwZmrOQdlMCXyBfp66n+aFXHp40sGZCnkpREKhRmvmdetUWjAxwuF6X6O
+ ay5SZ0Ggte4T2XwFLMuiFCxgYHCvk3FxfxFx4Vfe6iupjQSSOH2Pjy8VG4nblmi46kpLEgQr8G
+ g2UL5SMCHBGSOKtfBzDtqxU7Pg7d+pI9rgej5xvBIADuwrdJ+NqPRSB8naYdpiCZAIYlo8hBkn
+ CrQPDUArOA1mR9jp7RybhiH8ESqSNLG+2YuHi4uC9LjOrBrRXByrzz49rCPX+GHdaukebjfOkD
+ f9k5bCycIN0e82GX7OJsP1HV
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="145454941"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jan 2022 08:15:13 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 14 Jan 2022 08:15:13 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 14 Jan 2022 08:15:07 -0700
+From:   <conor.dooley@microchip.com>
+To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
+        <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <broonie@kernel.org>,
+        <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
+        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-crypto@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
+        <bin.meng@windriver.com>, <heiko@sntech.de>,
+        <lewis.hanly@microchip.com>, <conor.dooley@microchip.com>,
+        <daire.mcnamara@microchip.com>, <ivan.griffin@microchip.com>,
+        <atishp@rivosinc.com>
+Subject: [PATCH v3 00/15] Update the Icicle Kit device tree
+Date:   Fri, 14 Jan 2022 15:17:12 +0000
+Message-ID: <20220114151727.2319915-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeGEM7TP3tekBVEh@hirez.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 03:09:55PM +0100, Peter Zijlstra wrote:
+From: Conor Dooley <conor.dooley@microchip.com>
 
-> > I think the assumption is based on the idea that a process
-> > using UMCG will get affined to N CPUs, will have N servers and
-> > a number of workers, and they will all happily cooperate and not
-> > get any extra threads running.
-> > 
-> > Of course the pretty picture was not completely true, as the unblocked
-> > tasks do consume extra threads in the kernel, though never in the
-> > userspace.
-> 
-> Right, there is some unmanaged time anyway.
+This series updates the Microchip Icicle Kit device tree by adding a
+host of peripherals, and some updates to the memory map. In addition,
+the device tree has been split into a third part, which contains "soft"
+peripherals that are in the fpga fabric.
 
-Also, since we force wake to the same CPU, and overlapping runtime is
-'short', they should all stick to the same CPU, even if we don't pin.
+Several of the entries are for peripherals that have not get had their
+drivers upstreamed, so in those cases the dt bindings are included where
+appropriate in order to avoid the many "DT compatible string <x> appears
+un-documented" errors.
+
+Depends on mpfs clock driver series [1] to provide:
+dt-bindings/clock/microchip,mpfs-clock.h
+and on the other changes to the icicle/mpfs device tree from geert
+that are already in linux/riscv/for-next.
+
+Additionally, the interrupt-extended warnings on the plic/clint are 
+cleared by [2] & [3].
+
+[1] https://lore.kernel.org/linux-clk/20211216140022.16146-1-conor.dooley@microchip.com/T/
+[2] https://lore.kernel.org/linux-riscv/cover.1639744468.git.geert@linux-m68k.org/
+[3] https://lore.kernel.org/linux-riscv/cover.1639744106.git.geert@linux-m68k.org/
+
+Changes from v2:
+- dropped plic int header & corresponding defines in dts{,i}
+- use $ref to drmode in mpfs-musb binding
+- split changes to dts{,i} again: functional changes to existing
+  elements now are in a new patch
+- drop num-cs property in mpfs-spi binding
+- dont make the system controller a simple-mfd
+- move the separate bindings for rng/generic system services into the 
+  system controller binding
+- added an instance corei2c as i2c2 in the fabric dtsi
+- add version numbering to corepwm and corei2c compat string (-rtl-vN)
+
+Conor Dooley (15):
+  dt-bindings: soc/microchip: update syscontroller compatibles
+  dt-bindings: soc/microchip: add services as children of sys ctrlr
+  mailbox: change mailbox-mpfs compatible string
+  dt-bindings: i2c: add bindings for microchip mpfs i2c
+  dt-bindings: rtc: add bindings for microchip mpfs rtc
+  dt-bindings: gpio: add bindings for microchip mpfs gpio
+  dt-bindings: spi: add bindings for microchip mpfs spi
+  dt-bindings: usb: add bindings for microchip mpfs musb
+  dt-bindings: pwm: add microchip corepwm binding
+  riscv: dts: microchip: use clk defines for icicle kit
+  riscv: dts: microchip: add fpga fabric section to icicle kit
+  riscv: dts: microchip: refactor icicle kit device tree
+  riscv: dts: microchip: update peripherals in icicle kit device tree
+  riscv: dts: microchip: add new peripherals to icicle kit device tree
+  MAINTAINERS: update riscv/microchip entry
+
+ .../bindings/gpio/microchip,mpfs-gpio.yaml    |  80 ++++++
+ .../bindings/i2c/microchip,mpfs-i2c.yaml      |  55 ++++
+ ...ilbox.yaml => microchip,mpfs-mailbox.yaml} |   6 +-
+ .../bindings/pwm/microchip,corepwm.yaml       |  75 +++++
+ .../bindings/rtc/microchip,mfps-rtc.yaml      |  63 +++++
+ .../microchip,mpfs-sys-controller.yaml        |  73 +++++
+ ...icrochip,polarfire-soc-sys-controller.yaml |  35 ---
+ .../bindings/spi/microchip,mpfs-spi.yaml      |  52 ++++
+ .../bindings/usb/microchip,mpfs-musb.yaml     |  59 ++++
+ MAINTAINERS                                   |   2 +
+ .../dts/microchip/microchip-mpfs-fabric.dtsi  |  25 ++
+ .../microchip/microchip-mpfs-icicle-kit.dts   | 115 ++++++--
+ .../boot/dts/microchip/microchip-mpfs.dtsi    | 262 +++++++++++++++---
+ arch/riscv/configs/icicle_kit_defconfig       | 134 +++++++++
+ drivers/mailbox/mailbox-mpfs.c                |   2 +-
+ 15 files changed, 933 insertions(+), 105 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+ create mode 100644 Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+ rename Documentation/devicetree/bindings/mailbox/{microchip,polarfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} (82%)
+ create mode 100644 Documentation/devicetree/bindings/pwm/microchip,corepwm.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+ delete mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
+ create mode 100644 arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
+ create mode 100644 arch/riscv/configs/icicle_kit_defconfig
+
+-- 
+2.32.0
+

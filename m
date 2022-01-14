@@ -2,159 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF12E48EB7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5111B48EB68
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241527AbiANOQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 09:16:56 -0500
-Received: from mout.perfora.net ([74.208.4.194]:35039 "EHLO mout.perfora.net"
+        id S241474AbiANOQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 09:16:00 -0500
+Received: from mout.perfora.net ([74.208.4.194]:38213 "EHLO mout.perfora.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241561AbiANOQh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:16:37 -0500
+        id S241444AbiANOP7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 09:15:59 -0500
 Received: from localhost.localdomain ([81.221.144.115]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MDzNh-1n7blH0XmR-00HPF9;
- Fri, 14 Jan 2022 15:15:28 +0100
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lkw9T-1mZrMM1Gx3-00apy9;
+ Fri, 14 Jan 2022 15:15:31 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marek Vasut <marek.vasut@gmail.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chester Lin <clin@suse.com>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         Fabio Estevam <festevam@gmail.com>,
         Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lucas Stach <dev@lynxeye.de>, Martin KaFai Lau <kafai@fb.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Michael Walle <michael@walle.cc>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
         =?UTF-8?q?Oliver=20St=C3=A4bler?= <oliver.staebler@bytesatwork.ch>,
         Olof Johansson <olof@lixom.net>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Will Deacon <will@kernel.org>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v2 00/11] arm64: prepare and add verdin imx8m mini support
-Date:   Fri, 14 Jan 2022 15:14:56 +0100
-Message-Id: <20220114141507.395271-1-marcel@ziswiler.com>
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 01/11] arm64: dts: imx8mm: fix strange hex notation
+Date:   Fri, 14 Jan 2022 15:14:57 +0100
+Message-Id: <20220114141507.395271-2-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220114141507.395271-1-marcel@ziswiler.com>
+References: <20220114141507.395271-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:qvE0E69fR3U8SG8guukfvjMfmFHtZUCRsqWEl8F+pYrI0Ep53um
- rqRdbFy9zCwgeP8Higi+PW6l3hNVFaQ/IgKdlD/Zua4XPmCBAdcLhf3ZBxQxJyPnfsuxHW+
- seLE8kF2gjRf+mt2BOZ9T+UR+WFt5gOpcTyzzCN/xJTBttwfb8D2dvvuqFQ0qkuWlN6WSie
- cH+M2m7z8JzJ9nbeQW7Gg==
+X-Provags-ID: V03:K1:oESOtOPuWo8sPx81MeeTQKrPBLqUe0dN4Uy33o5E5eZu8mHV/LN
+ 1www8ErKZBd1DAjr/DflEkvkrA9HXV9NveOMa/3NQq8WVagTw8DqGFtoheRpv+t1AKY6b7x
+ sW1jxEkIcmCnXWdTE0SHR7bZkvu/8KpXB9iRDdUKuqYJQMkhxM1CPJmoolCbeskU1exTVUq
+ M/u+qPjxOXc50R7/iGw3A==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:sIvfkNPuiaI=:R2VPpHu2TucjxHx9nUCJqd
- 9NFVV92twZUheUe/14OH/tJh70MsMWxzVYF5HWCSFhD+Skt5nvser05zMberpHVW/ePDKBTxV
- xaPuyCVjRxQBlf4ePDGPFx46gLkyUSItg/hI3VAs9jBoro5K7/vOtFKv95Vvykwa669TBas31
- HNTanFRKnBFclhEqPMgn5cXMgzS1jwBFR0+53u/9ttokno3i4A/1WJFFOptyTRLB6B0ppO6is
- Bt4YzeecP+O4sTm02M3bVue/FgDj7zjn1XBOVdBLVhOQmTVSq0YT1R7Jgn/j53EOQD2TIPu9u
- 5bJW2QPQihyeHcrRjVw0CZXOLEFb6Q+LNiQlTi8ZB1fCSE2Qyd2PwZnsn6i7bw11qk5EsazVq
- mS3Fvey/e7qqozba0iTVJ0jx8qCcXWBqImtjHc8rMoi3XBuBOzBplJKhjHVTkbAQKqK065kOf
- PGJzOuCHOPfCe8k38a6Sfw//+umdKtQ1797C1ypZlJKN1PkHkkQZEgD+tGIDsR02pmpWpwkRh
- j0bCUC4qIeZygs+jzME+tiw5cxA4AJquCeNTag5eAmQwaZ/5QIPUVbhSrnqM0YMbgi79pxnRX
- 6QX4u4PrYsH291zva8ZsDCJ1uIVbx66xRqPgmeBAYtudOPm6VWBVlqdWj6ZNjGf+qw7ckNmF3
- LX1oFSQdiVzxUD8SkVwQzsDH3Rr57cX/WuQn4Jhyx6GpWSYBr7LPC7mI75UZXQKfYHAU=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UkNeJRe/hQs=:HYIfJ6MdDX+fslLPC6fnfn
+ qmIimZEiO/UoWZrSPRFMFMS+oGhzxDu733V6z2BMkvvd0+swtipGfBupD6Kk4FgmsjPEp3cj8
+ 8pcLBgnviYlIGmWVX6Tdoc5oapu1r3eRK23fzDyNezncV0TvpQuV9vv7a8JFrVWwkmEuckI3R
+ AypiidV9jCv1C4cHESAcia1lWtghQ+n8PlAZ/UWZH264azRftZ2jCBVsrDoFhC/n9DmEZkzGs
+ UYrPgqMVnyK1hwNB8ehTY8el4iwvsgcjt3DSbFd2qENOQLoUPTUAjKHgv50FhVb7g0rjrWK1G
+ iEz6cHv9+e73ckHJ8EiP+V48g1zz6tM3thGGKOldNfwNIhMapuP35wtG9LpwGjNiOkDzFJOLc
+ 2wdX2rFPtj3WF3AZicQ6uXKintkuk/pAwApDuGs6uAznpRxNCjK8dy02bOugfN/FRlPFzi+MZ
+ UOcMPC+2hfLdLr0Q1/aChEhyvUoYyXWlMSMTQ7PC94ct74CqnSyW/UHPkz9k9JmWQrG5+2YfA
+ OVXi4ba7EpgG2UKjXNekmcWjJ1SWyXf+6cpd3wA03PGCzHm33abbLBLMNCaviLPL0bPQnbq7E
+ 2qML+g+sc9rc3qCtGPChcfJ75ze1GTP2J+R6wswv4Oe3XNEjC0Vqim53G9n+DoBCvp7z8cS/J
+ Sl5vjS1tBH2xdoTSma5yYOZsTggQKA8c500a5Vb0CzI0khnysVSQLQoZJ6gXZHWWl/Zs=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
+Fix strange hex notation with mixed lower-case and upper-case letters.
 
-Fix strange hex notation and gpio-hog example, rebuild default
-configuration, enable various relevant configuration options mainly to
-be built as modules, add toradex,verdin-imx8mm et al. to dt-bindings and
-finally, add initial support for Verdin iMX8M Mini.
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+---
 
 Changes in v2:
 - Added Laurent's reviewed-by tag.
-- Added Rob's ack.
-- New patch following full defconfig analysis as requested by Krzysztof.
-- New patch following full defconfig analysis as requested by Krzysztof.
-- Done full defconfig analysis as requested by Krzysztof.
-- Add Song's acked-by tag.
-- A similar change got accepted for imx_v6_v7_defconfig. Further
-discussion may be found in [1].
-[1] https://lore.kernel.org/lkml/20210920144938.314588-6-marcel@ziswiler.com/
-- Explain why enabling it may be a good idea as requested by Krzysztof.
-- Explain why enabling these may make sense and squash them relevant
-  changes as requested by Krzysztof.
-- Add Rob's acked-by tag.
-- Fix Colibri vs. Verdin copy/paste mistake. Thanks to Francesco Dolcini
-  <francesco.dolcini@toradex.com> for pointing that out to me.
-- Remove bootargs which will be filled in by the bootloader as requested
-  by Krzysztof.
-- Remove the previously #ifdefed-out spi-nor as requested by Krzysztof.
-- Fix capitalisation in cover-letter.
 
-Marcel Ziswiler (11):
-  arm64: dts: imx8mm: fix strange hex notation
-  dt-bindings: gpio: fix gpio-hog example
-  arm64: defconfig: enable taskstats configuration
-  arm64: defconfig: enable pcieaer configuration
-  arm64: defconfig: rebuild default configuration
-  arm64: defconfig: enable bpf/cgroup firewalling
-  arm64: defconfig: build imx-sdma as a module
-  arm64: defconfig: build r8169 as a module
-  arm64: defconfig: enable verdin-imx8mm relevant drivers as modules
-  dt-bindings: arm: fsl: add toradex,verdin-imx8mm et al.
-  arm64: dts: freescale: add initial support for verdin imx8m mini
+ arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- .../devicetree/bindings/arm/fsl.yaml          |   21 +
- .../devicetree/bindings/gpio/gpio.txt         |    2 +-
- arch/arm64/boot/dts/freescale/Makefile        |    4 +
- .../arm64/boot/dts/freescale/imx8mm-pinfunc.h |    6 +-
- .../dts/freescale/imx8mm-verdin-dahlia.dtsi   |  143 ++
- .../boot/dts/freescale/imx8mm-verdin-dev.dtsi |   67 +
- .../imx8mm-verdin-nonwifi-dahlia.dts          |   18 +
- .../freescale/imx8mm-verdin-nonwifi-dev.dts   |   18 +
- .../dts/freescale/imx8mm-verdin-nonwifi.dtsi  |   75 +
- .../freescale/imx8mm-verdin-wifi-dahlia.dts   |   18 +
- .../dts/freescale/imx8mm-verdin-wifi-dev.dts  |   18 +
- .../dts/freescale/imx8mm-verdin-wifi.dtsi     |   95 ++
- .../boot/dts/freescale/imx8mm-verdin.dtsi     | 1267 +++++++++++++++++
- arch/arm64/configs/defconfig                  |  123 +-
- 14 files changed, 1806 insertions(+), 69 deletions(-)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-dev.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dahlia.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dev.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dahlia.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dev.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h b/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h
+index a003e6af3353..c68a5e456025 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h
++++ b/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h
+@@ -279,7 +279,7 @@
+ #define MX8MM_IOMUXC_SAI5_RXD2_SAI1_TX_DATA4                                0x150 0x3B8 0x000 0x1 0x0
+ #define MX8MM_IOMUXC_SAI5_RXD2_SAI1_TX_SYNC                                 0x150 0x3B8 0x4CC 0x2 0x1
+ #define MX8MM_IOMUXC_SAI5_RXD2_SAI5_TX_BCLK                                 0x150 0x3B8 0x4E8 0x3 0x0
+-#define MX8MM_IOMUXC_SAI5_RXD2_PDM_DATA2                                    0x150 0x3B8 0x53c 0x4 0x0
++#define MX8MM_IOMUXC_SAI5_RXD2_PDM_DATA2                                    0x150 0x3B8 0x53C 0x4 0x0
+ #define MX8MM_IOMUXC_SAI5_RXD2_GPIO3_IO23                                   0x150 0x3B8 0x000 0x5 0x0
+ #define MX8MM_IOMUXC_SAI5_RXD3_SAI5_RX_DATA3                                0x154 0x3BC 0x4E0 0x0 0x0
+ #define MX8MM_IOMUXC_SAI5_RXD3_SAI1_TX_DATA5                                0x154 0x3BC 0x000 0x1 0x0
+@@ -486,7 +486,7 @@
+ #define MX8MM_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC                                 0x1D8 0x440 0x000 0x0 0x0
+ #define MX8MM_IOMUXC_SAI3_TXFS_GPT1_CAPTURE2                                0x1D8 0x440 0x000 0x1 0x0
+ #define MX8MM_IOMUXC_SAI3_TXFS_SAI5_RX_DATA1                                0x1D8 0x440 0x4D8 0x2 0x2
+-#define MX8MM_IOMUXC_SAI3_TXFS_UART2_DCE_RX                                 0x1D8 0x440 0x4Fc 0x4 0x2
++#define MX8MM_IOMUXC_SAI3_TXFS_UART2_DCE_RX                                 0x1D8 0x440 0x4FC 0x4 0x2
+ #define MX8MM_IOMUXC_SAI3_TXFS_UART2_DTE_TX                                 0x1D8 0x440 0x000 0x4 0x0
+ #define MX8MM_IOMUXC_SAI3_TXFS_GPIO4_IO31                                   0x1D8 0x440 0x000 0x5 0x0
+ #define MX8MM_IOMUXC_SAI3_TXFS_TPSMP_HDATA1                                 0x1D8 0x440 0x000 0x7 0x0
+@@ -494,7 +494,7 @@
+ #define MX8MM_IOMUXC_SAI3_TXC_GPT1_COMPARE2                                 0x1DC 0x444 0x000 0x1 0x0
+ #define MX8MM_IOMUXC_SAI3_TXC_SAI5_RX_DATA2                                 0x1DC 0x444 0x4DC 0x2 0x2
+ #define MX8MM_IOMUXC_SAI3_TXC_UART2_DCE_TX                                  0x1DC 0x444 0x000 0x4 0x0
+-#define MX8MM_IOMUXC_SAI3_TXC_UART2_DTE_RX                                  0x1DC 0x444 0x4Fc 0x4 0x3
++#define MX8MM_IOMUXC_SAI3_TXC_UART2_DTE_RX                                  0x1DC 0x444 0x4FC 0x4 0x3
+ #define MX8MM_IOMUXC_SAI3_TXC_GPIO5_IO0                                     0x1DC 0x444 0x000 0x5 0x0
+ #define MX8MM_IOMUXC_SAI3_TXC_TPSMP_HDATA2                                  0x1DC 0x444 0x000 0x7 0x0
+ #define MX8MM_IOMUXC_SAI3_TXD_SAI3_TX_DATA0                                 0x1E0 0x448 0x000 0x0 0x0
 -- 
 2.33.1
 

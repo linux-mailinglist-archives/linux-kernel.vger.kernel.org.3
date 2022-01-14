@@ -2,114 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8576248E175
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC09848E182
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235540AbiANAYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 19:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
+        id S238416AbiANA3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 19:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiANAYS (ORCPT
+        with ESMTP id S230491AbiANA3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 19:24:18 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFC7C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 16:24:17 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id m4so29046433edb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 16:24:17 -0800 (PST)
+        Thu, 13 Jan 2022 19:29:40 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45A0C061574;
+        Thu, 13 Jan 2022 16:29:39 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id t24so29153389edi.8;
+        Thu, 13 Jan 2022 16:29:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=5zmKEUhzCkz1KenuWvpv6GMsWqgprMiy2UAeYsWU8Uk=;
-        b=MKzgQXYEkBn98my1ggUaKQwtoDdc4Ha/0Tq8y1bN4ZQIBw6oao22XYluV9S5S76pMc
-         HJ92bALDv5rhgmiTUoBcPpzKDMzK4pNhh+mtmHb1whz1YYXDFNVauRKrsIb8FvY5cK7x
-         QphfaDxgxqiOouz//N08ARxZlgMpVRnYx1aeOSWuVfXPPGsFuEpPe0I0hleORRgCUP/S
-         YAx38PLvGbDE1WQdBH6ZCve53LJudxfuyBMxlXGhntfzSQ76OfhzT3y1Sr9TN4p6xW2/
-         P9mugddRxwhrBZFOLbL3RkS6Lf3PeR4PNyfjopp1ow8x+5DhD58jTxmjjscUNRxm7gnp
-         ubmQ==
+        bh=8EJiE87iFvzZs2wfpp7MhZSruKW5x9ebf2/nsWfIQAY=;
+        b=KzGxA/Mn5jnF3eZqy7OWsndDxgnJpSHZAE+/AsMtTVpwYdR+j5o7zqZybAwsY3FtfC
+         Zdhb4E/EIDEzf3/C/I6WWnCyQ3MVlat+azg4xSdQJ5PMhoLivaX+W0w2Ks8GBbKdjJKO
+         8cDYIaYTatdFa5sunv/AGeKgu/Bw4ABOVqHsc70RH7d0C5oA8w1qz2cMAQuH5ITEcfdf
+         euxQZ8B3cT42PKxNQL0n8RDQyw5ILnnDrH6mR0+p5FeilycRyArnNQtA1lHzQMCBWEvq
+         uSGjp71IEJm70ZrPWH56e7JGMeqBHO6cUeH1QRx0COuJBM1M3RxbXAH+TvdBkY7sRDuk
+         fQ5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5zmKEUhzCkz1KenuWvpv6GMsWqgprMiy2UAeYsWU8Uk=;
-        b=WuhrjHLKmwJbPB1OaQrqPcjtmuLl7279GzIoPzqy+N1bKxyZL848ezkvq+ArMWcNfG
-         2Szat/h9B5HyeAHcxe4zuovHq8Qh4Uem/NcJikWgNFUjvzWDJYFsuc2oi4GAhv/4+PTV
-         I5t6p3kEHOXOiC9v73j2/0mSmc3TUv/Rs4LCSrLkFKTr8z7EfkBPo/5fR6lbPoXPEz8v
-         sySWveDlI9zc/WHS6/8GS60emKcCjoHMfOPleyTV8jfkD9ZHX7wcWSmuRq3gLc/zxtpK
-         rdu2JEI4y9YPpwiMFbwOR3xftdD2Qf1FLZpVIIfWOoYjSgrPr/8tYH5eocapM4bKvRwn
-         Z2Lw==
-X-Gm-Message-State: AOAM5302VyrPactRCvvsYpMfd9PfxDDK1cXVrOC8A+p9qzlk/MWWA9Nl
-        UOftEiluT4SzvGyDEUXgXI+Ps9JcfUc=
-X-Google-Smtp-Source: ABdhPJxIWybHBJq7aJWGhltINrr/sOpNB2KjcfizkU+b7EKNWsouDxXXi9ITIf2kQmcEnv74K+TfRA==
-X-Received: by 2002:a17:906:794c:: with SMTP id l12mr5291248ejo.474.1642119856519;
-        Thu, 13 Jan 2022 16:24:16 -0800 (PST)
+        bh=8EJiE87iFvzZs2wfpp7MhZSruKW5x9ebf2/nsWfIQAY=;
+        b=AXv/2R2Gd/CdG79wF4LJc8LJLeDFTefKr1hfKYjoClKMQouhWjdMoG6BlfKYG/Ln7T
+         Uh7YZH3cuE4jkriTqU3QqZIAXWcOIbDrxG4JX7V+LQBMp54P/0X0XheiNGymfMsi7Ddo
+         R1m0ErilfToNBDS9lRV3NhRMXPR1DgYYW44AXDxdeAdRGEvEYovMPuAMX1kYmWy4zrfG
+         yE5U/5yWXIFdiLyIyBinb5hgym8lHTkOvapEjt61KJ7dtEw0d750GYFXjdRP5PaP6BtM
+         aPou98gv8vbB+Pb31pZpyaRsq+PmvgS7qOGK1cXPb2+iDCfblsKxJDJfvSizdjx5HJxq
+         hrKg==
+X-Gm-Message-State: AOAM5329/8bAXIB3D9yWBXGIo7vXnb6Sy4pLHSAEwoOy4msgGzR7ELJB
+        VG2/nTPCgCF2zmxvmHgxSa4=
+X-Google-Smtp-Source: ABdhPJwgzBvEezAa5NINhfz1SA5iwrNunoXYrzVrs5APytwkgDEFLy8R0bo2N6zJZtlQgqy2SIMUlw==
+X-Received: by 2002:a17:906:7e57:: with SMTP id z23mr5422663ejr.674.1642120178277;
+        Thu, 13 Jan 2022 16:29:38 -0800 (PST)
 Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id h13sm1686173edt.61.2022.01.13.16.24.15
+        by smtp.gmail.com with ESMTPSA id t8sm1710368edr.90.2022.01.13.16.29.37
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 13 Jan 2022 16:24:16 -0800 (PST)
-Date:   Fri, 14 Jan 2022 00:24:15 +0000
+        Thu, 13 Jan 2022 16:29:37 -0800 (PST)
+Date:   Fri, 14 Jan 2022 00:29:37 +0000
 From:   Wei Yang <richard.weiyang@gmail.com>
 To:     Michal Hocko <mhocko@suse.com>
-Cc:     Christoph Lameter <cl@gentwo.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Nico Pache <npache@redhat.com>
-Subject: Re: [PATCH v2 2/4] mm: handle uninitialized numa nodes gracefully
-Message-ID: <20220114002415.wfhhdp7ixn7kztqk@master>
+Cc:     Wei Yang <richard.weiyang@gmail.com>, hannes@cmpxchg.org,
+        vdavydov.dev@gmail.com, akpm@linux-foundation.org,
+        shakeelb@google.com, guro@fb.com, vbabka@suse.cz,
+        willy@infradead.org, songmuchun@bytedance.com, shy828301@gmail.com,
+        surenb@google.com, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 1/4] mm/memcg: use NUMA_NO_NODE to indicate allocation
+ from unspecified node
+Message-ID: <20220114002937.fnyq3yyk36j4nb3d@master>
 Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <YbHfBgPQMkjtuHYF@dhcp22.suse.cz>
- <20211214100732.26335-1-mhocko@kernel.org>
- <20211214100732.26335-3-mhocko@kernel.org>
- <alpine.DEB.2.22.394.2112141131180.370323@gentwo.de>
- <Ybh0NwH1grEyLoe8@dhcp22.suse.cz>
+References: <20220111010302.8864-1-richard.weiyang@gmail.com>
+ <Yd1CdJA5NelzoK1D@dhcp22.suse.cz>
+ <20220112004634.dc5suwei4ymyxaxg@master>
+ <Yd6Xr7K9bKGVgGtI@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ybh0NwH1grEyLoe8@dhcp22.suse.cz>
+In-Reply-To: <Yd6Xr7K9bKGVgGtI@dhcp22.suse.cz>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 11:38:47AM +0100, Michal Hocko wrote:
->On Tue 14-12-21 11:33:41, Christoph Lameter wrote:
->> On Tue, 14 Dec 2021, Michal Hocko wrote:
+On Wed, Jan 12, 2022 at 09:56:15AM +0100, Michal Hocko wrote:
+>On Wed 12-01-22 00:46:34, Wei Yang wrote:
+>> On Tue, Jan 11, 2022 at 09:40:20AM +0100, Michal Hocko wrote:
+>> >On Tue 11-01-22 01:02:59, Wei Yang wrote:
+>> >> Instead of use "-1", let's use NUMA_NO_NODE for consistency.
+>> >> 
+>> >> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+>> >
+>> >I am not really sure this is worth it. After the merge window I plan to
+>> >post http://lkml.kernel.org/r/20211214100732.26335-1-mhocko@kernel.org.
 >> 
->> > This patch takes a different approach (following a lead of [3]) and it
->> > pre allocates pgdat for all possible nodes in an arch indipendent code
->> > - free_area_init. All uninitialized nodes are treated as memoryless
->> > nodes. node_state of the node is not changed because that would lead to
->> > other side effects - e.g. sysfs representation of such a node and from
->> > past discussions [4] it is known that some tools might have problems
->> > digesting that.
->> 
->> Would it be possible to define a pgdat statically and place it in read
->> only memory? Populate with values that ensure that the page allocator
->> does not blow up but does a defined fallback.
->> 
->> Point the pgdat for all nodes not online to that readonly pgdat?
->> 
->> Maybe that would save some memory. When the node comes online then a real
->> pgdat could be allocated.
+>> Give me some time to understand it :-)
 >
->This is certainly possible but also it is more complex. I aim for as
->simple as possible at this stage. The reason I am not concerned about
->memory overhead so much (even though the pgdat is a large data
->structure) is that these unpopulated nodes are rather rare. We might see
->more of them in the future but we are not quite there yet so I do not
->think this is a major obstacle for now.
+>Just for the record, here is what I have put on top of that series:
 
-Another thing is we still have a chance to get NULL NODE_DATA if we failed to
-allocate it. And this is the problem we want to address here.
+Ok, I got what you try to resolve. I am ok with the following change except
+one point.
 
-This is not urgent, while we may need to address this later.
+>--- 
+>>From b7195eba02fe6308a6927450f4630057c05e808e Mon Sep 17 00:00:00 2001
+>From: Wei Yang <richard.weiyang@gmail.com>
+>Date: Tue, 11 Jan 2022 09:45:25 +0100
+>Subject: [PATCH] memcg: do not tweak node in alloc_mem_cgroup_per_node_info
+>
+>alloc_mem_cgroup_per_node_info is allocated for each possible node and
+>this used to be a problem because not !node_online nodes didn't have
+>appropriate data structure allocated. This has changed by "mm: handle
+>uninitialized numa nodes gracefully" so we can drop the special casing
+>here.
+>
+>Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+>Signed-off-by: Michal Hocko <mhocko@suse.com>
+>---
+> mm/memcontrol.c | 14 ++------------
+> 1 file changed, 2 insertions(+), 12 deletions(-)
+>
+>diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+>index 781605e92015..ed19a21ee14e 100644
+>--- a/mm/memcontrol.c
+>+++ b/mm/memcontrol.c
+>@@ -5044,18 +5044,8 @@ struct mem_cgroup *mem_cgroup_from_id(unsigned short id)
+> static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
+> {
+> 	struct mem_cgroup_per_node *pn;
+>-	int tmp = node;
+>-	/*
+>-	 * This routine is called against possible nodes.
+>-	 * But it's BUG to call kmalloc() against offline node.
+>-	 *
+>-	 * TODO: this routine can waste much memory for nodes which will
+>-	 *       never be onlined. It's better to use memory hotplug callback
+>-	 *       function.
+>-	 */
 
+Do you think this TODO is not related to this change?
+
+>-	if (!node_state(node, N_NORMAL_MEMORY))
+>-		tmp = -1;
+>-	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL, tmp);
+>+
+>+	pn = kzalloc_node(sizeof(*pn), GFP_KERNEL, node);
+> 	if (!pn)
+> 		return 1;
+> 
+>-- 
+>2.30.2
+>
 >
 >-- 
 >Michal Hocko

@@ -2,91 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F9A48E350
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 05:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4B348E353
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 05:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239194AbiANEbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 23:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
+        id S239084AbiANEf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 23:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiANEbh (ORCPT
+        with ESMTP id S231585AbiANEf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 23:31:37 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81251C061574;
-        Thu, 13 Jan 2022 20:31:37 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id h1so12231392pls.11;
-        Thu, 13 Jan 2022 20:31:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Y3Vea8plG7NdygEVdJpagO9aiMQvkxxFcDl4y17hVgM=;
-        b=YWDavPGlHlCkZioKRp2U+66aqRlsrunjaGL4gKYFEtafhyIo/iQudiCKytDDQ8K9rY
-         r5i+EfhJl+fCKTQn+rXsUKqLBkhxBpdEPawyOhAv4oWMbrejPSFGUoPXO+4CXP9m5NHy
-         FbiUypYUmRMscR5MTK4b1T3CwUiPaV4q/w4cMxId61VDDwp5HzJHJS08j8ns8vxhSpL7
-         PKLiFwlD9uEQ0gYciGNs/qjstn1Qyf0YwZCNcbK31fLg0MVPpUjiIUsq2iDF2zm5H3PN
-         CgoSAQ5YOMkDdFu7tAQr3V4KkwnYH6TalT2WimukYB4zVEmCWdYVXxLtrDXqjWtyzzlg
-         +zkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Y3Vea8plG7NdygEVdJpagO9aiMQvkxxFcDl4y17hVgM=;
-        b=CfFekbcw1nSpRY/0iUSM9D2W82vpd46Zg0t573d9QvxoM6L+J/HN1PJQgQqbr2Gaye
-         cKW9NTAjg8Q8O4lhBbX/0sF/EUFeJdOFeTdwckxTmEAid5D8WdVhdXNpmLCxEjgJP8F+
-         Kv8ks4hmXt4xTjNs50TTwY+i/hiuH+3aGLvd4bB3j+XLO+mi52Fy17s9hCfZz35ofcLw
-         iXDaBebaQ1ZugecbKp5KbDeQgDM2mzJYriXKFp5uSAMd877kOQZfEaqbd0PfijeDUYVo
-         yAhy8dTUufd+sNPTHh136m65KPexJoqUx36Qcg1WKUQcwtdY/TlVaVtIzGRTFKzTA+YQ
-         GvhA==
-X-Gm-Message-State: AOAM530ppnXgkC70KutvqM1vGbQb2dUSs3d2EhEvOebdaHpq4BzSeZNc
-        akwwd7D+XhCLK20u0qMfM/jZHf38UdfgZNvn1Zkm7A13IDry/g==
-X-Google-Smtp-Source: ABdhPJyJlqSq579IOa444NxezIZu364d2xx7ujWPNs4VT85tSXATFc06+6N4r0b0i61MGpILYb+/3O7BZrS2iFnxxVY=
-X-Received: by 2002:a17:90a:7e8a:: with SMTP id j10mr8582758pjl.13.1642134697015;
- Thu, 13 Jan 2022 20:31:37 -0800 (PST)
+        Thu, 13 Jan 2022 23:35:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CF6C061574;
+        Thu, 13 Jan 2022 20:35:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BDCBB823A8;
+        Fri, 14 Jan 2022 04:35:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 592F2C36AEA;
+        Fri, 14 Jan 2022 04:35:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642134925;
+        bh=5ujrF7TIlOeg9a58cDS1ACqnP2rvn0LCA4q1ER9VkWQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cv0DqK+UwemWWlFsZxqshPiEwbp+K1z0lulrNtgjuiT1Ucq/Q5SaO1KImGbmnMcOt
+         ib16xTYq+vHwd4UTUK6j0qWL4YPBuI5mYW6sp47Njg5JDp9b8jYCvsKAdW1Cf3Z4aV
+         c2rqSgRJhbXI465f3oGQUCDFj6wU7HyJ5+J3Yos9qrg68rA4KU86a61+ecfZ9UOVPr
+         /hQYu3jG/3jzcJ2bCN01NaemFLKvjIo6Z6l9FYYEhvbvGAORjC65qqjr0p/WbNL97R
+         YbhYjumZi7K0gRnbxHlySFxndwkv3RPGj3IUJWfm7MSUDp0CkXxGvLLHkYe43DaheT
+         +2+K+E90niP7w==
+Date:   Thu, 13 Jan 2022 20:35:23 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, "David S. Miller" <davem@davemloft.net>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] stmmac: intel: Honor phy LED set by system firmware
+ on a Dell hardware
+Message-ID: <20220113203523.310e13d3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20220114040755.1314349-2-kai.heng.feng@canonical.com>
+References: <20220114040755.1314349-1-kai.heng.feng@canonical.com>
+        <20220114040755.1314349-2-kai.heng.feng@canonical.com>
 MIME-Version: 1.0
-References: <20211124214418.GA1094@raspberrypi> <CAOoBcBWHi+UJENsfNzG2NMAjBj0RjsKSWNDaQ+++F-uL0ubAYQ@mail.gmail.com>
- <f227bd950c3b7c060b4b581f5604fe4d9103e942.camel@linux.ibm.com>
-In-Reply-To: <f227bd950c3b7c060b4b581f5604fe4d9103e942.camel@linux.ibm.com>
-From:   Austin Kim <austindh.kim@gmail.com>
-Date:   Fri, 14 Jan 2022 13:31:25 +0900
-Message-ID: <CADLLry5kph-7RUE0FYYR87625mvBCOYJR93JWTZ7KWKUS-8FKA@mail.gmail.com>
-Subject: Re: [PATCH] ima: Fix trivial typos in the comments
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Austin Kim <austinkernel.kim@gmail.com>, dmitry.kasatkin@gmail.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=EB=85=84 1=EC=9B=94 14=EC=9D=BC (=EA=B8=88) =EC=98=A4=EC=A0=84 10:51, =
-Mimi Zohar <zohar@linux.ibm.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> Hi Austin,
->
-> On Wed, 2022-01-12 at 17:46 +0900, Austin Kim wrote:
->
-> > >
-> > > There are a few minor typos in the comments. Fix these.
-> > >
-> > > Signed-off-by: Austin Kim <austindh.kim@gmail.com>
->
-> It would be really nice if checkpatch.pl would catch spelling mistakes
-> before the patch was upstreamed.
+On Fri, 14 Jan 2022 12:07:54 +0800 Kai-Heng Feng wrote:
+> BIOS on Dell Edge Gateway 3200 already makes its own phy LED setting, so
+> instead of setting another value, keep it untouched and restore the saved
+> value on system resume.
+> 
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-Thanks for feedback.
-Let me make sure to upstream patch after executing
-'./scripts/checkpatch.pl --strict' command.
+I defer to PHY experts for review. Coincidentally the first Marvell
+flag appears dead, nobody sets it:
 
-BR,
-Austin Kim
+$ git grep MARVELL_PHY_M1145_FLAGS_RESISTANCE
+drivers/net/phy/marvell.c:      if (phydev->dev_flags & MARVELL_PHY_M1145_FLAGS_RESISTANCE) {
+include/linux/marvell_phy.h:#define MARVELL_PHY_M1145_FLAGS_RESISTANCE  0x00000001
+$
 
->
-> thanks,
->
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
->
+unless it's read from DT under different name or something.
+
+
+Once you get some reviews please wait for net-next to open:
+
+http://vger.kernel.org/~davem/net-next.html
+
+and repost. It should happen the week of Jan 24th. When you repost
+please drop the first patch, I believe Russell does not like the BIT()
+macro, his opinion overrides checkpatch.
+
+Thanks!

@@ -2,79 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FB148E344
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 05:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E6748E348
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 05:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239164AbiANEYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 23:24:47 -0500
-Received: from out162-62-57-87.mail.qq.com ([162.62.57.87]:53815 "EHLO
-        out162-62-57-87.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239155AbiANEYq (ORCPT
+        id S239169AbiANEaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 23:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239020AbiANEaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 23:24:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1642134280;
-        bh=Urrkg6gwwF34U0YTNyiFQ168PUplzRETtVsXA1AEVUY=;
-        h=From:To:Cc:Subject:Date;
-        b=PSopq1s2afJg2RbousGGyHogPPAl475J4/LyUu8/mVURJm09TWFbrQJP+PRCbSUNy
-         d5nF/Hu0ADZmILxrW0bJCgdSXglJyIn2uxhdLjaPMynrDN6OWdBHZUL44DkvklRoLL
-         ECGivSrLjoNyJUhjZWmb2DCpLbUYuE0WNTzeaF6A=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszc7.qq.com (NewEsmtp) with SMTP
-        id 624AE4DF; Fri, 14 Jan 2022 12:24:36 +0800
-X-QQ-mid: xmsmtpt1642134276thc8y7i40
-Message-ID: <tencent_A49992D0BF00081EB37A6E21070E45563806@qq.com>
-X-QQ-XMAILINFO: MdDuF0zFTqpBTE1h0UcV7El2iSZ4hsOsUyhv1NB7KJLEDYXIncMeLXrV79mQAV
-         Cv9Ur2fKKv30U5O8R3Qh787ksB8YCZAounoOQuHXspH5OkgK7FginIIqRxRR5EPRh4q5mc7oLFgG
-         4F9SiAuU7iZe2H7CZcxa3h3naAO1m42DxbMOrm1fOTMaI/jComTJejrViXSVuv6bJvcQUERcbGtl
-         K/v+LyXB+svOnxTLue1bYkuhyL5yfmQ0Qb0KU4RgL1bHIeFeu+dx673sYyoQm7pXY9BZSUDHVOTI
-         ly/vtMl/aPthF62lZK0kcLMfMNjxSfRInMsOV8iNdM7Zs9ItIcNz9xFOWSP05qt+dtQl6U8sGiOt
-         iYU2SDNxVTCI/Gsurn//HjV3KPH31cgv/Db0DadH23xYNqmznYaK7JtNe7irJP9e7BmkpshU74bH
-         s8Bxywjut3dVO6Jc314bZwswwFXWt9b46/IaAxEbn9iyajzwEGvyU3RsfjFjiTO7SkXkJU2JjiLB
-         ExpnExs4HlnzfbeA8JHUJM8R86Q/vdJYJLf3eh8GumWHFsPJOj68jmVKcxQTxoTdj7fj1q1XNusE
-         MxXBbr9gZPZNhAjSECFaNjry6wMGbwGYl8hLGZGbLvsHqROArV5l0RTzas/ebdTjbDnjKC8DV0Ca
-         ++Q/EmtLsXFHUjG9W1GnQJTa0h8m4UWrk4oKERNk6XUIFfWs1LKVl07FSiItgfGIpYx2iqeykCVH
-         k+JPUvJrClgNh8+5Y/6wk/5aGHIpNXowlFYmwzC5OYWBeU5xP5MGXWt8qgfEETKc/KxEVvGnOE3c
-         iYAILGS4Pl22PNAEMa9PgtXH4lV2vkZhqjFSa8rBEwV7VaQRnXNLU7PrZQeWw4HsoMcREmwynpXn
-         b6q0dbp5VupVFos6RHWozjBFJJnlYcOWaVEgG+v5A3xYKSCB3qbhw=
-From:   xkernel.wang@foxmail.com
-To:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCHv2] integrity: check the return value of audit_log_start()
-Date:   Fri, 14 Jan 2022 12:23:44 +0800
-X-OQ-MSGID: <20220114042344.1693-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        Thu, 13 Jan 2022 23:30:04 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A315AC061574;
+        Thu, 13 Jan 2022 20:30:04 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id h23so10986241iol.11;
+        Thu, 13 Jan 2022 20:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QytipBfsQBns2WRd2Yb0XfQLH0+kyvtCcIoi6sIqkJ4=;
+        b=SMVaSVH7HbN62VgDLbaKPeMgz/nNzM96EnzJ7pfCfsH8wB21VHoAavj09rBXU0FaRw
+         vF5z8RVoc2rgdQM2yBJnf7iRMYD+9zFP70dHdbEIGVYuzwyvCmWKuaJg9gi2UaWO2rjo
+         wp9HnmTiDayBZc8EUFshgien7+abAWzmT9p/gLKuoM2qZrM7KMiBcHDxUIbbLTBHEQyU
+         sJUUQcSpmJvQ5oFSKNZ01FG3Xfh4yH0zQyuBlRD2yCmaJYe1Y2b6SNwHyFO6tMJQTnRS
+         rgkjFCF22GO/zcla/SDu8CZ001drV1N64KfZXEKOsuz776QhTrLDMVoSLPRjqlBC+rUS
+         2MZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QytipBfsQBns2WRd2Yb0XfQLH0+kyvtCcIoi6sIqkJ4=;
+        b=yGfkKrPrbQ/5e2WfFVBGWkOrPKspgG+j2dq4G2UVClO+MqtfUfYhVAHCANvl6/x6ZH
+         YeK9V7CFXQrvJCMRWx5/6MydP1gTROYORQgTqCDNcWmh1KMTCWD+7GwxmLkY5yNJTsYp
+         8b5vv94U+uVuUcCr3qL9GEi9n+uQtA+yLQEJJG6XeEKkMZIgcBj8r/78IB0Ik4qleBga
+         qBnmXG+RfAGtGqeRiCEOcYXywobPsw7yM4IcNMw9SQXOk8ij0ccMuttnNlZoCSNJaAz8
+         dsIkocOC56iQtQaT3W1F/NpH3R3vU/AmQtauT1xQlVDqFMOwFV7vXIpiVMwrrp23QrCF
+         /Zvw==
+X-Gm-Message-State: AOAM530qRFmdmKJy8ImC76GWr1FVKAKh/FVy92c+4ntde6AaK9/JP3g+
+        sb2m0Xf7f+VJg0hD1uBqPVUFsX5pgas=
+X-Google-Smtp-Source: ABdhPJyLzIDNY+70gOmfgSgl1Y6mccID6Tq7RrYVuu6rDm6r0Uwo3JE0gH4aLYkHvpWeQYqDNDvx6w==
+X-Received: by 2002:a05:6638:a33:: with SMTP id 19mr1710902jao.257.1642134604105;
+        Thu, 13 Jan 2022 20:30:04 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.58])
+        by smtp.googlemail.com with ESMTPSA id y15sm4530295iow.44.2022.01.13.20.30.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 20:30:03 -0800 (PST)
+Message-ID: <b4363fb0-a837-f452-8abe-549f4568f38a@gmail.com>
+Date:   Thu, 13 Jan 2022 21:30:02 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH] ipv6: ICMPV6: Use swap() instead of open coding it
+Content-Language: en-US
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        davem@davemloft.net
+Cc:     yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220113161731.130554-1-jiapeng.chong@linux.alibaba.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20220113161731.130554-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On 1/13/22 9:17 AM, Jiapeng Chong wrote:
+> Clean the following coccicheck warning:
+> 
+> ./net/ipv6/icmp.c:348:25-26: WARNING opportunity for swap().
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  net/ipv6/icmp.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
 
-audit_log_start() returns audit_buffer pointer on success or NULL on
-error, so it is better to check the return value of it.
+looks fine to me but net-next is closed; resubmit when it opens.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
-Changelogs: simplify the patch. 
-Note: Take the suggestion from Paul Moore.
- security/integrity/integrity_audit.c | 2 ++
- 1 file changed, 2 insertions(+)
+Also, you need to add the tree to the subject line so in this case:
 
-diff --git a/security/integrity/integrity_audit.c b/security/integrity/integrity_audit.c
-index 2922005..0ec5e4c 100644
---- a/security/integrity/integrity_audit.c
-+++ b/security/integrity/integrity_audit.c
-@@ -45,6 +45,8 @@ void integrity_audit_message(int audit_msgno, struct inode *inode,
- 		return;
- 
- 	ab = audit_log_start(audit_context(), GFP_KERNEL, audit_msgno);
-+	if (!ab)
-+		return;
- 	audit_log_format(ab, "pid=%d uid=%u auid=%u ses=%u",
- 			 task_pid_nr(current),
- 			 from_kuid(&init_user_ns, current_uid()),
--- 
+[PATCH net-next] ipv6: ICMPV6: Use swap() instead of open coding it

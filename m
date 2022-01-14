@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6C648E5A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C254048E630
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbiANIT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:19:59 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59862 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239757AbiANITL (ORCPT
+        id S240692AbiANIYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:24:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240507AbiANIW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:19:11 -0500
+        Fri, 14 Jan 2022 03:22:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9579BC061783;
+        Fri, 14 Jan 2022 00:22:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8AA76B823E6;
-        Fri, 14 Jan 2022 08:19:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDFBAC36AE9;
-        Fri, 14 Jan 2022 08:19:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 613DBB823E6;
+        Fri, 14 Jan 2022 08:22:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73201C36AEA;
+        Fri, 14 Jan 2022 08:21:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148348;
-        bh=8S1hAOaCE0nuCTYKqPbrUYjfJ4XAy3sfQgAufqi6aas=;
+        s=korg; t=1642148519;
+        bh=BNMTFU6P4QdWciYzDW3oJwN/NGJ92jdsHhDtFTld0mY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o/KsCbZw+kvoRWjthJ/x3CyOcFxcGwfqTP9bvui4kXjzQIitbIT5zpAzss2jTa0pj
-         GF3VxQmE47FkgoFJPCt/DUyke7SxR1wIxnxdSkndKR9fWlih6XGogkgeFPi2OaS2vj
-         X3gNss/2xUAVZCIvl7qPf8dwjpItpSMtSJJZdjZY=
+        b=QDc/ccsb4DoU/JaLfefMJKy2MfzMevgqhIdzyiDBxsbow37qJIdgEECu1EpOrleH6
+         JS1J2nCUfcDa6tNLibN8fRVkt7d63NcAMdPT3/J/Ua0WYJ/ErrJAwpLmfvGKflOQgx
+         rdnDwQCoT0/WiLaFCfO4rN3GsBWcMuruW6X61B+c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 5.10 22/25] media: Revert "media: uvcvideo: Set unique vdev name based in type"
+        stable@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 5.16 16/37] ARM: dts: exynos: Fix BCM4330 Bluetooth reset polarity in I9100
 Date:   Fri, 14 Jan 2022 09:16:30 +0100
-Message-Id: <20220114081543.457330482@linuxfoundation.org>
+Message-Id: <20220114081545.385733210@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
-References: <20220114081542.698002137@linuxfoundation.org>
+In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
+References: <20220114081544.849748488@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,60 +48,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ricardo Ribalda <ribalda@chromium.org>
+From: Paul Cercueil <paul@crapouillou.net>
 
-commit f66dcb32af19faf49cc4a9222c3152b10c6ec84a upstream.
+commit 9cb6de45a006a9799ec399bce60d64b6d4fcc4af upstream.
 
-A lot of userspace depends on a descriptive name for vdev. Without this
-patch, users have a hard time figuring out which camera shall they use
-for their video conferencing.
+The reset GPIO was marked active-high, which is against what's specified
+in the documentation. Mark the reset GPIO as active-low. With this
+change, Bluetooth can now be used on the i9100.
 
-This reverts commit e3f60e7e1a2b451f538f9926763432249bcf39c4.
-
-Link: https://lore.kernel.org/linux-media/20211207003840.1212374-2-ribalda@chromium.org
-Cc: <stable@vger.kernel.org>
-Fixes: e3f60e7e1a2b ("media: uvcvideo: Set unique vdev name based in type")
-Reported-by: Nicolas Dufresne <nicolas@ndufresne.ca>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: 8620cc2f99b7 ("ARM: dts: exynos: Add devicetree file for the Galaxy S2")
+Cc: stable@vger.kernel.org
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Link: https://lore.kernel.org/r/20211031234137.87070-1-paul@crapouillou.net
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/usb/uvc/uvc_driver.c |    7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ arch/arm/boot/dts/exynos4210-i9100.dts |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -2065,7 +2065,6 @@ int uvc_register_video_device(struct uvc
- 			      const struct v4l2_file_operations *fops,
- 			      const struct v4l2_ioctl_ops *ioctl_ops)
- {
--	const char *name;
- 	int ret;
+--- a/arch/arm/boot/dts/exynos4210-i9100.dts
++++ b/arch/arm/boot/dts/exynos4210-i9100.dts
+@@ -828,7 +828,7 @@
+ 		compatible = "brcm,bcm4330-bt";
  
- 	/* Initialize the video buffers queue. */
-@@ -2094,20 +2093,16 @@ int uvc_register_video_device(struct uvc
- 	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
- 	default:
- 		vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
--		name = "Video Capture";
- 		break;
- 	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
- 		vdev->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
--		name = "Video Output";
- 		break;
- 	case V4L2_BUF_TYPE_META_CAPTURE:
- 		vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
--		name = "Metadata";
- 		break;
- 	}
- 
--	snprintf(vdev->name, sizeof(vdev->name), "%s %u", name,
--		 stream->header.bTerminalLink);
-+	strscpy(vdev->name, dev->name, sizeof(vdev->name));
- 
- 	/*
- 	 * Set the driver data before calling video_register_device, otherwise
+ 		shutdown-gpios = <&gpl0 4 GPIO_ACTIVE_HIGH>;
+-		reset-gpios = <&gpl1 0 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpl1 0 GPIO_ACTIVE_LOW>;
+ 		device-wakeup-gpios = <&gpx3 1 GPIO_ACTIVE_HIGH>;
+ 		host-wakeup-gpios = <&gpx2 6 GPIO_ACTIVE_HIGH>;
+ 	};
 
 

@@ -2,106 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B11048EE63
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA8E48EE5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243479AbiANQj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:39:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
+        id S243483AbiANQjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:39:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236240AbiANQjZ (ORCPT
+        with ESMTP id S239343AbiANQjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:39:25 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF0BC06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:39:25 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id u6so18004345uaq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:39:25 -0800 (PST)
+        Fri, 14 Jan 2022 11:39:39 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDEFC06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:39:39 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id s1so3179007pga.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:39:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TB9rYYWA3RApYigUmdeDs7Nca9Nz3elgch2NBvZeOg0=;
-        b=j5kYZtWic5x9+6IfULEPREXK9iQOEZYgqqSp7rnA+0/szMDEk1papPfzOyMRUM/gsI
-         Xllf07dgl7ZXTQPAoEcIN8l+DfX/W8W7DYHHjaxIUAkrgQIRdFdeGV5awXOD7kODdh31
-         cnVsTZ8AfcWbnOyXO27A6BOUriLw9nXYpUrf5anxD2NDnvz8PumlTe0iXaiX3CsTTN7v
-         923umi1sTD5OaPdkOis+mJ1urd6AYUMuFK5+GhsMUXECPkpPBbYceX28FYuKle+oDpEe
-         IzsK3ZzkB3Y9ZmE5yZT1oEOqtJ1u6G3rEYSb7EsdHKSpLnB3/6B1/Ksj7ZzXdvm1IkhL
-         uf6w==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RzwZ9r7D0xuY96wzPVNuGxDwRqinQNPHQv0I4wZgmns=;
+        b=giRVu3dmn7ssaVRYKP4nfYlcAMywgq88Sam+cBL9ONnnsKs7WsuMBbwCcIdsvgQZTv
+         cDbk94dvHbR9ubuesRVBhgCQyoE6ERq2UzHzu1adv/rTGlvQQYByx7Md6FtQGcJU3ed1
+         0tLky8vPYXR+6KPJWytP4WTAkBOLJv1HCyC2Y2FmXMGKexl+yCXBLOjqlh/VyitoQOlV
+         rOkrpzAK0ZfT5JHbWkPfEmiRS45gS+fOK3RfgkCEhRZWIIXMSSXYDqM5TFnRUva1lowK
+         zklR5dXWUzTOel7A7JQhLUionw/W6gs+e75Vgu7wRoCUCS/v5KIO7hvN2io1AlLK+0kC
+         a7jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TB9rYYWA3RApYigUmdeDs7Nca9Nz3elgch2NBvZeOg0=;
-        b=wrVN77TX6axmK36eG9B5dRySBF3gHi/uaw4asRhOA9nCh/9xx7G+ijN+BTZpuhoGHA
-         Uh+aaWKfOt+MbXrGMgODPuyoWan1FR5oxDIZlFc5X4wm/lm8etB3b/BYJkmFzmpQOe4K
-         5nKYtEdxS2QomDzSjDfYw/UhmwX7/ofEmIXAMysY/eyCTtDHhI8Qh7gZy0EjwrAVrKwR
-         cG0gwUFHRo5dPyLLn8Y0Erud5KCmrWxh+wZBh+xWcxn/yDVLfWx5HcRutIT5mC7elMwf
-         cL9Q2QrOCBBM7C31PH3m44CV0czMibk+PQ7x432Kby+Y4G6DmDszhPmI98PqUOxGXi1L
-         JPUA==
-X-Gm-Message-State: AOAM533OJslZlMxBuZvBrm8HTP8w3xKSLMgjjEHAJROB/IRHDq/pcO1T
-        KpTJmcT7DLcenxjvWgpIaPN9l3QmCBcYm4J598gIgw==
-X-Google-Smtp-Source: ABdhPJxbgJnPkI9Tq2dgW1Q5XbXJ8e/r8vZnzrtBuMqFg0KMsO4wZ60iX5gYpy2VvwwP+v1QEaq/YykPn3ntOjBBxh8=
-X-Received: by 2002:a05:6102:94c:: with SMTP id a12mr4531319vsi.86.1642178364582;
- Fri, 14 Jan 2022 08:39:24 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=RzwZ9r7D0xuY96wzPVNuGxDwRqinQNPHQv0I4wZgmns=;
+        b=vAE29p/AyylZMs5hF6zJHZgCqEC3qh6vkYU+RZ1CukdBaiAHetvN8bgxfXyuoiBJuK
+         cQcaHJAPNtyDaU/I9roTbFNLvMZSEBjgBdJR9fYhmhql0CNtqYO0lYCnVi21ZMRML0am
+         D48BiK1NXnDRTkxg5jl2LAO4VocRBfqrH6tuaQOlSBc0OGxlxTD+EjBoyBrH08/fKzm1
+         DBETQjbGziggJShGlYgzuMN8WPGKbvfvFGQVEaoRjF2tjeIddPzPudLG4/hG9I7bxgiu
+         wnetHF1It20GbU5jFQc9oxL7gZQdKPikwIxv9UXtB+oX85rrd2gQN2QfZsqdWHS+3qbp
+         GGIg==
+X-Gm-Message-State: AOAM530ZG9axm25kynKcjpyb1UZjPUZKtJllDTfNyxM2c3Tns8XIyX6l
+        IJbUfXAszu4+pshstOTVij8=
+X-Google-Smtp-Source: ABdhPJxlMJIT7txTEkWruImSEZL2QmOl+Iu9e3wX0LCA1Lf172CxK92MpYarHHz3TRPRuURJzT55cQ==
+X-Received: by 2002:a63:ae48:: with SMTP id e8mr8698938pgp.347.1642178378678;
+        Fri, 14 Jan 2022 08:39:38 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:a5b:82ad:7990:3ae0])
+        by smtp.gmail.com with ESMTPSA id y13sm5032328pgi.53.2022.01.14.08.39.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 08:39:38 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Fri, 14 Jan 2022 08:39:36 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        John Dias <joaodias@google.com>, huww98@outlook.com,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [RFC v2] mm: introduce page pin owner
+Message-ID: <YeGnSG3BS5np9mUa@google.com>
+References: <20211228175904.3739751-1-minchan@kernel.org>
+ <cf596fdc-6599-7c53-26e8-1524c5f214f7@redhat.com>
+ <Yd8AYViR6vuBVU2L@google.com>
+ <c9c97e6a-5bb6-475e-2d0e-d791f11d2cf9@redhat.com>
+ <Yd884YERYI+UvXbj@google.com>
+ <35d7f27c-44e3-3921-c8d3-b6dee3b01238@redhat.com>
 MIME-Version: 1.0
-References: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com> <20220111201722.327219-20-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220111201722.327219-20-krzysztof.kozlowski@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 14 Jan 2022 18:39:13 +0200
-Message-ID: <CAPLW+4k3Pypn6t-hHVtxg216oj=LMtchdRtsJmKBANN639oRgQ@mail.gmail.com>
-Subject: Re: [PATCH v2 26/28] pinctrl: samsung: add support for Exynos850 and
- ExynosAutov9 wake-ups
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Alim Akhtar <alim.akhtar@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <35d7f27c-44e3-3921-c8d3-b6dee3b01238@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 at 22:18, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> It seems that newer ARMv8 Exynos SoC like Exynos850 and
-> ExynosAutov9 have differences of their pin controller node capable of
-> external wake-up interrupts:
-> 1. No multiplexed external wake-up interrupt, only direct,
-> 2. More than one pin controller capable of external wake-up interrupts.
->
-> Add support for dedicated Exynos850 and ExynosAutov9 compatibles.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
+On Fri, Jan 14, 2022 at 02:31:43PM +0100, David Hildenbrand wrote:
+> On 12.01.22 21:41, Minchan Kim wrote:
+> > On Wed, Jan 12, 2022 at 06:42:21PM +0100, David Hildenbrand wrote:
+> >>>>
+> >>>> What about something like:
+> >>>>
+> >>>> "mm: selective tracing of page reference holders on unref"
+> >>>>
+> >>>> PAGE_EXT_PIN_OWNER -> PAGE_EXT_TRACE_UNREF
+> >>>>
+> >>>> $whatever feature/user can then set the bit, for example, when migration
+> >>>> fails.
+> >>>
+> >>> I couldn't imagine put_page tracking is generally useful except
+> >>> migration failure. Do you have reasonable usecase in your mind
+> >>> to make the feature general to be used?
+> >>
+> >> HWpoison etc. purposes maybe? Trace who still held a reference a page
+> >> that was poisoned and couldn't be removed?  Or in general, tracking
+> > 
+> > I am not familiar with hwpoison so here dumb question goes:
+> > Is that different one with __soft_offline_page?
+> > It uses migrate_pages so current interface supports it with filter.
+> 
+> __soft_offline_page() won't kill the target and try to migrate because
+> the pages are about to be damaged and we can still access them.
+> 
+> ordinary memory errors mean we kill the target because we cannot access
+> the page anymore without triggering MCEs (or worse IIUC) again.
+> 
+> So in my thinking, after memory_failure(), it could eventually be
+> helpful to figure out who still has a (temporary) reference to such a
+> broken page, even after killing the process. But that's just one idea I
+> quickly came up with.
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 
->  drivers/pinctrl/samsung/pinctrl-exynos.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.c b/drivers/pinctrl/samsung/pinctrl-exynos.c
-> index 0489c899b401..a158d587814e 100644
-> --- a/drivers/pinctrl/samsung/pinctrl-exynos.c
-> +++ b/drivers/pinctrl/samsung/pinctrl-exynos.c
-> @@ -465,6 +465,10 @@ static const struct of_device_id exynos_wkup_irq_ids[] = {
->                         .data = &exynos4210_wkup_irq_chip },
->         { .compatible = "samsung,exynos7-wakeup-eint",
->                         .data = &exynos7_wkup_irq_chip },
-> +       { .compatible = "samsung,exynos850-wakeup-eint",
-> +                       .data = &exynos7_wkup_irq_chip },
-> +       { .compatible = "samsung,exynosautov9-wakeup-eint",
-> +                       .data = &exynos7_wkup_irq_chip },
->         { }
->  };
->
-> --
-> 2.32.0
->
+Thanks for the clarification. Is the trace best fit in the case?
+Presumably you know the broken page, can't you find who owns the page
+using /proc/pid/pagemap?
+Furthermore, page_get/put operations commonly could happen in
+different contexts regardless of page's owner so the trace from
+different context is still helpful?
+
+If it's helpful, could you tell what you want to make the interface to
+set the bit of broken page? For example, as-is case for page migration,
+report_page_pinners is called to mark failed page at unmap_and_move.
+Do you want to add something similar(maybe, set_page_ref_track under
+rename) in memory-failure.c?
+
+It would be very helpful to design the feature's interface(surely,
+naming as well) and write description to convince others "yeah,
+sounds like so useful for the case and that's best fit than other way".
+
+> 
+> > 
+> > echo "memory_failure" > $trace_dir/events/page_pin_owner/report_page_pinners/filter
+> > 
+> >> references to something that should have a refcount of 0 because it
+> >> should have been freed, but for some reason there are still references
+> >> around?
+> > 
+> > Sounds like you are talking about memory leak? What's the purpose
+> > with trace, not using other existing tool to find memory leak?
+> > 
+> 
+> IIRC, kmemleak can find objects that are no longer referenced, and we
+> cannot track buddy allocations, but only kmalloc and friends.
+
+PageOwner is your good buddy.
+
+> 
+> >>
+> >>> Otherwise, I'd like to have feature naming more higher level
+> >>> to represent page migration failure and then tracking unref of
+> >>> the page. In the sense, PagePinOwner John suggested was good
+> >>> candidate(Even, my original naming PagePinner was worse) since
+> >>
+> >> Personally, I dislike both variants.
+> >>
+> >>> I was trouble to abstract the feature with short word.
+> >>> If we approach "what feature is doing" rather than "what's
+> >>> the feature's goal"(I feel the your suggestion would be close
+> >>> to what feature is doing), I'd like to express "unreference on
+> >>> migraiton failed page" so PAGE_EXT_UNMIGRATED_UNREF
+> >>> (However, I prefer the feature naming more "what we want to achieve")
+> >>>
+> >> E.g., PAGE_EXT_TRACE_UNREF will trace unref to the page once the bit is
+> >> set. The functionality itself is completely independent of migration
+> >> failures. That's just the code that sets it to enable the underlying
+> >> tracing for that specific page.
+> > 
+> > I agree that make something general is great but I also want to avoid
+> > create something too big from the beginning with just imagination.
+> > So, I'd like to hear more concrete and appealing usecases and then
+> > we could think over this trace approach is really the best one to
+> > achieve the goal. Once it's agreed, the naming you suggested would
+> > make sense. 
+> 
+> At least for me it's a lot cleaner if a feature clearly expresses what
+> it actually does. Staring at PAGE_EXT_PIN_OWNER I initially had no clue.
+> I was assuming we would actually track (not trace!) all active FOLL_PIN
+> (not unref callers!). Maybe that makes it clearer why I'd prefer a
+> clearer name.
+
+I totally agree PagePinOwner is not 100% straightforward. I'm open for
+other better name. Currently we are discussing how we could generalize
+and whether it's useful or not. Depending on the discussion, the design/
+interface as well as naming could be changed. No problem.
+
+> 
+> >>
+> >> Makes sense, I was expecting the output to be large, but possible it's
+> >> going to be way too large.
+> >>
+> >> Would it also make sense to track for a flagged page new taken
+> >> references, such that you can differentiate between new (e.g.,
+> >> temporary) ones and previous ones? Feels like a reasonable addition.
+> > 
+> > I actually tried it and it showed 2x times bigger output.
+> 
+> Is 2x that bad? Or would it be worth making it configurable?
+
+For my goal, 2x was bad because I need to minimize the trace buffer.
+Furthermore, the new get operation was not helpful but just noisy.
+If some usecase is not enough with only put callsite, we add get
+easily. Implementation is not hard. The matter is how it's useful
+in real practice since we would expose the interface to the user,
+I guess.
+
+> 
+> > For me to debug CMA alloation failure, the new get_page callstack
+> > after migration failure were waste since they repeated from lru
+> > adding, isolate from the LRU something. Rather than get callsite,
+> > I needed only put call sites since I could deduce where the pair-get
+> > came from.
+> 
+> Could maybe some filters help that exclude such LRU activity?
+
+For my case, the filter wouldn't be helpful because I shouldn't
+miss the LRU activity since sometime they makes the allocation
+failure. Thus, I could deduce the lru's get site from put callback.
+get callsite is not helpful for my case but just wasted memory
+and perf.

@@ -2,164 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5788F48E5FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19AEF48E617
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240499AbiANIW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:22:26 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:30279 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240158AbiANIVJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:21:09 -0500
-Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JZvPP3kd7zbk0J;
-        Fri, 14 Jan 2022 16:20:25 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 14 Jan 2022 16:21:06 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 14 Jan 2022 16:21:05 +0800
-Subject: Re: [PATCH v6 2/2] block: cancel all throttled bios in del_gendisk()
-To:     Ming Lei <ming.lei@redhat.com>
-CC:     <mkoutny@suse.com>, <paulmck@kernel.org>, <tj@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220110134758.2233758-1-yukuai3@huawei.com>
- <20220110134758.2233758-3-yukuai3@huawei.com> <Yd5FkuhYX9YcgQkZ@T590>
- <2221953d-be40-3433-d46c-f40acd044482@huawei.com>
- <CAFj5m9KmHB6FtUZ3E42BMZo+=aNNfn2bLu=kNhBOsRdxbfT6nw@mail.gmail.com>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <c5d1d7b5-b815-0dda-b7d3-8151189a8203@huawei.com>
-Date:   Fri, 14 Jan 2022 16:21:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S239790AbiANIXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:23:17 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:48726 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237202AbiANIVm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 03:21:42 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowAD3_S2AMuFh4HuGBQ--.10268S2;
+        Fri, 14 Jan 2022 16:21:20 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     keescook@chromium.org, arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] lkdtm/bugs: Check for the NULL pointer after calling kmalloc
+Date:   Fri, 14 Jan 2022 16:21:19 +0800
+Message-Id: <20220114082119.1270966-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAFj5m9KmHB6FtUZ3E42BMZo+=aNNfn2bLu=kNhBOsRdxbfT6nw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+X-CM-TRANSID: rQCowAD3_S2AMuFh4HuGBQ--.10268S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Wr4UGw4UJFyxAr4xtw4xJFb_yoWDCrc_Ga
+        n5Jr98JryYkF1Skwn7tr97urZFka1DuF4FqF9xt3y3A34xZr12vFyqgrn3Xw43GayvqFsx
+        CrWDZay0vr129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFyl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUIzuXUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/01/14 11:05, Ming Lei 写道:
-> On Thu, Jan 13, 2022 at 04:46:18PM +0800, yukuai (C) wrote:
->> 在 2022/01/12 11:05, Ming Lei 写道:
->>> Hello Yu Kuai,
->>>
->>> On Mon, Jan 10, 2022 at 09:47:58PM +0800, Yu Kuai wrote:
->>>> Throttled bios can't be issued after del_gendisk() is done, thus
->>>> it's better to cancel them immediately rather than waiting for
->>>> throttle is done.
->>>>
->>>> For example, if user thread is throttled with low bps while it's
->>>> issuing large io, and the device is deleted. The user thread will
->>>> wait for a long time for io to return.
->>>>
->>>> Noted this patch is mainly from revertion of commit 32e3374304c7
->>>> ("blk-throttle: remove tg_drain_bios") and commit b77412372b68
->>>> ("blk-throttle: remove blk_throtl_drain").
->>>>
->>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->>>> ---
->>>>    block/blk-throttle.c | 77 ++++++++++++++++++++++++++++++++++++++++++++
->>>>    block/blk-throttle.h |  2 ++
->>>>    block/genhd.c        |  2 ++
->>>>    3 files changed, 81 insertions(+)
->>>
->>> Just wondering why not take the built-in way in throtl_upgrade_state() for
->>> canceling throttled bios? Something like the following, then we can avoid
->>> to re-invent the wheel.
->>>
->>>    block/blk-throttle.c | 38 +++++++++++++++++++++++++++++++-------
->>>    block/blk-throttle.h |  2 ++
->>>    block/genhd.c        |  3 +++
->>>    3 files changed, 36 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
->>> index cf7e20804f1b..17e56b2e44c4 100644
->>> --- a/block/blk-throttle.c
->>> +++ b/block/blk-throttle.c
->>> @@ -1816,16 +1816,11 @@ static void throtl_upgrade_check(struct throtl_grp *tg)
->>>              throtl_upgrade_state(tg->td);
->>>    }
->>> -static void throtl_upgrade_state(struct throtl_data *td)
->>> +static void __throtl_cancel_bios(struct throtl_data *td)
->>>    {
->>>      struct cgroup_subsys_state *pos_css;
->>>      struct blkcg_gq *blkg;
->>> -   throtl_log(&td->service_queue, "upgrade to max");
->>> -   td->limit_index = LIMIT_MAX;
->>> -   td->low_upgrade_time = jiffies;
->>> -   td->scale = 0;
->>> -   rcu_read_lock();
->>>      blkg_for_each_descendant_post(blkg, pos_css, td->queue->root_blkg) {
->>>              struct throtl_grp *tg = blkg_to_tg(blkg);
->>>              struct throtl_service_queue *sq = &tg->service_queue;
->>> @@ -1834,12 +1829,41 @@ static void throtl_upgrade_state(struct throtl_data *td)
->>>              throtl_select_dispatch(sq);
->>>              throtl_schedule_next_dispatch(sq, true);
->> Hi, Ming Lei
->>
->> I'm confused that how can bios be canceled here?
->> tg->iops and tg->bps stay untouched, how can throttled bios
->> dispatch?
-> 
-> I thought that throttled bios will be canceled by 'tg->disptime = jiffies - 1;'
-> and the following dispatch schedule.
-> 
-> But looks it isn't enough, since tg_update_disptime() updates
-> ->disptime. However,
-> this problem can be solved easily by not updating ->disptime in case that we are
-> canceling.
-> 
->>>      }
->>> -   rcu_read_unlock();
->>>      throtl_select_dispatch(&td->service_queue);
->>>      throtl_schedule_next_dispatch(&td->service_queue, true);
->>>      queue_work(kthrotld_workqueue, &td->dispatch_work);
->>>    }
->>> +void blk_throtl_cancel_bios(struct request_queue *q)
->>> +{
->>> +   struct cgroup_subsys_state *pos_css;
->>> +   struct blkcg_gq *blkg;
->>> +
->>> +   rcu_read_lock();
->>> +   spin_lock_irq(&q->queue_lock);
->>> +   __throtl_cancel_bios(q->td);
->>> +   spin_unlock_irq(&q->queue_lock);
->>> +   rcu_read_unlock();
->>> +
->>> +   blkg_for_each_descendant_post(blkg, pos_css, q->root_blkg)
->>> +           del_timer_sync(&blkg_to_tg(blkg)->service_queue.pending_timer);
->>> +   del_timer_sync(&q->td->service_queue.pending_timer);
->>
->> By the way, I think delete timer will end up io hung here if there are
->> some bios still be throttled.
-> 
-> Firstly ->queue_lock is held by blk_throtl_cancel_bios(), so no new bios
-> will be throttled.
-> 
-> Also if we don't update ->disptime, any new bios throttled after releasing
-> ->queue_lock will be dispatched soon.
+As the possible failure of the kmalloc(), the not_checked and checked
+could be NULL pointer.
+Therefore, it should be better to check it in order to avoid the
+dereference of the NULL pointer.
+And since it is just a test, it may directly return without error
+number.
 
-Hi, Ming Lei
+Fixes: ae2e1aad3e48 ("drivers/misc/lkdtm/bugs.c: add arithmetic overflow and array bounds checks")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/misc/lkdtm/bugs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Just to be curiosity, I'm still trying to understand the logic here:
+diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
+index f4cb94a9aa9c..12c474a38494 100644
+--- a/drivers/misc/lkdtm/bugs.c
++++ b/drivers/misc/lkdtm/bugs.c
+@@ -325,6 +325,8 @@ void lkdtm_ARRAY_BOUNDS(void)
+ 
+ 	not_checked = kmalloc(sizeof(*not_checked) * 2, GFP_KERNEL);
+ 	checked = kmalloc(sizeof(*checked) * 2, GFP_KERNEL);
++	if (!not_checked || !checked)
++		return;
+ 
+ 	pr_info("Array access within bounds ...\n");
+ 	/* For both, touch all bytes in the actual member size. */
+-- 
+2.25.1
 
-For example, if bps is set to 1k, and a io with size 16k is just
-dispatched, then io throtle should wait for 16s untill new io can be 
-dispatched. (details in tg_with_in_bps_limit）.
-
-How does such mechanism bypassed here?
-
-Thanks,
-Kuai

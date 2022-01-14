@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7E448EC3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E1448EC48
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:09:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242246AbiANPIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:08:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59698 "EHLO
+        id S242396AbiANPJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:09:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242233AbiANPIl (ORCPT
+        with ESMTP id S242236AbiANPIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:08:41 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37448C06173F
+        Fri, 14 Jan 2022 10:08:42 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB127C061401
         for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:08:41 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id o12so14499345lfu.12
+Received: by mail-lf1-x133.google.com with SMTP id o12so14499474lfu.12
         for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:08:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QqInyZq8VYW10zqqw28bZOXS/aHab7hJ3edzoV6jxDs=;
-        b=BObzpq9JbE2OvElVupvr8QgOXajqE8zlPfxC2d5G9a4n6YlRUX8CjrswkT0bqgflnS
-         NFdwYSuzhg4qfgn16XNrP0Ikz38A0bbYXPkJ7OIMzHeyHnUow6darfxzewkqqO27n/Q5
-         VxbxbWqZGo19pQYwsywLlPqKLqZ15MIN611yAqrky1VVsy0oZeeuT0DMa+kF5c9mvUry
-         jHPPkP/micUrUUPMkDWgPrXVL0d0VKBaYDsLwWDaLr8vrLmFd5I3s+uFA+bSVC07kPXU
-         h/SLZbxtEvF9YstuQkpUpb4SDDYqhvvpdg+GUBKHN8fD7z0SoNARu4sVoZue8fsWg/mM
-         mjzg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iBza1mKhlqsg6etHF8D7TfcQzqGCBqmRr7/AGAencgU=;
+        b=mWoA3iCe1z2dOukN3ywIDsVcujjm357N+aSwG6Z5e/kedopn/L0pgeG7yDgY0/rlHH
+         vTswikc5e/ienX62gJsmRVzXS/I9YV7bJSJk+Rgvf36bEvbXRdU3Z7TXqw0YbHJvwzNH
+         sfXwZ4ZsjGqps34yGaDI80H/WccXqvJ2U+IHXhpXp25Gi0fwJUjYMWaOQGb+aTXMoSv5
+         CVg6nQDlrFt1QVEv8p0S8U96CiszzDk+3sRFpm9C/nTrah0zW8ims+sd9BnJONyt9C3c
+         ha3CKsV3s9mDiR1umRROhqjdWu5lvm80j8brrAuhITfuTBShbFsCGAKMN8eZFsBFfdK3
+         i8/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QqInyZq8VYW10zqqw28bZOXS/aHab7hJ3edzoV6jxDs=;
-        b=CNH7qkG+YxTsaPfXQoyOB6gzTEOvT+w1dOl7E3YIgXAm7Y5UpbUG3kdLcJObIBkUE4
-         7POjnt4WzEjNwcquUp5/3vycrSKS6QparzJEUrEiFeEMEsTfbk9rbhyF9VlwGFV3lgKC
-         TfB80Kj/bDE9TUP+kEDnpKwSzCkarYZkva0Q/4UdaoEpljrKkVNWpcxVKy16Uz1/A4tI
-         jLIYM0eUl/F02VfFbBTju+DOvnRk62Pe7kJrk8c/Iy7UkYTx6Yn+JmRW5krkZZCTtEa0
-         ANctkYVSam09ZK0AEL8tm1zrvxYf1XQsZ+qS55kerBi2Tb/4vekzd5uuUDFiVOESlizp
-         sstw==
-X-Gm-Message-State: AOAM5311TRbZbANGePio+P0DBU8iJ5HOgv9wPgOb8IZkZKiI7Io+RAMo
-        esqM+snd34OoaMF+9gmMYe+H7cdk8IBcgw==
-X-Google-Smtp-Source: ABdhPJy5LI986NPHy7cjah7mr/iQ/3nouIR8Wxn5k5uAiVCBRhkgyuo00DfRryXMD8cFioI9tHnnxg==
-X-Received: by 2002:a05:6512:3ba9:: with SMTP id g41mr7137244lfv.651.1642172919348;
-        Fri, 14 Jan 2022 07:08:39 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iBza1mKhlqsg6etHF8D7TfcQzqGCBqmRr7/AGAencgU=;
+        b=A4K9TzdhWQoj3RYLjZN5fg/LSBiTFF6WUv5n3B0GYJeTi8F77jhe7SpT7/cmxFIWGO
+         JWTCObdTialMUhDX0AcMzCMYZBZPbNobk9BNaeNARRDp00qk3Gbcl+2QySpnumlOsH0I
+         DtVK/6nPPPNx6ZycjVkbFotHyUHhhrNeQpdAh7FQni5HveinGjOV6zDrO51FruYfyZKl
+         0YcCEq0miaPXYmKVKqZwXTPA8M1Kf8b/k/8ixsarL+xgqtDz2CkG8zeQ/SDNiFwUvKk1
+         3x3WiRuwnQ+LYtZR4zqttHJ3rtYJ0yOSGARtFurQBdkpv+fUC9F7m0CEwv+OYxHMpC6c
+         Otfw==
+X-Gm-Message-State: AOAM530SBZr7SwozZcccAEI+jzn7HkRymFbjiwz556i0WyvUBzD0dKew
+        Q1XW0Hfo6jTg8VK4+zLw94nKCGlNqEV11Q==
+X-Google-Smtp-Source: ABdhPJwMWgsO17BCykpmK5ITtDHSnLFw9U+WsqyXcV83Nc21zW8s5Kf/ZPVKKd2E66k2rzpkPyl9Kg==
+X-Received: by 2002:a19:f202:: with SMTP id q2mr326004lfh.650.1642172920151;
+        Fri, 14 Jan 2022 07:08:40 -0800 (PST)
 Received: from jade.urgonet (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
-        by smtp.gmail.com with ESMTPSA id i31sm40517lfv.67.2022.01.14.07.08.38
+        by smtp.gmail.com with ESMTPSA id i31sm40517lfv.67.2022.01.14.07.08.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 14 Jan 2022 07:08:39 -0800 (PST)
 From:   Jens Wiklander <jens.wiklander@linaro.org>
@@ -57,101 +57,45 @@ Cc:     Sumit Garg <sumit.garg@linaro.org>,
         David Howells <dhowells@redhat.com>,
         Tyler Hicks <tyhicks@linux.microsoft.com>,
         Jens Wiklander <jens.wiklander@linaro.org>
-Subject: [PATCH v2 00/12] tee: shared memory updates
-Date:   Fri, 14 Jan 2022 16:08:12 +0100
-Message-Id: <20220114150824.3578829-1-jens.wiklander@linaro.org>
+Subject: [PATCH v2 01/12] hwrng: optee-rng: use tee_shm_alloc_kernel_buf()
+Date:   Fri, 14 Jan 2022 16:08:13 +0100
+Message-Id: <20220114150824.3578829-2-jens.wiklander@linaro.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220114150824.3578829-1-jens.wiklander@linaro.org>
+References: <20220114150824.3578829-1-jens.wiklander@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Uses the new simplified tee_shm_alloc_kernel_buf() function instead of
+the old deprecated tee_shm_alloc() function which required specific
+TEE_SHM-flags.
 
-This patchset is a general cleanup of shared memory handling in the TEE
-subsystem.
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+---
+ drivers/char/hw_random/optee-rng.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Until now has the in-kernel tee clients used tee_shm_alloc() and
-tee_shm_register() to share memory with secure world. These two function
-exposes via a flags parameter a bit more of the internals of the TEE
-subsystem than one would like. So in order to make things easier are those
-two functions replaced by few functions which should provide better
-abstraction.
-
-Two in-kernel tee clients are updated to use these new functions.
-
-The shared memory pool handling is simplified, an internal matter for the
-two TEE drivers OP-TEE and AMDTEE.
-
-An OP-TEE driver internal tee_context is added to handle shared memory
-allocations received via RPC, for instance the argument structure needed
-to make more complex RPC requests. The tee_context used when doing such a
-memory allocation must be kept until the memory is freed. With this we can
-avoid keeping a tee_context of a client around for longer than necessary.
-
-In the v1 review it was suggested [1] to allow physically non-contiguous
-memory allocations by the drivers. It turned out to be harder than
-anticipated so I'll save that for a separate patch.
-
-This patchset is also available at [2] and is based on the asynchronous
-notification patches [3] which was just merged during this merge window.
-
-Thanks,
-Jens
-
-[1] https://lore.kernel.org/linux-arm-kernel/20210609145811.GJ4910@sequoia/
-[2] https://git.linaro.org/people/jens.wiklander/linux-tee.git/log/?h=tee_shm_v2
-[3] https://git.linaro.org/people/jens.wiklander/linux-tee.git/log/?h=async_notif
-
-v1->v2:
-* The commits three "tee: add tee_shm_alloc_kernel_buf()",
-  "tpm_ftpm_tee: use tee_shm_alloc_kernel_buf()" and
-  "firmware: tee_bnxt: use tee_shm_alloc_kernel_buf()" has been merged some
-  time ago as part of another patchset.
-* Another in-kernel tee client is updated with the commit
-  "KEYS: trusted: tee: use tee_shm_register_kernel_buf()"
-* tee_shm_alloc_anon_kernel_buf() is replaced with an easier to use function
-  tee_shm_alloc_priv_kernel_buf() and tee_shm_free_anon_kernel_buf() has
-  been dropped.
-* A driver internal struct tee_context is used to when doing driver internal
-  calls to secure world.
-* Adds patches to replace tee_shm_register() in a similar way as how
-  tee_shm_alloc() is replaced.
-* A patch is added to clean up the TEE_SHM_* flags
-* Fixed a warning reported by kernel test robot <lkp@intel.com>
-
-Jens Wiklander (12):
-  hwrng: optee-rng: use tee_shm_alloc_kernel_buf()
-  tee: remove unused tee_shm_pool_alloc_res_mem()
-  tee: add tee_shm_alloc_user_buf()
-  tee: simplify shm pool handling
-  tee: replace tee_shm_alloc()
-  optee: add driver private tee_context
-  optee: use driver internal tee_contex for some rpc
-  optee: add optee_pool_op_free_helper()
-  tee: add tee_shm_register_{user,kernel}_buf()
-  KEYS: trusted: tee: use tee_shm_register_kernel_buf()
-  tee: replace tee_shm_register()
-  tee: refactor TEE_SHM_* flags
-
- drivers/char/hw_random/optee-rng.c       |   6 +-
- drivers/tee/amdtee/shm_pool.c            |  55 ++--
- drivers/tee/optee/Kconfig                |   8 -
- drivers/tee/optee/call.c                 |   2 +-
- drivers/tee/optee/core.c                 |  22 +-
- drivers/tee/optee/device.c               |   5 +-
- drivers/tee/optee/ffa_abi.c              | 136 ++++------
- drivers/tee/optee/optee_private.h        |  12 +-
- drivers/tee/optee/smc_abi.c              | 155 +++--------
- drivers/tee/tee_core.c                   |   5 +-
- drivers/tee/tee_private.h                |  11 -
- drivers/tee/tee_shm.c                    | 322 +++++++++++++++--------
- drivers/tee/tee_shm_pool.c               | 162 +++---------
- include/linux/tee_drv.h                  | 133 +++-------
- security/keys/trusted-keys/trusted_tee.c |  23 +-
- 15 files changed, 434 insertions(+), 623 deletions(-)
-
+diff --git a/drivers/char/hw_random/optee-rng.c b/drivers/char/hw_random/optee-rng.c
+index 135a82590923..a948c0727b2b 100644
+--- a/drivers/char/hw_random/optee-rng.c
++++ b/drivers/char/hw_random/optee-rng.c
+@@ -145,10 +145,10 @@ static int optee_rng_init(struct hwrng *rng)
+ 	struct optee_rng_private *pvt_data = to_optee_rng_private(rng);
+ 	struct tee_shm *entropy_shm_pool = NULL;
+ 
+-	entropy_shm_pool = tee_shm_alloc(pvt_data->ctx, MAX_ENTROPY_REQ_SZ,
+-					 TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
++	entropy_shm_pool = tee_shm_alloc_kernel_buf(pvt_data->ctx,
++						    MAX_ENTROPY_REQ_SZ);
+ 	if (IS_ERR(entropy_shm_pool)) {
+-		dev_err(pvt_data->dev, "tee_shm_alloc failed\n");
++		dev_err(pvt_data->dev, "tee_shm_alloc_kernel_buf failed\n");
+ 		return PTR_ERR(entropy_shm_pool);
+ 	}
+ 
 -- 
 2.31.1
 

@@ -2,98 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3DB48ED06
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3324048ECF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:18:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242688AbiANPT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:19:26 -0500
-Received: from mga01.intel.com ([192.55.52.88]:57555 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239340AbiANPTO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:19:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642173554; x=1673709554;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gQypZeKb20iK6V4Fo2vqovMOcW37eXRpK9D4ZpMA80M=;
-  b=BtH88BUhEmWlwFXXte+qLw3Vvhv3gqQk8ax+w+tSh2xstShTBvIDV56V
-   PUsCKlImoNoj6t9b8S+UNiO0BR3jgJ7IY/cbAugfXLJNoOW4Sprdt2JsP
-   zl6J1rREoHd4keoQ3+fBLgZH9RcNG/GdtqpMUxE2Q1U5X7k/QtPu23Gx4
-   PbVH6zuztG2ajbheN8fq/nneNzygRZ+qXiALSn5Ql8FXpYrMcHGWJYick
-   c+osJESBMt+vxSnZqnCajDT8Hsw7+1MUBnfB8t8SovAWIECC6uh3Ksm4J
-   xeUbUHUZ81YgYvHNGcjjd94PPxp7dHS3EwB+rm4QYWW/T6BxeZ8lbtHit
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="268628145"
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="268628145"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 07:19:13 -0800
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="594058641"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 07:19:07 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n8OKv-00AgJa-UJ;
-        Fri, 14 Jan 2022 17:17:53 +0200
-Date:   Fri, 14 Jan 2022 17:17:53 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Simon Ser <contact@emersion.fr>
-Cc:     Tomohito Esaki <etom@igel.co.jp>, dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Michel =?iso-8859-1?Q?D=E4nzer?= <mdaenzer@redhat.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Evan Quan <evan.quan@amd.com>, Petr Mladek <pmladek@suse.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org, Daniel Stone <daniel@fooishbar.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>
-Subject: Re: [RFC PATCH v3 2/3] drm: add support modifiers for drivers whose
- planes only support linear layout
-Message-ID: <YeGUIYK3hYo7wLJt@smile.fi.intel.com>
-References: <20220114101753.24996-1-etom@igel.co.jp>
- <20220114101753.24996-3-etom@igel.co.jp>
- <YeGFugZvwbF7l2I/@smile.fi.intel.com>
- <7eljcd3F4aWL2jjBRwr3DISmyt0XPWFIH1_kebFGqZTJXLZRx0bm_8c8yaIuEuH8rS0MaJhU6SY1y-fc6U_zCLaKgoLM124nZpr0H91nSjw=@emersion.fr>
+        id S239345AbiANPSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:18:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55759 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242959AbiANPST (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 10:18:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642173498;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mq7Qsa4OmDK/Jlw1qDgigFZECUU5BuQWP0ItOaVJNWo=;
+        b=ZeucIdIgmkF3cWpS9V0GN147mip9/F55mgfksqSQlqfGm4e5vdzVdhsoMyd1XlQIBfkRKd
+        uoAeLztpyC7Kc6UK7GnhEIM3tY2t7CyMbgceFavhgOMhPAD2XUECKwNRruuQMKkVG4BLb0
+        +r48shTFmoQpcTe++Nbg3ZJa8Ln/Xk0=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-144-6CJ-6FwWPaWasv5g_ttmSA-1; Fri, 14 Jan 2022 10:18:17 -0500
+X-MC-Unique: 6CJ-6FwWPaWasv5g_ttmSA-1
+Received: by mail-wr1-f72.google.com with SMTP id d24-20020adf9b98000000b001c7e34c40bbso1162236wrc.16
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:18:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mq7Qsa4OmDK/Jlw1qDgigFZECUU5BuQWP0ItOaVJNWo=;
+        b=fOBeoy7i/IOzOW7DdyV0ziF2fg0J52KWcrMAtsP/MpKT9XgA5gjaw4L77OkefC9ITz
+         8nKv4HRZJJ8MJ9guSEY9aOorzXU4RVHZOThe4w2pExDGoq/ir5pUCt3eAnVFCj3cPD5K
+         kQWySXE6D2bk27sS3cynUvQUSEyiLvfoj47lwVuYaU/VhDZSQeUoFtAWoLUTSz3vDB1m
+         nvnFFGlkn40QeT6OCbXhGcPcL3FPssvVoaDF9tBsDQfx4bmFL1Sez30T8jT6pzOcHdyQ
+         hLPimX321uAnNe2t9EQBSiFEedPCZ6q9GbMQgrCWs+8y9WObKVgAs6ZWXdNlCZN1F837
+         NSLQ==
+X-Gm-Message-State: AOAM532fMSMnY8E6rZdketwcfvyIu0Tv/FJNKBJWEsdQcGkAbFFzHsFv
+        mAJUtRUhwYbkTQZoqJ94O5eqqjexuQxBiTDrmFoNPwtBk2Qp1VBJn6/4xdVj0eKe7fofVYQ/B+R
+        h56vK9B9+1GLitF4heCE0zL5g
+X-Received: by 2002:a50:a6ce:: with SMTP id f14mr9121093edc.105.1642173495967;
+        Fri, 14 Jan 2022 07:18:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzjr7yvapJIW0T2i5iOaYEHpkb6rYZHAjzU2WPIV4ZnLbIP4s8FBNjhllvcQ2T9V9ot8o/TdQ==
+X-Received: by 2002:a50:a6ce:: with SMTP id f14mr9121072edc.105.1642173495809;
+        Fri, 14 Jan 2022 07:18:15 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id u1sm2488013edp.19.2022.01.14.07.18.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 07:18:15 -0800 (PST)
+Date:   Fri, 14 Jan 2022 16:18:13 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v2 3/8] rethook: Add a generic return hook
+Message-ID: <YeGUNRH9MiF7dgVs@krava>
+References: <164199616622.1247129.783024987490980883.stgit@devnote2>
+ <164199620208.1247129.13021391608719523669.stgit@devnote2>
+ <YeAaUN8aUip3MUn8@krava>
+ <20220113221532.c48abf7f56d29ba95dcb0dc6@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7eljcd3F4aWL2jjBRwr3DISmyt0XPWFIH1_kebFGqZTJXLZRx0bm_8c8yaIuEuH8rS0MaJhU6SY1y-fc6U_zCLaKgoLM124nZpr0H91nSjw=@emersion.fr>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20220113221532.c48abf7f56d29ba95dcb0dc6@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 03:07:21PM +0000, Simon Ser wrote:
-> On Friday, January 14th, 2022 at 15:16, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On Thu, Jan 13, 2022 at 10:15:32PM +0900, Masami Hiramatsu wrote:
+> On Thu, 13 Jan 2022 13:25:52 +0100
+> Jiri Olsa <jolsa@redhat.com> wrote:
 > 
-> > Why not enum?
+> > On Wed, Jan 12, 2022 at 11:03:22PM +0900, Masami Hiramatsu wrote:
+> > > Add a return hook framework which hooks the function
+> > > return. Most of the idea came from the kretprobe, but
+> > > this is independent from kretprobe.
+> > > Note that this is expected to be used with other
+> > > function entry hooking feature, like ftrace, fprobe,
+> > > adn kprobes. Eventually this will replace the
+> > > kretprobe (e.g. kprobe + rethook = kretprobe), but
+> > > at this moment, this is just a additional hook.
+> > 
+> > this looks similar to the code kretprobe is using now
 > 
-> There is no enum for DRM format modifiers.
+> Yes, I've mostly re-typed the code :)
+> 
+> > would it make sense to incrementaly change current code to provide
+> > this rethook interface? instead of big switch of current kretprobe
+> > to kprobe + new rethook interface in future?
+> 
+> Would you mean modifying the kretprobe instance code to provide
+> similar one, and rename it at some point?
+> My original idea is to keep the current kretprobe code and build
+> up the similar one, and switch to it at some point. Actually,
+> I don't want to change the current kretprobe interface itself,
+> but the backend will be changed. For example, current kretprobe
+> has below interface.
+> 
+> struct kretprobe {
+>         struct kprobe kp;
+>         kretprobe_handler_t handler;
+>         kretprobe_handler_t entry_handler;
+>         int maxactive;
+>         int nmissed;
+>         size_t data_size;
+>         struct freelist_head freelist;
+>         struct kretprobe_holder *rph;
+> };
+> 
+> My idea is switching it to below.
+> 
+> struct kretprobe {
+>         struct kprobe kp;
+>         kretprobe_handler_t handler;
+>         kretprobe_handler_t entry_handler;
+>         int maxactive;
+>         int nmissed;
+>         size_t data_size;
+>         struct rethook *rethook;
+> };
 
-I'm not sure how this prevents to use enum in the code instead of const u64.
-Any specific reason for that?
+looks good, will this be a lot of changes?
+could you include it in the patchset?
 
--- 
-With Best Regards,
-Andy Shevchenko
+thanks,
+jirka
 
+> 
+> Of course 'kretprobe_instance' may need to be changed...
+> 
+> struct kretprobe_instance {
+> 	struct rethook_node;
+> 	char data[];
+> };
+> 
+> But even though, since there is 'get_kretprobe(ri)' wrapper, user
+> will be able to access the 'struct kretprobe' from kretprobe_instance
+> transparently.
+> 
+> Thank you,
+> 
+> 
+> -- 
+> Masami Hiramatsu <mhiramat@kernel.org>
+> 
 

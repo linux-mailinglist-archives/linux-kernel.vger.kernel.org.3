@@ -2,72 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3372B48E64C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 058AB48E676
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:27:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239938AbiANIZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:25:55 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:35840 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240101AbiANIXk (ORCPT
+        id S240423AbiANI1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240174AbiANI0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:23:40 -0500
-Received: from kwepemi100005.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JZvSK1lpXzccXY;
-        Fri, 14 Jan 2022 16:22:57 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100005.china.huawei.com (7.221.188.155) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 14 Jan 2022 16:23:37 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 14 Jan 2022 16:23:37 +0800
-Subject: Re: [PATCH v2 0/3] block, bfq: minor cleanup and fix
-From:   "yukuai (C)" <yukuai3@huawei.com>
-To:     <jack@suse.cz>, <tj@kernel.org>, <axboe@kernel.dk>,
-        <paolo.valente@linaro.org>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20211231032354.793092-1-yukuai3@huawei.com>
- <5696c767-8248-09a4-f04e-ac93138d30ef@huawei.com>
-Message-ID: <1cdb99ba-ed52-c755-fec4-86ee5f9bc61d@huawei.com>
-Date:   Fri, 14 Jan 2022 16:23:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 14 Jan 2022 03:26:22 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FD8C0613EE
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 00:23:55 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id v6so14250551wra.8
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 00:23:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2SXNoXMdnGaSfy4KnO5GzxkSIdaPrK9msaNZUkt3T8Y=;
+        b=TyRi88oeaki7bUJT9yoFyv6wUj9fpeayXEzTbacbcpowHz8FPfwCEa5pPeNp4hic2A
+         1LUiMChZ/JgR4XfavZjb1aUuuO2byzLkGj1zOXheJtN63skSUHN8+KmF8d19GagVbsrr
+         3fmQKuhufkBrR7HLsFJkJOrO+niqCVoiY6pXytGHfK3Z/P2h4xZlwMO0M6mfyCp643jF
+         mVBK4R++pEHgYWm8fqj840V0Bd7FVUMAC9/gMdKD2vUoCfCbBcTjHl4ISxc5ELSpzHNM
+         hEOssy1EdHg2qUjygRA/8pzlYYvPdaPBs1bBkE4hJnxLCH+S/QkVvPnwozU/+o0Z1GpP
+         y65A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=2SXNoXMdnGaSfy4KnO5GzxkSIdaPrK9msaNZUkt3T8Y=;
+        b=Z+6frKUSNdTDhic4C/uD4QBeq00pREGnWSLX7sfeyqjIgPgjGVf3Scmc6ClfssVB8e
+         en3ucdY8BF8zaUya+5TsWljYD50zzvZfvI5zLI7MZPgQC17RVdIR3xur/yG9bBoFcp7K
+         G8gq6qFCgq29vIWL6FpZms51ECS8r2s9q4rJvE5LGWMNSYBUNGHipxu30BVolRLXj+HY
+         SbU/aRU6E9T4fBgtYM2gkkHtgryzYl2sslLMrFYmklb9c0ECKEx4fNBemxeOjtvd7y5W
+         wHptcuUC6KdWqiwk+0O4fTnoLERLRe2eiA1yJ5oSWktdtkOX8VyuKSfm0wwwJJGQRnGf
+         akfQ==
+X-Gm-Message-State: AOAM533B6Dey9VVpsuuJDNTgQZg7q2Tnla2omPj/JVAkicDi7V+HqIbw
+        qM8O5eBwUWnqhrQF1YK5AFDszf/co+zr7Q==
+X-Google-Smtp-Source: ABdhPJwtTLFQyCczvzEvPARkSbWXpC8Q4vilLBDbd9n7KTtKKzr0kpI3M6BrzPhUDH5NWo5f3LRQ0Q==
+X-Received: by 2002:a5d:6781:: with SMTP id v1mr2909142wru.714.1642148633286;
+        Fri, 14 Jan 2022 00:23:53 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:a3fc:c40b:5afc:88ee? ([2001:861:44c0:66c0:a3fc:c40b:5afc:88ee])
+        by smtp.gmail.com with ESMTPSA id i82sm5990464wma.23.2022.01.14.00.23.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jan 2022 00:23:52 -0800 (PST)
+Subject: Re: dw_hdmi is showing wrong colour after commit
+ 7cd70656d1285b79("drm/bridge: display-connector: implement bus fmts
+ callbacks")
+To:     Fabio Estevam <festevam@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "Laurent.pinchart@ideasonboard.com" 
+        <Laurent.pinchart@ideasonboard.com>,
+        "robert.foss@linaro.org" <robert.foss@linaro.org>,
+        "jonas@kwiboo.se" <jonas@kwiboo.se>,
+        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
+        "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <OS0PR01MB59221ED76B74231F5836D5FB86539@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CAOMZO5DJiCb5bJN5_nxnYa-FsK-u7QtFghWNzs_-udE42XPDeA@mail.gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <502f3ec4-fea4-8e14-c7a9-39418fc05d6d@baylibre.com>
+Date:   Fri, 14 Jan 2022 09:23:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <5696c767-8248-09a4-f04e-ac93138d30ef@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+In-Reply-To: <CAOMZO5DJiCb5bJN5_nxnYa-FsK-u7QtFghWNzs_-udE42XPDeA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/01/11 9:40, yukuai (C) 写道:
-> 在 2021/12/31 11:23, Yu Kuai 写道:
->> Chagnes in v2:
->>   - add comment in patch 2
->>   - remove patch 4, since the problem do not exist.
->>
-> friendly ping ...
+Hi,
 
-Hi, Jens
-
-Can this patchset be applied?
-
-Thanks
->> Yu Kuai (3):
->>    block, bfq: cleanup bfq_bfqq_to_bfqg()
->>    block, bfq: avoid moving bfqq to it's parent bfqg
->>    block, bfq: don't move oom_bfqq
+On 13/01/2022 21:01, Fabio Estevam wrote:
+> Hi Biju,
+> 
+> On Thu, Jan 13, 2022 at 2:45 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
 >>
->>   block/bfq-cgroup.c  | 16 +++++++++++++++-
->>   block/bfq-iosched.c |  4 ++--
->>   block/bfq-iosched.h |  1 -
->>   block/bfq-wf2q.c    | 15 ---------------
->>   4 files changed, 17 insertions(+), 19 deletions(-)
+>> Hi All,
 >>
+>> RZ/G2{H, M, N} SoC has dw_hdmi IP and it was working ok(colour) till the commit
+>> 7cd70656d1285b79("drm/bridge: display-connector: implement bus fmts callbacks").
+>>
+>> After this patch, the screen becomes greenish(may be it is setting it into YUV format??).
+>>
+>> By checking the code, previously it used to call get_input_fmt callback and set colour as RGB24.
+>>
+>> After this commit, it calls get_output_fmt_callbck and returns 3 outputformats(YUV16, YUV24 and RGB24)
+>> And get_input_fmt callback, I see the outputformat as YUV16 instead of RGB24.
+>>
+>> Not sure, I am the only one seeing this issue with dw_HDMI driver.
+
+This patch was introduced to maintain the bridge color format negotiation after using DRM_BRIDGE_ATTACH_NO_CONNECTOR,
+but it seems it behaves incorrectly if the first bridge doesn't implement the negotiation callbacks.
+
+Let me check the code to see how to fix that.
+
+> 
+> I have tested linux-next 20220112 on a imx6q-sabresd board, which shows:
+> 
+> dwhdmi-imx 120000.hdmi: Detected HDMI TX controller v1.30a with HDCP
+> (DWC HDMI 3D TX PHY)
+> 
+> The colors are shown correctly here.
+> 
+
+The imx doesn't use DRM_BRIDGE_ATTACH_NO_CONNECTOR so the negotiation fails and use the RGB fallback input & output format.
+
+Anyway thanks for testing
+
+Neil

@@ -2,172 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7909848EEE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF8C48EF13
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243689AbiANRAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:00:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243672AbiANRAw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:00:52 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26652C06173F
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:00:52 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id y4so18019955uad.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:00:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oKmCN3yojMQ2wi56P4UR8ruDKIpKUs7zR5mIdUilTLs=;
-        b=c/em2xklv+/oiPVG3wTsLIBI/PYz+iiwoQwDyRu0z2WGsetY8k58VlWYjZ74jknml7
-         6Km598wDrpzl0CGzCrAAR0yygQgYzQ70RNZmob1m3aoLEx7l4GAI2MsvP59jQoQuy2Ev
-         q4UZ6uROQCaS4wDF1vEQWhZr42h6gvMrUReP4y2T+g/YFirmZyzn1NT0at9oT5nU6Mwz
-         ONVcyHYScnayivUGaX9SjAgUUCbcHcJ27ckCH4T659y6ApgoD7aJZfjZVgfJLKDKLY7m
-         BahChZQZ20cJ2K/Iq7ycKTmXSrs5eMoA4S3dRodPxwbKWs+uKs15irLcXcp0Ub6akDqb
-         BGxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oKmCN3yojMQ2wi56P4UR8ruDKIpKUs7zR5mIdUilTLs=;
-        b=HTruWq1njO5mZbKHsJlyZmb0G9n86ooYfWK2jOPwjv5gPhbT8KbKA8EV0LwUDd2mR/
-         45lE7X0MiVZKKi+9XObfQW44EVx/Uk98t+57Nac6wSIpI5OEKEcWGUbkEfAXB3GEd97M
-         kkpmtt54gsNtyPC2+eseswJa27RQjd0BWydyFa6Pswb28ixkjtgL4Nadz1GtBl27hZJi
-         0v8IfK2Mu6RZQaxp+Ulhl/VW7nu7x8r8h/krVMjCf6fAU3vPysPAxn93UshG9Ahrsffi
-         CtZle9tSg/RGKEssT25TIbg6klHgxHTciTXSZ07TadrHPBq7RPDyQDdfGadNzp0FpGjq
-         i+QA==
-X-Gm-Message-State: AOAM533fUKfc0RVmdwlQWT4xFW2PWAxliQ9AgL+GUBsEiXxcXwU8vSEV
-        39RNcjvzch000Ix2Up+qoFFXoNnf38yxVLlbzkZEow==
-X-Google-Smtp-Source: ABdhPJzfMi5FAUwNLZJsBuj9+B3iYoKBkW9szO1rxl+UwYt/p1RLjf/xabkqjabSLUaCla5a0sBWNjE9cL/zlpKHmDk=
-X-Received: by 2002:ab0:5a46:: with SMTP id m6mr4357760uad.104.1642179651179;
- Fri, 14 Jan 2022 09:00:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com> <20220111201426.326777-3-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220111201426.326777-3-krzysztof.kozlowski@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 14 Jan 2022 19:00:39 +0200
-Message-ID: <CAPLW+4=TMyytDPO0t4c0Kayy9HAAja6dVq9L8_ic3vf_1LpSRA@mail.gmail.com>
-Subject: Re: [PATCH v2 02/28] pinctrl: samsung: accept GPIO bank nodes with a suffix
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Alim Akhtar <alim.akhtar@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S236673AbiANRLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:11:20 -0500
+Received: from mga04.intel.com ([192.55.52.120]:8844 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235260AbiANRLN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 12:11:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642180273; x=1673716273;
+  h=from:to:cc:subject:date:message-id;
+  bh=5bMRkSbwda2W++UDW9AENUPPKl67d4aXOGbqSNY+4Dc=;
+  b=hglb4laAUwvKXj4N5Vq1l/VX0+7RSRuUzGt16Lo4ItGmwmYpDDdayyCZ
+   B5mkIg9e6gtuqr0J5yHhg/wTap+GMavyMVuJQlSQ/RvbyAAMQEFEo2WB4
+   NEAHMuSSi5k7iazJoH5ZjZytX8tcsbPzoreJQ7ftLdy3dpVytFkYOJf74
+   Dgs5TjVdICtVnxS8DGfb6hT7bEag4gdHY6cqfVm7ZnL5vsOiZadukjLPG
+   sIJaS05Vj9h+TJGqFocM1NPsPfFFrjiVcd/B8u+3POZmOcS/pEJc96Gqn
+   QeSbWob57uC3TIUiLeTTbOJYFxL+K1RmMJmtjJ4KlCmDXr6jOPtU4wWO/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="243102028"
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="243102028"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 09:11:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="594121048"
+Received: from otc-wp-03.jf.intel.com ([10.54.39.79])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Jan 2022 09:11:13 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>
+Cc:     Jacob Pan <jacob.jun.pan@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>
+Subject: [PATCH v2] iommu/vt-d: Fix PCI bus rescan device hot add
+Date:   Fri, 14 Jan 2022 00:21:10 -0800
+Message-Id: <1642148470-11949-1-git-send-email-jacob.jun.pan@linux.intel.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 at 22:15, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> Existing dt-bindings expected that each GPIO/pin bank within pin
-> controller has its own node with name matching the bank (e.g. gpa0,
-> gpx2) and "gpio-controller" property.  The node name is then used for
-> matching between driver data and DTS.
->
-> Newly introduced dtschema expects to have nodes ending with "-gpio-bank"
-> suffix, so rewrite bank-devicetree matching to look for old and new
-> style of naming.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
+During PCI bus rescan, adding new devices involve two notifiers.
+1. dmar_pci_bus_notifier()
+2. iommu_bus_notifier()
+The current code sets #1 as low priority (INT_MIN) which resulted in #2
+being invoked first. The result is that struct device pointer cannot be
+found in DRHD search for the new device's DMAR/IOMMU. Subsequently, the
+device is put under the "catch-all" IOMMU instead of the correct one.
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+This could cause system hang when device TLB invalidation is sent to the
+wrong IOMMU. Invalidation timeout error and hard lockup have been observed.
 
->  drivers/pinctrl/samsung/pinctrl-samsung.c | 57 ++++++++++++++++++-----
->  1 file changed, 45 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
-> index b19ebc43d886..b3a5bc473841 100644
-> --- a/drivers/pinctrl/samsung/pinctrl-samsung.c
-> +++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
-> @@ -1012,13 +1012,56 @@ static void samsung_banks_of_node_put(struct samsung_pinctrl_drv_data *d)
->                 of_node_put(bank->of_node);
->  }
->
-> +/*
-> + * Iterate over all driver pin banks to find one matching the name of node,
-> + * skipping optional "-gpio" node suffix. When found, assign node to the bank.
-> + */
-> +static void samsung_banks_of_node_get(struct device *dev,
-> +                                     struct samsung_pinctrl_drv_data *d,
-> +                                     struct device_node *node)
-> +{
-> +       const char *suffix = "-gpio-bank";
-> +       struct samsung_pin_bank *bank;
-> +       struct device_node *child;
-> +       /* Pin bank names are up to 4 characters */
-> +       char node_name[20];
-> +       unsigned int i;
-> +       size_t len;
-> +
-> +       bank = d->pin_banks;
-> +       for (i = 0; i < d->nr_banks; ++i, ++bank) {
-> +               strscpy(node_name, bank->name, sizeof(node_name));
-> +               len = strlcat(node_name, suffix, sizeof(node_name));
-> +               if (len >= sizeof(node_name)) {
-> +                       dev_err(dev, "Too long pin bank name '%s', ignoring\n",
-> +                               bank->name);
-> +                       continue;
-> +               }
-> +
-> +               for_each_child_of_node(node, child) {
-> +                       if (!of_find_property(child, "gpio-controller", NULL))
-> +                               continue;
-> +                       if (of_node_name_eq(child, node_name))
-> +                               break;
-> +                       else if (of_node_name_eq(child, bank->name))
-> +                               break;
-> +               }
-> +
-> +               if (child)
-> +                       bank->of_node = child;
-> +               else
-> +                       dev_warn(dev, "Missing node for bank %s - invalid DTB\n",
-> +                                bank->name);
-> +               /* child reference dropped in samsung_drop_banks_of_node() */
-> +       }
-> +}
-> +
->  /* retrieve the soc specific data */
->  static const struct samsung_pin_ctrl *
->  samsung_pinctrl_get_soc_data(struct samsung_pinctrl_drv_data *d,
->                              struct platform_device *pdev)
->  {
->         struct device_node *node = pdev->dev.of_node;
-> -       struct device_node *np;
->         const struct samsung_pin_bank_data *bdata;
->         const struct samsung_pin_ctrl *ctrl;
->         struct samsung_pin_bank *bank;
-> @@ -1082,17 +1125,7 @@ samsung_pinctrl_get_soc_data(struct samsung_pinctrl_drv_data *d,
->          */
->         d->virt_base = virt_base[0];
->
-> -       for_each_child_of_node(node, np) {
-> -               if (!of_find_property(np, "gpio-controller", NULL))
-> -                       continue;
-> -               bank = d->pin_banks;
-> -               for (i = 0; i < d->nr_banks; ++i, ++bank) {
-> -                       if (of_node_name_eq(np, bank->name)) {
-> -                               bank->of_node = np;
-> -                               break;
-> -                       }
-> -               }
-> -       }
-> +       samsung_banks_of_node_get(&pdev->dev, d, node);
->
->         d->pin_base = pin_base;
->         pin_base += d->nr_pins;
-> --
-> 2.32.0
->
+On the reverse direction for device removal, the order should be #2-#1
+such that DMAR cleanup is done after IOMMU.
+
+This patch fixes the issue by setting proper priorities for
+dmar_pci_bus_notifier around IOMMU bus notifier. DRHD search for a new
+device will find the correct IOMMU. The order with this patch is the
+following:
+1. dmar_pci_bus_add_dev()
+2. iommu_probe_device()
+3. iommu_release_device()
+4. dmar_pci_bus_remove_dev()
+
+Fixes: 59ce0515cdaf ("iommu/vt-d: Update DRHD/RMRR/ATSR device scope")
+Reported-by: Zhang, Bernice <bernice.zhang@intel.com>
+Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
+Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+---
+ drivers/iommu/intel/dmar.c | 69 ++++++++++++++++++++++++++++----------
+ drivers/iommu/iommu.c      |  1 +
+ include/linux/iommu.h      |  1 +
+ 3 files changed, 53 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
+index 915bff76fe96..5f4751ba6bb1 100644
+--- a/drivers/iommu/intel/dmar.c
++++ b/drivers/iommu/intel/dmar.c
+@@ -340,15 +340,19 @@ static inline void vf_inherit_msi_domain(struct pci_dev *pdev)
+ 	dev_set_msi_domain(&pdev->dev, dev_get_msi_domain(&physfn->dev));
+ }
+ 
+-static int dmar_pci_bus_notifier(struct notifier_block *nb,
++static int dmar_pci_bus_add_notifier(struct notifier_block *nb,
+ 				 unsigned long action, void *data)
+ {
+ 	struct pci_dev *pdev = to_pci_dev(data);
+ 	struct dmar_pci_notify_info *info;
+ 
+-	/* Only care about add/remove events for physical functions.
++	if (action != BUS_NOTIFY_ADD_DEVICE)
++		return NOTIFY_DONE;
++
++	/*
+ 	 * For VFs we actually do the lookup based on the corresponding
+-	 * PF in device_to_iommu() anyway. */
++	 * PF in device_to_iommu() anyway.
++	 */
+ 	if (pdev->is_virtfn) {
+ 		/*
+ 		 * Ensure that the VF device inherits the irq domain of the
+@@ -358,13 +362,34 @@ static int dmar_pci_bus_notifier(struct notifier_block *nb,
+ 		 * from the PF device, but that's yet another x86'sism to
+ 		 * inflict on everybody else.
+ 		 */
+-		if (action == BUS_NOTIFY_ADD_DEVICE)
+-			vf_inherit_msi_domain(pdev);
++		vf_inherit_msi_domain(pdev);
+ 		return NOTIFY_DONE;
+ 	}
+ 
+-	if (action != BUS_NOTIFY_ADD_DEVICE &&
+-	    action != BUS_NOTIFY_REMOVED_DEVICE)
++	info = dmar_alloc_pci_notify_info(pdev, action);
++	if (!info)
++		return NOTIFY_DONE;
++
++	down_write(&dmar_global_lock);
++	dmar_pci_bus_add_dev(info);
++	up_write(&dmar_global_lock);
++	dmar_free_pci_notify_info(info);
++
++	return NOTIFY_OK;
++}
++
++static struct notifier_block dmar_pci_bus_add_nb = {
++	.notifier_call = dmar_pci_bus_add_notifier,
++	.priority = IOMMU_BUS_NOTIFY_PRIORITY + 1,
++};
++
++static int dmar_pci_bus_remove_notifier(struct notifier_block *nb,
++				 unsigned long action, void *data)
++{
++	struct pci_dev *pdev = to_pci_dev(data);
++	struct dmar_pci_notify_info *info;
++
++	if (pdev->is_virtfn || action != BUS_NOTIFY_REMOVED_DEVICE)
+ 		return NOTIFY_DONE;
+ 
+ 	info = dmar_alloc_pci_notify_info(pdev, action);
+@@ -372,10 +397,7 @@ static int dmar_pci_bus_notifier(struct notifier_block *nb,
+ 		return NOTIFY_DONE;
+ 
+ 	down_write(&dmar_global_lock);
+-	if (action == BUS_NOTIFY_ADD_DEVICE)
+-		dmar_pci_bus_add_dev(info);
+-	else if (action == BUS_NOTIFY_REMOVED_DEVICE)
+-		dmar_pci_bus_del_dev(info);
++	dmar_pci_bus_del_dev(info);
+ 	up_write(&dmar_global_lock);
+ 
+ 	dmar_free_pci_notify_info(info);
+@@ -383,11 +405,10 @@ static int dmar_pci_bus_notifier(struct notifier_block *nb,
+ 	return NOTIFY_OK;
+ }
+ 
+-static struct notifier_block dmar_pci_bus_nb = {
+-	.notifier_call = dmar_pci_bus_notifier,
+-	.priority = INT_MIN,
++static struct notifier_block dmar_pci_bus_remove_nb = {
++	.notifier_call = dmar_pci_bus_remove_notifier,
++	.priority = IOMMU_BUS_NOTIFY_PRIORITY - 1,
+ };
+-
+ static struct dmar_drhd_unit *
+ dmar_find_dmaru(struct acpi_dmar_hardware_unit *drhd)
+ {
+@@ -835,7 +856,17 @@ int __init dmar_dev_scope_init(void)
+ 
+ void __init dmar_register_bus_notifier(void)
+ {
+-	bus_register_notifier(&pci_bus_type, &dmar_pci_bus_nb);
++	/*
++	 * We need two notifiers in that we need to make sure the ordering
++	 * is enforced as the following:
++	 * 1. dmar_pci_bus_add_dev()
++	 * 2. iommu_probe_device()
++	 * 3. iommu_release_device()
++	 * 4. dmar_pci_bus_remove_dev()
++	 * Notifier block priority is used to enforce the order
++	 */
++	bus_register_notifier(&pci_bus_type, &dmar_pci_bus_add_nb);
++	bus_register_notifier(&pci_bus_type, &dmar_pci_bus_remove_nb);
+ }
+ 
+ 
+@@ -2151,8 +2182,10 @@ static int __init dmar_free_unused_resources(void)
+ 	if (dmar_in_use())
+ 		return 0;
+ 
+-	if (dmar_dev_scope_status != 1 && !list_empty(&dmar_drhd_units))
+-		bus_unregister_notifier(&pci_bus_type, &dmar_pci_bus_nb);
++	if (dmar_dev_scope_status != 1 && !list_empty(&dmar_drhd_units)) {
++		bus_unregister_notifier(&pci_bus_type, &dmar_pci_bus_add_nb);
++		bus_unregister_notifier(&pci_bus_type, &dmar_pci_bus_remove_nb);
++	}
+ 
+ 	down_write(&dmar_global_lock);
+ 	list_for_each_entry_safe(dmaru, dmaru_n, &dmar_drhd_units, list) {
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 8b86406b7162..6103bcde1f65 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -1841,6 +1841,7 @@ static int iommu_bus_init(struct bus_type *bus, const struct iommu_ops *ops)
+ 		return -ENOMEM;
+ 
+ 	nb->notifier_call = iommu_bus_notifier;
++	nb->priority = IOMMU_BUS_NOTIFY_PRIORITY;
+ 
+ 	err = bus_register_notifier(bus, nb);
+ 	if (err)
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index de0c57a567c8..8e13c69980be 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -403,6 +403,7 @@ static inline void iommu_iotlb_gather_init(struct iommu_iotlb_gather *gather)
+ 	};
+ }
+ 
++#define IOMMU_BUS_NOTIFY_PRIORITY		0
+ #define IOMMU_GROUP_NOTIFY_ADD_DEVICE		1 /* Device added */
+ #define IOMMU_GROUP_NOTIFY_DEL_DEVICE		2 /* Pre Device removed */
+ #define IOMMU_GROUP_NOTIFY_BIND_DRIVER		3 /* Pre Driver bind */
+-- 
+2.25.1
+

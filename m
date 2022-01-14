@@ -2,97 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9739B48EFA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 19:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DF548EFB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 19:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243999AbiANSJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 13:09:31 -0500
-Received: from mail-qt1-f174.google.com ([209.85.160.174]:38857 "EHLO
-        mail-qt1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235405AbiANSJa (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 13:09:30 -0500
-Received: by mail-qt1-f174.google.com with SMTP id bb9so6035407qtb.5;
-        Fri, 14 Jan 2022 10:09:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vWFRqt1snG0vKk4A5HswSbVNh90av8m781UEgmU/+DA=;
-        b=11KrcIlSxri4kn5ralE0W0fEdSHvTSkjo9NcwZ8ksO0/f6VyVgxGz2JHds4PdYX3Kb
-         5wzjpLm5D4NL/qaB7YQuYUNe4aOi7u8OcIlNKtw4Z1o7oArc+OIYIc/V9v5qD8vzLE77
-         LU9tCQK/KGrzavyT2YaxBSpAa/LLTQkhC1MA11dXVi5njdRij2sw91QIlYdVnwHbXWYu
-         BC5Me686GO5XGYY4hLrVIgso7M78zumoZDOG5fl40UZEBM+WOBCAarTHEnmchiYqHod+
-         kf9Uvx96wEtQce5eRNhLw9w2+M8xiW+c0W+rrpV3dXkspsJDsbOwx7hSKynu0VSbb/A5
-         v9HQ==
-X-Gm-Message-State: AOAM532Rg5uKhvTqLcudKNvkKoQY9Gyyj56knbcX0H9E4CwzxmXd3e7a
-        gceg3HFK6UX8vZPH0K4tUAe07XOPcSjPwhpjnAw=
-X-Google-Smtp-Source: ABdhPJxTXfPOTcCz0073xhS4n7Az6/FPfBKGiajhOEWK/wDX6tVYGQV2jg6sy6ywX29PPSDXNZb5nySCtjg9+CHTlOY=
-X-Received: by 2002:a05:622a:1881:: with SMTP id v1mr8653852qtc.327.1642183769801;
- Fri, 14 Jan 2022 10:09:29 -0800 (PST)
+        id S244072AbiANSMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 13:12:44 -0500
+Received: from mout.gmx.net ([212.227.15.15]:59769 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236802AbiANSMn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 13:12:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642183948;
+        bh=BfT+QXQondzq2MdcCIjBYr2wbp9CQ606HkEA+VJrpaM=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=OyLa6aXFERPG+wAnPEzonDwd5okKrOXtRCfk1yDbGk/oFLgUy3nXBKm/XEjB1TS1z
+         spdRg4x7LEXeVr+HNkM3id9pz0AWcQKRVwruNpL7EOULk7hTPr8tPZIjaUQ5gocYpA
+         ZN02iQe/s2utpQhxqEAPhxi093H7oZPGHNnDeYlw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530 ([92.116.186.160]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Ma24s-1mnYAi28xQ-00VzJu; Fri, 14
+ Jan 2022 19:12:28 +0100
+Date:   Fri, 14 Jan 2022 19:11:21 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Message-ID: <YeG8ydoJNWWkGrTb@ls3530>
 MIME-Version: 1.0
-References: <20220114101546.1368163-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20220114101546.1368163-1-jiasheng@iscas.ac.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 14 Jan 2022 19:09:18 +0100
-Message-ID: <CAJZ5v0j5LVV_gV_K45YqFPqtBcS423VP0x_Uos7MtKBeqWkg5A@mail.gmail.com>
-Subject: Re: [PATCH] ACPI/ACPICA: Check for NULL pointer after calling alloc
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     Robert Moore <robert.moore@intel.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:U8AySo36viW77ZA+cTW+h6saPqOmnFC3bwCFYOxUzXGXX3knDVl
+ i9qqybvIB/2E3qrz8jDtRQdRcAcjEAa05/653by446WEP4yljRIwDQ97ta1w22qoUDefIEW
+ YxiYXMZSnScedrA6obPgqq+rL3aA6kWVFpAq1Gw32hMe5ZPPFvBw+xNUozqO2PKPlAhyMVj
+ TBzp9LjSUvt6oV+4qz9qw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:E8Zc6+s8G5o=:HQGNleRj26OUA3Mh3rlRV7
+ LYmyVrRWa4canrQxQYCaREImbO9dnDduWrGj/9QXnFk8ofgN1oHO80do+qIZVz8NjU9cMhWKc
+ bQ5x7Wp9ubHG/ySjqqnyWvm6seAoaQeYmIuAueh9f5JbPVLl3s8pKJvXFX8D+3FLkl6gGGPgd
+ mGWH4OLry4rRe1Z97Cd6GTm6vPvbJ0R4Zqut1ZWdh6KtL2yhamWRj+PHnSypHsZcgRFIpxIys
+ zoIGm4cNdNbUvMUVt1HxptXJe/U7TVa7ZAfs7EnTsnDxQTPkO2bZ0OOG/t5J/y8oPjoJMD4o1
+ 4VBkwQ5ArxnsamgZ75xfZl42PqurVberV4G8swfnScDxS7JNfG41gWM1Sg8kCocMUZ4o7tuh0
+ bJ81JQt+4vHv1R8WWi5lKfjWS8gEgJ9dW7CBbfWJrZ7j6lZBAbCRQFmcfUMPsnYtav8NUPHz3
+ WsTXG0Mz4sfR15PdWqApNrzn90diERvInOl0rBm1/Lz9t/hgpPe/IyZnzR+VbkzOCuR3Pm8ea
+ TxgSuQA0unV8tNiwMwk/9ShKr3Gsyn4GyfMc3m9UhpgRxJeQH3+wsJkzhCgdtu8YlOrHSXJG7
+ ZCHv4vj8B4nC1AeMY7MuwtEMTrUYMXbhYVgpBvUmr9HtMF7UFrMFdviWYiACHzB1vCFi/mgrA
+ U2VgjnB9P9garj8bbIoUQ+rMjlej9LXVClKH+3UXOXqOCO44RZ2Bx9VDNe+iZ/jDi8PQeFzBW
+ 13A35uQ9YsB/TvxMI5W30EXW9KWPXVdXCt5gboaTFWnPKfLPwa8Ko8pQPIXKYt1cLA+jLJrVS
+ bkDk7gScowwBPVL6izJIg4TjrACJIKYMeT2CMMxIlpeRM5zpfgcGiXK271mH8Pn3WhwZGLaEK
+ JnI1conPnNdJQ7KREIHnHivKc6u5bmN2WRgma6/YKpsYWpsnfhHnDk2gr83Y7FUplmC/QZG6T
+ dEkPgQtYKpkDWIeog7jbIAVdQTfmxlLnYdpgFnzlw6nweFaOmERL1iHFiMDRtlWu/a8ElGyIV
+ UVteo/sajHbN1e+Ngzb9cxiU00IUkM+m5v8fNgD0u5V/7zcabkLREhmjFq2olIZgduyqouw7v
+ PmHPnwHXOGlQ3o=
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 11:16 AM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
->
-> As the possible failure of the allocation, object_info could be NULL
-> pointer.
-> Therefore, it should be better to check it in order to avoid the
-> dereference of the NULL pointer.
-> If fails, we should return 'AE_NON_MEMORY' and the caller
-> acpi_db_command_dispatch() will deal with the return status of
-> acpi_db_display_objects().
-> Also, the comment of the acpi_db_display_objects() is wrong.
-> So we need to correct it too.
->
-> Fixes: 995751025572 ("ACPICA: Linuxize: Export debugger files to Linux")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+The fbdev layer is orphaned, but seems to need some care.
+So I'd like to step up as new maintainer.
 
-This is ACPICA material, so it needs to be submitted to the upstream
-ACPICA project via https://github.com/acpica/acpica, thanks!
+Signed-off-by: Helge Deller <deller@gmx.de>
 
-> ---
->  drivers/acpi/acpica/dbnames.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/acpica/dbnames.c b/drivers/acpi/acpica/dbnames.c
-> index 3615e1a6efd8..d8e5852fadb1 100644
-> --- a/drivers/acpi/acpica/dbnames.c
-> +++ b/drivers/acpi/acpica/dbnames.c
-> @@ -632,7 +632,7 @@ acpi_db_walk_for_specific_objects(acpi_handle obj_handle,
->   * PARAMETERS:  obj_type_arg        - Type of object to display
->   *              display_count_arg   - Max depth to display
->   *
-> - * RETURN:      None
-> + * RETURN:      Status
->   *
->   * DESCRIPTION: Display objects in the namespace of the requested type
->   *
-> @@ -651,6 +651,8 @@ acpi_status acpi_db_display_objects(char *obj_type_arg, char *display_count_arg)
->         if (!obj_type_arg) {
->                 object_info =
->                     ACPI_ALLOCATE_ZEROED(sizeof(struct acpi_object_info));
-> +               if (!object_info)
-> +                       return (AE_NO_MEMORY);
->
->                 /* Walk the namespace from the root */
->
-> --
-> 2.25.1
->
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5d0cd537803a..ce47dbc467cc 100644
+=2D-- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7583,11 +7583,12 @@ W:	http://floatingpoint.sourceforge.net/emulator/i=
+ndex.html
+ F:	arch/x86/math-emu/
+
+ FRAMEBUFFER LAYER
+-L:	dri-devel@lists.freedesktop.org
++M:	Helge Deller <deller@gmx.de>
+ L:	linux-fbdev@vger.kernel.org
+-S:	Orphan
++L:	dri-devel@lists.freedesktop.org
++S:	Maintained
+ Q:	http://patchwork.kernel.org/project/linux-fbdev/list/
+-T:	git git://anongit.freedesktop.org/drm/drm-misc
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.g=
+it
+ F:	Documentation/fb/
+ F:	drivers/video/
+ F:	include/linux/fb.h

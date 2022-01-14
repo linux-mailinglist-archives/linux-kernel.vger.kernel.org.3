@@ -2,306 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E36148E425
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2512748E427
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239319AbiANGRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:17:06 -0500
-Received: from helcar.hmeau.com ([216.24.177.18]:59496 "EHLO fornost.hmeau.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229936AbiANGRF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:17:05 -0500
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1n8FtA-0006EA-VI; Fri, 14 Jan 2022 17:16:42 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 14 Jan 2022 17:16:41 +1100
-Date:   Fri, 14 Jan 2022 17:16:41 +1100
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Nicolai Stange <nstange@suse.de>
-Cc:     Stephan Mueller <smueller@chronox.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
-        Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org, simo@redhat.com,
-        Eric Biggers <ebiggers@kernel.org>, Petr Vorel <pvorel@suse.cz>
-Subject: [v2 PATCH] crypto: api - Disallow sha1 in FIPS-mode while allowing
- hmac(sha1)
-Message-ID: <YeEVSaMEVJb3cQkq@gondor.apana.org.au>
-References: <20211209090358.28231-1-nstange@suse.de>
- <87r1a7thy0.fsf@suse.de>
- <YcvEkfS4cONDXXB9@gondor.apana.org.au>
- <2468270.qO8rWLYou6@tauon.chronox.de>
- <YdepEhTI/LB9wdJr@gondor.apana.org.au>
- <Yd0gInht+V+Kcsw2@gondor.apana.org.au>
- <871r1eyamd.fsf@suse.de>
- <Yd1dK//76455cHdz@gondor.apana.org.au>
+        id S239324AbiANGSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:18:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36467 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229717AbiANGSP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 01:18:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642141095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YawaJX8lTftoOW61Y7U6IA50jMGmbdQaYnSxlW1+tHw=;
+        b=iYMZJ06Ov2MIwtjGo2PkdfMaiiH6PXBVB7rHMu+VFtchAv02b1AYAU7Pil/cgNyKjyn5dy
+        nVRYx7NTiESJRK3UfWGYu8KuJmqT42gxNAm7xbq4UJ/N4E+FIjQWY+mmA7SfH2uyrTbGvb
+        iz+jG1HNv4OjybxNEqufpEOOfubsnwQ=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-380-jd7chlQgPbKom_wRYui7Gw-1; Fri, 14 Jan 2022 01:18:13 -0500
+X-MC-Unique: jd7chlQgPbKom_wRYui7Gw-1
+Received: by mail-lf1-f71.google.com with SMTP id z23-20020a0565120c1700b004258a35caf2so5525895lfu.13
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:18:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YawaJX8lTftoOW61Y7U6IA50jMGmbdQaYnSxlW1+tHw=;
+        b=Q6PNCtrx7wL84wePhJAd7IVYX3gkVYlgu9fh+1AtUBMubYHcBQjcOSvm1ijIxSssoU
+         suaGFZh826NzwPmb0Xy4isVesocmWOaf0o4b6m6yFb9zOX12QcKHc9MMUGaQbdyhoul5
+         TM+j5dy8sstsSneSvHNeUXTj9SOlm1qTTrA5EU+agBWNTWvFPsZhtBKsfUJKJ1e8s9PC
+         SJcwlT7JDET0gN9OzqIotk6z4SzsU6iKJPkZHe3HwAua1OE1brUlFgaWX99e0a82032o
+         Ltc1eZG0de/NdgtA7HbmGBvCJxa4x2ICZs5mpKaW2gszbkw08ZBFlgtNTOP1wcs2zK9G
+         ClVQ==
+X-Gm-Message-State: AOAM530He7gdxGaenxj1FYmxfLMEh0foCRqRKbSepEqd6vOGz3ouAqKr
+        4CI+x1e3Q+ochtmqFrGP/czzkeX7y/U5kkJeJb4Fx6/jgJUAmQDyvHbKbZO1GyNR2lzVoLY9zFx
+        ZuFhjrPqXxRtNW3g+6vF6N4NcNOqaDLXnd5qc52dk
+X-Received: by 2002:a2e:8645:: with SMTP id i5mr2054347ljj.420.1642141092220;
+        Thu, 13 Jan 2022 22:18:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx6Nfbams2KnY3qknpeMJm2YPphc5XVQuPf+9aKqnItDdPeixnxkwbf4f/KJ8Znvhi0j4XtHNEKy5oo568WAt4=
+X-Received: by 2002:a2e:8645:: with SMTP id i5mr2054339ljj.420.1642141092040;
+ Thu, 13 Jan 2022 22:18:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yd1dK//76455cHdz@gondor.apana.org.au>
+References: <20220113145642.205388-1-sgarzare@redhat.com>
+In-Reply-To: <20220113145642.205388-1-sgarzare@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 14 Jan 2022 14:18:01 +0800
+Message-ID: <CACGkMEsqY5RHL=9=iny6xRVs_=EdACUCfX-Rmpq+itpdoT_rrg@mail.gmail.com>
+Subject: Re: [RFC PATCH] vhost: cache avail index in vhost_enable_notify()
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 09:34:19PM +1100, Herbert Xu wrote:
+On Thu, Jan 13, 2022 at 10:57 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
 >
-> You're right.  The real issue is that any algorithm with no tests
-> at all is allowed in FIPS mode.  That's clearly suboptimal.  But we
-> can't just ban every unknown algorithm because we rely on that
-> to let things like echainiv through.
-> 
-> Let me figure out a way to differentiate these two cases.
+> In vhost_enable_notify() we enable the notifications and we read
+> the avail index to check if new buffers have become available in
+> the meantime. In this case, the device would go to re-read avail
+> index to access the descriptor.
+>
+> As we already do in other place, we can cache the value in `avail_idx`
+> and compare it with `last_avail_idx` to check if there are new
+> buffers available.
+>
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 
-So what I've done is modify hmac so that if the underlying algo
-is FIPS_INTERNAL, then we pre-emptively set FIPS_INTERNAL on the
-hmac side as well.  This can then be cleared if the hmac algorithm
-is explicitly listed as fips_allowed.
+Patch looks fine but I guess we won't get performance improvement
+since it doesn't save any userspace/VM memory access?
 
----8<---
-Currently we do not distinguish between algorithms that fail on
-the self-test vs. those which are disabled in FIPS mode (not allowed).
-Both are marked as having failed the self-test.
+Thanks
 
-As it has been requested that we need to disable sha1 in FIPS
-mode while still allowing hmac(sha1) this approach needs to change.
+> ---
+>  drivers/vhost/vhost.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> index 59edb5a1ffe2..07363dff559e 100644
+> --- a/drivers/vhost/vhost.c
+> +++ b/drivers/vhost/vhost.c
+> @@ -2543,8 +2543,9 @@ bool vhost_enable_notify(struct vhost_dev *dev, struct vhost_virtqueue *vq)
+>                        &vq->avail->idx, r);
+>                 return false;
+>         }
+> +       vq->avail_idx = vhost16_to_cpu(vq, avail_idx);
+>
+> -       return vhost16_to_cpu(vq, avail_idx) != vq->avail_idx;
+> +       return vq->avail_idx != vq->last_avail_idx;
+>  }
+>  EXPORT_SYMBOL_GPL(vhost_enable_notify);
+>
+> --
+> 2.31.1
+>
 
-This patch allows this scenario by adding a new flag FIPS_INTERNAL
-to indicate those algorithms that have passed the self-test and are
-not FIPS-allowed.  They can then be used for the self-testing of
-other algorithms or by those that are explicitly allowed to use them
-(currently just hmac).
-
-Note that as a side-effect of this patch algorithms which are not
-FIPS-allowed will now return ENOENT instead of ELIBBAD.  Hopefully
-this is not an issue as some people were relying on this already.
-
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-diff --git a/crypto/algapi.c b/crypto/algapi.c
-index a366cb3e8aa1..09fb75806e87 100644
---- a/crypto/algapi.c
-+++ b/crypto/algapi.c
-@@ -322,8 +322,16 @@ void crypto_alg_tested(const char *name, int err)
- found:
- 	q->cra_flags |= CRYPTO_ALG_DEAD;
- 	alg = test->adult;
--	if (err || list_empty(&alg->cra_list))
-+
-+	if (list_empty(&alg->cra_list))
-+		goto complete;
-+
-+	if (err == -ECANCELED)
-+		alg->cra_flags |= CRYPTO_ALG_FIPS_INTERNAL;
-+	else if (err)
- 		goto complete;
-+	else
-+		alg->cra_flags &= ~CRYPTO_ALG_FIPS_INTERNAL;
- 
- 	alg->cra_flags |= CRYPTO_ALG_TESTED;
- 
-diff --git a/crypto/api.c b/crypto/api.c
-index cf0869dd130b..549f9aced1da 100644
---- a/crypto/api.c
-+++ b/crypto/api.c
-@@ -223,6 +223,8 @@ static struct crypto_alg *crypto_larval_wait(struct crypto_alg *alg)
- 	else if (crypto_is_test_larval(larval) &&
- 		 !(alg->cra_flags & CRYPTO_ALG_TESTED))
- 		alg = ERR_PTR(-EAGAIN);
-+	else if (alg->cra_flags & CRYPTO_ALG_FIPS_INTERNAL)
-+		alg = ERR_PTR(-EAGAIN);
- 	else if (!crypto_mod_get(alg))
- 		alg = ERR_PTR(-EAGAIN);
- 	crypto_mod_put(&larval->alg);
-@@ -233,6 +235,7 @@ static struct crypto_alg *crypto_larval_wait(struct crypto_alg *alg)
- static struct crypto_alg *crypto_alg_lookup(const char *name, u32 type,
- 					    u32 mask)
- {
-+	const u32 fips = CRYPTO_ALG_FIPS_INTERNAL;
- 	struct crypto_alg *alg;
- 	u32 test = 0;
- 
-@@ -240,8 +243,20 @@ static struct crypto_alg *crypto_alg_lookup(const char *name, u32 type,
- 		test |= CRYPTO_ALG_TESTED;
- 
- 	down_read(&crypto_alg_sem);
--	alg = __crypto_alg_lookup(name, type | test, mask | test);
--	if (!alg && test) {
-+	alg = __crypto_alg_lookup(name, (type | test) & ~fips,
-+				  (mask | test) & ~fips);
-+	if (alg) {
-+		if (((type | mask) ^ fips) & fips)
-+			mask |= fips;
-+		mask &= fips;
-+
-+		if (!crypto_is_larval(alg) &&
-+		    ((type ^ alg->cra_flags) & mask)) {
-+			/* Algorithm is disallowed in FIPS mode. */
-+			crypto_mod_put(alg);
-+			alg = ERR_PTR(-ENOENT);
-+		}
-+	} else if (test) {
- 		alg = __crypto_alg_lookup(name, type, mask);
- 		if (alg && !crypto_is_larval(alg)) {
- 			/* Test failed */
-diff --git a/crypto/hmac.c b/crypto/hmac.c
-index 25856aa7ccbf..af82e3eeb7d0 100644
---- a/crypto/hmac.c
-+++ b/crypto/hmac.c
-@@ -169,6 +169,7 @@ static int hmac_create(struct crypto_template *tmpl, struct rtattr **tb)
- 	struct crypto_alg *alg;
- 	struct shash_alg *salg;
- 	u32 mask;
-+	u32 type;
- 	int err;
- 	int ds;
- 	int ss;
-@@ -182,8 +183,9 @@ static int hmac_create(struct crypto_template *tmpl, struct rtattr **tb)
- 		return -ENOMEM;
- 	spawn = shash_instance_ctx(inst);
- 
-+	type = CRYPTO_ALG_FIPS_INTERNAL;
- 	err = crypto_grab_shash(spawn, shash_crypto_instance(inst),
--				crypto_attr_alg_name(tb[1]), 0, mask);
-+				crypto_attr_alg_name(tb[1]), type, mask);
- 	if (err)
- 		goto err_free_inst;
- 	salg = crypto_spawn_shash_alg(spawn);
-@@ -204,6 +206,7 @@ static int hmac_create(struct crypto_template *tmpl, struct rtattr **tb)
- 	if (err)
- 		goto err_free_inst;
- 
-+	inst->alg.base.cra_flags = alg->cra_flags & CRYPTO_ALG_FIPS_INTERNAL;
- 	inst->alg.base.cra_priority = alg->cra_priority;
- 	inst->alg.base.cra_blocksize = alg->cra_blocksize;
- 	inst->alg.base.cra_alignmask = alg->cra_alignmask;
-diff --git a/crypto/testmgr.c b/crypto/testmgr.c
-index 5831d4bbc64f..995d44db6154 100644
---- a/crypto/testmgr.c
-+++ b/crypto/testmgr.c
-@@ -1664,7 +1664,8 @@ static int test_hash_vs_generic_impl(const char *generic_driver,
- 	if (strcmp(generic_driver, driver) == 0) /* Already the generic impl? */
- 		return 0;
- 
--	generic_tfm = crypto_alloc_shash(generic_driver, 0, 0);
-+	generic_tfm = crypto_alloc_shash(generic_driver,
-+					 CRYPTO_ALG_FIPS_INTERNAL, 0);
- 	if (IS_ERR(generic_tfm)) {
- 		err = PTR_ERR(generic_tfm);
- 		if (err == -ENOENT) {
-@@ -2387,7 +2388,8 @@ static int test_aead_vs_generic_impl(struct aead_extra_tests_ctx *ctx)
- 	if (strcmp(generic_driver, driver) == 0) /* Already the generic impl? */
- 		return 0;
- 
--	generic_tfm = crypto_alloc_aead(generic_driver, 0, 0);
-+	generic_tfm = crypto_alloc_aead(generic_driver,
-+					CRYPTO_ALG_FIPS_INTERNAL, 0);
- 	if (IS_ERR(generic_tfm)) {
- 		err = PTR_ERR(generic_tfm);
- 		if (err == -ENOENT) {
-@@ -2986,7 +2988,8 @@ static int test_skcipher_vs_generic_impl(const char *generic_driver,
- 	if (strcmp(generic_driver, driver) == 0) /* Already the generic impl? */
- 		return 0;
- 
--	generic_tfm = crypto_alloc_skcipher(generic_driver, 0, 0);
-+	generic_tfm = crypto_alloc_skcipher(generic_driver,
-+					    CRYPTO_ALG_FIPS_INTERNAL, 0);
- 	if (IS_ERR(generic_tfm)) {
- 		err = PTR_ERR(generic_tfm);
- 		if (err == -ENOENT) {
-@@ -5328,7 +5331,6 @@ static const struct alg_test_desc alg_test_descs[] = {
- 	}, {
- 		.alg = "sha1",
- 		.test = alg_test_hash,
--		.fips_allowed = 1,
- 		.suite = {
- 			.hash = __VECS(sha1_tv_template)
- 		}
-@@ -5613,6 +5615,13 @@ static int alg_find_test(const char *alg)
- 	return -1;
- }
- 
-+static int alg_fips_disabled(const char *driver, const char *alg)
-+{
-+	pr_info("alg: %s (%s) is disabled due to FIPS\n", alg, driver);
-+
-+	return -ECANCELED;
-+}
-+
- int alg_test(const char *driver, const char *alg, u32 type, u32 mask)
- {
- 	int i;
-@@ -5637,9 +5646,6 @@ int alg_test(const char *driver, const char *alg, u32 type, u32 mask)
- 		if (i < 0)
- 			goto notest;
- 
--		if (fips_enabled && !alg_test_descs[i].fips_allowed)
--			goto non_fips_alg;
--
- 		rc = alg_test_cipher(alg_test_descs + i, driver, type, mask);
- 		goto test_done;
- 	}
-@@ -5649,8 +5655,7 @@ int alg_test(const char *driver, const char *alg, u32 type, u32 mask)
- 	if (i < 0 && j < 0)
- 		goto notest;
- 
--	if (fips_enabled && ((i >= 0 && !alg_test_descs[i].fips_allowed) ||
--			     (j >= 0 && !alg_test_descs[j].fips_allowed)))
-+	if (fips_enabled && (j >= 0 && !alg_test_descs[j].fips_allowed))
- 		goto non_fips_alg;
- 
- 	rc = 0;
-@@ -5671,16 +5676,22 @@ int alg_test(const char *driver, const char *alg, u32 type, u32 mask)
- 		}
- 		WARN(1, "alg: self-tests for %s (%s) failed (rc=%d)",
- 		     driver, alg, rc);
--	} else {
--		if (fips_enabled)
--			pr_info("alg: self-tests for %s (%s) passed\n",
--				driver, alg);
-+	} else if (fips_enabled) {
-+		pr_info("alg: self-tests for %s (%s) passed\n",
-+			driver, alg);
-+
-+		if (i >= 0 && !alg_test_descs[i].fips_allowed)
-+			rc = alg_fips_disabled(driver, alg);
- 	}
- 
- 	return rc;
- 
- notest:
- 	printk(KERN_INFO "alg: No test for %s (%s)\n", alg, driver);
-+
-+	if (type & CRYPTO_ALG_FIPS_INTERNAL)
-+		return alg_fips_disabled(driver, alg);
-+
- 	return 0;
- non_fips_alg:
- 	return -EINVAL;
-diff --git a/include/linux/crypto.h b/include/linux/crypto.h
-index 855869e1fd32..df3f68dfe8c7 100644
---- a/include/linux/crypto.h
-+++ b/include/linux/crypto.h
-@@ -132,6 +132,15 @@
-  */
- #define CRYPTO_ALG_ALLOCATES_MEMORY	0x00010000
- 
-+/*
-+ * Mark an algorithm as a service implementation only usable by a
-+ * template and never by a normal user of the kernel crypto API.
-+ * This is intended to be used by algorithms that are themselves
-+ * not FIPS-approved but may instead be used to implement parts of
-+ * a FIPS-approved algorithm (e.g., sha1 vs. hmac(sha1)).
-+ */
-+#define CRYPTO_ALG_FIPS_INTERNAL	0x00020000
-+
- /*
-  * Transform masks and values (for crt_flags).
-  */
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

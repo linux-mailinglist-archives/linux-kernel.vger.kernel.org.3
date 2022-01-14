@@ -2,347 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7C348F0F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 21:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AE948F10B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 21:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244138AbiANU2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 15:28:07 -0500
-Received: from mga03.intel.com ([134.134.136.65]:34023 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232761AbiANU2G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 15:28:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642192086; x=1673728086;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=NBtuZOCI/VvXKB7yr72RHMvqEhb3Bk1Y/6yE42Illw8=;
-  b=QHZbrroiDeONOBl7dBwTcp+I+r44QDann1p3FG/7kBACqJ9gq3L7eDbh
-   HQyPitoJaolmoFLHaJvrqMY8OkRRnzZ8ef18W5VOsAztE9VUbllADSp+A
-   lEWo7pkyI3/wLACOdE4qjYRR8uSane/xPDiBGlhcITOAFqWwPZ7cxg4Tk
-   s4PXRjkpJsWK+3wz0+/tlExJ/4qYToreMcV8ycJ219rdwRjeZ0oUsVusx
-   ScDNWNEXQpE81fMUJ4+yiplHLUVB4T7Cm1WhbLuhxY7GuSQlEbvgnuQCg
-   OuEkFApy7NPbl6ttbBlLLTaVQ3Ol2R7T15blQJFtasVM4PgEk/vQdav2I
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="244282797"
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="244282797"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 12:28:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="473767991"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga003.jf.intel.com with ESMTP; 14 Jan 2022 12:28:05 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, lenb@kernel.org
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [UPDATE][PATCH v2] ACPI / fan: Properly handle fine grain control
-Date:   Fri, 14 Jan 2022 12:28:05 -0800
-Message-Id: <20220114202805.103233-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+        id S244303AbiANUau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 15:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244275AbiANUat (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 15:30:49 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114CBC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:30:49 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n8TCl-0001fN-N3; Fri, 14 Jan 2022 21:29:47 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n8TCi-00AJbq-3s; Fri, 14 Jan 2022 21:29:43 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n8TCg-0002hC-MP; Fri, 14 Jan 2022 21:29:42 +0100
+Date:   Fri, 14 Jan 2022 21:29:39 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Mark Brown <broonie@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, netdev@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH] driver core: platform: Rename
+ platform_get_irq_optional() to platform_get_irq_silent()
+Message-ID: <20220114202939.5kq5ud5opfosjlyc@pengutronix.de>
+References: <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+ <YeA7CjOyJFkpuhz/@sirena.org.uk>
+ <20220113194358.xnnbhsoyetihterb@pengutronix.de>
+ <386a7f56-38c8-229c-4fec-4b38a77c4121@omp.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gs4ynp4fq77e5cup"
+Content-Disposition: inline
+In-Reply-To: <386a7f56-38c8-229c-4fec-4b38a77c4121@omp.ru>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When _FIF object specifies support for fine grain control, then fan speed
-can be set from 0 to 100% with the recommended minimum "step size" via
-_FSL object. Here the control value doesn't need to match any value from
-_FPS object.
 
-Currently we have a simple solution implemented which just pick maximum
-control value from _FPS to display the actual state, but this is not
-optimal when there is a big window between two control values in
-_FPS. Also there is no way to set to any speed which doesn't match
-control values in _FPS. The system firmware can start the fan at speed
-which doesn't match any control value.
+--gs4ynp4fq77e5cup
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-To support fine grain control via thermal sysfs:
-- cooling device max state is not _FPS state count but it will be
-100 / _FIF.step_size
-- cooling device current state is 100 / _FIF.step_size
-- cooling device set state will set the control value
-curr_state * _FIF.step_size plus any adjustment for 100%.
-By the spec, when control value do not sum to 100% because of
-_FIF.step_size, OSPM may select an appropriate ending Level increment
-to reach 100%.
+On Fri, Jan 14, 2022 at 10:45:38PM +0300, Sergey Shtylyov wrote:
+> On 1/13/22 10:43 PM, Uwe Kleine-K=F6nig wrote:
+>=20
+> > The subsystems regulator, clk and gpio have the concept of a dummy
+> > resource. For regulator, clk and gpio there is a semantic difference
+> > between the regular _get() function and the _get_optional() variant.
+> > (One might return the dummy resource, the other won't. Unfortunately
+> > which one implements which isn't the same for these three.) The
+> > difference between platform_get_irq() and platform_get_irq_optional() is
+> > only that the former might emit an error message and the later won't.
+> >=20
+> > To prevent people's expectations that there is a semantic difference
+> > between these too, rename platform_get_irq_optional() to
+> > platform_get_irq_silent() to make the actual difference more obvious.
+> >=20
+> > The #define for the old name can and should be removed once all patches
+> > currently in flux still relying on platform_get_irq_optional() are
+> > fixed.
+>=20
+>    Hm... I'm afraid that with this #define they would never get fixed... =
+:-)
 
-Also publish the actual fan rpm in sysfs in the same place where
-_FIF objects are displayed. Knowing fan rpm is helpful to reduce noise
-level and use passive control instead. Also fan performance may not be
-same over time, so the same control value may not be enough to run the
-fan at a speed. So a feedback value of speed is helpful. This sysfs
-attribute is called "fan_speed_rpm".
+I will care for it.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
-v2-update
-Change log is missed for v2.
-Missed one kfree(obj) on failure.
-v2
-Fix for build issue as reported by Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+> > Hello,
+> >=20
+> > On Thu, Jan 13, 2022 at 02:45:30PM +0000, Mark Brown wrote:
+> >> On Thu, Jan 13, 2022 at 12:08:31PM +0100, Uwe Kleine-K=F6nig wrote:
+> >>
+> >>> This is all very unfortunate. In my eyes b) is the most sensible
+> >>> sense, but the past showed that we don't agree here. (The most annoyi=
+ng
+> >>> part of regulator_get is the warning that is emitted that regularily
+> >>> makes customers ask what happens here and if this is fixable.)
+> >>
+> >> Fortunately it can be fixed, and it's safer to clearly specify things.
+> >> The prints are there because when the description is wrong enough to
+> >> cause things to blow up we can fail to boot or run messily and
+> >> forgetting to describe some supplies (or typoing so they haven't done
+> >> that) and people were having a hard time figuring out what might've
+> >> happened.
+> >=20
+> > Yes, that's right. I sent a patch for such a warning in 2019 and pinged
+> > occationally. Still waiting for it to be merged :-\
+> > (https://lore.kernel.org/r/20190625100412.11815-1-u.kleine-koenig@pengu=
+tronix.de)
+> >=20
+> >>> I think at least c) is easy to resolve because
+> >>> platform_get_irq_optional() isn't that old yet and mechanically
+> >>> replacing it by platform_get_irq_silent() should be easy and safe.
+> >>> And this is orthogonal to the discussion if -ENOXIO is a sensible ret=
+urn
+> >>> value and if it's as easy as it could be to work with errors on irq
+> >>> lookups.
+> >>
+> >> It'd certainly be good to name anything that doesn't correspond to one
+> >> of the existing semantics for the API (!) something different rather
+> >> than adding yet another potentially overloaded meaning.
+> >=20
+> > It seems we're (at least) three who agree about this. Here is a patch
+> > fixing the name.
+>=20
+>    I can't say I genrally agree with this patch...
 
- .../acpi/fan_performance_states.rst           |  10 ++
- drivers/acpi/fan.c                            | 142 ++++++++++++++----
- 2 files changed, 125 insertions(+), 27 deletions(-)
+Yes, I didn't count you to the three people signaling agreement.
 
-diff --git a/Documentation/admin-guide/acpi/fan_performance_states.rst b/Documentation/admin-guide/acpi/fan_performance_states.rst
-index 98fe5c333121..2a5988d747e5 100644
---- a/Documentation/admin-guide/acpi/fan_performance_states.rst
-+++ b/Documentation/admin-guide/acpi/fan_performance_states.rst
-@@ -60,3 +60,13 @@ For example::
- 
- When a given field is not populated or its value provided by the platform
- firmware is invalid, the "not-defined" string is shown instead of the value.
-+
-+ACPI Fan Performance Feedback
-+=============================
-+
-+The optional _FST object provides status information for the fan device.
-+This includes field to provide current fan speed in revolutions per minute
-+at which the fan is rotating.
-+
-+This speed is presented in the sysfs using the attribute "fan_speed_rpm",
-+in the same directory as performance states.
-diff --git a/drivers/acpi/fan.c b/drivers/acpi/fan.c
-index 5cd0ceb50bc8..b1ca5530c16c 100644
---- a/drivers/acpi/fan.c
-+++ b/drivers/acpi/fan.c
-@@ -64,12 +64,19 @@ struct acpi_fan_fif {
- 	u64 low_speed_notification;
- };
- 
-+struct acpi_fan_fst {
-+	u64 revision;
-+	u64 control;
-+	u64 speed;
-+};
-+
- struct acpi_fan {
- 	bool acpi4;
- 	struct acpi_fan_fif fif;
- 	struct acpi_fan_fps *fps;
- 	int fps_count;
- 	struct thermal_cooling_device *cdev;
-+	struct device_attribute fst_speed;
- };
- 
- static struct platform_driver acpi_fan_driver = {
-@@ -89,20 +96,23 @@ static int fan_get_max_state(struct thermal_cooling_device *cdev, unsigned long
- 	struct acpi_device *device = cdev->devdata;
- 	struct acpi_fan *fan = acpi_driver_data(device);
- 
--	if (fan->acpi4)
--		*state = fan->fps_count - 1;
--	else
-+	if (fan->acpi4) {
-+		if (fan->fif.fine_grain_ctrl)
-+			*state = 100 / (int)fan->fif.step_size;
-+		else
-+			*state = fan->fps_count - 1;
-+	} else {
- 		*state = 1;
-+	}
-+
- 	return 0;
- }
- 
--static int fan_get_state_acpi4(struct acpi_device *device, unsigned long *state)
-+static int fan_get_fps(struct acpi_device *device, struct acpi_fan_fst *fst)
- {
- 	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
--	struct acpi_fan *fan = acpi_driver_data(device);
- 	union acpi_object *obj;
- 	acpi_status status;
--	int control, i;
- 
- 	status = acpi_evaluate_object(device->handle, "_FST", NULL, &buffer);
- 	if (ACPI_FAILURE(status)) {
-@@ -119,31 +129,51 @@ static int fan_get_state_acpi4(struct acpi_device *device, unsigned long *state)
- 		goto err;
- 	}
- 
--	control = obj->package.elements[1].integer.value;
-+	fst->revision = obj->package.elements[0].integer.value;
-+	fst->control = obj->package.elements[1].integer.value;
-+	fst->speed = obj->package.elements[2].integer.value;
-+
-+	status = 0;
-+err:
-+	kfree(obj);
-+	return status;
-+}
-+
-+static int fan_get_state_acpi4(struct acpi_device *device, unsigned long *state)
-+{
-+	struct acpi_fan *fan = acpi_driver_data(device);
-+	struct acpi_fan_fst fst;
-+	int status;
-+	int control, i;
-+
-+	status = fan_get_fps(device, &fst);
-+	if (status)
-+		return status;
-+
-+	control = fst.control;
-+
-+	if (fan->fif.fine_grain_ctrl) {
-+		/* This control should be same what we set using _FSL by spec */
-+		if (control > 100) {
-+			dev_dbg(&device->dev, "Invalid control value returned\n");
-+			return -EINVAL;
-+		}
-+
-+		*state = control / (int)fan->fif.step_size;
-+		return 0;
-+	}
-+
- 	for (i = 0; i < fan->fps_count; i++) {
--		/*
--		 * When Fine Grain Control is set, return the state
--		 * corresponding to maximum fan->fps[i].control
--		 * value compared to the current speed. Here the
--		 * fan->fps[] is sorted array with increasing speed.
--		 */
--		if (fan->fif.fine_grain_ctrl && control < fan->fps[i].control) {
--			i = (i > 0) ? i - 1 : 0;
--			break;
--		} else if (control == fan->fps[i].control) {
-+		if (control == fan->fps[i].control)
- 			break;
--		}
- 	}
- 	if (i == fan->fps_count) {
- 		dev_dbg(&device->dev, "Invalid control value returned\n");
--		status = -EINVAL;
--		goto err;
-+		return -EINVAL;
- 	}
- 
- 	*state = i;
- 
--err:
--	kfree(obj);
- 	return status;
- }
- 
-@@ -187,12 +217,36 @@ static int fan_set_state_acpi4(struct acpi_device *device, unsigned long state)
- {
- 	struct acpi_fan *fan = acpi_driver_data(device);
- 	acpi_status status;
-+	u64 value = state;
-+	int max_state;
-+
-+	if (fan->fif.fine_grain_ctrl)
-+		max_state = 100 / (int)fan->fif.step_size;
-+	else
-+		max_state = fan->fps_count - 1;
- 
--	if (state >= fan->fps_count)
-+	if (state > max_state)
- 		return -EINVAL;
- 
--	status = acpi_execute_simple_method(device->handle, "_FSL",
--					    fan->fps[state].control);
-+	if (fan->fif.fine_grain_ctrl) {
-+		int rem;
-+
-+		value *= fan->fif.step_size;
-+
-+		/*
-+		 * In the event OSPM’s incremental selections of Level
-+		 * using the StepSize field value do not sum to 100%,
-+		 * OSPM may select an appropriate ending Level
-+		 * increment to reach 100%.
-+		 */
-+		rem = 100 - value;
-+		if (rem && rem < fan->fif.step_size)
-+			value = 100;
-+	} else {
-+		value = fan->fps[state].control;
-+	}
-+
-+	status = acpi_execute_simple_method(device->handle, "_FSL", value);
- 	if (ACPI_FAILURE(status)) {
- 		dev_dbg(&device->dev, "Failed to set state by _FSL\n");
- 		return status;
-@@ -258,6 +312,12 @@ static int acpi_fan_get_fif(struct acpi_device *device)
- 		status = -EINVAL;
- 	}
- 
-+	/* If there is a bug in step size and set as 0, change to 1 */
-+	if (!fan->fif.step_size)
-+		fan->fif.step_size = 1;
-+	/* If step size > 9, change to 9 (by spec valid values 1-9) */
-+	if (fan->fif.step_size > 9)
-+		fan->fif.step_size = 9;
- err:
- 	kfree(obj);
- 	return status;
-@@ -303,6 +363,19 @@ static ssize_t show_state(struct device *dev, struct device_attribute *attr, cha
- 	return count;
- }
- 
-+static ssize_t show_fan_speed(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct acpi_device *acpi_dev = container_of(dev, struct acpi_device, dev);
-+	struct acpi_fan_fst fst;
-+	int status;
-+
-+	status = fan_get_fps(acpi_dev, &fst);
-+	if (status)
-+		return status;
-+
-+	return sprintf(buf, "%lld\n", fst.speed);
-+}
-+
- static int acpi_fan_get_fps(struct acpi_device *device)
- {
- 	struct acpi_fan *fan = acpi_driver_data(device);
-@@ -311,15 +384,25 @@ static int acpi_fan_get_fps(struct acpi_device *device)
- 	acpi_status status;
- 	int i;
- 
-+	/* _FST is present if we are here */
-+	sysfs_attr_init(&fan->fst_speed.attr);
-+	fan->fst_speed.show = show_fan_speed;
-+	fan->fst_speed.store = NULL;
-+	fan->fst_speed.attr.name = "fan_speed_rpm";
-+	fan->fst_speed.attr.mode = 0444;
-+	status = sysfs_create_file(&device->dev.kobj, &fan->fst_speed.attr);
-+	if (status)
-+		return status;
-+
- 	status = acpi_evaluate_object(device->handle, "_FPS", NULL, &buffer);
- 	if (ACPI_FAILURE(status))
--		return status;
-+		goto rem_attr;
- 
- 	obj = buffer.pointer;
- 	if (!obj || obj->type != ACPI_TYPE_PACKAGE || obj->package.count < 2) {
- 		dev_err(&device->dev, "Invalid _FPS data\n");
- 		status = -EINVAL;
--		goto err;
-+		goto rem_attr;
- 	}
- 
- 	fan->fps_count = obj->package.count - 1; /* minus revision field */
-@@ -368,6 +451,11 @@ static int acpi_fan_get_fps(struct acpi_device *device)
- 
- err:
- 	kfree(obj);
-+	if (!status)
-+		return 0;
-+rem_attr:
-+	sysfs_remove_file(&device->dev.kobj, &fan->fst_speed.attr);
-+
- 	return status;
- }
- 
--- 
-2.34.1
+> [...]
+> > diff --git a/include/linux/platform_device.h b/include/linux/platform_d=
+evice.h
+> > index 7c96f169d274..6d495f15f717 100644
+> > --- a/include/linux/platform_device.h
+> > +++ b/include/linux/platform_device.h
+> > @@ -69,7 +69,14 @@ extern void __iomem *
+> >  devm_platform_ioremap_resource_byname(struct platform_device *pdev,
+> >  				      const char *name);
+> >  extern int platform_get_irq(struct platform_device *, unsigned int);
+> > -extern int platform_get_irq_optional(struct platform_device *, unsigne=
+d int);
+> > +extern int platform_get_irq_silent(struct platform_device *, unsigned =
+int);
+> > +
+> > +/*
+> > + * platform_get_irq_optional was recently renamed to platform_get_irq_=
+silent.
+> > + * Fixup users to not break patches that were created before the renam=
+e.
+> > + */
+> > +#define platform_get_irq_optional(pdev, index) platform_get_irq_silent=
+(pdev, index)
+> > +
+>=20
+>    Yeah, why bother fixing if it compiles anyway?
 
+The plan is to remove the define in one or two kernel releases. The idea
+is only to not break patches that are currently in next.
+
+>    I think an inline wrapper with an indication to gcc that the function =
+is deprecated
+> (I just forgot how it should look) would be better instead...
+
+The deprecated function annotation is generally frowned upon. See
+771c035372a0.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--gs4ynp4fq77e5cup
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHh3S8ACgkQwfwUeK3K
+7AkDXQf/U5FAV2AAfHdpPoYhXkPobJeAf5Dqsq9HthaQ/4EsbgoDzhwXUQuRqgGp
+s3l08rbKnPAXvuz91TT4s4P4EfflDVbvLMELaacliZW9A2Zubif0kRa5i7noZtww
+bMiLnHbf6jZNoGKWayBhA0I+mD3ItG2bJkiZMPC9EauwofQRd5TZEOFEnf0MOQYR
+WDceoBK0StFIaNP+azd2h5Mkfo+sy70ZLX3i1E5+f2X9Iac4pOldU5N65ldsgg9N
+AVzKdnYk6h5IpXqZaytMAGpMn9j4OQHJGDLA8zo0jjwjnK+1JHnoGFwlJO43H0af
+61XlzqllsW1diNuTEAhAtFOrNwsDYQ==
+=Iw62
+-----END PGP SIGNATURE-----
+
+--gs4ynp4fq77e5cup--

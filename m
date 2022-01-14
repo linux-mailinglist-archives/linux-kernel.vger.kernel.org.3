@@ -2,95 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BF848EB0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4445D48EB14
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241424AbiANNqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 08:46:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235698AbiANNqU (ORCPT
+        id S241424AbiANNtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 08:49:14 -0500
+Received: from mail-oi1-f182.google.com ([209.85.167.182]:33705 "EHLO
+        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236966AbiANNtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 08:46:20 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4247EC06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:46:20 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id t24so35108812edi.8
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:46:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GWRH+rvwHqP1z4qchF8L9hZG2NGx1v2K+/SKPTErMzY=;
-        b=YgoipMgKyro6jhYaoBISHi6o0+jzJtH4pf7nE3n8Il8c9EeiBNt04Y0WBlh3M+Lo1B
-         DitUOHbXTcE8ForIPXgyFrU3bYuRCXzvRPEfCnoBL0exnKMjLqKN8+XdplsJ8ivFf2W4
-         m0gOXN1tK9WVG8zjW79Cn57gnc105aPJuGABE=
+        Fri, 14 Jan 2022 08:49:13 -0500
+Received: by mail-oi1-f182.google.com with SMTP id x193so12282017oix.0;
+        Fri, 14 Jan 2022 05:49:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GWRH+rvwHqP1z4qchF8L9hZG2NGx1v2K+/SKPTErMzY=;
-        b=mlUbMOV4LdGuD0AsMjk+sT0iBCNjGVe3/Juhm5HigaRf2D+wzwXztO6JhHJUmXnzVV
-         3Zsg5fdIz7MKFrwGKKUQpjRmJ01vHTTsR+K8B7ihqYQPbyNVSME4prR0oM+Pti7Kw8vy
-         qdwC5mykstRPMI8klvoX7X/sXbtme+RKcjnOpKyoJmM0fYgOypicyDkYycmDr1n5egpv
-         SIsoYqCQfBto4RWkux69SnkP5gjmOjBCjV0YyDxVDzfllCkbUnyqEF0AJswroROvBYp7
-         xtSMMPRkjb7tjgwbypUNBdzxmtZtpE7VxaGK11/9Hu3ITlho9rI0abmr5nhTvqXcZLu3
-         wgEg==
-X-Gm-Message-State: AOAM533+JhkdSqYWx8SUjLkTf4m3dDBVhd+NLIYrtw2gicRMxBxSo0O4
-        /qIGudalxPLZs5311z0nUU/ILPmQmyVOLtWm
-X-Google-Smtp-Source: ABdhPJzBwUX8zmIUoxn7JxwnWF7yT4Cjr/ldQKwhyVT9P6+4J4z1PgeB8h0YBGzUzHlMnrV3I46CFw==
-X-Received: by 2002:a05:6402:3551:: with SMTP id f17mr8848197edd.64.1642167978653;
-        Fri, 14 Jan 2022 05:46:18 -0800 (PST)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id 13sm1858091ejh.225.2022.01.14.05.46.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 05:46:18 -0800 (PST)
-Received: by mail-wr1-f45.google.com with SMTP id s1so15704634wra.6
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:46:17 -0800 (PST)
-X-Received: by 2002:a5d:4575:: with SMTP id a21mr8140206wrc.281.1642167977708;
- Fri, 14 Jan 2022 05:46:17 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=B+AfKsQIJxC792VJgj63R3rMU3bH/e+JiSQPxpb/PgA=;
+        b=CThA8zH1Yu5NzfG7RPNjwSJYIECd/s9/lQVUAeR3pqmoLwAVUQBw6lsCrwXqUmpwV/
+         YK45SMt64Gs2jlkA6aP0MO5e9XgUy0CXcFX/wBAEG3580q/9in1YPwOrPrf6A/n3G0vS
+         6ltTkUD4h8S3s2Mtc05NTwP48p4/9tnFObsSAufkEWry9fuA9hpw2V2ydfczSOdfa7gV
+         Tco4Q95ly2w80Gw3tXQcyHd9jSYiABksTajvXbADgGSff9HAGPVZKdPjw0KT4rzBCkm6
+         IxKHn0AEFa4zgE2GI9FxV7uelqeux5SU+riGBNLwkegmYosPQf0hUhNY/siKOxeV+tiw
+         fTPg==
+X-Gm-Message-State: AOAM530eqpz7YoHqfgxC7aH2w+zudcOVNgH3FqBR1T6GqTjDbeRiIvWF
+        K9KzjMlSedjZhvvAQ1Rm1+Kf9SpbMQ==
+X-Google-Smtp-Source: ABdhPJxmmpHFexPzfp142xVob3UE2xRtzttqlu0uvjFB2qTPN7Q740l/qG4ZqqAAkRskJZeKthLPSQ==
+X-Received: by 2002:a05:6808:124d:: with SMTP id o13mr7412554oiv.91.1642168150973;
+        Fri, 14 Jan 2022 05:49:10 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id n189sm1812573oif.33.2022.01.14.05.49.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 05:49:10 -0800 (PST)
+Received: (nullmailer pid 1783269 invoked by uid 1000);
+        Fri, 14 Jan 2022 13:49:09 -0000
+Date:   Fri, 14 Jan 2022 07:49:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+        kernel@axis.com, linux-kernel@vger.kernel.org,
+        linux-um@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] um: Add devicetree support
+Message-ID: <YeF/Vbxo6fAt0WLp@robh.at.kernel.org>
+References: <20211208151123.29313-1-vincent.whitchurch@axis.com>
+ <20211208151123.29313-3-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-References: <31f8716fbb4f1e2a332b2b3e3243a170e8b01145.camel@HansenPartnership.com>
-In-Reply-To: <31f8716fbb4f1e2a332b2b3e3243a170e8b01145.camel@HansenPartnership.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 14 Jan 2022 14:46:01 +0100
-X-Gmail-Original-Message-ID: <CAHk-=wjx_q9Aa=o5kiiSpCC_4U+H2D1=H3umFOwVMUbFmdQjGA@mail.gmail.com>
-Message-ID: <CAHk-=wjx_q9Aa=o5kiiSpCC_4U+H2D1=H3umFOwVMUbFmdQjGA@mail.gmail.com>
-Subject: Re: [GIT PULL] first round of SCSI updates for the 5.15+ merge window
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208151123.29313-3-vincent.whitchurch@axis.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 9:22 PM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> Adrian Hunter (4):
->       scsi: ufs: ufs-pci: Add support for Intel ADL
->       scsi: ufs: Let devices remain runtime suspended during system suspend
->       scsi: ufs: core: Fix another task management completion race
->       scsi: ufs: core: Fix task management completion timeout race
-[...]
+On Wed, Dec 08, 2021 at 04:11:23PM +0100, Vincent Whitchurch wrote:
+> Add a dtb=<filename> option to boot UML with a devicetree blob.  This
+> can be used for testing driver code using UML.
 
-You seem to have forgotten to fetch my upstream tree, so your shortlog
-(or diffstat) doesn't seem to take the various fixes pulls you did for
-5.16 into account.
+Neat!
 
-The only actual new commit I got from Adrian was
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
+>  arch/um/Kconfig          |  1 +
+>  arch/um/kernel/Makefile  |  1 +
+>  arch/um/kernel/dtb.c     | 41 ++++++++++++++++++++++++++++++++++++++++
+>  arch/um/kernel/um_arch.c |  3 +++
+>  arch/um/kernel/um_arch.h |  6 ++++++
+>  5 files changed, 52 insertions(+)
+>  create mode 100644 arch/um/kernel/dtb.c
+> 
+> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+> index c18b45f75d41..1cf7ef3a2b81 100644
+> --- a/arch/um/Kconfig
+> +++ b/arch/um/Kconfig
+> @@ -18,6 +18,7 @@ config UML
+>  	select HAVE_DEBUG_KMEMLEAK
+>  	select HAVE_DEBUG_BUGVERBOSE
+>  	select NO_DMA if !UML_DMA_EMULATION
+> +	select OF_EARLY_FLATTREE
+>  	select GENERIC_IRQ_SHOW
+>  	select GENERIC_CPU_DEVICES
+>  	select HAVE_GCC_PLUGINS
+> diff --git a/arch/um/kernel/Makefile b/arch/um/kernel/Makefile
+> index 92692bfef7ae..ebd0cca3ff26 100644
+> --- a/arch/um/kernel/Makefile
+> +++ b/arch/um/kernel/Makefile
+> @@ -22,6 +22,7 @@ obj-y += load_file.o
+>  
+>  obj-$(CONFIG_BLK_DEV_INITRD) += initrd.o
+>  obj-$(CONFIG_GPROF)	+= gprof_syms.o
+> +obj-$(CONFIG_OF) += dtb.o
+>  obj-$(CONFIG_EARLY_PRINTK) += early_printk.o
+>  obj-$(CONFIG_STACKTRACE) += stacktrace.o
+>  obj-$(CONFIG_GENERIC_PCI_IOMAP) += ioport.o
+> diff --git a/arch/um/kernel/dtb.c b/arch/um/kernel/dtb.c
+> new file mode 100644
+> index 000000000000..ca69d72025f3
+> --- /dev/null
+> +++ b/arch/um/kernel/dtb.c
+> @@ -0,0 +1,41 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include <linux/init.h>
+> +#include <linux/of_fdt.h>
+> +#include <linux/printk.h>
+> +#include <linux/memblock.h>
+> +#include <init.h>
+> +
+> +#include "um_arch.h"
+> +
+> +static char *dtb __initdata;
+> +
+> +void uml_dtb_init(void)
+> +{
+> +	long long size;
+> +	void *area;
+> +
+> +	area = uml_load_file(dtb, &size);
+> +	if (!area)
+> +		return;
+> +
+> +	if (!early_init_dt_scan(area)) {
+> +		pr_err("invalid DTB %s\n", dtb);
+> +		memblock_free(area, size);
+> +		return;
+> +	}
+> +
+> +	unflatten_device_tree();
+> +	early_init_fdt_scan_reserved_mem();
 
-Adrian Hunter (1):
-      scsi: ufs: Let devices remain runtime suspended during system suspend
+These should be reversed. early_init_fdt_scan_reserved_mem() works on 
+the flat tree. Reserved memory needs to be reserved before 
+unflatten_device_tree() starts allocating memory. Though I imagine that 
+doesn't really matter for UML.
 
-and the same for other fixes..
+Also, does the dtb end up in permanently allocated memory (i.e. not 
+init)? It needs to be if not.
 
-Not a big deal, but when the shortlog and diffstat don't match what I
-get, I waste time figuring out why. So please do a "git fetch linus"
-or whatever so that git can take all your previous pulls into
-account..
-
-                Linus
+Rob

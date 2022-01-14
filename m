@@ -2,85 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF2648E3D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 06:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3079748E3DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 06:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236351AbiANFma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 00:42:30 -0500
-Received: from mga07.intel.com ([134.134.136.100]:53323 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234904AbiANFm3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 00:42:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642138949; x=1673674949;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mJtBJjwOHIIsvktCwetmxq/lvqD04SKb80xBhc5EN0k=;
-  b=lLWPUyKxan3UPrYvt/+jBVE89aHj9S++WJsZGpxKM/nkgps1J14i6/j1
-   rrsY1XMDLktdAlQZG3wyu6AJRsY9QtyxmXCMEJdLrH1Go06uCFY58KSHl
-   Xh3jz93Kwkuqmgcvd2Di84L7znM24zqWyxSV2F/G3QWKmxGejyFBx5RNI
-   szVOhRJhYsG4cuSGbZeMwYia0w/cSGJSyGH1q5+aCF3UnM1VRthvwI97A
-   JNx2amhNLXd+cJMX31JrZ9CjXRNGanCCJyneKFHLC+n1eKTnz9ljw38KX
-   t5gv7Ip0KFoYgwSoQCqiWZU3DtBvqCnD2ImkjOAxWBxb8RgaUTfGav7g8
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="307530880"
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="307530880"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 21:42:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="692079917"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 13 Jan 2022 21:42:27 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8FM2-00089r-Mb; Fri, 14 Jan 2022 05:42:26 +0000
-Date:   Fri, 14 Jan 2022 13:41:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [deller-parisc:5.16-vdso-6 1/3] kernel/signal.c:2994
- __do_sys_restart_syscall() warn: inconsistent indenting
-Message-ID: <202201141304.Om7XuSMy-lkp@intel.com>
+        id S236404AbiANFoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 00:44:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234904AbiANFoM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 00:44:12 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F23C061574;
+        Thu, 13 Jan 2022 21:44:12 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id b13so31308796edn.0;
+        Thu, 13 Jan 2022 21:44:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=2WU/q1u+ncowVTyrtjZBvLYZsp0cbhNEqqLrYsYSJiE=;
+        b=nTphanuLAjh3f+296Ts/L2/sCo6omPbhvjF6h3Ynd685DkQvLCxpGrfV+IIwybDo2X
+         lyDcj3FumLSC4J7z5dL0OjHq5R8Dj/+nShMtt3631naRgQn/CFxVeuE2Z1FRrMfp2iLY
+         xVX06Aa2YXAbXnARRl8nSHGOyK/CBhdLlM6qyz1tiHiaWcr61G/uCtO/Rx3UAaWsSmv+
+         GEcjf1u2FA7831B3gGWe3kmiJKGS6K1E5SMrENYkJL6Hzxo58IRZHjhYkie9Zkte1fd0
+         mOyNKaR+Yk6WxBlERZAxZbHdH9uais/3+Gb8cYps/JT2nKNqh/8oD83ODUeIo5yvZZ8j
+         d0nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=2WU/q1u+ncowVTyrtjZBvLYZsp0cbhNEqqLrYsYSJiE=;
+        b=rsvgezVf+fuwpYu5Q3M9I+5m66RSt+knfTKqdNXiJXWPuaVdBn9ma7kDfE1IJEQyxZ
+         uB/hIA1GFJBDjAMK6C237noOForhqG7vMMeLqI/VjBse84Cq+PFP+4NI8Qfdn9JMTazT
+         yFGbWWWGoiDhlTfd9liZiZFBmD2YOMLlnOV95U549JLV1bdf7wUgffS+SZz/ScxvmmDx
+         4294lCGjF/0Do0ulx7LsbUM5wGS8J3A+et1b9DGYmcmYSqQMItcgZcjigdzwGzuUWDWo
+         M0F6w6ZAmCJ/Ko2XrZeZUdtl/gxnejfF1XrDMmAqg7gjZdgOB90xg5CW1y6BsPykpJxm
+         sAdg==
+X-Gm-Message-State: AOAM530bUn3RS3VQogSeugA2XSelBXpt8P9F2ibxPQLBvvxbjrW0gFjT
+        kACkPN+nCPHJ+qw2kIoG6/PYmrT8Mw/M7A8Kqk4MqiGRc6I=
+X-Google-Smtp-Source: ABdhPJybJuvKa9LHYBmZuH0qGjLOBlYmhITGXhItw5r4EFL6cdU0GVqd0D4LnpvEqiHg/WVvtBXHH/s2bR5Gj5kINqM=
+X-Received: by 2002:a17:906:4781:: with SMTP id cw1mr6550136ejc.116.1642139050856;
+ Thu, 13 Jan 2022 21:44:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220111192952.49040-1-ivan@cloudflare.com> <CAA93jw6HKLh857nuh2eX2N=siYz5wwQknMaOtpkqLzpfWTGhuA@mail.gmail.com>
+ <CABWYdi0ZHYvzzP9SFOCJhnfyMP12Ot9ALEmXg75oeXBWRAD8KQ@mail.gmail.com>
+In-Reply-To: <CABWYdi0ZHYvzzP9SFOCJhnfyMP12Ot9ALEmXg75oeXBWRAD8KQ@mail.gmail.com>
+From:   Dave Taht <dave.taht@gmail.com>
+Date:   Thu, 13 Jan 2022 21:43:57 -0800
+Message-ID: <CAA93jw5+LjKLcCaNr5wJGPrXhbjvLhts8hqpKPFx7JeWG4g0AA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] tcp: bpf: Add TCP_BPF_RCV_SSTHRESH for bpf_setsockopt
+To:     Ivan Babrou <ivan@cloudflare.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Eric Dumazet <edumazet@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git 5.16-vdso-6
-head:   b7e375e2ced653c4615242d90232d4a0238dcac1
-commit: 31c51d49e3f587cdcdf22b313b5bbce80b31405f [1/3] add testing vDSO support (v5)
-config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220114/202201141304.Om7XuSMy-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+On Thu, Jan 13, 2022 at 2:56 PM Ivan Babrou <ivan@cloudflare.com> wrote:
+>
+> On Wed, Jan 12, 2022 at 1:02 PM Dave Taht <dave.taht@gmail.com> wrote:
+> > I would not use the word "latency" in this way, I would just say
+> > potentially reducing
+> > roundtrips...
+>
+> Roundtrips translate directly into latency on high latency links.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, but with the caveats below. I'm fine with you just saying round trips,
+and making this api possible.
 
-smatch warnings:
-kernel/signal.c:2994 __do_sys_restart_syscall() warn: inconsistent indenting
+It would comfort me further if you could provide an actual scenario.
 
-vim +2994 kernel/signal.c
+See also:
 
-  2983	
-  2984	/*
-  2985	 * System call entry points.
-  2986	 */
-  2987	
-  2988	/**
-  2989	 *  sys_restart_syscall - restart a system call
-  2990	 */
-  2991	SYSCALL_DEFINE0(restart_syscall)
-  2992	{
-  2993		struct restart_block *restart = &current->restart_block;
-> 2994	printk("************** RESTART SYSCALL gestartet\n");
-  2995		return restart->fn(restart);
-  2996	}
-  2997	
+https://datatracker.ietf.org/doc/html/rfc6928
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+which predates packet pacing (are you using sch_fq?)
+
+>
+> > and potentially massively increasing packet loss, oversaturating
+> > links, and otherwise
+> > hurting latency for other applications sharing the link, including the
+> > application
+> > that advertised an extreme window like this.
+>
+> The receive window is going to scale up to tcp_rmem[2] with traffic,
+> and packet loss won't stop it. That's around 3MiB on anything that's
+> not embedded these days.
+>
+> My understanding is that congestion control on the sender side deals
+> with packet loss, bottleneck saturation, and packet pacing. This patch
+> only touches the receiving side, letting the client scale up faster if
+> they choose to do so. I don't think any out of the box sender will
+> make use of this, even if we enable it on the receiver, just because
+> the sender's congestion control constraints are lower (like
+> initcwnd=3D10).
+
+I've always kind of not liked the sender/reciever "language" in tcp.
+
+they are peers.
+
+> Let me know if any of this doesn't look right to you.
+>
+> > This overall focus tends to freak me out somewhat, especially when
+> > faced with further statements that cloudflare is using an initcwnd of 2=
+50!???
+>
+> Congestion window is a learned property, not a static number. You
+> won't get a large initcwnd towards a poor connection.
+
+initcwnd is set globally or on a per route basis.
+
+> We have a dedicated backbone with different properties.
+
+It's not so much that I don't think your backbone can handle this...
+
+... it's the prospect of handing whiskey, car keys and excessive
+initcwnd to teenage boys on a saturday night.
+
+--=20
+I tried to build a better future, a few times:
+https://wayforward.archive.org/?site=3Dhttps%3A%2F%2Fwww.icei.org
+
+Dave T=C3=A4ht CEO, TekLibre, LLC

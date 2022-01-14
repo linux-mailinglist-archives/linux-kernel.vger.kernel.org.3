@@ -2,74 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F3148E6ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1526D48E6FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237985AbiANIxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:53:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiANIxL (ORCPT
+        id S239483AbiANIzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:55:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37825 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230160AbiANIzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:53:11 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0A7C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 00:53:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XDdFiFYcMGjCRySrjyxXHgb42tImQV0MD5bVeKoPEFU=; b=U7F/KxmsVN8BvK8HHguJBC5oND
-        ZjWbpqt+Jb0lYCWHk3f+4H2bPtpy08rL/7ImuspsyEqzM3FAKdBdKHrvzprUlXew8zugXXoXtbkT+
-        do9Eop2wMDfMK0k7+isOSyGetFbnNBy1T2hR8Gf41MEgmv6DrwAWsNAl8ozO/wBiQGv7KBNf91NXq
-        bUD2Pb9T575+cToGoIs4UlHUSlINnRZvkLGlMi2JG9Bsqxwi6pJBo1mAjZ4IPhm8/yuZ4rwueESQl
-        tchc3b/yKGFDURRX5yNRGIAV1QTuP4heE90zBba4NIf9F72mo3JYEB9keMaP4wvyTGFLNvnzKJ9dZ
-        UV2UqBCw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n8IKa-0017Cv-3Q; Fri, 14 Jan 2022 08:53:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BC3D23002C1;
-        Fri, 14 Jan 2022 09:53:07 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A0C9B3023C766; Fri, 14 Jan 2022 09:53:07 +0100 (CET)
-Date:   Fri, 14 Jan 2022 09:53:07 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sergei Trofimovich <slyich@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH] objtool: check: give big enough buffer for pv_ops
-Message-ID: <YeE588tXLrgWoUu4@hirez.programming.kicks-ass.net>
-References: <20220114075756.838243-1-slyich@gmail.com>
+        Fri, 14 Jan 2022 03:55:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642150540;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UO215vY0TsZ7UGo51cf2geQhbDmO34SD1bUwZDInbqI=;
+        b=Jhrwfc9oAxExFcRLG/DJWwBIKkbw13wSs7L2jS1HlgO5Oqv2j9KOqvvNhN7uyjio7NQczK
+        FOH13btCervn1rE0sbRfR+7K/9Jazj/gEUwROyh2JO8+6QM0z/PeRiki0D87OCZ18ftWLt
+        avPKogEG/aj8D8mnWPxltfp5mMu1sE4=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-205-pisTjhReM86TkfQVcsjB3w-1; Fri, 14 Jan 2022 03:55:39 -0500
+X-MC-Unique: pisTjhReM86TkfQVcsjB3w-1
+Received: by mail-wm1-f70.google.com with SMTP id n13-20020a05600c3b8d00b0034979b7e200so2043987wms.4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 00:55:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UO215vY0TsZ7UGo51cf2geQhbDmO34SD1bUwZDInbqI=;
+        b=DsawF+oR4oqe5SqLzRWKEcSch1knN+0pBEkcpISZ6VAztBhhadfT8/BnBE2A+9yc7A
+         VV/6CbIca2cz/N2b7HjPwxHem/aafI/OsFEqSvovXV34JMwQ+XzTIatAV46KyXQYhiJh
+         7iqMQ2mdrhZeYRUO6LBcMCsU/EGCStdg8c5oZY53W4RyKPMP4xJlkgdeUYDqV7CGaY8H
+         YyxOfcFMbiA2Z/mRu3+nu5+1wmnyaPAlLKbWOGnGKGuUFqqXFutdbhU7e22NgUoawuFz
+         SQlz+DANlt2EQBEmsuXmE1HnXE+TSeEPDfno0tyFe2sbIxWcalcQ56Wwe/NRdfBfDvHG
+         eg0A==
+X-Gm-Message-State: AOAM53087o0pHm25rGR37N9gfbVNFE6PxGdwnO6/IfNHlQitghjs6j96
+        eH0orY2ZX5SJYutXvdvUFa18Tnf0Fx+jracpwsmusqes/KeB5H3zrYujxj68aqGeoZh0bgVhnVO
+        Fs03H30M/S/VZWPM6PPcmWJ8p
+X-Received: by 2002:a1c:770b:: with SMTP id t11mr7386900wmi.61.1642150537774;
+        Fri, 14 Jan 2022 00:55:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzIO5huFyW3FnXxDXwl3aS4/QSRgEkcnYKKgfAejE8iqE1Tc9WIb6Q1yxCQ6lkdhH96uPNJYA==
+X-Received: by 2002:a1c:770b:: with SMTP id t11mr7386870wmi.61.1642150537479;
+        Fri, 14 Jan 2022 00:55:37 -0800 (PST)
+Received: from localhost (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.gmail.com with ESMTPSA id h10sm5961643wmh.0.2022.01.14.00.55.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 00:55:36 -0800 (PST)
+Date:   Fri, 14 Jan 2022 09:55:35 +0100
+From:   Igor Mammedov <imammedo@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+Message-ID: <20220114095535.0f498707@redhat.com>
+In-Reply-To: <YeCowpPBEHC6GJ59@google.com>
+References: <20211122175818.608220-1-vkuznets@redhat.com>
+        <20211122175818.608220-3-vkuznets@redhat.com>
+        <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
+        <20211227183253.45a03ca2@redhat.com>
+        <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
+        <87mtkdqm7m.fsf@redhat.com>
+        <20220103104057.4dcf7948@redhat.com>
+        <YeCowpPBEHC6GJ59@google.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220114075756.838243-1-slyich@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 07:57:56AM +0000, Sergei Trofimovich wrote:
-> On gcc-12 build fails flagging possible buffer overflow:
+On Thu, 13 Jan 2022 22:33:38 +0000
+Sean Christopherson <seanjc@google.com> wrote:
+
+> On Mon, Jan 03, 2022, Igor Mammedov wrote:
+> > On Mon, 03 Jan 2022 09:04:29 +0100
+> > Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+> >   
+> > > Paolo Bonzini <pbonzini@redhat.com> writes:
+> > >   
+> > > > On 12/27/21 18:32, Igor Mammedov wrote:    
+> > > >>> Tweaked and queued nevertheless, thanks.    
+> > > >> it seems this patch breaks VCPU hotplug, in scenario:
+> > > >> 
+> > > >>    1. hotunplug existing VCPU (QEMU stores VCPU file descriptor in parked cpus list)
+> > > >>    2. hotplug it again (unsuspecting QEMU reuses stored file descriptor when recreating VCPU)
+> > > >> 
+> > > >> RHBZ:https://bugzilla.redhat.com/show_bug.cgi?id=2028337#c11
+> > > >>     
+> > > >
+> > > > The fix here would be (in QEMU) to not call KVM_SET_CPUID2 again. 
+> > > > However, we need to work around it in KVM, and allow KVM_SET_CPUID2 if 
+> > > > the data passed to the ioctl is the same that was set before.    
+> > > 
+> > > Are we sure the data is going to be *exactly* the same? In particular,
+> > > when using vCPU fds from the parked list, do we keep the same
+> > > APIC/x2APIC id when hotplugging? Or can we actually hotplug with a
+> > > different id?  
+> > 
+> > If I recall it right, it can be a different ID easily.  
 > 
->     check.c: In function 'validate_call':
->     check.c:2865:58: error: '%d' directive output may be truncated writing between 1 and 10 bytes into a region of size 9 [-Werror=format-truncation=]
->      2865 |                 snprintf(pvname, sizeof(pvname), "pv_ops[%d]", idx);
->           |                                                          ^~
+> No, it cannot.  KVM doesn't provide a way for userspace to change the APIC ID of
+> a vCPU after the vCPU is created.  x2APIC flat out disallows changing the APIC ID,
+> and unless there's magic I'm missing, apic_mmio_write() => kvm_lapic_reg_write()
+> is not reachable from userspace.
 > 
-> I think it's a valid warning:
+> The only way for userspace to set the APIC ID is to change vcpu->vcpu_id, and that
+> can only be done at KVM_VCPU_CREATE.
 > 
->     static char pvname[16];
->     int idx;
+> So, reusing a parked vCPU for hotplug must reuse the same APIC ID.  QEMU handles
+> this by stashing the vcpu_id, a.k.a. APIC ID, when parking a vCPU, and reuses a
+> parked vCPU if and only if it has the same APIC ID.  And because QEMU derives the
+> APIC ID from topology, that means all the topology CPUID leafs must remain the
+> same, otherwise the guest is hosed because it will send IPIs to the wrong vCPUs.
+
+Indeed, I was wrong.
+I just checked all cpu unplug history in qemu. It was introduced in qemu-2.7
+and from the very beginning it did stash vcpu_id,
+so there is no old QEMU that would re-plug VCPU with different apic_id.
+Though tells us nothing about what other userspace implementations might do.
+
+However, a problem of failing KVM_SET_CPUID2 during VCPU re-plug
+is still there and re-plug will fail if KVM rejects repeated KVM_SET_CPUID2
+even if ioctl called with exactly the same CPUID leafs as the 1st call.
+
+
+>   static int do_kvm_destroy_vcpu(CPUState *cpu)
+>   {
+>     struct KVMParkedVcpu *vcpu = NULL;
+> 
 >     ...
->     idx = (rel->addend / sizeof(void *));
->     snprintf(pvname, sizeof(pvname), "pv_ops[%d]", idx);
 > 
-> we have only 7 chars for %d while it could take up to 9.
+>     vcpu = g_malloc0(sizeof(*vcpu));
+>     vcpu->vcpu_id = kvm_arch_vcpu_id(cpu); <=== stash the APIC ID when parking
+>     vcpu->kvm_fd = cpu->kvm_fd;
+>     QLIST_INSERT_HEAD(&kvm_state->kvm_parked_vcpus, vcpu, node);
+> err:
+>     return ret;
+>   }
+> 
+>   static int kvm_get_vcpu(KVMState *s, unsigned long vcpu_id)
+>   {
+>     struct KVMParkedVcpu *cpu;
+> 
+>     QLIST_FOREACH(cpu, &s->kvm_parked_vcpus, node) {
+>         if (cpu->vcpu_id == vcpu_id) {  <=== reuse if APIC ID matches
+>             int kvm_fd;
+> 
+>             QLIST_REMOVE(cpu, node);
+>             kvm_fd = cpu->kvm_fd;
+>             g_free(cpu);
+>             return kvm_fd;
+>         }
+>     }
+> 
+>     return kvm_vm_ioctl(s, KVM_CREATE_VCPU, (void *)vcpu_id);
+>   }
+> 
 
-Right, very unlikely to have that many pv_ops, but it doesn't hurt to
-fix this.
-
-Thanks!

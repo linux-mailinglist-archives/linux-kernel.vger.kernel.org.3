@@ -2,75 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4114848E288
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 03:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E9B48E28D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 03:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238852AbiANCa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 21:30:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235069AbiANCaW (ORCPT
+        id S238778AbiANCex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 21:34:53 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46776 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234029AbiANCew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 21:30:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B47C061574;
-        Thu, 13 Jan 2022 18:30:22 -0800 (PST)
+        Thu, 13 Jan 2022 21:34:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7AF1CB821C9;
-        Fri, 14 Jan 2022 02:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EBEEC36AEB;
-        Fri, 14 Jan 2022 02:30:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5915AB823F5;
+        Fri, 14 Jan 2022 02:34:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3EC7C36AE3;
+        Fri, 14 Jan 2022 02:34:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642127420;
-        bh=2ebsmgfl6HWYNDrMyMRyrSK/7zuFiBDF852CKK3RFbM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CbJiS7xqwlh/Tmvl1k7CfBigp+Hlddx9tMbNU7j7mC45tXH6eR5/Plox5+57J6vkM
-         HY9oPVjz4B0j/aeecyawTEGabbfamGx54bTYdBlNBUcpUnABKyvgWOGoutK5Nv6ikQ
-         4dE7YwUl7JUSHSZ6dDoMXqfz2GegvbV57Ro4FaGtQ7qgBl518cKL5ECupBSoe2+Hr7
-         A73ubqQuOeYTW1bDfPLwqu2vUUyxseydasYVyMLLy4qiH0W1rp05UTZxeogARIrVfr
-         LXzCVLQXeQMinvc2iXRaodm8MKQ1U7VaXW2/1qUxaaGGFo3z6zUZcQTwJD5Op8S+nZ
-         +hpW5z4lGbqYQ==
-Received: by mail-ed1-f53.google.com with SMTP id a18so29967303edj.7;
-        Thu, 13 Jan 2022 18:30:20 -0800 (PST)
-X-Gm-Message-State: AOAM533mgtxRi8xR8drCUDIzpBMyzw1Anx49RNqUwWZnQ+F0Ka67+aPW
-        9qlxmKE1W65WdVVZYl+4rA0xrcK4pz86n3+ZQQ==
-X-Google-Smtp-Source: ABdhPJzQuUwTo+YAUp1MFy3Egme1Ft6/mg5bXZAFRg77QALC/m2dtKghKRICRPO7KkebK3UcJQYTEAYyEl4ueCZ9/bs=
-X-Received: by 2002:a05:6402:3456:: with SMTP id l22mr2575585edc.280.1642127418656;
- Thu, 13 Jan 2022 18:30:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20220113085208.2636517-1-michael@walle.cc> <3072e2f28b4f2569f5861093768398c8@walle.cc>
-In-Reply-To: <3072e2f28b4f2569f5861093768398c8@walle.cc>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 13 Jan 2022 20:30:07 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+NDje8TTPWAKPKKuA6bMHEO17LFXfKJPxgbE_394bkdg@mail.gmail.com>
-Message-ID: <CAL_Jsq+NDje8TTPWAKPKKuA6bMHEO17LFXfKJPxgbE_394bkdg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] of: base: of_parse_phandle() fixes and new variant
-To:     Michael Walle <michael@walle.cc>
-Cc:     devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        s=k20201202; t=1642127690;
+        bh=1zycz2e46vXoUD4sZJQiVQh6Wt3eKK/5paZ5/M+Am9k=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=EoCfiU2jgjQfdrsiRLL4qry/kpJj+bEZ7S+J4ipvnWI6vyHd6mrARwMKEbU01Na3X
+         mDLRSIWU1DSKjE7iRLjiecfJvsd2NFV/B4xBO668n9/bczVcsL5Ysrwu8LNzpdE2h6
+         JkU5VhFGRLL2qiNEgNo46CG85+osyXeTwc47k5ZbN+AZEgirzkXzIfq65BDP3q9+AF
+         Ps8WQdmrgJQZ1oBXyIyle/4L14Y/iZ1CkU7+wZanJpyK77f8LnFC9kAVpL/aGesQ9U
+         qmMfqNq1gGoaECfDNenA6jpGOQJ4fhpTJ1qp6IXq/DIq9ZiOp1DY7l+Y+KqW94JlHB
+         GwvbWA/EpYLMg==
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 6150427C0054;
+        Thu, 13 Jan 2022 21:34:48 -0500 (EST)
+Received: from imap48 ([10.202.2.98])
+  by compute5.internal (MEProxy); Thu, 13 Jan 2022 21:34:48 -0500
+X-ME-Sender: <xms:R-HgYYKeqp_Pf6vT461iO_w1CsQPy2fiKC1xl0b8ZhdO4cxRvKR17Q>
+    <xme:R-HgYYJl3GkF7zK7kuKktneJDAEpwQSU2XN_cj0XvMGVb47hyrjG67z1BcOhh_Osf
+    gt80WUE-yN9G8hFz_w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrtdeggdegkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehnugih
+    ucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecuggftrf
+    grthhtvghrnhephfegffegkeefkedvffehleehgfeileeutdfhieegkeeuheegvdektdet
+    fffhtedvnecuffhomhgrihhnpehouhhtrdhtohholhhsnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghnugihodhmvghsmhhtphgruhhthhhp
+    vghrshhonhgrlhhithihqdduudeiudekheeifedvqddvieefudeiiedtkedqlhhuthhope
+    epkhgvrhhnvghlrdhorhhgsehlihhnuhigrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:R-HgYYtcQl2oyw4bWnOw_izI-NxIW2JF6wL7D2aa6bQVdO0t58aQ4A>
+    <xmx:R-HgYVa1bXNSWpCOtIxItKMJGQsJO_cMiPMiEEMgeR5bi_Pf2K2cUQ>
+    <xmx:R-HgYfY9LbILUfGpQFrFlnJpDFm0Dej8dSCDyRk2roSmwkYf7C0d8Q>
+    <xmx:SOHgYcQ513uXepiIzysiDcFz4JVeK6o1sHQuKIrL4lWIDlEtkHvdyodkBP8>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B567B21E0073; Thu, 13 Jan 2022 21:34:47 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4569-g891f756243-fm-20220111.001-g891f7562
+Mime-Version: 1.0
+Message-Id: <5a4f01f4-cd16-47dd-880b-dcfb7ec5daeb@www.fastmail.com>
+In-Reply-To: <87lezjxpnc.fsf@oldenburg.str.redhat.com>
+References: <3a1c8280967b491bf6917a18fbff6c9b52e8df24.1641398395.git.fweimer@redhat.com>
+ <54ae0e1f8928160c1c4120263ea21c8133aa3ec4.1641398395.git.fweimer@redhat.com>
+ <034075bd-aac5-9b97-6d09-02d9dd658a0b@kernel.org>
+ <87lezjxpnc.fsf@oldenburg.str.redhat.com>
+Date:   Thu, 13 Jan 2022 18:34:20 -0800
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Florian Weimer" <fweimer@redhat.com>
+Cc:     linux-arch@vger.kernel.org,
+        "Linux API" <linux-api@vger.kernel.org>,
+        linux-x86_64@vger.kernel.org, kernel-hardening@lists.openwall.com,
+        linux-mm@kvack.org, "the arch/x86 maintainers" <x86@kernel.org>,
+        musl@lists.openwall.com,
+        "Dave Hansen via Libc-alpha" <libc-alpha@sourceware.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Dave Hansen" <dave.hansen@intel.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Andrei Vagin" <avagin@gmail.com>
+Subject: Re: [PATCH v3 2/3] selftests/x86/Makefile: Support per-target $(LIBS)
+ configuration
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 6:22 AM Michael Walle <michael@walle.cc> wrote:
+On Thu, Jan 13, 2022, at 2:00 PM, Florian Weimer wrote:
+> * Andy Lutomirski:
 >
-> Am 2022-01-13 09:52, schrieb Michael Walle:
-> > This series is a result of the discussion in [1]. Rob suggested to
-> > convert
-> > the index parameter to unsigned int and drop the check for negative
-> > values
-> > and make them static inline.
+>> On 1/5/22 08:03, Florian Weimer wrote:
+>>> And avoid compiling PCHs by accident.
+>>> 
+>>
+>> The patch seems fine, but I can't make heads or tails of the
+>> $SUBJECT. Can you help me?
 >
-> Oh I haven't thought this through.. If this is going via another tree
-> than
-> the nvmem patches, then I'd need either wait one kernel release, or
-> there
-> need to be an immutable tag, right?
+> What about this?
+>
+> selftests/x86/Makefile: Set linked libraries using $(LIBS)
+>
+> I guess that it's possible to use make features to set this per target
+> isn't important.
 
-I can pick this up for 5.17-rc1 if we can get it sorted soon.
+I think that's actually important -- it's nice to explain to make dummies (e.g. me) what the purpose is is.  I assume it's so that a given test can override the libraries.  Also, you've conflated two different changes into one patch: removal of .h and addition of LIBS.
 
-Rob
+--Andy
+
+
+
+>
+> Thanks,
+> Florian
+>
+>>> Signed-off-by: Florian Weimer <fweimer@redhat.com>
+>>> ---
+>>> v3: Patch split out.
+>>>   tools/testing/selftests/x86/Makefile | 6 ++++--
+>>>   1 file changed, 4 insertions(+), 2 deletions(-)
+>>> diff --git a/tools/testing/selftests/x86/Makefile
+>>> b/tools/testing/selftests/x86/Makefile
+>>> index 8a1f62ab3c8e..0993d12f2c38 100644
+>>> --- a/tools/testing/selftests/x86/Makefile
+>>> +++ b/tools/testing/selftests/x86/Makefile
+>>> @@ -72,10 +72,12 @@ all_64: $(BINARIES_64)
+>>>   EXTRA_CLEAN := $(BINARIES_32) $(BINARIES_64)
+>>>     $(BINARIES_32): $(OUTPUT)/%_32: %.c helpers.h
+>>> -	$(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl -lm
+>>> +	$(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $(filter-out %.h, $^) \
+>>> +		$(or $(LIBS), -lrt -ldl -lm)
+>>>     $(BINARIES_64): $(OUTPUT)/%_64: %.c helpers.h
+>>> -	$(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl
+>>> +	$(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $(filter-out %.h, $^) \
+>>> +		$(or $(LIBS), -lrt -ldl -lm)
+>>>     # x86_64 users should be encouraged to install 32-bit libraries
+>>>   ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),01)

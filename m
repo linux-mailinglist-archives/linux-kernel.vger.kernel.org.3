@@ -2,101 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AFE48E434
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E879348E436
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239352AbiANGXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:23:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S239361AbiANGYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:24:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236448AbiANGXo (ORCPT
+        with ESMTP id S236448AbiANGYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:23:44 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09D7C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:23:43 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id n11so10513248plf.4
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:23:43 -0800 (PST)
+        Fri, 14 Jan 2022 01:24:06 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7666C06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:24:05 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id hv15so12544333pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:24:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=YlBuHVJNhLTTS49RUYF71HhX7jm/XgcILxOyefrpYh4=;
-        b=ff9TSWN6sHPkw/cOIiKlFzpwxBYyzIM2oodoXjW2UpJogE/8korjmOKlonPOjLEGFZ
-         oI/ntzLW8FeD7MaqZgYNfc99VS2UwUzDYf0fSiYZiHcfh+HkIE1UySexNS9EKwUMxXK4
-         U5Gs1I4QvjuNE3hUe4tgpvcdkFUp8iZJOCDbPWzce5SUg1NBn74nLvoeTvj4VUC5IwH8
-         bP9tF1z29kpBVh2GQb6bz+r55vn2Hlco/thudioU/fx9gEAi4YRQ3Sn6MYuFmSYLlJzk
-         ZMaUo5ybY6MWUpr1Z7coC+3LD87IC/ntJcJq7xFUzS6iA1hCPZVnByIF05ZbUMu/oBgt
-         AEog==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=efD7MXnSTwwB5xVjXzKnpMf87tT71yAx/cljfnEhNas=;
+        b=VGerjJAK8GzUatgIVU0a+8oCQmLsZwZaA+xK/n8dg9nnhsCwi/cLvyukvffHwbq4lD
+         KUfhzEQDfHJ3FYQFDjf3LmONir9tuCFjuR8y8YaMKZaXGG7AkFWUIkVcXQmn/4eRmCng
+         jm6TqwihJHpnT5w4Rtz9yeYnmgsj/596lDOnlOI5WxnBOLAY+Dn/CUdUt//Oqn89O9xX
+         5K5aNFzbE9ndV89wLtwYSCJIyuPEKzB5JZcATTObSRZ0LF2ryCXr9GwRsphLbHwK1Dz5
+         mFl0gV7bAhaYxQp4RtohXeS+M/y0JGauajd/X3ewewRMHVIMEvFdPOX5lWBO5GSl2h6k
+         3+PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=YlBuHVJNhLTTS49RUYF71HhX7jm/XgcILxOyefrpYh4=;
-        b=vutmeShvGce65hwVAHtNFPkbaVV8T9el8ripbfrgtQoez/tJ5FgEPQ54HledRt1fe6
-         fgXLjjxt/BnEG2NB2PhcWl80kR8VBvlKryi/+/EyxrAskMT/pl2GFCKKZzAxbloPRLMq
-         8Vh/ib3OXxflgyDlkkioL6pXsWivZO7SDgMSKlmcCsvfyj7pSTfIyE9GKsChyvpBcZi4
-         uLzRIut95+ISKzBG1wCtGyPBrV2ZIt7t5y8SHygGQeauGWORumyrL4L/MZbMah+7wtF8
-         ncXTKC5nZTZdJ4RTA8ZqdggzkUqkWs3D/CzskkvHXukEOkmZ/9uv6Lr05ET5GYJ7tlQR
-         gspg==
-X-Gm-Message-State: AOAM530H9t3NysvmkkX31HWt9vsyHKAUqEHKNs7h2ipqd0Hgfj05Cydd
-        1UianMc3U294PrlkvpT/6FM=
-X-Google-Smtp-Source: ABdhPJz4PsDyEwcrP8nnfaBqgQF0eFooxBiwroU3cq6N0PHSAeUD/Wox166lAy4Cu7qE9jRZ1hflOg==
-X-Received: by 2002:a17:902:e54f:b0:14a:48d6:d39e with SMTP id n15-20020a170902e54f00b0014a48d6d39emr8499336plf.123.1642141423260;
-        Thu, 13 Jan 2022 22:23:43 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id f7sm4952907pfe.210.2022.01.13.22.23.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 22:23:43 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Haavard Skinnemoen <hskinnemoen@atmel.com>,
-        Hans-Christian Egtvedt <hcegtvedt@atmel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] misc: atmel-ssc: Fix IRQ check in ssc_probe
-Date:   Fri, 14 Jan 2022 06:23:07 +0000
-Message-Id: <20220114062307.15199-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=efD7MXnSTwwB5xVjXzKnpMf87tT71yAx/cljfnEhNas=;
+        b=xw7hi+ZgasRtgpx0rC7gmvv3OEmrZ8UY11u2EcANLP763VZVUwaPR1aVP3C2yEy6fO
+         Ji+VWtDatqrvVOHbAmnjxj/4ODGNNXVRIXEjxAlUpoP4CR8qMQoLQY6L7D6GoBnYkaDN
+         8qiTrUwOXjtxMdB9E+DfQR60FZFkTCX1jkpGel3e7L3FrhhsMPNasGipmRIxjkn1WlwM
+         dnmEgu7vzyMopuN/l9p6XNom9LJta3xqg4Wr5qAPO+8DqtXGifpUzI9xoOUoYqoegB6i
+         Vkt/9PG037ir/K+86M2FXPIvvoLgOc//Q9hpXMVJE1Y4J+S2YKhW6+DEEOw6sF+BmP3d
+         z4gA==
+X-Gm-Message-State: AOAM532y1Dq8EYP1QLK1AOohZcK1gO/tA8QpdZ1p4VLEPGnfThusNC0r
+        4EgQEDmn+R6q7mXZbtRdF5bq0qcCNv+IvFGCAsv9jw==
+X-Google-Smtp-Source: ABdhPJyOGEzTN5ie9agHxl4cS61ylB6xO8eTkZnYeEg8FGn5HzoowBJbQV+Ws9vld5pFq3VE38zPZoChvTtPXqEREvE=
+X-Received: by 2002:a17:90b:4a09:: with SMTP id kk9mr18400389pjb.230.1642141445152;
+ Thu, 13 Jan 2022 22:24:05 -0800 (PST)
+MIME-Version: 1.0
+References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-5-rananta@google.com>
+ <CAAeT=FztkibSajKjnpRfObx+D1r8H1s_8-5MmqjemJTfmb2mpg@mail.gmail.com>
+ <CAJHc60ywYgAPfG11Ljkj3qzLoUn9mZPKnPH0P-HYS-pfs+A__g@mail.gmail.com>
+ <CAAeT=FwA9X9eXrF+Q31Wzah=UkM-B8bMJObjJ=oCV0rjLfX6=g@mail.gmail.com> <CAJHc60y6b-scY8zcPuLnjGtr6HzSBnmhi2mCnmkNm4nTxgMTUQ@mail.gmail.com>
+In-Reply-To: <CAJHc60y6b-scY8zcPuLnjGtr6HzSBnmhi2mCnmkNm4nTxgMTUQ@mail.gmail.com>
+From:   Reiji Watanabe <reijiw@google.com>
+Date:   Thu, 13 Jan 2022 22:23:49 -0800
+Message-ID: <CAAeT=FyER7GWZqSHyRA4-YRwef_KmGEw+tUoxBc7GXC4-6hFhw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 04/11] KVM: arm64: Setup a framework for hypercall
+ bitmap firmware registers
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_irq() returns negative error number instead 0 on failure.
-And the doc of platform_get_irq() provides a usage example:
+> > > > > +static void
+> > > > > +kvm_arm_get_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 fw_reg_bmap, u64 *val)
+> > > > > +{
+> > > > > +       struct kvm *kvm = vcpu->kvm;
+> > > > > +
+> > > > > +       mutex_lock(&kvm->lock);
+> > > > > +       *val = fw_reg_bmap;
+> > > > > +       mutex_unlock(&kvm->lock);
+> > > >
 
-    int irq = platform_get_irq(pdev, 0);
-    if (irq < 0)
-        return irq;
+I have another comment for kvm_arm_get_fw_reg_bmap.
 
-Fix the check of return value to catch errors correctly.
+I just noticed that @fw_reg_bmap is a value of the bitmap register
+(not a pointer).  I believe what you meant was a pointer to
+hvc_desc->hvc_*_bmap.  Also, you can remove @val and return the register
+value instead (change the type of the return value from void to u64).
+I'm not sure if you will keep this function in the next version though.
 
-Fixes: eb1f2930609b ("Driver for the Atmel on-chip SSC on AT32AP and AT91")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/misc/atmel-ssc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/misc/atmel-ssc.c b/drivers/misc/atmel-ssc.c
-index d6cd5537126c..69f9b0336410 100644
---- a/drivers/misc/atmel-ssc.c
-+++ b/drivers/misc/atmel-ssc.c
-@@ -232,9 +232,9 @@ static int ssc_probe(struct platform_device *pdev)
- 	clk_disable_unprepare(ssc->clk);
- 
- 	ssc->irq = platform_get_irq(pdev, 0);
--	if (!ssc->irq) {
-+	if (ssc->irq < 0) {
- 		dev_dbg(&pdev->dev, "could not get irq\n");
--		return -ENXIO;
-+		return ssc->irq;
- 	}
- 
- 	mutex_lock(&user_lock);
--- 
-2.17.1
-
+Thanks,
+Reiji

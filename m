@@ -2,177 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1CD48E411
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DF348E403
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 06:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239281AbiANGLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:11:00 -0500
-Received: from mga11.intel.com ([192.55.52.93]:41075 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234997AbiANGK7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:10:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642140659; x=1673676659;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=vFkrUx7JlBhH8tQHdr680ZVtcCkoqOiY56p9j5M74UM=;
-  b=cjaPPKNK9hWLEikc2M+MeiR/Nr8cD17Ly/AEtI2UV2rh7b9Lw6QF0VXh
-   MsaPvYPVsmV1o5dwpVk/mq9tAYDHSw2RVyoZQb7U25rq+amiBnVeVKDQg
-   wozjzPLjV2ag33t6B+bBEroy8M9NYD/w9prrVdrcaDjQBGYXs0YgIk8ud
-   AgfozJJXcnwo45gRPCZDprUYeGv2SND92NNb9py5gRWW727VJAn2luT7m
-   T9WBI2S0FYYjdJN71zLM2A79TRavcNTlQqfPguJ1bNoTQROvzqKmDbmAh
-   q1a70HqKWOWRYh4fhURXzksbsEJR2hcSASGcmjjDI9YynIA2xnFroEomL
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="241751127"
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="241751127"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 22:10:59 -0800
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="559370934"
-Received: from yzhao56-desk.sh.intel.com ([10.239.159.43])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 22:10:52 -0800
-Date:   Fri, 14 Jan 2022 13:53:15 +0800
-From:   Yan Zhao <yan.y.zhao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: Re: [PATCH v3 kvm/queue 14/16] KVM: Handle page fault for private
- memory
-Message-ID: <20220114055315.GA29165@yzhao56-desk.sh.intel.com>
-Reply-To: Yan Zhao <yan.y.zhao@intel.com>
-References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
- <20211223123011.41044-15-chao.p.peng@linux.intel.com>
- <20220104014629.GA2330@yzhao56-desk.sh.intel.com>
- <20220104091008.GA21806@chaop.bj.intel.com>
- <20220104100612.GA19947@yzhao56-desk.sh.intel.com>
- <20220105062810.GB25283@chaop.bj.intel.com>
- <20220105075356.GB19947@yzhao56-desk.sh.intel.com>
- <YdYFFzlPTvgFdSXL@google.com>
+        id S239245AbiANF57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 00:57:59 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:27536 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239119AbiANF56 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 00:57:58 -0500
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220114055756epoutp0411f79ae30da2e6e0b170256a267bb99c~KDYRahKIV1483514835epoutp04g
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:57:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220114055756epoutp0411f79ae30da2e6e0b170256a267bb99c~KDYRahKIV1483514835epoutp04g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1642139876;
+        bh=oXZI/5pHmSIV2rnVkqX/WYgr+6bWc30NCtFRJUIazl0=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=OJLNsXR++SlHmzP1kzNzmugZ9JylVbdQMElnPkWSK9If/a23Fk1vJKvG/G+jo9neb
+         6c6DemCmvCfMndOH59wifK4RsBzO3bCyHEmDQlliMTpcJc/VP+E4vUfu5vh0y3C01r
+         Fcg9rKmq0GSJZ5wUfQh8lfLujJUg5vyWx0KA4Wlk=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220114055755epcas2p4b205348d35d4207e815fc4c86e20c304~KDYQ7DEfi0272902729epcas2p4D;
+        Fri, 14 Jan 2022 05:57:55 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.91]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4JZrDv6GG1z4x9Pv; Fri, 14 Jan
+        2022 05:57:51 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        74.7E.10014.04011E16; Fri, 14 Jan 2022 14:55:12 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220114055749epcas2p45a47db370d61851761daf6103c7bcdb9~KDYLWL-dT2225622256epcas2p4S;
+        Fri, 14 Jan 2022 05:57:49 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220114055749epsmtrp1a2efe03d0dd74a6658c6441bbcf0b074~KDYLVKm2H2498824988epsmtrp1d;
+        Fri, 14 Jan 2022 05:57:49 +0000 (GMT)
+X-AuditID: b6c32a47-489ff7000000271e-53-61e11040422d
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        11.8C.08738.DD011E16; Fri, 14 Jan 2022 14:57:49 +0900 (KST)
+Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220114055749epsmtip2b88ba33f957f8f72949f589f757f9189~KDYLD_lax3237232372epsmtip2g;
+        Fri, 14 Jan 2022 05:57:49 +0000 (GMT)
+From:   "Chanho Park" <chanho61.park@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        "'Andi Shyti'" <andi@etezian.org>,
+        "'Mark Brown'" <broonie@kernel.org>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Pratyush Yadav'" <p.yadav@ti.com>, <linux-spi@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Cc:     "'Sam Protsenko'" <semen.protsenko@linaro.org>,
+        "'Rob Herring'" <robh@kernel.org>
+In-Reply-To: <20220112100046.68068-5-krzysztof.kozlowski@canonical.com>
+Subject: RE: [PATCH v3 4/4] spi: s3c64xx: allow controller-data to be
+ optional
+Date:   Fri, 14 Jan 2022 14:57:49 +0900
+Message-ID: <00a601d8090b$a92da220$fb88e660$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdYFFzlPTvgFdSXL@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQLMnbI1WsUjdTWr/4z1tM/QIKR8oQM1ZV57AYRzuIOqUwzpEA==
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFJsWRmVeSWpSXmKPExsWy7bCmha6DwMNEg/3PzS0W/3jOZDH14RM2
+        i/lHzrFabHz7g8li0+NrrBaXd81hs5hxfh+TRePHm+wWd5//YLdo3XuE3eL/nh3sFs/79jE5
+        8HjMauhl87i+5BOzx6ZVnWwed67tYfPYvKTe4/iN7UwenzfJBbBHZdtkpCampBYppOYl56dk
+        5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAB2qpFCWmFMKFApILC5W0rezKcov
+        LUlVyMgvLrFVSi1IySkwL9ArTswtLs1L18tLLbEyNDAwMgUqTMjO2PO6g7lgMkfF81lnmRsY
+        O9i7GDk5JARMJJb9fsbaxcjFISSwg1GiZ9UeJgjnE6PEqbX/2CCcz4wS75YfYYRp2XLlAguI
+        LSSwi1Fi8dNoiKIXjBJrfjewgSTYBPQlXnZsA5srItDCLPHiwwSwbmaBcIkd8/+A2ZwC7hJ/
+        7r8HmyQsECDx7PgfZhCbRUBVYnHHf7AaXgFLidPH+tghbEGJkzOfsEDMkZfY/nYOM8RFChI/
+        ny5jBbFFBJwkvnyGeI5ZQERidmcbM8gREgInOCS+nm5hhWhwkXh+eAkLhC0s8er4FmhoSEm8
+        7G9jh2joZpSY9PIuVGIGMABu5kDYxhKznrUDXccBtEFTYv0ufRBTQkBZ4sgtqNv4JDoO/2WH
+        CPNKdLQJQTSqSxzYPh1qq6xE95zPrBMYlWYh+WwWks9mIflgFsKuBYwsqxjFUguKc9NTi40K
+        jOGxnZyfu4kRnIi13Hcwznj7Qe8QIxMH4yFGCQ5mJRHe/qL7iUK8KYmVValF+fFFpTmpxYcY
+        TYFhPZFZSjQ5H5gL8kriDU0sDUzMzAzNjUwNzJXEeb1SNiQKCaQnlqRmp6YWpBbB9DFxcEo1
+        MG05LOjNe6rBN5E5lWNPVgEzl8vMsxf2eWnWCr+OCmhg2/GR0XSmzsnKcCc7Fukz/G1+74re
+        Ke6qXKXN4XJiyl6Dyoce8XHX3M7+YyxfdLr7v1bDLhWT5TPjuhcGpnaEpLNveHUvetbG+Yy7
+        ztzwe5wS7Z3HyLBglnH9M8apN2snubqZOmyLKvqodPFq0Hu1c64ejPdS80w8X+eEPTy07PKx
+        A1VHUudtOLf5ivj7i3+O+4aZrU+I/2rstSmlp1yz6kP5z+KtUUdjNzNfXrC1YdIPGZ7nX60L
+        nnyZJPr9gtDed74JjPZX630lv/JUTL7nHpZVstHJt2dW9aHnS7JXnjyjon6TP0PrZoOS4AVW
+        ayWW4oxEQy3mouJEAFTMdtxNBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGIsWRmVeSWpSXmKPExsWy7bCSvO5dgYeJBk8OKlks/vGcyWLqwyds
+        FvOPnGO12Pj2B5PFpsfXWC0u75rDZjHj/D4mi8aPN9kt7j7/wW7RuvcIu8X/PTvYLZ737WNy
+        4PGY1dDL5nF9ySdmj02rOtk87lzbw+axeUm9x/Eb25k8Pm+SC2CP4rJJSc3JLEst0rdL4MrY
+        87qDuWAyR8XzWWeZGxg72LsYOTkkBEwktly5wNLFyMUhJLCDUWLqo6OsEAlZiWfvdkAVCUvc
+        bzkCFhcSeMYo8eS8N4jNJqAv8bJjGytIs4hAD7PE5OVbmUASzALhEh+e3YCaeplRYuLnTWDd
+        nALuEn/uv2cBsYUF/CTuNGwBi7MIqEos7vjPCGLzClhKnD7Wxw5hC0qcnPmEBWKonsT69XMY
+        IWx5ie1v5zBDXKcg8fPpMrA5IgJOEl8+Q7zGLCAiMbuzjXkCo/AsJKNmIRk1C8moWUhaFjCy
+        rGKUTC0ozk3PLTYsMMpLLdcrTswtLs1L10vOz93ECI5KLa0djHtWfdA7xMjEwXiIUYKDWUmE
+        t7/ofqIQb0piZVVqUX58UWlOavEhRmkOFiVx3gtdJ+OFBNITS1KzU1MLUotgskwcnFINTKv2
+        7zSxsbxzoFEmtWtBuqunyPN454tzjolHnbrywq33mYXBXJs4hfabV8/WfhJ92iU1je/QNnnu
+        rGmWLarGzoVMejcfaRtGavt+8/miFqIQ3PPHf0vInPR+nwdHOZ9eTjnLYirFfrW0wi72fdX8
+        O8VXq+669EhMm+ufXWj172n65w4d82xbc94PWUaZZjdd0j5GyHVxcZntPHGj3vlwi1rS3+wH
+        Ux7ESzVwhSUufbDSh9vde+O03bJfY/9febNWY+NuRs5XqfH7PT+zPT+YayxXyq5ZayI9OVP2
+        162O1StN7Z7PnLJ+feKcD/ozjM/ebkvVFDi0YYa699LKDAtX9aX6PEc0C20u3V6p0i6lxFKc
+        kWioxVxUnAgAuK2ibDkDAAA=
+X-CMS-MailID: 20220114055749epcas2p45a47db370d61851761daf6103c7bcdb9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220112100121epcas2p1ba2f59e6fa405e10e9daa80403ec17e2
+References: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com>
+        <CGME20220112100121epcas2p1ba2f59e6fa405e10e9daa80403ec17e2@epcas2p1.samsung.com>
+        <20220112100046.68068-5-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Sean,
-Sorry for the late reply. I just saw this mail in my mailbox.
-
-On Wed, Jan 05, 2022 at 08:52:39PM +0000, Sean Christopherson wrote:
-> On Wed, Jan 05, 2022, Yan Zhao wrote:
-> > Sorry, maybe I didn't express it clearly.
-> > 
-> > As in the kvm_faultin_pfn_private(), 
-> > static bool kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
-> > 				    struct kvm_page_fault *fault,
-> > 				    bool *is_private_pfn, int *r)
-> > {
-> > 	int order;
-> > 	int mem_convert_type;
-> > 	struct kvm_memory_slot *slot = fault->slot;
-> > 	long pfn = kvm_memfd_get_pfn(slot, fault->gfn, &order);
-> > 	...
-> > }
-> > Currently, kvm_memfd_get_pfn() is called unconditionally.
-> > However, if the backend of a private memslot is not memfd, and is device
-> > fd for example, a different xxx_get_pfn() is required here.
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Sent: Wednesday, January 12, 2022 7:01 PM
+> To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>; Andi Shyti
+> <andi@etezian.org>; Mark Brown <broonie@kernel.org>; Rob Herring
+> <robh+dt@kernel.org>; Pratyush Yadav <p.yadav@ti.com>; linux-
+> spi@vger.kernel.org; linux-samsung-soc@vger.kernel.org;
+> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org
+> Cc: Sam Protsenko <semen.protsenko@linaro.org>; Rob Herring
+> <robh@kernel.org>
+> Subject: [PATCH v3 4/4] spi: s3c64xx: allow controller-data to be optional
 > 
-> Ya, I've complained about this in a different thread[*].  This should really be
-> something like kvm_private_fd_get_pfn(), where the underlying ops struct can point
-> at any compatible backing store.
+> The Samsung SoC SPI driver requires to provide controller-data node for
+> each of SPI peripheral device nodes.  Make this controller-data node
+> optional, so DTS could be simpler.
 > 
-> https://lore.kernel.org/all/YcuMUemyBXFYyxCC@google.com/
->
-ok. 
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-> > Further, though mapped to a private gfn, it might be ok for QEMU to
-> > access the device fd in hva-based way (or call it MMU access way, e.g.
-> > read/write/mmap), it's desired that it could use the traditional to get
-> > pfn without convert the range to a shared one.
-> 
-> No, this is expressly forbidden.  The backing store for a private gfn must not
-> be accessible by userspace.  It's possible a backing store could support both, but
-> not concurrently, and any conversion must be done without KVM being involved.
-> In other words, resolving a private gfn must either succeed or fail (exit to
-> userspace), KVM cannot initiate any conversions.
->
-When it comes to a device passthrough via VFIO, there might be more work
-related to the device fd as a backend.
+Reviewed-by: Chanho Park <chanho61.park@samsung.com>
 
-First, unlike memfd which can allocate one private fd for a set of PFNs,
-and one shared fd for another set of PFNs, for device fd, it needs to open
-the same physical device twice, one for shared fd, and one for private fd.
-
-Then, for private device fd, now its ramblock has to use qemu_ram_alloc_from_fd()
-instead of current qemu_ram_alloc_from_ptr().
-And as in VFIO, this private fd is shared by several ramblocks (each locating from
-a different base offset), the base offsets also need to be kept somewhere 
-in order to call get_pfn successfully. (this info is kept in
-vma through mmap() previously, so without mmap(), a new interface might
-be required). 
-
-Also, for shared device fd,  mmap() is required in order to allocate the
-ramblock with qemu_ram_alloc_from_ptr(), and more importantly to make
-the future gfn_to_hva, and hva_to_pfn possible.
-But as the shared and private fds are based on the same physical device,
-the vfio driver needs to record which vma ranges are allowed for the actual
-mmap_fault, which vma area are not.
-
-With the above changes, it only prevents the host user space from accessing
-the device mapped to private GFNs.
-For memory backends, host kernel space accessing is prevented via MKTME.
-And for device, the device needs to the work to disallow host kernel
-space access.
-However, unlike memory side, the device side would not cause any MCE. 
-Thereby, host user space access to the device also would not cause MCEs, either. 
-
-So, I'm not sure if the above work is worthwhile to the device fd.
-
-
-> > pfn = __gfn_to_pfn_memslot(slot, fault->gfn, ...)
-> > 	|->addr = __gfn_to_hva_many (slot, gfn,...)
-> > 	|  pfn = hva_to_pfn (addr,...)
-> > 
-> > 
-> > So, is it possible to recognize such kind of backends in KVM, and to get
-> > the pfn in traditional way without converting them to shared?
-> > e.g.
-> > - specify KVM_MEM_PRIVATE_NONPROTECT to memory regions with such kind
-> > of backends, or
-> > - detect the fd type and check if get_pfn is provided. if no, go the
-> >   traditional way.
-> 
-> No, because the whole point of this is to make guest private memory inaccessible
-> to host userspace.  Or did I misinterpret your questions?
-I think the host unmap series is based on the assumption that host user
-space access to the memory based to private guest GFNs would cause fatal
-MCEs.
-So, I hope for backends who will not bring this fatal error can keep
-using traditional way to get pfn and be mapped to private GFNs at the
-same time.
-
-Thanks
-Yan

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB1D48EC4C
+	by mail.lfdr.de (Postfix) with ESMTP id 753F848EC4D
 	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242322AbiANPJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S242491AbiANPJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:09:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242257AbiANPIt (ORCPT
+        with ESMTP id S242269AbiANPIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 14 Jan 2022 10:08:49 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7834C06173E
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:08:48 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id m3so17174810lfu.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:08:48 -0800 (PST)
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655D8C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:08:49 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id p27so19520847lfa.1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:08:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BMWnTZVzVzGElJzU5xNhyaOzPG95n804pR9dUD0UpSM=;
-        b=sVLNnZCk9v2uts1VfyjtyPuUOiD7rH1nXPNLXPa5/tQOdmj2DQU3+bQTWb+BAuFGlr
-         VVC6BJP2Fe/uhcwCMCh0y4NxqXHs9uApS0Fqe/SeCl7wh9bF4COVPu9vsN55gSGCUEmF
-         jIovWSaoItjipFLRJP1fzQ8HKS4f6ywI1oGO/0/9KtM5ZBlultFFJ5nUC73TIxulCUS1
-         OPiAuFGLlaNavNsZViuRDNwnczbRedoFobsOCqa4LQ68XqoHrxVU1EjWAHZD7owNUuzR
-         1qJmpt+/qV+BRfZ+GTN74Q3xhXBoqvL7NE+uvptIhOZrGQxckaaGegsGQAOSkHR3jIZs
-         Hogg==
+        bh=CwI8FoTifdXWAKhHzqpeiPhswUT20WDuLw+g3B+0PMQ=;
+        b=fCNXkPpRYTo9IliKsoHIH0v2yU8zmgF6CPFJYwbbBPkEKVsa4rxyP3BVCiFFZgquYX
+         z3wddR87WVCQJ0Bt+kqhP4uIDPBIdIYw6MQUPSg1sMm++qSZfx7SJ/LaKBTqLhiZtwDY
+         PzG1fq8zGi3Uiyr7ivRGjb2lt3whrN1nE/umpIwNUrFAvs03YU5TnI720Jx+B1Ub/kR2
+         r0o7YrxH58DyoeZ3dzEIiPnqshjgGTJ2y3Ec44qwM8XmkRQYbnn7Rf8liXG8pUb1IWAJ
+         VfCJJ/cvMYD8hj7wr+lRZ5/uYpzoMmtXgwAxH0dPGPEJ4sGxV2dK4dfI0Din8z/4Dk0Y
+         4ELQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BMWnTZVzVzGElJzU5xNhyaOzPG95n804pR9dUD0UpSM=;
-        b=rTa516sGAAyDV/cbOuhuamUL41JJyT5XtJXwIikR7TT8HYGkjGTqx9KXcp2JnbZJhM
-         ROkstZagy55YUVyqhIrZPUCXEoifU5x1aJFisnRgtGbjScr6/pvk1jaePAO+RbJ0mk7I
-         qIMhs64r232GD1ayuHyVrdWEhMf2J3KCKNScCH+JJhavCO/Rt4cPKZeY5Xpw9i45S9wn
-         4jux96ZtZA0ovyloKN1zMoN45kBbAAI+Bnj9OoNaXsMj0eI1LwpmwsM2zQvtbueMnaJi
-         G3quqjsfDRgXWZJUOQcMpC3xAf5p8i5gJkQ9YXPTXRkfS2m5RLbvveAnrMWPg3IY38wJ
-         gK6Q==
-X-Gm-Message-State: AOAM533rZQggGWwtbbEEBmTgMMcT+sbVtMgFyCWmmUPqQPxU//eHKXo9
-        nS1hv3uSw7lj6xRWRvv8xrodHBmaONNAwQ==
-X-Google-Smtp-Source: ABdhPJzNNelaOvKCjbTz781HW+mCw6BOTdGWUPuqwyazCvQa+Y9odiI9bj86aLnmytCbAevWYtcKXg==
-X-Received: by 2002:a05:651c:508:: with SMTP id o8mr6440057ljp.99.1642172926707;
-        Fri, 14 Jan 2022 07:08:46 -0800 (PST)
+        bh=CwI8FoTifdXWAKhHzqpeiPhswUT20WDuLw+g3B+0PMQ=;
+        b=a3uOzI59Mw56i5rTBGd2ctKrp9v5SUn2XQYuvOtzoSosEGKiAPYUoZmrY9+0NnTTOO
+         UikJMWbYeJTRid4Az7vJid+Cx95+8Z11QC7qlgPQeLcJB8nTKlxcsu1m1VqW2lnV8Zt+
+         ykNpYoqU/klucpqTT9kuPSDZnJU/1oanIvQXcSo+H5i6fCCQaughBwP9QTaBiC799eZe
+         8hImU/jhjZymIToHvwXxhxqfFa1NjgKBtBk6RejXLMUB5y4RW3C9sl7bitA/TMrMTgvF
+         stnNA1gGV8tpIiRoPYoFsXHVY3smQPH8f7vPh8VT55FXZO9S6wQ7ovPe/bFxBBumUARH
+         8PqA==
+X-Gm-Message-State: AOAM5338cKlYszTkj9NfJ5FEamqjv36BPE+e+U7nFPe+abNhhFkOz9Ob
+        mYMwqXtkdPaDL0g+/c8KADJPyvmDDhV2XA==
+X-Google-Smtp-Source: ABdhPJwlW7g5gOBkY5CQKML6bw18bvndNjFy+WzHTbQYGsJGbfmWYCzB3RAbnzHB60u5+yVKiJaUwQ==
+X-Received: by 2002:a05:6512:1088:: with SMTP id j8mr6885781lfg.220.1642172927674;
+        Fri, 14 Jan 2022 07:08:47 -0800 (PST)
 Received: from jade.urgonet (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
         by smtp.gmail.com with ESMTPSA id i31sm40517lfv.67.2022.01.14.07.08.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 07:08:46 -0800 (PST)
+        Fri, 14 Jan 2022 07:08:47 -0800 (PST)
 From:   Jens Wiklander <jens.wiklander@linaro.org>
 To:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
 Cc:     Sumit Garg <sumit.garg@linaro.org>,
@@ -57,9 +57,9 @@ Cc:     Sumit Garg <sumit.garg@linaro.org>,
         David Howells <dhowells@redhat.com>,
         Tyler Hicks <tyhicks@linux.microsoft.com>,
         Jens Wiklander <jens.wiklander@linaro.org>
-Subject: [PATCH v2 09/12] tee: add tee_shm_register_{user,kernel}_buf()
-Date:   Fri, 14 Jan 2022 16:08:21 +0100
-Message-Id: <20220114150824.3578829-10-jens.wiklander@linaro.org>
+Subject: [PATCH v2 10/12] KEYS: trusted: tee: use tee_shm_register_kernel_buf()
+Date:   Fri, 14 Jan 2022 16:08:22 +0100
+Message-Id: <20220114150824.3578829-11-jens.wiklander@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220114150824.3578829-1-jens.wiklander@linaro.org>
 References: <20220114150824.3578829-1-jens.wiklander@linaro.org>
@@ -69,94 +69,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds the two new functions tee_shm_register_user_buf() and
-tee_shm_register_kernel_buf() which should be used instead of the old
-tee_shm_register().
-
-This avoids having the caller supplying the flags parameter which
-exposes a bit more than desired of the internals of the TEE subsystem.
+Uses the new simplified tee_shm_register_kernel_buf() function instead
+of the old tee_shm_alloc() function which required specific
+TEE_SHM-flags
 
 Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 ---
- drivers/tee/tee_core.c  |  3 +--
- drivers/tee/tee_shm.c   | 34 ++++++++++++++++++++++++++++++++++
- include/linux/tee_drv.h |  4 ++++
- 3 files changed, 39 insertions(+), 2 deletions(-)
+ security/keys/trusted-keys/trusted_tee.c | 23 +++++++++--------------
+ 1 file changed, 9 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
-index a15812baaeb1..8aa1a4836b92 100644
---- a/drivers/tee/tee_core.c
-+++ b/drivers/tee/tee_core.c
-@@ -334,8 +334,7 @@ tee_ioctl_shm_register(struct tee_context *ctx,
- 	if (data.flags)
- 		return -EINVAL;
+diff --git a/security/keys/trusted-keys/trusted_tee.c b/security/keys/trusted-keys/trusted_tee.c
+index 2ce66c199e1d..c8626686ee1b 100644
+--- a/security/keys/trusted-keys/trusted_tee.c
++++ b/security/keys/trusted-keys/trusted_tee.c
+@@ -70,17 +70,15 @@ static int trusted_tee_seal(struct trusted_key_payload *p, char *datablob)
+ 	memset(&inv_arg, 0, sizeof(inv_arg));
+ 	memset(&param, 0, sizeof(param));
  
--	shm = tee_shm_register(ctx, data.addr, data.length,
--			       TEE_SHM_DMA_BUF | TEE_SHM_USER_MAPPED);
-+	shm = tee_shm_register_user_buf(ctx, data.addr, data.length);
- 	if (IS_ERR(shm))
- 		return PTR_ERR(shm);
+-	reg_shm_in = tee_shm_register(pvt_data.ctx, (unsigned long)p->key,
+-				      p->key_len, TEE_SHM_DMA_BUF |
+-				      TEE_SHM_KERNEL_MAPPED);
++	reg_shm_in = tee_shm_register_kernel_buf(pvt_data.ctx, p->key,
++						 p->key_len);
+ 	if (IS_ERR(reg_shm_in)) {
+ 		dev_err(pvt_data.dev, "key shm register failed\n");
+ 		return PTR_ERR(reg_shm_in);
+ 	}
  
-diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-index d51bf97ce7e5..6a1dbce75616 100644
---- a/drivers/tee/tee_shm.c
-+++ b/drivers/tee/tee_shm.c
-@@ -301,6 +301,40 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
- }
- EXPORT_SYMBOL_GPL(tee_shm_register);
+-	reg_shm_out = tee_shm_register(pvt_data.ctx, (unsigned long)p->blob,
+-				       sizeof(p->blob), TEE_SHM_DMA_BUF |
+-				       TEE_SHM_KERNEL_MAPPED);
++	reg_shm_out = tee_shm_register_kernel_buf(pvt_data.ctx, p->blob,
++						  sizeof(p->blob));
+ 	if (IS_ERR(reg_shm_out)) {
+ 		dev_err(pvt_data.dev, "blob shm register failed\n");
+ 		ret = PTR_ERR(reg_shm_out);
+@@ -131,17 +129,15 @@ static int trusted_tee_unseal(struct trusted_key_payload *p, char *datablob)
+ 	memset(&inv_arg, 0, sizeof(inv_arg));
+ 	memset(&param, 0, sizeof(param));
  
-+/**
-+ * tee_shm_register_user_buf() - Register a userspace shared memory buffer
-+ * @ctx:	Context that registers the shared memory
-+ * @addr:	The userspace address of the shared buffer
-+ * @length:	Length of the shared buffer
-+ *
-+ * @returns a pointer to 'struct tee_shm'
-+ */
-+struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
-+					  unsigned long addr, size_t length)
-+{
-+	return tee_shm_register(ctx, addr, length,
-+				TEE_SHM_DMA_BUF | TEE_SHM_USER_MAPPED);
-+}
-+EXPORT_SYMBOL_GPL(tee_shm_register_user_buf);
-+
-+/**
-+ * tee_shm_register_kernel_buf() - Register kernel memory to be shared with
-+ *				   secure world
-+ * @ctx:	Context that registers the shared memory
-+ * @addr:	The buffer
-+ * @length:	Length of the buffer
-+ *
-+ * @returns a pointer to 'struct tee_shm'
-+ */
-+
-+struct tee_shm *tee_shm_register_kernel_buf(struct tee_context *ctx,
-+					    void *addr, size_t length)
-+{
-+	return tee_shm_register(ctx, (unsigned long)addr, length,
-+				TEE_SHM_DMA_BUF | TEE_SHM_KERNEL_MAPPED);
-+}
-+EXPORT_SYMBOL_GPL(tee_shm_register_kernel_buf);
-+
- static int tee_shm_fop_release(struct inode *inode, struct file *filp)
- {
- 	tee_shm_put(filp->private_data);
-diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
-index e71cb0411e9c..029c9a0590cc 100644
---- a/include/linux/tee_drv.h
-+++ b/include/linux/tee_drv.h
-@@ -289,6 +289,10 @@ struct tee_shm *tee_shm_alloc_kernel_buf(struct tee_context *ctx, size_t size);
-  */
- struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
- 				 size_t length, u32 flags);
-+struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
-+					  unsigned long addr, size_t length);
-+struct tee_shm *tee_shm_register_kernel_buf(struct tee_context *ctx,
-+					    void *addr, size_t length);
+-	reg_shm_in = tee_shm_register(pvt_data.ctx, (unsigned long)p->blob,
+-				      p->blob_len, TEE_SHM_DMA_BUF |
+-				      TEE_SHM_KERNEL_MAPPED);
++	reg_shm_in = tee_shm_register_kernel_buf(pvt_data.ctx, p->blob,
++						 p->blob_len);
+ 	if (IS_ERR(reg_shm_in)) {
+ 		dev_err(pvt_data.dev, "blob shm register failed\n");
+ 		return PTR_ERR(reg_shm_in);
+ 	}
  
- /**
-  * tee_shm_is_registered() - Check if shared memory object in registered in TEE
+-	reg_shm_out = tee_shm_register(pvt_data.ctx, (unsigned long)p->key,
+-				       sizeof(p->key), TEE_SHM_DMA_BUF |
+-				       TEE_SHM_KERNEL_MAPPED);
++	reg_shm_out = tee_shm_register_kernel_buf(pvt_data.ctx, p->key,
++						  sizeof(p->key));
+ 	if (IS_ERR(reg_shm_out)) {
+ 		dev_err(pvt_data.dev, "key shm register failed\n");
+ 		ret = PTR_ERR(reg_shm_out);
+@@ -192,8 +188,7 @@ static int trusted_tee_get_random(unsigned char *key, size_t key_len)
+ 	memset(&inv_arg, 0, sizeof(inv_arg));
+ 	memset(&param, 0, sizeof(param));
+ 
+-	reg_shm = tee_shm_register(pvt_data.ctx, (unsigned long)key, key_len,
+-				   TEE_SHM_DMA_BUF | TEE_SHM_KERNEL_MAPPED);
++	reg_shm = tee_shm_register_kernel_buf(pvt_data.ctx, key, key_len);
+ 	if (IS_ERR(reg_shm)) {
+ 		dev_err(pvt_data.dev, "key shm register failed\n");
+ 		return PTR_ERR(reg_shm);
 -- 
 2.31.1
 

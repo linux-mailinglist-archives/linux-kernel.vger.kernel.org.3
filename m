@@ -2,102 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0930248EF2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C14048EF32
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243844AbiANRWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:22:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
+        id S243855AbiANRXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243842AbiANRV7 (ORCPT
+        with ESMTP id S229758AbiANRXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:21:59 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B39AC061574;
-        Fri, 14 Jan 2022 09:21:58 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id u21so36403205edd.5;
-        Fri, 14 Jan 2022 09:21:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=DZsFo02ItcgUoJXp2q+L6CGSHBvAOzzqvn0C/GK76PI=;
-        b=dSd5aAWtTZqFxTds/o5F02gYjXz19ShtCPoGo2h20yCaGii3RRceSruaBLMvcy/SFD
-         NBadKk1qKfuDsw3cEBLcX+hK4ZrWznMkmOepzUOYGIilCfyUp5wswbpRxsMSZMuT/48T
-         QaTSUTzNdbWJMlPHtpJN/PSshhbxeLMYbH4tCH7LsVyP7bqPsg8Bb08eZNrSoQScx8WU
-         Hn67Q9nAWSZtFqnE2bN/sM14BkQq4ksE5lR+3C4UIsJaZ8KezQtNkvS/D5gfziThJCGr
-         IoWpJul/Ov+i4ThKUQaL+Dmco4oUqhLuv0u7ab3qEPtz6MpcLISy2Q5cOoKk52TC4KUI
-         m8Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=DZsFo02ItcgUoJXp2q+L6CGSHBvAOzzqvn0C/GK76PI=;
-        b=kuegJjIITychNeRluoBDK9GtQywi6WN3BUEr/Tk22APjHjPr55sYOPtVXRhbBEDlfM
-         VTfwzsF4Ix8IjY3SuSwHeCCpFXbB2jExQllBAmioiTXKuEwb1MqACj0zB6muL253DUK7
-         PevTD4bbWiUojaJ4pQjhcdel0d+4d6ApMMBKmOxDrElrauI3JQnMNceX0FC5tiJKT1pn
-         LddRKIOOKz2CXTNmu2zKV5j/GpYoGVjtSq3ks0TILUwU2TLeLXWqPfS1SoGOwYf6KMIv
-         eH84X7yHz/ElVC4dg6/ofr8+kxJMrYHvkDke5syVArOLm6ukfV016XFxEbqRWVHznxqI
-         Ogpg==
-X-Gm-Message-State: AOAM532sPfex04FQY8FJ/oSh4mBqiQdFgwd5VF0NZQK4Qdgw1Xm6rLAL
-        pRDla6BOHXC8JgTbXUH56OFOGocPdbo=
-X-Google-Smtp-Source: ABdhPJx6bv/2btgpI8Q3cOwV3QOCXU57QgSmeqqxf/pX4aVveM2EgjIkKiMaMTSeEWEyTyvlcG/thg==
-X-Received: by 2002:a50:9549:: with SMTP id v9mr9925330eda.335.1642180917228;
-        Fri, 14 Jan 2022 09:21:57 -0800 (PST)
-Received: from standask-GA-A55M-S2HP ([188.123.115.255])
-        by smtp.gmail.com with ESMTPSA id u1sm2581703edp.19.2022.01.14.09.21.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 09:21:56 -0800 (PST)
-Date:   Fri, 14 Jan 2022 18:21:55 +0100
-From:   Stanislav Jakubek <stano.jakubek@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: trivial-devices: make comment indentation
- consistent
-Message-ID: <20220114172155.GA3677@standask-GA-A55M-S2HP>
+        Fri, 14 Jan 2022 12:23:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BA9C061574;
+        Fri, 14 Jan 2022 09:23:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C415461FFF;
+        Fri, 14 Jan 2022 17:23:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45B6C36AE5;
+        Fri, 14 Jan 2022 17:23:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642180995;
+        bh=8RDjIIimYFNcFf/LYpHmIeI22mGZukj9FZXbDY9ygZM=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=tccIOXWXAkjKgk4+zPtW1eF5fJGz+2bfLK2s+zC/XiieqS0LkNZIN5DE6cHKUA51d
+         l/bUxurSmVfTKWhOFy+D74AibEekbUOixuXbhrKVT5+GbTD3HlA/pOnOP2QIb7Bjff
+         iyzKapZEZc0/TS23+3gRN0hjO4TBLzlpPzXLHwbJMKdIy3ZgUXHPlnf2hzXvKxVekx
+         5rrBX06Y0BL7w1SgLT/YKRxrCIzi+D3vvoK/m+FPAoTCtusRZW57CYBxRRpouP37YK
+         Ymsiukb0UAsh2IvlXwEiluafIfHtuhhp2XnZz55fsNvZc4qM+4Czqdak6pFZ7aljgR
+         LDh9IcdFrpBjg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sfr@canb.auug.org.au, lkp@intel.com
+Subject: Re: [PATCH wireless] MAINTAINERS: add common wireless and wireless-next trees
+References: <20220114133415.8008-1-kvalo@kernel.org>
+        <20220114081932.475eaf86@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+Date:   Fri, 14 Jan 2022 19:23:10 +0200
+In-Reply-To: <20220114081932.475eaf86@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        (Jakub Kicinski's message of "Fri, 14 Jan 2022 08:19:32 -0800")
+Message-ID: <87tue6s03l.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Makes the comment indentation consistent across the board.
+Jakub Kicinski <kuba@kernel.org> writes:
 
-Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
----
- Documentation/devicetree/bindings/trivial-devices.yaml | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> On Fri, 14 Jan 2022 15:34:15 +0200 Kalle Valo wrote:
+>> +Q:	http://patchwork.kernel.org/project/linux-wireless/list/
+>
+> nit: https?
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 9af1b0f4ecea..eee751713cb5 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -77,7 +77,7 @@ properties:
-           - delta,ahe50dc-fan
-             # Delta Electronics DPS-650-AB power supply
-           - delta,dps650ab
--          # Delta Electronics DPS920AB 920W 54V Power Supply
-+            # Delta Electronics DPS920AB 920W 54V Power Supply
-           - delta,dps920ab
-             # 1/4 Brick DC/DC Regulated Power Module
-           - delta,q54sj108a2
-@@ -123,13 +123,13 @@ properties:
-           - ibm,cffps2
-             # Infineon IR36021 digital POL buck controller
-           - infineon,ir36021
--          # Infineon IR38060 Voltage Regulator
-+            # Infineon IR38060 Voltage Regulator
-           - infineon,ir38060
-             # Infineon IR38064 Voltage Regulator
-           - infineon,ir38064
--          # Infineon IR38164 Voltage Regulator
-+            # Infineon IR38164 Voltage Regulator
-           - infineon,ir38164
--          # Infineon IR38263 Voltage Regulator
-+            # Infineon IR38263 Voltage Regulator
-           - infineon,ir38263
-             # Infineon SLB9635 (Soft-) I2C TPM (old protocol, max 100khz)
-           - infineon,slb9635tt
+Good point, I'll add that. I'll also change the existing links to use
+https.
+
+While looking at MAINTAINERS file more, I found this odd small entry in
+the MAINTAINERS file:
+
+NETWORKING [WIRELESS]
+L:         linux-wireless@vger.kernel.org
+Q:         http://patchwork.kernel.org/project/linux-wireless/list/
+
+It seems to be an artifact from this commit:
+
+0e324cf640fb MAINTAINERS: changes for wireless
+
+I don't see how that section is needed so I'll remove that as well.
+
 -- 
-2.25.1
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

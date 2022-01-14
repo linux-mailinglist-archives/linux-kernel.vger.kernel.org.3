@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 810D948F2C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A34348F2CB
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbiANXCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 18:02:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
+        id S231310AbiANXEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 18:04:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiANXCd (ORCPT
+        with ESMTP id S229646AbiANXE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 18:02:33 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CD8C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 15:02:33 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id x20so3915495pgk.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 15:02:33 -0800 (PST)
+        Fri, 14 Jan 2022 18:04:26 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B672CC061574;
+        Fri, 14 Jan 2022 15:04:26 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id i65so4065901pfc.9;
+        Fri, 14 Jan 2022 15:04:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=K2v+tf3/coBADjHlh/X456ouYdTDi9mxyKcdvb4sAww=;
-        b=VoKx/O+RdQ97dNYCMkBu/pvrz+/Fne9QTD5/ufOzQc2tIbl2VwuKirYICxRUmOaxU7
-         bzMP9wvZcj0rii2XVRaGz2CB77+ByOkbDWFdmqSt03chP8478o1isqsZ72dK5ERh1qCg
-         ZD1l5mA8b+oYH1T/dEcNRmhZAhXZfQvq12+jI=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=J4+lZIDd6o5zmH05CFS7Chus/4ckzIXTgk91SRnxUls=;
+        b=FTpEGS7qAx/sQGZEcABd019S7Hymf9UHf4a+Z/FjMnKETvgcSNOuprT2LqLixPDeU4
+         my/DZmh4kvT5trb5uQ3kQHJzq/69VUUie5znya1InMaurhjnGjQeyR5fxccRqI+cmpbC
+         w/WhOjbKT3fzbrAceqOtVrj3g5BC76OA3C5KYveiiPrCq9ufFYuHPali89mMa01htUNJ
+         MBap2BbkvaqdkGLioyzQFVXTrBD500qzM+J3gJVNk7Vv1kOTv2zyGl4Qqi0Ar/IuZlT3
+         7w0e/9eoys1y57wiS2gXvQqcdoAwBLuPKp6AB4VU0xZfs8Md1OWiAoeqVo8CVK2ITK95
+         t+Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=K2v+tf3/coBADjHlh/X456ouYdTDi9mxyKcdvb4sAww=;
-        b=aIMtvUIr1fK1S8SWEA7xBbt2N84wtzCvQCJk5vZ1C0rRGs0023Uj9o6mgT5apwYyQF
-         9hi1ntTvoyUKf1xV/CjgaT52+m7k/EYCdruUzJFS1t0Iy6UP4WQjsxbimeYvqTZLgmDP
-         3ohdubSUqsioo/I46i4ixiep411rNRzSBFCnqs5xZ4uuKzWDsW7fs5W3HCRxklE/72uG
-         BNoo7K38qLFOC6jCHoNoU4D0ZswM/zaRcdJdS/a0gnK36B4QtE5OpHcmLZ9sEZBUeeIn
-         uF2W6a9F9JCssYhPnBFeRfI7SvSmPk8jJj3+ZvtP/5+87dRHUqQif7vLSHCFuUB7kTyb
-         PQ4Q==
-X-Gm-Message-State: AOAM530iNCkboMTel9gnx4wA55VrF+IwvVrzefCbQUMcY+zwVTSz5Fm0
-        klI3fAgwXyxqDWtbT5IQnRtL3w==
-X-Google-Smtp-Source: ABdhPJyJxad9FH/It6rpaHOKDPCSlkdbKW/X7HtmB2tbRUwLIpcP+QTk8BQyjl2RIOc9OttHVlG6qw==
-X-Received: by 2002:a05:6a00:1413:b0:4bf:a0d7:1f55 with SMTP id l19-20020a056a00141300b004bfa0d71f55mr10925475pfu.13.1642201353019;
-        Fri, 14 Jan 2022 15:02:33 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:76ab:ede1:503d:1c39])
-        by smtp.gmail.com with UTF8SMTPSA id l27sm5307598pgb.0.2022.01.14.15.02.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 15:02:32 -0800 (PST)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Heiko Stuebner <heiko@sntech.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-rockchip@lists.infradead.org, Lin Huang <hl@rock-chips.com>,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
-        Sandy Huang <hjc@rock-chips.com>, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v2 3/3] ASoC: rk3399_gru_sound: Wire up DP jack detection
-Date:   Fri, 14 Jan 2022 15:02:09 -0800
-Message-Id: <20220114150129.v2.3.I3c79b1466c14b02980071221e5b99283cd26ec77@changeid>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-In-Reply-To: <20220114230209.4091727-1-briannorris@chromium.org>
-References: <20220114230209.4091727-1-briannorris@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=J4+lZIDd6o5zmH05CFS7Chus/4ckzIXTgk91SRnxUls=;
+        b=foP2Z01vh5BnAH+Hp5OB+R4YIugPWpP6kob3kdKS/EsaUa6Kvdk5nGHJilvgeEYTKs
+         kFIFox3YIIx+W5ZkCqvaJPUn8h0I31RP0B7x4FfLvZMuIocMIS9JtFnDHN/t29l6bV65
+         ZJXRgBQOPLw8lCa8qiqBqQfHhZ3H/ejS0xg5FIGMWycKkVTUNeArsRhuIK31LKb16aXe
+         +A+BMXxByWB97z0cTSj087AuEiWnBf57i2woR1ngq1d9yYKrgyXcXkJ26mpmQpRHS0oA
+         HHvqLhWKGEokHafVpuAMUh2K/gN7iYTTeLLwEes5D9TqeDZWI3BFlw0HfmUh//I4xPD+
+         egyw==
+X-Gm-Message-State: AOAM533ie7LS/BP6JQfftXLXdSWXO3wCrTNWcjXSjTRWIWXewvXvREqn
+        Pc7xz6c/Fb4WNnXwec9zJgyIu4ebWIO9dFfdbng=
+X-Google-Smtp-Source: ABdhPJxiGyyevi/x/S48E/qQOg2S+H4ILpi11ez7OVZ6hwF0rP9lAfUr9XzA8Y1pOZL3sRiAWpW5jLpJ1QRsiRsHH4g=
+X-Received: by 2002:a63:a619:: with SMTP id t25mr9755116pge.235.1642201466182;
+ Fri, 14 Jan 2022 15:04:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220112131204.800307-1-Jason@zx2c4.com> <20220112131204.800307-2-Jason@zx2c4.com>
+ <87tue8ftrm.fsf@toke.dk>
+In-Reply-To: <87tue8ftrm.fsf@toke.dk>
+Reply-To: noloader@gmail.com
+From:   Jeffrey Walton <noloader@gmail.com>
+Date:   Fri, 14 Jan 2022 18:04:14 -0500
+Message-ID: <CAH8yC8=+7p1i6a+_zq3fL5MqHem34vMDGxY+KGcZbjOg1H9q1Q@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 1/3] bpf: move from sha1 to blake2s in tag calculation
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the cdn-dp driver supports plug-change callbacks, let's wire it
-up.
+On Wed, Jan 12, 2022 at 8:13 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>
+> [ adding the bpf list - please make sure to include that when sending
+>   BPF-related patches, not everyone in BPF land follows netdev ]
+>
+> "Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+>
+> > BLAKE2s is faster and more secure. SHA-1 has been broken for a long tim=
+e
+> > now. This also removes quite a bit of code, and lets us potentially
+> > remove sha1 from lib, which would further reduce vmlinux size.
+>
+> AFAIU, the BPF tag is just used as an opaque (i.e., arbitrary) unique
+> identifier for BPF programs, without any guarantees of stability. Which
+> means changing it should be fine; at most we'd confuse some operators
+> who have memorised the tags of their BPF programs :)
+>
+> The only other concern I could see would be if it somehow locked us into
+> that particular algorithm for other future use cases for computing
+> hashes of BPF programs (say, signing if that ends up being the direction
+> we go in). But obviously SHA1 would not be a good fit for that anyway,
+> so the algorithm choice would have to be part of that discussion in any
+> case.
+>
+> So all in all, I don't see any issues with making this change for BPF.
 
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
+Somewhat related, if BPF is going to move from SHA to something, then
+consider SipHash. Here are the numbers I regularly observe. They
+remain relative the same on 64-bit platforms:
 
-(no changes since v1)
+    * SHA-1: 4.31 cpb using SSE2
+    * BLAKE2s: 4.84 cpb using SSE4.1
+    * BLAKE2b: 3.49 cpb using SSE4.1
+    * SipHash 2-4: 1.54 cpb using C/C++
+    * SipHash 4-8: 2.55 cpb using C/C++
 
- sound/soc/rockchip/rk3399_gru_sound.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+If BPF is Ok with 64-bit tags, then SipHash 2-4 is probably what you
+want on the wish list.
 
-diff --git a/sound/soc/rockchip/rk3399_gru_sound.c b/sound/soc/rockchip/rk3399_gru_sound.c
-index e2d52d8d0ff9..eeef3ed70037 100644
---- a/sound/soc/rockchip/rk3399_gru_sound.c
-+++ b/sound/soc/rockchip/rk3399_gru_sound.c
-@@ -164,6 +164,25 @@ static int rockchip_sound_da7219_hw_params(struct snd_pcm_substream *substream,
- 	return 0;
- }
- 
-+static struct snd_soc_jack cdn_dp_card_jack;
-+
-+static int rockchip_sound_cdndp_init(struct snd_soc_pcm_runtime *rtd)
-+{
-+	struct snd_soc_component *component = asoc_rtd_to_codec(rtd, 0)->component;
-+	struct snd_soc_card *card = rtd->card;
-+	int ret;
-+
-+	/* Enable jack detection. */
-+	ret = snd_soc_card_jack_new(card, "DP Jack", SND_JACK_LINEOUT,
-+				    &cdn_dp_card_jack, NULL, 0);
-+	if (ret) {
-+		dev_err(card->dev, "Can't create DP Jack %d\n", ret);
-+		return ret;
-+	}
-+
-+	return snd_soc_component_set_jack(component, &cdn_dp_card_jack, NULL);
-+}
-+
- static int rockchip_sound_da7219_init(struct snd_soc_pcm_runtime *rtd)
- {
- 	struct snd_soc_component *component = asoc_rtd_to_codec(rtd, 0)->component;
-@@ -315,6 +334,7 @@ static const struct snd_soc_dai_link rockchip_dais[] = {
- 	[DAILINK_CDNDP] = {
- 		.name = "DP",
- 		.stream_name = "DP PCM",
-+		.init = rockchip_sound_cdndp_init,
- 		.dai_fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF |
- 			SND_SOC_DAIFMT_CBS_CFS,
- 		SND_SOC_DAILINK_REG(cdndp),
--- 
-2.34.1.703.g22d0c6ccf7-goog
-
+Jeff

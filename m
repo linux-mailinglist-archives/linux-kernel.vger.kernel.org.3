@@ -2,81 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A3A48EA5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEF648EA63
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235666AbiANNIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 08:08:54 -0500
-Received: from mga14.intel.com ([192.55.52.115]:43044 "EHLO mga14.intel.com"
+        id S241111AbiANNJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 08:09:40 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:37812 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235182AbiANNIx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 08:08:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642165733; x=1673701733;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HuiDkpd1S46KvBZiqcTrE2bs1dpaLcTS39cyhoj3ESQ=;
-  b=A03By21yd6nwhLJhmJrTViW9d0asI+Ebw+YAzrD/YkDCzTy1Al9GNlK8
-   nV44mp5G88xuLZK0nAbiFrp0GUWsIzWYxpAUwK0Ag/3sSY4hh0Zoz7R46
-   8Mba4G2nRm3c76G+Elxz4bOme8JqLL/c5+VXDpmErqaWR2vgfoDlHWjoF
-   aEzloynoJDklm1v4AHhJF/v6lzuKYvnnQhuUe0CvVak8ssm+hAE+RNy6+
-   +j5bqILpsmrEYUyGKLCHk+7FV7D40mTSSxnmUCvSbLh9NXBVjPPax+eKZ
-   gI0fFqB6OjHdsvvtWzgDCWN/g5SYxhwYt0lskxFPzjpjcMUK8KYv7VV7i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244442163"
-X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
-   d="scan'208";a="244442163"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 05:08:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
-   d="scan'208";a="577277462"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Jan 2022 05:08:52 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8MK3-0008Yb-Pa; Fri, 14 Jan 2022 13:08:51 +0000
-Date:   Fri, 14 Jan 2022 21:07:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 1559/2382] ./usr/include/linux/socket.h:5:10:
- fatal error: uapi/linux/socket_types.h: No such file or directory
-Message-ID: <202201142149.lENf79SU-lkp@intel.com>
+        id S235859AbiANNJi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 08:09:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=YnTWFx/yPuQ1VJBPYKlDARZ46we08KrqVjJlbdgCYJc=; b=Sw/ckGTBxXX43aAOM1HZp2w+Ez
+        c0haMM5HFuJ3YE9bAx+QhnWH2u7ueis4Pt8sdrZT6uzVuKm9Pp8mrpqpkM3vtD6NxUHs9/tBm2TS3
+        nsFL9ZEpMXQrH2XWnBRp+S0b6KT8yhYVBVpOFWyQysliV5Dk/NjnbnYx1JCh9nqlElug=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1n8MKI-001Pd9-Rk; Fri, 14 Jan 2022 14:09:06 +0100
+Date:   Fri, 14 Jan 2022 14:09:06 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] stmmac: intel: Honor phy LED set by system firmware
+ on a Dell hardware
+Message-ID: <YeF18mxKuO4/4G0V@lunn.ch>
+References: <20220114040755.1314349-1-kai.heng.feng@canonical.com>
+ <20220114040755.1314349-2-kai.heng.feng@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220114040755.1314349-2-kai.heng.feng@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   1a880941a087613ed42f77001229edfcf75ea8a5
-commit: 4d279aea908260eca25d06d817422f7b820a790f [1559/2382] headers/deps: net: Split <linux/socket_types.h> out of <linux/socket.h>
-config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220114/202201142149.lENf79SU-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=4d279aea908260eca25d06d817422f7b820a790f
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout 4d279aea908260eca25d06d817422f7b820a790f
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Fri, Jan 14, 2022 at 12:07:54PM +0800, Kai-Heng Feng wrote:
+> BIOS on Dell Edge Gateway 3200 already makes its own phy LED setting, so
+> instead of setting another value, keep it untouched and restore the saved
+> value on system resume.
+> 
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>  .../net/ethernet/stmicro/stmmac/dwmac-intel.c | 16 +++++
+>  drivers/net/ethernet/stmicro/stmmac/stmmac.h  |  2 +
+>  .../net/ethernet/stmicro/stmmac/stmmac_main.c |  4 ++
+>  drivers/net/phy/marvell.c                     | 58 ++++++++++++-------
+>  include/linux/marvell_phy.h                   |  1 +
+>  5 files changed, 61 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+> index 8e8778cfbbadd..f8a2879e0264a 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+> @@ -857,6 +857,16 @@ static const struct dmi_system_id quark_pci_dmi[] = {
+>  	{}
+>  };
+>  
+> +static const struct dmi_system_id use_preset_led[] = {
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell EMC"),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "Edge Gateway 3200"),
+> +		},
+> +	},
+> +	{}
+> +};
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This is a PHY property. Why is the MAC involved?
 
-All errors (new ones prefixed by >>):
+Please also think about how to make this generic, so any ACPI based
+system can use it, with any PHY.
 
-   In file included from ./usr/include/rdma/rdma_user_cm.h:38,
-                    from <command-line>:32:
->> ./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h: No such file or directory
-       5 | #include <uapi/linux/socket_types.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+     Andrew

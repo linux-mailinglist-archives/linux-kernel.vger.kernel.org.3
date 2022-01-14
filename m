@@ -2,41 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B00948E54F
+	by mail.lfdr.de (Postfix) with ESMTP id D633E48E551
 	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239428AbiANIRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236858AbiANIRM (ORCPT
+        id S239493AbiANIRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:17:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58222 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238991AbiANIRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:17:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A012C06161C;
-        Fri, 14 Jan 2022 00:17:11 -0800 (PST)
+        Fri, 14 Jan 2022 03:17:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2EAB0B82434;
-        Fri, 14 Jan 2022 08:17:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51BFEC36AEA;
-        Fri, 14 Jan 2022 08:17:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C5B8B823E6;
+        Fri, 14 Jan 2022 08:17:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C78C36AFF;
+        Fri, 14 Jan 2022 08:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148229;
-        bh=2EwTAPWZDgrgcwrvD4tCosRGB2k7vAOmbxB6/Ga4Vcg=;
+        s=korg; t=1642148232;
+        bh=y8uN/yGs2smiHpOWeUJUot42enqTFxI/H8QaxQqmhCk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S07bkzAkXeN0UzRUGlEuNLBkjv6zJMdKxzL4Rs89ow1ToUZISXqqhmKIvTZrx0D8l
-         ttkRFJndEatPrGwZj/bbDvA6yipHM3EywI4R376To3kIs+Z1ktxrnx2M+iic2AG+LU
-         JU8Mcsq3CRwwIJsWVStr8Av+Oad9PHaNgnvvngIo=
+        b=Le+Q84fVwSecXn5096pvggWkFzrcyUXAbb9TfLQkpv2wFKCohfx2zOEnPnIG+tbWf
+         K4+lVYNnAjnNvkZJUoo5BJMV96hmcGdgbBLR+hGiOsAfC+K6mShIFo8PsnkPR/8hXb
+         q0AdUsN3Rf79MYVpHjJJwfbYpPnZ3cQj/nl8YwLk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: [PATCH 5.4 03/18] Bluetooth: bfusb: fix division by zero in send path
-Date:   Fri, 14 Jan 2022 09:16:10 +0100
-Message-Id: <20220114081541.578627314@linuxfoundation.org>
+        stable@vger.kernel.org, Jonathan McDowell <noodles@earth.li>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH 5.4 04/18] USB: core: Fix bug in resuming hubs handling of wakeup requests
+Date:   Fri, 14 Jan 2022 09:16:11 +0100
+Message-Id: <20220114081541.615679749@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220114081541.465841464@linuxfoundation.org>
 References: <20220114081541.465841464@linuxfoundation.org>
@@ -48,38 +45,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-commit b5e6fa7a12572c82f1e7f2f51fbb02a322291291 upstream.
+commit 0f663729bb4afc92a9986b66131ebd5b8a9254d1 upstream.
 
-Add the missing bulk-out endpoint sanity check to probe() to avoid
-division by zero in bfusb_send_frame() in case a malicious device has
-broken descriptors (or when doing descriptor fuzz testing).
+Bugzilla #213839 reports a 7-port hub that doesn't work properly when
+devices are plugged into some of the ports; the kernel goes into an
+unending disconnect/reinitialize loop as shown in the bug report.
 
-Note that USB core will reject URBs submitted for endpoints with zero
-wMaxPacketSize but that drivers doing packet-size calculations still
-need to handle this (cf. commit 2548288b4fb0 ("USB: Fix: Don't skip
-endpoint descriptors with maxpacket=0")).
+This "7-port hub" comprises two four-port hubs with one plugged into
+the other; the failures occur when a device is plugged into one of the
+downstream hub's ports.  (These hubs have other problems too.  For
+example, they bill themselves as USB-2.0 compliant but they only run
+at full speed.)
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+It turns out that the failures are caused by bugs in both the kernel
+and the hub.  The hub's bug is that it reports a different
+bmAttributes value in its configuration descriptor following a remote
+wakeup (0xe0 before, 0xc0 after -- the wakeup-support bit has
+changed).
+
+The kernel's bug is inside the hub driver's resume handler.  When
+hub_activate() sees that one of the hub's downstream ports got a
+wakeup request from a child device, it notes this fact by setting the
+corresponding bit in the hub->change_bits variable.  But this variable
+is meant for connection changes, not wakeup events; setting it causes
+the driver to believe the downstream port has been disconnected and
+then connected again (in addition to having received a wakeup
+request).
+
+Because of this, the hub driver then tries to check whether the device
+currently plugged into the downstream port is the same as the device
+that had been attached there before.  Normally this check succeeds and
+wakeup handling continues with no harm done (which is why the bug
+remained undetected until now).  But with these dodgy hubs, the check
+fails because the config descriptor has changed.  This causes the hub
+driver to reinitialize the child device, leading to the
+disconnect/reinitialize loop described in the bug report.
+
+The proper way to note reception of a downstream wakeup request is
+to set a bit in the hub->event_bits variable instead of
+hub->change_bits.  That way the hub driver will realize that something
+has happened to the port but will not think the port and child device
+have been disconnected.  This patch makes that change.
+
+Cc: <stable@vger.kernel.org>
+Tested-by: Jonathan McDowell <noodles@earth.li>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/r/YdCw7nSfWYPKWQoD@rowland.harvard.edu
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/bluetooth/bfusb.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/core/hub.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/bluetooth/bfusb.c
-+++ b/drivers/bluetooth/bfusb.c
-@@ -629,6 +629,9 @@ static int bfusb_probe(struct usb_interf
- 	data->bulk_out_ep   = bulk_out_ep->desc.bEndpointAddress;
- 	data->bulk_pkt_size = le16_to_cpu(bulk_out_ep->desc.wMaxPacketSize);
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -1223,7 +1223,7 @@ static void hub_activate(struct usb_hub
+ 			 */
+ 			if (portchange || (hub_is_superspeed(hub->hdev) &&
+ 						port_resumed))
+-				set_bit(port1, hub->change_bits);
++				set_bit(port1, hub->event_bits);
  
-+	if (!data->bulk_pkt_size)
-+		goto done;
-+
- 	rwlock_init(&data->lock);
- 
- 	data->reassembly = NULL;
+ 		} else if (udev->persist_enabled) {
+ #ifdef CONFIG_PM
 
 

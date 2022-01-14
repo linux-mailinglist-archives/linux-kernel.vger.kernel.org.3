@@ -2,175 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C5648E790
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3BF48E78D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239804AbiANJcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 04:32:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiANJcq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:32:46 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BBFC061574;
-        Fri, 14 Jan 2022 01:32:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rMcUu/K1sVGV/SWZES0Ey2qPe4iMY0WZ61fzFjW8Z3Q=; b=IDAmrVXzL/LxmcKSyBrPlQgbz6
-        6aaGrIfS399/ajMDcn64iRN6xaBwNuCgA00UiZuWdwgPxT0qtgE93Qk8sOAwzHK2ZoQk6bqOvXNxw
-        6zHptXyExgi2eEPvpB3Lp0bw7Bqnq6xMyjOoFr48etOfHS8IgVv2bPofPzZ2lo7s0FfQkEiv+ZB3l
-        tleIUV1QVRU+yGF657jrdb5Mfhk+CLthBju+LnBgHDIdL5yUwefiOCa3YNhWGAt+ITbOCgClk4J+U
-        c/sGgmAyUgd0saINUBOcO8/VScYvtRpIel/uJkEKE1jFzqYaUPNy/IqyaNigVqKr3ZIZQAOwpWFO2
-        uRCdApUA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n8IwA-005gcN-Tb; Fri, 14 Jan 2022 09:31:59 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 41C903001C0;
-        Fri, 14 Jan 2022 10:31:55 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 22952203C24E7; Fri, 14 Jan 2022 10:31:55 +0100 (CET)
-Date:   Fri, 14 Jan 2022 10:31:55 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc:     Alexander Duyck <alexanderduyck@fb.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ben Segall <bsegall@google.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Steve Sistare <steven.sistare@oracle.com>,
-        Tejun Heo <tj@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-mm@kvack.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: Re: [RFC 15/16] sched/fair: Account kthread runtime debt for CFS
- bandwidth
-Message-ID: <YeFDC0mV3yurUFbl@hirez.programming.kicks-ass.net>
-References: <20220106004656.126790-1-daniel.m.jordan@oracle.com>
- <20220106004656.126790-16-daniel.m.jordan@oracle.com>
+        id S239483AbiANJcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 04:32:08 -0500
+Received: from foss.arm.com ([217.140.110.172]:58832 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231882AbiANJcH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 04:32:07 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA5A7101E;
+        Fri, 14 Jan 2022 01:32:06 -0800 (PST)
+Received: from [10.57.34.164] (unknown [10.57.34.164])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 155F83F766;
+        Fri, 14 Jan 2022 01:32:05 -0800 (PST)
+Subject: Re: [PATCH 0/2] perf: arm_spe: make the PMSCR CX bit[3] consistent
+ across the session
+To:     linux-eng@arm.com
+Cc:     james.clark@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220113175417.5523-1-german.gomez@arm.com>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <4f28367f-f6a2-fcca-dd33-c98daeb6bc11@arm.com>
+Date:   Fri, 14 Jan 2022 09:31:58 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106004656.126790-16-daniel.m.jordan@oracle.com>
+In-Reply-To: <20220113175417.5523-1-german.gomez@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 07:46:55PM -0500, Daniel Jordan wrote:
-> As before, helpers in multithreaded jobs don't honor the main thread's
-> CFS bandwidth limits, which could lead to the group exceeding its quota.
-> 
-> Fix it by having helpers remote charge their CPU time to the main
-> thread's task group.  A helper calls a pair of new interfaces
-> cpu_cgroup_remote_begin() and cpu_cgroup_remote_charge() (see function
-> header comments) to achieve this.
-> 
-> This is just supposed to start a discussion, so it's pretty simple.
-> Once a kthread has finished a remote charging period with
-> cpu_cgroup_remote_charge(), its runtime is subtracted from the target
-> task group's runtime (cfs_bandwidth::runtime) and any remainder is saved
-> as debt (cfs_bandwidth::debt) to pay off in later periods.
-> 
-> Remote charging tasks aren't throttled when the group reaches its quota,
-> and a task group doesn't run at all until its debt is completely paid,
-> but these shortcomings can be addressed if the approach ends up being
-> taken.
+Apologies everyone, this was a missend.
 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 44c452072a1b..3c2d7f245c68 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4655,10 +4655,19 @@ static inline u64 sched_cfs_bandwidth_slice(void)
->   */
->  void __refill_cfs_bandwidth_runtime(struct cfs_bandwidth *cfs_b)
->  {
-> -	if (unlikely(cfs_b->quota == RUNTIME_INF))
-> +	u64 quota = cfs_b->quota;
-> +	u64 payment;
-> +
-> +	if (unlikely(quota == RUNTIME_INF))
->  		return;
->  
-> -	cfs_b->runtime += cfs_b->quota;
-> +	if (cfs_b->debt) {
-> +		payment = min(quota, cfs_b->debt);
-> +		cfs_b->debt -= payment;
-> +		quota -= payment;
-> +	}
-> +
-> +	cfs_b->runtime += quota;
->  	cfs_b->runtime = min(cfs_b->runtime, cfs_b->quota + cfs_b->burst);
->  }
-
-It might be easier to make cfs_bandwidth::runtime an s64 and make it go
-negative.
-
-> @@ -5406,6 +5415,32 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
->  	rcu_read_unlock();
->  }
->  
-> +static void incur_cfs_debt(struct rq *rq, struct sched_entity *se,
-> +			   struct task_group *tg, u64 debt)
-> +{
-> +	if (!cfs_bandwidth_used())
-> +		return;
-> +
-> +	while (tg != &root_task_group) {
-> +		struct cfs_rq *cfs_rq = tg->cfs_rq[cpu_of(rq)];
-> +
-> +		if (cfs_rq->runtime_enabled) {
-> +			struct cfs_bandwidth *cfs_b = &tg->cfs_bandwidth;
-> +			u64 payment;
-> +
-> +			raw_spin_lock(&cfs_b->lock);
-> +
-> +			payment = min(cfs_b->runtime, debt);
-> +			cfs_b->runtime -= payment;
-
-At this point it might hit 0 (or go negative if/when you do the above)
-and you'll need to throttle the group.
-
-> +			cfs_b->debt += debt - payment;
-> +
-> +			raw_spin_unlock(&cfs_b->lock);
-> +		}
-> +
-> +		tg = tg->parent;
-> +	}
-> +}
-
-So part of the problem I have with this is that these external things
-can consume all the bandwidth and basically indefinitely starve the
-group.
-
-This is doulby so if you're going to account things like softirq network
-processing.
-
-Also, why does the whole charging API have a task argument? It either is
-current or NULL in case of things like softirq, neither really make
-sense as an argument.
-
-Also, by virtue of this being a start-stop annotation interface, the
-accrued time might be arbitrarily large and arbitrarily delayed. I'm not
-sure that's sensible.
-
-For tasks it might be better to mark the task and have the tick DTRT
-instead of later trying to 'migrate' the time.
+On 13/01/2022 17:54, German Gomez wrote:
+> The value of the CX bit of the PMSCR register is not consistent across
+> a perf session. There is an example in [1/2] to reproduce the issue.
+>
+> This cset applies a small correction to fix the consistency issue.
+>
+> - [PATCH 1/2] Makes the CX bit consistent by caching the value during
+>   the initialization of the SPE PMU event.
+> - [PATCH 2/2] Allows CONTEXT packets when profiling in CPU mode.
+>
+> German Gomez (2):
+>   perf: arm_spe: make the PMSCR CX bit[3] consistent across the session
+>   perf: arm_spe: Enable CONTEXT packets if profiling in CPU mode
+>
+>  drivers/perf/arm_spe_pmu.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+>

@@ -2,94 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E43BE48F1F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:18:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC23D48F200
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiANVSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 16:18:12 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:59435 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiANVSM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 16:18:12 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JbDfn6TZnz4y4m;
-        Sat, 15 Jan 2022 08:18:09 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642195090;
-        bh=aqd+9WcXOs53PGQiQ5d6p966oQvb4Ym651YYmVvLbjE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YZax+LF7uTRPl6eHye+HHpO5u/NsJK5NeR25+UgQGkdIgCl8M6If5ejZ/zdbXmQ4n
-         IgiqMrXhU+GrjXWUyYdRB6/eOd27QZgEjzVri4xITP1hX1GfEYvRPqBbj7uSY6Tne8
-         X4qFW7VTTLglalr4h8qv+BwX5ppb2ocZSWFSqFHAjihuuqzPgj5FjF0wzSFm3T0KQc
-         +fMEApy1TvHY5TajYuK9E/Rl3PALgjyaEVFLglJ4LfZ1P98So95eXecCNpWxrnAfQY
-         +FESqhOf0QsDvjmEJ+m4AbjAwdXaVUMFAeYgQ1gGBwKGCPIB6r5ZY9gF8ILBtc5yhT
-         iEqP4EU5C7KJA==
-Date:   Sat, 15 Jan 2022 08:18:09 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lkp@intel.com
-Subject: Re: [PATCH wireless] MAINTAINERS: add common wireless and
- wireless-next trees
-Message-ID: <20220115081809.64c9fec5@canb.auug.org.au>
-In-Reply-To: <20220114133415.8008-1-kvalo@kernel.org>
-References: <20220114133415.8008-1-kvalo@kernel.org>
+        id S229768AbiANVVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 16:21:23 -0500
+Received: from foss.arm.com ([217.140.110.172]:38020 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229741AbiANVVW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 16:21:22 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8035C6D;
+        Fri, 14 Jan 2022 13:21:21 -0800 (PST)
+Received: from ip-10-252-15-108.eu-west-1.compute.internal (unknown [10.252.15.108])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A20393F774;
+        Fri, 14 Jan 2022 13:21:18 -0800 (PST)
+From:   German Gomez <german.gomez@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     German Gomez <german.gomez@arm.com>,
+        Chase Conklin <chase.conklin@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Stephane Eranian <eranian@google.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH] perf record/arm-spe: Override attr->sample_period for non-libpfm4 events
+Date:   Fri, 14 Jan 2022 21:21:02 +0000
+Message-Id: <20220114212102.179209-1-german.gomez@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/54f_YPH=tNa4afEtyMIegyt";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/54f_YPH=tNa4afEtyMIegyt
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+A previous commit preventing attr->sample_period values from being
+overridden in pfm events changed a related behaviour in arm_spe.
 
-Hi Kalle,
+Before this patch:
+perf record -c 10000 -e arm_spe_0// -- sleep 1
 
-On Fri, 14 Jan 2022 15:34:15 +0200 Kalle Valo <kvalo@kernel.org> wrote:
->
-> For easier maintenance we have decided to create common wireless and
-> wireless-next trees for all wireless patches. Old mac80211 and wireless-d=
-rivers
-> trees will not be used anymore.
->=20
-> While at it, add a wiki link to wireless drivers section and a patchwork =
-link
-> to 802.11, mac80211 and rfkill sections.
->=20
-> Acked-by: Johannes Berg <johannes@sipsolutions.net>
-> Signed-off-by: Kalle Valo <kvalo@kernel.org>
-> ---
->=20
-> Stephen, please use these new trees in linux-next from now on.
+Would not yield an SPE event with period=10000, because the arm-spe code
+initializes sample_period to a non-0 value, so the "-c 10000" is ignored.
 
-Done from today.  I have set you and Johannes as contacts along with
-the linux-wireless mailing list.  Also, I assume you meant to mention
-that I should use the branches called "main".
+This patch restores the previous behaviour for non-libpfm4 events.
 
---=20
-Cheers,
-Stephen Rothwell
+Reported-by: Chase Conklin <chase.conklin@arm.com>
+Fixes: ae5dcc8abe31 (“perf record: Prevent override of attr->sample_period for libpfm4 events”)
+Signed-off-by: German Gomez <german.gomez@arm.com>
+---
+ tools/perf/util/evsel.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
---Sig_/54f_YPH=tNa4afEtyMIegyt
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index a59fb2ecb84e..86ab038f020f 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -1065,6 +1065,17 @@ void __weak arch_evsel__fixup_new_cycles(struct perf_event_attr *attr __maybe_un
+ {
+ }
+ 
++static void evsel__set_default_freq_period(struct record_opts *opts,
++					   struct perf_event_attr *attr)
++{
++	if (opts->freq) {
++		attr->freq = 1;
++		attr->sample_freq = opts->freq;
++	} else {
++		attr->sample_period = opts->default_interval;
++	}
++}
++
+ /*
+  * The enable_on_exec/disabled value strategy:
+  *
+@@ -1131,14 +1142,12 @@ void evsel__config(struct evsel *evsel, struct record_opts *opts,
+ 	 * We default some events to have a default interval. But keep
+ 	 * it a weak assumption overridable by the user.
+ 	 */
+-	if (!attr->sample_period) {
+-		if (opts->freq) {
+-			attr->freq		= 1;
+-			attr->sample_freq	= opts->freq;
+-		} else {
+-			attr->sample_period = opts->default_interval;
+-		}
+-	}
++	if ((evsel->is_libpfm_event && !attr->sample_period) ||
++	    (!evsel->is_libpfm_event && (!attr->sample_period ||
++					 opts->user_freq != UINT_MAX ||
++					 opts->user_interval != ULLONG_MAX)))
++		evsel__set_default_freq_period(opts, attr);
++
+ 	/*
+ 	 * If attr->freq was set (here or earlier), ask for period
+ 	 * to be sampled.
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHh6JEACgkQAVBC80lX
-0GykRwf/dF3ug/FXpM5DXFuCbr7Jxx/z5/BTp5RrYTaNiqiS8xtKDYsUUkvB+ErC
-EcFYzush/ySH743I9rH9TPJxuWn1qt7WOmfkfiWpbCF1+/e+25vD+JfF8E5xWpC1
-TE6//171OE6nX5KcksOpDjf0bg0jKaS6q8BoKByvwEg3NNvsJennJTRHHMeZSJU9
-u56jxF6Elb+WHe4rFSFeoPvBf5SOSk9Ti6nwT334Y3NHm+xKu0cbfbw6Mk8AWzRK
-vSeaOq3GdImBW1bYfUUaxR+Ohes6w/53xU9kpvCLZ1xYjamoWxWJy0OevGCBcGUp
-zoPG7pFdeNvgUwEKdw/4t3biAkDBMQ==
-=E95i
------END PGP SIGNATURE-----
-
---Sig_/54f_YPH=tNa4afEtyMIegyt--

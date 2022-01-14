@@ -2,95 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F0948EE02
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C10D48EE08
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243310AbiANQWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:22:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
+        id S243314AbiANQXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233526AbiANQWC (ORCPT
+        with ESMTP id S243235AbiANQXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:22:02 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76810C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:22:02 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id 59-20020a17090a09c100b001b34a13745eso22426202pjo.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:22:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=elOwmhf+rzcQgZMfoeUXN1l9H5VGHHZ0l6UT+nIDAOg=;
-        b=dvQyhXvSwz3tlHeQlP9hgUsSHmw2hh9MaTChbDAad9NgZA/72wIx4T4NJ9MV0zx2AA
-         EMM1pFrrgj5GYfXQid9hIAlwP3A76ti84WWwj1n2/0/0YHEAmVBIEOgEJtkzl7Oo7cuf
-         bvVcwoZmmCINTe5hs1e0w7dD41lnhED5Hbu6+rddGa1jDsss/w32iFdhfKfwTfeAZwFy
-         NeZAf6n4o2EPXnN6wGjs8WeGJ3dhj8QAJ1nN1Lftn4I8W7UqiiKKubJ6/13ANq54EXOG
-         X7pWTsL4jP0WQifhikkk0Iv27A8/AoEZhnAMY+mI6Y9xa7kPD9E2Zr5JVAYOVu+Cw1EI
-         BRgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=elOwmhf+rzcQgZMfoeUXN1l9H5VGHHZ0l6UT+nIDAOg=;
-        b=22Vs0ZjbBiW8ku+KSGSDe7YLWVidmnCDZPdqJolDXfLSAxoFRwH5txBb/LHVo4u36Z
-         VbDJnlsQdh5wRIAu8tq0rwuFxD5vXFsDC3wvJV+SEyPT6j5jMto42XMiJ4TsUtnIeS7D
-         pKlT+MZHBWOiiYGOYnNV4sIcWXccZ51fQJJ5/nh/Mt0p8eEEeEtzc+scnaF66zHTUC2i
-         r1mhjcb7MaZT/OBTZqhFT7uFMnss3VR8DE73YqSuSMTOXMY92RUB0N+uSJvIelprP+uc
-         WkvNU17DL+B4FZxK+/lJGVnDhJE1ut3pcbBglELM9rluFDOUtJCs6IoMsqFj31GFcXFP
-         aEgw==
-X-Gm-Message-State: AOAM530AGhVldY+qtROXcBraac9sbwaUC4GMkrLTuEQiD8sy0+USN/At
-        le2/gwaiFgWmzLS8pXpLitqdWw==
-X-Google-Smtp-Source: ABdhPJzKnGGEjoTCd5mvsGX8rMFiKOHI+wVjEU+z7K2C79NByOmLaTMK5vJDiFlLCGYRARv3VOlFxQ==
-X-Received: by 2002:a17:902:ee4c:b0:14a:436e:56d7 with SMTP id 12-20020a170902ee4c00b0014a436e56d7mr9941712plo.169.1642177321863;
-        Fri, 14 Jan 2022 08:22:01 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o186sm6091069pfb.187.2022.01.14.08.22.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 08:22:01 -0800 (PST)
-Date:   Fri, 14 Jan 2022 16:21:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Igor Mammedov <imammedo@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] KVM: x86: Partially allow KVM_SET_CPUID{,2} after
- KVM_RUN for CPU hotplug
-Message-ID: <YeGjJRfpJ8mMa6c7@google.com>
-References: <20220113133703.1976665-1-vkuznets@redhat.com>
- <YeCEyNz/xqcJBcU/@google.com>
- <20220114100849.277c04ee@redhat.com>
+        Fri, 14 Jan 2022 11:23:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C8FC061574;
+        Fri, 14 Jan 2022 08:23:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22FAE61F87;
+        Fri, 14 Jan 2022 16:23:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D75BDC36AE5;
+        Fri, 14 Jan 2022 16:23:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642177390;
+        bh=8EEtbq135Y0w2OjVUTuJBP80ewEFZkVxYRnAxWNG0eY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=G+MoEykL1Bzcf4w4AmXD+dX82/JB8pi55zC1aY+51movMZJ+fQNkqDJiNVLBeqaXK
+         66h8mj10pJnEMsA6EcLsz7bK+9zrJr73Aknmr80Wk5g5sbyfRb+cbAIbZdEgLdqNWH
+         3sgBSDZteg/GXq5TSfGLXRb/cimeHMgq17JkgyCsrAGc/fW4IMm5IjXknUz97qp1K/
+         JQEW+Kpy21DFQOGvcGI7kypMT707B7HmAfLHT+lmSdicfoXklTmnuY2hgT+6OsaZOV
+         bUZ69y/0FBYanLA3SOuetWFb6qZv7vva5S9whhT5I3vqFJheVnSKeItWWBiWkAE4WW
+         BjIFhvUDzN1HQ==
+Date:   Fri, 14 Jan 2022 08:23:08 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, "David S. Miller" <davem@davemloft.net>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] stmmac: intel: Honor phy LED set by system firmware
+ on a Dell hardware
+Message-ID: <20220114082308.76a5cca5@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <CAAd53p6rW7PcugY7okKsXybK2O=pS8qAhctMzsa-MEgJrKhEdg@mail.gmail.com>
+References: <20220114040755.1314349-1-kai.heng.feng@canonical.com>
+        <20220114040755.1314349-2-kai.heng.feng@canonical.com>
+        <20220113203523.310e13d3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <CAAd53p6rW7PcugY7okKsXybK2O=pS8qAhctMzsa-MEgJrKhEdg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220114100849.277c04ee@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022, Igor Mammedov wrote:
-> On Thu, 13 Jan 2022 20:00:08 +0000
-> Sean Christopherson <seanjc@google.com> wrote:
+On Fri, 14 Jan 2022 14:47:47 +0800 Kai-Heng Feng wrote:
+> > Coincidentally the first Marvell flag appears dead, nobody sets it:
+> >
+> > $ git grep MARVELL_PHY_M1145_FLAGS_RESISTANCE
+> > drivers/net/phy/marvell.c:      if (phydev->dev_flags & MARVELL_PHY_M1145_FLAGS_RESISTANCE) {
+> > include/linux/marvell_phy.h:#define MARVELL_PHY_M1145_FLAGS_RESISTANCE  0x00000001
+> > $
+> >
+> > unless it's read from DT under different name or something.  
 > 
-> > On Thu, Jan 13, 2022, Vitaly Kuznetsov wrote:
-> > > Recently, KVM made it illegal to change CPUID after KVM_RUN but
-> > > unfortunately this change is not fully compatible with existing VMMs.
-> > > In particular, QEMU reuses vCPU fds for CPU hotplug after unplug and it
-> > > calls KVM_SET_CPUID2. Relax the requirement by implementing an allowlist
-> > > of entries which are allowed to change.  
-> > 
-> > Honestly, I'd prefer we give up and just revert feb627e8d6f6 ("KVM: x86: Forbid
-> > KVM_SET_CPUID{,2} after KVM_RUN").  Attempting to retroactively restrict the
-> > existing ioctls is becoming a mess, and I'm more than a bit concerned that this
-> > will be a maintenance nightmare in the future, without all that much benefit to
-> > anyone.
-> 
-> in 63f5a1909f9 ("KVM: x86: Alert userspace that KVM_SET_CPUID{,2} after KVM_RUN is broken")
-> you mention heterogeneous configuration, and that implies that
-> a userspace (not upstream qemu today) might attempt to change CPUID
-> and that would be wrong. Do we still care about that?
+> It was introduced by 95d21ff4c645 without any user. Should we keep it?
 
-We still care, and I really do like the idea in theory, but if we're stuck choosing
-between taking on a pile of ugly code in KVM and letting userspace shoot themselves
-in the foot, I choose the latter :-)
+Not unless someone explains that it's actually used somehow.
+
+Please post a patch once net-next opens.

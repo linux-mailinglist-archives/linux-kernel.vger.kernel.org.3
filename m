@@ -2,105 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6353C48E517
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 08:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7F348E51E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 08:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234207AbiANH6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 02:58:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiANH6M (ORCPT
+        id S234391AbiANH7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 02:59:20 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:65162 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234249AbiANH7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 02:58:12 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA5BC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 23:58:12 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id e9so14220956wra.2
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 23:58:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qQYjsQBGNm39+m2dg7I01Yy9Chp8U4KppaS99DbhPP8=;
-        b=qIF7NumT6wIJyuqSTkndqu8vxCmN24tBqFBtZ4wPwMPkVE69PHgrfzgtCQUw5bshPx
-         pMVV+t8w9BWVAIRIHBAqnb0SETIWFCYVMuekeGaC0cnTz3lf6LCgiJGWkI92KeBvBH3/
-         9Zn/CPNgeaI3BzCfgAL17Pn9lAnXzX/F0b7NzVm6cGMGgGtvr2fAKckgnNyIilawCsvD
-         BF4CdLwgIJwwkIneN8WpVwIACMSLPBXW8jiRb2XVmr5l4JDj1mnRP2tUhDhHIQ1unBca
-         vHC/+hjJcAr4r39EB+oxaiprnleY27R80e2QFWHu4t5LXze2XDXMkwgLcp0+lZZaBMWh
-         t9wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qQYjsQBGNm39+m2dg7I01Yy9Chp8U4KppaS99DbhPP8=;
-        b=CGX4Il7nV09SbvJCQh+uA7CbLMatuAQjT0gCHwgaYFV9dizpvewhnZ0SpEnjiRQBML
-         AAkj1Mn1ItUYsEHDiqZYZ1YDGyynoo2bg1W0YF7Fa3z8H1CqpxIss9/KCizqj5E42Uwp
-         mL6BX7ud8n0yC5TNnkrmS6FBISYc6zgr8k88KhWcdECiFC+EAaKnXoP3+x3h0ouSI1dr
-         FPWuQsdXOxKl51g3tSLBOQ1Iz1VjIpZlt9SE/zmGFaFAFKAK48zZsHwfIt6RkCIrUt94
-         +n0G5POaj0uVrm6tFlzjSfOAtgpcb7x6n6vbZ5tHYZalgRxtYtq/l95EIKHlFIek18eG
-         aokg==
-X-Gm-Message-State: AOAM531MALDgh1Y3GhTq1IeEMYjMuIxy6ulMq6AcZovTa0X+zdasnb4W
-        EB2brhYqyyZsRA45vL1JJxE6aQD8iO4=
-X-Google-Smtp-Source: ABdhPJxaAGWnJ+sjNOjsTnVJSiWbTg77K7MrJqJmVjBJj8UUVESt6Gakeb9jWYftaAF9t28SX0ay/A==
-X-Received: by 2002:a05:6000:1543:: with SMTP id 3mr2943527wry.98.1642147090941;
-        Thu, 13 Jan 2022 23:58:10 -0800 (PST)
-Received: from nz.home (host81-129-83-154.range81-129.btcentralplus.com. [81.129.83.154])
-        by smtp.gmail.com with ESMTPSA id k31sm3581154wms.15.2022.01.13.23.58.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 23:58:10 -0800 (PST)
-Received: by nz.home (Postfix, from userid 1000)
-        id 4FE9919DC1560; Fri, 14 Jan 2022 07:58:09 +0000 (GMT)
-From:   Sergei Trofimovich <slyich@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Sergei Trofimovich <slyich@gmail.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: [PATCH] objtool: check: give big enough buffer for pv_ops
-Date:   Fri, 14 Jan 2022 07:57:56 +0000
-Message-Id: <20220114075756.838243-1-slyich@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 14 Jan 2022 02:59:18 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20E7RZqT025960;
+        Fri, 14 Jan 2022 07:58:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Cesl+No+0sOGeGnRqupy1/fhMOaN8mokgd7VZS/yh+o=;
+ b=OpDe5TMnxSz6WbTjusmzFOSVHCzXzceNntoZsxF+Dnvom9xDpuu8mQhRetjRiqgmEHZE
+ NXjPV7HEg9dR9V1sw5DOVuzn61aIr1TCVne3nZSMLrh7BeqMgSIRkD88vP+xfSjWpv+e
+ Ch+1OcMgSg6QcA0fimz+cbP9cz0hK8A8GNC6te7UbIY/HhFOTi9IUgYbmBmdpr+wrWzi
+ 3zsY5GLUoSRuUIzFeMxbr9JnKiB+axlw3QWxp2f6bvOQ8Q9XOPe4L7rZCWWetVDULmDT
+ 8TjSoTyg2R4zRuMHlg/o8Z9DqvbL3qNL7t3G6gQ1yXG5SvNPptBXf85N2aaKCuJoyMbA KQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dk4t58g2v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Jan 2022 07:58:52 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20E7koq0021905;
+        Fri, 14 Jan 2022 07:58:50 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3df1vjved3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Jan 2022 07:58:50 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20E7wms638011348
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 Jan 2022 07:58:48 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40ACF42041;
+        Fri, 14 Jan 2022 07:58:48 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C6C9342042;
+        Fri, 14 Jan 2022 07:58:47 +0000 (GMT)
+Received: from localhost (unknown [9.43.21.93])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 14 Jan 2022 07:58:47 +0000 (GMT)
+Date:   Fri, 14 Jan 2022 13:28:46 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Subject: Re: [PATCH] powerpc/bpf: Always reallocate BPF_REG_5, BPF_REG_AX and
+ TMP_REG when possible
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+References: <b04c246874b716911139c04bc004b3b14eed07ef.1641817763.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <b04c246874b716911139c04bc004b3b14eed07ef.1641817763.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: astroid/v0.16-1-g4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1642147004.dum5th9cvl.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: VqQotbyCuTjboUUftVpRbmYP6Cec2Cau
+X-Proofpoint-ORIG-GUID: VqQotbyCuTjboUUftVpRbmYP6Cec2Cau
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-14_02,2022-01-13_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ impostorscore=0 suspectscore=0 lowpriorityscore=0 phishscore=0
+ adultscore=0 priorityscore=1501 clxscore=1015 spamscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201140052
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gcc-12 build fails flagging possible buffer overflow:
+Christophe Leroy wrote:
+> BPF_REG_5, BPF_REG_AX and TMP_REG are mapped on non volatile registers
+> because there are not enough volatile registers, but they don't need
+> to be preserved on function calls.
+>=20
+> So when some volatile registers become available, those registers can
+> always be reallocated regardless of whether SEEN_FUNC is set or not.
+>=20
+> Suggested-by: Naveen N. Rao <naveen.n.rao@linux.ibm.com>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  arch/powerpc/net/bpf_jit.h        |  3 ---
+>  arch/powerpc/net/bpf_jit_comp32.c | 14 +++++++++++---
+>  2 files changed, 11 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+> index b20a2a83a6e7..b75507fc8f6b 100644
+> --- a/arch/powerpc/net/bpf_jit.h
+> +++ b/arch/powerpc/net/bpf_jit.h
+> @@ -127,9 +127,6 @@
+>  #define SEEN_FUNC	0x20000000 /* might call external helpers */
+>  #define SEEN_TAILCALL	0x40000000 /* uses tail calls */
+> =20
+> -#define SEEN_VREG_MASK	0x1ff80000 /* Volatile registers r3-r12 */
+> -#define SEEN_NVREG_MASK	0x0003ffff /* Non volatile registers r14-r31 */
+> -
+>  #ifdef CONFIG_PPC64
+>  extern const int b2p[MAX_BPF_JIT_REG + 2];
+>  #else
+> diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit=
+_comp32.c
+> index d3a52cd42f53..cfec42c8a511 100644
+> --- a/arch/powerpc/net/bpf_jit_comp32.c
+> +++ b/arch/powerpc/net/bpf_jit_comp32.c
+> @@ -77,14 +77,22 @@ static int bpf_jit_stack_offsetof(struct codegen_cont=
+ext *ctx, int reg)
+>  	return BPF_PPC_STACKFRAME(ctx) - 4;
+>  }
+> =20
+> +#define SEEN_VREG_MASK		0x1ff80000 /* Volatile registers r3-r12 */
+> +#define SEEN_NVREG_FULL_MASK	0x0003ffff /* Non volatile registers r14-r3=
+1 */
+> +#define SEEN_NVREG_TEMP_MASK	0x00001e01 /* BPF_REG_5, BPF_REG_AX, TMP_RE=
+G */
 
-    check.c: In function 'validate_call':
-    check.c:2865:58: error: '%d' directive output may be truncated writing between 1 and 10 bytes into a region of size 9 [-Werror=format-truncation=]
-     2865 |                 snprintf(pvname, sizeof(pvname), "pv_ops[%d]", idx);
-          |                                                          ^~
-
-I think it's a valid warning:
-
-    static char pvname[16];
-    int idx;
-    ...
-    idx = (rel->addend / sizeof(void *));
-    snprintf(pvname, sizeof(pvname), "pv_ops[%d]", idx);
-
-we have only 7 chars for %d while it could take up to 9.
-
-CC: Josh Poimboeuf <jpoimboe@redhat.com>
-CC: Peter Zijlstra <peterz@infradead.org>
----
- tools/objtool/check.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 8c1931eab5f1..0fae132ea59f 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -2852,7 +2852,7 @@ static inline bool func_uaccess_safe(struct symbol *func)
- 
- static inline const char *call_dest_name(struct instruction *insn)
- {
--	static char pvname[16];
-+	static char pvname[32];
- 	struct reloc *rel;
- 	int idx;
- 
--- 
-2.34.1
+Could have been named better: SEEN_NVREG_BPF_VGER_MASK, or such.
+Apart from that:
+Reviewed-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 

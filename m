@@ -2,197 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F189848E1D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA45848E1D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238545AbiANA5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 19:57:21 -0500
-Received: from mga03.intel.com ([134.134.136.65]:64084 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230040AbiANA5U (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 19:57:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642121840; x=1673657840;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5zlHbZlCHZs666H8cOGG7rweh70YY57ByrZiK4jMcZk=;
-  b=kCqI7uP2B/P5tEOwcoUBz9uaw7aL+luWA/FOWjtiu+rVE1Ayg1sNseBZ
-   o6A6jXKQPezreQLoyGHC/bhaKpI4Pcu19ih2p7JztfNwdwD4CE6d0PQHE
-   tsFfn3XwT4SrFT+/rzfsnIsOPtwYaC33X/qXrx/B3+Rx4U6EPRVP5gNuU
-   pFqUuucgf3yLONUQZAUKXHyhZvVX06f4YqJ7GpJJBQE/JAC9dluRNHGm+
-   vQi8gPWM+Z/FlORzN/PDgYlJCiUMmr23FvAyfjJJ2xsEDirxTtFdDS9Cx
-   9vKuEtDkPiq/mypeVEYRK772R6LiePVK0bSzEtX+dmoPEnbCrB6DKqjDw
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244107764"
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="244107764"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 16:57:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="475566017"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jan 2022 16:57:16 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8Au3-0007qt-Gg; Fri, 14 Jan 2022 00:57:15 +0000
-Date:   Fri, 14 Jan 2022 08:56:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        id S238571AbiANA7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 19:59:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230040AbiANA7H (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 19:59:07 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7434FC061574;
+        Thu, 13 Jan 2022 16:59:07 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id p37so1374888pfh.4;
+        Thu, 13 Jan 2022 16:59:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kcXWNVuJYi9TrKMu8wUS6Mxf0fEhEL/rywpSg33yxMg=;
+        b=OmvCCgZDZaT14EaTCOLuWi0SfgUA4fsYNmDUbcJUeLTeeuLhp2fWpYrvovEvPY3V7u
+         sCfCHJfvI0XOT+6Oa0OtNFw28mQWtcKPRfTAMB/KFDFdbzXqF7l/VOV7e7oC5dXVs5ac
+         MmfzHGtsTxDd9rf5yCC6+mLd+WTQocCFo0/mPZ3kk1RhwsrxQFoYIuA/09eLYMFPNPQN
+         HxT5/LTAAE8V7KjvHolH5KXSzqL7gymjmQgoC4jSDvx4qwatgfSjf9WwJtZyNcv1vZhE
+         AHshZwjS2mZcCyAHSUEhdNW+Ez7hl6WBQojeXk2ICmCyWs/Akh6/sebhN4vEPsQIS3f7
+         OL9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kcXWNVuJYi9TrKMu8wUS6Mxf0fEhEL/rywpSg33yxMg=;
+        b=B1TbSqjsPpW7+Ujm8C0GGrkGke7ofU+LTdt4BmnIaB7o7Gs+sRfU7yfjO+1dyCLW64
+         /8u+3HG1I9fqH/IB2Idp0q3RmIaZo8JnLNS/bvWAAzCpdSGVAdjC84RzylmLVtRwO4SN
+         abFncYmF3FTRmSiDqs41gmzdX+bdwhZ2CfyRiCuUuVasfhX3QRBDYAeamA340JGCY+ZE
+         4J1SeFfpwNlw8/lENqD64i4o6GPcCr6x3faARMkzGPZKYSVsMZTfSvo/qH+cDa7pTVci
+         Z7+OGW+8yEKc4TrpCxjjrQMKmXtyqIq9Lqj94MTvha4Y58iWjzQ4Sm1rbqfEMQk4uGyb
+         esng==
+X-Gm-Message-State: AOAM532U0wThUh5h9R20s/vU1F4Z56Bx+gyMjUXhUFe0IEiiKGPWu/bB
+        ltQlIS2MWqGau8aYwkYtpG/HOEjEiBs=
+X-Google-Smtp-Source: ABdhPJzPQb8WLJY2bTIVXdoXkfeWT3DUbEnpALgoXUl5H2xTHIGlx/I2YKMKsvgWw4O5F218OaEDqQ==
+X-Received: by 2002:a63:3d8e:: with SMTP id k136mr5969485pga.262.1642121947060;
+        Thu, 13 Jan 2022 16:59:07 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id o15sm259675pfg.176.2022.01.13.16.58.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 16:58:30 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     trond.myklebust@hammerspace.com
+Cc:     anna.schumaker@netapp.com, linux-nfs@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [intel-tdx:tdx/guest-rebased 105/133] kernel/dma/swiotlb.c:320:16:
- error: implicit declaration of function 'kzalloc'
-Message-ID: <202201140844.HLn72YTB-lkp@intel.com>
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] NFS: Replace one-element array with flexible-array member
+Date:   Fri, 14 Jan 2022 00:57:33 +0000
+Message-Id: <20220114005732.763911-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git tdx/guest-rebased
-head:   e3995864d37c56f431c93fc3dc454d9c65f5e9ea
-commit: 64f46677f0bd4db290a0c6be857c6fd8db39324b [105/133] swiotlb: use bitmap to track free slots
-config: s390-randconfig-r033-20220113 (https://download.01.org/0day-ci/archive/20220114/202201140844.HLn72YTB-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel/tdx/commit/64f46677f0bd4db290a0c6be857c6fd8db39324b
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx tdx/guest-rebased
-        git checkout 64f46677f0bd4db290a0c6be857c6fd8db39324b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+There is a regular need in the kernel to provide a way to declare having
+a dynamically sized set of trailing elements in a structure. Kernel code
+should always use “flexible array members” for these cases. The older
+style of one-element or zero-length arrays should no longer be used.
 
-All errors (new ones prefixed by >>):
+Reference:
+https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-
+and-one-element-arrays
 
-   In file included from kernel/dma/swiotlb.c:24:
-   In file included from include/linux/dma-direct.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/dma/swiotlb.c:24:
-   In file included from include/linux/dma-direct.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/dma/swiotlb.c:24:
-   In file included from include/linux/dma-direct.h:9:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/dma/swiotlb.c:320:16: error: implicit declaration of function 'kzalloc' [-Werror,-Wimplicit-function-declaration]
-           mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-                         ^
-   kernel/dma/swiotlb.c:320:16: note: did you mean 'vzalloc'?
-   include/linux/vmalloc.h:140:14: note: 'vzalloc' declared here
-   extern void *vzalloc(unsigned long size) __alloc_size(1);
-                ^
-   kernel/dma/swiotlb.c:320:14: warning: incompatible integer to pointer conversion assigning to 'unsigned long *' from 'int' [-Wint-conversion]
-           mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/dma/swiotlb.c:324:3: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
-                   kfree(mem->bitmap);
-                   ^
-   kernel/dma/swiotlb.c:324:3: note: did you mean 'vfree'?
-   include/linux/vmalloc.h:155:13: note: 'vfree' declared here
-   extern void vfree(const void *addr);
-               ^
-   13 warnings and 2 errors generated.
-
-
-vim +/kzalloc +320 kernel/dma/swiotlb.c
-
-   306	
-   307	int
-   308	swiotlb_late_init_with_tbl(char *tlb, unsigned long nslabs)
-   309	{
-   310		struct io_tlb_mem *mem = &io_tlb_default_mem;
-   311		unsigned long bytes = nslabs << IO_TLB_SHIFT;
-   312	
-   313		if (swiotlb_force == SWIOTLB_NO_FORCE)
-   314			return 0;
-   315	
-   316		/* protect against double initialization */
-   317		if (WARN_ON_ONCE(mem->nslabs))
-   318			return -ENOMEM;
-   319	
- > 320		mem->bitmap = kzalloc(DIV_ROUND_UP(nslabs, BITS_PER_BYTE), GFP_KERNEL);
-   321		mem->slots = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO,
-   322			get_order(array_size(sizeof(*mem->slots), nslabs)));
-   323		if (!mem->slots || !mem->bitmap) {
- > 324			kfree(mem->bitmap);
-   325			kfree(mem->slots);
-   326			return -ENOMEM;
-   327		}
-   328	
-   329		set_memory_decrypted((unsigned long)tlb, bytes >> PAGE_SHIFT);
-   330		swiotlb_init_io_tlb_mem(mem, virt_to_phys(tlb), nslabs, true);
-   331	
-   332		swiotlb_print_info();
-   333		swiotlb_set_max_segment(mem->nslabs << IO_TLB_SHIFT);
-   334		return 0;
-   335	}
-   336	
-
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ include/linux/nfs_xdr.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/nfs_xdr.h b/include/linux/nfs_xdr.h
+index 39390d9df9e1..7f51edd5785a 100644
+--- a/include/linux/nfs_xdr.h
++++ b/include/linux/nfs_xdr.h
+@@ -421,7 +421,7 @@ struct nfs42_layout_error {
+ 	__u64 offset;
+ 	__u64 length;
+ 	nfs4_stateid stateid;
+-	struct nfs42_device_error errors[1];
++	struct nfs42_device_error errors[];
+ };
+ 
+ #define NFS42_LAYOUTERROR_MAX 5
+-- 
+2.25.1
+

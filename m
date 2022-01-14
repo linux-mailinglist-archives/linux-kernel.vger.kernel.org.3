@@ -2,299 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4E648EF2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0930248EF2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243832AbiANRU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
+        id S243844AbiANRWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:22:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiANRUy (ORCPT
+        with ESMTP id S243842AbiANRV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:20:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9F7C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:20:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3979B829D4
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 17:20:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E96C36AE9;
-        Fri, 14 Jan 2022 17:20:49 +0000 (UTC)
-Date:   Fri, 14 Jan 2022 12:20:47 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Colin Ian King <colin.i.king@googlemail.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Geliang Tang <geliang.tang@suse.com>,
-        Jiri Olsa <jolsa@redhat.com>, John Keeping <john@metanate.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>,
-        Qiujun Huang <hqjagain@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Tom Zanussi <zanussi@kernel.org>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Xiangyang Zhang <xyz.sun.ok@gmail.com>,
-        Xiaoke Wang <xkernel.wang@foxmail.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Yinan Liu <yinan@linux.alibaba.com>,
-        Yuntao Wang <ytcoode@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [GIT PULL] tracing: Updates for 5.17
-Message-ID: <20220114122047.061a16e6@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 14 Jan 2022 12:21:59 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B39AC061574;
+        Fri, 14 Jan 2022 09:21:58 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id u21so36403205edd.5;
+        Fri, 14 Jan 2022 09:21:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=DZsFo02ItcgUoJXp2q+L6CGSHBvAOzzqvn0C/GK76PI=;
+        b=dSd5aAWtTZqFxTds/o5F02gYjXz19ShtCPoGo2h20yCaGii3RRceSruaBLMvcy/SFD
+         NBadKk1qKfuDsw3cEBLcX+hK4ZrWznMkmOepzUOYGIilCfyUp5wswbpRxsMSZMuT/48T
+         QaTSUTzNdbWJMlPHtpJN/PSshhbxeLMYbH4tCH7LsVyP7bqPsg8Bb08eZNrSoQScx8WU
+         Hn67Q9nAWSZtFqnE2bN/sM14BkQq4ksE5lR+3C4UIsJaZ8KezQtNkvS/D5gfziThJCGr
+         IoWpJul/Ov+i4ThKUQaL+Dmco4oUqhLuv0u7ab3qEPtz6MpcLISy2Q5cOoKk52TC4KUI
+         m8Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=DZsFo02ItcgUoJXp2q+L6CGSHBvAOzzqvn0C/GK76PI=;
+        b=kuegJjIITychNeRluoBDK9GtQywi6WN3BUEr/Tk22APjHjPr55sYOPtVXRhbBEDlfM
+         VTfwzsF4Ix8IjY3SuSwHeCCpFXbB2jExQllBAmioiTXKuEwb1MqACj0zB6muL253DUK7
+         PevTD4bbWiUojaJ4pQjhcdel0d+4d6ApMMBKmOxDrElrauI3JQnMNceX0FC5tiJKT1pn
+         LddRKIOOKz2CXTNmu2zKV5j/GpYoGVjtSq3ks0TILUwU2TLeLXWqPfS1SoGOwYf6KMIv
+         eH84X7yHz/ElVC4dg6/ofr8+kxJMrYHvkDke5syVArOLm6ukfV016XFxEbqRWVHznxqI
+         Ogpg==
+X-Gm-Message-State: AOAM532sPfex04FQY8FJ/oSh4mBqiQdFgwd5VF0NZQK4Qdgw1Xm6rLAL
+        pRDla6BOHXC8JgTbXUH56OFOGocPdbo=
+X-Google-Smtp-Source: ABdhPJx6bv/2btgpI8Q3cOwV3QOCXU57QgSmeqqxf/pX4aVveM2EgjIkKiMaMTSeEWEyTyvlcG/thg==
+X-Received: by 2002:a50:9549:: with SMTP id v9mr9925330eda.335.1642180917228;
+        Fri, 14 Jan 2022 09:21:57 -0800 (PST)
+Received: from standask-GA-A55M-S2HP ([188.123.115.255])
+        by smtp.gmail.com with ESMTPSA id u1sm2581703edp.19.2022.01.14.09.21.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 09:21:56 -0800 (PST)
+Date:   Fri, 14 Jan 2022 18:21:55 +0100
+From:   Stanislav Jakubek <stano.jakubek@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: trivial-devices: make comment indentation
+ consistent
+Message-ID: <20220114172155.GA3677@standask-GA-A55M-S2HP>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Makes the comment indentation consistent across the board.
 
-Linus,
+Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Note, I'm just recovering from COVID. I started getting sick on Monday, and
-was pretty much bedridden from Tuesday through Thursday, although last
-night I was able to start sorting out my pull request and found a few
-issues I had to clean up. But it should be good to go. Sorry for the delay.
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 9af1b0f4ecea..eee751713cb5 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -77,7 +77,7 @@ properties:
+           - delta,ahe50dc-fan
+             # Delta Electronics DPS-650-AB power supply
+           - delta,dps650ab
+-          # Delta Electronics DPS920AB 920W 54V Power Supply
++            # Delta Electronics DPS920AB 920W 54V Power Supply
+           - delta,dps920ab
+             # 1/4 Brick DC/DC Regulated Power Module
+           - delta,q54sj108a2
+@@ -123,13 +123,13 @@ properties:
+           - ibm,cffps2
+             # Infineon IR36021 digital POL buck controller
+           - infineon,ir36021
+-          # Infineon IR38060 Voltage Regulator
++            # Infineon IR38060 Voltage Regulator
+           - infineon,ir38060
+             # Infineon IR38064 Voltage Regulator
+           - infineon,ir38064
+-          # Infineon IR38164 Voltage Regulator
++            # Infineon IR38164 Voltage Regulator
+           - infineon,ir38164
+-          # Infineon IR38263 Voltage Regulator
++            # Infineon IR38263 Voltage Regulator
+           - infineon,ir38263
+             # Infineon SLB9635 (Soft-) I2C TPM (old protocol, max 100khz)
+           - infineon,slb9635tt
+-- 
+2.25.1
 
-Tracing updates for 5.17:
-
-New:
-
-- The Real Time Linux Analysis (RTLA) tool is added to the tools directory.
-
-- Can safely filter on user space pointers with: field.ustring ~ "match-string"
-
-- eprobes can now be filtered like any other event.
-
-- trace_marker(_raw) now uses stream_open() to allow multiple threads to safely
-  write to it. Note, this could possibly break existing user space, but we will
-  not know until we hear about it, and then can revert the change if need be.
-
-- New field in events to display when bottom halfs are disabled.
-
-- Sorting of the ftrace functions are now done at compile time instead of
-  at bootup.
-
-Infrastructure changes to support future efforts:
-
-- Added __rel_loc type for trace events. Similar to __data_loc but the offset
-  to the dynamic data is based off of the location of the descriptor and not
-  the beginning of the event. Needed for user defined events.
-
-- Some simplification of event trigger code.
-
-- Make synthetic events process its callback better to not hinder other
-  event callbacks that are registered. Needed for user defined events.
-
-And other small fixes and clean ups.
-
-
-
-Please pull the latest trace-v5.17 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-trace-v5.17
-
-Tag SHA1: 9a38345e8252c9fba23c5ec173fd086ee9fd7c65
-Head SHA1: f37c3bbc635994eda203a6da4ba0f9d05165a8d6
-
-
-Beau Belgrave (1):
-      tracing: Do not let synth_events block other dyn_event systems during create
-
-Colin Ian King (1):
-      tracing: Fix spelling mistake "aritmethic" -> "arithmetic"
-
-Daniel Bristot de Oliveira (14):
-      rtla: Real-Time Linux Analysis tool
-      rtla: Helper functions for rtla
-      rtla: Add osnoise tool
-      rtla/osnoise: Add osnoise top mode
-      rtla/osnoise: Add the hist mode
-      rtla: Add timerlat tool and timelart top mode
-      rtla/timerlat: Add timerlat hist mode
-      rtla: Add Documentation
-      rtla: Add rtla osnoise man page
-      rtla: Add rtla osnoise top documentation
-      rtla: Add rtla osnoise hist documentation
-      rtla: Add rtla timerlat documentation
-      rtla: Add rtla timerlat top documentation
-      rtla: Add rtla timerlat hist documentation
-
-Geliang Tang (1):
-      tracing: Fix mismatched comment in __string_len
-
-Jiri Olsa (1):
-      tracing: Iterate trace_[ku]probe objects directly
-
-John Keeping (1):
-      tracing: Make trace_marker{,_raw} stream-like
-
-Masami Hiramatsu (5):
-      tracing: Support __rel_loc relative dynamic data location attribute
-      tracing: Add '__rel_loc' using trace event macros
-      samples/trace_event: Add '__rel_loc' using sample event
-      libtraceevent: Add __rel_loc relative location attribute support
-      tools/perf: Add '__rel_loc' event field parsing support
-
-Nikita Yushchenko (1):
-      tracing/osnoise: Properly unhook events if start_per_cpu_kthreads() fails
-
-Qiujun Huang (1):
-      tracing: Fix synth_event_add_val() kernel-doc comment
-
-Sebastian Andrzej Siewior (1):
-      tracing: Account bottom half disabled sections.
-
-Steven Rostedt (3):
-      tracing: Have syscall trace events use trace_event_buffer_lock_reserve()
-      tracing: Add test for user space strings when filtering on string pointers
-      tracing: Add ustring operation to filtering string pointers
-
-Steven Rostedt (VMware) (8):
-      tracing: Use __this_cpu_read() in trace_event_buffer_lock_reserver()
-      tracing: Disable preemption when using the filter buffer
-      tracing: Have eprobes use filtering logic of trace events
-      tracing/kprobes: Do not open code event reserve logic
-      tracing/uprobes: Use trace_event_buffer_reserve() helper
-      tracefs: Use d_inode() helper function to get the dentry inode
-      tracing: Use trace_iterator_reset() in tracing_read_pipe()
-      ftrace: Add test to make sure compiled time sorts work
-
-Tom Zanussi (4):
-      tracing: Change event_command func() to parse()
-      tracing: Change event_trigger_ops func() to trigger()
-      tracing: Remove ops param from event_command reg()/unreg() callbacks
-      tracing: Add helper functions to simplify event_command.parse() callback handling
-
-Uladzislau Rezki (Sony) (1):
-      tracing: Switch to kvfree_rcu() API
-
-Xiangyang Zhang (1):
-      tracing/kprobes: 'nmissed' not showed correctly for kretprobe
-
-Xiaoke Wang (2):
-      tracing/uprobes: Check the return value of kstrdup() for tu->filename
-      tracing/probes: check the return value of kstrndup() for pbuf
-
-Xiu Jianfeng (1):
-      tracing: Use memset_startat helper in trace_iterator_reset()
-
-Yinan Liu (2):
-      script/sorttable: Code style improvements
-      scripts: ftrace - move the sort-processing in ftrace_init
-
-Yuntao Wang (1):
-      tracing: Remove duplicate warnings when calling trace_create_file()
-
-----
- Documentation/tools/rtla/Makefile                  |  41 +
- Documentation/tools/rtla/common_appendix.rst       |  12 +
- Documentation/tools/rtla/common_hist_options.rst   |  23 +
- Documentation/tools/rtla/common_options.rst        |  28 +
- .../tools/rtla/common_osnoise_description.rst      |   8 +
- .../tools/rtla/common_osnoise_options.rst          |  17 +
- .../tools/rtla/common_timerlat_description.rst     |  10 +
- .../tools/rtla/common_timerlat_options.rst         |  16 +
- Documentation/tools/rtla/common_top_options.rst    |   3 +
- Documentation/tools/rtla/rtla-osnoise-hist.rst     |  66 ++
- Documentation/tools/rtla/rtla-osnoise-top.rst      |  61 ++
- Documentation/tools/rtla/rtla-osnoise.rst          |  59 ++
- Documentation/tools/rtla/rtla-timerlat-hist.rst    | 106 +++
- Documentation/tools/rtla/rtla-timerlat-top.rst     | 145 ++++
- Documentation/tools/rtla/rtla-timerlat.rst         |  57 ++
- Documentation/tools/rtla/rtla.rst                  |  48 ++
- Documentation/trace/events.rst                     |  19 +
- fs/tracefs/inode.c                                 |  24 +-
- include/linux/trace_events.h                       |   2 +
- include/trace/bpf_probe.h                          |  16 +
- include/trace/perf.h                               |  16 +
- include/trace/trace_events.h                       | 120 ++-
- kernel/trace/Kconfig                               |  14 +
- kernel/trace/ftrace.c                              |  34 +-
- kernel/trace/trace.c                               |  88 ++-
- kernel/trace/trace.h                               |  83 +-
- kernel/trace/trace_eprobe.c                        |  38 +-
- kernel/trace/trace_events.c                        |  12 +-
- kernel/trace/trace_events_filter.c                 | 139 +++-
- kernel/trace/trace_events_hist.c                   |  69 +-
- kernel/trace/trace_events_inject.c                 |  11 +-
- kernel/trace/trace_events_synth.c                  |  15 +-
- kernel/trace/trace_events_trigger.c                | 424 +++++++++-
- kernel/trace/trace_kprobe.c                        |  43 +-
- kernel/trace/trace_osnoise.c                       |  23 +-
- kernel/trace/trace_output.c                        |   4 +
- kernel/trace/trace_probe.c                         |   5 +-
- kernel/trace/trace_syscalls.c                      |   6 +-
- kernel/trace/trace_uprobe.c                        |  39 +-
- samples/trace_events/trace-events-sample.c         |   3 +
- samples/trace_events/trace-events-sample.h         |  35 +-
- scripts/Makefile                                   |   6 +-
- scripts/link-vmlinux.sh                            |   6 +-
- scripts/sorttable.c                                |   2 +
- scripts/sorttable.h                                | 124 ++-
- tools/lib/traceevent/event-parse.c                 |  59 +-
- tools/lib/traceevent/event-parse.h                 |   5 +-
- tools/lib/traceevent/parse-filter.c                |   5 +-
- tools/perf/builtin-trace.c                         |   2 +
- tools/perf/util/data-convert-bt.c                  |   2 +
- tools/perf/util/evsel.c                            |   2 +
- tools/perf/util/python.c                           |   2 +
- .../perf/util/scripting-engines/trace-event-perl.c |   2 +
- .../util/scripting-engines/trace-event-python.c    |   2 +
- tools/perf/util/sort.c                             |   2 +
- tools/tracing/rtla/Makefile                        | 102 +++
- tools/tracing/rtla/README.txt                      |  36 +
- tools/tracing/rtla/src/osnoise.c                   | 875 +++++++++++++++++++++
- tools/tracing/rtla/src/osnoise.h                   |  91 +++
- tools/tracing/rtla/src/osnoise_hist.c              | 801 +++++++++++++++++++
- tools/tracing/rtla/src/osnoise_top.c               | 579 ++++++++++++++
- tools/tracing/rtla/src/rtla.c                      |  87 ++
- tools/tracing/rtla/src/timerlat.c                  |  72 ++
- tools/tracing/rtla/src/timerlat.h                  |   4 +
- tools/tracing/rtla/src/timerlat_hist.c             | 822 +++++++++++++++++++
- tools/tracing/rtla/src/timerlat_top.c              | 618 +++++++++++++++
- tools/tracing/rtla/src/trace.c                     | 192 +++++
- tools/tracing/rtla/src/trace.h                     |  27 +
- tools/tracing/rtla/src/utils.c                     | 433 ++++++++++
- tools/tracing/rtla/src/utils.h                     |  56 ++
- 70 files changed, 6706 insertions(+), 292 deletions(-)
- create mode 100644 Documentation/tools/rtla/Makefile
- create mode 100644 Documentation/tools/rtla/common_appendix.rst
- create mode 100644 Documentation/tools/rtla/common_hist_options.rst
- create mode 100644 Documentation/tools/rtla/common_options.rst
- create mode 100644 Documentation/tools/rtla/common_osnoise_description.rst
- create mode 100644 Documentation/tools/rtla/common_osnoise_options.rst
- create mode 100644 Documentation/tools/rtla/common_timerlat_description.rst
- create mode 100644 Documentation/tools/rtla/common_timerlat_options.rst
- create mode 100644 Documentation/tools/rtla/common_top_options.rst
- create mode 100644 Documentation/tools/rtla/rtla-osnoise-hist.rst
- create mode 100644 Documentation/tools/rtla/rtla-osnoise-top.rst
- create mode 100644 Documentation/tools/rtla/rtla-osnoise.rst
- create mode 100644 Documentation/tools/rtla/rtla-timerlat-hist.rst
- create mode 100644 Documentation/tools/rtla/rtla-timerlat-top.rst
- create mode 100644 Documentation/tools/rtla/rtla-timerlat.rst
- create mode 100644 Documentation/tools/rtla/rtla.rst
- create mode 100644 tools/tracing/rtla/Makefile
- create mode 100644 tools/tracing/rtla/README.txt
- create mode 100644 tools/tracing/rtla/src/osnoise.c
- create mode 100644 tools/tracing/rtla/src/osnoise.h
- create mode 100644 tools/tracing/rtla/src/osnoise_hist.c
- create mode 100644 tools/tracing/rtla/src/osnoise_top.c
- create mode 100644 tools/tracing/rtla/src/rtla.c
- create mode 100644 tools/tracing/rtla/src/timerlat.c
- create mode 100644 tools/tracing/rtla/src/timerlat.h
- create mode 100644 tools/tracing/rtla/src/timerlat_hist.c
- create mode 100644 tools/tracing/rtla/src/timerlat_top.c
- create mode 100644 tools/tracing/rtla/src/trace.c
- create mode 100644 tools/tracing/rtla/src/trace.h
- create mode 100644 tools/tracing/rtla/src/utils.c
- create mode 100644 tools/tracing/rtla/src/utils.h
----------------------------

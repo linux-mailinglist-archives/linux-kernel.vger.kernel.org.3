@@ -2,137 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1F448F0B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 20:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF1848F0E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 21:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244193AbiANT7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 14:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiANT7z (ORCPT
+        id S244258AbiANUXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 15:23:43 -0500
+Received: from qproxy1-pub.mail.unifiedlayer.com ([173.254.64.10]:54843 "EHLO
+        qproxy1-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232761AbiANUXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 14:59:55 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067C6C061574;
-        Fri, 14 Jan 2022 11:59:55 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id f13so3705169plg.0;
-        Fri, 14 Jan 2022 11:59:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=D0wKk3vGKLq9UCyFJhVh9PflC/XZziG3O4cSoYLFQ14=;
-        b=CMGGmJ6D3NMsRS4cRVv7aywNPWWrW3P/NYH+BuqdX73hVb24Xw4ruWbjUtGgua+dDa
-         g7HSHshblLY2yOYIwtAWsouqlwb4tu38D2UL1hM2fC/N3T8kLA8i1VXQ8CO430ag2B5M
-         mfm2TwS+IPJ/KnkbQAq7cA/+3PB0PMr+XAjINM7eL1u7YKRlOBTYVQ9xWpVXG/jaBLn2
-         +x7GvAulvRNdRhrmSieJjNEwxKTzeN5ZP6PF1LvJhBRrdsGdUmm0pSL+Ap8HyVLBWVvL
-         ySuqjvBYN9OK0enYKzEOksdLASixmODRrAsAjhjILS/rrtVZRBJBG8Z8aq2l4vSOUQwx
-         3ssg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D0wKk3vGKLq9UCyFJhVh9PflC/XZziG3O4cSoYLFQ14=;
-        b=izF2V6qIdAmZEIIX+v0z/k3o8pHf5izlB+S90xxs6gsmkvxh8tF5Iscn3QS3mCfuqc
-         HCYNpKQGD73ipDRlaUv2ENR0YdIcayDv5FsbVybOtna+w4Ky4EHU527Icu9yXSR8EeWh
-         Uk/k4SEvyyFpdytMkgPv2YgbzP4LRP+sDApe+2i0XjSyqoOkYupFbCJXG5CSOXlZh61H
-         X2fNLmreZntkrUvg207M9lHwy3tf1d0lBU8QaBQiwMArtdzfTgTeY78k7Nz28Gx6ay47
-         JZrFKRv4frgFSWruIKvoACdlSUu2oJ2/RGHxF9xTf07siyaoQjl3NnJFMzJfa4eLCx3m
-         WP4w==
-X-Gm-Message-State: AOAM533m9YbHorvGkn/fMKVXXpe6QRzFPTIQfwyBvz5JSKOjf27osBRr
-        jyI0fjHtoqH96DCrtZcLZt8=
-X-Google-Smtp-Source: ABdhPJydHKeHi0WAuDG7E8O8JcRh2QkqgprHJfyoPXoR9K601QF4x+ZcgLz720gFAD+4TaRmv1aK0w==
-X-Received: by 2002:a17:90a:4214:: with SMTP id o20mr12625102pjg.80.1642190394344;
-        Fri, 14 Jan 2022 11:59:54 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:20f0:3cd3:13fc:6b46])
-        by smtp.gmail.com with ESMTPSA id n15sm11813121pjj.12.2022.01.14.11.59.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 11:59:53 -0800 (PST)
-Date:   Fri, 14 Jan 2022 11:59:50 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>,
-        benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        Wei-Ning Huang <wnhuang@google.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Sean O'Brien <seobrien@chromium.org>, phoenixshen@chromium.org
-Subject: Re: [PATCH v2] HID: google: modify HID device groups of eel
-Message-ID: <YeHWNtl0Or1dgadz@google.com>
-References: <20220107091357.28960-1-xiazhengqiao@huaqin.corp-partner.google.com>
- <nycvar.YFH.7.76.2201140935460.28059@cbobk.fhfr.pm>
- <CAE-0n53M723sZ7H-f0SF=AoTrwznmTRhKPapgHe5H7Mw6bPb7Q@mail.gmail.com>
+        Fri, 14 Jan 2022 15:23:43 -0500
+X-Greylist: delayed 1419 seconds by postgrey-1.27 at vger.kernel.org; Fri, 14 Jan 2022 15:23:43 EST
+Received: from alt-proxy28.mail.unifiedlayer.com (unknown [74.220.216.123])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 5549D8033194
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 20:00:01 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id B74101003FA0B
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 20:00:00 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id 8SjwnwyPpEaNC8SjwnpxBA; Fri, 14 Jan 2022 20:00:00 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=dJtjJMVb c=1 sm=1 tr=0 ts=61e1d640
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=DghFqjY3_ZEA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=HGw1mVhBy2YoFkOnSw0A:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:In-Reply-To:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=3ZZ8Z3lXC4EgxEaTFM+fFaZa06WIHcyvU419ouZNh5A=; b=m79quRX1zeKrb4l7z7LrO+5slh
+        nd2+r1WjqvQCL2BP8Y0FuWUl6UycKd4bomXlyQtUEG5bufu2LzxkuLti/eCvvbFoZ2XJ6nEaj+B26
+        kI36JYbpGaooHyQ73q2VcjZyb;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:60958 helo=[10.0.1.23])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1n8Sjv-001Fm6-D5; Fri, 14 Jan 2022 12:59:59 -0700
+Subject: Re: [PATCH 5.15 00/41] 5.15.15-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+References: <20220114081545.158363487@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220114081545.158363487@linuxfoundation.org>
+Message-ID: <b94bd7bd-0c8b-1697-f4af-27e99ca9e62f@w6rz.net>
+Date:   Fri, 14 Jan 2022 11:59:57 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE-0n53M723sZ7H-f0SF=AoTrwznmTRhKPapgHe5H7Mw6bPb7Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1n8Sjv-001Fm6-D5
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:60958
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 01:25:12PM -0600, Stephen Boyd wrote:
-> Quoting Jiri Kosina (2022-01-14 00:38:23)
-> > On Fri, 7 Jan 2022, Zhengqiao Xia wrote:
-> >
-> > > If HID_GROUP of eel is set to HID_GROUP_GENERIC, Whiskers Tablet
-> > > Mode Switch of eel hammer will not be detected by system. when it
-> > > is set to HID_GROUP_VIVALDI, system will detect Whiskers Tablet
-> > > Mode Switch successfully.
-> > >
-> > > Signed-off-by: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-> > > ---
-> > >  drivers/hid/hid-google-hammer.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/hid/hid-google-hammer.c b/drivers/hid/hid-google-hammer.c
-> > > index 0403beb3104b..e5acd15f4a55 100644
-> > > --- a/drivers/hid/hid-google-hammer.c
-> > > +++ b/drivers/hid/hid-google-hammer.c
-> > > @@ -585,7 +585,7 @@ static void hammer_remove(struct hid_device *hdev)
-> > >  static const struct hid_device_id hammer_devices[] = {
-> > >       { HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-> > >                    USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_DON) },
-> > > -     { HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-> > > +     { HID_DEVICE(BUS_USB, HID_GROUP_VIVALDI,
-> > >                    USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_EEL) },
-> > >       { HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-> >
-> > Color me confused, but anything with HID_GROUP_VIVALDI should be matched
-> > by hid-vivaldi driver, so what is this about?
+On 1/14/22 12:16 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.15 release.
+> There are 41 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.15-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-We need this particular chunk because hid_scan_collection() forces all
-devices that declare usage 0x01 from the Google Vendor page to be marked
-as HID_GROUP_VIVALDI, so without it the hammer driver will not match
-eel.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-However this change (I believe) will break vivaldi functionality
-(reporting of the top row map) so we can't apply this as is.
+Warnings:
 
-> >
-> 
-> My understanding is that 'vivaldi' is mostly a keyboard layout and
-> 'hammer' is a detachable keyboard. We want to prevent the hid-vivaldi
-> driver from probing this particular device because the hid-vivaldi
-> driver doesn't know about detachable keyboards. Hammer devices also
-> support 360 degree wraparound so we know that the keyboard has been put
-> behind the screen or that it's being used to stand up the device on a
-> table.
-> 
-> Given all that, I'm still confused. If we make the hid-google-hammer
-> driver probe this device and the keyboard layout is vivaldi then we'd
-> want the part of the vivaldi driver that exposes the
-> function_row_physmap through sysfs. Otherwise userspace won't know how
-> to handle the function row properly. I think we need the device to stack
-> two drivers here. Does that happen with HID?
+fs/jffs2/xattr.c: In function 'jffs2_build_xattr_subsystem':
+fs/jffs2/xattr.c:887:1: warning: the frame size of 1104 bytes is larger 
+than 1024 bytes [-Wframe-larger-than=]
+   887 | }
+       | ^
+lib/crypto/curve25519-hacl64.c: In function 'ladder_cmult.constprop':
+lib/crypto/curve25519-hacl64.c:601:1: warning: the frame size of 1040 
+bytes is larger than 1024 bytes [-Wframe-larger-than=]
+   601 | }
+       | ^
+drivers/net/wireguard/allowedips.c: In function 'root_remove_peer_lists':
+drivers/net/wireguard/allowedips.c:77:1: warning: the frame size of 1040 
+bytes is larger than 1024 bytes [-Wframe-larger-than=]
+    77 | }
+       | ^
+drivers/net/wireguard/allowedips.c: In function 'root_free_rcu':
+drivers/net/wireguard/allowedips.c:64:1: warning: the frame size of 1040 
+bytes is larger than 1024 bytes [-Wframe-larger-than=]
+    64 | }
+       | ^
+drivers/vhost/scsi.c: In function 'vhost_scsi_flush':
+drivers/vhost/scsi.c:1444:1: warning: the frame size of 1040 bytes is 
+larger than 1024 bytes [-Wframe-larger-than=]
+  1444 | }
+       | ^
 
-As far as I know HID does not easily allow "stacking" drivers like that.
+Tested-by: Ron Economos <re@w6rz.net>
 
-Probably the easiest way would be to export vivaldi_feature_mapping()
-and the show method for the physical row map and call them from the
-hammer driver.
-
-Thanks.
-
--- 
-Dmitry

@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C0E48E42B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C69348E432
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239330AbiANGSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:18:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
+        id S239334AbiANGVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:21:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236454AbiANGSn (ORCPT
+        with ESMTP id S236448AbiANGVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:18:43 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620B4C061574;
-        Thu, 13 Jan 2022 22:18:43 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id f144so1147491pfa.6;
-        Thu, 13 Jan 2022 22:18:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=P7I6VaE87nRYEstDp+uq11bjIAOgfEzIQh4DoOK5I2k=;
-        b=qe9as3lG4cg4d11XtFLXqvRFNvZMNnNnIdE+gPaK3SFr4zp6zwuxYyFC5i0tv5TtTz
-         zjAIcTezNFAI1yJWMHmkN1gY+NfhHuwweyxUCtK5fno4YDIU3Kuz1cHXFkym6XCxBAWI
-         iqlPFhlAEN4dSWh61WkITrZRSp0TDfjnNOTc6shj9xNYue1dTBZXx6HSFx4V++8sU+55
-         2xRcARCv7ky1ZRin/ot+OaQb6GEOsnk3Ym0u0GWKxLHsmFeCIKe+mfwEHpZtNfVQoLO0
-         rqTYQk/DGCw1e3mQENDa3EFAvRjo+ZzBNdtdTSHyz6x6GHWL7ArD4fXIVa7svdTCm2Re
-         yCLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=P7I6VaE87nRYEstDp+uq11bjIAOgfEzIQh4DoOK5I2k=;
-        b=IrwpumvxVvyrO6vcztlir85cyB2gnx8MPIPKb7VUFTFxCYr87ze/oNSXThfQzrqJiD
-         u6yo5BtTCF1ebHXQeRMVV1jVIARmntFsUMidg5cUG8Bn2ORnI8H4jGzC83PztjaCL8ST
-         SRJm7vE5p7UC6tsa7p0LYnATCyuNMSKJxjKL47RfApBnb+fxdQrGlSoBp6VCzsBmOJyU
-         kPkjeioKx6Md5u1ylHRM+E3FD3ZiTzIALxgtDzIsoc0u9utVYNUazTxC0BAOw/9316ZH
-         /I8ELuGvT9JH/MqfmZCz09jrUhIVdy2rky72DiAJORP7/2UrmVaiqSnCAjBckw3ak28M
-         bKyQ==
-X-Gm-Message-State: AOAM533nlWZKMMlDEIl8oVd9nCEaEmFEFeSb94/RSgZkw9Hr28YqIFpr
-        R4Gy1uNbLvPIaVVxVvwM74g=
-X-Google-Smtp-Source: ABdhPJxDVsI0xYs0EXSiOjEYrv7EF3fAnGjGjUzRXG0ePAETn2CzuaiK1U+JTS0VUpNjF5BAA5/L5Q==
-X-Received: by 2002:a63:6bc3:: with SMTP id g186mr6897880pgc.192.1642141122952;
-        Thu, 13 Jan 2022 22:18:42 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id pi7sm1871131pjb.23.2022.01.13.22.18.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 22:18:42 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
+        Fri, 14 Jan 2022 01:21:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4871C061574;
+        Thu, 13 Jan 2022 22:21:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5427B82358;
+        Fri, 14 Jan 2022 06:21:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1516C36AEA;
+        Fri, 14 Jan 2022 06:21:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642141306;
+        bh=jMMCQqHtQybK+7j6b9dRuEYkttlsElUrZOATTRYk3nY=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=mydq9O2zMax5L27z6DbdkN0K82YjLUhFbSLtKQQt/heZwXE1An/F2Yzn7KVXt1wMt
+         0tXCzSPrTl5B0zVq5IkiZqyo9IynB6SKEtxfv9OBEVmSx5qHYqGxYP7B7C+/e9rNeb
+         w1APZwq+KfpwJTTDx+MUVwowlyakdjzOrpkPq8+SVfQm/A9nCFj3/5KvR+6gZrh9jC
+         g2BZIkviW35EC7kT0N+XfGr/Gfld7PLqKmIg5jBAkKIjzPSJT6nUBjRY57v6DVHweD
+         XDFEvPJ8hxAGMWgTJkQcyJd34O0Ni4x6Bqei7JWY94fOfqLFZYpxoqbxY33c7ydV0I
+         50q7eEmF/Lirw==
+References: <20211202191630.12450-1-jaschultz@microsoft.com>
+ <20211202191630.12450-3-jaschultz@microsoft.com>
+ <CAMuHMdUPwo7pCSwY8_9xTaDruTHt6d=wHiNHvRmE71k8hWeLBw@mail.gmail.com>
+User-agent: mu4e 1.6.10; emacs 28.0.90
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jarrett Schultz <jaschultzms@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sagar Dharia <sdharia@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] slimbus: qcom:  Fix IRQ check in qcom_slim_probe
-Date:   Fri, 14 Jan 2022 06:18:29 +0000
-Message-Id: <20220114061830.13456-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Jarrett Schultz <jaschultz@microsoft.com>
+Subject: Re: [PATCH 2/5] platform: surface: Propagate ACPI Dependency
+Date:   Fri, 14 Jan 2022 08:20:41 +0200
+In-reply-to: <CAMuHMdUPwo7pCSwY8_9xTaDruTHt6d=wHiNHvRmE71k8hWeLBw@mail.gmail.com>
+Message-ID: <87czku4z2i.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_irq() returns negative error number instead 0 on failure.
-And the doc of platform_get_irq() provides a usage example:
 
-    int irq = platform_get_irq(pdev, 0);
-    if (irq < 0)
-        return irq;
+Hi,
 
-Fix the check of return value to catch errors correctly.
+Geert Uytterhoeven <geert@linux-m68k.org> writes:
+> Hi Jarrett,
+>
+> On Mon, Dec 6, 2021 at 4:03 PM Jarrett Schultz <jaschultzms@gmail.com> wrote:
+>> Since the Surface XBL Driver does not depend on ACPI, the
+>> platform/surface directory as a whole no longer depends on ACPI. With
+>> respect to this, the ACPI dependency is moved into each config that depends
+>> on ACPI individually.
+>>
+>> Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
+>
+> Thanks for your patch, which is now commit 272479928172edf0 ("platform:
+> surface: Propagate ACPI Dependency").
+>
+>> --- a/drivers/platform/surface/Kconfig
+>> +++ b/drivers/platform/surface/Kconfig
+>> @@ -5,7 +5,6 @@
+>>
+>>  menuconfig SURFACE_PLATFORMS
+>>         bool "Microsoft Surface Platform-Specific Device Drivers"
+>> -       depends on ACPI
+>>         default y
+>>         help
+>>           Say Y here to get to see options for platform-specific device drivers
+>
+> Without any dependency, all users configuring a kernel are now asked
+> about this. Is there any other platform dependency that can be used
+> instead?
 
-Fixes: ad7fcbc308b0 ("slimbus: qcom: Add Qualcomm Slimbus controller driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/slimbus/qcom-ctrl.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+there's probably no symbol that would be true for x86 and arm64 while
+being false for everything else. Any ideas?
 
-diff --git a/drivers/slimbus/qcom-ctrl.c b/drivers/slimbus/qcom-ctrl.c
-index f04b961b96cd..ec58091fc948 100644
---- a/drivers/slimbus/qcom-ctrl.c
-+++ b/drivers/slimbus/qcom-ctrl.c
-@@ -510,9 +510,9 @@ static int qcom_slim_probe(struct platform_device *pdev)
- 	}
- 
- 	ctrl->irq = platform_get_irq(pdev, 0);
--	if (!ctrl->irq) {
-+	if (ctrl->irq < 0) {
- 		dev_err(&pdev->dev, "no slimbus IRQ\n");
--		return -ENODEV;
-+		return ctrl->irq;
- 	}
- 
- 	sctrl = &ctrl->ctrl;
+In any case, what's the problem of being asked about a new symbol? That
+happens all the time whenever new drivers are merged, right?
+
 -- 
-2.17.1
-
+balbi

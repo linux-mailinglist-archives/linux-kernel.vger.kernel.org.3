@@ -2,190 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA8D48EC44
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:08:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E839D48EC3E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242263AbiANPIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235794AbiANPIn (ORCPT
+        id S242225AbiANPIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:08:39 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:32994 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235794AbiANPId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:08:43 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7D2C061746
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:08:42 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id x11so5463252lfa.2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:08:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4dui9+NpX4w52rrVA0g43taTTsULBafA6eRdbjyTa0s=;
-        b=rD4w4QP10UDyrS9EQ5coM1KCAFC9PxRPJ9d9lH+BANBIoZQkYN1mZUCY/MUm5E9Qry
-         1wLzrMKT0O+F524Qx07gOZCBpDVamGz+r/VWiGT81TyQhXzxeNHVajeaW0jeDtXtbbtY
-         TwrLh0yEEdk1qCV9CVetAJqHRE+rVcDBu5j+YkQhlvqBaXRarqeu/0bhT+oGWsZ9c8xm
-         8ZoF3e/vx7WE2RM/C0pJac76Qk8t7FVqhQD8MhoniX8t+60HKHL9S5t8SJHqlva2NnDS
-         VXlnotD/BRXqyI4dXsTqLT27BUVFPhMifVhqPTTf9LDyMWnJbFO2P+DQBDZU/FfRTgDb
-         VrMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4dui9+NpX4w52rrVA0g43taTTsULBafA6eRdbjyTa0s=;
-        b=UjX3EOVWKIGWVifq+mBNyQqd0DUXt36rYTQq44aMKfvtQmoEioKgh04wzyaRhTGuTW
-         65vpYAw5JEb0YKiJbxc7WCegqo8lp4f3h4QdSwmI+RZBhD+3FPS2Ymy6FfnMGq+uTG5V
-         te+fUt5G5kIH0Hb3lBAoOdN6wX5eEbfK7xyWP8vQ5QOa4U6NuawlYZtn6t+1SBfePrA1
-         Q8h2bUmXqZFckB5W1rIrfmn7jJISRZQhxTCawTVYeKeEUjbWLoRH0CGjt3rW/rsLz6wb
-         EJ/VPNOZlvf48MsR60tidYx7EZGMGZ+IyKnL2irNFGVG3zJyZS1PQFu6G9koG4itevT5
-         hVZA==
-X-Gm-Message-State: AOAM530vrdfoOru095cznIWOjMMofXj3Qka4vjmLCNUihdKHkT4BXz6+
-        7Mh1rtD2CQW0/HehhWQbNdxM+kBIO7UtLA==
-X-Google-Smtp-Source: ABdhPJx+G+1RC9jl681kZrchzosFEWuHX+TYTIeHYMiaCzuOta6YAeCce9VzoM9rOK9s44WwJYo+qg==
-X-Received: by 2002:a2e:9609:: with SMTP id v9mr5847790ljh.45.1642172920876;
-        Fri, 14 Jan 2022 07:08:40 -0800 (PST)
-Received: from jade.urgonet (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
-        by smtp.gmail.com with ESMTPSA id i31sm40517lfv.67.2022.01.14.07.08.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 07:08:40 -0800 (PST)
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
-        Rijo Thomas <Rijo-john.Thomas@amd.com>,
-        David Howells <dhowells@redhat.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>
-Subject: [PATCH v2 02/12] tee: remove unused tee_shm_pool_alloc_res_mem()
-Date:   Fri, 14 Jan 2022 16:08:14 +0100
-Message-Id: <20220114150824.3578829-3-jens.wiklander@linaro.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220114150824.3578829-1-jens.wiklander@linaro.org>
-References: <20220114150824.3578829-1-jens.wiklander@linaro.org>
+        Fri, 14 Jan 2022 10:08:33 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A07061EC0;
+        Fri, 14 Jan 2022 15:08:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABABDC36AEB;
+        Fri, 14 Jan 2022 15:08:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642172908;
+        bh=CtQ6ZOtNT7z1AMej504pXmMqMHKixdfvyoxsqixy7FM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LM60DmKxPUQvy3gacRTdz07wJ/r5OcFJ21TEhgf4QvsOfoxlvFlrB/bPq7FiUGdCh
+         xvi8KLQzufTlLinlVes9gFygwj0bpOXE824z/ezdl+fjl6vpAI78OznNOldDjGSJlh
+         B2pxzoYNOat2ZDN3zztijbAGxq9YWRV2hHNZSCbE0UDKIrTm7XAvd7l9NgQnqY6rqi
+         AtKQ2+Jaf15Ri5aGAzNHtQKH0PBq/9YT5BhieBmq3MOWRiDRgmWfJ6s8uDlzzPXpbx
+         QSBYIhT67CM48GDLd2xL/2jfycJAoy9AVcypF6dpaXD+mhAIxQC0UQL7lBJN7ulW2G
+         G5Jqneflltn8g==
+Received: by mail-wr1-f54.google.com with SMTP id v6so16091010wra.8;
+        Fri, 14 Jan 2022 07:08:28 -0800 (PST)
+X-Gm-Message-State: AOAM532t21ZXqFeV0JYQ9e3OEas5Fu0f5ClE4yrgoZ6xl+2qJvYayUyb
+        WmAXFVf2hYxEajpcr+8MEFqaBh3vzs6aX60V5c0=
+X-Google-Smtp-Source: ABdhPJzn1XtOkPf3Uj/N7N6GWjY/AWhSkNxLOXT/oUWl44TmSou49XTna0hda7KdSVS3ckAPaCabVoldlNYLJKSmO8M=
+X-Received: by 2002:a05:6000:154c:: with SMTP id 12mr8620813wry.447.1642172906987;
+ Fri, 14 Jan 2022 07:08:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220112131204.800307-1-Jason@zx2c4.com> <20220112131204.800307-2-Jason@zx2c4.com>
+ <87tue8ftrm.fsf@toke.dk> <CAADnVQJqoHy+EQ-G5fUtkPpeHaA6YnqsOjjhUY6UW0v7eKSTZw@mail.gmail.com>
+ <CAHmME9ork6wh-T=sRfX6X0B4j-Vb36GVO0v=Yda0Hac1hiN_KA@mail.gmail.com>
+ <CAADnVQLF_tmNmNk+H+jP1Ubmw-MBhG1FevFmtZY6yw5xk2314g@mail.gmail.com> <CAHmME9oq36JdV8ap9sPZ=CDfNyaQd6mXd21ztAaZiL7pJh8RCw@mail.gmail.com>
+In-Reply-To: <CAHmME9oq36JdV8ap9sPZ=CDfNyaQd6mXd21ztAaZiL7pJh8RCw@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 14 Jan 2022 16:08:14 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXE3JtNjgF3FZjbL-GOQG41yODup4+XdEFP063F=-AWg8A@mail.gmail.com>
+Message-ID: <CAMj1kXE3JtNjgF3FZjbL-GOQG41yODup4+XdEFP063F=-AWg8A@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 1/3] bpf: move from sha1 to blake2s in tag calculation
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-None of the drivers in the TEE subsystem uses
-tee_shm_pool_alloc_res_mem() so remove the function.
+On Fri, 14 Jan 2022 at 15:12, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Hi Alexei,
+>
+> On Thu, Jan 13, 2022 at 11:45 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> > On Thu, Jan 13, 2022 at 4:27 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > >
+> > > Hi Alexei,
+> > >
+> > > On 1/13/22, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > > > Nack.
+> > > > It's part of api. We cannot change it.
+> > >
+> > > This is an RFC patchset, so there's no chance that it'll actually be
+> > > applied as-is, and hence there's no need for the strong hammer nack.
+> > > The point of "request for comments" is comments. Specifically here,
+> > > I'm searching for information on the ins and outs of *why* it might be
+> > > hard to change. How does userspace use this? Why must this 64-bit
+> > > number be unchanged? Why did you do things this way originally? Etc.
+> > > If you could provide a bit of background, we might be able to shake
+> > > out a solution somewhere in there.
+> >
+> > There is no problem with the code and nothing to be fixed.
+>
+> Yes yes, my mama says I'm the specialist snowflake of a boy too. That
+> makes two of us ice crystals, falling from the winter heavens,
+> blessing vim with our beautiful shapes and frosty code.
+>
 
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
----
- drivers/tee/tee_shm_pool.c | 56 --------------------------------------
- include/linux/tee_drv.h    | 30 --------------------
- 2 files changed, 86 deletions(-)
+Can we please keep it professional, guys?
 
-diff --git a/drivers/tee/tee_shm_pool.c b/drivers/tee/tee_shm_pool.c
-index fcbb461fc59c..a9f9d50fd181 100644
---- a/drivers/tee/tee_shm_pool.c
-+++ b/drivers/tee/tee_shm_pool.c
-@@ -47,62 +47,6 @@ static const struct tee_shm_pool_mgr_ops pool_ops_generic = {
- 	.destroy_poolmgr = pool_op_gen_destroy_poolmgr,
- };
- 
--/**
-- * tee_shm_pool_alloc_res_mem() - Create a shared memory pool from reserved
-- * memory range
-- * @priv_info:	Information for driver private shared memory pool
-- * @dmabuf_info: Information for dma-buf shared memory pool
-- *
-- * Start and end of pools will must be page aligned.
-- *
-- * Allocation with the flag TEE_SHM_DMA_BUF set will use the range supplied
-- * in @dmabuf, others will use the range provided by @priv.
-- *
-- * @returns pointer to a 'struct tee_shm_pool' or an ERR_PTR on failure.
-- */
--struct tee_shm_pool *
--tee_shm_pool_alloc_res_mem(struct tee_shm_pool_mem_info *priv_info,
--			   struct tee_shm_pool_mem_info *dmabuf_info)
--{
--	struct tee_shm_pool_mgr *priv_mgr;
--	struct tee_shm_pool_mgr *dmabuf_mgr;
--	void *rc;
--
--	/*
--	 * Create the pool for driver private shared memory
--	 */
--	rc = tee_shm_pool_mgr_alloc_res_mem(priv_info->vaddr, priv_info->paddr,
--					    priv_info->size,
--					    3 /* 8 byte aligned */);
--	if (IS_ERR(rc))
--		return rc;
--	priv_mgr = rc;
--
--	/*
--	 * Create the pool for dma_buf shared memory
--	 */
--	rc = tee_shm_pool_mgr_alloc_res_mem(dmabuf_info->vaddr,
--					    dmabuf_info->paddr,
--					    dmabuf_info->size, PAGE_SHIFT);
--	if (IS_ERR(rc))
--		goto err_free_priv_mgr;
--	dmabuf_mgr = rc;
--
--	rc = tee_shm_pool_alloc(priv_mgr, dmabuf_mgr);
--	if (IS_ERR(rc))
--		goto err_free_dmabuf_mgr;
--
--	return rc;
--
--err_free_dmabuf_mgr:
--	tee_shm_pool_mgr_destroy(dmabuf_mgr);
--err_free_priv_mgr:
--	tee_shm_pool_mgr_destroy(priv_mgr);
--
--	return rc;
--}
--EXPORT_SYMBOL_GPL(tee_shm_pool_alloc_res_mem);
--
- struct tee_shm_pool_mgr *tee_shm_pool_mgr_alloc_res_mem(unsigned long vaddr,
- 							phys_addr_t paddr,
- 							size_t size,
-diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
-index 5e1533ee3785..6b0f0d01ebdf 100644
---- a/include/linux/tee_drv.h
-+++ b/include/linux/tee_drv.h
-@@ -278,36 +278,6 @@ static inline void tee_shm_pool_mgr_destroy(struct tee_shm_pool_mgr *poolm)
- 	poolm->ops->destroy_poolmgr(poolm);
- }
- 
--/**
-- * struct tee_shm_pool_mem_info - holds information needed to create a shared
-- * memory pool
-- * @vaddr:	Virtual address of start of pool
-- * @paddr:	Physical address of start of pool
-- * @size:	Size in bytes of the pool
-- */
--struct tee_shm_pool_mem_info {
--	unsigned long vaddr;
--	phys_addr_t paddr;
--	size_t size;
--};
--
--/**
-- * tee_shm_pool_alloc_res_mem() - Create a shared memory pool from reserved
-- * memory range
-- * @priv_info:	 Information for driver private shared memory pool
-- * @dmabuf_info: Information for dma-buf shared memory pool
-- *
-- * Start and end of pools will must be page aligned.
-- *
-- * Allocation with the flag TEE_SHM_DMA_BUF set will use the range supplied
-- * in @dmabuf, others will use the range provided by @priv.
-- *
-- * @returns pointer to a 'struct tee_shm_pool' or an ERR_PTR on failure.
-- */
--struct tee_shm_pool *
--tee_shm_pool_alloc_res_mem(struct tee_shm_pool_mem_info *priv_info,
--			   struct tee_shm_pool_mem_info *dmabuf_info);
--
- /**
-  * tee_shm_pool_free() - Free a shared memory pool
-  * @pool:	The shared memory pool to free
--- 
-2.31.1
+> Anyway, back to reality, as Geert points out, we're hoping to be able
+> to remove lib/sha1.c from vmlinux (see 3/3 of this series) for
+> codesize, and this bpf usage here is one of two remaining usages of
+> it. So I was hoping that by sending this RFC, it might elicit a bit
+> more information about the ecosystem around the usage of the function,
+> so that we can start trying to think of creative solutions to sunset
+> it.
+>
 
+Yeah, so the issue is that, at *some* point, SHA-1 is going to have to
+go. So it would be helpful if Alexei could clarify *why* he doesn't
+see this as a problem. The fact that it is broken means that it is no
+longer intractable to forge collisions, which likley means that SHA-1
+no longer fulfills the task that you wanted it to do in the first
+place.
+
+And just dismissing the issue every time it comes up won't make the
+problem go away. There are people on this thread that have a much
+better handle on how to use crypto safely and responsibly, and it is
+in everybody's interest if we can come to an agreement about when and
+how SHA-1 will be phased out.
+
+
+> I started trying to figure out what's up there and wound up with some
+> more questions. My primary one is why you're okay with such a weak
+> "checksum" -- the thing is only 64-bits, and as you told Andy Polyakov
+> in 2016 when he tried to stop you from using SHA-1, "Andy, please read
+> the code. \ we could have used jhash there just as well. \ Collisions
+> are fine."
+>
+> Looking at https://github.com/iovisor/bcc/blob/e17c4f7324d8fc5cc24ba8ee1db451666cd7ced3/src/cc/bpf_module.cc#L571
+> I see:
+>
+>   err = bpf_prog_compute_tag(insns, prog_len, &tag1);
+>   if (err)
+>     return err;
+>   err = bpf_prog_get_tag(prog_fd, &tag2);
+>   if (err)
+>     return err;
+>   if (tag1 != tag2) {
+>     fprintf(stderr, "prog tag mismatch %llx %llx\n", tag1, tag2);
+>
+> So it's clearly a check for something. A collision there might prove pesky:
+>
+>   char buf[128];
+>   ::snprintf(buf, sizeof(buf), BCC_PROG_TAG_DIR "/bpf_prog_%llx", tag1);
+>   err = mkdir(buf, 0777);
+>
+> Maybe you don't really see a security problem here, because these
+> programs are root loadable anyway? But I imagine things will
+> ultimately get more complicated later on down the road when bpf
+> becomes more modular and less privileged and more namespaced -- the
+> usual evolution of these sorts of features.
+>
+> So I'm wondering - why not just do this in a more robust way entirely,
+> and always export a sufficiently sized blake2s hash? That way we'll
+> never have these sorts of shenanigans to care about. If that's not a
+> sensible thing to do, it's likely that I _still_ don't quite grok the
+> purpose of the program tag, in which case, I'd be all ears to an
+> explanation.
+>
+> Jason
+>
+> [ PS: As an aside, I noticed some things in the userspace tag
+> calculation code at
+> https://github.com/iovisor/bcc/blob/aa7200b9b2a7a2ce2e8a6f0dc1f456f3f93af1da/src/cc/libbpf.c#L536
+> - you probably shouldn't use AF_ALG for things that are software based
+> and can be done in userspace faster. And the unconditional
+> __builtin_bswap64 there means that the code will fail on big endian
+> systems. I know you mostly only care about x86 and all, but <endian.h>
+> might make this easy to fix. ]

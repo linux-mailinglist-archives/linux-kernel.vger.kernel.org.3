@@ -2,77 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FBF48E774
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4800548E786
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:28:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239896AbiANJ0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 04:26:41 -0500
-Received: from foss.arm.com ([217.140.110.172]:58742 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239692AbiANJ0k (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:26:40 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 509D01FB;
-        Fri, 14 Jan 2022 01:26:40 -0800 (PST)
-Received: from [10.57.34.164] (unknown [10.57.34.164])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 753183F766;
-        Fri, 14 Jan 2022 01:26:38 -0800 (PST)
-Subject: Re: [PATCH] perf arm: Fix off-by-one directory path.
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220114064822.1806019-1-irogers@google.com>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <42fbdd13-c8a8-404b-a452-1e796c2e5a8b@arm.com>
-Date:   Fri, 14 Jan 2022 09:26:29 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S237968AbiANJ2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 04:28:21 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:57088 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230104AbiANJ2U (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 04:28:20 -0500
+Received: by mail-io1-f71.google.com with SMTP id d125-20020a6bb483000000b006051f7a8573so5269119iof.23
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 01:28:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=al7eFBuh4sFwLCL4GiOXmiXiy1H4469bZvRRUWVvLdA=;
+        b=NekbblI/WhRWSaUWQSlrm2FrSdeNtxmA+2G+A5ZFc2UqlvfDLs67A6z6Xo1mhtbTYo
+         e1ZxaK4UEOtFaMSV05ugzAESKSKdDBiPiYf2aWQIMLSOySx+M056MLK7Mz5EejddIvzl
+         voIHZpzYBMY5fIbrrgijlSGu5YmJR+1/W9eR9bC0qReu9vyJrGhkeCRzoq96RvhKsJrc
+         awkBKLXpAfUzb57mCb7OGrOC8ZG3mUv6KgkKM6ITIZoCmBikDBpPFXTHOptPUMy8y52Z
+         Kty+qI6c1PqPU1keaBONW2OzbPfkTqTZ0vnKIQ4MJORTWJJ+d8zUa+YFMJq2ioLxrc3y
+         TbZQ==
+X-Gm-Message-State: AOAM5334IzUHmxXOi1ntgj2yi4gs0q0zODAart8bhhqDcmMt/8q9cXB3
+        mHhUGezjh9J5eMemdo3UqOTutZ3rBeEFbS+Adyd4w1uT7bCz
+X-Google-Smtp-Source: ABdhPJxyXr0SBcgR05CtxsGITEYhHVGsVTH3amDHmbiFuXEEPQXjM4u7Ifq2Z/daTNoBSH+81dLAkvlbNRIQ74v76uwVeMr2DQ8S
 MIME-Version: 1.0
-In-Reply-To: <20220114064822.1806019-1-irogers@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+X-Received: by 2002:a02:9108:: with SMTP id a8mr3729402jag.284.1642152499779;
+ Fri, 14 Jan 2022 01:28:19 -0800 (PST)
+Date:   Fri, 14 Jan 2022 01:28:19 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006aa20b05d5876c1f@google.com>
+Subject: [syzbot] KASAN: null-ptr-deref Write in kcm_tx_work (2)
+From:   syzbot <syzbot+25ca556057c68f8a03a2@syzkaller.appspotmail.com>
+To:     aahringo@redhat.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, paskripkin@gmail.com,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
+        unixbhaskar@gmail.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+Hello,
 
-I think there's another include in "utils/intel-pt.c" that may need the same treatment.
+syzbot found the following issue on:
 
-On 14/01/2022 06:48, Ian Rogers wrote:
-> Relative path include works in the regular build due to -I paths but may
-> fail in other situations.
->
-> Fixes: 83869019c74c ("perf arch: Support register names from all archs")
-> Signed-off-by: Ian Rogers <irogers@google.com>
-Reviewed-by: German Gomez <german.gomez@arm.com>
+HEAD commit:    df0cc57e057f Linux 5.16
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12a89d2db00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ea1f52f5503d3ac3
+dashboard link: https://syzkaller.appspot.com/bug?extid=25ca556057c68f8a03a2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Thanks,
-German
-> ---
->  tools/perf/util/arm64-frame-pointer-unwind-support.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/arm64-frame-pointer-unwind-support.c b/tools/perf/util/arm64-frame-pointer-unwind-support.c
-> index 4f5ecf51ed38..2242a885fbd7 100644
-> --- a/tools/perf/util/arm64-frame-pointer-unwind-support.c
-> +++ b/tools/perf/util/arm64-frame-pointer-unwind-support.c
-> @@ -6,7 +6,7 @@
->  #include "unwind.h"
->  
->  #define perf_event_arm_regs perf_event_arm64_regs
-> -#include "../arch/arm64/include/uapi/asm/perf_regs.h"
-> +#include "../../arch/arm64/include/uapi/asm/perf_regs.h"
->  #undef perf_event_arm_regs
->  
->  struct entries {
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+25ca556057c68f8a03a2@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_write include/linux/instrumented.h:86 [inline]
+BUG: KASAN: null-ptr-deref in clear_bit include/asm-generic/bitops/instrumented-atomic.h:41 [inline]
+BUG: KASAN: null-ptr-deref in kcm_tx_work+0xff/0x160 net/kcm/kcmsock.c:741
+Write of size 8 at addr 0000000000000008 by task kworker/u4:47/7955
+
+CPU: 1 PID: 7955 Comm: kworker/u4:47 Not tainted 5.16.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: kkcmd kcm_tx_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __kasan_report mm/kasan/report.c:437 [inline]
+ kasan_report.cold+0x66/0xdf mm/kasan/report.c:450
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_write include/linux/instrumented.h:86 [inline]
+ clear_bit include/asm-generic/bitops/instrumented-atomic.h:41 [inline]
+ kcm_tx_work+0xff/0x160 net/kcm/kcmsock.c:741
+ process_one_work+0x9b2/0x1660 kernel/workqueue.c:2298
+ worker_thread+0x65d/0x1130 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+==================================================================
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 7955 Comm: kworker/u4:47 Tainted: G    B             5.16.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: kkcmd kcm_tx_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ panic+0x2b0/0x6dd kernel/panic.c:232
+ end_report.cold+0x63/0x6f mm/kasan/report.c:128
+ __kasan_report mm/kasan/report.c:440 [inline]
+ kasan_report.cold+0x71/0xdf mm/kasan/report.c:450
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_write include/linux/instrumented.h:86 [inline]
+ clear_bit include/asm-generic/bitops/instrumented-atomic.h:41 [inline]
+ kcm_tx_work+0xff/0x160 net/kcm/kcmsock.c:741
+ process_one_work+0x9b2/0x1660 kernel/workqueue.c:2298
+ worker_thread+0x65d/0x1130 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

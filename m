@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D0F48F1BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 21:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB0948F1C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 21:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiANUzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 15:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S229550AbiANU4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 15:56:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiANUzu (ORCPT
+        with ESMTP id S229526AbiANU4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 15:55:50 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6467CC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:55:50 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id c3-20020a9d6c83000000b00590b9c8819aso11506983otr.6
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:55:50 -0800 (PST)
+        Fri, 14 Jan 2022 15:56:19 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA2CC06173E
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:56:18 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id c66so8314452wma.5
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:56:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=kZlcK6bzk2i8yDVBkb61iS5h5fQfrdP5oTJGQdHluU8=;
-        b=TsQm+oAzKNnCJ4v024+FpUVdSx0j6IuMd+HlMYnTIuQfYA4xMIFvWyEkWD7qgiPmqk
-         WYwR7hi3YJ2qM5lSGaQRvov0csEpAdxMoJk85UB5SOeAqACTVZQPYhi/AJuwY5kXHXI/
-         Q5hJgwUHVrXBKac+U2t6XQ3I0l0SIvlxe8wVA=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=a2LK+XCzRUQuX/FKJ8hTnpMWPOfnbChf1uqBe6evn14=;
+        b=TatznFHqz4q/JNQk6ZcSu00tRi1lJns+grkgt68v4JlRwWUwEWskbD7Eo1/QtiimJb
+         2DsQk8udeSaRNeTIxoGMeKXeBZLrdk5C8MmBA4y49hugKr6IyKWjGfjAL5lix6bsA8YK
+         ulzIzHwIN6eFqCez+iFzFoHBlMIrO4dXddOB4EumZ7hYABe22bNEHQyiXlH2ZL2a1DS4
+         d/xnj0pe6mNUK9HfdoYjZ/VFHGZuZpM3k77VpECd0aRmjZop+vebKg17agfiYCAZxTlm
+         IYmfdW7BsxqYNuk4Fh3pl1C5qn2hoPNWzFvLJ5AmgrMfDaJ/Bt2nismRmwww3tSSzu+R
+         r6OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=kZlcK6bzk2i8yDVBkb61iS5h5fQfrdP5oTJGQdHluU8=;
-        b=CrweXgZk+O5RAp9U+Hm1cT5nDxBMj7b1k11ZTn4xB5nzfx9Pm2t+D14LY/jG9UaxrX
-         ooc/7CKZoOnCKY7ZiwL7jNqvtF/JgBb3/M72c+0XhxxLpegsIWqhAPu6aEOmK+oc9tjn
-         QwEV1C7NhrJQgbNWpglBJ6zwhPQnlgzMqud6iS2t8c8f0vcWDlVqrDIofCKNmkG8shEF
-         Kg3eMvoxXei7DF6zj+rSM0BxzP1LDOumNPr9clbbWITvTSbjx4/JVCRhqtQ+YckEFpj0
-         8KoPxbj6fSbMvbMxlSKgYRgHwk03gMEt+J+p6mQKMX8jsgoT1rxyZkDGokf/CISgFk3l
-         OHJw==
-X-Gm-Message-State: AOAM532LEaLP0rpxb0ZMOlbnvaeme7SiTARKkIjaktrZebRhZmrSDuG5
-        nKy13DwWF5zC33H/eCTitNX3sILCnqmO3Nw/7nLh9A==
-X-Google-Smtp-Source: ABdhPJzzp8E4NOSV2XzSq+cs6x37dxauIKu6zpkuVpKATYcGEIUh/HC5MNTbrioYLy7iARwikOhEYirsEKJu8hhT6CU=
-X-Received: by 2002:a9d:2243:: with SMTP id o61mr8151551ota.126.1642193749461;
- Fri, 14 Jan 2022 12:55:49 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 14 Jan 2022 14:55:49 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=a2LK+XCzRUQuX/FKJ8hTnpMWPOfnbChf1uqBe6evn14=;
+        b=M3jTsYvp4hAsG8VFgG8/44k9JeD/hP58Ur56IVafdQGz29Pp4OOofFG97jFWnJLwCz
+         Qor1wcZ59OJtWi99XnbzjX4Qf+v3pWSIejQr7pL8jChvOdPAEZ5rCVfSNjMtWZ46NXRx
+         qsOxUXn+YdX8Jv2M6MR9uP7J8yXN2f7Osqf64GSRFUAswGXgXOnd+4b9mo7LKp046xmQ
+         NcrEq6iMUtmLDIusqTfEAWgUqiQqMVQGfYfs9tu7GOdLVfVSUU5PHoYqPQk5/37ep1S6
+         S0IOQj/nK0vLLpi8FWL7Zt8SG8/Y3y3+yuFwN5Rf4OVp5XxcWAJs+Fy5YEPK/edgNxQe
+         6xpA==
+X-Gm-Message-State: AOAM530i/u5ak52dZUbGT37OaUr+qRul0OYfOtIlxdD8OtcGEDnyynF4
+        HMDa/AxucpashK4BHoCvlpeyBg==
+X-Google-Smtp-Source: ABdhPJxEOp2Wo1ezLBKMdg3Rs8D9/4m/Bwa6/dloggb4D57MyDeWhvpnWUAVCmPkdzXMY6R9wWCD9A==
+X-Received: by 2002:a1c:1d17:: with SMTP id d23mr9767788wmd.46.1642193777164;
+        Fri, 14 Jan 2022 12:56:17 -0800 (PST)
+Received: from larix (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id p62sm6050452wmp.10.2022.01.14.12.56.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 12:56:16 -0800 (PST)
+Date:   Fri, 14 Jan 2022 20:56:14 +0000
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        christophe.jaillet@wanadoo.fr, dapeng1.mi@intel.com,
+        david@redhat.com, elic@nvidia.com, eperezma@redhat.com,
+        flyingpenghao@gmail.com, flyingpeng@tencent.com,
+        gregkh@linuxfoundation.org, guanjun@linux.alibaba.com,
+        jasowang@redhat.com, jiasheng@iscas.ac.cn, johan@kernel.org,
+        keescook@chromium.org, labbott@kernel.org, lingshan.zhu@intel.com,
+        lkp@intel.com, luolikang@nsfocus.com, lvivier@redhat.com,
+        pasic@linux.ibm.com, sgarzare@redhat.com, somlo@cmu.edu,
+        trix@redhat.com, wu000273@umn.edu, xianting.tian@linux.alibaba.com,
+        xuanzhuo@linux.alibaba.com, yun.wang@linux.alibaba.com
+Subject: Re: [GIT PULL] virtio,vdpa,qemu_fw_cfg: features, cleanups, fixes
+Message-ID: <YeHjbqjY8Dd+3o1E@larix>
+References: <20220114153515-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <YeHWNtl0Or1dgadz@google.com>
-References: <20220107091357.28960-1-xiazhengqiao@huaqin.corp-partner.google.com>
- <nycvar.YFH.7.76.2201140935460.28059@cbobk.fhfr.pm> <CAE-0n53M723sZ7H-f0SF=AoTrwznmTRhKPapgHe5H7Mw6bPb7Q@mail.gmail.com>
- <YeHWNtl0Or1dgadz@google.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 14 Jan 2022 14:55:49 -0600
-Message-ID: <CAE-0n51TAtifbbruKhCJ_u5xH1j0zKjWOehGQFFdCez=RubxVA@mail.gmail.com>
-Subject: Re: [PATCH v2] HID: google: modify HID device groups of eel
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>,
-        benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        Wei-Ning Huang <wnhuang@google.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        "Sean O'Brien" <seobrien@chromium.org>, phoenixshen@chromium.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220114153515-mutt-send-email-mst@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Dmitry Torokhov (2022-01-14 11:59:50)
-> On Fri, Jan 14, 2022 at 01:25:12PM -0600, Stephen Boyd wrote:
-> >
-> > My understanding is that 'vivaldi' is mostly a keyboard layout and
-> > 'hammer' is a detachable keyboard. We want to prevent the hid-vivaldi
-> > driver from probing this particular device because the hid-vivaldi
-> > driver doesn't know about detachable keyboards. Hammer devices also
-> > support 360 degree wraparound so we know that the keyboard has been put
-> > behind the screen or that it's being used to stand up the device on a
-> > table.
-> >
-> > Given all that, I'm still confused. If we make the hid-google-hammer
-> > driver probe this device and the keyboard layout is vivaldi then we'd
-> > want the part of the vivaldi driver that exposes the
-> > function_row_physmap through sysfs. Otherwise userspace won't know how
-> > to handle the function row properly. I think we need the device to stack
-> > two drivers here. Does that happen with HID?
->
-> As far as I know HID does not easily allow "stacking" drivers like that.
+Hi,
 
-Ok.
+On Fri, Jan 14, 2022 at 03:35:15PM -0500, Michael S. Tsirkin wrote:
+> Jean-Philippe Brucker (5):
+>       iommu/virtio: Add definitions for VIRTIO_IOMMU_F_BYPASS_CONFIG
+>       iommu/virtio: Support bypass domains
+>       iommu/virtio: Sort reserved regions
+>       iommu/virtio: Pass end address to viommu_add_mapping()
+>       iommu/virtio: Support identity-mapped domains
 
->
-> Probably the easiest way would be to export vivaldi_feature_mapping()
-> and the show method for the physical row map and call them from the
-> hammer driver.
->
+Please could you drop these patches, they are from an old version of the
+series. The newer version was already in Joerg's pull request and was
+merged, so this will conflict.
 
-I worry about builtin vs. modular drivers so probably ought to make some
-hid-vivaldi-common.c file that has the physmap code and then have both
-drivers call that mini-library. The 'vivaldi_data' structure would need
-to be figured out too. The hammer driver stores 'hammer_kbd_leds' in the
-hid_get_drvdata() whereas the vivaldi driver stores 'vivalid_data' so we
-can't simply call the show method for the sysfs attribute without some
-minor surgery.
+Thanks,
+Jean
+

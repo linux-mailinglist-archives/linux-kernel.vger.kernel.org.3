@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA4648E5A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F0D48E606
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233501AbiANITz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
+        id S237141AbiANIWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239716AbiANITD (ORCPT
+        with ESMTP id S240279AbiANIV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:19:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC0CC061574;
-        Fri, 14 Jan 2022 00:19:03 -0800 (PST)
+        Fri, 14 Jan 2022 03:21:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0002C06161C;
+        Fri, 14 Jan 2022 00:21:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E18EB61E1A;
-        Fri, 14 Jan 2022 08:19:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF09AC36AE9;
-        Fri, 14 Jan 2022 08:19:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CE56B82440;
+        Fri, 14 Jan 2022 08:21:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E8FDC36AEA;
+        Fri, 14 Jan 2022 08:21:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148342;
-        bh=YtKawqdXJpNajjN826LV9wNuisL90T2K85ZRzfXt1cI=;
+        s=korg; t=1642148477;
+        bh=46tSODd3bKTz4lai4mtnMZJFQXBXOmrf5iaLfeO4rI8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TxjbAT+UVw4CbASYb4kwmnBMF+COzq2Kqj8VYc00T4qR75G67ltw21uVqxqqnqIwj
-         o3YvtExVA0bIRFnlQ+CQ8pNaZtlhiVFmBOXSTz7PsPuN+81SQ3ix6lzTxXhxqNJpVA
-         YJulsdjBwKwWzTWvgaQ68I/4k+TDotLOcgmDNJJE=
+        b=LfZ30xq+jKiSwpWiPFxPLtDjrQTLU03cPnmcgc5wBF8Niv6hJ8drde3V6L6tyg1zQ
+         /a1ZSY7CrSMBbGEaw2MRw6SwnxNq+ucFk+5ZkfITYg6Aj6as9GqXxx147WwGLwW92q
+         EFpDA5K0ounNpkChJG5aRy4v8yjW1E3G22QHmQ88=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 20/25] random: fix data race on crng init time
-Date:   Fri, 14 Jan 2022 09:16:28 +0100
-Message-Id: <20220114081543.383548627@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Aditya Garg <gargaditya08@live.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 5.15 29/41] mfd: intel-lpss: Fix too early PM enablement in the ACPI ->probe()
+Date:   Fri, 14 Jan 2022 09:16:29 +0100
+Message-Id: <20220114081546.130992699@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
-References: <20220114081542.698002137@linuxfoundation.org>
+In-Reply-To: <20220114081545.158363487@linuxfoundation.org>
+References: <20220114081545.158363487@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,71 +51,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-commit 009ba8568be497c640cab7571f7bfd18345d7b24 upstream.
+commit c9e143084d1a602f829115612e1ec79df3727c8b upstream.
 
-_extract_crng() does plain loads of crng->init_time and
-crng_global_init_time, which causes undefined behavior if
-crng_reseed() and RNDRESEEDCRNG modify these corrently.
+The runtime PM callback may be called as soon as the runtime PM facility
+is enabled and activated. It means that ->suspend() may be called before
+we finish probing the device in the ACPI case. Hence, NULL pointer
+dereference:
 
-Use READ_ONCE() and WRITE_ONCE() to make the behavior defined.
+  intel-lpss INT34BA:00: IRQ index 0 not found
+  BUG: kernel NULL pointer dereference, address: 0000000000000030
+  ...
+  Workqueue: pm pm_runtime_work
+  RIP: 0010:intel_lpss_suspend+0xb/0x40 [intel_lpss]
 
-Don't fix the race on crng->init_time by protecting it with crng->lock,
-since it's not a problem for duplicate reseedings to occur.  I.e., the
-lockless access with READ_ONCE() is fine.
+To fix this, first try to register the device and only after that enable
+runtime PM facility.
 
-Fixes: d848e5f8e1eb ("random: add new ioctl RNDRESEEDCRNG")
-Fixes: e192be9d9a30 ("random: replace non-blocking pool with a Chacha20-based CRNG")
-Cc: stable@vger.kernel.org
-Signed-off-by: Eric Biggers <ebiggers@google.com>
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Fixes: 4b45efe85263 ("mfd: Add support for Intel Sunrisepoint LPSS devices")
+Reported-by: Orlando Chamberlain <redecorating@protonmail.com>
+Reported-by: Aditya Garg <gargaditya08@live.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: Aditya Garg <gargaditya08@live.com>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Link: https://lore.kernel.org/r/20211101190008.86473-1-andriy.shevchenko@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ drivers/mfd/intel-lpss-acpi.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -990,7 +990,7 @@ static void crng_reseed(struct crng_stat
- 		crng->state[i+4] ^= buf.key[i] ^ rv;
- 	}
- 	memzero_explicit(&buf, sizeof(buf));
--	crng->init_time = jiffies;
-+	WRITE_ONCE(crng->init_time, jiffies);
- 	spin_unlock_irqrestore(&crng->lock, flags);
- 	if (crng == &primary_crng && crng_init < 2) {
- 		invalidate_batched_entropy();
-@@ -1016,12 +1016,15 @@ static void crng_reseed(struct crng_stat
- static void _extract_crng(struct crng_state *crng,
- 			  __u8 out[CHACHA_BLOCK_SIZE])
+--- a/drivers/mfd/intel-lpss-acpi.c
++++ b/drivers/mfd/intel-lpss-acpi.c
+@@ -136,6 +136,7 @@ static int intel_lpss_acpi_probe(struct
  {
--	unsigned long v, flags;
-+	unsigned long v, flags, init_time;
+ 	struct intel_lpss_platform_info *info;
+ 	const struct acpi_device_id *id;
++	int ret;
  
--	if (crng_ready() &&
--	    (time_after(crng_global_init_time, crng->init_time) ||
--	     time_after(jiffies, crng->init_time + CRNG_RESEED_INTERVAL)))
--		crng_reseed(crng, crng == &primary_crng ? &input_pool : NULL);
-+	if (crng_ready()) {
-+		init_time = READ_ONCE(crng->init_time);
-+		if (time_after(READ_ONCE(crng_global_init_time), init_time) ||
-+		    time_after(jiffies, init_time + CRNG_RESEED_INTERVAL))
-+			crng_reseed(crng, crng == &primary_crng ?
-+				    &input_pool : NULL);
-+	}
- 	spin_lock_irqsave(&crng->lock, flags);
- 	if (arch_get_random_long(&v))
- 		crng->state[14] ^= v;
-@@ -1975,7 +1978,7 @@ static long random_ioctl(struct file *f,
- 		if (crng_init < 2)
- 			return -ENODATA;
- 		crng_reseed(&primary_crng, &input_pool);
--		crng_global_init_time = jiffies - 1;
-+		WRITE_ONCE(crng_global_init_time, jiffies - 1);
- 		return 0;
- 	default:
- 		return -EINVAL;
+ 	id = acpi_match_device(intel_lpss_acpi_ids, &pdev->dev);
+ 	if (!id)
+@@ -149,10 +150,14 @@ static int intel_lpss_acpi_probe(struct
+ 	info->mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	info->irq = platform_get_irq(pdev, 0);
+ 
++	ret = intel_lpss_probe(&pdev->dev, info);
++	if (ret)
++		return ret;
++
+ 	pm_runtime_set_active(&pdev->dev);
+ 	pm_runtime_enable(&pdev->dev);
+ 
+-	return intel_lpss_probe(&pdev->dev, info);
++	return 0;
+ }
+ 
+ static int intel_lpss_acpi_remove(struct platform_device *pdev)
 
 

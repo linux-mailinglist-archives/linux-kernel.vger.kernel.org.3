@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B0748EE15
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F243148EE0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243347AbiANQ2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:28:55 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:59304 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbiANQ2y (ORCPT
+        id S243322AbiANQXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:23:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243321AbiANQXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:28:54 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id F07FA219B1;
-        Fri, 14 Jan 2022 16:28:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1642177732;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0CzX1aSmTooK1EMmhJfbzkcQGSY16OFvSVNFOPoOdA4=;
-        b=Lq9y/B8zyJlIuN6E7uTVdUzhHROJtHPAYaXJikQtJWHm44HYkQPSwyjYpH39VEQLhFcr4G
-        y4HEXSDC6Kd5yzvGyf9Q/UCTMzJ1l97QG2UjcbDP0kHwCwccYLKZoLsLJmiZBmSqj9qe3K
-        wTXLh7fHUgMsYI1HAr0H6HlNgzVxL3g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1642177732;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0CzX1aSmTooK1EMmhJfbzkcQGSY16OFvSVNFOPoOdA4=;
-        b=Tfz/6bZiVdWgDm0QwZmHsNJsaixtkdTt4/m1pBJhjCVorrJjnIR01iAlgT3BR3+prF9CsA
-        isyfZ09y6y9LHbDg==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id C6FF2A3B81;
-        Fri, 14 Jan 2022 16:28:52 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 28D14DA781; Fri, 14 Jan 2022 17:28:17 +0100 (CET)
-Date:   Fri, 14 Jan 2022 17:28:17 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Filipe Manana <fdmanana@kernel.org>
-Cc:     lkp <oliver.sang@intel.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, linux-btrfs@vger.kernel.org
-Subject: Re: [btrfs]  [confidence: ] c2e3930529:
- WARNING:at_fs/btrfs/block-group.c:#btrfs_put_block_group[btrfs]
-Message-ID: <20220114162817.GC14046@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Filipe Manana <fdmanana@kernel.org>,
-        lkp <oliver.sang@intel.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, linux-btrfs@vger.kernel.org
-References: <20220114082331.GE32317@xsang-OptiPlex-9020>
- <YeFVtonXVkSJsdhq@debian9.Home>
+        Fri, 14 Jan 2022 11:23:25 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EA4C06173E
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:23:25 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id m3so17852905lfu.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:23:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:user-agent:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=42zPbb0yroZukcZ5WPJ2D+PdN5fgMopF24EmDtHwsH4=;
+        b=E5AwvZ8XcO+MsT9Hq92x30gcmZmZqPYcSC+iuhS9vWpX6JEbk+/JsTyTk/UL8/9wzm
+         CBKUeKeamZDJYUaB/sZ9mXo8xCA1OhAfe8ZYXOxhJ1k6oiH3zfCEiYLrLklRNMOCZOO5
+         3HreIIzMhmoim1gKEOJzbOQkJSI3wY+CVS9dg94jQfkIsUgboAJ1ThBq1TiP5GkwF3pW
+         zS9LuGVuF6dfrlx2mTjRd1M6DkgK924sC8RNJlBTkUKh2lpTtvgOE7/dBVko+s6Mm+6A
+         z+EnOACdOWOS0NDOUhuUGaRIlVEoNSosAbPWEShtX1Hyw3qgzxOx84PdodTaR19YUjdR
+         TIiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=42zPbb0yroZukcZ5WPJ2D+PdN5fgMopF24EmDtHwsH4=;
+        b=GBUfNee44EWEAPBtRoXBsHuLT2Ga/2lBiSvYsJRuz72vQ9/PTwtZN9IImQBjKaE3Yn
+         YSuFLWQM7rU89pJUIcCsIWFVmOtjuJzh2Bosw6L2ikRLPjM/0aaC5HdarCq6Fk+0HO+j
+         WW2lwk35n6XiyNgEx3XxlSBzfn5VNRvHAknTVzL2cGMG+uQSv+Dw2Gsgua710yxM1xM4
+         ccBIG6CdQetJkj5P1RQtz5ouzlgLR8qxI6Y22m2o0nbsGkc44BroJOP10kQJokSTXdpg
+         ZPCeLIPgpmNvoXTA0+UxgipxLZ4VXAiEYTY/eiRuNXamYwPmU/X06SJyDG1L31rwGHza
+         MzLA==
+X-Gm-Message-State: AOAM532GN+xqju5uJvB0MGonXVAhmu+Kk1/Vx0QgjjBknvioHekcu40W
+        Rlqicrdc0WywDlGDlEyZy/g=
+X-Google-Smtp-Source: ABdhPJwxqYTPEnm/szEKg/tWZvhyJXTB2ySl61arfJl0qseHH8097Qm/FF0M8jMMM7V/tSGRMpHWcA==
+X-Received: by 2002:a2e:9a91:: with SMTP id p17mr974222lji.11.1642177403033;
+        Fri, 14 Jan 2022 08:23:23 -0800 (PST)
+Received: from localhost.localdomain (ntd06459.static.corbina.ru. [95.31.14.149])
+        by smtp.gmail.com with ESMTPSA id k19sm624295lfu.176.2022.01.14.08.23.21
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Fri, 14 Jan 2022 08:23:22 -0800 (PST)
+Date:   Fri, 14 Jan 2022 19:29:03 +0300
+From:   Alexander Sergeyev <sergeev917@gmail.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
+        Elia Devito <eliadevito@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: fix speakers and micmute on HP 855 G8
+Message-ID: <20220114162903.fbdejorf5ibia4sw@localhost.localdomain>
+User-Agent: mtt
+References: <20220113210930.dtryx4ifjsmb33lz@localhost.localdomain>
+ <s5hh7a647vw.wl-tiwai@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <YeFVtonXVkSJsdhq@debian9.Home>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+In-Reply-To: <s5hh7a647vw.wl-tiwai@suse.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 10:51:34AM +0000, Filipe Manana wrote:
-> On Fri, Jan 14, 2022 at 04:23:31PM +0800, kernel test robot wrote:
-> > If you fix the issue, kindly add following tag
-> > Reported-by: kernel test robot <oliver.sang@intel.com>
-> 
-> Known issue, and is fixed by:
-> 
-> https://patchwork.kernel.org/project/linux-btrfs/patch/3aae7c6728257c7ce2279d6660ee2797e5e34bbd.1641300250.git.fdmanana@suse.com/
-> 
-> But it's not yet on Linus' tree.
+On Fri, Jan 14, 2022 at 05:08:51PM +0100, Takashi Iwai wrote:
+>The change looks OK, but it doesn't apply to the latest tree.
+>Could you rebase it with either sound.git tree for-linus branch or
+>the latest Linus tree, and resubmit?
 
-Will go as a post-rc1 fix at the latest.
+Sure, I'll rebase on the sound.git branch.

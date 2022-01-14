@@ -2,162 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4781A48E1A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8B248E1A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238484AbiANAm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 19:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
+        id S235777AbiANAnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 19:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235727AbiANAmz (ORCPT
+        with ESMTP id S235738AbiANAnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 19:42:55 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424DAC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 16:42:55 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so4756820wme.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 16:42:55 -0800 (PST)
+        Thu, 13 Jan 2022 19:43:42 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFB6C06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 16:43:42 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id a7so9134209plh.1
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 16:43:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PdLaFJ7mQpkrAJQLB818USTGDL7xDCP3yDj71WsdZOc=;
-        b=ermvpzRfAeXvbQoW/NU+Nyz8KsVNsA+9MkTJMeZnzvAz8noUZtj+DIoLp5KH1pToY4
-         nO0EcZKTo7/CBd8fwseqhxZuZzaCHgJg9Y2wIvKJYLU5D/pFkPrlnUmgU+Ybmr6f3MJ9
-         Obj1b+Gqt3LebbsYskHDf/TCCDEMVW+3d5QAkrVU+cdkhnB+3pAYe91cUowL6COSHauy
-         MXdA8+dbSBPlLz3HO5z6XyXFzk2vb1FqVrAy7M/gEI61kT9hhiuv0C3lEj4UTEkSqjuN
-         FNh1Gf/Q/aIy0ZzMC8Ps0iX31+vJScTapecJ0dqLUmQOPG4pRQMs1P2pRhErlF/mkIED
-         WGXw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DqtNSv4Z9kBGU0LDr3xUR2auo+7Gq8uLx1kqkAz4XQU=;
+        b=RVtu2nkywJa1g8nghYyFXFlqS2ka2yS41LPeb0r+UL2+Mau+fRiMQgjl1ZWmktWK4y
+         xdZ1VAfEb9AX3ASwGhd+FzHzo2uwK/7sylMJPGopEWzw3K/nfG3AgU3Pu8grSG+E9xo0
+         62QXp71/16M7PIjGUbXYT/ovvDFr8gPcsOWJY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PdLaFJ7mQpkrAJQLB818USTGDL7xDCP3yDj71WsdZOc=;
-        b=WdsdqemgYovjb17u/HhHT3Grvdg69JO5FtPBQyYjCtHedNqQI+1kIk9RpGfuphh/q/
-         CTMdzgINetyQTq3cklbc+NQ2PabJWu4edGJ84vzZKqB+ib08ZdmWexcHojFIYtaeiPlX
-         2r90NFtfyWu+nI75dKJjJ7bNmXsY3xVYJOh3WfJUww679vuUnJjeSkI7ioBisADCrdB7
-         NmpxaIbhPQxfezWp+FMIEPB/qWoD/VpmEloUhIl9vo2z8yET65phTwR8HZ7JVRPoPIk2
-         ms8feaPwZp6j3ai9xBeZK8gU7Lpg4/HJFHhXxXOdYTfEf/Cc3dVFmuYxmhGBz1M+JdlF
-         t+xw==
-X-Gm-Message-State: AOAM533tGZiaIVi1HNspwkmPOPYjPHyfRQ7UzyIZPbnlOtpTFd675Sbi
-        tR7WeqSRu0mc1tnUxTCI0odwdVPgxrEd8Q==
-X-Google-Smtp-Source: ABdhPJzBs1bQyASATtj77sp9ccpf3cUeDakj6icFSLtQN2uQCU+yX18t3BthUb6wWC0qkOFApNc4xQ==
-X-Received: by 2002:a05:600c:4e46:: with SMTP id e6mr6117400wmq.132.1642120973799;
-        Thu, 13 Jan 2022 16:42:53 -0800 (PST)
-Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
-        by smtp.gmail.com with ESMTPSA id bk17sm3594437wrb.105.2022.01.13.16.42.52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DqtNSv4Z9kBGU0LDr3xUR2auo+7Gq8uLx1kqkAz4XQU=;
+        b=CrOzWc6aWrI3nZcgY7XaCP0qOj1nuMB3IN7C4bhrUIPeF2vTTdAhgx0O4jwK4BkV4R
+         7mokqTctMP/T8U6UpK2ex/t2pR6jFHQDf3N5yKrzvCsKDAB5cuxL26ukPFoww9eexlhU
+         Zr4YhtKsgqBfE2w3UNkz/m5QeKPyEfJd87qGNGVe5tmzsETzTii9L1qqUzHEq1Xw8ct8
+         gF9dGqd29H+REGnjZJ6cGcMDa1pZ9i8WczLEN4gHdx0fB8k8Oruh6hnpvqxVbRP0B+Br
+         lZ/m1/Q0Z2LvCIbJAhg952UjDsPLcjeGHwbKcijHV+GQ+YthBoD+o9NwHtztzGum7Z4F
+         romQ==
+X-Gm-Message-State: AOAM532SxU65bZ5XAJUoH0XHveorXShgce4y1tBQ/6YJWVhi4jhBdctY
+        a5uRtMFPOiig82KLXwx1H4bsZQ==
+X-Google-Smtp-Source: ABdhPJxnMElkBrGw7QVbbAwDkb4QfPHO+cq87oWf9ffcSvJcQwgmbzNMLztmzh/Kpif1rE0Q/Rle1g==
+X-Received: by 2002:a17:903:245:b0:149:d2a3:ddbf with SMTP id j5-20020a170903024500b00149d2a3ddbfmr6839564plh.3.1642121022107;
+        Thu, 13 Jan 2022 16:43:42 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:cf6e:9fa9:a398:4c9])
+        by smtp.gmail.com with ESMTPSA id j4sm4061498pfj.217.2022.01.13.16.43.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 16:42:53 -0800 (PST)
-Date:   Fri, 14 Jan 2022 00:42:50 +0000
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, straube.linux@gmail.com,
-        martin@kaiser.cx, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/7] staging: r8188eu: convert DBG_88E calls in
- core/rtw_iol.c
-Message-ID: <YeDHCtZ+hy0Q+ZXV@equinox>
-References: <20220109215427.887-1-phil@philpotter.co.uk>
- <20220109215427.887-4-phil@philpotter.co.uk>
- <20220110100843.GC1951@kadam>
- <YdydYlpVzHoLy2Wh@equinox>
- <20220111050644.GD1951@kadam>
+        Thu, 13 Jan 2022 16:43:41 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     quic_rjendra@quicinc.com, sibis@codeaurora.org,
+        kgodara1@codeaurora.org, mka@chromium.org, swboyd@chromium.org,
+        pmaliset@codeaurora.org, Douglas Anderson <dianders@chromium.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] arm64: dts: qcom: sc7280: Introduce herobrine-rev1
+Date:   Thu, 13 Jan 2022 16:42:59 -0800
+Message-Id: <20220114004303.905808-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111050644.GD1951@kadam>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 08:06:44AM +0300, Dan Carpenter wrote:
-> On Mon, Jan 10, 2022 at 08:56:02PM +0000, Phillip Potter wrote:
-> > On Mon, Jan 10, 2022 at 01:08:43PM +0300, Dan Carpenter wrote:
-> > > On Sun, Jan 09, 2022 at 09:54:23PM +0000, Phillip Potter wrote:
-> > > > Convert the DBG_88E macro calls in core/rtw_iol.c to use pr_debug
-> > > > or netdev_dbg appropriately, as their information may be useful to
-> > > > observers, and this gets the driver closer to the point of being
-> > > > able to remove DBG_88E itself.
-> > > > 
-> > > > Some calls are at points in the call chain where use of dev_dbg or
-> > > > netdev_dbg isn't possible due to lack of device pointer, so plain
-> > > > pr_debug is appropriate here.
-> > > > 
-> > > > Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
-> > > > ---
-> > > >  drivers/staging/r8188eu/core/rtw_iol.c | 10 ++++++----
-> > > >  1 file changed, 6 insertions(+), 4 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/staging/r8188eu/core/rtw_iol.c b/drivers/staging/r8188eu/core/rtw_iol.c
-> > > > index 7e78b47c1284..923da2a9f6ae 100644
-> > > > --- a/drivers/staging/r8188eu/core/rtw_iol.c
-> > > > +++ b/drivers/staging/r8188eu/core/rtw_iol.c
-> > > > @@ -12,13 +12,15 @@ struct xmit_frame	*rtw_IOL_accquire_xmit_frame(struct adapter  *adapter)
-> > > >  
-> > > >  	xmit_frame = rtw_alloc_xmitframe(pxmitpriv);
-> > > >  	if (!xmit_frame) {
-> > > > -		DBG_88E("%s rtw_alloc_xmitframe return null\n", __func__);
-> > > > +		netdev_dbg(adapter->pnetdev,
-> > > > +			   "rtw_alloc_xmitframe return null\n");
-> > > 
-> > > You're going to have to send this anyway because of the compile issue.
-> > > 
-> > > I feel like you are not being aggressive enough in the debug messages
-> > > that you delete.  For example, this one should definitely be deleted.
-> > > Don't print an error message for alloc failures.
-> > > 
-> > > It would be easier to Ack a mass delete of these messages.
-> > > 
-> > > regards,
-> > > dan carpenter
-> > > 
-> > 
-> > Dear Dan,
-> > 
-> > Thank you for your feedback. I already sent a V2 series to fix the empty case
-> > label I left in core/rtw_mlme_ext.c, sounds like a V3 is needed though 
-> > based on this feedback - admittedly I have tried to be conservative and
-> > basically only removed commented DBG_88E calls or calls which just print the
-> > function name/line number so far.
-> 
-> Yeah.  I saw v3.  It's fine.  I'm not really trying to nak your patches.
-> 
-> > 
-> > I get what you're saying about deleting them all just being easier,
-> > but I've already converted several in previous series that have
-> > made it in. It would make sense to delete these converted calls as well
-> > if going for the total deletion approach. Also, I do worry some of the
-> > info could be useful. I'd appreciate your thoughts on this.
-> > 
-> > I am happy to delete it all by all means, just want to make sure majority
-> > would be happy with that approach, as opposed to a refinement of this
-> > approach and being more judicious with deletion of more DBG_88E calls.
-> 
-> In the original code DBG_88E was kind of an error level severity message
-> not a debug level severity.  Of course, you had to use a module option
-> to turn on any output at all so it's hard to judge how that works in
-> real life.  By making them debug level severity, you've basically
-> deleted them already...  Don't be a hoarder.
-> 
-> Once you change it to dev_dbg() then it becomes more difficult
-> emotionally to do a mass delete.
-> 
-> There is a real value to just deleting stuff.
-> 
-> regards,
-> dan carpenter
+This series adds support for herobrine-rev1. Note that it's likely
+that with the introduction of -rev1 we can drop -rev0 support, but
+we'll keep it for now (though we won't try to "fit it in" and share
+code with it).
 
-Thanks Dan,
+This series is confirmed to boot herobrine-rev1 atop mainline, commit
+fb3b0673b7d5 ("Merge tag 'mailbox-v5.17' of
+git://git.linaro.org/landing-teams/working/fujitsu/integration"),
+though it requires a hack to work around a misconfigured DMA for
+i2c14 (https://crrev.com/c/3378660)
 
-OK - based on what you've said, I will make a series to just remove all
-DBG_88E calls, including any I've already converted that have been
-merged, and also the aliased versions that are defined via additional
-preprocessor directives.
 
-Greg - please could you disregard this series and the previous smaller
-one I sent? The new series will supersede them both when it's ready.
-Many thanks.
+Douglas Anderson (4):
+  arm64: dts: qcom: sc7280: Fix gmu unit address
+  arm64: dts: qcom: sc7280: Move herobrine-r0 to its own dts
+  arm64: dts: qcom: sc7280: Factor out Chrome common fragment
+  arm64: dts: qcom: sc7280: Add herobrine-r1
 
-Regards,
-Phil
+ arch/arm64/boot/dts/qcom/Makefile             |    3 +-
+ .../boot/dts/qcom/sc7280-chrome-common.dtsi   |   97 ++
+ .../qcom/sc7280-herobrine-herobrine-r0.dts    | 1352 +++++++++++++++++
+ .../qcom/sc7280-herobrine-herobrine-r1.dts    |  314 ++++
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dts |   14 -
+ .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 1045 +++----------
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      |   75 +-
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |  557 +++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi          |    2 +-
+ 9 files changed, 2532 insertions(+), 927 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+ delete mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+
+-- 
+2.34.1.703.g22d0c6ccf7-goog
+

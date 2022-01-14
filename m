@@ -2,104 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE6B48EAE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EA348EAED
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241375AbiANNid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 08:38:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:22537 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230472AbiANNic (ORCPT
+        id S241393AbiANNi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 08:38:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230472AbiANNi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 08:38:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642167511;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YhO8ftDsk4+jW9Ti1jjOdqgLJ1dfN2h8UN/qErYWEn4=;
-        b=eqA6B3a5PWfUoSYxM4GrzF1IpSaoyDFfOsvUWLD/kJR1lBGnqpTde7QtSGc/1tE2f/xp+B
-        w93Odnziw/vjvJ0NqWgzu+2GXFjtG2oi6F21vIlHsSYhQF/6PcgWbBlAPhbAy7oTbTX7vt
-        /lpULM5b94ndDWWFNNa9jnIe15fKJOg=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-589-3MftssAzMHSvbVaFc9JYpA-1; Fri, 14 Jan 2022 08:38:30 -0500
-X-MC-Unique: 3MftssAzMHSvbVaFc9JYpA-1
-Received: by mail-pj1-f70.google.com with SMTP id f1-20020a17090a8e8100b001b44bb75678so1272195pjo.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:38:30 -0800 (PST)
+        Fri, 14 Jan 2022 08:38:56 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B5EC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:38:56 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id br17so30342235lfb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:38:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fm/m3hhYi8USgiEU3N02TwzoT6Lhf/h0pQPibfSrZZQ=;
+        b=HUKDG5fAEr+kRVIfFS9wNG2zI/eiySiSKmv+MgH0I8+xhYNV4kJSgcsCJmZmbSWfJB
+         lvVG1pYw39g/4oIb/F+k2fOzCpSrlTAS2gr9ltL/T6S2PXS5Gdy4KZzSF3MucOrzF5tA
+         xtYzZ8kBPoaYoHPhM2Hg2uF1ibuTZSk5wNofetIGoNguVkgGAI3WLxW0s7B3uedgVzmk
+         do7oqAqpe4sDAbAiN4yTk6O8SHPS0gr6rOMf8p9PTJoZ9e9aB0e+mzlpHaT9CKkB+6Rk
+         5ZPowLDjb74IEbWMohJA4RSz8is2DGvPXNu2nxfNT4O3MDSwt51H2dOKM/eD94VxaGOL
+         HLAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YhO8ftDsk4+jW9Ti1jjOdqgLJ1dfN2h8UN/qErYWEn4=;
-        b=4Q6/pB4theNRdSl2eLPUIwqPhb14oXYopxLKfqx60Atz0La6j5ab3OLdYzGfZbyxCr
-         zCs+uKOJsdyFnpx1YYanMnbeY85BP/WKEh8xIB0ujxK/HF5HIBrbXZAOrj0jGu6oGwRG
-         AHfHiHtksYByUW9z2f+qEapx7GbXm+EFPShlOrkrlTbgy/BGfvy0YStuYnarHpIsulrb
-         29Fz7IIG76raqXspgvPLkeErRb5tkO33Fj2pq9JjhXHp85TBEtTejCQ1LFDcm94PpJP3
-         6X/QpfllPE/i0c7GhkGkJOhQEEvFrwlTKnmn2VIrg7MfkZcq6Ogjb9R1pTRYaYKZbguL
-         LRag==
-X-Gm-Message-State: AOAM533LVqcPlc7P+Gv30c7KH2qnuWPPPqHWHrW/hRxEoZAaPsLLhzCD
-        4DzB0y6FtwcxApqbHZG+Ot9QnTkFJEQ9Jc+Hag9NdUIZBrDKQtKwj4+2zq+2yyaM9HylZNyZ7/4
-        iXdKOqnUHJS/evt/Y4Z40n11M
-X-Received: by 2002:a17:902:a502:b0:149:c5a5:5329 with SMTP id s2-20020a170902a50200b00149c5a55329mr9559621plq.164.1642167509353;
-        Fri, 14 Jan 2022 05:38:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxILsnBPX9TsvIa9qO8Uq+U+Jo4SOThql41KRmDC+m0uXyl0MuvIPYYRITKGIUaFyG3qpSUrA==
-X-Received: by 2002:a17:902:a502:b0:149:c5a5:5329 with SMTP id s2-20020a170902a50200b00149c5a55329mr9559603plq.164.1642167509120;
-        Fri, 14 Jan 2022 05:38:29 -0800 (PST)
-Received: from steredhat (host-95-238-125-214.retail.telecomitalia.it. [95.238.125.214])
-        by smtp.gmail.com with ESMTPSA id g7sm5820333pfu.61.2022.01.14.05.38.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 05:38:28 -0800 (PST)
-Date:   Fri, 14 Jan 2022 14:38:16 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, stefanha@redhat.com,
-        kvm@vger.kernel.org, netdev@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>
-Subject: Re: [PATCH v1] vhost: cache avail index in vhost_enable_notify()
-Message-ID: <20220114133816.7niyaqygvdveddmi@steredhat>
-References: <20220114090508.36416-1-sgarzare@redhat.com>
- <20220114074454-mutt-send-email-mst@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fm/m3hhYi8USgiEU3N02TwzoT6Lhf/h0pQPibfSrZZQ=;
+        b=2BHQsntBM+Mu+K3Tx9+ep1tQeJ3CF+rQ8bBteXVPkQvAbdH8FT3gtXpJ6TXuefq4my
+         yVATrZfim6jNB+L+/p/UUU+LrN0XNnwWt0jHIbFNMVe0Td3rjCwRDPjICH2pKLEZnTtd
+         SMkSOmxRWYpuHk6sPp8ndodk8cfR8tmEUzH6Al5icuyZpljhDLrqwRn37duul7nbEbBn
+         b9bR7qSgamtiDHxnnw2cKhRbFOiv7zvi/ySb91t47hKN9zydzi367QXLQCxsaDFGtJSw
+         zWU49PqlxPfVe504MGBWU5R7VBBd/R578cQBFUbIE2c77xQfWXQT7YvoPMHf5XD/S0bQ
+         7l2g==
+X-Gm-Message-State: AOAM5318nYQwuNgHZUdm21jNrohGUSl9R6hmdPBzG0z+Y0NCK0yXhf+u
+        HpYXhTDxxTGfQ1HQRqJdEs+TgmbKo5bQk8+lglz6Jw==
+X-Google-Smtp-Source: ABdhPJwU75v+PDeGlfsjylWxQOTH/0+OJYuUCddEMAGNjxc4X3KiKPSVleT14H/MDGd6Wyw44lujhS0zZl2BgsqaRRg=
+X-Received: by 2002:a2e:947:: with SMTP id 68mr6892116ljj.300.1642167534811;
+ Fri, 14 Jan 2022 05:38:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220114074454-mutt-send-email-mst@kernel.org>
+References: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com> <1641749107-31979-9-git-send-email-quic_mkshah@quicinc.com>
+In-Reply-To: <1641749107-31979-9-git-send-email-quic_mkshah@quicinc.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 14 Jan 2022 14:38:18 +0100
+Message-ID: <CAPDyKFpqdRveupZ-jnZ82OdRW32tHA37TTaWpQgHSrmodK0FeQ@mail.gmail.com>
+Subject: Re: [PATCH 08/10] PM: domains: Store the closest hrtimer event of the
+ domain CPUs
+To:     Maulik Shah <quic_mkshah@quicinc.com>
+Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org,
+        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 07:45:35AM -0500, Michael S. Tsirkin wrote:
->On Fri, Jan 14, 2022 at 10:05:08AM +0100, Stefano Garzarella wrote:
->> In vhost_enable_notify() we enable the notifications and we read
->> the avail index to check if new buffers have become available in
->> the meantime.
->>
->> We are not caching the avail index, so when the device will call
->> vhost_get_vq_desc(), it will find the old value in the cache and
->> it will read the avail index again.
->>
->> It would be better to refresh the cache every time we read avail
->> index, so let's change vhost_enable_notify() caching the value in
->> `avail_idx` and compare it with `last_avail_idx` to check if there
->> are new buffers available.
->>
->> Anyway, we don't expect a significant performance boost because
->> the above path is not very common, indeed vhost_enable_notify()
->> is often called with unlikely(), expecting that avail index has
->> not been updated.
->>
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+On Sun, 9 Jan 2022 at 18:26, Maulik Shah <quic_mkshah@quicinc.com> wrote:
 >
->... and can in theory even hurt due to an extra memory write.
->So ... performance test restults pls?
+> The arch timer can not wake up the Qualcomm Technologies, Inc. (QTI)
+> SoCs when the deepest CPUidle modes results in the SoC also to enter
+> the low power mode.
+>
+> RSC is part of CPU subsystem and APSS rsc device is attached to cluster
+> power domain. RSC has to setup next hrtimer wakeup in CONTROL_TCS which
+> can wakeup the SoC from deepest low power states. The CONTROL_TCS does
+> this by writing next wakeup in always on domain timer when the SoC is
+> entering the low power state.
+>
+> Store the domain wakeup time from all the CPUs which can be used from
+> domain power off callback by RSC device.
+>
+> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
 
-Right, could be.
+I need to think a little bit more about this one, so I have to get
+back with some more detailed comments next week.
 
-I'll run some perf test with vsock, about net, do you have a test suite 
-or common step to follow to test it?
+Kind regards
+Uffe
 
-Thanks,
-Stefano
-
+> ---
+>  drivers/base/power/domain_governor.c | 1 +
+>  include/linux/pm_domain.h            | 1 +
+>  2 files changed, 2 insertions(+)
+>
+> diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
+> index cd08c58..a4c7dd8 100644
+> --- a/drivers/base/power/domain_governor.c
+> +++ b/drivers/base/power/domain_governor.c
+> @@ -363,6 +363,7 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
+>                                 domain_wakeup = next_hrtimer;
+>                 }
+>         }
+> +       genpd->next_hrtimer = domain_wakeup;
+>
+>         /* The minimum idle duration is from now - until the next wakeup. */
+>         idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 67017c9..682b372 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -136,6 +136,7 @@ struct generic_pm_domain {
+>         struct gpd_dev_ops dev_ops;
+>         s64 max_off_time_ns;    /* Maximum allowed "suspended" time. */
+>         ktime_t next_wakeup;    /* Maintained by the domain governor */
+> +       ktime_t next_hrtimer;   /* Closest hrtimer event of the domain CPUs */
+>         bool max_off_time_changed;
+>         bool cached_power_down_ok;
+>         bool cached_power_down_state_idx;
+> --
+> 2.7.4
+>

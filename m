@@ -2,186 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED8148EF85
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB71D48EF8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244008AbiANRzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:55:23 -0500
-Received: from mxout02.lancloud.ru ([45.84.86.82]:37634 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244005AbiANRzR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:55:17 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 02F2120606E9
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH] driver core: platform: Rename platform_get_irq_optional()
- to platform_get_irq_silent()
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>
-CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-iio@vger.kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-phy@lists.infradead.org>, Jiri Slaby <jirislaby@kernel.org>,
-        <openipmi-developer@lists.sourceforge.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        "William Breathitt Gray" <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        <platform-driver-x86@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        "Eric Auger" <eric.auger@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        "Linux MMC List" <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        <linux-mediatek@lists.infradead.org>,
-        "Brian Norris" <computersforpeace@gmail.com>,
-        <netdev@vger.kernel.org>
-References: <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220110201014.mtajyrfcfznfhyqm@pengutronix.de> <YdyilpjC6rtz6toJ@lunn.ch>
- <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
- <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
- <Yd9L9SZ+g13iyKab@sirena.org.uk>
- <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
- <YeA7CjOyJFkpuhz/@sirena.org.uk>
- <20220113194358.xnnbhsoyetihterb@pengutronix.de>
- <745c601f-c782-0904-f786-c9bfced8f11c@gmail.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <cae0b73e-46df-a491-4a8e-415205038c2c@omp.ru>
-Date:   Fri, 14 Jan 2022 20:55:07 +0300
+        id S243999AbiANRzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:55:40 -0500
+Received: from mga06.intel.com ([134.134.136.31]:55617 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244048AbiANRzh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 12:55:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642182936; x=1673718936;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=doUB/pKBDJqy6j6WmEvX+v/9LR0IPAN2M5yEKEe05ak=;
+  b=Pl1Mr5feFB3MS7mM5ByRh1SRL1jO/xbXpbFfRDASLUOtt5lpzk39NJjs
+   Y/F62gln7+GDSkDGcz4P6gOKB1SLoHMQyxtqzgQh0mL9jd/KXgiPlgZZH
+   xXcAZBSG96Yefwv78wqPl0j9b7KBPYHz7I8qEb8TVly0aWp8LgJmFY46n
+   +LTKEtsMWa2QI9MuvzKBT89PTGyoINYGFcVa/aWnbpbwh/Z25Kby/6rqz
+   U4BCcudN5naqKXY2bSh/dBPd00lPiuA68fI+YJ+xOwZ4wOO7eQrX9Ce3s
+   1xIMrvINjmDRU+UFD+6cHXO8aHa0DtFKdvrC2VtASqkAq1mJba8GZFTq0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="305026674"
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="305026674"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 09:55:33 -0800
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="624426987"
+Received: from dsubasic-mobl.amr.corp.intel.com (HELO [10.212.67.37]) ([10.212.67.37])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 09:55:32 -0800
+Subject: Re: [PATCH] ASoC: SOF: compr: Add compress ops implementation
+To:     Daniel Baluta <daniel.baluta@oss.nxp.com>, broonie@kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     kai.vehmanen@linux.intel.com, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, tiwai@suse.com,
+        ranjani.sridharan@linux.intel.com, daniel.baluta@nxp.com
+References: <20220113161341.371345-1-daniel.baluta@oss.nxp.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <9b3d28f3-aa2b-ade9-4160-752b349bdeab@linux.intel.com>
+Date:   Fri, 14 Jan 2022 11:55:31 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <745c601f-c782-0904-f786-c9bfced8f11c@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20220113161341.371345-1-daniel.baluta@oss.nxp.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/14/22 12:42 AM, Florian Fainelli wrote:
 
->> The subsystems regulator, clk and gpio have the concept of a dummy
->> resource. For regulator, clk and gpio there is a semantic difference
->> between the regular _get() function and the _get_optional() variant.
->> (One might return the dummy resource, the other won't. Unfortunately
->> which one implements which isn't the same for these three.) The
->> difference between platform_get_irq() and platform_get_irq_optional() is
->> only that the former might emit an error message and the later won't.
->>
->> To prevent people's expectations that there is a semantic difference
->> between these too, rename platform_get_irq_optional() to
->> platform_get_irq_silent() to make the actual difference more obvious.
->>
->> The #define for the old name can and should be removed once all patches
->> currently in flux still relying on platform_get_irq_optional() are
->> fixed.
->>
->> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-[...]
->>>> I think at least c) is easy to resolve because
->>>> platform_get_irq_optional() isn't that old yet and mechanically
->>>> replacing it by platform_get_irq_silent() should be easy and safe.
->>>> And this is orthogonal to the discussion if -ENOXIO is a sensible return
->>>> value and if it's as easy as it could be to work with errors on irq
->>>> lookups.
->>>
->>> It'd certainly be good to name anything that doesn't correspond to one
->>> of the existing semantics for the API (!) something different rather
->>> than adding yet another potentially overloaded meaning.
->>
->> It seems we're (at least) three who agree about this. Here is a patch
->> fixing the name.
-> 
-> From an API naming perspective this does not make much sense anymore with the name chosen,
-> it is understood that whent he function is called platform_get_irq_optional(), optional applies
-> to the IRQ. An optional IRQ is something people can reason about because it makes sense.
+Thanks for starting this work Daniel.
 
-   Right! :-)
+> +int sof_compr_get_params(struct snd_soc_component *component,
+> +			 struct snd_compr_stream *cstream, struct snd_codec *params)
+> +{
+> +	return 0;
+> +}
 
-> What is a a "silent" IRQ however? It does not apply to the object it is trying to fetch to
-> anymore, but to the message that may not be printed in case the resource failed to be obtained,
-> because said resource is optional. Woah, that's quite a stretch.
+You should probably add a statement along the lines of:
 
-   Right again! :-)
+/* TODO: we don't query the supported codecs for now, if the application
+asks for an unsupported codec the set_params() will fail
+*/
 
-> Following the discussion and original 2 patches set from Sergey, it is not entirely clear to me
-> anymore what is it that we are trying to fix.
+.get_codec_caps is also missing, it should be documented as something we
+want to add.
 
-   Andy and me tried to fix the platform_get_irq[_byname]_optional() value, corresponding to
-a missing (optional) IRQ resource from -ENXIO to 0, in order to keep the callers error code
-agnostic. This change completely aligns e.g. platform_get_irq_optional() with clk_get_optional()
-and gpiod_get_optional()...
-   Unforunately, we can't "fix" request_irq() and company to treat 0 as missing IRQ -- they have
-to keep the ability to get called from the arch/ code (that doesn't use platform_get_irq(), etc.
+> +static int sof_compr_pointer(struct snd_soc_component *component,
+> +			     struct snd_compr_stream *cstream,
+> +			     struct snd_compr_tstamp *tstamp)
+> +{
+> +	struct snd_compr_runtime *runtime = cstream->runtime;
+> +	struct sof_compr_stream *sstream = runtime->private_data;
+> +
+> +	tstamp->sampling_rate = sstream->sample_rate;
+> +	tstamp->copied_total = sstream->copied_total;
 
-> I nearly forgot, I would paint it blue, sky blue, not navy blue, not light blue ;)
+Humm, this doesn't return any information on how many PCM samples were
+generated (pcm_frames) or rendered (pcm_io_frames).
 
-   :-)
+I don't think the existing SOF firmware has this level of detail for
+now, you should at least document it as to be added in the future.
 
-PS: Florian, something was wrong with your mail client -- I had to manually wrap your quotes,
-else there were super long unbroken paragraphs...
+In addition, the .pointer callback can be used at different times, and
+for added precision the information should be queried from the firmware
+via IPC or by looking up counters in the SRAM windows.
+
+I don't think it's good enough to update the information on a fragment
+elapsed event. It will work for sure in terms of reporting compressed
+data transfers, but it's not good enough for an application to report
+time elapsed.
+
+> +struct sof_compr_stream {
+> +	unsigned int copied_total;
+> +	unsigned int sample_rate;
+> +	size_t posn_offset;
+> +};
+
+do you need an SOF-specific definition? This looks awfully similar to
+snd_compr_tstamp:
+
+struct snd_compr_tstamp {
+	__u32 byte_offset;
+	__u32 copied_total;
+	__u32 pcm_frames;
+	__u32 pcm_io_frames;
+	__u32 sampling_rate;
+}

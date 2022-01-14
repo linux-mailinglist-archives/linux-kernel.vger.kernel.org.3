@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B40848E795
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3C948E79A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239542AbiANJfM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Jan 2022 04:35:12 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:53078 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230141AbiANJfL (ORCPT
+        id S239790AbiANJgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 04:36:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229785AbiANJgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:35:11 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-113-N-IQipKrO-i71OVc75YCcg-1; Fri, 14 Jan 2022 09:35:09 +0000
-X-MC-Unique: N-IQipKrO-i71OVc75YCcg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Fri, 14 Jan 2022 09:35:08 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Fri, 14 Jan 2022 09:35:08 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Steven Rostedt' <rostedt@goodmis.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "deller@gmx.de" <deller@gmx.de>
-Subject: RE: [PATCH v2] tracing: Add test for user space strings when
- filtering on  string pointers
-Thread-Topic: [PATCH v2] tracing: Add test for user space strings when
- filtering on  string pointers
-Thread-Index: AQHYBkLm7AQ+C6qOvkCW4jNyMLz0qKxce3DQgAAF6wCAAEoUEIAFASf/gAB6SdA=
-Date:   Fri, 14 Jan 2022 09:35:08 +0000
-Message-ID: <0a249160215a44ee8789f12727667a42@AcuMS.aculab.com>
-References: <20220110115532.536088fd@gandalf.local.home>
-        <31c11a47a8bc4e34a1a64d54a54bb944@AcuMS.aculab.com>
-        <20220110122436.5302128f@gandalf.local.home>
-        <7a0fefb7ed3542b4a49dee1e78b1668b@AcuMS.aculab.com>
-        <yt9d8rvmt2jq.fsf@linux.ibm.com>
-        <20220113125754.0cb5273f@gandalf.local.home>
-        <yt9dwnj3wcke.fsf@linux.ibm.com>
-        <20220113165115.0c844df9@gandalf.local.home>
- <20220113211501.473ab5ca@gandalf.local.home>
-In-Reply-To: <20220113211501.473ab5ca@gandalf.local.home>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 14 Jan 2022 04:36:49 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3136C061574;
+        Fri, 14 Jan 2022 01:36:49 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 72FA71F466F3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642153007;
+        bh=pFIPIy9RdFXB+9xAvQLstpQYOgxW4GoQbae/UEltiWE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Tt0qSzhsWQ5EVH6VjZyCyTHylaUwo1BQR0kHlLZvfN2B3BBVCP12vhFPduPFVvWOM
+         +PYV6SAKKjEYKDY30Qmkt33KfjNFJoBrODPR0XfMMkmmKVzyqcWJWtEdGUR/WrpNGE
+         tOBje8PM8F+jjp5LVPEgUHsGSnGxI9Z2e74ZUBG+59+fo4Tw8xKmdMMWbEmD+XgcfV
+         oEBXslQIgU7unasQkcDYVu6wZho/5u7POprK1bLaJRpGkQeQG8QclIo5CqT0UodInQ
+         4YtD4eFVMRQ7pt2AixdLlaESbe8cGsIVc4FcnPcqLq+mNXJhheVtiCZ04HnQ/5h1F5
+         F+ZiAYGZ6SJCQ==
+Subject: Re: [v9,2/3] drm/mediatek: implement the DSI hs packets aligned
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
+        matthias.bgg@gmail.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, andrzej.hajda@intel.com, daniel@ffwll.ch,
+        airlied@linux.ie, p.zabel@pengutronix.de
+Cc:     xji@analogixsemi.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Jitao Shi <jitao.shi@mediatek.com>
+References: <20220114092110.12137-1-rex-bc.chen@mediatek.com>
+ <20220114092110.12137-3-rex-bc.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <4076cb55-4546-6bbd-1a1f-19395dcd9ccd@collabora.com>
+Date:   Fri, 14 Jan 2022 10:36:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+In-Reply-To: <20220114092110.12137-3-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt
-> Sent: 14 January 2022 02:15
+Il 14/01/22 10:21, Rex-BC Chen ha scritto:
+> Some DSI RX devices require the packets on all lanes aligned at the end.
+> Otherwise, there will be some issues of shift or scroll for screen.
 > 
-> On Thu, 13 Jan 2022 16:51:15 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+
+Hello,
+thanks for the patch! However, there's something to improve...
+
+> ---
+>   drivers/gpu/drm/mediatek/mtk_dsi.c | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
 > 
-> > We could add something later. As it is currently the merge window, and this
-> > is a real bug, I'm going to just leave it as is, and we can work to fix the
-> > other archs later. I need to get a pull request ready by tomorrow.
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index 5d90d2eb0019..ccdda15f5a66 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -195,6 +195,8 @@ struct mtk_dsi {
+>   	struct clk *hs_clk;
+>   
+>   	u32 data_rate;
+> +	/* force dsi line end without dsi_null data */
+> +	bool hs_packet_end_aligned;
+
+There's no need to introduce a new variable here...
+
+>   
+>   	unsigned long mode_flags;
+>   	enum mipi_dsi_pixel_format format;
+> @@ -500,6 +502,13 @@ static void mtk_dsi_config_vdo_timing(struct mtk_dsi *dsi)
+>   		DRM_WARN("HFP + HBP less than d-phy, FPS will under 60Hz\n");
+>   	}
+>   
+> +	if (dsi->hs_packet_end_aligned) {
+
+You can simply check mode_flags here:
+	if (dsi->mode_flags & MIPI_DSI_HS_PKT_END_ALIGNED) {
+
+> +		horizontal_sync_active_byte = roundup(horizontal_sync_active_byte, dsi->lanes) - 2;
+> +		horizontal_frontporch_byte = roundup(horizontal_frontporch_byte, dsi->lanes) - 2;
+> +		horizontal_backporch_byte = roundup(horizontal_backporch_byte, dsi->lanes) - 2;
+> +		horizontal_backporch_byte -= (vm->hactive * dsi_tmp_buf_bpp + 2) % dsi->lanes;
+> +	}
+> +
+>   	writel(horizontal_sync_active_byte, dsi->regs + DSI_HSA_WC);
+>   	writel(horizontal_backporch_byte, dsi->regs + DSI_HBP_WC);
+>   	writel(horizontal_frontporch_byte, dsi->regs + DSI_HFP_WC);
+> @@ -794,6 +803,9 @@ static int mtk_dsi_host_attach(struct mipi_dsi_host *host,
+>   	dsi->lanes = device->lanes;
+>   	dsi->format = device->format;
+>   	dsi->mode_flags = device->mode_flags;
+> +	dsi->hs_packet_end_aligned = (dsi->mode_flags &
+> +				      MIPI_DSI_HS_PKT_END_ALIGNED)
+> +				     ? true : false;
+
+...so there's no need for this one, either.
+
+>   
+>   	return 0;
+>   }
 > 
-> Actually I got this working, and looks like a reasonable answer to the
-> problem. It basically requires that the user specify that the pointer
-> points into user space for the kernel to read it.
 
-Certainly look better.
-
-I'm not sure about the difference between the _inatomic() and _nocheck()
-user access functions though.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Regards,
+- Angelo
 

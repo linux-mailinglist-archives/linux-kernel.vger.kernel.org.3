@@ -2,311 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D17D248E834
+	by mail.lfdr.de (Postfix) with ESMTP id 3C89648E832
 	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 11:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240364AbiANKSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 05:18:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
+        id S240381AbiANKSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 05:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240358AbiANKSS (ORCPT
+        with ESMTP id S240323AbiANKSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 05:18:18 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB8EC06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 02:18:18 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so21499824pjf.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 02:18:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sUJXFXBOp87QX53W1MJLT6jvZlCBoBy6LJsPyWEuKxE=;
-        b=i4kHgW1Tx4qnqctn7mdqp7vHBalP+GEkgKs6Et5Ac5Ngxfh8xct+4YJh/wnM+he1qz
-         5IhvJ/xfWrTTKqh1jf5TWT1+KQPwXq+uKrSPNMjbzdAwftOLoWQOWoz2i+8q3DKSAUpW
-         Vu74JR+0dM0iNFRm2YTfuybGszQZLPSNxsbmGooYcLyG70XLxoblfaxslhMMWG6prz3o
-         sPqRIlQYHguN2gx/iOVJGKLDKUc5F8X9NGtXKi9ZttalOFz52be8doCr0UpRgSwW4CqJ
-         awQrvS/G+aWb9bjmUVvcFqk8VNuhbLS6aBizPy3MTJey+Mo5FnP8Twiw/WKr3ptDu16Y
-         MgIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sUJXFXBOp87QX53W1MJLT6jvZlCBoBy6LJsPyWEuKxE=;
-        b=fvqM3b+dQIun98Dlom8wBZPtH3ZKh/p0ij6Tpk1NprVfgrdyN2gkJgzIhyq5P3P+v7
-         5pNv21w4e8VvrsUgoThs9o7tPwaBAM/A+riwf6H6NDBgXOCl7AZ39W/soiMFdjgo7+LN
-         RufYhP6Z+WhItgdf8dpYgn1TCPIc97LqJqIlCYxYvZFYCRUhlh27D+9/gZyXT9UL015w
-         ZmmBHkA6rljX+NNwmyBdssOEJG2RjPdf2A345T5ntQjjnDVDpPPINslyzuIEMXXAla9r
-         zDCcPkiGfNE6HQeB58DJyhXdwesxzSeJpe/GH+z88H1C3j0PscBJcWcdGXJ1+ZQf3/P+
-         Wsrg==
-X-Gm-Message-State: AOAM530soXr4bPubIA9z7+O5MnxQgqqNUWpxb7rUDq3i+ucpc6+5z2Ft
-        I2Q8xjPm1gOBDvrZmqmTySxI5g==
-X-Google-Smtp-Source: ABdhPJy/UDQhpupvUk83aY0nMurd57v8ZWQbjLCoPvg9ZhE30wyDbkehvy4hysWEstqIUri7m9EU4Q==
-X-Received: by 2002:a17:902:c10c:b0:14a:8def:dc2f with SMTP id 12-20020a170902c10c00b0014a8defdc2fmr2709752pli.98.1642155497977;
-        Fri, 14 Jan 2022 02:18:17 -0800 (PST)
-Received: from aqua.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id 13sm5555970pfm.161.2022.01.14.02.18.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 02:18:17 -0800 (PST)
-From:   Tomohito Esaki <etom@igel.co.jp>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        Simon Ser <contact@emersion.fr>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Evan Quan <evan.quan@amd.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org, Daniel Stone <daniel@fooishbar.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Tomohito Esaki <etom@igel.co.jp>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>
-Subject: [RFC PATCH v3 1/3] drm: introduce fb_modifiers_not_supported flag in mode_config
-Date:   Fri, 14 Jan 2022 19:17:51 +0900
-Message-Id: <20220114101753.24996-2-etom@igel.co.jp>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220114101753.24996-1-etom@igel.co.jp>
-References: <20220114101753.24996-1-etom@igel.co.jp>
+        Fri, 14 Jan 2022 05:18:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DA0C061574;
+        Fri, 14 Jan 2022 02:18:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D7EBB823A5;
+        Fri, 14 Jan 2022 10:17:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94594C36AE5;
+        Fri, 14 Jan 2022 10:17:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642155478;
+        bh=Spfv4rIdTqDcfRKVer0oHyTdUEot8YAzpaQktg6H6/A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tRg79tZLTJA+PgOpqauU9ECo9LP/f3uPCErqVYyt537vLo2tzpxBe7dKrvojoMPXd
+         R20FW7wbV3mCkw2Pi0Wd3abFHAGG56wemR1GI2ZUyI5VH8K3vmd9tXHwm8Esz/Dsv7
+         OBvr3HO4hHtxeo08EpUA3NagmM70Z1MfFKaqzummjBc2WWIGEPG1xXoXSqrctmw+Ja
+         n0wTk+uzvu6YCANZQEFmLZPMvw2hkqb6HYtkkF+2fvMy60vhUbEl+KFPfUjtsEYh/b
+         T+ZAM498kThkvFlvDdZRykQPjVS+kWYdAspbEEda/8kwIU/Idjf0dzmh+B6ZNZ2pOJ
+         Wr6PPavo/zB+w==
+Date:   Fri, 14 Jan 2022 11:17:51 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for v5.17
+Message-ID: <YeFNz6pdiGvVTPLh@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IQeYaCUw+0LgCgpF"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If only linear modifier is advertised, since there are many drivers that
-only linear supported, the DRM core should handle this rather than
-open-coding in every driver. However, there are legacy drivers such as
-radeon that do not support modifiers but infer the actual layout of the
-underlying buffer. Therefore, a new flag fb_modifiers_not_supported is
-introduced for these legacy drivers, and allow_fb_modifiers is replaced
-with this new flag.
 
-Signed-off-by: Tomohito Esaki <etom@igel.co.jp>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_display.c       |  6 +++---
- drivers/gpu/drm/amd/amdgpu/dce_v10_0.c            |  2 ++
- drivers/gpu/drm/amd/amdgpu/dce_v11_0.c            |  2 ++
- drivers/gpu/drm/amd/amdgpu/dce_v6_0.c             |  1 +
- drivers/gpu/drm/amd/amdgpu/dce_v8_0.c             |  2 ++
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  3 +++
- drivers/gpu/drm/drm_framebuffer.c                 |  6 +++---
- drivers/gpu/drm/drm_ioctl.c                       |  2 +-
- drivers/gpu/drm/nouveau/nouveau_display.c         |  6 ++++--
- drivers/gpu/drm/radeon/radeon_display.c           |  2 ++
- include/drm/drm_mode_config.h                     | 10 ++++++++++
- 11 files changed, 33 insertions(+), 9 deletions(-)
+--IQeYaCUw+0LgCgpF
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-index 82011e75ed85..edbb30d47b8c 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-@@ -954,7 +954,7 @@ static int amdgpu_display_verify_sizes(struct amdgpu_framebuffer *rfb)
- 	int ret;
- 	unsigned int i, block_width, block_height, block_size_log2;
- 
--	if (!rfb->base.dev->mode_config.allow_fb_modifiers)
-+	if (rfb->base.dev->mode_config.fb_modifiers_not_supported)
- 		return 0;
- 
- 	for (i = 0; i < format_info->num_planes; ++i) {
-@@ -1141,7 +1141,7 @@ int amdgpu_display_framebuffer_init(struct drm_device *dev,
- 	if (ret)
- 		return ret;
- 
--	if (!dev->mode_config.allow_fb_modifiers) {
-+	if (dev->mode_config.fb_modifiers_not_supported) {
- 		drm_WARN_ONCE(dev, adev->family >= AMDGPU_FAMILY_AI,
- 			      "GFX9+ requires FB check based on format modifier\n");
- 		ret = check_tiling_flags_gfx6(rfb);
-@@ -1149,7 +1149,7 @@ int amdgpu_display_framebuffer_init(struct drm_device *dev,
- 			return ret;
- 	}
- 
--	if (dev->mode_config.allow_fb_modifiers &&
-+	if (!dev->mode_config.fb_modifiers_not_supported &&
- 	    !(rfb->base.flags & DRM_MODE_FB_MODIFIERS)) {
- 		ret = convert_tiling_flags_to_modifier(rfb);
- 		if (ret) {
-diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
-index d1570a462a51..fb61c0814115 100644
---- a/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
-@@ -2798,6 +2798,8 @@ static int dce_v10_0_sw_init(void *handle)
- 	adev_to_drm(adev)->mode_config.preferred_depth = 24;
- 	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
- 
-+	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
-+
- 	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
- 
- 	r = amdgpu_display_modeset_create_props(adev);
-diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
-index 18a7b3bd633b..17942a11366d 100644
---- a/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
-@@ -2916,6 +2916,8 @@ static int dce_v11_0_sw_init(void *handle)
- 	adev_to_drm(adev)->mode_config.preferred_depth = 24;
- 	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
- 
-+	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
-+
- 	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
- 
- 	r = amdgpu_display_modeset_create_props(adev);
-diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
-index c7803dc2b2d5..2ec99ec8e1a3 100644
---- a/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
-@@ -2674,6 +2674,7 @@ static int dce_v6_0_sw_init(void *handle)
- 	adev_to_drm(adev)->mode_config.max_height = 16384;
- 	adev_to_drm(adev)->mode_config.preferred_depth = 24;
- 	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
-+	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
- 	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
- 
- 	r = amdgpu_display_modeset_create_props(adev);
-diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
-index 8318ee8339f1..de11fbe5aba2 100644
---- a/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
-@@ -2695,6 +2695,8 @@ static int dce_v8_0_sw_init(void *handle)
- 	adev_to_drm(adev)->mode_config.preferred_depth = 24;
- 	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
- 
-+	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
-+
- 	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
- 
- 	r = amdgpu_display_modeset_create_props(adev);
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 2f0b14f8f833..61cb41766fae 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -7868,6 +7868,9 @@ static int amdgpu_dm_plane_init(struct amdgpu_display_manager *dm,
- 	if (res)
- 		return res;
- 
-+	if (modifiers == NULL)
-+		adev_to_drm(dm->adev)->mode_config.fb_modifiers_not_supported = true;
-+
- 	res = drm_universal_plane_init(adev_to_drm(dm->adev), plane, possible_crtcs,
- 				       &dm_plane_funcs, formats, num_formats,
- 				       modifiers, plane->type, NULL);
-diff --git a/drivers/gpu/drm/drm_framebuffer.c b/drivers/gpu/drm/drm_framebuffer.c
-index 07f5abc875e9..4562a8b86579 100644
---- a/drivers/gpu/drm/drm_framebuffer.c
-+++ b/drivers/gpu/drm/drm_framebuffer.c
-@@ -309,7 +309,7 @@ drm_internal_framebuffer_create(struct drm_device *dev,
- 	}
- 
- 	if (r->flags & DRM_MODE_FB_MODIFIERS &&
--	    !dev->mode_config.allow_fb_modifiers) {
-+	    dev->mode_config.fb_modifiers_not_supported) {
- 		DRM_DEBUG_KMS("driver does not support fb modifiers\n");
- 		return ERR_PTR(-EINVAL);
- 	}
-@@ -594,7 +594,7 @@ int drm_mode_getfb2_ioctl(struct drm_device *dev,
- 	r->pixel_format = fb->format->format;
- 
- 	r->flags = 0;
--	if (dev->mode_config.allow_fb_modifiers)
-+	if (!dev->mode_config.fb_modifiers_not_supported)
- 		r->flags |= DRM_MODE_FB_MODIFIERS;
- 
- 	for (i = 0; i < ARRAY_SIZE(r->handles); i++) {
-@@ -607,7 +607,7 @@ int drm_mode_getfb2_ioctl(struct drm_device *dev,
- 	for (i = 0; i < fb->format->num_planes; i++) {
- 		r->pitches[i] = fb->pitches[i];
- 		r->offsets[i] = fb->offsets[i];
--		if (dev->mode_config.allow_fb_modifiers)
-+		if (!dev->mode_config.fb_modifiers_not_supported)
- 			r->modifier[i] = fb->modifier;
- 	}
- 
-diff --git a/drivers/gpu/drm/drm_ioctl.c b/drivers/gpu/drm/drm_ioctl.c
-index 8b8744dcf691..51fcf1298023 100644
---- a/drivers/gpu/drm/drm_ioctl.c
-+++ b/drivers/gpu/drm/drm_ioctl.c
-@@ -297,7 +297,7 @@ static int drm_getcap(struct drm_device *dev, void *data, struct drm_file *file_
- 			req->value = 64;
- 		break;
- 	case DRM_CAP_ADDFB2_MODIFIERS:
--		req->value = dev->mode_config.allow_fb_modifiers;
-+		req->value = !dev->mode_config.fb_modifiers_not_supported;
- 		break;
- 	case DRM_CAP_CRTC_IN_VBLANK_EVENT:
- 		req->value = 1;
-diff --git a/drivers/gpu/drm/nouveau/nouveau_display.c b/drivers/gpu/drm/nouveau/nouveau_display.c
-index 2b460835a438..2cd0932b3d68 100644
---- a/drivers/gpu/drm/nouveau/nouveau_display.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_display.c
-@@ -708,10 +708,12 @@ nouveau_display_create(struct drm_device *dev)
- 				     &disp->disp);
- 		if (ret == 0) {
- 			nouveau_display_create_properties(dev);
--			if (disp->disp.object.oclass < NV50_DISP)
-+			if (disp->disp.object.oclass < NV50_DISP) {
-+				dev->mode_config.fb_modifiers_not_supported = true;
- 				ret = nv04_display_create(dev);
--			else
-+			} else {
- 				ret = nv50_display_create(dev);
-+			}
- 		}
- 	} else {
- 		ret = 0;
-diff --git a/drivers/gpu/drm/radeon/radeon_display.c b/drivers/gpu/drm/radeon/radeon_display.c
-index 573154268d43..b9a07677a71e 100644
---- a/drivers/gpu/drm/radeon/radeon_display.c
-+++ b/drivers/gpu/drm/radeon/radeon_display.c
-@@ -1596,6 +1596,8 @@ int radeon_modeset_init(struct radeon_device *rdev)
- 	rdev->ddev->mode_config.preferred_depth = 24;
- 	rdev->ddev->mode_config.prefer_shadow = 1;
- 
-+	rdev->ddev->mode_config.fb_modifiers_not_supported = true;
-+
- 	rdev->ddev->mode_config.fb_base = rdev->mc.aper_base;
- 
- 	ret = radeon_modeset_create_props(rdev);
-diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
-index 91ca575a78de..da82f45351c7 100644
---- a/include/drm/drm_mode_config.h
-+++ b/include/drm/drm_mode_config.h
-@@ -933,6 +933,16 @@ struct drm_mode_config {
- 	 */
- 	bool allow_fb_modifiers;
- 
-+	/**
-+	 * @fb_modifiers_not_supported:
-+	 *
-+	 * This flag is for legacy drivers such as radeon that do not support
-+	 * modifiers but infer the actual layout of the underlying buffer.
-+	 * Generally, each drivers must support modifiers, this flag should not
-+	 * be set.
-+	 */
-+	bool fb_modifiers_not_supported;
-+
- 	/**
- 	 * @normalize_zpos:
- 	 *
--- 
-2.25.1
+Linus,
 
+for 5.17, I2C has mostly driver updates and refactorization. The removal
+of the XLR driver and the i801 refactoring stand out a little. In the
+core, we enabled async suspend/resume for I2C controllers and their
+clients. No issues were reported during the test phase in -next. We will
+see how this goes for mainline.
+
+Please pull.
+
+Thanks,
+
+   Wolfram
+
+
+The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5:
+
+  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-merge=
+window
+
+for you to fetch changes up to bf3c39f5da43499c52d4127b7f2f495b69dfeebf:
+
+  i2c: sh_mobile: remove unneeded semicolon (2022-01-11 21:11:24 +0100)
+
+----------------------------------------------------------------
+Abel Vesa (1):
+      dt-bindings: i2c: imx-lpi2c: Add i.MX8DXL compatible match
+
+Akhil R (2):
+      i2c: tegra: Add the ACPI support
+      i2c: tegra: use i2c_timings for bus clock freq
+
+Alain Volmat (1):
+      i2c: stm32: get rid of stm32f7_i2c_release_bus return value
+
+Andy Shevchenko (8):
+      i2c: mux: gpio:=C2=A0Replace custom acpi_get_local_address()
+      i2c: mux: gpio: Don't dereference fwnode from struct device
+      i2c: mux: gpio: Use array_size() helper
+      i2c: designware: Fix the kernel doc description for struct dw_i2c_dev
+      i2c: designware-pci: Add a note about struct dw_scl_sda_cfg usage
+      i2c: designware-pci: Group MODULE_*() macros
+      i2c: designware-pci: use __maybe_unused for PM functions
+      i2c: designware-pci: Convert to use dev_err_probe()
+
+Corey Minyard (1):
+      i2c: imx: Add timer for handling the stop condition
+
+David Heidelberg (1):
+      dt-bindings: i2c: brcm,bcm2835-i2c: convert to YAML schema
+
+Derek Basehore (1):
+      i2c: enable async suspend/resume on i2c client devices
+
+Geert Uytterhoeven (1):
+      dt-bindings: at24: Rework special case compatible handling
+
+Heiner Kallweit (7):
+      i2c: i801: Don't silently correct invalid transfer size
+      i2c: i801: Remove i801_set_block_buffer_mode
+      i2c: i801: Improve handling of chip-specific feature definitions
+      i2c: i801: Improve handling platform data for tco device
+      eeprom: at24: remove struct at24_client
+      i2c: i801: Don't read back cleared status in i801_check_pre()
+      i2c: i801: Don't clear status flags twice in interrupt mode
+
+Jacky Bai (1):
+      dt-bindings: i2c: imx-lpi2c: Add imx8ulp compatible string
+
+Jaewon Kim (2):
+      dt-bindings: i2c: exynos5: Add exynosautov9-hsi2c compatible
+      i2c: exynos5: Add support for ExynosAutoV9 SoC
+
+Joakim Tjernlund (1):
+      i2c: mpc: Correct I2C reset procedure
+
+John Keeping (1):
+      i2c: rk3x: enable clock before getting rate
+
+Lad Prabhakar (3):
+      i2c: bcm2835: Use platform_get_irq() to get the interrupt
+      i2c: sh_mobile: Use platform_get_irq_optional() to get the interrupt
+      i2c: riic: Use platform_get_irq() to get the interrupt
+
+Lakshmi Sowjanya D (3):
+      i2c: designware-pci: Add support for Fast Mode Plus and High Speed Mo=
+de
+      i2c: designware-pci: Set ideal timing parameters for Elkhart Lake PSE
+      i2c: designware-pci: Fix to change data types of hcnt and lcnt parame=
+ters
+
+Maxim Kochetkov (2):
+      dt-bindings: at24: add at24c1025
+      eeprom: at24: Add support for 24c1025 EEPROM
+
+Rajat Jain (2):
+      i2c: designware: Enable async suspend / resume of designware devices
+      i2c: enable async suspend/resume for i2c adapters
+
+Rob Herring (3):
+      i2c: Remove Netlogic XLP variant
+      i2c: Remove unused Netlogic/Sigma Designs XLR driver
+      dt-bindings: i2c: aspeed: Drop stray '#interrupt-cells'
+
+Sam Protsenko (5):
+      dt-bindings: i2c: exynos5: Convert to dtschema
+      dt-bindings: i2c: exynos5: Add bus clock
+      i2c: exynos5: Add bus clock support
+      i2c: exynos5: Mention Exynos850 and ExynosAutoV9 in Kconfig
+      i2c: exynos5: Fix getting the optional clock
+
+Tamal Saha (1):
+      i2c: designware: Do not complete i2c read without RX_FULL interrupt
+
+Thierry Reding (1):
+      i2c: aspeed: Remove unused includes
+
+Wolfram Sang (7):
+      Merge branch 'i2c/for-current' into i2c/for-mergewindow
+      Revert "i2c: designware-pci: Set ideal timing parameters for Elkhart =
+Lake PSE"
+      Revert "i2c: designware-pci: Add support for Fast Mode Plus and High =
+Speed Mode"
+      i2c: stm32f7: remove noisy and imprecise log messages
+      i2c: rcar: update to new DMAENGINE API when terminating
+      i2c: sh_mobile: update to new DMAENGINE API when terminating
+      Merge tag 'at24-updates-for-v5.17' of git://git.kernel.org/pub/scm/li=
+nux/kernel/git/brgl/linux into i2c/for-mergewindow
+
+Yang Li (1):
+      i2c: sh_mobile: remove unneeded semicolon
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Alain Volmat (1):
+      (Rev.) i2c: stm32f7: remove noisy and imprecise log messages
+
+Andrew Manley (2):
+      (Test) i2c: imx: Add timer for handling the stop condition
+      (Rev.) i2c: imx: Add timer for handling the stop condition
+
+Andy Shevchenko (1):
+      (Rev.) i2c: tegra: use i2c_timings for bus clock freq
+
+Chanho Park (3):
+      (Rev.) i2c: exynos5: Fix getting the optional clock
+      (Rev.) i2c: exynos5: Mention Exynos850 and ExynosAutoV9 in Kconfig
+      (Rev.) i2c: exynos5: Add bus clock support
+
+Dmitry Osipenko (3):
+      (Rev.) i2c: tegra: use i2c_timings for bus clock freq
+      (Test) i2c: tegra: use i2c_timings for bus clock freq
+      (Rev.) i2c: tegra: Add the ACPI support
+
+Dong Aisheng (1):
+      (Rev.) dt-bindings: i2c: imx-lpi2c: Add imx8ulp compatible string
+
+Evan Green (3):
+      (Rev.) i2c: mux: gpio: Use array_size() helper
+      (Rev.) i2c: mux: gpio: Don't dereference fwnode from struct device
+      (Rev.) i2c: mux: gpio:=C2=A0Replace custom acpi_get_local_address()
+
+Florian Fainelli (2):
+      (Rev.) i2c: bcm2835: Use platform_get_irq() to get the interrupt
+      (Test) dt-bindings: i2c: brcm,bcm2835-i2c: convert to YAML schema
+
+Geert Uytterhoeven (3):
+      (Rev.) i2c: sh_mobile: remove unneeded semicolon
+      (Rev.) i2c: riic: Use platform_get_irq() to get the interrupt
+      (Rev.) i2c: sh_mobile: Use platform_get_irq_optional() to get the int=
+errupt
+
+Heiko Stuebner (1):
+      (Rev.) i2c: rk3x: enable clock before getting rate
+
+Jarkko Nikula (3):
+      (Test) i2c: enable async suspend/resume on i2c client devices
+      (Test) i2c: enable async suspend/resume for i2c adapters
+      (Test) i2c: designware: Enable async suspend / resume of designware d=
+evices
+
+Jean Delvare (10):
+      (Rev.) i2c: i801: Don't clear status flags twice in interrupt mode
+      (Test) i2c: i801: Don't clear status flags twice in interrupt mode
+      (Rev.) i2c: i801: Don't read back cleared status in i801_check_pre()
+      (Test) i2c: i801: Don't read back cleared status in i801_check_pre()
+      (Rev.) i2c: i801: Improve handling platform data for tco device
+      (Rev.) i2c: i801: Improve handling of chip-specific feature definitio=
+ns
+      (Test) i2c: i801: Improve handling of chip-specific feature definitio=
+ns
+      (Rev.) i2c: i801: Remove i801_set_block_buffer_mode
+      (Test) i2c: i801: Remove i801_set_block_buffer_mode
+      (Rev.) i2c: i801: Don't silently correct invalid transfer size
+
+Joel Stanley (1):
+      (Rev.) i2c: aspeed: Remove unused includes
+
+Krzysztof Kozlowski (7):
+      (Rev.) i2c: exynos5: Fix getting the optional clock
+      (Rev.) i2c: exynos5: Mention Exynos850 and ExynosAutoV9 in Kconfig
+      (Rev.) i2c: exynos5: Add bus clock support
+      (Rev.) i2c: exynos5: Add support for ExynosAutoV9 SoC
+      (Rev.) dt-bindings: i2c: exynos5: Add bus clock
+      (Rev.) dt-bindings: i2c: exynos5: Add exynosautov9-hsi2c compatible
+      (Rev.) dt-bindings: i2c: exynos5: Convert to dtschema
+
+Oleksij Rempel (1):
+      (Rev.) i2c: imx: Add timer for handling the stop condition
+
+Thierry Reding (1):
+      (Rev.) dt-bindings: i2c: aspeed: Drop stray '#interrupt-cells'
+
+Wolfram Sang (3):
+      (Rev.) i2c: riic: Use platform_get_irq() to get the interrupt
+      (Rev.) i2c: sh_mobile: Use platform_get_irq_optional() to get the int=
+errupt
+      (Test) i2c: sh_mobile: Use platform_get_irq_optional() to get the int=
+errupt
+
+ Documentation/devicetree/bindings/eeprom/at24.yaml |  29 +-
+ .../devicetree/bindings/i2c/aspeed,i2c.yaml        |   1 -
+ .../devicetree/bindings/i2c/brcm,bcm2835-i2c.txt   |  22 -
+ .../devicetree/bindings/i2c/brcm,bcm2835-i2c.yaml  |  54 +++
+ .../devicetree/bindings/i2c/i2c-exynos5.txt        |  53 ---
+ .../devicetree/bindings/i2c/i2c-exynos5.yaml       | 133 ++++++
+ .../devicetree/bindings/i2c/i2c-imx-lpi2c.yaml     |   2 +
+ drivers/i2c/busses/Kconfig                         |  18 +-
+ drivers/i2c/busses/Makefile                        |   1 -
+ drivers/i2c/busses/i2c-aspeed.c                    |   2 -
+ drivers/i2c/busses/i2c-bcm2835.c                   |  11 +-
+ drivers/i2c/busses/i2c-designware-core.h           |  13 +-
+ drivers/i2c/busses/i2c-designware-master.c         |   7 +-
+ drivers/i2c/busses/i2c-designware-pcidrv.c         |  51 ++-
+ drivers/i2c/busses/i2c-designware-platdrv.c        |   2 +
+ drivers/i2c/busses/i2c-exynos5.c                   | 110 ++++-
+ drivers/i2c/busses/i2c-i801.c                      | 288 +++++--------
+ drivers/i2c/busses/i2c-imx.c                       |  92 +++-
+ drivers/i2c/busses/i2c-mpc.c                       |  23 +-
+ drivers/i2c/busses/i2c-rcar.c                      |  26 +-
+ drivers/i2c/busses/i2c-riic.c                      |  10 +-
+ drivers/i2c/busses/i2c-rk3x.c                      |   7 +
+ drivers/i2c/busses/i2c-sh_mobile.c                 |  60 +--
+ drivers/i2c/busses/i2c-stm32f7.c                   |  14 +-
+ drivers/i2c/busses/i2c-tegra.c                     |  69 ++-
+ drivers/i2c/busses/i2c-xlp9xx.c                    |   7 -
+ drivers/i2c/busses/i2c-xlr.c                       | 470 -----------------=
+----
+ drivers/i2c/i2c-core-base.c                        |   2 +
+ drivers/i2c/muxes/i2c-mux-gpio.c                   |  53 +--
+ drivers/misc/eeprom/at24.c                         |  68 ++-
+ 30 files changed, 677 insertions(+), 1021 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/brcm,bcm2835-i2c.=
+txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/brcm,bcm2835-i2c.=
+yaml
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+ delete mode 100644 drivers/i2c/busses/i2c-xlr.c
+
+--IQeYaCUw+0LgCgpF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHhTcoACgkQFA3kzBSg
+KbbNSw//cLRT80uwIvv68VVUDt7m6OKwwW8qGlG/feAsdhoRPY/QzmTv1U0Hpw11
+EiHQxieaJw2NC4x/VcUJ0k9lKpabT5c0qaSdRpoWgaoUgLK7j6mnKMs0W+xbJd+n
+Rs5h4mDUoqDRwz0YVnVzvkTt6jwb/Y98fuGEzXwjMeuNumdyNpzjZjeEcQuEhrfC
+oYvdmkQPRt7pItOe7KZ5C8se8vliBCwhYCFtHMyqsZEN/fZbfjWHVJTg6z8p2pAy
+EYxQKXlRBURHD8DJqAudijOUVomji1y9UusAo0zyh4j31LG+slnZnLPxHImz02Hc
+YXyFkDWkooWbBTsCxDS/QdgU+Nphiw9A9SFsafk7fPmKtimPDxY8+4llwGLiCLpL
+bh66OZzhtym2ihpUn5nE9AG/9AR804fnOw/PJMjIUETUpekMCQDAAz9ry1FaKrmH
+W74yOVn/qeEK2yhKsN12fiDVhKglKCGGz0H8ky1Cf2EMpYfYpiEGjBvpQqLUJc6k
+Eeu5ovBHPGRWpzgtx4lHAzuxWzZOU/CQt54L4HPqoYLes61ZXRs0F9Pd7dbMwjvL
+jC0S37JapS048kKLled2nqhX2Qg3ApPFyeikL54wmL60W+3tvVldksT3Lt5XtB/s
+5TnwDIxMmdq20D9dpNZ3p9fKbmH7UuXaKPkXe1M+aRGj+ingY3w=
+=aIlM
+-----END PGP SIGNATURE-----
+
+--IQeYaCUw+0LgCgpF--

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B44F48F316
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFB748F318
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbiANXja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 18:39:30 -0500
+        id S230233AbiANXjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 18:39:33 -0500
 Received: from mail-am6eur05on2071.outbound.protection.outlook.com ([40.107.22.71]:20289
         "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230136AbiANXjZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 18:39:25 -0500
+        id S230147AbiANXj0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 18:39:26 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mDjZAqf2orThVnY0bbELZ7T8XgOg9JS7XQKcuR/sk2k7OG54FF6Q1+0qeDFPl+YsNDzhQ0W2ChzFEXSjpzEpRBvP0KqKgsMpZT4X0rYkJXY2J9T1zYuqNzf0zsf7VPH6ljXoHElWtP9fyFoz/4ef7yqNX19TazmATqoYLslD4iNyNumYRdm/ePb0Nixj2w3YAWqyEzcMq/CxVhnquzFPmU490M5CrK1A4QvtOVSW8TCoeZ6zF1QrCgI60WKQR/vmEY6UiFvGlqtxtNAgFOMB8ncLXDfeHe8IoJGr7K+6BIC57X1vbsW+iNDk683gCn+CW5Eovf50IXD2xp6vPKHBwQ==
+ b=OFQkuwJIZewt2EGEG3TUdcRAZFJ/ykRDnVXOZ2EnEIG7KN1Rb6Y1BUjpC561s0lEIYq6e2ZrMJn33yUrAUoV5waFL/sO9c/HkTDJlSzLMC0+cHWf9IyuDWfh+yQLUUIaq0s6tkywaZPVNMGoYxcg4XhnQ7qfFcJm+lEonH9aXYnu1ynXHHAuNfj3bqlhDmbiOtJiOxY3biMVPTDTB5vWxKk0k8WSINziKbPd8/JJ2HeUfxPq2lqmElyj6iWpnnfwt1p9nHXqwsDGeBnfKpVitklYhc20oMHIJ4O77ClNC8PEIlfHSGciLarewBEPHzuCBb43+wMuR8FWMCDT5bL+7Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cLFhyChsJ4LImci8dwK5s99yueuJ8oXC7sm+P+C7M4I=;
- b=lYcerv8eQpeaXJd6XXGUqYcFft5u/Kes3BHPGhU3/BL8ksadts3kDkopcTD34/amzaOnHEMWjuoMD1fdZTApVkkRduI/uM38TfYw75w+DS1riJ7q9HJhQj+dlzepLR+PLNGz2Ahbh4DfI7J0wVOTH+XC0qKcgGwMxhfgFLD9gL+rEy2+EodA5ALKk4UxIICDyb/9DP3XyR1FTFrXCqMXc9qZ93/xApbZU7R2Xfp0OKasFDyyWQm7wlXeqR33ZS/515X/G6JmIcwss9CdlBTVkdxhq9URthnFlevUWLN6xvxV3fGXoxx5clx140ZAVI7+96v6Mk/1vb4nF+QtZnsvSw==
+ bh=m/LLMNIxV6X/5Gez8Mt39JB0bJ0z9XpMgyvmp5QQ37g=;
+ b=F2OQ6P6DTijlIWDYYeeT8aoL3KN6HjeVwfjywttVEng3iM/GIHk2kp0r3G/lVSqrzQxA/mo4oybJb2ag5a1P2nq+nLXt/90TS0+pPRwpIjiaNt7Z/lST8Ifjpv0TvoLMEFIaRXthpmVZApxUtTDdAMM0EA6YfOWaNvorh+u04dQwG+zQj+9TsMRvIv/gqtLDhLQ1r0x4CwIGKalSpcGfNBwGsEjXKEQhBoJ754Vi0w9TliKqPX5UNkiMrFTuPPIAvPRPjiPGBCND4VsWaAE4TcB+2Teqz3QNbezxGEAUsy5wDsn3b6TY5kgZy1DFsrpIV6v60pFXp3n00lZ56cuzWw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
  dkim=pass header.d=seco.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cLFhyChsJ4LImci8dwK5s99yueuJ8oXC7sm+P+C7M4I=;
- b=gFLpXdTVDInbsmj77bt51LwswWK0wO2NAgDz3my/vyBy8FOLQi/fHhHI9P/BPJmx5QhJgvxh/vM8Il7p2Q1rZVFck42XSYwNUTlbbvzKNOrPB0osUo4BNr5pTQ/HUgosEiKZu52rOmgRD5QJXTdMwNkyZZIeuNw7+Lkt2NosKa4=
+ bh=m/LLMNIxV6X/5Gez8Mt39JB0bJ0z9XpMgyvmp5QQ37g=;
+ b=i8AqYpS9/tG863oNNVOcrhV0R27M6BB0OD5JN1Kyt9e/XpRZ/Mw86J6F5DenlDl50TAWKWX6/NjliCTh8Sv6S5C29yAIOXUyqw3vvhmKgLXiofijQ2gBpnk5scRwfZ1ZwdKzSIIAVAPEuKy0HWdmPfgJUiMhbLxhDvKfOPwwkXE=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=seco.com;
 Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
  by VI1PR03MB4336.eurprd03.prod.outlook.com (2603:10a6:803:5b::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Fri, 14 Jan
- 2022 23:39:22 +0000
+ 2022 23:39:24 +0000
 Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
  ([fe80::d47e:81b0:256:3005]) by DB7PR03MB4523.eurprd03.prod.outlook.com
  ([fe80::d47e:81b0:256:3005%4]) with mapi id 15.20.4888.012; Fri, 14 Jan 2022
- 23:39:22 +0000
+ 23:39:24 +0000
 From:   Sean Anderson <sean.anderson@seco.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
@@ -46,9 +46,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Felipe Balbi <balbi@kernel.org>,
         Balaji Prakash J <bjagadee@codeaurora.org>,
         Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH 2/6] usb: dwc3: Get clocks individually
-Date:   Fri, 14 Jan 2022 18:39:00 -0500
-Message-Id: <20220114233904.907918-3-sean.anderson@seco.com>
+Subject: [PATCH 3/6] usb: dwc3: Calculate REFCLKPER based on reference clock
+Date:   Fri, 14 Jan 2022 18:39:01 -0500
+Message-Id: <20220114233904.907918-4-sean.anderson@seco.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220114233904.907918-1-sean.anderson@seco.com>
 References: <20220114233904.907918-1-sean.anderson@seco.com>
@@ -59,205 +59,99 @@ X-ClientProxiedBy: MN2PR22CA0017.namprd22.prod.outlook.com
  (2603:10a6:10:19::27)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 04d737e4-ad8c-4d4d-b1a5-08d9d7b71750
+X-MS-Office365-Filtering-Correlation-Id: 738b4662-be89-45b5-8f6e-08d9d7b71835
 X-MS-TrafficTypeDiagnostic: VI1PR03MB4336:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR03MB4336CB04835CE9979860F67996549@VI1PR03MB4336.eurprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-Microsoft-Antispam-PRVS: <VI1PR03MB433643095B3C78FE5322552D96549@VI1PR03MB4336.eurprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:655;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 29RwWOqSC2mhZZLSXYkDwc4ESmylAO3S7K6Qt53IKzbPH0c0LNKCs3ywHIdLhroX7rmIP1juO6prIFecJqUb/LM7tPoLOPBeLTv5UH2MKC0SP9Nr91Gjjf27WaZGHcj9lVloe+CpjwJiNDfV6ShXcpOo0Mh7LJ06Z76QZy8X5qDDoIivekIGR2Lt+cbaWyIKsANZNTngAh7hdfMnnPeRSitDvXU2QNurnGiDDCzXKOSuZiL3Vnr1/Hxhm0opX4cXx5m2R02QfvLOOrarwPa5cPbM08Mr18NMHfGFbdU29VDurbNcDkOU+fqxjbeE7EpU1l3jOSIgBH+k7A1AGE9hmQNTPjDyWKr27wP6kswO3iLmyJNNEsizLeYIo9YJLFREu+2sz4fNwEQAnVRDb7Its18YD5ykBVTrU6v5KS/RQZPUV1tbGFlvgty9+aN5qHM+HruwVwxsMtqD7zu92AzOJ0DlBycHQeDmXkzB8PDjfKDYZ2MNA4zOWlDnCOdfq11bxNusqe9ywjGsiBnV6BHbiV09FvWqStNrM3Y3JptiSZX4nWe6QO/r56fvAvn+YR+1p+CC9Z//deSFjN7vT8QAB1cPQP8Z1mT5vkQkgqrVWvHjhswcT+nl+zC1ai4ryGsikf4+4AZUcMiR5t18121FjZcB7K2MSOALexc1QCHBqsC81gEBAWNVPsPRc3wrtNDhqyUffa7kq5G5EQwMqEorbw==
+X-Microsoft-Antispam-Message-Info: SbFzOpRoigsCLW9QBj0i4gDU4uDS5vRkbMT7BYSAK1zpQ9a+0gWp5xTbauJXcDJRjthzukG54gAS0MG3fD3yQOG1WNRe8/WjqethidF7jlvaO3j8epe+YqCj24meTzoFQbVdAl9ZYUaiXQzPwF9aqM4jtf619+EPSrgeyDkXP1tqb6c923UvOoEQ9F0I+7EfuHd+RIRQXwMJ6DdB/8Vl0VrKQ6cH7SuODuAodBzRYI5XiGAqJusQwUPVzFc7IUD5S39bZVx3/Cqivytz3M/3b51D+XE+tri27wwLUxLaNbDMPYm0CXGY8LFpkXJpsHijOW9d5ADCy6H9dtN0Yd0Jlcsw4waOXXHHZ9GUwQ2xesV1rT3N9+MFCbYLFOI9E9xMjzp6FU9MOiUo46fZbAn875Ha4V4GdB4Yu8+ndydh0LKmJ1mMpoBDDrAyEhH+JG7jxWk9dx1RxGeeifK6g4ckPEtX1MNvDCi2/aIkwNm5HI8JBvrfvGL1GqzqQnp+DZ2nu0FEapBz5uM3Om2K2sQfVz1hem4pe7O4i/HaX4NYDo2FOSVtU2J/ZT36aXCRBbb/yQ9+WFgAwdLeM6tIddaQdX3pxu4A6GEnMfkAguP6mnPoTAyV97wl8yCU5M1pmj5PotRMdV/YebSHjrNj6AR+Srw4vvUH4Y7dsqTbM+ygemGgoJAYLIOW2aAT9UP7dCOgbpXiQaei0cL/Adgi8pu6uA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66556008)(8676002)(6486002)(44832011)(54906003)(83380400001)(38350700002)(66476007)(52116002)(2616005)(66946007)(6506007)(86362001)(107886003)(38100700002)(186003)(6666004)(2906002)(36756003)(5660300002)(316002)(1076003)(508600001)(26005)(8936002)(4326008)(6512007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KOqec1q9FPfgXnZf4WrYipl9+JP9260+vjpuhYa/9lTlf4gcjzSaCahG/zyi?=
- =?us-ascii?Q?wYjpBFsH4Asmvq7YCzqYojacO+4sFBinQk2z6YM/YwnqS7jKsfqQ3mPjfvEN?=
- =?us-ascii?Q?Dv8C3vW/h3FRbbBMa0W2mD3dEAHB9tyAqqxyInyEXUbi2SNPlsw36xs/HMKP?=
- =?us-ascii?Q?m4vXfAC/M78N7BVW9NC75G26ryjj+G9LbnOsIks+g7k9KKWNP6NZ8EdE1zqz?=
- =?us-ascii?Q?CbXd4p4DK3uGmg3Jep0MdvJtdcuTyutJ9Wb5JS8DboNLkbJhKW1vOU0UYCNx?=
- =?us-ascii?Q?EqG2lcfBOi77/WGCOqdNASlQvTiK7xNVVx7akFkzste/zTykmBsDT8f0qhAZ?=
- =?us-ascii?Q?wRU213LWBUro2oAzqBy/zElABZkI+PoMInWnCmPOr0ptbMXBfJohqKflhXV/?=
- =?us-ascii?Q?E9RL26mEJkjKWwhDI4JwJxDxzAdJwdWm/hcjBVj0KDRZjyFx8+kjLbvcLF/2?=
- =?us-ascii?Q?pf3LrFPkYm6ayRbxgC7XodqprJdZJkKFT8CUyyECfFNtQgA1lGsVjxL/hZSb?=
- =?us-ascii?Q?h9QFt2tjBBWfB/i+1JyMz6S4u8kmicgsu/nCN5aBAeKUxk01crznxWR7Ys8Z?=
- =?us-ascii?Q?6uFvK9unQvelc+FRWgi/i3+Q+UEfZ8nXqBVbjzMCPfh2Jyi9ViP/sL0IjdaP?=
- =?us-ascii?Q?kpFQ3wK4elSQtnaxpdUa6Vvq+p4jVNGsct5nQWVBoEOmoLi6CP1Aegx1Plm9?=
- =?us-ascii?Q?U/+fT54OFN3wZEX8rqG/c2n50RQTYGlzAU5y4Pqu+6Eluj1cNdmI4qd+aVEo?=
- =?us-ascii?Q?Cdm/VVR88ngPE/uAkhfZkOLQVuT3HV3rW+A00x/6knI8zuVw79CJypoUVjC/?=
- =?us-ascii?Q?8pHUx8ZAc2DZZpyHJVVYDqdWSlUE8ySv9JivxuY2bCUWh/ftf3rg9EJGDydD?=
- =?us-ascii?Q?AWtRrEsmeOC1p7InMhfLrcc/jnRAOd9+oGQ0amFtugioOoJdVGGLavael7mj?=
- =?us-ascii?Q?pz3+mpgeeIQwAQH9IDbeyNsVFp1ReVBCFbtGF5oAtpUrxtOZ6wKrcekq/C53?=
- =?us-ascii?Q?cBSy6mY8KicBZ3ZbrbonU3NsMegIThHCEQQOeTJX3qS+wR0EgyClSxkbFAQ3?=
- =?us-ascii?Q?X/G2GLB5Gt+GMBhuIHoHndHlxB76QNXydqVYKxtdn3DhYP+3YhAKhMmQblvS?=
- =?us-ascii?Q?ZXRcI1PtA6MEWjqHHMcLDHbEAz+pIbKBlA48C5gLU1z0T/PpV3F14Ogt/ChH?=
- =?us-ascii?Q?PU8ec3sMkrJIyePhN7WXg6SOZy/Pe02ze9V9uLYqdhWV/E/1urvElfCw8Q+d?=
- =?us-ascii?Q?0kfPYQ87U7TEpxoFxJxn6siOTzmZQ0lBfe23CyVkgdA5wt1+nLjnojxMHZkt?=
- =?us-ascii?Q?A0yER5fovxxajSocP6bYkw0JHYPEtSLov4Mc+pRiCDG/JM0mqIIJ87hQgXzs?=
- =?us-ascii?Q?gRVTjpA60xwn0Ex9tHqWVQgkbrgVYhMGS3+s1LXf8io0On4oeB4pLrv87pb6?=
- =?us-ascii?Q?rx8UhI7tZIukgZLwrLPxjSTnP13FyvdZxkwhjqk9dt7CX5SWN1DhGFH9U7wp?=
- =?us-ascii?Q?ZDQci3pYZWYxsGzunxt4PQfMq2ueadPNy64xY46Y4PsYEvIRddpOXGaiE8f8?=
- =?us-ascii?Q?Gq0d6mdi80XEcWvfFJ2y0gKewK/ANNNvSYSxmdAyvSovz5vxczNLQMHJFF/2?=
- =?us-ascii?Q?y96Sq1uB6laU4DjxmiWVxkU=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QQYuKZfleJOoBdZzTwXPGyKd9s+ZrBOBpk3KQ6x7iXpVhU5m06OZSiiXZ8F/?=
+ =?us-ascii?Q?0kj+J+Jh7PKIWvkYGsNbb1RBMHp02dN8njsD9fzSvfx8MuHz7Ztj7FultHKf?=
+ =?us-ascii?Q?gUvQVv9EYwkoVz6x+pIf+evXRS/1kfPhRFx3LkUuwjrh1/E3IBs9v3Zeuioo?=
+ =?us-ascii?Q?mZyEVmwNNUYtq2pd3pHrHVvcGPbzwxDf18Bbgq9t5GYejva5eRl2/klCEhsy?=
+ =?us-ascii?Q?/KromY5geNQTI5aRIP0uxRQv+hhD4G7Gk6plbGTM/vYunCIPMet3z/cGw/X4?=
+ =?us-ascii?Q?QK6JT75NE5CucaWnTfsF97lLu/efMQ3QErNmnA3HZBsbRREQixETrXJ4/5XK?=
+ =?us-ascii?Q?VkvceZDS6g4F/HahoS2K4zYAdm6ZkDcQJQ6A8SL7hnpfh1bMaL0WBEyP7Cbf?=
+ =?us-ascii?Q?lQ4+pYmHdO7+umqIXH85/edFNBmbYwfrPnfuzdlOZ10euPwAG0cArDkVED2S?=
+ =?us-ascii?Q?53za1gYbwCK1S3+9F7s+B2mbxeInPR+S+zwgIXEfyJ4dKo1E+CCcEG7fYo+P?=
+ =?us-ascii?Q?Uq2JeljIuY/bAk8H3mFNUFCDthbUfOhHfFHN8Uo/bWl4dWneWqBsJpmN4PBE?=
+ =?us-ascii?Q?vC8TK7UZhid2sD4hnTRkUECKC3dBcADFuh6PGRVg77EXUN0tnZgiQ0k2RD4I?=
+ =?us-ascii?Q?HkQJ0dhnM2+hRtkY8yi2X1XLfsZkzbLzVrXBv0pdeTKhWk3c3IhdleLr2J/X?=
+ =?us-ascii?Q?3pFMMFsOVLHfafizUFOpwGZhl7YSLfw5RZvkQF+FjXk1kjJn9Co7MINQ+c/f?=
+ =?us-ascii?Q?7hhQoJCvCqSSvbXQ0g3puqJiZlaH521kzwJDckPE4cQ9QODjWeJs0FX5lG9p?=
+ =?us-ascii?Q?i9klSbmBO/D08HYLsZwuOLKg93fI/hlmMdiWjRiFs2xi8HWULhnqylCuwH2x?=
+ =?us-ascii?Q?NxroyCIqTsCLBKDdONcvRm0jjBqDHqildtG4IyHZkT3CgdjeCR4wLUW7UL9W?=
+ =?us-ascii?Q?AYptB84QhTLaLL3UPOxBhBzWu1SzLTw9nAcA0s8cglDFQA6Xf7WYZsua3sLB?=
+ =?us-ascii?Q?Nxt/LwZ8FC5BjEvH+1sChr/QuZt/qD2QQv5gTzmz1pVn3A7ykhG/LlijcnY2?=
+ =?us-ascii?Q?HAd+7qH/Nv7hPzXrTmzJKctNeJD+8/QjKq29nG2u1Fqlu4XCmSBfak/ejgoL?=
+ =?us-ascii?Q?swOX97JjVabece3JzrN4+lj9/6cd6z0zDy54OcekAR4Udm4wibaRXGbTvMDq?=
+ =?us-ascii?Q?beBQx/cu9Y40+opf7YE9B3g1gsNknVnfXS9xCvuyzJn9i3FDVB6TcfDHylgJ?=
+ =?us-ascii?Q?Y33syyayImV1U1u/FOkbmHVb7HYffekIRIWwQ4HXXXPrBznPGbAkYTC5qY3P?=
+ =?us-ascii?Q?Z5ek+ey8a+lIs3d5I/Y7xj11LIpyK3Dz9iln18QjqofjPG2ySROAZnIiNNYA?=
+ =?us-ascii?Q?PiqHbuC2OuwuBP8qMg5n9rrJo04cFglNuFI8Oykmq7l62bI4OojQraJkLokM?=
+ =?us-ascii?Q?9cuikTiykEkq9YAze8wJt67qwb+SJhXbKvCSlv5OjJpu6Wh81fcB0DEe6G3q?=
+ =?us-ascii?Q?ABCPiNOCFXQL40gTFeYlqburipCrZr2/Q91D5GHmqxiGiMu0o65/UALli/Pt?=
+ =?us-ascii?Q?OyFubFblScPagJluDpRs2OZEE+/2xAtYWwqF8XpR5zGhC6VP34GaGEkawQIO?=
+ =?us-ascii?Q?72txKs4naIQPPOpY2yC/9oo=3D?=
 X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04d737e4-ad8c-4d4d-b1a5-08d9d7b71750
+X-MS-Exchange-CrossTenant-Network-Message-Id: 738b4662-be89-45b5-8f6e-08d9d7b71835
 X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2022 23:39:22.1037
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2022 23:39:24.6972
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZJXLYfZNzHB5CD+EXIp7osZyxMbALPfB5NBoClUWJvFRL58x3ptnXeE9N9Hd0iXLXo497ifikunKokzJ/9EXug==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3QagXXdfAd6TCMZtEBhxGkpiZ5BtDAAIxxeolxm1FmJwbEipqaVwW4Jil4AVIfD7pK0uEREzcDwNbhDNWq2p8g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR03MB4336
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of grabbing all clocks in bulk, grab them individually. This will
-allow us to get the frequency or otherwise deal with discrete clocks. This
-may break some platforms if they use a clock which doesn't use one of the
-documented names.
+Instead of using a special property to determine the reference clock
+period, use the rate of the reference clock. When we have a legacy
+snps,ref-clock-period-ns property and no reference clock, use it
+instead. Fractional clocks are not currently supported, and will be
+dealt with in the next commit.
 
 Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 ---
 
- drivers/usb/dwc3/core.c | 62 +++++++++++++++++++++++++++++++++--------
- drivers/usb/dwc3/core.h |  5 ++--
- 2 files changed, 53 insertions(+), 14 deletions(-)
+ drivers/usb/dwc3/core.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index f4c09951b517..699ab9abdc47 100644
+index 699ab9abdc47..5214daceda86 100644
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
-@@ -745,6 +745,38 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
- 	return 0;
- }
- 
-+static int dwc3_clk_enable(struct dwc3 *dwc)
-+{
-+	int ret;
-+
-+	ret = clk_prepare_enable(dwc->bus_clk);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_prepare_enable(dwc->ref_clk);
-+	if (ret)
-+		goto disable_bus_clk;
-+
-+	ret = clk_prepare_enable(dwc->susp_clk);
-+	if (ret)
-+		goto disable_ref_clk;
-+
-+	return 0;
-+
-+disable_ref_clk:
-+	clk_disable_unprepare(dwc->ref_clk);
-+disable_bus_clk:
-+	clk_disable_unprepare(dwc->bus_clk);
-+	return ret;
-+}
-+
-+static void dwc3_clk_disable(struct dwc3 *dwc)
-+{
-+	clk_disable_unprepare(dwc->susp_clk);
-+	clk_disable_unprepare(dwc->ref_clk);
-+	clk_disable_unprepare(dwc->bus_clk);
-+}
-+
- static void dwc3_core_exit(struct dwc3 *dwc)
+@@ -348,13 +348,22 @@ static void dwc3_frame_length_adjustment(struct dwc3 *dwc)
+ static void dwc3_ref_clk_period(struct dwc3 *dwc)
  {
- 	dwc3_event_buffers_cleanup(dwc);
-@@ -758,7 +790,7 @@ static void dwc3_core_exit(struct dwc3 *dwc)
- 	usb_phy_set_suspend(dwc->usb3_phy, 1);
- 	phy_power_off(dwc->usb2_generic_phy);
- 	phy_power_off(dwc->usb3_generic_phy);
--	clk_bulk_disable_unprepare(dwc->num_clks, dwc->clks);
-+	dwc3_clk_disable(dwc);
- 	reset_control_assert(dwc->reset);
+ 	u32 reg;
++	unsigned long rate, period;
+ 
+-	if (dwc->ref_clk_per == 0)
++	if (dwc->ref_clk) {
++		rate = clk_get_rate(dwc->ref_clk);
++		if (!rate)
++			return;
++		period = NSEC_PER_SEC / rate;
++	} else if (dwc->ref_clk_per) {
++		period = dwc->ref_clk_per;
++	} else {
+ 		return;
++	}
+ 
+ 	reg = dwc3_readl(dwc->regs, DWC3_GUCTL);
+ 	reg &= ~DWC3_GUCTL_REFCLKPER_MASK;
+-	reg |=  FIELD_PREP(DWC3_GUCTL_REFCLKPER_MASK, dwc->ref_clk_per);
++	reg |=  FIELD_PREP(DWC3_GUCTL_REFCLKPER_MASK, period);
+ 	dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
  }
- 
-@@ -1605,25 +1637,31 @@ static int dwc3_probe(struct platform_device *pdev)
- 		return PTR_ERR(dwc->reset);
- 
- 	if (dev->of_node) {
--		ret = devm_clk_bulk_get_all(dev, &dwc->clks);
--		if (ret == -EPROBE_DEFER)
--			return ret;
- 		/*
- 		 * Clocks are optional, but new DT platforms should support all
- 		 * clocks as required by the DT-binding.
- 		 */
--		if (ret < 0)
--			dwc->num_clks = 0;
--		else
--			dwc->num_clks = ret;
-+		dwc->bus_clk = devm_clk_get_optional(dev, "bus_early");
-+		if (IS_ERR(dwc->bus_clk))
-+			return dev_err_probe(dev, PTR_ERR(dwc->bus_clk),
-+					     "could not get bus clock\n");
- 
-+		dwc->ref_clk = devm_clk_get_optional(dev, "ref");
-+		if (IS_ERR(dwc->ref_clk))
-+			return dev_err_probe(dev, PTR_ERR(dwc->ref_clk),
-+					     "could not get ref clock\n");
-+
-+		dwc->susp_clk = devm_clk_get_optional(dev, "suspend");
-+		if (IS_ERR(dwc->susp_clk))
-+			return dev_err_probe(dev, PTR_ERR(dwc->susp_clk),
-+					     "could not get suspend clock\n");
- 	}
- 
- 	ret = reset_control_deassert(dwc->reset);
- 	if (ret)
- 		return ret;
- 
--	ret = clk_bulk_prepare_enable(dwc->num_clks, dwc->clks);
-+	ret = dwc3_clk_enable(dwc);
- 	if (ret)
- 		goto assert_reset;
- 
-@@ -1711,7 +1749,7 @@ static int dwc3_probe(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 
- disable_clks:
--	clk_bulk_disable_unprepare(dwc->num_clks, dwc->clks);
-+	dwc3_clk_disable(dwc);
- assert_reset:
- 	reset_control_assert(dwc->reset);
- 
-@@ -1755,7 +1793,7 @@ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
- 	if (ret)
- 		return ret;
- 
--	ret = clk_bulk_prepare_enable(dwc->num_clks, dwc->clks);
-+	ret = dwc3_clk_enable(dwc);
- 	if (ret)
- 		goto assert_reset;
- 
-@@ -1766,7 +1804,7 @@ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
- 	return 0;
- 
- disable_clks:
--	clk_bulk_disable_unprepare(dwc->num_clks, dwc->clks);
-+	dwc3_clk_disable(dwc);
- assert_reset:
- 	reset_control_assert(dwc->reset);
- 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index e1cc3f7398fb..32dfcf3a83d5 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1134,8 +1134,9 @@ struct dwc3 {
- 	struct usb_gadget	*gadget;
- 	struct usb_gadget_driver *gadget_driver;
- 
--	struct clk_bulk_data	*clks;
--	int			num_clks;
-+	struct clk		*bus_clk;
-+	struct clk		*ref_clk;
-+	struct clk		*susp_clk;
- 
- 	struct reset_control	*reset;
  
 -- 
 2.25.1

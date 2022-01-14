@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D31C48E57E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7529948E656
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239779AbiANISe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239705AbiANISN (ORCPT
+        id S240781AbiANIYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:24:40 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33082 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240192AbiANIWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:18:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB538C061751;
-        Fri, 14 Jan 2022 00:18:12 -0800 (PST)
+        Fri, 14 Jan 2022 03:22:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A19A61DDA;
-        Fri, 14 Jan 2022 08:18:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31608C36AF8;
-        Fri, 14 Jan 2022 08:18:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38A3761E2C;
+        Fri, 14 Jan 2022 08:22:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19659C36AEC;
+        Fri, 14 Jan 2022 08:22:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148291;
-        bh=M/kT1BlTrVRbK+6m5FwyenZKLb/O9n0j8HrCqKkK7rA=;
+        s=korg; t=1642148557;
+        bh=MFJZOy3GRMX4/xbzCsR2FxLlhKoMFHSYMCGxzsfZ1jk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vD27Mk55iM8G40c2X81RRueHKn43gpNHegajnftMGnQlj9ZaU8u3dqtfkjXDT+esF
-         3a1dp9sp8LzKt1jumC5qNhwfDAaSafpFe5MhMEtlahUiBnA3O8BuYW9pLhpgEc62Nr
-         BD5n1Ar3DVlhtVW9Or0SuDODtrBnziHAO5ZnFg2U=
+        b=nIlTHIloiOKVwFrzYGq/GFoPp0H0lTuJgeqO9rz0GNuDcgORIqKbOFaK5tXBnxux7
+         upZ3C51we9C+HkGnRrhB8DH32nkBl84rXcB3hu13jPGfyw2QVnOuYW+w6x/suiYX0o
+         /EcHPri5ENhxEkjoVHnC6UUY0LPvuadzEVy4+gWI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sven Eckelmann <sven@narfation.org>,
-        Kalle Valo <quic_kvalo@quicinc.com>
-Subject: [PATCH 5.10 12/25] ath11k: Fix buffer overflow when scanning with extraie
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        David Yang <davidcomponentone@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: [PATCH 5.16 06/37] Bluetooth: btusb: Fix application of sizeof to pointer
 Date:   Fri, 14 Jan 2022 09:16:20 +0100
-Message-Id: <20220114081543.115550627@linuxfoundation.org>
+Message-Id: <20220114081545.066721531@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
-References: <20220114081542.698002137@linuxfoundation.org>
+In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
+References: <20220114081544.849748488@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,76 +46,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Eckelmann <sven@narfation.org>
+From: David Yang <davidcomponentone@gmail.com>
 
-commit a658c929ded7ea3aee324c8c2a9635a5e5a38e7f upstream.
+commit dc1650fc94a8566fb89f3fd14a26d1cec7865f16 upstream.
 
-If cfg80211 is providing extraie's for a scanning process then ath11k will
-copy that over to the firmware. The extraie.len is a 32 bit value in struct
-element_info and describes the amount of bytes for the vendor information
-elements.
+The coccinelle check report:
+"./drivers/bluetooth/btusb.c:2239:36-42:
+ERROR: application of sizeof to pointer".
+Using the real size to fix it.
 
-The WMI_TLV packet is having a special WMI_TAG_ARRAY_BYTE section. This
-section can have a (payload) length up to 65535 bytes because the
-WMI_TLV_LEN can store up to 16 bits. The code was missing such a check and
-could have created a scan request which cannot be parsed correctly by the
-firmware.
-
-But the bigger problem was the allocation of the buffer. It has to align
-the TLV sections by 4 bytes. But the code was using an u8 to store the
-newly calculated length of this section (with alignment). And the new
-calculated length was then used to allocate the skbuff. But the actual code
-to copy in the data is using the extraie.len and not the calculated
-"aligned" length.
-
-The length of extraie with IEEE80211_HW_SINGLE_SCAN_ON_ALL_BANDS enabled
-was 264 bytes during tests with a QCA Milan card. But it only allocated 8
-bytes (264 bytes % 256) for it. As consequence, the code to memcpy the
-extraie into the skb was then just overwriting data after skb->end. Things
-like shinfo were therefore corrupted. This could usually be seen by a crash
-in skb_zcopy_clear which tried to call a ubuf_info callback (using a bogus
-address).
-
-Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-02892.1-QCAHSPSWPL_V1_V2_SILICONZ_LITE-1
-
-Cc: stable@vger.kernel.org
-Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
-Signed-off-by: Sven Eckelmann <sven@narfation.org>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20211207142913.1734635-1-sven@narfation.org
+Fixes: 5a87679ffd443 ("Bluetooth: btusb: Support public address configuration for MediaTek Chip.")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: David Yang <davidcomponentone@gmail.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/ath/ath11k/wmi.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/bluetooth/btusb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/wireless/ath/ath11k/wmi.c
-+++ b/drivers/net/wireless/ath/ath11k/wmi.c
-@@ -2036,7 +2036,7 @@ int ath11k_wmi_send_scan_start_cmd(struc
- 	void *ptr;
- 	int i, ret, len;
- 	u32 *tmp_ptr;
--	u8 extraie_len_with_pad = 0;
-+	u16 extraie_len_with_pad = 0;
- 	struct hint_short_ssid *s_ssid = NULL;
- 	struct hint_bssid *hint_bssid = NULL;
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -2238,7 +2238,7 @@ static int btusb_set_bdaddr_mtk(struct h
+ 	struct sk_buff *skb;
+ 	long ret;
  
-@@ -2055,7 +2055,7 @@ int ath11k_wmi_send_scan_start_cmd(struc
- 		len += sizeof(*bssid) * params->num_bssid;
- 
- 	len += TLV_HDR_SIZE;
--	if (params->extraie.len)
-+	if (params->extraie.len && params->extraie.len <= 0xFFFF)
- 		extraie_len_with_pad =
- 			roundup(params->extraie.len, sizeof(u32));
- 	len += extraie_len_with_pad;
-@@ -2162,7 +2162,7 @@ int ath11k_wmi_send_scan_start_cmd(struc
- 		      FIELD_PREP(WMI_TLV_LEN, len);
- 	ptr += TLV_HDR_SIZE;
- 
--	if (params->extraie.len)
-+	if (extraie_len_with_pad)
- 		memcpy(ptr, params->extraie.ptr,
- 		       params->extraie.len);
- 
+-	skb = __hci_cmd_sync(hdev, 0xfc1a, sizeof(bdaddr), bdaddr, HCI_INIT_TIMEOUT);
++	skb = __hci_cmd_sync(hdev, 0xfc1a, 6, bdaddr, HCI_INIT_TIMEOUT);
+ 	if (IS_ERR(skb)) {
+ 		ret = PTR_ERR(skb);
+ 		bt_dev_err(hdev, "changing Mediatek device address failed (%ld)",
 
 

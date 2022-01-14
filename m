@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A5148F2C2
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 810D948F2C4
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbiANXCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 18:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
+        id S231290AbiANXCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 18:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiANXCb (ORCPT
+        with ESMTP id S231294AbiANXCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 18:02:31 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3336C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 15:02:30 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id i17so4052105pfk.11
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 15:02:30 -0800 (PST)
+        Fri, 14 Jan 2022 18:02:33 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CD8C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 15:02:33 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id x20so3915495pgk.1
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 15:02:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=X0lN8KgwngdIWQtX+1YBYkcWtXacsAROFK0Re0Isayk=;
-        b=JVAC7svkA82CIskoX9XxpEfg+B8GFkTpb3ivSbFZgI/HPbD7sY7z1Mp2/N0DGlMyj1
-         4kRKb6WX3EXTB1GWlBwz1HHIo/SBYne1AVVReufn7082hSWgZV8LusfLssbZ+nO+QZMF
-         zfKkrjxjOuZUoKGjf2YwUeV1EFcNl2i1ZeX5o=
+        bh=K2v+tf3/coBADjHlh/X456ouYdTDi9mxyKcdvb4sAww=;
+        b=VoKx/O+RdQ97dNYCMkBu/pvrz+/Fne9QTD5/ufOzQc2tIbl2VwuKirYICxRUmOaxU7
+         bzMP9wvZcj0rii2XVRaGz2CB77+ByOkbDWFdmqSt03chP8478o1isqsZ72dK5ERh1qCg
+         ZD1l5mA8b+oYH1T/dEcNRmhZAhXZfQvq12+jI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=X0lN8KgwngdIWQtX+1YBYkcWtXacsAROFK0Re0Isayk=;
-        b=itnQpSGGWS8iVww0pJnnz9PeWmOp8jEurwS4uYmbKywNBOqThciYhp1msczQXhCvhz
-         EDdb4+vRJRK+eLgNd6VtV+X7Xb68P+NEyZFvCaatY2cGRpcWeVN3JOfaWc6xNuAxTpgf
-         /BUJwHdlR+s8cSFiOgqhGXk7a6veYKn8n83XlgEzZlfVVmsx74rvY9/V1Ibqwj4rZLa1
-         a8lvf0I4BOfZLTu7OWYkfvozASNDcWuHBV3Z/L5fZrkCnbZmZxjEiJ9F7LoKa1fD6GF3
-         VbaWTNSZjDM/9bADrbuK6MFfpWiomKGXc70vzbdLMxBDffRXoMkHUwI0AB7+CVSDmqpn
-         o/kA==
-X-Gm-Message-State: AOAM530DQTnZlDxYYoVhrt1Sn7vPVMEi9CkymiP39KhPGkdmQzxoF9fu
-        jnjR6s7UrQcsbhligujvBD7oXQ==
-X-Google-Smtp-Source: ABdhPJxEEE2CEn37OnjZYtyIw2or9NSfWoMKhSqZ32s/6jckTLsVQCguVm+8geqnseEdUH1GvQWwKw==
-X-Received: by 2002:a62:1b49:0:b0:4be:f4a5:14a6 with SMTP id b70-20020a621b49000000b004bef4a514a6mr10888650pfb.31.1642201350433;
-        Fri, 14 Jan 2022 15:02:30 -0800 (PST)
+        bh=K2v+tf3/coBADjHlh/X456ouYdTDi9mxyKcdvb4sAww=;
+        b=aIMtvUIr1fK1S8SWEA7xBbt2N84wtzCvQCJk5vZ1C0rRGs0023Uj9o6mgT5apwYyQF
+         9hi1ntTvoyUKf1xV/CjgaT52+m7k/EYCdruUzJFS1t0Iy6UP4WQjsxbimeYvqTZLgmDP
+         3ohdubSUqsioo/I46i4ixiep411rNRzSBFCnqs5xZ4uuKzWDsW7fs5W3HCRxklE/72uG
+         BNoo7K38qLFOC6jCHoNoU4D0ZswM/zaRcdJdS/a0gnK36B4QtE5OpHcmLZ9sEZBUeeIn
+         uF2W6a9F9JCssYhPnBFeRfI7SvSmPk8jJj3+ZvtP/5+87dRHUqQif7vLSHCFuUB7kTyb
+         PQ4Q==
+X-Gm-Message-State: AOAM530iNCkboMTel9gnx4wA55VrF+IwvVrzefCbQUMcY+zwVTSz5Fm0
+        klI3fAgwXyxqDWtbT5IQnRtL3w==
+X-Google-Smtp-Source: ABdhPJyJxad9FH/It6rpaHOKDPCSlkdbKW/X7HtmB2tbRUwLIpcP+QTk8BQyjl2RIOc9OttHVlG6qw==
+X-Received: by 2002:a05:6a00:1413:b0:4bf:a0d7:1f55 with SMTP id l19-20020a056a00141300b004bfa0d71f55mr10925475pfu.13.1642201353019;
+        Fri, 14 Jan 2022 15:02:33 -0800 (PST)
 Received: from localhost ([2620:15c:202:201:76ab:ede1:503d:1c39])
-        by smtp.gmail.com with UTF8SMTPSA id j14sm6719717pfu.15.2022.01.14.15.02.28
+        by smtp.gmail.com with UTF8SMTPSA id l27sm5307598pgb.0.2022.01.14.15.02.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 15:02:29 -0800 (PST)
+        Fri, 14 Jan 2022 15:02:32 -0800 (PST)
 From:   Brian Norris <briannorris@chromium.org>
 To:     Heiko Stuebner <heiko@sntech.de>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -57,9 +57,9 @@ Cc:     linux-rockchip@lists.infradead.org, Lin Huang <hl@rock-chips.com>,
         Sandy Huang <hjc@rock-chips.com>, linux-kernel@vger.kernel.org,
         alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v2 2/3] drm/rockchip: cdn-dp: Support HDMI codec plug-change callback
-Date:   Fri, 14 Jan 2022 15:02:08 -0800
-Message-Id: <20220114150129.v2.2.I20d754a1228aa5c51a18c8eb15a2c60dec25b639@changeid>
+Subject: [PATCH v2 3/3] ASoC: rk3399_gru_sound: Wire up DP jack detection
+Date:   Fri, 14 Jan 2022 15:02:09 -0800
+Message-Id: <20220114150129.v2.3.I3c79b1466c14b02980071221e5b99283cd26ec77@changeid>
 X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
 In-Reply-To: <20220114230209.4091727-1-briannorris@chromium.org>
 References: <20220114230209.4091727-1-briannorris@chromium.org>
@@ -69,104 +69,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some audio servers like to monitor a jack device (perhaps combined with
-EDID, for audio-presence info) to determine DP/HDMI audio presence.
+Now that the cdn-dp driver supports plug-change callbacks, let's wire it
+up.
 
 Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
 
 (no changes since v1)
 
- drivers/gpu/drm/rockchip/cdn-dp-core.c | 28 ++++++++++++++++++++++++++
- drivers/gpu/drm/rockchip/cdn-dp-core.h |  4 ++++
- 2 files changed, 32 insertions(+)
+ sound/soc/rockchip/rk3399_gru_sound.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.c b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-index 16497c31d9f9..edd6a1fc46cd 100644
---- a/drivers/gpu/drm/rockchip/cdn-dp-core.c
-+++ b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-@@ -586,6 +586,13 @@ static bool cdn_dp_check_link_status(struct cdn_dp_device *dp)
- 	return drm_dp_channel_eq_ok(link_status, min(port->lanes, sink_lanes));
- }
- 
-+static void cdn_dp_audio_handle_plugged_change(struct cdn_dp_device *dp,
-+					       bool plugged)
-+{
-+	if (dp->codec_dev)
-+		dp->plugged_cb(dp->codec_dev, plugged);
-+}
-+
- static void cdn_dp_encoder_enable(struct drm_encoder *encoder)
- {
- 	struct cdn_dp_device *dp = encoder_to_dp(encoder);
-@@ -641,6 +648,9 @@ static void cdn_dp_encoder_enable(struct drm_encoder *encoder)
- 		DRM_DEV_ERROR(dp->dev, "Failed to valid video %d\n", ret);
- 		goto out;
- 	}
-+
-+	cdn_dp_audio_handle_plugged_change(dp, true);
-+
- out:
- 	mutex_unlock(&dp->lock);
- }
-@@ -651,6 +661,8 @@ static void cdn_dp_encoder_disable(struct drm_encoder *encoder)
- 	int ret;
- 
- 	mutex_lock(&dp->lock);
-+	cdn_dp_audio_handle_plugged_change(dp, false);
-+
- 	if (dp->active) {
- 		ret = cdn_dp_disable(dp);
- 		if (ret) {
-@@ -846,11 +858,27 @@ static int cdn_dp_audio_get_eld(struct device *dev, void *data,
+diff --git a/sound/soc/rockchip/rk3399_gru_sound.c b/sound/soc/rockchip/rk3399_gru_sound.c
+index e2d52d8d0ff9..eeef3ed70037 100644
+--- a/sound/soc/rockchip/rk3399_gru_sound.c
++++ b/sound/soc/rockchip/rk3399_gru_sound.c
+@@ -164,6 +164,25 @@ static int rockchip_sound_da7219_hw_params(struct snd_pcm_substream *substream,
  	return 0;
  }
  
-+static int cdn_dp_audio_hook_plugged_cb(struct device *dev, void *data,
-+					hdmi_codec_plugged_cb fn,
-+					struct device *codec_dev)
++static struct snd_soc_jack cdn_dp_card_jack;
++
++static int rockchip_sound_cdndp_init(struct snd_soc_pcm_runtime *rtd)
 +{
-+	struct cdn_dp_device *dp = dev_get_drvdata(dev);
++	struct snd_soc_component *component = asoc_rtd_to_codec(rtd, 0)->component;
++	struct snd_soc_card *card = rtd->card;
++	int ret;
 +
-+	mutex_lock(&dp->lock);
-+	dp->plugged_cb = fn;
-+	dp->codec_dev = codec_dev;
-+	cdn_dp_audio_handle_plugged_change(dp, dp->connected);
-+	mutex_unlock(&dp->lock);
++	/* Enable jack detection. */
++	ret = snd_soc_card_jack_new(card, "DP Jack", SND_JACK_LINEOUT,
++				    &cdn_dp_card_jack, NULL, 0);
++	if (ret) {
++		dev_err(card->dev, "Can't create DP Jack %d\n", ret);
++		return ret;
++	}
 +
-+	return 0;
++	return snd_soc_component_set_jack(component, &cdn_dp_card_jack, NULL);
 +}
 +
- static const struct hdmi_codec_ops audio_codec_ops = {
- 	.hw_params = cdn_dp_audio_hw_params,
- 	.audio_shutdown = cdn_dp_audio_shutdown,
- 	.mute_stream = cdn_dp_audio_mute_stream,
- 	.get_eld = cdn_dp_audio_get_eld,
-+	.hook_plugged_cb = cdn_dp_audio_hook_plugged_cb,
- 	.no_capture_mute = 1,
- };
- 
-diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.h b/drivers/gpu/drm/rockchip/cdn-dp-core.h
-index 81ac9b658a70..d808a9de45ed 100644
---- a/drivers/gpu/drm/rockchip/cdn-dp-core.h
-+++ b/drivers/gpu/drm/rockchip/cdn-dp-core.h
-@@ -10,6 +10,7 @@
- #include <drm/drm_dp_helper.h>
- #include <drm/drm_panel.h>
- #include <drm/drm_probe_helper.h>
-+#include <sound/hdmi-codec.h>
- 
- #include "rockchip_drm_drv.h"
- 
-@@ -101,5 +102,8 @@ struct cdn_dp_device {
- 
- 	u8 dpcd[DP_RECEIVER_CAP_SIZE];
- 	bool sink_has_audio;
-+
-+	hdmi_codec_plugged_cb plugged_cb;
-+	struct device *codec_dev;
- };
- #endif  /* _CDN_DP_CORE_H */
+ static int rockchip_sound_da7219_init(struct snd_soc_pcm_runtime *rtd)
+ {
+ 	struct snd_soc_component *component = asoc_rtd_to_codec(rtd, 0)->component;
+@@ -315,6 +334,7 @@ static const struct snd_soc_dai_link rockchip_dais[] = {
+ 	[DAILINK_CDNDP] = {
+ 		.name = "DP",
+ 		.stream_name = "DP PCM",
++		.init = rockchip_sound_cdndp_init,
+ 		.dai_fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF |
+ 			SND_SOC_DAIFMT_CBS_CFS,
+ 		SND_SOC_DAILINK_REG(cdndp),
 -- 
 2.34.1.703.g22d0c6ccf7-goog
 

@@ -2,165 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 481A448F20C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F60848F20D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiANVa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 16:30:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiANVaz (ORCPT
+        id S229873AbiANVgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 16:36:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58530 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229838AbiANVgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 16:30:55 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034AFC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 13:30:55 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id y14so14016029oia.9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 13:30:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=qzWKW58EHMRYfJEMWdh6ZI9TALsJ363+iOZxWHKT5Dg=;
-        b=m+tA33y4EKPBF5RGvo85oy9HWU3abLrzxeiKVsLD9tVTojyWnpMfPiGManmCHq+SJa
-         jUCYY4SnECxcwj0qpyLRNSTBNh11tWxEcT5GvTDzcAsjz8ZAvy9YRLFECkOSyGWKolcO
-         smb+cvls8PdAvykD60pN2/GL9MWc0BTWbKWjw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=qzWKW58EHMRYfJEMWdh6ZI9TALsJ363+iOZxWHKT5Dg=;
-        b=R7BTUKKXKql7T1U9ks/krG8kfMXLdTC1jq85GMhQaPDNJQWC54LaUtLFjCBQ+PvT9C
-         FOvCAHn+UQPWcd0bUaN1En4GUk9AjtN6beF2Aqsvp0L+0kh+koJ9f6sm/MgzABu4z/uV
-         W2g1fer4/lkBdCkceDNgIB4AtvH4zyYyCzjrguN685IAsRj5M1pZ9Qb3ohNmf+ieoD0R
-         iaqNyjvjs+q3tnQ3NxyY2gUNy5AqRYO0IcSfOZF9XvzQShfVGjhypxYtYKfe7ZSCm07i
-         ywFMFk+lndvG5RJ+bZ1Jk/HM1feWM9EUGf72VSaBS76nsVgcJumooc5GkJrL2+Uk9td7
-         B5xg==
-X-Gm-Message-State: AOAM531p3GPQl3k3h9VE1zZI9QrVy2LV4aaJX2OduockjQbsbtMRlWIJ
-        EghCwuLdGilO41ay9jJZugDk8V5Cv3b90JrQUwWc/w==
-X-Google-Smtp-Source: ABdhPJzLzmiokzwTquHXvpd04mD3pjLPkUF9enSFzCrjicEdCXOV9BJ3Pf4eqRXnVC2O0O5rr5vYBYKUyd0cJHUJnuk=
-X-Received: by 2002:aca:a953:: with SMTP id s80mr14644271oie.164.1642195854341;
- Fri, 14 Jan 2022 13:30:54 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 14 Jan 2022 15:30:53 -0600
+        Fri, 14 Jan 2022 16:36:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E40E61F9B;
+        Fri, 14 Jan 2022 21:36:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34261C36AE9;
+        Fri, 14 Jan 2022 21:36:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642196194;
+        bh=a92jsGWhL5DsPYT7tYxlR91a3WyN9cW0YdAlCYvlwUg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ygns0sTyX3uGYdMtjQB3sfBpIK/aUmev/21p+E7yAXJKyufJZXVBl15zcQcP0jb59
+         yMYVY4Y5wGwGm+yKfAFFk5MD+IBDHaeld/uVUAksFV+onWk2k/44DhJgSl4mx8dsk/
+         +N72w3lFQA6T7KMkXMbHBgOFvT6HX2uuOG8fxvJN+0N0evy8qHa7yj/YGoOoeHqf8v
+         u2uzhqlHzkKf4Z4hE9qKw0yz0cqW9OcxqohRJ1v+wNkDdEcaNURk8vVorsJ/nZNszD
+         i/BrPgmwlUlsgIKIx29LJ5DoTNhghRLgCkBWN42pjYPZvExMYWqN0O+nk/1gV9ppb/
+         quyaKZOgOZ7xg==
+Date:   Fri, 14 Jan 2022 23:36:22 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Haitao Huang <haitao.huang@linux.intel.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+Message-ID: <YeHs1vyUaZ/v9eAF@iki.fi>
+References: <YdmzDy1BOHgh8CII@iki.fi>
+ <Ydm6RiIwuh3IspRI@iki.fi>
+ <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net>
+ <YdzjEzjF0YKn+pZ6@iki.fi>
+ <YdzjrIxrVfgrlzWH@iki.fi>
+ <YdzldMXO2LrssnER@iki.fi>
+ <YdzoQJknQK5r6xLK@iki.fi>
+ <op.1ftbip0cwjvjmi@hhuan26-mobl1.mshome.net>
+ <Yd9o4BJWNtK5AxoB@iki.fi>
+ <op.1fwxk0flwjvjmi@hhuan26-mobl1.mshome.net>
 MIME-Version: 1.0
-In-Reply-To: <69a10908622512c60790f97942731a8ab989b727.camel@mediatek.com>
-References: <20220106214556.2461363-1-swboyd@chromium.org> <20220106214556.2461363-26-swboyd@chromium.org>
- <1a3b368eb891ca55c33265397cffab0b9f128737.camel@mediatek.com>
- <CAE-0n53Y3WRy4_QvUm9k9wjjWV7adMDQcK_+1ji4+W25SSeGwg@mail.gmail.com>
- <ff81bc1fe1f1c2060fcf03ba14f1bef584c47599.camel@mediatek.com>
- <CAE-0n53FAHDmCznJ35Xh2aTwXBVwukAM3ioKx8SU9VowSaQSqA@mail.gmail.com> <69a10908622512c60790f97942731a8ab989b727.camel@mediatek.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 14 Jan 2022 15:30:53 -0600
-Message-ID: <CAE-0n53ao52UX3sJ67UQ3dgj0-DZ0xTeo-NrmW5YVAuXfAnxZw@mail.gmail.com>
-Subject: Re: [PATCH v5 25/32] iommu/mtk: Migrate to aggregate driver
-To:     Yong Wu <yong.wu@mediatek.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Saravana Kannan <saravanak@google.com>,
-        linux-mediatek@lists.infradead.org,
-        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <op.1fwxk0flwjvjmi@hhuan26-mobl1.mshome.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Yong Wu (2022-01-14 01:06:31)
-> On Wed, 2022-01-12 at 20:25 -0800, Stephen Boyd wrote:
-> > >
-> > > [    2.654526] ------------[ cut here ]------------
-> > > [    2.655558] refcount_t: addition on 0; use-after-free.
-> > >
-> > > After this patch, the aggregate_driver flow looks ok. But our
-> > > driver
-> > > still aborts like this:
-> > >
-> > > [    2.721316] Unable to handle kernel NULL pointer dereference at
-> > > virtual address 0000000000000000
-> > > ...
-> > > [    2.731658] pc :
-> > > mtk_smi_larb_config_port_gen2_general+0xa4/0x138
-> > > [    2.732434] lr : mtk_smi_larb_resume+0x54/0x98
-> > > ...
-> > > [    2.742457] Call trace:
-> > > [    2.742768]  mtk_smi_larb_config_port_gen2_general+0xa4/0x138
-> > > [    2.743496]  pm_generic_runtime_resume+0x2c/0x48
-> > > [    2.744090]  __genpd_runtime_resume+0x30/0xa8
-> > > [    2.744648]  genpd_runtime_resume+0x94/0x2c8
-> > > [    2.745191]  __rpm_callback+0x44/0x150
-> > > [    2.745669]  rpm_callback+0x6c/0x78
-> > > [    2.746114]  rpm_resume+0x314/0x558
-> > > [    2.746559]  __pm_runtime_resume+0x3c/0x88
-> > > [    2.747080]  pm_runtime_get_suppliers+0x7c/0x110
-> > > [    2.747668]  __driver_probe_device+0x4c/0xe8
-> > > [    2.748212]  driver_probe_device+0x44/0x130
-> > > [    2.748745]  __device_attach_driver+0x98/0xd0
-> > > [    2.749300]  bus_for_each_drv+0x68/0xd0
-> > > [    2.749787]  __device_attach+0xec/0x148
-> > > [    2.750277]  device_attach+0x14/0x20
-> > > [    2.750733]  bus_rescan_devices_helper+0x50/0x90
-> > > [    2.751319]  bus_for_each_dev+0x7c/0xd8
-> > > [    2.751806]  bus_rescan_devices+0x20/0x30
-> > > [    2.752315]  __component_add+0x7c/0xa0
-> > > [    2.752795]  component_add+0x14/0x20
-> > > [    2.753253]  mtk_smi_larb_probe+0xe0/0x120
-> > >
-> > > This is because the device runtime_resume is called before the bind
-> > > operation(In our case this detailed function is mtk_smi_larb_bind).
-> > > The issue doesn't happen without this patchset. I'm not sure the
-> > > right
-> > > sequence. If we should fix in mediatek driver, the patch could be:
-> >
-> > Oh, the runtime PM is moved around with these patches. The aggregate
-> > device is runtime PM enabled before the probe is called,
->
-> In our case, the component device may probe before the aggregate
-> device. thus the component device runtime PM has already been enabled
-> when aggregate device probe.
+On Wed, Jan 12, 2022 at 08:41:18PM -0600, Haitao Huang wrote:
+> On Wed, 12 Jan 2022 17:48:48 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+> wrote:
+> 
+> > On Mon, Jan 10, 2022 at 09:48:15PM -0600, Haitao Huang wrote:
+> > > On Mon, 10 Jan 2022 20:15:28 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+> > > wrote:
+> > > 
+> > > > On Tue, Jan 11, 2022 at 04:03:32AM +0200, Jarkko Sakkinen wrote:
+> > > > > On Tue, Jan 11, 2022 at 03:55:59AM +0200, Jarkko Sakkinen wrote:
+> > > > > > On Tue, Jan 11, 2022 at 03:53:26AM +0200, Jarkko Sakkinen wrote:
+> > > > > > > On Mon, Jan 10, 2022 at 04:05:21PM -0600, Haitao Huang wrote:
+> > > > > > > > On Sat, 08 Jan 2022 10:22:30 -0600, Jarkko Sakkinen
+> > > > > <jarkko@kernel.org>
+> > > > > > > > wrote:
+> > > > > > > >
+> > > > > > > > > On Sat, Jan 08, 2022 at 05:51:46PM +0200, Jarkko
+> > > Sakkinen wrote:
+> > > > > > > > > > On Sat, Jan 08, 2022 at 05:45:44PM +0200, Jarkko Sakkinen
+> > > > > wrote:
+> > > > > > > > > > > On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang
+> > > > > wrote:
+> > > > > > > > > > > > > > > OK, so the question is: do we need both or
+> > > would a
+> > > > > > > > > > mechanism just
+> > > > > > > > > > > > > > to extend
+> > > > > > > > > > > > > > > permissions be sufficient?
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > I do believe that we need both in order to support
+> > > > > pages
+> > > > > > > > > > having only
+> > > > > > > > > > > > > > the permissions required to support their
+> > > intended use
+> > > > > > > > > > during the
+> > > > > > > > > > > > > > time the
+> > > > > > > > > > > > > > particular access is required. While
+> > > technically it is
+> > > > > > > > > > possible to grant
+> > > > > > > > > > > > > > pages all permissions they may need during their
+> > > > > lifetime it
+> > > > > > > > > > is safer to
+> > > > > > > > > > > > > > remove permissions when no longer required.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > So if we imagine a run-time: how EMODPR would be
+> > > > > useful, and
+> > > > > > > > > > how using it
+> > > > > > > > > > > > > would make things safer?
+> > > > > > > > > > > > >
+> > > > > > > > > > > > In scenarios of JIT compilers, once code is generated
+> > > > > into RW pages,
+> > > > > > > > > > > > modifying both PTE and EPCM permissions to RX would be
+> > > > > a good
+> > > > > > > > > > defensive
+> > > > > > > > > > > > measure. In that case, EMODPR is useful.
+> > > > > > > > > > >
+> > > > > > > > > > > What is the exact threat we are talking about?
+> > > > > > > > > >
+> > > > > > > > > > To add: it should be *significantly* critical thread,
+> > > > > given that not
+> > > > > > > > > > supporting only EAUG would leave us only one complex call
+> > > > > pattern with
+> > > > > > > > > > EACCEPT involvement.
+> > > > > > > > > >
+> > > > > > > > > > I'd even go to suggest to leave EMODPR out of the patch
+> > > > > set, and
+> > > > > > > > > > introduce
+> > > > > > > > > > it when there is PoC code for any of the existing run-time
+> > > > > that
+> > > > > > > > > > demonstrates the demand for it. Right now this way too
+> > > > > speculative.
+> > > > > > > > > >
+> > > > > > > > > > Supporting EMODPE is IMHO by factors more critical.
+> > > > > > > > >
+> > > > > > > > > At least it does not protected against enclave code because
+> > > > > an enclave
+> > > > > > > > > can
+> > > > > > > > > always choose not to EACCEPT any of the EMODPR requests. I'm
+> > > > > not only
+> > > > > > > > > confused here about the actual threat but also the potential
+> > > > > adversary
+> > > > > > > > > and
+> > > > > > > > > target.
+> > > > > > > > >
+> > > > > > > > I'm not sure I follow your thoughts here. The sequence should
+> > > > > be for enclave
+> > > > > > > > to request  EMODPR in the first place through runtime to
+> > > > > kernel, then to
+> > > > > > > > verify with EACCEPT that the OS indeed has done EMODPR.
+> > > > > > > > If enclave does not verify with EACCEPT, then its own code has
+> > > > > > > > vulnerability. But this does not justify OS not providing the
+> > > > > mechanism to
+> > > > > > > > request EMODPR.
+> > > > > > >
+> > > > > > > The question is really simple: what is the threat scenario? In
+> > > > > order to use
+> > > > > > > the word "vulnerability", you would need one.
+> > > > > > >
+> > > > > > > Given the complexity of the whole dance with EMODPR it is
+> > > > > mandatory to have
+> > > > > > > one, in order to ack it to the mainline.
+> > > > > > >
+> > > > > > > > Similar to how we don't want have RWX code pages for
+> > > normal Linux
+> > > > > > > > application, when an enclave loads code pages (either directly
+> > > > > or JIT
+> > > > > > > > compiled from high level code ) into EAUG'd page (which has
+> > > > > RW), we do not
+> > > > > > > > want leave pages to be RWX for code to be executable, hence
+> > > > > the need of
+> > > > > > > > EMODPR request OS to reduce the permissions to RX once the
+> > > > > code is ready to
+> > > > > > > > execute.
+> > > > > > >
+> > > > > > > You cannot compare *enforced* permissions outside the enclave,
+> > > > > and claim that
+> > > > > > > they would be equivalent to the permissions of the already
+> > > > > sandboxed code
+> > > > > > > inside the enclave, with permissions that are not enforced but
+> > > > > are based
+> > > > > > > on good will of the enclave code.
+> > > > > >
+> > > > > > To add, you can already do "EMODPR" by simply adjusting VMA
+> > > > > permissions to be
+> > > > > > more restrictive. How this would be worse than this collaboration
+> > > > > based
+> > > > > > thing?
+> > > > >
+> > > > > ... or you could even make soft version of EMODPR without using that
+> > > > > opcode
+> > > > > by writing an ioctl to update our xarray to allow lower permissions.
+> > > > > That
+> > > > > ties the hands of the process who is doing the mmap() already.
+> > > >
+> > > > E.g. why not just
+> > > >
+> > > > #define SGX_IOC_ENCLAVE_RESTRICT_PAGE_PERMISSIONS \
+> > > > 	_IOW(SGX_MAGIC, 0x05, struct sgx_enclave_modify_page_permissions)
+> > > > #define SGX_IOC_ENCLAVE_EXTEND_PAGE_PERMISSIONS \
+> > > > 	_IOW(SGX_MAGIC, 0x06, struct sgx_enclave_modify_page_permissions)
+> > > >
+> > > > struct sgx_enclave_restrict_page_permissions {
+> > > > 	__u64 src;
+> > > > 	__u64 offset;
+> > > > 	__u64 length;
+> > > > 	__u64 secinfo;
+> > > > 	__u64 count;
+> > > > };
+> > > > struct sgx_enclave_extend_page_permissions {
+> > > > 	__u64 src;
+> > > > 	__u64 offset;
+> > > > 	__u64 length;
+> > > > 	__u64 secinfo;
+> > > > 	__u64 count;
+> > > > };
+> > > >
+> > > > These would simply update the xarray and nothing else. I'd go with two
+> > > > ioctls (with the necessary checks for secinfo) in order to provide
+> > > hook
+> > > > up points in the future for LSMs.
+> > > >
+> > > > This leaves only EAUG and EMODT requiring the EACCEPT handshake.
+> > > >
+> > > > /Jarkko
+> > > The trusted code base here is the enclave. It can't trust any code
+> > > outside
+> > > for enforcement. There is also need for TLB shootdown.
+> > > 
+> > > To answer your earlier question about threat, the threat is
+> > > malicious/compromised code inside enclave. Yes, you can say the
+> > > whole thing
+> > > is sand-boxed, but the runtime inside enclave could load complex
+> > > upper layer
+> > > code.  Therefore the runtime needs to have a trusted mechanism to ensure
+> > > code pages not writable so that there is less/no chance for compromised
+> > > malicious enclave to modify existing code pages. I still consider it
+> > > to be
+> > > similar to normal Linux elf-loader/dynamic linker relying on
+> > > mmap/mprotect
+> > > and trusting OS to enforce permissions, but here the enclave runtime
+> > > only
+> > > trust the HW provided mechanism: EMODPR to change EPCM records and
+> > > EACCEPT
+> > > to verify.
+> > 
+> > So what if:
+> > 
+> > 1. User space does EMODPR ioctl.
+> > 2. Enclave does EACCEPT.
+> > 3. Enclave does EMODPE.
+> > 
+> Could you elaborate on your exact concern here? EMODPE won't be able to
+> restrict permissions, only add, so no way to cancel what's done by EMODPR if
+> that's your concern.
+> 
+> And EMODPE would only affect EPCM not PTE. So if OS set PTE no matching
+> EPCM, the enclave won't be able to use the page for added access.
 
-This is always the case. The component device always probes before the
-aggregate device because the component device registers with the
-component framework. But the component device can decide to enable
-runtime PM during driver probe or during component bind.
+The problem I see is clearly visible in your last sentence, if you think
+about it. That's all I can add more to this discussion for the moment.
 
->
-> > and there are
-> > supplier links made to each component, so each component is runtime
-> > resumed before the aggregate probe function is called.
->
-> Yes. This is the current flow.
-
-Got it.
-
->
-> > It means that all
-> > the component drivers need to have their resources ready to power on
-> > before their component_bind() callback is made.
->
-> Sorry, I don't understand here well. In this case, The component
-> drivers prepare the resource for power on in the component_bind since
-> the resource comes from the aggregate driver. Thus, we expect the
-> component_bind run before the runtime resume callback.
-
-What resource comes from the aggregate device that the component device
-manages in runtime PM?
-
->
-> Another solution is moving the component's pm_runtime_enable into the
-> component_bind(It's mtk_smi_larb_bind here), then the runtime callback
-> is called after component_bind in which the resource for power on is
-> ready.
-
-This sounds more correct to me. I'm not an expert on runtime PM though
-as I always have to read the code to remember how it works. if the
-device isn't ready for runtime PM until the component bind function is
-called then runtime PM shouldn't be enabled on the component device.
+/Jarkko

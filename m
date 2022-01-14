@@ -2,169 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BBD48E747
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 750E048E74E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239784AbiANJSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 04:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S233460AbiANJTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 04:19:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239787AbiANJR6 (ORCPT
+        with ESMTP id S230124AbiANJTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:17:58 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A408C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 01:17:58 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id hv15so12844215pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 01:17:58 -0800 (PST)
+        Fri, 14 Jan 2022 04:19:53 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0B6C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 01:19:53 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id s9so11379439oib.11
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 01:19:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UnDHOgPgHxrpEfq7DGKwHo/JXpf5Q25m6hL15BhwKxo=;
-        b=niPVQetGLY/pUlNg30eKEQ/IYzZi4OmcTVvIzI0ERhmfvbGC8tWx782CbK2myBiWXh
-         dmzulVUdZMrKW47do7EuMg6wUDNXv71UCjEbNTFKIO7SdOeIfCSjmqWv4+plJOE/2Nki
-         1tOU3eImAfPdcEO1IzToFlneunoUKpMmvlBmlJ7dgLSJH7kcJhSac2WMRzTksKJuDVX2
-         xUP74Td3sketHGJhWiqo4o6+yymg+fw4M+AqLdaPMbqrD33oyirXdSaROio6fM7YpQJm
-         Q27snM7DzwdyrU632YbM8zvumymhdPZ1W/tiNff6HxXyn/bKh0VlSM1XUyb7673CULw7
-         FSMA==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=QN0N+AKpheanluf1vTzub6eAJJLvzk1oql8qt6U8QbY=;
+        b=hDAmnhD4SJ9jkJU50qQV24zSPhraH1MoNhulEO36DDCMeZbdlErMqJjpCDLkCYYD4R
+         BrMjMqKgHwiSNniZ9FpwQbRAIBUtPxIZI5pXfUYTc9RuLPCgbn/kyiJ01on97fRfsecJ
+         ikqp52KziteXZHeon7BMlV4hPgNCR+q/8JzkvyvBKovXXQ10tX3RhLeuSRgFhpOfb4YW
+         3wNdgS//rQIaJZ7XRp0YZNexmt3FIEINxLEg07dw6a5gjqMN/jpqt2drbkXBZQjeccsd
+         qEg0itLDU1NxYgH2RM0VO7nGkxX+sYlt3KipgzFk3rEu5xBTpK1GfSrtc5UWankKrvBD
+         TTfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UnDHOgPgHxrpEfq7DGKwHo/JXpf5Q25m6hL15BhwKxo=;
-        b=edIJlQMvw/a6+/II3Yz1rSalawJOJXasrDZgaACCkkb2HMV/7MoWDPXhEyMzOPGUFw
-         WNbL1xV6kw1jLv9R2qNHTi8ul1+uYfJ+Y3brK1MQSpuZsF2KMNQCy7f7OB1U3xR8Fr7o
-         GBa1lpXTQkqPLcF0wcoLUB0oszotk8dgEw3+AC5tSW+4BDURCXj8unGFrRYLLsO1/ZlC
-         1tyjR2KnweLyQuPhYylsbMH/doZgzNq28VHF5LGl9jZIp3TdJS5JizJhBNVBSwrLfAcQ
-         g4XvRiswcIwTlb4rVLCTl2fMPXu/vH/etPkWHEydsQyWBchpVk2QfBVyGVfZ0g10QFoW
-         BcKg==
-X-Gm-Message-State: AOAM5339XH70lHO3q5HnQ72HNbDGVnBxec/LEmnDDYwthxrw2YhnCb98
-        nVUWIcuswCkYhWtifXw9CYeO1Q==
-X-Google-Smtp-Source: ABdhPJyzg2ZT4GxwLjdse984P77qAjIRC7yU7HACLQpYCuRh79FQtcfOgBxIrntqjqdoRZkaHFHl3Q==
-X-Received: by 2002:a17:90a:3846:: with SMTP id l6mr19256262pjf.7.1642151877575;
-        Fri, 14 Jan 2022 01:17:57 -0800 (PST)
-Received: from hsinchu16.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id z3sm4237179pgc.45.2022.01.14.01.17.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 01:17:57 -0800 (PST)
-From:   Zong Li <zong.li@sifive.com>
-To:     robh+dt@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
-        conor.dooley@microchip.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, green.wan@sifive.com, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Zong Li <zong.li@sifive.com>
-Subject: [PATCH v3 3/3] dmaengine: sf-pdma: Get number of channel by device tree
-Date:   Fri, 14 Jan 2022 17:17:41 +0800
-Message-Id: <91a8fb6dff811b36db951ee98d955ad14a2a30eb.1642151791.git.zong.li@sifive.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1642151791.git.zong.li@sifive.com>
-References: <cover.1642151791.git.zong.li@sifive.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=QN0N+AKpheanluf1vTzub6eAJJLvzk1oql8qt6U8QbY=;
+        b=O6ZSGzh7TNFjGoAPeZ5juT/GxpxdMsDhgYrCccqqcjED2YYUjKrwXXgajzkb2JdLwC
+         qNR7evR/aPptQspIDrrxXv9cE70A6aDCE/bfhBkDu4E/TNC0Hfy0V2FPb5/eNwCPuB9H
+         VooBiRtBKBOm0CYHcR+Ye4sPq5Ng8LXf8O7iAf8kHrZnqe7O83YezwzhEPLI9moziZ8W
+         3TfXT6qC74Mxf2oH0v/dMSbzmxQEQDvCKAJWYJ1/GBrphYqYjqp+ZTcbEmWnBFlR7EmI
+         7QF615cp/IXl5QmrFYgf9yEZ3duKwn/RLudaZFk0eDHMTaO8kgb6YNP607QSQI0l/Q4o
+         jY/w==
+X-Gm-Message-State: AOAM533janugUl2Q8KipG3TgEUDTHS0SQbmbjEfYEUuhbY12QYkZ4Lz2
+        PkICcCDqvP+yMOG4Onh/ygnTG49Xh86dkgEzq2E=
+X-Google-Smtp-Source: ABdhPJxyHCHZU3/OLEfAos/SynSfy56x2C9ZDmgfhMG0Nqr/mtDf4cH9Ia/fbDU03KnnQ54ZOdJVz9utRz5CEZ2AVmo=
+X-Received: by 2002:a05:6808:2220:: with SMTP id bd32mr2889234oib.12.1642151992950;
+ Fri, 14 Jan 2022 01:19:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a4a:d5d0:0:0:0:0:0 with HTTP; Fri, 14 Jan 2022 01:19:52
+ -0800 (PST)
+Reply-To: mrsbillchantal2022@mail.com
+From:   "Mrs. Bill Chantal" <david56584356@gmail.com>
+Date:   Fri, 14 Jan 2022 10:19:52 +0100
+Message-ID: <CANTp8Tc8T8M+Gcm76Yd=vmM0k04uMH-A53m0Bd97507cSLsftw@mail.gmail.com>
+Subject: ATM VISA COMPENSATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It currently assumes that there are always four channels, it would
-cause the error if there is actually less than four channels. Change
-that by getting number of channel from device tree.
+Hello my Dearest
+You have been compensated with the sum of 5.4 million dollars in this
+united nation the payment will be Issue into ATM visa card and send to
+you from the bank,we need your address, passport and your WhatsApp
+Number.
 
-For backwards-compatible, it uses the default value (i.e. 4) when there
-is no 'dma-channels' information in dts.
+Thanks
 
-Signed-off-by: Zong Li <zong.li@sifive.com>
----
- drivers/dma/sf-pdma/Makefile  |  2 ++
- drivers/dma/sf-pdma/sf-pdma.c | 20 +++++++++++++-------
- drivers/dma/sf-pdma/sf-pdma.h |  8 ++------
- 3 files changed, 17 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/dma/sf-pdma/Makefile b/drivers/dma/sf-pdma/Makefile
-index 764552ab8d0a..cf1daff7e445 100644
---- a/drivers/dma/sf-pdma/Makefile
-+++ b/drivers/dma/sf-pdma/Makefile
-@@ -1 +1,3 @@
- obj-$(CONFIG_SF_PDMA)   += sf-pdma.o
-+
-+CFLAGS_sf-pdma.o += -O0
-diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
-index f12606aeff87..1264add9897e 100644
---- a/drivers/dma/sf-pdma/sf-pdma.c
-+++ b/drivers/dma/sf-pdma/sf-pdma.c
-@@ -482,9 +482,7 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
- static int sf_pdma_probe(struct platform_device *pdev)
- {
- 	struct sf_pdma *pdma;
--	struct sf_pdma_chan *chan;
- 	struct resource *res;
--	int len, chans;
- 	int ret;
- 	const enum dma_slave_buswidth widths =
- 		DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
-@@ -492,13 +490,21 @@ static int sf_pdma_probe(struct platform_device *pdev)
- 		DMA_SLAVE_BUSWIDTH_16_BYTES | DMA_SLAVE_BUSWIDTH_32_BYTES |
- 		DMA_SLAVE_BUSWIDTH_64_BYTES;
- 
--	chans = PDMA_NR_CH;
--	len = sizeof(*pdma) + sizeof(*chan) * chans;
--	pdma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
-+	pdma = devm_kzalloc(&pdev->dev, sizeof(*pdma), GFP_KERNEL);
- 	if (!pdma)
- 		return -ENOMEM;
- 
--	pdma->n_chans = chans;
-+	ret = of_property_read_u32(pdev->dev.of_node, "dma-channels",
-+				   &pdma->n_chans);
-+	if (ret) {
-+		dev_notice(&pdev->dev, "set number of channels to default value: 4\n");
-+		pdma->n_chans = PDMA_MAX_NR_CH;
-+	}
-+
-+	if (pdma->n_chans > PDMA_MAX_NR_CH) {
-+		dev_err(&pdev->dev, "the number of channels exceeds the maximum\n");
-+		return -EINVAL;
-+	}
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	pdma->membase = devm_ioremap_resource(&pdev->dev, res);
-@@ -556,7 +562,7 @@ static int sf_pdma_remove(struct platform_device *pdev)
- 	struct sf_pdma_chan *ch;
- 	int i;
- 
--	for (i = 0; i < PDMA_NR_CH; i++) {
-+	for (i = 0; i < pdma->n_chans; i++) {
- 		ch = &pdma->chans[i];
- 
- 		devm_free_irq(&pdev->dev, ch->txirq, ch);
-diff --git a/drivers/dma/sf-pdma/sf-pdma.h b/drivers/dma/sf-pdma/sf-pdma.h
-index 0c20167b097d..8127d792f639 100644
---- a/drivers/dma/sf-pdma/sf-pdma.h
-+++ b/drivers/dma/sf-pdma/sf-pdma.h
-@@ -22,11 +22,7 @@
- #include "../dmaengine.h"
- #include "../virt-dma.h"
- 
--#define PDMA_NR_CH					4
--
--#if (PDMA_NR_CH != 4)
--#error "Please define PDMA_NR_CH to 4"
--#endif
-+#define PDMA_MAX_NR_CH					4
- 
- #define PDMA_BASE_ADDR					0x3000000
- #define PDMA_CHAN_OFFSET				0x1000
-@@ -118,7 +114,7 @@ struct sf_pdma {
- 	void __iomem            *membase;
- 	void __iomem            *mappedbase;
- 	u32			n_chans;
--	struct sf_pdma_chan	chans[PDMA_NR_CH];
-+	struct sf_pdma_chan	chans[PDMA_MAX_NR_CH];
- };
- 
- #endif /* _SF_PDMA_H */
--- 
-2.31.1
-
+Mrs.Bill Chantal

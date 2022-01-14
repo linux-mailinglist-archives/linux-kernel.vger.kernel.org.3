@@ -2,110 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8644448F070
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 20:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFBC948F074
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 20:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235243AbiANTZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 14:25:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232539AbiANTZO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 14:25:14 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF50C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 11:25:14 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id s21-20020a05683004d500b0058f585672efso11235694otd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 11:25:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=oi38lNbF2nCViHYOk3ZTIpO9qvlEErwQJAzcfemw1uo=;
-        b=j+NXxFC+a5tmI+S+u8A/WWv9YGt9fS/U2yQDmTjMDqshvap+8Y9IIwTqPMbVdTttW0
-         XHv6RmZcqWi98cuyRWxGrsTaZvydtCXjj9g0ZwztxBcMzwnAIxRwclgCczlDReIr8CZq
-         oc4/zqCHmhcb5iJ31KiauDT3Jm9CIBZnhhAbQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=oi38lNbF2nCViHYOk3ZTIpO9qvlEErwQJAzcfemw1uo=;
-        b=06gB3PCos0wnaSHOqI2kbvRZZc1yjA6RK7cQAv5E+fhYWWu8gU7rGr59MBzzGC/oLT
-         jyLPe1IwpEVl0s11ubzvLNaVEOFlqPkF/DG5a7EUyTeU6llCxXxhBvqdvlkoZ97GXYmE
-         Xkp8yTiPCFIxn9hUC8VbHdTNs04YHoIpVSt6JqRbp4jN/wlNQl05JPujRNvOEUDfok32
-         k95NhLu7pk6OOwjFQxMyVRh0ueIYZx3yOUakQbpiIEOEwbKjNRwYGURBOkg/AtszvG6X
-         LFBouv1kFAvhDdS4vFwjivdgsuyyJqVdHJ+EpeV3M2ZFcXRd7c85Jj4ZmZBkj8ZtibQm
-         RVHw==
-X-Gm-Message-State: AOAM533I+7l0OPU+3z9m98lWXk1IbudFhU4jgzi3z1BS+5VkBkzDZncU
-        OMVeFnJdG/4B91O9cTzJ1bBiRw+Edy8F4K04VlqI/A==
-X-Google-Smtp-Source: ABdhPJxmzGznCHPz5Ktyt+OWUw/Pygrg4y+fUDgM2f+GRqnM9vz++Zjyencyk8k6Fw+S6E7benyRMBCKUlGdLhbcTS4=
-X-Received: by 2002:a9d:2243:: with SMTP id o61mr7938721ota.126.1642188313396;
- Fri, 14 Jan 2022 11:25:13 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 14 Jan 2022 13:25:12 -0600
+        id S239746AbiANT3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 14:29:04 -0500
+Received: from mga09.intel.com ([134.134.136.24]:63219 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232539AbiANT3D (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 14:29:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642188543; x=1673724543;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5HzOZCZjnBGUrJVEJS7KrjjTa27VP4UpVAznmKydlzg=;
+  b=MxbSgJOGcIefJVkmQRg93NvqXn1aouWH1CcssvqciPsiWK0GlM1Psb+M
+   HvzAdV+fwnkODyh+bJn6GUJiBfq/Fy8gl35QHU2Y3KDltGcoBy3pJV8Ay
+   oWLHI7oki/POaAbxlevGeGf+kDsmdVEEFI74rBiecbJ+U1SsEzX287jJs
+   uXoHxddZV/4PPYTdiqXNB1lFdMLLGUq9F8bR2aT6J4+qN80xDM/RYgV36
+   Eh6my/Ikt7zz30VRcuVcKFbE1/FQUhdNug6soIB5/q2Fe+1R0NcrWY+1G
+   JmQcnLuCFjaZQWscmz8LLhGTfLOSNq6GFgb+yVGlp3vs8brdT7GV0vJEj
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="244108481"
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="244108481"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 11:29:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="491620739"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga002.jf.intel.com with ESMTP; 14 Jan 2022 11:29:02 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, lenb@kernel.org
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2] ACPI / fan: Properly handle fine grain control
+Date:   Fri, 14 Jan 2022 11:29:01 -0800
+Message-Id: <20220114192901.102223-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <nycvar.YFH.7.76.2201140935460.28059@cbobk.fhfr.pm>
-References: <20220107091357.28960-1-xiazhengqiao@huaqin.corp-partner.google.com>
- <nycvar.YFH.7.76.2201140935460.28059@cbobk.fhfr.pm>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 14 Jan 2022 13:25:12 -0600
-Message-ID: <CAE-0n53M723sZ7H-f0SF=AoTrwznmTRhKPapgHe5H7Mw6bPb7Q@mail.gmail.com>
-Subject: Re: [PATCH v2] HID: google: modify HID device groups of eel
-To:     Jiri Kosina <jikos@kernel.org>,
-        Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        Wei-Ning Huang <wnhuang@google.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        "Sean O'Brien" <seobrien@chromium.org>, phoenixshen@chromium.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Jiri Kosina (2022-01-14 00:38:23)
-> On Fri, 7 Jan 2022, Zhengqiao Xia wrote:
->
-> > If HID_GROUP of eel is set to HID_GROUP_GENERIC, Whiskers Tablet
-> > Mode Switch of eel hammer will not be detected by system. when it
-> > is set to HID_GROUP_VIVALDI, system will detect Whiskers Tablet
-> > Mode Switch successfully.
-> >
-> > Signed-off-by: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-> > ---
-> >  drivers/hid/hid-google-hammer.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hid/hid-google-hammer.c b/drivers/hid/hid-google-hammer.c
-> > index 0403beb3104b..e5acd15f4a55 100644
-> > --- a/drivers/hid/hid-google-hammer.c
-> > +++ b/drivers/hid/hid-google-hammer.c
-> > @@ -585,7 +585,7 @@ static void hammer_remove(struct hid_device *hdev)
-> >  static const struct hid_device_id hammer_devices[] = {
-> >       { HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-> >                    USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_DON) },
-> > -     { HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-> > +     { HID_DEVICE(BUS_USB, HID_GROUP_VIVALDI,
-> >                    USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_EEL) },
-> >       { HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
->
-> Color me confused, but anything with HID_GROUP_VIVALDI should be matched
-> by hid-vivaldi driver, so what is this about?
->
+When _FIF object specifies support for fine grain control, then fan speed
+can be set from 0 to 100% with the recommended minimum "step size" via
+_FSL object. Here the control value doesn't need to match any value from
+_FPS object.
 
-My understanding is that 'vivaldi' is mostly a keyboard layout and
-'hammer' is a detachable keyboard. We want to prevent the hid-vivaldi
-driver from probing this particular device because the hid-vivaldi
-driver doesn't know about detachable keyboards. Hammer devices also
-support 360 degree wraparound so we know that the keyboard has been put
-behind the screen or that it's being used to stand up the device on a
-table.
+Currently we have a simple solution implemented which just pick maximum
+control value from _FPS to display the actual state, but this is not
+optimal when there is a big window between two control values in
+_FPS. Also there is no way to set to any speed which doesn't match
+control values in _FPS. The system firmware can start the fan at speed
+which doesn't match any control value.
 
-Given all that, I'm still confused. If we make the hid-google-hammer
-driver probe this device and the keyboard layout is vivaldi then we'd
-want the part of the vivaldi driver that exposes the
-function_row_physmap through sysfs. Otherwise userspace won't know how
-to handle the function row properly. I think we need the device to stack
-two drivers here. Does that happen with HID?
+To support fine grain control via thermal sysfs:
+- cooling device max state is not _FPS state count but it will be
+100 / _FIF.step_size
+- cooling device current state is 100 / _FIF.step_size
+- cooling device set state will set the control value
+curr_state * _FIF.step_size plus any adjustment for 100%.
+By the spec, when control value do not sum to 100% because of
+_FIF.step_size, OSPM may select an appropriate ending Level increment
+to reach 100%.
+
+Also publish the actual fan rpm in sysfs in the same place where
+_FIF objects are displayed. Knowing fan rpm is helpful to reduce noise
+level and use passive control instead. Also fan performance may not be
+same over time, so the same control value may not be enough to run the
+fan at a speed. So a feedback value of speed is helpful. This sysfs
+attribute is called "fan_speed_rpm".
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ .../acpi/fan_performance_states.rst           |  10 ++
+ drivers/acpi/fan.c                            | 146 ++++++++++++++----
+ 2 files changed, 129 insertions(+), 27 deletions(-)
+
+diff --git a/Documentation/admin-guide/acpi/fan_performance_states.rst b/Documentation/admin-guide/acpi/fan_performance_states.rst
+index 98fe5c333121..2a5988d747e5 100644
+--- a/Documentation/admin-guide/acpi/fan_performance_states.rst
++++ b/Documentation/admin-guide/acpi/fan_performance_states.rst
+@@ -60,3 +60,13 @@ For example::
+ 
+ When a given field is not populated or its value provided by the platform
+ firmware is invalid, the "not-defined" string is shown instead of the value.
++
++ACPI Fan Performance Feedback
++=============================
++
++The optional _FST object provides status information for the fan device.
++This includes field to provide current fan speed in revolutions per minute
++at which the fan is rotating.
++
++This speed is presented in the sysfs using the attribute "fan_speed_rpm",
++in the same directory as performance states.
+diff --git a/drivers/acpi/fan.c b/drivers/acpi/fan.c
+index 5cd0ceb50bc8..863cd62422db 100644
+--- a/drivers/acpi/fan.c
++++ b/drivers/acpi/fan.c
+@@ -64,12 +64,19 @@ struct acpi_fan_fif {
+ 	u64 low_speed_notification;
+ };
+ 
++struct acpi_fan_fst {
++	u64 revision;
++	u64 control;
++	u64 speed;
++};
++
+ struct acpi_fan {
+ 	bool acpi4;
+ 	struct acpi_fan_fif fif;
+ 	struct acpi_fan_fps *fps;
+ 	int fps_count;
+ 	struct thermal_cooling_device *cdev;
++	struct device_attribute fst_speed;
+ };
+ 
+ static struct platform_driver acpi_fan_driver = {
+@@ -89,20 +96,23 @@ static int fan_get_max_state(struct thermal_cooling_device *cdev, unsigned long
+ 	struct acpi_device *device = cdev->devdata;
+ 	struct acpi_fan *fan = acpi_driver_data(device);
+ 
+-	if (fan->acpi4)
+-		*state = fan->fps_count - 1;
+-	else
++	if (fan->acpi4) {
++		if (fan->fif.fine_grain_ctrl)
++			*state = 100 / (int)fan->fif.step_size;
++		else
++			*state = fan->fps_count - 1;
++	} else {
+ 		*state = 1;
++	}
++
+ 	return 0;
+ }
+ 
+-static int fan_get_state_acpi4(struct acpi_device *device, unsigned long *state)
++static int fan_get_fps(struct acpi_device *device, struct acpi_fan_fst *fst)
+ {
+ 	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+-	struct acpi_fan *fan = acpi_driver_data(device);
+ 	union acpi_object *obj;
+ 	acpi_status status;
+-	int control, i;
+ 
+ 	status = acpi_evaluate_object(device->handle, "_FST", NULL, &buffer);
+ 	if (ACPI_FAILURE(status)) {
+@@ -119,31 +129,51 @@ static int fan_get_state_acpi4(struct acpi_device *device, unsigned long *state)
+ 		goto err;
+ 	}
+ 
+-	control = obj->package.elements[1].integer.value;
++	fst->revision = obj->package.elements[0].integer.value;
++	fst->control = obj->package.elements[1].integer.value;
++	fst->speed = obj->package.elements[2].integer.value;
++
++	status = 0;
++err:
++	kfree(obj);
++	return status;
++}
++
++static int fan_get_state_acpi4(struct acpi_device *device, unsigned long *state)
++{
++	struct acpi_fan *fan = acpi_driver_data(device);
++	struct acpi_fan_fst fst;
++	int status;
++	int control, i;
++
++	status = fan_get_fps(device, &fst);
++	if (status)
++		return status;
++
++	control = fst.control;
++
++	if (fan->fif.fine_grain_ctrl) {
++		/* This control should be same what we set using _FSL by spec */
++		if (control > 100) {
++			dev_dbg(&device->dev, "Invalid control value returned\n");
++			return -EINVAL;
++		}
++
++		*state = control / (int)fan->fif.step_size;
++		return 0;
++	}
++
+ 	for (i = 0; i < fan->fps_count; i++) {
+-		/*
+-		 * When Fine Grain Control is set, return the state
+-		 * corresponding to maximum fan->fps[i].control
+-		 * value compared to the current speed. Here the
+-		 * fan->fps[] is sorted array with increasing speed.
+-		 */
+-		if (fan->fif.fine_grain_ctrl && control < fan->fps[i].control) {
+-			i = (i > 0) ? i - 1 : 0;
+-			break;
+-		} else if (control == fan->fps[i].control) {
++		if (control == fan->fps[i].control)
+ 			break;
+-		}
+ 	}
+ 	if (i == fan->fps_count) {
+ 		dev_dbg(&device->dev, "Invalid control value returned\n");
+-		status = -EINVAL;
+-		goto err;
++		return -EINVAL;
+ 	}
+ 
+ 	*state = i;
+ 
+-err:
+-	kfree(obj);
+ 	return status;
+ }
+ 
+@@ -187,12 +217,36 @@ static int fan_set_state_acpi4(struct acpi_device *device, unsigned long state)
+ {
+ 	struct acpi_fan *fan = acpi_driver_data(device);
+ 	acpi_status status;
++	u64 value = state;
++	int max_state;
+ 
+-	if (state >= fan->fps_count)
++	if (fan->fif.fine_grain_ctrl)
++		max_state = 100 / (int)fan->fif.step_size;
++	else
++		max_state = fan->fps_count - 1;
++
++	if (state > max_state)
+ 		return -EINVAL;
+ 
+-	status = acpi_execute_simple_method(device->handle, "_FSL",
+-					    fan->fps[state].control);
++	if (fan->fif.fine_grain_ctrl) {
++		int rem;
++
++		value *= fan->fif.step_size;
++
++		/*
++		 * In the event OSPM’s incremental selections of Level
++		 * using the StepSize field value do not sum to 100%,
++		 * OSPM may select an appropriate ending Level
++		 * increment to reach 100%.
++		 */
++		rem = 100 - value;
++		if (rem && rem < fan->fif.step_size)
++			value = 100;
++	} else {
++		value = fan->fps[state].control;
++	}
++
++	status = acpi_execute_simple_method(device->handle, "_FSL", value);
+ 	if (ACPI_FAILURE(status)) {
+ 		dev_dbg(&device->dev, "Failed to set state by _FSL\n");
+ 		return status;
+@@ -258,6 +312,12 @@ static int acpi_fan_get_fif(struct acpi_device *device)
+ 		status = -EINVAL;
+ 	}
+ 
++	/* If there is a bug in step size and set as 0, change to 1 */
++	if (!fan->fif.step_size)
++		fan->fif.step_size = 1;
++	/* If step size > 9, change to 9 (by spec valid values 1-9) */
++	if (fan->fif.step_size > 9)
++		fan->fif.step_size = 9;
+ err:
+ 	kfree(obj);
+ 	return status;
+@@ -303,6 +363,19 @@ static ssize_t show_state(struct device *dev, struct device_attribute *attr, cha
+ 	return count;
+ }
+ 
++static ssize_t show_fan_speed(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct acpi_device *acpi_dev = container_of(dev, struct acpi_device, dev);
++	struct acpi_fan_fst fst;
++	int status;
++
++	status = fan_get_fps(acpi_dev, &fst);
++	if (status)
++		return status;
++
++	return sprintf(buf, "%lld\n", fst.speed);
++}
++
+ static int acpi_fan_get_fps(struct acpi_device *device)
+ {
+ 	struct acpi_fan *fan = acpi_driver_data(device);
+@@ -311,15 +384,25 @@ static int acpi_fan_get_fps(struct acpi_device *device)
+ 	acpi_status status;
+ 	int i;
+ 
++	/* _FST is present if we are here */
++	sysfs_attr_init(&fan->fst_speed.attr);
++	fan->fst_speed.show = show_fan_speed;
++	fan->fst_speed.store = NULL;
++	fan->fst_speed.attr.name = "fan_speed_rpm";
++	fan->fst_speed.attr.mode = 0444;
++	status = sysfs_create_file(&device->dev.kobj, &fan->fst_speed.attr);
++	if (status)
++		return status;
++
+ 	status = acpi_evaluate_object(device->handle, "_FPS", NULL, &buffer);
+ 	if (ACPI_FAILURE(status))
+-		return status;
++		goto rem_attr;
+ 
+ 	obj = buffer.pointer;
+ 	if (!obj || obj->type != ACPI_TYPE_PACKAGE || obj->package.count < 2) {
+ 		dev_err(&device->dev, "Invalid _FPS data\n");
+ 		status = -EINVAL;
+-		goto err;
++		goto rem_attr;
+ 	}
+ 
+ 	fan->fps_count = obj->package.count - 1; /* minus revision field */
+@@ -366,8 +449,17 @@ static int acpi_fan_get_fps(struct acpi_device *device)
+ 		}
+ 	}
+ 
++	if (status)
++		goto err;
++
++	return 0;
++
+ err:
+ 	kfree(obj);
++
++rem_attr:
++	sysfs_remove_file(&device->dev.kobj, &fan->fst_speed.attr);
++
+ 	return status;
+ }
+ 
+-- 
+2.34.1
+

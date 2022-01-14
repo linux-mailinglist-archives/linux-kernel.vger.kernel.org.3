@@ -2,93 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB0948F1C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 21:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE13248F1C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 21:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiANU4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 15:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiANU4T (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 15:56:19 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA2CC06173E
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:56:18 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id c66so8314452wma.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:56:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=a2LK+XCzRUQuX/FKJ8hTnpMWPOfnbChf1uqBe6evn14=;
-        b=TatznFHqz4q/JNQk6ZcSu00tRi1lJns+grkgt68v4JlRwWUwEWskbD7Eo1/QtiimJb
-         2DsQk8udeSaRNeTIxoGMeKXeBZLrdk5C8MmBA4y49hugKr6IyKWjGfjAL5lix6bsA8YK
-         ulzIzHwIN6eFqCez+iFzFoHBlMIrO4dXddOB4EumZ7hYABe22bNEHQyiXlH2ZL2a1DS4
-         d/xnj0pe6mNUK9HfdoYjZ/VFHGZuZpM3k77VpECd0aRmjZop+vebKg17agfiYCAZxTlm
-         IYmfdW7BsxqYNuk4Fh3pl1C5qn2hoPNWzFvLJ5AmgrMfDaJ/Bt2nismRmwww3tSSzu+R
-         r6OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a2LK+XCzRUQuX/FKJ8hTnpMWPOfnbChf1uqBe6evn14=;
-        b=M3jTsYvp4hAsG8VFgG8/44k9JeD/hP58Ur56IVafdQGz29Pp4OOofFG97jFWnJLwCz
-         Qor1wcZ59OJtWi99XnbzjX4Qf+v3pWSIejQr7pL8jChvOdPAEZ5rCVfSNjMtWZ46NXRx
-         qsOxUXn+YdX8Jv2M6MR9uP7J8yXN2f7Osqf64GSRFUAswGXgXOnd+4b9mo7LKp046xmQ
-         NcrEq6iMUtmLDIusqTfEAWgUqiQqMVQGfYfs9tu7GOdLVfVSUU5PHoYqPQk5/37ep1S6
-         S0IOQj/nK0vLLpi8FWL7Zt8SG8/Y3y3+yuFwN5Rf4OVp5XxcWAJs+Fy5YEPK/edgNxQe
-         6xpA==
-X-Gm-Message-State: AOAM530i/u5ak52dZUbGT37OaUr+qRul0OYfOtIlxdD8OtcGEDnyynF4
-        HMDa/AxucpashK4BHoCvlpeyBg==
-X-Google-Smtp-Source: ABdhPJxEOp2Wo1ezLBKMdg3Rs8D9/4m/Bwa6/dloggb4D57MyDeWhvpnWUAVCmPkdzXMY6R9wWCD9A==
-X-Received: by 2002:a1c:1d17:: with SMTP id d23mr9767788wmd.46.1642193777164;
-        Fri, 14 Jan 2022 12:56:17 -0800 (PST)
-Received: from larix (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id p62sm6050452wmp.10.2022.01.14.12.56.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 12:56:16 -0800 (PST)
-Date:   Fri, 14 Jan 2022 20:56:14 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        christophe.jaillet@wanadoo.fr, dapeng1.mi@intel.com,
-        david@redhat.com, elic@nvidia.com, eperezma@redhat.com,
-        flyingpenghao@gmail.com, flyingpeng@tencent.com,
-        gregkh@linuxfoundation.org, guanjun@linux.alibaba.com,
-        jasowang@redhat.com, jiasheng@iscas.ac.cn, johan@kernel.org,
-        keescook@chromium.org, labbott@kernel.org, lingshan.zhu@intel.com,
-        lkp@intel.com, luolikang@nsfocus.com, lvivier@redhat.com,
-        pasic@linux.ibm.com, sgarzare@redhat.com, somlo@cmu.edu,
-        trix@redhat.com, wu000273@umn.edu, xianting.tian@linux.alibaba.com,
-        xuanzhuo@linux.alibaba.com, yun.wang@linux.alibaba.com
-Subject: Re: [GIT PULL] virtio,vdpa,qemu_fw_cfg: features, cleanups, fixes
-Message-ID: <YeHjbqjY8Dd+3o1E@larix>
-References: <20220114153515-mutt-send-email-mst@kernel.org>
+        id S229563AbiANU6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 15:58:32 -0500
+Received: from mga05.intel.com ([192.55.52.43]:49727 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229515AbiANU63 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 15:58:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642193908; x=1673729908;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JmzRu99xoPHOIUL6oRvMiGQeumz3p9hDCpTCwXUwDDU=;
+  b=jaAq9CAgMDVJ3qyaDARNDbilD09mvQf+iNJzk5rwsW/Z/B1jbtaVBOYe
+   w9nacrQg/rcyGg0zapBJjXkkMwSfOq1ggThVcqdtPJc6xL4NkUJLZHaKg
+   B0pvSxdlIrpJxPHegI9EX/8VvzBuVE1j+b1bmHwhRUAlYz12DtJilsSgv
+   JOPiFoQgkkyLAk2GEhjQb4QS18TfNvbAxYJr1ZjU6Or9y+mXVisjMpRmH
+   iDGXKabMhOyds/1vJAA/rx6QlbKuOcS7qz18jSLy8QVpjfxls/jVI8tU9
+   /rJieK/f0TjJ3z+ENZoRKubQY33Jzkf0iwc3P+esSDWl8gpWwIuRxlr++
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="330678355"
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="330678355"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 12:58:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="624475691"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 14 Jan 2022 12:58:26 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8TeU-0008za-4n; Fri, 14 Jan 2022 20:58:26 +0000
+Date:   Sat, 15 Jan 2022 04:58:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [peterz-queue:perf/wip.self 9/9] arch/x86/events/core.c:2725:48:
+ error: use of undeclared identifier 'PERF_X86_EVENT_RDPMC_ALLOWED'
+Message-ID: <202201150418.32fAKxxq-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220114153515-mutt-send-email-mst@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.self
+head:   1b4635e33f629e20b5bbecd62d27c9191d5ec390
+commit: 1b4635e33f629e20b5bbecd62d27c9191d5ec390 [9/9] perf: Better track self-monitoring events
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220115/202201150418.32fAKxxq-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=1b4635e33f629e20b5bbecd62d27c9191d5ec390
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue perf/wip.self
+        git checkout 1b4635e33f629e20b5bbecd62d27c9191d5ec390
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-On Fri, Jan 14, 2022 at 03:35:15PM -0500, Michael S. Tsirkin wrote:
-> Jean-Philippe Brucker (5):
->       iommu/virtio: Add definitions for VIRTIO_IOMMU_F_BYPASS_CONFIG
->       iommu/virtio: Support bypass domains
->       iommu/virtio: Sort reserved regions
->       iommu/virtio: Pass end address to viommu_add_mapping()
->       iommu/virtio: Support identity-mapped domains
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Please could you drop these patches, they are from an old version of the
-series. The newer version was already in Joerg's pull request and was
-merged, so this will conflict.
+All errors (new ones prefixed by >>):
 
-Thanks,
-Jean
+>> arch/x86/events/core.c:2725:48: error: use of undeclared identifier 'PERF_X86_EVENT_RDPMC_ALLOWED'
+           userpg->cap_user_rdpmc = !!(event->hw.flags & PERF_X86_EVENT_RDPMC_ALLOWED);
+                                                         ^
+   1 error generated.
 
+
+vim +/PERF_X86_EVENT_RDPMC_ALLOWED +2725 arch/x86/events/core.c
+
+  2718	
+  2719	void arch_perf_update_userpage(struct perf_event *event,
+  2720				       struct perf_event_mmap_page *userpg, u64 now)
+  2721	{
+  2722		struct cyc2ns_data data;
+  2723		u64 offset;
+  2724	
+> 2725		userpg->cap_user_rdpmc = !!(event->hw.flags & PERF_X86_EVENT_RDPMC_ALLOWED);
+  2726		userpg->pmc_width = x86_pmu.cntval_bits;
+  2727	
+  2728		if (unlikely(!using_native_sched_clock() || !sched_clock_stable())) {
+  2729			userpg->cap_user_time = 0;
+  2730			userpg->cap_user_time_zero = 0;
+  2731			return;
+  2732		}
+  2733	
+  2734		/* already set the time fields before */
+  2735		if (likely(userpg->cap_user_time))
+  2736			return;
+  2737	
+  2738		cyc2ns_read_begin(&data);
+  2739	
+  2740		offset = data.cyc2ns_offset + __sched_clock_offset;
+  2741	
+  2742		/*
+  2743		 * Internal timekeeping for enabled/running/stopped times
+  2744		 * is always in the local_clock domain.
+  2745		 */
+  2746		userpg->cap_user_time = 1;
+  2747		userpg->time_mult = data.cyc2ns_mul;
+  2748		userpg->time_shift = data.cyc2ns_shift;
+  2749		userpg->time_offset = offset - now;
+  2750	
+  2751		/*
+  2752		 * cap_user_time_zero doesn't make sense when we're using a different
+  2753		 * time base for the records.
+  2754		 */
+  2755		if (!event->attr.use_clockid) {
+  2756			userpg->cap_user_time_zero = 1;
+  2757			userpg->time_zero = offset;
+  2758		}
+  2759	
+  2760		cyc2ns_read_end();
+  2761	}
+  2762	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

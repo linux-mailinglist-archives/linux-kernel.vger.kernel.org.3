@@ -2,93 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E098848F1F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E43BE48F1F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiANVNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 16:13:02 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47966 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiANVNA (ORCPT
+        id S229737AbiANVSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 16:18:12 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:59435 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229610AbiANVSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 16:13:00 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 14 Jan 2022 16:18:12 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41BC061F6E;
-        Fri, 14 Jan 2022 21:13:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D6DC36AE5;
-        Fri, 14 Jan 2022 21:12:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642194779;
-        bh=niJzjtKa24M/K9SaTRk1489GynPFKKY7X52fQyZqBjA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NXEylpgU00kAF987ah7HC5CJVS97UihExbToSPmKKjPX6YV4LuqbiAoRoz9TAnFkf
-         K1aaU3L0a/xWKZGmsYpF56VN2CH9RtI/3NXqiH8bOALYd+zhYr/8hwxWqBT5Bi+vS/
-         ngx2MdIqZ/bL7kRhEiM9GHt/phpk9aJLp0ULZAF+xaGFD6wqUfBL4oeUXUeot2hRQJ
-         9lNVAOisVRppl8mt+XWbSsyw33s6ASldILhE3IkKxUsuoFuDLFpJQ5173cEognDBXl
-         CcXWk/l+VdM+hoB6niGS6QKDLseoqyAt9VdxVwWwMiyuXLWPzlGP41OvqC/0By3uXC
-         LJgldWTdYeSOQ==
-Date:   Fri, 14 Jan 2022 23:12:46 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     Tadeusz Struk <tstruk@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com
-Subject: Re: [PATCH v3 1/2] tpm: Fix error handling in async work
-Message-ID: <YeHnTlK+QCZiUyOL@iki.fi>
-References: <20220111055228.1830-1-tstruk@gmail.com>
- <Yd8fY/wixkXhXEFH@iki.fi>
- <3c2eeee7-0d3e-8000-67ad-3054f229cbe0@linaro.org>
- <YeHmB0BWgfVGPL55@iki.fi>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JbDfn6TZnz4y4m;
+        Sat, 15 Jan 2022 08:18:09 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642195090;
+        bh=aqd+9WcXOs53PGQiQ5d6p966oQvb4Ym651YYmVvLbjE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YZax+LF7uTRPl6eHye+HHpO5u/NsJK5NeR25+UgQGkdIgCl8M6If5ejZ/zdbXmQ4n
+         IgiqMrXhU+GrjXWUyYdRB6/eOd27QZgEjzVri4xITP1hX1GfEYvRPqBbj7uSY6Tne8
+         X4qFW7VTTLglalr4h8qv+BwX5ppb2ocZSWFSqFHAjihuuqzPgj5FjF0wzSFm3T0KQc
+         +fMEApy1TvHY5TajYuK9E/Rl3PALgjyaEVFLglJ4LfZ1P98So95eXecCNpWxrnAfQY
+         +FESqhOf0QsDvjmEJ+m4AbjAwdXaVUMFAeYgQ1gGBwKGCPIB6r5ZY9gF8ILBtc5yhT
+         iEqP4EU5C7KJA==
+Date:   Sat, 15 Jan 2022 08:18:09 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lkp@intel.com
+Subject: Re: [PATCH wireless] MAINTAINERS: add common wireless and
+ wireless-next trees
+Message-ID: <20220115081809.64c9fec5@canb.auug.org.au>
+In-Reply-To: <20220114133415.8008-1-kvalo@kernel.org>
+References: <20220114133415.8008-1-kvalo@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeHmB0BWgfVGPL55@iki.fi>
+Content-Type: multipart/signed; boundary="Sig_/54f_YPH=tNa4afEtyMIegyt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 11:07:22PM +0200, Jarkko Sakkinen wrote:
-> On Wed, Jan 12, 2022 at 10:47:29AM -0800, Tadeusz Struk wrote:
-> > On 1/12/22 10:35, Jarkko Sakkinen wrote:
-> > > These look good to me! Thank you. I'm in process of compiling a test
-> > > kernel.
-> > 
-> > Thanks Jarkko,
-> > You can run the new test before and after applying the change and see
-> > how it behaves. Also just noticed a mistake in the comment, sorry but
-> > it was quite late when I sent it.
-> > 
-> > +	/*
-> > +	 * If ret is > 0 then tpm_dev_transmit returned the size of the
-> > +	 * response. If ret is < 0 then tpm_dev_transmit failed and
-> > +	 * returned a return code.
-> > +	 */
-> > 
-> > In the above could you please replace:
-> > 
-> > s/returned a return code/returned an error code/
-> > 
-> > before applying the patch. I would appreciate that.
-> 
-> Please send new versions, there's also this:
-> 
-> def test_flush_invlid_context()
-> 
-> I'd figure "invlid" should be  "invalid"
-> 
-> You can add, as these changes do not change the semantics of the
-> patches:
-> 
-> Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> It's always best if you author the final version, as then a clear
-> reference on what was accepted exist at lore.kernel.org.
+--Sig_/54f_YPH=tNa4afEtyMIegyt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Maybe it is good to mention that the test environment was libvirt hosted
-QEMU using swtpm, which I tried for the first time, instead of real hadware
-(libvirt has a nice property that it handles the startup/shutdown of
-swtpm). I managed to run all tests so I guess swtpm is working properly.
+Hi Kalle,
 
-/Jarkko
+On Fri, 14 Jan 2022 15:34:15 +0200 Kalle Valo <kvalo@kernel.org> wrote:
+>
+> For easier maintenance we have decided to create common wireless and
+> wireless-next trees for all wireless patches. Old mac80211 and wireless-d=
+rivers
+> trees will not be used anymore.
+>=20
+> While at it, add a wiki link to wireless drivers section and a patchwork =
+link
+> to 802.11, mac80211 and rfkill sections.
+>=20
+> Acked-by: Johannes Berg <johannes@sipsolutions.net>
+> Signed-off-by: Kalle Valo <kvalo@kernel.org>
+> ---
+>=20
+> Stephen, please use these new trees in linux-next from now on.
+
+Done from today.  I have set you and Johannes as contacts along with
+the linux-wireless mailing list.  Also, I assume you meant to mention
+that I should use the branches called "main".
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/54f_YPH=tNa4afEtyMIegyt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHh6JEACgkQAVBC80lX
+0GykRwf/dF3ug/FXpM5DXFuCbr7Jxx/z5/BTp5RrYTaNiqiS8xtKDYsUUkvB+ErC
+EcFYzush/ySH743I9rH9TPJxuWn1qt7WOmfkfiWpbCF1+/e+25vD+JfF8E5xWpC1
+TE6//171OE6nX5KcksOpDjf0bg0jKaS6q8BoKByvwEg3NNvsJennJTRHHMeZSJU9
+u56jxF6Elb+WHe4rFSFeoPvBf5SOSk9Ti6nwT334Y3NHm+xKu0cbfbw6Mk8AWzRK
+vSeaOq3GdImBW1bYfUUaxR+Ohes6w/53xU9kpvCLZ1xYjamoWxWJy0OevGCBcGUp
+zoPG7pFdeNvgUwEKdw/4t3biAkDBMQ==
+=E95i
+-----END PGP SIGNATURE-----
+
+--Sig_/54f_YPH=tNa4afEtyMIegyt--

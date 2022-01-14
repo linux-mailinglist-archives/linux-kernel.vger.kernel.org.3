@@ -2,105 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6B448EE93
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCAFA48EE9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:44:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243384AbiANQmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:42:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:35704 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235625AbiANQmN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:42:13 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CBBF76D;
-        Fri, 14 Jan 2022 08:42:12 -0800 (PST)
-Received: from [10.57.67.190] (unknown [10.57.67.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A2F13F766;
-        Fri, 14 Jan 2022 08:42:11 -0800 (PST)
-Message-ID: <d2d54776-b4ee-2cda-334d-f868a6bbdf8b@arm.com>
-Date:   Fri, 14 Jan 2022 16:42:06 +0000
+        id S243550AbiANQoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:44:20 -0500
+Received: from giacobini.uberspace.de ([185.26.156.129]:52290 "EHLO
+        giacobini.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235625AbiANQoT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 11:44:19 -0500
+Received: (qmail 16780 invoked by uid 990); 14 Jan 2022 16:44:17 -0000
+Authentication-Results: giacobini.uberspace.de;
+        auth=pass (plain)
+From:   Soenke Huster <soenke.huster@eknoes.de>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Soenke Huster <soenke.huster@eknoes.de>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] Bluetooth: fix null ptr deref on hci_sync_conn_complete_evt
+Date:   Fri, 14 Jan 2022 17:44:02 +0100
+Message-Id: <20220114164401.330248-1-soenke.huster@eknoes.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 4/4] arm64: dts: rockchip: Enable the GPU on Quartz64
- Model A
-Content-Language: en-GB
-To:     Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
-        Alex Bee <knaerzche@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        linux-rockchip@lists.infradead.org,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-References: <20211126151729.1026566-1-knaerzche@gmail.com>
- <20211126151729.1026566-5-knaerzche@gmail.com>
- <EB2E04F1-BACA-4A4F-97F9-0257F29D57B5@gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <EB2E04F1-BACA-4A4F-97F9-0257F29D57B5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Rspamd-Bar: /
+X-Rspamd-Report: BAYES_HAM(-3) R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) SUSPICIOUS_RECIPS(1.5)
+X-Rspamd-Score: -0.1
+Received: from unknown (HELO unkown) (::1)
+        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Fri, 14 Jan 2022 17:44:17 +0100
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-14 16:25, Piotr Oniszczuk wrote:
-> 
-> 
->> Wiadomość napisana przez Alex Bee <knaerzche@gmail.com> w dniu 26.11.2021, o godz. 16:17:
->>
->> From: Ezequiel Garcia <ezequiel@collabora.com>
->>
->> Enable the GPU core on the Pine64 Quartz64 Model A.
->>
->> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
->> Signed-off-by: Alex Bee <knaerzche@gmail.com>
->> ---
->> arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts | 5 +++++
->> 1 file changed, 5 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
->> index 4d4b2a301b1a..625489c60622 100644
->> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
->> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
->> @@ -205,6 +205,11 @@ &gmac1m0_clkinout
->> 	status = "okay";
->> };
->>
->> +&gpu {
->> +	mali-supply = <&vdd_gpu>;
->> +	status = "okay";
->> +};
->> +
->> &i2c0 {
->> 	status = "okay";
->>
->> -- 
->>
-> 
-> Alex, Ezequiel
-> 
-> I'm playing with 5.16 mainline on rk3566 based tvbox (x96-x6)
-> 
-> Box boots and I have working SD card, Eth, HDMI.
-> 
-> I applied this series as I want to get GPU working but I'm getting:
-> 
-> [    3.169144] panfrost fde60000.gpu: get clock failed -517
-> [    3.169646] panfrost fde60000.gpu: clk init failed -517
-> [    3.213653] panfrost fde60000.gpu: get clock failed -517
-> [    3.214156] panfrost fde60000.gpu: clk init failed -517
-> [    3.230505] panfrost fde60000.gpu: get clock failed -517
-> [    3.231006] panfrost fde60000.gpu: clk init failed -517
-> [    3.258072] panfrost fde60000.gpu: get clock failed -517
-> [    3.258575] panfrost fde60000.gpu: clk init failed -517
-> 
-> Maybe you have some hints here?
+This event is just specified for SCO and eSCO link types.
+On the reception of a HCI_Synchronous_Connection_Complete for a BDADDR
+of an existing LE connection, LE link type and a status that triggers the
+second case of the packet processing a NULL pointer dereference happens,
+as conn->link is NULL.
 
-517 is EPROBE_DEFER, which implies it's waiting for the relevant clock 
-provider to show up. I see from patch #2 that SCMI is involved, so I'd 
-check that that's working and you have CONFIG_COMMON_CLOCK_SCMI enabled.
+Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
+---
+v3: Replace if with switch, reference spec
 
-Robin.
+I found this null pointer dereference while fuzzing bluetooth-next.
+On the described behaviour, a null ptr deref in line 4723 happens, as
+conn->link is NULL. According to the Core spec, Link_Type must be SCO or eSCO,
+all other values are reserved for future use. Checking that mitigates a null
+pointer dereference.
+
+ net/bluetooth/hci_event.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+index fc30f4c03d29..e47cde778b1c 100644
+--- a/net/bluetooth/hci_event.c
++++ b/net/bluetooth/hci_event.c
+@@ -4661,6 +4661,19 @@ static void hci_sync_conn_complete_evt(struct hci_dev *hdev, void *data,
+ 	struct hci_ev_sync_conn_complete *ev = data;
+ 	struct hci_conn *conn;
+ 
++	switch (ev->link_type) {
++	case SCO_LINK:
++	case ESCO_LINK:
++		break;
++	default:
++		/* As per Core 5.3 Vol 4 Part E 7.7.35 (p.2219), Link_Type
++		 * for HCI_Synchronous_Connection_Complete is limited to
++		 * either SCO or eSCO
++		 */
++		bt_dev_err(hdev, "Ignoring connect complete event for invalid link type");
++		return;
++	}
++
+ 	bt_dev_dbg(hdev, "status 0x%2.2x", ev->status);
+ 
+ 	hci_dev_lock(hdev);
+-- 
+2.34.1
+

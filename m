@@ -2,56 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B860248E8D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4873448E8DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240665AbiANLGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 06:06:08 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:39030 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237845AbiANLGH (ORCPT
+        id S240676AbiANLGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 06:06:36 -0500
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:57587 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237845AbiANLGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 06:06:07 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DD5542199C;
-        Fri, 14 Jan 2022 11:06:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642158365; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f5GQsbNODb/boJqO97vFBzxn1VIkOP5hFVYc6+C3Wxg=;
-        b=G4FaGjc0m50ZzuAAHu+SiqSvMJ7HZR0NeUeusNZ+N6ahh/cRuExZIfkna2Q9V6bCyI+6vf
-        J7y4WGXPr7sRFFl6LahWKBeseo2Y4LnkRKxotAk8ypujdFpJRWr9iR0TMjXyDVs4e0vzIq
-        EENBxb4WbftCQF6aKE3gy1ilDII/64I=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 65B9313BFD;
-        Fri, 14 Jan 2022 11:06:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id D82rFR1Z4WFMQQAAMHmgww
-        (envelope-from <nborisov@suse.com>); Fri, 14 Jan 2022 11:06:05 +0000
-Subject: Re: [PATCH] btrfs: zoned: Remove redundant initialization of to_add
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, clm@fb.com
-Cc:     josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20220114104136.3531-1-jiapeng.chong@linux.alibaba.com>
-From:   Nikolay Borisov <nborisov@suse.com>
-Message-ID: <db049584-dc23-78ca-9fc7-0d575855b4ed@suse.com>
-Date:   Fri, 14 Jan 2022 13:06:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 14 Jan 2022 06:06:35 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=cruzzhao@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V1oHN1x_1642158390;
+Received: from 30.21.164.113(mailfrom:cruzzhao@linux.alibaba.com fp:SMTPD_---0V1oHN1x_1642158390)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 14 Jan 2022 19:06:31 +0800
+Message-ID: <e071a66e-e7d5-8657-725b-8d48cb8ddbb7@linux.alibaba.com>
+Date:   Fri, 14 Jan 2022 19:06:30 +0800
 MIME-Version: 1.0
-In-Reply-To: <20220114104136.3531-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH v2 2/3] sched/core: Forced idle accounting per-cpu
 Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, joshdon@google.com, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1641894961-9241-1-git-send-email-CruzZhao@linux.alibaba.com>
+ <1641894961-9241-3-git-send-email-CruzZhao@linux.alibaba.com>
+ <Yd7JO1UYlRXR0dWE@hirez.programming.kicks-ass.net>
+From:   cruzzhao <cruzzhao@linux.alibaba.com>
+In-Reply-To: <Yd7JO1UYlRXR0dWE@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -59,37 +43,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 14.01.22 г. 12:41, Jiapeng Chong wrote:
-> to_add is being initialized to len but this is never read as
-> to_add is overwritten later on. Remove the redundant
-> initialization.
+在 2022/1/12 下午8:27, Peter Zijlstra 写道:
+> On Tue, Jan 11, 2022 at 05:56:00PM +0800, Cruz Zhao wrote:
 > 
-> Cleans up the following clang-analyzer warning:
+>> @@ -1115,6 +1118,7 @@ struct rq {
+>>  	unsigned int		core_forceidle_seq;
+>>  	unsigned int		core_forceidle_occupation;
+>>  	u64			core_forceidle_start;
+>> +	bool			in_forcedidle;
 > 
-> fs/btrfs/extent-tree.c:2769:8: warning: Value stored to 'to_add' during
-> its initialization is never read [clang-analyzer-deadcode.DeadStores].
+> naming is wrong
+> 
+>>  #endif
+>>  };
+>>  
+>> diff --git a/kernel/sched/stats.c b/kernel/sched/stats.c
+>> index 07dde29..ea22a8c 100644
+>> --- a/kernel/sched/stats.c
+>> +++ b/kernel/sched/stats.c
+>> @@ -108,6 +108,16 @@ void __update_stats_enqueue_sleeper(struct rq *rq, struct task_struct *p,
+>>  	}
+>>  }
+>>  
+>> +#ifdef CONFIG_SCHED_CORE
+>> +static inline u64 get_rq_forceidle_time(struct rq *rq) {
+>> +	return rq->rq_forceidle_time;
+>> +}
+>> +#else
+>> +static inline u64 get_rq_forceidle_time(struct rq *rq) {
+>> +	return 0;
+>> +}
+>> +#endif
+> 
+> indent is wrong, and if you put the #ifdef inside the function it'll be
+> smaller.
 
-To make it even better it would be good if to_add is define within the
-if (!global_rsv->full) branch.
+Thanks for reviewing and suggestions, I'll fix these problems in the
+next version.
 
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  fs/btrfs/extent-tree.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/btrfs/extent-tree.c b/fs/btrfs/extent-tree.c
-> index d89273c4b6b8..37117b62d005 100644
-> --- a/fs/btrfs/extent-tree.c
-> +++ b/fs/btrfs/extent-tree.c
-> @@ -2766,7 +2766,7 @@ static int unpin_extent_range(struct btrfs_fs_info *fs_info,
->  		spin_unlock(&cache->lock);
->  		if (!readonly && return_free_space &&
->  		    global_rsv->space_info == space_info) {
-> -			u64 to_add = len;
-> +			u64 to_add;
->  
->  			spin_lock(&global_rsv->lock);
->  			if (!global_rsv->full) {
-> 
+Best,
+Cruz Zhao

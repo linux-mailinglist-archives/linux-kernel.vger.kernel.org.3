@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD7C48E1B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB5448E1B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238506AbiANAnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 19:43:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S238536AbiANAnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 19:43:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238494AbiANAnp (ORCPT
+        with ESMTP id S238509AbiANAns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 19:43:45 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434EDC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 16:43:45 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id u11so6714551plh.13
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 16:43:45 -0800 (PST)
+        Thu, 13 Jan 2022 19:43:48 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB06C06173F
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 16:43:47 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id c14-20020a17090a674e00b001b31e16749cso20445412pjm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 16:43:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oOZFo592UdILGLoDGp89AJsD2A4mJA4MyK/MjP77tbM=;
-        b=KVtjLHwGb6AIYwNB2flGInGHH25R4C1NvHcO4uZ8yoKCbfn0+Msq843IYhj7uZq/vQ
-         MwTR1deqYLnUiV+tPYUT1SxADF8NuBmWTgYjcbJMzW/oveN6bXrJOkXYrAHDOj4IS/6W
-         iTvkVbjk872M6Df84PDyn0W4FMA5Cc0Gik5sE=
+        bh=KPH9MdMa3cqYY1dvpEd/g8+Q5deKc0MlMiTcTnUUQhQ=;
+        b=WKvsc+D6lFQmmv9j3obln12T77VzpHb7Rjj6wAzzwpLQwb2y15SMgdL3vjvUgDzxXV
+         hTFTxwk4lmB14uFWtcElWVIPnEq5KwglY+III1A3wUB4fRCti06wMVTs1YfV8W7DliOg
+         g7F4w7vSqsdGqIn+hXl233oWcDSPZUPkGpHp4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oOZFo592UdILGLoDGp89AJsD2A4mJA4MyK/MjP77tbM=;
-        b=YuLvxr9snQVxVEDRjjNddxbbilf3Ja4IiJwBz/m8cb+pNlFYgGo2MlpjGFv7c0kbe+
-         cbtE2/mlcYtHx5iMRePluVEQbpB/XZXnkzD3RRTYQMspjG0fBhM3vUeWL7Ga4r3tdHxi
-         nZSSd+/oVzuW536Rr6QbfnLmXcqKoWVmtsFH5r42EM5QyLSr+4a5JchseM/QH7x/SAgZ
-         3r9NPEvbTvxXeNO72sI6jcepK/0xjVLota7F6wDRJq1mgfq4wMWjHnLDnxOYFuU9yMWy
-         QSruex/ewbCgiwfm5SvcZ8K4IdTX/S1I3fNt1UVMbZFMgReSri02tPnKCgwCmy070Vp2
-         v7lQ==
-X-Gm-Message-State: AOAM530XGEDY+8RUVvTdTb7Xx8nTjpUEBOMM/kLpLm1uiRi7qS9EGMRA
-        j758igj9X5ZoL2zLhcswhndOBQ==
-X-Google-Smtp-Source: ABdhPJwDuaMnySixe3jTI1iHzgs7G0LVCvvJSBOHLiQ/cTDNRUNlQr2UlYRo6HR3kTGONiNN+mBqXQ==
-X-Received: by 2002:a17:903:41c4:b0:14a:4baa:4261 with SMTP id u4-20020a17090341c400b0014a4baa4261mr7058413ple.174.1642121024840;
-        Thu, 13 Jan 2022 16:43:44 -0800 (PST)
+        bh=KPH9MdMa3cqYY1dvpEd/g8+Q5deKc0MlMiTcTnUUQhQ=;
+        b=u1e1lduKHXIZky7gEV67XdRVTTdd6pL+yIDKp3nzvmoE/KTHBbk64TAdr5MTCejWYi
+         iIPlgaGtuUxDnY4RVzTUveaDi1lCJDcL+DGkcxjrwZ/rhfHWfZppXSF2InVQxaX8ypbL
+         ZCPgq/r9Qutnga63Pd0SltnBolr4XXqcsbF7BoA1/pLT1XXusi/ezz+qnbrqxiy63T0P
+         /X9yRaLV4tVHfuTarIE06UTZtroXtl24VdbU9X7RfGG42iYpDnOHQgZrhXk0v09meYn2
+         tAjNBkbBPQUedfbBZZMYhkpDxotuEY7em8cAFqVMWpcUA6CfWmv7KP2fSd7/OpF+AAql
+         nmoA==
+X-Gm-Message-State: AOAM532m90ZxUwIB6q66i6C5Kxu8T7x73HaHGGIR/aqXt2mUpawggh6v
+        aRPNF1mhnrr000kLwRSF9gmqnA==
+X-Google-Smtp-Source: ABdhPJwga6MdqoYEM0yEgEBRrzFGTrEfCzIz4msejiiJRCDJu2kU2UyfSQYj8CRqK5bPun8Zs29BBA==
+X-Received: by 2002:a17:90a:1b28:: with SMTP id q37mr7852559pjq.48.1642121026291;
+        Thu, 13 Jan 2022 16:43:46 -0800 (PST)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:cf6e:9fa9:a398:4c9])
-        by smtp.gmail.com with ESMTPSA id j4sm4061498pfj.217.2022.01.13.16.43.43
+        by smtp.gmail.com with ESMTPSA id j4sm4061498pfj.217.2022.01.13.16.43.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 16:43:44 -0800 (PST)
+        Thu, 13 Jan 2022 16:43:45 -0800 (PST)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     quic_rjendra@quicinc.com, sibis@codeaurora.org,
@@ -53,9 +53,9 @@ Cc:     quic_rjendra@quicinc.com, sibis@codeaurora.org,
         Andy Gross <agross@kernel.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] arm64: dts: qcom: sc7280: Move herobrine-r0 to its own dts
-Date:   Thu, 13 Jan 2022 16:43:01 -0800
-Message-Id: <20220113164233.2.Id9716db8c133bcb14c9413144048f8d00ae2674f@changeid>
+Subject: [PATCH 3/4] arm64: dts: qcom: sc7280: Factor out Chrome common fragment
+Date:   Thu, 13 Jan 2022 16:43:02 -0800
+Message-Id: <20220113164233.3.Iac012fa8d727be46448d47027a1813ea716423ce@changeid>
 X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
 In-Reply-To: <20220114004303.905808-1-dianders@chromium.org>
 References: <20220114004303.905808-1-dianders@chromium.org>
@@ -65,85 +65,345 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The upcoming herobrine-r1 board is really not very similar to
-herobrine-r0. Let's get rid of the "herobrine.dtsi" file and stick all
-the content in the -r0 dts file directly. We'll also rename the dts so
-it's obvious that it's just for -r0.
+This factors out a device tree fragment from some sc7280 device
+trees. It represents the device tree bits that should be included for
+"Chrome" based sc7280 boards. On these boards the bootloader (Coreboot
++ Depthcharge) configures things slightly different than the
+bootloader that Qualcomm provides. The modem firmware on these boards
+also works differently than on other Qulacomm products and thus the
+reserved memory map needs to be adjusted.
 
-While renaming, let's actually name the file so it's obvious that
-"herobrine" is both the name of the board and the name of the
-"baseboard". In other words "herobrine" is an actual board but also
-often used as the name of a whole class of similar boards that forked
-from a design. While "herobrine-herobrine" is a bit of mouthful it
-makes it more obvious which things are part of an actual board rather
-than the baseboard.
-
-NOTE: herobrine-rev0's days are likely doomed and this device tree is
-likely to be deleted in the future.
+NOTES:
+- This is _not_ quite a no-op change. The "herobrine" and "idp"
+  fragments here were different and it looks like someone simply
+  forgot to update the herobrine version. This updates a few numbers
+  to match IDP. This will also cause the `pmk8350_pon` to be disabled
+  on idp/crd, which I belive is a correct change.
+- At the moment this assumes LTE skus. Once it's clearer how WiFi SKUs
+  will work (how much of the memory map they can reclaim) we may add
+  an extra fragment that will rejigger one way or the other.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
- arch/arm64/boot/dts/qcom/Makefile                  |  2 +-
- ...rine.dtsi => sc7280-herobrine-herobrine-r0.dts} |  6 ++++++
- arch/arm64/boot/dts/qcom/sc7280-herobrine.dts      | 14 --------------
- 3 files changed, 7 insertions(+), 15 deletions(-)
- rename arch/arm64/boot/dts/qcom/{sc7280-herobrine.dtsi => sc7280-herobrine-herobrine-r0.dts} (99%)
- delete mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine.dts
+ .../boot/dts/qcom/sc7280-chrome-common.dtsi   | 97 +++++++++++++++++++
+ .../qcom/sc7280-herobrine-herobrine-r0.dts    | 70 +------------
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      | 75 +-------------
+ 3 files changed, 101 insertions(+), 141 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index f7232052d286..9db743826391 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -82,7 +82,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r3.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r3-lte.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1-lte.dtb
--dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r0.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts
-similarity index 99%
-rename from arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-rename to arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts
-index 4619fa9fcacd..8676c93590b5 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+new file mode 100644
+index 000000000000..9d4f25f77152
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+@@ -0,0 +1,97 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * sc7280 fragment for devices with Chrome bootloader
++ *
++ * This file mainly tries to abstract out the memory protections put into
++ * place by the Chrome bootloader which are different than what's put into
++ * place by Qualcomm's typical bootloader. It also has a smattering of other
++ * things that will hold true for any conceivable Chrome design
++ *
++ * Copyright 2022 Google LLC.
++ */
++
++/*
++ * Reserved memory changes
++ *
++ * Delete all unused memory nodes and define the peripheral memory regions
++ * required by the setup for Chrome boards.
++ */
++
++/delete-node/ &hyp_mem;
++/delete-node/ &xbl_mem;
++/delete-node/ &reserved_xbl_uefi_log;
++/delete-node/ &sec_apps_mem;
++
++/ {
++	reserved-memory {
++		adsp_mem: memory@86700000 {
++			reg = <0x0 0x86700000 0x0 0x2800000>;
++			no-map;
++		};
++
++		camera_mem: memory@8ad00000 {
++			reg = <0x0 0x8ad00000 0x0 0x500000>;
++			no-map;
++		};
++
++		venus_mem: memory@8b200000 {
++			reg = <0x0 0x8b200000 0x0 0x500000>;
++			no-map;
++		};
++
++		mpss_mem: memory@8b800000 {
++			reg = <0x0 0x8b800000 0x0 0xf600000>;
++			no-map;
++		};
++
++		wpss_mem: memory@9ae00000 {
++			reg = <0x0 0x9ae00000 0x0 0x1900000>;
++			no-map;
++		};
++
++		mba_mem: memory@9c700000 {
++			reg = <0x0 0x9c700000 0x0 0x200000>;
++			no-map;
++		};
++	};
++};
++
++/* The PMIC PON code isn't compatible w/ how Chrome EC/BIOS handle things. */
++&pmk8350_pon {
++	status = "disabled";
++};
++
++/*
++ * Chrome designs always boot from SPI flash hooked up to the qspi.
++ *
++ * It's expected that all boards will support "dual SPI" at 37.5 MHz.
++ * If some boards need a different speed or have a package that allows
++ * Quad SPI together with WP then those boards can easily override.
++ */
++&qspi {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&qspi_clk>, <&qspi_cs0>, <&qspi_data01>;
++
++	spi_flash: flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++
++		spi-max-frequency = <37500000>;
++		spi-tx-bus-width = <2>;
++		spi-rx-bus-width = <2>;
++	};
++};
++
++/* Modem setup is different on Chrome setups than typical Qualcomm setup */
++&remoteproc_mpss {
++	status = "okay";
++	compatible = "qcom,sc7280-mss-pil";
++	iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
++	memory-region = <&mba_mem &mpss_mem>;
++};
++
++/* Increase the size from 2.5MB to 8MB */
++&rmtfs_mem {
++	reg = <0x0 0x9c900000 0x0 0x800000>;
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts
+index 8676c93590b5..67680a13c234 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts
 +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts
-@@ -22,6 +22,12 @@
+@@ -22,62 +22,15 @@
  #include "pm8350c.dtsi"
  #include "pmk8350.dtsi"
  
-+/ {
-+	model = "Google Herobrine (rev0)";
-+	compatible = "google,herobrine",
-+		     "qcom,sc7280";
-+};
++#include "sc7280-chrome-common.dtsi"
 +
- /*
-  * Reserved memory changes
-  *
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dts
-deleted file mode 100644
-index 7a92679a688b..000000000000
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dts
-+++ /dev/null
-@@ -1,14 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ / {
+ 	model = "Google Herobrine (rev0)";
+ 	compatible = "google,herobrine",
+ 		     "qcom,sc7280";
+ };
+ 
 -/*
-- * Google Herobrine board device tree source
+- * Reserved memory changes
 - *
-- * Copyright 2021 Google LLC.
+- * Delete all unused memory nodes and define the peripheral memory regions
+- * required by the board dts.
+- *
 - */
 -
--#include "sc7280-herobrine.dtsi"
+-/delete-node/ &hyp_mem;
+-/delete-node/ &xbl_mem;
+-/delete-node/ &sec_apps_mem;
+-
+-/* Increase the size from 2MB to 8MB */
+-&rmtfs_mem {
+-	reg = <0x0 0x83600000 0x0 0x800000>;
+-};
+-
+ / {
+-	reserved-memory {
+-		adsp_mem: memory@86700000 {
+-			reg = <0x0 0x86700000 0x0 0x2800000>;
+-			no-map;
+-		};
+-
+-		camera_mem: memory@8ad00000 {
+-			reg = <0x0 0x8ad00000 0x0 0x500000>;
+-			no-map;
+-		};
+-
+-		venus_mem: memory@8b200000 {
+-			reg = <0x0 0x8b200000 0x0 0x500000>;
+-			no-map;
+-		};
+-
+-		mpss_mem: memory@8b800000 {
+-			reg = <0x0 0x8b800000 0x0 0xf600000>;
+-			no-map;
+-		};
+-
+-		wpss_mem: memory@9ae00000 {
+-			reg = <0x0 0x9ae00000 0x0 0x1900000>;
+-			no-map;
+-		};
+-
+-		mba_mem: memory@9c700000 {
+-			reg = <0x0 0x9c700000 0x0 0x200000>;
+-			no-map;
+-		};
+-	};
+-
+ 	aliases {
+ 		serial0 = &uart5;
+ 		serial1 = &uart7;
+@@ -691,10 +644,6 @@ &pmk8350_gpios {
+ 	status = "disabled"; /* No GPIOs are connected */
+ };
+ 
+-&pmk8350_pon {
+-	status = "disabled";
+-};
+-
+ &pmk8350_rtc {
+ 	status = "disabled";
+ };
+@@ -717,21 +666,6 @@ &qfprom {
+ 	vcc-supply = <&vdd_qfprom>;
+ };
+ 
+-&qspi {
+-	status = "okay";
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&qspi_clk>, <&qspi_cs0>, <&qspi_data01>;
+-
+-	flash@0 {
+-		compatible = "jedec,spi-nor";
+-		reg = <0>;
+-
+-		spi-max-frequency = <37500000>;
+-		spi-tx-bus-width = <2>;
+-		spi-rx-bus-width = <2>;
+-	};
+-};
+-
+ &qupv3_id_0 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index d623d71d8bd4..98c8f39ce459 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -13,6 +13,8 @@
+ #include "pm8350c.dtsi"
+ #include "pmk8350.dtsi"
+ 
++#include "sc7280-chrome-common.dtsi"
++
+ / {
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+@@ -45,58 +47,6 @@ nvme_3v3_regulator: nvme-3v3-regulator {
+ 	};
+ };
+ 
+-/*
+- * Reserved memory changes
+- *
+- * Delete all unused memory nodes and define the peripheral memory regions
+- * required by the board dts.
+- *
+- */
+-
+-/delete-node/ &hyp_mem;
+-/delete-node/ &xbl_mem;
+-/delete-node/ &reserved_xbl_uefi_log;
+-/delete-node/ &sec_apps_mem;
+-
+-/* Increase the size from 2.5MB to 8MB */
+-&rmtfs_mem {
+-	reg = <0x0 0x9c900000 0x0 0x800000>;
+-};
 -
 -/ {
--	model = "Google Herobrine";
--	compatible = "google,herobrine",
--		     "qcom,sc7280";
+-	reserved-memory {
+-		adsp_mem: memory@86700000 {
+-			reg = <0x0 0x86700000 0x0 0x2800000>;
+-			no-map;
+-		};
+-
+-		camera_mem: memory@8ad00000 {
+-			reg = <0x0 0x8ad00000 0x0 0x500000>;
+-			no-map;
+-		};
+-
+-		venus_mem: memory@8b200000 {
+-			reg = <0x0 0x8b200000 0x0 0x500000>;
+-			no-map;
+-		};
+-
+-		mpss_mem: memory@8b800000 {
+-			reg = <0x0 0x8b800000 0x0 0xf600000>;
+-			no-map;
+-		};
+-
+-		wpss_mem: memory@9ae00000 {
+-			reg = <0x0 0x9ae00000 0x0 0x1900000>;
+-			no-map;
+-		};
+-
+-		mba_mem: memory@9c700000 {
+-			reg = <0x0 0x9c700000 0x0 0x200000>;
+-			no-map;
+-		};
+-	};
 -};
+-
+ &apps_rsc {
+ 	pm7325-regulators {
+ 		compatible = "qcom,pm7325-rpmh-regulators";
+@@ -313,20 +263,6 @@ &qfprom {
+ 	vcc-supply = <&vreg_l1c_1p8>;
+ };
+ 
+-&qspi {
+-	status = "okay";
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&qspi_clk>, <&qspi_cs0>, <&qspi_data01>;
+-
+-	flash@0 {
+-		compatible = "jedec,spi-nor";
+-		reg = <0>;
+-		spi-max-frequency = <37500000>;
+-		spi-tx-bus-width = <2>;
+-		spi-rx-bus-width = <2>;
+-	};
+-};
+-
+ &qupv3_id_0 {
+ 	status = "okay";
+ };
+@@ -335,13 +271,6 @@ &qupv3_id_1 {
+ 	status = "okay";
+ };
+ 
+-&remoteproc_mpss {
+-	status = "okay";
+-	compatible = "qcom,sc7280-mss-pil";
+-	iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
+-	memory-region = <&mba_mem &mpss_mem>;
+-};
+-
+ &sdhc_1 {
+ 	status = "okay";
+ 
 -- 
 2.34.1.703.g22d0c6ccf7-goog
 

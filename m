@@ -2,133 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCDA48E691
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCFB48E696
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbiANIcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:32:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47066 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233270AbiANIcB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:32:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642149120;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4e3R0cGDEuzfJCTMeYBZ008JX3SkTwc1ShwrpVRZ6sY=;
-        b=Ic8tZhd+tdHq0swuzkL607OV4PxiFkUrEfLUVDEw41zHOM5pNRf0m5JVFqgrYsDenlZWfJ
-        iDOJviDs3LI21/9NtmIv9CKbNlGFpXn+TqF48hJI17u5tlnPnQfrBpDdhcZIXp1ikoBNbe
-        gvayDGXZ9Whp5uPi2WvVU08YAiCawmw=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-370-arcgUfW3OvOYkra2FIuutQ-1; Fri, 14 Jan 2022 03:31:59 -0500
-X-MC-Unique: arcgUfW3OvOYkra2FIuutQ-1
-Received: by mail-ed1-f69.google.com with SMTP id z8-20020a056402274800b003f8580bfb99so7735813edd.11
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 00:31:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4e3R0cGDEuzfJCTMeYBZ008JX3SkTwc1ShwrpVRZ6sY=;
-        b=k/kmJnNuODhHKo6xRDmY7B9yinpeBZpMBozQI31yjkpEmPIrzSDYInF3YeSd08Ngiu
-         slcd5tw1MO+BKik+h/mtlJIoydvHHyEAPrWrst/tZTcJslU7revbR9Hv3Eeipak0lH1b
-         Qs9G/l64wcdWOPXTFD6FGL0RI8RNbus5rpABG1sNXJcIiWOPs/BgFm8sux4ROsG6rwUs
-         J92j/48sZyvUMP5dZzLiw5a6CT+72Tk5PJ+uXy12UsYNO+oDjQZWCVaIO1W3LaCUvA3s
-         tW4JUApwxtFLNkrWcTYuAqfFLyI9vXjqSiWa+wQpiNGoqgec7mKcBCZwT+dIdp4t0TOj
-         I6Fg==
-X-Gm-Message-State: AOAM533pXYb/4+F34o4k5KZCa1g9A65Bo/0CsXDhxS2fHp1hmpzNudEo
-        ueb0yFKW8mliwp3gAuBvEkiqfu3E7BSJjr+7yYzuhr0JjpqCbFVIcgnrvTlxPlAoOrUz6szRyW3
-        IjDoGfry2g5HlwZrvWLJyaiGe
-X-Received: by 2002:a17:907:7b9a:: with SMTP id ne26mr6794417ejc.24.1642149117765;
-        Fri, 14 Jan 2022 00:31:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyc7ZUjSZiOi4vR7JBwLNXvaLjQlMFxrVHe1I54Rh0HNGyN31qRHcwp/dgJR+l4YdLADSfyPQ==
-X-Received: by 2002:a17:907:7b9a:: with SMTP id ne26mr6794377ejc.24.1642149117132;
-        Fri, 14 Jan 2022 00:31:57 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id 17sm1623091ejo.27.2022.01.14.00.31.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 00:31:56 -0800 (PST)
-Message-ID: <2d6ab8ab-79c8-681b-a898-a88b48fceb55@redhat.com>
-Date:   Fri, 14 Jan 2022 09:31:55 +0100
+        id S233356AbiANIdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:33:40 -0500
+Received: from mga05.intel.com ([192.55.52.43]:26713 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231472AbiANIdj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 03:33:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642149219; x=1673685219;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SP5uKYsWvxtFx7YjJ4PgaYlzJmeTwx2UzB3SXbUqZS8=;
+  b=nz5zyhE/0UhTyp5YNEZYsU02f7bWfq5XGuTVvf74+lqy/Nd6QyA8PuRo
+   i8p50Onx7f7A9aJ5YNKqdDzubmmFKGBBAoYd/+ce077T7TuHQbDZ7HMTn
+   XwGjLlLmrt0GyJI8zIU52sGLS32rVjNzKSwoYz9e+syKk5Hcd58yQ9m8A
+   7N3f0XhX4a+1NKQG2/m+eAd8fWb/8qWJKMeZKY/1cL0c/j7olDLz/NraF
+   2w9iV00Jg/Jh3soeYZkPNrt/CebXG5MQ/K6sx71U/awK/9kKde/PxJ4fJ
+   /qeBACekV21itEnQOKhb9dslFsUUsYqQX4qDrhfSXMjhTRrufKJw37S4+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="330557516"
+X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
+   d="scan'208";a="330557516"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 00:33:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
+   d="scan'208";a="529266915"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 14 Jan 2022 00:33:35 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8I1e-0008Ir-KT; Fri, 14 Jan 2022 08:33:34 +0000
+Date:   Fri, 14 Jan 2022 16:32:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Thomas Gleixner <tglx@linutronix.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-m68k@lists.linux-m68k.org,
+        John Stultz <john.stultz@linaro.org>,
+        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v6 3/4] clocksource/drivers: Add a goldfish-timer
+ clocksource
+Message-ID: <202201141640.iSJ8IkCj-lkp@intel.com>
+References: <20220113201920.3201760-4-laurent@vivier.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 2/5] platform: surface: Propagate ACPI Dependency
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Jarrett Schultz <jaschultzms@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Gross <markgross@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Jarrett Schultz <jaschultz@microsoft.com>
-References: <20211202191630.12450-1-jaschultz@microsoft.com>
- <20211202191630.12450-3-jaschultz@microsoft.com>
- <CAMuHMdUPwo7pCSwY8_9xTaDruTHt6d=wHiNHvRmE71k8hWeLBw@mail.gmail.com>
- <87czku4z2i.fsf@kernel.org>
- <CAMuHMdWEh07zXZZesuY0sksXaa6ptDvv3Fv4UC1RDkf7_KUv8w@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAMuHMdWEh07zXZZesuY0sksXaa6ptDvv3Fv4UC1RDkf7_KUv8w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220113201920.3201760-4-laurent@vivier.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Laurent,
 
-On 1/14/22 09:29, Geert Uytterhoeven wrote:
-> Hi Felipe,
-> 
-> On Fri, Jan 14, 2022 at 7:21 AM Felipe Balbi <balbi@kernel.org> wrote:
->> Geert Uytterhoeven <geert@linux-m68k.org> writes:
->>> On Mon, Dec 6, 2021 at 4:03 PM Jarrett Schultz <jaschultzms@gmail.com> wrote:
->>>> Since the Surface XBL Driver does not depend on ACPI, the
->>>> platform/surface directory as a whole no longer depends on ACPI. With
->>>> respect to this, the ACPI dependency is moved into each config that depends
->>>> on ACPI individually.
->>>>
->>>> Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
->>>
->>> Thanks for your patch, which is now commit 272479928172edf0 ("platform:
->>> surface: Propagate ACPI Dependency").
->>>
->>>> --- a/drivers/platform/surface/Kconfig
->>>> +++ b/drivers/platform/surface/Kconfig
->>>> @@ -5,7 +5,6 @@
->>>>
->>>>  menuconfig SURFACE_PLATFORMS
->>>>         bool "Microsoft Surface Platform-Specific Device Drivers"
->>>> -       depends on ACPI
->>>>         default y
->>>>         help
->>>>           Say Y here to get to see options for platform-specific device drivers
->>>
->>> Without any dependency, all users configuring a kernel are now asked
->>> about this. Is there any other platform dependency that can be used
->>> instead?
->>
->> there's probably no symbol that would be true for x86 and arm64 while
->> being false for everything else. Any ideas?
-> 
-> depends on ARM64 || X86 || COMPILE_TEST?
+Thank you for the patch! Yet something to improve:
 
-That sounds reasonable to me, I would be happy to take a patch for that.
+[auto build test ERROR on geert-m68k/for-next]
+[also build test ERROR on linux/master v5.16]
+[cannot apply to tip/timers/core linus/master next-20220114]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Regards,
+url:    https://github.com/0day-ci/linux/commits/Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20220114-042103
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git for-next
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20220114/202201141640.iSJ8IkCj-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/7e887e6ec0d7193083a2f0020007688db2318c76
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20220114-042103
+        git checkout 7e887e6ec0d7193083a2f0020007688db2318c76
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash drivers/
 
-Hans
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/clocksource/timer-goldfish.c: In function 'goldfish_timer_init':
+>> drivers/clocksource/timer-goldfish.c:94:20: error: implicit declaration of function 'kzalloc'; did you mean 'vzalloc'? [-Werror=implicit-function-declaration]
+      94 |         timerdrv = kzalloc(sizeof(*timerdrv), GFP_KERNEL);
+         |                    ^~~~~~~
+         |                    vzalloc
+   drivers/clocksource/timer-goldfish.c:94:18: warning: assignment to 'struct goldfish_timer *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+      94 |         timerdrv = kzalloc(sizeof(*timerdrv), GFP_KERNEL);
+         |                  ^
+   cc1: some warnings being treated as errors
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for RTC_CLASS
+   Depends on !S390
+   Selected by
+   - GOLDFISH_TIMER && GENERIC_CLOCKEVENTS
+   WARNING: unmet direct dependencies detected for RTC_DRV_GOLDFISH
+   Depends on RTC_CLASS && HAS_IOMEM
+   Selected by
+   - GOLDFISH_TIMER && GENERIC_CLOCKEVENTS
 
 
+vim +94 drivers/clocksource/timer-goldfish.c
+
+    88	
+    89	void __init goldfish_timer_init(int irq, void __iomem *base)
+    90	{
+    91		struct goldfish_timer *timerdrv;
+    92		int ret;
+    93	
+  > 94		timerdrv = kzalloc(sizeof(*timerdrv), GFP_KERNEL);
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

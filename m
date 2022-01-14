@@ -2,275 +2,519 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E7848EB2B
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1750B48EB4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241255AbiANOBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 09:01:12 -0500
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:42856 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230472AbiANOBK (ORCPT
+        id S237452AbiANOKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 09:10:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231331AbiANOKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:01:10 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R261e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=guoheyi@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V1pIrib_1642168867;
-Received: from 30.39.196.58(mailfrom:guoheyi@linux.alibaba.com fp:SMTPD_---0V1pIrib_1642168867)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 14 Jan 2022 22:01:08 +0800
-Message-ID: <e62fba0b-ebb9-934a-d7cf-6da33ecc4335@linux.alibaba.com>
-Date:   Fri, 14 Jan 2022 22:01:07 +0800
+        Fri, 14 Jan 2022 09:10:38 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB14FC061574;
+        Fri, 14 Jan 2022 06:10:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=00gnKZzNat2QdmQR8Oe1xgTfylUYzk2oj+Q2hjgiK+Y=; b=W/jjhKq3gAED8iYq2GUoPYlma5
+        bD4Egg6Ado/KCN/dlsmOI2hKH0jz9losKIDaVgmzo4G/K/xnUNOGuqxnMROu/2Hd0Lq0qxtthR5Bn
+        JZ02gHYtYaviEjAo7c2kS6vIJ9RQaKYGUqhVTHlgEfwpMDU7pvAGIybqBOEflOVmQyeptPP2n8pjb
+        Nlo6L/G/jnaWW25g0JHYZ5dKBWydPn0O39BppGXKyPhqsvSwC1oLHYEImOJY0ynEWdQwShJiwbmcJ
+        j4Mz5frMtfbA5NIkyH7OshdYKCDASvrmeY4Wi6wsDTKiT6SnZqjZzUEFVn1w4c2+WGiS6wYwNfr6o
+        K64vkH4A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n8NHC-0019ca-Lo; Fri, 14 Jan 2022 14:10:00 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D982D3002C1;
+        Fri, 14 Jan 2022 15:09:55 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 875452B323542; Fri, 14 Jan 2022 15:09:55 +0100 (CET)
+Date:   Fri, 14 Jan 2022 15:09:55 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Peter Oskolkov <posk@posk.io>
+Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
+        pjt@google.com, posk@google.com, avagin@google.com,
+        jannh@google.com, tdelisle@uwaterloo.ca
+Subject: Re: [RFC][PATCH 3/3] sched: User Mode Concurency Groups
+Message-ID: <YeGEM7TP3tekBVEh@hirez.programming.kicks-ass.net>
+References: <20211214204445.665580974@infradead.org>
+ <20211214205358.701701555@infradead.org>
+ <20211221171900.GA580323@dev-hv>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH] drivers/i2c-aspeed: avoid invalid memory reference after
- timeout
-Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>
-References: <20220109132613.122912-1-guoheyi@linux.alibaba.com>
- <ad5e5438-4a3f-2447-4af3-7caa91e7252a@linux.alibaba.com>
- <CACPK8XcYp9iAD3fjBQCax41C-1UpA+1AQW3epyEooYzNLt7R5g@mail.gmail.com>
-From:   Heyi Guo <guoheyi@linux.alibaba.com>
-In-Reply-To: <CACPK8XcYp9iAD3fjBQCax41C-1UpA+1AQW3epyEooYzNLt7R5g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221171900.GA580323@dev-hv>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joel,
 
+Hi!
 
-在 2022/1/11 下午6:51, Joel Stanley 写道:
-> On Tue, 11 Jan 2022 at 07:52, Heyi Guo <guoheyi@linux.alibaba.com> wrote:
->> Hi all,
->>
->> Any comments?
->>
->> Thanks,
->>
->> Heyi
->>
->> 在 2022/1/9 下午9:26, Heyi Guo 写道:
->>> The memory will be freed by the caller if transfer timeout occurs,
->>> then it would trigger kernel panic if the peer device responds with
->>> something after timeout and triggers the interrupt handler of aspeed
->>> i2c driver.
->>>
->>> Set the msgs pointer to NULL to avoid invalid memory reference after
->>> timeout to fix this potential kernel panic.
-> Thanks for the patch. How did you discover this issue? Do you have a
-> test I can run to reproduce the crash?
+I've seen you send a new version based on this, but I figured I ought to
+reply to this first.
 
-We are using one i2c channel to communicate with another MCU by 
-implementing user space SSIF protocol, and the MCU may not respond in 
-time if it is busy. If it responds after timeout occurs, it will trigger 
-below kernel panic:
+On Tue, Dec 21, 2021 at 05:19:00PM +0000, Peter Oskolkov wrote:
 
-[11844.248998] 8<--- cut here ---
-[11844.252419] Unhandled fault: page domain fault (0x81b) at 0x7edb2ff5
-[11844.259509] pgd = aa62a338
-[11844.262524] [7edb2ff5] *pgd=b5bee835, *pte=b020275f, *ppte=b0202c7f
-[11844.269525] Internal error: : 81b [#1] SMP ARM
-[11844.274479] Modules linked in: [last unloaded: i2c_dev_sysfs]
-[11844.280895] CPU: 0 PID: 256 Comm: ssif-host Tainted: G           
-O      5.4.39-e0b210f #1
-[11844.290016] Hardware name: Generic DT based system
-[11844.295367] PC is at aspeed_i2c_master_irq+0xc8/0x498
-[11844.301001] LR is at 0x16
-[11844.303917] pc : [<80636b4c>]    lr : [<00000016>]    psr: 000f0193
-[11844.310905] sp : b5c53ce8  ip : 7edb2fe0  fp : b5c53d04
-[11844.316730] r10: b5c52000  r9 : 00000000  r8 : 0000002e
-[11844.322554] r7 : 00000001  r6 : 00000004  r5 : 00000004  r4 : b4b91440
-[11844.329825] r3 : 00000000  r2 : b642448c  r1 : 00000015  r0 : 00000000
-[11844.337107] Flags: nzcv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  
-Segment none
-[11844.345163] Control: 10c5387d  Table: b5a9006a  DAC: 00000051
-[11844.351572] Process ssif-host (pid: 256, stack limit = 0xbe5df348)
-[11844.358466] Stack: (0xb5c53ce8 to 0xb5c54000)
-[11844.363325] 3ce0:                   b4b91440 00000004 b4b916bc 
-00000001 b5c53d2c b5c53d08
-[11844.372451] 3d00: 80636f80 80636a90 b4b8d140 80c052e4 b91e8068 
-00000001 0000002e 00000000
-[11844.381577] 3d20: b5c53d6c b5c53d30 8017b13c 80636f28 80839580 
-b53a8600 b91e8000 b5c53d70
-[11844.390702] 3d40: 80c8fcb4 b91e8000 80c052e4 b91e8068 00000001 
-b900c800 b5c53e28 b648863c
-[11844.399828] 3d60: b5c53d8c b5c53d70 8017b348 8017b0f4 00000000 
-80c04c48 b91e8000 80c052e4
-[11844.408954] 3d80: b5c53dac b5c53d90 8017b3fc 8017b318 b91e8000 
-80c052e4 00000000 00000001
-[11844.418079] 3da0: b5c53dc4 b5c53db0 801800f4 8017b3b0 0000002e 
-80b771c0 b5c53dd4 b5c53dc8
-[11844.427205] 3dc0: 8017a1bc 80180040 b5c53dfc b5c53dd8 8017a8d0 
-8017a198 bf80200c 000003ff
-[11844.436330] 3de0: 80c052e4 bf802000 00000000 b5c53e28 b5c53e24 
-b5c53e00 801022f8 8017a87c
-[11844.445456] 3e00: 80634000 200f0013 ffffffff b5c53e5c b6488640 
-b5c52000 b5c53eac b5c53e28
-[11844.454583] 3e20: 80101aac 801022b8 b6488640 38c3f000 00000059 
-80b7ca58 7edb2974 00000000
-[11844.463709] 3e40: b6424480 00000002 b6488640 b6424480 b648863c 
-b5c53eac 0000005d b5c53e78
-[11844.472835] 3e60: 00000001 80634000 200f0013 ffffffff 00000051 
-7f000000 00000018 b53a8600
-[11844.481960] 3e80: 00000018 7edb2974 00000000 b53a8600 00000051 
-b4c5ce40 b5c52000 00000036
-[11844.491086] 3ea0: b5c53ee4 b5c53eb0 80634850 80633fc0 b5fd3015 
-802a7770 7edb2990 00000002
-[11844.500212] 3ec0: b4b94778 80c04c48 7edb2974 b4b94778 b4c5ce40 
-00000007 b5c53f6c b5c53ee8
-[11844.509338] 3ee0: 802c6c48 80634528 00000020 b4b94778 b4c5ce48 
-00000142 b5c53f34 b5c53f08
-[11844.518463] 3f00: 802a604c 802a5e2c 00000000 00000000 00000000 
-00000000 00000000 b5fd3000
-[11844.527589] 3f20: b4c5ce40 b5fd3000 b5c53f4c b5c53f38 802c27e0 
-802a6010 00000007 80c04c48
-[11844.536715] 3f40: b5c53f94 b4c5ce40 00000007 00000707 7edb2974 
-b4c5ce40 b5c52000 00000036
-[11844.545841] 3f60: b5c53f94 b5c53f70 802c71dc 802c6870 00000007 
-00000016 0000000c 00000036
-[11844.554967] 3f80: 80101204 b5c52000 b5c53fa4 b5c53f98 802c7220 
-802c71a4 00000000 b5c53fa8
-[11844.564092] 3fa0: 80101000 802c7214 00000007 00000016 00000007 
-00000707 7edb2974 7edb2990
-[11844.573218] 3fc0: 00000007 00000016 0000000c 00000036 7edb2be1 
-7edb2fe0 00000030 76f436b4
-[11844.582344] 3fe0: 0004d110 7edb2964 00033f48 45f2ffac 200f0010 
-00000007 00000000 00000000
-[11844.591464] Backtrace:
-[11844.594189] [<80636a84>] (aspeed_i2c_master_irq) from [<80636f80>] 
-(aspeed_i2c_bus_irq+0x64/0x180)
-[11844.604187]  r7:00000001 r6:b4b916bc r5:00000004 r4:b4b91440
-[11844.610506] [<80636f1c>] (aspeed_i2c_bus_irq) from [<8017b13c>] 
-(__handle_irq_event_percpu+0x54/0x224)
-[11844.620893]  r9:00000000 r8:0000002e r7:00000001 r6:b91e8068 
-r5:80c052e4 r4:b4b8d140
-[11844.629537] [<8017b0e8>] (__handle_irq_event_percpu) from 
-[<8017b348>] (handle_irq_event_percpu+0x3c/0x98)
-[11844.640311]  r10:b648863c r9:b5c53e28 r8:b900c800 r7:00000001 
-r6:b91e8068 r5:80c052e4
-[11844.649044]  r4:b91e8000
-[11844.651861] [<8017b30c>] (handle_irq_event_percpu) from [<8017b3fc>] 
-(handle_irq_event+0x58/0x7c)
-[11844.661759]  r5:80c052e4 r4:b91e8000
-[11844.665747] [<8017b3a4>] (handle_irq_event) from [<801800f4>] 
-(handle_fasteoi_irq+0xc0/0x180)
-[11844.675259]  r7:00000001 r6:00000000 r5:80c052e4 r4:b91e8000
-[11844.681574] [<80180034>] (handle_fasteoi_irq) from [<8017a1bc>] 
-(generic_handle_irq+0x30/0x44)
-[11844.691181]  r5:80b771c0 r4:0000002e
-[11844.695169] [<8017a18c>] (generic_handle_irq) from [<8017a8d0>] 
-(__handle_domain_irq+0x60/0xc4)
-[11844.704878] [<8017a870>] (__handle_domain_irq) from [<801022f8>] 
-(gic_handle_irq+0x4c/0x94)
-[11844.714198]  r9:b5c53e28 r8:00000000 r7:bf802000 r6:80c052e4 
-r5:000003ff r4:bf80200c
-[11844.722838] [<801022ac>] (gic_handle_irq) from [<80101aac>] 
-(__irq_svc+0x6c/0x90)
-[11844.731185] Exception stack(0xb5c53e28 to 0xb5c53e70)
-[11844.736819] 3e20:                   b6488640 38c3f000 00000059 
-80b7ca58 7edb2974 00000000
-[11844.745945] 3e40: b6424480 00000002 b6488640 b6424480 b648863c 
-b5c53eac 0000005d b5c53e78
-[11844.755068] 3e60: 00000001 80634000 200f0013 ffffffff
-[11844.760704]  r9:b5c52000 r8:b6488640 r7:b5c53e5c r6:ffffffff 
-r5:200f0013 r4:80634000
-[11844.769347] [<80633fb4>] (i2cdev_ioctl_rdwr) from [<80634850>] 
-(i2cdev_ioctl+0x334/0x3bc)
-[11844.778473]  r10:00000036 r9:b5c52000 r8:b4c5ce40 r7:00000051 
-r6:b53a8600 r5:00000000
-[11844.787206]  r4:7edb2974
-[11844.790024] [<8063451c>] (i2cdev_ioctl) from [<802c6c48>] 
-(do_vfs_ioctl+0x3e4/0x934)
-[11844.798664]  r7:00000007 r6:b4c5ce40 r5:b4b94778 r4:7edb2974
-[11844.804979] [<802c6864>] (do_vfs_ioctl) from [<802c71dc>] 
-(ksys_ioctl+0x44/0x70)
-[11844.813232]  r10:00000036 r9:b5c52000 r8:b4c5ce40 r7:7edb2974 
-r6:00000707 r5:00000007
-[11844.821966]  r4:b4c5ce40
-[11844.824781] [<802c7198>] (ksys_ioctl) from [<802c7220>] 
-(sys_ioctl+0x18/0x1c)
-[11844.832745]  r9:b5c52000 r8:80101204 r7:00000036 r6:0000000c 
-r5:00000016 r4:00000007
-[11844.841385] [<802c7208>] (sys_ioctl) from [<80101000>] 
-(ret_fast_syscall+0x0/0x54)
-[11844.849827] Exception stack(0xb5c53fa8 to 0xb5c53ff0)
-[11844.855453] 3fa0:                   00000007 00000016 00000007 
-00000707 7edb2974 7edb2990
-[11844.864578] 3fc0: 00000007 00000016 0000000c 00000036 7edb2be1 
-7edb2fe0 00000030 76f436b4
-[11844.873701] 3fe0: 0004d110 7edb2964 00033f48 45f2ffac
-[11844.879337] Code: e1a03423 e281e001 e6ef3073 e584e2a4 (e7cc3001)
-[11844.886143] ---[ end trace 9422f39bd8d33cb5 ]---
+> > +/* pre-schedule() */
+> > +void umcg_wq_worker_sleeping(struct task_struct *tsk)
+> > +{
+> > +	struct umcg_task __user *self = READ_ONCE(tsk->umcg_task);
+> > +
+> > +	/* Must not fault, mmap_sem might be held. */
+> > +	pagefault_disable();
+> > +
+> > +	if (WARN_ON_ONCE(!tsk->umcg_server))
+> > +		UMCG_DIE_PF("no server");
+> 
+> We can get here if a running worker (no pinned pages) gets a pagefault
+> in the userspace. Is umcg_sys_enter() called for pagefaults? If not,
+> we should not kill the worker; also the userspace won't be able to
+> detect this worker blocking on a pagefault...
 
-After applying this patch, we'll get below warning instead:
+Ufff.. good one. No #PF doesn't pass through sys_enter, I'll have to go
+fix that.
 
-"bus in unknown state. irq_status: 0x%x\n"
+> Why don't you like my approach of pinning pages on exit_to_userspace
+> and unpinning on going to sleep? Yes, the pins will last longer,
+> but only for scheduled on CPU tasks, so bounded both by time and number
+> (of course, if umcg_sys_enter() is called on pagefaults/signals/other
+> interrupts, pinning in umcg_sys_enter() is better).
 
-The issue can be reproduced more easily by setting the timeout to some 
-smaller value.
+Well, in general I would not call userspace bounded. There's plenty
+userspace that doesn't do syscalls for indeterminate amounts of time.
+Now, such userspace might not be the immediate target for UMCG, but we
+also should not rule it out.
 
->
-> Can you provide a Fixes tag?
+Having been an mm/ developer in a previous lifetime, I still think
+page-pins should be as short as possible. They can get in the way of
+other things, like CMA.
 
-I think the bug was introduced by the first commit of this file :(
+> On the other hand, doing nothing on pagefaults and similar, and having
+> to only worry about blocking in syscalls, does make things much simpler
+> (no unexpected concurrency and such). I think most of the things
+> you found complicated in my patchset, other than the SMP remote-idle wakeup,
+> were driven by making sure spurious pagefaults are properly handled.
+> 
+> I can't tell now whether keeping workers RUNNING during pagefaults
+> vs waking their servers to run pending workers is a net gain or loss
+> re: performance. I'll have to benchmark this when my large test is ready.
 
-f327c686d3ba44eda79a2d9e02a6a242e0b75787
+I'll go fix the non syscall things that can schedule.
 
+> > +int umcg_wait(u64 timo)
+> > +{
+> > +	struct task_struct *tsk = current;
+> > +	struct umcg_task __user *self = tsk->umcg_task;
+> > +	struct page *page = NULL;
+> > +	u32 state;
+> > +	int ret;
+> > +
+> > +	for (;;) {
+> > +		set_current_state(TASK_INTERRUPTIBLE);
+> > +
+> > +		ret = -EINTR;
+> > +		if (signal_pending(current))
+> > +			break;
+> > +
+> > +		/*
+> > +		 * Faults can block and scribble our wait state.
+> > +		 */
+> > +		pagefault_disable();
+> > +		if (get_user(state, &self->state)) {
+> > +			pagefault_enable();
+> > +
+> > +			ret = -EFAULT;
+> > +			if (page) {
+> > +				unpin_user_page(page);
+> > +				page = NULL;
+> > +				break;
+> > +			}
+> > +
+> > +			if (pin_user_pages_fast((unsigned long)self, 1, 0, &page) != 1) {
+> 
+> I believe that the task should not be TASK_INTERRUPTIBLE here,
+> as pin_user_pages_fast may fault, and might_fault complains via __might_sleep.
 
->
-> Do other i2c master drivers do this? I took a quick look at the meson
-> driver and it doesn't appear to clear it's pointer to msgs.
+Fair enough; can easily mark the task __set_current_state(TASK_RUNNING)
+right near pagefault_enable() or something.
 
-It is hard to say. It seems other drivers have some recover scheme like 
-aborting the transfer, or loop each messages in process context and 
-don't do much in IRQ handler, which may disable interrupts or not retain 
-the buffer pointer before returning timeout.
+> > +				page = NULL;
+> > +				break;
+> > +			}
+> > +
+> > +			continue;
+> > +		}
 
-Thanks,
+> > +void umcg_sys_exit(struct pt_regs *regs)
+> > +{
+> > +	struct task_struct *tsk = current;
+> > +	struct umcg_task __user *self = READ_ONCE(tsk->umcg_task);
+> > +	long syscall = syscall_get_nr(tsk, regs);
+> > +
+> > +	if (syscall == __NR_umcg_wait)
+> > +		return;
+> > +
+> > +	/*
+> > +	 * sys_umcg_ctl() will get here without having called umcg_sys_enter()
+> > +	 * as such it will look like a syscall that blocked.
+> > +	 */
+> > +
+> > +	if (tsk->umcg_server) {
+> > +		/*
+> > +		 * Didn't block, we done.
+> > +		 */
+> > +		umcg_unpin_pages();
+> > +		return;
+> > +	}
+> > +
+> > +	/* avoid recursion vs schedule() */
+> > +	current->flags &= ~PF_UMCG_WORKER;
+> > +
+> > +	if (umcg_pin_pages())
+> > +		UMCG_DIE("pin");
+> > +
+> > +	if (umcg_update_state(tsk, self, UMCG_TASK_BLOCKED, UMCG_TASK_RUNNABLE))
+> > +		UMCG_DIE_UNPIN("state");
+> > +
+> > +	if (umcg_enqueue_runnable(tsk))
+> > +		UMCG_DIE_UNPIN("enqueue");
+> > +
+> > +	/* Server might not be RUNNABLE, means it's already running */
+> > +	if (umcg_wake_server(tsk))
+> > +		UMCG_DIE_UNPIN("wake-server");
+> 
+> So this here breaks the assumption that servers+workers never run
+> on more CPUs than the number of servers, which I've gone through
+> a lot of pain to ensure in my patchset.
 
-Heyi
+Yes, but you also completely wrecked signals afaict. But yes, this
+preemption thing also causes that, which is why I proposed that LAZY
+crud earlier, but I never got that in a shape I was happy with -- it
+quickly becomes a mess :/
 
+> I think the assumption is based on the idea that a process
+> using UMCG will get affined to N CPUs, will have N servers and
+> a number of workers, and they will all happily cooperate and not
+> get any extra threads running.
+> 
+> Of course the pretty picture was not completely true, as the unblocked
+> tasks do consume extra threads in the kernel, though never in the
+> userspace.
 
->
->>> Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
->>>
->>> -------
->>>
->>> Cc: Brendan Higgins <brendanhiggins@google.com>
->>> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
->>> Cc: Joel Stanley <joel@jms.id.au>
->>> Cc: Andrew Jeffery <andrew@aj.id.au>
->>> Cc: Philipp Zabel <p.zabel@pengutronix.de>
->>> Cc: linux-i2c@vger.kernel.org
->>> Cc: openbmc@lists.ozlabs.org
->>> Cc: linux-arm-kernel@lists.infradead.org
->>> Cc: linux-aspeed@lists.ozlabs.org
->>> ---
->>>    drivers/i2c/busses/i2c-aspeed.c | 5 +++++
->>>    1 file changed, 5 insertions(+)
->>>
->>> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
->>> index 67e8b97c0c950..3ab0396168680 100644
->>> --- a/drivers/i2c/busses/i2c-aspeed.c
->>> +++ b/drivers/i2c/busses/i2c-aspeed.c
->>> @@ -708,6 +708,11 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
->>>                spin_lock_irqsave(&bus->lock, flags);
->>>                if (bus->master_state == ASPEED_I2C_MASTER_PENDING)
->>>                        bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
->>> +             /*
->>> +              * All the buffers may be freed after returning to caller, so
->>> +              * set msgs to NULL to avoid memory reference after freeing.
->>> +              */
->>> +             bus->msgs = NULL;
->>>                spin_unlock_irqrestore(&bus->lock, flags);
->>>
->>>                return -ETIMEDOUT;
+Right, there is some unmanaged time anyway.
+
+> So this patch may result in all servers running due to wakeups
+> in umcg_sys_exit(), with also their currently designated workers
+> running as well, so the userspace may see N+N running threads.
+
+I think this was already true, the servers could be running and all
+workers could be woken from their in-kernel slumber, entering unmamanged
+time, seeing N+M running tasks as worst possible case.
+
+But yes, the 2N case is more common now.
+
+> For now I think this may be OK, but as I mentioned above, I need to
+> run a larger test with a real workload to see if anything is missing.
+> 
+> What does worry me is that in this wakeup the server calls sys_umcg_wait()
+> with another worker in next_tid, so now the server will have two
+> workers running: the current kernel API seems to allow this to happen.
+> In my patchset the invariant that no more than one worker running
+> per server was enforced by the kernel.
+
+So one of the things I've started, but didn't finished, is to forward
+port the Proxy-Execution patches to a current kernel and play with the
+PE+UMCG interaction.
+
+Thinking about that interaction I've ran into that exact problem.
+
+The 'nice' solution is to actually block the worker, but that's also the
+slow solution :/
+
+The other solution seems to be to keep kernel state; track the current
+worker associated with the server. I haven't (so far) done that due to
+my futex trauma.
+
+So yes, the current API can be used to do the wrong thing, but the
+kernel doesn't care and you get to keep the pieces in userspace. And I
+much prefer user pieces over kernel pieces.
+
+> > +
+> > +	umcg_unpin_pages();
+> > +
+> > +	switch (umcg_wait(0)) {
+> > +	case -EFAULT:
+> > +	case -EINVAL:
+> > +	case -ETIMEDOUT: /* how!?! */
+> > +	default:
+> 
+> This "default" coming before "case 0" below feels weird... can we do
+> 
+> 	switch (umcg_wait()) {
+> 	case 0:
+> 	case -EINTR:
+> 		/* ... */
+> 		break;
+> 	default:
+> 		UMCG_DIE("wait");
+> 	}
+
+Sure.
+
+> > +		/*
+> > +		 * XXX do we want a preemption consuming ::next_tid ?
+> > +		 * I'm currently leaning towards no.
+> 
+> I don't think so: preemption is a sched-type event, so a server
+> should handle it; next_tid has nothing to do with it.
+
+We agree, I'll update the comment.
+
+> > +SYSCALL_DEFINE2(umcg_wait, u32, flags, u64, timo)
+> > +{
+> > +	struct task_struct *tsk = current;
+> > +	struct umcg_task __user *self = READ_ONCE(tsk->umcg_task);
+> > +	bool worker = tsk->flags & PF_UMCG_WORKER;
+> > +	int ret;
+> > +
+> > +	if (!self || flags)
+> > +		return -EINVAL;
+> > +
+> > +	if (worker) {
+> > +		tsk->flags &= ~PF_UMCG_WORKER;
+> > +		if (timo)
+> > +			return -ERANGE;
+> 
+> Worker sleeps timing out is a valid and a real use case. Similar
+> to futex timeouts, mutex timeouts, condvar timeouts. I do not believe
+> there is a fundamental problem here, so I'll add worker timeout
+> handling in my larger test.
+
+I don't understand worker timeout, also see:
+
+  https://lkml.kernel.org/r/Ya34S2JCQg+81h4t@hirez.programming.kicks-ass.net
+
+> In addition, shouldn't we NOT clear PF_UMCG_WORKER flag if we
+> return an error?
+
+Why? Userspace can do umcg_ctl() if they want, no?
+
+> > +	}
+> > +
+> > +	/* see umcg_sys_{enter,exit}() syscall exceptions */
+> > +	ret = umcg_pin_pages();
+> 
+> I do not think we need to pin pages for servers, only for workers. Yes,
+> this makes things easier/simpler, so ok for now, but maybe later we will
+> need to be a bit more fine-grained here.
+
+Right.
+
+> > +	if (ret)
+> > +		goto unblock;
+> > +
+> > +	/*
+> > +	 * Clear UMCG_TF_COND_WAIT *and* check state == RUNNABLE.
+> > +	 */
+> > +	ret = umcg_update_state(tsk, self, UMCG_TASK_RUNNABLE, UMCG_TASK_RUNNABLE);
+> > +	if (ret)
+> > +		goto unpin;
+> > +
+> > +	if (worker) {
+> > +		ret = umcg_enqueue_runnable(tsk);
+> > +		if (ret)
+> > +			goto unpin;
+> > +	}
+> > +
+> > +	if (worker)
+> 
+> Should this "if" be merged with the one above?
+
+Yes, I think I've done that at least once, but clearly it didn't stick.
+
+Ah, here it is:
+
+  https://lkml.kernel.org/r/Ybm+HJzkO%2F0BB4Va@hirez.programming.kicks-ass.net
+
+but since that LAZY thing didn't live that cleanup seems to have gone
+out the window too.
+
+> > +		ret = umcg_wake(tsk);
+> > +	else if (tsk->umcg_next)
+> > +		ret = umcg_wake_next(tsk);
+> > +
+> > +	if (ret) {
+> > +		/*
+> > +		 * XXX already enqueued ourself on ::server_tid; failing now
+> > +		 * leaves the lot in an inconsistent state since it'll also
+> > +		 * unblock self in order to return the error. !?!?
+> > +		 */
+> 
+> It looks like only EFAULT can be here. I'd ensure that, and then just DIE.
+
+Can also be -EAGAIN if the target task isn't in an expected state.
+
+I also wanted to avoid DIE from the syscalls(). DIE really isn't nice,
+we shouldn't do it if it can be avoided.
+
+> > +		goto unpin;
+> > +	}
+> > +
+> > +	umcg_unpin_pages();
+> > +
+> > +	ret = umcg_wait(timo);
+> > +	switch (ret) {
+> > +	case 0:		/* all done */
+> > +	case -EINTR:	/* umcg_notify_resume() will continue the wait */
+> > +		ret = 0;
+> > +		break;
+> 
+> Why not let workers have timeouts, and keep -ETIMEDOUT here? Just set
+> UMCG_TF_PREEMPT, or another flag with similar behavior, and
+> umcg_notify_resume will properly wake the server?
+
+I really don't understand timeouts on workers, see above.
+
+TF_PREEMPT must only be set on RUNNING, but if we're in wait, we're
+RUNNABLE.
+
+> > +
+> > +	default:
+> > +		goto unblock;
+> > +	}
+> > +out:
+> > +	if (worker)
+> > +		tsk->flags |= PF_UMCG_WORKER;
+> > +	return ret;
+> > +
+> > +unpin:
+> > +	umcg_unpin_pages();
+> > +unblock:
+> > +	/*
+> > +	 * Workers will still block in umcg_notify_resume() before they can
+> > +	 * consume their error, servers however need to get the error asap.
+> > +	 *
+> > +	 * Still, things might be unrecoverably screwy after this. Not our
+> > +	 * problem.
+> 
+> I think we should explicitly document the unrecoverable screwiness
+> of errors here, so that the userspace proactively kills itself
+> to avoid badness. The only reason that returning an error here is
+> mildly preferable to just killing the task (we already do that
+> in other places) is to give the userspace an opportunity to
+> log an error, with more state/info than we can do here.
+
+Bah, I should've written a better comment, because I can't quite
+remember the case I had in mind. Also, again from the LAZY patch, I
+think we can actually do better in some of the cases here.
+
+Specifically, currently we'll enqueue on ::runnable_workers_ptr and fail
+waking ::next_tid and leave it at that. While I think waking
+::server_tid in that case makes sense.
+
+I'll go prod at this.
+
+> > +	 */
+> > +	if (!worker)
+> > +		umcg_update_state(tsk, self, UMCG_TASK_RUNNABLE, UMCG_TASK_RUNNING);
+> > +	goto out;
+> > +}
+> > +
+> > +/**
+> > + * sys_umcg_ctl: (un)register the current task as a UMCG task.
+> > + * @flags:       ORed values from enum umcg_ctl_flag; see below;
+> > + * @self:        a pointer to struct umcg_task that describes this
+> > + *               task and governs the behavior of sys_umcg_wait if
+> > + *               registering; must be NULL if unregistering.
+> 
+> @which_clock is not documented. Why do we need the option in the first
+> place?
+
+Well, you had CLOCK_REALTIME, which I think is quite daft, but Thomas
+also wanted CLOCK_TAI, so here we are.
+
+I'll add the comment.
+
+> > +SYSCALL_DEFINE3(umcg_ctl, u32, flags, struct umcg_task __user *, self, clockid_t, which_clock)
+> > +{
+> > +	struct task_struct *server;
+> > +	struct umcg_task ut;
+> > +
+> > +	if ((unsigned long)self % UMCG_TASK_ALIGN)
+> > +		return -EINVAL;
+> > +
+> > +	if (flags & ~(UMCG_CTL_REGISTER |
+> > +		      UMCG_CTL_UNREGISTER |
+> > +		      UMCG_CTL_WORKER))
+> > +		return -EINVAL;
+> > +
+> > +	if (flags == UMCG_CTL_UNREGISTER) {
+> > +		if (self || !current->umcg_task)
+> > +			return -EINVAL;
+> > +
+> > +		if (current->flags & PF_UMCG_WORKER)
+> > +			umcg_worker_exit();
+> 
+> The server should be woken here. Imagine: one server, one worker.
+> The server is sleeping, the worker is running. The worker unregisters,
+> the server keeps sleeping forever?
+> 
+> I'm OK re: NOT waking the server if the worker thread exits without
+> unregistering, as this is the userspace breaking the contract/protocol.
+> But here we do need to notify the server. At the minimum so that the
+> server can schedule a worker to run in its place.
+> 
+> (Why is this important? Worker count can fluctuate considerably:
+> on load spikes many new workers may be created, and later in
+> quiet times they exit to free resources.)
+
+Fair enough. Will do.
+
+> > +	if (flags == UMCG_CTL_WORKER) {
+> > +		if ((ut.state & (UMCG_TASK_MASK | UMCG_TF_MASK)) != UMCG_TASK_BLOCKED)
+> > +			return -EINVAL;
+> > +
+> > +		WRITE_ONCE(current->umcg_task, self);
+> > +		current->flags |= PF_UMCG_WORKER;	/* hook schedule() */
+> > +		set_syscall_work(SYSCALL_UMCG);		/* hook syscall */
+> > +		set_thread_flag(TIF_UMCG);		/* hook return-to-user */
+> 
+> Too many flags, I'd say. Not a big deal, just a mild preference:
+> I have only a single flag.
+
+Yeah, you overloaded TIF_NOTIFY_RESUME, I prefer an explicit flag. And
+the syscall things already have their own flag word, so that simply
+needs another one.
+
+> > +
+> > +		/* umcg_sys_exit() will transition to RUNNABLE and wait */
+> > +
+> > +	} else {
+> > +		if ((ut.state & (UMCG_TASK_MASK | UMCG_TF_MASK)) != UMCG_TASK_RUNNING)
+> > +			return -EINVAL;
+> > +
+> > +		WRITE_ONCE(current->umcg_task, self);
+> > +		set_thread_flag(TIF_UMCG);		/* hook return-to-user */
+> 
+> Why do we need to hook server's return to user? I did not need it in my
+> version.
+
+Signals; server could be blocked in sys_umcg_wait() and get a signal,
+then we should resume waiting after the signal.
+
+I hate signals as much as the next guy, but we gotta do something with
+them.
+
+Anyway, let me go poke at this code again..

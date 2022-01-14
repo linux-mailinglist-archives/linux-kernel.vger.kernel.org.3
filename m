@@ -2,96 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B298548EADE
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9961748EAE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241348AbiANNgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 08:36:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21515 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230472AbiANNgg (ORCPT
+        id S236551AbiANNhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 08:37:55 -0500
+Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:49642 "EHLO
+        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230472AbiANNhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 08:36:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642167395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n+u9lImGJHsltEhgnOxi+5lKtT79IMZvETmYQxQXldM=;
-        b=H4a0F/783qn7pxlfkP9k56qhmXvcE2qqE/n4Vr64y/437F8edQgXX4CEQKkiU9G4Z6Dhlb
-        d44TFKzt7CA3tfx2FfutzYKLZOMPSufH6oH8xYTni5Y9LaD0Vp0fL6xxOp9VADG9j8EwY2
-        3akRAwjzjK7AJu5lXFdcR4OMD6qYH1o=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-184-eQAah2ufPRiIcSj7ZNrWFg-1; Fri, 14 Jan 2022 08:36:32 -0500
-X-MC-Unique: eQAah2ufPRiIcSj7ZNrWFg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 292CA1083F7A;
-        Fri, 14 Jan 2022 13:36:30 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.192.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9E985703B8;
-        Fri, 14 Jan 2022 13:36:26 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
-        linux-x86_64@vger.kernel.org, kernel-hardening@lists.openwall.com,
-        linux-mm@kvack.org, the arch/x86 maintainers <x86@kernel.org>,
-        musl@lists.openwall.com, libc-alpha@sourceware.org,
-        linux-kernel@vger.kernel.org, Dave Hansen <dave.hansen@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrei Vagin <avagin@gmail.com>
-Subject: Re: [PATCH v3 1/3] x86: Implement arch_prctl(ARCH_VSYSCALL_CONTROL)
- to disable vsyscall
-References: <3a1c8280967b491bf6917a18fbff6c9b52e8df24.1641398395.git.fweimer@redhat.com>
-        <e431fa42-26ec-8ac6-f954-e681b1e0e9a6@kernel.org>
-Date:   Fri, 14 Jan 2022 14:36:24 +0100
-In-Reply-To: <e431fa42-26ec-8ac6-f954-e681b1e0e9a6@kernel.org> (Andy
-        Lutomirski's message of "Thu, 13 Jan 2022 13:47:26 -0800")
-Message-ID: <87sftqtp5z.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+        Fri, 14 Jan 2022 08:37:54 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R291e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V1p8aYo_1642167444;
+Received: from e02h04404.eu6sqa(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0V1p8aYo_1642167444)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 14 Jan 2022 21:37:52 +0800
+From:   Wen Gu <guwen@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net] net/smc: Fix hung_task when removing SMC-R devices
+Date:   Fri, 14 Jan 2022 21:37:24 +0800
+Message-Id: <1642167444-107744-1-git-send-email-guwen@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andy Lutomirski:
+A hung_task is observed when removing SMC-R devices. Suppose that
+a link group has two active links(lnk_A, lnk_B) associated with two
+different SMC-R devices(dev_A, dev_B). When dev_A is removed, the
+link group will be removed from smc_lgr_list and added into
+lgr_linkdown_list. lnk_A will be cleared and smcibdev(A)->lnk_cnt
+will reach to zero. However, when dev_B is removed then, the link
+group can't be found in smc_lgr_list and lnk_B won't be cleared,
+making smcibdev->lnk_cnt never reaches zero, which causes a hung_task.
 
-> Is there a reason you didn't just change the check earlier in the
-> function to:
->
-> if (vsyscall_mode == NONE || current->mm->context.vsyscall_disabled)
+This patch fixes this issue by restoring the implementation of
+smc_smcr_terminate_all() to what it was before commit 349d43127dac
+("net/smc: fix kernel panic caused by race of smc_sock"). The original
+implementation also satisfies the intention that make sure QP destroy
+earlier than CQ destroy because we will always wait for smcibdev->lnk_cnt
+reaches zero, which guarantees QP has been destroyed.
 
-Andrei requested that I don't print anything if vsyscall was disabled.
+Fixes: 349d43127dac ("net/smc: fix kernel panic caused by race of smc_sock")
+Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+---
+ net/smc/smc_core.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-The original patch used a different message for better diagnostics.
-
-> Also, I still think the prctl should not be available if
-> vsyscall=emulate.  Either we should fully implement it or we should
-> not implement.  We could even do:
->
-> pr_warn_once("userspace vsyscall hardening request ignored because you
-> have vsyscall=emulate.  Unless you absolutely need vsyscall=emulate, 
-> update your system to use vsyscall=xonly.\n");
->
-> and thus encourage good behavior.
-
-I think there is still some hardening applied even with
-vsyscall=emulate.  The question is what is more important: the
-additional hardening, or clean, easily described behavior of the
-interface.
-
-Maybe ARCH_VSYSCALL_CONTROL could return different values based on to
-what degree it could disable vsyscall?
-
-The pr_warn_once does not seem particularly useful.  Anyone who upgrades
-glibc and still uses vsyscall=emulate will see that, with no way to
-disable it.
-
-Thanks,
-Florian
+diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
+index b19c0aa..1124594 100644
+--- a/net/smc/smc_core.c
++++ b/net/smc/smc_core.c
+@@ -1533,7 +1533,6 @@ void smc_smcr_terminate_all(struct smc_ib_device *smcibdev)
+ {
+ 	struct smc_link_group *lgr, *lg;
+ 	LIST_HEAD(lgr_free_list);
+-	LIST_HEAD(lgr_linkdown_list);
+ 	int i;
+ 
+ 	spin_lock_bh(&smc_lgr_list.lock);
+@@ -1545,7 +1544,7 @@ void smc_smcr_terminate_all(struct smc_ib_device *smcibdev)
+ 		list_for_each_entry_safe(lgr, lg, &smc_lgr_list.list, list) {
+ 			for (i = 0; i < SMC_LINKS_PER_LGR_MAX; i++) {
+ 				if (lgr->lnk[i].smcibdev == smcibdev)
+-					list_move_tail(&lgr->list, &lgr_linkdown_list);
++					smcr_link_down_cond_sched(&lgr->lnk[i]);
+ 			}
+ 		}
+ 	}
+@@ -1557,16 +1556,6 @@ void smc_smcr_terminate_all(struct smc_ib_device *smcibdev)
+ 		__smc_lgr_terminate(lgr, false);
+ 	}
+ 
+-	list_for_each_entry_safe(lgr, lg, &lgr_linkdown_list, list) {
+-		for (i = 0; i < SMC_LINKS_PER_LGR_MAX; i++) {
+-			if (lgr->lnk[i].smcibdev == smcibdev) {
+-				mutex_lock(&lgr->llc_conf_mutex);
+-				smcr_link_down_cond(&lgr->lnk[i]);
+-				mutex_unlock(&lgr->llc_conf_mutex);
+-			}
+-		}
+-	}
+-
+ 	if (smcibdev) {
+ 		if (atomic_read(&smcibdev->lnk_cnt))
+ 			wait_event(smcibdev->lnks_deleted,
+-- 
+1.8.3.1
 

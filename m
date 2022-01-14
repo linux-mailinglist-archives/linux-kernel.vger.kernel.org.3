@@ -2,76 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D86B248EC33
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDBA748EC39
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242156AbiANPHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:07:25 -0500
-Received: from mail-4022.proton.ch ([185.70.40.22]:27141 "EHLO
-        mail-4022.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235794AbiANPHZ (ORCPT
+        id S242209AbiANPIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:08:02 -0500
+Received: from mail-oi1-f181.google.com ([209.85.167.181]:37741 "EHLO
+        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235794AbiANPIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:07:25 -0500
-Date:   Fri, 14 Jan 2022 15:07:21 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail; t=1642172842;
-        bh=eLKKiTMw1JJZ+1oGczRJs+/VLcUyP4uYFpIUjpFZWFE=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc;
-        b=QciLqLZNzaO+Dq8ITPa2PPVLKwvF21lT3mUdWYucI1U2ztgVfZJDUdCVStKlmA0ko
-         7b/iE8UyPIOzG0tD5RFUqJxnkODP2Nqe6Cd3w1TBrcmWB88XbrENAXfatPg/wPcuQd
-         GH9LZ/lbfTSMkkk87uIdu9QTYXGCHzA5KvdRC+D+FG+L4sNgOkmkCOt0McLDKhXeN9
-         dFQPiOs22ncnZuRc7bgx5w//jcgh8eETic48bpSJARO/EUC1m/egpi3h7P0S0aKKUo
-         s+SS8RDLFLVWI6/DfPssJFi4fiVYK6cbRY81vZe7hm4aQnIaS89o3DnxWNLBteTTuS
-         ZpKjLjFpPwSjA==
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     Tomohito Esaki <etom@igel.co.jp>, dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?utf-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        =?utf-8?Q?Michel_D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Evan Quan <evan.quan@amd.com>, Petr Mladek <pmladek@suse.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org, Daniel Stone <daniel@fooishbar.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: Re: [RFC PATCH v3 2/3] drm: add support modifiers for drivers whose planes only support linear layout
-Message-ID: <7eljcd3F4aWL2jjBRwr3DISmyt0XPWFIH1_kebFGqZTJXLZRx0bm_8c8yaIuEuH8rS0MaJhU6SY1y-fc6U_zCLaKgoLM124nZpr0H91nSjw=@emersion.fr>
-In-Reply-To: <YeGFugZvwbF7l2I/@smile.fi.intel.com>
-References: <20220114101753.24996-1-etom@igel.co.jp> <20220114101753.24996-3-etom@igel.co.jp> <YeGFugZvwbF7l2I/@smile.fi.intel.com>
+        Fri, 14 Jan 2022 10:08:01 -0500
+Received: by mail-oi1-f181.google.com with SMTP id i9so12546768oih.4;
+        Fri, 14 Jan 2022 07:08:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mELcxoCS2rGqtuIQqHLN1/ESK0gzux5v3TxcVcf+0NY=;
+        b=Sjq5dVh276ILS2BMZmHOzlsSX3/R3wta4Quzx3bt1VyKnKO+D7lzc1F2uHVAdjGuvE
+         Cd2TOg1iCScwbS6kfRNVOV6u8pDWF/57N8nWFxRtIGV0RWuQDnnNSmJmsXn/MQwHkOG8
+         +7ivyAAU6Pkxgvl6aRBDcyr7hnVxr1KzmJnRPa9mzmL+fatxWRPwjzjVkWAav8kfzNLs
+         ZDqxtxAWunZ5+fjAFOdFYE3n92EcTDeI1HUcLXdfbTwiSBr8Jv9dbT3J1pIR1SvRSavE
+         9T2bNmoDulyiCHj2OwY/a6Ok2LJc5AQ1slv3ZT+fQNcMBT1FJGZ/gtH5kmFEXNsPb4Jh
+         skFA==
+X-Gm-Message-State: AOAM533+TNIpXowvAsokD64f1+zqGEbXJhNpiFuuiyEjdxNP0Yin6K7U
+        xgBoHW6FxJXdpKfAbvDE8tXUjVRmZA==
+X-Google-Smtp-Source: ABdhPJxHWKztI9xJhF9PWC2HI/gkFe+b9mkNYmIf0SuBeLj1ScA/QuakJAE+PHMNdecRvcNp+D7XzQ==
+X-Received: by 2002:a05:6808:8c3:: with SMTP id k3mr85956oij.98.1642172880317;
+        Fri, 14 Jan 2022 07:08:00 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id c4sm1875869otu.39.2022.01.14.07.07.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 07:07:59 -0800 (PST)
+Received: (nullmailer pid 1894656 invoked by uid 1000);
+        Fri, 14 Jan 2022 15:07:56 -0000
+Date:   Fri, 14 Jan 2022 09:07:56 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: power: reset: gpio-restart: Correct default
+ priority
+Message-ID: <YeGRzIMsbSRTEId1@robh.at.kernel.org>
+References: <20220110214456.67087-1-sander@svanheule.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110214456.67087-1-sander@svanheule.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday, January 14th, 2022 at 15:16, Andy Shevchenko <andriy.shevchenko@=
-linux.intel.com> wrote:
+On Mon, 10 Jan 2022 22:44:56 +0100, Sander Vanheule wrote:
+> Commit bcd56fe1aa97 ("power: reset: gpio-restart: increase priority
+> slightly") changed the default restart priority 129, but did not update
+> the documentation. Correct this, so the driver and documentation have
+> the same default value.
+> 
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> ---
+> This is a resubmission of RFC:
+> https://lore.kernel.org/all/cfcd00257daba5aa30b8d20a62ba542be1a6914c.1640887456.git.sander@svanheule.net/
+> 
+> The commit message for bcd56fe1aa97 mentions that it is a workaround for
+> rk3288-veryon boards. However, commit e28ea9dbc52d3 ("ARM: dts:
+> rockchip: add shared rk3288-veyron files") later adds a gpio-restart
+> node with a priority value of <200> for those boards, effectively
+> rendering bcd56fe1aa97 obsolete (for their use case).
+> 
+> Perhaps bcd56fe1aa97 could just be reverted instead of updating the
+> documentation.
+> 
+> An argument against reverting (a 6 year old patch) is that other boards
+> may have come to depend on the default value of 129. I don't know about
+> out-of-tree user of gpio-restart, but there are a few in-tree users of
+> gpio-restart /without/ an explicit priority:
+> 
+> arch/arm/boot/dts/imx53-ppd.dts (commit 2952d67637716)
+>   DTS submitted after changed default, but DTS copyright predates the
+>   changed default.
+> 
+> arch/microblaze/boot/dts/system.dts (commit 7cca9b8b7c5bc)
+>   The original DTS commit predates the changed default, but didn't use
+>   gpio-restart. The commit adding gpio-restart appears to indicate no
+>   other restart handlers are present on this platform, although it could
+>   be these were just being shadowed by the custom restart code.
+> 
+> arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dts (commit 0a91330b2af9f)
+>   Recently added board; couldn't find any obvious alternative restart
+>   handlers.
+> 
+> Best,
+> Sander
+> 
+>  .../devicetree/bindings/power/reset/gpio-restart.yaml         | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
 
-> Why not enum?
-
-There is no enum for DRM format modifiers.
+Applied, thanks!

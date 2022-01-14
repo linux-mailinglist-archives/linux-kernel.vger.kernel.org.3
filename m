@@ -2,108 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B36948F217
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBD248F21E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiANVnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 16:43:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34679 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229903AbiANVnd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 16:43:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642196613;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=H65UNYpk1YgIkr6+F7jbPWFp6tYbCp821iY0zXAi0/8=;
-        b=R7S67hf8tcGNk03u8H4xDibZtHhRcUfnwtlbv0FaLLxpF0Z+PNqMoDpwmxHno4SpGl1AEC
-        hCR1k33Kk8TCctht9GTsX3fLtJ5ui3eo+2R3Kw7w8C4njWHIhLVOJ3ooPrkgS7q5wek4Cc
-        nPypzHAPP5IrI8q6wcyEPBAYZpcISzU=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-81-MFEb3JWwN3OwKU56qgvwjQ-1; Fri, 14 Jan 2022 16:43:31 -0500
-X-MC-Unique: MFEb3JWwN3OwKU56qgvwjQ-1
-Received: by mail-ed1-f72.google.com with SMTP id z8-20020a056402274800b003f8580bfb99so9268681edd.11
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 13:43:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=H65UNYpk1YgIkr6+F7jbPWFp6tYbCp821iY0zXAi0/8=;
-        b=A307Y/hXf1pnCsHeWN6NXAWj6yhhWDZEg2Vu821jvyB00UCUaZdYXh5xEkq/9vypYv
-         FzgXmWbSkpUoBaR71BHmGMAAoblgL8Y3S+4c40OR0PcF7hIzX/XsDKhTHXSMIaXxp+NX
-         +oV+1557ThlVDGpGeaX09Mwpk7beAUllNx7ZvewgLfl6vvFhNz1vQjE67k3Hv+ep1guH
-         06cTeqLPYh9v0ZYhDCSO2Q5SfD8lgXtpY0qcRYTaw1WIybrfocCrOZmWuEDozTtQvM3Z
-         1VdUi6OAeap7pfkZmdCTSDbVNvxEmoI2jNbmCN253/INn9W4uTce9n4JbGSzJad9zs+Q
-         SzWw==
-X-Gm-Message-State: AOAM530pDaHDgn6kkK0XayILbJlzsZ4ovb4st6eaUMXoUQx2yMVfbQvy
-        DwLG8HTvbvwmt8f7FTeL3BDaozXvTp3UpiFFcLahYlodj1ZlCZevQ1HTNUDuUR0uzlWkuihukg8
-        Pa+gjFkzSuOd1SSWradx4Tbu6uiT5OYzvrpEgS8iCwm2if6dDL44b3UM35hL9ze0ACGKBwA==
-X-Received: by 2002:a05:6402:27d1:: with SMTP id c17mr10483759ede.128.1642196609916;
-        Fri, 14 Jan 2022 13:43:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwX+X4YHjBMDl2PYMvPClJyagNr+C+tepnu7ca8BYRhvwykdVnYrSL9WI3b0URVZRj1HoAt8A==
-X-Received: by 2002:a05:6402:27d1:: with SMTP id c17mr10483746ede.128.1642196609685;
-        Fri, 14 Jan 2022 13:43:29 -0800 (PST)
-Received: from redhat.com ([2.55.154.210])
-        by smtp.gmail.com with ESMTPSA id c19sm2755020ede.47.2022.01.14.13.43.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 13:43:29 -0800 (PST)
-Date:   Fri, 14 Jan 2022 16:43:26 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH] virtio_mem: break device on remove
-Message-ID: <20220114214324.239444-1-mst@redhat.com>
+        id S229955AbiANVth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 16:49:37 -0500
+Received: from mga02.intel.com ([134.134.136.20]:43105 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229952AbiANVta (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 16:49:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642196970; x=1673732970;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=itffkzDe+Il4JzFZB2Jw4OTWUo631sKz/op75lSih44=;
+  b=Tdxb7IkDO8w1JJ7+aefCZ8gwtiSP5cBfKRSqT1J/Nlyn3FE6J2qWGOdm
+   7HuiC1BdLlWatmOp6dGbmCQDiD6JEOlsfJ/+ZFyDc3501d3Spc9aqPr5k
+   BiY6FNrVTfJNM0K64RYZCkPvRwOcQO6mcqiPiBpEHiW+D3xkcx2aUlUUj
+   jUxRjiaEuYJI4kTAkVOkj/4TWyFLnEYxvvYfcmBPHAAFiE93Q9Ij1Q58G
+   nrwCw1KF19uL5oWWiF53onlY0RX3qQ4CL82B81jA2I7iAQ+GdShxiz2KM
+   uEfS+jABkA48pL0Bm+HieBw9iVbNaqoqUWcWo78RP2aG9z7L/HZ3DeHa6
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="231686621"
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="231686621"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 13:49:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="559623948"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 14 Jan 2022 13:49:28 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8URr-00092F-VM; Fri, 14 Jan 2022 21:49:27 +0000
+Date:   Sat, 15 Jan 2022 05:48:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:perf/wip.self 9/9] arch/x86/events/core.c:2725:48:
+ error: 'PERF_X86_EVENT_RDPMC_ALLOWED' undeclared; did you mean
+ 'PERF_X86_EVENT_AUTO_RELOAD'?
+Message-ID: <202201150505.POFRV19D-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
-X-Mutt-Fcc: =sent
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A common pattern for device reset is currently:
-vdev->config->reset(vdev);
-.. cleanup ..
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.self
+head:   1b4635e33f629e20b5bbecd62d27c9191d5ec390
+commit: 1b4635e33f629e20b5bbecd62d27c9191d5ec390 [9/9] perf: Better track self-monitoring events
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220115/202201150505.POFRV19D-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=1b4635e33f629e20b5bbecd62d27c9191d5ec390
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue perf/wip.self
+        git checkout 1b4635e33f629e20b5bbecd62d27c9191d5ec390
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-reset prevents new interrupts from arriving and waits for interrupt
-handlers to finish.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-However if - as is common - the handler queues a work request which is
-flushed during the cleanup stage, we have code adding buffers / trying
-to get buffers while device is reset. Not good.
+All errors (new ones prefixed by >>):
 
-This was reproduced by running
-	modprobe virtio_console
-	modprobe -r virtio_console
-in a loop, and this reasoning seems to apply to virtio mem though
-I could not reproduce it there.
+   arch/x86/events/core.c: In function 'arch_perf_update_userpage':
+>> arch/x86/events/core.c:2725:48: error: 'PERF_X86_EVENT_RDPMC_ALLOWED' undeclared (first use in this function); did you mean 'PERF_X86_EVENT_AUTO_RELOAD'?
+    2725 |  userpg->cap_user_rdpmc = !!(event->hw.flags & PERF_X86_EVENT_RDPMC_ALLOWED);
+         |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                PERF_X86_EVENT_AUTO_RELOAD
+   arch/x86/events/core.c:2725:48: note: each undeclared identifier is reported only once for each function it appears in
 
-Fix this up by calling virtio_break_device + flush before reset.
 
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+vim +2725 arch/x86/events/core.c
+
+  2718	
+  2719	void arch_perf_update_userpage(struct perf_event *event,
+  2720				       struct perf_event_mmap_page *userpg, u64 now)
+  2721	{
+  2722		struct cyc2ns_data data;
+  2723		u64 offset;
+  2724	
+> 2725		userpg->cap_user_rdpmc = !!(event->hw.flags & PERF_X86_EVENT_RDPMC_ALLOWED);
+  2726		userpg->pmc_width = x86_pmu.cntval_bits;
+  2727	
+  2728		if (unlikely(!using_native_sched_clock() || !sched_clock_stable())) {
+  2729			userpg->cap_user_time = 0;
+  2730			userpg->cap_user_time_zero = 0;
+  2731			return;
+  2732		}
+  2733	
+  2734		/* already set the time fields before */
+  2735		if (likely(userpg->cap_user_time))
+  2736			return;
+  2737	
+  2738		cyc2ns_read_begin(&data);
+  2739	
+  2740		offset = data.cyc2ns_offset + __sched_clock_offset;
+  2741	
+  2742		/*
+  2743		 * Internal timekeeping for enabled/running/stopped times
+  2744		 * is always in the local_clock domain.
+  2745		 */
+  2746		userpg->cap_user_time = 1;
+  2747		userpg->time_mult = data.cyc2ns_mul;
+  2748		userpg->time_shift = data.cyc2ns_shift;
+  2749		userpg->time_offset = offset - now;
+  2750	
+  2751		/*
+  2752		 * cap_user_time_zero doesn't make sense when we're using a different
+  2753		 * time base for the records.
+  2754		 */
+  2755		if (!event->attr.use_clockid) {
+  2756			userpg->cap_user_time_zero = 1;
+  2757			userpg->time_zero = offset;
+  2758		}
+  2759	
+  2760		cyc2ns_read_end();
+  2761	}
+  2762	
+
 ---
- drivers/virtio/virtio_mem.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-index 38becd8d578c..33b8a118a3ae 100644
---- a/drivers/virtio/virtio_mem.c
-+++ b/drivers/virtio/virtio_mem.c
-@@ -2888,6 +2888,8 @@ static void virtio_mem_remove(struct virtio_device *vdev)
- 		virtio_mem_deinit_hotplug(vm);
- 
- 	/* reset the device and cleanup the queues */
-+	virtio_break_device(vdev);
-+	flush_work(&vm->wq);
- 	virtio_reset_device(vdev);
- 	vdev->config->del_vqs(vdev);
- 
--- 
-MST
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

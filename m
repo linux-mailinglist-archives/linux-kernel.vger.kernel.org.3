@@ -2,93 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF8F48E461
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B2948E465
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbiANGs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
+        id S232166AbiANGtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiANGs1 (ORCPT
+        with ESMTP id S230223AbiANGtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:48:27 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BAFC06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:48:27 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id e18-20020a255012000000b00611b9fa7078so9448560ybb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:48:27 -0800 (PST)
+        Fri, 14 Jan 2022 01:49:00 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8758FC061574;
+        Thu, 13 Jan 2022 22:49:00 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id 82so10011254qki.10;
+        Thu, 13 Jan 2022 22:49:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=HMm6lw8fmCzwK/qAm0rnyqsh44zJLqbdDkWenpmSRLk=;
-        b=AGp8bk4dNYz2YbKjz9F6ldM9V3L5xbYpFX1f0d3EF53J+qNT62etz0c8sX1TGsKpE4
-         qG00hl7piKfpBWc4BCmhN1suswNqET6HwzK7lVQZcsTAhW/VaqmJunyk/JS5z++hTrYv
-         h4Lg/3oWROm1BxNDxodMmPdPbgs4V1KvKzW+/gRJz/8h/KV8Jc+K3fCAHp9cYurcHDpD
-         43JqK/bqieDuu9eBrTfG6CCiHIegCRxtZ2khankhOKtueslTns8LvHRKsmi0T3Z7VPdM
-         q19KRFfX/FGRi4Tp+i2kdfrirlbGiFyVZE8E+CeVSgqcvBN6fMLQwMmbH9dPRh0pSEoJ
-         Pj4g==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=B+fcba0guNJe05QgbJXwe+sMQe2m5ccQ8ajqhjcvHAE=;
+        b=ecmU7hZRNGjPS2XiyC0x8KenUkgVcZzEzqPlRh5jPDVUOuLvmP8aKk9OkWhIdvwWCJ
+         T097GxzoxSze7MoQR9hVpF2UxBYH+TFUbAAqX1ffTCXIBTbnTit4Nvc4CBhn4bRvCxs+
+         6rO9P6L12CyL5KAhjyTwPxanbieM7dAMSx2vBPpIyxZNywCUhEFYvh++oljd1vYNqgS4
+         0EglfMrjsN3+Ywy1gGHALjWmtsf6vDsbES7K9bJRIF/gFWZKRmiaPGGD2C0+IIDZDFEA
+         khuEOJcEYWOrWASuBwJEmEH7ruvVVejYu7UozhUMKCLeHseJbr5EtfqhhgMAABF4HVla
+         owVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=HMm6lw8fmCzwK/qAm0rnyqsh44zJLqbdDkWenpmSRLk=;
-        b=n94Ldi8z4ecXFHoxJCl4M61lqYIgm2fQfi3DAyodPW7GKKdkxgHWpGqQ7oL19t0x5+
-         QiSj4fs9bHWU8MzmxSWySJnuj+Uklgl9LoQ7Ai4hsUCCNKRmBRLATlyouAWyeZAaisMH
-         t4Hh/CcUWKSDs33uWmvz0O0YtNkDACPo/Givs9pebnjvCQZbx4mSGSjIsaDmqXh5gp+u
-         uDaAsTjUgAEteP3EbtE1Jv/f6pXDyS0aJD4Wi2Ua/jx6aG9mw4ME/pzTrZWcv35fSv4X
-         8eAS8H3ofRJzDzlL/PYt6v+QANA7B+2SSzm3mSrpvxpGr+KJOcIS8JU09i5t3rYJf2Kk
-         kq4g==
-X-Gm-Message-State: AOAM532ABGRy3UQWsitZPh22axsEocu534Omex9gCARL5qimW8xjxIhm
-        cE4JBNI7YP9+kgALStzbZOCb8OaGcHQ1
-X-Google-Smtp-Source: ABdhPJwhxSzCg2gZ8CBq5yz4UF4rfjyY6GWEipaxURLLLH8fw6VkrsGuN1NI99Vv8zva8uUfdQyNniXroQFK
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:de36:7cc:6c7a:b7cd])
- (user=irogers job=sendgmr) by 2002:a25:d648:: with SMTP id
- n69mr4603717ybg.371.1642142906649; Thu, 13 Jan 2022 22:48:26 -0800 (PST)
-Date:   Thu, 13 Jan 2022 22:48:22 -0800
-Message-Id: <20220114064822.1806019-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH] perf arm: Fix off-by-one directory path.
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=B+fcba0guNJe05QgbJXwe+sMQe2m5ccQ8ajqhjcvHAE=;
+        b=1KhQDO5VL0DicffcZZEyjANJKYpa5R8tl4jCuZ4rK1R+E7sCheDyF9Lx9seV89Zxbm
+         08twJD3CyC3D9ggwsaz0M5QNml7Q56NZrdMQajQQHGVAzHOmReIMnVYqGclJI4q+L/TJ
+         c+b6V2h39eOjvjnNUwrtoCcGYEVso4vZ4LhQ32etO13Oe6Ttf5zlazjVzUgA9VnNJPgn
+         sFdJxlIqa2poGcT3VsAKyPD7H/QASnVg7m+IgGL5ePfmhHQpPNYDPHoxY4K9lGjS/b52
+         3aqZutr5BP2PtWU35bUBuXvCecAycFvum84ibQPl/qc5pMDBOSOF5ApY/HzXn7IyFMNl
+         PQGQ==
+X-Gm-Message-State: AOAM530cgX8zEymAiWEY/38LMLxjhMWfAVvUkAPDrubEi6CpeHtU3hsA
+        eGnwpJGA5Za5md9AZRwe/sk8i38TgrE=
+X-Google-Smtp-Source: ABdhPJxpLJfkcIKmkzQboS/h9TEkXvXV4sh4EWp3uO/wDl8oH9bNtbWjfmEvNMtuTjduCYallcj9BA==
+X-Received: by 2002:a05:620a:f10:: with SMTP id v16mr5485570qkl.626.1642142939650;
+        Thu, 13 Jan 2022 22:48:59 -0800 (PST)
+Received: from vps.qemfd.net (vps.qemfd.net. [173.230.130.29])
+        by smtp.gmail.com with ESMTPSA id w9sm563358qkp.89.2022.01.13.22.48.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 22:48:59 -0800 (PST)
+Received: from schwarzgerat.orthanc (schwarzgerat.danknet [192.168.128.2])
+        by vps.qemfd.net (Postfix) with ESMTP id 7A6DA2B5D4;
+        Fri, 14 Jan 2022 01:48:58 -0500 (EST)
+Received: by schwarzgerat.orthanc (Postfix, from userid 1000)
+        id 75B24600305; Fri, 14 Jan 2022 01:48:58 -0500 (EST)
+Date:   Fri, 14 Jan 2022 01:48:58 -0500
+From:   nick black <dankamongmen@gmail.com>
+To:     linux-man@vger.kernel.org
+Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [patch] console_codes.4: ffix
+Message-ID: <YeEc2pYvKEckcAmv@schwarzgerat.orthanc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Relative path include works in the regular build due to -I paths but may
-fail in other situations.
+Fix up the busted OSC command list (reset palette and
+set palette). Remove CSI prefix from the list of non-CSI
+escapes. End all items of said list with periods,
+matching other sections of the page.
 
-Fixes: 83869019c74c ("perf arch: Support register names from all archs")
-Signed-off-by: Ian Rogers <irogers@google.com>
+Signed-off-by: nick black <nickblack@linux.com>
 ---
- tools/perf/util/arm64-frame-pointer-unwind-support.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ man4/console_codes.4 | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/tools/perf/util/arm64-frame-pointer-unwind-support.c b/tools/perf/util/arm64-frame-pointer-unwind-support.c
-index 4f5ecf51ed38..2242a885fbd7 100644
---- a/tools/perf/util/arm64-frame-pointer-unwind-support.c
-+++ b/tools/perf/util/arm64-frame-pointer-unwind-support.c
-@@ -6,7 +6,7 @@
- #include "unwind.h"
- 
- #define perf_event_arm_regs perf_event_arm64_regs
--#include "../arch/arm64/include/uapi/asm/perf_regs.h"
-+#include "../../arch/arm64/include/uapi/asm/perf_regs.h"
- #undef perf_event_arm_regs
- 
- struct entries {
+diff --git man4/console_codes.4 man4/console_codes.4
+index d549b76a9..001de1955 100644
+--- man4/console_codes.4
++++ man4/console_codes.4
+@@ -139,29 +139,28 @@ T}
+ ESC 8	DECRC	T{
+ Restore state most recently saved by ESC 7.
+ T}
+-ESC [	CSI	Control sequence introducer
+ ESC %		Start sequence selecting character set
+ ESC % @		\0\0\0Select default (ISO 646 / ISO 8859-1)
+ ESC % G		\0\0\0Select UTF-8
+ ESC % 8		\0\0\0Select UTF-8 (obsolete)
+ ESC # 8	DECALN	T{
+-DEC screen alignment test \- fill screen with E's
++DEC screen alignment test \- fill screen with E's.
+ T}
+ ESC (		T{
+ Start sequence defining G0 character set
+ (followed by one of B, 0, U, K, as below)
+ T}
+ ESC ( B		T{
+-Select default (ISO 8859-1 mapping)
++Select default (ISO 8859-1 mapping).
+ T}
+ ESC ( 0		T{
+-Select VT100 graphics mapping
++Select VT100 graphics mapping.
+ T}
+ ESC ( U		T{
+-Select null mapping \- straight to character ROM
++Select null mapping \- straight to character ROM.
+ T}
+ ESC ( K		T{
+-Select user mapping \- the map that is loaded by the utility \fBmapscrn\fP(8)
++Select user mapping \- the map that is loaded by the utility \fBmapscrn\fP(8).
+ T}
+ ESC )		T{
+ Start sequence defining G1 (followed by one of B, 0, U, K, as above).
+@@ -169,12 +168,13 @@ T}
+ ESC >	DECPNM	Set numeric keypad mode
+ ESC =	DECPAM	Set application keypad mode
+ ESC ]	OSC	T{
+-(Should be: Operating system command)
+-ESC ] P \fInrrggbb\fP: set palette, with parameter
+-given in 7 hexadecimal digits after the final P :-(.
+-Here \fIn\fP is the color (0\(en15), and \fIrrggbb\fP indicates
++Operating System Command prefix.
++T}
++ESC ] R		Reset palette.
++ESC ] P		T{
++Set palette, with parameter given in 7 hexadecimal digits \fInrrggbb\fP after
++the final P. Here \fIn\fP is the color (0\(en15), and \fIrrggbb\fP indicates
+ the red/green/blue values (0\(en255).
+-ESC ] R: reset palette
+ T}
+ .TE
+ .ad
 -- 
-2.34.1.703.g22d0c6ccf7-goog
+2.34.1
 
+
+-- 
+nick black -=- https://www.nick-black.com
+to make an apple pie from scratch,
+you need first invent a universe.

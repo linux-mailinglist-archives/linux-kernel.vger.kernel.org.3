@@ -2,122 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF5E48E933
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EAF48E935
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240844AbiANLbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 06:31:55 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:51057 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231759AbiANLbz (ORCPT
+        id S234142AbiANLdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 06:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231759AbiANLdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 06:31:55 -0500
-Received: from [192.168.100.1] ([82.142.23.158]) by mrelayeu.kundenserver.de
- (mreue106 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1MJW18-1msrHl0OrI-00Ju2B; Fri, 14 Jan 2022 12:31:37 +0100
-Message-ID: <d5f59216-793a-f5cf-2ab6-e3cf3a4a855f@vivier.eu>
-Date:   Fri, 14 Jan 2022 12:31:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: fr
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        John Stultz <john.stultz@linaro.org>,
-        linux-rtc@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-References: <20220113201920.3201760-1-laurent@vivier.eu>
- <20220113201920.3201760-4-laurent@vivier.eu>
- <CAK8P3a2QzMiga0FFVmTuefnq1OzsgyopiJN2he8043K0TRF1ng@mail.gmail.com>
- <a53e6d46-114f-7bb2-70b9-113c5f8a9c0e@vivier.eu>
- <CAMuHMdXN=2tjizcjA4vZ1FOSXDBNBkKH355fkfspgO9bOhp6_w@mail.gmail.com>
-From:   Laurent Vivier <laurent@vivier.eu>
-Subject: Re: [PATCH v6 3/4] clocksource/drivers: Add a goldfish-timer
- clocksource
-In-Reply-To: <CAMuHMdXN=2tjizcjA4vZ1FOSXDBNBkKH355fkfspgO9bOhp6_w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:0UGI68OHsoIg0aXdou6t+iNtAQu+NKLrIM+xtoNuF5A4FxrSc0N
- PSikFEz7ud2JUdT8/lrcWZgbodU4Ui7xUdXL9PvWdnNiMmS/ZsiiZBHe6r1uRXGzW7NH1Po
- 11d3PZQhSg/yyAZvLUe5islJnhvOb/sCzawnMUiifWgfUMKCdCVBae02ofrNNDze0I7vA6d
- M1XOZYaFeDPiAM7Rgch6g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/ELH4PXPORM=:vY/EGpAJmAe0v8NsowcdZr
- O0pXABsu971y5qZ3KpJAOHIMLEfYweVs36N5a9WjbI+U7DbLyRxB2xbN5QVG06VUVscqohyZh
- cqYRlnVV1/BQpftbujUYhQbV5Ai4I0odpRQmQXv3UbW7eYqf5LyVymK8EbFIFZZXvm3X9UVRa
- kGkPcKqO0gXuo1tlB/0FWUJgioyqc+0NdyzGMFeixgAyNj5e34sqRs5KvSGNKzFNSy20VIGl8
- TRe6X32KTsqha6p5XzOmVG9y7u6rmfb4JBVoN5p4tieCu/WOzBbuTjMv+bOpmsGJTHU+A5X2Z
- /K1lm8gp4gIovXyrpdM3VkQD+ep3Rg+1XS/y5aIYYvfSLQp6ikc90EqXnK46NukzzUg/qD1Qf
- JbBqkxDxrn8Vv1EELZUs9PhisIRXV92hc+P34VMYxusOzWfz+b7OhR8Uf+eaCBzmg8kKOhPAv
- o8vbrTtj7ceuaAB2jDRIJxpcjOq91OF+s8YtvqSBztyqtrFETiYk6FiibDI8PdH9O8v1+3Qlu
- S0+UTKOXWT4ux3gzg0n5KHcA5gRi0tU5nSqZ1m4QFqNOs8jeYw1krZ5bQjsQTGd3Tk166QK6m
- eYEC7KO3Tp3jkkdm/+0eP4f/sAU4CI64LCTY+Upd0c7nl1gqW3E5m8i2T1kJ4LBoN0awarPy7
- ptbAZ8weyn14zf95iZGftj3xF5deShj/90EFBGBN/DVpIolTuS0diZ38+0p/3kobsKTA=
+        Fri, 14 Jan 2022 06:33:42 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072EDC06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 03:33:42 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id f8so2537824pgf.8
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 03:33:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=huaqin-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=CBlaERLpJj7dIk48HIUvM5e4ik/vy9mtJGQxiVH6MVw=;
+        b=BSrwxDk56IjZQ1HzQYDCjg+yVbndyHXEWkJSmoFeu5FqLhlqQdkzSsnKo3VlcQLOab
+         bLzDnnI2YGXQOATTAUp8CEwqbVXUdTw8AjJg6Wv9qZmcV3sNUqdqbM3D4hn8i8/1Ue16
+         L8iYWkephKOAHmMaNmp1G9ntSxrvsoSPMRhBCAfBJsI6YzaLNFlNNNPx/BbGC8LGSh47
+         5ugLFU0Ph9orz+kn3DlTQAT59GUMB9fNpGMCFg8psOHpC9lduggMNheFOAQiKeEI/JLz
+         FQS3Sae/AV+tzccWOu7ClR2sG7eza3PynoqGB7OVzTaj+ObVf79RI9qylOqfeQkXLwtn
+         4wiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=CBlaERLpJj7dIk48HIUvM5e4ik/vy9mtJGQxiVH6MVw=;
+        b=5IGIKD1B+xtMT8+bpXB9N3QH36iElrzsHz5/hOKd1uWoqNQrJWuA0cFtHLpNiabXDs
+         QlV8jcvceJM47Qbsrb0sIUoIpMyPu6vsephkpc++8l5Ath5gSbcabSH/eApRbOiAiBFK
+         1wMY/D4ilMdFpOhWE9tT2/zEHLW3RrDIyPzdREV68LvD3T5FYTIzv+GSkE6aKK6rJFFQ
+         jdgM/RNzqD+Fu/4vpWE1Vqw5H8d5L8LtDqSo6MmbIptC4encSsAXjZUAymb8g0K4/E5U
+         qQLg3lKMCLdr0t21Wff9dNcDJRHWVPTgKnk0dqziIBUpZ3dEBwf0z4GViV9K1UE33It6
+         qOMQ==
+X-Gm-Message-State: AOAM531E0PVEX7RzLPFv1Cio0m1k6nXzUN7EbseZQfMlMcUsqsTPVZSA
+        2E1fPExDY8BukMtckkvDwwNaug==
+X-Google-Smtp-Source: ABdhPJxDPUxgFGjgGhFhA1Juf5QMziYDXPu7RzE3gPmc2KLZ29AcI5RXIkK3Joo+0xBv50TfG8Cc6g==
+X-Received: by 2002:a63:a745:: with SMTP id w5mr7688435pgo.374.1642160021469;
+        Fri, 14 Jan 2022 03:33:41 -0800 (PST)
+Received: from ubuntu.huaqin.com ([101.78.151.213])
+        by smtp.gmail.com with ESMTPSA id m17sm5701429pfk.59.2022.01.14.03.33.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 03:33:40 -0800 (PST)
+From:   xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
+To:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     phoenixshen@chromium.org
+Subject: Re Re: [PATCH v2] HID: google: modify HID device groups of eel
+Date:   Fri, 14 Jan 2022 19:33:36 +0800
+Message-Id: <20220114113336.21182-1-xiazhengqiao@huaqin.corp-partner.google.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220107091357.28960-1-xiazhengqiao@huaqin.corp-partner.google.com>
+References: <20220107091357.28960-1-xiazhengqiao@huaqin.corp-partner.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 14/01/2022 à 12:12, Geert Uytterhoeven a écrit :
-> Hi Laurent,
-> 
-> On Fri, Jan 14, 2022 at 12:03 PM Laurent Vivier <laurent@vivier.eu> wrote:
->> Le 14/01/2022 à 11:46, Arnd Bergmann a écrit :
->>> On Thu, Jan 13, 2022 at 9:19 PM Laurent Vivier <laurent@vivier.eu> wrote:
->>>> +static int goldfish_timer_set_oneshot(struct clock_event_device *evt)
->>>> +{
->>>> +       struct goldfish_timer *timerdrv = ced_to_gf(evt);
->>>> +       void __iomem *base = timerdrv->base;
->>>> +
->>>> +       __raw_writel(0, base + TIMER_ALARM_HIGH);
->>>> +       __raw_writel(0, base + TIMER_ALARM_LOW);
->>>> +       __raw_writel(1, base + TIMER_IRQ_ENABLED);
->>>
->>> As mentioned elsewhere, the __raw_* accessors are not portable, please
->>> use readl()/writel() here, or possibly ioread32_be()/iowrite32_be() for
->>> the big-endian variant.
->>
->> We can't use readl()/writel() here because it's supposed to read from a little endian device, and
->> goldfish endianness depends on the endianness of the machine.
->>
->> For goldfish, readl()/writel() works fine on little-endian machine but not on big-endian machine.
->>
->> On m68k, you have:
->>
->> #define readl(addr)      in_le32(addr)
->> #define writel(val,addr) out_le32((addr),(val))
->>
->> and with goldfish it's wrong as the device is not little-endian, it is big-endian like the machine.
->>
->> same comment with ioread32_be()/iowrite32_be(): it will work on big-endian machine not on little-endian.
->>
->> We need an accessor that doesn't byteswap the value, that accesses it natively, and in all other
->> parts of the kernel __raw_writel() and __raw_readl() are used.
-> 
-> Hence Arnd's suggestion to define custom accessors in the Goldfish
-> RTC driver, that map to {read,write}l() on little-endian, and to
-> io{read,write}32_be() on big-endian.
-> 
-> BTW, I'd go for io{read,write}32() on little endian instead, for
-> symmetry.
+Hi Jiri,
 
-You mean something like that:
+> Color me confused, but anything with HID_GROUP_VIVALDI should be matched 
+> by hid-vivaldi driver, so what is this about?
 
-#ifdef CONFIG_CPU_BIG_ENDIAN
-#define raw_ioread32 ioread32be
-#define raw_iowrite32 iowrite32be
-#else
-#define raw_ioread32 ioread32
-#define raw_iowrite32 iowrite32
-#endif
+yes, HID_GROUP_VIVALDI will be matched by hid-vivaldi driver. 
 
-and then use raw_ioread32()/raw_iowrite32() rather than readl()/writel()?
+CONFIG_HID_VIVALDI will be set to y when it is used.  
 
-Thanks,
-Laurent
+thanks.

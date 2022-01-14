@@ -2,245 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B4748E9D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 13:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD9048E9DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 13:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241047AbiANMar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 07:30:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
+        id S241057AbiANMa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 07:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241036AbiANMaq (ORCPT
+        with ESMTP id S241051AbiANMa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 07:30:46 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12F8C06173E
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 04:30:45 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id x22so29668204lfd.10
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 04:30:45 -0800 (PST)
+        Fri, 14 Jan 2022 07:30:58 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B6AC06173E
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 04:30:58 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id x22so29670022lfd.10
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 04:30:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dFRXtZZJM1w8961wsdhrLcj24zD7zb34E9qEnauBJXU=;
-        b=idPRQ8dlVpadyH1EnirRdmBZfw36VmY5JeDrBgyETgygFDTDNjO3OicMzeXhdzNjHX
-         ZDn6mUnyfs3HzMQG7yaW2qR2ih94hpk5bb2omZNNsCljHWruVgHiVJbJmX86H7CY44kT
-         /odSrXFwMtcxBoGbj1nS62G1dCqrpZdpUdL4JZqn1YyqQgC9bY5QUH2t1uHHnjiGNspf
-         KyGle92on+jBisHCxaFBGI+pjfxka9i3nnBSHe8a3auq9EcP58O6YoEz+SvelslkSKnB
-         TRDwhpLZ1OtpeZQjp/rSUBAUVxHsdgPoNirq+rGKlLTOvkpkAvS8J81AeXnJkkrle9ob
-         JKtw==
+        bh=Ws2LMZ5nWWo85ltRjOHPxrAJcfufwTYWFr7QIEeNBz4=;
+        b=IRwaov5nNzKhqzILCR7xKnU588447yjbVN5r8tk8fbVWOCgvtxko6yXqu/aP3wk74X
+         WZ+uhaaI2tSAK9YqPzXuqpK1P2lhM7MK+NIElRmh0FFbfmAbNYTMq7OL7wV9gV98inaG
+         bep2hY1c3Cd+nlDHNJ9zmzmQlcnV+myVv+B6lOTzyWQoUw3/YNhRL5UUlaXcmdjnPxxB
+         IHLojo7NNqPsmpp6jAsbM+lhsjNJtjz3RMkC3PvrWxwu4k3eGmCuj5zM63d7apZmz5yn
+         KK8evaG9XfxJ3frcitYbz7C1wbD4Aa53umxGhSU0ezTmncsZ1C9J2OTJ3g9Tswfad179
+         zJxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dFRXtZZJM1w8961wsdhrLcj24zD7zb34E9qEnauBJXU=;
-        b=u/pBt1W2k00uZ4B+7oj1PdwH84GKYCEVvWYXNk/2CfqjhEtkTK6pal85+Rs7B47p0g
-         IYY02SAfvWt5EFaT38646M43Y5apo7yhZ9rpM4OT/LdnIwMaoq7QN/ZzZu3CMai6OEtB
-         XNfoFwMa/RJjfam3bSKx2K/DQvYm8AEedYQroazg+kYpizp+fkJDTYo+nVK/zyf+4ubm
-         BavxH7zUL4N4YhK1jKZmEmfeZ536oIsYbpQlhRiI8A7H1oU67U04Dx8s+5ltLlZehGcc
-         Rx4ZRIiuWzttilTEsL3K9QxRp6CenZyDIOt2h14PgYRTu0zf/8Us3cDCNgCSSiB3CTDr
-         TMbA==
-X-Gm-Message-State: AOAM5323ItNbaySMQXl/SMUbNU36uv0N6I80875sZbwnT+z8W0fJ4XIp
-        IUbBaU28iKgu/ryfcKGs7aWEtlmn6T3ch3MkF+2ceA==
-X-Google-Smtp-Source: ABdhPJyWQeFWRdC1re5kRbvMitOb6K7LNOupUy6c8ve0Xxr9HTyFtNXTC7xc5QWnESF9qUEg9Ikn6HYvX3IjDLt4aEU=
-X-Received: by 2002:a05:651c:98f:: with SMTP id b15mr6534836ljq.367.1642163442620;
- Fri, 14 Jan 2022 04:30:42 -0800 (PST)
+        bh=Ws2LMZ5nWWo85ltRjOHPxrAJcfufwTYWFr7QIEeNBz4=;
+        b=n+L3zMYe1C2R9UC/bYs13FxJ5EKo8JbWiGLY5kuQgKSMCBByi0ENlZGqDmkPeiiKrn
+         w+lTTi89AI94znNK537GVx3Ophozl+nOZLb4h7o+UiRGebOeaKU+Bq8A3/FqUVDAhikM
+         gM/dF33CMgjf17OFfO/m3n0LCKC/c+Sx7ySw1icfOIbfYbjihURPHKxBEZVwZLJNLCvh
+         DCeBrRVh2gxKHYOHJph5mXtPZGkx+OBdQibw2RLh+laQzhg1o6u3wePL3i0WMrK91H9V
+         uHFSK9bAzeiyRRKu4Fnv06JxFxsORNLfgtUoRT1n2k1Ykr7dR8duwGFocPdz/YGOXfJZ
+         SvhA==
+X-Gm-Message-State: AOAM530lcctjLvT+FZJMFAl5f4DwIcK4eyeU6jxU9XwljD33uqdTMUwP
+        OCin1oJagLay/OJnjs1dhbRD9dCtW+dYTFTbJle/cw==
+X-Google-Smtp-Source: ABdhPJyb+WRkCf4D+uR0dqONoC4HWsyFnEUmzHebA+YTiyB3aKkKGX9UG5M5JiKdKZxHP3NYuOCWMhQvHIOq4p3hq3w=
+X-Received: by 2002:a2e:947:: with SMTP id 68mr6711799ljj.300.1642163456710;
+ Fri, 14 Jan 2022 04:30:56 -0800 (PST)
 MIME-Version: 1.0
-References: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com> <1641749107-31979-7-git-send-email-quic_mkshah@quicinc.com>
-In-Reply-To: <1641749107-31979-7-git-send-email-quic_mkshah@quicinc.com>
+References: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com> <1641749107-31979-3-git-send-email-quic_mkshah@quicinc.com>
+In-Reply-To: <1641749107-31979-3-git-send-email-quic_mkshah@quicinc.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 14 Jan 2022 13:30:06 +0100
-Message-ID: <CAPDyKFrYKRz=S_9_6RNGWn4p3K1MLP63rRfVDSKvH_o8SjZCeQ@mail.gmail.com>
-Subject: Re: [PATCH 06/10] soc: qcom: rpmh-rsc: Attach RSC to cluster PM domain
+Date:   Fri, 14 Jan 2022 13:30:20 +0100
+Message-ID: <CAPDyKFr3_RJXE7_6YQzgusRNhsZ1F8CBG5iV27ZTspGacwo6uA@mail.gmail.com>
+Subject: Re: [PATCH 02/10] arm64: dts: qcom: sm8250: Add cpuidle states
 To:     Maulik Shah <quic_mkshah@quicinc.com>
 Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         rafael@kernel.org, daniel.lezcano@linaro.org,
-        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
+        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com,
+        devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 9 Jan 2022 at 18:26, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+On Sun, 9 Jan 2022 at 18:25, Maulik Shah <quic_mkshah@quicinc.com> wrote:
 >
-> From: Lina Iyer <ilina@codeaurora.org>
+> This change adds various idle states and add devices to power domains.
 >
-> RSC is part the CPU subsystem and powers off the CPU domains when all
-> the CPUs and no RPMH transactions are pending from any of the drivers.
-> The RSC needs to flush the 'sleep' and 'wake' votes that are critical
-> for saving power when all the CPUs are in idle.
->
-> Let's make RSC part of the CPU PM domains, by attaching it to the
-> cluster power domain. Registering for PM domain notifications, RSC
-> driver can be notified that the last CPU is powering down. When the last
-> CPU is powering down the domain, let's flush the 'sleep' and 'wake'
-> votes that are stored in the data buffers into the hardware and also
-> write next wakeup in CONTROL_TCS.
->
-> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+> Cc: devicetree@vger.kernel.org
 > Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
-> ---
->  drivers/soc/qcom/rpmh-internal.h |  6 +++-
->  drivers/soc/qcom/rpmh-rsc.c      | 60 ++++++++++++++++++++++++++++++++++++++--
->  2 files changed, 62 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/soc/qcom/rpmh-internal.h b/drivers/soc/qcom/rpmh-internal.h
-> index 344ba68..32ac117 100644
-> --- a/drivers/soc/qcom/rpmh-internal.h
-> +++ b/drivers/soc/qcom/rpmh-internal.h
-> @@ -97,7 +97,9 @@ struct rpmh_ctrlr {
->   * @rsc_pm:             CPU PM notifier for controller.
->   *                      Used when solver mode is not present.
->   * @cpus_in_pm:         Number of CPUs not in idle power collapse.
-> - *                      Used when solver mode is not present.
-> + *                      Used when solver mode and "power-domains" is not present.
-> + * @genpd_nb:           PM Domain notifier for cluster genpd notifications.
-> + * @genpdb:             PM Domain for cluster genpd.
 
-/s/genpdb/genpd
-
->   * @tcs:                TCS groups.
->   * @tcs_in_use:         S/W state of the TCS; only set for ACTIVE_ONLY
->   *                      transfers, but might show a sleep/wake TCS in use if
-> @@ -117,6 +119,8 @@ struct rsc_drv {
->         int id;
->         int num_tcs;
->         struct notifier_block rsc_pm;
-> +       struct notifier_block genpd_nb;
-> +       struct generic_pm_domain *genpd;
->         atomic_t cpus_in_pm;
->         struct tcs_group tcs[TCS_TYPE_NR];
->         DECLARE_BITMAP(tcs_in_use, MAX_TCS_NR);
-> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-> index 01c2f50c..5875ad5 100644
-> --- a/drivers/soc/qcom/rpmh-rsc.c
-> +++ b/drivers/soc/qcom/rpmh-rsc.c
-> @@ -14,10 +14,13 @@
->  #include <linux/kernel.h>
->  #include <linux/list.h>
->  #include <linux/module.h>
-> +#include <linux/notifier.h>
->  #include <linux/of.h>
->  #include <linux/of_irq.h>
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
-> +#include <linux/pm_domain.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
->  #include <linux/wait.h>
-> @@ -834,6 +837,51 @@ static int rpmh_rsc_cpu_pm_callback(struct notifier_block *nfb,
->         return ret;
->  }
->
-> +/**
-> + * rpmh_rsc_pd_callback() - Check if any of the AMCs are busy.
-> + * @nfb:    Pointer to the genpd notifier block in struct rsc_drv.
-> + * @action: GENPD_NOTIFY_PRE_OFF, GENPD_NOTIFY_OFF, GENPD_NOTIFY_PRE_ON or GENPD_NOTIFY_ON.
-> + * @v:      Unused
-> + *
-> + * This function is given to dev_pm_genpd_add_notifier() so we can be informed
-> + * about when cluster-pd is going down. When cluster go down we know no more active
-> + * transfers will be started so we write sleep/wake sets. This function gets
-> + * called from cpuidle code paths and also at system suspend time.
-> + *
-> + * If AMCs are not busy then writes cached sleep and wake messages to TCSes.
-> + * The firmware then takes care of triggering them when entering deepest low power modes.
-> + *
-> + * Return:
-> + * * NOTIFY_OK          - success
-> + * * NOTIFY_BAD         - failure
-> + */
-> +static int rpmh_rsc_pd_callback(struct notifier_block *nfb,
-> +                               unsigned long action, void *v)
-> +{
-> +       struct rsc_drv *drv = container_of(nfb, struct rsc_drv, genpd_nb);
-> +
-> +       /* We don't need to lock as domin on/off are serialized */
-
-/s/domin/genpd
-
-> +       if ((action == GENPD_NOTIFY_PRE_OFF) &&
-> +           (rpmh_rsc_ctrlr_is_busy(drv) || rpmh_flush(&drv->client)))
-> +               return NOTIFY_BAD;
-> +
-> +       return NOTIFY_OK;
-> +}
-> +
-> +static int rpmh_rsc_pd_attach(struct rsc_drv *drv, struct device *dev)
-> +{
-> +       int ret;
-> +
-> +       pm_runtime_enable(dev);
-> +       ret = dev_pm_domain_attach(dev, false);
-
-Unless I have missed something, this should not be needed.
-
-This is because it's a regular platform driver and we only have a
-single PM domain to attach for the rsc device. In this case, the
-platform bus is capable of managing the attach to the genpd. See
-platform_probe() in drivers/base/platform.c.
-
-> +       if (ret)
-> +               return ret;
- > +
-> +       drv->genpd = pd_to_genpd(dev->pm_domain);
-
-I couldn't find where this pointer is being used later in the driver.
-In any case, you can probably use dev->pm_domain directly wherever
-needed instead.
-
-> +       drv->genpd_nb.notifier_call = rpmh_rsc_pd_callback;
-> +       return dev_pm_genpd_add_notifier(dev, &drv->genpd_nb);
-
-You should call pm_runtime_disable() in the error path.
-
-> +}
-> +
->  static int rpmh_probe_tcs_config(struct platform_device *pdev,
->                                  struct rsc_drv *drv, void __iomem *base)
->  {
-> @@ -963,7 +1011,7 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
->                 return ret;
->
->         /*
-> -        * CPU PM notification are not required for controllers that support
-> +        * CPU PM/genpd notification are not required for controllers that support
->          * 'HW solver' mode where they can be in autonomous mode executing low
->          * power mode to power down.
->          */
-> @@ -971,8 +1019,14 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
->         solver_config &= DRV_HW_SOLVER_MASK << DRV_HW_SOLVER_SHIFT;
->         solver_config = solver_config >> DRV_HW_SOLVER_SHIFT;
->         if (!solver_config) {
-> -               drv->rsc_pm.notifier_call = rpmh_rsc_cpu_pm_callback;
-> -               cpu_pm_register_notifier(&drv->rsc_pm);
-> +               if (of_find_property(dn, "power-domains", NULL)) {
-
-Rather than parsing the DT, I think it's better to check if
-"dev->pm_domain" has been assigned. As I indicated above, the platform
-bus manages the attach before the driver's ->probe() callback is
-invoked.
-
-> +                       ret = rpmh_rsc_pd_attach(drv, &pdev->dev);
-> +                       if (ret)
-> +                               return ret;
-> +               } else {
-> +                       drv->rsc_pm.notifier_call = rpmh_rsc_cpu_pm_callback;
-> +                       cpu_pm_register_notifier(&drv->rsc_pm);
-> +               }
->         }
->
->         /* Enable the active TCS to send requests immediately */
-
-Beyond this point, you need to call the below to manage the error path
-correctly:
-dev_pm_genpd_remove_notifier()
-pm_runtime_disable()
-
-> --
-> 2.7.4
->
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
+
+
+> ---
+>  arch/arm64/boot/dts/qcom/sm8250.dtsi | 105 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 105 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> index 5617a46..077d0ab 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> @@ -98,6 +98,8 @@
+>                         capacity-dmips-mhz = <448>;
+>                         dynamic-power-coefficient = <205>;
+>                         next-level-cache = <&L2_0>;
+> +                       power-domains = <&CPU_PD0>;
+> +                       power-domain-names = "psci";
+>                         qcom,freq-domain = <&cpufreq_hw 0>;
+>                         operating-points-v2 = <&cpu0_opp_table>;
+>                         interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -120,6 +122,8 @@
+>                         capacity-dmips-mhz = <448>;
+>                         dynamic-power-coefficient = <205>;
+>                         next-level-cache = <&L2_100>;
+> +                       power-domains = <&CPU_PD1>;
+> +                       power-domain-names = "psci";
+>                         qcom,freq-domain = <&cpufreq_hw 0>;
+>                         operating-points-v2 = <&cpu0_opp_table>;
+>                         interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -139,6 +143,8 @@
+>                         capacity-dmips-mhz = <448>;
+>                         dynamic-power-coefficient = <205>;
+>                         next-level-cache = <&L2_200>;
+> +                       power-domains = <&CPU_PD2>;
+> +                       power-domain-names = "psci";
+>                         qcom,freq-domain = <&cpufreq_hw 0>;
+>                         operating-points-v2 = <&cpu0_opp_table>;
+>                         interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -158,6 +164,8 @@
+>                         capacity-dmips-mhz = <448>;
+>                         dynamic-power-coefficient = <205>;
+>                         next-level-cache = <&L2_300>;
+> +                       power-domains = <&CPU_PD3>;
+> +                       power-domain-names = "psci";
+>                         qcom,freq-domain = <&cpufreq_hw 0>;
+>                         operating-points-v2 = <&cpu0_opp_table>;
+>                         interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -177,6 +185,8 @@
+>                         capacity-dmips-mhz = <1024>;
+>                         dynamic-power-coefficient = <379>;
+>                         next-level-cache = <&L2_400>;
+> +                       power-domains = <&CPU_PD4>;
+> +                       power-domain-names = "psci";
+>                         qcom,freq-domain = <&cpufreq_hw 1>;
+>                         operating-points-v2 = <&cpu4_opp_table>;
+>                         interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -196,6 +206,8 @@
+>                         capacity-dmips-mhz = <1024>;
+>                         dynamic-power-coefficient = <379>;
+>                         next-level-cache = <&L2_500>;
+> +                       power-domains = <&CPU_PD5>;
+> +                       power-domain-names = "psci";
+>                         qcom,freq-domain = <&cpufreq_hw 1>;
+>                         operating-points-v2 = <&cpu4_opp_table>;
+>                         interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -216,6 +228,8 @@
+>                         capacity-dmips-mhz = <1024>;
+>                         dynamic-power-coefficient = <379>;
+>                         next-level-cache = <&L2_600>;
+> +                       power-domains = <&CPU_PD6>;
+> +                       power-domain-names = "psci";
+>                         qcom,freq-domain = <&cpufreq_hw 1>;
+>                         operating-points-v2 = <&cpu4_opp_table>;
+>                         interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -235,6 +249,8 @@
+>                         capacity-dmips-mhz = <1024>;
+>                         dynamic-power-coefficient = <444>;
+>                         next-level-cache = <&L2_700>;
+> +                       power-domains = <&CPU_PD7>;
+> +                       power-domain-names = "psci";
+>                         qcom,freq-domain = <&cpufreq_hw 2>;
+>                         operating-points-v2 = <&cpu7_opp_table>;
+>                         interconnects = <&gem_noc MASTER_AMPSS_M0 &mc_virt SLAVE_EBI_CH0>,
+> @@ -281,6 +297,42 @@
+>                                 };
+>                         };
+>                 };
+> +
+> +               idle-states {
+> +                       entry-method = "psci";
+> +
+> +                       LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
+> +                               compatible = "arm,idle-state";
+> +                               idle-state-name = "silver-rail-power-collapse";
+> +                               arm,psci-suspend-param = <0x40000004>;
+> +                               entry-latency-us = <360>;
+> +                               exit-latency-us = <531>;
+> +                               min-residency-us = <3934>;
+> +                               local-timer-stop;
+> +                       };
+> +
+> +                       BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
+> +                               compatible = "arm,idle-state";
+> +                               idle-state-name = "gold-rail-power-collapse";
+> +                               arm,psci-suspend-param = <0x40000004>;
+> +                               entry-latency-us = <702>;
+> +                               exit-latency-us = <1061>;
+> +                               min-residency-us = <4488>;
+> +                               local-timer-stop;
+> +                       };
+> +               };
+> +
+> +               domain-idle-states {
+> +                       CLUSTER_SLEEP_0: cluster-sleep-0 {
+> +                               compatible = "domain-idle-state";
+> +                               idle-state-name = "cluster-llcc-off";
+> +                               arm,psci-suspend-param = <0x4100c244>;
+> +                               entry-latency-us = <3264>;
+> +                               exit-latency-us = <6562>;
+> +                               min-residency-us = <9987>;
+> +                               local-timer-stop;
+> +                       };
+> +               };
+>         };
+>
+>         cpu0_opp_table: cpu0_opp_table {
+> @@ -594,6 +646,59 @@
+>         psci {
+>                 compatible = "arm,psci-1.0";
+>                 method = "smc";
+> +
+> +               CPU_PD0: cpu0 {
+> +                       #power-domain-cells = <0>;
+> +                       power-domains = <&CLUSTER_PD>;
+> +                       domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+> +               };
+> +
+> +               CPU_PD1: cpu1 {
+> +                       #power-domain-cells = <0>;
+> +                       power-domains = <&CLUSTER_PD>;
+> +                       domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+> +               };
+> +
+> +               CPU_PD2: cpu2 {
+> +                       #power-domain-cells = <0>;
+> +                       power-domains = <&CLUSTER_PD>;
+> +                       domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+> +               };
+> +
+> +               CPU_PD3: cpu3 {
+> +                       #power-domain-cells = <0>;
+> +                       power-domains = <&CLUSTER_PD>;
+> +                       domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
+> +               };
+> +
+> +               CPU_PD4: cpu4 {
+> +                       #power-domain-cells = <0>;
+> +                       power-domains = <&CLUSTER_PD>;
+> +                       domain-idle-states = <&BIG_CPU_SLEEP_0>;
+> +               };
+> +
+> +               CPU_PD5: cpu5 {
+> +                       #power-domain-cells = <0>;
+> +                       power-domains = <&CLUSTER_PD>;
+> +                       domain-idle-states = <&BIG_CPU_SLEEP_0>;
+> +               };
+> +
+> +               CPU_PD6: cpu6 {
+> +                       #power-domain-cells = <0>;
+> +                       power-domains = <&CLUSTER_PD>;
+> +                       domain-idle-states = <&BIG_CPU_SLEEP_0>;
+> +               };
+> +
+> +               CPU_PD7: cpu7 {
+> +                       #power-domain-cells = <0>;
+> +                       power-domains = <&CLUSTER_PD>;
+> +                       domain-idle-states = <&BIG_CPU_SLEEP_0>;
+> +               };
+> +
+> +               CLUSTER_PD: cpu-cluster0 {
+> +                       #power-domain-cells = <0>;
+> +                       domain-idle-states = <&CLUSTER_SLEEP_0>;
+> +               };
+>         };
+>
+>         reserved-memory {
+> --
+> 2.7.4
+>

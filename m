@@ -2,111 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4387948E984
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC06B48E989
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240913AbiANL5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 06:57:21 -0500
-Received: from smtp2.axis.com ([195.60.68.18]:46503 "EHLO smtp2.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229579AbiANL5U (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 06:57:20 -0500
+        id S240922AbiANL5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 06:57:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229579AbiANL5h (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 06:57:37 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F219C061574;
+        Fri, 14 Jan 2022 03:57:36 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bu18so6469359lfb.5;
+        Fri, 14 Jan 2022 03:57:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1642161440;
-  x=1673697440;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GxYdK86AwVncAjnPJuoy99CKiKtTmvQPJrbjyinZXo0=;
-  b=fuhnfa740wVhRpBmlkOadHSOYsZV1rA7WeI2JrrTonfnC4lu6cT3Zv2Q
-   s//sfq9O2U8dmUf7Q8hORFYe+sezgQM4LsiLeuoBZra4HjoplTWPiereE
-   0y0f3bL4K3O6nRa/kOAosg3aYIDUxe+lcgKUYPo+aRt60tVWFAruvT7EX
-   /EYeRGPwqDL4FrkC8iiM60LUV8Nk8Kg52g1EQlrK3U9PBSyrPHgngg3/z
-   DA7HAom2YPzytUv7pOOPGWEwSb7ihMm1c5As0wF4Phdqjf51yTC5OyO7Q
-   QqoxzyYnfVqEP3OMnqvHMoshqfWO0fl9frAoTWXxzSpwUDbhj7tsVFBUA
-   Q==;
-Date:   Fri, 14 Jan 2022 12:57:18 +0100
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Jim Cromie <jim.cromie@gmail.com>
-CC:     "jbaron@akamai.com" <jbaron@akamai.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "seanpaul@chromium.org" <seanpaul@chromium.org>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_saipraka@quicinc.com" <quic_saipraka@quicinc.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "quic_psodagud@quicinc.com" <quic_psodagud@quicinc.com>,
-        "maz@kernel.org" <maz@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>
-Subject: Re: [PATCH v11 01/19] dyndbg: add _DPRINTK_FLAGS_ENABLED
-Message-ID: <20220114115718.GB23983@axis.com>
-References: <20220107052942.1349447-1-jim.cromie@gmail.com>
- <20220107052942.1349447-2-jim.cromie@gmail.com>
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sjN7HPUH7Ug5X0NQ0OoeotHY8BGCzuFrcq6sgpHsOA4=;
+        b=AdpLYfxODBkXDQIbyp+qF14sUymbcLVGlDkPE3jNWqBCa3l1kP6oLjsbKnw4yOarVz
+         8YpU9/i3nqXBGuOfuw5z33kjebnGB4oFyX8UI2pqFltxqhoxYQ+7SGLN1JjgjanT6W74
+         GM+qBmYu/GFX8NJLhMVSNmVC3kIxhQxt8ojChQaw1sZLqHE8UVWe4Kmgfz8ChiL6UUGt
+         Usrx18Q9tUSB3LC+IVLy/6bpd3s6cKANn17j+mokwhuxnQYHvA/hZthJc7IhagnRbS82
+         ZYhCE16pVB5eQr3Ud+7ZNlTZiJZI0Sp3RUmUjBXW8yqXUDSDOql1WS5FIDTtVok7csIe
+         nAQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sjN7HPUH7Ug5X0NQ0OoeotHY8BGCzuFrcq6sgpHsOA4=;
+        b=246SMfxy72+I8FYQDcQyp16otyBWgnRHIsujMgJ/ogKdbIHUyEkpt2E3uzW+BpK5ii
+         /D3dS/cKVr17mzxOaHsXZz6gbkfIqqCwINsUlI+mT+408r3otQJ1Hdd1rDK4lYj2PGAH
+         pTlB0o9/Jfx9i0R9cV28SsgfjqnvhvbvD2aZP0ynXZP8Teroz98tFwIoRhCEPTAV4Y8q
+         oI5g9Nr/dKpwrFOyBqadwazylj/CXhEzfUUAksWnEb1R29ziE9HFRSk0zSgxCKlcqgJm
+         Z86PcFbdoYdGDAEFS0rgFf20ArUP86LlaeY7x9qLBg6VoadfFEXA4XgwhVM9nMlIBqS6
+         Te2g==
+X-Gm-Message-State: AOAM530E+jZw0iDYkc0qs2C/armkSHNCM64EbuUyhJ8yWCakjuWw0d5n
+        oxVrt4t77mlssNVElAwJA5q9IjzoMQU=
+X-Google-Smtp-Source: ABdhPJwJlj0n6aU3bkhluqbsKFTna4jWn8pCe5ppGTnreW4zcFhIlJ1YkpoWecjMvDZ3RaPyRr0HaA==
+X-Received: by 2002:a2e:9c0c:: with SMTP id s12mr6057309lji.251.1642161454362;
+        Fri, 14 Jan 2022 03:57:34 -0800 (PST)
+Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
+        by smtp.googlemail.com with ESMTPSA id a35sm543435ljq.7.2022.01.14.03.57.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jan 2022 03:57:33 -0800 (PST)
+Subject: Re: [PATCH v16 2/4] dmaengine: tegra: Add tegra gpcdma driver
+To:     Akhil R <akhilrajeev@nvidia.com>, dan.j.williams@intel.com,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        jonathanh@nvidia.com, kyarlagadda@nvidia.com, ldewangan@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, vkoul@kernel.org
+Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
+References: <1641830718-23650-1-git-send-email-akhilrajeev@nvidia.com>
+ <1641830718-23650-3-git-send-email-akhilrajeev@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <16c73e83-b990-7d8e-ddfd-7cbbe7e407ea@gmail.com>
+Date:   Fri, 14 Jan 2022 14:57:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220107052942.1349447-2-jim.cromie@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1641830718-23650-3-git-send-email-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 06:29:24AM +0100, Jim Cromie wrote:
->  #ifdef CONFIG_JUMP_LABEL
-> -			if (dp->flags & _DPRINTK_FLAGS_PRINT) {
-> -				if (!(modifiers->flags & _DPRINTK_FLAGS_PRINT))
-> +			if (dp->flags & _DPRINTK_FLAGS_ENABLED) {
-> +				if (!(modifiers->flags & _DPRINTK_FLAGS_ENABLED))
->  					static_branch_disable(&dp->key.dd_key_true);
-> -			} else if (modifiers->flags & _DPRINTK_FLAGS_PRINT)
-> +			} else if (modifiers->flags & _DPRINTK_FLAGS_ENABLED)
->  				static_branch_enable(&dp->key.dd_key_true);
->  #endif
->  			dp->flags = newflags;
-> -- 
-> 2.33.1
-> 
+10.01.2022 19:05, Akhil R пишет:
+> +static int tegra_dma_terminate_all(struct dma_chan *dc)
+> +{
+> +	struct tegra_dma_channel *tdc = to_tegra_dma_chan(dc);
+> +	unsigned long flags;
+> +	LIST_HEAD(head);
+> +	int err;
+> +
+> +	if (tdc->dma_desc) {
 
-I haven't tested it so I could be mistaken, but when
-_DPRINTK_FLAGS_ENABLED gets two flags in the next patch, it looks like
-this code still has the problem which I mentioned in
-https://lore.kernel.org/lkml/20211209150910.GA23668@axis.com/?
-
-| I noticed a bug inside the CONFIG_JUMP_LABEL handling (also present
-| in the last version I posted) which should be fixed as part of the
-| diff below (I've added a comment).
-| [...] 
-|  #ifdef CONFIG_JUMP_LABEL
-| -			if (dp->flags & _DPRINTK_FLAGS_PRINT) {
-| -				if (!(modifiers->flags & _DPRINTK_FLAGS_PRINT))
-| +			if (dp->flags & _DPRINTK_FLAGS_ENABLE) {
-| +				/*
-| +				 * The newflags check is to ensure that the
-| +				 * static branch doesn't get disabled in step
-| +				 * 3:
-| +				 *
-| +				 * (1) +pf
-| +				 * (2) +x
-| +				 * (3) -pf
-| +				 */
-| +				if (!(modifiers->flags & _DPRINTK_FLAGS_ENABLE) &&
-| +				    !(newflags & _DPRINTK_FLAGS_ENABLE)) {
-|  					static_branch_disable(&dp->key.dd_key_true);
-| -			} else if (modifiers->flags & _DPRINTK_FLAGS_PRINT)
-| +				}
-| +			} else if (modifiers->flags & _DPRINTK_FLAGS_ENABLE) {
-|  				static_branch_enable(&dp->key.dd_key_true);
-| +			}
-|  #endif
+Needs locking protection against racing with the interrupt handler.

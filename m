@@ -2,94 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 215B048EBF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1D548EBF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238522AbiANOqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 09:46:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
+        id S241984AbiANOql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 09:46:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241962AbiANOqK (ORCPT
+        with ESMTP id S238709AbiANOqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:46:10 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3A9C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 06:46:09 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id o15so30892311lfo.11
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 06:46:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CSKRUaLsfJfUnzvmnBvx1Gx7Z4MA4RF1gGT6nyveJj0=;
-        b=l+aO4kxL+2IolvBE1/PZe4caAKQ+C4QQRKMRUspMhpn0bG6GPSCcVbqEwcExCyi4Dr
-         myngy1BLNt86v5Ywzk09729EHCzCVerjZOCjTzu6C8aMlmkH2eu475hmKlnAjaEnnVt1
-         9Cf4NX46x23ppQPniRKPgz7TNXwj0dUwld7XCaNUJir/kdfZNqGcYtK94mVBfjFT4OZn
-         Pde+62KnnP4VlUN7ocEDzcyM1uG7XcxheMKSl6n6Z1DsRCv2WdSpovOYOD7cKk3mkbqd
-         4EVFQzKZmX2VHy57rr3WZrTpurgTIowrWfnjWCN/Yn+B14YYFApnTqBI0kOv9c6J+whg
-         EfEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CSKRUaLsfJfUnzvmnBvx1Gx7Z4MA4RF1gGT6nyveJj0=;
-        b=K1btJOEesJMt1dgIvYYWAmA9n6iHC2S7vjnIXLbYm72jXpkYimQn92wrmBoDZOdf0s
-         LhG4xy/KseTq+MWnnpcquMCFWqFzRXmZtufaFSnny7H/+dHalmj6RjjJ8e8uvsaMeK2o
-         8i6i9UBrnjkUg4Zr2b5od0kOoCYmWsJ6zRMzLebBUzhIdtlUTzz7vpFlgGmon02jhCFt
-         /hYoxe5ZgmKCc9a26qfnLgFAariup1JTrO/+R4AJmaTxds/Ud+DLYFE+Avbj8icUrPWS
-         jtwwQgJKzKXWhjJ2IeFHGk5I0YsQvnvYMnBRJFI6itBEK2O37N1bzLN/u/0nHkoidpCX
-         V0dQ==
-X-Gm-Message-State: AOAM532806SKIN0AqHobMUJxef/sMJNZxd/SjQatlB65Qo651u+umizJ
-        iTfRwiNVXiBRH8UOZ2v5NYEDFQ==
-X-Google-Smtp-Source: ABdhPJy75c34uMOZTp1fMT1cUhgs2/p0FZuOt7qJKZIOS0vbBgCNSStp6M8LTRjt6Ovtac0R1MC5vA==
-X-Received: by 2002:ac2:4a8e:: with SMTP id l14mr7049062lfp.520.1642171568006;
-        Fri, 14 Jan 2022 06:46:08 -0800 (PST)
-Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id b17sm364093ljr.86.2022.01.14.06.46.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 06:46:07 -0800 (PST)
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Chanho Park <chanho61.park@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] soc: samsung: Fix typo in CONFIG_EXYNOS_USI description
-Date:   Fri, 14 Jan 2022 16:46:06 +0200
-Message-Id: <20220114144606.24358-1-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.30.2
+        Fri, 14 Jan 2022 09:46:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D7EC061574;
+        Fri, 14 Jan 2022 06:46:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC4FAB821B8;
+        Fri, 14 Jan 2022 14:46:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92087C36AEA;
+        Fri, 14 Jan 2022 14:46:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642171597;
+        bh=CkdMvZCwQYDA8ZJ4QcAkC/rvfnqM2RFL97I2ZNXR9oE=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=FwN5NvX99Ai2YFk9WMXWg4Al4ov5HkRmkwehtaWAMYg97AylSYtjypJFsjf5RmkhI
+         CUZL0GfLgf7v3mZ1ldBryhzv6JsqXMrak1GKRUzRpLSuKLgvYPTiTBiHs5TfrONNY6
+         e64RAzEgaWcXI55YejlcghnWVNKAnDTR4Rc7px4M/SnYJHjMWSSNLtj1Dzz05i1ZlH
+         UEb8wE8iUU1c2D5hpOzL+tvIRlMMglAr+0MLcxGB+KEuhlkxyEuhOedCGUiQBlpf+U
+         6O13K9klAyIj4hOEvcXBXzxv/RhF0G0E133m1g0NfM0JGWQtilsg19i2/U3QsTza4t
+         ZQh5w19/3WYyw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Abhishek Kumar <kuabhs@chromium.org>
+Cc:     kernel test robot <lkp@intel.com>, ath10k@lists.infradead.org,
+        kbuild-all@lists.01.org, pillair@codeaurora.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, Jakub Kicinski <kuba@kernel.org>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] ath10k: search for default BDF name provided in DT
+References: <20220110231255.v2.1.Ie4dcc45b0bf365077303c596891d460d716bb4c5@changeid>
+        <202201110851.5qAxfQJj-lkp@intel.com>
+        <CACTWRwtCjXbpxkixAyRrmK5gRjWW7fMv5==9j=YcsdN-mnYhJw@mail.gmail.com>
+Date:   Fri, 14 Jan 2022 16:46:30 +0200
+In-Reply-To: <CACTWRwtCjXbpxkixAyRrmK5gRjWW7fMv5==9j=YcsdN-mnYhJw@mail.gmail.com>
+        (Abhishek Kumar's message of "Thu, 13 Jan 2022 22:47:31 -0800")
+Message-ID: <87y23is7cp.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The proper name is Exynos Auto V9, not V0. It was the typo slipped in
-unnoticed, fix it.
+Abhishek Kumar <kuabhs@chromium.org> writes:
 
-Fixes: b603377e408f ("soc: samsung: Add USI driver")
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
----
-Changes in v2:
-  - Add "Fixes" tag
-  - Add R-b tag by Chanho Park
+> On this patch I have a kernel bot warning, which I intend to fix along
+> with all the comments and discussion and push out V3. So, any
+> comments/next steps are appreciated.
 
- drivers/soc/samsung/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please wait my comments before sending v3, I think this is something
+which is also needed in ath11k and I need to look at it in detail.
 
-diff --git a/drivers/soc/samsung/Kconfig b/drivers/soc/samsung/Kconfig
-index a9f8b224322e..02e319508cc6 100644
---- a/drivers/soc/samsung/Kconfig
-+++ b/drivers/soc/samsung/Kconfig
-@@ -31,7 +31,7 @@ config EXYNOS_USI
- 	help
- 	  Enable support for USI block. USI (Universal Serial Interface) is an
- 	  IP-core found in modern Samsung Exynos SoCs, like Exynos850 and
--	  ExynosAutoV0. USI block can be configured to provide one of the
-+	  ExynosAutoV9. USI block can be configured to provide one of the
- 	  following serial protocols: UART, SPI or High Speed I2C.
- 
- 	  This driver allows one to configure USI for desired protocol, which
 -- 
-2.30.2
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

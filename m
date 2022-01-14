@@ -2,551 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9516F48EC5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD54748EC5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238541AbiANPMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235467AbiANPMF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:12:05 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B387C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:12:05 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso7884616wmj.2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 07:12:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gtoGJAaTWD5rbU4WeYi3UYwlPvJul/pQmYMABUYT0Jg=;
-        b=ITDoa7bvgJ+YJ/qRmBmFAnI9lEW9gSSsjrqotP+onQB+D541L3lqCUZFGN2MY83aBx
-         XFvWKPRgU/sm1XJwMqEsv5hJZ49truclUavCRAyF9zDrGXa8LoNydG61zqysN9tH3tQq
-         DaUUzlGXVjXUlsa8pvFCx6lttn5OF8RCq0njc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gtoGJAaTWD5rbU4WeYi3UYwlPvJul/pQmYMABUYT0Jg=;
-        b=Bw/zouMT05DRyh5Y+ltGhueGNBEjqrsescv8G/sb9NiK6w4PrSeKVXNEQBVlZxHlAQ
-         YWyZNHGUesyzPMjKVjtkcghUIjxZjn/uUJtBugQtaEkCc30O5/uzKh+M+IfkM9qO34+k
-         ePzTmxemW4mZ+E+77HJY6ML8GHulpoer1fjYREwq+AHnt1ElR4tMillyEi1ahksI42f8
-         0tx7jq42BtmcvcYwKsHgoIL8QyAjTd5RRYzqS2l4Jak9K7aD6+sImV/Fq7LxpjazgfqG
-         TGEQVpJJCqAFdoztfRVi7eQtaAb02llzMP4owvMxOqWyIP4h4o5KJ7y2uaiqieVQq44F
-         izSQ==
-X-Gm-Message-State: AOAM5304QjpWF2Uu0xCrJPWc1H9UGTqAIfa0pUkORyy4KUJBtpqt26Qy
-        8wN686nnI//8TksuMxatrU0lYw==
-X-Google-Smtp-Source: ABdhPJygeS7NtZxiP1HYdBCgm7FYn7wyqKB4fqKUlUDgd8s+Q4YMeJf5ViieOoUukluFlZJo3mjMaQ==
-X-Received: by 2002:a17:907:724e:: with SMTP id ds14mr3159406ejc.711.1642173123598;
-        Fri, 14 Jan 2022 07:12:03 -0800 (PST)
-Received: from alco.corp.google.com ([100.104.168.197])
-        by smtp.gmail.com with ESMTPSA id di18sm1891356ejc.56.2022.01.14.07.12.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 07:12:03 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH] media: uvcvideo: Recover stalled ElGato devices
-Date:   Fri, 14 Jan 2022 16:11:45 +0100
-Message-Id: <20220114151145.381637-1-ribalda@chromium.org>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+        id S238551AbiANPO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:14:57 -0500
+Received: from mail-bn1nam07on2046.outbound.protection.outlook.com ([40.107.212.46]:21248
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235467AbiANPOz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 10:14:55 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fUiSyOeBqhUAQNhe3gAfas9oHf1551K7Hcur+ueLTdepGESPU7r92zI3HpyCY0pOI+X0Nfhc5NEQ3x125FJAKChRx/JZ6ETy/1xZ+/Nd4wkAO8a749S2yNi3tr5ZEwjpSZcHiRndaDKzIqPWguwoBIXZD56UZ63MObCacPIx9dTuw7qEN70ax4p8QvpkwjJaWqWRWo6A44au/2NFYeHYKP0BEjkkkDOHlev/Q0a5CBwc9V5AKOHQGGTHAT6r4NETZxRiGEfr/BsVCX1H+QgSzcA203xG3Z8jB97eE2oweqS50P8gQP7iQmO7uXaHfkIm5Suuu8u/JLDjE9RmiTYXtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zy+kTsTEy+0S7nHv/8wZECM8wxZHiCXWhCVJGLbrWvE=;
+ b=TwU21DMtpmt3ZjhKXstP5yZSimyMM4/JJOrlsMMJ53/K+gGSWurP51AoRCArgBXmOS/mGDxqCoKySZwSxPuwPocgrrcr/tRVFC2i/+QB2NfLhMRlQpsVmKgFJLgkakAEMEGt+jYdIBNm7XvLbe/DINGDGmwWcubOGkBInMJm914yRHC4ZccxJgWrZOhvHzPjZ2r492SRu/+J1EguFgVBMiexMcOL5KMxANqP5SnCqUfdU9DksicPbQIxSyq/a+/A1rapdKua8xIY6VdS8+n+i7mSwlGp1CRXEz7qKR8KVz9NSCPnHVt8jiF7mVfPv8uO83d5wrTyhpUIJYW2ZxT+Kg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Zy+kTsTEy+0S7nHv/8wZECM8wxZHiCXWhCVJGLbrWvE=;
+ b=iNn8gsihZrBB0uLRfXFzIzXqRE5kG8Qb6rdbSdNBnhXntCuL6qkSXfgqWBgcS6kRBNZFBWWwVv++gqshM2lrz8WEFdkARbY8cbyyHVu+X68jWtuSiUmmSyyu7Bm5t1bgVI/OcxeE3rHq7DOm3LZGZaRXiq8HR6v+J/hwdeU0VW2K+sfu/BLQGYoBFSoneGXEhhuNTmF/I2bVG2woJbGQt3IeS7saWySaN4FS0bi5l+w7M5xMpWJZ5YzSBeE6K0C7yEfyLRRkGc+5YACc2nw/GrkT6Ubkt3xTCh8cGwqNVRe04KRS106EirsaCArywdezu7GtG/G2E25a9wYgqjjW8g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
+ by MN2PR12MB3472.namprd12.prod.outlook.com (2603:10b6:208:d2::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.10; Fri, 14 Jan
+ 2022 15:14:53 +0000
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::a9db:9c46:183e:c213]) by MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::a9db:9c46:183e:c213%3]) with mapi id 15.20.4888.012; Fri, 14 Jan 2022
+ 15:14:53 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>
+Subject: Re: [RFC PATCH v3 5/8] mm: page_isolation: check specified range for unmovable pages during isolation.
+Date:   Fri, 14 Jan 2022 10:14:51 -0500
+X-Mailer: MailMate (1.14r5853)
+Message-ID: <0A46DD38-CEB2-43BE-8ED0-71BDD8B87479@nvidia.com>
+In-Reply-To: <ead90b32-da2b-4d66-f103-6fbec0937e93@redhat.com>
+References: <20220105214756.91065-1-zi.yan@sent.com>
+ <20220105214756.91065-6-zi.yan@sent.com>
+ <ead90b32-da2b-4d66-f103-6fbec0937e93@redhat.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_EFD96380-E8E7-433E-93B8-B1EB40D69348_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: MN2PR04CA0019.namprd04.prod.outlook.com
+ (2603:10b6:208:d4::32) To MN2PR12MB3823.namprd12.prod.outlook.com
+ (2603:10b6:208:168::26)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d365d00f-454b-49fd-8757-08d9d7709d93
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3472:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB34723CFE1A64E10A8B273A4AC2549@MN2PR12MB3472.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dOblVkDBCJYmh8v5sGwew9+n0Y5KaBSuZRekBSMSleEZHvyAjnEv34+TGlA96gwzN+j9/ab34Nx4lyFylfsBjN3MhKmhvcFEw8Vdo8zJdBdyuSvReB3/0KA4Np6pL4//TS6s+dt2TcnaldmIB22f7hAgmDN3oR/sxPs9LZYtr+O/PN4/gGHKHwwdrQwqMUCdkbl654kSmckvGvJ8fyUN3QB37asZvtzspOSY8MVmD6m4j1VSJRBMYzD9zj5jUpW7PG8CG+yMuwVn6s7kT8hgGBCO+SSvxOp5xN1sMvwLezn6DXhFJXoMX5iQjiCtg9BDjpA92ZR/O5FETsDMG+KpOSZ2cX13OL8Ijgj99Vnviich2LRUQYyC42PAuRyiyflf6Hfoe4Si98R6BxUH/er7OelAl+CxD7XJZs1+g2Hy7AewNlrSQ8oNSXMHLMj+xcG934OwaW0tKQE+PxgXAjZqxQjPiCM1ouVGA3Sx0SpQ/G+D0izHxGb+n0zdpCus4PjdY5viIeGoRy9ztXjLOIhpWGfy2QjwT3HgGIhJIZf4dQ/ra/UoIrXdgxofYvl8zzPKvAwNA9mrNXk4c4jRmZvX1vIOomVNz8p9GX/BZF4dfuEClwDANyLwvgS1rPPIqrrLj6RpeJjgkWgnLi/82UVlxRWSm/NBbcUndNU+Swfh8ine0Eyw+wASAKCVMRE5yi2Szk/iNq8Bdpvqy+IONnATsg78rXOzb035CApzfys6b/M=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(4326008)(33656002)(7416002)(66556008)(66476007)(53546011)(6916009)(235185007)(36756003)(2906002)(54906003)(86362001)(66946007)(5660300002)(83380400001)(6512007)(186003)(8936002)(21480400003)(316002)(38100700002)(6486002)(8676002)(2616005)(6506007)(26005)(72826004)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KwZS9TDSkabn+MDZssohHT+OVdfBroyoni3/5mgMmKMbCbzh5oboXnx9nmte?=
+ =?us-ascii?Q?Xt7aGeyyzkuTqcP9IKGsKvI8mLL5wZ7VN9Tk+qC/LuI5Xd6l7J5a85wWpqig?=
+ =?us-ascii?Q?sK3FW4/pIjnXRO/T0c3MN2CFme/VAl5Tr33hqAa8y1jSefStP+453/JQoG71?=
+ =?us-ascii?Q?oXbW93aT3y4PmEsX/PJqEzJQbRckr/vKoKRnNmYicxUrjmMbp08cF8GVmBFo?=
+ =?us-ascii?Q?+AL3zCNZGenr8lKrbzSd2dofUmpA1KjkD8E9SUAB+V8oL7RKMdu7/FmedSEX?=
+ =?us-ascii?Q?wU3kRKjTyQ/k8uRGElqgSeGk2JgBH9LJMO7IFJrw6ykFC/KvnEix/KurS3FP?=
+ =?us-ascii?Q?yvG56Rdpur9wAKwnlaXbKoIo28sbs8kmgQe2YKDfhMc3zd3kfIxUqdUxG0hH?=
+ =?us-ascii?Q?XG6Sg6sG4pKOns43gGWiCS0ILxa3uqhPJPdQ6mkBgzxbr2y3tKbG1VMwfTzv?=
+ =?us-ascii?Q?Hcz1eDnegjdBatowHv/FmW5SXjaPxABYlxG5vo/MR4la9Wu2S8uFOI+COMUS?=
+ =?us-ascii?Q?EkqC72UL1I+sDUCqKJV5Sog7xvP2VLGT78Vx2B5V2U0k1Ld5q4VA387b6buV?=
+ =?us-ascii?Q?xfFfLZicPCzX/XyH7JqIfy9oXZu2Qrhe4Z/aAaton0pf/qEzH5Wr0DieTTj2?=
+ =?us-ascii?Q?mIQb55bhrrxEG0vl0hk0UFqu7kj8+N+2cqKBsNs7pj1pNQZozILeYfQLLjg4?=
+ =?us-ascii?Q?okJMchtoy3pY6lc1e0zXSQ86nwsk4qC6RLl3fE3FRiqV00Hne4an8LbVe4YP?=
+ =?us-ascii?Q?0M2LWsw5uAn0++c0wPZmwpO4HT1MYdZAM1+U1W0SGTTnRG2wT1XKwxOXB+mO?=
+ =?us-ascii?Q?NJDNUCnSQsR+r2tn9dWsyxg8AsMX7H5kuEnnuPSrpV6dtVRTJn0Z66NW8mej?=
+ =?us-ascii?Q?rDGT6dAbg246eoEc3gwlVctg7B0ydyqxyaZClXl98hnFSrBPyDkQGnTx1wSo?=
+ =?us-ascii?Q?559fpe9kPe5fRMkaxPyScNqadpCK5NoS34/JzkeForeBWtAjk2UMbPqFqrhr?=
+ =?us-ascii?Q?8PldcJD4zMcD8JSq1s5gZ/ou1jpbnwtSlLKbl0aU4bIU6cjqdZiLH0IAeZL7?=
+ =?us-ascii?Q?6HKqNwTjI8QQhO2Ztn7qrWmvh4RBzFTAjLIBpHfILTRJSlSmAQU+HFJcjeRR?=
+ =?us-ascii?Q?FaSPqtcAhwUpCCytOlEGltYXfJj7vc7LB9216tGffOTHI8J4iwg9Qy1RO7fD?=
+ =?us-ascii?Q?ziuMvOYM2ZVk5ArIgWUdHwUVUXvA4fCPd0caXz8u9scCTqbz4H4QHyGXmqT1?=
+ =?us-ascii?Q?XuaygxX/uPa4EQWO7jO/UZHiNBqxZzQOT/6EQqU2/GDdOdwSwRkqHqqeM1sg?=
+ =?us-ascii?Q?jjlcQXvzOM2grHo+3TS3R/PHTn1+Li+RWNLFZ1xRTAGYjZeEtZnfH4jwCsVG?=
+ =?us-ascii?Q?XjZM8JTlFUo1tjM7NUtHkaEUYMnJkRU5BkrBqrYZM93RMkN84A8XVRNP9Zpq?=
+ =?us-ascii?Q?6hNua4MdeIEIHuFo9zXtSIykWYWJ7dxxdxQHaQBgT2doOx7Y5eGEaJ/VhSGq?=
+ =?us-ascii?Q?FfdmxwHH5UTybI9pJuzFmVPYrc4qKuVNouddMpkM6+f8xIx+kSfDCmDkqwXh?=
+ =?us-ascii?Q?0wTrORTbFZhlk6E6eQ8=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d365d00f-454b-49fd-8757-08d9d7709d93
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2022 15:14:53.2292
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: t6m0gp/dPvJ/AYWD5J2H/q8GqCO1a239TQ0fMT0SsAfsO2JqLtEuHjdINM8iM1+2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3472
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Elgato Cam Link 4k can be in a stalled state if the resolution of
-the external source has changed while the firmware initializes.
-Once in this state, the device is useless until it receives a
-USB reset. It has even been observed that the stalled state will
-continue even after unplugging the device.
+--=_MailMate_EFD96380-E8E7-433E-93B8-B1EB40D69348_=
+Content-Type: text/plain
 
-lsusb -v
+On 14 Jan 2022, at 8:38, David Hildenbrand wrote:
 
-Bus 002 Device 002: ID 0fd9:0066 Elgato Systems GmbH Cam Link 4K
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               3.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0         9
-  idVendor           0x0fd9 Elgato Systems GmbH
-  idProduct          0x0066
-  bcdDevice            0.00
-  iManufacturer           1 Elgato
-  iProduct                2 Cam Link 4K
-  iSerial                 4 0005AC52FE000
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x01ca
-    bNumInterfaces          5
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0x80
-      (Bus Powered)
-    MaxPower              800mA
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         0
-      bInterfaceCount         2
-      bFunctionClass         14 Video
-      bFunctionSubClass       3 Video Interface Collection
-      bFunctionProtocol       0
-      iFunction               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass        14 Video
-      bInterfaceSubClass      1 Video Control
-      bInterfaceProtocol      0
-      iInterface              5 Cam Link 4K
-      VideoControl Interface Descriptor:
-        bLength                13
-        bDescriptorType        36
-        bDescriptorSubtype      1 (HEADER)
-        bcdUVC               1.10
-        wTotalLength       0x002b
-        dwClockFrequency        0.000000MHz
-        bInCollection           1
-        baInterfaceNr( 0)       1
-      VideoControl Interface Descriptor:
-        bLength                 8
-        bDescriptorType        36
-        bDescriptorSubtype      2 (INPUT_TERMINAL)
-        bTerminalID             1
-        wTerminalType      0x0200 Input Vendor Specific
-        bAssocTerminal          0
-        iTerminal               0
-      VideoControl Interface Descriptor:
-        bLength                13
-        bDescriptorType        36
-        bDescriptorSubtype      5 (PROCESSING_UNIT)
-        bUnitID                 2
-        bSourceID               1
-        wMaxMultiplier          0
-        bControlSize            3
-        bmControls     0x0000000f
-          Brightness
-          Contrast
-          Hue
-          Saturation
-        iProcessing             0
-        bmVideoStandards     0x00
-      VideoControl Interface Descriptor:
-        bLength                 9
-        bDescriptorType        36
-        bDescriptorSubtype      3 (OUTPUT_TERMINAL)
-        bTerminalID             3
-        wTerminalType      0x0101 USB Streaming
-        bAssocTerminal          0
-        bSourceID               2
-        iTerminal               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               1
-        bMaxBurst               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass        14 Video
-      bInterfaceSubClass      2 Video Streaming
-      bInterfaceProtocol      0
-      iInterface              5 Cam Link 4K
-      VideoStreaming Interface Descriptor:
-        bLength                            16
-        bDescriptorType                    36
-        bDescriptorSubtype                  1 (INPUT_HEADER)
-        bNumFormats                         3
-        wTotalLength                   0x00cd
-        bEndpointAddress                 0x83  EP 3 IN
-        bmInfo                              0
-        bTerminalLink                       3
-        bStillCaptureMethod                 1
-        bTriggerSupport                     0
-        bTriggerUsage                       0
-        bControlSize                        1
-        bmaControls( 0)                     0
-        bmaControls( 1)                     0
-        bmaControls( 2)                     0
-      VideoStreaming Interface Descriptor:
-        bLength                            27
-        bDescriptorType                    36
-        bDescriptorSubtype                  4 (FORMAT_UNCOMPRESSED)
-        bFormatIndex                        1
-        bNumFrameDescriptors                1
-        guidFormat                            {3231564e-0000-0010-8000-00aa00389b71}
-        bBitsPerPixel                      12
-        bDefaultFrameIndex                  1
-        bAspectRatioX                       0
-        bAspectRatioY                       0
-        bmInterlaceFlags                 0x00
-          Interlaced stream or variable: No
-          Fields per frame: 2 fields
-          Field 1 first: No
-          Field pattern: Field 1 only
-        bCopyProtect                        0
-      VideoStreaming Interface Descriptor:
-        bLength                            30
-        bDescriptorType                    36
-        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
-        bFrameIndex                         1
-        bmCapabilities                   0x01
-          Still image supported
-        wWidth                           3840
-        wHeight                          2160
-        dwMinBitRate                2985984000
-        dwMaxBitRate                2985984000
-        dwMaxVideoFrameBufferSize    12441600
-        dwDefaultFrameInterval         333333
-        bFrameIntervalType                  1
-        dwFrameInterval( 0)            333333
-      VideoStreaming Interface Descriptor:
-        bLength                             6
-        bDescriptorType                    36
-        bDescriptorSubtype                 13 (COLORFORMAT)
-        bColorPrimaries                     1 (BT.709,sRGB)
-        bTransferCharacteristics            1 (BT.709)
-        bMatrixCoefficients                 1 (BT.709)
-      VideoStreaming Interface Descriptor:
-        bLength                            27
-        bDescriptorType                    36
-        bDescriptorSubtype                  4 (FORMAT_UNCOMPRESSED)
-        bFormatIndex                        2
-        bNumFrameDescriptors                1
-        guidFormat                            {3231564e-0000-0010-8000-00aa00389b71}
-        bBitsPerPixel                      12
-        bDefaultFrameIndex                  1
-        bAspectRatioX                       0
-        bAspectRatioY                       0
-        bmInterlaceFlags                 0x00
-          Interlaced stream or variable: No
-          Fields per frame: 2 fields
-          Field 1 first: No
-          Field pattern: Field 1 only
-        bCopyProtect                        0
-      VideoStreaming Interface Descriptor:
-        bLength                            30
-        bDescriptorType                    36
-        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
-        bFrameIndex                         1
-        bmCapabilities                   0x01
-          Still image supported
-        wWidth                           3840
-        wHeight                          2160
-        dwMinBitRate                2985984000
-        dwMaxBitRate                2985984000
-        dwMaxVideoFrameBufferSize    12441600
-        dwDefaultFrameInterval         333333
-        bFrameIntervalType                  1
-        dwFrameInterval( 0)            333333
-      VideoStreaming Interface Descriptor:
-        bLength                             6
-        bDescriptorType                    36
-        bDescriptorSubtype                 13 (COLORFORMAT)
-        bColorPrimaries                     1 (BT.709,sRGB)
-        bTransferCharacteristics            1 (BT.709)
-        bMatrixCoefficients                 1 (BT.709)
-      VideoStreaming Interface Descriptor:
-        bLength                            27
-        bDescriptorType                    36
-        bDescriptorSubtype                  4 (FORMAT_UNCOMPRESSED)
-        bFormatIndex                        3
-        bNumFrameDescriptors                1
-        guidFormat                            {30323449-0000-0010-8000-00aa00389b71}
-        bBitsPerPixel                      12
-        bDefaultFrameIndex                  1
-        bAspectRatioX                       0
-        bAspectRatioY                       0
-        bmInterlaceFlags                 0x00
-          Interlaced stream or variable: No
-          Fields per frame: 2 fields
-          Field 1 first: No
-          Field pattern: Field 1 only
-        bCopyProtect                        0
-      VideoStreaming Interface Descriptor:
-        bLength                            30
-        bDescriptorType                    36
-        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
-        bFrameIndex                         1
-        bmCapabilities                   0x01
-          Still image supported
-        wWidth                           3840
-        wHeight                          2160
-        dwMinBitRate                2985984000
-        dwMaxBitRate                2985984000
-        dwMaxVideoFrameBufferSize    12441600
-        dwDefaultFrameInterval         333333
-        bFrameIntervalType                  1
-        dwFrameInterval( 0)            333333
-      VideoStreaming Interface Descriptor:
-        bLength                             6
-        bDescriptorType                    36
-        bDescriptorSubtype                 13 (COLORFORMAT)
-        bColorPrimaries                     1 (BT.709,sRGB)
-        bTransferCharacteristics            1 (BT.709)
-        bMatrixCoefficients                 1 (BT.709)
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         2
-      bInterfaceCount         1
-      bFunctionClass          3 Human Interface Device
-      bFunctionSubClass       0
-      bFunctionProtocol       0
-      iFunction               5 Cam Link 4K
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         3 Human Interface Device
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-        HID Device Descriptor:
-          bLength                 9
-          bDescriptorType        33
-          bcdHID               1.01
-          bCountryCode            0 Not supported
-          bNumDescriptors         1
-          bDescriptorType        34 Report
-          wDescriptorLength     207
-         Report Descriptors:
-           ** UNAVAILABLE **
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x86  EP 6 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval              10
-        bMaxBurst               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         3
-      bInterfaceCount         2
-      bFunctionClass          1 Audio
-      bFunctionSubClass       2 Streaming
-      bFunctionProtocol       0
-      iFunction               6 Cam Link 4K
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        3
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      1 Control Device
-      bInterfaceProtocol      0
-      iInterface              6 Cam Link 4K
-      AudioControl Interface Descriptor:
-        bLength                 9
-        bDescriptorType        36
-        bDescriptorSubtype      1 (HEADER)
-        bcdADC               1.00
-        wTotalLength       0x001e
-        bInCollection           1
-        baInterfaceNr(0)        4
-      AudioControl Interface Descriptor:
-        bLength                12
-        bDescriptorType        36
-        bDescriptorSubtype      2 (INPUT_TERMINAL)
-        bTerminalID             1
-        wTerminalType      0x0602 Digital Audio Interface
-        bAssocTerminal          0
-        bNrChannels             2
-        wChannelConfig     0x0003
-          Left Front (L)
-          Right Front (R)
-        iChannelNames           0
-        iTerminal               0
-      AudioControl Interface Descriptor:
-        bLength                 9
-        bDescriptorType        36
-        bDescriptorSubtype      3 (OUTPUT_TERMINAL)
-        bTerminalID             2
-        wTerminalType      0x0101 USB Streaming
-        bAssocTerminal          0
-        bSourceID               1
-        iTerminal               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        4
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      2 Streaming
-      bInterfaceProtocol      0
-      iInterface              6 Cam Link 4K
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        4
-      bAlternateSetting       1
-      bNumEndpoints           1
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      2 Streaming
-      bInterfaceProtocol      0
-      iInterface              6 Cam Link 4K
-      AudioStreaming Interface Descriptor:
-        bLength                 7
-        bDescriptorType        36
-        bDescriptorSubtype      1 (AS_GENERAL)
-        bTerminalLink           2
-        bDelay                  1 frames
-        wFormatTag         0x0001 PCM
-      AudioStreaming Interface Descriptor:
-        bLength                11
-        bDescriptorType        36
-        bDescriptorSubtype      2 (FORMAT_TYPE)
-        bFormatType             1 (FORMAT_TYPE_I)
-        bNrChannels             2
-        bSubframeSize           2
-        bBitResolution         16
-        bSamFreqType            1 Discrete
-        tSamFreq[ 0]        48000
-      Endpoint Descriptor:
-        bLength                 9
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            5
-          Transfer Type            Isochronous
-          Synch Type               Asynchronous
-          Usage Type               Data
-        wMaxPacketSize     0x00c0  1x 192 bytes
-        bInterval               4
-        bRefresh                0
-        bSynchAddress           0
-        bMaxBurst               0
-        AudioStreaming Endpoint Descriptor:
-          bLength                 7
-          bDescriptorType        37
-          bDescriptorSubtype      1 (EP_GENERAL)
-          bmAttributes         0x00
-          bLockDelayUnits         0 Undefined
-          wLockDelay         0x0000
-Binary Object Store Descriptor:
-  bLength                 5
-  bDescriptorType        15
-  wTotalLength       0x0016
-  bNumDeviceCaps          2
-  USB 2.0 Extension Device Capability:
-    bLength                 7
-    bDescriptorType        16
-    bDevCapabilityType      2
-    bmAttributes   0x00000002
-      HIRD Link Power Management (LPM) Supported
-  SuperSpeed USB Device Capability:
-    bLength                10
-    bDescriptorType        16
-    bDevCapabilityType      3
-    bmAttributes         0x00
-    wSpeedsSupported   0x000e
-      Device can operate at Full Speed (12Mbps)
-      Device can operate at High Speed (480Mbps)
-      Device can operate at SuperSpeed (5Gbps)
-    bFunctionalitySupport   3
-      Lowest fully-functional device speed is SuperSpeed (5Gbps)
-    bU1DevExitLat           0 micro seconds
-    bU2DevExitLat           0 micro seconds
-Device Status:     0x0000
-  (Bus Powered)
+> On 05.01.22 22:47, Zi Yan wrote:
+>> From: Zi Yan <ziy@nvidia.com>
+>>
+>> Enable set_migratetype_isolate() to check specified sub-range for
+>> unmovable pages during isolation. Page isolation is done
+>> at max(MAX_ORDER_NR_PAEGS, pageblock_nr_pages) granularity, but not all
+>> pages within that granularity are intended to be isolated. For example,
+>> alloc_contig_range(), which uses page isolation, allows ranges without
+>> alignment. This commit makes unmovable page check only look for
+>> interesting pages, so that page isolation can succeed for any
+>> non-overlapping ranges.
+>
+> Are you handling if we start checking in the middle of a compound page
+> and actually have to lookup the head to figure out if movable or not?
+>
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_video.c | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+Yes. has_unmovable_pages() has that check already.
 
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 1b4cc934109e..818e504eb62a 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -129,12 +129,12 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
- 	return -EPIPE;
- }
- 
-+static const struct usb_device_id elgato_cam_link_4k = {
-+						USB_DEVICE(0x0fd9, 0x0066)};
-+
- static void uvc_fixup_video_ctrl(struct uvc_streaming *stream,
- 	struct uvc_streaming_control *ctrl)
- {
--	static const struct usb_device_id elgato_cam_link_4k = {
--		USB_DEVICE(0x0fd9, 0x0066)
--	};
- 	struct uvc_format *format = NULL;
- 	struct uvc_frame *frame = NULL;
- 	unsigned int i;
-@@ -292,7 +292,7 @@ static int uvc_get_video_ctrl(struct uvc_streaming *stream,
- 		dev_err(&stream->intf->dev,
- 			"Failed to query (%u) UVC %s control : %d (exp. %u).\n",
- 			query, probe ? "probe" : "commit", ret, size);
--		ret = -EIO;
-+		ret = (ret == -EPROTO) ? -EPROTO : -EIO;
- 		goto out;
- 	}
- 
-@@ -2102,6 +2102,20 @@ int uvc_video_init(struct uvc_streaming *stream)
- 	 * request on the probe control, as required by the UVC specification.
- 	 */
- 	ret = uvc_get_video_ctrl(stream, probe, 1, UVC_GET_CUR);
-+
-+	/*
-+	 * Elgato Cam Link 4k can be in a stalled state if the resolution of
-+	 * the external source has changed while the firmware initializes.
-+	 * Once in this state, the device is useless until it receives a
-+	 * USB reset. It has even been observed that the stalled state will
-+	 * continue even after unplugging the device.
-+	 */
-+	if (usb_match_one_id(stream->dev->intf, &elgato_cam_link_4k) &&
-+	    (ret == -EPROTO)) {
-+		usb_reset_device(stream->dev->udev);
-+		dev_err(&stream->intf->dev, "Restarting Elgato Cam Link 4K\n");
-+	}
-+
- 	if (ret < 0)
- 		return ret;
- 
--- 
-2.34.1.703.g22d0c6ccf7-goog
 
+>>
+>> has_unmovable_pages() is moved to mm/page_isolation.c since it is only
+>> used by page isolation.
+>
+> Please move that into a separate patch upfront, makes this patch much
+> easier to review.
+
+Sure. Will do.
+
+Thanks.
+
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_EFD96380-E8E7-433E-93B8-B1EB40D69348_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmHhk2sPHHppeUBudmlk
+aWEuY29tAAoJEJ2yUfNrYfqKHVAP+wQLmekSmaBLUZyqE6BmgXMxqAuKfHDisuju
+sQ+K1TITi4vp/Fgyb3qrGtxbEsYSLoTCJ7MrO/hg/oRC4zW3UFtq9jhfX9E/jBnN
+g616RnbCfmuhRzWAbegxLx7irdhlntNgvrjo/OjOwWRZtdJgF82VZyZYmjoKjCZt
+kycSHdtVwVF0Ndq6KFuSct8yRXAOug2cNwCnPV/q0Dy6iQG9efK1/r8Q2TOBUcBR
+QbmSrufndFopmFsbh16slJlH41SbkaChz8lHUUlmganHvRakoFxxQjg4KKcyumTG
+k28DSYqGeOdhWKu/CgLkdEgB75twNx9aSJ6aFKrxxc1q4P7w9tvPUAOx4cMEZhRW
+ReV8wSACAj53/oihEt6i9lRDax6Sf+JU4hZjtaQr+Vm/TRmzuttRvtP7EQiA/97d
+nTazMzHcBgeXB/eSko6GqLkV8VWbvxcnAQkt7XcAQJ+pcRDktym2as3P1Tu4kSrj
+V1EO6QJtqSD9RRAPWGoZG8XrHcm6O7/knkFil2a0IoFmwW0tTWcz8v2fuct07j+u
+LR18iJgLhtPwJuKQ5pGcex8iLaeSaTqrX7RJlgcbN/sTuSuiTHwFxYnvPxK03dy6
+Ig6pwIHSDmclpRnLFOK0TfoxruMnnj6a5yE3MkTBeG2M/xCJw8CXHAnXmxlrc+mV
+llVORpAe
+=emuQ
+-----END PGP SIGNATURE-----
+
+--=_MailMate_EFD96380-E8E7-433E-93B8-B1EB40D69348_=--

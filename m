@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D46C348E626
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3323A48E5A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237658AbiANIX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:23:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
+        id S239640AbiANITf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240146AbiANIWT (ORCPT
+        with ESMTP id S239732AbiANITC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:22:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83BEC0617BD;
-        Fri, 14 Jan 2022 00:21:51 -0800 (PST)
+        Fri, 14 Jan 2022 03:19:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C808C06177B;
+        Fri, 14 Jan 2022 00:19:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8E56B8243B;
-        Fri, 14 Jan 2022 08:21:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF65BC36B01;
-        Fri, 14 Jan 2022 08:21:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F186161E1F;
+        Fri, 14 Jan 2022 08:18:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAFF0C36AE9;
+        Fri, 14 Jan 2022 08:18:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148509;
-        bh=9/N4BaNjin+okbQTdC62u02A2fP7O1ok2ZrHO+liqTw=;
+        s=korg; t=1642148339;
+        bh=aQwWQG2dZCe/QnD746MOLbyMgXEjVFDmIcu6mhHzYas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BaBXIMpjNzANNDk1ugnajeZU/akGiYqhPF7EmpiptoX5wDmSrVPTQTNmDpUl1R/jk
-         gX564oylgBNpycIuuBReSOMz1Xbdscumg6U6E8zCgu6oOJDC3BG7J4oF2Mh3ZElO3Q
-         0crbnoJb88TKrMxzNKKNQp5vvgFzDOdl3CGs1mLg=
+        b=dblnxaMejT5qktIA5IcOcWX4Z67W1i0f+MvnLjXuhfjOZvbsQ+HPQe/KjtrqLmRnv
+         hvOhihnuKPseawTej9dTUi21X7yGnc3FHjDWrecRMVvOYfqf61rF0JLEwG6ZWuqF4K
+         htHN+aZhLYIPE+jZ/6qrQrNG6y2VdQENrurYYeOk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tedd Ho-Jeong An <tedd.an@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: [PATCH 5.16 13/37] Bluetooth: btintel: Fix broken LED quirk for legacy ROM devices
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.10 19/25] random: fix data race on crng_node_pool
 Date:   Fri, 14 Jan 2022 09:16:27 +0100
-Message-Id: <20220114081545.296079204@linuxfoundation.org>
+Message-Id: <20220114081543.352538528@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
-References: <20220114081544.849748488@linuxfoundation.org>
+In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
+References: <20220114081542.698002137@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,127 +49,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tedd Ho-Jeong An <tedd.an@intel.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit 95655456e7cee858a23793f67025765b4c4c227b upstream.
+commit 5d73d1e320c3fd94ea15ba5f79301da9a8bcc7de upstream.
 
-This patch fixes the broken LED quirk for Intel legacy ROM devices.
-To fix the LED issue that doesn't turn off immediately, the host sends
-the SW RFKILL command while shutting down the interface and it puts the
-devices in SW RFKILL state.
+extract_crng() and crng_backtrack_protect() load crng_node_pool with a
+plain load, which causes undefined behavior if do_numa_crng_init()
+modifies it concurrently.
 
-Once the device is in SW RFKILL state, it can only accept HCI_Reset to
-exit from the SW RFKILL state. This patch checks the quirk for broken
-LED and sends the HCI_Reset before sending the HCI_Intel_Read_Version
-command.
+Fix this by using READ_ONCE().  Note: as per the previous discussion
+https://lore.kernel.org/lkml/20211219025139.31085-1-ebiggers@kernel.org/T/#u,
+READ_ONCE() is believed to be sufficient here, and it was requested that
+it be used here instead of smp_load_acquire().
 
-The affected legacy ROM devices are
- - 8087:07dc
- - 8087:0a2a
- - 8087:0aa7
+Also change do_numa_crng_init() to set crng_node_pool using
+cmpxchg_release() instead of mb() + cmpxchg(), as the former is
+sufficient here but is more lightweight.
 
-Fixes: ffcba827c0a1d ("Bluetooth: btintel: Fix the LED is not turning off immediately")
-Signed-off-by: Tedd Ho-Jeong An <tedd.an@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: 1e7f583af67b ("random: make /dev/urandom scalable for silly userspace programs")
+Cc: stable@vger.kernel.org
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/bluetooth/btintel.c |   20 +++++++++++---------
- drivers/bluetooth/btintel.h |    2 +-
- drivers/bluetooth/btusb.c   |   13 ++++++++++---
- 3 files changed, 22 insertions(+), 13 deletions(-)
+ drivers/char/random.c |   42 ++++++++++++++++++++++--------------------
+ 1 file changed, 22 insertions(+), 20 deletions(-)
 
---- a/drivers/bluetooth/btintel.c
-+++ b/drivers/bluetooth/btintel.c
-@@ -2353,8 +2353,15 @@ static int btintel_setup_combined(struct
- 	 * As a workaround, send HCI Reset command first which will reset the
- 	 * number of completed commands and allow normal command processing
- 	 * from now on.
-+	 *
-+	 * Regarding the INTEL_BROKEN_SHUTDOWN_LED flag, these devices maybe
-+	 * in the SW_RFKILL ON state as a workaround of fixing LED issue during
-+	 * the shutdown() procedure, and once the device is in SW_RFKILL ON
-+	 * state, the only way to exit out of it is sending the HCI_Reset
-+	 * command.
- 	 */
--	if (btintel_test_flag(hdev, INTEL_BROKEN_INITIAL_NCMD)) {
-+	if (btintel_test_flag(hdev, INTEL_BROKEN_INITIAL_NCMD) ||
-+	    btintel_test_flag(hdev, INTEL_BROKEN_SHUTDOWN_LED)) {
- 		skb = __hci_cmd_sync(hdev, HCI_OP_RESET, 0, NULL,
- 				     HCI_INIT_TIMEOUT);
- 		if (IS_ERR(skb)) {
-@@ -2426,12 +2433,6 @@ static int btintel_setup_combined(struct
- 				set_bit(HCI_QUIRK_WIDEBAND_SPEECH_SUPPORTED,
- 					&hdev->quirks);
- 
--			/* These devices have an issue with LED which doesn't
--			 * go off immediately during shutdown. Set the flag
--			 * here to send the LED OFF command during shutdown.
--			 */
--			btintel_set_flag(hdev, INTEL_BROKEN_LED);
--
- 			err = btintel_legacy_rom_setup(hdev, &ver);
- 			break;
- 		case 0x0b:      /* SfP */
-@@ -2562,9 +2563,10 @@ static int btintel_shutdown_combined(str
- 
- 	/* Some platforms have an issue with BT LED when the interface is
- 	 * down or BT radio is turned off, which takes 5 seconds to BT LED
--	 * goes off. This command turns off the BT LED immediately.
-+	 * goes off. As a workaround, sends HCI_Intel_SW_RFKILL to put the
-+	 * device in the RFKILL ON state which turns off the BT LED immediately.
- 	 */
--	if (btintel_test_flag(hdev, INTEL_BROKEN_LED)) {
-+	if (btintel_test_flag(hdev, INTEL_BROKEN_SHUTDOWN_LED)) {
- 		skb = __hci_cmd_sync(hdev, 0xfc3f, 0, NULL, HCI_INIT_TIMEOUT);
- 		if (IS_ERR(skb)) {
- 			ret = PTR_ERR(skb);
---- a/drivers/bluetooth/btintel.h
-+++ b/drivers/bluetooth/btintel.h
-@@ -150,7 +150,7 @@ enum {
- 	INTEL_FIRMWARE_FAILED,
- 	INTEL_BOOTING,
- 	INTEL_BROKEN_INITIAL_NCMD,
--	INTEL_BROKEN_LED,
-+	INTEL_BROKEN_SHUTDOWN_LED,
- 	INTEL_ROM_LEGACY,
- 
- 	__INTEL_NUM_FLAGS,
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -59,6 +59,7 @@ static struct usb_driver btusb_driver;
- #define BTUSB_WIDEBAND_SPEECH	0x400000
- #define BTUSB_VALID_LE_STATES   0x800000
- #define BTUSB_QCA_WCN6855	0x1000000
-+#define BTUSB_INTEL_BROKEN_SHUTDOWN_LED	0x2000000
- #define BTUSB_INTEL_BROKEN_INITIAL_NCMD 0x4000000
- 
- static const struct usb_device_id btusb_table[] = {
-@@ -380,10 +381,13 @@ static const struct usb_device_id blackl
- 	{ USB_DEVICE(0x8087, 0x0033), .driver_info = BTUSB_INTEL_COMBINED },
- 	{ USB_DEVICE(0x8087, 0x07da), .driver_info = BTUSB_CSR },
- 	{ USB_DEVICE(0x8087, 0x07dc), .driver_info = BTUSB_INTEL_COMBINED |
--						     BTUSB_INTEL_BROKEN_INITIAL_NCMD },
--	{ USB_DEVICE(0x8087, 0x0a2a), .driver_info = BTUSB_INTEL_COMBINED },
-+						     BTUSB_INTEL_BROKEN_INITIAL_NCMD |
-+						     BTUSB_INTEL_BROKEN_SHUTDOWN_LED },
-+	{ USB_DEVICE(0x8087, 0x0a2a), .driver_info = BTUSB_INTEL_COMBINED |
-+						     BTUSB_INTEL_BROKEN_SHUTDOWN_LED },
- 	{ USB_DEVICE(0x8087, 0x0a2b), .driver_info = BTUSB_INTEL_COMBINED },
--	{ USB_DEVICE(0x8087, 0x0aa7), .driver_info = BTUSB_INTEL_COMBINED },
-+	{ USB_DEVICE(0x8087, 0x0aa7), .driver_info = BTUSB_INTEL_COMBINED |
-+						     BTUSB_INTEL_BROKEN_SHUTDOWN_LED },
- 	{ USB_DEVICE(0x8087, 0x0aaa), .driver_info = BTUSB_INTEL_COMBINED },
- 
- 	/* Other Intel Bluetooth devices */
-@@ -3888,6 +3892,9 @@ static int btusb_probe(struct usb_interf
- 
- 		if (id->driver_info & BTUSB_INTEL_BROKEN_INITIAL_NCMD)
- 			btintel_set_flag(hdev, INTEL_BROKEN_INITIAL_NCMD);
-+
-+		if (id->driver_info & BTUSB_INTEL_BROKEN_SHUTDOWN_LED)
-+			btintel_set_flag(hdev, INTEL_BROKEN_SHUTDOWN_LED);
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -853,8 +853,8 @@ static void do_numa_crng_init(struct wor
+ 		crng_initialize_secondary(crng);
+ 		pool[i] = crng;
  	}
+-	mb();
+-	if (cmpxchg(&crng_node_pool, NULL, pool)) {
++	/* pairs with READ_ONCE() in select_crng() */
++	if (cmpxchg_release(&crng_node_pool, NULL, pool) != NULL) {
+ 		for_each_node(i)
+ 			kfree(pool[i]);
+ 		kfree(pool);
+@@ -867,8 +867,26 @@ static void numa_crng_init(void)
+ {
+ 	schedule_work(&numa_crng_init_work);
+ }
++
++static struct crng_state *select_crng(void)
++{
++	struct crng_state **pool;
++	int nid = numa_node_id();
++
++	/* pairs with cmpxchg_release() in do_numa_crng_init() */
++	pool = READ_ONCE(crng_node_pool);
++	if (pool && pool[nid])
++		return pool[nid];
++
++	return &primary_crng;
++}
+ #else
+ static void numa_crng_init(void) {}
++
++static struct crng_state *select_crng(void)
++{
++	return &primary_crng;
++}
+ #endif
  
- 	if (id->driver_info & BTUSB_MARVELL)
+ /*
+@@ -1015,15 +1033,7 @@ static void _extract_crng(struct crng_st
+ 
+ static void extract_crng(__u8 out[CHACHA_BLOCK_SIZE])
+ {
+-	struct crng_state *crng = NULL;
+-
+-#ifdef CONFIG_NUMA
+-	if (crng_node_pool)
+-		crng = crng_node_pool[numa_node_id()];
+-	if (crng == NULL)
+-#endif
+-		crng = &primary_crng;
+-	_extract_crng(crng, out);
++	_extract_crng(select_crng(), out);
+ }
+ 
+ /*
+@@ -1052,15 +1062,7 @@ static void _crng_backtrack_protect(stru
+ 
+ static void crng_backtrack_protect(__u8 tmp[CHACHA_BLOCK_SIZE], int used)
+ {
+-	struct crng_state *crng = NULL;
+-
+-#ifdef CONFIG_NUMA
+-	if (crng_node_pool)
+-		crng = crng_node_pool[numa_node_id()];
+-	if (crng == NULL)
+-#endif
+-		crng = &primary_crng;
+-	_crng_backtrack_protect(crng, tmp, used);
++	_crng_backtrack_protect(select_crng(), tmp, used);
+ }
+ 
+ static ssize_t extract_crng_user(void __user *buf, size_t nbytes)
 
 

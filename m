@@ -2,131 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FC348E165
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC99648E167
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 01:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238380AbiANAKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 19:10:54 -0500
-Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:36845 "EHLO
-        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238356AbiANAKx (ORCPT
+        id S238391AbiANALQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 19:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238356AbiANALO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 19:10:53 -0500
+        Thu, 13 Jan 2022 19:11:14 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806ACC061574;
+        Thu, 13 Jan 2022 16:11:14 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id 78so1299427pfu.10;
+        Thu, 13 Jan 2022 16:11:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1642119055; x=1673655055;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sZ0Q13DS9ckI0r0N0o++8V1Ury3/fcldI1Z3JXkEwlc=;
-  b=EQzd5bG4CrzTcBZOrRQUnobH60cCj2aPHEfNulrRU+QWCi2f5eH9yQ2S
-   Y0EJW4PjLFfJeeqhNr6AMO5GEwBpIh4ozKFATOxvcwy4CrT22ZqSF/lWi
-   GmiSAdLiJqIrZ8iaFPjdMcAcqUhWy10fKI2NuWpg+KWkOuio9ipMz8rSI
-   s=;
-X-IronPort-AV: E=Sophos;i="5.88,286,1635206400"; 
-   d="scan'208";a="168914631"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-22c2b493.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP; 14 Jan 2022 00:10:53 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-22c2b493.us-west-2.amazon.com (Postfix) with ESMTPS id 640AA41501;
-        Fri, 14 Jan 2022 00:10:48 +0000 (UTC)
-Received: from EX13D08UEE002.ant.amazon.com (10.43.62.92) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Fri, 14 Jan 2022 00:10:47 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX13D08UEE002.ant.amazon.com (10.43.62.92) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Fri, 14 Jan 2022 00:10:47 +0000
-Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
- Server id 15.0.1497.28 via Frontend Transport; Fri, 14 Jan 2022 00:10:47
- +0000
-Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id 6BE7EC6; Fri, 14 Jan 2022 00:10:46 +0000 (UTC)
-Date:   Fri, 14 Jan 2022 00:10:46 +0000
-From:   Frank van der Linden <fllinden@amazon.com>
-To:     Mike Rapoport <rppt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
-        <frowand.list@gmail.com>, <ardb@kernel.org>, <linux-mm@kvack.org>,
-        <devicetree@vger.kernel.org>, <linux-efi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kexec@lists.infradead.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <geert+renesas@glider.be>
-Subject: Re: [PATCH 1/3] memblock: define functions to set the usable memory
- range
-Message-ID: <20220114001046.GA10609@dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com>
-References: <20220110210809.3528-1-fllinden@amazon.com>
- <20220110210809.3528-2-fllinden@amazon.com> <Yd1cnquQFZoNE7FP@kernel.org>
- <20220111204441.GA36458@dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com>
- <YeBiV8fuCCLWyHYb@kernel.org>
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q8c93w5bjbPbNHYcCj6vw9R7FFzBe3yubr2S2ys7jow=;
+        b=biOjEtzRfto97MwOkEz/PpXG0fvyBTQ0N+cxP//GcbhQp28LT/Y5ql7bskgwNS1jgX
+         OnbLf/DPW7EkZlMTm0WDWBsu3V83gQEpScN70+042gbIfW093n5ECTDtYh4TqRf6CTAg
+         XsoZpdmvEX6/SKma12syQ8SdH9uTVqJvqq4j/EEZPS7c/S57zFICXVIc4RpcNpYJLo50
+         mWIfdEsTVSkfhukP0Egbi9kTGqqb6QGSpjMMYfknqA57Lpku/ocUPBsF1K4EYbGB7UHY
+         NmqpHEainnEhPY7m4GybLc6fR8ObbrfVq9QTMNIKeZW81P2NGkYd6QRKqERj1gi8hXYo
+         g/AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q8c93w5bjbPbNHYcCj6vw9R7FFzBe3yubr2S2ys7jow=;
+        b=UKaigiMva/+vVoO2bYZyU1d4sQMfNuBbxdbOieHUOsMozO/6wzy4yuZ+cZWRCybQCp
+         5a3qkKWORyOAiFfniD8HJluNGfl9JzeUkDSJ6aVb/1v4jRA9fuRQg303z9RRCJuz/nVM
+         SlnzW3EuIK4CJ6rVs5UMiE8xbJ/9Jz6KiANsrW5p+TFvBC1VuF3cqcfC/48xlgzBXPf6
+         bnv7CFxApplkYa25gFbItEg/aOrIBEQf0TtHKiZuqBXz/kE9tE5n5z5/E5mHSrJe2aNJ
+         GzBJKKnJ0mBppMsMaJwuhxmLNfoC2VLkCzHtNhsx+KxQZC+dakh16bkNf+Vgfl1TGlK1
+         qFog==
+X-Gm-Message-State: AOAM532R2u0ppEQTG8JlvxwnhxOvBjbCnzUivqfRLovI3G40YNqT2Ixf
+        sxZrkOYE0H/q/5+njRz+U2E=
+X-Google-Smtp-Source: ABdhPJyPFMAh7V/OnW+Qtp4Ph8kQS2Au6c/+rRfbAH7HWNJim8E3B5vjaCiwPvdkfW2YW66czpZjWQ==
+X-Received: by 2002:a63:370b:: with SMTP id e11mr6057693pga.558.1642119073845;
+        Thu, 13 Jan 2022 16:11:13 -0800 (PST)
+Received: from localhost.localdomain (192.243.120.57.16clouds.com. [192.243.120.57])
+        by smtp.gmail.com with ESMTPSA id s21sm3966429pfg.75.2022.01.13.16.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 16:11:13 -0800 (PST)
+From:   davidcomponentone@gmail.com
+To:     m@bues.ch
+Cc:     davidcomponentone@gmail.com, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Guang <yang.guang5@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] ssb: fix boolreturn.cocci warning
+Date:   Fri, 14 Jan 2022 08:11:02 +0800
+Message-Id: <fa4f1fa737e715eb62a85229ac5f12bae21145cf.1642065490.git.davidcomponentone@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YeBiV8fuCCLWyHYb@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 07:33:11PM +0200, Mike Rapoport wrote:
-> On Tue, Jan 11, 2022 at 08:44:41PM +0000, Frank van der Linden wrote:
-> > On Tue, Jan 11, 2022 at 12:31:58PM +0200, Mike Rapoport wrote:
-> > > > --- a/include/linux/memblock.h
-> > > > +++ b/include/linux/memblock.h
-> > > > @@ -481,6 +481,8 @@ phys_addr_t memblock_reserved_size(void);
-> > > >  phys_addr_t memblock_start_of_DRAM(void);
-> > > >  phys_addr_t memblock_end_of_DRAM(void);
-> > > >  void memblock_enforce_memory_limit(phys_addr_t memory_limit);
-> > > > +void memblock_set_usable_range(phys_addr_t base, phys_addr_t size);
-> > > > +void memblock_enforce_usable_range(void);
-> > > >  void memblock_cap_memory_range(phys_addr_t base, phys_addr_t size);
-> > > >  void memblock_mem_limit_remove_map(phys_addr_t limit);
-> > >
-> > > We already have 3 very similar interfaces that deal with memory capping.
-> > > Now you suggest to add fourth that will "generically" solve a single use
-> > > case of DT, EFI and kdump interaction on arm64.
-> > >
-> > > Looks like a workaround for a fundamental issue of incompatibility between
-> > > DT and EFI wrt memory registration.
-> >
-> > Yep, I figured this would be the main argument against this - arm64
-> > already added several other more-or-less special cased interfaces over
-> > time.
-> >
-> > I'm more than happy to solve this in a different way.
-> >
-> > What would you suggest:
-> >
-> > 1) Try to merge the similar interfaces in to one.
-> > 2) Just deal with it at a lower (arm64) level?
-> > 3) Some other way?
-> 
-> We've discussed this with Ard on IRC, and our conclusion was that on arm64
-> kdump kernel should have memblock.memory exactly the same as the normal
-> kernel. Then, the memory outside usable-memory-range should be reserved so
-> that kdump kernel won't step over it.
-> 
-> With that, simple (untested) patch below could be what we need:
-> 
-> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> index bdca35284ceb..371418dffaf1 100644
-> --- a/drivers/of/fdt.c
-> +++ b/drivers/of/fdt.c
-> @@ -1275,7 +1275,8 @@ void __init early_init_dt_scan_nodes(void)
->         of_scan_flat_dt(early_init_dt_scan_memory, NULL);
-> 
->         /* Handle linux,usable-memory-range property */
-> -       memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
-> +       memblock_reserve(0, cap_mem_addr);
-> +       memblock_reserve(cap_mem_addr + cap_mem_size, PHYS_ADDR_MAX);
->  }
-> 
->  bool __init early_init_dt_scan(void *params)
+From: Yang Guang <yang.guang5@zte.com.cn>
 
-Thanks for discussing this further! I tried the above change, although
-I wrapped it in an if (cap_mem_size != 0), so that a normal kernel
-doesn't get its entire memory marked as reserved.
+The coccinelle report
+./include/linux/ssb/ssb_driver_gige.h:98:8-9:
+WARNING: return of 0/1 in function
+'ssb_gige_must_flush_posted_writes' with return type bool
 
-The crash kernel hung without producing output - I haven't chased that
-down. This particular kernel was a bit older (5.15), so I'll try again
-with 5.17-rc to make sure.
+Return statements in functions returning bool should use true/false
+instead of 1/0.
 
-- Frank
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+Signed-off-by: David Yang <davidcomponentone@gmail.com>
+---
+ include/linux/ssb/ssb_driver_gige.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/ssb/ssb_driver_gige.h b/include/linux/ssb/ssb_driver_gige.h
+index 15ba0df1ee0d..28c145a51e57 100644
+--- a/include/linux/ssb/ssb_driver_gige.h
++++ b/include/linux/ssb/ssb_driver_gige.h
+@@ -95,7 +95,7 @@ static inline bool ssb_gige_must_flush_posted_writes(struct pci_dev *pdev)
+ 	struct ssb_gige *dev = pdev_to_ssb_gige(pdev);
+ 	if (dev)
+ 		return (dev->dev->bus->chip_id == 0x4785);
+-	return 0;
++	return false;
+ }
+ 
+ /* Get the device MAC address */
+-- 
+2.30.2
+

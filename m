@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5D348E5C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D85048E568
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239874AbiANIVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:21:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59162 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239821AbiANIUG (ORCPT
+        id S239552AbiANIR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:17:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236932AbiANIRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:20:06 -0500
+        Fri, 14 Jan 2022 03:17:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93390C06174E;
+        Fri, 14 Jan 2022 00:17:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C674261E2D;
-        Fri, 14 Jan 2022 08:20:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4F4CC36AE9;
-        Fri, 14 Jan 2022 08:20:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E77CB8243C;
+        Fri, 14 Jan 2022 08:17:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84222C36AEA;
+        Fri, 14 Jan 2022 08:17:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148405;
-        bh=PqTjD/Nbf5u8y6yLhStG0y8yvB+cexBcboNJqtvmuLk=;
+        s=korg; t=1642148263;
+        bh=KcD0sYL6CVc3BtWUwmc6cDHq9Vg8plJozZ2DfE6d1Ks=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JXDoV4fmtwJZSnCBJS90FAT2qE4WGrASKxqtqXMSh5w35RJvZcHemJ7rZHtk3CDmz
-         L/0SA9yIrOxvOJrBO4ZzELDJ9XQr9deLKb1Fij/WoYBMjdZAY2D7Agn+S0I/ELM6wT
-         y6Z/3TIe7KgKvkS3YvYESaq0gkfkIJlJb6yS49qg=
+        b=GpanQmDuxrtrNQTEZKboxsTHAOJpMszWUCp6F2Gv570qTak2q0g/QV9iElY2jz7+8
+         wurBvei6FPYITja9QWx+ly76MPc7yPD+mm7k0pBEGc1NOPdY3/DswzFZYGOQupTNPg
+         pT9ehLtcUTc0DUcwK99jItV5KxOnrVxxpSLmntPI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan McDowell <noodles@earth.li>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH 5.15 21/41] USB: core: Fix bug in resuming hubs handling of wakeup requests
+        stable@vger.kernel.org, "Ivan T. Ivanov" <iivanov@suse.de>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.4 14/18] random: fix crash on multiple early calls to add_bootloader_randomness()
 Date:   Fri, 14 Jan 2022 09:16:21 +0100
-Message-Id: <20220114081545.869596047@linuxfoundation.org>
+Message-Id: <20220114081541.952223820@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081545.158363487@linuxfoundation.org>
-References: <20220114081545.158363487@linuxfoundation.org>
+In-Reply-To: <20220114081541.465841464@linuxfoundation.org>
+References: <20220114081541.465841464@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,69 +49,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: Dominik Brodowski <linux@dominikbrodowski.net>
 
-commit 0f663729bb4afc92a9986b66131ebd5b8a9254d1 upstream.
+commit f7e67b8e803185d0aabe7f29d25a35c8be724a78 upstream.
 
-Bugzilla #213839 reports a 7-port hub that doesn't work properly when
-devices are plugged into some of the ports; the kernel goes into an
-unending disconnect/reinitialize loop as shown in the bug report.
+Currently, if CONFIG_RANDOM_TRUST_BOOTLOADER is enabled, multiple calls
+to add_bootloader_randomness() are broken and can cause a NULL pointer
+dereference, as noted by Ivan T. Ivanov. This is not only a hypothetical
+problem, as qemu on arm64 may provide bootloader entropy via EFI and via
+devicetree.
 
-This "7-port hub" comprises two four-port hubs with one plugged into
-the other; the failures occur when a device is plugged into one of the
-downstream hub's ports.  (These hubs have other problems too.  For
-example, they bill themselves as USB-2.0 compliant but they only run
-at full speed.)
+On the first call to add_hwgenerator_randomness(), crng_fast_load() is
+executed, and if the seed is long enough, crng_init will be set to 1.
+On subsequent calls to add_bootloader_randomness() and then to
+add_hwgenerator_randomness(), crng_fast_load() will be skipped. Instead,
+wait_event_interruptible() and then credit_entropy_bits() will be called.
+If the entropy count for that second seed is large enough, that proceeds
+to crng_reseed().
 
-It turns out that the failures are caused by bugs in both the kernel
-and the hub.  The hub's bug is that it reports a different
-bmAttributes value in its configuration descriptor following a remote
-wakeup (0xe0 before, 0xc0 after -- the wakeup-support bit has
-changed).
+However, both wait_event_interruptible() and crng_reseed() depends
+(at least in numa_crng_init()) on workqueues. Therefore, test whether
+system_wq is already initialized, which is a sufficient indicator that
+workqueue_init_early() has progressed far enough.
 
-The kernel's bug is inside the hub driver's resume handler.  When
-hub_activate() sees that one of the hub's downstream ports got a
-wakeup request from a child device, it notes this fact by setting the
-corresponding bit in the hub->change_bits variable.  But this variable
-is meant for connection changes, not wakeup events; setting it causes
-the driver to believe the downstream port has been disconnected and
-then connected again (in addition to having received a wakeup
-request).
+If we wind up hitting the !system_wq case, we later want to do what
+would have been done there when wqs are up, so set a flag, and do that
+work later from the rand_initialize() call.
 
-Because of this, the hub driver then tries to check whether the device
-currently plugged into the downstream port is the same as the device
-that had been attached there before.  Normally this check succeeds and
-wakeup handling continues with no harm done (which is why the bug
-remained undetected until now).  But with these dodgy hubs, the check
-fails because the config descriptor has changed.  This causes the hub
-driver to reinitialize the child device, leading to the
-disconnect/reinitialize loop described in the bug report.
-
-The proper way to note reception of a downstream wakeup request is
-to set a bit in the hub->event_bits variable instead of
-hub->change_bits.  That way the hub driver will realize that something
-has happened to the port but will not think the port and child device
-have been disconnected.  This patch makes that change.
-
-Cc: <stable@vger.kernel.org>
-Tested-by: Jonathan McDowell <noodles@earth.li>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/YdCw7nSfWYPKWQoD@rowland.harvard.edu
+Reported-by: Ivan T. Ivanov <iivanov@suse.de>
+Fixes: 18b915ac6b0a ("efi/random: Treat EFI_RNG_PROTOCOL output as bootloader randomness")
+Cc: stable@vger.kernel.org
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+[Jason: added crng_need_done state and related logic.]
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/hub.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/random.c |   59 ++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 38 insertions(+), 21 deletions(-)
 
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -1225,7 +1225,7 @@ static void hub_activate(struct usb_hub
- 			 */
- 			if (portchange || (hub_is_superspeed(hub->hdev) &&
- 						port_resumed))
--				set_bit(port1, hub->change_bits);
-+				set_bit(port1, hub->event_bits);
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -497,6 +497,7 @@ static struct crng_state primary_crng =
+  * its value (from 0->1->2).
+  */
+ static int crng_init = 0;
++static bool crng_need_final_init = false;
+ #define crng_ready() (likely(crng_init > 1))
+ static int crng_init_cnt = 0;
+ static unsigned long crng_global_init_time = 0;
+@@ -889,6 +890,38 @@ static void crng_initialize(struct crng_
+ 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+ }
  
- 		} else if (udev->persist_enabled) {
- #ifdef CONFIG_PM
++static void crng_finalize_init(struct crng_state *crng)
++{
++	if (crng != &primary_crng || crng_init >= 2)
++		return;
++	if (!system_wq) {
++		/* We can't call numa_crng_init until we have workqueues,
++		 * so mark this for processing later. */
++		crng_need_final_init = true;
++		return;
++	}
++
++	invalidate_batched_entropy();
++	numa_crng_init();
++	crng_init = 2;
++	process_random_ready_list();
++	wake_up_interruptible(&crng_init_wait);
++	kill_fasync(&fasync, SIGIO, POLL_IN);
++	pr_notice("crng init done\n");
++	if (unseeded_warning.missed) {
++		pr_notice("random: %d get_random_xx warning(s) missed "
++			  "due to ratelimiting\n",
++			  unseeded_warning.missed);
++		unseeded_warning.missed = 0;
++	}
++	if (urandom_warning.missed) {
++		pr_notice("random: %d urandom warning(s) missed "
++			  "due to ratelimiting\n",
++			  urandom_warning.missed);
++		urandom_warning.missed = 0;
++	}
++}
++
+ #ifdef CONFIG_NUMA
+ static void do_numa_crng_init(struct work_struct *work)
+ {
+@@ -1044,26 +1077,7 @@ static void crng_reseed(struct crng_stat
+ 	memzero_explicit(&buf, sizeof(buf));
+ 	WRITE_ONCE(crng->init_time, jiffies);
+ 	spin_unlock_irqrestore(&crng->lock, flags);
+-	if (crng == &primary_crng && crng_init < 2) {
+-		invalidate_batched_entropy();
+-		numa_crng_init();
+-		crng_init = 2;
+-		process_random_ready_list();
+-		wake_up_interruptible(&crng_init_wait);
+-		pr_notice("random: crng init done\n");
+-		if (unseeded_warning.missed) {
+-			pr_notice("random: %d get_random_xx warning(s) missed "
+-				  "due to ratelimiting\n",
+-				  unseeded_warning.missed);
+-			unseeded_warning.missed = 0;
+-		}
+-		if (urandom_warning.missed) {
+-			pr_notice("random: %d urandom warning(s) missed "
+-				  "due to ratelimiting\n",
+-				  urandom_warning.missed);
+-			urandom_warning.missed = 0;
+-		}
+-	}
++	crng_finalize_init(crng);
+ }
+ 
+ static void _extract_crng(struct crng_state *crng,
+@@ -1962,6 +1976,8 @@ int __init rand_initialize(void)
+ {
+ 	init_std_data(&input_pool);
+ 	init_std_data(&blocking_pool);
++	if (crng_need_final_init)
++		crng_finalize_init(&primary_crng);
+ 	crng_initialize(&primary_crng);
+ 	crng_global_init_time = jiffies;
+ 	if (ratelimit_disable) {
+@@ -2493,7 +2509,8 @@ void add_hwgenerator_randomness(const ch
+ 	 * We'll be woken up again once below random_write_wakeup_thresh,
+ 	 * or when the calling thread is about to terminate.
+ 	 */
+-	wait_event_interruptible(random_write_wait, kthread_should_stop() ||
++	wait_event_interruptible(random_write_wait,
++			!system_wq || kthread_should_stop() ||
+ 			ENTROPY_BITS(&input_pool) <= random_write_wakeup_bits);
+ 	mix_pool_bytes(poolp, buffer, count);
+ 	credit_entropy_bits(poolp, entropy);
 
 

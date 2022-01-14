@@ -2,100 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCD448EDD5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB9148EDE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243235AbiANQQL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Jan 2022 11:16:11 -0500
-Received: from mail-4018.proton.ch ([185.70.40.18]:38115 "EHLO
-        mail-4018.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243218AbiANQQG (ORCPT
+        id S243241AbiANQSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:18:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239095AbiANQSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:16:06 -0500
-Date:   Fri, 14 Jan 2022 16:15:58 +0000
-Authentication-Results: mail-4018.proton.ch; dkim=none
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-From:   conor dooley <mail@conchuod.ie>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        Atish Patra <atishp@rivosinc.com>
-Reply-To: conor dooley <mail@conchuod.ie>
-Subject: Re: [PATCH v3 03/15] mailbox: change mailbox-mpfs compatible string
-Message-ID: <MzSOUvHzeH0svo7uoPc_rfCs1BVTByRKAZ_EftQ5Qk2sheETSbE_NFPRVzFd8YmKMQ_9uIggomOqyQUD9clIwabiKrVp4F2Gw4nOnJkXv2M=@conchuod.ie>
-In-Reply-To: <CAMuHMdUXD8CHqoaygXzcC0YpsbRT_KAUni1hD4sMn=k=WD+DuQ@mail.gmail.com>
-References: <20220114151727.2319915-1-conor.dooley@microchip.com> <20220114151727.2319915-4-conor.dooley@microchip.com> <CAMuHMdUXD8CHqoaygXzcC0YpsbRT_KAUni1hD4sMn=k=WD+DuQ@mail.gmail.com>
+        Fri, 14 Jan 2022 11:18:33 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAF8C06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:18:32 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id f8so3141579pgf.8
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:18:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7VMdD/jG1OhLf0ccWBGGvDrHOZitMiDuwr1tmbzaiPk=;
+        b=dtsLpROvyW71vMsAeyUDpkELOk3IIZsyrBrQaMpABVKaCHSph5MPHi31CrLCVeFCfb
+         qAC8978AT1Bv5z7usNwPhes62xlyu6fWhXnwKyXTmJavoREl5nY0j+RfLOSKddAbTqdj
+         LYGlpYwRYf5bA/XS28pQ1V6/seMux030uA/Hf6VJF3ShDFU3OvNV8TiwSagntC0z1q43
+         KfvTqyoCJFhpjhe1qjy+ZS6RsNEVqWo1FcwAsKrWyP9er3vkh3pF+r2I8z1BllSkoWYS
+         gwf4XuPebfTzvVx22RBy0MsH8/gwrfnKt6wCT6WLLZWZh+E3wRBL8j6/U/y+zS0L3gVL
+         cDcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7VMdD/jG1OhLf0ccWBGGvDrHOZitMiDuwr1tmbzaiPk=;
+        b=CjkVWKDlcceLqfM+aPC+U2auz49A19sXLe/+flhRVuHhfknjRTEz3AH9PgSGGSXF4+
+         kaHOYw/v8C8jXuaZ7+lhwsDIoiFfxyDaMBY+LrLofSNwBgBb8cNNT436rjy9rGWsH1+y
+         MKXj+osrbDnTXKvUuKyv35TCLIwpOV3ihaB4Amh8A3tQOQnoqzLsOwIWURv44r/vC45N
+         dc4MzYw49UlQrzW6JKkOxl7tgAHLHzFSEZYDNjyjmJuRyaUrFNIjLk9FKLl22+wNSoqC
+         R/RJd4CAYVo8pcuIFLqsmMApnsGg4EujhIpGUd9F6uQVOqtg8RP1Gl6Hp6PkC5Bhvoxc
+         z0WQ==
+X-Gm-Message-State: AOAM530obucSrspEAMrdYqE9WTveQ8fttqW12X3pF24x/EyPiLOLCtI5
+        s/jOsEbI5HrZG2PqAPWYT3kDfQ==
+X-Google-Smtp-Source: ABdhPJw8er2uWFApX4KapuD5tBwh7MswU/QprQpkNs5xP88OBelj+H2tdzEm9pgcSKcQ4Kwt7Xhxrw==
+X-Received: by 2002:a63:8548:: with SMTP id u69mr6595782pgd.306.1642177112043;
+        Fri, 14 Jan 2022 08:18:32 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id m14sm5985121pff.151.2022.01.14.08.18.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 08:18:31 -0800 (PST)
+Date:   Fri, 14 Jan 2022 16:18:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH v5 8/8] KVM: VMX: Resize PID-ponter table on demand for
+ IPI virtualization
+Message-ID: <YeGiVCn0wNH9eqxX@google.com>
+References: <20211231142849.611-1-guang.zeng@intel.com>
+ <20211231142849.611-9-guang.zeng@intel.com>
+ <YeCjHbdAikyIFQc9@google.com>
+ <43200b86-aa40-f7a3-d571-dc5fc3ebd421@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.0 required=10.0 tests=ALL_TRUSTED shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <43200b86-aa40-f7a3-d571-dc5fc3ebd421@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi Conor,
->
-> On Fri, Jan 14, 2022 at 4:16 PM <conor.dooley@microchip.com> wrote:
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> >
-> > The Polarfire SoC is currently using two different compatible string
-> > prefixes. Fix this by changing "polarfire-soc-*" strings to "mpfs-*" in
-> > its system controller in order to match the compatible string used in
-> > the soc binding and device tree.
-> >
-> > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->
-> This is already upstream, commit f10b1fc0161cd99e ("mailbox: change
-> mailbox-mpfs compatible string").
+On Fri, Jan 14, 2022, Zeng Guang wrote:
+> On 1/14/2022 6:09 AM, Sean Christopherson wrote:
+> > On Fri, Dec 31, 2021, Zeng Guang wrote:
+> > > +static int vmx_expand_pid_table(struct kvm_vmx *kvm_vmx, int entry_idx)
+> > > +{
+> > > +	u64 *last_pid_table;
+> > > +	int last_table_size, new_order;
+> > > +
+> > > +	if (entry_idx <= kvm_vmx->pid_last_index)
+> > > +		return 0;
+> > > +
+> > > +	last_pid_table = kvm_vmx->pid_table;
+> > > +	last_table_size = table_index_to_size(kvm_vmx->pid_last_index + 1);
+> > > +	new_order = get_order(table_index_to_size(entry_idx + 1));
+> > > +
+> > > +	if (vmx_alloc_pid_table(kvm_vmx, new_order))
+> > > +		return -ENOMEM;
+> > > +
+> > > +	memcpy(kvm_vmx->pid_table, last_pid_table, last_table_size);
+> > > +	kvm_make_all_cpus_request(&kvm_vmx->kvm, KVM_REQ_PID_TABLE_UPDATE);
+> > > +
+> > > +	/* Now old PID table can be freed safely as no vCPU is using it. */
+> > > +	free_pages((unsigned long)last_pid_table, get_order(last_table_size));
+> > This is terrifying.  I think it's safe?  But it's still terrifying.
+> 
+> Free old PID table here is safe as kvm making request KVM_REQ_PI_TABLE_UPDATE
+> with KVM_REQUEST_WAIT flag force all vcpus trigger vm-exit to update vmcs
+> field to new allocated PID table. At this time, it makes sure old PID table
+> not referenced by any vcpu.
+> Do you mean it still has potential problem?
 
-I would say great, but that means the new string is now in the driver
-but the new dt-binding is not (and I just noticed contains an error).
-Conor.
+No, I do think it's safe, but it is still terrifying :-)
 
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> > Rather than dynamically react as vCPUs are created, what about we make max_vcpus
+> > common[*], extend KVM_CAP_MAX_VCPUS to allow userspace to override max_vcpus,
+> > and then have the IPIv support allocate the PID table on first vCPU creation
+> > instead of in vmx_vm_init()?
+> > 
+> > That will give userspace an opportunity to lower max_vcpus to reduce memory
+> > consumption without needing to dynamically muck with the table in KVM.  Then
+> > this entire patch goes away.
+> IIUC, it's risky if relying on userspace .
+
+That's why we have cgroups, rlimits, etc...
+
+> In this way userspace also have chance to assign large max_vcpus but not use
+> them at all. This cannot approach the goal to save memory as much as possible
+> just similar as using KVM_MAX_VCPU_IDS to allocate PID table.
+
+Userspace can simply do KVM_CREATE_VCPU until it hits KVM_MAX_VCPU_IDS...

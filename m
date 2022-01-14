@@ -2,186 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C2948EEF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A526D48EEF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243719AbiANRFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:05:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52598 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243708AbiANRFF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S243712AbiANRFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 14 Jan 2022 12:05:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642179904;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NVYKjhnkLV/svSI6KvkwlE+spjnGNnsoSLgbeYPEv9I=;
-        b=WcUWiH9rqnwhjzgix4WYjb6iQgmuNUtVEMNk6HH/BJes0jTxa6XpNFwcFxh9CoH4bGMyJq
-        uEJpI9XvWlHq1fQigzB6YJ+naS+aFNZ+A+CKveCKkCN14NiVILC7Fl1iPRxGz4QWRrqLWl
-        sn9MWc+psJGFO4MmLMmYz8WtfsIizxo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-287-06Hw7hyYMZSdqkBAsC7yAA-1; Fri, 14 Jan 2022 12:05:03 -0500
-X-MC-Unique: 06Hw7hyYMZSdqkBAsC7yAA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C96ED18B62A8;
-        Fri, 14 Jan 2022 17:05:01 +0000 (UTC)
-Received: from jmeneghi.bos.com (unknown [10.22.17.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F25825B2EC;
-        Fri, 14 Jan 2022 17:05:00 +0000 (UTC)
-From:   John Meneghini <jmeneghi@redhat.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        GR-QLogic-Storage-Upstream@marvell.com, mlombard@redhat.com,
-        skashyap@marvell.com
-Subject: [PATCH V2] scsi: bnx2fc: flush destroy_work queue before calling bnx2fc_interface_put
-Date:   Fri, 14 Jan 2022 12:04:25 -0500
-Message-Id: <20220114170424.871391-1-jmeneghi@redhat.com>
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:49675 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233561AbiANRFE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 12:05:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642179905; x=1673715905;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LAXbPGrQij7hKaDghaiCxJfHKx2yQSO9XzW1xW7uwLo=;
+  b=aBpuejDlNkkEv69TO9q6PjDmSUtlEDzIYrGdvG8BKPn/fQUKHP4hucVD
+   SsDQCGVi1cOhZ9dWE/la9tKUWAMqnzyXnuvJIxWd/HxMcxkCwHHeSxOxs
+   YK2xh0yXyKrLHXqUTYmmjQFPLEzLXEv9uc7jDkAt/AEdgHNqyXbZQdWDV
+   M=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 14 Jan 2022 09:05:04 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 09:04:48 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 14 Jan 2022 09:04:48 -0800
+Received: from [10.110.125.36] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 14 Jan
+ 2022 09:04:47 -0800
+Message-ID: <a507d7f2-c1f8-f8bd-24fa-15c4a2fb5a8b@quicinc.com>
+Date:   Fri, 14 Jan 2022 09:04:46 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v13 1/4] drm/msm/dp: do not initialize phy until plugin
+ interrupt received
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
+        <daniel@ffwll.ch>, <dmitry.baryshkov@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1642118019-18673-1-git-send-email-quic_khsieh@quicinc.com>
+ <1642118019-18673-2-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n52OETzrO-XxuOQLp=fM17X3SGdD6zARtF85znmTqdvVRg@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n52OETzrO-XxuOQLp=fM17X3SGdD6zARtF85znmTqdvVRg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  The bnx2fc_destroy functions are removing the interface before calling
-  destroy_work. This results multiple WARNings from sysfs_remove_group
-  as the controller rport device attributes are removed to early.
 
-  Replace the fcoe_port's destroy_work queue.  It's not needed.
+On 1/13/2022 6:42 PM, Stephen Boyd wrote:
+> Quoting Kuogee Hsieh (2022-01-13 15:53:36)
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index 7cc4d21..b3c5404 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -83,6 +83,7 @@ struct dp_display_private {
+>>
+>>          /* state variables */
+>>          bool core_initialized;
+>> +       bool phy_initialized;
+>>          bool hpd_irq_on;
+>>          bool audio_supported;
+>>
+>> @@ -372,21 +373,38 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
+>>          return rc;
+>>   }
+>>
+>> -static void dp_display_host_init(struct dp_display_private *dp, int reset)
+>> +static void dp_display_host_phy_init(struct dp_display_private *dp)
+>>   {
+>> -       bool flip = false;
+>> +       DRM_DEBUG_DP("core_init=%d phy_init=%d\n",
+>> +                       dp->core_initialized, dp->phy_initialized);
+>>
+>> +       if (!dp->phy_initialized) {
+>> +               dp_ctrl_phy_init(dp->ctrl);
+>> +               dp->phy_initialized = true;
+>> +       }
+>> +}
+>> +
+>> +static void dp_display_host_phy_exit(struct dp_display_private *dp)
+>> +{
+>> +       DRM_DEBUG_DP("core_init=%d phy_init=%d\n",
+>> +                       dp->core_initialized, dp->phy_initialized);
+>> +
+>> +       if (dp->phy_initialized) {
+>> +               dp_ctrl_phy_exit(dp->ctrl);
+>> +               dp->phy_initialized = false;
+>> +       }
+>> +}
+>> +
+>> +static void dp_display_host_init(struct dp_display_private *dp)
+>> +{
+>>          DRM_DEBUG_DP("core_initialized=%d\n", dp->core_initialized);
+>>          if (dp->core_initialized) {
+> When is this true? From what I see dp_display_host_init() is only called
+> from two places: resume where core_initialized has been set to false
+> during suspend or from dp_display_config_hpd() kicked by the kthread
+> where core_initialized is also false.
+>
+> Also, I see that dp_display_host_deinit() is only called from suspend
+> now, so 'core_initialized' is almost always true, except for on the
+> resume path and before the kthread is started and in the case that the
+> driver probes but can't start the kthread for some reason (is that
+> real?).
 
-  The problem is easily reproducible with the following steps.
+Yes, that true.
 
-  Example:
+The purpose  of dp_display_host_init() is to configure both dp 
+controller and hpd controller to be ready to receive
 
-    $ dmesg -w &
-    $ systemctl enable --now fcoe
-    $ fipvlan -s -c ens2f1
-    $ fcoeadm -d ens2f1.802
-    [  583.464488] host2: libfc: Link down on port (7500a1)
-    [  583.472651] bnx2fc: 7500a1 - rport not created Yet!!
-    [  583.490468] ------------[ cut here ]------------
-    [  583.538725] sysfs group 'power' not found for kobject 'rport-2:0-0'
-    [  583.568814] WARNING: CPU: 3 PID: 192 at fs/sysfs/group.c:279 sysfs_remove_group+0x6f/0x80
-    [  583.607130] Modules linked in: dm_service_time 8021q garp mrp stp llc bnx2fc cnic uio rpcsec_gss_krb5 auth_rpcgss nfsv4 ...
-    [  583.942994] CPU: 3 PID: 192 Comm: kworker/3:2 Kdump: loaded Not tainted 5.14.0-39.el9.x86_64 #1
-    [  583.984105] Hardware name: HP ProLiant DL120 G7, BIOS J01 07/01/2013
-    [  584.016535] Workqueue: fc_wq_2 fc_rport_final_delete [scsi_transport_fc]
-    [  584.050691] RIP: 0010:sysfs_remove_group+0x6f/0x80
-    [  584.074725] Code: ff 5b 48 89 ef 5d 41 5c e9 ee c0 ff ff 48 89 ef e8 f6 b8 ff ff eb d1 49 8b 14 24 48 8b 33 48 c7 c7 ...
-    [  584.162586] RSP: 0018:ffffb567c15afdc0 EFLAGS: 00010282
-    [  584.188225] RAX: 0000000000000000 RBX: ffffffff8eec4220 RCX: 0000000000000000
-    [  584.221053] RDX: ffff8c1586ce84c0 RSI: ffff8c1586cd7cc0 RDI: ffff8c1586cd7cc0
-    [  584.255089] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffb567c15afc00
-    [  584.287954] R10: ffffb567c15afbf8 R11: ffffffff8fbe7f28 R12: ffff8c1486326400
-    [  584.322356] R13: ffff8c1486326480 R14: ffff8c1483a4a000 R15: 0000000000000004
-    [  584.355379] FS:  0000000000000000(0000) GS:ffff8c1586cc0000(0000) knlGS:0000000000000000
-    [  584.394419] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-    [  584.421123] CR2: 00007fe95a6f7840 CR3: 0000000107674002 CR4: 00000000000606e0
-    [  584.454888] Call Trace:
-    [  584.466108]  device_del+0xb2/0x3e0
-    [  584.481701]  device_unregister+0x13/0x60
-    [  584.501306]  bsg_unregister_queue+0x5b/0x80
-    [  584.522029]  bsg_remove_queue+0x1c/0x40
-    [  584.541884]  fc_rport_final_delete+0xf3/0x1d0 [scsi_transport_fc]
-    [  584.573823]  process_one_work+0x1e3/0x3b0
-    [  584.592396]  worker_thread+0x50/0x3b0
-    [  584.609256]  ? rescuer_thread+0x370/0x370
-    [  584.628877]  kthread+0x149/0x170
-    [  584.643673]  ? set_kthread_struct+0x40/0x40
-    [  584.662909]  ret_from_fork+0x22/0x30
-    [  584.680002] ---[ end trace 53575ecefa942ece ]---
+HPD plugged-in interrupts and at plugged-in handler enable dp phy. 
+Therefore core_initialized is set to true at both booting up and resume 
+and false at suspend.
 
-Signed-off-by: John Meneghini <jmeneghi@redhat.com>
-Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
----
- drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 20 +++++---------------
- 1 file changed, 5 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-index 71fa62bd3083..9be273c320e2 100644
---- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-+++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-@@ -82,7 +82,7 @@ static int bnx2fc_bind_pcidev(struct bnx2fc_hba *hba);
- static void bnx2fc_unbind_pcidev(struct bnx2fc_hba *hba);
- static struct fc_lport *bnx2fc_if_create(struct bnx2fc_interface *interface,
- 				  struct device *parent, int npiv);
--static void bnx2fc_destroy_work(struct work_struct *work);
-+static void bnx2fc_port_destroy(struct fcoe_port *port);
- 
- static struct bnx2fc_hba *bnx2fc_hba_lookup(struct net_device *phys_dev);
- static struct bnx2fc_interface *bnx2fc_interface_lookup(struct net_device
-@@ -907,9 +907,6 @@ static void bnx2fc_indicate_netevent(void *context, unsigned long event,
- 				__bnx2fc_destroy(interface);
- 		}
- 		mutex_unlock(&bnx2fc_dev_lock);
--
--		/* Ensure ALL destroy work has been completed before return */
--		flush_workqueue(bnx2fc_wq);
- 		return;
- 
- 	default:
-@@ -1215,8 +1212,8 @@ static int bnx2fc_vport_destroy(struct fc_vport *vport)
- 	mutex_unlock(&n_port->lp_mutex);
- 	bnx2fc_free_vport(interface->hba, port->lport);
- 	bnx2fc_port_shutdown(port->lport);
-+	bnx2fc_port_destroy(port);
- 	bnx2fc_interface_put(interface);
--	queue_work(bnx2fc_wq, &port->destroy_work);
- 	return 0;
- }
- 
-@@ -1525,7 +1522,6 @@ static struct fc_lport *bnx2fc_if_create(struct bnx2fc_interface *interface,
- 	port->lport = lport;
- 	port->priv = interface;
- 	port->get_netdev = bnx2fc_netdev;
--	INIT_WORK(&port->destroy_work, bnx2fc_destroy_work);
- 
- 	/* Configure fcoe_port */
- 	rc = bnx2fc_lport_config(lport);
-@@ -1653,8 +1649,8 @@ static void __bnx2fc_destroy(struct bnx2fc_interface *interface)
- 	bnx2fc_interface_cleanup(interface);
- 	bnx2fc_stop(interface);
- 	list_del(&interface->list);
-+	bnx2fc_port_destroy(port);
- 	bnx2fc_interface_put(interface);
--	queue_work(bnx2fc_wq, &port->destroy_work);
- }
- 
- /**
-@@ -1694,15 +1690,12 @@ static int bnx2fc_destroy(struct net_device *netdev)
- 	return rc;
- }
- 
--static void bnx2fc_destroy_work(struct work_struct *work)
-+static void bnx2fc_port_destroy(struct fcoe_port *port)
- {
--	struct fcoe_port *port;
- 	struct fc_lport *lport;
- 
--	port = container_of(work, struct fcoe_port, destroy_work);
- 	lport = port->lport;
--
--	BNX2FC_HBA_DBG(lport, "Entered bnx2fc_destroy_work\n");
-+	BNX2FC_HBA_DBG(lport, "Entered %s, destroying lport %p\n", __func__, lport);
- 
- 	bnx2fc_if_destroy(lport);
- }
-@@ -2556,9 +2549,6 @@ static void bnx2fc_ulp_exit(struct cnic_dev *dev)
- 			__bnx2fc_destroy(interface);
- 	mutex_unlock(&bnx2fc_dev_lock);
- 
--	/* Ensure ALL destroy work has been completed before return */
--	flush_workqueue(bnx2fc_wq);
--
- 	bnx2fc_ulp_stop(hba);
- 	/* unregister cnic device */
- 	if (test_and_clear_bit(BNX2FC_CNIC_REGISTERED, &hba->reg_with_cnic))
--- 
-2.27.0
-
+>>                  DRM_DEBUG_DP("DP core already initialized\n");
+>>                  return;
+>>          }
+>>
+>> -       if (dp->usbpd->orientation == ORIENTATION_CC2)
+>> -               flip = true;
+>> -
+>> -       dp_power_init(dp->power, flip);
+>> -       dp_ctrl_host_init(dp->ctrl, flip, reset);
+>> +       dp_power_init(dp->power, false);
+>> +       dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
+>>          dp_aux_init(dp->aux);
+>>          dp->core_initialized = true;
+>>   }
+>> @@ -892,12 +901,19 @@ static int dp_display_disable(struct dp_display_private *dp, u32 data)
+>>
+>>          dp_display->audio_enabled = false;
+>>
+>> -       /* triggered by irq_hpd with sink_count = 0 */
+>>          if (dp->link->sink_count == 0) {
+>> +               /*
+>> +                * irq_hpd with sink_count = 0
+>> +                * hdmi unplugged out of dongle
+>> +                */
+>>                  dp_ctrl_off_link_stream(dp->ctrl);
+>>          } else {
+>> +               /*
+>> +                * unplugged interrupt
+>> +                * dongle unplugged out of DUT
+>> +                */
+>>                  dp_ctrl_off(dp->ctrl);
+>> -               dp->core_initialized = false;
+>> +               dp_display_host_phy_exit(dp);
+>>          }
+>>
+>>          dp_display->power_on = false;
+>> @@ -1027,7 +1043,7 @@ void msm_dp_snapshot(struct msm_disp_state *disp_state, struct msm_dp *dp)
+>>   static void dp_display_config_hpd(struct dp_display_private *dp)
+>>   {
+>>
+>> -       dp_display_host_init(dp, true);
+>> +       dp_display_host_init(dp);
+>>          dp_catalog_ctrl_hpd_config(dp->catalog);
+>>
+>>          /* Enable interrupt first time
+>> @@ -1306,20 +1322,23 @@ static int dp_pm_resume(struct device *dev)
+>>          dp->hpd_state = ST_DISCONNECTED;
+>>
+>>          /* turn on dp ctrl/phy */
+>> -       dp_display_host_init(dp, true);
+>> +       dp_display_host_init(dp);
+>>
+>>          dp_catalog_ctrl_hpd_config(dp->catalog);
+>>
+>> -       /*
+>> -        * set sink to normal operation mode -- D0
+>> -        * before dpcd read
+>> -        */
+>> -       dp_link_psm_config(dp->link, &dp->panel->link_info, false);
+>>
+>>          if (dp_catalog_link_is_connected(dp->catalog)) {
+>> +               /*
+>> +                * set sink to normal operation mode -- D0
+>> +                * before dpcd read
+>> +                */
+>> +               dp_display_host_phy_init(dp);
+>> +               dp_link_psm_config(dp->link, &dp->panel->link_info, false);
+>>                  sink_count = drm_dp_read_sink_count(dp->aux);
+>>                  if (sink_count < 0)
+>>                          sink_count = 0;
+>> +
+>> +               dp_display_host_phy_exit(dp);
+>>          }
+>>
+>>          dp->link->sink_count = sink_count;
+>> @@ -1363,7 +1382,11 @@ static int dp_pm_suspend(struct device *dev)
+>>                  if (dp_power_clk_status(dp->power, DP_CTRL_PM))
+>>                          dp_ctrl_off_link_stream(dp->ctrl);
+>>
+>> +               dp_display_host_phy_exit(dp);
+>> +
+> Why is there a newline here?
+>
+>>                  dp_display_host_deinit(dp);
+>> +       } else {
+>> +               dp_display_host_phy_exit(dp);
+>>          }
+>>
+>>          dp->hpd_state = ST_SUSPENDED;
+> There's a dp->core_initialized = false right here but it's not in the
+> diff window. It's redundant now because the hunk above is basically
+>
+> 	if (dp->core_initialized == true) {
+> 		...
+> 		dp_display_host_phy_exit(dp);
+> 		dp_display_host_deinit(dp);
+> 	} else {
+> 		dp_display_host_phy_exit(dp);
+> 	}
+>
+> 	dp->hpd_state = ST_SUSPENDED;
+>
+> and dp_display_host_deinit() sets core_initialized to false, thus
+> core_initialized will be false here already. Can you remove the
+> duplicate assignment?
+yes,
+>> @@ -1535,7 +1558,7 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
+>>          state =  dp_display->hpd_state;
+>>
+>>          if (state == ST_DISPLAY_OFF)
+>> -               dp_display_host_init(dp_display, true);
+>> +               dp_display_host_phy_init(dp_display);
+>>
+>>          dp_display_enable(dp_display, 0);
+>>

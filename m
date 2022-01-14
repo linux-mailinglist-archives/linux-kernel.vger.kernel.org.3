@@ -2,110 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B854448EDC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4BC48EDC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243208AbiANQNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:13:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
+        id S243182AbiANQNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:13:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243192AbiANQNk (ORCPT
+        with ESMTP id S243161AbiANQNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:13:40 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8459C061401
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:13:39 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id p37so17723184uae.8
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:13:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Qxkpv3eNiRdJcWaLuANiCoD4pI3qvbrsDdQYc45dZk8=;
-        b=goCpoT6iIjZHX/StCqxQby/LS7loOLRpEO/Y1+Fj6M2kXs38lG7f13W8ikbjrmBMCB
-         OnFyQXUuaTcCidVWULOBJLIvx/O/tI14Z/F4AqdGWKvBoErCdpyWjtBMdyDgcX26Jfur
-         P7tevqaqFwc2lNh+GQupHifgTHk1QgJ0IulZyqJpHw93YdOpRSB30jRvKA//YtZrz3uy
-         /rLzNvL+AP0sqJ3Gw46gtEEyJHSgy+hlpmuz9XhnzfG6TSHUx8NMiint7b7kMzgahLzi
-         uyYTcPOibvNGpK23+DpgqR2j4PPmT16QhZWV9UBCLL4NKQuKJeBHXJ6hFknVvbMD9Vjx
-         Z9Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Qxkpv3eNiRdJcWaLuANiCoD4pI3qvbrsDdQYc45dZk8=;
-        b=7BrkpkTVPG32sALpxAFxklHy6Udmw3VRUex+DivnN+km1pxKaCzfr1Lbe0/NYBzuva
-         dQ6N5+vadlQF0YKGvAI6l+eJbvewz/eZZ0zNfg1wrgH7QW1s2AV95ApjvbZ2kyulHsPV
-         cb0cw08tVI88hTlnNHsKAaIu80KX52aBf5OWr0rk4m4W+t+lHdqq6bxPWcUdy7Jy0Xgh
-         C/we/qHCr1ASxyCataWqqCTdYGWSvGJ6klrL7kIxUndUUWj5aZBmi1vRt4vlUMLXNQUG
-         C/vDonanbKJW9Cq5qZZXnWFnIutz89PWNJO/+7a82/P+5CtiDzomXPuptYSapn7684Zc
-         HYaA==
-X-Gm-Message-State: AOAM53390UZg/oAIHP4ThOiYJpOC7CU7hqAP/1uLzJe+ULeHgABU8DqG
-        h/2J67iPS6vWKTVMSJkq12z1+I0cobLo47AlisdubA==
-X-Google-Smtp-Source: ABdhPJzWflgFRWJp52JXGQ6mFbqqIxK3ZZYuUMkUM0idCjp2RCLsqwd6kxDjkUeOcXkWzHUSz8ObECiekIGt+opAxuw=
-X-Received: by 2002:ab0:13ee:: with SMTP id n43mr4421442uae.9.1642176818829;
- Fri, 14 Jan 2022 08:13:38 -0800 (PST)
+        Fri, 14 Jan 2022 11:13:32 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15420C061574;
+        Fri, 14 Jan 2022 08:13:32 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3CBAA1EC04DB;
+        Fri, 14 Jan 2022 17:13:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1642176806;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=T9lVGRMfB0dZ/1pOk6rO2IeX36vPDtdKY83YL0cY2Mo=;
+        b=TK52Th4/+7XvKMFOCryiQRmIwHP79uZD+OIuFZABrKQ7YzkwrV5uKKnsBKj4sUsc/3PKPr
+        +x/fbpLKwQuDO7hIFbx3LuulU5N+oT7pz2XvJ8Adab9yhp1SGJnu0VK+FgU3FEn2KBrS8B
+        qPgoEPJtqSyahyEqWUwxWhGgxHAS2d4=
+Date:   Fri, 14 Jan 2022 17:13:30 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 29/40] x86/compressed/64: add support for SEV-SNP
+ CPUID table in #VC handlers
+Message-ID: <YeGhKll2fTcTr2wS@zn.tnic>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-30-brijesh.singh@amd.com>
+ <YeAmFePcPjvMoWCP@zn.tnic>
+ <20220113163913.phpu4klrmrnedgic@amd.com>
 MIME-Version: 1.0
-References: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com> <20220112100046.68068-5-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220112100046.68068-5-krzysztof.kozlowski@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 14 Jan 2022 18:13:27 +0200
-Message-ID: <CAPLW+4mRY7diuP8Ts_pnY6M0TeK9OmxPe+fh_K0YBBzvitRNbw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] spi: s3c64xx: allow controller-data to be optional
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Pratyush Yadav <p.yadav@ti.com>, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220113163913.phpu4klrmrnedgic@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jan 2022 at 12:00, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> The Samsung SoC SPI driver requires to provide controller-data node
-> for each of SPI peripheral device nodes.  Make this controller-data node
-> optional, so DTS could be simpler.
->
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
+On Thu, Jan 13, 2022 at 10:39:13AM -0600, Michael Roth wrote:
+> I was thinking a future hypervisor/spec might make use of this field for
+> new functionality, while still wanting to be backward-compatible with
+> existing guests, so it would be better to not enforce 0. The firmware
+> ABI does indeed document it as must-be-zero,
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+Maybe there's a good reason for that.
 
->  drivers/spi/spi-s3c64xx.c | 14 ++++++--------
->  1 file changed, 6 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-> index 8755cd85e83c..769d958a2f86 100644
-> --- a/drivers/spi/spi-s3c64xx.c
-> +++ b/drivers/spi/spi-s3c64xx.c
-> @@ -796,16 +796,14 @@ static struct s3c64xx_spi_csinfo *s3c64xx_get_slave_ctrldata(
->                 return ERR_PTR(-EINVAL);
->         }
->
-> -       data_np = of_get_child_by_name(slave_np, "controller-data");
-> -       if (!data_np) {
-> -               dev_err(&spi->dev, "child node 'controller-data' not found\n");
-> -               return ERR_PTR(-EINVAL);
-> -       }
-> -
->         cs = kzalloc(sizeof(*cs), GFP_KERNEL);
-> -       if (!cs) {
-> -               of_node_put(data_np);
-> +       if (!cs)
->                 return ERR_PTR(-ENOMEM);
-> +
-> +       data_np = of_get_child_by_name(slave_np, "controller-data");
-> +       if (!data_np) {
-> +               dev_info(&spi->dev, "child node 'controller-data' not found, using defaults\n");
-> +               return cs;
->         }
->
->         of_property_read_u32(data_np, "samsung,spi-feedback-delay", &fb_delay);
-> --
-> 2.32.0
->
+> by that seems to be more of a constraint on what a hypervisor is
+> currently allowed to place in the CPUID table, rather than something
+> the guest is meant to enforce/rely on.
+
+So imagine whoever creates those, starts putting stuff in those fields.
+Then, in the future, the spec decides to rename those reserved/unused
+fields into something else and starts putting concrete values in them.
+I.e., it starts using them for something.
+
+But, now the spec breaks existing usage because those fields are already
+in use. And by then it doesn't matter what the spec says - existing
+usage makes it an ABI.
+
+So we start doing expensive and ugly workarounds just so that we don't
+break the old, undocumented use which the spec simply silently allowed,
+and accomodate that new feature the spec adds.
+
+So no, what you're thinking is a bad bad idea.
+
+> snp_cpuid_info_create() (which sets snp_cpuid_initialized) only gets
+> called if firmware indicates this is an SNP guests (via the cc_blob), but
+> the #VC handler still needs to know whether or not it should use the SNP
+> CPUID table still SEV-ES will still make use of it, so it uses
+> snp_cpuid_active() to make that determination.
+
+So I went and applied the rest of the series. And I think you mean
+do_vc_no_ghcb() and it doing snp_cpuid().
+
+Then, looking at sev_enable() and it calling snp_init(), you fail
+further init if there's any discrepancy in the supplied data - CPUID,
+SEV status MSR, etc.
+
+So, practically, what you wanna test in all those places is whether
+you're a SNP guest or not. Which we already have:
+
+	sev_status & MSR_AMD64_SEV_SNP_ENABLED
+
+so, unless I'm missing something, you don't need yet another
+<bla>_active() helper.
+
+> This code is calculating the total XSAVE buffer size for whatever
+> features are enabled by the guest's XCR0/XSS registers. Those feature
+> bits correspond to the 0xD subleaves 2-63, which advertise the buffer
+> size for each particular feature. So that check needs to ignore anything
+> outside that range (including 0xD subleafs 0 and 1, which would normally
+> provide this total size dynamically based on current values of XCR0/XSS,
+> but here are instead calculated "manually" since we are not relying on
+> the XCR0_IN/XSS_IN fields in the table (due to the reasons mentioned
+> earlier in this thread).
+
+Yah, the gist of that needs to be as a comment of that line as it is not
+obvious (at least to me).
+
+> Not duplicate entries (though there's technically nothing in the spec
+> that says you can't), but I was more concerned here with multiple
+> entries corresponding to different combination of XCR0_IN/XSS_IN.
+> There's no good reason for a hypervisor to use those fields for anything
+> other than 0xD subleaves 0 and 1, but a hypervisor could in theory encode
+> 1 "duplicate" sub-leaf for each possible combination of XCR0_IN/XSS_IN,
+> similar to what it might do for subleaves 0 and 1, and not violate the
+> spec.
+
+
+Ditto. Also a comment ontop please.
+
+> The current spec is a bit open-ended in some of these areas so the guest
+> code is trying to be as agnostic as possible to the underlying implementation
+> so there's less chance of breakage running on one hypervisor verses
+> another. We're working on updating the spec to encourage better
+> interoperability, but that would likely only be enforceable for future
+> firmware versions/guests.
+
+This has the same theoretical problem as the reserved/unused fields. If
+you don't enforce it, people will do whatever and once it is implemented
+in hypervisors and it has become an ABI, you can't change it anymore.
+
+So I'd very strongly suggest you tighten in up upfront and only allow
+stuff later, when it makes sense. Not the other way around.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

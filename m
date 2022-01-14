@@ -2,205 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8079C48E538
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BEA48E53A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235349AbiANIKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:10:42 -0500
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:47611 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231576AbiANIKm (ORCPT
+        id S235058AbiANILm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:11:42 -0500
+Received: from ewsoutbound.kpnmail.nl ([195.121.94.167]:11955 "EHLO
+        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231576AbiANILl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:10:42 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3AMFIIQa5hdN3TcH2ISgYsNwxRtEvGchMFZxGqfqr?=
- =?us-ascii?q?LsXjdYENShjUHzzYYUGqDbK6JZ2WnfYtya4S28hkBu5HVytAxHVE5pCpnJ55og?=
- =?us-ascii?q?ZCbXIzGdC8cHM8zwvXrFRsht4NHAjX5BJhcokT0+1H9YtANkVEmjfvSHuOlVLa?=
- =?us-ascii?q?dUsxMbVQMpBkJ2EsLd9ER0tYAbeiRW2thiPuqyyHtEAbNNw1cbgr435m+RCZH5?=
- =?us-ascii?q?5wejt+3UmsWPpintHeG/5Uc4Ql2yauZdxMUSaEMdgK2qnqq8V23wo/Z109F5tK?=
- =?us-ascii?q?NmbC9fFAIQ6LJIE6FjX8+t6qK20AE/3JtlP1gcqd0hUR/0l1lm/h1ycdNtJ6xQ?=
- =?us-ascii?q?AEBMLDOmfgGTl9TFCQW0ahuoeWfeiXi653Kp6HBWz62qxl0N2ksJYAR4P1wB2F?=
- =?us-ascii?q?W+NQXLTkMalaIgOfe6KCqSPt9hJ57dJHDM4YWu3UmxjbcZd4iQJnFTLrH48dV2?=
- =?us-ascii?q?jgYht1HAvvfIcEebFJHYB3GJR8JJVYTDJM3mfyAh3/jfjkeo1WQzYIz7m/V5A9?=
- =?us-ascii?q?8yr7gNJzSYNPibcNLkkedo0rC/n/lGVceNdqC2XyJ/2zErubPlDn8XoY6EqO5+?=
- =?us-ascii?q?v9jxlaUwwQ7DRcSUlC7if+ni0K/UpRULEl80i4vq7UisU+mVN/wWzWmr3Oe+B0?=
- =?us-ascii?q?RQdxdF6s98g7l4q7V5RuJQ3IISzdpdtMrrok1SCYs21vPmMnmbRRtv7K9W3OQ7?=
- =?us-ascii?q?rrSpjraBMS/BQfufgddFU1cvYal+9p103ryoh9YOPbdprXI9fvYmVhmdBQDuog?=
- =?us-ascii?q?=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3ACTcVJKHuJA/lezhVpLqEjceALOsnbusQ8zAX?=
- =?us-ascii?q?PiFKKSC9Hfb0qynDpp4mPHzP6Qr5OktOpTnoAsDpKk80naQFgrX5Vo3PYOCJgg?=
- =?us-ascii?q?WVEL0=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,287,1635177600"; 
-   d="scan'208";a="120355291"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 14 Jan 2022 16:10:38 +0800
-Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
-        by cn.fujitsu.com (Postfix) with ESMTP id A26304D15A4C;
-        Fri, 14 Jan 2022 16:10:34 +0800 (CST)
-Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Fri, 14 Jan 2022 16:10:32 +0800
-Received: from [192.168.122.212] (10.167.226.45) by
- G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Fri, 14 Jan 2022 16:10:34 +0800
-Subject: Re: [RFC PATCH rdma-next 01/10] RDMA: mr: Introduce is_pmem
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-CC:     <linux-rdma@vger.kernel.org>, <zyjzyj2000@gmail.com>,
-        <aharonl@nvidia.com>, <leon@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mbloch@nvidia.com>,
-        <liangwenpeng@huawei.com>, <yangx.jy@cn.fujitsu.com>,
-        <rpearsonhpe@gmail.com>, <y-goto@fujitsu.com>,
-        <dan.j.williams@intel.com>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>
-References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
- <20211228080717.10666-2-lizhijian@cn.fujitsu.com>
- <20220106002130.GP6467@ziepe.ca>
- <bf038e6c-66db-50ca-0126-3ad4ac1371e7@fujitsu.com>
-From:   "Li, Zhijian" <lizhijian@cn.fujitsu.com>
-Message-ID: <4e679df5-633d-cd0c-9de3-16348b2cef35@cn.fujitsu.com>
-Date:   Fri, 14 Jan 2022 16:10:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Fri, 14 Jan 2022 03:11:41 -0500
+X-KPN-MessageId: 82f03557-7511-11ec-9a2e-005056abbe64
+Received: from smtp.kpnmail.nl (unknown [10.31.155.38])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 82f03557-7511-11ec-9a2e-005056abbe64;
+        Fri, 14 Jan 2022 09:11:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:from:to:subject:mime-version:date:message-id;
+        bh=zuml5cb46ityR8xHyuGQOnCJFEzHf/fVcI6uqZxrEzM=;
+        b=Vm1/T/dBf1sPj4g6flqPJ6wMCEQKWb0NGEX/JNEmBIV5EbGt2xf9UOx1U2DP6JFV4WxNuJjmWqEBx
+         sNhfvRLyNoRvcXdyBsactU7UjDENlIVnYAlGB3bMWRjcWizc5fxuIxTVrZKQ7t3GykJy5oj1tIOkds
+         SAfx6lZvQFfBJbJcawioxz5b20Yi4f4vWa4w8Qi/yTD240rnvbErdcAPfyH7OKOmze69j3UMaiKikk
+         +sV48suiT/5Gc5Um5ZZ4f75YltdKHLvdMYECsU27sQg1jobcDb28Q2GfYjjdWL0AJqbOtU4kLmI3kM
+         irDZOaZdjGa2nQdEwBvTz8KpU9J4ORA==
+X-KPN-VerifiedSender: No
+X-CMASSUN: 33|DrdHS/CriUx8uE+kxG18PLhtCM1oJKFMrj1aOy9kvNYQ8+y3N9cmsRAqi8b9Ehc
+ 3PoMjIdumdoSK61BXN6GlTw==
+X-Originating-IP: 193.91.129.219
+Received: from [192.168.2.10] (cdb815bc1.dhcp.as2116.net [193.91.129.219])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id 98daabcd-7511-11ec-94d2-005056abf0db;
+        Fri, 14 Jan 2022 09:11:39 +0100 (CET)
+Message-ID: <703ff71e-c76a-9df1-c644-04efed0199ca@xs4all.nl>
+Date:   Fri, 14 Jan 2022 09:11:37 +0100
 MIME-Version: 1.0
-In-Reply-To: <bf038e6c-66db-50ca-0126-3ad4ac1371e7@fujitsu.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.4.1
+Subject: Re: [PATCH v8 1/4] media: v4l: Add definition for the Aspeed JPEG
+ format
+Content-Language: en-US
+To:     Jammy Huang <jammy_huang@aspeedtech.com>,
+        sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
+        eajames@linux.ibm.com, mchehab@kernel.org, joel@jms.id.au,
+        andrew@aj.id.au, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20211224012738.1551-1-jammy_huang@aspeedtech.com>
+ <20211224012738.1551-2-jammy_huang@aspeedtech.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20211224012738.1551-2-jammy_huang@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-yoursite-MailScanner-ID: A26304D15A4C.AEA32
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
-X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Copied to nvdimm list
+On 24/12/2021 02:27, Jammy Huang wrote:
+> This introduces support for the Aspeed JPEG format, where the new frame
+> can refer to previous frame to reduce the amount of compressed data. The
+> concept is similar to I/P frame of video compression. It will compare the
+> new frame with previous one to decide which macroblock's data is
+> changed, and only the changed macroblocks will be compressed.
+> 
+> This Aspeed JPEG format is used by the video engine on Aspeed platforms,
+> which is generally adapted for remote KVM.
+> 
+> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+> ---
+> v8:
+>   - Add decoder information for aspeed-jpeg
+> v7:
+>   - Add more information for aspeed-jpeg
+> v6:
+>   - Update description for new format, aspeed-jpeg, in Documentation.
+> v5:
+>   - no update
+> v4:
+>   - new
+> ---
+>  .../media/uapi/v4l/pixfmt-reserved.rst          | 17 +++++++++++++++++
+>  drivers/media/v4l2-core/v4l2-ioctl.c            |  1 +
+>  include/uapi/linux/videodev2.h                  |  1 +
+>  3 files changed, 19 insertions(+)
+> 
+> diff --git a/Documentation/media/uapi/v4l/pixfmt-reserved.rst b/Documentation/media/uapi/v4l/pixfmt-reserved.rst
 
-Thanks
+This is the wrong file! It should be:
 
-Zhijian
+Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
 
+Regards,
 
-on 2022/1/6 14:12, Li Zhijian wrote:
->
-> Add Dan to the party :)
->
-> May i know whether there is any existing APIs to check whether
-> a va/page backs to a nvdimm/pmem ?
->
->
->
-> On 06/01/2022 08:21, Jason Gunthorpe wrote:
->> On Tue, Dec 28, 2021 at 04:07:08PM +0800, Li Zhijian wrote:
->>> We can use it to indicate whether the registering mr is associated with
->>> a pmem/nvdimm or not.
->>>
->>> Currently, we only assign it in rxe driver, for other device/drivers,
->>> they should implement it if needed.
->>>
->>> RDMA FLUSH will support the persistence feature for a pmem/nvdimm.
->>>
->>> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
->>>   drivers/infiniband/sw/rxe/rxe_mr.c | 47 
->>> ++++++++++++++++++++++++++++++
->>>   include/rdma/ib_verbs.h            |  1 +
->>>   2 files changed, 48 insertions(+)
->>>
->>> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c 
->>> b/drivers/infiniband/sw/rxe/rxe_mr.c
->>> index 7c4cd19a9db2..bcd5e7afa475 100644
->>> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
->>> @@ -162,6 +162,50 @@ void rxe_mr_init_dma(struct rxe_pd *pd, int 
->>> access, struct rxe_mr *mr)
->>>       mr->type = IB_MR_TYPE_DMA;
->>>   }
->>>   +// XXX: the logic is similar with mm/memory-failure.c
->>> +static bool page_in_dev_pagemap(struct page *page)
->>> +{
->>> +    unsigned long pfn;
->>> +    struct page *p;
->>> +    struct dev_pagemap *pgmap = NULL;
->>> +
->>> +    pfn = page_to_pfn(page);
->>> +    if (!pfn) {
->>> +        pr_err("no such pfn for page %p\n", page);
->>> +        return false;
->>> +    }
->>> +
->>> +    p = pfn_to_online_page(pfn);
->>> +    if (!p) {
->>> +        if (pfn_valid(pfn)) {
->>> +            pgmap = get_dev_pagemap(pfn, NULL);
->>> +            if (pgmap)
->>> +                put_dev_pagemap(pgmap);
->>> +        }
->>> +    }
->>> +
->>> +    return !!pgmap;
->> You need to get Dan to check this out, but I'm pretty sure this should
->> be more like this:
->>
->> if (is_zone_device_page(page) && page->pgmap->type == 
->> MEMORY_DEVICE_FS_DAX)
->
-> Great, i have added him.
->
->
->
->>
->>
->>> +static bool iova_in_pmem(struct rxe_mr *mr, u64 iova, int length)
->>> +{
->>> +    struct page *page = NULL;
->>> +    char *vaddr = iova_to_vaddr(mr, iova, length);
->>> +
->>> +    if (!vaddr) {
->>> +        pr_err("not a valid iova %llu\n", iova);
->>> +        return false;
->>> +    }
->>> +
->>> +    page = virt_to_page(vaddr);
->> And obviously this isn't uniform for the entire umem, so I don't even
->> know what this is supposed to mean.
->
-> My intention is to check if a memory region belongs to a nvdimm/pmem.
-> The approach is like that:
-> iova(user space)-+                     +-> page -> page_in_dev_pagemap()
->                  |                     |
->                  +-> va(kernel space) -+
-> Since current MR's va is associated with map_set where it record the 
-> relations
-> between iova and va and page. Do do you mean we should travel map_set to
-> get its page ? or by any other ways.
->
->
->
->
->
->
->
->>> diff --git a/include/rdma/ib_verbs.h b/include/rdma/ib_verbs.h
->>> index 6e9ad656ecb7..822ebb3425dc 100644
->>> +++ b/include/rdma/ib_verbs.h
->>> @@ -1807,6 +1807,7 @@ struct ib_mr {
->>>       unsigned int       page_size;
->>>       enum ib_mr_type       type;
->>>       bool           need_inval;
->>> +    bool           is_pmem;
->> Or why it is being stored in the global struct?
->
-> Indeed, it's not strong necessary. but i think is_pmem should belongs 
-> to a ib_mr
-> so that it can be checked by other general code when they needed even 
-> though no
-> one does such checking so far.
->
->
-> Thanks
-> Zhijian
->
->
->
->>
->> Jason
->
+	Hans
 
+> index b2cd155e691b..1d0dc8d86ed7 100644
+> --- a/Documentation/media/uapi/v4l/pixfmt-reserved.rst
+> +++ b/Documentation/media/uapi/v4l/pixfmt-reserved.rst
+> @@ -264,6 +264,23 @@ please make a proposal on the linux-media mailing list.
+>  	of tiles, resulting in 32-aligned resolutions for the luminance plane
+>  	and 16-aligned resolutions for the chrominance plane (with 2x2
+>  	subsampling).
+> +    * .. _V4L2-PIX-FMT-AJPG:
+> +
+> +      - ``V4L2_PIX_FMT_AJPG``
+> +      - 'AJPG'
+> +      - ASPEED JPEG format used by the aspeed-video driver on Aspeed platforms,
+> +        which is generally adapted for remote KVM.
+> +        On each frame compression, I will compare the new frame with previous
+> +        one to decide which macroblock's data is changed, and only the changed
+> +        macroblocks will be compressed.
+> +
+> +        The implementation is based on AST2600 A3 datasheet, revision 0.9, which
+> +        is not publicly available. Or you can reference Video stream data format
+> +        – ASPEED mode compression of SDK_User_Guide which available on
+> +        AspeedTech-BMC/openbmc/releases.
+> +
+> +        Decoder's implementation can be found here,
+> +        `https://github.com/AspeedTech-BMC/aspeed_codec/ <https://github.com/AspeedTech-BMC/aspeed_codec/>`__
+>  
+>  .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
+>  
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index 24db33f803c0..00dde01d2f97 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -1378,6 +1378,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>  		case V4L2_PIX_FMT_S5C_UYVY_JPG:	descr = "S5C73MX interleaved UYVY/JPEG"; break;
+>  		case V4L2_PIX_FMT_MT21C:	descr = "Mediatek Compressed Format"; break;
+>  		case V4L2_PIX_FMT_SUNXI_TILED_NV12: descr = "Sunxi Tiled NV12 Format"; break;
+> +		case V4L2_PIX_FMT_AJPG:		descr = "Aspeed JPEG"; break;
+>  		default:
+>  			if (fmt->description[0])
+>  				return;
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 3210b3c82a4a..994eb6155ea9 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -726,6 +726,7 @@ struct v4l2_pix_format {
+>  #define V4L2_PIX_FMT_INZI     v4l2_fourcc('I', 'N', 'Z', 'I') /* Intel Planar Greyscale 10-bit and Depth 16-bit */
+>  #define V4L2_PIX_FMT_SUNXI_TILED_NV12 v4l2_fourcc('S', 'T', '1', '2') /* Sunxi Tiled NV12 Format */
+>  #define V4L2_PIX_FMT_CNF4     v4l2_fourcc('C', 'N', 'F', '4') /* Intel 4-bit packed depth confidence information */
+> +#define V4L2_PIX_FMT_AJPG     v4l2_fourcc('A', 'J', 'P', 'G') /* Aspeed JPEG */
+>  
+>  /* 10bit raw bayer packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
+>  #define V4L2_PIX_FMT_IPU3_SBGGR10	v4l2_fourcc('i', 'p', '3', 'b') /* IPU3 packed 10-bit BGGR bayer */
 

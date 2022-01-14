@@ -2,120 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B7D48EF97
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 19:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8351948EF9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 19:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243956AbiANSCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 13:02:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40227 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229775AbiANSCo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 13:02:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642183363;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Zgi7kgPZpPYPdqiACX0LHJAeUyEaVTMb9kNv1vAmtfg=;
-        b=V4qsQokc45L+z7/mrSpxFEf0vem3cRHFiNxH7rhWy5482WrvfCgHOJ/RZozg/wZkQs4LzE
-        uzCPkF4DvBHo3bHV0B0sEHqhqZZhNc+FE6/VYZstWa5/eaclqubbA5NMwHUJLRfNs6gTVV
-        TOfRD7yKv9j6iytALtIh+j1EGHQJJl8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-644-_8Ae0FRgO7-oBLoZmCQ1hw-1; Fri, 14 Jan 2022 13:02:40 -0500
-X-MC-Unique: _8Ae0FRgO7-oBLoZmCQ1hw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D1F78101F000;
-        Fri, 14 Jan 2022 18:02:38 +0000 (UTC)
-Received: from localhost.net (unknown [10.22.34.129])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4980E34941;
-        Fri, 14 Jan 2022 18:02:23 +0000 (UTC)
-From:   Nico Pache <npache@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, jsavitz@redhat.com, mhocko@suse.com
-Cc:     peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com,
-        dvhart@infradead.org, dave@stgolabs.net, andrealmeid@collabora.com,
-        longman@redhat.com
-Subject: [PATCH v3] mm/oom: do not oom reap task with an unresolved robust futex
-Date:   Fri, 14 Jan 2022 13:01:35 -0500
-Message-Id: <20220114180135.83308-1-npache@redhat.com>
+        id S244062AbiANSE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 13:04:26 -0500
+Received: from mga17.intel.com ([192.55.52.151]:62728 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243990AbiANSEW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 13:04:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642183462; x=1673719462;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mZVNO8bBWYDoGXvMeTT1wxgX8brQjfjeABvzlv+a6bw=;
+  b=AaCKtEucNgLsvIXbxEZ1AkL1+D9nwMgyq4o9gTofiq4ztTmUAY2wHSm2
+   P+aI9+NJx9tknBrK3nDLzJh4nK4m4pWwVQpopzfvttZx5svrSlBu7M8UN
+   T0pSFRD5wqKR82Wr3dFHvzKpzySA6IFA46pyvnjRpGlCtu4g1ySID+m2R
+   VV6Ym2WMLd4KvgERQppVJUyXgvukNHcw9rhawRGuaHbWywyU9MoRzDv+8
+   IhdNsK1tuqyrvwCpgatpWlJ9/FzBjPdKH4LANjQsdIozVlUqqHW2qxgap
+   VInHPNyTTMof40yuUgCkwpDIGJHkIb+1m6Shi0fNpMMJqNFrh7y8L01Ls
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="224986286"
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="224986286"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 10:04:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="475863098"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 14 Jan 2022 10:04:18 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8Qvx-0008rt-J0; Fri, 14 Jan 2022 18:04:17 +0000
+Date:   Sat, 15 Jan 2022 02:03:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [hverkuil-media-tree:for-v5.18f 82/82]
+ drivers/media/platform/aspeed-video.c:1836:30: warning: format '%p' expects
+ argument of type 'void *', but argument 4 has type 'dma_addr_t' {aka
+ 'unsigned int'}
+Message-ID: <202201150148.ScCRoG8b-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the case that two or more processes share a futex located within
-a shared mmaped region, such as a process that shares a lock between
-itself and child processes, we have observed that when a process holding
-the lock is oom killed, at least one waiter is never alerted to this new
-development and simply continues to wait.
+tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.18f
+head:   97dd85f0caf1ad96c275147583c46f8ee12308fc
+commit: 97dd85f0caf1ad96c275147583c46f8ee12308fc [82/82] f
+config: parisc-buildonly-randconfig-r002-20220113 (https://download.01.org/0day-ci/archive/20220115/202201150148.ScCRoG8b-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree for-v5.18f
+        git checkout 97dd85f0caf1ad96c275147583c46f8ee12308fc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash drivers/media/platform/
 
-This is visible via pthreads by checking the __owner field of the
-pthread_mutex_t structure within a waiting process, perhaps with gdb.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-We identify reproduction of this issue by checking a waiting process of
-a test program and viewing the contents of the pthread_mutex_t, taking note
-of the value in the owner field, and then checking dmesg to see if the
-owner has already been killed.
+All warnings (new ones prefixed by >>):
 
-As mentioned by Michal in his patchset introducing the oom reaper,
-commit aac4536355496 ("mm, oom: introduce oom reaper"), the purpose of the
-oom reaper is to try and free memory more quickly; however, In the case
-that a robust futex is being used, we want to avoid utilizing the
-concurrent oom reaper. This is due to a race that can occur between the
-SIGKILL handling the robust futex, and the oom reaper freeing the memory
-needed to maintain the robust list.
+   In file included from include/linux/device.h:15,
+                    from drivers/media/platform/aspeed-video.c:9:
+   drivers/media/platform/aspeed-video.c: In function 'aspeed_video_init':
+>> drivers/media/platform/aspeed-video.c:1836:30: warning: format '%p' expects argument of type 'void *', but argument 4 has type 'dma_addr_t' {aka 'unsigned int'} [-Wformat=]
+    1836 |         dev_info(video->dev, "alloc mem size(%d) at %pad for jpeg header\n",
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                          ^~~~~~~
+   drivers/media/platform/aspeed-video.c:1836:9: note: in expansion of macro 'dev_info'
+    1836 |         dev_info(video->dev, "alloc mem size(%d) at %pad for jpeg header\n",
+         |         ^~~~~~~~
+   drivers/media/platform/aspeed-video.c:1836:54: note: format string is defined here
+    1836 |         dev_info(video->dev, "alloc mem size(%d) at %pad for jpeg header\n",
+         |                                                     ~^
+         |                                                      |
+         |                                                      void *
+         |                                                     %d
 
-In the case that the oom victim is utilizing a robust futex, and the
-SIGKILL has not yet handled the futex death, the tsk->robust_list should
-be non-NULL. This issue can be tricky to reproduce, but with the
-modifications of this patch, we have found it to be impossible to
-reproduce.
 
-Add a check for tsk->robust_list is non-NULL in wake_oom_reaper() to return
-early and prevent waking the oom reaper.
+vim +1836 drivers/media/platform/aspeed-video.c
 
-Reproducer: https://gitlab.com/jsavitz/oom_futex_reproducer
+  1780	
+  1781	static int aspeed_video_init(struct aspeed_video *video)
+  1782	{
+  1783		int irq;
+  1784		int rc;
+  1785		struct device *dev = video->dev;
+  1786	
+  1787		irq = irq_of_parse_and_map(dev->of_node, 0);
+  1788		if (!irq) {
+  1789			dev_err(dev, "Unable to find IRQ\n");
+  1790			return -ENODEV;
+  1791		}
+  1792	
+  1793		rc = devm_request_threaded_irq(dev, irq, NULL, aspeed_video_irq,
+  1794					       IRQF_ONESHOT, DEVICE_NAME, video);
+  1795		if (rc < 0) {
+  1796			dev_err(dev, "Unable to request IRQ %d\n", irq);
+  1797			return rc;
+  1798		}
+  1799		dev_info(video->dev, "irq %d\n", irq);
+  1800	
+  1801		video->eclk = devm_clk_get(dev, "eclk");
+  1802		if (IS_ERR(video->eclk)) {
+  1803			dev_err(dev, "Unable to get ECLK\n");
+  1804			return PTR_ERR(video->eclk);
+  1805		}
+  1806	
+  1807		rc = clk_prepare(video->eclk);
+  1808		if (rc)
+  1809			return rc;
+  1810	
+  1811		video->vclk = devm_clk_get(dev, "vclk");
+  1812		if (IS_ERR(video->vclk)) {
+  1813			dev_err(dev, "Unable to get VCLK\n");
+  1814			rc = PTR_ERR(video->vclk);
+  1815			goto err_unprepare_eclk;
+  1816		}
+  1817	
+  1818		rc = clk_prepare(video->vclk);
+  1819		if (rc)
+  1820			goto err_unprepare_eclk;
+  1821	
+  1822		of_reserved_mem_device_init(dev);
+  1823	
+  1824		rc = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+  1825		if (rc) {
+  1826			dev_err(dev, "Failed to set DMA mask\n");
+  1827			goto err_release_reserved_mem;
+  1828		}
+  1829	
+  1830		if (!aspeed_video_alloc_buf(video, &video->jpeg,
+  1831					    VE_JPEG_HEADER_SIZE)) {
+  1832			dev_err(dev, "Failed to allocate DMA for JPEG header\n");
+  1833			rc = -ENOMEM;
+  1834			goto err_release_reserved_mem;
+  1835		}
+> 1836		dev_info(video->dev, "alloc mem size(%d) at %pad for jpeg header\n",
+  1837			 VE_JPEG_HEADER_SIZE, video->jpeg.dma);
+  1838	
+  1839		aspeed_video_init_jpeg_table(video->jpeg.virt, video->yuv420);
+  1840	
+  1841		return 0;
+  1842	
+  1843	err_release_reserved_mem:
+  1844		of_reserved_mem_device_release(dev);
+  1845		clk_unprepare(video->vclk);
+  1846	err_unprepare_eclk:
+  1847		clk_unprepare(video->eclk);
+  1848	
+  1849		return rc;
+  1850	}
+  1851	
 
-Co-developed-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Nico Pache <npache@redhat.com>
 ---
- mm/oom_kill.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 1ddabefcfb5a..3cdaac9c7de5 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -667,6 +667,21 @@ static void wake_oom_reaper(struct task_struct *tsk)
- 	if (test_and_set_bit(MMF_OOM_REAP_QUEUED, &tsk->signal->oom_mm->flags))
- 		return;
- 
-+#ifdef CONFIG_FUTEX
-+	/*
-+	 * If the ooming task's SIGKILL has not finished handling the
-+	 * robust futex it is not correct to reap the mm concurrently.
-+	 * Do not wake the oom reaper when the task still contains a
-+	 * robust list.
-+	 */
-+	if (tsk->robust_list)
-+		return;
-+#ifdef CONFIG_COMPAT
-+	if (tsk->compat_robust_list)
-+		return;
-+#endif
-+#endif
-+
- 	get_task_struct(tsk);
- 
- 	spin_lock(&oom_reaper_lock);
--- 
-2.33.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

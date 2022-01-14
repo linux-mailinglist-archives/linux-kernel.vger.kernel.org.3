@@ -2,85 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6EC348E788
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5457C48E78C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239999AbiANJam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 04:30:42 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:45542 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233615AbiANJal (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:30:41 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowAD3_wOoQuFhWawyBg--.47397S2;
-        Fri, 14 Jan 2022 17:30:16 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     hjc@rock-chips.com, heiko@sntech.de, airlied@linux.ie,
-        daniel@ffwll.ch, p.zabel@pengutronix.de
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] drm/rockchip: Check for NULL pointer after calling kzalloc
-Date:   Fri, 14 Jan 2022 17:30:15 +0800
-Message-Id: <20220114093015.1295274-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S236985AbiANJb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 04:31:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:22083 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231882AbiANJbz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 04:31:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642152714;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4HBgz8OwU/mU5OrM0Gwxwm6qrWMg9a0UmRfWZIj1Z94=;
+        b=QyBYN2rdmsF8AKokTmKgdpnuxaXioB5OvSzj+e9d5I6CTPeIAIH1f/Kk9yi9Fpv7t83wV0
+        uKOtzyCu3t3m6C1nknA5NxunpfDgAgaZeVa35AMIQPQX5eyQYMuNQqKrtkkclMx0GtA7Eh
+        V1/6yQ3KEw+wCo64ZUmnmiHj87rhiAE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-kHel8v-lMTCII2wDL5oEsg-1; Fri, 14 Jan 2022 04:31:53 -0500
+X-MC-Unique: kHel8v-lMTCII2wDL5oEsg-1
+Received: by mail-ed1-f71.google.com with SMTP id z8-20020a056402274800b003f8580bfb99so7874406edd.11
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 01:31:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=4HBgz8OwU/mU5OrM0Gwxwm6qrWMg9a0UmRfWZIj1Z94=;
+        b=bnX5qL0mzRNRtQNCMCrxpqkNxLd12ohW4w/dqivZ5t8/x3Yvne0Yp+S1bRHI2xMNOH
+         hl5IW28Rs0rvgq+eywBgr9OXeh0ePx5fYsv2KWxmxPJRRvztxMJ0FpO6c6zP0TGgpwDC
+         qgH3ncfey3YmjkYuic95zyxFdicvBW4ZyQH8e2+302GR8rHjvnSIuWrNBAOc8+sZi30O
+         CRQ+h8g5+RmYRG2AfCylQzOLHN9wbiu3vAwl6iSMZ9MVHwB93HXCkbHlCNA/klEPqP7W
+         PS9ZI9MlHpVe7MoghJjuUNF6fiBLUlha8MQ+PEhrweb2JHGOW1mrbO+yBea3n68SkyPt
+         /Qyw==
+X-Gm-Message-State: AOAM532q+mpTUZsMAjzcZJFyDr+ICpx/xJ7Eq8H7HZui2B59n4ugE0CU
+        WaMOjxjYnEhppElvxjTazC1STr1ZeMbCYrAFI+1+bPREsjP4ETqwUH5dkkJte0XoHu8ks7j1eyz
+        BfPpT27GD3B4W7CKE1j2V/6Td
+X-Received: by 2002:a17:906:12c7:: with SMTP id l7mr6547779ejb.648.1642152711976;
+        Fri, 14 Jan 2022 01:31:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyB+u9F0i5ZOwZvvAmolu1OmUAo0EEgaS2J8+AhnOUmWoFgW41SQ+6okJCPoKrUBsp8FewU7w==
+X-Received: by 2002:a17:906:12c7:: with SMTP id l7mr6547769ejb.648.1642152711768;
+        Fri, 14 Jan 2022 01:31:51 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id hq29sm1720490ejc.141.2022.01.14.01.31.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 01:31:51 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Igor Mammedov <imammedo@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+In-Reply-To: <20220114095535.0f498707@redhat.com>
+References: <20211122175818.608220-1-vkuznets@redhat.com>
+ <20211122175818.608220-3-vkuznets@redhat.com>
+ <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
+ <20211227183253.45a03ca2@redhat.com>
+ <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
+ <87mtkdqm7m.fsf@redhat.com> <20220103104057.4dcf7948@redhat.com>
+ <YeCowpPBEHC6GJ59@google.com> <20220114095535.0f498707@redhat.com>
+Date:   Fri, 14 Jan 2022 10:31:50 +0100
+Message-ID: <87ilummznd.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAD3_wOoQuFhWawyBg--.47397S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF1rWrWfWF48tr1UCw4kJFb_yoW8Gr17pr
-        s7JrW2qr409r4DWwsrJw1q93yfKan0y34xGrs7Gw13uF1fKrnxAan5ZrZ5Xr47XrWxXr15
-        trs7A345ZF4j93JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6r4fMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjfUeLvtDUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the possible failure of the kzalloc(), crtc_state could be NULL
-pointer.
-Therefore, it should be better to check it in order to avoid the
-dereference of the NULL pointer, like the kzalloc() in
-vop_crtc_duplicate_state().
-If fails, we can directly use the 'NULL' instead of the
-'&crtc_state->base' and __drm_atomic_helper_crtc_duplicate_state() will
-deal with it correctly.
+Igor Mammedov <imammedo@redhat.com> writes:
 
-Fixes: dc0b408f5a87 ("drm/rockchip: allocate correct crtc state structure on reset")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> On Thu, 13 Jan 2022 22:33:38 +0000
+> Sean Christopherson <seanjc@google.com> wrote:
+>
+>> On Mon, Jan 03, 2022, Igor Mammedov wrote:
+>> > On Mon, 03 Jan 2022 09:04:29 +0100
+>> > Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>> >   
+>> > > Paolo Bonzini <pbonzini@redhat.com> writes:
+>> > >   
+>> > > > On 12/27/21 18:32, Igor Mammedov wrote:    
+>> > > >>> Tweaked and queued nevertheless, thanks.    
+>> > > >> it seems this patch breaks VCPU hotplug, in scenario:
+>> > > >> 
+>> > > >>    1. hotunplug existing VCPU (QEMU stores VCPU file descriptor in parked cpus list)
+>> > > >>    2. hotplug it again (unsuspecting QEMU reuses stored file descriptor when recreating VCPU)
+>> > > >> 
+>> > > >> RHBZ:https://bugzilla.redhat.com/show_bug.cgi?id=2028337#c11
+>> > > >>     
+>> > > >
+>> > > > The fix here would be (in QEMU) to not call KVM_SET_CPUID2 again. 
+>> > > > However, we need to work around it in KVM, and allow KVM_SET_CPUID2 if 
+>> > > > the data passed to the ioctl is the same that was set before.    
+>> > > 
+>> > > Are we sure the data is going to be *exactly* the same? In particular,
+>> > > when using vCPU fds from the parked list, do we keep the same
+>> > > APIC/x2APIC id when hotplugging? Or can we actually hotplug with a
+>> > > different id?  
+>> > 
+>> > If I recall it right, it can be a different ID easily.  
+>> 
+>> No, it cannot.  KVM doesn't provide a way for userspace to change the APIC ID of
+>> a vCPU after the vCPU is created.  x2APIC flat out disallows changing the APIC ID,
+>> and unless there's magic I'm missing, apic_mmio_write() => kvm_lapic_reg_write()
+>> is not reachable from userspace.
+>> 
+>> The only way for userspace to set the APIC ID is to change vcpu->vcpu_id, and that
+>> can only be done at KVM_VCPU_CREATE.
+>> 
+>> So, reusing a parked vCPU for hotplug must reuse the same APIC ID.  QEMU handles
+>> this by stashing the vcpu_id, a.k.a. APIC ID, when parking a vCPU, and reuses a
+>> parked vCPU if and only if it has the same APIC ID.  And because QEMU derives the
+>> APIC ID from topology, that means all the topology CPUID leafs must remain the
+>> same, otherwise the guest is hosed because it will send IPIs to the wrong vCPUs.
+>
+> Indeed, I was wrong.
+> I just checked all cpu unplug history in qemu. It was introduced in qemu-2.7
+> and from the very beginning it did stash vcpu_id,
+> so there is no old QEMU that would re-plug VCPU with different apic_id.
+> Though tells us nothing about what other userspace implementations might do.
+>
 
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-index 3e8d9e2d1b67..db672ff5e37b 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-@@ -1577,7 +1577,10 @@ static void vop_crtc_reset(struct drm_crtc *crtc)
- 	if (crtc->state)
- 		vop_crtc_destroy_state(crtc, crtc->state);
- 
--	__drm_atomic_helper_crtc_reset(crtc, &crtc_state->base);
-+	if (!crtc_state)
-+		__drm_atomic_helper_crtc_reset(crtc, NULL);
-+	else
-+		__drm_atomic_helper_crtc_reset(crtc, &crtc_state->base);
- }
- 
- #ifdef CONFIG_DRM_ANALOGIX_DP
+The genie is out of the bottle already, 5.16 is released with the change
+(which was promissed for some time, KVM was complaining with
+pr_warn_ratelimited()). I'd be brave and say that if QEMU doesn't need
+it then nobody else does (out of curiosity, are there KVM VMMs besides
+QEMU which support CPU hotplug out there?).
+
+> However, a problem of failing KVM_SET_CPUID2 during VCPU re-plug
+> is still there and re-plug will fail if KVM rejects repeated KVM_SET_CPUID2
+> even if ioctl called with exactly the same CPUID leafs as the 1st call.
+>
+
+Assuming APIC id change doesn not need to be supported, I can send v2
+here with an empty allowlist.
+
 -- 
-2.25.1
+Vitaly
 

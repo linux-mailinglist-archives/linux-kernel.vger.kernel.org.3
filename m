@@ -2,117 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AEF48F216
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B36948F217
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiANVlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 16:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiANVlq (ORCPT
+        id S229926AbiANVnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 16:43:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34679 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229903AbiANVnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 16:41:46 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9C5C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 13:41:45 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id t9so13996811oie.12
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 13:41:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=EiF4kxaLYYslVsSU2sOxDU0qaE58YW7xc6wp1g7lJQQ=;
-        b=aJyozUrkyudyCMwztwokNGSEAVnw6wQjjRztzVHW4JAvcr8WI07NRwpnWsK0diRUPt
-         Fg6IeQRZP9g8Ds56ymeldBaTBbQqvfd81JsjFfxduSl/Fq9np23NPioUWZ99mkBngw4z
-         XrI1d2GSV/i8mv1RJQoL4rGUg51B6kowqwvtU=
+        Fri, 14 Jan 2022 16:43:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642196613;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=H65UNYpk1YgIkr6+F7jbPWFp6tYbCp821iY0zXAi0/8=;
+        b=R7S67hf8tcGNk03u8H4xDibZtHhRcUfnwtlbv0FaLLxpF0Z+PNqMoDpwmxHno4SpGl1AEC
+        hCR1k33Kk8TCctht9GTsX3fLtJ5ui3eo+2R3Kw7w8C4njWHIhLVOJ3ooPrkgS7q5wek4Cc
+        nPypzHAPP5IrI8q6wcyEPBAYZpcISzU=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-81-MFEb3JWwN3OwKU56qgvwjQ-1; Fri, 14 Jan 2022 16:43:31 -0500
+X-MC-Unique: MFEb3JWwN3OwKU56qgvwjQ-1
+Received: by mail-ed1-f72.google.com with SMTP id z8-20020a056402274800b003f8580bfb99so9268681edd.11
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 13:43:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=EiF4kxaLYYslVsSU2sOxDU0qaE58YW7xc6wp1g7lJQQ=;
-        b=lUQellET0vGgG7FNAIJr5MLhA+mGGuWzy6niGEViU4O7Ng04dxBbVcERD9Cae/A3MG
-         e7p7jCxeT3IUUfOzubDWBSzflb9VuKMNIF+BZe/NgireVxIUOMpfgRmhduzUIC8Vx6Wx
-         /5GT/p2st2a9S28l9v34SsHmouiY2LNbUp2ALxeWV3JcNRPTdvq7r7Py1N0URMtJNkxb
-         P4m4fnl/baey1019EeF2OdfMvS3PGO0C57eBfCkO1KJYHkoPVC/5XfkjfOdUHTds5RCZ
-         vM2qwSo7igm5UWvah4PnJo73JxvBWGMAunu9Q/0HC9ALEv3eja2sKeZVdnMamF/s8o2w
-         hfsA==
-X-Gm-Message-State: AOAM533D24YBaTums1PnV5FNgkllRlhBPH3g2GCypGaE4FrvsSU2iHnA
-        /zG0nrg5cnwAxEQrVHTuZVhekCeM1DW/1vKUlrILvw==
-X-Google-Smtp-Source: ABdhPJxqXjmHGTouafQMbaFEPOTUQrNELWzSofFuBmD0rN8FxXai9W9dtNego1w9Wr2rWHHHSY+XGSIvw1IVJXLBDn4=
-X-Received: by 2002:aca:4382:: with SMTP id q124mr9068196oia.64.1642196504991;
- Fri, 14 Jan 2022 13:41:44 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 14 Jan 2022 15:41:44 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=H65UNYpk1YgIkr6+F7jbPWFp6tYbCp821iY0zXAi0/8=;
+        b=A307Y/hXf1pnCsHeWN6NXAWj6yhhWDZEg2Vu821jvyB00UCUaZdYXh5xEkq/9vypYv
+         FzgXmWbSkpUoBaR71BHmGMAAoblgL8Y3S+4c40OR0PcF7hIzX/XsDKhTHXSMIaXxp+NX
+         +oV+1557ThlVDGpGeaX09Mwpk7beAUllNx7ZvewgLfl6vvFhNz1vQjE67k3Hv+ep1guH
+         06cTeqLPYh9v0ZYhDCSO2Q5SfD8lgXtpY0qcRYTaw1WIybrfocCrOZmWuEDozTtQvM3Z
+         1VdUi6OAeap7pfkZmdCTSDbVNvxEmoI2jNbmCN253/INn9W4uTce9n4JbGSzJad9zs+Q
+         SzWw==
+X-Gm-Message-State: AOAM530pDaHDgn6kkK0XayILbJlzsZ4ovb4st6eaUMXoUQx2yMVfbQvy
+        DwLG8HTvbvwmt8f7FTeL3BDaozXvTp3UpiFFcLahYlodj1ZlCZevQ1HTNUDuUR0uzlWkuihukg8
+        Pa+gjFkzSuOd1SSWradx4Tbu6uiT5OYzvrpEgS8iCwm2if6dDL44b3UM35hL9ze0ACGKBwA==
+X-Received: by 2002:a05:6402:27d1:: with SMTP id c17mr10483759ede.128.1642196609916;
+        Fri, 14 Jan 2022 13:43:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwX+X4YHjBMDl2PYMvPClJyagNr+C+tepnu7ca8BYRhvwykdVnYrSL9WI3b0URVZRj1HoAt8A==
+X-Received: by 2002:a05:6402:27d1:: with SMTP id c17mr10483746ede.128.1642196609685;
+        Fri, 14 Jan 2022 13:43:29 -0800 (PST)
+Received: from redhat.com ([2.55.154.210])
+        by smtp.gmail.com with ESMTPSA id c19sm2755020ede.47.2022.01.14.13.43.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 13:43:29 -0800 (PST)
+Date:   Fri, 14 Jan 2022 16:43:26 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH] virtio_mem: break device on remove
+Message-ID: <20220114214324.239444-1-mst@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <1642194710-2512-2-git-send-email-quic_khsieh@quicinc.com>
-References: <1642194710-2512-1-git-send-email-quic_khsieh@quicinc.com> <1642194710-2512-2-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 14 Jan 2022 15:41:44 -0600
-Message-ID: <CAE-0n52UYBajrqGFqppun5oK82V3ppjvQxANU27kL95gCZtURg@mail.gmail.com>
-Subject: Re: [PATCH v15 1/4] drm/msm/dp: do not initialize phy until plugin
- interrupt received
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
+X-Mutt-Fcc: =sent
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-01-14 13:11:47)
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 7cc4d21..7cd6222 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -696,12 +699,9 @@ static int dp_irq_hpd_handle(struct dp_display_private *dp, u32 data)
->          * dp core (ahb/aux clks) must be initialized before
->          * irq_hpd be handled
->          */
-> -       if (dp->core_initialized) {
-> -               ret = dp_display_usbpd_attention_cb(&dp->pdev->dev);
-> -               if (ret == -ECONNRESET) { /* cable unplugged */
-> -                       dp->core_initialized = false;
-> -               }
-> -       }
-> +       if (dp->core_initialized)
+A common pattern for device reset is currently:
+vdev->config->reset(vdev);
+.. cleanup ..
 
-When is this condition false? The irq isn't unmasked until the core has
-been initialized. On the resume path I suppose the irq is enabled in
-dp_display_host_init() calling dp_ctrl_reset_irq_ctrl(), and then we
-could immediately get the interrupt but it will block on the event_mutex
-lock.
+reset prevents new interrupts from arriving and waits for interrupt
+handlers to finish.
 
-> +               dp_display_usbpd_attention_cb(&dp->pdev->dev);
-> +
->         DRM_DEBUG_DP("hpd_state=%d\n", state);
->
->         mutex_unlock(&dp->event_mutex);
-> @@ -1363,14 +1373,16 @@ static int dp_pm_suspend(struct device *dev)
->                 if (dp_power_clk_status(dp->power, DP_CTRL_PM))
->                         dp_ctrl_off_link_stream(dp->ctrl);
->
-> +               dp_display_host_phy_exit(dp);
-> +
-> +               /* host_init will be called at pm_resume */
->                 dp_display_host_deinit(dp);
-> +       } else {
-> +               dp_display_host_phy_exit(dp);
+However if - as is common - the handler queues a work request which is
+flushed during the cleanup stage, we have code adding buffers / trying
+to get buffers while device is reset. Not good.
 
-I fail to see where this condition happens. Can we suspend the device
-without the irq being installed?
+This was reproduced by running
+	modprobe virtio_console
+	modprobe -r virtio_console
+in a loop, and this reasoning seems to apply to virtio mem though
+I could not reproduce it there.
 
->         }
->
->         dp->hpd_state = ST_SUSPENDED;
->
-> -       /* host_init will be called at pm_resume */
-> -       dp->core_initialized = false;
-> -
->         DRM_DEBUG_DP("After, core_inited=%d power_on=%d\n",
->                         dp->core_initialized, dp_display->power_on);
->
+Fix this up by calling virtio_break_device + flush before reset.
+
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+---
+ drivers/virtio/virtio_mem.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
+index 38becd8d578c..33b8a118a3ae 100644
+--- a/drivers/virtio/virtio_mem.c
++++ b/drivers/virtio/virtio_mem.c
+@@ -2888,6 +2888,8 @@ static void virtio_mem_remove(struct virtio_device *vdev)
+ 		virtio_mem_deinit_hotplug(vm);
+ 
+ 	/* reset the device and cleanup the queues */
++	virtio_break_device(vdev);
++	flush_work(&vm->wq);
+ 	virtio_reset_device(vdev);
+ 	vdev->config->del_vqs(vdev);
+ 
+-- 
+MST
+

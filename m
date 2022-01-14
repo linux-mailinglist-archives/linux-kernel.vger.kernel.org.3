@@ -2,167 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CEB48F304
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2411E48F307
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiANX1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 18:27:34 -0500
-Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:60308 "EHLO
-        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiANX1d (ORCPT
+        id S230093AbiANXcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 18:32:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229471AbiANXce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 18:27:33 -0500
+        Fri, 14 Jan 2022 18:32:34 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037F5C061574;
+        Fri, 14 Jan 2022 15:32:30 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id a18so3284413ilq.6;
+        Fri, 14 Jan 2022 15:32:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1642202853; x=1673738853;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:subject;
-  bh=Mm62JXSl5zeICS/ifss0xt6fgpw3EJrv2ma2nrDfxt8=;
-  b=iXErR/n0Uho4F6+bJctxxHzEAhrObbIKInQNag4TxE1E6Du4/YYA5L31
-   eu5Or8MKqksTD/APrC+Ft3IzD+X2E9h8jpUKI1iw5momFXfi0jkmTuwG1
-   zhvZncV9ESg2cSpGJv8lGFY1soRwGuj+ke72ED6qWWczMP8mpaGFWB9us
-   Q=;
-X-IronPort-AV: E=Sophos;i="5.88,290,1635206400"; 
-   d="scan'208";a="170572735"
-Subject: Re: [PATCH 1/3] memblock: define functions to set the usable memory range
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 14 Jan 2022 23:27:31 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com (Postfix) with ESMTPS id 8AB4841615;
-        Fri, 14 Jan 2022 23:27:30 +0000 (UTC)
-Received: from EX13D35UWB004.ant.amazon.com (10.43.161.230) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Fri, 14 Jan 2022 23:27:30 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX13D35UWB004.ant.amazon.com (10.43.161.230) with Microsoft SMTP Server (TLS)
- id 15.0.1497.26; Fri, 14 Jan 2022 23:27:30 +0000
-Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
- Server id 15.0.1497.28 via Frontend Transport; Fri, 14 Jan 2022 23:27:30
- +0000
-Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id 20DD5FC; Fri, 14 Jan 2022 23:27:29 +0000 (UTC)
-Date:   Fri, 14 Jan 2022 23:27:29 +0000
-From:   Frank van der Linden <fllinden@amazon.com>
-To:     Mike Rapoport <rppt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
-        <frowand.list@gmail.com>, <ardb@kernel.org>, <linux-mm@kvack.org>,
-        <devicetree@vger.kernel.org>, <linux-efi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kexec@lists.infradead.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <geert+renesas@glider.be>
-Message-ID: <20220114232729.GA35066@dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com>
-References: <20220110210809.3528-1-fllinden@amazon.com>
- <20220110210809.3528-2-fllinden@amazon.com> <Yd1cnquQFZoNE7FP@kernel.org>
- <20220111204441.GA36458@dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com>
- <YeBiV8fuCCLWyHYb@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YeBiV8fuCCLWyHYb@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=86UOOD+8jKmAIN2Sw05IJAEDZE16W4XSBxRW5tI83xI=;
+        b=EfhH8lzPipJcQTM3iI6WkVch96DC4C3MeV9m1VHug+5Tp5wBpr6bT+3lTcPH3jZ7jN
+         7f9HiooVePWPzA3uwO9iI31Iy55jTeHoVO1DS2ai/DGfblC1gKmdx5KTN75yLmMyd4xe
+         OR875TOtswy9fh92sVg3xxo1XpCu9XToGe2Gy9UKCp7cUqbObdJ3osrQsa7TEt0zEUEl
+         pdEe9woIXw9mqvtGKdv1OZUEKyBG+glUTMrC50ZVIOaNfPGOLIzGsKATH14gMtXUY1v1
+         JsqzhNIFxbnQpueXcGAe4zNgymSw03WKYAEn0s842RoSRpYG4zCXHeDy+FooohFDNbpO
+         Ho0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=86UOOD+8jKmAIN2Sw05IJAEDZE16W4XSBxRW5tI83xI=;
+        b=SZ6aCrbzY4CfnzNqm/k2sUWYUA3GQzbUxrB4b8bdBr5BljeAQMseGAoc2zoFRU3DC0
+         OkPBi+IfNbqiNpd/lnqjICy95MQ+vvscFEq2RzgBXJNrypMN11hMAjigxhhHxXCanuRL
+         ybyMKtYTgaGs7NgPzCiRxqNzaP2xQn9rz4JmCR1FSr+rkRghv77QkPcURyBwUuasjJ0S
+         HOxYAhkdKsLbwgnqZ7UmtaQo5q6ydUi7ei6ndLYX5yhoPHP1kGebgIaRXjdURw5WLXe5
+         cxESngccZKat+oUd5t8dDqoZ3ClHe066osS9xy5uGVrcelvgHp72Ismg6TO3XAQnCUQ+
+         ZZ4Q==
+X-Gm-Message-State: AOAM530aIh1FrS/ebQtbBKru++v3uAgq1adi18AeTlRgDLgHmNQKj+k/
+        z2fGd3SYTSVBwrOOJfeWjZrq1lKz2rTGRn9LO08=
+X-Google-Smtp-Source: ABdhPJzj1Q13O8ozeYjz/R5TZhta2004hkGVv76WBiy2ghnttKv3DdVTGlZHezr0glIcLJRK73Aj+g==
+X-Received: by 2002:a05:6e02:1a24:: with SMTP id g4mr5732307ile.71.1642203149304;
+        Fri, 14 Jan 2022 15:32:29 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id h7sm4793816ior.53.2022.01.14.15.32.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 15:32:28 -0800 (PST)
+Message-ID: <61e2080c.1c69fb81.3439f.5eaa@mx.google.com>
+Date:   Fri, 14 Jan 2022 15:32:28 -0800 (PST)
+X-Google-Original-Date: Fri, 14 Jan 2022 23:32:27 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220114081545.158363487@linuxfoundation.org>
+Subject: RE: [PATCH 5.15 00/41] 5.15.15-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 07:33:11PM +0200, Mike Rapoport wrote:
-> On Tue, Jan 11, 2022 at 08:44:41PM +0000, Frank van der Linden wrote:
-> > On Tue, Jan 11, 2022 at 12:31:58PM +0200, Mike Rapoport wrote:
-> > > > --- a/include/linux/memblock.h
-> > > > +++ b/include/linux/memblock.h
-> > > > @@ -481,6 +481,8 @@ phys_addr_t memblock_reserved_size(void);
-> > > >  phys_addr_t memblock_start_of_DRAM(void);
-> > > >  phys_addr_t memblock_end_of_DRAM(void);
-> > > >  void memblock_enforce_memory_limit(phys_addr_t memory_limit);
-> > > > +void memblock_set_usable_range(phys_addr_t base, phys_addr_t size);
-> > > > +void memblock_enforce_usable_range(void);
-> > > >  void memblock_cap_memory_range(phys_addr_t base, phys_addr_t size);
-> > > >  void memblock_mem_limit_remove_map(phys_addr_t limit);
-> > >
-> > > We already have 3 very similar interfaces that deal with memory capping.
-> > > Now you suggest to add fourth that will "generically" solve a single use
-> > > case of DT, EFI and kdump interaction on arm64.
-> > >
-> > > Looks like a workaround for a fundamental issue of incompatibility between
-> > > DT and EFI wrt memory registration.
-> >
-> > Yep, I figured this would be the main argument against this - arm64
-> > already added several other more-or-less special cased interfaces over
-> > time.
-> >
-> > I'm more than happy to solve this in a different way.
-> >
-> > What would you suggest:
-> >
-> > 1) Try to merge the similar interfaces in to one.
-> > 2) Just deal with it at a lower (arm64) level?
-> > 3) Some other way?
+On Fri, 14 Jan 2022 09:16:00 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.15.15 release.
+> There are 41 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> We've discussed this with Ard on IRC, and our conclusion was that on arm64
-> kdump kernel should have memblock.memory exactly the same as the normal
-> kernel. Then, the memory outside usable-memory-range should be reserved so
-> that kdump kernel won't step over it.
+> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
+> Anything received after that time might be too late.
 > 
-> With that, simple (untested) patch below could be what we need:
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.15-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
 > 
-> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> index bdca35284ceb..371418dffaf1 100644
-> --- a/drivers/of/fdt.c
-> +++ b/drivers/of/fdt.c
-> @@ -1275,7 +1275,8 @@ void __init early_init_dt_scan_nodes(void)
->         of_scan_flat_dt(early_init_dt_scan_memory, NULL);
+> thanks,
 > 
->         /* Handle linux,usable-memory-range property */
-> -       memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
-> +       memblock_reserve(0, cap_mem_addr);
-> +       memblock_reserve(cap_mem_addr + cap_mem_size, PHYS_ADDR_MAX);
->  }
+> greg k-h
 > 
->  bool __init early_init_dt_scan(void *params)
 
-Ok, tested this on 5.17-rc, and it's working OK there. Main kernel has
-32G, crash kernel gets 512M:
+5.15.15-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-Main kernel:
-
-[    0.000000] Zone ranges:
-[    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
-[    0.000000]   DMA32    empty
-[    0.000000]   Normal   [mem 0x0000000100000000-0x0000000b96ffffff]
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000040000000-0x00000000786effff]
-[    0.000000]   node   0: [mem 0x00000000786f0000-0x000000007872ffff]
-[    0.000000]   node   0: [mem 0x0000000078730000-0x000000007bbfffff]
-[    0.000000]   node   0: [mem 0x000000007bc00000-0x000000007bfdffff]
-[    0.000000]   node   0: [mem 0x000000007bfe0000-0x000000007fffffff]
-[    0.000000]   node   0: [mem 0x0000000400000000-0x0000000b96ffffff]
-[    0.000000] Initmem setup node 0 [mem 0x0000000040000000-0x0000000b96ffffff]
-[    0.000000] On node 0, zone Normal: 4096 pages in unavailable ranges
-[    0.000000] cma: Reserved 64 MiB at 0x000000007c000000
-[    0.000000] crashkernel reserved: 0x0000000054400000 - 0x0000000074400000 (512 MB)
-
-
-Crash kernel:
-
-[    0.000000] Zone ranges:
-[    0.000000]   DMA      [mem 0x0000000054400000-0x000000007bfdffff]
-[    0.000000]   DMA32    empty
-[    0.000000]   Normal   empty
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000054400000-0x00000000743fffff]
-[    0.000000]   node   0: [mem 0x00000000786f0000-0x000000007872ffff]
-[    0.000000]   node   0: [mem 0x000000007bc00000-0x000000007bfdffff]
-[    0.000000] Initmem setup node 0 [mem 0x0000000054400000-0x000000007bfdffff]
-[    0.000000] On node 0, zone DMA: 17408 pages in unavailable ranges
-[    0.000000] On node 0, zone DMA: 17136 pages in unavailable ranges
-[    0.000000] On node 0, zone DMA: 13520 pages in unavailable ranges
-[    0.000000] On node 0, zone DMA: 16416 pages in unavailable ranges
-
-Not sure why I had trouble with the same on 5.15, I'll have to look
-at that again. But this seems fine for 5.16+
-
-Thanks,
-
-- Frank

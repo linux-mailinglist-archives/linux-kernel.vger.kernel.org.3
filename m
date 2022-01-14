@@ -2,164 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BFD48E919
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA92148E91C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240785AbiANLVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 06:21:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbiANLVX (ORCPT
+        id S236513AbiANLWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 06:22:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56397 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232631AbiANLWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 06:21:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5796C061574;
-        Fri, 14 Jan 2022 03:21:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52ABE61EB0;
-        Fri, 14 Jan 2022 11:21:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D524CC36AE5;
-        Fri, 14 Jan 2022 11:21:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642159282;
-        bh=NbrTOKw2NXpLjzztrax4ER9WDyfOxaxGE7tM1uu5Itg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=faMRwpg+FACzc2wAngUDsBwF57K/ahxeDdhKvPnZk60jDpOjPTCAjtaC7swrApGhV
-         9aya7jA8F6uF8CV12qjbZDPQkYjTfrsUrxamOR4XpP9s6kFa4DW42+jjtr2t5GqmlC
-         ga5Ckie1/NQa8I7NZheexto2eFqGWFlV4YTt1dEEDf3/j8Nay5dl3AkcuXp+/CK0LF
-         eaKlyvdSqsNlNWxYDVJVst0rGAAdnGLJt8mejElocbf+LvRYxkfaQyj+AMaCcNvT9P
-         0NDXiX4BCQJ3who3+JJ8xfl7r1XUNbnnHOR2xRwx0JGJFkaoMsh/3809sl6MwKl/nf
-         f80Wf1x65X3RA==
-Date:   Fri, 14 Jan 2022 12:21:14 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v8 10/19] ima: Implement hierarchical processing of file
- accesses
-Message-ID: <20220114112114.tu4f56bm7tewzfmj@wittgenstein>
-References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
- <20220104170416.1923685-11-stefanb@linux.vnet.ibm.com>
+        Fri, 14 Jan 2022 06:22:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642159361;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iLTg4wwf72c5vthIOvKqfSt1SY2KDa4Mpvj4k6lWWOY=;
+        b=Ro7/qVjrqkChgn4uK96sl/45qXLTH3IkCXnGPooKtjh46JACZKkqHGv9gAwYz3F8ktJoAH
+        y2nRi0Mb0xiWYTJa1O8cmzf0vXvPeY3IZ9SHU4moBPEht6L4G7ySoTKZ9hNtxEHiKtdBw5
+        P3sVt6IAkWVQ+Tvuql3VQC2tQD+4b0A=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-554-3xLkkVNRPBut89nsMGxQ5Q-1; Fri, 14 Jan 2022 06:22:40 -0500
+X-MC-Unique: 3xLkkVNRPBut89nsMGxQ5Q-1
+Received: by mail-ed1-f71.google.com with SMTP id x11-20020aa7d38b000000b004004e4fc8fdso5577040edq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 03:22:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iLTg4wwf72c5vthIOvKqfSt1SY2KDa4Mpvj4k6lWWOY=;
+        b=zmNHg+Sat9LjhuTpqxAN17Gj8taaHEE8y+dPn8V7bOO79y+84ccBvwCpO15UvCG5GL
+         3d9JnSTbNqzqd/MYQd64trjUvwhIR193yCgk2RDWj/YnoV+6kZnbem0YJranGkJBkQQN
+         8RATmUAbP74eEy6gSy5ipgVlWyh+4jRNQkyiKNeJnBonD7/xchbe0E1or6IJ0g9yc5fq
+         JY0RNHk71as1+avO8dhxC2iLJ8yM7GTD8hR3awnzcM1VvvC6hG2wabGn+rx8UsrzZaGm
+         SZZRg7ZRTAYwWsjuwvoZDGZ5Ld3oLEzvP4mAgV6CyyfG8nz4rf2FOsvx41z92lSQyeAs
+         Pwxg==
+X-Gm-Message-State: AOAM531a3XKQUXGiuNLQUPrSh5UwS4fHMQ+i/HnlYoMiohMy7jcmm4PL
+        uDkxTjeuouuDF/It+NlXvImoq2TlTohFFF8iAr9+7QGRaNFo4DePEjKS0oE3jN6/g9McSt38aEl
+        Bsn+10pTDRP7h7dypqBPWeYdH
+X-Received: by 2002:a17:906:1f51:: with SMTP id d17mr6899086ejk.759.1642159358840;
+        Fri, 14 Jan 2022 03:22:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxsMqgdRzO68qhSabKf+XHaTzty5JGMJ6wQ+em+6w7fAZnYL54Sg4c0WDYyOb2SwQQYgsuOww==
+X-Received: by 2002:a17:906:1f51:: with SMTP id d17mr6899069ejk.759.1642159358643;
+        Fri, 14 Jan 2022 03:22:38 -0800 (PST)
+Received: from localhost (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.gmail.com with ESMTPSA id 4sm1723923ejc.168.2022.01.14.03.22.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 03:22:38 -0800 (PST)
+Date:   Fri, 14 Jan 2022 12:22:37 +0100
+From:   Igor Mammedov <imammedo@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+Message-ID: <20220114122237.54fa8c91@redhat.com>
+In-Reply-To: <87ilummznd.fsf@redhat.com>
+References: <20211122175818.608220-1-vkuznets@redhat.com>
+        <20211122175818.608220-3-vkuznets@redhat.com>
+        <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
+        <20211227183253.45a03ca2@redhat.com>
+        <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
+        <87mtkdqm7m.fsf@redhat.com>
+        <20220103104057.4dcf7948@redhat.com>
+        <YeCowpPBEHC6GJ59@google.com>
+        <20220114095535.0f498707@redhat.com>
+        <87ilummznd.fsf@redhat.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220104170416.1923685-11-stefanb@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 12:04:07PM -0500, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> Implement hierarchical processing of file accesses in IMA namespaces by
-> walking the list of user namespaces towards the root. This way file
-> accesses can be audited in an IMA namespace and also be evaluated against
-> the IMA policies of parent IMA namespaces.
-> 
-> __process_measurement() returns either 0 or -EACCES. For hierarchical
-> processing remember the -EACCES returned by this function but continue
-> to the parent user namespace. At the end either return 0 or -EACCES
-> if an error occurred in one of the IMA namespaces.
-> 
-> Currently the ima_ns pointer of the user_namespace is always NULL except
-> at the init_user_ns, so test ima_ns for NULL pointer and skip the call to
-> __process_measurement() if it is NULL. Once IMA namespacing is fully
-> enabled, the pointer may also be NULL due to late initialization of the
-> IMA namespace.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  include/linux/ima.h               |  6 +++++
->  security/integrity/ima/ima_main.c | 37 +++++++++++++++++++++++++++----
->  2 files changed, 39 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/ima.h b/include/linux/ima.h
-> index b6ab66a546ae..fcee2a51bb87 100644
-> --- a/include/linux/ima.h
-> +++ b/include/linux/ima.h
-> @@ -65,6 +65,12 @@ static inline const char * const *arch_get_ima_policy(void)
->  }
->  #endif
->  
-> +static inline struct user_namespace
-> +*ima_ns_to_user_ns(struct ima_namespace *ns)
-> +{
-> +	return current_user_ns();
-> +}
-> +
->  #else
->  static inline enum hash_algo ima_get_current_hash_algo(void)
->  {
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 621685d4eb95..51b0ef1cebbe 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -200,10 +200,10 @@ void ima_file_free(struct file *file)
->  	ima_check_last_writer(iint, inode, file);
->  }
->  
-> -static int process_measurement(struct ima_namespace *ns,
-> -			       struct file *file, const struct cred *cred,
-> -			       u32 secid, char *buf, loff_t size, int mask,
-> -			       enum ima_hooks func)
-> +static int __process_measurement(struct ima_namespace *ns,
-> +				 struct file *file, const struct cred *cred,
-> +				 u32 secid, char *buf, loff_t size, int mask,
-> +				 enum ima_hooks func)
->  {
->  	struct inode *inode = file_inode(file);
->  	struct integrity_iint_cache *iint = NULL;
-> @@ -395,6 +395,35 @@ static int process_measurement(struct ima_namespace *ns,
->  	return 0;
->  }
->  
-> +static int process_measurement(struct ima_namespace *ns,
-> +			       struct file *file, const struct cred *cred,
-> +			       u32 secid, char *buf, loff_t size, int mask,
-> +			       enum ima_hooks func)
-> +{
-> +	struct user_namespace *user_ns = ima_ns_to_user_ns(ns);
-> +	int ret = 0;
-> +
-> +	while (user_ns) {
-> +		ns = ima_ns_from_user_ns(user_ns);
-> +		if (ns) {
-> +			int rc;
-> +
-> +			rc = __process_measurement(ns, file, cred, secid, buf,
-> +						   size, mask, func);
-> +			switch (rc) {
-> +			case -EACCES:
-> +				/* return this error at the end but continue */
-> +				ret = -EACCES;
-> +				break;
+On Fri, 14 Jan 2022 10:31:50 +0100
+Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
 
-This seems risky. Every error not -EACCES will be counted as a success.
-It doesn't look like __process_measurement() will return anything else
-but I would still place a WARN_ON() or WARN_ON_ONCE() in there to make
-that assumption explicit.
+> Igor Mammedov <imammedo@redhat.com> writes:
+> 
+> > On Thu, 13 Jan 2022 22:33:38 +0000
+> > Sean Christopherson <seanjc@google.com> wrote:
+> >  
+> >> On Mon, Jan 03, 2022, Igor Mammedov wrote:  
+> >> > On Mon, 03 Jan 2022 09:04:29 +0100
+> >> > Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+> >> >     
+> >> > > Paolo Bonzini <pbonzini@redhat.com> writes:
+> >> > >     
+> >> > > > On 12/27/21 18:32, Igor Mammedov wrote:      
+> >> > > >>> Tweaked and queued nevertheless, thanks.      
+> >> > > >> it seems this patch breaks VCPU hotplug, in scenario:
+> >> > > >> 
+> >> > > >>    1. hotunplug existing VCPU (QEMU stores VCPU file descriptor in parked cpus list)
+> >> > > >>    2. hotplug it again (unsuspecting QEMU reuses stored file descriptor when recreating VCPU)
+> >> > > >> 
+> >> > > >> RHBZ:https://bugzilla.redhat.com/show_bug.cgi?id=2028337#c11
+> >> > > >>       
+> >> > > >
+> >> > > > The fix here would be (in QEMU) to not call KVM_SET_CPUID2 again. 
+> >> > > > However, we need to work around it in KVM, and allow KVM_SET_CPUID2 if 
+> >> > > > the data passed to the ioctl is the same that was set before.      
+> >> > > 
+> >> > > Are we sure the data is going to be *exactly* the same? In particular,
+> >> > > when using vCPU fds from the parked list, do we keep the same
+> >> > > APIC/x2APIC id when hotplugging? Or can we actually hotplug with a
+> >> > > different id?    
+> >> > 
+> >> > If I recall it right, it can be a different ID easily.    
+> >> 
+> >> No, it cannot.  KVM doesn't provide a way for userspace to change the APIC ID of
+> >> a vCPU after the vCPU is created.  x2APIC flat out disallows changing the APIC ID,
+> >> and unless there's magic I'm missing, apic_mmio_write() => kvm_lapic_reg_write()
+> >> is not reachable from userspace.
+> >> 
+> >> The only way for userspace to set the APIC ID is to change vcpu->vcpu_id, and that
+> >> can only be done at KVM_VCPU_CREATE.
+> >> 
+> >> So, reusing a parked vCPU for hotplug must reuse the same APIC ID.  QEMU handles
+> >> this by stashing the vcpu_id, a.k.a. APIC ID, when parking a vCPU, and reuses a
+> >> parked vCPU if and only if it has the same APIC ID.  And because QEMU derives the
+> >> APIC ID from topology, that means all the topology CPUID leafs must remain the
+> >> same, otherwise the guest is hosed because it will send IPIs to the wrong vCPUs.  
+> >
+> > Indeed, I was wrong.
+> > I just checked all cpu unplug history in qemu. It was introduced in qemu-2.7
+> > and from the very beginning it did stash vcpu_id,
+> > so there is no old QEMU that would re-plug VCPU with different apic_id.
+> > Though tells us nothing about what other userspace implementations might do.
+> >  
+> 
+> The genie is out of the bottle already, 5.16 is released with the change
+> (which was promissed for some time, KVM was complaining with
+> pr_warn_ratelimited()). I'd be brave and say that if QEMU doesn't need
+> it then nobody else does (out of curiosity, are there KVM VMMs besides
+> QEMU which support CPU hotplug out there?).
+> 
+> > However, a problem of failing KVM_SET_CPUID2 during VCPU re-plug
+> > is still there and re-plug will fail if KVM rejects repeated KVM_SET_CPUID2
+> > even if ioctl called with exactly the same CPUID leafs as the 1st call.
+> >  
+> 
+> Assuming APIC id change doesn not need to be supported, I can send v2
+> here with an empty allowlist.
+As you mentioned in another thread black list would be better
+to address Sean's concerns or just revert problematic commit.
 
-Right now it looks like your only error condition is -EACCES and non-ima
-cracks like me need to read through __process_measurement() to figure
-out that that's ok. With a WARN_ON* in there I'd not have needed to bother.
-
-switch (rc) {
-case -EACCES:
-	/* return this error at the end but continue */
-	ret = -EACCES;
-	break
-default:
-	WARN_ON_ONCE(true);
-}
-
-or sm similar.

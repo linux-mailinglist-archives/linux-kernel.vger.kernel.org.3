@@ -2,205 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF9A48EF1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D92248EF21
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:15:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243800AbiANRM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:12:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41854 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235457AbiANRM2 (ORCPT
+        id S243774AbiANRPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:15:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235457AbiANRPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:12:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642180347;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eiNq5bVHdsCWUNllFz+9n+Smaow8A1fYEBzwE18wQnE=;
-        b=WGWIHAeWEvbJl0QK2b8k65F2FagQu5KdgLGpsQ5bxhJjc0kuPsS65btE4wpD7ao8Phx52t
-        hv3QxjV3PVN4eyuTqO+3H/HlbH7jwYMsB639FzFfPL2SEeMu9NU+HO5oxheshhm5xwRsl0
-        uGEtY9ah3NfaMsK5Ufkp52EZKqQcSzo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-272-CA10eKBZNCWEDy2jWvKQMQ-1; Fri, 14 Jan 2022 12:12:24 -0500
-X-MC-Unique: CA10eKBZNCWEDy2jWvKQMQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F26AF36393;
-        Fri, 14 Jan 2022 17:12:19 +0000 (UTC)
-Received: from [10.22.17.136] (unknown [10.22.17.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 730767DE23;
-        Fri, 14 Jan 2022 17:12:19 +0000 (UTC)
-Message-ID: <4522437c-eb7d-7ff6-31a1-15d90b1282a2@redhat.com>
-Date:   Fri, 14 Jan 2022 12:12:18 -0500
+        Fri, 14 Jan 2022 12:15:44 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95017C061574;
+        Fri, 14 Jan 2022 09:15:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=obMLePz8gzwSWYcfgTXlx8d93738wOycRllUtrFLNOY=; b=Es88OXu+Kk+Vb5Noch7OuhJkGc
+        wDgyFBZGZ5uqebuTgz05IZTZVK6YspSSmGLKwGV+YpqzreCyBWBaLPcrcFxYE/XQ97oai8VOAe8A1
+        gGHB9YCm3ILTWCKHGviey4KMdnclJVMdBPR88Hkn6qY2vKKkK0xoHtmvDZHSXKjPeMk3wF9A+7ebL
+        ugwFou/tiyKntAUiWyk6RWEBCAYskTAuO6ouV0mBY+sKW7yZK2n+rmmljrTTJOmRfUH5DqYGEkc0U
+        GN1/9S0DYgTrk7KuAdwNFCXMlnlZJIrN6JE4HpwOFNUIRgja1MX+klH8AfsLlBC+GK/SHnjA0i6jP
+        TGh54e8g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n8QAX-005xtz-A5; Fri, 14 Jan 2022 17:15:17 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 647283002C1;
+        Fri, 14 Jan 2022 18:15:14 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 189CE29BF6E8F; Fri, 14 Jan 2022 18:15:14 +0100 (CET)
+Date:   Fri, 14 Jan 2022 18:15:14 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Peter Oskolkov <posk@posk.io>
+Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
+        pjt@google.com, posk@google.com, avagin@google.com,
+        jannh@google.com, tdelisle@uwaterloo.ca
+Subject: Re: [RFC][PATCH 3/3] sched: User Mode Concurency Groups
+Message-ID: <YeGvovSckivQnKX8@hirez.programming.kicks-ass.net>
+References: <20211214204445.665580974@infradead.org>
+ <20211214205358.701701555@infradead.org>
+ <20211221171900.GA580323@dev-hv>
+ <YeGEM7TP3tekBVEh@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH V2] scsi: bnx2fc: flush destroy_work queue before calling
- bnx2fc_interface_put
-Content-Language: en-US
-From:   John Meneghini <jmeneghi@redhat.com>
-To:     GR-QLogic-Storage-Upstream@marvell.com
-Cc:     linux-kernel@vger.kernel.org, mlombard@redhat.com,
-        skashyap@marvell.com, linux-scsi@vger.kernel.org
-References: <20220114170424.871391-1-jmeneghi@redhat.com>
-Organization: RHEL Core Storge Team
-In-Reply-To: <20220114170424.871391-1-jmeneghi@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YeGEM7TP3tekBVEh@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After looking at the original patch more closely, Maurizio suggested that we
-just remove the destroy_work queue all together.
-
-This has been fully tested on more than one testbed and our QE dept. has verified
-this patch fixes the problem.
-
-Please review/approve.  We'd like to get this into v5.17-rc1
-
-Thanks,
-
-/John
-
-On 1/14/22 12:04, John Meneghini wrote:
->    The bnx2fc_destroy functions are removing the interface before calling
->    destroy_work. This results multiple WARNings from sysfs_remove_group
->    as the controller rport device attributes are removed to early.
+On Fri, Jan 14, 2022 at 03:09:55PM +0100, Peter Zijlstra wrote:
 > 
->    Replace the fcoe_port's destroy_work queue.  It's not needed.
+> Hi!
 > 
->    The problem is easily reproducible with the following steps.
+> I've seen you send a new version based on this, but I figured I ought to
+> reply to this first.
 > 
->    Example:
+> On Tue, Dec 21, 2021 at 05:19:00PM +0000, Peter Oskolkov wrote:
 > 
->      $ dmesg -w &
->      $ systemctl enable --now fcoe
->      $ fipvlan -s -c ens2f1
->      $ fcoeadm -d ens2f1.802
->      [  583.464488] host2: libfc: Link down on port (7500a1)
->      [  583.472651] bnx2fc: 7500a1 - rport not created Yet!!
->      [  583.490468] ------------[ cut here ]------------
->      [  583.538725] sysfs group 'power' not found for kobject 'rport-2:0-0'
->      [  583.568814] WARNING: CPU: 3 PID: 192 at fs/sysfs/group.c:279 sysfs_remove_group+0x6f/0x80
->      [  583.607130] Modules linked in: dm_service_time 8021q garp mrp stp llc bnx2fc cnic uio rpcsec_gss_krb5 auth_rpcgss nfsv4 ...
->      [  583.942994] CPU: 3 PID: 192 Comm: kworker/3:2 Kdump: loaded Not tainted 5.14.0-39.el9.x86_64 #1
->      [  583.984105] Hardware name: HP ProLiant DL120 G7, BIOS J01 07/01/2013
->      [  584.016535] Workqueue: fc_wq_2 fc_rport_final_delete [scsi_transport_fc]
->      [  584.050691] RIP: 0010:sysfs_remove_group+0x6f/0x80
->      [  584.074725] Code: ff 5b 48 89 ef 5d 41 5c e9 ee c0 ff ff 48 89 ef e8 f6 b8 ff ff eb d1 49 8b 14 24 48 8b 33 48 c7 c7 ...
->      [  584.162586] RSP: 0018:ffffb567c15afdc0 EFLAGS: 00010282
->      [  584.188225] RAX: 0000000000000000 RBX: ffffffff8eec4220 RCX: 0000000000000000
->      [  584.221053] RDX: ffff8c1586ce84c0 RSI: ffff8c1586cd7cc0 RDI: ffff8c1586cd7cc0
->      [  584.255089] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffb567c15afc00
->      [  584.287954] R10: ffffb567c15afbf8 R11: ffffffff8fbe7f28 R12: ffff8c1486326400
->      [  584.322356] R13: ffff8c1486326480 R14: ffff8c1483a4a000 R15: 0000000000000004
->      [  584.355379] FS:  0000000000000000(0000) GS:ffff8c1586cc0000(0000) knlGS:0000000000000000
->      [  584.394419] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->      [  584.421123] CR2: 00007fe95a6f7840 CR3: 0000000107674002 CR4: 00000000000606e0
->      [  584.454888] Call Trace:
->      [  584.466108]  device_del+0xb2/0x3e0
->      [  584.481701]  device_unregister+0x13/0x60
->      [  584.501306]  bsg_unregister_queue+0x5b/0x80
->      [  584.522029]  bsg_remove_queue+0x1c/0x40
->      [  584.541884]  fc_rport_final_delete+0xf3/0x1d0 [scsi_transport_fc]
->      [  584.573823]  process_one_work+0x1e3/0x3b0
->      [  584.592396]  worker_thread+0x50/0x3b0
->      [  584.609256]  ? rescuer_thread+0x370/0x370
->      [  584.628877]  kthread+0x149/0x170
->      [  584.643673]  ? set_kthread_struct+0x40/0x40
->      [  584.662909]  ret_from_fork+0x22/0x30
->      [  584.680002] ---[ end trace 53575ecefa942ece ]---
+> > > +/* pre-schedule() */
+> > > +void umcg_wq_worker_sleeping(struct task_struct *tsk)
+> > > +{
+> > > +	struct umcg_task __user *self = READ_ONCE(tsk->umcg_task);
+> > > +
+> > > +	/* Must not fault, mmap_sem might be held. */
+> > > +	pagefault_disable();
+> > > +
+> > > +	if (WARN_ON_ONCE(!tsk->umcg_server))
+> > > +		UMCG_DIE_PF("no server");
+> > 
+> > We can get here if a running worker (no pinned pages) gets a pagefault
+> > in the userspace. Is umcg_sys_enter() called for pagefaults? If not,
+> > we should not kill the worker; also the userspace won't be able to
+> > detect this worker blocking on a pagefault...
 > 
-> Signed-off-by: John Meneghini <jmeneghi@redhat.com>
-> Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
-> ---
->   drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 20 +++++---------------
->   1 file changed, 5 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-> index 71fa62bd3083..9be273c320e2 100644
-> --- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-> +++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-> @@ -82,7 +82,7 @@ static int bnx2fc_bind_pcidev(struct bnx2fc_hba *hba);
->   static void bnx2fc_unbind_pcidev(struct bnx2fc_hba *hba);
->   static struct fc_lport *bnx2fc_if_create(struct bnx2fc_interface *interface,
->   				  struct device *parent, int npiv);
-> -static void bnx2fc_destroy_work(struct work_struct *work);
-> +static void bnx2fc_port_destroy(struct fcoe_port *port);
->   
->   static struct bnx2fc_hba *bnx2fc_hba_lookup(struct net_device *phys_dev);
->   static struct bnx2fc_interface *bnx2fc_interface_lookup(struct net_device
-> @@ -907,9 +907,6 @@ static void bnx2fc_indicate_netevent(void *context, unsigned long event,
->   				__bnx2fc_destroy(interface);
->   		}
->   		mutex_unlock(&bnx2fc_dev_lock);
-> -
-> -		/* Ensure ALL destroy work has been completed before return */
-> -		flush_workqueue(bnx2fc_wq);
->   		return;
->   
->   	default:
-> @@ -1215,8 +1212,8 @@ static int bnx2fc_vport_destroy(struct fc_vport *vport)
->   	mutex_unlock(&n_port->lp_mutex);
->   	bnx2fc_free_vport(interface->hba, port->lport);
->   	bnx2fc_port_shutdown(port->lport);
-> +	bnx2fc_port_destroy(port);
->   	bnx2fc_interface_put(interface);
-> -	queue_work(bnx2fc_wq, &port->destroy_work);
->   	return 0;
->   }
->   
-> @@ -1525,7 +1522,6 @@ static struct fc_lport *bnx2fc_if_create(struct bnx2fc_interface *interface,
->   	port->lport = lport;
->   	port->priv = interface;
->   	port->get_netdev = bnx2fc_netdev;
-> -	INIT_WORK(&port->destroy_work, bnx2fc_destroy_work);
->   
->   	/* Configure fcoe_port */
->   	rc = bnx2fc_lport_config(lport);
-> @@ -1653,8 +1649,8 @@ static void __bnx2fc_destroy(struct bnx2fc_interface *interface)
->   	bnx2fc_interface_cleanup(interface);
->   	bnx2fc_stop(interface);
->   	list_del(&interface->list);
-> +	bnx2fc_port_destroy(port);
->   	bnx2fc_interface_put(interface);
-> -	queue_work(bnx2fc_wq, &port->destroy_work);
->   }
->   
->   /**
-> @@ -1694,15 +1690,12 @@ static int bnx2fc_destroy(struct net_device *netdev)
->   	return rc;
->   }
->   
-> -static void bnx2fc_destroy_work(struct work_struct *work)
-> +static void bnx2fc_port_destroy(struct fcoe_port *port)
->   {
-> -	struct fcoe_port *port;
->   	struct fc_lport *lport;
->   
-> -	port = container_of(work, struct fcoe_port, destroy_work);
->   	lport = port->lport;
-> -
-> -	BNX2FC_HBA_DBG(lport, "Entered bnx2fc_destroy_work\n");
-> +	BNX2FC_HBA_DBG(lport, "Entered %s, destroying lport %p\n", __func__, lport);
->   
->   	bnx2fc_if_destroy(lport);
->   }
-> @@ -2556,9 +2549,6 @@ static void bnx2fc_ulp_exit(struct cnic_dev *dev)
->   			__bnx2fc_destroy(interface);
->   	mutex_unlock(&bnx2fc_dev_lock);
->   
-> -	/* Ensure ALL destroy work has been completed before return */
-> -	flush_workqueue(bnx2fc_wq);
-> -
->   	bnx2fc_ulp_stop(hba);
->   	/* unregister cnic device */
->   	if (test_and_clear_bit(BNX2FC_CNIC_REGISTERED, &hba->reg_with_cnic))
+> Ufff.. good one. No #PF doesn't pass through sys_enter, I'll have to go
+> fix that.
 
+Something like the below I think.. it builds, but I've not yet tested
+it.
+
+
+---
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -73,18 +73,6 @@
+ 
+ DECLARE_BITMAP(system_vectors, NR_VECTORS);
+ 
+-static inline void cond_local_irq_enable(struct pt_regs *regs)
+-{
+-	if (regs->flags & X86_EFLAGS_IF)
+-		local_irq_enable();
+-}
+-
+-static inline void cond_local_irq_disable(struct pt_regs *regs)
+-{
+-	if (regs->flags & X86_EFLAGS_IF)
+-		local_irq_disable();
+-}
+-
+ __always_inline int is_valid_bugaddr(unsigned long addr)
+ {
+ 	if (addr < TASK_SIZE_MAX)
+@@ -177,9 +165,9 @@ static void do_error_trap(struct pt_regs
+ 
+ 	if (notify_die(DIE_TRAP, str, regs, error_code, trapnr, signr) !=
+ 			NOTIFY_STOP) {
+-		cond_local_irq_enable(regs);
++		irqentry_irq_enable(regs);
+ 		do_trap(trapnr, signr, str, regs, error_code, sicode, addr);
+-		cond_local_irq_disable(regs);
++		irqentry_irq_disable(regs);
+ 	}
+ }
+ 
+@@ -300,7 +288,7 @@ DEFINE_IDTENTRY_ERRORCODE(exc_alignment_
+ 	if (!user_mode(regs))
+ 		die("Split lock detected\n", regs, error_code);
+ 
+-	local_irq_enable();
++	irqentry_irq_enable(regs);
+ 
+ 	if (handle_user_split_lock(regs, error_code))
+ 		goto out;
+@@ -309,7 +297,7 @@ DEFINE_IDTENTRY_ERRORCODE(exc_alignment_
+ 		error_code, BUS_ADRALN, NULL);
+ 
+ out:
+-	local_irq_disable();
++	irqentry_irq_disable(regs);
+ }
+ 
+ #ifdef CONFIG_VMAP_STACK
+@@ -473,14 +461,14 @@ DEFINE_IDTENTRY(exc_bounds)
+ 	if (notify_die(DIE_TRAP, "bounds", regs, 0,
+ 			X86_TRAP_BR, SIGSEGV) == NOTIFY_STOP)
+ 		return;
+-	cond_local_irq_enable(regs);
++	irqentry_irq_enable(regs);
+ 
+ 	if (!user_mode(regs))
+ 		die("bounds", regs, 0);
+ 
+ 	do_trap(X86_TRAP_BR, SIGSEGV, "bounds", regs, 0, 0, NULL);
+ 
+-	cond_local_irq_disable(regs);
++	irqentry_irq_disable(regs);
+ }
+ 
+ enum kernel_gp_hint {
+@@ -567,7 +555,7 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_pr
+ 	unsigned long gp_addr;
+ 	int ret;
+ 
+-	cond_local_irq_enable(regs);
++	irqentry_irq_enable(regs);
+ 
+ 	if (static_cpu_has(X86_FEATURE_UMIP)) {
+ 		if (user_mode(regs) && fixup_umip_exception(regs))
+@@ -638,7 +626,7 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_pr
+ 	die_addr(desc, regs, error_code, gp_addr);
+ 
+ exit:
+-	cond_local_irq_disable(regs);
++	irqentry_irq_disable(regs);
+ }
+ 
+ static bool do_int3(struct pt_regs *regs)
+@@ -665,9 +653,9 @@ static void do_int3_user(struct pt_regs
+ 	if (do_int3(regs))
+ 		return;
+ 
+-	cond_local_irq_enable(regs);
++	irqentry_irq_enable(regs);
+ 	do_trap(X86_TRAP_BP, SIGTRAP, "int3", regs, 0, 0, NULL);
+-	cond_local_irq_disable(regs);
++	irqentry_irq_disable(regs);
+ }
+ 
+ DEFINE_IDTENTRY_RAW(exc_int3)
+@@ -1003,7 +991,7 @@ static __always_inline void exc_debug_us
+ 		goto out;
+ 
+ 	/* It's safe to allow irq's after DR6 has been saved */
+-	local_irq_enable();
++	irqentry_irq_enable(regs);
+ 
+ 	if (v8086_mode(regs)) {
+ 		handle_vm86_trap((struct kernel_vm86_regs *)regs, 0, X86_TRAP_DB);
+@@ -1020,7 +1008,7 @@ static __always_inline void exc_debug_us
+ 		send_sigtrap(regs, 0, get_si_code(dr6));
+ 
+ out_irq:
+-	local_irq_disable();
++	irqentry_irq_disable(regs);
+ out:
+ 	instrumentation_end();
+ 	irqentry_exit_to_user_mode(regs);
+@@ -1064,7 +1052,7 @@ static void math_error(struct pt_regs *r
+ 	char *str = (trapnr == X86_TRAP_MF) ? "fpu exception" :
+ 						"simd exception";
+ 
+-	cond_local_irq_enable(regs);
++	irqentry_irq_enable(regs);
+ 
+ 	if (!user_mode(regs)) {
+ 		if (fixup_exception(regs, trapnr, 0, 0))
+@@ -1099,7 +1087,7 @@ static void math_error(struct pt_regs *r
+ 	force_sig_fault(SIGFPE, si_code,
+ 			(void __user *)uprobe_get_trap_addr(regs));
+ exit:
+-	cond_local_irq_disable(regs);
++	irqentry_irq_disable(regs);
+ }
+ 
+ DEFINE_IDTENTRY(exc_coprocessor_error)
+@@ -1160,7 +1148,7 @@ static bool handle_xfd_event(struct pt_r
+ 	if (WARN_ON(!user_mode(regs)))
+ 		return false;
+ 
+-	local_irq_enable();
++	irqentry_irq_enable(regs);
+ 
+ 	err = xfd_enable_feature(xfd_err);
+ 
+@@ -1173,7 +1161,7 @@ static bool handle_xfd_event(struct pt_r
+ 		break;
+ 	}
+ 
+-	local_irq_disable();
++	irqentry_irq_disable(regs);
+ 	return true;
+ }
+ 
+@@ -1188,12 +1176,12 @@ DEFINE_IDTENTRY(exc_device_not_available
+ 	if (!boot_cpu_has(X86_FEATURE_FPU) && (cr0 & X86_CR0_EM)) {
+ 		struct math_emu_info info = { };
+ 
+-		cond_local_irq_enable(regs);
++		irqentry_irq_enable(regs);
+ 
+ 		info.regs = regs;
+ 		math_emulate(&info);
+ 
+-		cond_local_irq_disable(regs);
++		irqentry_irq_disable(regs);
+ 		return;
+ 	}
+ #endif
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -1209,6 +1209,12 @@ do_kern_addr_fault(struct pt_regs *regs,
+ NOKPROBE_SYMBOL(do_kern_addr_fault);
+ 
+ /*
++ * EFLAGS[3] is unused and ABI defined to be 0, use it to store IRQ state,
++ * because do_user_addr_fault() is too convoluted to track things.
++ */
++#define X86_EFLAGS_MISC		(1UL << 3)
++
++/*
+  * Handle faults in the user portion of the address space.  Nothing in here
+  * should check X86_PF_USER without a specific justification: for almost
+  * all purposes, we should treat a normal kernel access to user memory
+@@ -1290,13 +1296,11 @@ void do_user_addr_fault(struct pt_regs *
+ 	 * User-mode registers count as a user access even for any
+ 	 * potential system fault or CPU buglet:
+ 	 */
+-	if (user_mode(regs)) {
+-		local_irq_enable();
++	if (user_mode(regs))
+ 		flags |= FAULT_FLAG_USER;
+-	} else {
+-		if (regs->flags & X86_EFLAGS_IF)
+-			local_irq_enable();
+-	}
++
++	irqentry_irq_enable(regs);
++	regs->flags |= X86_EFLAGS_MISC;
+ 
+ 	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+ 
+@@ -1483,14 +1487,10 @@ handle_page_fault(struct pt_regs *regs,
+ 		do_kern_addr_fault(regs, error_code, address);
+ 	} else {
+ 		do_user_addr_fault(regs, error_code, address);
+-		/*
+-		 * User address page fault handling might have reenabled
+-		 * interrupts. Fixing up all potential exit points of
+-		 * do_user_addr_fault() and its leaf functions is just not
+-		 * doable w/o creating an unholy mess or turning the code
+-		 * upside down.
+-		 */
+-		local_irq_disable();
++		if (regs->flags & X86_EFLAGS_MISC) {
++			regs->flags &= ~X86_EFLAGS_MISC;
++			irqentry_irq_disable(regs);
++		}
+ 	}
+ }
+ 
+--- a/include/linux/entry-common.h
++++ b/include/linux/entry-common.h
+@@ -7,6 +7,7 @@
+ #include <linux/syscalls.h>
+ #include <linux/seccomp.h>
+ #include <linux/sched.h>
++#include <asm/ptrace.h>
+ 
+ #include <asm/entry-common.h>
+ 
+@@ -218,6 +219,24 @@ static inline void local_irq_disable_exi
+ }
+ #endif
+ 
++static inline void irqentry_irq_enable(struct pt_regs *regs)
++{
++	if (!regs_irqs_disabled(regs)) {
++		local_irq_enable();
++		if (user_mode(regs) && (current->flags & PF_UMCG_WORKER))
++			umcg_sys_enter(regs, 0);
++	}
++}
++
++static inline void irqentry_irq_disable(struct pt_regs *regs)
++{
++	if (!regs_irqs_disabled(regs)) {
++		if (user_mode(regs) && (current->flags & PF_UMCG_WORKER))
++			umcg_sys_exit(regs);
++		local_irq_disable();
++	}
++}
++
+ /**
+  * arch_exit_to_user_mode_work - Architecture specific TIF work for exit
+  *				 to user mode.

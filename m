@@ -2,138 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F72448EC14
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F334148EC18
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242130AbiANO6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 09:58:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60776 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242086AbiANO6m (ORCPT
+        id S242135AbiANPAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242122AbiANPA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:58:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642172322;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HOzdRMknZ5PmyxcIgplcnkj1XzKRyAcCC7j04FkTM74=;
-        b=BJN25dskzTPhOgHdI5r+HTLcjOy82DDwNkwfp+jwr4kuXIMIsWbvpbwz8fmxSl7O/mdvU8
-        wLzbSsqvUci6uNELnrwgfYAeVkrh/QP2FG4tY+bUMRrsenlp3XDOKE10auUnzteTyEu3Dj
-        rDslcMqaljNNoAIQYonZaloS6B40iwo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-641-lLo09EyNMbe6qgC0dC3laQ-1; Fri, 14 Jan 2022 09:58:39 -0500
-X-MC-Unique: lLo09EyNMbe6qgC0dC3laQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E4BD11083F66;
-        Fri, 14 Jan 2022 14:58:36 +0000 (UTC)
-Received: from [10.22.33.90] (unknown [10.22.33.90])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9029B753E1;
-        Fri, 14 Jan 2022 14:58:35 +0000 (UTC)
-Message-ID: <e3e07a1c-0446-7408-5ef1-1bae7a1b90c5@redhat.com>
-Date:   Fri, 14 Jan 2022 09:58:35 -0500
+        Fri, 14 Jan 2022 10:00:29 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57170C06161C;
+        Fri, 14 Jan 2022 07:00:28 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id e9so16116962wra.2;
+        Fri, 14 Jan 2022 07:00:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=TUU+DMa7U3mjpjYCA+HNoEJPTDawZ7oiEXnBDzYpIQ4=;
+        b=b3RFYe7/XHj7ObWRTcs3pjWGVbt3+gM9uVFlpJwpzMW0C1ctPeenn/MyAmsVBBVeGA
+         +ZUjO6vS9nMnXPnDhPujXoztWypjxq3mEdok+zvImur9ei+1Gd+r3fMNjFIISkAKmlYq
+         WfUjrFvYg2WNfdntHbJX12n4r2KNbxqb4cgFd7tXZEoMquIOODyMka1jMJhq8KauEbTz
+         yt1EKqNaRpw5gUP62/JYim5D3Q9iEDG4Z82GIzv2rGkzy8929+uq2gDnh1bglacPvz4/
+         hL/sJhUkVNQx2NiVn0JP8uCfA0nvVR/TJHX236I+6+t9a5hPKUHqOiRYT/aNfvBQR79J
+         WlPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=TUU+DMa7U3mjpjYCA+HNoEJPTDawZ7oiEXnBDzYpIQ4=;
+        b=y5pJKGPkEPavbLlxFvMqzBVzsl731v1510OJGTJwTJ57YpZ0038tRZhoaKAYffBaGs
+         142dOa3JND96T3akLog9pQQcruyUOany/N76QlylLeFkH7i+fobpNfBQUvmDQPJY3Owy
+         vwHVmPm8qJjYY0EJ6j2oTqZWLuUnPrL/Vj/ztkh0m8AdVxXQL4JlDK30acOD+BVtg48i
+         YdGZhOfZ4isnicy+9XzAcLBaypHw9Js8RywTlinn3Gpk6Fp86iw2QeQQo3Jm6qqkDpWb
+         HrImXOLKAy3YebQ9DDYSu1exGIW7b9GNbjSBqdPMmms5u5tf5aen7qpzr6u1KmGPHxgw
+         tejA==
+X-Gm-Message-State: AOAM531xTZsFEdn/MOz3btR+xmLQ5hiMP+WadDtRigG22ESpWTC3o1+L
+        uP40q20ZtN5U7LtrCr2qPNC4Ti43iatTEA==
+X-Google-Smtp-Source: ABdhPJzKSJQ53YkPS8o4b5mIenTlKqDuobOxTGikalxpM3OfJ7vwhurUzG3DIlk2axwuQNEnX3OQ5Q==
+X-Received: by 2002:a5d:5590:: with SMTP id i16mr7911949wrv.34.1642172426900;
+        Fri, 14 Jan 2022 07:00:26 -0800 (PST)
+Received: from elementary ([94.73.33.246])
+        by smtp.gmail.com with ESMTPSA id c22sm11516936wmr.27.2022.01.14.07.00.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 07:00:26 -0800 (PST)
+Date:   Fri, 14 Jan 2022 16:00:24 +0100
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ian Rogers <irogers@google.com>, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, ak@linux.intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf util: Fix use after free in metric__new
+Message-ID: <20220114150024.GA5646@elementary>
+References: <20211208171113.22089-1-jose.exposito89@gmail.com>
+ <CAP-5=fUAR9uSAQGkukqafkoX+jz1fE8f-ziU5WeG59XT53jMWw@mail.gmail.com>
+ <YeGNDskRtgpIFmzU@kernel.org>
+ <44b8de2c-b976-a396-2363-61a014d7e71f@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] mm/oom_kill: wake futex waiters before annihilating
- victim shared mutex
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Joel Savitz <jsavitz@redhat.com>, Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Nico Pache <npache@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-References: <20211207214902.772614-1-jsavitz@redhat.com>
- <20211207154759.3f3fe272349c77e0c4aca36f@linux-foundation.org>
- <YbB0d6T8RbHW48sZ@dhcp22.suse.cz> <YbDX16LAkvzgYHpH@dhcp22.suse.cz>
- <CAL1p7m4ka1v-Zoi-RpDy5ME-bMikGPX5V_4Hod-Y0KHOq_G8zA@mail.gmail.com>
- <YbG1mu0CLONo+Z7l@dhcp22.suse.cz>
- <CAL1p7m7mWxLE-7Qf_QjmREJ2AvfSexPvybPyHvxTUugxsPPxjQ@mail.gmail.com>
- <eee96817-1814-5849-65b8-0038235f2617@redhat.com>
-In-Reply-To: <eee96817-1814-5849-65b8-0038235f2617@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <44b8de2c-b976-a396-2363-61a014d7e71f@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 14, 2022 at 02:48:35PM +0000, John Garry wrote:
+> On 14/01/2022 14:47, Arnaldo Carvalho de Melo wrote:
+> > > > Addresses-Coverity-ID: 1494000
+> > > > Signed-off-by: Jos� Exp�sito<jose.exposito89@gmail.com>
+> > > Acked-by: Ian Rogers <irogers@google,com>
+> > > 
+> > > This can only happen in the ENOMEM case, but it is a good fix.
+> > > 
+> > > Fixes: b85a4d61d302 (perf metric: Allow modifiers on metrics)
+> > Sorry, I missed this one_as well_, sigh...
+> > 
+> > - Arnaldo
+> 
+> 
+> Isn't there a v3 out there? Not sure if you noticed...
+> 
+> Cheers
 
-On 1/14/22 09:55, Waiman Long wrote:
-> On 1/14/22 09:39, Joel Savitz wrote:
->>> What has happened to the oom victim and why it has never exited?
->> What appears to happen is that the oom victim is sent SIGKILL by the
->> process that triggers the oom while also being marked as an oom
->> victim.
->>
->> As you mention in your patchset introducing the oom reaper in commit
->> aac4536355496 ("mm, oom: introduce oom reaper"), the purpose the the
->> oom reaper is to try and free more memory more quickly than it
->> otherwise would have been by assuming anonymous or swapped out pages
->> won't be needed in the exit path as the owner is already dying.
->> However, this assumption is violated by the futex_cleanup() path,
->> which needs access to userspace in fetch_robust_entry() when it is
->> called in exit_robust_list(). Trace_printk()s in this failure path
->> reveal an apparent race between the oom reaper thread reaping the
->> victim's mm and the futex_cleanup() path. There may be other ways that
->> this race manifests but we have been most consistently able to trace
->> that one.
->>
->> Since in the case of an oom victim using robust futexes the core
->> assumption of the oom reaper is violated, we propose to solve this
->> problem by either canceling or delaying the waking of the oom reaper
->> thread by wake_oom_reaper in the case that tsk->robust_list is
->> non-NULL.
->>
->> e.g. the bug does not reproduce with this patch (from 
->> npache@redhat.com):
->>
->> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
->> index 989f35a2bbb1..b8c518fdcf4d 100644
->> --- a/mm/oom_kill.c
->> +++ b/mm/oom_kill.c
->> @@ -665,6 +665,19 @@ static void wake_oom_reaper(struct task_struct 
->> *tsk)
->>          if (test_and_set_bit(MMF_OOM_REAP_QUEUED, 
->> &tsk->signal->oom_mm->flags))
->>                  return;
->>
->> +#ifdef CONFIG_FUTEX
->> +       /*
->> +        * don't wake the oom_reaper thread if we still have a robust
->> list to handle
->> +        * This will then rely on the sigkill to handle the cleanup 
->> of memory
->> +        */
->> +       if(tsk->robust_list)
->> +               return;
->> +#ifdef CONFIG_COMPAT
->> +       if(tsk->compat_robust_list)
->> +               return;
->> +#endif
->> +#endif
->> +
->>          get_task_struct(tsk);
->>
->>          spin_lock(&oom_reaper_lock);
->
-> OK, that can explain why the robust futex is not properly cleaned up. 
-> Could you post a more formal v2 patch with description about the 
-> possible race condition?
->
-It should be v3. Sorry for the mix-up.
+Yes, here is v3 including the Fixes, Acked-by and Reviewed-by tags:
 
-Cheers,
-Longman
-
+https://lore.kernel.org/linux-perf-users/20220107182106.138418-1-jose.exposito89@gmail.com/

@@ -2,105 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB7248EDE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C917548EDED
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243266AbiANQS4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Jan 2022 11:18:56 -0500
-Received: from mail-0201.mail-europe.com ([51.77.79.158]:36237 "EHLO
-        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243243AbiANQSz (ORCPT
+        id S243276AbiANQTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:19:12 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:52960 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243278AbiANQTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:18:55 -0500
-Date:   Fri, 14 Jan 2022 16:18:50 +0000
-Authentication-Results: mail-4018.proton.ch; dkim=none
-To:     conor.dooley@microchip.com
-From:   conor dooley <mail@conchuod.ie>
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        robh+dt@kernel.org, jassisinghbrar@gmail.com,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, broonie@kernel.org,
-        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        atishp@rivosinc.com
-Reply-To: conor dooley <mail@conchuod.ie>
-Subject: Re: [PATCH v3 01/15] dt-bindings: soc/microchip: update syscontroller compatibles
-Message-ID: <nK7Z7oZFnoE0yhMjColrEPJvSFc7SpHv54Ftu3PJzQjpLA0s1F0Rwa3P5qEQrcFhJVbcUvY3TOFppyaIAS9QX09qg5nPMiilhvOO_W0fmHQ=@conchuod.ie>
-In-Reply-To: <20220114151727.2319915-2-conor.dooley@microchip.com>
-References: <20220114151727.2319915-1-conor.dooley@microchip.com> <20220114151727.2319915-2-conor.dooley@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.0 required=10.0 tests=ALL_TRUSTED shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+        Fri, 14 Jan 2022 11:19:07 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 6CAD41F3CE;
+        Fri, 14 Jan 2022 16:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642177146; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Spkw61CbNChV5xZqQLKYPzypFfNleWy1BM/D9zEVuhA=;
+        b=Iz++ekoL0FTxQxvkFvp9uvjhmdZBAXfcnp6RJmdkXIRsdRDGaUoBNCT30iSlt4KTeF/ADU
+        v9qN17GBZvN7YmJehZI5Q+6xpSWKyaXdB3LD7CI4HaeHo6q9KgR8gMsLDd6vUo/0PyCxVr
+        Qe7MVB+xXq5Lj7NxxzkrgGfMUZqYbIA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642177146;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Spkw61CbNChV5xZqQLKYPzypFfNleWy1BM/D9zEVuhA=;
+        b=AebJHghtAS1P8nayA20bWwUXSE3u+l3ztg0QK+Q+jRBIIOck1+VPuTUhKRCF95E3d8dtTt
+        Cl9KrJ/VACqaRYAA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 5CE1AA3B84;
+        Fri, 14 Jan 2022 16:19:06 +0000 (UTC)
+Date:   Fri, 14 Jan 2022 17:19:06 +0100
+Message-ID: <s5hee5a47et.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <linux-acpi@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/5] ACPI / scan: Create platform device for CLSA0100
+In-Reply-To: <20220113170728.1953559-5-tanureal@opensource.cirrus.com>
+References: <20220113170728.1953559-1-tanureal@opensource.cirrus.com>
+        <20220113170728.1953559-5-tanureal@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> The Polarfire SoC is currently using two different compatible string
-> prefixes. Fix this by changing "polarfire-soc-*" strings to "mpfs-*" in
-> its system controller in order to match the compatible string used in
-> the soc binding and device tree
->
-> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+On Thu, 13 Jan 2022 18:07:28 +0100,
+Lucas Tanure wrote:
+> 
+> The ACPI device with CLSA0100 is a sound card with
+> multiple instances of CS35L41 connected by I2C to
+> the main CPU.
+> 
+> We add an ID to the i2c_multi_instantiate_idsi list
+> to enumerate all I2C slaves correctly.
+> 
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+
+I think it's better to merge this from sound git tree together with
+others in the patch set, presumably for rc1.
+
+It'd be great if ACPI people can take a review and give an ack/nack.
+
+
+Thanks!
+
+Takashi
+
 > ---
->  ...larfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} | 6 +++---
->  ...s-controller.yaml => microchip,mpfs-sys-controller.yaml} | 6 +++---
->  2 files changed, 6 insertions(+), 6 deletions(-)
->  rename Documentation/devicetree/bindings/mailbox/{microchip,polarfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} (82%)
->  rename Documentation/devicetree/bindings/soc/microchip/{microchip,polarfire-soc-sys-controller.yaml => microchip,mpfs-sys-controller.yaml} (75%)
->
-> diff --git a/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
-> similarity index 82%
-> rename from Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
-> rename to Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
-> index bbb173ea483c..9251c2218c68 100644
-> --- a/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->  %YAML 1.2
->  ---
-> -$id: "http://devicetree.org/schemas/mailbox/microchip,polarfire-soc-mailbox.yaml#"
-> +$id: "http://devicetree.org/schemas/mailbox/microchip,mpfs-mailbox.yaml#"
->  $schema: "http://devicetree.org/meta-schemas/core.yaml#"
->
->  title: Microchip PolarFire SoC (MPFS) MSS (microprocessor subsystem) mailbox controller
-> @@ -11,7 +11,7 @@ maintainers:
->
->  properties:
->    compatible:
-> -    const: microchip,polarfire-soc-mailbox
-> +    const: microchip,mpfs-mailbox
->
->    reg:
->      items:
-> @@ -38,7 +38,7 @@ examples:
->        #address-cells = <2>;
->        #size-cells = <2>;
->        mbox: mailbox@37020000 {
-> -        compatible = "microchip,polarfire-soc-mailbox";
-> +        compatible = "mpfs-mailbox";
-
-Example is wrong, should read "microchip,mpfs-mailbox".
-
-Will resubmit Monday.
-
->          reg = <0x0 0x37020000 0x0 0x1000>, <0x0 0x2000318c 0x0 0x40>;
->          interrupt-parent = <&L1>;
->          interrupts = <96>;
-
+>  drivers/acpi/scan.c                          | 2 ++
+>  drivers/platform/x86/i2c-multi-instantiate.c | 8 ++++++++
+>  2 files changed, 10 insertions(+)
+> 
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index c215bc8723d0..2a68031d953e 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -1753,6 +1753,8 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+>  	 */
+>  		{"BCM4752", },
+>  		{"LNV4752", },
+> +	/* Non-conforming _HID for Cirrus Logic already released */
+> +		{"CLSA0100", },
+>  		{}
+>  	};
+>  
+> diff --git a/drivers/platform/x86/i2c-multi-instantiate.c b/drivers/platform/x86/i2c-multi-instantiate.c
+> index 4956a1df5b90..a51a74933fa9 100644
+> --- a/drivers/platform/x86/i2c-multi-instantiate.c
+> +++ b/drivers/platform/x86/i2c-multi-instantiate.c
+> @@ -147,6 +147,12 @@ static const struct i2c_inst_data int3515_data[]  = {
+>  	{}
+>  };
+>  
+> +static const struct i2c_inst_data cs35l41_hda[] = {
+> +	{ "cs35l41-hda", IRQ_RESOURCE_GPIO, 0 },
+> +	{ "cs35l41-hda", IRQ_RESOURCE_GPIO, 0 },
+> +	{}
+> +};
+> +
+>  /*
+>   * Note new device-ids must also be added to i2c_multi_instantiate_ids in
+>   * drivers/acpi/scan.c: acpi_device_enumeration_by_parent().
+> @@ -155,6 +161,8 @@ static const struct acpi_device_id i2c_multi_inst_acpi_ids[] = {
+>  	{ "BSG1160", (unsigned long)bsg1160_data },
+>  	{ "BSG2150", (unsigned long)bsg2150_data },
+>  	{ "INT3515", (unsigned long)int3515_data },
+> +	/* Non-conforming _HID for Cirrus Logic already released */
+> +	{ "CLSA0100", (unsigned long)cs35l41_hda },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(acpi, i2c_multi_inst_acpi_ids);
+> -- 
+> 2.34.1
+> 

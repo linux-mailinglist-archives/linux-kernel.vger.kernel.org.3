@@ -2,135 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E7848E9F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 13:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2280148E9F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 13:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241092AbiANMec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 07:34:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiANMe3 (ORCPT
+        id S241013AbiANMeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 07:34:22 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:46536 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230379AbiANMeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 07:34:29 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1277C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 04:34:28 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id b14so11327761lff.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 04:34:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=74m2z9z8/ANoqPEjwuCfAH2DgVjMBOME/cN8PGQl4s8=;
-        b=cI4mVgqcK5b+0olwu/qJGwhS44ktfkLg47uSbyGOzAAW0Pnl1LdOAP//d89vVeIyhk
-         MJPs1hN0pMQbDzxkh77FNRkH0ilkjkQOszOXwVpgsp8C0xXVIWXJPF6GZ8GWkMHo/1Q8
-         Hq0K9+w8gOMnQYeX4dBp8cfEf/6fIpRwbaeuQL6QGQOGKq5npAle/wxvUiuwHvREAaiv
-         WyDxHWkjdwKB3cOy15P2kNxqOY9OtcpVePXt9HT+1XofC+dLGXEZlRiEGBX5MNmYObl7
-         Eb8Ekzrtcze5xJ+JHiGs/f0lXWwwKbmknenGFpyGkP0NqjWRTZldGDhcLKq7CnbyDIZn
-         xagQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=74m2z9z8/ANoqPEjwuCfAH2DgVjMBOME/cN8PGQl4s8=;
-        b=iA0wNY/MKbaz8vC2oenK2jwgrCMWe9hgysPJPtv7ZDtxrvLkPQLgReYGpSK9QJsV9l
-         RDNYZbJZcW1Ue4Zjm9C3SRVlOgie33+xUchbvfc2VzXp59bfA6mvcXpm/YrrkEfx9Q3R
-         9lam2kQJsjwMc4QCktqpa0i8b7IvIbn17YiCmARRPBvhBKlSUrIDG/Go88u0oX0snckL
-         G+ZmE8qAsoXeyrVCI2Xqc7oyzp5jLrjM6Uwf1CUdnDDoJlXCgjcnZV1H0t04kwwDPBM4
-         nf+lcX3DRHFK86qlR2tZ5TbweKjs/1zuc+ao7LAp684PKqf9ypfzg0fGGVto8msTA1U0
-         U43A==
-X-Gm-Message-State: AOAM531aGGS57CNxkmzJaks1pUTLD7zzqVLWjCbwQVHOtNx9OhVgPBbu
-        ne50lTZo1gJsqe2Z6oJyu0sO/0ZUuNbX17IS3B73PQ==
-X-Google-Smtp-Source: ABdhPJx/DMSJC2Cpd/wQ055uvougZWWjZP6hhmbGd6G9dfbbiSsd0soImYQZ8yfwk1SAagedSkDl/EIK1aDSAdY/q8k=
-X-Received: by 2002:a19:6748:: with SMTP id e8mr6750942lfj.358.1642163667220;
- Fri, 14 Jan 2022 04:34:27 -0800 (PST)
+        Fri, 14 Jan 2022 07:34:21 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0FDB821995;
+        Fri, 14 Jan 2022 12:34:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642163660; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8poY4M1IFG372E11KweWs3Mw4bqPQSe2IueiIl0Mx2A=;
+        b=pzZOeD0+2HDFE3xm6WG7DuzQJUD6o7HSrrytnEEj3fOw4pf/Dct3k3VsrsE84hm6lpEQ42
+        885kaHtchCNK+mTjO1n56++QBgAGlFuD5n4uoeRjiQUVhb5yWHyl8wRf4TSlretEI5GJdK
+        WtyFi58fKA13nr4KoCC7Lyj+sojjesk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642163660;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8poY4M1IFG372E11KweWs3Mw4bqPQSe2IueiIl0Mx2A=;
+        b=avvPBmr/E/GHXPLc5QwfkPONWxKIo/THvrVUoJtreFkwV2pHwakXz1YKv7lQLEsZwVHGxr
+        h7LTPZbnBH2S17AQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 787D113C18;
+        Fri, 14 Jan 2022 12:34:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HZWkG8tt4WGdbgAAMHmgww
+        (envelope-from <nstange@suse.de>); Fri, 14 Jan 2022 12:34:19 +0000
+From:   Nicolai Stange <nstange@suse.de>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Nicolai Stange <nstange@suse.de>,
+        Stephan Mueller <smueller@chronox.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
+        Zaibo Xu <xuzaibo@huawei.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qat-linux@intel.com, keyrings@vger.kernel.org, simo@redhat.com,
+        Eric Biggers <ebiggers@kernel.org>, Petr Vorel <pvorel@suse.cz>
+Subject: Re: [v2 PATCH] crypto: api - Disallow sha1 in FIPS-mode while allowing hmac(sha1)
+References: <20211209090358.28231-1-nstange@suse.de> <87r1a7thy0.fsf@suse.de>
+        <YcvEkfS4cONDXXB9@gondor.apana.org.au>
+        <2468270.qO8rWLYou6@tauon.chronox.de>
+        <YdepEhTI/LB9wdJr@gondor.apana.org.au>
+        <Yd0gInht+V+Kcsw2@gondor.apana.org.au> <871r1eyamd.fsf@suse.de>
+        <Yd1dK//76455cHdz@gondor.apana.org.au>
+        <YeEVSaMEVJb3cQkq@gondor.apana.org.au> <87k0f2hefl.fsf@suse.de>
+        <YeFWnscvXtv73KBl@gondor.apana.org.au>
+Date:   Fri, 14 Jan 2022 13:34:18 +0100
+In-Reply-To: <YeFWnscvXtv73KBl@gondor.apana.org.au> (Herbert Xu's message of
+        "Fri, 14 Jan 2022 21:55:26 +1100")
+Message-ID: <87a6fyh4xh.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
 MIME-Version: 1.0
-References: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com> <1641749107-31979-8-git-send-email-quic_mkshah@quicinc.com>
-In-Reply-To: <1641749107-31979-8-git-send-email-quic_mkshah@quicinc.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 14 Jan 2022 13:33:51 +0100
-Message-ID: <CAPDyKFq=VdHzdmmoXBKwWvn1kdL2egX2AM_hERqvM56mVBcGzg@mail.gmail.com>
-Subject: Re: [PATCH 07/10] arm64: dts: qcom: Add power-domains property for apps_rsc
-To:     Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 9 Jan 2022 at 18:26, Maulik Shah <quic_mkshah@quicinc.com> wrote:
->
-> Add power-domains property which allows apps_rsc device to attach
-> to cluster power domain on sm8150, sm8250, sm8350 and sm8450.
->
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
+Herbert Xu <herbert@gondor.apana.org.au> writes:
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> On Fri, Jan 14, 2022 at 10:09:02AM +0100, Nicolai Stange wrote:
+>>
+>> I wonder whether this can be made more generic. I.e. would it be possible
+>> to make crypto_grab_spawn() to or in FIPS_INTERNAL into type (iff !(mask
+>> & FIPS_INTERNAL)) and to make crypto_register_instance() to propagate
+>> FIPS_INTERNAL from the template instance's spawns upwards into the
+>> instance's ->cra_flags?
+>
+> We could certainly do something like that in future.  But it
+> isn't that easy because crypto_register_instance doesn't know
+> what the paramter algorithm(s) is/are.
 
-Kind regards
-Uffe
+I was thinking of simply walking through the inst->spawns list for that.
 
 
-> ---
->  arch/arm64/boot/dts/qcom/sm8150.dtsi | 1 +
->  arch/arm64/boot/dts/qcom/sm8250.dtsi | 1 +
->  arch/arm64/boot/dts/qcom/sm8350.dtsi | 1 +
->  arch/arm64/boot/dts/qcom/sm8450.dtsi | 1 +
->  4 files changed, 4 insertions(+)
 >
-> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> index 7826564..83a44f5 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> @@ -3559,6 +3559,7 @@
->                                           <SLEEP_TCS   3>,
->                                           <WAKE_TCS    3>,
->                                           <CONTROL_TCS 1>;
-> +                       power-domains = <&CLUSTER_PD>;
+>> On an unrelated note, this will break trusted_key_tpm_ops->init() in
+>> FIPS mode, because trusted_shash_alloc() would fail to get a hold of
+>> sha1. AFAICT, this could potentially make the init_trusted() module_init
+>> to fail, and, as encrypted-keys.ko imports key_type_trusted, prevent the
+>> loading of that one as well. Not sure that's desired...
 >
->                         rpmhcc: clock-controller {
->                                 compatible = "qcom,sm8150-rpmh-clk";
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> index 077d0ab..ebb4a4e 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> @@ -4593,6 +4593,7 @@
->                         qcom,drv-id = <2>;
->                         qcom,tcs-config = <ACTIVE_TCS  2>, <SLEEP_TCS   3>,
->                                           <WAKE_TCS    3>, <CONTROL_TCS 1>;
-> +                       power-domains = <&CLUSTER_PD>;
+> Well if sha1 is supposed to be forbidden in FIPS mode why should
+> TPM be allowed to use it?=20
+
+Yes, I only wanted to point out that doing that could potentially have
+unforseen consequences as it currently stands, like
+e.g. encrypted-keys.ko loading failures, even though the latter doesn't
+even seem to use sha1 by itself.
+
+However, this scenario would be possible only for CONFIG_TRUSTED_KEYS=3Dm,
+CONFIG_TEE=3Dn and tpm_default_chip() returning something.
+
+
+> If it must be allowed, then we could change TPM to set the
+> FIPS_INTERNAL flag.
 >
->                         rpmhcc: clock-controller {
->                                 compatible = "qcom,sm8250-rpmh-clk";
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> index 665f79f..2c5dc305 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> @@ -1803,6 +1803,7 @@
->                         qcom,drv-id = <2>;
->                         qcom,tcs-config = <ACTIVE_TCS  2>, <SLEEP_TCS   3>,
->                                           <WAKE_TCS    3>, <CONTROL_TCS 0>;
-> +                       power-domains = <&CLUSTER_PD>;
+> I think I'll simply leave out the line that actually disables sha1
+> for now.
 >
->                         rpmhcc: clock-controller {
->                                 compatible = "qcom,sm8350-rpmh-clk";
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 5e329f8..acd122a 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -910,6 +910,7 @@
->                         qcom,drv-id = <2>;
->                         qcom,tcs-config = <ACTIVE_TCS  3>, <SLEEP_TCS   2>,
->                                           <WAKE_TCS    2>, <CONTROL_TCS 0>;
-> +                       power-domains = <&CLUSTER_PD>;
+>> > diff --git a/crypto/api.c b/crypto/api.c
+>> > index cf0869dd130b..549f9aced1da 100644
+>> > --- a/crypto/api.c
+>> > +++ b/crypto/api.c
+>> > @@ -223,6 +223,8 @@ static struct crypto_alg *crypto_larval_wait(struc=
+t crypto_alg *alg)
+>> >  	else if (crypto_is_test_larval(larval) &&
+>> >  		 !(alg->cra_flags & CRYPTO_ALG_TESTED))
+>> >  		alg =3D ERR_PTR(-EAGAIN);
+>> > +	else if (alg->cra_flags & CRYPTO_ALG_FIPS_INTERNAL)
+>> > +		alg =3D ERR_PTR(-EAGAIN);
+>>=20
+>> I might be mistaken, but I think this would cause hmac(sha1)
+>> instantiation to fail if sha1 is not already there. I.e. if hmac(sha1)
+>> instantiation would load sha1, then it would invoke crypto_larval_wait()
+>> on the sha1 larval, see the FIPS_INTERNAL and fail?
 >
->                         apps_bcm_voter: bcm-voter {
->                                 compatible = "qcom,bcm-voter";
-> --
-> 2.7.4
+> When EAGAIN is returned the lookup is automatically retried.
+
+Ah right, just found the loop in cryptomgr_probe().
+
+
 >
+>> However, wouldn't it be possible to simply implement FIPS_INTERNAL
+>> lookups in analogy to the INTERNAL ones instead? That is, would adding
+>>=20
+>> 	if (!((type | mask) & CRYPTO_ALG_FIPS_INTERNAL))
+>> 		mask |=3D CRYPTO_ALG_FIPS_INTERNAL;
+>>=20
+>> to the preamble of crypto_alg_mod_lookup() work instead?
+>
+> If you do that then you will end up creating an infinite number
+> of failed templates if you lookup something like hmac(md5).  Once
+> the first hmac(md5) is created it must then match all subsequent
+> lookups of hmac(md5) in order to prevent any further creation.
+
+Thanks for the explanation, it makes sense now.
+
+>
+>> This looks all good to me, but as !->fips_allowed tests aren't skipped
+>> over anymore now, it would perhaps make sense to make their failure
+>> non-fatal in FIPS mode. Because in FIPS mode a failure could mean a
+>> panic and some of the existing TVs might not pass because of e.g. some
+>> key length checks or so active only for fips_enabled...
+>
+> You mean a buggy non-FIPS algorithm that fails when tested in
+> FIPS mode?
+
+Yes, I can't tell how realistic that is though.
+
+
+> I guess we could skip the panic in that case if everyone is happy with
+> that.  Stephan?
+>
+
+Thanks,
+
+Nicolai
+
+--=20
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg, G=
+ermany
+(HRB 36809, AG N=C3=BCrnberg), GF: Ivo Totev

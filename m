@@ -2,105 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA1E48E9C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 13:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC45648E9CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 13:27:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241019AbiANMZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 07:25:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56417 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235487AbiANMZP (ORCPT
+        id S241031AbiANM0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 07:26:55 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:46006 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240922AbiANM0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 07:25:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642163114;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Fri, 14 Jan 2022 07:26:54 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id CC7AD21995;
+        Fri, 14 Jan 2022 12:26:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642163212; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=hBh0G3PaFCWJV1sufbCQzEoGiZiKhsRfTLAPWCryd98=;
-        b=Q8cMp8kl5QMmluEv2feQMUw6WnN5NrLo6YLPZo8ZaqdyASVrjERuSzwE+spOOLc52i2s8h
-        feXAKzcBFOAKb3vHiCWWzVa98C8JeUA3yI2JnuSXW71p7t0v0sMdQqOphzkO0wy5+2xWgm
-        2TGV4lKxeRi8VL1VWIgPagVnQyfTzyw=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-122-NG78i4aKOJutJ-eUKydnDw-1; Fri, 14 Jan 2022 07:25:13 -0500
-X-MC-Unique: NG78i4aKOJutJ-eUKydnDw-1
-Received: by mail-wr1-f72.google.com with SMTP id w25-20020adf8bd9000000b001a255212b7cso1704347wra.18
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 04:25:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=hBh0G3PaFCWJV1sufbCQzEoGiZiKhsRfTLAPWCryd98=;
-        b=iIX+QPDjqIhisTYyiE0gy6R953JQrMaMrCaV2cunVADkxD/D2pG1EOyRYARNs4sf+a
-         peRtEvsMUYi0mecBlJxNhSE4KwbXDOoVE8HahqdobyPXN1ozEpc7AQMBSoYVZUpGO8zk
-         cH/x+MoEPmFFz7YcZJIL8+c3hw5HYEYQ3ANY/xFx5hHRhyFaJoElHR8MIEtHkSRGIUD5
-         qy6jd8QPoek8JWMrC0XxRoR5tC0scLP2AjueliQkv9RciQeHZmIOV/xSuzSvuT5SYl3H
-         YSO9vSkAk7Tzq7hvEyv2/wj6Bz4XTzFSbUMSAEw366w5Mddpw7YdM6cGXqZa8/MZZdRu
-         Zptg==
-X-Gm-Message-State: AOAM531SxDzWaF0WvUUgL4F8Jup6Nj6KJX7sE8OusCqSwDjlwNcSZdCf
-        aL4rgZ7CfSWb3wQI9Qtun4twPB3JHZ217H1uzCpF++RwVpaYOnzKIhmq9Z8Q1dXPXyBalH2SKjz
-        444QbBZLV+ARFwBb1TTg+dkDy
-X-Received: by 2002:adf:dfcb:: with SMTP id q11mr8088559wrn.181.1642163112439;
-        Fri, 14 Jan 2022 04:25:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJytUF1b2SbzKOsKta4a5pVQxU/2110KFAo5J35XHdXJ85Ys1js7Hdv0X5E6eJ5VN6A5fa2AWw==
-X-Received: by 2002:adf:dfcb:: with SMTP id q11mr8088537wrn.181.1642163112185;
-        Fri, 14 Jan 2022 04:25:12 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id g2sm5042986wro.41.2022.01.14.04.25.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 04:25:11 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Igor Mammedov <imammedo@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
-In-Reply-To: <20220114122237.54fa8c91@redhat.com>
-References: <20211122175818.608220-1-vkuznets@redhat.com>
- <20211122175818.608220-3-vkuznets@redhat.com>
- <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
- <20211227183253.45a03ca2@redhat.com>
- <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
- <87mtkdqm7m.fsf@redhat.com> <20220103104057.4dcf7948@redhat.com>
- <YeCowpPBEHC6GJ59@google.com> <20220114095535.0f498707@redhat.com>
- <87ilummznd.fsf@redhat.com> <20220114122237.54fa8c91@redhat.com>
-Date:   Fri, 14 Jan 2022 13:25:10 +0100
-Message-ID: <87ee5amrmh.fsf@redhat.com>
+        bh=5FKY5OS8cYg5DAHvwLUhsHaD7LBWzxeEJ9udOdcFioc=;
+        b=A+18NqmM1Geo8fvTEgMWOq0H9obdjOZmE7JiZJQJWVs6EdBI+OFfj6bCpzRNP7RWit3prU
+        h/GBRcbWLVpyRrbyqBbAm+wpmeb4z3Lkrv2jO7YW5r/Nzt7SNBMnRPoxyFZJzMRK2HmYx8
+        FgCQq5PeLyWVugVTewKNRkumTCd2O+Q=
+Received: from suse.cz (pathway.suse.cz [10.100.12.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 64599A3B85;
+        Fri, 14 Jan 2022 12:26:51 +0000 (UTC)
+Date:   Fri, 14 Jan 2022 13:26:51 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        kernel@gpiccoli.net, senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, feng.tang@intel.com,
+        kexec@lists.infradead.org, dyoung@redhat.com,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com
+Subject: Re: [PATCH V2] panic: Move panic_print before kmsg dumpers
+Message-ID: <20220114122651.GB17817@pathway.suse.cz>
+References: <20220106212835.119409-1-gpiccoli@igalia.com>
+ <Yd/0K1x7ILw3Qa46@alley>
+ <ba0e29ba-0e08-df6e-ade5-eb58ae2495e3@igalia.com>
+ <YeA1pXz7f0wqSnah@alley>
+ <f25672a4-e4dd-29e8-b2db-f92dd9ff9f8a@igalia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f25672a4-e4dd-29e8-b2db-f92dd9ff9f8a@igalia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Igor Mammedov <imammedo@redhat.com> writes:
+On Thu 2022-01-13 12:15:08, Guilherme G. Piccoli wrote:
+> On 13/01/2022 11:22, Petr Mladek wrote:
+> > [...]
+> > OK, do we have any specific reason why panic_print_sys_info()
+> > should get called right before kmsg_dump() when this code patch
+> > is used?
+> > 
+> > Alternative solution would be to remove the check of
+> > kexec_crash_loaded() and always call panic_print_sys_info(false)
+> > at the beginning (after kgdb_panic(buf)).
+> > 
+> > The advantage is that panic_print_sys_info(false) will be always
+> > called on the same location. It will give the same results
+> > in all code paths so that it will be easier to interpret them.
+> > And it will have the same problems so it should be easier
+> > to debug and maintain.
+> > 
+> > It is possible that it will not work for some users. Also it is
+> > possible that it might cause some problems. But it is hard to
+> > guess at least for me.
+> > 
+> > I think that we might try it and see if anyone complains.
+> > Honestly, I think that only few people use panic_printk_sys_info().
+> > And your use-case makes sense.
+> > 
+> > Best Regards,
+> > Petr
+> 
+> Hi Petr, thanks for your idea - it's simple and effective, would resolve
+> the problems in a straightforward way. But there are some cons, let me
+> detail more.
+> 
+> Currently (in linux-next), if users set panic_print but not kdump, the
+> panic_print_sys_info() is called *after* the panic notifiers. If user
+> has kdump configured and still sets panic_print (which is our use case),
+> then panic_print_sys_info() is called _before_ the panic notifiers. In
+> other words, the behavior for non-kdump users is the same as before,
+> since the merge of panic_print functionality.
+> 
+> Your idea brings the printing earlier, always before the panic
+> notifiers. This isn't terrible, but might lead to unfortunate and
+> hard-to-debug problems; for example, some panic notifiers are
+> rcu_panic() and hung_task_panic(), both are simple functions to disable
+> RCU warnings and hung task detector in panic scenarios. If we go with
+> your idea, these won't get called before panic_print_sys_info(), even if
+> kdump is not set. So, since the panic_print triggers a lot of printing
+> in the console, we could face a stall and trigger RCU messages, maybe
+> intermixed with the panic_print information.
 
-> On Fri, 14 Jan 2022 10:31:50 +0100
-> Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->
->> Igor Mammedov <imammedo@redhat.com> writes:
->> 
->> 
->> > However, a problem of failing KVM_SET_CPUID2 during VCPU re-plug
->> > is still there and re-plug will fail if KVM rejects repeated KVM_SET_CPUID2
->> > even if ioctl called with exactly the same CPUID leafs as the 1st call.
->> >  
->> 
->> Assuming APIC id change doesn not need to be supported, I can send v2
->> here with an empty allowlist.
-> As you mentioned in another thread black list would be better
-> to address Sean's concerns or just revert problematic commit.
->
+I see. OK, it makes sense to call it after the panic notifiers when
+they are used. It would be nice to mention the above in the commit
+message and explain why the 2nd call is there.
 
-Personally, I'm leaning towards the blocklist approach even if just for
-'documenting' the fact that KVM doesn't correctly handle the
-change. Compared to a comment in the code, such approach could help
-someone save tons of debugging time (if anyone ever decides do something
-weird, like changing MAXPHYADDR on the fly).
+Just an idea. It might be better to move the 1st call below
+if (!_crash_kexec_post_notifiers). It would make it more
+clear that it is intended for this code path. I mean:
 
--- 
-Vitaly
+	if (!_crash_kexec_post_notifiers) {
+		/* ... */
+		if (kexec_crash_loaded())
+			panic_print_sys_info(false);
 
+		__crash_kexec(NULL);
+	...
+
+Best Regards,
+Petr

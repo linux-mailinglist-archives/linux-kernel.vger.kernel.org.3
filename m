@@ -2,369 +2,554 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6126348EBE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D762748EBEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241936AbiANOnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 09:43:20 -0500
-Received: from mail-mw2nam10on2089.outbound.protection.outlook.com ([40.107.94.89]:24639
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S241943AbiANOnT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:43:19 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZQX//hrUPDMhkobJXnyVNLCcd2FGoTRat6ZZfKK+f/OIJzVMOyS7irzk2W3eR4Lv4Rbfc6rTkEmPQ+H5UQLXinm5yPvJDgxfZUwfuPK/mNrvx25xacsSeA5nSEW6pQhTv/XzEo6Q36l9k04Z6uvgCfYm1EAuhYNFsbiEHbphPUeOKzc1l06/NavugwgO3NpxuqBPbPm+xmKaVGvudUqLLQspL7MkMppIVD3R60AzrEDG84iGyBJBz/oG3lJsw2iGCM5rH29Q5z/AQADYmlSYVQ9pXFDN7xZUnZm1ui6Rc19DUUwac/gB6kZBDYrxa05T0pGIrwaK7Q3Ok4lJJQrVtg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7Y78nyKAEcgWmKrse36BMBjD83CLacLsIRO4Be4cpgo=;
- b=TtevnK09uStuZgf95wdauZn5/nY6Rxfnx/OkFxZpO6lYkvC8EhBCwBXnRhOOkYzu0+iGpiWTsZAF8hfIhvnLHFWnfTyHbZuDSRhkGC3i2ZyPR60bGnfIAohpTR8wkKjaiq7GvrvSVnfweu+JXfRCFhHzW0AAYo7J7FZGOarFOXyaNfkbSKP7TpP4DuNmTmeFYOkGozeULLAAjgt7Nmbu3GsdIO0x7IPcaBeB7v0WKuj9c+Lhzsc05FJmX+sxE9kojgTKMFThe4S6Xz3rzdztCJPsdK7unTmWtSkneHDRATpw4U8Fvnr7Qmm6GDDVYVpX3i2Sn1mVGLs99ag1t+ZBSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7Y78nyKAEcgWmKrse36BMBjD83CLacLsIRO4Be4cpgo=;
- b=X+2DKhUibAwtTrtgXEVu9iJucwco0ZtfU6226VP5gATo1dPfwH3Aoo7CQuQSytiDGzea3F9N1F/53eyPrVcnDwzyMY5ABe1xmp4rGpLDiR2mMCWM/BPeIV0BrEMZU3Q9zauMkqyQUh2eo0rW5Kx/wE1LsaO9Sy/ncFzH+hoE/1Q=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by BN8PR12MB3281.namprd12.prod.outlook.com (2603:10b6:408:6e::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Fri, 14 Jan
- 2022 14:43:16 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::dd4b:b67b:1688:b52]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::dd4b:b67b:1688:b52%9]) with mapi id 15.20.4888.012; Fri, 14 Jan 2022
- 14:43:16 +0000
-Message-ID: <b58b4288-8220-8ab8-3972-6371cdc4e34a@amd.com>
-Date:   Fri, 14 Jan 2022 09:43:08 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v3 1/3] drm: introduce fb_modifiers_not_supported flag
- in mode_config
-Content-Language: en-US
-To:     Tomohito Esaki <etom@igel.co.jp>, dri-devel@lists.freedesktop.org
-Cc:     David Airlie <airlied@linux.ie>, nouveau@lists.freedesktop.org,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <mdaenzer@redhat.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Evan Quan <evan.quan@amd.com>, amd-gfx@lists.freedesktop.org,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Takanari Hayama <taki@igel.co.jp>,
-        Sean Paul <seanpaul@chromium.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Simon Ser <contact@emersion.fr>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <20220114101753.24996-1-etom@igel.co.jp>
- <20220114101753.24996-2-etom@igel.co.jp>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20220114101753.24996-2-etom@igel.co.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0127.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:5::30) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        id S241970AbiANOpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 09:45:42 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38888 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242526AbiANOp0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 09:45:26 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79610B82595;
+        Fri, 14 Jan 2022 14:45:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1564FC36AEA;
+        Fri, 14 Jan 2022 14:45:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642171523;
+        bh=Y66QlMqzl7hxE9RveXwk8G4ZBIhRRN+NGlM513QyFDM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oGb9mzF5GVtg9D9b4cwZDchbE/lR04pYusvR9XzZdG3fYNU92trLaoq1oqqOMPwuA
+         Xm/WIgwahdgV5e5BqwmKkC2QVOXOHIBL2Zaqbl9ddNdBPQxHCRaSA78wdspeSL5Znc
+         is9St6yfJN3fVIJ6hGNT++JaX82ECuugHonUQe6TstMzCgk38cxnh5ay9FnbYUkwY/
+         +dqo36cMewAEanDvDPcNkPRkcLQG4jOzRt5RHydncB3ydzBAEDMFB49q95t1qxOeMr
+         x42Q8do5WNVh7Qbo519XbwZC5p/WLFS/XuRkzoSzWU3245r4tOVVcA9lpfRayyR5fi
+         r/SEYavMmREXw==
+Date:   Fri, 14 Jan 2022 15:45:15 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v8 19/19] ima: Enable IMA namespaces
+Message-ID: <20220114144515.vbler7ae3jqebhec@wittgenstein>
+References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
+ <20220104170416.1923685-20-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9c2e6d0f-b334-4e7b-f515-08d9d76c3274
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3281:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB3281E8DC2CD2D351C461B1638C549@BN8PR12MB3281.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iQzf7CDDBpId2UtjJ5/SkkjwrtMUyR1SRKqysRD+jEI4rVwh93mJPIkwFhUcQ7PM9zu5vnxWIZR15OgkwRTp/GOK6GIeIi+PIoKH6gNR8rYqYH5uv0xuI4FUMmZPr1IHWv/gXezvz0dDOMrZB6wrlA9iVt4WRx7e/7SGcojoYZohDpQKM0wjj+TS+glxSL+p1y1gkMPLeVQPTY8ri4Cp7wDMMgtLu3SfQLAsZpMz1NSkcd3SuR9jsoNNFeEAtCiTb/KJw72cJYqIxaMfMrk/gtsVMoQv6KRxq14XlAzFFtRRoT7WVTS2itimKD0UqHMW/wgnVOZDRZ8f7pz5GZJC0bSXqM1OTiP9HPx93PxoHx1uBtpeEhmGSghw1C8l9WKdBtxcKvL1b1OIvbKz6yQVZi2Mh/OLQzdZsJhuznCsVQAlvNw8Jxj2vAvLLsmpwTUfpDU2mBzpk43kXsbvxfyJYmcxtKfRbYh3gxowiAK6xoQ89sObiaJPcX306MzmVcy0k/jtXTbxd+4P7f2b4x+QNkrc/a2LqXHkAwoqtClMTp1eV8tGUScwJo/wFAt0rvQGl5l0J/3VmohX4prR3xpsjYAc7v8dip0rwKcQVYzYdy79UklDByq+ZWS1/syuxgolxcKoa3rSq+1i7mWun5YGnqKwFnCwVQiiHo611ygxSdYoB7TosAsSAqdyCz37dzmZb5sGHhkcgqLZR+Vx1Xhs3CrFcjmizjy5h5ojBRTFMMrz/UWAjcs3sRcputtWjevX
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(7416002)(86362001)(36756003)(4326008)(31686004)(2906002)(8936002)(83380400001)(31696002)(6486002)(186003)(66946007)(6506007)(66556008)(44832011)(38100700002)(6666004)(508600001)(26005)(5660300002)(54906003)(53546011)(6512007)(2616005)(316002)(8676002)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UEF6VzI4TlV1ejRCcFJUZ3A5ZmJ2M00wK2RGMnpBSnVxK25hbk45Y1JKZWNr?=
- =?utf-8?B?WmhaSk5DNWFCd05tcmJBMWZEVVZuRWw5bk5nelpnSGJyc3h1Y1dXQm41bXRy?=
- =?utf-8?B?SndvLzcrbVplNjFyZmZ6VHUxS0ZwcmludTdEVGU4djlEUGRtb0E0TW10NWFr?=
- =?utf-8?B?d2VZL0hUZE10cEpOVENJd3BDaXZxb1dtK2dVdWxBaERPU04zbllZV1pMeUo4?=
- =?utf-8?B?R3JJcWtUQlRjTllyUzgwK0psTG1tTHZYdVllaDluQ1A4Ty9ZWGpWZ3VOTUVv?=
- =?utf-8?B?dmJ3Zy9nOURHRjlWemtjdzMxZC95SmJaSEpRZVptVXpYMEUrSmdUTkpvdkpD?=
- =?utf-8?B?UUROeHdOdFpzRnpzK0RvemxHeFZ5TDNrVGoxUTdIMFplRlNoSm5UZnY3ZXYw?=
- =?utf-8?B?amJ0WE55SldtUXVPUE5aKzFKN3hrbjJ3aCtmMnhickRpaDZ5WTdud1hEcGo2?=
- =?utf-8?B?ZklmbVdqSlhvc3VZOUZPTmlJSktOcDUvMkQzUC9HdXRqNWNVRVJIK3h2bUpS?=
- =?utf-8?B?UzBEcDRXUzFlODd6M0psRmdIdjlSMUh3aElPT3lheTFveGxIcEtIaTJjQm1y?=
- =?utf-8?B?QmFZaW54QVBNTDlVZnJYNlpoMFQ2RW5MMXdyalljZzFwZmVvRnQyblZjWUEw?=
- =?utf-8?B?NEVqVDAzYTlEQlB2V2F1R2NiVlZwRUZJOHBJTTdZYVhqTFM2WHVyeTB5ZWJu?=
- =?utf-8?B?NndnZ0RyS3FzZU43L2ZxM01zUVEzOGFkVXNqMnNPT1B0bXVKSzQ3OFVGdWNH?=
- =?utf-8?B?b2MyTDdOQlBwL0FsV3VIWHQ0aU9sd3lRV3NKdzFTVC9OT0Y0anQvam9xTThq?=
- =?utf-8?B?YXlIYW9yZHhtUHdvcCt6cDAzdXlhMm5VVVdPZGFvWHRSWnFHKytwQ0lRMzRL?=
- =?utf-8?B?aHlsM0RNZ0ZERkE4S1RiaVQzMys3UllQQzFSQXpZb0xmQjhQR3hYUnBFNmZr?=
- =?utf-8?B?Z2QyYldLUTh2OW4yakVjUG95Vmc4NFloNk5OZ1VucUlNMXd6N0t3aUlBdkFU?=
- =?utf-8?B?dDRHVEpUdDNaMjlRZmw1MUdKUnpqK0laaExNRFc5WmJXOVpuUEFoSC9EdWlN?=
- =?utf-8?B?NmExS01hVE9YVzd1MW9zOTlUVFVkQmxRbm9SMEEzeUQ4YlU5azlkblJoTUxk?=
- =?utf-8?B?RUNFNEt1VHE1SFBNQndITEZWa2pROU10enp5R21OdVJFdlF5UjUxb1NTcGZa?=
- =?utf-8?B?bWNENWI5M0phYjVqNGEvbWRsbDNrb3QzbGRBaUhJWkptRFdKd011TSs1M2JN?=
- =?utf-8?B?Y1ZNU1JnT1N1anN3S1FpU2REa2JTaDV1Q3FVRkFTRE5Kd2xacmdQcDZqWXJO?=
- =?utf-8?B?dXJDMmtzV0E4a0xncHJndHJpOUlrVzJpTlZza0xhNFdpNjhTcVhjZ0d3QWJt?=
- =?utf-8?B?SlNCRUxQdkYvdFlYWlFkVE9ub2Q4QWZEZTVDZDZJSWxGZmg4L0xFN3pzazVS?=
- =?utf-8?B?ZU9ZcWllb1ovWVBTTDZqQklnV3VrREZFWGVQQlR1WlJPU3FNYmR4Ri9qNmRn?=
- =?utf-8?B?VG56TGZ1RDVRME4yU0ZOLzRJdDMvMk1SOEExTU1YT3R0bUJXU0k1MEtDY0JD?=
- =?utf-8?B?dXRsaEh4MzJzSHJ1Um5UalQ5Z2w0WFEyZHhNNnEwbGRMNDRPMy9RZFBGRVVF?=
- =?utf-8?B?T2xPbVdRRy8ySlBsM3lVYmxGR0JJbUZUa0NERmpubXl3ajUxdThva096cTBz?=
- =?utf-8?B?OFZVOXpQcTNld01CN1ZXa3lqRjQzVXNzYkpoRWhxbTJ3cnFLQUpnQkdlTzRM?=
- =?utf-8?B?aEdBcEtqbXpuM2V1ajQzNGozWU1lTzltaktkUmtPNlVLZktxbHoveDRZcDdk?=
- =?utf-8?B?L0E0MGtDRlQwWk42cmRDU1A3WkkzWCtURUpxdWJaRlhoOGU3TFBxNHBNOVJK?=
- =?utf-8?B?d1Z0Y2hPSEZpYS9wcGh3RERLdS9vdnNyWlZnTTVOd09qK2M4WVZDcy9CUldl?=
- =?utf-8?B?TjFXOHpPZzFVVm5zMWtTMVBuSlRrMGNqOWNiaVhmMUsvTjI1UlVmN1oydWsr?=
- =?utf-8?B?ZmJTeFB6RURtQVJpbVhYemNFWjIxclk1MW1VMmhjVlZ0dGpBK3VDMDZmTThU?=
- =?utf-8?B?WWhzdWQwMy9VR2JSUHFGemxTZkxoTlA2NmM4VTVpVWNjSU54N3VBYVpFbXJ1?=
- =?utf-8?B?QXNHRFd4dWhjY3JDelZsdHdYeUo5c0ZMTU9SbUdqS0lPOEdSeDNVVmFRZ2hH?=
- =?utf-8?Q?Z68eNAp+IuaVWZJI1xdBdyA=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c2e6d0f-b334-4e7b-f515-08d9d76c3274
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2022 14:43:15.8537
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TBxMW27HoVFvNh18npg6aOmjjlmyPUO8R6lfSC4QCyK84xBi86ITcE11A8VBUeDR9/0ZJ8vbdPo9iDP1ljs5Iw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3281
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220104170416.1923685-20-stefanb@linux.vnet.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-14 05:17, Tomohito Esaki wrote:
-> If only linear modifier is advertised, since there are many drivers that
-> only linear supported, the DRM core should handle this rather than
-> open-coding in every driver. However, there are legacy drivers such as
-> radeon that do not support modifiers but infer the actual layout of the
-> underlying buffer. Therefore, a new flag fb_modifiers_not_supported is
-> introduced for these legacy drivers, and allow_fb_modifiers is replaced
-> with this new flag.
+On Tue, Jan 04, 2022 at 12:04:16PM -0500, Stefan Berger wrote:
+> From: Stefan Berger <stefanb@linux.ibm.com>
 > 
-> Signed-off-by: Tomohito Esaki <etom@igel.co.jp>
-
-Acked-by: Harry Wentland <harry.wentland@amd.com>
-
-Harry
-
+> Introduce the IMA_NS in Kconfig for IMA namespace enablement.
+> 
+> Enable the lazy initialization of an IMA namespace when a user mounts
+> SecurityFS. Now a user_namespace will get a pointer to an ima_namespace
+> and therefore add an implementation of get_current_ns() that returns this
+> pointer.
+> 
+> get_current_ns() may now return a NULL pointer for as long as the IMA
+> namespace hasn't been created, yet. Therefore, return early from those
+> functions that may now get a NULL pointer from this call. The NULL
+> pointer can typically be treated similar to not having an IMA policy set
+> and simply return early from a function.
+> 
+> Implement ima_ns_from_file() for SecurityFS-related files where we can
+> now get the IMA namespace via the user namespace pointer associated
+> with the superblock of the SecurityFS filesystem instance. Since
+> the functions using ima_ns_from_file() will only be called after an
+> ima_namesapce has been allocated they will never get a NULL pointer
+> for the ima_namespace.
+> 
+> Switch access to userns->ima_ns to use acquire/release semantics to ensure
+> that a newly created ima_namespace structure is fully visible upon access.
+> 
+> Replace usage of current_user_ns() with ima_ns_from_user_ns() that
+> implements a method to derive the user_namespace from the given
+> ima_namespace. It leads to the same result.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 > ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_display.c       |  6 +++---
->  drivers/gpu/drm/amd/amdgpu/dce_v10_0.c            |  2 ++
->  drivers/gpu/drm/amd/amdgpu/dce_v11_0.c            |  2 ++
->  drivers/gpu/drm/amd/amdgpu/dce_v6_0.c             |  1 +
->  drivers/gpu/drm/amd/amdgpu/dce_v8_0.c             |  2 ++
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  3 +++
->  drivers/gpu/drm/drm_framebuffer.c                 |  6 +++---
->  drivers/gpu/drm/drm_ioctl.c                       |  2 +-
->  drivers/gpu/drm/nouveau/nouveau_display.c         |  6 ++++--
->  drivers/gpu/drm/radeon/radeon_display.c           |  2 ++
->  include/drm/drm_mode_config.h                     | 10 ++++++++++
->  11 files changed, 33 insertions(+), 9 deletions(-)
+>  include/linux/ima.h                 |  9 ++++++-
+>  init/Kconfig                        | 13 ++++++++++
+>  kernel/user_namespace.c             |  2 ++
+>  security/integrity/ima/ima.h        | 35 ++++++++++++++++++++++-----
+>  security/integrity/ima/ima_fs.c     | 37 ++++++++++++++++++++++-------
+>  security/integrity/ima/ima_main.c   | 29 ++++++++++++++++------
+>  security/integrity/ima/ima_ns.c     |  3 ++-
+>  security/integrity/ima/ima_policy.c | 13 +++++-----
+>  8 files changed, 112 insertions(+), 29 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-> index 82011e75ed85..edbb30d47b8c 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-> @@ -954,7 +954,7 @@ static int amdgpu_display_verify_sizes(struct amdgpu_framebuffer *rfb)
->  	int ret;
->  	unsigned int i, block_width, block_height, block_size_log2;
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index 5354e83d1694..7b9713b290ae 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -11,6 +11,7 @@
+>  #include <linux/fs.h>
+>  #include <linux/security.h>
+>  #include <linux/kexec.h>
+> +#include <linux/user_namespace.h>
+>  #include <crypto/hash_info.h>
+>  struct linux_binprm;
 >  
-> -	if (!rfb->base.dev->mode_config.allow_fb_modifiers)
-> +	if (rfb->base.dev->mode_config.fb_modifiers_not_supported)
+> @@ -71,7 +72,13 @@ static inline const char * const *arch_get_ima_policy(void)
+>  static inline struct user_namespace
+>  *ima_ns_to_user_ns(struct ima_namespace *ns)
+>  {
+> -	return current_user_ns();
+> +	struct user_namespace *user_ns;
+> +
+> +	user_ns = current_user_ns();
+> +#ifdef CONFIG_IMA_NS
+> +	WARN_ON(user_ns->ima_ns != ns);
+> +#endif
+> +	return user_ns;
+>  }
+>  
+>  #else
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 4b7bac10c72d..e27155e0ddba 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1247,6 +1247,19 @@ config NET_NS
+>  	  Allow user space to create what appear to be multiple instances
+>  	  of the network stack.
+>  
+> +config IMA_NS
+> +	bool "IMA namespace"
+> +	depends on USER_NS
+> +	depends on IMA
+> +	default n
+> +	help
+> +	  Allow the creation of an IMA namespace for each user namespace.
+> +	  Namespaced IMA enables having IMA features work separately
+> +	  in each IMA namespace.
+> +	  Currently, only the audit status flags are stored in the namespace,
+> +	  which allows the same file to be audited each time it is accessed
+> +	  in a new namespace.
+> +
+>  endif # NAMESPACES
+>  
+>  config CHECKPOINT_RESTORE
+> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+> index 6b2e3ca7ee99..653f8fa83b69 100644
+> --- a/kernel/user_namespace.c
+> +++ b/kernel/user_namespace.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/fs_struct.h>
+>  #include <linux/bsearch.h>
+>  #include <linux/sort.h>
+> +#include <linux/ima.h>
+>  
+>  static struct kmem_cache *user_ns_cachep __read_mostly;
+>  static DEFINE_MUTEX(userns_state_mutex);
+> @@ -196,6 +197,7 @@ static void free_user_ns(struct work_struct *work)
+>  			kfree(ns->projid_map.forward);
+>  			kfree(ns->projid_map.reverse);
+>  		}
+> +		free_ima_ns(ns);
+>  		retire_userns_sysctls(ns);
+>  		key_free_user_ns(ns);
+>  		ns_free_inum(&ns->ns);
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index 344c8c4bd030..d993655ec796 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -509,21 +509,20 @@ struct user_namespace *ima_user_ns_from_file(const struct file *filp)
+>  	return file_inode(filp)->i_sb->s_user_ns;
+>  }
+>  
+> +#ifdef CONFIG_IMA_NS
+> +
+>  static inline struct ima_namespace
+>  *ima_ns_from_user_ns(struct user_namespace *user_ns)
+>  {
+> -	if (user_ns == &init_user_ns)
+> -		return &init_ima_ns;
+> -	return NULL;
+> +	/* Pairs with smp_store_releases() in create_ima_ns(). */
+> +	return smp_load_acquire(&user_ns->ima_ns);
+>  }
+>  
+>  static inline struct ima_namespace *get_current_ns(void)
+>  {
+> -	return &init_ima_ns;
+> +	return ima_ns_from_user_ns(current_user_ns());
+>  }
+>  
+> -#ifdef CONFIG_IMA_NS
+> -
+>  struct ima_namespace *create_ima_ns(struct user_namespace *user_ns);
+>  
+>  struct ns_status *ima_get_ns_status(struct ima_namespace *ns,
+> @@ -532,6 +531,11 @@ struct ns_status *ima_get_ns_status(struct ima_namespace *ns,
+>  
+>  void ima_free_ns_status_tree(struct ima_namespace *ns);
+>  
+> +static inline struct ima_namespace *ima_ns_from_file(const struct file *filp)
+> +{
+> +	return ima_user_ns_from_file(filp)->ima_ns;
+> +}
+> +
+>  #define IMA_NS_STATUS_ACTIONS   IMA_AUDIT
+>  #define IMA_NS_STATUS_FLAGS     IMA_AUDITED
+>  
+> @@ -542,6 +546,20 @@ unsigned long set_iint_flags(struct integrity_iint_cache *iint,
+>  
+>  #else
+>  
+> +static inline struct ima_namespace
+> +*ima_ns_from_user_ns(struct user_namespace *user_ns)
+> +{
+> +	if (user_ns == &init_user_ns)
+> +		return &init_ima_ns;
+> +	return NULL;
+> +}
+> +
+> +
+> +static inline struct ima_namespace *get_current_ns(void)
+> +{
+> +	return &init_ima_ns;
+> +}
+> +
+>  static inline struct ima_namespace *
+>  create_ima_ns(struct user_namespace *user_ns)
+>  {
+> @@ -572,6 +590,11 @@ static inline unsigned long set_iint_flags(struct integrity_iint_cache *iint,
+>  	return flags;
+>  }
+>  
+> +static inline struct ima_namespace *ima_ns_from_file(const struct file *filp)
+> +{
+> +	return &init_ima_ns;
+> +}
+> +
+>  #endif /* CONFIG_IMA_NS */
+>  
+>  #endif /* __LINUX_IMA_H */
+> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+> index 468508f6a7e8..ee3af81d1c3e 100644
+> --- a/security/integrity/ima/ima_fs.c
+> +++ b/security/integrity/ima/ima_fs.c
+> @@ -49,7 +49,7 @@ static ssize_t ima_show_htable_violations(struct file *filp,
+>  					  char __user *buf,
+>  					  size_t count, loff_t *ppos)
+>  {
+> -	struct ima_namespace *ns = &init_ima_ns;
+> +	struct ima_namespace *ns = ima_ns_from_file(filp);
+>  
+>  	return ima_show_htable_value(buf, count, ppos,
+>  				     &ns->ima_htable.violations);
+> @@ -64,7 +64,7 @@ static ssize_t ima_show_measurements_count(struct file *filp,
+>  					   char __user *buf,
+>  					   size_t count, loff_t *ppos)
+>  {
+> -	struct ima_namespace *ns = &init_ima_ns;
+> +	struct ima_namespace *ns = ima_ns_from_file(filp);
+>  
+>  	return ima_show_htable_value(buf, count, ppos, &ns->ima_htable.len);
+>  }
+> @@ -77,7 +77,7 @@ static const struct file_operations ima_measurements_count_ops = {
+>  /* returns pointer to hlist_node */
+>  static void *ima_measurements_start(struct seq_file *m, loff_t *pos)
+>  {
+> -	struct ima_namespace *ns = &init_ima_ns;
+> +	struct ima_namespace *ns = ima_ns_from_file(m->file);
+>  	loff_t l = *pos;
+>  	struct ima_queue_entry *qe;
+>  
+> @@ -95,7 +95,7 @@ static void *ima_measurements_start(struct seq_file *m, loff_t *pos)
+>  
+>  static void *ima_measurements_next(struct seq_file *m, void *v, loff_t *pos)
+>  {
+> -	struct ima_namespace *ns = &init_ima_ns;
+> +	struct ima_namespace *ns = ima_ns_from_file(m->file);
+>  	struct ima_queue_entry *qe = v;
+>  
+>  	/* lock protects when reading beyond last element
+> @@ -317,7 +317,7 @@ static ssize_t ima_read_policy(struct ima_namespace *ns, char *path)
+>  static ssize_t ima_write_policy(struct file *file, const char __user *buf,
+>  				size_t datalen, loff_t *ppos)
+>  {
+> -	struct ima_namespace *ns = &init_ima_ns;
+> +	struct ima_namespace *ns = ima_ns_from_file(file);
+>  	char *data;
+>  	ssize_t result;
+>  
+> @@ -379,7 +379,7 @@ static const struct seq_operations ima_policy_seqops = {
+>  static int ima_open_policy(struct inode *inode, struct file *filp)
+>  {
+>  	struct user_namespace *user_ns = ima_user_ns_from_file(filp);
+> -	struct ima_namespace *ns = &init_ima_ns;
+> +	struct ima_namespace *ns = ima_ns_from_file(filp);
+>  
+>  	if (!(filp->f_flags & O_WRONLY)) {
+>  #ifndef	CONFIG_IMA_READ_POLICY
+> @@ -406,7 +406,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
+>   */
+>  static int ima_release_policy(struct inode *inode, struct file *file)
+>  {
+> -	struct ima_namespace *ns = &init_ima_ns;
+> +	struct ima_namespace *ns = ima_ns_from_file(file);
+>  	const char *cause = ns->valid_policy ? "completed" : "failed";
+>  
+>  	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
+> @@ -459,12 +459,29 @@ int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
+>  	struct dentry *ascii_runtime_measurements = NULL;
+>  	struct dentry *runtime_measurements_count = NULL;
+>  	struct dentry *violations = NULL;
+> +	bool created_ns = false;
+> +
+> +	/*
+> +	 * While multiple superblocks can exist they are keyed by userns in
+> +	 * s_fs_info for securityfs. The first time a userns mounts a
+> +	 * securityfs instance we lazily allocate the ima_namespace for the
+> +	 * userns since that's the only way a userns can meaningfully use ima.
+> +	 * The vfs ensures we're the only one to call fill_super() and hence
+> +	 * ima_fs_ns_init(), so we don't need any memory barriers here, i.e.
+> +	 * user_ns->ima_ns can't change while we're in here.
+> +	 */
+> +	if (!ns) {
+> +		ns = create_ima_ns(user_ns);
+> +		if (IS_ERR(ns))
+> +			return PTR_ERR(ns);
+> +		created_ns = true;
+> +	}
+>  
+>  	/* FIXME: update when evm and integrity are namespaced */
+>  	if (user_ns != &init_user_ns) {
+>  		int_dir = securityfs_create_dir("integrity", root);
+>  		if (IS_ERR(int_dir))
+> -			return PTR_ERR(int_dir);
+> +			goto free_ns;
+>  	} else
+>  		int_dir = integrity_dir;
+>  
+> @@ -526,6 +543,10 @@ int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
+>  	if (user_ns != &init_user_ns)
+>  		securityfs_remove(int_dir);
+>  
+> +free_ns:
+> +	if (created_ns)
+> +		free_ima_ns(user_ns);
+> +
+>  	return -1;
+>  }
+>  
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index bc3ab08f39c6..fc878577cdd7 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -483,7 +483,7 @@ int ima_file_mmap(struct file *file, unsigned long prot)
+>  	struct ima_namespace *ns = get_current_ns();
+>  	u32 secid;
+>  
+> -	if (file && (prot & PROT_EXEC)) {
+> +	if (ns && file && (prot & PROT_EXEC)) {
+>  		security_task_getsecid_subj(current, &secid);
+>  		return process_measurement(ns, file, current_cred(), secid,
+>  					   NULL, 0, MAY_EXEC, MMAP_CHECK);
+> @@ -519,7 +519,7 @@ int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot)
+>  	int pcr;
+>  
+>  	/* Is mprotect making an mmap'ed file executable? */
+> -	if (!(ns->ima_policy_flag & IMA_APPRAISE) || !vma->vm_file ||
+> +	if (!ns || !(ns->ima_policy_flag & IMA_APPRAISE) || !vma->vm_file ||
+>  	    !(prot & PROT_EXEC) || (vma->vm_flags & VM_EXEC))
 >  		return 0;
 >  
->  	for (i = 0; i < format_info->num_planes; ++i) {
-> @@ -1141,7 +1141,7 @@ int amdgpu_display_framebuffer_init(struct drm_device *dev,
->  	if (ret)
->  		return ret;
+> @@ -565,6 +565,9 @@ int ima_bprm_check(struct linux_binprm *bprm)
+>  	int ret;
+>  	u32 secid;
 >  
-> -	if (!dev->mode_config.allow_fb_modifiers) {
-> +	if (dev->mode_config.fb_modifiers_not_supported) {
->  		drm_WARN_ONCE(dev, adev->family >= AMDGPU_FAMILY_AI,
->  			      "GFX9+ requires FB check based on format modifier\n");
->  		ret = check_tiling_flags_gfx6(rfb);
-> @@ -1149,7 +1149,7 @@ int amdgpu_display_framebuffer_init(struct drm_device *dev,
->  			return ret;
->  	}
->  
-> -	if (dev->mode_config.allow_fb_modifiers &&
-> +	if (!dev->mode_config.fb_modifiers_not_supported &&
->  	    !(rfb->base.flags & DRM_MODE_FB_MODIFIERS)) {
->  		ret = convert_tiling_flags_to_modifier(rfb);
->  		if (ret) {
-> diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
-> index d1570a462a51..fb61c0814115 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
-> @@ -2798,6 +2798,8 @@ static int dce_v10_0_sw_init(void *handle)
->  	adev_to_drm(adev)->mode_config.preferred_depth = 24;
->  	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
->  
-> +	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
+> +	if (!ns)
+> +		return 0;
 > +
->  	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
+>  	security_task_getsecid_subj(current, &secid);
+>  	ret = process_measurement(ns, bprm->file, current_cred(), secid, NULL,
+>  				  0, MAY_EXEC, BPRM_CHECK);
+> @@ -591,6 +594,9 @@ int ima_file_check(struct file *file, int mask)
+>  	struct ima_namespace *ns = get_current_ns();
+>  	u32 secid;
 >  
->  	r = amdgpu_display_modeset_create_props(adev);
-> diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
-> index 18a7b3bd633b..17942a11366d 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
-> @@ -2916,6 +2916,8 @@ static int dce_v11_0_sw_init(void *handle)
->  	adev_to_drm(adev)->mode_config.preferred_depth = 24;
->  	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
->  
-> +	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
+> +	if (!ns)
+> +		return 0;
 > +
->  	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
+>  	security_task_getsecid_subj(current, &secid);
+>  	return process_measurement(ns, file, current_cred(), secid, NULL, 0,
+>  				   mask & (MAY_READ | MAY_WRITE | MAY_EXEC |
+> @@ -656,7 +662,7 @@ int ima_file_hash(struct file *file, char *buf, size_t buf_size)
+>  {
+>  	struct ima_namespace *ns = get_current_ns();
 >  
->  	r = amdgpu_display_modeset_create_props(adev);
-> diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
-> index c7803dc2b2d5..2ec99ec8e1a3 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
-> @@ -2674,6 +2674,7 @@ static int dce_v6_0_sw_init(void *handle)
->  	adev_to_drm(adev)->mode_config.max_height = 16384;
->  	adev_to_drm(adev)->mode_config.preferred_depth = 24;
->  	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
-> +	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
->  	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
+> -	if (!file)
+> +	if (!ns || !file)
+>  		return -EINVAL;
 >  
->  	r = amdgpu_display_modeset_create_props(adev);
-> diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
-> index 8318ee8339f1..de11fbe5aba2 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
-> @@ -2695,6 +2695,8 @@ static int dce_v8_0_sw_init(void *handle)
->  	adev_to_drm(adev)->mode_config.preferred_depth = 24;
->  	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
+>  	return __ima_inode_hash(ns, file_inode(file), buf, buf_size);
+> @@ -685,7 +691,7 @@ int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
+>  {
+>  	struct ima_namespace *ns = get_current_ns();
 >  
-> +	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
+> -	if (!inode)
+> +	if (!ns || !inode)
+>  		return -EINVAL;
+>  
+>  	return __ima_inode_hash(ns, inode, buf, buf_size);
+> @@ -708,7 +714,7 @@ void ima_post_create_tmpfile(struct user_namespace *mnt_userns,
+>  	struct integrity_iint_cache *iint;
+>  	int must_appraise;
+>  
+> -	if (!ns->ima_policy_flag || !S_ISREG(inode->i_mode))
+> +	if (!ns || !ns->ima_policy_flag || !S_ISREG(inode->i_mode))
+>  		return;
+>  
+>  	must_appraise = ima_must_appraise(ns, mnt_userns, inode, MAY_ACCESS,
+> @@ -742,7 +748,7 @@ void ima_post_path_mknod(struct user_namespace *mnt_userns,
+>  	struct inode *inode = dentry->d_inode;
+>  	int must_appraise;
+>  
+> -	if (!ns->ima_policy_flag || !S_ISREG(inode->i_mode))
+> +	if (!ns || !ns->ima_policy_flag || !S_ISREG(inode->i_mode))
+>  		return;
+>  
+>  	must_appraise = ima_must_appraise(ns, mnt_userns, inode, MAY_ACCESS,
+> @@ -778,6 +784,9 @@ int ima_read_file(struct file *file, enum kernel_read_file_id read_id,
+>  	enum ima_hooks func;
+>  	u32 secid;
+>  
+> +	if (!ns)
+> +		return 0;
 > +
->  	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
+>  	/*
+>  	 * Do devices using pre-allocated memory run the risk of the
+>  	 * firmware being accessible to the device prior to the completion
+> @@ -829,6 +838,9 @@ int ima_post_read_file(struct file *file, void *buf, loff_t size,
+>  	enum ima_hooks func;
+>  	u32 secid;
 >  
->  	r = amdgpu_display_modeset_create_props(adev);
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> index 2f0b14f8f833..61cb41766fae 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> @@ -7868,6 +7868,9 @@ static int amdgpu_dm_plane_init(struct amdgpu_display_manager *dm,
->  	if (res)
->  		return res;
->  
-> +	if (modifiers == NULL)
-> +		adev_to_drm(dm->adev)->mode_config.fb_modifiers_not_supported = true;
+> +	if (!ns)
+> +		return 0;
 > +
->  	res = drm_universal_plane_init(adev_to_drm(dm->adev), plane, possible_crtcs,
->  				       &dm_plane_funcs, formats, num_formats,
->  				       modifiers, plane->type, NULL);
-> diff --git a/drivers/gpu/drm/drm_framebuffer.c b/drivers/gpu/drm/drm_framebuffer.c
-> index 07f5abc875e9..4562a8b86579 100644
-> --- a/drivers/gpu/drm/drm_framebuffer.c
-> +++ b/drivers/gpu/drm/drm_framebuffer.c
-> @@ -309,7 +309,7 @@ drm_internal_framebuffer_create(struct drm_device *dev,
->  	}
+>  	/* permit signed certs */
+>  	if (!file && read_id == READING_X509_CERTIFICATE)
+>  		return 0;
+> @@ -1071,7 +1083,7 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+>  	struct ima_namespace *ns = get_current_ns();
+>  	struct fd f;
 >  
->  	if (r->flags & DRM_MODE_FB_MODIFIERS &&
-> -	    !dev->mode_config.allow_fb_modifiers) {
-> +	    dev->mode_config.fb_modifiers_not_supported) {
->  		DRM_DEBUG_KMS("driver does not support fb modifiers\n");
->  		return ERR_PTR(-EINVAL);
->  	}
-> @@ -594,7 +594,7 @@ int drm_mode_getfb2_ioctl(struct drm_device *dev,
->  	r->pixel_format = fb->format->format;
+> -	if (!buf || !size)
+> +	if (!ns || !buf || !size)
+>  		return;
 >  
->  	r->flags = 0;
-> -	if (dev->mode_config.allow_fb_modifiers)
-> +	if (!dev->mode_config.fb_modifiers_not_supported)
->  		r->flags |= DRM_MODE_FB_MODIFIERS;
+>  	f = fdget(kernel_fd);
+> @@ -1111,6 +1123,9 @@ int ima_measure_critical_data(const char *event_label,
+>  {
+>  	struct ima_namespace *ns = get_current_ns();
 >  
->  	for (i = 0; i < ARRAY_SIZE(r->handles); i++) {
-> @@ -607,7 +607,7 @@ int drm_mode_getfb2_ioctl(struct drm_device *dev,
->  	for (i = 0; i < fb->format->num_planes; i++) {
->  		r->pitches[i] = fb->pitches[i];
->  		r->offsets[i] = fb->offsets[i];
-> -		if (dev->mode_config.allow_fb_modifiers)
-> +		if (!dev->mode_config.fb_modifiers_not_supported)
->  			r->modifier[i] = fb->modifier;
->  	}
->  
-> diff --git a/drivers/gpu/drm/drm_ioctl.c b/drivers/gpu/drm/drm_ioctl.c
-> index 8b8744dcf691..51fcf1298023 100644
-> --- a/drivers/gpu/drm/drm_ioctl.c
-> +++ b/drivers/gpu/drm/drm_ioctl.c
-> @@ -297,7 +297,7 @@ static int drm_getcap(struct drm_device *dev, void *data, struct drm_file *file_
->  			req->value = 64;
->  		break;
->  	case DRM_CAP_ADDFB2_MODIFIERS:
-> -		req->value = dev->mode_config.allow_fb_modifiers;
-> +		req->value = !dev->mode_config.fb_modifiers_not_supported;
->  		break;
->  	case DRM_CAP_CRTC_IN_VBLANK_EVENT:
->  		req->value = 1;
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_display.c b/drivers/gpu/drm/nouveau/nouveau_display.c
-> index 2b460835a438..2cd0932b3d68 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_display.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_display.c
-> @@ -708,10 +708,12 @@ nouveau_display_create(struct drm_device *dev)
->  				     &disp->disp);
->  		if (ret == 0) {
->  			nouveau_display_create_properties(dev);
-> -			if (disp->disp.object.oclass < NV50_DISP)
-> +			if (disp->disp.object.oclass < NV50_DISP) {
-> +				dev->mode_config.fb_modifiers_not_supported = true;
->  				ret = nv04_display_create(dev);
-> -			else
-> +			} else {
->  				ret = nv50_display_create(dev);
-> +			}
->  		}
->  	} else {
->  		ret = 0;
-> diff --git a/drivers/gpu/drm/radeon/radeon_display.c b/drivers/gpu/drm/radeon/radeon_display.c
-> index 573154268d43..b9a07677a71e 100644
-> --- a/drivers/gpu/drm/radeon/radeon_display.c
-> +++ b/drivers/gpu/drm/radeon/radeon_display.c
-> @@ -1596,6 +1596,8 @@ int radeon_modeset_init(struct radeon_device *rdev)
->  	rdev->ddev->mode_config.preferred_depth = 24;
->  	rdev->ddev->mode_config.prefer_shadow = 1;
->  
-> +	rdev->ddev->mode_config.fb_modifiers_not_supported = true;
+> +	if (!ns)
+> +		return -EINVAL;
 > +
->  	rdev->ddev->mode_config.fb_base = rdev->mc.aper_base;
+>  	if (!event_name || !event_label || !buf || !buf_len)
+>  		return -ENOPARAM;
 >  
->  	ret = radeon_modeset_create_props(rdev);
-> diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
-> index 91ca575a78de..da82f45351c7 100644
-> --- a/include/drm/drm_mode_config.h
-> +++ b/include/drm/drm_mode_config.h
-> @@ -933,6 +933,16 @@ struct drm_mode_config {
->  	 */
->  	bool allow_fb_modifiers;
+> diff --git a/security/integrity/ima/ima_ns.c b/security/integrity/ima/ima_ns.c
+> index 205dd06ac41e..9a5105d0ea89 100644
+> --- a/security/integrity/ima/ima_ns.c
+> +++ b/security/integrity/ima/ima_ns.c
+> @@ -26,7 +26,8 @@ struct ima_namespace *create_ima_ns(struct user_namespace *user_ns)
+>  	if (err)
+>  		goto fail_free;
 >  
-> +	/**
-> +	 * @fb_modifiers_not_supported:
-> +	 *
-> +	 * This flag is for legacy drivers such as radeon that do not support
-> +	 * modifiers but infer the actual layout of the underlying buffer.
-> +	 * Generally, each drivers must support modifiers, this flag should not
-> +	 * be set.
-> +	 */
-> +	bool fb_modifiers_not_supported;
-> +
->  	/**
->  	 * @normalize_zpos:
->  	 *
+> -	user_ns->ima_ns = ns;
+> +	/* Pairs with smp_load_acquire() in ima_ns_from_user_ns(). */
+> +	smp_store_release(&user_ns->ima_ns, ns);
+>  
+>  	return ns;
+>  
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index b7dbc687b6ff..5a9b511ebbae 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -1333,6 +1333,7 @@ static unsigned int ima_parse_appraise_algos(char *arg)
+>  static int ima_parse_rule(struct ima_namespace *ns,
+>  			  char *rule, struct ima_rule_entry *entry)
+>  {
+> +	struct user_namespace *user_ns = ima_ns_to_user_ns(ns);
 
+So I think ima_policy_write() and therefore ima_parse_rule() can
+legitimately be reached at least from an ancestor userns but also from a
+completely unrelated userns via securityfs. Sorry, I didn't see this
+earlier. Think of the following two scenarios:
+
+* userns1: unshare -U --map-root --mount
+-----------------------------------------
+   mount -t securityfs securityfs /userns1_securityfs
+   fd_in_userns1 = open("/userns1_securityfs/ima_file, O_RDWR);
+
+   /* I _think_ that sending of fds here should work but I haven't
+    * bothered to recheck the scm code as I need to do some driving in a
+    * little bit so I'm running out of time...
+    */
+   send_fd_scm_rights(fd_in_userns1, task_in_userns2);
+
+* userns2: unshare -U --map-root --mount
+-----------------------------------------
+   fd_from_userns1 = receive_fd_scm_rights();
+   write_policy(fd_from_userns1, "my fancy policy");
+
+It also means that if you inherit an fd from a more privileged imans
+instance you can write to it:
+
+* initial_userns:
+------------------
+   mount -t securityfs securityfs /initial_securityfs
+
+   fd_in_initial_securityfs = open("/initial_securityfs/ima_file, O_RDWR);
+
+   pid = fork():
+   if (pid == 0) {
+	unshare(CLONE_NEWUSER);
+	/* write idmapping for yourself */
+
+	write_policy(fd_in_initial_securityfs, "my fancy policy");
+   }
+
+would allow an unprivileged caller to alter the host's ima policy (as
+you can see the example requires cooperation).
+
+In both cases the write can legitimately reach ima_policy_write() and
+trigger ima_parse_rule() from another user namespace.
+
+There are multiple ways to go here, I think.
+
+It's important to figure out whether - coming back to an earlier review
+of mine - you're ok with everyone with access to an opened policy fd
+being able to write an ima policy for the namespace in questions as long
+as _the opener of the policy file_ was privileged enough.
+
+If that's the case then you can just remove the WARN_ON()/add a
+non-WARN_ON() helper in there.
+
+From my ima-naive perspective this seems fine and preferable as this
+means clean permission checking once at open time.
+
+A good question to answer in order to solve this is whether or not a
+given operation is allowed is dependent on what is written, i.e. on the
+content of the rule, I guess. I don't think there is.

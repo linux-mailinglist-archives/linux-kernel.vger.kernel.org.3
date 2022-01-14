@@ -2,209 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 034F748F235
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 23:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7735548F248
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 23:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiANWAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 17:00:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43146 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiANWAe (ORCPT
+        id S230326AbiANWNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 17:13:13 -0500
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:43468
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230314AbiANWNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 17:00:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 14 Jan 2022 17:13:12 -0500
+Received: from [192.168.192.153] (unknown [50.126.114.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 497FA61FC5;
-        Fri, 14 Jan 2022 22:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61C4BC36AE9;
-        Fri, 14 Jan 2022 22:00:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642197633;
-        bh=oemXj9peTf8j2kprBYCiiZkFqJJVOqMiREDxABiUPUI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A6KZuPD3iHOv0oX1VzzLZdO+XNSkFxGV9rQhqGjMO033tom6DkRUDrIMjZASKeNl1
-         0GJvjlrY4D90DGCIoT0AW58hPRHYf92ZsCdBjGoqn5E047tOWlrgJMiquJ/OSAUuvG
-         A+FHkYRmNmcEaEdggEiCTvrE/MT5jqUGswP9nno6cvD/ahLTjoEKRLGaYb/6ZtK3U5
-         7LQCifXR6zv3hKxrSz4lr52EGZoiHq+SdMAoRJT46IH3VHuIn5xqgZbrT1SZtFhB7D
-         eoHSMnfq6Pva9GvbEk+yaslJu3U7bOmpi3Tl4eiuftKqzwab/SRFotI9r44kKnLVvQ
-         x0RuVZF3mciSA==
-Date:   Sat, 15 Jan 2022 00:00:21 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Nathaniel McCallum <nathaniel@profian.com>,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
-        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
-        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
-        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
-Message-ID: <YeHydUn9OznuolW9@iki.fi>
-References: <Ydm6RiIwuh3IspRI@iki.fi>
- <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net>
- <YdzjEzjF0YKn+pZ6@iki.fi>
- <4195402f-cbf9-bc75-719d-22cea8e36e60@intel.com>
- <Yd9pMq4lUy56B+50@iki.fi>
- <Yd9qmMx7NO450mzZ@iki.fi>
- <CAHAy0tRi2q+wG+yBttq0FYeK-5wUAoK_=ZCtWsfQf0m8oPc1-w@mail.gmail.com>
- <168fb2c9-de3f-384a-bb17-ab84db2cf533@intel.com>
- <YeHwzwnfsUcxiNbw@iki.fi>
- <YeHxsYaJMINYFJOm@iki.fi>
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id CB5423FCEA;
+        Fri, 14 Jan 2022 22:13:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642198383;
+        bh=stGyB9cd3q3CzvP5bfN9x0UvNGnJIW50M58RyeoH8Qk=;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type;
+        b=HyrqdRbjSVeJEAq+7koFIlRXDgoGGrGJVOi0EFvxO5GrG+YvnP0Je/kLVEbR/NAfu
+         5BVvWojcBRxZV2lM7/AuKgTwfLR5Tq1PvHAEa6WQ9DH3tCcR1uH6itxnhnQMwZIrWz
+         aUEjcc7KTBFqmXXzAkWY9Fc7Ls94AYMxpX/+p56cZUjW0IF0+W2VFk2vWiO8GC0RLs
+         Wox7ORHwiwRUwkm0ntSS7moTPhigFCF6ekcC2ObUK9XUV61cZeHsP3NkLGvC/+8ejv
+         HB0nrTRadWjRMKBrO8aCJ21q7M848tYYhRWGhPdEfdYbjD80lceQk5/uDOGgtKGOh6
+         4Ok4bJGF9BYtA==
+Subject: Re: [PATCH] security/apparmor: remove redundant ret variable
+To:     cgel.zte@gmail.com
+Cc:     jmorris@namei.org, serge@hallyn.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220112080356.666999-1-chi.minghao@zte.com.cn>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+Message-ID: <d5b23c25-971a-dc67-1f97-b70ccb2160a6@canonical.com>
+Date:   Fri, 14 Jan 2022 14:12:50 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeHxsYaJMINYFJOm@iki.fi>
+In-Reply-To: <20220112080356.666999-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 11:57:08PM +0200, Jarkko Sakkinen wrote:
-> On Fri, Jan 14, 2022 at 11:53:22PM +0200, Jarkko Sakkinen wrote:
-> > On Thu, Jan 13, 2022 at 01:42:50PM -0800, Reinette Chatre wrote:
-> > > Hi Jarkko and Nathaniel,
-> > > 
-> > > On 1/13/2022 12:09 PM, Nathaniel McCallum wrote:
-> > > > On Wed, Jan 12, 2022 at 6:56 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > >>
-> > > >> On Thu, Jan 13, 2022 at 01:50:13AM +0200, Jarkko Sakkinen wrote:
-> > > >>> On Tue, Jan 11, 2022 at 09:13:27AM -0800, Reinette Chatre wrote:
-> > > >>>> Hi Jarkko,
-> > > >>>>
-> > > >>>> On 1/10/2022 5:53 PM, Jarkko Sakkinen wrote:
-> > > >>>>> On Mon, Jan 10, 2022 at 04:05:21PM -0600, Haitao Huang wrote:
-> > > >>>>>> On Sat, 08 Jan 2022 10:22:30 -0600, Jarkko Sakkinen <jarkko@kernel.org>
-> > > >>>>>> wrote:
-> > > >>>>>>
-> > > >>>>>>> On Sat, Jan 08, 2022 at 05:51:46PM +0200, Jarkko Sakkinen wrote:
-> > > >>>>>>>> On Sat, Jan 08, 2022 at 05:45:44PM +0200, Jarkko Sakkinen wrote:
-> > > >>>>>>>>> On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang wrote:
-> > > >>>>>>>>>>>>> OK, so the question is: do we need both or would a
-> > > >>>>>>>> mechanism just
-> > > >>>>>>>>>>>> to extend
-> > > >>>>>>>>>>>>> permissions be sufficient?
-> > > >>>>>>>>>>>>
-> > > >>>>>>>>>>>> I do believe that we need both in order to support pages
-> > > >>>>>>>> having only
-> > > >>>>>>>>>>>> the permissions required to support their intended use
-> > > >>>>>>>> during the
-> > > >>>>>>>>>>>> time the
-> > > >>>>>>>>>>>> particular access is required. While technically it is
-> > > >>>>>>>> possible to grant
-> > > >>>>>>>>>>>> pages all permissions they may need during their lifetime it
-> > > >>>>>>>> is safer to
-> > > >>>>>>>>>>>> remove permissions when no longer required.
-> > > >>>>>>>>>>>
-> > > >>>>>>>>>>> So if we imagine a run-time: how EMODPR would be useful, and
-> > > >>>>>>>> how using it
-> > > >>>>>>>>>>> would make things safer?
-> > > >>>>>>>>>>>
-> > > >>>>>>>>>> In scenarios of JIT compilers, once code is generated into RW pages,
-> > > >>>>>>>>>> modifying both PTE and EPCM permissions to RX would be a good
-> > > >>>>>>>> defensive
-> > > >>>>>>>>>> measure. In that case, EMODPR is useful.
-> > > >>>>>>>>>
-> > > >>>>>>>>> What is the exact threat we are talking about?
-> > > >>>>>>>>
-> > > >>>>>>>> To add: it should be *significantly* critical thread, given that not
-> > > >>>>>>>> supporting only EAUG would leave us only one complex call pattern with
-> > > >>>>>>>> EACCEPT involvement.
-> > > >>>>>>>>
-> > > >>>>>>>> I'd even go to suggest to leave EMODPR out of the patch set, and
-> > > >>>>>>>> introduce
-> > > >>>>>>>> it when there is PoC code for any of the existing run-time that
-> > > >>>>>>>> demonstrates the demand for it. Right now this way too speculative.
-> > > >>>>>>>>
-> > > >>>>>>>> Supporting EMODPE is IMHO by factors more critical.
-> > > >>>>>>>
-> > > >>>>>>> At least it does not protected against enclave code because an enclave
-> > > >>>>>>> can
-> > > >>>>>>> always choose not to EACCEPT any of the EMODPR requests. I'm not only
-> > > >>>>>>> confused here about the actual threat but also the potential adversary
-> > > >>>>>>> and
-> > > >>>>>>> target.
-> > > >>>>>>>
-> > > >>>>>> I'm not sure I follow your thoughts here. The sequence should be for enclave
-> > > >>>>>> to request  EMODPR in the first place through runtime to kernel, then to
-> > > >>>>>> verify with EACCEPT that the OS indeed has done EMODPR.
-> > > >>>>>> If enclave does not verify with EACCEPT, then its own code has
-> > > >>>>>> vulnerability. But this does not justify OS not providing the mechanism to
-> > > >>>>>> request EMODPR.
-> > > >>>>>
-> > > >>>>> The question is really simple: what is the threat scenario? In order to use
-> > > >>>>> the word "vulnerability", you would need one.
-> > > >>>>>
-> > > >>>>> Given the complexity of the whole dance with EMODPR it is mandatory to have
-> > > >>>>> one, in order to ack it to the mainline.
-> > > >>>>>
-> > > >>>>
-> > > >>>> Which complexity related to EMODPR are you concerned about? In a later message
-> > > >>>> you mention "This leaves only EAUG and EMODT requiring the EACCEPT handshake"
-> > > >>>> so it seems that you are perhaps concerned about the flow involving EACCEPT?
-> > > >>>> The OS does not require nor depend on EACCEPT being called as part of these flows
-> > > >>>> so a faulty or misbehaving user space omitting an EACCEPT call would not impact
-> > > >>>> these flows in the OS, but would of course impact the enclave.
-> > > >>>
-> > > >>> I'd say *any* complexity because I see no benefit of supporting it. E.g.
-> > > >>> EMODPR/EACCEPT/EMODPE sequence I mentioned to Haitao concerns me. How is
-> > > >>> EMODPR going to help with any sort of workload?
-> > > >>
-> > > >> I've even started think should we just always allow mmap()?
-> > > > 
-> > > > I suspect this may be the most ergonomic way forward. Instructions
-> > > > like EAUG/EMODPR/etc are really irrelevant implementation details to
-> > > > what the enclave wants, which is a memory mapping in the enclave. Why
-> > > > make the enclave runner do multiple context switches just to change
-> > > > the memory map of an enclave?
-> > > 
-> > > The enclave runner is not forced to make any changes to a memory mapping. To start,
-> > > this implementation supports and does not change the existing ABI where a new
-> > > memory mapping can only be created if its permissions are the same or weaker
-> > > than the EPCM permissions. After the memory mapping is created the EPCM permissions
-> > > can change (thanks to SGX2) and when they do there are no forced nor required
-> > > changes to the memory mapping - pages remain accessible where the memory mapping
-> > > and EPCM permissions agree. It is true that if an enclave chooses to relax permissions
-> > > to an enclave page (EMODPE) then the memory mapping may need to be changed as
-> > > should be expected to access a page with permissions that the memory mapping
-> > > did not previously allow.
-> > > 
-> > > Are you saying that the permissions of a new memory mapping should now be allowed
-> > > to exceed EPCM permissions and thus the enclave runner would not need to modify a
-> > > memory mapping when EPCM permissions are relaxed? As mentioned above this may be
-> > > considered a change in ABI but something we could support on SGX2 systems.
-> > > 
-> > > I would also like to highlight Haitao's earlier comment that a foundation of SGX is
-> > > that the OS is untrusted. The enclave owner does not trust the OS and needs EMODPR
-> > > and EMODPE to manage enclave page permissions.
-> > 
-> > Thanks, this was very informative response. I'll try to elaborate why
-> > EMODPR gives me headaches.
-> > 
-> > I'm having hard time to connect the dots between OS mistrust and
-> > restricting enclave by changing EPCM permissions. To make EMODPR actually
-> > legit, it needs really at least some sort of example of a scenario where
-> > mistrusted OS is the adversary and enclave is the attack target. Otherwise,
-> > we are just waving our hands.
-> > 
-> > Generally speaking a restriction is not a restriction if cannot be enforced. 
-> > 
-> > I see two non-EMODPR options: you could relax this,  *or* you could make it
-> > soft restriction by not doing EMODPR but instead just updating the internal
-> > xarray. The 2nd option would be fully backwards compatible with the
-> > existing invariant.
-> > 
-> > It's really hard to ACK or NAK EMODPR patch without knowing how EMODPE is
-> > or will be supported.
+On 1/12/22 12:03 AM, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> Off-topic: I was able to compile a kernel with your SGX2 patches and run
-> kselftests. I cannot give tested-by's before the design is locked-in but
-> in that sense I don't think we are far away of some solution. EAUG side
-> looks pretty good to me.
+> Return value from nf_register_net_hooks() directly instead
+> of taking this in another redundant variable.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
 
-Also, I'll add the missing ioctl's to my man page patch before sending a
-new version so that it lacks only SGX2 ioctls. I think you are right in
-your review feedback that they should be part of the patch so that we get
-it in-sync.
+Acked-by: John Johansen <john.johansen@canonical.com>
 
-/Jarkko
+I will pull this into my tree
+
+> ---
+>  security/apparmor/lsm.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+> index ce7d96627810..f3deeb8b712e 100644
+> --- a/security/apparmor/lsm.c
+> +++ b/security/apparmor/lsm.c
+> @@ -1799,11 +1799,8 @@ static const struct nf_hook_ops apparmor_nf_ops[] = {
+>  
+>  static int __net_init apparmor_nf_register(struct net *net)
+>  {
+> -	int ret;
+> -
+> -	ret = nf_register_net_hooks(net, apparmor_nf_ops,
+> +	return nf_register_net_hooks(net, apparmor_nf_ops,
+>  				    ARRAY_SIZE(apparmor_nf_ops));
+> -	return ret;
+>  }
+>  
+>  static void __net_exit apparmor_nf_unregister(struct net *net)
+> 
+

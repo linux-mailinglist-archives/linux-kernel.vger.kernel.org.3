@@ -2,218 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA8E48EE5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2143D48EE65
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243483AbiANQjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239343AbiANQjj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:39:39 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDEFC06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:39:39 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id s1so3179007pga.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:39:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RzwZ9r7D0xuY96wzPVNuGxDwRqinQNPHQv0I4wZgmns=;
-        b=giRVu3dmn7ssaVRYKP4nfYlcAMywgq88Sam+cBL9ONnnsKs7WsuMBbwCcIdsvgQZTv
-         cDbk94dvHbR9ubuesRVBhgCQyoE6ERq2UzHzu1adv/rTGlvQQYByx7Md6FtQGcJU3ed1
-         0tLky8vPYXR+6KPJWytP4WTAkBOLJv1HCyC2Y2FmXMGKexl+yCXBLOjqlh/VyitoQOlV
-         rOkrpzAK0ZfT5JHbWkPfEmiRS45gS+fOK3RfgkCEhRZWIIXMSSXYDqM5TFnRUva1lowK
-         zklR5dXWUzTOel7A7JQhLUionw/W6gs+e75Vgu7wRoCUCS/v5KIO7hvN2io1AlLK+0kC
-         a7jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=RzwZ9r7D0xuY96wzPVNuGxDwRqinQNPHQv0I4wZgmns=;
-        b=vAE29p/AyylZMs5hF6zJHZgCqEC3qh6vkYU+RZ1CukdBaiAHetvN8bgxfXyuoiBJuK
-         cQcaHJAPNtyDaU/I9roTbFNLvMZSEBjgBdJR9fYhmhql0CNtqYO0lYCnVi21ZMRML0am
-         D48BiK1NXnDRTkxg5jl2LAO4VocRBfqrH6tuaQOlSBc0OGxlxTD+EjBoyBrH08/fKzm1
-         DBETQjbGziggJShGlYgzuMN8WPGKbvfvFGQVEaoRjF2tjeIddPzPudLG4/hG9I7bxgiu
-         wnetHF1It20GbU5jFQc9oxL7gZQdKPikwIxv9UXtB+oX85rrd2gQN2QfZsqdWHS+3qbp
-         GGIg==
-X-Gm-Message-State: AOAM530ZG9axm25kynKcjpyb1UZjPUZKtJllDTfNyxM2c3Tns8XIyX6l
-        IJbUfXAszu4+pshstOTVij8=
-X-Google-Smtp-Source: ABdhPJxlMJIT7txTEkWruImSEZL2QmOl+Iu9e3wX0LCA1Lf172CxK92MpYarHHz3TRPRuURJzT55cQ==
-X-Received: by 2002:a63:ae48:: with SMTP id e8mr8698938pgp.347.1642178378678;
-        Fri, 14 Jan 2022 08:39:38 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:a5b:82ad:7990:3ae0])
-        by smtp.gmail.com with ESMTPSA id y13sm5032328pgi.53.2022.01.14.08.39.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 08:39:38 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Fri, 14 Jan 2022 08:39:36 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        John Dias <joaodias@google.com>, huww98@outlook.com,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [RFC v2] mm: introduce page pin owner
-Message-ID: <YeGnSG3BS5np9mUa@google.com>
-References: <20211228175904.3739751-1-minchan@kernel.org>
- <cf596fdc-6599-7c53-26e8-1524c5f214f7@redhat.com>
- <Yd8AYViR6vuBVU2L@google.com>
- <c9c97e6a-5bb6-475e-2d0e-d791f11d2cf9@redhat.com>
- <Yd884YERYI+UvXbj@google.com>
- <35d7f27c-44e3-3921-c8d3-b6dee3b01238@redhat.com>
+        id S243486AbiANQkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:40:21 -0500
+Received: from mail-db8eur05on2045.outbound.protection.outlook.com ([40.107.20.45]:63713
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236457AbiANQkT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 11:40:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PsNuawV0CU++UoLdK6nQoHuOLnR+AR5l7XgoBhbTsOuOUqNhD/V6QQKz7hEjZBCpNZKbxIWXKOD/mjPnX0vnkYjlGSvTcqMIEwsH8FaQwRKd9S28pOoyEv/gKu36qlq6HzQhD2tfEMLylms1fGTT8QNtdPEmO39BEJgL+ABC6vzzByYeadXty2TtHtnFZpl1GzFySNEiBJufPTXK0vFyhhqM9xMn61NilKz91/uuy1pmykTeerDZ/lYyOXBl7mkBPzqqLgTq1AaTHmP7Ba0onwX4DN5+TlnyFEAh/cfdiV8a8WMp+pMOqRlVRP6ZOnb2yfXe4Re0AwAlnv6I7IRNZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5TtOfKTEI06+FyDYOZxDAqYsImAJxPrsoqL9H1PI+PA=;
+ b=JpxtByylbnNjWJY9YXWzkPDmTQJzDAvQHugfLUwnN6SwxhxBK7P/QLGuhtRGMCcM0pDTOGR33jqab1sS/q2LKycqZ3z7HpwC334kVLOqasVQbnYdd9rbDl279jZyLHV/OKEJrIH4GPyW6prZZoihzNUuPE83eaisOfJQAEjQdRNNH0CVbjJtSr+tMuvdTTJ7cHCaAq3G1MULuuXQbBCD5JfahXUbQzUUe9xeeBjCJej29TcMRfBXj6JFQWHW2n6pZEopGJALrRE0yVPOKLw+WicQv5I/y734iiJM46g6jZ3hDP39nOD2xcYhGonCcUw+VA2QSSQnkYR4zFPxCz9KRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5TtOfKTEI06+FyDYOZxDAqYsImAJxPrsoqL9H1PI+PA=;
+ b=fM8fWcXun5GiovgaXZWgWsfvGJArh8AqN8bClk0BIfWsJdJCdSeYXPAXOBgSiPuBhVQcLInvqyA6Id9xmqDh/3WDS+N8QwoOn91Gx46c8yBoio9W75tXo6T3/ojLF2xaqGEKQTitcr7s4yeTzKqRS+kci7x1BfIEw47muYEdRIQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
+ by AM6PR03MB3509.eurprd03.prod.outlook.com (2603:10a6:209:2f::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Fri, 14 Jan
+ 2022 16:40:17 +0000
+Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
+ ([fe80::d47e:81b0:256:3005]) by DB7PR03MB4523.eurprd03.prod.outlook.com
+ ([fe80::d47e:81b0:256:3005%4]) with mapi id 15.20.4888.011; Fri, 14 Jan 2022
+ 16:40:17 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH] usb: ulpi: Add debugfs support
+Date:   Fri, 14 Jan 2022 11:39:47 -0500
+Message-Id: <20220114163947.790078-1-sean.anderson@seco.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BL0PR02CA0133.namprd02.prod.outlook.com
+ (2603:10b6:208:35::38) To DB7PR03MB4523.eurprd03.prod.outlook.com
+ (2603:10a6:10:19::27)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <35d7f27c-44e3-3921-c8d3-b6dee3b01238@redhat.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b774ce2b-992c-4f75-2685-08d9d77c8ba1
+X-MS-TrafficTypeDiagnostic: AM6PR03MB3509:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR03MB35092F72AA4BF88AB980DC8096549@AM6PR03MB3509.eurprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:785;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: t6oPrwfiapq1E5U3SzV3AgOsw6+TbtzTf3irHtZ0k1V+bIVE1hX6A9wg9otG3/HIOq6oEyIOEytrTGsQP9ThO70GhXYYXE6yFbWGOuMiX7kexxx7NwhIuvqjrejb5jFbJeFsNRfQK/f1dxhKiQYw6NZSe27Cjz7Ro0XysWRPTDkcDemV5k7E0JNj5kezDDNQ89AfRr4Ou2/x4GT09j4X7OUnPWb4DnITvB0R0TH50w3OB2LHbyrP/X+xau1xljBYJc+FJU3YEV1oC5wcEg33BTqZXqPKFXIdcwkHx7TuSYWbhCj0eKYvZ1zwH9NAp0NGJCqQoa1E/dUAY4jxsqLVCESXH3ynx/38IznF3aKkcBUyh/eSQ3MWFn5Yf8iJjz4w5uEZUQ0mJ/oklNY0WbpAZuaBi972gyglutRiMEDEbnR18ENzZHms+lgAAStIKCSjzsMBzY/ExscLqA7UHxEnVM/sXDB0Vgl+MnzV9XUP5RO3DiWRIBK+wDi92hewCGtjpfCOYrrhQhuxAAercwTm9M2/usUbg/ULY2c+NWSJeh5I/vW8kvKhoDjWqpJegdLS+Mw7/HixjmbLTqX4eWLBQ+/GuOV5t6ejxVLdXgbPbGpMkkylCGLhs1wmGT/Ue0gad8uJAYWYJm5YP0I586QF69wX1I3QbZLFXSPoToM76Y86Kv/cmlYJgkWfekaNv2Ec+28npQFkEpJ5EAS3FfP+TA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(8676002)(66946007)(8936002)(6512007)(66556008)(86362001)(6506007)(6666004)(52116002)(66476007)(36756003)(5660300002)(1076003)(4326008)(54906003)(44832011)(26005)(107886003)(316002)(508600001)(2616005)(186003)(38100700002)(38350700002)(83380400001)(6486002)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kCdh6FV1lL07etdpNlLzpXAskRlZAUJt4A8P3vWjREal0gr81buyAEhZnleO?=
+ =?us-ascii?Q?wSmnOQaJn0JqnYORLLG2Ofjeilvpeou44v7fKtFBM3VXtYSFX1t0+ma4xCev?=
+ =?us-ascii?Q?iDhOcYszo7qWy/DNQ7UOeWku4Buqd6smsqp2CfCPw751f1tAekytpyAgkJYT?=
+ =?us-ascii?Q?dUH/jWLB+YcDgwSDgFb6tq0BLitVvjLzdzmIpfQKDZ3P6nST3A6QXxR2GjIE?=
+ =?us-ascii?Q?GhUcbrXZgH6FExM0VXTP2NVCa4g8qYBbAdWHQc/kmNUa/2jD4iDtHEVKNCvB?=
+ =?us-ascii?Q?lRu2ewRn0ZNnpQpPiL0hbi1IppixGr85LE+HwRUOyCvtrBP0DJsxi6butetK?=
+ =?us-ascii?Q?DNGBliMSn5fPwEYtKx8ZVKvFei5aorDZ0cC2R13uao27p1pCjQgxCSaw1qIf?=
+ =?us-ascii?Q?pQLoMYwdB5pLXoz4DUrGA3waLwdvqnU9DV/hdj4WWWq7EdTE+OfDU1uUCdd8?=
+ =?us-ascii?Q?8ZKX7X+v0jH/FN33kmG0239n0PLzhOJGfEnmOKa50nXdYu8EZK4BNoCLX9Th?=
+ =?us-ascii?Q?d8/NAcqufGGwYt1wPrKA/3VzPqAWv2bghDGUdeqHAy1fS0Nq1muwodVvbYX9?=
+ =?us-ascii?Q?uTZj4jY8PD+g0hY7yjtrTr2wAkU/roA2ITeKRg9sjpekxamp+zIbc9jDFTMa?=
+ =?us-ascii?Q?Md9zTVwp/JfcU/WHuHObdaUUZlJ495kh45DS6nLOy2+KlewOeQUvJ/vYgOqW?=
+ =?us-ascii?Q?tWH2xJjFiLwvuP90qD/7QyNJztBRtxTAyoYEv12zcB+kXi2EhZEU39/vtyHd?=
+ =?us-ascii?Q?rd4Wbs4rs4SxKO+zVfy2jWO4dki+uieiOwJ6SXz2e0H2o7Y6XuapTPYN5T79?=
+ =?us-ascii?Q?mRj/kz4msen9e4H2fhhsspuYAChQlPNOrfKtuuy/01GTybZR8N3WB21rPdep?=
+ =?us-ascii?Q?NQ04fFl5kcSAggfJhTdepnXRPmfqY/RZyRCq1D1caXdC1YTEA6j/HQY+TFsb?=
+ =?us-ascii?Q?YHeUE4FlAR+JeeDVvKbjw0Bunvv4NrEi+EmvgTo4J5VImxilMcuIs4nIhEt3?=
+ =?us-ascii?Q?mYki/IqcUCAQLoHAxJxKZR1YwyYJ3mGj7uNHrcdjnbuGMFhTh9+XnPedS0ci?=
+ =?us-ascii?Q?xtKxxhmuDstpNEOcrqnCGsEOcm8GLc18LVnX08giVey+jZA4BJ+vUMW8s6et?=
+ =?us-ascii?Q?0qiO+yTEoAx9ZJYcXqC0fo42h3TnZtvRZRPSquGU3E6ZeDszoy4iVjcwJ8z9?=
+ =?us-ascii?Q?KVqEv/ET/Pf7lhsXfZ6WY2BWLcpYQDgyEd4i+g4nFBkaCQhIwHdlUzbWm046?=
+ =?us-ascii?Q?8wqxx5RjhhoSOBBv4R1eVrQgJ6XYwcAPpH9acLSAOi2OKlKicZpf22HxqG6T?=
+ =?us-ascii?Q?vZnbIi3oa0sY+6g4bpQhfgkO+lJ8NLvBv5YZbG6G/69YR3Ggm68quYCeKfiu?=
+ =?us-ascii?Q?e5eGe8nG7XHs0KzdOG9s/LAtBspzE8EaoUCj5+wvgWrbGO9XaYGxALZUaqEc?=
+ =?us-ascii?Q?pF7Yh9wpRVWIDL5u9Lpp8i3mRdqh2rxlpifaRvPJWmR3h7YNKDCoMXkri73/?=
+ =?us-ascii?Q?amsSTz35vY4h3hNshTcmQ5qh3j8IMvoaHd3/hOtst0sc8OgOakB+TiV7fau6?=
+ =?us-ascii?Q?sEcOyhBCU0tD/GDshIK5+xC6hW36exxt1aRUkURrOA1pcFSSlgYQi1N/mbtq?=
+ =?us-ascii?Q?qOogPXb6n8kNR0mtugzs6E4=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b774ce2b-992c-4f75-2685-08d9d77c8ba1
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2022 16:40:16.9552
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: A1YdRZJpxDHnaghb9tVcx1Ci1KhB2xWW+ka6XatzmdPv+jKzcLFd5eFkC0PmNtxEmlkvc1LPgcbq7980QLKIJQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR03MB3509
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 02:31:43PM +0100, David Hildenbrand wrote:
-> On 12.01.22 21:41, Minchan Kim wrote:
-> > On Wed, Jan 12, 2022 at 06:42:21PM +0100, David Hildenbrand wrote:
-> >>>>
-> >>>> What about something like:
-> >>>>
-> >>>> "mm: selective tracing of page reference holders on unref"
-> >>>>
-> >>>> PAGE_EXT_PIN_OWNER -> PAGE_EXT_TRACE_UNREF
-> >>>>
-> >>>> $whatever feature/user can then set the bit, for example, when migration
-> >>>> fails.
-> >>>
-> >>> I couldn't imagine put_page tracking is generally useful except
-> >>> migration failure. Do you have reasonable usecase in your mind
-> >>> to make the feature general to be used?
-> >>
-> >> HWpoison etc. purposes maybe? Trace who still held a reference a page
-> >> that was poisoned and couldn't be removed?  Or in general, tracking
-> > 
-> > I am not familiar with hwpoison so here dumb question goes:
-> > Is that different one with __soft_offline_page?
-> > It uses migrate_pages so current interface supports it with filter.
-> 
-> __soft_offline_page() won't kill the target and try to migrate because
-> the pages are about to be damaged and we can still access them.
-> 
-> ordinary memory errors mean we kill the target because we cannot access
-> the page anymore without triggering MCEs (or worse IIUC) again.
-> 
-> So in my thinking, after memory_failure(), it could eventually be
-> helpful to figure out who still has a (temporary) reference to such a
-> broken page, even after killing the process. But that's just one idea I
-> quickly came up with.
+This adds a debugfs file for ULPI devices which contains a dump of their
+registers. This is useful for debugging basic connectivity problems. The
+file is created in ulpi_register because many devices will never have a
+driver bound (as they are managed in hardware by the USB controller
+device).
 
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+---
 
-Thanks for the clarification. Is the trace best fit in the case?
-Presumably you know the broken page, can't you find who owns the page
-using /proc/pid/pagemap?
-Furthermore, page_get/put operations commonly could happen in
-different contexts regardless of page's owner so the trace from
-different context is still helpful?
+ drivers/usb/common/ulpi.c   | 100 ++++++++++++++++++++++++++++++++++--
+ include/linux/ulpi/driver.h |   3 ++
+ 2 files changed, 99 insertions(+), 4 deletions(-)
 
-If it's helpful, could you tell what you want to make the interface to
-set the bit of broken page? For example, as-is case for page migration,
-report_page_pinners is called to mark failed page at unmap_and_move.
-Do you want to add something similar(maybe, set_page_ref_track under
-rename) in memory-failure.c?
+diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+index 4169cf40a03b..a39c48e04013 100644
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -13,6 +13,7 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/acpi.h>
++#include <linux/debugfs.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/clk/clk-conf.h>
+@@ -228,9 +229,64 @@ static int ulpi_read_id(struct ulpi *ulpi)
+ 	return 0;
+ }
+ 
++static int __maybe_unused ulpi_regs_read(struct seq_file *seq, void *data)
++{
++	struct ulpi *ulpi = seq->private;
++
++#define ulpi_print(name, reg) do { \
++	int ret = ulpi_read(ulpi, reg); \
++	if (ret < 0) \
++		return ret; \
++	seq_printf(seq, name " %.02x\n", ret); \
++} while (0)
++
++	ulpi_print("Vendor ID Low               ", ULPI_VENDOR_ID_LOW);
++	ulpi_print("Vendor ID High              ", ULPI_VENDOR_ID_HIGH);
++	ulpi_print("Product ID Low              ", ULPI_PRODUCT_ID_LOW);
++	ulpi_print("Product ID High             ", ULPI_PRODUCT_ID_HIGH);
++	ulpi_print("Function Control            ", ULPI_FUNC_CTRL);
++	ulpi_print("Interface Control           ", ULPI_IFC_CTRL);
++	ulpi_print("OTG Control                 ", ULPI_OTG_CTRL);
++	ulpi_print("USB Interrupt Enable Rising ", ULPI_USB_INT_EN_RISE);
++	ulpi_print("USB Interrupt Enable Falling", ULPI_USB_INT_EN_FALL);
++	ulpi_print("USB Interrupt Status        ", ULPI_USB_INT_STS);
++	ulpi_print("USB Interrupt Latch         ", ULPI_USB_INT_LATCH);
++	ulpi_print("Debug                       ", ULPI_DEBUG);
++	ulpi_print("Scratch Register            ", ULPI_SCRATCH);
++	ulpi_print("Carkit Control              ", ULPI_CARKIT_CTRL);
++	ulpi_print("Carkit Interrupt Delay      ", ULPI_CARKIT_INT_DELAY);
++	ulpi_print("Carkit Interrupt Enable     ", ULPI_CARKIT_INT_EN);
++	ulpi_print("Carkit Interrupt Status     ", ULPI_CARKIT_INT_STS);
++	ulpi_print("Carkit Interrupt Latch      ", ULPI_CARKIT_INT_LATCH);
++	ulpi_print("Carkit Pulse Control        ", ULPI_CARKIT_PLS_CTRL);
++	ulpi_print("Transmit Positive Width     ", ULPI_TX_POS_WIDTH);
++	ulpi_print("Transmit Negative Width     ", ULPI_TX_NEG_WIDTH);
++	ulpi_print("Receive Polarity Recovery   ", ULPI_POLARITY_RECOVERY);
++
++	return 0;
++}
++
++static int __maybe_unused ulpi_regs_open(struct inode *inode, struct file *f)
++{
++	struct ulpi *ulpi = inode->i_private;
++
++	return single_open(f, ulpi_regs_read, ulpi);
++}
++
++static const struct file_operations __maybe_unused ulpi_regs_ops = {
++	.owner = THIS_MODULE,
++	.open = ulpi_regs_open,
++	.release = single_release,
++	.read = seq_read,
++	.llseek = seq_lseek
++};
++
++static struct dentry *ulpi_root = (void *)-EPROBE_DEFER;
++
+ static int ulpi_register(struct device *dev, struct ulpi *ulpi)
+ {
+ 	int ret;
++	struct dentry *regs;
+ 
+ 	ulpi->dev.parent = dev; /* needed early for ops */
+ 	ulpi->dev.bus = &ulpi_bus;
+@@ -245,16 +301,39 @@ static int ulpi_register(struct device *dev, struct ulpi *ulpi)
+ 
+ 	ret = ulpi_read_id(ulpi);
+ 	if (ret)
+-		return ret;
++		goto err_of;
+ 
+ 	ret = device_register(&ulpi->dev);
+ 	if (ret)
+-		return ret;
++		goto err_of;
++
++	if (IS_ENABLED(CONFIG_DEBUG_FS)) {
++		ulpi->root = debugfs_create_dir(dev_name(dev), ulpi_root);
++		if (IS_ERR(ulpi->root)) {
++			ret = PTR_ERR(ulpi->root);
++			goto err_dev;
++		}
++
++		regs = debugfs_create_file("regs", 0444, ulpi->root, ulpi,
++					   &ulpi_regs_ops);
++		if (IS_ERR(regs)) {
++			ret = PTR_ERR(regs);
++			goto err_debugfs;
++		}
++	}
+ 
+ 	dev_dbg(&ulpi->dev, "registered ULPI PHY: vendor %04x, product %04x\n",
+ 		ulpi->id.vendor, ulpi->id.product);
+ 
+ 	return 0;
++
++err_debugfs:
++	debugfs_remove(ulpi->root);
++err_dev:
++	device_unregister(&ulpi->dev);
++err_of:
++	of_node_put(ulpi->dev.of_node);
++	return ret;
+ }
+ 
+ /**
+@@ -296,8 +375,9 @@ EXPORT_SYMBOL_GPL(ulpi_register_interface);
+  */
+ void ulpi_unregister_interface(struct ulpi *ulpi)
+ {
+-	of_node_put(ulpi->dev.of_node);
++	debugfs_remove_recursive(ulpi->root);
+ 	device_unregister(&ulpi->dev);
++	of_node_put(ulpi->dev.of_node);
+ }
+ EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
+ 
+@@ -305,13 +385,25 @@ EXPORT_SYMBOL_GPL(ulpi_unregister_interface);
+ 
+ static int __init ulpi_init(void)
+ {
+-	return bus_register(&ulpi_bus);
++	int ret;
++
++	if (IS_ENABLED(CONFIG_DEBUG_FS)) {
++		ulpi_root = debugfs_create_dir("ulpi", NULL);
++		if (IS_ERR(ulpi_root))
++			return PTR_ERR(ulpi_root);
++	}
++
++	ret = bus_register(&ulpi_bus);
++	if (ret)
++		debugfs_remove(ulpi_root);
++	return ret;
+ }
+ subsys_initcall(ulpi_init);
+ 
+ static void __exit ulpi_exit(void)
+ {
+ 	bus_unregister(&ulpi_bus);
++	debugfs_remove(ulpi_root);
+ }
+ module_exit(ulpi_exit);
+ 
+diff --git a/include/linux/ulpi/driver.h b/include/linux/ulpi/driver.h
+index c7a1810373e3..083ea2d2e873 100644
+--- a/include/linux/ulpi/driver.h
++++ b/include/linux/ulpi/driver.h
+@@ -6,6 +6,7 @@
+ 
+ #include <linux/device.h>
+ 
++struct dentry;
+ struct ulpi_ops;
+ 
+ /**
+@@ -13,10 +14,12 @@ struct ulpi_ops;
+  * @id: vendor and product ids for ULPI device
+  * @ops: I/O access
+  * @dev: device interface
++ * @root: root directory for debugfs files
+  */
+ struct ulpi {
+ 	struct ulpi_device_id id;
+ 	const struct ulpi_ops *ops;
++	struct dentry *root;
+ 	struct device dev;
+ };
+ 
+-- 
+2.25.1
 
-It would be very helpful to design the feature's interface(surely,
-naming as well) and write description to convince others "yeah,
-sounds like so useful for the case and that's best fit than other way".
-
-> 
-> > 
-> > echo "memory_failure" > $trace_dir/events/page_pin_owner/report_page_pinners/filter
-> > 
-> >> references to something that should have a refcount of 0 because it
-> >> should have been freed, but for some reason there are still references
-> >> around?
-> > 
-> > Sounds like you are talking about memory leak? What's the purpose
-> > with trace, not using other existing tool to find memory leak?
-> > 
-> 
-> IIRC, kmemleak can find objects that are no longer referenced, and we
-> cannot track buddy allocations, but only kmalloc and friends.
-
-PageOwner is your good buddy.
-
-> 
-> >>
-> >>> Otherwise, I'd like to have feature naming more higher level
-> >>> to represent page migration failure and then tracking unref of
-> >>> the page. In the sense, PagePinOwner John suggested was good
-> >>> candidate(Even, my original naming PagePinner was worse) since
-> >>
-> >> Personally, I dislike both variants.
-> >>
-> >>> I was trouble to abstract the feature with short word.
-> >>> If we approach "what feature is doing" rather than "what's
-> >>> the feature's goal"(I feel the your suggestion would be close
-> >>> to what feature is doing), I'd like to express "unreference on
-> >>> migraiton failed page" so PAGE_EXT_UNMIGRATED_UNREF
-> >>> (However, I prefer the feature naming more "what we want to achieve")
-> >>>
-> >> E.g., PAGE_EXT_TRACE_UNREF will trace unref to the page once the bit is
-> >> set. The functionality itself is completely independent of migration
-> >> failures. That's just the code that sets it to enable the underlying
-> >> tracing for that specific page.
-> > 
-> > I agree that make something general is great but I also want to avoid
-> > create something too big from the beginning with just imagination.
-> > So, I'd like to hear more concrete and appealing usecases and then
-> > we could think over this trace approach is really the best one to
-> > achieve the goal. Once it's agreed, the naming you suggested would
-> > make sense. 
-> 
-> At least for me it's a lot cleaner if a feature clearly expresses what
-> it actually does. Staring at PAGE_EXT_PIN_OWNER I initially had no clue.
-> I was assuming we would actually track (not trace!) all active FOLL_PIN
-> (not unref callers!). Maybe that makes it clearer why I'd prefer a
-> clearer name.
-
-I totally agree PagePinOwner is not 100% straightforward. I'm open for
-other better name. Currently we are discussing how we could generalize
-and whether it's useful or not. Depending on the discussion, the design/
-interface as well as naming could be changed. No problem.
-
-> 
-> >>
-> >> Makes sense, I was expecting the output to be large, but possible it's
-> >> going to be way too large.
-> >>
-> >> Would it also make sense to track for a flagged page new taken
-> >> references, such that you can differentiate between new (e.g.,
-> >> temporary) ones and previous ones? Feels like a reasonable addition.
-> > 
-> > I actually tried it and it showed 2x times bigger output.
-> 
-> Is 2x that bad? Or would it be worth making it configurable?
-
-For my goal, 2x was bad because I need to minimize the trace buffer.
-Furthermore, the new get operation was not helpful but just noisy.
-If some usecase is not enough with only put callsite, we add get
-easily. Implementation is not hard. The matter is how it's useful
-in real practice since we would expose the interface to the user,
-I guess.
-
-> 
-> > For me to debug CMA alloation failure, the new get_page callstack
-> > after migration failure were waste since they repeated from lru
-> > adding, isolate from the LRU something. Rather than get callsite,
-> > I needed only put call sites since I could deduce where the pair-get
-> > came from.
-> 
-> Could maybe some filters help that exclude such LRU activity?
-
-For my case, the filter wouldn't be helpful because I shouldn't
-miss the LRU activity since sometime they makes the allocation
-failure. Thus, I could deduce the lru's get site from put callback.
-get callsite is not helpful for my case but just wasted memory
-and perf.

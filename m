@@ -2,154 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1293848E390
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 06:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3D848E3C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 06:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234418AbiANFYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 00:24:45 -0500
-Received: from mga09.intel.com ([134.134.136.24]:50718 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229379AbiANFYo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 00:24:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642137884; x=1673673884;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=92tRTD4fcrpeUbknFCBT9XDPsuuvbBnF0XT7Yjbsol8=;
-  b=Ad+IG4pIqalRznqh2l/L1+AUwS9cGuknOzH+XBQsPal4+wUojDhSgf/z
-   pzcmSeFdYdWkfa8Au1BnEX/sGmtzoq2SnxWj/GIoxzCMlg4+JIbEoESk5
-   UF5y10LupjF5as4IFydVLsoMgyFb+aJzeFvGN1Gxo5L/jNCM+et03NkFZ
-   IzfZWHZ/qRnbZeBqW2HQIip8ixF456dqpwu0/qq1kn/p/2Jo0VjOhjUTq
-   p5pt3TWTHd7ixJ2nPREQx5rmisrklxtb1XdnwW9tSM55lLaA0KgtML3uL
-   jv2N4l+3635I9+FUBfihW9IFEEcPVtfWV4/6vgaBrUjvOxiyLikOqLveV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="243982280"
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="243982280"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 21:24:43 -0800
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="624217605"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.11])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 21:24:40 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mel Gorman <mgorman@suse.de>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Hasan Al Maruf <hasanalmaruf@fb.com>
-Subject: Re: [PATCH -V10 RESEND 0/6] NUMA balancing: optimize memory
- placement for memory tiering system
-References: <20211207022757.2523359-1-ying.huang@intel.com>
-        <Yd79b6PptQMNzDRw@hirez.programming.kicks-ass.net>
-        <87sftsumqd.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Yd/1r49RKgwCXCQL@hirez.programming.kicks-ass.net>
-        <87o84fu9f3.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <YeAid+EXvmH9WAbq@hirez.programming.kicks-ass.net>
-        <871r1bu310.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Date:   Fri, 14 Jan 2022 13:24:38 +0800
-In-Reply-To: <871r1bu310.fsf@yhuang6-desk2.ccr.corp.intel.com> (Ying Huang's
-        message of "Thu, 13 Jan 2022 22:24:43 +0800")
-Message-ID: <87lezisxd5.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S234418AbiANFcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 00:32:15 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:45930 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229379AbiANFcO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 00:32:14 -0500
+X-UUID: 11fe67c9e55a486b91cdd833dd270086-20220114
+X-UUID: 11fe67c9e55a486b91cdd833dd270086-20220114
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 207998095; Fri, 14 Jan 2022 13:32:05 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 14 Jan 2022 13:32:04 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 14 Jan
+ 2022 13:32:03 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 14 Jan 2022 13:32:02 +0800
+Message-ID: <6e75de8187b276f54c8673ccd708b299614bc5c3.camel@mediatek.com>
+Subject: Re: [PATCH 3/3] phy: mediatek: phy-mtk-mipi-dsi: Simplify with
+ dev_err_probe()
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <chunkuang.hu@kernel.org>
+CC:     <p.zabel@pengutronix.de>, <kishon@ti.com>, <vkoul@kernel.org>,
+        <matthias.bgg@gmail.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Date:   Fri, 14 Jan 2022 13:32:02 +0800
+In-Reply-To: <ba6c0163-fc5f-2a5f-560d-240e5fe2c3c4@collabora.com>
+References: <20220103145324.48008-1-angelogioacchino.delregno@collabora.com>
+         <20220103145324.48008-3-angelogioacchino.delregno@collabora.com>
+         <4d7195c3ac9bc63a5f980548f0c880484403346d.camel@mediatek.com>
+         <ba6c0163-fc5f-2a5f-560d-240e5fe2c3c4@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Huang, Ying" <ying.huang@intel.com> writes:
+On Fri, 2022-01-07 at 10:23 +0100, AngeloGioacchino Del Regno wrote:
+> Il 06/01/22 10:13, Chunfeng Yun ha scritto:
+> > On Mon, 2022-01-03 at 15:53 +0100, AngeloGioacchino Del Regno
+> > wrote:
+> > > Use the dev_err_probe() helper to simplify error handling during
+> > > probe.
+> > > 
+> > > Signed-off-by: AngeloGioacchino Del Regno <
+> > > angelogioacchino.delregno@collabora.com>
+> > > ---
+> > >   drivers/phy/mediatek/phy-mtk-mipi-dsi.c | 29 +++++++++---------
+> > > ---
+> > > ----
+> > >   1 file changed, 10 insertions(+), 19 deletions(-)
+> > > 
+> > > diff --git a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
+> > > b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
+> > > index 6f7425b0bf5b..4b77508f5241 100644
+> > > --- a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
+> > > +++ b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
+> > > @@ -148,11 +148,9 @@ static int mtk_mipi_tx_probe(struct
+> > > platform_device *pdev)
+> > >   		return PTR_ERR(mipi_tx->regmap);
+> > >   
+> > >   	ref_clk = devm_clk_get(dev, NULL);
+> > > -	if (IS_ERR(ref_clk)) {
+> > > -		ret = PTR_ERR(ref_clk);
+> > > -		dev_err(dev, "Failed to get reference clock: %d\n",
+> > > ret);
+> > > -		return ret;
+> > > -	}
+> > > +	if (IS_ERR(ref_clk))
+> > > +		return dev_err_probe(dev, PTR_ERR(ref_clk),
+> > > +				     "Failed to get reference
+> > > clock\n");
+> > >   
+> > >   	ret = of_property_read_u32(dev->of_node, "drive-
+> > > strength-
+> > > microamp",
+> > >   				   &mipi_tx->mipitx_drive);
+> > > @@ -172,27 +170,20 @@ static int mtk_mipi_tx_probe(struct
+> > > platform_device *pdev)
+> > >   
+> > >   	ret = of_property_read_string(dev->of_node, "clock-
+> > > output-
+> > > names",
+> > >   				      &clk_init.name);
+> > > -	if (ret < 0) {
+> > > -		dev_err(dev, "Failed to read clock-output-names: %d\n",
+> > > ret);
+> > > -		return ret;
+> > > -	}
+> > > +	if (ret < 0)
+> > > +		return dev_err_probe(dev, ret, "Failed to read clock-
+> > > output-names\n");
+> > 
+> > Seems no need change it here. (no EPROBE_DEFER error)
+> > 
+> 
+> Hello Chunfeng,
+> 
+> pasting from kernel driver-api infrastructure guidelines:
+> 
+> [...]Note that it is deemed acceptable to use this function for error
+> prints during 
+> probe even if the err is known to never be -EPROBE_DEFER. The benefit
+> compared to a 
+> normal dev_err() is the standardized format of the error code and the
+> fact that the 
+> error code is returned.
+> 
+> https://www.kernel.org/doc/html/latest/driver-api/infrastructure.html
+> 
+Got it, thanks a lot:)
 
-> Peter Zijlstra <peterz@infradead.org> writes:
->
->> On Thu, Jan 13, 2022 at 08:06:40PM +0800, Huang, Ying wrote:
->>> Peter Zijlstra <peterz@infradead.org> writes:
->>> > On Thu, Jan 13, 2022 at 03:19:06PM +0800, Huang, Ying wrote:
->>> >> Peter Zijlstra <peterz@infradead.org> writes:
->>> >> > On Tue, Dec 07, 2021 at 10:27:51AM +0800, Huang Ying wrote:
->>
->>> >> >> After commit c221c0b0308f ("device-dax: "Hotplug" persistent memory
->>> >> >> for use like normal RAM"), the PMEM could be used as the
->>> >> >> cost-effective volatile memory in separate NUMA nodes.  In a typical
->>> >> >> memory tiering system, there are CPUs, DRAM and PMEM in each physical
->>> >> >> NUMA node.  The CPUs and the DRAM will be put in one logical node,
->>> >> >> while the PMEM will be put in another (faked) logical node.
->>> >> >
->>> >> > So what does a system like that actually look like, SLIT table wise, and
->>> >> > how does that affect init_numa_topology_type() ?
->>> >> 
->>> >> The SLIT table is as follows,
->>
->> <snip>
->>
->>> >> node distances:
->>> >> node   0   1   2   3 
->>> >>   0:  10  21  17  28 
->>> >>   1:  21  10  28  17 
->>> >>   2:  17  28  10  28 
->>> >>   3:  28  17  28  10 
->>> >> 
->>> >> init_numa_topology_type() set sched_numa_topology_type to NUMA_DIRECT.
->>> >> 
->>> >> The node 0 and node 1 are onlined during boot.  While the PMEM node,
->>> >> that is, node 2 and node 3 are onlined later.  As in the following dmesg
->>> >> snippet.
->>> >
->>> > But how? sched_init_numa() scans the *whole* SLIT table to determine
->>> > nr_levels / sched_domains_numa_levels, even offline nodes. Therefore it
->>> > should find 4 distinct distance values and end up not selecting
->>> > NUMA_DIRECT.
->>> >
->>> > Similarly for the other types it uses for_each_online_node(), which
->>> > would include the pmem nodes once they've been onlined, but I'm thinking
->>> > we explicitly want to skip CPU-less nodes in that iteration.
->>> 
->>> I used the debug patch as below, and get the log in dmesg as follows,
->>> 
->>> [    5.394577][    T1] sched_numa_topology_type: 0, levels: 4, max_distance: 28
->>> 
->>> I found that I forget another caller of init_numa_topology_type() run
->>> during hotplug.  I will add another printk() to show it.  Sorry about
->>> that.
->>
->> Can you try with this on?
->>
->> I'm suspecting there's a problem with init_numa_topology_type(); it will
->> never find the max distance due to the _online_ clause in the iteration,
->> since you said the pmem nodes are not online yet.
->>
->> ---
->> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
->> index d201a7052a29..53ab9c63c185 100644
->> --- a/kernel/sched/topology.c
->> +++ b/kernel/sched/topology.c
->> @@ -1756,6 +1756,8 @@ static void init_numa_topology_type(void)
->>  			return;
->>  		}
->>  	}
->> +
->> +	WARN(1, "no NUMA type determined");
->>  }
->
-> Hi, Peter,
->
-> I have run the test, the warning is triggered in the dmesg as follows.
-> I will continue to debug hotplug tomorrow.
+> Regards,
+> - Angelo
+> 
+> > Thanks
+> > >   
+> > >   	clk_init.ops = mipi_tx->driver_data->mipi_tx_clk_ops;
+> > >   
+> > >   	mipi_tx->pll_hw.init = &clk_init;
+> > >   	mipi_tx->pll = devm_clk_register(dev, &mipi_tx-
+> > > >pll_hw);
+> > > -	if (IS_ERR(mipi_tx->pll)) {
+> > > -		ret = PTR_ERR(mipi_tx->pll);
+> > > -		dev_err(dev, "Failed to register PLL: %d\n", ret);
+> > > -		return ret;
+> > > -	}
+> > > +	if (IS_ERR(mipi_tx->pll))
+> > > +		return dev_err_probe(dev, PTR_ERR(mipi_tx->pll),
+> > > "Cannot register PLL\n");
+> > >   
+> > >   	phy = devm_phy_create(dev, NULL, &mtk_mipi_tx_ops);
+> > > -	if (IS_ERR(phy)) {
+> > > -		ret = PTR_ERR(phy);
+> > > -		dev_err(dev, "Failed to create MIPI D-PHY: %d\n", ret);
+> > > -		return ret;
+> > > -	}
+> > > +	if (IS_ERR(phy))
+> > > +		return dev_err_probe(dev, PTR_ERR(phy), "Failed to
+> > > create MIPI D-PHY\n");
+> > > +
+> > >   	phy_set_drvdata(phy, mipi_tx);
+> > >   
+> > >   	phy_provider = devm_of_phy_provider_register(dev,
+> > > of_phy_simple_xlate);
+> 
+> 
 
-I did more experiments and found that init_numa_topology_type() will not
-be called during PMEM nodes plugging in.  Because it will only be called
-when a CPU of a never-onlined-before node is onlined.  There's no CPU on
-the PMEM nodes (2/3).  So, when the PMEM node is onlined,
-init_numa_topology_type() will not be called. And
-sched_numa_topology_type will not be changed.
-
-Best Regards,
-Huang, Ying

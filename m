@@ -2,102 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5174448E906
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B400148E8E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:08:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240757AbiANLSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 06:18:06 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:34636 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232873AbiANLSF (ORCPT
+        id S240712AbiANLIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 06:08:40 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:24978 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230163AbiANLIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 06:18:05 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20E5Cio0005698;
-        Fri, 14 Jan 2022 05:18:02 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=R33BElVQupXFbTDN+OsGp/VAy1tSFbXhIXhIS2yYmTc=;
- b=AHo2x28qFcQNanfL+B3lUEoPUbaKNtSFHrd4C7wleElnIpYoMw9jrNQGAcci1Q/BmI5D
- yRie9nU9fqYmbqK54jcNWPQWzIeg+NVKjCPPvrUe49HXNf8yr8M+Tks8CC7EmJ6X2e9U
- UNQ2HSfgOuAZRrA48SvflSzesuqResPlakkGBXMemTX/zr8vHkkFpAdCoGs8jh3eDOZ7
- jJpWZERs1Jb2uCoFO5BDARjmFrdQb8Mx7dP0NM8ODPOlAIWYB5Cc3oVbjWvayQntJhTL
- 69Eys0+1ZHUX98+0Lj07qhvNdQz5ktczE82+gdvoTkQhWmFRNWIf60YoZH6E98yMKK9/ sg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3djma115bt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 14 Jan 2022 05:18:02 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 14 Jan
- 2022 11:18:00 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Fri, 14 Jan 2022 11:18:00 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8878E11D7;
-        Fri, 14 Jan 2022 11:18:00 +0000 (UTC)
-Date:   Fri, 14 Jan 2022 11:18:00 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <robh@kernel.org>
-CC:     <peter.chen@kernel.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: ChipIdea USB regression
-Message-ID: <20220114111800.GL18506@ediswmail.ad.cirrus.com>
-References: <20220114105620.GK18506@ediswmail.ad.cirrus.com>
+        Fri, 14 Jan 2022 06:08:37 -0500
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220114110835epoutp0441490b18b9898c161afe6a5e7f02c32d~KHng_wQcB0387903879epoutp04l
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 11:08:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220114110835epoutp0441490b18b9898c161afe6a5e7f02c32d~KHng_wQcB0387903879epoutp04l
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1642158515;
+        bh=pfGpD4W/035PIQFiX2KcbGP5G2igcYQwaHKPpL7Giy0=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=HKiTUHeDSRXA9XZBOrcp/StY3e841AUXt+cW9DUbeaYl+lwzlU6J+NLZr00zCIfrd
+         2pkT7+bFa1bdEGHlBFfgm+quSPuvnTextW/+xT/yIwkdEDJ2fl7Xi8/gN/JdPjQBWE
+         3wR4fBeivh6fX1Tgz5MYuwlm2Z6xBHKk+ZsYe3jI=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20220114110835epcas1p4645b1409d138b857ec3d09d45e343215~KHngXeTgv1939919399epcas1p4O;
+        Fri, 14 Jan 2022 11:08:35 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.38.236]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4JZz7M1BLZz4x9QC; Fri, 14 Jan
+        2022 11:08:31 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        13.4E.08277.EA951E16; Fri, 14 Jan 2022 20:08:31 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220114110830epcas1p2d601346f9591baf7d3be1b35c241a98b~KHncFpt0H2954829548epcas1p2c;
+        Fri, 14 Jan 2022 11:08:30 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220114110830epsmtrp297cb7564b27abc70954122c59f9aaf4f~KHncEk13Z2598625986epsmtrp2G;
+        Fri, 14 Jan 2022 11:08:30 +0000 (GMT)
+X-AuditID: b6c32a36-1edff70000002055-33-61e159aebae5
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        71.28.29871.EA951E16; Fri, 14 Jan 2022 20:08:30 +0900 (KST)
+Received: from [10.113.221.211] (unknown [10.113.221.211]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220114110830epsmtip1be0a3b40cd19968fcc2612b6e1d47d54~KHnbvW7E51013810138epsmtip12;
+        Fri, 14 Jan 2022 11:08:30 +0000 (GMT)
+Subject: Re: [PATCH 2/5] drm/exynos: mixer: Use platform_get_irq() to get
+ the interrupt
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+From:   Inki Dae <inki.dae@samsung.com>
+Message-ID: <a95b74fd-7118-b0fe-26b9-4665c719f1a0@samsung.com>
+Date:   Fri, 14 Jan 2022 20:20:05 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+        Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220114105620.GK18506@ediswmail.ad.cirrus.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: WYqIB65Cdgw84DO7D3IsWwxrzukvmPPq
-X-Proofpoint-ORIG-GUID: WYqIB65Cdgw84DO7D3IsWwxrzukvmPPq
-X-Proofpoint-Spam-Reason: safe
+In-Reply-To: <20211222190134.24866-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPJsWRmVeSWpSXmKPExsWy7bCmvu76yIeJBjNOM1r0njvJZPF/20Rm
+        iytf37NZvLh3kcVi49sfTBZnm96wW2x6fI3V4vKuOWwWM87vY7J4eX8Fs0Xfm3XMFq17j7Bb
+        zJj8ks2B12Pli9nsHrMaetk89n5bwOKxc9Zddo9NqzrZPLZ/e8Dqcb/7OJPH5iX1Hn1bVjF6
+        fN4kF8AVlW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZ
+        A3S8kkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAtECvODG3uDQvXS8vtcTK0MDA
+        yBSoMCE7Y3JbM3tBi1DF7c/b2BsYz/N1MXJySAiYSPzp+MfWxcjFISSwg1Hiy/PPLCAJIYFP
+        jBLnFrJCJL4xSixaNhvI4QDraJsnAhHfyyhxY/I8RgjnPaPEghUbmUG6hQUiJc53tbGAJEQE
+        ljNLPGw6ATaWWSBHYkrPMrAiNgFViYkr7rOB2LwCdhLvzzwEi7MAxe9+6mQCsUWBBt3/sZwd
+        okZQ4uTMJ2BzOAV8Jd4sOMUKMVNc4taT+UwQtrxE89bZzCCLJQRucEjs/3iRHeJRF4mWfdeY
+        IGxhiVfHt0DFpSQ+v9vLBtGwj1Fi+a6T7BDOYUaJ5p3NUB3GEvuXTmYCBQCzgKbE+l36EGFF
+        iZ2/5zJCbOaTePe1BxpGvBIdbUIQJUoSxy7eYISwJSQuLJnIBmF7SPTtusY0gVFxFpLfZiH5
+        ZxaSf2YhLF7AyLKKUSy1oDg3PbXYsMAIHt3J+bmbGMEpW8tsB+Oktx/0DjEycTAeYpTgYFYS
+        4e0vup8oxJuSWFmVWpQfX1Sak1p8iNEUGNoTmaVEk/OBWSOvJN7QxNLAxMzI2MTC0MxQSZx3
+        1bTTiUIC6YklqdmpqQWpRTB9TBycUg1M2kt3vLro0n30g6CA/dnyX9WvN/Q96zLds4L3d3n+
+        ptN32AsF2M2EuBQZI162zeOKOaeRHVq/1+ihIKNL40LJO6/1ywpKLA/v4Jc7mll1aZ+XNhMP
+        z6n2r339GjmvRI9K6s7p3TE5tcSAmT06PNKwZu21Rlv+G/7HX3fNkolSZu9b/etbl+9jwx9u
+        1Vv9X6dYTvvGsYbnzNeIb9afewxuV4kENvnEPN8psoGbIWKK2cfTjMX3GYLeXDr3Yv/L9e93
+        qD7bMVG3adbs7afKWbzufOu++1fGytpydYPyHa4P/ttX8bB8+qTu4n++X2Cj54os5hNZF7NP
+        tHRM0jf5eOC3S3Hc5u/Nl1msNvNtWcKvxFKckWioxVxUnAgAccoLBmIEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDIsWRmVeSWpSXmKPExsWy7bCSnO66yIeJBp9Oylv0njvJZPF/20Rm
+        iytf37NZvLh3kcVi49sfTBZnm96wW2x6fI3V4vKuOWwWM87vY7J4eX8Fs0Xfm3XMFq17j7Bb
+        zJj8ks2B12Pli9nsHrMaetk89n5bwOKxc9Zddo9NqzrZPLZ/e8Dqcb/7OJPH5iX1Hn1bVjF6
+        fN4kF8AVxWWTkpqTWZZapG+XwJUxua2ZvaBFqOL2523sDYzn+boYOTgkBEwk2uaJdDFycQgJ
+        7GaU2LHmHAtEXEJiy1YOCFNY4vDhYoiSt4wSS3raGbsYOTmEBSIl9n74zQKSEBFYzSxx/vQf
+        VpAEs0CORNPMVUwQHY8ZJb427wbrYBNQlZi44j4biM0rYCfx/sxDZhCbBSh+91MnE4gtCjR1
+        3fFl7BA1ghInZz5hAbE5BXwl3iw4BbVAXeLPvEvMELa4xK0n85kgbHmJ5q2zmScwCs1C0j4L
+        ScssJC2zkLQsYGRZxSiZWlCcm55bbFhgmJdarlecmFtcmpeul5yfu4kRHKFamjsYt6/6oHeI
+        kYmD8RCjBAezkghvf9H9RCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphak
+        FsFkmTg4pRqYmL2fTOU/yrrTd5/mg8NmoSHfH/Sda9xbeWTzE+GcyyVJelYvZqTPie2xaWtx
+        nZJStSNj0rNr8+I95W91FLoUu0REONXML5A2LLrFmdx5Q3fyRj/Oz1b35BfNC9WbY3PMqHz+
+        zw6RJV9mmrkU6vG3u04r4+JeGuu7n8f7wuq95cuuqW90qnwXaL12wo/5PW3ZFYefa9rLqy/Y
+        N8GvikPctDD8stQ2wewLr/y2RRtvFb76/pIWq+VbQ4cbj02Ylh7rmb7CfZfUpWlpX/nyL+wL
+        dzcS81u20bmlVInPLVDu6sP5dy/c10//uMVPb8bEFd+VnTmWOM1KP871oT136ZI9sZo7vPTz
+        33w723K4/+FrJZbijERDLeai4kQA7ONwvT8DAAA=
+X-CMS-MailID: 20220114110830epcas1p2d601346f9591baf7d3be1b35c241a98b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211222190203epcas1p2a7647eb2c09c29587b70982744c1a912
+References: <20211222190134.24866-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <CGME20211222190203epcas1p2a7647eb2c09c29587b70982744c1a912@epcas1p2.samsung.com>
+        <20211222190134.24866-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 10:56:20AM +0000, Charles Keepax wrote:
-> Hi guys,
+Hi Lad Prabhakar,
+
+21. 12. 23. 오전 4:01에 Lad Prabhakar 이(가) 쓴 글:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypassed the hierarchical setup and messed up the
+> irq chaining.
 > 
-> My Zynq based board stopped booting today, a bisect points to this
-> patch:
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
 > 
-> commit 0f153a1b8193 ("usb: chipidea: Set the DT node on the child device")
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> Hi,
 > 
-> It looks like it gets stuck in some sort of boot loop of doom:
+> Ideally I would expect the mixer_resources_init() to be called from probe
+> instead from the bind callback. If platform_get_irq() returns -EPROBE_DEFER
+> the bind callback will fail :(
 
-Ok so poking that a little more, I think I can see what happens,
-the USB DT node looks like this:
+If the bind callback failed then probe function of exynos drm driver will call -EPROBE_DEFER like below so it must be no problem :),
+--------------------------------------------
+in exynos_drm_platform_probe function
+    component_master_add_with_match()
 
-usb0: usb@e0002000 {
-	compatible = "xlnx,zynq-usb-2.20a", "chipidea,usb2";
-	status = "disabled";
-	clocks = <&clkc 28>;
-	interrupt-parent = <&intc>;
-	interrupts = <0 21 4>;
-	reg = <0xe0002000 0x1000>;
-	phy_type = "ulpi";
-};
-
-&usb0 {
-	status = "okay";
-
-	dr_mode = "host";
-	usb-phy = <&usb_phy0>;
-};
-
-So when that patch copies the DT node to the new platform device
-in ci_hdrc_add_device it copies the compatible stuff as well as
-the IRQ stuff it was targeting, this presumably causes the kernel
-to bind a new copy of the driver to that new device, which probes
-and calls ci_hdrc_add_device again repeating the process until
-it dies.
-
-Kinda looks to me like the best solution might just be to revert
-the patch, I am not sure I see how that copy of the DT is supposed
-to work?
+in component_master_add_with_match function
+    try_to_bring_up_master()
 
 Thanks,
-Charles
+Inki Dae
+
+> 
+> Cheers,
+> Prabhakar
+> ---
+>  drivers/gpu/drm/exynos/exynos_mixer.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/exynos/exynos_mixer.c b/drivers/gpu/drm/exynos/exynos_mixer.c
+> index 41c54f1f60bc..e5204be86093 100644
+> --- a/drivers/gpu/drm/exynos/exynos_mixer.c
+> +++ b/drivers/gpu/drm/exynos/exynos_mixer.c
+> @@ -809,19 +809,17 @@ static int mixer_resources_init(struct mixer_context *mixer_ctx)
+>  		return -ENXIO;
+>  	}
+>  
+> -	res = platform_get_resource(mixer_ctx->pdev, IORESOURCE_IRQ, 0);
+> -	if (res == NULL) {
+> -		dev_err(dev, "get interrupt resource failed.\n");
+> -		return -ENXIO;
+> -	}
+> +	ret = platform_get_irq(mixer_ctx->pdev, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +	mixer_ctx->irq = ret;
+>  
+> -	ret = devm_request_irq(dev, res->start, mixer_irq_handler,
+> -						0, "drm_mixer", mixer_ctx);
+> +	ret = devm_request_irq(dev, mixer_ctx->irq, mixer_irq_handler,
+> +			       0, "drm_mixer", mixer_ctx);
+>  	if (ret) {
+>  		dev_err(dev, "request interrupt failed.\n");
+>  		return ret;
+>  	}
+> -	mixer_ctx->irq = res->start;
+>  
+>  	return 0;
+>  }
+> 

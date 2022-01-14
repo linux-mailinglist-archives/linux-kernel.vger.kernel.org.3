@@ -2,118 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9BA48EF26
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B79B248EF2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243831AbiANRQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:16:34 -0500
-Received: from srv6.fidu.org ([159.69.62.71]:47374 "EHLO srv6.fidu.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235457AbiANRQ0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:16:26 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id E7FCFC800BB;
-        Fri, 14 Jan 2022 18:16:23 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id LTsH0aBPcG80; Fri, 14 Jan 2022 18:16:23 +0100 (CET)
-Received: from wsembach-tuxedo.fritz.box (host-212-18-30-247.customer.m-online.net [212.18.30.247])
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPA id 7F5C7C80094;
-        Fri, 14 Jan 2022 18:16:23 +0100 (CET)
-From:   Werner Sembach <wse@tuxedocomputers.com>
-To:     dmitry.torokhov@gmail.com, tiwai@suse.com, mpdesouza@suse.com,
-        arnd@arndb.de, samuel@cavoj.net, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH][RESEND] input/i8042: Add quirk table to disable aux port on Clevo NS70MU
-Date:   Fri, 14 Jan 2022 18:16:23 +0100
-Message-Id: <20220114171623.729343-1-wse@tuxedocomputers.com>
-X-Mailer: git-send-email 2.25.1
+        id S243840AbiANRVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:21:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229577AbiANRVj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 12:21:39 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777DAC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:21:39 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id o7-20020a05600c510700b00347e10f66d1so3896887wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:21:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=kjv33ksC1LaBz+eH4uHJ9BtWCyCSppHcW6B69JImuKA=;
+        b=ST/d+6P668Hv4OqjKK5pY8njVz23qPGkyZE127Tzj6ByzPDfKDQRCg6+42fQe2uNKP
+         GpuZn20BBG6kCzbPj5rKpSBSflyyKNajOjGSCsTYi/8VgAHfYYPNrHJrSJzJyOjYppj0
+         AwpRq0GRy8kO1hJRL1wTgIqZW/kCoUMGLBLTY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:mime-version:content-disposition
+         :content-transfer-encoding;
+        bh=kjv33ksC1LaBz+eH4uHJ9BtWCyCSppHcW6B69JImuKA=;
+        b=KoUEO+Grskrj4jr8TLnEyLellNgQqi8K0losd3jm0LZBEr4TVGP1+mEeuJo/8GNXid
+         kw4YZHV4GSS2Kmmm8gLSBMPwZwLtHQuJb76feL39BlIeu663p8kHPP32GymMkZvhplVM
+         Q/saUN9C1s6Y+fXmBGFMLCYUb1YmrhaNO0pYIenrLryl4dvaYaUWdy3yz6wi1khd0Sz5
+         SYPTUONUEwVRP8fCUj6HH1JsDMM2/BWsGoKKnrF4oixU1gh4biYDgS6cfJAz/qGbadg4
+         o21+/moRFXba4BKZVdhE4MituOE20rrOzkexOBYb1tvmw3Z3CxOmgH7TQRrPy9znyGrr
+         auUg==
+X-Gm-Message-State: AOAM532ZSonCaaYsyMRxBXsuP5lJQqdbaZnwqZDdoJY9mnqA1Ar7pDdK
+        i+2TWdq5AYG3GNEjcnQaNyyKbw==
+X-Google-Smtp-Source: ABdhPJy1P3cAo5JR4n6d2JHOwxnu6kymjDB5wqYjx+p6jJ9q2v9a08ja+dDtS8sieKnqVCvoYKzeGg==
+X-Received: by 2002:a1c:980d:: with SMTP id a13mr16690053wme.194.1642180897994;
+        Fri, 14 Jan 2022 09:21:37 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id c11sm12703740wmq.48.2022.01.14.09.21.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 09:21:37 -0800 (PST)
+Date:   Fri, 14 Jan 2022 18:20:41 +0100
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dim-tools@lists.freedesktop.org
+Subject: [PULL] drm-next (merge window fixes really)
+Message-ID: <YeGw6f4mhBZd0ZHg@phenom.ffwll.local>
+Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
+        Dave Airlie <airlied@gmail.com>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dim-tools@lists.freedesktop.org
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At least one modern Clevo barebone has the touchpad connected both via PS/2
-and i2c interface. This causes a race condition between the psmouse and
-i2c-hid driver. Since the full capability if the touchpad is available via
-the i2c interface and the device has no external PS/2 port, it is save to
-just ignore all ps2 mouses here to avoid this issue.
+Hi Linus,
 
-The know affected device is the Clevo NS70MU.
+drm-next-2022-01-14:
+drm fixes for 5.17-rc1:
 
-This patch add a new i8042_dmi_noaux_table with the dmi strings of the
-affected device of different revisions. The table is then evaluated like
-the other quirk tables in the i8042 driver.
+drivers fixes:
+- i915 fixes for ttm backend + one pm wakelock fix
+- amdgpu fixes, fairly big pile of small things all over. Note this
+  doesn't yet containe the fixed version of the otg sync patch that
+  blew up
+- small driver fixes: meson, sun4i, vga16fb probe fix
 
-Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-Cc: stable@vger.kernel.org
----
- drivers/input/serio/i8042-x86ia64io.h | 42 +++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+drm core fixes:
+- cma-buf heap locking
+- ttm compilation
+- self refresh helper state check
+- wrong error message in atomic helpers
+- mipi-dbi buffer mapping
 
-diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
-index 148a7c5fd0e2..48ad6247a1a0 100644
---- a/drivers/input/serio/i8042-x86ia64io.h
-+++ b/drivers/input/serio/i8042-x86ia64io.h
-@@ -1013,6 +1013,45 @@ static const struct dmi_system_id i8042_dmi_probe_defer_table[] __initconst = {
- 	{ }
- };
- 
-+static const struct dmi_system_id i8042_dmi_noaux_table[] __initconst = {
-+	/*
-+	 * At least one modern Clevo barebone has the touchpad connected
-+	 * both via PS/2 and i2c interface. This causes a race condition
-+	 * between the psmouse and i2c-hid driver. Since the full
-+	 * capability if the touchpad is available via the i2c interface
-+	 * and the device has no external PS/2 port, it is save to just
-+	 * ignore all ps2 mouses here to avoid this issue.
-+	 * The know affected device is the
-+	 * TUXEDO InfinityBook S17 Gen6 / Clevo NS70MU which comes with
-+	 * one of the 4 different dmi string combinations below.
-+	 */
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+			DMI_MATCH(DMI_BOARD_NAME, "NS50MU"),
-+		},
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+			DMI_MATCH(DMI_BOARD_NAME, "NS50_70MU"),
-+		},
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-+			DMI_MATCH(DMI_BOARD_NAME, "NS50MU"),
-+		},
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
-+			DMI_MATCH(DMI_BOARD_NAME, "NS50_70MU"),
-+		},
-+	},
-+	{ }
-+};
-+
- #endif /* CONFIG_X86 */
- 
- #ifdef CONFIG_PNP
-@@ -1336,6 +1375,9 @@ static int __init i8042_platform_init(void)
- 	if (dmi_check_system(i8042_dmi_probe_defer_table))
- 		i8042_probe_defer = true;
- 
-+	if (dmi_check_system(i8042_dmi_noaux_table))
-+		i8042_noaux = true;
-+
- 	/*
- 	 * A20 was already enabled during early kernel init. But some buggy
- 	 * BIOSes (in MSI Laptops) require A20 to be enabled using 8042 to
+Note there's some conflicts:
+- One of the pulls was based on previous release, so I had to redo your
+  merge (since I really didn't want to roll forward to a random point in
+  the merge window). I tried to pick your exact solution to prevent
+  further merge conflict lolz.
+
+- amgpu has some conflicts, you should be fine by just going with the
+  version in this pull. Alex tested that what I have in our shared
+  rerere/integration tree, if you want to fetch that:
+
+	git://anongit.freedesktop.org/drm/drm-tip drm-tip
+
+I also wasted some time chasing a arm32 bad udelay compile issue until I
+realized it's not a regression in this set but been there already, hence
+why this pull is a bit late. Alex is looking into that one.
+
+Next week's drm pull is back to Dave.
+
+Cheers, Daniel
+
+The following changes since commit cb6846fbb83b574c85c2a80211b402a6347b60b1:
+
+  Merge tag 'amd-drm-next-5.17-2021-12-30' of ssh://gitlab.freedesktop.org/agd5f/linux into drm-next (2021-12-31 10:59:17 +1000)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-01-14
+
+for you to fetch changes up to 4efdddbce7c1329f00c458e85dcaf105aebdc0ed:
+
+  Merge tag 'amd-drm-next-5.17-2022-01-12' of https://gitlab.freedesktop.org/agd5f/linux into drm-next (2022-01-14 15:42:28 +0100)
+
+----------------------------------------------------------------
+drm fixes for 5.17-rc1:
+
+drivers fixes:
+- i915 fixes for ttm backend + one pm wakelock fix
+- amdgpu fixes, fairly big pile of small things all over. Note this
+  doesn't yet containe the fixed version of the otg sync patch that
+  blew up
+- small driver fixes: meson, sun4i, vga16fb probe fix
+
+drm core fixes:
+- cma-buf heap locking
+- ttm compilation
+- self refresh helper state check
+- wrong error message in atomic helpers
+- mipi-dbi buffer mapping
+
+----------------------------------------------------------------
+Alexander Stein (2):
+      dt-bindings: display: meson-vpu: Add missing amlogic,canvas property
+      dt-bindings: display: meson-dw-hdmi: add missing sound-name-prefix property
+
+Charlene Liu (1):
+      drm/amd/display: Add check for forced_clocks debug option
+
+Claudio Suarez (1):
+      drm: fix error found in some cases after the patch d1af5cd86997
+
+Daniel Vetter (5):
+      Merge tag 'drm-intel-next-fixes-2022-01-13' of git://anongit.freedesktop.org/drm/drm-intel into drm-next
+      Merge tag 'drm-misc-next-fixes-2022-01-13' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
+      Merge tag 'drm-misc-fixes-2022-01-14' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
+      Merge tag 'drm-misc-next-fixes-2022-01-14' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
+      Merge tag 'amd-drm-next-5.17-2022-01-12' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
+
+Evan Quan (1):
+      drm/amd/pm: keep the BACO feature enabled for suspend
+
+Felix Kuehling (3):
+      drm/amdkfd: Use prange->list head for insert_list
+      drm/amdkfd: Use prange->update_list head for remove_list
+      drm/amdkfd: Fix DQM asserts on Hawaii
+
+Greg Kroah-Hartman (2):
+      drm/amdgpu: use default_groups in kobj_type
+      drm/amdkfd: use default_groups in kobj_type
+
+Guchun Chen (1):
+      drm/amdgpu: use spin_lock_irqsave to avoid deadlock by local interrupt
+
+Harry Wentland (1):
+      drm/amdgpu: Use correct VIEWPORT_DIMENSION for DCN2
+
+James Yao (1):
+      drm/amdgpu: add dummy event6 for vega10
+
+Javier Martinez Canillas (1):
+      video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
+
+Jiasheng Jiang (1):
+      drm/amdkfd: Check for null pointer after calling kmemdup
+
+Jiawei Gu (1):
+      drm/amdgpu: Clear garbage data in err_data before usage
+
+Johannes Berg (1):
+      drm/ttm: fix compilation on ARCH=um
+
+José Expósito (1):
+      drm/amd/display: invalid parameter check in dmub_hpd_callback
+
+Juston Li (1):
+      drm/i915/pxp: Hold RPM wakelock during PXP unbind
+
+Kent Russell (1):
+      drm/amdkfd: Fix ASIC name typos
+
+Leslie Shi (1):
+      drm/amdgpu: Unmap MMIO mappings when device is not unplugged
+
+Liu Ying (1):
+      drm/atomic: Check new_crtc_state->active to determine if CRTC needs disable in self refresh mode
+
+Lukas Bulwahn (1):
+      drm/amdkfd: make SPDX License expression more sound
+
+Mario Limonciello (4):
+      drm/amdgpu: explicitly check for s0ix when evicting resources
+      drm/amdgpu: don't set s3 and s0ix at the same time
+      drm/amd/display: explicitly set is_dsc_supported to false before use
+      drm/amd/display: reset dcn31 SMU mailbox on failures
+
+Matthew Auld (4):
+      drm/i915: don't call free_mmap_offset when purging
+      drm/i915/ttm: only fault WILLNEED objects
+      drm/i915/ttm: add unmap_virtual callback
+      drm/i915/ttm: ensure we unmap when purging
+
+Miaoqian Lin (1):
+      drm/sun4i: dw-hdmi: Fix missing put_device() call in sun8i_hdmi_phy_get
+
+Mikita Lipski (1):
+      drm/amd/display: introduce mpo detection flags
+
+Nicholas Kazlauskas (2):
+      drm/amd/display: Don't reinitialize DMCUB on s0ix resume
+      drm/amd/display: Add version check before using DP alt query interface
+
+Nirmoy Das (4):
+      drm/amdgpu: do not pass ttm_resource_manager to gtt_mgr
+      drm/amdkfd: remove unused function
+      drm/amdgpu: do not pass ttm_resource_manager to vram_mgr
+      drm/amdgpu: recover gart table at resume
+
+Peng Ju Zhou (1):
+      drm/amdgpu: Enable second VCN for certain Navy Flounder.
+
+Prike Liang (1):
+      drm/amdgpu: not return error on the init_apu_flags
+
+Rajneesh Bhardwaj (1):
+      Revert "drm/amdgpu: Don't inherit GEM object VMAs in child process"
+
+Tao Zhou (1):
+      drm/amd/pm: only send GmiPwrDnControl msg on master die (v3)
+
+Thomas Zimmermann (1):
+      drm/mipi-dbi: Fix source-buffer address in mipi_dbi_buf_copy
+
+Tom St Denis (1):
+      drm/amd/amdgpu: Add pcie indirect support to amdgpu_mm_wreg_mmio_rlc()
+
+Weizhao Ouyang (1):
+      dma-buf: cma_heap: Fix mutex locking section
+
+Wenjing Liu (1):
+      drm/amd/display: unhard code link to phy idx mapping in dc link and clean up
+
+Yi-Ling Chen (1):
+      drm/amd/display: Fix underflow for fused display pipes case
+
+yipechai (1):
+      drm/amdkfd: enable sdma ecc interrupt event can be handled by event_interrupt_wq_v9
+
+ .../bindings/display/amlogic,meson-dw-hdmi.yaml    |   5 +
+ .../bindings/display/amlogic,meson-vpu.yaml        |   6 +
+ drivers/dma-buf/heaps/cma_heap.c                   |   6 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c         |   7 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.h         |   1 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c             |   5 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |  36 ++---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c      |   3 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c        |   2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |   6 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gart.c           |  84 +-----------
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c            |   3 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gtt_mgr.c        |  17 +--
+ drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c            |  14 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_object.c         |  12 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c            |   7 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c            |  11 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h            |  12 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c           |   9 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c           |   5 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c       |  40 +++---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c           |   3 +-
+ drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c             |   3 +-
+ drivers/gpu/drm/amd/amdgpu/gmc_v6_0.c              |   3 +-
+ drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c              |   3 +-
+ drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c              |   3 +-
+ drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c              |  17 ++-
+ drivers/gpu/drm/amd/amdgpu/mxgpu_ai.c              |  11 ++
+ drivers/gpu/drm/amd/amdgpu/mxgpu_ai.h              |   2 +
+ drivers/gpu/drm/amd/amdkfd/kfd_crat.c              |   3 +
+ drivers/gpu/drm/amd/amdkfd/kfd_device.c            |   6 +-
+ .../gpu/drm/amd/amdkfd/kfd_device_queue_manager.c  |   9 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_int_process_v9.c    |   1 +
+ drivers/gpu/drm/amd/amdkfd/kfd_process.c           |   3 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_svm.c               |  23 ++--
+ drivers/gpu/drm/amd/amdkfd/kfd_svm.h               |   4 -
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  44 ++++++-
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h  |   2 +
+ .../drm/amd/display/dc/clk_mgr/dcn31/dcn31_smu.c   |   6 +
+ drivers/gpu/drm/amd/display/dc/core/dc_link.c      | 145 +++++++++------------
+ drivers/gpu/drm/amd/display/dc/core/dc_resource.c  |  33 +++++
+ .../drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c  |   7 +-
+ .../amd/display/dc/dcn31/dcn31_dio_link_encoder.c  | 114 +++++++++++++---
+ .../gpu/drm/amd/display/dc/dcn31/dcn31_resource.c  |   2 +-
+ drivers/gpu/drm/amd/display/dc/dm_cp_psp.h         |   4 +-
+ drivers/gpu/drm/amd/display/dc/inc/resource.h      |   1 +
+ drivers/gpu/drm/amd/display/modules/inc/mod_hdcp.h |   2 +-
+ drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c          |   8 +-
+ drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c |  16 ++-
+ drivers/gpu/drm/ast/ast_mode.c                     |   5 +-
+ drivers/gpu/drm/drm_atomic_helper.c                |  14 +-
+ drivers/gpu/drm/drm_fb_helper.c                    |   8 +-
+ drivers/gpu/drm/drm_mipi_dbi.c                     |   2 +-
+ drivers/gpu/drm/i915/gem/i915_gem_mman.c           |   3 +
+ drivers/gpu/drm/i915/gem/i915_gem_object_types.h   |   1 +
+ drivers/gpu/drm/i915/gem/i915_gem_pages.c          |   1 -
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c            |  27 +++-
+ drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c |  18 +--
+ drivers/gpu/drm/i915/pxp/intel_pxp_tee.c           |   5 +-
+ drivers/gpu/drm/nouveau/nouveau_fence.c            |  48 ++++---
+ drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c             |   4 +-
+ drivers/gpu/drm/tiny/simpledrm.c                   |   2 +-
+ drivers/gpu/drm/ttm/ttm_module.c                   |   4 +-
+ drivers/video/fbdev/vga16fb.c                      |  24 ++++
+ include/uapi/linux/kfd_sysfs.h                     |   2 +-
+ 65 files changed, 555 insertions(+), 382 deletions(-)
+
 -- 
-2.25.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

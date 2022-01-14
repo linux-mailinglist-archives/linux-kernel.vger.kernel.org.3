@@ -2,87 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DDD48E76F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4E348E773
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239524AbiANJZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 04:25:14 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:38539 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237310AbiANJZN (ORCPT
+        id S239875AbiANJZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 04:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236096AbiANJZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:25:13 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7EA975C0181;
-        Fri, 14 Jan 2022 04:25:13 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 14 Jan 2022 04:25:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-type:content-transfer-encoding; s=fm1; bh=
-        jkIcsTRJpq5h4+8FEvPP1ydZO44aBTg/S08RqPx/CXo=; b=SMnoU/NR0yrdWUSt
-        HpV1LkLanzcPgF8KEh3lPFh60n6kbiHjsTeA1S78AwU02QonYyKlnY8K+dscSHDY
-        CpZA9CELoKxvR+WPrQf9MJBG+30SrNFRUjBvYQFBjJ/hy4nr2B5aV65Xjlm2CVnQ
-        WI3MkfVNBLbN4fngfQAh/mGCZOb9V5sPU5Buq91+JYA9Nta4wvzVej4Dj4oeF1wn
-        tk1Eliud/EFgJjVcNn8ayzJ6ZrI1xxHlbpjdOpy1ZeGa2zrmHNQ57MwqxezaxXhm
-        EbCuAg9MTx0l7Z6jDaK2rGCaQwjyIIDD+CtPLeN2UoxeaRZSraImNa4EhXQQB2he
-        dbTh5Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=jkIcsTRJpq5h4+8FEvPP1ydZO44aBTg/S08RqPx/C
-        Xo=; b=l7LjrJnNBfAKQAe2LJywd74qGhtUo0APkghslLN8slOF6OIO/xmE68rMZ
-        GtsFjVE1c1o7mton8v1uIgvNGqtRLRQk923UZVhcXjQAFIJtfeK1MfzRw1MicciK
-        3E1FrVuLNO1AoP2Wg4I8qO0sD/yp9uQX3za8+IcFvaqY4abmOuRaKILxchdWZrsC
-        +mtB1TtTJj/RSJ10mwyt7+AHvRYCqA1fegT3odZJSLl0Ids9hf9DN2unLusDOfjI
-        /v4cF+e8SK0td/ux3xm5ZXHhb3OZrheEGbjZ0KY/gjd//pj6wg3GegkXduBMqNIz
-        QMTH5rn3PVgaFFTz9u+F+29cs7rhw==
-X-ME-Sender: <xms:eUHhYZ2_S0jo6IwcMYUtRIByFWkX7ZSbtw7jtB3l2QGHcW_qXsgwhA>
-    <xme:eUHhYQHAGelgNAStZf2Yu3HEL1_l3uqzee-tVF75Dtk8MN6zv20i4hilk7VGoUMd2
-    IoECIcW72BgY-EkbPo>
-X-ME-Received: <xmr:eUHhYZ7-wzghir2A4edhTOzZT5uxfEi0LvoY71KYAnBoC5UZy8ela086dUxxjf-ZFq9OWfAYhUnRzcqqpJlVh1DnAkmYysRAt2Y3lac>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrtdehgddtgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepjeeugfegkeffgfeuvedtvddufffhjeffjeejvddvudduteehhfefhfefgeei
-    keeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:eUHhYW3JwET1wnRbkZJAzatEz5z5VtaVAiv0PKkRHvX854-eS9bGrg>
-    <xmx:eUHhYcF1ze3CD1WYbVN8z_lyUTUILdJPzPEmyh4oOHpBHg-UiFt_ww>
-    <xmx:eUHhYX8lGUVMA388DzxGOVA-JsFwp2EsARW9TRhU21P5dVQzHR4EPw>
-    <xmx:eUHhYROP_q2SeBYz-kTKoHp7XWGrzitbchDipIrA7SB2n0Fj5aLstQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Jan 2022 04:25:12 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Mans Rullgard <mans@mansr.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: (subset) [PATCH] ARM: dts: sunxi: h3/h5: add r_uart node
-Date:   Fri, 14 Jan 2022 10:25:10 +0100
-Message-Id: <164215230543.14932.4092617393834141243.b4-ty@cerno.tech>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220112173327.26317-1-mans@mansr.com>
-References: <20220112173327.26317-1-mans@mansr.com>
+        Fri, 14 Jan 2022 04:25:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448C6C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 01:25:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D63DE61E8B
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:25:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E934BC36AE9;
+        Fri, 14 Jan 2022 09:25:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642152337;
+        bh=P/bm0LGDZJvi20w4ynwHGaO4gRrS312I6XLwmwXc6zE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=G2IxCYzqi2axbQfsMiqaGE9avzhCxdxeX9gDAYHVb06FszPue07LTJDwA1cqj/28R
+         XODwpvQImT1J76cvDRBWk1egDyAeNluNucCkbsanqFLjWdZkRu+VhlDm37Cj5aL3Np
+         lpEu06z+FWKYVMoKC5bsbrd6ceuuywqFwKUS9HlgNuGO7gk0zTssf2QDVXQr2X7QEB
+         bc+wZL5ZjMrdZ5pdvTNAnnCbLpH3feH4PCRsDvsp+Hd49P5JCortO6t/Ci9xq461N6
+         ZYAclPi3Rz6HTogHx56dmuOpewpmhRqHLOoi1Ij16F6YjYHtF2lLdMamY7TI5zaAmB
+         ghurcsi8Gk8hw==
+Date:   Fri, 14 Jan 2022 11:25:30 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Karolina Drobnik <karolinadrobnik@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] memblock: Remove #ifdef __KERNEL__ from memblock.h
+Message-ID: <YeFBiiDO0FUz3mpZ@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Jan 2022 17:33:27 +0000, Mans Rullgard wrote:
-> There is an additional UART in the PL I/O block.
-> Add a node and pinmux for it.
-> 
-> 
+Hi Linus,
 
-Applied to local tree (sunxi/dt-for-5.18).
+Please pull this small cleanup in memblock.h.
 
-Thanks!
-Maxime
+The following changes since commit df0cc57e057f18e44dac8e6c18aba47ab53202f9:
+
+  Linux 5.16 (2022-01-09 14:55:34 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/memblock-v5.17-rc1
+
+for you to fetch changes up to a59466ee91aaa9d43889a4c51e01de087d188448:
+
+  memblock: Remove #ifdef __KERNEL__ from memblock.h (2022-01-11 12:36:47 +0200)
+
+----------------------------------------------------------------
+memblock: Remove #ifdef __KERNEL__ from memblock.h
+
+memblock.h is not a uAPI header, so __KERNEL__ guard can be deleted
+
+----------------------------------------------------------------
+Karolina Drobnik (1):
+      memblock: Remove #ifdef __KERNEL__ from memblock.h
+
+ include/linux/memblock.h | 2 --
+ 1 file changed, 2 deletions(-)
+
+-- 
+Sincerely yours,
+Mike.

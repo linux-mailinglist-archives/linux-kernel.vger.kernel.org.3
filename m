@@ -2,208 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3126548E41F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:16:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E36148E425
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239294AbiANGQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:16:17 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:49624 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiANGQP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:16:15 -0500
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220114061613epoutp041cff07ae24e2ecc3d1213c7faa213561~KDoPQFD3I0057000570epoutp04N
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 06:16:13 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220114061613epoutp041cff07ae24e2ecc3d1213c7faa213561~KDoPQFD3I0057000570epoutp04N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642140973;
-        bh=/jJg+HLwuIlmsM6ENqFjZzDJD1HfIhHE7HBn+iaWwm4=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=SFRMF0egY6dX6n3/7vKEOk/3dXckKAoW/r54gKD+Anp4RiuNHVsVt+9HXcl7lw8gP
-         JDNMwAsZomBDDkNbk7E8uxQMhXLzZx+YK0R+hndQ9inCpfkin5eiSj9ilGFv8lhj63
-         SqNFUV1jwqNL1N2Kmr0naQ643cYDbRc3+qZQr4Tk=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220114061612epcas5p109458634755b92a6432019cefa2fd3e1~KDoOxf4BL1055410554epcas5p1m;
-        Fri, 14 Jan 2022 06:16:12 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4JZrf11L44z4x9Q8; Fri, 14 Jan
-        2022 06:16:09 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4F.1C.05590.92511E16; Fri, 14 Jan 2022 15:16:09 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220114061608epcas5p2c16b3ad7c52a441f240d1d1ea93cc4a1~KDoKk_K4b2842728427epcas5p2M;
-        Fri, 14 Jan 2022 06:16:08 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220114061608epsmtrp2129819ac708d9691c45f1aafd2897541~KDoKjllmq1575215752epsmtrp2P;
-        Fri, 14 Jan 2022 06:16:08 +0000 (GMT)
-X-AuditID: b6c32a4b-723ff700000015d6-eb-61e11529a639
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C2.9E.08738.82511E16; Fri, 14 Jan 2022 15:16:08 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220114061605epsmtip18357d3467cbd8470473eac9672fb7a7c~KDoH3KHd03210332103epsmtip1t;
-        Fri, 14 Jan 2022 06:16:05 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Cc:     <soc@kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <olof@lixom.net>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <robh+dt@kernel.org>, <s.nawrocki@samsung.com>,
-        <linux-samsung-soc@vger.kernel.org>, <pankaj.dubey@samsung.com>,
-        <linux-fsd@tesla.com>, "'Jayati Sahu'" <jayati.sahu@samsung.com>,
-        "'Ajay Kumar'" <ajaykumar.rs@samsung.com>
-In-Reply-To: <b9fac286-9227-b26b-221b-7f54b63e6b0b@canonical.com>
-Subject: RE: [PATCH 03/23] clk: samsung: fsd: Add initial clock support
-Date:   Fri, 14 Jan 2022 11:46:04 +0530
-Message-ID: <077d01d8090e$37f75da0$a7e618e0$@samsung.com>
+        id S239319AbiANGRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:17:06 -0500
+Received: from helcar.hmeau.com ([216.24.177.18]:59496 "EHLO fornost.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229936AbiANGRF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 01:17:05 -0500
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1n8FtA-0006EA-VI; Fri, 14 Jan 2022 17:16:42 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 14 Jan 2022 17:16:41 +1100
+Date:   Fri, 14 Jan 2022 17:16:41 +1100
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Nicolai Stange <nstange@suse.de>
+Cc:     Stephan Mueller <smueller@chronox.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
+        Zaibo Xu <xuzaibo@huawei.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qat-linux@intel.com, keyrings@vger.kernel.org, simo@redhat.com,
+        Eric Biggers <ebiggers@kernel.org>, Petr Vorel <pvorel@suse.cz>
+Subject: [v2 PATCH] crypto: api - Disallow sha1 in FIPS-mode while allowing
+ hmac(sha1)
+Message-ID: <YeEVSaMEVJb3cQkq@gondor.apana.org.au>
+References: <20211209090358.28231-1-nstange@suse.de>
+ <87r1a7thy0.fsf@suse.de>
+ <YcvEkfS4cONDXXB9@gondor.apana.org.au>
+ <2468270.qO8rWLYou6@tauon.chronox.de>
+ <YdepEhTI/LB9wdJr@gondor.apana.org.au>
+ <Yd0gInht+V+Kcsw2@gondor.apana.org.au>
+ <871r1eyamd.fsf@suse.de>
+ <Yd1dK//76455cHdz@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKuNmZ/+9PJHbdzezyQqzGEXzr0sgIsF/K0AhOIyekBxha2S6qFgZWg
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Tf0wbZRjed3e9Xklqzg7CN/BHbbYYMEArbb0uQ53O7Sb8QZyRDaPshBs0
-        lLbptU50ZoWFKQME6jTadbVOBgRwQoENWyCzKzJAKQsIsiyOMRCZMEAwA0eYLceU/573/Z7n
-        e5/n+0Ggkut4FKHVm1mTntHJ8DDs4pWYmLiYiFuMvLQdpy7P/YBRc9WlgPrK3y+g/L1VCNU0
-        u4xQp1drEMp9e1hALZT+JqBu3UmjBj0OnPoi0IlQvSOLOHWudUlIFXX4hdSVmY8E1O2RVfxF
-        km5wNgDabi3DaXddMU7fGG7H6eaq4/TQ1UIB/UlLHaDXCs8K6UX3E6mi9NxdOSyTxZqkrD7T
-        kKXVZyfJkg9kvJyhUssVcQoN9ZxMqmfy2CTZnpTUuL1aXTCFTPouo7MEW6kMx8kSnt9lMljM
-        rDTHwJmTZKwxS2dUGuM5Jo+z6LPj9ax5p0Iuf1YVJB7Ozbk2WQeMrdveG2yYFlhBIOIUEBGQ
-        VMIFW0BwCoQREtILYF//5zhf/AVgV/PvGF8sAni2qAd5KOmcdwn5BQ+As733Eb6YBrDbvQJC
-        LJyMg23fnFzfK5wsBrD+3so6CyWtKBxbuS4IsUTkbuh/YEdDeCu5D/7stwXVBIGRO6B1KSXU
-        FpMa6B0dw3n8KOz5cgILYZR8El6adaC8JSlcmaxe3zKc3AsfrA4CnhMJp7v861YhuURAr7dW
-        wAv2wIrWpQ3xVninu0XI4yi4eLcDD3mAZC4s9STy7WPwvPNHjMcvwMtDDixEQckY+J0ngR/1
-        CCy7P4HwSjH8+KSEZ++AJ+7+sqGMhpUlJRsGaDi8XItVgKfsm4LZNwWzbwpg/3+YC2B1YBtr
-        5PKyWU5lTNSzR/+78ExDnhusP/LY5DYwPjYf7wMIAXwAEqgsXFxuuslIxFlM/vusyZBhsuhY
-        zgdUwcOuRKMiMg3BX6I3ZyiUGrlSrVYrNYlqhSxS3JvdyEjIbMbM5rKskTU91CGEKMqKsAP6
-        txr6t2OeuZ6OWRFao0NHBhrDlrQ/FXzoij7DRWsx9cIWh3QcuTBnnwyw9bZX8mvXnqk7XFvm
-        fXPq1al0Mfp0f7nvXKBz9OivF4bMXmiNbN3pruhm7n1/ZAY9GO4XuK5O+SsUZ1R/+tK6LB+o
-        C9uW5/OnZtbIGKdHWKukLRM4Md/4+KcqYx/orOoI8+8uTzDZLjk1++mG3q5Df5tFqm/Pl+4T
-        XnspOemQsei0q7nbGZEyV3DkWHHH/r7AxdHK9tea0hNuqKmS1/PJpvq03JvjM48NHH9bteVg
-        rOPrauREyx+SAwXb/ykYna4peSMyuW/qs9RFW1TSO7oWYbhGhnE5jCIWNXHMv3W9yEBtBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCIsWRmVeSWpSXmKPExsWy7bCSnK6G6MNEgykrhCwOvD/IYvF+WQ+j
-        xfwj51gtjpxawmSx8e0PJospf5YzWWx6fI3V4mPPPVaLh6/CLS7vmsNmMeP8PiaLU9c/s1ks
-        2vqF3aJ17xF2i8Nv2lktHl//w+Yg4LFm3hpGj1kNvWwem1Z1snncubaHzWPzknqPKyeaWD36
-        tqxi9PjXNJfd4/MmuQDOKC6blNSczLLUIn27BK6Mi09XMRZslay4vOYlawPjedEuRk4OCQET
-        iX0fFrB3MXJxCAnsYJR4Pm8yM0RCWuL6xgnsELawxMp/z6GKnjNKbDzcBZZgE9CV2LG4jQ0k
-        ISLQzShxpWcmI4jDLNDHLHFv0w8miJYvjBKbri8Fa+EUcJQ48n8W2A5hAXeJs0cmAXVwcLAI
-        qEo0fPEBCfMKWErsvvmADcIWlDg58wkLiM0soC3R+7CVEcKWl9j+dg7UqQoSP58uYwWxRQTc
-        JP7/uQxVIy7x8ugR9gmMwrOQjJqFZNQsJKNmIWlZwMiyilEytaA4Nz232LDAKC+1XK84Mbe4
-        NC9dLzk/dxMjOKK1tHYw7ln1Qe8QIxMH4yFGCQ5mJRHe/qL7iUK8KYmVValF+fFFpTmpxYcY
-        pTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwHeKrUTkyl4Oz85P8jdbyDY9vFtmFsDPN
-        eGqhc7dz3umvFZM09vHZvOdvy3sz+8h2/SCDNp5ZfII+m0TCDl6RC4qIllgd0azZWSAeen8T
-        27sDjDlRbv8kDm3b43D/mAH7Lc5ilzXeDk4yd+YyiYmbP0qad3hT/jz/mee0/Nx1lk+wfp3+
-        pzh98dnChIgWl/3q/584r9I6fPyJUvrzntgNXIw87x06bn6V2Ohx/tHkd5umbE29VDjjhg+/
-        S2iZxi/HS4+XNj7y57rT1qa+d+2WpFP6atmP1Dhb7/BOuusswFY/LzmpTdifTVmqMWBt9scv
-        fhyhbCs9p/9dItf1eRaH6D6LDUJ3dr07VFLhPkdQiaU4I9FQi7moOBEA1lcVD1cDAAA=
-X-CMS-MailID: 20220114061608epcas5p2c16b3ad7c52a441f240d1d1ea93cc4a1
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220113122324epcas5p105c53b448b5801813a02a88c6107a2f3
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
-        <CGME20220113122324epcas5p105c53b448b5801813a02a88c6107a2f3@epcas5p1.samsung.com>
-        <20220113121143.22280-4-alim.akhtar@samsung.com>
-        <b9fac286-9227-b26b-221b-7f54b63e6b0b@canonical.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd1dK//76455cHdz@gondor.apana.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 11, 2022 at 09:34:19PM +1100, Herbert Xu wrote:
+>
+> You're right.  The real issue is that any algorithm with no tests
+> at all is allowed in FIPS mode.  That's clearly suboptimal.  But we
+> can't just ban every unknown algorithm because we rely on that
+> to let things like echainiv through.
+> 
+> Let me figure out a way to differentiate these two cases.
 
+So what I've done is modify hmac so that if the underlying algo
+is FIPS_INTERNAL, then we pre-emptively set FIPS_INTERNAL on the
+hmac side as well.  This can then be cleared if the hmac algorithm
+is explicitly listed as fips_allowed.
 
->-----Original Message-----
->From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
->Sent: Thursday, January 13, 2022 6:20 PM
->To: Alim Akhtar <alim.akhtar@samsung.com>; linux-arm-
->kernel@lists.infradead.org; linux-kernel@vger.kernel.org
->Cc: soc@kernel.org; linux-clk@vger.kernel.org; devicetree@vger.kernel.org;
->olof@lixom.net; linus.walleij@linaro.org; catalin.marinas@arm.com;
->robh+dt@kernel.org; s.nawrocki@samsung.com; linux-samsung-
->soc@vger.kernel.org; pankaj.dubey@samsung.com; linux-fsd@tesla.com;
->Jayati Sahu <jayati.sahu@samsung.com>; Ajay Kumar
-><ajaykumar.rs@samsung.com>
->Subject: Re: [PATCH 03/23] clk: samsung: fsd: Add initial clock support
->
->On 13/01/2022 13:11, Alim Akhtar wrote:
->> Add initial clock support for FSD (Full Self-Driving) SoC which is
->> required to bring-up platforms based on this SoC.
->>
->> Cc: linux-fsd@tesla.com
->> Signed-off-by: Jayati Sahu <jayati.sahu@samsung.com>
->> Signed-off-by: Ajay Kumar <ajaykumar.rs@samsung.com>
->> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
->> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
->> ---
->>  drivers/clk/samsung/Makefile  |   1 +
->>  drivers/clk/samsung/clk-fsd.c | 308
->++++++++++++++++++++++++++++++++++
->>  drivers/clk/samsung/clk-pll.c |   1 +
->>  drivers/clk/samsung/clk-pll.h |   1 +
->>  4 files changed, 311 insertions(+)
->>  create mode 100644 drivers/clk/samsung/clk-fsd.c
->>
->> diff --git a/drivers/clk/samsung/Makefile
->> b/drivers/clk/samsung/Makefile index c46cf11e4d0b..d66b2ede004c 100644
->> --- a/drivers/clk/samsung/Makefile
->> +++ b/drivers/clk/samsung/Makefile
->> @@ -18,6 +18,7 @@ obj-$(CONFIG_EXYNOS_AUDSS_CLK_CON) += clk-
->exynos-audss.o
->>  obj-$(CONFIG_EXYNOS_CLKOUT)	+= clk-exynos-clkout.o
->>  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos7.o
->>  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos850.o
->> +obj-$(CONFIG_ARCH_TESLA_FSD)         += clk-fsd.o
->
->It should be rather it's own CONFIG_TESLA_FSD_CLK option, just like other
->Exynos designs. This keeps unified approach with existing Samsung clock
->Kconfig.
->
-Ok, will add a separate config for this 
+---8<---
+Currently we do not distinguish between algorithms that fail on
+the self-test vs. those which are disabled in FIPS mode (not allowed).
+Both are marked as having failed the self-test.
 
->>  obj-$(CONFIG_S3C2410_COMMON_CLK)+= clk-s3c2410.o
->> obj-$(CONFIG_S3C2410_COMMON_DCLK)+= clk-s3c2410-dclk.o
->> obj-$(CONFIG_S3C2412_COMMON_CLK)+= clk-s3c2412.o diff --git
->> a/drivers/clk/samsung/clk-fsd.c b/drivers/clk/samsung/clk-fsd.c new
->> file mode 100644 index 000000000000..e47523106d9e
->> --- /dev/null
->> +++ b/drivers/clk/samsung/clk-fsd.c
->> @@ -0,0 +1,308 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Common Clock Framework support for FSD SoC.
->> + *
->> + * Copyright (c) 2017-2022 Samsung Electronics Co., Ltd.
->> + *             https://www.samsung.com
->> + * Copyright (c) 2017-2022 Tesla, Inc.
->> + *             https://www.tesla.com
->> + *
->
->Drop the line break with empty * comment.
-Will fix in next version
->> + */
->> +
->> +#include <linux/clk-provider.h>
->> +#include <linux/of.h>
->> +
->> +#include "clk.h"
->> +#include <dt-bindings/clock/fsd-clk.h>
->
->dt-bindings headers before local clk.h.
->
-Noted, thanks
->> +
->> +/* Register Offset definitions for CMU_CMU (0x11c10000) */
->
->
->
->Best regards,
->Krzysztof
+As it has been requested that we need to disable sha1 in FIPS
+mode while still allowing hmac(sha1) this approach needs to change.
 
+This patch allows this scenario by adding a new flag FIPS_INTERNAL
+to indicate those algorithms that have passed the self-test and are
+not FIPS-allowed.  They can then be used for the self-testing of
+other algorithms or by those that are explicitly allowed to use them
+(currently just hmac).
+
+Note that as a side-effect of this patch algorithms which are not
+FIPS-allowed will now return ENOENT instead of ELIBBAD.  Hopefully
+this is not an issue as some people were relying on this already.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+
+diff --git a/crypto/algapi.c b/crypto/algapi.c
+index a366cb3e8aa1..09fb75806e87 100644
+--- a/crypto/algapi.c
++++ b/crypto/algapi.c
+@@ -322,8 +322,16 @@ void crypto_alg_tested(const char *name, int err)
+ found:
+ 	q->cra_flags |= CRYPTO_ALG_DEAD;
+ 	alg = test->adult;
+-	if (err || list_empty(&alg->cra_list))
++
++	if (list_empty(&alg->cra_list))
++		goto complete;
++
++	if (err == -ECANCELED)
++		alg->cra_flags |= CRYPTO_ALG_FIPS_INTERNAL;
++	else if (err)
+ 		goto complete;
++	else
++		alg->cra_flags &= ~CRYPTO_ALG_FIPS_INTERNAL;
+ 
+ 	alg->cra_flags |= CRYPTO_ALG_TESTED;
+ 
+diff --git a/crypto/api.c b/crypto/api.c
+index cf0869dd130b..549f9aced1da 100644
+--- a/crypto/api.c
++++ b/crypto/api.c
+@@ -223,6 +223,8 @@ static struct crypto_alg *crypto_larval_wait(struct crypto_alg *alg)
+ 	else if (crypto_is_test_larval(larval) &&
+ 		 !(alg->cra_flags & CRYPTO_ALG_TESTED))
+ 		alg = ERR_PTR(-EAGAIN);
++	else if (alg->cra_flags & CRYPTO_ALG_FIPS_INTERNAL)
++		alg = ERR_PTR(-EAGAIN);
+ 	else if (!crypto_mod_get(alg))
+ 		alg = ERR_PTR(-EAGAIN);
+ 	crypto_mod_put(&larval->alg);
+@@ -233,6 +235,7 @@ static struct crypto_alg *crypto_larval_wait(struct crypto_alg *alg)
+ static struct crypto_alg *crypto_alg_lookup(const char *name, u32 type,
+ 					    u32 mask)
+ {
++	const u32 fips = CRYPTO_ALG_FIPS_INTERNAL;
+ 	struct crypto_alg *alg;
+ 	u32 test = 0;
+ 
+@@ -240,8 +243,20 @@ static struct crypto_alg *crypto_alg_lookup(const char *name, u32 type,
+ 		test |= CRYPTO_ALG_TESTED;
+ 
+ 	down_read(&crypto_alg_sem);
+-	alg = __crypto_alg_lookup(name, type | test, mask | test);
+-	if (!alg && test) {
++	alg = __crypto_alg_lookup(name, (type | test) & ~fips,
++				  (mask | test) & ~fips);
++	if (alg) {
++		if (((type | mask) ^ fips) & fips)
++			mask |= fips;
++		mask &= fips;
++
++		if (!crypto_is_larval(alg) &&
++		    ((type ^ alg->cra_flags) & mask)) {
++			/* Algorithm is disallowed in FIPS mode. */
++			crypto_mod_put(alg);
++			alg = ERR_PTR(-ENOENT);
++		}
++	} else if (test) {
+ 		alg = __crypto_alg_lookup(name, type, mask);
+ 		if (alg && !crypto_is_larval(alg)) {
+ 			/* Test failed */
+diff --git a/crypto/hmac.c b/crypto/hmac.c
+index 25856aa7ccbf..af82e3eeb7d0 100644
+--- a/crypto/hmac.c
++++ b/crypto/hmac.c
+@@ -169,6 +169,7 @@ static int hmac_create(struct crypto_template *tmpl, struct rtattr **tb)
+ 	struct crypto_alg *alg;
+ 	struct shash_alg *salg;
+ 	u32 mask;
++	u32 type;
+ 	int err;
+ 	int ds;
+ 	int ss;
+@@ -182,8 +183,9 @@ static int hmac_create(struct crypto_template *tmpl, struct rtattr **tb)
+ 		return -ENOMEM;
+ 	spawn = shash_instance_ctx(inst);
+ 
++	type = CRYPTO_ALG_FIPS_INTERNAL;
+ 	err = crypto_grab_shash(spawn, shash_crypto_instance(inst),
+-				crypto_attr_alg_name(tb[1]), 0, mask);
++				crypto_attr_alg_name(tb[1]), type, mask);
+ 	if (err)
+ 		goto err_free_inst;
+ 	salg = crypto_spawn_shash_alg(spawn);
+@@ -204,6 +206,7 @@ static int hmac_create(struct crypto_template *tmpl, struct rtattr **tb)
+ 	if (err)
+ 		goto err_free_inst;
+ 
++	inst->alg.base.cra_flags = alg->cra_flags & CRYPTO_ALG_FIPS_INTERNAL;
+ 	inst->alg.base.cra_priority = alg->cra_priority;
+ 	inst->alg.base.cra_blocksize = alg->cra_blocksize;
+ 	inst->alg.base.cra_alignmask = alg->cra_alignmask;
+diff --git a/crypto/testmgr.c b/crypto/testmgr.c
+index 5831d4bbc64f..995d44db6154 100644
+--- a/crypto/testmgr.c
++++ b/crypto/testmgr.c
+@@ -1664,7 +1664,8 @@ static int test_hash_vs_generic_impl(const char *generic_driver,
+ 	if (strcmp(generic_driver, driver) == 0) /* Already the generic impl? */
+ 		return 0;
+ 
+-	generic_tfm = crypto_alloc_shash(generic_driver, 0, 0);
++	generic_tfm = crypto_alloc_shash(generic_driver,
++					 CRYPTO_ALG_FIPS_INTERNAL, 0);
+ 	if (IS_ERR(generic_tfm)) {
+ 		err = PTR_ERR(generic_tfm);
+ 		if (err == -ENOENT) {
+@@ -2387,7 +2388,8 @@ static int test_aead_vs_generic_impl(struct aead_extra_tests_ctx *ctx)
+ 	if (strcmp(generic_driver, driver) == 0) /* Already the generic impl? */
+ 		return 0;
+ 
+-	generic_tfm = crypto_alloc_aead(generic_driver, 0, 0);
++	generic_tfm = crypto_alloc_aead(generic_driver,
++					CRYPTO_ALG_FIPS_INTERNAL, 0);
+ 	if (IS_ERR(generic_tfm)) {
+ 		err = PTR_ERR(generic_tfm);
+ 		if (err == -ENOENT) {
+@@ -2986,7 +2988,8 @@ static int test_skcipher_vs_generic_impl(const char *generic_driver,
+ 	if (strcmp(generic_driver, driver) == 0) /* Already the generic impl? */
+ 		return 0;
+ 
+-	generic_tfm = crypto_alloc_skcipher(generic_driver, 0, 0);
++	generic_tfm = crypto_alloc_skcipher(generic_driver,
++					    CRYPTO_ALG_FIPS_INTERNAL, 0);
+ 	if (IS_ERR(generic_tfm)) {
+ 		err = PTR_ERR(generic_tfm);
+ 		if (err == -ENOENT) {
+@@ -5328,7 +5331,6 @@ static const struct alg_test_desc alg_test_descs[] = {
+ 	}, {
+ 		.alg = "sha1",
+ 		.test = alg_test_hash,
+-		.fips_allowed = 1,
+ 		.suite = {
+ 			.hash = __VECS(sha1_tv_template)
+ 		}
+@@ -5613,6 +5615,13 @@ static int alg_find_test(const char *alg)
+ 	return -1;
+ }
+ 
++static int alg_fips_disabled(const char *driver, const char *alg)
++{
++	pr_info("alg: %s (%s) is disabled due to FIPS\n", alg, driver);
++
++	return -ECANCELED;
++}
++
+ int alg_test(const char *driver, const char *alg, u32 type, u32 mask)
+ {
+ 	int i;
+@@ -5637,9 +5646,6 @@ int alg_test(const char *driver, const char *alg, u32 type, u32 mask)
+ 		if (i < 0)
+ 			goto notest;
+ 
+-		if (fips_enabled && !alg_test_descs[i].fips_allowed)
+-			goto non_fips_alg;
+-
+ 		rc = alg_test_cipher(alg_test_descs + i, driver, type, mask);
+ 		goto test_done;
+ 	}
+@@ -5649,8 +5655,7 @@ int alg_test(const char *driver, const char *alg, u32 type, u32 mask)
+ 	if (i < 0 && j < 0)
+ 		goto notest;
+ 
+-	if (fips_enabled && ((i >= 0 && !alg_test_descs[i].fips_allowed) ||
+-			     (j >= 0 && !alg_test_descs[j].fips_allowed)))
++	if (fips_enabled && (j >= 0 && !alg_test_descs[j].fips_allowed))
+ 		goto non_fips_alg;
+ 
+ 	rc = 0;
+@@ -5671,16 +5676,22 @@ int alg_test(const char *driver, const char *alg, u32 type, u32 mask)
+ 		}
+ 		WARN(1, "alg: self-tests for %s (%s) failed (rc=%d)",
+ 		     driver, alg, rc);
+-	} else {
+-		if (fips_enabled)
+-			pr_info("alg: self-tests for %s (%s) passed\n",
+-				driver, alg);
++	} else if (fips_enabled) {
++		pr_info("alg: self-tests for %s (%s) passed\n",
++			driver, alg);
++
++		if (i >= 0 && !alg_test_descs[i].fips_allowed)
++			rc = alg_fips_disabled(driver, alg);
+ 	}
+ 
+ 	return rc;
+ 
+ notest:
+ 	printk(KERN_INFO "alg: No test for %s (%s)\n", alg, driver);
++
++	if (type & CRYPTO_ALG_FIPS_INTERNAL)
++		return alg_fips_disabled(driver, alg);
++
+ 	return 0;
+ non_fips_alg:
+ 	return -EINVAL;
+diff --git a/include/linux/crypto.h b/include/linux/crypto.h
+index 855869e1fd32..df3f68dfe8c7 100644
+--- a/include/linux/crypto.h
++++ b/include/linux/crypto.h
+@@ -132,6 +132,15 @@
+  */
+ #define CRYPTO_ALG_ALLOCATES_MEMORY	0x00010000
+ 
++/*
++ * Mark an algorithm as a service implementation only usable by a
++ * template and never by a normal user of the kernel crypto API.
++ * This is intended to be used by algorithms that are themselves
++ * not FIPS-approved but may instead be used to implement parts of
++ * a FIPS-approved algorithm (e.g., sha1 vs. hmac(sha1)).
++ */
++#define CRYPTO_ALG_FIPS_INTERNAL	0x00020000
++
+ /*
+  * Transform masks and values (for crt_flags).
+  */
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

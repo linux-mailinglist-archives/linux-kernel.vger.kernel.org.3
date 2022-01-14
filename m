@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD9D48E553
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2443648E5AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239537AbiANIRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239516AbiANIRQ (ORCPT
+        id S239901AbiANIUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:20:13 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60182 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239862AbiANITh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:17:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94141C06173F;
-        Fri, 14 Jan 2022 00:17:16 -0800 (PST)
+        Fri, 14 Jan 2022 03:19:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D336061E0B;
-        Fri, 14 Jan 2022 08:17:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9910C36AE9;
-        Fri, 14 Jan 2022 08:17:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 341F2B8243F;
+        Fri, 14 Jan 2022 08:19:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73B04C36AEC;
+        Fri, 14 Jan 2022 08:19:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148235;
-        bh=ODmlybYA1X7PI5hQpMANYj3jMI3VYtYjGZ0QCd3yevE=;
+        s=korg; t=1642148375;
+        bh=VVfheN7Z1g2MM6wFrNFUj1NxCpfl1wgNFD1u1+I3bfA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dUszUmzMB7rQGCC1TK+VXt2K16d75Ud3JHvHlUbmEB4/XGQ2sjPvxKGMQDinCU9gK
-         KncWWnRcGYkTNVfo1uzWBPazAPk9Xl368KNkXmrZHWdO02f6IIUN2D4EJ6+siNNbvK
-         acSd1DPGNFvXSxn+jilBQ7UxKRyT2fKwokU7hSY4=
+        b=lPWiDuF7aId6ZFYGs3c5BXHowrKgDr8QxKJwaPvXFAzlcLpPnwREqzfvPgLq7Lp7n
+         ch/ueLD67ys1mcQes/WxA7c/HpqQ2X+iJaRZn7yI80fgmprEqj9ij+jR3YsRvYaQUP
+         v188uGUSB3yaQnI7j7Nn1Nqgm3G9gU4sgoXvchBU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
-Subject: [PATCH 5.4 05/18] USB: Fix "slab-out-of-bounds Write" bug in usb_hcd_poll_rh_status
+        stable@vger.kernel.org, Tim Jiang <tjiang@codeaurora.org>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: [PATCH 5.15 12/41] Bluetooth: btusb: Add the new support IDs for WCN6855
 Date:   Fri, 14 Jan 2022 09:16:12 +0100
-Message-Id: <20220114081541.645093106@linuxfoundation.org>
+Message-Id: <20220114081545.573067230@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081541.465841464@linuxfoundation.org>
-References: <20220114081541.465841464@linuxfoundation.org>
+In-Reply-To: <20220114081545.158363487@linuxfoundation.org>
+References: <20220114081545.158363487@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,65 +45,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: tjiang@codeaurora.org <tjiang@codeaurora.org>
 
-commit 1d7d4c07932e04355d6e6528d44a2f2c9e354346 upstream.
+commit 21a241b3bc153b346987a28cc132674646589e02 upstream.
 
-When the USB core code for getting root-hub status reports was
-originally written, it was assumed that the hub driver would be its
-only caller.  But this isn't true now; user programs can use usbfs to
-communicate with root hubs and get status reports.  When they do this,
-they may use a transfer_buffer that is smaller than the data returned
-by the HCD, which will lead to a buffer overflow error when
-usb_hcd_poll_rh_status() tries to store the status data.  This was
-discovered by syzbot:
+Add the more IDs of HP to usb_device_id table for WCN6855.
 
-BUG: KASAN: slab-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
-BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x5f4/0x780 drivers/usb/core/hcd.c:776
-Write of size 2 at addr ffff88801da403c0 by task syz-executor133/4062
+-Device(0489:e0cc) from /sys/kernel/debug/usb/devices
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=12   MxCh= 0
+D:  Ver= 1.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=0489 ProdID=e0cc Rev= 0.01
+C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=100mA
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+I:  If#= 1 Alt= 7 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  65 Ivl=1ms
 
-This patch fixes the bug by reducing the amount of status data if it
-won't fit in the transfer_buffer.  If some data gets discarded then
-the URB's completion status is set to -EOVERFLOW rather than 0, to let
-the user know what happened.
+-Device(0489:e0d6) from /sys/kernel/debug/usb/devices
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=12   MxCh= 0
+D:  Ver= 1.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=0489 ProdID=e0d6 Rev= 0.01
+C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=100mA
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+I:  If#= 1 Alt= 7 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  65 Ivl=1ms
 
-Reported-and-tested-by: syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/Yc+3UIQJ2STbxNua@rowland.harvard.edu
+Signed-off-by: Tim Jiang <tjiang@codeaurora.org>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/hcd.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/bluetooth/btusb.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -753,6 +753,7 @@ void usb_hcd_poll_rh_status(struct usb_h
- {
- 	struct urb	*urb;
- 	int		length;
-+	int		status;
- 	unsigned long	flags;
- 	char		buffer[6];	/* Any root hubs with > 31 ports? */
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -295,6 +295,12 @@ static const struct usb_device_id blackl
+ 	{ USB_DEVICE(0x0cf3, 0xe600), .driver_info = BTUSB_QCA_WCN6855 |
+ 						     BTUSB_WIDEBAND_SPEECH |
+ 						     BTUSB_VALID_LE_STATES },
++	{ USB_DEVICE(0x0489, 0xe0cc), .driver_info = BTUSB_QCA_WCN6855 |
++						     BTUSB_WIDEBAND_SPEECH |
++						     BTUSB_VALID_LE_STATES },
++	{ USB_DEVICE(0x0489, 0xe0d6), .driver_info = BTUSB_QCA_WCN6855 |
++						     BTUSB_WIDEBAND_SPEECH |
++						     BTUSB_VALID_LE_STATES },
  
-@@ -770,11 +771,17 @@ void usb_hcd_poll_rh_status(struct usb_h
- 		if (urb) {
- 			clear_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
- 			hcd->status_urb = NULL;
-+			if (urb->transfer_buffer_length >= length) {
-+				status = 0;
-+			} else {
-+				status = -EOVERFLOW;
-+				length = urb->transfer_buffer_length;
-+			}
- 			urb->actual_length = length;
- 			memcpy(urb->transfer_buffer, buffer, length);
- 
- 			usb_hcd_unlink_urb_from_ep(hcd, urb);
--			usb_hcd_giveback_urb(hcd, urb, 0);
-+			usb_hcd_giveback_urb(hcd, urb, status);
- 		} else {
- 			length = 0;
- 			set_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
+ 	/* Broadcom BCM2035 */
+ 	{ USB_DEVICE(0x0a5c, 0x2009), .driver_info = BTUSB_BCM92035 },
 
 

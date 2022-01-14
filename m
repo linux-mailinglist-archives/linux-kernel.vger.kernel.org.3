@@ -2,175 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D6648EF9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 19:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48CF48EF9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 19:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244054AbiANSEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 13:04:23 -0500
-Received: from mga17.intel.com ([192.55.52.151]:62728 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235383AbiANSEW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 13:04:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642183462; x=1673719462;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KfHCf+CAWf1npqThs9yzRu/PDCFapC6NYruwlljGzYY=;
-  b=J09GQEpNpjUoSsCUQM007+uBNWss+czrYmbNQ6soqCBZ4xkhNsDb41sr
-   OrfmNMWKMPQxosoCtyYqMJwvcE6aWzfW3GjPMwbJRUSKsYJrvEOwrowqE
-   2944CrDtOekylwazK2WEmeE1sIjOWVSkkMfoGrt4mi57sXK2N35gYxSFZ
-   EJkdOS68QYpc8k52z9J/i5iTcxA+cuxapg491+Er96Hx/frh5mGPzvxjy
-   tEPh2jAZBgDXm0tkJ3fsD8l1rBZbgeOoqcwaHUV4l1PDJqHshFP6qkOyG
-   ZD8l+Cf44wsuA5Z6h6a83BenkQB0VaJ56olmgkE578Rz1fs+JPkubvkpa
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="224986283"
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="224986283"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 10:04:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="624432428"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 14 Jan 2022 10:04:18 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8Qvx-0008rv-Jg; Fri, 14 Jan 2022 18:04:17 +0000
-Date:   Sat, 15 Jan 2022 02:03:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [hverkuil-media-tree:for-v5.18f 82/82]
- drivers/media/platform/aspeed-video.c:1836:30: warning: format '%p' expects
- argument of type 'void *', but argument 4 has type 'dma_addr_t' {aka
- 'unsigned int'}
-Message-ID: <202201150143.t4kto0kZ-lkp@intel.com>
+        id S244043AbiANSDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 13:03:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243990AbiANSDl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 13:03:41 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF48C06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 10:03:40 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id p18so7496051wmg.4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 10:03:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U38RVxiG3sOh0MWzSEGRMLdXOoM3QqR6IHHi0QfBZi8=;
+        b=kpWl9tiTaB9Y667+lup71x1J3yMu5ghjvQoCzOOh+q4D5IZ7zGM8zg/+N28TScTQ0g
+         anXQOGW/wgm+xoWtCuWtpzWQH5OjTX3fBjNdmthHBM9IdXHwaPS3iarQ25LnNF54nfuk
+         zccvVoDGoZrIQhhlFFrJZC3FFkyIBY/cx44eA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=U38RVxiG3sOh0MWzSEGRMLdXOoM3QqR6IHHi0QfBZi8=;
+        b=qjm3HirEYU8CniFhsT61VXiriji0vH/XznK4YMA7ReM3k2OUay2/ocNNd9pu0oNr2P
+         +udn8h7unSIMQDeFZzL098azbJA9W25IeD8gGxsre0X0SpguE9BeWPOSseIbcHJEeSuD
+         Su3xULB1Yq0zKtojkW1kHjOcfgWL2tKf+ilre5ppd6b+bFqUnNwqJfa3lm8/J20+Z9W7
+         hkIHlQrFE4d9E82nVDRS2Q7Z9GO/dwMvWsxVYnR+Ya4FwF2jWK2Nb3hol6wmRzsQS45v
+         QpwoJAxbEvl70zyFgQJemsTIiV7ee1kjLjF2GXIMYx2iJTpPk0MIB+Fp4xpLL63et6r7
+         3lvg==
+X-Gm-Message-State: AOAM53120NNjaPiX5obxSlV7/ML9feT30De4PnOnLCdmw69rimAqNnux
+        SE/Qq1QAT/raprWpEcd7dwgq8g==
+X-Google-Smtp-Source: ABdhPJyVV+dBLuNrlNBzg8Kf9VpXDDldf58VcfVCXoH95cU29uLwU/ZmIhJpGV5CUQg5nCnlJxrxuQ==
+X-Received: by 2002:a05:600c:3790:: with SMTP id o16mr11384843wmr.174.1642183419143;
+        Fri, 14 Jan 2022 10:03:39 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id bg19sm12113937wmb.47.2022.01.14.10.03.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 10:03:38 -0800 (PST)
+Date:   Fri, 14 Jan 2022 19:03:36 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Iouri Tarassov <iourit@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
+        gregkh@linuxfoundation.org,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        jenatali@microsoft.com
+Subject: Re: [PATCH v1 9/9] drivers: hv: dxgkrnl: Implement DXGSYNCFILE
+Message-ID: <YeG6+Crv/Bg4h3u1@phenom.ffwll.local>
+Mail-Followup-To: Iouri Tarassov <iourit@linux.microsoft.com>,
+        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
+        gregkh@linuxfoundation.org,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        jenatali@microsoft.com
+References: <cover.1641937419.git.iourit@linux.microsoft.com>
+ <e04c8e820bc166d9d4fe8e388aace731bb3255b0.1641937420.git.iourit@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <e04c8e820bc166d9d4fe8e388aace731bb3255b0.1641937420.git.iourit@linux.microsoft.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.18f
-head:   97dd85f0caf1ad96c275147583c46f8ee12308fc
-commit: 97dd85f0caf1ad96c275147583c46f8ee12308fc [82/82] f
-config: nios2-allyesconfig (https://download.01.org/0day-ci/archive/20220115/202201150143.t4kto0kZ-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree for-v5.18f
-        git checkout 97dd85f0caf1ad96c275147583c46f8ee12308fc
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/media/platform/
+Hi all,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Wed, Jan 12, 2022 at 11:55:14AM -0800, Iouri Tarassov wrote:
+> Implement the LX_DXCREATESYNCFILE IOCTL (D3DKMTCreateSyncFile).
+> 
+> dxgsyncfile is built on top of the Linux sync_file object and
+> provides a way for the user mode to synchronize with the execution
+> of the device DMA packets.
+> 
+> The IOCTL creates a dxgsyncfile object for the given GPU synchronization
+> object and a fence value. A sync_object file descriptor is returned to
+> the caller. The caller could wait for the object by using poll().
+> When the GPU synchronization object is signaled on the host, the host
+> sends a message to the virtual machine and the sync_file object is
+> signaled.
+> 
+> Signed-off-by: Iouri Tarassov <iourit@linux.microsoft.com>
 
-All warnings (new ones prefixed by >>):
+Adding dri-devel, which get_maintainers.pl should have done automatically
+with the dma_fence wildcard match. Not sure why that didn't happen.
 
-   In file included from include/linux/device.h:15,
-                    from drivers/media/platform/aspeed-video.c:9:
-   drivers/media/platform/aspeed-video.c: In function 'aspeed_video_init':
->> drivers/media/platform/aspeed-video.c:1836:30: warning: format '%p' expects argument of type 'void *', but argument 4 has type 'dma_addr_t' {aka 'unsigned int'} [-Wformat=]
-    1836 |         dev_info(video->dev, "alloc mem size(%d) at %pad for jpeg header\n",
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
-     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                          ^~~~~~~
-   drivers/media/platform/aspeed-video.c:1836:9: note: in expansion of macro 'dev_info'
-    1836 |         dev_info(video->dev, "alloc mem size(%d) at %pad for jpeg header\n",
-         |         ^~~~~~~~
-   drivers/media/platform/aspeed-video.c:1836:54: note: format string is defined here
-    1836 |         dev_info(video->dev, "alloc mem size(%d) at %pad for jpeg header\n",
-         |                                                     ~^
-         |                                                      |
-         |                                                      void *
-         |                                                     %d
+> +struct dxgsyncpoint {
+> +	struct dxghostevent	hdr;
+> +	struct dma_fence	base;
 
+This doesn't work unfortuntately. For better or worse memory fences like
+monitored fences from wddm have completely different semantics from
+dma_fence. You could probably hack this to be self-consistent for hyper-v,
+but the problem is that then hv would have incompatible locking/nesting
+rules compared to everything else, and dma_fence matter for memory
+management so this includes whether you're allowed to kmalloc(GFP_KERNEL)
+or not, and that's just a bit too much.
 
-vim +1836 drivers/media/platform/aspeed-video.c
+I discussed this quickly with Jesse on irc and it sounds like the reason
+you want the dma_fence is just to emulate the sync_file interface for
+android. I think the correct solution here is to create a hv_dxg_sync_file
+fd, which emulates the exact ioctls that Android needs, but with a wddm
+monitored fence underneath instead of a dma_fence underneath.
 
-  1780	
-  1781	static int aspeed_video_init(struct aspeed_video *video)
-  1782	{
-  1783		int irq;
-  1784		int rc;
-  1785		struct device *dev = video->dev;
-  1786	
-  1787		irq = irq_of_parse_and_map(dev->of_node, 0);
-  1788		if (!irq) {
-  1789			dev_err(dev, "Unable to find IRQ\n");
-  1790			return -ENODEV;
-  1791		}
-  1792	
-  1793		rc = devm_request_threaded_irq(dev, irq, NULL, aspeed_video_irq,
-  1794					       IRQF_ONESHOT, DEVICE_NAME, video);
-  1795		if (rc < 0) {
-  1796			dev_err(dev, "Unable to request IRQ %d\n", irq);
-  1797			return rc;
-  1798		}
-  1799		dev_info(video->dev, "irq %d\n", irq);
-  1800	
-  1801		video->eclk = devm_clk_get(dev, "eclk");
-  1802		if (IS_ERR(video->eclk)) {
-  1803			dev_err(dev, "Unable to get ECLK\n");
-  1804			return PTR_ERR(video->eclk);
-  1805		}
-  1806	
-  1807		rc = clk_prepare(video->eclk);
-  1808		if (rc)
-  1809			return rc;
-  1810	
-  1811		video->vclk = devm_clk_get(dev, "vclk");
-  1812		if (IS_ERR(video->vclk)) {
-  1813			dev_err(dev, "Unable to get VCLK\n");
-  1814			rc = PTR_ERR(video->vclk);
-  1815			goto err_unprepare_eclk;
-  1816		}
-  1817	
-  1818		rc = clk_prepare(video->vclk);
-  1819		if (rc)
-  1820			goto err_unprepare_eclk;
-  1821	
-  1822		of_reserved_mem_device_init(dev);
-  1823	
-  1824		rc = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-  1825		if (rc) {
-  1826			dev_err(dev, "Failed to set DMA mask\n");
-  1827			goto err_release_reserved_mem;
-  1828		}
-  1829	
-  1830		if (!aspeed_video_alloc_buf(video, &video->jpeg,
-  1831					    VE_JPEG_HEADER_SIZE)) {
-  1832			dev_err(dev, "Failed to allocate DMA for JPEG header\n");
-  1833			rc = -ENOMEM;
-  1834			goto err_release_reserved_mem;
-  1835		}
-> 1836		dev_info(video->dev, "alloc mem size(%d) at %pad for jpeg header\n",
-  1837			 VE_JPEG_HEADER_SIZE, video->jpeg.dma);
-  1838	
-  1839		aspeed_video_init_jpeg_table(video->jpeg.virt, video->yuv420);
-  1840	
-  1841		return 0;
-  1842	
-  1843	err_release_reserved_mem:
-  1844		of_reserved_mem_device_release(dev);
-  1845		clk_unprepare(video->vclk);
-  1846	err_unprepare_eclk:
-  1847		clk_unprepare(video->eclk);
-  1848	
-  1849		return rc;
-  1850	}
-  1851	
+This way we guarantee that no one ever accidentally mixes these
+incompatible concepts up in the kernel, and Android should still be able
+to happily run under hyperv.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thoughts?
+
+Also pls cc me on this sync work since even if you drop dma_fence use
+completely I'd like to follow this a bit.
+
+Cheers, Daniel
+
+> +	u64			fence_value;
+> +	u64			context;
+> +	spinlock_t		lock;
+> +	u64			u64;
+> +};
+> +
+> +#endif	 /* _DXGSYNCFILE_H */
+> diff --git a/drivers/hv/dxgkrnl/dxgvmbus.c b/drivers/hv/dxgkrnl/dxgvmbus.c
+> index 773d8f364b34..185fb7e38c21 100644
+> --- a/drivers/hv/dxgkrnl/dxgvmbus.c
+> +++ b/drivers/hv/dxgkrnl/dxgvmbus.c
+> @@ -1311,15 +1311,18 @@ int create_existing_sysmem(struct dxgdevice *device,
+>  	void *kmem = NULL;
+>  	int ret = 0;
+>  	struct dxgkvmb_command_setexistingsysmemstore *set_store_command;
+> +	struct dxgkvmb_command_setexistingsysmempages *set_pages_command;
+>  	u64 alloc_size = host_alloc->allocation_size;
+>  	u32 npages = alloc_size >> PAGE_SHIFT;
+>  	struct dxgvmbusmsg msg = {.hdr = NULL};
+> -
+> -	ret = init_message(&msg, device->adapter, device->process,
+> -			   sizeof(*set_store_command));
+> -	if (ret)
+> -		goto cleanup;
+> -	set_store_command = (void *)msg.msg;
+> +	const u32 max_pfns_in_message =
+> +		(DXG_MAX_VM_BUS_PACKET_SIZE - sizeof(*set_pages_command) -
+> +		PAGE_SIZE) / sizeof(__u64);
+> +	u32 alloc_offset_in_pages = 0;
+> +	struct page **page_in;
+> +	u64 *pfn;
+> +	u32 pages_to_send;
+> +	u32 i;
+>  
+>  	/*
+>  	 * Create a guest physical address list and set it as the allocation
+> @@ -1330,6 +1333,7 @@ int create_existing_sysmem(struct dxgdevice *device,
+>  	dev_dbg(dxgglobaldev, "   Alloc size: %lld", alloc_size);
+>  
+>  	dxgalloc->cpu_address = (void *)sysmem;
+> +
+>  	dxgalloc->pages = vzalloc(npages * sizeof(void *));
+>  	if (dxgalloc->pages == NULL) {
+>  		pr_err("failed to allocate pages");
+> @@ -1347,31 +1351,80 @@ int create_existing_sysmem(struct dxgdevice *device,
+>  		ret = -ENOMEM;
+>  		goto cleanup;
+>  	}
+> -	kmem = vmap(dxgalloc->pages, npages, VM_MAP, PAGE_KERNEL);
+> -	if (kmem == NULL) {
+> -		pr_err("vmap failed");
+> -		ret = -ENOMEM;
+> -		goto cleanup;
+> -	}
+> -	ret1 = vmbus_establish_gpadl(dxgglobal_get_vmbus(), kmem,
+> -				     alloc_size, &dxgalloc->gpadl);
+> -	if (ret1) {
+> -		pr_err("establish_gpadl failed: %d", ret1);
+> -		ret = -ENOMEM;
+> -		goto cleanup;
+> -	}
+> -	dev_dbg(dxgglobaldev, "New gpadl %d", dxgalloc->gpadl.gpadl_handle);
+> +	if (!dxgglobal->map_guest_pages_enabled) {
+> +		ret = init_message(&msg, device->adapter, device->process,
+> +				sizeof(*set_store_command));
+> +		if (ret)
+> +			goto cleanup;
+> +		set_store_command = (void *)msg.msg;
+>  
+> -	command_vgpu_to_host_init2(&set_store_command->hdr,
+> -				   DXGK_VMBCOMMAND_SETEXISTINGSYSMEMSTORE,
+> -				   device->process->host_handle);
+> -	set_store_command->device = device->handle;
+> -	set_store_command->device = device->handle;
+> -	set_store_command->allocation = host_alloc->allocation;
+> -	set_store_command->gpadl = dxgalloc->gpadl.gpadl_handle;
+> -	ret = dxgvmb_send_sync_msg_ntstatus(msg.channel, msg.hdr, msg.size);
+> -	if (ret < 0)
+> -		pr_err("failed to set existing store: %x", ret);
+> +		kmem = vmap(dxgalloc->pages, npages, VM_MAP, PAGE_KERNEL);
+> +		if (kmem == NULL) {
+> +			pr_err("vmap failed");
+> +			ret = -ENOMEM;
+> +			goto cleanup;
+> +		}
+> +		ret1 = vmbus_establish_gpadl(dxgglobal_get_vmbus(), kmem,
+> +					alloc_size, &dxgalloc->gpadl);
+> +		if (ret1) {
+> +			pr_err("establish_gpadl failed: %d", ret1);
+> +			ret = -ENOMEM;
+> +			goto cleanup;
+> +		}
+> +		dev_dbg(dxgglobaldev, "New gpadl %d",
+> +			dxgalloc->gpadl.gpadl_handle);
+> +
+> +		command_vgpu_to_host_init2(&set_store_command->hdr,
+> +					DXGK_VMBCOMMAND_SETEXISTINGSYSMEMSTORE,
+> +					device->process->host_handle);
+> +		set_store_command->device = device->handle;
+> +		set_store_command->allocation = host_alloc->allocation;
+> +		set_store_command->gpadl = dxgalloc->gpadl.gpadl_handle;
+> +		ret = dxgvmb_send_sync_msg_ntstatus(msg.channel, msg.hdr,
+> +						    msg.size);
+> +		if (ret < 0)
+> +			pr_err("failed to set existing store: %x", ret);
+> +	} else {
+> +		/*
+> +		 * Send the list of the allocation PFNs to the host. The host
+> +		 * will map the pages for GPU access.
+> +		 */
+> +
+> +		ret = init_message(&msg, device->adapter, device->process,
+> +				sizeof(*set_pages_command) +
+> +				max_pfns_in_message * sizeof(u64));
+> +		if (ret)
+> +			goto cleanup;
+> +		set_pages_command = (void *)msg.msg;
+> +		command_vgpu_to_host_init2(&set_pages_command->hdr,
+> +					DXGK_VMBCOMMAND_SETEXISTINGSYSMEMPAGES,
+> +					device->process->host_handle);
+> +		set_pages_command->device = device->handle;
+> +		set_pages_command->allocation = host_alloc->allocation;
+> +
+> +		page_in = dxgalloc->pages;
+> +		while (alloc_offset_in_pages < npages) {
+> +			pfn = (u64 *)((char *)msg.msg +
+> +				sizeof(*set_pages_command));
+> +			pages_to_send = min(npages - alloc_offset_in_pages,
+> +					    max_pfns_in_message);
+> +			set_pages_command->num_pages = pages_to_send;
+> +			set_pages_command->alloc_offset_in_pages =
+> +				alloc_offset_in_pages;
+> +
+> +			for (i = 0; i < pages_to_send; i++)
+> +				*pfn++ = page_to_pfn(*page_in++);
+> +
+> +			ret = dxgvmb_send_sync_msg_ntstatus(msg.channel,
+> +							    msg.hdr,
+> +							    msg.size);
+> +			if (ret < 0) {
+> +				pr_err("failed to set existing pages: %x", ret);
+> +				break;
+> +			}
+> +			alloc_offset_in_pages += pages_to_send;
+> +		}
+> +	}
+>  
+>  cleanup:
+>  	if (kmem)
+> @@ -2685,6 +2738,7 @@ int dxgvmb_send_wait_sync_object_cpu(struct dxgprocess *process,
+>  				     struct
+>  				     d3dkmt_waitforsynchronizationobjectfromcpu
+>  				     *args,
+> +				     bool user_address,
+>  				     u64 cpu_event)
+>  {
+>  	int ret = -EINVAL;
+> @@ -2708,18 +2762,25 @@ int dxgvmb_send_wait_sync_object_cpu(struct dxgprocess *process,
+>  	command->object_count = args->object_count;
+>  	command->guest_event_pointer = (u64) cpu_event;
+>  	current_pos = (u8 *) &command[1];
+> -	ret = copy_from_user(current_pos, args->objects, object_size);
+> -	if (ret) {
+> -		pr_err("%s failed to copy objects", __func__);
+> -		ret = -EINVAL;
+> -		goto cleanup;
+> -	}
+> -	current_pos += object_size;
+> -	ret = copy_from_user(current_pos, args->fence_values, fence_size);
+> -	if (ret) {
+> -		pr_err("%s failed to copy fences", __func__);
+> -		ret = -EINVAL;
+> -		goto cleanup;
+> +	if (user_address) {
+> +		ret = copy_from_user(current_pos, args->objects, object_size);
+> +		if (ret) {
+> +			pr_err("%s failed to copy objects", __func__);
+> +			ret = -EINVAL;
+> +			goto cleanup;
+> +		}
+> +		current_pos += object_size;
+> +		ret = copy_from_user(current_pos, args->fence_values,
+> +				     fence_size);
+> +		if (ret) {
+> +			pr_err("%s failed to copy fences", __func__);
+> +			ret = -EINVAL;
+> +			goto cleanup;
+> +		}
+> +	} else {
+> +		memcpy(current_pos, args->objects, object_size);
+> +		current_pos += object_size;
+> +		memcpy(current_pos, args->fence_values, fence_size);
+>  	}
+>  
+>  	ret = dxgvmb_send_sync_msg_ntstatus(msg.channel, msg.hdr, msg.size);
+> diff --git a/drivers/hv/dxgkrnl/dxgvmbus.h b/drivers/hv/dxgkrnl/dxgvmbus.h
+> index a19ac804a320..dc766d95a0c4 100644
+> --- a/drivers/hv/dxgkrnl/dxgvmbus.h
+> +++ b/drivers/hv/dxgkrnl/dxgvmbus.h
+> @@ -139,6 +139,8 @@ enum dxgkvmb_commandtype {
+>  	DXGK_VMBCOMMAND_GETCONTEXTSCHEDULINGPRIORITY = 61,
+>  	DXGK_VMBCOMMAND_QUERYCLOCKCALIBRATION	= 62,
+>  	DXGK_VMBCOMMAND_QUERYRESOURCEINFO	= 64,
+> +	DXGK_VMBCOMMAND_LOGEVENT		= 65,
+> +	DXGK_VMBCOMMAND_SETEXISTINGSYSMEMPAGES	= 66,
+>  	DXGK_VMBCOMMAND_INVALID
+>  };
+>  
+> @@ -245,6 +247,16 @@ struct dxgkvmb_command_setexistingsysmemstore {
+>  	u32				gpadl;
+>  };
+>  
+> +/* Returns ntstatus */
+> +struct dxgkvmb_command_setexistingsysmempages {
+> +	struct dxgkvmb_command_vgpu_to_host hdr;
+> +	struct d3dkmthandle		device;
+> +	struct d3dkmthandle		allocation;
+> +	u32				num_pages;
+> +	u32				alloc_offset_in_pages;
+> +	/* u64 pfn_array[num_pages] */
+> +};
+> +
+>  struct dxgkvmb_command_createprocess {
+>  	struct dxgkvmb_command_vm_to_host hdr;
+>  	void			*process;
+> diff --git a/drivers/hv/dxgkrnl/ioctl.c b/drivers/hv/dxgkrnl/ioctl.c
+> index 9770fabf163e..9236b6b95973 100644
+> --- a/drivers/hv/dxgkrnl/ioctl.c
+> +++ b/drivers/hv/dxgkrnl/ioctl.c
+> @@ -19,6 +19,7 @@
+>  
+>  #include "dxgkrnl.h"
+>  #include "dxgvmbus.h"
+> +#include "dxgsyncfile.h"
+>  
+>  #undef pr_fmt
+>  #define pr_fmt(fmt)	"dxgk:err: " fmt
+> @@ -32,11 +33,6 @@ struct ioctl_desc {
+>  };
+>  static struct ioctl_desc ioctls[LX_IO_MAX + 1];
+>  
+> -static char *errorstr(int ret)
+> -{
+> -	return ret < 0 ? "err" : "";
+> -}
+> -
+>  static int dxgsyncobj_release(struct inode *inode, struct file *file)
+>  {
+>  	struct dxgsharedsyncobject *syncobj = file->private_data;
+> @@ -3561,7 +3557,7 @@ dxgk_wait_sync_object_cpu(struct dxgprocess *process, void *__user inargs)
+>  	}
+>  
+>  	ret = dxgvmb_send_wait_sync_object_cpu(process, adapter,
+> -					       &args, event_id);
+> +					       &args, true, event_id);
+>  	if (ret < 0)
+>  		goto cleanup;
+>  
+> @@ -5457,4 +5453,6 @@ void init_ioctls(void)
+>  		  LX_DXQUERYSTATISTICS);
+>  	SET_IOCTL(/*0x44 */ dxgk_share_object_with_host,
+>  		  LX_DXSHAREOBJECTWITHHOST);
+> +	SET_IOCTL(/*0x45 */ dxgk_create_sync_file,
+> +		  LX_DXCREATESYNCFILE);
+>  }
+> diff --git a/drivers/hv/dxgkrnl/misc.c b/drivers/hv/dxgkrnl/misc.c
+> index ffb491641836..1b152c269265 100644
+> --- a/drivers/hv/dxgkrnl/misc.c
+> +++ b/drivers/hv/dxgkrnl/misc.c
+> @@ -35,3 +35,9 @@ u16 *wcsncpy(u16 *dest, const u16 *src, size_t n)
+>  	dest[i - 1] = 0;
+>  	return dest;
+>  }
+> +
+> +char *errorstr(int ret)
+> +{
+> +	return ret < 0 ? "err" : "";
+> +}
+> +
+> diff --git a/drivers/hv/dxgkrnl/misc.h b/drivers/hv/dxgkrnl/misc.h
+> index 7fe3fc45b67c..3079dd55c7a4 100644
+> --- a/drivers/hv/dxgkrnl/misc.h
+> +++ b/drivers/hv/dxgkrnl/misc.h
+> @@ -44,6 +44,7 @@ extern const struct d3dkmthandle zerohandle;
+>   */
+>  
+>  u16 *wcsncpy(u16 *dest, const u16 *src, size_t n);
+> +char *errorstr(int ret);
+>  
+>  enum dxglockstate {
+>  	DXGLOCK_SHARED,
+> -- 
+> 2.32.0
+> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD0F48F2E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E14048F2EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiANXUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 18:20:52 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56560 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiANXUv (ORCPT
+        id S229820AbiANXVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 18:21:43 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:34116 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229572AbiANXVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 18:20:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03159B82A4F;
-        Fri, 14 Jan 2022 23:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D8DBC36AE7;
-        Fri, 14 Jan 2022 23:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642202448;
-        bh=NGSaF/WGmhkbF37ukIBly91h03FIlvCv0XyffSi0nE4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ugpH/Q10bH2MLiQAqjCaNxJQr1MSw63iJQkyAvCVO5yVnH+zr8vwR45jBtXF086c4
-         AsJh1ZjS5MYbPBs73cytI7Zopub2A/Pur72AcMfAKXz9l0RIlC0rZ+zDonJyKEvHZz
-         NHVV/FDhPzRgxUbj8SB3tbMqjsaRt4iZwlpgmpMOqWo9Q+x0F+0SjDxIUVsfwDvCcW
-         kXcVR0+IhJ8GlJ0QPfSGRu7cdcWPzckNhyOFyx/0oHQuwsbF0s+3MxTxw2d+mzLQiL
-         TVYc+at5bMSeoaJ9Yxy3JZiyG0v1RfYvEEC4AMlF9AOcA8JrCRrBuAbHPCU8a6tGdV
-         C4NST9hw3XD3w==
-Received: by pali.im (Postfix)
-        id 53A057D1; Sat, 15 Jan 2022 00:20:46 +0100 (CET)
-Date:   Sat, 15 Jan 2022 00:20:46 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 0/6] serial: mvebu-uart: Support for higher baudrates
-Message-ID: <20220114232046.ucpxsdiitow5huwj@pali>
-References: <20210930095838.28145-1-pali@kernel.org>
- <20211103214209.azo2z3z4gy7aj5hu@pali>
- <87ee6bm9hn.fsf@BL-laptop>
- <20220114105100.im6gmkt6fjl2aiwl@pali>
- <20220114225659.D5D79C36AE9@smtp.kernel.org>
- <20220114230549.56co4qcpnq32muwj@pali>
- <20220114231657.AB353C36AE7@smtp.kernel.org>
+        Fri, 14 Jan 2022 18:21:42 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 56AB71F46D79
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642202501;
+        bh=IG6R5uw0yb3VLWtgH6sIypdBw8QjZrLQPe1BTwKhfbI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hIfQ6LPv3hxOBrIzE+2fY+y+U+gAwIVNKl5BeY1UMT2Tzf/VfiKoelgFvpydPfVeu
+         YOgyyYx/a3JMIQnw1tpFjjmhNLc+1cye4D6C0e9/o8WFtEpO4Nl0CKYnIazi2QlyAX
+         EZc7ApWAQ/t0NTFv6RCOah2tBe/Y9iEHMrdiFlmUnNJWzyTs0HA65nOWdNbY+VSeWp
+         YMcuwxnEjxUkQhzm0ODVW2R8a+RYWiJlfUndo/JP9VAomYg6iu3T5DDC3fO2bwXPx/
+         NDdONaiKwFH9C4KUbkZjpHERQVv0HHyd0F4gNI3SsnOLqwiOusXcRKpIQ/3kX+5Wz7
+         yPHG312/z/VmQ==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+Subject: [PATCH] selftests: cpufreq: Write test output to stdout as well
+Date:   Fri, 14 Jan 2022 18:21:26 -0500
+Message-Id: <20220114232126.92043-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220114231657.AB353C36AE7@smtp.kernel.org>
-User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 14 January 2022 15:16:55 Stephen Boyd wrote:
-> Quoting Pali Rohár (2022-01-14 15:05:49)
-> > On Friday 14 January 2022 14:56:58 Stephen Boyd wrote:
-> > > 
-> > > If we're adding new support why can't we break with backwards
-> > > compatibility for the binding and do it a different way?
-> > 
-> > Because DTS are backwards compatible. I was told more times that kernel
-> > drivers should work correctly with older DTS files. On some boards are
-> > DTB files provided by bootloader and they do not use in-kernel DTS
-> > files.
-> 
-> I'm not suggesting to break the kernel driver when used with older DTBs.
-> New features are fair game to change the compatible string and do
-> something different. If the user wants the new feature they update their
-> DTB. We shouldn't be constrained by backwards compatibility here.
+Use 'tee' to send the test output to stdout in addition to the current
+output file. This makes the output easier to handle in automated test
+systems and is superior to only later dumping the output file contents
+to stdout, since this way the test output can be interleaved with other
+log messages, like from the kernel, so that chronology is preserved,
+making it easier to detect issues.
 
-And what do you suggest to do? Separate UART0 and UART1 nodes are still
-needed because as Mark wrote stdin-path and stdout-patch could be
-different.
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+---
+ tools/testing/selftests/cpufreq/main.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
+index 31f8c9a76c5f..60ce18ed0666 100755
+--- a/tools/testing/selftests/cpufreq/main.sh
++++ b/tools/testing/selftests/cpufreq/main.sh
+@@ -194,5 +194,5 @@ prerequisite
+ 
+ # Run requested functions
+ clear_dumps $OUTFILE
+-do_test >> $OUTFILE.txt
++do_test | tee -a $OUTFILE.txt
+ dmesg_dumps $OUTFILE
+-- 
+2.34.1
+

@@ -2,64 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C8F48E874
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 11:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FDF48E876
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 11:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240476AbiANKl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 05:41:59 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:43117 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233947AbiANKl5 (ORCPT
+        id S237624AbiANKmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 05:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234097AbiANKmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 05:41:57 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V1o6OlK_1642156898;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V1o6OlK_1642156898)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 14 Jan 2022 18:41:55 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     clm@fb.com
-Cc:     josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] btrfs: zoned: Remove redundant initialization of to_add
-Date:   Fri, 14 Jan 2022 18:41:36 +0800
-Message-Id: <20220114104136.3531-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Fri, 14 Jan 2022 05:42:39 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D751C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 02:42:39 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id k18so14825759wrg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 02:42:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=gp5m+hjNnex+C5KrxF94exi88etk0hJOGkatfv4Q0bU=;
+        b=R8XlGGCi3zgVrOlJxHWY3jfI+Y42tPrDUAayaOZzeN0BjiwTcKnYiWpfHf/RyPD+PA
+         DMluxaRqAZF/FLUbiqhfVqmoKUCH5+PlpaZS2elAXXNYEukkKvu9KmUXOWa4tp+NrUob
+         wHFBIU4SBFF/5eQWwhBelF1Px8RDqviwQoGHYiVrGUQdC5AEvxJY+7Z4Q6A9YShwuoPQ
+         Rc5H9FrFvWGZ01qDSN2KjmCjPO/xOU11F8jwpuuR5GEGPN565KuEroKY9FrRWxoJLLt1
+         I8dR6W+MCZGY4N34VAvXlU/8s8P0eBDOv4bZBCvqXkpOP1/p0hwkm5x9JCNdbungfjoC
+         5Kow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=gp5m+hjNnex+C5KrxF94exi88etk0hJOGkatfv4Q0bU=;
+        b=WXNaJxqgFTb5/Hk65zYOYRswTxghRxOiN1nswR5gSBOFXqBapv2fXFxmj+m69UQ5zu
+         BZMsOozEzii95oS8Ktp1FEh0e1CNWcVQyVT9V7qcBVAe9xW5BOOgUdYAXKxwwli/WrIC
+         7zVkTulIRjvHzKTUP1T/YWAmbraCOLLVvLxa0oCnh0eSxPoXOyABi912w4irG7g47cBQ
+         f9QzNpqtS6svTExGVKA0dm/0UAaL429x9RqMezm2i+4fRn5/yiy5oPwGmzL+6KRix1wP
+         +MFZvYnzs7QbWpWvJu/YSwXzH0Ey7XTO24eg7+MyEjdvDZyFPYPvr1wsmgWq340071PK
+         GGPw==
+X-Gm-Message-State: AOAM53017aMg0Sg+YlPaYxT9I3z0PAkplrXfy1VAfjGIYK9MM/9Yi9Ox
+        2MHfxg34ta+mNcWahUM+Hvo7XQ==
+X-Google-Smtp-Source: ABdhPJyoGyFoYIArOrqbuQZfSBwAef4ylBDlWBIOjcz0yLUP3z+XxfSUcEq33rLVvTxljW/UNcrFVA==
+X-Received: by 2002:a05:6000:2ce:: with SMTP id o14mr7927987wry.70.1642156957760;
+        Fri, 14 Jan 2022 02:42:37 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:a3fc:c40b:5afc:88ee? ([2001:861:44c0:66c0:a3fc:c40b:5afc:88ee])
+        by smtp.gmail.com with ESMTPSA id m15sm5370531wmq.6.2022.01.14.02.42.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jan 2022 02:42:37 -0800 (PST)
+Subject: Re: dw_hdmi is showing wrong colour after commit
+ 7cd70656d1285b79("drm/bridge: display-connector: implement bus fmts
+ callbacks")
+To:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "Laurent.pinchart@ideasonboard.com" 
+        <Laurent.pinchart@ideasonboard.com>,
+        "robert.foss@linaro.org" <robert.foss@linaro.org>,
+        "jonas@kwiboo.se" <jonas@kwiboo.se>,
+        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
+        "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+References: <OS0PR01MB59221ED76B74231F5836D5FB86539@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CAOMZO5DJiCb5bJN5_nxnYa-FsK-u7QtFghWNzs_-udE42XPDeA@mail.gmail.com>
+ <502f3ec4-fea4-8e14-c7a9-39418fc05d6d@baylibre.com>
+ <OS0PR01MB592224EC8F50F41B7FF1DEE286549@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <19dd6013-8a31-b2ed-29d5-93fc44193ce4@baylibre.com>
+Date:   Fri, 14 Jan 2022 11:42:35 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <OS0PR01MB592224EC8F50F41B7FF1DEE286549@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-to_add is being initialized to len but this is never read as
-to_add is overwritten later on. Remove the redundant
-initialization.
+On 14/01/2022 09:29, Biju Das wrote:
+> Hi Neil,
+>  
+> + renesas-soc
+> 
+>> Subject: Re: dw_hdmi is showing wrong colour after commit
+>> 7cd70656d1285b79("drm/bridge: display-connector: implement bus fmts
+>> callbacks")
+>>
+>> Hi,
+>>
+>> On 13/01/2022 21:01, Fabio Estevam wrote:
+>>> Hi Biju,
+>>>
+>>> On Thu, Jan 13, 2022 at 2:45 PM Biju Das <biju.das.jz@bp.renesas.com>
+>> wrote:
+>>>>
+>>>> Hi All,
+>>>>
+>>>> RZ/G2{H, M, N} SoC has dw_hdmi IP and it was working ok(colour) till
+>>>> the commit
+>>>> 7cd70656d1285b79("drm/bridge: display-connector: implement bus fmts
+>> callbacks").
+>>>>
+>>>> After this patch, the screen becomes greenish(may be it is setting it
+>> into YUV format??).
+>>>>
+>>>> By checking the code, previously it used to call get_input_fmt callback
+>> and set colour as RGB24.
+>>>>
+>>>> After this commit, it calls get_output_fmt_callbck and returns 3
+>>>> outputformats(YUV16, YUV24 and RGB24) And get_input_fmt callback, I see
+>> the outputformat as YUV16 instead of RGB24.
+>>>>
+>>>> Not sure, I am the only one seeing this issue with dw_HDMI driver.
+>>
+>> This patch was introduced to maintain the bridge color format negotiation
+>> after using DRM_BRIDGE_ATTACH_NO_CONNECTOR, but it seems it behaves
+>> incorrectly if the first bridge doesn't implement the negotiation
+>> callbacks.
+>>
+>> Let me check the code to see how to fix that.
+> 
+> Thanks for the information, I am happy to test the patch/fix.
+> 
+> Cheers,
+> Biju
+> 
+>>
+>>>
+>>> I have tested linux-next 20220112 on a imx6q-sabresd board, which shows:
+>>>
+>>> dwhdmi-imx 120000.hdmi: Detected HDMI TX controller v1.30a with HDCP
+>>> (DWC HDMI 3D TX PHY)
+>>>
+>>> The colors are shown correctly here.
+>>>
+>>
+>> The imx doesn't use DRM_BRIDGE_ATTACH_NO_CONNECTOR so the negotiation
+>> fails and use the RGB fallback input & output format.
+>>
+>> Anyway thanks for testing
+>>
+>> Neil
 
-Cleans up the following clang-analyzer warning:
+Can you test :
 
-fs/btrfs/extent-tree.c:2769:8: warning: Value stored to 'to_add' during
-its initialization is never read [clang-analyzer-deadcode.DeadStores].
+==><===============================
+diff --git a/drivers/gpu/drm/drm_bridge.c b/drivers/gpu/drm/drm_bridge.c
+index c96847fc0ebc..7019acd37716 100644
+--- a/drivers/gpu/drm/drm_bridge.c
++++ b/drivers/gpu/drm/drm_bridge.c
+@@ -955,7 +955,14 @@ drm_atomic_bridge_chain_select_bus_fmts(struct drm_bridge *bridge,
+        last_bridge_state = drm_atomic_get_new_bridge_state(crtc_state->state,
+                                                            last_bridge);
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- fs/btrfs/extent-tree.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-       if (last_bridge->funcs->atomic_get_output_bus_fmts) {
++       /*
++        * Only negociate with real values if both end of the bridge chain
++        * support negociation callbacks, otherwise you can end in a situation
++        * where the selected output format doesn't match with the first bridge
++        * output format.
++        */
++       if (bridge->funcs->atomic_get_input_bus_fmts &&
++           last_bridge->funcs->atomic_get_output_bus_fmts) {
+                const struct drm_bridge_funcs *funcs = last_bridge->funcs;
 
-diff --git a/fs/btrfs/extent-tree.c b/fs/btrfs/extent-tree.c
-index d89273c4b6b8..37117b62d005 100644
---- a/fs/btrfs/extent-tree.c
-+++ b/fs/btrfs/extent-tree.c
-@@ -2766,7 +2766,7 @@ static int unpin_extent_range(struct btrfs_fs_info *fs_info,
- 		spin_unlock(&cache->lock);
- 		if (!readonly && return_free_space &&
- 		    global_rsv->space_info == space_info) {
--			u64 to_add = len;
-+			u64 to_add;
- 
- 			spin_lock(&global_rsv->lock);
- 			if (!global_rsv->full) {
--- 
-2.20.1.7.g153144c
+                /*
+@@ -980,7 +987,12 @@ drm_atomic_bridge_chain_select_bus_fmts(struct drm_bridge *bridge,
+                if (!out_bus_fmts)
+                        return -ENOMEM;
 
+-               if (conn->display_info.num_bus_formats &&
++               /*
++                * If first bridge doesn't support negociation, use MEDIA_BUS_FMT_FIXED
++                * as a safe value for the whole bridge chain
++                */
++               if (bridge->funcs->atomic_get_input_bus_fmts &&
++                   conn->display_info.num_bus_formats &&
+                    conn->display_info.bus_formats)
+                        out_bus_fmts[0] = conn->display_info.bus_formats[0];
+                else
+==><===============================
+
+This should exclude your situation where the first bridge doesn't support negociation.
+
+Neil

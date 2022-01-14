@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E879348E436
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F3248E43B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239361AbiANGYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:24:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52046 "EHLO
+        id S239334AbiANGZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236448AbiANGYG (ORCPT
+        with ESMTP id S229729AbiANGZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:24:06 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7666C06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:24:05 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id hv15so12544333pjb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:24:05 -0800 (PST)
+        Fri, 14 Jan 2022 01:25:23 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED829C06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:25:22 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id x193so11067054oix.0
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:25:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=efD7MXnSTwwB5xVjXzKnpMf87tT71yAx/cljfnEhNas=;
-        b=VGerjJAK8GzUatgIVU0a+8oCQmLsZwZaA+xK/n8dg9nnhsCwi/cLvyukvffHwbq4lD
-         KUfhzEQDfHJ3FYQFDjf3LmONir9tuCFjuR8y8YaMKZaXGG7AkFWUIkVcXQmn/4eRmCng
-         jm6TqwihJHpnT5w4Rtz9yeYnmgsj/596lDOnlOI5WxnBOLAY+Dn/CUdUt//Oqn89O9xX
-         5K5aNFzbE9ndV89wLtwYSCJIyuPEKzB5JZcATTObSRZ0LF2ryCXr9GwRsphLbHwK1Dz5
-         mFl0gV7bAhaYxQp4RtohXeS+M/y0JGauajd/X3ewewRMHVIMEvFdPOX5lWBO5GSl2h6k
-         3+PQ==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=P31p+kFVwmOiI3/+SfJ1eDPjKnj+4NHA/QnHEDI8vD4=;
+        b=Tc2Ij+r2dRStuwdA2z8k/QMP6qz7UzufJqbZuBNmt1dVz9OGE+Gqvdt2IBChmrOzmZ
+         sgUJH1uFjqrEblArY8TN8c1ZRl/NJ1pcUnPnpMcYdfOXhYwOmZJTY1IXAIR/C6wfeRLb
+         hMDdAM4AnwBziapK/xqYecBGcFHQECgyZFwPY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=efD7MXnSTwwB5xVjXzKnpMf87tT71yAx/cljfnEhNas=;
-        b=xw7hi+ZgasRtgpx0rC7gmvv3OEmrZ8UY11u2EcANLP763VZVUwaPR1aVP3C2yEy6fO
-         Ji+VWtDatqrvVOHbAmnjxj/4ODGNNXVRIXEjxAlUpoP4CR8qMQoLQY6L7D6GoBnYkaDN
-         8qiTrUwOXjtxMdB9E+DfQR60FZFkTCX1jkpGel3e7L3FrhhsMPNasGipmRIxjkn1WlwM
-         dnmEgu7vzyMopuN/l9p6XNom9LJta3xqg4Wr5qAPO+8DqtXGifpUzI9xoOUoYqoegB6i
-         Vkt/9PG037ir/K+86M2FXPIvvoLgOc//Q9hpXMVJE1Y4J+S2YKhW6+DEEOw6sF+BmP3d
-         z4gA==
-X-Gm-Message-State: AOAM532y1Dq8EYP1QLK1AOohZcK1gO/tA8QpdZ1p4VLEPGnfThusNC0r
-        4EgQEDmn+R6q7mXZbtRdF5bq0qcCNv+IvFGCAsv9jw==
-X-Google-Smtp-Source: ABdhPJyOGEzTN5ie9agHxl4cS61ylB6xO8eTkZnYeEg8FGn5HzoowBJbQV+Ws9vld5pFq3VE38zPZoChvTtPXqEREvE=
-X-Received: by 2002:a17:90b:4a09:: with SMTP id kk9mr18400389pjb.230.1642141445152;
- Thu, 13 Jan 2022 22:24:05 -0800 (PST)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=P31p+kFVwmOiI3/+SfJ1eDPjKnj+4NHA/QnHEDI8vD4=;
+        b=Vfhrdg2PTFBX9X5w/Brm9mje7seYwTLNt4YQ8vHDNp4UVaqzcxI1tv5ShAr+iZqn5d
+         MyI0zKxpzoop0tY0brMka/q66oLAQ6IWwS2KXdgsK4FKCvkscGK1Po+BQLmH/U37HYPk
+         Y0NVX2gUGtW5Bl3k+Lth4l/oilWmRi7hw3HvtyHAYCDf5uIpQAJVmYyYp1Xwz4EhcmpM
+         HSvW0FtjAzPZAVU6DtpJZfpJwKEgYdeU5BFelKdHyIOjWaKGSeS62ps5SPJYsAMg3IRO
+         hE8ZU3P0mPp3yRbyjHf3wRNvWgrVm+uQ3WhaJhsSzeZ+6cGowLn4UjIq0iXaABAtZaqb
+         eGlQ==
+X-Gm-Message-State: AOAM533uSqndO/ExW9e5iqhDh6RSm3+rn9DKOzqLB+mrzwdfjMlDl07u
+        KsyLwYibPSPNbT40g1Kfzsu3xUIcPU1LTsLZpJNvpQ==
+X-Google-Smtp-Source: ABdhPJyNhHiiWL0ga7Yjo6ha5I+du9/9cd9L6+5J2+Yl7zVxUoL7i5Wlm7/epPqhp50BL5TwXwGR8sSzD3FdYLj0MT0=
+X-Received: by 2002:aca:a953:: with SMTP id s80mr11793776oie.164.1642141522376;
+ Thu, 13 Jan 2022 22:25:22 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 13 Jan 2022 22:25:21 -0800
 MIME-Version: 1.0
-References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-5-rananta@google.com>
- <CAAeT=FztkibSajKjnpRfObx+D1r8H1s_8-5MmqjemJTfmb2mpg@mail.gmail.com>
- <CAJHc60ywYgAPfG11Ljkj3qzLoUn9mZPKnPH0P-HYS-pfs+A__g@mail.gmail.com>
- <CAAeT=FwA9X9eXrF+Q31Wzah=UkM-B8bMJObjJ=oCV0rjLfX6=g@mail.gmail.com> <CAJHc60y6b-scY8zcPuLnjGtr6HzSBnmhi2mCnmkNm4nTxgMTUQ@mail.gmail.com>
-In-Reply-To: <CAJHc60y6b-scY8zcPuLnjGtr6HzSBnmhi2mCnmkNm4nTxgMTUQ@mail.gmail.com>
-From:   Reiji Watanabe <reijiw@google.com>
-Date:   Thu, 13 Jan 2022 22:23:49 -0800
-Message-ID: <CAAeT=FyER7GWZqSHyRA4-YRwef_KmGEw+tUoxBc7GXC4-6hFhw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 04/11] KVM: arm64: Setup a framework for hypercall
- bitmap firmware registers
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
+In-Reply-To: <20220113164233.4.I5604b7af908e8bbe709ac037a6a8a6ba8a2bfa94@changeid>
+References: <20220114004303.905808-1-dianders@chromium.org> <20220113164233.4.I5604b7af908e8bbe709ac037a6a8a6ba8a2bfa94@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 13 Jan 2022 22:25:21 -0800
+Message-ID: <CAE-0n53Y=GzBxbkbG=Vj+5gcrDreZYL1qMwnu4X1FdKJ78Ky-Q@mail.gmail.com>
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc7280: Add herobrine-r1
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     quic_rjendra@quicinc.com, sibis@codeaurora.org,
+        kgodara1@codeaurora.org, mka@chromium.org, pmaliset@codeaurora.org,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > > > +static void
-> > > > > +kvm_arm_get_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 fw_reg_bmap, u64 *val)
-> > > > > +{
-> > > > > +       struct kvm *kvm = vcpu->kvm;
-> > > > > +
-> > > > > +       mutex_lock(&kvm->lock);
-> > > > > +       *val = fw_reg_bmap;
-> > > > > +       mutex_unlock(&kvm->lock);
-> > > >
+Quoting Douglas Anderson (2022-01-13 16:43:03)
+> Add the new herobrine-r1. Note that this is pretty much a re-design
+> compared to herobrine-r0 so we don't attempt any dtsi to share stuff
+> between them.
+>
+> This patch attempts to define things at 3 levels:
+>
+> 1. The Qcard level. Herobrine includes a Qcard PCB and the Qcard PCB
+>    is supposed to be the same (modulo stuffing options) across
+>    multiple boards, so trying to define what's there hopefully makes
+>    sense. NOTE that newer "CRD" boards from Qualcomm also use
+>    Qcard. When support for CRD3 is added hopefully it can use the
+>    Qcard include (and perhaps we should even evaluate it using
+>    herobrine.dtsi?)
+> 2. The herobrine "baseboard" level. Right now most stuff is here with
+>    the exception of things that we _know_ will be different per
+>    board. We know that not all boards will have the same set of eMMC,
+>    nvme, and SD. We also know that the exact pin names are likely to
+>    be different.
+> 3. The actual "board" level, AKA herobrine-rev1.
+>
+> NOTES:
+> - This boots to command prompt, but no eDP yet since eDP hasn't
+>   been added to sc7280.dtsi yet.
+> - This assumes LTE for now. Once it's clear how WiFi-only SKUs will
+>   work we expect some small changes.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 
-I have another comment for kvm_arm_get_fw_reg_bmap.
-
-I just noticed that @fw_reg_bmap is a value of the bitmap register
-(not a pointer).  I believe what you meant was a pointer to
-hvc_desc->hvc_*_bmap.  Also, you can remove @val and return the register
-value instead (change the type of the return value from void to u64).
-I'm not sure if you will keep this function in the next version though.
-
-Thanks,
-Reiji
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

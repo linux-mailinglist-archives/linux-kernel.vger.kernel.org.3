@@ -2,186 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F4D48EBF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 133C248EBF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241989AbiANOrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 09:47:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50212 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231920AbiANOrL (ORCPT
+        id S242001AbiANOrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 09:47:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40226 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238709AbiANOrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:47:11 -0500
+        Fri, 14 Jan 2022 09:47:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C03E861E96;
-        Fri, 14 Jan 2022 14:47:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2C81C36AE5;
-        Fri, 14 Jan 2022 14:47:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642171630;
-        bh=qHWrUmeiZSefYYwS58iqTPXzITzDmFN48zXbQXZimWs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kdQgPnfDGxD87/z11qY6V9c3zmpICJbRX00TrZn1aTGgnGpmrHT27bf+ibRb3nY6F
-         9wM9CF2zkvP7AIHBk3YrpygLhSXOplR3ROk5BI/IEjzKkbomUK0U+2Vz/+quhHu/8a
-         NO9Xw60LjQ7XBBXhSnW8iRqWTAh3JOKLBOsN4TPX8FJcYqWCvxpkQ+AUnH+D+Ukqqr
-         T7hYoxQ9Fesf4Ckh8eokUYo1CzsIcQh1GMKvX96hMV+9lK4ooA3Zn1mUTNBhse0MuL
-         EqgVG42K6zUzShv+Y8p1KjrDMOUPT1/a6yfZvJ07HwzxAqJ2SxikbC+R/imbVe+xLP
-         9ahuXzQr6nZ9A==
-Date:   Fri, 14 Jan 2022 23:47:04 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v2 0/8] fprobe: Introduce fprobe function entry/exit
- probe
-Message-Id: <20220114234704.41f28e8b5e63368c655d848e@kernel.org>
-In-Reply-To: <YeAatqQTKsrxmUkS@krava>
-References: <164199616622.1247129.783024987490980883.stgit@devnote2>
-        <Yd77SYWgtrkhFIYz@krava>
-        <YeAatqQTKsrxmUkS@krava>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3D84B825EC
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 14:47:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66AA7C36AEA;
+        Fri, 14 Jan 2022 14:47:08 +0000 (UTC)
+Date:   Fri, 14 Jan 2022 09:47:06 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [for-next][PATCH] tracing: Add ustring operation to filtering
+ string pointers
+Message-ID: <20220114094706.31d7a2ef@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiri and Alexei,
 
-On Thu, 13 Jan 2022 13:27:34 +0100
-Jiri Olsa <jolsa@redhat.com> wrote:
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+for-next
 
-> On Wed, Jan 12, 2022 at 05:01:15PM +0100, Jiri Olsa wrote:
-> > On Wed, Jan 12, 2022 at 11:02:46PM +0900, Masami Hiramatsu wrote:
-> > > Hi Jiri and Alexei,
-> > > 
-> > > Here is the 2nd version of fprobe. This version uses the
-> > > ftrace_set_filter_ips() for reducing the registering overhead.
-> > > Note that this also drops per-probe point private data, which
-> > > is not used anyway.
-> > > 
-> > > This introduces the fprobe, the function entry/exit probe with
-> > > multiple probe point support. This also introduces the rethook
-> > > for hooking function return as same as kretprobe does. This
-> > 
-> > nice, I was going through the multi-user-graph support 
-> > and was wondering that this might be a better way
-> > 
-> > > abstraction will help us to generalize the fgraph tracer,
-> > > because we can just switch it from rethook in fprobe, depending
-> > > on the kernel configuration.
-> > > 
-> > > The patch [1/8] and [7/8] are from your series[1]. Other libbpf
-> > > patches will not be affected by this change.
-> > 
-> > I'll try the bpf selftests on top of this
-> 
-> I'm getting crash and stall when running bpf selftests,
-> the fprobe sample module works fine, I'll check on that
-
-I've tried to build tools/testing/selftests/bpf on my machine,
-but I got below errors. Would you know how I can setup to build
-the bpf selftests correctly? (I tried "make M=samples/bpf", but same result)
-
-~/ksrc/linux/tools/testing/selftests/bpf$ make 
-[...]
-  CLANG   /home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool/pid_iter.bpf.o
-skeleton/pid_iter.bpf.c:35:10: error: incomplete definition of type 'struct bpf_link'
-                return BPF_CORE_READ((struct bpf_link *)ent, id);
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:403:2: note: expanded from macro 'BPF_CORE_READ'
-        ___type((src), a, ##__VA_ARGS__) __r;                               \
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:274:29: note: expanded from macro '___type'
-#define ___type(...) typeof(___arrow(__VA_ARGS__))
-                            ^~~~~~~~~~~~~~~~~~~~~
-/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:272:23: note: expanded from macro '___arrow'
-#define ___arrow(...) ___apply(___arrow, ___narg(__VA_ARGS__))(__VA_ARGS__)
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:223:25: note: expanded from macro '___concat'
-#define ___concat(a, b) a ## b
-                        ^
-<scratch space>:16:1: note: expanded from here
-___arrow2
-^
-/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:263:26: note: expanded from macro '___arrow2'
-#define ___arrow2(a, b) a->b
-                        ~^
-skeleton/pid_iter.bpf.c:35:32: note: forward declaration of 'struct bpf_link'
-                return BPF_CORE_READ((struct bpf_link *)ent, id);
-                                             ^
-skeleton/pid_iter.bpf.c:35:10: error: incomplete definition of type 'struct bpf_link'
-                return BPF_CORE_READ((struct bpf_link *)ent, id);
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:404:2: note: expanded from macro 'BPF_CORE_READ'
-        BPF_CORE_READ_INTO(&__r, (src), a, ##__VA_ARGS__);                  \
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:311:2: note: expanded from macro 'BPF_CORE_READ_INTO'
-        ___core_read(bpf_core_read, bpf_core_read,                          \
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:302:2: note: expanded from macro '___core_read'
-        ___apply(___core_read, ___empty(__VA_ARGS__))(fn, fn_ptr, dst,      \
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:296:2: note: expanded from macro '___core_read0'
-        ___read(fn, dst, ___type(src), src, a);
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:277:59: note: expanded from macro '___read'
-        read_fn((void *)(dst), sizeof(*(dst)), &((src_type)(src))->accessor)
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:206:79: note: expanded from macro 'bpf_core_read'
-        bpf_probe_read_kernel(dst, sz, (const void *)__builtin_preserve_access_index(src))
-                                                                                     ^~~
-skeleton/pid_iter.bpf.c:35:32: note: forward declaration of 'struct bpf_link'
-                return BPF_CORE_READ((struct bpf_link *)ent, id);
-                                             ^
-skeleton/pid_iter.bpf.c:35:10: error: returning 'void' from a function with incompatible result type '__u32' (aka 'unsigned int')
-                return BPF_CORE_READ((struct bpf_link *)ent, id);
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:402:36: note: expanded from macro 'BPF_CORE_READ'
-#define BPF_CORE_READ(src, a, ...) ({                                       \
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-skeleton/pid_iter.bpf.c:42:17: warning: declaration of 'struct bpf_iter__task_file' will not be visible outside of this function [-Wvisibility]
-int iter(struct bpf_iter__task_file *ctx)
-                ^
-skeleton/pid_iter.bpf.c:44:25: error: incomplete definition of type 'struct bpf_iter__task_file'
-        struct file *file = ctx->file;
-                            ~~~^
-skeleton/pid_iter.bpf.c:42:17: note: forward declaration of 'struct bpf_iter__task_file'
-int iter(struct bpf_iter__task_file *ctx)
-                ^
-skeleton/pid_iter.bpf.c:45:32: error: incomplete definition of type 'struct bpf_iter__task_file'
-        struct task_struct *task = ctx->task;
-                                   ~~~^
-skeleton/pid_iter.bpf.c:42:17: note: forward declaration of 'struct bpf_iter__task_file'
-int iter(struct bpf_iter__task_file *ctx)
-                ^
-skeleton/pid_iter.bpf.c:76:19: error: incomplete definition of type 'struct bpf_iter__task_file'
-        bpf_seq_write(ctx->meta->seq, &e, sizeof(e));
-                      ~~~^
-skeleton/pid_iter.bpf.c:42:17: note: forward declaration of 'struct bpf_iter__task_file'
-int iter(struct bpf_iter__task_file *ctx)
-                ^
-1 warning and 6 errors generated.
-make[1]: *** [Makefile:188: /home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool/pid_iter.bpf.o] Error 1
-make: *** [Makefile:219: /home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/sbin/bpftool] Error 2
+Head SHA1: f37c3bbc635994eda203a6da4ba0f9d05165a8d6
 
 
-Thank you,
+Steven Rostedt (1):
+      tracing: Add ustring operation to filtering string pointers
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+----
+ Documentation/trace/events.rst     |  9 +++++
+ kernel/trace/trace_events_filter.c | 81 +++++++++++++++++++++++++++-----------
+ 2 files changed, 66 insertions(+), 24 deletions(-)
+---------------------------
+commit f37c3bbc635994eda203a6da4ba0f9d05165a8d6
+Author: Steven Rostedt <rostedt@goodmis.org>
+Date:   Thu Jan 13 20:08:40 2022 -0500
+
+    tracing: Add ustring operation to filtering string pointers
+    
+    Since referencing user space pointers is special, if the user wants to
+    filter on a field that is a pointer to user space, then they need to
+    specify it.
+    
+    Add a ".ustring" attribute to the field name for filters to state that the
+    field is pointing to user space such that the kernel can take the
+    appropriate action to read that pointer.
+    
+    Link: https://lore.kernel.org/all/yt9d8rvmt2jq.fsf@linux.ibm.com/
+    
+    Fixes: 77360f9bbc7e ("tracing: Add test for user space strings when filtering on string pointers")
+    Tested-by: Sven Schnelle <svens@linux.ibm.com>
+    Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+
+diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
+index 45e66a60a816..c47f381d0c00 100644
+--- a/Documentation/trace/events.rst
++++ b/Documentation/trace/events.rst
+@@ -198,6 +198,15 @@ The glob (~) accepts a wild card character (\*,?) and character classes
+   prev_comm ~ "*sh*"
+   prev_comm ~ "ba*sh"
+ 
++If the field is a pointer that points into user space (for example
++"filename" from sys_enter_openat), then you have to append ".ustring" to the
++field name::
++
++  filename.ustring ~ "password"
++
++As the kernel will have to know how to retrieve the memory that the pointer
++is at from user space.
++
+ 5.2 Setting filters
+ -------------------
+ 
+diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
+index 2e9ef64e9ee9..b458a9afa2c0 100644
+--- a/kernel/trace/trace_events_filter.c
++++ b/kernel/trace/trace_events_filter.c
+@@ -665,6 +665,23 @@ struct ustring_buffer {
+ static __percpu struct ustring_buffer *ustring_per_cpu;
+ 
+ static __always_inline char *test_string(char *str)
++{
++	struct ustring_buffer *ubuf;
++	char *kstr;
++
++	if (!ustring_per_cpu)
++		return NULL;
++
++	ubuf = this_cpu_ptr(ustring_per_cpu);
++	kstr = ubuf->buffer;
++
++	/* For safety, do not trust the string pointer */
++	if (!strncpy_from_kernel_nofault(kstr, str, USTRING_BUF_SIZE))
++		return NULL;
++	return kstr;
++}
++
++static __always_inline char *test_ustring(char *str)
+ {
+ 	struct ustring_buffer *ubuf;
+ 	char __user *ustr;
+@@ -676,23 +693,11 @@ static __always_inline char *test_string(char *str)
+ 	ubuf = this_cpu_ptr(ustring_per_cpu);
+ 	kstr = ubuf->buffer;
+ 
+-	/*
+-	 * We use TASK_SIZE to denote user or kernel space, but this will
+-	 * not work for all architectures. If it picks the wrong one, it may
+-	 * just fail the filter (but will not bug).
+-	 *
+-	 * TODO: Have a way to properly denote which one this is for.
+-	 */
+-	if (likely((unsigned long)str >= TASK_SIZE)) {
+-		/* For safety, do not trust the string pointer */
+-		if (!strncpy_from_kernel_nofault(kstr, str, USTRING_BUF_SIZE))
+-			return NULL;
+-	} else {
+-		/* user space address? */
+-		ustr = (char __user *)str;
+-		if (!strncpy_from_user_nofault(kstr, ustr, USTRING_BUF_SIZE))
+-			return NULL;
+-	}
++	/* user space address? */
++	ustr = (char __user *)str;
++	if (!strncpy_from_user_nofault(kstr, ustr, USTRING_BUF_SIZE))
++		return NULL;
++
+ 	return kstr;
+ }
+ 
+@@ -709,24 +714,42 @@ static int filter_pred_string(struct filter_pred *pred, void *event)
+ 	return match;
+ }
+ 
++static __always_inline int filter_pchar(struct filter_pred *pred, char *str)
++{
++	int cmp, match;
++	int len;
++
++	len = strlen(str) + 1;	/* including tailing '\0' */
++	cmp = pred->regex.match(str, &pred->regex, len);
++
++	match = cmp ^ pred->not;
++
++	return match;
++}
+ /* Filter predicate for char * pointers */
+ static int filter_pred_pchar(struct filter_pred *pred, void *event)
+ {
+ 	char **addr = (char **)(event + pred->offset);
+ 	char *str;
+-	int cmp, match;
+-	int len;
+ 
+ 	str = test_string(*addr);
+ 	if (!str)
+ 		return 0;
+ 
+-	len = strlen(str) + 1;	/* including tailing '\0' */
+-	cmp = pred->regex.match(str, &pred->regex, len);
++	return filter_pchar(pred, str);
++}
+ 
+-	match = cmp ^ pred->not;
++/* Filter predicate for char * pointers in user space*/
++static int filter_pred_pchar_user(struct filter_pred *pred, void *event)
++{
++	char **addr = (char **)(event + pred->offset);
++	char *str;
+ 
+-	return match;
++	str = test_ustring(*addr);
++	if (!str)
++		return 0;
++
++	return filter_pchar(pred, str);
+ }
+ 
+ /*
+@@ -1232,6 +1255,7 @@ static int parse_pred(const char *str, void *data,
+ 	struct filter_pred *pred = NULL;
+ 	char num_buf[24];	/* Big enough to hold an address */
+ 	char *field_name;
++	bool ustring = false;
+ 	char q;
+ 	u64 val;
+ 	int len;
+@@ -1266,6 +1290,12 @@ static int parse_pred(const char *str, void *data,
+ 		return -EINVAL;
+ 	}
+ 
++	/* See if the field is a user space string */
++	if ((len = str_has_prefix(str + i, ".ustring"))) {
++		ustring = true;
++		i += len;
++	}
++
+ 	while (isspace(str[i]))
+ 		i++;
+ 
+@@ -1405,7 +1435,10 @@ static int parse_pred(const char *str, void *data,
+ 					goto err_mem;
+ 			}
+ 
+-			pred->fn = filter_pred_pchar;
++			if (ustring)
++				pred->fn = filter_pred_pchar_user;
++			else
++				pred->fn = filter_pred_pchar;
+ 		}
+ 		/* go past the last quote */
+ 		i++;

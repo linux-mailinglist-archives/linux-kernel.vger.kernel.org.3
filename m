@@ -2,101 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5AF48E212
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 02:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2928C48E21F
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 02:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235991AbiANBSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 20:18:20 -0500
-Received: from mga14.intel.com ([192.55.52.115]:3486 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230237AbiANBST (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 20:18:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642123099; x=1673659099;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=k61ukGPp1G9ctxiAMspSi107hhKLz6ggVd6jEFfeBig=;
-  b=ZsSvD7FsA6KbY44NnBmoGqEJeOD4Yd9RypCXhHTvHXk4oDjUhVOKNLaK
-   kcgmF2rIPFnMmusoGZl6Q9N9wPO5qoT4pQR6fjMIgmPNML6j8NA+qvYk3
-   NIJR1PEt5kBPRJnlbEh6JXWKz0jJ8kdIEfpF0fxCd1hAkUxLGb6goS2/N
-   s7UFTOTfEiLE73xy48ObMUTJI5v5miNGubrS71s9/LF+21bzAqP61IIrT
-   1MeWpQwjx1yTSEg64zJIYPLnbCyrA9rV0mSFtLXsI7wrLqkaEOI0cs/li
-   CgzEGO5F7Y5fGI0V2ZB8cH5GeDoQRqyZrFC6+V3vsS0rg1PXC++WKLJ7l
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244359440"
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="244359440"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 17:18:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="670703998"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Jan 2022 17:18:18 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8BEP-0007t3-Gf; Fri, 14 Jan 2022 01:18:17 +0000
-Date:   Fri, 14 Jan 2022 09:17:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eric Biggers <ebiggers@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [ebiggers:blk-crypto-sysfs-testing 4/4]
- drivers/block/virtio_blk.c:763:10: error: 'struct request_queue' has no
- member named 'crypto_profile'
-Message-ID: <202201140941.edAqs2GB-lkp@intel.com>
+        id S238672AbiANBWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 20:22:20 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:30277 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238619AbiANBWS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 20:22:18 -0500
+Received: from dggeme762-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JZk676NnZzbjtp;
+        Fri, 14 Jan 2022 09:21:35 +0800 (CST)
+Received: from [10.67.110.176] (10.67.110.176) by
+ dggeme762-chm.china.huawei.com (10.3.19.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Fri, 14 Jan 2022 09:22:16 +0800
+Subject: Re: Flush the hold queue fall into an infinite loop.
+To:     Paul Moore <paul@paul-moore.com>
+CC:     <linux-audit@redhat.com>, Xiujianfeng <xiujianfeng@huawei.com>,
+        wangweiyang <wangweiyang2@huawei.com>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <96f4f1cb-0e7d-6682-ce33-f7f1314cba83@huawei.com>
+ <8b487a19-d121-5fee-eda5-0aee9340f453@huawei.com>
+ <CAHC9VhTGTmNzFURkAPm2LW3qL+ijBi=UmXqZBwEWeusC46+8yg@mail.gmail.com>
+From:   cuigaosheng <cuigaosheng1@huawei.com>
+Message-ID: <c0f9b9b3-69a3-1b31-5115-51dd580e00ca@huawei.com>
+Date:   Fri, 14 Jan 2022 09:22:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAHC9VhTGTmNzFURkAPm2LW3qL+ijBi=UmXqZBwEWeusC46+8yg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.176]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggeme762-chm.china.huawei.com (10.3.19.108)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git blk-crypto-sysfs-testing
-head:   59eaf05f0496aed45c6825a931254a94381d36ac
-commit: 59eaf05f0496aed45c6825a931254a94381d36ac [4/4] virtio-blk: add fake crypto profile for testing
-config: csky-randconfig-r002-20220113 (https://download.01.org/0day-ci/archive/20220114/202201140941.edAqs2GB-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=59eaf05f0496aed45c6825a931254a94381d36ac
-        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
-        git fetch --no-tags ebiggers blk-crypto-sysfs-testing
-        git checkout 59eaf05f0496aed45c6825a931254a94381d36ac
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash drivers/block/
+I want to stop droping the logs into audit_hold_queue when the auditd is abnormal.it
+seems that this modification goes against the design intent of audit_hold_queue. its
+effect is similar to removing the audit_hold_queue.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+diff --git a/kernel/audit.c b/kernel/audit.c
+index 2a38cbaf3ddb..a8091b1a6587 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -748,6 +748,7 @@ static int kauditd_send_queue(struct sock *sk, u32 
+portid,
+                                         (*err_hook)(skb);
+                                 if (rc == -EAGAIN)
+                                         rc = 0;
++                               audit_default = AUDIT_OFF;
+                                 /* continue to drain the queue */
+                                 continue;
+                         } else
+@@ -755,6 +756,7 @@ static int kauditd_send_queue(struct sock *sk, u32 
+portid,
+                 } else {
+                         /* skb sent - drop the extra reference and 
+continue */
+                         consume_skb(skb);
++                       audit_default = audit_enabled;
+                         failed = 0;
+                 }
+         }
 
-All errors (new ones prefixed by >>):
-
-   drivers/block/virtio_blk.c: In function 'virtblk_add_crypto_profile':
->> drivers/block/virtio_blk.c:763:10: error: 'struct request_queue' has no member named 'crypto_profile'
-     763 |         q->crypto_profile = profile;
-         |          ^~
-
-
-vim +763 drivers/block/virtio_blk.c
-
-   751	
-   752	static void virtblk_add_crypto_profile(struct request_queue *q)
-   753	{
-   754		struct blk_crypto_profile *profile;
-   755	
-   756		profile = kzalloc(sizeof(*profile), GFP_KERNEL);
-   757	
-   758		blk_crypto_profile_init(profile, 32);
-   759		profile->modes_supported[BLK_ENCRYPTION_MODE_AES_256_XTS] =
-   760			4096 | 8192;
-   761		profile->max_dun_bytes_supported = 8;
-   762	
- > 763		q->crypto_profile = profile;
-   764	}
-   765	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+在 2022/1/13 23:22, Paul Moore 写道:
+> On Thu, Jan 13, 2022 at 6:57 AM cuigaosheng <cuigaosheng1@huawei.com> wrote:
+>> When we add "audit=1" to the cmdline, kauditd will take up 100%
+>> cpu resource.As follows:
+>>
+>> configurations:
+>> auditctl -b 64
+>> auditctl --backlog_wait_time 60000
+>> auditctl -r 0
+>> auditctl -w /root/aaa  -p wrx
+>> shell scripts：
+>> #!/bin/bash
+>> i=0
+>> while [ $i -le 66 ]
+>> do
+>>     touch /root/aaa
+>>     let i++
+>> done
+>> mandatory conditions:
+>>
+>> add "audit=1" to the cmdline, and kill -19 pid_number(for /sbin/auditd).
+>>
+>>   As long as we keep the audit_hold_queue non-empty, flush the hold queue will fall into
+>>   an infinite loop.
+>>
+>> 713 static int kauditd_send_queue(struct sock *sk, u32 portid,
+>>   714                               struct sk_buff_head *queue,
+>>   715                               unsigned int retry_limit,
+>>   716                               void (*skb_hook)(struct sk_buff *skb),
+>>   717                               void (*err_hook)(struct sk_buff *skb))
+>>   718 {
+>>   719         int rc = 0;
+>>   720         struct sk_buff *skb;
+>>   721         unsigned int failed = 0;
+>>   722
+>>   723         /* NOTE: kauditd_thread takes care of all our locking, we just use
+>>   724          *       the netlink info passed to us (e.g. sk and portid) */
+>>   725
+>>   726         while ((skb = skb_dequeue(queue))) {
+>>   727                 /* call the skb_hook for each skb we touch */
+>>   728                 if (skb_hook)
+>>   729                         (*skb_hook)(skb);
+>>   730
+>>   731                 /* can we send to anyone via unicast? */
+>>   732                 if (!sk) {
+>>   733                         if (err_hook)
+>>   734                                 (*err_hook)(skb);
+>>   735                         continue;
+>>   736                 }
+>>   737
+>>   738 retry:
+>>   739                 /* grab an extra skb reference in case of error */
+>>   740                 skb_get(skb);
+>>   741                 rc = netlink_unicast(sk, skb, portid, 0);
+>>   742                 if (rc < 0) {
+>>   743                         /* send failed - try a few times unless fatal error */
+>>   744                         if (++failed >= retry_limit ||
+>>   745                             rc == -ECONNREFUSED || rc == -EPERM) {
+>>   746                                 sk = NULL;
+>>   747                                 if (err_hook)
+>>   748                                         (*err_hook)(skb);
+>>   749                                 if (rc == -EAGAIN)
+>>   750                                         rc = 0;
+>>   751                                 /* continue to drain the queue */
+>>   752                                 continue;
+>>   753                         } else
+>>   754                                 goto retry;
+>>   755                 } else {
+>>   756                         /* skb sent - drop the extra reference and continue */
+>>   757                         consume_skb(skb);
+>>   758                         failed = 0;
+>>   759                 }
+>>   760         }
+>>   761
+>>   762         return (rc >= 0 ? 0 : rc);
+>>   763 }
+>>
+>> When kauditd attempt to flush the hold queue, the queue parameter is &audit_hold_queue,
+>> and if netlink_unicast(line 741 ) return -EAGAIN, sk will be NULL(line 746), so err_hook(kauditd_rehold_skb)
+>> will be call. Then continue, skb_dequeue(line 726) and err_hook(kauditd_rehold_skb,line 733) will
+>> fall into an infinite loop.
+>> I don't really understand the value of audit_hold_queue, can we remove it, or stop droping the logs
+>> into kauditd_rehold_skb when the auditd is abnormal?
+> Thanks Gaosheng for the bug report, I'm able to reproduce this and I'm
+> looking into it now.  I'll report back when I have a better idea of
+> the problem and a potential fix.
+>

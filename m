@@ -2,126 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 777BF48F3B3
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B10148F3C1
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbiAOBBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 20:01:51 -0500
-Received: from mga06.intel.com ([134.134.136.31]:4852 "EHLO mga06.intel.com"
+        id S231752AbiAOBFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 20:05:35 -0500
+Received: from mga07.intel.com ([134.134.136.100]:27592 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229533AbiAOBBu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 20:01:50 -0500
+        id S229534AbiAOBFe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 20:05:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642208510; x=1673744510;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WYKnBtxj0d0Z5N6die+zqAPR/Ua4SB6/AcSav8I8t20=;
-  b=MWDWSFJTNovd1CTkBF7W8U2YrW1ODmNzyri09QVUTM7DAl4dfskq05V3
-   MAbZWsOyiArs+3QY1ryCDUyzo9nQs5/CcjGX0tOkd5e+q8mY3OH8cNUbv
-   8KRTH/Y3vjEFYmqlmRsYBtxVmusZgscpf46uWL/zgfFAhQbyiaMwuLGcG
-   VcuTAO52H/AArLS2+hfVhIvEXWKwsIJzXVv04iZpz/Y2HLVqYJtakAON5
-   iDsxXsnJhNkjOsdQV4g+hTnG+f6LozKk6r9QYRDHHVeXuvjfyTwclKi+S
-   hDsCoyrd3N1ez7dNJdJuZWd28BlHzIbl+PY2c/Pq03oNAhYCbMRx+TGVc
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="305090893"
+  t=1642208734; x=1673744734;
+  h=subject:to:references:from:message-id:date:mime-version:
+   in-reply-to:content-transfer-encoding;
+  bh=wZ0Ry+mIARE6XgrFHfixgiV08hKw7NCIewYKMb+m2qE=;
+  b=nsWw0v+B2ihKsLi6UUAW/b72FV8iBqPWH1YSGV3B4o1lEohdnUz+eYOr
+   EANYh8i2LLNBeD3aef7cNwGdtZwf7PmHvUns5omPZ1SoctZH8UieJ6oXf
+   mnd2i6yqrx/raFBeM9p+zeURsSAgaUO2VU2jWwqzYmhA63UmcrO6M6i+8
+   jgHj7zYfHI9e0iP7rTTaUtskCF718LHOAaPH4gkxGS/ZHp0JAqlaLWl9q
+   ey9j0IYJIje25TmtVNnlxz5/o/suriTo/woyojtWoOqFqtlCCu5cSsSvr
+   VpJAaJIO6KWWB/iHwcSo1B3yWAu4NFfDVdcYI7FPqdLexyVYTJb2XEfcl
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="307703011"
 X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="305090893"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 17:01:49 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="307703011"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 17:05:32 -0800
 X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="516595864"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 14 Jan 2022 17:01:43 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 74F35C5; Sat, 15 Jan 2022 03:01:55 +0200 (EET)
-Date:   Sat, 15 Jan 2022 04:01:55 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/26] x86/tdx: Support TDX guest port I/O at
- decompression time
-Message-ID: <20220115010155.ss2hnyotw4a3nljf@black.fi.intel.com>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-11-kirill.shutemov@linux.intel.com>
- <YeAuehoOEjUH3vZ3@zn.tnic>
+   d="scan'208";a="624531822"
+Received: from dsubasic-mobl.amr.corp.intel.com (HELO [10.212.67.37]) ([10.212.67.37])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 17:05:31 -0800
+Subject: Re: [PATCH] slimbus: qcom: Fix IRQ check in qcom_slim_probe
+To:     Miaoqian Lin <linmq006@gmail.com>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sagar Dharia <sdharia@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220114061830.13456-1-linmq006@gmail.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <239c3b32-6754-02ba-6bfd-7f05fa2adfed@linux.intel.com>
+Date:   Fri, 14 Jan 2022 09:14:58 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeAuehoOEjUH3vZ3@zn.tnic>
+In-Reply-To: <20220114061830.13456-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 02:51:54PM +0100, Borislav Petkov wrote:
-> On Tue, Dec 14, 2021 at 06:02:48PM +0300, Kirill A. Shutemov wrote:
-> > From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> > 
-> > Port IO triggers a #VE exception in TDX guests.  During normal runtime,
-> > the kernel will handle those exceptions for any port IO.
-> > 
-> > But for the early code in the decompressor, #VE cannot be used because
-> > the IDT needed for handling the exception is not set up.
-> 							  ... yet.
-> 
-> Well, we're setting up and IDT twice in
-> 
-> arch/x86/boot/compressed/idt_64.c
-> 
-> as early as startup_64 for SEV. And the second stage one
-> do_boot_stage2_vc() handles port IO too.
-> 
-> Can't you hook in your VE handler there too?
 
-We certainly can. But do we want to?
 
-IIUC, SEV has to handle #VC very early to deal with CPUID and covering
-port I/O in addition via the exception is a logical step.
+On 1/14/22 12:18 AM, Miaoqian Lin wrote:
+> platform_get_irq() returns negative error number instead 0 on failure.
 
-We had some back and forth on #VE vs direct hypercalls for port I/O in
-decompresser and we settled on direct hypercalls.
+the 'instead of' wording is a bit misleading:
 
-Adding all the plumbing for #VE just to deal with port I/O was considered
-overkill. And I expect debugging exception infrastructure is harder than
-direct hypercalls.
+platform_get_irq() returns non-zero IRQ number on success, negative
+error number on failure. Zero is not a valid return valid.
 
-Do you see it differently? Do you want to switch to #VE here?
 
-> > Replace IN/OUT instructions with TDX IO hypercalls by defining helper
-> > macros __in/__out and by re-defining them in the decompressor code.
-> > Also, since TDX IO hypercall requires an IO size parameter, allow
-> > __in/__out macros to accept size as an input parameter.
+> And the doc of platform_get_irq() provides a usage example:
 > 
-> Please end function/macro names with parentheses. I think in this
-> particular case you wanna say
+>     int irq = platform_get_irq(pdev, 0);
+>     if (irq < 0)
+>         return irq;
 > 
-> "__in*()/__out*() macros"
+> Fix the check of return value to catch errors correctly.
 > 
-> When a function is mentioned in the changelog, either the text body or the
-> subject line, please use the format 'function_name()'. Omitting the
-> brackets after the function name can be ambiguous::
+> Fixes: ad7fcbc308b0 ("slimbus: qcom: Add Qualcomm Slimbus controller driver")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/slimbus/qcom-ctrl.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->   Subject: subsys/component: Make reservation_count static
+> diff --git a/drivers/slimbus/qcom-ctrl.c b/drivers/slimbus/qcom-ctrl.c
+> index f04b961b96cd..ec58091fc948 100644
+> --- a/drivers/slimbus/qcom-ctrl.c
+> +++ b/drivers/slimbus/qcom-ctrl.c
+> @@ -510,9 +510,9 @@ static int qcom_slim_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	ctrl->irq = platform_get_irq(pdev, 0);
+> -	if (!ctrl->irq) {
+> +	if (ctrl->irq < 0) {
+>  		dev_err(&pdev->dev, "no slimbus IRQ\n");
+> -		return -ENODEV;
+> +		return ctrl->irq;
+>  	}
+>  
+>  	sctrl = &ctrl->ctrl;
 > 
->   reservation_count is only used in reservation_stats. Make it static.
-> 
-> The variant with brackets is more precise::
-> 
->   Subject: subsys/component: Make reservation_count() static
-> 
->   reservation_count() is only called from reservation_stats(). Make it
->   static.
-
-Okay, got it.
-
--- 
- Kirill A. Shutemov

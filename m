@@ -2,120 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5107D48E74A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EC348E788
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239790AbiANJS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 04:18:57 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17347 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236423AbiANJS4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:18:56 -0500
-Received: from kwepemi100006.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JZwgX5M9xz9sBr;
-        Fri, 14 Jan 2022 17:17:44 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100006.china.huawei.com (7.221.188.165) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 14 Jan 2022 17:18:54 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 14 Jan
- 2022 17:18:53 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <tj@kernel.org>, <axboe@kernel.dk>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH -next] blk-throttle: enable io throttle for root in cgroup v2
-Date:   Fri, 14 Jan 2022 17:30:00 +0800
-Message-ID: <20220114093000.3323470-1-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        id S239999AbiANJam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 04:30:42 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:45542 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233615AbiANJal (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 04:30:41 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAD3_wOoQuFhWawyBg--.47397S2;
+        Fri, 14 Jan 2022 17:30:16 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     hjc@rock-chips.com, heiko@sntech.de, airlied@linux.ie,
+        daniel@ffwll.ch, p.zabel@pengutronix.de
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] drm/rockchip: Check for NULL pointer after calling kzalloc
+Date:   Fri, 14 Jan 2022 17:30:15 +0800
+Message-Id: <20220114093015.1295274-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAD3_wOoQuFhWawyBg--.47397S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJF1rWrWfWF48tr1UCw4kJFb_yoW8Gr17pr
+        s7JrW2qr409r4DWwsrJw1q93yfKan0y34xGrs7Gw13uF1fKrnxAan5ZrZ5Xr47XrWxXr15
+        trs7A345ZF4j93JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6r4fMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjfUeLvtDUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RFC patch: https://lkml.org/lkml/2021/9/9/1432
+As the possible failure of the kzalloc(), crtc_state could be NULL
+pointer.
+Therefore, it should be better to check it in order to avoid the
+dereference of the NULL pointer, like the kzalloc() in
+vop_crtc_duplicate_state().
+If fails, we can directly use the 'NULL' instead of the
+'&crtc_state->base' and __drm_atomic_helper_crtc_duplicate_state() will
+deal with it correctly.
 
-There is a proformance problem in our environment:
-
-A host can provide a remote device to difierent client. If one client is
-under high io pressure, other clients might be affected.
-
-Limit the overall iops/bps(io.max) from the client can fix the problem,
-however, config files do not exist in root cgroup currently, which makes
-it impossible.
-
-This patch enables io throttle for root cgroup:
- - enable "io.max" and "io.low" in root
- - don't skip root group in tg_iops_limit() and tg_bps_limit()
- - don't skip root group in tg_conf_updated()
-
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Fixes: dc0b408f5a87 ("drm/rockchip: allocate correct crtc state structure on reset")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- block/blk-throttle.c | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 7c462c006b26..ac25bfbbfe7f 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -156,9 +156,6 @@ static uint64_t tg_bps_limit(struct throtl_grp *tg, int rw)
- 	struct throtl_data *td;
- 	uint64_t ret;
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+index 3e8d9e2d1b67..db672ff5e37b 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+@@ -1577,7 +1577,10 @@ static void vop_crtc_reset(struct drm_crtc *crtc)
+ 	if (crtc->state)
+ 		vop_crtc_destroy_state(crtc, crtc->state);
  
--	if (cgroup_subsys_on_dfl(io_cgrp_subsys) && !blkg->parent)
--		return U64_MAX;
--
- 	td = tg->td;
- 	ret = tg->bps[rw][td->limit_index];
- 	if (ret == 0 && td->limit_index == LIMIT_LOW) {
-@@ -186,9 +183,6 @@ static unsigned int tg_iops_limit(struct throtl_grp *tg, int rw)
- 	struct throtl_data *td;
- 	unsigned int ret;
+-	__drm_atomic_helper_crtc_reset(crtc, &crtc_state->base);
++	if (!crtc_state)
++		__drm_atomic_helper_crtc_reset(crtc, NULL);
++	else
++		__drm_atomic_helper_crtc_reset(crtc, &crtc_state->base);
+ }
  
--	if (cgroup_subsys_on_dfl(io_cgrp_subsys) && !blkg->parent)
--		return UINT_MAX;
--
- 	td = tg->td;
- 	ret = tg->iops[rw][td->limit_index];
- 	if (ret == 0 && tg->td->limit_index == LIMIT_LOW) {
-@@ -1284,9 +1278,8 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
- 		struct throtl_grp *parent_tg;
- 
- 		tg_update_has_rules(this_tg);
--		/* ignore root/second level */
--		if (!cgroup_subsys_on_dfl(io_cgrp_subsys) || !blkg->parent ||
--		    !blkg->parent->parent)
-+		/* ignore root level */
-+		if (!cgroup_subsys_on_dfl(io_cgrp_subsys) || !blkg->parent)
- 			continue;
- 		parent_tg = blkg_to_tg(blkg->parent);
- 		/*
-@@ -1625,7 +1618,6 @@ static struct cftype throtl_files[] = {
- #ifdef CONFIG_BLK_DEV_THROTTLING_LOW
- 	{
- 		.name = "low",
--		.flags = CFTYPE_NOT_ON_ROOT,
- 		.seq_show = tg_print_limit,
- 		.write = tg_set_limit,
- 		.private = LIMIT_LOW,
-@@ -1633,7 +1625,6 @@ static struct cftype throtl_files[] = {
- #endif
- 	{
- 		.name = "max",
--		.flags = CFTYPE_NOT_ON_ROOT,
- 		.seq_show = tg_print_limit,
- 		.write = tg_set_limit,
- 		.private = LIMIT_MAX,
+ #ifdef CONFIG_DRM_ANALOGIX_DP
 -- 
-2.31.1
+2.25.1
 

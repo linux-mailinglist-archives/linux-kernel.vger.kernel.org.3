@@ -2,54 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8F548E615
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C49BA48E591
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237930AbiANIXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239770AbiANIVk (ORCPT
+        id S237096AbiANITI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:19:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58034 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237090AbiANISl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:21:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B004C06176D;
-        Fri, 14 Jan 2022 00:21:39 -0800 (PST)
+        Fri, 14 Jan 2022 03:18:41 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19892B823EB;
-        Fri, 14 Jan 2022 08:21:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 045D8C36AEA;
-        Fri, 14 Jan 2022 08:21:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5CBA61E2D;
+        Fri, 14 Jan 2022 08:18:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A51A2C36AFF;
+        Fri, 14 Jan 2022 08:18:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148496;
-        bh=/XyRly+7y2sPvMTKrZuvM4zw99DP2Ky0lkevHGyRWCs=;
+        s=korg; t=1642148320;
+        bh=HxavA+cJQOKS/3747jgcNdzlPomayvzaDkDybccxg2U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wB9UF8RI5RUTzokAMA/BAgIxlcd/rJ9Hb/NJz5Vhhu2F/ZkA3YU0WSAMQOp/0sEvF
-         7yvJgjZQm5cYSMV5grueqXfFhvjoTwsEhgKsrRrtDzWhewZKqkqW8qCpvK4OqTNDwR
-         sRGrs+SyIaaVpJ5sq/tpjwI5ykPTW1quyz0J4X48=
+        b=1SNvcnhXMRvdDN0zoElmFcXm3hbqOgPHKmhgx7rPwXw0fH7zYjYuDKzpP3+uYfFFw
+         sktzOQY+xBLGCPu5XyXsgUBwWguOgIoKbvcHPone5yBKgmNqfyZ2qLfbY/7gGTb0xc
+         NfqnBvaMmBDNNQxU8om0mp2eK31FmYjohvG/q+2o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Tejun Heo <tj@kernel.org>
-Subject: [PATCH 5.16 01/37] workqueue: Fix unbind_workers() VS wq_worker_running() race
+        stable@vger.kernel.org, Aaron Ma <aaron.ma@canonical.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: [PATCH 5.10 07/25] Bluetooth: btusb: Add support for Foxconn QCA 0xe0d0
 Date:   Fri, 14 Jan 2022 09:16:15 +0100
-Message-Id: <20220114081544.899493450@linuxfoundation.org>
+Message-Id: <20220114081542.945339817@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
-References: <20220114081544.849748488@linuxfoundation.org>
+In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
+References: <20220114081542.698002137@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -57,101 +45,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frederic Weisbecker <frederic@kernel.org>
+From: Aaron Ma <aaron.ma@canonical.com>
 
-commit 07edfece8bcb0580a1828d939e6f8d91a8603eb2 upstream.
+commit 1cd563ebd0dc062127a85e84f934f4c697bb43ef upstream.
 
-At CPU-hotplug time, unbind_worker() may preempt a worker while it is
-waking up. In that case the following scenario can happen:
+Add an ID of Qualcomm Bluetooth SoC WCN6855.
 
-        unbind_workers()                     wq_worker_running()
-        --------------                      -------------------
-        	                      if (!(worker->flags & WORKER_NOT_RUNNING))
-        	                          //PREEMPTED by unbind_workers
-        worker->flags |= WORKER_UNBOUND;
-        [...]
-        atomic_set(&pool->nr_running, 0);
-        //resume to worker
-		                              atomic_inc(&worker->pool->nr_running);
+T:  Bus=05 Lev=01 Prnt=01 Port=03 Cnt=02 Dev#=  4 Spd=12   MxCh= 0
+D:  Ver= 1.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=0489 ProdID=e0d0 Rev= 0.01
+C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=100mA
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+I:* If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+I:  If#= 1 Alt= 7 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  65 Ivl=1ms
 
-After unbind_worker() resets pool->nr_running, the value is expected to
-remain 0 until the pool ever gets rebound in case cpu_up() is called on
-the target CPU in the future. But here the race leaves pool->nr_running
-with a value of 1, triggering the following warning when the worker goes
-idle:
-
-	WARNING: CPU: 3 PID: 34 at kernel/workqueue.c:1823 worker_enter_idle+0x95/0xc0
-	Modules linked in:
-	CPU: 3 PID: 34 Comm: kworker/3:0 Not tainted 5.16.0-rc1+ #34
-	Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba527-rebuilt.opensuse.org 04/01/2014
-	Workqueue:  0x0 (rcu_par_gp)
-	RIP: 0010:worker_enter_idle+0x95/0xc0
-	Code: 04 85 f8 ff ff ff 39 c1 7f 09 48 8b 43 50 48 85 c0 74 1b 83 e2 04 75 99 8b 43 34 39 43 30 75 91 8b 83 00 03 00 00 85 c0 74 87 <0f> 0b 5b c3 48 8b 35 70 f1 37 01 48 8d 7b 48 48 81 c6 e0 93  0
-	RSP: 0000:ffff9b7680277ed0 EFLAGS: 00010086
-	RAX: 00000000ffffffff RBX: ffff93465eae9c00 RCX: 0000000000000000
-	RDX: 0000000000000000 RSI: ffff9346418a0000 RDI: ffff934641057140
-	RBP: ffff934641057170 R08: 0000000000000001 R09: ffff9346418a0080
-	R10: ffff9b768027fdf0 R11: 0000000000002400 R12: ffff93465eae9c20
-	R13: ffff93465eae9c20 R14: ffff93465eae9c70 R15: ffff934641057140
-	FS:  0000000000000000(0000) GS:ffff93465eac0000(0000) knlGS:0000000000000000
-	CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-	CR2: 0000000000000000 CR3: 000000001cc0c000 CR4: 00000000000006e0
-	DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-	DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-	Call Trace:
-	  <TASK>
-	  worker_thread+0x89/0x3d0
-	  ? process_one_work+0x400/0x400
-	  kthread+0x162/0x190
-	  ? set_kthread_struct+0x40/0x40
-	  ret_from_fork+0x22/0x30
-	  </TASK>
-
-Also due to this incorrect "nr_running == 1", further queued work may
-end up not being served, because no worker is awaken at work insert time.
-This raises rcutorture writer stalls for example.
-
-Fix this with disabling preemption in the right place in
-wq_worker_running().
-
-It's worth noting that if the worker migrates and runs concurrently with
-unbind_workers(), it is guaranteed to see the WORKER_UNBOUND flag update
-due to set_cpus_allowed_ptr() acquiring/releasing rq->lock.
-
-Fixes: 6d25be5782e4 ("sched/core, workqueues: Distangle worker accounting from rq lock")
-Reviewed-by: Lai Jiangshan <jiangshanlai@gmail.com>
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Signed-off-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/workqueue.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/bluetooth/btusb.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -868,8 +868,17 @@ void wq_worker_running(struct task_struc
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -385,6 +385,9 @@ static const struct usb_device_id blackl
+ 	{ USB_DEVICE(0x10ab, 0x9409), .driver_info = BTUSB_QCA_WCN6855 |
+ 						     BTUSB_WIDEBAND_SPEECH |
+ 						     BTUSB_VALID_LE_STATES },
++	{ USB_DEVICE(0x0489, 0xe0d0), .driver_info = BTUSB_QCA_WCN6855 |
++						     BTUSB_WIDEBAND_SPEECH |
++						     BTUSB_VALID_LE_STATES },
  
- 	if (!worker->sleeping)
- 		return;
-+
-+	/*
-+	 * If preempted by unbind_workers() between the WORKER_NOT_RUNNING check
-+	 * and the nr_running increment below, we may ruin the nr_running reset
-+	 * and leave with an unexpected pool->nr_running == 1 on the newly unbound
-+	 * pool. Protect against such race.
-+	 */
-+	preempt_disable();
- 	if (!(worker->flags & WORKER_NOT_RUNNING))
- 		atomic_inc(&worker->pool->nr_running);
-+	preempt_enable();
- 	worker->sleeping = 0;
- }
- 
+ 	/* Other Intel Bluetooth devices */
+ 	{ USB_VENDOR_AND_INTERFACE_INFO(0x8087, 0xe0, 0x01, 0x01),
 
 

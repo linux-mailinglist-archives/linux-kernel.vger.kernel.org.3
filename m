@@ -2,220 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C44B48EAC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AECE48EAC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241292AbiANNdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 08:33:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
+        id S241309AbiANNd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 08:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241265AbiANNdw (ORCPT
+        with ESMTP id S241296AbiANNd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 08:33:52 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869B7C06173E
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:33:51 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id a5so15656586wrh.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:33:51 -0800 (PST)
+        Fri, 14 Jan 2022 08:33:56 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88BCC06173E
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:33:55 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id v6so15622573wra.8
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:33:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LxiQlhOo4zQQckBkWamyjXdCFErIGazuTgYjaePRe9I=;
-        b=B2eGWpsgCWO7/yiavMx+ZQDWQodoUu7AjRQBiqQ3wqH/jcx/IoZO28tOeeUG++NbGW
-         fj7DqGIixIr8CmYo3ZYsMr87ELLMGBI8bvFa5mPBfvYAI6gJ73xjTd9PToTpr8zh/Y3T
-         w2DVf+/QrCcb6z73rrBm9JzwbaJKo31mU0kmSR631R87UGItEmUywTgep54g9vUQfMOF
-         NAWcn0cemFHgtVgtLpApJsmfBuaQTSN/BIz/cxfRoHCTVKC3RugJRvIpjwpiaVs6nMzv
-         LKppxLa0PvfYlLkc0dedznDIevM+sUr51iA4o6VPIR+gzUOtOPIb/kVr8uiVIEmmRqqY
-         pgew==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1vFopuQifYDi+69/YOS3FtXomAJ3p0gkydigw8chDQ0=;
+        b=a5nSqjObrDQ4Lo5GFtrtp+8nCr/2mklxVAwYpc7l6aCVBZGicECk12JIbC8o+5Rf5C
+         XzDskzu8LlkCMd3/YIecElTiR4Y47JQ7zW9yV4Hfcyuq0NETzHKLrDu1+ijSMDkZHt0J
+         +e5xS2ALfYktsaGRBoowlUpepwWml4fMEWk8Tc/hqzJWvkIi8XeGC7h60k+4gA9Q5muW
+         c7hkWMQoyucp1mz7uiPYA3QSaNPQo2+ODe/+GkdfIGP98V6uF3cOZ0sAd2WYSUCmW1GI
+         6EvqEaz1lZUJrTMKIBLF6edt9Av4SsPGZmIXPPYjiMIid0fVTtxgi2NSAn2iI3i90bqh
+         VY0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LxiQlhOo4zQQckBkWamyjXdCFErIGazuTgYjaePRe9I=;
-        b=0SMpLpAvENqJlyvbHCTVeLMorTNTzqyo0A+0AnWK8SQJUeHwwhiTW4bObS1sRJRIC2
-         WVDUytqpRx4709N6VB8/NQ67LRsJ9HUsYmQ4U5UIF9zmijQ1/wOYUJnPP4npxYS+7p7O
-         zKTs6eiI+YmYz5WRbzOdZT5eDkM3xsn5rGwOBsCmd/m8WbvX7YXr4peWJFlJijYq/Spz
-         Q2BerSif4tfcbFBiiBWLoP9t9Y80SNxsysQkn44EmwfH4+Ab8DeDTV8ZZ1itdz60xDWl
-         huVA3MC28Hr3wS++9su3dBZnYaCEc7DKK2yE3W1GZbkXEyy3PC4oglnYAqvQ4aIS2wyz
-         Os7g==
-X-Gm-Message-State: AOAM532VpAXVLfZ3ihEAw3gYpa02QZTzBOD8bkvjKBlm8cTeWGznM9vv
-        yhiZrmeQ7JdC5BHmHVUyCzozOA==
-X-Google-Smtp-Source: ABdhPJz8RDVMF53Zo/9Tz+O40fAR7OB7bkA69Yg/lMrX6hUwjtzY3zFGqgtej1U+mgQy2ymIyltcVQ==
-X-Received: by 2002:a5d:4bc5:: with SMTP id l5mr8083954wrt.475.1642167229742;
-        Fri, 14 Jan 2022 05:33:49 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1vFopuQifYDi+69/YOS3FtXomAJ3p0gkydigw8chDQ0=;
+        b=Mx1eeBf2VgUES1QYJx+/wmcQR22GUqvDwN07rwe5SJooYZmeBrBYFYxQxrZpzJKJPU
+         Xq3ukOU3mWJSjhrhY/xG5sBgwQ516gSSPWk08AEfrOQkWOuu3isbxpjogQc7VuLbQ84p
+         qQK7ZUok7LcvULuzl/StuJPmifatsQY1seIblKOG+lMyAo/uYUqt1bGVOuSTim9uHwom
+         beVrzYzvsMYcBVBkvWkxNvIES+K8qKjnMQsLe0huHlX9/gLzD7A/7XeMB9BeDf434iYU
+         UnHhifkmq3ct84MSj84sE6bu8IxlwwMr+g8NB5QWiPAej2rAggjYvcecYnQm0KIukSU0
+         3HLg==
+X-Gm-Message-State: AOAM531AUzwS535Zl1eekCqKcXi5sBX8Y4rK3ePRUipsM+kpQ+64814g
+        5KBUnX5UwBHB+7NFXTGN5XsTyg==
+X-Google-Smtp-Source: ABdhPJwr0xIgD9c24X+iXCLh6Zzcm6rRYn5SEpoc0fHT2awItaqzsdWydUn89R1ptwH+puAG0d1N+g==
+X-Received: by 2002:adf:fd43:: with SMTP id h3mr8602682wrs.341.1642167234352;
+        Fri, 14 Jan 2022 05:33:54 -0800 (PST)
 Received: from localhost ([2a02:168:96c5:1:55ed:514f:6ad7:5bcc])
-        by smtp.gmail.com with ESMTPSA id v13sm6125185wro.90.2022.01.14.05.33.48
+        by smtp.gmail.com with ESMTPSA id j11sm7381241wmq.23.2022.01.14.05.33.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 05:33:49 -0800 (PST)
+        Fri, 14 Jan 2022 05:33:53 -0800 (PST)
 From:   Jann Horn <jannh@google.com>
 To:     David Rheinsberg <david.rheinsberg@gmail.com>,
         Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         linux-input@vger.kernel.org
 Cc:     Roderick Colenbrander <roderick.colenbrander@sony.com>,
-        linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 1/2] HID: uhid: Fix worker destroying device without any protection
-Date:   Fri, 14 Jan 2022 14:33:30 +0100
-Message-Id: <20220114133331.873057-1-jannh@google.com>
+        linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>
+Subject: [PATCH 2/2] HID: uhid: Use READ_ONCE()/WRITE_ONCE() for ->running
+Date:   Fri, 14 Jan 2022 14:33:31 +0100
+Message-Id: <20220114133331.873057-2-jannh@google.com>
 X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+In-Reply-To: <20220114133331.873057-1-jannh@google.com>
+References: <20220114133331.873057-1-jannh@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-uhid has to run hid_add_device() from workqueue context while allowing
-parallel use of the userspace API (which is protected with ->devlock).
-But hid_add_device() can fail. Currently, that is handled by immediately
-destroying the associated HID device, without using ->devlock - but if
-there are concurrent requests from userspace, that's wrong and leads to
-NULL dereferences and/or memory corruption (via use-after-free).
+The flag uhid->running can be set to false by uhid_device_add_worker()
+without holding the uhid->devlock. Mark all reads/writes of the flag
+that might race with READ_ONCE()/WRITE_ONCE() for clarity and
+correctness.
 
-Fix it by leaving the HID device as-is in the worker. We can clean it up
-later, either in the UHID_DESTROY command handler or in the ->release()
-handler.
-
-Cc: stable@vger.kernel.org
-Fixes: 67f8ecc550b5 ("HID: uhid: fix timeout when probe races with IO")
 Signed-off-by: Jann Horn <jannh@google.com>
 ---
 
 Notes:
-    This crasher triggers an ASAN UAF warning:
-=20=20=20=20
-    int main(void) {
-      int dev =3D open("/dev/uhid", O_RDWR);
-      if (dev =3D=3D -1) err(1, "open");
-=20=20=20=20
-      while (1) {
-        struct uhid_event ev_create =3D {
-          .type =3D UHID_CREATE2,
-          /* choose vendor+product IDs that will be rejected by hid_add_dev=
-ice() */
-          .u.create2 =3D { .rd_size =3D 1, .vendor =3D 0x07c0, .product =3D=
- 0x1500 }
-        };
-        if (write(dev, &ev_create, sizeof(ev_create)) <=3D 0)
-          err(1, "write CREATE");
-=20=20=20=20
-        while (1) {
-          struct uhid_event ev_input =3D {
-            .type =3D UHID_INPUT2,
-            .u.input2 =3D {
-              .data =3D { 0xff },
-              .size =3D 1
-            }
-          };
-          int res =3D write(dev, &ev_input, sizeof(ev_input));
-          if (res =3D=3D -1 && errno =3D=3D EINVAL)
-            break;
-        }
-      }
-    }
-=20=20=20=20
-    It results in a splat like this:
-=20=20=20=20
-    BUG: KASAN: use-after-free in __lock_acquire+0x3eb9/0x5550
-    Read of size 8 at addr ffff88800c2218f8 by task uhid_uaf/588
-=20=20=20=20
-    CPU: 1 PID: 588 Comm: uhid_uaf Not tainted 5.16.0-08301-gfb3b0673b7d5 #=
-886
-    [...]
-    Call Trace:
-     [...]
-     lock_acquire+0x1b9/0x4e0
-     _raw_spin_lock_irqsave+0x3e/0x60
-     down_trylock+0x13/0x70
-     hid_input_report+0x3d/0x500
-     uhid_char_write+0x210/0xdb0
-     vfs_write+0x1c7/0x920
-     ksys_write+0x176/0x1d0
-     do_syscall_64+0x43/0x90
-     entry_SYSCALL_64_after_hwframe+0x44/0xae
-    [...]
+    This is just some cleanup to make it clearer what's going on and avoid =
+UB.
+    If you don't want to take this patch, feel free to just take patch 1/2.
 
- drivers/hid/uhid.c | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+ drivers/hid/uhid.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/hid/uhid.c b/drivers/hid/uhid.c
-index 8fe3efcb8327..fc06d8bb42e0 100644
+index fc06d8bb42e0..614adb510dbd 100644
 --- a/drivers/hid/uhid.c
 +++ b/drivers/hid/uhid.c
-@@ -28,11 +28,22 @@
-=20
- struct uhid_device {
- 	struct mutex devlock;
-+
-+	/* This flag tracks whether the HID device is usable for commands from
-+	 * userspace. The flag is already set before hid_add_device(), which
-+	 * runs in workqueue context, to allow hid_add_device() to communicate
-+	 * with userspace.
-+	 * However, if hid_add_device() fails, the flag is cleared without
-+	 * holding devlock.
-+	 * We guarantee that if @running changes from true to false while you're
-+	 * holding @devlock, it's still fine to access @hid.
-+	 */
- 	bool running;
-=20
- 	__u8 *rd_data;
- 	uint rd_size;
-=20
-+	/* When this is NULL, userspace may use UHID_CREATE/UHID_CREATE2. */
- 	struct hid_device *hid;
- 	struct uhid_event input_buf;
-=20
-@@ -63,9 +74,18 @@ static void uhid_device_add_worker(struct work_struct *w=
-ork)
- 	if (ret) {
- 		hid_err(uhid->hid, "Cannot register HID device: error %d\n", ret);
-=20
--		hid_destroy_device(uhid->hid);
--		uhid->hid =3D NULL;
-+		/* We used to call hid_destroy_device() here, but that's really
-+		 * messy to get right because we have to coordinate with
-+		 * concurrent writes from userspace that might be in the middle
-+		 * of using uhid->hid.
-+		 * Just leave uhid->hid as-is for now, and clean it up when
-+		 * userspace tries to close or reinitialize the uhid instance.
-+		 *
-+		 * However, we do have to clear the ->running flag and do a
-+		 * wakeup to make sure userspace knows that the device is gone.
-+		 */
- 		uhid->running =3D false;
-+		wake_up_interruptible(&uhid->report_wait);
+@@ -84,7 +84,7 @@ static void uhid_device_add_worker(struct work_struct *wo=
+rk)
+ 		 * However, we do have to clear the ->running flag and do a
+ 		 * wakeup to make sure userspace knows that the device is gone.
+ 		 */
+-		uhid->running =3D false;
++		WRITE_ONCE(uhid->running, false);
+ 		wake_up_interruptible(&uhid->report_wait);
  	}
  }
+@@ -194,9 +194,9 @@ static int __uhid_report_queue_and_wait(struct uhid_dev=
+ice *uhid,
+ 	spin_unlock_irqrestore(&uhid->qlock, flags);
 =20
-@@ -474,7 +494,7 @@ static int uhid_dev_create2(struct uhid_device *uhid,
- 	void *rd_data;
+ 	ret =3D wait_event_interruptible_timeout(uhid->report_wait,
+-				!uhid->report_running || !uhid->running,
++				!uhid->report_running || !READ_ONCE(uhid->running),
+ 				5 * HZ);
+-	if (!ret || !uhid->running || uhid->report_running)
++	if (!ret || !READ_ONCE(uhid->running) || uhid->report_running)
+ 		ret =3D -EIO;
+ 	else if (ret < 0)
+ 		ret =3D -ERESTARTSYS;
+@@ -237,7 +237,7 @@ static int uhid_hid_get_report(struct hid_device *hid, =
+unsigned char rnum,
+ 	struct uhid_event *ev;
  	int ret;
 =20
--	if (uhid->running)
-+	if (uhid->hid)
- 		return -EALREADY;
-=20
- 	rd_size =3D ev->u.create2.rd_size;
-@@ -556,7 +576,7 @@ static int uhid_dev_create(struct uhid_device *uhid,
-=20
- static int uhid_dev_destroy(struct uhid_device *uhid)
- {
 -	if (!uhid->running)
-+	if (!uhid->hid)
++	if (!READ_ONCE(uhid->running))
+ 		return -EIO;
+=20
+ 	ev =3D kzalloc(sizeof(*ev), GFP_KERNEL);
+@@ -279,7 +279,7 @@ static int uhid_hid_set_report(struct hid_device *hid, =
+unsigned char rnum,
+ 	struct uhid_event *ev;
+ 	int ret;
+=20
+-	if (!uhid->running || count > UHID_DATA_MAX)
++	if (!READ_ONCE(uhid->running) || count > UHID_DATA_MAX)
+ 		return -EIO;
+=20
+ 	ev =3D kzalloc(sizeof(*ev), GFP_KERNEL);
+@@ -579,7 +579,7 @@ static int uhid_dev_destroy(struct uhid_device *uhid)
+ 	if (!uhid->hid)
  		return -EINVAL;
 =20
- 	uhid->running =3D false;
-@@ -565,6 +585,7 @@ static int uhid_dev_destroy(struct uhid_device *uhid)
+-	uhid->running =3D false;
++	WRITE_ONCE(uhid->running, false);
+ 	wake_up_interruptible(&uhid->report_wait);
+=20
  	cancel_work_sync(&uhid->worker);
+@@ -593,7 +593,7 @@ static int uhid_dev_destroy(struct uhid_device *uhid)
 =20
- 	hid_destroy_device(uhid->hid);
-+	uhid->hid =3D NULL;
- 	kfree(uhid->rd_data);
+ static int uhid_dev_input(struct uhid_device *uhid, struct uhid_event *ev)
+ {
+-	if (!uhid->running)
++	if (!READ_ONCE(uhid->running))
+ 		return -EINVAL;
 =20
- 	return 0;
-
-base-commit: fb3b0673b7d5b477ed104949450cd511337ba3c6
+ 	hid_input_report(uhid->hid, HID_INPUT_REPORT, ev->u.input.data,
+@@ -604,7 +604,7 @@ static int uhid_dev_input(struct uhid_device *uhid, str=
+uct uhid_event *ev)
+=20
+ static int uhid_dev_input2(struct uhid_device *uhid, struct uhid_event *ev)
+ {
+-	if (!uhid->running)
++	if (!READ_ONCE(uhid->running))
+ 		return -EINVAL;
+=20
+ 	hid_input_report(uhid->hid, HID_INPUT_REPORT, ev->u.input2.data,
+@@ -616,7 +616,7 @@ static int uhid_dev_input2(struct uhid_device *uhid, st=
+ruct uhid_event *ev)
+ static int uhid_dev_get_report_reply(struct uhid_device *uhid,
+ 				     struct uhid_event *ev)
+ {
+-	if (!uhid->running)
++	if (!READ_ONCE(uhid->running))
+ 		return -EINVAL;
+=20
+ 	uhid_report_wake_up(uhid, ev->u.get_report_reply.id, ev);
+@@ -626,7 +626,7 @@ static int uhid_dev_get_report_reply(struct uhid_device=
+ *uhid,
+ static int uhid_dev_set_report_reply(struct uhid_device *uhid,
+ 				     struct uhid_event *ev)
+ {
+-	if (!uhid->running)
++	if (!READ_ONCE(uhid->running))
+ 		return -EINVAL;
+=20
+ 	uhid_report_wake_up(uhid, ev->u.set_report_reply.id, ev);
 --=20
 2.34.1.703.g22d0c6ccf7-goog
 

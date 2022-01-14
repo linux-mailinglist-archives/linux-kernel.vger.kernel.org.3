@@ -2,235 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1303548E9E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 13:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B4748E9D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 13:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241080AbiANMbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 07:31:33 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28178 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241079AbiANMbX (ORCPT
+        id S241047AbiANMar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 07:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241036AbiANMaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 07:31:23 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20E9rVwu017438;
-        Fri, 14 Jan 2022 12:29:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=hwlL8jG1miQ/OC88rOTP9Qxe5Y+51cvIZUDsR3IpE5w=;
- b=Jste4pqlTbYf6T1NsUQx6bqM/+1YpYtV0FDUbfzH5ruuXHUnqAGMo0p1sh+xBw/WcZG8
- XvUQtGQEXnqcX0LfZH0oxRb9MCwtZYb5fnT5snLmjjUpM+kMdVN9SRZ1eMYlMG/gdMYd
- 97Ul4cWwpWtU2rOxBsZaWgdtUsM9A4LtT1JVRzV947usqjb5vEdvim5jMVH4bEAbU2b6
- XIb+GHpLzb+0zidUPOmXhGmUqtYCM0GK1fhF0GWZ60fS7u1giGFCTvWjjPnR/ynoBSox
- Ddf7tBEtubHDhEIuaD/KvjXnspsOP6Ldnzv9gBE2uNFTWfTUpSOZdKVsgl44McIITiBA jw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dk6xmjjh6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Jan 2022 12:29:54 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20ECTsx1015997;
-        Fri, 14 Jan 2022 12:29:54 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dk6xmjjg9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Jan 2022 12:29:54 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20ECSHZR023672;
-        Fri, 14 Jan 2022 12:29:51 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3df289x63y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Jan 2022 12:29:51 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20ECKfw942926492
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 14 Jan 2022 12:20:41 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9B81252050;
-        Fri, 14 Jan 2022 12:29:48 +0000 (GMT)
-Received: from [9.171.88.24] (unknown [9.171.88.24])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 16F815205F;
-        Fri, 14 Jan 2022 12:29:47 +0000 (GMT)
-Message-ID: <ae1a42ab-f719-4a4e-8d2a-e2b4fa6e9580@linux.ibm.com>
-Date:   Fri, 14 Jan 2022 13:29:46 +0100
+        Fri, 14 Jan 2022 07:30:46 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12F8C06173E
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 04:30:45 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id x22so29668204lfd.10
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 04:30:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dFRXtZZJM1w8961wsdhrLcj24zD7zb34E9qEnauBJXU=;
+        b=idPRQ8dlVpadyH1EnirRdmBZfw36VmY5JeDrBgyETgygFDTDNjO3OicMzeXhdzNjHX
+         ZDn6mUnyfs3HzMQG7yaW2qR2ih94hpk5bb2omZNNsCljHWruVgHiVJbJmX86H7CY44kT
+         /odSrXFwMtcxBoGbj1nS62G1dCqrpZdpUdL4JZqn1YyqQgC9bY5QUH2t1uHHnjiGNspf
+         KyGle92on+jBisHCxaFBGI+pjfxka9i3nnBSHe8a3auq9EcP58O6YoEz+SvelslkSKnB
+         TRDwhpLZ1OtpeZQjp/rSUBAUVxHsdgPoNirq+rGKlLTOvkpkAvS8J81AeXnJkkrle9ob
+         JKtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dFRXtZZJM1w8961wsdhrLcj24zD7zb34E9qEnauBJXU=;
+        b=u/pBt1W2k00uZ4B+7oj1PdwH84GKYCEVvWYXNk/2CfqjhEtkTK6pal85+Rs7B47p0g
+         IYY02SAfvWt5EFaT38646M43Y5apo7yhZ9rpM4OT/LdnIwMaoq7QN/ZzZu3CMai6OEtB
+         XNfoFwMa/RJjfam3bSKx2K/DQvYm8AEedYQroazg+kYpizp+fkJDTYo+nVK/zyf+4ubm
+         BavxH7zUL4N4YhK1jKZmEmfeZ536oIsYbpQlhRiI8A7H1oU67U04Dx8s+5ltLlZehGcc
+         Rx4ZRIiuWzttilTEsL3K9QxRp6CenZyDIOt2h14PgYRTu0zf/8Us3cDCNgCSSiB3CTDr
+         TMbA==
+X-Gm-Message-State: AOAM5323ItNbaySMQXl/SMUbNU36uv0N6I80875sZbwnT+z8W0fJ4XIp
+        IUbBaU28iKgu/ryfcKGs7aWEtlmn6T3ch3MkF+2ceA==
+X-Google-Smtp-Source: ABdhPJyWQeFWRdC1re5kRbvMitOb6K7LNOupUy6c8ve0Xxr9HTyFtNXTC7xc5QWnESF9qUEg9Ikn6HYvX3IjDLt4aEU=
+X-Received: by 2002:a05:651c:98f:: with SMTP id b15mr6534836ljq.367.1642163442620;
+ Fri, 14 Jan 2022 04:30:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 0/5] kvm: fix latent guest entry/exit bugs
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
-        alexandru.elisei@arm.com, anup.patel@wdc.com,
-        aou@eecs.berkeley.edu, atish.patra@wdc.com,
-        benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
-        david@redhat.com, frankja@linux.ibm.com, frederic@kernel.org,
-        gor@linux.ibm.com, hca@linux.ibm.com, imbrenda@linux.ibm.com,
-        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
-        kvm@vger.kernel.org, maz@kernel.org, mingo@redhat.com,
-        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
-        paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com,
-        pbonzini@redhat.com, seanjc@google.com, suzuki.poulose@arm.com,
-        tglx@linutronix.de, tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-References: <20220111153539.2532246-1-mark.rutland@arm.com>
- <127a6117-85fb-7477-983c-daf09e91349d@linux.ibm.com>
- <YeFqUlhqY+7uzUT1@FVFF77S0Q05N>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <YeFqUlhqY+7uzUT1@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Bj2hvrjmwb5h9G5dh_Zi7SnpgHktSNnX
-X-Proofpoint-ORIG-GUID: wWmUB7R1oI4hWbROxbgfEJAUI7-yV8fR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-14_04,2022-01-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- adultscore=0 mlxlogscore=721 suspectscore=0 spamscore=0 malwarescore=0
- bulkscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201140081
+References: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com> <1641749107-31979-7-git-send-email-quic_mkshah@quicinc.com>
+In-Reply-To: <1641749107-31979-7-git-send-email-quic_mkshah@quicinc.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 14 Jan 2022 13:30:06 +0100
+Message-ID: <CAPDyKFrYKRz=S_9_6RNGWn4p3K1MLP63rRfVDSKvH_o8SjZCeQ@mail.gmail.com>
+Subject: Re: [PATCH 06/10] soc: qcom: rpmh-rsc: Attach RSC to cluster PM domain
+To:     Maulik Shah <quic_mkshah@quicinc.com>
+Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org,
+        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 9 Jan 2022 at 18:26, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+>
+> From: Lina Iyer <ilina@codeaurora.org>
+>
+> RSC is part the CPU subsystem and powers off the CPU domains when all
+> the CPUs and no RPMH transactions are pending from any of the drivers.
+> The RSC needs to flush the 'sleep' and 'wake' votes that are critical
+> for saving power when all the CPUs are in idle.
+>
+> Let's make RSC part of the CPU PM domains, by attaching it to the
+> cluster power domain. Registering for PM domain notifications, RSC
+> driver can be notified that the last CPU is powering down. When the last
+> CPU is powering down the domain, let's flush the 'sleep' and 'wake'
+> votes that are stored in the data buffers into the hardware and also
+> write next wakeup in CONTROL_TCS.
+>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
+> ---
+>  drivers/soc/qcom/rpmh-internal.h |  6 +++-
+>  drivers/soc/qcom/rpmh-rsc.c      | 60 ++++++++++++++++++++++++++++++++++++++--
+>  2 files changed, 62 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/soc/qcom/rpmh-internal.h b/drivers/soc/qcom/rpmh-internal.h
+> index 344ba68..32ac117 100644
+> --- a/drivers/soc/qcom/rpmh-internal.h
+> +++ b/drivers/soc/qcom/rpmh-internal.h
+> @@ -97,7 +97,9 @@ struct rpmh_ctrlr {
+>   * @rsc_pm:             CPU PM notifier for controller.
+>   *                      Used when solver mode is not present.
+>   * @cpus_in_pm:         Number of CPUs not in idle power collapse.
+> - *                      Used when solver mode is not present.
+> + *                      Used when solver mode and "power-domains" is not present.
+> + * @genpd_nb:           PM Domain notifier for cluster genpd notifications.
+> + * @genpdb:             PM Domain for cluster genpd.
 
+/s/genpdb/genpd
 
-Am 14.01.22 um 13:19 schrieb Mark Rutland:
-> On Thu, Jan 13, 2022 at 04:20:07PM +0100, Christian Borntraeger wrote:
->>
->>
->> Am 11.01.22 um 16:35 schrieb Mark Rutland:
->>> Several architectures have latent bugs around guest entry/exit, most
->>> notably:
->>>
->>> 1) Several architectures enable interrupts between guest_enter() and
->>>      guest_exit(). As this period is an RCU extended quiescent state (EQS) this
->>>      is unsound unless the irq entry code explicitly wakes RCU, which most
->>>      architectures only do for entry from usersapce or idle.
->>>
->>>      I believe this affects: arm64, riscv, s390
->>>
->>>      I am not sure about powerpc.
->>>
->>> 2) Several architectures permit instrumentation of code between
->>>      guest_enter() and guest_exit(), e.g. KASAN, KCOV, KCSAN, etc. As
->>>      instrumentation may directly o indirectly use RCU, this has the same
->>>      problems as with interrupts.
->>>
->>>      I believe this affects: arm64, mips, powerpc, riscv, s390
->>>
->>> 3) Several architectures do not inform lockdep and tracing that
->>>      interrupts are enabled during the execution of the guest, or do so in
->>>      an incorrect order. Generally
->>>      this means that logs will report IRQs being masked for much longer
->>>      than is actually the case, which is not ideal for debugging. I don't
->>>      know whether this affects the correctness of lockdep.
->>>
->>>      I believe this affects: arm64, mips, powerpc, riscv, s390
->>>
->>> This was previously fixed for x86 specifically in a series of commits:
->>>
->>>     87fa7f3e98a1310e ("x86/kvm: Move context tracking where it belongs")
->>>     0642391e2139a2c1 ("x86/kvm/vmx: Add hardirq tracing to guest enter/exit")
->>>     9fc975e9efd03e57 ("x86/kvm/svm: Add hardirq tracing on guest enter/exit")
->>>     3ebccdf373c21d86 ("x86/kvm/vmx: Move guest enter/exit into .noinstr.text")
->>>     135961e0a7d555fc ("x86/kvm/svm: Move guest enter/exit into .noinstr.text")
->>>     160457140187c5fb ("KVM: x86: Defer vtime accounting 'til after IRQ handling")
->>>     bc908e091b326467 ("KVM: x86: Consolidate guest enter/exit logic to common helpers")
->>>
->>> But other architectures were left broken, and the infrastructure for
->>> handling this correctly is x86-specific.
->>>
->>> This series introduces generic helper functions which can be used to
->>> handle the problems above, and migrates architectures over to these,
->>> fixing the latent issues.
->>>
->>> I wasn't able to figure my way around powerpc and s390, so I have not
->>
->> I think 2 later patches have moved the guest_enter/exit a bit out.
->> Does this make the s390 code clearer?
-> 
-> Yes; that's much simpler to follow!
-> 
-> One major thing I wasn't sure about for s390 is the sequence:
-> 
-> 	guest_enter_irqoff();	// Enters an RCU EQS
-> 	...
-> 	local_irq_enable();
-> 	...
-> 	sie64a(...);
-> 	...
-> 	local_irq_disable();
-> 	...
-> 	guest_exit_irqoff();	// Exits an RCU EQS
-> 
-> ... since if an IRQ is taken between local_irq_{enable,disable}(), RCU won't be
-> watching, and I couldn't spot whether your regular IRQ entry logic would wake
-> RCU in this case, or whether there was something else I'm missing that saves
-> you here.
-> 
-> For other architectures, including x86 and arm64, we enter the guest with IRQs
-> masked and return from the guest with IRQs masked, and don't actually take IRQs
-> until we unmask them in the host, after the guest_exit_*() logic has woken RCU
-> and so on.
-> 
-> I wasn't able to find documentation on the semantics of SIE, so I couldn't spot
-> whether the local_irq_{enable,disable}() calls were necessary, or could be
-> removed.
+>   * @tcs:                TCS groups.
+>   * @tcs_in_use:         S/W state of the TCS; only set for ACTIVE_ONLY
+>   *                      transfers, but might show a sleep/wake TCS in use if
+> @@ -117,6 +119,8 @@ struct rsc_drv {
+>         int id;
+>         int num_tcs;
+>         struct notifier_block rsc_pm;
+> +       struct notifier_block genpd_nb;
+> +       struct generic_pm_domain *genpd;
+>         atomic_t cpus_in_pm;
+>         struct tcs_group tcs[TCS_TYPE_NR];
+>         DECLARE_BITMAP(tcs_in_use, MAX_TCS_NR);
+> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
+> index 01c2f50c..5875ad5 100644
+> --- a/drivers/soc/qcom/rpmh-rsc.c
+> +++ b/drivers/soc/qcom/rpmh-rsc.c
+> @@ -14,10 +14,13 @@
+>  #include <linux/kernel.h>
+>  #include <linux/list.h>
+>  #include <linux/module.h>
+> +#include <linux/notifier.h>
+>  #include <linux/of.h>
+>  #include <linux/of_irq.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/slab.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/wait.h>
+> @@ -834,6 +837,51 @@ static int rpmh_rsc_cpu_pm_callback(struct notifier_block *nfb,
+>         return ret;
+>  }
+>
+> +/**
+> + * rpmh_rsc_pd_callback() - Check if any of the AMCs are busy.
+> + * @nfb:    Pointer to the genpd notifier block in struct rsc_drv.
+> + * @action: GENPD_NOTIFY_PRE_OFF, GENPD_NOTIFY_OFF, GENPD_NOTIFY_PRE_ON or GENPD_NOTIFY_ON.
+> + * @v:      Unused
+> + *
+> + * This function is given to dev_pm_genpd_add_notifier() so we can be informed
+> + * about when cluster-pd is going down. When cluster go down we know no more active
+> + * transfers will be started so we write sleep/wake sets. This function gets
+> + * called from cpuidle code paths and also at system suspend time.
+> + *
+> + * If AMCs are not busy then writes cached sleep and wake messages to TCSes.
+> + * The firmware then takes care of triggering them when entering deepest low power modes.
+> + *
+> + * Return:
+> + * * NOTIFY_OK          - success
+> + * * NOTIFY_BAD         - failure
+> + */
+> +static int rpmh_rsc_pd_callback(struct notifier_block *nfb,
+> +                               unsigned long action, void *v)
+> +{
+> +       struct rsc_drv *drv = container_of(nfb, struct rsc_drv, genpd_nb);
+> +
+> +       /* We don't need to lock as domin on/off are serialized */
 
-We run the SIE instruction with interrupts enabled. SIE is interruptible.
-The disable/enable pairs are just because  guest_enter/exit_irqoff() require them.
-One thing to be aware of: in our entry.S - after an interrupt - we leave SIE by
-setting the return address of the interrupt after the sie instruction so that we
-get back into this __vcpu_run loop to check for signals and so.
+/s/domin/genpd
 
+> +       if ((action == GENPD_NOTIFY_PRE_OFF) &&
+> +           (rpmh_rsc_ctrlr_is_busy(drv) || rpmh_flush(&drv->client)))
+> +               return NOTIFY_BAD;
+> +
+> +       return NOTIFY_OK;
+> +}
+> +
+> +static int rpmh_rsc_pd_attach(struct rsc_drv *drv, struct device *dev)
+> +{
+> +       int ret;
+> +
+> +       pm_runtime_enable(dev);
+> +       ret = dev_pm_domain_attach(dev, false);
 
-> 
-> Thanks,
-> Mark.
-> 
->> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->> index 577f1ead6a51..5859207c2cc0 100644
->> --- a/arch/s390/kvm/kvm-s390.c
->> +++ b/arch/s390/kvm/kvm-s390.c
->> @@ -4145,10 +4145,6 @@ static int __vcpu_run(struct kvm_vcpu *vcpu)
->>                   * As PF_VCPU will be used in fault handler, between
->>                   * guest_enter and guest_exit should be no uaccess.
->>                   */
->> -               local_irq_disable();
->> -               guest_enter_irqoff();
->> -               __disable_cpu_timer_accounting(vcpu);
->> -               local_irq_enable();
->>                  if (kvm_s390_pv_cpu_is_protected(vcpu)) {
->>                          memcpy(sie_page->pv_grregs,
->>                                 vcpu->run->s.regs.gprs,
->> @@ -4156,8 +4152,16 @@ static int __vcpu_run(struct kvm_vcpu *vcpu)
->>                  }
->>                  if (test_cpu_flag(CIF_FPU))
->>                          load_fpu_regs();
->> +               local_irq_disable();
->> +               __disable_cpu_timer_accounting(vcpu);
->> +               guest_enter_irqoff();
->> +               local_irq_enable();
->>                  exit_reason = sie64a(vcpu->arch.sie_block,
->>                                       vcpu->run->s.regs.gprs);
->> +               local_irq_disable();
->> +               guest_exit_irqoff();
->> +               __enable_cpu_timer_accounting(vcpu);
->> +               local_irq_enable();
->>                  if (kvm_s390_pv_cpu_is_protected(vcpu)) {
->>                          memcpy(vcpu->run->s.regs.gprs,
->>                                 sie_page->pv_grregs,
->> @@ -4173,10 +4177,6 @@ static int __vcpu_run(struct kvm_vcpu *vcpu)
->>                                  vcpu->arch.sie_block->gpsw.mask &= ~PSW_INT_MASK;
->>                          }
->>                  }
->> -               local_irq_disable();
->> -               __enable_cpu_timer_accounting(vcpu);
->> -               guest_exit_irqoff();
->> -               local_irq_enable();
->>                  vcpu->srcu_idx = srcu_read_lock(&vcpu->kvm->srcu);
->>                  rc = vcpu_post_run(vcpu, exit_reason);
+Unless I have missed something, this should not be needed.
+
+This is because it's a regular platform driver and we only have a
+single PM domain to attach for the rsc device. In this case, the
+platform bus is capable of managing the attach to the genpd. See
+platform_probe() in drivers/base/platform.c.
+
+> +       if (ret)
+> +               return ret;
+ > +
+> +       drv->genpd = pd_to_genpd(dev->pm_domain);
+
+I couldn't find where this pointer is being used later in the driver.
+In any case, you can probably use dev->pm_domain directly wherever
+needed instead.
+
+> +       drv->genpd_nb.notifier_call = rpmh_rsc_pd_callback;
+> +       return dev_pm_genpd_add_notifier(dev, &drv->genpd_nb);
+
+You should call pm_runtime_disable() in the error path.
+
+> +}
+> +
+>  static int rpmh_probe_tcs_config(struct platform_device *pdev,
+>                                  struct rsc_drv *drv, void __iomem *base)
+>  {
+> @@ -963,7 +1011,7 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
+>                 return ret;
+>
+>         /*
+> -        * CPU PM notification are not required for controllers that support
+> +        * CPU PM/genpd notification are not required for controllers that support
+>          * 'HW solver' mode where they can be in autonomous mode executing low
+>          * power mode to power down.
+>          */
+> @@ -971,8 +1019,14 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
+>         solver_config &= DRV_HW_SOLVER_MASK << DRV_HW_SOLVER_SHIFT;
+>         solver_config = solver_config >> DRV_HW_SOLVER_SHIFT;
+>         if (!solver_config) {
+> -               drv->rsc_pm.notifier_call = rpmh_rsc_cpu_pm_callback;
+> -               cpu_pm_register_notifier(&drv->rsc_pm);
+> +               if (of_find_property(dn, "power-domains", NULL)) {
+
+Rather than parsing the DT, I think it's better to check if
+"dev->pm_domain" has been assigned. As I indicated above, the platform
+bus manages the attach before the driver's ->probe() callback is
+invoked.
+
+> +                       ret = rpmh_rsc_pd_attach(drv, &pdev->dev);
+> +                       if (ret)
+> +                               return ret;
+> +               } else {
+> +                       drv->rsc_pm.notifier_call = rpmh_rsc_cpu_pm_callback;
+> +                       cpu_pm_register_notifier(&drv->rsc_pm);
+> +               }
+>         }
+>
+>         /* Enable the active TCS to send requests immediately */
+
+Beyond this point, you need to call the below to manage the error path
+correctly:
+dev_pm_genpd_remove_notifier()
+pm_runtime_disable()
+
+> --
+> 2.7.4
+>
+
+Kind regards
+Uffe

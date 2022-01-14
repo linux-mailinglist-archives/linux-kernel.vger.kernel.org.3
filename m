@@ -2,104 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3265A48EDB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:11:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830CE48EDBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243170AbiANQLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S243171AbiANQM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:12:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243139AbiANQLk (ORCPT
+        with ESMTP id S243107AbiANQM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:11:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34EDC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:11:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B86161F6A
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 16:11:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9DD1C36AE5;
-        Fri, 14 Jan 2022 16:11:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642176698;
-        bh=6X9KLOSKKaye1jO+GF6tFE3ksul+CGCuXjokSL1ou+g=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=JZf0PfXkA3yzq5W767oiXY7hi0mQbDJIFygFh0XJewPYpGqXVpDPAq+F+/Bxk7vcG
-         rt3Q4t/Q/YtrrTd689sqOoYnyVW2F4Puk9CHpCwrKM+51junwVJk+9ZDCksEaJgrp3
-         sJ+DvpquduGA0sVG7svphatT4qSTSg1z3EzORh6JqmsXQ5RAgPO9ofZi8YsNL86yR5
-         PL7tLHvExJ2bgh9SDXuR8Eb3ybH2jeSIuskHi00oVUvf6buYtdTuwHEfdpuW9RmuKa
-         VnooqVeq+bk19qdZjoVP4HCxYRuSkfQ6pzH8Dq45ET4ONPUOoRZPQFbhTBFAVR/pH+
-         j/EYWnk77DtQQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A08315C023F; Fri, 14 Jan 2022 08:11:38 -0800 (PST)
-Date:   Fri, 14 Jan 2022 08:11:38 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+4f789823c1abc5accf13@syzkaller.appspotmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        quic_neeraju@quicinc.com, frederic@kernel.org, urezki@gmail.com,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [syzbot] KASAN: use-after-free Read in srcu_invoke_callbacks
-Message-ID: <20220114161138.GW947480@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <00000000000081b56205d54c6667@google.com>
- <20220111134324.1727-1-hdanton@sina.com>
- <20220111190500.GG947480@paulmck-ThinkPad-P17-Gen-1>
- <YeGK8gUziDoa/IYL@boqun-archlinux>
- <20220114152752.GU947480@paulmck-ThinkPad-P17-Gen-1>
- <YeGdoAFYGhg3viPZ@T590>
+        Fri, 14 Jan 2022 11:12:56 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CE9C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:12:56 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id w9so12802779iol.13
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:12:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EPYjGXrXJzm3/2O9xWQaTqxgYIE2B54FIlQCIxIosGY=;
+        b=VNoFwJfrEUUkkBi9mN8WLSQHc/uYB5+8/57AiBNaQ4YTSJZxzwxde3bDqPpVwNFJCy
+         NoO82SKi9RlwsjwpceMIPaMlvTdVTN8sU8FiEoDr6Dej0i/f0ZOeN4I+yn8HSY1E368q
+         qiSSqXDVbeR0Vq74cBIPbNYoPzGuGVoDlJKhI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EPYjGXrXJzm3/2O9xWQaTqxgYIE2B54FIlQCIxIosGY=;
+        b=CF1uaN9yXx/pSGyqRuqnMG73DELMqwS3RCgLeaV5hDw/8rCvGHv/S/Nyf2wD6Dtbh4
+         sqZbjPHscndD8LTDIh/F2NZb42AX1R5vdMIkHCcCeGdr57UyuA4/PEarwpuE79FuhzRR
+         SInEgOTjZ7aev1Ld4ST2m6D92lSdcDP1GqY58zUbn0KVsSOK5UbrfNGlTHbe2rsTJIxs
+         f2EG04hbkNEbJbLHsxUPNqDAN1DuKHVkDelMPO56VFM1q32zpaKMi4EE5rbRZOrfnitC
+         NX2GmnEz/wRAaa6Egsd/HP/u8vRzXTS7VRJuJ74kw+FodBLGfSJe1LJyjUtUAoAYZcye
+         j5Cw==
+X-Gm-Message-State: AOAM5338fiNO9IKP0So4ZunXfXZSABKewUwCtWSYu4ZwA0hWYdVedFL4
+        CIgu3xEv0A41UQP1PvrLnmm4apLlC9LaaA==
+X-Google-Smtp-Source: ABdhPJyv/+flF6/jxMNhsZKcnRS7vhZ3KkN6W7OEKuhYYhMOOWLuzLlSo2zSYFktvnfYeUvY+hRoDA==
+X-Received: by 2002:a02:ad11:: with SMTP id s17mr4440625jan.209.1642176775321;
+        Fri, 14 Jan 2022 08:12:55 -0800 (PST)
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com. [209.85.166.170])
+        by smtp.gmail.com with ESMTPSA id g10sm4771803ilf.46.2022.01.14.08.12.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jan 2022 08:12:54 -0800 (PST)
+Received: by mail-il1-f170.google.com with SMTP id e8so8708076ilm.13
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:12:53 -0800 (PST)
+X-Received: by 2002:a05:6e02:2187:: with SMTP id j7mr5036103ila.120.1642176773592;
+ Fri, 14 Jan 2022 08:12:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeGdoAFYGhg3viPZ@T590>
+References: <YeDJKNTYVu/Fe9VS@google.com>
+In-Reply-To: <YeDJKNTYVu/Fe9VS@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 14 Jan 2022 08:12:41 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UQdT==0KH+VsWcmHikTpwdDMSTkBa_GXRhXPacwrkR5Q@mail.gmail.com>
+Message-ID: <CAD=FV=UQdT==0KH+VsWcmHikTpwdDMSTkBa_GXRhXPacwrkR5Q@mail.gmail.com>
+Subject: Re: [PATCH] module: fix signature check failures when using in-kernel decompression
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 11:58:24PM +0800, Ming Lei wrote:
-> On Fri, Jan 14, 2022 at 07:27:52AM -0800, Paul E. McKenney wrote:
-> > On Fri, Jan 14, 2022 at 10:38:42PM +0800, Boqun Feng wrote:
-> > > Hi,
-> > > 
-> > > On Tue, Jan 11, 2022 at 11:05:00AM -0800, Paul E. McKenney wrote:
-> > > [...]
-> > > > > > The buggy address belongs to the object at ffff8880189b5c70
-> > > > > >  which belongs to the cache request_queue_srcu of size 3816
-> > > 
-> > > This cache name drew my attention when I was trying to look into this,
-> > > because I couldn't find it in v5.16, later on I realized the UAF was
-> > > found in linux-next and the commit introducing the cache was merged into
-> > > mainline if 5.17 merge window:
-> > > 
-> > > 	704b914f15fb blk-mq: move srcu from blk_mq_hw_ctx to request_queue
-> > > 
-> > > I think the UAF is actually a bug introduced by the commit, because in
-> > > that commit srcu structure was moved from blk_mq_hw_ctx to
-> > > request_queue, and therefore the cleanup_srcu_struct() should be moved
-> > > from blk_mq_hw_sysfs_release() to blk_release_queue(), however the above
-> > > commit only deleted the one in blk_mq_hw_sysfs_release() but didn't add
-> > > a new one in blk_release_queue(). As a result when a request queue is
-> > > freed, the srcu structure is not fully clean up, therefore the UAF.
-> > > 
-> > > IOW, something like below (untested) should fix this. Copy the auther
-> > > and block maintainers.
-> > 
-> > One question for the author and block maintainers...  Why not simply have
-> > a single srcu_struct for all of the queues?  Or is there some situation
-> > where you need one queue's reader to avoid blocking other queues' SRCU
-> > grace periods?
-> 
-> Because srcu_struct is too fat, and only few drivers need it, and
-> most block drivers needn't it.
+Hi,
 
-Fair points.
+On Thu, Jan 13, 2022 at 4:52 PM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> The new flag MODULE_INIT_COMPRESSED_FILE unintentionally trips check in
+> module_sig_check(). The check was supposed to catch case when version
+> info or magic was removed from a signed module, making signature
+> invalid, but it was coded too broadly and was catching this new flag as
+> well.
+>
+> Change the check to only test the 2 particular flags affecting signature
+> validity.
+>
+> Fixes: b1ae6dc41eaa ("module: add in-kernel support for decompressing")
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+>  kernel/module.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/module.c b/kernel/module.c
+> index 201398d58079..24dab046e16c 100644
+> --- a/kernel/module.c
+> +++ b/kernel/module.c
+> @@ -2883,12 +2883,13 @@ static int module_sig_check(struct load_info *info, int flags)
+>         const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+>         const char *reason;
+>         const void *mod = info->hdr;
+> -
+> +       bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
+> +                                      MODULE_INIT_IGNORE_VERMAGIC);
+>         /*
+> -        * Require flags == 0, as a module with version information
+> -        * removed is no longer the module that was signed
+> +        * Do not allow mangled modules as a module with version information
+> +        * removed is no longer the module that was signed.
+>          */
+> -       if (flags == 0 &&
+> +       if (!mangled_module &&
 
-But would it make sense to dynamically allocate a single srcu_struct
-when the first need arose, and only remove it when the last need passed?
+Seems reasonable to me. I guess the only question in my mind is
+whether this is the best way to handle "unknown" new flags. If someone
+introduces a new flag to "uapi/linux/module.h" should we consider it
+as "mangled" or not? Given that I can't predict the future and the
+comments seem to indicate that we're only trying to detect
+version-related issues, your choice seems OK to me.
 
-							Thanx, Paul
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

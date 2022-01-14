@@ -2,135 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C56AA48F26A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 23:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F7348F26F
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 23:30:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbiANW2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 17:28:55 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:34147 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230310AbiANW2z (ORCPT
+        id S230457AbiANW3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 17:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230450AbiANW3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 17:28:55 -0500
+        Fri, 14 Jan 2022 17:29:06 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83CEC06173E;
+        Fri, 14 Jan 2022 14:29:06 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id g2so3859207pgo.9;
+        Fri, 14 Jan 2022 14:29:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642199335; x=1673735335;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=SMYVXUFcqvm73ktl2Lmgp3uM9JleJ3uNnTtTQe48tYY=;
-  b=Vsgqy6d9rwoEH0jqTJ4bNigZVbEaiRP6MQQlChWY7OapKZ45qi7kTPsW
-   RkeJmr44prPiGoke8/dCFZ8SfagKHea5K8N0R+T4sf1Yv43r7Q8LsFpc9
-   mpsZRN98ZmGZUqoteE0PGgNXAyMHpsjCWrrJTmLwzsTE6J/j9QVUxZQ8O
-   8=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Jan 2022 14:28:54 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 14:28:54 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 14 Jan 2022 14:28:53 -0800
-Received: from [10.110.125.36] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 14 Jan
- 2022 14:28:52 -0800
-Message-ID: <f5a282ed-0b4a-9fb2-fc04-17842745feaa@quicinc.com>
-Date:   Fri, 14 Jan 2022 14:28:52 -0800
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=NBxVTn0du8/apgRw9wjiw5xd6D8rrVeNvphwxQy6weQ=;
+        b=Qk2Y4pHrafDC/h+ccvLQNfzdfS/fWPLIsaroJQHEbOieMZtWE02IRt4Gz8mWGVSIjY
+         4L3uF6zUHg+Lpriplt88nK+Nkat+ovRaBLzlol+IKSBr8eCaV+H1dyhCsdKJ0LPKz/fU
+         wxKN1V1n2uXjsJtkHWCokVdtpbabaaNsqHH7hZ21Fu3gOSovAq0HDVNfZqLpD8bdFFfm
+         S9Y4VfkDjofdm/0Nm8ZyYEgcvP5SlERybhxEgdF+2oY7UWLz7+Q9XU9hcoTsvpEIR218
+         As1E6i3xGydOHIa1P8ZK6qI+g2NA+zAXBqhLvn0cbcx0lqEFWCJTQT5oWmn5z/gCyPtO
+         0pLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=NBxVTn0du8/apgRw9wjiw5xd6D8rrVeNvphwxQy6weQ=;
+        b=4BirUU0d/RGpXtXlGSDNeG7WNZ8SKmiTkjZIGSOawoOYRlLTOQpaDkUfAJIUqGyMXi
+         /rCrjkfUNWirIBV9OhDyUnl/wjdXryWcTPLu+X5MJr1j/YJFmUulLwOL/wyC2Zs6yfiv
+         +8xn1dxW2E6aP+uoND54ZSjMhudW7uQc8J3T6h1WdWnmYJ9kaQ98k0fFFD9ikvO349kj
+         7hV5Dnog5CVpDkAWQ8CligwbzAaulZ7W2ijeFmSc/FbXm4Pw0FZE7xpnKjH28U3jY+me
+         IT7REU9l7ekklF6G0qLZi513J1Q4VZKYHnUgLoPmuQi8tHLPVR/w2R4WW2lFKvlKoqA7
+         C8eg==
+X-Gm-Message-State: AOAM53167vE5kSbvwzFllcT/pjp58k+06at9PCZv5ScYBoXHogBet7Yk
+        vlWdn6r8Zg7eEK/7HHx0IMZtbrhHDAo=
+X-Google-Smtp-Source: ABdhPJyT0Ifc7MfE3kMF8aoWUsA4tuPOBTIDbA5OSfxKT3GjlP/x3gLEtWxu+YPLfznrpi8cCkW8wQ==
+X-Received: by 2002:aa7:985d:0:b0:4bd:8a52:63f0 with SMTP id n29-20020aa7985d000000b004bd8a5263f0mr10848043pfq.56.1642199345902;
+        Fri, 14 Jan 2022 14:29:05 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id nn6sm6147080pjb.51.2022.01.14.14.29.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jan 2022 14:29:05 -0800 (PST)
+Subject: Re: [PATCH 5.10 00/25] 5.10.92-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        stable@vger.kernel.org
+References: <20220114081542.698002137@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <d1a10ea1-e21d-7db5-75c6-18319c9d124d@gmail.com>
+Date:   Fri, 14 Jan 2022 14:29:00 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v15 1/4] drm/msm/dp: do not initialize phy until plugin
- interrupt received
+In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
-        <daniel@ffwll.ch>, <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1642194710-2512-1-git-send-email-quic_khsieh@quicinc.com>
- <1642194710-2512-2-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n52UYBajrqGFqppun5oK82V3ppjvQxANU27kL95gCZtURg@mail.gmail.com>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <CAE-0n52UYBajrqGFqppun5oK82V3ppjvQxANU27kL95gCZtURg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 1/14/22 12:16 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.92 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.92-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-On 1/14/2022 1:41 PM, Stephen Boyd wrote:
-> Quoting Kuogee Hsieh (2022-01-14 13:11:47)
->> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
->> index 7cc4d21..7cd6222 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->> @@ -696,12 +699,9 @@ static int dp_irq_hpd_handle(struct dp_display_private *dp, u32 data)
->>           * dp core (ahb/aux clks) must be initialized before
->>           * irq_hpd be handled
->>           */
->> -       if (dp->core_initialized) {
->> -               ret = dp_display_usbpd_attention_cb(&dp->pdev->dev);
->> -               if (ret == -ECONNRESET) { /* cable unplugged */
->> -                       dp->core_initialized = false;
->> -               }
->> -       }
->> +       if (dp->core_initialized)
-> When is this condition false? The irq isn't unmasked until the core has
-> been initialized. On the resume path I suppose the irq is enabled in
-> dp_display_host_init() calling dp_ctrl_reset_irq_ctrl(), and then we
-> could immediately get the interrupt but it will block on the event_mutex
-> lock.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-This is left over form Lazor.
-
-I remember that there is an extreme case that several irq_hpd interrupts 
-happen right after dongle plug in  (happen at resume too) and sometime 
-cause system crash at dpcd read due to AHB clock is not enabled yet. It 
-took some time to debug it.
-
- From looking into code, it does not look likely it will happen. But it 
-did happen at real world.
-
-So that I would like to keep this condition checking.
-
-
->> +               dp_display_usbpd_attention_cb(&dp->pdev->dev);
->> +
->>          DRM_DEBUG_DP("hpd_state=%d\n", state);
->>
->>          mutex_unlock(&dp->event_mutex);
->> @@ -1363,14 +1373,16 @@ static int dp_pm_suspend(struct device *dev)
->>                  if (dp_power_clk_status(dp->power, DP_CTRL_PM))
->>                          dp_ctrl_off_link_stream(dp->ctrl);
->>
->> +               dp_display_host_phy_exit(dp);
->> +
->> +               /* host_init will be called at pm_resume */
->>                  dp_display_host_deinit(dp);
->> +       } else {
->> +               dp_display_host_phy_exit(dp);
-> I fail to see where this condition happens. Can we suspend the device
-> without the irq being installed?
-
-Agree, with this new mechanism it should not happen.
-
-Will remove it.
-
->>          }
->>
->>          dp->hpd_state = ST_SUSPENDED;
->>
->> -       /* host_init will be called at pm_resume */
->> -       dp->core_initialized = false;
->> -
->>          DRM_DEBUG_DP("After, core_inited=%d power_on=%d\n",
->>                          dp->core_initialized, dp_display->power_on);
->>
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

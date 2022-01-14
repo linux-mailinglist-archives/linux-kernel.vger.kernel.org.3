@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 356F948E2D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 04:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9729048E2D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 04:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238987AbiANDGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 22:06:42 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:33416 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236150AbiANDGl (ORCPT
+        id S239000AbiANDHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 22:07:21 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:6168 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236150AbiANDHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 22:06:41 -0500
-X-UUID: 775fc08edc90494a9341dded806c18e1-20220114
-X-UUID: 775fc08edc90494a9341dded806c18e1-20220114
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1888334197; Fri, 14 Jan 2022 11:06:39 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 14 Jan 2022 11:06:37 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 14 Jan 2022 11:06:36 +0800
-Message-ID: <52901ebe0db555f8e58dc0d59cfd703c5a0fc2de.camel@mediatek.com>
-Subject: Re: [PATCH v2 3/3] mmc: mediatek: add support for SDIO eint irq
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Yoshihiro Shimoda" <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Lucas Stach" <dev@lynxeye.de>, Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Fri, 14 Jan 2022 11:06:36 +0800
-In-Reply-To: <YeADWXPGPW253ssR@smile.fi.intel.com>
-References: <20220111014046.5864-1-axe.yang@mediatek.com>
-         <20220111014046.5864-4-axe.yang@mediatek.com>
-         <Yd1uJ+dX2CTEJfYY@smile.fi.intel.com>
-         <83670f12a4eda1d8aecde3c0bf225642106d1267.camel@mediatek.com>
-         <YeADWXPGPW253ssR@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 13 Jan 2022 22:07:19 -0500
+Received: from [10.28.39.106] (10.28.39.106) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Fri, 14 Jan
+ 2022 11:07:17 +0800
+Message-ID: <98619eef-8b51-c138-e98d-39fdbe4c9ebb@amlogic.com>
+Date:   Fri, 14 Jan 2022 11:07:17 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v9 1/4] clk: meson: add one based divider support for sclk
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, <linux-clk@vger.kernel.org>
+CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20220113115745.45826-1-liang.yang@amlogic.com>
+ <20220113115745.45826-2-liang.yang@amlogic.com>
+ <20220113212801.E88BFC36AE3@smtp.kernel.org>
+From:   Liang Yang <liang.yang@amlogic.com>
+In-Reply-To: <20220113212801.E88BFC36AE3@smtp.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
+X-Originating-IP: [10.28.39.106]
+X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
+ (10.28.11.5)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-01-13 at 12:47 +0200, Andy Shevchenko wrote:
-> On Thu, Jan 13, 2022 at 03:58:52PM +0800, Axe Yang wrote:
-> 
-> > But for the comment for 'dev_dbg', can you explain more about that?
-> 
-> Sure.
-> 
-> > On Tue, 2022-01-11 at 13:46 +0200, Andy Shevchenko wrote:
-> > > On Tue, Jan 11, 2022 at 09:40:46AM +0800, Axe Yang wrote:
-> 
-> ..
-> 
-> > > > +		host->pins_eint = pinctrl_lookup_state(host-
-> > > > >pinctrl,
-> > > > "state_eint");
-> > > > +		if (IS_ERR(host->pins_eint)) {
-> > > > +			dev_dbg(&pdev->dev, "Cannot find
-> > > > pinctrl
-> > > > eint!\n");
-> > > 
-> > > In debug mode of pin control this will bring a duplicate message.
-> > 
-> > Can you explain more about this comment?
-> > I don't understand what the 'duplicate message' refers for.
-> 
-> Have you chance to read the implementation of pinctrl_lookup_state()?
+Hi Stephen,
 
-I have read pinctrl_lookup_state(), and if the 'duplicate message' you
-were talking about is 'using pinctrl dummy state...':
-
-https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/core.c#L1214
-No, this message will not appear in debug mode if pins_eint not found
-because pinctrl_dummy_state is always FALSE. MTK Soc do not need dummy
-state support.
-
---
-Best Regard,
-Axe Yang
-
+On 2022/1/14 5:28, Stephen Boyd wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> Quoting Liang Yang (2022-01-13 03:57:42)
+>> diff --git a/drivers/clk/meson/sclk-div.c b/drivers/clk/meson/sclk-div.c
+>> index 76d31c0a3342..79c9efd28115 100644
+>> --- a/drivers/clk/meson/sclk-div.c
+>> +++ b/drivers/clk/meson/sclk-div.c
+>> @@ -28,22 +29,39 @@ meson_sclk_div_data(struct clk_regmap *clk)
+>>          return (struct meson_sclk_div_data *)clk->data;
+>>   }
+>>   
+>> -static int sclk_div_maxval(struct meson_sclk_div_data *sclk)
+>> +static inline int sclk_get_reg(int val, unsigned char flag)
+>>   {
+>> -       return (1 << sclk->div.width) - 1;
+>> +       if ((flag & MESON_SCLK_ONE_BASED) || !val)
+>> +               return val;
+>> +       else
+>> +               return val - 1;
+> 
+> Please drop the else
+ok
+> 
+>> +}
+>> +
+>> +static inline int sclk_get_divider(int reg, unsigned char flag)
+>> +{
+>> +       if (flag & MESON_SCLK_ONE_BASED)
+>> +               return reg;
+>> +       else
+> 
+> Please drop the else
+ok
+> 
+>> +               return reg + 1;
+>>   }
+>>   
+>>   static int sclk_div_maxdiv(struct meson_sclk_div_data *sclk)
+>>   {
+>> -       return sclk_div_maxval(sclk) + 1;
+> 
+> .

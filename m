@@ -2,72 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0AD48EC28
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0EA48EC2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242199AbiANPDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:03:20 -0500
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:33710 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242188AbiANPDT (ORCPT
+        id S242188AbiANPES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:04:18 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:34282 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238270AbiANPEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:03:19 -0500
-Received: by mail-oi1-f177.google.com with SMTP id x193so12569359oix.0;
-        Fri, 14 Jan 2022 07:03:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9VL/++i2s0qSrUBS+fCEDMrjfRy+FPmGVi53DdPYFEQ=;
-        b=O1ayS58WyUKcJKNKZDNPsQemcA1TAvxVK5dgoM13IM/PfnsBSBEjpQ3Y4Yxc///Vj+
-         uSwg20cxQaD+cOnyTeDzetWay4RwNfrXoiFvHWQGKdzAl0F1BcbZlJWxIex90MSenkjq
-         26ljlbSXG0r2tAAPXQBuOYB4wGVBV5Y28K9TMR+e9+9yz6/jWzaTkajNK9W6UFYDlW61
-         wZ5M+uLnlrNM48bmeIN4e+M4I23uuHVXmsPcyeS9lqDwM4pfyR2pwmbGKkV61nSn/wUg
-         JquNTsGFovJTUEQbppb6KLykgAZNFDzWripwal+rB1gtDf3ZnpnVfnLc4aLrcsXkJXWp
-         mpww==
-X-Gm-Message-State: AOAM530zU1Qb3Mw1iZdyirRzoKW89cr8PA3VtvZuAfBSNd4ADmj0Lwsf
-        xyl2rMA6zXA793VILbreEQ==
-X-Google-Smtp-Source: ABdhPJzkJt7+RWB4MgwR5E70dD7vgi9jGkWI0wHqI7YmKsJmvb02Dh7I7OOT3J+yhMBHk9yppPGT6A==
-X-Received: by 2002:aca:44c5:: with SMTP id r188mr13301461oia.177.1642172599221;
-        Fri, 14 Jan 2022 07:03:19 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id j99sm1838176otj.15.2022.01.14.07.03.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 07:03:18 -0800 (PST)
-Received: (nullmailer pid 1887770 invoked by uid 1000);
-        Fri, 14 Jan 2022 15:03:17 -0000
-Date:   Fri, 14 Jan 2022 09:03:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Stanislav Jakubek <stano.jakubek@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: vendor-prefixes: add Thundercomm
-Message-ID: <YeGQtZP8KIOTPmWY@robh.at.kernel.org>
-References: <20220113103036.GA4456@standask-GA-A55M-S2HP>
+        Fri, 14 Jan 2022 10:04:16 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=cruzzhao@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V1pfdAE_1642172651;
+Received: from 30.21.164.113(mailfrom:cruzzhao@linux.alibaba.com fp:SMTPD_---0V1pfdAE_1642172651)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 14 Jan 2022 23:04:12 +0800
+Message-ID: <86fbc313-e179-0cbd-8f5b-66e7b5964b14@linux.alibaba.com>
+Date:   Fri, 14 Jan 2022 23:04:11 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220113103036.GA4456@standask-GA-A55M-S2HP>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH v2 2/3] sched/core: Forced idle accounting per-cpu
+Content-Language: en-US
+To:     Josh Don <joshdon@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        cgroups@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <1641894961-9241-1-git-send-email-CruzZhao@linux.alibaba.com>
+ <1641894961-9241-3-git-send-email-CruzZhao@linux.alibaba.com>
+ <CABk29NtonxXS53J-+3w_GTLTVurf8HS4v35T9evoGyERB0uDqA@mail.gmail.com>
+From:   cruzzhao <cruzzhao@linux.alibaba.com>
+In-Reply-To: <CABk29NtonxXS53J-+3w_GTLTVurf8HS4v35T9evoGyERB0uDqA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Jan 2022 11:30:36 +0100, Stanislav Jakubek wrote:
-> The vendor prefix for Thundercomm [1] is used in device tree [2], but
-> was not documented so far. Add it to the schema to document it.
-> 
-> [1] https://www.thundercomm.com/
-> [2] arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> 
-> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> ---
-> Changes in v2:
->   - Reworked patch description
->   - Rebase on next-20220113
-> 
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
 
-Applied, thanks!
+
+在 2022/1/12 上午9:59, Josh Don 写道:
+> On Tue, Jan 11, 2022 at 1:56 AM Cruz Zhao <CruzZhao@linux.alibaba.com> wrote:
+>>
+>> Accounting for "forced idle" time per cpu, which is the time a cpu is
+>> forced to idle by its SMT sibling.
+>>
+>> As it's not accurate to measure the capacity loss only by cookie'd forced
+>> idle time, and it's hard to trace the forced idle time caused by all the
+>> uncookie'd tasks, we account the forced idle time from the perspective of
+>> the cpu.
+>>
+>> Forced idle time per cpu is displayed via /proc/schedstat, we can get the
+>> forced idle time of cpu x from the 10th column of the row for cpu x. The
+>> unit is ns. It also requires that schedstats is enabled.
+>>
+>> Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
+>> ---
+> 
+> Two quick followup questions:
+> 
+> 1) From your v1, I still wasn't quite sure if the per-cpu time was
+> useful or not for you versus a single overall sum (ie. I think other
+> metrics could be more useful for analyzing steal_cookie if that's what
+> you're specifically interested in). Do you definitely want the per-cpu
+> totals?
+> 
+IMO, the per-cpu forced idle time can help us get to know whether the
+forced idle time is uniform among the core, or among all the cpus. IMO,
+it's a kind of balance.
+
+> 2) If your cgroup accounting patch is merged, do you still want this
+> patch? You can grab the global values from the root cgroup (assuming
+> you have cgroups enabled). The only potential gap is if you need
+> per-cpu totals, though I'm working to add percpu stats to cgroup-v2:
+> https://lkml.kernel.org/r/%3C20220107234138.1765668-1-joshdon@google.com%3E
+
+If cgroup accounting patch is merged, this patch is still needed.
+
+Consider the following scenario:
+Task p of cgroup A is running on cpu x, and it forces cpu y into idle
+for t ns. The forceidle time of cgroup A on cpu x increases t ns, and
+the forcedidle time of cpu y increases t ns.
+
+That is, the force idle time of cgroup is defined as the forced idle
+time it caused, and the force idle time of cpu is defined as the time
+the cpu is forced into idle, which have different meanings from each other.
+
+And for SMT > 2, we cannot caculate the forced idle time of cpu x from
+the cgroup interface.
+
+Best,
+Cruz Zhao

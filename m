@@ -2,210 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F5748E574
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5788F48E5FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239619AbiANISM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:18:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29477 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239592AbiANIR6 (ORCPT
+        id S240499AbiANIW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:22:26 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:30279 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240158AbiANIVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:17:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642148277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IUoonh6OYal9J1ZwVwpqRFVJ3/QYUBwJK8HyOa8FQ4E=;
-        b=CWPHsbEBg1wnwrHqEdJ3P1aEIchskb8e+XpSfXpQDcpKW+oodfyhFXetUGuKFmZ/iJDg/O
-        egCGSITMOz5XAwTXQlwexGjdUOUzI2Nq2Iks0U8bVyjshBMSYiX5wXzy+jNhz7UU2Mm785
-        8QRWCzOu2u8JARYbz+pfntX/Dklzics=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-516-67uh35B1NU-AoczfBtTW_A-1; Fri, 14 Jan 2022 03:17:54 -0500
-X-MC-Unique: 67uh35B1NU-AoczfBtTW_A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ED7B518C89DF;
-        Fri, 14 Jan 2022 08:17:50 +0000 (UTC)
-Received: from starship (unknown [10.40.192.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3341E105914D;
-        Fri, 14 Jan 2022 08:17:35 +0000 (UTC)
-Message-ID: <4b9fb845bf698f7efa6b46d525b37e329dd693ea.camel@redhat.com>
-Subject: Re: [PATCH v5 7/8] KVM: VMX: Update PID-pointer table entry when
- APIC ID is changed
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Chao Gao <chao.gao@intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Zeng Guang <guang.zeng@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>
-Date:   Fri, 14 Jan 2022 10:17:34 +0200
-In-Reply-To: <20220114025825.GA3010@gao-cwp>
-References: <20211231142849.611-1-guang.zeng@intel.com>
-         <20211231142849.611-8-guang.zeng@intel.com>
-         <640e82f3-489d-60af-1d31-25096bef1a46@amd.com>
-         <4eee5de5-ab76-7094-17aa-adc552032ba0@intel.com>
-         <aa86022c-2816-4155-8d77-f4faf6018255@amd.com>
-         <aa7db6d2-8463-2517-95ce-c0bba22e80d4@intel.com>
-         <d058f7464084cadc183bd9dbf02c7f525bb9f902.camel@redhat.com>
-         <20220110074523.GA18434@gao-cwp>
-         <1ff69ed503faa4c5df3ad1b5abe8979d570ef2b8.camel@redhat.com>
-         <YeClaZWM1cM+WLjH@google.com> <20220114025825.GA3010@gao-cwp>
-Content-Type: multipart/mixed; boundary="=-gTfv472rn7j6C2YSy/9D"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Fri, 14 Jan 2022 03:21:09 -0500
+Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JZvPP3kd7zbk0J;
+        Fri, 14 Jan 2022 16:20:25 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 14 Jan 2022 16:21:06 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 14 Jan 2022 16:21:05 +0800
+Subject: Re: [PATCH v6 2/2] block: cancel all throttled bios in del_gendisk()
+To:     Ming Lei <ming.lei@redhat.com>
+CC:     <mkoutny@suse.com>, <paulmck@kernel.org>, <tj@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220110134758.2233758-1-yukuai3@huawei.com>
+ <20220110134758.2233758-3-yukuai3@huawei.com> <Yd5FkuhYX9YcgQkZ@T590>
+ <2221953d-be40-3433-d46c-f40acd044482@huawei.com>
+ <CAFj5m9KmHB6FtUZ3E42BMZo+=aNNfn2bLu=kNhBOsRdxbfT6nw@mail.gmail.com>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <c5d1d7b5-b815-0dda-b7d3-8151189a8203@huawei.com>
+Date:   Fri, 14 Jan 2022 16:21:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+In-Reply-To: <CAFj5m9KmHB6FtUZ3E42BMZo+=aNNfn2bLu=kNhBOsRdxbfT6nw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---=-gTfv472rn7j6C2YSy/9D
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-On Fri, 2022-01-14 at 10:58 +0800, Chao Gao wrote:
-> On Thu, Jan 13, 2022 at 10:19:21PM +0000, Sean Christopherson wrote:
-> > On Tue, Jan 11, 2022, Maxim Levitsky wrote:
-> > > Both Intel and AMD's PRM also state that changing APIC ID is implementation
-> > > dependent.
-> > >  
-> > > I vote to forbid changing apic id, at least in the case any APIC acceleration
-> > > is used, be that APICv or AVIC.
-> > 
-> > That has my vote as well.  For IPIv in particular there's not much concern with
-> > backwards compability, i.e. we can tie the behavior to enable_ipiv.
-Great!
+在 2022/01/14 11:05, Ming Lei 写道:
+> On Thu, Jan 13, 2022 at 04:46:18PM +0800, yukuai (C) wrote:
+>> 在 2022/01/12 11:05, Ming Lei 写道:
+>>> Hello Yu Kuai,
+>>>
+>>> On Mon, Jan 10, 2022 at 09:47:58PM +0800, Yu Kuai wrote:
+>>>> Throttled bios can't be issued after del_gendisk() is done, thus
+>>>> it's better to cancel them immediately rather than waiting for
+>>>> throttle is done.
+>>>>
+>>>> For example, if user thread is throttled with low bps while it's
+>>>> issuing large io, and the device is deleted. The user thread will
+>>>> wait for a long time for io to return.
+>>>>
+>>>> Noted this patch is mainly from revertion of commit 32e3374304c7
+>>>> ("blk-throttle: remove tg_drain_bios") and commit b77412372b68
+>>>> ("blk-throttle: remove blk_throtl_drain").
+>>>>
+>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>>> ---
+>>>>    block/blk-throttle.c | 77 ++++++++++++++++++++++++++++++++++++++++++++
+>>>>    block/blk-throttle.h |  2 ++
+>>>>    block/genhd.c        |  2 ++
+>>>>    3 files changed, 81 insertions(+)
+>>>
+>>> Just wondering why not take the built-in way in throtl_upgrade_state() for
+>>> canceling throttled bios? Something like the following, then we can avoid
+>>> to re-invent the wheel.
+>>>
+>>>    block/blk-throttle.c | 38 +++++++++++++++++++++++++++++++-------
+>>>    block/blk-throttle.h |  2 ++
+>>>    block/genhd.c        |  3 +++
+>>>    3 files changed, 36 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+>>> index cf7e20804f1b..17e56b2e44c4 100644
+>>> --- a/block/blk-throttle.c
+>>> +++ b/block/blk-throttle.c
+>>> @@ -1816,16 +1816,11 @@ static void throtl_upgrade_check(struct throtl_grp *tg)
+>>>              throtl_upgrade_state(tg->td);
+>>>    }
+>>> -static void throtl_upgrade_state(struct throtl_data *td)
+>>> +static void __throtl_cancel_bios(struct throtl_data *td)
+>>>    {
+>>>      struct cgroup_subsys_state *pos_css;
+>>>      struct blkcg_gq *blkg;
+>>> -   throtl_log(&td->service_queue, "upgrade to max");
+>>> -   td->limit_index = LIMIT_MAX;
+>>> -   td->low_upgrade_time = jiffies;
+>>> -   td->scale = 0;
+>>> -   rcu_read_lock();
+>>>      blkg_for_each_descendant_post(blkg, pos_css, td->queue->root_blkg) {
+>>>              struct throtl_grp *tg = blkg_to_tg(blkg);
+>>>              struct throtl_service_queue *sq = &tg->service_queue;
+>>> @@ -1834,12 +1829,41 @@ static void throtl_upgrade_state(struct throtl_data *td)
+>>>              throtl_select_dispatch(sq);
+>>>              throtl_schedule_next_dispatch(sq, true);
+>> Hi, Ming Lei
+>>
+>> I'm confused that how can bios be canceled here?
+>> tg->iops and tg->bps stay untouched, how can throttled bios
+>> dispatch?
 > 
-> Hi Sean and Levitsky,
+> I thought that throttled bios will be canceled by 'tg->disptime = jiffies - 1;'
+> and the following dispatch schedule.
 > 
-> Let's align on the implementation.
+> But looks it isn't enough, since tg_update_disptime() updates
+> ->disptime. However,
+> this problem can be solved easily by not updating ->disptime in case that we are
+> canceling.
 > 
-> To disable changes for xAPIC ID when IPIv/AVIC is enabled:
+>>>      }
+>>> -   rcu_read_unlock();
+>>>      throtl_select_dispatch(&td->service_queue);
+>>>      throtl_schedule_next_dispatch(&td->service_queue, true);
+>>>      queue_work(kthrotld_workqueue, &td->dispatch_work);
+>>>    }
+>>> +void blk_throtl_cancel_bios(struct request_queue *q)
+>>> +{
+>>> +   struct cgroup_subsys_state *pos_css;
+>>> +   struct blkcg_gq *blkg;
+>>> +
+>>> +   rcu_read_lock();
+>>> +   spin_lock_irq(&q->queue_lock);
+>>> +   __throtl_cancel_bios(q->td);
+>>> +   spin_unlock_irq(&q->queue_lock);
+>>> +   rcu_read_unlock();
+>>> +
+>>> +   blkg_for_each_descendant_post(blkg, pos_css, q->root_blkg)
+>>> +           del_timer_sync(&blkg_to_tg(blkg)->service_queue.pending_timer);
+>>> +   del_timer_sync(&q->td->service_queue.pending_timer);
+>>
+>> By the way, I think delete timer will end up io hung here if there are
+>> some bios still be throttled.
 > 
-> 1. introduce a variable (forbid_apicid_change) for this behavior in kvm.ko
-> and export it so that kvm-intel, kvm-amd can set it when IPIv/AVIC is
-> enabled. To reduce complexity, this variable is a module level setting.
+> Firstly ->queue_lock is held by blk_throtl_cancel_bios(), so no new bios
+> will be throttled.
 > 
-> 2. when guest attempts to change xAPIC ID but it is forbidden, KVM prints
-> a warning on host and injects a #GP to guest.
-> 
-> 3. remove AVIC code that deals with changes to xAPIC ID.
-> 
+> Also if we don't update ->disptime, any new bios throttled after releasing
+> ->queue_lock will be dispatched soon.
 
-I have a patch for both, I attached them.
-I haven't tested either of these patches that much other than a smoke test,
-but I did test all of the guests I  have and none broke in regard to boot.
+Hi, Ming Lei
 
-I will send those patches as part of larger patch series that implements
-nesting for AVIC. I hope to do this next week.
+Just to be curiosity, I'm still trying to understand the logic here:
 
-Best regards,
-	Maxim Levitsky
+For example, if bps is set to 1k, and a io with size 16k is just
+dispatched, then io throtle should wait for 16s untill new io can be 
+dispatched. (details in tg_with_in_bps_limit）.
 
---=-gTfv472rn7j6C2YSy/9D
-Content-Disposition: attachment;
-	filename*0=0001-KVM-x86-lapic-don-t-allow-to-change-APIC-ID-when-api.pat;
-	filename*1=ch
-Content-Type: text/x-patch;
-	name="0001-KVM-x86-lapic-don-t-allow-to-change-APIC-ID-when-api.patch";
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
+How does such mechanism bypassed here?
 
-RnJvbSA0YTcwNDE2Yjk4YzQ3MjVkYzI4NjA4MTUyYjY2ZWM0MmEyMzNiMmU4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBNYXhpbSBMZXZpdHNreSA8bWxldml0c2tAcmVkaGF0LmNvbT4K
-RGF0ZTogU3VuLCA5IEphbiAyMDIyIDE4OjA5OjA4ICswMjAwClN1YmplY3Q6IFtQQVRDSCAxLzhd
-IEtWTTogeDg2OiBsYXBpYzogZG9uJ3QgYWxsb3cgdG8gY2hhbmdlIEFQSUMgSUQgd2hlbiBhcGlj
-CiBhY2NlbGVyYXRpb24gaXMgZW5hYmxlZAoKTm8gc2FuZSBndWVzdCB3b3VsZCBjaGFuZ2UgcGh5
-c2ljYWwgQVBJQyBJRHMsIGFuZCBhbGxvd2luZyB0aGlzIGludHJvZHVjZXMgYnVncwppbnRvIEFQ
-SUMgYWNjZWxlcmF0aW9uIGNvZGUuCgpTaWduZWQtb2ZmLWJ5OiBNYXhpbSBMZXZpdHNreSA8bWxl
-dml0c2tAcmVkaGF0LmNvbT4KLS0tCiBhcmNoL3g4Ni9rdm0vbGFwaWMuYyB8IDEyICsrKysrKysr
-Ky0tLQogMSBmaWxlIGNoYW5nZWQsIDkgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRp
-ZmYgLS1naXQgYS9hcmNoL3g4Ni9rdm0vbGFwaWMuYyBiL2FyY2gveDg2L2t2bS9sYXBpYy5jCmlu
-ZGV4IDZlMWZiYmY0YzUwOGIuLjU2YmM0OTRjYWRkM2UgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2L2t2
-bS9sYXBpYy5jCisrKyBiL2FyY2gveDg2L2t2bS9sYXBpYy5jCkBAIC0yMDA3LDEwICsyMDA3LDE2
-IEBAIGludCBrdm1fbGFwaWNfcmVnX3dyaXRlKHN0cnVjdCBrdm1fbGFwaWMgKmFwaWMsIHUzMiBy
-ZWcsIHUzMiB2YWwpCiAKIAlzd2l0Y2ggKHJlZykgewogCWNhc2UgQVBJQ19JRDoJCS8qIExvY2Fs
-IEFQSUMgSUQgKi8KLQkJaWYgKCFhcGljX3gyYXBpY19tb2RlKGFwaWMpKQotCQkJa3ZtX2FwaWNf
-c2V0X3hhcGljX2lkKGFwaWMsIHZhbCA+PiAyNCk7Ci0JCWVsc2UKKwkJaWYgKCFhcGljX3gyYXBp
-Y19tb2RlKGFwaWMpIHx8CisJCSAgICAvKgorCQkgICAgICogRG9uJ3QgYWxsb3cgc2V0dGluZyBB
-UElDIElEIHdpdGggYW55IEFQSUMgYWNjZWxlcmF0aW9uCisJCSAgICAgKiBlbmFibGVkIHRvIGF2
-b2lkIHVuZXhwZWN0ZWQgaXNzdWVzCisJCSAgICAgKi8KKwkJICAgIChlbmFibGVfYXBpY3YgJiYg
-KCh2YWwgPj4gMjQpICE9IGFwaWMtPnZjcHUtPnZjcHVfaWQpKSkgewogCQkJcmV0ID0gMTsKKwkJ
-CWJyZWFrOworCQl9CisJCWt2bV9hcGljX3NldF94YXBpY19pZChhcGljLCB2YWwgPj4gMjQpOwog
-CQlicmVhazsKIAogCWNhc2UgQVBJQ19UQVNLUFJJOgotLSAKMi4yNi4zCgo=
-
-
---=-gTfv472rn7j6C2YSy/9D
-Content-Disposition: attachment;
-	filename*0=0002-KVM-x86-AVIC-remove-broken-code-that-updated-APIC-ID.pat;
-	filename*1=ch
-Content-Type: text/x-patch;
-	name="0002-KVM-x86-AVIC-remove-broken-code-that-updated-APIC-ID.patch";
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-RnJvbSAzMjAwOTI0ZWQwNTZlZmU1OGIzZDFkMTI2NzVjMTk0YmVhOThjMGZjIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBNYXhpbSBMZXZpdHNreSA8bWxldml0c2tAcmVkaGF0LmNvbT4K
-RGF0ZTogU3VuLCA5IEphbiAyMDIyIDE4OjE0OjEyICswMjAwClN1YmplY3Q6IFtQQVRDSCAyLzhd
-IEtWTTogeDg2OiBBVklDOiByZW1vdmUgYnJva2VuIGNvZGUgdGhhdCB1cGRhdGVkIEFQSUMgSUQK
-ClNpZ25lZC1vZmYtYnk6IE1heGltIExldml0c2t5IDxtbGV2aXRza0ByZWRoYXQuY29tPgotLS0K
-IGFyY2gveDg2L2t2bS9zdm0vYXZpYy5jIHwgMzcgKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMzMgZGVsZXRpb25z
-KC0pCgpkaWZmIC0tZ2l0IGEvYXJjaC94ODYva3ZtL3N2bS9hdmljLmMgYi9hcmNoL3g4Ni9rdm0v
-c3ZtL2F2aWMuYwppbmRleCBmM2FiMDBmNDA3ZDViLi44NjU1YjM1MDQzMTM0IDEwMDY0NAotLS0g
-YS9hcmNoL3g4Ni9rdm0vc3ZtL2F2aWMuYworKysgYi9hcmNoL3g4Ni9rdm0vc3ZtL2F2aWMuYwpA
-QCAtNDgwLDM1ICs0ODAsNiBAQCBzdGF0aWMgaW50IGF2aWNfaGFuZGxlX2xkcl91cGRhdGUoc3Ry
-dWN0IGt2bV92Y3B1ICp2Y3B1KQogCXJldHVybiByZXQ7CiB9CiAKLXN0YXRpYyBpbnQgYXZpY19o
-YW5kbGVfYXBpY19pZF91cGRhdGUoc3RydWN0IGt2bV92Y3B1ICp2Y3B1KQotewotCXU2NCAqb2xk
-LCAqbmV3OwotCXN0cnVjdCB2Y3B1X3N2bSAqc3ZtID0gdG9fc3ZtKHZjcHUpOwotCXUzMiBpZCA9
-IGt2bV94YXBpY19pZCh2Y3B1LT5hcmNoLmFwaWMpOwotCi0JaWYgKHZjcHUtPnZjcHVfaWQgPT0g
-aWQpCi0JCXJldHVybiAwOwotCi0Jb2xkID0gYXZpY19nZXRfcGh5c2ljYWxfaWRfZW50cnkodmNw
-dSwgdmNwdS0+dmNwdV9pZCk7Ci0JbmV3ID0gYXZpY19nZXRfcGh5c2ljYWxfaWRfZW50cnkodmNw
-dSwgaWQpOwotCWlmICghbmV3IHx8ICFvbGQpCi0JCXJldHVybiAxOwotCi0JLyogV2UgbmVlZCB0
-byBtb3ZlIHBoeXNpY2FsX2lkX2VudHJ5IHRvIG5ldyBvZmZzZXQgKi8KLQkqbmV3ID0gKm9sZDsK
-LQkqb2xkID0gMFVMTDsKLQl0b19zdm0odmNwdSktPmF2aWNfcGh5c2ljYWxfaWRfY2FjaGUgPSBu
-ZXc7Ci0KLQkvKgotCSAqIEFsc28gdXBkYXRlIHRoZSBndWVzdCBwaHlzaWNhbCBBUElDIElEIGlu
-IHRoZSBsb2dpY2FsCi0JICogQVBJQyBJRCB0YWJsZSBlbnRyeSBpZiBhbHJlYWR5IHNldHVwIHRo
-ZSBMRFIuCi0JICovCi0JaWYgKHN2bS0+bGRyX3JlZykKLQkJYXZpY19oYW5kbGVfbGRyX3VwZGF0
-ZSh2Y3B1KTsKLQotCXJldHVybiAwOwotfQotCiBzdGF0aWMgdm9pZCBhdmljX2hhbmRsZV9kZnJf
-dXBkYXRlKHN0cnVjdCBrdm1fdmNwdSAqdmNwdSkKIHsKIAlzdHJ1Y3QgdmNwdV9zdm0gKnN2bSA9
-IHRvX3N2bSh2Y3B1KTsKQEAgLTUyOSw4ICs1MDAsMTAgQEAgc3RhdGljIGludCBhdmljX3VuYWNj
-ZWxfdHJhcF93cml0ZShzdHJ1Y3QgdmNwdV9zdm0gKnN2bSkKIAogCXN3aXRjaCAob2Zmc2V0KSB7
-CiAJY2FzZSBBUElDX0lEOgotCQlpZiAoYXZpY19oYW5kbGVfYXBpY19pZF91cGRhdGUoJnN2bS0+
-dmNwdSkpCi0JCQlyZXR1cm4gMDsKKwkJLyogcmVzdG9yZSB0aGUgdmFsdWUgdGhhdCB3ZSBoYWQs
-IHdlIGRvbid0IHN1cHBvcnQgQVBJQyBJRAorCQkgKiBjaGFuZ2VzLCBidXQgZHVlIHRvIHRyYXAg
-Vk0gZXhpdCwgdGhlIHZhbHVlIHdhcworCQkgKiBhbHJlYWR5IHdyaXR0ZW4qLworCQlrdm1fbGFw
-aWNfcmVnX3dyaXRlKGFwaWMsIG9mZnNldCwgc3ZtLT52Y3B1LnZjcHVfaWQgPDwgMjQpOwogCQli
-cmVhazsKIAljYXNlIEFQSUNfTERSOgogCQlpZiAoYXZpY19oYW5kbGVfbGRyX3VwZGF0ZSgmc3Zt
-LT52Y3B1KSkKQEAgLTYyNCw4ICs1OTcsNiBAQCBpbnQgYXZpY19pbml0X3ZjcHUoc3RydWN0IHZj
-cHVfc3ZtICpzdm0pCiAKIHZvaWQgYXZpY19wb3N0X3N0YXRlX3Jlc3RvcmUoc3RydWN0IGt2bV92
-Y3B1ICp2Y3B1KQogewotCWlmIChhdmljX2hhbmRsZV9hcGljX2lkX3VwZGF0ZSh2Y3B1KSAhPSAw
-KQotCQlyZXR1cm47CiAJYXZpY19oYW5kbGVfZGZyX3VwZGF0ZSh2Y3B1KTsKIAlhdmljX2hhbmRs
-ZV9sZHJfdXBkYXRlKHZjcHUpOwogfQotLSAKMi4yNi4zCgo=
-
-
---=-gTfv472rn7j6C2YSy/9D--
-
+Thanks,
+Kuai

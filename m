@@ -2,116 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6362A48F234
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 034F748F235
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 23:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiANV65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 16:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiANV64 (ORCPT
+        id S230052AbiANWAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 17:00:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43146 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229980AbiANWAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 16:58:56 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F459C061574;
-        Fri, 14 Jan 2022 13:58:56 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id h30so9478519ila.12;
-        Fri, 14 Jan 2022 13:58:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gmfAhubjEyaVBPWv1g0ex2hEpije68c3WmxI7HlJuIk=;
-        b=QnmdCE3NJISxA+/1AWG4v/lMA6X1fAvApupya0G6ju2+yMwnUKhXgkISyblOky7wCH
-         Iawa8V9VAsNgx7S12bZLNY6lIb2W7w9QALKSGmIeeDreHrmlrikiu3u5BRvdhqJ/6/Jo
-         9xXq6H4H1OaymlUbwKpuC0Ak27BK0BjWEQNSuOnL4s0wNNsAVbkErr42oLIC4obma8EK
-         SD+CzfoXgDV6Ckt2IPEvXWoMtxq/tE/IfTBCZM+JeocTf7KLSeXDK1GCPWowiCK9HmyK
-         4HeERsvOmOvdEmNj2k2Tz2D3aXW35vtBPVw0DbFiTyBWSR018gqvECgwFQa9qLjl9bx7
-         NEMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gmfAhubjEyaVBPWv1g0ex2hEpije68c3WmxI7HlJuIk=;
-        b=ESNX34cPkRJ9r300RgCIz28xpuKjbaJKIQvd/h8HqM4/nCFd7pvIDG/GFZXnQeMomm
-         hXQPSQFxPpUdnRCrU67ejJmane9CK9MmK1l4J7YjUtGhfe4ndJoHJp1a9T/LX7UH1rTP
-         KXxgHsuxTJN9DtVsvlZfk3u1jfIabfDa3BZKQJU178/xgO/7x07R7E1stzynLIjeTXUN
-         upHmQhoA3OcFx0dSF4kxj3VmDkbNFFjs5ud0autA2iULOK1bFlo7HYXdmR+mv8aKh6Kd
-         ImGHGZ3Du8XPWZea0lNv3o/S7CU2D5d1I+8/Hh34fF82RIdrDB88/vrT2b6hZfWD8cvk
-         bwSA==
-X-Gm-Message-State: AOAM531/Qq/MAt/B6wZXTZQo4I2z6BiNVf6O+Ulr0MDHgwjQrC2kjjSW
-        4EJHMjzWmjHV7Yz5h8xuo/iFNhu2SbHFXAETv5M=
-X-Google-Smtp-Source: ABdhPJyEqWk4kGHWNUxv/NqZeg5vXP4u/CwmwuwfG3M0oC96dClS8SejOQ80vW+AxDbzi+M3FzZQrmnQm0Ct0B6rL1U=
-X-Received: by 2002:a92:1e0a:: with SMTP id e10mr5942316ile.28.1642197535952;
- Fri, 14 Jan 2022 13:58:55 -0800 (PST)
+        Fri, 14 Jan 2022 17:00:34 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 497FA61FC5;
+        Fri, 14 Jan 2022 22:00:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61C4BC36AE9;
+        Fri, 14 Jan 2022 22:00:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642197633;
+        bh=oemXj9peTf8j2kprBYCiiZkFqJJVOqMiREDxABiUPUI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A6KZuPD3iHOv0oX1VzzLZdO+XNSkFxGV9rQhqGjMO033tom6DkRUDrIMjZASKeNl1
+         0GJvjlrY4D90DGCIoT0AW58hPRHYf92ZsCdBjGoqn5E047tOWlrgJMiquJ/OSAUuvG
+         A+FHkYRmNmcEaEdggEiCTvrE/MT5jqUGswP9nno6cvD/ahLTjoEKRLGaYb/6ZtK3U5
+         7LQCifXR6zv3hKxrSz4lr52EGZoiHq+SdMAoRJT46IH3VHuIn5xqgZbrT1SZtFhB7D
+         eoHSMnfq6Pva9GvbEk+yaslJu3U7bOmpi3Tl4eiuftKqzwab/SRFotI9r44kKnLVvQ
+         x0RuVZF3mciSA==
+Date:   Sat, 15 Jan 2022 00:00:21 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Nathaniel McCallum <nathaniel@profian.com>,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+Message-ID: <YeHydUn9OznuolW9@iki.fi>
+References: <Ydm6RiIwuh3IspRI@iki.fi>
+ <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net>
+ <YdzjEzjF0YKn+pZ6@iki.fi>
+ <4195402f-cbf9-bc75-719d-22cea8e36e60@intel.com>
+ <Yd9pMq4lUy56B+50@iki.fi>
+ <Yd9qmMx7NO450mzZ@iki.fi>
+ <CAHAy0tRi2q+wG+yBttq0FYeK-5wUAoK_=ZCtWsfQf0m8oPc1-w@mail.gmail.com>
+ <168fb2c9-de3f-384a-bb17-ab84db2cf533@intel.com>
+ <YeHwzwnfsUcxiNbw@iki.fi>
+ <YeHxsYaJMINYFJOm@iki.fi>
 MIME-Version: 1.0
-References: <20220113031434.464992-1-pcc@google.com>
-In-Reply-To: <20220113031434.464992-1-pcc@google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Sat, 15 Jan 2022 00:58:44 +0300
-Message-ID: <CA+fCnZeckbw+Vv9TQaCNfaMBA9DkMGXeiQwcoHnwxoO6fCrzcA@mail.gmail.com>
-Subject: Re: [PATCH] mm: use compare-exchange operation to set KASAN page tag
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YeHxsYaJMINYFJOm@iki.fi>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- On Thu, Jan 13, 2022 at 6:14 AM Peter Collingbourne <pcc@google.com> wrote:
->
-> It has been reported that the tag setting operation on newly-allocated
-> pages can cause the page flags to be corrupted when performed
-> concurrently with other flag updates as a result of the use of
-> non-atomic operations.
+On Fri, Jan 14, 2022 at 11:57:08PM +0200, Jarkko Sakkinen wrote:
+> On Fri, Jan 14, 2022 at 11:53:22PM +0200, Jarkko Sakkinen wrote:
+> > On Thu, Jan 13, 2022 at 01:42:50PM -0800, Reinette Chatre wrote:
+> > > Hi Jarkko and Nathaniel,
+> > > 
+> > > On 1/13/2022 12:09 PM, Nathaniel McCallum wrote:
+> > > > On Wed, Jan 12, 2022 at 6:56 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > >>
+> > > >> On Thu, Jan 13, 2022 at 01:50:13AM +0200, Jarkko Sakkinen wrote:
+> > > >>> On Tue, Jan 11, 2022 at 09:13:27AM -0800, Reinette Chatre wrote:
+> > > >>>> Hi Jarkko,
+> > > >>>>
+> > > >>>> On 1/10/2022 5:53 PM, Jarkko Sakkinen wrote:
+> > > >>>>> On Mon, Jan 10, 2022 at 04:05:21PM -0600, Haitao Huang wrote:
+> > > >>>>>> On Sat, 08 Jan 2022 10:22:30 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+> > > >>>>>> wrote:
+> > > >>>>>>
+> > > >>>>>>> On Sat, Jan 08, 2022 at 05:51:46PM +0200, Jarkko Sakkinen wrote:
+> > > >>>>>>>> On Sat, Jan 08, 2022 at 05:45:44PM +0200, Jarkko Sakkinen wrote:
+> > > >>>>>>>>> On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang wrote:
+> > > >>>>>>>>>>>>> OK, so the question is: do we need both or would a
+> > > >>>>>>>> mechanism just
+> > > >>>>>>>>>>>> to extend
+> > > >>>>>>>>>>>>> permissions be sufficient?
+> > > >>>>>>>>>>>>
+> > > >>>>>>>>>>>> I do believe that we need both in order to support pages
+> > > >>>>>>>> having only
+> > > >>>>>>>>>>>> the permissions required to support their intended use
+> > > >>>>>>>> during the
+> > > >>>>>>>>>>>> time the
+> > > >>>>>>>>>>>> particular access is required. While technically it is
+> > > >>>>>>>> possible to grant
+> > > >>>>>>>>>>>> pages all permissions they may need during their lifetime it
+> > > >>>>>>>> is safer to
+> > > >>>>>>>>>>>> remove permissions when no longer required.
+> > > >>>>>>>>>>>
+> > > >>>>>>>>>>> So if we imagine a run-time: how EMODPR would be useful, and
+> > > >>>>>>>> how using it
+> > > >>>>>>>>>>> would make things safer?
+> > > >>>>>>>>>>>
+> > > >>>>>>>>>> In scenarios of JIT compilers, once code is generated into RW pages,
+> > > >>>>>>>>>> modifying both PTE and EPCM permissions to RX would be a good
+> > > >>>>>>>> defensive
+> > > >>>>>>>>>> measure. In that case, EMODPR is useful.
+> > > >>>>>>>>>
+> > > >>>>>>>>> What is the exact threat we are talking about?
+> > > >>>>>>>>
+> > > >>>>>>>> To add: it should be *significantly* critical thread, given that not
+> > > >>>>>>>> supporting only EAUG would leave us only one complex call pattern with
+> > > >>>>>>>> EACCEPT involvement.
+> > > >>>>>>>>
+> > > >>>>>>>> I'd even go to suggest to leave EMODPR out of the patch set, and
+> > > >>>>>>>> introduce
+> > > >>>>>>>> it when there is PoC code for any of the existing run-time that
+> > > >>>>>>>> demonstrates the demand for it. Right now this way too speculative.
+> > > >>>>>>>>
+> > > >>>>>>>> Supporting EMODPE is IMHO by factors more critical.
+> > > >>>>>>>
+> > > >>>>>>> At least it does not protected against enclave code because an enclave
+> > > >>>>>>> can
+> > > >>>>>>> always choose not to EACCEPT any of the EMODPR requests. I'm not only
+> > > >>>>>>> confused here about the actual threat but also the potential adversary
+> > > >>>>>>> and
+> > > >>>>>>> target.
+> > > >>>>>>>
+> > > >>>>>> I'm not sure I follow your thoughts here. The sequence should be for enclave
+> > > >>>>>> to request  EMODPR in the first place through runtime to kernel, then to
+> > > >>>>>> verify with EACCEPT that the OS indeed has done EMODPR.
+> > > >>>>>> If enclave does not verify with EACCEPT, then its own code has
+> > > >>>>>> vulnerability. But this does not justify OS not providing the mechanism to
+> > > >>>>>> request EMODPR.
+> > > >>>>>
+> > > >>>>> The question is really simple: what is the threat scenario? In order to use
+> > > >>>>> the word "vulnerability", you would need one.
+> > > >>>>>
+> > > >>>>> Given the complexity of the whole dance with EMODPR it is mandatory to have
+> > > >>>>> one, in order to ack it to the mainline.
+> > > >>>>>
+> > > >>>>
+> > > >>>> Which complexity related to EMODPR are you concerned about? In a later message
+> > > >>>> you mention "This leaves only EAUG and EMODT requiring the EACCEPT handshake"
+> > > >>>> so it seems that you are perhaps concerned about the flow involving EACCEPT?
+> > > >>>> The OS does not require nor depend on EACCEPT being called as part of these flows
+> > > >>>> so a faulty or misbehaving user space omitting an EACCEPT call would not impact
+> > > >>>> these flows in the OS, but would of course impact the enclave.
+> > > >>>
+> > > >>> I'd say *any* complexity because I see no benefit of supporting it. E.g.
+> > > >>> EMODPR/EACCEPT/EMODPE sequence I mentioned to Haitao concerns me. How is
+> > > >>> EMODPR going to help with any sort of workload?
+> > > >>
+> > > >> I've even started think should we just always allow mmap()?
+> > > > 
+> > > > I suspect this may be the most ergonomic way forward. Instructions
+> > > > like EAUG/EMODPR/etc are really irrelevant implementation details to
+> > > > what the enclave wants, which is a memory mapping in the enclave. Why
+> > > > make the enclave runner do multiple context switches just to change
+> > > > the memory map of an enclave?
+> > > 
+> > > The enclave runner is not forced to make any changes to a memory mapping. To start,
+> > > this implementation supports and does not change the existing ABI where a new
+> > > memory mapping can only be created if its permissions are the same or weaker
+> > > than the EPCM permissions. After the memory mapping is created the EPCM permissions
+> > > can change (thanks to SGX2) and when they do there are no forced nor required
+> > > changes to the memory mapping - pages remain accessible where the memory mapping
+> > > and EPCM permissions agree. It is true that if an enclave chooses to relax permissions
+> > > to an enclave page (EMODPE) then the memory mapping may need to be changed as
+> > > should be expected to access a page with permissions that the memory mapping
+> > > did not previously allow.
+> > > 
+> > > Are you saying that the permissions of a new memory mapping should now be allowed
+> > > to exceed EPCM permissions and thus the enclave runner would not need to modify a
+> > > memory mapping when EPCM permissions are relaxed? As mentioned above this may be
+> > > considered a change in ABI but something we could support on SGX2 systems.
+> > > 
+> > > I would also like to highlight Haitao's earlier comment that a foundation of SGX is
+> > > that the OS is untrusted. The enclave owner does not trust the OS and needs EMODPR
+> > > and EMODPE to manage enclave page permissions.
+> > 
+> > Thanks, this was very informative response. I'll try to elaborate why
+> > EMODPR gives me headaches.
+> > 
+> > I'm having hard time to connect the dots between OS mistrust and
+> > restricting enclave by changing EPCM permissions. To make EMODPR actually
+> > legit, it needs really at least some sort of example of a scenario where
+> > mistrusted OS is the adversary and enclave is the attack target. Otherwise,
+> > we are just waving our hands.
+> > 
+> > Generally speaking a restriction is not a restriction if cannot be enforced. 
+> > 
+> > I see two non-EMODPR options: you could relax this,  *or* you could make it
+> > soft restriction by not doing EMODPR but instead just updating the internal
+> > xarray. The 2nd option would be fully backwards compatible with the
+> > existing invariant.
+> > 
+> > It's really hard to ACK or NAK EMODPR patch without knowing how EMODPE is
+> > or will be supported.
+> 
+> Off-topic: I was able to compile a kernel with your SGX2 patches and run
+> kselftests. I cannot give tested-by's before the design is locked-in but
+> in that sense I don't think we are far away of some solution. EAUG side
+> looks pretty good to me.
 
-Is it know how exactly this race happens? Why are flags for a newly
-allocated page being accessed concurrently?
+Also, I'll add the missing ioctl's to my man page patch before sending a
+new version so that it lacks only SGX2 ioctls. I think you are right in
+your review feedback that they should be part of the patch so that we get
+it in-sync.
 
-> Fix the problem by using a compare-exchange
-> loop to update the tag.
->
-> Signed-off-by: Peter Collingbourne <pcc@google.com>
-> Link: https://linux-review.googlesource.com/id/I456b24a2b9067d93968d43b4bb3351c0cec63101
-> Fixes: 2813b9c02962 ("kasan, mm, arm64: tag non slab memory allocated via pagealloc")
-> Cc: stable@vger.kernel.org
-> ---
->  include/linux/mm.h | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index c768a7c81b0b..b544b0a9f537 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1531,11 +1531,17 @@ static inline u8 page_kasan_tag(const struct page *page)
->
->  static inline void page_kasan_tag_set(struct page *page, u8 tag)
->  {
-> -       if (kasan_enabled()) {
-> -               tag ^= 0xff;
-> -               page->flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
-> -               page->flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
-> -       }
-> +       unsigned long old_flags, flags;
-> +
-> +       if (!kasan_enabled())
-> +               return;
-> +
-> +       tag ^= 0xff;
-> +       do {
-> +               old_flags = flags = page->flags;
-
-I guess this should be at least READ_ONCE(page->flags) if we care
-about concurrency.
-
-> +               flags &= ~(KASAN_TAG_MASK << KASAN_TAG_PGSHIFT);
-> +               flags |= (tag & KASAN_TAG_MASK) << KASAN_TAG_PGSHIFT;
-> +       } while (unlikely(cmpxchg(&page->flags, old_flags, flags) != old_flags));
->  }
->
->  static inline void page_kasan_tag_reset(struct page *page)
-> --
-> 2.34.1.575.g55b058a8bb-goog
->
+/Jarkko

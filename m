@@ -2,130 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E27248F221
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C70148F223
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiANVvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 16:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        id S229927AbiANVxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 16:53:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiANVvY (ORCPT
+        with ESMTP id S229498AbiANVxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 16:51:24 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7222C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 13:51:24 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so15453234pjp.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 13:51:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CDsGS2jq8SAFd9OvPx49AGjFg/2s2ed5RyEVXzRWnAo=;
-        b=cfjpva8bdcPLTTQoIPCixVnAFaxsDELlb/9JwStbXYQvRDZGYhfWD3/1KeCmYuq1Yy
-         IupWGk+fR/uoJLiecnN6JvPjTin7H2Hska91lSfi0kRro7XHjZ6Rzw5/PBWb3KmK74HI
-         6pCTKoDjaCjUtQcw4EmIb5Vfnyj3Gkuo0vj2jqbXi6WAKriAHyY1Sgq+jO+4eA5weoen
-         ZrIWRe1oHnOOA/6QybWEb2IdUiv7mV9Bj9zx4zNCcwBb//Iynkc59wxBPmD0p9oUP07a
-         L+eJCdTyRQg1pRPFhhLwPjoPg8fhQ884XaKcHU6+jI7Zd1mjfSkV4huFnNNCOGyPSI2t
-         Jc6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CDsGS2jq8SAFd9OvPx49AGjFg/2s2ed5RyEVXzRWnAo=;
-        b=eNNA4SRnssr3Ur6LDMkAuahTC24Q+Wn2Pif9mYRwt1I12uoz7pok2qwqRyF2/QQuDV
-         jgkgLjE4NhlmHulKJmcxg5U9/vfNGKLGgmvdg4w5v0R9orxndbdtbzwSABmuWVJYXMCs
-         1MsAucvW2mhxB0YUTgbOORcWee2uk2+uOOo+EuQamiWhX2nw6Cj0VJal2FoHdRU3EExi
-         WTMiBSeSB/uaZeR4jzMH5P+EVlXEbspUWP6RYXV2Iwe02/lNsGQPPkJEiSXXwpB84bmW
-         zPkWOg42/CziubeUQZtiu2LaWpisIRpE4fwbThS6cEaF/K1MLUwF37snRNRKdkz6L+Je
-         YrkQ==
-X-Gm-Message-State: AOAM532DaGpDyj3vXPM81bcZRixYljWZSY7EaCarnxkFEUZUSDsVfF3F
-        EaT+tAVsmwxFuJR4jqMjwRO3iVrFmTKKm/2NrhBWcQhVtJC/FA==
-X-Google-Smtp-Source: ABdhPJxoOISTy68Z7laSCPjCr0YLWiNLl+ousUKcH2g0/tuXUHAGX63U2SWCQe4kEq9CrnNG7uifRtzx5bVqMY3fqWc=
-X-Received: by 2002:a17:902:ea10:b0:14a:6c29:a6a5 with SMTP id
- s16-20020a170902ea1000b0014a6c29a6a5mr11540567plg.172.1642197084066; Fri, 14
- Jan 2022 13:51:24 -0800 (PST)
+        Fri, 14 Jan 2022 16:53:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05912C061574;
+        Fri, 14 Jan 2022 13:53:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3642B8174B;
+        Fri, 14 Jan 2022 21:53:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D093C36AE9;
+        Fri, 14 Jan 2022 21:53:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642197212;
+        bh=BxT29CvuAG1DjnC4r3MV5/goKu2ZYy72wnJBQr0xoTo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AIGTPwb0pXUxVhd5p7yLVb4HKxrhYVAVMDuAOlLc7+W8Coa/OAJY8uQMVLysOBcRo
+         S4fFfbAGXaq+y7PHlm1rHFjAGY69/+6ZmOwd8fjpxUS9VxOP9yLhPrKPLkgFn25y4A
+         lJdQmhn2GXGMrxNukhaF9S/NYSc21xW4yBA8AyDqRXJYRV1QxWXScx5oYZOoRcFNpL
+         R78OghmHtRtdL7u5yz6ANpXlzkIT8YU8XsOTxYlfUByDq9ZBhULPGhASIBLAHDtKh7
+         i0TzdboH5W2tRwKlGMbTGJATPIaUD3ksG/tCoQ6OPT5khPY76Agob/lgA+CSRnHuj/
+         zsu7c/MiM6rzg==
+Date:   Fri, 14 Jan 2022 23:53:19 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Nathaniel McCallum <nathaniel@profian.com>,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+Message-ID: <YeHwzwnfsUcxiNbw@iki.fi>
+References: <YdmxpTVM1JG8nxQ3@iki.fi>
+ <YdmzDy1BOHgh8CII@iki.fi>
+ <Ydm6RiIwuh3IspRI@iki.fi>
+ <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net>
+ <YdzjEzjF0YKn+pZ6@iki.fi>
+ <4195402f-cbf9-bc75-719d-22cea8e36e60@intel.com>
+ <Yd9pMq4lUy56B+50@iki.fi>
+ <Yd9qmMx7NO450mzZ@iki.fi>
+ <CAHAy0tRi2q+wG+yBttq0FYeK-5wUAoK_=ZCtWsfQf0m8oPc1-w@mail.gmail.com>
+ <168fb2c9-de3f-384a-bb17-ab84db2cf533@intel.com>
 MIME-Version: 1.0
-References: <20220104194918.373612-1-rananta@google.com> <20220104194918.373612-2-rananta@google.com>
- <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com>
- <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
- <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
- <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
- <CALMp9eTPJZDtMiHZ5XRiYw2NR9EBKSfcP5CYddzyd2cgWsJ9hw@mail.gmail.com>
- <CAJHc60xD2U36pM4+Dq3yZw6Cokk-16X83JHMPXj4aFnxOJ3BUQ@mail.gmail.com>
- <CALMp9eR+evJ+w9VTSvR2KHciQDgTsnS=bh=1OUL4yy8gG6O51A@mail.gmail.com>
- <CAJHc60zw1o=JdUJ+sNNtv3mc_JTRMKG3kPp=-cchWkHm74hUYA@mail.gmail.com> <YeBfj89mIf8SezfD@google.com>
-In-Reply-To: <YeBfj89mIf8SezfD@google.com>
-From:   Reiji Watanabe <reijiw@google.com>
-Date:   Fri, 14 Jan 2022 13:51:07 -0800
-Message-ID: <CAAeT=Fz2q4PfJMXes3A9f+c01NnyORbvUrzJZO=ew-LsjPq2jQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Raghavendra Rao Ananta <rananta@google.com>, kvm@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>, Peter Shier <pshier@google.com>,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <168fb2c9-de3f-384a-bb17-ab84db2cf533@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 9:21 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Wed, Jan 12, 2022, Raghavendra Rao Ananta wrote:
-> > On Tue, Jan 11, 2022 at 11:16 AM Jim Mattson <jmattson@google.com> wrote:
-> > > Perhaps it would help if you explained *why* you are doing this. It
-> > > sounds like you are either trying to protect against a malicious
-> > > userspace, or you are trying to keep userspace from doing something
-> > > stupid. In general, kvm only enforces constraints that are necessary
-> > > to protect the host. If that's what you're doing, I don't understand
-> > > why live migration doesn't provide an end-run around your protections.
-> > It's mainly to safeguard the guests. With respect to migration, KVM
-> > and the userspace are collectively playing a role here. It's up to the
-> > userspace to ensure that the registers are configured the same across
-> > migrations and KVM ensures that the userspace doesn't modify the
-> > registers after KVM_RUN so that they don't see features turned OFF/ON
-> > during execution. I'm not sure if it falls into the definition of
-> > protecting the host. Do you see a value in adding this extra
-> > protection from KVM?
->
-> Short answer: probably not?
->
-> There is precedent for disallowing userspace from doing stupid things, but that's
-> either for KVM's protection (as Jim pointed out), or because KVM can't honor the
-> change, e.g. x86 is currently in the process of disallowing most CPUID changes
-> after KVM_RUN because KVM itself consumes the CPUID information and KVM doesn't
-> support updating some of it's own internal state (because removing features like
-> GB hugepage support is nonsensical and would require a large pile of complicated,
-> messy code).
->
-> Restricing CPUID changes does offer some "protection" to the guest, but that's
-> not the goal.  E.g. KVM won't detect CPUID misconfiguration in the migration
-> case, and trying to do so is a fool's errand.
->
-> If restricting updates in the arm64 is necessary to ensure KVM provides sane
-> behavior, then it could be justified.  But if it's purely a sanity check on
-> behalf of the guest, then it's not justified.
+On Thu, Jan 13, 2022 at 01:42:50PM -0800, Reinette Chatre wrote:
+> Hi Jarkko and Nathaniel,
+> 
+> On 1/13/2022 12:09 PM, Nathaniel McCallum wrote:
+> > On Wed, Jan 12, 2022 at 6:56 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >>
+> >> On Thu, Jan 13, 2022 at 01:50:13AM +0200, Jarkko Sakkinen wrote:
+> >>> On Tue, Jan 11, 2022 at 09:13:27AM -0800, Reinette Chatre wrote:
+> >>>> Hi Jarkko,
+> >>>>
+> >>>> On 1/10/2022 5:53 PM, Jarkko Sakkinen wrote:
+> >>>>> On Mon, Jan 10, 2022 at 04:05:21PM -0600, Haitao Huang wrote:
+> >>>>>> On Sat, 08 Jan 2022 10:22:30 -0600, Jarkko Sakkinen <jarkko@kernel.org>
+> >>>>>> wrote:
+> >>>>>>
+> >>>>>>> On Sat, Jan 08, 2022 at 05:51:46PM +0200, Jarkko Sakkinen wrote:
+> >>>>>>>> On Sat, Jan 08, 2022 at 05:45:44PM +0200, Jarkko Sakkinen wrote:
+> >>>>>>>>> On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang wrote:
+> >>>>>>>>>>>>> OK, so the question is: do we need both or would a
+> >>>>>>>> mechanism just
+> >>>>>>>>>>>> to extend
+> >>>>>>>>>>>>> permissions be sufficient?
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> I do believe that we need both in order to support pages
+> >>>>>>>> having only
+> >>>>>>>>>>>> the permissions required to support their intended use
+> >>>>>>>> during the
+> >>>>>>>>>>>> time the
+> >>>>>>>>>>>> particular access is required. While technically it is
+> >>>>>>>> possible to grant
+> >>>>>>>>>>>> pages all permissions they may need during their lifetime it
+> >>>>>>>> is safer to
+> >>>>>>>>>>>> remove permissions when no longer required.
+> >>>>>>>>>>>
+> >>>>>>>>>>> So if we imagine a run-time: how EMODPR would be useful, and
+> >>>>>>>> how using it
+> >>>>>>>>>>> would make things safer?
+> >>>>>>>>>>>
+> >>>>>>>>>> In scenarios of JIT compilers, once code is generated into RW pages,
+> >>>>>>>>>> modifying both PTE and EPCM permissions to RX would be a good
+> >>>>>>>> defensive
+> >>>>>>>>>> measure. In that case, EMODPR is useful.
+> >>>>>>>>>
+> >>>>>>>>> What is the exact threat we are talking about?
+> >>>>>>>>
+> >>>>>>>> To add: it should be *significantly* critical thread, given that not
+> >>>>>>>> supporting only EAUG would leave us only one complex call pattern with
+> >>>>>>>> EACCEPT involvement.
+> >>>>>>>>
+> >>>>>>>> I'd even go to suggest to leave EMODPR out of the patch set, and
+> >>>>>>>> introduce
+> >>>>>>>> it when there is PoC code for any of the existing run-time that
+> >>>>>>>> demonstrates the demand for it. Right now this way too speculative.
+> >>>>>>>>
+> >>>>>>>> Supporting EMODPE is IMHO by factors more critical.
+> >>>>>>>
+> >>>>>>> At least it does not protected against enclave code because an enclave
+> >>>>>>> can
+> >>>>>>> always choose not to EACCEPT any of the EMODPR requests. I'm not only
+> >>>>>>> confused here about the actual threat but also the potential adversary
+> >>>>>>> and
+> >>>>>>> target.
+> >>>>>>>
+> >>>>>> I'm not sure I follow your thoughts here. The sequence should be for enclave
+> >>>>>> to request  EMODPR in the first place through runtime to kernel, then to
+> >>>>>> verify with EACCEPT that the OS indeed has done EMODPR.
+> >>>>>> If enclave does not verify with EACCEPT, then its own code has
+> >>>>>> vulnerability. But this does not justify OS not providing the mechanism to
+> >>>>>> request EMODPR.
+> >>>>>
+> >>>>> The question is really simple: what is the threat scenario? In order to use
+> >>>>> the word "vulnerability", you would need one.
+> >>>>>
+> >>>>> Given the complexity of the whole dance with EMODPR it is mandatory to have
+> >>>>> one, in order to ack it to the mainline.
+> >>>>>
+> >>>>
+> >>>> Which complexity related to EMODPR are you concerned about? In a later message
+> >>>> you mention "This leaves only EAUG and EMODT requiring the EACCEPT handshake"
+> >>>> so it seems that you are perhaps concerned about the flow involving EACCEPT?
+> >>>> The OS does not require nor depend on EACCEPT being called as part of these flows
+> >>>> so a faulty or misbehaving user space omitting an EACCEPT call would not impact
+> >>>> these flows in the OS, but would of course impact the enclave.
+> >>>
+> >>> I'd say *any* complexity because I see no benefit of supporting it. E.g.
+> >>> EMODPR/EACCEPT/EMODPE sequence I mentioned to Haitao concerns me. How is
+> >>> EMODPR going to help with any sort of workload?
+> >>
+> >> I've even started think should we just always allow mmap()?
+> > 
+> > I suspect this may be the most ergonomic way forward. Instructions
+> > like EAUG/EMODPR/etc are really irrelevant implementation details to
+> > what the enclave wants, which is a memory mapping in the enclave. Why
+> > make the enclave runner do multiple context switches just to change
+> > the memory map of an enclave?
+> 
+> The enclave runner is not forced to make any changes to a memory mapping. To start,
+> this implementation supports and does not change the existing ABI where a new
+> memory mapping can only be created if its permissions are the same or weaker
+> than the EPCM permissions. After the memory mapping is created the EPCM permissions
+> can change (thanks to SGX2) and when they do there are no forced nor required
+> changes to the memory mapping - pages remain accessible where the memory mapping
+> and EPCM permissions agree. It is true that if an enclave chooses to relax permissions
+> to an enclave page (EMODPE) then the memory mapping may need to be changed as
+> should be expected to access a page with permissions that the memory mapping
+> did not previously allow.
+> 
+> Are you saying that the permissions of a new memory mapping should now be allowed
+> to exceed EPCM permissions and thus the enclave runner would not need to modify a
+> memory mapping when EPCM permissions are relaxed? As mentioned above this may be
+> considered a change in ABI but something we could support on SGX2 systems.
+> 
+> I would also like to highlight Haitao's earlier comment that a foundation of SGX is
+> that the OS is untrusted. The enclave owner does not trust the OS and needs EMODPR
+> and EMODPE to manage enclave page permissions.
 
-The pseudo firmware hvc registers, which this series are adding, are
-used by KVM to identify available hvc features for the guest, and not
-directly exposed to the guest as registers.
-The ways the KVM code in the series consumes the registers' values are
-very limited, and no KVM data/state is created based on their values.
-But, as the code that consumes the registers grows in the future,
-I wouldn't be surprised if KVM consumes them differently than it does
-now (e.g. create another data structure based on the register values).
-I'm not sure though :)
+Thanks, this was very informative response. I'll try to elaborate why
+EMODPR gives me headaches.
 
-The restriction, with which KVM doesn't need to worry about the changes
-in the registers after KVM_RUN, could potentially protect or be useful
-to protect KVM and simplify future changes/maintenance of the KVM codes
-that consumes the values.
-I thought this was one of the reasons for having the restriction.
+I'm having hard time to connect the dots between OS mistrust and
+restricting enclave by changing EPCM permissions. To make EMODPR actually
+legit, it needs really at least some sort of example of a scenario where
+mistrusted OS is the adversary and enclave is the attack target. Otherwise,
+we are just waving our hands.
 
-Thanks,
-Reiji
+Generally speaking a restriction is not a restriction if cannot be enforced. 
+
+I see two non-EMODPR options: you could relax this,  *or* you could make it
+soft restriction by not doing EMODPR but instead just updating the internal
+xarray. The 2nd option would be fully backwards compatible with the
+existing invariant.
+
+It's really hard to ACK or NAK EMODPR patch without knowing how EMODPE is
+or will be supported.
+
+> Reinette
+ 
+/Jarkko

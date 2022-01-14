@@ -2,84 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4873448E8DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE5F48E8DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240676AbiANLGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 06:06:36 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:57587 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237845AbiANLGf (ORCPT
+        id S240686AbiANLHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 06:07:05 -0500
+Received: from outpost1.zedat.fu-berlin.de ([130.133.4.66]:35933 "EHLO
+        outpost1.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237845AbiANLHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 06:06:35 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=cruzzhao@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V1oHN1x_1642158390;
-Received: from 30.21.164.113(mailfrom:cruzzhao@linux.alibaba.com fp:SMTPD_---0V1oHN1x_1642158390)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 14 Jan 2022 19:06:31 +0800
-Message-ID: <e071a66e-e7d5-8657-725b-8d48cb8ddbb7@linux.alibaba.com>
-Date:   Fri, 14 Jan 2022 19:06:30 +0800
+        Fri, 14 Jan 2022 06:07:04 -0500
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.94)
+          with esmtps (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1n8KQA-003OF5-08; Fri, 14 Jan 2022 12:07:02 +0100
+Received: from p57bd9aec.dip0.t-ipconnect.de ([87.189.154.236] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.94)
+          with esmtpsa (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1n8KQ9-000SRd-Q1; Fri, 14 Jan 2022 12:07:01 +0100
+Message-ID: <10b80ee9-b180-45e7-77bc-8420908a4b21@physik.fu-berlin.de>
+Date:   Fri, 14 Jan 2022 12:07:01 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v2 2/3] sched/core: Forced idle accounting per-cpu
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 2/4] rtc: goldfish: use __raw_writel()/__raw_readl()
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, joshdon@google.com, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1641894961-9241-1-git-send-email-CruzZhao@linux.alibaba.com>
- <1641894961-9241-3-git-send-email-CruzZhao@linux.alibaba.com>
- <Yd7JO1UYlRXR0dWE@hirez.programming.kicks-ass.net>
-From:   cruzzhao <cruzzhao@linux.alibaba.com>
-In-Reply-To: <Yd7JO1UYlRXR0dWE@hirez.programming.kicks-ass.net>
+To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-m68k@lists.linux-m68k.org,
+        John Stultz <john.stultz@linaro.org>,
+        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <20220113201920.3201760-1-laurent@vivier.eu>
+ <20220113201920.3201760-3-laurent@vivier.eu>
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+In-Reply-To: <20220113201920.3201760-3-laurent@vivier.eu>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.154.236
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Laurent!
 
+On 1/13/22 21:19, Laurent Vivier wrote:
+> As android implementation defines the endianness of the device is the one
+> of the architecture replace all writel()/readl() by
+> __raw_writel()/__raw_readl()
 
-在 2022/1/12 下午8:27, Peter Zijlstra 写道:
-> On Tue, Jan 11, 2022 at 05:56:00PM +0800, Cruz Zhao wrote:
-> 
->> @@ -1115,6 +1118,7 @@ struct rq {
->>  	unsigned int		core_forceidle_seq;
->>  	unsigned int		core_forceidle_occupation;
->>  	u64			core_forceidle_start;
->> +	bool			in_forcedidle;
-> 
-> naming is wrong
-> 
->>  #endif
->>  };
->>  
->> diff --git a/kernel/sched/stats.c b/kernel/sched/stats.c
->> index 07dde29..ea22a8c 100644
->> --- a/kernel/sched/stats.c
->> +++ b/kernel/sched/stats.c
->> @@ -108,6 +108,16 @@ void __update_stats_enqueue_sleeper(struct rq *rq, struct task_struct *p,
->>  	}
->>  }
->>  
->> +#ifdef CONFIG_SCHED_CORE
->> +static inline u64 get_rq_forceidle_time(struct rq *rq) {
->> +	return rq->rq_forceidle_time;
->> +}
->> +#else
->> +static inline u64 get_rq_forceidle_time(struct rq *rq) {
->> +	return 0;
->> +}
->> +#endif
-> 
-> indent is wrong, and if you put the #ifdef inside the function it'll be
-> smaller.
+I think this sentence is a little hard to understand. Can you rephrase it in
+case you are sending another version of the series?
 
-Thanks for reviewing and suggestions, I'll fix these problems in the
-next version.
+Adrian
 
-Best,
-Cruz Zhao
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer - glaubitz@debian.org
+`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+

@@ -2,61 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB42948EF51
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AABF148EF54
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243898AbiANRnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
+        id S236305AbiANRoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiANRnJ (ORCPT
+        with ESMTP id S234374AbiANRoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:43:09 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235E3C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:43:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=p/a5sC8wCu6QRDPDeSoazAGcfWn/EQU27wXVoKv6HDE=; b=yrRF1LMIPSF4YoxoTtfB4vstpd
-        e+UML2knqn2aSgdNakEzx150lxccbItspIZ2QhooXV4TpbqNCi4ukFGA1f1yvO5Skcl7e28SM7yev
-        iEfZimQrMDHb/cU39Eu/pFXxpNMvKRJQwbQza6EJkRyilgSUK8zKdD6ybnZAtpamZ7VkmCKe3/EYA
-        a0YY3/YLdKROsP92gP3Sbc5qpWnRe6TNxdp6ro6AqEDm7Bd4waXABXSXYMZ9hWwu41utbepcaZC8f
-        IO9puCyxnQu9lXSUcv8LdmiPbgKFqo+3DwK56gSbWpBfv1q1iTDj3MG/xtMbddCQ/tiQ+u5tlCzi5
-        JmGtObqg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n8QbT-009xOM-Qc; Fri, 14 Jan 2022 17:43:07 +0000
-Date:   Fri, 14 Jan 2022 09:43:07 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: fix signature check failures when using
- in-kernel decompression
-Message-ID: <YeG2Ky8nLGMIyqe3@bombadil.infradead.org>
-References: <YeDJKNTYVu/Fe9VS@google.com>
+        Fri, 14 Jan 2022 12:44:03 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FFFC06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:44:03 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id m6so25801446ybc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:44:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=CIdcniFkESogcfuxZJbci8rmJq/a9Xy6sonYcBI09eE=;
+        b=ifuBgYtHYC48R3emVaGeDrBm5fhweaRTU0tYjC3FJ2xbDfSDHGaskiSF3iAoqxhrC5
+         5OJBIEYfiWQuFnbvM54zNu44AogDfw2OB4WNVjLjlwV1jtKawFs4SNUxZHeK3YG5jqoj
+         oXRcGkmvxjdAbxiGB3nHJEFAjcBPUwhpdkjr/DdiDsDAGV6BYs5KgYS6Bs6e1Y+2f9JJ
+         gmtarTiCR1cf2Qb1ZwHrslW4GGxTcJkZtRCYXq9jLNVrrvIvtfTPmO7bc6cVChkSpzXO
+         8RarHdw/pzp5lXL4fpXuAX5vZogUGUvdyDjJQN+XJl19Pjg5CEbni1Fsrf/QDEgX4RIB
+         F+6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CIdcniFkESogcfuxZJbci8rmJq/a9Xy6sonYcBI09eE=;
+        b=fIWr3uVPQmTxBoFr05tYie+FmIE1osxMVmJ6r63uqM/uPCfctQJTCwJ067UgyBe/4e
+         mSMj9/EKtrJr6uZxQGgGNMy+3F1A4+ah82lwZBVE1X0WoBaU3we+6Ei1Th6G2PG/bjef
+         /Xy7+0IsdFP+NU5NdtasAQgwCHmgXfgHLXm0EzDwcmif+ii+Hx+3U+DzxguRsv6Obvk6
+         5+rc4tPWmdzQJgN+wTekC1D2W7RUnOvVjVhyNRDe7sSbq4RXmOZn/wTAqk//elykFI5E
+         Cu2lpUy+xDSbNGIkVVQohrbvAj5XA0Tk2V6JoBOTcq2Q7N2fKFWpYym1zx4aEQf/LW3u
+         3vzQ==
+X-Gm-Message-State: AOAM532OKxgddcn6xVgnst5I5hdXnmse7jNtuAScmn0kgj73OSz8S9hl
+        6AVWVfRJG51OU2lTLzgmnWbL4n3jVPwpJUnbgTTYCg==
+X-Google-Smtp-Source: ABdhPJw/+LccB/c4YVq88CNM1frHU08znyUuRluNpzIpNkJlriVRcXRHpZJSuYbKQsS0u020JG7fSZRq8b2rm4eHiR8=
+X-Received: by 2002:a25:8e89:: with SMTP id q9mr15670271ybl.520.1642182241669;
+ Fri, 14 Jan 2022 09:44:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeDJKNTYVu/Fe9VS@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20220114081545.158363487@linuxfoundation.org>
+In-Reply-To: <20220114081545.158363487@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 14 Jan 2022 23:13:50 +0530
+Message-ID: <CA+G9fYsxnbb00O61CxtFzWG-J6GTMftXgBFmC2=yxvLaJXMXyQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/41] 5.15.15-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 04:51:52PM -0800, Dmitry Torokhov wrote:
-> The new flag MODULE_INIT_COMPRESSED_FILE unintentionally trips check in
-> module_sig_check(). The check was supposed to catch case when version
-> info or magic was removed from a signed module, making signature
-> invalid, but it was coded too broadly and was catching this new flag as
-> well.
-> 
-> Change the check to only test the 2 particular flags affecting signature
-> validity.
-> 
-> Fixes: b1ae6dc41eaa ("module: add in-kernel support for decompressing")
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+On Fri, 14 Jan 2022 at 13:50, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.15 release.
+> There are 41 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.15-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Queued on to modules-next.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-  Luis
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.15.15-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: f9dc3f25c12ab4f1f1e691dcb48202fbf8d6226d
+* git describe: v5.15.14-42-gf9dc3f25c12a
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.14-42-gf9dc3f25c12a
+
+## Test Regressions (compared to v5.15.14-39-gc9df4d832e20)
+No test regressions found.
+
+## Metric Regressions (compared to v5.15.14-39-gc9df4d832e20)
+No metric regressions found.
+
+## Test Fixes (compared to v5.15.14-39-gc9df4d832e20)
+No test fixes found.
+
+## Metric Fixes (compared to v5.15.14-39-gc9df4d832e20)
+No metric fixes found.
+
+## Test result summary
+total: 90478, pass: 77086, fail: 780, skip: 11832, xfail: 780
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 259 total, 255 passed, 4 failed
+* arm64: 37 total, 37 passed, 0 failed
+* i386: 35 total, 35 passed, 0 failed
+* mips: 34 total, 30 passed, 4 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 48 passed, 4 failed
+* riscv: 24 total, 20 passed, 4 failed
+* s390: 18 total, 18 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 37 total, 37 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* lt[
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

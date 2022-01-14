@@ -2,110 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7030348EE21
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95AD548EE26
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243373AbiANQbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:31:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiANQbY (ORCPT
+        id S236293AbiANQdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:33:10 -0500
+Received: from out203-205-221-202.mail.qq.com ([203.205.221.202]:59084 "EHLO
+        out203-205-221-202.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229813AbiANQdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:31:24 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EBFC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:31:24 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id u6so17964887uaq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:31:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W8BJonKrUJJxs6hl3AJin2CViuhqfsYAJVcPiVusuxk=;
-        b=FVz/5ga9KDCjl3940tWLE8mGBZK0qp5+0D8dwAkEC/bELGBz8Yt7AeFV0DGofHxTDg
-         4K5/jDfYjNIsCv2mlW/1JWH/fSvS8lBrmYjCeKjwlRBAZuB6DJWmmhdrFTy1UpF8Own+
-         qg2NSV0Ae5EsWZlix+p4ff82s3peHqyy9hwIXOls2EPJBS9c0AGl98puoo+rLQZ21T0v
-         PDjG/qb0dlQl0Hi5jt10l2Aju4Yk8OFyftrbbizO0VClnSXEK/DLW3dzc0pDNlNGGwIi
-         eHgWxC1gERsGmzm0a9LJL8dXPJwcvrdIm1yKnTBT52hBzOgJkndtZuptXwY32gLmcXUg
-         P3eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W8BJonKrUJJxs6hl3AJin2CViuhqfsYAJVcPiVusuxk=;
-        b=g8RqXrxCWq4bFS7s4UOPCLMG5g4zum3UBVgxai9ShVoYEYCf5+HxJMIunelCCW+jY5
-         jn8kVcGSwtUqYZiZcm9zNLgpA4M1EjZ9qf4PdjlNRi5iNFYKOBEiV/m8ocKz6A5nAllK
-         Rtz14N37PecjvKsY+wde40c/CztWa4ddj7SHBHyB3FKWpz5j0ySjU3/lgKhG3AwvMFkU
-         nlDwpxK/03SdcK1/PpvK4cvizvWF8yGObtqghz+QwUW0TZTSzQGUTpjW1JoFW74Oa2Bh
-         NqgXrEuOY8g94q6x2kZnU2yyIHB1dP1kqWh3+UFE4lx315f7MNIRZsDhnP6MQdfnRMA1
-         khnQ==
-X-Gm-Message-State: AOAM5316rLpCQpY5MMer4Oa+QRi3xcmkXWQHwKlYm/zjdvTwTx9CcUlq
-        PpdnArJ0ikw+bss5zOrbZR1zPYEHbMpB4r1pmILKMw==
-X-Google-Smtp-Source: ABdhPJwGPrbufoRUrKieMfzFagq+YhPGKN+V0bGRe+G+nT/sM+zB7wLo3Kt2aIV5ertn1H9IivMjTJ2tKWNsrWL1Cl4=
-X-Received: by 2002:a05:6102:108c:: with SMTP id s12mr4452918vsr.20.1642177883703;
- Fri, 14 Jan 2022 08:31:23 -0800 (PST)
+        Fri, 14 Jan 2022 11:33:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1642177988;
+        bh=bLy2QEgkt0p3V8bap4bKp9o2urCKFEbv7K1Eu4iH0AM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=VFm+StM03jig2F9onMND9lwosoJFKUa/I6Uu9ddXyCEcN/jALaX1zxDepa1WrPETG
+         U6juj1wXbDLtrLsghqjdE16xik9SQqKFrrvUQNC/RCtZFhHEPEO8V9KFZ6qX6waz82
+         IEal7we/jfGaIw5VcqmB23owBvv04BWrVcnqHAGQ=
+Received: from fedora.. ([119.32.47.91])
+        by newxmesmtplogicsvrszc11.qq.com (NewEsmtp) with SMTP
+        id 7F1958D8; Sat, 15 Jan 2022 00:31:49 +0800
+X-QQ-mid: xmsmtpt1642177909tu68gz60g
+Message-ID: <tencent_C2E26D0935C9157CB3597BA4BD3316E8940A@qq.com>
+X-QQ-XMAILINFO: OLJT8zSTI41RbFnZZ/zp4LtNjEnirvFiCNomzyTEwUAH/RaYQwDAf98TAJ0PKz
+         kNgGVF0A9h4YOXL1wM+zunpPoyb5RxaLxE2h1B1TpZ0iAHLjMA+THc97dCc/frYio3DCuE1SXWS7
+         a8cP7pRthLeGrM00P/ym1k3tJlZPafRH8uoDAJHsyC6dMGMfEOBBbcKK7npyeWhWM0XX1+/awwHO
+         Oi7a0I/tVpuVPIyyNWoKn576hwmjgldCz2dPfCCaOfjW5bF61eHukXdnmnc7/Ww0LneJ/Ld3vDGo
+         UKMBnHYDpWnG3jDRhbQYMjlJk3GIbTNtqd5CS69S//Ckfq2LWAoKzKauguZwS29vtsNyrQgkeOKv
+         c8y/yPRGe2+ncEMvJqIthozEmt7lcjxo6KKcdTE255R4o2s1l3dquHoxAv38RO9zUcbyKi1tI6jQ
+         BzrfaVurqTzvFWqdyklRFaSsZTpHD4gySOvyBm3BX/mskxB9W9aEBjb7t5wU1KxX6pQkXbMMuisg
+         w9Bjb2kPxFu52+/yFposkCLwVSdOVyewuzmJCFfh0RyECyrKtshnAo0f4tj8W5WjD85GCLnp6ThK
+         YArsbCtQ0OnIUpxk4InlOOBlU5DWU+yp+6H4MET6owMCW5GS4klbu5L5rUVBIogSU5OWAjB06AEy
+         /L21ftX+wN8TWp56R+8RuGtDTbIgJgJ/ytpYPrmssZTbqUE0uQn+Uuj39h75jjBh/Vy4nHBurU3W
+         CG5qjK/26XdOFNkweFjpAWkLjbsegjVFzlkRKZo2MYJ3dSkw+ED0mzS03X/6ytGc6gfjztuTN43a
+         heH+2WNCR2Dob22mlG13C+ryLkvFcpjZI3uiyOrZYggymi8gdsBKQr9AFm8iunAAb7EL8hxPf67r
+         4JSlSkAXBC5w7bp3VeKqEqYEIBs6pvECunwyc1c/nR
+From:   Conley Lee <conleylee@foxmail.com>
+To:     maxime@cerno.tech, mripard@kernel.org, wens@csie.org,
+        robh@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Conley Lee <conleylee@foxmail.com>
+Subject: [PATCH v4 1/2] arm: dts: sun7i: Add A20-Marsboard
+Date:   Sat, 15 Jan 2022 00:31:47 +0800
+X-OQ-MSGID: <20220114163148.2854265-1-conleylee@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <tencent_DC7B4D416B69D6D6789356010B5B9647C606@qq.com>
+References: <tencent_DC7B4D416B69D6D6789356010B5B9647C606@qq.com>
 MIME-Version: 1.0
-References: <20220111201426.326777-1-krzysztof.kozlowski@canonical.com> <20220111201722.327219-22-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220111201722.327219-22-krzysztof.kozlowski@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 14 Jan 2022 18:31:11 +0200
-Message-ID: <CAPLW+4=t0z-aMhCSp4K3L8EqH_BzinsLuRcopbCQr_xzgFCYVA@mail.gmail.com>
-Subject: Re: [PATCH v2 28/28] arm64: dts: exynos: use dedicated wake-up
- pinctrl compatible in ExynosAutov9
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Alim Akhtar <alim.akhtar@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 at 22:19, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> Older Samsung Exynos SoC pin controller nodes (Exynos3250, Exynos4,
-> Exynos5, Exynos5433) with external wake-up interrupts, expected to have
-> one interrupt for multiplexing these wake-up interrupts.  Also they
-> expected to have exactly one pin controller capable of external wake-up
-> interrupts.
->
-> It seems however that newer ARMv8 Exynos SoC like Exynos850 and
-> ExynosAutov9 have differences:
-> 1. No multiplexed external wake-up interrupt, only direct,
-> 2. More than one pin controller capable of external wake-up interrupts.
->
-> Use dedicated ExynosAutov9 compatible for its external wake-up interrupts
-> controller to indicate the differences.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
+The Marsboard A20 is a A20 based SBC with 1G RAM, 8G Flash, micro SD
+card slot , SATA socketm 10/100 ethernet, HDMI port, 4 USB2.0 ports, 2
+USB2.0 OTG, USB WIFI(RTL8188EU) with antenna.
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+Signed-off-by: Conley Lee <conleylee@foxmail.com>
+---
+Change since v1.
+  - Spearate biddings and dts as two patches.
+  - use SPDX tag
 
->  arch/arm64/boot/dts/exynos/exynosautov9.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-> index de8fcb82eaec..807d500d6022 100644
-> --- a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-> +++ b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-> @@ -208,7 +208,7 @@ pinctrl_alive: pinctrl@10450000 {
->                         reg = <0x10450000 0x1000>;
->
->                         wakeup-interrupt-controller {
-> -                               compatible = "samsung,exynos7-wakeup-eint";
-> +                               compatible = "samsung,exynosautov9-wakeup-eint";
->                         };
->                 };
->
-> --
-> 2.32.0
->
+Change since v2.
+  - reformat patch
+  - dual-license with GPL and MIT
+  - rename dts filename to sun7i-a20-haoyu-marsboard.dts
+Change since v3.
+  - reformat patch
+  - order dtb alphabetically
+  - add gmac_txerr node and remove gmac_mii_pins node in
+    sun7i-a20-marsboard.dts
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/sun7i-a20-haoyu-marsboard.dts    | 183 ++++++++++++++++++
+ 2 files changed, 184 insertions(+)
+ create mode 100644 arch/arm/boot/dts/sun7i-a20-haoyu-marsboard.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 0de64f237cd8..1850ff7c9006 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1213,6 +1213,7 @@ dtb-$(CONFIG_MACH_SUN7I) += \
+ 	sun7i-a20-bananapro.dtb \
+ 	sun7i-a20-cubieboard2.dtb \
+ 	sun7i-a20-cubietruck.dtb \
++	sun7i-a20-haoyu-marsboard.dtb \
+ 	sun7i-a20-hummingbird.dtb \
+ 	sun7i-a20-itead-ibox.dtb \
+ 	sun7i-a20-i12-tvbox.dtb \
+diff --git a/arch/arm/boot/dts/sun7i-a20-haoyu-marsboard.dts b/arch/arm/boot/dts/sun7i-a20-haoyu-marsboard.dts
+new file mode 100644
+index 000000000000..056dbc415de7
+--- /dev/null
++++ b/arch/arm/boot/dts/sun7i-a20-haoyu-marsboard.dts
+@@ -0,0 +1,183 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2021 Conley Lee
++ * Conley Lee <conleylee@foxmail.com>
++ */
++
++/dts-v1/;
++#include "sun7i-a20.dtsi"
++#include "sunxi-common-regulators.dtsi"
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++
++/ {
++	model = "HAOYU Electronics Marsboard A20";
++	compatible = "haoyu,a20-marsboard", "allwinner,sun7i-a20";
++
++	aliases {
++		serial0 = &uart0;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	hdmi-connector {
++		compatible = "hdmi-connector";
++		type = "a";
++
++		port {
++			hdmi_con_in: endpoint {
++				remote-endpoint = <&hdmi_out_con>;
++			};
++		};
++	};
++};
++
++&ahci {
++	target-supply = <&reg_ahci_5v>;
++	status = "okay";
++};
++
++&codec {
++	status = "okay";
++};
++
++&cpu0 {
++	cpu-supply = <&reg_dcdc2>;
++};
++
++&de {
++	status = "okay";
++};
++
++&ehci0 {
++	status = "okay";
++};
++
++&ehci1 {
++	status = "okay";
++};
++
++&gmac {
++	pinctrl-names = "default";
++	pinctrl-0 = <&gmac_mii_pins>, <&gmac_txerr>;
++	phy-handle = <&phy0>;
++	phy-mode = "mii";
++	status = "okay";
++};
++
++&hdmi {
++	status = "okay";
++};
++
++&hdmi_out {
++	hdmi_out_con: endpoint {
++		remote-endpoint = <&hdmi_con_in>;
++	};
++};
++
++&i2c0 {
++	status = "okay";
++
++	axp209: pmic@34 {
++		reg = <0x34>;
++		interrupt-parent = <&nmi_intc>;
++		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
++	};
++};
++
++&mmc0 {
++	vmmc-supply = <&reg_vcc3v3>;
++	bus-width = <4>;
++	cd-gpios = <&pio 7 10 GPIO_ACTIVE_LOW>; /* PH10 */
++	status = "okay";
++};
++
++&gmac_mdio {
++	phy0: ethernet-phy@0 {
++		reg = <0>;
++	};
++};
++
++&ohci0 {
++	status = "okay";
++};
++
++&ohci1 {
++	status = "okay";
++};
++
++&otg_sram {
++	status = "okay";
++};
++
++&pio {
++	gmac_txerr: gmac-txerr-pin {
++		pins = "PA17";
++		function = "gmac";
++	};
++};
++
++
++&reg_ahci_5v {
++	status = "okay";
++};
++
++#include "axp209.dtsi"
++
++&ac_power_supply {
++	status = "okay";
++};
++
++&reg_dcdc2 {
++	regulator-always-on;
++	regulator-min-microvolt = <1000000>;
++	regulator-max-microvolt = <1450000>;
++	regulator-name = "vdd-cpu";
++};
++
++&reg_dcdc3 {
++	regulator-always-on;
++	regulator-min-microvolt = <1000000>;
++	regulator-max-microvolt = <1400000>;
++	regulator-name = "vdd-int-dll";
++};
++
++&reg_ldo1 {
++	regulator-name = "vdd-rtc";
++};
++
++&reg_ldo2 {
++	regulator-always-on;
++	regulator-min-microvolt = <3000000>;
++	regulator-max-microvolt = <3000000>;
++	regulator-name = "avcc";
++};
++
++&reg_usb1_vbus {
++	status = "okay";
++};
++
++&reg_usb2_vbus {
++	status = "okay";
++};
++
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_pb_pins>;
++	status = "okay";
++};
++
++&usb_otg {
++	dr_mode = "otg";
++	status = "okay";
++};
++
++&usbphy {
++	usb0_id_det-gpios = <&pio 7 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; /* PH4 */
++	usb1_vbus-supply = <&reg_usb1_vbus>;
++	usb2_vbus-supply = <&reg_usb2_vbus>;
++	status = "okay";
++};
+-- 
+2.31.1
+

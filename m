@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6DD48E463
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF8F48E461
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233603AbiANGsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S231497AbiANGs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233576AbiANGsc (ORCPT
+        with ESMTP id S229560AbiANGs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:48:32 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D968C061574;
-        Thu, 13 Jan 2022 22:48:32 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id p14so12568128plf.3;
-        Thu, 13 Jan 2022 22:48:32 -0800 (PST)
+        Fri, 14 Jan 2022 01:48:27 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BAFC06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:48:27 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id e18-20020a255012000000b00611b9fa7078so9448560ybb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:48:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=i9LyRM/Cvn/+ZP3AQxRWnhMX0KWeMjk3mtcIWGDqIOY=;
-        b=Yu+SIb7UPWWNf98D86v7vRcE53pixxEAAUzjpQsuI98UZloflGLRvoFkiVzFHocyGU
-         OqLrJmE8XMYqUKsxrMv+/QY2H4zTkj26a5AUVqKkgeBx/kzguZjJzL6zIp+Wok4+YZJW
-         WsmjToMMq371jWtupX73Km4F40GewrZA+MF4VetPFPDXSz6zm+TxV1LydLiXs9ERfCEY
-         /3Rbsh32aHRnVmSgPTiPXk22CrqGXU3JGvZgkKgIvT34bqjMG3IbAS6hH1aOiaPr2IRx
-         hxyOxWGVa1VSy32mSGKhCtKfFP9YmWYK+HJ6fQXfuJoQm4fPL/KWIcX2VENAG4BSpOly
-         dHQg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=HMm6lw8fmCzwK/qAm0rnyqsh44zJLqbdDkWenpmSRLk=;
+        b=AGp8bk4dNYz2YbKjz9F6ldM9V3L5xbYpFX1f0d3EF53J+qNT62etz0c8sX1TGsKpE4
+         qG00hl7piKfpBWc4BCmhN1suswNqET6HwzK7lVQZcsTAhW/VaqmJunyk/JS5z++hTrYv
+         h4Lg/3oWROm1BxNDxodMmPdPbgs4V1KvKzW+/gRJz/8h/KV8Jc+K3fCAHp9cYurcHDpD
+         43JqK/bqieDuu9eBrTfG6CCiHIegCRxtZ2khankhOKtueslTns8LvHRKsmi0T3Z7VPdM
+         q19KRFfX/FGRi4Tp+i2kdfrirlbGiFyVZE8E+CeVSgqcvBN6fMLQwMmbH9dPRh0pSEoJ
+         Pj4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=i9LyRM/Cvn/+ZP3AQxRWnhMX0KWeMjk3mtcIWGDqIOY=;
-        b=iAmPmzLHVDJK1fJe8g588PrsIOtB8l3+vS3QRrm4ttVUjTDJ/grpKKESpuJ0ggHWci
-         fcNCxTgdPChCwp8zezH6ZFMqR1Vr7UI1CSaFeNaXPQVU8f2ezU03+Iirk0wbqxatLqF0
-         mqQ7Recxxi06zgZ5qZ/DEGv6yDk8cOXBHX42quY3qhYqSEtOyojffr/f0wynnaeywRqt
-         36PzgLTKulJUYHPC2n5tcyhiGnBmM2hx6i5BqAerPKDYFaUPdMhl5Z0IV1OoWXWaXj1M
-         jGk8oatRBFsr/RUp4rawfCt90HCBwM6JSZEWB0M7iiggIECdVZ2TA54DWWGKH0PADSs3
-         QcDg==
-X-Gm-Message-State: AOAM532NXlfwNuZ6sUtjIpiXhnsE3rpSFWlbQ7XU1K5GPTvu4Ll4/ZQg
-        gLwb8cU9XRQGyjJummMX06VMJ377LyMQ67uL5vo=
-X-Google-Smtp-Source: ABdhPJxr3Eu7BCOij8hAseKJMFyZ5bBaDFUsQeVAYjhRhQ2HbzVBrf/L7t1Y743sFpvYe3fPkgjLtQ==
-X-Received: by 2002:a17:90a:d901:: with SMTP id c1mr18430192pjv.204.1642142911621;
-        Thu, 13 Jan 2022 22:48:31 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id q9sm11679568pjg.1.2022.01.13.22.48.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 22:48:31 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Ran Wang <ran.wang_1@nxp.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] gpio: mpc8xxx: Fix IRQ check in mpc8xxx_probe
-Date:   Fri, 14 Jan 2022 06:48:20 +0000
-Message-Id: <20220114064821.20200-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=HMm6lw8fmCzwK/qAm0rnyqsh44zJLqbdDkWenpmSRLk=;
+        b=n94Ldi8z4ecXFHoxJCl4M61lqYIgm2fQfi3DAyodPW7GKKdkxgHWpGqQ7oL19t0x5+
+         QiSj4fs9bHWU8MzmxSWySJnuj+Uklgl9LoQ7Ai4hsUCCNKRmBRLATlyouAWyeZAaisMH
+         t4Hh/CcUWKSDs33uWmvz0O0YtNkDACPo/Givs9pebnjvCQZbx4mSGSjIsaDmqXh5gp+u
+         uDaAsTjUgAEteP3EbtE1Jv/f6pXDyS0aJD4Wi2Ua/jx6aG9mw4ME/pzTrZWcv35fSv4X
+         8eAS8H3ofRJzDzlL/PYt6v+QANA7B+2SSzm3mSrpvxpGr+KJOcIS8JU09i5t3rYJf2Kk
+         kq4g==
+X-Gm-Message-State: AOAM532ABGRy3UQWsitZPh22axsEocu534Omex9gCARL5qimW8xjxIhm
+        cE4JBNI7YP9+kgALStzbZOCb8OaGcHQ1
+X-Google-Smtp-Source: ABdhPJwhxSzCg2gZ8CBq5yz4UF4rfjyY6GWEipaxURLLLH8fw6VkrsGuN1NI99Vv8zva8uUfdQyNniXroQFK
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:de36:7cc:6c7a:b7cd])
+ (user=irogers job=sendgmr) by 2002:a25:d648:: with SMTP id
+ n69mr4603717ybg.371.1642142906649; Thu, 13 Jan 2022 22:48:26 -0800 (PST)
+Date:   Thu, 13 Jan 2022 22:48:22 -0800
+Message-Id: <20220114064822.1806019-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH] perf arm: Fix off-by-one directory path.
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_irq() returns negative error number instead 0 on failure.
-And the doc of platform_get_irq() provides a usage example:
+Relative path include works in the regular build due to -I paths but may
+fail in other situations.
 
-    int irq = platform_get_irq(pdev, 0);
-    if (irq < 0)
-        return irq;
-
-Fix the check of return value to catch errors correctly.
-
-Fixes: 76c47d1449fc ("gpio: mpc8xxx: Add ACPI support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Fixes: 83869019c74c ("perf arch: Support register names from all archs")
+Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- drivers/gpio/gpio-mpc8xxx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/perf/util/arm64-frame-pointer-unwind-support.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpio/gpio-mpc8xxx.c b/drivers/gpio/gpio-mpc8xxx.c
-index 70d6ae20b1da..01634c8d27b3 100644
---- a/drivers/gpio/gpio-mpc8xxx.c
-+++ b/drivers/gpio/gpio-mpc8xxx.c
-@@ -388,8 +388,8 @@ static int mpc8xxx_probe(struct platform_device *pdev)
- 	}
+diff --git a/tools/perf/util/arm64-frame-pointer-unwind-support.c b/tools/perf/util/arm64-frame-pointer-unwind-support.c
+index 4f5ecf51ed38..2242a885fbd7 100644
+--- a/tools/perf/util/arm64-frame-pointer-unwind-support.c
++++ b/tools/perf/util/arm64-frame-pointer-unwind-support.c
+@@ -6,7 +6,7 @@
+ #include "unwind.h"
  
- 	mpc8xxx_gc->irqn = platform_get_irq(pdev, 0);
--	if (!mpc8xxx_gc->irqn)
--		return 0;
-+	if (mpc8xxx_gc->irqn < 0)
-+		return mpc8xxx_gc->irqn;
+ #define perf_event_arm_regs perf_event_arm64_regs
+-#include "../arch/arm64/include/uapi/asm/perf_regs.h"
++#include "../../arch/arm64/include/uapi/asm/perf_regs.h"
+ #undef perf_event_arm_regs
  
- 	mpc8xxx_gc->irq = irq_domain_create_linear(fwnode,
- 						   MPC8XXX_GPIO_PINS,
+ struct entries {
 -- 
-2.17.1
+2.34.1.703.g22d0c6ccf7-goog
 

@@ -2,119 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 257E448ED97
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A41F48ED9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243104AbiANQAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:00:15 -0500
-Received: from mga14.intel.com ([192.55.52.115]:56036 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236311AbiANQAO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:00:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642176014; x=1673712014;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aj2gJ9xDWwhDAK2L30Eh73Nu5/kH0hbb15rkhPR0Ffo=;
-  b=OjAoiZdtOCkTnapR+zGyY/Wb0KA5wDxOcuhAYaFrXE+7ykUoIYQYzXVQ
-   uKkeBw5nYSAagHlUNNYOCjvohoW3+XV4HxvruOsemK23QhaDu9pYQX4se
-   hvy39DNayp5P7llh3eAsbu2dNff9tfrVpncmqsQJSQ7OHEsFqu2ASdgMw
-   6rhIbbdycuy1zXrmi5YrPG5fTL/QvNpkzjg4wQwQleqmVk2DdlXBXIYcF
-   JALVY7GHD/e+dq6uvVWM/NmwXIL2z4kyw+J+egkCpgMHt61D2kBuZxXvk
-   bFOK37Il9wYIVVrljrTQhvRv3wHiDolxHkSvR+Qd3la1uDeJpomdVnbdY
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244470674"
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="244470674"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 08:00:12 -0800
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="516439986"
-Received: from zengguan-mobl.ccr.corp.intel.com (HELO [10.254.213.217]) ([10.254.213.217])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 08:00:07 -0800
-Message-ID: <43200b86-aa40-f7a3-d571-dc5fc3ebd421@intel.com>
-Date:   Fri, 14 Jan 2022 23:59:54 +0800
+        id S239053AbiANQC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:02:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238931AbiANQCy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 11:02:54 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D67CC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:02:53 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id x4so16369311wru.7
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:02:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xZzF8jRq/y/h9eqJLnj+PjpGmcmPav5EfqP3FY3NYi8=;
+        b=V0aYU9lM2tThUDewNR5coBOdW+kY8Mvww7QlK8ifg2d/pqtYeCEz5U18blbnxmXsRy
+         b6z8n+PdphvpY4Tp4G6aZdBMmPDk/T/RpWFhkivQbwBkJWBldglHGky8IK9cwu51HzmM
+         w+gzXxJo47L/wEUJgiKP80YTs73vI2MwAgaJJ3G2Tzhuqkbk1LRvGyU5oe0r3XBUpwd/
+         aMgkUxQDGnprMTKsym76aHy5xGHCeefPwBcN2QBwspbHnjnLrXCrOwUDndgDadLg1bRB
+         b3pNBcnqBxsEY3hWK9Ifxgk1i3tuJwnYZuF8n60p4fOF4c18zsf7ovExSTxgz9qGF5Ms
+         DWPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xZzF8jRq/y/h9eqJLnj+PjpGmcmPav5EfqP3FY3NYi8=;
+        b=Cq+PW8JzBQHMBu9chZnglwx7Cqv2mSge5kmbctZpqdfjshbVnjQsr1JXKUEUJhCnRE
+         j3XWVBKJ3qWni2+RTQT4z2zmwcfqFkriP3flm8DjuSM3hrXUuZdgP6LAHoiywSw/Mvma
+         uKGOM/nYW9ahPelr6iBetImJssAmwoydLQt5rsJ3+jRs5sHywjOZMnSgnGtZEkRX4FwH
+         PbaAoL5jUwkmbLHaGmqPc/JgoAsMoUwWYpe640d4cvPYZLnT5fjJHrioLYdllUdoUHvn
+         MANeenmWogaIbFrSchLCLGiAZ95Fq7Pka8TFePhgofvWBtk3zPn6qB0xbAnPwnfEhcas
+         dVUQ==
+X-Gm-Message-State: AOAM530vUd/NYcktKGP3WzREQ5rB7stNtLTMbjVis9iP9hTtHtGtfEnW
+        pSwysWp5UCAPlOq+N8YsIuY=
+X-Google-Smtp-Source: ABdhPJz3vgPy4mEKsWeLWZJldjyCHIe5FYzFAjuNKRgD2AKZZB7ntFwrYzveqy5NL+dYmtVd2No7Xw==
+X-Received: by 2002:adf:ce07:: with SMTP id p7mr9023006wrn.329.1642176172085;
+        Fri, 14 Jan 2022 08:02:52 -0800 (PST)
+Received: from [192.168.0.14] ([37.223.145.74])
+        by smtp.gmail.com with ESMTPSA id x8sm5487523wru.102.2022.01.14.08.02.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jan 2022 08:02:51 -0800 (PST)
+Message-ID: <56d0a5d3-65e7-db59-7704-e9868952bb45@gmail.com>
+Date:   Fri, 14 Jan 2022 17:02:50 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.4.1
-Subject: Re: [PATCH v5 8/8] KVM: VMX: Resize PID-ponter table on demand for
- IPI virtualization
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v4] drm/mediatek: Fix mtk_cec_mask()
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-References: <20211231142849.611-1-guang.zeng@intel.com>
- <20211231142849.611-9-guang.zeng@intel.com> <YeCjHbdAikyIFQc9@google.com>
-From:   Zeng Guang <guang.zeng@intel.com>
-In-Reply-To: <YeCjHbdAikyIFQc9@google.com>
+To:     Miles Chen <miles.chen@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Junzhi Zhao <junzhi.zhao@mediatek.com>,
+        Jie Qiu <jie.qiu@mediatek.com>
+Cc:     Zhiqiang Lin <zhiqiang.lin@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220103054706.8072-1-miles.chen@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220103054706.8072-1-miles.chen@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/14/2022 6:09 AM, Sean Christopherson wrote:
-> On Fri, Dec 31, 2021, Zeng Guang wrote:
->> +static int vmx_expand_pid_table(struct kvm_vmx *kvm_vmx, int entry_idx)
->> +{
->> +	u64 *last_pid_table;
->> +	int last_table_size, new_order;
->> +
->> +	if (entry_idx <= kvm_vmx->pid_last_index)
->> +		return 0;
->> +
->> +	last_pid_table = kvm_vmx->pid_table;
->> +	last_table_size = table_index_to_size(kvm_vmx->pid_last_index + 1);
->> +	new_order = get_order(table_index_to_size(entry_idx + 1));
->> +
->> +	if (vmx_alloc_pid_table(kvm_vmx, new_order))
->> +		return -ENOMEM;
->> +
->> +	memcpy(kvm_vmx->pid_table, last_pid_table, last_table_size);
->> +	kvm_make_all_cpus_request(&kvm_vmx->kvm, KVM_REQ_PID_TABLE_UPDATE);
->> +
->> +	/* Now old PID table can be freed safely as no vCPU is using it. */
->> +	free_pages((unsigned long)last_pid_table, get_order(last_table_size));
-> This is terrifying.  I think it's safe?  But it's still terrifying.
 
-Free old PID table here is safe as kvm making request 
-KVM_REQ_PI_TABLE_UPDATE with
-KVM_REQUEST_WAIT flag force all vcpus trigger vm-exit to update vmcs 
-field to new allocated
-PID table. At this time, it makes sure old PID table not referenced by 
-any vcpu.
-Do you mean it still has potential problem?
 
-> Rather than dynamically react as vCPUs are created, what about we make max_vcpus
-> common[*], extend KVM_CAP_MAX_VCPUS to allow userspace to override max_vcpus,
-> and then have the IPIv support allocate the PID table on first vCPU creation
-> instead of in vmx_vm_init()?
->
-> That will give userspace an opportunity to lower max_vcpus to reduce memory
-> consumption without needing to dynamically muck with the table in KVM.  Then
-> this entire patch goes away.
-IIUC, it's risky if relying on userspace . In this way userspace also 
-have chance to assign large max_vcpus
-but not use them at all. This cannot approach the goal to save memory as 
-much as possible just similar
-as using KVM_MAX_VCPU_IDS to allocate PID table.
+On 03/01/2022 06:47, Miles Chen wrote:
+> In current implementation, mtk_cec_mask() writes val into target register
+> and ignores the mask. After talking to our hdmi experts, mtk_cec_mask()
+> should read a register, clean only mask bits, and update (val | mask) bits
+> to the register.
+> 
+> Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
+> 
 
+Normally there is no new line here.
+
+> Cc: Zhiqiang Lin <zhiqiang.lin@mediatek.com>
+> Cc: CK Hu <ck.hu@mediatek.com>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+
+Neither here.
+
+> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+> 
+
+But that are nit-picks. I leave it to the maintainer to decide if he want to fix 
+that when applying the patch:
+
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+Thanks a lot,
+Matthias
+
+> ---
+> 
+> Change since v1:
+> add Fixes tag
+> 
+> Change since v2:
+> add explanation of mtk_cec_mask()
+> 
+> Change since v3:
+> change misleading subject and modify the commit message since this is a bug fix patch
+> 
+> ---
+>   drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediatek/mtk_cec.c
+> index e9cef5c0c8f7..cdfa648910b2 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_cec.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_cec.c
+> @@ -85,7 +85,7 @@ static void mtk_cec_mask(struct mtk_cec *cec, unsigned int offset,
+>   	u32 tmp = readl(cec->regs + offset) & ~mask;
+>   
+>   	tmp |= val & mask;
+> -	writel(val, cec->regs + offset);
+> +	writel(tmp, cec->regs + offset);
+>   }
+>   
+>   void mtk_cec_set_hpd_event(struct device *dev,
+> 

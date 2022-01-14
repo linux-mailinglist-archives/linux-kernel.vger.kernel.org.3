@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CED4648E5EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:22:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6126648E5F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240419AbiANIWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
+        id S237671AbiANIWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:22:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239875AbiANIVD (ORCPT
+        with ESMTP id S239984AbiANIVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:21:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FF5C061781;
-        Fri, 14 Jan 2022 00:20:52 -0800 (PST)
+        Fri, 14 Jan 2022 03:21:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45F3C06178A;
+        Fri, 14 Jan 2022 00:20:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2CE2B82437;
-        Fri, 14 Jan 2022 08:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C850CC36AEC;
-        Fri, 14 Jan 2022 08:20:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5585861E04;
+        Fri, 14 Jan 2022 08:20:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47EF8C36AE9;
+        Fri, 14 Jan 2022 08:20:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148449;
-        bh=fVhb6SJem3cPcMRbUppLOuJM/saR48vtTBy79ji/cRU=;
+        s=korg; t=1642148454;
+        bh=yfxZPi4xmnKIPAh259PxlfYe0OoOXPnGjXMUYBhX7Sc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t+FDAsSQ2gdawYZAmmzhSj85s60eiRi3vpByf1vyQ2/mAurcZHKX7h2kfMnCQLtbw
-         QNbf/30U09eIUs6PR+HJJqDeupFVJlkup/96/BG1gp1CkuH3nw9KCIGtJKZr/zkWdb
-         eGlcxNQht5eY/FlM227ZzcMPqhj4Quq5wGiBQaD8=
+        b=IK8wdIWli41cFx1j++gLaGmFxfO0WVPIHjaxQ1DBBlCC1JSVqw7iiOZgAXqsWIVG1
+         S+uczPA5072ZZZvz9iblptBm+5gQ4C5tzPoYA8FIJw1Yn9pCal+wLuFq3+bU4xnxFT
+         2+ap9azIAWqQ/kDjWfNdwzN2OEJkE4NkRBF2eIMo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alex Hung <alex.hung@canonical.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH 5.15 37/41] platform/x86/intel: hid: add quirk to support Surface Go 3
-Date:   Fri, 14 Jan 2022 09:16:37 +0100
-Message-Id: <20220114081546.402962699@linuxfoundation.org>
+        stable@vger.kernel.org, Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 5.15 38/41] media: Revert "media: uvcvideo: Set unique vdev name based in type"
+Date:   Fri, 14 Jan 2022 09:16:38 +0100
+Message-Id: <20220114081546.432276837@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220114081545.158363487@linuxfoundation.org>
 References: <20220114081545.158363487@linuxfoundation.org>
@@ -48,39 +51,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Hung <alex.hung@canonical.com>
+From: Ricardo Ribalda <ribalda@chromium.org>
 
-commit 01e16cb67cce68afaeb9c7bed72299036dbb0bc1 upstream.
+commit f66dcb32af19faf49cc4a9222c3152b10c6ec84a upstream.
 
-Similar to other systems Surface Go 3 requires a DMI quirk to enable
-5 button array for power and volume buttons.
+A lot of userspace depends on a descriptive name for vdev. Without this
+patch, users have a hard time figuring out which camera shall they use
+for their video conferencing.
 
-Buglink: https://github.com/linux-surface/linux-surface/issues/595
+This reverts commit e3f60e7e1a2b451f538f9926763432249bcf39c4.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Alex Hung <alex.hung@canonical.com>
-Link: https://lore.kernel.org/r/20211203212810.2666508-1-alex.hung@canonical.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/linux-media/20211207003840.1212374-2-ribalda@chromium.org
+Cc: <stable@vger.kernel.org>
+Fixes: e3f60e7e1a2b ("media: uvcvideo: Set unique vdev name based in type")
+Reported-by: Nicolas Dufresne <nicolas@ndufresne.ca>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/platform/x86/intel/hid.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/media/usb/uvc/uvc_driver.c |    7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
---- a/drivers/platform/x86/intel/hid.c
-+++ b/drivers/platform/x86/intel/hid.c
-@@ -106,6 +106,13 @@ static const struct dmi_system_id button
- 			DMI_MATCH(DMI_PRODUCT_NAME, "Surface Go 3"),
- 		},
- 	},
-+	{
-+		.ident = "Microsoft Surface Go 3",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Surface Go 3"),
-+		},
-+	},
- 	{ }
- };
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2194,7 +2194,6 @@ int uvc_register_video_device(struct uvc
+ 			      const struct v4l2_file_operations *fops,
+ 			      const struct v4l2_ioctl_ops *ioctl_ops)
+ {
+-	const char *name;
+ 	int ret;
  
+ 	/* Initialize the video buffers queue. */
+@@ -2223,20 +2222,16 @@ int uvc_register_video_device(struct uvc
+ 	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+ 	default:
+ 		vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
+-		name = "Video Capture";
+ 		break;
+ 	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
+ 		vdev->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
+-		name = "Video Output";
+ 		break;
+ 	case V4L2_BUF_TYPE_META_CAPTURE:
+ 		vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
+-		name = "Metadata";
+ 		break;
+ 	}
+ 
+-	snprintf(vdev->name, sizeof(vdev->name), "%s %u", name,
+-		 stream->header.bTerminalLink);
++	strscpy(vdev->name, dev->name, sizeof(vdev->name));
+ 
+ 	/*
+ 	 * Set the driver data before calling video_register_device, otherwise
 
 

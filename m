@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9498F48E88E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 11:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B7248E8C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240561AbiANKue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 05:50:34 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17351 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237830AbiANKud (ORCPT
+        id S240628AbiANLAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 06:00:07 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53218 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232445AbiANLAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 05:50:33 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JZyjF4cKjz9sH9;
-        Fri, 14 Jan 2022 18:49:21 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 14 Jan 2022 18:50:31 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 14 Jan 2022 18:50:30 +0800
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-To:     <arnd@arndb.de>, <catalin.marinas@arm.com>
-CC:     <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wangxiongfeng2@huawei.com>, <huangguangbin2@huawei.com>
-Subject: [PATCH] asm-generic: Add missing brackets for io_stop_wc macro
-Date:   Fri, 14 Jan 2022 18:58:57 +0800
-Message-ID: <20220114105857.126300-1-wangxiongfeng2@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        Fri, 14 Jan 2022 06:00:06 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 236D4B82595;
+        Fri, 14 Jan 2022 11:00:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49A5BC36AEA;
+        Fri, 14 Jan 2022 11:00:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1642158004;
+        bh=g8GfDmbZOSBMNBxcz5maGzA55wGu69eVfbZjs4FrWM0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=si2NFGFTuRwOv6Z3sKaucEUFv3ySdvbU8l/87RdFbHGduJsNfeeLpWCMyRV3L834B
+         2w6jw427qNZ1kAqd2aHNADTd9em51F1M3kgamHZJMV19i/Dy+KYoKKXT0yNwQuRJgO
+         +JaC6244Shpnr4JXxMjJPqe8A/irXERHTHcInkEw=
+Date:   Fri, 14 Jan 2022 12:00:00 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.4.y] Revert "ia64: kprobes: Use generic kretprobe
+ trampoline handler"
+Message-ID: <YeFXsJVt1I7yWtDj@kroah.com>
+References: <YeEhuGXr2B9r7mer@kroah.com>
+ <164215559880.1662358.1475310445318313122.stgit@devnote2>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164215559880.1662358.1475310445318313122.stgit@devnote2>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After using io_stop_wc(), drivers reports following compile error when
-compiled on X86.
+On Fri, Jan 14, 2022 at 07:19:59PM +0900, Masami Hiramatsu wrote:
+> This reverts commit 77fa5e15c933a1ec812de61ad709c00aa51e96ae.
+> 
+> Since the upstream commit e792ff804f49720ce003b3e4c618b5d996256a18
+> depends on the generic kretprobe trampoline handler, which was
+> introduced by commit 66ada2ccae4e ("kprobes: Add generic kretprobe
+> trampoline handler") but that is not ported to the stable kernel
+> because it is not a bugfix series.
+> So revert this commit to fix a build error.
+> 
+> NOTE: I keep commit a7fe2378454c ("ia64: kprobes: Fix to pass
+> correct trampoline address to the handler") on the tree, that seems
+> just a cleanup without the original reverted commit, but it would
+> be better to use dereference_function_descriptor() macro instead
+> of accessing descriptor's field directly.
+> 
+> 
+> Fixes: 77fa5e15c933 ("ia64: kprobes: Use generic kretprobe trampoline handler")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>  arch/ia64/kernel/kprobes.c |   78 ++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 75 insertions(+), 3 deletions(-)
 
-  drivers/net/ethernet/hisilicon/hns3/hns3_enet.c: In function ‘hns3_tx_push_bd’:
-  drivers/net/ethernet/hisilicon/hns3/hns3_enet.c:2058:12: error: expected ‘;’ before ‘(’ token
-    io_stop_wc();
-              ^
-It is because I missed to add the brackets after io_stop_wc macro. So
-let's add the missing brackets.
+Thanks for this, I'll queue it up after this round of stable releases
+are out.
 
-Fixes: d5624bb29f49 ("asm-generic: introduce io_stop_wc() and add implementation for ARM64")
-Reported-by: Guangbin Huang <huangguangbin2@huawei.com>
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
----
- include/asm-generic/barrier.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-index 3d503e74037f..fd7e8fbaeef1 100644
---- a/include/asm-generic/barrier.h
-+++ b/include/asm-generic/barrier.h
-@@ -285,7 +285,7 @@ do {									\
-  * write-combining memory accesses before this macro with those after it.
-  */
- #ifndef io_stop_wc
--#define io_stop_wc do { } while (0)
-+#define io_stop_wc() do { } while (0)
- #endif
- 
- #endif /* !__ASSEMBLY__ */
--- 
-2.20.1
-
+greg k-h

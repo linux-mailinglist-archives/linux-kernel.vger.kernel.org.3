@@ -2,140 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4445D48EB14
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB17148EB1A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241424AbiANNtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 08:49:14 -0500
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:33705 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236966AbiANNtN (ORCPT
+        id S241245AbiANNxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 08:53:15 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8792 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230472AbiANNxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 08:49:13 -0500
-Received: by mail-oi1-f182.google.com with SMTP id x193so12282017oix.0;
-        Fri, 14 Jan 2022 05:49:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B+AfKsQIJxC792VJgj63R3rMU3bH/e+JiSQPxpb/PgA=;
-        b=CThA8zH1Yu5NzfG7RPNjwSJYIECd/s9/lQVUAeR3pqmoLwAVUQBw6lsCrwXqUmpwV/
-         YK45SMt64Gs2jlkA6aP0MO5e9XgUy0CXcFX/wBAEG3580q/9in1YPwOrPrf6A/n3G0vS
-         6ltTkUD4h8S3s2Mtc05NTwP48p4/9tnFObsSAufkEWry9fuA9hpw2V2ydfczSOdfa7gV
-         Tco4Q95ly2w80Gw3tXQcyHd9jSYiABksTajvXbADgGSff9HAGPVZKdPjw0KT4rzBCkm6
-         IxKHn0AEFa4zgE2GI9FxV7uelqeux5SU+riGBNLwkegmYosPQf0hUhNY/siKOxeV+tiw
-         fTPg==
-X-Gm-Message-State: AOAM530eqpz7YoHqfgxC7aH2w+zudcOVNgH3FqBR1T6GqTjDbeRiIvWF
-        K9KzjMlSedjZhvvAQ1Rm1+Kf9SpbMQ==
-X-Google-Smtp-Source: ABdhPJxmmpHFexPzfp142xVob3UE2xRtzttqlu0uvjFB2qTPN7Q740l/qG4ZqqAAkRskJZeKthLPSQ==
-X-Received: by 2002:a05:6808:124d:: with SMTP id o13mr7412554oiv.91.1642168150973;
-        Fri, 14 Jan 2022 05:49:10 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n189sm1812573oif.33.2022.01.14.05.49.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 05:49:10 -0800 (PST)
-Received: (nullmailer pid 1783269 invoked by uid 1000);
-        Fri, 14 Jan 2022 13:49:09 -0000
-Date:   Fri, 14 Jan 2022 07:49:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        kernel@axis.com, linux-kernel@vger.kernel.org,
-        linux-um@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] um: Add devicetree support
-Message-ID: <YeF/Vbxo6fAt0WLp@robh.at.kernel.org>
-References: <20211208151123.29313-1-vincent.whitchurch@axis.com>
- <20211208151123.29313-3-vincent.whitchurch@axis.com>
+        Fri, 14 Jan 2022 08:53:13 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20EBveur020151;
+        Fri, 14 Jan 2022 13:51:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=vP1aoBsPQt/yrozo2sUvU5CVIot6dV2VEGneghSkLFA=;
+ b=a2gFV4734kGqUgIHKXadnrCFSKuBjJRY30aUQdGCFiYF8jRsHV+z2mI4wFE/Vmth6kUs
+ 8QUMtKN08iYUGQdeGav2yl4jGVMOnN+FjLbFBpgJ6dEmNOs7wsMT4y+PEc1wueG6Atxc
+ OXnSBTyBBQbA8HCalgy5VAexQD8ps0se//ZDpVvQbn1K2qLNcATAExxwxxPYpHjsKd1u
+ IS1l1Q16lhrtUXAVpb64mZZhXTVa4ROac7uK7SIt27/2EeBnhIyQDnzALcLTG4mxbb6L
+ eHN77+UCRvY8NAuo6a9ZGGf68003niLfHTxMzqmoVo9J4NtX4+8u69ZsERMOzAndRSg7 ZA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dk8rvj1er-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Jan 2022 13:51:46 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20EDEb57026077;
+        Fri, 14 Jan 2022 13:51:45 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dk8rvj1e0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Jan 2022 13:51:45 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20EDkqGP005393;
+        Fri, 14 Jan 2022 13:51:43 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3df1vjxub1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Jan 2022 13:51:43 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20EDpeCG37093796
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 Jan 2022 13:51:40 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2808052051;
+        Fri, 14 Jan 2022 13:51:40 +0000 (GMT)
+Received: from [9.171.88.24] (unknown [9.171.88.24])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id A47C752050;
+        Fri, 14 Jan 2022 13:51:38 +0000 (GMT)
+Message-ID: <b66c4856-7826-9cff-83f3-007d7ed5635c@linux.ibm.com>
+Date:   Fri, 14 Jan 2022 14:51:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208151123.29313-3-vincent.whitchurch@axis.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 0/5] kvm: fix latent guest entry/exit bugs
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
+        alexandru.elisei@arm.com, anup.patel@wdc.com,
+        aou@eecs.berkeley.edu, atish.patra@wdc.com,
+        benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
+        david@redhat.com, frankja@linux.ibm.com, frederic@kernel.org,
+        gor@linux.ibm.com, hca@linux.ibm.com, imbrenda@linux.ibm.com,
+        james.morse@arm.com, jmattson@google.com, joro@8bytes.org,
+        kvm@vger.kernel.org, maz@kernel.org, mingo@redhat.com,
+        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
+        paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com,
+        pbonzini@redhat.com, seanjc@google.com, suzuki.poulose@arm.com,
+        tglx@linutronix.de, tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org
+References: <20220111153539.2532246-1-mark.rutland@arm.com>
+ <127a6117-85fb-7477-983c-daf09e91349d@linux.ibm.com>
+ <YeFqUlhqY+7uzUT1@FVFF77S0Q05N>
+ <ae1a42ab-f719-4a4e-8d2a-e2b4fa6e9580@linux.ibm.com>
+ <YeF7Wvz05JhyCx0l@FVFF77S0Q05N>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <YeF7Wvz05JhyCx0l@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: V601sx0TRChMmHg9UgBYp6CkK53iWuCv
+X-Proofpoint-ORIG-GUID: EIy8ZE84WROG9oqjCpjBq0scXVJmJ2Sk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-14_05,2022-01-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 malwarescore=0 mlxscore=0 bulkscore=0 mlxlogscore=584
+ priorityscore=1501 clxscore=1015 phishscore=0 spamscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201140090
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 04:11:23PM +0100, Vincent Whitchurch wrote:
-> Add a dtb=<filename> option to boot UML with a devicetree blob.  This
-> can be used for testing driver code using UML.
 
-Neat!
 
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
->  arch/um/Kconfig          |  1 +
->  arch/um/kernel/Makefile  |  1 +
->  arch/um/kernel/dtb.c     | 41 ++++++++++++++++++++++++++++++++++++++++
->  arch/um/kernel/um_arch.c |  3 +++
->  arch/um/kernel/um_arch.h |  6 ++++++
->  5 files changed, 52 insertions(+)
->  create mode 100644 arch/um/kernel/dtb.c
+Am 14.01.22 um 14:32 schrieb Mark Rutland:
+> On Fri, Jan 14, 2022 at 01:29:46PM +0100, Christian Borntraeger wrote:
+>>
+>>
+>> Am 14.01.22 um 13:19 schrieb Mark Rutland:
+>>> On Thu, Jan 13, 2022 at 04:20:07PM +0100, Christian Borntraeger wrote:
+>>>> Am 11.01.22 um 16:35 schrieb Mark Rutland:
+>>>>> Several architectures have latent bugs around guest entry/exit, most
+>>>>> notably:
+>>>>>
+>>>>> 1) Several architectures enable interrupts between guest_enter() and
+>>>>>       guest_exit(). As this period is an RCU extended quiescent state (EQS) this
+>>>>>       is unsound unless the irq entry code explicitly wakes RCU, which most
+>>>>>       architectures only do for entry from usersapce or idle.
+>>>>>
+>>>>>       I believe this affects: arm64, riscv, s390
+>>>>>
+>>>>>       I am not sure about powerpc.
+>>>>>
+>>>>> 2) Several architectures permit instrumentation of code between
+>>>>>       guest_enter() and guest_exit(), e.g. KASAN, KCOV, KCSAN, etc. As
+>>>>>       instrumentation may directly o indirectly use RCU, this has the same
+>>>>>       problems as with interrupts.
+>>>>>
+>>>>>       I believe this affects: arm64, mips, powerpc, riscv, s390
+>>>>>
+>>>>> 3) Several architectures do not inform lockdep and tracing that
+>>>>>       interrupts are enabled during the execution of the guest, or do so in
+>>>>>       an incorrect order. Generally
+>>>>>       this means that logs will report IRQs being masked for much longer
+>>>>>       than is actually the case, which is not ideal for debugging. I don't
+>>>>>       know whether this affects the correctness of lockdep.
+>>>>>
+>>>>>       I believe this affects: arm64, mips, powerpc, riscv, s390
+>>>>>
+>>>>> This was previously fixed for x86 specifically in a series of commits:
+>>>>>
+>>>>>      87fa7f3e98a1310e ("x86/kvm: Move context tracking where it belongs")
+>>>>>      0642391e2139a2c1 ("x86/kvm/vmx: Add hardirq tracing to guest enter/exit")
+>>>>>      9fc975e9efd03e57 ("x86/kvm/svm: Add hardirq tracing on guest enter/exit")
+>>>>>      3ebccdf373c21d86 ("x86/kvm/vmx: Move guest enter/exit into .noinstr.text")
+>>>>>      135961e0a7d555fc ("x86/kvm/svm: Move guest enter/exit into .noinstr.text")
+>>>>>      160457140187c5fb ("KVM: x86: Defer vtime accounting 'til after IRQ handling")
+>>>>>      bc908e091b326467 ("KVM: x86: Consolidate guest enter/exit logic to common helpers")
+>>>>>
+>>>>> But other architectures were left broken, and the infrastructure for
+>>>>> handling this correctly is x86-specific.
+>>>>>
+>>>>> This series introduces generic helper functions which can be used to
+>>>>> handle the problems above, and migrates architectures over to these,
+>>>>> fixing the latent issues.
+>>>>>
+>>>>> I wasn't able to figure my way around powerpc and s390, so I have not
+>>>>
+>>>> I think 2 later patches have moved the guest_enter/exit a bit out.
+>>>> Does this make the s390 code clearer?
+>>>
+>>> Yes; that's much simpler to follow!
+>>>
+>>> One major thing I wasn't sure about for s390 is the sequence:
+>>>
+>>> 	guest_enter_irqoff();	// Enters an RCU EQS
+>>> 	...
+>>> 	local_irq_enable();
+>>> 	...
+>>> 	sie64a(...);
+>>> 	...
+>>> 	local_irq_disable();
+>>> 	...
+>>> 	guest_exit_irqoff();	// Exits an RCU EQS
+>>>
+>>> ... since if an IRQ is taken between local_irq_{enable,disable}(), RCU won't be
+>>> watching, and I couldn't spot whether your regular IRQ entry logic would wake
+>>> RCU in this case, or whether there was something else I'm missing that saves
+>>> you here.
+>>>
+>>> For other architectures, including x86 and arm64, we enter the guest with IRQs
+>>> masked and return from the guest with IRQs masked, and don't actually take IRQs
+>>> until we unmask them in the host, after the guest_exit_*() logic has woken RCU
+>>> and so on.
+>>>
+>>> I wasn't able to find documentation on the semantics of SIE, so I couldn't spot
+>>> whether the local_irq_{enable,disable}() calls were necessary, or could be
+>>> removed.
+>>
+>> We run the SIE instruction with interrupts enabled. SIE is interruptible.
+>> The disable/enable pairs are just because  guest_enter/exit_irqoff() require them.
 > 
-> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-> index c18b45f75d41..1cf7ef3a2b81 100644
-> --- a/arch/um/Kconfig
-> +++ b/arch/um/Kconfig
-> @@ -18,6 +18,7 @@ config UML
->  	select HAVE_DEBUG_KMEMLEAK
->  	select HAVE_DEBUG_BUGVERBOSE
->  	select NO_DMA if !UML_DMA_EMULATION
-> +	select OF_EARLY_FLATTREE
->  	select GENERIC_IRQ_SHOW
->  	select GENERIC_CPU_DEVICES
->  	select HAVE_GCC_PLUGINS
-> diff --git a/arch/um/kernel/Makefile b/arch/um/kernel/Makefile
-> index 92692bfef7ae..ebd0cca3ff26 100644
-> --- a/arch/um/kernel/Makefile
-> +++ b/arch/um/kernel/Makefile
-> @@ -22,6 +22,7 @@ obj-y += load_file.o
->  
->  obj-$(CONFIG_BLK_DEV_INITRD) += initrd.o
->  obj-$(CONFIG_GPROF)	+= gprof_syms.o
-> +obj-$(CONFIG_OF) += dtb.o
->  obj-$(CONFIG_EARLY_PRINTK) += early_printk.o
->  obj-$(CONFIG_STACKTRACE) += stacktrace.o
->  obj-$(CONFIG_GENERIC_PCI_IOMAP) += ioport.o
-> diff --git a/arch/um/kernel/dtb.c b/arch/um/kernel/dtb.c
-> new file mode 100644
-> index 000000000000..ca69d72025f3
-> --- /dev/null
-> +++ b/arch/um/kernel/dtb.c
-> @@ -0,0 +1,41 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <linux/init.h>
-> +#include <linux/of_fdt.h>
-> +#include <linux/printk.h>
-> +#include <linux/memblock.h>
-> +#include <init.h>
-> +
-> +#include "um_arch.h"
-> +
-> +static char *dtb __initdata;
-> +
-> +void uml_dtb_init(void)
-> +{
-> +	long long size;
-> +	void *area;
-> +
-> +	area = uml_load_file(dtb, &size);
-> +	if (!area)
-> +		return;
-> +
-> +	if (!early_init_dt_scan(area)) {
-> +		pr_err("invalid DTB %s\n", dtb);
-> +		memblock_free(area, size);
-> +		return;
-> +	}
-> +
-> +	unflatten_device_tree();
-> +	early_init_fdt_scan_reserved_mem();
+> What I was trying to figure out was when an interrupt is taken between
+> guest_enter_irqoff() and guest_exit_irqoff(), where is RCU woken? I couldn't
+> spot that in the s390 entry code (probably simply because I'm not familiar with
+> it), and so AFAICT that means IRQ code could run without RCU watching, which
+> would cause things to explode.
+> 
+> On other architectures that problem is avoided because IRQs asserted during the
+> guest cause a specific guest exit rather than a regular IRQ exception, and the
+> HW enables/disables IRQs when entering/exiting the guest, so the host can leave
+> IRQs masked across guest_enter_irqoff()..guest_exit_irqoff().
+> 
+> Am I right in understanding that SIE itself won't enable (host) interrupts
+> while running the guest, and so it *needs* to be run with interrupts already
+> enabled?
 
-These should be reversed. early_init_fdt_scan_reserved_mem() works on 
-the flat tree. Reserved memory needs to be reserved before 
-unflatten_device_tree() starts allocating memory. Though I imagine that 
-doesn't really matter for UML.
+yes
 
-Also, does the dtb end up in permanently allocated memory (i.e. not 
-init)? It needs to be if not.
+> 
+>> One thing to be aware of: in our entry.S - after an interrupt - we leave SIE by
+>> setting the return address of the interrupt after the sie instruction so that we
+>> get back into this __vcpu_run loop to check for signals and so.
+> 
+> Just to check, that's after the IRQ handler runs, right?
 
-Rob
+and yes.

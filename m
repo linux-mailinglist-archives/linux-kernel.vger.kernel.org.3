@@ -2,40 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2BB48E638
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE8748E57C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbiANIYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:24:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:32992 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240185AbiANIWc (ORCPT
+        id S239696AbiANISa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239603AbiANISL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:22:32 -0500
+        Fri, 14 Jan 2022 03:18:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AF9C061749;
+        Fri, 14 Jan 2022 00:18:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE96361E04;
-        Fri, 14 Jan 2022 08:22:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ADEEC36AE9;
-        Fri, 14 Jan 2022 08:22:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E447FB8243B;
+        Fri, 14 Jan 2022 08:18:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F246DC36AE9;
+        Fri, 14 Jan 2022 08:18:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148551;
-        bh=EkXLKmKi0lwhKvER05e2eCfe4gmq+a56A0vUlD9i5iM=;
+        s=korg; t=1642148288;
+        bh=H17Xnnsx9bUNzRTd4XZiYuNbuQ+ZTEduKVlF/IISWFQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lpZhsPUVMVLMqKIx7HzcYQq9tqdOPbHTHVFi0wOCjp/qM/NVoYOYuUP0p5bRNW723
-         vY98a4jwHh/DBb9x+sSJ0SI+vdnp6jN8WjPGVcNXl6nYrhtFbmDCXN5P1DSph0wIx1
-         ojg8Ldox5F9g540WpHMTG3bWdAWlEPUy4FLM4dqw=
+        b=OxJBZBMlZiMmsQtepBJrCAGeQ1nnYn2rsR7MZwohK4jOs+Nk7NCspUlLYjCUIQo5A
+         Pz0DOEibxbzj1d9KPYL3sdK0h9lqAuBF+QhELkz2ZS8zcGnx+2nYN+6v0Cast+SdY2
+         CRFBlXg5txweh407H3wQnr5DyxtQKbJaW8NzOSd8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 5.16 04/37] bpf: Fix out of bounds access from invalid *_or_null type verification
-Date:   Fri, 14 Jan 2022 09:16:18 +0100
-Message-Id: <20220114081545.000018750@linuxfoundation.org>
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
+Subject: [PATCH 5.10 11/25] USB: Fix "slab-out-of-bounds Write" bug in usb_hcd_poll_rh_status
+Date:   Fri, 14 Jan 2022 09:16:19 +0100
+Message-Id: <20220114081543.075142856@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
-References: <20220114081544.849748488@linuxfoundation.org>
+In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
+References: <20220114081542.698002137@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -44,102 +48,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-[ no upstream commit given implicitly fixed through the larger refactoring
-  in c25b2ae136039ffa820c26138ed4a5e5f3ab3841 ]
+commit 1d7d4c07932e04355d6e6528d44a2f2c9e354346 upstream.
 
-While auditing some other code, I noticed missing checks inside the pointer
-arithmetic simulation, more specifically, adjust_ptr_min_max_vals(). Several
-*_OR_NULL types are not rejected whereas they are _required_ to be rejected
-given the expectation is that they get promoted into a 'real' pointer type
-for the success case, that is, after an explicit != NULL check.
+When the USB core code for getting root-hub status reports was
+originally written, it was assumed that the hub driver would be its
+only caller.  But this isn't true now; user programs can use usbfs to
+communicate with root hubs and get status reports.  When they do this,
+they may use a transfer_buffer that is smaller than the data returned
+by the HCD, which will lead to a buffer overflow error when
+usb_hcd_poll_rh_status() tries to store the status data.  This was
+discovered by syzbot:
 
-One case which stands out and is accessible from unprivileged (iff enabled
-given disabled by default) is BPF ring buffer. From crafting a PoC, the NULL
-check can be bypassed through an offset, and its id marking will then lead
-to promotion of mem_or_null to a mem type.
+BUG: KASAN: slab-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
+BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x5f4/0x780 drivers/usb/core/hcd.c:776
+Write of size 2 at addr ffff88801da403c0 by task syz-executor133/4062
 
-bpf_ringbuf_reserve() helper can trigger this case through passing of reserved
-flags, for example.
+This patch fixes the bug by reducing the amount of status data if it
+won't fit in the transfer_buffer.  If some data gets discarded then
+the URB's completion status is set to -EOVERFLOW rather than 0, to let
+the user know what happened.
 
-  func#0 @0
-  0: R1=ctx(id=0,off=0,imm=0) R10=fp0
-  0: (7a) *(u64 *)(r10 -8) = 0
-  1: R1=ctx(id=0,off=0,imm=0) R10=fp0 fp-8_w=mmmmmmmm
-  1: (18) r1 = 0x0
-  3: R1_w=map_ptr(id=0,off=0,ks=0,vs=0,imm=0) R10=fp0 fp-8_w=mmmmmmmm
-  3: (b7) r2 = 8
-  4: R1_w=map_ptr(id=0,off=0,ks=0,vs=0,imm=0) R2_w=invP8 R10=fp0 fp-8_w=mmmmmmmm
-  4: (b7) r3 = 0
-  5: R1_w=map_ptr(id=0,off=0,ks=0,vs=0,imm=0) R2_w=invP8 R3_w=invP0 R10=fp0 fp-8_w=mmmmmmmm
-  5: (85) call bpf_ringbuf_reserve#131
-  6: R0_w=mem_or_null(id=2,ref_obj_id=2,off=0,imm=0) R10=fp0 fp-8_w=mmmmmmmm refs=2
-  6: (bf) r6 = r0
-  7: R0_w=mem_or_null(id=2,ref_obj_id=2,off=0,imm=0) R6_w=mem_or_null(id=2,ref_obj_id=2,off=0,imm=0) R10=fp0 fp-8_w=mmmmmmmm refs=2
-  7: (07) r0 += 1
-  8: R0_w=mem_or_null(id=2,ref_obj_id=2,off=1,imm=0) R6_w=mem_or_null(id=2,ref_obj_id=2,off=0,imm=0) R10=fp0 fp-8_w=mmmmmmmm refs=2
-  8: (15) if r0 == 0x0 goto pc+4
-   R0_w=mem(id=0,ref_obj_id=0,off=0,imm=0) R6_w=mem(id=0,ref_obj_id=2,off=0,imm=0) R10=fp0 fp-8_w=mmmmmmmm refs=2
-  9: R0_w=mem(id=0,ref_obj_id=0,off=0,imm=0) R6_w=mem(id=0,ref_obj_id=2,off=0,imm=0) R10=fp0 fp-8_w=mmmmmmmm refs=2
-  9: (62) *(u32 *)(r6 +0) = 0
-   R0_w=mem(id=0,ref_obj_id=0,off=0,imm=0) R6_w=mem(id=0,ref_obj_id=2,off=0,imm=0) R10=fp0 fp-8_w=mmmmmmmm refs=2
-  10: R0_w=mem(id=0,ref_obj_id=0,off=0,imm=0) R6_w=mem(id=0,ref_obj_id=2,off=0,imm=0) R10=fp0 fp-8_w=mmmmmmmm refs=2
-  10: (bf) r1 = r6
-  11: R0_w=mem(id=0,ref_obj_id=0,off=0,imm=0) R1_w=mem(id=0,ref_obj_id=2,off=0,imm=0) R6_w=mem(id=0,ref_obj_id=2,off=0,imm=0) R10=fp0 fp-8_w=mmmmmmmm refs=2
-  11: (b7) r2 = 0
-  12: R0_w=mem(id=0,ref_obj_id=0,off=0,imm=0) R1_w=mem(id=0,ref_obj_id=2,off=0,imm=0) R2_w=invP0 R6_w=mem(id=0,ref_obj_id=2,off=0,imm=0) R10=fp0 fp-8_w=mmmmmmmm refs=2
-  12: (85) call bpf_ringbuf_submit#132
-  13: R6=invP(id=0) R10=fp0 fp-8=mmmmmmmm
-  13: (b7) r0 = 0
-  14: R0_w=invP0 R6=invP(id=0) R10=fp0 fp-8=mmmmmmmm
-  14: (95) exit
-
-  from 8 to 13: safe
-  processed 15 insns (limit 1000000) max_states_per_insn 0 total_states 1 peak_states 1 mark_read 0
-  OK
-
-All three commits, that is b121b341e598 ("bpf: Add PTR_TO_BTF_ID_OR_NULL support"),
-457f44363a88 ("bpf: Implement BPF ring buffer and verifier support for it"), and the
-afbf21dce668 ("bpf: Support readonly/readwrite buffers in verifier") suffer the same
-cause and their *_OR_NULL type pendants must be rejected in adjust_ptr_min_max_vals().
-
-Make the test more robust by reusing reg_type_may_be_null() helper such that we catch
-all *_OR_NULL types we have today and in future.
-
-Note that pointer arithmetic on PTR_TO_BTF_ID, PTR_TO_RDONLY_BUF, and PTR_TO_RDWR_BUF
-is generally allowed.
-
-Fixes: b121b341e598 ("bpf: Add PTR_TO_BTF_ID_OR_NULL support")
-Fixes: 457f44363a88 ("bpf: Implement BPF ring buffer and verifier support for it")
-Fixes: afbf21dce668 ("bpf: Support readonly/readwrite buffers in verifier")
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reported-and-tested-by: syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/Yc+3UIQJ2STbxNua@rowland.harvard.edu
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/bpf/verifier.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/core/hcd.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7229,16 +7229,16 @@ static int adjust_ptr_min_max_vals(struc
- 		fallthrough;
- 	case PTR_TO_PACKET_END:
- 	case PTR_TO_SOCKET:
--	case PTR_TO_SOCKET_OR_NULL:
- 	case PTR_TO_SOCK_COMMON:
--	case PTR_TO_SOCK_COMMON_OR_NULL:
- 	case PTR_TO_TCP_SOCK:
--	case PTR_TO_TCP_SOCK_OR_NULL:
- 	case PTR_TO_XDP_SOCK:
-+reject:
- 		verbose(env, "R%d pointer arithmetic on %s prohibited\n",
- 			dst, reg_type_str[ptr_reg->type]);
- 		return -EACCES;
- 	default:
-+		if (reg_type_may_be_null(ptr_reg->type))
-+			goto reject;
- 		break;
- 	}
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -754,6 +754,7 @@ void usb_hcd_poll_rh_status(struct usb_h
+ {
+ 	struct urb	*urb;
+ 	int		length;
++	int		status;
+ 	unsigned long	flags;
+ 	char		buffer[6];	/* Any root hubs with > 31 ports? */
  
+@@ -771,11 +772,17 @@ void usb_hcd_poll_rh_status(struct usb_h
+ 		if (urb) {
+ 			clear_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
+ 			hcd->status_urb = NULL;
++			if (urb->transfer_buffer_length >= length) {
++				status = 0;
++			} else {
++				status = -EOVERFLOW;
++				length = urb->transfer_buffer_length;
++			}
+ 			urb->actual_length = length;
+ 			memcpy(urb->transfer_buffer, buffer, length);
+ 
+ 			usb_hcd_unlink_urb_from_ep(hcd, urb);
+-			usb_hcd_giveback_urb(hcd, urb, 0);
++			usb_hcd_giveback_urb(hcd, urb, status);
+ 		} else {
+ 			length = 0;
+ 			set_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
 
 

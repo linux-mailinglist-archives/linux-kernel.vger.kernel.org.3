@@ -2,61 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2491148E728
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA9848E72F
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239713AbiANJKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 04:10:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbiANJKk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:10:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64616C061574;
-        Fri, 14 Jan 2022 01:10:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0623661B76;
-        Fri, 14 Jan 2022 09:10:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13CA4C36AE9;
-        Fri, 14 Jan 2022 09:10:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642151439;
-        bh=BgnqRXbrYCJ6e+fKoAFI5d8seqgDU4hUCDIJZkCHAyU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rGhk3dkQsvSwSp8qDpByiT/eUlS0irN3IKnqbz1mCPN3NoDNZYhhpYj6fIZRJc/A+
-         GZMSuDlhtzKEDTd/7bHBFod+VATdQ4/Dbt4NcFpR2EhfPramX2faDPdleLo0gfJ9P/
-         vT6rq7RbYAK9PQjSrgyRim9IVRE3RCwtFBXCLkLVp/m1PG5/wgNXkxy6K9bIdyPKhf
-         pKF2+dcrm/0Tp5NIz8Eb8Gw+AnDNHvZYcw9jxD8It0hiRACtkZg67ARBXG2DMo/0MC
-         4KBC60YYOZX2STT5lFkDgX9zVeITiAjXIsl6/pRB43iFeM+OPJvvgeIpmCbdhUiIUZ
-         6ssr5BJ57jRUw==
-Date:   Fri, 14 Jan 2022 11:10:31 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Ryan Cai <ryancaicse@gmail.com>
-Cc:     jgg@ziepe.ca, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: mlx5: memory leaks
-Message-ID: <YeE+Bw3IoAIZZZ/h@unreal>
-References: <76193B8E-6A8B-4FF9-B6BB-A3A17FB74A61@gmail.com>
+        id S237772AbiANJNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 04:13:40 -0500
+Received: from mga06.intel.com ([134.134.136.31]:55322 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233450AbiANJNi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 04:13:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642151618; x=1673687618;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RaOJVlZwiSIS8nodz6Kmpx4JyHIXqLC15AZgaDM31mo=;
+  b=S7EoP7y+Ca73f2rXnSvyjjsL3qOvtL9uyxP1MQiumEOMLdywr4HYKQzl
+   +sCxiiEIEmqUTJqPVBfxHSHEx/MJ1AxYcEdVr0EufuXFEYEOifvn0B4bL
+   wmVXSuVHN/ipaAFTp9KMCq1zqQrOaCEeUgU1DoMn6sCEuIJVZvr+5HRTy
+   bUUYP8AK5Ddy2BDJfhXZzozVgOpGaIn6LpVnyAEc7uE79HQHjP+5hqC0D
+   Q+C3Wvpn59KpkmoCcN6eGhgdj3Qqp4NEqAkPut21OaxcP/WiXlpVz7R6F
+   kDnm6LQcesyXYq8F2TAGoPrtkB6kpPmze7le5MIsUXTi+kh9dr0MCsVAw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="304945615"
+X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
+   d="scan'208";a="304945615"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 01:13:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
+   d="scan'208";a="516308942"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 14 Jan 2022 01:13:36 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8IeN-0008Lq-OC; Fri, 14 Jan 2022 09:13:35 +0000
+Date:   Fri, 14 Jan 2022 17:13:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Fangzhi Zuo <Jerry.Zuo@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343:
+ warning: expecting prototype for Return PCON's post FRL link training
+ supported BW if its non(). Prototype was for intersect_frl_link_bw_support()
+ instead
+Message-ID: <202201141715.OhMqGKge-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <76193B8E-6A8B-4FF9-B6BB-A3A17FB74A61@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 12:37:10PM +0800, Ryan Cai wrote:
-> Hi, Kernel Maintainers,
-> 
->     In method mlx5_ib_destroy_gsi of gsi.c, there are memory leaks when ret = ib_destroy_qp(gsi->rx_qp); returns true? I think, ib_free_cq(gsi->cq); kfree(gsi->outstanding_wrs); kfree(gsi->tx_qps); should also be put before return ret before Line 180. If this is a real bug, I can send a patch. Thanks!
+Hi Fangzhi,
 
-The ib_destroy_qp() is function that destroys kernel QP that in our
-memory model shouldn't fail. The patch that converts ib_destroy_qp()
-to be void is very welcomed.
+FYI, the error/warning still remains.
 
-See ib_destroy_srq() as an example of expected function format.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fb3b0673b7d5b477ed104949450cd511337ba3c6
+commit: c022375ae0955b6d97ec438d658ab43a857a010f drm/amd/display: Add DP-HDMI FRL PCON Support in DC
+date:   6 weeks ago
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220114/202201141715.OhMqGKge-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c022375ae0955b6d97ec438d658ab43a857a010f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c022375ae0955b6d97ec438d658ab43a857a010f
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Thanks
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: Function parameter or member 'max_supported_frl_bw_in_kbps' not described in 'intersect_frl_link_bw_support'
+   drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: Function parameter or member 'hdmi_encoded_link_bw' not described in 'intersect_frl_link_bw_support'
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: expecting prototype for Return PCON's post FRL link training supported BW if its non(). Prototype was for intersect_frl_link_bw_support() instead
+
+
+vim +4343 drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c
+
+  4336	
+  4337	/**
+  4338	 * Return PCON's post FRL link training supported BW if its non-zero, otherwise return max_supported_frl_bw.
+  4339	 */
+  4340	static uint32_t intersect_frl_link_bw_support(
+  4341		const uint32_t max_supported_frl_bw_in_kbps,
+  4342		const union hdmi_encoded_link_bw hdmi_encoded_link_bw)
+> 4343	{
+  4344		uint32_t supported_bw_in_kbps = max_supported_frl_bw_in_kbps;
+  4345	
+  4346		// HDMI_ENCODED_LINK_BW bits are only valid if HDMI Link Configuration bit is 1 (FRL mode)
+  4347		if (hdmi_encoded_link_bw.bits.FRL_MODE) {
+  4348			if (hdmi_encoded_link_bw.bits.BW_48Gbps)
+  4349				supported_bw_in_kbps = 48000000;
+  4350			else if (hdmi_encoded_link_bw.bits.BW_40Gbps)
+  4351				supported_bw_in_kbps = 40000000;
+  4352			else if (hdmi_encoded_link_bw.bits.BW_32Gbps)
+  4353				supported_bw_in_kbps = 32000000;
+  4354			else if (hdmi_encoded_link_bw.bits.BW_24Gbps)
+  4355				supported_bw_in_kbps = 24000000;
+  4356			else if (hdmi_encoded_link_bw.bits.BW_18Gbps)
+  4357				supported_bw_in_kbps = 18000000;
+  4358			else if (hdmi_encoded_link_bw.bits.BW_9Gbps)
+  4359				supported_bw_in_kbps = 9000000;
+  4360		}
+  4361	
+  4362		return supported_bw_in_kbps;
+  4363	}
+  4364	#endif
+  4365	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

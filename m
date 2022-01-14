@@ -2,167 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7CE48E722
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C58448E723
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239659AbiANJJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 04:09:14 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:53951 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239652AbiANJJL (ORCPT
+        id S239693AbiANJJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 04:09:18 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:52133 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239644AbiANJJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:09:11 -0500
-Received: (Authenticated sender: alex@ghiti.fr)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id B690460003;
-        Fri, 14 Jan 2022 09:09:04 +0000 (UTC)
-Message-ID: <d95094f8-2407-7e93-490d-94fce2af21a3@ghiti.fr>
-Date:   Fri, 14 Jan 2022 10:09:03 +0100
+        Fri, 14 Jan 2022 04:09:17 -0500
+Received: by mail-il1-f200.google.com with SMTP id d8-20020a056e02214800b002b766d01bf5so5746442ilv.18
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 01:09:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=grHxCRd7/fDYY0i9cGDsjoRzJRJ5aOkbW3ALA1psZtI=;
+        b=SnHJrHKhSp5Rk87gupTIB0ZuFMapdHte4mM3FRH8SGKNd9hZSZPPbZeKyQHbhWUfNw
+         WQMjlKesp3IOwTM/R2W9MxExACf2rv+5QIYBfFDwuNvIKEdxWJ0dhbV1efd6s9cZy6e+
+         kuqTfGHxT2JP6hi3+UHB9zAhU+o04N41hlH2zW/HDathsL57Z9QdqRW2f5WXmFaogCzN
+         /V3RD65U0PIwPcwA/1WwAygPUr6d+29j8IuJ97zDD5QxT0GMIfM/L2FwkjJstzC0QGz+
+         0Gl4g60uOkwReTiVwr8O/RcAQ1RpH81jGALKywsDQaianN8jnkwqwuPTmohcKXZqOgjv
+         OuUQ==
+X-Gm-Message-State: AOAM533tSK5RrNwoTnzABbHOwggk1+yDgi64ugxcNkOh5991yHhf9r1h
+        28+ud7cOtTm+8Qh6MQ8VCpHYLI32j654HNKktAeiOQSlWsZf
+X-Google-Smtp-Source: ABdhPJzrtzL3KtaKjcbS2baa8Qd4awayCo48Py4S2a3t1Oj2zYk/kDJec2Lpeaz7tQ2eeoftXXRshiw/OHvPgFXiLmNUMwVJAmyC
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 02/12] RISC-V: MAXPHYSMEM_2GB doesn't depend on
- CMODEL_MEDLOW
-Content-Language: en-US
-To:     Conor.Dooley@microchip.com, geert@linux-m68k.org,
-        palmer@rivosinc.com
-Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        heinrich.schuchardt@canonical.com, bin.meng@windriver.com,
-        sagar.kadam@sifive.com, damien.lemoal@wdc.com, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20211119164413.29052-1-palmer@rivosinc.com>
- <20211119164413.29052-3-palmer@rivosinc.com>
- <CAMuHMdXQg942-DwDBJANsFiOCqyAwCt_GwW4HuC1nh0_DNmyEQ@mail.gmail.com>
- <232b8a0d-b25d-b942-eeec-9a67b66b81ce@microchip.com>
-From:   Alexandre ghiti <alex@ghiti.fr>
-In-Reply-To: <232b8a0d-b25d-b942-eeec-9a67b66b81ce@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6602:3c6:: with SMTP id g6mr3954432iov.213.1642151356982;
+ Fri, 14 Jan 2022 01:09:16 -0800 (PST)
+Date:   Fri, 14 Jan 2022 01:09:16 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004cede805d58728c3@google.com>
+Subject: [syzbot] possible deadlock in f2fs_write_checkpoint
+From:   syzbot <syzbot+0b9cadf5fc45a98a5083@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+Hello,
 
-On 1/14/22 09:40, Conor.Dooley@microchip.com wrote:
-> On 11/01/2022 16:04, Geert Uytterhoeven wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> Hi Palmer,
->>
->> On Fri, Nov 19, 2021 at 5:47 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->>> From: Palmer Dabbelt <palmer@rivosinc.com>
->>>
->>> For non-relocatable kernels we need to be able to link the kernel at
->>> approximately PAGE_OFFSET, thus requiring medany (as medlow requires the
->>> code to be linked within 2GiB of 0).  The inverse doesn't apply, though:
->>> since medany code can be linked anywhere it's fine to link it close to
->>> 0, so we can support the smaller memory config.
->>>
->>> Fixes: de5f4b8f634b ("RISC-V: Define MAXPHYSMEM_1GB only for RV32")
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->> Thanks for your patch, which is now commit 9f36b96bc70f9707 ("RISC-V:
->> MAXPHYSMEM_2GB doesn't depend on CMODEL_MEDLOW").
->>
->>> I found this when going through the savedefconfig diffs for the K210
->>> defconfigs.  I'm not entirely sure they're doing the right thing here
->>> (they should probably be setting CMODEL_LOW to take advantage of the
->>> better code generation), but I don't have any way to test those
->>> platforms so I don't want to change too much.
->> I can confirm MAXPHYSMEM_2GB works on K210 with CMODEL_MEDANY.
->>
->> As the Icicle has 1760 MiB of RAM, I gave it a try with MAXPHYSMEM_2GB
->> (and CMODEL_MEDANY), too.  Unfortunately it crashes very early
->> (needs earlycon to see):
-> Given you said 1760 MiB I assume you're not running the device tree
-> currently in the kernel?
-> But the defconfig is /arch/riscv/configs/defconfig?
->
-> I tested it w/ my newer version of the dts, using both 1760 & 736 MiB
-> (ddrc_cache_lo only) w/ MAXPHYSMEM_2GB.
-> Enabling MAXPHYSMEM_2GB with either CMODEL_MEDANY or CMODEL_MEDLOW
-> lead to the same boot failure as you got.
+syzbot found the following issue on:
+
+HEAD commit:    57c149e506d5 Add linux-next specific files for 20220110
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=15cb8b77b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2f1cca5543ac6349
+dashboard link: https://syzkaller.appspot.com/bug?extid=0b9cadf5fc45a98a5083
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0b9cadf5fc45a98a5083@syzkaller.appspotmail.com
+
+============================================
+WARNING: possible recursive locking detected
+5.16.0-rc8-next-20220110-syzkaller #0 Not tainted
+--------------------------------------------
+f2fs_ckpt-7:2/4139 is trying to acquire lock:
+ffff88807c598390 (&sem->internal_rwsem#2){+.+.}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2149 [inline]
+ffff88807c598390 (&sem->internal_rwsem#2){+.+.}-{3:3}, at: f2fs_write_checkpoint+0x535/0x5d00 fs/f2fs/checkpoint.c:1615
+
+but task is already holding lock:
+ffff88807c599338 (&sem->internal_rwsem#2){+.+.}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2149 [inline]
+ffff88807c599338 (&sem->internal_rwsem#2){+.+.}-{3:3}, at: __write_checkpoint_sync fs/f2fs/checkpoint.c:1744 [inline]
+ffff88807c599338 (&sem->internal_rwsem#2){+.+.}-{3:3}, at: __checkpoint_and_complete_reqs+0xdd/0x360 fs/f2fs/checkpoint.c:1764
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&sem->internal_rwsem#2);
+  lock(&sem->internal_rwsem#2);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+1 lock held by f2fs_ckpt-7:2/4139:
+ #0: ffff88807c599338 (&sem->internal_rwsem#2){+.+.}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2149 [inline]
+ #0: ffff88807c599338 (&sem->internal_rwsem#2){+.+.}-{3:3}, at: __write_checkpoint_sync fs/f2fs/checkpoint.c:1744 [inline]
+ #0: ffff88807c599338 (&sem->internal_rwsem#2){+.+.}-{3:3}, at: __checkpoint_and_complete_reqs+0xdd/0x360 fs/f2fs/checkpoint.c:1764
+
+stack backtrace:
+CPU: 0 PID: 4139 Comm: f2fs_ckpt-7:2 Not tainted 5.16.0-rc8-next-20220110-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_deadlock_bug kernel/locking/lockdep.c:2956 [inline]
+ check_deadlock kernel/locking/lockdep.c:2999 [inline]
+ validate_chain kernel/locking/lockdep.c:3788 [inline]
+ __lock_acquire.cold+0x149/0x3ab kernel/locking/lockdep.c:5027
+ lock_acquire kernel/locking/lockdep.c:5639 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
+ down_write+0x90/0x150 kernel/locking/rwsem.c:1514
+ f2fs_down_write fs/f2fs/f2fs.h:2149 [inline]
+ f2fs_write_checkpoint+0x535/0x5d00 fs/f2fs/checkpoint.c:1615
+ __write_checkpoint_sync fs/f2fs/checkpoint.c:1745 [inline]
+ __checkpoint_and_complete_reqs+0xea/0x360 fs/f2fs/checkpoint.c:1764
+ issue_checkpoint_thread+0xdf/0x250 fs/f2fs/checkpoint.c:1795
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
 
 
-Any chance you can give a try to [1] so that I can extract it from my 
-sv48 patchset and propose it to fixes if it works?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Thanks,
-
-Alex
-
-https://patchwork.kernel.org/project/linux-riscv/patch/20211206104657.433304-6-alexandre.ghiti@canonical.com/
-
-
->>       OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
->>       Machine model: Microchip PolarFire-SoC Icicle Kit
->>       printk: debug: ignoring loglevel setting.
->>       earlycon: ns16550a0 at MMIO32 0x0000000020100000 (options '115200n8')
->>       printk: bootconsole [ns16550a0] enabled
->>       printk: debug: skip boot console de-registration.
->>       efi: UEFI not found.
->>       Unable to handle kernel paging request at virtual address ffffffff87e00001
->>       Oops [#1]
->>       Modules linked in:
->>       CPU: 0 PID: 0 Comm: swapper Not tainted 5.16.0-08771-g85515233477d #56
->>       Hardware name: Microchip PolarFire-SoC Icicle Kit (DT)
->>       epc : fdt_check_header+0x14/0x208
->>        ra : early_init_dt_verify+0x16/0x94
->>       epc : ffffffff802ddacc ra : ffffffff8082415a sp : ffffffff81203ee0
->>        gp : ffffffff812ec3a8 tp : ffffffff8120cd80 t0 : 0000000000000005
->>        t1 : 0000001040000000 t2 : ffffffff80000000 s0 : ffffffff81203f00
->>        s1 : ffffffff87e00000 a0 : ffffffff87e00000 a1 : 000000040ffffce7
->>        a2 : 00000000000000e7 a3 : ffffffff8080394c a4 : 0000000000000000
->>        a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000000000000
->>        s2 : ffffffff81203f98 s3 : 8000000a00006800 s4 : fffffffffffffff3
->>        s5 : 0000000000000000 s6 : 0000000000000001 s7 : 0000000000000000
->>        s8 : 0000000020236c20 s9 : 0000000000000000 s10: 0000000000000000
->>        s11: 0000000000000000 t3 : 0000000000000018 t4 : 00ff000000000000
->>        t5 : 0000000000000000 t6 : 0000000000000010
->>       status: 0000000200000100 badaddr: ffffffff87e00001 cause: 000000000000000d
->>       [<ffffffff802ddacc>] fdt_check_header+0x14/0x208
->>       [<ffffffff8082415a>] early_init_dt_verify+0x16/0x94
->>       [<ffffffff80802dee>] setup_arch+0xec/0x4ec
->>       [<ffffffff80800700>] start_kernel+0x88/0x6d6
->>       random: get_random_bytes called from
->> print_oops_end_marker+0x22/0x44 with crng_init=0
->>       ---[ end trace 903df1a0ade0b876 ]---
->>       Kernel panic - not syncing: Attempted to kill the idle task!
->>       ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
->>
->> So the FDT is at 0xffffffff87e00000, i.e. at 0x7e00000 from the start
->> of virtual memory (CONFIG_PAGE_OFFSET=0xffffffff80000000), and thus
->> within the 2 GiB range.
->>
->>> --- a/arch/riscv/Kconfig
->>> +++ b/arch/riscv/Kconfig
->>> @@ -280,7 +280,7 @@ choice
->>>                   depends on 32BIT
->>>                   bool "1GiB"
->>>           config MAXPHYSMEM_2GB
->>> -               depends on 64BIT && CMODEL_MEDLOW
->>> +               depends on 64BIT
->>>                   bool "2GiB"
->>>           config MAXPHYSMEM_128GB
->>>                   depends on 64BIT && CMODEL_MEDANY
->> Gr{oetje,eeting}s,
->>
->>                           Geert
->>
->> --
->> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->>
->> In personal conversations with technical people, I call myself a hacker. But
->> when I'm talking to journalists I just say "programmer" or something like that.
->>                                   -- Linus Torvalds
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
->>
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

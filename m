@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3304748F344
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0419148F348
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiANXzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 18:55:47 -0500
-Received: from mga06.intel.com ([134.134.136.31]:16440 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229779AbiANXzp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 18:55:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642204545; x=1673740545;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=EaBxO/MhgDtShxcOfsdwvluceGYoVqaQXzNoi48cIZA=;
-  b=HuhCwB68VZKlqKnVOs2h6DyIt753fSiZ+GiOI7Cn5gYaX32bRh29DFTA
-   6Ccc7mS87fKbiWATjoCjSBhh8u+40P7+R2xC9EaTAGQhJYUv21CeGZQz7
-   IxF7abaZJ7KWectV3SlPyrG4juL4gi9tVrWEdmdmtrEv+71MJyoskrJHw
-   FqB/nOuEgB3C8umHrSlcDswjKsV4puAugrmpo/92Ok+hDRHuLabB/n5yq
-   vF79/ugVHemk/cnPA7sQ1+4YHeFParlBFIIvQx1YAk4hV32YpAXJ2qs22
-   oK0z0aASCZGv86dYnYRro9QCVqhCQUzdlHHjv1Jd7f/toXjBHwDMscIRk
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="305082538"
-X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="305082538"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 15:55:45 -0800
-X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="491688046"
-Received: from richasha-mobl.amr.corp.intel.com (HELO [10.251.12.158]) ([10.251.12.158])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 15:55:44 -0800
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     linux-sgx@vger.kernel.org,
+        id S231410AbiANX50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 18:57:26 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:53568 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229945AbiANX5Z (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 18:57:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0F5EFCE2414;
+        Fri, 14 Jan 2022 23:57:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2ED0C36AE9;
+        Fri, 14 Jan 2022 23:57:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642204642;
+        bh=oNGlXxyiCsXzWDaq7a+yH3K4XqiLgu/y4W7AI0O/+dY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DG5FenBpLI1lzu0KabeAMW1/v+aCOqD2YH4opVRrmleCQURaVZX+2Ydhy6Ibz2S51
+         ilHisOaNAobT3whjWXg9U2IdjvxhdHlREyh8KwEV0y+y+SQB4pQGRzFawpuP9soT1e
+         eyRkXxr17k4p/vpVVAGyamc9v06c8HuwziFe9oW6vygcbUkLbRNMxTttWzxqhwnK8k
+         N7Uqt4Vt38DHPVPTwyLKOcBEyu7bpueLo+N/xWxpPlfMQUWBpim6YqIsvhRliyJLKq
+         klD9XMYCXY7Y4RP7WQVliHoojObnU8MBOOuBvzAjibX/Ob1ENkYAiArGLsVidX/pO9
+         aaqG8u1OII68A==
+Date:   Sat, 15 Jan 2022 01:57:09 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
+        linux-sgx@vger.kernel.org,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         linux-kernel@vger.kernel.org
-References: <20220107181618.6597-1-kristen@linux.intel.com>
- <20220107181618.6597-3-kristen@linux.intel.com> <Ydm2Qk8JFwgdueZa@iki.fi>
- <fda3bb7bd557a37112a4f7c6c205871addda1bd3.camel@linux.intel.com>
- <YeIMqd+o//M3vB6e@iki.fi>
-From:   Dave Hansen <dave.hansen@intel.com>
 Subject: Re: [PATCH v2 2/2] x86/sgx: account backing pages
-Message-ID: <3b7e79ea-18f2-afe2-be4e-401524b481f7@intel.com>
-Date:   Fri, 14 Jan 2022 15:55:43 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Message-ID: <YeIN1RQydD1juJGA@iki.fi>
+References: <20220107181618.6597-1-kristen@linux.intel.com>
+ <20220107181618.6597-3-kristen@linux.intel.com>
+ <Ydm2Qk8JFwgdueZa@iki.fi>
+ <fda3bb7bd557a37112a4f7c6c205871addda1bd3.camel@linux.intel.com>
+ <ed190b80-75cb-3137-1d64-1a87e1ac930e@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YeIMqd+o//M3vB6e@iki.fi>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed190b80-75cb-3137-1d64-1a87e1ac930e@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/14/22 3:52 PM, Jarkko Sakkinen wrote:
->> I can understand your hesitation, but I agree with Dave here that
->> wrapping the function makes the code more clear. I would prefer to keep
->> this the way it is.
-> What if sgx_encl_get_backing() was changed as "static inline", if the
-> only motivation is encapsulation?
+On Fri, Jan 14, 2022 at 09:55:51AM -0800, Dave Hansen wrote:
+> On 1/14/22 9:51 AM, Kristen Carlson Accardi wrote:
+> >>> +int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long
+> >>> page_index,
+> >>> +			    struct sgx_backing *backing)
+> >>> +{
+> >>> +	return sgx_encl_get_backing(encl, page_index, backing);
+> >>> +}
+> >> IMHO, sgx_encl_backing() should be open-coded here.
+> > I can understand your hesitation, but I agree with Dave here that
+> > wrapping the function makes the code more clear. I would prefer to keep
+> > this the way it is.
+> 
+> I'd also like to see sgx_encl_lookup_backing() and
+> sgx_encl_alloc_backing() diverge more in the future.
+> 
+> For instance, sgx_encl_alloc_backing() could ensure that the page does
+> not exist in the file before doing the sgx_encl_get_backing() call.
+> This would ensure that it truly *does* allocate a page and does not just
+> return a previously-allocated page.
+> 
+> sgx_encl_lookup_backing() could ensure the opposite: that the page
+> *DOES* exist in the file before doing the sgx_encl_get_backing() call.
+> This would ensure that it does not allocate a page in a case where we
+> expected an old, existing page to be present.
 
-What would the purpose be of adding an 'inline' to the function definition?
+Would it be a too big tretch to add these and make the whole scheme
+fully legit? Does not sound like an extremely huge stretch and there is now
+a full cycle amount of time make it happen before 5.18 merge window.
+
+/Jarkko

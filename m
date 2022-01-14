@@ -2,117 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D61F448E527
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5461B48E52D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235058AbiANICN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:02:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46099 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229812AbiANICM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:02:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642147331;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=klb0nnUjuvobPotelSx3DfHypMSRSFWqMkVcwCb1ESI=;
-        b=PoqYoQXlFIWys5suqyfWfH3zPzUoXWBWJbZr9p/XNjHoBcBJurpp5fjcWfArv2QeuLQDkm
-        YbhxT6vuLL6hoCCHgEtsxdG6sHEMgAVLI3IvYQaypGsXu8g1TKK+Pa45Dtlx6Q3JS9Lrq+
-        T3xHCO8BB7SfiFova3Tjmo0OYgdGskk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-224-fBRNBjnAPUijwB6mONgK3w-1; Fri, 14 Jan 2022 03:02:10 -0500
-X-MC-Unique: fBRNBjnAPUijwB6mONgK3w-1
-Received: by mail-wm1-f72.google.com with SMTP id s190-20020a1ca9c7000000b00347c6c39d9aso5135164wme.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 00:02:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=klb0nnUjuvobPotelSx3DfHypMSRSFWqMkVcwCb1ESI=;
-        b=aEdSjYmcRU6BMVChW6g0atrMwq+PkWNbEyEdAWoPw2ce2ACU42t2ioYHlcka7tVokN
-         5gb1DHZSnERa42KzPqmYOKNo1IE6GTSHs3uoOd5H+iQyubwuuYTIbsN8G1rWa95QBY2w
-         5NoU0ZXnOk7Cc6F2GhM7hNl2RgtKluw7WieNChRHm//JAW/JzVF8euEdt7HH+gOcpjub
-         TyHzBhmLSElsZt+08UCQ+OkMfEag1PtlCSgXsEXaABU+bRmVHS1zkCwvQmb03y8tjEOn
-         wOsaGDPYuvKRuIkl4icX4FrD7+1NdKCZW/MQPKiO1g4kq6t8R8ti7CkEXcm+MEl0q/6n
-         taww==
-X-Gm-Message-State: AOAM532fiygAOBNdW+MiJWO6OqWWcFrAFd0u1RQzB3yfIpxBTRqgkW3w
-        JNdVw24nrmT0Dw6UaVsel3Df04vEC6jiWMNpdmKlJBoWCpT+Fn5Smt/C3inRxDEiS+gTT6tDjug
-        PJW8x+GfCIhYTvllX8UecjOJX
-X-Received: by 2002:a05:6000:188d:: with SMTP id a13mr7447584wri.297.1642147329115;
-        Fri, 14 Jan 2022 00:02:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyjqJT5sGU0ZJyw8nvYxiwmgy2EIiuoaOLJLNLYx14PQLad/rO2oCWq7DkWPydBZBlnn2TR1Q==
-X-Received: by 2002:a05:6000:188d:: with SMTP id a13mr7447566wri.297.1642147328909;
-        Fri, 14 Jan 2022 00:02:08 -0800 (PST)
-Received: from steredhat (host-95-238-125-214.retail.telecomitalia.it. [95.238.125.214])
-        by smtp.gmail.com with ESMTPSA id o12sm5576911wrc.69.2022.01.14.00.02.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 00:02:08 -0800 (PST)
-Date:   Fri, 14 Jan 2022 09:02:05 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>
-Subject: Re: [RFC PATCH] vhost: cache avail index in vhost_enable_notify()
-Message-ID: <20220114080205.ls4txgj7qbqmc3q5@steredhat>
-References: <20220113145642.205388-1-sgarzare@redhat.com>
- <CACGkMEsqY5RHL=9=iny6xRVs_=EdACUCfX-Rmpq+itpdoT_rrg@mail.gmail.com>
+        id S235184AbiANIDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:03:52 -0500
+Received: from mail-eopbgr90083.outbound.protection.outlook.com ([40.107.9.83]:42135
+        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229775AbiANIDu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 03:03:50 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DoSQn3pvFXWWU0e5510p6ehnNxaDe3MdR2/vmhVen1lC3zq3o0wPeTunIeFCH6xcla/ujHc/zYRUYq5MQwBty7PkweLl3VwtXo9JZVGukphxRo1RI1GikSHq4bF9QPz4Uio2R4AeNi87H8KOZff04iJ7TMFLtT1UHD7NexgLCwmWMiNizRy2s3RUAuo7LpOcFpwzynPrNFTPxc64HkZoqhvKbyEsY6FfqHrQwtrDBeJ9zJM4jiw0V3HrAK/IkdbOqTWFVnx+PjXmC27fVB0Kjz78iQtyDkgb1q88XL3j7Tw/SEtq9i2DnsbVW1wfx2/3P698LFYoL73UGFBe37aZVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YxBvhL/L6jsFNN+5XblDlL03RFdv003p3mAQf87yxvE=;
+ b=CNH3/2Irqwl9nfNyD2Bn8lVB6DxJ9o4jG3SisNNuWJ0USPcFvlBHUjlyZwaYwxPZweORlX7+nkq89B3pQQZUn8ipTMMSr/b8s6ZQrOZF4pw62yfM5qAhaZldBVVmoMuYBXs20spveI9gjOfepHs79JdURu+h1CHwP83FhgSaWTxuYxdpXd5fMDmb60FNJCs05Y3/IaUuWIl3L/02QkmplZhGEH7B59kBA8nUQl61qqtEDUkCWkqn5sO2PkGTP6aYet2GO/V/RLiMnOFdzYBqC1z0DPcVi3tijzrv81K9oZsxWqlhlwaobDtuR6XIPAa+IImdhXcTAW7MRMgPJPhBbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB2455.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e2::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Fri, 14 Jan
+ 2022 08:03:47 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::9d4f:1090:9b36:3fc5]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::9d4f:1090:9b36:3fc5%5]) with mapi id 15.20.4888.012; Fri, 14 Jan 2022
+ 08:03:47 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] powerpc/bpf: Always reallocate BPF_REG_5, BPF_REG_AX and
+ TMP_REG when possible
+Thread-Topic: [PATCH] powerpc/bpf: Always reallocate BPF_REG_5, BPF_REG_AX and
+ TMP_REG when possible
+Thread-Index: AQHYBh2+PoHCxCSIk0C7aiUG8hGF4axiLOEAgAABZQA=
+Date:   Fri, 14 Jan 2022 08:03:47 +0000
+Message-ID: <f6a5027a-6f3b-ee50-3439-56b5948d860a@csgroup.eu>
+References: <b04c246874b716911139c04bc004b3b14eed07ef.1641817763.git.christophe.leroy@csgroup.eu>
+ <1642147004.dum5th9cvl.naveen@linux.ibm.com>
+In-Reply-To: <1642147004.dum5th9cvl.naveen@linux.ibm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 210e1282-2d57-4afb-7cac-08d9d73464b8
+x-ms-traffictypediagnostic: PR0P264MB2455:EE_
+x-microsoft-antispam-prvs: <PR0P264MB2455DE3E323FE30C66122362ED549@PR0P264MB2455.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:3173;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VgpaecC+e3niUTtEjeQw38H0mqN0UOHAjnq2detW38KfJBY105h1BWY341BaNJrat+nEeznchTLshcH/GvLihf0LDYI54MCrPuyzG0QR906WqoyTZhuwCoGNbjGehJX0GIYx7yNKn7/mo05bob3UBjVa2aQVg0Ag47Al1tPbdXT8cliq9x8EjA+PX2St2Ivhy+e/soLYZcMnRldegCGKKX+VDxDF2PAlOQ3q6L9qhs6x1GfkSjQy0vArTdNCxAwFXP0jEJcDIebMKJTQrgAWcDyYUmFoHl/OqEHNSUZZ40h34rirfe2phJFUJyNfKjhZlGvV56XP6HkNq+mfkFYAQN+Sphb3we8PiXOKBddUjCjYvG2+3BUrgGDPFfrRY1/ovzD5NQrfJ3gUHLaa+FxFygowlF2zFQlPKVc78+aNgsuitUoadbP/GuEtNm/teFCaEvy6ROfNMR5xzkEFrzQ7QO+ad7sP8jdDBKoFrXRejql4TxDc4PdFrAQFgQyiw0uExb7c07AOyX1dp1mjDfmyL7UbEVpYejyzEDE5qDIX7LBGHbIPq6bf276FTXyres2ct5t3INRt7Eed1+4OuWDKB++jmzMjT3VVmG4NaKiY9Q7wl4OtgnnzpHmfA0uxVu5dFJQTjs+x+6QnflpKvVyLtUqIq+9ATNb+lFtUsYNHbOU0jzDdTRyoVyh/r72K6nYv0Ji4cMwaK2pvLsrlS2q3VpACqMGm24q7tyW1k9e3rkHTyZifk1lBLyGJGsYiaCUIJho3PHddCTmZogHHD4K92Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(6506007)(83380400001)(26005)(5660300002)(186003)(38100700002)(31696002)(316002)(66476007)(8676002)(36756003)(71200400001)(122000001)(31686004)(110136005)(86362001)(91956017)(66446008)(6512007)(66556008)(8936002)(38070700005)(4326008)(2616005)(44832011)(54906003)(2906002)(6486002)(64756008)(76116006)(508600001)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dkJJaEdzTzVsQU9TUitucG1JdzJHcGJ1NkQwR0dub0xXNEVMMnFvTC9ZMUJ4?=
+ =?utf-8?B?Q3BqeXVQTndIcUphT1hJZFQwUmZtcmFUQmxKU2tCcWZkSEJUUVVhWTNHVkRT?=
+ =?utf-8?B?Z2pUaTFiTVIyejhuclR6NjlIQi9oZnAzdFlSamNCbXFRK2tkTjI4SXU3NEQv?=
+ =?utf-8?B?OS9oaEoydWZKL3Q4eEhoOXVIRUdsd0RZQ283am8xcWJYNk1tT002OFdxZmFO?=
+ =?utf-8?B?Z3RxV3FsNUl4QVBMaE9ranJNUEYvbnQ2QmxyUURLeDZQQjNCTC9mNWFEaTR5?=
+ =?utf-8?B?V0tuWFRwYlIrOXVoWkZRMkJTajhkeXduRDc1c1VVK01MZk5MYzgrNWh2NXNp?=
+ =?utf-8?B?azBvc1hmQXVvY2JPaldSd0dCbS9GcmFLY1RsOWxJQ003TkFMNm9wR1NNMExH?=
+ =?utf-8?B?Wks2a2ZocElXZTFQTlp4K3ZYVkpvSk5HaEhicVdabk5pTVV1ZlRvT05iZmMz?=
+ =?utf-8?B?YTJRbXU4Mmw1bGt0Z3dhaThSdy9KeTI0K0F1YUtUWjFJdWNuQ0UvTTdrT01D?=
+ =?utf-8?B?OW5pV2tBWjhSZjVaTFVJRU9POGpBV0UyL21hMmkzYm9Dd0FHbzJ3c1A1MWpJ?=
+ =?utf-8?B?NE4vMitSL0RMODFkczFibXkweGMrdDllSkZVVXFCWGVTR1g3cWN3cWo3NVBp?=
+ =?utf-8?B?d3dyeEt6b0lOMjM2cTBPQi9wVFljVFhodVF0V2tqdUU4OUJxV3gwY0Z3Skgv?=
+ =?utf-8?B?dXdEWDFscGticW1vMkZlaFZtTVVRYUpzL0hDZVJDZWM4elp0dnF5M3JnMjJQ?=
+ =?utf-8?B?SU55RnZ6Y2NwNXFOOGpOUjdMNGU3c0tKdjFveEtjOFNJdVAvMytrVHNLRmty?=
+ =?utf-8?B?WkR6c2g1d2l1aGZLd1NmNmdZc0ZVMElQSzM4MVd6VVpmU3VIbFZDemxmMGlY?=
+ =?utf-8?B?dlRKYmozVGlHMkFYRnhibHR4elRsMTMxZHVLZ1A2amM0TWsxUmpxVXdhcGM3?=
+ =?utf-8?B?V0NzQytMd1FXUi9mNHZ2TDNIOXRIcEpGM1l5dHpDZ2dIeG5qT0VtMlpBWHhC?=
+ =?utf-8?B?eVFCWTdHWUV0cEtyNnpvRkdPbzVhb0d1bWxHZUZuMDdvSldkK252d1dEVWkr?=
+ =?utf-8?B?eVpUTHE1M01QRjJ4RmFDSndaNko3MUxXSi9JdTEvTkZ2dEtJQ0JkcUREa2JL?=
+ =?utf-8?B?WnZoMys5MEJGdkpsUEt2K3c0WUpkRHE0aUFmN3BrTUhGVEkwNGRJV3c2VXEv?=
+ =?utf-8?B?UHd3QWhlSGhVd3NMUENQSDk0cjFyS1ZJMCtEelVWbzdBTTV5a1J2aStGZ2RS?=
+ =?utf-8?B?NndzRkxjWWU2WldzOHhOSGdReHJyTEJpcURvbmZ1UU82NCtLVE1Wb3ltNXha?=
+ =?utf-8?B?VURTTDF6b1FyeURjeC9pY1lwOXVlVk1jSnR4MjNteDZEMUl5Z0hvNEpBUS9B?=
+ =?utf-8?B?UlU4cFdFeGNwb1N5andvRmlZNU9RL3RNWU55YkRncENLdWk1cUFwbWtncTEy?=
+ =?utf-8?B?YUxpRnlWU0VQL0dyZTUvbEgzcjM0ZDIwaTNmZlEzR0gzazlDbHFyNDYxWk1S?=
+ =?utf-8?B?d2VveTBUT1NLY2drdWk0cFBIR3NhdjJCMWdrMGVjVUJzcFlRSnAzc0o1WXVn?=
+ =?utf-8?B?VmsvUjZwR2pyV1hwV1JqT0srSXQyMnpCMk1LVWEwcVlHOGtuc1V5YmswL1NC?=
+ =?utf-8?B?amJIRThId3V6aEo3c0V2TEZVWWJYVXZQRFdjNVhVZjBXNyt6aGRpSkRiZkJF?=
+ =?utf-8?B?WmNHYzhpcXlrWUNyTXZEVlhnWWVsZjVwMDBMWklKZ3B1OEpHakUrWkZ0cEtl?=
+ =?utf-8?B?OHdYUDI0ZXJ3bm9lUXpVMWE0ZE01TGRpMEJEQjRhNkgzZmRwQmNPejgraDAz?=
+ =?utf-8?B?cmpad1hNTEZvOEw3UElxUEhDZForMmtJYjV3NUZRTXlBZjUvdndiWmYxUTdL?=
+ =?utf-8?B?ZGRqUFVIc0Rod1BHdTJwem9leSt0eUpaWGVVd05mdXRQV25tazNlV0U3Z1h1?=
+ =?utf-8?B?S3VUYzZ0T2E0U3NUNDd6eVhjaVRFcFlIYWJNWUZaNjlpaGNDeVhQNW9wT1A5?=
+ =?utf-8?B?OEQzU1MvUXoxR3VqcHlUWVhjTFd4RWxOdEhLZEVmMzRDZkFyd0VvN1J2NHFm?=
+ =?utf-8?B?L1d5b3VVTlZ3bWFZRmpYcXpiUXJhYjFCQVpNVDdJSTJlSlkrcHdsK0JBNW1D?=
+ =?utf-8?B?VHpQRExUVm5hZFJnWDdZQmNXT2hwY2oyK3VnN3U0VFN3SVhjb2pVQ0UyZXBZ?=
+ =?utf-8?B?TCtQaTFsaGRZZkt4SWpTYVRRZVFGRUxsVFd5RXVLSWZ6QnNJa1FlRndDZGU4?=
+ =?utf-8?Q?7CuhV8LUE89TkdJ/GLf0Jam1vEreqaw8UM6eDz3VJM=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1AB5E76AA0F7C04FA10BFD3A0A043E37@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CACGkMEsqY5RHL=9=iny6xRVs_=EdACUCfX-Rmpq+itpdoT_rrg@mail.gmail.com>
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 210e1282-2d57-4afb-7cac-08d9d73464b8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jan 2022 08:03:47.6781
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4BJ6PjT5u+UXZCsyrq5ZAzj3JjehpftivKz0FrnPhcYLTS5avt5csmGswllmsJzYSAgW8Jiu4S/OMEmGsbNICDWgQkSgocme5hNvNDOxzPk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2455
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 02:18:01PM +0800, Jason Wang wrote:
->On Thu, Jan 13, 2022 at 10:57 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->>
->> In vhost_enable_notify() we enable the notifications and we read
->> the avail index to check if new buffers have become available in
->> the meantime. In this case, the device would go to re-read avail
->> index to access the descriptor.
->>
->> As we already do in other place, we can cache the value in `avail_idx`
->> and compare it with `last_avail_idx` to check if there are new
->> buffers available.
->>
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
->
->Patch looks fine but I guess we won't get performance improvement
->since it doesn't save any userspace/VM memory access?
-
-It should save the memory access when vhost_enable_notify() find 
-something new in the VQ, so in this path:
-
-     vhost_enable_notify() <- VM memory access for avail index
-       == true
-
-     vhost_disable_notify()
-     ...
-
-     vhost_get_vq_desc()   <- VM memory access for avail index
-                              with the patch applied, this access is 
-                              avoided since avail index is cached
-
-In any case, I don't expect this to be a very common path, indeed we
-usually use unlikely() for this path:
-
-     if (unlikely(vhost_enable_notify(dev, vq))) {
-         vhost_disable_notify(dev, vq);
-         continue;
-     }
-
-So I don't expect a significant performance increase.
-
-v1 coming with a better commit description.
-
-Thanks,
-Stefano
-
+DQoNCkxlIDE0LzAxLzIwMjIgw6AgMDg6NTgsIE5hdmVlbiBOLiBSYW8gYSDDqWNyaXTCoDoNCj4g
+Q2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+IEJQRl9SRUdfNSwgQlBGX1JFR19BWCBhbmQgVE1Q
+X1JFRyBhcmUgbWFwcGVkIG9uIG5vbiB2b2xhdGlsZSByZWdpc3RlcnMNCj4+IGJlY2F1c2UgdGhl
+cmUgYXJlIG5vdCBlbm91Z2ggdm9sYXRpbGUgcmVnaXN0ZXJzLCBidXQgdGhleSBkb24ndCBuZWVk
+DQo+PiB0byBiZSBwcmVzZXJ2ZWQgb24gZnVuY3Rpb24gY2FsbHMuDQo+Pg0KPj4gU28gd2hlbiBz
+b21lIHZvbGF0aWxlIHJlZ2lzdGVycyBiZWNvbWUgYXZhaWxhYmxlLCB0aG9zZSByZWdpc3RlcnMg
+Y2FuDQo+PiBhbHdheXMgYmUgcmVhbGxvY2F0ZWQgcmVnYXJkbGVzcyBvZiB3aGV0aGVyIFNFRU5f
+RlVOQyBpcyBzZXQgb3Igbm90Lg0KPj4NCj4+IFN1Z2dlc3RlZC1ieTogTmF2ZWVuIE4uIFJhbyA8
+bmF2ZWVuLm4ucmFvQGxpbnV4LmlibS5jb20+DQo+PiBTaWduZWQtb2ZmLWJ5OiBDaHJpc3RvcGhl
+IExlcm95IDxjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+DQo+PiAtLS0NCj4+IMKgYXJjaC9w
+b3dlcnBjL25ldC9icGZfaml0LmjCoMKgwqDCoMKgwqDCoCB8wqAgMyAtLS0NCj4+IMKgYXJjaC9w
+b3dlcnBjL25ldC9icGZfaml0X2NvbXAzMi5jIHwgMTQgKysrKysrKysrKystLS0NCj4+IMKgMiBm
+aWxlcyBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRp
+ZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvbmV0L2JwZl9qaXQuaCBiL2FyY2gvcG93ZXJwYy9uZXQv
+YnBmX2ppdC5oDQo+PiBpbmRleCBiMjBhMmE4M2E2ZTcuLmI3NTUwN2ZjOGY2YiAxMDA2NDQNCj4+
+IC0tLSBhL2FyY2gvcG93ZXJwYy9uZXQvYnBmX2ppdC5oDQo+PiArKysgYi9hcmNoL3Bvd2VycGMv
+bmV0L2JwZl9qaXQuaA0KPj4gQEAgLTEyNyw5ICsxMjcsNiBAQA0KPj4gwqAjZGVmaW5lIFNFRU5f
+RlVOQ8KgwqDCoCAweDIwMDAwMDAwIC8qIG1pZ2h0IGNhbGwgZXh0ZXJuYWwgaGVscGVycyAqLw0K
+Pj4gwqAjZGVmaW5lIFNFRU5fVEFJTENBTEzCoMKgwqAgMHg0MDAwMDAwMCAvKiB1c2VzIHRhaWwg
+Y2FsbHMgKi8NCj4+DQo+PiAtI2RlZmluZSBTRUVOX1ZSRUdfTUFTS8KgwqDCoCAweDFmZjgwMDAw
+IC8qIFZvbGF0aWxlIHJlZ2lzdGVycyByMy1yMTIgKi8NCj4+IC0jZGVmaW5lIFNFRU5fTlZSRUdf
+TUFTS8KgwqDCoCAweDAwMDNmZmZmIC8qIE5vbiB2b2xhdGlsZSByZWdpc3RlcnMgDQo+PiByMTQt
+cjMxICovDQo+PiAtDQo+PiDCoCNpZmRlZiBDT05GSUdfUFBDNjQNCj4+IMKgZXh0ZXJuIGNvbnN0
+IGludCBiMnBbTUFYX0JQRl9KSVRfUkVHICsgMl07DQo+PiDCoCNlbHNlDQo+PiBkaWZmIC0tZ2l0
+IGEvYXJjaC9wb3dlcnBjL25ldC9icGZfaml0X2NvbXAzMi5jIA0KPj4gYi9hcmNoL3Bvd2VycGMv
+bmV0L2JwZl9qaXRfY29tcDMyLmMNCj4+IGluZGV4IGQzYTUyY2Q0MmY1My4uY2ZlYzQyYzhhNTEx
+IDEwMDY0NA0KPj4gLS0tIGEvYXJjaC9wb3dlcnBjL25ldC9icGZfaml0X2NvbXAzMi5jDQo+PiAr
+KysgYi9hcmNoL3Bvd2VycGMvbmV0L2JwZl9qaXRfY29tcDMyLmMNCj4+IEBAIC03NywxNCArNzcs
+MjIgQEAgc3RhdGljIGludCBicGZfaml0X3N0YWNrX29mZnNldG9mKHN0cnVjdCANCj4+IGNvZGVn
+ZW5fY29udGV4dCAqY3R4LCBpbnQgcmVnKQ0KPj4gwqDCoMKgwqAgcmV0dXJuIEJQRl9QUENfU1RB
+Q0tGUkFNRShjdHgpIC0gNDsNCj4+IMKgfQ0KPj4NCj4+ICsjZGVmaW5lIFNFRU5fVlJFR19NQVNL
+wqDCoMKgwqDCoMKgwqAgMHgxZmY4MDAwMCAvKiBWb2xhdGlsZSByZWdpc3RlcnMgcjMtcjEyICov
+DQo+PiArI2RlZmluZSBTRUVOX05WUkVHX0ZVTExfTUFTS8KgwqDCoCAweDAwMDNmZmZmIC8qIE5v
+biB2b2xhdGlsZSByZWdpc3RlcnMgDQo+PiByMTQtcjMxICovDQo+PiArI2RlZmluZSBTRUVOX05W
+UkVHX1RFTVBfTUFTS8KgwqDCoCAweDAwMDAxZTAxIC8qIEJQRl9SRUdfNSwgQlBGX1JFR19BWCwg
+DQo+PiBUTVBfUkVHICovDQo+IA0KPiBDb3VsZCBoYXZlIGJlZW4gbmFtZWQgYmV0dGVyOiBTRUVO
+X05WUkVHX0JQRl9WR0VSX01BU0ssIG9yIHN1Y2guDQoNClllcywgSSB3YXMgc3VmZmVyaW5nIGZy
+b20gYSBsYWNrIG9mIGluc3BpcmF0aW9uLg0KDQpXaGF0IGRvZXMgQlBGX1ZHRVIgbWVhbiA/DQoN
+Cg0KPiBBcGFydCBmcm9tIHRoYXQ6DQo+IFJldmlld2VkLWJ5OiBOYXZlZW4gTi4gUmFvIDxuYXZl
+ZW4ubi5yYW9AbGludXgudm5ldC5pYm0uY29tPg0KPiANCg0KVGhhbmtz

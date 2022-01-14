@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F0948E97A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5FF48E980
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240897AbiANLxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 06:53:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234329AbiANLw7 (ORCPT
+        id S240905AbiANL4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 06:56:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35104 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229579AbiANL4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 06:52:59 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AABC06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 03:52:59 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id d14so8152665ila.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 03:52:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ggggXvDyaBR0LJCyxzdnWq5ifz2qZOeKg76j6fFCWZQ=;
-        b=YbtpZwNvRaeMXIKqoTeacmat+cE9nkjOlK9yVQK+2CeT158jIlSGnxqYhXYYcO89P4
-         fmi1rsyhw+fOrMKwTKlhD1QabiPjqgnwIQTNcwrLatiERKp2ZqRMV8axr4EniTHMWMvO
-         5bBmVT8HN9XBFrANOTll8O3IkcIkMkUbjK9I6WZeJfymbWxgKVM/6MKxIAXpvgtG1qcu
-         6UjXBqedvW/7DKvrv28pO0K+EC8fo1op8ht/b44KMAodQ41dAjx5n9EE5vGzRLVYIjX2
-         NyiRrZWTUfiD26eARF4SCGw+DHWj9wjJS1uEYnfYqGRlhbbhsQLFFIGoL4BOgxtCG0ev
-         mQUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ggggXvDyaBR0LJCyxzdnWq5ifz2qZOeKg76j6fFCWZQ=;
-        b=k3X4KFCf+C+uho9nZpbAVnixgGAg8DZECyK49KtmIwQJ+aWAP+s6YlUAEJwgimkiFY
-         5IsccD97/FWmzwphHYPkIGtJm0e/imNbWEvOPhEqEKqhq6T0V4PRDGbYcmtjCGsRy6Nx
-         WCCLwY3oUEe/m7SBAyiaCfLVHyD7VdARO87jFqxIVwmQ4U+bsA/afmO83VBsFotIigbe
-         jdOhBK2e4hj/+GaSBXwce8gTtJwaPnBM1D5/QtpSShB16NoForFtc2edSIHzPWIvyXtr
-         lHqLigrVaR4ajciOtpIRnvMfcdi86KNh5//FxzW2m7sQpnxFJivzz2WHZaBRbt8zQFNX
-         GdwA==
-X-Gm-Message-State: AOAM532GoDk7YHlbtraqF+hULrA0uNnTRysLp2AHMCGv39/CivhmrbY5
-        SogvsBwE9MEaX+xzBIsS2xJWQL0g/eeODAi9tqc=
-X-Google-Smtp-Source: ABdhPJyIfpffn/j7lZEFwWw3znB9txoiIIZfyBWlqrP05OiiFUJwAsA7h/d65jcHrXd2ieM7e/OInQmmZ273reoqu9s=
-X-Received: by 2002:a92:6406:: with SMTP id y6mr4552420ilb.179.1642161178812;
- Fri, 14 Jan 2022 03:52:58 -0800 (PST)
+        Fri, 14 Jan 2022 06:56:44 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9AFF61EFA;
+        Fri, 14 Jan 2022 11:56:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A65FC36AE5;
+        Fri, 14 Jan 2022 11:56:42 +0000 (UTC)
+Date:   Fri, 14 Jan 2022 11:56:39 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     arnd@arndb.de, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huangguangbin2@huawei.com
+Subject: Re: [PATCH] asm-generic: Add missing brackets for io_stop_wc macro
+Message-ID: <YeFk9w9AFJxkZziq@arm.com>
+References: <20220114105857.126300-1-wangxiongfeng2@huawei.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6602:2a4c:0:0:0:0 with HTTP; Fri, 14 Jan 2022 03:52:58
- -0800 (PST)
-Reply-To: mrsbillchantal2022@mail.com
-From:   "Mrs. Bill Chantal" <km78646342@gmail.com>
-Date:   Fri, 14 Jan 2022 12:52:58 +0100
-Message-ID: <CAOhgQkeL=UZQXVLGS4_5cV-n3FQ72csqukODf74onwDPvY+RzQ@mail.gmail.com>
-Subject: Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220114105857.126300-1-wangxiongfeng2@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DEAR FRIEND
-You have been compensated with the sum of 5.4 million dollars in this
-united nation the payment will be Issue into ATM visa card and send to
-you from the bank,we need your address, passport and your WhatsApp
-Number.
+On Fri, Jan 14, 2022 at 06:58:57PM +0800, Xiongfeng Wang wrote:
+> After using io_stop_wc(), drivers reports following compile error when
+> compiled on X86.
+> 
+>   drivers/net/ethernet/hisilicon/hns3/hns3_enet.c: In function ‘hns3_tx_push_bd’:
+>   drivers/net/ethernet/hisilicon/hns3/hns3_enet.c:2058:12: error: expected ‘;’ before ‘(’ token
+>     io_stop_wc();
+>               ^
+> It is because I missed to add the brackets after io_stop_wc macro. So
+> let's add the missing brackets.
+> 
+> Fixes: d5624bb29f49 ("asm-generic: introduce io_stop_wc() and add implementation for ARM64")
+> Reported-by: Guangbin Huang <huangguangbin2@huawei.com>
+> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+> ---
+>  include/asm-generic/barrier.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
+> index 3d503e74037f..fd7e8fbaeef1 100644
+> --- a/include/asm-generic/barrier.h
+> +++ b/include/asm-generic/barrier.h
+> @@ -285,7 +285,7 @@ do {									\
+>   * write-combining memory accesses before this macro with those after it.
+>   */
+>  #ifndef io_stop_wc
+> -#define io_stop_wc do { } while (0)
+> +#define io_stop_wc() do { } while (0)
 
-Thanks
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 
-Mrs.Bill Chantal
+Arnd, do you plan to take this fix or you'd like me to?
+
+Thanks.
+
+-- 
+Catalin

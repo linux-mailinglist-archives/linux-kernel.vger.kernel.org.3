@@ -2,105 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE01748F341
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:51:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2F348F343
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbiANXuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 18:50:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25555 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229801AbiANXuT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 18:50:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642204218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wQKAQp3punPuo3jodbvvWKcFENKeN8QBsPxGUfPzlv8=;
-        b=D/jW+5ljzLLD4BBWt1d9r3Mz8OP1cjx0I62Ox4vp1axorkzI3lL4F60xdvMbxgJAd57R5L
-        UzTwPa1d6Ht3tShx+tWEQ8KkfZFk75PLdr/E9eVCoqOElcGgNnmFcLIdVqZlxSnI1F2SwC
-        Wj9Gz8mt3pvQjUYobz9IoxK8yJuSiv4=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-222-_QYAtPmlOkOPjWREgITUZA-1; Fri, 14 Jan 2022 18:50:17 -0500
-X-MC-Unique: _QYAtPmlOkOPjWREgITUZA-1
-Received: by mail-wm1-f72.google.com with SMTP id v185-20020a1cacc2000000b0034906580813so8937280wme.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 15:50:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wQKAQp3punPuo3jodbvvWKcFENKeN8QBsPxGUfPzlv8=;
-        b=sODZZ5jfI1PBiBa36UYmNsRwPDuLDKyaS65fU4I4eh1gTJZuCt0ILkPWSgshQu5RVt
-         3ByHw/lAqLMSWpOITqLtdx2rFga6obspt/83s7Wb8tfh7tWx2eGFbwKSVijwNOdsgvdN
-         7yV8QnVJs2MmeJTKVrTvdeldpkMQVwU/2qTMTBw6RSlyrYXqakUxKyTLxLjwj47yX0lA
-         ePbzBrmxlaPhkYDcBYgPVW87vAiQijDtEHITeSzxSaE0HWqFJV9D/dw1DR7Lt2ymamzr
-         AyY9CVzk7dZ4UZ4A+QmLkKsRsWfqX4VX56HENYG2hJSk9A/oVXCdBFGEInmBPfro/F6y
-         DWPg==
-X-Gm-Message-State: AOAM530awlCg0G+LH+9zzt1AVf/9py82XeB15QInfmgdZQ/Npitv+vOT
-        18vTvVzxaLezf8XKEOyiVjLy8cFy+xwp7DXD4Ke4h59DzaouS//2cdi3CwiRvqjf+rQMfR5cAWa
-        WxGaGEtcHB9BzPHyZWGhpGUs2
-X-Received: by 2002:a05:6000:2c8:: with SMTP id o8mr420787wry.366.1642204216474;
-        Fri, 14 Jan 2022 15:50:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJypJ87tcfmR3bXkhkalO7yqmUU3OIYhufRb3IdZu48YZ8Mj2eS/XA9CKPzuAUCrrnMJrp7WRw==
-X-Received: by 2002:a05:6000:2c8:: with SMTP id o8mr420775wry.366.1642204216253;
-        Fri, 14 Jan 2022 15:50:16 -0800 (PST)
-Received: from redhat.com ([2.55.154.210])
-        by smtp.gmail.com with ESMTPSA id r7sm15078419wmq.18.2022.01.14.15.50.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 15:50:15 -0800 (PST)
-Date:   Fri, 14 Jan 2022 18:50:10 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        christophe.jaillet@wanadoo.fr, dapeng1.mi@intel.com,
-        david@redhat.com, elic@nvidia.com, eperezma@redhat.com,
-        flyingpenghao@gmail.com, flyingpeng@tencent.com,
-        gregkh@linuxfoundation.org, guanjun@linux.alibaba.com,
-        jasowang@redhat.com, jiasheng@iscas.ac.cn, johan@kernel.org,
-        keescook@chromium.org, labbott@kernel.org, lingshan.zhu@intel.com,
-        lkp@intel.com, luolikang@nsfocus.com, lvivier@redhat.com,
-        pasic@linux.ibm.com, sgarzare@redhat.com, somlo@cmu.edu,
-        trix@redhat.com, wu000273@umn.edu, xianting.tian@linux.alibaba.com,
-        xuanzhuo@linux.alibaba.com, yun.wang@linux.alibaba.com
-Subject: Re: [GIT PULL] virtio,vdpa,qemu_fw_cfg: features, cleanups, fixes
-Message-ID: <20220114184916-mutt-send-email-mst@kernel.org>
-References: <20220114153515-mutt-send-email-mst@kernel.org>
- <YeHjbqjY8Dd+3o1E@larix>
+        id S231392AbiANXwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 18:52:35 -0500
+Received: from mga03.intel.com ([134.134.136.65]:27944 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229801AbiANXwe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 18:52:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642204354; x=1673740354;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7mho6A7CUIR5IT9gDR87/jT/tWNHoagoN1uPQ8gqVQc=;
+  b=euWevvkGBzVN5rsHaUZ4LEbtFjrugUSGBjRtRDcC8vizHX2h4r9bBSUq
+   pvnza3lKD58em85ZW1drsG6gLTv4hMZEhDY1gSKuiAadF3YjZJGukYYdg
+   r7FEB/KQnoEwB+SFFnu3ZbgaFvQ55areLRgDY8ouTJ/VlKXoFdOsiTSMu
+   69+IL7FzsvnbE9scZokV7SBAyye/3YGjCD9eo11rgRkHvuL/MKuf3lRwJ
+   FOOgkqI1w8mHXkY5I0APyIcHuUFQ/pBgMZpLerTPZexoRsBfwvgp3XyDx
+   otx3Gx+CxWq8LquMcfl5ioYa2N2yOsugf2V09G4mBZcKtLvJ1DY7rsjTX
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="244310267"
+X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
+   d="scan'208";a="244310267"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 15:52:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
+   d="scan'208";a="516578505"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 14 Jan 2022 15:52:32 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8WMy-00099l-3P; Fri, 14 Jan 2022 23:52:32 +0000
+Date:   Sat, 15 Jan 2022 07:52:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1596/2384]
+ ./usr/include/linux/netdevice.h:29:10: fatal error: uapi/linux/if.h: No such
+ file or directory
+Message-ID: <202201150726.6104S4by-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YeHjbqjY8Dd+3o1E@larix>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 08:56:14PM +0000, Jean-Philippe Brucker wrote:
-> Hi,
-> 
-> On Fri, Jan 14, 2022 at 03:35:15PM -0500, Michael S. Tsirkin wrote:
-> > Jean-Philippe Brucker (5):
-> >       iommu/virtio: Add definitions for VIRTIO_IOMMU_F_BYPASS_CONFIG
-> >       iommu/virtio: Support bypass domains
-> >       iommu/virtio: Sort reserved regions
-> >       iommu/virtio: Pass end address to viommu_add_mapping()
-> >       iommu/virtio: Support identity-mapped domains
-> 
-> Please could you drop these patches, they are from an old version of the
-> series. The newer version was already in Joerg's pull request and was
-> merged, so this will conflict.
-> 
-> Thanks,
-> Jean
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
+commit: 5d5fc815f35aee2826c6b83d677576c46132c10c [1596/2384] headers/deps: net: Optimize <uapi/linux/netdevice.h>
+config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220115/202201150726.6104S4by-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=5d5fc815f35aee2826c6b83d677576c46132c10c
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 5d5fc815f35aee2826c6b83d677576c46132c10c
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-It's weird that this wasn't detected, these have been in linux-next
-for a long time now. I'l drop, though it's unfortunate as
-hashes will not match with what was tested in linux-next.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--- 
-MST
+All errors (new ones prefixed by >>):
 
+   In file included from ./usr/include/linux/if_arp.h:27,
+                    from <command-line>:32:
+>> ./usr/include/linux/netdevice.h:29:10: fatal error: uapi/linux/if.h: No such file or directory
+      29 | #include <uapi/linux/if.h>
+         |          ^~~~~~~~~~~~~~~~~
+   compilation terminated.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

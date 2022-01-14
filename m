@@ -2,101 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C27648E262
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 03:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 466B348E267
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 03:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238785AbiANCI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 21:08:27 -0500
-Received: from mga14.intel.com ([192.55.52.115]:7258 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235713AbiANCIY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 21:08:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642126104; x=1673662104;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ghBSgNiMzX0EVCLVUvRgnSDfTK4GjS2KttxsrSC72TQ=;
-  b=bfFSx3HrZcXMX0/OpF57bZyZdGWVAROC+Q8UN7MczC4HcvYu+H0NELR8
-   LZcdAHTUhYN1BmbpzV+nTkoMoDR7hpAeoMQSeCL4C1h9aMa9eE6jKzVbT
-   GJUHDcz3KuaTDGRhL0Sknq4OFI0nLvucXldraSy8Bh830SCQq99TTfn5f
-   jfSCcOyXNtG1kqCE7xgzj4gPm/5TWk8HjqRxAV9SmqGAl+DNZeLoEWMm1
-   Nh9Bze/jOmomQKyTdoy66NW/JziDs9XivNeCe4UWYBd2hOxx564CzRhvZ
-   FIhjzoKtxsJgAvLysmmpw6OzkF6KI+JsK/aYy+PgIGCuhGr674D4UfoMz
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244367404"
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="244367404"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 18:08:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
-   d="scan'208";a="624177682"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 13 Jan 2022 18:08:20 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8C0p-0007xW-G0; Fri, 14 Jan 2022 02:08:19 +0000
-Date:   Fri, 14 Jan 2022 10:08:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com
-Subject: Re: [PATCH 14/23] arm64: dts: fsd: Add initial device tree support
-Message-ID: <202201141032.5xT5iNdz-lkp@intel.com>
-References: <20220113121143.22280-15-alim.akhtar@samsung.com>
+        id S238453AbiANCJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 21:09:09 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:47862 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235713AbiANCJI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 21:09:08 -0500
+Received: by mail-il1-f200.google.com with SMTP id g14-20020a056e021e0e00b002a26cb56bd4so5158546ila.14
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 18:09:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=l+R7nWMxKcU084x0V/7GNQbj65lf2ts3dJyo3gy3f6s=;
+        b=Ylon23E2xx6gHBPykyeLBMIXDS1fJdhMh/19U/Bh9RN8O7eHzXpr2H6F3x98lb+h3A
+         JRh4ZtI45uhEuVCJX4c2QrUkzeW9zCjgLtEPKd3psBXmBJdy7DY5ApJBk1d3FaOMZYVz
+         uWvIZGxL9GYNsMnk5qZKMbKrdSarNIU0DEKm67VORfuUtL+qB5k6KU7+Y3+P4tsMvl4S
+         X5USqyartqVPc2PqbXn33qKbG6YGZN/hXEBWw65e/MCEeDNwkvsWvB4wyEicgf7VjOm5
+         q+MEOyz+xxpZcsFnuvDdPrGtmDKkJ05vMFNnO1inwlgPdGcd3w6hTpe3CUYs2j9Vb2vG
+         6Usg==
+X-Gm-Message-State: AOAM530039K1PkAI6yPw9tsOyZTcPjXtdmXbngjLnWs96t/Vv3sya3jA
+        eJVRsfFf+KlUSBt0NdBzL7VZG3whDwT9bSzXpSOeumNGaWsm
+X-Google-Smtp-Source: ABdhPJybKJOsrE+8Vo8gzVZrp2mTACAvXMUTRVRTzELPcrK9to/GJshkwEJEUMZmSYSGqFeYj8NqLtMD/0Cl7x2d2cUB4f5x7AlY
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220113121143.22280-15-alim.akhtar@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a05:6e02:18ce:: with SMTP id s14mr4007528ilu.0.1642126147538;
+ Thu, 13 Jan 2022 18:09:07 -0800 (PST)
+Date:   Thu, 13 Jan 2022 18:09:07 -0800
+In-Reply-To: <998e645c-b300-9e58-eb02-3005667dcfe2@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b355a205d58149fd@google.com>
+Subject: Re: [syzbot] WARNING in signalfd_cleanup
+From:   syzbot <syzbot+5426c7ed6868c705ca14@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, changbin.du@intel.com,
+        daniel@iogearbox.net, davem@davemloft.net, ebiggers@kernel.org,
+        edumazet@google.com, hkallweit1@gmail.com,
+        io-uring@vger.kernel.org, kuba@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk, yajun.deng@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alim,
+Hello,
 
-I love your patch! Yet something to improve:
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-[auto build test ERROR on v5.16]
-[also build test ERROR on next-20220113]
-[cannot apply to clk/clk-next robh/for-next pinctrl-samsung/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Reported-and-tested-by: syzbot+5426c7ed6868c705ca14@syzkaller.appspotmail.com
 
-url:    https://github.com/0day-ci/linux/commits/Alim-Akhtar/dt-bindings-clock-Document-FSD-CMU-bindings/20220113-211129
-base:    df0cc57e057f18e44dac8e6c18aba47ab53202f9
-config: arm64-randconfig-r014-20220113 (https://download.01.org/0day-ci/archive/20220114/202201141032.5xT5iNdz-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/7edcfae09ff2aa85ae39f2240b13ea17eac8be94
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Alim-Akhtar/dt-bindings-clock-Document-FSD-CMU-bindings/20220113-211129
-        git checkout 7edcfae09ff2aa85ae39f2240b13ea17eac8be94
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
+Tested on:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+commit:         59fb37ef io_uring: pollfree
+git tree:       https://github.com/isilence/linux.git pollfree_test1
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d2aaa2946b030309
+dashboard link: https://syzkaller.appspot.com/bug?extid=5426c7ed6868c705ca14
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-All errors (new ones prefixed by >>):
-
-   In file included from arch/arm64/boot/dts/tesla/fsd.dtsi:11,
-                    from arch/arm64/boot/dts/tesla/fsd.dts:12:
->> scripts/dtc/include-prefixes/dt-bindings/clock/fsd-clk.h:12: error: unterminated #ifndef
-      12 | #ifndef _DT_BINDINGS_CLOCK_FSD_H
-         | 
-
-
-vim +12 scripts/dtc/include-prefixes/dt-bindings/clock/fsd-clk.h
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Note: testing is done by a robot and is best-effort only.

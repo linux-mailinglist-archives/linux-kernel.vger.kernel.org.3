@@ -2,165 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D13B448E9B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 13:11:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B5A48E9B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 13:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235551AbiANMKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 07:10:48 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:33120
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235042AbiANMJm (ORCPT
+        id S241025AbiANMKt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Jan 2022 07:10:49 -0500
+Received: from mail-ua1-f45.google.com ([209.85.222.45]:41909 "EHLO
+        mail-ua1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235178AbiANMJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 07:09:42 -0500
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C66C93F1AF
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:09:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642162171;
-        bh=nx2SfehiFhMJ49inCJOjqiXDfOhn3s9YnvwXH3Vtd2w=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Hib9Ny+4t1k1+FlZ3Hy3ogJP6B4AzvxQkXWqD1zJHV9QBRl1O6MYakRFTBK29fxio
-         0AwVIKf1vE72c8Ct59C+KkTbUNFZphcu2HjqxDHr+gBdShzHk45AuyMReGIPvYXbN0
-         Zt5tDq8fcGfKwWU+tTShKrLUavSGnmZQvpiaLvnKDY6glEHvk+VlOCM938h1D1TjTd
-         SfRKvwkEIxqr+3F5vbNeNsAuexWwAYI5C9Hwgf/CBoGkWrZOgRh+52gkUsBxDAFH72
-         PAVEi62d6UQBQdUnF0+4jy+4vcKpsf0RM9xJRQmdz/6FHPcdvppYWlN6Y0v89yb/ib
-         bL8WncxrqB/wg==
-Received: by mail-oi1-f198.google.com with SMTP id d205-20020aca36d6000000b002c890f38d80so5944432oia.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 04:09:31 -0800 (PST)
+        Fri, 14 Jan 2022 07:09:52 -0500
+Received: by mail-ua1-f45.google.com with SMTP id p37so16518984uae.8;
+        Fri, 14 Jan 2022 04:09:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nx2SfehiFhMJ49inCJOjqiXDfOhn3s9YnvwXH3Vtd2w=;
-        b=608nJ88mB/+U0Km7xMXSR31CRDHk6FPtUtLba5J6BeTeo0z+Asx0dbwJs6eFacQ7HU
-         82wV1eTxNFBprb/MrOabr3WoAp5DvUkhnWsb0ywpPCMvevXdFnuxZlN9ZqIbzWqNy0rp
-         bPiXtW2C/yhEE7Zr2Jg4sQ80SBrI/q6E3h12KHneSbDCCtNJltnCmGc625PIG2kf/lli
-         hHEjZ0By6N9EoHyn/qqJ+MJ5+jF+yVUYoF8aFX7A00XLbQRPIx/vVMvHrrAQOqSrUMJQ
-         DixAPTY1R6kKuBXyrGZthoBPs+OUnciIUNjnLYWciOMGL6J19P3KFcVCrKbavaLfmVDw
-         GAOQ==
-X-Gm-Message-State: AOAM530WoBKvK62VaclLQYseM/ZFh9tST8LE8rBajjL+9BhQgInl0Yfq
-        BjNlB3iyBUQV6KDswPJgfWCoMarBGtbV13HYTgMOIhldSD7hfdtcolGtRzukrWwNgDhkKgCD6/5
-        7j2qRKKPwhkMiwqpUnQg1dqzARUy/rOjL/LUkB2IyA8ogeATEw0BGWWnZug==
-X-Received: by 2002:a05:6808:1985:: with SMTP id bj5mr561675oib.146.1642162170321;
-        Fri, 14 Jan 2022 04:09:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyZ+rPPNfojPvMV2jHkMma3Pd6xc/dAmc+h10RLGhKH1owN7VstHwwAOJRELP29v3fiXfRhMheSDLbOCXPDC4c=
-X-Received: by 2002:a05:6808:1985:: with SMTP id bj5mr561646oib.146.1642162169760;
- Fri, 14 Jan 2022 04:09:29 -0800 (PST)
+        bh=kEdzLzYRPE0boS0yd+k+Jhoa91HE+G13L0nN6bFEhyo=;
+        b=uG/lrgVvyPtXBXKup/zC1yOaIV1YIQgYLR1XzqEVgI0c4PCqMueIXgN7h9Nu2XIMW2
+         uezCy0sAEWkYBjeygeIODKENt95d56LcGOrolaac0Ub+dxd4UhVn6Zz8VJDWrwuuGw89
+         DPui8Hid6pLeRFi1Q7+ttV30t/J8EMMWuu+Q0kOA0yb2IKq3nl0hg+aWi2ZHAqUrsk8U
+         5YsJCpwUkIZwjMZO9feST2vwyjYIuonn9a5AjErm6nL2cJjWApD8H3QgOpJkjpDC+7nX
+         TXW0DXd2qT+tnOxxaG521bsIFzxHJ2nuVWUWYoSVl6BRMEzVAyI6GXbwujom9h9TXGyf
+         YliA==
+X-Gm-Message-State: AOAM533RrRul1EkJntV/DvSO7aPGOJdoWeTPR7uclbKFvgBS/qj3GVCR
+        eZSH/mXVDHP4Ht6YUb/fUcWLt3NDjdn2JD75
+X-Google-Smtp-Source: ABdhPJzBnzRe9G6dkHfIj3aekSn3OxjRbkPv2cdAbgyHNPt8gY77Dc0wzBQEeT4pnMmlkHp/eLj/sA==
+X-Received: by 2002:a67:f550:: with SMTP id z16mr3974367vsn.23.1642162191911;
+        Fri, 14 Jan 2022 04:09:51 -0800 (PST)
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
+        by smtp.gmail.com with ESMTPSA id 7sm307853vkr.23.2022.01.14.04.09.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jan 2022 04:09:51 -0800 (PST)
+Received: by mail-ua1-f54.google.com with SMTP id m15so16530745uap.6;
+        Fri, 14 Jan 2022 04:09:51 -0800 (PST)
+X-Received: by 2002:a9f:3e09:: with SMTP id o9mr4045837uai.114.1642162191265;
+ Fri, 14 Jan 2022 04:09:51 -0800 (PST)
 MIME-Version: 1.0
-References: <c4525b4738f94483b9b8f8571fc80646@realtek.com> <CAAd53p6gzZVNov0L-abZ_N=FoD-JpfWp2W096SrVva=FfEv=aw@mail.gmail.com>
- <3bae27438b4b4d1eb367baefa7898060@realtek.com> <CAAd53p6GFqMbp-xMDf0qufxfpb8wes8S8VVdghZnNdV5Mr4s7w@mail.gmail.com>
- <ccb30393c86e42f489c2d7445e3534a9@realtek.com>
-In-Reply-To: <ccb30393c86e42f489c2d7445e3534a9@realtek.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 14 Jan 2022 20:09:18 +0800
-Message-ID: <CAAd53p7nHqaKcZx7+asZz5k2jRJK-nJeCM21Nhvw6AeVE3=Qpw@mail.gmail.com>
-Subject: Re: [PATCH] misc: rtsx: modify rtd3 flow
-To:     Ricky WU <ricky_wu@realtek.com>
-Cc:     "arnd@arndb.de" <arnd@arndb.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "yang.lee@linux.alibaba.com" <yang.lee@linux.alibaba.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220113201920.3201760-1-laurent@vivier.eu> <20220113201920.3201760-4-laurent@vivier.eu>
+ <CAK8P3a2QzMiga0FFVmTuefnq1OzsgyopiJN2he8043K0TRF1ng@mail.gmail.com>
+ <a53e6d46-114f-7bb2-70b9-113c5f8a9c0e@vivier.eu> <CAMuHMdXN=2tjizcjA4vZ1FOSXDBNBkKH355fkfspgO9bOhp6_w@mail.gmail.com>
+ <d5f59216-793a-f5cf-2ab6-e3cf3a4a855f@vivier.eu>
+In-Reply-To: <d5f59216-793a-f5cf-2ab6-e3cf3a4a855f@vivier.eu>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 14 Jan 2022 13:09:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWbsF8O34JpwpGba=w_dh4DcDT3_FKbE8RGtVun=iw6Og@mail.gmail.com>
+Message-ID: <CAMuHMdWbsF8O34JpwpGba=w_dh4DcDT3_FKbE8RGtVun=iw6Og@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] clocksource/drivers: Add a goldfish-timer clocksource
+To:     Laurent Vivier <laurent@vivier.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        John Stultz <john.stultz@linaro.org>,
+        linux-rtc@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 4:51 PM Ricky WU <ricky_wu@realtek.com> wrote:
-[snip]
-> > >
-> > > We don=E2=80=99t want to entry D3 frequently
-> > > So we need to call pm_runtime_get() at start And call pm_runtime_put(=
-)
-> > > in delay-work (rtd3_work)
+Hi Laurent,
+
+On Fri, Jan 14, 2022 at 12:31 PM Laurent Vivier <laurent@vivier.eu> wrote:
+> Le 14/01/2022 à 12:12, Geert Uytterhoeven a écrit :
+> > On Fri, Jan 14, 2022 at 12:03 PM Laurent Vivier <laurent@vivier.eu> wrote:
+> >> Le 14/01/2022 à 11:46, Arnd Bergmann a écrit :
+> >>> On Thu, Jan 13, 2022 at 9:19 PM Laurent Vivier <laurent@vivier.eu> wrote:
+> >>>> +static int goldfish_timer_set_oneshot(struct clock_event_device *evt)
+> >>>> +{
+> >>>> +       struct goldfish_timer *timerdrv = ced_to_gf(evt);
+> >>>> +       void __iomem *base = timerdrv->base;
+> >>>> +
+> >>>> +       __raw_writel(0, base + TIMER_ALARM_HIGH);
+> >>>> +       __raw_writel(0, base + TIMER_ALARM_LOW);
+> >>>> +       __raw_writel(1, base + TIMER_IRQ_ENABLED);
+> >>>
+> >>> As mentioned elsewhere, the __raw_* accessors are not portable, please
+> >>> use readl()/writel() here, or possibly ioread32_be()/iowrite32_be() for
+> >>> the big-endian variant.
+> >>
+> >> We can't use readl()/writel() here because it's supposed to read from a little endian device, and
+> >> goldfish endianness depends on the endianness of the machine.
+> >>
+> >> For goldfish, readl()/writel() works fine on little-endian machine but not on big-endian machine.
+> >>
+> >> On m68k, you have:
+> >>
+> >> #define readl(addr)      in_le32(addr)
+> >> #define writel(val,addr) out_le32((addr),(val))
+> >>
+> >> and with goldfish it's wrong as the device is not little-endian, it is big-endian like the machine.
+> >>
+> >> same comment with ioread32_be()/iowrite32_be(): it will work on big-endian machine not on little-endian.
+> >>
+> >> We need an accessor that doesn't byteswap the value, that accesses it natively, and in all other
+> >> parts of the kernel __raw_writel() and __raw_readl() are used.
 > >
-> > Maybe use 'cancel_delayed_work(&pcr->rtd3_work)' like what
-> > rtsx_pci_runtime_suspend() does?
-> > And for this case maybe cancel_delayed_work_sync() is more preferred.
+> > Hence Arnd's suggestion to define custom accessors in the Goldfish
+> > RTC driver, that map to {read,write}l() on little-endian, and to
+> > io{read,write}32_be() on big-endian.
 > >
+> > BTW, I'd go for io{read,write}32() on little endian instead, for
+> > symmetry.
 >
-> I think you misunderstand what I means
-> This delay_work() is for not enter D3 <-> D0 frequently
-
-This is doable with current pm_runtime_*() helpers.
-
-> That delay is we need, we don=E2=80=99t want to power_on and power_off fr=
-equently on our device
-
-Is this to avoid the pm_runtime_resume() call before system suspend?
-IOW, to avoid D3 -> D0 -> D3 for S3?
-
+> You mean something like that:
 >
-> This patch want to solve pcr->is_runtime_suspended this value
-> because we need to set more register at power_down flow when Device suppo=
-rt D3 and System going to S3
-
-So is it possible to introduce a new parameter for force_power_down()
-and get rid of is_runtime_suspended completely?
-
+> #ifdef CONFIG_CPU_BIG_ENDIAN
+> #define raw_ioread32 ioread32be
+> #define raw_iowrite32 iowrite32be
+> #else
+> #define raw_ioread32 ioread32
+> #define raw_iowrite32 iowrite32
+> #endif
 >
-> > >
-> > > But we found If we keep this if statement in start_run if
-> > > (pcr->is_runtime_suspended) {
-> > >   pm_runtime_get(&(pcr->pci->dev));
-> > >   pcr->is_runtime_suspended =3D false;
-> > > }
-> > > pcr->is_runtime_suspended this status are not correct when enter S3
-> > > because enter S3 not call start_run()
-> >
-> > Maybe because the driver is trying to trick the runtime PM core on its =
-real
-> > power status?
-> > I.e. the driver is maintaining its own PM state machine. Fully cooperat=
-ing the
-> > driver with PM core should solve the issue.
-> >
->
-> System not call start_run() because do not have any sd_request at that ti=
-me,
-> so we need to update value(pcr->is_runtime_suspended) at rtsx_pci_runtime=
-_resume
-> but if we only update value here not to call pm_runtime_get(), the if-sta=
-tement always be FALSE at start_run()
+> and then use raw_ioread32()/raw_iowrite32() rather than readl()/writel()?
 
-Sounds like the RPM refcount goes to zero so it was runtime suspended again=
-.
-The correct usage should be merging rtsx_pci_start_run() with
-rtsx_pci_runtime_resume(), then guard each op of mmc_host_ops with
-pm_runtime_get_sync() at the beginning and pm_runtime_idle() at and
-end of each ops.
+Exactly.
 
-Increase the RPM refcount in runtime resume routine to prevent the
-driver from suspending doesn't really make sense to me.
+You may want to use names that have less chance of conflicting in
+the future, e.g. goldfish_{read,write}().
 
-Kai-Heng
+Gr{oetje,eeting}s,
 
-> that is why we move this if-statement from start_run() to rtsx_pci_runtim=
-e_resume()
->
-> > > >
-> > > > > +
-> > > > >         mutex_lock(&pcr->pcr_mutex);
-> > > > >
-> > > > >         rtsx_pci_write_register(pcr, HOST_SLEEP_STATE, 0x03,
-> > > > > 0x00); diff --git a/drivers/misc/cardreader/rtsx_pcr.h
-> > > > > b/drivers/misc/cardreader/rtsx_pcr.h
-> > > > > index daf057c4eea6..b93975268e6d 100644
-> > > > > --- a/drivers/misc/cardreader/rtsx_pcr.h
-> > > > > +++ b/drivers/misc/cardreader/rtsx_pcr.h
-> > > > > @@ -25,6 +25,7 @@
-> > > > >  #define REG_EFUSE_POWEROFF             0x00
-> > > > >  #define RTS5250_CLK_CFG3               0xFF79
-> > > > >  #define RTS525A_CFG_MEM_PD             0xF0
-> > > > > +#define RTS524A_AUTOLOAD_CFG1  0xFF7C
-> > > > >  #define RTS524A_PM_CTRL3               0xFF7E
-> > > > >  #define RTS525A_BIOS_CFG               0xFF2D
-> > > > >  #define RTS525A_LOAD_BIOS_FLAG 0x01
-> > > > > --
-> > > > > 2.25.1
-> > > > ------Please consider the environment before printing this e-mail.
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

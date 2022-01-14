@@ -2,89 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7735548F248
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 23:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AEC748F24A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 23:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiANWNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 17:13:13 -0500
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:43468
-        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230314AbiANWNM (ORCPT
+        id S230350AbiANWNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 17:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230332AbiANWNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 17:13:12 -0500
-Received: from [192.168.192.153] (unknown [50.126.114.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id CB5423FCEA;
-        Fri, 14 Jan 2022 22:13:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642198383;
-        bh=stGyB9cd3q3CzvP5bfN9x0UvNGnJIW50M58RyeoH8Qk=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=HyrqdRbjSVeJEAq+7koFIlRXDgoGGrGJVOi0EFvxO5GrG+YvnP0Je/kLVEbR/NAfu
-         5BVvWojcBRxZV2lM7/AuKgTwfLR5Tq1PvHAEa6WQ9DH3tCcR1uH6itxnhnQMwZIrWz
-         aUEjcc7KTBFqmXXzAkWY9Fc7Ls94AYMxpX/+p56cZUjW0IF0+W2VFk2vWiO8GC0RLs
-         Wox7ORHwiwRUwkm0ntSS7moTPhigFCF6ekcC2ObUK9XUV61cZeHsP3NkLGvC/+8ejv
-         HB0nrTRadWjRMKBrO8aCJ21q7M848tYYhRWGhPdEfdYbjD80lceQk5/uDOGgtKGOh6
-         4Ok4bJGF9BYtA==
-Subject: Re: [PATCH] security/apparmor: remove redundant ret variable
-To:     cgel.zte@gmail.com
-Cc:     jmorris@namei.org, serge@hallyn.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220112080356.666999-1-chi.minghao@zte.com.cn>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-Message-ID: <d5b23c25-971a-dc67-1f97-b70ccb2160a6@canonical.com>
-Date:   Fri, 14 Jan 2022 14:12:50 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 14 Jan 2022 17:13:15 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693ADC06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 14:13:15 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id w16so38898078edc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 14:13:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=akNBIPEkQByIFfu1P2peeZN+JzE2WGUVrx0nJKmv+Ig=;
+        b=GSAsqvuvZ11joKI+dRdRJOuuVW/GJ5oZzAyrppAVppJB8/otiBguI1w2lk9hHNXqnI
+         Ah2KYY6LjOawBgQgGE7+KdjMHlAl54JHjYq3LkyXXdtAFjOKz1mvf6BzmmkH3bJ3ITRx
+         BoAPd/vlyz23S4tdpthx6JmSXvk85dXhFPneTR68UnNNct00yEIDFQ7BKo5JeCGAFsTf
+         kSfwAWc+cdnWmPAUKROQqfPdMslbpdSaLjacJqBTP+eYHZGM1v0OM3x0Yxp48pMigh0+
+         RFP+MRBcL7tHV7qoZI8yQcfPZtmOb4cFGQM7UPaDISXkdWalKSpU0eAVdplz/50FrSXS
+         esDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=akNBIPEkQByIFfu1P2peeZN+JzE2WGUVrx0nJKmv+Ig=;
+        b=mDdOgb+hBULAV+sQgORavr5wWKgPDwzgcMF/z34NvGN3nta9Sw6sCb0pfXAy5Xhdss
+         fnK/f0lIkRca77amdAW8dJcFrAy3tjGXaDPxgO/8FERL0/nP2Yq3O8IZpYZwxmqnyigO
+         rbo2M/tK1q/BfV5ARO/2FMTpec4RWLMsXUsCShtBBWTdYwP5eKy+FIvj0OIT8H2vdSp4
+         sxXrSmKGNY/1BOLxEJ62iAX0R4JZ96PjXTItTCHLYhUPlKYMUNV2sWkl3HLc4t8aZhNA
+         Dv6CGhaA5dNUoOGIz8JDlOo4Q37bVqcRApbvpieyQZJmsRNSUL510ZoscuBE+MowEJUA
+         qIVQ==
+X-Gm-Message-State: AOAM531Pd6mIw23M46CT1At5i9RsU9u4A9c8d6cznH9joccGNPT5AW2F
+        zofsXaENx2SaWmuruMhDtvO9sSgGDmAej5peOzJF
+X-Google-Smtp-Source: ABdhPJycdiADIHXzwCC4XbXDGCbSn1ShsYMkBqzWdZbiKVObYX6mlneZ3AzzwH9MsKG0FKNcfDxCMHxteeDPm3BK6vw=
+X-Received: by 2002:a05:6402:3551:: with SMTP id f17mr10816345edd.331.1642198393740;
+ Fri, 14 Jan 2022 14:13:13 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220112080356.666999-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <tencent_A49992D0BF00081EB37A6E21070E45563806@qq.com>
+In-Reply-To: <tencent_A49992D0BF00081EB37A6E21070E45563806@qq.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 14 Jan 2022 17:13:02 -0500
+Message-ID: <CAHC9VhQDEG7hOwAzTCkaiO7r7sgaV2B08BVV6V3XMVLZztcS+g@mail.gmail.com>
+Subject: Re: [PATCHv2] integrity: check the return value of audit_log_start()
+To:     xkernel.wang@foxmail.com
+Cc:     jmorris@namei.org, serge@hallyn.com,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/22 12:03 AM, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> Return value from nf_register_net_hooks() directly instead
-> of taking this in another redundant variable.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+On Thu, Jan 13, 2022 at 11:24 PM <xkernel.wang@foxmail.com> wrote:
+>
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
+>
+> audit_log_start() returns audit_buffer pointer on success or NULL on
+> error, so it is better to check the return value of it.
+>
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-Acked-by: John Johansen <john.johansen@canonical.com>
-
-I will pull this into my tree
+Reviewed-by: Paul Moore <paul@paul-moore.com>
 
 > ---
->  security/apparmor/lsm.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-> index ce7d96627810..f3deeb8b712e 100644
-> --- a/security/apparmor/lsm.c
-> +++ b/security/apparmor/lsm.c
-> @@ -1799,11 +1799,8 @@ static const struct nf_hook_ops apparmor_nf_ops[] = {
->  
->  static int __net_init apparmor_nf_register(struct net *net)
->  {
-> -	int ret;
-> -
-> -	ret = nf_register_net_hooks(net, apparmor_nf_ops,
-> +	return nf_register_net_hooks(net, apparmor_nf_ops,
->  				    ARRAY_SIZE(apparmor_nf_ops));
-> -	return ret;
->  }
->  
->  static void __net_exit apparmor_nf_unregister(struct net *net)
-> 
+> Changelogs: simplify the patch.
+> Note: Take the suggestion from Paul Moore.
+>  security/integrity/integrity_audit.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/security/integrity/integrity_audit.c b/security/integrity/integrity_audit.c
+> index 2922005..0ec5e4c 100644
+> --- a/security/integrity/integrity_audit.c
+> +++ b/security/integrity/integrity_audit.c
+> @@ -45,6 +45,8 @@ void integrity_audit_message(int audit_msgno, struct inode *inode,
+>                 return;
+>
+>         ab = audit_log_start(audit_context(), GFP_KERNEL, audit_msgno);
+> +       if (!ab)
+> +               return;
+>         audit_log_format(ab, "pid=%d uid=%u auid=%u ses=%u",
+>                          task_pid_nr(current),
+>                          from_kuid(&init_user_ns, current_uid()),
+> --
 
+-- 
+paul moore
+www.paul-moore.com

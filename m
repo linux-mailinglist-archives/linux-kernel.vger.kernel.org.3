@@ -2,87 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC5548E807
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 11:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE3C48E817
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 11:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240162AbiANKDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 05:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiANKDb (ORCPT
+        id S237618AbiANKH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 05:07:58 -0500
+Received: from mail-m971.mail.163.com ([123.126.97.1]:29376 "EHLO
+        mail-m971.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231187AbiANKH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 05:03:31 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F389C061574;
-        Fri, 14 Jan 2022 02:03:31 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id g11-20020a17090a7d0b00b001b2c12c7273so7114609pjl.0;
-        Fri, 14 Jan 2022 02:03:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s6C6u8TBdc9M8p01GH9e4dr/uBTHy41NUIFTVoZys3s=;
-        b=AWImLrAs920lXTMlJh1le5mebyLF8myq0jAjgSxB7poe4xKclRAZnV1wwiTAeZwg7l
-         gOPwBezlQW1DrpOhR5tO7z9GP0NIS5iXqYs468SWoedP4tvmCToTiQQXLIgyawCNGCKB
-         /1vn7uFHOypitUcOUQ4yD5fy1p1BJ+DByEOkkIXWRFP1MEDXI9kaocPtp3/kffXoHH7a
-         /debY7bmd5TweIrldcsgcMKd61jpC2tBAUl9Pjgg7eVO/9kxdYRoN+N98SMYGDmCUZtJ
-         LMRGyqfY31Lt7VTuWxSrm9i0yJ1SGHPcfWPnd0SKggOrbM8k+36j4ofYabvUv+plAoa6
-         5Y8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s6C6u8TBdc9M8p01GH9e4dr/uBTHy41NUIFTVoZys3s=;
-        b=WM+dFjkJULOc5bg7R8PFzZalUwXRkMvbq7wasibC5eU0UyccrcwnI+gBlyi/mckZDH
-         64xQ3iweW8kdd+O71duNIbzBqkQHyJ6YJtJBcp61rTA6WLJCtt5dslDgXHLozMQM8kIo
-         WS3vHQPpFBmBfK3PFzOfbvi4rE1cT92R25lmRTM4MGW95llXiWLoqkpUhSzhuMs7EuTn
-         rH1F3gGABvPK551AEW5OFf3fq8aqRVzRXWOxJJf4ml5SoGjx09u4Y/KawVqmC12B0UsC
-         Fk+r/n5G9b0P4nOQFiPPKDTDo3NTD3zLFM+M/ajimZ3w6tqEI1cFliHqwYFEawO8KXTh
-         C5Lg==
-X-Gm-Message-State: AOAM531gEtuWHN83AclmkPzVCsl5buAjAqksdh7tQuWKCMebTHpY+hvY
-        qLb3RGCuURpgWBCKhIgU52P+Mn0Ob5mUm+K4Jmo=
-X-Google-Smtp-Source: ABdhPJzFXa1+5zcRjtQjdRUQ9nz12FaliOO8vqTVftxdvQWzLH3ulk1/Iqq/aVM9G7JxKxcAYpWnfmMhIj8CRQKjUSY=
-X-Received: by 2002:a17:90a:a588:: with SMTP id b8mr19504354pjq.25.1642154611189;
- Fri, 14 Jan 2022 02:03:31 -0800 (PST)
+        Fri, 14 Jan 2022 05:07:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=xKG0/
+        VpM8JY7qr+GY07L9dUEfdhlUMTKwgIXVuXGgaM=; b=oSPemfIEe1p9bZCRO0hrk
+        NYDlF7vFo9qlEi02jZPFUQ9QvePhcYGMF/E62m6cUjtENaDh5tvGAhAzlyqEVJc9
+        dtXX/qyleu/hj840qfb+rPyuWmeWPc5vS9IApHximty5/2Y8SnG7FpOcBo12jXYi
+        qgAkmAJFvbYdOWPEIJ/xPI=
+Received: from localhost.localdomain (unknown [112.97.56.99])
+        by smtp1 (Coremail) with SMTP id GdxpCgAn3qpoS+FhBrA7AA--.2798S2;
+        Fri, 14 Jan 2022 18:07:38 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
+        johannes@sipsolutions.net, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>, Shujun Wang <wsj20369@163.com>
+Subject: [PATCH] Fix MRU mismatch issue which may lead to data connection lost
+Date:   Fri, 14 Jan 2022 18:07:31 +0800
+Message-Id: <20220114100731.4033-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220112143517.262143-1-sxwjean@me.com> <20220112143517.262143-3-sxwjean@me.com>
- <YeBFxBwaHtfs8jmg@dhcp22.suse.cz>
-In-Reply-To: <YeBFxBwaHtfs8jmg@dhcp22.suse.cz>
-From:   Xiongwei Song <sxwjean@gmail.com>
-Date:   Fri, 14 Jan 2022 18:03:04 +0800
-Message-ID: <CAEVVKH-L-6Yra75XEWUNiq=ajJmtWauDTcmN=b1VCcJ0NVS7OA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] proc: Add getting pages info of ZONE_DEVICE support
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Xiongwei Song <sxwjean@me.com>, akpm@linux-foundation.org,
-        David Hildenbrand <david@redhat.com>, dan.j.williams@intel.com,
-        osalvador@suse.de, naoya.horiguchi@nec.com,
-        thunder.leizhen@huawei.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GdxpCgAn3qpoS+FhBrA7AA--.2798S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7AFyDWFW5KFyfZw4fCw4fAFb_yoW8Jw15pF
+        WY9345trn7X3y2ga1kGr17ZFy5K3Z8Wry7KrWa93yFqFn5ZFn0grZ0gr1Fvr4Fyay8CF4j
+        yF4vqF47uan8uw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Uv0PhUUUUU=
+X-Originating-IP: [112.97.56.99]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiNQqIZFrPfATt3gAAsN
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Michal,
+In pci_generic.c there is a 'mru_default' in struct mhi_pci_dev_info.
+This value shall be used for whole mhi if it's given a value for a specific product.
+But in function mhi_net_rx_refill_work(), it's still using hard code value MHI_DEFAULT_MRU.
+'mru_default' shall have higher priority than MHI_DEFAULT_MRU.
+And after checking, this change could help fix a data connection lost issue.
 
-On Thu, Jan 13, 2022 at 11:31 PM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Wed 12-01-22 22:35:17, sxwjean@me.com wrote:
-> > From: Xiongwei Song <sxwjean@gmail.com>
-> >
-> > When requesting pages info by /proc/kpage*, the pages in ZONE_DEVICE were
-> > ignored.
-> >
-> > The pfn_to_devmap_page() function can help to get page that belongs to
-> > ZONE_DEVICE.
->
-> Why is this needed? Who would consume that information and what for?
+Signed-off-by: Shujun Wang <wsj20369@163.com>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/net/wwan/mhi_wwan_mbim.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-It's for debug purpose, which checks page flags in system wide. No any other
-special thought. But it looks like it's not appropriate to expose now from my
-understand, which is from David's comment.
-https://lore.kernel.org/linux-mm/20220110141957.259022-1-sxwjean@me.com/T/#m4eccbb2698dbebc80ec00be47382b34b0f64b4fc
+diff --git a/drivers/net/wwan/mhi_wwan_mbim.c b/drivers/net/wwan/mhi_wwan_mbim.c
+index 71bf9b4f769f..6872782e8dd8 100644
+--- a/drivers/net/wwan/mhi_wwan_mbim.c
++++ b/drivers/net/wwan/mhi_wwan_mbim.c
+@@ -385,13 +385,13 @@ static void mhi_net_rx_refill_work(struct work_struct *work)
+ 	int err;
+ 
+ 	while (!mhi_queue_is_full(mdev, DMA_FROM_DEVICE)) {
+-		struct sk_buff *skb = alloc_skb(MHI_DEFAULT_MRU, GFP_KERNEL);
++		struct sk_buff *skb = alloc_skb(mbim->mru, GFP_KERNEL);
+ 
+ 		if (unlikely(!skb))
+ 			break;
+ 
+ 		err = mhi_queue_skb(mdev, DMA_FROM_DEVICE, skb,
+-				    MHI_DEFAULT_MRU, MHI_EOT);
++				    mbim->mru, MHI_EOT);
+ 		if (unlikely(err)) {
+ 			kfree_skb(skb);
+ 			break;
+-- 
+2.25.1
 
-Regards,
-Xingwei

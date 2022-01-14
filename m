@@ -2,119 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F02A48F19E
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 21:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8F048F1A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 21:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240427AbiANUlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 15:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239585AbiANUlt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 15:41:49 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F8AC06173E
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:41:49 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id g205so13858191oif.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:41:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=w8eYRN8DvaWrfxZ2Wz3wjJHXZl1sXzUmVItZvQrcpIU=;
-        b=OKa3qW6WIsuRKuwVZNQaoh+x0FXafWzSaIVMiOJybsAilmpEY6W3EOaW9x2UgT2rw5
-         7Z6ixaS6ITqghZ1bGqvYEroKq3/zGqHGcf6lImK8zDJvW3Mf+P2/aLm6KsTE0F3P8quV
-         5MzfzisWUjGUiPZu535FQWvgGlcTrhsR26KJc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=w8eYRN8DvaWrfxZ2Wz3wjJHXZl1sXzUmVItZvQrcpIU=;
-        b=FcnmKGFvs4b61v1KFRVflD6hqnRpwmSdULJe2E9gIUjxApQzX7Xs36rqK6YsYioEjg
-         1Pur1H8h3iw5fvdum9SWgnm0DOq85pAEAZ9ppPtAr2OdzTCz08vx27VsR5Fd6htRVSvz
-         2ZXOLBPuutyMv+CxlCmF9ovQO+iK8gbf3eUvQVOpItSM9ieSOUzxKyH3bwNG5bmprWU8
-         wWgeCj6fB4FS/rkEetHZ4/q7+e2EGmqlzhM7SxJ3hZD8D/HnRs7D4BG+nSjjgjAgCFHT
-         IDDZImkQnzahMm/zPW1m2nkyS13YaBaasZxhh4+/v7a9ypTv/F+bTy/TLJZs3xTtBUTF
-         ozXg==
-X-Gm-Message-State: AOAM531ZkJ6aiw86Z7mSvOZXwYqnSDQf/BXqYm7P/6ElNUxmeCDpTHda
-        3qb08C//yyU0/txmGhkt8jaoN6OzDtatYe6WIuOyeYiVyH0=
-X-Google-Smtp-Source: ABdhPJyJdhcMkqImaSUxZ1WkeHPyT3tbME4n66V0rAr6S+Pk6ZlC3B9/0q6DsTjh/bqpzaqTLFTgaIaDVy4htwfjrno=
-X-Received: by 2002:aca:4382:: with SMTP id q124mr8893398oia.64.1642192908901;
- Fri, 14 Jan 2022 12:41:48 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 14 Jan 2022 14:41:48 -0600
+        id S244286AbiANUs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 15:48:28 -0500
+Received: from mga06.intel.com ([134.134.136.31]:4744 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236975AbiANUs1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 15:48:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642193307; x=1673729307;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WJnOki/acRxkRycDA1MP3ik1IpUr2u6KCu76PpNEKOM=;
+  b=Ztq+yWyX+BcIZhzSPZlkDeqIaVWT+YYEPrCGd/Bx1YjKbxW6oOP52YPb
+   tVOSQTZJJ4MTFSCMM4Lr8zWf/TL16KOwFJHNh9MCPCxblpUMxEpBUJSO0
+   N9BzkzGLxdPfucd7c/9gl6rP97hP+wis1pNlEM3S5tEeVu0RV1iApJWNZ
+   3gsK0MjhD51IRJefrrfWN8G585cvRMgcGPYJ79Uy7X7vt9M6MJ60JtYmN
+   MNTt/PdAUxio/Wky0s7M7vF6LNfYUKsLh5qAuqxjYXnIZiNsfS+VLk6KE
+   jgorWqPS+gG7/BvAd0nQts6A7Hj7x7sbLbMka5tucgV5phoRwwR1Gb23/
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="305059325"
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="305059325"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 12:48:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
+   d="scan'208";a="692346324"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 14 Jan 2022 12:48:26 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8TUn-0008yv-PN; Fri, 14 Jan 2022 20:48:25 +0000
+Date:   Sat, 15 Jan 2022 04:47:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1595/2383]
+ ./usr/include/linux/if_link.h:5:10: fatal error: uapi/linux/netlink.h: No
+ such file or directory
+Message-ID: <202201150439.Rc5HIAEq-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <1642182874-27296-2-git-send-email-quic_khsieh@quicinc.com>
-References: <1642182874-27296-1-git-send-email-quic_khsieh@quicinc.com> <1642182874-27296-2-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 14 Jan 2022 14:41:48 -0600
-Message-ID: <CAE-0n52UntroUk9hzPorUOvkVty1=V5B2oznYghi_DM6=zyzrw@mail.gmail.com>
-Subject: Re: [PATCH v14 1/4] drm/msm/dp: do not initialize phy until plugin
- interrupt received
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-01-14 09:54:31)
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 7cc4d21..2616f7b 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -372,21 +373,38 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
->         return rc;
->  }
->
-> -static void dp_display_host_init(struct dp_display_private *dp, int reset)
-> +static void dp_display_host_phy_init(struct dp_display_private *dp)
->  {
-> -       bool flip = false;
-> +       DRM_DEBUG_DP("core_init=%d phy_init=%d\n",
-> +                       dp->core_initialized, dp->phy_initialized);
->
-> +       if (!dp->phy_initialized) {
-> +               dp_ctrl_phy_init(dp->ctrl);
-> +               dp->phy_initialized = true;
-> +       }
-> +}
-> +
-> +static void dp_display_host_phy_exit(struct dp_display_private *dp)
-> +{
-> +       DRM_DEBUG_DP("core_init=%d phy_init=%d\n",
-> +                       dp->core_initialized, dp->phy_initialized);
-> +
-> +       if (dp->phy_initialized) {
-> +               dp_ctrl_phy_exit(dp->ctrl);
-> +               dp->phy_initialized = false;
-> +       }
-> +}
-> +
-> +static void dp_display_host_init(struct dp_display_private *dp)
-> +{
->         DRM_DEBUG_DP("core_initialized=%d\n", dp->core_initialized);
->         if (dp->core_initialized) {
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   d772004cd069a1947a890ccc8346e922f866ba1e
+commit: 60d16930c980493906092825024aebd0235c0f37 [1595/2383] headers/deps: net: Optimize <uapi/linux/if_link.h>
+config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220115/202201150439.Rc5HIAEq-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=60d16930c980493906092825024aebd0235c0f37
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 60d16930c980493906092825024aebd0235c0f37
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Can you remove this if condition too? I don't see how it ever happens.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->                 DRM_DEBUG_DP("DP core already initialized\n");
->                 return;
->         }
->
-> -       if (dp->usbpd->orientation == ORIENTATION_CC2)
-> -               flip = true;
-> -
-> -       dp_power_init(dp->power, flip);
-> -       dp_ctrl_host_init(dp->ctrl, flip, reset);
-> +       dp_power_init(dp->power, false);
-> +       dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
->         dp_aux_init(dp->aux);
->         dp->core_initialized = true;
->  }
+All errors (new ones prefixed by >>):
+
+   In file included from <command-line>:32:
+>> ./usr/include/linux/if_link.h:5:10: fatal error: uapi/linux/netlink.h: No such file or directory
+       5 | #include <uapi/linux/netlink.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

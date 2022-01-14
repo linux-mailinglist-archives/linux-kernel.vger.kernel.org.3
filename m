@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4800548E786
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5107D48E74A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237968AbiANJ2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 04:28:21 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:57088 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiANJ2U (ORCPT
+        id S239790AbiANJS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 04:18:57 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:17347 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236423AbiANJS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:28:20 -0500
-Received: by mail-io1-f71.google.com with SMTP id d125-20020a6bb483000000b006051f7a8573so5269119iof.23
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 01:28:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=al7eFBuh4sFwLCL4GiOXmiXiy1H4469bZvRRUWVvLdA=;
-        b=NekbblI/WhRWSaUWQSlrm2FrSdeNtxmA+2G+A5ZFc2UqlvfDLs67A6z6Xo1mhtbTYo
-         e1ZxaK4UEOtFaMSV05ugzAESKSKdDBiPiYf2aWQIMLSOySx+M056MLK7Mz5EejddIvzl
-         voIHZpzYBMY5fIbrrgijlSGu5YmJR+1/W9eR9bC0qReu9vyJrGhkeCRzoq96RvhKsJrc
-         awkBKLXpAfUzb57mCb7OGrOC8ZG3mUv6KgkKM6ITIZoCmBikDBpPFXTHOptPUMy8y52Z
-         Kty+qI6c1PqPU1keaBONW2OzbPfkTqTZ0vnKIQ4MJORTWJJ+d8zUa+YFMJq2ioLxrc3y
-         TbZQ==
-X-Gm-Message-State: AOAM5334IzUHmxXOi1ntgj2yi4gs0q0zODAart8bhhqDcmMt/8q9cXB3
-        mHhUGezjh9J5eMemdo3UqOTutZ3rBeEFbS+Adyd4w1uT7bCz
-X-Google-Smtp-Source: ABdhPJxyXr0SBcgR05CtxsGITEYhHVGsVTH3amDHmbiFuXEEPQXjM4u7Ifq2Z/daTNoBSH+81dLAkvlbNRIQ74v76uwVeMr2DQ8S
+        Fri, 14 Jan 2022 04:18:56 -0500
+Received: from kwepemi100006.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JZwgX5M9xz9sBr;
+        Fri, 14 Jan 2022 17:17:44 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100006.china.huawei.com (7.221.188.165) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 14 Jan 2022 17:18:54 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 14 Jan
+ 2022 17:18:53 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <tj@kernel.org>, <axboe@kernel.dk>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH -next] blk-throttle: enable io throttle for root in cgroup v2
+Date:   Fri, 14 Jan 2022 17:30:00 +0800
+Message-ID: <20220114093000.3323470-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:9108:: with SMTP id a8mr3729402jag.284.1642152499779;
- Fri, 14 Jan 2022 01:28:19 -0800 (PST)
-Date:   Fri, 14 Jan 2022 01:28:19 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006aa20b05d5876c1f@google.com>
-Subject: [syzbot] KASAN: null-ptr-deref Write in kcm_tx_work (2)
-From:   syzbot <syzbot+25ca556057c68f8a03a2@syzkaller.appspotmail.com>
-To:     aahringo@redhat.com, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, paskripkin@gmail.com,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
-        unixbhaskar@gmail.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+RFC patch: https://lkml.org/lkml/2021/9/9/1432
 
-syzbot found the following issue on:
+There is a proformance problem in our environment:
 
-HEAD commit:    df0cc57e057f Linux 5.16
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12a89d2db00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ea1f52f5503d3ac3
-dashboard link: https://syzkaller.appspot.com/bug?extid=25ca556057c68f8a03a2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+A host can provide a remote device to difierent client. If one client is
+under high io pressure, other clients might be affected.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Limit the overall iops/bps(io.max) from the client can fix the problem,
+however, config files do not exist in root cgroup currently, which makes
+it impossible.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+25ca556057c68f8a03a2@syzkaller.appspotmail.com
+This patch enables io throttle for root cgroup:
+ - enable "io.max" and "io.low" in root
+ - don't skip root group in tg_iops_limit() and tg_bps_limit()
+ - don't skip root group in tg_conf_updated()
 
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_write include/linux/instrumented.h:86 [inline]
-BUG: KASAN: null-ptr-deref in clear_bit include/asm-generic/bitops/instrumented-atomic.h:41 [inline]
-BUG: KASAN: null-ptr-deref in kcm_tx_work+0xff/0x160 net/kcm/kcmsock.c:741
-Write of size 8 at addr 0000000000000008 by task kworker/u4:47/7955
-
-CPU: 1 PID: 7955 Comm: kworker/u4:47 Not tainted 5.16.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: kkcmd kcm_tx_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- __kasan_report mm/kasan/report.c:437 [inline]
- kasan_report.cold+0x66/0xdf mm/kasan/report.c:450
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_write include/linux/instrumented.h:86 [inline]
- clear_bit include/asm-generic/bitops/instrumented-atomic.h:41 [inline]
- kcm_tx_work+0xff/0x160 net/kcm/kcmsock.c:741
- process_one_work+0x9b2/0x1660 kernel/workqueue.c:2298
- worker_thread+0x65d/0x1130 kernel/workqueue.c:2445
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-==================================================================
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 7955 Comm: kworker/u4:47 Tainted: G    B             5.16.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: kkcmd kcm_tx_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- panic+0x2b0/0x6dd kernel/panic.c:232
- end_report.cold+0x63/0x6f mm/kasan/report.c:128
- __kasan_report mm/kasan/report.c:440 [inline]
- kasan_report.cold+0x71/0xdf mm/kasan/report.c:450
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_write include/linux/instrumented.h:86 [inline]
- clear_bit include/asm-generic/bitops/instrumented-atomic.h:41 [inline]
- kcm_tx_work+0xff/0x160 net/kcm/kcmsock.c:741
- process_one_work+0x9b2/0x1660 kernel/workqueue.c:2298
- worker_thread+0x65d/0x1130 kernel/workqueue.c:2445
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ block/blk-throttle.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+index 7c462c006b26..ac25bfbbfe7f 100644
+--- a/block/blk-throttle.c
++++ b/block/blk-throttle.c
+@@ -156,9 +156,6 @@ static uint64_t tg_bps_limit(struct throtl_grp *tg, int rw)
+ 	struct throtl_data *td;
+ 	uint64_t ret;
+ 
+-	if (cgroup_subsys_on_dfl(io_cgrp_subsys) && !blkg->parent)
+-		return U64_MAX;
+-
+ 	td = tg->td;
+ 	ret = tg->bps[rw][td->limit_index];
+ 	if (ret == 0 && td->limit_index == LIMIT_LOW) {
+@@ -186,9 +183,6 @@ static unsigned int tg_iops_limit(struct throtl_grp *tg, int rw)
+ 	struct throtl_data *td;
+ 	unsigned int ret;
+ 
+-	if (cgroup_subsys_on_dfl(io_cgrp_subsys) && !blkg->parent)
+-		return UINT_MAX;
+-
+ 	td = tg->td;
+ 	ret = tg->iops[rw][td->limit_index];
+ 	if (ret == 0 && tg->td->limit_index == LIMIT_LOW) {
+@@ -1284,9 +1278,8 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
+ 		struct throtl_grp *parent_tg;
+ 
+ 		tg_update_has_rules(this_tg);
+-		/* ignore root/second level */
+-		if (!cgroup_subsys_on_dfl(io_cgrp_subsys) || !blkg->parent ||
+-		    !blkg->parent->parent)
++		/* ignore root level */
++		if (!cgroup_subsys_on_dfl(io_cgrp_subsys) || !blkg->parent)
+ 			continue;
+ 		parent_tg = blkg_to_tg(blkg->parent);
+ 		/*
+@@ -1625,7 +1618,6 @@ static struct cftype throtl_files[] = {
+ #ifdef CONFIG_BLK_DEV_THROTTLING_LOW
+ 	{
+ 		.name = "low",
+-		.flags = CFTYPE_NOT_ON_ROOT,
+ 		.seq_show = tg_print_limit,
+ 		.write = tg_set_limit,
+ 		.private = LIMIT_LOW,
+@@ -1633,7 +1625,6 @@ static struct cftype throtl_files[] = {
+ #endif
+ 	{
+ 		.name = "max",
+-		.flags = CFTYPE_NOT_ON_ROOT,
+ 		.seq_show = tg_print_limit,
+ 		.write = tg_set_limit,
+ 		.private = LIMIT_MAX,
+-- 
+2.31.1
+

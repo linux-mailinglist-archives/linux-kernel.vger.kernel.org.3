@@ -2,109 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC23D48F200
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5232A48F203
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiANVVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 16:21:23 -0500
-Received: from foss.arm.com ([217.140.110.172]:38020 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229741AbiANVVW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 16:21:22 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8035C6D;
-        Fri, 14 Jan 2022 13:21:21 -0800 (PST)
-Received: from ip-10-252-15-108.eu-west-1.compute.internal (unknown [10.252.15.108])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A20393F774;
-        Fri, 14 Jan 2022 13:21:18 -0800 (PST)
-From:   German Gomez <german.gomez@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     German Gomez <german.gomez@arm.com>,
-        Chase Conklin <chase.conklin@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Stephane Eranian <eranian@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH] perf record/arm-spe: Override attr->sample_period for non-libpfm4 events
-Date:   Fri, 14 Jan 2022 21:21:02 +0000
-Message-Id: <20220114212102.179209-1-german.gomez@arm.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S229811AbiANVZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 16:25:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229545AbiANVZw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 16:25:52 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967B9C061574;
+        Fri, 14 Jan 2022 13:25:52 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id k14so9946029ion.7;
+        Fri, 14 Jan 2022 13:25:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=uDnDf1DQUcIKiU/WmtPYVDPZoECXknDFAzEAIWPNPfc=;
+        b=mpwljeHfYu+YF13MLEqbg4u5QEnsIwf+LiYrYhrrYAnIxk1chi1CTNZGYWVozYv3jU
+         Yd5ovjTDJXVj+EoRDJ3lGTfztNxZX8E9k1NxXQ4WnTNPSQap1I8VPwBIAU01jhinJk2U
+         IgJZ1OdnDJYf5IsTi7woX1klQFXEz57GP9Wp9qZYtyBjGrc5Q2FTwzZvvXv0PCz/PP/B
+         095r9NvNMwzyY8J0YgdyGNAHUeNz4zk0qqJ8sJpJLoV/09ho9OVoQAbRiRDJKnwvKbMo
+         Zfvv3bBfEg2Cu6HlyUVf0XAq7/6gwhzRap0Khax5rpDXR+XAY5PL5KTJCYJMU18Flvhn
+         NdIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=uDnDf1DQUcIKiU/WmtPYVDPZoECXknDFAzEAIWPNPfc=;
+        b=vM2LnKXjmIqOY2A9boGOe1wyu1cN+/3i6gT9Im4h40+6lRkwle/X33BlprlpLRlqzi
+         WeR/c91ualIJWN//ox8LAUcsmINjQKjnI0wtS3yYevstp+c1m+r39s9jCnegLtU8qioy
+         xzF/SSiy5Hxs8KAkVo3uhL1mP2PS83O3qGd1CoGaG+q9anhLcrwKZa49M/QbSzg3rEfh
+         dczGu30nOqdozFjx7LQvijh/VXG8eyzwgMiQKjFy6/yW8DM5UyFjc5sEtXmRTaC1XlAF
+         sUEBH+nyZ0iqFb/NMy1g0rMahWbcPpkhzUF4h82xe/P/SSn+iWsUGUflCeP6yLVTsSZX
+         ZRMA==
+X-Gm-Message-State: AOAM533RJPawryabNSjmzcelIzl5Nrl+6m9JrlAVh8SslZfsOvGtlJhQ
+        vhax73ugpob9kc6gL+Jur7pRq6bFEYrZIIOOe9k=
+X-Google-Smtp-Source: ABdhPJza9aKEtuNK5at3/gBvae2H+p0bDrVD5mR6YRXkAKacewQ7GCLK+nMsgkThfA54h4NhDjhtoQ==
+X-Received: by 2002:a05:6638:359f:: with SMTP id v31mr4817280jal.59.1642195551501;
+        Fri, 14 Jan 2022 13:25:51 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id n5sm5628388ilk.44.2022.01.14.13.25.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 13:25:50 -0800 (PST)
+Message-ID: <61e1ea5e.1c69fb81.f740b.8957@mx.google.com>
+Date:   Fri, 14 Jan 2022 13:25:50 -0800 (PST)
+X-Google-Original-Date: Fri, 14 Jan 2022 21:25:49 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
+Subject: RE: [PATCH 5.10 00/25] 5.10.92-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A previous commit preventing attr->sample_period values from being
-overridden in pfm events changed a related behaviour in arm_spe.
+On Fri, 14 Jan 2022 09:16:08 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.10.92 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.92-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Before this patch:
-perf record -c 10000 -e arm_spe_0// -- sleep 1
-
-Would not yield an SPE event with period=10000, because the arm-spe code
-initializes sample_period to a non-0 value, so the "-c 10000" is ignored.
-
-This patch restores the previous behaviour for non-libpfm4 events.
-
-Reported-by: Chase Conklin <chase.conklin@arm.com>
-Fixes: ae5dcc8abe31 (“perf record: Prevent override of attr->sample_period for libpfm4 events”)
-Signed-off-by: German Gomez <german.gomez@arm.com>
----
- tools/perf/util/evsel.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
-
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index a59fb2ecb84e..86ab038f020f 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -1065,6 +1065,17 @@ void __weak arch_evsel__fixup_new_cycles(struct perf_event_attr *attr __maybe_un
- {
- }
- 
-+static void evsel__set_default_freq_period(struct record_opts *opts,
-+					   struct perf_event_attr *attr)
-+{
-+	if (opts->freq) {
-+		attr->freq = 1;
-+		attr->sample_freq = opts->freq;
-+	} else {
-+		attr->sample_period = opts->default_interval;
-+	}
-+}
-+
- /*
-  * The enable_on_exec/disabled value strategy:
-  *
-@@ -1131,14 +1142,12 @@ void evsel__config(struct evsel *evsel, struct record_opts *opts,
- 	 * We default some events to have a default interval. But keep
- 	 * it a weak assumption overridable by the user.
- 	 */
--	if (!attr->sample_period) {
--		if (opts->freq) {
--			attr->freq		= 1;
--			attr->sample_freq	= opts->freq;
--		} else {
--			attr->sample_period = opts->default_interval;
--		}
--	}
-+	if ((evsel->is_libpfm_event && !attr->sample_period) ||
-+	    (!evsel->is_libpfm_event && (!attr->sample_period ||
-+					 opts->user_freq != UINT_MAX ||
-+					 opts->user_interval != ULLONG_MAX)))
-+		evsel__set_default_freq_period(opts, attr);
-+
- 	/*
- 	 * If attr->freq was set (here or earlier), ask for period
- 	 * to be sampled.
--- 
-2.25.1
+5.10.92-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 

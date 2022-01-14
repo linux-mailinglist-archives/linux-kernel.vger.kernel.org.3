@@ -2,228 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D1A48F27A
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 23:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FBD48F27E
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 23:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbiANWeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 17:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
+        id S230483AbiANWfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 17:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiANWep (ORCPT
+        with ESMTP id S230465AbiANWfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 17:34:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC21FC061574;
-        Fri, 14 Jan 2022 14:34:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD04062043;
-        Fri, 14 Jan 2022 22:34:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC69C36AE7;
-        Fri, 14 Jan 2022 22:34:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642199684;
-        bh=QU4uu8c2AN5ou8pfgm1CaFYrtNH/RkWfeCBkbLFDLZM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a57lOta+u4qH0pzJV9qP2ZQHyNzVEgqeR2ecRoDHvHN5HW03vctOIv+BMI98V8DN2
-         B1mWlKQCSbHme5vPlJVstvpUpYNbcJBGLluwlhWxrNU4v0MLHnzl+ySSIdi6wEpPIS
-         xje/m6doB47cEctoC7LTTUYk+/Lu4SirQMdJDE9KnvxXfJ96dQHusw5Rjrs6wA3Q7Q
-         c+/uX9i259fqPLtmGNarScgLl7n0ISrsIUqXhGZKhcJImv4iNs2NLSJ5/5/ziTEpoV
-         Nq8Ubp0J+jou4hEIlhRizKm5nMMkYNx+ut/gKpGZ+h+TucF+79dN0clkRU2HMfyRR8
-         L98bldTfuSDmg==
-Date:   Sat, 15 Jan 2022 00:34:31 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Nathaniel McCallum <nathaniel@profian.com>,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, dave.hansen@linux.intel.com,
-        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com,
-        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
-        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
-Message-ID: <YeH6d5KEnT6xfpyP@iki.fi>
-References: <op.1fsvkfiwwjvjmi@hhuan26-mobl1.mshome.net>
- <YdzjEzjF0YKn+pZ6@iki.fi>
- <4195402f-cbf9-bc75-719d-22cea8e36e60@intel.com>
- <Yd9pMq4lUy56B+50@iki.fi>
- <Yd9qmMx7NO450mzZ@iki.fi>
- <CAHAy0tRi2q+wG+yBttq0FYeK-5wUAoK_=ZCtWsfQf0m8oPc1-w@mail.gmail.com>
- <168fb2c9-de3f-384a-bb17-ab84db2cf533@intel.com>
- <YeHwzwnfsUcxiNbw@iki.fi>
- <YeH2Xwn/8RJdicsi@iki.fi>
- <YeH38oEgfHzLYH9k@iki.fi>
+        Fri, 14 Jan 2022 17:35:32 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18017C06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 14:35:32 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id 30so39203146edv.3
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 14:35:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=SkNpdM6eZXXVcJVQ11NWOZFwVrMmc4tVgm0vVCXMsxQ=;
+        b=EYsmK1W8Io0FJyX9tdKZBPvMidx0Rkrh04CvcIo2kLwyFF6JDItVeLXuGEtyu4Zuec
+         W21Rgff1lgsJIBTNEDBFbLEd5u2867bSZ7hAAqKs3JUSFvW5OfdsEv+GPhxWEyFzNrIe
+         eobV42h4uRes/TAbr/mtTfylKWSQNQ6EBRnp0awgChmLa6s2tx5NpqjT5Rr/NFOzBLOC
+         1WMqyVeDPSHRFmjcvZ+rcx1+if45EqfkR1dPCYs35Vt1j7dLCKuTV+m3IupIROtr92Su
+         1YnJEOyGqePtgtLu6jH6D5HfvKq+StEczp1R9TUyUJykUZVksZb5Cv8aSELRnvnPQS/j
+         6X/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SkNpdM6eZXXVcJVQ11NWOZFwVrMmc4tVgm0vVCXMsxQ=;
+        b=dfjbNuzR25DW2dWzqLPNuYoKz2G+xQ5RJ4IjW/c/mbPkk1r58pNEyc5Edxlbd2jek8
+         JXxg8OfM0jfEDWZfLC+407Fj+0b7jLoHxqXczcqU1yxyloXU3RRNeOOiPJLy5U7mbchD
+         6QA6YFz//BEnxWdLbBMz5d4yGXZP098xQUPiBXBujqGdO3dpnUaSH1D+u57CKQcw/E2M
+         SzIWQiEkf+o17CoeST+Xr9C5aE45ah3W5T2v09PspSnSdW/jys7RsAc92SbGhYCcAWnb
+         PrS8aMQiTtffjOgQ/IUC+CSFGduLekMtYak3qiEGF36zGhOxBhPxdpZuZ/lRExRj7v4u
+         Wrow==
+X-Gm-Message-State: AOAM5304j/nXoe/za6m9la2oDDzwHvYJCb1o/lDx0ebnY20GWJms9DwT
+        /z+/3otuvX0lKBKIBeBL2of1q3pEBRy7RE4PYX/0
+X-Google-Smtp-Source: ABdhPJzPoytqdXbJteXXJAmYxB6IAgK+i9VGw6/4V0dSsyNdXqdE2nhD8yJFIVugl0Eb/KHOU9I0xJdwmdkxqZWszC4=
+X-Received: by 2002:a05:6402:1003:: with SMTP id c3mr10879904edu.405.1642199729820;
+ Fri, 14 Jan 2022 14:35:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeH38oEgfHzLYH9k@iki.fi>
+References: <96f4f1cb-0e7d-6682-ce33-f7f1314cba83@huawei.com>
+ <8b487a19-d121-5fee-eda5-0aee9340f453@huawei.com> <CAHC9VhTGTmNzFURkAPm2LW3qL+ijBi=UmXqZBwEWeusC46+8yg@mail.gmail.com>
+ <c0f9b9b3-69a3-1b31-5115-51dd580e00ca@huawei.com>
+In-Reply-To: <c0f9b9b3-69a3-1b31-5115-51dd580e00ca@huawei.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 14 Jan 2022 17:35:18 -0500
+Message-ID: <CAHC9VhQgX070pOXZk_PUsaWGZpPdqVpEZvfYBsE2dnRYrbWsTw@mail.gmail.com>
+Subject: Re: Flush the hold queue fall into an infinite loop.
+To:     cuigaosheng <cuigaosheng1@huawei.com>
+Cc:     linux-audit@redhat.com, Xiujianfeng <xiujianfeng@huawei.com>,
+        wangweiyang <wangweiyang2@huawei.com>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 12:23:46AM +0200, Jarkko Sakkinen wrote:
-> On Sat, Jan 15, 2022 at 12:17:06AM +0200, Jarkko Sakkinen wrote:
-> > On Fri, Jan 14, 2022 at 11:53:22PM +0200, Jarkko Sakkinen wrote:
-> > > On Thu, Jan 13, 2022 at 01:42:50PM -0800, Reinette Chatre wrote:
-> > > > Hi Jarkko and Nathaniel,
-> > > > 
-> > > > On 1/13/2022 12:09 PM, Nathaniel McCallum wrote:
-> > > > > On Wed, Jan 12, 2022 at 6:56 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > >>
-> > > > >> On Thu, Jan 13, 2022 at 01:50:13AM +0200, Jarkko Sakkinen wrote:
-> > > > >>> On Tue, Jan 11, 2022 at 09:13:27AM -0800, Reinette Chatre wrote:
-> > > > >>>> Hi Jarkko,
-> > > > >>>>
-> > > > >>>> On 1/10/2022 5:53 PM, Jarkko Sakkinen wrote:
-> > > > >>>>> On Mon, Jan 10, 2022 at 04:05:21PM -0600, Haitao Huang wrote:
-> > > > >>>>>> On Sat, 08 Jan 2022 10:22:30 -0600, Jarkko Sakkinen <jarkko@kernel.org>
-> > > > >>>>>> wrote:
-> > > > >>>>>>
-> > > > >>>>>>> On Sat, Jan 08, 2022 at 05:51:46PM +0200, Jarkko Sakkinen wrote:
-> > > > >>>>>>>> On Sat, Jan 08, 2022 at 05:45:44PM +0200, Jarkko Sakkinen wrote:
-> > > > >>>>>>>>> On Fri, Jan 07, 2022 at 10:14:29AM -0600, Haitao Huang wrote:
-> > > > >>>>>>>>>>>>> OK, so the question is: do we need both or would a
-> > > > >>>>>>>> mechanism just
-> > > > >>>>>>>>>>>> to extend
-> > > > >>>>>>>>>>>>> permissions be sufficient?
-> > > > >>>>>>>>>>>>
-> > > > >>>>>>>>>>>> I do believe that we need both in order to support pages
-> > > > >>>>>>>> having only
-> > > > >>>>>>>>>>>> the permissions required to support their intended use
-> > > > >>>>>>>> during the
-> > > > >>>>>>>>>>>> time the
-> > > > >>>>>>>>>>>> particular access is required. While technically it is
-> > > > >>>>>>>> possible to grant
-> > > > >>>>>>>>>>>> pages all permissions they may need during their lifetime it
-> > > > >>>>>>>> is safer to
-> > > > >>>>>>>>>>>> remove permissions when no longer required.
-> > > > >>>>>>>>>>>
-> > > > >>>>>>>>>>> So if we imagine a run-time: how EMODPR would be useful, and
-> > > > >>>>>>>> how using it
-> > > > >>>>>>>>>>> would make things safer?
-> > > > >>>>>>>>>>>
-> > > > >>>>>>>>>> In scenarios of JIT compilers, once code is generated into RW pages,
-> > > > >>>>>>>>>> modifying both PTE and EPCM permissions to RX would be a good
-> > > > >>>>>>>> defensive
-> > > > >>>>>>>>>> measure. In that case, EMODPR is useful.
-> > > > >>>>>>>>>
-> > > > >>>>>>>>> What is the exact threat we are talking about?
-> > > > >>>>>>>>
-> > > > >>>>>>>> To add: it should be *significantly* critical thread, given that not
-> > > > >>>>>>>> supporting only EAUG would leave us only one complex call pattern with
-> > > > >>>>>>>> EACCEPT involvement.
-> > > > >>>>>>>>
-> > > > >>>>>>>> I'd even go to suggest to leave EMODPR out of the patch set, and
-> > > > >>>>>>>> introduce
-> > > > >>>>>>>> it when there is PoC code for any of the existing run-time that
-> > > > >>>>>>>> demonstrates the demand for it. Right now this way too speculative.
-> > > > >>>>>>>>
-> > > > >>>>>>>> Supporting EMODPE is IMHO by factors more critical.
-> > > > >>>>>>>
-> > > > >>>>>>> At least it does not protected against enclave code because an enclave
-> > > > >>>>>>> can
-> > > > >>>>>>> always choose not to EACCEPT any of the EMODPR requests. I'm not only
-> > > > >>>>>>> confused here about the actual threat but also the potential adversary
-> > > > >>>>>>> and
-> > > > >>>>>>> target.
-> > > > >>>>>>>
-> > > > >>>>>> I'm not sure I follow your thoughts here. The sequence should be for enclave
-> > > > >>>>>> to request  EMODPR in the first place through runtime to kernel, then to
-> > > > >>>>>> verify with EACCEPT that the OS indeed has done EMODPR.
-> > > > >>>>>> If enclave does not verify with EACCEPT, then its own code has
-> > > > >>>>>> vulnerability. But this does not justify OS not providing the mechanism to
-> > > > >>>>>> request EMODPR.
-> > > > >>>>>
-> > > > >>>>> The question is really simple: what is the threat scenario? In order to use
-> > > > >>>>> the word "vulnerability", you would need one.
-> > > > >>>>>
-> > > > >>>>> Given the complexity of the whole dance with EMODPR it is mandatory to have
-> > > > >>>>> one, in order to ack it to the mainline.
-> > > > >>>>>
-> > > > >>>>
-> > > > >>>> Which complexity related to EMODPR are you concerned about? In a later message
-> > > > >>>> you mention "This leaves only EAUG and EMODT requiring the EACCEPT handshake"
-> > > > >>>> so it seems that you are perhaps concerned about the flow involving EACCEPT?
-> > > > >>>> The OS does not require nor depend on EACCEPT being called as part of these flows
-> > > > >>>> so a faulty or misbehaving user space omitting an EACCEPT call would not impact
-> > > > >>>> these flows in the OS, but would of course impact the enclave.
-> > > > >>>
-> > > > >>> I'd say *any* complexity because I see no benefit of supporting it. E.g.
-> > > > >>> EMODPR/EACCEPT/EMODPE sequence I mentioned to Haitao concerns me. How is
-> > > > >>> EMODPR going to help with any sort of workload?
-> > > > >>
-> > > > >> I've even started think should we just always allow mmap()?
-> > > > > 
-> > > > > I suspect this may be the most ergonomic way forward. Instructions
-> > > > > like EAUG/EMODPR/etc are really irrelevant implementation details to
-> > > > > what the enclave wants, which is a memory mapping in the enclave. Why
-> > > > > make the enclave runner do multiple context switches just to change
-> > > > > the memory map of an enclave?
-> > > > 
-> > > > The enclave runner is not forced to make any changes to a memory mapping. To start,
-> > > > this implementation supports and does not change the existing ABI where a new
-> > > > memory mapping can only be created if its permissions are the same or weaker
-> > > > than the EPCM permissions. After the memory mapping is created the EPCM permissions
-> > > > can change (thanks to SGX2) and when they do there are no forced nor required
-> > > > changes to the memory mapping - pages remain accessible where the memory mapping
-> > > > and EPCM permissions agree. It is true that if an enclave chooses to relax permissions
-> > > > to an enclave page (EMODPE) then the memory mapping may need to be changed as
-> > > > should be expected to access a page with permissions that the memory mapping
-> > > > did not previously allow.
-> > > > 
-> > > > Are you saying that the permissions of a new memory mapping should now be allowed
-> > > > to exceed EPCM permissions and thus the enclave runner would not need to modify a
-> > > > memory mapping when EPCM permissions are relaxed? As mentioned above this may be
-> > > > considered a change in ABI but something we could support on SGX2 systems.
-> > > > 
-> > > > I would also like to highlight Haitao's earlier comment that a foundation of SGX is
-> > > > that the OS is untrusted. The enclave owner does not trust the OS and needs EMODPR
-> > > > and EMODPE to manage enclave page permissions.
-> > > 
-> > > Thanks, this was very informative response. I'll try to elaborate why
-> > > EMODPR gives me headaches.
-> > > 
-> > > I'm having hard time to connect the dots between OS mistrust and
-> > > restricting enclave by changing EPCM permissions. To make EMODPR actually
-> > > legit, it needs really at least some sort of example of a scenario where
-> > > mistrusted OS is the adversary and enclave is the attack target. Otherwise,
-> > > we are just waving our hands.
-> > > 
-> > > Generally speaking a restriction is not a restriction if cannot be enforced. 
-> > > 
-> > > I see two non-EMODPR options: you could relax this,  *or* you could make it
-> > > soft restriction by not doing EMODPR but instead just updating the internal
-> > > xarray. The 2nd option would be fully backwards compatible with the
-> > > existing invariant.
-> > > 
-> > > It's really hard to ACK or NAK EMODPR patch without knowing how EMODPE is
-> > > or will be supported.
-> > 
-> > I think I *might* have a supporting scenario for EMODPR.
-> > 
-> > Enclave might want to accept EMODPR request because a bug in functionality
-> > triggered with TCS entries might allow otherwise to rewrite enclave data,
-> > i.e. provide a write primitive outside the enclave. With some other way to
-> > exploit you could have a read primitive and thus have a full access to the
-> > internal data of the enclave.
-> 
-> I.e. because of this it would be "for profit case" for the enclave not to
-> cancel the effect of EMODPR by applying EMODPE because it can protect
-> itself by doing that from malformed input data.
-> 
-> I get that the whole point is the OS mistrust but you really need to bring
-> up the rationale to the specifics what you mean by it in the context of the
-> kernel patch. Otherwise, anything would go by saying that we do this
-> because OS mistrust.
+On Thu, Jan 13, 2022 at 8:22 PM cuigaosheng <cuigaosheng1@huawei.com> wrote=
+:
+>
+> I want to stop droping the logs into audit_hold_queue when the auditd is =
+abnormal.it
+> seems that this modification goes against the design intent of audit_hold=
+_queue. its
+> effect is similar to removing the audit_hold_queue.
+>
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 2a38cbaf3ddb..a8091b1a6587 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -748,6 +748,7 @@ static int kauditd_send_queue(struct sock *sk, u32
+> portid,
+>                                          (*err_hook)(skb);
+>                                  if (rc =3D=3D -EAGAIN)
+>                                          rc =3D 0;
+> +                               audit_default =3D AUDIT_OFF;
+>                                  /* continue to drain the queue */
+>                                  continue;
+>                          } else
+> @@ -755,6 +756,7 @@ static int kauditd_send_queue(struct sock *sk, u32
+> portid,
+>                  } else {
+>                          /* skb sent - drop the extra reference and
+> continue */
+>                          consume_skb(skb);
+> +                       audit_default =3D audit_enabled;
+>                          failed =3D 0;
+>                  }
+>          }
 
-My scenario is illegit because:
+We can't toggle the audit_default setting like this, that isn't
+acceptable upstream.  I believe I have a fix, but I need to finish the
+testing before I can post it for further review.
 
-1. An attacker can choose not to do EMODPR and still take advantage of the
-   exploit, and get the write primitive.
-2. Enclave has very theoretical chances to counter-measure that because
-   introspection is not possible, only the "mistrusted OS" has that
-   capability, i.e. the attacker. ERDINFO is AFAIK ENCLS leaf.
+> =E5=9C=A8 2022/1/13 23:22, Paul Moore =E5=86=99=E9=81=93:
+> > On Thu, Jan 13, 2022 at 6:57 AM cuigaosheng <cuigaosheng1@huawei.com> w=
+rote:
+> >> When we add "audit=3D1" to the cmdline, kauditd will take up 100%
+> >> cpu resource.As follows:
+> >>
+> >> configurations:
+> >> auditctl -b 64
+> >> auditctl --backlog_wait_time 60000
+> >> auditctl -r 0
+> >> auditctl -w /root/aaa  -p wrx
+> >> shell scripts=EF=BC=9A
+> >> #!/bin/bash
+> >> i=3D0
+> >> while [ $i -le 66 ]
+> >> do
+> >>     touch /root/aaa
+> >>     let i++
+> >> done
+> >> mandatory conditions:
+> >>
+> >> add "audit=3D1" to the cmdline, and kill -19 pid_number(for /sbin/audi=
+td).
+> >>
+> >>   As long as we keep the audit_hold_queue non-empty, flush the hold qu=
+eue will fall into
+> >>   an infinite loop.
+> >>
+> >> 713 static int kauditd_send_queue(struct sock *sk, u32 portid,
+> >>   714                               struct sk_buff_head *queue,
+> >>   715                               unsigned int retry_limit,
+> >>   716                               void (*skb_hook)(struct sk_buff *s=
+kb),
+> >>   717                               void (*err_hook)(struct sk_buff *s=
+kb))
+> >>   718 {
+> >>   719         int rc =3D 0;
+> >>   720         struct sk_buff *skb;
+> >>   721         unsigned int failed =3D 0;
+> >>   722
+> >>   723         /* NOTE: kauditd_thread takes care of all our locking, w=
+e just use
+> >>   724          *       the netlink info passed to us (e.g. sk and port=
+id) */
+> >>   725
+> >>   726         while ((skb =3D skb_dequeue(queue))) {
+> >>   727                 /* call the skb_hook for each skb we touch */
+> >>   728                 if (skb_hook)
+> >>   729                         (*skb_hook)(skb);
+> >>   730
+> >>   731                 /* can we send to anyone via unicast? */
+> >>   732                 if (!sk) {
+> >>   733                         if (err_hook)
+> >>   734                                 (*err_hook)(skb);
+> >>   735                         continue;
+> >>   736                 }
+> >>   737
+> >>   738 retry:
+> >>   739                 /* grab an extra skb reference in case of error =
+*/
+> >>   740                 skb_get(skb);
+> >>   741                 rc =3D netlink_unicast(sk, skb, portid, 0);
+> >>   742                 if (rc < 0) {
+> >>   743                         /* send failed - try a few times unless =
+fatal error */
+> >>   744                         if (++failed >=3D retry_limit ||
+> >>   745                             rc =3D=3D -ECONNREFUSED || rc =3D=3D=
+ -EPERM) {
+> >>   746                                 sk =3D NULL;
+> >>   747                                 if (err_hook)
+> >>   748                                         (*err_hook)(skb);
+> >>   749                                 if (rc =3D=3D -EAGAIN)
+> >>   750                                         rc =3D 0;
+> >>   751                                 /* continue to drain the queue *=
+/
+> >>   752                                 continue;
+> >>   753                         } else
+> >>   754                                 goto retry;
+> >>   755                 } else {
+> >>   756                         /* skb sent - drop the extra reference a=
+nd continue */
+> >>   757                         consume_skb(skb);
+> >>   758                         failed =3D 0;
+> >>   759                 }
+> >>   760         }
+> >>   761
+> >>   762         return (rc >=3D 0 ? 0 : rc);
+> >>   763 }
+> >>
+> >> When kauditd attempt to flush the hold queue, the queue parameter is &=
+audit_hold_queue,
+> >> and if netlink_unicast(line 741 ) return -EAGAIN, sk will be NULL(line=
+ 746), so err_hook(kauditd_rehold_skb)
+> >> will be call. Then continue, skb_dequeue(line 726) and err_hook(kaudit=
+d_rehold_skb,line 733) will
+> >> fall into an infinite loop.
+> >> I don't really understand the value of audit_hold_queue, can we remove=
+ it, or stop droping the logs
+> >> into kauditd_rehold_skb when the auditd is abnormal?
+> > Thanks Gaosheng for the bug report, I'm able to reproduce this and I'm
+> > looking into it now.  I'll report back when I have a better idea of
+> > the problem and a potential fix.
+> >
 
-/Jarkko
+
+
+--=20
+paul moore
+www.paul-moore.com

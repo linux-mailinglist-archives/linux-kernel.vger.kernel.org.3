@@ -2,242 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B82B48EF46
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C8448EF4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239448AbiANReT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:34:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234268AbiANReS (ORCPT
+        id S243910AbiANRjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:39:39 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:36398 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230300AbiANRjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:34:18 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8549CC06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:34:18 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id hv15so14005576pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:34:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tlKPtWrMnNhQ2zUBMOVAbMivXCD/K2BWvR3jQNPgLzU=;
-        b=XX3A9YU5P9pPfPub0Or+FHT3A4oAky7zr4urlHgkYLnqB8z7/2b/EqK5iiG4E0wOeq
-         N8Gx2uQyyhrP09NCe/+hw0TLcUD++Kg4nWrW+cQTtwy5GQZHnIykaefKz2QN4YnF3knv
-         eb473RVPUHUxe7QZUu/8Wy2g4lEYhCJ6z1y7fza6hsRUk/wBlDEBYocvGe6w9Iz4K1Oz
-         VFfDevOC91HFlntLAk4esr1Krz0O6G3MMuzjAvVK8cZJ8O12aoVYTc3J/DhFB7iMyUuH
-         5VzZJ9pY6RXLejBX1fkmWlWGaoT9owo0Sq1xp2NtTmd4sbA0N3e37MZ954j0He81pN90
-         V6+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tlKPtWrMnNhQ2zUBMOVAbMivXCD/K2BWvR3jQNPgLzU=;
-        b=xw6fcTI2U7cS3dg7NdUOxvoutGKiNrHoJFERvCh/AM/tIrC5WIRc9TNx0cGkODq3pL
-         lb0SxRj0y2sxmqkHnEP9E52geEVf0bOAszgo1eLA10ndrSWkfAwiQNhT+fv8qJGWXyGJ
-         xYqYfc6rs8mFSacdtvrE4sicX32ApI/NP7uJDGnFDc7yve00go3icOJjtnG4XBT9ZPMW
-         fxzOxJJJfeb37o8ZMk5VHSHtZG2DB9W2/oHfFLCH49/crpi4u70tqoe2qxF4YaDnbDa2
-         zXmDjhiRazTyl/vV4IIIp9p+P4YuVD1cKaLW1g1dnT86hL7gygPN/vz7QD14mlJT/uOI
-         bwRw==
-X-Gm-Message-State: AOAM532ZMpFgOKH7uvCNCmn6IbwLxAuY2wS5tb2Uir4faH75h77m/0OB
-        8ECgy1IVC3pZzVrpUy5wLC6tfQ==
-X-Google-Smtp-Source: ABdhPJz1nB+cPSjOOz5jtCNG/Q3eF2z8Mhc+k8GHztrKxvqDTpfgl1RSQPKNxFC16oai0HPPZj9WSw==
-X-Received: by 2002:a17:90a:e018:: with SMTP id u24mr11720844pjy.95.1642181657872;
-        Fri, 14 Jan 2022 09:34:17 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o3sm5560840pjr.2.2022.01.14.09.34.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 09:34:17 -0800 (PST)
-Date:   Fri, 14 Jan 2022 17:34:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-Subject: Re: [PATCH v5 5/8] KVM: x86: Support interrupt dispatch in x2APIC
- mode with APIC-write VM exit
-Message-ID: <YeG0Fdn/2++phMWs@google.com>
-References: <20211231142849.611-1-guang.zeng@intel.com>
- <20211231142849.611-6-guang.zeng@intel.com>
- <YeCZpo+qCkvx5l5m@google.com>
- <ec578526-989d-0913-e40e-9e463fb85a8f@intel.com>
+        Fri, 14 Jan 2022 12:39:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1642181978;
+        bh=JdsUGUUKmEd5jQvS8fN5dkon4a1934IBBuFUHQPqYtg=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=HmgXAK4PfwiG+ghvLZtu6MAoirwUAhgkyDSvY6M+7gz4dy6tyR/khnoDYvz2RLrEO
+         5ipHVEQ5xeeQZr8wUi/WFtsmfyiqUpjll1JRnM2UsVfy3lMH6IaW9JzAFQNE8HaQnK
+         9AGxvKMenqgpYa+Fg7YW2RzbCixmEFdjtISB8LMY=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D0D2D1280639;
+        Fri, 14 Jan 2022 12:39:38 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id C3-_Nm4Kcfcs; Fri, 14 Jan 2022 12:39:38 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1642181978;
+        bh=JdsUGUUKmEd5jQvS8fN5dkon4a1934IBBuFUHQPqYtg=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=HmgXAK4PfwiG+ghvLZtu6MAoirwUAhgkyDSvY6M+7gz4dy6tyR/khnoDYvz2RLrEO
+         5ipHVEQ5xeeQZr8wUi/WFtsmfyiqUpjll1JRnM2UsVfy3lMH6IaW9JzAFQNE8HaQnK
+         9AGxvKMenqgpYa+Fg7YW2RzbCixmEFdjtISB8LMY=
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 5301F1280636;
+        Fri, 14 Jan 2022 12:39:38 -0500 (EST)
+Message-ID: <04ddb0c8f6bcaf67e137ee758d56d4482a382c49.camel@HansenPartnership.com>
+Subject: Re: [GIT PULL] first round of SCSI updates for the 5.15+ merge
+ window
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Fri, 14 Jan 2022 12:39:37 -0500
+In-Reply-To: <CAHk-=wjx_q9Aa=o5kiiSpCC_4U+H2D1=H3umFOwVMUbFmdQjGA@mail.gmail.com>
+References: <31f8716fbb4f1e2a332b2b3e3243a170e8b01145.camel@HansenPartnership.com>
+         <CAHk-=wjx_q9Aa=o5kiiSpCC_4U+H2D1=H3umFOwVMUbFmdQjGA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ec578526-989d-0913-e40e-9e463fb85a8f@intel.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022, Zeng Guang wrote:
-> kvm_lapic_reg_read() is limited to read up to 4 bytes. It needs extension to
-> support 64bit read.
+On Fri, 2022-01-14 at 14:46 +0100, Linus Torvalds wrote:
+> On Thu, Jan 13, 2022 at 9:22 PM James Bottomley
+> <James.Bottomley@hansenpartnership.com> wrote:
+> > Adrian Hunter (4):
+> >       scsi: ufs: ufs-pci: Add support for Intel ADL
+> >       scsi: ufs: Let devices remain runtime suspended during system
+> > suspend
+> >       scsi: ufs: core: Fix another task management completion race
+> >       scsi: ufs: core: Fix task management completion timeout race
+> [...]
+> 
+> You seem to have forgotten to fetch my upstream tree, so your
+> shortlog (or diffstat) doesn't seem to take the various fixes pulls
+> you did for 5.16 into account.
+> 
+> The only actual new commit I got from Adrian was
+> 
+> Adrian Hunter (1):
+>       scsi: ufs: Let devices remain runtime suspended during system
+> suspend
+> 
+> and the same for other fixes..
+> 
+> Not a big deal, but when the shortlog and diffstat don't match what I
+> get, I waste time figuring out why. So please do a "git fetch linus"
+> or whatever so that git can take all your previous pulls into
+> account..
 
-Ah, right.
+Sorry about that.  We actually have a merge in the middle of the misc
+tree this time (commit: 87f77d37d398d92a9963890b14f336dc394f6fa0) and
+the scripts I run to generate the shortlog and diffstat failed to cope
+with it.  I'll investigate and fix them before next time.
 
-> And another concern is here getting reg value only specific from vICR(no
-> other regs need take care), going through whole path on kvm_lapic_reg_read()
-> could be time-consuming unnecessarily. Is it proper that calling
-> kvm_lapic_get_reg64() to retrieve vICR value directly?
+Regards,
 
-Hmm, no, I don't think that's proper.  Retrieving a 64-bit value really is unique
-to vICR.  Yes, the code does WARN on that, but if future architectural extensions
-even generate APIC-write exits on other registers, then using kvm_lapic_get_reg64()
-would be wrong and this code would need to be updated again.
+James
 
-What about tweaking my prep patch from before to the below?  That would yield:
 
-	if (apic_x2apic_mode(apic)) {
-		if (WARN_ON_ONCE(offset != APIC_ICR))
-			return 1;
-
-		kvm_lapic_msr_read(apic, offset, &val);
-		kvm_lapic_msr_write(apic, offset, val);
-	} else {
-		kvm_lapic_reg_read(apic, offset, 4, &val);
-		kvm_lapic_reg_write(apic, offset, val);
-	}
-
-I like that the above has "msr" in the low level x2apic helpers, and it maximizes
-code reuse.  Compile tested only...
-
-From: Sean Christopherson <seanjc@google.com>
-Date: Fri, 14 Jan 2022 09:29:34 -0800
-Subject: [PATCH] KVM: x86: Add helpers to handle 64-bit APIC MSR read/writes
-
-Add helpers to handle 64-bit APIC read/writes via MSRs to deduplicate the
-x2APIC and Hyper-V code needed to service reads/writes to ICR.  Future
-support for IPI virtualization will add yet another path where KVM must
-handle 64-bit APIC MSR reads/write (to ICR).
-
-Opportunistically fix the comment in the write path; ICR2 holds the
-destination (if there's no shorthand), not the vector.
-
-No functional change intended.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/lapic.c | 59 ++++++++++++++++++++++----------------------
- 1 file changed, 29 insertions(+), 30 deletions(-)
-
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index f206fc35deff..cc4531eb448f 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2787,6 +2787,30 @@ int kvm_lapic_set_vapic_addr(struct kvm_vcpu *vcpu, gpa_t vapic_addr)
- 	return 0;
- }
-
-+static int kvm_lapic_msr_read(struct kvm_lapic *apic, u32 reg, u64 *data)
-+{
-+	u32 low, high = 0;
-+
-+	if (kvm_lapic_reg_read(apic, reg, 4, &low))
-+		return 1;
-+
-+	if (reg == APIC_ICR &&
-+	    WARN_ON_ONCE(kvm_lapic_reg_read(apic, APIC_ICR2, 4, &high)))
-+		return 1;
-+
-+	*data = (((u64)high) << 32) | low;
-+
-+	return 0;
-+}
-+
-+static int kvm_lapic_msr_write(struct kvm_lapic *apic, u32 reg, u64 data)
-+{
-+	/* For 64-bit ICR writes, set ICR2 (dest) before ICR (command). */
-+	if (reg == APIC_ICR)
-+		kvm_lapic_reg_write(apic, APIC_ICR2, (u32)(data >> 32));
-+	return kvm_lapic_reg_write(apic, reg, (u32)data);
-+}
-+
- int kvm_x2apic_msr_write(struct kvm_vcpu *vcpu, u32 msr, u64 data)
- {
- 	struct kvm_lapic *apic = vcpu->arch.apic;
-@@ -2798,16 +2822,13 @@ int kvm_x2apic_msr_write(struct kvm_vcpu *vcpu, u32 msr, u64 data)
- 	if (reg == APIC_ICR2)
- 		return 1;
-
--	/* if this is ICR write vector before command */
--	if (reg == APIC_ICR)
--		kvm_lapic_reg_write(apic, APIC_ICR2, (u32)(data >> 32));
--	return kvm_lapic_reg_write(apic, reg, (u32)data);
-+	return kvm_lapic_msr_write(apic, reg, data);
- }
-
- int kvm_x2apic_msr_read(struct kvm_vcpu *vcpu, u32 msr, u64 *data)
- {
- 	struct kvm_lapic *apic = vcpu->arch.apic;
--	u32 reg = (msr - APIC_BASE_MSR) << 4, low, high = 0;
-+	u32 reg = (msr - APIC_BASE_MSR) << 4;
-
- 	if (!lapic_in_kernel(vcpu) || !apic_x2apic_mode(apic))
- 		return 1;
-@@ -2815,45 +2836,23 @@ int kvm_x2apic_msr_read(struct kvm_vcpu *vcpu, u32 msr, u64 *data)
- 	if (reg == APIC_DFR || reg == APIC_ICR2)
- 		return 1;
-
--	if (kvm_lapic_reg_read(apic, reg, 4, &low))
--		return 1;
--	if (reg == APIC_ICR)
--		kvm_lapic_reg_read(apic, APIC_ICR2, 4, &high);
--
--	*data = (((u64)high) << 32) | low;
--
--	return 0;
-+	return kvm_lapic_msr_read(apic, reg, data);
- }
-
- int kvm_hv_vapic_msr_write(struct kvm_vcpu *vcpu, u32 reg, u64 data)
- {
--	struct kvm_lapic *apic = vcpu->arch.apic;
--
- 	if (!lapic_in_kernel(vcpu))
- 		return 1;
-
--	/* if this is ICR write vector before command */
--	if (reg == APIC_ICR)
--		kvm_lapic_reg_write(apic, APIC_ICR2, (u32)(data >> 32));
--	return kvm_lapic_reg_write(apic, reg, (u32)data);
-+	return kvm_lapic_msr_write(vcpu->arch.apic, reg, data);
- }
-
- int kvm_hv_vapic_msr_read(struct kvm_vcpu *vcpu, u32 reg, u64 *data)
- {
--	struct kvm_lapic *apic = vcpu->arch.apic;
--	u32 low, high = 0;
--
- 	if (!lapic_in_kernel(vcpu))
- 		return 1;
-
--	if (kvm_lapic_reg_read(apic, reg, 4, &low))
--		return 1;
--	if (reg == APIC_ICR)
--		kvm_lapic_reg_read(apic, APIC_ICR2, 4, &high);
--
--	*data = (((u64)high) << 32) | low;
--
--	return 0;
-+	return kvm_lapic_msr_read(vcpu->arch.apic, reg, data);
- }
-
- int kvm_lapic_set_pv_eoi(struct kvm_vcpu *vcpu, u64 data, unsigned long len)
---

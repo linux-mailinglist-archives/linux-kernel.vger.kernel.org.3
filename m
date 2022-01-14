@@ -2,134 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A45C448E8D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B860248E8D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 12:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240656AbiANLD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 06:03:57 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:40513 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237845AbiANLD4 (ORCPT
+        id S240665AbiANLGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 06:06:08 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:39030 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237845AbiANLGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 06:03:56 -0500
-Received: from [192.168.100.1] ([82.142.23.158]) by mrelayeu.kundenserver.de
- (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1MVNJ3-1mjHHE2fzD-00SLnq; Fri, 14 Jan 2022 12:03:43 +0100
-Message-ID: <a53e6d46-114f-7bb2-70b9-113c5f8a9c0e@vivier.eu>
-Date:   Fri, 14 Jan 2022 12:03:41 +0100
+        Fri, 14 Jan 2022 06:06:07 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DD5542199C;
+        Fri, 14 Jan 2022 11:06:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1642158365; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f5GQsbNODb/boJqO97vFBzxn1VIkOP5hFVYc6+C3Wxg=;
+        b=G4FaGjc0m50ZzuAAHu+SiqSvMJ7HZR0NeUeusNZ+N6ahh/cRuExZIfkna2Q9V6bCyI+6vf
+        J7y4WGXPr7sRFFl6LahWKBeseo2Y4LnkRKxotAk8ypujdFpJRWr9iR0TMjXyDVs4e0vzIq
+        EENBxb4WbftCQF6aKE3gy1ilDII/64I=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 65B9313BFD;
+        Fri, 14 Jan 2022 11:06:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id D82rFR1Z4WFMQQAAMHmgww
+        (envelope-from <nborisov@suse.com>); Fri, 14 Jan 2022 11:06:05 +0000
+Subject: Re: [PATCH] btrfs: zoned: Remove redundant initialization of to_add
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, clm@fb.com
+Cc:     josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220114104136.3531-1-jiapeng.chong@linux.alibaba.com>
+From:   Nikolay Borisov <nborisov@suse.com>
+Message-ID: <db049584-dc23-78ca-9fc7-0d575855b4ed@suse.com>
+Date:   Fri, 14 Jan 2022 13:06:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: fr
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        John Stultz <john.stultz@linaro.org>,
-        linux-rtc@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-References: <20220113201920.3201760-1-laurent@vivier.eu>
- <20220113201920.3201760-4-laurent@vivier.eu>
- <CAK8P3a2QzMiga0FFVmTuefnq1OzsgyopiJN2he8043K0TRF1ng@mail.gmail.com>
-From:   Laurent Vivier <laurent@vivier.eu>
-Subject: Re: [PATCH v6 3/4] clocksource/drivers: Add a goldfish-timer
- clocksource
-In-Reply-To: <CAK8P3a2QzMiga0FFVmTuefnq1OzsgyopiJN2he8043K0TRF1ng@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220114104136.3531-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:smzK6d4OVWNorZOCeZXQ3R0dRxq4hr/LXuhZg5brBfJJdJNCq7b
- KJIobnfgxnXbl9N3QiD4yaMtOV3IDD2CXLwOgWfVS/e8SbXR4a32dbYpaKSJLFj0xQDvmHU
- tbMfOj4eNd33mdo1/cptU9Qv/cta4toKYiTjYcpwJ1vqsA2jLVoZxB3zGov0bexexue5xWd
- BrewS1+Kbc8yjm0mFMwGA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:aQm5OjTfUvk=:bhDOtNIJeeqXG/AztJK+lq
- E7sWztyo5KoUKfrDdBp0MP9cpB8WWpo6E32pbT0QuYie47W22B9gqP0+xW2ttR9bNwS2LOL2U
- v83yQ5liBIZNpGky6+kjCeKJVOqwkmBArCxSslQCs2HVkv3x/DQn/vFuLvVdTwZK0UH0+FrBH
- f8iTdhJpNTqu3k6mN/6AEqmCVNSW4cibMnzoGBZvyLCyjQleTj6PreO4ol60EfZ45WDmIQh8I
- b6b3IGCOM2yC4vPtq6Xs2Kjkx9JluWXAP3DNvtpV0k41kAf+eNhNeusMKvNYF8R61JTuPxP+B
- ofs4btndAP/nVtVq1SmStaAgvo1XsjWa5jIp0Mo/sbMYxOfqOVSy1EayDMlNFUJPbBYkva2Ys
- KK5zSipzIrwkEemGCmoHz03mh9lAvlETkp/4Nf1o8dm/bjIcBXJ0dvRCfOoPY+Q5LNX+Yjf4d
- 7ehAJInIp9fCjgHRZSTxELm/qHMbTrl9m3TEtdDHvyyve6vhUc7HjevJ2yIDC7B7FqdBbzn27
- vA8SfdmkcU+9oloww8zTqk7IG2FBhijw9zOV4OR1FgyXgI0VkAye0rrK0FzG0aQGijasiEOjm
- BhRxMJd/eaQ9HLCQ8ueF9VFHsSamD+m2YwFMb+EcNrOgOpz1rjWhJuw70u9qKbxA72rbklWU0
- FUkTtfUKEfAFDBKx6c5wwlABBLiPCqQEUpP2Iqgszne3+lka7+JshQ7ov+ZWmRXQg7CY=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 14/01/2022 à 11:46, Arnd Bergmann a écrit :
-> On Thu, Jan 13, 2022 at 9:19 PM Laurent Vivier <laurent@vivier.eu> wrote:
->>
->> Add a clocksource based on the goldfish-rtc device.
->>
->> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
->> ---
->>   drivers/clocksource/Kconfig          |   7 ++
->>   drivers/clocksource/Makefile         |   1 +
->>   drivers/clocksource/timer-goldfish.c | 130 +++++++++++++++++++++++++++
->>   include/clocksource/timer-goldfish.h |  12 +++
->>   4 files changed, 150 insertions(+)
->>   create mode 100644 drivers/clocksource/timer-goldfish.c
->>   create mode 100644 include/clocksource/timer-goldfish.h
->>
->> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
->> index f65e31bab9ae..6ca9bb78407d 100644
->> --- a/drivers/clocksource/Kconfig
->> +++ b/drivers/clocksource/Kconfig
->> @@ -711,4 +711,11 @@ config MICROCHIP_PIT64B
->>            modes and high resolution. It is used as a clocksource
->>            and a clockevent.
->>
->> +config GOLDFISH_TIMER
->> +       bool "Clocksource using goldfish-rtc"
->> +       select RTC_CLASS
->> +       select RTC_DRV_GOLDFISH
-> 
-> This should probably be
-> 
->            depends on M68K || COMPILE_TEST
->            depends on RTC_DRV_GOLDFISH
-> 
-> A driver should never 'select' another user-selectable subsystem
 
-ok
+
+On 14.01.22 г. 12:41, Jiapeng Chong wrote:
+> to_add is being initialized to len but this is never read as
+> to_add is overwritten later on. Remove the redundant
+> initialization.
+> 
+> Cleans up the following clang-analyzer warning:
+> 
+> fs/btrfs/extent-tree.c:2769:8: warning: Value stored to 'to_add' during
+> its initialization is never read [clang-analyzer-deadcode.DeadStores].
+
+To make it even better it would be good if to_add is define within the
+if (!global_rsv->full) branch.
 
 > 
->> +static int goldfish_timer_set_oneshot(struct clock_event_device *evt)
->> +{
->> +       struct goldfish_timer *timerdrv = ced_to_gf(evt);
->> +       void __iomem *base = timerdrv->base;
->> +
->> +       __raw_writel(0, base + TIMER_ALARM_HIGH);
->> +       __raw_writel(0, base + TIMER_ALARM_LOW);
->> +       __raw_writel(1, base + TIMER_IRQ_ENABLED);
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  fs/btrfs/extent-tree.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> As mentioned elsewhere, the __raw_* accessors are not portable, please
-> use readl()/writel() here, or possibly ioread32_be()/iowrite32_be() for
-> the big-endian variant.
-
-We can't use readl()/writel() here because it's supposed to read from a little endian device, and 
-goldfish endianness depends on the endianness of the machine.
-
-For goldfish, readl()/writel() works fine on little-endian machine but not on big-endian machine.
-
-On m68k, you have:
-
-#define readl(addr)      in_le32(addr)
-#define writel(val,addr) out_le32((addr),(val))
-
-and with goldfish it's wrong as the device is not little-endian, it is big-endian like the machine.
-
-same comment with ioread32_be()/iowrite32_be(): it will work on big-endian machine not on little-endian.
-
-We need an accessor that doesn't byteswap the value, that accesses it natively, and in all other 
-parts of the kernel __raw_writel() and __raw_readl() are used.
-
-Thanks,
-Laurent
-
+> diff --git a/fs/btrfs/extent-tree.c b/fs/btrfs/extent-tree.c
+> index d89273c4b6b8..37117b62d005 100644
+> --- a/fs/btrfs/extent-tree.c
+> +++ b/fs/btrfs/extent-tree.c
+> @@ -2766,7 +2766,7 @@ static int unpin_extent_range(struct btrfs_fs_info *fs_info,
+>  		spin_unlock(&cache->lock);
+>  		if (!readonly && return_free_space &&
+>  		    global_rsv->space_info == space_info) {
+> -			u64 to_add = len;
+> +			u64 to_add;
+>  
+>  			spin_lock(&global_rsv->lock);
+>  			if (!global_rsv->full) {
+> 

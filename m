@@ -2,78 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC9048ED39
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2E548ED5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242764AbiANPjK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 14 Jan 2022 10:39:10 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:49052 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229884AbiANPjJ (ORCPT
+        id S242862AbiANPrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:47:09 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:36710 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238763AbiANPrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:39:09 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-312-5jlSIvp6O4S49Qxj-dKL-Q-1; Fri, 14 Jan 2022 15:39:06 +0000
-X-MC-Unique: 5jlSIvp6O4S49Qxj-dKL-Q-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Fri, 14 Jan 2022 15:39:06 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Fri, 14 Jan 2022 15:39:06 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>
-Subject: RE: [PATCH] random: cleanup fractional entropy shift constants
-Thread-Topic: [PATCH] random: cleanup fractional entropy shift constants
-Thread-Index: AQHYCVwNJeBTmh3+qEWqVcWV8TuSV6xipq1A
-Date:   Fri, 14 Jan 2022 15:39:06 +0000
-Message-ID: <18ec4b57aecc4fa18d8e3bb6e090af1b@AcuMS.aculab.com>
-References: <20220113154413.29513-1-Jason@zx2c4.com>
- <20220114153305.98505-1-Jason@zx2c4.com>
-In-Reply-To: <20220114153305.98505-1-Jason@zx2c4.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 14 Jan 2022 10:47:07 -0500
+Received: by mail-ot1-f54.google.com with SMTP id s21-20020a05683004d500b0058f585672efso10501389otd.3;
+        Fri, 14 Jan 2022 07:47:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5dzA66i4ivAiYOjfo8oco9UtNpMipS0k8jsB20XDEr0=;
+        b=N+I3et3MOlnEZV8DM6er7cWyvhAel8u3zbYT4IdkjRbaYJ1wSy51YtefUMNptFLOF9
+         R6xIdZ4M9SlZ4vOLF3X/HdH49K7tpIjqZgyIwVKLdlJCiAe/4dNsIY4I29Kq+ngaFho2
+         zUHeARHYuMXf3du9MTcTBvvbEtSFP8NoGK0EmHvHDz4maAxgxXP8iAZGlQaBZt/9Ppd1
+         tJTCdhIeveNUM7W3Mfsl+yPKjEVLLTQ3YH7nAtG7YRdXmHOJ5pe4g/LzAxvNL7Xpxtec
+         iK8W2lbUY8SPfArE093Pny8QKnqEkBwl4mmWbWt4wEKhtBkSgwmYndMyj+lZDHpTU646
+         DfkQ==
+X-Gm-Message-State: AOAM533ohJCVk7mYO8P/MfJ/D6UtOExSyXgOQkXJH99w1zh82P6MW0NX
+        EQ7RiiDapyRHgDKlTKX0/fn1pMhaKkm3oxF5
+X-Google-Smtp-Source: ABdhPJzpq+bIHymNtfPPEI7X6nGEw7++j4Q0gG6AcAn3BffD6q8SLt066o/eRJwcRmhe0sqCKuwePQ==
+X-Received: by 2002:a9d:6c4f:: with SMTP id g15mr6987331otq.3.1642175226110;
+        Fri, 14 Jan 2022 07:47:06 -0800 (PST)
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
+        by smtp.gmail.com with ESMTPSA id 17sm1311947oij.21.2022.01.14.07.47.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jan 2022 07:47:05 -0800 (PST)
+Received: by mail-ot1-f47.google.com with SMTP id z25-20020a0568301db900b005946f536d85so1467309oti.9;
+        Fri, 14 Jan 2022 07:47:05 -0800 (PST)
+X-Received: by 2002:ab0:4d42:: with SMTP id k2mr2650964uag.78.1642174814894;
+ Fri, 14 Jan 2022 07:40:14 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <20220114151727.2319915-1-conor.dooley@microchip.com> <20220114151727.2319915-4-conor.dooley@microchip.com>
+In-Reply-To: <20220114151727.2319915-4-conor.dooley@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 14 Jan 2022 16:40:03 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUXD8CHqoaygXzcC0YpsbRT_KAUni1hD4sMn=k=WD+DuQ@mail.gmail.com>
+Message-ID: <CAMuHMdUXD8CHqoaygXzcC0YpsbRT_KAUni1hD4sMn=k=WD+DuQ@mail.gmail.com>
+Subject: Re: [PATCH v3 03/15] mailbox: change mailbox-mpfs compatible string
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bin Meng <bin.meng@windriver.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        Atish Patra <atishp@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld
-> Sent: 14 January 2022 15:33
-> 
-> The entropy estimator is calculated in terms of 1/8 bits, which means
-> there are various constants where things are shifted by 3. Move these
-> into our pool info enum with the other relevant constants, and normalize
-> the name a bit, prepending a POOL_ like the rest. While we're at it,
-> move an English assertion about sizes into a proper BUILD_BUG_ON so
-> that the compiler can ensure this invariant.
-> 
-...
-> -#define ENTROPY_SHIFT 3
-> -#define ENTROPY_BITS() (input_pool.entropy_count >> ENTROPY_SHIFT)
-..
-> +	POOL_ENTROPY_SHIFT = 3,
-> +#define POOL_ENTROPY_BITS() (input_pool.entropy_count >> POOL_ENTROPY_SHIFT)
+Hi Conor,
 
-The rename ought to be a different patch.
+On Fri, Jan 14, 2022 at 4:16 PM <conor.dooley@microchip.com> wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> The Polarfire SoC is currently using two different compatible string
+> prefixes. Fix this by changing "polarfire-soc-*" strings to "mpfs-*" in
+> its system controller in order to match the compatible string used in
+> the soc binding and device tree.
+>
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-	David
+This is already upstream, commit f10b1fc0161cd99e ("mailbox: change
+mailbox-mpfs compatible string").
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

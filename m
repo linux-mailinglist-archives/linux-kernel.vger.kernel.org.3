@@ -2,460 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF6B48EE4F
+	by mail.lfdr.de (Postfix) with ESMTP id E940948EE50
 	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243447AbiANQhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:37:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243436AbiANQhj (ORCPT
+        id S243467AbiANQhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:37:50 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:60684 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243446AbiANQhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:37:39 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545AEC061574;
-        Fri, 14 Jan 2022 08:37:39 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id y14so12883587oia.9;
-        Fri, 14 Jan 2022 08:37:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=su5hjftPM5OFescd+VBdWAUl1Sex+sWLL9ea4ZIzJII=;
-        b=B+DkEavaihVI6npBWEIl4BbmSQimWnLDsTFDjMPBZeYCbuwDaTtw1PC06Afi0Na3CP
-         nI4NvLscJTAjHvKwqWNs48/nuZnS0iAP2s6oqIIUu5xoe1fFV3DGq7gjsWvomKlqXyjq
-         PpZiP9AAm4SULNB68jWWzEeRhFPQejduGo8UgH9edFtgzGfIBpa2O6kTL5mVyUMoRedY
-         bLVB+Y0UYy+OihkRmKLPlOVNLwvWo8UggSrsqSNOFvtfwPNhsSDX1N4TBNbqZfpEUoSi
-         EYPVjUqnBZBDxR/2kHlK+5u+LeouQ9xXatImkGISma1MJYwsbogjNBjYMIFdQlCwADqZ
-         VTLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=su5hjftPM5OFescd+VBdWAUl1Sex+sWLL9ea4ZIzJII=;
-        b=1NEnkICnU72McOo/3AJd4fzbelZp+Tat/YqPVg874PMMMmA8O9zANbf7jfplaa9JV1
-         wYRp89UJd77XaydIRFbrDtzeqXlKwlATNSyKUIweMc830WBV4qyIw5HsbAomKEAuIXGI
-         KtwR1g8d9+qbkeb38VG2IvDO7RiVXUWG3BKKt0vXa8i7kdnBl7kVNRTw/kzRbap/U3lS
-         qWVMV4qOlGMQ3wZ0goHyqoEBvwPXVs8ryFXRoZlpyKZEHc8HeVqm/ErAGA7gwxTqoCwx
-         cXJeolMr/wuXKk6PovzdgeBQwcAH46jkIMXwX6I1fUnCsjLz3bsAYylSRO1QrgeyfQTV
-         M8GA==
-X-Gm-Message-State: AOAM532z2sL9hR6zzyDVN7chusyiMUwQ19i8sf7eTipCKa2Yg23ahjIc
-        qdZtMGkQ6AyH16gpsZudFMs=
-X-Google-Smtp-Source: ABdhPJwvainL+SiAs5LMN3frj+cbHljseNoiODA11Wu9yYTOtVGY7A7jdlXsg6NQELTBa864L+ScOQ==
-X-Received: by 2002:a05:6808:1444:: with SMTP id x4mr1502792oiv.171.1642178258657;
-        Fri, 14 Jan 2022 08:37:38 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c27sm2043246ooe.45.2022.01.14.08.37.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 08:37:38 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 14 Jan 2022 08:37:36 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        linux-kernel@vger.kernel.org, Renze Nicolai <renze@rnplus.nl>
-Subject: Re: [PATCH v4] hwmon: (nct6775) add support for TSI temperature
- registers
-Message-ID: <20220114163736.GA1168556@roeck-us.net>
-References: <20220113164629.21924-1-zev@bewilderbeest.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220113164629.21924-1-zev@bewilderbeest.net>
+        Fri, 14 Jan 2022 11:37:43 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 68474219B1;
+        Fri, 14 Jan 2022 16:37:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642178262; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zmtoZZdmqikoLleBgA5rE7Gqlol+bSO79e6psKPWRU4=;
+        b=CD+sUNNSN9tVqehrxHGx5KfPnOXDoPY10gAO9uei6jI1iwiux2whwt7V4Q/lz9BnJcPP5t
+        uSyNz+NVN0nCRHgS9qc3T4+B2wgHTuCBTMUgKDo5rtIfUW64r76QwDa6Spek0j4QNspe03
+        rrw5hU4Tx/e5QCW0xez+rdQToj1skiQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642178262;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zmtoZZdmqikoLleBgA5rE7Gqlol+bSO79e6psKPWRU4=;
+        b=QOJpi+G392iy1rUzQiH2qUm8F399GzzE5BgmRPjy0z85FDm8LnbfJMpZWySH32MJgoxSUi
+        UrhHPEp7Oc9qPcDQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 53C3FA3B84;
+        Fri, 14 Jan 2022 16:37:42 +0000 (UTC)
+Date:   Fri, 14 Jan 2022 17:37:42 +0100
+Message-ID: <s5ha6fy46jt.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Alexander Sergeyev <sergeev917@gmail.com>
+Cc:     Jeremy Szu <jeremy.szu@canonical.com>, tiwai@suse.com,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        Kailang Yang <kailang@realtek.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jian-Hong Pan <jhp@endlessos.org>,
+        Hui Wang <hui.wang@canonical.com>,
+        PeiSen Hou <pshou@realtek.com>
+Subject: Re: [PATCH 1/4] ALSA: hda/realtek: fix mute/micmute LEDs for HP 855 G8
+In-Reply-To: <20220113183141.kla37mbqmo4x6wxp@localhost.localdomain>
+References: <20210519170357.58410-1-jeremy.szu@canonical.com>
+        <20220111195229.a77wrpjclqwrx4bx@localhost.localdomain>
+        <s5ho84h9tit.wl-tiwai@suse.de>
+        <20220112101249.ya73jvpmqmeh4ggg@localhost.localdomain>
+        <s5hilup9s87.wl-tiwai@suse.de>
+        <20220112104827.4aymoth7ua65nwge@localhost.localdomain>
+        <20220112201824.qmphnz2hx4frda6e@localhost.localdomain>
+        <s5h8rvk85uy.wl-tiwai@suse.de>
+        <20220113183141.kla37mbqmo4x6wxp@localhost.localdomain>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 08:46:29AM -0800, Zev Weiss wrote:
-> These registers report CPU temperatures (and, depending on the system,
-> sometimes chipset temperatures) via the TSI interface on AMD systems.
-> They're distinct from most of the other Super-IO temperature readings
-> (CPUTIN, SYSTIN, etc.) in that they're not a selectable source for
-> monitoring and are in a different (higher resolution) format, but can
-> still provide useful temperature data.
+On Thu, 13 Jan 2022 19:31:41 +0100,
+Alexander Sergeyev wrote:
 > 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> Tested-by: Renze Nicolai <renze@rnplus.nl>
+> On Thu, Jan 13, 2022 at 08:14:29AM +0100, Takashi Iwai wrote:
+> >> First, about unbind and bind via sysfs -- attempts to unbind the
+> >> HD-audio controller immediately trigger BUGs:
+> >> Is it normal/expected?
+> >
+> >A sort of. The sysfs unbind is little tested and may be still buggy
+> >if done during the stream operation.
+> >
+> >To be sure, could you check with my latest sound.git tree for-linus
+> >branch?  There are a few fixes that harden the dynamic unbind.
+> 
+> I assume that the referred repository is the one at [1]. I've tried
+> 081c73701ef0 "ALSA: hda: intel-dsp-config: reorder the config
+> table". It crashed with nearly identical logs.
 
-Applied to hwmon-next.
+OK, then it's still something to do with the led cdev
+unregisteration.
 
-Thanks,
-Guenter
+Could you try the patch below?
 
-> ---
+> >> 1) Coeff 0x0b is flapping between 0x8003 and 0x7770 and does not seem
+> >> to have any effect in both non-working and working versions. Not sure
+> >> about this, maybe microphone is not operational since I haven't
+> >> checked it yet.
 > 
-> This patch has been tested on NCT6779 and NCT6798[0] hardware on
-> (respectively) ASRock Rack ROMED8HM3 and X570D4U boards, and seems to
-> work as expected; the implementation for the other chips supported by
-> the driver is purely based on the datasheets and has not been tested
-> (for lack of available hardware).
-> 
-> [0] Or at least, its chip ID registers identify it as an NCT6798 and
-> it seems to behave consistently with that, though it's actually
-> physically labeled as an NCT6796.
-> 
-> Changes since v3 [1]:
->  - removed "unknown number of TSI temp registers" warning
-> 
-> Changes since v2 [2]:
->  - fixed a pair of <= that should have been < in is_word_sized()
->  - fixed nct6116 switch case mistakenly referencing NCT6106_REG_TSI_TEMP
-> 
-> Changes since v1 [3]:
->  - simplified logic in is_word_sized()
-> 
-> [1] https://lore.kernel.org/linux-hwmon/20220112034824.3467-1-zev@bewilderbeest.net/
-> [2] https://lore.kernel.org/linux-hwmon/20211226051438.5081-1-zev@bewilderbeest.net/
-> [3] https://lore.kernel.org/linux-hwmon/Yb7RVu6fQc+tLIAg@hatter.bewilderbeest.net/
-> 
->  drivers/hwmon/nct6775.c | 129 ++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 123 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
-> index fd3f91cb01c6..6c1ad82ad54b 100644
-> --- a/drivers/hwmon/nct6775.c
-> +++ b/drivers/hwmon/nct6775.c
-> @@ -308,6 +308,7 @@ static void superio_exit(struct nct6775_sio_data *sio_data)
->  
->  #define NUM_TEMP	10	/* Max number of temp attribute sets w/ limits*/
->  #define NUM_TEMP_FIXED	6	/* Max number of fixed temp attribute sets */
-> +#define NUM_TSI_TEMP	8	/* Max number of TSI temp register pairs */
->  
->  #define NUM_REG_ALARM	7	/* Max number of alarm registers */
->  #define NUM_REG_BEEP	5	/* Max number of beep registers */
-> @@ -498,6 +499,8 @@ static const u16 NCT6775_REG_TEMP_CRIT[32] = {
->  	[11] = 0xa07
->  };
->  
-> +static const u16 NCT6775_REG_TSI_TEMP[] = { 0x669 };
-> +
->  /* NCT6776 specific data */
->  
->  /* STEP_UP_TIME and STEP_DOWN_TIME regs are swapped for all chips but NCT6775 */
-> @@ -581,6 +584,9 @@ static const u16 NCT6776_REG_TEMP_CRIT[32] = {
->  	[12] = 0x70a,
->  };
->  
-> +static const u16 NCT6776_REG_TSI_TEMP[] = {
-> +	0x409, 0x40b, 0x40d, 0x40f, 0x411, 0x413, 0x415, 0x417 };
-> +
->  /* NCT6779 specific data */
->  
->  static const u16 NCT6779_REG_IN[] = {
-> @@ -864,6 +870,8 @@ static const char *const nct6796_temp_label[] = {
->  #define NCT6796_TEMP_MASK	0xbfff0ffe
->  #define NCT6796_VIRT_TEMP_MASK	0x80000c00
->  
-> +static const u16 NCT6796_REG_TSI_TEMP[] = { 0x409, 0x40b };
-> +
->  static const char *const nct6798_temp_label[] = {
->  	"",
->  	"SYSTIN",
-> @@ -1005,6 +1013,8 @@ static const u16 NCT6106_REG_TEMP_CRIT[32] = {
->  	[12] = 0x205,
->  };
->  
-> +static const u16 NCT6106_REG_TSI_TEMP[] = { 0x59, 0x5b, 0x5d, 0x5f, 0x61, 0x63, 0x65, 0x67 };
-> +
->  /* NCT6112D/NCT6114D/NCT6116D specific data */
->  
->  static const u16 NCT6116_REG_FAN[] = { 0x20, 0x22, 0x24, 0x26, 0x28 };
-> @@ -1069,6 +1079,8 @@ static const s8 NCT6116_BEEP_BITS[] = {
->  	34, -1				/* intrusion0, intrusion1 */
->  };
->  
-> +static const u16 NCT6116_REG_TSI_TEMP[] = { 0x59, 0x5b };
-> +
->  static enum pwm_enable reg_to_pwm_enable(int pwm, int mode)
->  {
->  	if (mode == 0 && pwm == 255)
-> @@ -1169,6 +1181,12 @@ static inline u8 in_to_reg(u32 val, u8 nr)
->  	return clamp_val(DIV_ROUND_CLOSEST(val * 100, scale_in[nr]), 0, 255);
->  }
->  
-> +/* TSI temperatures are in 8.3 format */
-> +static inline unsigned int tsi_temp_from_reg(unsigned int reg)
-> +{
-> +	return (reg >> 5) * 125;
-> +}
-> +
->  /*
->   * Data structures and manipulation thereof
->   */
-> @@ -1179,7 +1197,7 @@ struct nct6775_data {
->  	enum kinds kind;
->  	const char *name;
->  
-> -	const struct attribute_group *groups[6];
-> +	const struct attribute_group *groups[7];
->  
->  	u16 reg_temp[5][NUM_TEMP]; /* 0=temp, 1=temp_over, 2=temp_hyst,
->  				    * 3=temp_crit, 4=temp_lcrit
-> @@ -1240,6 +1258,8 @@ struct nct6775_data {
->  	const u16 *REG_ALARM;
->  	const u16 *REG_BEEP;
->  
-> +	const u16 *REG_TSI_TEMP;
-> +
->  	unsigned int (*fan_from_reg)(u16 reg, unsigned int divreg);
->  	unsigned int (*fan_from_reg_min)(u16 reg, unsigned int divreg);
->  
-> @@ -1267,6 +1287,7 @@ struct nct6775_data {
->  	s8 temp_offset[NUM_TEMP_FIXED];
->  	s16 temp[5][NUM_TEMP]; /* 0=temp, 1=temp_over, 2=temp_hyst,
->  				* 3=temp_crit, 4=temp_lcrit */
-> +	s16 tsi_temp[NUM_TSI_TEMP];
->  	u64 alarms;
->  	u64 beeps;
->  
-> @@ -1315,6 +1336,7 @@ struct nct6775_data {
->  
->  	u16 have_temp;
->  	u16 have_temp_fixed;
-> +	u16 have_tsi_temp;
->  	u16 have_in;
->  
->  	/* Remember extra register values over suspend/resume */
-> @@ -1464,13 +1486,15 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
->  	switch (data->kind) {
->  	case nct6106:
->  		return reg == 0x20 || reg == 0x22 || reg == 0x24 ||
-> +		  (reg >= 0x59 && reg < 0x69 && (reg & 1)) ||
->  		  reg == 0xe0 || reg == 0xe2 || reg == 0xe4 ||
->  		  reg == 0x111 || reg == 0x121 || reg == 0x131;
->  	case nct6116:
->  		return reg == 0x20 || reg == 0x22 || reg == 0x24 ||
-> -		  reg == 0x26 || reg == 0x28 || reg == 0xe0 || reg == 0xe2 ||
-> -		  reg == 0xe4 || reg == 0xe6 || reg == 0xe8 || reg == 0x111 ||
-> -		  reg == 0x121 || reg == 0x131 || reg == 0x191 || reg == 0x1a1;
-> +		  reg == 0x26 || reg == 0x28 || reg == 0x59 || reg == 0x5b ||
-> +		  reg == 0xe0 || reg == 0xe2 || reg == 0xe4 || reg == 0xe6 ||
-> +		  reg == 0xe8 || reg == 0x111 || reg == 0x121 || reg == 0x131 ||
-> +		  reg == 0x191 || reg == 0x1a1;
->  	case nct6775:
->  		return (((reg & 0xff00) == 0x100 ||
->  		    (reg & 0xff00) == 0x200) &&
-> @@ -1479,7 +1503,7 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
->  		    (reg & 0x00ff) == 0x55)) ||
->  		  (reg & 0xfff0) == 0x630 ||
->  		  reg == 0x640 || reg == 0x642 ||
-> -		  reg == 0x662 ||
-> +		  reg == 0x662 || reg == 0x669 ||
->  		  ((reg & 0xfff0) == 0x650 && (reg & 0x000f) >= 0x06) ||
->  		  reg == 0x73 || reg == 0x75 || reg == 0x77;
->  	case nct6776:
-> @@ -1490,6 +1514,7 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
->  		    (reg & 0x00ff) == 0x55)) ||
->  		  (reg & 0xfff0) == 0x630 ||
->  		  reg == 0x402 ||
-> +		  (reg >= 0x409 && reg < 0x419 && (reg & 1)) ||
->  		  reg == 0x640 || reg == 0x642 ||
->  		  ((reg & 0xfff0) == 0x650 && (reg & 0x000f) >= 0x06) ||
->  		  reg == 0x73 || reg == 0x75 || reg == 0x77;
-> @@ -1504,6 +1529,7 @@ static bool is_word_sized(struct nct6775_data *data, u16 reg)
->  		return reg == 0x150 || reg == 0x153 || reg == 0x155 ||
->  		  (reg & 0xfff0) == 0x4c0 ||
->  		  reg == 0x402 ||
-> +		  (reg >= 0x409 && reg < 0x419 && (reg & 1)) ||
->  		  reg == 0x63a || reg == 0x63c || reg == 0x63e ||
->  		  reg == 0x640 || reg == 0x642 || reg == 0x64a ||
->  		  reg == 0x64c ||
-> @@ -1987,6 +2013,12 @@ static struct nct6775_data *nct6775_update_device(struct device *dev)
->  								   data->REG_TEMP_OFFSET[i]);
->  		}
->  
-> +		for (i = 0; i < NUM_TSI_TEMP; i++) {
-> +			if (!(data->have_tsi_temp & BIT(i)))
-> +				continue;
-> +			data->tsi_temp[i] = data->read_value(data, data->REG_TSI_TEMP[i]);
-> +		}
-> +
->  		data->alarms = 0;
->  		for (i = 0; i < NUM_REG_ALARM; i++) {
->  			u8 alarm;
-> @@ -2670,6 +2702,44 @@ static const struct sensor_template_group nct6775_temp_template_group = {
->  	.base = 1,
->  };
->  
-> +static ssize_t show_tsi_temp(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +	struct nct6775_data *data = nct6775_update_device(dev);
-> +	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
-> +
-> +	return sysfs_emit(buf, "%u\n", tsi_temp_from_reg(data->tsi_temp[sattr->index]));
-> +}
-> +
-> +static ssize_t show_tsi_temp_label(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +	struct sensor_device_attribute *sattr = to_sensor_dev_attr(attr);
-> +
-> +	return sysfs_emit(buf, "TSI%d_TEMP\n", sattr->index);
-> +}
-> +
-> +SENSOR_TEMPLATE(tsi_temp_input, "temp%d_input", 0444, show_tsi_temp, NULL, 0);
-> +SENSOR_TEMPLATE(tsi_temp_label, "temp%d_label", 0444, show_tsi_temp_label, NULL, 0);
-> +
-> +static umode_t nct6775_tsi_temp_is_visible(struct kobject *kobj, struct attribute *attr,
-> +					       int index)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct nct6775_data *data = dev_get_drvdata(dev);
-> +	int temp = index / 2;
-> +
-> +	return (data->have_tsi_temp & BIT(temp)) ? attr->mode : 0;
-> +}
-> +
-> +/*
-> + * The index calculation in nct6775_tsi_temp_is_visible() must be kept in
-> + * sync with the size of this array.
-> + */
-> +static struct sensor_device_template *nct6775_tsi_temp_template[] = {
-> +	&sensor_dev_template_tsi_temp_input,
-> +	&sensor_dev_template_tsi_temp_label,
-> +	NULL
-> +};
-> +
->  static ssize_t
->  show_pwm_mode(struct device *dev, struct device_attribute *attr, char *buf)
->  {
-> @@ -3948,10 +4018,11 @@ static int nct6775_probe(struct platform_device *pdev)
->  	const u16 *reg_temp, *reg_temp_over, *reg_temp_hyst, *reg_temp_config;
->  	const u16 *reg_temp_mon, *reg_temp_alternate, *reg_temp_crit;
->  	const u16 *reg_temp_crit_l = NULL, *reg_temp_crit_h = NULL;
-> -	int num_reg_temp, num_reg_temp_mon;
-> +	int num_reg_temp, num_reg_temp_mon, num_reg_tsi_temp;
->  	u8 cr2a;
->  	struct attribute_group *group;
->  	struct device *hwmon_dev;
-> +	struct sensor_template_group tsi_temp_tg;
->  	int num_attr_groups = 0;
->  
->  	if (sio_data->access == access_direct) {
-> @@ -4043,11 +4114,13 @@ static int nct6775_probe(struct platform_device *pdev)
->  		data->ALARM_BITS = NCT6106_ALARM_BITS;
->  		data->REG_BEEP = NCT6106_REG_BEEP;
->  		data->BEEP_BITS = NCT6106_BEEP_BITS;
-> +		data->REG_TSI_TEMP = NCT6106_REG_TSI_TEMP;
->  
->  		reg_temp = NCT6106_REG_TEMP;
->  		reg_temp_mon = NCT6106_REG_TEMP_MON;
->  		num_reg_temp = ARRAY_SIZE(NCT6106_REG_TEMP);
->  		num_reg_temp_mon = ARRAY_SIZE(NCT6106_REG_TEMP_MON);
-> +		num_reg_tsi_temp = ARRAY_SIZE(NCT6106_REG_TSI_TEMP);
->  		reg_temp_over = NCT6106_REG_TEMP_OVER;
->  		reg_temp_hyst = NCT6106_REG_TEMP_HYST;
->  		reg_temp_config = NCT6106_REG_TEMP_CONFIG;
-> @@ -4116,11 +4189,13 @@ static int nct6775_probe(struct platform_device *pdev)
->  		data->ALARM_BITS = NCT6116_ALARM_BITS;
->  		data->REG_BEEP = NCT6106_REG_BEEP;
->  		data->BEEP_BITS = NCT6116_BEEP_BITS;
-> +		data->REG_TSI_TEMP = NCT6116_REG_TSI_TEMP;
->  
->  		reg_temp = NCT6106_REG_TEMP;
->  		reg_temp_mon = NCT6106_REG_TEMP_MON;
->  		num_reg_temp = ARRAY_SIZE(NCT6106_REG_TEMP);
->  		num_reg_temp_mon = ARRAY_SIZE(NCT6106_REG_TEMP_MON);
-> +		num_reg_tsi_temp = ARRAY_SIZE(NCT6116_REG_TSI_TEMP);
->  		reg_temp_over = NCT6106_REG_TEMP_OVER;
->  		reg_temp_hyst = NCT6106_REG_TEMP_HYST;
->  		reg_temp_config = NCT6106_REG_TEMP_CONFIG;
-> @@ -4191,11 +4266,13 @@ static int nct6775_probe(struct platform_device *pdev)
->  		data->REG_WEIGHT_TEMP[2] = NCT6775_REG_WEIGHT_TEMP_BASE;
->  		data->REG_ALARM = NCT6775_REG_ALARM;
->  		data->REG_BEEP = NCT6775_REG_BEEP;
-> +		data->REG_TSI_TEMP = NCT6775_REG_TSI_TEMP;
->  
->  		reg_temp = NCT6775_REG_TEMP;
->  		reg_temp_mon = NCT6775_REG_TEMP_MON;
->  		num_reg_temp = ARRAY_SIZE(NCT6775_REG_TEMP);
->  		num_reg_temp_mon = ARRAY_SIZE(NCT6775_REG_TEMP_MON);
-> +		num_reg_tsi_temp = ARRAY_SIZE(NCT6775_REG_TSI_TEMP);
->  		reg_temp_over = NCT6775_REG_TEMP_OVER;
->  		reg_temp_hyst = NCT6775_REG_TEMP_HYST;
->  		reg_temp_config = NCT6775_REG_TEMP_CONFIG;
-> @@ -4264,11 +4341,13 @@ static int nct6775_probe(struct platform_device *pdev)
->  		data->REG_WEIGHT_TEMP[2] = NCT6775_REG_WEIGHT_TEMP_BASE;
->  		data->REG_ALARM = NCT6775_REG_ALARM;
->  		data->REG_BEEP = NCT6776_REG_BEEP;
-> +		data->REG_TSI_TEMP = NCT6776_REG_TSI_TEMP;
->  
->  		reg_temp = NCT6775_REG_TEMP;
->  		reg_temp_mon = NCT6775_REG_TEMP_MON;
->  		num_reg_temp = ARRAY_SIZE(NCT6775_REG_TEMP);
->  		num_reg_temp_mon = ARRAY_SIZE(NCT6775_REG_TEMP_MON);
-> +		num_reg_tsi_temp = ARRAY_SIZE(NCT6776_REG_TSI_TEMP);
->  		reg_temp_over = NCT6775_REG_TEMP_OVER;
->  		reg_temp_hyst = NCT6775_REG_TEMP_HYST;
->  		reg_temp_config = NCT6776_REG_TEMP_CONFIG;
-> @@ -4341,11 +4420,13 @@ static int nct6775_probe(struct platform_device *pdev)
->  		data->REG_WEIGHT_TEMP[2] = NCT6775_REG_WEIGHT_TEMP_BASE;
->  		data->REG_ALARM = NCT6779_REG_ALARM;
->  		data->REG_BEEP = NCT6776_REG_BEEP;
-> +		data->REG_TSI_TEMP = NCT6776_REG_TSI_TEMP;
->  
->  		reg_temp = NCT6779_REG_TEMP;
->  		reg_temp_mon = NCT6779_REG_TEMP_MON;
->  		num_reg_temp = ARRAY_SIZE(NCT6779_REG_TEMP);
->  		num_reg_temp_mon = ARRAY_SIZE(NCT6779_REG_TEMP_MON);
-> +		num_reg_tsi_temp = ARRAY_SIZE(NCT6776_REG_TSI_TEMP);
->  		reg_temp_over = NCT6779_REG_TEMP_OVER;
->  		reg_temp_hyst = NCT6779_REG_TEMP_HYST;
->  		reg_temp_config = NCT6779_REG_TEMP_CONFIG;
-> @@ -4460,6 +4541,24 @@ static int nct6775_probe(struct platform_device *pdev)
->  			data->REG_BEEP = NCT6776_REG_BEEP;
->  		else
->  			data->REG_BEEP = NCT6792_REG_BEEP;
-> +		switch (data->kind) {
-> +		case nct6791:
-> +		case nct6792:
-> +		case nct6793:
-> +			data->REG_TSI_TEMP = NCT6776_REG_TSI_TEMP;
-> +			num_reg_tsi_temp = ARRAY_SIZE(NCT6776_REG_TSI_TEMP);
-> +			break;
-> +		case nct6795:
-> +		case nct6796:
-> +		case nct6797:
-> +		case nct6798:
-> +			data->REG_TSI_TEMP = NCT6796_REG_TSI_TEMP;
-> +			num_reg_tsi_temp = ARRAY_SIZE(NCT6796_REG_TSI_TEMP);
-> +			break;
-> +		default:
-> +			num_reg_tsi_temp = 0;
-> +			break;
-> +		}
->  
->  		reg_temp = NCT6779_REG_TEMP;
->  		num_reg_temp = ARRAY_SIZE(NCT6779_REG_TEMP);
-> @@ -4659,6 +4758,12 @@ static int nct6775_probe(struct platform_device *pdev)
->  	}
->  #endif /* USE_ALTERNATE */
->  
-> +	/* Check which TSIx_TEMP registers are active */
-> +	for (i = 0; i < num_reg_tsi_temp; i++) {
-> +		if (data->read_value(data, data->REG_TSI_TEMP[i]))
-> +			data->have_tsi_temp |= BIT(i);
-> +	}
-> +
->  	/* Initialize the chip */
->  	nct6775_init_device(data);
->  
-> @@ -4766,6 +4871,18 @@ static int nct6775_probe(struct platform_device *pdev)
->  		return PTR_ERR(group);
->  
->  	data->groups[num_attr_groups++] = group;
-> +
-> +	if (data->have_tsi_temp) {
-> +		tsi_temp_tg.templates = nct6775_tsi_temp_template;
-> +		tsi_temp_tg.is_visible = nct6775_tsi_temp_is_visible;
-> +		tsi_temp_tg.base = fls(data->have_temp) + 1;
-> +		group = nct6775_create_attr_group(dev, &tsi_temp_tg, fls(data->have_tsi_temp));
-> +		if (IS_ERR(group))
-> +			return PTR_ERR(group);
-> +
-> +		data->groups[num_attr_groups++] = group;
-> +	}
-> +
->  	data->groups[num_attr_groups++] = &nct6775_group_other;
->  
->  	hwmon_dev = devm_hwmon_device_register_with_groups(dev, data->name,
+> I got some time to poke the internal microphone. It works, but
+> oddities are there as well. Initially I get "Mic Boost", "Capture" and
+> "Internal Mic Boost" controls in alsamixer. When I run arecord,
+> "Digital" control appears, but it cannot be changed until arecord is
+> stopped. Subsequent arecord calls do not lock "Digital" control. This
+> control affects sensitivity of the microphone and seems useful.
+
+That's presumably an alsa-lib softvol stuff.  It's created
+dynamically.  So not really a kernel problem.
+
+
+Takashi
+
+---
+diff --git a/sound/pci/hda/hda_generic.c b/sound/pci/hda/hda_generic.c
+index 3bf5e3410703..503cd979c908 100644
+--- a/sound/pci/hda/hda_generic.c
++++ b/sound/pci/hda/hda_generic.c
+@@ -84,13 +84,21 @@ static void free_kctls(struct hda_gen_spec *spec)
+ 	snd_array_free(&spec->kctls);
+ }
+ 
+-static void snd_hda_gen_spec_free(struct hda_gen_spec *spec)
++static void snd_hda_gen_spec_free(struct hda_codec *codec)
+ {
++	struct hda_gen_spec *spec = codec->spec;
++
+ 	if (!spec)
+ 		return;
+ 	free_kctls(spec);
+ 	snd_array_free(&spec->paths);
+ 	snd_array_free(&spec->loopback_list);
++#ifdef CONFIG_SND_HDA_GENERIC_LEDS
++	if (spec->led_cdevs[LED_AUDIO_MUTE])
++		led_classdev_unregister(spec->led_cdevs[LED_AUDIO_MUTE]);
++	if (spec->led_cdevs[LED_AUDIO_MICMUTE])
++		led_classdev_unregister(spec->led_cdevs[LED_AUDIO_MICMUTE]);
++#endif
+ }
+ 
+ /*
+@@ -3922,7 +3930,9 @@ static int create_mute_led_cdev(struct hda_codec *codec,
+ 						enum led_brightness),
+ 				bool micmute)
+ {
++	struct hda_gen_spec *spec = codec->spec;
+ 	struct led_classdev *cdev;
++	int err;
+ 
+ 	cdev = devm_kzalloc(&codec->core.dev, sizeof(*cdev), GFP_KERNEL);
+ 	if (!cdev)
+@@ -3935,7 +3945,11 @@ static int create_mute_led_cdev(struct hda_codec *codec,
+ 	cdev->brightness = ledtrig_audio_get(micmute ? LED_AUDIO_MICMUTE : LED_AUDIO_MUTE);
+ 	cdev->flags = LED_CORE_SUSPENDRESUME;
+ 
+-	return devm_led_classdev_register(&codec->core.dev, cdev);
++	err = led_classdev_register(&codec->core.dev, cdev);
++	if (err < 0)
++		return err;
++	spec->led_cdevs[micmute ? LED_AUDIO_MICMUTE : LED_AUDIO_MUTE] = cdev;
++	return 0;
+ }
+ 
+ /**
+@@ -5998,7 +6012,7 @@ EXPORT_SYMBOL_GPL(snd_hda_gen_init);
+ void snd_hda_gen_free(struct hda_codec *codec)
+ {
+ 	snd_hda_apply_fixup(codec, HDA_FIXUP_ACT_FREE);
+-	snd_hda_gen_spec_free(codec->spec);
++	snd_hda_gen_spec_free(codec);
+ 	kfree(codec->spec);
+ 	codec->spec = NULL;
+ }
+diff --git a/sound/pci/hda/hda_generic.h b/sound/pci/hda/hda_generic.h
+index 8e1bc8ea74fc..34eba40cc6e6 100644
+--- a/sound/pci/hda/hda_generic.h
++++ b/sound/pci/hda/hda_generic.h
+@@ -294,6 +294,9 @@ struct hda_gen_spec {
+ 				   struct hda_jack_callback *cb);
+ 	void (*mic_autoswitch_hook)(struct hda_codec *codec,
+ 				    struct hda_jack_callback *cb);
++
++	/* leds */
++	struct led_classdev *led_cdevs[NUM_AUDIO_LEDS];
+ };
+ 
+ /* values for add_stereo_mix_input flag */

@@ -2,108 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5111B48EB68
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2245848EB65
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:16:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241474AbiANOQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 09:16:00 -0500
-Received: from mout.perfora.net ([74.208.4.194]:38213 "EHLO mout.perfora.net"
+        id S241450AbiANOPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 09:15:51 -0500
+Received: from mout.perfora.net ([74.208.4.197]:59577 "EHLO mout.perfora.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241444AbiANOP7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:15:59 -0500
+        id S241444AbiANOPu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 09:15:50 -0500
 Received: from localhost.localdomain ([81.221.144.115]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lkw9T-1mZrMM1Gx3-00apy9;
- Fri, 14 Jan 2022 15:15:31 +0100
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MA82J-1n1XkS28s5-00BN6P;
+ Fri, 14 Jan 2022 15:15:33 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marek Vasut <marek.vasut@gmail.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Fabio Estevam <festevam@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Frank Rowand <frowand.list@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?q?Oliver=20St=C3=A4bler?= <oliver.staebler@bytesatwork.ch>,
-        Olof Johansson <olof@lixom.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 01/11] arm64: dts: imx8mm: fix strange hex notation
-Date:   Fri, 14 Jan 2022 15:14:57 +0100
-Message-Id: <20220114141507.395271-2-marcel@ziswiler.com>
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 02/11] dt-bindings: gpio: fix gpio-hog example
+Date:   Fri, 14 Jan 2022 15:14:58 +0100
+Message-Id: <20220114141507.395271-3-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220114141507.395271-1-marcel@ziswiler.com>
 References: <20220114141507.395271-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:oESOtOPuWo8sPx81MeeTQKrPBLqUe0dN4Uy33o5E5eZu8mHV/LN
- 1www8ErKZBd1DAjr/DflEkvkrA9HXV9NveOMa/3NQq8WVagTw8DqGFtoheRpv+t1AKY6b7x
- sW1jxEkIcmCnXWdTE0SHR7bZkvu/8KpXB9iRDdUKuqYJQMkhxM1CPJmoolCbeskU1exTVUq
- M/u+qPjxOXc50R7/iGw3A==
+X-Provags-ID: V03:K1:xFK4LGuItNGSNTma0SMQ7RSr3e4uAb9RyHyRiJaV7Rm55JquVNP
+ 4H9TEkjq/YFvBUEIxp5kqPwnuY8/qU0WbXmx3+sUhycuV6X3m2Ic0C64aKxHnNAbaDSoXC6
+ MS9QFMRnWtq6qJo6JjnVOsMug2bya63AyKq/QppzD8xoixp24CiqpTGgh1ab6q4RzTmRMwp
+ lLHSaS3JDfd0AwV2g1/2Q==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UkNeJRe/hQs=:HYIfJ6MdDX+fslLPC6fnfn
- qmIimZEiO/UoWZrSPRFMFMS+oGhzxDu733V6z2BMkvvd0+swtipGfBupD6Kk4FgmsjPEp3cj8
- 8pcLBgnviYlIGmWVX6Tdoc5oapu1r3eRK23fzDyNezncV0TvpQuV9vv7a8JFrVWwkmEuckI3R
- AypiidV9jCv1C4cHESAcia1lWtghQ+n8PlAZ/UWZH264azRftZ2jCBVsrDoFhC/n9DmEZkzGs
- UYrPgqMVnyK1hwNB8ehTY8el4iwvsgcjt3DSbFd2qENOQLoUPTUAjKHgv50FhVb7g0rjrWK1G
- iEz6cHv9+e73ckHJ8EiP+V48g1zz6tM3thGGKOldNfwNIhMapuP35wtG9LpwGjNiOkDzFJOLc
- 2wdX2rFPtj3WF3AZicQ6uXKintkuk/pAwApDuGs6uAznpRxNCjK8dy02bOugfN/FRlPFzi+MZ
- UOcMPC+2hfLdLr0Q1/aChEhyvUoYyXWlMSMTQ7PC94ct74CqnSyW/UHPkz9k9JmWQrG5+2YfA
- OVXi4ba7EpgG2UKjXNekmcWjJ1SWyXf+6cpd3wA03PGCzHm33abbLBLMNCaviLPL0bPQnbq7E
- 2qML+g+sc9rc3qCtGPChcfJ75ze1GTP2J+R6wswv4Oe3XNEjC0Vqim53G9n+DoBCvp7z8cS/J
- Sl5vjS1tBH2xdoTSma5yYOZsTggQKA8c500a5Vb0CzI0khnysVSQLQoZJ6gXZHWWl/Zs=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4ekKvrQAY8Y=:aDvkCu0gy8aAhHqnEsoYgN
+ qUum0Q4W9Q8mgfL/EzUZljc3z715TVPC3aP5c2nC5AbAM8VNnklGvDSsqmVkvjAU/GJk+Qbhc
+ DmydSLuuhcThG4w8/tOSQsT/3x4SPFVyNlVpRcTQRnl70a9Mq8CfznXAbv8qreRTRLcSPb68T
+ k/rpqfp/60mXFQA6ZElppgLuiR6qMNL9Iuf6/CfFhf+H3vDkY0Hsniwlvg5bDubywynsbcKzY
+ 6EDJ5eVbuFSWOG+9vwP6GaPcMRFV9uk3Ojx2QR3d0aDCfXFNzLUQCCvMs4sIKRPXE6KDbL2rl
+ BIbwCJ60WMef0/uvRGmgrd4/+042dirkBfq1nqeHWekJwo99hnYom69mMfTDIUAUDfuRMIMXS
+ 2Ih4/dlq/CZ7DyEjAfJFTJN3vTgs5QEcC/LcaTyojJ/99sTPEAQi7at46etuAphjFCw7c6H6g
+ PjeHwC4Rwghd/xR/68NH92Is7mTQWNX7eTtxtLGISeyKuoRUX9tf+244ea4uwDM3aajnJdGbC
+ PO5PZ/I2IaYwR1C/Ab3H/BdhTP5xKzAg2JLXrkiDP0DU5zx/Nr20N6szMBcCsNdowt7AjfM0B
+ kIX7ELuywRdmta2kR4Fmz1grm9EJ4G6CEge4nxON+h0iH5WdkUGECkVsGPPmmcQNnYeccuyr6
+ n14OCB99focr6zD/zpDi9kTWeINN0nS5Zl6zYKWPOpfoXrJBCq97z0xgwUCt4koa1wcA=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Fix strange hex notation with mixed lower-case and upper-case letters.
+Even if this is no yaml yet at least fix the example to be compliant to
+later schema as e.g. found in gpio-pca95xx.yaml, fairchild,74hc595.yaml
+and gpio/fsl-imx-gpio.yaml.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Acked-by: Rob Herring <robh@kernel.org>
 
 ---
 
 Changes in v2:
-- Added Laurent's reviewed-by tag.
+- Added Rob's ack.
 
- arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/gpio/gpio.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h b/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h
-index a003e6af3353..c68a5e456025 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h
-@@ -279,7 +279,7 @@
- #define MX8MM_IOMUXC_SAI5_RXD2_SAI1_TX_DATA4                                0x150 0x3B8 0x000 0x1 0x0
- #define MX8MM_IOMUXC_SAI5_RXD2_SAI1_TX_SYNC                                 0x150 0x3B8 0x4CC 0x2 0x1
- #define MX8MM_IOMUXC_SAI5_RXD2_SAI5_TX_BCLK                                 0x150 0x3B8 0x4E8 0x3 0x0
--#define MX8MM_IOMUXC_SAI5_RXD2_PDM_DATA2                                    0x150 0x3B8 0x53c 0x4 0x0
-+#define MX8MM_IOMUXC_SAI5_RXD2_PDM_DATA2                                    0x150 0x3B8 0x53C 0x4 0x0
- #define MX8MM_IOMUXC_SAI5_RXD2_GPIO3_IO23                                   0x150 0x3B8 0x000 0x5 0x0
- #define MX8MM_IOMUXC_SAI5_RXD3_SAI5_RX_DATA3                                0x154 0x3BC 0x4E0 0x0 0x0
- #define MX8MM_IOMUXC_SAI5_RXD3_SAI1_TX_DATA5                                0x154 0x3BC 0x000 0x1 0x0
-@@ -486,7 +486,7 @@
- #define MX8MM_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC                                 0x1D8 0x440 0x000 0x0 0x0
- #define MX8MM_IOMUXC_SAI3_TXFS_GPT1_CAPTURE2                                0x1D8 0x440 0x000 0x1 0x0
- #define MX8MM_IOMUXC_SAI3_TXFS_SAI5_RX_DATA1                                0x1D8 0x440 0x4D8 0x2 0x2
--#define MX8MM_IOMUXC_SAI3_TXFS_UART2_DCE_RX                                 0x1D8 0x440 0x4Fc 0x4 0x2
-+#define MX8MM_IOMUXC_SAI3_TXFS_UART2_DCE_RX                                 0x1D8 0x440 0x4FC 0x4 0x2
- #define MX8MM_IOMUXC_SAI3_TXFS_UART2_DTE_TX                                 0x1D8 0x440 0x000 0x4 0x0
- #define MX8MM_IOMUXC_SAI3_TXFS_GPIO4_IO31                                   0x1D8 0x440 0x000 0x5 0x0
- #define MX8MM_IOMUXC_SAI3_TXFS_TPSMP_HDATA1                                 0x1D8 0x440 0x000 0x7 0x0
-@@ -494,7 +494,7 @@
- #define MX8MM_IOMUXC_SAI3_TXC_GPT1_COMPARE2                                 0x1DC 0x444 0x000 0x1 0x0
- #define MX8MM_IOMUXC_SAI3_TXC_SAI5_RX_DATA2                                 0x1DC 0x444 0x4DC 0x2 0x2
- #define MX8MM_IOMUXC_SAI3_TXC_UART2_DCE_TX                                  0x1DC 0x444 0x000 0x4 0x0
--#define MX8MM_IOMUXC_SAI3_TXC_UART2_DTE_RX                                  0x1DC 0x444 0x4Fc 0x4 0x3
-+#define MX8MM_IOMUXC_SAI3_TXC_UART2_DTE_RX                                  0x1DC 0x444 0x4FC 0x4 0x3
- #define MX8MM_IOMUXC_SAI3_TXC_GPIO5_IO0                                     0x1DC 0x444 0x000 0x5 0x0
- #define MX8MM_IOMUXC_SAI3_TXC_TPSMP_HDATA2                                  0x1DC 0x444 0x000 0x7 0x0
- #define MX8MM_IOMUXC_SAI3_TXD_SAI3_TX_DATA0                                 0x1E0 0x448 0x000 0x0 0x0
+diff --git a/Documentation/devicetree/bindings/gpio/gpio.txt b/Documentation/devicetree/bindings/gpio/gpio.txt
+index a8895d339bfe..5663e71b751f 100644
+--- a/Documentation/devicetree/bindings/gpio/gpio.txt
++++ b/Documentation/devicetree/bindings/gpio/gpio.txt
+@@ -213,7 +213,7 @@ Example of two SOC GPIO banks defined as gpio-controller nodes:
+ 		gpio-controller;
+ 		#gpio-cells = <2>;
+ 
+-		line_b {
++		line_b-hog {
+ 			gpio-hog;
+ 			gpios = <6 0>;
+ 			output-low;
 -- 
 2.33.1
 

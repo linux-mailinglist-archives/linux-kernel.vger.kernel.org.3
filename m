@@ -2,338 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B79B248EF2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:21:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4E648EF2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243840AbiANRVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
+        id S243832AbiANRU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:20:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiANRVj (ORCPT
+        with ESMTP id S229761AbiANRUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:21:39 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777DAC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:21:39 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id o7-20020a05600c510700b00347e10f66d1so3896887wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:21:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=kjv33ksC1LaBz+eH4uHJ9BtWCyCSppHcW6B69JImuKA=;
-        b=ST/d+6P668Hv4OqjKK5pY8njVz23qPGkyZE127Tzj6ByzPDfKDQRCg6+42fQe2uNKP
-         GpuZn20BBG6kCzbPj5rKpSBSflyyKNajOjGSCsTYi/8VgAHfYYPNrHJrSJzJyOjYppj0
-         AwpRq0GRy8kO1hJRL1wTgIqZW/kCoUMGLBLTY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:mime-version:content-disposition
-         :content-transfer-encoding;
-        bh=kjv33ksC1LaBz+eH4uHJ9BtWCyCSppHcW6B69JImuKA=;
-        b=KoUEO+Grskrj4jr8TLnEyLellNgQqi8K0losd3jm0LZBEr4TVGP1+mEeuJo/8GNXid
-         kw4YZHV4GSS2Kmmm8gLSBMPwZwLtHQuJb76feL39BlIeu663p8kHPP32GymMkZvhplVM
-         Q/saUN9C1s6Y+fXmBGFMLCYUb1YmrhaNO0pYIenrLryl4dvaYaUWdy3yz6wi1khd0Sz5
-         SYPTUONUEwVRP8fCUj6HH1JsDMM2/BWsGoKKnrF4oixU1gh4biYDgS6cfJAz/qGbadg4
-         o21+/moRFXba4BKZVdhE4MituOE20rrOzkexOBYb1tvmw3Z3CxOmgH7TQRrPy9znyGrr
-         auUg==
-X-Gm-Message-State: AOAM532ZSonCaaYsyMRxBXsuP5lJQqdbaZnwqZDdoJY9mnqA1Ar7pDdK
-        i+2TWdq5AYG3GNEjcnQaNyyKbw==
-X-Google-Smtp-Source: ABdhPJy1P3cAo5JR4n6d2JHOwxnu6kymjDB5wqYjx+p6jJ9q2v9a08ja+dDtS8sieKnqVCvoYKzeGg==
-X-Received: by 2002:a1c:980d:: with SMTP id a13mr16690053wme.194.1642180897994;
-        Fri, 14 Jan 2022 09:21:37 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id c11sm12703740wmq.48.2022.01.14.09.21.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 09:21:37 -0800 (PST)
-Date:   Fri, 14 Jan 2022 18:20:41 +0100
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+        Fri, 14 Jan 2022 12:20:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9F7C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:20:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3979B829D4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 17:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E96C36AE9;
+        Fri, 14 Jan 2022 17:20:49 +0000 (UTC)
+Date:   Fri, 14 Jan 2022 12:20:47 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dim-tools@lists.freedesktop.org
-Subject: [PULL] drm-next (merge window fixes really)
-Message-ID: <YeGw6f4mhBZd0ZHg@phenom.ffwll.local>
-Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Airlie <airlied@gmail.com>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dim-tools@lists.freedesktop.org
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Colin Ian King <colin.i.king@googlemail.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Jiri Olsa <jolsa@redhat.com>, John Keeping <john@metanate.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>,
+        Qiujun Huang <hqjagain@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tom Zanussi <zanussi@kernel.org>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Xiangyang Zhang <xyz.sun.ok@gmail.com>,
+        Xiaoke Wang <xkernel.wang@foxmail.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Yinan Liu <yinan@linux.alibaba.com>,
+        Yuntao Wang <ytcoode@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [GIT PULL] tracing: Updates for 5.17
+Message-ID: <20220114122047.061a16e6@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-drm-next-2022-01-14:
-drm fixes for 5.17-rc1:
+Linus,
 
-drivers fixes:
-- i915 fixes for ttm backend + one pm wakelock fix
-- amdgpu fixes, fairly big pile of small things all over. Note this
-  doesn't yet containe the fixed version of the otg sync patch that
-  blew up
-- small driver fixes: meson, sun4i, vga16fb probe fix
+Note, I'm just recovering from COVID. I started getting sick on Monday, and
+was pretty much bedridden from Tuesday through Thursday, although last
+night I was able to start sorting out my pull request and found a few
+issues I had to clean up. But it should be good to go. Sorry for the delay.
 
-drm core fixes:
-- cma-buf heap locking
-- ttm compilation
-- self refresh helper state check
-- wrong error message in atomic helpers
-- mipi-dbi buffer mapping
+Tracing updates for 5.17:
 
-Note there's some conflicts:
-- One of the pulls was based on previous release, so I had to redo your
-  merge (since I really didn't want to roll forward to a random point in
-  the merge window). I tried to pick your exact solution to prevent
-  further merge conflict lolz.
+New:
 
-- amgpu has some conflicts, you should be fine by just going with the
-  version in this pull. Alex tested that what I have in our shared
-  rerere/integration tree, if you want to fetch that:
+- The Real Time Linux Analysis (RTLA) tool is added to the tools directory.
 
-	git://anongit.freedesktop.org/drm/drm-tip drm-tip
+- Can safely filter on user space pointers with: field.ustring ~ "match-string"
 
-I also wasted some time chasing a arm32 bad udelay compile issue until I
-realized it's not a regression in this set but been there already, hence
-why this pull is a bit late. Alex is looking into that one.
+- eprobes can now be filtered like any other event.
 
-Next week's drm pull is back to Dave.
+- trace_marker(_raw) now uses stream_open() to allow multiple threads to safely
+  write to it. Note, this could possibly break existing user space, but we will
+  not know until we hear about it, and then can revert the change if need be.
 
-Cheers, Daniel
+- New field in events to display when bottom halfs are disabled.
 
-The following changes since commit cb6846fbb83b574c85c2a80211b402a6347b60b1:
+- Sorting of the ftrace functions are now done at compile time instead of
+  at bootup.
 
-  Merge tag 'amd-drm-next-5.17-2021-12-30' of ssh://gitlab.freedesktop.org/agd5f/linux into drm-next (2021-12-31 10:59:17 +1000)
+Infrastructure changes to support future efforts:
 
-are available in the Git repository at:
+- Added __rel_loc type for trace events. Similar to __data_loc but the offset
+  to the dynamic data is based off of the location of the descriptor and not
+  the beginning of the event. Needed for user defined events.
 
-  git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-01-14
+- Some simplification of event trigger code.
 
-for you to fetch changes up to 4efdddbce7c1329f00c458e85dcaf105aebdc0ed:
+- Make synthetic events process its callback better to not hinder other
+  event callbacks that are registered. Needed for user defined events.
 
-  Merge tag 'amd-drm-next-5.17-2022-01-12' of https://gitlab.freedesktop.org/agd5f/linux into drm-next (2022-01-14 15:42:28 +0100)
+And other small fixes and clean ups.
 
-----------------------------------------------------------------
-drm fixes for 5.17-rc1:
 
-drivers fixes:
-- i915 fixes for ttm backend + one pm wakelock fix
-- amdgpu fixes, fairly big pile of small things all over. Note this
-  doesn't yet containe the fixed version of the otg sync patch that
-  blew up
-- small driver fixes: meson, sun4i, vga16fb probe fix
 
-drm core fixes:
-- cma-buf heap locking
-- ttm compilation
-- self refresh helper state check
-- wrong error message in atomic helpers
-- mipi-dbi buffer mapping
+Please pull the latest trace-v5.17 tree, which can be found at:
 
-----------------------------------------------------------------
-Alexander Stein (2):
-      dt-bindings: display: meson-vpu: Add missing amlogic,canvas property
-      dt-bindings: display: meson-dw-hdmi: add missing sound-name-prefix property
 
-Charlene Liu (1):
-      drm/amd/display: Add check for forced_clocks debug option
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+trace-v5.17
 
-Claudio Suarez (1):
-      drm: fix error found in some cases after the patch d1af5cd86997
+Tag SHA1: 9a38345e8252c9fba23c5ec173fd086ee9fd7c65
+Head SHA1: f37c3bbc635994eda203a6da4ba0f9d05165a8d6
 
-Daniel Vetter (5):
-      Merge tag 'drm-intel-next-fixes-2022-01-13' of git://anongit.freedesktop.org/drm/drm-intel into drm-next
-      Merge tag 'drm-misc-next-fixes-2022-01-13' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
-      Merge tag 'drm-misc-fixes-2022-01-14' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
-      Merge tag 'drm-misc-next-fixes-2022-01-14' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
-      Merge tag 'amd-drm-next-5.17-2022-01-12' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
 
-Evan Quan (1):
-      drm/amd/pm: keep the BACO feature enabled for suspend
+Beau Belgrave (1):
+      tracing: Do not let synth_events block other dyn_event systems during create
 
-Felix Kuehling (3):
-      drm/amdkfd: Use prange->list head for insert_list
-      drm/amdkfd: Use prange->update_list head for remove_list
-      drm/amdkfd: Fix DQM asserts on Hawaii
+Colin Ian King (1):
+      tracing: Fix spelling mistake "aritmethic" -> "arithmetic"
 
-Greg Kroah-Hartman (2):
-      drm/amdgpu: use default_groups in kobj_type
-      drm/amdkfd: use default_groups in kobj_type
+Daniel Bristot de Oliveira (14):
+      rtla: Real-Time Linux Analysis tool
+      rtla: Helper functions for rtla
+      rtla: Add osnoise tool
+      rtla/osnoise: Add osnoise top mode
+      rtla/osnoise: Add the hist mode
+      rtla: Add timerlat tool and timelart top mode
+      rtla/timerlat: Add timerlat hist mode
+      rtla: Add Documentation
+      rtla: Add rtla osnoise man page
+      rtla: Add rtla osnoise top documentation
+      rtla: Add rtla osnoise hist documentation
+      rtla: Add rtla timerlat documentation
+      rtla: Add rtla timerlat top documentation
+      rtla: Add rtla timerlat hist documentation
 
-Guchun Chen (1):
-      drm/amdgpu: use spin_lock_irqsave to avoid deadlock by local interrupt
+Geliang Tang (1):
+      tracing: Fix mismatched comment in __string_len
 
-Harry Wentland (1):
-      drm/amdgpu: Use correct VIEWPORT_DIMENSION for DCN2
+Jiri Olsa (1):
+      tracing: Iterate trace_[ku]probe objects directly
 
-James Yao (1):
-      drm/amdgpu: add dummy event6 for vega10
+John Keeping (1):
+      tracing: Make trace_marker{,_raw} stream-like
 
-Javier Martinez Canillas (1):
-      video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
+Masami Hiramatsu (5):
+      tracing: Support __rel_loc relative dynamic data location attribute
+      tracing: Add '__rel_loc' using trace event macros
+      samples/trace_event: Add '__rel_loc' using sample event
+      libtraceevent: Add __rel_loc relative location attribute support
+      tools/perf: Add '__rel_loc' event field parsing support
 
-Jiasheng Jiang (1):
-      drm/amdkfd: Check for null pointer after calling kmemdup
+Nikita Yushchenko (1):
+      tracing/osnoise: Properly unhook events if start_per_cpu_kthreads() fails
 
-Jiawei Gu (1):
-      drm/amdgpu: Clear garbage data in err_data before usage
+Qiujun Huang (1):
+      tracing: Fix synth_event_add_val() kernel-doc comment
 
-Johannes Berg (1):
-      drm/ttm: fix compilation on ARCH=um
+Sebastian Andrzej Siewior (1):
+      tracing: Account bottom half disabled sections.
 
-José Expósito (1):
-      drm/amd/display: invalid parameter check in dmub_hpd_callback
+Steven Rostedt (3):
+      tracing: Have syscall trace events use trace_event_buffer_lock_reserve()
+      tracing: Add test for user space strings when filtering on string pointers
+      tracing: Add ustring operation to filtering string pointers
 
-Juston Li (1):
-      drm/i915/pxp: Hold RPM wakelock during PXP unbind
+Steven Rostedt (VMware) (8):
+      tracing: Use __this_cpu_read() in trace_event_buffer_lock_reserver()
+      tracing: Disable preemption when using the filter buffer
+      tracing: Have eprobes use filtering logic of trace events
+      tracing/kprobes: Do not open code event reserve logic
+      tracing/uprobes: Use trace_event_buffer_reserve() helper
+      tracefs: Use d_inode() helper function to get the dentry inode
+      tracing: Use trace_iterator_reset() in tracing_read_pipe()
+      ftrace: Add test to make sure compiled time sorts work
 
-Kent Russell (1):
-      drm/amdkfd: Fix ASIC name typos
+Tom Zanussi (4):
+      tracing: Change event_command func() to parse()
+      tracing: Change event_trigger_ops func() to trigger()
+      tracing: Remove ops param from event_command reg()/unreg() callbacks
+      tracing: Add helper functions to simplify event_command.parse() callback handling
 
-Leslie Shi (1):
-      drm/amdgpu: Unmap MMIO mappings when device is not unplugged
+Uladzislau Rezki (Sony) (1):
+      tracing: Switch to kvfree_rcu() API
 
-Liu Ying (1):
-      drm/atomic: Check new_crtc_state->active to determine if CRTC needs disable in self refresh mode
+Xiangyang Zhang (1):
+      tracing/kprobes: 'nmissed' not showed correctly for kretprobe
 
-Lukas Bulwahn (1):
-      drm/amdkfd: make SPDX License expression more sound
+Xiaoke Wang (2):
+      tracing/uprobes: Check the return value of kstrdup() for tu->filename
+      tracing/probes: check the return value of kstrndup() for pbuf
 
-Mario Limonciello (4):
-      drm/amdgpu: explicitly check for s0ix when evicting resources
-      drm/amdgpu: don't set s3 and s0ix at the same time
-      drm/amd/display: explicitly set is_dsc_supported to false before use
-      drm/amd/display: reset dcn31 SMU mailbox on failures
+Xiu Jianfeng (1):
+      tracing: Use memset_startat helper in trace_iterator_reset()
 
-Matthew Auld (4):
-      drm/i915: don't call free_mmap_offset when purging
-      drm/i915/ttm: only fault WILLNEED objects
-      drm/i915/ttm: add unmap_virtual callback
-      drm/i915/ttm: ensure we unmap when purging
+Yinan Liu (2):
+      script/sorttable: Code style improvements
+      scripts: ftrace - move the sort-processing in ftrace_init
 
-Miaoqian Lin (1):
-      drm/sun4i: dw-hdmi: Fix missing put_device() call in sun8i_hdmi_phy_get
+Yuntao Wang (1):
+      tracing: Remove duplicate warnings when calling trace_create_file()
 
-Mikita Lipski (1):
-      drm/amd/display: introduce mpo detection flags
-
-Nicholas Kazlauskas (2):
-      drm/amd/display: Don't reinitialize DMCUB on s0ix resume
-      drm/amd/display: Add version check before using DP alt query interface
-
-Nirmoy Das (4):
-      drm/amdgpu: do not pass ttm_resource_manager to gtt_mgr
-      drm/amdkfd: remove unused function
-      drm/amdgpu: do not pass ttm_resource_manager to vram_mgr
-      drm/amdgpu: recover gart table at resume
-
-Peng Ju Zhou (1):
-      drm/amdgpu: Enable second VCN for certain Navy Flounder.
-
-Prike Liang (1):
-      drm/amdgpu: not return error on the init_apu_flags
-
-Rajneesh Bhardwaj (1):
-      Revert "drm/amdgpu: Don't inherit GEM object VMAs in child process"
-
-Tao Zhou (1):
-      drm/amd/pm: only send GmiPwrDnControl msg on master die (v3)
-
-Thomas Zimmermann (1):
-      drm/mipi-dbi: Fix source-buffer address in mipi_dbi_buf_copy
-
-Tom St Denis (1):
-      drm/amd/amdgpu: Add pcie indirect support to amdgpu_mm_wreg_mmio_rlc()
-
-Weizhao Ouyang (1):
-      dma-buf: cma_heap: Fix mutex locking section
-
-Wenjing Liu (1):
-      drm/amd/display: unhard code link to phy idx mapping in dc link and clean up
-
-Yi-Ling Chen (1):
-      drm/amd/display: Fix underflow for fused display pipes case
-
-yipechai (1):
-      drm/amdkfd: enable sdma ecc interrupt event can be handled by event_interrupt_wq_v9
-
- .../bindings/display/amlogic,meson-dw-hdmi.yaml    |   5 +
- .../bindings/display/amlogic,meson-vpu.yaml        |   6 +
- drivers/dma-buf/heaps/cma_heap.c                   |   6 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c         |   7 -
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.h         |   1 -
- drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c             |   5 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |  36 ++---
- drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c      |   3 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c        |   2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |   6 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_gart.c           |  84 +-----------
- drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c            |   3 -
- drivers/gpu/drm/amd/amdgpu/amdgpu_gtt_mgr.c        |  17 +--
- drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c            |  14 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_object.c         |  12 ++
- drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c            |   7 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c            |  11 ++
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h            |  12 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c           |   9 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c           |   5 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c       |  40 +++---
- drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c           |   3 +-
- drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c             |   3 +-
- drivers/gpu/drm/amd/amdgpu/gmc_v6_0.c              |   3 +-
- drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c              |   3 +-
- drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c              |   3 +-
- drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c              |  17 ++-
- drivers/gpu/drm/amd/amdgpu/mxgpu_ai.c              |  11 ++
- drivers/gpu/drm/amd/amdgpu/mxgpu_ai.h              |   2 +
- drivers/gpu/drm/amd/amdkfd/kfd_crat.c              |   3 +
- drivers/gpu/drm/amd/amdkfd/kfd_device.c            |   6 +-
- .../gpu/drm/amd/amdkfd/kfd_device_queue_manager.c  |   9 +-
- drivers/gpu/drm/amd/amdkfd/kfd_int_process_v9.c    |   1 +
- drivers/gpu/drm/amd/amdkfd/kfd_process.c           |   3 +-
- drivers/gpu/drm/amd/amdkfd/kfd_svm.c               |  23 ++--
- drivers/gpu/drm/amd/amdkfd/kfd_svm.h               |   4 -
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  44 ++++++-
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h  |   2 +
- .../drm/amd/display/dc/clk_mgr/dcn31/dcn31_smu.c   |   6 +
- drivers/gpu/drm/amd/display/dc/core/dc_link.c      | 145 +++++++++------------
- drivers/gpu/drm/amd/display/dc/core/dc_resource.c  |  33 +++++
- .../drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c  |   7 +-
- .../amd/display/dc/dcn31/dcn31_dio_link_encoder.c  | 114 +++++++++++++---
- .../gpu/drm/amd/display/dc/dcn31/dcn31_resource.c  |   2 +-
- drivers/gpu/drm/amd/display/dc/dm_cp_psp.h         |   4 +-
- drivers/gpu/drm/amd/display/dc/inc/resource.h      |   1 +
- drivers/gpu/drm/amd/display/modules/inc/mod_hdcp.h |   2 +-
- drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c          |   8 +-
- drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c |  16 ++-
- drivers/gpu/drm/ast/ast_mode.c                     |   5 +-
- drivers/gpu/drm/drm_atomic_helper.c                |  14 +-
- drivers/gpu/drm/drm_fb_helper.c                    |   8 +-
- drivers/gpu/drm/drm_mipi_dbi.c                     |   2 +-
- drivers/gpu/drm/i915/gem/i915_gem_mman.c           |   3 +
- drivers/gpu/drm/i915/gem/i915_gem_object_types.h   |   1 +
- drivers/gpu/drm/i915/gem/i915_gem_pages.c          |   1 -
- drivers/gpu/drm/i915/gem/i915_gem_ttm.c            |  27 +++-
- drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c |  18 +--
- drivers/gpu/drm/i915/pxp/intel_pxp_tee.c           |   5 +-
- drivers/gpu/drm/nouveau/nouveau_fence.c            |  48 ++++---
- drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c             |   4 +-
- drivers/gpu/drm/tiny/simpledrm.c                   |   2 +-
- drivers/gpu/drm/ttm/ttm_module.c                   |   4 +-
- drivers/video/fbdev/vga16fb.c                      |  24 ++++
- include/uapi/linux/kfd_sysfs.h                     |   2 +-
- 65 files changed, 555 insertions(+), 382 deletions(-)
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+----
+ Documentation/tools/rtla/Makefile                  |  41 +
+ Documentation/tools/rtla/common_appendix.rst       |  12 +
+ Documentation/tools/rtla/common_hist_options.rst   |  23 +
+ Documentation/tools/rtla/common_options.rst        |  28 +
+ .../tools/rtla/common_osnoise_description.rst      |   8 +
+ .../tools/rtla/common_osnoise_options.rst          |  17 +
+ .../tools/rtla/common_timerlat_description.rst     |  10 +
+ .../tools/rtla/common_timerlat_options.rst         |  16 +
+ Documentation/tools/rtla/common_top_options.rst    |   3 +
+ Documentation/tools/rtla/rtla-osnoise-hist.rst     |  66 ++
+ Documentation/tools/rtla/rtla-osnoise-top.rst      |  61 ++
+ Documentation/tools/rtla/rtla-osnoise.rst          |  59 ++
+ Documentation/tools/rtla/rtla-timerlat-hist.rst    | 106 +++
+ Documentation/tools/rtla/rtla-timerlat-top.rst     | 145 ++++
+ Documentation/tools/rtla/rtla-timerlat.rst         |  57 ++
+ Documentation/tools/rtla/rtla.rst                  |  48 ++
+ Documentation/trace/events.rst                     |  19 +
+ fs/tracefs/inode.c                                 |  24 +-
+ include/linux/trace_events.h                       |   2 +
+ include/trace/bpf_probe.h                          |  16 +
+ include/trace/perf.h                               |  16 +
+ include/trace/trace_events.h                       | 120 ++-
+ kernel/trace/Kconfig                               |  14 +
+ kernel/trace/ftrace.c                              |  34 +-
+ kernel/trace/trace.c                               |  88 ++-
+ kernel/trace/trace.h                               |  83 +-
+ kernel/trace/trace_eprobe.c                        |  38 +-
+ kernel/trace/trace_events.c                        |  12 +-
+ kernel/trace/trace_events_filter.c                 | 139 +++-
+ kernel/trace/trace_events_hist.c                   |  69 +-
+ kernel/trace/trace_events_inject.c                 |  11 +-
+ kernel/trace/trace_events_synth.c                  |  15 +-
+ kernel/trace/trace_events_trigger.c                | 424 +++++++++-
+ kernel/trace/trace_kprobe.c                        |  43 +-
+ kernel/trace/trace_osnoise.c                       |  23 +-
+ kernel/trace/trace_output.c                        |   4 +
+ kernel/trace/trace_probe.c                         |   5 +-
+ kernel/trace/trace_syscalls.c                      |   6 +-
+ kernel/trace/trace_uprobe.c                        |  39 +-
+ samples/trace_events/trace-events-sample.c         |   3 +
+ samples/trace_events/trace-events-sample.h         |  35 +-
+ scripts/Makefile                                   |   6 +-
+ scripts/link-vmlinux.sh                            |   6 +-
+ scripts/sorttable.c                                |   2 +
+ scripts/sorttable.h                                | 124 ++-
+ tools/lib/traceevent/event-parse.c                 |  59 +-
+ tools/lib/traceevent/event-parse.h                 |   5 +-
+ tools/lib/traceevent/parse-filter.c                |   5 +-
+ tools/perf/builtin-trace.c                         |   2 +
+ tools/perf/util/data-convert-bt.c                  |   2 +
+ tools/perf/util/evsel.c                            |   2 +
+ tools/perf/util/python.c                           |   2 +
+ .../perf/util/scripting-engines/trace-event-perl.c |   2 +
+ .../util/scripting-engines/trace-event-python.c    |   2 +
+ tools/perf/util/sort.c                             |   2 +
+ tools/tracing/rtla/Makefile                        | 102 +++
+ tools/tracing/rtla/README.txt                      |  36 +
+ tools/tracing/rtla/src/osnoise.c                   | 875 +++++++++++++++++++++
+ tools/tracing/rtla/src/osnoise.h                   |  91 +++
+ tools/tracing/rtla/src/osnoise_hist.c              | 801 +++++++++++++++++++
+ tools/tracing/rtla/src/osnoise_top.c               | 579 ++++++++++++++
+ tools/tracing/rtla/src/rtla.c                      |  87 ++
+ tools/tracing/rtla/src/timerlat.c                  |  72 ++
+ tools/tracing/rtla/src/timerlat.h                  |   4 +
+ tools/tracing/rtla/src/timerlat_hist.c             | 822 +++++++++++++++++++
+ tools/tracing/rtla/src/timerlat_top.c              | 618 +++++++++++++++
+ tools/tracing/rtla/src/trace.c                     | 192 +++++
+ tools/tracing/rtla/src/trace.h                     |  27 +
+ tools/tracing/rtla/src/utils.c                     | 433 ++++++++++
+ tools/tracing/rtla/src/utils.h                     |  56 ++
+ 70 files changed, 6706 insertions(+), 292 deletions(-)
+ create mode 100644 Documentation/tools/rtla/Makefile
+ create mode 100644 Documentation/tools/rtla/common_appendix.rst
+ create mode 100644 Documentation/tools/rtla/common_hist_options.rst
+ create mode 100644 Documentation/tools/rtla/common_options.rst
+ create mode 100644 Documentation/tools/rtla/common_osnoise_description.rst
+ create mode 100644 Documentation/tools/rtla/common_osnoise_options.rst
+ create mode 100644 Documentation/tools/rtla/common_timerlat_description.rst
+ create mode 100644 Documentation/tools/rtla/common_timerlat_options.rst
+ create mode 100644 Documentation/tools/rtla/common_top_options.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise-hist.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise-top.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat-hist.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat-top.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat.rst
+ create mode 100644 Documentation/tools/rtla/rtla.rst
+ create mode 100644 tools/tracing/rtla/Makefile
+ create mode 100644 tools/tracing/rtla/README.txt
+ create mode 100644 tools/tracing/rtla/src/osnoise.c
+ create mode 100644 tools/tracing/rtla/src/osnoise.h
+ create mode 100644 tools/tracing/rtla/src/osnoise_hist.c
+ create mode 100644 tools/tracing/rtla/src/osnoise_top.c
+ create mode 100644 tools/tracing/rtla/src/rtla.c
+ create mode 100644 tools/tracing/rtla/src/timerlat.c
+ create mode 100644 tools/tracing/rtla/src/timerlat.h
+ create mode 100644 tools/tracing/rtla/src/timerlat_hist.c
+ create mode 100644 tools/tracing/rtla/src/timerlat_top.c
+ create mode 100644 tools/tracing/rtla/src/trace.c
+ create mode 100644 tools/tracing/rtla/src/trace.h
+ create mode 100644 tools/tracing/rtla/src/utils.c
+ create mode 100644 tools/tracing/rtla/src/utils.h
+---------------------------

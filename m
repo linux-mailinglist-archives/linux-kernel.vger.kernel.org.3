@@ -2,114 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 214D448E460
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6DD48E463
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233477AbiANGsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:48:06 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:59254
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229955AbiANGsD (ORCPT
+        id S233603AbiANGsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233576AbiANGsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:48:03 -0500
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 90C1A402A4
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 06:48:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642142881;
-        bh=PKBAkmJ7or0T/bxHU0Wvyq29ugXtwBBaF+RK3mybysU=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=hDIiylRN/BhR3ijiiWn2wBFPyRwRb06nqYpmUx4C+aV6dTp5xI2nRrJGZ3n50E7O0
-         CbS1pO8x86DkqH4QUbPue5kg/sSXD9bqZpvAf6m2k82QB941iO2baagLssj9WarLQp
-         KLMiSonoqyTJSWEY/X1fHx6nD9jrRmdvDsSCvcQA131JdAOjfBHyzZEDjO6GLgkrRv
-         T4f0LMD1m9xLE6iEabDWROdRNcJxN7SJ1YiYOJpqX0/n+K9GaTyTVxQWEqYSQ/CYe/
-         G1NT0CiQdqFfO09vj0y7XGfVyJ8KK1+hN7FARhe5AJ5XMiXttlAht6j3CNnkTUH50B
-         CeV74hekx6AnQ==
-Received: by mail-oi1-f198.google.com with SMTP id v72-20020acaac4b000000b002c8dd559f44so5452753oie.8
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:48:01 -0800 (PST)
+        Fri, 14 Jan 2022 01:48:32 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D968C061574;
+        Thu, 13 Jan 2022 22:48:32 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id p14so12568128plf.3;
+        Thu, 13 Jan 2022 22:48:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=i9LyRM/Cvn/+ZP3AQxRWnhMX0KWeMjk3mtcIWGDqIOY=;
+        b=Yu+SIb7UPWWNf98D86v7vRcE53pixxEAAUzjpQsuI98UZloflGLRvoFkiVzFHocyGU
+         OqLrJmE8XMYqUKsxrMv+/QY2H4zTkj26a5AUVqKkgeBx/kzguZjJzL6zIp+Wok4+YZJW
+         WsmjToMMq371jWtupX73Km4F40GewrZA+MF4VetPFPDXSz6zm+TxV1LydLiXs9ERfCEY
+         /3Rbsh32aHRnVmSgPTiPXk22CrqGXU3JGvZgkKgIvT34bqjMG3IbAS6hH1aOiaPr2IRx
+         hxyOxWGVa1VSy32mSGKhCtKfFP9YmWYK+HJ6fQXfuJoQm4fPL/KWIcX2VENAG4BSpOly
+         dHQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PKBAkmJ7or0T/bxHU0Wvyq29ugXtwBBaF+RK3mybysU=;
-        b=IGmwkoJBKGfvGGlEi6o62XDZK6rBthDbbJl/Ud6ZnMqgFQUqkTZEErIxeClgrUKxFr
-         8v/cRmLAUVk8Cb8qiCulx268NDmRoPLh/DhXW964R7ZYYVGEGp15YrHbrR6XaSpsaRHN
-         YGkqoxCVIn+m7Bsloa8lzj2/ERcZ9jDtBIyw4FNPMyz3HxJvNVaxrtvpIq7wtNkO7Cfu
-         DALi3uuwmc7lDG58jShslhi0CtXlxwwR9VFpcK75+aSmr+lAWnN0dCJuxKHYyYs3WeP9
-         JU9tHlKPK7kvtoqona2+XdpjJhPyslTtQQn+/aE3W1xNQdfnE711eEB1KbO/7Ixc2A2X
-         8M1w==
-X-Gm-Message-State: AOAM530GLl+XvsqEUtoLnY5IRIzJEHsofUM65GOxsYZQGjVIExde1dsL
-        Z28/YvV0BMvSulnNC23XGpBthoVg4rSiW/xVWywjojwHWNZzpvcCfyHpDI60OxK+CDE4iVPTGkQ
-        g4YOwwEWjp3RRGlCWx7k/Lle+z0dxsWkzJ1cJ92+mClPUoEhvelxpjMeyjg==
-X-Received: by 2002:a05:6808:293:: with SMTP id z19mr10972604oic.41.1642142879353;
-        Thu, 13 Jan 2022 22:47:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJye/IK1OGddDRHlpoRSRDwJDrr3evy3FfczWQgU60l1SslTO9lJxeMi9V5rBVY0jKXg6Ly5r0DmOwSH1F8j5i0=
-X-Received: by 2002:a05:6808:293:: with SMTP id z19mr10972566oic.41.1642142878837;
- Thu, 13 Jan 2022 22:47:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20220114040755.1314349-1-kai.heng.feng@canonical.com>
- <20220114040755.1314349-2-kai.heng.feng@canonical.com> <20220113203523.310e13d3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220113203523.310e13d3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 14 Jan 2022 14:47:47 +0800
-Message-ID: <CAAd53p6rW7PcugY7okKsXybK2O=pS8qAhctMzsa-MEgJrKhEdg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] stmmac: intel: Honor phy LED set by system firmware
- on a Dell hardware
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, "David S. Miller" <davem@davemloft.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=i9LyRM/Cvn/+ZP3AQxRWnhMX0KWeMjk3mtcIWGDqIOY=;
+        b=iAmPmzLHVDJK1fJe8g588PrsIOtB8l3+vS3QRrm4ttVUjTDJ/grpKKESpuJ0ggHWci
+         fcNCxTgdPChCwp8zezH6ZFMqR1Vr7UI1CSaFeNaXPQVU8f2ezU03+Iirk0wbqxatLqF0
+         mqQ7Recxxi06zgZ5qZ/DEGv6yDk8cOXBHX42quY3qhYqSEtOyojffr/f0wynnaeywRqt
+         36PzgLTKulJUYHPC2n5tcyhiGnBmM2hx6i5BqAerPKDYFaUPdMhl5Z0IV1OoWXWaXj1M
+         jGk8oatRBFsr/RUp4rawfCt90HCBwM6JSZEWB0M7iiggIECdVZ2TA54DWWGKH0PADSs3
+         QcDg==
+X-Gm-Message-State: AOAM532NXlfwNuZ6sUtjIpiXhnsE3rpSFWlbQ7XU1K5GPTvu4Ll4/ZQg
+        gLwb8cU9XRQGyjJummMX06VMJ377LyMQ67uL5vo=
+X-Google-Smtp-Source: ABdhPJxr3Eu7BCOij8hAseKJMFyZ5bBaDFUsQeVAYjhRhQ2HbzVBrf/L7t1Y743sFpvYe3fPkgjLtQ==
+X-Received: by 2002:a17:90a:d901:: with SMTP id c1mr18430192pjv.204.1642142911621;
+        Thu, 13 Jan 2022 22:48:31 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id q9sm11679568pjg.1.2022.01.13.22.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 22:48:31 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Ran Wang <ran.wang_1@nxp.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] gpio: mpc8xxx: Fix IRQ check in mpc8xxx_probe
+Date:   Fri, 14 Jan 2022 06:48:20 +0000
+Message-Id: <20220114064821.20200-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 12:35 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Fri, 14 Jan 2022 12:07:54 +0800 Kai-Heng Feng wrote:
-> > BIOS on Dell Edge Gateway 3200 already makes its own phy LED setting, so
-> > instead of setting another value, keep it untouched and restore the saved
-> > value on system resume.
-> >
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->
-> I defer to PHY experts for review. Coincidentally the first Marvell
-> flag appears dead, nobody sets it:
->
-> $ git grep MARVELL_PHY_M1145_FLAGS_RESISTANCE
-> drivers/net/phy/marvell.c:      if (phydev->dev_flags & MARVELL_PHY_M1145_FLAGS_RESISTANCE) {
-> include/linux/marvell_phy.h:#define MARVELL_PHY_M1145_FLAGS_RESISTANCE  0x00000001
-> $
->
-> unless it's read from DT under different name or something.
+platform_get_irq() returns negative error number instead 0 on failure.
+And the doc of platform_get_irq() provides a usage example:
 
-It was introduced by 95d21ff4c645 without any user. Should we keep it?
+    int irq = platform_get_irq(pdev, 0);
+    if (irq < 0)
+        return irq;
 
->
->
-> Once you get some reviews please wait for net-next to open:
->
-> http://vger.kernel.org/~davem/net-next.html
->
-> and repost. It should happen the week of Jan 24th. When you repost
-> please drop the first patch, I believe Russell does not like the BIT()
-> macro, his opinion overrides checkpatch.
+Fix the check of return value to catch errors correctly.
 
-Of course. I'll wait for the review and resubmit the 2nd patch.
+Fixes: 76c47d1449fc ("gpio: mpc8xxx: Add ACPI support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/gpio/gpio-mpc8xxx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Kai-Heng
+diff --git a/drivers/gpio/gpio-mpc8xxx.c b/drivers/gpio/gpio-mpc8xxx.c
+index 70d6ae20b1da..01634c8d27b3 100644
+--- a/drivers/gpio/gpio-mpc8xxx.c
++++ b/drivers/gpio/gpio-mpc8xxx.c
+@@ -388,8 +388,8 @@ static int mpc8xxx_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	mpc8xxx_gc->irqn = platform_get_irq(pdev, 0);
+-	if (!mpc8xxx_gc->irqn)
+-		return 0;
++	if (mpc8xxx_gc->irqn < 0)
++		return mpc8xxx_gc->irqn;
+ 
+ 	mpc8xxx_gc->irq = irq_domain_create_linear(fwnode,
+ 						   MPC8XXX_GPIO_PINS,
+-- 
+2.17.1
 
->
-> Thanks!

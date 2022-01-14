@@ -2,99 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB64148EC12
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BEB48EC0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 15:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242109AbiANO6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 09:58:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242086AbiANO6F (ORCPT
+        id S242086AbiANOzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 09:55:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37868 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242005AbiANOzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:58:05 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D59C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 06:58:04 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id e9so16103705wra.2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 06:58:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=6vf0U5q3YvBeFSP6ko6F5Omy2TYNCgDxRvUcHVhEYQ0=;
-        b=pd/Sc/ymoFhHtUDJbKUIFmJbTZs7ISdAwc/Z/4CtN3v9WiV8GkRuofTlTWTc4KHk2f
-         RsnhyOCpwHcLsYotx9lqgV3q8OoB+Q9ycRNBt4VSUGccMCFGDv0z9G+We8al2dwQQDLY
-         wAkC6KTN26MeXtT+8vldnrpnHKJjalrGcvh0SVSZFT6Qj3vFeyDyI1bNW+0QfxKRhXKy
-         XYWQvHxG3sTil6A5HJqTC6d8DaycxwcfNWzvReiJj+0yHWD3hnLJjCcvtdA8LuZcJxG/
-         BrN7DiuqrBCe2HqxYg8lDDPbJJ/6Kkpfey2aWeXcJ6YUTbftXFpgTG5OUMaAT+nMiTxZ
-         mykg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=6vf0U5q3YvBeFSP6ko6F5Omy2TYNCgDxRvUcHVhEYQ0=;
-        b=DEPq892Lnv7My35UAHnvDw+gNv0G1Z70CGGViLWxOI0TDURtH85yQYTGcdoSh2SkBi
-         /vjNePH8kMFH2XZCC/uLiwHHh2IHsCbLkv+JJezyXyRxq8kJcCI7XFMnsG+GuMT8xyXg
-         +azaYT/yt7RTGnXnGxuUGJ/Ebssmq0rf4UyPc75fotEa+aE/DNBBcxpFhUcqH+GvZPoV
-         wq6IGpzmQTrEKLPZ5iRN4db8o8LEvibFFjpQWdNJaM40dQia1RLof+uKsm2Rz2sUfmTw
-         uD56n7Mg32AGhZivd4yvDShrX3f8IUWVv2L2p57iNDBFeNc69R/Fh7FSrZemtYaESR9v
-         72Pg==
-X-Gm-Message-State: AOAM5336JXkwiyvXqO4a8wWNYK4aGFIr7tr14eis4Clit+Glmrd5NOTJ
-        x5zlqQZ33KiN3Up9gR4qTQW8qQ==
-X-Google-Smtp-Source: ABdhPJwaCzxyfoZDVfCEAjJ6QGAdsVMhSBHArLgqdn2cWeUg0VmXCTSfPWbGVZ4NDt21+LmaYPHROg==
-X-Received: by 2002:a05:6000:1686:: with SMTP id y6mr2609775wrd.320.1642172283314;
-        Fri, 14 Jan 2022 06:58:03 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id 9sm2380504wrb.77.2022.01.14.06.58.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 06:58:02 -0800 (PST)
-References: <20220114090753.34873-1-Jiayi.Zhou@amlogic.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Jiayi.Zhou@amlogic.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        khilman@baylibre.com, martin.blumenstingl@googlemail.com
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] pwm: meson: external clock configuration for s4
-Date:   Fri, 14 Jan 2022 15:53:58 +0100
-In-reply-to: <20220114090753.34873-1-Jiayi.Zhou@amlogic.com>
-Message-ID: <1jmtjybc05.fsf@starbuckisacylon.baylibre.com>
+        Fri, 14 Jan 2022 09:55:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642172122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ULSBCTiB85+pd++faKqH2i+l6ecH+2tEYKM+evo+AMI=;
+        b=Bq4ULdU4zGl7jR/EuV6tqkMF5sydz6wV9vWqKDiSq4oOH9Vb55z6rPKsqD3YhSHPwJpaao
+        IWG6XbajIP7RNLj46ZOUloj7+wmsBEuhsITr/C9XihVR8QNJuP85sV4VtF3qN+nyIqmJi2
+        6cJIMCpiFw11/ydQf5qeKYVyXb3McbI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-32-uJVMGmcoOgW_PRLrS0aanQ-1; Fri, 14 Jan 2022 09:55:19 -0500
+X-MC-Unique: uJVMGmcoOgW_PRLrS0aanQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 80A2E801B04;
+        Fri, 14 Jan 2022 14:55:17 +0000 (UTC)
+Received: from [10.22.33.90] (unknown [10.22.33.90])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6B35A753F6;
+        Fri, 14 Jan 2022 14:55:10 +0000 (UTC)
+Message-ID: <eee96817-1814-5849-65b8-0038235f2617@redhat.com>
+Date:   Fri, 14 Jan 2022 09:55:10 -0500
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] mm/oom_kill: wake futex waiters before annihilating
+ victim shared mutex
+Content-Language: en-US
+To:     Joel Savitz <jsavitz@redhat.com>, Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        Nico Pache <npache@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
+References: <20211207214902.772614-1-jsavitz@redhat.com>
+ <20211207154759.3f3fe272349c77e0c4aca36f@linux-foundation.org>
+ <YbB0d6T8RbHW48sZ@dhcp22.suse.cz> <YbDX16LAkvzgYHpH@dhcp22.suse.cz>
+ <CAL1p7m4ka1v-Zoi-RpDy5ME-bMikGPX5V_4Hod-Y0KHOq_G8zA@mail.gmail.com>
+ <YbG1mu0CLONo+Z7l@dhcp22.suse.cz>
+ <CAL1p7m7mWxLE-7Qf_QjmREJ2AvfSexPvybPyHvxTUugxsPPxjQ@mail.gmail.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <CAL1p7m7mWxLE-7Qf_QjmREJ2AvfSexPvybPyHvxTUugxsPPxjQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri 14 Jan 2022 at 17:07, <Jiayi.Zhou@amlogic.com> wrote:
-
-> From: "Jiayi.zhou" <jiayi.zhou@amlogic.com>
+On 1/14/22 09:39, Joel Savitz wrote:
+>> What has happened to the oom victim and why it has never exited?
+> What appears to happen is that the oom victim is sent SIGKILL by the
+> process that triggers the oom while also being marked as an oom
+> victim.
 >
-> For PWM controller in the Meson-S4 SoC,
-> PWM needs to obtain an external clock source.
-> This patch tries to describe them in the DT compatible data.
+> As you mention in your patchset introducing the oom reaper in commit
+> aac4536355496 ("mm, oom: introduce oom reaper"), the purpose the the
+> oom reaper is to try and free more memory more quickly than it
+> otherwise would have been by assuming anonymous or swapped out pages
+> won't be needed in the exit path as the owner is already dying.
+> However, this assumption is violated by the futex_cleanup() path,
+> which needs access to userspace in fetch_robust_entry() when it is
+> called in exit_robust_list(). Trace_printk()s in this failure path
+> reveal an apparent race between the oom reaper thread reaping the
+> victim's mm and the futex_cleanup() path. There may be other ways that
+> this race manifests but we have been most consistently able to trace
+> that one.
 >
+> Since in the case of an oom victim using robust futexes the core
+> assumption of the oom reaper is violated, we propose to solve this
+> problem by either canceling or delaying the waking of the oom reaper
+> thread by wake_oom_reaper in the case that tsk->robust_list is
+> non-NULL.
+>
+> e.g. the bug does not reproduce with this patch (from npache@redhat.com):
+>
+> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> index 989f35a2bbb1..b8c518fdcf4d 100644
+> --- a/mm/oom_kill.c
+> +++ b/mm/oom_kill.c
+> @@ -665,6 +665,19 @@ static void wake_oom_reaper(struct task_struct *tsk)
+>          if (test_and_set_bit(MMF_OOM_REAP_QUEUED, &tsk->signal->oom_mm->flags))
+>                  return;
+>
+> +#ifdef CONFIG_FUTEX
+> +       /*
+> +        * don't wake the oom_reaper thread if we still have a robust
+> list to handle
+> +        * This will then rely on the sigkill to handle the cleanup of memory
+> +        */
+> +       if(tsk->robust_list)
+> +               return;
+> +#ifdef CONFIG_COMPAT
+> +       if(tsk->compat_robust_list)
+> +               return;
+> +#endif
+> +#endif
+> +
+>          get_task_struct(tsk);
+>
+>          spin_lock(&oom_reaper_lock);
 
-I'm sorry but I have already commented on v1 that all the mess in here
-don't seem necessary. For Reference:
+OK, that can explain why the robust futex is not properly cleaned up. 
+Could you post a more formal v2 patch with description about the 
+possible race condition?
 
-"""
- You trying to bypass the input selection mux. There is no reason to do
- so.
+Cheers,
+Longman
 
- Your input clocks should be
- * OSC
- * vid_pll
- * fdiv3
- * fdiv4
-
- While the pwm driver could welcome a rework around how it deal with DT
- and the clocks, this S4 chip does not warrant any change compared to
- previous generation (AFAICT)
-
- All the stuff around "extern_clk" should go away IMO.
-"""
-
-Unless you can *really* justify why this approach is required, it is
-firm Nack.

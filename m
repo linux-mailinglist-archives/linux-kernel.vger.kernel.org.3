@@ -2,118 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB24548E46C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 662FC48E46D
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234011AbiANGu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
+        id S235381AbiANGvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiANGu5 (ORCPT
+        with ESMTP id S230223AbiANGvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:50:57 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B8FC06161C
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:50:57 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id z19so5661411ioj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:50:57 -0800 (PST)
+        Fri, 14 Jan 2022 01:51:10 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856F7C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:51:10 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id y10-20020a2586ca000000b006116aaeeee6so16173659ybm.21
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:51:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UEqQjSYXkfyW+68nPj0FYib/sLZbBqjDvvEW6pUXEMs=;
-        b=MTvLBGb93y4NG3HP9hsj6GJqaPMSV5rCLAODCbScflUq8wqXmhWkGvSnteNIbDp2Ov
-         coqxkkfYDIS8/h8F430CX9H5E5Y/GMaNX0hpGuCQwkg9CUPnIOxgENXGSwuJYziPbJgb
-         3c6yzf7rGFekQ11xeLKb60r8J6I7i786ywQEs=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=LDwm4hnT7Bk0Sbi/T1/8Yk0x2iaTja6ZT3of8YSmJeU=;
+        b=XPw44X2fTrMNJiw8DtD81VSxYEHznaWrOMYhAqhnKENIrDnI2ZOwKWuFDbYybuJNMO
+         wwpkbhM+3xjm9kV4oF+24DgQoduuwR5nRbgDi+xsy2hYZbnACROcTjjij5n7KLQQg05V
+         sOtX47QqVDZ1uIlpirCPy9h+6tYUFUrxL+MdApk9G2dIGLii+hpqiF2keRdeHfMq3KGm
+         hTssq+cIHPz6d5RE+t/2U3OUzANWn4sO4BcYXk2MpSigpRNfrfWGmNqBIQ1MAqMx9iEh
+         TeCJLApid4xAcs/x0kmGFORzwav2sVvD4aM/qOat0XRabrx4MOk8Zv8xjGe6w5ihv3e4
+         H5xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UEqQjSYXkfyW+68nPj0FYib/sLZbBqjDvvEW6pUXEMs=;
-        b=bgdmx+PkqSv564AnpjlfHZKO+FC1/XtRV8liMPB9NTKO8iUn9bHTFMl99eFSPTnAxH
-         3SwnKYlqKMO5ypafDWIF6YtMMq3r9uF5m/uLnqt9HVg8fE+841+J+SXpcx2iDKMBFHwV
-         GZG3nyzztrcqydPCjRWZy2pDrC5yRZ7wcoX6YAHrsQYh5VSLuSrq33rCx+7lyBFeknj/
-         Vj4/ZV/tsROEEZlBtyfhaNqyUR+AyUWZRBqJdRFr88Y6qjcuyfsATGG12bjEvGB0g5Jn
-         221dEacPKDQWYyCAGHwrkjh6Gm3j60OXLgisfwGooPqtC/6jVr8KwaLNfzEMma+vUsFE
-         uXyw==
-X-Gm-Message-State: AOAM531skULYR3ERkIFJbm7J8zkDcMWmepcxObp7k8cDiyKfCv/VNHb4
-        jC83CdK/WFnIiB0YuMnLizcVN/Mmn6Ow5bexyzYSeA==
-X-Google-Smtp-Source: ABdhPJyRmwBj5vq9rUMU2RWBrfxr/D+hLST7MYzyT0aeXbJX1WVZ0xmbvVIY3hMwgMkjwXWAVzENoDU07Qg/NLr6AIk=
-X-Received: by 2002:a05:6602:2b83:: with SMTP id r3mr3812667iov.93.1642143056574;
- Thu, 13 Jan 2022 22:50:56 -0800 (PST)
-MIME-Version: 1.0
-References: <20220110231255.v2.1.Ie4dcc45b0bf365077303c596891d460d716bb4c5@changeid>
- <CAD=FV=VVzQFK_PwnCXkJ6OK3DcgBnoxmvNG3WXFn30ncdY-E_w@mail.gmail.com>
-In-Reply-To: <CAD=FV=VVzQFK_PwnCXkJ6OK3DcgBnoxmvNG3WXFn30ncdY-E_w@mail.gmail.com>
-From:   Abhishek Kumar <kuabhs@chromium.org>
-Date:   Thu, 13 Jan 2022 22:50:45 -0800
-Message-ID: <CACTWRwsT8dEPiVkvk_=FPSAwuN2oti27p8Vb-mVjWE7iJuTNrw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] ath10k: search for default BDF name provided in DT
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        ath10k <ath10k@lists.infradead.org>,
-        Rakesh Pillai <pillair@codeaurora.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>, netdev <netdev@vger.kernel.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=LDwm4hnT7Bk0Sbi/T1/8Yk0x2iaTja6ZT3of8YSmJeU=;
+        b=lSJqZ1Eptyow7VLmQiPxkq64uazYIYACLO/JMjT5E+4rBATH4Acsj+HG1/S1ih5WZ4
+         MDtlFaxBZcCzkzK0CQJWQ99kMYs8GVdFCPl1ccJoEWB8sKjZuTAUvfCyc1U1CabZOQvS
+         AKLoNf127+Yd0j7a1uqOEQ6qwwhE2tHRPM86HvraBU7sUDOkIL4ie8ERGH30C3GReVef
+         h1VitVx37+mOakjp7+YJTUL6SXzWj45zb03y0u5nFcYLhkzhJmO0OM4a+RsxhEpi0BYe
+         bA0av+awxY9QjuhIF4B7wjFRj2LAsUI+fks3NQPhRml67SMuS95+UJkU9zC/wBn/Nvvg
+         Zo7g==
+X-Gm-Message-State: AOAM533rdcqMACsVqhhxhyXheDbf823kRZeLevbaq00yu11xZDl7+rLj
+        jHqavEbd/LfQWEa+v9IzwvAuc5cqDoDM
+X-Google-Smtp-Source: ABdhPJwFeqSCtfOlYXdrcLc5Y8RJDAM3kwLMD0StphbD7/oIG+kCDuB1Q+cEqG0wNfBfli2R9A2Ixv7mqsYD
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:de36:7cc:6c7a:b7cd])
+ (user=irogers job=sendgmr) by 2002:a25:2cc7:: with SMTP id
+ s190mr4039605ybs.186.1642143069821; Thu, 13 Jan 2022 22:51:09 -0800 (PST)
+Date:   Thu, 13 Jan 2022 22:51:05 -0800
+Message-Id: <20220114065105.1806542-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH] libperf tests: Update a use of the new cpumap api.
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Colin Ian King <colin.king@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 4:51 PM Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Mon, Jan 10, 2022 at 3:15 PM Abhishek Kumar <kuabhs@chromium.org> wrote:
-> >
-> > +int ath10k_core_parse_default_bdf_dt(struct ath10k *ar)
-> > +{
-> > +       struct device_node *node;
-> > +       const char *board_name = NULL;
-> > +
-> > +       ar->id.default_bdf[0] = '\0';
-> > +
-> > +       node = ar->dev->of_node;
-> > +       if (!node)
-> > +               return -ENOENT;
-> > +
-> > +       of_property_read_string(node, "qcom,ath10k-default-bdf",
-> > +                               &board_name);
-> > +       if (!board_name)
-> > +               return -ENODATA;
-> > +
-> > +       if (strscpy(ar->id.default_bdf,
-> > +                   board_name, sizeof(ar->id.default_bdf)) < 0)
-> > +               ath10k_warn(ar,
-> > +                           "default board name is longer than allocated buffer, board_name: %s; allocated size: %ld\n",
-> > +                           board_name, sizeof(ar->id.default_bdf));
->
-> I suspect, but don't know for sure, that you're going to get another
-> builder splat here. Just like sizeof() isn't guaranteed to return an
-> "unsigned int", it's also not guaranteed to return an "unsigned long".
-> I believe you want %zu. See Documentation/core-api/printk-formats.rst
-Thanks for the tip, I will make this fix in V3.
->
-> > +
-> > +       return 0;
-> > +}
-> > +EXPORT_SYMBOL(ath10k_core_parse_default_bdf_dt);
->
-> Boy, that function seems like overkill for something that you need
-> once at init time. ...and I also suspect that the lifetime of the
-> string returned by of_property_read_string() is valid for as long as
-> your "of_node" is held and thus probably you could use it directly (it
-> likely has a longer lifetime than the location you're storing it).
->
-> ...but I guess it matches the ath10k_core_check_dt() function above
-> it, so I guess it's fine?
-Ya, that was my idea to match it with ath10k_core_check_dt, initially,
-I was planning to remodify ath10k_core_check_dt to parse the new
-property, but looks it is used it multiple places, so I thought having
-a separate parser function would be cleaner, however, I am open to new
-ideas.
+Fixes a build breakage.
 
-- Abhishek
+Fixes: 6d18804b963b ("perf cpumap: Give CPUs their own type")
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/lib/perf/tests/test-evlist.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/lib/perf/tests/test-evlist.c b/tools/lib/perf/tests/test-evlist.c
+index e7afff12c35a..b3479dfa9a1c 100644
+--- a/tools/lib/perf/tests/test-evlist.c
++++ b/tools/lib/perf/tests/test-evlist.c
+@@ -334,7 +334,8 @@ static int test_mmap_cpus(void)
+ 	};
+ 	cpu_set_t saved_mask;
+ 	char path[PATH_MAX];
+-	int id, err, cpu, tmp;
++	int id, err, tmp;
++	struct perf_cpu cpu;
+ 	union perf_event *event;
+ 	int count = 0;
+ 
+@@ -377,7 +378,7 @@ static int test_mmap_cpus(void)
+ 		cpu_set_t mask;
+ 
+ 		CPU_ZERO(&mask);
+-		CPU_SET(cpu, &mask);
++		CPU_SET(cpu.cpu, &mask);
+ 
+ 		err = sched_setaffinity(0, sizeof(mask), &mask);
+ 		__T("sched_setaffinity failed", err == 0);
+-- 
+2.34.1.703.g22d0c6ccf7-goog
+

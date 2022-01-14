@@ -2,107 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B606B48E416
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EA248E418
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239294AbiANGMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:12:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27076 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239284AbiANGMT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:12:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642140738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EUt20B2ZQKiul9TVzlscr0qYlhPciKBJGV+dQspDLic=;
-        b=hGXZGoJcTiW7PKM9s6Ieshfgjnj1FjD3PUO5zAge1yN2pupq+Pz5UeC0b6MOFJLYTFkN9f
-        aY8bWKso+w7rA8qmZ4i3Vm90fsWVQ0R3ztndYNEvIRLcGHCFrVZHVNYdXtJSX3y5WFIaAv
-        jIyxkl19EWVFOCdzyOPKG5UksTMvh/c=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-46-r0LUZt3gPxKprcFWdHx0IA-1; Fri, 14 Jan 2022 01:12:17 -0500
-X-MC-Unique: r0LUZt3gPxKprcFWdHx0IA-1
-Received: by mail-lf1-f69.google.com with SMTP id l29-20020a19495d000000b0042d1e9c46f3so5525787lfj.22
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:12:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EUt20B2ZQKiul9TVzlscr0qYlhPciKBJGV+dQspDLic=;
-        b=wzPOI75XXt5cpWyctactk7eOdJjMRNyxtsFBnM8qLYtlsWOL11yhffxLr1Y5wM4aY5
-         vRM4iNm9+dBWquLJ+GXUcDiaNlyNmqDzrb2MEg7oeae+guTIv13su4Z4uge5icSB45xk
-         HImawmjYIlwfDEFReR7kxA8i8qF0msvM01PIAcQj3Cu6a16ZMH8i6dmL9wJrxE2RwhF5
-         kuso3pvMpVtwr7xSTRUoJmsiFx2ThyA0aKsQNx8F7E3lRRUN7tag+v3R8ZG3LyWXp5gl
-         b5H4QY77aLMgOjAmAWtYxx+UfRdO/Vs7ZhaVNDnlWE0XVk9Nw+nbglsAgvl7D1mO8INy
-         beSQ==
-X-Gm-Message-State: AOAM532NenfM0LVnhQBI9gxXYPY/FDZojpP1vQUI07Ba6iekvW+TJS82
-        kD5wojJr9jvSzgt6h9lo/STB4ox3m7KScInEU9mVh18F1UmH/QARENNpdHHQPqGxwrMpd54DkNa
-        93Ki3VUY+NeZlQaEAo59m+Tn+baFKwLhATNzkMuP1
-X-Received: by 2002:a05:6512:3d24:: with SMTP id d36mr6244860lfv.481.1642140735519;
-        Thu, 13 Jan 2022 22:12:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzXfcJ6JMKErK1A1bwY9Z9Ixp5/QcPqABoqPDeUk3JLyw951WqrUnFZxZXBpbXddgs9NIe5WU7RNU0Xu5pWstw=
-X-Received: by 2002:a05:6512:3d24:: with SMTP id d36mr6244843lfv.481.1642140735248;
- Thu, 13 Jan 2022 22:12:15 -0800 (PST)
+        id S239304AbiANGMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:12:31 -0500
+Received: from mga06.intel.com ([134.134.136.31]:37965 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239297AbiANGMa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 01:12:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642140750; x=1673676750;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iH2bAUjpJnt2I7vkj9k8oAio1FRAu/W0AFiLzFSvBWA=;
+  b=gIY55ZRFKbs6BNXDf4JKGEvPHVpr75jKqHLCs7iWydabcp3RycvqNioW
+   s39n6yPtDJ7yOhNEc3WC/yPgFNIDzTO4S9FDOxkcIyy1v/awtxGLKDkh6
+   sBgay2tsiPq4L3sSZDl3s6+K2vLu1u8CR027bHKxvZ+6bb5uO3mHz09U6
+   WUvfJf0S9WeWwQi0OsJ+RaTxLtTnAe8TibE+HWJ4OdHQapCy4tGKcgHnE
+   xy4zt/zsOdjYqt7q0ydjLPc6qLwS//vdD8bj1m3/L+Noes3BvEU211SbM
+   C74aHXZa/MWnv6IhNWFZtG6XJuQZsFbD96lbrEVzGrfsgMYMF28fUefSb
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="304922756"
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="304922756"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 22:12:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="614241326"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Jan 2022 22:12:28 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8Fp5-0008Ba-HV; Fri, 14 Jan 2022 06:12:27 +0000
+Date:   Fri, 14 Jan 2022 14:12:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: kernel/time/hrtimer.c:650:19: warning: unused function
+ 'hrtimer_hres_active'
+Message-ID: <202201141442.FVgxOEDt-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220113141134.186773-1-sgarzare@redhat.com>
-In-Reply-To: <20220113141134.186773-1-sgarzare@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 14 Jan 2022 14:12:04 +0800
-Message-ID: <CACGkMEuFbr+V7qzm=DXKuDUehFH-8Hrw-dojPTDxN3zKOq_kCQ@mail.gmail.com>
-Subject: Re: [PATCH] vhost: remove avail_event arg from vhost_update_avail_event()
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 10:11 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->
-> In vhost_update_avail_event() we never used the `avail_event` argument,
-> since its introduction in commit 2723feaa8ec6 ("vhost: set log when
-> updating used flags or avail event").
->
-> Let's remove it to clean up the code.
->
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+Hi Thomas,
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+FYI, the error/warning still remains.
 
-> ---
->  drivers/vhost/vhost.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index 59edb5a1ffe2..ee171e663a18 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -1981,7 +1981,7 @@ static int vhost_update_used_flags(struct vhost_virtqueue *vq)
->         return 0;
->  }
->
-> -static int vhost_update_avail_event(struct vhost_virtqueue *vq, u16 avail_event)
-> +static int vhost_update_avail_event(struct vhost_virtqueue *vq)
->  {
->         if (vhost_put_avail_event(vq))
->                 return -EFAULT;
-> @@ -2527,7 +2527,7 @@ bool vhost_enable_notify(struct vhost_dev *dev, struct vhost_virtqueue *vq)
->                         return false;
->                 }
->         } else {
-> -               r = vhost_update_avail_event(vq, vq->avail_idx);
-> +               r = vhost_update_avail_event(vq);
->                 if (r) {
->                         vq_err(vq, "Failed to update avail event index at %p: %d\n",
->                                vhost_avail_event(vq), r);
-> --
-> 2.31.1
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fb3b0673b7d5b477ed104949450cd511337ba3c6
+commit: 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429 hrtimer: Use raw_cpu_ptr() in clock_was_set()
+date:   5 months ago
+config: mips-randconfig-r032-20220114 (https://download.01.org/0day-ci/archive/20220114/202201141442.FVgxOEDt-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/time/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_REALTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_MONOTONIC,
+   ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_BOOTTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_TAI,
+   ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
+   static inline bool is_migration_base(struct hrtimer_clock_base
+   ^
+>> kernel/time/hrtimer.c:650:19: warning: unused function 'hrtimer_hres_active'
+   static inline int hrtimer_hres_active(void)
+   ^
+   kernel/time/hrtimer.c:1887:20: warning: unused function '__hrtimer_peek_ahead_timers'
+   static inline void __hrtimer_peek_ahead_timers(void) { }
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 14.0.0 (git://gitmirror/llvm_project 82c8aca93488730ce8f66101e0f3538f14b551dd)
+   Target: mipsel-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-82c8aca934/bin
+   clang-14: note: diagnostic msg:
+   Makefile arch include kernel nr_bisected scripts source usr
+
+
+vim +/hrtimer_hres_active +650 kernel/time/hrtimer.c
+
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  649  
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21 @650  static inline int hrtimer_hres_active(void)
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  651  {
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  652  	return __hrtimer_hres_active(this_cpu_ptr(&hrtimer_bases));
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  653  }
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  654  
+
+:::::: The code at line 650 was first introduced by commit
+:::::: 28bfd18bf3daa5db8bb3422ea7138c8b7d2444ac hrtimer: Make the hrtimer_cpu_base::hres_active field unconditional, to simplify the code
+
+:::::: TO: Anna-Maria Gleixner <anna-maria@linutronix.de>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

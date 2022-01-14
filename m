@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3375148E584
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6209648E56C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237042AbiANISt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:18:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
+        id S239615AbiANISD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239687AbiANISW (ORCPT
+        with ESMTP id S236951AbiANIRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:18:22 -0500
+        Fri, 14 Jan 2022 03:17:53 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10514C06175A;
-        Fri, 14 Jan 2022 00:18:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8176DC06175B;
+        Fri, 14 Jan 2022 00:17:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4EB461E06;
-        Fri, 14 Jan 2022 08:18:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69A0BC36AE9;
-        Fri, 14 Jan 2022 08:18:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21BA661E09;
+        Fri, 14 Jan 2022 08:17:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6086C36AEC;
+        Fri, 14 Jan 2022 08:17:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642148301;
-        bh=etBZ/Zm3JQWTYpbzDpQhx8B+oOgjW3fLaT6U3d46yak=;
+        s=korg; t=1642148269;
+        bh=Uh/Bhv7AqgNt1MvA67kKhA3mQZvo44UFqagmaBRB8yc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vKzUG4p9EHnMU8b6u6Q7XeaML1ncBqmINLMy1fgP531bdkiRM9B0Px4fOJ0omqjbd
-         GanQC7Z+eARstPkSV7q+LD3x/v/ejlIRXuSGTPZRU9hA5l5l1+4tpD9oVtVvfUILyf
-         w7LFwjnpIM6uQoR5H4lE9dX71CcIS993CXd2KCbU=
+        b=a2fORLKBpwZaXf/mrKz3E71SdTQXYfjiK/NPunAFpg1QcY3jVVkyXizWw52ry7fl7
+         v1vcQ9RPboWUhGNBreiTls4oIB1hY5AlM+bZgxfYny7UCXPA0G0ixpL1Sfi06ejOKL
+         IlLqrToeM7YbgtL1Go3VJy2nIeDtLW43YpK1cuq8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Aditya Garg <gargaditya08@live.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 5.10 15/25] mfd: intel-lpss: Fix too early PM enablement in the ACPI ->probe()
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 5.4 16/18] staging: wlan-ng: Avoid bitwise vs logical OR warning in hfa384x_usb_throttlefn()
 Date:   Fri, 14 Jan 2022 09:16:23 +0100
-Message-Id: <20220114081543.228147960@linuxfoundation.org>
+Message-Id: <20220114081542.013458658@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
-References: <20220114081542.698002137@linuxfoundation.org>
+In-Reply-To: <20220114081541.465841464@linuxfoundation.org>
+References: <20220114081541.465841464@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,61 +47,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-commit c9e143084d1a602f829115612e1ec79df3727c8b upstream.
+commit 502408a61f4b7eb4713f44bd77f4a48e6cb1b59a upstream.
 
-The runtime PM callback may be called as soon as the runtime PM facility
-is enabled and activated. It means that ->suspend() may be called before
-we finish probing the device in the ACPI case. Hence, NULL pointer
-dereference:
+A new warning in clang points out a place in this file where a bitwise
+OR is being used with boolean expressions:
 
-  intel-lpss INT34BA:00: IRQ index 0 not found
-  BUG: kernel NULL pointer dereference, address: 0000000000000030
-  ...
-  Workqueue: pm pm_runtime_work
-  RIP: 0010:intel_lpss_suspend+0xb/0x40 [intel_lpss]
+In file included from drivers/staging/wlan-ng/prism2usb.c:2:
+drivers/staging/wlan-ng/hfa384x_usb.c:3787:7: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
+            ((test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
+            ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/staging/wlan-ng/hfa384x_usb.c:3787:7: note: cast one or both operands to int to silence this warning
+1 warning generated.
 
-To fix this, first try to register the device and only after that enable
-runtime PM facility.
+The comment explains that short circuiting here is undesirable, as the
+calls to test_and_{clear,set}_bit() need to happen for both sides of the
+expression.
 
-Fixes: 4b45efe85263 ("mfd: Add support for Intel Sunrisepoint LPSS devices")
-Reported-by: Orlando Chamberlain <redecorating@protonmail.com>
-Reported-by: Aditya Garg <gargaditya08@live.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Aditya Garg <gargaditya08@live.com>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20211101190008.86473-1-andriy.shevchenko@linux.intel.com
+Clang's suggestion would work to silence the warning but the readability
+of the expression would suffer even more. To clean up the warning and
+make the block more readable, use a variable for each side of the
+bitwise expression.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1478
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/r/20211014215703.3705371-1-nathan@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mfd/intel-lpss-acpi.c |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/staging/wlan-ng/hfa384x_usb.c |   22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
---- a/drivers/mfd/intel-lpss-acpi.c
-+++ b/drivers/mfd/intel-lpss-acpi.c
-@@ -102,6 +102,7 @@ static int intel_lpss_acpi_probe(struct
- {
- 	struct intel_lpss_platform_info *info;
- 	const struct acpi_device_id *id;
-+	int ret;
+--- a/drivers/staging/wlan-ng/hfa384x_usb.c
++++ b/drivers/staging/wlan-ng/hfa384x_usb.c
+@@ -3779,18 +3779,18 @@ static void hfa384x_usb_throttlefn(struc
  
- 	id = acpi_match_device(intel_lpss_acpi_ids, &pdev->dev);
- 	if (!id)
-@@ -115,10 +116,14 @@ static int intel_lpss_acpi_probe(struct
- 	info->mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	info->irq = platform_get_irq(pdev, 0);
+ 	spin_lock_irqsave(&hw->ctlxq.lock, flags);
  
-+	ret = intel_lpss_probe(&pdev->dev, info);
-+	if (ret)
-+		return ret;
-+
- 	pm_runtime_set_active(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
+-	/*
+-	 * We need to check BOTH the RX and the TX throttle controls,
+-	 * so we use the bitwise OR instead of the logical OR.
+-	 */
+ 	pr_debug("flags=0x%lx\n", hw->usb_flags);
+-	if (!hw->wlandev->hwremoved &&
+-	    ((test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
+-	      !test_and_set_bit(WORK_RX_RESUME, &hw->usb_flags)) |
+-	     (test_and_clear_bit(THROTTLE_TX, &hw->usb_flags) &&
+-	      !test_and_set_bit(WORK_TX_RESUME, &hw->usb_flags))
+-	    )) {
+-		schedule_work(&hw->usb_work);
++	if (!hw->wlandev->hwremoved) {
++		bool rx_throttle = test_and_clear_bit(THROTTLE_RX, &hw->usb_flags) &&
++				   !test_and_set_bit(WORK_RX_RESUME, &hw->usb_flags);
++		bool tx_throttle = test_and_clear_bit(THROTTLE_TX, &hw->usb_flags) &&
++				   !test_and_set_bit(WORK_TX_RESUME, &hw->usb_flags);
++		/*
++		 * We need to check BOTH the RX and the TX throttle controls,
++		 * so we use the bitwise OR instead of the logical OR.
++		 */
++		if (rx_throttle | tx_throttle)
++			schedule_work(&hw->usb_work);
+ 	}
  
--	return intel_lpss_probe(&pdev->dev, info);
-+	return 0;
- }
- 
- static int intel_lpss_acpi_remove(struct platform_device *pdev)
+ 	spin_unlock_irqrestore(&hw->ctlxq.lock, flags);
 
 

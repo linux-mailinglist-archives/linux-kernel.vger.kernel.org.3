@@ -2,216 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E105C48E7D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C4348E7D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 10:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240139AbiANJtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 04:49:43 -0500
-Received: from mga03.intel.com ([134.134.136.65]:50426 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240107AbiANJtj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 04:49:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642153779; x=1673689779;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=C2fUKW3KYv9f6U5s+DUvkZkV3JRjDsnBvziK3O7gcxk=;
-  b=mh8K3CIA1r25V2AJ8ryS7K0CofBpn2DXH1CKbijy1dxhOvtglVOJb5Da
-   vofUTdKTPY4HzZQ/r0I4gvbmQIRQ+UfjHEmDjjaVK3xjShf6MU+BTDd2i
-   0sdM1Z2RdSD1UZqgXUSELKnS78cDc+21Ucpsyx802neM4umRlBzP+PFWX
-   tEHx9GscwHy71ScELU3VK7QZCcRhBCntufE3PpHNzThLofqheYB+s6Q3I
-   +NLQDXTR2hII6Pmw0Zq2GlqM29G+AHC3yh0t+5XtjsD77f5o+QeHqx9Nz
-   VIOnhKexZ33SeJTC9/U332paxSs6mUOGIkzNki1Rkf6BlSupP3+ISfaYN
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244173573"
-X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
-   d="scan'208";a="244173573"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 01:49:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,288,1635231600"; 
-   d="scan'208";a="516321424"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 14 Jan 2022 01:49:37 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8JDE-0008NG-Bm; Fri, 14 Jan 2022 09:49:36 +0000
-Date:   Fri, 14 Jan 2022 17:48:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 85538cc07d6b6dcffc1df64a22308fcb05ecddf4
-Message-ID: <61e146f4.fQFGHLLnjcUERCYQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S240103AbiANJu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 04:50:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229785AbiANJux (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 04:50:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09BBC061574;
+        Fri, 14 Jan 2022 01:50:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33DDF61EAA;
+        Fri, 14 Jan 2022 09:50:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11901C36AEA;
+        Fri, 14 Jan 2022 09:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642153852;
+        bh=qPzNVCCoAO7JZYE7iYAZoPJpbmPs2eM2hLzOcfDeZ5A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NNt1sa9GkIaJprmWQxUHodyPtEBvTEBvTU5VRbhBXxfMfnCbS0h6hvDUpkUrURMXC
+         6ocweaUvLEmsf0P+Uf0vOQQtOel7bvY6Kxp17F/bAZNWVgP+C5ktQqc7E6dZ27dars
+         IyLHg4K7IIpT2fbjLY/8JOCXD5JpTU+5HFLFMopmssk26sY5EH3JNfOSRX3+R6ca+z
+         48j83R/ZrFCvEIVOep9QDtPjd2WkwmOZf/jiSahxaIR1ecvBYMPpHcrQydOTc4DMy5
+         l538BfzFVnBh6pKbN5fNa//79MGVfqSPR++qLGX++FI41Nhf7fnx8zdrbtTtYZlLt/
+         jVqPuAmOdEXXQ==
+Date:   Fri, 14 Jan 2022 11:50:42 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Martin Fernandez <martin.fernandez@eclypsium.com>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
+        alison.schofield@intel.com
+Subject: Re: [PATCH v5 1/5] mm/memblock: Tag memblocks with crypto
+ capabilities
+Message-ID: <YeFHcrUUopm5xrtZ@kernel.org>
+References: <20220113213027.457282-1-martin.fernandez@eclypsium.com>
+ <20220113213027.457282-2-martin.fernandez@eclypsium.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20220113213027.457282-2-martin.fernandez@eclypsium.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 85538cc07d6b6dcffc1df64a22308fcb05ecddf4  Merge branch into tip/master: 'x86/core'
+On Thu, Jan 13, 2022 at 06:30:23PM -0300, Martin Fernandez wrote:
+> Add the capability to mark regions of the memory memory_type able of
+> hardware memory encryption.
+> 
+> Also add the capability to query if all regions of a memory node are
+> able to do hardware memory encryption to call it when initializing the
+> nodes.
+> 
+> Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
+> ---
+>  include/linux/memblock.h |  5 ++++
+>  mm/memblock.c            | 49 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 54 insertions(+)
+> 
+> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> index 9dc7cb239d21..374c03e10b2e 100644
+> --- a/include/linux/memblock.h
+> +++ b/include/linux/memblock.h
+> @@ -41,6 +41,7 @@ extern unsigned long long max_possible_pfn;
+>   * via a driver, and never indicated in the firmware-provided memory map as
+>   * system RAM. This corresponds to IORESOURCE_SYSRAM_DRIVER_MANAGED in the
+>   * kernel resource tree.
+> + * @MEMBLOCK_CRYPTO_CAPABLE: capable of hardware encryption
+>   */
+>  enum memblock_flags {
+>  	MEMBLOCK_NONE		= 0x0,	/* No special request */
+> @@ -48,6 +49,7 @@ enum memblock_flags {
+>  	MEMBLOCK_MIRROR		= 0x2,	/* mirrored region */
+>  	MEMBLOCK_NOMAP		= 0x4,	/* don't add to kernel direct mapping */
+>  	MEMBLOCK_DRIVER_MANAGED = 0x8,	/* always detected via a driver */
+> +	MEMBLOCK_CRYPTO_CAPABLE = 0x10,  /* capable of hardware encryption */
 
-elapsed time: 1462m
+Nit: please keep the comments aligned with TAB.
 
-configs tested: 142
-configs skipped: 3
+>  };
+>  
+>  /**
+> @@ -121,6 +123,9 @@ int memblock_physmem_add(phys_addr_t base, phys_addr_t size);
+>  void memblock_trim_memory(phys_addr_t align);
+>  bool memblock_overlaps_region(struct memblock_type *type,
+>  			      phys_addr_t base, phys_addr_t size);
+> +bool memblock_node_is_crypto_capable(int nid);
+> +int memblock_mark_crypto_capable(phys_addr_t base, phys_addr_t size);
+> +int memblock_clear_crypto_capable(phys_addr_t base, phys_addr_t size);
+>  int memblock_mark_hotplug(phys_addr_t base, phys_addr_t size);
+>  int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
+>  int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 1018e50566f3..61ec50647469 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -191,6 +191,27 @@ bool __init_memblock memblock_overlaps_region(struct memblock_type *type,
+>  	return i < type->cnt;
+>  }
+>  
+> +/**
+> + * memblock_node_is_crypto_capable - get if whole node is capable
+> + * of encryption
+> + * @nid: number of node
+> + *
+> + * Iterate over all memory memblock_type and find if all regions under
+> + * node @nid are capable of hardware encryption.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Please add Return: description, otherwise kernel-doc is unhappy
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-arm                          gemini_defconfig
-arm                         at91_dt_defconfig
-nios2                         10m50_defconfig
-sparc64                             defconfig
-mips                        bcm47xx_defconfig
-powerpc                 mpc837x_mds_defconfig
-m68k                        mvme16x_defconfig
-powerpc                     tqm8555_defconfig
-arm                            hisi_defconfig
-mips                       capcella_defconfig
-arm                         axm55xx_defconfig
-arm                           h5000_defconfig
-powerpc                    amigaone_defconfig
-arc                        nsim_700_defconfig
-sh                        sh7757lcr_defconfig
-sh                          landisk_defconfig
-csky                             alldefconfig
-xtensa                          iss_defconfig
-arm                           sunxi_defconfig
-arm                            pleb_defconfig
-arm                           stm32_defconfig
-m68k                       m5475evb_defconfig
-arm                        trizeps4_defconfig
-powerpc                      pasemi_defconfig
-sh                               j2_defconfig
-arc                              alldefconfig
-mips                           ci20_defconfig
-powerpc                      tqm8xx_defconfig
-arm                          iop32x_defconfig
-mips                         tb0226_defconfig
-arm                            mps2_defconfig
-arm                          lpd270_defconfig
-riscv                            allmodconfig
-arm                            qcom_defconfig
-ia64                        generic_defconfig
-sh                   rts7751r2dplus_defconfig
-s390                          debug_defconfig
-sh                          rsk7264_defconfig
-sh                          r7785rp_defconfig
-arm                            xcep_defconfig
-sh                           se7343_defconfig
-sh                         microdev_defconfig
-powerpc                       ppc64_defconfig
-m68k                             allmodconfig
-sh                              ul2_defconfig
-arm                  randconfig-c002-20220113
-arm                  randconfig-c002-20220114
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220113
-arc                  randconfig-r043-20220113
-s390                 randconfig-r044-20220113
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+> + */
+> +bool __init_memblock memblock_node_is_crypto_capable(int nid)
+> +{
+> +	struct memblock_region *region;
+> +
+> +	for_each_mem_region(region) {
+> +		if ((memblock_get_region_node(region) == nid) &&
+> +		    !(region->flags & MEMBLOCK_CRYPTO_CAPABLE))
+> +			return false;
+> +	}
 
-clang tested configs:
-arm                  randconfig-c002-20220113
-x86_64                        randconfig-c007
-riscv                randconfig-c006-20220113
-powerpc              randconfig-c003-20220113
-i386                          randconfig-c001
-mips                 randconfig-c004-20220113
-mips                           ip28_defconfig
-arm                          pxa168_defconfig
-powerpc                     powernv_defconfig
-powerpc                        icon_defconfig
-mips                        bcm63xx_defconfig
-mips                     loongson1c_defconfig
-powerpc                     mpc5200_defconfig
-mips                            e55_defconfig
-powerpc                 mpc836x_mds_defconfig
-riscv                             allnoconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220113
-hexagon              randconfig-r041-20220113
+As we discussed on v3, please add a printk if the same node has both
+crypto-capable and not crypto-capable regions.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+https://lore.kernel.org/all/Ya++1FwWzKr2wYQH@kernel.org/
+
+> +
+> +	return true;
+> +}
+> +
+>  /**
+>   * __memblock_find_range_bottom_up - find free area utility in bottom-up
+>   * @start: start of candidate range
+> @@ -885,6 +906,34 @@ static int __init_memblock memblock_setclr_flag(phys_addr_t base,
+>  	return 0;
+>  }
+>  
+> +/**
+> + * memblock_mark_crypto_capable - Mark memory regions capable of hardware
+> + * encryption with flag MEMBLOCK_CRYPTO_CAPABLE.
+> + * @base: the base phys addr of the region
+> + * @size: the size of the region
+> + *
+> + * Return: 0 on success, -errno on failure.
+> + */
+> +int __init_memblock memblock_mark_crypto_capable(phys_addr_t base,
+> +						 phys_addr_t size)
+> +{
+> +	return memblock_setclr_flag(base, size, 1, MEMBLOCK_CRYPTO_CAPABLE);
+> +}
+> +
+> +/**
+> + * memblock_clear_crypto_capable - Clear flag MEMBLOCK_CRYPTO for a
+> + * specified region.
+> + * @base: the base phys addr of the region
+> + * @size: the size of the region
+> + *
+> + * Return: 0 on success, -errno on failure.
+> + */
+> +int __init_memblock memblock_clear_crypto_capable(phys_addr_t base,
+> +						  phys_addr_t size)
+> +{
+> +	return memblock_setclr_flag(base, size, 0, MEMBLOCK_CRYPTO_CAPABLE);
+> +}
+> +
+>  /**
+>   * memblock_mark_hotplug - Mark hotpluggable memory with flag MEMBLOCK_HOTPLUG.
+>   * @base: the base phys addr of the region
+> -- 
+> 2.30.2
+> 
+
+-- 
+Sincerely yours,
+Mike.

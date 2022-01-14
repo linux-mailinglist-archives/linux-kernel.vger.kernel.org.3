@@ -2,144 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B2948E465
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C3E48E469
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbiANGtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S233561AbiANGuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:50:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiANGtA (ORCPT
+        with ESMTP id S230223AbiANGuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:49:00 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8758FC061574;
-        Thu, 13 Jan 2022 22:49:00 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id 82so10011254qki.10;
-        Thu, 13 Jan 2022 22:49:00 -0800 (PST)
+        Fri, 14 Jan 2022 01:50:21 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC08C06161C
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:50:21 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id h23so11228497iol.11
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 22:50:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=B+fcba0guNJe05QgbJXwe+sMQe2m5ccQ8ajqhjcvHAE=;
-        b=ecmU7hZRNGjPS2XiyC0x8KenUkgVcZzEzqPlRh5jPDVUOuLvmP8aKk9OkWhIdvwWCJ
-         T097GxzoxSze7MoQR9hVpF2UxBYH+TFUbAAqX1ffTCXIBTbnTit4Nvc4CBhn4bRvCxs+
-         6rO9P6L12CyL5KAhjyTwPxanbieM7dAMSx2vBPpIyxZNywCUhEFYvh++oljd1vYNqgS4
-         0EglfMrjsN3+Ywy1gGHALjWmtsf6vDsbES7K9bJRIF/gFWZKRmiaPGGD2C0+IIDZDFEA
-         khuEOJcEYWOrWASuBwJEmEH7ruvVVejYu7UozhUMKCLeHseJbr5EtfqhhgMAABF4HVla
-         owVQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/uAIslgp7ONq6Ddd5/X8dnsCVfeQok8EwfpuDdopIBA=;
+        b=aelyoHTVyggA4VE8b2pomJTP4FTQJnMiNt3Yk6nHA5ZrfLep8xNJhn8NA4XTaiKpcd
+         wjp1S1gFpg6TbmlWxDYoZV6LJ1KosYKL0I+yt2KHduWnx+2H/nOy6iQT6vYv3K6XEb9e
+         +xPSOQE1hXMkQ0IV2yWwo1ebyvo2dS0Rik6/W++J4z9Q9pLS7i2vn6jXXy6YFDuc9D3E
+         UOPZ6SySmvkuI3NeAjFS3vJ6jecQZMuaRCRL+EGWla/bQDyEDaXPeHS5R2Ba4MYT5QBy
+         oJYMSj4gGV/3QWO9gZZYJKEVIXBeuC9GR+ardniSfG5ehuAMGPhNlaSU5RrZxgIWKlAA
+         c9FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=B+fcba0guNJe05QgbJXwe+sMQe2m5ccQ8ajqhjcvHAE=;
-        b=1KhQDO5VL0DicffcZZEyjANJKYpa5R8tl4jCuZ4rK1R+E7sCheDyF9Lx9seV89Zxbm
-         08twJD3CyC3D9ggwsaz0M5QNml7Q56NZrdMQajQQHGVAzHOmReIMnVYqGclJI4q+L/TJ
-         c+b6V2h39eOjvjnNUwrtoCcGYEVso4vZ4LhQ32etO13Oe6Ttf5zlazjVzUgA9VnNJPgn
-         sFdJxlIqa2poGcT3VsAKyPD7H/QASnVg7m+IgGL5ePfmhHQpPNYDPHoxY4K9lGjS/b52
-         3aqZutr5BP2PtWU35bUBuXvCecAycFvum84ibQPl/qc5pMDBOSOF5ApY/HzXn7IyFMNl
-         PQGQ==
-X-Gm-Message-State: AOAM530cgX8zEymAiWEY/38LMLxjhMWfAVvUkAPDrubEi6CpeHtU3hsA
-        eGnwpJGA5Za5md9AZRwe/sk8i38TgrE=
-X-Google-Smtp-Source: ABdhPJxpLJfkcIKmkzQboS/h9TEkXvXV4sh4EWp3uO/wDl8oH9bNtbWjfmEvNMtuTjduCYallcj9BA==
-X-Received: by 2002:a05:620a:f10:: with SMTP id v16mr5485570qkl.626.1642142939650;
-        Thu, 13 Jan 2022 22:48:59 -0800 (PST)
-Received: from vps.qemfd.net (vps.qemfd.net. [173.230.130.29])
-        by smtp.gmail.com with ESMTPSA id w9sm563358qkp.89.2022.01.13.22.48.58
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/uAIslgp7ONq6Ddd5/X8dnsCVfeQok8EwfpuDdopIBA=;
+        b=ZVI/ZqZHfnVpWPY5JnUZtSRxvhlT40c1QWURTZCBiNQ3HMe/mTqeAaaR6WOCjqXYRO
+         ch6IknbajYpBk21DLXVFu8PpATenEcsHT0d+pk//VQuRB/x0L4fp8VP5EhmLS12WhtjF
+         n7/CqMf37S3bQiQYHBVq95LA05YfTMuwzfvcGgie4QqUqtPwRJ0BRwfri7HXfV/tKEXg
+         QmSfkxRXWCoo4QZkzpY0uoU7eP63onEdhApOZiKZfcsNNCtN+OFqLK7NT5fw5UmTKlMa
+         3F6PkHmXJ8f26B3EUHz7fYiu68y2D6Dov3gJ39OPVCR7Vfo0Q3+O+1B21CYtJThJheon
+         FqcQ==
+X-Gm-Message-State: AOAM530R1ZVSMLdb2H5O1CWqlwWcZAYn9RCXoibh4aD8k4RDyBzn5+Cn
+        f0rBP3ddVp+WrUU/FNoXC9p6Xw==
+X-Google-Smtp-Source: ABdhPJyOWiBBNEtN/fpYQONgoCQeeIW6abrdFufzxfrdvPmlu6061PGP7cx2UON7MtXNbTIgq9KkJg==
+X-Received: by 2002:a05:6602:2b0b:: with SMTP id p11mr3595653iov.116.1642143020636;
+        Thu, 13 Jan 2022 22:50:20 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:2ee3:2c3c:a8c8:b1bf])
+        by smtp.gmail.com with ESMTPSA id o5sm4261525iow.8.2022.01.13.22.50.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jan 2022 22:48:59 -0800 (PST)
-Received: from schwarzgerat.orthanc (schwarzgerat.danknet [192.168.128.2])
-        by vps.qemfd.net (Postfix) with ESMTP id 7A6DA2B5D4;
-        Fri, 14 Jan 2022 01:48:58 -0500 (EST)
-Received: by schwarzgerat.orthanc (Postfix, from userid 1000)
-        id 75B24600305; Fri, 14 Jan 2022 01:48:58 -0500 (EST)
-Date:   Fri, 14 Jan 2022 01:48:58 -0500
-From:   nick black <dankamongmen@gmail.com>
-To:     linux-man@vger.kernel.org
-Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [patch] console_codes.4: ffix
-Message-ID: <YeEc2pYvKEckcAmv@schwarzgerat.orthanc>
+        Thu, 13 Jan 2022 22:50:20 -0800 (PST)
+Date:   Thu, 13 Jan 2022 23:50:15 -0700
+From:   Yu Zhao <yuzhao@google.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>
+Subject: Re: [PATCH v6 8/9] mm: multigenerational lru: user interface
+Message-ID: <YeEdJxLdUaxEGBBP@google.com>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <20220104202227.2903605-9-yuzhao@google.com>
+ <87a6g0nczg.fsf@linux.ibm.com>
+ <YeCvd4UBPy27SYGZ@google.com>
+ <877db2opve.fsf@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <877db2opve.fsf@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix up the busted OSC command list (reset palette and
-set palette). Remove CSI prefix from the list of non-CSI
-escapes. End all items of said list with periods,
-matching other sections of the page.
+On Fri, Jan 14, 2022 at 10:50:05AM +0530, Aneesh Kumar K.V wrote:
+> Yu Zhao <yuzhao@google.com> writes:
+> > On Thu, Jan 13, 2022 at 04:01:31PM +0530, Aneesh Kumar K.V wrote:
+> >> Yu Zhao <yuzhao@google.com> writes:
+> >> 
+> >> > Add /sys/kernel/mm/lru_gen/enabled as a runtime kill switch.
+> >> 
+> >> Got the below lockdep warning while using the above kill/enable switch
+> >> 
+> >> 
+> >> [   84.252952] ======================================================
+> >> [   84.253012] WARNING: possible circular locking dependency detected
+> >> [   84.253074] 5.16.0-rc8-16204-g1cdcf1120b31 #511 Not tainted
+> >> [   84.253135] ------------------------------------------------------
+> >> [   84.253194] bash/2862 is trying to acquire lock:
+> >> [   84.253243] c0000000021ff740 (cgroup_mutex){+.+.}-{3:3}, at: store_enable+0x80/0x1510
+> >> [   84.253340]
+> >>                but task is already holding lock:
+> >> [   84.253410] c000000002221348 (mem_hotplug_lock){++++}-{0:0}, at: mem_hotplug_begin+0x30/0x50
+> >> [   84.253503]
+> >>                which lock already depends on the new lock.
+> >> 
+> >> [   84.255933] Chain exists of:
+> >>                  cgroup_mutex --> cpu_hotplug_lock --> mem_hotplug_lock
+> >
+> > Thanks. Will reverse the order between mem_hotplug_lock and
+> > cgroup_mutex in the next spin.
+> 
+> It also needs the unlocked variant of static_key_enable/disable.
 
-Signed-off-by: nick black <nickblack@linux.com>
----
- man4/console_codes.4 | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+Right. This is what I have at the moment. Tested with QEMU memory
+hotplug. Can you please give it try too? Thanks.
 
-diff --git man4/console_codes.4 man4/console_codes.4
-index d549b76a9..001de1955 100644
---- man4/console_codes.4
-+++ man4/console_codes.4
-@@ -139,29 +139,28 @@ T}
- ESC 8	DECRC	T{
- Restore state most recently saved by ESC 7.
- T}
--ESC [	CSI	Control sequence introducer
- ESC %		Start sequence selecting character set
- ESC % @		\0\0\0Select default (ISO 646 / ISO 8859-1)
- ESC % G		\0\0\0Select UTF-8
- ESC % 8		\0\0\0Select UTF-8 (obsolete)
- ESC # 8	DECALN	T{
--DEC screen alignment test \- fill screen with E's
-+DEC screen alignment test \- fill screen with E's.
- T}
- ESC (		T{
- Start sequence defining G0 character set
- (followed by one of B, 0, U, K, as below)
- T}
- ESC ( B		T{
--Select default (ISO 8859-1 mapping)
-+Select default (ISO 8859-1 mapping).
- T}
- ESC ( 0		T{
--Select VT100 graphics mapping
-+Select VT100 graphics mapping.
- T}
- ESC ( U		T{
--Select null mapping \- straight to character ROM
-+Select null mapping \- straight to character ROM.
- T}
- ESC ( K		T{
--Select user mapping \- the map that is loaded by the utility \fBmapscrn\fP(8)
-+Select user mapping \- the map that is loaded by the utility \fBmapscrn\fP(8).
- T}
- ESC )		T{
- Start sequence defining G1 (followed by one of B, 0, U, K, as above).
-@@ -169,12 +168,13 @@ T}
- ESC >	DECPNM	Set numeric keypad mode
- ESC =	DECPAM	Set application keypad mode
- ESC ]	OSC	T{
--(Should be: Operating system command)
--ESC ] P \fInrrggbb\fP: set palette, with parameter
--given in 7 hexadecimal digits after the final P :-(.
--Here \fIn\fP is the color (0\(en15), and \fIrrggbb\fP indicates
-+Operating System Command prefix.
-+T}
-+ESC ] R		Reset palette.
-+ESC ] P		T{
-+Set palette, with parameter given in 7 hexadecimal digits \fInrrggbb\fP after
-+the final P. Here \fIn\fP is the color (0\(en15), and \fIrrggbb\fP indicates
- the red/green/blue values (0\(en255).
--ESC ] R: reset palette
- T}
- .TE
- .ad
--- 
-2.34.1
+    cgroup_lock()
+    cpus_read_lock()
+    get_online_mems()
 
+        if (enable)
+            static_branch_enable_cpuslocked()
+        else
+            static_branch_disable_cpuslocked()
 
--- 
-nick black -=- https://www.nick-black.com
-to make an apple pie from scratch,
-you need first invent a universe.
+    put_online_mems()
+    cpus_read_unlock()
+    cgroup_unlock()

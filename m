@@ -2,122 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C2248F210
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AEF48F216
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiANVkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 16:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
+        id S229911AbiANVlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 16:41:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiANVkX (ORCPT
+        with ESMTP id S229903AbiANVlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 16:40:23 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3678C061574;
-        Fri, 14 Jan 2022 13:40:22 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id n185so3894544pfd.2;
-        Fri, 14 Jan 2022 13:40:22 -0800 (PST)
+        Fri, 14 Jan 2022 16:41:46 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9C5C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 13:41:45 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id t9so13996811oie.12
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 13:41:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5CZaMdnFwKIS25P7FXe8qrzsl683KSPNybAxRv3JsgU=;
-        b=O+Eql4u2oJZR8SricH7RsWhofVyx2xdGlqZxGZ7W8Yliweqh7C5xVRka6Ao4gpKyd8
-         DrH8DzVx2dMuF/YuDXuNrJLCCo93XfFR5phs+6PCt8ZglZpkJjZBAJ5sQd+3dmZ5ynCE
-         oNzv+SSWD+K/zKruIDdl6Qk/Vl2piH0qL0r1sp5aNZMxDcRdOMjUWWYtcmOLGr5Bo+JL
-         x9+s5M/TQDRy36ACQqLGPz5SPLMiyJMCf3Q+kmQ1qASexN9UYlD6dYbC+0YGAauf+G5X
-         B9qEoY0S8pLVxqpDqusFoxYiCSHR3L0zFi+Lw8cb56ubaiT8ln0exrxcOfmmEO+rkCbL
-         gpGw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=EiF4kxaLYYslVsSU2sOxDU0qaE58YW7xc6wp1g7lJQQ=;
+        b=aJyozUrkyudyCMwztwokNGSEAVnw6wQjjRztzVHW4JAvcr8WI07NRwpnWsK0diRUPt
+         Fg6IeQRZP9g8Ds56ymeldBaTBbQqvfd81JsjFfxduSl/Fq9np23NPioUWZ99mkBngw4z
+         XrI1d2GSV/i8mv1RJQoL4rGUg51B6kowqwvtU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5CZaMdnFwKIS25P7FXe8qrzsl683KSPNybAxRv3JsgU=;
-        b=ILWury3EU2nsvVOtOQsM2w/qLgDCdP8YJsRn3e0171NSqNI0oyx684qZthHtlzr6+Y
-         41hAu9mx5cPDX7RcUGGEgADZX+rgEkDbXq0abXLkpqC9dtjWyWK9QlAUXixiofpASB2z
-         DqcjlsXnnUDXBzz9I2jv/BdeqUsH1ET7hmqsfDvYLUGWoPUFwrtQasny7/kppCftxEam
-         y0YwfD0mWFmDks511tLgypxOaI5VvkHQ2GcpR73O/3eql8Vp82NaobhTGx4XQDFZLRch
-         3IvAs5/Y99hr6Fepc1Maekf/kyCgR6wreLz/q1hodtUBSqNUqJNkhaLnOnx2nZXbXpP4
-         3M+w==
-X-Gm-Message-State: AOAM533YdUtahCzKF/J9c5YxKb34KkQMbUgXAE/hjQ5CGuYKbkWf0Gl1
-        oi6icXPpy4ZnNS5Nk9iSJHk=
-X-Google-Smtp-Source: ABdhPJz9TbSYOfMk7/mvo8ljhyJqUrURjEgMH76SRWE9vHDuVbmP6zmtDurIQqRsecBLMxlxrsHelQ==
-X-Received: by 2002:a62:f210:0:b0:4c2:84b2:b8ff with SMTP id m16-20020a62f210000000b004c284b2b8ffmr4512117pfh.62.1642196422290;
-        Fri, 14 Jan 2022 13:40:22 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:20f0:3cd3:13fc:6b46])
-        by smtp.gmail.com with ESMTPSA id l2sm6416821pfc.42.2022.01.14.13.40.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 13:40:21 -0800 (PST)
-Date:   Fri, 14 Jan 2022 13:40:18 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>,
-        benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        Wei-Ning Huang <wnhuang@google.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Sean O'Brien <seobrien@chromium.org>, phoenixshen@chromium.org
-Subject: Re: [PATCH v2] HID: google: modify HID device groups of eel
-Message-ID: <YeHtwsmKzqhU4Fiq@google.com>
-References: <20220107091357.28960-1-xiazhengqiao@huaqin.corp-partner.google.com>
- <nycvar.YFH.7.76.2201140935460.28059@cbobk.fhfr.pm>
- <CAE-0n53M723sZ7H-f0SF=AoTrwznmTRhKPapgHe5H7Mw6bPb7Q@mail.gmail.com>
- <YeHWNtl0Or1dgadz@google.com>
- <CAE-0n51TAtifbbruKhCJ_u5xH1j0zKjWOehGQFFdCez=RubxVA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=EiF4kxaLYYslVsSU2sOxDU0qaE58YW7xc6wp1g7lJQQ=;
+        b=lUQellET0vGgG7FNAIJr5MLhA+mGGuWzy6niGEViU4O7Ng04dxBbVcERD9Cae/A3MG
+         e7p7jCxeT3IUUfOzubDWBSzflb9VuKMNIF+BZe/NgireVxIUOMpfgRmhduzUIC8Vx6Wx
+         /5GT/p2st2a9S28l9v34SsHmouiY2LNbUp2ALxeWV3JcNRPTdvq7r7Py1N0URMtJNkxb
+         P4m4fnl/baey1019EeF2OdfMvS3PGO0C57eBfCkO1KJYHkoPVC/5XfkjfOdUHTds5RCZ
+         vM2qwSo7igm5UWvah4PnJo73JxvBWGMAunu9Q/0HC9ALEv3eja2sKeZVdnMamF/s8o2w
+         hfsA==
+X-Gm-Message-State: AOAM533D24YBaTums1PnV5FNgkllRlhBPH3g2GCypGaE4FrvsSU2iHnA
+        /zG0nrg5cnwAxEQrVHTuZVhekCeM1DW/1vKUlrILvw==
+X-Google-Smtp-Source: ABdhPJxqXjmHGTouafQMbaFEPOTUQrNELWzSofFuBmD0rN8FxXai9W9dtNego1w9Wr2rWHHHSY+XGSIvw1IVJXLBDn4=
+X-Received: by 2002:aca:4382:: with SMTP id q124mr9068196oia.64.1642196504991;
+ Fri, 14 Jan 2022 13:41:44 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 14 Jan 2022 15:41:44 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE-0n51TAtifbbruKhCJ_u5xH1j0zKjWOehGQFFdCez=RubxVA@mail.gmail.com>
+In-Reply-To: <1642194710-2512-2-git-send-email-quic_khsieh@quicinc.com>
+References: <1642194710-2512-1-git-send-email-quic_khsieh@quicinc.com> <1642194710-2512-2-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 14 Jan 2022 15:41:44 -0600
+Message-ID: <CAE-0n52UYBajrqGFqppun5oK82V3ppjvQxANU27kL95gCZtURg@mail.gmail.com>
+Subject: Re: [PATCH v15 1/4] drm/msm/dp: do not initialize phy until plugin
+ interrupt received
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 02:55:49PM -0600, Stephen Boyd wrote:
-> Quoting Dmitry Torokhov (2022-01-14 11:59:50)
-> > On Fri, Jan 14, 2022 at 01:25:12PM -0600, Stephen Boyd wrote:
-> > >
-> > > My understanding is that 'vivaldi' is mostly a keyboard layout and
-> > > 'hammer' is a detachable keyboard. We want to prevent the hid-vivaldi
-> > > driver from probing this particular device because the hid-vivaldi
-> > > driver doesn't know about detachable keyboards. Hammer devices also
-> > > support 360 degree wraparound so we know that the keyboard has been put
-> > > behind the screen or that it's being used to stand up the device on a
-> > > table.
-> > >
-> > > Given all that, I'm still confused. If we make the hid-google-hammer
-> > > driver probe this device and the keyboard layout is vivaldi then we'd
-> > > want the part of the vivaldi driver that exposes the
-> > > function_row_physmap through sysfs. Otherwise userspace won't know how
-> > > to handle the function row properly. I think we need the device to stack
-> > > two drivers here. Does that happen with HID?
-> >
-> > As far as I know HID does not easily allow "stacking" drivers like that.
-> 
-> Ok.
-> 
-> >
-> > Probably the easiest way would be to export vivaldi_feature_mapping()
-> > and the show method for the physical row map and call them from the
-> > hammer driver.
-> >
-> 
-> I worry about builtin vs. modular drivers so probably ought to make some
+Quoting Kuogee Hsieh (2022-01-14 13:11:47)
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 7cc4d21..7cd6222 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -696,12 +699,9 @@ static int dp_irq_hpd_handle(struct dp_display_private *dp, u32 data)
+>          * dp core (ahb/aux clks) must be initialized before
+>          * irq_hpd be handled
+>          */
+> -       if (dp->core_initialized) {
+> -               ret = dp_display_usbpd_attention_cb(&dp->pdev->dev);
+> -               if (ret == -ECONNRESET) { /* cable unplugged */
+> -                       dp->core_initialized = false;
+> -               }
+> -       }
+> +       if (dp->core_initialized)
 
-Just make hid-hammer depend on hid-vivaldi, hid-vivaldi is tiny
-otherwise.
+When is this condition false? The irq isn't unmasked until the core has
+been initialized. On the resume path I suppose the irq is enabled in
+dp_display_host_init() calling dp_ctrl_reset_irq_ctrl(), and then we
+could immediately get the interrupt but it will block on the event_mutex
+lock.
 
-> hid-vivaldi-common.c file that has the physmap code and then have both
-> drivers call that mini-library. The 'vivaldi_data' structure would need
-> to be figured out too. The hammer driver stores 'hammer_kbd_leds' in the
-> hid_get_drvdata() whereas the vivaldi driver stores 'vivalid_data' so we
-> can't simply call the show method for the sysfs attribute without some
-> minor surgery.
+> +               dp_display_usbpd_attention_cb(&dp->pdev->dev);
+> +
+>         DRM_DEBUG_DP("hpd_state=%d\n", state);
+>
+>         mutex_unlock(&dp->event_mutex);
+> @@ -1363,14 +1373,16 @@ static int dp_pm_suspend(struct device *dev)
+>                 if (dp_power_clk_status(dp->power, DP_CTRL_PM))
+>                         dp_ctrl_off_link_stream(dp->ctrl);
+>
+> +               dp_display_host_phy_exit(dp);
+> +
+> +               /* host_init will be called at pm_resume */
+>                 dp_display_host_deinit(dp);
+> +       } else {
+> +               dp_display_host_phy_exit(dp);
 
-Yeah, we'll need to convert them into helpers into which callers can
-pass buffers.
+I fail to see where this condition happens. Can we suspend the device
+without the irq being installed?
 
-Thanks.
-
--- 
-Dmitry
+>         }
+>
+>         dp->hpd_state = ST_SUSPENDED;
+>
+> -       /* host_init will be called at pm_resume */
+> -       dp->core_initialized = false;
+> -
+>         DRM_DEBUG_DP("After, core_inited=%d power_on=%d\n",
+>                         dp->core_initialized, dp_display->power_on);
+>

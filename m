@@ -2,101 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFD748F2D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6616F48F2D5
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbiANXFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 18:05:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S229543AbiANXIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 18:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiANXFy (ORCPT
+        with ESMTP id S229452AbiANXIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 18:05:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4302C061574;
-        Fri, 14 Jan 2022 15:05:53 -0800 (PST)
+        Fri, 14 Jan 2022 18:08:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EC0C061574;
+        Fri, 14 Jan 2022 15:08:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8660B62065;
-        Fri, 14 Jan 2022 23:05:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4154C36AE9;
-        Fri, 14 Jan 2022 23:05:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04C50B82A0C;
+        Fri, 14 Jan 2022 23:08:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABD63C36AE9;
+        Fri, 14 Jan 2022 23:08:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642201552;
-        bh=eW8qfxOLXmdoe8jddUPKE7G9qg502Iient4wuy9l11I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iecKcacZgzID8/b83zx1M7UUlCj0+BSDXYsyfZsokK9MDNjfllpfTYDSzIY8Oz3ge
-         vBHt+OI7i3geYdpP7aSckqswrzFNYRVqyeAqCBlaNw4nxhwgePgSncP0JuEwgobZwl
-         ceQ68+uqxOA75qL065+rX6avsuj5DJBN2iDhJd9M8OjoUxOwhpPUeHsgkrozDv8b9M
-         b9PScIWVf5ZWEJMerqVOVqCFzeFRJ63EC6ZEjFEGHkJnFRUfM/W+baHS2m9ZkRaV9/
-         LnvTyCPoTNeaVZ9Q9/x08jRgwmfqeRQpMl9S3IzU9HGaw2l+vpX06+7JEj/sH5wumY
-         2tsfKhUS5o3dw==
-Received: by pali.im (Postfix)
-        id DA3527D1; Sat, 15 Jan 2022 00:05:49 +0100 (CET)
-Date:   Sat, 15 Jan 2022 00:05:49 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 0/6] serial: mvebu-uart: Support for higher baudrates
-Message-ID: <20220114230549.56co4qcpnq32muwj@pali>
-References: <20210930095838.28145-1-pali@kernel.org>
- <20211103214209.azo2z3z4gy7aj5hu@pali>
- <87ee6bm9hn.fsf@BL-laptop>
- <20220114105100.im6gmkt6fjl2aiwl@pali>
- <20220114225659.D5D79C36AE9@smtp.kernel.org>
+        s=k20201202; t=1642201719;
+        bh=JSbd/2JJlrn7NdVeL7yUu515yOv/H1ir0i6L8o9BVwc=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=DXAKdbNFYESDd5ZoJyBcxJB+BBj97Q5GGkm9E76xYoMhfKwRs6dM1ui9fmoK/Kv04
+         J1jcrshP/12K1fCmxUTnuWkNKNyLa31emQokPOacDisBwgKXKRSEOAveXaQxidtba+
+         Mcg1z90AWHGBmpeEhivMt5xCYvfH7AMf5h0ZybURoKuXN49ShVzR6wkogdhM/+KuIC
+         gwE/O3idr3zzbRZYKQJjHK8BZRUKunCxdyyVqxp8b3vGPpfjTC1Ay/FblhiCbGshfb
+         2d+lA/XoSEVQDFmNDjqNNmC0pa5ZZr4m3HcgpHJ6RqJjz/8wviuBPUbKCwUFnz4+Xy
+         jJ0tvrZKOWA1g==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220114225659.D5D79C36AE9@smtp.kernel.org>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211220195646.44498-12-cristian.marussi@arm.com>
+References: <20211220195646.44498-1-cristian.marussi@arm.com> <20211220195646.44498-12-cristian.marussi@arm.com>
+Subject: Re: [PATCH v8 11/11] clk: scmi: Support atomic clock enable/disable API
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, cristian.marussi@arm.com,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Fri, 14 Jan 2022 15:08:37 -0800
+User-Agent: alot/0.10
+Message-Id: <20220114230839.ABD63C36AE9@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 14 January 2022 14:56:58 Stephen Boyd wrote:
-> Quoting Pali Rohár (2022-01-14 02:51:00)
-> > Hello Stephen!
-> > 
-> > On Friday 17 December 2021 18:23:00 Gregory CLEMENT wrote:
-> > > Hello Pali,
-> > > 
-> > > > On Thursday 30 September 2021 11:58:32 Pali Rohár wrote:
-> > > >> This patch series add support for baudrates higher than 230400 on
-> > > >> Marvell Armada 37xx boards.
-> > > >
-> > > > Stephen, Gregory, are there any issues with this patch series?
-> > > 
-> > > I am not found of these changes but let's apply it as I didn't take time
-> > > to do a better review.
-> > > 
-> > > However I can't apply the dt part if the driver is not merged.
-> > 
-> > Stephen, are there any issues with driver (non-DT) part changes in this
-> > patch series? If not, could you please merge them? This patch series is
-> > here on the list since September without any request for change...
-> 
-> Oh I missed this thread. I thought it was going to be resent.
-> 
-> > 
-> > We would really like to see support for higher baudrates for Armada 3720
-> > platforms in mainline kernel.
-> 
-> If we're adding new support why can't we break with backwards
-> compatibility for the binding and do it a different way?
+Quoting Cristian Marussi (2021-12-20 11:56:46)
+> Support also atomic enable/disable clk_ops beside the bare non-atomic one
+> (prepare/unprepare) when the underlying SCMI transport is configured to
+> support atomic transactions for synchronous commands.
+>=20
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> NOTE THAT STILL THERE'S NO FINE GRAIN CONTROL OVER SELECTION
+> OF WHICH CLOCK DEVICES CAN SUPPORT ATOMIC AND WHICH SHOULD NOT
+> BASED ON CLOCK DEVICES ENABLE LATENCY.
+> THIS HAS STILL TO BE ADDED IN SCMI PROTOCOL SPEC.
 
-Because DTS are backwards compatible. I was told more times that kernel
-drivers should work correctly with older DTS files. On some boards are
-DTB files provided by bootloader and they do not use in-kernel DTS
-files.
+Why are you yelling on the internet? :-) I guess I need to ack this.
+
+Acked-by: Stephen Boyd <sboyd@kernel.org>

@@ -2,103 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0EA48EC2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D86B248EC33
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242188AbiANPES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:04:18 -0500
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:34282 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238270AbiANPEQ (ORCPT
+        id S242156AbiANPHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:07:25 -0500
+Received: from mail-4022.proton.ch ([185.70.40.22]:27141 "EHLO
+        mail-4022.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235794AbiANPHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:04:16 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=cruzzhao@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V1pfdAE_1642172651;
-Received: from 30.21.164.113(mailfrom:cruzzhao@linux.alibaba.com fp:SMTPD_---0V1pfdAE_1642172651)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 14 Jan 2022 23:04:12 +0800
-Message-ID: <86fbc313-e179-0cbd-8f5b-66e7b5964b14@linux.alibaba.com>
-Date:   Fri, 14 Jan 2022 23:04:11 +0800
+        Fri, 14 Jan 2022 10:07:25 -0500
+Date:   Fri, 14 Jan 2022 15:07:21 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
+        s=protonmail; t=1642172842;
+        bh=eLKKiTMw1JJZ+1oGczRJs+/VLcUyP4uYFpIUjpFZWFE=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc;
+        b=QciLqLZNzaO+Dq8ITPa2PPVLKwvF21lT3mUdWYucI1U2ztgVfZJDUdCVStKlmA0ko
+         7b/iE8UyPIOzG0tD5RFUqJxnkODP2Nqe6Cd3w1TBrcmWB88XbrENAXfatPg/wPcuQd
+         GH9LZ/lbfTSMkkk87uIdu9QTYXGCHzA5KvdRC+D+FG+L4sNgOkmkCOt0McLDKhXeN9
+         dFQPiOs22ncnZuRc7bgx5w//jcgh8eETic48bpSJARO/EUC1m/egpi3h7P0S0aKKUo
+         s+SS8RDLFLVWI6/DfPssJFi4fiVYK6cbRY81vZe7hm4aQnIaS89o3DnxWNLBteTTuS
+         ZpKjLjFpPwSjA==
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From:   Simon Ser <contact@emersion.fr>
+Cc:     Tomohito Esaki <etom@igel.co.jp>, dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?utf-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        =?utf-8?Q?Michel_D=C3=A4nzer?= <mdaenzer@redhat.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        Mark Yacoub <markyacoub@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Evan Quan <evan.quan@amd.com>, Petr Mladek <pmladek@suse.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org, Daniel Stone <daniel@fooishbar.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
+        Takanari Hayama <taki@igel.co.jp>
+Reply-To: Simon Ser <contact@emersion.fr>
+Subject: Re: [RFC PATCH v3 2/3] drm: add support modifiers for drivers whose planes only support linear layout
+Message-ID: <7eljcd3F4aWL2jjBRwr3DISmyt0XPWFIH1_kebFGqZTJXLZRx0bm_8c8yaIuEuH8rS0MaJhU6SY1y-fc6U_zCLaKgoLM124nZpr0H91nSjw=@emersion.fr>
+In-Reply-To: <YeGFugZvwbF7l2I/@smile.fi.intel.com>
+References: <20220114101753.24996-1-etom@igel.co.jp> <20220114101753.24996-3-etom@igel.co.jp> <YeGFugZvwbF7l2I/@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v2 2/3] sched/core: Forced idle accounting per-cpu
-Content-Language: en-US
-To:     Josh Don <joshdon@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        cgroups@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <1641894961-9241-1-git-send-email-CruzZhao@linux.alibaba.com>
- <1641894961-9241-3-git-send-email-CruzZhao@linux.alibaba.com>
- <CABk29NtonxXS53J-+3w_GTLTVurf8HS4v35T9evoGyERB0uDqA@mail.gmail.com>
-From:   cruzzhao <cruzzhao@linux.alibaba.com>
-In-Reply-To: <CABk29NtonxXS53J-+3w_GTLTVurf8HS4v35T9evoGyERB0uDqA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Friday, January 14th, 2022 at 15:16, Andy Shevchenko <andriy.shevchenko@=
+linux.intel.com> wrote:
 
+> Why not enum?
 
-在 2022/1/12 上午9:59, Josh Don 写道:
-> On Tue, Jan 11, 2022 at 1:56 AM Cruz Zhao <CruzZhao@linux.alibaba.com> wrote:
->>
->> Accounting for "forced idle" time per cpu, which is the time a cpu is
->> forced to idle by its SMT sibling.
->>
->> As it's not accurate to measure the capacity loss only by cookie'd forced
->> idle time, and it's hard to trace the forced idle time caused by all the
->> uncookie'd tasks, we account the forced idle time from the perspective of
->> the cpu.
->>
->> Forced idle time per cpu is displayed via /proc/schedstat, we can get the
->> forced idle time of cpu x from the 10th column of the row for cpu x. The
->> unit is ns. It also requires that schedstats is enabled.
->>
->> Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
->> ---
-> 
-> Two quick followup questions:
-> 
-> 1) From your v1, I still wasn't quite sure if the per-cpu time was
-> useful or not for you versus a single overall sum (ie. I think other
-> metrics could be more useful for analyzing steal_cookie if that's what
-> you're specifically interested in). Do you definitely want the per-cpu
-> totals?
-> 
-IMO, the per-cpu forced idle time can help us get to know whether the
-forced idle time is uniform among the core, or among all the cpus. IMO,
-it's a kind of balance.
-
-> 2) If your cgroup accounting patch is merged, do you still want this
-> patch? You can grab the global values from the root cgroup (assuming
-> you have cgroups enabled). The only potential gap is if you need
-> per-cpu totals, though I'm working to add percpu stats to cgroup-v2:
-> https://lkml.kernel.org/r/%3C20220107234138.1765668-1-joshdon@google.com%3E
-
-If cgroup accounting patch is merged, this patch is still needed.
-
-Consider the following scenario:
-Task p of cgroup A is running on cpu x, and it forces cpu y into idle
-for t ns. The forceidle time of cgroup A on cpu x increases t ns, and
-the forcedidle time of cpu y increases t ns.
-
-That is, the force idle time of cgroup is defined as the forced idle
-time it caused, and the force idle time of cpu is defined as the time
-the cpu is forced into idle, which have different meanings from each other.
-
-And for SMT > 2, we cannot caculate the forced idle time of cpu x from
-the cgroup interface.
-
-Best,
-Cruz Zhao
+There is no enum for DRM format modifiers.

@@ -2,88 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E6748E348
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 05:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FA148E34B
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 05:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239169AbiANEaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 23:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239020AbiANEaE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 23:30:04 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A315AC061574;
-        Thu, 13 Jan 2022 20:30:04 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id h23so10986241iol.11;
-        Thu, 13 Jan 2022 20:30:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QytipBfsQBns2WRd2Yb0XfQLH0+kyvtCcIoi6sIqkJ4=;
-        b=SMVaSVH7HbN62VgDLbaKPeMgz/nNzM96EnzJ7pfCfsH8wB21VHoAavj09rBXU0FaRw
-         vF5z8RVoc2rgdQM2yBJnf7iRMYD+9zFP70dHdbEIGVYuzwyvCmWKuaJg9gi2UaWO2rjo
-         wp9HnmTiDayBZc8EUFshgien7+abAWzmT9p/gLKuoM2qZrM7KMiBcHDxUIbbLTBHEQyU
-         sJUUQcSpmJvQ5oFSKNZ01FG3Xfh4yH0zQyuBlRD2yCmaJYe1Y2b6SNwHyFO6tMJQTnRS
-         rgkjFCF22GO/zcla/SDu8CZ001drV1N64KfZXEKOsuz776QhTrLDMVoSLPRjqlBC+rUS
-         2MZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QytipBfsQBns2WRd2Yb0XfQLH0+kyvtCcIoi6sIqkJ4=;
-        b=yGfkKrPrbQ/5e2WfFVBGWkOrPKspgG+j2dq4G2UVClO+MqtfUfYhVAHCANvl6/x6ZH
-         YeK9V7CFXQrvJCMRWx5/6MydP1gTROYORQgTqCDNcWmh1KMTCWD+7GwxmLkY5yNJTsYp
-         8b5vv94U+uVuUcCr3qL9GEi9n+uQtA+yLQEJJG6XeEKkMZIgcBj8r/78IB0Ik4qleBga
-         qBnmXG+RfAGtGqeRiCEOcYXywobPsw7yM4IcNMw9SQXOk8ij0ccMuttnNlZoCSNJaAz8
-         dsIkocOC56iQtQaT3W1F/NpH3R3vU/AmQtauT1xQlVDqFMOwFV7vXIpiVMwrrp23QrCF
-         /Zvw==
-X-Gm-Message-State: AOAM530qRFmdmKJy8ImC76GWr1FVKAKh/FVy92c+4ntde6AaK9/JP3g+
-        sb2m0Xf7f+VJg0hD1uBqPVUFsX5pgas=
-X-Google-Smtp-Source: ABdhPJyLzIDNY+70gOmfgSgl1Y6mccID6Tq7RrYVuu6rDm6r0Uwo3JE0gH4aLYkHvpWeQYqDNDvx6w==
-X-Received: by 2002:a05:6638:a33:: with SMTP id 19mr1710902jao.257.1642134604105;
-        Thu, 13 Jan 2022 20:30:04 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.58])
-        by smtp.googlemail.com with ESMTPSA id y15sm4530295iow.44.2022.01.13.20.30.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 20:30:03 -0800 (PST)
-Message-ID: <b4363fb0-a837-f452-8abe-549f4568f38a@gmail.com>
-Date:   Thu, 13 Jan 2022 21:30:02 -0700
+        id S239189AbiANEaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 23:30:46 -0500
+Received: from mga03.intel.com ([134.134.136.65]:59050 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239020AbiANEap (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 23:30:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642134645; x=1673670645;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Db3v2WR6zdYDj89/1HtLVLfRq6qpI5iJWhsa09yCTys=;
+  b=iyrLuStUPgav9FSpkoznQ8pDQEgWkYPA+oY32/SAJZoB9MtpacWswoZr
+   4jMt7rYmMPPK33wNw2e5QChnhQPECdUmN3LRbAmG40q3B1nlI9LsSJd0O
+   bMndBBNiaZwRPLRF+sR8iTffIRFpQWk4n96tV9HwRWRgF9oaOLto8RM6y
+   Wnv0S6/Bqxg0PakMXPan6w8cwjCQFdgkNRQNPmrmwjUSukEmv6Mnxz+g1
+   9muB04sD+a9ba8x/FgpvRkq3n3Lhrr8cD8XSs13eSDZ9Ebu14JshFd7Hr
+   6agKCQ3vyxeTU4mZXf9qeTmC2Vk2zcN6617uF5yO8OnmVGeoe9FqKNSjo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="244136366"
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="244136366"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 20:30:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="559354866"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 13 Jan 2022 20:30:24 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8EEJ-00085j-Bz; Fri, 14 Jan 2022 04:30:23 +0000
+Date:   Fri, 14 Jan 2022 12:30:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mhiramat:kprobes/fixes 2/3] include/asm-generic/bug.h:99:17: error:
+ too few arguments to function '__warn_printk'
+Message-ID: <202201141214.4SkSLX9S-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH] ipv6: ICMPV6: Use swap() instead of open coding it
-Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        davem@davemloft.net
-Cc:     yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20220113161731.130554-1-jiapeng.chong@linux.alibaba.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20220113161731.130554-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/13/22 9:17 AM, Jiapeng Chong wrote:
-> Clean the following coccicheck warning:
-> 
-> ./net/ipv6/icmp.c:348:25-26: WARNING opportunity for swap().
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  net/ipv6/icmp.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git kprobes/fixes
+head:   dfa160b26549af888185cb9d3001b577ce755dd3
+commit: 9eb569267490d4537bd3ea1819f6cdfc03e986be [2/3] powerpc/kprobes: Fix alloc_optinsn_page() to use all area of optinsn_slot
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220114/202201141214.4SkSLX9S-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/commit/?id=9eb569267490d4537bd3ea1819f6cdfc03e986be
+        git remote add mhiramat https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git
+        git fetch --no-tags mhiramat kprobes/fixes
+        git checkout 9eb569267490d4537bd3ea1819f6cdfc03e986be
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-looks fine to me but net-next is closed; resubmit when it opens.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Also, you need to add the tree to the subject line so in this case:
+All errors (new ones prefixed by >>):
 
-[PATCH net-next] ipv6: ICMPV6: Use swap() instead of open coding it
+   In file included from arch/powerpc/include/asm/bug.h:149,
+                    from include/linux/bug.h:5,
+                    from arch/powerpc/include/asm/cmpxchg.h:8,
+                    from arch/powerpc/include/asm/atomic.h:11,
+                    from include/linux/atomic.h:7,
+                    from include/linux/cpumask.h:13,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/mutex.h:17,
+                    from include/linux/notifier.h:14,
+                    from include/linux/kprobes.h:21,
+                    from arch/powerpc/kernel/optprobes.c:8:
+   arch/powerpc/kernel/optprobes.c: In function 'free_optinsn_page':
+>> include/asm-generic/bug.h:99:17: error: too few arguments to function '__warn_printk'
+      99 |                 __warn_printk(arg);                                     \
+         |                 ^~~~~~~~~~~~~
+   include/asm-generic/bug.h:132:17: note: in expansion of macro '__WARN_printf'
+     132 |                 __WARN_printf(TAINT_WARN, format);                      \
+         |                 ^~~~~~~~~~~~~
+   include/linux/once_lite.h:19:25: note: in expansion of macro 'WARN'
+      19 |                         func(__VA_ARGS__);                              \
+         |                         ^~~~
+   include/asm-generic/bug.h:150:9: note: in expansion of macro 'DO_ONCE_LITE_IF'
+     150 |         DO_ONCE_LITE_IF(condition, WARN, 1, format)
+         |         ^~~~~~~~~~~~~~~
+   arch/powerpc/kernel/optprobes.c:49:9: note: in expansion of macro 'WARN_ONCE'
+      49 |         WARN_ONCE(idx & (PAGE_SIZE - 1));
+         |         ^~~~~~~~~
+   include/asm-generic/bug.h:95:28: note: declared here
+      95 | extern __printf(1, 2) void __warn_printk(const char *fmt, ...);
+         |                            ^~~~~~~~~~~~~
+>> include/asm-generic/bug.h:99:17: error: too few arguments to function '__warn_printk'
+      99 |                 __warn_printk(arg);                                     \
+         |                 ^~~~~~~~~~~~~
+   include/asm-generic/bug.h:132:17: note: in expansion of macro '__WARN_printf'
+     132 |                 __WARN_printf(TAINT_WARN, format);                      \
+         |                 ^~~~~~~~~~~~~
+   include/linux/once_lite.h:19:25: note: in expansion of macro 'WARN'
+      19 |                         func(__VA_ARGS__);                              \
+         |                         ^~~~
+   include/asm-generic/bug.h:150:9: note: in expansion of macro 'DO_ONCE_LITE_IF'
+     150 |         DO_ONCE_LITE_IF(condition, WARN, 1, format)
+         |         ^~~~~~~~~~~~~~~
+   arch/powerpc/kernel/optprobes.c:51:13: note: in expansion of macro 'WARN_ONCE'
+      51 |         if (WARN_ONCE(idx >= OPTINSN_SLOT_PAGES))
+         |             ^~~~~~~~~
+   include/asm-generic/bug.h:95:28: note: declared here
+      95 | extern __printf(1, 2) void __warn_printk(const char *fmt, ...);
+         |                            ^~~~~~~~~~~~~
+
+
+vim +/__warn_printk +99 include/asm-generic/bug.h
+
+^1da177e4c3f41 Linus Torvalds   2005-04-16   67  
+af9379c7121d55 David Brownell   2009-01-06   68  /*
+af9379c7121d55 David Brownell   2009-01-06   69   * WARN(), WARN_ON(), WARN_ON_ONCE, and so on can be used to report
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   70   * significant kernel issues that need prompt attention if they should ever
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   71   * appear at runtime.
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   72   *
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   73   * Do not use these macros when checking for invalid external inputs
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   74   * (e.g. invalid system call arguments, or invalid data coming from
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   75   * network/devices), and on transient conditions like ENOMEM or EAGAIN.
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   76   * These macros should be used for recoverable kernel issues only.
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   77   * For invalid external inputs, transient conditions, etc use
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   78   * pr_err[_once/_ratelimited]() followed by dump_stack(), if necessary.
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   79   * Do not include "BUG"/"WARNING" in format strings manually to make these
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   80   * conditions distinguishable from kernel issues.
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   81   *
+96c6a32ccb55a3 Dmitry Vyukov    2018-08-21   82   * Use the versions with printk format strings to provide better diagnostics.
+af9379c7121d55 David Brownell   2009-01-06   83   */
+d4bce140b4e739 Kees Cook        2019-09-25   84  #ifndef __WARN_FLAGS
+b9075fa968a0a4 Joe Perches      2011-10-31   85  extern __printf(4, 5)
+ee8711336c5170 Kees Cook        2019-09-25   86  void warn_slowpath_fmt(const char *file, const int line, unsigned taint,
+b9075fa968a0a4 Joe Perches      2011-10-31   87  		       const char *fmt, ...);
+f2f84b05e02b77 Kees Cook        2019-09-25   88  #define __WARN()		__WARN_printf(TAINT_WARN, NULL)
+5916d5f9b33473 Thomas Gleixner  2020-03-13   89  #define __WARN_printf(taint, arg...) do {				\
+5916d5f9b33473 Thomas Gleixner  2020-03-13   90  		instrumentation_begin();				\
+5916d5f9b33473 Thomas Gleixner  2020-03-13   91  		warn_slowpath_fmt(__FILE__, __LINE__, taint, arg);	\
+5916d5f9b33473 Thomas Gleixner  2020-03-13   92  		instrumentation_end();					\
+5916d5f9b33473 Thomas Gleixner  2020-03-13   93  	} while (0)
+a8f18b909c0a3f Arjan van de Ven 2008-07-25   94  #else
+a7bed27af194aa Kees Cook        2017-11-17   95  extern __printf(1, 2) void __warn_printk(const char *fmt, ...);
+a44f71a9ab99b5 Kees Cook        2019-09-25   96  #define __WARN()		__WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
+d4bce140b4e739 Kees Cook        2019-09-25   97  #define __WARN_printf(taint, arg...) do {				\
+5916d5f9b33473 Thomas Gleixner  2020-03-13   98  		instrumentation_begin();				\
+d4bce140b4e739 Kees Cook        2019-09-25  @99  		__warn_printk(arg);					\
+a44f71a9ab99b5 Kees Cook        2019-09-25  100  		__WARN_FLAGS(BUGFLAG_NO_CUT_HERE | BUGFLAG_TAINT(taint));\
+5916d5f9b33473 Thomas Gleixner  2020-03-13  101  		instrumentation_end();					\
+6b15f678fb7d5e Drew Davenport   2019-07-16  102  	} while (0)
+2da1ead4d5f7fa Kees Cook        2019-09-25  103  #define WARN_ON_ONCE(condition) ({				\
+2da1ead4d5f7fa Kees Cook        2019-09-25  104  	int __ret_warn_on = !!(condition);			\
+2da1ead4d5f7fa Kees Cook        2019-09-25  105  	if (unlikely(__ret_warn_on))				\
+2da1ead4d5f7fa Kees Cook        2019-09-25  106  		__WARN_FLAGS(BUGFLAG_ONCE |			\
+2da1ead4d5f7fa Kees Cook        2019-09-25  107  			     BUGFLAG_TAINT(TAINT_WARN));	\
+2da1ead4d5f7fa Kees Cook        2019-09-25  108  	unlikely(__ret_warn_on);				\
+2da1ead4d5f7fa Kees Cook        2019-09-25  109  })
+3a6a62f96f168d Olof Johansson   2008-01-30  110  #endif
+3a6a62f96f168d Olof Johansson   2008-01-30  111  
+
+:::::: The code at line 99 was first introduced by commit
+:::::: d4bce140b4e739bceb4e239d4842cf8f346c1e0f bug: clean up helper macros to remove __WARN_TAINT()
+
+:::::: TO: Kees Cook <keescook@chromium.org>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

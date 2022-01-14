@@ -2,200 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FCB48F206
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 481A448F20C
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiANV33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 16:29:29 -0500
-Received: from mga05.intel.com ([192.55.52.43]:51834 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229545AbiANV33 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 16:29:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642195768; x=1673731768;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eL8cbg/YE44wHLkkTQqnQq0nvxsy4VO/CjAQAKS5k2A=;
-  b=aAFSS2YGbZDm7QyvdYqlu3tDo3iwGEsg9o6W+na9xI0dFJeCwhKyVNi9
-   N3xphNWOR1D911nS/dV5y0i7Bp1QEdBHAoo5oE9zUnqNMsNKcoHf4AgHn
-   mzX2ABFMPWfzY0X6Y28lxFYjbh3u2qrHgURX56OJXZBw5zLcWXq8rC1vb
-   6CvEB8ChXoQoxpjLPaaLUL1dxHRtB/Q+H8OpXGGX4V2QPbX5+hFbtj5M1
-   oPFsF1fI2uX1IcagnMLdCtn2MkK6/DMaD4jorIlFRW5sWSWMLpi7DzHlr
-   uHchm92xB43A29K60D/A86N5g/zmNa4d1pMysEsE/owzZo00Cz70ZjduW
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="330682019"
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="330682019"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 13:29:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,289,1635231600"; 
-   d="scan'208";a="670977644"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Jan 2022 13:29:27 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8U8U-00090x-PZ; Fri, 14 Jan 2022 21:29:26 +0000
-Date:   Sat, 15 Jan 2022 05:28:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jammy Huang <jammy_huang@aspeedtech.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [hverkuil-media-tree:for-v5.18f 76/82]
- drivers/media/platform/aspeed-video.c:977:5: warning: format specifies type
- 'unsigned int' but the argument has type 'dma_addr_t' (aka 'unsigned long
- long')
-Message-ID: <202201150524.D0pO65rp-lkp@intel.com>
+        id S229849AbiANVa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 16:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229837AbiANVaz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 16:30:55 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034AFC061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 13:30:55 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id y14so14016029oia.9
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 13:30:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=qzWKW58EHMRYfJEMWdh6ZI9TALsJ363+iOZxWHKT5Dg=;
+        b=m+tA33y4EKPBF5RGvo85oy9HWU3abLrzxeiKVsLD9tVTojyWnpMfPiGManmCHq+SJa
+         jUCYY4SnECxcwj0qpyLRNSTBNh11tWxEcT5GvTDzcAsjz8ZAvy9YRLFECkOSyGWKolcO
+         smb+cvls8PdAvykD60pN2/GL9MWc0BTWbKWjw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=qzWKW58EHMRYfJEMWdh6ZI9TALsJ363+iOZxWHKT5Dg=;
+        b=R7BTUKKXKql7T1U9ks/krG8kfMXLdTC1jq85GMhQaPDNJQWC54LaUtLFjCBQ+PvT9C
+         FOvCAHn+UQPWcd0bUaN1En4GUk9AjtN6beF2Aqsvp0L+0kh+koJ9f6sm/MgzABu4z/uV
+         W2g1fer4/lkBdCkceDNgIB4AtvH4zyYyCzjrguN685IAsRj5M1pZ9Qb3ohNmf+ieoD0R
+         iaqNyjvjs+q3tnQ3NxyY2gUNy5AqRYO0IcSfOZF9XvzQShfVGjhypxYtYKfe7ZSCm07i
+         ywFMFk+lndvG5RJ+bZ1Jk/HM1feWM9EUGf72VSaBS76nsVgcJumooc5GkJrL2+Uk9td7
+         B5xg==
+X-Gm-Message-State: AOAM531p3GPQl3k3h9VE1zZI9QrVy2LV4aaJX2OduockjQbsbtMRlWIJ
+        EghCwuLdGilO41ay9jJZugDk8V5Cv3b90JrQUwWc/w==
+X-Google-Smtp-Source: ABdhPJzLzmiokzwTquHXvpd04mD3pjLPkUF9enSFzCrjicEdCXOV9BJ3Pf4eqRXnVC2O0O5rr5vYBYKUyd0cJHUJnuk=
+X-Received: by 2002:aca:a953:: with SMTP id s80mr14644271oie.164.1642195854341;
+ Fri, 14 Jan 2022 13:30:54 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 14 Jan 2022 15:30:53 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <69a10908622512c60790f97942731a8ab989b727.camel@mediatek.com>
+References: <20220106214556.2461363-1-swboyd@chromium.org> <20220106214556.2461363-26-swboyd@chromium.org>
+ <1a3b368eb891ca55c33265397cffab0b9f128737.camel@mediatek.com>
+ <CAE-0n53Y3WRy4_QvUm9k9wjjWV7adMDQcK_+1ji4+W25SSeGwg@mail.gmail.com>
+ <ff81bc1fe1f1c2060fcf03ba14f1bef584c47599.camel@mediatek.com>
+ <CAE-0n53FAHDmCznJ35Xh2aTwXBVwukAM3ioKx8SU9VowSaQSqA@mail.gmail.com> <69a10908622512c60790f97942731a8ab989b727.camel@mediatek.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 14 Jan 2022 15:30:53 -0600
+Message-ID: <CAE-0n53ao52UX3sJ67UQ3dgj0-DZ0xTeo-NrmW5YVAuXfAnxZw@mail.gmail.com>
+Subject: Re: [PATCH v5 25/32] iommu/mtk: Migrate to aggregate driver
+To:     Yong Wu <yong.wu@mediatek.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Saravana Kannan <saravanak@google.com>,
+        linux-mediatek@lists.infradead.org,
+        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.18f
-head:   97dd85f0caf1ad96c275147583c46f8ee12308fc
-commit: 63c049607882d11ee1cce0c739113c8dfd7fed02 [76/82] media: aspeed: add more debug log messages
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220115/202201150524.D0pO65rp-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree for-v5.18f
-        git checkout 63c049607882d11ee1cce0c739113c8dfd7fed02
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/platform/
+Quoting Yong Wu (2022-01-14 01:06:31)
+> On Wed, 2022-01-12 at 20:25 -0800, Stephen Boyd wrote:
+> > >
+> > > [    2.654526] ------------[ cut here ]------------
+> > > [    2.655558] refcount_t: addition on 0; use-after-free.
+> > >
+> > > After this patch, the aggregate_driver flow looks ok. But our
+> > > driver
+> > > still aborts like this:
+> > >
+> > > [    2.721316] Unable to handle kernel NULL pointer dereference at
+> > > virtual address 0000000000000000
+> > > ...
+> > > [    2.731658] pc :
+> > > mtk_smi_larb_config_port_gen2_general+0xa4/0x138
+> > > [    2.732434] lr : mtk_smi_larb_resume+0x54/0x98
+> > > ...
+> > > [    2.742457] Call trace:
+> > > [    2.742768]  mtk_smi_larb_config_port_gen2_general+0xa4/0x138
+> > > [    2.743496]  pm_generic_runtime_resume+0x2c/0x48
+> > > [    2.744090]  __genpd_runtime_resume+0x30/0xa8
+> > > [    2.744648]  genpd_runtime_resume+0x94/0x2c8
+> > > [    2.745191]  __rpm_callback+0x44/0x150
+> > > [    2.745669]  rpm_callback+0x6c/0x78
+> > > [    2.746114]  rpm_resume+0x314/0x558
+> > > [    2.746559]  __pm_runtime_resume+0x3c/0x88
+> > > [    2.747080]  pm_runtime_get_suppliers+0x7c/0x110
+> > > [    2.747668]  __driver_probe_device+0x4c/0xe8
+> > > [    2.748212]  driver_probe_device+0x44/0x130
+> > > [    2.748745]  __device_attach_driver+0x98/0xd0
+> > > [    2.749300]  bus_for_each_drv+0x68/0xd0
+> > > [    2.749787]  __device_attach+0xec/0x148
+> > > [    2.750277]  device_attach+0x14/0x20
+> > > [    2.750733]  bus_rescan_devices_helper+0x50/0x90
+> > > [    2.751319]  bus_for_each_dev+0x7c/0xd8
+> > > [    2.751806]  bus_rescan_devices+0x20/0x30
+> > > [    2.752315]  __component_add+0x7c/0xa0
+> > > [    2.752795]  component_add+0x14/0x20
+> > > [    2.753253]  mtk_smi_larb_probe+0xe0/0x120
+> > >
+> > > This is because the device runtime_resume is called before the bind
+> > > operation(In our case this detailed function is mtk_smi_larb_bind).
+> > > The issue doesn't happen without this patchset. I'm not sure the
+> > > right
+> > > sequence. If we should fix in mediatek driver, the patch could be:
+> >
+> > Oh, the runtime PM is moved around with these patches. The aggregate
+> > device is runtime PM enabled before the probe is called,
+>
+> In our case, the component device may probe before the aggregate
+> device. thus the component device runtime PM has already been enabled
+> when aggregate device probe.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This is always the case. The component device always probes before the
+aggregate device because the component device registers with the
+component framework. But the component device can decide to enable
+runtime PM during driver probe or during component bind.
 
-All warnings (new ones prefixed by >>):
+>
+> > and there are
+> > supplier links made to each component, so each component is runtime
+> > resumed before the aggregate probe function is called.
+>
+> Yes. This is the current flow.
 
->> drivers/media/platform/aspeed-video.c:977:5: warning: format specifies type 'unsigned int' but the argument has type 'dma_addr_t' (aka 'unsigned long long') [-Wformat]
-                            video->srcs[0].dma, video->srcs[0].size);
-                            ^~~~~~~~~~~~~~~~~~
-   include/media/v4l2-common.h:74:42: note: expanded from macro 'v4l2_dbg'
-                           v4l2_printk(KERN_DEBUG, dev, fmt , ## arg);     \
-                                                        ~~~      ^~~
-   include/media/v4l2-common.h:58:44: note: expanded from macro 'v4l2_printk'
-           printk(level "%s: " fmt, (dev)->name , ## arg)
-                               ~~~                   ^~~
-   include/linux/printk.h:450:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/media/platform/aspeed-video.c:979:5: warning: format specifies type 'unsigned int' but the argument has type 'dma_addr_t' (aka 'unsigned long long') [-Wformat]
-                            video->srcs[1].dma, video->srcs[1].size);
-                            ^~~~~~~~~~~~~~~~~~
-   include/media/v4l2-common.h:74:42: note: expanded from macro 'v4l2_dbg'
-                           v4l2_printk(KERN_DEBUG, dev, fmt , ## arg);     \
-                                                        ~~~      ^~~
-   include/media/v4l2-common.h:58:44: note: expanded from macro 'v4l2_printk'
-           printk(level "%s: " fmt, (dev)->name , ## arg)
-                               ~~~                   ^~~
-   include/linux/printk.h:450:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/media/platform/aspeed-video.c:1806:25: warning: format specifies type 'unsigned int' but the argument has type 'dma_addr_t' (aka 'unsigned long long') [-Wformat]
-                    VE_JPEG_HEADER_SIZE, video->jpeg.dma);
-                                         ^~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
-           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                    ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   3 warnings generated.
+Got it.
 
+>
+> > It means that all
+> > the component drivers need to have their resources ready to power on
+> > before their component_bind() callback is made.
+>
+> Sorry, I don't understand here well. In this case, The component
+> drivers prepare the resource for power on in the component_bind since
+> the resource comes from the aggregate driver. Thus, we expect the
+> component_bind run before the runtime resume callback.
 
-vim +977 drivers/media/platform/aspeed-video.c
+What resource comes from the aggregate device that the component device
+manages in runtime PM?
 
-   916	
-   917	static void aspeed_video_set_resolution(struct aspeed_video *video)
-   918	{
-   919		struct v4l2_bt_timings *act = &video->active_timings;
-   920		unsigned int size = act->width * act->height;
-   921	
-   922		/* Set capture/compression frame sizes */
-   923		aspeed_video_calc_compressed_size(video, size);
-   924	
-   925		if (video->active_timings.width == 1680) {
-   926			/*
-   927			 * This is a workaround to fix a silicon bug on A1 and A2
-   928			 * revisions. Since it doesn't break capturing operation of
-   929			 * other revisions, use it for all revisions without checking
-   930			 * the revision ID. It picked 1728 which is a very next
-   931			 * 64-pixels aligned value to 1680 to minimize memory bandwidth
-   932			 * and to get better access speed from video engine.
-   933			 */
-   934			aspeed_video_write(video, VE_CAP_WINDOW,
-   935					   1728 << 16 | act->height);
-   936			size += (1728 - 1680) * video->active_timings.height;
-   937		} else {
-   938			aspeed_video_write(video, VE_CAP_WINDOW,
-   939					   act->width << 16 | act->height);
-   940		}
-   941		aspeed_video_write(video, VE_COMP_WINDOW,
-   942				   act->width << 16 | act->height);
-   943		aspeed_video_write(video, VE_SRC_SCANLINE_OFFSET, act->width * 4);
-   944	
-   945		/* Don't use direct mode below 1024 x 768 (irqs don't fire) */
-   946		if (size < DIRECT_FETCH_THRESHOLD) {
-   947			v4l2_dbg(1, debug, &video->v4l2_dev, "Capture: Sync Mode\n");
-   948			aspeed_video_write(video, VE_TGS_0,
-   949					   FIELD_PREP(VE_TGS_FIRST,
-   950						      video->frame_left - 1) |
-   951					   FIELD_PREP(VE_TGS_LAST,
-   952						      video->frame_right));
-   953			aspeed_video_write(video, VE_TGS_1,
-   954					   FIELD_PREP(VE_TGS_FIRST, video->frame_top) |
-   955					   FIELD_PREP(VE_TGS_LAST,
-   956						      video->frame_bottom + 1));
-   957			aspeed_video_update(video, VE_CTRL, 0, VE_CTRL_INT_DE);
-   958		} else {
-   959			v4l2_dbg(1, debug, &video->v4l2_dev, "Capture: Direct Mode\n");
-   960			aspeed_video_update(video, VE_CTRL, 0, VE_CTRL_DIRECT_FETCH);
-   961		}
-   962	
-   963		size *= 4;
-   964	
-   965		if (size != video->srcs[0].size) {
-   966			if (video->srcs[0].size)
-   967				aspeed_video_free_buf(video, &video->srcs[0]);
-   968			if (video->srcs[1].size)
-   969				aspeed_video_free_buf(video, &video->srcs[1]);
-   970	
-   971			if (!aspeed_video_alloc_buf(video, &video->srcs[0], size))
-   972				goto err_mem;
-   973			if (!aspeed_video_alloc_buf(video, &video->srcs[1], size))
-   974				goto err_mem;
-   975	
-   976			v4l2_dbg(1, debug, &video->v4l2_dev, "src buf0 addr(%#x) size(%d)\n",
- > 977				 video->srcs[0].dma, video->srcs[0].size);
-   978			v4l2_dbg(1, debug, &video->v4l2_dev, "src buf1 addr(%#x) size(%d)\n",
-   979				 video->srcs[1].dma, video->srcs[1].size);
-   980			aspeed_video_write(video, VE_SRC0_ADDR, video->srcs[0].dma);
-   981			aspeed_video_write(video, VE_SRC1_ADDR, video->srcs[1].dma);
-   982		}
-   983	
-   984		return;
-   985	
-   986	err_mem:
-   987		dev_err(video->dev, "Failed to allocate source buffers\n");
-   988	
-   989		if (video->srcs[0].size)
-   990			aspeed_video_free_buf(video, &video->srcs[0]);
-   991	}
-   992	
+>
+> Another solution is moving the component's pm_runtime_enable into the
+> component_bind(It's mtk_smi_larb_bind here), then the runtime callback
+> is called after component_bind in which the resource for power on is
+> ready.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This sounds more correct to me. I'm not an expert on runtime PM though
+as I always have to read the code to remember how it works. if the
+device isn't ready for runtime PM until the component bind function is
+called then runtime PM shouldn't be enabled on the component device.

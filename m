@@ -2,89 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2EEB48F1D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 669DD48F1DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 22:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiANVHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 16:07:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiANVHf (ORCPT
+        id S229631AbiANVMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 16:12:02 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:23524 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229602AbiANVMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 16:07:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3069DC06161C;
-        Fri, 14 Jan 2022 13:07:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECA88B82A28;
-        Fri, 14 Jan 2022 21:07:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43703C36AE9;
-        Fri, 14 Jan 2022 21:07:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642194452;
-        bh=ZL7v3SjQIdKufAKqWNrLkle1oD9dG0wh6lJBBoIu6+w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z7eLuaFKMW1RHr6hy8fkkVtQhncSszfBq+4pa8xmWkX/FsFkoPdfFIKntonMDNs4M
-         Hji2k3S74pwnfTZAdyTKX4sZjWhbcQX3CWFVhHpnr1VfFHV2zbf7SFFo+/pGeb8c1C
-         dqD1ETWX7AJ9Hhd/Q3XArjBu9OFctdDPFv7u2Q7sVXQjmvazDBxwhYsN9LKqcKUca/
-         eBByR+O1t4QxYx4SxTGP9xklOYqadIO+S5qxK/zF0isaUuExb9UJ5xVmYuTUf2G1i3
-         XNDrwRBaBdKsPRbQMBMlSB4sycaILXf3ACL8PrU031idel235b2H8qmJd0CePTgsoF
-         4eSVhs48OyKLQ==
-Date:   Fri, 14 Jan 2022 23:07:19 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     Tadeusz Struk <tstruk@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] tpm: Fix error handling in async work
-Message-ID: <YeHmB0BWgfVGPL55@iki.fi>
-References: <20220111055228.1830-1-tstruk@gmail.com>
- <Yd8fY/wixkXhXEFH@iki.fi>
- <3c2eeee7-0d3e-8000-67ad-3054f229cbe0@linaro.org>
+        Fri, 14 Jan 2022 16:12:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642194721; x=1673730721;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=/4GBNMPdwBS9cM9z/abzaZUdcyEiqvofhTDmKCg2xWI=;
+  b=jmlWf9ryHI7dA5xgW21lsp+D/nMS5F4E5Uuvn2zK/zoUCXfUDrm8sEyp
+   P+g0SqRwCya4Q9vuBXkCk4s/cAnbZUxZbMfv7Q7fls+QmpytlAj8jumvr
+   snT5PuvDK5hp4BTKpKeUdHjHULPgHnH8xiil44OWJ66HMcS7bGT+5mVNz
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Jan 2022 13:12:01 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 13:12:00 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 14 Jan 2022 13:12:00 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 14 Jan 2022 13:11:59 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
+        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v15 0/4] group dp driver related patches into one series
+Date:   Fri, 14 Jan 2022 13:11:46 -0800
+Message-ID: <1642194710-2512-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c2eeee7-0d3e-8000-67ad-3054f229cbe0@linaro.org>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 10:47:29AM -0800, Tadeusz Struk wrote:
-> On 1/12/22 10:35, Jarkko Sakkinen wrote:
-> > These look good to me! Thank you. I'm in process of compiling a test
-> > kernel.
-> 
-> Thanks Jarkko,
-> You can run the new test before and after applying the change and see
-> how it behaves. Also just noticed a mistake in the comment, sorry but
-> it was quite late when I sent it.
-> 
-> +	/*
-> +	 * If ret is > 0 then tpm_dev_transmit returned the size of the
-> +	 * response. If ret is < 0 then tpm_dev_transmit failed and
-> +	 * returned a return code.
-> +	 */
-> 
-> In the above could you please replace:
-> 
-> s/returned a return code/returned an error code/
-> 
-> before applying the patch. I would appreciate that.
+Group below 4 dp driver related patches into one series.
 
-Please send new versions, there's also this:
+Kuogee Hsieh (4):
+  drm/msm/dp: do not initialize phy until plugin interrupt received
+  drm/msm/dp:  populate connector of struct  dp_panel
+  drm/msm/dp: add support of tps4 (training pattern 4) for HBR3
+  drm/msm/dp: stop link training after link training 2 failed
 
-def test_flush_invlid_context()
+ drivers/gpu/drm/msm/dp/dp_catalog.c |  12 ++---
+ drivers/gpu/drm/msm/dp/dp_catalog.h |   2 +-
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    | 100 ++++++++++++++++------------------
+ drivers/gpu/drm/msm/dp/dp_ctrl.h    |   8 +--
+ drivers/gpu/drm/msm/dp/dp_display.c | 105 +++++++++++++++++++++---------------
+ 5 files changed, 118 insertions(+), 109 deletions(-)
 
-I'd figure "invlid" should be  "invalid"
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-You can add, as these changes do not change the semantics of the
-patches:
-
-Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-It's always best if you author the final version, as then a clear
-reference on what was accepted exist at lore.kernel.org.
-
-BR, Jarkko

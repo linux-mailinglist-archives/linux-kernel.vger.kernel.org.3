@@ -2,236 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6B748F180
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 21:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10E848F186
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 21:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244417AbiANUfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 15:35:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41502 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239834AbiANUf0 (ORCPT
+        id S239834AbiANUiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 15:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235529AbiANUiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 15:35:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642192526;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=amgtrqtQMjyUksxLoOVhxEX1FtphBXOPchfSfNb8y6E=;
-        b=DqlvhEFzjkMkKhR7F8yN4OGYbwXYTty9YvYhvJAMPdgiYOsIaSRlZqEjBJ4UWHOwBF/6Uz
-        Mos5cSXdQBp0Ko9JeXJnIqZeDiXHb+e3izDmEH7wqLu8bxz2+E/BGr94maU/Gz0WtjsOwi
-        Q2UJ9Ia4wqE8QYXosLAw6GoCsKmFSrw=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-543-5000ofk7OVSXNvC07RpKXA-1; Fri, 14 Jan 2022 15:35:24 -0500
-X-MC-Unique: 5000ofk7OVSXNvC07RpKXA-1
-Received: by mail-ed1-f72.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso9075508edt.20
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:35:23 -0800 (PST)
+        Fri, 14 Jan 2022 15:38:00 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5398DC06173E
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:38:00 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id e3so31208744lfc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 12:38:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HUGzTTyriTXZ8n39Zh2yraY+YbTAIxFn2aNWIIs8oNQ=;
+        b=lHnbPLnlJnWZf4BOMgmL2WqcLhiNaGPR/dRyJ+W4VokrCg0QyE0qjyGQzu70znnfRN
+         JgnFwglHtOeXECzW+ZZgqy0HEoSeFG5lKatmVX0JLcK5El8sDxc/Ct8e5poffUjcdpcE
+         DMt1jsK2b2xhzdqlUCuoCjI69QqxErIeO3636yS7B7BiWp56sJzMi39LWt2YiSAgPyfQ
+         W/J8cKN7U2ztZfhK34tF9fzmwv7A2tHK3bY77Mp+lgO3GhAb6TM3w9H79V+Rjf0Mfc5z
+         ocNlQgM9I0QO7kTjTNPSGLMy/pb7iz77FLe9OZ5JsnfCR1SEs9GYj4XY/xnRWn60RcHB
+         gHtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=amgtrqtQMjyUksxLoOVhxEX1FtphBXOPchfSfNb8y6E=;
-        b=2XWHmFQXwBVHmVSTQJgVrVCaAOEFtBay2zSNEXjqZ01aHvk8NpFX+0D19CtSklmtIW
-         373MMBZYntIOHsulGguf+qZ0eYc6pN4G/Q9neM3AOCWf+TYBPnE3g+fyoGOOj2qhdC6w
-         QyqwMLEXCZpeM5aH2V/AkdPb0GtDcbZ9zLyV/1x+bqFMaVwcyjNUN1OEpjYpuhpM0JRO
-         uX0aC++gdiwcU61qOSDNIlFnG9dya3vOZ51ZFjMp6R8pQxzxsGLmFN5hV5iznXi2J3Pc
-         LTnVi9YkoePobvRHvqnWH+T4526sZiX55PBgPPmzOXBcCWu6Q7jRT18GFdI+94j4p4Q6
-         tsyQ==
-X-Gm-Message-State: AOAM5301csV29kFdslzxnRGWyEDCOQ8KmFMfeHSmF89S/aXaJHovsoRF
-        FShhkURiVMN0RUDI5PJId2uKo9J9dZk5G8Q+B2wH/tOst++9orPHqzUjL+nHorVDwjsoN9SKL6T
-        6CRltC9tEqc5SZn9qaey80ji8
-X-Received: by 2002:a17:906:819:: with SMTP id e25mr4853837ejd.63.1642192522650;
-        Fri, 14 Jan 2022 12:35:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwPI8pIhpFi/ZyGwDQrEvy99Xsw6RBcz7cfDlKQfktwhMLpdTccY1eNq0Y8ynYb5emG9NQgwg==
-X-Received: by 2002:a17:906:819:: with SMTP id e25mr4853826ejd.63.1642192522443;
-        Fri, 14 Jan 2022 12:35:22 -0800 (PST)
-Received: from redhat.com ([2.55.154.210])
-        by smtp.gmail.com with ESMTPSA id a20sm2709266eda.21.2022.01.14.12.35.16
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HUGzTTyriTXZ8n39Zh2yraY+YbTAIxFn2aNWIIs8oNQ=;
+        b=3t0Io/jRkdEsZj2Dur/8SGr7bbqttDqqWcCQ4cgtmdX1ST/+7rfuRM3e8GXZkUB0wc
+         7KqorlBKLTsAzMRR6o9u7cQSBc018p4ZM6Q2j8AngpPr1bH7KxSrWB05UJfM7mgL271Y
+         C500KqhbqIGrS/yAuUtsR2OdKUNIK4p7sjUt5M2Vw6rqBwR33nEx3QDJZ7I7bY5GV5gy
+         MByTGzvbRLoMBB4auGKg12IPt+C5jodSUae7mT8jIwslq/T0XuEswCgoe4ottX6w9qlR
+         04bQatbYv0MBcD91IOBnc5YBLGgJYKOmCbci98U2/YGhNZab9V49XG4DGzvb9FlkGTIx
+         u+6Q==
+X-Gm-Message-State: AOAM530j5dauWCnlf6FZU9S5Du+k4yy5/i5PHxhLXs2hrRXgTTmd/lH/
+        URpeEhVZADARbivvk+zOcDm2Qw==
+X-Google-Smtp-Source: ABdhPJyeB8FDojDbTY19RElb4UtHYMamhY3DprjLgedvmvQQCZDyifUK3I/wm9pcJvBq8VX6y1Z4jA==
+X-Received: by 2002:a05:6512:3044:: with SMTP id b4mr1614836lfb.7.1642192678674;
+        Fri, 14 Jan 2022 12:37:58 -0800 (PST)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id c3sm371492lff.261.2022.01.14.12.37.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 12:35:21 -0800 (PST)
-Date:   Fri, 14 Jan 2022 15:35:15 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        christophe.jaillet@wanadoo.fr, dapeng1.mi@intel.com,
-        david@redhat.com, elic@nvidia.com, eperezma@redhat.com,
-        flyingpenghao@gmail.com, flyingpeng@tencent.com,
-        gregkh@linuxfoundation.org, guanjun@linux.alibaba.com,
-        jasowang@redhat.com, jean-philippe@linaro.org,
-        jiasheng@iscas.ac.cn, johan@kernel.org, keescook@chromium.org,
-        labbott@kernel.org, lingshan.zhu@intel.com, lkp@intel.com,
-        luolikang@nsfocus.com, lvivier@redhat.com, mst@redhat.com,
-        pasic@linux.ibm.com, sgarzare@redhat.com, somlo@cmu.edu,
-        trix@redhat.com, wu000273@umn.edu, xianting.tian@linux.alibaba.com,
-        xuanzhuo@linux.alibaba.com, yun.wang@linux.alibaba.com
-Subject: [GIT PULL] virtio,vdpa,qemu_fw_cfg: features, cleanups, fixes
-Message-ID: <20220114153515-mutt-send-email-mst@kernel.org>
+        Fri, 14 Jan 2022 12:37:58 -0800 (PST)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chanho Park <chanho61.park@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] pinctrl: samsung: Remove EINT handler for Exynos850 ALIVE and CMGP gpios
+Date:   Fri, 14 Jan 2022 22:37:57 +0200
+Message-Id: <20220114203757.4860-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Mutt-Fcc: =sent
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit c9e6606c7fe92b50a02ce51dda82586ebdf99b48:
+GPIO_ALIVE and GPIO_CMGP blocks in Exynos850 SoC don't have EINT
+capabilities (like EINT_SVC register), and there are no corresponding
+interrupts wired to GIC. Instead those blocks have wake-up interrupts
+for each pin. The ".eint_gpio_init" callbacks were specified by mistake
+for these blocks, when porting pinctrl code from downstream kernel. That
+leads to error messages like this:
 
-  Linux 5.16-rc8 (2022-01-02 14:23:25 -0800)
+    samsung-pinctrl 11850000.pinctrl: irq number not available
 
-are available in the Git repository at:
+Remove ".eint_gpio_init" for pinctrl_alive and pinctrl_gpmc to fix this
+error. This change doesn't affect proper interrupt handling for related
+pins, as all those pins are handled in ".eint_wkup_init".
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+Fixes: cdd3d945dcec ("pinctrl: samsung: Add Exynos850 SoC specific data")
+Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+---
+ drivers/pinctrl/samsung/pinctrl-exynos-arm64.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-for you to fetch changes up to f04ac267029c8063fc35116b385cd37656b3c81a:
-
-  virtio: acknowledge all features before access (2022-01-14 14:58:41 -0500)
-
-----------------------------------------------------------------
-virtio,vdpa,qemu_fw_cfg: features, cleanups, fixes
-
-IOMMU bypass support in virtio-iommu
-partial support for < MAX_ORDER - 1 granularity for virtio-mem
-driver_override for vdpa
-sysfs ABI documentation for vdpa
-multiqueue config support for mlx5 vdpa
-
-Misc fixes, cleanups.
-
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-
-----------------------------------------------------------------
-Christophe JAILLET (1):
-      eni_vdpa: Simplify 'eni_vdpa_probe()'
-
-Dapeng Mi (1):
-      virtio: fix a typo in function "vp_modern_remove" comments.
-
-David Hildenbrand (2):
-      virtio-mem: prepare page onlining code for granularity smaller than MAX_ORDER - 1
-      virtio-mem: prepare fake page onlining code for granularity smaller than MAX_ORDER - 1
-
-Eli Cohen (20):
-      net/mlx5_vdpa: Offer VIRTIO_NET_F_MTU when setting MTU
-      vdpa/mlx5: Fix wrong configuration of virtio_version_1_0
-      vdpa: Provide interface to read driver features
-      vdpa/mlx5: Distribute RX virtqueues in RQT object
-      vdpa: Sync calls set/get config/status with cf_mutex
-      vdpa: Read device configuration only if FEATURES_OK
-      vdpa: Allow to configure max data virtqueues
-      vdpa/mlx5: Fix config_attr_mask assignment
-      vdpa/mlx5: Support configuring max data virtqueue
-      vdpa: Add support for returning device configuration information
-      vdpa/mlx5: Restore cur_num_vqs in case of failure in change_num_qps()
-      vdpa: Support reporting max device capabilities
-      vdpa/mlx5: Report max device capabilities
-      vdpa/vdpa_sim: Configure max supported virtqueues
-      vdpa: Use BIT_ULL for bit operations
-      vdpa/vdpa_sim_net: Report max device capabilities
-      vdpa: Avoid taking cf_mutex lock on get status
-      vdpa: Protect vdpa reset with cf_mutex
-      vdpa/mlx5: Fix is_index_valid() to refer to features
-      vdpa/mlx5: Fix tracking of current number of VQs
-
-Eugenio Pérez (2):
-      vdpa: Avoid duplicate call to vp_vdpa get_status
-      vdpa: Mark vdpa_config_ops.get_vq_notification as optional
-
-Guanjun (1):
-      vduse: moving kvfree into caller
-
-Jean-Philippe Brucker (5):
-      iommu/virtio: Add definitions for VIRTIO_IOMMU_F_BYPASS_CONFIG
-      iommu/virtio: Support bypass domains
-      iommu/virtio: Sort reserved regions
-      iommu/virtio: Pass end address to viommu_add_mapping()
-      iommu/virtio: Support identity-mapped domains
-
-Johan Hovold (4):
-      firmware: qemu_fw_cfg: fix NULL-pointer deref on duplicate entries
-      firmware: qemu_fw_cfg: fix kobject leak in probe error path
-      firmware: qemu_fw_cfg: fix sysfs information leak
-      firmware: qemu_fw_cfg: remove sysfs entries explicitly
-
-Laura Abbott (1):
-      vdpa: clean up get_config_size ret value handling
-
-Michael S. Tsirkin (5):
-      virtio: wrap config->reset calls
-      hwrng: virtio - unregister device before reset
-      virtio_ring: mark ring unused on error
-      virtio: unexport virtio_finalize_features
-      virtio: acknowledge all features before access
-
-Peng Hao (2):
-      virtio/virtio_mem: handle a possible NULL as a memcpy parameter
-      virtio/virtio_pci_legacy_dev: ensure the correct return value
-
-Stefano Garzarella (2):
-      docs: document sysfs ABI for vDPA bus
-      vdpa: add driver_override support
-
-Xianting Tian (1):
-      vhost/test: fix memory leak of vhost virtqueues
-
-Zhu Lingshan (1):
-      ifcvf/vDPA: fix misuse virtio-net device config size for blk dev
-
-王贇 (1):
-      virtio-pci: fix the confusing error message
-
- Documentation/ABI/testing/sysfs-bus-vdpa   |  57 ++++++++++
- MAINTAINERS                                |   1 +
- arch/um/drivers/virt-pci.c                 |   2 +-
- drivers/block/virtio_blk.c                 |   4 +-
- drivers/bluetooth/virtio_bt.c              |   2 +-
- drivers/char/hw_random/virtio-rng.c        |   2 +-
- drivers/char/virtio_console.c              |   4 +-
- drivers/crypto/virtio/virtio_crypto_core.c |   8 +-
- drivers/firmware/arm_scmi/virtio.c         |   2 +-
- drivers/firmware/qemu_fw_cfg.c             |  21 ++--
- drivers/gpio/gpio-virtio.c                 |   2 +-
- drivers/gpu/drm/virtio/virtgpu_kms.c       |   2 +-
- drivers/i2c/busses/i2c-virtio.c            |   2 +-
- drivers/iommu/virtio-iommu.c               | 115 ++++++++++++++++----
- drivers/net/caif/caif_virtio.c             |   2 +-
- drivers/net/virtio_net.c                   |   4 +-
- drivers/net/wireless/mac80211_hwsim.c      |   2 +-
- drivers/nvdimm/virtio_pmem.c               |   2 +-
- drivers/rpmsg/virtio_rpmsg_bus.c           |   2 +-
- drivers/scsi/virtio_scsi.c                 |   2 +-
- drivers/vdpa/alibaba/eni_vdpa.c            |  28 +++--
- drivers/vdpa/ifcvf/ifcvf_base.c            |  41 ++++++--
- drivers/vdpa/ifcvf/ifcvf_base.h            |   9 +-
- drivers/vdpa/ifcvf/ifcvf_main.c            |  40 +++----
- drivers/vdpa/mlx5/net/mlx5_vnet.c          | 156 ++++++++++++++++-----------
- drivers/vdpa/vdpa.c                        | 163 +++++++++++++++++++++++++----
- drivers/vdpa/vdpa_sim/vdpa_sim.c           |  21 ++--
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c       |   2 +
- drivers/vdpa/vdpa_user/vduse_dev.c         |  19 +++-
- drivers/vdpa/virtio_pci/vp_vdpa.c          |  16 ++-
- drivers/vhost/test.c                       |   1 +
- drivers/vhost/vdpa.c                       |  12 +--
- drivers/virtio/virtio.c                    |  40 ++++---
- drivers/virtio/virtio_balloon.c            |   2 +-
- drivers/virtio/virtio_input.c              |   2 +-
- drivers/virtio/virtio_mem.c                | 114 +++++++++++++-------
- drivers/virtio/virtio_pci_legacy.c         |   2 +-
- drivers/virtio/virtio_pci_legacy_dev.c     |   4 +-
- drivers/virtio/virtio_pci_modern_dev.c     |   2 +-
- drivers/virtio/virtio_ring.c               |   4 +-
- drivers/virtio/virtio_vdpa.c               |   7 +-
- fs/fuse/virtio_fs.c                        |   4 +-
- include/linux/vdpa.h                       |  39 +++++--
- include/linux/virtio.h                     |   2 +-
- include/uapi/linux/vdpa.h                  |   6 ++
- include/uapi/linux/virtio_iommu.h          |   8 +-
- net/9p/trans_virtio.c                      |   2 +-
- net/vmw_vsock/virtio_transport.c           |   4 +-
- sound/virtio/virtio_card.c                 |   4 +-
- 49 files changed, 706 insertions(+), 286 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-vdpa
+diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+index 2e490e7696f4..4102ce955bd7 100644
+--- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
++++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+@@ -585,13 +585,11 @@ static const struct samsung_pin_ctrl exynos850_pin_ctrl[] __initconst = {
+ 		/* pin-controller instance 0 ALIVE data */
+ 		.pin_banks	= exynos850_pin_banks0,
+ 		.nr_banks	= ARRAY_SIZE(exynos850_pin_banks0),
+-		.eint_gpio_init = exynos_eint_gpio_init,
+ 		.eint_wkup_init = exynos_eint_wkup_init,
+ 	}, {
+ 		/* pin-controller instance 1 CMGP data */
+ 		.pin_banks	= exynos850_pin_banks1,
+ 		.nr_banks	= ARRAY_SIZE(exynos850_pin_banks1),
+-		.eint_gpio_init = exynos_eint_gpio_init,
+ 		.eint_wkup_init = exynos_eint_wkup_init,
+ 	}, {
+ 		/* pin-controller instance 2 AUD data */
+-- 
+2.30.2
 

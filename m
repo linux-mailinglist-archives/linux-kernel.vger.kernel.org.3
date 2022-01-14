@@ -2,189 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEBE48EFD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 19:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D6F48EFE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 19:31:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244089AbiANSZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 13:25:49 -0500
-Received: from foss.arm.com ([217.140.110.172]:36686 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236376AbiANSZs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 13:25:48 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF795ED1;
-        Fri, 14 Jan 2022 10:25:47 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 657E23F766;
-        Fri, 14 Jan 2022 10:25:46 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        John Keeping <john@metanate.com>
-Cc:     linux-rt-users@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RT] BUG in sched/cpupri.c
-In-Reply-To: <f2d50e78-dc7b-6851-f12e-d702fbfea826@arm.com>
-References: <Yb3vXx3DcqVOi+EA@donbot> <71ddbe51-2b7f-2b13-5f22-9013506471dc@arm.com> <87zgou6iq1.mognet@arm.com> <20211221164528.3c84543f.john@metanate.com> <31a47e99-6de3-76ec-62ad-9c98d092ead5@arm.com> <87r1a4775a.mognet@arm.com> <f2d50e78-dc7b-6851-f12e-d702fbfea826@arm.com>
-Date:   Fri, 14 Jan 2022 18:25:35 +0000
-Message-ID: <87h7a66uow.mognet@arm.com>
+        id S242765AbiANSbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 13:31:47 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:56774 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242195AbiANSbq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 13:31:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=RTzI+d+fMBcYInPYiT4CX8GwWa7IMrsmasiltAjndlM=; b=WP6rf8fS1YOOJR1rMGrP4Pzyia
+        OZirfWdCjlO5B2/gvw73TjANJSM/B4pmejtWBRQwz+kRgUHriClZF4mht3/eUjW3+Fv/GPNlttNyN
+        ajKcP+YkJNx6aIePUEAz4X+myaHZeRtkFwbiO+RX4IrPLXjdFtsEVDlUmIyGYB5X7D+1dYrrzheBz
+        tJ1kbU6V5q97N62GD6d+SvQEW1CmGVDst07mF/3MC0yMXKqRP2iXKB/dvITUUPj8jqOcZm+oaKvul
+        1z//7peftuOzsoPe0Vjzb9qrgcggcSXBrw2tHacZsxp61XPrJcWfly7W99kX1S8gCmXefw2xBHEeN
+        Sb2Qo65A==;
+Received: from [177.215.76.11] (helo=localhost)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1n8RMR-0003yM-Ix; Fri, 14 Jan 2022 19:31:40 +0100
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        pmladek@suse.com
+Cc:     gpiccoli@igalia.com, kernel@gpiccoli.net, senozhatsky@chromium.org,
+        rostedt@goodmis.org, john.ogness@linutronix.de,
+        feng.tang@intel.com, kexec@lists.infradead.org, dyoung@redhat.com,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com
+Subject: [PATCH V3] panic: Move panic_print before kmsg dumpers
+Date:   Fri, 14 Jan 2022 15:30:46 -0300
+Message-Id: <20220114183046.428796-1-gpiccoli@igalia.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The panic_print setting allows users to collect more information in a
+panic event, like memory stats, tasks, CPUs backtraces, etc.
+This is a pretty interesting debug mechanism, but currently the print
+event happens *after* kmsg_dump(), meaning that pstore, for example,
+cannot collect a dmesg with the panic_print information.
 
-Trying to page this back in...
+This patch changes that in 2 ways:
 
-On 07/01/22 11:46, Dietmar Eggemann wrote:
-> On 22/12/2021 20:48, Valentin Schneider wrote:
->> On 22/12/21 18:46, Dietmar Eggemann wrote:
->>> On 21.12.21 17:45, John Keeping wrote:
->>>> On Tue, 21 Dec 2021 16:11:34 +0000
->>>> Valentin Schneider <valentin.schneider@arm.com> wrote:
->>>>
->>>>> On 20/12/21 18:35, Dietmar Eggemann wrote:
->
-> [...]
->
->>> switched_from_rt() -> rt_queue_pull_task(, pull_rt_task)
->>>   pull_rt_task()->tell_cpu_to_push()->irq_work_queue_on(&rq->rd->rto_push_work,)
->>>     rto_push_irq_work_func() -> push_rt_task(rq, true)
->>>
->>> seems to be the only way with pull=true.
->>>
->>> In my tests, rq->rt.rt_nr_running seems to be 0 when it happens.
->>>
->>> [   22.288537] CPU3 switched_to_rt: p=[ksoftirqd/3 35]
->>> [   22.288554] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] pi_task=[rcu_preempt 11] queued=1 running=0 prio=98 oldprio=120
->>> [   22.288636] CPU3 switched_from_rt: p=[ksoftirqd/3 35] rq->rt.rt_nr_running=0
->>>                                                          ^^^^^^^^^^^^^^^^^^^^^^
->>> [   22.288649] rt_mutex_setprio: CPU3 p=[ksoftirqd/3 35] queued=1 running=1 prio=120 oldprio=98
->>> [   22.288681] CPU3 push_rt_task: next_task=[rcu_preempt 11] migr_dis=1 rq->curr=[ksoftirqd/3 35] pull=1
->>>                                                              ^^^^^^^^^^                           ^^^^^^
->> 
->> mark_wakeup_next_waiter() first deboosts the previous owner and then
->> wakeups the next top waiter. Seems like you somehow have the wakeup happen
->> before the push_rt_task IRQ work is run. Also, tell_cpu_to_push() should
->> only pick a CPU that is in rq->rd->rto_mask, which requires having at least
->> 2 RT tasks there...
->
-> True, this_cpu has rt_nr_running = 0 and *cpu* has rt_nr_running >= 2:
->
->   mark_wakeup_next_waiter()
->
->     (1) /* deboost */
->     rt_mutex_adjust_prio()
->
->       rt_mutex_setprio(current, ...)
->
->         rq = __task_rq_lock(current, );
->         check_class_changed(rq, p, prev_class, oldprio)
->
->           switched_from_rt()
->
->             if (!task_on_rq_queued(p) || rq->rt.rt_nr_running)
->               return;
->
->             rt_queue_pull_task(rq)
->
->               queue_balance_callback(rq, ..., pull_rt_task);
->
->                 pull_rt_task()
->
->                   tell_cpu_to_push()
->
->                     *cpu* = rto_next_cpu(rq->rd)
->                     irq_work_queue_on(&rq->rd->rto_push_work, *cpu*)
->
->                       rto_push_irq_work_func()
->                         push_rt_task(rq, true) <-- !!!
->
->     (2) /* waking the top waiter */
->     rt_mutex_wake_q_add(wqh, waiter);
->
->> Now, that wakeup from the rtmutex unlock would give us a resched_curr() via
->> check_preempt_curr() if required, which is good, though I think we are
->> still missing some for sched_setscheduler() (there are no wakeups
->> there). So if we just have to live with an IRQ work popping in before we
->> get to preempt_schedule_irq() (or somesuch), then perhaps the below would
->> be sufficient.
->
-> I think that's the case here but we are on the RT overloaded CPU (*cpu*).
->
+(a) First, after a good discussion with Petr in the mailing-list[0],
+he noticed that one specific setting of panic_print (the console replay,
+bit 5) should not be executed before console proper flushing; hence we
+hereby split the panic_print_sys_info() function in upper and lower
+portions: if the parameter "after_kmsg_dumpers" is passed, only bit 5
+(the console replay thing) is evaluated and the function returns - this
+is the lower portion. Otherwise all other bits are checked and the
+function prints the user required information; this is the upper/earlier
+mode.
 
-So one thing I wasn't entirely clear on (and holidays didn't fix that) is
-the rt_queue_pull_task() from switched_from_rt() only happens if that rq
-has no other runnable RT tasks, so I don't quite see how the
-irq_work_queue_on() can end up as a self-IPI...
+(b) With the above change, we can safely insert a panic_print_sys_info()
+call up some lines, in order kmsg_dump() accounts this new information
+and exposes it through pstore or other kmsg dumpers. Notice that this
+new earlier call doesn't set "after_kmsg_dumpers" so we print the
+information set by user in panic_print, except the console replay that,
+if set, will be executed after the console flushing.
+Also, worth to notice we needed to guard the panic_print_sys_info(false)
+calls against double print - we use kexec_crash_loaded() helper for that
+(see discussion [1] for more details).
 
->> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
->> index ef8228d19382..8f3e3a1367b6 100644
->> --- a/kernel/sched/rt.c
->> +++ b/kernel/sched/rt.c
->> @@ -1890,6 +1890,16 @@ static int push_rt_task(struct rq *rq, bool pull)
->>  	if (!next_task)
->>  		return 0;
->>  
->> +	/*
->> +	 * It's possible that the next_task slipped in of higher priority than
->> +	 * current, or current has *just* changed priority.  If that's the case
->> +	 * just reschedule current.
->> +	 */
->> +	if (unlikely(next_task->prio < rq->curr->prio)) {
->> +		resched_curr(rq);
->> +		return 0;
->> +	}
->
-> IMHO, that's the bit which prevents the BUG.
->
-> But this would also prevent the case in which rq->curr is an RT task
-> with lower prio than next_task.
->
+In the first version of this patch we discussed the risks in the
+mailing-list [0], and seems this approach is the least terrible,
+despite still having risks of polluting the log with the bulk of
+information that panic_print may bring, losing older messages.
+In order to attenuate that, we've added a warning in the
+kernel-parameters.txt so that users enabling this mechanism consider
+to increase the log buffer size via "log_buf_len" as well.
 
-I think that's what we want - if current isn't the (logical) highest
-priority task on the runqueue, we should forgo push/pull and reschedule
-ASAP.
+Finally, another decision was to keep 2 panic_print_sys_info(false)
+calls (instead of just bringing it up some code lines and keep a single
+call) due to the panic notifiers: if kdump is not set, currently the
+panic_print information is collected after the notifiers and since
+it's a bit safer this way, we decided to keep it as is, only modifying
+the kdump case as per the previous commit [2] (see more details about
+this discussion also in thread [1]).
 
-> Also `rq->curr = migration/X` goes still though which is somehow fine
-> since find_lowest_rq() bails out for if (task->nr_cpus_allowed == 1).
->
-> And DL tasks (like sugov:X go through and they can have
-> task->nr_cpus_allowed > 1 (arm64 slow-switching boards with shared
-> freuency domains with schedutil). cpupri_find_fitness()->convert_prio()
-> can handle  task_pri, p->prio = -1 (CPUPRI_INVALID) although its somehow
-> by coincidence.
->
+[0] https://lore.kernel.org/lkml/20211230161828.121858-1-gpiccoli@igalia.com
+[1] https://lore.kernel.org/lkml/f25672a4-e4dd-29e8-b2db-f92dd9ff9f8a@igalia.com
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=5613b7538f69
 
-Right. This reminds me of:
-https://lore.kernel.org/lkml/jhjblbx7glh.mognet@arm.com/
+Cc: Feng Tang <feng.tang@intel.com>
+Cc: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+---
 
 
-> So maybe something like this:
->
+V3: Added a guard in the 2nd panic_print_sys_info(false) to prevent
+double print - thanks for catching this Petr!
 
-Ah, so you explicitely prevent rt.c::find_lowest_rq() invocations with a
-non-RT task... But what if current is an RT task that just got deboosted,
-so that next_task->prio < rq->curr->prio? IMO we should reschedule ASAP (as
-I already blabbered about above). If next_task is migration_disabled but
-higher (logical) prio than current, we don't need to do any of the
-migration_disabled specific crud, we just reschedule.
+I didn't implement your final suggestion Petr, i.e., putting the first
+panic_print_sys_info(false) inside the if (!_crash_kexec_post_notifiers)
+block, and the reason is that when we do this, there's 4 cases to consider:
 
-> @ -1898,6 +1898,11 @@ static int push_rt_task(struct rq *rq, bool pull)
->                 if (!pull || rq->push_busy)
->                         return 0;
->
-> +               if (rq->curr->sched_class != &rt_sched_class) {
-> +                       resched_curr(rq);
-> +                       return 0;
-> +               }
-> +
->                 cpu = find_lowest_rq(rq->curr);
->
-> [...]
+!kexec_crash_load() && !_crash_kexec_post_notifiers
+kexec_crash_load() && !_crash_kexec_post_notifiers
+kexec_crash_load() && _crash_kexec_post_notifiers
+!kexec_crash_load() && _crash_kexec_post_notifiers
+
+The 3rd case, which means user enabled kdump and set the post_notifiers
+in the cmdline fails - we end-up not reaching panic_print_sys_info(false)
+in this case, unless we add another variable to track the function call
+and prevent double print. My preference was to keep the first call
+as introduced by commit [2] (mentioned above) and not rely in another
+variable.
+Thanks again for the great reviews,
+
+Guilherme
+
+
+V2: https://lore.kernel.org/lkml/20220106212835.119409-1-gpiccoli@igalia.com
+
+
+
+ .../admin-guide/kernel-parameters.txt         |  4 ++++
+ kernel/panic.c                                | 22 ++++++++++++++-----
+ 2 files changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index a069d8fe2fee..0f5cbe141bfd 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3727,6 +3727,10 @@
+ 			bit 4: print ftrace buffer
+ 			bit 5: print all printk messages in buffer
+ 			bit 6: print all CPUs backtrace (if available in the arch)
++			*Be aware* that this option may print a _lot_ of lines,
++			so there are risks of losing older messages in the log.
++			Use this option carefully, maybe worth to setup a
++			bigger log buffer with "log_buf_len" along with this.
+ 
+ 	panic_on_taint=	Bitmask for conditionally calling panic() in add_taint()
+ 			Format: <hex>[,nousertaint]
+diff --git a/kernel/panic.c b/kernel/panic.c
+index 41ecf9ab824a..4ae712665f75 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -148,10 +148,13 @@ void nmi_panic(struct pt_regs *regs, const char *msg)
+ }
+ EXPORT_SYMBOL(nmi_panic);
+ 
+-static void panic_print_sys_info(void)
++static void panic_print_sys_info(bool after_kmsg_dumpers)
+ {
+-	if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
+-		console_flush_on_panic(CONSOLE_REPLAY_ALL);
++	if (after_kmsg_dumpers) {
++		if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
++			console_flush_on_panic(CONSOLE_REPLAY_ALL);
++		return;
++	}
+ 
+ 	if (panic_print & PANIC_PRINT_ALL_CPU_BT)
+ 		trigger_all_cpu_backtrace();
+@@ -249,7 +252,7 @@ void panic(const char *fmt, ...)
+ 	 * show some extra information on kernel log if it was set...
+ 	 */
+ 	if (kexec_crash_loaded())
+-		panic_print_sys_info();
++		panic_print_sys_info(false);
+ 
+ 	/*
+ 	 * If we have crashed and we have a crash kernel loaded let it handle
+@@ -283,6 +286,15 @@ void panic(const char *fmt, ...)
+ 	 */
+ 	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
+ 
++	/*
++	 * If kexec_crash_loaded() is true and we still reach this point,
++	 * kernel would double print the information from panic_print; so
++	 * let's guard against that possibility (it happens if kdump users
++	 * also set crash_kexec_post_notifiers in the command-line).
++	 */
++	if (!kexec_crash_loaded())
++		panic_print_sys_info(false);
++
+ 	kmsg_dump(KMSG_DUMP_PANIC);
+ 
+ 	/*
+@@ -313,7 +325,7 @@ void panic(const char *fmt, ...)
+ 	debug_locks_off();
+ 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
+ 
+-	panic_print_sys_info();
++	panic_print_sys_info(true);
+ 
+ 	if (!panic_blink)
+ 		panic_blink = no_blink;
+-- 
+2.34.1
+

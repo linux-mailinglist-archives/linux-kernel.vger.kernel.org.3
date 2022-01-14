@@ -2,157 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAA648EECB
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C2D48EED1
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243633AbiANQ5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:57:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56562 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229729AbiANQ5J (ORCPT
+        id S243644AbiANQ5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:57:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229729AbiANQ5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:57:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642179428;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L/VcfrWN/CJufq+iaNTecIlHvJcTa9A4ZW2s07umBv8=;
-        b=hnbCtICQZ71K9yaHLeCN8eg5XcS4i2UaMJHxdsv+nI6vTU0IVc3UVbTSbwL4378zTpu3Ye
-        o2Ae/8Tqpbx8TMa2fZhS3xbRI/esCDn2VgBng5rQJxx5IZwcKbr8alKYC2aB5GUOQ6/f35
-        heITVnu4LJ35x3peFl9rk0VFloep/tw=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-324-i3ReVXBEOcG6Dc8X6HpGvA-1; Fri, 14 Jan 2022 11:57:07 -0500
-X-MC-Unique: i3ReVXBEOcG6Dc8X6HpGvA-1
-Received: by mail-ed1-f72.google.com with SMTP id q15-20020a056402518f00b003f87abf9c37so8610214edd.15
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:57:06 -0800 (PST)
+        Fri, 14 Jan 2022 11:57:43 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA911C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:57:42 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id k30so16600365wrd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:57:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8tlmhR9a+oSiQxYgTs9TSjEyT0cpPnO4gBCG7leedNI=;
+        b=QcCsaXmaZFWsArkyS5ubMHNqwdV+bONwmyEp85ScjOc2CF/42wJGz4jjT+ad/Ry611
+         083GxGtKg4TJ79eMUo3dC2J+XtNJ9+5FfgSuwjcmtvOR/4zwkboYinLPZ2YyT7IQEcX6
+         O4+0Ww9RTbJquWrvJBsU4RGpdabqbKvq6Eo4w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=L/VcfrWN/CJufq+iaNTecIlHvJcTa9A4ZW2s07umBv8=;
-        b=A4xzlIVubZCrwZnB7FaegErToYMuIYZBso7CBe3G85knVumGyMw/ZgxC349SdFZ8YA
-         QtN9ytmz8ZVwPoVaPcH6Z+3aQJ97cAFYZk3GjazWNs7lOhyCRXl5LDV8R7y11SuTMQsx
-         QBUIz8cTX/J1OtUpQ6HxOlNfO2HizI2gzkbgHSF3Zckh4eOkYTdzbfQsvpNjbh2KeGNo
-         QVa6WOtZNK+aQgMqt5sMHDjBsQvggUIMHt41rAmK7z7/SqtVh/3ey0RTMsymrARCu2bW
-         TnU8QkqkcuJzEhGicOd8xmrSs+n+WIooFJWy0lm8Bd5TsLeEdfgVuAkQjSMPBtOS9Nlh
-         E9rQ==
-X-Gm-Message-State: AOAM530gbV65mY2TvlEsAt6Y+ZOTUgYLoNerY2txOaAvdKL9SfgQo8Xo
-        xh+d8qEX9N59WGQUMBR194Ol9BuIjGDvWIEPk/n4mNUidWxZy1wghZyLEXIDotfbKWRPwokxrGw
-        7aXFV8SXY0elJU9aR8QXaI5xP
-X-Received: by 2002:a17:906:2f97:: with SMTP id w23mr7752009eji.739.1642179424886;
-        Fri, 14 Jan 2022 08:57:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwBdhdFvT9wrbNEej3LojZ9TVAbSXZcep4xdKG41AVlohi7vwp5TAfgT7v2q1eob/+dkfPZeg==
-X-Received: by 2002:a17:906:2f97:: with SMTP id w23mr7751960eji.739.1642179423950;
-        Fri, 14 Jan 2022 08:57:03 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id k16sm1994888ejk.172.2022.01.14.08.57.01
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=8tlmhR9a+oSiQxYgTs9TSjEyT0cpPnO4gBCG7leedNI=;
+        b=xvd43ibIEOyq+sbmJwSY/AkCGvbPad3vgxL/n6y5M90SSlL+nsRBrDm4KmaMmUmoLj
+         HBGI1N/Oo7Bue6i1ft+26HpxML+2xKST4PF8SjMdJ5IScSjwxdee805QEdw/QAIGeuVb
+         LnR+26nSfUJZPL/J2Qa2dE6c72ezPAyXqYu3v5L3/t9Lougnk9G3I1KdmC0yvX+/+F9z
+         blSOur5adu1JMRxPdQ5R6eQ6Pl9bFshGRQRWbNN1NuHI8faD2HK1Sd///mLdtCjC0Auc
+         cL2FSVkbnEt83qM6yfkYiCMs9w5nmbQxKPnbDlEZTMUd6TPzdw289glLrWVIiJqiWItF
+         lU9g==
+X-Gm-Message-State: AOAM531e6dvE5wdrsRGQPh0NWs8fsm2Wzwze7Wgim/FhM/PWhC+D2IPA
+        6+gRuc8VjYjxuhw98/G/btFtdQ==
+X-Google-Smtp-Source: ABdhPJwJs+M7uqymw5kPe5LWbLvcWEC9656nwi+iTRgHPrTpBHgrVMtYX3b6p8Xz5qk20YpoKPr0gw==
+X-Received: by 2002:a5d:6e09:: with SMTP id h9mr9098120wrz.116.1642179461451;
+        Fri, 14 Jan 2022 08:57:41 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id s10sm10546434wmr.30.2022.01.14.08.57.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 08:57:03 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 17EA61806B4; Fri, 14 Jan 2022 17:57:00 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Hannes Frederic Sowa <hannes@stressinduktion.org>
-Cc:     Netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Erik Kline <ek@google.com>,
-        Fernando Gont <fgont@si6networks.com>,
-        Lorenzo Colitti <lorenzo@google.com>,
-        YOSHIFUJI Hideaki <hideaki.yoshifuji@miraclelinux.com>
-Subject: Re: [PATCH RFC v1 2/3] ipv6: move from sha1 to blake2s in address
- calculation
-In-Reply-To: <CAHmME9pR+qTn72vyANq8Nxx0BtGy7a_+dRvZS_F7RCag8Rvxng@mail.gmail.com>
-References: <20220112131204.800307-1-Jason@zx2c4.com>
- <20220112131204.800307-3-Jason@zx2c4.com> <87r19cftbr.fsf@toke.dk>
- <CAHmME9pieaBBhKc1uKABjTmeKAL_t-CZa_WjCVnUr_Y1_D7A0g@mail.gmail.com>
- <55d185a8-31ea-51d0-d9be-debd490cd204@stressinduktion.org>
- <CAHmME9pR+qTn72vyANq8Nxx0BtGy7a_+dRvZS_F7RCag8Rvxng@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Fri, 14 Jan 2022 17:57:00 +0100
-Message-ID: <875yqmdzmr.fsf@toke.dk>
+        Fri, 14 Jan 2022 08:57:40 -0800 (PST)
+Date:   Fri, 14 Jan 2022 17:57:38 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     kraxel@redhat.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, daniel.vetter@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
+Subject: Re: [PATCH] udmabuf: validate ubuf->pagecount
+Message-ID: <YeGrgs+4PXM2ud+n@phenom.ffwll.local>
+Mail-Followup-To: Pavel Skripkin <paskripkin@gmail.com>, kraxel@redhat.com,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
+References: <20211230142649.23022-1-paskripkin@gmail.com>
+ <c5ae2a68-070f-884c-c82a-2d3f4b8e06b1@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c5ae2a68-070f-884c-c82a-2d3f4b8e06b1@gmail.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+On Wed, Jan 12, 2022 at 09:08:46PM +0300, Pavel Skripkin wrote:
+> On 12/30/21 17:26, Pavel Skripkin wrote:
+> > Syzbot has reported GPF in sg_alloc_append_table_from_pages(). The
+> > problem was in ubuf->pages == ZERO_PTR.
+> > 
+> > ubuf->pagecount is calculated from arguments passed from user-space. If
+> > user creates udmabuf with list.size == 0 then ubuf->pagecount will be
+> > also equal to zero; it causes kmalloc_array() to return ZERO_PTR.
+> > 
+> > Fix it by validating ubuf->pagecount before passing it to
+> > kmalloc_array().
+> > 
+> > Fixes: fbb0de795078 ("Add udmabuf misc device")
+> > Reported-and-tested-by: syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
+> > Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> > ---
+> > 
+> 
+> Gentle ping :)
 
-> Hi Hannes,
->
-> On Thu, Jan 13, 2022 at 12:15 PM Hannes Frederic Sowa
-> <hannes@stressinduktion.org> wrote:
->> > I'm not even so sure that's true. That was my worry at first, but
->> > actually, looking at this more closely, DAD means that the address can
->> > be changed anyway - a byte counter is hashed in - so there's no
->> > guarantee there.
->>
->> The duplicate address detection counter is a way to merely provide basic
->> network connectivity in case of duplicate addresses on the network
->> (maybe some kind misconfiguration or L2 attack). Such detected addresses
->> would show up in the kernel log and an administrator should investigate
->> and clean up the situation.
->
-> I don't mean to belabor a point where I'm likely wrong anyway, but
-> this DAD business has kept me thinking...
->
-> Attacker is hanging out on the network sending DAD responses, forcing
-> those counters to increment, and thus making SHA1(stuff || counter)
-> result in a different IPv6 address than usual. Outcomes:
-> 1) The administrator cannot handle this, did not understand the
-> semantics of this address generation feature, and will now have a
-> broken network;
-> 2) The administrator knows what he's doing, and will be able to handle
-> a different IPv6 address coming up.
->
-> Do we really care about case (1)? That sounds like emacs spacebar
-> heating https://xkcd.com/1172/. And case (2) seems like something that
-> would tolerate us changing the hash function.
+Gerd Hoffmann should pick this one up, pls holler again if it doesn't
+happen.
+-Daniel
 
-Privacy addresses mostly address identification outside of the local
-network (because on the local network you can see the MAC address), so I
-don't think it's unreasonable for someone to enable this and not have a
-procedure in place to deal with DAD causing the address to change. For
-instance, they could manage their network in a way that they won't
-happen (or just turn off DAD entirely on the affected boxes).
+> 
+> > 
+> > ---
+> >   drivers/dma-buf/udmabuf.c | 4 ++++
+> >   1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+> > index c57a609db75b..e7330684d3b8 100644
+> > --- a/drivers/dma-buf/udmabuf.c
+> > +++ b/drivers/dma-buf/udmabuf.c
+> > @@ -190,6 +190,10 @@ static long udmabuf_create(struct miscdevice *device,
+> >   		if (ubuf->pagecount > pglimit)
+> >   			goto err;
+> >   	}
+> > +
+> > +	if (!ubuf->pagecount)
+> > +		goto err;
+> > +
+> >   	ubuf->pages = kmalloc_array(ubuf->pagecount, sizeof(*ubuf->pages),
+> >   				    GFP_KERNEL);
+> >   	if (!ubuf->pages) {
+> 
+> With regards,
+> Pavel Skripkin
 
->> Afterwards bringing the interface down and
->> up again should revert the interface to its initial (dad_counter == 0)
->> address.
->
-> Except the attacker is still on the network, and the administrator
-> can't figure it out because the mac addresses keep changing and it's
-> arriving from seemingly random switches! Plot twist: the attack is
-> being conducted from an implant in the switch firmware. There are a
-> lot of creative different takes on the same basic scenario. The point
-> is - the administrator really _can't_ rely on the address always being
-> the same, because it's simply out of his control.
->
-> Given that the admin already *must* be prepared for the address to
-> change, doesn't that give us some leeway to change the algorithm used
-> between kernels?
->
-> Or to put it differently, are there _actually_ braindead deployments
-> out there that truly rely on the address never ever changing, and
-> should we be going out of our way to support what is arguably a
-> misreading and misdeployment of the feature?
->
-> (Feel free to smack this line of argumentation down if you disagree. I
-> just thought it should be a bit more thoroughly explored.)
-
-I kinda get where you're coming from, but most systems are not actively
-under attack, and those will still "break" if this is just changed.
-Which is one of those "a kernel upgrade broke my system" type of events
-that we want to avoid because it makes people vary of upgrading, so
-they'll keep running old kernels way past their expiry dates.
-
--Toke
-
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

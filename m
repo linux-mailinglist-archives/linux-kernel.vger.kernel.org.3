@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0434A48EA27
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 13:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C27A48EA31
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 13:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241134AbiANMy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 07:54:28 -0500
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:36394 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235721AbiANMy1 (ORCPT
+        id S241148AbiANM4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 07:56:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235721AbiANM4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 07:54:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1642164866;
-        bh=VlYopUlU/dZusNNzCQzVaUstqWWXqVs4HkuRAe/MRr0=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=ES1hfZSWAA9TfB2Zuf0ErUKoh0yEgCd34zGF1Tj2ylHhAXSQ6QWqo2SHjJmg8jDeK
-         zaVe2V/meQXJWPJlppkJm+DQ9HRxlQMPFHxuk02zJupGHURHvniLSn7vE1cTaRSA8l
-         MkrlInbBPDEdBg51ipiMmQuMyQSiRbDnP6CO1l2o=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D37E31281205;
-        Fri, 14 Jan 2022 07:54:26 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id SFhWcQRURlwj; Fri, 14 Jan 2022 07:54:26 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1642164866;
-        bh=VlYopUlU/dZusNNzCQzVaUstqWWXqVs4HkuRAe/MRr0=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=ES1hfZSWAA9TfB2Zuf0ErUKoh0yEgCd34zGF1Tj2ylHhAXSQ6QWqo2SHjJmg8jDeK
-         zaVe2V/meQXJWPJlppkJm+DQ9HRxlQMPFHxuk02zJupGHURHvniLSn7vE1cTaRSA8l
-         MkrlInbBPDEdBg51ipiMmQuMyQSiRbDnP6CO1l2o=
-Received: from [IPv6:2601:5c4:4300:c551::c447] (unknown [IPv6:2601:5c4:4300:c551::c447])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 3DD4A12811C5;
-        Fri, 14 Jan 2022 07:54:25 -0500 (EST)
-Message-ID: <9153507bd837a774ac76dafc23ca9a56451ef91e.camel@HansenPartnership.com>
-Subject: Re: [v2 PATCH] crypto: api - Disallow sha1 in FIPS-mode while
- allowing hmac(sha1)
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Stephan Mueller <smueller@chronox.de>,
-        Nicolai Stange <nstange@suse.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
-        Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org, simo@redhat.com,
-        Eric Biggers <ebiggers@kernel.org>, Petr Vorel <pvorel@suse.cz>
-Date:   Fri, 14 Jan 2022 07:54:23 -0500
-In-Reply-To: <1765621.jvH33SIsIh@tauon.chronox.de>
-References: <20211209090358.28231-1-nstange@suse.de>
-         <87k0f2hefl.fsf@suse.de> <YeFWnscvXtv73KBl@gondor.apana.org.au>
-         <1765621.jvH33SIsIh@tauon.chronox.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Fri, 14 Jan 2022 07:56:15 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46BBC061574;
+        Fri, 14 Jan 2022 04:56:14 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id q8so15417056wra.12;
+        Fri, 14 Jan 2022 04:56:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=d3ibwPAPVt4HA/SbrQ1xEvUJPH+rbcSyYMnJxKURgvY=;
+        b=fb5npDbIVbXCAmGa3aSg1k8zmuohBbb7KypbIegherNH93fveoZq8HcfrgdsuNvXz8
+         CDw9aC3OJl/FCnBGvwgMykySe9jqF3hjX6uVUTPOGTork74gr4LptbeOXg08D4FANiN4
+         m8uPEJXzq0ezfHyXFI8iPMWd6idfe7hf+JY5QpD66LC7d0MXsfE9Ghd81R/poIn9XgZa
+         aZ+6o7lhptWt3VmwrOFdjmES0DdKYFnKYEFl7Y2Pbve5Qp/2x9SlYO4Y1AM7Ejq6Mgvg
+         hzG7CLkkWKgGMP6j+arp8RUt0N9V2cVDdsz3waJaB/vNQgiuNQ/ZWDdROzQuPi0Ykuxa
+         0+hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=d3ibwPAPVt4HA/SbrQ1xEvUJPH+rbcSyYMnJxKURgvY=;
+        b=B4qwT0JApZS/1hhtfGUGbKf5jMf2sIi1SxsGflGuswSBRRsB8cHHOYMjCSKONLMNkQ
+         vET3ZENKOfQMoPt3u/wur7/vzYorC3Z0sWVv+VWAbvbKkLXRtyC0Vwxk08gGw+cWMzPK
+         uHJLM12w+nVFoCld0to6+Mo8HA8kUtyxZ489IK4vGMkYyumu+/9VtUWmjL4G9c0Fdr0M
+         8TfL1JeKOcuf4vKE7ZAInw1S/hsEHkQ19RW0Y0CsvYm2hQ4oYBVJkxiVjCIQ74IvxlIx
+         fc4COnHoVwrKVaIfleLPtvX/eMh7TdYMJLWEIIw50dyjwrkm+L7up/BYmS8MVtn8A8AD
+         ob8w==
+X-Gm-Message-State: AOAM532Vs2cn5DyJfG0xqztQnVGpaIWvefjvha8oV8dd+EO9cqDEw5cv
+        XvUM+I/mU+CU/fkokBoMiec=
+X-Google-Smtp-Source: ABdhPJxo8QEjs5Q0X+ZWAwcHSYac8AQTrcqIp/pFDeME41NkNSzQHoy2PCkOg4lwKdONf8ZqSIFXjA==
+X-Received: by 2002:a5d:6dd1:: with SMTP id d17mr8741857wrz.520.1642164973553;
+        Fri, 14 Jan 2022 04:56:13 -0800 (PST)
+Received: from [192.168.0.22] ([37.223.145.74])
+        by smtp.gmail.com with ESMTPSA id g15sm5358083wrm.2.2022.01.14.04.56.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jan 2022 04:56:13 -0800 (PST)
+Message-ID: <68895a40-559b-13ce-d433-f9b32c648323@gmail.com>
+Date:   Fri, 14 Jan 2022 13:56:11 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v4] dt-bindings: dsp: mediatek: add mt8195 dsp document
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, YC Hung <yc.hung@mediatek.com>
+Cc:     robh+dt@kernel.org, broonie@kernel.org, daniel.baluta@nxp.com,
+        trevor.wu@mediatek.com, tiwai@suse.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        cezary.rojewski@intel.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        allen-kh.cheng@mediatek.com
+References: <20220106064847.15588-1-yc.hung@mediatek.com>
+ <Yd4yNkeGlzdULNlv@robh.at.kernel.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <Yd4yNkeGlzdULNlv@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-01-14 at 13:35 +0100, Stephan Mueller wrote:
-> Am Freitag, 14. Januar 2022, 11:55:26 CET schrieb Herbert Xu:
+
+
+On 12/01/2022 02:43, Rob Herring wrote:
+> On Thu, 06 Jan 2022 14:48:48 +0800, YC Hung wrote:
+>> From: "YC Hung" <yc.hung@mediatek.com>
+>>
+>> This patch adds mt8195 dsp document. The dsp is used for Sound Open
+>> Firmware driver node. It includes registers,  clocks, memory regions,
+>> and mailbox for dsp.
+>>
+>> Signed-off-by: yc.hung <yc.hung@mediatek.com>
+>> ---
+>> Changes since v3:
+>>    Fix patch v3 error : v3 only provide difference between v3 and v2.
+>>
+>> Changes since v2:
+>>    Remove useless watchdog interrupt.
+>>    Add commit message more detail description.
+>>
+>> Changes since v1:
+>>    Rename yaml file name as mediatek,mt8195-dsp.yaml
+>>    Refine descriptions for mailbox, memory-region and drop unused labels
+>>    in examples.
+>> ---
+>>   .../bindings/dsp/mediatek,mt8195-dsp.yaml     | 105 ++++++++++++++++++
+>>   1 file changed, 105 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+>>
 > 
-> Hi Herbert,
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > 
-> > > On an unrelated note, this will break trusted_key_tpm_ops->init() 
-> > > in FIPS mode, because trusted_shash_alloc() would fail to get a
-> > > hold of sha1. AFAICT, this could potentially make the
-> > > init_trusted() module_init to fail, and, as encrypted-keys.ko
-> > > imports key_type_trusted, prevent the loading of that one as
-> > > well. Not sure that's desired...
-> > 
-> > Well if sha1 is supposed to be forbidden in FIPS mode why should
-> 
-> SHA-1 is approved in all use cases except signatures.
 
-Actually, even that's not quite true: you can't use it in a FIPS
-compliant system to *generate* signatures, but you can still use it in
-a FIPS compliant system to verify legacy signatures (signatures created
-before sha-1 was deprecated).  It's still also completely acceptable as
-a hash for HMAC.
+Rob, it seems we don't have a maintainer for this bindings. Shall I as MediaTek 
+SoC maintainer take them through my branch?
 
-The supporting document is this one:
-
-https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar1.pdf
-
-The bottom line is removing SHA-1 to achieve "FIPS compliance" is the
-wrong approach.  You just have to make sure you can never use it to
-generate signatures.
-
-James
-
-
+Regards,
+Matthias

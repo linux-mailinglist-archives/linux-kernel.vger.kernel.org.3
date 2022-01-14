@@ -2,115 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 830CE48EDBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B854448EDC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 17:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243171AbiANQM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 11:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S243208AbiANQNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 11:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243107AbiANQM4 (ORCPT
+        with ESMTP id S243192AbiANQNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 11:12:56 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CE9C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:12:56 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id w9so12802779iol.13
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:12:56 -0800 (PST)
+        Fri, 14 Jan 2022 11:13:40 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8459C061401
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:13:39 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id p37so17723184uae.8
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:13:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=EPYjGXrXJzm3/2O9xWQaTqxgYIE2B54FIlQCIxIosGY=;
-        b=VNoFwJfrEUUkkBi9mN8WLSQHc/uYB5+8/57AiBNaQ4YTSJZxzwxde3bDqPpVwNFJCy
-         NoO82SKi9RlwsjwpceMIPaMlvTdVTN8sU8FiEoDr6Dej0i/f0ZOeN4I+yn8HSY1E368q
-         qiSSqXDVbeR0Vq74cBIPbNYoPzGuGVoDlJKhI=
+        bh=Qxkpv3eNiRdJcWaLuANiCoD4pI3qvbrsDdQYc45dZk8=;
+        b=goCpoT6iIjZHX/StCqxQby/LS7loOLRpEO/Y1+Fj6M2kXs38lG7f13W8ikbjrmBMCB
+         OnFyQXUuaTcCidVWULOBJLIvx/O/tI14Z/F4AqdGWKvBoErCdpyWjtBMdyDgcX26Jfur
+         P7tevqaqFwc2lNh+GQupHifgTHk1QgJ0IulZyqJpHw93YdOpRSB30jRvKA//YtZrz3uy
+         /rLzNvL+AP0sqJ3Gw46gtEEyJHSgy+hlpmuz9XhnzfG6TSHUx8NMiint7b7kMzgahLzi
+         uyYTcPOibvNGpK23+DpgqR2j4PPmT16QhZWV9UBCLL4NKQuKJeBHXJ6hFknVvbMD9Vjx
+         Z9Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EPYjGXrXJzm3/2O9xWQaTqxgYIE2B54FIlQCIxIosGY=;
-        b=CF1uaN9yXx/pSGyqRuqnMG73DELMqwS3RCgLeaV5hDw/8rCvGHv/S/Nyf2wD6Dtbh4
-         sqZbjPHscndD8LTDIh/F2NZb42AX1R5vdMIkHCcCeGdr57UyuA4/PEarwpuE79FuhzRR
-         SInEgOTjZ7aev1Ld4ST2m6D92lSdcDP1GqY58zUbn0KVsSOK5UbrfNGlTHbe2rsTJIxs
-         f2EG04hbkNEbJbLHsxUPNqDAN1DuKHVkDelMPO56VFM1q32zpaKMi4EE5rbRZOrfnitC
-         NX2GmnEz/wRAaa6Egsd/HP/u8vRzXTS7VRJuJ74kw+FodBLGfSJe1LJyjUtUAoAYZcye
-         j5Cw==
-X-Gm-Message-State: AOAM5338fiNO9IKP0So4ZunXfXZSABKewUwCtWSYu4ZwA0hWYdVedFL4
-        CIgu3xEv0A41UQP1PvrLnmm4apLlC9LaaA==
-X-Google-Smtp-Source: ABdhPJyv/+flF6/jxMNhsZKcnRS7vhZ3KkN6W7OEKuhYYhMOOWLuzLlSo2zSYFktvnfYeUvY+hRoDA==
-X-Received: by 2002:a02:ad11:: with SMTP id s17mr4440625jan.209.1642176775321;
-        Fri, 14 Jan 2022 08:12:55 -0800 (PST)
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com. [209.85.166.170])
-        by smtp.gmail.com with ESMTPSA id g10sm4771803ilf.46.2022.01.14.08.12.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 08:12:54 -0800 (PST)
-Received: by mail-il1-f170.google.com with SMTP id e8so8708076ilm.13
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 08:12:53 -0800 (PST)
-X-Received: by 2002:a05:6e02:2187:: with SMTP id j7mr5036103ila.120.1642176773592;
- Fri, 14 Jan 2022 08:12:53 -0800 (PST)
+        bh=Qxkpv3eNiRdJcWaLuANiCoD4pI3qvbrsDdQYc45dZk8=;
+        b=7BrkpkTVPG32sALpxAFxklHy6Udmw3VRUex+DivnN+km1pxKaCzfr1Lbe0/NYBzuva
+         dQ6N5+vadlQF0YKGvAI6l+eJbvewz/eZZ0zNfg1wrgH7QW1s2AV95ApjvbZ2kyulHsPV
+         cb0cw08tVI88hTlnNHsKAaIu80KX52aBf5OWr0rk4m4W+t+lHdqq6bxPWcUdy7Jy0Xgh
+         C/we/qHCr1ASxyCataWqqCTdYGWSvGJ6klrL7kIxUndUUWj5aZBmi1vRt4vlUMLXNQUG
+         C/vDonanbKJW9Cq5qZZXnWFnIutz89PWNJO/+7a82/P+5CtiDzomXPuptYSapn7684Zc
+         HYaA==
+X-Gm-Message-State: AOAM53390UZg/oAIHP4ThOiYJpOC7CU7hqAP/1uLzJe+ULeHgABU8DqG
+        h/2J67iPS6vWKTVMSJkq12z1+I0cobLo47AlisdubA==
+X-Google-Smtp-Source: ABdhPJzWflgFRWJp52JXGQ6mFbqqIxK3ZZYuUMkUM0idCjp2RCLsqwd6kxDjkUeOcXkWzHUSz8ObECiekIGt+opAxuw=
+X-Received: by 2002:ab0:13ee:: with SMTP id n43mr4421442uae.9.1642176818829;
+ Fri, 14 Jan 2022 08:13:38 -0800 (PST)
 MIME-Version: 1.0
-References: <YeDJKNTYVu/Fe9VS@google.com>
-In-Reply-To: <YeDJKNTYVu/Fe9VS@google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 14 Jan 2022 08:12:41 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=UQdT==0KH+VsWcmHikTpwdDMSTkBa_GXRhXPacwrkR5Q@mail.gmail.com>
-Message-ID: <CAD=FV=UQdT==0KH+VsWcmHikTpwdDMSTkBa_GXRhXPacwrkR5Q@mail.gmail.com>
-Subject: Re: [PATCH] module: fix signature check failures when using in-kernel decompression
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com> <20220112100046.68068-5-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220112100046.68068-5-krzysztof.kozlowski@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 14 Jan 2022 18:13:27 +0200
+Message-ID: <CAPLW+4mRY7diuP8Ts_pnY6M0TeK9OmxPe+fh_K0YBBzvitRNbw@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] spi: s3c64xx: allow controller-data to be optional
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Jan 13, 2022 at 4:52 PM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+On Wed, 12 Jan 2022 at 12:00, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
 >
-> The new flag MODULE_INIT_COMPRESSED_FILE unintentionally trips check in
-> module_sig_check(). The check was supposed to catch case when version
-> info or magic was removed from a signed module, making signature
-> invalid, but it was coded too broadly and was catching this new flag as
-> well.
+> The Samsung SoC SPI driver requires to provide controller-data node
+> for each of SPI peripheral device nodes.  Make this controller-data node
+> optional, so DTS could be simpler.
 >
-> Change the check to only test the 2 particular flags affecting signature
-> validity.
->
-> Fixes: b1ae6dc41eaa ("module: add in-kernel support for decompressing")
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  kernel/module.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+
+>  drivers/spi/spi-s3c64xx.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
 >
-> diff --git a/kernel/module.c b/kernel/module.c
-> index 201398d58079..24dab046e16c 100644
-> --- a/kernel/module.c
-> +++ b/kernel/module.c
-> @@ -2883,12 +2883,13 @@ static int module_sig_check(struct load_info *info, int flags)
->         const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
->         const char *reason;
->         const void *mod = info->hdr;
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 8755cd85e83c..769d958a2f86 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -796,16 +796,14 @@ static struct s3c64xx_spi_csinfo *s3c64xx_get_slave_ctrldata(
+>                 return ERR_PTR(-EINVAL);
+>         }
+>
+> -       data_np = of_get_child_by_name(slave_np, "controller-data");
+> -       if (!data_np) {
+> -               dev_err(&spi->dev, "child node 'controller-data' not found\n");
+> -               return ERR_PTR(-EINVAL);
+> -       }
 > -
-> +       bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
-> +                                      MODULE_INIT_IGNORE_VERMAGIC);
->         /*
-> -        * Require flags == 0, as a module with version information
-> -        * removed is no longer the module that was signed
-> +        * Do not allow mangled modules as a module with version information
-> +        * removed is no longer the module that was signed.
->          */
-> -       if (flags == 0 &&
-> +       if (!mangled_module &&
-
-Seems reasonable to me. I guess the only question in my mind is
-whether this is the best way to handle "unknown" new flags. If someone
-introduces a new flag to "uapi/linux/module.h" should we consider it
-as "mangled" or not? Given that I can't predict the future and the
-comments seem to indicate that we're only trying to detect
-version-related issues, your choice seems OK to me.
-
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>         cs = kzalloc(sizeof(*cs), GFP_KERNEL);
+> -       if (!cs) {
+> -               of_node_put(data_np);
+> +       if (!cs)
+>                 return ERR_PTR(-ENOMEM);
+> +
+> +       data_np = of_get_child_by_name(slave_np, "controller-data");
+> +       if (!data_np) {
+> +               dev_info(&spi->dev, "child node 'controller-data' not found, using defaults\n");
+> +               return cs;
+>         }
+>
+>         of_property_read_u32(data_np, "samsung,spi-feedback-delay", &fb_delay);
+> --
+> 2.32.0
+>

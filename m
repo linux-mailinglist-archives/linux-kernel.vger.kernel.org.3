@@ -2,185 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07AB848E6C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:45:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D0848E6CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237706AbiANIpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:45:42 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43470 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiANIpl (ORCPT
+        id S237887AbiANIsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:48:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233954AbiANIr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:45:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6157D61682;
-        Fri, 14 Jan 2022 08:45:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 789CEC36AEA;
-        Fri, 14 Jan 2022 08:45:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642149940;
-        bh=ALcCanfjAhMekqhMxi4ZwisyFo7m5c0BQYGrxo+oabQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=L3jf+9uMfQNFKk1ms8EH7R2MmwSlh8FGivmpE911Txmh2mhLDV5IOX/PkD4Z8ErtH
-         XTuN7lVPZpamqinI+NLVj4XygjWKBNbIbf4qZ06vHQsgiaaCdwlo1IGX/LhHkBrRJv
-         e5WC05bS4Mi5vTY0UzWM0695ssRGeXg8qQ/QCnzYMURky6tRNB+6Gvw7be0fq1sGBl
-         5wiG21hibt069DECb8lITTx39s4NwA4ZzY1969vJctwvXOByrHp1CPAr5KYbRdEDqj
-         IF76Bn7cuniTPihLuDaJ9toJEaik2p6s7PaPWxAlPFOjiPBMZl+9Fjk0xPsCR4axe3
-         74iODocYzk8LA==
-Date:   Fri, 14 Jan 2022 09:45:35 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] docs: sphinx/kfigure.py: Improve conversion to
- PDF
-Message-ID: <20220114094535.5bb9ba94@coco.lan>
-In-Reply-To: <e545803a-8f09-f0e7-4ca0-16b673ef1796@gmail.com>
-References: <e01fe9f9-f600-c2fc-c6b3-ef6395655ffe@gmail.com>
-        <e545803a-8f09-f0e7-4ca0-16b673ef1796@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Fri, 14 Jan 2022 03:47:59 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA80C061574;
+        Fri, 14 Jan 2022 00:47:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aQfD5GKz9bWzncLC4xptw+tsOF5qGfNZ6C5SakVX528=; b=TYlEPOvKvJNQjd8poLzSIb7AYR
+        BzKqI+ZG2q+OsXutWYlctjA0Op4JKteJP5Aef59/UFf7sVYtVPhJiiZL216jofRGJmSB+1nycza1q
+        bQKg7C+IkWimB0gyIrCC+bshTPicJvUEsghan2P8xSQfr4dftP9xPoDY4X0iHiqx3e+jMV47r7+xL
+        qM0/iGgge8uFybYJBJqTONKFYhxhlYdNOEaNGq8yzFoNGNn1Frr6/5+Uz4Df0P1nBbZg0H5F0xxSB
+        yMTQLqcgx/b+msA3p3I9/7NuQSWKGK1emzkUyDI/0UeyxNIYvNZDNivdS8ujqtTgWAxheq2FNmUW/
+        2+rQ51QQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n8IFM-0017AP-NF; Fri, 14 Jan 2022 08:47:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6B7503002C1;
+        Fri, 14 Jan 2022 09:47:42 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4BE82266305C3; Fri, 14 Jan 2022 09:47:42 +0100 (CET)
+Date:   Fri, 14 Jan 2022 09:47:42 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: Re: earlyprintk=xdbc seems broken
+Message-ID: <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
+References: <YajkzwmWQua3Kh6A@hirez.programming.kicks-ass.net>
+ <105f35d2-3c53-b550-bfb4-aa340d31128e@linux.intel.com>
+ <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
+ <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
+ <Yao35lElOkwtBYEb@kroah.com>
+ <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
+ <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
+ <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, 7 Jan 2022 22:45:47 +0900
-Akira Yokosawa <akiyks@gmail.com> escreveu:
+On Tue, Dec 21, 2021 at 10:40:50AM +0100, Peter Zijlstra wrote:
+> On Fri, Dec 17, 2021 at 02:55:07PM +0100, Peter Zijlstra wrote:
+> > On Fri, Dec 17, 2021 at 01:01:43PM +0200, Mathias Nyman wrote:
+> > > I can reproduce this.
+> > > Looks like problems started when driver converted to readl_poll_timeout_atomic() in:
+> > > 
+> > > 796eed4b2342 usb: early: convert to readl_poll_timeout_atomic()
+> > 
+> > I can confirm, reverting that solves the boot hang, things aren't quite
+> > working for me though.
+> 
+> I've been poking at this a little, find debug patch and full dmesg
+> below. The TL;DR version of the dmesg seems to be:
+> 
+> [    4.984148] xhci_dbc:xdbc_start: waiting for connection timed out
+> [    4.984149] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+> 
+> Initially I thought this was due to delay not being set up properly, but
+> I 'fixed' that, and I've ran out of ideas. I really don't know anything
+> about USB :/
 
-> On Wed, 29 Dec 2021 20:42:00 +0900, Akira Yokosawa wrote:
-> > This patch set improves conversions of DOT -> PDF and SVG -> PDF
-> > for PDF docs.  
-> 
-> Gentle ping.
-> 
-> Mauro, any comments?
-
-Sorry, have been busy those days with not much time to test it,
-and I'm not expecting any time to test it on the next couple of
-weeks.
-
-The main concern from my last review is that inkscape is too noisy 
-(well, frankly, textlive is also too noisy). If this was solved
-on a nice way, and provided that the output files on both html and
-pdf are working fine with those conversions, I don't have any 
-objections to this series.
-
-Regards,
-Mauro
-
-> 
-> > 
-> > * DOT -> PDF conversion
-> > 
-> > Current scheme uses "dot -Tpdf" (of graphviz).
-> > 
-> > Cons:
-> >   - openSUSE's dot(1) does not support -Tpdf.
-> >   - Other distro's dot(1) generates PDFs with unnecessarily wide
-> >     margins for inclusion into LaTeX docs.
-> > 
-> > Patch 1/4 changes the route to the following two steps:
-> > 
-> >   1. DOT -> SVG by "dot -Tsvg"
-> >   2. SVG -> PDF by "rsvg-convert -f pdf" with fallback to convert(1)
-> > 
-> > Pros:
-> >   - Improved portability across distros
-> >   - Less space around graphs in final PDF documents
-> > 
-> > Con:
-> >   - On systems without rsvg-convert, generated PDF will be of raster
-> >     image.
-> > 
-> > Patch 2/4 avoids raster-image PDF by using "dot -Tpdf" on systems where
-> > the option is available.
-> > 
-> > * SVG -> PDF conversion
-> > 
-> > Current scheme uses convert(1) (of ImageMagick)  
-> 
-> I was not aware of security concerns regarding ImageMagick until
-> Christoph brought them up in another thread [1].
-> 
-> [1]: https://lore.kernel.org/linux-doc/20220104131952.GA21933@lst.de/
-> 
-> Now I can add another Con as bellow.
-> 
-> > 
-> > Cons:  
->     - ImageMagick is not allowed to read/write PDF by default under
->       Debian/Ubuntu and Gentoo systems.  The policy is a band-aide
->       fix to its security issues.
-> >   - Generated PDFs are of raster image.  Some of them look blurry.
-> >   - Raster images tend to be large in size.
-> >   - convert(1) delegates SVG decoding to rsvg-convert(1).
-> >     It doesn't cover full range of Inkscape-specific SVG features
-> >     and fails to convert some of SVG figures properly.  
-> 
->         Thanks, Akira
-> 
-> > 
-> > Improper conversions are observed with SVGs listed below (incomplete,
-> > conversion quality depends on the version of rsvg-convert):
-> >   - Documentation/userspace-api/media/v4l/selection.svg
-> >   - Documentation/userspace-api/media/v4l/vbi_525.svg
-> >   - Documentation/userspace-api/media/v4l/vbi_625.svg
-> >   - Documentation/userspace-api/media/v4l/vbi_hsync.svg
-> >   - Documentation/admin-guide/blockdev/drbd/DRBD-8.3-data-packets.svg
-> >   - Documentation/admin-guide/blockdev/drbd/DRBD-data-packages.svg
-> > 
-> > If you have Inkscape installed as well, convert(1) delegates SVG
-> > decoding to inkscape(1) rather than to rsvg-convert(1) and SVGs listed
-> > above can be rendered properly.
-> > 
-> > So if Inkscape is required for converting those SVGs properly, why not
-> > use it directly in the first place?
-> > 
-> > Patches 3/4 and 4/4 add code to utilize inkscape(1) for SVG -> PDF
-> > conversion when it is available.  They don't modify any existing
-> > requirements for kernel-doc.
-> > 
-> > Patch 3/4 adds the alternative route of SVG -> PDF conversion by
-> > inkscape(1).
-> > Patch 4/4 delegates warning messages from inkscape(1) to kernellog.verbose
-> > as they are likely harmless in command-line uses.
-> > 
-> > Pros:
-> >   - Generated PDFs are of vector graphics.
-> >   - Vector graphics tends to be smaller in size and looks nicer when
-> >     zoomed in.
-> >   - SVGs drawn by Inkscape are fully supported.
-> > 
-> > On systems without Inkscape, no regression is expected by these two
-> > patches.
-> > 
-> > Changes since v1 (as of Patch 5/3) [1]:
-> > 
-> > - Reorder and merge patches to reduce/eliminate regression windows of
-> >   raster-image PDF and stderr redirection.
-> >     v1        v2
-> >     1/3       1/4
-> >     4/3       2/4
-> >     2/3       3/4
-> >     3/3+5/3   4/4
-> > 
-> > - Massage kernellog.verbose/warn messages. They now show command(s)
-> >   used in DOT -> PDF conversion.
-> > 
-> > - Pass actual exit code of inkscape(1) to kernellog.warn.
-> > 
-> > FWIW, diff of v1 vs. v2 follows:
-> > 
-> > --------------------------------------------------------------  
-> [...]
-> 
-
-
-
-Thanks,
-Mauro
+Any thoughts on this? I'd really like to be able to use this machine but
+can't due to lack of console.

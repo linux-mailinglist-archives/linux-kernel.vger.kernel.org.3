@@ -2,83 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E33648E515
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 08:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6353C48E517
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 08:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbiANH5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 02:57:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S234207AbiANH6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 02:58:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiANH5j (ORCPT
+        with ESMTP id S229449AbiANH6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 02:57:39 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94BBC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 23:57:39 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id pf13so12822567pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 23:57:39 -0800 (PST)
+        Fri, 14 Jan 2022 02:58:12 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA5BC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 23:58:12 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id e9so14220956wra.2
+        for <linux-kernel@vger.kernel.org>; Thu, 13 Jan 2022 23:58:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=oNR6UMoEFgCGES/gVk9KvDaEd3IBNEPmzowHbE1edNc=;
-        b=fQrZQwtB8hsISxZ0v3iGKH8uRmToEVbh4LjVRMdNLqYnZWIIETfO5oQp+Ysm5pmbij
-         2ANAszb5uGtgSH6p+6wSHd5rt6chOH+fAX6DRKmGGu92e4vySnLsSSSXqRR56K3IVAQm
-         x5Nd9ApSqGsbgto90+IRd8OIdbXfX2+diPTkNsqM3sVA6FGQ5rLNM2uGg2ZkH5vQ22Is
-         L9Rrrkdcq6Uwt89pDNmahoqjlhgrUSNWwvIlgIlk2cAf7EsMklqBpPFI+yKmWyg1OtP1
-         WplRKlfQLX8J0CfuNELvjybKp32survcdZP4dCzeqngGDtJoEMWcCa3mDPyxOZNoHX1p
-         daPg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qQYjsQBGNm39+m2dg7I01Yy9Chp8U4KppaS99DbhPP8=;
+        b=qIF7NumT6wIJyuqSTkndqu8vxCmN24tBqFBtZ4wPwMPkVE69PHgrfzgtCQUw5bshPx
+         pMVV+t8w9BWVAIRIHBAqnb0SETIWFCYVMuekeGaC0cnTz3lf6LCgiJGWkI92KeBvBH3/
+         9Zn/CPNgeaI3BzCfgAL17Pn9lAnXzX/F0b7NzVm6cGMGgGtvr2fAKckgnNyIilawCsvD
+         BF4CdLwgIJwwkIneN8WpVwIACMSLPBXW8jiRb2XVmr5l4JDj1mnRP2tUhDhHIQ1unBca
+         vHC/+hjJcAr4r39EB+oxaiprnleY27R80e2QFWHu4t5LXze2XDXMkwgLcp0+lZZaBMWh
+         t9wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=oNR6UMoEFgCGES/gVk9KvDaEd3IBNEPmzowHbE1edNc=;
-        b=sKqblqc18hM3DwYaYgVJaVphC8Nc42dz5SOoA1N4CrPv/OTYxlydVq943CDdj39A89
-         9jw6iP00NQoJZkVjvW5d/N1pQVruvGkXmpHF7N9OcDDXmJ1cuLYiwZCByfdH6kSSXt4Y
-         OK196WrUHsuWdFZ+j9xaQOR4ksA21ZpXuIvKwP11lkQLA44NdSTx35xeko54BE6MWiZ+
-         KH95TOuVg3XzRU79Rf01qJPQx1cf8EPsGLhyEL3qtvJ5hcUUQ3b3ElUqPH/nFDETsF+f
-         yTF5UddHCykEngM2gY/UYkqk8KPPNwfYpF8bQ2Fv4mC7g5qSTBRbhH39Czz0JyKelOdB
-         a5kw==
-X-Gm-Message-State: AOAM533UmfU8jGGjQSu9XShulkDRwHMpSimDpI4aepljGo39rU4GY2cu
-        y1kez6Ffeb9TJ3AuKozqs+gaeWKpLTNen9nBs4A=
-X-Google-Smtp-Source: ABdhPJyk87lTnCxBxQCRZGYheBGUyek9yB/i0PWgU0aJdBm1JR/k+RBXM04l+IGK2HiYoKIl6FTD8Atl06AtbLuru8E=
-X-Received: by 2002:a17:90b:1186:: with SMTP id gk6mr18887254pjb.127.1642147059084;
- Thu, 13 Jan 2022 23:57:39 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qQYjsQBGNm39+m2dg7I01Yy9Chp8U4KppaS99DbhPP8=;
+        b=CGX4Il7nV09SbvJCQh+uA7CbLMatuAQjT0gCHwgaYFV9dizpvewhnZ0SpEnjiRQBML
+         AAkj1Mn1ItUYsEHDiqZYZ1YDGyynoo2bg1W0YF7Fa3z8H1CqpxIss9/KCizqj5E42Uwp
+         mL6BX7ud8n0yC5TNnkrmS6FBISYc6zgr8k88KhWcdECiFC+EAaKnXoP3+x3h0ouSI1dr
+         FPWuQsdXOxKl51g3tSLBOQ1Iz1VjIpZlt9SE/zmGFaFAFKAK48zZsHwfIt6RkCIrUt94
+         +n0G5POaj0uVrm6tFlzjSfOAtgpcb7x6n6vbZ5tHYZalgRxtYtq/l95EIKHlFIek18eG
+         aokg==
+X-Gm-Message-State: AOAM531MALDgh1Y3GhTq1IeEMYjMuIxy6ulMq6AcZovTa0X+zdasnb4W
+        EB2brhYqyyZsRA45vL1JJxE6aQD8iO4=
+X-Google-Smtp-Source: ABdhPJxaAGWnJ+sjNOjsTnVJSiWbTg77K7MrJqJmVjBJj8UUVESt6Gakeb9jWYftaAF9t28SX0ay/A==
+X-Received: by 2002:a05:6000:1543:: with SMTP id 3mr2943527wry.98.1642147090941;
+        Thu, 13 Jan 2022 23:58:10 -0800 (PST)
+Received: from nz.home (host81-129-83-154.range81-129.btcentralplus.com. [81.129.83.154])
+        by smtp.gmail.com with ESMTPSA id k31sm3581154wms.15.2022.01.13.23.58.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jan 2022 23:58:10 -0800 (PST)
+Received: by nz.home (Postfix, from userid 1000)
+        id 4FE9919DC1560; Fri, 14 Jan 2022 07:58:09 +0000 (GMT)
+From:   Sergei Trofimovich <slyich@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Sergei Trofimovich <slyich@gmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: [PATCH] objtool: check: give big enough buffer for pv_ops
+Date:   Fri, 14 Jan 2022 07:57:56 +0000
+Message-Id: <20220114075756.838243-1-slyich@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:2810:0:0:0:0 with HTTP; Thu, 13 Jan 2022 23:57:37
- -0800 (PST)
-Reply-To: fulhammartins8@gmail.com
-From:   Fulham Martins <hamfranck877@gmail.com>
-Date:   Thu, 13 Jan 2022 23:57:37 -0800
-Message-ID: <CANe2if0mfoaH1BLdV96FAwbChaDjGSv55GTZ5H-3DPPH3SPg2w@mail.gmail.com>
-Subject: INVESTMENT PARTNERSHIP
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Partner,
+On gcc-12 build fails flagging possible buffer overflow:
 
-My Name is Mr. Fulham Martins. I am from the United Kingdom.
-It is my resolve to contact you for an investment plan in your country. It is
-no more a secret that investments are thriving fast in your country.
-Therefore, I want to invest in your country and want you to be my
-business partner.
-I am ready to invest in any sector such as Manufacturing, Agriculture,
-Real Estate, Hoteling,etc. or any other business that has good return
-on investment/profitable.
+    check.c: In function 'validate_call':
+    check.c:2865:58: error: '%d' directive output may be truncated writing between 1 and 10 bytes into a region of size 9 [-Werror=format-truncation=]
+     2865 |                 snprintf(pvname, sizeof(pvname), "pv_ops[%d]", idx);
+          |                                                          ^~
 
-If you choose to be of assistance,I am ready to send the consignment
-fund box to your country regarding the investment
-collaboration or do a direct bank transfer to your account based on
-whatever modalities the investment will entail.
-I am presently based in the United Kingdom and would like to know
-whether you are ready to partner with me on this. Kindly indicate your
-interest to enable us proceed.
-Thank you in anticipation as I look forward to reading your reply on
-fulhammartins8@gmail.com.
+I think it's a valid warning:
 
+    static char pvname[16];
+    int idx;
+    ...
+    idx = (rel->addend / sizeof(void *));
+    snprintf(pvname, sizeof(pvname), "pv_ops[%d]", idx);
 
-Best regards.
+we have only 7 chars for %d while it could take up to 9.
 
-Mr.Fulham Martins.
+CC: Josh Poimboeuf <jpoimboe@redhat.com>
+CC: Peter Zijlstra <peterz@infradead.org>
+---
+ tools/objtool/check.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 8c1931eab5f1..0fae132ea59f 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -2852,7 +2852,7 @@ static inline bool func_uaccess_safe(struct symbol *func)
+ 
+ static inline const char *call_dest_name(struct instruction *insn)
+ {
+-	static char pvname[16];
++	static char pvname[32];
+ 	struct reloc *rel;
+ 	int idx;
+ 
+-- 
+2.34.1
+

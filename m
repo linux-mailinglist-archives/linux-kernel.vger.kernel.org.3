@@ -2,127 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 058AB48E676
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8761548E67A
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 09:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240423AbiANI1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 03:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240174AbiANI0W (ORCPT
+        id S239967AbiANI30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 03:29:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26129 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240294AbiANI2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 03:26:22 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FD8C0613EE
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 00:23:55 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id v6so14250551wra.8
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 00:23:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2SXNoXMdnGaSfy4KnO5GzxkSIdaPrK9msaNZUkt3T8Y=;
-        b=TyRi88oeaki7bUJT9yoFyv6wUj9fpeayXEzTbacbcpowHz8FPfwCEa5pPeNp4hic2A
-         1LUiMChZ/JgR4XfavZjb1aUuuO2byzLkGj1zOXheJtN63skSUHN8+KmF8d19GagVbsrr
-         3fmQKuhufkBrR7HLsFJkJOrO+niqCVoiY6pXytGHfK3Z/P2h4xZlwMO0M6mfyCp643jF
-         mVBK4R++pEHgYWm8fqj840V0Bd7FVUMAC9/gMdKD2vUoCfCbBcTjHl4ISxc5ELSpzHNM
-         hEOssy1EdHg2qUjygRA/8pzlYYvPdaPBs1bBkE4hJnxLCH+S/QkVvPnwozU/+o0Z1GpP
-         y65A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=2SXNoXMdnGaSfy4KnO5GzxkSIdaPrK9msaNZUkt3T8Y=;
-        b=Z+6frKUSNdTDhic4C/uD4QBeq00pREGnWSLX7sfeyqjIgPgjGVf3Scmc6ClfssVB8e
-         en3ucdY8BF8zaUya+5TsWljYD50zzvZfvI5zLI7MZPgQC17RVdIR3xur/yG9bBoFcp7K
-         G8gq6qFCgq29vIWL6FpZms51ECS8r2s9q4rJvE5LGWMNSYBUNGHipxu30BVolRLXj+HY
-         SbU/aRU6E9T4fBgtYM2gkkHtgryzYl2sslLMrFYmklb9c0ECKEx4fNBemxeOjtvd7y5W
-         wHptcuUC6KdWqiwk+0O4fTnoLERLRe2eiA1yJ5oSWktdtkOX8VyuKSfm0wwwJJGQRnGf
-         akfQ==
-X-Gm-Message-State: AOAM533B6Dey9VVpsuuJDNTgQZg7q2Tnla2omPj/JVAkicDi7V+HqIbw
-        qM8O5eBwUWnqhrQF1YK5AFDszf/co+zr7Q==
-X-Google-Smtp-Source: ABdhPJwtTLFQyCczvzEvPARkSbWXpC8Q4vilLBDbd9n7KTtKKzr0kpI3M6BrzPhUDH5NWo5f3LRQ0Q==
-X-Received: by 2002:a5d:6781:: with SMTP id v1mr2909142wru.714.1642148633286;
-        Fri, 14 Jan 2022 00:23:53 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:a3fc:c40b:5afc:88ee? ([2001:861:44c0:66c0:a3fc:c40b:5afc:88ee])
-        by smtp.gmail.com with ESMTPSA id i82sm5990464wma.23.2022.01.14.00.23.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 00:23:52 -0800 (PST)
-Subject: Re: dw_hdmi is showing wrong colour after commit
- 7cd70656d1285b79("drm/bridge: display-connector: implement bus fmts
- callbacks")
-To:     Fabio Estevam <festevam@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "Laurent.pinchart@ideasonboard.com" 
-        <Laurent.pinchart@ideasonboard.com>,
-        "robert.foss@linaro.org" <robert.foss@linaro.org>,
-        "jonas@kwiboo.se" <jonas@kwiboo.se>,
-        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
-        "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <OS0PR01MB59221ED76B74231F5836D5FB86539@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAOMZO5DJiCb5bJN5_nxnYa-FsK-u7QtFghWNzs_-udE42XPDeA@mail.gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <502f3ec4-fea4-8e14-c7a9-39418fc05d6d@baylibre.com>
-Date:   Fri, 14 Jan 2022 09:23:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 14 Jan 2022 03:28:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642148893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Toq/pcDDykYr7QxIBUh+EwJlcrNHxSEe3MwKZ5YvLWg=;
+        b=DTyx72UzrYm6yISFDzK2LwUOoUelU+t9CJmIsnisms+GFGKNy4d1PoyLQHRkNKsLwoinFm
+        4km0sx7JbBV/4IOe83ejL47ieUqi0ewVRIv9Mvoj2/HDN/4D16Ocb8sEdbfudeUz1xAKNv
+        E++s8gtH4VNQvcmJ595rEgUtTDHl8C4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-634-wTWZ0GwMOOOwT6gfIkH5GQ-1; Fri, 14 Jan 2022 03:28:10 -0500
+X-MC-Unique: wTWZ0GwMOOOwT6gfIkH5GQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D7A5E1019983;
+        Fri, 14 Jan 2022 08:28:08 +0000 (UTC)
+Received: from starship (unknown [10.40.192.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DAA586E1EF;
+        Fri, 14 Jan 2022 08:28:01 +0000 (UTC)
+Message-ID: <5b516b51f81874fe7cafe8ce6846bc9936d83cc7.camel@redhat.com>
+Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Igor Mammedov <imammedo@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
+Date:   Fri, 14 Jan 2022 10:28:00 +0200
+In-Reply-To: <YeCowpPBEHC6GJ59@google.com>
+References: <20211122175818.608220-1-vkuznets@redhat.com>
+         <20211122175818.608220-3-vkuznets@redhat.com>
+         <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
+         <20211227183253.45a03ca2@redhat.com>
+         <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
+         <87mtkdqm7m.fsf@redhat.com> <20220103104057.4dcf7948@redhat.com>
+         <YeCowpPBEHC6GJ59@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-In-Reply-To: <CAOMZO5DJiCb5bJN5_nxnYa-FsK-u7QtFghWNzs_-udE42XPDeA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 13/01/2022 21:01, Fabio Estevam wrote:
-> Hi Biju,
+On Thu, 2022-01-13 at 22:33 +0000, Sean Christopherson wrote:
+> On Mon, Jan 03, 2022, Igor Mammedov wrote:
+> > On Mon, 03 Jan 2022 09:04:29 +0100
+> > Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+> > 
+> > > Paolo Bonzini <pbonzini@redhat.com> writes:
+> > > 
+> > > > On 12/27/21 18:32, Igor Mammedov wrote:  
+> > > > > > Tweaked and queued nevertheless, thanks.  
+> > > > > it seems this patch breaks VCPU hotplug, in scenario:
+> > > > > 
+> > > > >    1. hotunplug existing VCPU (QEMU stores VCPU file descriptor in parked cpus list)
+> > > > >    2. hotplug it again (unsuspecting QEMU reuses stored file descriptor when recreating VCPU)
+> > > > > 
+> > > > > RHBZ:https://bugzilla.redhat.com/show_bug.cgi?id=2028337#c11
+> > > > >   
+> > > > 
+> > > > The fix here would be (in QEMU) to not call KVM_SET_CPUID2 again. 
+> > > > However, we need to work around it in KVM, and allow KVM_SET_CPUID2 if 
+> > > > the data passed to the ioctl is the same that was set before.  
+> > > 
+> > > Are we sure the data is going to be *exactly* the same? In particular,
+> > > when using vCPU fds from the parked list, do we keep the same
+> > > APIC/x2APIC id when hotplugging? Or can we actually hotplug with a
+> > > different id?
+> > 
+> > If I recall it right, it can be a different ID easily.
 > 
-> On Thu, Jan 13, 2022 at 2:45 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
->>
->> Hi All,
->>
->> RZ/G2{H, M, N} SoC has dw_hdmi IP and it was working ok(colour) till the commit
->> 7cd70656d1285b79("drm/bridge: display-connector: implement bus fmts callbacks").
->>
->> After this patch, the screen becomes greenish(may be it is setting it into YUV format??).
->>
->> By checking the code, previously it used to call get_input_fmt callback and set colour as RGB24.
->>
->> After this commit, it calls get_output_fmt_callbck and returns 3 outputformats(YUV16, YUV24 and RGB24)
->> And get_input_fmt callback, I see the outputformat as YUV16 instead of RGB24.
->>
->> Not sure, I am the only one seeing this issue with dw_HDMI driver.
+> No, it cannot.  KVM doesn't provide a way for userspace to change the APIC ID of
+> a vCPU after the vCPU is created.  x2APIC flat out disallows changing the APIC ID,
+> and unless there's magic I'm missing, apic_mmio_write() => kvm_lapic_reg_write()
+> is not reachable from userspace.
 
-This patch was introduced to maintain the bridge color format negotiation after using DRM_BRIDGE_ATTACH_NO_CONNECTOR,
-but it seems it behaves incorrectly if the first bridge doesn't implement the negotiation callbacks.
+So after all, it is true that vcpu_id == initial APIC_ID,
+and if we don't let guest change it, it will be always like that? 
 
-Let me check the code to see how to fix that.
 
+You said that its not true in the other mail in the thread. 
+I haven't checked it in the code yet, as I never was much worried about userspace changing,
+but I will check it soon.
+
+I did a quick look and I see that at least the userspace can call 'kvm_apic_set_state' and it 
+contains snapshot of all apic registers, including apic id.
+However it would be very easy to add a check
+there and fail if userspace attempts to
+set APIC_ID != vcpu_id.
+
+
+Best regards,
+	Maxim Levitsky
 > 
-> I have tested linux-next 20220112 on a imx6q-sabresd board, which shows:
+> The only way for userspace to set the APIC ID is to change vcpu->vcpu_id, and that
+> can only be done at KVM_VCPU_CREATE.
 > 
-> dwhdmi-imx 120000.hdmi: Detected HDMI TX controller v1.30a with HDCP
-> (DWC HDMI 3D TX PHY)
+> So, reusing a parked vCPU for hotplug must reuse the same APIC ID.  QEMU handles
+> this by stashing the vcpu_id, a.k.a. APIC ID, when parking a vCPU, and reuses a
+> parked vCPU if and only if it has the same APIC ID.  And because QEMU derives the
+> APIC ID from topology, that means all the topology CPUID leafs must remain the
+> same, otherwise the guest is hosed because it will send IPIs to the wrong vCPUs.
 > 
-> The colors are shown correctly here.
+>   static int do_kvm_destroy_vcpu(CPUState *cpu)
+>   {
+>     struct KVMParkedVcpu *vcpu = NULL;
+> 
+>     ...
+> 
+>     vcpu = g_malloc0(sizeof(*vcpu));
+>     vcpu->vcpu_id = kvm_arch_vcpu_id(cpu); <=== stash the APIC ID when parking
+>     vcpu->kvm_fd = cpu->kvm_fd;
+>     QLIST_INSERT_HEAD(&kvm_state->kvm_parked_vcpus, vcpu, node);
+> err:
+>     return ret;
+>   }
+> 
+>   static int kvm_get_vcpu(KVMState *s, unsigned long vcpu_id)
+>   {
+>     struct KVMParkedVcpu *cpu;
+> 
+>     QLIST_FOREACH(cpu, &s->kvm_parked_vcpus, node) {
+>         if (cpu->vcpu_id == vcpu_id) {  <=== reuse if APIC ID matches
+>             int kvm_fd;
+> 
+>             QLIST_REMOVE(cpu, node);
+>             kvm_fd = cpu->kvm_fd;
+>             g_free(cpu);
+>             return kvm_fd;
+>         }
+>     }
+> 
+>     return kvm_vm_ioctl(s, KVM_CREATE_VCPU, (void *)vcpu_id);
+>   }
 > 
 
-The imx doesn't use DRM_BRIDGE_ATTACH_NO_CONNECTOR so the negotiation fails and use the RGB fallback input & output format.
 
-Anyway thanks for testing
-
-Neil

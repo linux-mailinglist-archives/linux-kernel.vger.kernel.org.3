@@ -2,76 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6928D48EA85
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BA248EA87
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 14:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241208AbiANNWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 08:22:22 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:34764 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbiANNWV (ORCPT
+        id S241216AbiANNWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 08:22:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21383 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241211AbiANNWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 08:22:21 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id CE4141C0B76; Fri, 14 Jan 2022 14:22:19 +0100 (CET)
-Date:   Fri, 14 Jan 2022 14:22:19 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.10 00/25] 5.10.92-rc1 review
-Message-ID: <20220114132219.GA26600@duo.ucw.cz>
-References: <20220114081542.698002137@linuxfoundation.org>
+        Fri, 14 Jan 2022 08:22:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642166558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oeaq06iGyvE0QAALNnhiWPGnYSnujvBuiZVqBWtdPcQ=;
+        b=GLM4PNOLO76exaLiapDScAvMqMI8v4Osy92YUsa2i7LSptqZfpylpWur4kO8t1IsSxRE2e
+        Qe7PxETOfO7m2AxqnSgGtTS10kqhPFEIR6TZ4puVvTuNx+lxJtIrNdPrfV4kguF53CvQNn
+        mtD5gZW52syBY0nJ+ZTU0naa4//gOeE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-339-xRec_neyNZmemZIArGWOnA-1; Fri, 14 Jan 2022 08:22:37 -0500
+X-MC-Unique: xRec_neyNZmemZIArGWOnA-1
+Received: by mail-ed1-f71.google.com with SMTP id h11-20020a05640250cb00b003fa024f87c2so8363872edb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 05:22:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=oeaq06iGyvE0QAALNnhiWPGnYSnujvBuiZVqBWtdPcQ=;
+        b=BpUloi9Z5aGSPYAZWwzbjfn6xHM7hIf/J3Nesp4DddM/UORdEbxHAEKEAmsjJMWnmZ
+         7KsBoKf4HGY5JrJmF15+GPonGnh/YbXsDzBSX/enEofhv0R7U623BnBTZAVvCGN+ErcP
+         nlraxexeEWfJa3jt7wJAIYfX9MzdZzPArtpQfRPb3G1ARZ1I1Vm6rbVWa1UY9cc1tVi5
+         HmTG2hMJOb+wsxu9CfXv3XZVM9ChpSEu/ofj9eXtrPATJJGIby+6tfS/pOAIf2n6PJz1
+         X7YkGB50PqcppJ3GeW/uEan27fS0t1THpEILxAc67tvN4inLYL7h+onO/gznQef9xqKn
+         wOUg==
+X-Gm-Message-State: AOAM533UpV5dPpCqdr1+kpDXlQz19pbiuV//JYS4yKxH4SrFHsT1sDJX
+        s3nKEMDu2lYwSsqB1x48hntQ2C5sINk8+SPS5cDAz216iYXRBBtA52i6+TC5XMPMH5JoHq784Wc
+        kjeUgcrjIEiNHDLqZzG/HAber
+X-Received: by 2002:a17:907:da0:: with SMTP id go32mr7626095ejc.206.1642166556203;
+        Fri, 14 Jan 2022 05:22:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxS9vZNX3oQ6i39jM2FKgLuz6f8PXERubRE87h6Ubd8Gv/YN4aNXBeXwCcra2gmHtmx8Cv73A==
+X-Received: by 2002:a17:907:da0:: with SMTP id go32mr7626059ejc.206.1642166555864;
+        Fri, 14 Jan 2022 05:22:35 -0800 (PST)
+Received: from ?IPV6:2003:cb:c701:9d00:ff87:1c9b:108a:9702? (p200300cbc7019d00ff871c9b108a9702.dip0.t-ipconnect.de. [2003:cb:c701:9d00:ff87:1c9b:108a:9702])
+        by smtp.gmail.com with ESMTPSA id o1sm2377554edv.2.2022.01.14.05.22.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Jan 2022 05:22:35 -0800 (PST)
+Message-ID: <1549f9f8-92a5-21f6-23ef-f3e6217df1c3@redhat.com>
+Date:   Fri, 14 Jan 2022 14:22:34 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="n8g4imXOkfNTN/H1"
-Content-Disposition: inline
-In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220111113314.27173-1-kirill.shutemov@linux.intel.com>
+ <20220111113314.27173-2-kirill.shutemov@linux.intel.com>
+ <3a68fabd-eaff-2164-5609-3a71fd4a7257@intel.com>
+ <d84e242f-f7f6-4fb0-8f22-bcc790a296a0@redhat.com>
+ <20220112191510.6uqdflbreuet7bnx@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCHv2 1/7] mm: Add support for unaccepted memory
+In-Reply-To: <20220112191510.6uqdflbreuet7bnx@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12.01.22 20:15, Kirill A. Shutemov wrote:
+> On Wed, Jan 12, 2022 at 12:31:10PM +0100, David Hildenbrand wrote:
+>>
+>>>
+>>> Looking at stuff like this, I can't help but think that a:
+>>>
+>>> 	#define PageOffline PageUnaccepted
+>>>
+>>> and some other renaming would be a fine idea.  I get that the Offline 
+>>> bit can be reused, but I'm not sure that the "Offline" *naming* should 
+>>> be reused.  What you're doing here is logically distinct from existing 
+>>> offlining.
+>>
+>> Yes, or using a new pagetype bit to make the distinction clearer.
+>> Especially the function names like maybe_set_page_offline() et. Al are
+>> confusing IMHO. They are all about accepting unaccepted memory ... and
+>> should express that.
+> 
+> "Unaccepted" is UEFI treminology and I'm not sure we want to expose
+> core-mm to it. Power/S390/ARM may have a different name for the same
+> concept. Offline/online is neutral terminology, familiar to MM developers.
 
---n8g4imXOkfNTN/H1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Personally, I'd much rather prefer clear UEFI terminology for now than
+making the code more confusing to get. We can always generalize later
+iff there are similar needs by other archs (and if they are able to come
+up witha  better name). But maybe we can find a different name immediately.
 
-Hi!
+The issue with online vs. offline I have is that we already have enough
+confusion:
 
-> This is the start of the stable review cycle for the 5.10.92 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
-> Anything received after that time might be too late.
+offline page: memory section is offline. These pages are not managed by
+the buddy. The memmap is stale unless we're dealing with special
+ZONE_DEVICE memory.
 
-CIP testing did not find any new kernel problems here (gcc 8 gmp.h
-problem remains):
+logically offline pages: memory section is online and pages are
+PageOffline(). These pages were removed from the buddy e.g., to free
+them up in the hypervisor.
 
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
+soft offline pages:  memory section is online and pages are
+PageHWPoison(). These pages are removed from the buddy such that we
+cannot allocate them to not trigger MCEs.
 
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
 
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+offline pages are exposed to the buddy by onlining them
+(generic_online_page()), which is init+freeing. PageOffline() and
+PageHWPoison() are onlined by removing the flag and freeing them to the
+buddy.
 
---n8g4imXOkfNTN/H1
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Your case is different such that the pages are managed by the buddy and
+they don't really have online/offline semantics compared to what we
+already have. All the buddy has to do is prepare them for initial use.
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYeF5CwAKCRAw5/Bqldv6
-8kFqAJ9nwgTJkxTfs5Huz8EVtn7NFMdY6wCff+GpKsNaNIEi3J3Tlb/vKB8czxU=
-=IiSg
------END PGP SIGNATURE-----
 
---n8g4imXOkfNTN/H1--
+I'm fine with reusing PageOffline(), but for the purpose of reading the
+code, I think we really want some different terminology in page_alloc.c
+
+So using any such terminology would make it clearer to me:
+* PageBuddyUnprepared()
+* PageBuddyUninitialized()
+* PageBuddyUnprocessed()
+* PageBuddyUnready()
+
+
+> 
+> What if I change accept->online in function names and document the meaning
+> properly?
+> 
+>> I assume PageOffline() will be set only on the first sub-page of a
+>> high-order PageBuddy() page, correct?
+>>
+>> Then we'll have to monitor all PageOffline() users such that they can
+>> actually deal with PageBuddy() pages spanning *multiple* base pages for
+>> a PageBuddy() page. For now it's clear that if a page is PageOffline(),
+>> it cannot be PageBuddy() and cannot span more than one base page.
+> 
+>> E.g., fs/proc/kcore.c:read_kcore() assumes that PageOffline() is set on
+>> individual base pages.
+> 
+> Right, pages that offline from hotplug POV are never on page allocator's
+> free lists, so it cannot ever step on them.
+> 
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

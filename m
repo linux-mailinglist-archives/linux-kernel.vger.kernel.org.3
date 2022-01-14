@@ -2,112 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8219548E451
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BBC48E452
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 07:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239389AbiANGmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 01:42:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235213AbiANGmT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 01:42:19 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381B3C061574;
-        Thu, 13 Jan 2022 22:42:18 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JZsD76Mg7z4xQp;
-        Fri, 14 Jan 2022 17:42:15 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642142536;
-        bh=SNvPMfPKFeAN3UxFhwUESeesZJM1ozquQSLQ6yaN/xk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=siNA53gx841+6QDoYA2OHKw8gaWQKquFLEfK8oXAuphpdy7Cy0mZAd1Z2NBnmz7CK
-         XQTSYwPZ13Y2DUOlLKtSqeysUC3m/HK6VBtzhYC9BPd8dvsUr2tT3Qfj3B52XK1qSp
-         Jamz/MXyVvVCoIFPdwQE0UZXg6BAWZPuhZquih9jtAp0qo+xgJopv0R1DCFVbhoqy3
-         PP3k5zH65WFe7rGltjwxVR6NDI8mO1CYcn5KSJJA/8/sG21O5a0OVc4dVk7O2/6O48
-         18K1rxcp3seuxUO2q2oDJ8SX0jXnU6w3NJ22zsi2j4zD1iv2unGnGrkvl8MCG0ZxSD
-         p2jot5PkEpERA==
-Date:   Fri, 14 Jan 2022 17:42:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Yinan Liu <yinan@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the ftrace tree
-Message-ID: <20220114174214.1fde716e@canb.auug.org.au>
-In-Reply-To: <20220113225048.17d4d9b7@rorschach.local.home>
-References: <20220112113103.7e03448f@canb.auug.org.au>
-        <20220114120240.4b592480@canb.auug.org.au>
-        <20220113211633.4f9bea57@gandalf.local.home>
-        <20220114135808.391398d0@canb.auug.org.au>
-        <20220114140258.2fe2f076@canb.auug.org.au>
-        <20220113222539.30202e01@rorschach.local.home>
-        <20220114143418.06035a75@canb.auug.org.au>
-        <20220113225048.17d4d9b7@rorschach.local.home>
+        id S239398AbiANGna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 01:43:30 -0500
+Received: from mga11.intel.com ([192.55.52.93]:43067 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235213AbiANGna (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 01:43:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642142610; x=1673678610;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=C6gi/Lo3Wvj+j+/Qd+tWFYEYVfcNt7kby4wAhJCBil8=;
+  b=R14FqASgm/3JLcUa+CZFRqz+KwEKnl9w2bFXTGgCdiTYdHQlm/NLg81e
+   XI6RPUuo5Ujj6MpAvAyuahZb4dkze4m3QDNgsZlbhSSwZ1V0awl3/VGrL
+   kBJqLnM+aBpcTpJXTa3ZYjPwByTXQvHik3RwRDAru3oIVTRASOH9TEZj0
+   EGLHx7GhEbQLKP2DEegsmwVvgMDT+eqAl0iSLOLaohU+g57wewXSHvuRy
+   uQIL2tpURQAPWEKm/gJV4TFSvwiMzCYQKL8tf/MoTEfjbJxtykOAPc+PI
+   lMX5SdQxLasnOslkLqUpQMssejgFdUVO47CePX8U68NC2QLTRqkdrnl2I
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="241755440"
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="241755440"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 22:43:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="577202093"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Jan 2022 22:43:28 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8GJ6-0008Ct-6s; Fri, 14 Jan 2022 06:43:28 +0000
+Date:   Fri, 14 Jan 2022 14:42:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jens-wiklander-tee:testing/tuxbuild 6/13]
+ drivers/tee/tee_shm.c:52:17: warning: no previous prototype for function
+ 'shm_alloc_helper'
+Message-ID: <202201141435.ogrNv2hr-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Hwo0t9D2rPj8RqZOMv3qWOH";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Hwo0t9D2rPj8RqZOMv3qWOH
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+tree:   http://git.linaro.org/people/jens.wiklander/linux-tee testing/tuxbuild
+head:   9ea0d125d4c9a4144b8641c454e97406b483722d
+commit: b056eac4e504db8ee3fb03b4d13f1c9f2653bee8 [6/13] tee: replace tee_shm_alloc()
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220114/202201141435.ogrNv2hr-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add jens-wiklander-tee http://git.linaro.org/people/jens.wiklander/linux-tee
+        git fetch --no-tags jens-wiklander-tee testing/tuxbuild
+        git checkout b056eac4e504db8ee3fb03b4d13f1c9f2653bee8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/tee/
 
-Hi Steve
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Thu, 13 Jan 2022 22:50:48 -0500 Steven Rostedt <rostedt@goodmis.org> wro=
-te:
->
-> On Fri, 14 Jan 2022 14:34:18 +1100
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->=20
-> > > Does it fail on anything else?   =20
-> >=20
-> > This is the first build I do after merging each tree, so I don't know
-> > about others.  I may be able to do some testing later today (after
-> > linux-next is released). =20
->=20
-> Could you see if this fixes it? This is a revert of part of the patch.
-> Yinan, was there a reason you moved this code?
+All warnings (new ones prefixed by >>):
 
-It is my fault, sorry.  I got the merge resolution wrong and managed to
-remove both copies of:
+>> drivers/tee/tee_shm.c:52:17: warning: no previous prototype for function 'shm_alloc_helper' [-Wmissing-prototypes]
+   struct tee_shm *shm_alloc_helper(struct tee_context *ctx, size_t size,
+                   ^
+   drivers/tee/tee_shm.c:52:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct tee_shm *shm_alloc_helper(struct tee_context *ctx, size_t size,
+   ^
+   static 
+   1 warning generated.
 
-info SYSMAP System.map
-mksysmap vmlinux System.map
 
-putting it back before
+vim +/shm_alloc_helper +52 drivers/tee/tee_shm.c
 
-if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
+    51	
+  > 52	struct tee_shm *shm_alloc_helper(struct tee_context *ctx, size_t size,
+    53					 size_t align, u32 flags, int id)
+    54	{
+    55		struct tee_device *teedev = ctx->teedev;
+    56		struct tee_shm *shm;
+    57		void *ret;
+    58		int rc;
+    59	
+    60		if (!tee_device_get(teedev))
+    61			return ERR_PTR(-EINVAL);
+    62	
+    63		if (!teedev->pool) {
+    64			/* teedev has been detached from driver */
+    65			ret = ERR_PTR(-EINVAL);
+    66			goto err_dev_put;
+    67		}
+    68	
+    69		shm = kzalloc(sizeof(*shm), GFP_KERNEL);
+    70		if (!shm) {
+    71			ret = ERR_PTR(-ENOMEM);
+    72			goto err_dev_put;
+    73		}
+    74	
+    75		refcount_set(&shm->refcount, 1);
+    76		shm->flags = flags;
+    77		shm->id = id;
+    78	
+    79		/*
+    80		 * We're assigning this as it is needed if the shm is to be
+    81		 * registered. If this function returns OK then the caller expected
+    82		 * to call teedev_ctx_get() or clear shm->ctx in case it's not
+    83		 * needed any longer.
+    84		 */
+    85		shm->ctx = ctx;
+    86	
+    87		rc = teedev->pool->ops->alloc(teedev->pool, shm, size, align);
+    88		if (rc) {
+    89			ret = ERR_PTR(rc);
+    90			goto err_kfree;
+    91		}
+    92	
+    93		teedev_ctx_get(ctx);
+    94		return shm;
+    95	err_kfree:
+    96		kfree(shm);
+    97	err_dev_put:
+    98		tee_device_put(teedev);
+    99		return ret;
+   100	}
+   101	
 
-makes it work!
-
-I am so sorry.  I will fix up my merge resolution for Monday.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Hwo0t9D2rPj8RqZOMv3qWOH
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHhG0YACgkQAVBC80lX
-0GwatQf/XT0EePLc7igQs9pL+N0S+Av68irdHwY5K7xyQqWW+c0+MbbnyMS/kh1A
-tSddA0QY5u99E8V5a9TrYwY3J2nnNDwPOCDII7c77dIGVxIv9nQS6l+YUL7Bkmxh
-XZ8PsLkC+YSfgr06mNhsGzjo25cfe5feQ2H+P+/o+04xNn0+UgLN093+DRJ4V9IX
-44wu5sLCCHEnNenjiNVMngb8FTfJq1Guo6vYJfpW7HuCfJdTa4XBccWHunUqrWDD
-DG+npTFRwtMf9fdEfl7w910/vgWJk2yPeP6NV7PGLbH3cRc4TGpjWTZgRUmfVrk7
-olKzv+moPAnQtvD4OLqnOV8dKjq3yA==
-=kAht
------END PGP SIGNATURE-----
-
---Sig_/Hwo0t9D2rPj8RqZOMv3qWOH--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

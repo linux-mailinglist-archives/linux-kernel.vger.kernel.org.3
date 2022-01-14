@@ -2,114 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BC348EEDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5BE48EEE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 18:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243650AbiANRAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 12:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243483AbiANRAc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 12:00:32 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79090C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:00:31 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id x20so3223338pgk.1
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 09:00:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xjoS4K/y8gkwtFetlOk0sMfpyN0++LCc7AkNoF1EEeA=;
-        b=IKLEf9fy+XV5ibto796ufUUVkuOXmiAe1Ec1lM7Z3daI4YOtmL6CWQG9prdrfb7oup
-         I98bnXfMazE1cMqeBEAsn6oKT/rUhI80S2prPVp/AhX8ICntJmz5AJWQ/XRV2CCwXO3M
-         TVYw4crJyR8WLi8lOK9POPQQ6JjM+g19AP1dddsS1z3Dq7g36cWQNpAdPIaHuC3/p4n6
-         WzaubIq1mLt+jn9fLoMcSt6Ovf8zUad/zHf7O3mpUigEyTF3WmnRmYCyOQ51QP/ld1Sp
-         qZa5acJbXlHJgNm9yxDginU0uGaj1DZXxV5NEd3qnX1n9t0K3lWv2OjUXnZ073W+WtPY
-         LfhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xjoS4K/y8gkwtFetlOk0sMfpyN0++LCc7AkNoF1EEeA=;
-        b=sRNq55+jpRE/qw23qLXcCWG0ANBNZ5kyBtbBFosFnSb8spvile+sIcbfq5CIxduWYB
-         clxeP9a5ztZBgp1hQMiOVG1oB4J2VTKlHDV6hOhYzqf2FHvhhyVymIQFphGrV1ZOFB1L
-         FYjTqIYSDjPvvaWvOd3tFna/uPbQNF1QtL4n/eHPDdU56gUfH4hPBn6Uas0dhsHCAFJX
-         GWa1FkvoBUPJO1dd3Npu51nhr0H9CM+bGPhXpe0OytpeysRlgK/HTsXuqg9FWM5hVS4A
-         iWoaXn+TdtRJfoJ4VzA91dd4xxd/nOWoSmkGYt7vKPHesPo1hSng6ASPDNFQq+iQ2Yym
-         gUNQ==
-X-Gm-Message-State: AOAM530qGtpszBM8ZZFlq/rttVKO+40Zp1n2JUY6eTewYrv+B/qtRAKR
-        sc2UOz8hxVA8vh2jDxr5uR+YXQ==
-X-Google-Smtp-Source: ABdhPJyK4NO0IRQqUFtpgmMoDjmV9qYii4Ns5cvsdau/cVTvulWI3OU+4pc/o5/DiidW5EAys9uOLQ==
-X-Received: by 2002:a63:6c01:: with SMTP id h1mr8913390pgc.233.1642179630783;
-        Fri, 14 Jan 2022 09:00:30 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m13sm4985630pga.38.2022.01.14.09.00.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 09:00:29 -0800 (PST)
-Date:   Fri, 14 Jan 2022 17:00:26 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Igor Mammedov <imammedo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
-Message-ID: <YeGsKslt7hbhQZPk@google.com>
-References: <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
- <20211227183253.45a03ca2@redhat.com>
- <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
- <87mtkdqm7m.fsf@redhat.com>
- <20220103104057.4dcf7948@redhat.com>
- <YeCowpPBEHC6GJ59@google.com>
- <20220114095535.0f498707@redhat.com>
- <87ilummznd.fsf@redhat.com>
- <20220114122237.54fa8c91@redhat.com>
- <87ee5amrmh.fsf@redhat.com>
+        id S243679AbiANRAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 12:00:36 -0500
+Received: from srv6.fidu.org ([159.69.62.71]:46628 "EHLO srv6.fidu.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243483AbiANRAf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 12:00:35 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by srv6.fidu.org (Postfix) with ESMTP id B1951C800BB;
+        Fri, 14 Jan 2022 18:00:30 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
+Received: from srv6.fidu.org ([127.0.0.1])
+        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
+        with LMTP id Od9T7Fi7LaNx; Fri, 14 Jan 2022 18:00:30 +0100 (CET)
+Received: from wsembach-tuxedo.fritz.box (host-212-18-30-247.customer.m-online.net [212.18.30.247])
+        (Authenticated sender: wse@tuxedocomputers.com)
+        by srv6.fidu.org (Postfix) with ESMTPA id 37E9FC80094;
+        Fri, 14 Jan 2022 18:00:30 +0100 (CET)
+From:   Werner Sembach <wse@tuxedocomputers.com>
+To:     dmitry.torokhov@gmail.com, tiwai@suse.com, mpdesouza@suse.com,
+        arnd@arndb.de, samuel@cavoj.net, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] input/i8042: Add quirk table to disable aux port on Clevo NS70MU
+Date:   Fri, 14 Jan 2022 18:00:30 +0100
+Message-Id: <20220114170030.599494-1-wse@tuxedocomputers.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ee5amrmh.fsf@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022, Vitaly Kuznetsov wrote:
-> Igor Mammedov <imammedo@redhat.com> writes:
-> 
-> > On Fri, 14 Jan 2022 10:31:50 +0100
-> > Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
-> >
-> >> Igor Mammedov <imammedo@redhat.com> writes:
-> >> 
-> >> 
-> >> > However, a problem of failing KVM_SET_CPUID2 during VCPU re-plug
-> >> > is still there and re-plug will fail if KVM rejects repeated KVM_SET_CPUID2
-> >> > even if ioctl called with exactly the same CPUID leafs as the 1st call.
-> >> >  
-> >> 
-> >> Assuming APIC id change doesn not need to be supported, I can send v2
-> >> here with an empty allowlist.
-> > As you mentioned in another thread black list would be better
-> > to address Sean's concerns or just revert problematic commit.
-> >
-> 
-> Personally, I'm leaning towards the blocklist approach even if just for
-> 'documenting' the fact that KVM doesn't correctly handle the
-> change. Compared to a comment in the code, such approach could help
-> someone save tons of debugging time (if anyone ever decides do something
-> weird, like changing MAXPHYADDR on the fly).
+At least one modern Clevo barebone has the touchpad connected both via PS/2
+and i2c interface. This causes a race condition between the psmouse and
+i2c-hid driver. Since the full capability if the touchpad is available via
+the i2c interface and the device has no external PS/2 port, it is save to
+just ignore all ps2 mouses here to avoid this issue.
 
-I assume the blocklist approach is let userspace opt into rejecting KVM_SET_CPUID{,2},
-but allow all CPUID leafs and sub-leafs to be modified at will by default?  I don't
-dislike the idea, but I wonder if it's unnecessarily fancy.
+The know affected device is the Clevo NS70MU.
 
-What if we instead provide an ioctl/capability to let userspace toggle disabling
-of KVM_SET_CPUID{,2}, a la STAC/CLAC to override SMAP?  E.g. QEMU could enable
-protections after initially creating the vCPU, then temporarily disable protections
-only for the hotplug path?
+This patch add a new i8042_dmi_noaux_table with the dmi strings of the
+affected device of different revisions. The table is then evaluated like
+the other quirk tables in the i8042 driver.
 
-That'd provide solid protections for minimal effort, and if userspace can restrict
-the danger zone to one specific path, then userspace can easily do its own auditing
-for that one path.
+Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+---
+ drivers/input/serio/i8042-x86ia64io.h | 42 +++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+
+diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
+index 148a7c5fd0e2..48ad6247a1a0 100644
+--- a/drivers/input/serio/i8042-x86ia64io.h
++++ b/drivers/input/serio/i8042-x86ia64io.h
+@@ -1013,6 +1013,45 @@ static const struct dmi_system_id i8042_dmi_probe_defer_table[] __initconst = {
+ 	{ }
+ };
+ 
++static const struct dmi_system_id i8042_dmi_noaux_table[] __initconst = {
++	/*
++	 * At least one modern Clevo barebone has the touchpad connected
++	 * both via PS/2 and i2c interface. This causes a race condition
++	 * between the psmouse and i2c-hid driver. Since the full
++	 * capability if the touchpad is available via the i2c interface
++	 * and the device has no external PS/2 port, it is save to just
++	 * ignore all ps2 mouses here to avoid this issue.
++	 * The know affected device is the
++	 * TUXEDO InfinityBook S17 Gen6 / Clevo NS70MU which comes with
++	 * one of the 4 different dmi string combinations below.
++	 */
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
++			DMI_MATCH(DMI_BOARD_NAME, "NS50MU"),
++		},
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
++			DMI_MATCH(DMI_BOARD_NAME, "NS50_70MU"),
++		},
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
++			DMI_MATCH(DMI_BOARD_NAME, "NS50MU"),
++		},
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
++			DMI_MATCH(DMI_BOARD_NAME, "NS50_70MU"),
++		},
++	},
++	{ }
++};
++
+ #endif /* CONFIG_X86 */
+ 
+ #ifdef CONFIG_PNP
+@@ -1336,6 +1375,9 @@ static int __init i8042_platform_init(void)
+ 	if (dmi_check_system(i8042_dmi_probe_defer_table))
+ 		i8042_probe_defer = true;
+ 
++	if (dmi_check_system(i8042_dmi_noaux_table))
++		i8042_noaux = true;
++
+ 	/*
+ 	 * A20 was already enabled during early kernel init. But some buggy
+ 	 * BIOSes (in MSI Laptops) require A20 to be enabled using 8042 to
+-- 
+2.25.1
+

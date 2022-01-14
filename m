@@ -2,114 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A8F48F327
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9927348F32C
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 00:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiANXlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 18:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
+        id S230382AbiANXsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 18:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiANXlG (ORCPT
+        with ESMTP id S229785AbiANXsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 18:41:06 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84D8C061574;
-        Fri, 14 Jan 2022 15:41:05 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JbHqh13vGz4xQq;
-        Sat, 15 Jan 2022 10:41:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642203664;
-        bh=Ft4fKhCy/uILQiu+5fAS/dvvxi4E7qK9PwnWq99FxBc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hIdCMbvUSSztnVTrLOBX+uATvlkrVoqAf/t+m83viOrUIkFeOGyHBXM+J3yHZthqb
-         KPbl0g+NseKMeO+vBT5xMxtTE2Zy6gbyCY2I/8NWNhONXStBGboO1Ff/ShFl1CIyUn
-         Z39bfwXUSGMiT+OWti45PiTMIQhWxgusdLxX+HtVbzHrHkVbxoly9iX6CrtcbLIvDm
-         p/jYuwDF15nssX5L+BrlHLFDaH+0IyZW3aKkEXUCcgwIuAsaEOyE++IdiUGqsZy4mQ
-         c4BEqxezWLycSUw8X8MKRzo5wfeMoc+6TRjh03uMeegGG7AMO53YoNRJdHioOX3IdA
-         kPsaEb6+wYUXQ==
-Date:   Sat, 15 Jan 2022 10:41:03 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>
-Subject: linux-next: manual merge of the devicetree tree with Linus' tree
-Message-ID: <20220115104103.7fa71b2e@canb.auug.org.au>
+        Fri, 14 Jan 2022 18:48:54 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45F9C061574;
+        Fri, 14 Jan 2022 15:48:53 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so8466959wme.0;
+        Fri, 14 Jan 2022 15:48:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ySZL7RoYaL29XosJreK0Gzamm/2aPB7hvnnCs2NFPcU=;
+        b=FUH7o3wjCqJ/PC6aR8HO4iTtGuCuMVDs3n9dhuZR5fdcly8iMQXLzhjpdo1ws2l72f
+         +e5HbaKHZBcCKj/Sf9GEx+Q8BHmM0V4LmTo0StOS7xjPI1XTSrxnH85uJ1YS+yJGHSgX
+         ToAzrdC7IljLfmujYdWh5UE4qZrCjglQvDLaH6grSSKgiFhYNTCgaKYwPp0u0bX7LX8y
+         lFAzKSmVxlEmFcDaaiCsy0G51A6j9fKF+48Ao9GxR33E1nedBx7kcA09oPH0dZeAYQNZ
+         XRREP3BsktzZsQH1FLicu3IG5V9KvVYiN7OtlRAPlAwyJ+yDltv179WRdrj0ZrlUZCyu
+         uC5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ySZL7RoYaL29XosJreK0Gzamm/2aPB7hvnnCs2NFPcU=;
+        b=4NlDKF6U970ie6DsiJ2Ztygq/spwWO4VIeNVapD96lBhka4+R+MsSqEavz/CeW5U9W
+         toQ5eP3OhptpG/otmQt+kGpI71LWZQqZcI30n7JIhIoxUkLL+nVpGG/j+dc8A7fzW0lC
+         HTlX+vF21WeM4NEOaIjAmRnmVhhsFvAdYWoeGFyJ9/SIVh6fEOc25CkGskn/lSOpAlZV
+         SW1Upbj8cAVHov76VJMcNuwXSJ1swpIxCJ6mCKguVaO5flOlBfpL+Y+YkVocnWIqPstJ
+         AR43aXPpTB6goSAC8kj8Hw0t7ejNyUBADNgPH8V7pAl3dW8uVwHkjwzS1QDeFT5JuGwC
+         AtzA==
+X-Gm-Message-State: AOAM53370B7/p8IEFYJdpnFDQG3mZu1rIAboLwta7j194DOz3WYohWgb
+        81tOosD4xM/xipcnzWBtlYD3HNtFBxg=
+X-Google-Smtp-Source: ABdhPJz0xmxj6j7iS5TecpFNyAuScZGxk31roquob9EYy8aC4AuLMydSXt38D7rgnBrPy+sBoUwatg==
+X-Received: by 2002:a7b:cb8a:: with SMTP id m10mr17641286wmi.165.1642204131880;
+        Fri, 14 Jan 2022 15:48:51 -0800 (PST)
+Received: from localhost.localdomain (dynamic-2a01-0c22-7684-7400-f22f-74ff-fe21-0725.c22.pool.telefonica.de. [2a01:c22:7684:7400:f22f:74ff:fe21:725])
+        by smtp.googlemail.com with ESMTPSA id i3sm5788533wmq.21.2022.01.14.15.48.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 15:48:51 -0800 (PST)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-wireless@vger.kernel.org
+Cc:     tony0620emma@gmail.com, kvalo@codeaurora.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pkshih <pkshih@realtek.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH 0/4] rtw88: four small code-cleanups and refactorings
+Date:   Sat, 15 Jan 2022 00:48:21 +0100
+Message-Id: <20220114234825.110502-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2ICeBVUJ8K4W7I20qL9zcvf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/2ICeBVUJ8K4W7I20qL9zcvf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+this series consists of four small patches which clean up and refactor
+existing code in preparation for SDIO support. Functionality is
+supposed to stay the same with these changes.
 
-Today's linux-next merge of the devicetree tree got a conflict in:
+The goal of the first two patches is to make it easier to understand
+the allowed values in the queue by using enum rtw_tx_queue_type instead
+of u8.
 
-  Documentation/devicetree/bindings/vendor-prefixes.yaml
+The third patch in this series moves the rtw_tx_queue_type code out of
+pci.c so it can be re-used by SDIO (and also USB) HCIs.
 
-between commit:
+The last patch is another small cleanup to improve readability of the
+code by using (already existing) macros instead of magic BIT(n).
 
-  2d6a1c7d5772 ("dt-bindings: Add vendor prefix for WinLink")
+This series is built on top of v3 of my other series called "rtw88:
+prepare locking for SDIO support" [0].
 
-from Linus' tree and commit:
 
-  ea800bc1bd93 ("dt-bindings: vendor-prefixes: add Wingtech")
+[0] https://lore.kernel.org/linux-wireless/20220108005533.947787-1-martin.blumenstingl@googlemail.com/
 
-from the devicetree tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Martin Blumenstingl (4):
+  rtw88: pci: Change type of rtw_hw_queue_mapping() and ac_to_hwq to
+    enum
+  rtw88: pci: Change queue datatype from u8 to enum rtw_tx_queue_type
+  rtw88: Move enum rtw_tx_queue_type mapping code to tx.{c,h}
+  rtw88: mac: Use existing interface mask macros in rtw_pwr_seq_parser()
 
---=20
-Cheers,
-Stephen Rothwell
+ drivers/net/wireless/realtek/rtw88/mac.c |  4 +-
+ drivers/net/wireless/realtek/rtw88/pci.c | 47 ++++++------------------
+ drivers/net/wireless/realtek/rtw88/tx.c  | 35 ++++++++++++++++++
+ drivers/net/wireless/realtek/rtw88/tx.h  |  3 ++
+ 4 files changed, 51 insertions(+), 38 deletions(-)
 
-diff --cc Documentation/devicetree/bindings/vendor-prefixes.yaml
-index b3de81e8290f,a2efbc26d945..000000000000
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@@ -1338,8 -1332,8 +1346,10 @@@ patternProperties
-      description: Wiligear, Ltd.
-    "^winbond,.*":
-      description: Winbond Electronics corp.
- +  "^winlink,.*":
- +    description: WinLink Co., Ltd
-+   "^wingtech,.*":
-+     description: Wingtech Technology Co., Ltd.
-    "^winstar,.*":
-      description: Winstar Display Corp.
-    "^wits,.*":
+-- 
+2.34.1
 
---Sig_/2ICeBVUJ8K4W7I20qL9zcvf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHiCg8ACgkQAVBC80lX
-0GxP8gf/Xg/Yuew2BuHhNEL2TkZUc8euKrJxao08cr6r5i3GDHhdgjoeTCuGU1xR
-L/O/bmm5XzGqCPTKVT0m4m0Fy3aBs0riagjFvXaAYGJrQaifUSXULAw/gitUeYRb
-UKONYoxRyJ/3DBbAH0CqoNANxWPpkTHakcv5Sy8Bk8svqU5LGjE8Ym+btJziruqz
-PvnMRiZkplzV/LXWGFABlaF92f+/DIaCLK+tGODydclWDJaTxBHjqFtOULNx/K/E
-7sZ3+uLReZs7yl6euKgBzlyG+tBNlBQ0k2WOkfXr/g0JSTeVVp+loAlS0QjTF/WX
-k0eOhN/Wnz/vL7vPvaoVQwxBXr/jeA==
-=t4hD
------END PGP SIGNATURE-----
-
---Sig_/2ICeBVUJ8K4W7I20qL9zcvf--

@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E85C448ED1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADDF48ED1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 16:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242082AbiANPZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 10:25:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60586 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243495AbiANPZc (ORCPT
+        id S242746AbiANP0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 10:26:10 -0500
+Received: from mail-oo1-f44.google.com ([209.85.161.44]:46731 "EHLO
+        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242722AbiANP0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:25:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 538B0B8262A;
-        Fri, 14 Jan 2022 15:25:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 039C2C36AEA;
-        Fri, 14 Jan 2022 15:25:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642173930;
-        bh=rD5NHOMz1fPD0u+TQzXoNu4F4mR75dk7ItndCrC90LM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=l+oI1gPUSeeX4lNYkQwxoKonGKo+no87XvfOUb7pq17mILFy7/djMk/43NK0d1Kl7
-         XBUq8PwsoPxnzXTY07IOS2/LNRNrFeLsPetvaN3Pd9TFZigffgPNHa3hUz8yZKEOra
-         NBH/4ZJIxPqyJUGV8RbYbWLkX8C+oATBXp7wzA5S6PvPXMWVW0oHfD7KDlCS32NgBJ
-         P6icRjrYzaR0LaLmr59Wj9Ktoxz8M8jNAr/M05MUarxu0ydgXw2MP3yyOwHxGZ4u4K
-         oSscH25r79KNzsiqWFUkze8we4oFJUaTv9bkr9tIY0FPobR0L5IAwKbaJSI5YDFWPa
-         YOBD4IvKBNWsQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E6CD8F60794;
-        Fri, 14 Jan 2022 15:25:29 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c for v5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YeFNz6pdiGvVTPLh@kunai>
-References: <YeFNz6pdiGvVTPLh@kunai>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YeFNz6pdiGvVTPLh@kunai>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-mergewindow
-X-PR-Tracked-Commit-Id: bf3c39f5da43499c52d4127b7f2f495b69dfeebf
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 112450df61b7373529b0fe4c122ad13b89d80a8a
-Message-Id: <164217392993.6456.9900069742517740030.pr-tracker-bot@kernel.org>
-Date:   Fri, 14 Jan 2022 15:25:29 +0000
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        Fri, 14 Jan 2022 10:26:09 -0500
+Received: by mail-oo1-f44.google.com with SMTP id b20-20020a4a3414000000b002dda566aba7so2641510ooa.13;
+        Fri, 14 Jan 2022 07:26:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tFhJnE7sUoOEQBH6lC9rY2RtuqE+bsMzpp8lViD3BiQ=;
+        b=Dmk1bgUTlYMaczTrs7VfHjsG+ZX7parS7octv0dTqIU9R1IPEOlEwZdwnI6Qgv+kgE
+         fTZFKH49liniIumQtA9Ly3MOqJ6Fd7RbBybkTcBDiXE2IOU5YRhEX6yXevqk56afLAAU
+         diJ9h1DaZDf8wT3MM1hCLtM7+l9Ypq2KP4T8JWyg9/J9sjxmdDtEqR6A9ak30fTHDTPe
+         lCIu/Kp/BVbeCc0sctfywxJpbL1X4z8DPbvDbORcvNxvCWu7AgCjShHQIF7adLydb4Dj
+         BwBd1EA+dlNPm5T4tJ4mAPBp2+1kYdZZRBzGoi8ewE7HeihMwb0xZhvuMemUEgDG3S+w
+         hpfw==
+X-Gm-Message-State: AOAM533SmNeV7HYSbbehJyw+elmZvZztCEANMN0+ZNclcSP0VEkVHaM/
+        sHJviGJDFMTHo+nIAMNdniw0PqYi+g==
+X-Google-Smtp-Source: ABdhPJxg7Y9rekKNlr/yJ61dE2m5g4xgFSN31WUa1UMcZa5u0uvJ5rFNposBrfMFEBHTiMO1bd3yrg==
+X-Received: by 2002:a4a:b14d:: with SMTP id e13mr6781501ooo.67.1642173968474;
+        Fri, 14 Jan 2022 07:26:08 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id f18sm1875738oop.9.2022.01.14.07.26.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 07:26:07 -0800 (PST)
+Received: (nullmailer pid 1919745 invoked by uid 1000);
+        Fri, 14 Jan 2022 15:26:06 -0000
+Date:   Fri, 14 Jan 2022 09:26:06 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] scripts/dtc: dtx_diff: remove broken example from
+ help text
+Message-ID: <YeGWDoobNrjiSEXd@robh.at.kernel.org>
+References: <20220113081918.10387-1-matthias.schiffer@ew.tq-group.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220113081918.10387-1-matthias.schiffer@ew.tq-group.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 14 Jan 2022 11:17:51 +0100:
+On Thu, Jan 13, 2022 at 09:19:18AM +0100, Matthias Schiffer wrote:
+> dtx_diff suggests to use <(...) syntax to pipe two inputs into it, but
+> this has never worked: The /proc/self/fds/... paths passed by the shell
+> will fail the `[ -f "${dtx}" ] && [ -r "${dtx}" ]` check in compile_to_dts,
+> but even with this check removed, the function cannot work: hexdump will
+> eat up the DTB magic, making the subsequent dtc call fail, as a pipe
+> cannot be rewound.
+> 
+> Simply remove this broken example, as there is already an alternative one
+> that works fine.
+> 
+> Fixes: 10eadc253ddf ("dtc: create tool to diff device trees")
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> ---
+>  scripts/dtc/dtx_diff | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-mergewindow
+Applied, thanks.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/112450df61b7373529b0fe4c122ad13b89d80a8a
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Rob

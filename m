@@ -2,161 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2928C48E21F
-	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 02:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B69DD48E222
+	for <lists+linux-kernel@lfdr.de>; Fri, 14 Jan 2022 02:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238672AbiANBWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 13 Jan 2022 20:22:20 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:30277 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238619AbiANBWS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 13 Jan 2022 20:22:18 -0500
-Received: from dggeme762-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JZk676NnZzbjtp;
-        Fri, 14 Jan 2022 09:21:35 +0800 (CST)
-Received: from [10.67.110.176] (10.67.110.176) by
- dggeme762-chm.china.huawei.com (10.3.19.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Fri, 14 Jan 2022 09:22:16 +0800
-Subject: Re: Flush the hold queue fall into an infinite loop.
-To:     Paul Moore <paul@paul-moore.com>
-CC:     <linux-audit@redhat.com>, Xiujianfeng <xiujianfeng@huawei.com>,
-        wangweiyang <wangweiyang2@huawei.com>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <96f4f1cb-0e7d-6682-ce33-f7f1314cba83@huawei.com>
- <8b487a19-d121-5fee-eda5-0aee9340f453@huawei.com>
- <CAHC9VhTGTmNzFURkAPm2LW3qL+ijBi=UmXqZBwEWeusC46+8yg@mail.gmail.com>
-From:   cuigaosheng <cuigaosheng1@huawei.com>
-Message-ID: <c0f9b9b3-69a3-1b31-5115-51dd580e00ca@huawei.com>
-Date:   Fri, 14 Jan 2022 09:22:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S238660AbiANB2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 13 Jan 2022 20:28:20 -0500
+Received: from mga12.intel.com ([192.55.52.136]:40526 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233397AbiANB2U (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 13 Jan 2022 20:28:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642123700; x=1673659700;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mWMDgej6uot+0DRGM53qdr4l1XU7cxzO10PqdAjoqFo=;
+  b=f30EPcBgzqyYb/QhIb6EUv7US951YAz4DupZ8YnssFj7NV+qNuCIvMMN
+   ryFv3RcMCU3JOe2+GI+dLiik64uMccOYYXg4/stM/3FHdC3qFQbVvtNJG
+   eDtvFKChV7JAbbLxcmzN4uH6zkzoyZyymy3/AVrMtaRqsoUk0bVSyJklN
+   PZ7BMla50vpum+Kt9r8JDvIbSX8u6zUFugsTmKbXx3NfbujDWJwAIpFbH
+   jgm0bBGg7hB7RxZfYTv3vSoEI5O47wi7r7sj8DDFn/bimxCjNiIFJ0IZA
+   QlYX1QSvAJI/fqqhpXlc7rBU99ABEiun+XlaRdCKkvYQjyzWjO5BeDvO2
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10226"; a="224141291"
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="224141291"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2022 17:28:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,287,1635231600"; 
+   d="scan'208";a="692020034"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 13 Jan 2022 17:28:18 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8BO5-0007ti-QM; Fri, 14 Jan 2022 01:28:17 +0000
+Date:   Fri, 14 Jan 2022 09:27:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 1471/2382] include/linux/rcupdate.h:380:9: error:
+ dereferencing pointer to incomplete type 'struct task_struct'
+Message-ID: <202201140915.k0d5wA8g-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHC9VhTGTmNzFURkAPm2LW3qL+ijBi=UmXqZBwEWeusC46+8yg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.176]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggeme762-chm.china.huawei.com (10.3.19.108)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I want to stop droping the logs into audit_hold_queue when the auditd is abnormal.it
-seems that this modification goes against the design intent of audit_hold_queue. its
-effect is similar to removing the audit_hold_queue.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   1a880941a087613ed42f77001229edfcf75ea8a5
+commit: 2343c4a8035421263b16ea777e945cc1b0cbd22f [1471/2382] headers/deps: rcu/wait: Remove <linux/sched/task_flags.h> from <linux/rcuwait.h>
+config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220114/202201140915.k0d5wA8g-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=2343c4a8035421263b16ea777e945cc1b0cbd22f
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout 2343c4a8035421263b16ea777e945cc1b0cbd22f
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 2a38cbaf3ddb..a8091b1a6587 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -748,6 +748,7 @@ static int kauditd_send_queue(struct sock *sk, u32 
-portid,
-                                         (*err_hook)(skb);
-                                 if (rc == -EAGAIN)
-                                         rc = 0;
-+                               audit_default = AUDIT_OFF;
-                                 /* continue to drain the queue */
-                                 continue;
-                         } else
-@@ -755,6 +756,7 @@ static int kauditd_send_queue(struct sock *sk, u32 
-portid,
-                 } else {
-                         /* skb sent - drop the extra reference and 
-continue */
-                         consume_skb(skb);
-+                       audit_default = audit_enabled;
-                         failed = 0;
-                 }
-         }
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-在 2022/1/13 23:22, Paul Moore 写道:
-> On Thu, Jan 13, 2022 at 6:57 AM cuigaosheng <cuigaosheng1@huawei.com> wrote:
->> When we add "audit=1" to the cmdline, kauditd will take up 100%
->> cpu resource.As follows:
->>
->> configurations:
->> auditctl -b 64
->> auditctl --backlog_wait_time 60000
->> auditctl -r 0
->> auditctl -w /root/aaa  -p wrx
->> shell scripts：
->> #!/bin/bash
->> i=0
->> while [ $i -le 66 ]
->> do
->>     touch /root/aaa
->>     let i++
->> done
->> mandatory conditions:
->>
->> add "audit=1" to the cmdline, and kill -19 pid_number(for /sbin/auditd).
->>
->>   As long as we keep the audit_hold_queue non-empty, flush the hold queue will fall into
->>   an infinite loop.
->>
->> 713 static int kauditd_send_queue(struct sock *sk, u32 portid,
->>   714                               struct sk_buff_head *queue,
->>   715                               unsigned int retry_limit,
->>   716                               void (*skb_hook)(struct sk_buff *skb),
->>   717                               void (*err_hook)(struct sk_buff *skb))
->>   718 {
->>   719         int rc = 0;
->>   720         struct sk_buff *skb;
->>   721         unsigned int failed = 0;
->>   722
->>   723         /* NOTE: kauditd_thread takes care of all our locking, we just use
->>   724          *       the netlink info passed to us (e.g. sk and portid) */
->>   725
->>   726         while ((skb = skb_dequeue(queue))) {
->>   727                 /* call the skb_hook for each skb we touch */
->>   728                 if (skb_hook)
->>   729                         (*skb_hook)(skb);
->>   730
->>   731                 /* can we send to anyone via unicast? */
->>   732                 if (!sk) {
->>   733                         if (err_hook)
->>   734                                 (*err_hook)(skb);
->>   735                         continue;
->>   736                 }
->>   737
->>   738 retry:
->>   739                 /* grab an extra skb reference in case of error */
->>   740                 skb_get(skb);
->>   741                 rc = netlink_unicast(sk, skb, portid, 0);
->>   742                 if (rc < 0) {
->>   743                         /* send failed - try a few times unless fatal error */
->>   744                         if (++failed >= retry_limit ||
->>   745                             rc == -ECONNREFUSED || rc == -EPERM) {
->>   746                                 sk = NULL;
->>   747                                 if (err_hook)
->>   748                                         (*err_hook)(skb);
->>   749                                 if (rc == -EAGAIN)
->>   750                                         rc = 0;
->>   751                                 /* continue to drain the queue */
->>   752                                 continue;
->>   753                         } else
->>   754                                 goto retry;
->>   755                 } else {
->>   756                         /* skb sent - drop the extra reference and continue */
->>   757                         consume_skb(skb);
->>   758                         failed = 0;
->>   759                 }
->>   760         }
->>   761
->>   762         return (rc >= 0 ? 0 : rc);
->>   763 }
->>
->> When kauditd attempt to flush the hold queue, the queue parameter is &audit_hold_queue,
->> and if netlink_unicast(line 741 ) return -EAGAIN, sk will be NULL(line 746), so err_hook(kauditd_rehold_skb)
->> will be call. Then continue, skb_dequeue(line 726) and err_hook(kauditd_rehold_skb,line 733) will
->> fall into an infinite loop.
->> I don't really understand the value of audit_hold_queue, can we remove it, or stop droping the logs
->> into kauditd_rehold_skb when the auditd is abnormal?
-> Thanks Gaosheng for the bug report, I'm able to reproduce this and I'm
-> looking into it now.  I'll report back when I have a better idea of
-> the problem and a potential fix.
->
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/workqueue.h:16,
+                    from include/linux/workqueue_api.h:2,
+                    from arch/x86/kvm/lapic.c:19:
+   include/linux/rcuwait.h: In function 'rcuwait_active':
+>> include/linux/rcupdate.h:380:9: error: dereferencing pointer to incomplete type 'struct task_struct'
+     380 |  typeof(*p) *_________p1 = (typeof(*p) *__force)READ_ONCE(p); \
+         |         ^
+   include/linux/rcupdate.h:490:31: note: in expansion of macro '__rcu_access_pointer'
+     490 | #define rcu_access_pointer(p) __rcu_access_pointer((p), __rcu)
+         |                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/rcuwait.h:33:11: note: in expansion of macro 'rcu_access_pointer'
+      33 |  return !!rcu_access_pointer(w->task);
+         |           ^~~~~~~~~~~~~~~~~~
+   In file included from include/linux/rcuwait_api.h:1,
+                    from arch/x86/kvm/lapic.c:20:
+   include/linux/rcuwait.h:34:1: error: control reaches end of non-void function [-Werror=return-type]
+      34 | }
+         | ^
+   cc1: some warnings being treated as errors
+--
+   In file included from include/linux/rcuwait.h:5,
+                    from include/linux/irq_work.h:7,
+                    from arch/x86/include/asm/nmi.h:5,
+                    from arch/x86/kernel/cpu/perfctr-watchdog.c:20:
+   include/linux/rcuwait.h: In function 'rcuwait_active':
+>> include/linux/rcupdate.h:380:9: error: dereferencing pointer to incomplete type 'struct task_struct'
+     380 |  typeof(*p) *_________p1 = (typeof(*p) *__force)READ_ONCE(p); \
+         |         ^
+   include/linux/rcupdate.h:490:31: note: in expansion of macro '__rcu_access_pointer'
+     490 | #define rcu_access_pointer(p) __rcu_access_pointer((p), __rcu)
+         |                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/rcuwait.h:33:11: note: in expansion of macro 'rcu_access_pointer'
+      33 |  return !!rcu_access_pointer(w->task);
+         |           ^~~~~~~~~~~~~~~~~~
+
+
+vim +380 include/linux/rcupdate.h
+
+76c8eaafe4f061f Paul E. McKenney        2021-04-21  377  
+ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  378  #define __rcu_access_pointer(p, space) \
+ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  379  ({ \
+7d0ae8086b82831 Paul E. McKenney        2015-03-03 @380  	typeof(*p) *_________p1 = (typeof(*p) *__force)READ_ONCE(p); \
+423a86a610cad12 Joel Fernandes (Google  2018-12-12  381) 	rcu_check_sparse(p, space); \
+ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  382  	((typeof(*p) __force __kernel *)(_________p1)); \
+ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  383  })
+ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  384  #define __rcu_dereference_check(p, c, space) \
+ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  385  ({ \
+ac59853c06993a4 Pranith Kumar           2014-11-13  386  	/* Dependency order vs. p above. */ \
+506458efaf153c1 Will Deacon             2017-10-24  387  	typeof(*p) *________p1 = (typeof(*p) *__force)READ_ONCE(p); \
+f78f5b90c4ffa55 Paul E. McKenney        2015-06-18  388  	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_check() usage"); \
+423a86a610cad12 Joel Fernandes (Google  2018-12-12  389) 	rcu_check_sparse(p, space); \
+ac59853c06993a4 Pranith Kumar           2014-11-13  390  	((typeof(*p) __force __kernel *)(________p1)); \
+ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  391  })
+ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  392  #define __rcu_dereference_protected(p, c, space) \
+ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  393  ({ \
+f78f5b90c4ffa55 Paul E. McKenney        2015-06-18  394  	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected() usage"); \
+423a86a610cad12 Joel Fernandes (Google  2018-12-12  395) 	rcu_check_sparse(p, space); \
+ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  396  	((typeof(*p) __force __kernel *)(p)); \
+ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  397  })
+995f1405610bd84 Paul E. McKenney        2016-07-01  398  #define rcu_dereference_raw(p) \
+995f1405610bd84 Paul E. McKenney        2016-07-01  399  ({ \
+995f1405610bd84 Paul E. McKenney        2016-07-01  400  	/* Dependency order vs. p above. */ \
+506458efaf153c1 Will Deacon             2017-10-24  401  	typeof(p) ________p1 = READ_ONCE(p); \
+995f1405610bd84 Paul E. McKenney        2016-07-01  402  	((typeof(*p) __force __kernel *)(________p1)); \
+995f1405610bd84 Paul E. McKenney        2016-07-01  403  })
+ca5ecddfa8fcbd9 Paul E. McKenney        2010-04-28  404  
+
+:::::: The code at line 380 was first introduced by commit
+:::::: 7d0ae8086b828311250c6afdf800b568ac9bd693 rcu: Convert ACCESS_ONCE() to READ_ONCE() and WRITE_ONCE()
+
+:::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

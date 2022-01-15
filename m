@@ -2,84 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D762D48F494
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 04:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3CE748F49C
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 04:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbiAODgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 22:36:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
+        id S232310AbiAODuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 22:50:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232295AbiAODgH (ORCPT
+        with ESMTP id S232230AbiAODuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 22:36:07 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D46C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 19:36:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=Fu5lCP7cfb3jzNS+tHM0CX5vdOqpUOAzIehnFh+7FXk=; b=vDUl20GmP5zdKQfkx4fAjQ9AvG
-        8yr/CkvhklE03qaM6lRNxyUKwNHzYtej4+j7dtwWAT/OK1H4R8ULNW4nYywp5up1QAiN2rldLlE9j
-        YE3rKlxHd9TC5blqjMNdEu+GW5TL1ilp17z3IeKulOA7gx8bCiV9f1tjYLkCVVZz8ODcCHHbD6jM9
-        s+RJawYKiVbhtwPB4Hbuq7Y0pmy7JytDcEzul8n+S0Xd4YKFyMJd5g8+TOij+G/lfXesNFelYewUA
-        7ipyhJQZ3+I8mdCr1e2rFPYIVTspfu3oUXyEcKyAkiEt+MPJfgQ3AGbYjjpRkXCuUxlIh/WiAblFR
-        beDW6YEQ==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n8ZrI-00AbwC-MI; Sat, 15 Jan 2022 03:36:04 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Watson Chow <watson.chow@avnet.com>,
-        Mark Brown <broonie@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH] regulator: MAX20086: add gpio/consumer.h
-Date:   Fri, 14 Jan 2022 19:36:03 -0800
-Message-Id: <20220115033603.24473-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        Fri, 14 Jan 2022 22:50:50 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373ABC06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 19:50:50 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id o1so3004692pjr.2
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 19:50:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=glwqqOEdn91POaZx9czNGi+z/EIMYXyhx0ZODvWOkR0=;
+        b=PXUM6ip1gn1+Z5jW8swrOLF3BV9itUCEcLYQCp2orcK9jlHRTk3DxMwbP1tpEoV8cM
+         OFw2h/5ar5N+aZNXlFTMqh6v4aXrZYK2X6tWvJECiz81Gi4v9qKd/dIO6eQ0KiGWpTef
+         +hkdnHieyMv2NqxMz8B9Kz3n90NaG333FbQgE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=glwqqOEdn91POaZx9czNGi+z/EIMYXyhx0ZODvWOkR0=;
+        b=yKIxi3sFYPSUdwoGlcCQV5sBp35xFVtKl132VyULXdL/+hIq4sscu/mc0ijw4I2sLR
+         N3cO6l34jwY2VOh7XcTddT/8d3P6uLjDhtb+oOouZWfaIaSptDikRbtci7uAsRi0SaM0
+         Gl59oUJQ55hawH7/CIwBa/odxDP/nyxdcbtBCIB1mMn6eIOWBmF7x5k1JwFfs+5kwRp1
+         ZG0WghBaitEKwB2rNTp2Qr+M8370ccMQnecufpnL9vPFtsErseO0YsU/gWMDpoBFKxjp
+         wzpiFQsdlYvdCO2fk1xdmmv3CrjDHXn20ilr4sgAnqDj/huzD7atZ3/l2M++84/I4SY4
+         J+CA==
+X-Gm-Message-State: AOAM531IRkp+DHmb0um109gTNzp4FwkktNzJ0EQwzTqNs4Wi3+jZlScN
+        Efmo7rASIRokYCGFjFBiGpLQt7aYQAm94g==
+X-Google-Smtp-Source: ABdhPJxT6ZBYuQcmSXlrAijE8o8SdFMgz49AbsQ0GuEiNixlYic8K09k0PM5BtkBV5vPPez4AxqUVw==
+X-Received: by 2002:a17:90a:bb86:: with SMTP id v6mr23685422pjr.152.1642218648520;
+        Fri, 14 Jan 2022 19:50:48 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w4sm11628101pjq.7.2022.01.14.19.50.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 19:50:48 -0800 (PST)
+Date:   Fri, 14 Jan 2022 19:50:47 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, gustavoars@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH -next, v2] sched: Use struct_size() helper in
+ task_numa_group()
+Message-ID: <202201141935.A3F2ED1CF@keescook>
+References: <20220110012354.144394-1-xiujianfeng@huawei.com>
+ <Ydy3N577YD0JJr2N@hirez.programming.kicks-ass.net>
+ <20220110193158.31e1eaea@gandalf.local.home>
+ <Yd1qYsFcgcp/uHSa@hirez.programming.kicks-ass.net>
+ <20220111101425.7c59de5b@rorschach.local.home>
+ <Yd/ugQ8kUmcceuex@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yd/ugQ8kUmcceuex@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-max20086-regulator.c needs <linux/gpio/consumer.h> for an enum, some
-macros, and a function prototype. (seen on ARCH=m68k)
+On Thu, Jan 13, 2022 at 10:18:57AM +0100, Peter Zijlstra wrote:
+> On Tue, Jan 11, 2022 at 10:14:25AM -0500, Steven Rostedt wrote:
+> > On Tue, 11 Jan 2022 12:30:42 +0100
+> > Peter Zijlstra <peterz@infradead.org> wrote:
+> > 
+> > > > > >  	if (unlikely(!deref_curr_numa_group(p))) {
+> > > > > > -		unsigned int size = sizeof(struct numa_group) +
+> > > > > > -				    NR_NUMA_HINT_FAULT_STATS *
+> > > > > > -				    nr_node_ids * sizeof(unsigned long);
+> > > > > > +		unsigned int size = struct_size(grp, faults,
+> > > > > > +						NR_NUMA_HINT_FAULT_STATS * nr_node_ids);    
+> > > > > 
+> > > > > Again, why?! The old code was perfectly readable, this, not so much.  
+> > > > 
+> > > > Because it is unsafe,  
+> > > 
+> > > Unsafe how? Changelog doesn't mention anything, nor do you. In fact,
+> > > Changelog says there is no functional change, which makes me hate the
+> > > thing for obscuring something that was simple.
+> > 
+> > If for some reason faults changes in size, the original code must be
+> > updated whereas the new code is robust enough to not need changing.
 
-Adding this header file fixes multiple build errors:
+I think this alone is reason enough. :)
 
-../drivers/regulator/max20086-regulator.c: In function 'max20086_i2c_probe':
-../drivers/regulator/max20086-regulator.c:217:26: error: storage size of 'flags' isn't known
-  217 |         enum gpiod_flags flags;
-../drivers/regulator/max20086-regulator.c:261:27: error: 'GPIOD_OUT_HIGH' undeclared (first use in this function); did you mean 'GPIOF_INIT_HIGH'?
-  261 |         flags = boot_on ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
-      |                           ^~~~~~~~~~~~~~
-../drivers/regulator/max20086-regulator.c:261:44: error: 'GPIOD_OUT_LOW' undeclared (first use in this function); did you mean 'GPIOF_INIT_LOW'?
-  261 |         flags = boot_on ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
-../drivers/regulator/max20086-regulator.c:262:27: error: implicit declaration of function 'devm_gpiod_get'; did you mean 'devm_gpio_free'? [-Werror=implicit-function-declaration]
-  262 |         chip->ena_gpiod = devm_gpiod_get(chip->dev, "enable", flags);
-../drivers/regulator/max20086-regulator.c:217:26: warning: unused variable 'flags' [-Wunused-variable]
-  217 |         enum gpiod_flags flags;
+> Then I would still much prefer something like:
+> 
+> 	unsigned int size = sizeof(*grp) +
+> 			    NR_NUMA_HINT_FAULT_STATS * numa_node_ids * sizeof(gfp->faults);
+> 
+> Which is still far more readable than some obscure macro. But again, the
 
-Fixes: bfff546aae50 ("regulator: Add MAX20086-MAX20089 driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Watson Chow <watson.chow@avnet.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/regulator/max20086-regulator.c |    1 +
- 1 file changed, 1 insertion(+)
+I'm not sure it's _obscure_, but it is relatively new. It's even
+documented. ;)
+https://www.kernel.org/doc/html/latest/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments
 
---- linux-next-20220114.orig/drivers/regulator/max20086-regulator.c
-+++ linux-next-20220114/drivers/regulator/max20086-regulator.c
-@@ -7,6 +7,7 @@
- 
- #include <linux/err.h>
- #include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/module.h>
- #include <linux/regmap.h>
+That said, the original patch is incomplete: it should be using size_t
+for "size".
+
+> It is a fairly useful and common pattern to have a small structure and
+> an array in the same memory allocation.
+> 
+> Think hash-tables, the structure contains the size of the table and some
+> other things, like for example a seed for the hash function or a lock,
+> and then the table itself as an array.
+
+Right, the use of flexible arrays is very common in the kernel. So much
+so that we've spent years fixing all the ancient "fake flexible arrays"
+scattered around the kernel messing up all kinds of compile-time and
+run-time flaw mitigations. Flexible array manipulations are notoriously
+prone to mistakes (overflows in allocation, mismatched bounds storage
+sizes, array index overflows, etc). These helpers (with more to come)
+help remove some of the foot-guns that C would normally impart to them.
+
+> I can't, nor do I want to, remember all these stupid little macros. Esp.
+> not for trivial things like this.
+
+Well, the good news is that other folks will (and are) fixing them for
+you. :) Even if you never make mistakes with flexible arrays, other
+people do, and so we need to take on some improvements to the robustness
+of the kernel source tree-wide.
+
+-Kees
+
+-- 
+Kees Cook

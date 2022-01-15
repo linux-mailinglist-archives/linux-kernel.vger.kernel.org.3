@@ -2,128 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E4C48F357
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E2448F358
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiAOAGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 19:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiAOAGk (ORCPT
+        id S230261AbiAOAHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 19:07:52 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:40294 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229509AbiAOAHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 19:06:40 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC887C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 16:06:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=2mqBbyqPOMHZqHggqyUH6GbMfzYEQBdKVqUlGLMWERU=; b=sfWo13HQ1+/KvXiefW4bzQVrM7
-        7T/mHPmfuRtk7uZ7MXUNyjo3GYnmhgYkQ7FOCMP8AtN7KpMX0wBjU8zOgnNIO3KAPdUIdd70TDK5Z
-        /kDBLIak/q2HYqj6dLS/SK/jwi3jhyBIp87+4LYs4as/c02+9tI0fnBQICet/mBeG1Wsh0vw43WNj
-        +ZuSgfnSYpfYBylKEKukhIl5aCso74FVObwcLbhyHotV2WCYkl0dn2YAGSY3ZwRaXIwyyhuxJbcJD
-        6hLjTyYZOA8yZLxavmhHPaQ0igURTQFZqEjIWEIe2mYV9PVLmp6xJueXd+QGBUDAgktHmPHjSP7w+
-        zFY1DxOw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n8WaO-006CoU-Bf; Sat, 15 Jan 2022 00:06:25 +0000
-Message-ID: <f9336852-d741-5483-a6f5-3cd05b233022@infradead.org>
-Date:   Fri, 14 Jan 2022 16:06:19 -0800
+        Fri, 14 Jan 2022 19:07:51 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:59370)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n8Wbk-00DMyZ-OK; Fri, 14 Jan 2022 17:07:48 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:35432 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n8Wbi-007vuP-E5; Fri, 14 Jan 2022 17:07:48 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oliver Sang <oliver.sang@intel.com>
+Cc:     Alexey Gladkov <legion@kernel.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        lkp@intel.com, ying.huang@intel.com, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
+References: <20220112134211.GA10024@xsang-OptiPlex-9020>
+        <874k68pyag.fsf@email.froward.int.ebiederm.org>
+        <20220113021704.GA18396@xsang-OptiPlex-9020>
+Date:   Fri, 14 Jan 2022 18:07:39 -0600
+In-Reply-To: <20220113021704.GA18396@xsang-OptiPlex-9020> (Oliver Sang's
+        message of "Thu, 13 Jan 2022 10:17:04 +0800")
+Message-ID: <87y23hkgj8.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: drivers/firmware/efi/sysfb_efi.c:190:35: warning: unused variable
- 'efifb_dmi_system_table'
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Herrmann <dh.herrmann@gmail.com>
-References: <202201041920.mOzzco4D-lkp@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202201041920.mOzzco4D-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-XM-SPF: eid=1n8Wbi-007vuP-E5;;;mid=<87y23hkgj8.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/McjTzzKV4lUmYllqnij+TV0vdFPRhcvc=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.3 required=8.0 tests=ALL_TRUSTED,BAYES_40,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,
+        T_TooManySym_02,XMSubLong autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
+        *      [score: 0.2009]
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_02 5+ unique symbols in subject
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Oliver Sang <oliver.sang@intel.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1477 ms - load_scoreonly_sql: 0.11 (0.0%),
+        signal_user_changed: 13 (0.9%), b_tie_ro: 10 (0.7%), parse: 1.70
+        (0.1%), extract_message_metadata: 15 (1.0%), get_uri_detail_list: 1.54
+        (0.1%), tests_pri_-1000: 15 (1.0%), tests_pri_-950: 1.44 (0.1%),
+        tests_pri_-900: 1.13 (0.1%), tests_pri_-90: 64 (4.3%), check_bayes: 62
+        (4.2%), b_tokenize: 7 (0.5%), b_tok_get_all: 7 (0.5%), b_comp_prob:
+        2.4 (0.2%), b_tok_touch_all: 42 (2.8%), b_finish: 0.95 (0.1%),
+        tests_pri_0: 1343 (90.9%), check_dkim_signature: 0.65 (0.0%),
+        check_dkim_adsp: 3.0 (0.2%), poll_dns_idle: 0.67 (0.0%), tests_pri_10:
+        3.1 (0.2%), tests_pri_500: 15 (1.0%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [ucounts]  59ec71575a:  will-it-scale.per_process_ops -10.3%
+ regression
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi lkp robot,
+Oliver Sang <oliver.sang@intel.com> writes:
 
-I have a metaquestion, please:
+> Hi Eric,
+>
+> On Wed, Jan 12, 2022 at 01:08:23PM -0600, Eric W. Biederman wrote:
+>> kernel test robot <oliver.sang@intel.com> writes:
+>> 
+>> > Greeting,
+>> >
+>> > FYI, we noticed a -10.3% regression of will-it-scale.per_process_ops due to commit:
+>> 
+>> 
+>> I am having a bit of a challenge reading this report.  Does the -10.3%
+>> mean that will-it-scale.per_process_ops is performing 70873 operations
+>> per second instead of 78995 aka -10.3% fewer operations per second?
+>
+> yes
+>
+>> 
+>> The per-profile.self-cycles-pp.do_dec_rlimits_put_ucounts now takes +2.6
+>> more cycles, and perf-profile.self.cycles.pp.inc_rlimit_get_ucounts now
+>> takes +3.8 more cycles.
+>> 
+>> Which if I read this correctly is a regression report about two
+>> functions taking 3 or 4 cycles more after the code was rearranged inside
+>> of them.
+>> 
+>> Is that correct?  Is this a regression report saying those two functions
+>> are taking a few cycles more which leads to
+>> will-it-scale.per_process_ops not being able to perform as many
+>> operations per second?
+>
+> yes
+>
+>> 
+>> Given the change in the commit mentioned I think this is all down to a
+>> bug fix causing the code to be rearranged and a compiler optimizations.
+>> 
+>> I don't see much room to do anything about this.
+>
+> got it. this is a bug fix. Thanks for explanation!
 
+The big surprise is that we haven't seen performance regressions up
+until this point as the ucount rlimit work was merged.
 
-On 1/4/22 03:52, kernel test robot wrote:
-> Hi Randy,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
-> commit: 15d27b15de965043d6f8e23bc7f34386fcd1a772 efi: sysfb_efi: fix build when EFI is not set
-> date:   5 months ago
-> config: x86_64-randconfig-a016-20210927 (https://download.01.org/0day-ci/archive/20220104/202201041920.mOzzco4D-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dc6e8dfdfe7efecfda318d43a06fae18b40eb498)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=15d27b15de965043d6f8e23bc7f34386fcd1a772
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 15d27b15de965043d6f8e23bc7f34386fcd1a772
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/firmware/efi/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/firmware/efi/sysfb_efi.c:72:6: warning: no previous prototype for function 'efifb_setup_from_dmi' [-Wmissing-prototypes]
->    void efifb_setup_from_dmi(struct screen_info *si, const char *opt)
->         ^
->    drivers/firmware/efi/sysfb_efi.c:72:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void efifb_setup_from_dmi(struct screen_info *si, const char *opt)
->    ^
->    static 
->>> drivers/firmware/efi/sysfb_efi.c:190:35: warning: unused variable 'efifb_dmi_system_table' [-Wunused-const-variable]
->    static const struct dmi_system_id efifb_dmi_system_table[] __initconst = {
->                                      ^
->>> drivers/firmware/efi/sysfb_efi.c:240:35: warning: unused variable 'efifb_dmi_swap_width_height' [-Wunused-const-variable]
->    static const struct dmi_system_id efifb_dmi_swap_width_height[] __initconst = {
->                                      ^
->>> drivers/firmware/efi/sysfb_efi.c:331:39: warning: unused variable 'efifb_fwnode_ops' [-Wunused-const-variable]
->    static const struct fwnode_operations efifb_fwnode_ops = {
->                                          ^
->    4 warnings generated.
-> 
-> 
-> vim +/efifb_dmi_system_table +190 drivers/firmware/efi/sysfb_efi.c
-> 
+Unless we can spot something very silly that the compiler is doing
+with code generation (and those 3 or 4 cycles suggests it is possible
+the compiler is being silly) it is going to take some reorganizing
+to improve the performance.
 
-[snip]
-
-Why is the patch committer (David Herrmann) not cc-ed on your original email?
-(I am adding him now.)
-
-bu I have seen this multiple times, where the TO: person (below) is not cc-ed
-on the problem email.  I don't understand.
-
-> 
-> :::::: The code at line 190 was first introduced by commit
-> :::::: 2995e506276bfdc7311eb02db8b2aa1a61a4b849 x86: sysfb: move EFI quirks from efifb to sysfb
-> 
-> :::::: TO: David Herrmann <dh.herrmann@gmail.com>
-> :::::: CC: H. Peter Anvin <hpa@linux.intel.com>
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-
-thanks.
--- 
-~Randy
+Eric

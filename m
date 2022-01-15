@@ -2,80 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F5748F969
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 22:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 644F748F970
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 22:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233714AbiAOVEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 16:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233684AbiAOVEr (ORCPT
+        id S233734AbiAOVGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 16:06:13 -0500
+Received: from mxout01.lancloud.ru ([45.84.86.81]:45150 "EHLO
+        mxout01.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233684AbiAOVGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 16:04:47 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBC6C061574;
-        Sat, 15 Jan 2022 13:04:46 -0800 (PST)
-Received: from apollo.. (unknown [IPv6:2a02:810b:4340:43bf:4685:ff:fe12:5967])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 9717A22246;
-        Sat, 15 Jan 2022 22:04:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1642280681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=EOFAi8C5JK3apd+Ptn3OSlWNng34gktrSqmr7op8tlE=;
-        b=mRdneA3Hjw+RZBSw8YKueFnYw6fpZNPnghKYfSO9ZuXL90hTtjpXCsM0o0agCDqXvhuF1W
-        FG7tyTjBm8uHnHtBattXzbeuA18KS+fz6Hld6ullbfj5dxID91NFTb6NSXJe3OXQl2EUNs
-        11b77YWhUiPUypWplXdjyMCv16Xmd0Y=
-From:   Michael Walle <michael@walle.cc>
-To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>, Biwen Li <biwen.li@nxp.com>,
-        Michael Walle <michael@walle.cc>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        "kernelci.org bot" <bot@kernelci.org>
-Subject: [PATCH] arm64: dts: ls1028a: sl28: re-enable ftm_alarm0
-Date:   Sat, 15 Jan 2022 22:04:32 +0100
-Message-Id: <20220115210432.449968-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Sat, 15 Jan 2022 16:06:10 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru 2176D209C7CC
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] driver core: platform: Rename platform_get_irq_optional()
+ to platform_get_irq_silent()
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>
+CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-iio@vger.kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-phy@lists.infradead.org>, Jiri Slaby <jirislaby@kernel.org>,
+        <openipmi-developer@lists.sourceforge.net>,
+        "Khuong Dinh" <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Tony Luck" <tony.luck@intel.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        "Saravanan Sekar" <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        "Hans de Goede" <hdegoede@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        "Yoshihiro Shimoda" <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "Liam Girdwood" <lgirdwood@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-mediatek@lists.infradead.org>,
+        "Brian Norris" <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+ <YeA7CjOyJFkpuhz/@sirena.org.uk>
+ <20220113194358.xnnbhsoyetihterb@pengutronix.de>
+ <YeCI47ltlWzjzjYy@sirena.org.uk>
+ <1df04d74-8aa2-11f1-54e9-34d0e8f4e58b@omp.ru>
+ <20220113224319.akljsjtu7ps75vun@pengutronix.de>
+ <CAMuHMdWjo36UGde3g5ysdXpLJn=mrPp31SDODuQNPUqoc-ARrQ@mail.gmail.com>
+ <20220115152102.m47snsdrw2elagak@pengutronix.de>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <77cea138-977a-1454-4808-bd16dd7d2734@omp.ru>
+Date:   Sun, 16 Jan 2022 00:06:00 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <20220115152102.m47snsdrw2elagak@pengutronix.de>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit dd3d936a1b17 ("arm64: dts: ls1028a: add ftm_alarm1 node to be
-used as wakeup source") disables ftm_alarm0 in the SoC dtsi but doesn't
-enable it on the board which is still using it. Re-enable it on the sl28
-board.
+On 1/15/22 6:21 PM, Uwe Kleine-König wrote:
 
-Fixes: dd3d936a1b17 ("arm64: dts: ls1028a: add ftm_alarm1 node to be used as wakeup source")
-Reported-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+[...]
+>>>>>> The subsystems regulator, clk and gpio have the concept of a dummy
+>>>>>> resource. For regulator, clk and gpio there is a semantic difference
+>>>>>> between the regular _get() function and the _get_optional() variant.
+>>>>>> (One might return the dummy resource, the other won't. Unfortunately
+>>>>>> which one implements which isn't the same for these three.) The
+>>>>>> difference between platform_get_irq() and platform_get_irq_optional() is
+>>>>>> only that the former might emit an error message and the later won't.
+>>>>
+>>>>    This is only a current difference but I'm still going to return 0 ISO
+>>>> -ENXIO from latform_get_irq_optional(), no way I'd leave that -ENXIO there
+>>>> alone... :-)
+>>>
+>>> This would address a bit of the critic in my commit log. But as 0 isn't
+>>> a dummy value like the dummy values that exist for clk, gpiod and
+>>> regulator I still think that the naming is a bad idea because it's not
+>>> in the spirit of the other *_get_optional functions.
+>>>
+>>> Seeing you say that -ENXIO is a bad return value for
+>>> platform_get_irq_optional() and 0 should be used instead, I wonder why
+>>> not changing platform_get_irq() to return 0 instead of -ENXIO, too.
+>>> This question is for now only about a sensible semantic. That actually
+>>> changing platform_get_irq() is probably harder than changing
+>>> platform_get_irq_optional() is a different story.
+>>>
+>>> If only platform_get_irq_optional() is changed and given that the
+>>> callers have to do something like:
+>>>
+>>>         if (this_irq_exists()):
+>>>                 ... (e.g. request_irq)
+>>>         else:
+>>>                 ... (e.g. setup polling)
+>>>
+>>> I really think it's a bad idea that this_irq_exists() has to be
+>>> different for platform_get_irq() vs. platform_get_irq_optional().
+>>
+>> For platform_get_irq(), the IRQ being absent is an error condition,
+>> hence it should return an error code.
+>> For platform_get_irq_optional(), the IRQ being absent is not an error
+>> condition, hence it should not return an error code, and 0 is OK.
+> 
+> Please show a few examples how this simplifies the code. If it's only
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-index dd4773d1cf03..5dc85d088ec2 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
-@@ -190,6 +190,10 @@ base_mac_address: base-mac-address@17 {
- 	};
- };
- 
-+&ftm_alarm0 {
-+	status = "okay";
-+};
-+
- &gpio1 {
- 	gpio-line-names =
- 		"", "", "", "", "", "", "", "",
--- 
-2.30.2
+   As for platform_get_irq(), returning -ENXIO simplifies things a lot: you don't
+have to check for 0 at every freaking call site and have s/th like (every
+time!):
 
+	irq = platform_get_irq();
+	if (irq <= 0)
+		return irq ?: -ENXIO; // any error code you choose
+
+instead of just:
+
+	irq = platform_get_irq();
+	if (irq < 0)
+		return irq;
+
+This scales better in my book.
+
+> that a driver has to check for == 0 instead of == -ENXIO, than that's
+> not a good enough motivation to make platform_get_irq_optional()
+> different to platform_get_irq().
+
+   Again, it scales better... good motivation in my eyes.
+
+> Best regards
+> Uwe
+
+MBR, Sergey

@@ -2,79 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB81348F8E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 19:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B7E48F8EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 20:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbiAOSxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 13:53:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50572 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbiAOSxv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 13:53:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S233464AbiAOTCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 14:02:19 -0500
+Received: from meesny.iki.fi ([195.140.195.201]:54886 "EHLO meesny.iki.fi"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230174AbiAOTCR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 14:02:17 -0500
+Received: from localhost (91-154-92-187.elisa-laajakaista.fi [91.154.92.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 911F160EF9;
-        Sat, 15 Jan 2022 18:53:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 422ABC36AE5;
-        Sat, 15 Jan 2022 18:53:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642272830;
-        bh=kNMj2XNx6e+EyWPVtoxRGWoy6MV3BxoY4ZrP5yulyUQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=K8FX4oqFjxEibIsb9+Vvt4db3oM5l/egCOvmKLAfQ70ERYWreybe+Ikclse8eM9wV
-         lCRBYBBTo13qYKJ/V5qP4BWcV16/bwHmn1Ay/8HPaujogbuVpeIQU4/xi+1BRQDKi/
-         xv5zxd8MEN9OMbxJbjy5EurHna17eOcTxSEEW+cQ+V4WEDf/dlf2FtFyWX+qdF24FQ
-         cQyLdD3KkzjbBAk7OGHtQXjCLkbAu8T6U6uaSrj7BR895VYHI0XBUfvXZaTsqLCdma
-         BmZM/RZDijsx8+L+xYP24yXql3PqL6efoy5WQ3rcU8IxUmQNIMjBRExUFIQlOco2DS
-         Ax+g2zZ3HUKqQ==
-Date:   Sat, 15 Jan 2022 18:59:48 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Cosmin Tanislav <demonsingur@gmail.com>,
-        cosmin.tanislav@analog.com, Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: Re: [PATCH v3 3/3] iio: addac: ad74413r: for_each_set_bit_from ->
- for_each_set_bit
-Message-ID: <20220115185948.56f227df@jic23-huawei>
-In-Reply-To: <CAHp75VeVRwbMhQp-oBYM7yVzL_ma0jRu3ESEjz19zLQDFWyzkA@mail.gmail.com>
-References: <20220111074703.3677392-1-cosmin.tanislav@analog.com>
-        <20220111074703.3677392-3-cosmin.tanislav@analog.com>
-        <CAHp75VeVRwbMhQp-oBYM7yVzL_ma0jRu3ESEjz19zLQDFWyzkA@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        (Authenticated sender: sakkinen)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 99CE420194;
+        Sat, 15 Jan 2022 21:02:15 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1642273335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J6+byRl82CpxyJhOAegiEUplqovfZkizblYVHI0tOzg=;
+        b=ZY2jQAehWw9wXRF8Ei1TOYRJOp6eX5CGxir5nYFRa6PV0TUmL2qYGf8BXJukv/QG0tD+Qm
+        7uLWKiiDHJJH92KJD81onMkA+2LOU0c6aq1/E5peBRy6oZ2Q1IRN6/e1roVJMgm5le6ejH
+        HizmlNKvfqqrhrh0v51yniz1YWb8HW0=
+Date:   Sat, 15 Jan 2022 21:02:05 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] x86/sgx: Limit EPC overcommit
+Message-ID: <YeMaLTtcx9t0+HGG@iki.fi>
+References: <20220107181618.6597-1-kristen@linux.intel.com>
+ <YeMZJ7gZi8JzTYYd@iki.fi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YeMZJ7gZi8JzTYYd@iki.fi>
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1642273335; a=rsa-sha256; cv=none;
+        b=vn8j1yk0TnejkZAE3vq4uF6drbUieteXe7QVbYJpfHheCBei5os1TFKevDP0NhWx7KIKTZ
+        NtyMrUhVBSoDxW7vbstZf+FzH8+EJAdDATMdKa/JaV9udMS1rmPywAoVg/HRClP44IgB4o
+        kIPP+HQIuY2v5FyOKAxT6gXka+yykgo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1642273335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J6+byRl82CpxyJhOAegiEUplqovfZkizblYVHI0tOzg=;
+        b=bZi81rHBY9neTnhty5xoCJ7iA3W7iFmIdT4MYrNqMzCDOpPC43xHsH9xesuNRD3F5638sh
+        fwXTsJqbh4QcMBwSNQFjcxe5HhV8ZnoKsOW68RHHAhHJtubMEeclRRNFgBRbNJ+9QzxOWH
+        RnKyk6ElTnyoVAT0cHFL2+uHE3ayH2c=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 11:22:23 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-
-> On Tue, Jan 11, 2022 at 9:47 AM Cosmin Tanislav <demonsingur@gmail.com> wrote:
-> >
-> > The starting bit is always zero, it doesn't make much sense to
-> > use for_each_set_bit_from. Replace it with for_each_set_bit
-> > which doesn't start from a particular bit.  
+On Sat, Jan 15, 2022 at 08:57:44PM +0200, Jarkko Sakkinen wrote:
+> On Fri, Jan 07, 2022 at 10:16:15AM -0800, Kristen Carlson Accardi wrote:
+> > SGX currently allows EPC pages to be overcommitted. If the system is
+> > out of enclave memory, EPC pages are swapped to normal RAM via
+> > a per enclave shared memory area. This shared memory is not charged
+> > to the enclave or the task mapping it, making it hard to account
+> > for using normal methods. Since SGX will allow EPC pages to be
+> > overcommitted without limits, enclaves can consume system memory
+> > for these backing pages without limits.
+> > 
+> > In order to prevent this, set a cap on the amount of overcommit SGX
+> > allows.  Whenever a backing page is requested by an enclave, track
+> > the total amount of shared memory pages used across all enclaves and
+> > return an error if the overcommit limit has been reached. This will
+> > restrict the total amount of backing pages that all enclaves can
+> > consume to a maximum amount, and prevent enclaves from consuming
+> > all the system RAM for backing pages.
+> > 
+> > The overcommit percentage has a value of 150, which limits shared
+> > memory page consumption to 1.5x the number of EPC pages in the system.
+> > 
+> > Changes from v1
+> > ----------------
+> > * removed module parameter and disable boolean
+> > * increased over commit percentage to 150% from 100%
+> > 
+> > Kristen Carlson Accardi (2):
+> >   x86/sgx: Add accounting for tracking overcommit
+> >   x86/sgx: account backing pages
+> > 
+> >  arch/x86/kernel/cpu/sgx/encl.c | 76 ++++++++++++++++++++++++++++++++--
+> >  arch/x86/kernel/cpu/sgx/encl.h |  6 ++-
+> >  arch/x86/kernel/cpu/sgx/main.c | 52 +++++++++++++++++++++--
+> >  arch/x86/kernel/cpu/sgx/sgx.h  |  2 +
+> >  4 files changed, 128 insertions(+), 8 deletions(-)
+> > 
+> > -- 
+> > 2.20.1
+> > 
 > 
-> We refer to the function() like this.
-> But no need to resend, I hope Jonathan may amend this when applying.
+> I've tested also these. Looking at the feedback, there's
+> nothing game changing, so you could add for the next
+> version:
 > 
+> Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-I'll need to wait for rc1 to have the relevant code in my fixes-togreg
-branch to pick these up.
+The test environment was a VM running my desktop [*] and I just
+run many instances of kselftest as a test case.
 
-They look fine to me and hopefully I'll remember to cleanup the above ;)
+[*] i5-9600KF CPU
 
-Thanks,
-
-Jonathan
+/Jarkko

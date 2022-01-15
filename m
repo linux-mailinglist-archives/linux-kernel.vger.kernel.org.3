@@ -2,91 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA25E48F434
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 826F248F43D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbiAOBkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 20:40:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S232087AbiAOBqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 20:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbiAOBkp (ORCPT
+        with ESMTP id S231781AbiAOBqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 20:40:45 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A5EC061574;
-        Fri, 14 Jan 2022 17:40:45 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id d3so9817503ilr.10;
-        Fri, 14 Jan 2022 17:40:45 -0800 (PST)
+        Fri, 14 Jan 2022 20:46:47 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F54C061574;
+        Fri, 14 Jan 2022 17:46:47 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id v186so28686783ybg.1;
+        Fri, 14 Jan 2022 17:46:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=W50ZckeQoCC0z8xImJgw5j94j3GSLK4e8Lrg1EnOcDU=;
-        b=W4LyySCyg2dQREA7aVerDBuP4qXfZmRf1/8C6R+lY0M85eH82ouIsWmcHo1Kp7GqFP
-         V9a0JpdCFjDVfXk3SUweWKvk4M1klOhx/H+JUkQJ87B2uNHbEzuvIRJa17kgTmx8cjzs
-         kHN8kQxEoCzLjkVasMco88ApSx/hL07IA+Qfn6I+kujoVaBkBGZyYyC5U9eelL8Ymb1X
-         Arr3kZJVnjyZvW3ogeyoc0sIkIAjLE9wpyYSB0j9Nv8qzdFoQHI4QBuiljdJsh9hP7F+
-         q7PuhCrfP1guUBiWVy9p94nW8yZtooIiPJCwDk0eKjGcw5KziK0yE3gw7JVC7l8z7lT4
-         KDiQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tWKYqjMToQiYNKjbuCtLFgDL3xooRgPiVQeOXmHwMgs=;
+        b=nwt9fdkM8Jjyr8Qk9lQ3nikJt45z3ZIWItehvNMCq582HhZP8/Oh6b6RjDfJmYArPe
+         ieCs/E6lFaO4d6AriWHvI+bzTth+kfSwjf1RnbHxYyyUKCIpNxKoe/QHJ9Q5jzcdFpfd
+         FbGlZuzaiA44s0JyKbeHGe8aFfrl4DydWRmdRXsCOFni4zYlF/L493G0jeeKCEW+f/o2
+         shvM/YO1PgtuMiXhu5GPDb4eobmjPwBx/YQMSvNEwy99/99y3mPq1RpE+EI9V9Zyoqe+
+         I5XffLZuCwrZ2TllmVItNccGKkOw8Ve/hLX7dU2qKMm6ar7xWxxke9c9amp96VLpnUB5
+         u7ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=W50ZckeQoCC0z8xImJgw5j94j3GSLK4e8Lrg1EnOcDU=;
-        b=n/wygxwvbnC43LZDiOEWDv3eEwU+SIznZkmPJiorDVcuFW+VpdvnLPO9Ty/dvvkQHM
-         znQiaOAB++5eYpl4tlgusDOo5KE93mw8glnS9+aXycOCQQDc5LuL3LgYE9k5qQNFRfeE
-         fm6l8JhBZU+goSe6Gx2JEQUp03iDMp73Zz2PP/EayZ3d+Ln7ZpFa4pUXvIJrQ0SdcZHr
-         BWk6eRmkFSrmDGpT92U2dIJWRhkEtzEzHXAIfSLzxfuR42QhAXunh1A7y68pryE4hI0z
-         xtn1GHIrpOcfI/5CWJxmqsWomXttkx7/wDo/u+yJDGKJ7KM5B6Zhpyxb504KjcYM7SWN
-         eFNw==
-X-Gm-Message-State: AOAM5327HiNEc/9OKdGZa3ollOvPBv5VTGBjOHfXTvvm9LVKygBFccRt
-        qwvTxt3xf91LdvCfQX97ZeXf1VAL5WkOxYJUj0U=
-X-Google-Smtp-Source: ABdhPJzA2z4ehugmgiiu/UTY3j5iXvAY8QcXF1zV8MGwxJX23uyg5k/SsZD0PWzITMRaX8SxFHBXHw==
-X-Received: by 2002:a05:6e02:188a:: with SMTP id o10mr560432ilu.81.1642210844600;
-        Fri, 14 Jan 2022 17:40:44 -0800 (PST)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id r4sm5264736ilb.4.2022.01.14.17.40.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 17:40:44 -0800 (PST)
-Message-ID: <61e2261c.1c69fb81.42eb5.73e8@mx.google.com>
-Date:   Fri, 14 Jan 2022 17:40:44 -0800 (PST)
-X-Google-Original-Date: Sat, 15 Jan 2022 01:40:42 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
-Subject: RE: [PATCH 5.16 00/37] 5.16.1-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tWKYqjMToQiYNKjbuCtLFgDL3xooRgPiVQeOXmHwMgs=;
+        b=JzZDj96o6lX7kNjMFDSNhC0z3/j9GYl/544DuqZ5NEisNAU9C5ZTcnOTudbYWOjOkw
+         dbjRaYeRAI0d2BfC4LaZAJQjWM+tazgs3JhRpvKSZyE/TEY+6dhMA8+2EwEc06pg1O5Q
+         qdnke2dQg4dmyJdUWAjjrU7nPsjN1FO6Z8l+Lw7XdVRfbYQfi481AbhgOUCfXQ2d+w5N
+         DEOiPIC+FyuKNNL1MNkIOjzNn/1PIYhSPI3wVif17g/5cOsHi/6aTOaHmi2mtn88+wot
+         Vlw+Gik8QAmR6RE5tb4QFRPIwa4M9Dv88mPacmIRrx2OV4leY8nrurIKEJ6S3yCfGHRC
+         OKoA==
+X-Gm-Message-State: AOAM531/z/2M8M8qurQz34LOI9os+2GDjkx4N0xBpOrywUlAVYgtxdMA
+        mQD2xoAPBjrQFpu6VbStbJvjAIGI9DPcUKyafaU=
+X-Google-Smtp-Source: ABdhPJwgzZLZHSnjfCYS1rIjQLZjd5tRg1w+jXNopdsIY1kj6ZrznRiU7nGR8CaxCU3f3tXLpA+HKePIHs69ZRR2jjU=
+X-Received: by 2002:a25:874a:: with SMTP id e10mr16006654ybn.422.1642211206642;
+ Fri, 14 Jan 2022 17:46:46 -0800 (PST)
+MIME-Version: 1.0
+References: <20211221094717.16187-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211221094717.16187-7-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdUB-wK_0Vqn4fmqQ0jaHWmo9OTRPT1bwWsZh76U1J729A@mail.gmail.com>
+In-Reply-To: <CAMuHMdUB-wK_0Vqn4fmqQ0jaHWmo9OTRPT1bwWsZh76U1J729A@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Sat, 15 Jan 2022 01:46:20 +0000
+Message-ID: <CA+V-a8sMfAT8DAxQJeAM6BvGOvrBE5sqVfm6ErS4y3wqT-UwVQ@mail.gmail.com>
+Subject: Re: [PATCH 06/16] dt-bindings: serial: renesas,scif: Document RZ/V2L SoC
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        dmaengine <dmaengine@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Jan 2022 09:16:14 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.16.1 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.1-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Hi Geert,
 
-5.16.1-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+Thank you for the review.
 
+On Tue, Jan 11, 2022 at 4:23 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Tue, Dec 21, 2021 at 10:48 AM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > From: Biju Das <biju.das.jz@bp.renesas.com>
+> >
+> > Add SCIF binding documentation for Renesas RZ/V2L SoC. SCIF block on RZ/V2L
+> > is identical to one found on the RZ/G2L SoC. No driver changes are required
+> > as RZ/G2L compatible string "renesas,scif-r9a07g044" will be used as a
+> > fallback.
+> >
+> > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Thanks for your patch!
+>
+> > --- a/Documentation/devicetree/bindings/serial/renesas,scif.yaml
+> > +++ b/Documentation/devicetree/bindings/serial/renesas,scif.yaml
+> > @@ -67,6 +67,12 @@ properties:
+> >        - items:
+> >            - enum:
+> >                - renesas,scif-r9a07g044      # RZ/G2{L,LC}
+> > +              - renesas,scif-r9a07g054      # RZ/V2L
+>
+> As the idea is to rely on the RZ/G2L fallback for matching, cfr. below,
+> the above addition is not needed or wanted.
+>
+Agreed I will drop that.
+
+> > +
+> > +      - items:
+> > +          - enum:
+> > +              - renesas,scif-r9a07g054      # RZ/V2L
+> > +          - const: renesas,scif-r9a07g044   # RZ/G2{L,LC} fallback for RZ/V2L
+> >
+> >    reg:
+> >      maxItems: 1
+> > @@ -154,6 +160,7 @@ if:
+> >            - renesas,rcar-gen2-scif
+> >            - renesas,rcar-gen3-scif
+> >            - renesas,scif-r9a07g044
+> > +          - renesas,scif-r9a07g054
+>
+> This addition is not needed if the fallback is always present.
+>
+Ditto.
+> >  then:
+> >    required:
+> >      - resets
+>
+> Given Greg already applied your patch, I think you have to send a
+> follow-up patch.
+Will do.
+
+Cheers,
+Prabhakar

@@ -2,87 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 322E948F755
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 15:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BDE48F758
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 15:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232893AbiAOOmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 09:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
+        id S232916AbiAOOsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 09:48:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiAOOmF (ORCPT
+        with ESMTP id S231804AbiAOOsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 09:42:05 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF24C061574
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 06:42:05 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id j37-20020a634a65000000b00349a11dc809so3782901pgl.3
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 06:42:05 -0800 (PST)
+        Sat, 15 Jan 2022 09:48:03 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D7EC061574;
+        Sat, 15 Jan 2022 06:48:03 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id p18so11429854wmg.4;
+        Sat, 15 Jan 2022 06:48:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=vQu2YGnyaem/WDCb/1ixVe4jFBzHYp6XDPfE+l97NRQ=;
-        b=RAFTf5fJoVhrySxFeclsltYyb9p2i1twuPM/kLWQ+AFQ0Wh4oUI+8TVolsH83OcqBj
-         nk/EF88RqtYjKHpmjifQ5+xGMnzVLUpYZuKU0LsDwODppMPNL/NusBwFSngJ8jGgVjB4
-         8Hd8NAsMTlBAIYnqa2CKkW3Z7NYdyLGxFaKkHL7QAwZZWCwTrKtg/74BAqqzr5omvKpG
-         Gcb0uEB9LaPxJouoiwL5DNLazEiRrev8MFAm+lz0ThqXFWJbtWhzyG3h14nKMnNQ6fAD
-         BvCiWA4yTnQnwRCDXK0K2c2Ed5ebeyYF51MrZvkKWbKAx2fSFPVDfmfeAivojQxhkRo5
-         HlGg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GC51F22P9hmDRGNgZ9UO38S7UXU4rgWrovN9MJFLkEU=;
+        b=pboxVeQ8Zfmv3VTJzskHkHqXetRECuLUtjcPJ7D+fN0OohUP+Uef0vjCHv4JWt5OKK
+         s1jcAHou9+tMWt/rsOtNmmxTTAZqw6XtWZT+TJhYrHU1ShyKXuk2LKavW63dCEXY6uJN
+         jQcCuEvzl3qJXSf3JtucXGA14twxywdJci7UQgVCsptnRrmkd5aPfWM0BoZZHQGSrnPL
+         IqyxzDd9rHIB8Ahwahjv+xpAZnppxJVBYRxtKgnqPid6Gm+bFGj1YBl/r3i0MAKsgXDm
+         6oE7c3O7v8CEfWZ/pVaVng+jFVr8yJHjeAA0mZEVZmld7NyHcbckH0HCDl+UWbQdnCGY
+         estw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=vQu2YGnyaem/WDCb/1ixVe4jFBzHYp6XDPfE+l97NRQ=;
-        b=5zA4MrGQ8OAQMIKkdw0Ap/LmnoARxW3HmgkEJUE33IHXUfAi0T9JZGbKe1wfoot+xC
-         iovumdzSByC7kOqcpdQW6gHZhsjVJJR/Rn2BRoPgOZzVWcaJ6uiCCT69pSiCQPODVCDR
-         k3myeZOIIdANxvG5tiIQFjOlv7Dc3NG/r51onKGiEG4m4mKdrRoFZhgBZ1NG9kz/iptL
-         5PGVDk8RsD9y4+pGbtjIGdbQCz2VMoWRkebhk7ZBmf8XBz4tdGyubuiKbYo2U/2Guuw1
-         O8xgbpykDvY025008OKKZ0RFdnUuZj1JZTtsVl6LaP61o3jrKsJhTSlN59ATiVEbMRuY
-         EbyQ==
-X-Gm-Message-State: AOAM532dbETN7MApI9W+XL7icsAtOsm6QRCM4DzvDWgkERSpo4dtnE1B
-        tCishjOefF3U+9Q1izP4ICyNpk7OjNAAgA==
-X-Google-Smtp-Source: ABdhPJzDJ6OuCMhPiZXw84Q7hz0CXiTS8JIsrrIAXlT+ZM3uGrKf7jUah/OPOJXY4kS0xiWjZNQkDozDXW4OSw==
-X-Received: from shakeelb.svl.corp.google.com ([2620:15c:2cd:202:5db:c608:dd2d:a4b])
- (user=shakeelb job=sendgmr) by 2002:a17:903:41c1:b0:14a:6879:9333 with SMTP
- id u1-20020a17090341c100b0014a68799333mr14741762ple.36.1642257724752; Sat, 15
- Jan 2022 06:42:04 -0800 (PST)
-Date:   Sat, 15 Jan 2022 06:41:50 -0800
-Message-Id: <20220115144150.1195590-1-shakeelb@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH] mpage: remove ineffective __GFP_HIGH flag
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Michal Hocko <mhocko@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GC51F22P9hmDRGNgZ9UO38S7UXU4rgWrovN9MJFLkEU=;
+        b=Q914/02BQ3/gDMSBNWRtiTuAaLaLO8WMQv9HpuARCvfQ286WiYxZ1UEBqY/Wj5KHPi
+         vFGGobIhnWEfCO0XUWGRuV5kzW+ezlMM9jN8LBnvqOS4GjjMY2O0rN6aKw1Iu/PeBkIL
+         3zqjyALTKrM5ofViyOpHuMP/Cjjdpz4a9vhwQ8XVDyQ/AbmgXCilrmoZM0rzczY55gVQ
+         LCeaRAuxNM2gOAodPrdOOgxZkN1/bz2h/ByO3A+lY3ZCHAkOcCIIwsCTdzdWRUG6tgCq
+         Y2fMcuhxtNLtFkg12HHgg/onQDjHOuGkz6s+CStuyGCWwrnuLqjnjsuAp9BwLg0LtsvF
+         4Ymw==
+X-Gm-Message-State: AOAM533+uIyJPwv5ijxHwM8XzWpzqSjKo6NL586IC17oCMR3eipEr0oa
+        +x6LBOGCdm2vgMjeTxCWu04=
+X-Google-Smtp-Source: ABdhPJyOpKKWHLm2fY3wpHhQBRslIeg+GYRRESPqQ7yOF5iutGDwKHfOs2iU6nimDiLgN7VbmbzOYQ==
+X-Received: by 2002:a05:6000:1842:: with SMTP id c2mr12607186wri.482.1642258081570;
+        Sat, 15 Jan 2022 06:48:01 -0800 (PST)
+Received: from r2-d2.localdomain (dynamic-077-002-020-096.77.2.pool.telefonica.de. [77.2.20.96])
+        by smtp.gmail.com with ESMTPSA id 14sm10058940wry.23.2022.01.15.06.48.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jan 2022 06:48:00 -0800 (PST)
+Date:   Sat, 15 Jan 2022 15:47:08 +0100
+From:   Andrei Rabusov <arabusov@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.15 00/41] 5.15.15-rc1 review
+Message-ID: <YeLebG4dKq6X5P4A@r2-d2.localdomain>
+References: <20220114081545.158363487@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220114081545.158363487@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the commit 8a5c743e308dd ("mm, memcg: use consistent gfp flags
-during readahead") mpage_alloc is clearing all the flag bits other than
-bits in GFP_KERNEL internally. Simply remove __GFP_HIGH from the call to
-mpage_alloc as it is cleared by it.
+On Fri, Jan 14, 2022 at 09:16:00AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.15 release.
+> There are 41 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
+> Anything received after that time might be too late.
 
-Signed-off-by: Shakeel Butt <shakeelb@google.com>
----
- fs/mpage.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Builds and runs on ThinkPad X220 (nitro mod).
 
-diff --git a/fs/mpage.c b/fs/mpage.c
-index 87f5cfef6caa..477ccc3f3ac3 100644
---- a/fs/mpage.c
-+++ b/fs/mpage.c
-@@ -609,7 +609,7 @@ static int __mpage_writepage(struct page *page, struct writeback_control *wbc,
- 				goto out;
- 		}
- 		bio = mpage_alloc(bdev, blocks[0] << (blkbits - 9),
--				BIO_MAX_VECS, GFP_NOFS|__GFP_HIGH);
-+				  BIO_MAX_VECS, GFP_NOFS);
- 		if (bio == NULL)
- 			goto confused;
- 
--- 
-2.34.1.703.g22d0c6ccf7-goog
-
+Tested-by: Andrei Rabusov

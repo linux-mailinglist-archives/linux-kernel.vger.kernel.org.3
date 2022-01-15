@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E07B348F84E
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 18:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E5348F878
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 18:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbiAORWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 12:22:51 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:37721 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233321AbiAORWn (ORCPT
+        id S229786AbiAOR1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 12:27:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229458AbiAOR1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 12:22:43 -0500
-Received: by mail-ot1-f41.google.com with SMTP id i7-20020a9d68c7000000b0059396529af8so7452794oto.4;
-        Sat, 15 Jan 2022 09:22:42 -0800 (PST)
+        Sat, 15 Jan 2022 12:27:07 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A73FC061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 09:27:07 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id v6so16274856iom.6
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 09:27:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mu52mCpV2nrQW+DvvGvGXwkA9rgLAwESwOW831oZMnE=;
+        b=d3c2rEAUTq64Y+w6197B+rfX3aaLSZ92yWel7tJ5VZaQnn0VPZTAewMBNDS0Tmud85
+         KH5j5drTQzOAbIhxudKiZaXo9wwa46OCq2FVaGILXJmQ2lCLgWHDsnVykCSCjIeCHTY/
+         ZQXHtXE3g9CAUtVdt2NYw02fZ7pg8W1ftQR0g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=CYssEdn4U+D0DKxBFx9coxO44MoyGtGFbzFuFgNIr2E=;
-        b=CCTfC01GdzyJC37rJMmrClsZ2vrBV5MvcluOVANBOWa6N4sBJKGUHn4DeenEM7jOvY
-         nzx13joZ7XzSg3a4MNNbVVOHXxX7l1o4fDeiIyaMjWE1FievrEwgvRaQFnEc8Y2ACl8K
-         gPmmo4gm7ve8co5dVP7eB0x13sk9MA7hNXIdIxHB9YlUOokhgbN8qmgX6PBbER3Jvf94
-         QWmsN1Q7R9eF2/Ynsgv5qp7l+/JbW71FjNxroBy3L/8kBYmil1KWY8LZL5OmASpGvNbR
-         BlAC+AnTyJsZb/813yJ2kTrSCtQOQqjcIZC+dj2DE0irrKa3G23b6DLeUFlpLpA1fJR+
-         C3uQ==
-X-Gm-Message-State: AOAM533IACwg1GhlTyCaOrLY/OGl5Fo7EYIXWxiO5ujOwfBLagST1oPm
-        MWuHbQ5MO8cFtrlsJDlvTw==
-X-Google-Smtp-Source: ABdhPJxa0Y95SAgsnFgvzW2QXkzA/LkZ4mlEhY1BKNnbCRyfZlp+mRbzX6AfmWmwF/mz5bmb22E9Bg==
-X-Received: by 2002:a05:6830:4393:: with SMTP id s19mr10668275otv.272.1642267362255;
-        Sat, 15 Jan 2022 09:22:42 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n26sm3426650ooc.48.2022.01.15.09.22.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Jan 2022 09:22:41 -0800 (PST)
-Received: (nullmailer pid 119892 invoked by uid 1000);
-        Sat, 15 Jan 2022 17:22:30 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     heiko@sntech.de, daire.mcnamara@microchip.com, palmer@dabbelt.com,
-        bgolaszewski@baylibre.com, alexandre.belloni@bootlin.com,
-        linux-pwm@vger.kernel.org, bin.meng@windriver.com,
-        linux-riscv@lists.infradead.org, robh+dt@kernel.org,
-        atishp@rivosinc.com, broonie@kernel.org, lee.jones@linaro.org,
-        linux-gpio@vger.kernel.org, thierry.reding@gmail.com,
-        linux-spi@vger.kernel.org, ivan.griffin@microchip.com,
-        gregkh@linuxfoundation.org, linux-crypto@vger.kernel.org,
-        lewis.hanly@microchip.com, u.kleine-koenig@pengutronix.de,
-        jassisinghbrar@gmail.com, krzysztof.kozlowski@canonical.com,
-        a.zummo@towertech.it, linux-usb@vger.kernel.org,
-        paul.walmsley@sifive.com, linux-rtc@vger.kernel.org,
-        geert@linux-m68k.org, linus.walleij@linaro.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        aou@eecs.berkeley.edu, devicetree@vger.kernel.org
-In-Reply-To: <20220114151727.2319915-10-conor.dooley@microchip.com>
-References: <20220114151727.2319915-1-conor.dooley@microchip.com> <20220114151727.2319915-10-conor.dooley@microchip.com>
-Subject: Re: [PATCH v3 09/15] dt-bindings: pwm: add microchip corepwm binding
-Date:   Sat, 15 Jan 2022 11:22:30 -0600
-Message-Id: <1642267350.939328.119891.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mu52mCpV2nrQW+DvvGvGXwkA9rgLAwESwOW831oZMnE=;
+        b=PPxljUrrA2uAwt2O4cnaVsECbW+fWN63hyAJuSTmgF6wvI4zsH2VGWSltVRSt7hs8e
+         axI7VVRsVKPwPS6K2NP+ZIQZBjz/4lqicG2vF9UM723RbSwZ1nBNdQj7CYZZ14Ago6Q+
+         sDGwGeQapU+gYSpXXWu2OMZHzg2e6mAH2Ci35J7wFpzfGnBwXaH8AFUX0YGRwDfqylZD
+         Got6kSwb8DMzxipmpUY3Kb2mvneYXgwBcQu2Gs1QkFjX+jpYBvSdzYnR0lAYKOUUpiu+
+         Ecetaj3sFrUWfcgh7Ne9cNZypAmK+c68ELSTTvvP3DTdkdAVgVLthiTs6TfDf8qv+DhB
+         cX+Q==
+X-Gm-Message-State: AOAM532NV1l8OswRlP+dwcF5DUIt6kKrDQ48AF1EtKEqZhSH2de0uVah
+        uD33T3abDxSybIoVCQiQyNjUUzsKn5E4MQntCvrA6g==
+X-Google-Smtp-Source: ABdhPJyR3JZ53vXZtEgCpx9pT/ydRQnd5TmsZ9xh4WkPiq1Hsx2lP0NtdPS27LZu4ouZ2C9SZTB2oznIMinprrNekro=
+X-Received: by 2002:a05:6638:3012:: with SMTP id r18mr6621186jak.282.1642267626434;
+ Sat, 15 Jan 2022 09:27:06 -0800 (PST)
+MIME-Version: 1.0
+References: <20220106122452.18719-1-wsa@kernel.org> <Yd6gRR0jtqhRLwtB@ninjato>
+ <98ed8d6d16a3d472d9432eb169aa2da44b66b5cc.camel@yandex.ru>
+ <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com> <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
+ <6121a782-6927-f033-1c09-ffe4ad7700ae@yahoo.com>
+In-Reply-To: <6121a782-6927-f033-1c09-ffe4ad7700ae@yahoo.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Sun, 16 Jan 2022 01:26:40 +0800
+Message-ID: <CAJMQK-j5YYqen78Vgng_5jhja-YKSTRut7f7vJ4wWufVfbZy6w@mail.gmail.com>
+Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in adapter"
+To:     Tareque Md Hanif <tarequemd.hanif@yahoo.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Jan 2022 15:17:21 +0000, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Add device tree bindings for the Microchip fpga fabric based "core" PWM controller.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../bindings/pwm/microchip,corepwm.yaml       | 75 +++++++++++++++++++
->  1 file changed, 75 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pwm/microchip,corepwm.yaml
-> 
+hi Tareque,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-yamllint warnings/errors:
+On Fri, Jan 14, 2022 at 6:09 PM Tareque Md Hanif
+<tarequemd.hanif@yahoo.com> wrote:
+>
+> Hi Hsin-Yi,
+>
+> On 1/12/22 16:58, Hsin-Yi Wang wrote:
+>
+> Can you help provide logs if we apply
+> 5a7b95fb993ec399c8a685552aa6a8fc995c40bd but revert
+> 8d35a2596164c1c9d34d4656fd42b445cd1e247f?
+>
+> Issue still exists. journalctl log attached in revert_8d.txt
+>
+>
+> > after apply 5a7b95fb993ec399c8a685552aa6a8fc995c40bd
+> > 1. delete SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late,
+> > i2c_resume_early) and function i2c_suspend_late() and
+> > i2c_resume_early().
+>
+> No issues. journalctl log attached in test1.txt
+>
+>
+> > 2. delete SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume,
+> > NULL) and function i2c_runtime_suspend() and i2c_runtime_resume().
+>
+> Issue exists. journalctl log attached in test2.txt
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/pwm/microchip,corepwm.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
-   19 |         #include "dt-bindings/clock/microchip,mpfs-clock.h"
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/pwm/microchip,corepwm.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1413: dt_binding_check] Error 2
+Thanks for the testing.
+Can you help us test if applying the following patch on top of
+5a7b95fb993ec399c8a685552aa6a8fc995c40bd works? Thanks
 
-doc reference errors (make refcheckdocs):
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 9eb4009cb250..6b046012aa08 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -484,7 +484,7 @@ static int i2c_resume_early(struct device *dev)
+        struct i2c_client *client = i2c_verify_client(dev);
+        int err;
 
-See https://patchwork.ozlabs.org/patch/1580131
+-       if (!client)
++       if (!client || dev_pm_skip_resume(dev))
+                return 0;
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+        if (pm_runtime_status_suspended(&client->dev) &&
+@@ -502,7 +502,7 @@ static int i2c_suspend_late(struct device *dev)
+        struct i2c_client *client = i2c_verify_client(dev);
+        int err;
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+-       if (!client)
++       if (!client || dev_pm_skip_suspend(dev))
+                return 0;
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+        err = pm_generic_suspend_late(&client->dev);

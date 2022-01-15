@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F4848F7F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B853148F7F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233167AbiAOQkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 11:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbiAOQkX (ORCPT
+        id S232217AbiAOQmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 11:42:07 -0500
+Received: from mail-4317.proton.ch ([185.70.43.17]:32554 "EHLO
+        mail-4317.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230117AbiAOQmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 11:40:23 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09529C061574;
-        Sat, 15 Jan 2022 08:40:23 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id a10-20020a9d260a000000b005991bd6ae3eso475336otb.11;
-        Sat, 15 Jan 2022 08:40:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LUysGRDK4tfCXrSANW1gz+YTxfq+kG6zs3IFEBfiEVM=;
-        b=mXFnMkE1zzKcdvtSeS5nu8D4VU82n5amDtb5yMoihZFIvGK9Oz/WfZdWBoGxTpZi/G
-         GDOHh6cijQAkYC8psP9B2z8V6bkva5OaGEwi8MkO+zab/L2jYvsnN9oX0Rhr4SFdxkv+
-         L3kGK68yk7b/OIIrK/6mAerJX6kBDLUGRizRL0eRUC71MEsePA/RSVYdesKSoprHlIKo
-         QEHx3M4ZnMzJSgZ7hGlhNnlPHD2xr8WiTyykdRHp3q4lW2Vy9Vc1h5MMJ66MuwVE1Q5T
-         nks+fmajieL8eBH5OyO+5JKeZ6TiEigx7OC7kVYFAEMXfgM7gtpz2FrBCQf72sIzDHWT
-         5yqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=LUysGRDK4tfCXrSANW1gz+YTxfq+kG6zs3IFEBfiEVM=;
-        b=tIvJIy1EybLfZqJWVre65ELeKuDKs0xK4t+9hq9g4orlJPlkKZY1WuXlV907fD025+
-         zmAObOAK7sdK441WHqSVpxnWow4UGy+kqSzCz2IuOBnmxJaaHzj/+wM1PRhnKZbHoIWL
-         VaWF+1FodZMLslokkhEEzLGkUaQm8ybeEl+MVUYMS/7oL5kJAjAgMyG5irwOTECu8c3i
-         aqRL4S/p59fbleG++2xD6OzL/dEteWQayQwTy9p+bUhbO9y/nSmAfk6q1sR0C1Dzmkts
-         jvs2dI1ciILCZNielNxIF+U7Jqn+fK4bRHsgJkWsLHeXMovnrk0t8CCyw8vz94pvQ7ga
-         IoBw==
-X-Gm-Message-State: AOAM5335oEpUs0kqCRW1XXmUic2qflEMXmgXYjEcyT/leGHV8oXM01zv
-        fxgvS4Zkd5wW/Icf+AWNOd8=
-X-Google-Smtp-Source: ABdhPJyKnLDLqnJI3V2DHL0pPuw2XKQ62onlbGXbbuJBZk6FVIMjdaPp8yvGWG+T6t9SeDbZP0qkqQ==
-X-Received: by 2002:a9d:897:: with SMTP id 23mr11163980otf.181.1642264822430;
-        Sat, 15 Jan 2022 08:40:22 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w19sm3645357oiw.29.2022.01.15.08.40.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Jan 2022 08:40:21 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 15 Jan 2022 08:40:19 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.16 00/37] 5.16.1-rc1 review
-Message-ID: <20220115164019.GD1744836@roeck-us.net>
-References: <20220114081544.849748488@linuxfoundation.org>
+        Sat, 15 Jan 2022 11:42:05 -0500
+Date:   Sat, 15 Jan 2022 16:42:02 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alfasys.se;
+        s=protonmail2; t=1642264923;
+        bh=osBdiWyUWB5UFKuwp0VI80b3Eq7SBrPOORm6P2M1jNA=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc;
+        b=vz+gD4GgUFyAufrGY4iE5StS6HmqNtoniKhz3TlA1KsyctiBmzK4isbv0y9//Q4FM
+         QalwHxT7ngX4aLU/VvcHLM8FrMoFIn7lJEr/4tJ+nVx5qg+HMitW2e1Sij9PpymjCr
+         aHdcFieLqrjBNT3CCXR2631wcVuwl5SlmPUmM9edwk0IaJuoEZJ3OQf1M+LQDxS7a6
+         gSD+g5cjUSN8HZlrNkqTcaXhFW7DWkc4d6rATS8kyi0usTEha2sg+PDISSVzPjnubY
+         CSKiq7s613slY7csGKFEEqHRXuTWkmYSrH5IfsJXpFv4xIXWMSSuwobu1O+1+Rr/pz
+         ofRor/Rml7vLw==
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Alfasys <alfred@alfasys.se>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Damian Hobson-Garcia <dhobsong@igel.co.jp>
+Reply-To: Alfasys <alfred@alfasys.se>
+Subject: [PATCH 001/001] UIO: allow binding uio_dmem_genirq to devices using command line options
+Message-ID: <qFul607Amxy21SnrHljzWlk1zF1aanKgSpEIH0--hvj9t9wRzQR5xx80eFgl_2I6pppi8NNFp0TTHwkQw0uQD0Xl-8vth8-KOsbfwrLIHNg=@alfasys.se>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
+Content-Type: multipart/signed; protocol="application/pgp-signature"; micalg=pgp-sha512; boundary="------1a12312c1b586c2261ba94b99a2075ad2fd891cff25605e68e3b11db1bbaca1e"; charset=utf-8
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 09:16:14AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.1 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
-> Anything received after that time might be too late.
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------1a12312c1b586c2261ba94b99a2075ad2fd891cff25605e68e3b11db1bbaca1e
+Content-Type: multipart/mixed;boundary=---------------------979133eaa6260ebbf7515c2184d6b46c
 
-Build results:
-	total: 153 pass: 153 fail: 0
-Qemu test results:
-	total: 476 pass: 476 fail: 0
+-----------------------979133eaa6260ebbf7515c2184d6b46c
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;charset=utf-8
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Add an option to bind the uio_dmem_genirq driver to a given device
+using command line options.
+Make uio_dmem_genirq match uio_pdrv_genirq functionality added in
+commit 05c3e0bb5629 ("UIO: allow binding uio_pdrv_genirq.c to devices =
 
-Guenter
+
+using command line option")
+
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Damian Hobson-Garcia <dhobsong@igel.co.jp>
+Signed-off-by: Alfred Patriksson <alfred@alfasys.se>
+
+---
+
+git diff c9e6606c7fe92 #(tag: v5.16-rc8)
+diff --git a/drivers/uio/uio_dmem_genirq.c b/drivers/uio/uio_dmem_genirq.c
+index 6b5cfa5b0673..7f6c9b594dd4 100644
+--- a/drivers/uio/uio_dmem_genirq.c
++++ b/drivers/uio/uio_dmem_genirq.c
+@@ -317,10 +317,13 @@ static const struct dev_pm_ops uio_dmem_genirq_dev_p=
+m_ops =3D {
+ };
+ =
+
+
+ #ifdef CONFIG_OF
+-static const struct of_device_id uio_of_genirq_match[] =3D {
+-       { /* empty for now */ },
++static struct of_device_id uio_of_genirq_match[] =3D {
++       { /* This is filled with module_parm */ },
++       { /* Sentinel */ },
+ };
+ MODULE_DEVICE_TABLE(of, uio_of_genirq_match);
++module_param_string(of_id, uio_of_genirq_match[0].compatible, 128, 0);
++MODULE_PARM_DESC(of_id, "Openfirmware id of the device to be handled by u=
+io");
+ #endif
+-----------------------979133eaa6260ebbf7515c2184d6b46c--
+
+--------1a12312c1b586c2261ba94b99a2075ad2fd891cff25605e68e3b11db1bbaca1e
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: ProtonMail
+
+wnUEARYKAAYFAmHi+UUAIQkQUNpnjRayphAWIQSeloIZhOMBIRON26tQ2meN
+FrKmEDDEAP937pgEUdJoUDIxWsSqd1USB2GnGeb3W+/z6f/5FcjwuwD+OkKe
+UkVHYJRvikadEwl+uNZQLYkfp3aejTBB9IQaaQw=
+=9Siu
+-----END PGP SIGNATURE-----
+
+
+--------1a12312c1b586c2261ba94b99a2075ad2fd891cff25605e68e3b11db1bbaca1e--
+

@@ -2,89 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C0E48F4B6
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 05:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8D248F4B9
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 05:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbiAOETG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 23:19:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
+        id S232479AbiAOEYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 23:24:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiAOETF (ORCPT
+        with ESMTP id S231346AbiAOEYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 23:19:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EA9C061574;
-        Fri, 14 Jan 2022 20:19:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6AA1B82A41;
-        Sat, 15 Jan 2022 04:19:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EDF9C36AE7;
-        Sat, 15 Jan 2022 04:19:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642220342;
-        bh=L9jZwPl+ulM1n91M5X+pPqPaIs8EmocblrHHoBwI/NU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mC7KUJ0WI0h1o6Nvx2jO2cpeYvQp9kXPiY2nfdkJYyUvJIrn9R7dqkllqC5Cw4PAJ
-         0eqkcl5xvR1KKYI+gfO5wUXczedEm1nz7e+7Gud1N+kK95evtZVPqU2X5Ymj+SYNsk
-         xgsbhY2v4IU/5X2ZRHj7HDxb3q8SiS/5XKqDKxrFvap8zIRUKez36i+JKZnjxzHTwM
-         mqxpI+1I/B6G4JtZ2YBwc3PYR4Wy87jchgGA2Z/wiIsACzU+8K8rDPJxAFRmC+y2pT
-         zQB1Rr0pZxcfE0blfDD71Jv8wgoc8kCoh1yWRoslt/6hjRG6CI3lOfWtXUNfcZ/7Uj
-         YVse1suXj1zgg==
-Date:   Fri, 14 Jan 2022 20:19:02 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        david@fromorbit.com, linux-kernel@vger.kernel.org,
-        sandeen@sandeen.net, hch@lst.de
-Subject: [GIT PULL] xfs: new bug fixes for 5.17
-Message-ID: <20220115041902.GF90423@magnolia>
+        Fri, 14 Jan 2022 23:24:31 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92D8C061746
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 20:24:30 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id t32so4417016pgm.7
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 20:24:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cfHd7InBKggohreeo6TzAmVAoKc+zClbIDJTEU/k7sE=;
+        b=SX9u92+/2fJvDeBP2v8rFZN7fVMouG3mSDO3/wvSgAKaHI7Sv4H5a3JXMMJYqtZqqN
+         3LwAuXYOJpDOspW7oaqoPw4VnQQ+fwj7zTQbA05VfYMvECM4M/vY/vs++jrmO0kOjILC
+         +CHQZIp6+AEjd4vB2HXahvrW+QCb/eSagFd7g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cfHd7InBKggohreeo6TzAmVAoKc+zClbIDJTEU/k7sE=;
+        b=5bBltNC+sm+NPWSUO8Rn1tTO+zWWfm90MorI7HeIcXYQZcnudcCHMRo1Q2pGkgKhCE
+         sw4v8OwGe/qfoeOBQbOv1fgNyTxcVMHlhF3PlQXC2l5RpqSUiNgEF9gTBMILydbKWk8X
+         5sS/oWa+lxzlqOJS3+r7hg/sB9ogNjyIHezuW7MuGx1+d3wUZB3ypoaeLdYPPTspm6oW
+         rGKGjBBE0djjCMrIv4GaCSlgB0S8qciUoGB3aTkAGitmG/My+WUK8UIIccAizTMimvnU
+         EwBId86+kV49cnn1GYHVO8fpdIh1GusMu+IkiVmtuag0kyZkWpvCFaD/Ve7CAsQ2sKLQ
+         rnPA==
+X-Gm-Message-State: AOAM532jyGfzvcTq09iIoeZQ60TEHbU6FZFNMJCnnVsF66ApDyoM55gq
+        nWYyC+MjDFoeI8hxQpI74csqFw==
+X-Google-Smtp-Source: ABdhPJz9ih5ar8BWOxTELabdEWwF47rVOKy8bBcgJeO3O07v8K/TCocM/wzrxtuBchFZGqNxpR41LQ==
+X-Received: by 2002:a63:ad0e:: with SMTP id g14mr10490719pgf.408.1642220669588;
+        Fri, 14 Jan 2022 20:24:29 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f8sm12177412pjs.47.2022.01.14.20.24.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 20:24:29 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zhansaya Bagdauletkyzy <zhansayabagdaulet@gmail.com>,
+        Ivan Safonov <insafonov@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Marco Cesati <marcocesati@gmail.com>,
+        Joe Perches <joe@perches.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH 0/3 v2] staging: rtl*: Check for NULL header value
+Date:   Fri, 14 Jan 2022 20:24:24 -0800
+Message-Id: <20220115042427.824542-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2346; h=from:subject; bh=0//lkO/0wFXg2CJ7H8evHpq6JQek92k7+udPsATuwMQ=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh4kx6IoojX1My8JDm3s8RTZJRNnwTPi665D4rHLZS ZBQR7imJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYeJMegAKCRCJcvTf3G3AJv+9D/ 9Ynz91Nz2s14j7d43+u9u8iqDnSN9MWomqbv810lPS7N8T8hC5EZlnk1nbFxvrPDhHw+uPR9PuiKxr t2WRtrzegBAU64+lA5YZdq2ruByk9frXDx/+1pi8eitLVZwUIQJbtYZO2o3XQ0R+EHmoAerTXpdnXS Y+llUjStu73BkWFtMg4AVRC4jagtnF2R0xVXT8LlAzp6z6RHj1LggNlPT+MB1PS7KDb6HmfMtz1Adu b1cDSLqFv2jZWJfzXf2UUCB9BsXMOkNsnT7iPPLN96osQN9U/TVNXqG3IUdtn4X7iBMjcmMowpaXTr 677AZM9KHQJYsJfCcCp6xPHzd7ueJwlAKcXH9kE+hw7/NZV82AWRpuaMcQwiSqfpWIAj03PVKEMbI9 wnpPnBWDPK/8XH+gYuCWYKr1HDgEHmUsR3Ej287pXviHivGPUwJ88v5yWPMjKGQr+Z/2EAIgh1yurq wS1HLipnYH30uQlf1fbQOFA9Cc3UnQ26Vle1WrZH/Qrxjw8rUSdUUbfJxs/oR5gQMlM+VZ0/tS5V13 iMqZTpVjbmAa6+x4kHRZS6/4vr1HMqOCGUhGdtv2aSWSqcz4m6RKLnQ+D68bpENAIXv//dMdLkcN5Y rUDjxw0tlTTkJjXCm5ZTUBXLhJ2OmxJOSLrQdiex/hK0KQ5iHqNRqNrWZjvA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi,
 
-Please pull these bug fixes for Linux 5.17.  These are the last few
-obvious fixes that I found while stress testing online fsck for XFS
-prior to initiating a design review of the whole giant machinery.
+When building with -Warray-bounds, the following warning is emitted:
 
-The branch merges cleanly against upstream as of a few minutes ago.
-Please let me know if anything else strange happens during the merge
-process.  There will definitely be a third pull request coming with a
-removal of the recently troublesome ALLOCSP/FREESP ioctl family and the
-long dead SGI XFS HSM ioctls.
+In file included from ./include/linux/string.h:253,
+                 from ./arch/x86/include/asm/page_32.h:22,
+                 from ./arch/x86/include/asm/page.h:14,
+                 from ./arch/x86/include/asm/thread_info.h:12,
+                 from ./include/linux/thread_info.h:60,
+                 from ./arch/x86/include/asm/preempt.h:7,
+                 from ./include/linux/preempt.h:78,
+                 from ./include/linux/rcupdate.h:27,
+                 from ./include/linux/rculist.h:11,
+                 from ./include/linux/sched/signal.h:5,
+                 from ./drivers/staging/rtl8723bs/include/drv_types.h:17,
+                 from drivers/staging/rtl8723bs/core/rtw_recv.c:7:
+In function 'memcpy',
+    inlined from 'wlanhdr_to_ethhdr' at drivers/staging/rtl8723bs/core/rtw_recv.c:1554:2:
+./include/linux/fortify-string.h:41:33: warning: '__builtin_memcpy' offset [0, 5] is out of the bounds [0, 0] [-Warray-bounds]
+   41 | #define __underlying_memcpy     __builtin_memcpy
+      |                                 ^
 
---D
+This is due to various paths to the memcpy() where the compile could
+see the destination buffer having a NULL value. This series fixes this
+by both eliminating cases where NULL returns were impossible and adding
+missing NULL checks where values were possible.
 
-The following changes since commit 7e937bb3cbe1f6b9840a43f879aa6e3f1a5e6537:
+Thanks!
 
-  xfs: warn about inodes with project id of -1 (2022-01-06 10:43:30 -0800)
+-Kees
 
-are available in the Git repository at:
+v1: https://lore.kernel.org/lkml/20220113002001.3498383-1-keescook@chromium.org/
+v2:
+ - drop get_recvframe_data()
+ - add missing NULL checks to r8188eu and rtl8723bs (already present in rtl8712)
 
-  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.17-merge-3
+Kees Cook (3):
+  staging: r8188eu: Drop get_recvframe_data()
+  staging: rtl8723bs: Drop get_recvframe_data()
+  staging: rtl8712: Drop get_recvframe_data()
 
-for you to fetch changes up to 4a9bca86806fa6fc4fbccf050c1bd36a4778948a:
+ drivers/staging/r8188eu/core/rtw_recv.c        |  6 +++++-
+ drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c  |  4 +---
+ drivers/staging/r8188eu/include/rtw_recv.h     |  9 ---------
+ drivers/staging/rtl8712/rtl871x_recv.c         |  4 ++--
+ drivers/staging/rtl8712/rtl871x_recv.h         |  8 --------
+ drivers/staging/rtl8723bs/core/rtw_recv.c      | 11 ++++++++---
+ drivers/staging/rtl8723bs/hal/rtl8723bs_recv.c |  3 +--
+ drivers/staging/rtl8723bs/include/rtw_recv.h   | 11 -----------
+ 8 files changed, 17 insertions(+), 39 deletions(-)
 
-  xfs: fix online fsck handling of v5 feature bits on secondary supers (2022-01-12 09:45:21 -0800)
+-- 
+2.30.2
 
-----------------------------------------------------------------
-New code for 5.17:
-
- - Fix a minor locking inconsistency in readdir
- - Fix incorrect fs feature bit validation for secondary superblocks
-
-----------------------------------------------------------------
-Darrick J. Wong (2):
-      xfs: take the ILOCK when readdir inspects directory mapping data
-      xfs: fix online fsck handling of v5 feature bits on secondary supers
-
- fs/xfs/scrub/agheader.c        | 53 ++++++++++++++++++++--------------------
- fs/xfs/scrub/agheader_repair.c | 12 +++++++++
- fs/xfs/xfs_dir2_readdir.c      | 55 +++++++++++++++++++++++++++---------------
- 3 files changed, 73 insertions(+), 47 deletions(-)

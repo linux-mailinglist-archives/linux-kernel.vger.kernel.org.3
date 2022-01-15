@@ -2,122 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A3648F9CC
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 00:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 067FA48F9D1
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 00:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232701AbiAOXRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 18:17:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
+        id S233906AbiAOXpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 18:45:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232603AbiAOXRE (ORCPT
+        with ESMTP id S233894AbiAOXpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 18:17:04 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AC4C061574
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 15:17:04 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id j27so6118206pgj.3
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 15:17:04 -0800 (PST)
+        Sat, 15 Jan 2022 18:45:20 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6178CC061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 15:45:20 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id c71so48925802edf.6
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 15:45:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sdOdPHO13ELbYkVKga0qbkuFCOM80w2sjWMdUsNelzI=;
-        b=HG5JfIt4nloEMLlZ50FdwxUckJJ8iy7ZPM6gLlXFKzC2Io0iFXqatAZ0mXsz95a953
-         bwabUdT/UYDXVyo1MMaGKSdl3dpwPQB5vJgYCQjVkc6d6jI8J8ZAG7j3+wHbXBodVpBP
-         f/6NPR8h5JO4QK0HHY98iPgKf2MVuNH3Pz5TIRR+CdnOYcyJXevHFatggXpnDeKZQAWI
-         fBOWH5Cw0VejCEROr7nRKr9S5PH1Z3lC/XoTSrnIxL9CSgs2/GxzU6+5NFVCws+N4CVv
-         +jwKzHMv1AYZ0gGCRDghsazU98csRWSttZTnAzJ4w2HBYtBoW3b9lZ0CJpRUeSJpJ36F
-         6FTQ==
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=w75my6N+lE9Tb7Xrd/3B5AqGyYJg6q7bwJts0m1eHAM=;
+        b=HULieHlYiwuUrdzEf/a41YN5yHintRqwUa+1XNEXIwjwf+O7x7SO8+/0ejBJiMkLRv
+         Qa7gt8IC33b3dOj97R4TZthJuecJMwdGbrnLHhSzMwjJ2yX4rrx3FJHeMkJG6vyzGCWw
+         wj7bVt2ssWFUwm8gHkV6o07eNmrWKxsBXpSgTZFrTXKQrElgqaCHytBXy3GhHHXbPlis
+         GB1n0zQrJQZqdM61P+Fc4cFNJ0D+yym7BaFwavjAtR9ZHs6dHASEs9H6vQ3XTkRkXNo+
+         e9tC5AhoOCXa7771/23ATjXEEvLPGKi0FYPuiTxTC3YYqRxGwsqqiAvOoRYfd47cwwYO
+         Morw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=sdOdPHO13ELbYkVKga0qbkuFCOM80w2sjWMdUsNelzI=;
-        b=e54DyfxE+o8eHgnLG68499wznlojnA9BM+GD7Fkfr19prx4TJ2w7Ek49N+dcpmNLLm
-         dbQuYpxs+6i0PUeQZNtW3d/leB2VOXHxOLqmsC5dQG/mLU0WZuhqclNhVVXEFuvhbPdc
-         Uw2OLpAgDiUPQjbtcNdGoIbB7P5ZtzeTb1AbIov/Dtna4Q5OlHmu6/N0PaaOcDSd9arV
-         lLSRXOc9/G26azhX4NQPsSbXgratBD6G/6GsEJ2krXy4lCyn3UCQEGLoebUJSbIbcJQ7
-         aIjNXHWic5DiBAMnRU9nLlHXHHBvLimXdJQvyx0f5KTrsPjBt0ew4dp7wmiuykeYj5+R
-         cIYA==
-X-Gm-Message-State: AOAM531HB5nJNi9eJ5dwuvTru48guZPxLXQFPHVRK4tqFoE7vcLLKDk1
-        b7TSLJUjvcvCjC92TYzlkRXYN0VT3Cg=
-X-Google-Smtp-Source: ABdhPJzGYQZtvYzEXbO5jB+oMm7DZ7FoBOt2wklAeNS+Z15RquTld9i427Mns6SoTKomA9AcWyP03A==
-X-Received: by 2002:a63:6687:: with SMTP id a129mr13053286pgc.477.1642288623494;
-        Sat, 15 Jan 2022 15:17:03 -0800 (PST)
-Received: from bbox-1.mtv.corp.google.com ([2620:15c:211:201:8f5b:e301:1a36:bbbb])
-        by smtp.gmail.com with ESMTPSA id s22sm3139529pje.1.2022.01.15.15.17.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Jan 2022 15:17:02 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-From:   Minchan Kim <minchan@kernel.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Tim Murray <timmurray@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Minchan Kim <minchan@kernel.org>
-Subject: [PATCH] locking: add missing __sched attributes
-Date:   Sat, 15 Jan 2022 15:16:57 -0800
-Message-Id: <20220115231657.84828-1-minchan@kernel.org>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=w75my6N+lE9Tb7Xrd/3B5AqGyYJg6q7bwJts0m1eHAM=;
+        b=AiVOmYTtTWWeDsHu4iFx97l4eJp6cZ3BB6pg6EiTsMy3bRH95FPtGC0Aku3l/d8/pk
+         MBaEtw+ARd9BEIiYf00q7sw/2ctap1Uypp+DKoW1TmAckNvo+jCTO7gOtu3ng1wUT4IU
+         XYfRqiYfqeEU8ob0nLukuXmYbNBUulDbEMPFHx0Yk2UJvngP49hI7Dd8hVJUgdyHH5/5
+         ROPVBoXg+BBIthWHxwJ53xxS36t4ktT0/K3b8pdAiXc1tysCaYVAVzFnqDnumfI+jCyS
+         e07q4Gk7Lwql1mL1RchkFhhdO9MrpiJ1+0jvXet6ZtxPA1IjjIsv8SShJsUote9CL6ij
+         qLQg==
+X-Gm-Message-State: AOAM533B4jNIrXuQaYkKBVUg0ZC3unmdUFpSzWOmNkgJjrDpbyR7Ctl9
+        WX/6j+w16+gWSTOyWqINA08=
+X-Google-Smtp-Source: ABdhPJxIdNHo4amCDxOD387P/932l4bdBqsU+sfIquBgaBClOd6a7rSXfKoEW6rcSfE9h29VW8ubEA==
+X-Received: by 2002:aa7:c60e:: with SMTP id h14mr12964037edq.40.1642290318922;
+        Sat, 15 Jan 2022 15:45:18 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id e26sm1407022edy.36.2022.01.15.15.45.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 15 Jan 2022 15:45:18 -0800 (PST)
+Date:   Sat, 15 Jan 2022 23:45:18 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     Wei Yang <richard.weiyang@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mhocko@suse.com
+Subject: Re: [PATCH] mm/page_alloc: clear node_load[] in function
+ build_zonelists
+Message-ID: <20220115234518.4q2yhb3mz2sg76iz@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20220115230002.490-1-richard.weiyang@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220115230002.490-1-richard.weiyang@gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds __sched attributes to a few missing places
-to show blocked function rather than locking function
-in get_wchan.
+On Sat, Jan 15, 2022 at 11:00:02PM +0000, Wei Yang wrote:
+>static variable node_load[] is a helper variable during build zonelist.
+>On each turn for building zonelist, node_load[] is cleared. So this is
+>proper to do this in function build_zonelist.
+>
 
-Signed-off-by: Minchan Kim <minchan@kernel.org>
----
- kernel/locking/percpu-rwsem.c | 5 +++--
- kernel/locking/rwsem.c        | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Hm... sounds I missed some important part of this operation.
 
-diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
-index 70a32a576f3f..c9fdae94e098 100644
---- a/kernel/locking/percpu-rwsem.c
-+++ b/kernel/locking/percpu-rwsem.c
-@@ -7,6 +7,7 @@
- #include <linux/rcupdate.h>
- #include <linux/sched.h>
- #include <linux/sched/task.h>
-+#include <linux/sched/debug.h>
- #include <linux/errno.h>
- 
- int __percpu_init_rwsem(struct percpu_rw_semaphore *sem,
-@@ -162,7 +163,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore *sem, bool reader)
- 	__set_current_state(TASK_RUNNING);
- }
- 
--bool __percpu_down_read(struct percpu_rw_semaphore *sem, bool try)
-+bool __sched __percpu_down_read(struct percpu_rw_semaphore *sem, bool try)
- {
- 	if (__percpu_down_read_trylock(sem))
- 		return true;
-@@ -211,7 +212,7 @@ static bool readers_active_check(struct percpu_rw_semaphore *sem)
- 	return true;
- }
- 
--void percpu_down_write(struct percpu_rw_semaphore *sem)
-+void __sched percpu_down_write(struct percpu_rw_semaphore *sem)
- {
- 	might_sleep();
- 	rwsem_acquire(&sem->dep_map, 0, 0, _RET_IP_);
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index 69aba4abe104..acde5d6f1254 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -1048,7 +1048,7 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- /*
-  * Wait until we successfully acquire the write lock
-  */
--static struct rw_semaphore *
-+static struct rw_semaphore __sched *
- rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- {
- 	long count;
+Please forget this one :-(
+
+>Another side effect is,  #ifdef CONFIG_NUMA could be removed since
+>node_load[] is only defined when CONFIG_NUMA is set.
+>
+
 -- 
-2.34.1.703.g22d0c6ccf7-goog
-
+Wei Yang
+Help you, Help me

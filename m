@@ -2,86 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 176D248F99D
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 22:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A4848F9A0
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 23:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233759AbiAOVvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 16:51:46 -0500
-Received: from mga11.intel.com ([192.55.52.93]:22541 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230464AbiAOVvp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 16:51:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642283505; x=1673819505;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oQjgmX+6U3TQQip0A1tuwriE8Vl38rW2a49NCxQ71fA=;
-  b=IWIPL/7Zles/ObKe9SsoY78zULNCP2k56L7zc1cqFNQIP+bQEIxYM2rQ
-   VS89+hQ9sfEm3ZsxBsREA84tI19KGKV16DYFwv/NqLF3YyESylnwZNcWk
-   R+6SIFpa7hgKaeYlOlbKfx24QH2RvP4v16h+vCJr1r/sulAL1eFY/ard7
-   6xzQSXozqPM3b6VfQyS1+1n6gGGfjj8WuDyB4E6iYDe5RrTWdZ8rhRD7L
-   cYHss1WOycgofCQhr1AwV2i13Fz7oEOAbSltLx7/iQcd22yzZ6l1tRfob
-   QG1GaMOlATk0UWAJyXbSWu+AjQejLvtmM75ambxbyVoEO1aGB59GJDOig
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10228"; a="242000440"
-X-IronPort-AV: E=Sophos;i="5.88,292,1635231600"; 
-   d="scan'208";a="242000440"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 13:51:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,292,1635231600"; 
-   d="scan'208";a="614677458"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Jan 2022 13:51:43 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8qxa-000AJY-Qw; Sat, 15 Jan 2022 21:51:42 +0000
-Date:   Sun, 16 Jan 2022 05:51:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1597/2384]
- ./usr/include/linux/netlink.h:5:10: fatal error: 'uapi/linux/types.h' file
- not found
-Message-ID: <202201160519.Yztp2bjA-lkp@intel.com>
+        id S233817AbiAOWK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 17:10:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230464AbiAOWK0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 17:10:26 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FA4C061574;
+        Sat, 15 Jan 2022 14:10:26 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id m4so48261222edb.10;
+        Sat, 15 Jan 2022 14:10:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=EPbI8Tt0WfUMwAmaR0DL4u0NGyT4Pfp5ibYD0UcG0DI=;
+        b=agj6fChYEnKrSoNxBVq48eG35QoBd5Z4IF+iAiicRpU2JWeJ9LfMJNox6L4q2g2RBL
+         4ETDJyBfAyhwTeit7qORH7ag0LnhF2LlADK4vfaVOzEQi/ZW5lHvfa82MDys4hXQK+C3
+         4hJN/NnQMc73yqTl5qISSYt5yrcUMzgCFAXwTi3GLM1kOeIw6js15Tx/R0XIYwz6PTXa
+         4ZwyvjW7pSAjcoWl9BMhmTQ0SloTVQLPkExYXobQE08n1ZfTuuww4aVBjSKCVRKtf75l
+         UwhvkbPdJkfEIcvOk0IyuUjkHa+J6Ffexa9DabrExe6AtDsr+WdXHHvkyFsvbMoVt92K
+         o4yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=EPbI8Tt0WfUMwAmaR0DL4u0NGyT4Pfp5ibYD0UcG0DI=;
+        b=DS8iPNcuvqk+asW/cA38H82w0E+EjGgqt1gbAU9JFKjfjuj+OuKuNIpRvc1vSTLdvt
+         DTUYU1SWA4e08/D8ImK0zTUcZT6tZL9PWl0jNxEeOlfTgFyuspVv7/pTyZmWhTZjt53j
+         BPtXQfwGAlWHLk9Lgx8u66aq3vAt1DNiF15OX+VSx60Y/DvXqP/uoKzehiqbBBsi5PLi
+         WnI+Yf6dADUFWXcp7v9y1mmj6YFFrVb+dllUh/akGBldsrJjMy6/3Hy4m3euyWNPUubI
+         zFxZpYMs3JQQDYCFyKovGrS3Oc1g+O4w/RnlLFZTDlaIZWZFIAUE3Q8JWlniP6hbs5R3
+         WuHA==
+X-Gm-Message-State: AOAM53217UHEIH0H3Q+lJ7IME0FhtGWIll2UVjhqaV2mLepYmPRifzBs
+        hFP0ApneTSFxl+/3vwAv4lY=
+X-Google-Smtp-Source: ABdhPJyyNWOlbijFCkXzof9hTCK0gRxJs24hN60XetvbzrKmVaUKeHF2ngn5PutlX7rMQmoqy+A9jQ==
+X-Received: by 2002:a17:907:9085:: with SMTP id ge5mr12006871ejb.128.1642284624835;
+        Sat, 15 Jan 2022 14:10:24 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id j5sm2957736ejo.177.2022.01.15.14.10.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 15 Jan 2022 14:10:24 -0800 (PST)
+Date:   Sat, 15 Jan 2022 22:10:23 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Wei Yang <richard.weiyang@gmail.com>, hannes@cmpxchg.org,
+        vdavydov.dev@gmail.com, akpm@linux-foundation.org,
+        shakeelb@google.com, guro@fb.com, vbabka@suse.cz,
+        willy@infradead.org, songmuchun@bytedance.com, shy828301@gmail.com,
+        surenb@google.com, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 1/4] mm/memcg: use NUMA_NO_NODE to indicate allocation
+ from unspecified node
+Message-ID: <20220115221023.qndjlehjxdrj5r6b@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20220111010302.8864-1-richard.weiyang@gmail.com>
+ <Yd1CdJA5NelzoK1D@dhcp22.suse.cz>
+ <20220112004634.dc5suwei4ymyxaxg@master>
+ <Yd6Xr7K9bKGVgGtI@dhcp22.suse.cz>
+ <20220114002937.fnyq3yyk36j4nb3d@master>
+ <YeE5k79uP3xBPCv7@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YeE5k79uP3xBPCv7@dhcp22.suse.cz>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
-commit: 394a7895e7b5aeef5c98d7fbe21f09107b515d19 [1597/2384] headers/deps: net: Optimize <uapi/linux/netlink.h>
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220116/202201160519.Yztp2bjA-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=394a7895e7b5aeef5c98d7fbe21f09107b515d19
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 394a7895e7b5aeef5c98d7fbe21f09107b515d19
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Fri, Jan 14, 2022 at 09:51:31AM +0100, Michal Hocko wrote:
+>On Fri 14-01-22 00:29:37, Wei Yang wrote:
+>> On Wed, Jan 12, 2022 at 09:56:15AM +0100, Michal Hocko wrote:
+>> >On Wed 12-01-22 00:46:34, Wei Yang wrote:
+>> >> On Tue, Jan 11, 2022 at 09:40:20AM +0100, Michal Hocko wrote:
+>> >> >On Tue 11-01-22 01:02:59, Wei Yang wrote:
+>> >> >> Instead of use "-1", let's use NUMA_NO_NODE for consistency.
+>> >> >> 
+>> >> >> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+>> >> >
+>> >> >I am not really sure this is worth it. After the merge window I plan to
+>> >> >post http://lkml.kernel.org/r/20211214100732.26335-1-mhocko@kernel.org.
+>> >> 
+>> >> Give me some time to understand it :-)
+>> >
+>> >Just for the record, here is what I have put on top of that series:
+>> 
+>> Ok, I got what you try to resolve. I am ok with the following change except
+>> one point.
+>> 
+>> >--- 
+>> >>From b7195eba02fe6308a6927450f4630057c05e808e Mon Sep 17 00:00:00 2001
+>> >From: Wei Yang <richard.weiyang@gmail.com>
+>> >Date: Tue, 11 Jan 2022 09:45:25 +0100
+>> >Subject: [PATCH] memcg: do not tweak node in alloc_mem_cgroup_per_node_info
+>> >
+>> >alloc_mem_cgroup_per_node_info is allocated for each possible node and
+>> >this used to be a problem because not !node_online nodes didn't have
+>> >appropriate data structure allocated. This has changed by "mm: handle
+>> >uninitialized numa nodes gracefully" so we can drop the special casing
+>> >here.
+>> >
+>> >Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+>> >Signed-off-by: Michal Hocko <mhocko@suse.com>
+>> >---
+>> > mm/memcontrol.c | 14 ++------------
+>> > 1 file changed, 2 insertions(+), 12 deletions(-)
+>> >
+>> >diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+>> >index 781605e92015..ed19a21ee14e 100644
+>> >--- a/mm/memcontrol.c
+>> >+++ b/mm/memcontrol.c
+>> >@@ -5044,18 +5044,8 @@ struct mem_cgroup *mem_cgroup_from_id(unsigned short id)
+>> > static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
+>> > {
+>> > 	struct mem_cgroup_per_node *pn;
+>> >-	int tmp = node;
+>> >-	/*
+>> >-	 * This routine is called against possible nodes.
+>> >-	 * But it's BUG to call kmalloc() against offline node.
+>> >-	 *
+>> >-	 * TODO: this routine can waste much memory for nodes which will
+>> >-	 *       never be onlined. It's better to use memory hotplug callback
+>> >-	 *       function.
+>> >-	 */
+>> 
+>> Do you think this TODO is not related to this change?
+>
+>It is not really related but I am not sure how useful it is. Essentially
+>any allocation that is per-possible node is in the same situation and if
+>we really need to deal with large and sparse possible nodes masks.
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sounds reasonable :-)
 
-All errors (new ones prefixed by >>):
+>If you want me to keep the TODO I will do it though.
+>
+>-- 
+>Michal Hocko
+>SUSE Labs
 
-   In file included from <built-in>:1:
-   In file included from ./usr/include/linux/fib_rules.h:6:
-   In file included from ./usr/include/linux/rtnetlink.h:6:
->> ./usr/include/linux/netlink.h:5:10: fatal error: 'uapi/linux/types.h' file not found
-   #include <uapi/linux/types.h>
-            ^~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Wei Yang
+Help you, Help me

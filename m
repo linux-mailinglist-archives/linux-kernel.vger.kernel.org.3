@@ -2,139 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CE748F49C
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 04:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2D448F4A3
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 05:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbiAODuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 22:50:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232230AbiAODuu (ORCPT
+        id S232346AbiAOEBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 23:01:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56011 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232334AbiAOEBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 22:50:50 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373ABC06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 19:50:50 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id o1so3004692pjr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 19:50:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=glwqqOEdn91POaZx9czNGi+z/EIMYXyhx0ZODvWOkR0=;
-        b=PXUM6ip1gn1+Z5jW8swrOLF3BV9itUCEcLYQCp2orcK9jlHRTk3DxMwbP1tpEoV8cM
-         OFw2h/5ar5N+aZNXlFTMqh6v4aXrZYK2X6tWvJECiz81Gi4v9qKd/dIO6eQ0KiGWpTef
-         +hkdnHieyMv2NqxMz8B9Kz3n90NaG333FbQgE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=glwqqOEdn91POaZx9czNGi+z/EIMYXyhx0ZODvWOkR0=;
-        b=yKIxi3sFYPSUdwoGlcCQV5sBp35xFVtKl132VyULXdL/+hIq4sscu/mc0ijw4I2sLR
-         N3cO6l34jwY2VOh7XcTddT/8d3P6uLjDhtb+oOouZWfaIaSptDikRbtci7uAsRi0SaM0
-         Gl59oUJQ55hawH7/CIwBa/odxDP/nyxdcbtBCIB1mMn6eIOWBmF7x5k1JwFfs+5kwRp1
-         ZG0WghBaitEKwB2rNTp2Qr+M8370ccMQnecufpnL9vPFtsErseO0YsU/gWMDpoBFKxjp
-         wzpiFQsdlYvdCO2fk1xdmmv3CrjDHXn20ilr4sgAnqDj/huzD7atZ3/l2M++84/I4SY4
-         J+CA==
-X-Gm-Message-State: AOAM531IRkp+DHmb0um109gTNzp4FwkktNzJ0EQwzTqNs4Wi3+jZlScN
-        Efmo7rASIRokYCGFjFBiGpLQt7aYQAm94g==
-X-Google-Smtp-Source: ABdhPJxT6ZBYuQcmSXlrAijE8o8SdFMgz49AbsQ0GuEiNixlYic8K09k0PM5BtkBV5vPPez4AxqUVw==
-X-Received: by 2002:a17:90a:bb86:: with SMTP id v6mr23685422pjr.152.1642218648520;
-        Fri, 14 Jan 2022 19:50:48 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w4sm11628101pjq.7.2022.01.14.19.50.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 19:50:48 -0800 (PST)
-Date:   Fri, 14 Jan 2022 19:50:47 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, gustavoars@kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH -next, v2] sched: Use struct_size() helper in
- task_numa_group()
-Message-ID: <202201141935.A3F2ED1CF@keescook>
-References: <20220110012354.144394-1-xiujianfeng@huawei.com>
- <Ydy3N577YD0JJr2N@hirez.programming.kicks-ass.net>
- <20220110193158.31e1eaea@gandalf.local.home>
- <Yd1qYsFcgcp/uHSa@hirez.programming.kicks-ass.net>
- <20220111101425.7c59de5b@rorschach.local.home>
- <Yd/ugQ8kUmcceuex@hirez.programming.kicks-ass.net>
+        Fri, 14 Jan 2022 23:01:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642219266;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wud2rs14ZF1prvGoS/djlh4/NOp7NyfwlxRJwSrHKLE=;
+        b=crMjiTAXYO/ix0Oo+Oam8VQaRkvBhxU4YnH4vVERoOYi/NvUwUPw1uhMW+lb94avwLfxMw
+        3eRRZip2yKzOjU+aJllyEiLP5LGuZ9Cp7PTWiS7ALB4oCkotHVKuHni2s9FG+OE+I2HrYr
+        QqMS1vOrHUIjAw7zqpDkDiUtvWZ2fns=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-391-Oyl71GGDP1GB2tyW0sLS3g-1; Fri, 14 Jan 2022 23:01:05 -0500
+X-MC-Unique: Oyl71GGDP1GB2tyW0sLS3g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E2BC918397A7;
+        Sat, 15 Jan 2022 04:01:03 +0000 (UTC)
+Received: from jmeneghi.bos.com (unknown [10.22.17.136])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3DB7856F8F;
+        Sat, 15 Jan 2022 04:01:03 +0000 (UTC)
+From:   John Meneghini <jmeneghi@redhat.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        GR-QLogic-Storage-Upstream@marvell.com, mlombard@redhat.com,
+        skashyap@marvell.com, guazhang@redhat.com
+Subject: [PATCH v3] scsi: bnx2fc: flush destroy_work queue before calling bnx2fc_interface_put
+Date:   Fri, 14 Jan 2022 23:00:44 -0500
+Message-Id: <20220115040044.1013475-1-jmeneghi@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yd/ugQ8kUmcceuex@hirez.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 10:18:57AM +0100, Peter Zijlstra wrote:
-> On Tue, Jan 11, 2022 at 10:14:25AM -0500, Steven Rostedt wrote:
-> > On Tue, 11 Jan 2022 12:30:42 +0100
-> > Peter Zijlstra <peterz@infradead.org> wrote:
-> > 
-> > > > > >  	if (unlikely(!deref_curr_numa_group(p))) {
-> > > > > > -		unsigned int size = sizeof(struct numa_group) +
-> > > > > > -				    NR_NUMA_HINT_FAULT_STATS *
-> > > > > > -				    nr_node_ids * sizeof(unsigned long);
-> > > > > > +		unsigned int size = struct_size(grp, faults,
-> > > > > > +						NR_NUMA_HINT_FAULT_STATS * nr_node_ids);    
-> > > > > 
-> > > > > Again, why?! The old code was perfectly readable, this, not so much.  
-> > > > 
-> > > > Because it is unsafe,  
-> > > 
-> > > Unsafe how? Changelog doesn't mention anything, nor do you. In fact,
-> > > Changelog says there is no functional change, which makes me hate the
-> > > thing for obscuring something that was simple.
-> > 
-> > If for some reason faults changes in size, the original code must be
-> > updated whereas the new code is robust enough to not need changing.
+  The bnx2fc_destroy functions are removing the interface before calling
+  destroy_work. This results multiple WARNings from sysfs_remove_group
+  as the controller rport device attributes are removed to early.
 
-I think this alone is reason enough. :)
+  Replace the fcoe_port's destroy_work queue.  It's not needed.
 
-> Then I would still much prefer something like:
-> 
-> 	unsigned int size = sizeof(*grp) +
-> 			    NR_NUMA_HINT_FAULT_STATS * numa_node_ids * sizeof(gfp->faults);
-> 
-> Which is still far more readable than some obscure macro. But again, the
+  The problem is easily reproducible with the following steps.
 
-I'm not sure it's _obscure_, but it is relatively new. It's even
-documented. ;)
-https://www.kernel.org/doc/html/latest/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments
+  Example:
 
-That said, the original patch is incomplete: it should be using size_t
-for "size".
+    $ dmesg -w &
+    $ systemctl enable --now fcoe
+    $ fipvlan -s -c ens2f1
+    $ fcoeadm -d ens2f1.802
+    [  583.464488] host2: libfc: Link down on port (7500a1)
+    [  583.472651] bnx2fc: 7500a1 - rport not created Yet!!
+    [  583.490468] ------------[ cut here ]------------
+    [  583.538725] sysfs group 'power' not found for kobject 'rport-2:0-0'
+    [  583.568814] WARNING: CPU: 3 PID: 192 at fs/sysfs/group.c:279 sysfs_remove_group+0x6f/0x80
+    [  583.607130] Modules linked in: dm_service_time 8021q garp mrp stp llc bnx2fc cnic uio rpcsec_gss_krb5 auth_rpcgss nfsv4 ...
+    [  583.942994] CPU: 3 PID: 192 Comm: kworker/3:2 Kdump: loaded Not tainted 5.14.0-39.el9.x86_64 #1
+    [  583.984105] Hardware name: HP ProLiant DL120 G7, BIOS J01 07/01/2013
+    [  584.016535] Workqueue: fc_wq_2 fc_rport_final_delete [scsi_transport_fc]
+    [  584.050691] RIP: 0010:sysfs_remove_group+0x6f/0x80
+    [  584.074725] Code: ff 5b 48 89 ef 5d 41 5c e9 ee c0 ff ff 48 89 ef e8 f6 b8 ff ff eb d1 49 8b 14 24 48 8b 33 48 c7 c7 ...
+    [  584.162586] RSP: 0018:ffffb567c15afdc0 EFLAGS: 00010282
+    [  584.188225] RAX: 0000000000000000 RBX: ffffffff8eec4220 RCX: 0000000000000000
+    [  584.221053] RDX: ffff8c1586ce84c0 RSI: ffff8c1586cd7cc0 RDI: ffff8c1586cd7cc0
+    [  584.255089] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffb567c15afc00
+    [  584.287954] R10: ffffb567c15afbf8 R11: ffffffff8fbe7f28 R12: ffff8c1486326400
+    [  584.322356] R13: ffff8c1486326480 R14: ffff8c1483a4a000 R15: 0000000000000004
+    [  584.355379] FS:  0000000000000000(0000) GS:ffff8c1586cc0000(0000) knlGS:0000000000000000
+    [  584.394419] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+    [  584.421123] CR2: 00007fe95a6f7840 CR3: 0000000107674002 CR4: 00000000000606e0
+    [  584.454888] Call Trace:
+    [  584.466108]  device_del+0xb2/0x3e0
+    [  584.481701]  device_unregister+0x13/0x60
+    [  584.501306]  bsg_unregister_queue+0x5b/0x80
+    [  584.522029]  bsg_remove_queue+0x1c/0x40
+    [  584.541884]  fc_rport_final_delete+0xf3/0x1d0 [scsi_transport_fc]
+    [  584.573823]  process_one_work+0x1e3/0x3b0
+    [  584.592396]  worker_thread+0x50/0x3b0
+    [  584.609256]  ? rescuer_thread+0x370/0x370
+    [  584.628877]  kthread+0x149/0x170
+    [  584.643673]  ? set_kthread_struct+0x40/0x40
+    [  584.662909]  ret_from_fork+0x22/0x30
+    [  584.680002] ---[ end trace 53575ecefa942ece ]---
 
-> It is a fairly useful and common pattern to have a small structure and
-> an array in the same memory allocation.
-> 
-> Think hash-tables, the structure contains the size of the table and some
-> other things, like for example a seed for the hash function or a lock,
-> and then the table itself as an array.
+Fixes: 0cbf32e1681d ("[SCSI] bnx2fc: Avoid calling bnx2fc_if_destroy with unnecessary locks")
+Tested-by: Guangwu Zhang <guazhang@redhat.com>
+Signed-off-by: John Meneghini <jmeneghi@redhat.com>
+Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
+---
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 20 +++++---------------
+ 1 file changed, 5 insertions(+), 15 deletions(-)
 
-Right, the use of flexible arrays is very common in the kernel. So much
-so that we've spent years fixing all the ancient "fake flexible arrays"
-scattered around the kernel messing up all kinds of compile-time and
-run-time flaw mitigations. Flexible array manipulations are notoriously
-prone to mistakes (overflows in allocation, mismatched bounds storage
-sizes, array index overflows, etc). These helpers (with more to come)
-help remove some of the foot-guns that C would normally impart to them.
-
-> I can't, nor do I want to, remember all these stupid little macros. Esp.
-> not for trivial things like this.
-
-Well, the good news is that other folks will (and are) fixing them for
-you. :) Even if you never make mistakes with flexible arrays, other
-people do, and so we need to take on some improvements to the robustness
-of the kernel source tree-wide.
-
--Kees
-
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+index 71fa62bd3083..9be273c320e2 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+@@ -82,7 +82,7 @@ static int bnx2fc_bind_pcidev(struct bnx2fc_hba *hba);
+ static void bnx2fc_unbind_pcidev(struct bnx2fc_hba *hba);
+ static struct fc_lport *bnx2fc_if_create(struct bnx2fc_interface *interface,
+ 				  struct device *parent, int npiv);
+-static void bnx2fc_destroy_work(struct work_struct *work);
++static void bnx2fc_port_destroy(struct fcoe_port *port);
+ 
+ static struct bnx2fc_hba *bnx2fc_hba_lookup(struct net_device *phys_dev);
+ static struct bnx2fc_interface *bnx2fc_interface_lookup(struct net_device
+@@ -907,9 +907,6 @@ static void bnx2fc_indicate_netevent(void *context, unsigned long event,
+ 				__bnx2fc_destroy(interface);
+ 		}
+ 		mutex_unlock(&bnx2fc_dev_lock);
+-
+-		/* Ensure ALL destroy work has been completed before return */
+-		flush_workqueue(bnx2fc_wq);
+ 		return;
+ 
+ 	default:
+@@ -1215,8 +1212,8 @@ static int bnx2fc_vport_destroy(struct fc_vport *vport)
+ 	mutex_unlock(&n_port->lp_mutex);
+ 	bnx2fc_free_vport(interface->hba, port->lport);
+ 	bnx2fc_port_shutdown(port->lport);
++	bnx2fc_port_destroy(port);
+ 	bnx2fc_interface_put(interface);
+-	queue_work(bnx2fc_wq, &port->destroy_work);
+ 	return 0;
+ }
+ 
+@@ -1525,7 +1522,6 @@ static struct fc_lport *bnx2fc_if_create(struct bnx2fc_interface *interface,
+ 	port->lport = lport;
+ 	port->priv = interface;
+ 	port->get_netdev = bnx2fc_netdev;
+-	INIT_WORK(&port->destroy_work, bnx2fc_destroy_work);
+ 
+ 	/* Configure fcoe_port */
+ 	rc = bnx2fc_lport_config(lport);
+@@ -1653,8 +1649,8 @@ static void __bnx2fc_destroy(struct bnx2fc_interface *interface)
+ 	bnx2fc_interface_cleanup(interface);
+ 	bnx2fc_stop(interface);
+ 	list_del(&interface->list);
++	bnx2fc_port_destroy(port);
+ 	bnx2fc_interface_put(interface);
+-	queue_work(bnx2fc_wq, &port->destroy_work);
+ }
+ 
+ /**
+@@ -1694,15 +1690,12 @@ static int bnx2fc_destroy(struct net_device *netdev)
+ 	return rc;
+ }
+ 
+-static void bnx2fc_destroy_work(struct work_struct *work)
++static void bnx2fc_port_destroy(struct fcoe_port *port)
+ {
+-	struct fcoe_port *port;
+ 	struct fc_lport *lport;
+ 
+-	port = container_of(work, struct fcoe_port, destroy_work);
+ 	lport = port->lport;
+-
+-	BNX2FC_HBA_DBG(lport, "Entered bnx2fc_destroy_work\n");
++	BNX2FC_HBA_DBG(lport, "Entered %s, destroying lport %p\n", __func__, lport);
+ 
+ 	bnx2fc_if_destroy(lport);
+ }
+@@ -2556,9 +2549,6 @@ static void bnx2fc_ulp_exit(struct cnic_dev *dev)
+ 			__bnx2fc_destroy(interface);
+ 	mutex_unlock(&bnx2fc_dev_lock);
+ 
+-	/* Ensure ALL destroy work has been completed before return */
+-	flush_workqueue(bnx2fc_wq);
+-
+ 	bnx2fc_ulp_stop(hba);
+ 	/* unregister cnic device */
+ 	if (test_and_clear_bit(BNX2FC_CNIC_REGISTERED, &hba->reg_with_cnic))
 -- 
-Kees Cook
+2.27.0
+

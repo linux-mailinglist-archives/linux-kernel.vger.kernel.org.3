@@ -2,274 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 038DC48F619
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 10:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC3A48F61E
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 10:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbiAOJWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 04:22:22 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:31161 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232707AbiAOJWV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 04:22:21 -0500
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JbXg95SrYz8wGj;
-        Sat, 15 Jan 2022 17:19:33 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 15 Jan 2022 17:22:19 +0800
-CC:     <yangyicong@hisilicon.com>,
-        Lukasz Maniak <lukasz.maniak@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?=c5=81ukasz_Gieryk?= <lukasz.gieryk@linux.intel.com>
-Subject: Re: [PATCH] PCI: Reset IOV state on FLR to PF
-To:     Bjorn Helgaas <helgaas@kernel.org>
-References: <20220114163719.GA560703@bhelgaas>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <9cb41c4c-5d44-ae60-f457-c317daa84c4f@huawei.com>
-Date:   Sat, 15 Jan 2022 17:22:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
-MIME-Version: 1.0
-In-Reply-To: <20220114163719.GA560703@bhelgaas>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
+        id S229767AbiAOJZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 04:25:59 -0500
+Received: from mga17.intel.com ([192.55.52.151]:56218 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229507AbiAOJZ6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 04:25:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642238758; x=1673774758;
+  h=from:to:cc:subject:date:message-id;
+  bh=EThxn/wE7fut9eVWRi+jhA0S/91AohvabwQFCKNPX7k=;
+  b=TLYKG0N+0vaiIs5UzFp9zpvStd2FBNNBWMM2gHS5j5VRBPWhCmb/L+S1
+   ED2HWzh2YOObKm4RjHvRJxxmPshMiFf59wwk508oxCw4bXLqZkQo3er6U
+   c3uku25jv44mXUNvpzFzfcKHWKB23fHSF57ZWvR/61GMXgZKxvpMSLHuZ
+   2J6SN6pJ2QNdXuq/KhCl56zRvW+z78BaBl1/eiugI43oy/yyilj7Mi8hU
+   nCfRzb8pl/hm6F2VlNDmryAhcKSt4/LL+duxJoI8HheWJr7vunWZiEb0S
+   N05ep3yqJd0VTAhEyN+gJnGCXjYXxcPxMWY/0duNI0P4ESSEcAQA0Pz+v
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="225083493"
+X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
+   d="scan'208";a="225083493"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 01:25:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
+   d="scan'208";a="559763229"
+Received: from mismail5-ilbpg0.png.intel.com ([10.88.229.13])
+  by orsmga001.jf.intel.com with ESMTP; 15 Jan 2022 01:25:55 -0800
+From:   Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mohammad.athari.ismail@intel.com, stable@vger.kernel.org
+Subject: [PATCH net v4] net: phy: marvell: add Marvell specific PHY loopback
+Date:   Sat, 15 Jan 2022 17:25:15 +0800
+Message-Id: <20220115092515.18143-1-mohammad.athari.ismail@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/1/15 0:37, Bjorn Helgaas wrote:
-> On Fri, Jan 14, 2022 at 05:42:48PM +0800, Yicong Yang wrote:
->> On 2022/1/14 0:45, Lukasz Maniak wrote:
->>> On Wed, Jan 12, 2022 at 08:49:03AM -0600, Bjorn Helgaas wrote:
->>>> On Wed, Dec 22, 2021 at 08:19:57PM +0100, Lukasz Maniak wrote:
->>>>> As per PCI Express specification, FLR to a PF resets the PF state as
->>>>> well as the SR-IOV extended capability including VF Enable which means
->>>>> that VFs no longer exist.
->>>>
->>>> Can you add a specific reference to the spec, please?
->>>>
->>> Following the Single Root I/O Virtualization and Sharing Specification:
->>> 2.2.3. FLR That Targets a PF
->>> PFs must support FLR.
->>> FLR to a PF resets the PF state as well as the SR-IOV extended
->>> capability including VF Enable which means that VFs no longer exist.
->>>
->>> For PCI Express Base Specification Revision 5.0 and later, this is
->>> section 9.2.2.3.
-> 
-> This is also the section in the new PCIe r6.0.  Let's use that.
-> 
->>>>> Currently, the IOV state is not updated during FLR, resulting in
->>>>> non-compliant PCI driver behavior.
->>>>
->>>> And include a little detail about what problem is observed?  How would
->>>> a user know this problem is occurring?
->>>>
->>> The problem is that the state of the kernel and HW as to the number of
->>> VFs gets out of sync after FLR.
->>>
->>> This results in further listing, after the FLR is performed by the HW,
->>> of VFs that actually no longer exist and should no longer be reported on
->>> the PCI bus. lspci return FFs for these VFs.
->>
->> There're some exceptions. Take HiSilicon's hns3 and sec device as an
->> example, the VF won't be destroyed after the FLR reset.
-> 
-> If FLR on an hns3 PF does *not* clear VF Enable, and the VFs still
-> exist after FLR, isn't that a violation of sec 9.2.2.3?
-> 
+Existing genphy_loopback() is not applicable for Marvell PHY. Besides
+configuring bit-6 and bit-13 in Page 0 Register 0 (Copper Control
+Register), it is also required to configure same bits  in Page 2
+Register 21 (MAC Specific Control Register 2) according to speed of
+the loopback is operating.
 
-yes I think it's a violation to the spec.
+Tested working on Marvell88E1510 PHY for all speeds (1000/100/10Mbps).
 
-> If hns3 and sec don't conform to the spec, we should have some sort of
-> quirk that serves to document and work around this.
-> 
+FIXME: Based on trial and error test, it seem 1G need to have delay between
+soft reset and loopback enablement.
 
-ok I think it'll help. Do you mean something like this based on this patch:
+Fixes: 014068dcb5b1 ("net: phy: genphy_loopback: add link speed configuration")
+Cc: <stable@vger.kernel.org> # 5.15.x
+Signed-off-by: Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+---
+v4 changelog:
+- Rename the function to m88e1510_loopback(). Commented by Heiner Kallweit
+<hkallweit1@gmail.com>.
 
-diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-index 69ee321027b4..0e4976c669b2 100644
---- a/drivers/pci/iov.c
-+++ b/drivers/pci/iov.c
-@@ -1025,6 +1025,8 @@ void pci_reset_iov_state(struct pci_dev *dev)
- 		return;
- 	if (!iov->num_VFs)
- 		return;
-+	if (dev->flr_no_vf_reset)
-+		return;
+v3 changelog:
+- Use phy_write() to configure speed for BMCR.
+- Add error handling.
+All commented by Russell King <linux@armlinux.org.uk>
 
- 	sriov_del_vfs(dev);
+v2 changelog:
+- For loopback enabled, add bit-6 and bit-13 configuration in both Page
+  0 Register 0 and Page 2 Register 21. Commented by Heiner Kallweit
+<hkallweit1@gmail.com>.
+- For loopback disabled, follow genphy_loopback() implementation
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 003950c738d2..c8ffcb0ac612 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -1860,6 +1860,17 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_HUAWEI, 0xa256, quirk_huawei_pcie_sva);
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_HUAWEI, 0xa258, quirk_huawei_pcie_sva);
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_HUAWEI, 0xa259, quirk_huawei_pcie_sva);
+---
+ drivers/net/phy/marvell.c | 56 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 55 insertions(+), 1 deletion(-)
 
-+/*
-+ * Some HiSilicon PCIe devices' VF won't be destroyed after a FLR reset.
-+ * Don't reset these devices' IOV state when doing FLR.
-+ */
-+static void quirk_huawei_pcie_flr(struct pci_dev *pdev)
-+{
-+	pdev->flr_no_vf_reset = 1;
-+}
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_HUAWEI, 0xa255, quirk_huawei_pcie_flr);
-+/* ...some other devices have this quirk */
+diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+index 4fcfca4e1702..0ff94400510f 100644
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -189,6 +189,8 @@
+ #define MII_88E1510_GEN_CTRL_REG_1_MODE_RGMII_SGMII	0x4
+ #define MII_88E1510_GEN_CTRL_REG_1_RESET	0x8000	/* Soft reset */
+ 
++#define MII_88E1510_MSCR_2		0x15
 +
- /*
-  * It's possible for the MSI to get corrupted if SHPC and ACPI are used
-  * together on certain PXH-based systems.
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 18a75c8e615c..e62f9fa4d48f 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -454,6 +454,7 @@ struct pci_dev {
- 	unsigned int	is_probed:1;		/* Device probing in progress */
- 	unsigned int	link_active_reporting:1;/* Device capable of reporting link active */
- 	unsigned int	no_vf_scan:1;		/* Don't scan for VFs after IOV enablement */
-+	unsigned int	flr_no_vf_reset:1;	/* VF won't be destroyed after PF's FLR */
- 	unsigned int	no_command_memory:1;	/* No PCI_COMMAND_MEMORY */
- 	pci_dev_flags_t dev_flags;
- 	atomic_t	enable_cnt;	/* pci_enable_device has been called */
+ #define MII_VCT5_TX_RX_MDI0_COUPLING	0x10
+ #define MII_VCT5_TX_RX_MDI1_COUPLING	0x11
+ #define MII_VCT5_TX_RX_MDI2_COUPLING	0x12
+@@ -1932,6 +1934,58 @@ static void marvell_get_stats(struct phy_device *phydev,
+ 		data[i] = marvell_get_stat(phydev, i);
+ }
+ 
++static int m88e1510_loopback(struct phy_device *phydev, bool enable)
++{
++	int err;
++
++	if (enable) {
++		u16 bmcr_ctl = 0, mscr2_ctl = 0;
++
++		if (phydev->speed == SPEED_1000)
++			bmcr_ctl = BMCR_SPEED1000;
++		else if (phydev->speed == SPEED_100)
++			bmcr_ctl = BMCR_SPEED100;
++
++		if (phydev->duplex == DUPLEX_FULL)
++			bmcr_ctl |= BMCR_FULLDPLX;
++
++		err = phy_write(phydev, MII_BMCR, bmcr_ctl);
++		if (err < 0)
++			return err;
++
++		if (phydev->speed == SPEED_1000)
++			mscr2_ctl = BMCR_SPEED1000;
++		else if (phydev->speed == SPEED_100)
++			mscr2_ctl = BMCR_SPEED100;
++
++		err = phy_modify_paged(phydev, MII_MARVELL_MSCR_PAGE,
++				       MII_88E1510_MSCR_2, BMCR_SPEED1000 |
++				       BMCR_SPEED100, mscr2_ctl);
++		if (err < 0)
++			return err;
++
++		/* Need soft reset to have speed configuration takes effect */
++		err = genphy_soft_reset(phydev);
++		if (err < 0)
++			return err;
++
++		/* FIXME: Based on trial and error test, it seem 1G need to have
++		 * delay between soft reset and loopback enablement.
++		 */
++		if (phydev->speed == SPEED_1000)
++			msleep(1000);
++
++		return phy_modify(phydev, MII_BMCR, BMCR_LOOPBACK,
++				  BMCR_LOOPBACK);
++	} else {
++		err = phy_modify(phydev, MII_BMCR, BMCR_LOOPBACK, 0);
++		if (err < 0)
++			return err;
++
++		return phy_config_aneg(phydev);
++	}
++}
++
+ static int marvell_vct5_wait_complete(struct phy_device *phydev)
+ {
+ 	int i;
+@@ -3078,7 +3132,7 @@ static struct phy_driver marvell_drivers[] = {
+ 		.get_sset_count = marvell_get_sset_count,
+ 		.get_strings = marvell_get_strings,
+ 		.get_stats = marvell_get_stats,
+-		.set_loopback = genphy_loopback,
++		.set_loopback = m88e1510_loopback,
+ 		.get_tunable = m88e1011_get_tunable,
+ 		.set_tunable = m88e1011_set_tunable,
+ 		.cable_test_start = marvell_vct7_cable_test_start,
 -- 
-2.24.0
+2.17.1
 
-
->> Currently the transactions with the VF will be restored after the
->> FLR. But this patch will break that, the VF is fully disabled and
->> the transaction cannot be restored. User needs to reconfigure it,
->> which is unnecessary before this patch.
-> 
-> What does it mean for a "transaction to be restored"?  Maybe you mean
-> this patch removes the *VFs* via sriov_del_vfs(), and whoever
-> initiated the FLR would need to re-enable VFs via pci_enable_sriov()
-> or something similar?
-> 
-
-Partly. It'll also terminate the VF users.
-Think that I attach the VF of hns to a VM by vfio and ping the network
-in the VM, when doing FLR the 'ping' will pause and after FLR it'll
-resume. Currenlty The driver handle this in the ->reset_{prepare, done}()
-methods. The user of VM may not realize there is a FLR of the PF as the
-VF always exists and the 'ping' is never terminated.
-
-If we remove the VF when doing FLR, then 1) we'll block in the VF->remove()
-until no one is using the device, for example the 'ping' is finished.
-2) the VF in the VM no longer exists and we have to re-enable VF and hotplug
-it into the VM and restart the ping. That's a big difference.
-
-> If FLR disables VFs, it seems like we should expect to have to
-> re-enable them if we want them.
-> 
-
-It involves a remove()/probe() process of the VF driver and the user of the VF
-will be terminated, just like the situation illustrated above.
-
-Thanks,
-Yicong
-
->> Can we handle this problem in another way? Maybe test the VF's
->> vendor device ID after the FLR reset to see whether it has really
->> gone or not?
->>
->>> sriov_numvfs in sysfs returns old invalid value and does not allow
->>> setting a new value before explicitly setting 0 in the first place.
->>>
->>>>> This patch introduces a simple function, called on the FLR path, that
->>>>> removes the virtual function devices from the PCI bus and their
->>>>> corresponding sysfs links with a final clear of the num_vfs value in IOV
->>>>> state.
->>>>>
->>>>> Signed-off-by: Lukasz Maniak <lukasz.maniak@linux.intel.com>
->>>>> ---
->>>>>  drivers/pci/iov.c | 21 +++++++++++++++++++++
->>>>>  drivers/pci/pci.c |  2 ++
->>>>>  drivers/pci/pci.h |  4 ++++
->>>>>  3 files changed, 27 insertions(+)
->>>>>
->>>>> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
->>>>> index 0267977c9f17..69ee321027b4 100644
->>>>> --- a/drivers/pci/iov.c
->>>>> +++ b/drivers/pci/iov.c
->>>>> @@ -1013,6 +1013,27 @@ int pci_iov_bus_range(struct pci_bus *bus)
->>>>>  	return max ? max - bus->number : 0;
->>>>>  }
->>>>>  
->>>>> +/**
->>>>> + * pci_reset_iov_state - reset the state of the IOV capability
->>>>> + * @dev: the PCI device
->>>>> + */
->>>>> +void pci_reset_iov_state(struct pci_dev *dev)
->>>>> +{
->>>>> +	struct pci_sriov *iov = dev->sriov;
->>>>> +
->>>>> +	if (!dev->is_physfn)
->>>>> +		return;
->>>>> +	if (!iov->num_VFs)
->>>>> +		return;
->>>>> +
->>>>> +	sriov_del_vfs(dev);
->>>>> +
->>>>> +	if (iov->link != dev->devfn)
->>>>> +		sysfs_remove_link(&dev->dev.kobj, "dep_link");
->>>>> +
->>>>> +	iov->num_VFs = 0;
->>>>> +}
->>>>> +
->>>>>  /**
->>>>>   * pci_enable_sriov - enable the SR-IOV capability
->>>>>   * @dev: the PCI device
->>>>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
->>>>> index 3d2fb394986a..535f19d37e8d 100644
->>>>> --- a/drivers/pci/pci.c
->>>>> +++ b/drivers/pci/pci.c
->>>>> @@ -4694,6 +4694,8 @@ EXPORT_SYMBOL(pci_wait_for_pending_transaction);
->>>>>   */
->>>>>  int pcie_flr(struct pci_dev *dev)
->>>>>  {
->>>>> +	pci_reset_iov_state(dev);
->>>>> +
->>>>>  	if (!pci_wait_for_pending_transaction(dev))
->>>>>  		pci_err(dev, "timed out waiting for pending transaction; performing function level reset anyway\n");
->>>>>  
->>>>> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
->>>>> index 3d60cabde1a1..7bb144fbec76 100644
->>>>> --- a/drivers/pci/pci.h
->>>>> +++ b/drivers/pci/pci.h
->>>>> @@ -480,6 +480,7 @@ void pci_iov_update_resource(struct pci_dev *dev, int resno);
->>>>>  resource_size_t pci_sriov_resource_alignment(struct pci_dev *dev, int resno);
->>>>>  void pci_restore_iov_state(struct pci_dev *dev);
->>>>>  int pci_iov_bus_range(struct pci_bus *bus);
->>>>> +void pci_reset_iov_state(struct pci_dev *dev);
->>>>>  extern const struct attribute_group sriov_pf_dev_attr_group;
->>>>>  extern const struct attribute_group sriov_vf_dev_attr_group;
->>>>>  #else
->>>>> @@ -501,6 +502,9 @@ static inline int pci_iov_bus_range(struct pci_bus *bus)
->>>>>  {
->>>>>  	return 0;
->>>>>  }
->>>>> +static inline void pci_reset_iov_state(struct pci_dev *dev)
->>>>> +{
->>>>> +}
->>>>>  
->>>>>  #endif /* CONFIG_PCI_IOV */
->>>>>  
->>>>>
->>>>> base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
->>>>> -- 
->>>>> 2.25.1
->>>>>
->>> .
->>>
-> .
-> 

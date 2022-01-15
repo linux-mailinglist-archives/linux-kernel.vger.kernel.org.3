@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C22B048F679
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 12:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1265048F67B
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 12:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232445AbiAOLG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 06:06:57 -0500
-Received: from mga07.intel.com ([134.134.136.100]:3895 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229569AbiAOLG4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 06:06:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642244816; x=1673780816;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KXhbO5Q47j/EEkAn8WgshqqfxAILmEd0lLJsRHlyFHU=;
-  b=KsxgpAFpNJ0a+DwYBlM3LjmpqfAR2HMdgaUEmlOn8IkvNlISu+frbHuu
-   7Ly1iY8RVrjA85I85d+Y7hGssyeIoL/DcREoPQCCOoUPSDQofHLKRBatE
-   LpfqdeyRxoJHHHmNtA0De5nMOFb/XtclD5pyh0SbyvFHB510IRd9W2Xqm
-   AP5bdcxhnrZEJOyMXmMSMKgJxd6EOT6aq1GHMX871/SolQtHFdjJGPY0m
-   W7CXnEuCMq66U4vdCwJNgV6CoOVdY2UokpzX3FOKhDrn5xWLSDiHahDBl
-   QmfDiyw3AeqzRpVGedcXnZgVyT0mTKvKTvdJ9vUI//xExzn4MmAOwy3nw
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="307743544"
-X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="307743544"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 03:06:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="763855116"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Jan 2022 03:06:52 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8gtY-0009gn-9Q; Sat, 15 Jan 2022 11:06:52 +0000
-Date:   Sat, 15 Jan 2022 19:06:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Juergen Gross <jgross@suse.com>,
-        Pavel Skripkin <paskripkin@gmail.com>
-Subject: [PATCH] x86/alternative: fix semicolon.cocci warnings
-Message-ID: <20220115110615.GA93870@e5efbd32b5f0>
-References: <202201151903.nIz48hKn-lkp@intel.com>
+        id S232876AbiAOLHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 06:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229569AbiAOLHr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 06:07:47 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8617C061574;
+        Sat, 15 Jan 2022 03:07:46 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso11740959wmj.0;
+        Sat, 15 Jan 2022 03:07:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=49cMYEAT/BjVZYMFgdWLTUrWi8kXzuhxxLdsLpUVzRY=;
+        b=FgYLDqMsrjmJVI94AWq+39BBdWqiGQi+RYxzrI8+tdB9wpgi+nEz7kCya3laXaVySq
+         KsqfcUPxC1w+rh9/I4aJDiiA++H+2k+FEUjWq3y3x2PA+cH53OlUrxAdJ1A9Eao5GAKy
+         pRd3Vn7zoAH88AmV8u/pkm0EtpEVlQI+hPdVBfOQ2TuxTbk38hy+oMGkw+bI1LHDM63C
+         di4bGeP1w3BvzDB7JUjsMU51ozNn3CNOSBBJki8ChDQMHvCunzw8luwJmkE+xUY4Qjdv
+         Z8u3GyC+0ziRzAbMhy4ULBrEOT5q2AMTHNFGdQmeMzx3xTjQ7pU8fBfFvBqmJ9Zfeojn
+         Z1AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=49cMYEAT/BjVZYMFgdWLTUrWi8kXzuhxxLdsLpUVzRY=;
+        b=1zOKIaofQyZZsaMnCHqd1VODcYL02sjXdccn2Cc3mQ7FMtmmIGpfdYAdfmErx6i6LW
+         Fk4NU79kC4opcQaEGS9/yuJ4bL9sUbPW3518fsKdmBYx+S2RP/nKC7TO7MbTUfhDd+4a
+         6KKv+dmV4YAujpzezG4jZfIReHnyi9tvJvgEsaB+BwEHWqqGJQikM/DAEpyJcMXG1arU
+         Cx9PH6tiF45woFFR15GqY+dg0ATDY/JwCCxAHD2QgxGud27AXUvTPEtBqhhSej0cXTAB
+         gz7obt/IduYjg2q3WaEo+ajLJT4ACjQ3hD0hkRsNNLbcGStpTaW6iDYV7xQnkCEaM+4D
+         MuFQ==
+X-Gm-Message-State: AOAM532TX2k5LMiGWFZIsRbl98dGcDJQ7oWefOD1+Bn7KFc8NtOBGJ6/
+        tScFH8aMg3yeYZ857q5c4+8=
+X-Google-Smtp-Source: ABdhPJyQZKvhIkFcqUMtT0cMX9nAWsLhFBVaHcGDZozXWpg7zZl/MNTcjdFJcKSs6EGUtSJ1mhb9lg==
+X-Received: by 2002:a5d:6d49:: with SMTP id k9mr11985247wri.530.1642244865500;
+        Sat, 15 Jan 2022 03:07:45 -0800 (PST)
+Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
+        by smtp.gmail.com with ESMTPSA id a3sm10009010wri.89.2022.01.15.03.07.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jan 2022 03:07:45 -0800 (PST)
+Date:   Sat, 15 Jan 2022 11:07:43 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 00/25] 5.10.92-rc1 review
+Message-ID: <YeKq/2bnquT3xvjx@debian>
+References: <20220114081542.698002137@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202201151903.nIz48hKn-lkp@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
+Hi Greg,
 
-arch/x86/kernel/alternative.c:1411:2-3: Unneeded semicolon
+On Fri, Jan 14, 2022 at 09:16:08AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.92 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
+> Anything received after that time might be too late.
+
+Build test:
+mips (gcc version 11.2.1 20220106): 63 configs -> no new failure
+arm (gcc version 11.2.1 20220106): 105 configs -> no new failure
+arm64 (gcc version 11.2.1 20220106): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220106): 4 configs -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/626
+[2]. https://openqa.qa.codethink.co.uk/tests/628
 
 
- Remove unneeded semicolon.
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-Generated by: scripts/coccinelle/misc/semicolon.cocci
+--
+Regards
+Sudip
 
-Fixes: 26c44b776dba ("x86/alternative: Relax text_poke_bp() constraint")
-CC: Peter Zijlstra <peterz@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a33f5c380c4bd3fa5278d690421b72052456d9fe
-commit: 26c44b776dba4ac692a0bf5a3836feb8a63fea6b x86/alternative: Relax text_poke_bp() constraint
-:::::: branch date: 5 hours ago
-:::::: commit date: 5 weeks ago
-
- alternative.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1408,7 +1408,7 @@ static void text_poke_loc_init(struct te
- 
- 	default:
- 		BUG_ON(len != insn.length);
--	};
-+	}
- 
- 
- 	switch (tp->opcode) {

@@ -2,154 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8092748F6E9
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 13:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA8948F6DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 13:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbiAOMzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 07:55:35 -0500
-Received: from qproxy5-pub.mail.unifiedlayer.com ([69.89.21.30]:60158 "EHLO
-        qproxy5-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230165AbiAOMzd (ORCPT
+        id S231626AbiAOMc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 07:32:27 -0500
+Received: from vulcan.natalenko.name ([104.207.131.136]:39140 "EHLO
+        vulcan.natalenko.name" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231397AbiAOMc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 07:55:33 -0500
-X-Greylist: delayed 1425 seconds by postgrey-1.27 at vger.kernel.org; Sat, 15 Jan 2022 07:55:33 EST
-Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
-        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 0361E8023BFB
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 12:31:48 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id 5C0C810047655
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 12:31:47 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 8iDjnIvMBikTn8iDjnuQqN; Sat, 15 Jan 2022 12:31:47 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=CeHNWJnl c=1 sm=1 tr=0 ts=61e2beb3
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=DghFqjY3_ZEA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=EiS2R4b7cH6gAcqD88AA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ljzcytYZwH/UWJRlNXc9+FEdgCIqtEZd042mwlrIzNo=; b=P5nzavBzFeZo069fN25nsxOkW6
-        HRaSMldSFdlaxBpr28lt2jkElViMbtXBhtfsO/sxf/XK9OBSjpAtEWDv/4TgvTJyoP05cJi4dRBDf
-        C7nNndSTHdQ0CYPPO/DW40rmM;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:32786 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1n8iDi-003gEg-41; Sat, 15 Jan 2022 05:31:46 -0700
-Subject: Re: [PATCH 5.15 00/41] 5.15.15-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-References: <20220114081545.158363487@linuxfoundation.org>
- <b94bd7bd-0c8b-1697-f4af-27e99ca9e62f@w6rz.net> <YeKCeIOd8v7vOpdE@kroah.com>
- <6aa09e6a-9537-72d0-caf0-347038fe37b5@w6rz.net> <YeK69MTpuiz0wqrU@kroah.com>
-In-Reply-To: <YeK69MTpuiz0wqrU@kroah.com>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <78cae1c8-9a2b-b0a4-d9a1-efeb03290f58@w6rz.net>
-Date:   Sat, 15 Jan 2022 04:31:44 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sat, 15 Jan 2022 07:32:26 -0500
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id E7C13D61A6F;
+        Sat, 15 Jan 2022 13:32:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1642249940;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=23WmGWgngXycJzPXUeyJefpoZ2lrYTw10W0ixnvWPy4=;
+        b=jsFluq6b8wsA9ztfCdQL+w3BiXzAvaYocna06XxA6DvGVLtQwiCbTva8Keei5wZtr5K0Zi
+        nz3Hp+8mKo3psL9L/EojohtdxXgpM6UoxY+W/ow/z+gZJPsjwjpJlSyGRhaiS6yVhUMLqy
+        St5MikKm3gReqNhfCXjS07W6sl3+OTs=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] hwmon: deprecate asis_wmi_ec_sensors driver
+Date:   Sat, 15 Jan 2022 13:32:18 +0100
+Message-ID: <2613306.mvXUDI8C0e@natalenko.name>
+In-Reply-To: <a95919c0-6a89-18bc-e8ba-2165414e096b@roeck-us.net>
+References: <20220111180347.1245774-1-eugene.shalygin@gmail.com> <2224186.ElGaqSPkdT@natalenko.name> <a95919c0-6a89-18bc-e8ba-2165414e096b@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1n8iDi-003gEg-41
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:32786
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/15/22 4:15 AM, Greg Kroah-Hartman wrote:
-> On Sat, Jan 15, 2022 at 03:52:34AM -0800, Ron Economos wrote:
->> On 1/15/22 12:14 AM, Greg Kroah-Hartman wrote:
->>> On Fri, Jan 14, 2022 at 11:59:57AM -0800, Ron Economos wrote:
->>>> On 1/14/22 12:16 AM, Greg Kroah-Hartman wrote:
->>>>> This is the start of the stable review cycle for the 5.15.15 release.
->>>>> There are 41 patches in this series, all will be posted as a response
->>>>> to this one.  If anyone has any issues with these being applied, please
->>>>> let me know.
->>>>>
->>>>> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
->>>>> Anything received after that time might be too late.
->>>>>
->>>>> The whole patch series can be found in one patch at:
->>>>> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.15-rc1.gz
->>>>> or in the git tree and branch at:
->>>>> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
->>>>> and the diffstat can be found below.
->>>>>
->>>>> thanks,
->>>>>
->>>>> greg k-h
->>>> Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
->>>>
->>>> Warnings:
->>>>
->>>> fs/jffs2/xattr.c: In function 'jffs2_build_xattr_subsystem':
->>>> fs/jffs2/xattr.c:887:1: warning: the frame size of 1104 bytes is larger than
->>>> 1024 bytes [-Wframe-larger-than=]
->>>>     887 | }
->>>>         | ^
->>>> lib/crypto/curve25519-hacl64.c: In function 'ladder_cmult.constprop':
->>>> lib/crypto/curve25519-hacl64.c:601:1: warning: the frame size of 1040 bytes
->>>> is larger than 1024 bytes [-Wframe-larger-than=]
->>>>     601 | }
->>>>         | ^
->>>> drivers/net/wireguard/allowedips.c: In function 'root_remove_peer_lists':
->>>> drivers/net/wireguard/allowedips.c:77:1: warning: the frame size of 1040
->>>> bytes is larger than 1024 bytes [-Wframe-larger-than=]
->>>>      77 | }
->>>>         | ^
->>>> drivers/net/wireguard/allowedips.c: In function 'root_free_rcu':
->>>> drivers/net/wireguard/allowedips.c:64:1: warning: the frame size of 1040
->>>> bytes is larger than 1024 bytes [-Wframe-larger-than=]
->>>>      64 | }
->>>>         | ^
->>>> drivers/vhost/scsi.c: In function 'vhost_scsi_flush':
->>>> drivers/vhost/scsi.c:1444:1: warning: the frame size of 1040 bytes is larger
->>>> than 1024 bytes [-Wframe-larger-than=]
->>>>    1444 | }
->>>>         | ^
->>> Are these new warnings with this release, or old ones?
->>>
->>> thanks,
->>>
->>> greg k-h
->> They are old ones.
-> Ok, that's good.  Are they fixed in 5.16?  Anyone planning on fixing
-> them given that -Werror is now allowed to be set?
->
-> thanks,
->
-> greg k-h
+Hello.
 
-They are also in 5.16. I'm using the Ubuntu 21.10 config (which includes 
-the kitchen sink), so they're probably not showing up for others.
+On =C4=8Dtvrtek 13. ledna 2022 3:51:47 CET Guenter Roeck wrote:
+> On 1/12/22 1:51 PM, Oleksandr Natalenko wrote:
+> > Hello.
+> >=20
+> > On =C3=BAter=C3=BD 11. ledna 2022 19:03:46 CET Eugene Shalygin wrote:
+> >> ---
+> >>   drivers/hwmon/Kconfig | 5 ++++-
+> >>   1 file changed, 4 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> >> index 2c16b19d2c03..5e693c93d43a 100644
+> >> --- a/drivers/hwmon/Kconfig
+> >> +++ b/drivers/hwmon/Kconfig
+> >> @@ -2243,13 +2243,16 @@ config SENSORS_ASUS_WMI
+> >>  =20
+> >>   config SENSORS_ASUS_WMI_EC
+> >>   	tristate "ASUS WMI B550/X570"
+> >> -	depends on ACPI_WMI
+> >> +	depends on ACPI_WMI && !SENSORS_ASUS_EC
+> >=20
+> > Not sure how it handles `SENSORS_ASUS_EC=3Dm`. Probably, it should be:
+> >=20
+> > ```
+> > depends on ACPI_WMI && SENSORS_ASUS_EC=3Dn
+> > ```
+> >=20
+>=20
+> Odd language, and good catch. If I understand correctly, the result
+> of !SENSORS_ASUS_EC is 'm' if SENSORS_ASUS_EC=3Dm. So, yes, it looks
+> like this needs to be "ACPI_WMI && SENSORS_ASUS_EC=3Dn".
 
-Ron
+With this change:
+
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+
+on ASUS Pro WS X570-ACE.
+
+>=20
+> Guenter
+>=20
+> > ?
+> >=20
+> >>   	help
+> >>   	  If you say yes here you get support for the ACPI embedded control=
+ler
+> >>   	  hardware monitoring interface found in B550/X570 ASUS motherboard=
+s.
+> >>   	  This driver will provide readings of fans, voltages and temperatu=
+res
+> >>   	  through the system firmware.
+> >>  =20
+> >> +	  This driver is deprecated in favor of the ASUS EC Sensors driver
+> >> +	  which provides fully compatible output.
+> >> +
+> >>   	  This driver can also be built as a module. If so, the module
+> >>   	  will be called asus_wmi_sensors_ec.
+> >=20
+> > Thanks.
+> >=20
+>=20
+>=20
+
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
 

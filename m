@@ -2,97 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4D648F698
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 12:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 991D348F69C
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 12:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiAOLt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 06:49:56 -0500
-Received: from mga06.intel.com ([134.134.136.31]:13358 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229486AbiAOLtz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 06:49:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642247395; x=1673783395;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JsiERj0g8ROw4vXv4LGluQgqYSxg4cq67AV0Kbmirzk=;
-  b=BJ8Qq1WS2okRNhAMZbC2Tewoc5x0YuvuB1mo0x40vomL43xGze25tlfw
-   uPNJLYWjh3hbu4vGZ4+Ze2wKt+OsOQjAqZECXXCTHpJsIreKLWfo2Ox+N
-   ua5LFapav86AabIAw7Y+jW5FxyJ+Jd8l1q5mMeKP4pcuHczYpndAfxeGF
-   pXDTOZVvtKOn2aJFMTd+7TC9db6fCRQZwvmSRDSoODvxvrKojezHiuFY3
-   YkcIdUk4riUeZiZaC8sCJaYv4QqqQR4x0ZVeuissxxBLxODHe+2/o5ZBL
-   y8skVDjdhenNUPXth7srSttJTqeYaMUkRHu/IraAmNS4/46iprgMYo8Dc
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="305138536"
-X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="305138536"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 03:49:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="516726297"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 15 Jan 2022 03:49:53 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8hZB-0009j8-49; Sat, 15 Jan 2022 11:49:53 +0000
-Date:   Sat, 15 Jan 2022 19:49:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Subject: {standard input}:1381: Error: Insn slot not set in unwind record.
-Message-ID: <202201151944.siKQX7w9-lkp@intel.com>
+        id S229849AbiAOLu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 06:50:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35166 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229486AbiAOLuZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 06:50:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE3B1B8016A;
+        Sat, 15 Jan 2022 11:50:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 608E7C36AE7;
+        Sat, 15 Jan 2022 11:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642247422;
+        bh=qvz8T8eq7lMx4dBZY0vynGOB+OrJI2dXUSsaC65bOm0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NtUoGylvCRs6P5AnA8K3gSHE5KAksmfvPepltJNcGfyWTKv1WC0LXjdQfp260XQGJ
+         YUDYtff7g9MnLZaH3bXOdDbLmyZ82hFr1NVEj1Kjiz3BF1ITiJg2JjsiTOdzuh1vf7
+         U68D8NSYbOFm22M1BkG3gHk/KBBWmCTdxOZTCWN+Coog9dSG0g1Y1yUGzCa24woLr3
+         IK1ad98HMh4+sKiOfrt9I7ApMx5THw5bhlM9naZhJVdJRCUyVq01zyPf6yFC27eK/h
+         6BTUSoPZMy6aqC4XZyVm2cK2ZN9w3Yji8dnf1zWove01tx2dwUC+cgBF+gAXry6XiR
+         ckDDk8X6Vp0vg==
+Received: by pali.im (Postfix)
+        id 0802386D; Sat, 15 Jan 2022 12:50:18 +0100 (CET)
+Date:   Sat, 15 Jan 2022 12:50:18 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Vladimir Vid <vladimir.vid@sartura.hr>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 3/6] dt-bindings: mvebu-uart: document DT bindings for
+ marvell,armada-3700-uart-clock
+Message-ID: <20220115115018.he4hnnhlvrb6kann@pali>
+References: <20210930095838.28145-1-pali@kernel.org>
+ <20210930095838.28145-4-pali@kernel.org>
+ <163425678347.1688384.10695189000353676651@swboyd.mtv.corp.google.com>
+ <20211015090937.gnt66hgugrhwnkei@pali>
+ <20211015093701.pfvkighxsndj4ujg@pali>
+ <163433494758.1688384.5994009027317282677@swboyd.mtv.corp.google.com>
+ <20211016064210.7ahqfqcvf66wtt66@pali>
+ <20220115080213.0CCAFC36AE3@smtp.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220115080213.0CCAFC36AE3@smtp.kernel.org>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a33f5c380c4bd3fa5278d690421b72052456d9fe
-commit: bf67014d6bda16a72deea11dbbff2a97c705ca92 drm/amdgpu: introduce new amdgpu_fence object to indicate the job embedded fence
-date:   4 weeks ago
-config: ia64-randconfig-r033-20220114 (https://download.01.org/0day-ci/archive/20220115/202201151944.siKQX7w9-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bf67014d6bda16a72deea11dbbff2a97c705ca92
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout bf67014d6bda16a72deea11dbbff2a97c705ca92
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+On Saturday 15 January 2022 00:02:11 Stephen Boyd wrote:
+> Quoting Pali Rohár (2021-10-15 23:42:10)
+> > 
+> > If I was designing this driver and DTS bindings I would have choose
+> > something like this:
+> > 
+> > uart@0x12000 {
+> 
+> Drop the 0x
+> 
+> >     reg = <0x12000 0x18>, <0x12200 0x30>;
+> >     clock-controller {
+> >         ...
+> >     };
+> 
+> Drop this node and put whatever properties are inside into the parent
+> node.
+> 
+> >     serial1 {
+> >         ...
+> >         status = "disabled";
+> >     };
+> >     serial2 {
+> >         ...
+> >         status = "disabled";
+> >     };
+> > };
+> > 
+> > Meaning that 0x12000 node would be 3 subnodes and all registers would be
+> > defined in top level nodes and would be handled by one driver.
+> > 
+> > This is really how hardware block looks like. But it is not backward
+> > compatible...
+> 
+> Sounds good to me. I presume we need the serial child nodes so we can
+> reference them from the stdout-path?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, exactly, separate nodes for serial1 and serial2 are still required.
 
-All errors (new ones prefixed by >>):
+But dropping clock controller is not possible as for higher baudrates we
+need to use and configure uart clock controller. Without it we just get
+comparable feature support which is already present in driver.
 
-   In file included from arch/ia64/include/asm/pgtable.h:153,
-                    from include/linux/pgtable.h:6,
-                    from arch/ia64/include/asm/uaccess.h:40,
-                    from include/linux/uaccess.h:11,
-                    from include/linux/sched/task.h:11,
-                    from include/linux/sched/signal.h:9,
-                    from include/linux/rcuwait.h:6,
-                    from include/linux/percpu-rwsem.h:7,
-                    from include/linux/fs.h:33,
-                    from include/linux/seq_file.h:12,
-                    from drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c:31:
-   arch/ia64/include/asm/mmu_context.h: In function 'reload_context':
-   arch/ia64/include/asm/mmu_context.h:127:48: warning: variable 'old_rr4' set but not used [-Wunused-but-set-variable]
-     127 |         unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
-         |                                                ^~~~~~~
-   {standard input}: Assembler messages:
->> {standard input}:1381: Error: Insn slot not set in unwind record.
-   {standard input}:1381: Fatal error: Section switching in code is not supported.
+But, I do not fully understand now, why to change this DTS bindings in
+this incompatible way? What it brings? Because for me now it looks like
+that this change does not bring anything useful, only breaks current DTS
+bindings.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Driver changes would still look in the similar / same way like it is in
+current patch series because bindings already contains separate nodes,
+just they are children of top level node which represents in internal
+registers.

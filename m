@@ -2,92 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A693448F91C
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 20:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 581E048F920
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 20:48:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbiAOTnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 14:43:18 -0500
-Received: from outpost1.zedat.fu-berlin.de ([130.133.4.66]:55057 "EHLO
-        outpost1.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232539AbiAOTnR (ORCPT
+        id S233624AbiAOTsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 14:48:15 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:44395 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231172AbiAOTsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 14:43:17 -0500
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.94)
-          with esmtps (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1n8ox2-002dgO-Si; Sat, 15 Jan 2022 20:43:00 +0100
-Received: from p57bd9aec.dip0.t-ipconnect.de ([87.189.154.236] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.94)
-          with esmtpsa (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1n8ox2-003ZOJ-Lz; Sat, 15 Jan 2022 20:43:00 +0100
-Message-ID: <b40d1377-51d5-4ba3-ab3f-b40626c229ad@physik.fu-berlin.de>
-Date:   Sat, 15 Jan 2022 20:42:59 +0100
+        Sat, 15 Jan 2022 14:48:14 -0500
+Received: from [192.168.100.1] ([82.142.13.186]) by mrelayeu.kundenserver.de
+ (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis) id
+ 1N79ly-1mH7NX1uCy-017Qwb; Sat, 15 Jan 2022 20:47:39 +0100
+Message-ID: <db86e6b1-d6f7-3f57-246b-d7f8c882e933@vivier.eu>
+Date:   Sat, 15 Jan 2022 20:47:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] x86: Remove a.out support
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>, X86 ML <x86@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        =?UTF-8?B?TcOlbnMgUnVsbGfDpXJk?= <mans@mansr.com>,
-        Michael Cree <mcree@orcon.net.nz>
-References: <20220113160115.5375-1-bp@alien8.de> <YeBzxuO0wLn/B2Ew@mit.edu>
- <YeCuNapJLK4M5sat@zn.tnic>
- <CAMuHMdUbTNNr16YY1TFe=-uRLjg6yGzgw_RqtAFpyhnOMM5Pvw@mail.gmail.com>
- <YeHLIDsjGB944GSP@zn.tnic>
- <CAMuHMdUBr+gpF6Z5nPadjHFYJwgGd+LGoNTV=Sxty+yaY5EWxg@mail.gmail.com>
- <YeHQmbMYyy92AbBp@zn.tnic> <YeKyBP5rac8sVvWw@zn.tnic>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <YeKyBP5rac8sVvWw@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.154.236
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v8 4/4] m68k: introduce a virtual m68k machine
+Content-Language: fr
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        linux-rtc@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+References: <20220115193245.3777833-1-laurent@vivier.eu>
+ <20220115193245.3777833-5-laurent@vivier.eu>
+ <CAMuHMdXBrPM5Zw+wtM3gi6k5n-i_OoWs_eZff27458hqepZV7A@mail.gmail.com>
+From:   Laurent Vivier <laurent@vivier.eu>
+In-Reply-To: <CAMuHMdXBrPM5Zw+wtM3gi6k5n-i_OoWs_eZff27458hqepZV7A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:8IQk7dMKKQFaRROY1rEDyjyqT+yHtssPD+wgTVK1haU3bt5Nbeq
+ ozwumov3iH3OBwd0H7ZOxbRiKRE91W/jjUMi3f9kVb2pbpEUqhwcnrcucXJUZCzOzc1TNyg
+ nS6vNoXgLNi6XfcILwpelCkeS+8IBbuE6F5D8Oq+P/se8WgUdIhVgMB+VvCvZhPTIQbTY0N
+ SeIi4dE+m+oXIUhJMQcQg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JvmOhXg6fFg=:wxZBxFyhB08Qt4HjmAXxbc
+ WiA5AtqIbl+Fid7VDmAv+fwqmNObqVCbmoHwDMjE+Q1/+xI0UGnJpUlVkhzhNG1tGtAFpwLdm
+ WmQvBhqrqqZGfDqMB9KWwzzIdM7ZfigCicIgbstLE3ca6mHNibUbgpwOAi+IiTJae+GxjKU8j
+ es9INT7yFEY3Mb4Fa+BjKZaJgKliLKflpzph9aEFPM8DFQu30ypTTB0RgHwBeoowlAQ0KlbQ6
+ gGRPXrwSg9lGKZYWqlBeiFn4FsjOXP10tAgs+4XHy9BjUvgk/ovT6n9rSX1xBgz51kvPecY8V
+ scdin8pkUzfLLy0D1wFADE9vxKF1k2C1/wNq1ulUwIb0yyR2Nf9aGTiXIg5ofRIcKRSdza844
+ LRKpuiIRePyXnSwfp5fY6GO7cKiD4FP7id1Y1VNlCvn+IV7qiMpR6/SnwtiRtHVV3I+eFg6AD
+ Rs7Ku76EO4C4UjlxUkG1HrHgOmCzr3lgTkYZR6Aol5DSpgWqRzn/IORj4fQXLIvKGezzWrEof
+ pHqpD7uaoUvDMfAulqmghS1P98Z/ZxXdN8rkBfUj6Xab+GiXnAMEnJ3fS7JOP+S3l9DsWqmxw
+ s5Sufkew0SfD5d9jYjyEzxz0rRg+LK1JDiKWnoDD4OGn0wZEEyrM/w7NrTQY70grO/uQ2rCuv
+ br9WXSELmN23EEgppFtJmpKDAHbK5Op4AnyzEaZ8ln6FbqwVeic3XbXqruqGNeQxQwHA=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Borislav!
-
-On 1/15/22 12:37, Borislav Petkov wrote:
-> On Fri, Jan 14, 2022 at 08:35:53PM +0100, Borislav Petkov wrote:
->> On Fri, Jan 14, 2022 at 08:21:36PM +0100, Geert Uytterhoeven wrote:
->>> I mean that I can rip it out on m68k.
->>>
->>> Who's gonna take care of alpha?
->>
->> I'm sceptical anyone would:
->>
->> $ ./scripts/get_maintainer.pl -f arch/alpha/
->> Richard Henderson <rth@twiddle.net> (odd fixer:ALPHA PORT)
->> Ivan Kokshaysky <ink@jurassic.park.msu.ru> (odd fixer:ALPHA PORT)
->>
->> which leaves me. I could give it a try.
+Le 15/01/2022 à 20:41, Geert Uytterhoeven a écrit :
+> Hi Laurent,
 > 
-> Well, on that old thread from 2019 people expressed the wish to be able
-> to run a.out binaries on Alpha. Let's see whether that has changed in
-> the meantime.
+> On Sat, Jan 15, 2022 at 8:33 PM Laurent Vivier <laurent@vivier.eu> wrote:
+>> This machine allows to have up to 3.2 GiB and 128 Virtio devices.
+>>
+>> It is based on android goldfish devices.
+>>
+>> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> 
+> Thanks for your patch (the new versions keep on coming quickly).
+> 
+>> --- /dev/null
+>> +++ b/arch/m68k/virt/platform.c
+> 
+>> +static int __init virt_platform_init(void)
+>> +{
+>> +       const struct resource goldfish_tty_res[] = {
+>> +               DEFINE_RES_MEM(virt_bi_data.tty.mmio, 1),
+>> +               DEFINE_RES_IRQ(virt_bi_data.tty.irq),
+>> +       };
+>> +       /* this is the second gf-rtc, the first one is used by the scheduler */
+>> +       const struct resource goldfish_rtc_res[] = {
+>> +               DEFINE_RES_MEM(virt_bi_data.rtc.mmio + 0x1000, 0x1000),
+>> +               DEFINE_RES_IRQ(virt_bi_data.rtc.irq + 1),
+>> +       };
+>> +       extern unsigned long min_low_pfn;
+> 
+> checkpatch keeps on complaining.
+> #include <linux/memblock.h> instead?
 
-Checking on the message I sent three years ago, it didn't seem that I was opposed
-to removing a.out support, but that I would be happy to help test the patches.
+oh, yes, I didn't see it was defined here. Thank you.
 
-I don't have any particular use case for a.out support either.
+I've updated my patch, the change will be in the next version.
 
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
-
+Thanks,
+Laurent

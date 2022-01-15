@@ -2,118 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 991D348F69C
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 12:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27BD848F6B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 13:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiAOLu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 06:50:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35166 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiAOLuZ (ORCPT
+        id S230382AbiAOMRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 07:17:14 -0500
+Received: from qproxy2-pub.mail.unifiedlayer.com ([69.89.16.161]:47483 "EHLO
+        qproxy2-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229486AbiAOMRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 06:50:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE3B1B8016A;
-        Sat, 15 Jan 2022 11:50:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 608E7C36AE7;
-        Sat, 15 Jan 2022 11:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642247422;
-        bh=qvz8T8eq7lMx4dBZY0vynGOB+OrJI2dXUSsaC65bOm0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NtUoGylvCRs6P5AnA8K3gSHE5KAksmfvPepltJNcGfyWTKv1WC0LXjdQfp260XQGJ
-         YUDYtff7g9MnLZaH3bXOdDbLmyZ82hFr1NVEj1Kjiz3BF1ITiJg2JjsiTOdzuh1vf7
-         U68D8NSYbOFm22M1BkG3gHk/KBBWmCTdxOZTCWN+Coog9dSG0g1Y1yUGzCa24woLr3
-         IK1ad98HMh4+sKiOfrt9I7ApMx5THw5bhlM9naZhJVdJRCUyVq01zyPf6yFC27eK/h
-         6BTUSoPZMy6aqC4XZyVm2cK2ZN9w3Yji8dnf1zWove01tx2dwUC+cgBF+gAXry6XiR
-         ckDDk8X6Vp0vg==
-Received: by pali.im (Postfix)
-        id 0802386D; Sat, 15 Jan 2022 12:50:18 +0100 (CET)
-Date:   Sat, 15 Jan 2022 12:50:18 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 3/6] dt-bindings: mvebu-uart: document DT bindings for
- marvell,armada-3700-uart-clock
-Message-ID: <20220115115018.he4hnnhlvrb6kann@pali>
-References: <20210930095838.28145-1-pali@kernel.org>
- <20210930095838.28145-4-pali@kernel.org>
- <163425678347.1688384.10695189000353676651@swboyd.mtv.corp.google.com>
- <20211015090937.gnt66hgugrhwnkei@pali>
- <20211015093701.pfvkighxsndj4ujg@pali>
- <163433494758.1688384.5994009027317282677@swboyd.mtv.corp.google.com>
- <20211016064210.7ahqfqcvf66wtt66@pali>
- <20220115080213.0CCAFC36AE3@smtp.kernel.org>
+        Sat, 15 Jan 2022 07:17:13 -0500
+X-Greylist: delayed 1475 seconds by postgrey-1.27 at vger.kernel.org; Sat, 15 Jan 2022 07:17:13 EST
+Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
+        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id B2B17802821F
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 11:52:37 +0000 (UTC)
+Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
+        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 213E7100438AF
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 11:52:37 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id 8hbonQZuiwm8i8hbonOphg; Sat, 15 Jan 2022 11:52:37 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=DpSTREz+ c=1 sm=1 tr=0 ts=61e2b585
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=DghFqjY3_ZEA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=AP5qsahKqJmy_V8YNR8A:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=epW9L7ShDsKW6zsYqLXc4ia52wbxBHVIIkKtVVafelU=; b=p3RINHvPdXCZBqADT1gBZ+D4Zk
+        hcl0DbyNrvtN/EMtUbmkX+lEz36kTlLC0yBbD+qfKsfiZtPcYtDTBB6MxG0Ky4WWCXIkVKXf253fu
+        EQdwICTtBurfxOdMomjPIV97N;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:32778 helo=[10.0.1.23])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1n8hbn-003OEW-L5; Sat, 15 Jan 2022 04:52:35 -0700
+Subject: Re: [PATCH 5.15 00/41] 5.15.15-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+References: <20220114081545.158363487@linuxfoundation.org>
+ <b94bd7bd-0c8b-1697-f4af-27e99ca9e62f@w6rz.net> <YeKCeIOd8v7vOpdE@kroah.com>
+In-Reply-To: <YeKCeIOd8v7vOpdE@kroah.com>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <6aa09e6a-9537-72d0-caf0-347038fe37b5@w6rz.net>
+Date:   Sat, 15 Jan 2022 03:52:34 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220115080213.0CCAFC36AE3@smtp.kernel.org>
-User-Agent: NeoMutt/20180716
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1n8hbn-003OEW-L5
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:32778
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday 15 January 2022 00:02:11 Stephen Boyd wrote:
-> Quoting Pali Rohár (2021-10-15 23:42:10)
-> > 
-> > If I was designing this driver and DTS bindings I would have choose
-> > something like this:
-> > 
-> > uart@0x12000 {
-> 
-> Drop the 0x
-> 
-> >     reg = <0x12000 0x18>, <0x12200 0x30>;
-> >     clock-controller {
-> >         ...
-> >     };
-> 
-> Drop this node and put whatever properties are inside into the parent
-> node.
-> 
-> >     serial1 {
-> >         ...
-> >         status = "disabled";
-> >     };
-> >     serial2 {
-> >         ...
-> >         status = "disabled";
-> >     };
-> > };
-> > 
-> > Meaning that 0x12000 node would be 3 subnodes and all registers would be
-> > defined in top level nodes and would be handled by one driver.
-> > 
-> > This is really how hardware block looks like. But it is not backward
-> > compatible...
-> 
-> Sounds good to me. I presume we need the serial child nodes so we can
-> reference them from the stdout-path?
+On 1/15/22 12:14 AM, Greg Kroah-Hartman wrote:
+> On Fri, Jan 14, 2022 at 11:59:57AM -0800, Ron Economos wrote:
+>> On 1/14/22 12:16 AM, Greg Kroah-Hartman wrote:
+>>> This is the start of the stable review cycle for the 5.15.15 release.
+>>> There are 41 patches in this series, all will be posted as a response
+>>> to this one.  If anyone has any issues with these being applied, please
+>>> let me know.
+>>>
+>>> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
+>>> Anything received after that time might be too late.
+>>>
+>>> The whole patch series can be found in one patch at:
+>>> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.15-rc1.gz
+>>> or in the git tree and branch at:
+>>> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+>>> and the diffstat can be found below.
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
+>> Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+>>
+>> Warnings:
+>>
+>> fs/jffs2/xattr.c: In function 'jffs2_build_xattr_subsystem':
+>> fs/jffs2/xattr.c:887:1: warning: the frame size of 1104 bytes is larger than
+>> 1024 bytes [-Wframe-larger-than=]
+>>    887 | }
+>>        | ^
+>> lib/crypto/curve25519-hacl64.c: In function 'ladder_cmult.constprop':
+>> lib/crypto/curve25519-hacl64.c:601:1: warning: the frame size of 1040 bytes
+>> is larger than 1024 bytes [-Wframe-larger-than=]
+>>    601 | }
+>>        | ^
+>> drivers/net/wireguard/allowedips.c: In function 'root_remove_peer_lists':
+>> drivers/net/wireguard/allowedips.c:77:1: warning: the frame size of 1040
+>> bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>>     77 | }
+>>        | ^
+>> drivers/net/wireguard/allowedips.c: In function 'root_free_rcu':
+>> drivers/net/wireguard/allowedips.c:64:1: warning: the frame size of 1040
+>> bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>>     64 | }
+>>        | ^
+>> drivers/vhost/scsi.c: In function 'vhost_scsi_flush':
+>> drivers/vhost/scsi.c:1444:1: warning: the frame size of 1040 bytes is larger
+>> than 1024 bytes [-Wframe-larger-than=]
+>>   1444 | }
+>>        | ^
+> Are these new warnings with this release, or old ones?
+>
+> thanks,
+>
+> greg k-h
 
-Yes, exactly, separate nodes for serial1 and serial2 are still required.
+They are old ones.
 
-But dropping clock controller is not possible as for higher baudrates we
-need to use and configure uart clock controller. Without it we just get
-comparable feature support which is already present in driver.
+Ron
 
-But, I do not fully understand now, why to change this DTS bindings in
-this incompatible way? What it brings? Because for me now it looks like
-that this change does not bring anything useful, only breaks current DTS
-bindings.
-
-Driver changes would still look in the similar / same way like it is in
-current patch series because bindings already contains separate nodes,
-just they are children of top level node which represents in internal
-registers.

@@ -2,145 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A86CF48F82D
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 18:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F9948F85D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 18:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232386AbiAORMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 12:12:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiAORMB (ORCPT
+        id S233481AbiAORW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 12:22:59 -0500
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:46730 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233367AbiAORWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 12:12:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B90C061574;
-        Sat, 15 Jan 2022 09:12:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9E07B80967;
-        Sat, 15 Jan 2022 17:11:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD832C36AE7;
-        Sat, 15 Jan 2022 17:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642266718;
-        bh=+x1DbKa0d1NTgP8AulnZ1HHW73xrwlfQWVgKa1MsQrA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KUxmXO3WdFK/4ksG4uOE9ayZhS2f4mBq8i5ikcYJ8i9mmWnVtiFag0kq4UveAG9gc
-         yk6U+OH9WKT82707LHv9vcX76LgRzHijxrXm0A6u6Y2Pl3CiSSO9LvZmA/m9vhnluE
-         OXmMJvRtKROpc35/IZXnez8t/eUrteOCCxTxmqhAtG7fy4IHsVxq3yOilIYba3cA4n
-         QLttt2oZ2iey6DbWQ2hiQWYs7oSdRpBTfOn3zdtLpoWcpk+Ruq673CSfhSRCIeRzeu
-         +zQlVdzag9K+inCpiwUKLDqmNGdSw1HZ3YTJz28QscCW8rClQsk2CUVOITIioRhvVk
-         h9twzQeEuOIOg==
-Date:   Sat, 15 Jan 2022 19:11:45 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Eric Snowberg <eric.snowberg@oracle.com>,
-        David Howells <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@hansenpartnership.com>,
-        "pjones@redhat.com" <pjones@redhat.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>
-Subject: Re: [PATCH v9 2/8] integrity: Introduce a Linux keyring called
- machine
-Message-ID: <YeMAURSR8/fRjBHD@iki.fi>
-References: <20220105235012.2497118-1-eric.snowberg@oracle.com>
- <20220105235012.2497118-3-eric.snowberg@oracle.com>
- <883da244c04fcb07add9984859a09d7b1827880a.camel@linux.ibm.com>
- <100B070F-7EB4-4BF7-B2B9-E5AE78D3066A@oracle.com>
- <a384fcf8bdd9ff79456e9669fc61ab50ec4e1c55.camel@linux.ibm.com>
- <F1F41DB2-171A-4A6F-9AE7-E03C4D3B7DD0@oracle.com>
- <eece68eba2beceeb410748c1f9f32162793d2057.camel@linux.ibm.com>
- <2d681148b6ea57241f6a7c518dd331068a5f47b0.camel@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2d681148b6ea57241f6a7c518dd331068a5f47b0.camel@linux.ibm.com>
+        Sat, 15 Jan 2022 12:22:49 -0500
+Received: by mail-ot1-f49.google.com with SMTP id t4-20020a05683022e400b00591aaf48277so14122658otc.13;
+        Sat, 15 Jan 2022 09:22:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=tOd5PlmluudALXw25P1FUTpuTqmX0VJHEIDiSnDnSyQ=;
+        b=P8BNx1KyALy+oCKwvbY/SuZ2uLWvKlelb4y4x47ck3aZCtDH+QThu3OLj2rFKgwhhQ
+         tZ/dsopp4ZhQoFgvu5yNkXlMUQhpLrAuettIeKX0VoCAG6jyI69DV3+Pjh+4f1k6NITn
+         aqY0chnmNxqG4MaqwG9FVDkwLqVfCX+/dNz3L+5F+RrqL5vSqr7ophLGItHr7kEYZ9jr
+         +YQdTwmMtwuo/Ha7/1C8KPXfdq01fOmAeCRNXS8/O0J9lAChvUj213iFQrjtyGImWH+C
+         ckgyaCpUaCSpv6wXeF/zgB4ArCdbTyoJc970lvPEHljuDnE7DbAx96mcCs6YbcDmTOw0
+         KkzA==
+X-Gm-Message-State: AOAM533tH/JBKnjZQSSOoGH38yi96hVIvNTMgVUsG6ljYQi+fd68X3ub
+        M3KqLiF3ZiiXUHynX8mwTA==
+X-Google-Smtp-Source: ABdhPJwIybGqL+uwk2P4tWp5L19eVC71Jl+JwGpTzzBPt2XUw3/wznpGXkiPdKkv8jvQYIA+SGnISQ==
+X-Received: by 2002:a9d:7cc9:: with SMTP id r9mr10587481otn.202.1642267368079;
+        Sat, 15 Jan 2022 09:22:48 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id x13sm3251441oof.19.2022.01.15.09.22.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jan 2022 09:22:47 -0800 (PST)
+Received: (nullmailer pid 119886 invoked by uid 1000);
+        Sat, 15 Jan 2022 17:22:30 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     linus.walleij@linaro.org, heiko@sntech.de,
+        linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
+        aou@eecs.berkeley.edu, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, atishp@rivosinc.com,
+        bgolaszewski@baylibre.com, palmer@dabbelt.com,
+        a.zummo@towertech.it, ivan.griffin@microchip.com,
+        u.kleine-koenig@pengutronix.de, devicetree@vger.kernel.org,
+        daire.mcnamara@microchip.com, thierry.reding@gmail.com,
+        bin.meng@windriver.com, robh+dt@kernel.org,
+        lewis.hanly@microchip.com, lee.jones@linaro.org,
+        linux-crypto@vger.kernel.org, linux-pwm@vger.kernel.org,
+        jassisinghbrar@gmail.com, linux-riscv@lists.infradead.org,
+        geert@linux-m68k.org, linux-rtc@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, paul.walmsley@sifive.com,
+        alexandre.belloni@bootlin.com, linux-i2c@vger.kernel.org,
+        broonie@kernel.org, gregkh@linuxfoundation.org
+In-Reply-To: <20220114151727.2319915-7-conor.dooley@microchip.com>
+References: <20220114151727.2319915-1-conor.dooley@microchip.com> <20220114151727.2319915-7-conor.dooley@microchip.com>
+Subject: Re: [PATCH v3 06/15] dt-bindings: gpio: add bindings for microchip mpfs gpio
+Date:   Sat, 15 Jan 2022 11:22:30 -0600
+Message-Id: <1642267350.915591.119885.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 02:41:47PM -0500, Mimi Zohar wrote:
-> On Tue, 2022-01-11 at 20:14 -0500, Mimi Zohar wrote:
-> > On Tue, 2022-01-11 at 21:26 +0000, Eric Snowberg wrote:
-> > > 
-> > > > On Jan 11, 2022, at 11:16 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > > > 
-> > > > On Mon, 2022-01-10 at 23:25 +0000, Eric Snowberg wrote:
-> > > >>> Jarkko, my concern is that once this version of the patch set is
-> > > >>> upstreamed, would limiting which keys may be loaded onto the .machine
-> > > >>> keyring be considered a regression?
-> > > >> 
-> > > >> 
-> > > >> Currently certificates built into the kernel do not have a CA restriction on them.  
-> > > >> IMA will trust anything in this keyring even if the CA bit is not set.  While it would 
-> > > >> be advisable for a kernel to be built with a CA, nothing currently enforces it. 
-> > > >> 
-> > > >> My thinking for the dropped CA restriction patches was to introduce a new Kconfig.  
-> > > >> This Kconfig would do the CA enforcement on the machine keyring.  However if the 
-> > > >> Kconfig option was not set for enforcement, it would work as it does in this series, 
-> > > >> plus it would allow IMA to work with non-CA keys.  This would be done by removing 
-> > > >> the restriction placed in this patch. Let me know your thoughts on whether this would 
-> > > >> be an appropriate solution.  I believe this would get around what you are identifying as 
-> > > >> a possible regression.
-> > > > 
-> > > > True the problem currently exists with the builtin keys, but there's a
-> > > > major difference between trusting the builtin keys and those being
-> > > > loading via MOK.  This is an integrity gap that needs to be closed and
-> > > > shouldn't be expanded to keys on the .machine keyring.
-> > > > 
-> > > > "plus it would allow IMA to work with non-CA keys" is unacceptable.
-> > > 
-> > > Ok, I’ll leave that part out.  Could you clarify the wording I should include in the future 
-> > > cover letter, which adds IMA support, on why it is unacceptable for the end-user to
-> > > make this decision?
-> > 
-> > The Kconfig IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
-> > "help" is very clear:
+On Fri, 14 Jan 2022 15:17:18 +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> [Reposting the text due to email formatting issues.]
+> Add device tree bindings for the gpio controller on
+> the Microchip PolarFire SoC.
 > 
-> help
->   Keys may be added to the IMA or IMA blacklist keyrings, if the
->   key is validly signed by a CA cert in the system built-in or
->   secondary trusted keyrings.
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../bindings/gpio/microchip,mpfs-gpio.yaml    | 80 +++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
 > 
->   Intermediate keys between those the kernel has compiled in and the 
->   IMA keys to be added may be added to the system secondary keyring,
->   provided they are validly signed by a key already resident in the
->   built-in or secondary trusted keyrings.
-> 
-> 
-> The first paragraph requires "validly signed by a CA cert in the system
-> built-in or secondary trusted keyrings" for keys to be loaded onto the
-> IMA keyring.  This Kconfig is limited to just the builtin and secondary
-> keyrings.  Changing this silently to include the ".machine" keyring
-> introduces integrity risks that previously did not exist.  A new IMA
-> Kconfig needs to be defined to allow all three keyrings - builtin,
-> machine, and secondary.
-> 
-> The second paragraph implies that only CA and intermediate CA keys are
-> on secondary keyring, or as in our case the ".machine" keyring linked
-> to the secondary keyring.
-> 
-> Mimi
-> 
-I have also now test environment for this patch set but if there are
-any possible changes, I'm waiting for a new version, as it is anyway
-for 5.18 cycle earliest.
 
-/Jarkko
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
+   19 |         #include "dt-bindings/clock/microchip,mpfs-clock.h"
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1413: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1580118
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

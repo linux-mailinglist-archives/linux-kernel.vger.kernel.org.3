@@ -2,217 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E6948F888
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 18:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B121A48F88D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 18:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbiAORo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 12:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiAORo6 (ORCPT
+        id S232452AbiAORxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 12:53:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43832 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232372AbiAORxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 12:44:58 -0500
-Received: from haggis.mythic-beasts.com (haggis.mythic-beasts.com [IPv6:2a00:1098:0:86:1000:0:2:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07E5C061574;
-        Sat, 15 Jan 2022 09:44:57 -0800 (PST)
-Received: from [81.101.6.87] (port=47192 helo=jic23-huawei)
-        by haggis.mythic-beasts.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <jic23@jic23.retrosnub.co.uk>)
-        id 1n8n6g-0005QG-LR; Sat, 15 Jan 2022 17:44:51 +0000
-Date:   Sat, 15 Jan 2022 17:50:53 +0000
-From:   Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] iio: accel: add ADXL367 driver
-Message-ID: <20220115175053.3757f641@jic23-huawei>
-In-Reply-To: <ab212905-2377-040b-ce8a-2cef3ae13002@gmail.com>
-References: <20211217114548.1659721-1-cosmin.tanislav@analog.com>
-        <20211217114548.1659721-3-cosmin.tanislav@analog.com>
-        <20211223130100.059231d6@jic23-huawei>
-        <edb634a17ba04f4cb5e77fa3b5c69358@analog.com>
-        <20211228205757.7654cb66@jic23-huawei>
-        <ab212905-2377-040b-ce8a-2cef3ae13002@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sat, 15 Jan 2022 12:53:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642269187;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=H6OoxCkI7fG8A16oQRFEumN9Lwt/USiivt1NkSzppcU=;
+        b=BMGzPfkGp0/twyWTm9uwIEKOxihc3rYwg4urQ/urrO2QU/JigM1DlH92h3oDlM8THySxHg
+        Ezc912gltkj/myld8kpa4dbpDt/qEQYQwIFa59UMDyY6O/tZ9XLFsi++MUWuC7s3tVOAOh
+        8ZJDkwFUzrinMOQWAxRguCSt6hdts5U=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-487-K_qAHG-VPaKkJt0WK11-yw-1; Sat, 15 Jan 2022 12:53:06 -0500
+X-MC-Unique: K_qAHG-VPaKkJt0WK11-yw-1
+Received: by mail-oi1-f199.google.com with SMTP id s127-20020aca5e85000000b002c807e9c48aso8519941oib.10
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 09:53:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H6OoxCkI7fG8A16oQRFEumN9Lwt/USiivt1NkSzppcU=;
+        b=SDJi8iRka0Lr3IuJX6az2+3gVcSmGXFvSGHMyEjaxz/NgdmMkq/fbWvY2EqJXOPdqM
+         p1dEFodLZCqZwiv/QdrbSo3R1yOQVBEWB0/CyUhTz3uQK8FCM1haNa9XFuKlEHiNsZVB
+         CaPkzXOzHr+M95ExrNlnaZ0Ir//wy433JiIbEhqyZiVMqe2+e8nfqbqfXD/FDbq1Y//U
+         56Hqc911DmBwIiLNx/YXFEvzZGYqQqmuUO4fF1/uSs01mbl6zFI5LzHliHBXwPKD3Bdd
+         uH0qR4ImDVihupvnqE2830zKAhH97T2ox6uSqybb7P55djn65nQuWy75zgqzlOAm8cBo
+         sKSQ==
+X-Gm-Message-State: AOAM533gqOAZiQUTPrXMhVK0UEJ2prQ2k1RUCQAW0sdSWUNIZV6ntSOz
+        VH5cf7960EeVB5l/kD7Xblb79WxCUDli3BUzkQQLtkVDJF7AzAYfiDPJ/ZFzAYEMzhAeoE/jsY0
+        PsVV0f8rcDeds1XJSCLgxmWCPVff1cKqjcikHfcBU68qv/AjjoTXrsket5DtagjoOntvsD+A=
+X-Received: by 2002:a9d:6452:: with SMTP id m18mr10836767otl.99.1642269185723;
+        Sat, 15 Jan 2022 09:53:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx9FEvJu4hwH45VQzjU0SGArx6HF4tcZhBFJpeHe0t/HSRhSFhG4SAO/rliXGInygdXW0hzuA==
+X-Received: by 2002:a9d:6452:: with SMTP id m18mr10836753otl.99.1642269185500;
+        Sat, 15 Jan 2022 09:53:05 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id n26sm3653046oij.5.2022.01.15.09.53.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jan 2022 09:53:05 -0800 (PST)
+From:   trix@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] memory: emif: cleanup double word in comment
+Date:   Sat, 15 Jan 2022 09:52:52 -0800
+Message-Id: <20220115175252.297433-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-BlackCat-Spam-Score: 19
-X-Spam-Status: No, score=1.9
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 00:43:25 +0200
-Cosmin Tanislav <demonsingur@gmail.com> wrote:
+From: Tom Rix <trix@redhat.com>
 
-> On 12/28/21 22:58, Jonathan Cameron wrote:
-> > Hi Cosmin,
-> > 
-> > Happy New year for a few day's time.
-> >   
-> >>> ...
-> >>>      
-> >>>> +
-> >>>> +static bool adxl367_push_event(struct iio_dev *indio_dev, u8 status)
-> >>>> +{
-> >>>> +	unsigned int ev_dir;
-> >>>> +
-> >>>> +	if (FIELD_GET(ADXL367_STATUS_ACT_MASK, status))
-> >>>> +		ev_dir = IIO_EV_DIR_RISING;
-> >>>> +	else if (FIELD_GET(ADXL367_STATUS_INACT_MASK, status))
-> >>>> +		ev_dir = IIO_EV_DIR_FALLING;
-> >>>> +	else
-> >>>> +		return false;
-> >>>> +
-> >>>> +	iio_push_event(indio_dev,
-> >>>> +		       IIO_MOD_EVENT_CODE(IIO_ACCEL, 0,  
-> >>> IIO_MOD_X_OR_Y_OR_Z,  
-> >>>> +					  IIO_EV_TYPE_THRESH, ev_dir),  
-> >>> This is unusual for event detection as it's a simple or of separately
-> >>> applied thresholds on X, Y and Z axes.  Given the effect of gravity that
-> >>> means you have to set the thresholds very wide.
-> >>>
-> >>> Also, I'd expect these to be magnitudes, not THRESH - no data sheet that
-> >>> I can find though so can't be sure.
-> >>>      
-> >>
-> >> Actually, the chip has a referenced, and an absolute mode. We use reference mode
-> >> in this driver, as configured in write_event_config.
-> >> The motion detection details are about the same as ADXL362 (page 14).
-> >> https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL362.pdf  
-> > 
-> > Interesting.  We should figure out some way to make that clear to userspace
-> > given right now it has no way of knowing that and might set inappropriate limits
-> > without that information.
-> >   
-> 
-> Any suggestions on how I should do this?
+Remove the second 'if'.
 
-*laughs*  you caught be avoiding thinking about how we might do this.  Going to need
-some new ABI that can be universal or per event.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ include/linux/platform_data/emif_plat.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I think the best bet is probably to define something similar to adaptive_thresh in
-that we are saying it's a threshold / magnitude as appropriate but not on the
-raw underlying signal.  We could potentially use adaptive again but maybe we need
-something more specific as that is used when the threshold tracks some low pass
-filtered version of the signal. Perhaps
-
-in_accel_x_referenced_magn_* with appropriate ABI docs that make it clear that for
-acceleration the point is to remove G, but leave it open what referenced might mean
-for other types of signal. 
-
-
-> 
-> > It's kind of similar to some of the adaptive thresholds, just that it uses
-> > the value at a particular moment.
-> > 
-> > Worth noting that for the adxl362 at least the maths is
-> > ABS(Acceleration - reference) > Threshold which is a magnitude not a threshold
-> > unless you want to represent it as a pair of thresholds (above and below) which
-> > gets fiddly as I assume there is only one control
-> >   
-> 
-> Indeed. I didn't catch onto the difference between magnitude and
-> threshold. So, I should use IIO_EV_TYPE_MAG rather than
-> IIO_EV_TYPE_THRESH? Or IIO_EV_TYPE_MAG_ADAPTIVE? The ABI doesn't
-> describe these too well.
-
-Well for what we have today it would be IIO_EV_TYPE_MAG. Roughly speaking
-(there are varriants that are similar enough we don't distinguish).
-IIO_EV_TYPE_THRESH is signed comparison. If you happen to have a signal that
-is always positive (e.g. an ADC) then it's preferred of IIO_EV_TYPE_MAGN even
-though they would be the same thing.
-
-So if you have an accelerometer that does -10m/sec^2 to 10m/sec^2 a
-rising threshold detector at 5m/sec^2 would only trigger when we pass 
-5m/sec^2 heading upwards towards 6, but not when passing -5m/sec^2 heading
-for -6m/sec^2.
-
-Magn is basically a threshold applied to the absolute of the reading so a
-rising magn threshold would fire on both passing 5m/sec^2 heading for 6m/sec^2
-and on passing -5m/sec^2 heading for -6m/sec^2.
-
-The adaptive variants are more fun in that rather than applying to the raw
-signal they 'typically' apply relative to some filtered version of that raw
-signal (normally Low pass filtered).  The idea is to detect a sudden absolute
-change but ignore a slow drift.  So filter on signal - LowPass(signal) with
-same thresh vs magn rules as above.
-
-
-
-> 
-> >>
-> >>  
-> >>>> +		       iio_get_time_ns(indio_dev));
-> >>>> +
-> >>>> +	return true;
-> >>>> +}  
-> > 
-> > ...
-> >   
-> >>>> +static int adxl367_write_event_config(struct iio_dev *indio_dev,
-> >>>> +				      const struct iio_chan_spec *chan,
-> >>>> +				      enum iio_event_type type,
-> >>>> +				      enum iio_event_direction dir,
-> >>>> +				      int state)
-> >>>> +{
-> >>>> +	struct adxl367_state *st = iio_priv(indio_dev);
-> >>>> +	enum adxl367_activity_type act;
-> >>>> +	int ret;
-> >>>> +
-> >>>> +	switch (dir) {
-> >>>> +	case IIO_EV_DIR_RISING:
-> >>>> +		act = ADXL367_ACTIVITY;
-> >>>> +		break;
-> >>>> +	case IIO_EV_DIR_FALLING:
-> >>>> +		act = ADXL367_INACTIVITY;
-> >>>> +		break;
-> >>>> +	default:
-> >>>> +		return -EINVAL;
-> >>>> +	}
-> >>>> +
-> >>>> +	ret = iio_device_claim_direct_mode(indio_dev);  
-> >>>
-> >>> It's unusual (though not unheard of) to have events that cannot be enabled
-> >>> at the same time as a fifo.  If that's true here, please add some comments
-> >>> to explain why.  Or is this just about the impact of having to disable
-> >>> the measurement to turn it on and the resulting interruption of data
-> >>> capture?
-> >>>
-> >>> If so that needs more thought as we have a situation where you can (I think)
-> >>> have events as long as you enable them before the fifo based capture is
-> >>> started,
-> >>> but cannot enable them after.
-> >>>      
-> >>
-> >> That is indeed the case. You mentioned in a previous patchset that various
-> >> attributes could toggle measurement mode while the FIFO capture was running,
-> >> so I checked all the possible places where that could happen and added claim
-> >> direct mode. Not too nice, but it's the nature of the chip...  
-> > 
-> > Hmm. I'm not sure what the right thing to do here is. Maybe we need a docs update
-> > to explicitly call out that this might happen for the event enables?  Calling
-> > it out for all devices is fine because all we are doing is saying userspace would
-> > ideally cope with this situation and make the decision to disable the buffered
-> > mode if it wants to enable events then reenable it afterwards if that is what
-> > is desired.  
-> 
-> By docs you mean the ABI file?
-
-Yup.  
-
-Jonathan
-
-> 
-> > 
-> > Jonathan
-> > 
-> >   
+diff --git a/include/linux/platform_data/emif_plat.h b/include/linux/platform_data/emif_plat.h
+index b93feef5d586f..53057713c9fbf 100644
+--- a/include/linux/platform_data/emif_plat.h
++++ b/include/linux/platform_data/emif_plat.h
+@@ -98,7 +98,7 @@ struct emif_custom_configs {
+  *			as type, bus width, density etc
+  * @timings:		Timings information from device datasheet passed
+  *			as an array of 'struct lpddr2_timings'. Can be NULL
+- *			if if default timings are ok
++ *			if default timings are ok
+  * @timings_arr_size:	Size of the timings array. Depends on the number
+  *			of different frequencies for which timings data
+  *			is provided
+-- 
+2.26.3
 

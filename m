@@ -2,93 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7947E48F5C9
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 08:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8783948F5CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 08:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232647AbiAOHuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 02:50:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiAOHue (ORCPT
+        id S230235AbiAOHzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 02:55:31 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:58726 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229816AbiAOHz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 02:50:34 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B15C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 23:50:32 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id s22so15554081oie.10
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 23:50:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=h3PgS0CNglNFEriFcIB5fPEGJsKvjMbV56HeR6dLGrE=;
-        b=EmUyNC5+fyl6EfcWg7V5NP/+/kTDIH/EdOvuowOUADAQekSeyTVMo2Pw+R7MGnNyr3
-         5F8QHuI+3uuwmjE0hhIplcSf2WL7/QNRQcOV1244KFMSs7KyWUA1l2Wf6ku/ze8CULMO
-         JrK0FD1KD6O13Y02WDkLJ8qPwwJwBY8Rk79Pk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=h3PgS0CNglNFEriFcIB5fPEGJsKvjMbV56HeR6dLGrE=;
-        b=xDP/yuZX26Y665G0oqV7Il65yVuQQlCegwAzW56SEy+SDEXG7Ep9BOijo19PN0XaKo
-         K7peMnEG47AcoN8vXcNibzDqq9n+lLI1YnlgfDfg/1DIdFdHcixhXDZtl1p/almNE+dG
-         uMVPvtyXzyl/85El8Pgnx6iiaJNNcrugUZrlU9sgna602LpwEb/yTbTG3DZHntKV3J8A
-         sLW8BvufOmnoB/Z/EL1w1dz0qyWKJSysxxpVnS9wKOI3CYRevHTSaBpdWH6c9dsT7l4W
-         lIA9Kw/fD/AwvvZIrE2HIU6FFsH82XwM0o/DWAmb6ULd4C1HT7IdEmyetNY55mDmch01
-         wxBQ==
-X-Gm-Message-State: AOAM531gH2u8xtOt2PgmlnmigXTlslqw1MpzSufimdJuypUgwvL+NGWh
-        tzHVYDCqH7n6ZZWxePc1d2L6Q8t4Us6bnZCn/307w+GnLX8=
-X-Google-Smtp-Source: ABdhPJx02kIfoT6/5m/ATyYIlU8INhZ26iHsr9xTblSQKWo5tlo36oAirP0TSNUr8dUl4s8qhL52VFzPwIS7Yj/lE4c=
-X-Received: by 2002:aca:a953:: with SMTP id s80mr15972957oie.164.1642233032027;
- Fri, 14 Jan 2022 23:50:32 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Sat, 15 Jan 2022 01:50:31 -0600
-MIME-Version: 1.0
-In-Reply-To: <fc7207eb9958c487fec5679da73d8f3595cc7bb1.camel@mediatek.com>
-References: <20220106214556.2461363-1-swboyd@chromium.org> <20220106214556.2461363-26-swboyd@chromium.org>
- <1a3b368eb891ca55c33265397cffab0b9f128737.camel@mediatek.com>
- <CAE-0n53Y3WRy4_QvUm9k9wjjWV7adMDQcK_+1ji4+W25SSeGwg@mail.gmail.com>
- <ff81bc1fe1f1c2060fcf03ba14f1bef584c47599.camel@mediatek.com>
- <CAE-0n53FAHDmCznJ35Xh2aTwXBVwukAM3ioKx8SU9VowSaQSqA@mail.gmail.com>
- <69a10908622512c60790f97942731a8ab989b727.camel@mediatek.com>
- <CAE-0n53ao52UX3sJ67UQ3dgj0-DZ0xTeo-NrmW5YVAuXfAnxZw@mail.gmail.com> <fc7207eb9958c487fec5679da73d8f3595cc7bb1.camel@mediatek.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Sat, 15 Jan 2022 01:50:31 -0600
-Message-ID: <CAE-0n52kPPXuZH8srbQXC6iPpaM_+2Qewn6-HQ0RNKMxi5Jdsg@mail.gmail.com>
-Subject: Re: [PATCH v5 25/32] iommu/mtk: Migrate to aggregate driver
-To:     Yong Wu <yong.wu@mediatek.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Saravana Kannan <saravanak@google.com>,
-        linux-mediatek@lists.infradead.org,
-        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 15 Jan 2022 02:55:29 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 60E7D1F3A7;
+        Sat, 15 Jan 2022 07:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642233328; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vbSkh4UntaygzRJkDFV/8mX3nAqS8NhGLcZl6dVcAzY=;
+        b=ROou3wcQitCIjHYh3ohJaecX2Bqbm5A6jZ1hLdxIexi6naaSlkrqzMJLb8bGC8BpuPyzt6
+        z5aKi60VMasjoyUimEXE7uj+Bo7c7vkZFaYuRYTB9NrMwRIJaFyrlg+r73WubRYgU3J60r
+        zXQ4QFiIc9UUgzlhru0H3pxG79iWpHg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642233328;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vbSkh4UntaygzRJkDFV/8mX3nAqS8NhGLcZl6dVcAzY=;
+        b=AOzgvSaHSSj22/Z67r4IWoPtIQ/63wDzYwufUq6G0XneSSqKuCPoc6vpQj8VofncYD/gYb
+        U8Mv8aSglT972ZBg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 1221BA3B81;
+        Sat, 15 Jan 2022 07:55:28 +0000 (UTC)
+Date:   Sat, 15 Jan 2022 08:55:28 +0100
+Message-ID: <s5hsftp3027.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Alexander Sergeyev <sergeev917@gmail.com>
+Cc:     Jeremy Szu <jeremy.szu@canonical.com>, tiwai@suse.com,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        Kailang Yang <kailang@realtek.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jian-Hong Pan <jhp@endlessos.org>,
+        Hui Wang <hui.wang@canonical.com>,
+        PeiSen Hou <pshou@realtek.com>
+Subject: Re: [PATCH 1/4] ALSA: hda/realtek: fix mute/micmute LEDs for HP 855 G8
+In-Reply-To: <20220114183720.n46wealclg6spxkp@localhost.localdomain>
+References: <20210519170357.58410-1-jeremy.szu@canonical.com>
+        <20220111195229.a77wrpjclqwrx4bx@localhost.localdomain>
+        <s5ho84h9tit.wl-tiwai@suse.de>
+        <20220112101249.ya73jvpmqmeh4ggg@localhost.localdomain>
+        <s5hilup9s87.wl-tiwai@suse.de>
+        <20220112104827.4aymoth7ua65nwge@localhost.localdomain>
+        <20220112201824.qmphnz2hx4frda6e@localhost.localdomain>
+        <s5h8rvk85uy.wl-tiwai@suse.de>
+        <20220113183141.kla37mbqmo4x6wxp@localhost.localdomain>
+        <s5ha6fy46jt.wl-tiwai@suse.de>
+        <20220114183720.n46wealclg6spxkp@localhost.localdomain>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Yong Wu (2022-01-14 23:39:52)
-> On Fri, 2022-01-14 at 15:30 -0600, Stephen Boyd wrote:
+On Fri, 14 Jan 2022 19:37:20 +0100,
+Alexander Sergeyev wrote:
+> 
+> On Fri, Jan 14, 2022 at 05:37:42PM +0100, Takashi Iwai wrote:
+> > > I assume that the referred repository is the one at [1]. I've tried
+> > > 081c73701ef0 "ALSA: hda: intel-dsp-config: reorder the config
+> > > table". It crashed with nearly identical logs.
 > >
-> > This sounds more correct to me. I'm not an expert on runtime PM
-> > though
-> > as I always have to read the code to remember how it works. if the
-> > device isn't ready for runtime PM until the component bind function
-> > is
-> > called then runtime PM shouldn't be enabled on the component device.
->
-> Anyway, We should update the SMI driver for this case. I prepare a
-> patch into this patchset or I send it independently? which way is
-> better?
+> > OK, then it's still something to do with the led cdev
+> > unregisteration.
+> >
+> > Could you try the patch below?
+> 
+> This patch solved the BUG problem. But after unbind/bind micmute LED stopped 
+> working. Speakers and mute LED are fine though.
 
-I can roll it into this patch. It needs to be combined otherwise it
-breaks the bisectability of the series.
+Does the corresponding sysfs entry exist in /sys/class/leds/*?
+And can you control LED over there?
+
+
+> Dmesg:
+> snd_hda_intel 0000:05:00.6: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0015 address=0x1fffff800 flags=0x0020]
+
+Hmm, that looks bad.  Something must be accessing out of bound.
+
+> snd_hda_codec_realtek hdaudioC1D0: out of range cmd 0:20:400:90170118
+> snd_hda_codec_realtek hdaudioC1D0: out of range cmd 0:20:400:411111f0
+> snd_hda_codec_realtek hdaudioC1D0: out of range cmd 0:20:400:270300
+
+This seems to be a bogus COEF.  But I have no idea from where this
+comes.  The values look completely wrong.
+
+I guess you'd need to put some debug prints to trace down how those
+are triggered...
+
+
+Takashi

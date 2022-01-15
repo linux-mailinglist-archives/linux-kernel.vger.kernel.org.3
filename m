@@ -2,76 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB35948F582
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 07:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC69748F588
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 08:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbiAOGix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 01:38:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbiAOGiw (ORCPT
+        id S229845AbiAOG77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 01:59:59 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57674 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229529AbiAOG76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 01:38:52 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B11C061574;
-        Fri, 14 Jan 2022 22:38:52 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n8chz-0025ZF-G2; Sat, 15 Jan 2022 06:38:39 +0000
-Date:   Sat, 15 Jan 2022 06:38:39 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Ian Kent <raven@themaw.net>
-Cc:     Brian Foster <bfoster@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        David Howells <dhowells@redhat.com>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        xfs <linux-xfs@vger.kernel.org>
-Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
-Message-ID: <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
-References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+        Sat, 15 Jan 2022 01:59:58 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 410171F394;
+        Sat, 15 Jan 2022 06:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642229997; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hPpaLHDUo6nY/syh5TXQg7yaeRb8DjB9j4D5fpeu5QU=;
+        b=eIj4SZcQH/CYWjy15Su5W9fEiK6JctiCUhESZ71D31v4u3xY5Qu2QpM5PZ8dnwk6nquOsS
+        Kr+MOJYpjTlyhe1ai5O7VrgI70i5Uv3Fb/+F6cAdrUwqUm4hrvVWVmT3f+GRKAG4P5Tldo
+        j+Px+tp6RgvCNs160IurFCeWSYn3Edg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642229997;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hPpaLHDUo6nY/syh5TXQg7yaeRb8DjB9j4D5fpeu5QU=;
+        b=+OfH3tSQvQJoCBCbbXCvvzgXhxSoR7XtPyWoqh7uYN+gOtDgu2UlPMoMAa+DBhz/lET7em
+        on82127RVloDarAQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 1C240A3B81;
+        Sat, 15 Jan 2022 06:59:57 +0000 (UTC)
+Date:   Sat, 15 Jan 2022 07:59:57 +0100
+Message-ID: <s5hy23h32mq.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        patches@opensource.cirrus.com,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/5] ACPI / scan: Create platform device for CLSA0100
+In-Reply-To: <55cb8127-65e2-4d56-5127-2722c5bfe11f@redhat.com>
+References: <20220113170728.1953559-1-tanureal@opensource.cirrus.com>
+        <20220113170728.1953559-5-tanureal@opensource.cirrus.com>
+        <s5hee5a47et.wl-tiwai@suse.de>
+        <CAJZ5v0ijGWNd9s-4mrFgK-QbPDhnj2K3DF+Z45t7ckV6ET0hpQ@mail.gmail.com>
+        <55cb8127-65e2-4d56-5127-2722c5bfe11f@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 05:11:31PM +0800, Ian Kent wrote:
-> When following a trailing symlink in rcu-walk mode it's possible for
-> the dentry to become invalid between the last dentry seq lock check
-> and getting the link (eg. an unlink) leading to a backtrace similar
-> to this:
+On Fri, 14 Jan 2022 19:56:04 +0100,
+Hans de Goede wrote:
 > 
-> crash> bt
-> PID: 10964  TASK: ffff951c8aa92f80  CPU: 3   COMMAND: "TaniumCX"
-> …
->  #7 [ffffae44d0a6fbe0] page_fault at ffffffff8d6010fe
->     [exception RIP: unknown or invalid address]
->     RIP: 0000000000000000  RSP: ffffae44d0a6fc90  RFLAGS: 00010246
->     RAX: ffffffff8da3cc80  RBX: ffffae44d0a6fd30  RCX: 0000000000000000
->     RDX: ffffae44d0a6fd98  RSI: ffff951aa9af3008  RDI: 0000000000000000
->     RBP: 0000000000000000   R8: ffffae44d0a6fb94   R9: 0000000000000000
->     R10: ffff951c95d8c318  R11: 0000000000080000  R12: ffffae44d0a6fd98
->     R13: ffff951aa9af3008  R14: ffff951c8c9eb840  R15: 0000000000000000
->     ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
->  #8 [ffffae44d0a6fc90] trailing_symlink at ffffffff8cf24e61
->  #9 [ffffae44d0a6fcc8] path_lookupat at ffffffff8cf261d1
-> #10 [ffffae44d0a6fd28] filename_lookup at ffffffff8cf2a700
-> #11 [ffffae44d0a6fe40] vfs_statx at ffffffff8cf1dbc4
-> #12 [ffffae44d0a6fe98] __do_sys_newstat at ffffffff8cf1e1f9
-> #13 [ffffae44d0a6ff38] do_syscall_64 at ffffffff8cc0420b
+> Hi,
 > 
-> Most of the time this is not a problem because the inode is unchanged
-> while the rcu read lock is held.
+> On 1/14/22 18:51, Rafael J. Wysocki wrote:
+> > On Fri, Jan 14, 2022 at 5:19 PM Takashi Iwai <tiwai@suse.de> wrote:
+> >>
+> >> On Thu, 13 Jan 2022 18:07:28 +0100,
+> >> Lucas Tanure wrote:
+> >>>
+> >>> The ACPI device with CLSA0100 is a sound card with
+> >>> multiple instances of CS35L41 connected by I2C to
+> >>> the main CPU.
+> >>>
+> >>> We add an ID to the i2c_multi_instantiate_idsi list
+> >>> to enumerate all I2C slaves correctly.
+> >>>
+> >>> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+> >>
+> >> I think it's better to merge this from sound git tree together with
+> >> others in the patch set, presumably for rc1.
+> >>
+> >> It'd be great if ACPI people can take a review and give an ack/nack.
+> > 
+> > Hans, what do you think?
 > 
-> But xfs can re-use inodes which can result in the inode ->get_link()
-> method becoming invalid (or NULL).
+> This patch (5/5) applies on top of:
+> 
+> https://lore.kernel.org/linux-acpi/20211210154050.3713-1-sbinding@opensource.cirrus.com/
+> 
+> Which still needs some work and which really should be merged
+> through the ACPI tree. IMHO it would be best to simply drop
+> this (5/5) from this series and move it to the v3 of the
+> series which I've linked to above.
+> 
+> 1-4 can be merged through the alsa tree independently of 5/5 AFAIK.
 
-Without an RCU delay?  Then we have much worse problems...
+OK, that's fine.
 
-Details, please.
+Lucas, could you submit v3 patches in the suggested way?
+
+
+thanks,
+
+Takashi

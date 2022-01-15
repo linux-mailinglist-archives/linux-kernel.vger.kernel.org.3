@@ -2,135 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 395E148F4CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 05:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A5648F4BE
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 05:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbiAOEsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 23:48:40 -0500
-Received: from qproxy4-pub.mail.unifiedlayer.com ([66.147.248.250]:38175 "EHLO
-        qproxy4-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229579AbiAOEsj (ORCPT
+        id S232449AbiAOE2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 23:28:17 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:55843 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229992AbiAOE2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 23:48:39 -0500
-X-Greylist: delayed 1408 seconds by postgrey-1.27 at vger.kernel.org; Fri, 14 Jan 2022 23:48:39 EST
-Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
-        by qproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id DE1438034106
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 04:25:09 +0000 (UTC)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 2EB581004870D
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 04:25:09 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 8acmnCmRX2s5d8acnnqj9U; Sat, 15 Jan 2022 04:25:09 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=BOh2EHcG c=1 sm=1 tr=0 ts=61e24ca5
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=DghFqjY3_ZEA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=-Qcm0AZxhyoZnww38z8A:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=2ytazBcu1/WEpQe+c3RwgbycMvD43iurYN7PpL6wsLc=; b=fb0YPheNQsk8n8tjAuXrqr/8nq
-        d7f9/bFZmaSNLxsROFQ6ccY7wFIgPkQztrgC0qXfP7ljZtTA9Cn4eAAqoXFI0iS7X0wFJKRrbejC4
-        aeaNtpNAGUK9QisRV+b/LRJW5;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:60982 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1n8acl-000TEm-Us; Fri, 14 Jan 2022 21:25:08 -0700
-Subject: Re: [PATCH 5.16 00/37] 5.16.1-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-References: <20220114081544.849748488@linuxfoundation.org>
-In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <7da2da48-33a8-6448-6906-03e1661b50b4@w6rz.net>
-Date:   Fri, 14 Jan 2022 20:25:06 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 14 Jan 2022 23:28:15 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JbQC211yCz4xQq;
+        Sat, 15 Jan 2022 15:28:13 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642220894;
+        bh=8jn6I8CPZWipEDPcWXz04laC7x/fRHvcfk2+bwEX0tU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=W7USzrqaDnKx64N7hx+a+f37CBMr0moBwg+f4OcRI7+9joFZHVlyOGFWSaEgM5fSn
+         +3mB0AHGI85Uk279uv15c0mtRgwLn3kQoAU2gRpZ5Qn54kmsySe4lhcZ7F0Sa1D2Wk
+         gkWeKpxWM41ZLKT+ur/qh41/I3TtZkKBUfoFTJiBwoWof9tVELgGBCDwlsjwwiZ9Q2
+         eSkVMNEiwd4tXWF7RgDr+q+UAX2Tg7U69DsLH1Mq7uw2gkTRvYzORol0Sm7xwe1iY7
+         UKPcqjDdAa51fBcWoXn68qlJKJYQTFAEFqpBPl9N/KaWJqTDSy2ff0jMGNweunhKVN
+         cxw/Wb1Jyscqg==
+Date:   Sat, 15 Jan 2022 15:28:12 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the ftrace tree
+Message-ID: <20220115152812.32d3ba5a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1n8acl-000TEm-Us
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:60982
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+Content-Type: multipart/signed; boundary="Sig_/_550BUW8eWvGwM_SywU2/bf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/14/22 12:16 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.1 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.1-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+--Sig_/_550BUW8eWvGwM_SywU2/bf
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Hi all,
 
-Warnings:
+After merging the ftrace tree, today's linux-next build (htmldoc)
+produced these warnings:
 
-fs/jffs2/xattr.c: In function ‘jffs2_build_xattr_subsystem’:
-fs/jffs2/xattr.c:887:1: warning: the frame size of 1104 bytes is larger 
-than 1024 bytes [-Wframe-larger-than=]
-   887 | }
-       | ^
-lib/crypto/curve25519-hacl64.c: In function ‘ladder_cmult.constprop’:
-lib/crypto/curve25519-hacl64.c:601:1: warning: the frame size of 1040 
-bytes is larger than 1024 bytes [-Wframe-larger-than=]
-   601 | }
-       | ^
-drivers/net/wireguard/allowedips.c: In function ‘root_remove_peer_lists’:
-drivers/net/wireguard/allowedips.c:77:1: warning: the frame size of 1040 
-bytes is larger than 1024 bytes [-Wframe-larger-than=]
-    77 | }
-       | ^
-drivers/net/wireguard/allowedips.c: In function ‘root_free_rcu’:
-drivers/net/wireguard/allowedips.c:64:1: warning: the frame size of 1040 
-bytes is larger than 1024 bytes [-Wframe-larger-than=]
-    64 | }
-       | ^
-drivers/vhost/scsi.c: In function ‘vhost_scsi_flush’:
-drivers/vhost/scsi.c:1444:1: warning: the frame size of 1040 bytes is 
-larger than 1024 bytes [-Wframe-larger-than=]
-  1444 | }
-       | ^
+Documentation/tools/rtla/rtla-osnoise-hist.rst: WARNING: document isn't inc=
+luded in any toctree
+Documentation/tools/rtla/rtla-osnoise-top.rst: WARNING: document isn't incl=
+uded in any toctree
+Documentation/tools/rtla/rtla-timerlat.rst: WARNING: document isn't include=
+d in any toctree
+Documentation/tools/rtla/rtla-timerlat-hist.rst: WARNING: document isn't in=
+cluded in any toctree
+Documentation/tools/rtla/rtla-timerlat-top.rst: WARNING: document isn't inc=
+luded in any toctree
 
-Tested-by: Ron Economos <re@w6rz.net>
+Introduced by commits
 
+  b1be48307de4 ("rtla: Add rtla osnoise top documentation")
+  e7041c6b3c12 ("rtla: Add rtla osnoise hist documentation")
+  29380d4055e5 ("rtla: Add rtla timerlat documentation")
+  df337d014b57 ("rtla: Add rtla timerlat top documentation")
+  5dce5904e3b9 ("rtla: Add rtla timerlat hist documentation")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/_550BUW8eWvGwM_SywU2/bf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHiTVwACgkQAVBC80lX
+0Gzyrwf/cOcJfaR9UAS3oNdlrSdpZliqHmXA78TZ5oVOhimXvg7vglTmY4Rh3vq+
+xT7GrunW5p2Xy7zDHlgwlb1lfSCis1SEKlUBWZ3GitYQNCW/YmEUP8vlKkTioKvp
+TGbuv9xh8qeNQJGrKGWIcG/9TyiP8y4YQZ/NNkvpRuNm0y8eu7IR98DpcnBusqOj
+28HxYD07VzVNsPBRrAgyByrBvGZqBHTmd6dfu/ZjMYmbT9wMiwWhZ7Qr0ipTaqXV
+5mPC+SOQiEMDCFNIQY71Sq+C2Yx1fA2g5AeFxqJEbLdlDts33vVP0knQGdsPf5EJ
+oNOLfVkNCiuHgKP1ETm4HH+FRIld1Q==
+=NPUz
+-----END PGP SIGNATURE-----
+
+--Sig_/_550BUW8eWvGwM_SywU2/bf--

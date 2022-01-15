@@ -2,178 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2B048F4AB
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 05:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC35F48F4AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 05:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbiAOEOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 23:14:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
+        id S232303AbiAOERS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 23:17:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbiAOEOF (ORCPT
+        with ESMTP id S229964AbiAOERR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 23:14:05 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AEBC06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 20:14:04 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so24122090pjf.3
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 20:14:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mfIrzj6cPcGzWR/gN8R7LyeEpSY521Rk0SIcNjAgQwo=;
-        b=D4zpVPRtkIQYIqolRPih/thQZjac99N1tHrhrQcT4NLSu6zjJXH4rmRWaNBUL6gGa0
-         2McD+Nc+1QM0Nu586VyP4uNHqGirwrAj4JTypaa/zSdMaac6wmocNYLr/pOUsC1KtWQw
-         x/6LRvnryvaGPECwPHL7/hu/JGK/oBFCuipqQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mfIrzj6cPcGzWR/gN8R7LyeEpSY521Rk0SIcNjAgQwo=;
-        b=CHgvlnzgEkFVYyGP/bhoSz5cCnVbmQWPVTNrFjpJxH06/nFzc+E8BZ1p5noRnVHsBy
-         n7yQK/9O14GsbyKuQNF62UjB2n67oRWwY4xmIW+4EUUcUu3hczqaVFQnsf2HKcZLqbGQ
-         0lvPwXoexpEVis4BHmuI3vqhb4KIhgllKrXCUhkBDDb37QuT3UPkVgE2UxL4Db4q/AQv
-         Mz3WwIKvf/BeQKpPurihzQCKdTfxi2mxlQXoUxgeOYGkhd3jfjPbbeLOOQTd9r1c4G5Z
-         YB+ZrueBNr936R7TYmk2PJ46Ki4AVxrJYoSFOfxb1Uq5+uLm05ZsPYVOqPEnLL8iVfFo
-         rlIw==
-X-Gm-Message-State: AOAM532rxda2T5xpzj+QyIFIBIE1Dck2PkPEWksrXDxBkbim1Z/Dj5UH
-        8SSs24OURCx6+AIptpeUGUnv1g==
-X-Google-Smtp-Source: ABdhPJxUkgWJzQPhcFWbWuR/K659eJVHLeC9GLGXuxaI75I5X0fvvZfdu3tleS0bdLQyXvQPZxcrvg==
-X-Received: by 2002:a17:902:6bc7:b0:149:9004:ca04 with SMTP id m7-20020a1709026bc700b001499004ca04mr12535270plt.43.1642220044226;
-        Fri, 14 Jan 2022 20:14:04 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id oj6sm9671328pjb.18.2022.01.14.20.14.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 20:14:03 -0800 (PST)
-Date:   Fri, 14 Jan 2022 20:14:03 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-staging@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Marco Cesati <marcocesati@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8723bs: Check for NULL header value
-Message-ID: <202201141958.5864A3ABD@keescook>
-References: <20220113002001.3498383-1-keescook@chromium.org>
- <Yd/tSpnpb4vWp6OP@kroah.com>
- <202201131027.FCAC3072E4@keescook>
- <YeB0rP7KXtbIKr6I@kroah.com>
+        Fri, 14 Jan 2022 23:17:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27B7C061574;
+        Fri, 14 Jan 2022 20:17:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A5BBB823FF;
+        Sat, 15 Jan 2022 04:17:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D112CC36AE3;
+        Sat, 15 Jan 2022 04:17:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642220232;
+        bh=L9jZwPl+ulM1n91M5X+pPqPaIs8EmocblrHHoBwI/NU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UY52dugeZGoZV8ns0dXi5uSI1slG40Tri+6JivHyATPasfY/Z4rYVljD+SoQmTzhv
+         8BvmevtjUUKY0/z4cUcW3tguj+lF20IXtLdzvKYBkfwlkR+lnJvhMRYZXylZOkTZsl
+         vbM4iF26pM4/aNu2UNpKdVUWm3msRMQAReVuQV8NjbprixvKxXjzRL2A/7qDG8zgiV
+         Qvd1OZKpl8iqQzL1V2Xoz0MF2aZo4ayCtTOdzMpk5TWyHVAuptuvs0eK4/MhhxN6B3
+         9xVgahRos77eiEvmpCu2YO54aXnwFq5UICAvH7VufF2At+t1x6phqIWy4FdLf9H9tD
+         sCn9M70GyB2kQ==
+Date:   Fri, 14 Jan 2022 20:17:12 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        david@fromorbit.com, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, hch@lst.de
+Subject: Re: [GIT PULL] xfs: new code for 5.17
+Message-ID: <20220115041712.GD90423@magnolia>
+References: <20220110220615.GA656707@magnolia>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YeB0rP7KXtbIKr6I@kroah.com>
+In-Reply-To: <20220110220615.GA656707@magnolia>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 07:51:24PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Jan 13, 2022 at 10:29:04AM -0800, Kees Cook wrote:
-> > On Thu, Jan 13, 2022 at 10:13:46AM +0100, Greg Kroah-Hartman wrote:
-> > > On Wed, Jan 12, 2022 at 04:20:01PM -0800, Kees Cook wrote:
-> > > > When building with -Warray-bounds, the following warning is emitted:
-> > > > 
-> > > > In file included from ./include/linux/string.h:253,
-> > > >                  from ./arch/x86/include/asm/page_32.h:22,
-> > > >                  from ./arch/x86/include/asm/page.h:14,
-> > > >                  from ./arch/x86/include/asm/thread_info.h:12,
-> > > >                  from ./include/linux/thread_info.h:60,
-> > > >                  from ./arch/x86/include/asm/preempt.h:7,
-> > > >                  from ./include/linux/preempt.h:78,
-> > > >                  from ./include/linux/rcupdate.h:27,
-> > > >                  from ./include/linux/rculist.h:11,
-> > > >                  from ./include/linux/sched/signal.h:5,
-> > > >                  from ./drivers/staging/rtl8723bs/include/drv_types.h:17,
-> > > >                  from drivers/staging/rtl8723bs/core/rtw_recv.c:7:
-> > > > In function 'memcpy',
-> > > >     inlined from 'wlanhdr_to_ethhdr' at drivers/staging/rtl8723bs/core/rtw_recv.c:1554:2:
-> > > > ./include/linux/fortify-string.h:41:33: warning: '__builtin_memcpy' offset [0, 5] is out of the bounds [0, 0] [-Warray-bounds]
-> > > >    41 | #define __underlying_memcpy     __builtin_memcpy
-> > > >       |                                 ^
-> > > > 
-> > > > This is because the compiler sees it is possible for "ptr" to be a NULL
-> > > > value, and concludes that it has zero size and attempts to copy to it
-> > > > would overflow. Instead, detect the NULL return and error out early.
-> > > > 
-> > > > Cc: Larry Finger <Larry.Finger@lwfinger.net>
-> > > > Cc: Phillip Potter <phil@philpotter.co.uk>
-> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > Cc: Michael Straube <straube.linux@gmail.com>
-> > > > Cc: Fabio Aiuto <fabioaiuto83@gmail.com>
-> > > > Cc: linux-staging@lists.linux.dev
-> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > > ---
-> > > >  drivers/staging/rtl8723bs/core/rtw_recv.c | 3 +++
-> > > >  1 file changed, 3 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/staging/rtl8723bs/core/rtw_recv.c b/drivers/staging/rtl8723bs/core/rtw_recv.c
-> > > > index 41bfca549c64..61135c49322b 100644
-> > > > --- a/drivers/staging/rtl8723bs/core/rtw_recv.c
-> > > > +++ b/drivers/staging/rtl8723bs/core/rtw_recv.c
-> > > > @@ -1513,6 +1513,9 @@ static signed int wlanhdr_to_ethhdr(union recv_frame *precvframe)
-> > > >  	u8 *ptr = get_recvframe_data(precvframe) ; /*  point to frame_ctrl field */
-> > > >  	struct rx_pkt_attrib *pattrib = &precvframe->u.hdr.attrib;
-> > > >  
-> > > > +	if (!ptr)
-> > > > +		return _FAIL;
-> > > 
-> > > This will never happen, so let's not paper over compiler issues with
-> > > stuff like this please.
-> > > 
-> > > As the call to get_recvframe_data() is only done in one place in this
-> > > driver (in all drivers that look like this as well), it can just be
-> > > replaced with the real code instead of the nonsensical test for NULL and
-> > > then the compiler should be happy.
-> > > 
-> > > I'll gladly take that fix instead of this one, as that would be the
-> > > correct solution here.
-> > 
-> > I changed it around, but it doesn't help. I assume this is because we
-> > build with -fno-delete-null-pointer-checks, so the compiler continues
-> > to assume it's possible for the incoming argument to be NULL.
-> 
-> That's a broken compiler then.
-> 
-> > Should I rearrange this to do a NULL check for precvframe before all the
-> > assignments in addition to removing get_recvframe_data()?
-> 
-> If you walk the call-chain back, you will see that precvframe can't ever
-> be NULL here (which is why this code doesn't crash), so don't check for
-> something that is impossible to ever hit please just because the
-> compiler is broken.
+Hi Linus,
 
-I agree that the _original_ precvframe is always non-NULL, but the pointer
-landing at memcpy() gets updated along the way. It seems the new problem
-is that recvframe_pull() may return NULL and nothing is checking for that.
-Adding this silences the warning:
+Please pull these bug fixes for Linux 5.17.  These are the last few
+obvious fixes that I found while stress testing online fsck for XFS
+prior to initiating a design review of the whole giant machinery.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index 49a02d6239d6..946e659ae97a 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -1223,10 +1223,14 @@ static int wlanhdr_to_ethhdr(struct recv_frame *precvframe)
- 		eth_type = 0x8712;
- 		/*  append rx status for mp test packets */
- 		ptr = recvframe_pull(precvframe, (rmv_len - sizeof(struct ethhdr) + 2) - 24);
-+		if (!ptr)
-+			return _FAIL;
- 		memcpy(ptr, get_rxmem(precvframe), 24);
- 		ptr += 24;
- 	} else {
- 		ptr = recvframe_pull(precvframe, (rmv_len - sizeof(struct ethhdr) + (bsnaphdr ? 2 : 0)));
-+		if (!ptr)
-+			return _FAIL;
- 	}
- 
- 	memcpy(ptr, pattrib->dst, ETH_ALEN);
+The branch merges cleanly against upstream as of a few minutes ago.
+Please let me know if anything else strange happens during the merge
+process.  There will definitely be a third pull request coming with a
+removal of the recently troublesome ALLOCSP/FREESP ioctl family and the
+long dead SGI XFS HSM ioctls.
 
-> 
-> thanks,
-> 
-> greg k-h
+--D
 
--- 
-Kees Cook
+The following changes since commit 7e937bb3cbe1f6b9840a43f879aa6e3f1a5e6537:
+
+  xfs: warn about inodes with project id of -1 (2022-01-06 10:43:30 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.17-merge-3
+
+for you to fetch changes up to 4a9bca86806fa6fc4fbccf050c1bd36a4778948a:
+
+  xfs: fix online fsck handling of v5 feature bits on secondary supers (2022-01-12 09:45:21 -0800)
+
+----------------------------------------------------------------
+New code for 5.17:
+
+ - Fix a minor locking inconsistency in readdir
+ - Fix incorrect fs feature bit validation for secondary superblocks
+
+----------------------------------------------------------------
+Darrick J. Wong (2):
+      xfs: take the ILOCK when readdir inspects directory mapping data
+      xfs: fix online fsck handling of v5 feature bits on secondary supers
+
+ fs/xfs/scrub/agheader.c        | 53 ++++++++++++++++++++--------------------
+ fs/xfs/scrub/agheader_repair.c | 12 +++++++++
+ fs/xfs/xfs_dir2_readdir.c      | 55 +++++++++++++++++++++++++++---------------
+ 3 files changed, 73 insertions(+), 47 deletions(-)

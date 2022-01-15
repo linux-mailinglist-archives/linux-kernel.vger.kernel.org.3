@@ -2,81 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4E348F3F4
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B74948F3F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbiAOBNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 20:13:01 -0500
-Received: from out162-62-58-211.mail.qq.com ([162.62.58.211]:53829 "EHLO
-        out162-62-58-211.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229775AbiAOBNA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 20:13:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1642209176;
-        bh=YNp/yvFhsx77bB3jyjujX9DWqCR9bbA1zfZ2FCw+jcg=;
-        h=From:To:Cc:Subject:Date;
-        b=gejo+zxWr8UFuwWz0VMSrBhWUIG5mKLxAPwGuQyQPfu0ZYAQHqP+VBD1rgNiWNXSE
-         JZVrOv2xsL5mrkazGWVTRjQyksrSRUXvlJ6qTBSgRhIJEc8F4CC1Dvb312Fu1U4IvW
-         jWUFB27FF1VOp7JpJltnfZgNa9CJ43xGAGshTMKg=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
-        id 2E800642; Sat, 15 Jan 2022 09:11:40 +0800
-X-QQ-mid: xmsmtpt1642209100t1cufa6nb
-Message-ID: <tencent_46E8FF37413C984772AD382429DAC2719409@qq.com>
-X-QQ-XMAILINFO: MxUBm8splV+pt5nDB6L0MjDMuGjDdD35LsIelK25JsJDfx0j4TvaYukC+2hLfR
-         lic28361A6ZtdQfi0EGqCVjse8JL2ATl7AmlhZhXqoLIbu3TPKZJSMPugGMu39QQ5BYeKLZt75fo
-         lxZoFYdH6k84WQFuCwhdFDIuCntoIuWdPK9thCwaBaS8951YHRQoXu4wZPq/DLw92e2mDzOISb6Q
-         yTcExWgUrtTIZySiNsSktwB3U2eGC6HEhFlWkJ1fAz3mb5RWl22z6ppTR7hRl1tG+BQJq2QigQIW
-         GxMDRT9hDnONgXQ1vQhuJ1IRwI3eX4EzBr3lKUEnR7gz14WKRcDmOCL1nzyM+Bh79VetYA6lfb8T
-         gHvHd86FR4QpnhkqHgmqx5a7Mof06pnzlbdB91AWN9J6BQxBLPr5mWtGpYm9tIQMlOWuHvC6J+A5
-         5OwgwD8+AThjrKUcsrdiO6tgZQFv9BuIvQD1/EMcH4fzciTVjsHJ/g2cdDrk+/fDNWSWLiaKgJOn
-         psM0RYxf3gQoW0SPcJ2C8JIF7XYlBQuVrp9M8WFcocnDue3IppdekhIp/37YIMTPqaox/aNZevtU
-         aIkR4p4EgWHkh0/WdBLSVHxAZs9+Ium9Gc+zxxvFHnxwmA5JTyrXaUpZbqqgyPBL13HmBKKP5ssS
-         cy6dJa/4k/w1Xd9n7Nht2stcAO/CqhvTQrG2FjEnlOmRDO5hZxXX7zepBaULbLBKdsWrJRUyt/KI
-         Ygbfi61TPwVbil7cq/L4otiZOo05Fa7YMOedB5ikvq6lQFZJA3r8Qmm/YbWVqLtj5Y+pg7vCC/ul
-         o/dxxGTH0z2Ln3Qvln0tj1cdeEK/fG835TPn/onpn9J5Io3K8pf9/rqBtn6iWtEa0QLDBWToEobv
-         XZoMzgO+BiWuEismfUIQDfRApGlSl6/nQui4PMLob3pBMfBbcww9k=
-From:   xkernel.wang@foxmail.com
-To:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH v3] integrity: check the return value of audit_log_start()
-Date:   Sat, 15 Jan 2022 09:11:11 +0800
-X-OQ-MSGID: <20220115011111.1900-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        id S231753AbiAOBML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 20:12:11 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:33048 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229775AbiAOBMK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 20:12:10 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4JbKrm3SHxz63;
+        Sat, 15 Jan 2022 02:12:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1642209128; bh=scKGEpL52lWp55TeU1oP8aPIFhzsHvC402p525gBJdc=;
+        h=Date:From:Subject:To:Cc:From;
+        b=sAAisDp4DFHGd11WZcpdhzySV3jCCK1KGnP+E2YPDP2vQhhZBO8DeQefJZvS1lQvO
+         CTBMhw7b0yhJRUD+tj3uQOiUagnb1n38WvqUFjKW0/iinCXSZeD39alzDWlBYa1enL
+         l4yn4wKz2Pt05q94RON5XZsYMMIMtX08/2LRA+qZ0Hio4u80g4NYovyIIG3ubd1Cfv
+         G6QCbAdClBwfpSOUiHlsovjAHYXkb5EED1POtEJtOQjIq4MESa9DQkU+shdC6bxLoN
+         gBB79oe4Sp/96GvOUDQpcgJUwrCJR+4DnZUZL9tP7X3hpX1HIIOBtqXI0aSoo2t8lG
+         4ZkA8Qn1F48cQ==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.4 at mail
+Date:   Sat, 15 Jan 2022 02:12:07 +0100
+Message-Id: <a9dc272e4e06db661125b7b4c330821b532afc4d.1642209079.git.mirq-linux@rere.qmqm.pl>
+From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Subject: [PATCH] i2c: core: fix potential use-after-free on adapter removal
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+put_device(&adap->dev) might free the memory pointed to by `adap`,
+so we shouldn't read adap->owner after that.
 
-audit_log_start() returns audit_buffer pointer on success or NULL on
-error, so it is better to check the return value of it.
+Fix by saving module pointer before calling put_device().
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-Reviewed-by: Paul Moore <paul@paul-moore.com>
+Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 ---
-Changelogs:
-V2 -> V3: add the Reviewed-by tag.
-V1 -> V2: simplify the patch. 
- security/integrity/integrity_audit.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/i2c/i2c-core-base.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/security/integrity/integrity_audit.c b/security/integrity/integrity_audit.c
-index 2922005..0ec5e4c 100644
---- a/security/integrity/integrity_audit.c
-+++ b/security/integrity/integrity_audit.c
-@@ -45,6 +45,8 @@ void integrity_audit_message(int audit_msgno, struct inode *inode,
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 2c59dd748a49..5d694f8ce9ef 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -2464,11 +2464,14 @@ EXPORT_SYMBOL(i2c_get_adapter);
+ 
+ void i2c_put_adapter(struct i2c_adapter *adap)
+ {
++	struct module *owner;
++
+ 	if (!adap)
  		return;
  
- 	ab = audit_log_start(audit_context(), GFP_KERNEL, audit_msgno);
-+	if (!ab)
-+		return;
- 	audit_log_format(ab, "pid=%d uid=%u auid=%u ses=%u",
- 			 task_pid_nr(current),
- 			 from_kuid(&init_user_ns, current_uid()),
++	owner = adap->owner;
+ 	put_device(&adap->dev);
+-	module_put(adap->owner);
++	module_put(owner);
+ }
+ EXPORT_SYMBOL(i2c_put_adapter);
+ 
 -- 
+2.30.2
+

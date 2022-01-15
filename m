@@ -2,113 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D27848F432
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA25E48F434
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbiAOBko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 20:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
+        id S232062AbiAOBkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 20:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiAOBkn (ORCPT
+        with ESMTP id S232050AbiAOBkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 20:40:43 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8BAC061574;
-        Fri, 14 Jan 2022 17:40:42 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id v186so28657908ybg.1;
-        Fri, 14 Jan 2022 17:40:42 -0800 (PST)
+        Fri, 14 Jan 2022 20:40:45 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A5EC061574;
+        Fri, 14 Jan 2022 17:40:45 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id d3so9817503ilr.10;
+        Fri, 14 Jan 2022 17:40:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4xj65T8RWG0+hHEFyJGBp3+1b5O20fwk4wK5S2rZsA4=;
-        b=n2Fh3NmLz2d6sp4Qmlto1f3BVHmjGrIadTEingnWHR7GDNCbwVjQlMWThWgGyU4E28
-         DHT0TPnsTlAYOCFfOoCNnU50H/VW2qNhGLXPC7jccvtejQ1Mfxqpg7uyfTCoI6WB75ab
-         YhvIdMMkOfR2anZ0T9NbNFyMZDuuqOZwAkPVVZh+dpsIXyKvoYSkCIvGZaT8BvzmwKDI
-         dukFPcnQaFXpI08r5yvgeNXNwe7J/yH6NkCEf6z16WLPxI8Pwf7e4y1mc0PUspJ9LMla
-         4hqQWOrlMzLMSL1pCG0sbRumBRZnogxzE7MLtCtm0KO4eiVvkShN9qc8vgYPvWFHzWra
-         VomA==
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=W50ZckeQoCC0z8xImJgw5j94j3GSLK4e8Lrg1EnOcDU=;
+        b=W4LyySCyg2dQREA7aVerDBuP4qXfZmRf1/8C6R+lY0M85eH82ouIsWmcHo1Kp7GqFP
+         V9a0JpdCFjDVfXk3SUweWKvk4M1klOhx/H+JUkQJ87B2uNHbEzuvIRJa17kgTmx8cjzs
+         kHN8kQxEoCzLjkVasMco88ApSx/hL07IA+Qfn6I+kujoVaBkBGZyYyC5U9eelL8Ymb1X
+         Arr3kZJVnjyZvW3ogeyoc0sIkIAjLE9wpyYSB0j9Nv8qzdFoQHI4QBuiljdJsh9hP7F+
+         q7PuhCrfP1guUBiWVy9p94nW8yZtooIiPJCwDk0eKjGcw5KziK0yE3gw7JVC7l8z7lT4
+         KDiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4xj65T8RWG0+hHEFyJGBp3+1b5O20fwk4wK5S2rZsA4=;
-        b=Re8QgbxKQDOa2H9XHBj9MiKe/Wys0EjIGQ6tsUdc5fdgxhQj8D5LvyaJzTpcgzAZ/V
-         MP9yC+03kyDxngXbocV9U2+C8Vawzy/g8EHU/s4DBniwtmJHu/IZ042W4I/46OCTw+zH
-         Jo1xqPb7A7yfvpBas6jILb/cUvnoBFdGz0j8N8XcYpa/KjRGWCQaPEABJ7JXJuNYn9n/
-         0Ng7n8oRk8RC0PEsOahsIjey174dmSpHzSOWrKewbAT0T+CsA0JIwjJkqRXGz+IKQwzr
-         u3/vYa/cjbmjKB5cOtxcaByJF1UvV7K7a2vsM0m6YcLItZQM2KRihaNgGkP4eWt43tL1
-         YwfA==
-X-Gm-Message-State: AOAM531QE78iFcah1zH/ev8k1vK7E0vauGfsvPhYprMLS5orTEfXCji7
-        gWLgp7UeizhSOQwbyxhyRFcNCElKCLKEv86moTA=
-X-Google-Smtp-Source: ABdhPJyZ+AMZzLKscGwgxAMno4/ugfReYdipnFkyZDavVf7WNx1MJDQkydIChF1IHAyV1XcTbxz3zozXhGWeu5tfH9I=
-X-Received: by 2002:a25:2cc7:: with SMTP id s190mr9088772ybs.186.1642210842195;
- Fri, 14 Jan 2022 17:40:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20211222190134.24866-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CGME20211222190203epcas1p2a7647eb2c09c29587b70982744c1a912@epcas1p2.samsung.com>
- <20211222190134.24866-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <a95b74fd-7118-b0fe-26b9-4665c719f1a0@samsung.com>
-In-Reply-To: <a95b74fd-7118-b0fe-26b9-4665c719f1a0@samsung.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sat, 15 Jan 2022 01:40:16 +0000
-Message-ID: <CA+V-a8tDqLWQXtZbjh=XwKaen1T-iXy=pP-Rn8GF9j_YA-8wdQ@mail.gmail.com>
-Subject: Re: [PATCH 2/5] drm/exynos: mixer: Use platform_get_irq() to get the interrupt
-To:     Inki Dae <inki.dae@samsung.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=W50ZckeQoCC0z8xImJgw5j94j3GSLK4e8Lrg1EnOcDU=;
+        b=n/wygxwvbnC43LZDiOEWDv3eEwU+SIznZkmPJiorDVcuFW+VpdvnLPO9Ty/dvvkQHM
+         znQiaOAB++5eYpl4tlgusDOo5KE93mw8glnS9+aXycOCQQDc5LuL3LgYE9k5qQNFRfeE
+         fm6l8JhBZU+goSe6Gx2JEQUp03iDMp73Zz2PP/EayZ3d+Ln7ZpFa4pUXvIJrQ0SdcZHr
+         BWk6eRmkFSrmDGpT92U2dIJWRhkEtzEzHXAIfSLzxfuR42QhAXunh1A7y68pryE4hI0z
+         xtn1GHIrpOcfI/5CWJxmqsWomXttkx7/wDo/u+yJDGKJ7KM5B6Zhpyxb504KjcYM7SWN
+         eFNw==
+X-Gm-Message-State: AOAM5327HiNEc/9OKdGZa3ollOvPBv5VTGBjOHfXTvvm9LVKygBFccRt
+        qwvTxt3xf91LdvCfQX97ZeXf1VAL5WkOxYJUj0U=
+X-Google-Smtp-Source: ABdhPJzA2z4ehugmgiiu/UTY3j5iXvAY8QcXF1zV8MGwxJX23uyg5k/SsZD0PWzITMRaX8SxFHBXHw==
+X-Received: by 2002:a05:6e02:188a:: with SMTP id o10mr560432ilu.81.1642210844600;
+        Fri, 14 Jan 2022 17:40:44 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id r4sm5264736ilb.4.2022.01.14.17.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 17:40:44 -0800 (PST)
+Message-ID: <61e2261c.1c69fb81.42eb5.73e8@mx.google.com>
+Date:   Fri, 14 Jan 2022 17:40:44 -0800 (PST)
+X-Google-Original-Date: Sat, 15 Jan 2022 01:40:42 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220114081544.849748488@linuxfoundation.org>
+Subject: RE: [PATCH 5.16 00/37] 5.16.1-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Inki,
+On Fri, 14 Jan 2022 09:16:14 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.16.1 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.1-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-On Fri, Jan 14, 2022 at 11:08 AM Inki Dae <inki.dae@samsung.com> wrote:
->
-> Hi Lad Prabhakar,
->
-> 21. 12. 23. =EC=98=A4=EC=A0=84 4:01=EC=97=90 Lad Prabhakar =EC=9D=B4(=EA=
-=B0=80) =EC=93=B4 =EA=B8=80:
-> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> > allocation of IRQ resources in DT core code, this causes an issue
-> > when using hierarchical interrupt domains using "interrupts" property
-> > in the node as this bypassed the hierarchical setup and messed up the
-> > irq chaining.
-> >
-> > In preparation for removal of static setup of IRQ resource from DT core
-> > code use platform_get_irq().
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > Hi,
-> >
-> > Ideally I would expect the mixer_resources_init() to be called from pro=
-be
-> > instead from the bind callback. If platform_get_irq() returns -EPROBE_D=
-EFER
-> > the bind callback will fail :(
->
-> If the bind callback failed then probe function of exynos drm driver will=
- call -EPROBE_DEFER like below so it must be no problem :),
-> --------------------------------------------
-> in exynos_drm_platform_probe function
->     component_master_add_with_match()
->
-> in component_master_add_with_match function
->     try_to_bring_up_master()
->
-Thank you for the clarification.
+5.16.1-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-Cheers,
-Prabhakar

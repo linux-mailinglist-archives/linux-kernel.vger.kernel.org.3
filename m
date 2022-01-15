@@ -2,151 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A4848F9A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 23:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A44048F9A9
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 23:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233817AbiAOWK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 17:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbiAOWK0 (ORCPT
+        id S233818AbiAOW0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 17:26:25 -0500
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:60083 "EHLO
+        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230464AbiAOW0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 17:10:26 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FA4C061574;
-        Sat, 15 Jan 2022 14:10:26 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id m4so48261222edb.10;
-        Sat, 15 Jan 2022 14:10:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=EPbI8Tt0WfUMwAmaR0DL4u0NGyT4Pfp5ibYD0UcG0DI=;
-        b=agj6fChYEnKrSoNxBVq48eG35QoBd5Z4IF+iAiicRpU2JWeJ9LfMJNox6L4q2g2RBL
-         4ETDJyBfAyhwTeit7qORH7ag0LnhF2LlADK4vfaVOzEQi/ZW5lHvfa82MDys4hXQK+C3
-         4hJN/NnQMc73yqTl5qISSYt5yrcUMzgCFAXwTi3GLM1kOeIw6js15Tx/R0XIYwz6PTXa
-         4ZwyvjW7pSAjcoWl9BMhmTQ0SloTVQLPkExYXobQE08n1ZfTuuww4aVBjSKCVRKtf75l
-         UwhvkbPdJkfEIcvOk0IyuUjkHa+J6Ffexa9DabrExe6AtDsr+WdXHHvkyFsvbMoVt92K
-         o4yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=EPbI8Tt0WfUMwAmaR0DL4u0NGyT4Pfp5ibYD0UcG0DI=;
-        b=DS8iPNcuvqk+asW/cA38H82w0E+EjGgqt1gbAU9JFKjfjuj+OuKuNIpRvc1vSTLdvt
-         DTUYU1SWA4e08/D8ImK0zTUcZT6tZL9PWl0jNxEeOlfTgFyuspVv7/pTyZmWhTZjt53j
-         BPtXQfwGAlWHLk9Lgx8u66aq3vAt1DNiF15OX+VSx60Y/DvXqP/uoKzehiqbBBsi5PLi
-         WnI+Yf6dADUFWXcp7v9y1mmj6YFFrVb+dllUh/akGBldsrJjMy6/3Hy4m3euyWNPUubI
-         zFxZpYMs3JQQDYCFyKovGrS3Oc1g+O4w/RnlLFZTDlaIZWZFIAUE3Q8JWlniP6hbs5R3
-         WuHA==
-X-Gm-Message-State: AOAM53217UHEIH0H3Q+lJ7IME0FhtGWIll2UVjhqaV2mLepYmPRifzBs
-        hFP0ApneTSFxl+/3vwAv4lY=
-X-Google-Smtp-Source: ABdhPJyyNWOlbijFCkXzof9hTCK0gRxJs24hN60XetvbzrKmVaUKeHF2ngn5PutlX7rMQmoqy+A9jQ==
-X-Received: by 2002:a17:907:9085:: with SMTP id ge5mr12006871ejb.128.1642284624835;
-        Sat, 15 Jan 2022 14:10:24 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id j5sm2957736ejo.177.2022.01.15.14.10.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 15 Jan 2022 14:10:24 -0800 (PST)
-Date:   Sat, 15 Jan 2022 22:10:23 +0000
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Wei Yang <richard.weiyang@gmail.com>, hannes@cmpxchg.org,
-        vdavydov.dev@gmail.com, akpm@linux-foundation.org,
-        shakeelb@google.com, guro@fb.com, vbabka@suse.cz,
-        willy@infradead.org, songmuchun@bytedance.com, shy828301@gmail.com,
-        surenb@google.com, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 1/4] mm/memcg: use NUMA_NO_NODE to indicate allocation
- from unspecified node
-Message-ID: <20220115221023.qndjlehjxdrj5r6b@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20220111010302.8864-1-richard.weiyang@gmail.com>
- <Yd1CdJA5NelzoK1D@dhcp22.suse.cz>
- <20220112004634.dc5suwei4ymyxaxg@master>
- <Yd6Xr7K9bKGVgGtI@dhcp22.suse.cz>
- <20220114002937.fnyq3yyk36j4nb3d@master>
- <YeE5k79uP3xBPCv7@dhcp22.suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeE5k79uP3xBPCv7@dhcp22.suse.cz>
-User-Agent: NeoMutt/20170113 (1.7.2)
+        Sat, 15 Jan 2022 17:26:24 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 2B30D2B001D1;
+        Sat, 15 Jan 2022 17:26:23 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute4.internal (MEProxy); Sat, 15 Jan 2022 17:26:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type:content-transfer-encoding; s=fm1; bh=GmKOC
+        EuMn8GQgtCLVZiEgJqH55Q45JknrWSsBbMngLI=; b=WQO5YUwnDN6rc8tCRR3Eh
+        1qB/UoUoyDj10qanPA11rfz+gjF3aqfLDZfpy0PrzPOH5pNo8lBJa/tIPXnEwP7v
+        NLhUBYdDJoAspfs01zGXjEa4b3JJG0Jfz2KTyJC9Mt9AYMSaaN8jG9efdTtQ02YC
+        e/qe3Z6nWTmh/PC6Uwv9CIORB//Bey2dVkKLdR6m9cGdQ7jL4lOutikMPvH4U2kO
+        lrDksICkT5q64z4FPGW2U4IjOJ2P/sNfJv2buUdpw/3r2xIANZ1pcxi+4EtOTrOL
+        uphWID5Epb3ioFg8oz4W63zSVyPbpcLLdgQvdUOSOzQJUYyl+i3L9vP9lWZRkPaH
+        Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=GmKOCEuMn8GQgtCLVZiEgJqH55Q45JknrWSsBbMng
+        LI=; b=V6+M9jS1uQov96onjFx0eoJwKucGF/D9LSwzpj6yjng0KGL1/86j2XG2R
+        7xhoBJiwdKdlC+HU4yrGdI93awwzMjhW/TkmvwwjnpfTh3RfEhHdm9WAHAc4279U
+        4lm2dUhGe9kCKz2kI3cdUAdRj15dZq/KBlePAlyCKyr8iFP7r6eCnzX+q+gIicpR
+        OdEsQHWr5l8ykA/90kTD1yRahc68Q6/N8dSPZiCBYGj31rh1Zplar34Rcy7pfB20
+        49VxidC+PYTlHZIFD2mGEsS3IwITP27mhA47s29WurNwymnEBEpa5wmK6Y8Ru1ph
+        h22trHLZaanpE4g91UlMQnDKzmf4Q==
+X-ME-Sender: <xms:DUrjYY7E31sjimgksyoYl8YS1iGN87dOMstybIUIE9IHTX02XBMWsw>
+    <xme:DUrjYZ5gvMcfXjE8IJCjtS1DBt9LZzNIWkLrhaBzz0pwyoSZ9EaPjLkTuc2KOgBjk
+    r6u-nRJYAvWxwMEOmw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrtdejgdduieduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepuddvhfdvgeekgeduheelhefgjeeuhfegieelueevfffg
+    kefgudevfefgkeduffeinecuffhomhgrihhnpehgohhoghhlvghsohhurhgtvgdrtghomh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgr
+    gihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:DUrjYXdvC1eovAQHLkA3aBXeIKPv0ZkbQL-Nn4gftwRb62fLYb7YSA>
+    <xmx:DUrjYdLLmo6EoCy31fccZAo6kh6XYiEsw7yAN5UFqGC4lSq73cDr3w>
+    <xmx:DUrjYcI44wjkot0uoJH0yfAg267B1IIlPW_HhiopeKsQC4Fwy6D3Mg>
+    <xmx:DkrjYRWFIqNmKYKtOf7Z48JGcUZEtpI7-t_rdO0rWbB4eXEAUltoUl0N2DI>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D1B5AFA0AA6; Sat, 15 Jan 2022 17:26:21 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4569-g891f756243-fm-20220111.001-g891f7562
+Mime-Version: 1.0
+Message-Id: <f6e1858c-a31f-4f07-96ed-fb1d792dab49@www.fastmail.com>
+In-Reply-To: <20220115193245.3777833-3-laurent@vivier.eu>
+References: <20220115193245.3777833-1-laurent@vivier.eu>
+ <20220115193245.3777833-3-laurent@vivier.eu>
+Date:   Sat, 15 Jan 2022 22:25:58 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Laurent Vivier" <laurent@vivier.eu>, linux-kernel@vger.kernel.org
+Cc:     "John Stultz" <john.stultz@linaro.org>, linux-rtc@vger.kernel.org,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Arnd Bergmann" <arnd@arndb.de>, linux-m68k@lists.linux-m68k.org
+Subject: Re: [PATCH v8 2/4] rtc: goldfish: introduce
+ goldfish_ioread32()/goldfish_iowrite32()
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 09:51:31AM +0100, Michal Hocko wrote:
->On Fri 14-01-22 00:29:37, Wei Yang wrote:
->> On Wed, Jan 12, 2022 at 09:56:15AM +0100, Michal Hocko wrote:
->> >On Wed 12-01-22 00:46:34, Wei Yang wrote:
->> >> On Tue, Jan 11, 2022 at 09:40:20AM +0100, Michal Hocko wrote:
->> >> >On Tue 11-01-22 01:02:59, Wei Yang wrote:
->> >> >> Instead of use "-1", let's use NUMA_NO_NODE for consistency.
->> >> >> 
->> >> >> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
->> >> >
->> >> >I am not really sure this is worth it. After the merge window I plan to
->> >> >post http://lkml.kernel.org/r/20211214100732.26335-1-mhocko@kernel.org.
->> >> 
->> >> Give me some time to understand it :-)
->> >
->> >Just for the record, here is what I have put on top of that series:
->> 
->> Ok, I got what you try to resolve. I am ok with the following change except
->> one point.
->> 
->> >--- 
->> >>From b7195eba02fe6308a6927450f4630057c05e808e Mon Sep 17 00:00:00 2001
->> >From: Wei Yang <richard.weiyang@gmail.com>
->> >Date: Tue, 11 Jan 2022 09:45:25 +0100
->> >Subject: [PATCH] memcg: do not tweak node in alloc_mem_cgroup_per_node_info
->> >
->> >alloc_mem_cgroup_per_node_info is allocated for each possible node and
->> >this used to be a problem because not !node_online nodes didn't have
->> >appropriate data structure allocated. This has changed by "mm: handle
->> >uninitialized numa nodes gracefully" so we can drop the special casing
->> >here.
->> >
->> >Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
->> >Signed-off-by: Michal Hocko <mhocko@suse.com>
->> >---
->> > mm/memcontrol.c | 14 ++------------
->> > 1 file changed, 2 insertions(+), 12 deletions(-)
->> >
->> >diff --git a/mm/memcontrol.c b/mm/memcontrol.c
->> >index 781605e92015..ed19a21ee14e 100644
->> >--- a/mm/memcontrol.c
->> >+++ b/mm/memcontrol.c
->> >@@ -5044,18 +5044,8 @@ struct mem_cgroup *mem_cgroup_from_id(unsigned short id)
->> > static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
->> > {
->> > 	struct mem_cgroup_per_node *pn;
->> >-	int tmp = node;
->> >-	/*
->> >-	 * This routine is called against possible nodes.
->> >-	 * But it's BUG to call kmalloc() against offline node.
->> >-	 *
->> >-	 * TODO: this routine can waste much memory for nodes which will
->> >-	 *       never be onlined. It's better to use memory hotplug callback
->> >-	 *       function.
->> >-	 */
->> 
->> Do you think this TODO is not related to this change?
->
->It is not really related but I am not sure how useful it is. Essentially
->any allocation that is per-possible node is in the same situation and if
->we really need to deal with large and sparse possible nodes masks.
->
 
-Sounds reasonable :-)
 
->If you want me to keep the TODO I will do it though.
+=E5=9C=A82022=E5=B9=B41=E6=9C=8815=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8B=E5=
+=8D=887:32=EF=BC=8CLaurent Vivier=E5=86=99=E9=81=93=EF=BC=9A
+> The goldfish device always uses the same endianness as the architecture
+> using it:
+> https://android.googlesource.com/platform/external/qemu/+/refs/heads/e=
+mu-master-dev/hw/timer/goldfish_timer.c#177
 >
->-- 
->Michal Hocko
->SUSE Labs
+> On a big-endian machine, the device is also big-endian, on a
+> little-endian machine the device is little-endian.
+>
+> So we need to use the right accessor to read/write values to the goldf=
+ish
+> registers: ioread32()/iowrite32() on a little-endian machine,
+> ioread32be()/iowrite32be() on a big-endian machine.
+>
+> This patch introduces goldfish_ioread32()/goldfish_iowrite32() that us=
+es
+> the expected accessor according to the machine endianness.
+>
+> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 
--- 
-Wei Yang
-Help you, Help me
+Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+> ---
+>  drivers/rtc/rtc-goldfish.c | 39 +++++++++++++++++++++++---------------
+>  1 file changed, 24 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/rtc/rtc-goldfish.c b/drivers/rtc/rtc-goldfish.c
+> index 7ab95d052644..b0cae4729b03 100644
+> --- a/drivers/rtc/rtc-goldfish.c
+> +++ b/drivers/rtc/rtc-goldfish.c
+> @@ -23,6 +23,15 @@
+>  #define TIMER_ALARM_STATUS	0x18
+>  #define TIMER_CLEAR_INTERRUPT	0x1c
+>=20
+> +/* goldfish endianness depends on CPU endianness */
+> +#ifdef CONFIG_CPU_BIG_ENDIAN
+> +#define goldfish_ioread32 ioread32be
+> +#define goldfish_iowrite32 iowrite32be
+> +#else
+> +#define goldfish_ioread32 ioread32
+> +#define goldfish_iowrite32 iowrite32
+> +#endif
+> +
+>  struct goldfish_rtc {
+>  	void __iomem *base;
+>  	int irq;
+> @@ -41,8 +50,8 @@ static int goldfish_rtc_read_alarm(struct device *de=
+v,
+>  	rtcdrv =3D dev_get_drvdata(dev);
+>  	base =3D rtcdrv->base;
+>=20
+> -	rtc_alarm_low =3D readl(base + TIMER_ALARM_LOW);
+> -	rtc_alarm_high =3D readl(base + TIMER_ALARM_HIGH);
+> +	rtc_alarm_low =3D goldfish_ioread32(base + TIMER_ALARM_LOW);
+> +	rtc_alarm_high =3D goldfish_ioread32(base + TIMER_ALARM_HIGH);
+>  	rtc_alarm =3D (rtc_alarm_high << 32) | rtc_alarm_low;
+>=20
+>  	do_div(rtc_alarm, NSEC_PER_SEC);
+> @@ -50,7 +59,7 @@ static int goldfish_rtc_read_alarm(struct device *de=
+v,
+>=20
+>  	rtc_time64_to_tm(rtc_alarm, &alrm->time);
+>=20
+> -	if (readl(base + TIMER_ALARM_STATUS))
+> +	if (goldfish_ioread32(base + TIMER_ALARM_STATUS))
+>  		alrm->enabled =3D 1;
+>  	else
+>  		alrm->enabled =3D 0;
+> @@ -71,18 +80,18 @@ static int goldfish_rtc_set_alarm(struct device *d=
+ev,
+>=20
+>  	if (alrm->enabled) {
+>  		rtc_alarm64 =3D rtc_tm_to_time64(&alrm->time) * NSEC_PER_SEC;
+> -		writel((rtc_alarm64 >> 32), base + TIMER_ALARM_HIGH);
+> -		writel(rtc_alarm64, base + TIMER_ALARM_LOW);
+> -		writel(1, base + TIMER_IRQ_ENABLED);
+> +		goldfish_iowrite32((rtc_alarm64 >> 32), base + TIMER_ALARM_HIGH);
+> +		goldfish_iowrite32(rtc_alarm64, base + TIMER_ALARM_LOW);
+> +		goldfish_iowrite32(1, base + TIMER_IRQ_ENABLED);
+>  	} else {
+>  		/*
+>  		 * if this function was called with enabled=3D0
+>  		 * then it could mean that the application is
+>  		 * trying to cancel an ongoing alarm
+>  		 */
+> -		rtc_status_reg =3D readl(base + TIMER_ALARM_STATUS);
+> +		rtc_status_reg =3D goldfish_ioread32(base + TIMER_ALARM_STATUS);
+>  		if (rtc_status_reg)
+> -			writel(1, base + TIMER_CLEAR_ALARM);
+> +			goldfish_iowrite32(1, base + TIMER_CLEAR_ALARM);
+>  	}
+>=20
+>  	return 0;
+> @@ -98,9 +107,9 @@ static int goldfish_rtc_alarm_irq_enable(struct dev=
+ice *dev,
+>  	base =3D rtcdrv->base;
+>=20
+>  	if (enabled)
+> -		writel(1, base + TIMER_IRQ_ENABLED);
+> +		goldfish_iowrite32(1, base + TIMER_IRQ_ENABLED);
+>  	else
+> -		writel(0, base + TIMER_IRQ_ENABLED);
+> +		goldfish_iowrite32(0, base + TIMER_IRQ_ENABLED);
+>=20
+>  	return 0;
+>  }
+> @@ -110,7 +119,7 @@ static irqreturn_t goldfish_rtc_interrupt(int irq,=20
+> void *dev_id)
+>  	struct goldfish_rtc *rtcdrv =3D dev_id;
+>  	void __iomem *base =3D rtcdrv->base;
+>=20
+> -	writel(1, base + TIMER_CLEAR_INTERRUPT);
+> +	goldfish_iowrite32(1, base + TIMER_CLEAR_INTERRUPT);
+>=20
+>  	rtc_update_irq(rtcdrv->rtc, 1, RTC_IRQF | RTC_AF);
+>=20
+> @@ -128,8 +137,8 @@ static int goldfish_rtc_read_time(struct device=20
+> *dev, struct rtc_time *tm)
+>  	rtcdrv =3D dev_get_drvdata(dev);
+>  	base =3D rtcdrv->base;
+>=20
+> -	time_low =3D readl(base + TIMER_TIME_LOW);
+> -	time_high =3D readl(base + TIMER_TIME_HIGH);
+> +	time_low =3D goldfish_ioread32(base + TIMER_TIME_LOW);
+> +	time_high =3D goldfish_ioread32(base + TIMER_TIME_HIGH);
+>  	time =3D (time_high << 32) | time_low;
+>=20
+>  	do_div(time, NSEC_PER_SEC);
+> @@ -149,8 +158,8 @@ static int goldfish_rtc_set_time(struct device=20
+> *dev, struct rtc_time *tm)
+>  	base =3D rtcdrv->base;
+>=20
+>  	now64 =3D rtc_tm_to_time64(tm) * NSEC_PER_SEC;
+> -	writel((now64 >> 32), base + TIMER_TIME_HIGH);
+> -	writel(now64, base + TIMER_TIME_LOW);
+> +	goldfish_iowrite32((now64 >> 32), base + TIMER_TIME_HIGH);
+> +	goldfish_iowrite32(now64, base + TIMER_TIME_LOW);
+>=20
+>  	return 0;
+>  }
+> --=20
+> 2.34.1
+
+--=20
+- Jiaxun

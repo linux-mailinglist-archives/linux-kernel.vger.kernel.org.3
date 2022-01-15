@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 521EF48F7D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2790C48F7C4
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiAOQbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 11:31:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        id S233062AbiAOQ0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 11:26:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiAOQbZ (ORCPT
+        with ESMTP id S230030AbiAOQ03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 11:31:25 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D14C061574
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 08:31:24 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1FCCCA24;
-        Sat, 15 Jan 2022 17:31:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642264282;
-        bh=SKPkoj4u1M/XPVndCWVekUDTPMbBU42gAJzWiSZ/tSw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sfjywUnQtbJWIOkgbB9ljNhzsOcv9dwP6N+A+zlmadlXB75/Vo6NYjkqzlufkEaYz
-         ETneE1V23HjKX4MgbSxuyRph54mTtIgr9tB3B8CzvhaxD5dbSHvctM1SIzU0peCpmI
-         AE2jUfRuEujQkno1mKGXXgz4fF/BJ6XJ+BDvxAxU=
-Date:   Sat, 15 Jan 2022 18:31:08 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Watson Chow <watson.chow@avnet.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH] regulator: MAX20086: add gpio/consumer.h
-Message-ID: <YeL2zLp9jsbBqMYG@pendragon.ideasonboard.com>
-References: <20220115033603.24473-1-rdunlap@infradead.org>
+        Sat, 15 Jan 2022 11:26:29 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD51AC061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 08:26:28 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id x7so40878481lfu.8
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 08:26:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:user-agent:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4xnnkY/0N7vitggBHBYyS2U/q+4IqBCzhx6kWTZjGxw=;
+        b=DFLIY5qvAceQd6eNdBXxvpVJFkF/1amxaCDjTsCXWvZv3f+yz4gz6EJXJRrlnLdcs6
+         1yFfCIwuz8a4tluCjQrvtSChlWgk2L+rBBmiIHGUhaDZUqhWl1Kwf+29b2ssptS4eRvn
+         L55UyaRl0eIFHWMH14JXMCJi9Nb3Z1t/DF77RdwurVr9CFIrM9Sod4bPaltxSTLNFlQD
+         UZXz0SVdi8UUW8H1p9NKo6e70BcmwTahPZo7CQVWnKQmXpN8tOxRTInZEfjXPbdN8kpj
+         PyBZmqb5DNywbSXYcvK+ZFLlymQ4EceTWle5V0ELPg7SAZjoBTUITJ17qxhxccSb0Jgd
+         fv1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:user-agent
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=4xnnkY/0N7vitggBHBYyS2U/q+4IqBCzhx6kWTZjGxw=;
+        b=7ztZ4A2P1EODNclivWjpJhVgPd6nim/aNmzjKipk76OnaioUfOa+LSdF4fgMeZ/9bh
+         6JEivdVxeOgoX28Q9kiWSBJlhZqhz9U4+DGIVVa15jZQ/FleEKzTvuq/nnpAlVDKZImu
+         L9gr/gB0ltZpbHCFb2nwj5WoMTCSEmXpGsKMrhlLZagJsZ8CLaSO81rMX09Jx/ymd7Bp
+         Cin/z+c7BDTP5H+mv7/u6dTTtljEVKLNzmjIVhi9jMrnQKxZnDQmPHctX0UoSg/+CDhw
+         nVTFQ9jktePcb+LYNuNUBQs6mYojG6ybd1/aA3giaX5CkCr+2Osjzcvt/VS8lZjP9hpA
+         42Uw==
+X-Gm-Message-State: AOAM532qkMKrRBA/O5nsWuldXnEwO2F6KNqIZ8s2hCWG3yWW1YQF5YKR
+        OikK3uwuuvucfrIOB+B1D1o=
+X-Google-Smtp-Source: ABdhPJyE6L8fzGlQGy/ier4fQfMSK2AuzP91lK0y4ZIb+Fm1j7k/Ep/M8wewAgqI+E5fn5Bd3pdLIw==
+X-Received: by 2002:a2e:3508:: with SMTP id z8mr9974618ljz.37.1642263986739;
+        Sat, 15 Jan 2022 08:26:26 -0800 (PST)
+Received: from localhost.localdomain (ntd06459.static.corbina.ru. [95.31.14.149])
+        by smtp.gmail.com with ESMTPSA id x6sm902368lfn.144.2022.01.15.08.26.26
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Sat, 15 Jan 2022 08:26:26 -0800 (PST)
+Date:   Sat, 15 Jan 2022 19:32:08 +0300
+From:   Alexander Sergeyev <sergeev917@gmail.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
+        Elia Devito <eliadevito@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] ALSA: hda/realtek: fix speakers and micmute on HP
+ 855 G8
+Message-ID: <20220115163208.xmvum6ehqcadonj7@localhost.localdomain>
+User-Agent: mtt
+References: <20220114164904.lgj7yimbei6fmloe@localhost.localdomain>
+ <20220114165050.ouw2nknuspclynro@localhost.localdomain>
+ <CAAd53p6KXD2mEHgkU_TpTrsU-vQ9Vxdip+6sPfDaVoSOkmaz-g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220115033603.24473-1-rdunlap@infradead.org>
+In-Reply-To: <CAAd53p6KXD2mEHgkU_TpTrsU-vQ9Vxdip+6sPfDaVoSOkmaz-g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+On Sat, Jan 15, 2022 at 11:47:40PM +0800, Kai-Heng Feng wrote:
+> > Note that the device can boot up with working speakers and micmute LED
+> > without this patch, but the success rate would be quite low (order of
+> > 16 working boots across 709 boots) at least for the built-in drivers
+> > scenario. This also means that there are some timing issues during early
+> > boot and this patch is a workaround.
+>
+> Does this issue happen to warm boot (reboot) or cold boot?
 
-Thank you for the patch.
+The issue is definitely not limited to warm boots only. I can confirm cold 
+boots with no sound and also warm boots with functioning sound. With this in 
+mind, the provided numbers (16 good boots across 709 boots) are largely coming 
+from reboots since the testing was scripted and driven by SSH.
 
-On Fri, Jan 14, 2022 at 07:36:03PM -0800, Randy Dunlap wrote:
-> max20086-regulator.c needs <linux/gpio/consumer.h> for an enum, some
-> macros, and a function prototype. (seen on ARCH=m68k)
-> 
-> Adding this header file fixes multiple build errors:
-> 
-> ../drivers/regulator/max20086-regulator.c: In function 'max20086_i2c_probe':
-> ../drivers/regulator/max20086-regulator.c:217:26: error: storage size of 'flags' isn't known
->   217 |         enum gpiod_flags flags;
-> ../drivers/regulator/max20086-regulator.c:261:27: error: 'GPIOD_OUT_HIGH' undeclared (first use in this function); did you mean 'GPIOF_INIT_HIGH'?
->   261 |         flags = boot_on ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
->       |                           ^~~~~~~~~~~~~~
-> ../drivers/regulator/max20086-regulator.c:261:44: error: 'GPIOD_OUT_LOW' undeclared (first use in this function); did you mean 'GPIOF_INIT_LOW'?
->   261 |         flags = boot_on ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
-> ../drivers/regulator/max20086-regulator.c:262:27: error: implicit declaration of function 'devm_gpiod_get'; did you mean 'devm_gpio_free'? [-Werror=implicit-function-declaration]
->   262 |         chip->ena_gpiod = devm_gpiod_get(chip->dev, "enable", flags);
-> ../drivers/regulator/max20086-regulator.c:217:26: warning: unused variable 'flags' [-Wunused-variable]
->   217 |         enum gpiod_flags flags;
-> 
-> Fixes: bfff546aae50 ("regulator: Add MAX20086-MAX20089 driver")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Watson Chow <watson.chow@avnet.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> If the issue only happen to warm boot, please try reverting commit
+> 9d3fcb28f9b9 "Revert "PM: ACPI: reboot: Use S5 for reboot"".
+> Many HP systems requires it to have a functional reboot.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/regulator/max20086-regulator.c |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> --- linux-next-20220114.orig/drivers/regulator/max20086-regulator.c
-> +++ linux-next-20220114/drivers/regulator/max20086-regulator.c
-> @@ -7,6 +7,7 @@
->  
->  #include <linux/err.h>
->  #include <linux/gpio.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/i2c.h>
->  #include <linux/module.h>
->  #include <linux/regmap.h>
-
--- 
-Regards,
-
-Laurent Pinchart
+Interesting. I haven't noticed anything breaking with reboots on this 
+particular system (at least so far).

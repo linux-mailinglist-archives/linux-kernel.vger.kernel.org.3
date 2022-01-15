@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FFB48F8A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 19:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8172F48F8A8
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 19:11:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233327AbiAOSIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 13:08:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
+        id S233390AbiAOSLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 13:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbiAOSIY (ORCPT
+        with ESMTP id S231278AbiAOSLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 13:08:24 -0500
+        Sat, 15 Jan 2022 13:11:01 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A457C061574;
-        Sat, 15 Jan 2022 10:08:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F74C061574;
+        Sat, 15 Jan 2022 10:11:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD85DB809E3;
-        Sat, 15 Jan 2022 18:08:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D58C36AE5;
-        Sat, 15 Jan 2022 18:08:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E64AB80A89;
+        Sat, 15 Jan 2022 18:11:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA03BC36AE7;
+        Sat, 15 Jan 2022 18:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642270101;
-        bh=ti3EFz0vjLpT5haAhw/2g1kDCJrvQ9FNEfVIwLyjAGI=;
+        s=k20201202; t=1642270259;
+        bh=2PWywdObtfGp7J3+7ngcsnTM6kfub2PBBTbBnzm4lhE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ncpxx8oWYCHYt4ZiADAmRIN2UVdscboPCLrjamKcB2VnbjLASvv9zlERBmsHMBVNu
-         muyWJovg3FMNhUKJVMQN/E3AMZVnGmq3NrAio+beFUY/hWPN3EhJUCKRDDHEOb3wJJ
-         1tJuGEvUwTuVVWcJsX3UjimbkKwvBoYTimnXDL83I5Qzmt6C0etnnmL0brZ8+Q6+NB
-         rxnskp9ukWjNJXZCYQRdPPMbMNNkTsEcaV8Yf/3w4V2CgA6TtaGD71zO50JTP1HB+J
-         dLWvOrIwsqxqFztQeL/jRcUsKqeH46bOX4OKF9hDbgN09GWRFNUXYOQZbuxxn7YJKS
-         j2niK1ZojC2qQ==
-Date:   Sat, 15 Jan 2022 18:14:22 +0000
+        b=s3eJH/ugwNk+p8MbDxFSC9LnvnGfzEsg4QII/QRBsvsG+LEOx/PuNeSj6b60sS/Yy
+         BG9Je6wEtPmHM9ROXxw9QGXrUKeZgVZ5OX+y/CGwneG+mr5VOUlDjk5zeTQGAmYkOL
+         HouggdMpMT8ZCr6LlYrSCFoRgJm4bzJs8qJ+cXD0GxbbSnaE95rX9CJiDOxyVTM1V+
+         qiNS1D9bHHj0FGH7hkjf28pN8RDigxWCTbOSgoRN17xq6/P4tMBpYrXp39AZRlsmzn
+         yUeW9tJbIzWLg+1J2qbRiIwBlTYgd0AwffFN6tf+vK5W/UEWja61rGZRWk6gJJN+a+
+         Oipiw7V9To3tg==
+Date:   Sat, 15 Jan 2022 18:16:59 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Oleksij Rempel <o.rempel@pengutronix.de>
 Cc:     devicetree@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
@@ -41,13 +41,13 @@ Cc:     devicetree@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
         linux-kernel@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         David Jander <david@protonic.nl>
-Subject: Re: [PATCH v1 1/1] iio: adc: tsc2046: rework the trigger state
- machine
-Message-ID: <20220115181422.0b622b69@jic23-huawei>
-In-Reply-To: <20220110123903.GC3326@pengutronix.de>
-References: <20220107074017.2762347-1-o.rempel@pengutronix.de>
-        <20220109154404.75e0ed2f@jic23-huawei>
-        <20220110123903.GC3326@pengutronix.de>
+Subject: Re: [PATCH v1 1/1] iio: adc: tsc2046: fix memory corruption by
+ preventing array overflow
+Message-ID: <20220115181659.0c759ec5@jic23-huawei>
+In-Reply-To: <20220110071945.GB3326@pengutronix.de>
+References: <20220107081401.2816357-1-o.rempel@pengutronix.de>
+        <20220109152557.74f06d2d@jic23-huawei>
+        <20220110071945.GB3326@pengutronix.de>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -56,57 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-...
+On Mon, 10 Jan 2022 08:19:45 +0100
+Oleksij Rempel <o.rempel@pengutronix.de> wrote:
 
-> > >  
-> > > -static enum hrtimer_restart tsc2046_adc_trig_more(struct hrtimer *hrtimer)
-> > > +static enum hrtimer_restart tsc2046_adc_timer(struct hrtimer *hrtimer)
-> > >  {
-> > >  	struct tsc2046_adc_priv *priv = container_of(hrtimer,
-> > >  						     struct tsc2046_adc_priv,
-> > >  						     trig_timer);
-> > >  	unsigned long flags;
-> > >  
-> > > -	spin_lock_irqsave(&priv->trig_lock, flags);
-> > > -
-> > > -	disable_irq_nosync(priv->spi->irq);
-> > > -
-> > > -	priv->trig_more_count++;
-> > > -	iio_trigger_poll(priv->trig);
-> > > -
-> > > -	spin_unlock_irqrestore(&priv->trig_lock, flags);
-> > > +	spin_lock_irqsave(&priv->state_lock, flags);
-> > > +	switch (priv->state) {
-> > > +	case TSC2046_STATE_ENABLE_IRQ_POLL:
-> > > +		/*
-> > > +		 * IRQ handler called iio_trigger_poll() to sample ADC.
-> > > +		 * Here we
-> > > +		 * - re-enable IRQs
-> > > +		 * - start hrtimer for timeout if no IRQ will occur
-> > > +		 */
-> > > +		priv->state = TSC2046_STATE_POLL;
-> > > +		enable_irq(priv->spi->irq);  
+> Hi Jonathan,
+> 
+> On Sun, Jan 09, 2022 at 03:25:57PM +0000, Jonathan Cameron wrote:
+> > On Fri,  7 Jan 2022 09:14:01 +0100
+> > Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+> >   
+> > > On one side we have indio_dev->num_channels includes all physical channels +
+> > > timestamp channel. On other side we have an array allocated only for
+> > > physical channels. So, fix memory corruption by ARRAY_SIZE() instead of
+> > > num_channels variable.
+> > > 
+> > > Fixes: 9374e8f5a38d ("iio: adc: add ADC driver for the TI TSC2046 controller")
+> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>  
+> > Hi Olesij,
 > > 
-> > I comment on this below, but I'm not sure why you don't move the enable_irq()
-> > here out of this timer function and then have the first entry of the timer
-> > go directly to TSC2046_STATE_POLL after a longer initial wait.  
+> > Have you managed to make this occur, or is it inspection only?  
 > 
-> Hm... yes. You are right.
+> Yes, this bug has eaten my rx_one and tx_one pointers on probe. I wonted
+> to use this buffers for read_raw and noticed that they do not exist.
+
+I got hung up on the first case and failed to notice the second one was
+entirely different :(
+
 > 
-> > It's been a long time since I looked at this, so perhaps I'm missing the
-> > point.  What you have here works as far as I can see, it just seems to push
-> > more than necessary into the state machine.  
+> > I 'think' (it's been a while since I looked at the particular code) that the timestamp
+> > bit in active_scan_mask will never actually be set because we handle that as a
+> > separate flag.  
 > 
-> The IRQ line is a level shifter connected to one of channels muxed to the core
-> ADC. If we switch internal muxer to different channel, the IRQ line will
-> change the state.
-> 
-> So, we need a trigger which:
-> - do not triggers if we do ADC readings.
-> - keeps triggering as long as we have some state changes on the IRQ line
-> - trigger only with specific rate
-> - still triggers for some amount of time after last interrupt event was
->   detected. Current implementation is doing only one extra read.
-Ah.. Good explanation, I get the point now :)
+> I didn't tested if active_scan_mask will trigger this issue as well, but
+> It it looked safer to me, to avoid this issue in both places. Even if on
+> of it is only theoretical.
+
+It certainly does no harm to not check a bit that is never set, so I'm fine with
+the change - just don't want to have lots of 'fixes' for this in other drivers
+adding noise and pointless backports.  This one is fine because we need the
+other part of the patch anyway.
 
 Jonathan
+
+
+> 
+> > So it is indeed an efficiency improvement to not check that bit but I don't think
+> > it's a bug to do so.  More than possible I'm missing something though!
+> > 
+> > This one had me quite worried when I first read it because this is a very common
+> > pattern to see in IIO drivers.  
+> 
+> I was thinking about this as well, because big part of this code was
+> inspired by other drivers. But i didn't reviewed other places so far.
+> 
+> Regards,
+> Oleksij
+

@@ -2,142 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6D548F808
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B8448F80C
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbiAOQue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 11:50:34 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:35498
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232334AbiAOQud (ORCPT
+        id S232286AbiAOQzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 11:55:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230028AbiAOQzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 11:50:33 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 55F8C3F175
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 16:50:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642265432;
-        bh=Bx9uLSJo5l3JJeDZs91+co32u9UjuiQG91WGogmNU6Q=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=MtnvNRIudjO+5jAE8wxALjsdcKYlMohjcZlOVOYrlGQl91nQaZKhS1FHkU9kVjEiL
-         FSxHkxvA7Ags0QNW2oyhG32vcGnqjPA84ytf+Jh6yqLMfvD7vyp9l+DMAxz0WBxvdm
-         /WUTWn8FJT9Ss5WyneiS9gAC/Ej+eWLbdCPmv7Bei6h8cRH6UDW0tixQwzbidw/Yxr
-         9hxD7CiCWs1fH1tUPcQB0vrHWhteVbnnrU8noHTnWpcWWW4WgcZMCN3OWhsAl9mdHP
-         G03rCXHYd27v2jbQVYPX3hckxJJ34eOtET6iraIGdnyTNFJN4qJA84pBbSAx6gKoew
-         FBtLI6l6R69lQ==
-Received: by mail-ed1-f69.google.com with SMTP id h11-20020a05640250cb00b003fa024f87c2so10679758edb.4
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 08:50:32 -0800 (PST)
+        Sat, 15 Jan 2022 11:55:00 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB25C061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 08:55:00 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id a12-20020a0568301dcc00b005919e149b4cso14086810otj.8
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 08:55:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wPgyFuTox01av7U+DJqMeKP3vPYCTSABryDAUujue2Y=;
+        b=e/owIVOuXVXPU79WZA79ZjD+KGsjuxQLQkGst3J6FhawCzTq5yb3GVlbzXXuk0RcuS
+         L1FRNScB2fAu4GhvbuehqXn74TmcsVUYjcYiUsO/3fEU8JBvH3cVQJHgy23IMOnfyIkL
+         Hh3b6By8wqW8oDEXApUyz/GofjKLD4eLKAT3Sapn9l2gFJBM4ZkIO3nGf7d+oH0rgJE8
+         Xq6DFcdOOrocwVe6f6lRNdXpf82XfH6Kyh2z+D3BzdCSxrVDPp9xPKfvlqK13lAVyzYk
+         R4tccxhmbXYnuvWSCgvyWHvqvHZZiqHb7Edkiem8nFzzR7evGKdAcTeZS8ESu1Jfoiix
+         fvGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Bx9uLSJo5l3JJeDZs91+co32u9UjuiQG91WGogmNU6Q=;
-        b=6Ysx93AJq/pF/7IsaXX/WBgbsrdPrtnBkdQgz9pF1BswJw9kiGzBeZzDN4KcteCIrb
-         xJfx+eNiyLLbdGVsA9LfGrJlEUSy5HHXK1q403bRd3R+YKI3DxlBT0u6w/ecFGZcrFdI
-         /eDszCATCBNjvF7/1rP0rUuyVJK7ku1glGFxObRsbkyE+vEogiCGoSrauQb3TwYhK//H
-         bvN46nBTz5Yu4o3BzkKJehSJENM/CawTEvUkOvrlaJCQ/5zAQi4WqXU4tOAuLZ4+oOTc
-         wypgRx+X09ww2pJEKLC9+Cr6i1kGROir/dSuQquhm0yKB7YJ9X6g9Nxqah7Oan4Lu94f
-         Syyw==
-X-Gm-Message-State: AOAM531Y7lNZp0ng4ApTjCfzjH2Srtcy7A1ZvbP0RgGPLIYvbmfNjv/A
-        Zts3R8gXm0/PPrR4Zt6nrcXnIfdUvLJKxZRgD3LolOsFdV//9t7f0anKlQhxNYNgtZZErud6VrP
-        dho7sh7mxf6HBWeASZvGkzWylixVgpcZdJxupZ7kXZQ==
-X-Received: by 2002:a05:6402:274e:: with SMTP id z14mr13630440edd.242.1642265431970;
-        Sat, 15 Jan 2022 08:50:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxRLa3GxKNNLPh4BLAvTX7vywOhl+rcpBmhKj4yXRpgSX3ph0nQ8ZGU37WZXch190wkFfTr4g==
-X-Received: by 2002:a05:6402:274e:: with SMTP id z14mr13630429edd.242.1642265431793;
-        Sat, 15 Jan 2022 08:50:31 -0800 (PST)
-Received: from [192.168.0.35] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id u12sm2741591eda.56.2022.01.15.08.50.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Jan 2022 08:50:31 -0800 (PST)
-Message-ID: <da5c9727-45c6-f2be-5a31-2214d0d1e9c0@canonical.com>
-Date:   Sat, 15 Jan 2022 17:50:30 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wPgyFuTox01av7U+DJqMeKP3vPYCTSABryDAUujue2Y=;
+        b=akFeEE3v79YqXzAhuNOpJb5Cx3JNHyTR40YJ9YXlNzwRvI7sa7W4JJATPUUrWoFAco
+         uA8RXnPozNym4R9ekwOwYuPjwCwM97yS1P7xLoPamGWuxi1i/HOizcIzVJahW/4Hji/g
+         vRO/danOaa4rPC3p1bnqh+jhvMethvyXAd+WYXZnbpohJqH3Vhu90WEEmND/F5F0lT4N
+         LcPeHlKTWj6fQnFKagMBFnZYoFTNNtBxtIckl0vvyJR0IfQmLkuw1OGbI7SaOZQBpagq
+         knk36R8KIV7UoXB8gXTjN1PG7w9NMSXP8gDJdIBE4g0H9IDPGnxfuxQu5OYir2oSLBnZ
+         sJcg==
+X-Gm-Message-State: AOAM531INe0CX39EbI5DeznJpfAKU/U5TFnjFc5W6fIDB2H+IBdpmXj8
+        rJuPpYeC0UDRkjI9XUVTDjnkUlbQqIlkvOqQOh4=
+X-Google-Smtp-Source: ABdhPJyCrp7HgOT0T0Y0VZuwS4QUHOoNKIL6bbxlrk8sRTjJ9PdCExDDK2T4XWd9LsWg4v2gbjEvyA/OTnf8QqwxvVc=
+X-Received: by 2002:a05:6830:19e6:: with SMTP id t6mr8393080ott.357.1642265699611;
+ Sat, 15 Jan 2022 08:54:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 11/11] arm64: dts: freescale: add initial support for
- verdin imx8m mini
-Content-Language: en-US
-To:     Marcel Ziswiler <marcel@ziswiler.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Marek Vasut <marek.vasut@gmail.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Arnd Bergmann <arnd@arndb.de>, Chester Lin <clin@suse.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Michael Walle <michael@walle.cc>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Olof Johansson <olof@lixom.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220114141507.395271-1-marcel@ziswiler.com>
- <20220114141507.395271-12-marcel@ziswiler.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220114141507.395271-12-marcel@ziswiler.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220113074016.15163-1-christian.gmeiner@gmail.com>
+ <c88a1dc4-afbd-bc52-1320-8f3d0e951121@denx.de> <CAGi-RU+U21coW01Z+_1SbrsjA=9jmuGf19MgVywhzm3BT_KU1w@mail.gmail.com>
+In-Reply-To: <CAGi-RU+U21coW01Z+_1SbrsjA=9jmuGf19MgVywhzm3BT_KU1w@mail.gmail.com>
+From:   Ramon Fried <rfried.dev@gmail.com>
+Date:   Sat, 15 Jan 2022 18:54:48 +0200
+Message-ID: <CAGi-RULoDaFc830od5DTr1crBi6SLkM89e2qq-rZn1zUjUuE8g@mail.gmail.com>
+Subject: Re: [PATCH] net: fastboot: make UDP port net: configurable
+To:     Heiko Schocher <hs@denx.de>
+Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joe Hershberger <joe.hershberger@ni.com>,
+        Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        Roman Kovalivskyi <roman.kovalivskyi@globallogic.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        U-Boot Mailing List <u-boot@lists.denx.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/01/2022 15:15, Marcel Ziswiler wrote:
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> 
-> This patch adds the device tree to support Toradex Verdin iMX8M Mini a
-> computer on module which can be used on different carrier boards.
-> 
-> The module consists of an NXP i.MX 8M Mini family SoC (either i.MX 8M
-> Mini Quad or 8M Mini DualLite), a PCA9450A PMIC, a Gigabit Ethernet PHY,
-> 1 or 2 GB of LPDDR4 RAM, an eMMC, a TLA2024 ADC, an I2C EEPROM, an
-> RX8130 RTC, an optional SPI CAN controller plus an optional Bluetooth/
-> Wi-Fi module.
-> 
-> Anything that is not self-contained on the module is disabled by
-> default.
-> 
-> The device tree for the Dahlia includes the module's device tree and
-> enables the supported peripherals of the carrier board.
-> 
-> The device tree for the Verdin Development Board includes the module's
-> device tree as well as the Dahlia one as it is a superset and supports
-> almost all peripherals available.
-> 
-> So far there is no display functionality supported at all but basic
-> console UART, USB host, eMMC and Ethernet and PCIe functionality work
-> fine.
-> 
-> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> 
-> ---
-> 
-> Changes in v2:
-> - Remove bootargs which will be filled in by the bootloader as requested
->   by Krzysztof.
-> - Remove the previously #ifdefed-out spi-nor as requested by Krzysztof.
-> - Fix capitalisation in cover-letter.
-> 
-
-Thanks for the changes.
-
-Looks, good but I did not perform review thorough enough to give a
-Reviewed-by tag, so let it be just:
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof
+On Sat, Jan 15, 2022 at 1:58 PM Ramon Fried <rfried.dev@gmail.com> wrote:
+>
+> On Thu, Jan 13, 2022 at 2:02 PM Heiko Schocher <hs@denx.de> wrote:
+> >
+> > Hello Christian,
+> >
+> > On 13.01.22 08:40, Christian Gmeiner wrote:
+> > > The fastboot protocol uses per default the UDP port 5554. In some cases
+> > > it might be needed to change the used port. The fastboot utility provides
+> > > a way to specifiy an other port number to use already.
+> > >
+> > >   fastboot -s udp:192.168.1.76:1234 boot fastboot.img
+> > >
+> > > Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+> > > ---
+> > >  drivers/fastboot/Kconfig | 7 +++++++
+> > >  net/fastboot.c           | 5 +----
+> > >  2 files changed, 8 insertions(+), 4 deletions(-)
+> >
+> > Reviewed-by: Heiko Schocher <hs@denx.de>
+> >
+> > bye,
+> > Heiko
+> > --
+> > DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+> > HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+> > Phone: +49-8142-66989-52   Fax: +49-8142-66989-80   Email: hs@denx.de
+> Reviewed-by: Ramon Fried <rfried.dev@gmail.com>
+Applied to u-boot-net/next
+Thanks !

@@ -2,97 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2747E48F67D
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 12:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0608948F680
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 12:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbiAOLJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 06:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiAOLJY (ORCPT
+        id S232893AbiAOLLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 06:11:41 -0500
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:53118 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229569AbiAOLLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 06:09:24 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAED2C061574;
-        Sat, 15 Jan 2022 03:09:23 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso12361721wmj.2;
-        Sat, 15 Jan 2022 03:09:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wbtngQJLC1AXKVgmXqeSN04h1xtyl3WUPRPOVydw+k8=;
-        b=n5rhOUPcZYStYqN2IderhavLDac2yeTnQ2qpc7mx6lVoy54aY5DJtafiYOtF6Wrrx3
-         Hz4DSCheKQPYUfKQJScUovIh8H2KnTFJYSAcVKlQ69Wv6kRgoYI2X5YieKLIb6Bz5t+l
-         oA/jfbTdf39j77UzArDMEKsTt2nxrhqWF+jNNqRFYgG+q9Qiv1mDbGQMGNQ/3ZmYeH8u
-         dqns0Vf+DeLmahsW6R94A3bIWPeDFJBzR+O5SbcK5Abp9Fq+C7nV6xBehwIuJSE8DR0Z
-         VbVkdW5ZnMvTjv90Yv4QYG3MM/o1zuNWdq4vVD7BABq9L3+J5PF06BLWG4fFAqlMMq37
-         AbDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wbtngQJLC1AXKVgmXqeSN04h1xtyl3WUPRPOVydw+k8=;
-        b=0CSCV2BX+hqlmwNcE/dJL3/P58XZFSfF+hf6oCwyndqZSi0FPZKUK4iS+EUKrKJCCK
-         VF82xZvCFGlUxJeLxZJZONSsT/o/AQyye5jCldTX6YMAzTw04AeXa5oJr7f8tiZQQmzL
-         6ZwOLAv+Dm0KxeyUlqUtqJngreb+mlg/Aar6pxiy0HfBTKoktQPFus7kC8fAE1T9Bovh
-         9efUBU42mWV27d8ImA4KoOA547BE5jGTMSwwUwN9SUdwNJZ+XFp6Ak1I/JH7VU5shPDV
-         xWojtsjyI9eZdjhB/jhru3hqIgfyPLSx4pIq9EKlW5PCdx8dcOJ/jxeTDQgsFc0CZZcx
-         tD7g==
-X-Gm-Message-State: AOAM533w62W18UaTzdQPcZGWnTIQW1I5MElwpkmChXAaNV9Tv/7ERH4I
-        mx2xNipCnILFpybtERCiCKjXcbcfJPs=
-X-Google-Smtp-Source: ABdhPJxPD33H1ytFI+ReUajL78kwoPIPb75CbtKQHtbwo4aYG+YtbiW8AgdW6jkHcfP16ofpaYqBvQ==
-X-Received: by 2002:adf:f1cf:: with SMTP id z15mr11733427wro.134.1642244962477;
-        Sat, 15 Jan 2022 03:09:22 -0800 (PST)
-Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
-        by smtp.gmail.com with ESMTPSA id z14sm5035055wrh.39.2022.01.15.03.09.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Jan 2022 03:09:22 -0800 (PST)
-Date:   Sat, 15 Jan 2022 11:09:20 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.4 00/18] 5.4.172-rc1 review
-Message-ID: <YeKrYJjt8R2Jp4Kn@debian>
-References: <20220114081541.465841464@linuxfoundation.org>
+        Sat, 15 Jan 2022 06:11:40 -0500
+X-IronPort-AV: E=Sophos;i="5.88,290,1635199200"; 
+   d="scan'208";a="15964437"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 12:11:39 +0100
+Date:   Sat, 15 Jan 2022 12:11:38 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] regulator: qcom_smd: fix for_each_child.cocci warnings
+Message-ID: <alpine.DEB.2.22.394.2201151210170.3051@hadrien>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220114081541.465841464@linuxfoundation.org>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+From: kernel test robot <lkp@intel.com>
 
-On Fri, Jan 14, 2022 at 09:16:07AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.172 release.
-> There are 18 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
-> Anything received after that time might be too late.
-
-Build test:
-mips (gcc version 11.2.1 20220106): 65 configs -> no new failure
-arm (gcc version 11.2.1 20220106): 107 configs -> no new failure
-arm64 (gcc version 11.2.1 20220106): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20220106): 4 configs -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/625
+drivers/regulator/qcom_smd-regulator.c:1318:1-33: WARNING: Function "for_each_available_child_of_node" should have of_node_put() before return around line 1321.
 
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Semantic patch information:
+ False positives can be due to function calls within the for_each
+ loop that may encapsulate an of_node_put.
 
---
-Regards
-Sudip
+Generated by: scripts/coccinelle/iterators/for_each_child.cocci
+
+Fixes: 14e2976fbabd ("regulator: qcom_smd: Align probe function with rpmh-regulator")
+CC: Konrad Dybcio <konrad.dybcio@somainline.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
+---
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   112450df61b7373529b0fe4c122ad13b89d80a8a
+commit: 14e2976fbabdacb01335d7f91eeebbc89c67ddb1 regulator: qcom_smd: Align probe function with rpmh-regulator
+:::::: branch date: 13 hours ago
+:::::: commit date: 9 days ago
+
+ qcom_smd-regulator.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+--- a/drivers/regulator/qcom_smd-regulator.c
++++ b/drivers/regulator/qcom_smd-regulator.c
+@@ -1317,8 +1317,10 @@ static int rpm_reg_probe(struct platform
+
+ 	for_each_available_child_of_node(dev->of_node, node) {
+ 		vreg = devm_kzalloc(&pdev->dev, sizeof(*vreg), GFP_KERNEL);
+-		if (!vreg)
++		if (!vreg) {
++			of_node_put(node);
+ 			return -ENOMEM;
++		}
+
+ 		ret = rpm_regulator_init_vreg(vreg, dev, node, rpm, vreg_data);
 

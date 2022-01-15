@@ -2,119 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D646F48F7B4
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B56D48F7B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233038AbiAOQCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 11:02:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58106 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233026AbiAOQCO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 11:02:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 028D460DF5;
-        Sat, 15 Jan 2022 16:02:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F5B4C36AE7;
-        Sat, 15 Jan 2022 16:02:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642262533;
-        bh=dXfz+j87xPDNeSX6HqrqgV0QIp9lXOhuOevSxgxBxAg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fBZUceP1fm1936OzmEoRc6xtqdD5KbaOLzrdEc+FuWEcCjgwnmIq7E5Rf9kN/qhOD
-         8yJWG2lHkrpd6AAyQEMaHrVuUBaZQVsC04OOGISARjc6DNf4NcLCVz59LvwhH1XxXy
-         0moIJHeGq+McQ5xaKrJey/AyOw7Fme5/Aeh/hs1pS32r0E655g9LGIStj7Gcfsr48+
-         56Avbf+02HmjAu1u80ZQKazofB9alNivfvpNOb5XbdMHyaIPqwF/jXOCt6bO0279/8
-         BCmo6chcAZz0OG6WtjiZUYit2B7zeWX4IxUgwaJSjC9VMR5E8F4bpBlH9EnvKMZo94
-         Mk2j4H4tbkxmA==
-Received: by mail-ed1-f48.google.com with SMTP id q25so46084088edb.2;
-        Sat, 15 Jan 2022 08:02:13 -0800 (PST)
-X-Gm-Message-State: AOAM532iF24XQny1hY7MtF5WCxSm1CnvVYUE86Mzh2CW3ma8zqRgdmWp
-        UYoci5uR5GahZiClB0Poi5Qrkegzg/CcOTEX5Q==
-X-Google-Smtp-Source: ABdhPJxfQvzMyV4E/lfsW80blaC+yF6Jz6eXdtfrSUYSUFPPjf5rBowLMBSmFOPgGlwU3ROMI1ZeCovUN+HxGfr8daY=
-X-Received: by 2002:aa7:c587:: with SMTP id g7mr9586993edq.109.1642262531677;
- Sat, 15 Jan 2022 08:02:11 -0800 (PST)
+        id S233041AbiAOQEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 11:04:10 -0500
+Received: from mga17.intel.com ([192.55.52.151]:56827 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229732AbiAOQEJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 11:04:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642262649; x=1673798649;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Rs4GPCKQxNaL4kGleAkZBSPLl3NhvNHqHaaIf9SwIcc=;
+  b=bqq6OBA0Bs5QAwgN5Ip/CYGwaLknAm7VB/p960b/escGlZmXxFBe2K7Z
+   n7kb+Loa0tb3KN8ugiXnnLncP4mYDYRD+omBD505yTP9mb7Pc8iJ1qoZv
+   3Dy9NBgK7xbPZhp9kyQ8BuQ+E3OdetsoQZUSvOmSEC5sZcnM7Q4wKnko7
+   /570z/WSIPS/m3StSwYe9BRoiYNgxExJ8VGPgLu5DJHVD69UAZUxtCsAu
+   2tQVeBqPzPE3bQoqRLVt5P3jRsRXWjjQX2Z7vxL4RiNqc9GPV2Rs2sZu1
+   T7KZjTPaL9klARMbu5KZ6+l5nCXVrG9uQ3//rRkleS+ZOwvZWZHLNIVTI
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="225105954"
+X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
+   d="scan'208";a="225105954"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 08:04:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
+   d="scan'208";a="624713173"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 15 Jan 2022 08:04:07 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8lXD-000A1k-0j; Sat, 15 Jan 2022 16:04:07 +0000
+Date:   Sun, 16 Jan 2022 00:03:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1684/2384] arch/mips/kernel/rtlx.c:345:46:
+ error: unknown type name 'poll_table'
+Message-ID: <202201152345.4hznmFMe-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211214221450.589884-1-luca@lucaceresoli.net>
- <CAL_Jsq+GQTcx1EGKHug2ZcDZufrKM-4k6PB0vQeTCTG42MHzvA@mail.gmail.com>
- <59a23c89-0810-eb28-acd9-7051ac34d438@lucaceresoli.net> <4579940c-27dc-733e-4022-ebea4671c839@lucaceresoli.net>
-In-Reply-To: <4579940c-27dc-733e-4022-ebea4671c839@lucaceresoli.net>
-From:   Rob Herring <robh@kernel.org>
-Date:   Sat, 15 Jan 2022 10:02:00 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ5nr6xJoTv3A6UPMMDXhWKcwSEUA3ux3kK8OMWQxdc6w@mail.gmail.com>
-Message-ID: <CAL_JsqJ5nr6xJoTv3A6UPMMDXhWKcwSEUA3ux3kK8OMWQxdc6w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] PCI: dra7xx: Fix link removal on probe error
-To:     Luca Ceresoli <luca@lucaceresoli.net>,
-        Saravana Kannan <saravanak@google.com>
-Cc:     PCI <linux-pci@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sekhar Nori <nsekhar@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Saravana
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
+commit: 4e8d31a2893e3ef566a2e9860e746519711a0ed3 [1684/2384] headers/deps: tracing: Optimize <linux/ring_buffer.h>'s header dependencies, remove <linux/poll.h>
+config: mips-maltaaprp_defconfig (https://download.01.org/0day-ci/archive/20220115/202201152345.4hznmFMe-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 650fc40b6d8d9a5869b4fca525d5f237b0ee2803)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=4e8d31a2893e3ef566a2e9860e746519711a0ed3
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 4e8d31a2893e3ef566a2e9860e746519711a0ed3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-On Tue, Jan 11, 2022 at 4:35 AM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->
-> Hi Rob,
->
-> On 16/12/21 10:08, Luca Ceresoli wrote:
-> > Hi Rob,
-> >
-> > thanks for the quick feedback!
-> >
-> > On 14/12/21 23:42, Rob Herring wrote:
-> >> On Tue, Dec 14, 2021 at 4:15 PM Luca Ceresoli <luca@lucaceresoli.net> wrote:
-> >>>
-> >>> If a devm_phy_get() calls fails with phy_count==N (N > 0), then N links
-> >>> have already been added by device_link_add() and won't be deleted by
-> >>> device_link_del() because the code calls 'return' and not 'goto err_link'.
-> >>>
-> >>> Fix in a very simple way by doing all the devm_phy_get() calls before all
-> >>> the device_link_add() calls.
-> >>>
-> >>> Fixes: 7a4db656a635 ("PCI: dra7xx: Create functional dependency between PCIe and PHY")
-> >>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> >>> ---
-> >>>  drivers/pci/controller/dwc/pci-dra7xx.c | 2 ++
-> >>>  1 file changed, 2 insertions(+)
-> >>>
-> >>> diff --git a/drivers/pci/controller/dwc/pci-dra7xx.c b/drivers/pci/controller/dwc/pci-dra7xx.c
-> >>> index f7f1490e7beb..2ccc53869e13 100644
-> >>> --- a/drivers/pci/controller/dwc/pci-dra7xx.c
-> >>> +++ b/drivers/pci/controller/dwc/pci-dra7xx.c
-> >>> @@ -757,7 +757,9 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
-> >>>                 phy[i] = devm_phy_get(dev, name);
-> >>>                 if (IS_ERR(phy[i]))
-> >>>                         return PTR_ERR(phy[i]);
-> >>> +       }
-> >>>
-> >>> +       for (i = 0; i < phy_count; i++) {
-> >>>                 link[i] = device_link_add(dev, &phy[i]->dev, DL_FLAG_STATELESS);
-> >>
-> >> I think this should happen automatically now with fw_devlink being
-> >> enabled by default. Can you try?
-> >
-> > Do you mean removal should be done automatically? I think they are not
-> > due to the DL_FLAG_STATELESS flag.
->
-> I would love to have feedback because, as said, I think my patch is
-> correct, but if I'm wrong (which might well be) I have to drop patch 1
-> and rewrite patch 2 in a slightly more complex form.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I mean that why do you need explicit dependency tracking here when
-dependencies on a PHY should happen automatically now. IOW, what is
-special about this driver and dependency?
+All errors (new ones prefixed by >>):
 
-Rob
+   In file included from arch/mips/kernel/rtlx.c:14:
+   In file included from include/linux/fs_api.h:2:
+   In file included from include/linux/fs.h:6:
+   include/linux/wait_bit.h:35:19: error: expected ';' after top level declarator
+   extern void __init wait_bit_init(void);
+                     ^
+                     ;
+>> arch/mips/kernel/rtlx.c:345:46: error: unknown type name 'poll_table'
+   static __poll_t file_poll(struct file *file, poll_table *wait)
+                                                ^
+>> arch/mips/kernel/rtlx.c:350:2: error: implicit declaration of function 'poll_wait' [-Werror,-Wimplicit-function-declaration]
+           poll_wait(file, &channel_wqs[minor].rt_queue, wait);
+           ^
+>> arch/mips/kernel/rtlx.c:358:11: error: use of undeclared identifier 'EPOLLIN'
+                   mask |= EPOLLIN | EPOLLRDNORM;
+                           ^
+>> arch/mips/kernel/rtlx.c:358:21: error: use of undeclared identifier 'EPOLLRDNORM'
+                   mask |= EPOLLIN | EPOLLRDNORM;
+                                     ^
+>> arch/mips/kernel/rtlx.c:362:11: error: use of undeclared identifier 'EPOLLOUT'
+                   mask |= EPOLLOUT | EPOLLWRNORM;
+                           ^
+>> arch/mips/kernel/rtlx.c:362:22: error: use of undeclared identifier 'EPOLLWRNORM'
+                   mask |= EPOLLOUT | EPOLLWRNORM;
+                                      ^
+   7 errors generated.
+
+
+vim +/poll_table +345 arch/mips/kernel/rtlx.c
+
+2600990e640e3b Ralf Baechle   2006-04-05  344  
+8b9aab09aaf390 Al Viro        2017-07-02 @345  static __poll_t file_poll(struct file *file, poll_table *wait)
+2600990e640e3b Ralf Baechle   2006-04-05  346  {
+496ad9aa8ef448 Al Viro        2013-01-23  347  	int minor = iminor(file_inode(file));
+8b9aab09aaf390 Al Viro        2017-07-02  348  	__poll_t mask = 0;
+2600990e640e3b Ralf Baechle   2006-04-05  349  
+2600990e640e3b Ralf Baechle   2006-04-05 @350  	poll_wait(file, &channel_wqs[minor].rt_queue, wait);
+2600990e640e3b Ralf Baechle   2006-04-05  351  	poll_wait(file, &channel_wqs[minor].lx_queue, wait);
+2600990e640e3b Ralf Baechle   2006-04-05  352  
+2600990e640e3b Ralf Baechle   2006-04-05  353  	if (rtlx == NULL)
+2600990e640e3b Ralf Baechle   2006-04-05  354  		return 0;
+2600990e640e3b Ralf Baechle   2006-04-05  355  
+2600990e640e3b Ralf Baechle   2006-04-05  356  	/* data available to read? */
+2600990e640e3b Ralf Baechle   2006-04-05  357  	if (rtlx_read_poll(minor, 0))
+a9a08845e9acbd Linus Torvalds 2018-02-11 @358  		mask |= EPOLLIN | EPOLLRDNORM;
+2600990e640e3b Ralf Baechle   2006-04-05  359  
+2600990e640e3b Ralf Baechle   2006-04-05  360  	/* space to write */
+2600990e640e3b Ralf Baechle   2006-04-05  361  	if (rtlx_write_poll(minor))
+a9a08845e9acbd Linus Torvalds 2018-02-11 @362  		mask |= EPOLLOUT | EPOLLWRNORM;
+2600990e640e3b Ralf Baechle   2006-04-05  363  
+2600990e640e3b Ralf Baechle   2006-04-05  364  	return mask;
+2600990e640e3b Ralf Baechle   2006-04-05  365  }
+2600990e640e3b Ralf Baechle   2006-04-05  366  
+
+:::::: The code at line 345 was first introduced by commit
+:::::: 8b9aab09aaf390b868359b9365b667cf6506473c mips: annotate ->poll() instances
+
+:::::: TO: Al Viro <viro@zeniv.linux.org.uk>
+:::::: CC: Al Viro <viro@zeniv.linux.org.uk>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

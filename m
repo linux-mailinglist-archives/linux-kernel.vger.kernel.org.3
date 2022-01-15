@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F1348F896
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 19:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FFB48F8A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 19:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233321AbiAOSGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 13:06:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
+        id S233327AbiAOSIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 13:08:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbiAOSGD (ORCPT
+        with ESMTP id S231278AbiAOSIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 13:06:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844E2C061574;
-        Sat, 15 Jan 2022 10:06:02 -0800 (PST)
+        Sat, 15 Jan 2022 13:08:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A457C061574;
+        Sat, 15 Jan 2022 10:08:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F3E660EE6;
-        Sat, 15 Jan 2022 18:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0516CC36AE5;
-        Sat, 15 Jan 2022 18:05:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD85DB809E3;
+        Sat, 15 Jan 2022 18:08:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D58C36AE5;
+        Sat, 15 Jan 2022 18:08:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642269961;
-        bh=3NCsbltn2VNl6BzDPPc4Nq1K5dUg7nI/HG6wnmIgY+c=;
+        s=k20201202; t=1642270101;
+        bh=ti3EFz0vjLpT5haAhw/2g1kDCJrvQ9FNEfVIwLyjAGI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OnWlvXYtrHm8ajgKrq4HrkwkEyFbpYg/a+OtSu/g4oGdVLFUWFoTfByCnnR/RTG1K
-         LOHe6F6x6x/MmzC5uSxo6YsxzcZ8T61cpR/vVCxDT48zAfauJRDlnMFO19RU5nLRB1
-         HIu/CK+dW0OAiwLRZSiu+kLDfaZPe9KV+GDYSY3RV+qFV6/LgJUWYzpzYwVLLPLCqz
-         Fk/7COhMapazdHXX4lIvFObffW2sO6lgATm7OAFQqDRW48lgCgDE/f/TfyY7gV8GgH
-         BeEeqiIXhN6ZGjhiD6h34ASaGl1V4qqqo5i3i5s48a4awgZOqGFbCyRXXF2mTD/WVy
-         QX6Dw4iDI7QIA==
-Date:   Sat, 15 Jan 2022 18:12:02 +0000
+        b=Ncpxx8oWYCHYt4ZiADAmRIN2UVdscboPCLrjamKcB2VnbjLASvv9zlERBmsHMBVNu
+         muyWJovg3FMNhUKJVMQN/E3AMZVnGmq3NrAio+beFUY/hWPN3EhJUCKRDDHEOb3wJJ
+         1tJuGEvUwTuVVWcJsX3UjimbkKwvBoYTimnXDL83I5Qzmt6C0etnnmL0brZ8+Q6+NB
+         rxnskp9ukWjNJXZCYQRdPPMbMNNkTsEcaV8Yf/3w4V2CgA6TtaGD71zO50JTP1HB+J
+         dLWvOrIwsqxqFztQeL/jRcUsKqeH46bOX4OKF9hDbgN09GWRFNUXYOQZbuxxn7YJKS
+         j2niK1ZojC2qQ==
+Date:   Sat, 15 Jan 2022 18:14:22 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH v2] iio: addac: Do not reference negative array offsets
-Message-ID: <20220115181202.476f09eb@jic23-huawei>
-In-Reply-To: <b87576f4e44e459bba4d3bd3c0b38693@analog.com>
-References: <20220105180214.2435001-1-keescook@chromium.org>
-        <b87576f4e44e459bba4d3bd3c0b38693@analog.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org,
+        Robin van der Gracht <robin@protonic.nl>,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH v1 1/1] iio: adc: tsc2046: rework the trigger state
+ machine
+Message-ID: <20220115181422.0b622b69@jic23-huawei>
+In-Reply-To: <20220110123903.GC3326@pengutronix.de>
+References: <20220107074017.2762347-1-o.rempel@pengutronix.de>
+        <20220109154404.75e0ed2f@jic23-huawei>
+        <20220110123903.GC3326@pengutronix.de>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -55,99 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jan 2022 06:31:55 +0000
-"Tanislav, Cosmin" <Cosmin.Tanislav@analog.com> wrote:
+...
 
-> Reviewed-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> > >  
+> > > -static enum hrtimer_restart tsc2046_adc_trig_more(struct hrtimer *hrtimer)
+> > > +static enum hrtimer_restart tsc2046_adc_timer(struct hrtimer *hrtimer)
+> > >  {
+> > >  	struct tsc2046_adc_priv *priv = container_of(hrtimer,
+> > >  						     struct tsc2046_adc_priv,
+> > >  						     trig_timer);
+> > >  	unsigned long flags;
+> > >  
+> > > -	spin_lock_irqsave(&priv->trig_lock, flags);
+> > > -
+> > > -	disable_irq_nosync(priv->spi->irq);
+> > > -
+> > > -	priv->trig_more_count++;
+> > > -	iio_trigger_poll(priv->trig);
+> > > -
+> > > -	spin_unlock_irqrestore(&priv->trig_lock, flags);
+> > > +	spin_lock_irqsave(&priv->state_lock, flags);
+> > > +	switch (priv->state) {
+> > > +	case TSC2046_STATE_ENABLE_IRQ_POLL:
+> > > +		/*
+> > > +		 * IRQ handler called iio_trigger_poll() to sample ADC.
+> > > +		 * Here we
+> > > +		 * - re-enable IRQs
+> > > +		 * - start hrtimer for timeout if no IRQ will occur
+> > > +		 */
+> > > +		priv->state = TSC2046_STATE_POLL;
+> > > +		enable_irq(priv->spi->irq);  
+> > 
+> > I comment on this below, but I'm not sure why you don't move the enable_irq()
+> > here out of this timer function and then have the first entry of the timer
+> > go directly to TSC2046_STATE_POLL after a longer initial wait.  
 > 
-> Put "iio: addac: ad74413r:" in patch title, maybe?
-I can fix that up whilst applying.
-
-I'll pick this up after rc1 is out.
-
-Thanks,
+> Hm... yes. You are right.
+> 
+> > It's been a long time since I looked at this, so perhaps I'm missing the
+> > point.  What you have here works as far as I can see, it just seems to push
+> > more than necessary into the state machine.  
+> 
+> The IRQ line is a level shifter connected to one of channels muxed to the core
+> ADC. If we switch internal muxer to different channel, the IRQ line will
+> change the state.
+> 
+> So, we need a trigger which:
+> - do not triggers if we do ADC readings.
+> - keeps triggering as long as we have some state changes on the IRQ line
+> - trigger only with specific rate
+> - still triggers for some amount of time after last interrupt event was
+>   detected. Current implementation is doing only one extra read.
+Ah.. Good explanation, I get the point now :)
 
 Jonathan
-
-> 
-> > -----Original Message-----
-> > From: Kees Cook <keescook@chromium.org>
-> > Sent: Wednesday, January 5, 2022 8:02 PM
-> > To: Lars-Peter Clausen <lars@metafoo.de>
-> > Cc: Kees Cook <keescook@chromium.org>; Hennerich, Michael
-> > <Michael.Hennerich@analog.com>; Tanislav, Cosmin
-> > <Cosmin.Tanislav@analog.com>; Jonathan Cameron <jic23@kernel.org>;
-> > linux-iio@vger.kernel.org; Linus Walleij <linus.walleij@linaro.org>; linux-
-> > kernel@vger.kernel.org; linux-hardening@vger.kernel.org
-> > Subject: [PATCH v2] iio: addac: Do not reference negative array offsets
-> > 
-> > [External]
-> > 
-> > Instead of aiming rx_buf at an invalid array-boundary-crossing location,
-> > just skip the first increment. Fixes this warning seen when building
-> > with -Warray-bounds:
-> > 
-> > drivers/iio/addac/ad74413r.c: In function 'ad74413r_update_scan_mode':
-> > drivers/iio/addac/ad74413r.c:843:22: warning: array subscript -4 is below
-> > array bounds of 'u8[16]' { aka 'unsigned char[16]'} [-Warray-bounds]
-> >   843 |         u8 *rx_buf = &st->adc_samples_buf.rx_buf[-1 *
-> > AD74413R_FRAME_SIZE];
-> >       |
-> > ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > drivers/iio/addac/ad74413r.c:84:20: note: while referencing 'rx_buf'
-> >    84 |                 u8 rx_buf[AD74413R_FRAME_SIZE *
-> > AD74413R_CHANNEL_MAX];
-> >       |                    ^~~~~~
-> > 
-> > Cc: Lars-Peter Clausen <lars@metafoo.de>
-> > Cc: Michael Hennerich <Michael.Hennerich@analog.com>
-> > Cc: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> > Cc: Jonathan Cameron <jic23@kernel.org>
-> > Cc: linux-iio@vger.kernel.org
-> > Fixes: fea251b6a5db ("iio: addac: add AD74413R driver")
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> > v1:
-> > https://urldefense.com/v3/__https://lore.kernel.org/lkml/20211215232321.
-> > 2069314-1-
-> > keescook@chromium.org/__;!!A3Ni8CS0y2Y!vadcwdERjyNVz3vFIp5m5S2ms
-> > oFHro8aKzH9ulwPevCKHpev6D53gibZrv5U9mPHGcoB$
-> > v2:
-> >  - use "xfer" for checking "first through the loop"
-> > ---
-> >  drivers/iio/addac/ad74413r.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
-> > index 5271073bb74e..aba9a643a4ca 100644
-> > --- a/drivers/iio/addac/ad74413r.c
-> > +++ b/drivers/iio/addac/ad74413r.c
-> > @@ -840,7 +840,7 @@ static int ad74413r_update_scan_mode(struct iio_dev
-> > *indio_dev,
-> >  {
-> >  	struct ad74413r_state *st = iio_priv(indio_dev);
-> >  	struct spi_transfer *xfer = st->adc_samples_xfer;
-> > -	u8 *rx_buf = &st->adc_samples_buf.rx_buf[-1 *
-> > AD74413R_FRAME_SIZE];
-> > +	u8 *rx_buf = st->adc_samples_buf.rx_buf;
-> >  	u8 *tx_buf = st->adc_samples_tx_buf;
-> >  	unsigned int channel;
-> >  	int ret = -EINVAL;
-> > @@ -894,9 +894,10 @@ static int ad74413r_update_scan_mode(struct
-> > iio_dev *indio_dev,
-> > 
-> >  		spi_message_add_tail(xfer, &st->adc_samples_msg);
-> > 
-> > -		xfer++;
-> >  		tx_buf += AD74413R_FRAME_SIZE;
-> > -		rx_buf += AD74413R_FRAME_SIZE;
-> > +		if (xfer != st->adc_samples_xfer)
-> > +			rx_buf += AD74413R_FRAME_SIZE;
-> > +		xfer++;
-> >  	}
-> > 
-> >  	xfer->rx_buf = rx_buf;
-> > --
-> > 2.30.2  
-> 
-

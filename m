@@ -2,106 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9FA48F667
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 11:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E3448F674
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 11:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbiAOK3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 05:29:51 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:53810 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229530AbiAOK3u (ORCPT
+        id S232850AbiAOKy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 05:54:56 -0500
+Received: from mail-m975.mail.163.com ([123.126.97.5]:30582 "EHLO
+        mail-m975.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230097AbiAOKyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 05:29:50 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=dust.li@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V1si10H_1642242587;
-Received: from localhost(mailfrom:dust.li@linux.alibaba.com fp:SMTPD_---0V1si10H_1642242587)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 15 Jan 2022 18:29:48 +0800
-Date:   Sat, 15 Jan 2022 18:29:47 +0800
-From:   "dust.li" <dust.li@linux.alibaba.com>
-To:     Wen Gu <guwen@linux.alibaba.com>, kgraul@linux.ibm.com,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net/smc: Fix hung_task when removing SMC-R devices
-Message-ID: <20220115102947.GB13341@linux.alibaba.com>
-Reply-To: dust.li@linux.alibaba.com
-References: <1642167444-107744-1-git-send-email-guwen@linux.alibaba.com>
+        Sat, 15 Jan 2022 05:54:55 -0500
+X-Greylist: delayed 922 seconds by postgrey-1.27 at vger.kernel.org; Sat, 15 Jan 2022 05:54:55 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=/oWUz
+        Z37QARouyTR+Z4mzpHTHtRRXJXnDqhNfwCrG0s=; b=B2TjhoCN1tbO5lxks4LFH
+        vNfzSu9z5ECOxr778W4phv1xOLpWst3U8TsJ6beCgud2bohFI45CMDY6HFeuPJD4
+        l2pgFJgg9wDgIn6MBbezn50UkPDFb9/QxcFSyRbM2I8SNO1hHlomfcJo63d7nSiM
+        BleIfUxbfwOlhBucYson3o=
+Received: from localhost.localdomain (unknown [112.97.48.74])
+        by smtp5 (Coremail) with SMTP id HdxpCgD3yXBSpOJhkl+5AA--.19057S2;
+        Sat, 15 Jan 2022 18:39:15 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     mani@kernel.org, hemantk@codeaurora.org
+Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH net] bus: mhi: Add mru_default for Foxconn SDX55
+Date:   Sat, 15 Jan 2022 18:39:12 +0800
+Message-Id: <20220115103912.3775-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1642167444-107744-1-git-send-email-guwen@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HdxpCgD3yXBSpOJhkl+5AA--.19057S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtw4xuw1rAFyxtF4xtF13Arb_yoW3trX_C3
+        9xWFs7uws8Wr95Gwn2van5XryrK3WfuF1kZF1vqrn8J34avwnFqw1ktrZ5AFn0gFWYkF9r
+        J34rWr1rAw1a9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUU5fH5UUUUU==
+X-Originating-IP: [112.97.48.74]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJROJZGAJmBux2gAAsa
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 09:37:24PM +0800, Wen Gu wrote:
->A hung_task is observed when removing SMC-R devices. Suppose that
->a link group has two active links(lnk_A, lnk_B) associated with two
->different SMC-R devices(dev_A, dev_B). When dev_A is removed, the
->link group will be removed from smc_lgr_list and added into
->lgr_linkdown_list. lnk_A will be cleared and smcibdev(A)->lnk_cnt
->will reach to zero. However, when dev_B is removed then, the link
->group can't be found in smc_lgr_list and lnk_B won't be cleared,
->making smcibdev->lnk_cnt never reaches zero, which causes a hung_task.
->
->This patch fixes this issue by restoring the implementation of
->smc_smcr_terminate_all() to what it was before commit 349d43127dac
->("net/smc: fix kernel panic caused by race of smc_sock"). The original
->implementation also satisfies the intention that make sure QP destroy
->earlier than CQ destroy because we will always wait for smcibdev->lnk_cnt
->reaches zero, which guarantees QP has been destroyed.
+For default mechanism, product would use default MRU 3500 if
+they didn't define it. But for Foxconn SDX55, there is a known
+issue which MRU 3500 would lead to data connection lost.
+So we align it with Qualcomm default MRU settings.
 
-Good catch, thank you !
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/bus/mhi/pci_generic.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Update the comments of smc_smcr_terminate_all as well ?
+diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
+index 3a258a677df8..74e8fc342cfd 100644
+--- a/drivers/bus/mhi/pci_generic.c
++++ b/drivers/bus/mhi/pci_generic.c
+@@ -366,6 +366,7 @@ static const struct mhi_pci_dev_info mhi_foxconn_sdx55_info = {
+ 	.config = &modem_foxconn_sdx55_config,
+ 	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
+ 	.dma_data_width = 32,
++	.mru_default = 32768,
+ 	.sideband_wake = false,
+ };
+ 
+-- 
+2.25.1
 
->
->Fixes: 349d43127dac ("net/smc: fix kernel panic caused by race of smc_sock")
->Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
-
-Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
-
->---
-> net/smc/smc_core.c | 13 +------------
-> 1 file changed, 1 insertion(+), 12 deletions(-)
->
->diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
->index b19c0aa..1124594 100644
->--- a/net/smc/smc_core.c
->+++ b/net/smc/smc_core.c
->@@ -1533,7 +1533,6 @@ void smc_smcr_terminate_all(struct smc_ib_device *smcibdev)
-> {
-> 	struct smc_link_group *lgr, *lg;
-> 	LIST_HEAD(lgr_free_list);
->-	LIST_HEAD(lgr_linkdown_list);
-> 	int i;
-> 
-> 	spin_lock_bh(&smc_lgr_list.lock);
->@@ -1545,7 +1544,7 @@ void smc_smcr_terminate_all(struct smc_ib_device *smcibdev)
-> 		list_for_each_entry_safe(lgr, lg, &smc_lgr_list.list, list) {
-> 			for (i = 0; i < SMC_LINKS_PER_LGR_MAX; i++) {
-> 				if (lgr->lnk[i].smcibdev == smcibdev)
->-					list_move_tail(&lgr->list, &lgr_linkdown_list);
->+					smcr_link_down_cond_sched(&lgr->lnk[i]);
-> 			}
-> 		}
-> 	}
->@@ -1557,16 +1556,6 @@ void smc_smcr_terminate_all(struct smc_ib_device *smcibdev)
-> 		__smc_lgr_terminate(lgr, false);
-> 	}
-> 
->-	list_for_each_entry_safe(lgr, lg, &lgr_linkdown_list, list) {
->-		for (i = 0; i < SMC_LINKS_PER_LGR_MAX; i++) {
->-			if (lgr->lnk[i].smcibdev == smcibdev) {
->-				mutex_lock(&lgr->llc_conf_mutex);
->-				smcr_link_down_cond(&lgr->lnk[i]);
->-				mutex_unlock(&lgr->llc_conf_mutex);
->-			}
->-		}
->-	}
->-
-> 	if (smcibdev) {
-> 		if (atomic_read(&smcibdev->lnk_cnt))
-> 			wait_event(smcibdev->lnks_deleted,
->-- 
->1.8.3.1

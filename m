@@ -2,203 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F3F48F94F
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 21:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 595CA48F953
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 21:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233697AbiAOUgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 15:36:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
+        id S233707AbiAOUiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 15:38:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbiAOUgM (ORCPT
+        with ESMTP id S231473AbiAOUit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 15:36:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B396C061574
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 12:36:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8D53B80B3D
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 20:36:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C48AEC36AE5;
-        Sat, 15 Jan 2022 20:36:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642278969;
-        bh=j81iu10IGA5MM7vZ+4Xflpm3VzuElFYMdZD244D7f5U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LKaqP8ny21GJ1HjC2QlE+3d0zehf1jptH+vE+ls2WL1yuH+ubKPqPnkvgRfUS13zT
-         Da3189wOonGl3l1jcwzRT2HpFZ0nbhterUBop+eiG/IM3Q6tfwmnK3Cn784s/9FBlH
-         6YY1uiMt8KwkYgpOZ7B3YWKc3Ran2ldQIEokF1wUBEr0WxyUbtZG7e80YDr3kqXkqh
-         Y3ByVd/CyJZENnrMaFfMddBbZ9wZU7s4RyfrU65exjdfmAgHShs0Hvl0Kl+X5rlrjk
-         pBIUf5mUfeLrwimXIFCsUOvgldMGljupoaN5bPB506zOPO7fB6KDrtqq2sYlYBg5KO
-         gjhRphO614Zeg==
-Date:   Sat, 15 Jan 2022 13:36:04 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Yinan Liu <yinan@linux.alibaba.com>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel test robot <lkp@intel.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        llvm@lists.linux.dev
-Subject: Re: [for-next][PATCH 10/31] scripts: ftrace - move the
- sort-processing in ftrace_init
-Message-ID: <YeMwNEfNaGErFthk@archlinux-ax161>
-References: <20220111173030.999527342@goodmis.org>
- <20220111173115.079437896@goodmis.org>
+        Sat, 15 Jan 2022 15:38:49 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A638C061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 12:38:49 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id y4so23258238uad.1
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 12:38:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yO8dTPrmPRXVrjQIMnFZqGd29yzkjusF/zgJOiaD7Wg=;
+        b=f8qTvbOG4o9caP0liBKVTeiqM7cP4NXuoC3zCUVmjb40xDo/8Ha5Dn+Dp2HKEivUkd
+         mO1gSKE1TxoHCs6Q7C2gaMhKzOdIrX4VajFraLwVM10R90tkhtrBTm8/LsZxwL5fQKWt
+         KPFwAMw7ROv5o8CZAw33d4A2aRFfAi8Ocom/XkqQAZpqAfIlE3+0QRr8h2JIBlv9H50Q
+         hHuWP76pzoHEbvmi3tX4Kn843ZlUhbdrBFYzQwvztnZYzIsHo2vuP1wu1Su8SR1a2Fgp
+         XN+kz54Gb9fYFC5kGAmT41mHaZ+SBdx5od0riY/ZxBv+PKemEAQOEuxWW4wzN8SVEecu
+         NKuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yO8dTPrmPRXVrjQIMnFZqGd29yzkjusF/zgJOiaD7Wg=;
+        b=1Jy7MrQ7NSe8xSDtetUjA9mD3k4tX+UL5Ga3wkBPpt8K1o0lgNJwvVn/Bft46JDq0N
+         ofmWY1y/AF1VF2snMWiVgwjSH2rTc7gdxmOXGwY346Uw0h5WHPrae0+wZGKCujKeXiPM
+         pyacl71OcLMTLTFkb3txqGmsB3m8Xi0IA98FixS3zWOdcvNDBKTA6So2zZa5i1ingspH
+         EXJrl7kUAM14uAdSBjjPrO34/w2t27Ss4QhPyFVd+FF6BRGirmIZsDjOBGHzjFXi5/Ew
+         KV5UFprB1GRNRqBU3M4jDut028uw5T2Lq2/rAowjTWqdkP99wjn7VOVmY/kWfgfCKo2F
+         2Z3Q==
+X-Gm-Message-State: AOAM532YX+nn73CmyK4yb6XNU83St1MYgh/WZYisIqtN6aYk74nfiXib
+        IEf3kY7kE92vIkFzf/i5KxOZw41Aj+2iWvomJFeUpA==
+X-Google-Smtp-Source: ABdhPJzn0ZcUlXuX8W+bbu7cwMymCpFiuBYTixLtFqfJguAcAFEzEHwdTrujX/GrVejpXZE47kvqqE43aEHBPCQJSlE=
+X-Received: by 2002:ab0:3c4a:: with SMTP id u10mr7062958uaw.139.1642279128502;
+ Sat, 15 Jan 2022 12:38:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111173115.079437896@goodmis.org>
+References: <3c0087a9-5c3b-d665-136e-6110a0482775@canonical.com>
+ <CAPLW+4nrPKA66GrF4XukyHWHJ=wBycjyK3ZPLCofEFe-VJ9wWg@mail.gmail.com>
+ <06320ea8-9297-1e90-dafd-978f73c22fff@canonical.com> <CAPLW+4=xD5hM_tYDD+kwqkiVq5h0tjO+7q6Akbd6iO_Ou-g=0A@mail.gmail.com>
+ <1a09cd4e-71da-43e6-9732-33d704e1744e@canonical.com>
+In-Reply-To: <1a09cd4e-71da-43e6-9732-33d704e1744e@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Sat, 15 Jan 2022 22:38:36 +0200
+Message-ID: <CAPLW+4kEQYrTvMwodbha4SV9mDS36sjxdsiCwVQptmoShb_5hQ@mail.gmail.com>
+Subject: Re: Exynos850 and ExynosAuto v9 pinctrl wakeup muxed interrupt
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Chanho Park <chanho61.park@samsung.com>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven and Yinan,
+On Sat, 15 Jan 2022 at 17:46, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 14/01/2022 21:32, Sam Protsenko wrote:
+> > On Fri, 7 Jan 2022 at 10:16, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@canonical.com> wrote:
+> >>
+> >> On 03/01/2022 21:59, Sam Protsenko wrote:
+> >>> On Thu, 30 Dec 2021 at 21:34, Krzysztof Kozlowski
+> >>> <krzysztof.kozlowski@canonical.com> wrote:
+> >>>>
+> >>>> Hi Chanho and Sam,
+> >>>>
+> >>>> I am slowly finishing dtschema for Samsung pinctrl drivers [1] and I
+> >>>> noticed that Exynos850 and Auto v9 do not define interrupt in pinctrl
+> >>>> node with: wakeup-interrupt-controller. This is an interrupt muxing
+> >>>> several external wakeup interrupts, e.g. EINT16 - EINT31.
+> >>>>
+> >>>> For Exynos5433 this looks like:
+> >>>> https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/exynos/exynos5433.dtsi#L857
+> >>>>
+> >>>> Missing muxed interrupt for Exynos850 and Autov9 might be fine, although
+> >>>> you should see in dmesg error log like:
+> >>>>     "irq number for muxed EINTs not found"
+> >>>>
+> >>>> Can you check that your wakeup-interrupt-controller is properly defined
+> >>>> in DTSI? If yes, I will need to include such differences in the dtschema.
+> >>>>
+> >>>
+> >>> In case of Exynos850, no muxed interrupts exist for wakeup GPIO
+> >>> domains. Basically, "pinctrl_alive" and "pinctrl_cmgp" domains are
+> >>> wake-up capable, and they have dedicated interrupt for each particular
+> >>> GPIO pin. All those interrupts are defined in exynos850-pinctrl.dtsi
+> >>> file, in next nodes:
+> >>>   - pinctrl_alive: gpa0..gpa4 (interrupt numbers 1..36)
+> >>>   - pinctrl_cmgp: gpm0..gpm7 (interrupt numbers 39..46)
+> >>>
+> >>> All mentioned interrupts are wakeup interrupts, and there are no muxed
+> >>> ones. So it seems like it's not possible to specify "interrupts"
+> >>> property in pinctrl nodes with wakeup-interrupt-controller. The PM is
+> >>> not enabled in Exynos850 platform yet, so I can't really test if
+> >>> interrupts I mentioned are able to wake up the system.
+> >>
+> >> Thanks for confirming, I'll adjust the schema.
+> >>
+> >>>
+> >>> After adding this patch ("arm64: dts: exynos: Add missing gpm6 and
+> >>> gpm7 nodes to Exynos850"), I can't see this error message anymore:
+> >>>
+> >>>     samsung-pinctrl 11c30000.pinctrl: irq number for muxed EINTs not found
+> >>>
+> >>> That's because exynos_eint_wkup_init() function exits in this check:
+> >>>
+> >>>     if (!muxed_banks) {
+> >>>         of_node_put(wkup_np);
+> >>>         return 0;
+> >>>     }
+> >>>
+> >>> But I actually can see another error message, printed in
+> >>> exynos_eint_gpio_init() function (for wake-up capable pinctrl nodes,
+> >>> because those nodes don't have "interrupts" property now -- you
+> >>> removed those in your patch):
+> >>>
+> >>>     samsung-pinctrl 11850000.pinctrl: irq number not available
+> >>>     samsung-pinctrl 11c30000.pinctrl: irq number not available
+> >>>
+> >>> which in turn leads to exynos_eint_gpio_init() function to exit with
+> >>> -EINVAL code in the very beginning, and I'm not sure if it's ok? As I
+> >>> said, those errors only appear after your patch ("arm64: dts: exynos:
+> >>> drop incorrectly placed wakeup interrupts in Exynos850").
+> >>
+> >> Yeah, I replied to this next to my patch. I think my patch was not
+> >> correct and you need one - exactly one - interrupt for regular GPIO
+> >> interrupts.
+> >>
+> >
+> > I just need to remove ".eint_gpio_init" in exynos850_pin_ctrl[] for
+> > pinctrl_alive and pinctrl_gpmc. Those already have ".eint_wkup_init",
+> > which is enough to handle all interrupts (per-pin). GPIO_ALIVE and
+> > GPIO_GPMC lack EINT capabilities: judging from TRM, there are no EINT
+> > interrupts (like EINT_SVC, which is accessed in EINT ISR), and there
+> > are no EINT interrupts wired to GIC (like INTREQ__GPIO_ALIVE or
+> > INTREQ__GPIO_GPMC). With removed ".eint_gpio_init", I can see in
+> > "/proc/interrupts" that corresponding interrupts are still handled
+> > properly (because of .eint_wkup_init), and the error message is gone.
+>
+> This would mean that my dts patch removing all interrupts for alive and
+> cmgp was correct:
+> https://lore.kernel.org/linux-samsung-soc/66754058-187e-ffd5-71ba-4720101f5d98@canonical.com/T/#mf0b06ebdac554d57d8230dc546c3d57d59d7bd6b
+> Was it?
+>
 
-On Tue, Jan 11, 2022 at 12:30:41PM -0500, Steven Rostedt wrote:
-> From: Yinan Liu <yinan@linux.alibaba.com>
-> 
-> When the kernel starts, the initialization of ftrace takes
-> up a portion of the time (approximately 6~8ms) to sort mcount
-> addresses. We can save this time by moving mcount-sorting to
-> compile time.
-> 
-> Link: https://lkml.kernel.org/r/20211212113358.34208-2-yinan@linux.alibaba.com
-> 
-> Signed-off-by: Yinan Liu <yinan@linux.alibaba.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+Yep. But patches [1,2] I sent recently should be probably applied
+before yours -- they belong together. Please take those in your patch
+series (when sending the next version).
 
-This change as commit 72b3942a173c ("scripts: ftrace - move the
-sort-processing in ftrace_init") in -next causes a bunch of warnings at
-the beginning of the build when using clang as the host compiler:
+Thanks!
 
-$ make -skj"$(nproc)" LLVM=1 distclean allmodconfig init/main.o
-In file included from scripts/sorttable.c:195:
-scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-        if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:479:6: note: uninitialized use occurs here
-        if (mcount_sort_thread) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:380:2: note: remove the 'if' if its condition is always false
-        if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-        if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:479:6: note: uninitialized use occurs here
-        if (mcount_sort_thread) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:380:6: note: remove the '||' if its condition is always false
-        if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-        if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-            ^~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:479:6: note: uninitialized use occurs here
-        if (mcount_sort_thread) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:380:6: note: remove the '||' if its condition is always false
-        if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:288:30: note: initialize the variable 'mcount_sort_thread' to silence this warning
-        pthread_t mcount_sort_thread;
-                                    ^
-                                     = 0
-In file included from scripts/sorttable.c:197:
-scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-        if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:479:6: note: uninitialized use occurs here
-        if (mcount_sort_thread) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:380:2: note: remove the 'if' if its condition is always false
-        if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-        if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:479:6: note: uninitialized use occurs here
-        if (mcount_sort_thread) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:380:6: note: remove the '||' if its condition is always false
-        if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:380:6: warning: variable 'mcount_sort_thread' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-        if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-            ^~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:479:6: note: uninitialized use occurs here
-        if (mcount_sort_thread) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:380:6: note: remove the '||' if its condition is always false
-        if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:370:6: warning: variable 'mcount_sort_thread' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-        if (pthread_create(&orc_sort_thread, NULL,
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:479:6: note: uninitialized use occurs here
-        if (mcount_sort_thread) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:370:2: note: remove the 'if' if its condition is always false
-        if (pthread_create(&orc_sort_thread, NULL,
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:360:6: warning: variable 'mcount_sort_thread' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-        if (orc_ip_size % sizeof(int) != 0 ||
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:479:6: note: uninitialized use occurs here
-        if (mcount_sort_thread) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:360:2: note: remove the 'if' if its condition is always false
-        if (orc_ip_size % sizeof(int) != 0 ||
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:360:6: warning: variable 'mcount_sort_thread' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-        if (orc_ip_size % sizeof(int) != 0 ||
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:479:6: note: uninitialized use occurs here
-        if (mcount_sort_thread) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:360:6: note: remove the '||' if its condition is always false
-        if (orc_ip_size % sizeof(int) != 0 ||
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:360:6: warning: variable 'mcount_sort_thread' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-        if (orc_ip_size % sizeof(int) != 0 ||
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:479:6: note: uninitialized use occurs here
-        if (mcount_sort_thread) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:360:6: note: remove the '||' if its condition is always false
-        if (orc_ip_size % sizeof(int) != 0 ||
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:353:6: warning: variable 'mcount_sort_thread' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-        if (!g_orc_ip_table || !g_orc_table) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:479:6: note: uninitialized use occurs here
-        if (mcount_sort_thread) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:353:2: note: remove the 'if' if its condition is always false
-        if (!g_orc_ip_table || !g_orc_table) {
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:353:6: warning: variable 'mcount_sort_thread' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-        if (!g_orc_ip_table || !g_orc_table) {
-            ^~~~~~~~~~~~~~~
-scripts/sorttable.h:479:6: note: uninitialized use occurs here
-        if (mcount_sort_thread) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:353:6: note: remove the '||' if its condition is always false
-        if (!g_orc_ip_table || !g_orc_table) {
-            ^~~~~~~~~~~~~~~~~~
-scripts/sorttable.h:288:30: note: initialize the variable 'mcount_sort_thread' to silence this warning
-        pthread_t mcount_sort_thread;
-                                    ^
-                                     = 0
-12 warnings generated.
+[1] https://lkml.org/lkml/2022/1/14/861
+[2] https://lkml.org/lkml/2022/1/3/680
 
-Should mcount_sort_thread be zero initialized or is there something else
-going on here? I am currently hunting down a bunch of other regressions
-so apologies for just the report rather than a patch to fix it.
-
-Cheers,
-Nathan
+> > Will send the patch soon -- please add it to the beginning of your
+> > series along with my other patch I already submitted.
+>
+> Sure.
+>
+>
+>
+>
+>
+> Best regards,
+> Krzysztof

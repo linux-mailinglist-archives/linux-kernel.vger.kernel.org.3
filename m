@@ -2,118 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7293D48F6A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 13:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D055948F6AA
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 13:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiAOMFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 07:05:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
+        id S230161AbiAOMPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 07:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiAOMFU (ORCPT
+        with ESMTP id S229486AbiAOMPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 07:05:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930CFC061574;
-        Sat, 15 Jan 2022 04:05:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33257B800E2;
-        Sat, 15 Jan 2022 12:05:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B253C36AE3;
-        Sat, 15 Jan 2022 12:05:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642248317;
-        bh=2IT+FQbGuQK8tZVADwQ/U1hJPKJDewZokL/75ySxy4I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nJmsxeN7eNg6Ht9L7sZ3312fAX5DCZ1KMwL3ZBGk8jEx8f/Ja8iNyqGLzj5MRf5am
-         4eZT/c4qBEzaHmM1uPQKbhOcBwubWTMbGp4O60vgXW9PG/zhEclq23u8s71gW5aeMU
-         KS1pFEWbuY6KJr4qcrf/vixin9sTripjkHQfSuDJcj8vSb6iAsE2WttJ8k2xLhlbwv
-         n3ToJD949Y3oFqtC0hmVzm6CMqNcq+U45mED9RwDJa1xQg1mnj3fogFxeKjX+vsGfP
-         JOAn2JbFDwMw9lom5c8EpxT/Bh7MlGRnAyCD8QLqpgRqMSat12f/62FVUbt01+A144
-         AcpmpKHl+p3Ug==
-Date:   Sat, 15 Jan 2022 13:05:09 +0100
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 3/6] dt-bindings: mvebu-uart: document DT bindings
- for marvell,armada-3700-uart-clock
-Message-ID: <20220115130509.4a240730@thinkpad>
-In-Reply-To: <20220115115018.he4hnnhlvrb6kann@pali>
-References: <20210930095838.28145-1-pali@kernel.org>
-        <20210930095838.28145-4-pali@kernel.org>
-        <163425678347.1688384.10695189000353676651@swboyd.mtv.corp.google.com>
-        <20211015090937.gnt66hgugrhwnkei@pali>
-        <20211015093701.pfvkighxsndj4ujg@pali>
-        <163433494758.1688384.5994009027317282677@swboyd.mtv.corp.google.com>
-        <20211016064210.7ahqfqcvf66wtt66@pali>
-        <20220115080213.0CCAFC36AE3@smtp.kernel.org>
-        <20220115115018.he4hnnhlvrb6kann@pali>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sat, 15 Jan 2022 07:15:21 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AACC061574;
+        Sat, 15 Jan 2022 04:15:21 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id s30so39304215lfo.7;
+        Sat, 15 Jan 2022 04:15:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MiI6w/5hjGm8XCjU8jAMKhntd2/3CYQYixb5tgCZxjk=;
+        b=CeyE0801M0KpLNHCzVoqXTm2Frz2DrWLvnPo3pSAHER2j7hrEEZzMsWG4oNp7A/k2g
+         d2ASBR1M6c1FBBRbA6R9G2xsYh78uyPdjQMHrrYmABJkkkINsxlKNUY66Bxf8Q2Ft2O0
+         RFbuhuE/EGk3BpYv+B9fBX6iZLfwXeIWiMqP7iarQ4eMnoClmjQ4KyqvX4fIIJu6c/Zp
+         uGx1whXcgRKMM3dvaULqAG/C/A85rvWODGrqgC7eQ24wDM98htbaJ3Sl8zgffTxBKfYP
+         Ztv28Bc2L4S5zWts6RHLtpnleDFb0RI8mP/UO0MV5Plnv4CIoLuxY9ACcdiv2xKeD9fD
+         WJvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MiI6w/5hjGm8XCjU8jAMKhntd2/3CYQYixb5tgCZxjk=;
+        b=XV58DQfBhxdAeDy8f4McOKRIhh+IOzHZd6eu7cM0yLXpTeAlVUaf8iiDAznxOsUPnU
+         5nG/Mh0DRFqtkTcfj4SODdBrql7+7fWPA3Hilwvg9OMRlIt6lQgH32rGK1DKNdWVRZiJ
+         L8Jy4t2jKQivdAr/SxtjOTHjOL1ZIK0TuWQz4M7/CMEZ4w+KwsHJWCRnEUBL5Mk9GT5K
+         u033JFOYnu/9MidJSoxIKBvNuaGeJuO/7zClaaiE9A9tYbpA8SNdHYIxPW9s0P6BxjLV
+         otCdofU9KJwcOj8OGlxbeP1MPQ4I1bQP6jnCUQMGQCHL5m3aGN6BEmbxzSJ+yl1rtUNn
+         zR3g==
+X-Gm-Message-State: AOAM533rB5hylOG65IzR2mO9miWGZuxtNWk4dOOXLlzTptDqGWLEUZAZ
+        R9DfVKNmNtftCYV9guUX3zhE99ovvLE=
+X-Google-Smtp-Source: ABdhPJz+e3krenSKInYFF0ag/d0FsplQIFrqq+iAzDuyxzck504BYNPsVOHY2J0czhPA98rYRhwOnA==
+X-Received: by 2002:a2e:8447:: with SMTP id u7mr9655087ljh.530.1642248919765;
+        Sat, 15 Jan 2022 04:15:19 -0800 (PST)
+Received: from localhost.localdomain ([2a05:3580:f312:6c01:1b6d:df4d:cbec:e4a2])
+        by smtp.gmail.com with ESMTPSA id q1sm851989lfa.216.2022.01.15.04.15.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jan 2022 04:15:19 -0800 (PST)
+From:   Andrey Skvortsov <andrej.skvortzov@gmail.com>
+Cc:     Arnaud Ferraris <arnaud.ferraris@gmail.com>,
+        Andrey Skvortsov <andrej.skvortzov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Huijin Park <huijin.park@samsung.com>,
+        =?UTF-8?q?Christian=20L=C3=B6hle?= <CLoehle@hyperstone.com>,
+        Yue Hu <huyue2@yulong.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mmc: core: Wait for command setting 'Power Off Notification' bit to complete
+Date:   Sat, 15 Jan 2022 15:14:46 +0300
+Message-Id: <20220115121447.641524-1-andrej.skvortzov@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 15 Jan 2022 12:50:18 +0100
-Pali Roh=C3=A1r <pali@kernel.org> wrote:
+SD card is allowed to signal busy on DAT0 up to 1s after the
+CMD49. According to SD spec (version 6.0 section 5.8.1.3) first host
+waits until busy of CMD49 is released and only then polls Power
+Management Status register up to 1s until the card indicates ready to
+power off.
 
-> On Saturday 15 January 2022 00:02:11 Stephen Boyd wrote:
-> > Quoting Pali Roh=C3=A1r (2021-10-15 23:42:10) =20
-> > >=20
-> > > If I was designing this driver and DTS bindings I would have choose
-> > > something like this:
-> > >=20
-> > > uart@0x12000 { =20
-> >=20
-> > Drop the 0x
-> >  =20
-> > >     reg =3D <0x12000 0x18>, <0x12200 0x30>;
-> > >     clock-controller {
-> > >         ...
-> > >     }; =20
-> >=20
-> > Drop this node and put whatever properties are inside into the parent
-> > node.
-> >  =20
-> > >     serial1 {
-> > >         ...
-> > >         status =3D "disabled";
-> > >     };
-> > >     serial2 {
-> > >         ...
-> > >         status =3D "disabled";
-> > >     };
-> > > };
-> > >=20
-> > > Meaning that 0x12000 node would be 3 subnodes and all registers would=
- be
-> > > defined in top level nodes and would be handled by one driver.
-> > >=20
-> > > This is really how hardware block looks like. But it is not backward
-> > > compatible... =20
-> >=20
-> > Sounds good to me. I presume we need the serial child nodes so we can
-> > reference them from the stdout-path? =20
->=20
-> Yes, exactly, separate nodes for serial1 and serial2 are still required.
->=20
-> But dropping clock controller is not possible as for higher baudrates we
-> need to use and configure uart clock controller. Without it we just get
-> comparable feature support which is already present in driver.
+Without waiting for busy before polling status register sometimes card
+becomes unresponsive and system fails to suspend:
 
-What Stephen means is making clock controller out of the uart node
-directly. No need to add separate subnode just for clock controller.
+  [  205.907459] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+  [  206.421274] sunxi-mmc 1c0f000.mmc: data error, sending stop command
+  [  206.421321] sunxi-mmc 1c0f000.mmc: send stop command failed
+  [  206.421347] mmc0: error -110 reading status reg of PM func
+  [  206.421366] PM: dpm_run_callback(): mmc_bus_suspend+0x0/0x74 returns -110
+  [  206.421402] mmcblk mmc0:aaaa: PM: failed to suspend async: error -110
+  [  206.437064] PM: Some devices failed to suspend, or early wake event detected
 
-Marek
+Tested with Sandisk Extreme PRO A2 64GB on Allwinner A64 system.
+
+Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
+---
+ drivers/mmc/core/sd.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
+index e223275bbad1..842b886bdd4e 100644
+--- a/drivers/mmc/core/sd.c
++++ b/drivers/mmc/core/sd.c
+@@ -66,7 +66,7 @@ static const unsigned int sd_au_size[] = {
+ 		__res & __mask;						\
+ 	})
+ 
+-#define SD_POWEROFF_NOTIFY_TIMEOUT_MS 2000
++#define SD_POWEROFF_NOTIFY_TIMEOUT_MS 1000
+ #define SD_WRITE_EXTR_SINGLE_TIMEOUT_MS 1000
+ 
+ struct sd_busy_data {
+@@ -1663,6 +1663,13 @@ static int sd_poweroff_notify(struct mmc_card *card)
+ 		goto out;
+ 	}
+ 
++	/* Find out when the command is completed. */
++	err = mmc_poll_for_busy(card, SD_POWEROFF_NOTIFY_TIMEOUT_MS, false,
++				MMC_BUSY_EXTR_SINGLE);
++
++	if (err)
++		goto out;
++
+ 	cb_data.card = card;
+ 	cb_data.reg_buf = reg_buf;
+ 	err = __mmc_poll_for_busy(card->host, SD_POWEROFF_NOTIFY_TIMEOUT_MS,
+-- 
+2.34.1
+

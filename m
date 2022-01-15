@@ -2,14 +2,14 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E07148F710
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 14:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B91EF48F70F
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 14:15:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbiAONPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 08:15:54 -0500
+        id S232213AbiAONPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 08:15:52 -0500
 Received: from alexa-out.qualcomm.com ([129.46.98.28]:16151 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbiAONPn (ORCPT
+        with ESMTP id S231833AbiAONPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 15 Jan 2022 08:15:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
@@ -17,11 +17,11 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1642252544; x=1673788544;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=GkPIu+KUNvXmZTEszIYy9MbqlgxYqQSilL8Iut3g6DI=;
-  b=UsGIZ200yNUiRO0pab6d8lzwLNNNGtvQx0TcqtqfupON1hiv1VsQ/xsQ
-   OINafi3gG1o1Wtx9DEHdxLp9KHvTSuJIB+JGm9UOzuII3KAxo+iy4Qqpd
-   frartVr+OlSrwdWItc+w54LqUKrNzaT0DJxlGVk8dG6t9QiTbXCgh9EMs
-   E=;
+  bh=DQWaPQ+0rviNbgTffzEDspCm5f8s267jdCGIyLu/vFM=;
+  b=GpSW2Hjqh5dZ8vu4GGglXRtItknlgkx0mFPfgCX3QNSuA0YbqemAngLM
+   NnwiqjP2SYWBSCQcF+cg9Xx//mVO7LGapyYGYmcxbPqmJWcMosXJftjgP
+   t118QWIAbKrxV8apBSmDC+dCH+ijWxLRa+ktJRk8Fn8Erx3vNqIvZ6els
+   A=;
 Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
   by alexa-out.qualcomm.com with ESMTP; 15 Jan 2022 05:15:43 -0800
 X-QCInternal: smtphost
@@ -30,11 +30,11 @@ Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sat, 15 Jan 2022 05:15:35 -0800
+ 15.2.922.19; Sat, 15 Jan 2022 05:15:41 -0800
 Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sat, 15 Jan 2022 05:15:30 -0800
+ 15.2.922.19; Sat, 15 Jan 2022 05:15:36 -0800
 From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 To:     Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -45,10 +45,12 @@ CC:     gregkh <gregkh@linuxfoundation.org>, <quic_psodagud@quicinc.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-arm-msm@vger.kernel.org>,
         Trilok Soni <quic_tsoni@quicinc.com>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>
-Subject: [PATCHv7 2/5] irqchip/tegra: Fix overflow implicit truncation warnings
-Date:   Sat, 15 Jan 2022 18:44:52 +0530
-Message-ID: <9b9be40178e4b1677e8d19df45f4bc59ba86ba0f.1642233364.git.quic_saipraka@quicinc.com>
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCHv7 3/5] drm/meson: Fix overflow implicit truncation warnings
+Date:   Sat, 15 Jan 2022 18:44:53 +0530
+Message-ID: <28080ab6447e5daf775ba0af2f20b5ea68f20739.1642233364.git.quic_saipraka@quicinc.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1642233364.git.quic_saipraka@quicinc.com>
 References: <cover.1642233364.git.quic_saipraka@quicinc.com>
@@ -62,64 +64,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix -Woverflow warnings for tegra irqchip driver which is a result
+Fix -Woverflow warnings for drm/meson driver which is a result
 of moving arm64 custom MMIO accessor macros to asm-generic function
 implementations giving a bonus type-checking now and uncovering these
 overflow warnings.
 
-drivers/irqchip/irq-tegra.c: In function ‘tegra_ictlr_suspend’:
-drivers/irqchip/irq-tegra.c:151:18: warning: large integer implicitly truncated to unsigned type [-Woverflow]
-   writel_relaxed(~0ul, ictlr + ICTLR_COP_IER_CLR);
-                  ^
+drivers/gpu/drm/meson/meson_viu.c: In function ‘meson_viu_init’:
+drivers/gpu/drm/meson/meson_registers.h:1826:48: error: large integer implicitly truncated to unsigned type [-Werror=overflow]
+ #define  VIU_OSD_BLEND_REORDER(dest, src)      ((src) << (dest * 4))
+                                                ^
+drivers/gpu/drm/meson/meson_viu.c:472:18: note: in expansion of macro ‘VIU_OSD_BLEND_REORDER’
+   writel_relaxed(VIU_OSD_BLEND_REORDER(0, 1) |
+                  ^~~~~~~~~~~~~~~~~~~~~
 
-Cc: Marc Zyngier <maz@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 ---
- drivers/irqchip/irq-tegra.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/meson/meson_viu.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/irqchip/irq-tegra.c b/drivers/irqchip/irq-tegra.c
-index e1f771c72fc4..9e4e5b39c701 100644
---- a/drivers/irqchip/irq-tegra.c
-+++ b/drivers/irqchip/irq-tegra.c
-@@ -148,10 +148,10 @@ static int tegra_ictlr_suspend(void)
- 		lic->cop_iep[i] = readl_relaxed(ictlr + ICTLR_COP_IEP_CLASS);
+diff --git a/drivers/gpu/drm/meson/meson_viu.c b/drivers/gpu/drm/meson/meson_viu.c
+index 259f3e6bec90..bb7e109534de 100644
+--- a/drivers/gpu/drm/meson/meson_viu.c
++++ b/drivers/gpu/drm/meson/meson_viu.c
+@@ -469,17 +469,17 @@ void meson_viu_init(struct meson_drm *priv)
+ 			priv->io_base + _REG(VD2_IF0_LUMA_FIFO_SIZE));
  
- 		/* Disable COP interrupts */
--		writel_relaxed(~0ul, ictlr + ICTLR_COP_IER_CLR);
-+		writel_relaxed(~0u, ictlr + ICTLR_COP_IER_CLR);
+ 	if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_G12A)) {
+-		writel_relaxed(VIU_OSD_BLEND_REORDER(0, 1) |
+-			       VIU_OSD_BLEND_REORDER(1, 0) |
+-			       VIU_OSD_BLEND_REORDER(2, 0) |
+-			       VIU_OSD_BLEND_REORDER(3, 0) |
+-			       VIU_OSD_BLEND_DIN_EN(1) |
+-			       VIU_OSD_BLEND1_DIN3_BYPASS_TO_DOUT1 |
+-			       VIU_OSD_BLEND1_DOUT_BYPASS_TO_BLEND2 |
+-			       VIU_OSD_BLEND_DIN0_BYPASS_TO_DOUT0 |
+-			       VIU_OSD_BLEND_BLEN2_PREMULT_EN(1) |
+-			       VIU_OSD_BLEND_HOLD_LINES(4),
+-			       priv->io_base + _REG(VIU_OSD_BLEND_CTRL));
++		u32 val = (u32)VIU_OSD_BLEND_REORDER(0, 1) |
++			  (u32)VIU_OSD_BLEND_REORDER(1, 0) |
++			  (u32)VIU_OSD_BLEND_REORDER(2, 0) |
++			  (u32)VIU_OSD_BLEND_REORDER(3, 0) |
++			  (u32)VIU_OSD_BLEND_DIN_EN(1) |
++			  (u32)VIU_OSD_BLEND1_DIN3_BYPASS_TO_DOUT1 |
++			  (u32)VIU_OSD_BLEND1_DOUT_BYPASS_TO_BLEND2 |
++			  (u32)VIU_OSD_BLEND_DIN0_BYPASS_TO_DOUT0 |
++			  (u32)VIU_OSD_BLEND_BLEN2_PREMULT_EN(1) |
++			  (u32)VIU_OSD_BLEND_HOLD_LINES(4);
++		writel_relaxed(val, priv->io_base + _REG(VIU_OSD_BLEND_CTRL));
  
- 		/* Disable CPU interrupts */
--		writel_relaxed(~0ul, ictlr + ICTLR_CPU_IER_CLR);
-+		writel_relaxed(~0u, ictlr + ICTLR_CPU_IER_CLR);
- 
- 		/* Enable the wakeup sources of ictlr */
- 		writel_relaxed(lic->ictlr_wake_mask[i], ictlr + ICTLR_CPU_IER_SET);
-@@ -172,12 +172,12 @@ static void tegra_ictlr_resume(void)
- 
- 		writel_relaxed(lic->cpu_iep[i],
- 			       ictlr + ICTLR_CPU_IEP_CLASS);
--		writel_relaxed(~0ul, ictlr + ICTLR_CPU_IER_CLR);
-+		writel_relaxed(~0u, ictlr + ICTLR_CPU_IER_CLR);
- 		writel_relaxed(lic->cpu_ier[i],
- 			       ictlr + ICTLR_CPU_IER_SET);
- 		writel_relaxed(lic->cop_iep[i],
- 			       ictlr + ICTLR_COP_IEP_CLASS);
--		writel_relaxed(~0ul, ictlr + ICTLR_COP_IER_CLR);
-+		writel_relaxed(~0u, ictlr + ICTLR_COP_IER_CLR);
- 		writel_relaxed(lic->cop_ier[i],
- 			       ictlr + ICTLR_COP_IER_SET);
- 	}
-@@ -312,7 +312,7 @@ static int __init tegra_ictlr_init(struct device_node *node,
- 		lic->base[i] = base;
- 
- 		/* Disable all interrupts */
--		writel_relaxed(~0UL, base + ICTLR_CPU_IER_CLR);
-+		writel_relaxed(~0U, base + ICTLR_CPU_IER_CLR);
- 		/* All interrupts target IRQ */
- 		writel_relaxed(0, base + ICTLR_CPU_IEP_CLASS);
- 
+ 		writel_relaxed(OSD_BLEND_PATH_SEL_ENABLE,
+ 			       priv->io_base + _REG(OSD1_BLEND_SRC_CTRL));
 -- 
 2.33.1
 

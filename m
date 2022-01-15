@@ -2,98 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA77B48F39D
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B557048F3B0
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbiAOA7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 19:59:00 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:14861 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiAOA67 (ORCPT
+        id S231691AbiAOBAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 20:00:14 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:34122 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229455AbiAOBAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 19:58:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1642208339; x=1673744339;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=z+JIuWKxJODjguXs3yWrhfZnFZJClraM9Lc/R80g5pc=;
-  b=E/GW2wN08FFf3VZNVXmILhUchNJj/hRHwxw7D9hP0vxsbkbkE+RWjPri
-   vVPgpJ3FupgHirIeNzHEQoZa3PujN3ZsHnQJajjzATNxYJvHTKxs5+26t
-   gd5FSYnYTh5gj5/iwBaK78OqIhzhUwHNL05EkL26WI5Li5ius6cByihWG
-   8=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 14 Jan 2022 16:58:59 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 16:58:58 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 14 Jan 2022 16:58:51 -0800
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 14 Jan 2022 16:58:51 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
-        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v17 4/4] drm/msm/dp: stop link training after link training 2 failed
-Date:   Fri, 14 Jan 2022 16:58:35 -0800
-Message-ID: <1642208315-9136-5-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1642208315-9136-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1642208315-9136-1-git-send-email-quic_khsieh@quicinc.com>
+        Fri, 14 Jan 2022 20:00:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 00357CE24C5;
+        Sat, 15 Jan 2022 01:00:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F812C36AEA;
+        Sat, 15 Jan 2022 01:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642208409;
+        bh=mK8RlZtmgrkSHVB8/Qo9CsH7FJoAG438jfe55xe5CwM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=iIjYRxmFC3jyo6p5vVqDEoii4K/95e3l4BzmAKlqItf3F/X4GwVyq/+swyzj7mmub
+         bWbqFu1hsfcnfaaKAIVaXZIgDVluEcYmpLJ8bPBXnB7u7YvLRfqylDKpi6Hg+LvSFl
+         JgbO3cBj3jwK340w8KNZCawtGGPLaxJNNihLvwGIP2RLZuE0LezaBZUfsTlpu6Wr1c
+         TQkJC3LSiuXf5TYgVrucELsyyJ3MIPJHsXcMmJde30xJEl+ZmrLEZ08tKm7OT9N6mq
+         hroa5mesetSO8Ry/GHidb7n/df22XFuatjX0TdvYTnilDQhZYwqxYYJrjldFYZ0st7
+         JOw+LtYneJ+fg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 25F4AF6079A;
+        Sat, 15 Jan 2022 01:00:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] tools/resolve_btfids: build with host flags
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164220840915.32473.3734511457879421361.git-patchwork-notify@kernel.org>
+Date:   Sat, 15 Jan 2022 01:00:09 +0000
+References: <20220112002503.115968-1-connoro@google.com>
+In-Reply-To: <20220112002503.115968-1-connoro@google.com>
+To:     Connor O'Brien <connoro@google.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Each DP link training contains link training 1 followed by link
-training 2.  There is maximum of 5 retries of DP link training
-before declared link training failed. It is required to stop link
-training at end of link training 2 if it is failed so that next
-link training 1 can start freshly. This patch fixes link compliance
-test  case 4.3.1.13 (Source Device Link Training EQ Fallback Test).
+Hello:
 
-Changes in v10:
---  group into one series
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-Changes in v11:
--- drop drm/msm/dp: dp_link_parse_sink_count() return immediately if aux read
+On Wed, 12 Jan 2022 00:25:03 +0000 you wrote:
+> resolve_btfids is built using $(HOSTCC) and $(HOSTLD) but does not
+> pick up the corresponding flags. As a result, host-specific settings
+> (such as a sysroot specified via HOSTCFLAGS=--sysroot=..., or a linker
+> specified via HOSTLDFLAGS=-fuse-ld=...) will not be respected.
+> 
+> Fix this by setting CFLAGS to KBUILD_HOSTCFLAGS and LDFLAGS to
+> KBUILD_HOSTLDFLAGS.
+> 
+> [...]
 
-Fixes: 2e0adc765d88 ("drm/msm/dp: do not end dp link training until video is ready")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/gpu/drm/msm/dp/dp_ctrl.c | 3 +++
- 1 file changed, 3 insertions(+)
+Here is the summary with links:
+  - [bpf] tools/resolve_btfids: build with host flags
+    https://git.kernel.org/bpf/bpf-next/c/0e3a1c902ffb
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index f98df93..245e1b9 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1755,6 +1755,9 @@ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl)
- 				/* end with failure */
- 				break; /* lane == 1 already */
- 			}
-+
-+			/* stop link training before start re training  */
-+			dp_ctrl_clear_training_pattern(ctrl);
- 		}
- 	}
- 
+You are awesome, thank you!
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

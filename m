@@ -2,101 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4AE48F753
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 15:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 322E948F755
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 15:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbiAOOky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 09:40:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S232893AbiAOOmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 09:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiAOOkx (ORCPT
+        with ESMTP id S231804AbiAOOmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 09:40:53 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CACFC061574;
-        Sat, 15 Jan 2022 06:40:53 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id d187-20020a1c1dc4000000b003474b4b7ebcso11399549wmd.5;
-        Sat, 15 Jan 2022 06:40:53 -0800 (PST)
+        Sat, 15 Jan 2022 09:42:05 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF24C061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 06:42:05 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id j37-20020a634a65000000b00349a11dc809so3782901pgl.3
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 06:42:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/n55x+rW0Kb1T4WVGAuKWrikNjmvex0n+Y9oWsL//RI=;
-        b=Jhy3e/7+sWwhU6YyA8UYhboOiVcuBCMbbnybhdYih73TBreaJv4/j2QUHys93HNYRN
-         2F+oPvYAu9dRNRErpKuiOzLX+LwNXsT9a6DTDSQIdefABdMX9HAeRCnfxTMIlWhqdi5+
-         gyA/MR9pV9yZY5zgX4HiTDA2N4PCwPYtkS/d4XtwFlGrin6vtv+JdQ0c4RQLqMDsKkX/
-         e47ErV8mp7qF3kfj7OXI2Iy5N6fCirw6xEFGTizJVDwZShoX2V17rZKWRvEkbrLMSAlo
-         cytDz9BVyLPNym8tmdeeuh2cXN7WysewhiU+BB+CI2faYGmKPU5jc1Ivbq97I+TsQAWi
-         Ko/w==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=vQu2YGnyaem/WDCb/1ixVe4jFBzHYp6XDPfE+l97NRQ=;
+        b=RAFTf5fJoVhrySxFeclsltYyb9p2i1twuPM/kLWQ+AFQ0Wh4oUI+8TVolsH83OcqBj
+         nk/EF88RqtYjKHpmjifQ5+xGMnzVLUpYZuKU0LsDwODppMPNL/NusBwFSngJ8jGgVjB4
+         8Hd8NAsMTlBAIYnqa2CKkW3Z7NYdyLGxFaKkHL7QAwZZWCwTrKtg/74BAqqzr5omvKpG
+         Gcb0uEB9LaPxJouoiwL5DNLazEiRrev8MFAm+lz0ThqXFWJbtWhzyG3h14nKMnNQ6fAD
+         BvCiWA4yTnQnwRCDXK0K2c2Ed5ebeyYF51MrZvkKWbKAx2fSFPVDfmfeAivojQxhkRo5
+         HlGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/n55x+rW0Kb1T4WVGAuKWrikNjmvex0n+Y9oWsL//RI=;
-        b=Qx7IbeXRFg4XWN3K0gOhfxum8iQcOy5T2LE58efsOsucR58byxOGFk3AHbKDbkxnOi
-         T4lb2GFWEMBp9g+1zodtlZdJcYk5NGUnqrN6P72UH/k4BJsWa0bS3BsOK3EoLX4je2w8
-         q9J9yX82Vv2x59v2kC/u2LadCpv1aBOBJFMd4a9j3OzDRADNIcalDzX7H/lgmWo/PHfD
-         S6ZxL3cKSxtvfCT36K4l5xnG8KPqgZgz/MDt/Iz4hZ36I3HWaFv2NoxhwstyxjTAh/qw
-         TzycPXEQRIYaFY9mbI6sThuAtNyZ9URHQsb6uBz/phAYsczJ1umr2HFKHGunHdhrsaJC
-         KVcQ==
-X-Gm-Message-State: AOAM531wBO3EnZSkEBH5+l8rlwz6ebtygAJuPEFEmfLNGcIl2WfxNlL/
-        E8EqiNGpfJDuyURrpQi+vVw=
-X-Google-Smtp-Source: ABdhPJw3CreaGPBR8Ai+PNIuljpvOdhwzdb3f2CL9x9GkUcvd29nx/xtJF6iGMo6+dbEnA6xg09vBA==
-X-Received: by 2002:a5d:5709:: with SMTP id a9mr12506097wrv.707.1642257651966;
-        Sat, 15 Jan 2022 06:40:51 -0800 (PST)
-Received: from [10.19.0.4] ([194.126.177.12])
-        by smtp.gmail.com with ESMTPSA id s22sm13024959wmc.1.2022.01.15.06.40.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Jan 2022 06:40:51 -0800 (PST)
-Message-ID: <b00ae233-d446-6a22-21a8-aeb6619d6685@gmail.com>
-Date:   Sat, 15 Jan 2022 15:40:50 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] platform/surface: Reinstate platform dependency
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jarrett Schultz <jaschultz@microsoft.com>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220115140849.269479-1-geert@linux-m68k.org>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20220115140849.269479-1-geert@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=vQu2YGnyaem/WDCb/1ixVe4jFBzHYp6XDPfE+l97NRQ=;
+        b=5zA4MrGQ8OAQMIKkdw0Ap/LmnoARxW3HmgkEJUE33IHXUfAi0T9JZGbKe1wfoot+xC
+         iovumdzSByC7kOqcpdQW6gHZhsjVJJR/Rn2BRoPgOZzVWcaJ6uiCCT69pSiCQPODVCDR
+         k3myeZOIIdANxvG5tiIQFjOlv7Dc3NG/r51onKGiEG4m4mKdrRoFZhgBZ1NG9kz/iptL
+         5PGVDk8RsD9y4+pGbtjIGdbQCz2VMoWRkebhk7ZBmf8XBz4tdGyubuiKbYo2U/2Guuw1
+         O8xgbpykDvY025008OKKZ0RFdnUuZj1JZTtsVl6LaP61o3jrKsJhTSlN59ATiVEbMRuY
+         EbyQ==
+X-Gm-Message-State: AOAM532dbETN7MApI9W+XL7icsAtOsm6QRCM4DzvDWgkERSpo4dtnE1B
+        tCishjOefF3U+9Q1izP4ICyNpk7OjNAAgA==
+X-Google-Smtp-Source: ABdhPJzDJ6OuCMhPiZXw84Q7hz0CXiTS8JIsrrIAXlT+ZM3uGrKf7jUah/OPOJXY4kS0xiWjZNQkDozDXW4OSw==
+X-Received: from shakeelb.svl.corp.google.com ([2620:15c:2cd:202:5db:c608:dd2d:a4b])
+ (user=shakeelb job=sendgmr) by 2002:a17:903:41c1:b0:14a:6879:9333 with SMTP
+ id u1-20020a17090341c100b0014a68799333mr14741762ple.36.1642257724752; Sat, 15
+ Jan 2022 06:42:04 -0800 (PST)
+Date:   Sat, 15 Jan 2022 06:41:50 -0800
+Message-Id: <20220115144150.1195590-1-shakeelb@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH] mpage: remove ineffective __GFP_HIGH flag
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Michal Hocko <mhocko@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Shakeel Butt <shakeelb@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/15/22 15:08, Geert Uytterhoeven wrote:
-> Microsoft Surface platform-specific devices are only present on
-> Microsoft Surface platforms, which are currently limited to arm64 and
-> x86.  Hence add a dependency on ARM64 || X86, to prevent asking the user
-> about drivers for these devices when configuring a kernel for an
-> architecture that does not support Microsoft Surface platforms.
-> 
-> Fixes: 272479928172edf0 ("platform: surface: Propagate ACPI Dependency")
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Since the commit 8a5c743e308dd ("mm, memcg: use consistent gfp flags
+during readahead") mpage_alloc is clearing all the flag bits other than
+bits in GFP_KERNEL internally. Simply remove __GFP_HIGH from the call to
+mpage_alloc as it is cleared by it.
 
-Seems sensible to me.
+Signed-off-by: Shakeel Butt <shakeelb@google.com>
+---
+ fs/mpage.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
+diff --git a/fs/mpage.c b/fs/mpage.c
+index 87f5cfef6caa..477ccc3f3ac3 100644
+--- a/fs/mpage.c
++++ b/fs/mpage.c
+@@ -609,7 +609,7 @@ static int __mpage_writepage(struct page *page, struct writeback_control *wbc,
+ 				goto out;
+ 		}
+ 		bio = mpage_alloc(bdev, blocks[0] << (blkbits - 9),
+-				BIO_MAX_VECS, GFP_NOFS|__GFP_HIGH);
++				  BIO_MAX_VECS, GFP_NOFS);
+ 		if (bio == NULL)
+ 			goto confused;
+ 
+-- 
+2.34.1.703.g22d0c6ccf7-goog
 
-> ---
->   drivers/platform/surface/Kconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/platform/surface/Kconfig b/drivers/platform/surface/Kconfig
-> index 5f0578e25f718f14..463f1ec5c14e9fa9 100644
-> --- a/drivers/platform/surface/Kconfig
-> +++ b/drivers/platform/surface/Kconfig
-> @@ -5,6 +5,7 @@
->   
->   menuconfig SURFACE_PLATFORMS
->   	bool "Microsoft Surface Platform-Specific Device Drivers"
-> +	depends on ARM64 || X86 || COMPILE_TEST
->   	default y
->   	help
->   	  Say Y here to get to see options for platform-specific device drivers

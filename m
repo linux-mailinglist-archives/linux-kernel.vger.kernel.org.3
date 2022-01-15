@@ -2,111 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5671548F525
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 06:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E7A48F52B
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 06:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232213AbiAOFbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 00:31:04 -0500
-Received: from vmicros1.altlinux.org ([194.107.17.57]:34312 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbiAOFbD (ORCPT
+        id S232405AbiAOFfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 00:35:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231184AbiAOFfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 00:31:03 -0500
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 8C9A972C8DC;
-        Sat, 15 Jan 2022 08:31:01 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 73E714A46FE;
-        Sat, 15 Jan 2022 08:31:01 +0300 (MSK)
-Date:   Sat, 15 Jan 2022 08:31:01 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/5] ima: support fs-verity file digest based
- signatures
-Message-ID: <20220115053101.36xoy2bc7ypozo6l@altlinux.org>
-References: <20211202215507.298415-1-zohar@linux.ibm.com>
- <20211202215507.298415-5-zohar@linux.ibm.com>
- <YalDvGjq0inMFKln@sol.localdomain>
- <56c53b027ae8ae6909d38904bf089e73011657d7.camel@linux.ibm.com>
- <YdYrw4eiQPryOMkZ@gmail.com>
- <20220109204537.oueokvvkrkyy3ipq@altlinux.org>
- <YdtOhsv/A5dqlApY@sol.localdomain>
+        Sat, 15 Jan 2022 00:35:44 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A22C06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 21:35:44 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id g81so29586744ybg.10
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 21:35:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=xr5CoW233+ktKsC/jbnkLpzCBoSWMGWpWu2mHvuqTEo=;
+        b=Nevyn/sUtYqfb/2OKlRHlPwSzDQD+MNA+Oy6Ibl5a4AtqSUyC1u0sNviHMaYDUnvQH
+         myEi+5cuIh4vAYhb1H3EZ95Z+Df7ly2ohqr/CA2HjyxjLph039PMZJ1Inmo+Uu51Gjiu
+         AhJDc/UlC54/qdiC08xy3OhNfFYTS866RFg6mJf2D0AwqnwCgNAuVK6NF8xXuS/bm0iO
+         B8jcfdmtcUJBLHZaN6ghbyz5wXa+Owwa5ov0/91ULr+sK7omel7IN46CXvTi0Crvtcdt
+         7ZUq4xtDXLJ346Lsbx4KC+jS20xwoft8bMs1njeK+ATy3UrWI6H4Ot+SsmXKbqCwQkzn
+         H6Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xr5CoW233+ktKsC/jbnkLpzCBoSWMGWpWu2mHvuqTEo=;
+        b=wBHq3wurEiEISFY/VvknvROKI32C3Feu9YLfB4xXGQ9cdcYMA2RuiW6+D0L8Ztm+dz
+         zcoaHxY2V6vgysdfv217B219FIhl1ygm40SmW26tA+YCETBFLkkBK4WdRLPJnCC9qtcH
+         ZpcbLuHWjyxmhK5ftnxaCpTu2y48W2aJOj/umfsA6xw6s54tQZc2mPG7FfGWXLC9NmFs
+         bazJURmV8CfC4bxYNfWfng13hY4a09cilgbPMqIYrURYbfkA6H8svlwnJ3X9wVYNwkJM
+         MYEk3KKlHzHEwanb58X1+NT+t9MS+5zqBsB717u9qpy5CB0q/CxPUoAx/8X0vF65lfGQ
+         b+jA==
+X-Gm-Message-State: AOAM530nmUi01cSK3G2cyI7OW5k3FoZOa5wzO9TtpIBOZL4Rm1WdhUDh
+        pAipyaj//qmSn4jGeDBIy+GLaLu2aLbyVC4evLwszyeHWfMFwA==
+X-Google-Smtp-Source: ABdhPJyYjMw8wiXn4F1ryduX4HaSEsCIKcOrJNsZI0UL7PDtoBi/gwJZ2YVhYXxBdi5Mzq1TC93siD0HE7NhAmhilsQ=
+X-Received: by 2002:a5b:d09:: with SMTP id y9mr17779457ybp.146.1642224943016;
+ Fri, 14 Jan 2022 21:35:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <YdtOhsv/A5dqlApY@sol.localdomain>
+References: <20220114081542.698002137@linuxfoundation.org>
+In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 15 Jan 2022 11:05:31 +0530
+Message-ID: <CA+G9fYtFfsDLPAfsXjbHeEqe9NP59E13x_=7uzx_k+8UOXMing@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/25] 5.10.92-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric,
+On Fri, 14 Jan 2022 at 13:48, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.92 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.92-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Sun, Jan 09, 2022 at 01:07:18PM -0800, Eric Biggers wrote:
-> On Sun, Jan 09, 2022 at 11:45:37PM +0300, Vitaly Chikunov wrote:
-> > On Wed, Jan 05, 2022 at 03:37:39PM -0800, Eric Biggers wrote:
-> > > On Fri, Dec 31, 2021 at 10:35:00AM -0500, Mimi Zohar wrote:
-> > > > On Thu, 2021-12-02 at 14:07 -0800, Eric Biggers wrote:
-> > > > > On Thu, Dec 02, 2021 at 04:55:06PM -0500, Mimi Zohar wrote:
-> > > > > >  	case IMA_VERITY_DIGSIG:
-> > > > > > -		fallthrough;
-> > > > > > +		set_bit(IMA_DIGSIG, &iint->atomic_flags);
-> > > > > > +
-> > > > > > +		/*
-> > > > > > +		 * The IMA signature is based on a hash of IMA_VERITY_DIGSIG
-> > > > > > +		 * and the fs-verity file digest, not directly on the
-> > > > > > +		 * fs-verity file digest.  Both digests should probably be
-> > > > > > +		 * included in the IMA measurement list, but for now this
-> > > > > > +		 * digest is only used for verifying the IMA signature.
-> > > > > > +		 */
-> > > > > > +		verity_digest[0] = IMA_VERITY_DIGSIG;
-> > > > > > +		memcpy(verity_digest + 1, iint->ima_hash->digest,
-> > > > > > +		       iint->ima_hash->length);
-> > > > > > +
-> > > > > > +		hash.hdr.algo = iint->ima_hash->algo;
-> > > > > > +		hash.hdr.length = iint->ima_hash->length;
-> > > > > 
-> > > > > This is still wrong because the bytes being signed don't include the hash
-> > > > > algorithm.  Unless you mean for it to be implicitly always SHA-256?  fs-verity
-> > > > > supports SHA-512 too, and it may support other hash algorithms in the future.
-> > > > 
-> > > > IMA assumes that the file hash algorithm and the signature algorithm
-> > > > are the same.   If they're not the same, for whatever reason, the
-> > > > signature verification would simply fail.
-> > > > 
-> > > > Based on the v2 signature header 'type' field, IMA can differentiate
-> > > > between regular IMA file hash based signatures and fs-verity file
-> > > > digest based signatures.  The digest field (d-ng) in the IMA
-> > > > meausrement list prefixes the digest with the hash algorithm. I'm
-> > > > missing the reason for needing to hash fs-verity's file digest with
-> > > > other metadata, and sign that hash rather than fs-verity's file digest
-> > > > directly.
-> > > 
-> > > Because if someone signs a raw hash, then they also implicitly sign the same
-> > > hash value for all supported hash algorithms that produce the same length hash.
-> > 
-> > Unless there is broken hash algorithm allowing for preimage attacks this
-> > is irrelevant. If there is two broken algorithms allowing for collisions,
-> > colliding hashes could be prepared even if algo id is hashed too.
-> > 
-> 
-> Only one algorithm needs to be broken.  For example, SM3 has the same hash
-> length as SHA-256.  If SM3 support were to be added to fs-verity, and if someone
-> were to find a way to find an input that has a specific SM3 digest, then they
-> could also make it match a specific SHA-256 digest.  Someone might intend to
-> sign a SHA-256 digest, but if they are only signing the raw 32 bytes of the
-> digest, then they would also be signing the corresponding SM3 digest.  That's
-> why the digest that is signed *must* also include the algorithm used in the
-> digest (not the algorithm(s) used in the signature, which is different).
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-I think it will be beneficial if we pass hash algo id to the
-akcipher_alg::verify. In fact, ecrdsa should only be used with streebog.
-And perhaps, sm2 with sm3, pkcs1 with md/sha/sm3, and ecdsa with sha family
-hashes.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Thanks,
+## Build
+* kernel: 5.10.92-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: fe11f2e0d63baa47c1e36b02721b4fd7a1157955
+* git describe: v5.10.91-26-gfe11f2e0d63b
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.91-26-gfe11f2e0d63b
 
+## Test Regressions (compared to v5.10.91)
+No test regressions found.
 
-> 
-> - Eric
+## Metric Regressions (compared to v5.10.91)
+No metric regressions found.
+
+## Test Fixes (compared to v5.10.91)
+No test fixes found.
+
+## Metric Fixes (compared to v5.10.91)
+No metric fixes found.
+
+## Test result summary
+total: 94616, pass: 81315, fail: 544, skip: 11939, xfail: 818
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 259 total, 255 passed, 4 failed
+* arm64: 37 total, 37 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 36 total, 36 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 30 passed, 4 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 46 passed, 6 failed
+* riscv: 24 total, 22 passed, 2 failed
+* s390: 18 total, 18 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 37 total, 37 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

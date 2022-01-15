@@ -2,231 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1B048F8C2
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 19:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BC048F8C1
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 19:31:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233168AbiAOSiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 13:38:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
+        id S233143AbiAOSbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 13:31:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiAOSiD (ORCPT
+        with ESMTP id S229786AbiAOSbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 13:38:03 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9586EC061574
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 10:38:02 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n8nvA-0003Jj-3l; Sat, 15 Jan 2022 19:37:00 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n8nux-00AUOf-7m; Sat, 15 Jan 2022 19:36:46 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n8nuv-0005gB-Q6; Sat, 15 Jan 2022 19:36:45 +0100
-Date:   Sat, 15 Jan 2022 19:36:43 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, linux-iio@vger.kernel.org,
+        Sat, 15 Jan 2022 13:31:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38A3C061574;
+        Sat, 15 Jan 2022 10:31:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8846060EFF;
+        Sat, 15 Jan 2022 18:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA35AC36AE7;
+        Sat, 15 Jan 2022 18:31:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642271508;
+        bh=fsi3/+1N1yx5rNAefD9iidlrYvYZHDdjbrAvYdTllXM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KUAcHcCZVKn7TEudIRIoCafHzeUxfZ7dfKWgE3hT5a0UZQJGVSWgctBBsEbq+a5lP
+         Bx3iFITw8v4EEZCtqipju0ZzDGwG4UO79VEuFIbKB5whDzS1qhE+qn4lOwwawSKfac
+         JJaT5QEUSgVj/vuZQEKc/1jZGZ5HuoVAaBS6sMrx9S4/yvCiwWixs7MAsK2VDFE1oO
+         xFtNN1bVIwf0JpHHu6qDW3VLVcAgfTqp9cgFRLMCJWeJwY5EnNyccA1P+7LXeQURRW
+         V80Be4gzGr1TfRETVSqJsolib/Kqj/2oqQh/kbS1JvCPL45yS3/s1h2BdtMdcNfaLb
+         UZADTxSBGT+iA==
+Date:   Sat, 15 Jan 2022 18:37:50 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-phy@lists.infradead.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        kvm@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Robert Richter <rric@kernel.org>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>, netdev@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
- (summary)
-Message-ID: <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH v2] iio: addac: Do not reference negative array offsets
+Message-ID: <20220115183750.7c728edd@jic23-huawei>
+In-Reply-To: <20220115181202.476f09eb@jic23-huawei>
+References: <20220105180214.2435001-1-keescook@chromium.org>
+        <b87576f4e44e459bba4d3bd3c0b38693@analog.com>
+        <20220115181202.476f09eb@jic23-huawei>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="j6ppxzwmobiijznr"
-Content-Disposition: inline
-In-Reply-To: <20220110195449.12448-2-s.shtylyov@omp.ru>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 15 Jan 2022 18:12:02 +0000
+Jonathan Cameron <jic23@kernel.org> wrote:
 
---j6ppxzwmobiijznr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Thu, 6 Jan 2022 06:31:55 +0000
+> "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com> wrote:
+> 
+> > Reviewed-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> > 
+> > Put "iio: addac: ad74413r:" in patch title, maybe?  
+> I can fix that up whilst applying.
+Ah. I see you already sent it again.  Thanks as that's
+even easier.
 
-Hello,
+Jonathan
 
-I'm trying to objectively summarize the discussions in this thread in
-the hope this helps finding a way that most people can live with.
+> 
+> I'll pick this up after rc1 is out.
+> 
+> Thanks,
+> 
+> Jonathan
+> 
+> >   
+> > > -----Original Message-----
+> > > From: Kees Cook <keescook@chromium.org>
+> > > Sent: Wednesday, January 5, 2022 8:02 PM
+> > > To: Lars-Peter Clausen <lars@metafoo.de>
+> > > Cc: Kees Cook <keescook@chromium.org>; Hennerich, Michael
+> > > <Michael.Hennerich@analog.com>; Tanislav, Cosmin
+> > > <Cosmin.Tanislav@analog.com>; Jonathan Cameron <jic23@kernel.org>;
+> > > linux-iio@vger.kernel.org; Linus Walleij <linus.walleij@linaro.org>; linux-
+> > > kernel@vger.kernel.org; linux-hardening@vger.kernel.org
+> > > Subject: [PATCH v2] iio: addac: Do not reference negative array offsets
+> > > 
+> > > [External]
+> > > 
+> > > Instead of aiming rx_buf at an invalid array-boundary-crossing location,
+> > > just skip the first increment. Fixes this warning seen when building
+> > > with -Warray-bounds:
+> > > 
+> > > drivers/iio/addac/ad74413r.c: In function 'ad74413r_update_scan_mode':
+> > > drivers/iio/addac/ad74413r.c:843:22: warning: array subscript -4 is below
+> > > array bounds of 'u8[16]' { aka 'unsigned char[16]'} [-Warray-bounds]
+> > >   843 |         u8 *rx_buf = &st->adc_samples_buf.rx_buf[-1 *
+> > > AD74413R_FRAME_SIZE];
+> > >       |
+> > > ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > drivers/iio/addac/ad74413r.c:84:20: note: while referencing 'rx_buf'
+> > >    84 |                 u8 rx_buf[AD74413R_FRAME_SIZE *
+> > > AD74413R_CHANNEL_MAX];
+> > >       |                    ^~~~~~
+> > > 
+> > > Cc: Lars-Peter Clausen <lars@metafoo.de>
+> > > Cc: Michael Hennerich <Michael.Hennerich@analog.com>
+> > > Cc: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> > > Cc: Jonathan Cameron <jic23@kernel.org>
+> > > Cc: linux-iio@vger.kernel.org
+> > > Fixes: fea251b6a5db ("iio: addac: add AD74413R driver")
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > ---
+> > > v1:
+> > > https://urldefense.com/v3/__https://lore.kernel.org/lkml/20211215232321.
+> > > 2069314-1-
+> > > keescook@chromium.org/__;!!A3Ni8CS0y2Y!vadcwdERjyNVz3vFIp5m5S2ms
+> > > oFHro8aKzH9ulwPevCKHpev6D53gibZrv5U9mPHGcoB$
+> > > v2:
+> > >  - use "xfer" for checking "first through the loop"
+> > > ---
+> > >  drivers/iio/addac/ad74413r.c | 7 ++++---
+> > >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
+> > > index 5271073bb74e..aba9a643a4ca 100644
+> > > --- a/drivers/iio/addac/ad74413r.c
+> > > +++ b/drivers/iio/addac/ad74413r.c
+> > > @@ -840,7 +840,7 @@ static int ad74413r_update_scan_mode(struct iio_dev
+> > > *indio_dev,
+> > >  {
+> > >  	struct ad74413r_state *st = iio_priv(indio_dev);
+> > >  	struct spi_transfer *xfer = st->adc_samples_xfer;
+> > > -	u8 *rx_buf = &st->adc_samples_buf.rx_buf[-1 *
+> > > AD74413R_FRAME_SIZE];
+> > > +	u8 *rx_buf = st->adc_samples_buf.rx_buf;
+> > >  	u8 *tx_buf = st->adc_samples_tx_buf;
+> > >  	unsigned int channel;
+> > >  	int ret = -EINVAL;
+> > > @@ -894,9 +894,10 @@ static int ad74413r_update_scan_mode(struct
+> > > iio_dev *indio_dev,
+> > > 
+> > >  		spi_message_add_tail(xfer, &st->adc_samples_msg);
+> > > 
+> > > -		xfer++;
+> > >  		tx_buf += AD74413R_FRAME_SIZE;
+> > > -		rx_buf += AD74413R_FRAME_SIZE;
+> > > +		if (xfer != st->adc_samples_xfer)
+> > > +			rx_buf += AD74413R_FRAME_SIZE;
+> > > +		xfer++;
+> > >  	}
+> > > 
+> > >  	xfer->rx_buf = rx_buf;
+> > > --
+> > > 2.30.2    
+> >   
+> 
 
-First a description of the status quo:
-
-There are several function pairs *get() and *get_optional() that however
-are different in various aspects. Their relevant properties are listes
-in the following table. Ideally each line had only identical entries.
-
-					| clk_get		| gpiod_get		| platform_get_irq	| regulator_get		|
-	return value			|			|			|			|			|
-	on not-found			| ERR_PTR(-ENOENT)	| ERR_PTR(-ENOENT)	| -ENXIO		| dummy[1]	=
-	|
-	(plain get)			|			|			|			|			|
-					|			|			|			|			|
-	return value			|			|			|			|			|
-	on not-found			| dummy[1]		| dummy[1]		| -ENXIO		| ERR_PTR(-ENOENT)	|
-	(get_optional)			|			|			|			|			|
-					|			|			|			|			|
-	emits an error message		|			|			|			|			|
-	on error (including 		| no			| no			| yes[2]		| no			|
-	not-found)			|			|			|			|			|
-					|			|			|			|			|
-	get_optional emits an error	|			|			|			|			|
-	message on error (including	| no			| no			| no			| no			|
-	not-found)			|			|			|			|			|
-					|			|			|			|			|
-	summary:			| returning a dummy	| returning a dummy	| doesn't emit an	| ret=
-urning error code	|
-	*_get_optional() differs from	| on not-found		| on not-found		| error mess=
-age		| on not-found		|
-	*_get by:			|			|			|			|			|
-
-
-	[1] the dummy value is a valid resource descriptor, the API functions
-	    are a noop for this dummy value. This dummy value is NULL for
-	    all three subsystems.
-	[2] no error is printed for -EPROBE_DEFER.
-
-The inversion between clk+gpio vs. regulator is unforunate, swaping one
-or the other would be good for consistency, but this isn't the topic of
-this thread. Only so much: It's not agreed upon which variant is the
-better one and the difference is of historical origin.
-
-There are now different suggestions to improve the situation regarding
-platform_get_irq() compared to the other functions:
-
-a) by Sergey
-   platform_get_irq_optional() is changed to return 0 on not-found.
-
-b) by Uwe
-   rename platform_get_irq_optional() to platform_get_irq_silent()
-
-The argument pro a) is:
-
-	platform_get_irq_optional() is aligned to clk_get() and
-	gpiod_get() by returning 0 on not-found.
-
-The argument contra a)=20
-
-	The return value 0 for platform_get_irq() is only syntactically
-	nearer to the dummy value of clk_get() and gpiod_get(). A dummy
-	value isn't available and probably not sensible to introduce for
-	irq because most drivers have to check for the not-found
-	situation anyhow to setup polling.=20
-
-The argument pro b) is:
-
-	The relevant difference between platform_get_irq() and its
-	optional variant is that the latter is silent. This is a
-	different concept for the meaning of optional compared to the
-	other *_get_optional().
-
-The argument contra b) is:
-
-	The chosen name is bad, because driver authors might wonder what
-	a silent irq is.
-
----- end of summary
-=09
-A possible compromise: We can have both. We rename
-platform_get_irq_optional() to platform_get_irq_silent() (or
-platform_get_irq_silently() if this is preferred) and once all users are
-are changed (which can be done mechanically), we reintroduce a
-platform_get_irq_optional() with Sergey's suggested semantic (i.e.
-return 0 on not-found, no error message printking).
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---j6ppxzwmobiijznr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHjFDcACgkQwfwUeK3K
-7Al8ywf+IeUGmQ++ZSqrHA1sy8iG93DkE7XqgEI+/OYaQABSzKpE6w55cBp0EbHJ
-TXkVcUUkd5e6eFtr5FwZEgzO1/vKIlB6IkuD5jbuqXJy0oRz9whaVLAJvpYN/mmy
-KTHzmFssgA4mbUBx8XRteoVSNn6k9z0UF6EGrb0Vyfu70Q4yTdZKDP2mznyAnLee
-rw1Oj2UCu2Jn5QrSTg0jNrPqGbHrmEeadE08d3oZRpL/ZcO1Er30Oj3aYFDiiE1V
-p0J5fzDs0GZN4r/mwNSUDyq2edsIF3F2/ILOt05pf6AsFudhufarTMh2VWIu/mz7
-mMHkAm6dYTtw1VKd1mp/RwSpxhhJSw==
-=6uea
------END PGP SIGNATURE-----
-
---j6ppxzwmobiijznr--

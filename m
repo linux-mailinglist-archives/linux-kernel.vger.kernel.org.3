@@ -2,41 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3254B48F7FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B0E48F7FF
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbiAOQrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 11:47:35 -0500
-Received: from mail-wm1-f52.google.com ([209.85.128.52]:44562 "EHLO
-        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbiAOQrd (ORCPT
+        id S233202AbiAOQrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 11:47:40 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:51420
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232208AbiAOQrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 11:47:33 -0500
-Received: by mail-wm1-f52.google.com with SMTP id f141-20020a1c1f93000000b003497aec3f86so11826058wmf.3
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 08:47:33 -0800 (PST)
+        Sat, 15 Jan 2022 11:47:39 -0500
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EBC8A3F1F2
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 16:47:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642265257;
+        bh=UuQGHzFQyjD5NAaAWYOOEzPz/4Y/EXTKf8414g9pUU8=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=u9DzLXCxP861AuO7q2lW5o2YF6Z8VWbwyoG1jGHYQHcppqpTlAXZiOTnrXLHO+Fgj
+         q+BiImBiEha9xwBaJFKYVYmKsMqpe5U3SV8KosPF3EL/z5+cZX2YlRX8b1D1yDwS6x
+         fn5+zvb1k/d8vhJqVw3xtVqwDhKSmu/qKT7jxWQfKQE4d3T/nEArIdC6H4awk+rysI
+         Y8s/Tuv23WpPR5avjfbPqx/Sz4lyh7510/47N5LheRIJjVUiHob6VOB+drrUcuCjZ+
+         +/4Iuyod6LxanHmpeRBbwBG7E0dzi9gtpcxX9I1pHJg43EVg3hT2W3caPsvChme6Qc
+         ipvOmHuds5BRA==
+Received: by mail-ed1-f72.google.com with SMTP id x11-20020aa7d38b000000b004004e4fc8fdso8135146edq.6
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 08:47:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
         bh=UuQGHzFQyjD5NAaAWYOOEzPz/4Y/EXTKf8414g9pUU8=;
-        b=CEOzYTJqPlkVBLPCUaEPitRDJ7wWijytUwAAsu0TVRit2/EiTUPZ79ljSRfzUTwv6z
-         LtCKP+sSqRlXnax3xe+7l5b/7RG4aNMONAl50/GjyiCrSsFBxI31L7Re/CGdA1znWLem
-         uIrYAccLVP4GfcFx1xf6m/Tdp8PpU+CIOLLOVyDTrIahk2cCqwXL2lvbn+FMURVm7Rh1
-         wLMvVlo7IUNu0aWOWT6mcjyXz/bs73+Sn6hsxwWXibVSddU/iamjvICJ4lZcCEF8Njl4
-         T6DmBXN/VvSOgwBPv7kTTzwA1pi99edAeEqafdQru6wTycjGTWEpY6zI/i6ZWe20V2dj
-         Crxg==
-X-Gm-Message-State: AOAM530QnsqtLXNcP+TVLJwlkUEuXTBeQPqyW8kBbz8o1BdMNu05Wj5Y
-        4RrsHLAll2jy1rUNAV+9aNg=
-X-Google-Smtp-Source: ABdhPJxlORzZQY7iTcbV/S0MP9/NfI4WFH8cNy8RCLa9V2TwWR4rOuDc1Ai/+Z5u8aReTE36xXe+pQ==
-X-Received: by 2002:a05:600c:3502:: with SMTP id h2mr6286709wmq.166.1642265252499;
-        Sat, 15 Jan 2022 08:47:32 -0800 (PST)
+        b=SXS05ZTT6wT0qeoYL6NcJ1A0qEp726HwYpcEamTranPxTvNYHzxh5c9d09DxGYvxrR
+         wT8/99tYxudQDJDP8DUaQwnBW2PxTynPMGkHfvUaKgOZPpmt905/pr1qJHLZiOR0mBub
+         jLmlbKYu0upYVTeEqGsvO7y8fPlPmvXlUi2TTRICsu3MRvXW7F3/zopoIXgL6kwR16wd
+         Xcq80G3dc2YSIQqt6U95pL8sB4Tay7T78F6QhW0poi/tFokxouvfirsVhetfqhWXMdpn
+         7MITBkr0fLfv8XKR14Aen39MyatT2oPUbnp7T3a+a+pNvj4CEgzQtV7TyGwpYwEV1O73
+         R+KQ==
+X-Gm-Message-State: AOAM530OkpJIAAxLmK2H0E9yuQMngzUkgenkwxV9wMjgEc5TKlwFtf7E
+        s4HP1xx6rFaDgUg5urE8McqSrxHPBQ9MZNgYFLh72AV/K4OmgO/h1/IWky4lJ7OFI+ssWSLB3OF
+        sKL98TZKuAEMYrA1woISm5A+tG+WmWIFpU7NKsD49gQ==
+X-Received: by 2002:a50:d541:: with SMTP id f1mr13426560edj.18.1642265256945;
+        Sat, 15 Jan 2022 08:47:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzDwb+EUniG7FcTyDyOA4s2o93VYKN49MWn3cGhR9H6XmhKM1fXPDjxM/2AsKbXe+2s7yxGbQ==
+X-Received: by 2002:a50:d541:: with SMTP id f1mr13426549edj.18.1642265256836;
+        Sat, 15 Jan 2022 08:47:36 -0800 (PST)
 Received: from [192.168.0.35] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.googlemail.com with ESMTPSA id z15sm8685523wrm.25.2022.01.15.08.47.30
+        by smtp.gmail.com with ESMTPSA id g2sm2723988ejt.43.2022.01.15.08.47.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Jan 2022 08:47:31 -0800 (PST)
-Message-ID: <90f2e35d-db4c-fb43-f2ba-a634649889ed@kernel.org>
-Date:   Sat, 15 Jan 2022 17:47:30 +0100
+        Sat, 15 Jan 2022 08:47:36 -0800 (PST)
+Message-ID: <95d9a962-3b31-eb19-8297-11e33a3d78cc@canonical.com>
+Date:   Sat, 15 Jan 2022 17:47:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.1
@@ -57,7 +77,7 @@ Cc:     Marek Vasut <marek.vasut@gmail.com>,
         linux-kernel@vger.kernel.org
 References: <20220114141507.395271-1-marcel@ziswiler.com>
  <20220114141507.395271-9-marcel@ziswiler.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 In-Reply-To: <20220114141507.395271-9-marcel@ziswiler.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit

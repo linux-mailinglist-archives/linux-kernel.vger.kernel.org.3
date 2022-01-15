@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9CC48F5A8
+	by mail.lfdr.de (Postfix) with ESMTP id 0354548F5A7
 	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 08:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbiAOHbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 02:31:51 -0500
-Received: from mga05.intel.com ([192.55.52.43]:56176 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230456AbiAOHbt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S230525AbiAOHbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 15 Jan 2022 02:31:49 -0500
+Received: from mga04.intel.com ([192.55.52.120]:15465 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230297AbiAOHbs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 02:31:48 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642231909; x=1673767909;
+  t=1642231908; x=1673767908;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1oUULl2+pZo/eWRUTBNn4f22ShUKxXWI6Y03z2SYvMg=;
-  b=VfxLI+5pafaIwbwW6Nx0bv1ONUhvIKind7JsNHY9h5RraKntGI6nRFmy
-   c/fTRasVb/SWfEydlNCFTs6q9oUB0KrvG/DpPaHkCbYheyfOKOhHsRzto
-   6UaqYw0bv4oEh1wrUo/ieAnN3UFQNAOZTjCD1DL87+I9fqHTPyds/04Kh
-   WZUitoAqBZgJV5FQHPSX+5PROAjnLNMpa8mkNQ4kM3MYpnMO82mHXdH3D
-   tVs+19EkEBccehy23HuVyEt7pjhWHr8mtzhhTKaPRAJRBzTpfYCc/g4pf
-   UnsioCzCJ0ZQ3r0LuW8O1ZG39ZTrHNV98KiWB811F9mYaJe7eSdPpLuto
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="330734577"
+  bh=ADT4kKYK18b/FFOcSf8II8IdYBpOTs8RkYhyGZyy0ZE=;
+  b=Ijj4PX0zH0adW2drZVlEPoNwfmwX6ZK+HVetszQIC/uO4LOGdWp7/t35
+   pfPHHESPVQA7zATNU2c0a2zAeo5Zx6eKC2RlzGVA3y4atBk9rhRsvYSur
+   Ybs30NACnsY+KElU8W+WQHyXv5nbUKPWYbE90l2gdyxJFwfRvLaupMUvl
+   qH3Jsk+Yjk86lTWOK2qYrBHyWWuZuqO2k/LmdWlkGOATpZtwKrhq6QQng
+   AutHgh2eI6/JKIcvWiVhAtK4ckUjhWSRM90CvXG26fInIouSNVtgM6kFz
+   AAP39VtNIKvmjBqrdKITpcClZ70I1vK5xnoXHvqf6RaCVG/rfILSw4ADz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="243201917"
 X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="330734577"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 23:31:48 -0800
+   d="scan'208";a="243201917"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 23:31:48 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="559734366"
+   d="scan'208";a="692485318"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 14 Jan 2022 23:31:47 -0800
+  by orsmga005.jf.intel.com with ESMTP; 14 Jan 2022 23:31:47 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1n8dXO-0009VA-MY; Sat, 15 Jan 2022 07:31:46 +0000
-Date:   Sat, 15 Jan 2022 15:31:19 +0800
+        id 1n8dXO-0009V8-Lw; Sat, 15 Jan 2022 07:31:46 +0000
+Date:   Sat, 15 Jan 2022 15:31:21 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [peterz-queue:x86/wip.ibt 7/15] arch/x86/kernel/setup.c:65:1:
- warning: 'nocf_check' attribute ignored; use -fcf-protection to enable the
- attribute
-Message-ID: <202201151505.wRwvYlwh-lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2353/2384]
+ drivers/media/rc/mtk-cir.c:163:15: error: implicit declaration of function
+ 'DIV_ROUND_CLOSEST'
+Message-ID: <202201151534.1iCJKuH9-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -53,58 +52,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
-head:   7b31f08c5f3fb5f3cfd75deb24787569f35315d5
-commit: e4b4623dc6a99968ab59ea14cdae2c7a09924838 [7/15] x86: Don't generate ENDBR in .discard.text
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220115/202201151505.wRwvYlwh-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 82c8aca93488730ce8f66101e0f3538f14b551dd)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
+commit: 6bdaa08124f2198c510118e5ae8816748e9816df [2353/2384] headers/deps: time: Optimize <linux/time64.h> dependencies, remove <linux/time64_api.h> inclusion
+config: mips-randconfig-r036-20220113 (https://download.01.org/0day-ci/archive/20220115/202201151534.1iCJKuH9-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=e4b4623dc6a99968ab59ea14cdae2c7a09924838
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue x86/wip.ibt
-        git checkout e4b4623dc6a99968ab59ea14cdae2c7a09924838
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=6bdaa08124f2198c510118e5ae8816748e9816df
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 6bdaa08124f2198c510118e5ae8816748e9816df
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ arch/x86/mm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/rc/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/setup.c:65:1: warning: 'nocf_check' attribute ignored; use -fcf-protection to enable the attribute [-Wignored-attributes]
-   RESERVE_BRK(dmi_alloc, 65536);
-   ^
-   arch/x86/include/asm/setup.h:122:56: note: expanded from macro 'RESERVE_BRK'
-           static void __section(".discard.text") __attribute__((nocf_check)) __used notrace               \
-                                                                 ^
-   1 warning generated.
---
->> arch/x86/mm/init.c:178:1: warning: 'nocf_check' attribute ignored; use -fcf-protection to enable the attribute [-Wignored-attributes]
-   RESERVE_BRK(early_pgt_alloc, INIT_PGT_BUF_SIZE);
-   ^
-   arch/x86/include/asm/setup.h:122:56: note: expanded from macro 'RESERVE_BRK'
-           static void __section(".discard.text") __attribute__((nocf_check)) __used notrace               \
-                                                                 ^
-   1 warning generated.
+   drivers/media/rc/mtk-cir.c: In function 'mtk_chk_period':
+>> drivers/media/rc/mtk-cir.c:163:15: error: implicit declaration of function 'DIV_ROUND_CLOSEST' [-Werror=implicit-function-declaration]
+     163 |         val = DIV_ROUND_CLOSEST(clk_get_rate(ir->bus),
+         |               ^~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
-vim +/nocf_check +65 arch/x86/kernel/setup.c
+vim +/DIV_ROUND_CLOSEST +163 drivers/media/rc/mtk-cir.c
 
-2b72394e408964 Pekka Enberg                  2009-04-28  63  
-e808bae2407a08 Thadeu Lima de Souza Cascardo 2010-02-09  64  #ifdef CONFIG_DMI
-796216a57fe45c Jeremy Fitzhardinge           2009-03-12 @65  RESERVE_BRK(dmi_alloc, 65536);
-e808bae2407a08 Thadeu Lima de Souza Cascardo 2010-02-09  66  #endif
-796216a57fe45c Jeremy Fitzhardinge           2009-03-12  67  
-c0b5842a457d44 Ingo Molnar                   2009-01-27  68  
+50c3c1ba171f3f Sean Wang  2017-06-30  154  
+50c3c1ba171f3f Sean Wang  2017-06-30  155  static inline u32 mtk_chk_period(struct mtk_ir *ir)
+50c3c1ba171f3f Sean Wang  2017-06-30  156  {
+50c3c1ba171f3f Sean Wang  2017-06-30  157  	u32 val;
+50c3c1ba171f3f Sean Wang  2017-06-30  158  
+50c3c1ba171f3f Sean Wang  2017-06-30  159  	/*
+50c3c1ba171f3f Sean Wang  2017-06-30  160  	 * Period for software decoder used in the
+50c3c1ba171f3f Sean Wang  2017-06-30  161  	 * unit of raw software sampling
+50c3c1ba171f3f Sean Wang  2017-06-30  162  	 */
+d904eb0b351fe5 Sean Young 2020-11-29 @163  	val = DIV_ROUND_CLOSEST(clk_get_rate(ir->bus),
+d904eb0b351fe5 Sean Young 2020-11-29  164  				USEC_PER_SEC * ir->data->div / MTK_IR_SAMPLE);
+50c3c1ba171f3f Sean Wang  2017-06-30  165  
+50c3c1ba171f3f Sean Wang  2017-06-30  166  	dev_dbg(ir->dev, "@pwm clk  = \t%lu\n",
+50c3c1ba171f3f Sean Wang  2017-06-30  167  		clk_get_rate(ir->bus) / ir->data->div);
+50c3c1ba171f3f Sean Wang  2017-06-30  168  	dev_dbg(ir->dev, "@chkperiod = %08x\n", val);
+50c3c1ba171f3f Sean Wang  2017-06-30  169  
+50c3c1ba171f3f Sean Wang  2017-06-30  170  	return val;
+50c3c1ba171f3f Sean Wang  2017-06-30  171  }
+50c3c1ba171f3f Sean Wang  2017-06-30  172  
 
-:::::: The code at line 65 was first introduced by commit
-:::::: 796216a57fe45c04adc35bda1f0782efec78a713 x86: allow extend_brk users to reserve brk space
+:::::: The code at line 163 was first introduced by commit
+:::::: d904eb0b351fe5545d9ba5b85844342f49025923 media: mtk-cir: fix calculation of chk period
 
-:::::: TO: Jeremy Fitzhardinge <jeremy.fitzhardinge@citrix.com>
-:::::: CC: H. Peter Anvin <hpa@zytor.com>
+:::::: TO: Sean Young <sean@mess.org>
+:::::: CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

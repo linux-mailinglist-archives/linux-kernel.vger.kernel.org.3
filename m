@@ -2,205 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C2E48F64D
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 11:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A22F248F650
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 11:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiAOKLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 05:11:24 -0500
-Received: from mail-eopbgr90077.outbound.protection.outlook.com ([40.107.9.77]:41504
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230176AbiAOKLW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 05:11:22 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PVjPxcNe+jeejmW80vqo2sb5i+5N1dV/UugwYFS3KReCxHt5kqwMidelJdhwKavUKCEG9Sh8xmP4oaBbkSnMSBv1XhLH9kNEkxF+cx4+VdZRwondYNW+Losz/OtRBeGpYJ6BQaAWSuwb/4io1TfQJe4exZclzVpY5Dj87aN4mJhDPWf5npbKMqCT/oDQUqV+5z9hMoEeFS5Nlr9FAnGRa4mVTEB5ZmWGWimeJ6lA1HrxxIzVqRNeRfWxcRwC2t5FzDEl/Yr/SOpS7CwSG1fVh4wwfM37yoxJBiiGR89UD1nrjzMuGF8aEkFnoUmplkGeXntksZqtxciH/9g3R5IUpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gVOIuvti3s6nCSjPzXW3r2jwqLlOUsrTNXgWvMl731w=;
- b=bFnHt4I3ZEDOQnGnLkwN+KGSQpJuExtpFV7ikchMODOgbExCYTST2cWgyS+9LA+5ncC39Tx+n0TtIzJuglvocSeYPFw9lcj+1rLirzTkedsBnW/2h1sgMbaHxFD2lqtOfFewwR+6o9blKIZzhnUAaxVW9zU4bFiyK+rKD3MUGj/boPJCodMshXP0AkUoedTsNFpAxiclUa0TLlR8hnvK2xXAuAbtlGUM7ImShyBgH84Ll/oT+Wb8VhqtWF6H8gi3/cDxlNKcmhEXNZVf8BuEwDI7IKlSySDdsq+sROrO/mi0bmpuqgAy/UAymcs64wLBdutEcNvM3iU+UybW2bOuGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:3d::7) by
- PAZP264MB3686.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:d8::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4888.9; Sat, 15 Jan 2022 10:11:19 +0000
-Received: from MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM
- ([fe80::30e4:16d5:f514:b8f8]) by MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM
- ([fe80::30e4:16d5:f514:b8f8%2]) with mapi id 15.20.4888.012; Sat, 15 Jan 2022
- 10:11:18 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Nicholas Piggin <npiggin@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v2 3/3] x86: Support huge vmalloc mappings
-Thread-Topic: [PATCH v2 3/3] x86: Support huge vmalloc mappings
-Thread-Index: AQHX+zD/hWUWAcg7A0O0lNZsb1MJ4KxGfioAgAE2QICAHEWrgA==
-Date:   Sat, 15 Jan 2022 10:11:18 +0000
-Message-ID: <21d6fc65-d9d1-66bb-9bea-a4bad78c7aac@csgroup.eu>
-References: <20211227145903.187152-1-wangkefeng.wang@huawei.com>
- <20211227145903.187152-4-wangkefeng.wang@huawei.com>
- <70ff58bc-3a92-55c2-2da8-c5877af72e44@intel.com>
- <3858de1f-cdbc-ff52-2890-4254d0f48b0a@huawei.com>
-In-Reply-To: <3858de1f-cdbc-ff52-2890-4254d0f48b0a@huawei.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e914dbf9-b3c1-4150-77ff-08d9d80f5f7d
-x-ms-traffictypediagnostic: PAZP264MB3686:EE_
-x-microsoft-antispam-prvs: <PAZP264MB3686105B605202E8D4949985ED559@PAZP264MB3686.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WfYYZCNoa7R2apZkagWecW8GnTI9eEabI35eK4jm3sPZ1yoBT7rpV5jNfq04ABfqfKP0E06+i8DJdtOsHvcxWtYOH+qAxY7hhg8D7EgMWtjFEmJpl9MobEe/YPL3Wv621+B2nLb9WUCRiGTe1hNSjYiMkn17746uY+UIGpUNCo252Ew3LIoA5KAVzT/u83124kXfoqETmLxaoJeNk+xQ/+np2oNA6VFIzpD4gc7OnTTtrC/nHlZ2WNvyEkglG+6coSekUCyjd0OGp3dbiaLDSLy24VLRvKcxaTeMwQzygCZMPmxehsUtVaOSbX5cLk+DCILC1vv/Hz8WyU45dEo7ibvdXmP4o7A9qdLwk6le1zKwVQtIgREBXgH7al4uF1VaYt5aCZEypiSQXFesEjSwUUNZPiC64OQ69BtuMFl8LLG6zOxV0pl6msXl/cR0TcsFmVtcU6O4dBB0CMPN+OEhSJggrFUZ+Pn8aYLWYIl6qVeZUImdbXu+XEkUyGm1+dMaSViPSkhwiFOukPbp2nJGGRUa5oSm9pjO9LTpZtpaS2gtVdE18n9H0s1pmUkAXmmnKf6DyyHLQ7pjP9U5ATmOfTZe2e5rj4tMsV0NE9vPCjxmiH+Nx13l05RbVM+bMhCeK4Z0U4jd8HaCyneuO4GO+65ltERrFDG7KEM/w4EWPXSay0K72PPywsbtFXtmRrng9PpS0gCoHbFG2XpVyw2hDgY2Fhol4LzwGE0g8F29hgI80jrLGpvDG+h2K2X2JmMC/4ni5vXgSxow31s6ELChtoao3WabsdziV6GYYqtEXS1eK1IP/JaNA3yqwruIQ3Uf
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(76116006)(91956017)(5660300002)(4326008)(66946007)(6486002)(66476007)(36756003)(31686004)(38070700005)(26005)(66556008)(64756008)(66446008)(66574015)(508600001)(2906002)(6512007)(186003)(7416002)(31696002)(44832011)(2616005)(38100700002)(921005)(122000001)(316002)(8936002)(71200400001)(110136005)(53546011)(8676002)(6506007)(54906003)(86362001)(14583001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SmVRTlpzNXd1T2wyOHZjSzlpSStZNXlqN1BGUUJhUlAvOWh2SVJLYjBHMVFL?=
- =?utf-8?B?RkFsbXRaUFExT1hUU21uY0pCRzQ3c2V1blpBN0lQVFVwS1NuYTFiN0NXWkR5?=
- =?utf-8?B?MnlMeWVMSTB0QlR3R3dTbDM1VUsyZEdkZEk1aUlvVlRSZ0pDaHFYLzlFdmhY?=
- =?utf-8?B?cXpPODY4K09tN29QSkFmV2ZJZ0RjZ09vRndMczI0MDhkYVVNQ3hOSDZVa3VZ?=
- =?utf-8?B?VXZJYmlUODZTVmFkY2NwT212aGRBazQ2WXptdjhkVnZhVFR4ZnExRXVrMWdH?=
- =?utf-8?B?WXdZRFI3V0lDNEVqNFh1eEZvWWtpUkVranRlWWNzVE5NYlJwTkYrTy9lODNI?=
- =?utf-8?B?a1pJMzBwRk1ObEJKNTAyZDVIT2hidW1oN2VDdDVFUUlSUWdUOFZaTC9QK0wy?=
- =?utf-8?B?NmpsNjRGek83a3JzK0RQZ3JWeGhvb0dDbUNEODJZQjJld3RWK3JhSkQ0NzdB?=
- =?utf-8?B?R08rR09BK3JlejBkZ2hvcGFGU0JwZnZpU3JWZVhMZHJSMWh3YUUvMGZXUWtQ?=
- =?utf-8?B?VmVNMjMvdHQyWmw1dmd4YTlYM3F3OGdrbGN2MjhDS1ZKYng2RlNzcnNrVzIz?=
- =?utf-8?B?cVZOVVg0WUZhMWZLWFZjVGI2K1NtUUZlRWxHelBlc08zT1lsZWpFVno1R1B4?=
- =?utf-8?B?bTlnck9qWFhQWHBNSVVvTkJlbEwrMXFlRlZ0dWw1WUsvanFLYVFlK3R0WVZs?=
- =?utf-8?B?V2FvT3VuVysrcUpCdmFqaW05c2pJdGRqekRDdjE2Uk43Q3BESXRUMXBYZEd1?=
- =?utf-8?B?c0QwVGpWdzdnbHAydHVYNTI3TFpucHFWaDdwdkxQVDdSNGQ3bFU1VGo3dWxC?=
- =?utf-8?B?MnRQSnIwWmwzN0R2VTZla2NmOEtuUkJoVmlXT2xNMldNTHg2Y1FaZXNGUEwy?=
- =?utf-8?B?ZnRWR3dWVGNFamg0VXJnVWZ0OU14WU5JcU90WUROMno1cjd2WXpuTW95cVZ5?=
- =?utf-8?B?MHpyRDhETGpsakFoaHdHekJ5ZnBIbWRmYmtxbWg1c2FhMWhiY0JaVWdRdWJr?=
- =?utf-8?B?bXRNYWp6V3dVMVVKWGpHemxETjhLTU5pby9KaTVyNzR3YVpLNnJhU3J4MTNW?=
- =?utf-8?B?ZFJSYXNNM0VtOE5Cem91TlBIenNzNmNIdURwNFdFd05xaVVNSnREVlc5OXJW?=
- =?utf-8?B?d3JiME8xTC9RTlAydEpvOXVndEsxaDAxTExBNnBlejFZYW9PZTAwRlY1c3dp?=
- =?utf-8?B?Vnh5aEUvbjBNcVhUZ093djJIRUptS0hrZFA3ZUVvbWpYVmJqRkk3bjZkWDRm?=
- =?utf-8?B?ZWVFRyszcDVQMUE1eWgyejZFVi8zQmJXWWVRZXUwZlZVTEwyVDR6cTErWnlN?=
- =?utf-8?B?dmpWWDZ3NDJSUTBtdldjcXBWUys2SjlFY2tvMW1OT1lZRFZkNzZHdmUzOFpI?=
- =?utf-8?B?cVhOMWw3WFNIUXEvdkZNY0ZJai9GRE5uelAxUFBGSm1iRU91NEhyS01iZXRn?=
- =?utf-8?B?b21EVWF6dElaY2hTeDF4Q0Z5dXhBNDUwYkNtYTM4eWdJNmhTL3ZETnN5NkUv?=
- =?utf-8?B?RWJlMXJZMndWa0RYQW9INFdnSUR5WTBibHlScWtaSGpONGVDbTVaVkY5RTk4?=
- =?utf-8?B?NktCdk9SbHM4Mm5HTUV1TXlnYUFTZ3RjbWdLOWtHS29vbGN3NHgwSTlrb29X?=
- =?utf-8?B?d2RPSk1hV3dPZmpaU2ZlZzkwd2d5VlJoYTF3UGZoVTZvVTVCRUhsR2UrK3Y2?=
- =?utf-8?B?U0MrUGhZdkhjR3RFSmFtaCs5Q1J2RTY4MVYvbmxCMGEwdm9aeGRoQ1VaYmRp?=
- =?utf-8?B?QXQwYXNyeFBXN1FtOENROTZIUlhtY0V1T2h2cG4zV1IxZjFaeldxRWg2eE5l?=
- =?utf-8?B?UDRWYWxFTjRVWkRmVG9uemZHYXFFTTZ6UXYyYk9BakFWL1pjcjFoN1FjS1dJ?=
- =?utf-8?B?V05YTzh2K3cxK0cvemZLbTE5R2pSc2YxZy93dHNjVlNJWkJKanpXZ2swM1Q5?=
- =?utf-8?B?QXNCSSttWkZQV2Z6SitBOEdiQlNhSW1lREhIZWY0eGc2WTRSdVRPN3c4Nk03?=
- =?utf-8?B?bXRTZzNiRnBRVFFTWXZZajhEZ2YvYlViU2R6bHVPVTVMRlM5cDUzVUQyN1FU?=
- =?utf-8?B?QWRUZkxFdW5FZ3d5eGl1YXpnd092TzRGcDFIeE95bWZMUVRoSEhicTA2aVAz?=
- =?utf-8?B?cWVCRlpHaTI3azB0YlBQMkpLVlIyTjhlVGtzM05oUzdhNmtkK3RHTzZXMGI2?=
- =?utf-8?B?c1RGaVh3WlUvL3MrbllVRU1hcTU5QTIyVjQ3aWV5VXVZUGtObTl2VjdRR0VM?=
- =?utf-8?Q?COh7oP7oAcVYqutxd1qrPY+frq9/f4nujscVOUMJrw=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F1F55E2FDAAD514FBEAF8D5FC65A0A47@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: e914dbf9-b3c1-4150-77ff-08d9d80f5f7d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2022 10:11:18.6688
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dcOomDxu6/fHIr6hYZbIoONxy9D41g5l8hnVzc9Etj2qHXKjPI4yKShFAU28fH9C8v/ZW+8ofZxOoLw7mrDEYCwboBO3rnrb/4ZgNv89ABg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB3686
+        id S231579AbiAOKNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 05:13:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230176AbiAOKNo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 05:13:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FE1C061574;
+        Sat, 15 Jan 2022 02:13:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30CB360C1C;
+        Sat, 15 Jan 2022 10:13:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBAD3C36AE5;
+        Sat, 15 Jan 2022 10:13:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642241622;
+        bh=TiozH/cQ43dTeXuz/YPK84dMNS24ln72k/CGmjNWP4g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Q29/5n2GxtcqF18wfl/zSEEyI3YG4itO7kn7ky0u5siEeiMAXaekRBYjEo8DtmhSk
+         te+7TUMLHCf92FLCTOS0j+lG60OeBv/sER0fAjgae5UXPp2gkefZOs17NGp+7fcWRK
+         bf0RYqosnHAsVdQ94G1JvrFDrcE3sxRIkyztl7um6i8jGLYgP+hYuJwCQMmafstW52
+         jmq5d4zbPTgDyEUTQn9qWm0cUlG8pd1p9KmH5bFJPtK+ytSCPbhnXzlLcpcF3LW74t
+         13FtdZdyBcH8WbdTMKM3PYnYtmCS/HAL8ji4hFtKTi5MXpvUj/Uneav9a9VwmNEfRK
+         THknsawNIJTTw==
+Date:   Sat, 15 Jan 2022 19:13:38 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.4.y] Revert
+ "ia64: kprobes: Use generic kretprobe trampoline handler"
+Message-Id: <20220115191338.b807796eb2bcf5b4c31e1314@kernel.org>
+In-Reply-To: <202201151231.g2sW8oWt-lkp@intel.com>
+References: <164215559880.1662358.1475310445318313122.stgit@devnote2>
+        <202201151231.g2sW8oWt-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDI4LzEyLzIwMjEgw6AgMTE6MjYsIEtlZmVuZyBXYW5nIGEgw6ljcml0wqA6DQo+IA0K
-PiBPbiAyMDIxLzEyLzI3IDIzOjU2LCBEYXZlIEhhbnNlbiB3cm90ZToNCj4+IE9uIDEyLzI3LzIx
-IDY6NTkgQU0sIEtlZmVuZyBXYW5nIHdyb3RlOg0KPj4+IFRoaXMgcGF0Y2ggc2VsZWN0IEhBVkVf
-QVJDSF9IVUdFX1ZNQUxMT0MgdG8gbGV0IFg4Nl82NCBhbmQgWDg2X1BBRQ0KPj4+IHN1cHBvcnQg
-aHVnZSB2bWFsbG9jIG1hcHBpbmdzLg0KPj4gSW4gZ2VuZXJhbCwgdGhpcyBzZWVtcyBpbnRlcmVz
-dGluZyBhbmQgdGhlIGRpZmYgaXMgc2ltcGxlLsKgIEJ1dCwgSSBkb24ndA0KPj4gc2VlIF9hbnlf
-IHg4Ni1zcGVjaWZpYyBkYXRhLsKgIEkgdGhpbmsgdGhlIGJhcmUgbWluaW11bSBoZXJlIHdvdWxk
-IGJlIGENCj4+IGZldyBrZXJuZWwgY29tcGlsZXMgYW5kIHNvbWUgJ3BlcmYgc3RhdCcgZGF0YSBm
-b3Igc29tZSBUTEIgZXZlbnRzLg0KPiANCj4gV2hlbiB0aGUgZmVhdHVyZSBzdXBwb3J0ZWQgb24g
-cHBjLA0KPiANCj4gY29tbWl0IDhhYmRkZDk2OGEzMDNkYjc1ZTRkZWJlNzdhM2RmNDg0MTY0ZjFm
-MzMNCj4gQXV0aG9yOiBOaWNob2xhcyBQaWdnaW4gPG5waWdnaW5AZ21haWwuY29tPg0KPiBEYXRl
-OsKgwqAgTW9uIE1heSAzIDE5OjE3OjU1IDIwMjEgKzEwMDANCj4gDQo+ICDCoMKgwqAgcG93ZXJw
-Yy82NHMvcmFkaXg6IEVuYWJsZSBodWdlIHZtYWxsb2MgbWFwcGluZ3MNCj4gDQo+ICDCoMKgwqAg
-VGhpcyByZWR1Y2VzIFRMQiBtaXNzZXMgYnkgbmVhcmx5IDMweCBvbiBhIGBnaXQgZGlmZmAgd29y
-a2xvYWQgb24gYQ0KPiAgwqDCoMKgIDItbm9kZSBQT1dFUjkgKDU5LDgwMCAtPiAyLDEwMCkgYW5k
-IHJlZHVjZXMgQ1BVIGN5Y2xlcyBieSAwLjU0JSwgZHVlDQo+ICDCoMKgwqAgdG8gdmZzIGhhc2hl
-cyBiZWluZyBhbGxvY2F0ZWQgd2l0aCAyTUIgcGFnZXMuDQo+IA0KPiBCdXQgdGhlIGRhdGEgY291
-bGQgYmUgZGlmZmVyZW50IG9uIGRpZmZlcmVudCBtYWNoaW5lL2FyY2guDQo+IA0KPj4+IGRpZmYg
-LS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwvbW9kdWxlLmMgYi9hcmNoL3g4Ni9rZXJuZWwvbW9kdWxl
-LmMNCj4+PiBpbmRleCA5NWZhNzQ1ZTMxMGEuLjZiZjVjYjdkODc2YSAxMDA2NDQNCj4+PiAtLS0g
-YS9hcmNoL3g4Ni9rZXJuZWwvbW9kdWxlLmMNCj4+PiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvbW9k
-dWxlLmMNCj4+PiBAQCAtNzUsOCArNzUsOCBAQCB2b2lkICptb2R1bGVfYWxsb2ModW5zaWduZWQg
-bG9uZyBzaXplKQ0KPj4+IMKgwqDCoMKgwqAgcCA9IF9fdm1hbGxvY19ub2RlX3JhbmdlKHNpemUs
-IE1PRFVMRV9BTElHTiwNCj4+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgTU9EVUxFU19WQUREUiArIGdldF9tb2R1bGVfbG9hZF9vZmZzZXQoKSwNCj4+PiAtwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgTU9EVUxFU19FTkQsIGdmcF9tYXNr
-LA0KPj4+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBQQUdFX0tFUk5F
-TCwgVk1fREVGRVJfS01FTUxFQUssIE5VTUFfTk9fTk9ERSwNCj4+PiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgTU9EVUxFU19FTkQsIGdmcF9tYXNrLCBQQUdFX0tFUk5F
-TCwNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgVk1fREVGRVJf
-S01FTUxFQUsgfCBWTV9OT19IVUdFX1ZNQVAsIE5VTUFfTk9fTk9ERSwNCj4+PiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgX19idWlsdGluX3JldHVybl9hZGRyZXNz
-KDApKTsNCj4+PiDCoMKgwqDCoMKgIGlmIChwICYmIChrYXNhbl9tb2R1bGVfYWxsb2MocCwgc2l6
-ZSwgZ2ZwX21hc2spIDwgMCkpIHsNCj4+PiDCoMKgwqDCoMKgwqDCoMKgwqAgdmZyZWUocCk7DQo+
-PiBUbyBmaWd1cmUgb3V0IHdoYXQncyBnb2luZyBvbiBpbiB0aGlzIGh1bmssIEkgaGFkIHRvIGxv
-b2sgYXQgdGhlIGNvdmVyDQo+PiBsZXR0ZXIgKHdoaWNoIEkgd2Fzbid0IGNjJ2Qgb24pLsKgIFRo
-YXQncyBub3QgZ3JlYXQgYW5kIGl0IG1lYW5zIHRoYXQNCj4+IHNvbWVib2R5IHdobyBzdHVtYmxl
-cyB1cG9uIHRoaXMgaW4gdGhlIGNvZGUgaXMgZ29pbmcgdG8gaGF2ZSBhIHJlYWxseQ0KPj4gaGFy
-ZCB0aW1lIGZpZ3VyaW5nIG91dCB3aGF0IGlzIGdvaW5nIG9uLsKgIENvdmVyIGxldHRlcnMgZG9u
-J3QgbWFrZSBpdA0KPj4gaW50byBnaXQgaGlzdG9yeS4NCj4gU29ycnkgZm9yIHRoYXQsIHdpbGwg
-YWRkIG1vcmUgaW50byBhcmNoJ3MgcGF0Y2ggY2hhbmdlbG9nLg0KPj4gVGhpcyBkZXNwZXJhdGVs
-eSBuZWVkcyBhIGNvbW1lbnQgYW5kIHNvbWUgY2hhbmdlbG9nIG1hdGVyaWFsIGluICp0aGlzKg0K
-Pj4gcGF0Y2guDQo+Pg0KPj4gQnV0LCBldmVuIHRoZSBkZXNjcmlwdGlvbiBmcm9tIHRoZSBjb3Zl
-ciBsZXR0ZXIgaXMgc3BhcnNlOg0KPj4NCj4+PiBUaGVyZSBhcmUgc29tZSBkaXNhZHZhbnRhZ2Vz
-IGFib3V0IHRoaXMgZmVhdHVyZVsyXSwgb25lIG9mIHRoZSBtYWluDQo+Pj4gY29uY2VybnMgaXMg
-dGhlIHBvc3NpYmxlIG1lbW9yeSBmcmFnbWVudGF0aW9uL3dhc3RlIGluIHNvbWUgc2NlbmFyaW9z
-LA0KPj4+IGFsc28gYXJjaHMgbXVzdCBlbnN1cmUgdGhhdCBhbnkgYXJjaCBzcGVjaWZpYyB2bWFs
-bG9jIGFsbG9jYXRpb25zIHRoYXQNCj4+PiByZXF1aXJlIFBBR0VfU0laRSBtYXBwaW5ncyhlZywg
-bW9kdWxlIGFsbG9jIHdpdGggU1RSSUNUX01PRFVMRV9SV1gpDQo+Pj4gdXNlIHRoZSBWTV9OT19I
-VUdFX1ZNQVAgZmxhZyB0byBpbmhpYml0IGxhcmdlciBtYXBwaW5ncy4NCj4+IFRoYXQganVzdCBz
-YXlzIHRoYXQgeDg2ICpuZWVkcyogUEFHRV9TSVpFIGFsbG9jYXRpb25zLsKgIEJ1dCwgd2hhdA0K
-Pj4gaGFwcGVucyBpZiBWTV9OT19IVUdFX1ZNQVAgaXMgbm90IHBhc3NlZCAobGlrZSBpdCB3YXMg
-aW4gdjEpP8KgIFdpbGwgdGhlDQo+PiBzdWJzZXF1ZW50IHBlcm1pc3Npb24gY2hhbmdlcyBqdXN0
-IGZyYWdtZW50IHRoZSAyTSBtYXBwaW5nPw0KPj4gLg0KPiANCj4gWWVzLCB3aXRob3V0IFZNX05P
-X0hVR0VfVk1BUCwgaXQgY291bGQgZnJhZ21lbnQgdGhlIDJNIG1hcHBpbmcuDQo+IA0KPiBXaGVu
-IG1vZHVsZSBhbGxvYyB3aXRoIFNUUklDVF9NT0RVTEVfUldYIG9uIHg4NiwgaXQgY2FsbHMgDQo+
-IF9fY2hhbmdlX3BhZ2VfYXR0cigpDQo+IA0KPiBmcm9tIHNldF9tZW1vcnlfcm8vcncvbnggd2hp
-Y2ggd2lsbCBzcGxpdCBsYXJnZSBwYWdlLCBzbyB0aGVyZSBpcyBubyANCj4gbmVlZCB0byBtYWtl
-DQo+IA0KPiBtb2R1bGUgYWxsb2Mgd2l0aCBIVUdFX1ZNQUxMT0MuDQo+IA0KDQpNYXliZSB0aGVy
-ZSBpcyBubyBuZWVkIHRvIHBlcmZvcm0gdGhlIG1vZHVsZSBhbGxvYyB3aXRoIEhVR0VfVk1BTExP
-QywgDQpidXQgaXQgbGVhc3QgaXQgd291bGQgc3RpbGwgd29yayBpZiB5b3UgZG8gc28uDQoNClBv
-d2VycGMgZGlkIGFkZCBWTV9OT19IVUdFX1ZNQVAgdGVtcG9yYXJpbHkgYW5kIGZvciBzb21lIHJl
-YXNvbiB3aGljaCBpcyANCiAgZXhwbGFpbmVkIGluIGEgY29tbWVudC4NCg0KSWYgeDg2IGFscmVh
-ZHkgaGFzIHRoZSBuZWNlc3NhcnkgbG9naWMgdG8gaGFuZGxlIGl0LCB3aHkgYWRkIA0KVk1fTk9f
-SFVHRV9WTUFQID8NCg0KQ2hyaXN0b3BoZQ==
+On Sat, 15 Jan 2022 12:58:46 +0800
+kernel test robot <lkp@intel.com> wrote:
+
+> Hi Masami,
+> 
+> I love your patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on stable/linux-5.4.y]
+> 
+> url:    https://github.com/0day-ci/linux/commits/Masami-Hiramatsu/Revert-ia64-kprobes-Use-generic-kretprobe-trampoline-handler/20220114-182111
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
+> config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20220115/202201151231.g2sW8oWt-lkp@intel.com/config)
+> compiler: ia64-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/0day-ci/linux/commit/514059de80b018e0edcf434519ff6bf41b4a519b
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Masami-Hiramatsu/Revert-ia64-kprobes-Use-generic-kretprobe-trampoline-handler/20220114-182111
+>         git checkout 514059de80b018e0edcf434519ff6bf41b4a519b
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    arch/ia64/kernel/kprobes.c: In function 'get_kprobe_inst':
+>    arch/ia64/kernel/kprobes.c:325:22: warning: variable 'template' set but not used [-Wunused-but-set-variable]
+>      325 |         unsigned int template;
+>          |                      ^~~~~~~~
+
+This one is fixed by recent patch.
+
+https://lore.kernel.org/all/164208575387.1590449.8278421820882450166.stgit@devnote2/T/#u
+
+>    arch/ia64/kernel/kprobes.c: At top level:
+>    arch/ia64/kernel/kprobes.c:407:15: warning: no previous prototype for 'trampoline_probe_handler' [-Wmissing-prototypes]
+>      407 | int __kprobes trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
+>          |               ^~~~~~~~~~~~~~~~~~~~~~~~
+>    arch/ia64/kernel/kprobes.c: In function 'trampoline_probe_handler':
+> >> arch/ia64/kernel/kprobes.c:414:17: warning: initialization of 'long unsigned int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+>      414 |                 dereference_function_descriptor(kretprobe_trampoline);
+>          |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Oops. I forgot to cast it. I'll resend the patch.
+
+Thank you,
+
+
+> 
+> Kconfig warnings: (for reference only)
+>    WARNING: unmet direct dependencies detected for FRAME_POINTER
+>    Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS
+>    Selected by
+>    - FAULT_INJECTION_STACKTRACE_FILTER && FAULT_INJECTION_DEBUG_FS && STACKTRACE_SUPPORT && !X86_64 && !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM && !ARC && !X86
+> 
+> 
+> vim +414 arch/ia64/kernel/kprobes.c
+> 
+>    320	
+>    321	static void __kprobes get_kprobe_inst(bundle_t *bundle, uint slot,
+>    322		       	unsigned long *kprobe_inst, uint *major_opcode)
+>    323	{
+>    324		unsigned long kprobe_inst_p0, kprobe_inst_p1;
+>  > 325		unsigned int template;
+>    326	
+>    327		template = bundle->quad0.template;
+>    328	
+>    329		switch (slot) {
+>    330		  case 0:
+>    331			*major_opcode = (bundle->quad0.slot0 >> SLOT0_OPCODE_SHIFT);
+>    332			*kprobe_inst = bundle->quad0.slot0;
+>    333			  break;
+>    334		  case 1:
+>    335			*major_opcode = (bundle->quad1.slot1_p1 >> SLOT1_p1_OPCODE_SHIFT);
+>    336			kprobe_inst_p0 = bundle->quad0.slot1_p0;
+>    337			kprobe_inst_p1 = bundle->quad1.slot1_p1;
+>    338			*kprobe_inst = kprobe_inst_p0 | (kprobe_inst_p1 << (64-46));
+>    339			break;
+>    340		  case 2:
+>    341			*major_opcode = (bundle->quad1.slot2 >> SLOT2_OPCODE_SHIFT);
+>    342			*kprobe_inst = bundle->quad1.slot2;
+>    343			break;
+>    344		}
+>    345	}
+>    346	
+>    347	/* Returns non-zero if the addr is in the Interrupt Vector Table */
+>    348	static int __kprobes in_ivt_functions(unsigned long addr)
+>    349	{
+>    350		return (addr >= (unsigned long)__start_ivt_text
+>    351			&& addr < (unsigned long)__end_ivt_text);
+>    352	}
+>    353	
+>    354	static int __kprobes valid_kprobe_addr(int template, int slot,
+>    355					       unsigned long addr)
+>    356	{
+>    357		if ((slot > 2) || ((bundle_encoding[template][1] == L) && slot > 1)) {
+>    358			printk(KERN_WARNING "Attempting to insert unaligned kprobe "
+>    359					"at 0x%lx\n", addr);
+>    360			return -EINVAL;
+>    361		}
+>    362	
+>    363		if (in_ivt_functions(addr)) {
+>    364			printk(KERN_WARNING "Kprobes can't be inserted inside "
+>    365					"IVT functions at 0x%lx\n", addr);
+>    366			return -EINVAL;
+>    367		}
+>    368	
+>    369		return 0;
+>    370	}
+>    371	
+>    372	static void __kprobes save_previous_kprobe(struct kprobe_ctlblk *kcb)
+>    373	{
+>    374		unsigned int i;
+>    375		i = atomic_add_return(1, &kcb->prev_kprobe_index);
+>    376		kcb->prev_kprobe[i-1].kp = kprobe_running();
+>    377		kcb->prev_kprobe[i-1].status = kcb->kprobe_status;
+>    378	}
+>    379	
+>    380	static void __kprobes restore_previous_kprobe(struct kprobe_ctlblk *kcb)
+>    381	{
+>    382		unsigned int i;
+>    383		i = atomic_read(&kcb->prev_kprobe_index);
+>    384		__this_cpu_write(current_kprobe, kcb->prev_kprobe[i-1].kp);
+>    385		kcb->kprobe_status = kcb->prev_kprobe[i-1].status;
+>    386		atomic_sub(1, &kcb->prev_kprobe_index);
+>    387	}
+>    388	
+>    389	static void __kprobes set_current_kprobe(struct kprobe *p,
+>    390				struct kprobe_ctlblk *kcb)
+>    391	{
+>    392		__this_cpu_write(current_kprobe, p);
+>    393	}
+>    394	
+>    395	static void kretprobe_trampoline(void)
+>    396	{
+>    397	}
+>    398	
+>    399	/*
+>    400	 * At this point the target function has been tricked into
+>    401	 * returning into our trampoline.  Lookup the associated instance
+>    402	 * and then:
+>    403	 *    - call the handler function
+>    404	 *    - cleanup by marking the instance as unused
+>    405	 *    - long jump back to the original return address
+>    406	 */
+>    407	int __kprobes trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
+>    408	{
+>    409		struct kretprobe_instance *ri = NULL;
+>    410		struct hlist_head *head, empty_rp;
+>    411		struct hlist_node *tmp;
+>    412		unsigned long flags, orig_ret_address = 0;
+>    413		unsigned long trampoline_address =
+>  > 414			dereference_function_descriptor(kretprobe_trampoline);
+>    415	
+>    416		INIT_HLIST_HEAD(&empty_rp);
+>    417		kretprobe_hash_lock(current, &head, &flags);
+>    418	
+>    419		/*
+>    420		 * It is possible to have multiple instances associated with a given
+>    421		 * task either because an multiple functions in the call path
+>    422		 * have a return probe installed on them, and/or more than one return
+>    423		 * return probe was registered for a target function.
+>    424		 *
+>    425		 * We can handle this because:
+>    426		 *     - instances are always inserted at the head of the list
+>    427		 *     - when multiple return probes are registered for the same
+>    428		 *       function, the first instance's ret_addr will point to the
+>    429		 *       real return address, and all the rest will point to
+>    430		 *       kretprobe_trampoline
+>    431		 */
+>    432		hlist_for_each_entry_safe(ri, tmp, head, hlist) {
+>    433			if (ri->task != current)
+>    434				/* another task is sharing our hash bucket */
+>    435				continue;
+>    436	
+>    437			orig_ret_address = (unsigned long)ri->ret_addr;
+>    438			if (orig_ret_address != trampoline_address)
+>    439				/*
+>    440				 * This is the real return address. Any other
+>    441				 * instances associated with this task are for
+>    442				 * other calls deeper on the call stack
+>    443				 */
+>    444				break;
+>    445		}
+>    446	
+>    447		regs->cr_iip = orig_ret_address;
+>    448	
+>    449		hlist_for_each_entry_safe(ri, tmp, head, hlist) {
+>    450			if (ri->task != current)
+>    451				/* another task is sharing our hash bucket */
+>    452				continue;
+>    453	
+>    454			if (ri->rp && ri->rp->handler)
+>    455				ri->rp->handler(ri, regs);
+>    456	
+>    457			orig_ret_address = (unsigned long)ri->ret_addr;
+>    458			recycle_rp_inst(ri, &empty_rp);
+>    459	
+>    460			if (orig_ret_address != trampoline_address)
+>    461				/*
+>    462				 * This is the real return address. Any other
+>    463				 * instances associated with this task are for
+>    464				 * other calls deeper on the call stack
+>    465				 */
+>    466				break;
+>    467		}
+>    468		kretprobe_assert(ri, orig_ret_address, trampoline_address);
+>    469	
+>    470		kretprobe_hash_unlock(current, &flags);
+>    471	
+>    472		hlist_for_each_entry_safe(ri, tmp, &empty_rp, hlist) {
+>    473			hlist_del(&ri->hlist);
+>    474			kfree(ri);
+>    475		}
+>    476		/*
+>    477		 * By returning a non-zero value, we are telling
+>    478		 * kprobe_handler() that we don't want the post_handler
+>    479		 * to run (and have re-enabled preemption)
+>    480		 */
+>    481		return 1;
+>    482	}
+>    483	
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

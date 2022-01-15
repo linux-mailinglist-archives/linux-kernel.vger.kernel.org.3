@@ -2,119 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E5348F878
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 18:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08A348F87D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 18:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiAOR1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 12:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiAOR1H (ORCPT
+        id S229992AbiAORaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 12:30:52 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:40617 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229458AbiAORat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 12:27:07 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A73FC061574
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 09:27:07 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id v6so16274856iom.6
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 09:27:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mu52mCpV2nrQW+DvvGvGXwkA9rgLAwESwOW831oZMnE=;
-        b=d3c2rEAUTq64Y+w6197B+rfX3aaLSZ92yWel7tJ5VZaQnn0VPZTAewMBNDS0Tmud85
-         KH5j5drTQzOAbIhxudKiZaXo9wwa46OCq2FVaGILXJmQ2lCLgWHDsnVykCSCjIeCHTY/
-         ZQXHtXE3g9CAUtVdt2NYw02fZ7pg8W1ftQR0g=
+        Sat, 15 Jan 2022 12:30:49 -0500
+Received: by mail-ot1-f41.google.com with SMTP id x31-20020a056830245f00b00599111c8b20so683058otr.7;
+        Sat, 15 Jan 2022 09:30:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mu52mCpV2nrQW+DvvGvGXwkA9rgLAwESwOW831oZMnE=;
-        b=PPxljUrrA2uAwt2O4cnaVsECbW+fWN63hyAJuSTmgF6wvI4zsH2VGWSltVRSt7hs8e
-         axI7VVRsVKPwPS6K2NP+ZIQZBjz/4lqicG2vF9UM723RbSwZ1nBNdQj7CYZZ14Ago6Q+
-         sDGwGeQapU+gYSpXXWu2OMZHzg2e6mAH2Ci35J7wFpzfGnBwXaH8AFUX0YGRwDfqylZD
-         Got6kSwb8DMzxipmpUY3Kb2mvneYXgwBcQu2Gs1QkFjX+jpYBvSdzYnR0lAYKOUUpiu+
-         Ecetaj3sFrUWfcgh7Ne9cNZypAmK+c68ELSTTvvP3DTdkdAVgVLthiTs6TfDf8qv+DhB
-         cX+Q==
-X-Gm-Message-State: AOAM532NV1l8OswRlP+dwcF5DUIt6kKrDQ48AF1EtKEqZhSH2de0uVah
-        uD33T3abDxSybIoVCQiQyNjUUzsKn5E4MQntCvrA6g==
-X-Google-Smtp-Source: ABdhPJyR3JZ53vXZtEgCpx9pT/ydRQnd5TmsZ9xh4WkPiq1Hsx2lP0NtdPS27LZu4ouZ2C9SZTB2oznIMinprrNekro=
-X-Received: by 2002:a05:6638:3012:: with SMTP id r18mr6621186jak.282.1642267626434;
- Sat, 15 Jan 2022 09:27:06 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3t9nBgeTBjIZbTnYp+Jp4UVlxxnSMO/+rzL7IjxEVIs=;
+        b=FLbd/JBzTJOzICjgxsyn5sRYoHFqoZyRNllc2raokQmIXFTvTsAJD9zyxgCqlwfUIF
+         uNYkUTqcIz9oBT8WLwqtS1F8Uk4dy9uENLgx6FP9hlEv3tJUgwpU1nksb2gD8N1yrggb
+         W91PkO+KnZ0uMLKsrWXF2AJ2FRKEo7ziqGYIoG/galOSzfOCMjfBnXxs9PzTxCn5P8l3
+         2FlOEFdf+hMsumE4DfmVVIbDlb1WEdm5Or/F4U6scOdNSCbJLxt5mz4LF2OFdqWPHAHF
+         4JuGi7AKSgM99hQFmkXXtliW7zWq109KgmQImyMZBP0gLfyGMv1/TQ2UtWTT9VDcxDmG
+         /MTA==
+X-Gm-Message-State: AOAM533PnoHql2Y6A6uq34tf+J/+yvcRSfwYnWK81Hv7DBOsL1zvLWgp
+        +j5tT1aU1uFAFYvrWzaR6DzGRwTDDg==
+X-Google-Smtp-Source: ABdhPJyb1hozHxAR9pgoKPTYNL2He4+TUfRi+8NKfRhzgFUvBQACstUUxJpNTD8z7Gc+O0vvUFJRAg==
+X-Received: by 2002:a9d:5613:: with SMTP id e19mr10796872oti.303.1642267848509;
+        Sat, 15 Jan 2022 09:30:48 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id e6sm2329494oiw.39.2022.01.15.09.30.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jan 2022 09:30:47 -0800 (PST)
+Received: (nullmailer pid 132309 invoked by uid 1000);
+        Sat, 15 Jan 2022 17:30:47 -0000
+Date:   Sat, 15 Jan 2022 11:30:47 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] of: base: add parameter doc to
+ of_parse_phandle_with_optional_args()
+Message-ID: <YeMEx1z1YeQAuOlT@robh.at.kernel.org>
+References: <20220115113156.435037-1-michael@walle.cc>
 MIME-Version: 1.0
-References: <20220106122452.18719-1-wsa@kernel.org> <Yd6gRR0jtqhRLwtB@ninjato>
- <98ed8d6d16a3d472d9432eb169aa2da44b66b5cc.camel@yandex.ru>
- <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com> <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
- <6121a782-6927-f033-1c09-ffe4ad7700ae@yahoo.com>
-In-Reply-To: <6121a782-6927-f033-1c09-ffe4ad7700ae@yahoo.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Sun, 16 Jan 2022 01:26:40 +0800
-Message-ID: <CAJMQK-j5YYqen78Vgng_5jhja-YKSTRut7f7vJ4wWufVfbZy6w@mail.gmail.com>
-Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in adapter"
-To:     Tareque Md Hanif <tarequemd.hanif@yahoo.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220115113156.435037-1-michael@walle.cc>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Tareque,
+On Sat, 15 Jan 2022 12:31:56 +0100, Michael Walle wrote:
+> htmldocs produces warnings about the missing documentation. Add them.
+> While at it, fix the typo in the referenced function name.
+> 
+> Fixes: 952c4865d27a ("of: base: add of_parse_phandle_with_optional_args()")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  include/linux/of.h | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
 
-
-On Fri, Jan 14, 2022 at 6:09 PM Tareque Md Hanif
-<tarequemd.hanif@yahoo.com> wrote:
->
-> Hi Hsin-Yi,
->
-> On 1/12/22 16:58, Hsin-Yi Wang wrote:
->
-> Can you help provide logs if we apply
-> 5a7b95fb993ec399c8a685552aa6a8fc995c40bd but revert
-> 8d35a2596164c1c9d34d4656fd42b445cd1e247f?
->
-> Issue still exists. journalctl log attached in revert_8d.txt
->
->
-> > after apply 5a7b95fb993ec399c8a685552aa6a8fc995c40bd
-> > 1. delete SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late,
-> > i2c_resume_early) and function i2c_suspend_late() and
-> > i2c_resume_early().
->
-> No issues. journalctl log attached in test1.txt
->
->
-> > 2. delete SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume,
-> > NULL) and function i2c_runtime_suspend() and i2c_runtime_resume().
->
-> Issue exists. journalctl log attached in test2.txt
-
-Thanks for the testing.
-Can you help us test if applying the following patch on top of
-5a7b95fb993ec399c8a685552aa6a8fc995c40bd works? Thanks
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 9eb4009cb250..6b046012aa08 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -484,7 +484,7 @@ static int i2c_resume_early(struct device *dev)
-        struct i2c_client *client = i2c_verify_client(dev);
-        int err;
-
--       if (!client)
-+       if (!client || dev_pm_skip_resume(dev))
-                return 0;
-
-        if (pm_runtime_status_suspended(&client->dev) &&
-@@ -502,7 +502,7 @@ static int i2c_suspend_late(struct device *dev)
-        struct i2c_client *client = i2c_verify_client(dev);
-        int err;
-
--       if (!client)
-+       if (!client || dev_pm_skip_suspend(dev))
-                return 0;
-
-        err = pm_generic_suspend_late(&client->dev);
+Applied, thanks!

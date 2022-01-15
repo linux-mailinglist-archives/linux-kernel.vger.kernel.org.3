@@ -2,99 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B10148F3C1
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936C848F3BC
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbiAOBFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 20:05:35 -0500
-Received: from mga07.intel.com ([134.134.136.100]:27592 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229534AbiAOBFe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 20:05:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642208734; x=1673744734;
-  h=subject:to:references:from:message-id:date:mime-version:
-   in-reply-to:content-transfer-encoding;
-  bh=wZ0Ry+mIARE6XgrFHfixgiV08hKw7NCIewYKMb+m2qE=;
-  b=nsWw0v+B2ihKsLi6UUAW/b72FV8iBqPWH1YSGV3B4o1lEohdnUz+eYOr
-   EANYh8i2LLNBeD3aef7cNwGdtZwf7PmHvUns5omPZ1SoctZH8UieJ6oXf
-   mnd2i6yqrx/raFBeM9p+zeURsSAgaUO2VU2jWwqzYmhA63UmcrO6M6i+8
-   jgHj7zYfHI9e0iP7rTTaUtskCF718LHOAaPH4gkxGS/ZHp0JAqlaLWl9q
-   ey9j0IYJIje25TmtVNnlxz5/o/suriTo/woyojtWoOqFqtlCCu5cSsSvr
-   VpJAaJIO6KWWB/iHwcSo1B3yWAu4NFfDVdcYI7FPqdLexyVYTJb2XEfcl
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="307703011"
-X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="307703011"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 17:05:32 -0800
-X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="624531822"
-Received: from dsubasic-mobl.amr.corp.intel.com (HELO [10.212.67.37]) ([10.212.67.37])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 17:05:31 -0800
-Subject: Re: [PATCH] slimbus: qcom: Fix IRQ check in qcom_slim_probe
-To:     Miaoqian Lin <linmq006@gmail.com>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sagar Dharia <sdharia@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220114061830.13456-1-linmq006@gmail.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <239c3b32-6754-02ba-6bfd-7f05fa2adfed@linux.intel.com>
-Date:   Fri, 14 Jan 2022 09:14:58 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S231728AbiAOBCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 20:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229783AbiAOBCn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 20:02:43 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B5DC061574;
+        Fri, 14 Jan 2022 17:02:43 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id p7so14478222iod.2;
+        Fri, 14 Jan 2022 17:02:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cV/KQAdoixRP2Jc7kX5ih1D3aR41cK+Dy/TFv78IhVY=;
+        b=C9xJVmTctCuMQKEqz+zvBi80svHjeyHO3AEwdTJnlo2VOzcWk6K+C7ldCp9MdKG/W3
+         0qf7XbyPheYQkoaqB+gW2MWvghElD4sNNg6c/PFptSBioKcBuimTseYrwXj5sqczvlfy
+         EX6V1eIjGYpxRDu7iZkn3NulGT19/d+ZEoXtuRkiZ3mpZjdHCJy8fRgPmJoDopuIprS4
+         7mwdCDDWf/ID/o01w/c2/2YNe0N8/SG/FxOLOXnSrigkvPlSE2hs7fvbQuBfuh2iXcuz
+         d9GYg7KLbPgb9AoD6iANKWGZMnUHu54onqQvWTcp6mWueDAWvwHhQGtd/gCni3V+Rni5
+         vOeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cV/KQAdoixRP2Jc7kX5ih1D3aR41cK+Dy/TFv78IhVY=;
+        b=kyET35kpy/KbUcxv+lrTXXIJGUSbnFbG3IPFaNVNwz4llfRTdCvLSEAbLi607iYGqO
+         zIgfqU7/jE7QnPHIqreF5MTaON+qiCXkVSPjw1QqddEfEJSp7n0ArqWJ/PQ8DG/LyMkO
+         vM3ZEvdixlziHxRWkt/RHDNYcaE8PmOcOE1shQ5lsrtXbRkC6qqBw+btfUvcmHyBhiQY
+         ZDLj9woA1RYcrLe3xs/E0eORhg/u94nwTrmuZ/znpDa7V6vd2MoSveL8zXlwCBrC61i+
+         MKTDRVBcGrsFy+3lFbNl5spj0jr72ssc750phIiFD8ROemfZWnGJmgEvH60gmMbyaZY4
+         UkQg==
+X-Gm-Message-State: AOAM531ZIuSK428TMizggvYEe94YEVKUow+pGFIePVNCJf0FYigWMCos
+        ChnId5vK7wY5bgBxcZUPmW+9EQAXvafNolRB110=
+X-Google-Smtp-Source: ABdhPJw+oat9TzFfSTgsYFB+Vf4ZqawwlYwdDnyJTgKJSotBO+zfX9B5XK3HUrtyeQSvu5BZU8LGaw5S/kZxqYu/E+Y=
+X-Received: by 2002:a02:bb8d:: with SMTP id g13mr5383663jan.103.1642208562404;
+ Fri, 14 Jan 2022 17:02:42 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220114061830.13456-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <164199616622.1247129.783024987490980883.stgit@devnote2>
+ <Yd77SYWgtrkhFIYz@krava> <YeAatqQTKsrxmUkS@krava> <20220114234704.41f28e8b5e63368c655d848e@kernel.org>
+ <YeGSeGVnBnEHXTtj@krava>
+In-Reply-To: <YeGSeGVnBnEHXTtj@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 14 Jan 2022 17:02:31 -0800
+Message-ID: <CAEf4Bza01kwiKPyXqDD17grVw9WAQT_MztoTsd0tMd2XuuGteQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/8] fprobe: Introduce fprobe function entry/exit probe
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 14, 2022 at 7:10 AM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Fri, Jan 14, 2022 at 11:47:04PM +0900, Masami Hiramatsu wrote:
+> > Hi Jiri and Alexei,
+> >
+> > On Thu, 13 Jan 2022 13:27:34 +0100
+> > Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > > On Wed, Jan 12, 2022 at 05:01:15PM +0100, Jiri Olsa wrote:
+> > > > On Wed, Jan 12, 2022 at 11:02:46PM +0900, Masami Hiramatsu wrote:
+> > > > > Hi Jiri and Alexei,
+> > > > >
+> > > > > Here is the 2nd version of fprobe. This version uses the
+> > > > > ftrace_set_filter_ips() for reducing the registering overhead.
+> > > > > Note that this also drops per-probe point private data, which
+> > > > > is not used anyway.
+> > > > >
+> > > > > This introduces the fprobe, the function entry/exit probe with
+> > > > > multiple probe point support. This also introduces the rethook
+> > > > > for hooking function return as same as kretprobe does. This
+> > > >
+> > > > nice, I was going through the multi-user-graph support
+> > > > and was wondering that this might be a better way
+> > > >
+> > > > > abstraction will help us to generalize the fgraph tracer,
+> > > > > because we can just switch it from rethook in fprobe, depending
+> > > > > on the kernel configuration.
+> > > > >
+> > > > > The patch [1/8] and [7/8] are from your series[1]. Other libbpf
+> > > > > patches will not be affected by this change.
+> > > >
+> > > > I'll try the bpf selftests on top of this
+> > >
+> > > I'm getting crash and stall when running bpf selftests,
+> > > the fprobe sample module works fine, I'll check on that
+> >
+> > I've tried to build tools/testing/selftests/bpf on my machine,
+> > but I got below errors. Would you know how I can setup to build
+> > the bpf selftests correctly? (I tried "make M=samples/bpf", but same result)
+>
+> what's your clang version? your distro might be behind,
 
+If you have very recent Clang, decently recent pahole, and qemu, try
+using vmtest.sh. That should build the kernel with all the necessary
+kernel config options and start qemu image with that latest image and
+build selftests. And even run selftests automatically.
 
-On 1/14/22 12:18 AM, Miaoqian Lin wrote:
-> platform_get_irq() returns negative error number instead 0 on failure.
+> I'm using clang 14 compiled from sources:
+>
+>         $ /opt/clang/bin/clang --version
+>         clang version 14.0.0 (https://github.com/llvm/llvm-project.git 9f8ffaaa0bddcefeec15a3df9858fd50b05fcbae)
+>         Target: x86_64-unknown-linux-gnu
+>         Thread model: posix
+>         InstalledDir: /opt/clang/bin
+>
+> and compiling bpf selftests with:
+>
+>         $ CLANG=/opt/clang/bin/clang make
+>
+> jirka
+>
+>
+> >
 
-the 'instead of' wording is a bit misleading:
+[...]
 
-platform_get_irq() returns non-zero IRQ number on success, negative
-error number on failure. Zero is not a valid return valid.
-
-
-> And the doc of platform_get_irq() provides a usage example:
-> 
->     int irq = platform_get_irq(pdev, 0);
->     if (irq < 0)
->         return irq;
-> 
-> Fix the check of return value to catch errors correctly.
-> 
-> Fixes: ad7fcbc308b0 ("slimbus: qcom: Add Qualcomm Slimbus controller driver")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/slimbus/qcom-ctrl.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/slimbus/qcom-ctrl.c b/drivers/slimbus/qcom-ctrl.c
-> index f04b961b96cd..ec58091fc948 100644
-> --- a/drivers/slimbus/qcom-ctrl.c
-> +++ b/drivers/slimbus/qcom-ctrl.c
-> @@ -510,9 +510,9 @@ static int qcom_slim_probe(struct platform_device *pdev)
->  	}
->  
->  	ctrl->irq = platform_get_irq(pdev, 0);
-> -	if (!ctrl->irq) {
-> +	if (ctrl->irq < 0) {
->  		dev_err(&pdev->dev, "no slimbus IRQ\n");
-> -		return -ENODEV;
-> +		return ctrl->irq;
->  	}
->  
->  	sctrl = &ctrl->ctrl;
-> 
+> >
+> > Thank you,
+> >
+> > --
+> > Masami Hiramatsu <mhiramat@kernel.org>
+> >
+>

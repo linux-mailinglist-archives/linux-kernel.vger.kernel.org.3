@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 412E948F639
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 11:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBBD48F63D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 11:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232559AbiAOKB4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 15 Jan 2022 05:01:56 -0500
-Received: from lithops.sigma-star.at ([195.201.40.130]:34734 "EHLO
-        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiAOKBz (ORCPT
+        id S232769AbiAOKFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 05:05:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232757AbiAOKFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 05:01:55 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id B9B6D614E2CD;
-        Sat, 15 Jan 2022 11:01:53 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id P38YeyIdWJ2O; Sat, 15 Jan 2022 11:01:52 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 8C229614E2D5;
-        Sat, 15 Jan 2022 11:01:52 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id JOwiyE1gdgNZ; Sat, 15 Jan 2022 11:01:52 +0100 (CET)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 62EB3614E2CD;
-        Sat, 15 Jan 2022 11:01:52 +0100 (CET)
-Date:   Sat, 15 Jan 2022 11:01:52 +0100 (CET)
-From:   Richard Weinberger <richard@nod.at>
-To:     chengzhihao1 <chengzhihao1@huawei.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        mcoquelin stm32 <mcoquelin.stm32@gmail.com>,
-        kirill shutemov <kirill.shutemov@linux.intel.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <626252388.262848.1642240912242.JavaMail.zimbra@nod.at>
-In-Reply-To: <face6dce-d860-a7e6-fe9c-39f59cef22c5@huawei.com>
-References: <20211227032246.2886878-1-chengzhihao1@huawei.com> <11976804.249069.1641902225370.JavaMail.zimbra@nod.at> <0a7a5cce-1ee1-70b6-d368-615dfa0a617a@huawei.com> <1492514284.249466.1641909382867.JavaMail.zimbra@nod.at> <6815e4af-9b5b-313f-5828-644722dd4d1f@huawei.com> <23886736.260777.1642185939371.JavaMail.zimbra@nod.at> <88df000c-97a6-ff3f-a1e2-10fa4da8c604@huawei.com> <face6dce-d860-a7e6-fe9c-39f59cef22c5@huawei.com>
-Subject: Re: [PATCH v6 12/15] ubi: fastmap: Add all fastmap pebs into
- 'ai->fastmap' when fm->used_blocks>=2
+        Sat, 15 Jan 2022 05:05:00 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995F2C06161C
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 02:05:00 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id p1-20020a1c7401000000b00345c2d068bdso12038428wmc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 02:05:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NnbSOHZabpTh0sjxu952a7mwBfFZ+I27XVWWNUBKhcc=;
+        b=UAXx7nHy4OHwH37ElrRhVy9WBbIXadGWmR2ZFZm199AmRBfOnGcviFLmwzhZtNqWt5
+         DrZyylV4Zgq+n4wEMAe6U2aoZe3z1vBSzpDvTI+5IwfDX/Ft+4EZspcRpgdCg83Kyi3T
+         uI+dpXPF1sYJfdCkLXiPu9xzPXaBuE/EzT/Vqo/di9au26EaAiLNf71Cv+t3aS2l8o0t
+         hMrckVwgGOQUHqpwBAP3x3eRuWpR6h0isCaE/7BcRGJs6Bq4dyfxQ0rvF65QbugG7G6f
+         U+/wJTinXW7lZU9fTZq1G9O+YsPhuKyau7/wB9c25kSEBZVqRdy2w6ZvEEOqu67o/9I8
+         i/KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NnbSOHZabpTh0sjxu952a7mwBfFZ+I27XVWWNUBKhcc=;
+        b=OHQ1uZdSiTBZhbsBoLbjmidYbQLt6CuoYsiSfKDgOdxfiTgWJDIeCwRsvaQLdqN7gz
+         qejQC/EF5s10Z92VDKh02QVS/OqVP21Mt0OEQOlxzEyBWVG04ICBodrMFBASCX30D8Tj
+         RZK2PxH/dzNecjvP+ptHXSa92D1BjarULJ2ZU507/uQ/N+ysDSzKzH6t0Gqt49UlCKpS
+         sa0klngXw9esSJ0pu9i5+FYQjhmBufErf0KNUM57YpR7Cnd7fbRH1JE0jX7lJV8bGGtC
+         O8/Js0gA94drwcVXFdNUfXO5MKKpQcqgAlmSQvCUEUN4izVKt4pkSwXtB+6EGfpcxJfV
+         DynQ==
+X-Gm-Message-State: AOAM533kNc2QnP6Uh2sFaaXHCEHgaH6+B/O/mwpTO+TX83PmFGb+6+1M
+        oS28iV8EnetKyaApkt2DWjwZAQ==
+X-Google-Smtp-Source: ABdhPJyXV18x1rvLhfkIOIqMPDeNofot0UMca38/deDL4nXSi9BbfoF6NvgOmV7P7anBg+zWFHZsrw==
+X-Received: by 2002:adf:ed51:: with SMTP id u17mr9592004wro.104.1642241099104;
+        Sat, 15 Jan 2022 02:04:59 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id n8sm9110356wri.47.2022.01.15.02.04.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jan 2022 02:04:58 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     linus.walleij@linaro.org, robh+dt@kernel.org,
+        ulli.kroll@googlemail.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH 1/2] ARM: dts: gemini: ns2502: permit to use gigabit
+Date:   Sat, 15 Jan 2022 10:04:43 +0000
+Message-Id: <20220115100444.3014823-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF96 (Linux)/8.8.12_GA_3809)
-Thread-Topic: fastmap: Add all fastmap pebs into 'ai->fastmap' when fm->used_blocks>=2
-Thread-Index: UBVQ5o9CerPStr2kIoVVEmrYehXG8Q==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ Ursprüngliche Mail -----
-> Von: "chengzhihao1" <chengzhihao1@huawei.com>
-> An: "richard" <richard@nod.at>
-> CC: "Miquel Raynal" <miquel.raynal@bootlin.com>, "Vignesh Raghavendra" <vigneshr@ti.com>, "mcoquelin stm32"
-> <mcoquelin.stm32@gmail.com>, "kirill shutemov" <kirill.shutemov@linux.intel.com>, "Sascha Hauer"
-> <s.hauer@pengutronix.de>, "linux-mtd" <linux-mtd@lists.infradead.org>, "linux-kernel" <linux-kernel@vger.kernel.org>
-> Gesendet: Samstag, 15. Januar 2022 09:46:07
-> Betreff: Re: [PATCH v6 12/15] ubi: fastmap: Add all fastmap pebs into 'ai->fastmap' when fm->used_blocks>=2
+I believed that gigabit was not working due to some unknown missing GPIO.
+In fact, gigabit worked when REALTEK_PHY was compiled out.
+So the problem was due to PHY delay and we need to use rgmii-id.
 
->>> Yes. But if you look into ubi_wl_init() you see that fastmap anchor PEBs
->>> get erases synchronously(!). The comment before the erasure explains why.
->> About erasing fastmap anchor PEB synchronously, I admit curreunt UBI
->> implementation cannot satisfy it, even with my fix applied. Wait, it
->> seems that UBI has never made it sure. Old fastmap PEBs could be erased
->> asynchronously, they could be counted into 'fmh->erase_peb_count' even
->> in early UBI implementation code, so old fastmap anchor PEB will be
->> added into 'ai->erase' and be erased asynchronously in next attaching.
-> In next attaching old fastmap PEBs will be processed as following:
-> ubi_attach_fastmap -> add_aeb(ai, &ai->erase...)
-> ubi_wl_init
->   list_for_each_entry_safe(aeb, tmp, &ai->erase)
->     erase_aeb       // erase asynchronously
->       ubi->lookuptbl[e->pnum] = e
->   list_for_each_entry(aeb, &ai->fastmap, u.list)
->     e = ubi_find_fm_block(ubi, aeb->pnum)
->     if (e) {
->        ...
->     } else {
->       if (ubi->lookuptbl[aeb->pnum])     // old fastmap PEBs are
-> assigned to 'ubi->lookuptbl'
->         continue;
->     }
->> But, I feel it is not a problem, find_fm_anchor() can help us find out
-> > the right fastmap anchor PEB according seqnum.
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ arch/arm/boot/dts/gemini-ns2502.dts | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-FYI, I think I understand now our disagreement.
-You assume that old Fastmap PEBs are *guaranteed* to be part of Fastmap's erase list.
-That's okay and this is what Linux as of today does.
+diff --git a/arch/arm/boot/dts/gemini-ns2502.dts b/arch/arm/boot/dts/gemini-ns2502.dts
+index 37e5debb693c..c759c4c732ab 100644
+--- a/arch/arm/boot/dts/gemini-ns2502.dts
++++ b/arch/arm/boot/dts/gemini-ns2502.dts
+@@ -39,10 +39,6 @@ mdio0: mdio {
+ 		phy0: ethernet-phy@1 {
+ 			reg = <1>;
+ 			device_type = "ethernet-phy";
+-			/* We lack the knowledge of necessary GPIO to achieve
+-			 * Gigabit
+-			 */
+-			max-speed = <100>;
+ 		};
+ 	};
+ };
+@@ -50,7 +46,7 @@ phy0: ethernet-phy@1 {
+ &ethernet {
+ 	status = "okay";
+ 	ethernet-port@0 {
+-		phy-mode = "rgmii";
++		phy-mode = "rgmii-id";
+ 		phy-handle = <&phy0>;
+ 		mac-address = [00 1F 1F 8E 65 E2];
+ 	};
+-- 
+2.34.1
 
-My point is that we need to be paranoid and check carefully for old Fastmap PEBs
-which might be *not* on the erase list.
-I saw such issues in the wild. These were causes by old and/or buggy Fastmap
-implementations.
-Keep in mind that Linux is not the only system that implements UBI (and fastmap).
-
-So let me give the whole situation another thought on how to improve it.
-I totally agree with you that currently there is a problem with fm->used_blocks > 1.
-I'm just careful (maybe too careful) about changing Fastmap code.
-
-Thanks,
-//richard

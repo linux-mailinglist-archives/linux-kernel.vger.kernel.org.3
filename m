@@ -2,190 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0AA548F643
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 11:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C093148F648
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 11:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbiAOKGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 05:06:22 -0500
-Received: from mail-eopbgr90058.outbound.protection.outlook.com ([40.107.9.58]:43098
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232748AbiAOKGU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 05:06:20 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XpBFyt8sk/OprAiZhXKKyCLe5LT8NugRQvJN1lfuXDgOA/r1gwqH6u8OOjev1PNdxAWVt1ynCCgO8aiSuojv/kRlI+ndAj8XAtOk2JD0Bjwf7wXLkNScbtWYvzdVm5lm+1yZmQ2Q71nFqcYM/kHpMTFtVbS76rxSG43MCwbjC3RzTcq2MVKTSueg/xV8AxoyZ/ofe/TomhpEhQy/8cSZ4Q+Ybygu+eSZssXg9/qKLT09Stc6Fhu8anJXfiWs1WBDhvW+HBcGxEzxGTZhkMD5/5gWbzAoZWvMeb/F5714olBNlxZrqQ+T/dmUXWlt/i4iX+aBQsFYH1+GmMdx8dt10A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tu60CJaPC4rdLntCn5c0odaHEseXBKKeLWZ9RUHaFhM=;
- b=aehKLLZ8QgJzIG7iv5e78qxvGLlyFlQZ9FuoDkJQ9iMukVG7j+qsoObyV7/IHRPNBeAL7rB68xXR2LAqdNhFynmwKzEBTektOAtvfdz+7CTZuYg8Qncfz3+15IkKlzF7R9OutaayoKaGhFpEx8Xy1dYERxOHA+r7ChyJRVGxabRxVNv5X9MIdrDV5DpDQUCjpwdk7oFvrp8W/rQhdofcrCjQYdbokuma19HF5Fuk2a7skpB2dGZ//wY9KhU8cZ2ej7cGSOHGkm/pawY1vhI1qwflXRfjfUiUzOombfcLNS/5RN/pAf5Nbgw6xOWWTUVUPghP3aRu/6e7v338xOY91g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:3d::7) by
- MRXP264MB0263.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:1f::21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4888.11; Sat, 15 Jan 2022 10:06:18 +0000
-Received: from MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM
- ([fe80::30e4:16d5:f514:b8f8]) by MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM
- ([fe80::30e4:16d5:f514:b8f8%2]) with mapi id 15.20.4888.012; Sat, 15 Jan 2022
- 10:06:18 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Nicholas Piggin <npiggin@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v2 3/3] x86: Support huge vmalloc mappings
-Thread-Topic: [PATCH v2 3/3] x86: Support huge vmalloc mappings
-Thread-Index: AQHX+zD/hWUWAcg7A0O0lNZsb1MJ4Kxj+LCA
-Date:   Sat, 15 Jan 2022 10:06:18 +0000
-Message-ID: <0b9dd629-6a2b-0bad-11e4-c49ea1abd223@csgroup.eu>
-References: <20211227145903.187152-1-wangkefeng.wang@huawei.com>
- <20211227145903.187152-4-wangkefeng.wang@huawei.com>
-In-Reply-To: <20211227145903.187152-4-wangkefeng.wang@huawei.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d247b6f5-8d2f-4498-b216-08d9d80eac65
-x-ms-traffictypediagnostic: MRXP264MB0263:EE_
-x-microsoft-antispam-prvs: <MRXP264MB02636DFAB3DD042B1B733217ED559@MRXP264MB0263.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:94;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jBwQ+4nxJlaEoU2G2f69mNkl8aHscSv/+OUsI8s/WyYuerFd/mFtQ62xtFQJkuOIQZOW9u7AfMUP5zyi+LHPdwTtCSfjUaB9k0Z3WzdY6yNFDEzvVv+5DtLXhsBMEoncxqzbezmVMjjlKNgPu/lnECXNW0m6ButPAQ0/rvkKPt2ZIFvQzega80K+HonbsT0CoxcZAc6ynSD1D5g1pmzgUr232RPMYTmqgbBPcYI1UwTrTgokStYJua322u4hddfQMXP3tdml6TBUPWi5DrXp14N/gIvDOPG7EkenEojP13CxXPDg9q8iepWQtoO22rtZpSxsRcYDlb/8g35uwbXrKMXc4FWWWxgZkC0jqZCPWyshtcCg3yDuEQ7DAOpnubngZkeF6ttdstyLYhDu2mEvPBtK9EkZKBJdeu8zc7zUZn7CJv2KBD4xc32qOdAHmT2w/CcOW9fbpGUkGHiPENBOWSeacZY/O0hu9uCAXlS0z4ibr7t7e+MPDhdzxviNeMYX9+7isi14pBBSaZ0lP74VnzBO4RoGnm1C3U2A9wLd52ncYcXrYZ0arMYDY8OhjyapMSroJvC30aAFaW0N767WUuMtQtD/Hy4OGsE4cCouf6mOWJzWxXDIbbHBkEcKp9sD83SmZtnSBzNzGKRwYWqhbb0jIoYAe9BepNyUrWvO1d0Bt/+hTyhWbYa+3HtWL0o6o0qtJdpL3liJ4caSh8x/U7a6lCC7DQeQsE5jv+14/t9HcQXtDe2bUH3jL69ozrHRFwcNRpUZKsAI0duBvWpKUwnqgQFmoGF1DP3ViTqOZxk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(38070700005)(31686004)(6512007)(76116006)(64756008)(186003)(8936002)(26005)(71200400001)(6506007)(66556008)(2906002)(86362001)(36756003)(31696002)(2616005)(8676002)(6486002)(5660300002)(7416002)(83380400001)(38100700002)(4326008)(316002)(110136005)(54906003)(91956017)(66946007)(44832011)(66446008)(66476007)(122000001)(14583001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SnhzUUw1WklkZ2c2TnF5VXR4Qm1zRkloOXJOelF0SC95dHVLd1dhcXJ0YTlz?=
- =?utf-8?B?YThqU205MDMwVTF5by9vMktWMlUzSHN3aHoybXkzNFFNWWZ6VU0zSkNqZWV5?=
- =?utf-8?B?KzFUaFRSK2R2STNDb3NSYmVmWnVnVzJlQzhlN0k2d0JEMlhIMndaOGVFNHJZ?=
- =?utf-8?B?Q21UM3Jpc2hFc2p2Z3ppY0NlUDBqelZNMmZ1VTdhUEthN3REYzR2NVFLQ2Y2?=
- =?utf-8?B?bEF3SmRvVFN6NURoN0libWlFbHZUZHhGUm13K0s1enRxVGZZQXF5dmppUDBY?=
- =?utf-8?B?bDM3ajVoTlFDK0xZL2JYS285eDBpK1lzZGN5Z0Y0Nm91MU5ET21CZE5QcHVV?=
- =?utf-8?B?TGxEaGtJNHFWT280Z1lidVJwWjlTcjdaVWk3Mm5iN2hDdDN2dnI2TlhEU3gr?=
- =?utf-8?B?RDB3RXAxY213MzVOSG9WeFQvc252RFo1bUljdTZoRVVoMUtiajZRRUpXQ2Jo?=
- =?utf-8?B?NndFTG80T3FhOFV2YjZ5OHZCQjNFZ0ZiU3B4WkpwMCtObWZkRFIyd1VNRWE2?=
- =?utf-8?B?L3A3LzV6ZGFsNU1MZlMvTFdMVmQ1bkZwMU5aZ1BpTmJUSWpMUldieFdySGFF?=
- =?utf-8?B?b0RSdnd2dU14MnFXLzBORGM5WnFFcnJoeUx3aU9JNEtBSDFVMmpLajVEQmcy?=
- =?utf-8?B?bTROTk41SVErU0hVZ0xhZTg4Uld4QUNvMHBSSGJxYXMrWkgwa2ZiSU5YRWJw?=
- =?utf-8?B?OU5BSm1vOVNrSUlycGVrbmJmWVEyNnhqS2plcTZrdnhWTmYzSXkzTHBXdVNw?=
- =?utf-8?B?UWhHUFFFUWpkUlZTTDA0TzJ2b3lEOU9RVFJDWWlzZmNLVDBrdlYvb05mNHN2?=
- =?utf-8?B?cThyL3g1aHB0cWFOQlNzM1JRbTB1R2crTnhBb1NHUy9SU1BVZEpIRzl3TWxR?=
- =?utf-8?B?YzA0VlNyTXRnQWc1aktpSG9OUDlMT0FHdWNnL3ZoNjZBM0w1eVZQM0tJYUhn?=
- =?utf-8?B?MXBzcm9WY1NUNW92T2MwNWZ6Z2JKUjZRZU5obUQyaUF1YU1VRmI0blVIKzhq?=
- =?utf-8?B?QXpuNi9mUkdXREZQUCtDTGdjYkk3VVNlRU5nR0VuNXNodzI0cHQwYVRsdHh1?=
- =?utf-8?B?cWZNVmRRdHo5YzJEcnErS0tTOFVPRFNwS2E5UmJLcHpYYzlhWTFkRUhiZm40?=
- =?utf-8?B?YkhqUlRybyt2MmJsTzhQZmZmdTZlaDhhemtEamVveGxnUkJDOGprU3hVT0Ew?=
- =?utf-8?B?VkhhL3hZVUZjNnVTOW14YTlYcWJxUEJWTXpiay9Ya2xSWThEL2h6aVBYZUg2?=
- =?utf-8?B?M1ZtcjdCdkI1YStCdHNNMGt0L3dKNFVVYVk5ZnYrZzE3Q0pzYTkrdEY2RVdy?=
- =?utf-8?B?SWdkTVBtbzlaUEtwNU5wV3haYWVNUnB6YnUreHpnalBJYkM3MWpPUS93RlpF?=
- =?utf-8?B?d3FGdXVZS1hYTnE5cDl2MnRra2NnQ0pqMThDeWh1NFFMZThTbXJpeWI3Y0pn?=
- =?utf-8?B?ZXl4UkpoZVJjYWNmbWh5cjR4OVh6cU1iZmJLVUpiZG9TZnN1SENYSUZzaE1a?=
- =?utf-8?B?cm9HOWQ1VGQ3RG50MnZkZlZuNXZRVmU5bmxIcUZ3cGxqeTNOSWpuU1MvWnpG?=
- =?utf-8?B?dFBiMktoSnl4TXhpMDM3cUxXaVBXb2ZOdDlTTExlMXRibVEzeEthQzVFV3Bm?=
- =?utf-8?B?UUVCdG0wWGRnam8waFFVanc3enhRVWphekI4c2Z0K1NzbW9DY0tFc3VlZTg1?=
- =?utf-8?B?UVZxcVVmMy8zbS9Uc1dXbTNxd1grZXF3VjVPeTgvV1FqZlB2blByeURWSkdV?=
- =?utf-8?B?SnI1dTRyUXhGRUF5WnRWYUpabFlRTUtnTVBLbStwQUc5eE1ETGJDQlB0Vmxx?=
- =?utf-8?B?Z3RpbXVyUklRL2pDdmFRTFYyRW00clZYV29wYWloR01GZUJxb1hGM2ZNOXdZ?=
- =?utf-8?B?TkYzR1M5MXhYUmxUTkxXQ3NuWXhjWTVhdStDcDM0b01nTzdSaTlPYWhHRGJr?=
- =?utf-8?B?OXAzWTQzN2U1SUw3bW9mb0x1NUFZRE9kY3BzQ1lveGlZZWJUWkthYzd4YzFV?=
- =?utf-8?B?dEI4YlNwOWhIQk1rbEQxKyt3U084WC9YS0tpSHZXZFZKc1VXNVd1c01RcTN0?=
- =?utf-8?B?ckZyMjBxVHlaeXl0VXpRRENIN29XSzZSVWpoTk53TXI3TGlWWmQ5Qy9vb29X?=
- =?utf-8?B?aWhhTzFYbEJQRHBQNUtrdjB3dmJCaUJ5WTY2ajhMaFVxSk1idllOc2hVL2M1?=
- =?utf-8?B?WHVWeU1TM1IxVTFUdWRIeVA5aHFPTEVNT3BJU0phdHE0UXdaOVZUUDlSYVdG?=
- =?utf-8?Q?zKzSld4e9N49irsGUOjOr6OSNslOGx+/rVVcoSOX6k=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3971D25A5F11764F981FB0B9C479FC41@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        id S232798AbiAOKHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 05:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231522AbiAOKHW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 05:07:22 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09405C061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 02:07:22 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id c66so10618030wma.5
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 02:07:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xHzaO4ONACqKvhGwj0tPEmx27kwwu6unLDfjaw5odQk=;
+        b=QzXz5M+8FThc6YS7BTcBpaSjY2VQwMtyP2aWOFTgY6F3CG/wzIUPGc8S1rddf8lIwy
+         0NJaylsB4zEmFToWvVObjj9xVDt78e+wRf5RyYnTktWNqNZ7wpOjFkZJM6PhcDg8hj37
+         ZqbRy93uvxc1qxQ2m6dgFTzJFQ8z5tjm8ggH1Dw3eGtX+TiCptySjZ7dao8iEDCiKeZo
+         e5ITXODfM/mhjWWfIzzl7bVfpF42p0C82rXjLblhMHEHOhdObgZxRjpxhwxRzLrYVjSp
+         T6wCP6BwTvs26YzRPCk4M+b+MMnRJFUEpmNtM2HLfj/kI6QaSpImzW0dn/UPdgp2Dox7
+         Xz+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xHzaO4ONACqKvhGwj0tPEmx27kwwu6unLDfjaw5odQk=;
+        b=JsJ7X5aw23Tlah3j9ZpX5FkJcwBKNdFTTFL+npHAYgcqMuaibxnmyJQLC6Y8CEHm5h
+         TalDpwVbkEPm6MptkkzDuH3Lt+tDigP/No6QL7tA9huVH2sIuGp1dxqsXer9E3iPZkER
+         2eA9xTFPR4NpILJBM+2MwCRpkQzPCznXT6RRIoUUG9bHV5p7D6qnpOEmrFbu1o+7TwXN
+         AfvAHXoZAD5+g4IFU1VlB87mI6m/Q94NOhYacbNuxFFAVZkdcOgxi8Q6bzFN+VJ7y6W/
+         9a/GQsTJYC7FmpxFBzvbi46+sN34DsdfRpf6GahqKoLyG38Fn115RVnuK0EpMhPEip8D
+         iWpw==
+X-Gm-Message-State: AOAM530lVzzkJoH1QQncZlzW2Kr5IeLkZ9gkG/B+tPoSrgLsbld+dVVd
+        Sf1WjchLfB58DyusmA5gwYh3NA==
+X-Google-Smtp-Source: ABdhPJwT9PpLZzfgM3b2ggNB5zCbHPDcVO71Y4bAF4rcgpahWKkHJ1bm1VqNAJA0DccSNUH3AVHGEQ==
+X-Received: by 2002:a1c:7c13:: with SMTP id x19mr11934460wmc.78.1642241240658;
+        Sat, 15 Jan 2022 02:07:20 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id w17sm9009436wmc.14.2022.01.15.02.07.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jan 2022 02:07:20 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     davem@davemloft.net, herbert@gondor.apana.org.au,
+        jernej.skrabec@gmail.com, mripard@kernel.org, wens@csie.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH] crypto: sun8i-ss: really disable hash on A80
+Date:   Sat, 15 Jan 2022 10:07:14 +0000
+Message-Id: <20220115100714.3016838-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MR1P264MB2980.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: d247b6f5-8d2f-4498-b216-08d9d80eac65
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2022 10:06:18.2446
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5rweOJl2UbDIyEVpolXCbamhEEbhfLAVqRxHssGlqwGq4cql30GdsC2rxDEHzEIeW76VahrVvzNyl65J3kx8Jz43DErMwmstbknnIAr+L1c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRXP264MB0263
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDI3LzEyLzIwMjEgw6AgMTU6NTksIEtlZmVuZyBXYW5nIGEgw6ljcml0wqA6DQo+IFRo
-aXMgcGF0Y2ggc2VsZWN0IEhBVkVfQVJDSF9IVUdFX1ZNQUxMT0MgdG8gbGV0IFg4Nl82NCBhbmQg
-WDg2X1BBRQ0KPiBzdXBwb3J0IGh1Z2Ugdm1hbGxvYyBtYXBwaW5ncy4NCj4gDQo+IENjOiBUaG9t
-YXMgR2xlaXhuZXIgPHRnbHhAbGludXRyb25peC5kZT4NCj4gQ2M6IEluZ28gTW9sbmFyIDxtaW5n
-b0ByZWRoYXQuY29tPg0KPiBDYzogQm9yaXNsYXYgUGV0a292IDxicEBhbGllbjguZGU+DQo+IENj
-OiBEYXZlIEhhbnNlbiA8ZGF2ZS5oYW5zZW5AbGludXguaW50ZWwuY29tPg0KPiBDYzogIkguIFBl
-dGVyIEFudmluIiA8aHBhQHp5dG9yLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogS2VmZW5nIFdhbmcg
-PHdhbmdrZWZlbmcud2FuZ0BodWF3ZWkuY29tPg0KPiAtLS0NCj4gICBEb2N1bWVudGF0aW9uL2Fk
-bWluLWd1aWRlL2tlcm5lbC1wYXJhbWV0ZXJzLnR4dCB8IDQgKystLQ0KPiAgIGFyY2gveDg2L0tj
-b25maWcgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgMSArDQo+ICAgYXJjaC94ODYv
-a2VybmVsL21vZHVsZS5jICAgICAgICAgICAgICAgICAgICAgICAgfCA0ICsrLS0NCj4gICAzIGZp
-bGVzIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYg
-LS1naXQgYS9Eb2N1bWVudGF0aW9uL2FkbWluLWd1aWRlL2tlcm5lbC1wYXJhbWV0ZXJzLnR4dCBi
-L0RvY3VtZW50YXRpb24vYWRtaW4tZ3VpZGUva2VybmVsLXBhcmFtZXRlcnMudHh0DQo+IGluZGV4
-IGUzZjlmZDdlYzEwNi4uZmZjZTY1OTFhZTY0IDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0aW9u
-L2FkbWluLWd1aWRlL2tlcm5lbC1wYXJhbWV0ZXJzLnR4dA0KPiArKysgYi9Eb2N1bWVudGF0aW9u
-L2FkbWluLWd1aWRlL2tlcm5lbC1wYXJhbWV0ZXJzLnR4dA0KPiBAQCAtMTYzOSw3ICsxNjM5LDcg
-QEANCj4gICAJCQlwcmVjZWRlbmNlIG92ZXIgbWVtb3J5X2hvdHBsdWcubWVtbWFwX29uX21lbW9y
-eS4NCj4gICANCj4gICANCj4gLQlodWdldm1hbGxvYz0JW0tOTCxQUEMsQVJNNjRdIFJlZ3VpcmVz
-IENPTkZJR19IQVZFX0FSQ0hfSFVHRV9WTUFMTE9DDQo+ICsJaHVnZXZtYWxsb2M9CVtLTkwsUFBD
-LEFSTTY0LFg4Nl0gUmVndWlyZXMgQ09ORklHX0hBVkVfQVJDSF9IVUdFX1ZNQUxMT0MNCj4gICAJ
-CQlGb3JtYXQ6IHsgb24gfCBvZmYgfQ0KPiAgIAkJCURlZmF1bHQgc2V0IGJ5IENPTkZJR19IVUdF
-X1ZNQUxMT0NfREVGQVVMVF9FTkFCTEVELg0KPiAgIA0KPiBAQCAtMzQyNCw3ICszNDI0LDcgQEAN
-Cj4gICANCj4gICAJbm9odWdlaW9tYXAJW0tOTCxYODYsUFBDLEFSTTY0XSBEaXNhYmxlIGtlcm5l
-bCBodWdlIEkvTyBtYXBwaW5ncy4NCj4gICANCj4gLQlub2h1Z2V2bWFsbG9jCVtLTkwsUFBDLEFS
-TTY0XSBEaXNhYmxlIGtlcm5lbCBodWdlIHZtYWxsb2MgbWFwcGluZ3MuDQo+ICsJbm9odWdldm1h
-bGxvYwlbS05MLFBQQyxBUk02NCxYODZdIERpc2FibGUga2VybmVsIGh1Z2Ugdm1hbGxvYyBtYXBw
-aW5ncy4NCj4gICANCj4gICAJbm9zbXQJCVtLTkwsUzM5MF0gRGlzYWJsZSBzeW1tZXRyaWMgbXVs
-dGl0aHJlYWRpbmcgKFNNVCkuDQo+ICAgCQkJRXF1aXZhbGVudCB0byBzbXQ9MS4NCj4gZGlmZiAt
-LWdpdCBhL2FyY2gveDg2L0tjb25maWcgYi9hcmNoL3g4Ni9LY29uZmlnDQo+IGluZGV4IGViZThm
-Yzc2OTQ5YS4uZjZiZjY2NzViYmU3IDEwMDY0NA0KPiAtLS0gYS9hcmNoL3g4Ni9LY29uZmlnDQo+
-ICsrKyBiL2FyY2gveDg2L0tjb25maWcNCj4gQEAgLTE1Nyw2ICsxNTcsNyBAQCBjb25maWcgWDg2
-DQo+ICAgCXNlbGVjdCBIQVZFX0FDUElfQVBFSV9OTUkJCWlmIEFDUEkNCj4gICAJc2VsZWN0IEhB
-VkVfQUxJR05FRF9TVFJVQ1RfUEFHRQkJaWYgU0xVQg0KPiAgIAlzZWxlY3QgSEFWRV9BUkNIX0FV
-RElUU1lTQ0FMTA0KPiArCXNlbGVjdCBIQVZFX0FSQ0hfSFVHRV9WTUFMTE9DCQlpZiBIQVZFX0FS
-Q0hfSFVHRV9WTUFQDQo+ICAgCXNlbGVjdCBIQVZFX0FSQ0hfSFVHRV9WTUFQCQlpZiBYODZfNjQg
-fHwgWDg2X1BBRQ0KPiAgIAlzZWxlY3QgSEFWRV9BUkNIX0pVTVBfTEFCRUwNCj4gICAJc2VsZWN0
-IEhBVkVfQVJDSF9KVU1QX0xBQkVMX1JFTEFUSVZFDQo+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9r
-ZXJuZWwvbW9kdWxlLmMgYi9hcmNoL3g4Ni9rZXJuZWwvbW9kdWxlLmMNCj4gaW5kZXggOTVmYTc0
-NWUzMTBhLi42YmY1Y2I3ZDg3NmEgMTAwNjQ0DQo+IC0tLSBhL2FyY2gveDg2L2tlcm5lbC9tb2R1
-bGUuYw0KPiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvbW9kdWxlLmMNCj4gQEAgLTc1LDggKzc1LDgg
-QEAgdm9pZCAqbW9kdWxlX2FsbG9jKHVuc2lnbmVkIGxvbmcgc2l6ZSkNCj4gICANCj4gICAJcCA9
-IF9fdm1hbGxvY19ub2RlX3JhbmdlKHNpemUsIE1PRFVMRV9BTElHTiwNCj4gICAJCQkJICAgIE1P
-RFVMRVNfVkFERFIgKyBnZXRfbW9kdWxlX2xvYWRfb2Zmc2V0KCksDQo+IC0JCQkJICAgIE1PRFVM
-RVNfRU5ELCBnZnBfbWFzaywNCj4gLQkJCQkgICAgUEFHRV9LRVJORUwsIFZNX0RFRkVSX0tNRU1M
-RUFLLCBOVU1BX05PX05PREUsDQo+ICsJCQkJICAgIE1PRFVMRVNfRU5ELCBnZnBfbWFzaywgUEFH
-RV9LRVJORUwsDQo+ICsJCQkJICAgIFZNX0RFRkVSX0tNRU1MRUFLIHwgVk1fTk9fSFVHRV9WTUFQ
-LCBOVU1BX05PX05PREUsDQoNCnlvdSBzaG91bGQgYWRkIGEgY29tbWVudCBsaWtlIHBvd2VycGMg
-KGNvbW1pdCA4YWJkZGQ5NjhhMzAgDQooInBvd2VycGMvNjRzL3JhZGl4OiBFbmFibGUgaHVnZSB2
-bWFsbG9jIG1hcHBpbmdzIikpIHRvIGV4cGxhaW4gd2h5IHRoaXMgDQpyZXF1aXJlcyBWTV9OT19I
-VUdFX1ZNQVANCg0KPiAgIAkJCQkgICAgX19idWlsdGluX3JldHVybl9hZGRyZXNzKDApKTsNCj4g
-ICAJaWYgKHAgJiYgKGthc2FuX21vZHVsZV9hbGxvYyhwLCBzaXplLCBnZnBfbWFzaykgPCAwKSkg
-ew0KPiAgIAkJdmZyZWUocCk7
+When adding hashes support to sun8i-ss, I have added them only on A83T.
+But I forgot that 0 is a valid algorithm ID, so hashes are enabled on A80 but
+with an incorrect ID.
+Anyway, even with correct IDs, hashes do not work on A80 and I cannot
+find why.
+So let's disable all of them on A80.
+
+Fixes: d9b45418a917 ("crypto: sun8i-ss - support hash algorithms")
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
+index 80e89066dbd1..319fe3279a71 100644
+--- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
++++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
+@@ -30,6 +30,8 @@
+ static const struct ss_variant ss_a80_variant = {
+ 	.alg_cipher = { SS_ALG_AES, SS_ALG_DES, SS_ALG_3DES,
+ 	},
++	.alg_hash = { SS_ID_NOTSUPP, SS_ID_NOTSUPP, SS_ID_NOTSUPP, SS_ID_NOTSUPP,
++	},
+ 	.op_mode = { SS_OP_ECB, SS_OP_CBC,
+ 	},
+ 	.ss_clks = {
+-- 
+2.34.1
+

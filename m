@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 928F948F398
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E53B248F3A3
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiAOA6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 19:58:24 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:33768 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiAOA6Y (ORCPT
+        id S231680AbiAOA7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 19:59:02 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:14861 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231215AbiAOA67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 19:58:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 61C86CE24C2;
-        Sat, 15 Jan 2022 00:58:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F0E5C36AE7;
-        Sat, 15 Jan 2022 00:58:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642208300;
-        bh=McnEXYJd55Dz/0s+UTqoEnDni3cdecySuuj+DIbfTCE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rO6sYCB1zx3VR1h4CXXO38hSKfTDq7qJ24l1I7kDdd1AEm7JPYkSK77vewZY7OBf0
-         L6FLM/EU7QqAGKFE3Uln4Q8sAtY5ltJRVWQMl+vQm9tGA7UMg6bMvpTfrSYu06+8xp
-         CEQGQcgfMLQlLcApW57I509ytFJw25EHtiQ4Tx0IeBM9bTShAcQErnhkeimEd0nQl8
-         +ky9f5AZ0l3N8E03R3m1+sSwXrv0uxuXaUDHiQLPYwnrZznI9nqDdWp45Rz2/ZYCId
-         HRNUMu1HFS90DCcnb/vRMgDD4g47TIKCwvZY1MDqUpMbIK9eSWmA18BO3SEEHHCJNA
-         A/8pzLpWr0l1A==
-Date:   Sat, 15 Jan 2022 02:58:08 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] x86/sgx: account backing pages
-Message-ID: <YeIcIMNUK/ujMTMQ@iki.fi>
-References: <20220107181618.6597-1-kristen@linux.intel.com>
- <20220107181618.6597-3-kristen@linux.intel.com>
- <Ydm2Qk8JFwgdueZa@iki.fi>
- <fda3bb7bd557a37112a4f7c6c205871addda1bd3.camel@linux.intel.com>
- <YeIMqd+o//M3vB6e@iki.fi>
- <3b7e79ea-18f2-afe2-be4e-401524b481f7@intel.com>
+        Fri, 14 Jan 2022 19:58:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1642208340; x=1673744340;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=nlHKGJWAZDVV79kLCTVkL+cWMNJXK6VmG1GTP7HY7tU=;
+  b=xodZzk3mg/AHueR6xLQfqVYcto7h7LF+y7y/h4fHlzrjmpc8zsSF+blM
+   mr9efp7TOWV+JdnRK6YW76WKmc0tDLBNr2ezh5hik+2oP6YtnHEmzPb+k
+   sVAtq0WZ6EidnV6PR07AMXDdo6Dn6zKRsMJme30Z5TFIgk7mcl0+rhL7v
+   4=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 14 Jan 2022 16:58:59 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 16:58:58 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 14 Jan 2022 16:58:44 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 14 Jan 2022 16:58:44 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
+        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v17 0/4] group dp driver related patches into one series
+Date:   Fri, 14 Jan 2022 16:58:31 -0800
+Message-ID: <1642208315-9136-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3b7e79ea-18f2-afe2-be4e-401524b481f7@intel.com>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 03:55:43PM -0800, Dave Hansen wrote:
-> On 1/14/22 3:52 PM, Jarkko Sakkinen wrote:
-> >> I can understand your hesitation, but I agree with Dave here that
-> >> wrapping the function makes the code more clear. I would prefer to keep
-> >> this the way it is.
-> > What if sgx_encl_get_backing() was changed as "static inline", if the
-> > only motivation is encapsulation?
-> 
-> What would the purpose be of adding an 'inline' to the function definition?
+Group below 4 dp driver related patches into one series.
 
-Agreed, not much sense to do this. I just had troubles to get the way
-things were encapsulated before your response.
+Kuogee Hsieh (4):
+  drm/msm/dp: do not initialize phy until plugin interrupt received
+  drm/msm/dp:  populate connector of struct  dp_panel
+  drm/msm/dp: add support of tps4 (training pattern 4) for HBR3
+  drm/msm/dp: stop link training after link training 2 failed
 
-/Jarkko
+ drivers/gpu/drm/msm/dp/dp_catalog.c |  12 ++--
+ drivers/gpu/drm/msm/dp/dp_catalog.h |   2 +-
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    | 100 +++++++++++++++-------------------
+ drivers/gpu/drm/msm/dp/dp_ctrl.h    |   8 ++-
+ drivers/gpu/drm/msm/dp/dp_display.c | 106 ++++++++++++++++++++----------------
+ 5 files changed, 115 insertions(+), 113 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

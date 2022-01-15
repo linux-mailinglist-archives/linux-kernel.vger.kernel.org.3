@@ -2,215 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A32148F3EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D066248F3E7
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbiAOBJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 20:09:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
+        id S231841AbiAOBIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 20:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbiAOBJJ (ORCPT
+        with ESMTP id S231825AbiAOBIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 20:09:09 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1031C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 17:09:08 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id y4-20020a5b0f44000000b00611862e546dso21715819ybr.7
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 17:09:08 -0800 (PST)
+        Fri, 14 Jan 2022 20:08:44 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38444C061574;
+        Fri, 14 Jan 2022 17:08:44 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id x15so9783016ilc.5;
+        Fri, 14 Jan 2022 17:08:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=kkjQvBHUpUsPJOcuRnb4FbpqpDLYZFNC/PGNH3Zg5WU=;
-        b=B7HrMalKbOrQ0jLo+t2k5LKQyXsYTrKPSnoCQbJTFt3xXAdNgf+Y3bG0OwuuV3conm
-         9YDTffSi81yddsv2BoH3Yepu0Qf4t9Yufib51okExGf5c00BzhktLBE/1fgctRjU17A0
-         FE5Q2yG/2zZsbcQO5KIgRMuIdtuJb3ntKNdMvUrJDIlln1wNgH3uN1Xs3Tq4HUuo2nQw
-         vX/4a2fLq5zN8JuJ/ROXboM4iqrNUfkxyQzzeG4K6rLmd0dL8lZlsn2U8cU340A6r7rt
-         CrzHH2yHQihIsNpJ9nYxK0RZUUVox7TiNHvKS/20HXPEnTeOhUMt/SoHjy/YrqoHfDGB
-         975A==
+        bh=SguhQSidD98goHcEcMCiT3PaDe/6KqF5jSvhZbAcwRk=;
+        b=NHiGLwf83Z+J4WvcapubnWeXQNYhGQEl4VuM3PQQAStk1h36D1YBs5Nyt5g6c7HJph
+         E9mOJaWWrKC6IcQqeFcM21mbbOAeTgKVNJihbPDFip4jAHUAq+9Zm0XnHHLQeyKrgs0g
+         BIPZ9WM65c/A1vmsU4OTiFsk/Fz+jAdDhhhmRt4WGU9pTZNMMiY+GD/ZIBlKg4h3SB27
+         qitoAMVCl/hmc6W0/F8pH+cFSOKYPVSQYFgYjaHw27oQAzEPsY2rn+zbNHG/9naRBWYO
+         H4Dc64P4YstnCzG1crCDxC8V1FLG7R/7E3mFDyEAJz+gNqZG2Mdmo611Mo9baRDlVJrL
+         5+wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=kkjQvBHUpUsPJOcuRnb4FbpqpDLYZFNC/PGNH3Zg5WU=;
-        b=4lhdGGtHaHjEnH4/hLrY94LGgtcxET/xHCJ+fyHnqrVfZTybP1FCwpu7958VHgh8eM
-         ANdFf3/DIthu5657vXof/QzBf5OVuPT6m5w6qUfmeZgmBr/QB7D/mY54qN/ZZ+VUevf/
-         jLPFGGCJpyT82J9goAjgqsv3XOZIhfC5Pi7uvv/SMeujzZMBAR3D0nPvsBc7SXz+1100
-         op0iSxNxWdfahvQ0YWb7dizs4rIFC0OSH5QL3lpZkmpbMrMcaMl/fzrD61iv4qt4nIJ4
-         bm4sCSD8DJhS514J3R2It/tRXxm9s+HCJ8o65z64Xw5wVF0acHQxkmRVD6qrmk24nBOa
-         XbIA==
-X-Gm-Message-State: AOAM53388tCg2vXnL8nwCzQa9HqyHwApwoD9YjRcH3Eq8zLF/Af8Kb0+
-        vpq7EYMqn8Dp943zfv1k1hKKKsabxWE=
-X-Google-Smtp-Source: ABdhPJz9CR2IoAwevLCGCWJ5VPMm/mBeIOkcx7f8CHh3K/XQY53M+B3vhZstfGoP5vWHDyFMJE3GX6t7YyU=
-X-Received: from hridya.mtv.corp.google.com ([2620:15c:211:200:5860:362a:3112:9d85])
- (user=hridya job=sendgmr) by 2002:a25:7b44:: with SMTP id w65mr15284933ybc.59.1642208948043;
- Fri, 14 Jan 2022 17:09:08 -0800 (PST)
-Date:   Fri, 14 Jan 2022 17:06:04 -0800
-In-Reply-To: <20220115010622.3185921-1-hridya@google.com>
-Message-Id: <20220115010622.3185921-7-hridya@google.com>
-Mime-Version: 1.0
-References: <20220115010622.3185921-1-hridya@google.com>
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [RFC 6/6] android: binder: Add a buffer flag to relinquish ownership
- of fds
-From:   Hridya Valsaraju <hridya@google.com>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <christian@brauner.io>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dave Airlie <airlied@redhat.com>,
-        Kenneth Graunke <kenneth@whitecape.org>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Li Li <dualli@google.com>, Marco Ballesio <balejs@google.com>,
-        Hang Lu <hangl@codeaurora.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Chris Down <chris@chrisdown.name>,
-        Vipin Sharma <vipinsh@google.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SguhQSidD98goHcEcMCiT3PaDe/6KqF5jSvhZbAcwRk=;
+        b=lG+2bSWsaGG8oYMmZWrwVeCWJwNNcXa85tIX58uZ3v5ryr99+zTeaUXqtCZjVT+TLx
+         bNZ6DudOfNLN5j9nvcglRJ4MwHUrSa1Vqss4WUVAN/JwoVYJH2Slg+Z/lW25K32XO+SG
+         +Sd0+BYijx5lCRlDxdNfcPGxPtun4wQ89mGGHV6QQcqY1IUkhuFV0xt+0nMygYscMmqO
+         xUP61KiqijLRnzIZ1l0zMrssAc7w8uAUxjTAbugIrBGvaZ+xkCMXUd7FvCZoCJ9XXtwx
+         L+ysH48SVIjmjP1BhoCxk6NrMzYfXOlMQz7J4SBo2ztOGAnok7PO6fUY5kqCQMX6he0I
+         xiow==
+X-Gm-Message-State: AOAM533+Xp8gMjN4gjML0QQI8CAzr7oebBAS+deoR7s3rYZp/fDVeoz2
+        o4U31zkbKPEAcUPvMqi8mV/t1PtDQcIxMrUzJxM=
+X-Google-Smtp-Source: ABdhPJwGLYxnU95xaDvzf6OsQToxn3hALPGJAKmy5zkq3aHdqqkbt5gl6/g9wDkG9TeB3ereYnB0dIGh1RV78ImTprE=
+X-Received: by 2002:a05:6e02:1749:: with SMTP id y9mr5705696ill.252.1642208923596;
+ Fri, 14 Jan 2022 17:08:43 -0800 (PST)
+MIME-Version: 1.0
+References: <164199616622.1247129.783024987490980883.stgit@devnote2>
+In-Reply-To: <164199616622.1247129.783024987490980883.stgit@devnote2>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 14 Jan 2022 17:08:32 -0800
+Message-ID: <CAEf4BzY9qmzemZ=3JSto+eWq9k-kX7hZKgugJRO9zZ61-pasqg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/8] fprobe: Introduce fprobe function entry/exit probe
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Arnd Bergmann <arnd@arndb.de>, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        cgroups@vger.kernel.org
-Cc:     Kenny.Ho@amd.com, daniels@collabora.com, kaleshsingh@google.com,
-        tjmercier@google.com
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch introduces a buffer flag BINDER_BUFFER_FLAG_SENDER_NO_NEED
-that a process sending an fd array to another process over binder IPC
-can set to relinquish ownership of the fds being sent for memory
-accounting purposes. If the flag is found to be set during the fd array
-translation and the fd is for a DMA-BUF, the buffer is uncharged from
-the sender's cgroup and charged to the receiving process's cgroup
-instead.
+On Wed, Jan 12, 2022 at 6:02 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> Hi Jiri and Alexei,
+>
+> Here is the 2nd version of fprobe. This version uses the
+> ftrace_set_filter_ips() for reducing the registering overhead.
+> Note that this also drops per-probe point private data, which
+> is not used anyway.
 
-It is upto the sending process to ensure that it closes the fds
-regardless of whether the transfer failed or succeeded.
+This per-probe private data is necessary for the feature called BPF
+cookie, in which each attachment has a unique user-provided u64 value
+associated to it, accessible at runtime through
+bpf_get_attach_cookie() helper. One way or another we'll need to
+support this to make these multi-attach BPF programs really useful for
+generic tracing applications.
 
-Most graphics shared memory allocations in Android are done by the
-graphics allocator HAL process. On requests from clients, the HAL process
-allocates memory and sends the fds to the clients over binder IPC.
-The graphics allocator HAL will not retain any references to the
-buffers. When the HAL sets the BINDER_BUFFER_FLAG_SENDER_NO_NEED for fd
-arrays holding DMA-BUF fds, the gpu cgroup controller will be able to
-correctly charge the buffers to the client processes instead of the
-graphics allocator HAL.
+Jiri,
 
-Signed-off-by: Hridya Valsaraju <hridya@google.com>
----
- drivers/android/binder.c            | 32 +++++++++++++++++++++++++++++
- include/uapi/linux/android/binder.h |  1 +
- 2 files changed, 33 insertions(+)
+We've discussed with Alexei this week how cookies can be supported for
+multi-attach fentry (where it seems even more challenging than in
+kprobe case), and agreed on rather simple solution, which roughly goes
+like this. When multi-attaching either fentry/fexit program, save
+sorted array of IP addresses and then sorted in the same order as IPs
+list of u64 cookies. At runtime, bpf_get_attach_cookie() helper should
+somehow get access to these two arrays and functions IP (that we
+already have with bpf_get_func_ip()), perform binary search and locate
+necessary cookie. This offloads the overhead of finding this cookie to
+actual call site of bpf_get_attach_cookie() (and it's a log(N), so not
+bad at all, especially if BPF program can be optimized to call this
+helper just once).
 
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index 5497797ab258..83082fd1ab6a 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -42,6 +42,7 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/dma-buf.h>
- #include <linux/fdtable.h>
- #include <linux/file.h>
- #include <linux/freezer.h>
-@@ -2482,8 +2483,11 @@ static int binder_translate_fd_array(struct list_head *pf_head,
- {
- 	binder_size_t fdi, fd_buf_size;
- 	binder_size_t fda_offset;
-+	bool transfer_gpu_charge = false;
- 	const void __user *sender_ufda_base;
- 	struct binder_proc *proc = thread->proc;
-+	struct binder_proc *target_proc = t->to_proc;
-+
- 	int ret;
- 
- 	fd_buf_size = sizeof(u32) * fda->num_fds;
-@@ -2520,8 +2524,15 @@ static int binder_translate_fd_array(struct list_head *pf_head,
- 	if (ret)
- 		return ret;
- 
-+	if (IS_ENABLED(CONFIG_CGROUP_GPU) &&
-+	    parent->flags & BINDER_BUFFER_FLAG_SENDER_NO_NEED)
-+		transfer_gpu_charge = true;
-+
- 	for (fdi = 0; fdi < fda->num_fds; fdi++) {
- 		u32 fd;
-+		struct dma_buf *dmabuf;
-+		struct gpucg *gpucg;
-+
- 		binder_size_t offset = fda_offset + fdi * sizeof(fd);
- 		binder_size_t sender_uoffset = fdi * sizeof(fd);
- 
-@@ -2531,6 +2542,27 @@ static int binder_translate_fd_array(struct list_head *pf_head,
- 						  in_reply_to);
- 		if (ret)
- 			return ret > 0 ? -EINVAL : ret;
-+
-+		if (!transfer_gpu_charge)
-+			continue;
-+
-+		dmabuf = dma_buf_get(fd);
-+		if (IS_ERR(dmabuf))
-+			continue;
-+
-+		if (dmabuf->ops->charge_to_cgroup) {
-+			gpucg = gpucg_get(target_proc->tsk);
-+			ret = dmabuf->ops->charge_to_cgroup(dmabuf, gpucg);
-+			if (ret) {
-+				pr_warn("%d:%d Unable to transfer DMA-BUF fd charge to %d",
-+					proc->pid, thread->pid, target_proc->pid);
-+				gpucg_put(gpucg);
-+			}
-+		} else {
-+			pr_warn("%d:%d DMA-BUF exporter %s is not configured correctly for GPU cgroup memory accounting",
-+				proc->pid, thread->pid, dmabuf->exp_name);
-+		}
-+		dma_buf_put(dmabuf);
- 	}
- 	return 0;
- }
-diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
-index ad619623571e..c85f0014c341 100644
---- a/include/uapi/linux/android/binder.h
-+++ b/include/uapi/linux/android/binder.h
-@@ -137,6 +137,7 @@ struct binder_buffer_object {
- 
- enum {
- 	BINDER_BUFFER_FLAG_HAS_PARENT = 0x01,
-+	BINDER_BUFFER_FLAG_SENDER_NO_NEED = 0x02,
- };
- 
- /* struct binder_fd_array_object - object describing an array of fds in a buffer
--- 
-2.34.1.703.g22d0c6ccf7-goog
+I think something like that should be doable for Masami's fprobe-based
+multi-attach kprobes, right? That would allow to have super-fast
+attachment, but still support BPF cookie per each individual IP/kernel
+function attachment. I haven't looked at code thoroughly, though,
+please let me know if I'm missing something fundamental.
 
+>
+> This introduces the fprobe, the function entry/exit probe with
+> multiple probe point support. This also introduces the rethook
+> for hooking function return as same as kretprobe does. This
+> abstraction will help us to generalize the fgraph tracer,
+> because we can just switch it from rethook in fprobe, depending
+> on the kernel configuration.
+>
+> The patch [1/8] and [7/8] are from your series[1]. Other libbpf
+> patches will not be affected by this change.
+>
+> [1] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
+>
+> I also added an out-of-tree (just for testing) patch at the
+> end of this series ([8/8]) for adding a wildcard support to
+> the sample program. With that patch, it shows how long the
+> registration will take;
+>
+> # time insmod fprobe_example.ko symbol='btrfs_*'
+> [   36.130947] fprobe_init: 1028 symbols found
+> [   36.177901] fprobe_init: Planted fprobe at btrfs_*
+> real    0m 0.08s
+> user    0m 0.00s
+> sys     0m 0.07s
+>
+> Thank you,
+>
+> ---
+>
+> Jiri Olsa (2):
+>       ftrace: Add ftrace_set_filter_ips function
+>       bpf: Add kprobe link for attaching raw kprobes
+>
+> Masami Hiramatsu (6):
+>       fprobe: Add ftrace based probe APIs
+>       rethook: Add a generic return hook
+>       rethook: x86: Add rethook x86 implementation
+>       fprobe: Add exit_handler support
+>       fprobe: Add sample program for fprobe
+>       [DO NOT MERGE] Out-of-tree: Support wildcard symbol option to sample
+>
+>
+>  arch/x86/Kconfig                |    1
+>  arch/x86/kernel/Makefile        |    1
+>  arch/x86/kernel/rethook.c       |  115 ++++++++++++++++++++
+>  include/linux/bpf_types.h       |    1
+>  include/linux/fprobe.h          |   57 ++++++++++
+>  include/linux/ftrace.h          |    3 +
+>  include/linux/rethook.h         |   74 +++++++++++++
+>  include/linux/sched.h           |    3 +
+>  include/uapi/linux/bpf.h        |   12 ++
+>  kernel/bpf/syscall.c            |  195 +++++++++++++++++++++++++++++++++-
+>  kernel/exit.c                   |    2
+>  kernel/fork.c                   |    3 +
+>  kernel/kallsyms.c               |    1
+>  kernel/trace/Kconfig            |   22 ++++
+>  kernel/trace/Makefile           |    2
+>  kernel/trace/fprobe.c           |  168 +++++++++++++++++++++++++++++
+>  kernel/trace/ftrace.c           |   54 ++++++++-
+>  kernel/trace/rethook.c          |  226 +++++++++++++++++++++++++++++++++++++++
+>  samples/Kconfig                 |    7 +
+>  samples/Makefile                |    1
+>  samples/fprobe/Makefile         |    3 +
+>  samples/fprobe/fprobe_example.c |  154 +++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h  |   12 ++
+>  23 files changed, 1103 insertions(+), 14 deletions(-)
+>  create mode 100644 arch/x86/kernel/rethook.c
+>  create mode 100644 include/linux/fprobe.h
+>  create mode 100644 include/linux/rethook.h
+>  create mode 100644 kernel/trace/fprobe.c
+>  create mode 100644 kernel/trace/rethook.c
+>  create mode 100644 samples/fprobe/Makefile
+>  create mode 100644 samples/fprobe/fprobe_example.c
+>
+> --
+> Masami Hiramatsu (Linaro) <mhiramat@kernel.org>

@@ -2,807 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E26648F7CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 521EF48F7D6
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233100AbiAOQ1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 11:27:45 -0500
-Received: from h01mx15.reliablemail.org ([173.236.5.211]:24069 "EHLO
-        h01mx15.reliablemail.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbiAOQ1n (ORCPT
+        id S232107AbiAOQbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 11:31:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230098AbiAOQbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 11:27:43 -0500
-X-Halon-Out: 0ea119de-7620-11ec-90dc-00163c81f1a9
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=grimler.se;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=EatQ3rbSebxB7STO7nSMOznNnUAC343gH5zcCjX0bdA=; b=bze2ijbMlAADdx3A7HmLa1vNg1
-        R8gVddSRHrodaNiZUiuwx8D/jQL+v7hVm68Apw5KbRcgpBc2fwnqHH2Fj5EBnX8tUIdUr5KKNFXTj
-        zPmHkYjuYNQkl8I1JMOklmc2sm2c8ZvoLmUch/esRwCOnSMD2xMx6VxR2gtQzeoGT/QF7UWLZaGnM
-        c0NTTa42SpZUZmIw5o8MK8/hdivF/CKU3h9tMDaHrU3JbSG72cfAfEsV4EXGBj2X4b3O1/h8gOx5G
-        /VtKBLR1YFsl3SdPTNsRq7fF1cIa4vEe1lSISh+HWjtY6B0jFfuTv/nGoXrvDDiNRbn3nQSdo+m/I
-        bmgLFHJQ==;
-From:   Henrik Grimler <henrik@grimler.se>
-To:     semen.protsenko@linaro.org, virag.david003@gmail.com,
-        martin.juecker@gmail.com, cw00.choi@samsung.com,
-        m.szyprowski@samsung.com, alim.akhtar@samsung.com,
-        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     Henrik Grimler <henrik@grimler.se>
-Subject: [PATCH v2 3/3] ARM: dts: Add support for Samsung Chagallwifi
-Date:   Sat, 15 Jan 2022 17:27:03 +0100
-Message-Id: <20220115162703.699347-4-henrik@grimler.se>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220115162703.699347-1-henrik@grimler.se>
-References: <20220115162703.699347-1-henrik@grimler.se>
+        Sat, 15 Jan 2022 11:31:25 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D14C061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 08:31:24 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1FCCCA24;
+        Sat, 15 Jan 2022 17:31:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1642264282;
+        bh=SKPkoj4u1M/XPVndCWVekUDTPMbBU42gAJzWiSZ/tSw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sfjywUnQtbJWIOkgbB9ljNhzsOcv9dwP6N+A+zlmadlXB75/Vo6NYjkqzlufkEaYz
+         ETneE1V23HjKX4MgbSxuyRph54mTtIgr9tB3B8CzvhaxD5dbSHvctM1SIzU0peCpmI
+         AE2jUfRuEujQkno1mKGXXgz4fF/BJ6XJ+BDvxAxU=
+Date:   Sat, 15 Jan 2022 18:31:08 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Watson Chow <watson.chow@avnet.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] regulator: MAX20086: add gpio/consumer.h
+Message-ID: <YeL2zLp9jsbBqMYG@pendragon.ideasonboard.com>
+References: <20220115033603.24473-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpsrv07.misshosting.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - grimler.se
-X-Get-Message-Sender-Via: cpsrv07.misshosting.com: authenticated_id: henrik@grimler.se
-X-Authenticated-Sender: cpsrv07.misshosting.com: henrik@grimler.se
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220115033603.24473-1-rdunlap@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chagallwifi, with product name Samsung Galaxy Tab S 10.5", is based on
-Exynos 5420. This device is one of several tablet models released in
-2013 - 2014 based on Exynos 5420.
+Hi Randy,
 
-The device tree added here contains support for:
+Thank you for the patch.
 
-- UART
-- eMMC
-- SD card
-- USB
+On Fri, Jan 14, 2022 at 07:36:03PM -0800, Randy Dunlap wrote:
+> max20086-regulator.c needs <linux/gpio/consumer.h> for an enum, some
+> macros, and a function prototype. (seen on ARCH=m68k)
+> 
+> Adding this header file fixes multiple build errors:
+> 
+> ../drivers/regulator/max20086-regulator.c: In function 'max20086_i2c_probe':
+> ../drivers/regulator/max20086-regulator.c:217:26: error: storage size of 'flags' isn't known
+>   217 |         enum gpiod_flags flags;
+> ../drivers/regulator/max20086-regulator.c:261:27: error: 'GPIOD_OUT_HIGH' undeclared (first use in this function); did you mean 'GPIOF_INIT_HIGH'?
+>   261 |         flags = boot_on ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
+>       |                           ^~~~~~~~~~~~~~
+> ../drivers/regulator/max20086-regulator.c:261:44: error: 'GPIOD_OUT_LOW' undeclared (first use in this function); did you mean 'GPIOF_INIT_LOW'?
+>   261 |         flags = boot_on ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
+> ../drivers/regulator/max20086-regulator.c:262:27: error: implicit declaration of function 'devm_gpiod_get'; did you mean 'devm_gpio_free'? [-Werror=implicit-function-declaration]
+>   262 |         chip->ena_gpiod = devm_gpiod_get(chip->dev, "enable", flags);
+> ../drivers/regulator/max20086-regulator.c:217:26: warning: unused variable 'flags' [-Wunused-variable]
+>   217 |         enum gpiod_flags flags;
+> 
+> Fixes: bfff546aae50 ("regulator: Add MAX20086-MAX20089 driver")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Watson Chow <watson.chow@avnet.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-CCI has been disabled in the hardware, enabling it would require
-(de-)soldering a resistor on the board.  Trying to boot with it
-enabled in kernel makes the device hang when CCI is probed.
-Exynos5420-arndale-octa also has had CCI disabled due to issues [1].
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-To successfully boot the mainline kernel with the stock bootloader
-(SBOOT), an additional hack is needed [2]. The same hack is also
-needed to boot exynos4412-i9300 with stock bootloader, and probably
-other Samsung devices of similar age.
+> ---
+>  drivers/regulator/max20086-regulator.c |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> --- linux-next-20220114.orig/drivers/regulator/max20086-regulator.c
+> +++ linux-next-20220114/drivers/regulator/max20086-regulator.c
+> @@ -7,6 +7,7 @@
+>  
+>  #include <linux/err.h>
+>  #include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/i2c.h>
+>  #include <linux/module.h>
+>  #include <linux/regmap.h>
 
-[1] https://marc.info/?l=linux-arm-kernel&m=141718639200624
-[2] https://lore.kernel.org/all/1355276466-18295-1-git-send-email-arve@android.com/
-
-Signed-off-by: Henrik Grimler <henrik@grimler.se>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/exynos5420-chagallwifi.dts  |  57 ++
- .../dts/exynos5420-galaxy-tab-common.dtsi     | 633 ++++++++++++++++++
- 3 files changed, 691 insertions(+)
- create mode 100644 arch/arm/boot/dts/exynos5420-chagallwifi.dts
- create mode 100644 arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 0de64f237cd8..be7a493ff1a1 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -220,6 +220,7 @@ dtb-$(CONFIG_ARCH_EXYNOS5) += \
- 	exynos5420-arndale-octa.dtb \
- 	exynos5420-peach-pit.dtb \
- 	exynos5420-smdk5420.dtb \
-+	exynos5420-chagallwifi.dtb \
- 	exynos5422-odroidhc1.dtb \
- 	exynos5422-odroidxu3.dtb \
- 	exynos5422-odroidxu3-lite.dtb \
-diff --git a/arch/arm/boot/dts/exynos5420-chagallwifi.dts b/arch/arm/boot/dts/exynos5420-chagallwifi.dts
-new file mode 100644
-index 000000000000..51eb2bbe6bf6
---- /dev/null
-+++ b/arch/arm/boot/dts/exynos5420-chagallwifi.dts
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Samsung's Exynos5420 Chagallwifi board device tree source
-+ *
-+ * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
-+ *		http://www.samsung.com
-+ * Copyright (c) 2022 Henrik Grimler
-+ */
-+
-+/dts-v1/;
-+#include "exynos5420-galaxy-tab-common.dtsi"
-+
-+/ {
-+	model = "Samsung Chagallwifi based on exynos5420";
-+	compatible = "samsung,chagallwifi", "samsung,exynos5420", \
-+		     "samsung,exynos5";
-+};
-+
-+&s2mps11 {
-+	regulators {
-+		ldo15_reg: LDO15 {
-+			/* Unused */
-+			regulator-name = "VDD_LDO15";
-+			regulator-min-microvolt = <3300000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		ldo17_reg: LDO17 {
-+			regulator-name = "VDD_IRLED_3V3";
-+			regulator-min-microvolt = <3300000>;
-+			regulator-max-microvolt = <3350000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo28_reg: LDO28 {
-+			/* Unused */
-+			regulator-name = "VDD_LDO28";
-+			regulator-min-microvolt = <3300000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		ldo29_reg: LDO29 {
-+			regulator-name = "VDD_TCON_1V8";
-+			regulator-min-microvolt = <1900000>;
-+			regulator-max-microvolt = <1900000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+	};
-+};
-diff --git a/arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi b/arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi
-new file mode 100644
-index 000000000000..408d0f1d4b44
---- /dev/null
-+++ b/arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi
-@@ -0,0 +1,633 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Base DT for Samsung's family of tablets based on Exynos5420.
-+ *
-+ * Copyright (c) 2012-2013 Samsung Electronics Co., Ltd.
-+ *		http://www.samsung.com
-+ * Copyright (c) 2022 Henrik Grimler
-+ */
-+
-+/dts-v1/;
-+#include "exynos5420.dtsi"
-+#include "exynos5420-cpus.dtsi"
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/clock/samsung,s2mps11.h>
-+
-+/ {
-+	compatible = "samsung,exynos5420", "samsung,exynos5";
-+	chassis-type = "tablet";
-+
-+	chosen {
-+		stdout-path = "serial2:115200n8";
-+	};
-+
-+	memory@20000000 {
-+		device_type = "memory";
-+		reg = <0x20000000 0xc0000000>;
-+	};
-+
-+	firmware@2073000 {
-+		compatible = "samsung,secure-firmware";
-+		reg = <0x02073000 0x1000>;
-+	};
-+
-+	fixed-rate-clocks {
-+		oscclk {
-+			compatible = "samsung,exynos5420-oscclk";
-+			clock-frequency = <24000000>;
-+		};
-+
-+		xxti {
-+			compatible = "samsung,clock-xxti";
-+			clock-frequency = <24000000>;
-+		};
-+
-+		xusbxti {
-+			compatible = "samsung,clock-xusbxti";
-+			clock-frequency = <24000000>;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+
-+		power {
-+			debounce-interval = <10>;
-+			gpios = <&gpx2 2 GPIO_ACTIVE_LOW>;
-+			label = "Power";
-+			linux,code = <KEY_POWER>;
-+			wakeup-source;
-+		};
-+
-+		home {
-+			debounce-interval = <10>;
-+			gpios = <&gpx0 5 GPIO_ACTIVE_LOW>;
-+			label = "Home";
-+			linux,code = <KEY_HOME>;
-+			wakeup-source;
-+		};
-+
-+		volume-up {
-+			debounce-interval = <10>;
-+			gpios = <&gpx0 2 GPIO_ACTIVE_LOW>;
-+			label = "Volume Up";
-+			linux,code = <KEY_VOLUMEUP>;
-+		};
-+
-+		volume-down {
-+			debounce-interval = <10>;
-+			gpios = <&gpx0 3 GPIO_ACTIVE_LOW>;
-+			label = "Volume Down";
-+			linux,code = <KEY_VOLUMEDOWN>;
-+		};
-+	};
-+};
-+
-+&cci {
-+	/* CCI is disabled in hardware */
-+	status = "disabled";
-+};
-+
-+&cpu0 {
-+	cpu-supply = <&buck2_reg>;
-+};
-+
-+&cpu4 {
-+	cpu-supply = <&buck6_reg>;
-+};
-+
-+&gpu {
-+	status = "okay";
-+	mali-supply = <&buck4_reg>;
-+};
-+
-+&hsi2c_7 {
-+	status = "okay";
-+
-+	s2mps11: pmic@66 {
-+		compatible = "samsung,s2mps11-pmic";
-+		reg = <0x66>;
-+
-+		interrupt-parent = <&gpx3>;
-+		interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&s2mps11_irq>;
-+
-+		s2mps11_osc: clocks {
-+			compatible = "samsung,s2mps11-clk";
-+			#clock-cells = <1>;
-+			clock-output-names = "s2mps11_ap", "s2mps11_cp",
-+					     "s2mps11_bt";
-+		};
-+
-+		buck1_reg: BUCK1 {
-+			regulator-name = "VDD_MIF_1V1";
-+			regulator-min-microvolt = <700000>;
-+			regulator-max-microvolt = <1300000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+				regulator-suspend-microvolt = <1100000>;
-+			};
-+		};
-+
-+		buck2_reg: BUCK2 {
-+			regulator-name = "VDD_ARM_1V0";
-+			regulator-min-microvolt = <800000>;
-+			regulator-max-microvolt = <1500000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+			regulator-ramp-delay = <12500>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		buck3_reg: BUCK3 {
-+			regulator-name = "VDD_INT_1V0";
-+			regulator-min-microvolt = <800000>;
-+			regulator-max-microvolt = <1400000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+				regulator-suspend-microvolt = <1100000>;
-+			};
-+		};
-+
-+		buck4_reg: BUCK4 {
-+			regulator-name = "VDD_G3D_1V0";
-+			regulator-min-microvolt = <700000>;
-+			regulator-max-microvolt = <1400000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+			regulator-ramp-delay = <12500>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		buck5_reg: BUCK5 {
-+			regulator-name = "VDD_MEM_1V2";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+		};
-+
-+		buck6_reg: BUCK6 {
-+			regulator-name = "VDD_KFC_1V0";
-+			regulator-min-microvolt = <800000>;
-+			regulator-max-microvolt = <1500000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		buck7_reg: BUCK7 {
-+			regulator-name = "VIN_LLDO_1V4";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1500000>;
-+			regulator-always-on;
-+		};
-+
-+		buck8_reg: BUCK8 {
-+			regulator-name = "VIN_MLDO_2V0";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2100000>;
-+			regulator-always-on;
-+		};
-+
-+		buck9_reg: BUCK9 {
-+			regulator-name = "VIN_HLDO_3V5";
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3500000>;
-+			regulator-always-on;
-+		};
-+
-+		buck10_reg: BUCK10 {
-+			regulator-name = "VDD_CAM_ISP_1V0";
-+			regulator-min-microvolt = <750000>;
-+			regulator-max-microvolt = <3550000>;
-+		};
-+
-+		ldo1_reg: LDO1 {
-+			regulator-name = "VDD_ALIVE_1.0V";
-+			regulator-min-microvolt = <1000000>;
-+			regulator-max-microvolt = <1000000>;
-+			regulator-always-on;
-+		};
-+
-+		ldo2_reg: LDO2 {
-+			regulator-name = "VDD_APIO_1V8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+		};
-+
-+		ldo3_reg: LDO3 {
-+			regulator-name = "VDD_APIO_MMC2_1V8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo4_reg: LDO4 {
-+			regulator-name = "VDD_ADC_1V8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+		};
-+
-+		ldo5_reg: LDO5 {
-+			/* Unused */
-+			regulato-name = "VDD_LDO5";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		ldo6_reg: LDO6 {
-+			regulator-name = "VDD_MIPI_1V0";
-+			regulator-min-microvolt = <1000000>;
-+			regulator-max-microvolt = <1000000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo7_reg: LDO7 {
-+			regulator-name = "VDD_MIPI_PLL_ABB1_18V";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo8_reg: LDO8 {
-+			/* Unused */
-+			regulator-name = "VDD_LDO8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		ldo9_reg: LDO9 {
-+			regulator-name = "VDD_UOTG_3V0";
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3000000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+		};
-+
-+		ldo10_reg: LDO10 {
-+			regulator-name = "VDDQ_PRE_1V8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+		};
-+
-+		ldo11_reg: LDO11 {
-+			regulator-name = "VDD_HSIC_1V0";
-+			regulator-min-microvolt = <1000000>;
-+			regulator-max-microvolt = <1000000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+		};
-+
-+		ldo12_reg: LDO12 {
-+			regulator-name = "VDD_HSIC_1V8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+		};
-+
-+		ldo13_reg: LDO13 {
-+			regulator-name = "VDD_APIO_MMC2_2V8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2800000>;
-+			regulator-boot-on;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo14_reg: LDO14 {
-+			regulator-name = "VDD_MOTOR_3V0";
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3000000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		/*
-+		 * LDO15 varies between devices and is
-+		 * specified in the device dts
-+		 */
-+
-+		ldo16_reg: LDO16 {
-+			regulator-name = "VDD_AP_2V8";
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2800000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+
-+			regulator-state-mem {
-+				regulator-on-in-suspend;
-+			};
-+		};
-+
-+		/*
-+		 * LDO17 varies between devices and is
-+		 * specified in the device dts
-+		 */
-+
-+		ldo18_reg: LDO18 {
-+			/* Unused */
-+			regulator-name = "VDD_LDO18";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+
-+		ldo19_reg: LDO19 {
-+			regulator-name = "VDD_VTF_2V8";
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2800000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo20_reg: LDO20 {
-+			regulator-name = "VDD_CAM1_CAM_1V8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo21_reg: LDO21 {
-+			regulator-name = "VDD_CAM_IO_1V8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo22_reg: LDO22 {
-+			regulator-name = "VDD_CAM0_S_CORE_1V1";
-+			regulator-min-microvolt = <1050000>;
-+			regulator-max-microvolt = <1200000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo23_reg: LDO23 {
-+			regulator-name = "VDD_MIFS_1V1";
-+			regulator-min-microvolt = <800000>;
-+			regulator-max-microvolt = <1100000>;
-+			regulator-always-on;
-+
-+			regulator-state-mem {
-+				regulator-on-in-suspend;
-+			};
-+		};
-+
-+		ldo24_reg: LDO24 {
-+			regulator-name = "VDD_TSP_3V3";
-+			regulator-min-microvolt = <3300000>;
-+			regulator-max-microvolt = <3300000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo25_reg: LDO25 {
-+			/* Unused */
-+			regulator-name = "VDD_LDO25";
-+			regulator-min-microvolt = <800000>;
-+			regulator-max-microvolt = <3950000>;
-+		};
-+
-+		ldo26_reg: LDO26 {
-+			regulator-name = "VDD_CAM0_AF_2V8";
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2800000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo27_reg: LDO27 {
-+			regulator-name = "VDD_G3DS_1V0";
-+			regulator-min-microvolt = <800000>;
-+			regulator-max-microvolt = <1000000>;
-+			regulator-always-on;
-+
-+			regulator-state-mem {
-+				regulator-on-in-suspend;
-+			};
-+		};
-+
-+		/*
-+		 * LDO28 and LDO29 varies between devices and
-+		 * are specified in the device dts
-+		 */
-+
-+		ldo30_reg: LDO30 {
-+			regulator-name = "VDD_TOUCH_1V8";
-+			regulator-min-microvolt = <1900000>;
-+			regulator-max-microvolt = <1900000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo31_reg: LDO31 {
-+			regulator-name = "VDD_GRIP_1V8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo32_reg: LDO32 {
-+			regulator-name = "VDD_TSP_1V8";
-+			regulator-min-microvolt = <1900000>;
-+			regulator-max-microvolt = <1900000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo33_reg: LDO33 {
-+			regulator-name = "VDD_MHL_1V8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo34_reg: LDO34 {
-+			regulator-name = "VDD_MHL_3V3";
-+			regulator-min-microvolt = <3300000>;
-+			regulator-max-microvolt = <3300000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo35_reg: LDO35 {
-+			regulator-name = "VDD_SIL_1V2";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+
-+		ldo36_reg: LDO36 {
-+			/* Unused */
-+			regulator-name = "VDD_LDO36";
-+			regulator-min-microvolt = <800000>;
-+			regulator-max-microvolt = <3950000>;
-+		};
-+
-+		ldo37_reg: LDO37 {
-+			/* Unused */
-+			regulator-name = "VDD_LDO37";
-+			regulator-min-microvolt = <800000>;
-+			regulator-max-microvolt = <3950000>;
-+		};
-+
-+		ldo38_reg: LDO38 {
-+			regulator-name = "VDD_KEY_LED_3V3";
-+			regulator-min-microvolt = <2500000>;
-+			regulator-max-microvolt = <3300000>;
-+
-+			regulator-state-mem {
-+				regulator-off-in-suspend;
-+			};
-+		};
-+	};
-+};
-+
-+&mixer {
-+	status = "okay";
-+};
-+
-+/* Internal storage */
-+&mmc_0 {
-+	status = "okay";
-+	non-removable;
-+	card-detect-delay = <200>;
-+	samsung,dw-mshc-ciu-div = <3>;
-+	samsung,dw-mshc-sdr-timing = <0 4>;
-+	samsung,dw-mshc-ddr-timing = <0 2>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_bus1 &sd0_bus4 &sd0_bus8>;
-+	bus-width = <8>;
-+	cap-mmc-highspeed;
-+	mmc-hs200-1_8v;
-+};
-+
-+/* External sdcard */
-+&mmc_2 {
-+	status = "okay";
-+	card-detect-delay = <200>;
-+	samsung,dw-mshc-ciu-div = <3>;
-+	samsung,dw-mshc-sdr-timing = <0 4>;
-+	samsung,dw-mshc-ddr-timing = <0 2>;
-+	bus-width = <4>;
-+	cap-sd-highspeed;
-+	sd-uhs-sdr50;
-+};
-+
-+&pinctrl_0 {
-+	s2mps11_irq: s2mps11-irq-pins {
-+		samsung,pins = "gpx3-2";
-+		samsung,pin-function = <EXYNOS_PIN_FUNC_F>;
-+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-+		samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
-+	};
-+};
-+
-+&rtc {
-+	status = "okay";
-+	clocks = <&clock CLK_RTC>, <&s2mps11_osc S2MPS11_CLK_AP>;
-+	clock-names = "rtc", "rtc_src";
-+};
-+
-+&tmu_cpu0 {
-+	vtmu-supply = <&ldo10_reg>;
-+};
-+
-+&tmu_cpu1 {
-+	vtmu-supply = <&ldo10_reg>;
-+};
-+
-+&tmu_cpu2 {
-+	vtmu-supply = <&ldo10_reg>;
-+};
-+
-+&tmu_cpu3 {
-+	vtmu-supply = <&ldo10_reg>;
-+};
-+
-+&tmu_gpu {
-+	vtmu-supply = <&ldo10_reg>;
-+};
-+
-+&usbdrd_dwc3_0 {
-+	dr_mode = "peripheral";
-+};
-+
-+&usbdrd_dwc3_1 {
-+	dr_mode = "peripheral";
-+};
 -- 
-2.34.1
+Regards,
 
+Laurent Pinchart

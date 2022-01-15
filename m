@@ -2,136 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED8E48F38D
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6343148F390
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbiAOAxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 19:53:37 -0500
-Received: from mga04.intel.com ([192.55.52.120]:64844 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230503AbiAOAxg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 19:53:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642208016; x=1673744016;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yZD7Z5MkG5cqQONiCgDp0cXzVhPEzwGdBGO9+cW3gNY=;
-  b=Q0LMHJW9zaS/ePu+rhOid/IcCoi/IL1+VwjaNeikxHj4qt4SZPSnQfzS
-   iP6InF9kL7/Iji00sZLuq9IHcPwneuHuSUPXO9nrJedJoNFY3IhMRVS/i
-   8MUGBktkwYm5a6d6ln5IOZXtxHCWuaxf+Wc1mboZANDkWrrkr5+nPhsL6
-   G5UT3thv5vG81NjMpeVDOwH+IyIS6dioR9LX3YVW2eHVch5Ws/y2ZcG3J
-   8YpLIMn3jn3HbDCSHvtufXfqkgVnKc1Yvg9ZDNEbaMZkXui1phjlsSAcf
-   2KnrWgO7JCOm0IeN7FPBbwsQlcJhU/LYF3eF8A5mv1793ODttyAHmDUml
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="243175800"
-X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="243175800"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 16:53:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="529518697"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 14 Jan 2022 16:53:34 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8XK1-0009Cr-Nr; Sat, 15 Jan 2022 00:53:33 +0000
-Date:   Sat, 15 Jan 2022 08:52:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Volodymyr Mytnyk <vmytnyk@marvell.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Vadym Kochan <vkochan@marvell.com>,
-        Yevhen Orlov <yevhen.orlov@plvision.eu>,
-        Taras Chornyi <tchornyi@marvell.com>
-Subject: include/linux/compiler_types.h:322:45: error: call to
- '__compiletime_assert_355' declared with attribute error: BUILD_BUG_ON
- failed: sizeof(struct prestera_msg_event_fdb) != 20
-Message-ID: <202201150856.uvqiyjjG-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S231622AbiAOA4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 19:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230503AbiAOA4k (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 19:56:40 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EC5C061574;
+        Fri, 14 Jan 2022 16:56:40 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id e8so921193plh.8;
+        Fri, 14 Jan 2022 16:56:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=lL0LBy1q4fDmIfsePXwWEWFjmCmkm8zieBUz0OTp2io=;
+        b=UJdYAlXcdTZ8B1/TB0b9f/J46ipwhNW3pAdZlb4PY5PX+D/sBBWss3FGm67aisN41G
+         ZXV5GUQUFmt7fmkJszykTTbGPnqOLIAIeLBsh8kDXSnN4jwAIy9qqCvc1f7U8Y8sHaYZ
+         hQ0wXD4YW+P0e9VIRONIj5WlKR1QO/3JGt2ReISBAdNWD4dcDGDxNn9BSEsJHb9BVQoX
+         sImlEIeGnw+qwPAnjajXNxykfFfs+nEKjvRFVtK0vUgA/8e/b7iO7P4NhonbeXcgm+Fk
+         L6PI4T4W9JMqCc5Sykf6d3r9wjE3OihT2eDW2CKhObyzkCpzYdm7OAWsNGXJewXkCQsB
+         yrlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=lL0LBy1q4fDmIfsePXwWEWFjmCmkm8zieBUz0OTp2io=;
+        b=F/T9odxXV+TIonf6T2uckxb0TX5h5YjSE3CmXhLTQ1tzhFU8+QD16rPpZEVsjxBO7u
+         poNP5DtmCgdfj/uDSFjNSTmn079WZYvFKpmkfoD9931WwA+m50Dngq4tTEEMDdrYu8+M
+         Dmoh2/r7NR13bQ51aFpgVb+h3r167tr0cqeOSU3VwNjFg59DqdhQthgBLH2Wnv/+76Rg
+         EplNK3tBDfbqkKIzdCuBoDsTHZ3QXyceQHUCC9LPbmodbn/Hj9E/TyjUYbP7c/hcosDd
+         tLS7VTQQZSjJ+T5+dGrF708tIu22mqatHd5YCWpR18M9C1nmq7IYD8RpCTjfmK+xa7bJ
+         aVxw==
+X-Gm-Message-State: AOAM533/iaH0t+fd5JHggBu8vlTJiCu6PaLKmTFRqQrpmyAStYveRixo
+        Nsv8epurjf71HNvvW+fAOos=
+X-Google-Smtp-Source: ABdhPJxDAYWFsBM0R8cLN7Eisj3Jo3sSNeJJMJzwZvWZez66ROAwcWeZF4UhlCqBqdY3H1x+FKQNyA==
+X-Received: by 2002:a17:90a:1c1:: with SMTP id 1mr13398620pjd.151.1642208199718;
+        Fri, 14 Jan 2022 16:56:39 -0800 (PST)
+Received: from localhost.localdomain (1-171-7-64.dynamic-ip.hinet.net. [1.171.7.64])
+        by smtp.gmail.com with ESMTPSA id j18sm5335570pgb.27.2022.01.14.16.56.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 14 Jan 2022 16:56:38 -0800 (PST)
+From:   cy_huang <u0084500@gmail.com>
+To:     robh+dt@kernel.org, heikki.krogerus@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cy_huang@richtek.com
+Subject: [PATCH v2 0/2] Add Richtek RT1719 USBPD controller support
+Date:   Sat, 15 Jan 2022 08:56:29 +0800
+Message-Id: <1642208191-7254-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Volodymyr,
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-FYI, the error/warning still remains.
+This patch series add Richtek RT1719 sink only USBPD typec controller support.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   112450df61b7373529b0fe4c122ad13b89d80a8a
-commit: bb5dbf2cc64d5cfa696765944c784c0010c48ae8 net: marvell: prestera: add firmware v4.0 support
-date:   3 months ago
-config: arm-randconfig-r006-20220115 (https://download.01.org/0day-ci/archive/20220115/202201150856.uvqiyjjG-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bb5dbf2cc64d5cfa696765944c784c0010c48ae8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout bb5dbf2cc64d5cfa696765944c784c0010c48ae8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/ethernet/marvell/prestera/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/net/ethernet/marvell/prestera/prestera_hw.c:284:1: warning: alignment 1 of 'union prestera_msg_port_param' is less than 4 [-Wpacked-not-aligned]
-     284 | } __packed;
-         | ^
-   In file included from <command-line>:
-   In function 'prestera_hw_build_tests',
-       inlined from 'prestera_hw_switch_init' at drivers/net/ethernet/marvell/prestera/prestera_hw.c:788:2:
->> include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_355' declared with attribute error: BUILD_BUG_ON failed: sizeof(struct prestera_msg_event_fdb) != 20
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/prestera/prestera_hw.c:531:9: note: in expansion of macro 'BUILD_BUG_ON'
-     531 |         BUILD_BUG_ON(sizeof(struct prestera_msg_event_fdb) != 20);
-         |         ^~~~~~~~~~~~
+v2:
+Fix below kernel test robot build warning.
+>> drivers/usb/typec/rt1719.c:492:65: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+     492 |                                  RT1719_EVALMODE_MASK | src_sel + 1);
+         |                                                         ~~~~~~~~^~~
 
 
-vim +/__compiletime_assert_355 +322 include/linux/compiler_types.h
+ChiYuan Huang (2):
+  dt-bindings: usb: rt1719: Add binding for Richtek RT1719
+  usb: typec: rt1719: Add support for Richtek RT1719
 
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  308  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  309  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  310  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  311  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  312  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  314   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  315   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  316   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  317   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  318   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  319   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  320   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  321  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @322  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  323  
+ .../devicetree/bindings/usb/richtek,rt1719.yaml    |  85 ++
+ drivers/usb/typec/Kconfig                          |  12 +
+ drivers/usb/typec/Makefile                         |   1 +
+ drivers/usb/typec/rt1719.c                         | 976 +++++++++++++++++++++
+ 4 files changed, 1074 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/richtek,rt1719.yaml
+ create mode 100644 drivers/usb/typec/rt1719.c
 
-:::::: The code at line 322 was first introduced by commit
-:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+-- 
+2.7.4
 
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Will Deacon <will@kernel.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

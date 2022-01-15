@@ -2,167 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5EA48F478
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 03:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA5048F47B
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 03:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbiAOCeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 21:34:06 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17352 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiAOCeF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 21:34:05 -0500
-Received: from kwepemi500005.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JbMdt5rB5z9s5x;
-        Sat, 15 Jan 2022 10:32:50 +0800 (CST)
-Received: from kwepeml500002.china.huawei.com (7.221.188.128) by
- kwepemi500005.china.huawei.com (7.221.188.179) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sat, 15 Jan 2022 10:34:01 +0800
-Received: from dggpeml500011.china.huawei.com (7.185.36.84) by
- kwepeml500002.china.huawei.com (7.221.188.128) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sat, 15 Jan 2022 10:34:00 +0800
-Received: from dggpeml500011.china.huawei.com ([7.185.36.84]) by
- dggpeml500011.china.huawei.com ([7.185.36.84]) with mapi id 15.01.2308.020;
- Sat, 15 Jan 2022 10:34:00 +0800
-From:   "zhudi (E)" <zhudi2@huawei.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Luzhihao (luzhihao, Euler)" <luzhihao@huawei.com>,
-        "Chenxiang (EulerOS)" <rose.chen@huawei.com>
-Subject: Re: [PATCH bpf-next v5 2/2] selftests: bpf: test BPF_PROG_QUERY for
- progs attached to sockmap
-Thread-Topic: [PATCH bpf-next v5 2/2] selftests: bpf: test BPF_PROG_QUERY for
- progs attached to sockmap
-Thread-Index: AdgJtfF93At/PtlUThCT0czbKVqVNQ==
-Date:   Sat, 15 Jan 2022 02:34:00 +0000
-Message-ID: <a05a0e4fdd3c49deaa6671c14bb20a6c@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.136.114.155]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S232239AbiAOCg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 21:36:26 -0500
+Received: from m12-13.163.com ([220.181.12.13]:52901 "EHLO m12-13.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229471AbiAOCgZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 21:36:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=rClxz
+        2KeZNnbf+HK8OFRyXG4S63oZpvkXTjEBIqP104=; b=IcCSFEqPtmAAbfdQc4NQJ
+        N3YMaqfptiQfVlTCJ2/81R2IBCFHh3gepxGolC6qhr2ImCHqLp+uEb+qtuelzN/i
+        yjKLLmXizuZuc64Pu2CgdWlFVdqe1Vw6oNN113lFb7B6lGYTwi+zFHAmTiax55Iz
+        NaAsvRZoUluQpm+HmJCwWE=
+Received: from localhost.localdomain (unknown [223.104.68.79])
+        by smtp9 (Coremail) with SMTP id DcCowAAHEpi6MuJhfkbJAA--.14706S2;
+        Sat, 15 Jan 2022 10:34:35 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
+        johannes@sipsolutions.net, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>, Shujun Wang <wsj20369@163.com>
+Subject: [PATCH net] net: wwan: Fix MRU mismatch issue which may lead to data connection lost
+Date:   Sat, 15 Jan 2022 10:34:30 +0800
+Message-Id: <20220115023430.4659-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcCowAAHEpi6MuJhfkbJAA--.14706S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7AFyDWFW5KFyfZw4fCw4fAFb_yoW8GF4xpa
+        yY9343trs7X3y2ga1kGr1xZFyrK3Z8Wry7KrWa93yFqFn5ZFn0vrZ0gw10vr4Fyay8CF4j
+        yF4vqF47uan8u3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRHq2NUUUUU=
+X-Originating-IP: [223.104.68.79]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJRyJZGAJmBcl3AAAsL
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiBUaHUsIEphbiAxMywgMjAyMiBhdCAxOjAxIEFNIERpIFpodSA8emh1ZGkyQGh1YXdlaS5j
-b20+IHdyb3RlOg0KPiA+DQo+ID4gQWRkIHRlc3QgZm9yIHF1ZXJ5aW5nIHByb2dzIGF0dGFjaGVk
-IHRvIHNvY2ttYXAuIHdlIHVzZSBhbiBleGlzdGluZw0KPiA+IGxpYmJwZiBxdWVyeSBpbnRlcmZh
-Y2UgdG8gcXVlcnkgcHJvZyBjbnQgYmVmb3JlIGFuZCBhZnRlciBwcm9ncw0KPiA+IGF0dGFjaGlu
-ZyB0byBzb2NrbWFwIGFuZCBjaGVjayB3aGV0aGVyIHRoZSBxdWVyaWVkIHByb2cgaWQgaXMgcmln
-aHQuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBEaSBaaHUgPHpodWRpMkBodWF3ZWkuY29tPg0K
-PiA+IEFja2VkLWJ5OiBZb25naG9uZyBTb25nIDx5aHNAZmIuY29tPg0KPiA+IC0tLQ0KPiA+ICAu
-Li4vc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3NvY2ttYXBfYmFzaWMuYyAgfCA3MCArKysrKysr
-KysrKysrKysrKysrDQo+ID4gIC4uLi9icGYvcHJvZ3MvdGVzdF9zb2NrbWFwX3Byb2dzX3F1ZXJ5
-LmMgICAgICB8IDI0ICsrKysrKysNCj4gPiAgMiBmaWxlcyBjaGFuZ2VkLCA5NCBpbnNlcnRpb25z
-KCspDQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NA0KPiB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9i
-cGYvcHJvZ3MvdGVzdF9zb2NrbWFwX3Byb2dzX3F1ZXJ5LmMNCj4gPg0KPiA+IGRpZmYgLS1naXQg
-YS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9zb2NrbWFwX2Jhc2ljLmMN
-Cj4gYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9zb2NrbWFwX2Jhc2lj
-LmMNCj4gPiBpbmRleCA4NWRiMGY0Y2RkOTUuLjA2OTIzZWE0NGJhZCAxMDA2NDQNCj4gPiAtLS0g
-YS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9zb2NrbWFwX2Jhc2ljLmMN
-Cj4gPiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9zb2NrbWFw
-X2Jhc2ljLmMNCj4gPiBAQCAtOCw2ICs4LDcgQEANCj4gPiAgI2luY2x1ZGUgInRlc3Rfc29ja21h
-cF91cGRhdGUuc2tlbC5oIg0KPiA+ICAjaW5jbHVkZSAidGVzdF9zb2NrbWFwX2ludmFsaWRfdXBk
-YXRlLnNrZWwuaCINCj4gPiAgI2luY2x1ZGUgInRlc3Rfc29ja21hcF9za2JfdmVyZGljdF9hdHRh
-Y2guc2tlbC5oIg0KPiA+ICsjaW5jbHVkZSAidGVzdF9zb2NrbWFwX3Byb2dzX3F1ZXJ5LnNrZWwu
-aCINCj4gPiAgI2luY2x1ZGUgImJwZl9pdGVyX3NvY2ttYXAuc2tlbC5oIg0KPiA+DQo+ID4gICNk
-ZWZpbmUgVENQX1JFUEFJUiAgICAgICAgICAgICAxOSAgICAgIC8qIFRDUCBzb2NrIGlzIHVuZGVy
-IHJlcGFpcg0KPiByaWdodCBub3cgKi8NCj4gPiBAQCAtMzE1LDYgKzMxNiw2OSBAQCBzdGF0aWMg
-dm9pZCB0ZXN0X3NvY2ttYXBfc2tiX3ZlcmRpY3RfYXR0YWNoKGVudW0NCj4gYnBmX2F0dGFjaF90
-eXBlIGZpcnN0LA0KPiA+ICAgICAgICAgdGVzdF9zb2NrbWFwX3NrYl92ZXJkaWN0X2F0dGFjaF9f
-ZGVzdHJveShza2VsKTsNCj4gPiAgfQ0KPiA+DQo+ID4gK3N0YXRpYyBfX3UzMiBxdWVyeV9wcm9n
-X2lkKGludCBwcm9nX2ZkKQ0KPiA+ICt7DQo+ID4gKyAgICAgICBzdHJ1Y3QgYnBmX3Byb2dfaW5m
-byBpbmZvID0ge307DQo+ID4gKyAgICAgICBfX3UzMiBpbmZvX2xlbiA9IHNpemVvZihpbmZvKTsN
-Cj4gPiArICAgICAgIGludCBlcnI7DQo+ID4gKw0KPiA+ICsgICAgICAgZXJyID0gYnBmX29ial9n
-ZXRfaW5mb19ieV9mZChwcm9nX2ZkLCAmaW5mbywgJmluZm9fbGVuKTsNCj4gPiArICAgICAgIGlm
-ICghQVNTRVJUX09LKGVyciwgImJwZl9vYmpfZ2V0X2luZm9fYnlfZmQiKSB8fA0KPiA+ICsgICAg
-ICAgICAgICFBU1NFUlRfRVEoaW5mb19sZW4sIHNpemVvZihpbmZvKSwgImJwZl9vYmpfZ2V0X2lu
-Zm9fYnlfZmQiKSkNCj4gPiArICAgICAgICAgICAgICAgcmV0dXJuIDA7DQo+ID4gKw0KPiA+ICsg
-ICAgICAgcmV0dXJuIGluZm8uaWQ7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyB2b2lkIHRl
-c3Rfc29ja21hcF9wcm9nc19xdWVyeShlbnVtIGJwZl9hdHRhY2hfdHlwZSBhdHRhY2hfdHlwZSkN
-Cj4gPiArew0KPiA+ICsgICAgICAgc3RydWN0IHRlc3Rfc29ja21hcF9wcm9nc19xdWVyeSAqc2tl
-bDsNCj4gPiArICAgICAgIGludCBlcnIsIG1hcF9mZCwgdmVyZGljdF9mZCwgZHVyYXRpb24gPSAw
-Ow0KPiA+ICsgICAgICAgX191MzIgYXR0YWNoX2ZsYWdzID0gMDsNCj4gPiArICAgICAgIF9fdTMy
-IHByb2dfaWRzWzNdID0ge307DQo+ID4gKyAgICAgICBfX3UzMiBwcm9nX2NudCA9IDM7DQo+ID4g
-Kw0KPiA+ICsgICAgICAgc2tlbCA9IHRlc3Rfc29ja21hcF9wcm9nc19xdWVyeV9fb3Blbl9hbmRf
-bG9hZCgpOw0KPiA+ICsgICAgICAgaWYgKCFBU1NFUlRfT0tfUFRSKHNrZWwsDQo+ICJ0ZXN0X3Nv
-Y2ttYXBfcHJvZ3NfcXVlcnlfX29wZW5fYW5kX2xvYWQiKSkNCj4gPiArICAgICAgICAgICAgICAg
-cmV0dXJuOw0KPiA+ICsNCj4gPiArICAgICAgIG1hcF9mZCA9IGJwZl9tYXBfX2ZkKHNrZWwtPm1h
-cHMuc29ja19tYXApOw0KPiA+ICsNCj4gPiArICAgICAgIGlmIChhdHRhY2hfdHlwZSA9PSBCUEZf
-U0tfTVNHX1ZFUkRJQ1QpDQo+ID4gKyAgICAgICAgICAgICAgIHZlcmRpY3RfZmQgPQ0KPiBicGZf
-cHJvZ3JhbV9fZmQoc2tlbC0+cHJvZ3MucHJvZ19za21zZ192ZXJkaWN0KTsNCj4gPiArICAgICAg
-IGVsc2UNCj4gPiArICAgICAgICAgICAgICAgdmVyZGljdF9mZCA9DQo+IGJwZl9wcm9ncmFtX19m
-ZChza2VsLT5wcm9ncy5wcm9nX3NrYl92ZXJkaWN0KTsNCj4gPiArDQo+ID4gKyAgICAgICBlcnIg
-PSBicGZfcHJvZ19xdWVyeShtYXBfZmQsIGF0dGFjaF90eXBlLCAwIC8qIHF1ZXJ5IGZsYWdzICov
-LA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgJmF0dGFjaF9mbGFncywgcHJvZ19p
-ZHMsICZwcm9nX2NudCk7DQo+ID4gKyAgICAgICBpZiAoIUFTU0VSVF9PSyhlcnIsICJicGZfcHJv
-Z19xdWVyeSBmYWlsZWQiKSkNCj4gPiArICAgICAgICAgICAgICAgZ290byBvdXQ7DQo+ID4gKw0K
-PiA+ICsgICAgICAgaWYgKCFBU1NFUlRfRVEoYXR0YWNoX2ZsYWdzLCAgMCwgIndyb25nIGF0dGFj
-aF9mbGFncyBvbiBxdWVyeSIpKQ0KPiA+ICsgICAgICAgICAgICAgICBnb3RvIG91dDsNCj4gPiAr
-DQo+ID4gKyAgICAgICBpZiAoIUFTU0VSVF9FUShwcm9nX2NudCwgMCwgIndyb25nIHByb2dyYW0g
-Y291bnQgb24gcXVlcnkiKSkNCj4gPiArICAgICAgICAgICAgICAgZ290byBvdXQ7DQo+ID4gKw0K
-PiA+ICsgICAgICAgZXJyID0gYnBmX3Byb2dfYXR0YWNoKHZlcmRpY3RfZmQsIG1hcF9mZCwgYXR0
-YWNoX3R5cGUsIDApOw0KPiA+ICsgICAgICAgaWYgKCFBU1NFUlRfT0soZXJyLCAiYnBmX3Byb2df
-YXR0YWNoIGZhaWxlZCIpKQ0KPiA+ICsgICAgICAgICAgICAgICBnb3RvIG91dDsNCj4gPiArDQo+
-ID4gKyAgICAgICBwcm9nX2NudCA9IDE7DQo+ID4gKyAgICAgICBlcnIgPSBicGZfcHJvZ19xdWVy
-eShtYXBfZmQsIGF0dGFjaF90eXBlLCAwIC8qIHF1ZXJ5IGZsYWdzICovLA0KPiA+ICsgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgJmF0dGFjaF9mbGFncywgcHJvZ19pZHMsICZwcm9nX2NudCk7
-DQo+ID4gKw0KPiA+ICsgICAgICAgQVNTRVJUX09LKGVyciwgImJwZl9wcm9nX3F1ZXJ5IGZhaWxl
-ZCIpOw0KPiA+ICsgICAgICAgQVNTRVJUX0VRKGF0dGFjaF9mbGFncywgMCwgIndyb25nIGF0dGFj
-aF9mbGFncyBvbiBxdWVyeSIpOw0KPiA+ICsgICAgICAgQVNTRVJUX0VRKHByb2dfY250LCAxLCAi
-d3JvbmcgcHJvZ3JhbSBjb3VudCBvbiBxdWVyeSIpOw0KPiA+ICsgICAgICAgQVNTRVJUX0VRKHBy
-b2dfaWRzWzBdLCBxdWVyeV9wcm9nX2lkKHZlcmRpY3RfZmQpLA0KPiA+ICsgICAgICAgICAgICAg
-ICAgICJ3cm9uZyBwcm9nX2lkcyBvbiBxdWVyeSIpOw0KPiANCj4gU2VlIGhvdyBtdWNoIGVhc2ll
-ciBpdCBpcyB0byBmb2xsb3cgdGhlc2UgdGVzdHMsIHdoeSBkaWRuJ3QgeW91IGRvIHRoZQ0KPiBz
-YW1lIHdpdGggZXJyLCBhdHRhY2hfZmxhZ3MgYW5kIHByb2cgYWJvdmU/DQoNCkl0IGlzIHJlY29t
-bWVuZGVkIGJ5IFlvbmdob25nIFNvbmcgdG8gaW5jcmVhc2UgdGhlIHRlc3QgY292ZXJhZ2UuDQoN
-Cj4gDQo+IA0KPiA+ICsNCj4gPiArICAgICAgIGJwZl9wcm9nX2RldGFjaDIodmVyZGljdF9mZCwg
-bWFwX2ZkLCBhdHRhY2hfdHlwZSk7DQo+ID4gK291dDoNCj4gPiArICAgICAgIHRlc3Rfc29ja21h
-cF9wcm9nc19xdWVyeV9fZGVzdHJveShza2VsKTsNCj4gPiArfQ0KPiA+ICsNCj4gPiAgdm9pZCB0
-ZXN0X3NvY2ttYXBfYmFzaWModm9pZCkNCj4gPiAgew0KPiA+ICAgICAgICAgaWYgKHRlc3RfX3N0
-YXJ0X3N1YnRlc3QoInNvY2ttYXAgY3JlYXRlX3VwZGF0ZV9mcmVlIikpDQo+ID4gQEAgLTM0MSw0
-ICs0MDUsMTAgQEAgdm9pZCB0ZXN0X3NvY2ttYXBfYmFzaWModm9pZCkNCj4gPg0KPiB0ZXN0X3Nv
-Y2ttYXBfc2tiX3ZlcmRpY3RfYXR0YWNoKEJQRl9TS19TS0JfU1RSRUFNX1ZFUkRJQ1QsDQo+ID4N
-Cj4gQlBGX1NLX1NLQl9WRVJESUNUKTsNCj4gPiAgICAgICAgIH0NCj4gPiArICAgICAgIGlmICh0
-ZXN0X19zdGFydF9zdWJ0ZXN0KCJzb2NrbWFwIHByb2dzIHF1ZXJ5IikpIHsNCj4gPiArICAgICAg
-ICAgICAgICAgdGVzdF9zb2NrbWFwX3Byb2dzX3F1ZXJ5KEJQRl9TS19NU0dfVkVSRElDVCk7DQo+
-ID4gKw0KPiB0ZXN0X3NvY2ttYXBfcHJvZ3NfcXVlcnkoQlBGX1NLX1NLQl9TVFJFQU1fUEFSU0VS
-KTsNCj4gPiArDQo+IHRlc3Rfc29ja21hcF9wcm9nc19xdWVyeShCUEZfU0tfU0tCX1NUUkVBTV9W
-RVJESUNUKTsNCj4gPiArICAgICAgICAgICAgICAgdGVzdF9zb2NrbWFwX3Byb2dzX3F1ZXJ5KEJQ
-Rl9TS19TS0JfVkVSRElDVCk7DQo+IA0KPiBXaHkgYXJlIHRoZXNlIG5vdCBzZXBhcmF0ZSBzdWJ0
-ZXN0cz8gV2hhdCdzIHRoZSBiZW5lZml0IG9mIGJ1bmRsaW5nDQo+IHRoZW0gaW50byBvbmUgc3Vi
-dGVzdD8NCj4gDQoNClRoZXNlIGFyZSBlc3NlbnRpYWxseSBkb2luZyB0aGUgc2FtZSB0aGluZywg
-anVzdCBmb3IgZGlmZmVyZW50IHByb2dyYW0gYXR0YWNoIHR5cGVzLg0KDQo+ID4gKyAgICAgICB9
-DQo+ID4gIH0NCj4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3By
-b2dzL3Rlc3Rfc29ja21hcF9wcm9nc19xdWVyeS5jDQo+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVz
-dHMvYnBmL3Byb2dzL3Rlc3Rfc29ja21hcF9wcm9nc19xdWVyeS5jDQo+ID4gbmV3IGZpbGUgbW9k
-ZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAwMDAuLjlkNThkNjFjMGRlZQ0KPiA+IC0tLSAv
-ZGV2L251bGwNCj4gPiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ3MvdGVz
-dF9zb2NrbWFwX3Byb2dzX3F1ZXJ5LmMNCj4gPiBAQCAtMCwwICsxLDI0IEBADQo+ID4gKy8vIFNQ
-RFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ID4gKyNpbmNsdWRlICJ2bWxpbnV4Lmgi
-DQo+ID4gKyNpbmNsdWRlIDxicGYvYnBmX2hlbHBlcnMuaD4NCj4gPiArDQo+ID4gK3N0cnVjdCB7
-DQo+ID4gKyAgICAgICBfX3VpbnQodHlwZSwgQlBGX01BUF9UWVBFX1NPQ0tNQVApOw0KPiA+ICsg
-ICAgICAgX191aW50KG1heF9lbnRyaWVzLCAxKTsNCj4gPiArICAgICAgIF9fdHlwZShrZXksIF9f
-dTMyKTsNCj4gPiArICAgICAgIF9fdHlwZSh2YWx1ZSwgX191NjQpOw0KPiA+ICt9IHNvY2tfbWFw
-IFNFQygiLm1hcHMiKTsNCj4gPiArDQo+ID4gK1NFQygic2tfc2tiIikNCj4gPiAraW50IHByb2df
-c2tiX3ZlcmRpY3Qoc3RydWN0IF9fc2tfYnVmZiAqc2tiKQ0KPiA+ICt7DQo+ID4gKyAgICAgICBy
-ZXR1cm4gU0tfUEFTUzsNCj4gPiArfQ0KPiA+ICsNCj4gPiArU0VDKCJza19tc2ciKQ0KPiA+ICtp
-bnQgcHJvZ19za21zZ192ZXJkaWN0KHN0cnVjdCBza19tc2dfbWQgKm1zZykNCj4gPiArew0KPiA+
-ICsgICAgICAgcmV0dXJuIFNLX1BBU1M7DQo+ID4gK30NCj4gPiArDQo+ID4gK2NoYXIgX2xpY2Vu
-c2VbXSBTRUMoImxpY2Vuc2UiKSA9ICJHUEwiOw0KPiA+IC0tDQo+ID4gMi4yNy4wDQo+ID4NCg==
+In pci_generic.c there is a 'mru_default' in struct mhi_pci_dev_info.
+This value shall be used for whole mhi if it's given a value for a specific product.
+But in function mhi_net_rx_refill_work(), it's still using hard code value MHI_DEFAULT_MRU.
+'mru_default' shall have higher priority than MHI_DEFAULT_MRU.
+And after checking, this change could help fix a data connection lost issue.
+
+Fixes: 5c2c85315948 ("bus: mhi: pci-generic: configurable network interface MRU")
+Signed-off-by: Shujun Wang <wsj20369@163.com>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/net/wwan/mhi_wwan_mbim.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/wwan/mhi_wwan_mbim.c b/drivers/net/wwan/mhi_wwan_mbim.c
+index 71bf9b4f769f..6872782e8dd8 100644
+--- a/drivers/net/wwan/mhi_wwan_mbim.c
++++ b/drivers/net/wwan/mhi_wwan_mbim.c
+@@ -385,13 +385,13 @@ static void mhi_net_rx_refill_work(struct work_struct *work)
+ 	int err;
+ 
+ 	while (!mhi_queue_is_full(mdev, DMA_FROM_DEVICE)) {
+-		struct sk_buff *skb = alloc_skb(MHI_DEFAULT_MRU, GFP_KERNEL);
++		struct sk_buff *skb = alloc_skb(mbim->mru, GFP_KERNEL);
+ 
+ 		if (unlikely(!skb))
+ 			break;
+ 
+ 		err = mhi_queue_skb(mdev, DMA_FROM_DEVICE, skb,
+-				    MHI_DEFAULT_MRU, MHI_EOT);
++				    mbim->mru, MHI_EOT);
+ 		if (unlikely(err)) {
+ 			kfree_skb(skb);
+ 			break;
+-- 
+2.25.1
+

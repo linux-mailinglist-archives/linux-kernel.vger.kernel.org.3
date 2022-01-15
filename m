@@ -2,102 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E8748F38A
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED8E48F38D
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbiAOAqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 19:46:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbiAOAqL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 19:46:11 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07921C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 16:46:10 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id l16-20020a17090a409000b001b2e9628c9cso15665110pjg.4
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 16:46:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bkM1TIVQ6Ac38f4nYsJNosa7HutS0fQKr+FWU8XPdnk=;
-        b=Yc/kl/Jbg9szpRv3k/IzparKqDb+3nAG79byiWJRAr6vcPID2qlK8Ll7ZhhGCQxKM8
-         qpnrDHGWORdYlTddFCIZc3MwCkKJ+fDE8F+hQJxxhm6k96biUQ7dMGQW/z3MvNn5zSzy
-         PmScnf2Ogg3ual4pUmmzq0EY4RbSN0/fWiSwf1cEac5e7yiSwjXuOqje1y8O9c/zgSew
-         aiQXMfsTxHHUXkMmh9zVcyjNklwiC2R/OcvtXjeHssebaHJfchlO0gd2PjZCHQwS36eg
-         KG15qUqzse9nkL3f8QZK/jx+X7zzcJfoyFCvcuIZh/bCI9p1Ut74ePaZy9y6y00xUXbc
-         Vbwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bkM1TIVQ6Ac38f4nYsJNosa7HutS0fQKr+FWU8XPdnk=;
-        b=GjWjAVmLRl7ETQtWVpmaHiH4VPzwXt+q/SJONV0IySNy/lHyi/BX7EzEtf4CZlQZmj
-         ZmYRdyEVmkuiVdTufx7OFB5HLbeHGhYFcGIRzW/MXNmP2q1tDW2DYFX1Cr3HOpR6rqub
-         teenPtA5znRITU53nsmEww7SO5nJATOYfQotVR+4AEXcvKUIHUy5hagqWjxgB4LTqQ+0
-         oqVjFMy4eBDt46IQ15G2/odeDRfbEobmEHov6q6ZvBv7iNGqEYHnmNaHiknNcV5WjopA
-         4I0liZGYMFoOi5gdsdpfl/t+jRkecD1dh1A/+DhlGc9vNmrMFP4B4ov1jvCmcs0uaKVA
-         EoAw==
-X-Gm-Message-State: AOAM532qEiJKiGqxTzJ5poTOI5W45wTY6QZj4uVsBfWN/b7oA9BM+oxg
-        0hMGVjfwvsh17on4Vs2dUCnRfg==
-X-Google-Smtp-Source: ABdhPJyjoEesRbQZZc0Tgpt+hvNhPOuvvNTkD9qfCCr7Q29ROSTPcf1hYZdlomlI4VxXqYxmdiidyQ==
-X-Received: by 2002:a17:902:e5c9:b0:14a:2da3:e60f with SMTP id u9-20020a170902e5c900b0014a2da3e60fmr11538953plf.100.1642207570237;
-        Fri, 14 Jan 2022 16:46:10 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t25sm5504034pgv.9.2022.01.14.16.46.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jan 2022 16:46:09 -0800 (PST)
-Date:   Sat, 15 Jan 2022 00:46:06 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Wang Guangju <wangguangju@baidu.com>
-Cc:     pbonzini@redhat.com, sean.j.christopherson@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: enhance the readability of function
- pic_intack()
-Message-ID: <YeIZTkYCfkTE0Lob@google.com>
-References: <20220112085153.4506-1-wangguangju@baidu.com>
+        id S231614AbiAOAxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 19:53:37 -0500
+Received: from mga04.intel.com ([192.55.52.120]:64844 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230503AbiAOAxg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 14 Jan 2022 19:53:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642208016; x=1673744016;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yZD7Z5MkG5cqQONiCgDp0cXzVhPEzwGdBGO9+cW3gNY=;
+  b=Q0LMHJW9zaS/ePu+rhOid/IcCoi/IL1+VwjaNeikxHj4qt4SZPSnQfzS
+   iP6InF9kL7/Iji00sZLuq9IHcPwneuHuSUPXO9nrJedJoNFY3IhMRVS/i
+   8MUGBktkwYm5a6d6ln5IOZXtxHCWuaxf+Wc1mboZANDkWrrkr5+nPhsL6
+   G5UT3thv5vG81NjMpeVDOwH+IyIS6dioR9LX3YVW2eHVch5Ws/y2ZcG3J
+   8YpLIMn3jn3HbDCSHvtufXfqkgVnKc1Yvg9ZDNEbaMZkXui1phjlsSAcf
+   2KnrWgO7JCOm0IeN7FPBbwsQlcJhU/LYF3eF8A5mv1793ODttyAHmDUml
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="243175800"
+X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
+   d="scan'208";a="243175800"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 16:53:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
+   d="scan'208";a="529518697"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 14 Jan 2022 16:53:34 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8XK1-0009Cr-Nr; Sat, 15 Jan 2022 00:53:33 +0000
+Date:   Sat, 15 Jan 2022 08:52:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Volodymyr Mytnyk <vmytnyk@marvell.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Vadym Kochan <vkochan@marvell.com>,
+        Yevhen Orlov <yevhen.orlov@plvision.eu>,
+        Taras Chornyi <tchornyi@marvell.com>
+Subject: include/linux/compiler_types.h:322:45: error: call to
+ '__compiletime_assert_355' declared with attribute error: BUILD_BUG_ON
+ failed: sizeof(struct prestera_msg_event_fdb) != 20
+Message-ID: <202201150856.uvqiyjjG-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220112085153.4506-1-wangguangju@baidu.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022, Wang Guangju wrote:
-> From: wangguangju <wangguangju@baidu.com>
-> 
-> In function pic_intack(), use a varibale of "mask" to
-> record expression of "1 << irq", so we can enhance the
-> readability of this function.
+Hi Volodymyr,
 
-Please wrap at ~75 chars.
+FYI, the error/warning still remains.
 
-> Signed-off-by: wangguangju <wangguangju@baidu.com>
-> ---
->  arch/x86/kvm/i8259.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/i8259.c b/arch/x86/kvm/i8259.c
-> index 814064d06016..ad6b64b11adc 100644
-> --- a/arch/x86/kvm/i8259.c
-> +++ b/arch/x86/kvm/i8259.c
-> @@ -216,12 +216,14 @@ void kvm_pic_clear_all(struct kvm_pic *s, int irq_source_id)
->   */
->  static inline void pic_intack(struct kvm_kpic_state *s, int irq)
->  {
-> -	s->isr |= 1 << irq;
-> +	int mask;
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   112450df61b7373529b0fe4c122ad13b89d80a8a
+commit: bb5dbf2cc64d5cfa696765944c784c0010c48ae8 net: marvell: prestera: add firmware v4.0 support
+date:   3 months ago
+config: arm-randconfig-r006-20220115 (https://download.01.org/0day-ci/archive/20220115/202201150856.uvqiyjjG-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bb5dbf2cc64d5cfa696765944c784c0010c48ae8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout bb5dbf2cc64d5cfa696765944c784c0010c48ae8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/ethernet/marvell/prestera/
 
-Needs a newline, and could also be:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-	int mask = 1 << irq;
+All errors (new ones prefixed by >>):
 
-or even
+   drivers/net/ethernet/marvell/prestera/prestera_hw.c:284:1: warning: alignment 1 of 'union prestera_msg_port_param' is less than 4 [-Wpacked-not-aligned]
+     284 | } __packed;
+         | ^
+   In file included from <command-line>:
+   In function 'prestera_hw_build_tests',
+       inlined from 'prestera_hw_switch_init' at drivers/net/ethernet/marvell/prestera/prestera_hw.c:788:2:
+>> include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_355' declared with attribute error: BUILD_BUG_ON failed: sizeof(struct prestera_msg_event_fdb) != 20
+     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
+     303 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
+     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   drivers/net/ethernet/marvell/prestera/prestera_hw.c:531:9: note: in expansion of macro 'BUILD_BUG_ON'
+     531 |         BUILD_BUG_ON(sizeof(struct prestera_msg_event_fdb) != 20);
+         |         ^~~~~~~~~~~~
 
-	int mask = BIT(irq);
 
-That said, I oddly find the existing code more readable.  Maybe "irq_mask" instead
-of "mask"?  Dunno.  I guess I don't have a strong opinion :-)
+vim +/__compiletime_assert_355 +322 include/linux/compiler_types.h
+
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  308  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  309  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  310  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  311  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  312  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  314   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  315   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  316   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  317   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  318   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  319   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  320   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  321  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @322  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  323  
+
+:::::: The code at line 322 was first introduced by commit
+:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

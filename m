@@ -2,77 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0608948F680
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 12:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F1848F683
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 12:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232893AbiAOLLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 06:11:41 -0500
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:53118 "EHLO
-        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229569AbiAOLLk (ORCPT
+        id S232911AbiAOLME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 06:12:04 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:45966 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232901AbiAOLMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 06:11:40 -0500
-X-IronPort-AV: E=Sophos;i="5.88,290,1635199200"; 
-   d="scan'208";a="15964437"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 12:11:39 +0100
-Date:   Sat, 15 Jan 2022 12:11:38 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] regulator: qcom_smd: fix for_each_child.cocci warnings
-Message-ID: <alpine.DEB.2.22.394.2201151210170.3051@hadrien>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sat, 15 Jan 2022 06:12:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1A85CCE24A0;
+        Sat, 15 Jan 2022 11:12:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CA85C36AE5;
+        Sat, 15 Jan 2022 11:11:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642245119;
+        bh=jNFGzrPIobZj5wF79igvxvVFmouOIeEfIO7F0ckDzkg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=h/L4Iav/wMcmrsPa0lJ6MqsYHCSbKP0Gv/f9Xq7iVb72BT3pUcUDqYw/i2wYM8diQ
+         YixaDehTMbf8cwOThCvnDb5deXdPWpcip+m0CFfMXa9aGx2nawjGKzYLdQ+TA4ncLN
+         /uu9HXK1hnKinn0bZyTos0WC+fXRyoTNs5NwobNDRpXL1bRpg6dvVQiHh5ZBz79pZ4
+         kRhF5rWX0mvQIGHAlfs7JLeIrcGMEgNjmA+ECgDGbZqeGa0weP9I+yFoMVGeX12kb8
+         t+5CpqourRKxKbqR1j9pH1hlffVlkxDzpWHg9/3WOBwpSIr62gHClxSCJOtOxLrRZh
+         4wOknAmx8A21A==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lkp@intel.com
+Subject: Re: [PATCH wireless] MAINTAINERS: add common wireless and wireless-next trees
+In-Reply-To: <20220115081809.64c9fec5@canb.auug.org.au> (Stephen Rothwell's
+        message of "Sat, 15 Jan 2022 08:18:09 +1100")
+References: <20220114133415.8008-1-kvalo@kernel.org>
+        <20220115081809.64c9fec5@canb.auug.org.au>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date:   Sat, 15 Jan 2022 13:11:54 +0200
+Message-ID: <87o84ds16t.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-drivers/regulator/qcom_smd-regulator.c:1318:1-33: WARNING: Function "for_each_available_child_of_node" should have of_node_put() before return around line 1321.
+> Hi Kalle,
+>
+> On Fri, 14 Jan 2022 15:34:15 +0200 Kalle Valo <kvalo@kernel.org> wrote:
+>>
+>> For easier maintenance we have decided to create common wireless and
+>> wireless-next trees for all wireless patches. Old mac80211 and wireless-drivers
+>> trees will not be used anymore.
+>> 
+>> While at it, add a wiki link to wireless drivers section and a patchwork link
+>> to 802.11, mac80211 and rfkill sections.
+>> 
+>> Acked-by: Johannes Berg <johannes@sipsolutions.net>
+>> Signed-off-by: Kalle Valo <kvalo@kernel.org>
+>> ---
+>> 
+>> Stephen, please use these new trees in linux-next from now on.
+>
+> Done from today.  I have set you and Johannes as contacts along with
+> the linux-wireless mailing list.  Also, I assume you meant to mention
+> that I should use the branches called "main".
 
+Yes, please use main branches. We decided to try the new naming scheme.
+Thanks Stephen.
 
-Semantic patch information:
- False positives can be due to function calls within the for_each
- loop that may encapsulate an of_node_put.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-Generated by: scripts/coccinelle/iterators/for_each_child.cocci
-
-Fixes: 14e2976fbabd ("regulator: qcom_smd: Align probe function with rpmh-regulator")
-CC: Konrad Dybcio <konrad.dybcio@somainline.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
----
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   112450df61b7373529b0fe4c122ad13b89d80a8a
-commit: 14e2976fbabdacb01335d7f91eeebbc89c67ddb1 regulator: qcom_smd: Align probe function with rpmh-regulator
-:::::: branch date: 13 hours ago
-:::::: commit date: 9 days ago
-
- qcom_smd-regulator.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
---- a/drivers/regulator/qcom_smd-regulator.c
-+++ b/drivers/regulator/qcom_smd-regulator.c
-@@ -1317,8 +1317,10 @@ static int rpm_reg_probe(struct platform
-
- 	for_each_available_child_of_node(dev->of_node, node) {
- 		vreg = devm_kzalloc(&pdev->dev, sizeof(*vreg), GFP_KERNEL);
--		if (!vreg)
-+		if (!vreg) {
-+			of_node_put(node);
- 			return -ENOMEM;
-+		}
-
- 		ret = rpm_regulator_init_vreg(vreg, dev, node, rpm, vreg_data);
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

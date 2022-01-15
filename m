@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF51748F748
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 15:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 183F948F74C
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 15:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbiAOOUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 09:20:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiAOOUO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 09:20:14 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B825C06161C
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 06:20:14 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so25087527pjj.2
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 06:20:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Ncd5IZKvHPrrlUNsXIMwKnuqz7gtjvAHZ3BqHWFsgGI=;
-        b=ZKMtG2g6ZqDQnOLci87+dJirsvLkyJiJNPqsvE/eHqAEKvqrcf2pU3pLmhyd5DENec
-         LIjxASold+k6sF/b8C07/LsOCcb3b1AVmkvQVEoc4FljwSkSN4/iLdIV5GSR4DSDU3E2
-         8B8UYT8eYwOrl4nimmcBKp6h8ONFQrp2AykzmFpUJAzQ7RQwin789tojlVvNKkMMNQua
-         GYnPlKP3nKzltcZ6E1RMtYBVEGimI38+kNSVMMqYo6RZBGucKjfvD7gtjg8Pcx9n3ZHp
-         +Ydd7vrVJ1hplgSYAKTU7PgROGJPruhDkDVGKgsiQpa/qLz0Bs5in5clcKMTbfialtft
-         PCow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Ncd5IZKvHPrrlUNsXIMwKnuqz7gtjvAHZ3BqHWFsgGI=;
-        b=sJe3w1YAZPE/a4eWMCD29AdhHIXWgWYtQ03plC9uHQ2UsH+tWGQYSsl5Yox9457npo
-         DSTD4qqiFf2XbRCQUPGnhqzTrkt9QqR2QepFbFW9/fOWQO655qBKqjrH/hZu2BJBCzyI
-         0BcBdo8EiLt0lNaRrfdA3eIJ1eTinqIsDZbiMLdCwbx+hEbrhj7HeX2tUBdA1TIg+6pw
-         Gn79YS2wwwfC2vYm/kkgNCg9rwA3fc8o63VGHr+VkTMALXtneZxtkrEFBns/yBj2wedj
-         sUp70oTFWRC+LY6rULVty2VQqK0A3ePS49OB/H3s7E1Hu3Vy9Uxl5sXgiUwK++sj8Sxa
-         XyuQ==
-X-Gm-Message-State: AOAM531A8Ka+2GukVLggcJeCRHCZ58O10TBm7mjKyRfe1Oifwfnot5h7
-        ja+y1QxVzA0yLdN9gwRdeoGYXripq9BxIPmwCcJtiw==
-X-Google-Smtp-Source: ABdhPJxVdXHefdKKHBUfz3c7b53Y2bYtVq5wiy1dOUcQNd//Ceu2Oce8OzpZSMNzZaM3yRErwQo3k5XOWhbFZmd2ET0=
-X-Received: by 2002:a17:902:e309:b0:14a:3072:8d1d with SMTP id
- q9-20020a170902e30900b0014a30728d1dmr14172928plc.6.1642256413521; Sat, 15 Jan
- 2022 06:20:13 -0800 (PST)
+        id S232777AbiAOOWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 09:22:05 -0500
+Received: from mga12.intel.com ([192.55.52.136]:65520 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229684AbiAOOWE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 09:22:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642256524; x=1673792524;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=N0fB5+2LlGwFz+nC626bb9OcnsTLxVoOh1VGivG/Iwg=;
+  b=dRis9zdtyS8lwYT7C2lqNo58jPLDXy1h0KUP21svKECpqeE8pfJ9GRqd
+   s1xxX4wdOdPp52YIQRCggf2vU6JkY5DwUBSzy2hHhI8WdD0nSYY+oJtPB
+   kQE/Q2feNM8rV5JfB4nw4txWE6GkmNu4DcxFtIDatn2FNpBxM/vVRfNCY
+   9VsjlCxKpq5XQZPo3h7NKyU3NgEY6ktV8a0/BBmD87IT2nXJ2pEGkcsXY
+   cGIcCLqbx1FdDuZ3A2g4MZlh7AjtQBZTZRAIyVl2FiDR4VfHAsXge7vLG
+   iXxg2tbrHWgUYTJSdPUMsjcGV29Bccaldk2g164uc7Yn4avla/xHMn8tW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="224396629"
+X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
+   d="scan'208";a="224396629"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 06:22:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
+   d="scan'208";a="559822118"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 15 Jan 2022 06:22:02 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8jwQ-0009sm-8P; Sat, 15 Jan 2022 14:22:02 +0000
+Date:   Sat, 15 Jan 2022 22:21:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1595/2384]
+ ./usr/include/linux/if_link.h:5:10: fatal error: 'uapi/linux/netlink.h' file
+ not found
+Message-ID: <202201152228.l7UYAZdZ-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220115023430.4659-1-slark_xiao@163.com>
-In-Reply-To: <20220115023430.4659-1-slark_xiao@163.com>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Sat, 15 Jan 2022 15:18:06 +0100
-Message-ID: <CAMZdPi8uc+qHJR_OaWu_12oT1VtVE6TY=nAmfSF9h+f9hpXrcQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: wwan: Fix MRU mismatch issue which may lead to
- data connection lost
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     Shujun Wang <wsj20369@163.com>, davem@davemloft.net,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        ryazanov.s.a@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le sam. 15 janv. 2022 =C3=A0 03:35, Slark Xiao <slark_xiao@163.com> a =C3=
-=A9crit :
->
-> In pci_generic.c there is a 'mru_default' in struct mhi_pci_dev_info.
-> This value shall be used for whole mhi if it's given a value for a specif=
-ic product.
-> But in function mhi_net_rx_refill_work(), it's still using hard code valu=
-e MHI_DEFAULT_MRU.
-> 'mru_default' shall have higher priority than MHI_DEFAULT_MRU.
-> And after checking, this change could help fix a data connection lost iss=
-ue.
->
-> Fixes: 5c2c85315948 ("bus: mhi: pci-generic: configurable network interfa=
-ce MRU")
-> Signed-off-by: Shujun Wang <wsj20369@163.com>
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> ---
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
+commit: 60d16930c980493906092825024aebd0235c0f37 [1595/2384] headers/deps: net: Optimize <uapi/linux/if_link.h>
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220115/202201152228.l7UYAZdZ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=60d16930c980493906092825024aebd0235c0f37
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 60d16930c980493906092825024aebd0235c0f37
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from <built-in>:1:
+   In file included from ./usr/include/linux/if_arp.h:27:
+   In file included from ./usr/include/linux/netdevice.h:32:
+>> ./usr/include/linux/if_link.h:5:10: fatal error: 'uapi/linux/netlink.h' file not found
+   #include <uapi/linux/netlink.h>
+            ^~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

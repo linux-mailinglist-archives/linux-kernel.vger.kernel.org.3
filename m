@@ -2,161 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC3948F36E
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993AD48F371
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbiAOARs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 19:17:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
+        id S231481AbiAOAUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 19:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiAOARr (ORCPT
+        with ESMTP id S230450AbiAOAUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 19:17:47 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EE0C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 16:17:47 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id 127-20020a250f85000000b00611ab6484abso18223675ybp.23
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 16:17:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:cc;
-        bh=TEFOv4YS0Pv2L4ioEdK41WD5FaS6ABhUfwsLXh99f8U=;
-        b=sN3IkgdFVVNugkPBMVaX1NQErDxMw2JjTs7fEo2IZHsKKUM7LTSV9HHpFS166HaH3W
-         1smmvnBfC2u30IE5BLIk409N1YZOuqDC+aTiCGUwbpoHdcN4OqjXMxCsDTaFeS5P2VRq
-         SmBZHpg8uW1ouZ/j7p3S+qI/pSM5yUosczI2Nj3gMldT1HQfoC/iWUsehWtmsGMiln9/
-         RhEvTEGlrfQRvTK/FqSw7xhLyNl7Aq9RiFRjCvHxZr5sv0MlpTkooxxRhlsXEQfp/npd
-         ki3xenMHB3KDK07iMrpR5qm5ThgDpUmuK8M6KClCzYuOt6imy1PMm2w3D2hS04k8KW0L
-         NlbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:cc;
-        bh=TEFOv4YS0Pv2L4ioEdK41WD5FaS6ABhUfwsLXh99f8U=;
-        b=0Us+N09ndPN7VNW5JahGKAWiZrx8oM7hxjUXR8hf0o0lrGz3i7sZzee+49v0M7U/SQ
-         Jyw8DS6/II35Fyg7d0IISeGsXdk8xJwvkR53wp3WtnNIyEseZgCrTii2JgkSPJg70nkX
-         lNbaGd8pqpSH7qhYmEkx6GNUQjDOdBoSB7dtiK0t6a1JqLrjVqouqG605aaxx419kIiq
-         jllkawco9/145QevBj+uvzHZXo5rn5545KW2kO6HjObYaPQ/DP6ez6mi7RL9CeYp4jU8
-         Qqcbpp3f19KYfBp2Uma/RMgj521v6wl5ofH5cLnwtX+G05ghWu8BzGRK2h2v+8h2t+fz
-         23jw==
-X-Gm-Message-State: AOAM532LBf+FyIgGNxjMrGK531qI2tFu5Af50qogWXP1StmYiKCoBgNo
-        6QicdaCAj5KS4YUKRVNlBcdHik58CA==
-X-Google-Smtp-Source: ABdhPJy8BbTFgHr7s6eDuLFYTIX87Wx1uQElAp//NDt5ogwcOGsWsYZHV8KXA3KKsn6Yu2DSgNTdK49S4w==
-X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
- (user=nhuck job=sendgmr) by 2002:a5b:3c2:: with SMTP id t2mr16685965ybp.747.1642205866524;
- Fri, 14 Jan 2022 16:17:46 -0800 (PST)
-Date:   Fri, 14 Jan 2022 18:17:19 -0600
-Message-Id: <20220115001719.1040897-1-nhuck@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH] crypto: x86 - Convert to SPDX identifier
-From:   Nathan Huckleberry <nhuck@google.com>
-Cc:     Nathan Huckleberry <nhuck@google.com>,
-        James Guilford <james.guilford@intel.com>,
-        Sean Gulley <sean.m.gulley@intel.com>,
-        Chandramouli Narayanan <mouli@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-To:     unlisted-recipients:; (no To-header on input)
+        Fri, 14 Jan 2022 19:20:06 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577D9C061574;
+        Fri, 14 Jan 2022 16:20:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=RO/5y8HN7zPObC7kKeadO21COfIT8ymMOCtOZ5TJz+w=; b=AEUUzycjcNniu2XHDfBVwHP202
+        5DzBTeRdkUIC7uCWaJv5L+L3tjIXaBYXhkYi8S6uCyzaDt5XtcguwTe0Bzc2/tW1P2EwMPx99S23m
+        rqMjpsvxonLEM6WNsogVWWu/g8hwQpWZdecXQS8Hjmw3NreZRPXbJz3sscIz2mLDWIcjkZGgL+SzS
+        8Nr+R442HfcQEfnLKMjrZNB236vn3odkUqQG/wFEAhQBtkDFBsHVzYxNmRwrQA+xGwNgu0lEsJDHr
+        6+1WHucw40f4OrmOo8ogtlfAxnPh1QJl+P751PxEySipaHUcHY8mrYhxkwp3ZvAIP3Sikfv701l7T
+        zeIMf83A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n8WnY-00AUes-GI; Sat, 15 Jan 2022 00:20:00 +0000
+Date:   Fri, 14 Jan 2022 16:20:00 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jessica Yu <jeyu@kernel.org>,
+        Colin Ian King <colin.king@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Yu Chen <chen.yu@easystack.cn>, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, mcgrof@kernel.org
+Subject: Modules updates for v5.17-rc1
+Message-ID: <YeITMG7bKozB2xVQ@bombadil.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use SPDX-License-Identifier instead of a verbose license text and
-update external link.
+Hi Linus,
 
-Cc: James Guilford <james.guilford@intel.com>
-Cc: Sean Gulley <sean.m.gulley@intel.com>
-Cc: Chandramouli Narayanan <mouli@linux.intel.com>
-Signed-off-by: Nathan Huckleberry <nhuck@google.com>
----
- arch/x86/crypto/aes_ctrby8_avx-x86_64.S | 63 ++++---------------------
- 1 file changed, 10 insertions(+), 53 deletions(-)
+Here are the modules changes for v5.17-rc1. This is my second pull
+request to you, the first one was for v5.16-rc1. Hopefully this time
+around this all looks good now, otherwise please let me know and I'll
+be sure to tidy up more.
 
-diff --git a/arch/x86/crypto/aes_ctrby8_avx-x86_64.S b/arch/x86/crypto/aes_ctrby8_avx-x86_64.S
-index c799838242a6..43852ba6e19c 100644
---- a/arch/x86/crypto/aes_ctrby8_avx-x86_64.S
-+++ b/arch/x86/crypto/aes_ctrby8_avx-x86_64.S
-@@ -1,65 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-3-Clause */
- /*
-- *	Implement AES CTR mode by8 optimization with AVX instructions. (x86_64)
-- *
-- * This is AES128/192/256 CTR mode optimization implementation. It requires
-- * the support of Intel(R) AESNI and AVX instructions.
-- *
-- * This work was inspired by the AES CTR mode optimization published
-- * in Intel Optimized IPSEC Cryptograhpic library.
-- * Additional information on it can be found at:
-- *    http://downloadcenter.intel.com/Detail_Desc.aspx?agr=Y&DwnldID=22972
-- *
-- * This file is provided under a dual BSD/GPLv2 license.  When using or
-- * redistributing this file, you may do so under either license.
-- *
-- * GPL LICENSE SUMMARY
-+ * AES CTR mode by8 optimization with AVX instructions. (x86_64)
-  *
-  * Copyright(c) 2014 Intel Corporation.
-  *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of version 2 of the GNU General Public License as
-- * published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful, but
-- * WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * General Public License for more details.
-- *
-  * Contact Information:
-  * James Guilford <james.guilford@intel.com>
-  * Sean Gulley <sean.m.gulley@intel.com>
-  * Chandramouli Narayanan <mouli@linux.intel.com>
-+ */
-+/*
-+ * This is AES128/192/256 CTR mode optimization implementation. It requires
-+ * the support of Intel(R) AESNI and AVX instructions.
-  *
-- * BSD LICENSE
-- *
-- * Copyright(c) 2014 Intel Corporation.
-- *
-- * Redistribution and use in source and binary forms, with or without
-- * modification, are permitted provided that the following conditions
-- * are met:
-- *
-- * Redistributions of source code must retain the above copyright
-- * notice, this list of conditions and the following disclaimer.
-- * Redistributions in binary form must reproduce the above copyright
-- * notice, this list of conditions and the following disclaimer in
-- * the documentation and/or other materials provided with the
-- * distribution.
-- * Neither the name of Intel Corporation nor the names of its
-- * contributors may be used to endorse or promote products derived
-- * from this software without specific prior written permission.
-- *
-- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-- *
-+ * This work was inspired by the AES CTR mode optimization published
-+ * in Intel Optimized IPSEC Cryptographic library.
-+ * Additional information on it can be found at:
-+ *    https://github.com/intel/intel-ipsec-mb
-  */
- 
- #include <linux/linkage.h>
--- 
-2.34.1.703.g22d0c6ccf7-goog
+The following changes since commit daadb3bd0e8d3e317e36bc2c1542e86c528665e5:
 
+  Merge tag 'locking_core_for_v5.17_rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2022-01-11 17:24:45 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+
+for you to fetch changes up to a97ac8cb24a3c3ad74794adb83717ef1605d1b47:
+
+  module: fix signature check failures when using in-kernel decompression (2022-01-14 09:40:49 -0800)
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      kernel: Fix spelling mistake "compresser" -> "compressor"
+
+Dmitry Torokhov (2):
+      module: add in-kernel support for decompressing
+      module: fix signature check failures when using in-kernel decompression
+
+Greg Kroah-Hartman (1):
+      module.h: allow #define strings to work with MODULE_IMPORT_NS
+
+Jessica Yu (1):
+      MAINTAINERS: Remove myself as modules maintainer
+
+Luis Chamberlain (1):
+      MAINTAINERS: add mailing lists for kmod and modules
+
+Yu Chen (1):
+      module: Remove outdated comment
+
+ MAINTAINERS                 |   6 +-
+ include/linux/module.h      |   3 +-
+ include/uapi/linux/module.h |   1 +
+ init/Kconfig                |  13 +++
+ kernel/Makefile             |   1 +
+ kernel/module-internal.h    |  19 ++++
+ kernel/module.c             |  45 +++++---
+ kernel/module_decompress.c  | 271 ++++++++++++++++++++++++++++++++++++++++++++
+ 8 files changed, 340 insertions(+), 19 deletions(-)
+ create mode 100644 kernel/module_decompress.c
+
+----------------------------------------------------------------
+
+modules changes for v5.17-rc1
+
+The biggest change here is in-kernel support for module decompression.
+This change is being made to help support LSMs like LoadPin as otherwise
+it loses link between the source of kernel module on the disk and binary
+blob that is being loaded into the kernel.
+
+kmod decompression is still done by userspace even with this is done,
+both because there are no measurable gains in not doing so and as it
+adds a secondary extra check for validating the module before loading it
+into the kernel.
+
+Although this change was only merged on January 11th, the patches have
+been being reviewed since early december. There was at least one fix
+already found for it and merged.
+
+The rest of the changes are minor, the only other change worth mentionin
+there is Jessica Yu is now bowing out of maintenance of modules as she's
+taking a break from work.
+
+While there were other changes posted for modules, those have not yet
+received much review of testing so I'm not yet comfortable in merging
+any of those changes yet.
+
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+
+  Luis

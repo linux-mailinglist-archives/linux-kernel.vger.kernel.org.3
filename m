@@ -2,89 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B73DF48F4C6
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 05:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8A648F4CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 05:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232481AbiAOEcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 23:32:16 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:39919 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiAOEcO (ORCPT
+        id S232494AbiAOEjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 23:39:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46010 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232483AbiAOEjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 23:32:14 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 14 Jan 2022 23:39:16 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JbQHd0m6jz4xsm;
-        Sat, 15 Jan 2022 15:32:13 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642221133;
-        bh=DwVna9aPtU+YWGe4lHMtrkXoBPYpSy4EFclecFmNxu4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=W8SKoP8MW01H0WGrE78ks95r25h7ltwsCCsy37SmAgEn8ELTYLfHu0qsFb30/4P1j
-         UQDaYqeU9P+VfdF+dA7h+mBRThaEvpB4nzkjZx8GT1ZpxbmgBmhbpDff9ZhbnZEArE
-         G2cWXtnrrmvpi3WRmdswdTsrf15i/yzDaH/ehY1Dr+SYIYmQnRdcH5mZuEttp31p6w
-         8UkAOG/vgFfdKpCYgmOAzdmPgRJjD0BOkijSsix8u56MkuGqBshLbIppddph4i4QYe
-         A+iSS7QavQKXaNt/zcHJndpl1fODtHYHfnL71++uiWq1y7lHqALkjnHTxTd71mfYmv
-         nknhv0xS+KbTA==
-Date:   Sat, 15 Jan 2022 15:32:12 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Michael Walle <michael@walle.cc>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the devicetree tree
-Message-ID: <20220115153212.593f534d@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/E12w=rlaNwVcckRJ_GIltsg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8EC9B82A3F;
+        Sat, 15 Jan 2022 04:39:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB737C36AE3;
+        Sat, 15 Jan 2022 04:39:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642221553;
+        bh=Lmw0vnQYmWnz1sy8w6vxj9DD1VhxFXZBl4P4Jg4yq/w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZCQYVVEZGKXxUXg07KpzKKYBf449x8VFMf4m6GuD2mqoi+QiHmDAOu8vU6moy9CK8
+         zWTxMxTX5/L5M1Ka2gA2sgmMS+oRyeecauqGf8wD0v+E8EEv9o5GjQ4720OUKadL6Z
+         0FrUNOWwuWnUatKXjZtLVwcFZOBmH97XizYRIgt4BXmGVEEnXK1OGANfounfdyJexz
+         odmNVhmDZ3OV5IJY+c8b+oCSjd6zWHfDixXtEjFiTGGa8/Y8aYgfxnMt5FQ4IQvIOa
+         Gw1wVApnGt2fXnW+QOBPH7KaYzvvDjROUPMFhWLYKfXipl4anZz3Gv0lr3GW06ERkc
+         YGpyCsbdkLiWw==
+Date:   Sat, 15 Jan 2022 13:39:07 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v2 3/8] rethook: Add a generic return hook
+Message-Id: <20220115133907.2a713806100fc0f7a562a96b@kernel.org>
+In-Reply-To: <YeGUNRH9MiF7dgVs@krava>
+References: <164199616622.1247129.783024987490980883.stgit@devnote2>
+        <164199620208.1247129.13021391608719523669.stgit@devnote2>
+        <YeAaUN8aUip3MUn8@krava>
+        <20220113221532.c48abf7f56d29ba95dcb0dc6@kernel.org>
+        <YeGUNRH9MiF7dgVs@krava>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/E12w=rlaNwVcckRJ_GIltsg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, 14 Jan 2022 16:18:13 +0100
+Jiri Olsa <jolsa@redhat.com> wrote:
 
-Hi all,
+> On Thu, Jan 13, 2022 at 10:15:32PM +0900, Masami Hiramatsu wrote:
+> > On Thu, 13 Jan 2022 13:25:52 +0100
+> > Jiri Olsa <jolsa@redhat.com> wrote:
+> > 
+> > > On Wed, Jan 12, 2022 at 11:03:22PM +0900, Masami Hiramatsu wrote:
+> > > > Add a return hook framework which hooks the function
+> > > > return. Most of the idea came from the kretprobe, but
+> > > > this is independent from kretprobe.
+> > > > Note that this is expected to be used with other
+> > > > function entry hooking feature, like ftrace, fprobe,
+> > > > adn kprobes. Eventually this will replace the
+> > > > kretprobe (e.g. kprobe + rethook = kretprobe), but
+> > > > at this moment, this is just a additional hook.
+> > > 
+> > > this looks similar to the code kretprobe is using now
+> > 
+> > Yes, I've mostly re-typed the code :)
+> > 
+> > > would it make sense to incrementaly change current code to provide
+> > > this rethook interface? instead of big switch of current kretprobe
+> > > to kprobe + new rethook interface in future?
+> > 
+> > Would you mean modifying the kretprobe instance code to provide
+> > similar one, and rename it at some point?
+> > My original idea is to keep the current kretprobe code and build
+> > up the similar one, and switch to it at some point. Actually,
+> > I don't want to change the current kretprobe interface itself,
+> > but the backend will be changed. For example, current kretprobe
+> > has below interface.
+> > 
+> > struct kretprobe {
+> >         struct kprobe kp;
+> >         kretprobe_handler_t handler;
+> >         kretprobe_handler_t entry_handler;
+> >         int maxactive;
+> >         int nmissed;
+> >         size_t data_size;
+> >         struct freelist_head freelist;
+> >         struct kretprobe_holder *rph;
+> > };
+> > 
+> > My idea is switching it to below.
+> > 
+> > struct kretprobe {
+> >         struct kprobe kp;
+> >         kretprobe_handler_t handler;
+> >         kretprobe_handler_t entry_handler;
+> >         int maxactive;
+> >         int nmissed;
+> >         size_t data_size;
+> >         struct rethook *rethook;
+> > };
+> 
+> looks good, will this be a lot of changes?
 
-After merging the devicetree tree, today's linux-next build (htmldocs)
-produced these warnings:
+Yes and no, we can easily replace the kretprobe generic trampoline
+callback (since it almost same, and have same feature), but it also
+needs to update per-arch kretprobe trampoline to rethook trampoline.
 
-include/linux/of.h:1037: warning: Function parameter or member 'np' not des=
-cribed in 'of_parse_phandle_with_optional_args'
-include/linux/of.h:1037: warning: Function parameter or member 'list_name' =
-not described in 'of_parse_phandle_with_optional_args'
-include/linux/of.h:1037: warning: Function parameter or member 'cells_name'=
- not described in 'of_parse_phandle_with_optional_args'
-include/linux/of.h:1037: warning: Function parameter or member 'index' not =
-described in 'of_parse_phandle_with_optional_args'
-include/linux/of.h:1037: warning: Function parameter or member 'out_args' n=
-ot described in 'of_parse_phandle_with_optional_args'
+> could you include it in the patchset?
 
-Introduced by commit
+Let me try, but since it involves many archs (which support kretprobes)
+it may take a time to be merged.
 
-  952c4865d27a ("of: base: add of_parse_phandle_with_optional_args()")
+Thank you,
 
---=20
-Cheers,
-Stephen Rothwell
+> 
+> thanks,
+> jirka
+> 
+> > 
+> > Of course 'kretprobe_instance' may need to be changed...
+> > 
+> > struct kretprobe_instance {
+> > 	struct rethook_node;
+> > 	char data[];
+> > };
+> > 
+> > But even though, since there is 'get_kretprobe(ri)' wrapper, user
+> > will be able to access the 'struct kretprobe' from kretprobe_instance
+> > transparently.
+> > 
+> > Thank you,
+> > 
+> > 
+> > -- 
+> > Masami Hiramatsu <mhiramat@kernel.org>
+> > 
+> 
 
---Sig_/E12w=rlaNwVcckRJ_GIltsg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHiTkwACgkQAVBC80lX
-0GwJmQf+K7E2G29jvQ0c54JTPW+p01Ov6/TUk5xSPnCaSt9N6TgYobrb0aEDzH1o
-tG3StwpKM9yZNh5rc6Htx9vQ9ih7HjDwcpiWPeZKzsdJG7Uqb3+DV6uUx+wKNQ7f
-2xKoh8Ri++8lgRZK/xB0BHRywWjnmArod60pIGjW2OIe3iZFnlgjyUJH2OorRp74
-Vk43kF5Wig8BXn72VPVmHlif4a1J1lFegjBjWFF7mal3Sbbo9Wa7EUmdgFzZACob
-vMBhK7hJqrvazgcrs+DPPOFzWQpVV0hKdf4JAu8u2n1iA5X9n9SdgpZkZyeBSBBd
-5y6bSER+kT+uldByZTrE/q3GX8DqEQ==
-=+v6G
------END PGP SIGNATURE-----
-
---Sig_/E12w=rlaNwVcckRJ_GIltsg--
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

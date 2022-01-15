@@ -2,97 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D123248F9C0
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 00:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C00C48F9BF
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 00:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbiAOXAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 18:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbiAOXAR (ORCPT
+        id S233880AbiAOXAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 18:00:12 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52730 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231483AbiAOXAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 18:00:17 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1D2C061574
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 15:00:16 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id j7so212743edr.4
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 15:00:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=kjbaItt49HeNYKlAAvgAvUBakX33E0u6vY6bifOEKb4=;
-        b=Uc9cRXojj+6mUIOsHJ+HkmjUfU30TXPHtGXyq8egGJ0VXpmuxOKiCiGo5b3txp8czg
-         ZERq3R659QHGatFaPYjrVp8w3ScLYW3iScEcgRM2tdKk7ySAu34Ph1JSXHeOnypxnkX9
-         yZFSttjGy5C42DP4SMliiBmABHmtdy776sKDmyoOSh7eO2l/Am814i1QMfZoyqs4aShV
-         JKVN+nkoW8Zp5mgbKXSVy0ZULlwsLv57X4GmVRzvpyB/GTIo285VvIdgYWkXGfHJuvSO
-         tccDpuoVXKpo0mI94FS2RMGA8ueXxt5TRamd8rUB0sINcJpHOd0ENlqLxbcVf+Ncvh+k
-         V8Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=kjbaItt49HeNYKlAAvgAvUBakX33E0u6vY6bifOEKb4=;
-        b=Gy2SkYJWaFIZ+AVhDnJBhlxUNTjJogXbZSQmn+gerG6Wsav/u6YdBNsFM3r5125kxM
-         wrApbaM7iNSkW869+aDSF++r1j2Fq0QxfFTlocemq9RiAdCEyAQi1EBIpXhVnM1aAHt6
-         UFMvCFWVDFa54E/PBktOX4cs3XE7GBDdd73i30ydVhCwsvrKJtXf8IRdn9R12Ozsf8W9
-         8WXSG+eM++pPw8vrt0Nsr8d+4Xr6hlQi3SUnnbNYyE+1p1sVQHKlMf5Ce7+SOheludLF
-         b9OtrjZJaUUn1yipZHrtHlGDd8/VR935WYc1rfwBvZr9pFTjE7JcKPPPfnTH5zwnm6yu
-         /TiQ==
-X-Gm-Message-State: AOAM532SuCE1KsOv35bxqF8IdU2H6ML4x/AHY22JGtiAz9lCNluPhb3q
-        Ccwq0xqh1xqPB2A4Xps+8Kk=
-X-Google-Smtp-Source: ABdhPJxT4Tv6oz52W08eKN9B+ubuMQ67i5hKP5HwoRtTuvxWcuu81WX0lvuLnZ7MtO8vTqH+PJ1J3Q==
-X-Received: by 2002:a17:907:d11:: with SMTP id gn17mr11593470ejc.252.1642287615069;
-        Sat, 15 Jan 2022 15:00:15 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id 16sm2977557ejx.149.2022.01.15.15.00.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 15 Jan 2022 15:00:14 -0800 (PST)
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, mhocko@suse.com,
-        Wei Yang <richard.weiyang@gmail.com>
-Subject: [PATCH] mm/page_alloc: clear node_load[] in function build_zonelists
-Date:   Sat, 15 Jan 2022 23:00:02 +0000
-Message-Id: <20220115230002.490-1-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        Sat, 15 Jan 2022 18:00:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CA99B80C83;
+        Sat, 15 Jan 2022 23:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 29539C36AEF;
+        Sat, 15 Jan 2022 23:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642287609;
+        bh=yKSa1yO06cC7xDb44AAOZz+o9oAW/joqyx8YUk6xLCg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ZH6ARvIoQlMGAyMsJZD7PVYUVBRKeNyPp+m40WTbyQY11VqVQmw6g5D6QmWCxJtGa
+         uvHcUDGbbIRzz4vs7cAYyQGlluIpuyzEoTbjilHYNMpdJcUcFYyR9GWyV+H2cgTZ5/
+         mXphCW2atzxue60BYFsXeOth3L/L3ttbvgirZr1aG/TISMIm04RoF1jphK4PWYSq2F
+         HEUAtgSAoCk5D6E7aQttGmBzA4LHywdgXOql7D4+5/ecuS0acx/nWKJR3hOlkl8FP+
+         HrNIzfDZLEDX33wItMstP83vK6xgBZd8hez0F8RKvoCLL1DsbrMzZD2NpZXJs84aiR
+         0VwJMltSGJY+w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1196DF6079A;
+        Sat, 15 Jan 2022 23:00:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net/smc: Remove unused function declaration
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164228760906.1385.6668664437675144815.git-patchwork-notify@kernel.org>
+Date:   Sat, 15 Jan 2022 23:00:09 +0000
+References: <1642167345-77338-1-git-send-email-guwen@linux.alibaba.com>
+In-Reply-To: <1642167345-77338-1-git-send-email-guwen@linux.alibaba.com>
+To:     Wen Gu <guwen@linux.alibaba.com>
+Cc:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-static variable node_load[] is a helper variable during build zonelist.
-On each turn for building zonelist, node_load[] is cleared. So this is
-proper to do this in function build_zonelist.
+Hello:
 
-Another side effect is,  #ifdef CONFIG_NUMA could be removed since
-node_load[] is only defined when CONFIG_NUMA is set.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
----
- mm/page_alloc.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+On Fri, 14 Jan 2022 21:35:45 +0800 you wrote:
+> The declaration of smc_wr_tx_dismiss_slots() is unused.
+> So remove it.
+> 
+> Fixes: 349d43127dac ("net/smc: fix kernel panic caused by race of smc_sock")
+> Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+> ---
+>  net/smc/smc_wr.h | 4 ----
+>  1 file changed, 4 deletions(-)
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index c5952749ad40..8245f5a24aad 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6255,6 +6255,7 @@ static void build_zonelists(pg_data_t *pgdat)
- 	prev_node = local_node;
- 
- 	memset(node_order, 0, sizeof(node_order));
-+	memset(node_load, 0, sizeof(node_load));
- 	while ((node = find_next_best_node(local_node, &used_mask)) >= 0) {
- 		/*
- 		 * We don't want to pressure a particular node.
-@@ -6371,10 +6372,6 @@ static void __build_all_zonelists(void *data)
- 
- 	spin_lock(&lock);
- 
--#ifdef CONFIG_NUMA
--	memset(node_load, 0, sizeof(node_load));
--#endif
--
- 	/*
- 	 * This node is hotadded and no memory is yet present.   So just
- 	 * building zonelists is fine - no need to touch other nodes.
+Here is the summary with links:
+  - [net] net/smc: Remove unused function declaration
+    https://git.kernel.org/netdev/net/c/9404bc1e58e4
+
+You are awesome, thank you!
 -- 
-2.33.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

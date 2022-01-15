@@ -2,250 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E7A48F52B
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 06:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B74848F52E
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 06:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbiAOFfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 00:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbiAOFfo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 00:35:44 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A22C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 21:35:44 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id g81so29586744ybg.10
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 21:35:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=xr5CoW233+ktKsC/jbnkLpzCBoSWMGWpWu2mHvuqTEo=;
-        b=Nevyn/sUtYqfb/2OKlRHlPwSzDQD+MNA+Oy6Ibl5a4AtqSUyC1u0sNviHMaYDUnvQH
-         myEi+5cuIh4vAYhb1H3EZ95Z+Df7ly2ohqr/CA2HjyxjLph039PMZJ1Inmo+Uu51Gjiu
-         AhJDc/UlC54/qdiC08xy3OhNfFYTS866RFg6mJf2D0AwqnwCgNAuVK6NF8xXuS/bm0iO
-         B8jcfdmtcUJBLHZaN6ghbyz5wXa+Owwa5ov0/91ULr+sK7omel7IN46CXvTi0Crvtcdt
-         7ZUq4xtDXLJ346Lsbx4KC+jS20xwoft8bMs1njeK+ATy3UrWI6H4Ot+SsmXKbqCwQkzn
-         H6Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xr5CoW233+ktKsC/jbnkLpzCBoSWMGWpWu2mHvuqTEo=;
-        b=wBHq3wurEiEISFY/VvknvROKI32C3Feu9YLfB4xXGQ9cdcYMA2RuiW6+D0L8Ztm+dz
-         zcoaHxY2V6vgysdfv217B219FIhl1ygm40SmW26tA+YCETBFLkkBK4WdRLPJnCC9qtcH
-         ZpcbLuHWjyxmhK5ftnxaCpTu2y48W2aJOj/umfsA6xw6s54tQZc2mPG7FfGWXLC9NmFs
-         bazJURmV8CfC4bxYNfWfng13hY4a09cilgbPMqIYrURYbfkA6H8svlwnJ3X9wVYNwkJM
-         MYEk3KKlHzHEwanb58X1+NT+t9MS+5zqBsB717u9qpy5CB0q/CxPUoAx/8X0vF65lfGQ
-         b+jA==
-X-Gm-Message-State: AOAM530nmUi01cSK3G2cyI7OW5k3FoZOa5wzO9TtpIBOZL4Rm1WdhUDh
-        pAipyaj//qmSn4jGeDBIy+GLaLu2aLbyVC4evLwszyeHWfMFwA==
-X-Google-Smtp-Source: ABdhPJyYjMw8wiXn4F1ryduX4HaSEsCIKcOrJNsZI0UL7PDtoBi/gwJZ2YVhYXxBdi5Mzq1TC93siD0HE7NhAmhilsQ=
-X-Received: by 2002:a5b:d09:: with SMTP id y9mr17779457ybp.146.1642224943016;
- Fri, 14 Jan 2022 21:35:43 -0800 (PST)
+        id S232538AbiAOFjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 00:39:47 -0500
+Received: from mga14.intel.com ([192.55.52.115]:54635 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232531AbiAOFjq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 00:39:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642225186; x=1673761186;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=75+YhRjUaMDilg1Gnh4edLsebkubg/S5XzVviLv/oug=;
+  b=dg9sJGhcyYoo7ncwz9i585M+w4jvM+S63zfzdz0V2yGbFzZA8v10OkT6
+   2eJfvnZaSzQweNRJPu276tiEAG+BPVFILlLljuH6mv9oMa+UpOM51g4wj
+   s7a7h2QWJM0hJUpwQLJWRDAxLKxiXUaS/BPlJ0/SPqKieCjcN6izzHynw
+   W9pfyDHeWf98wPNYxUH2C3rXlhtu+Sij6wBnOxFAeevLIAWL32UbS8am1
+   cpU0W15dW4rKQ57hocSggbe63HprW7ckPRTQbe1fVaOKHt81IjaccTE4e
+   aNl41cawj5dCP6Oue1T05PL4M1oLcxd7DPGSDjJdUnDmr9A/oNYi1TXtn
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="244580431"
+X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
+   d="scan'208";a="244580431"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2022 21:39:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
+   d="scan'208";a="614559830"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Jan 2022 21:39:45 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8bmy-0009QE-La; Sat, 15 Jan 2022 05:39:44 +0000
+Date:   Sat, 15 Jan 2022 13:39:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2114/2384] arch/mips/n64/irq.c:13:13:
+ error: expected '=', ',', ';', 'asm' or '__attribute__' before
+ 'arch_init_irq'
+Message-ID: <202201151359.yIVoREOh-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220114081542.698002137@linuxfoundation.org>
-In-Reply-To: <20220114081542.698002137@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 15 Jan 2022 11:05:31 +0530
-Message-ID: <CA+G9fYtFfsDLPAfsXjbHeEqe9NP59E13x_=7uzx_k+8UOXMing@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/25] 5.10.92-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Jan 2022 at 13:48, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.92 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 16 Jan 2022 08:15:33 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.92-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
+commit: 9b3c6ae85a5f3f3a0471ed5fba5c33471c2d9290 [2114/2384] headers/deps: irq: Optimize <linux/irq.h> dependencies, remove <linux/slab.h>
+config: mips-randconfig-r036-20220113 (https://download.01.org/0day-ci/archive/20220115/202201151359.yIVoREOh-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=9b3c6ae85a5f3f3a0471ed5fba5c33471c2d9290
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 9b3c6ae85a5f3f3a0471ed5fba5c33471c2d9290
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/n64/ drivers/media/rc/
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+All errors (new ones prefixed by >>):
 
-## Build
-* kernel: 5.10.92-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.10.y
-* git commit: fe11f2e0d63baa47c1e36b02721b4fd7a1157955
-* git describe: v5.10.91-26-gfe11f2e0d63b
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.91-26-gfe11f2e0d63b
+   In file included from include/linux/interrupt.h:23,
+                    from arch/mips/n64/irq.c:8:
+   arch/mips/include/asm/irq.h:23:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'init_IRQ'
+      23 | extern void __init init_IRQ(void);
+         |                    ^~~~~~~~
+>> arch/mips/n64/irq.c:13:13: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'arch_init_irq'
+      13 | void __init arch_init_irq(void)
+         |             ^~~~~~~~~~~~~
 
-## Test Regressions (compared to v5.10.91)
-No test regressions found.
 
-## Metric Regressions (compared to v5.10.91)
-No metric regressions found.
+vim +13 arch/mips/n64/irq.c
 
-## Test Fixes (compared to v5.10.91)
-No test fixes found.
+baec970aa5ba11 Lauri Kasanen 2021-01-13  12  
+baec970aa5ba11 Lauri Kasanen 2021-01-13 @13  void __init arch_init_irq(void)
 
-## Metric Fixes (compared to v5.10.91)
-No metric fixes found.
+:::::: The code at line 13 was first introduced by commit
+:::::: baec970aa5ba11099ad7a91773350c91fb2113f0 mips: Add N64 machine type
 
-## Test result summary
-total: 94616, pass: 81315, fail: 544, skip: 11939, xfail: 818
+:::::: TO: Lauri Kasanen <cand@gmx.com>
+:::::: CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 255 passed, 4 failed
-* arm64: 37 total, 37 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 36 total, 36 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 30 passed, 4 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 46 passed, 6 failed
-* riscv: 24 total, 22 passed, 2 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 37 total, 37 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

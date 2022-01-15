@@ -2,96 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E18A48F738
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 14:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77FF448F73B
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 15:04:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbiAON6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 08:58:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
+        id S231856AbiAOODz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 09:03:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiAON6v (ORCPT
+        with ESMTP id S229800AbiAOODy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 08:58:51 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9C9C061574;
-        Sat, 15 Jan 2022 05:58:50 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id b13so45331572edn.0;
-        Sat, 15 Jan 2022 05:58:50 -0800 (PST)
+        Sat, 15 Jan 2022 09:03:54 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5474FC061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 06:03:54 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id w26so11328917wmi.0
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 06:03:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=MNIIAwZPN2WK/bRTkHTV9IygDz14rAm8Sea6YKv4518=;
-        b=NuBujBfcv1KJFzIZZ68NLu3JYoGDW5MAKMgBmxEZYEzGtqdae90cZ/CYsgzxHDm/VQ
-         HBnM3eQIhkT/lkuX2X5W2cw6Ai+S1LqH5D2dzx32tEJbOre/qGnKmKLhPQ5f392KW+nN
-         rZ80+hRnwGpYC4S6fG47AdAvHd9fg9KQMtHL+BooOjNnwwzw9Dxk0usxAzUkVmjH7YWO
-         bUK/RU8l390HX1ly7e2h9tNCUREOX23qHmL0hsG3iFGMZNrsQ6+danuvslmoarMmEUCp
-         wT6bB3i4h9WY/DcsX4+ccjAq1+Ycwy0gT9tKTooEuus0llVv5+C5GksEkiI8yQ45weme
-         prUQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BgqdAQ+WwQ2orxsAM2n1S2UekO1K+V1jDnafdr+cUBA=;
+        b=eNlULm9KFr7sVfv7XXX8WvBvJ3EfnXgUDJB50ROFdt/F+8ya6/aT3s+UQrnnIPVR9a
+         46btCi0k7UxcG9C16YryKFwdNsh3kpvNfwx5BcbuRatdkkZgwrp/ojsyvrylHuxYufIq
+         EhA4Wf2KVbxkJ1VPLZ6iWslGLpPkqdDXHC2cDUIO1sj8b7DP4Qo6bDkA6cFzpfx0fdQ8
+         Tb3cwWyN/t//79o4oszMDCL6TPrc+kmBrjlQs0RkEXQj3N0r5ZZq//cipYXG+jAsJuUB
+         4OANPlKVCQZ0wjnvXtBXaDb7t6wEW/Qy1dH1cmn/BUFoIOZF+hdrczNY5din6QbN8SWD
+         iShA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=MNIIAwZPN2WK/bRTkHTV9IygDz14rAm8Sea6YKv4518=;
-        b=BgrCIcXNdHC/pGuMTGiY9Br26tw0nO58kEe3axEa3+Exsh81qnyX/cFO/rbYuw5xNa
-         eSpr7XgiBTvMNF6pNUMcbctyb6/vFQIxsXNls5Jn6z74Q5GiR4g7k/OjfErvR9PcfbaD
-         YIbBzFPqQzCD8XXtpv4u1nnl/7lyRLRFOxD2Yo6Pe2gQ8GuodcQ27bYesKIsWWkD1MYQ
-         o1Lco+wSOkARl9oi0/47XBHk3F9sEDK0PAjWDBoDpVQ358VYMqlugSaxlkOSjy6ZPTQt
-         yI/mAIhxNIsS4zEfL10a57XMOXZd8LqA8El21Wok9NNiQ9RcsjHV1AdVep4ZuE3LKTX9
-         dWkw==
-X-Gm-Message-State: AOAM5339htQHLbY/cj1vTjTqAgXyH36c/PsBwSelgf8sMhdXA7BRvNCa
-        BQ4IPmbFP64gDBrKUqUz+3aO/83pyeU=
-X-Google-Smtp-Source: ABdhPJxoHKhgNSogvFF3KBWdCDZxLJbgDfDInFO2FBmO5cm08+L1VxSquUGOdmsKoABAGkXZ7wvBjw==
-X-Received: by 2002:a17:907:7e9e:: with SMTP id qb30mr10377494ejc.279.1642255129071;
-        Sat, 15 Jan 2022 05:58:49 -0800 (PST)
-Received: from ?IPv6:2a00:a040:197:458f:2395:a31f:2f8b:a545? ([2a00:a040:197:458f:2395:a31f:2f8b:a545])
-        by smtp.gmail.com with ESMTPSA id g21sm3338556edt.12.2022.01.15.05.58.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Jan 2022 05:58:48 -0800 (PST)
-Subject: Re: [PATCH 0/2] kconfig: Improve comment blocks in the .config file
-To:     masahiroy@kernel.org
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211213100043.45645-1-arielmarcovitch@gmail.com>
-From:   Ariel Marcovitch <arielmarcovitch@gmail.com>
-Message-ID: <343788ac-41bc-4308-6aae-03a00535e9f3@gmail.com>
-Date:   Sat, 15 Jan 2022 15:58:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BgqdAQ+WwQ2orxsAM2n1S2UekO1K+V1jDnafdr+cUBA=;
+        b=Co6jMUAUamXBOFkJmMwMKTZZjE/GKUaYCQRlYmk2ULq//dHlaG6SYD+eyy6Jox57sC
+         fe71wZc5z3Fm9498WcyH5S6tRhDyGJQv1Mfq6VRBC3wZYihTqTFOtbXW0GDsz7XnRlDQ
+         muAjddfh5CYvQrXqBxbZ0aFFJSijJLpSq1w/UrPV9t/USXm1Ctw4gY0PYs8PV5il03G2
+         96v4ZB+9uTPrjl8PEw40DWhZwOpiXxdz+PufZBh0Qsrn7dBMQJmnMf3DZ0TLQe+vzvv8
+         2pJpIonFGAIy4Y9tBBru1sAinTqUsoFJtAjjVz1Is2fJV3MTkpBR8pZzIsJBhDvHqkup
+         6lHQ==
+X-Gm-Message-State: AOAM533QKcOK9MrqimeUuKc9mMYb98vS2CSGwQZ+9yCf5KKa75ALnkmM
+        SGdL3HzW1qlhmDWlB4KhrAU=
+X-Google-Smtp-Source: ABdhPJxpkSz+rTg4zCg4BU+pdDS31h57yxHNbH9tGWP4j2dQMy8tIubmv1xnIBgPdZ60V/gmyOln5w==
+X-Received: by 2002:a05:6000:18ab:: with SMTP id b11mr12329440wri.385.1642255432721;
+        Sat, 15 Jan 2022 06:03:52 -0800 (PST)
+Received: from kyrandia.fritz.box ([2001:a61:5e8:7801:dabb:c1ff:fe6f:aedd])
+        by smtp.googlemail.com with ESMTPSA id p2sm11148434wmg.44.2022.01.15.06.03.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jan 2022 06:03:51 -0800 (PST)
+From:   Johannes Schickel <lordhoto@gmail.com>
+To:     alsa-devel@alsa-project.org
+Cc:     Johannes Schickel <lordhoto@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andrea Fagiani <andfagiani@gmail.com>,
+        Timo Gurr <timo.gurr@gmail.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] ALSA: usb-audio: add mapping for MSI MPG X570S Carbon Max Wifi.
+Date:   Sat, 15 Jan 2022 15:02:57 +0100
+Message-Id: <20220115140257.8751-1-lordhoto@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20211213100043.45645-1-arielmarcovitch@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping (would really like some feedback :) )
+The USB audio device 0db0:419c based on the Realtek ALC4080 chip exposes
+all playback volume controls as "PCM". This is makes distinguishing the
+individual functions hard.
 
-On 13/12/2021 12:00, Ariel Marcovitch wrote:
-> Hi there!
->
-> This series attempts to make the .config file format make more sense.
-> Currently menuconfig blocks look exactly like regular configs while
-> comment blocks look almost exactly like menu blocks.
->
-> The first patch makes menuconfig blocks look the same as menu blocks.
->
-> The second makes comment blocks look different than menu blocks.
->
-> The format for comment blocks in the second patch is a suggestion. I
-> realize some people will think the '###' prefix is distasteful. I'm open
-> to other options as well, I just couldn't think of a better option that
-> starts with '#', looks different from a menu and can't be confused with
-> a disabled config.
->
-> Ariel Marcovitch (2):
->    kconfig: Show menuconfigs as menus in the .config file
->    kconfig: Make comments look different than menus in .config
->
->   scripts/kconfig/confdata.c | 34 +++++++++++++++++++++++-----------
->   1 file changed, 23 insertions(+), 11 deletions(-)
->
->
-> base-commit: e06a61a89ccd3edda046c78f9d08aa045b8c4d32
+The added mapping distinguishes all playback volume controls as their
+respective function:
+ - Speaker              - for back panel output
+ - Frontpanel Headphone - for front panel output
+ - IEC958               - for digital output on the back panel
+
+This clarifies the individual volume control functions for users.
+
+Signed-off-by: Johannes Schickel <lordhoto@gmail.com>
+---
+ sound/usb/mixer_maps.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/sound/usb/mixer_maps.c b/sound/usb/mixer_maps.c
+index 5d391f62351b..96991ddf5055 100644
+--- a/sound/usb/mixer_maps.c
++++ b/sound/usb/mixer_maps.c
+@@ -431,6 +431,14 @@ static const struct usbmix_name_map aorus_master_alc1220vb_map[] = {
+ 	{}
+ };
+ 
++/* MSI MPG X570S Carbon Max Wifi with ALC4080  */
++static const struct usbmix_name_map msi_mpg_x570s_carbon_max_wifi_alc4080_map[] = {
++	{ 29, "Speaker Playback" },
++	{ 30, "Front Headphone Playback" },
++	{ 32, "IEC958 Playback" },
++	{}
++};
++
+ /*
+  * Control map entries
+  */
+@@ -577,6 +585,10 @@ static const struct usbmix_ctl_map usbmix_ctl_maps[] = {
+ 		.map = trx40_mobo_map,
+ 		.connector_map = trx40_mobo_connector_map,
+ 	},
++	{	/* MSI MPG X570S Carbon Max Wifi */
++		.id = USB_ID(0x0db0, 0x419c),
++		.map = msi_mpg_x570s_carbon_max_wifi_alc4080_map,
++	},
+ 	{	/* MSI TRX40 */
+ 		.id = USB_ID(0x0db0, 0x543d),
+ 		.map = trx40_mobo_map,
+-- 
+2.34.1
+

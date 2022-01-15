@@ -2,126 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB6648F3FB
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2625348F403
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiAOBNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 20:13:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
+        id S231901AbiAOBR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 20:17:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiAOBNj (ORCPT
+        with ESMTP id S231156AbiAOBRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 20:13:39 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF805C061574;
-        Fri, 14 Jan 2022 17:13:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=j4X69JcLD6mdNWGbTcpDg4N2e78q2bD3JRVc0T2jhBs=; b=lS9h5WOextxA0Om5wNMAfwTXEa
-        oh0VkAalNyGQuqUvoEJC2NPDtDNs2xeN9h6fXM0sQhTfxnvxIpmKPTJse7I6NcVErK8sxJMUN0WPJ
-        CwvZwG8GDtRiDC7lb4bQDAwbXiiiNpbgqMaBDlt7/8/5m5cGiDXiEAjKtC6dlypZOppiJXP03g1Ee
-        5Hu0R3InL5I1gy0L47RZafgBDJ/98wqceuGkCz8NoNEfE7NgOsSdATX+qGW/eMO5gNEqCHQ0yqvAn
-        TZaYJuAMHimVlbSpT5iwGIkaF5EE3vGUBrpCv1cggDbY02o2Dd/caG6n7tnYHoqQWybl4mYVcpA70
-        ri+kW4kQ==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n8XdS-00AWnV-Ui; Sat, 15 Jan 2022 01:13:39 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH] remoteproc: qcom: q6v5: fix service routines build errors
-Date:   Fri, 14 Jan 2022 17:13:38 -0800
-Message-Id: <20220115011338.2973-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        Fri, 14 Jan 2022 20:17:55 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDA1C06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 17:17:54 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id e3so32873860lfc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 17:17:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DSUCsXvUq5CC+YLJR6sM+UncKVzG/eChv6GRiJ5ewuo=;
+        b=Km7B94yItHq7aVfP1T9NUkUg0CfyYu53x8ocQbPhc+dKDkm2Z3Qdmqq6lhxvM80Pks
+         16ttYCCVWt7dbiTvfB/TJxujAvsC6cSa06GEpsKkkuaeQlcM8M+t4u99s5lARvhfxInW
+         Ci1oy5mNVTaPwV+2dSBlSscKmvmZ+mg0LMkcK6MV3GSRb+XMtxMOJgcgXRxQrrOziDKZ
+         Bc7zRC9XKZDw0XoE+bVrA4iEkQtZ7fVhKAaqedPN8V6l0oR6BZz+wRBmSzU31XZDthCr
+         spefGhSvdjB+tbrWX7EjLUw/q7lrjUel8Kaldz+FP/57vDBGGjvW2MPQW/bngKKnr/RE
+         IoZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DSUCsXvUq5CC+YLJR6sM+UncKVzG/eChv6GRiJ5ewuo=;
+        b=ArNi0I/jRZOe9iFPR3KtZQHZFBFc46bX73uuRrxTSFajNvHo+D3NxQsvzzjQJChnEb
+         FRNdLWLG0KK6rb9tj8A0S+YozJ8N0/+D+0ZPC3K1XXzdOo0VDlYNxxTtzRvME3A3ZDOw
+         KPNeC+or76hhVvmnI0F3W7YvBTZ0oYOhodjylpHO+nFu05W7S+qfZEQz4VFJt5e4+sik
+         tZWnWScECm6A9oiOaeEhJdQT9q4LT8SZn/s3SIbhJJ0GxG04+NV4v0W2B6nEswPyWV9t
+         ylFBoVeYJMFIuknRPYGMQi/jTqN9LBAsieHfdrCibKmcyv4/ZsYjsPsYX5m79j5dv9qz
+         y1/g==
+X-Gm-Message-State: AOAM532VurwX/qrvzcfHF1Ndu8SnumlHEHPPSgEi9VTb1C/LGpXc4EfI
+        ikEcVeMO9YKliHG7QLfcvhnQh/88Oj97s/i/PcAuxA==
+X-Google-Smtp-Source: ABdhPJySDowHRxGMfXN2K9VReVwH+SUfch9JrimtyE5ccTX6eX5LjL8lOKhq1C4RF1mflvPlwsqfGtTGOZn0hxrfPFg=
+X-Received: by 2002:a05:6512:3e1f:: with SMTP id i31mr4004663lfv.661.1642209473081;
+ Fri, 14 Jan 2022 17:17:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAO_48GF=ttKqSOm9GRoA3Mq+-RQOtRjWp449XPcz-wH=kjaTjw@mail.gmail.com>
+ <20220113123406.11520-1-guangming.cao@mediatek.com> <4f88205c1b344aea8608960e2f85b8f4@intel.com>
+ <e657f5257cbf4955817b0bbf037de9f9@intel.com> <24157767-dc29-bbdd-5428-d89ecc6b9606@amd.com>
+ <CALAqxLXRtYDNQ8y1efVGa4SwUH_oAaHviZFjsOVSNFmUHnCCeQ@mail.gmail.com>
+ <6b8182a1-7cdc-7369-5c34-e6d0c24efcca@amd.com> <82faa62f1bc946cf2f9ee2f7d15c567162238eab.camel@mediatek.com>
+In-Reply-To: <82faa62f1bc946cf2f9ee2f7d15c567162238eab.camel@mediatek.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Fri, 14 Jan 2022 17:17:39 -0800
+Message-ID: <CALAqxLUSjHoLpgFLcvqmDfv7Uip2VwHS5d_5x2nzw=P3rA2NDA@mail.gmail.com>
+Subject: Re: [PATCH v3] dma-buf: dma-heap: Add a size check for allocation
+To:     "Guangming.Cao" <guangming.cao@mediatek.com>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "wsd_upstream@mediatek.com" <wsd_upstream@mediatek.com>,
+        "libo.kang@mediatek.com" <libo.kang@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "yf.wang@mediatek.com" <yf.wang@mediatek.com>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "lmark@codeaurora.org" <lmark@codeaurora.org>,
+        "benjamin.gaignard@linaro.org" <benjamin.gaignard@linaro.org>,
+        "bo.song@mediatek.com" <bo.song@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "labbott@redhat.com" <labbott@redhat.com>,
+        "mingyuan.ma@mediatek.com" <mingyuan.ma@mediatek.com>,
+        "jianjiao.zeng@mediatek.com" <jianjiao.zeng@mediatek.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_QCOM_AOSS_QMP=m and CONFIG_QCOM_Q6V5_MSS=y, the builtin
-driver cannot call into the loadable module's low-level service
-functions. Trying to build with that config combo causes linker errors.
+On Fri, Jan 14, 2022 at 4:04 AM Guangming.Cao
+<guangming.cao@mediatek.com> wrote:
+>
+> On Fri, 2022-01-14 at 08:16 +0100, Christian K=C3=B6nig wrote:
+> > Am 14.01.22 um 00:26 schrieb John Stultz:
+> > > On Thu, Jan 13, 2022 at 5:05 AM Christian K=C3=B6nig
+> > > <christian.koenig@amd.com> wrote:
+> > > > Am 13.01.22 um 14:00 schrieb Ruhl, Michael J:
+> > > > > > -----Original Message-----
+> > > > > > From: dri-devel <dri-devel-bounces@lists.freedesktop.org> On
+> > > > > > Behalf Of
+> > > > > > Ruhl, Michael J
+> > > > > > > -----Original Message-----
+> > > > > > > From: dri-devel <dri-devel-bounces@lists.freedesktop.org>
+> > > > > > > On Behalf Of
+> > > > > > > guangming.cao@mediatek.com
+> > > > > > > +   /*
+> > > > > > > +    * Invalid size check. The "len" should be less than
+> > > > > > > totalram.
+> > > > > > > +    *
+> > > > > > > +    * Without this check, once the invalid size allocation
+> > > > > > > runs on a process
+> > > > > > > that
+> > > > > > > +    * can't be killed by OOM flow(such as "gralloc" on
+> > > > > > > Android devices), it
+> > > > > > > will
+> > > > > > > +    * cause a kernel exception, and to make matters worse,
+> > > > > > > we can't find
+> > > > > > > who are using
+> > > > > > > +    * so many memory with "dma_buf_debug_show" since the
+> > > > > > > relevant
+> > > > > > > dma-buf hasn't exported.
+> > > > > > > +    */
+> > > > > > > +   if (len >> PAGE_SHIFT > totalram_pages())
+> > > > > >
+> > > > > > If your "heap" is from cma, is this still a valid check?
+> > > > >
+> > > > > And thinking a bit further, if I create a heap from something
+> > > > > else (say device memory),
+> > > > > you will need to be able to figure out the maximum allowable
+> > > > > check for the specific
+> > > > > heap.
+> > > > >
+> > > > > Maybe the heap needs a callback for max size?
+> Yes, I agree with this solution.
+> If dma-heap framework support this via adding a callback to support it,
+> seems it's more clear than adding a limitation in dma-heap framework
+> since each heap maybe has different limitation.
+> If you prefer adding callback, I can update this patch and add totalram
+> limitation to system dma-heap.
 
-There are two problems here. First, drivers/remoteproc/qcom_q6v5.c
-should #include <linux/soc/qcom/qcom_aoss.h> for the definitions of
-the service functions, depending on whether CONFIG_QCOM_AOSS_QMP is
-set/enabled or not. Second, the qcom remoteproc drivers should depend
-on QCOM_AOSS_QMP iff it is enabled (=y or =m) so that the qcom
-remoteproc drivers can be built properly.
+If the max value is per-heap, why not enforce that value in the
+per-heap allocation function?
 
-This prevents these build errors:
+Moving the check to the heap alloc to me seems simpler to me than
+adding complexity to the infrastructure to add a heap max_size
+callback. Is there some other use for the callback that you envision?
 
-aarch64-linux-ld: drivers/remoteproc/qcom_q6v5.o: in function `q6v5_load_state_toggle':
-qcom_q6v5.c:(.text+0xc4): undefined reference to `qmp_send'
-aarch64-linux-ld: drivers/remoteproc/qcom_q6v5.o: in function `qcom_q6v5_deinit':
-(.text+0x2e4): undefined reference to `qmp_put'
-aarch64-linux-ld: drivers/remoteproc/qcom_q6v5.o: in function `qcom_q6v5_init':
-(.text+0x778): undefined reference to `qmp_get'
-aarch64-linux-ld: (.text+0x7d8): undefined reference to `qmp_put'
-
-Fixes: c1fe10d238c0 ("remoteproc: qcom: q6v5: Use qmp_send to update co-processor load state")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: linux-remoteproc@vger.kernel.org
-Cc: Sibi Sankar <sibis@codeaurora.org>
-Cc: Stephen Boyd <swboyd@chromium.org>
----
- drivers/remoteproc/Kconfig     |    4 ++++
- drivers/remoteproc/qcom_q6v5.c |    1 +
- 2 files changed, 5 insertions(+)
-
---- linux-next-20220114.orig/drivers/remoteproc/qcom_q6v5.c
-+++ linux-next-20220114/drivers/remoteproc/qcom_q6v5.c
-@@ -10,6 +10,7 @@
- #include <linux/platform_device.h>
- #include <linux/interrupt.h>
- #include <linux/module.h>
-+#include <linux/soc/qcom/qcom_aoss.h>
- #include <linux/soc/qcom/smem.h>
- #include <linux/soc/qcom/smem_state.h>
- #include <linux/remoteproc.h>
---- linux-next-20220114.orig/drivers/remoteproc/Kconfig
-+++ linux-next-20220114/drivers/remoteproc/Kconfig
-@@ -180,6 +180,7 @@ config QCOM_Q6V5_ADSP
- 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
- 	depends on QCOM_SYSMON || QCOM_SYSMON=n
- 	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
-+	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
- 	select MFD_SYSCON
- 	select QCOM_PIL_INFO
- 	select QCOM_MDT_LOADER
-@@ -199,6 +200,7 @@ config QCOM_Q6V5_MSS
- 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
- 	depends on QCOM_SYSMON || QCOM_SYSMON=n
- 	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
-+	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
- 	select MFD_SYSCON
- 	select QCOM_MDT_LOADER
- 	select QCOM_PIL_INFO
-@@ -218,6 +220,7 @@ config QCOM_Q6V5_PAS
- 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
- 	depends on QCOM_SYSMON || QCOM_SYSMON=n
- 	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
-+	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
- 	select MFD_SYSCON
- 	select QCOM_PIL_INFO
- 	select QCOM_MDT_LOADER
-@@ -239,6 +242,7 @@ config QCOM_Q6V5_WCSS
- 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
- 	depends on QCOM_SYSMON || QCOM_SYSMON=n
- 	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
-+	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
- 	select MFD_SYSCON
- 	select QCOM_MDT_LOADER
- 	select QCOM_PIL_INFO
+thanks
+-john

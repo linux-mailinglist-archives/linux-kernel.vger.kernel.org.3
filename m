@@ -2,181 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC56648F423
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACD748F428
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbiAOB0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 20:26:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
+        id S232006AbiAOB34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 20:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiAOB0b (ORCPT
+        with ESMTP id S229470AbiAOB34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 20:26:31 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A095C06161C
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 17:26:31 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id q16-20020a4a3010000000b002dde2463e66so2959583oof.9
-        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 17:26:31 -0800 (PST)
+        Fri, 14 Jan 2022 20:29:56 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8DBC061574;
+        Fri, 14 Jan 2022 17:29:55 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id w7so9287955ioj.5;
+        Fri, 14 Jan 2022 17:29:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iGxhzdY+o8fZ08CLZJyGxW7d23UVHciFJHOknE38cZw=;
-        b=iY7KJRBkntVU/rVadUv0PJdb2KFcPKF6PPUUe1IH2Di0GhGZ+a66TCmxaI27Sy6K+O
-         xUleFpkSeSW8rDXQtCd/ZcIsHwxjTi2wj2abfIPaYDB0Gh1AdHQfRGa8ODwTfFypjeN3
-         h+iS6UO4wJDhB41ypCxmNXU1ZILBnL8je6tDO+mAMWOcI4iz+mBvbNDCxL1PqEQexXgr
-         p8ojIWbPPFqewMueT3lthQW2KLwMTqbaScL87wYoUadMGXTaUX4i7SDAfUTUQ0+I7Iv4
-         c8bjM7BhMb7FrVn+cHVwma4ZPp1qBk1MbqcIlAiylmeRZelK0ikhu8JhhOd+ywqRpDEf
-         Tf+Q==
+         :cc:content-transfer-encoding;
+        bh=GCZeq11EnvKAVKRXJ+Wljwr0enBfs9n5483mIDTDdOY=;
+        b=Vz/uODpM9Be/LGmGZphd/faVAELhVJKHdhdJUYUDjlXwtHhA9Q1pXYvpKDAJ1VW7JC
+         8zfjfVPqBpM4hjsLwhF+lA+2vSJz/vfDPnlBlijPhphfvxtJC96+A5QD5Jierl9blQ0r
+         8xuR8yPXMBoT0aZk1u2vQUg6KNf55t+CzJ8IwE1d6/y3bOWvkYDkri09etCGg+VpiX7R
+         xDuBmV102/pJDnGxpON+JKMCcDDmku2X7Kx9vbqxeIjtB1Z8TgzYXkX3ZFiFFj2J7Wkw
+         bXhqM1ZudTQyxu48PHCf9oR3AqiWtKMzkR1ykfRAq1tzjQnrzB7ZREfCqvxS/cPNCson
+         4NvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iGxhzdY+o8fZ08CLZJyGxW7d23UVHciFJHOknE38cZw=;
-        b=UuKZU6UoF0N4lyI2/e8MIdvDsjxbvYB4SRxhgH1PGHTwrYRh0v3Q1WLu6n3tlx8+ip
-         mobli78eQqaWhWj11M311K7Uj1XAWsMzmarChrl6uUavcL/SWNMnB+y8TjDtZx5J/kPN
-         /LcupNQRBLx2lQJvzQe+Boop/H4rrj+JIb0qzTB7UVFMF8XX2pnl3ZzggFdjZrAPjqzl
-         g5asOcyWkkmdNn9CiRkHdBCDuYuFRpuiosD7ey1k+DTcsAI+6r+ggKEaFJpQqA+yBlVZ
-         qywCscjHIBOM3UbFLbjg7wpQGdAJagL2rjN20NTl3w8Ucg0EbisdhN6Okrl/fJNxgxWM
-         2dwg==
-X-Gm-Message-State: AOAM530Ii86hxjg66cDoLxD/+n5TrRvviCR1WINVGxDyYyDJLwqkr93P
-        RL9l1JkHWZD55FyM2qPDxyUXRobelNiaMaXi3MuYGg==
-X-Google-Smtp-Source: ABdhPJwnBXn26R+PGLexcGDygO0NDDlzWoHG9/A0kn5cgChrw7gacpCWI4kqdbckb+NpQsQn+2ru/m5TniKKnsyTS9U=
-X-Received: by 2002:a4a:dc16:: with SMTP id p22mr8238076oov.85.1642209990389;
- Fri, 14 Jan 2022 17:26:30 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=GCZeq11EnvKAVKRXJ+Wljwr0enBfs9n5483mIDTDdOY=;
+        b=7CJfDBAy8R0ISxfC1SEirpKUzalQiOXoG2cGAxS4tf8lztDPq/q1XOe+9gEAosBnFy
+         +kG/0gNmWZw6NN1zZKuQ+S1mGoQYWhHOcmv/ppXeQucLwm3WuwAqCOiep9Bg689IpmKu
+         QuLuUoXP6V6vOVgAO60tiMYE2Uy//tlZB1AhUZIUgnf1XZJmWrHiD0DKD7ggoo4EiAFW
+         tMHtOT0YKgHojCXSfS+MV0yrrFyGQlYWqL1lzGZpXDFGpqwTFGvVhBj/wzixM2IBSSbh
+         JoATHCWM8EP9d2I8WDsiO6uhyrn35txOU7iaFOlt7PTR/tAdA3k++416q1XjHTKlnliN
+         tCNA==
+X-Gm-Message-State: AOAM532HIyX0sW6PDeN3U87FH+TovxrMo/beepRbJQjXvnDe1xB0AnqV
+        TN1EQHXyUroHdZUgfUHa4LwDimGSLXDPX64fBBI=
+X-Google-Smtp-Source: ABdhPJzb9ulZQ0BEYgTf+m/NE8souXe8oG3Lt0HK1RhGGcmIYBF5wqsLpy+zc1Wm7CpDkFgStZUV2UrzDqErgPlguls=
+X-Received: by 2002:a02:bb8d:: with SMTP id g13mr5414980jan.103.1642210195208;
+ Fri, 14 Jan 2022 17:29:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20211117080304.38989-1-likexu@tencent.com> <c840f1fe-5000-fb45-b5f6-eac15e205995@redhat.com>
-In-Reply-To: <c840f1fe-5000-fb45-b5f6-eac15e205995@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 14 Jan 2022 17:26:19 -0800
-Message-ID: <CALMp9eQCEFsQTbm7F9CqotirbP18OF_cQUySb7Q=dqiuiK1FMg@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/svm: Add module param to control PMU virtualization
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220113162228.5576-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220113162228.5576-1-jiapeng.chong@linux.alibaba.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 14 Jan 2022 17:29:43 -0800
+Message-ID: <CAEf4BzYiNbJAW4TJjvQR0mfFGtBXrqyqgoM2TuwDqSJG18cA0Q@mail.gmail.com>
+Subject: Re: [PATCH] samples/bpf: xdpsock: Use swap() instead of open coding it
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        john fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 5:25 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+On Thu, Jan 13, 2022 at 8:22 AM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
 >
-> On 11/17/21 09:03, Like Xu wrote:
-> > From: Like Xu <likexu@tencent.com>
-> >
-> > For Intel, the guest PMU can be disabled via clearing the PMU CPUID.
-> > For AMD, all hw implementations support the base set of four
-> > performance counters, with current mainstream hardware indicating
-> > the presence of two additional counters via X86_FEATURE_PERFCTR_CORE.
-> >
-> > In the virtualized world, the AMD guest driver may detect
-> > the presence of at least one counter MSR. Most hypervisor
-> > vendors would introduce a module param (like lbrv for svm)
-> > to disable PMU for all guests.
-> >
-> > Another control proposal per-VM is to pass PMU disable information
-> > via MSR_IA32_PERF_CAPABILITIES or one bit in CPUID Fn4000_00[FF:00].
-> > Both of methods require some guest-side changes, so a module
-> > parameter may not be sufficiently granular, but practical enough.
-> >
-> > Signed-off-by: Like Xu <likexu@tencent.com>
-> > ---
-> >   arch/x86/kvm/cpuid.c   |  2 +-
-> >   arch/x86/kvm/svm/pmu.c |  4 ++++
-> >   arch/x86/kvm/svm/svm.c | 11 +++++++++++
-> >   arch/x86/kvm/svm/svm.h |  1 +
-> >   4 files changed, 17 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> > index 2d70edb0f323..647af2a184ad 100644
-> > --- a/arch/x86/kvm/cpuid.c
-> > +++ b/arch/x86/kvm/cpuid.c
-> > @@ -487,7 +487,7 @@ void kvm_set_cpu_caps(void)
-> >               F(CR8_LEGACY) | F(ABM) | F(SSE4A) | F(MISALIGNSSE) |
-> >               F(3DNOWPREFETCH) | F(OSVW) | 0 /* IBS */ | F(XOP) |
-> >               0 /* SKINIT, WDT, LWP */ | F(FMA4) | F(TBM) |
-> > -             F(TOPOEXT) | F(PERFCTR_CORE)
-> > +             F(TOPOEXT) | 0 /* PERFCTR_CORE */
-> >       );
-> >
-> >       kvm_cpu_cap_mask(CPUID_8000_0001_EDX,
-> > diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-> > index fdf587f19c5f..a0bcf0144664 100644
-> > --- a/arch/x86/kvm/svm/pmu.c
-> > +++ b/arch/x86/kvm/svm/pmu.c
-> > @@ -16,6 +16,7 @@
-> >   #include "cpuid.h"
-> >   #include "lapic.h"
-> >   #include "pmu.h"
-> > +#include "svm.h"
-> >
-> >   enum pmu_type {
-> >       PMU_TYPE_COUNTER = 0,
-> > @@ -100,6 +101,9 @@ static inline struct kvm_pmc *get_gp_pmc_amd(struct kvm_pmu *pmu, u32 msr,
-> >   {
-> >       struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
-> >
-> > +     if (!pmuv)
-> > +             return NULL;
-> > +
-> >       switch (msr) {
-> >       case MSR_F15H_PERF_CTL0:
-> >       case MSR_F15H_PERF_CTL1:
-> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > index 21bb81710e0f..062e48c191ee 100644
-> > --- a/arch/x86/kvm/svm/svm.c
-> > +++ b/arch/x86/kvm/svm/svm.c
-> > @@ -190,6 +190,10 @@ module_param(vgif, int, 0444);
-> >   static int lbrv = true;
-> >   module_param(lbrv, int, 0444);
-> >
-> > +/* enable/disable PMU virtualization */
-> > +bool pmuv = true;
-> > +module_param(pmuv, bool, 0444);
-> > +
-> >   static int tsc_scaling = true;
-> >   module_param(tsc_scaling, int, 0444);
-> >
-> > @@ -952,6 +956,10 @@ static __init void svm_set_cpu_caps(void)
-> >           boot_cpu_has(X86_FEATURE_AMD_SSBD))
-> >               kvm_cpu_cap_set(X86_FEATURE_VIRT_SSBD);
-> >
-> > +     /* AMD PMU PERFCTR_CORE CPUID */
-> > +     if (pmuv && boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
-> > +             kvm_cpu_cap_set(X86_FEATURE_PERFCTR_CORE);
-> > +
-> >       /* CPUID 0x8000001F (SME/SEV features) */
-> >       sev_set_cpu_caps();
-> >   }
-> > @@ -1085,6 +1093,9 @@ static __init int svm_hardware_setup(void)
-> >                       pr_info("LBR virtualization supported\n");
-> >       }
-> >
-> > +     if (!pmuv)
-> > +             pr_info("PMU virtualization is disabled\n");
-> > +
-> >       svm_set_cpu_caps();
-> >
-> >       /*
-> > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> > index 0d7bbe548ac3..08e1c19ffbdf 100644
-> > --- a/arch/x86/kvm/svm/svm.h
-> > +++ b/arch/x86/kvm/svm/svm.h
-> > @@ -32,6 +32,7 @@
-> >   extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
-> >   extern bool npt_enabled;
-> >   extern bool intercept_smi;
-> > +extern bool pmuv;
-> >
-> >   /*
-> >    * Clean bits in VMCB.
-> >
+> Clean the following coccicheck warning:
 >
-> Queued, thanks - just changed the parameter name to "pmu".
+> ./samples/bpf/xdpsock_user.c:632:22-23: WARNING opportunity for swap().
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  samples/bpf/xdpsock_user.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+> index aa50864e4415..30065c703c77 100644
+> --- a/samples/bpf/xdpsock_user.c
+> +++ b/samples/bpf/xdpsock_user.c
+> @@ -626,11 +626,8 @@ static void swap_mac_addresses(void *data)
+>         struct ether_header *eth =3D (struct ether_header *)data;
+>         struct ether_addr *src_addr =3D (struct ether_addr *)&eth->ether_=
+shost;
+>         struct ether_addr *dst_addr =3D (struct ether_addr *)&eth->ether_=
+dhost;
+> -       struct ether_addr tmp;
+>
+> -       tmp =3D *src_addr;
+> -       *src_addr =3D *dst_addr;
+> -       *dst_addr =3D tmp;
+> +       swap(*src_addr, *dst_addr);
 
-Whoops! The global 'pmu' is hidden by a local 'pmu' in get_gp_pmc_amd().
+Don't mindlessly apply any suggestion of any robot/script without at
+least compile-testing:
+
+/data/users/andriin/linux/samples/bpf/xdpsock_user.c: In function
+=E2=80=98swap_mac_addresses=E2=80=99:
+/data/users/andriin/linux/samples/bpf/xdpsock_user.c:630:2: warning:
+implicit declaration of function =E2=80=98swap=E2=80=99; did you mean =E2=
+=80=98mmap=E2=80=99?
+[-Wimplicit-function-declaration]
+  swap(*src_addr, *dst_addr);
+  ^~~~
+  mmap
+
+I think this exact change was accidentally applied recently and backed
+out. Please stop sending such "improvements".
+
+
+>  }
+>
+>  static void hex_dump(void *pkt, size_t length, u64 addr)
+> --
+> 2.20.1.7.g153144c
+>

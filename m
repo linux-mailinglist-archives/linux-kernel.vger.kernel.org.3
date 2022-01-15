@@ -2,93 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B3F48F7F7
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C001048F7FA
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 17:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233181AbiAOQqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 11:46:06 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:65278 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229784AbiAOQqF (ORCPT
+        id S233101AbiAOQrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 11:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229471AbiAOQrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 11:46:05 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20FDxg1q018448;
-        Sat, 15 Jan 2022 16:45:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2021-07-09; bh=xFdErQzZhWw36cmChgQUJSnCaxzupFnzpJu6evk43mo=;
- b=0YN07xkKKmTo6HudaMgLxjh5ZkjoEvQXMgK8kCRH6oHE2JskoRCyHQqHg32sufyroNzr
- pFGE5RSYaEUG/231fDrs87NINPd3gP4juzgM30ajdbrQAGLhvJUfoleJHKDfusOcgGZm
- 7Hj7FHyJTHy9WErAmyuzVrxXCoO1cyzzqtPo88AXDUwBSdgj8JgjImuBo+IIPPEli5Bu
- 7OVPnKZI4e+Rn+s5NisPMQSV1wRXd8HZ/ZRW9LrGhoUq93kLSLTSIi3rV9O1yny1F24j
- j0bkINFliy36x5sWT78Mg7YG2MPSNetfDu2KkmAPEVsgsslNC3gFaAHgQeNdRIu2RyjF Rw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dkn22rrm6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 15 Jan 2022 16:45:57 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20FGe8qh128341;
-        Sat, 15 Jan 2022 16:45:56 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 3dkqqhh8rj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 15 Jan 2022 16:45:56 +0000
-Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20FGjtqK136628;
-        Sat, 15 Jan 2022 16:45:55 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
-        by userp3020.oracle.com with ESMTP id 3dkqqhh8rc-1;
-        Sat, 15 Jan 2022 16:45:55 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     harshit.m.mogalapalli@oracle.com, dan.carpenter@oracle.com,
-        kernel-janitors@vger.kernel.org, Dave Airlie <airlied@redhat.com>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Robert Tarasov <tutankhamen@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/udl: Return correct error code on kmalloc failure
-Date:   Sat, 15 Jan 2022 08:45:25 -0800
-Message-Id: <20220115164525.50258-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 15 Jan 2022 11:47:07 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87903C061574;
+        Sat, 15 Jan 2022 08:47:06 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id a18so46360564edj.7;
+        Sat, 15 Jan 2022 08:47:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=umg3fmIHEU7ouEUqxByuwXez80RylgBi5NxgeR5uNbQ=;
+        b=XtM7/t4yjYeD7SB0BHoS/8zjCi3EyHDHyN8e+nPG3/QFmujQ1mEftGtLVzA59gNri8
+         N5EOUb0FZImDOY6t+xgq0FqVwNXEMSuIGL651CgPH7ooF5ASBPja9tL8vOv4LsuCpXC9
+         EgTXJLVNtSwXVfPBRMcln6JzB52gwoca0kNu4Y7K6zU5I3Px4vCIY7c0c2AWIEBDAajA
+         YiI7OjPLq8qUmyPHDc9t8kBS+RCNmgXkyHxf8Y5PiTHKt7JXIkufiuhCaHc1KTuoWler
+         yeh7qkRQuaqLP65bFQrf1xvodxCRXRBFt4SlqstNUwoQ7nX73QeHJevivhiASdeiwZBi
+         9E2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=umg3fmIHEU7ouEUqxByuwXez80RylgBi5NxgeR5uNbQ=;
+        b=BWeApdd+nIB72WcIRjsObTiIs/JOqW25mhqK+O+2+gVeXHwamRGuau35nZEbHmcqbh
+         3HPNtYY19R+ed3fF+GcQ9eCsoIX7N9rGc4y19yi0vnpCahZvoUr/55fFIF8TN9X6/7My
+         cd48yUWGA9uWgFULUY4GGXXx9RJcNK4AeNNa2A2JoBWmqK43rtIQLACBj+Q1VhoBiuwR
+         vVECPCRMbAcVP2d6rnQdfDXtSnbxT3OpKZJTkzg9IVlad+2JoxZQPRGTCZs/M2NRbtKp
+         L3GNiW72sz+vM7MAbu91EBINPilJaEjTEYmmGBPLCe2aVGARGfyBtymdZp2xXZS7HDbN
+         msaw==
+X-Gm-Message-State: AOAM533C9GfiLjjr8JdWNk+S3CUXqP6lQARe0aYLrWfECFA1PtcPJSgM
+        rxaCAFFqB5LA7JykS30DkX8faXoRhKyGSOSJl7g=
+X-Google-Smtp-Source: ABdhPJyH0UIPV8JqnNsONGk7+0AcajsTKmtphUYvVBb6LJAlzTTQZj8ELY3WoewqdICJa2EcIezozG5CquyVZSmgNis=
+X-Received: by 2002:a05:6402:289a:: with SMTP id eg26mr334586edb.318.1642265225026;
+ Sat, 15 Jan 2022 08:47:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: EMXgLv04YryngQF4cU4jLsac9EK5n8tg
-X-Proofpoint-ORIG-GUID: EMXgLv04YryngQF4cU4jLsac9EK5n8tg
-To:     unlisted-recipients:; (no To-header on input)
+References: <20220111192952.49040-1-ivan@cloudflare.com> <CAA93jw6HKLh857nuh2eX2N=siYz5wwQknMaOtpkqLzpfWTGhuA@mail.gmail.com>
+ <CABWYdi0ZHYvzzP9SFOCJhnfyMP12Ot9ALEmXg75oeXBWRAD8KQ@mail.gmail.com>
+ <CAA93jw5+LjKLcCaNr5wJGPrXhbjvLhts8hqpKPFx7JeWG4g0AA@mail.gmail.com> <CABWYdi1p=rRQM3oySw2+N+mcrUq3bXA5MXm8cHmC3=qfCU5SDA@mail.gmail.com>
+In-Reply-To: <CABWYdi1p=rRQM3oySw2+N+mcrUq3bXA5MXm8cHmC3=qfCU5SDA@mail.gmail.com>
+From:   Dave Taht <dave.taht@gmail.com>
+Date:   Sat, 15 Jan 2022 08:46:52 -0800
+Message-ID: <CAA93jw435mThYcBA_7Sf1Z6W_bZrLuK8FLHw8AgAwg0+3y6PBw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] tcp: bpf: Add TCP_BPF_RCV_SSTHRESH for bpf_setsockopt
+To:     Ivan Babrou <ivan@cloudflare.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Eric Dumazet <edumazet@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--ENOMEM is correct error code to return on a memory allocation failure
-instead of -1.
+On Fri, Jan 14, 2022 at 2:21 PM Ivan Babrou <ivan@cloudflare.com> wrote:
+>
+> On Thu, Jan 13, 2022 at 9:44 PM Dave Taht <dave.taht@gmail.com> wrote:
+> > Yes, but with the caveats below. I'm fine with you just saying round tr=
+ips,
+> > and making this api possible.
+> >
+> > It would comfort me further if you could provide an actual scenario.
+>
+> The actual scenario is getting a response as quickly as possible on a
+> fresh connection across long distances (200ms+ RTT). If an RPC
+> response doesn't fit into the initial 64k of rcv_ssthresh, we end up
+> requiring more roundrips to receive the response. Some customers are
+> very picky about the latency they measure and cutting the extra
+> roundtrips made a very visible difference in the tests.
+>
+> > See also:
+> >
+> > https://datatracker.ietf.org/doc/html/rfc6928
+> >
+> > which predates packet pacing (are you using sch_fq?)
+>
+> We are using fq and bbr.
+>
+> > > Congestion window is a learned property, not a static number. You
+> > > won't get a large initcwnd towards a poor connection.
+> >
+> > initcwnd is set globally or on a per route basis.
 
-Smatch Warning:
-drivers/gpu/drm/udl/udl_connector.c:27 udl_get_edid_block() warn:
-returning -1 instead of -ENOMEM is sloppy
+Like I said, retaining state from an existing connection as to the
+window is ok. i think arbitrarily declaring a window like this
+for a new connection is not.
 
-Fixes: a51143001d9e ("drm/udl: Refactor edid retrieving in UDL driver (v2)")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
- drivers/gpu/drm/udl/udl_connector.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> With TCP_BPF_IW the world is your oyster.
 
-diff --git a/drivers/gpu/drm/udl/udl_connector.c b/drivers/gpu/drm/udl/udl_connector.c
-index 930574ad2bca..b7a9c6d103ba 100644
---- a/drivers/gpu/drm/udl/udl_connector.c
-+++ b/drivers/gpu/drm/udl/udl_connector.c
-@@ -24,7 +24,7 @@ static int udl_get_edid_block(void *data, u8 *buf, unsigned int block,
- 
- 	read_buff = kmalloc(2, GFP_KERNEL);
- 	if (!read_buff)
--		return -1;
-+		return -ENOMEM;
- 
- 	for (i = 0; i < len; i++) {
- 		int bval = (i + block * EDID_LENGTH) << 8;
--- 
-2.27.0
+The oyster has to co-habit in this ocean with all the other life
+there, and I would be comforted if your customer also tracked various
+other TCP_INFO statistics, like RTT growth, loss, marks, and
+retransmits, and was aware of not just the self harm inflicted but of
+collateral damage. In fact I really wish more were instrumenting
+everything with that, of late we've seen a lot of need for
+TCP_NOTSENT_LOWAT in things like apache traffic server in containers.
+A simple one line patch for an widely used app I can't talk about, did
+wonders for actual perceived throughput and responsiveness by the end
+user. Measuring from the reciever is far, far more important than
+measuring from the sender. Collecting long term statistics over many
+connections, also, from
+the real world. I hope y'all have been instrumenting your work as well
+as google has, on these fronts.
 
+I know that I'm getting old and crunchy and scarred by seeing so many
+(corporate wifi mostly) networks over the last decade essentially in
+congestion collapse!
+
+https://blog.apnic.net/2020/01/22/bufferbloat-may-be-solved-but-its-not-ove=
+r-yet/
+
+I'm very happy with how well sch_fq + packet pacing works to mitigate
+impuses like this, as well as with so many other things like BBR and
+BQL, but pacing out !=3D pacing in,
+and despite my fervent wish for more FQ+AQM techniques on more
+bottleneck links also, we're not there yet.
+
+I like very much that BPF is allowing rapid innovation, but with great
+power comes great responsibility.
+--=20
+I tried to build a better future, a few times:
+https://wayforward.archive.org/?site=3Dhttps%3A%2F%2Fwww.icei.org
+
+Dave T=C3=A4ht CEO, TekLibre, LLC

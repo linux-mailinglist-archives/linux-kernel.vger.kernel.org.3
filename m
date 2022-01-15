@@ -2,334 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5300748F931
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 21:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3647A48F93A
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 21:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233648AbiAOUWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 15:22:16 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34166 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233639AbiAOUWQ (ORCPT
+        id S233684AbiAOUWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 15:22:35 -0500
+Received: from mxout04.lancloud.ru ([45.84.86.114]:46542 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233654AbiAOUW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 15:22:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 602BA60F59;
-        Sat, 15 Jan 2022 20:22:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D6F4C36AE7;
-        Sat, 15 Jan 2022 20:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642278134;
-        bh=VbMPe2lie0zxRzOLKttT0Z3jfRARcv1C6Pq01zyjRpE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ozkDi7FXhYCGFkWqIFRzOYgqyWLl2gZHLJ+CAw0p3S+K1fnpdtWgpilVEI85HfZUn
-         VZsOLV8sJxYiCW/UWmo++ARFsQLnZb0O7/lsHHzEfPbnt3iTPzHYTnFnMqz9SSxMhg
-         GTpMtA4XJs7srxe1raOSwJ4sg5oRH6aN4cYXsSC+Ol5a23ccrEUK2MRjZTPcSpZvlv
-         Zxf8KFNzHbtVO0Cc74bLmlgUp8efh1STmup/f9ojjyjnEJrgLFHEY4UNEts+1Y6bZj
-         DD8TmRASbqVwJM1DZ5g7FdIgwkB/Eesi3Ctf7YNJvGgthQ/EOpJWhpjTJuUxD47sLQ
-         8DSI8D891722Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5331740714; Sat, 15 Jan 2022 17:22:12 -0300 (-03)
-Date:   Sat, 15 Jan 2022 17:22:12 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org,
-        "Frank Ch. Eigler" <fche@redhat.com>
-Subject: Re: [RFC] perf record: Disable debuginfod by default
-Message-ID: <YeMs9OnWKosZ1+LH@kernel.org>
-References: <20211209200425.303561-1-jolsa@kernel.org>
- <Yb8ubHK38NXDQE+O@krava>
+        Sat, 15 Jan 2022 15:22:28 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru B964D20ACF11
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-iio@vger.kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-phy@lists.infradead.org>, Jiri Slaby <jirislaby@kernel.org>,
+        <openipmi-developer@lists.sourceforge.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        "William Breathitt Gray" <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "Linux MMC List" <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-mediatek@lists.infradead.org>,
+        "Brian Norris" <computersforpeace@gmail.com>,
+        <netdev@vger.kernel.org>
+References: <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+ <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
+ <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
+ <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
+ <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru>
+Date:   Sat, 15 Jan 2022 23:22:16 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yb8ubHK38NXDQE+O@krava>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sun, Dec 19, 2021 at 02:06:52PM +0100, Jiri Olsa escreveu:
-> On Thu, Dec 09, 2021 at 09:04:25PM +0100, Jiri Olsa wrote:
-> > hi,
-> > after migrating to fedora 35 I found perf record hanging on exit
-> > and it's because fedora 35 sets DEBUGINFOD_URLS that triggers
-> > debuginfod query which might take long time to process.
-> > 
-> > I discussed this briefly with Frank and I'm sending the change
-> > to disable debuginfod by default in perf record.
-> > 
-> > Frank had other idea we could discuss here to fork or just spawn
-> > "/usr/bin/debuginfod-find ...." into background after perf record.
-> > 
-> > Perhaps there are other ways as well, hence this is RFC ;-)
-> > 
-> > thanks,
-> > jirka
+On 1/14/22 11:22 PM, Uwe Kleine-König wrote:
+> On Fri, Jan 14, 2022 at 10:14:10PM +0300, Sergey Shtylyov wrote:
+>> On 1/14/22 12:25 PM, Uwe Kleine-König wrote:
+>>
+>>>>>>> To me it sounds much more logical for the driver to check if an
+>>>>>>> optional irq is non-zero (available) or zero (not available), than to
+>>>>>>> sprinkle around checks for -ENXIO. In addition, you have to remember
+>>>>>>> that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
+>>>>>>> (or some other error code) to indicate absence. I thought not having
+>>>>>>> to care about the actual error code was the main reason behind the
+>>>>>>> introduction of the *_optional() APIs.
+>>>>>
+>>>>>> No, the main benefit of gpiod_get_optional() (and clk_get_optional()) is
+>>>>>> that you can handle an absent GPIO (or clk) as if it were available.
+>>>>
+>>>>    Hm, I've just looked at these and must note that they match 1:1 with
+>>>> platform_get_irq_optional(). Unfortunately, we can't however behave the
+>>>> same way in request_irq() -- because it has to support IRQ0 for the sake
+>>>> of i8253 drivers in arch/...
+>>>
+>>> Let me reformulate your statement to the IMHO equivalent:
+>>>
+>>> 	If you set aside the differences between
+>>> 	platform_get_irq_optional() and gpiod_get_optional(),
+>>
+>>    Sorry, I should make it clear this is actually the diff between a would-be
+>> platform_get_irq_optional() after my patch, not the current code...
 > 
-> Arnaldo,
-> looks like there are no more comments, do you need me to repost
-> it as normal patch? there's no change after rebasing on top of
-> your perf/core branch
-
-Applying now, after fixing up minor fuzzes.
- 
-> thanks,
-> jirka
+> The similarity is that with your patch both gpiod_get_optional() and
+> platform_get_irq_optional() return NULL and 0 on not-found. The relevant
+> difference however is that for a gpiod NULL is a dummy value, while for
+> irqs it's not. So the similarity is only syntactically, but not
+> semantically.
 > 
-> > 
-> > 
-> > ---
-> > Fedora 35 sets by default DEBUGINFOD_URLS, which might lead
-> > to unexpected stalls in perf record exit path, when we try
-> > to cache profiled binaries.
-> > 
-> >   # DEBUGINFOD_PROGRESS=1 ./perf record -a
-> >   ^C[ perf record: Woken up 1 times to write data ]
-> >   Downloading from https://debuginfod.fedoraproject.org/ 447069
-> >   Downloading from https://debuginfod.fedoraproject.org/ 1502175
-> >   Downloading \^Z
-> > 
-> > Disabling DEBUGINFOD_URLS by default in perf record and adding
-> > debuginfod option and .perfconfig variable support to enable id.
-> > 
-> >   Default without debuginfo processing:
-> >   # perf record -a
-> > 
-> >   Using system debuginfod setup:
-> >   # perf record -a --debuginfod
-> > 
-> >   Using custom debuginfd url:
-> >   # perf record -a --debuginfod='https://evenbetterdebuginfodserver.krava'
-> > 
-> > Adding single perf_debuginfod_setup function and using
-> > it also in perf buildid-cache command.
-> > 
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  .../perf/Documentation/perf-buildid-cache.txt |  5 +++-
-> >  tools/perf/Documentation/perf-config.txt      |  9 +++++++
-> >  tools/perf/Documentation/perf-record.txt      |  9 +++++++
-> >  tools/perf/builtin-buildid-cache.c            | 25 +++++++++++--------
-> >  tools/perf/builtin-record.c                   | 13 ++++++++++
-> >  tools/perf/util/util.c                        | 15 +++++++++++
-> >  tools/perf/util/util.h                        |  6 +++++
-> >  7 files changed, 70 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/tools/perf/Documentation/perf-buildid-cache.txt b/tools/perf/Documentation/perf-buildid-cache.txt
-> > index cd8ce6e8ec12..7e44b419d301 100644
-> > --- a/tools/perf/Documentation/perf-buildid-cache.txt
-> > +++ b/tools/perf/Documentation/perf-buildid-cache.txt
-> > @@ -74,12 +74,15 @@ OPTIONS
-> >  	used when creating a uprobe for a process that resides in a
-> >  	different mount namespace from the perf(1) utility.
-> >  
-> > ---debuginfod=URLs::
-> > +--debuginfod[=URLs]::
-> >  	Specify debuginfod URL to be used when retrieving perf.data binaries,
-> >  	it follows the same syntax as the DEBUGINFOD_URLS variable, like:
-> >  
-> >  	  buildid-cache.debuginfod=http://192.168.122.174:8002
-> >  
-> > +	If the URLs is not specified, the value of DEBUGINFOD_URLS
-> > +	system environment variable is used.
-> > +
-> >  SEE ALSO
-> >  --------
-> >  linkperf:perf-record[1], linkperf:perf-report[1], linkperf:perf-buildid-list[1]
-> > diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
-> > index 3bb75c1f25e8..0420e71698ee 100644
-> > --- a/tools/perf/Documentation/perf-config.txt
-> > +++ b/tools/perf/Documentation/perf-config.txt
-> > @@ -587,6 +587,15 @@ record.*::
-> >  		Use 'n' control blocks in asynchronous (Posix AIO) trace writing
-> >  		mode ('n' default: 1, max: 4).
-> >  
-> > +	record.debuginfod::
-> > +		Specify debuginfod URL to be used when cacheing perf.data binaries,
-> > +		it follows the same syntax as the DEBUGINFOD_URLS variable, like:
-> > +
-> > +		  http://192.168.122.174:8002
-> > +
-> > +		If the URLs is 'system', the value of DEBUGINFOD_URLS system environment
-> > +		variable is used.
-> > +
-> >  diff.*::
-> >  	diff.order::
-> >  		This option sets the number of columns to sort the result.
-> > diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-> > index 55df7b073a55..9ccc75935bc5 100644
-> > --- a/tools/perf/Documentation/perf-record.txt
-> > +++ b/tools/perf/Documentation/perf-record.txt
-> > @@ -715,6 +715,15 @@ measurements:
-> >  
-> >  include::intel-hybrid.txt[]
-> >  
-> > +--debuginfod[=URLs]::
-> > +	Specify debuginfod URL to be used when cacheing perf.data binaries,
-> > +	it follows the same syntax as the DEBUGINFOD_URLS variable, like:
-> > +
-> > +	  http://192.168.122.174:8002
-> > +
-> > +	If the URLs is not specified, the value of DEBUGINFOD_URLS
-> > +	system environment variable is used.
-> > +
-> >  SEE ALSO
-> >  --------
-> >  linkperf:perf-stat[1], linkperf:perf-list[1], linkperf:perf-intel-pt[1]
-> > diff --git a/tools/perf/builtin-buildid-cache.c b/tools/perf/builtin-buildid-cache.c
-> > index 0db3cfc04c47..cd381693658b 100644
-> > --- a/tools/perf/builtin-buildid-cache.c
-> > +++ b/tools/perf/builtin-buildid-cache.c
-> > @@ -351,10 +351,14 @@ static int build_id_cache__show_all(void)
-> >  
-> >  static int perf_buildid_cache_config(const char *var, const char *value, void *cb)
-> >  {
-> > -	const char **debuginfod = cb;
-> > +	struct perf_debuginfod *di = cb;
-> >  
-> > -	if (!strcmp(var, "buildid-cache.debuginfod"))
-> > -		*debuginfod = strdup(value);
-> > +	if (!strcmp(var, "buildid-cache.debuginfod")) {
-> > +		di->urls = strdup(value);
-> > +		if (!di->urls)
-> > +			return -ENOMEM;
-> > +		di->set = true;
-> > +	}
-> >  
-> >  	return 0;
-> >  }
-> > @@ -373,8 +377,8 @@ int cmd_buildid_cache(int argc, const char **argv)
-> >  		   *purge_name_list_str = NULL,
-> >  		   *missing_filename = NULL,
-> >  		   *update_name_list_str = NULL,
-> > -		   *kcore_filename = NULL,
-> > -		   *debuginfod = NULL;
-> > +		   *kcore_filename = NULL;
-> > +	struct perf_debuginfod debuginfod = { };
-> >  	char sbuf[STRERR_BUFSIZE];
-> >  
-> >  	struct perf_data data = {
-> > @@ -399,8 +403,10 @@ int cmd_buildid_cache(int argc, const char **argv)
-> >  	OPT_BOOLEAN('f', "force", &force, "don't complain, do it"),
-> >  	OPT_STRING('u', "update", &update_name_list_str, "file list",
-> >  		    "file(s) to update"),
-> > -	OPT_STRING(0, "debuginfod", &debuginfod, "debuginfod url",
-> > -		    "set debuginfod url"),
-> > +	OPT_STRING_OPTARG_SET(0, "debuginfod", &debuginfod.urls,
-> > +			&debuginfod.set, "debuginfod urls",
-> > +			"Enable debuginfod data retrieval from DEBUGINFOD_URLS or specified urls",
-> > +			"system"),
-> >  	OPT_INCR('v', "verbose", &verbose, "be more verbose"),
-> >  	OPT_INTEGER(0, "target-ns", &ns_id, "target pid for namespace context"),
-> >  	OPT_END()
-> > @@ -425,10 +431,7 @@ int cmd_buildid_cache(int argc, const char **argv)
-> >  	if (argc || !(list_files || opts_flag))
-> >  		usage_with_options(buildid_cache_usage, buildid_cache_options);
-> >  
-> > -	if (debuginfod) {
-> > -		pr_debug("DEBUGINFOD_URLS=%s\n", debuginfod);
-> > -		setenv("DEBUGINFOD_URLS", debuginfod, 1);
-> > -	}
-> > +	perf_debuginfod_setup(&debuginfod);
-> >  
-> >  	/* -l is exclusive. It can not be used with other options. */
-> >  	if (list_files && opts_flag) {
-> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> > index 0338b813585a..2da2a6acbb8c 100644
-> > --- a/tools/perf/builtin-record.c
-> > +++ b/tools/perf/builtin-record.c
-> > @@ -111,6 +111,7 @@ struct record {
-> >  	unsigned long long	samples;
-> >  	struct mmap_cpu_mask	affinity_mask;
-> >  	unsigned long		output_max_size;	/* = 0: unlimited */
-> > +	struct perf_debuginfod	debuginfod;
-> >  };
-> >  
-> >  static volatile int done;
-> > @@ -2177,6 +2178,12 @@ static int perf_record_config(const char *var, const char *value, void *cb)
-> >  			rec->opts.nr_cblocks = nr_cblocks_default;
-> >  	}
-> >  #endif
-> > +	if (!strcmp(var, "record.debuginfod")) {
-> > +		rec->debuginfod.urls = strdup(value);
-> > +		if (!rec->debuginfod.urls)
-> > +			return -ENOMEM;
-> > +		rec->debuginfod.set = true;
-> > +	}
-> >  
-> >  	return 0;
-> >  }
-> > @@ -2663,6 +2670,10 @@ static struct option __record_options[] = {
-> >  		      parse_control_option),
-> >  	OPT_CALLBACK(0, "synth", &record.opts, "no|all|task|mmap|cgroup",
-> >  		     "Fine-tune event synthesis: default=all", parse_record_synth_option),
-> > +	OPT_STRING_OPTARG_SET(0, "debuginfod", &record.debuginfod.urls,
-> > +			  &record.debuginfod.set, "debuginfod urls",
-> > +			  "Enable debuginfod data retrieval from DEBUGINFOD_URLS or specified urls",
-> > +			  "system"),
-> >  	OPT_END()
-> >  };
-> >  
-> > @@ -2716,6 +2727,8 @@ int cmd_record(int argc, const char **argv)
-> >  	if (err)
-> >  		return err;
-> >  
-> > +	perf_debuginfod_setup(&record.debuginfod);
-> > +
-> >  	/* Make system wide (-a) the default target. */
-> >  	if (!argc && target__none(&rec->opts.target))
-> >  		rec->opts.target.system_wide = true;
-> > diff --git a/tools/perf/util/util.c b/tools/perf/util/util.c
-> > index df3c4671be72..fb4f6616b5fa 100644
-> > --- a/tools/perf/util/util.c
-> > +++ b/tools/perf/util/util.c
-> > @@ -416,3 +416,18 @@ char *perf_exe(char *buf, int len)
-> >  	}
-> >  	return strcpy(buf, "perf");
-> >  }
-> > +
-> > +void perf_debuginfod_setup(struct perf_debuginfod *di)
-> > +{
-> > +	/*
-> > +	 * By default '!di->set' we clear DEBUGINFOD_URLS, so debuginfod
-> > +	 * processing is not triggered, otherwise we set it to 'di->urls'
-> > +	 * value. If 'di->urls' is "system" we keep DEBUGINFOD_URLS value.
-> > +	 */
-> > +	if (!di->set)
-> > +		setenv("DEBUGINFOD_URLS", "", 1);
-> > +	else if (di->urls && strcmp(di->urls, "system"))
-> > +		setenv("DEBUGINFOD_URLS", di->urls, 1);
-> > +
-> > +	pr_debug("DEBUGINFOD_URLS=%s\n", getenv("DEBUGINFOD_URLS"));
-> > +}
-> > diff --git a/tools/perf/util/util.h b/tools/perf/util/util.h
-> > index 9f0d36ba77f2..4359f5af2de7 100644
-> > --- a/tools/perf/util/util.h
-> > +++ b/tools/perf/util/util.h
-> > @@ -68,4 +68,10 @@ void test_attr__init(void);
-> >  struct perf_event_attr;
-> >  void test_attr__open(struct perf_event_attr *attr, pid_t pid, int cpu,
-> >  		     int fd, int group_fd, unsigned long flags);
-> > +
-> > +struct perf_debuginfod {
-> > +	const char	*urls;
-> > +	bool		 set;
-> > +};
-> > +void perf_debuginfod_setup(struct perf_debuginfod *di);
-> >  #endif /* GIT_COMPAT_UTIL_H */
-> > -- 
-> > 2.33.1
-> > 
+>>> 	platform_get_irq_optional() is like gpiod_get_optional().
+>>>
+>>> The introduction of gpiod_get_optional() made it possible to simplify
+>>> the following code:
+>>>
+>>> 	reset_gpio = gpiod_get(...)
+>>> 	if IS_ERR(reset_gpio):
+>>> 		error = PTR_ERR(reset_gpio)
+>>> 		if error != -ENDEV:
+>>
+>>    ENODEV?
+> 
+> Yes, typo.
+> 
+>>> 			return error
+>>> 	else:
+>>> 		gpiod_set_direction(reset_gpiod, INACTIVE)
+>>>
+>>> to
+>>>
+>>> 	reset_gpio = gpiod_get_optional(....)
+>>> 	if IS_ERR(reset_gpio):
+>>> 		return reset_gpio
+>>> 	gpiod_set_direction(reset_gpiod, INACTIVE)
+>>>
+>>> and I never need to actually know if the reset_gpio actually exists.
+>>> Either the line is put into its inactive state, or it doesn't exist and
+>>> then gpiod_set_direction is a noop. For a regulator or a clk this works
+>>> in a similar way.
+>>>
+>>> However for an interupt this cannot work. You will always have to check
+>>> if the irq is actually there or not because if it's not you cannot just
+>>> ignore that. So there is no benefit of an optional irq.
+>>>
+>>> Leaving error message reporting aside, the introduction of
+>>> platform_get_irq_optional() allows to change
+>>>
+>>> 	irq = platform_get_irq(...);
+>>> 	if (irq < 0 && irq != -ENXIO) {
+>>> 		return irq;
+>>> 	} else if (irq >= 0) {
+>>
+>>    Rather (irq > 0) actually, IRQ0 is considered invalid (but still returned).
+> 
+> This is a topic I don't feel strong for, so I'm sloppy here. If changing
+> this is all that is needed to convince you of my point ...
 
--- 
+   See below. :-)
 
-- Arnaldo
+>>> 		... setup irq operation ...
+>>> 	} else { /* irq == -ENXIO */
+>>> 		... setup polling ...
+>>> 	}
+>>>
+>>> to
+>>> 	
+>>> 	irq = platform_get_irq_optional(...);
+>>> 	if (irq < 0 && irq != -ENXIO) {
+>>> 		return irq;
+>>> 	} else if (irq >= 0) {
+>>> 		... setup irq operation ...
+>>> 	} else { /* irq == -ENXIO */
+>>> 		... setup polling ...
+>>> 	}
+>>>
+>>> which isn't a win. When changing the return value as you suggest, it can
+>>> be changed instead to:
+>>>
+>>> 	irq = platform_get_irq_optional(...);
+>>> 	if (irq < 0) {
+>>> 		return irq;
+>>> 	} else if (irq > 0) {
+>>> 		... setup irq operation ...
+>>> 	} else { /* irq == 0 */
+>>> 		... setup polling ...
+>>> 	}
+>>>
+>>> which is a tad nicer. If that is your goal however I ask you to also
+>>> change the semantic of platform_get_irq() to return 0 on "not found".
+>>
+>>     Well, I'm not totally opposed to that... but would there be a considerable win?
+
+> Well, compared to your suggestion of making platform_get_irq_optional()
+> return 0 on "not-found" the considerable win would be that
+> platform_get_irq_optional() and platform_get_irq() are not different
+
+   They would really be the same function if we do that. But...
+
+> just because platform_get_irq() is to hard to change.
+
+   It's not just that, of course. If you make platform_get_irq() return 0
+ISO -ENXIO, you'd have to add the handling of that 0 to all the callers,
+and that won't be as simple as:
+
+	if (irq < 0)
+		return irq;
+
+since we can't just propagate 0 upstream, we'd have to return something like
+-ENXIO (or whatever error we see fit). Does that really scale well?
+
+>> Anyway, we should 1st stop returning 0 for "valid" IRQs -- this is done by my patch
+>> the discussed patch series are atop of.
+>>
+>>> Note the win is considerably less compared to gpiod_get_optional vs
+>>
+>>    If there's any at all... We'd basically have to touch /all/ platform_get_irq()
+>> calls (and get an even larger CC list ;-)).
+> 
+> You got me wrong here. I meant that even if you change both
+> platform_get_irq() and platform_get_irq_optional() to return 0 on
+> "not-found", the win is small compared to the benefit of having both
+
+   There's no win at all, it seems.
+
+> clk_get() and clk_get_optional().
+> 
+>>> gpiod_get however. And then it still lacks the semantic of a dummy irq
+>>> which IMHO forfeits the right to call it ..._optional().
+>>
+>>    Not quite grasping it... Why e.g. clk_get() doesn't return 0 for a not found clock?
+> 
+> Because NULL is not an error value for clk and when calling clk_get()
+> you want a failure when the clk you asked for isn't available.
+> 
+> Sure you could do the following in a case where you want to insist the
+> clk to be actually available:
+> 
+> 	clk = clk_get_optional(...)
+> 	if (IS_ERR_OR_NULL(clk)) {
+> 		err = PTR_ERR(clk) || -ENODEV;
+> 		return dev_err_probe(dev, err, ....);
+> 	}
+> 
+> but this is more ugly than
+> 
+> 	clk = clk_get(...)
+> 	if (IS_ERR(clk)) {
+> 		err = PTR_ERR(clk);
+> 		return dev_err_probe(dev, err, ....);
+> 	}
+> 
+> Additionally the first usage would hard-code in the drivers that NULL is
+> the dummy value which you might want to consider a layer violation.
+
+   Unfortunately, we don't have a single layer in case of IRQs... There's
+no platform_request_irq() (yet? :-)).
+
+> You have to understand that for clk (and regulator and gpiod) NULL is a
+> valid descriptor that can actually be used, it just has no effect. So
+> this is a convenience value for the case "If the clk/regulator/gpiod in
+> question isn't available, there is nothing to do". This is what makes
+> clk_get_optional() and the others really useful and justifies their
+> existence. This doesn't apply to platform_get_irq_optional().
+
+   I do understand that. However, IRQs are a different beast with their
+own justifications...
+
+> So clk_get() is sane and sensible for cases where you need the clk to be
+> there. It doesn't emit an error message, because the caller knows better
+> if it's worth an error message and in some cases the caller can also
+> emit a better error message than clk_get() itself.
+
+   I haven't been thinking about the IRQ error messages at all (yet?)...
+And when I start thinking about it, it doesn't seem that bad, perhaps
+even saves a lot of the .rodata section... :-)
+
+> clk_get_optional() is sane and sensible for cases where the clk might be
+> absent and it helps you because you don't have to differentiate between
+> "not found" and "there is an actual resource".
+> 
+> The reason for platform_get_irq_optional()'s existence is just that
+> platform_get_irq() emits an error message which is wrong or suboptimal
+
+   I think you are very wrong here. The real reason is to simplify the
+callers.
+
+> in some cases (and IMHO is platform_get_irq() root fault). It doesn't
+> simplify handling the "not found" case.
+
+   Oh, it does... you don't have to special-case 0 when handling its result.
+In my book, it's a major simplification.
+
+> So let's not pretend by the
+> choice of function names that there is a similarity between clk_get() +
+> clk_get_optional() and platform_get_irq() + platform_get_irq_optional().
+
+   OK, no similarity. But that's well justified.
+
+> And as you cannot change platform_get_irq_optional() to return a working
+> dummy value, IMHO the only sane way out is renaming it.
+
+   Your rename really focused on the wrong aspect of the function, I think...
+
+> Best regards
+> Uwe
+
+MBR, Sergey

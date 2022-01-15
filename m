@@ -2,82 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA35548F42C
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D27848F432
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 02:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbiAOBaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 20:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S232046AbiAOBko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 20:40:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiAOBaK (ORCPT
+        with ESMTP id S229470AbiAOBkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 20:30:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619C6C061574;
-        Fri, 14 Jan 2022 17:30:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F11F5620D9;
-        Sat, 15 Jan 2022 01:30:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C6D9C36AEA;
-        Sat, 15 Jan 2022 01:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642210209;
-        bh=jaeXbZMuIfqzwYIZi0iIZBP3+PIHLNTDh33oru99wiM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=V5D75XsazkAYpHFDzf5HTUvzndjUVuW3trJxE3XRPqlGlu5ETovGQSjchxTtgAe2q
-         eMWVHGLENn/QHNHR0xUEqaf5cBv0AJi34lYScoCu9JKKMcV1gexobGgCV4YIdnlMJ1
-         eFW0h2SPF2rz7C8BJ1wxcz7VyWpKg1e1fITor9TxWE8Mw0SnrHZ1tzbCO+uR9GwOnP
-         2C/p1WJNT2O+YCLVvKf27YNvDwlIIpMhhfq4zW7AguS3OEWT5sa/2pSCJj6q9lP5O3
-         fcmaaZlLSWkGE0GGYTEjj13zIiLfF8sgvC3IgTMD0vy51CaG8wuS/tU1vxXX05T2E+
-         7rE7O1JZHwlRQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3774FF6079B;
-        Sat, 15 Jan 2022 01:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 14 Jan 2022 20:40:43 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8BAC061574;
+        Fri, 14 Jan 2022 17:40:42 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id v186so28657908ybg.1;
+        Fri, 14 Jan 2022 17:40:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=4xj65T8RWG0+hHEFyJGBp3+1b5O20fwk4wK5S2rZsA4=;
+        b=n2Fh3NmLz2d6sp4Qmlto1f3BVHmjGrIadTEingnWHR7GDNCbwVjQlMWThWgGyU4E28
+         DHT0TPnsTlAYOCFfOoCNnU50H/VW2qNhGLXPC7jccvtejQ1Mfxqpg7uyfTCoI6WB75ab
+         YhvIdMMkOfR2anZ0T9NbNFyMZDuuqOZwAkPVVZh+dpsIXyKvoYSkCIvGZaT8BvzmwKDI
+         dukFPcnQaFXpI08r5yvgeNXNwe7J/yH6NkCEf6z16WLPxI8Pwf7e4y1mc0PUspJ9LMla
+         4hqQWOrlMzLMSL1pCG0sbRumBRZnogxzE7MLtCtm0KO4eiVvkShN9qc8vgYPvWFHzWra
+         VomA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=4xj65T8RWG0+hHEFyJGBp3+1b5O20fwk4wK5S2rZsA4=;
+        b=Re8QgbxKQDOa2H9XHBj9MiKe/Wys0EjIGQ6tsUdc5fdgxhQj8D5LvyaJzTpcgzAZ/V
+         MP9yC+03kyDxngXbocV9U2+C8Vawzy/g8EHU/s4DBniwtmJHu/IZ042W4I/46OCTw+zH
+         Jo1xqPb7A7yfvpBas6jILb/cUvnoBFdGz0j8N8XcYpa/KjRGWCQaPEABJ7JXJuNYn9n/
+         0Ng7n8oRk8RC0PEsOahsIjey174dmSpHzSOWrKewbAT0T+CsA0JIwjJkqRXGz+IKQwzr
+         u3/vYa/cjbmjKB5cOtxcaByJF1UvV7K7a2vsM0m6YcLItZQM2KRihaNgGkP4eWt43tL1
+         YwfA==
+X-Gm-Message-State: AOAM531QE78iFcah1zH/ev8k1vK7E0vauGfsvPhYprMLS5orTEfXCji7
+        gWLgp7UeizhSOQwbyxhyRFcNCElKCLKEv86moTA=
+X-Google-Smtp-Source: ABdhPJyZ+AMZzLKscGwgxAMno4/ugfReYdipnFkyZDavVf7WNx1MJDQkydIChF1IHAyV1XcTbxz3zozXhGWeu5tfH9I=
+X-Received: by 2002:a25:2cc7:: with SMTP id s190mr9088772ybs.186.1642210842195;
+ Fri, 14 Jan 2022 17:40:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] test: selftests: remove unused various in
- sockmap_verdict_prog.c
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164221020922.14883.7115689326424030782.git-patchwork-notify@kernel.org>
-Date:   Sat, 15 Jan 2022 01:30:09 +0000
-References: <20220113031658.633290-1-imagedong@tencent.com>
-In-Reply-To: <20220113031658.633290-1-imagedong@tencent.com>
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        davemarchevsky@fb.com, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, imagedong@tencent.com
+References: <20211222190134.24866-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CGME20211222190203epcas1p2a7647eb2c09c29587b70982744c1a912@epcas1p2.samsung.com>
+ <20211222190134.24866-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <a95b74fd-7118-b0fe-26b9-4665c719f1a0@samsung.com>
+In-Reply-To: <a95b74fd-7118-b0fe-26b9-4665c719f1a0@samsung.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Sat, 15 Jan 2022 01:40:16 +0000
+Message-ID: <CA+V-a8tDqLWQXtZbjh=XwKaen1T-iXy=pP-Rn8GF9j_YA-8wdQ@mail.gmail.com>
+Subject: Re: [PATCH 2/5] drm/exynos: mixer: Use platform_get_irq() to get the interrupt
+To:     Inki Dae <inki.dae@samsung.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Inki,
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+On Fri, Jan 14, 2022 at 11:08 AM Inki Dae <inki.dae@samsung.com> wrote:
+>
+> Hi Lad Prabhakar,
+>
+> 21. 12. 23. =EC=98=A4=EC=A0=84 4:01=EC=97=90 Lad Prabhakar =EC=9D=B4(=EA=
+=B0=80) =EC=93=B4 =EA=B8=80:
+> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> > allocation of IRQ resources in DT core code, this causes an issue
+> > when using hierarchical interrupt domains using "interrupts" property
+> > in the node as this bypassed the hierarchical setup and messed up the
+> > irq chaining.
+> >
+> > In preparation for removal of static setup of IRQ resource from DT core
+> > code use platform_get_irq().
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > Hi,
+> >
+> > Ideally I would expect the mixer_resources_init() to be called from pro=
+be
+> > instead from the bind callback. If platform_get_irq() returns -EPROBE_D=
+EFER
+> > the bind callback will fail :(
+>
+> If the bind callback failed then probe function of exynos drm driver will=
+ call -EPROBE_DEFER like below so it must be no problem :),
+> --------------------------------------------
+> in exynos_drm_platform_probe function
+>     component_master_add_with_match()
+>
+> in component_master_add_with_match function
+>     try_to_bring_up_master()
+>
+Thank you for the clarification.
 
-On Thu, 13 Jan 2022 11:16:58 +0800 you wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> 'lport' and 'rport' in bpf_prog1() of sockmap_verdict_prog.c is not
-> used, just remove them.
-> 
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] test: selftests: remove unused various in sockmap_verdict_prog.c
-    https://git.kernel.org/bpf/bpf-next/c/e80f2a0d1946
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Cheers,
+Prabhakar

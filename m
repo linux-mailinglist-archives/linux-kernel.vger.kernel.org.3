@@ -2,91 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 197DD48F387
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E8748F38A
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 01:46:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbiAOAmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 14 Jan 2022 19:42:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56766 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiAOAmK (ORCPT
+        id S231602AbiAOAqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 14 Jan 2022 19:46:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230484AbiAOAqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 14 Jan 2022 19:42:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22135620B1;
-        Sat, 15 Jan 2022 00:42:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DC7CC36AE7;
-        Sat, 15 Jan 2022 00:42:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642207329;
-        bh=RFdd/d/h9ZEjW1WZXJI2ulzeQRya7tL/XKx/GmIbLQg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=HGKxtIKYShk97LVY70gcDHbbSgJqrTKiTt7051VATJzlcOCGUmSQ7/J5QkoAEJV1v
-         KbOIcLWDZSTeoqZrfk/6IS+haPjUjHUyiPyAl4bqdIGp9RIlNHnsql+/V4K9pfVvzl
-         IpWprY2ZdQ4f+MtWBwPV5/4jUtZ1p0B/9yS/NGlD82AdjDzTkiA+uQXln+P/liQSGX
-         NEVBMwTLUicmGm0420K3QgmTgsVgJhnI009vTH9cULqkZKcD18dVScgj5OsmnDJ6D3
-         qHn76+Ydx05Bl5q4+MTytVzNCfbR8dpS9Qsi8JXH8ldGItlkWe8zAGRnAIVBJjOuBm
-         UDq9YmoKVfyDA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1BE385C0373; Fri, 14 Jan 2022 16:42:09 -0800 (PST)
-Date:   Fri, 14 Jan 2022 16:42:09 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
- -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <20220115004209.GA985568@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YdIfz+LMewetSaEB@gmail.com>
+        Fri, 14 Jan 2022 19:46:11 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07921C06161C
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 16:46:10 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id l16-20020a17090a409000b001b2e9628c9cso15665110pjg.4
+        for <linux-kernel@vger.kernel.org>; Fri, 14 Jan 2022 16:46:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bkM1TIVQ6Ac38f4nYsJNosa7HutS0fQKr+FWU8XPdnk=;
+        b=Yc/kl/Jbg9szpRv3k/IzparKqDb+3nAG79byiWJRAr6vcPID2qlK8Ll7ZhhGCQxKM8
+         qpnrDHGWORdYlTddFCIZc3MwCkKJ+fDE8F+hQJxxhm6k96biUQ7dMGQW/z3MvNn5zSzy
+         PmScnf2Ogg3ual4pUmmzq0EY4RbSN0/fWiSwf1cEac5e7yiSwjXuOqje1y8O9c/zgSew
+         aiQXMfsTxHHUXkMmh9zVcyjNklwiC2R/OcvtXjeHssebaHJfchlO0gd2PjZCHQwS36eg
+         KG15qUqzse9nkL3f8QZK/jx+X7zzcJfoyFCvcuIZh/bCI9p1Ut74ePaZy9y6y00xUXbc
+         Vbwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bkM1TIVQ6Ac38f4nYsJNosa7HutS0fQKr+FWU8XPdnk=;
+        b=GjWjAVmLRl7ETQtWVpmaHiH4VPzwXt+q/SJONV0IySNy/lHyi/BX7EzEtf4CZlQZmj
+         ZmYRdyEVmkuiVdTufx7OFB5HLbeHGhYFcGIRzW/MXNmP2q1tDW2DYFX1Cr3HOpR6rqub
+         teenPtA5znRITU53nsmEww7SO5nJATOYfQotVR+4AEXcvKUIHUy5hagqWjxgB4LTqQ+0
+         oqVjFMy4eBDt46IQ15G2/odeDRfbEobmEHov6q6ZvBv7iNGqEYHnmNaHiknNcV5WjopA
+         4I0liZGYMFoOi5gdsdpfl/t+jRkecD1dh1A/+DhlGc9vNmrMFP4B4ov1jvCmcs0uaKVA
+         EoAw==
+X-Gm-Message-State: AOAM532qEiJKiGqxTzJ5poTOI5W45wTY6QZj4uVsBfWN/b7oA9BM+oxg
+        0hMGVjfwvsh17on4Vs2dUCnRfg==
+X-Google-Smtp-Source: ABdhPJyjoEesRbQZZc0Tgpt+hvNhPOuvvNTkD9qfCCr7Q29ROSTPcf1hYZdlomlI4VxXqYxmdiidyQ==
+X-Received: by 2002:a17:902:e5c9:b0:14a:2da3:e60f with SMTP id u9-20020a170902e5c900b0014a2da3e60fmr11538953plf.100.1642207570237;
+        Fri, 14 Jan 2022 16:46:10 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id t25sm5504034pgv.9.2022.01.14.16.46.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jan 2022 16:46:09 -0800 (PST)
+Date:   Sat, 15 Jan 2022 00:46:06 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Wang Guangju <wangguangju@baidu.com>
+Cc:     pbonzini@redhat.com, sean.j.christopherson@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86: enhance the readability of function
+ pic_intack()
+Message-ID: <YeIZTkYCfkTE0Lob@google.com>
+References: <20220112085153.4506-1-wangguangju@baidu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YdIfz+LMewetSaEB@gmail.com>
+In-Reply-To: <20220112085153.4506-1-wangguangju@baidu.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 02, 2022 at 10:57:35PM +0100, Ingo Molnar wrote:
+On Wed, Jan 12, 2022, Wang Guangju wrote:
+> From: wangguangju <wangguangju@baidu.com>
 > 
-> I'm pleased to announce the first public version of my new "Fast Kernel 
-> Headers" project that I've been working on since late 2020, which is a 
-> comprehensive rework of the Linux kernel's header hierarchy & header 
-> dependencies, with the dual goals of:
+> In function pic_intack(), use a varibale of "mask" to
+> record expression of "1 << irq", so we can enhance the
+> readability of this function.
+
+Please wrap at ~75 chars.
+
+> Signed-off-by: wangguangju <wangguangju@baidu.com>
+> ---
+>  arch/x86/kvm/i8259.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
->  - speeding up the kernel build (both absolute and incremental build times)
-> 
->  - decoupling subsystem type & API definitions from each other
+> diff --git a/arch/x86/kvm/i8259.c b/arch/x86/kvm/i8259.c
+> index 814064d06016..ad6b64b11adc 100644
+> --- a/arch/x86/kvm/i8259.c
+> +++ b/arch/x86/kvm/i8259.c
+> @@ -216,12 +216,14 @@ void kvm_pic_clear_all(struct kvm_pic *s, int irq_source_id)
+>   */
+>  static inline void pic_intack(struct kvm_kpic_state *s, int irq)
+>  {
+> -	s->isr |= 1 << irq;
+> +	int mask;
 
-Yow!!!  ;-)
+Needs a newline, and could also be:
 
-[ . . . ]
+	int mask = 1 << irq;
 
->       headers/uninline: Uninline multi-use function: finish_rcuwait()
+or even
 
-This one looks fine on its own merits, so I grabbed it from your git tree:
+	int mask = BIT(irq);
 
-ecdadb5289d1 ("headers/uninline: Uninline multi-use function: finish_rcuwait()")
-
->       headers/deps: RCU: Remove __read_mostly annotations from externs
-
-And same with this one:
-
-1c8af2245fd7 ("headers/deps: RCU: Remove __read_mostly annotations from externs")
-
-
-Of course, if you would rather keep these, please let me know and I will
-drop them.
-
-							Thanx, Paul
+That said, I oddly find the existing code more readable.  Maybe "irq_mask" instead
+of "mask"?  Dunno.  I guess I don't have a strong opinion :-)

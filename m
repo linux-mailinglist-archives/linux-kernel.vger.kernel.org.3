@@ -2,84 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 699ED48F633
-	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 10:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD5C48F638
+	for <lists+linux-kernel@lfdr.de>; Sat, 15 Jan 2022 11:02:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbiAOJow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 04:44:52 -0500
-Received: from mga07.intel.com ([134.134.136.100]:64836 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231547AbiAOJov (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 04:44:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642239891; x=1673775891;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3QND4MUyY31lpyay/oy3VT0yoSi/k/xi8c5d8hhWzIE=;
-  b=KQME24mZDCmNmwxaiPYsoFzPHRf2wrjiIZ8tPgcyXKKQv6lWUFcMeP/p
-   VzFGUJxZ+vtfU7KRZ1kJ9+GYjAQ6TVZXt+GxwkqGO0rmh28F7p4tvzwCH
-   GdajYGE40gFfal6q6FMOthkNAwuYQDAONrW5RmUZBTWGl6OLcly490jdH
-   P9IiwrCcGsKg6OlBaZz5FnV4Bp/lfytCpt0nnkHjF2jXToLDI9BKAYBvz
-   6rs4edi6xdmQfxdrLoYG5QreYAnL3Ye10eEQry/G5OukIMjWVRdqBzTfd
-   QTxJi+zxY6yED8G1K8Zq1vM0K2evYALvzEKsTwtDml9tXb8HIkbK58gG4
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10227"; a="307739413"
-X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="307739413"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 01:44:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,290,1635231600"; 
-   d="scan'208";a="692530403"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 15 Jan 2022 01:44:50 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n8fc9-0009ba-CT; Sat, 15 Jan 2022 09:44:49 +0000
-Date:   Sat, 15 Jan 2022 17:44:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1593/2384]
- ./usr/include/linux/if_bonding.h:47:10: fatal error: 'uapi/linux/sockios.h'
- file not found
-Message-ID: <202201151716.5dWSky8j-lkp@intel.com>
+        id S232756AbiAOJ5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 04:57:52 -0500
+Received: from gateway23.websitewelcome.com ([192.185.50.164]:17444 "EHLO
+        gateway23.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231547AbiAOJ5u (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 04:57:50 -0500
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id 00816104EA
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 03:57:49 -0600 (CST)
+Received: from gator4132.hostgator.com ([192.185.4.144])
+        by cmsmtp with SMTP
+        id 8fmmnUJeVXvvJ8fmmnOCvt; Sat, 15 Jan 2022 03:55:48 -0600
+X-Authority-Reason: nr=8
+Received: from host-79-47-126-144.retail.telecomitalia.it ([79.47.126.144]:34826 helo=[10.0.0.109])
+        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bristot@kernel.org>)
+        id 1n8fml-001urN-7W; Sat, 15 Jan 2022 03:55:47 -0600
+Message-ID: <92e4dd91-8d28-b059-ebd4-3c4e027662ad@kernel.org>
+Date:   Sat, 15 Jan 2022 10:55:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: linux-next: build warnings after merge of the ftrace tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220115152812.32d3ba5a@canb.auug.org.au>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20220115152812.32d3ba5a@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - kernel.org
+X-BWhitelist: no
+X-Source-IP: 79.47.126.144
+X-Source-L: No
+X-Exim-ID: 1n8fml-001urN-7W
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: host-79-47-126-144.retail.telecomitalia.it ([10.0.0.109]) [79.47.126.144]:34826
+X-Source-Auth: kernel@bristot.me
+X-Email-Count: 2
+X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
+X-Local-Domain: no
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
-commit: eb4b43a3bb224895dcd3976b63def55ee42203f5 [1593/2384] headers/deps: net: Optimize the header dependencies of <uapi/linux/if_bonding.h>
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220115/202201151716.5dWSky8j-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d1021978b8e7e35dcc30201ca1731d64b5a602a8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=eb4b43a3bb224895dcd3976b63def55ee42203f5
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout eb4b43a3bb224895dcd3976b63def55ee42203f5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Hi Stephen
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 1/15/22 05:28, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the ftrace tree, today's linux-next build (htmldoc)
+> produced these warnings:
+> 
+> Documentation/tools/rtla/rtla-osnoise-hist.rst: WARNING: document isn't included in any toctree
+> Documentation/tools/rtla/rtla-osnoise-top.rst: WARNING: document isn't included in any toctree
+> Documentation/tools/rtla/rtla-timerlat.rst: WARNING: document isn't included in any toctree
+> Documentation/tools/rtla/rtla-timerlat-hist.rst: WARNING: document isn't included in any toctree
+> Documentation/tools/rtla/rtla-timerlat-top.rst: WARNING: document isn't included in any toctree
+> 
+> Introduced by commits
+> 
+>   b1be48307de4 ("rtla: Add rtla osnoise top documentation")
+>   e7041c6b3c12 ("rtla: Add rtla osnoise hist documentation")
+>   29380d4055e5 ("rtla: Add rtla timerlat documentation")
+>   df337d014b57 ("rtla: Add rtla timerlat top documentation")
+>   5dce5904e3b9 ("rtla: Add rtla timerlat hist documentation")
+> 
 
-All errors (new ones prefixed by >>):
+The Documentation/tools/$tools/ is a new directory to store man pages of the
+$tools. The idea seems to be to create a '"book" within the larger documentation 
+collection'.
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/if_bonding.h:47:10: fatal error: 'uapi/linux/sockios.h' file not found
-   #include <uapi/linux/sockios.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+I moved the documentation to that directory following Corbet's suggestion [1], 
+but the "book" was not yet created. I think it deserves the hands of a more 
+expert person in Docs.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thoughts?
+
+[1] https://lore.kernel.org/lkml/5796a3d5-ae98-9d28-138f-981a06dab34b@kernel.org/
+
+-- Daniel

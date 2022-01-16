@@ -2,246 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE4648FA7A
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 04:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4425248FA7C
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 04:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234166AbiAPDcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 22:32:22 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22304 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232790AbiAPDcV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 22:32:21 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20G1wP2t028211;
-        Sun, 16 Jan 2022 03:32:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=A9mOB1Iw3sYUpOmfgZ5VDnbmpJWdRQdjyXXt3/CMPPg=;
- b=ojwK09aPOCZV/ID+cdcIvwvcvrHmQYFVULI19kOnW91EDf17c+0xhDVnRNDXhrTHgfUU
- +jrvHbAh3hWG7MmnN1cqWlRt9YvT9F8mhNr6Sy6v4ORNRM2MGxc21rxQbbx31j0P8cqk
- EyLvZbFHEEbsjQ7Q8Zh50P3kl0aRqzcmzEnW4FGhFEJyFNFPdkaBAJ0oxIaCYaddRMKf
- wcQlileU1aI2e21HbxgREjGkXYkva24LC0F425YaX4EaDR5lDFxTg1mJ8rPQhh8wRzDU
- jhq/e+PiqwWDHNOu8AWpPhbzBoCU2VCiG49hso/STYfOJj81VLm8oN+3xY44XJLQn2ru og== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dma5m8vpf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 16 Jan 2022 03:32:16 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20G3VnEO001417;
-        Sun, 16 Jan 2022 03:32:15 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma03wdc.us.ibm.com with ESMTP id 3dknw8jjqy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 16 Jan 2022 03:32:15 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20G3WFwe34865584
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 16 Jan 2022 03:32:15 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 051A2B2065;
-        Sun, 16 Jan 2022 03:32:15 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E80F4B2067;
-        Sun, 16 Jan 2022 03:32:14 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Sun, 16 Jan 2022 03:32:14 +0000 (GMT)
-Message-ID: <7e611504-eed8-6943-f1ae-7fb23298d3e5@linux.ibm.com>
-Date:   Sat, 15 Jan 2022 22:31:40 -0500
+        id S234179AbiAPDhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 22:37:52 -0500
+Received: from mga05.intel.com ([192.55.52.43]:6868 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232790AbiAPDht (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 15 Jan 2022 22:37:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642304269; x=1673840269;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aO8zqbNC6Uc0k9XMH8XBR2OHPyoqj0VPz8kimhFcOwA=;
+  b=AxYDb59+aMl1+EVXxXYHDVeMGK/iskFDT9e91QQAUR8y4Wn4TvmX7IQR
+   XlOV9bjLEt3pkwV4MOIdusbgZizfU0gqCFn9URpbAMNGbukHq/jeUdk0b
+   5lezoqijeMSZagcTksPXjUo+VxZrsO9ZoqURyNdUeB9OzrdDNI1jVQBhM
+   81wm513UqeNvm/wHTjyrVehNC+PMroJgon55TPi1/bqt+2kdBZD3xgz7Y
+   mWYwmoAdx/e2B3YCvQDKSgOuwNt+Lqmgl+HzmsR9oRz32NxjxqU26BOIn
+   IF+RpGgUYRkr7cTPKFs61J9Tz5UvRHUo2IsOemIK/RrRozYLJgQtQtMdP
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10228"; a="330805546"
+X-IronPort-AV: E=Sophos;i="5.88,292,1635231600"; 
+   d="scan'208";a="330805546"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2022 19:37:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,292,1635231600"; 
+   d="scan'208";a="624819256"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 15 Jan 2022 19:37:47 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n8wMU-000AQT-QP; Sun, 16 Jan 2022 03:37:46 +0000
+Date:   Sun, 16 Jan 2022 11:37:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Brian Foster <bfoster@redhat.com>
+Subject: fs/xfs/xfs_qm_syscalls.c:633:2: warning: Redundant assignment of
+ 'dqp' to itself. [selfAssignment]
+Message-ID: <202201160639.UsHmHRaq-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v1 4/5] ima: support fs-verity file digest based
- signatures
-Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>,
-        Vitaly Chikunov <vt@altlinux.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211202215507.298415-1-zohar@linux.ibm.com>
- <20211202215507.298415-5-zohar@linux.ibm.com>
- <YalDvGjq0inMFKln@sol.localdomain>
- <56c53b027ae8ae6909d38904bf089e73011657d7.camel@linux.ibm.com>
- <YdYrw4eiQPryOMkZ@gmail.com> <20220109204537.oueokvvkrkyy3ipq@altlinux.org>
- <YdtOhsv/A5dqlApY@sol.localdomain>
- <20220115053101.36xoy2bc7ypozo6l@altlinux.org>
- <YeJn7hxLEfdVrUQT@sol.localdomain>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <YeJn7hxLEfdVrUQT@sol.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: P4xjsozF8ITxkV656M1Poek7gY14MUlZ
-X-Proofpoint-ORIG-GUID: P4xjsozF8ITxkV656M1Poek7gY14MUlZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-16_01,2022-01-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- phishscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=999 spamscore=0
- bulkscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201160023
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a33f5c380c4bd3fa5278d690421b72052456d9fe
+commit: 7ac6eb46c9f32d3e6ae37943191cd744ffa1ef33 xfs: fix up build warnings when quotas are disabled
+date:   12 months ago
+compiler: sparc64-linux-gcc (GCC) 11.2.0
 
-On 1/15/22 01:21, Eric Biggers wrote:
-> On Sat, Jan 15, 2022 at 08:31:01AM +0300, Vitaly Chikunov wrote:
->> Eric,
->>
->> On Sun, Jan 09, 2022 at 01:07:18PM -0800, Eric Biggers wrote:
->>> On Sun, Jan 09, 2022 at 11:45:37PM +0300, Vitaly Chikunov wrote:
->>>> On Wed, Jan 05, 2022 at 03:37:39PM -0800, Eric Biggers wrote:
->>>>> On Fri, Dec 31, 2021 at 10:35:00AM -0500, Mimi Zohar wrote:
->>>>>> On Thu, 2021-12-02 at 14:07 -0800, Eric Biggers wrote:
->>>>>>> On Thu, Dec 02, 2021 at 04:55:06PM -0500, Mimi Zohar wrote:
->>>>>>>>   	case IMA_VERITY_DIGSIG:
->>>>>>>> -		fallthrough;
->>>>>>>> +		set_bit(IMA_DIGSIG, &iint->atomic_flags);
->>>>>>>> +
->>>>>>>> +		/*
->>>>>>>> +		 * The IMA signature is based on a hash of IMA_VERITY_DIGSIG
->>>>>>>> +		 * and the fs-verity file digest, not directly on the
->>>>>>>> +		 * fs-verity file digest.  Both digests should probably be
->>>>>>>> +		 * included in the IMA measurement list, but for now this
->>>>>>>> +		 * digest is only used for verifying the IMA signature.
->>>>>>>> +		 */
->>>>>>>> +		verity_digest[0] = IMA_VERITY_DIGSIG;
->>>>>>>> +		memcpy(verity_digest + 1, iint->ima_hash->digest,
->>>>>>>> +		       iint->ima_hash->length);
->>>>>>>> +
->>>>>>>> +		hash.hdr.algo = iint->ima_hash->algo;
->>>>>>>> +		hash.hdr.length = iint->ima_hash->length;
->>>>>>> This is still wrong because the bytes being signed don't include the hash
->>>>>>> algorithm.  Unless you mean for it to be implicitly always SHA-256?  fs-verity
->>>>>>> supports SHA-512 too, and it may support other hash algorithms in the future.
->>>>>> IMA assumes that the file hash algorithm and the signature algorithm
->>>>>> are the same.   If they're not the same, for whatever reason, the
->>>>>> signature verification would simply fail.
->>>>>>
->>>>>> Based on the v2 signature header 'type' field, IMA can differentiate
->>>>>> between regular IMA file hash based signatures and fs-verity file
->>>>>> digest based signatures.  The digest field (d-ng) in the IMA
->>>>>> meausrement list prefixes the digest with the hash algorithm. I'm
->>>>>> missing the reason for needing to hash fs-verity's file digest with
->>>>>> other metadata, and sign that hash rather than fs-verity's file digest
->>>>>> directly.
->>>>> Because if someone signs a raw hash, then they also implicitly sign the same
->>>>> hash value for all supported hash algorithms that produce the same length hash.
->>>> Unless there is broken hash algorithm allowing for preimage attacks this
->>>> is irrelevant. If there is two broken algorithms allowing for collisions,
->>>> colliding hashes could be prepared even if algo id is hashed too.
->>>>
->>> Only one algorithm needs to be broken.  For example, SM3 has the same hash
->>> length as SHA-256.  If SM3 support were to be added to fs-verity, and if someone
->>> were to find a way to find an input that has a specific SM3 digest, then they
->>> could also make it match a specific SHA-256 digest.  Someone might intend to
->>> sign a SHA-256 digest, but if they are only signing the raw 32 bytes of the
->>> digest, then they would also be signing the corresponding SM3 digest.  That's
->>> why the digest that is signed *must* also include the algorithm used in the
->>> digest (not the algorithm(s) used in the signature, which is different).
->> I think it will be beneficial if we pass hash algo id to the
->> akcipher_alg::verify. In fact, ecrdsa should only be used with streebog.
->> And perhaps, sm2 with sm3, pkcs1 with md/sha/sm3, and ecdsa with sha family
->> hashes.
->>
-> I was going to reply to this thread again, but I got a bit distracted by
-> everything else being broken.  Yes, the kernel needs to be restricting which
-> hash algorithms can be used with each public key algorithm, along the lines of
-> what you said.  I asked the BoringSSL maintainers for advice, and they confirmed
-> that ECDSA just signs/verifies a raw hash, and in fact it *must* be a raw hash
-> for it to be secure.  This is a design flaw in ECDSA, which was fixed in newer
-> algorithms such as EdDSA and SM2 as those have a hash built-in to the signature
-> scheme.  To mitigate it, the allowed hash algorithms must be restricted; in the
-> case of ECDSA, that means to the SHA family (preferably excluding SHA-1).
->
-> akcipher_alg::verify doesn't actually know which hash algorithm is used, except
-> in the case of rsa-pkcs1pad where it is built into the name of the algorithm.
-> So it can't check the hash algorithm.  I believe it needs to happen in
-> public_key_verify_signature() (and I'm working on a patch for that).
->
-> Now, SM2 is different from ECDSA and ECRDSA in that it uses the modern design
-> that includes the hash into the signature algorithm.  This means that it must be
-> used to sign/verify *data*, not a hash.  (Well, you can sign/verify a hash, but
-> SM2 will hash it again internally.)  Currently, public_key_verify_signature()
-> allows SM2 to be used to sign/verify a hash, skipping the SM2 internal hash, and
-> IMA uses this.  This is broken and must be removed, since it isn't actually the
-> SM2 algorithm as specified anymore, but rather some homebrew thing with unknown
-> security properties. (Well, I'm not confident about SM2, but homebrew is worse.)
->
-> Adding fs-verity support to IMA also complicates things, as doing it naively
-> would introduce an ambiguity about what is signed.  Naively, the *data* that is
-> signed (considering the hash as part of the signature algorithm) would be either
-> the whole file, in the case of traditional IMA, or the fsverity_descriptor
-> struct, in the case of IMA with fs-verity.  However, a file could have contents
-> which match an fsverity_descriptor struct; that would create an ambiguity.
->
-> Assuming that it needs to be allowed that the same key can sign files for both
-> traditional and fs-verity hashing, solving this problem will require a second
-> hash.  The easiest way to do this would be sign/verify the following struct:
->
-> 	struct ima_file_id {
-> 		u8 is_fsverity;
-> 		u8 hash_algorithm;
-> 		u8 hash[];
-> 	};
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-To calrify, I suppose that for ECDSA NIST P256 you would allow pairing 
-with any of the SHA family hashes (also as defined by the existing OIDs) 
-and as the standard allows today? And the same then applies for NIST 
-p384 etc.?
+cppcheck warnings: (new ones prefixed by >>)
+>> fs/xfs/xfs_qm_syscalls.c:633:2: warning: Redundant assignment of 'dqp' to itself. [selfAssignment]
+    xfs_qm_dqrele(dqp);
+    ^
+   fs/xfs/xfs_qm_syscalls.c:770:3: warning: Redundant assignment of 'ip->i_udquot' to itself. [selfAssignment]
+     xfs_qm_dqrele(ip->i_udquot);
+     ^
+   fs/xfs/xfs_qm_syscalls.c:774:3: warning: Redundant assignment of 'ip->i_gdquot' to itself. [selfAssignment]
+     xfs_qm_dqrele(ip->i_gdquot);
+     ^
+   fs/xfs/xfs_qm_syscalls.c:778:3: warning: Redundant assignment of 'ip->i_pdquot' to itself. [selfAssignment]
+     xfs_qm_dqrele(ip->i_pdquot);
+     ^
 
-Further, I suppose similar restriction would apply for ECRDSA to pair it 
-with Streebog only, as Vitaly said.
+vim +/dqp +633 fs/xfs/xfs_qm_syscalls.c
 
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  496  
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  497  /*
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  498   * Adjust quota limits, and start/stop timers accordingly.
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  499   */
+fcafb71b57a039f fs/xfs/quota/xfs_qm_syscalls.c Christoph Hellwig 2009-02-09  500  int
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  501  xfs_qm_scall_setqlim(
+b136645116e5471 fs/xfs/xfs_qm_syscalls.c       Brian Foster      2013-03-18  502  	struct xfs_mount	*mp,
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  503  	xfs_dqid_t		id,
+1a7ed271653a4f4 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-15  504  	xfs_dqtype_t		type,
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  505  	struct qc_dqblk		*newlim)
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  506  {
+8a7b8a89a3ae5b5 fs/xfs/quota/xfs_qm_syscalls.c Christoph Hellwig 2010-04-20  507  	struct xfs_quotainfo	*q = mp->m_quotainfo;
+b136645116e5471 fs/xfs/xfs_qm_syscalls.c       Brian Foster      2013-03-18  508  	struct xfs_dquot	*dqp;
+b136645116e5471 fs/xfs/xfs_qm_syscalls.c       Brian Foster      2013-03-18  509  	struct xfs_trans	*tp;
+be6079461abf796 fs/xfs/xfs_qm_syscalls.c       Carlos Maiolino   2016-02-08  510  	struct xfs_def_quota	*defq;
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  511  	struct xfs_dquot_res	*res;
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  512  	struct xfs_quota_limits	*qlim;
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  513  	int			error;
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  514  	xfs_qcnt_t		hard, soft;
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  515  
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  516  	if (newlim->d_fieldmask & ~XFS_QC_MASK)
+2451337dd043901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2014-06-25  517  		return -EINVAL;
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  518  	if ((newlim->d_fieldmask & XFS_QC_MASK) == 0)
+c472b4327597651 fs/xfs/quota/xfs_qm_syscalls.c Christoph Hellwig 2010-05-06  519  		return 0;
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  520  
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  521  	/*
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  522  	 * We don't want to race with a quotaoff so take the quotaoff lock.
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  523  	 * We don't hold an inode lock, so there's nothing else to stop
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  524  	 * a quotaoff from happening.
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  525  	 */
+8a7b8a89a3ae5b5 fs/xfs/quota/xfs_qm_syscalls.c Christoph Hellwig 2010-04-20  526  	mutex_lock(&q->qi_quotaofflock);
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  527  
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  528  	/*
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  529  	 * Get the dquot (locked) before we start, as we need to do a
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  530  	 * transaction to allocate it if it doesn't exist. Once we have the
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  531  	 * dquot, unlock it so we can start the next transaction safely. We hold
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  532  	 * a reference to the dquot, so it's safe to do this unlock/lock without
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  533  	 * it being reclaimed in the mean time.
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  534  	 */
+30ab2dcf2c0693e fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2018-05-04  535  	error = xfs_qm_dqget(mp, id, type, true, &dqp);
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  536  	if (error) {
+2451337dd043901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2014-06-25  537  		ASSERT(error != -ENOENT);
+8a7b8a89a3ae5b5 fs/xfs/quota/xfs_qm_syscalls.c Christoph Hellwig 2010-04-20  538  		goto out_unlock;
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  539  	}
+be6079461abf796 fs/xfs/xfs_qm_syscalls.c       Carlos Maiolino   2016-02-08  540  
+ce6e7e79ced35a8 fs/xfs/xfs_qm_syscalls.c       Eric Sandeen      2020-05-21  541  	defq = xfs_get_defquota(q, xfs_dquot_type(dqp));
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  542  	xfs_dqunlock(dqp);
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  543  
+253f4911f297b83 fs/xfs/xfs_qm_syscalls.c       Christoph Hellwig 2016-04-06  544  	error = xfs_trans_alloc(mp, &M_RES(mp)->tr_qm_setqlim, 0, 0, 0, &tp);
+253f4911f297b83 fs/xfs/xfs_qm_syscalls.c       Christoph Hellwig 2016-04-06  545  	if (error)
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  546  		goto out_rele;
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  547  
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  548  	xfs_dqlock(dqp);
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  549  	xfs_trans_dqjoin(tp, dqp);
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  550  
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  551  	/*
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  552  	 * Update quota limits, warnings, and timers, and the defaults
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  553  	 * if we're touching id == 0.
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  554  	 *
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  555  	 * Make sure that hardlimits are >= soft limits before changing.
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  556  	 *
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  557  	 * Update warnings counter(s) if requested.
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  558  	 *
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  559  	 * Timelimits for the super user set the relative time the other users
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  560  	 * can be over quota for this file system. If it is zero a default is
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  561  	 * used.  Ditto for the default soft and hard limit values (already
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  562  	 * done, above), and for warnings.
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  563  	 *
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  564  	 * For other IDs, userspace can bump out the grace period if over
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  565  	 * the soft limit.
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  566  	 */
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  567  
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  568  	/* Blocks on the data device. */
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  569  	hard = (newlim->d_fieldmask & QC_SPC_HARD) ?
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  570  		(xfs_qcnt_t) XFS_B_TO_FSB(mp, newlim->d_spc_hardlimit) :
+d3537cf93e5e2f8 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  571  			dqp->q_blk.hardlimit;
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  572  	soft = (newlim->d_fieldmask & QC_SPC_SOFT) ?
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  573  		(xfs_qcnt_t) XFS_B_TO_FSB(mp, newlim->d_spc_softlimit) :
+d3537cf93e5e2f8 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  574  			dqp->q_blk.softlimit;
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  575  	res = &dqp->q_blk;
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  576  	qlim = id == 0 ? &defq->blk : NULL;
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  577  
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  578  	if (xfs_setqlim_limits(mp, res, qlim, hard, soft, "blk"))
+b136645116e5471 fs/xfs/xfs_qm_syscalls.c       Brian Foster      2013-03-18  579  		xfs_dquot_set_prealloc_limits(dqp);
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  580  	if (newlim->d_fieldmask & QC_SPC_WARNS)
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  581  		xfs_setqlim_warns(res, qlim, newlim->d_spc_warns);
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  582  	if (newlim->d_fieldmask & QC_SPC_TIMER)
+11d8a9190275855 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-08-17  583  		xfs_setqlim_timer(mp, res, qlim, newlim->d_spc_timer);
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  584  
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  585  	/* Blocks on the realtime device. */
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  586  	hard = (newlim->d_fieldmask & QC_RT_SPC_HARD) ?
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  587  		(xfs_qcnt_t) XFS_B_TO_FSB(mp, newlim->d_rt_spc_hardlimit) :
+d3537cf93e5e2f8 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  588  			dqp->q_rtb.hardlimit;
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  589  	soft = (newlim->d_fieldmask & QC_RT_SPC_SOFT) ?
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  590  		(xfs_qcnt_t) XFS_B_TO_FSB(mp, newlim->d_rt_spc_softlimit) :
+d3537cf93e5e2f8 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  591  			dqp->q_rtb.softlimit;
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  592  	res = &dqp->q_rtb;
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  593  	qlim = id == 0 ? &defq->rtb : NULL;
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  594  
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  595  	xfs_setqlim_limits(mp, res, qlim, hard, soft, "rtb");
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  596  	if (newlim->d_fieldmask & QC_RT_SPC_WARNS)
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  597  		xfs_setqlim_warns(res, qlim, newlim->d_rt_spc_warns);
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  598  	if (newlim->d_fieldmask & QC_RT_SPC_TIMER)
+11d8a9190275855 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-08-17  599  		xfs_setqlim_timer(mp, res, qlim, newlim->d_rt_spc_timer);
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  600  
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  601  	/* Inodes */
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  602  	hard = (newlim->d_fieldmask & QC_INO_HARD) ?
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  603  		(xfs_qcnt_t) newlim->d_ino_hardlimit :
+d3537cf93e5e2f8 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  604  			dqp->q_ino.hardlimit;
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  605  	soft = (newlim->d_fieldmask & QC_INO_SOFT) ?
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  606  		(xfs_qcnt_t) newlim->d_ino_softlimit :
+d3537cf93e5e2f8 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  607  			dqp->q_ino.softlimit;
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  608  	res = &dqp->q_ino;
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  609  	qlim = id == 0 ? &defq->ino : NULL;
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  610  
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  611  	xfs_setqlim_limits(mp, res, qlim, hard, soft, "ino");
+14bf61ffe6ac54a fs/xfs/xfs_qm_syscalls.c       Jan Kara          2014-10-09  612  	if (newlim->d_fieldmask & QC_INO_WARNS)
+d1520deab039ca1 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  613  		xfs_setqlim_warns(res, qlim, newlim->d_ino_warns);
+df42ce64dc3eb7f fs/xfs/xfs_qm_syscalls.c       Eric Sandeen      2020-05-21  614  	if (newlim->d_fieldmask & QC_INO_TIMER)
+11d8a9190275855 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-08-17  615  		xfs_setqlim_timer(mp, res, qlim, newlim->d_ino_timer);
+df42ce64dc3eb7f fs/xfs/xfs_qm_syscalls.c       Eric Sandeen      2020-05-21  616  
+df42ce64dc3eb7f fs/xfs/xfs_qm_syscalls.c       Eric Sandeen      2020-05-21  617  	if (id != 0) {
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  618  		/*
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  619  		 * If the user is now over quota, start the timelimit.
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  620  		 * The user will not be 'warned'.
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  621  		 * Note that we keep the timers ticking, whether enforcement
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  622  		 * is on or off. We don't really want to bother with iterating
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  623  		 * over all ondisk dquots and turning the timers on/off.
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  624  		 */
+c8c753e19a76507 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  625  		xfs_qm_adjust_dqtimers(dqp);
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  626  	}
+985a78fdde15e17 fs/xfs/xfs_qm_syscalls.c       Darrick J. Wong   2020-07-14  627  	dqp->q_flags |= XFS_DQFLAG_DIRTY;
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  628  	xfs_trans_log_dquot(tp, dqp);
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  629  
+70393313dd0b26a fs/xfs/xfs_qm_syscalls.c       Christoph Hellwig 2015-06-04  630  	error = xfs_trans_commit(tp);
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  631  
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21  632  out_rele:
+f648167f3ac7901 fs/xfs/xfs_qm_syscalls.c       Dave Chinner      2013-05-21 @633  	xfs_qm_dqrele(dqp);
+8a7b8a89a3ae5b5 fs/xfs/quota/xfs_qm_syscalls.c Christoph Hellwig 2010-04-20  634  out_unlock:
+8a7b8a89a3ae5b5 fs/xfs/quota/xfs_qm_syscalls.c Christoph Hellwig 2010-04-20  635  	mutex_unlock(&q->qi_quotaofflock);
+e5720eec0548c08 fs/xfs/quota/xfs_qm_syscalls.c David Chinner     2008-04-10  636  	return error;
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  637  }
+^1da177e4c3f415 fs/xfs/quota/xfs_qm_syscalls.c Linus Torvalds    2005-04-16  638  
 
-What's happening now is that to verify a signature, IMA/integrity 
-subsystem fills out the following structure:
+:::::: The code at line 633 was first introduced by commit
+:::::: f648167f3ac79018c210112508c732ea9bf67c7b xfs: avoid nesting transactions in xfs_qm_scall_setqlim()
 
-struct public_key_signature pks;
+:::::: TO: Dave Chinner <dchinner@redhat.com>
+:::::: CC: Ben Myers <bpm@sgi.com>
 
-pks.hash_algo = hash_algo_name[hdr->hash_algo];  // name of hash algo 
-will go into this here, e.g., 'sha256'
-pks.pkey_algo = pk->pkey_algo; // this is either 'rsa', 'ecdsa-', 
-'ecrdsa-' or 'sm2' string
-
-It then calls:
-
-     ret = verify_signature(key, &pks);
-
-IMO, in the call path down this function the pairing of public key and 
-hash algo would have to be enforced in order to enforce the standards. 
-Would this not be sufficient to be able to stay with the standards ?
-
-File hashes: IMA calculates the hash over a file itself by calling 
-crypto functions, so at least the digest's bytes are trusted input in 
-that respect and using the sha family type of hashes directly with ECDSA 
-should work. Which algorithm IMA is supposed to use for the hashing is 
-given in the xattr bytestream header. IMA could then take that type of 
-hash, lookup the hash function, perform the hashing on the data, and let 
-verify_signature enforce the pairing, rejecting file signatures with 
-wrong pairing. This way the only thing that is needed is 'enforcement of 
-pairing'.
-
-Fsverity: How much control does a user have over the hash family 
-fsverity is using? Can IMA ECDSA/RSA users tell it to use a sha family 
-hash and ECRDSA users make it use a Streebog hash so that also the 
-pairing of hash and key type can work 'naturally' and we don't need the 
-level of indirection via your structure above?
-
-     Stefan
-
-
-
-> This would be the *data* that is signed/verified -- meaning that it would be
-> hashed again as part of the signature algorithm (whether that hash is built-in
-> to the signature algorithm, as is the case for modern algorithms, or handled by
-> the caller as is the case for legacy algorithms).  Note that both traditional
-> and fs-verity hashes would need to use this same method for it to be secure; the
-> kernel must not accept signatures using the old method at the same time.
->
-> - Eric
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

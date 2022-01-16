@@ -2,111 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5EB48FDF1
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 17:50:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF26B48FDF3
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 17:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235589AbiAPQuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 11:50:24 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:49428
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232585AbiAPQuX (ORCPT
+        id S235718AbiAPQu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 11:50:56 -0500
+Received: from h03mx16.reliablemail.org ([173.236.90.20]:23824 "EHLO
+        h03mx16.reliablemail.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232585AbiAPQuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 11:50:23 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2291E3F1E3
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 16:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642351816;
-        bh=uu9EwQyUbuYOtlXdv8X6YvDBdNAXZT2Hiy2y1K9OCsE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=Ah6xF7eC0TWXBsxmFjXPvU/9YqyLg9qkw/JSvMksPcoP/cYbJzPpp5jwtVWtLc3lO
-         ok+ELGEZbh1r+cd3JC+SsBQHUiSYvViwGmSVgKu0RwmC83eoK6LW6uU6NV7A7mrCcj
-         LflY1FAMO2o7ZBIej/P8VK+KAEm54Y9SlMirn/fu0MZBoRRYnsh8wuirF/XLWuoMY/
-         t3dEfBNQuLTgyzQtdunvgQpUdzQxfrOR6+iaNEPPZhVyZfi/J7gIO7dddnI7XWbxPG
-         OGMZ8oLqRK9//k38WNFqJhEfVDHIf0e2cR2ReHZUNjtntLGDscXZ+fnf/aOmXFdgRr
-         sVLE7l7fCQrqQ==
-Received: by mail-ed1-f70.google.com with SMTP id a8-20020a056402168800b004022fcdeb25so1432360edv.21
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 08:50:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uu9EwQyUbuYOtlXdv8X6YvDBdNAXZT2Hiy2y1K9OCsE=;
-        b=Y7b1HRfMmy5b1HzdAIz1my2tTZs404jk52ApPLSPWsn2MFFhpfvRbjWBEqSXi9Gowq
-         146nJs+OTtCrt72tVHY2P+obAd5dx2l7NyGvZc8MfKk/T7XaTPISJ+eqcFnitQnp7BhK
-         UjPvHv3DSuvpxQtxtcKQGRo2xqPAKjtBz4y5VfLWwQu37mGI8ODiAtZr4HdXQczawmj4
-         ODu98lhzjxzVtQkm+x1GVqKwH8+56HVmb1M0WpfHaspDwzKMrLYE2aS5ZYvxJCgYsgIf
-         GMsNvknQx4+nSA/mB0o6TPrm1o0NZzFYckngUoN0KJaFV1Mp+i9JCVBo5J+rXUlSPk++
-         CYAg==
-X-Gm-Message-State: AOAM533AjjHIYxcLwlDHdtG+xXutdnpqbIjMjpZWLTPmcPfJTcqSoDLw
-        4vexExFumdCI/33YwPZiezwXKuq1SxqLYM8XmUn1tkgp0ML6kFk43nKutzVqDfjmcxHXauJHlKH
-        XtYpwr1J+t3jhGJ7CJU5eWDZV0tmDIwGKQvxhuMsQ2A==
-X-Received: by 2002:a17:906:3e8a:: with SMTP id a10mr13816078ejj.612.1642351815015;
-        Sun, 16 Jan 2022 08:50:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxTDkNNzbNUZrdQVQnZWdz82SY8ieh3/fjQzLtq01B7PHYFbyE/eHBt0M1wSkD8sdfYhWEPVA==
-X-Received: by 2002:a17:906:3e8a:: with SMTP id a10mr13816070ejj.612.1642351814769;
-        Sun, 16 Jan 2022 08:50:14 -0800 (PST)
-Received: from [192.168.0.35] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id 7sm3585082ejh.161.2022.01.16.08.50.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 08:50:14 -0800 (PST)
-Message-ID: <ddce0e77-2fba-716f-6a69-eeb148fe91ca@canonical.com>
-Date:   Sun, 16 Jan 2022 17:50:13 +0100
+        Sun, 16 Jan 2022 11:50:55 -0500
+X-Halon-Out: 76b5d194-76ec-11ec-a67c-00163c72d6d3
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=grimler.se;
+        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=XF6MY+Oe0VC6ipxCCBP5H+WQ0jqB6VALeTJl0160SzU=; b=MuXW4p4Ijak+O6wBDCeDJ5Tkg1
+        2zE7JEXbmRdWt8Nsd2xfHrSaEb9RHheqZ/DRefXLljVSe0Q+nlSmloXuYpHmW/ofo7Xdef1WKqWo2
+        ZoqHBnOHJf+T7GCScIC+V+30leyKVVCVpAjGZRjDcq3UpizrP8WI+l32P54+NvRvE4j2ID300XG28
+        nU7azh69gory5sSKzYYsDxe9TEBc0n7/PscLcFtJ4py+HUB2jJT+O6hFuTghTqI087TG2H/1sGIMU
+        J9cOOqZMTcqNxIrg+muFamJdOE2lrANQ+m7xEfiaaDyem1EmB3AvlBmWY10aGo0sHi82VMy0nerw6
+        TF9WzZHQ==;
+From:   Henrik Grimler <henrik@grimler.se>
+To:     semen.protsenko@linaro.org, virag.david003@gmail.com,
+        martin.juecker@gmail.com, cw00.choi@samsung.com,
+        m.szyprowski@samsung.com, alim.akhtar@samsung.com,
+        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     Henrik Grimler <henrik@grimler.se>
+Subject: [PATCH v3 0/3] Add initial support for exynos5420-chagall-wifi
+Date:   Sun, 16 Jan 2022 17:50:32 +0100
+Message-Id: <20220116165035.437274-1-henrik@grimler.se>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 1/7] nfc: llcp: fix NULL error pointer dereference on
- sendmsg() after failed bind()
-Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     linux-nfc@lists.01.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+7f23bcddf626e0593a39@syzkaller.appspotmail.com
-References: <20220115122650.128182-1-krzysztof.kozlowski@canonical.com>
- <20220116134122.2197-1-hdanton@sina.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220116134122.2197-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpsrv07.misshosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - grimler.se
+X-Get-Message-Sender-Via: cpsrv07.misshosting.com: authenticated_id: henrik@grimler.se
+X-Authenticated-Sender: cpsrv07.misshosting.com: henrik@grimler.se
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/01/2022 14:41, Hillf Danton wrote:
-> Hey Krzysztof 
-> 
-> On Sat, 15 Jan 2022 13:26:44 +0100 Krzysztof Kozlowski wrote:
->> +++ b/net/nfc/llcp_sock.c
->> @@ -789,6 +789,11 @@ static int llcp_sock_sendmsg(struct socket *sock, struct msghdr *msg,
->>  
->>  	lock_sock(sk);
->>  
->> +	if (!llcp_sock->local) {
->> +		release_sock(sk);
->> +		return -ENODEV;
->> +	}
->> +
->>  	if (sk->sk_type == SOCK_DGRAM) {
->>  		DECLARE_SOCKADDR(struct sockaddr_nfc_llcp *, addr,
->>  				 msg->msg_name);
->> -- 
->> 2.32.0
-> 
-> Given the same check for llcp local in nfc_llcp_send_ui_frame(), adding
-> another check does not help.
+Samsung's tablet Galaxy Tab S 10.5" (wifi) has codename Chagall WiFi
+and is one of several tablets released in 2014 based on Exynos 5420.
+This initial devicetree adds support for accessing device over USB or
+UART, and allows using a rootfs in either the internal eMMC or an
+external sdcard.  4 out of 8 CPUs are brought up when device boots,
+which is the same as on the somewhat similar board
+exynos5420-arndale-octa.
 
-Helps, because other is not protected with lock. The other could be
-removed, because it is simply wrong, but I did not check it.
+Patch 2 is necessary after a secure-firmware node is added, otherwise
+device hangs during the CPU1BOOT secure monitor call. Without the
+secure-firmware node we are not able to bring up any secondary CPUs.
 
-The patch fixes the report and reproducible race, but maybe does not
-necessarily fix entirely the race (which maybe this is what you meant by
-"does not help"?).
+Changes since v2
+================
+
+Addressing Krzysztof's feedback:
+* chagallwifi -> chagall-wifi and Chagall WiFi in messages and comments
+* Re-write commit message for patch 3, use commit hash and ("subject"),
+  move hint about bootloader issue to galaxy-tab-common.dtsi
+* Fix s2mps11 regulator nodes, use &ldoXX_reg handle for device customisation
+* Re-add usbdrd supplies (works after fixing regulator nodes)
+* Remove unnecessary, duplicate, compatible in galaxy-tab-common.dtsi
+* Remove extra clocks xxti and xusbxti
+* Prefix key- to gpio-keys
+* Add pinctrl pins to mmc_2. card-detect pin is different than for other
+  Exynos 5420 devices, so define and use mmc2_cd node under pinctrl_0
+
+Additional changes:
+* Add/fix supplies of mmc_0 and mmc_2 (vmmc-supply for mmc0 is unknown)
+* Sort mmc_X properties alphabetically
+* Fix IRQ pin for s2mps11, it was wrong (gpx3-2 -> gpx3-0)
+* Mark LDO31 as varying between devices as well, it differs between WiFi
+  and LTE tablet versions
+* Fix typo for LDO5 (regulato-name -> regulator-name)
+* Remove regulator-ramp-delay from buck regulators, based on
+  exynos5420-arndale-octa there should be no need to set it
+
+Changes since v1
+================
+
+Fix mmc_0 and usbdrd in patch 3:
+* Remove extra, non supported, options from mmc_0 node
+* Do not set usbdrd supplies. Usb networking does not work with them
+  specified, but it works fine with dummy regulators
 
 
-Best regards,
-Krzysztof
+Henrik Grimler (3):
+  dt-bindings: arm: samsung: document Chagall WiFi board binding
+  ARM: exynos: only do SMC_CMD_CPU1BOOT call on Exynos4
+  ARM: dts: Add support for Samsung Chagall WiFi
+
+ .../bindings/arm/samsung/samsung-boards.yaml  |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/exynos5420-chagall-wifi.dts |  65 ++
+ .../dts/exynos5420-galaxy-tab-common.dtsi     | 666 ++++++++++++++++++
+ arch/arm/mach-exynos/firmware.c               |   4 +-
+ 5 files changed, 736 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/exynos5420-chagall-wifi.dts
+ create mode 100644 arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi
+
+-- 
+2.34.1
+

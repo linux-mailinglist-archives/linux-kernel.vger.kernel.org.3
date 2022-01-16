@@ -2,90 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E75D948FD1B
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 14:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A912F48FD20
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 14:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235309AbiAPM7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 07:59:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46336 "EHLO
+        id S235265AbiAPNAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 08:00:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25682 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235281AbiAPM7t (ORCPT
+        by vger.kernel.org with ESMTP id S233197AbiAPNAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 07:59:49 -0500
+        Sun, 16 Jan 2022 08:00:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642337988;
+        s=mimecast20190719; t=1642338042;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=DNYqjS3KFZ8+i72HB477mvELEUPUlmZhwi7en5ySxHM=;
-        b=PDB6vdzKgFBrJxKNiNeVQTRa+wjWuH3yXayE2jUpwCkfNV8pBTDT+OzGknoWBCJQWDIEwp
-        KI5fEY/z6Vw9Mj/K+Umperc8r77O474FT74e8Ciw+a5yI0iuX4ca5RG4V6x9x3ituH6OpU
-        Z8j7azPL73lp8HnwHUuaorgPji16bj0=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=yWRFWWtptnPxIxbi/2gfOhR6DgAD6LDtgNB3RKI6n2M=;
+        b=NpFNbVKx6d2VTwFb5qpX1dDBIin0xanzm8H6c5Zx0pKiy/RMmP0jgiHep2tX+KzpPMTHGi
+        q5rvZCm7DKXV1lUM6T+NUTuynRjbSTOAUyQgM8sG6zQqFxz9iEjVtTFZe9OZFJEujLQDxF
+        KDvlU9UUdIqGqDcsEfDzPE8OLb9zcVc=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-314-0EGiU0_rME6OE0qEMv8LdA-1; Sun, 16 Jan 2022 07:59:45 -0500
-X-MC-Unique: 0EGiU0_rME6OE0qEMv8LdA-1
-Received: by mail-ot1-f71.google.com with SMTP id 39-20020a9d0eaa000000b0058f56d89582so4232808otj.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 04:59:44 -0800 (PST)
+ us-mta-135-1slSeErYM8CiKLp95p6qFA-1; Sun, 16 Jan 2022 08:00:40 -0500
+X-MC-Unique: 1slSeErYM8CiKLp95p6qFA-1
+Received: by mail-oi1-f197.google.com with SMTP id bq20-20020a05680823d400b002cac339e9b0so827596oib.4
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 05:00:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=DNYqjS3KFZ8+i72HB477mvELEUPUlmZhwi7en5ySxHM=;
-        b=o2m/Y0+thOcHi5izOezh8yh/0nhQbSWoWPBU0px6yEInmGvY4YEz5G+obDOrKeNW0f
-         xLk0F08if/dT01LaxbeD+B+2CMg2BCaXSgL5d2SCiV4BDN4D54oZKPdwVltSreA5Pma3
-         GimGi1msfhpqB118ng0eF4Nau7B2L+sZiB34RWXPqA25aB0tGo9BYcXy3E3fC7Hp0FnU
-         46oRn5ayWuvfHgLra+VAO4SMiGYMQG7qMtl7aBKBZ1RGdSWS1eiPXkldGL4hFY9iorfC
-         39jdPFkjjzTcdB3JNCYkyAuryQDbMXLae30AgKCbgwizB5eET9msfr1LTkGRvbwqquy7
-         CWIQ==
-X-Gm-Message-State: AOAM5326NScUPkuuuskxQ2jrmcH8WFEzsFPOvGoCme8gJ/q0j2T1WTUN
-        0ZWszNMr1srHwOY5C2toKKdrMerIbBsQotF46NTr829UHmPIKp8hQRAgz5KCq5TiISbYFRBw0x7
-        8A7I/BCEYuQexHUwwqykJz6t0
-X-Received: by 2002:a9d:730c:: with SMTP id e12mr7152946otk.169.1642337984014;
-        Sun, 16 Jan 2022 04:59:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyrfpxyWsulP1/h6vkbFQ4Qxe0Ta5JWTP2oWkUQEO76XbZQsGOdY13EWOhJiDhQ6zPtsr8a4w==
-X-Received: by 2002:a9d:730c:: with SMTP id e12mr7152923otk.169.1642337983480;
-        Sun, 16 Jan 2022 04:59:43 -0800 (PST)
+        bh=yWRFWWtptnPxIxbi/2gfOhR6DgAD6LDtgNB3RKI6n2M=;
+        b=xEUyD4k+Y9bJbGmLwPhFo/OFsOJTRt9f/We5hhsS/yFs98tUIx/NV9y2dFqc+qlGHR
+         3YgTPEP3GNoz5t1Wpr2NF7UDugDCgFp+FG5PI2jgNmbYIZ37JTBFWRwFhpRsX0HmAYjZ
+         Ucixa1Zchtii3+rUXTeD9SSEA0GS8pS1WU3AWMisxvDBIB6Srn7FhjWJ3GgEbGfzyAk3
+         e6I1LK7zKBVEeG7jGm8FUZtQCegH6Vv9NpMrol0u7oAY9YFCPh0U2YpjgLX/qXf1bOai
+         jJ8s93KntRpV6f7Gp0kUJlbh7/kd54oJSzaxfztN7jNt1SBSZqrHzzSfX53h/LrFiztp
+         PZDg==
+X-Gm-Message-State: AOAM532Vj4f5IMqlQ2zquhb5+2cSFr3X5j+MqEjzBkntNzHsTvp0vfrd
+        FWBGmal82LMisoMbOy4uDH2BmFFuJ4xlDro2telX/0JcGv+rXg8OmYdueFvq42dAV37b4eEEn2h
+        pWnCbPAuS9rQehV0ThHBPbDo0//9o1/8acAtlxmGl3Gb3lndOinl/jsXgu8TAYPEfBXoih2w=
+X-Received: by 2002:a9d:644d:: with SMTP id m13mr12616025otl.131.1642338039609;
+        Sun, 16 Jan 2022 05:00:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx0rUedKeEJ61GjeRoQojmafzkXzm3UVGTaMWbmFc/LhGf7BmPXu4PHIVsO4lHRmShXspjC+Q==
+X-Received: by 2002:a9d:644d:: with SMTP id m13mr12615998otl.131.1642338038984;
+        Sun, 16 Jan 2022 05:00:38 -0800 (PST)
 Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id e69sm4347369ote.1.2022.01.16.04.59.42
+        by smtp.gmail.com with ESMTPSA id w19sm4871545oiw.29.2022.01.16.05.00.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jan 2022 04:59:43 -0800 (PST)
+        Sun, 16 Jan 2022 05:00:38 -0800 (PST)
 From:   trix@redhat.com
-To:     jack@suse.com
 Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] quota: cleanup double word in comment
-Date:   Sun, 16 Jan 2022 04:59:36 -0800
-Message-Id: <20220116125936.389767-1-trix@redhat.com>
+Subject: [PATCH] soc: ti: k3-ringacc: cleanup double word in comment
+Date:   Sun, 16 Jan 2022 05:00:30 -0800
+Message-Id: <20220116130030.389886-1-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tom Rix <trix@redhat.com>
 
-Remove the second 'handle'.
+Remove the second 'struct'.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- include/linux/quota.h | 2 +-
+ include/linux/soc/ti/k3-ringacc.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/quota.h b/include/linux/quota.h
-index 18ebd39c94871..fd692b4a41d5f 100644
---- a/include/linux/quota.h
-+++ b/include/linux/quota.h
-@@ -91,7 +91,7 @@ extern bool qid_valid(struct kqid qid);
-  *
-  *	When there is no mapping defined for the user-namespace, type,
-  *	qid tuple an invalid kqid is returned.  Callers are expected to
-- *	test for and handle handle invalid kqids being returned.
-+ *	test for and handle invalid kqids being returned.
-  *	Invalid kqids may be tested for using qid_valid().
+diff --git a/include/linux/soc/ti/k3-ringacc.h b/include/linux/soc/ti/k3-ringacc.h
+index 39b022b925986..c218f27ba26cc 100644
+--- a/include/linux/soc/ti/k3-ringacc.h
++++ b/include/linux/soc/ti/k3-ringacc.h
+@@ -256,7 +256,7 @@ u32 k3_ringacc_get_tisci_dev_id(struct k3_ring *ring);
+ struct ti_sci_handle;
+ 
+ /**
+- * struct struct k3_ringacc_init_data - Initialization data for DMA rings
++ * struct k3_ringacc_init_data - Initialization data for DMA rings
   */
- static inline struct kqid make_kqid(struct user_namespace *from,
+ struct k3_ringacc_init_data {
+ 	const struct ti_sci_handle *tisci;
 -- 
 2.26.3
 

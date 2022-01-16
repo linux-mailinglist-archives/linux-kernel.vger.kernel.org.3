@@ -2,125 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 338E948FC67
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 12:52:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B3D48FC73
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 13:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234982AbiAPLwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 06:52:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45128 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232933AbiAPLwX (ORCPT
+        id S232951AbiAPMCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 07:02:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231932AbiAPMCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 06:52:23 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B5C8B80978;
-        Sun, 16 Jan 2022 11:52:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBDF3C36AE7;
-        Sun, 16 Jan 2022 11:52:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642333940;
-        bh=Nn5UlheFW3tQqA1zQjKnG0yVDgckawJTxXhXNb922+w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dO1X1bqItNZ+Swz4EtWfTIvkT02D1BqOWTiVxq4XpfymW2m89Q8BJipQBzwdVDcjg
-         +UAYBO2I5FBYlRTCiWsVcccOpfHHanDJtluv7W7ocm5X8mj3cB0f/x7D/6WT+RttUB
-         /9t976qnKrEkm+EBa1t+iy2cVjsOFCWWZR3iqfQ5mbUVb+k6SJ59QdqiMxC+XMVBDJ
-         G+rKqIzivpfV8hjahhHBIJTGkAfMU6SdA6jrhoQls7pFOs33tsK5I8kAh6DWBNA9PK
-         3zMfHAylOnXQUYhqz2KlAEOomgVtgsIXdyASR0wOBJ17sA6IalfO5WocBLZJmLutnM
-         X9Ty5Yw3eMwzg==
-Date:   Sun, 16 Jan 2022 11:58:21 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org,
-        Robin van der Gracht <robin@protonic.nl>,
-        linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        David Jander <david@protonic.nl>
-Subject: Re: [PATCH v1 1/1] iio: adc: tsc2046: fix memory corruption by
- preventing array overflow
-Message-ID: <20220116115821.1d58b437@jic23-huawei>
-In-Reply-To: <20220115181659.0c759ec5@jic23-huawei>
-References: <20220107081401.2816357-1-o.rempel@pengutronix.de>
-        <20220109152557.74f06d2d@jic23-huawei>
-        <20220110071945.GB3326@pengutronix.de>
-        <20220115181659.0c759ec5@jic23-huawei>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sun, 16 Jan 2022 07:02:51 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DD0C06173E
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 04:02:50 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id t9so19310963oie.12
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 04:02:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MQugVzR0HUW1l8YQ855U1R3u4rbB4xlEWOyDYT7TwoM=;
+        b=s0yHRZxkpbimGufWxMOVBXxk5R6yRG83z9/XZ9iOTsE+YGZA1cWYi0Zi8fRs2kNaN0
+         eIVgSWV8wxFPOSX1u5DZCLWjSJyhP4NPoY0s9tQfCMq+D3JErlR6sez3A8q8Idu/Zbob
+         pLbqeWLXwGP419yPkutzyTfQf6IauG1pPSExJPOoFOkAhlo6g8wB8BnWbiG9nu/o/H5Q
+         DICRotGEhLY18p8HIWkHifxmVMSOWm9CIMLIVQDzQpwMsV1UCzusUQVI8jiyzOZlWmpy
+         DoMxEqLo1X3LqktlT2cmTUjQEE3a2bB3/Ea1AGr3lCMuusNLXyaNExyDhBQ9mRl/b+CL
+         mD2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MQugVzR0HUW1l8YQ855U1R3u4rbB4xlEWOyDYT7TwoM=;
+        b=vfh/x0RHg1e6QO8YYIwEIQCqoUomTi92mhSGp0FcLZmQJWHbKmUT3KylLH93QTvNqw
+         pYXphJ9ACfOZaM6sfrMK3JUKudVo4j5KBdd2Iis6ZTbBWJVfUmunY6oILVFQS9v+yagh
+         G9Qws0WeONsSWewm47z2rXQP8eBt7IuKHq4mTuo+RI3a58+d/9pjxa/Z/RgHKnftZsgl
+         5+KYJcCBhC6ISsR3X+PT89N4RjaTqTY4oNtV4cjqwhkpH4peuFJUCnB/cslO6/kRVSuW
+         rWAceQPZQQb3HvAWWnVT40SUXj+36z/Wm/nUmmtObcgXCPPbgemQuie23hDrYMRmBtmW
+         BCUw==
+X-Gm-Message-State: AOAM530HMmiOzUNSb5/IgFE/Y30ID7lx0B6JY7VhGJpCQKbQ2vgb/1Sm
+        IFdSSCWyIlvUyZMNL2KHOxYMjueEiUVAdhsrqK4jGw==
+X-Google-Smtp-Source: ABdhPJz5Vivaiqv+f1v9kMNzZy+LxZx0FYcqZ8u6a+PsYoKEcQKvQ5CcKRTey5EKw7ysWPJCtK7HWm3FeghHnLp48DM=
+X-Received: by 2002:a54:4613:: with SMTP id p19mr13356731oip.162.1642334569955;
+ Sun, 16 Jan 2022 04:02:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220113162617.131697-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20220113162617.131697-1-manivannan.sadhasivam@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 16 Jan 2022 13:02:38 +0100
+Message-ID: <CACRpkdYraGHxYPW5JL49RMg3Wo8wQgRP8d29VYGqHg4Oc=7Lbg@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: qcom: Return -EINVAL for setting affinity if no
+ IRQ parent
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     bjorn.andersson@linaro.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 15 Jan 2022 18:16:59 +0000
-Jonathan Cameron <jic23@kernel.org> wrote:
+On Thu, Jan 13, 2022 at 5:26 PM Manivannan Sadhasivam
+<manivannan.sadhasivam@linaro.org> wrote:
 
-> On Mon, 10 Jan 2022 08:19:45 +0100
-> Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> 
-> > Hi Jonathan,
-> > 
-> > On Sun, Jan 09, 2022 at 03:25:57PM +0000, Jonathan Cameron wrote:  
-> > > On Fri,  7 Jan 2022 09:14:01 +0100
-> > > Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> > >     
-> > > > On one side we have indio_dev->num_channels includes all physical channels +
-> > > > timestamp channel. On other side we have an array allocated only for
-> > > > physical channels. So, fix memory corruption by ARRAY_SIZE() instead of
-> > > > num_channels variable.
-> > > > 
-> > > > Fixes: 9374e8f5a38d ("iio: adc: add ADC driver for the TI TSC2046 controller")
-> > > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>    
-> > > Hi Olesij,
-> > > 
-> > > Have you managed to make this occur, or is it inspection only?    
-> > 
-> > Yes, this bug has eaten my rx_one and tx_one pointers on probe. I wonted
-> > to use this buffers for read_raw and noticed that they do not exist.  
-> 
-> I got hung up on the first case and failed to notice the second one was
-> entirely different :(
-> 
-> >   
-> > > I 'think' (it's been a while since I looked at the particular code) that the timestamp
-> > > bit in active_scan_mask will never actually be set because we handle that as a
-> > > separate flag.    
-> > 
-> > I didn't tested if active_scan_mask will trigger this issue as well, but
-> > It it looked safer to me, to avoid this issue in both places. Even if on
-> > of it is only theoretical.  
-> 
-> It certainly does no harm to not check a bit that is never set, so I'm fine with
-> the change - just don't want to have lots of 'fixes' for this in other drivers
-> adding noise and pointless backports.  This one is fine because we need the
-> other part of the patch anyway.
-> 
-> Jonathan
+> The MSM GPIO IRQ controller relies on the parent IRQ controller to set the
+> CPU affinity for the IRQ. And this is only valid if there is any wakeup
+> parent available and defined in DT.
+>
+> For the case of no parent IRQ controller defined in DT,
+> msm_gpio_irq_set_affinity() and msm_gpio_irq_set_vcpu_affinity() should
+> return -EINVAL instead of 0 as the affinity can't be set.
+>
+> Otherwise, below warning will be printed by genirq:
+>
+> genirq: irq_chip msmgpio did not update eff. affinity mask of irq 70
+>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-On that note, applied to the fixes-togreg branch of iio.git and marked for stable
-with a minor addition to the patch description to make
-sure we don't get the first case cargo picked up by anyone who doesn't read this
-thread as something to 'fix' everywhere else.
+Patch applied for v5.18!
 
-Thanks,
-
-Jonathan
-
-> 
-> 
-> >   
-> > > So it is indeed an efficiency improvement to not check that bit but I don't think
-> > > it's a bug to do so.  More than possible I'm missing something though!
-> > > 
-> > > This one had me quite worried when I first read it because this is a very common
-> > > pattern to see in IIO drivers.    
-> > 
-> > I was thinking about this as well, because big part of this code was
-> > inspired by other drivers. But i didn't reviewed other places so far.
-> > 
-> > Regards,
-> > Oleksij  
-> 
-
+Yours,
+Linus Walleij

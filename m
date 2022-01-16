@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B1948FECE
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 21:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D42948FED5
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 21:34:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236173AbiAPUTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 15:19:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236150AbiAPUTH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 15:19:07 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1B6C061574;
-        Sun, 16 Jan 2022 12:19:07 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id z22so56936532edd.12;
-        Sun, 16 Jan 2022 12:19:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=g05KffStcZJZjaUhCRWqgkCbNj/ENt20MwqZ+Pt+0FQ=;
-        b=j3ZEBOL0CID00J8J3mMGsCsV/iwvDnJ1hhxdYPOWmx4iUS9hyFQl7EWREh6IewfyIS
-         eAXnKCPMRsZY6tWnbCruox5TUvrt3ztXjMOOJfQFE32fcC0j+fTisUKF4vV7XZtMBrzv
-         Z+/1t9UzSt93OMSPLECu2KPH9uqPEFWI51fclvlbValQY/FPHVXtm1bhPKvFa3GeOuT4
-         83d1fZwTW/UfF9rSjvNea+RQ1k7mrPJb1emabAmSLXGC06KJAnVElKGyJrVjQPwpR027
-         /XR9BDn2+6PLHnifRvefvHg8wqo5YjAZGu2vMn+s6kd8RnZiOYhLqIezxt5SpqfG+bcw
-         ES8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=g05KffStcZJZjaUhCRWqgkCbNj/ENt20MwqZ+Pt+0FQ=;
-        b=BpxLrnc/FbNMT5E3MbfI+Y29RYCg4rSRUQHmgEWxGORwGW3emztV2C5zgiuAWDynf0
-         XMEunZOPjX4Rdkjw3DyUT5lVc4NXkbwUR60YAp2AG2n/PDu7rqUtGp8+RfbyHFQ1ycG/
-         JykRI7t4hPpWzk/xCmG9FMrESXMQLZUME0TqVMez89Ewl2N6jpn8BMsMdL8smfyjN6BP
-         RsHv7i3P6QTfOlrFRJ9Rz+WYdVp/T05iqdFyofdXjLcq2KfmbLwgeSYy4HB8K+jC9fcH
-         9aHMJJORMb5jaLqq92ADbXtaScTCiYI3THQTRzS8CKXYDQ6ST5PqGo3Tejr2c+NrgDHw
-         XAaw==
-X-Gm-Message-State: AOAM533f9lhjpWIEdjgLZzda5ajBMuB1+yc47aSdqvnOPQid39pbLnYp
-        l61oCGuDniXE/wUqKd1ccaE=
-X-Google-Smtp-Source: ABdhPJwQwFGg4CsDcUL/TWZj/aSc8hWlQSAlFqh+qqKqSAMC/3Gx4yoT1+VRhAQBK4I9ALMPww+iFg==
-X-Received: by 2002:aa7:c98b:: with SMTP id c11mr9566528edt.104.1642364345820;
-        Sun, 16 Jan 2022 12:19:05 -0800 (PST)
-Received: from tiger.museclub.art (p200300cf9f4053004b601b67b388bdb4.dip0.t-ipconnect.de. [2003:cf:9f40:5300:4b60:1b67:b388:bdb4])
-        by smtp.googlemail.com with ESMTPSA id eg30sm2529452edb.85.2022.01.16.12.19.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jan 2022 12:19:05 -0800 (PST)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [ASUS EC Sensors V6 v6 3/3] hwmon: deprecate asis_wmi_ec_sensors driver
-Date:   Sun, 16 Jan 2022 21:18:41 +0100
-Message-Id: <20220116201843.2301438-4-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220116201843.2301438-1-eugene.shalygin@gmail.com>
-References: <20220116201843.2301438-1-eugene.shalygin@gmail.com>
+        id S236175AbiAPUdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 15:33:17 -0500
+Received: from mga11.intel.com ([192.55.52.93]:54559 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231277AbiAPUdQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 15:33:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642365196; x=1673901196;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=p6fneE1PjydKK4Dj9v+OLF3B5xwCOjfFi7ZA47Qu78I=;
+  b=cHs+QEDYSClnTbzLniAogtw1PFBDe70wYQppQkcx3raMW1aNyaU6SJkl
+   KWgPt3axe7zZceUFiErVLjXpS7mK10D6GlNNqOIscN7JYyGcPeXDfvzq8
+   Tlv2SWATBbYbN6OLk9WOmwFDhxIN0I8gUHLK5Jjss0hVzQrr8RKfYfExV
+   7gughzJoqoA2hIKz3oXim7xnnvcR28wQ1+GuYIr+VRL2AxDc/DQhjt8Fb
+   EmPsHKeB5OuL4uSiSboqzJc48iK3ckHy7u/r8P59UkN2oJC2XjwsgpgRR
+   pHYHlMcSbNfP+cwxWqgDCbv8SzlS9RHOaqknCtlvO3FmlW5pkHprWxEQz
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="242073551"
+X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
+   d="scan'208";a="242073551"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 12:33:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
+   d="scan'208";a="517172824"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 16 Jan 2022 12:33:14 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n9CDC-000AyA-4y; Sun, 16 Jan 2022 20:33:14 +0000
+Date:   Mon, 17 Jan 2022 04:33:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jim Quinlan <jim2101024@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/bmips/dma.c:7:6: warning: no previous prototype for
+ function 'arch_sync_dma_for_cpu_all'
+Message-ID: <202201170455.DlrxW9Pv-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   79e06c4c4950be2abd8ca5d2428a8c915aa62c24
+commit: d552ddeaab4a15a8dc157ac007833aa0b3706862 MIPS: bmips: Remove obsolete DMA mapping support
+date:   5 days ago
+config: mips-bmips_stb_defconfig (https://download.01.org/0day-ci/archive/20220117/202201170455.DlrxW9Pv-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c63a3175c2947e8c1a2d3bbe16a8586600705c54)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d552ddeaab4a15a8dc157ac007833aa0b3706862
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d552ddeaab4a15a8dc157ac007833aa0b3706862
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/bmips/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/mips/bmips/dma.c:7:6: warning: no previous prototype for function 'arch_sync_dma_for_cpu_all' [-Wmissing-prototypes]
+   void arch_sync_dma_for_cpu_all(void)
+        ^
+   arch/mips/bmips/dma.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void arch_sync_dma_for_cpu_all(void)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/arch_sync_dma_for_cpu_all +7 arch/mips/bmips/dma.c
+
+d666cd0246f78b arch/mips/bcm3384/dma.c Kevin Cernekee    2014-10-20  6  
+56e35f9c5b87ec arch/mips/bmips/dma.c   Christoph Hellwig 2019-11-07 @7  void arch_sync_dma_for_cpu_all(void)
+
+:::::: The code at line 7 was first introduced by commit
+:::::: 56e35f9c5b87ec1ae93e483284e189c84388de16 dma-mapping: drop the dev argument to arch_sync_dma_for_*
+
+:::::: TO: Christoph Hellwig <hch@lst.de>
+:::::: CC: Christoph Hellwig <hch@lst.de>
+
 ---
- drivers/hwmon/Kconfig | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 2c16b19d2c03..38094c702e4d 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2243,13 +2243,16 @@ config SENSORS_ASUS_WMI
- 
- config SENSORS_ASUS_WMI_EC
- 	tristate "ASUS WMI B550/X570"
--	depends on ACPI_WMI
-+	depends on ACPI_WMI && SENSORS_ASUS_EC=n
- 	help
- 	  If you say yes here you get support for the ACPI embedded controller
- 	  hardware monitoring interface found in B550/X570 ASUS motherboards.
- 	  This driver will provide readings of fans, voltages and temperatures
- 	  through the system firmware.
- 
-+	  This driver is deprecated in favor of the ASUS EC Sensors driver
-+	  which provides fully compatible output.
-+
- 	  This driver can also be built as a module. If so, the module
- 	  will be called asus_wmi_sensors_ec.
- 
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

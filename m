@@ -2,81 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9EC48FC57
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 12:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B6948FC55
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 12:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234938AbiAPLcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 06:32:52 -0500
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net ([162.243.161.220]:60041
-        "HELO zg8tmtyylji0my4xnjeumjiw.icoremail.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S232797AbiAPLcv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 06:32:51 -0500
-X-Greylist: delayed 21321 seconds by postgrey-1.27 at vger.kernel.org; Sun, 16 Jan 2022 06:32:51 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=4qtF5pTLgHrEtS/8byluABFgtK1z5IUdOHuMX+F5kgw=; b=A
-        gpwgqDGv4gr0ssKHhJ3wqZ4uhsqWVe5I44dY0ari+e0sXuhdyWaSb++2TTeYJ6G6
-        5cRYWBpqAI1fOtJEijJGxMqkvxYxeCX6uLi1ASgZy71xd1mSM6ebOadb+T9NPDcA
-        NVpS5c/R2d+GtKF6sbKa+555zST/3Y4GN1gTiJ7JZQ=
-Received: from localhost (unknown [10.129.21.144])
-        by front01 (Coremail) with SMTP id 5oFpogAXHTkgAuRh8vdaAA--.26418S2;
-        Sun, 16 Jan 2022 19:31:44 +0800 (CST)
-From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
-To:     peter.ujfalusi@gmail.com, vkoul@kernel.org
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yongzhi Liu <lyz_cs@pku.edu.cn>
-Subject: [PATCH] dmaengine: ti: Fix runtime PM imbalance on error
-Date:   Sun, 16 Jan 2022 03:31:42 -0800
-Message-Id: <1642332702-126304-1-git-send-email-lyz_cs@pku.edu.cn>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: 5oFpogAXHTkgAuRh8vdaAA--.26418S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrKrW7ZFW7WF1rGrW8GF4rKrg_yoWfAFb_Cr
-        1rZrWxXrnxWF4Dtw17AwnxZFy0qF4UXr1DuF4Fv343trWjyrs8JrWYvFnYyws3X3yjyr1q
-        ya1v9F17CrWDWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb4xFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2
-        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
-        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
-        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK
-        82IY6x8ErcxFaVAv8VWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
-        UU=
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEEBlPy7t9+qgASsW
+        id S234922AbiAPLb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 06:31:58 -0500
+Received: from mga07.intel.com ([134.134.136.100]:65151 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232797AbiAPLb5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 06:31:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642332717; x=1673868717;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7DfAvPtPxvzuYNgkB3IZgnRqPUprJjtECkW/DRPaWCs=;
+  b=PnM8olxLVJ0+PuJtaxKuiN7+03T2MyosBbdqbCS+okqLOoDBjam2mhZY
+   TIUnnPeIPgPNppZjdgDhM/zJLCFhivnu3rSipCmEmUDt2K73RfUN9p5mj
+   5/bafxWcHMcyyzGOcBWU48+8cppmHYD0gQW4rQlnr4NNRjc4YYeA2lJla
+   X77K5RUc4fPxSbpuW0hmF6TbR1ys4OjosOFI8Q+VEqgy9zg4JMb3eNpc8
+   6vViZbu3Fx5nsHQ4i4KsYavWCj8Pq/9NErGgZ3M57bPWSfbL9vlE8HMpn
+   ueUS34+mZTIxqiBpByd2hz/00BTNajTSB2ABDscmcg6KoOd8nUcrR4Fh0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10228"; a="307822128"
+X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
+   d="scan'208";a="307822128"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 03:31:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
+   d="scan'208";a="517060914"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 16 Jan 2022 03:31:55 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n93lK-000AfB-Vj; Sun, 16 Jan 2022 11:31:54 +0000
+Date:   Sun, 16 Jan 2022 19:31:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Samuel Pascua <pascua.samuel.14@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Iskren Chernev <iskren.chernev@gmail.com>
+Subject: dtbs_check: arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml:
+ mdss@fd900000: status:0: 'ok' is not one of ['okay', 'disabled', 'reserved']
+Message-ID: <202201161804.sd3UKeLn-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pm_runtime_get_sync() increments the runtime PM usage counter even
-when it returns an error code, thus a matching decrement is needed on
-the error handling path to keep the counter balanced.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a33f5c380c4bd3fa5278d690421b72052456d9fe
+commit: 3657b677d20d4b6bda441bd568d037446bd6d880 ARM: dts: qcom: msm8974-klte: add support for display
+date:   12 months ago
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce: make ARCH=arm dtbs_check
 
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+dtcheck warnings: (new ones prefixed by >>)
+   arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml: tcsr-mutex: 'syscon' does not match any of the regexes: 'pinctrl-[0-9]+'
+   	From schema: Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml
+   arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml: memory@fc428000: 'device_type' is a required property
+   	From schema: /usr/local/lib/python3.9/dist-packages/dtschema/schemas/memory.yaml
+   arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml: vadc@3100: 'die_temp', 'ref_1250v', 'ref_625mv', 'ref_buf_625mv', 'ref_gnd', 'ref_vdd' do not match any of the regexes: '^.*@[0-9a-f]+$', 'pinctrl-[0-9]+'
+   	From schema: Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+   arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml: ocmem@fdd00000: 'ranges' is a required property
+   	From schema: Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
+   arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml: adreno@fdb00000: status:0: 'ok' is not one of ['okay', 'disabled', 'reserved']
+   	From schema: /usr/local/lib/python3.9/dist-packages/dtschema/schemas/dt-core.yaml
+>> arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml: mdss@fd900000: status:0: 'ok' is not one of ['okay', 'disabled', 'reserved']
+   	From schema: /usr/local/lib/python3.9/dist-packages/dtschema/schemas/dt-core.yaml
+>> arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml: mdp@fd900000: status:0: 'ok' is not one of ['okay', 'disabled', 'reserved']
+   	From schema: /usr/local/lib/python3.9/dist-packages/dtschema/schemas/dt-core.yaml
+>> arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml: dsi@fd922800: status:0: 'ok' is not one of ['okay', 'disabled', 'reserved']
+   	From schema: /usr/local/lib/python3.9/dist-packages/dtschema/schemas/dt-core.yaml
+>> arch/arm/boot/dts/qcom-msm8974-samsung-klte.dt.yaml: dsi-phy@fd922a00: status:0: 'ok' is not one of ['okay', 'disabled', 'reserved']
+   	From schema: /usr/local/lib/python3.9/dist-packages/dtschema/schemas/dt-core.yaml
+   schemas/input/input.yaml: ignoring, error in schema: properties: power-off-time-sec
+   Traceback (most recent call last):
+     File "/usr/local/bin/dt-validate", line 170, in <module>
+       sg.check_trees(filename, testtree)
+     File "/usr/local/bin/dt-validate", line 119, in check_trees
+       self.check_subtree(dt, subtree, False, "/", "/", filename)
+     File "/usr/local/bin/dt-validate", line 110, in check_subtree
+       self.check_subtree(tree, value, disabled, name, fullname + name, filename)
+     File "/usr/local/bin/dt-validate", line 110, in check_subtree
+
 ---
- drivers/dma/ti/edma.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
-index 08e47f4..a73f779 100644
---- a/drivers/dma/ti/edma.c
-+++ b/drivers/dma/ti/edma.c
-@@ -2398,9 +2398,9 @@ static int edma_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, ecc);
- 
- 	pm_runtime_enable(dev);
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0) {
--		dev_err(dev, "pm_runtime_get_sync() failed\n");
-+		dev_err(dev, "pm_runtime_resume_and_get() failed\n");
- 		pm_runtime_disable(dev);
- 		return ret;
- 	}
--- 
-2.7.4
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

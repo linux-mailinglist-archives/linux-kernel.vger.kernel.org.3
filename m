@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D68B548FE01
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 17:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA5D48FE03
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 17:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235881AbiAPQvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 11:51:23 -0500
-Received: from h04mx16.reliablemail.org ([185.76.67.209]:27698 "EHLO
-        h04mx16.reliablemail.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235787AbiAPQvN (ORCPT
+        id S235952AbiAPQve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 11:51:34 -0500
+Received: from h03mx16.reliablemail.org ([173.236.90.20]:23982 "EHLO
+        h03mx16.reliablemail.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235825AbiAPQvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 11:51:13 -0500
-X-Halon-Out: 821f4e16-76ec-11ec-a232-556aad082471
+        Sun, 16 Jan 2022 11:51:17 -0500
+X-Halon-Out: 8482268f-76ec-11ec-a67c-00163c72d6d3
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=grimler.se;
         s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=1FcLjva00SLkPxQdscGEux0R9htdpzwYk7cdxDo4J5g=; b=L/wSZSXtaOkoyNq7IJ6h5NaGNT
-        bD8VNAHXA2rFMXSmcQQC5ZUTsMVjbgshKQKgA8z7LlexSsEEVYzgS3sSGg/zi0ftCVj2RjVq/YRWy
-        qhbmzVwnTwS80avobXnFVVj47FTt9kBBK1QZgn1EfAtJFpf+3v+MMJ/vvixDtEO207hSSHP6tcRtp
-        x3aI1FicStJO7fFz/z6vcr6TiYdM/3fux4yqiC2kiCbiXVQ3BsqFvz+uL0mOGSoK6l9rbX3Di8r3K
-        aNrOcdmGFjuyx+krumu6HdvYJ8qcKemDVIY7Rfx8fOxkKjbctGMY4JlymheqlhxHxpRUJsAt1UG7Q
-        KEKOGWZw==;
+        bh=gypRF3e/VEsXtFI8r8PiWc3bYGtEcrqn757WrSM6/tE=; b=HOKm42m4+U4G0IljXWPDWHAxTM
+        YUFmZD4AnD7mROpLnZo7oxMqxvInzXklHtb1AxKCyyP+3PyS8Cn9KDtNLfFq0H8yclkfSGpptHHiP
+        tc+7/rmqp8FpKywWLLwPU/p87LsxVNyAUfZaCays+e9I0K7FFtriuIwT0epJCMBopDZ7hnwYh+Q8p
+        8C4tyndi2jULe4hMtDoiQDv2n9GtqxtDLO5igEaYHlTa/B8Sr4IPQ4kWRSV1kK/TSn1ywCvzLaS2H
+        AufLDX2j7iN2wv86n6jLiGLj+uMKegvt7NVHNwrHgsxbLD8AZpn+VBj4Bbm1gZ6i4/sC6sLO2b/24
+        icZk3QDQ==;
 From:   Henrik Grimler <henrik@grimler.se>
 To:     semen.protsenko@linaro.org, virag.david003@gmail.com,
         martin.juecker@gmail.com, cw00.choi@samsung.com,
@@ -34,9 +34,9 @@ To:     semen.protsenko@linaro.org, virag.david003@gmail.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht
 Cc:     Henrik Grimler <henrik@grimler.se>
-Subject: [PATCH v3 1/3] dt-bindings: arm: samsung: document Chagall WiFi board binding
-Date:   Sun, 16 Jan 2022 17:50:33 +0100
-Message-Id: <20220116165035.437274-2-henrik@grimler.se>
+Subject: [PATCH v3 2/3] ARM: exynos: only do SMC_CMD_CPU1BOOT call on Exynos4
+Date:   Sun, 16 Jan 2022 17:50:34 +0100
+Message-Id: <20220116165035.437274-3-henrik@grimler.se>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220116165035.437274-1-henrik@grimler.se>
 References: <20220116165035.437274-1-henrik@grimler.se>
@@ -56,27 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding for Samsung Galaxy Tab S 10.5", based on Exynos 5420 with
-codename chagall-wifi. It was released in 2014 and has several siblings
-with similar hardware.
+On Exynos5 the call is simply ignored by most variants of the
+trustzone firmware.  However, on some devices it instead causes the
+device to hang, so let's avoid the call for the SoCs where it should
+not be needed.
+
+To see that the call is ignored, we can look into sboot/tzsw.  On most
+of the Exynos{4,5} devices the part of sboot/tzsw that seem to handle
+the secure monitor calls is quite easy to recognise, the SMC number is
+compared to known ones, and if equal it branches to the relevant
+function.  In assembly this looks something like:
+
+;-- handle_smc:
+0x00000514      650070e3       cmn r0, 0x65
+0x00000518      0a00000a       beq loc.smc_cmd_reg
+0x0000051c      010070e3       cmn r0, 1
+0x00000520      6c00000a       beq loc.smc_cmd_init
+0x00000524      020070e3       cmn r0, 2
+0x00000528      6b00000a       beq loc.smc_cmd_info
+0x0000052c      030070e3       cmn r0, 3
+0x00000530      6e00000a       beq loc.smc_cmd_sleep
+0x00000534      060070e3       cmn r0, 6
+0x00000538      ae00000a       beq loc.smc_cmd_save_state
+0x0000053c      070070e3       cmn r0, 7
+0x00000540      b400000a       beq loc.smc_cmd_standby
+0x00000544      2b01001a       bne loc.smc_return_minus1
+
+where above example is from exynos5420-arndale-octa.  As can be seen
+the case where r0 is 4 (i.e. SMC_CMD_CPU1BOOT) is not handled.  The
+annotations are taken from github.com/hsnaves/exynos5410-firmware,
+where a large part of the exynos5410 trustzone firmware has been
+reverse-engineered.
 
 Signed-off-by: Henrik Grimler <henrik@grimler.se>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 ---
- .../devicetree/bindings/arm/samsung/samsung-boards.yaml          | 1 +
- 1 file changed, 1 insertion(+)
+Sent previously as RFC
+---
+ arch/arm/mach-exynos/firmware.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
-index 052cd94113d4..a2a8bf44fe9b 100644
---- a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
-+++ b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
-@@ -140,6 +140,7 @@ properties:
-         items:
-           - enum:
-               - insignal,arndale-octa           # Insignal Arndale Octa
-+              - samsung,chagall-wifi            # Samsung SM-T800
-               - samsung,smdk5420                # Samsung SMDK5420 eval
-           - const: samsung,exynos5420
-           - const: samsung,exynos5
+diff --git a/arch/arm/mach-exynos/firmware.c b/arch/arm/mach-exynos/firmware.c
+index 2eaf2dbb8e81..2da5b60b59e2 100644
+--- a/arch/arm/mach-exynos/firmware.c
++++ b/arch/arm/mach-exynos/firmware.c
+@@ -60,8 +60,10 @@ static int exynos_cpu_boot(int cpu)
+ 	/*
+ 	 * Exynos3250 doesn't need to send smc command for secondary CPU boot
+ 	 * because Exynos3250 removes WFE in secure mode.
++	 *
++	 * On Exynos5 devices the call is ignored by trustzone firmware.
+ 	 */
+-	if (soc_is_exynos3250())
++	if (!soc_is_exynos4210() && !soc_is_exynos4412())
+ 		return 0;
+ 
+ 	/*
 -- 
 2.34.1
 

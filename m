@@ -2,83 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DB348FC35
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 11:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E593848FC2F
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 11:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234841AbiAPKog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 05:44:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiAPKof (ORCPT
+        id S234830AbiAPKmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 05:42:40 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:37249 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229762AbiAPKmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 05:44:35 -0500
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1A9C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 02:44:34 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:76d0:2bff:fec8:549])
-        by xavier.telenet-ops.be with bizsmtp
-        id jNkX260060kcUhD01NkXgF; Sun, 16 Jan 2022 11:44:32 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1n931S-009zj9-Rx; Sun, 16 Jan 2022 11:44:30 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1n92p4-009x1i-BF; Sun, 16 Jan 2022 11:31:42 +0100
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] sysctl: Fix one_thousand defined but not used warning
-Date:   Sun, 16 Jan 2022 11:31:42 +0100
-Message-Id: <20220116103142.2371807-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        Sun, 16 Jan 2022 05:42:38 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JcBSX4D8xz4xtf;
+        Sun, 16 Jan 2022 21:42:36 +1100 (AEDT)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "Dmitry V . Levin" <ldv@altlinux.org>
+In-Reply-To: <c55cddb8f65713bf5859ed675d75a50cb37d5995.1642159570.git.christophe.leroy@csgroup.eu>
+References: <c55cddb8f65713bf5859ed675d75a50cb37d5995.1642159570.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v2] powerpc/audit: Fix syscall_get_arch()
+Message-Id: <164232966465.2885693.13588785394784064877.b4-ty@ellerman.id.au>
+Date:   Sun, 16 Jan 2022 21:41:04 +1100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_PERF_EVENTS is not set:
+On Fri, 14 Jan 2022 11:26:25 +0000, Christophe Leroy wrote:
+> Commit 770cec16cdc9 ("powerpc/audit: Simplify syscall_get_arch()")
+> and commit 898a1ef06ad4 ("powerpc/audit: Avoid unneccessary #ifdef
+> in syscall_get_arguments()")
+> replaced test_tsk_thread_flag(task, TIF_32BIT)) by is_32bit_task().
+> 
+> But is_32bit_task() applies on current task while be want the test
+> done on task 'task'
+> 
+> [...]
 
-    kernel/sysctl.c:125:12: warning: ‘one_thousand’ defined but not used [-Wunused-variable]
-      125 | static int one_thousand = 1000;
-	  |            ^~~~~~~~~~~~
+Applied to powerpc/fixes.
 
-Fix this by protecting the definition of one_thousand by a check for
-CONFIG_PERF_EVENTS, as is used for its single remaining user.
+[1/1] powerpc/audit: Fix syscall_get_arch()
+      https://git.kernel.org/powerpc/c/252745240ba0ae774d2f80c5e185ed59fbc4fb41
 
-Fixes: 39c65a94cd966153 ("mm/pagealloc: sysctl: change watermark_scale_factor max limit to 30%")
-Reported-by: noreply@ellerman.id.au
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
- kernel/sysctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index ef77be575d8754d2..d77208f9a56f2907 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -122,12 +122,12 @@ static unsigned long one_ul = 1;
- static unsigned long long_max = LONG_MAX;
- static int one_hundred = 100;
- static int two_hundred = 200;
--static int one_thousand = 1000;
- static int three_thousand = 3000;
- #ifdef CONFIG_PRINTK
- static int ten_thousand = 10000;
- #endif
- #ifdef CONFIG_PERF_EVENTS
-+static int one_thousand = 1000;
- static int six_hundred_forty_kb = 640 * 1024;
- #endif
- 
--- 
-2.25.1
-
+cheers

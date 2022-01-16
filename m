@@ -2,104 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB98448FB88
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 08:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D62248FB8F
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 09:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234579AbiAPHn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 02:43:57 -0500
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:46159 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234559AbiAPHny (ORCPT
+        id S234592AbiAPID4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 03:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234582AbiAPIDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 02:43:54 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V1wFlz1_1642319022;
-Received: from e02h04404.eu6sqa(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0V1wFlz1_1642319022)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 16 Jan 2022 15:43:52 +0800
-From:   Wen Gu <guwen@linux.alibaba.com>
-To:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org
-Cc:     dust.li@linux.alibaba.com, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net v2] net/smc: Fix hung_task when removing SMC-R devices
-Date:   Sun, 16 Jan 2022 15:43:42 +0800
-Message-Id: <1642319022-99525-1-git-send-email-guwen@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        Sun, 16 Jan 2022 03:03:55 -0500
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1BDC06161C
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 00:03:55 -0800 (PST)
+Received: by mail-ed1-x543.google.com with SMTP id k15so51632134edk.13
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 00:03:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=8Ztj7EWQ5t5f1IAnCCOuXDpfbxmiXcehQ7Ei8yvyqMM=;
+        b=AQYdmCUyID/t6+GqHccdCLZKiBFwR6HaYfrBM2p2bPiCvE23SqE6CmuNETvwkMNaXX
+         d9jRxYnc6APN86/pCgUg5CNKfUs5jeKWaTNE2JaWfLjhiqL400HS/DGkqOIMovbprnDc
+         XdtalSCckqqN5aTPC3YgiwamCAMIwxt+4dZHYpvt6r6IqfIyTUBuRYTF9Gk0i2HFgr4m
+         EcvcX+19zg0QeJkn5vbYWN9HXKK0F1kzZ+1exIBb8Sb8PteoucDbo+isSwCuGoXzR+Q6
+         P9Mqic8+bqU7hmUhInP65cqkXcNM54b6b8xQ1TbumPW3UKbkY89TsyjEBtUk5RqaCBMd
+         xBVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=8Ztj7EWQ5t5f1IAnCCOuXDpfbxmiXcehQ7Ei8yvyqMM=;
+        b=E8WpBqLbTSrnc5Jcy0jfuEXRnyh594p1b9TlQuK6B6jz/jZEIrxf9gfKvzxE2H9dUz
+         oU6YhTTWGWgSY3zUea4+EMCch8pGlASuuATSkCY/RXhbKfX+IsUyriAc2rl7qNrzOxAb
+         X2ED3qjQlQnPqxQgHhJozfPPxVXpBjbMg3rc3agFGhylvyx63gT9+4pQidLpaNQBrIfP
+         SuStkG5g3wz+vN82fBcfg8oRg+j50DuVBFibyyoQR75jD5e2UmZQ/fDnK1pUGoKYPlqK
+         RaTQWs945Ng4r3m4ZG4ez2OuHRwI/9qx+GCfdqjM/rUUS0eIEXl8/tIbscO69gw/ffIl
+         z4LQ==
+X-Gm-Message-State: AOAM532mz1uH2MmkfhpZHXIZgHOg1Vu9VVbAidB4CeRWtL8qd9NvEwRq
+        /6JlUQNyoWIOhhsJhciJqJtO6obPS4XBk7ZfAa8=
+X-Google-Smtp-Source: ABdhPJzZ3JD8CxviZYefe3LBt+nY9wJW4Rerv6Bn0jhutsX/L0+RwLH80oxo4WwLQDRmJUl1MTOBOr6v3rJq0TBxZeA=
+X-Received: by 2002:a05:6402:35d2:: with SMTP id z18mr15660511edc.100.1642320233161;
+ Sun, 16 Jan 2022 00:03:53 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a17:907:a424:0:0:0:0 with HTTP; Sun, 16 Jan 2022 00:03:51
+ -0800 (PST)
+Reply-To: dravasmith27@gmail.com
+From:   Dr Ava Smith <drwilliam48@gmail.com>
+Date:   Sun, 16 Jan 2022 00:03:51 -0800
+Message-ID: <CAFd1zB0ENfZY7dKWBpxmcV5J0MBtv+tRQHcgOWv_reoNQnDQ3w@mail.gmail.com>
+Subject: GREETINGS FROM DR AVA SMITH
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A hung_task is observed when removing SMC-R devices. Suppose that
-a link group has two active links(lnk_A, lnk_B) associated with two
-different SMC-R devices(dev_A, dev_B). When dev_A is removed, the
-link group will be removed from smc_lgr_list and added into
-lgr_linkdown_list. lnk_A will be cleared and smcibdev(A)->lnk_cnt
-will reach to zero. However, when dev_B is removed then, the link
-group can't be found in smc_lgr_list and lnk_B won't be cleared,
-making smcibdev->lnk_cnt never reaches zero, which causes a hung_task.
-
-This patch fixes this issue by restoring the implementation of
-smc_smcr_terminate_all() to what it was before commit 349d43127dac
-("net/smc: fix kernel panic caused by race of smc_sock"). The original
-implementation also satisfies the intention that make sure QP destroy
-earlier than CQ destroy because we will always wait for smcibdev->lnk_cnt
-reaches zero, which guarantees QP has been destroyed.
-
-Fixes: 349d43127dac ("net/smc: fix kernel panic caused by race of smc_sock")
-Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
----
-v1 -> v2:
-- Remove some comments.
----
- net/smc/smc_core.c | 17 +----------------
- 1 file changed, 1 insertion(+), 16 deletions(-)
-
-diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
-index b19c0aa..5fc84f0 100644
---- a/net/smc/smc_core.c
-+++ b/net/smc/smc_core.c
-@@ -1524,16 +1524,11 @@ void smc_smcd_terminate_all(struct smcd_dev *smcd)
- /* Called when an SMCR device is removed or the smc module is unloaded.
-  * If smcibdev is given, all SMCR link groups using this device are terminated.
-  * If smcibdev is NULL, all SMCR link groups are terminated.
-- *
-- * We must wait here for QPs been destroyed before we destroy the CQs,
-- * or we won't received any CQEs and cdc_pend_tx_wr cannot reach 0 thus
-- * smc_sock cannot be released.
-  */
- void smc_smcr_terminate_all(struct smc_ib_device *smcibdev)
- {
- 	struct smc_link_group *lgr, *lg;
- 	LIST_HEAD(lgr_free_list);
--	LIST_HEAD(lgr_linkdown_list);
- 	int i;
- 
- 	spin_lock_bh(&smc_lgr_list.lock);
-@@ -1545,7 +1540,7 @@ void smc_smcr_terminate_all(struct smc_ib_device *smcibdev)
- 		list_for_each_entry_safe(lgr, lg, &smc_lgr_list.list, list) {
- 			for (i = 0; i < SMC_LINKS_PER_LGR_MAX; i++) {
- 				if (lgr->lnk[i].smcibdev == smcibdev)
--					list_move_tail(&lgr->list, &lgr_linkdown_list);
-+					smcr_link_down_cond_sched(&lgr->lnk[i]);
- 			}
- 		}
- 	}
-@@ -1557,16 +1552,6 @@ void smc_smcr_terminate_all(struct smc_ib_device *smcibdev)
- 		__smc_lgr_terminate(lgr, false);
- 	}
- 
--	list_for_each_entry_safe(lgr, lg, &lgr_linkdown_list, list) {
--		for (i = 0; i < SMC_LINKS_PER_LGR_MAX; i++) {
--			if (lgr->lnk[i].smcibdev == smcibdev) {
--				mutex_lock(&lgr->llc_conf_mutex);
--				smcr_link_down_cond(&lgr->lnk[i]);
--				mutex_unlock(&lgr->llc_conf_mutex);
--			}
--		}
--	}
--
- 	if (smcibdev) {
- 		if (atomic_read(&smcibdev->lnk_cnt))
- 			wait_event(smcibdev->lnks_deleted,
 -- 
-1.8.3.1
-
+Hello Dear,
+My name is Dr Ava Smith from United States.I am a French and American national
+(dual)living in the U.S and sometimes in the U.K for the Purpose of Work.
+I hope you consider my friend request and consider me worthy to be your friend.
+I will share some of my pics and more details about my self when i get
+your response
+Thanks
+With love
+Ava

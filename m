@@ -2,189 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6E748FEC3
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 21:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A2748FEC7
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 21:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236118AbiAPULE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 15:11:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
+        id S236129AbiAPUTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 15:19:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236106AbiAPULD (ORCPT
+        with ESMTP id S236120AbiAPUTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 15:11:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A1DC061574;
-        Sun, 16 Jan 2022 12:11:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F922B80D49;
-        Sun, 16 Jan 2022 20:11:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C6D3C36AE7;
-        Sun, 16 Jan 2022 20:10:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642363859;
-        bh=K8dq2SS/1E+MId/jLcvnwzthKldgV0LgxQD+HLDX/hs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=heOAdNTz/aUqMZPUeB9F0UtRH9Lly8SoLlhjUh91VDyfjSozHaCEjZiE9JDLTo4yK
-         l4MyM3+FWAdlgN5o11OyOiQCF5CzE22NqOUFDoMESe2kH/5DXW11/0soNv+h49dkjc
-         cUAS1I7VAyUtRqmwoVhB6JzL1vuv12NQIAC9F2rNP2D505LSpmIYP/UHxzrM2mNa9y
-         GtUT72ZpI7LNG+fg4vpPSuQE0PqBtJ2lM2TOG40ElMlzuVnsNcc8afN7DGTaVFU+nr
-         8Z4C9Wo7jcYa0swkLzo9I7usOHwOLfdqn9Uyu0ivrlOXx+cg7+Ba5kSeBqA/hrOnir
-         m7iX6Fam6SODQ==
-Date:   Sun, 16 Jan 2022 22:10:47 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>, eric.snowberg@oracle.com
-Cc:     David Howells <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@hansenpartnership.com>,
-        "pjones@redhat.com" <pjones@redhat.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>
-Subject: Re: [PATCH v9 2/8] integrity: Introduce a Linux keyring called
- machine
-Message-ID: <YeR7x9fMuvW/dvRA@iki.fi>
-References: <100B070F-7EB4-4BF7-B2B9-E5AE78D3066A@oracle.com>
- <a384fcf8bdd9ff79456e9669fc61ab50ec4e1c55.camel@linux.ibm.com>
- <F1F41DB2-171A-4A6F-9AE7-E03C4D3B7DD0@oracle.com>
- <eece68eba2beceeb410748c1f9f32162793d2057.camel@linux.ibm.com>
- <2d681148b6ea57241f6a7c518dd331068a5f47b0.camel@linux.ibm.com>
- <YeMAURSR8/fRjBHD@iki.fi>
- <153F495F-EAF9-4C11-A476-293CC3B78F0A@oracle.com>
- <YeMdIrMXbSq7BgzY@iki.fi>
- <YeMdY+FLM32tmRMz@iki.fi>
- <f8598ca4e51e0b98aa98a1386c6f40bd04acdf15.camel@linux.ibm.com>
+        Sun, 16 Jan 2022 15:19:01 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF2CC061574;
+        Sun, 16 Jan 2022 12:19:00 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id w16so56901446edc.11;
+        Sun, 16 Jan 2022 12:19:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cM72o/X0eOXb/IxXhR6Z9AIge0rlk96uvYViLKdmv3w=;
+        b=kaD6yHxoCnovIcInLTTIIjb7IVKfbZA4bmuOTpmOa64FdqYRM4z1fFBi/114dpHevE
+         +CVzWxEantiMBAdsJ0FCd/7LlhbmYQU+mAeDJ1B++mJrNBEDIqICKbrqdZJMYh/FY2ph
+         SVKbkUSyy80GHjaqpqwvycoUWTHv3/fOWjHYB3AYhjRG/dH7yshBfn0Dgd80JKBf0N5f
+         iDDWe254b2XhIYMrEf35VFrD5IViTnPy47gm1T+y3lNY3oSiWrkbbxNuh1zq/BanzILF
+         4YqluShJZtKE9njYZIzgd44hYqy28FZQ6CLtFC/5oQRble8qnqV26nRYDsrRm5qWScek
+         Asfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cM72o/X0eOXb/IxXhR6Z9AIge0rlk96uvYViLKdmv3w=;
+        b=ftcQBFMPvnXD4rxONrdgANZEeP4I0Gh8lfLy75acEjQuPQ3XL9vVZOyspLMl6ISXLS
+         TFuYOmnrynIZ5YaIm+W66ovS8gGp5U83k2RNo6A802jkcS/nDyZbMcwQ4MP5KkDYsNzi
+         b2/kGlhcx0doE1tIgDyedvcNcb1enM1E9EDPvdVNjontQwYyS37qoQAkNsbj9n1xTa75
+         tdMrVSHlDXzvWZo3Ecqf+mUKTvPKmvLqQG+YfCYyExqOMYE9RsvzaTPPZK/X3M95w7tB
+         6hxtr8jEKjsuXKVWLzqPQHJ63tVm1a0M16yemBB1b3WJxY32A8MT/FxnkZANsgMXWqtn
+         Depw==
+X-Gm-Message-State: AOAM530LzvXf53LIb1fMLuDIJ6qWEJaAjH+2AOeP1ngDsSJzP1xLui4c
+        6YjMEs3EJCE1G71YtZU2Of9Y8MvagC6ppQ==
+X-Google-Smtp-Source: ABdhPJxv6fFW0gjWeOD+i2J/SaZlwkRqxNlDPv1zQkqstMuYLa3TYCocMjp9x8Es+XCq+DNb/+urhg==
+X-Received: by 2002:a05:6402:27d1:: with SMTP id c17mr17593585ede.128.1642364337634;
+        Sun, 16 Jan 2022 12:18:57 -0800 (PST)
+Received: from tiger.museclub.art (p200300cf9f4053004b601b67b388bdb4.dip0.t-ipconnect.de. [2003:cf:9f40:5300:4b60:1b67:b388:bdb4])
+        by smtp.googlemail.com with ESMTPSA id eg30sm2529452edb.85.2022.01.16.12.18.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jan 2022 12:18:57 -0800 (PST)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     eugene.shalygin@gmail.com
+Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [ASUS EC Sensors V6 v6 0/3]
+Date:   Sun, 16 Jan 2022 21:18:38 +0100
+Message-Id: <20220116201843.2301438-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f8598ca4e51e0b98aa98a1386c6f40bd04acdf15.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 09:55:47PM -0500, Mimi Zohar wrote:
-> On Sat, 2022-01-15 at 21:15 +0200, Jarkko Sakkinen wrote:
-> > On Sat, Jan 15, 2022 at 09:14:45PM +0200, Jarkko Sakkinen wrote:
-> > > On Sat, Jan 15, 2022 at 07:12:35PM +0000, Eric Snowberg wrote:
-> > > > 
-> > > > 
-> > > > > On Jan 15, 2022, at 10:11 AM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > > 
-> > > > > On Wed, Jan 12, 2022 at 02:41:47PM -0500, Mimi Zohar wrote:
-> > > > >> On Tue, 2022-01-11 at 20:14 -0500, Mimi Zohar wrote:
-> > > > >>> On Tue, 2022-01-11 at 21:26 +0000, Eric Snowberg wrote:
-> > > > >>>> 
-> > > > >>>>> On Jan 11, 2022, at 11:16 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > > > >>>>> 
-> > > > >>>>> On Mon, 2022-01-10 at 23:25 +0000, Eric Snowberg wrote:
-> > > > >>>>>>> Jarkko, my concern is that once this version of the patch set is
-> > > > >>>>>>> upstreamed, would limiting which keys may be loaded onto the .machine
-> > > > >>>>>>> keyring be considered a regression?
-> > > > >>>>>> 
-> > > > >>>>>> 
-> > > > >>>>>> Currently certificates built into the kernel do not have a CA restriction on them.  
-> > > > >>>>>> IMA will trust anything in this keyring even if the CA bit is not set.  While it would 
-> > > > >>>>>> be advisable for a kernel to be built with a CA, nothing currently enforces it. 
-> > > > >>>>>> 
-> > > > >>>>>> My thinking for the dropped CA restriction patches was to introduce a new Kconfig.  
-> > > > >>>>>> This Kconfig would do the CA enforcement on the machine keyring.  However if the 
-> > > > >>>>>> Kconfig option was not set for enforcement, it would work as it does in this series, 
-> > > > >>>>>> plus it would allow IMA to work with non-CA keys.  This would be done by removing 
-> > > > >>>>>> the restriction placed in this patch. Let me know your thoughts on whether this would 
-> > > > >>>>>> be an appropriate solution.  I believe this would get around what you are identifying as 
-> > > > >>>>>> a possible regression.
-> > > > >>>>> 
-> > > > >>>>> True the problem currently exists with the builtin keys, but there's a
-> > > > >>>>> major difference between trusting the builtin keys and those being
-> > > > >>>>> loading via MOK.  This is an integrity gap that needs to be closed and
-> > > > >>>>> shouldn't be expanded to keys on the .machine keyring.
-> > > > >>>>> 
-> > > > >>>>> "plus it would allow IMA to work with non-CA keys" is unacceptable.
-> > > > >>>> 
-> > > > >>>> Ok, I’ll leave that part out.  Could you clarify the wording I should include in the future 
-> > > > >>>> cover letter, which adds IMA support, on why it is unacceptable for the end-user to
-> > > > >>>> make this decision?
-> > > > >>> 
-> > > > >>> The Kconfig IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
-> > > > >>> "help" is very clear:
-> > > > >> 
-> > > > >> [Reposting the text due to email formatting issues.]
-> > > > >> 
-> > > > >> help
-> > > > >>  Keys may be added to the IMA or IMA blacklist keyrings, if the
-> > > > >>  key is validly signed by a CA cert in the system built-in or
-> > > > >>  secondary trusted keyrings.
-> > > > >> 
-> > > > >>  Intermediate keys between those the kernel has compiled in and the 
-> > > > >>  IMA keys to be added may be added to the system secondary keyring,
-> > > > >>  provided they are validly signed by a key already resident in the
-> > > > >>  built-in or secondary trusted keyrings.
-> > > > >> 
-> > > > >> 
-> > > > >> The first paragraph requires "validly signed by a CA cert in the system
-> > > > >> built-in or secondary trusted keyrings" for keys to be loaded onto the
-> > > > >> IMA keyring.  This Kconfig is limited to just the builtin and secondary
-> > > > >> keyrings.  Changing this silently to include the ".machine" keyring
-> > > > >> introduces integrity risks that previously did not exist.  A new IMA
-> > > > >> Kconfig needs to be defined to allow all three keyrings - builtin,
-> > > > >> machine, and secondary.
-> > > > >> 
-> > > > >> The second paragraph implies that only CA and intermediate CA keys are
-> > > > >> on secondary keyring, or as in our case the ".machine" keyring linked
-> > > > >> to the secondary keyring.
-> > > > >> 
-> > > > >> Mimi
-> > > > >> 
-> > > > > I have also now test environment for this patch set but if there are
-> > > > > any possible changes, I'm waiting for a new version, as it is anyway
-> > > > > for 5.18 cycle earliest.
-> > > > 
-> > > > Other than the two sentence changes, I have not seen anything identified 
-> > > > code wise requiring a change.  If you’d like me to respin a v10 with the sentence 
-> > > > changes let me know.  Or if you want to remove the ima reference, that works 
-> > > > too.  Just let me know how you want to handle this.  Thanks.
-> > > 
-> > > I'm basically waiting also Mimi to test this as I do not have IMA test
-> > > environment.
-> > > 
-> > > From my side:
-> > > 
-> > > Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > 
-> > I can pick the whole thing at the time when I get green light.
-> 
-> The MOK keys are not loaded onto the .machine keyring if
-> CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY is enabled. 
-> From an IMA perspective nothing has changed.
-> 
-> After the IMA references in the patch descriptions are removed, feel
-> free to add Tested-by: Mimi Zohar <zohar@linux.ibm.com> on patches 1 -
-> 5.
-> 
-> thanks,
-> 
-> Mimi
+This patchset replaces the HWMON asus_wmi_ec_sensors driver with
+an implementation that does not use WMI but queries the embedded
+controller directly.
 
-Eric, for me it would be at least a convenience, and overally it would
-make sure that I pick the right thing if you would fix the typos (and
-you can add all the tested-by tags of course as no functional changes).
+That provides two enhancements: sensor reading became quicker (on some
+systems or kernel configuration it took almost a full second to read
+all the sensors, that transfers less than 15 bytes of data), the driver
+became more fexible. The driver now relies on ACPI mutex to lock access
+to the EC, in the same way as the WMI DSDT code does.
 
-There's been times when I've manually "just fixed typos", and failed in a
-way or another because of human error. Just want to make sure that we
-have exactly the right content applied, I hope you understand my point
-of view. And we are early for the 5.18 release cycle anyway.
+Changes in v6:
+ - Fixed hwmon device name replacing dashes with underscores.
+ - Removed module verion.
+ - Fixed condition for asus_wmi_ec_Sensors in KBuild.
 
-BR, Jarkko
+Changes in v5:
+ - Place the sensors bitset directly into the driver_data field of the
+         dmi_system_id struct.
+ - Replace doc comments with regular ones.
+
+Changes in v4:
+ - Deprecate the wmi driver rather than removing it.
+
+Changes in v3:
+ - Remove BIOS version checks and BIOS version dependent mutex path.
+
+Changes in v2:
+ - Replace sensor flags enum with bitset
+ - Replace module init/probe functions with module_platform_driver_probe
+   and ask the platform drivers framework to load the driver when ACPI
+   EC is found (ACPI ID "PNP0C09").
+ - Extend board data with BIOS version attribute for the mutex path to be
+   BIOS version dependent.
+ - Add module parameter to override the mutex path.
+
+Eugene Shalygin (3):
+  hwmon: (asus-ec-sensors) add driver for ASUS EC
+  hwmon: (asus-ec-sensors) update documentation
+  hwmon: deprecate asis_wmi_ec_sensors driver
+
+ Documentation/hwmon/asus_ec_sensors.rst     |  51 ++
+ Documentation/hwmon/asus_wmi_ec_sensors.rst |  38 --
+ MAINTAINERS                                 |   6 +
+ drivers/hwmon/Kconfig                       |  16 +-
+ drivers/hwmon/Makefile                      |   1 +
+ drivers/hwmon/asus-ec-sensors.c             | 690 ++++++++++++++++++++
+ 6 files changed, 763 insertions(+), 39 deletions(-)
+ create mode 100644 Documentation/hwmon/asus_ec_sensors.rst
+ delete mode 100644 Documentation/hwmon/asus_wmi_ec_sensors.rst
+ create mode 100644 drivers/hwmon/asus-ec-sensors.c
+
+-- 
+2.34.1
+

@@ -2,63 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3418848FB57
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 08:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A979A48FB58
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 08:34:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234476AbiAPHb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 02:31:58 -0500
-Received: from tkylinode-sdnproxy-1.icoremail.net ([139.162.70.28]:54706 "HELO
-        tkylinode-sdnproxy-1.icoremail.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S230116AbiAPHb6 (ORCPT
+        id S234486AbiAPHd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 02:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230116AbiAPHd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 02:31:58 -0500
-X-Greylist: delayed 6871 seconds by postgrey-1.27 at vger.kernel.org; Sun, 16 Jan 2022 02:31:57 EST
+        Sun, 16 Jan 2022 02:33:58 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE870C061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 23:33:57 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id bu18so22418695lfb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 23:33:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID;
-        bh=3phafIXmRMQ5mJXI+ds71pFuhoEA9ECSPORZffJKggg=; b=N3No3k9RzU79u
-        jmbEbpbaQC1mHEjf9YNszzC3/epkJU5lWFP+Gf26hQxWzohAIB2IcGdt/wSinWzm
-        vsHqmwnnuzImNfusC2Soqq7w+VOryNqKblTQUeZufNOMNsxV2pU5FvChaksU2wRJ
-        NZRwgqEMHopfzds4JFFsGKRfLWdZwg=
-Received: by ajax-webmail-front02 (Coremail) ; Sun, 16 Jan 2022 15:29:51
- +0800 (GMT+08:00)
-X-Originating-IP: [10.129.17.95]
-Date:   Sun, 16 Jan 2022 15:29:51 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5YiY5rC45b+X?= <lyz_cs@pku.edu.cn>
-To:     laurent.pinchart@ideasonboard.com
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: shdma: Fix runtime PM imbalance on error
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-1ea67e80-64e4-49d5-bd9f-3beeae24b9f2-pku.edu.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=Db2mQxADcnB4Y0Y5fpffuJoiOxsZDM1AOxk+ZDm/G3M=;
+        b=O1WsZRDa1MjV6ESf9ywEGwsaIGLPab5LW2g7mey9qhztcqjQ0UqNkYGUs7vJHaZMZa
+         5jg2Mk4XhMtC+LPKVTTaa/iF/HjFyV12QS73RWd5moogZRqTbWXLPFnX1DdwPPWPyJ3Q
+         Tnc7QdyFMKbekRhGmcBymMZ7G9yBmUx4QcUPXjqgAocQU0vTii+YpS4N756ewMQlHW78
+         TBRZ1CYF0td1E2s4sBBYANpjdqnmEopJmM5LpjgRJlr8kEUeHEE1XnlahEeddWeOQUyx
+         9XtlVjBJ1VaJ6C8pO1JYJMECnipZfzVmPVe75yYA05EbYQxjFWA65P/Ng1/FM9Qoygqq
+         7iZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=Db2mQxADcnB4Y0Y5fpffuJoiOxsZDM1AOxk+ZDm/G3M=;
+        b=exv0qc809rjqezdwxwAC3LyeavMqu9GB9D1jRiFJJvxzCdDY2b0TTcgoC8uqgxt8Rj
+         dFMoADJ5hELUmKjkOXeSao0nQbMJkOejPSvmsgY/x8cXO2EPh7RzwDp1xoZL3cBrwpD3
+         U4NeyscS8ykhqxD1K680VlUAli310EvS0jOeO0Vt0lTbDz3isjDRMUICvrdyQ49RRpzz
+         X/aKxLxzkwEsSV10+D0gT8kaRrpLy9bI7d1aN7FajrCLSFmgpWxV3lbbS2Wisqsp/I7A
+         nNBZxFZC10QO79IMWxARKDIjtYWUU+ELee9CjjiN+DbV9+Eay7elVSpyMayX4ckDt04q
+         k3nQ==
+X-Gm-Message-State: AOAM533edCfFDXgH9a1JEoezQbLkZt+b/du5rVYzEfAQd5PQivObPpLR
+        pHBxjggHkgxoRtVHq7XcGgOXdG4YyyZVSltLdyI=
+X-Google-Smtp-Source: ABdhPJwo9IhBhMEr8UMqZucd4dRuI75XbD7dUhdv5A1M2gFMyspnwLSAKy1KssgV0onIc556gMrgVIVz7O9CtmkghBM=
+X-Received: by 2002:a2e:8786:: with SMTP id n6mr7133125lji.166.1642318435979;
+ Sat, 15 Jan 2022 23:33:55 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <6db72962.1929f.17e61cadc03.Coremail.lyz_cs@pku.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: 54FpogBXX9NvyeNhFqBYAA--.14453W
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEEBlPy7t9+qgARsV
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW7Jw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
+Sender: mrssuzaramalingwan2@gmail.com
+Received: by 2002:a05:6512:3086:0:0:0:0 with HTTP; Sat, 15 Jan 2022 23:33:55
+ -0800 (PST)
+From:   Mrs Riva Mimi <mrsriva8mimi@gmail.com>
+Date:   Sat, 15 Jan 2022 23:33:55 -0800
+X-Google-Sender-Auth: LNZKtWKVdn7hGWFY3nRP28vsc-g
+Message-ID: <CAGa6i3i=dx0c9-_DGPPXk0Wi+xP_94dvZO_UNPEPyi9Ky4P36g@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cG1fcnVudGltZV9nZXRfKCkgaW5jcmVtZW50cyB0aGUgcnVudGltZSBQTSB1c2FnZSBjb3VudGVy
-IGV2ZW4Kd2hlbiBpdCByZXR1cm5zIGFuIGVycm9yIGNvZGUsIHRodXMgYSBtYXRjaGluZyBkZWNy
-ZW1lbnQgaXMgbmVlZGVkIG9uCnRoZSBlcnJvciBoYW5kbGluZyBwYXRoIHRvIGtlZXAgdGhlIGNv
-dW50ZXIgYmFsYW5jZWQuCgpTaWduZWQtb2ZmLWJ5OiBZb25nemhpIExpdSA8bHl6X2NzQHBrdS5l
-ZHUuY24+Ci0tLQogZHJpdmVycy9kbWEvc2gvc2hkbWEtYmFzZS5jIHwgNCArKystCiAxIGZpbGUg
-Y2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9kbWEvc2gvc2hkbWEtYmFzZS5jIGIvZHJpdmVycy9kbWEvc2gvc2hkbWEtYmFzZS5jCmlu
-ZGV4IDE1OGU1ZTcuLmIyNmVkNjkgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvZG1hL3NoL3NoZG1hLWJh
-c2UuYworKysgYi9kcml2ZXJzL2RtYS9zaC9zaGRtYS1iYXNlLmMKQEAgLTExNSw4ICsxMTUsMTAg
-QEAgc3RhdGljIGRtYV9jb29raWVfdCBzaGRtYV90eF9zdWJtaXQoc3RydWN0IGRtYV9hc3luY190
-eF9kZXNjcmlwdG9yICp0eCkKIAkJcmV0ID0gcG1fcnVudGltZV9nZXQoc2NoYW4tPmRldik7CiAK
-IAkJc3Bpbl91bmxvY2tfaXJxKCZzY2hhbi0+Y2hhbl9sb2NrKTsKLQkJaWYgKHJldCA8IDApCisJ
-CWlmIChyZXQgPCAwKSB7CiAJCQlkZXZfZXJyKHNjaGFuLT5kZXYsICIlcygpOiBHRVQgPSAlZFxu
-IiwgX19mdW5jX18sIHJldCk7CisJCQlwbV9ydW50aW1lX3B1dChzY2hhbi0+ZGV2KTsKKwkJfQog
-CiAJCXBtX3J1bnRpbWVfYmFycmllcihzY2hhbi0+ZGV2KTsKIAotLSAKMi43LjQK
+Hello
+I'm "Mrs Riva Mimi." married to Mr. Riva( an International
+Contractor and Oil Merchant/ jointly in Exposition of Agro  Equipment
+) who died in  Burkina Faso attack, and diagnosed of cancer for about
+2 years ago  and my husband informed me that he deposited the sum of
+(22.3Million USD Only) with a Finance house) in OUAGADOUGOU BURKINA
+FASO.
+I want you to help me to use this money  for a charity project before
+I die, for the Poor, Less-privileged and  ORPHANAGES in
+your country.  Please kindly respond quickly for further details.
+
+Yours fairly friend,
+Mrs Riva Mimi.

@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FF748FA37
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 03:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FA348FA35
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 03:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234088AbiAPCDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 21:03:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        id S234071AbiAPCDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 21:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234084AbiAPCDk (ORCPT
+        with ESMTP id S234061AbiAPCDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 21:03:40 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6E6C061574
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 18:03:40 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id c14-20020a17090a674e00b001b31e16749cso25956510pjm.4
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 18:03:40 -0800 (PST)
+        Sat, 15 Jan 2022 21:03:33 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF14C06161C
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 18:03:33 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id 133so2013431pgb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 18:03:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=igorinstitute-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:in-reply-to:references:from:date:subject:to:cc;
-        bh=ff4sAy6O0hQSoqvnQZ8q3cMuMe1q1w8oq5fvcMe7gHk=;
-        b=ChDGSDgE0vp41yRuvawLLum8LS9T59WSDYXqaBpAQu3fsgcmtQKdjnnuQx7CtY1/AQ
-         BP9a4WfSRt2u8JJ33ysVu5VR5Yxuo+1dlXQjhxk7bidcnSB5QsY4vHxhlxmfMICWi46b
-         Tykhn4D6yP7CBpC0Wo2LlQd3sylpxjlvIxppQ9Eg0kVBr+fHOB0odXUzFyXIoqpgyvIL
-         MkiNEQ9PCU+FswnK4DBaIwdXVrIxpDvfJ0DY2Hq3PUmqYAFkQP9Ekhwy+y8p00Grdwwt
-         urajfZjzEJB61H+jbwfCDQuqW6oTbpd76aeFSQ3Si4RkTDPa9JYqh+Ol7fSwsKX6oRST
-         /pOg==
+        h=message-id:from:date:subject:to:cc;
+        bh=EQpPofv3xqVheya0dgefCVu2/vpqFU87ufMossH4bmQ=;
+        b=WyZmlmZplLS8zfYwy8JZCK4zxfN773ZY67zGGv43GjSQbpeJp2sSAgI/ZzQRFrZlX8
+         FLGhVsixwvrXFVgbAFnRzNE2XDpwDgL3RdJBKMrnMeX3wEy3BExHbaC0/0F8+8s/3DZH
+         CTSNY4v5VwwBZ+ShgfXy//zoDrUSdpels/Of4iN1J/LeJdIhWr7KKqyWJIciF6d4q3B8
+         83TePSuKskIQrH2nLGtK776rp8eH5TZo3lQPe8HP6YAJis4xdtEXw7hbw0oIAYcr0eyS
+         oMFBlWLTSX2SyU2eNq+YtA3vDwzc2fJv3bZjNnhZj0rAmUs4aX+2Zu6E0XQXrTZ3oKQ3
+         j/Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:in-reply-to:references:from:date
-         :subject:to:cc;
-        bh=ff4sAy6O0hQSoqvnQZ8q3cMuMe1q1w8oq5fvcMe7gHk=;
-        b=GD1bPAwJEkKjDsGsArkfB0jMipVGtN4ZphAe8319nPLSU833MdU1Ul2QEc6q2wh4Y9
-         NZZl89y9iBfzcLhcTo1id3Ui1AcCy+B+l+S856ShjorPQb3BUuMtIsEbrwaMDB1rd+cb
-         ZxdGj3659VxA931K7T/KEQpXiXXwTzdiXOPOKaN9P6JcVuI6mPNOKo2i9iRLeDcbHcHp
-         PldPsOvl3+q1g/3aC2b3C4W/uFdO8+oHFb1hc4uKBrjcwXfyxOVAo2svTIe0YEmztxlZ
-         n00jS4Lz2bWraa9cg4l+SXkZ47j05rF/xd4CWAtAyX4g8kCZtRGp8qZrCjHGQiBAUNhu
-         xuXw==
-X-Gm-Message-State: AOAM531in5JkJ7NjInnMTInkW69D+ZKrreMogizC173YyCfBmuhlWalH
-        /6UNlM4QpwxzD71e/hxjemXBUxAHOJhfuF4M
-X-Google-Smtp-Source: ABdhPJzJakvgX8A54M9pAxRgPqmDQvVbSfYjsv0RiB6ep12cXjXHZvw+0XXkdoxHtYXPjvAXfeXA5w==
-X-Received: by 2002:a17:90a:d184:: with SMTP id fu4mr27984577pjb.26.1642298620091;
-        Sat, 15 Jan 2022 18:03:40 -0800 (PST)
+        h=x-gm-message-state:message-id:from:date:subject:to:cc;
+        bh=EQpPofv3xqVheya0dgefCVu2/vpqFU87ufMossH4bmQ=;
+        b=g25dobKSt14TFPC3Vi84MamH9jIvuuc9ZyD063SFP1qXIOxV5clmYU6fvvgxaGGb7a
+         SZAIfUKI2VEh08TPjtvmG5GNqZdCnocCBu6lmvh+Sehn+YZxtvsAUcDSNNICiDB48ljU
+         wAwyhz898N2lhmolJURd/WmSXaeBpcAR4AKDPVXYIgqhH9ZX3HhqIrTszKPfqKXER8SR
+         aDHSMaH/lvZaX67Bv9uU7YnHnPxZoQn8gjjZPfsxSC3ZehXZDdMZ+bXRKo67rokDJZvc
+         01tm05RvtFcLkfFsOYpPRpqfcpZ+AD/2A6noxy72qD3Bq9J17vS+4vwZV5zYtZCWcL3V
+         +Rhg==
+X-Gm-Message-State: AOAM530K50AAkGnDWhWq8JEkVjPgkg7gaCKVvQiufMkDT60jI1FokvWb
+        SkQhy2jajJtM+NRNYgaFV1CHkQ==
+X-Google-Smtp-Source: ABdhPJzi4Nm0DAxYTAaquO6l69+WqV4eA7FwkV4Kp5hunLWNzSWKwTbscVwRpgaBdnUYKJtCnkMnRg==
+X-Received: by 2002:aa7:9ec7:0:b0:4be:19fa:f0f3 with SMTP id r7-20020aa79ec7000000b004be19faf0f3mr15342794pfq.8.1642298612838;
+        Sat, 15 Jan 2022 18:03:32 -0800 (PST)
 Received: from localhost ([121.99.145.49])
-        by smtp.gmail.com with ESMTPSA id h1sm9404858pfi.109.2022.01.15.18.03.39
+        by smtp.gmail.com with ESMTPSA id c10sm9761822pfl.200.2022.01.15.18.03.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Jan 2022 18:03:39 -0800 (PST)
-Message-Id: <e271d381dcf1c6036a2a22bab6ab72654455aa58.1642298336.git.daniel.beer@igorinstitute.com>
-In-Reply-To: <cover.1642298336.git.daniel.beer@igorinstitute.com>
-References: <cover.1642298336.git.daniel.beer@igorinstitute.com>
+        Sat, 15 Jan 2022 18:03:32 -0800 (PST)
+Message-Id: <cover.1642298336.git.daniel.beer@igorinstitute.com>
 From:   Daniel Beer <daniel.beer@igorinstitute.com>
-Date:   Sun, 16 Jan 2022 14:56:27 +1300
-Subject: [PATCH v3 2/2] ASoC: dt-bindings: add bindings for TI TAS5805M.
+Date:   Sun, 16 Jan 2022 14:58:56 +1300
+Subject: [PATCH v3 0/2] ASoC: add support for TAS5805M digital amplifier
 To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Andy Liu <andy-liu@ti.com>,
         Daniel Beer <daniel.beer@igorinstitute.com>,
@@ -64,78 +61,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TAS5805M is a class D speaker amplifier with integrated DSP.
-Configuration must be generated by TI's PPC3 tool and supplied as a
-firmware image.
+This pair of patches implements support for the TAS5805M class D audio
+amplifier. This driver, and the example configuration in the device-tree
+file, were originally based on a 4.19 series kernel and have been
+modified slightly from the tested version.
 
-Signed-off-by: Daniel Beer <daniel.beer@igorinstitute.com>
----
- .../devicetree/bindings/sound/tas5805m.yaml   | 56 +++++++++++++++++++
- 1 file changed, 56 insertions(+)
+This resubmission differs from v2 as follows:
+
+  - The redundant mutex has been removed
+  - DSP configuration is loaded as a firmware image, rather than
+    directly from the device-tree
+  - The volume control returns non-zero when the values have changed, as
+    required
+  - Some corrections to device-tree example
+
+Daniel Beer (2):
+  ASoC: add support for TAS5805M digital amplifier
+  ASoC: dt-bindings: add bindings for TI TAS5805M.
+
+ .../devicetree/bindings/sound/tas5805m.yaml   |  56 ++
+ sound/soc/codecs/Kconfig                      |   9 +
+ sound/soc/codecs/Makefile                     |   2 +
+ sound/soc/codecs/tas5805m.c                   | 567 ++++++++++++++++++
+ 4 files changed, 634 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/sound/tas5805m.yaml
+ create mode 100644 sound/soc/codecs/tas5805m.c
 
-diff --git a/Documentation/devicetree/bindings/sound/tas5805m.yaml b/Documentation/devicetree/bindings/sound/tas5805m.yaml
-new file mode 100644
-index 000000000000..3aade02d8a96
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/tas5805m.yaml
-@@ -0,0 +1,56 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/tas5805m.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: TAS5805M audio amplifier
-+
-+maintainers:
-+  - Daniel Beer <daniel.beer@igorinstitute.com>
-+
-+description: |
-+  The TAS5805M is a class D audio amplifier with a built-in DSP.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ti,tas5805m
-+
-+  reg:
-+    maxItems: 1
-+    description: |
-+      I2C address of the amplifier. See the datasheet for possible values.
-+
-+  pvdd-supply:
-+    description: |
-+      Regulator for audio power supply (PVDD in the datasheet).
-+
-+  pdn-gpios:
-+    description: |
-+      Power-down control GPIO (PDN pin in the datasheet).
-+
-+  ti,dsp-config-name:
-+    description: |
-+      The name of the DSP configuration that should be loaded for this
-+      instance. Configuration blobs are sequences of register writes
-+      generated from TI's PPC3 tool.
-+    $ref: /schemas/types.yaml#/definitions/string
-+
-+examples:
-+  - |
-+    i2c0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        tas5805m: tas5805m@2c {
-+                reg = <0x2c>;
-+                compatible = "ti,tas5805m";
-+
-+                pvdd-supply = <&audiopwr>;
-+                pdn-gpios = <&tlmm 160 0>;
-+
-+                ti,dsp-config-name = "mono_pbtl_48khz";
-+        };
-+    };
-+
-+additionalProperties: true
 -- 
 2.30.2
 

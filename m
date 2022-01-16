@@ -2,93 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2229C48FA6F
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 04:10:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0271548FA6D
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 04:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234142AbiAPDJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 22:09:08 -0500
-Received: from out162-62-57-64.mail.qq.com ([162.62.57.64]:38665 "EHLO
-        out162-62-57-64.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232540AbiAPDJI (ORCPT
+        id S234134AbiAPDH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 22:07:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232540AbiAPDH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 22:09:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1642302543;
-        bh=GLJp57dCDK6ibqvasrE495fjl0V1+xRpfDN9ufn3Fqc=;
-        h=From:To:Cc:Subject:Date;
-        b=jmolImVHrTew1DLK4MVJAavEbfZdekT8Gkq8uoiKhFIHHUrytsOinDdlW4sIoOVY+
-         PyYDA5AlCfeYT7ZFysVnGl2vB/gPlMRXiDRpH40/LcDK6JVEMGZiruHspU2dJNirJn
-         Xh4Uzmd53RDy7i29MQ5q9aL91w1ymPCcnmt6KsEI=
-Received: from localhost.localdomain ([43.227.136.188])
-        by newxmesmtplogicsvrszc7.qq.com (NewEsmtp) with SMTP
-        id 240084EB; Sun, 16 Jan 2022 11:09:00 +0800
-X-QQ-mid: xmsmtpt1642302540tznzxu9hn
-Message-ID: <tencent_4257E15D4A94FF9020DDCC4BB9B21C041408@qq.com>
-X-QQ-XMAILINFO: NNCgUTg3ctKTkPwe6gHqR9GLm5fQLsdrG8odSOjYTBICwJJmFqXTpTHwPkLAV4
-         vpfs209xyPcShTd6BvKbfaxSPGZtELINzzo7hpU87YpCqTI8YxSNkde8nJiiZUlA4ElxGVpLYhAC
-         4Wi/xetfYtR4lvG3IE4iWg0aX0q3RFVscDeL+rcB5bwtg2x+T5GPCjWfG+k2HDR7hkDNT2SrlMQR
-         BTkM+qnC72NgEoXU8OlAiK6nAbdr7/Lgw77kkcrjpevEc/woIXRA4hP3m7ZurIg82zr3QmEGk7FE
-         ijuOJ7zPhwAuwUH1k1p0qCdEG3CxBCgPcPKbDWozUo23JsYCiDe+OuPDktTC+v6yV/4D4mX3QNpu
-         DM70G57b1hOQP3vOMa3UNoAymwOnSBCc7nriaiyhbF+x8ZIY/d19tsJRqEvkxu47yD23v2Ym/2Ma
-         G+4C2wtLBTZixaytc3qYMvRQZNZ1MGRYM2uj8LzqTF0D1qz9hCZERFDIAQ2vrPN3aJcrtlsGkbUI
-         LYDK/CKCfo+6gIdYsgcuVU6mj11QhsyKebfrAvfRAjBK4A5BejADko1w/izF98HEeNcF1S3NhOVX
-         HJOa4LZOF3zGJ7Uakp28BJgxd/+F1fhXmbvNsQ/M/LYinPvhmDS1SATUMD8lF3uxdubg17Na1LD5
-         xM+eP8VlZypLct/yEVcHTCQ43wvbw/Lmvwzd7RDBqvVU1myHBz+OVLA3kqUzlLsE2w5f1clHVKOA
-         KAa6b9IRsqi9UbXrHR5ZFOoDKNvEwrPRRnJg8/RQr5OjrpRjyb+5IP8dx8Fg/NKBhrYcEKmfClUx
-         Ax6HEbcnWTa2OBnbhT6EFyhxNtvH/OKjH2HyA8R82ow07uHLwrOMqCmMTQ35aY9JQNyO2VzqIWsG
-         I5wGABy7dopUuP+cAV5S9cb2IDUH3DuPJH/iPT4wELqboYVxBadKu5cQ6tTJO75cUMzCeKqsUU
-From:   xkernel.wang@foxmail.com
-To:     bvanassche@acm.org, jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH v2] scsi: ufs: ufshcd-pltfrm: check the return value of devm_kstrdup()
-Date:   Sun, 16 Jan 2022 11:06:49 +0800
-X-OQ-MSGID: <20220116030649.2083-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        Sat, 15 Jan 2022 22:07:57 -0500
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE084C06161C
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 19:07:56 -0800 (PST)
+Received: by mail-vk1-xa33.google.com with SMTP id n9so7276273vkq.8
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 19:07:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=fc35oj1WXtoN0miP5IG+v8d9RduIqQk3g9nq0y/mLs4=;
+        b=CAWkRd1LSB1mKTbwuXGegxVxPCFOSvzZkYIHh9Wb0oBbg+j+IyEIodMEeqqMhAUq3b
+         nahk+4KPJiS6krYufsdZ7whmtJEzf/0SxLJngL3X23Z7jvPJfazUrJVn+eGMFtuxDDfr
+         uAs2/fBojIg6ymtV2n/uNB4BcmCeoPaspwVAonYljvS9u9QjJm9kCwArT2wtbcvyoWAg
+         aOciMbEPemBJau3lnpNMpynHvzKQ8x90AiwP6dmfECJO4VDiCL8/xDXSkaKJ7u1smExW
+         /YBM/n2CYgBQyANWhOvWqkc7FLc0U9hvYLjCN5CS6mUdzoX8l2+B9CXhl5WhurIwYviC
+         GXsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=fc35oj1WXtoN0miP5IG+v8d9RduIqQk3g9nq0y/mLs4=;
+        b=Kn7J9P8Q56kHZd9xRqVLSyiaSIoPOGHUBt6brNoX2MxEbKWWeFNO9tnSCEy0S1biE+
+         Vz8ZrUj1MpAJOTet0NCfqsWhhufrJ81oHvgLb0E4cK9C2b986QZQdGX7j5QY13JR2X/0
+         2970j8iy791/YPawOly9+TlI8c2JGhwhsDcYAWFi1h1Aa3DSG3qDIoIvufWsDoZIfpaQ
+         lDtkJsAYly76N7lWC0iZD5UMHzGOp6sOLfvWrIbfqxhK0UblqZU8OmNowpzd/KzBGEl7
+         MEilQwkR4+MZs6X7+WKJ993KEOSNaqG4qs58t9iuCr941NQZzzm3warGGMgjOz5SoGUE
+         ozyQ==
+X-Gm-Message-State: AOAM532oml3X2rSnoFIznalXfhLFQZfxrx5VAEaRlwotIAcUlCsp1Igw
+        hVzMJIxGqBtXOffKQap63A6PutOHBkwwetDDiCM=
+X-Google-Smtp-Source: ABdhPJwPJWf6OS/xIbnFP1YeXoqqA1QitlfwlcYy/9yW8cEAt+cnMWy/a6VV3oGDN7Z4ykhhojwswO3iq7iABkiQ2sk=
+X-Received: by 2002:a05:6122:90a:: with SMTP id j10mr6169550vka.12.1642302474867;
+ Sat, 15 Jan 2022 19:07:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Reply-To: ouedibepaul@yandex.com
+Sender: bertipau4@gmail.com
+Received: by 2002:a59:cf2a:0:b0:27b:550d:7fe6 with HTTP; Sat, 15 Jan 2022
+ 19:07:54 -0800 (PST)
+From:   "Ouedi be.Paul" <ouedibepa1@gmail.com>
+Date:   Sun, 16 Jan 2022 03:07:54 +0000
+X-Google-Sender-Auth: B3LMFxLVyePfGh9pScg1i1frtIQ
+Message-ID: <CAAyuv15fOjJCKO=OdCW2brLiONhyrdiSfuWeAy7Ma7vEwxHBLA@mail.gmail.com>
+Subject: Hello.......!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+Greetings to you!
 
-devm_kstrdup() returns pointer to allocated string on success,
-NULL on failure. So it is better to check the return value of it.
+I am Mr.Ouedi be.Paul, the Audit and Account Manager (A.D.B)Bank in
+Ouagadougou Burkina Faso, West Africa
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
-Changelogs:
-1. Use my official name.
-2. Synchronize with the latest source code(kstrdup -> devm_kstrdup).
-3. Clear up useless code(devm_kfree).
- drivers/scsi/ufs/ufshcd-pltfrm.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+I have a business transaction for you, In my department i discovered
+an abandoned Sum of US$10,2 Million Dollars,
+In an account that belongs to one of our late foreign customer who
+died in plane crash with his family member years ago.
+ever Since he died, Nobody to claim the left over balance in the account.
+therefore upon this discovery i decided to seek your assistance to
+transfer the funds to your bank account, 100% risk free,
 
-diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-index d35b892..186540a 100644
---- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-+++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-@@ -92,6 +92,11 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
- 		clki->min_freq = clkfreq[i];
- 		clki->max_freq = clkfreq[i+1];
- 		clki->name = devm_kstrdup(dev, name, GFP_KERNEL);
-+		if (!clki->name) {
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+
- 		if (!strcmp(name, "ref_clk"))
- 			clki->keep_link_active = true;
- 		dev_dbg(dev, "%s: min %u max %u name %s\n", "freq-table-hz",
-@@ -127,6 +132,8 @@ static int ufshcd_populate_vreg(struct device *dev, const char *name,
- 		return -ENOMEM;
- 
- 	vreg->name = devm_kstrdup(dev, name, GFP_KERNEL);
-+	if (!vreg->name)
-+		return -ENOMEM;
- 
- 	snprintf(prop_name, MAX_PROP_SIZE, "%s-max-microamp", name);
- 	if (of_property_read_u32(np, prop_name, &vreg->max_uA)) {
--- 
+if you accept i would give you the guide lines of how we can achieve
+this transfer of the balance $10,2 Million Dollars to your account.
+the fund will be share 50-50%. by both of us
+
+Send the information required below for more details,
+
+1. Full Names:...
+2. Address:...
+3. Your Age:...
+4. Your Country:...
+5. Your Private Phone Number:...
+
+Best Regards,
+Mr.Ouedi be.Paul.

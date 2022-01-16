@@ -2,136 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B709848FD58
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 15:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DB148FD57
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 15:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235413AbiAPOHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 09:07:08 -0500
-Received: from mga11.intel.com ([192.55.52.93]:19566 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229785AbiAPOHF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 09:07:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642342025; x=1673878025;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x4VQ4nR9VUlZ83fYyFKy/XXbdvbRBwbal6RMpIkpZLk=;
-  b=X6OncG15/ZbFb6iZKvzw6XY7i33jYaGfQLc7dnXWD4gH45M3PMxDOL3j
-   3lnpPwtYQadVRo3Q0R08r9Tu7bXQwxDMamGF3T/9UUKTTJl/xmyfkQHQu
-   k3wc4crqe3oU/1AsFEZ837Kv4MVGx32tehQ94HO2Y+kHGIFYyux2cFnjB
-   XJfdp9g6wDFF3SKJnhmVIc3jAyvEIjAvhg8ihv9Tbo+0LJM9U2Nz5EpPm
-   Z2bcFdgdo7jLXBKRvyS+C6ffRnlDCI/e2YSGqJioiMjuRdnfUgfuDXRyK
-   JXpZte7sSlY9a8ViHsgHzenEBMDk5Ye60NBlJ1huaw6U84g8GL3pEnFmN
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10228"; a="242049955"
-X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
-   d="scan'208";a="242049955"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 06:07:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
-   d="scan'208";a="517094263"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 16 Jan 2022 06:07:00 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n96BP-000AlI-RA; Sun, 16 Jan 2022 14:06:59 +0000
-Date:   Sun, 16 Jan 2022 22:06:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        gregkh@linuxfoundation.org, realwakka@gmail.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] staging: pi433: validate max bit_rate based on
- modulation used
-Message-ID: <202201162116.8r1xEw9q-lkp@intel.com>
-References: <20220116002333.GA23305@mail.google.com>
+        id S235407AbiAPOG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 09:06:29 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:33429 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229785AbiAPOG2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 09:06:28 -0500
+Received: from [192.168.0.4] (ip5f5aeaa0.dynamic.kabel-deutschland.de [95.90.234.160])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id E839F61EA1BE4;
+        Sun, 16 Jan 2022 15:06:26 +0100 (CET)
+Message-ID: <7886757f-60f4-b63e-95a6-52dc7dcb86d8@molgen.mpg.de>
+Date:   Sun, 16 Jan 2022 15:06:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220116002333.GA23305@mail.google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] Bluetooth: Apply initial command workaround for more
+ Intel chips
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Fernando Ramos <greenfoo@u92.eu>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Tedd Ho-Jeong An <tedd.an@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-bluetooth@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>
+References: <20211202162256.31837-1-tiwai@suse.de>
+ <acc7b5b4-72cc-9f3b-90a6-6fbf6c3a71e7@molgen.mpg.de>
+ <s5h7dcnt0lp.wl-tiwai@suse.de> <YayVYIAi56097Ltl@zacax395.localdomain>
+ <1D49EE9C-42D4-45C9-AE37-F4C508FD2D64@holtmann.org>
+ <s5hk0gch9ve.wl-tiwai@suse.de>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <s5hk0gch9ve.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paulo,
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on staging/staging-testing]
-
-url:    https://github.com/0day-ci/linux/commits/Paulo-Miguel-Almeida/staging-pi433-validate-min-max-bit-rate-settings/20220116-082432
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git fa783154524a71ab74e293cd8251155e5971952b
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220116/202201162116.8r1xEw9q-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c63a3175c2947e8c1a2d3bbe16a8586600705c54)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/4bbc9e444fd3bab38d93ae4261102db64385a26c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Paulo-Miguel-Almeida/staging-pi433-validate-min-max-bit-rate-settings/20220116-082432
-        git checkout 4bbc9e444fd3bab38d93ae4261102db64385a26c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/staging/pi433/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/staging/pi433/rf69.c:238:30: warning: result of comparison of constant 300000 with expression of type 'u16' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
-               (mod == FSK && bit_rate > 300000) ||
-                              ~~~~~~~~ ^ ~~~~~~
-   1 warning generated.
+Dear Takashi,
 
 
-vim +238 drivers/staging/pi433/rf69.c
+Am 10.12.21 um 14:23 schrieb Takashi Iwai:
+> On Tue, 07 Dec 2021 17:14:02 +0100, Marcel Holtmann wrote:
 
-   220	
-   221	int rf69_set_bit_rate(struct spi_device *spi, u16 bit_rate)
-   222	{
-   223		int retval;
-   224		u32 bit_rate_reg;
-   225		u8 msb;
-   226		u8 lsb;
-   227		enum modulation mod;
-   228	
-   229		// check if modulation is configured
-   230		mod = rf69_get_modulation(spi);
-   231		if (mod == UNDEF) {
-   232			dev_dbg(&spi->dev, "setBitRate: modulation is undefined");
-   233			return -EINVAL;
-   234		}
-   235	
-   236		// check input value
-   237		if (bit_rate < 1200 ||
- > 238		    (mod == FSK && bit_rate > 300000) ||
-   239		    (mod == OOK && bit_rate > 32768)) {
-   240			dev_dbg(&spi->dev, "setBitRate: illegal input param");
-   241			return -EINVAL;
-   242		}
-   243	
-   244		// calculate reg settings
-   245		bit_rate_reg = (F_OSC / bit_rate);
-   246	
-   247		msb = (bit_rate_reg & 0xff00) >> 8;
-   248		lsb = (bit_rate_reg & 0xff);
-   249	
-   250		// transmit to RF 69
-   251		retval = rf69_write_reg(spi, REG_BITRATE_MSB, msb);
-   252		if (retval)
-   253			return retval;
-   254		retval = rf69_write_reg(spi, REG_BITRATE_LSB, lsb);
-   255		if (retval)
-   256			return retval;
-   257	
-   258		return 0;
-   259	}
-   260	
+>>>> Thanks, so this seems depending on the hardware, maybe a subtle
+>>>> difference matters.  As far as I read the code changes, the workaround
+>>>> was applied in the past unconditionally, so it must be fairly safe
+>>>> even if the chip works as is.
+>>>>
+>>>> Or, for avoiding the unnecessarily application of the workaround,
+>>>> should it be changed as a fallback after the failure at the first
+>>>> try...?
+>>>
+>>> I don't know if this helps, but I started experiencing this same issue ("hci0:
+>>> command 0xfc05 tx timeout") yesterday after a kernel upgrade.
+>>>
+>>> My controller is a different one:
+>>>
+>>>     8087:0025 Intel Corp. Wireless-AC 9260 Bluetooth Adapter
+>>>     ^^^^^^^^^
+>>>
+>>> I tried with different (older) versions of the v5.15.x kernel but none worked.
+>>>
+>>> Now, this is the interesting (?) part: today, when I switched on the computer
+>>> to keep testing, the bluetooth was *already* working once again.
+>>>
+>>> I have reviewed my bash history to try to figure out what is it that I did, and
+>>> the only thing I see is that yesterday, before going to sleep, I did a full
+>>> poweroff instead of a reset (which is what I used yesterday to try different
+>>> kernels).
+>>>
+>>> This does not make any sense... but then I found this [1] post from someone else
+>>> who experienced the same.
+>>>
+>>> Is there any reasonable explanation for this? Could this be the reason why you
+>>> seem to have different results with the same controller (8087:0a2a)?
+>>
+>> we trying to figure out what went wrong here. This should be really only an
+>> issue on the really early Intel hardware like Wilkens Peak. However it seems
+>> it slipped into later parts now as well. We are investigating what happened >> and see if this can be fixed via a firmware update or if we really 
+have to
+>> mark this hardware as having a broken boot loader.
+> 
+> The upstream bugzilla indicates that 8087:0aa7 seems hitting the same
+> problem:
+>    https://bugzilla.kernel.org/show_bug.cgi?id=215167
+> 
+> OTOH, on openSUSE Bugzilla, there has been a report that applying the
+> workaround for 8087:0026 may cause another issue about the reset
+> error, so the entry for 8087:0026 should be dropped.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Can you confirm that commit 95655456e7ce (Bluetooth: btintel: Fix broken 
+LED quirk for legacy ROM devices) [1] merged in the current Linux 5.17 
+cycle this week fixed the issue?
+
+
+Kind regards,
+
+Paul
+
+
+[1]: 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95655456e7cee858a23793f67025765b4c4c227b

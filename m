@@ -2,70 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4C748FD00
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 13:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DAF48FD0B
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 13:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233197AbiAPMth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 07:49:37 -0500
-Received: from smtp10.smtpout.orange.fr ([80.12.242.132]:59232 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiAPMtc (ORCPT
+        id S235248AbiAPMwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 07:52:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235028AbiAPMwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 07:49:32 -0500
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id 94yOnSI1HEuQ294yPnkO1m; Sun, 16 Jan 2022 13:49:31 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 16 Jan 2022 13:49:31 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Andy Shevchenko <andy@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] lib/string_helpers: Use the given gfp flag when allocating memory
-Date:   Sun, 16 Jan 2022 13:49:22 +0100
-Message-Id: <30a0c2011f8034378639883339fa7d7c55e034a5.1642337349.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 16 Jan 2022 07:52:08 -0500
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B890CC061574;
+        Sun, 16 Jan 2022 04:52:07 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id CA353100D940F;
+        Sun, 16 Jan 2022 13:52:05 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id A7CE14A85B; Sun, 16 Jan 2022 13:52:05 +0100 (CET)
+Date:   Sun, 16 Jan 2022 13:52:05 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     patrice.chotard@foss.st.com
+Cc:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        christophe.kerello@foss.st.com, stable@vger.kernel.org
+Subject: Re: [PATCH v2] spi: stm32-qspi: Update spi registering
+Message-ID: <20220116125205.GA18267@wunner.de>
+References: <20220112144424.5278-1-patrice.chotard@foss.st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220112144424.5278-1-patrice.chotard@foss.st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kstrdup_quotable_cmdline() is given a gfp flag that is passed and used for
-memory allocation in kstrdup_quotable() just a few lines below.
+On Wed, Jan 12, 2022 at 03:44:24PM +0100, patrice.chotard@foss.st.com wrote:
+> diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+> index 514337c86d2c..09839a3dbb26 100644
+> --- a/drivers/spi/spi-stm32-qspi.c
+> +++ b/drivers/spi/spi-stm32-qspi.c
+> @@ -688,7 +688,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+>  	struct resource *res;
+>  	int ret, irq;
+>  
+> -	ctrl = spi_alloc_master(dev, sizeof(*qspi));
+> +	ctrl = devm_spi_alloc_master(dev, sizeof(*qspi));
+>  	if (!ctrl)
+>  		return -ENOMEM;
+>  
+> @@ -784,7 +784,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+>  	pm_runtime_enable(dev);
+>  	pm_runtime_get_noresume(dev);
+>  
+> -	ret = devm_spi_register_master(dev, ctrl);
+> +	ret = spi_register_master(ctrl);
+>  	if (ret)
+>  		goto err_pm_runtime_free;
+>
 
-It looks reasonable to use this gfp value for the buffer allocated and
-freed in kstrdup_quotable_cmdline() as well.
+Unfortunately this patch is still not correct:  It introduces a
+double free in the probe error path.
 
-Fixes: 0ee931c4e31a ("mm: treewide: remove GFP_TEMPORARY allocation flag")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-According to what I've found in 5.16, all callers use GFP_KERNEL, so this
-patch should be a no-op.
-But who knows how it will be used in the future. Better safe than sorry.
----
- lib/string_helpers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You need to remove this...
 
-diff --git a/lib/string_helpers.c b/lib/string_helpers.c
-index 90f9f1b7afec..7aceeb40dfd7 100644
---- a/lib/string_helpers.c
-+++ b/lib/string_helpers.c
-@@ -624,7 +624,7 @@ char *kstrdup_quotable_cmdline(struct task_struct *task, gfp_t gfp)
- 	char *buffer, *quoted;
- 	int i, res;
- 
--	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
-+	buffer = kmalloc(PAGE_SIZE, gfp);
- 	if (!buffer)
- 		return NULL;
- 
--- 
-2.32.0
+err_master_put:
+	spi_master_put(qspi->ctrl);
 
+...and replace all the gotos in stm32_qspi_probe() which jump
+to the err_master_put label with a return statement.
+
+Thanks,
+
+Lukas

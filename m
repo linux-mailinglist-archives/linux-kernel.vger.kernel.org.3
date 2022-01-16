@@ -2,102 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B96C48FEAA
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 20:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5525748FEAE
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 20:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236042AbiAPT3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 14:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiAPT3E (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 14:29:04 -0500
-X-Greylist: delayed 111399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Jan 2022 11:29:03 PST
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07B7C061574;
-        Sun, 16 Jan 2022 11:29:03 -0800 (PST)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 2F194D64DC7;
-        Sun, 16 Jan 2022 20:29:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1642361341;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GIoSTxudl4ORprjRcu++GnE1IFzgu7Qi36PinduD8GM=;
-        b=Sdahs2igqjBvlecM/tslBBQJ0uRu18YInEwW24OOIFbu949Ic24DGux3jNRAFnYUyCmoz3
-        q9ZNzZ369O8CoiEnYlCGxXLhzoalCRYFxrd87QuI4xa5brnLaVgY2cbpqHhlNuzhwM2TVK
-        xjJ6/Bil4wB4YV++v9NcvXc08ut+UUg=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: PATCH v4 ASUS EC Sensors
-Date:   Sun, 16 Jan 2022 20:28:59 +0100
-Message-ID: <2613330.mvXUDI8C0e@natalenko.name>
-In-Reply-To: <20220111180347.1245774-1-eugene.shalygin@gmail.com>
-References: <20220111180347.1245774-1-eugene.shalygin@gmail.com>
+        id S236066AbiAPTcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 14:32:24 -0500
+Received: from mout.gmx.net ([212.227.17.22]:46209 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229744AbiAPTcV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 14:32:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1642361535;
+        bh=0lgPWAbt9wOLUClznnUlT4W6Xyol8p86VUEX681jDz0=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=AXr2o4a/HwGqR1XYEHO0Y4GOGLohPYB7LaeoKMRC9WTWmKeSYj9xUAeUDVltRfO6U
+         0wt/Wpa3JEvtQR2bQq0nRbyocjXD4DY42p+V1XDvnu+64xaVUYFzPA8doQe+gGeiVa
+         21mRD2tlWwphSONUyJ/7DK8qk6IIDAEnbK+p7WiE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530 ([92.116.184.40]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MWRVb-1mq5tU0aOR-00XpKO; Sun, 16
+ Jan 2022 20:32:15 +0100
+Date:   Sun, 16 Jan 2022 20:31:09 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [GIT PULL] fbdev updates for v5.17-rc1
+Message-ID: <YeRyfaesC2kxkgZC@ls3530>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:f7Q6R91YqaJfAxtW+FAUMmAE+C1iuEWECRoMWYaHWzpPRA/qdH8
+ /skZ1uaTcZ0KJOqYHIXot03jiY246ME3PHXwIVd1PqU2iLrEguRMlBzojIen1ZI0/w5pyAg
+ kyyN0B88uM83Pj70PI+t/fWn14Eu6BKIVBDEeyqRd14htKWBca3QDE5dYw7zphxCutx3lUC
+ 64c/ucvhg6M/Rn7ufFBdA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kVqA4J89UW8=:1gtLHusprgEfqH+hokOQvF
+ Er/Jr1YMrFsfxHcvFBxWWE3N1ZHXiAt3Jp/ERvwxMo3YDllssP35hJsU47ZzMBTPJzkGZGW2p
+ xZkVlCYCMmkZDdLky/JcXA+CgA7W/P8+w+/xG6+FZlOyM12kwaNnrw8YEM3pBrZ8vWU+t1q3V
+ ffWV90eovqJnmkNJgI7qWMZDzvYe/t2d+hnQpM0eF3CDFGttiMC9KajD0Amrmg1Mg2ObnX3jp
+ 29jRXAnF0ylEDDJjBCCqFAzUtNA3LajzlyTaF921FjJsPNSMYwZ/ZoWuL1Uc/mJBP5J5roACW
+ 02zHUKsDGbmPb3lUV6CyAuuuhXMbx+xI4QkSQxXSkmmd9TBb1ab8IfspaaaC0LVlY+/kg8LpP
+ tiGEpvsO30wWi4jp/ExpLnJgCRVesCD28HDKewZ+tIYSXyAyWFgMuE6GIF182cO6xNAWauP2D
+ gch5R6mfjF9BD6pZpNCVYiLQgYHHslVUQ1DPo0OqT09HwOFSZ8X1nf1XyXx32OjsWlBzhbPCa
+ IdaN96JhXAdmGEN1Oeudj4day7x/SzP0WsRi9z6ssjBMrT0cjjiNpJDvV9Sm38drIobqvebO3
+ xrAPAfH6ir+mBdI9anb1DJmGXti70Gqs+/vPHeDngJw4XRW08Q0NXVHh7odo3sPXwRwoR7Vos
+ klMuygjGU4m9WUsU9LWWuK2+xqlNEKp/85kWOhFDGcx1FyNRtMilY0lrCPO+Vmgnm0Eoah1Xt
+ 717PtEimnh3P86H9R70U0yJsxHkLar3Cop9Kiqe/j1vNpJ1SI8dv66i2RguJGGwLNKbQmYDOY
+ 2hw/tX6EA9Q0i6tdsbLtIcLRGCAanyn8c39M+7ywIS7y0NNHQ69wmp+mUpwbNWoCsh5G/IJB4
+ tDswurnGe8ImiSfvCVutuoHMgwJYsf4xCPAaf1NXLwTMPovDbnppwNTClQc0Zc9/7PJYrHj2Y
+ PlSohW7BSeVwxa0iBnlYz2W/dWJRJ833k/KvecfZgN9tWSZwXcbIwQwtUK1GXc861XX5U1po9
+ YkkOMAfcu13K1GJvM4M9pX1uUmCcLYRJc4PhA3DnMvckWDwTHNkcvFJGw4SNOTUozA==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+Hi Linus,
 
-On =FAter=FD 11. ledna 2022 19:03:43 CET Eugene Shalygin wrote:
-> This patchset replaces the HWMON asus_wmi_ec_sensors driver with
-> an implementation that does not use WMI but queries the embedded
-> controller directly.
->=20
-> That provides two enhancements: sensor reading became quicker (on some
-> systems or kernel configuration it took almost a full second to read
-> all the sensors, that transfers less than 15 bytes of data), the driver
-> became more fexible. The driver now relies on ACPI mutex to lock access
-> to the EC, in the same way as the WMI DSDT code does.
->=20
-> Chenges in v5:
->  - Place the sensors bitset directly into the driver_data field of the
-> 	 dmi_system_id struct.
->  - Replace doc comments with regular ones.
+The fbdev layer is orphaned, but seems to need some care.
+So I'd like to step up as new maintainer.
 
-BTW, is this OK:
+This pull request contains only one single initial patch which adds
+myself to the MAINTAINERS file for the FRAMBUFFER LAYER.
 
-```
-[   11.104396] asus-ec-sensors PNP0C09:00: board has 6 EC sensors that span=
- 7 registers
-[   11.104400] asus-ec-sensors PNP0C09:00: hwmon: 'asus-ec-sensors' is not =
-a valid name attribute, please fix
-```
+This was
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-?
+Thanks,
+Helge
+--------
 
->=20
-> Changes in v4:
->  - Deprecate the wmi driver rather than removing it.
->=20
-> Changes in v3:
->  - Remove BIOS version checks and BIOS version dependent mutex path.
->=20
-> Changes in v2:
->  - Replace sensor flags enum with bitset
->  - Replace module init/probe functions with module_platform_driver_probe
->    and ask the platform drivers framework to load the driver when ACPI
->    EC is found (ACPI ID "PNP0C09").
->  - Extend board data with BIOS version attribute for the mutex path to be
->    BIOS version dependent.
->  - Add module parameter to override the mutex path.
+The following changes since commit df0cc57e057f18e44dac8e6c18aba47ab53202f9:
 
-Thanks.
+  Linux 5.16 (2022-01-09 14:55:34 -0800)
 
-=2D-=20
-Oleksandr Natalenko (post-factum)
+are available in the Git repository at:
 
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/fbdev-5.17-1
 
+for you to fetch changes up to f346f32701ebacf6fe397f6f1d254256f73da321:
+
+  MAINTAINERS: Add Helge as fbdev maintainer (2022-01-14 21:49:23 +0100)
+
+----------------------------------------------------------------
+fbdev updates for v5.17-rc1
+
+Add me as maintainer for the framebuffer code.
+
+----------------------------------------------------------------
+Helge Deller (1):
+      MAINTAINERS: Add Helge as fbdev maintainer
+
+ MAINTAINERS | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)

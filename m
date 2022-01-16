@@ -2,77 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E57148FEA6
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 20:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A931048FEA7
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 20:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236154AbiAPTYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 14:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
+        id S236092AbiAPT0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 14:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236157AbiAPTYR (ORCPT
+        with ESMTP id S230076AbiAPT0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 14:24:17 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199FDC06161C
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 11:24:17 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id m3so35636403lfu.0
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 11:24:17 -0800 (PST)
+        Sun, 16 Jan 2022 14:26:40 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B1EC061574
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 11:26:39 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id j27so7869552pgj.3
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 11:26:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c6evELW+tkD7CtjU/q82JAh8zwV9sibyS+oVT1wgMIo=;
-        b=pS/LRlqPd2v795c2ySY+8PL8UpC5Zl/zUN5+ti7B4CoFeYTvYKCSFwKmMbUVOPcDVc
-         7eDStVWQH+iALVLXbJ//2+WauF9fp7eC+h+NWylp10lReOm2dExRzmxX6TmsUpamL0FA
-         3mhzljQgdxIjCnOhaoIUlIh/xT31WP7v/ZND528u73eUybliaipUhuZ8Myurkri9/Bn0
-         VMYcEsiO5g5dBYFv1judak18DlWxlI2misGKjlM0Uy/c9j5/lFYy/XHbPdCQhuXVVchu
-         erkNGuEzUvBLWQC3ykVipjL4zjFm2geGKSIDKJvecb5eGqp9umVpwKPwj9v6mlgDm1G1
-         E4Cg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+an7IKXCzTHm4c2E+GDMSIDpCDQ46aOoF0DBIs1Sxew=;
+        b=oMdJpG1xA/YwY0eaxDCNRpvT2JhA+XDMWTFoCCCOl2dYec0Qczbc8/zbD1RZoxKoWB
+         RJ0CwLB9qULgDj1yN8vNwuQZasbwyuabCJjTuI78jQWGDiEnuRMM9HzdQSBq4HVk34+n
+         3y/fjCWdW6pEpggH+fbqKdW9YIIOE28BGCC3ps+H6uDUqs8jAirY/0Sg7+XIPeVFFTkk
+         zygpFHZaZ+c8LbzkMKQLDTyZGNO4Uv4vZNnGTvkRbOg39zVyyQZWmUSTglYdxUx8w+Dr
+         J7I031NuWgqBai2CE4msg04OHLg0URDPC9l8Q3sBeEaKUFHZinSniPTtTUJ5qXa8zZz5
+         HqYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c6evELW+tkD7CtjU/q82JAh8zwV9sibyS+oVT1wgMIo=;
-        b=RjMMdmkYfv8MYvTfYsCxB279PZexzsFsQKJ0Pqa7Ws0yQU00Akjx7ioppiknXp8gIM
-         mUoBIT6PWh7V+/45dBaIoLh0JXKXRnrdEErro/lstp7GYcO8l7xt6+P7FBLhbZiGP4F3
-         p+q1aC128/8cQKnLAlBfxZDon5f2/DaOz51MLImQKH4j2gowyadSc787G5DeGcQ2Lm6h
-         CHzOEQYU/cwi3zgc3tUJZwuumZ229Obcoctu+WVnRXcgyWioKCE77PtckFT3AGiczstw
-         xnYl5FdEOLVrH12qA6cru6QD7WJL+L8HR3VljhPVE+A0zjb0OHedWLE0DzmSi2RcSU4X
-         mQ2w==
-X-Gm-Message-State: AOAM532BrAafbx67AerswvX16UgfbxyrZKt6E0vt8/gHCX19Oks/HEfC
-        ZmzMJU9kbDkZ5YED/0I/Ic0kSHYwuTdhLfThdJKfXQ==
-X-Google-Smtp-Source: ABdhPJw6mt0uPBES7VWlz/l/3HfrOre8edIq1HG4QyVNrJkP4NMUfE1A5yoz/TNv8wazbvj7f5TgBtQy/ErWCZ/LmWo=
-X-Received: by 2002:a05:6512:2629:: with SMTP id bt41mr14284903lfb.264.1642361055116;
- Sun, 16 Jan 2022 11:24:15 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+an7IKXCzTHm4c2E+GDMSIDpCDQ46aOoF0DBIs1Sxew=;
+        b=ldNYMTp9PIimvTyyGGazVB+/WXlWFaf+EG7oOys4dLepojbODPvIF0DQpWdt3Q/D+l
+         2FISO07S4tgdeunFuaIDJcYyeP5DuQ1XeAaskfg5hD0pLFFAiZel7qJjs0Wl/T9OA+oJ
+         ix+6j76cGDIytFp50BHOXhXbki+7Hcv18PTBGCJfIctyqiJHiqMNJTBkL/7cTdSqknkk
+         PguOieDt/x7i9F0iBaU109Pd/fkjuY3e842SAQqHdHkS0PZRaymGtbQY3WF5e+Q2zL5z
+         i43Hko2Gep1qT8jRjdZWZIWUtNSk9pEmUxRAjNH2PwwbsECcVy45pSlX4y2hilloDXvZ
+         WKpA==
+X-Gm-Message-State: AOAM5329aT/CR3NoUB39TX9uk8I9Q792HXzpz8JzfpTGPQad4VSWJDb2
+        TAhtO61Nf5XBcgJHmLNJudo=
+X-Google-Smtp-Source: ABdhPJyCorLyOHoL+v6+t7fDcnQCr8n8tc4BiS/tIqwyTaIsw6rXyPsQE5JQGABwt26Edn+PmsFP3A==
+X-Received: by 2002:a63:338c:: with SMTP id z134mr16055036pgz.459.1642361199173;
+        Sun, 16 Jan 2022 11:26:39 -0800 (PST)
+Received: from localhost.localdomain ([150.129.206.110])
+        by smtp.gmail.com with ESMTPSA id v10sm7773823pfg.19.2022.01.16.11.26.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jan 2022 11:26:38 -0800 (PST)
+From:   Vihas Mak <makvihas@gmail.com>
+To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org, martin@kaiser.cx,
+        straube.linux@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Vihas Mak <makvihas@gmail.com>
+Subject: [PATCH] staging: r8188eu: handle rtw_init_netdev_name() failure appropriately
+Date:   Mon, 17 Jan 2022 00:56:11 +0530
+Message-Id: <20220116192611.19224-1-makvihas@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220111010302.8864-1-richard.weiyang@gmail.com> <20220111010302.8864-2-richard.weiyang@gmail.com>
-In-Reply-To: <20220111010302.8864-2-richard.weiyang@gmail.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Sun, 16 Jan 2022 11:24:03 -0800
-Message-ID: <CALvZod5ycSmk7URBoLGGJAiyjGQ1E0HR2RnJ-3uZai=t+KpEKA@mail.gmail.com>
-Subject: Re: [PATCH 2/4] mm/memcg: mem_cgroup_per_node is already set to 0 on allocation
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 5:03 PM Wei Yang <richard.weiyang@gmail.com> wrote:
->
-> kzalloc_node() would set data to 0, so it's not necessary to set it
-> again.
->
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+rtw_init_netdev_name() calls dev_alloc_name() which allocates the name
+for the device as per the given name format.
+It returns a negative err code if the format is invalid. Currently the
+name format is specified by the module parameter "ifname".
+Warn the user if "ifname" is invalid.
 
-Reviewed-by: Shakeel Butt <shakeelb@google.com>
+Signed-off-by: Vihas Mak <makvihas@gmail.com>
+---
+ drivers/staging/r8188eu/os_dep/usb_intf.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/staging/r8188eu/os_dep/usb_intf.c b/drivers/staging/r8188eu/os_dep/usb_intf.c
+index 91792dfd3..875815b5e 100644
+--- a/drivers/staging/r8188eu/os_dep/usb_intf.c
++++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
+@@ -399,7 +399,10 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
+ 			DBG_88E("can't get autopm:\n");
+ 
+ 	/*  alloc dev name after read efuse. */
+-	rtw_init_netdev_name(pnetdev, padapter->registrypriv.ifname);
++	if (rtw_init_netdev_name(pnetdev, padapter->registrypriv.ifname) < 0) {
++		DBG_88E("rtw_init_netdev_name failed, ifname:%s\n",
++			padapter->registrypriv.ifname);
++	}
+ 	rtw_macaddr_cfg(padapter->eeprompriv.mac_addr);
+ 	rtw_init_wifidirect_addrs(padapter, padapter->eeprompriv.mac_addr,
+ 				  padapter->eeprompriv.mac_addr);
+-- 
+2.30.2
+

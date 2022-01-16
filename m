@@ -2,102 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 925B548FDB7
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 17:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A4248FDDE
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 17:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235543AbiAPP7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 10:59:05 -0500
-Received: from mga02.intel.com ([134.134.136.20]:5452 "EHLO mga02.intel.com"
+        id S233666AbiAPQaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 11:30:12 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:63217 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232426AbiAPP7D (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 10:59:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642348743; x=1673884743;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/f2pNQ4PV7SPzdN485bwzOcHSv6xR3obCYGKlCERdJw=;
-  b=a9BiUqmTbBLf0Z6nNkzuQdXF9m+FK/vvQBJoOfCfvHrzao2OrNRfVa09
-   IJi36H8W2FqzYdRDWUC209AaPDfuE/tmAvJ3KTjDkx/4sqvMifnZDVxCt
-   5v1/nryVHqS59RfJ9djucGbrvkxDCRt2jiVlFE2l46IRFXJQD95cdoQT6
-   RyjZqTqwTYXnwHpkGVd+m5TnBbj2Lpo/2FRLIGen8+7j0TVLWY5sUcuy0
-   UJ/sP9AgOk/d/3GtCi03anYnvXJRhpMbAyfQV9fetPqbTHoN90IGIkoGU
-   UkRvIOSmZJDL8vucrTHtP+XG55eUfLcgw54+FxfezJyULml1XvgZF3v5u
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10228"; a="231853474"
-X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
-   d="scan'208";a="231853474"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 07:59:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
-   d="scan'208";a="517127552"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 16 Jan 2022 07:59:02 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n97vp-000Aoq-Br; Sun, 16 Jan 2022 15:59:01 +0000
-Date:   Sun, 16 Jan 2022 23:58:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mukesh Sisodiya <mukesh.sisodiya@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Luca Coelho <luciano.coelho@intel.com>
-Subject: drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c:1265:6: warning:
- stack frame size (1040) exceeds limit (1024) in '_iwl_dbg_tlv_time_point'
-Message-ID: <202201162344.1eLplIwD-lkp@intel.com>
+        id S235731AbiAPQ3q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 11:29:46 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4JcL944DHLz31;
+        Sun, 16 Jan 2022 17:29:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1642350584; bh=bGGaw/ldrCq1jAH5EChsBqNxiTNzrIjLK3w+QjVTJCw=;
+        h=Resent-From:Resent-Date:Resent-To:Date:From:Subject:To:Cc:From;
+        b=Pd2VbWB0znYwxMr/zuvbiSNcckRInObFJiQtiRGqwDj3EA7SODdZgaBDWEpmLQh2A
+         r32Jytoo0hFOkKPlS5oktGs6H4MvtCRnrjG5SKPuQZfMFz1QHKGXKbvoDIz8YzB2KT
+         OAmcLV09tAc8c1CyWiXGQtrY6uB1nwwwOhvALBTveCDxX30BSU2O4QnKlVvZudEt/o
+         O3RV5cV5zmk6wRPiP3MhP+rrbtlzeSfCGSVp0OaJ08XMI3lz6dCq6kX+pAEz0HxKP0
+         hJsQFv6g8w7yjPSxfRCVQEtrTcuouKKqTl5P9iK7YiGHn137IUMUYeTZ4veQk5oAI5
+         VRirZxQx/XCIA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.4 at mail
+X-Spam-Action: marked-ham
+X-Bogosity: H 0.000000
+Received: from rere.qmqm.pl
+        by rere.qmqm.pl with LMTP
+        id gCUpJ4tB5GFaKgEAZU03Dg
+        (envelope-from <mirq-linux@rere.qmqm.pl>)
+        for <mirq-linux@rere.qmqm.pl>; Sun, 16 Jan 2022 17:02:19 +0100
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4JcKYR2wYTz63;
+        Sun, 16 Jan 2022 17:02:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1642348939; bh=bGGaw/ldrCq1jAH5EChsBqNxiTNzrIjLK3w+QjVTJCw=;
+        h=Date:From:Subject:To:Cc:From;
+        b=FBgmvOZ5We0GsAgvaOrgo4c7fgbnPoYnoOImUCCiJsRJ0Iwa9CE7aT+amX8e+RXdS
+         y1eOLOJBwpUDUzkIpzNqL2B7eixDqYjsJFvPx5DKxHBWOVGhz946cHyBzuwywLh+ik
+         1MNjQ4wr91aom/rgSmqDeNmHN8+Dg4js8LxzapMr/YjzsruxFZBS05mCY3AJKre+r8
+         OqLXewNTlPfzcKQ4QCpArFWweFoYQEq+S2swpdM4er4QIg+9YU4hu7IyW/BQDMGoKy
+         9Bkpmw50XCnc0lzS9lMT/AH6G6ObSAv8+pXT0TXlnGsA8lA4ciGOxZU05k1GPxtiJ9
+         jJQddSTQck9wg==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.4 at mail
+Date:   Sun, 16 Jan 2022 17:02:17 +0100
+Message-Id: <cover.1642348712.git.mirq-linux@rere.qmqm.pl>
+From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Subject: [PATCH 0/2] i2c: tegra: allow compiling out support for Tegra's special constrollers
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mukesh,
+To patches that, combined, reduce I2C driver's code by ~2kB and a bit
+from runtime overhead for non-Tegra20 or non-Tegra210 builds.
 
-FYI, the error/warning still remains.
+Michał Mirosław (2):
+  i2c: tegra: allow DVC support to be compiled out
+  i2c: tegra: allow VI support to be compiled out
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4d66020dcef83314092f2c8c89152a8d122627e2
-commit: 020cde4750c5b20be309e028dec9950520384c1e iwlwifi: yoyo: support for DBGC4 for dram
-date:   6 weeks ago
-config: mips-randconfig-r032-20220116 (https://download.01.org/0day-ci/archive/20220116/202201162344.1eLplIwD-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 650fc40b6d8d9a5869b4fca525d5f237b0ee2803)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=020cde4750c5b20be309e028dec9950520384c1e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 020cde4750c5b20be309e028dec9950520384c1e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/wireless/intel/iwlwifi/
+ drivers/i2c/busses/Kconfig     | 16 ++++++++++++++++
+ drivers/i2c/busses/i2c-tegra.c | 35 +++++++++++++++++++++-------------
+ 2 files changed, 38 insertions(+), 13 deletions(-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+-- 
+2.30.2
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c:1265:6: warning: stack frame size (1040) exceeds limit (1024) in '_iwl_dbg_tlv_time_point' [-Wframe-larger-than]
-   void _iwl_dbg_tlv_time_point(struct iwl_fw_runtime *fwrt,
-        ^
-   1 warning generated.
-
-
-vim +/_iwl_dbg_tlv_time_point +1265 drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c
-
-14124b25780db5 Shahar S Matityahu 2019-07-23  1264  
-b8221b0f750a05 Johannes Berg      2021-08-02 @1265  void _iwl_dbg_tlv_time_point(struct iwl_fw_runtime *fwrt,
-
-:::::: The code at line 1265 was first introduced by commit
-:::::: b8221b0f750a05a7ae9cbca84932e2a36a3ee658 iwlwifi: prepare for synchronous error dumps
-
-:::::: TO: Johannes Berg <johannes.berg@intel.com>
-:::::: CC: Luca Coelho <luciano.coelho@intel.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

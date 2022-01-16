@@ -2,388 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FDF48FBFF
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 10:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E5148FC13
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 10:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234797AbiAPJik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 04:38:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S234806AbiAPJzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 04:55:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232360AbiAPJii (ORCPT
+        with ESMTP id S232360AbiAPJzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 04:38:38 -0500
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CE9C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 01:38:38 -0800 (PST)
-Received: by mail-ua1-x931.google.com with SMTP id m15so24992990uap.6
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 01:38:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qPwvpMeX7/VRxsUsvh5ugKJtoSAD+TyzCeiSfRll9OQ=;
-        b=AcV3lwBLpe1Yagub6q+UZwlJNn+dAZ8gGdzqgxPY6wxcRRJN+i3+BP7syQlA3Emg5C
-         QfHH+Yzjqt7di9w2STUci/Q6WB56vjZ2qKMSrIwDRo8/tReH1rRyNaf0fXfRlzOKwNUY
-         3T5p1IUi8I98RBIX/sBZ95zI5WG7eAAU+13IKRwkBx3wn3HmPq3sUhJKoOXNNxPx6aQT
-         ezZ187UN0DayPmleUSScPlsUosFolEKPSSU/ZYJb06KKKJoDeEnQhj5j4M6bI/xpJYjm
-         1kKm2q1vJwfTtQ5sIulxE442zJAD1v6yzDOidZVT9la0VDFTi0oc02pmohz/bidnDnDW
-         HRBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qPwvpMeX7/VRxsUsvh5ugKJtoSAD+TyzCeiSfRll9OQ=;
-        b=A3zwrYosKXcydfC7LKL8GYvEPKC/lqosHp2HDiKp7lGdkRUFNp229dBv5GhrFP6tRT
-         xuGLCH+xgRrBIyZornjYw9yIkRCLd+fuLy0liaK6QG6C6zBbuXUO5sjzMOXJycpQ6iZQ
-         JhIwiKqLKG8lkeXVa+5wBDaqeamFEy5ddB3vOEvd4S1QEsFGPkvNeXJwjVHidp0aZc5J
-         ebJ+lcmeZcyIJYMaqN63TctMpM70s8/Jz8hxrZbzIJsHOKlBQxAKYaCDIUd1X3V2cfNo
-         yYfkUA2/74EdJdpO3Du4+qP5jUAaYdD7a5aeRUcLCHqsfSodyABhMJWxKNqdE6ramFxb
-         DUmw==
-X-Gm-Message-State: AOAM530NtZEv6xBJm/TO8EuVM9oMOg1IxlQFlq11I+bqkfC3Ue780rW5
-        bS+lv5+5RkhlLi/oN7R+SKfhLeneUatKQP7mBwAlyHYeCOMA7J/j
-X-Google-Smtp-Source: ABdhPJza9Use6/MIwWAUyox/haAqkVc9Sr2Wz8jXaoF43VZWTtSzjr1f4oD/XnyosFnv2Y3cpN4X6U5HbanEnGc0CW0=
-X-Received: by 2002:a05:6102:c06:: with SMTP id x6mr3253816vss.52.1642325917347;
- Sun, 16 Jan 2022 01:38:37 -0800 (PST)
+        Sun, 16 Jan 2022 04:55:15 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D800C061574;
+        Sun, 16 Jan 2022 01:55:15 -0800 (PST)
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n92Fj-0004oF-Ou; Sun, 16 Jan 2022 10:55:11 +0100
+Message-ID: <4e7a5b11-541d-ef27-21b1-bc563677e045@leemhuis.info>
+Date:   Sun, 16 Jan 2022 10:55:11 +0100
 MIME-Version: 1.0
-References: <1635858706-27320-1-git-send-email-jianhua.ljh@gmail.com>
- <1635858706-27320-2-git-send-email-jianhua.ljh@gmail.com> <20211217164019.7d5d9848f350fef4f709c62f@kernel.org>
- <CAAgTQPXi_cmi27upcLHgen3PotOtcu64oAxjYp559g6fYgkCvQ@mail.gmail.com> <20220107212046.13e55368664b31c2b41b7e94@kernel.org>
-In-Reply-To: <20220107212046.13e55368664b31c2b41b7e94@kernel.org>
-From:   Jianhua Liu <jianhua.ljh@gmail.com>
-Date:   Sun, 16 Jan 2022 17:38:26 +0800
-Message-ID: <CAAgTQPWs0x_Hczc6ha5Cf2sVOYhAO91g-=79abi_+DWs9v-1kA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] arm64: kprobes: add support for KPROBES_ON_FTRACE
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        orson.zhai@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC] Scheduler: DMA Engine regression because of sched/fair
+ changes
+Content-Language: en-BS
+To:     Alexander Fomichev <fomichev.ru@gmail.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
+Cc:     Mel Gorman <mgorman@suse.de>, linux@yadro.com,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <20220112152609.gg2boujeh5vv5cns@yadro.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20220112152609.gg2boujeh5vv5cns@yadro.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1642326915;e61157a7;
+X-HE-SMSGID: 1n92Fj-0004oF-Ou
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 8:20 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> On Fri, 7 Jan 2022 01:34:16 +0800
-> Jianhua Liu <jianhua.ljh@gmail.com> wrote:
->
-> > On Fri, Dec 17, 2021 at 3:40 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On Tue,  2 Nov 2021 21:11:46 +0800
-> > > Janet Liu <jianhua.ljh@gmail.com> wrote:
-> > >
-> > > > From: Janet Liu <janet.liu@unisoc.com>
-> > > >
-> > > > This patch allow kprobes on ftrace call sites. This optimization
-> > > > avoids use of a trap with regular kprobes.
-> > > >
-> > > > This depends on HAVE_DYNAMIC_FTRACE_WITH_REGS which depends on
-> > > > "patchable-function-entry" options which is only implemented with newer
-> > > > toolchains.
-> > > >
-> > > > Signed-off-by: Janet Liu <janet.liu@unisoc.com>
-> > > > ---
-> > > >  arch/arm64/Kconfig                 |  1 +
-> > > >  arch/arm64/kernel/probes/Makefile  |  1 +
-> > > >  arch/arm64/kernel/probes/ftrace.c  | 73 ++++++++++++++++++++++++++++++
-> > > >  arch/arm64/kernel/probes/kprobes.c | 27 +++++++++++
-> > > >  4 files changed, 102 insertions(+)
-> > > >  create mode 100644 arch/arm64/kernel/probes/ftrace.c
-> > > >
-> > > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > > > index 339130712093..f59005608976 100644
-> > > > --- a/arch/arm64/Kconfig
-> > > > +++ b/arch/arm64/Kconfig
-> > > > @@ -200,6 +200,7 @@ config ARM64
-> > > >       select HAVE_SYSCALL_TRACEPOINTS
-> > > >       select HAVE_KPROBES
-> > > >       select HAVE_OPTPROBES
-> > > > +     select HAVE_KPROBES_ON_FTRACE
-> > > >       select HAVE_KRETPROBES
-> > > >       select HAVE_GENERIC_VDSO
-> > > >       select IOMMU_DMA if IOMMU_SUPPORT
-> > > > diff --git a/arch/arm64/kernel/probes/Makefile b/arch/arm64/kernel/probes/Makefile
-> > > > index c77c92ac95fd..d9b204f4795a 100644
-> > > > --- a/arch/arm64/kernel/probes/Makefile
-> > > > +++ b/arch/arm64/kernel/probes/Makefile
-> > > > @@ -3,5 +3,6 @@ obj-$(CONFIG_KPROBES)         += kprobes.o decode-insn.o      \
-> > > >                                  kprobes_trampoline.o         \
-> > > >                                  simulate-insn.o
-> > > >  obj-$(CONFIG_OPTPROBES)      += opt.o opt_head.o
-> > > > +obj-$(CONFIG_KPROBES_ON_FTRACE) += ftrace.o
-> > > >  obj-$(CONFIG_UPROBES)                += uprobes.o decode-insn.o      \
-> > > >                                  simulate-insn.o
-> > > > diff --git a/arch/arm64/kernel/probes/ftrace.c b/arch/arm64/kernel/probes/ftrace.c
-> > > > new file mode 100644
-> > > > index 000000000000..46ea92eb552f
-> > > > --- /dev/null
-> > > > +++ b/arch/arm64/kernel/probes/ftrace.c
-> > > > @@ -0,0 +1,73 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > +//
-> > > > +// Dynamic Ftrace based Kprobes Optimization
-> > > > +//
-> > > > +// Copyright (C) 2021, Unisoc Inc.
-> > > > +// Author: Janet Liu <janet.liu@unisoc.com>
-> > > > +#include <linux/kprobes.h>
-> > > > +#include <linux/ptrace.h>
-> > > > +#include <linux/hardirq.h>
-> > > > +#include <linux/preempt.h>
-> > > > +#include <linux/ftrace.h>
-> > > > +
-> > > > +
-> > > > +/* Ftrace callback handler for kprobes*/
-> > > > +void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
-> > > > +                        struct ftrace_ops *ops, struct ftrace_regs *fregs)
-> > > > +{
-> > > > +     struct kprobe *p;
-> > > > +     struct kprobe_ctlblk *kcb;
-> > > > +     struct pt_regs *regs = ftrace_get_regs(fregs);
-> > > > +     int bit;
-> > > > +
-> > > > +     bit = ftrace_test_recursion_trylock(ip, parent_ip);
-> > > > +     if (bit < 0)
-> > > > +             return;
-> > > > +
-> > > > +     preempt_disable_notrace();
-> > >
-> > > This already has been done in ftrace side.
-> >
-> > Hi Masami,
-> >
-> > Got it by reading code, will fix this.
-> >
-> > >
-> > > > +     p = get_kprobe((kprobe_opcode_t *)ip);
-> > > > +     if (unlikely(!p) || kprobe_disabled(p))
-> > > > +             goto end;
-> > > > +
-> > > > +     kcb = get_kprobe_ctlblk();
-> > > > +     if (kprobe_running()) {
-> > > > +             kprobes_inc_nmissed_count(p);
-> > > > +     } else {
-> > > > +             unsigned long orig_ip = instruction_pointer(regs);
-> > > > +
-> > > > +             instruction_pointer_set(regs, ip);
-> > >
-> > > The 'ip' is the address of the 'bl' instruction, which must be
-> > > p->addr + AARCH64_INSN_SIZE * 2. But this is a bit strange.
-> > >
-> > > On aarch64, if the user probe callback is called from breakpoint handler,
-> > > regs->pc == kp->addr. But in this case, it is not the same.
-> > >
-> > > So, what about this?
-> > >
-> > >  instruction_pointer_set(regs, ip - AARCH64_INSN_SIZE);
-> > >
-> >
-> > I got what you said.
-> >
-> > But p->addr is changed when KPROBES_ON_FTRACE enable.
-> > I implemented kprobe_lookup_name for arm64 to do the change in this patch.
->
-> Hmm, that is no good, because printk("%pS\n", p->addr) does not show
-> what the user set by p->symbol_name. This may confuse user.
-> Moreover, if user doesn't set symbol_name but addr directly (this
-> happens when you use 'perf probe' command, which will pass the address
-> from '_text', not the function entry.
->
 
-Hi Masami,
+[TLDR: I'm adding this regression to regzbot, the Linux kernel
+regression tracking bot; most text you find below is compiled from a few
+templates paragraphs some of you might have seen already.]
 
-Thanks for your explanation,if user doesn't set p->addr will not
-kprobe on ftrace entry.
-This also confuse me.
+Hi, this is your Linux kernel regression tracker speaking.
 
-> > because kernel/kprobe.c:check_ftrace_location check,
-> > if p->addr != ftrace_addr, don't kprobe on ftrace entry.
-> > so p->addr is equal to ftrace addr(the second nop), is equal to 'ip'.
-> > here should be instruction_pointer_set(regs, ip);
->
-> Hmm, OK. this is a special case for the arm64 (and maybe other
-> architectures except for x86). Let's fix the check_ftrace_location().
-> We already know that 2 instructions at the beginning of function will
-> be used for ftrace on arm64. Thus arm64 version of check_ftrace_location()
-> will check the given address + 1 is ftrace location or not.
->
-> >
-> > > > +
-> > > > +             __this_cpu_write(current_kprobe, p);
-> > > > +             kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-> > > > +             if (!p->pre_handler || !p->pre_handler(p, regs)) {
-> > > > +                     /*
-> > > > +                      *Emulate singlestep (and also recover regs->pc)
-> > > > +                      *as if there is a nop
-> > > > +                      */
-> > > > +                     instruction_pointer_set(regs,
-> > > > +                                     (unsigned long)p->addr + MCOUNT_INSN_SIZE);
-> > >
-> > > And then, this will be
-> > >
-> > >                         instruction_pointer_set(regs,
-> > >                                         (unsigned long)p->addr + AARCH64_INSN_SIZE * 2);
-> > >
-> > > So basically, kprobes on ftrace will skips 2 NOP instructions (the compiler installed
-> > > 2 nops) and call post handler. This means we have a virtual big NOP instruction there.
-> > >
-> > Ditto, skip two nop instructions should
-> > instruction_pointer_set(regs,
-> >                         (unsigned long)p->addr + AARCH64_INSN_SIZE);
-> >
-> >
-> > > > +                     if (unlikely(p->post_handler)) {
-> > > > +                             kcb->kprobe_status = KPROBE_HIT_SSDONE;
-> > > > +                             p->post_handler(p, regs, 0);
-> > > > +                     }
-> > > > +                     instruction_pointer_set(regs, orig_ip);
-> > > > +             }
-> > > > +
-> > > > +             /*
-> > > > +              * If pre_handler returns !0,it changes regs->pc. We have to
-> > > > +              * skip emulating post_handler.
-> > > > +              */
-> > > > +             __this_cpu_write(current_kprobe, NULL);
-> > > > +     }
-> > > > +end:
-> > > > +     preempt_enable_notrace();
-> > > > +     ftrace_test_recursion_unlock(bit);
-> > > > +}
-> > > > +NOKPROBE_SYMBOL(kprobe_ftrace_handler);
-> > > > +
-> > > > +int arch_prepare_kprobe_ftrace(struct kprobe *p)
-> > > > +{
-> > > > +     p->ainsn.api.insn = NULL;
-> > > > +     p->ainsn.api.restore = 0;
-> > > > +     return 0;
-> > > > +}
-> > > > diff --git a/arch/arm64/kernel/probes/kprobes.c b/arch/arm64/kernel/probes/kprobes.c
-> > > > index 6dbcc89f6662..3d371d3e4dfa 100644
-> > > > --- a/arch/arm64/kernel/probes/kprobes.c
-> > > > +++ b/arch/arm64/kernel/probes/kprobes.c
-> > > > @@ -417,6 +417,33 @@ int __kprobes arch_trampoline_kprobe(struct kprobe *p)
-> > > >       return 0;
-> > > >  }
-> > > >
-> > > > +kprobe_opcode_t __kprobes *kprobe_lookup_name(const char *name, unsigned int offset)
-> > > > +{
-> > > > +     kprobe_opcode_t *addr;
-> > > > +
-> > > > +     addr = (kprobe_opcode_t *)kallsyms_lookup_name(name);
-> > > > +#ifdef CONFIG_KPROBES_ON_FTRACE
-> > > > +     if (addr && !offset) {
-> > > > +             unsigned long faddr;
-> > > > +
-> > > > +             faddr = ftrace_location_range((unsigned long)addr,
-> > > > +                                           (unsigned long)addr + 8);
-> > >
-> > > this '8' must be (AARCH64_INSN_SIZE * 2). And here you may need to add
-> > > a comment why search the 2 instructions. (it is because arm64 uses
-> > > -fpatchable-function-entry=2.)
-> > >
-> > Got it , will fix it.
-> > > > +             if (faddr)
-> > > > +                     addr = (kprobe_opcode_t *)faddr;
-> > > > +     }
-> > This change the p->addr to ftrace_addr.
->
-> Ah, OK. Please forgot above. What we have to do is to change the
-> check_ftrace_location(), not this conversion.
+Thanks for the report.
 
-I don't do this conversion, and try to implement arm64 special
-check_ftrace_location as following.
-but register kprobe fail.
+Adding the regression mailing list to the list of recipients, as it
+should be in the loop for all regressions, as explained here:
+https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
 
-diff --git a/arch/arm64/kernel/probes/kprobes.c
-b/arch/arm64/kernel/probes/kprobes.c
-index d9dfa82c1f18..609f3f103a89 100644
---- a/arch/arm64/kernel/probes/kprobes.c
-+++ b/arch/arm64/kernel/probes/kprobes.c
-+int __kprobes check_ftrace_location(struct kprobe *p)
-+{
-+        unsigned long ftrace_addr;
-+
-+        ftrace_addr = ftrace_location_range((unsigned long)p->addr,
-+                               (unsigned long)p->addr + AARCH64_INSN_SIZE * 2);
-+        if (ftrace_addr) {
-+#ifdef CONFIG_KPROBES_ON_FTRACE
-+                /* Given address is not on the instruction boundary */
-+                if ((unsigned long)p->addr > ftrace_addr)
-+                        return -EILSEQ;
-+               if (p->offset <= AARCH64_INSN_SIZE * 2)
-+                       p->flags |= KPROBE_FLAG_FTRACE;
-+#else   /* !CONFIG_KPROBES_ON_FTRACE */
-+                return -EINVAL;
-+#endif
-+        }
-+        return 0;
-+}
-+
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 21eccc961bba..91c95ba4eed0 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1539,7 +1539,7 @@ static inline int warn_kprobe_rereg(struct kprobe *p)
-        return ret;
- }
+To be sure this issue doesn't fall through the cracks unnoticed, I'm
+adding it to regzbot, my Linux kernel regression tracking bot:
 
--static int check_ftrace_location(struct kprobe *p)
-+int __weak check_ftrace_location(struct kprobe *p)
- {
-        unsigned long ftrace_addr;
+On 12.01.22 16:26, Alexander Fomichev wrote:
+> CC: Mel Gorman <mgorman@suse.de>
+> CC: linux@yadro.com
+> 
+> Hi all,
+> 
+> There's a huge regression found, which affects Intel Xeon's DMA Engine
+> performance between v4.14 LTS and modern kernels. In certain
+> circumstances the speed in dmatest is more than 6 times lower.
+> 
+> 	- Hardware -
+> I did testing on 2 systems:
+> 1) Intel(R) Xeon(R) Gold 6132 CPU @ 2.60GHz (Supermicro X11DAi-N)
+> 2) Intel(R) Xeon(R) Bronze 3204 CPU @ 1.90GHz (YADRO Vegman S220)
+> 
+> 	- Measurement -
+> The dmatest result speed decreases with almost any test settings.
+> Although the most significant impact is revealed with 64K transfers. The
+> following parameters were used:
+> 
+> modprobe dmatest iterations=1000 timeout=2000 test_buf_size=0x100000 transfer_size=0x10000 norandom=1
+> echo "dma0chan0" > /sys/module/dmatest/parameters/channel
+> echo 1 > /sys/module/dmatest/parameters/run
+> 
+> Every test csse was performed at least 3 times. All detailed results are
+> below.
+> 
+> 	- Analysis -
+> Bisecting revealed 2 different bad commits for those 2 systems, but both
+> change the same function/condition in the same file.
+> For the system (1) the bad commit is:
+> [7332dec055f2457c386032f7e9b2991eb05c2a0a] sched/fair: Only immediately migrate tasks due to interrupts if prev and target CPUs share cache
+> For the system (2) the bad commit is:
+> [806486c377e33ab662de6d47902e9e2a32b79368] sched/fair: Do not migrate if the prev_cpu is idle
 
+Uhh, regzbot is not prepared for this, hence I'll simply pick
+7332dec055f2457c386032f7e9b2991eb05c2a0a
 
-__arm_kprobe_ftrace print fail info:
-[   38.286515] Failed to arm kprobe-ftrace at kernel_clone+0x0/0x440 (error -22)
-[   38.286606] WARNING: CPU: 3 PID: 341 at kernel/kprobes.c:1062
-arm_kprobe+0x114/0x14c
+#regzbot ^introduced 7332dec055f2457c386032f7e9b2991eb05c2a0a
+#regzbot title sched: DMA Engine regression because of sched/fair changes
+#regzbot ignore-activity
 
-__arm_kprobe_ftrace calls ftrace_set_filter_ip,
-ftrace_set_filter_ip use p->addr, but failed.
+Reminder: when fixing the issue, please add a 'Link:' tag with the URL
+to the report (the parent of this mail) using the kernel.org redirector,
+as explained in 'Documentation/process/submitting-patches.rst'. Regzbot
+then will automatically mark the regression as resolved once the fix
+lands in the appropriate tree. For more details about regzbot see footer.
 
-Thanks
-Jianhua
+Sending this to everyone that got the initial report, to make all aware
+of the tracking. I also hope that messages like this motivate people to
+directly get at least the regression mailing list and ideally even
+regzbot involved when dealing with regressions, as messages like this
+wouldn't be needed then.
 
->
-> Thank you,
->
-> >
-> > > > +#endif
-> > > > +     return addr;
-> > > > +}
-> > > > +
-> > > > +bool __kprobes arch_kprobe_on_func_entry(unsigned long offset)
-> > > > +{
-> > > > +#ifdef CONFIG_KPROBES_ON_FTRACE
-> > > > +     return offset <= 8;
-> > >
-> > > Ditto.
-> > Got it, will add comment.
-> >
-> > Thanks
-> >
-> > Jianhua
-> > >
-> > > > +#else
-> > > > +     return !offset;
-> > > > +#endif
-> > > > +}
-> > > > +
-> > > >  int __init arch_init_kprobes(void)
-> > > >  {
-> > > >       register_kernel_break_hook(&kprobes_break_hook);
-> > > > --
-> > > > 2.25.1
-> > > >
-> > >
-> > > Thank you,
-> > >
-> > >
-> > > --
-> > > Masami Hiramatsu <mhiramat@kernel.org>
->
->
-> --
-> Masami Hiramatsu <mhiramat@kernel.org>
+Don't worry, I'll send further messages wrt to this regression just to
+the lists (with a tag in the subject so people can filter them away), as
+long as they are intended just for regzbot. With a bit of luck no such
+messages will be needed anyway.
+
+Ciao, Thorsten (wearing his 'Linux kernel regression tracker' hat)
+
+P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
+on my table. I can only look briefly into most of them. Unfortunately
+therefore I sometimes will get things wrong or miss something important.
+I hope that's not the case here; if you think it is, don't hesitate to
+tell me about it in a public reply, that's in everyone's interest.
+
+BTW, I have no personal interest in this issue, which is tracked using
+regzbot, my Linux kernel regression tracking bot
+(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
+this mail to get things rolling again and hence don't need to be CC on
+all further activities wrt to this regression.
+
+> 	- Additional check -
+> Attempting to revert the changes above, a dirty patch for the (current)
+> kernel v5.16.0-rc5 was tested too:
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 6f16dfb74246..0a58cc00b1b8 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -5931,8 +5931,8 @@ wake_affine_idle(int this_cpu, int prev_cpu, int sync)
+>          * a cpufreq perspective, it's better to have higher utilisation
+>          * on one CPU.
+>          */
+> -       if (available_idle_cpu(this_cpu) && cpus_share_cache(this_cpu, prev_cpu))
+> -               return available_idle_cpu(prev_cpu) ? prev_cpu : this_cpu;
+> +       if (available_idle_cpu(this_cpu))
+> +               return this_cpu;
+> 
+>         if (sync && cpu_rq(this_cpu)->nr_running == 1)
+>                 return this_cpu;
+> 
+> Please, take a look if this makes sense. But with this patch applied the
+> performance of DMA Engine restores.
+> 
+> 	- Dmatest results TL;DR -
+> 
+> System (1) before bad commit:
+> ---------------------
+> [  519.894642] dmatest: Added 1 threads using dma0chan0
+> [  525.383021] dmatest: Started 1 threads using dma0chan0
+> [  528.521915] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 98367.10 iops 6295494 KB/s (0)
+> [  544.851751] dmatest: Added 1 threads using dma0chan0
+> [  546.460064] dmatest: Started 1 threads using dma0chan0
+> [  549.609504] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 100310.96 iops 6419901 KB/s (0)
+> [  562.178365] dmatest: Added 1 threads using dma0chan0
+> [  563.852534] dmatest: Started 1 threads using dma0chan0
+> [  567.004898] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 98580.44 iops 6309148 KB/s (0)
+> ---------------------
+> 
+> System (1) on HEAD=bad commit:
+> ---------------------
+> [  149.555401] dmatest: Added 1 threads using dma0chan0
+> [  154.162444] dmatest: Started 1 threads using dma0chan0
+> [  157.490868] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 26653.87 iops 1705847 KB/s (0)
+> [  176.783450] dmatest: Added 1 threads using dma0chan0
+> [  178.428518] dmatest: Started 1 threads using dma0chan0
+> [  181.606531] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 14194.86 iops 908471 KB/s (0)
+> [  192.125218] dmatest: Added 1 threads using dma0chan0
+> [  194.060029] dmatest: Started 1 threads using dma0chan0
+> [  197.235265] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 14757.09 iops 944454 KB/s (0)
+> ---------------------
+> 
+> Systen (1) on v5.16.0-rc5:
+> ---------------------
+> [ 1430.860170] dmatest: Added 1 threads using dma0chan0
+> [ 1437.367447] dmatest: Started 1 threads using dma0chan0
+> [ 1442.756660] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 24837.31 iops 1589588 KB/s (0)
+> [ 1561.614191] dmatest: Added 1 threads using dma0chan0
+> [ 1562.816375] dmatest: Started 1 threads using dma0chan0
+> [ 1566.619614] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 13666.05 iops 874627 KB/s (0)
+> [ 1585.019601] dmatest: Added 1 threads using dma0chan0
+> [ 1587.585741] dmatest: Started 1 threads using dma0chan0
+> [ 1591.386816] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 13521.91 iops 865402 KB/s (0)
+> ---------------------
+> 
+> System (1) on v5.16.0-rc5 with dirty patch:
+> ---------------------
+> [  733.571508] dmatest: Added 1 threads using dma0chan0
+> [  746.050800] dmatest: Started 1 threads using dma0chan0
+> [  749.765600] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 87260.03 iops 5584642 KB/s (0)
+> [  915.051955] dmatest: Added 1 threads using dma0chan0
+> [  916.550732] dmatest: Started 1 threads using dma0chan0
+> [  920.267525] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 88464.25 iops 5661712 KB/s (0)
+> [  936.781273] dmatest: Added 1 threads using dma0chan0
+> [  939.528616] dmatest: Started 1 threads using dma0chan0
+> [  943.247694] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 88833.61 iops 5685351 KB/s (0)
+> ---------------------
+> 
+> System (2) before bad commit:
+> ---------------------
+> [  481.309411] dmatest: Added 1 threads using dma0chan0
+> [  491.197425] dmatest: Started 1 threads using dma0chan0
+> [  497.047315] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 78988.94 iops 5055292 KB/s (0)
+> [  506.057101] dmatest: Added 1 threads using dma0chan0
+> [  508.939426] dmatest: Started 1 threads using dma0chan0
+> [  514.788823] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 77754.44 iops 4976284 KB/s (0)
+> [  531.894587] dmatest: Added 1 threads using dma0chan0
+> [  534.053360] dmatest: Started 1 threads using dma0chan0
+> [  539.906424] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 76988.21 iops 4927246 KB/s (0)
+> ---------------------
+> 
+> System (2) on HEAD=bad commit:
+> ---------------------
+> [44522.892995] dmatest: Added 1 threads using dma0chan0
+> [44526.193331] dmatest: Started 1 threads using dma0chan0
+> [44532.043932] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 80360.01 iops 5143040 KB/s (0)
+> [44561.121118] dmatest: Added 1 threads using dma0chan0
+> [44562.868428] dmatest: Started 1 threads using dma0chan0
+> [44568.808577] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 16080.53 iops 1029154 KB/s (0)
+> [44728.597409] dmatest: Added 1 threads using dma0chan0
+> [44730.301566] dmatest: Started 1 threads using dma0chan0
+> [44736.259009] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 16091.91 iops 1029882 KB/s (0)
+> ---------------------
+> 
+> Thanks for reading.
+> 
+
+---
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and/or the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+tell #regzbot about it in the report, as that will ensure the regression
+gets on the radar of regzbot and the regression tracker. That's in your
+interest, as they will make sure the report won't fall through the
+cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include a 'Link:' tag to the report in the commit message, as explained
+in Documentation/process/submitting-patches.rst
+That aspect was recently was made more explicit in commit 1f57bd42b77c:
+https://git.kernel.org/linus/1f57bd42b77c

@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B32948FD24
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 14:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F80D48FD3B
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 14:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235316AbiAPNLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 08:11:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54281 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235265AbiAPNLk (ORCPT
+        id S235349AbiAPNpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 08:45:10 -0500
+Received: from isilmar-4.linta.de ([136.243.71.142]:53448 "EHLO
+        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233233AbiAPNpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 08:11:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642338699;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2735UOsX2lbYzncmWz1w1L9NtF8LEvgUZSTpkTuP8AY=;
-        b=Q5OOoj2cmwpzox/T4gxBwg31r0KYjk1194blmpXRijv3x26edMIwC1SnGJ+A+BuZc2px1l
-        a9X6lcNXF3ziA+wCV89Dsj4toozd33JuJp1HjhtXvAW8fn+CVC0wl5mHG7Cs/ywPVhNWAo
-        o8s3jv3v7JtkaSfPqD6Yz/9lVY3La1M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-479-BUJ0pTtAMfqT2TIWkY5_Xg-1; Sun, 16 Jan 2022 08:11:36 -0500
-X-MC-Unique: BUJ0pTtAMfqT2TIWkY5_Xg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6E51D1006AA5;
-        Sun, 16 Jan 2022 13:11:34 +0000 (UTC)
-Received: from localhost (ovpn-12-76.pek2.redhat.com [10.72.12.76])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3684578AB2;
-        Sun, 16 Jan 2022 13:11:31 +0000 (UTC)
-Date:   Sun, 16 Jan 2022 21:11:29 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dyoung@redhat.com, linux-doc@vger.kernel.org, vgoyal@redhat.com,
-        stern@rowland.harvard.edu, akpm@linux-foundation.org,
-        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
-        halves@canonical.com, kernel@gpiccoli.net
-Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
-Message-ID: <20220116131129.GD2388@MiWiFi-R3L-srv>
-References: <20220108153451.195121-1-gpiccoli@igalia.com>
+        Sun, 16 Jan 2022 08:45:08 -0500
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 539332000D7;
+        Sun, 16 Jan 2022 13:45:07 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id 055F880312; Sun, 16 Jan 2022 14:24:39 +0100 (CET)
+Date:   Sun, 16 Jan 2022 14:24:39 +0100
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, tytso@mit.edu
+Subject: Re: [PATCH 1/7] random: cleanup poolinfo abstraction
+Message-ID: <YeQcl1q1L4+oKHPc@owl.dominikbrodowski.net>
+References: <20220113154413.29513-1-Jason@zx2c4.com>
+ <20220113154413.29513-2-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220108153451.195121-1-gpiccoli@igalia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <20220113154413.29513-2-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/08/22 at 12:34pm, Guilherme G. Piccoli wrote:
-...... 
-> So, this patch aims to ease this decision: we hereby introduce a filter
-> for the panic notifier list, in which users may select specifically
-> which callbacks they wish to run, allowing a safer kdump. The allowlist
-> should be provided using the parameter "panic_notifier_filter=a,b,..."
-> where a, b are valid callback names. Invalid symbols are discarded.
+Am Thu, Jan 13, 2022 at 04:44:07PM +0100 schrieb Jason A. Donenfeld:
+> Now that we're only using one polynomial, we can cleanup its
+> representation into constants, instead of passing around pointers
+> dynamically to select different polynomials. This improves the codegen
+> and makes the code a bit more straightforward.
 > 
-> Currently up to 16 symbols may be passed in this list, we consider
-> that this numbers allows enough flexibility (and no matter what
-> architecture is used, at most 30 panic callbacks are registered).
-> In an experiment using a qemu x86 virtual machine, by default only
-> six callbacks are registered in the panic notifier list.
-> Once a valid callback name is provided in the list, such function
-> is allowed to be registered/unregistered in the panic_notifier_list;
-> all other panic callbacks are ignored. Notice that this filter is
-> only for the panic notifiers and has no effect in the other notifiers.
-> 
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-This patch looks good to me, thx.
+> -} poolinfo_table[] = {
+> -	/* was: x^128 + x^103 + x^76 + x^51 +x^25 + x + 1 */
+> +enum poolinfo {
+> +	POOL_WORDS = 128,
+> +	POOL_WORDMASK = POOL_WORDS - 1,
+> +	POOL_BYTES = POOL_WORDS * sizeof(u32),
+> +	POOL_BITS = POOL_BYTES * 8,
+> +	POOL_BITSHIFT = ilog2(POOL_WORDS) + 5,
+> +	POOL_FRACBITS = POOL_WORDS << (ENTROPY_SHIFT + 5),
+> +
+>  	/* x^128 + x^104 + x^76 + x^51 +x^25 + x + 1 */
+> -	{ S(128),	104,	76,	51,	25,	1 },
+> +	POOL_TAP1 = 104,
+> +	POOL_TAP2 = 76,
 
-Acked-by: Baoquan He <bhe@redhat.com>
+The only information lost seems to be that POOL_TAP1 used to be 103. But
+that comment is still available in git history, so feel free to add:
 
+	Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+
+Thanks,
+	Dominik

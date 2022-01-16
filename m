@@ -2,209 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0458948FD19
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 13:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B32948FD24
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 14:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235302AbiAPM61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 07:58:27 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34598 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235281AbiAPM6Y (ORCPT
+        id S235316AbiAPNLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 08:11:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54281 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235265AbiAPNLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 07:58:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 16 Jan 2022 08:11:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642338699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2735UOsX2lbYzncmWz1w1L9NtF8LEvgUZSTpkTuP8AY=;
+        b=Q5OOoj2cmwpzox/T4gxBwg31r0KYjk1194blmpXRijv3x26edMIwC1SnGJ+A+BuZc2px1l
+        a9X6lcNXF3ziA+wCV89Dsj4toozd33JuJp1HjhtXvAW8fn+CVC0wl5mHG7Cs/ywPVhNWAo
+        o8s3jv3v7JtkaSfPqD6Yz/9lVY3La1M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-479-BUJ0pTtAMfqT2TIWkY5_Xg-1; Sun, 16 Jan 2022 08:11:36 -0500
+X-MC-Unique: BUJ0pTtAMfqT2TIWkY5_Xg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFCC5B80CBB;
-        Sun, 16 Jan 2022 12:58:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 455B9C36AE9;
-        Sun, 16 Jan 2022 12:58:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642337901;
-        bh=crWtyNK5zxiQBZDo3g0NyCg6HOCKw7F4DWaYul3pOEs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XQZyS2M3331U8AIPsDScFgEW8t/cR+vBZLahOJFRgeSMzAc6np2HiByRCR2fJLXNQ
-         OjdFrk+yaVQR5HM0SrwIEd4OF2GAvfW3bLMHgfvdLttorA+CeehqwJ4Yjmhz/EfTtv
-         JG57wYi3m/11pFc4V0/IeK0cxRaLJZWL9g30CnHiRr5BNLAMYMwmtvIoraZazaVW1V
-         WOCX/RX15qDUdcuM3KVBJMvbk7RHiV3hC9j9ixgQ8KSWuEyN5Eo8mS6FKmlHt9BTR1
-         AdfvLPhIvEBeabtBh9A7iLAYytZQ29Nfx/VRVfL5E+Tyad5in+o8XRZsee8gCQwPMN
-         Dix2mq6givYwA==
-Date:   Sun, 16 Jan 2022 13:04:22 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Cc:     <robh+dt@kernel.org>, <linux-iio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] dt-bindings:iio:frequency: add admv1014 binding
-Message-ID: <20220116130422.167bca2e@jic23-huawei>
-In-Reply-To: <20220110151350.164095-1-antoniu.miclaus@analog.com>
-References: <20220110151350.164095-1-antoniu.miclaus@analog.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6E51D1006AA5;
+        Sun, 16 Jan 2022 13:11:34 +0000 (UTC)
+Received: from localhost (ovpn-12-76.pek2.redhat.com [10.72.12.76])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3684578AB2;
+        Sun, 16 Jan 2022 13:11:31 +0000 (UTC)
+Date:   Sun, 16 Jan 2022 21:11:29 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dyoung@redhat.com, linux-doc@vger.kernel.org, vgoyal@redhat.com,
+        stern@rowland.harvard.edu, akpm@linux-foundation.org,
+        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
+        halves@canonical.com, kernel@gpiccoli.net
+Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
+Message-ID: <20220116131129.GD2388@MiWiFi-R3L-srv>
+References: <20220108153451.195121-1-gpiccoli@igalia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220108153451.195121-1-gpiccoli@igalia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 10 Jan 2022 17:13:49 +0200
-Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
-
-> Add device tree bindings for the ADMV1014 Upconverter.
+On 01/08/22 at 12:34pm, Guilherme G. Piccoli wrote:
+...... 
+> So, this patch aims to ease this decision: we hereby introduce a filter
+> for the panic notifier list, in which users may select specifically
+> which callbacks they wish to run, allowing a safer kdump. The allowlist
+> should be provided using the parameter "panic_notifier_filter=a,b,..."
+> where a, b are valid callback names. Invalid symbols are discarded.
 > 
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
-Just one totally trivial comment on this that I could tidy up with applying
-if patch 1 is good and others are happy with the series.
-
-Thanks,
-
-Jonathan
-
-> ---
-> changes in v2:
->  - move clock description unde `clock-names` section
->  - expand `p1db-comp-enable` to `p1db-compensation-enable`
->  - add regulators for all VCC_* supplies, as suggested
->  .../bindings/iio/frequency/adi,admv1014.yaml  | 129 ++++++++++++++++++
->  1 file changed, 129 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+> Currently up to 16 symbols may be passed in this list, we consider
+> that this numbers allows enough flexibility (and no matter what
+> architecture is used, at most 30 panic callbacks are registered).
+> In an experiment using a qemu x86 virtual machine, by default only
+> six callbacks are registered in the panic notifier list.
+> Once a valid callback name is provided in the list, such function
+> is allowed to be registered/unregistered in the panic_notifier_list;
+> all other panic callbacks are ignored. Notice that this filter is
+> only for the panic notifiers and has no effect in the other notifiers.
 > 
-> diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
-> new file mode 100644
-> index 000000000000..9c43cec72560
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
-> @@ -0,0 +1,129 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/frequency/adi,admv1014.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ADMV1014 Microwave Downconverter
-> +
-> +maintainers:
-> +  - Antoniu Miclaus <antoniu.miclaus@analog.com>
-> +
-> +description: |
-> +   Wideband, microwave downconverter optimized for point to point microwave
-> +   radio designs operating in the 24 GHz to 44 GHz frequency range.
-> +
-> +   https://www.analog.com/en/products/admv1014.html
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,admv1014
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  spi-max-frequency:
-> +    maximum: 1000000
-> +
-> +  clocks:
-> +    minItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: lo_in
-> +    description:
-> +      Definition of the external clock that serves as input Local Oscillator.
-Trivial: Not sure "Definition of" adds anything?
-	External clock that provides the Local Oscilator input.
-perhaps?
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 
-> +
-> +  vcm-supply:
-> +    description:
-> +      Common-mode voltage regulator.
-> +
-> +  vcc-if-bb-supply:
-> +    description:
-> +      BB and IF supply voltage regulator.
-> +
-> +  vcc-vga-supply:
-> +    description:
-> +      RF Amplifier supply voltage regulator.
-> +
-> +  vcc-vva-supply:
-> +    description:
-> +      VVA Control Circuit supply voltage regulator.
-> +
-> +  vcc-lna-3p3-supply:
-> +    description:
-> +      Low Noise Amplifier 3.3V supply voltage regulator.
-> +
-> +  vcc-lna-1p5-supply:
-> +    description:
-> +      Low Noise Amplifier 1.5V supply voltage regulator.
-> +
-> +  vcc-bg-supply:
-> +    description:
-> +      Band Gap Circuit supply voltage regulator.
-> +
-> +  vcc-quad-supply:
-> +    description:
-> +      Quadruple supply voltage regulator.
-> +
-> +  vcc-mixer-supply:
-> +    description:
-> +      Mixer supply voltage regulator.
-> +
-> +  adi,input-mode:
-> +    description:
-> +      Select the input mode.
-> +      iq - in-phase quadrature (I/Q) input
-> +      if - complex intermediate frequency (IF) input
-> +    enum: [iq, if]
-> +
-> +  adi,detector-enable:
-> +    description:
-> +      Digital Rx Detector Enable. The Square Law Detector output is
-> +      available at output pin VDET.
-> +    type: boolean
-> +
-> +  adi,p1db-compensation-enable:
-> +    description:
-> +      Turn on bits to optimize P1dB.
-> +    type: boolean
-> +
-> +  adi,quad-se-mode:
-> +    description:
-> +      Switch the LO path from differential to single-ended operation.
-> +      se-neg - Single-Ended Mode, Negative Side Disabled.
-> +      se-pos - Single-Ended Mode, Positive Side Disabled.
-> +      diff - Differential Mode.
-> +    enum: [se-neg, se-pos, diff]
-> +
-> +  '#clock-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - vcm-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    spi {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      admv1014@0{
-> +        compatible = "adi,admv1014";
-> +        reg = <0>;
-> +        spi-max-frequency = <1000000>;
-> +        clocks = <&admv1014_lo>;
-> +        clock-names = "lo_in";
-> +        vcm-supply = <&vcm>;
-> +        adi,quad-se-mode = "diff";
-> +        adi,detector-enable;
-> +        adi,p1db-compensation-enable;
-> +      };
-> +    };
-> +...
+This patch looks good to me, thx.
+
+Acked-by: Baoquan He <bhe@redhat.com>
 

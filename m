@@ -2,86 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7019848FC8D
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 13:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BD548FC90
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 13:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235049AbiAPMMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 07:12:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
+        id S235060AbiAPMNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 07:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbiAPMMe (ORCPT
+        with ESMTP id S235053AbiAPMNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 07:12:34 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDAFC06173E
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 04:12:34 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id z25-20020a0568301db900b005946f536d85so7201210oti.9
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 04:12:34 -0800 (PST)
+        Sun, 16 Jan 2022 07:13:46 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27259C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 04:13:46 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id i7-20020a9d68c7000000b0059396529af8so9511081oto.4
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 04:13:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dN4hyAkZ1Miqzb3/QhoFsGXlrqJg5gaQIvzhl2DDXYI=;
-        b=CPNaiXWo2pnIicCgCE4TOFjmWNuRA9dzQpr3F9MQWVZndQVObEbrqc0LkwEobvrbAm
-         b6jkPIJMdB2Xorzqzp3V0BiqMe5ONj9bKIWeOOKnukHWMiMqb9y3m4SwNrdoQkHfxhXq
-         CDquO4Y5+rWhQ+usux8FaGzPpZ95FJFNAJGvYvwxZ9I3+VcEl9PH/Pvh6d4vmzz5tDtF
-         V/8iIeMg4OwY/XNOgqmwFtCvGlXid6h50FVXjS+tHS/Kzh585Uwe2iOovV48wXEuLeyt
-         nSve4ONIxR8/CbPDzw/rOM9rrux2qd5frYCAqc10IqjcAEKiOuYUepeHxW4aqbyBlcZl
-         bWvA==
+        bh=UO8vyFXvwX7SYghDbHUuZM8heKAVpRc2v8cLwYWVW4o=;
+        b=DjeVuuDA0KdW/nC+q7IdYmQb9nZIn8j7wxygw5t2/5T4newz9evcma+miU7y1/p/0I
+         eXwnj1nfNhOiiI4ws48ScbwqL+cXjT5j8t5aCZ4dgEanylNdJ7FR+7u1lg57iT/+tAVE
+         ysgkLMRcOs5vvV74olBjf56f8WxLVe9FVgQg/O40Xz+7ucN2n0Q+oP7MDD1x99ondwqF
+         FFR8ITiPDvE015UKgutcCc7IxeocpTcQC6JUQiAcB0xbql2rVXF+UXffzyY9kEj9M7Lo
+         zQqsczhvBg5Fs1mCgIbWyUbeUHz3G9DwbuEofmpHMITCk8GEQNe6eSYW5JSp5PR1+a3O
+         6sOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dN4hyAkZ1Miqzb3/QhoFsGXlrqJg5gaQIvzhl2DDXYI=;
-        b=yrHPU5oNaeFPHjFx0FSOWW8FvatQKUoF/ZKVLOC8dm4Q8DMdp8omU/Os7itLhUZ5lt
-         iCSSyGkRSmviXBkjrp0/EqzQ0NRuedJBSBAyOBRxEde/NDL/l5JR0SnMWodPWwUUm8Tl
-         EgaADVnVNm3Vq+v4txUSvIf7mj/09/spcnprvtOY1tTw47ixUDfBFd2ob1/8UZL4SUeu
-         VLyl7+eOvk4l8E+EELQYySRfJr9YSmVnUVHL9Wbnf/FFeeIheIl8JGOfL1oJhHf++R6e
-         4bTL1zi1Aa//fjnAxvvxLaI+79yd0fDSAZ3IWquvQHOkIm+g7fDgsWtT5VIHAQAMncTD
-         MbBg==
-X-Gm-Message-State: AOAM530u0Rctv9VL7tWm4Hv0UXI1j+NCzJRdI7h5ohHSlYsmPMQYblDK
-        5yUaCCjlVxuIAGLtpZRlEeJzJ5EP24MqwOvRTSNcvA==
-X-Google-Smtp-Source: ABdhPJy8usbAaNUR44V9Qk15vyIj3ak49FQUUJBJouk/HUiIm/veRgYnOMPkzs5+HmpbNVpOzFFdybTHvuzzOVkJiXc=
-X-Received: by 2002:a9d:465:: with SMTP id 92mr12902887otc.35.1642335153484;
- Sun, 16 Jan 2022 04:12:33 -0800 (PST)
+        bh=UO8vyFXvwX7SYghDbHUuZM8heKAVpRc2v8cLwYWVW4o=;
+        b=lK4IUWEyN9sLU3NdgO7VzU3UKaKphbQ48u85oJpW0BHCl8D5kU4uSpNXKRVglVTFek
+         l2YgFgEt6VJmG7RhB2kjYV1O9+0rgmUNOJQfJi0yOZkEjFT443SCr55Lm25yKFdTeZEV
+         /ylrUGgw2/30/oQDU+p73WRZDRAFQ3x4wU4K4bz9EUSse/f0pce3kXLLDqR1I+XUQYSa
+         Wn4lOGvlZ8RF91BSYoGQ6BGZTi8rwadtShzH1Eed+VuvpYJtkCl/WRahdERNDe54L9ZF
+         b6Zqnu5UkrjxtMwdRiAtmgyJ6nuUuFYu3wrV+sydVlHE51zXWKQqRwjkmvRQZXFYp6Io
+         EghA==
+X-Gm-Message-State: AOAM531RjP/ARah8fVlSaMCcFrBLb7miP/2tUqPox+3dNj48AGZpi7yG
+        cfkKSzSaq8Jv+gqydPP9vxUS0yfbhTbDEN6r4s/bww==
+X-Google-Smtp-Source: ABdhPJzdicsKDrKNgLtStCnnhN2DtxD7a6BfPYtUCC55jkQfRghWaCtzmmu1EZ0JbC7fzfUIvqyXnGrAUYFMDAGTJy4=
+X-Received: by 2002:a9d:a42:: with SMTP id 60mr13252447otg.179.1642335225538;
+ Sun, 16 Jan 2022 04:13:45 -0800 (PST)
 MIME-Version: 1.0
-References: <CGME20220113122435epcas5p18e6a2699f193b9e1287588278a570235@epcas5p1.samsung.com>
- <20220113121143.22280-1-alim.akhtar@samsung.com> <20220113121143.22280-19-alim.akhtar@samsung.com>
-In-Reply-To: <20220113121143.22280-19-alim.akhtar@samsung.com>
+References: <20220114141507.395271-1-marcel@ziswiler.com> <20220114141507.395271-3-marcel@ziswiler.com>
+In-Reply-To: <20220114141507.395271-3-marcel@ziswiler.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 16 Jan 2022 13:12:21 +0100
-Message-ID: <CACRpkdYSR5hiVKoZTffxudNOUQCNFqX-yuys-xgeocn2vG_ecg@mail.gmail.com>
-Subject: Re: [PATCH 18/23] spi: s3c64xx: Add spi port configuration for Tesla
- FSD SoC
-To:     Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net,
-        catalin.marinas@arm.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@canonical.com, s.nawrocki@samsung.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com, broonie@kernel.org, linux-spi@vger.kernel.org,
-        Aswani Reddy <aswani.reddy@samsung.com>
+Date:   Sun, 16 Jan 2022 13:13:34 +0100
+Message-ID: <CACRpkdb+62jojDXTjEXjgMrpo6XkZy8AZg+jDdhqt-7w6nVQig@mail.gmail.com>
+Subject: Re: [PATCH v2 02/11] dt-bindings: gpio: fix gpio-hog example
+To:     Marcel Ziswiler <marcel@ziswiler.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Rob Herring <robh@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 1:24 PM Alim Akhtar <alim.akhtar@samsung.com> wrote:
+On Fri, Jan 14, 2022 at 3:15 PM Marcel Ziswiler <marcel@ziswiler.com> wrote:
 
-> This patch adds compatible and port configuration for
-> spi controller for Tesla Full Self-Driving SoC.
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 >
-> Cc: linux-fsd@tesla.com
-> Cc: broonie@kernel.org
-> Cc: linux-spi@vger.kernel.org
-> Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> Even if this is no yaml yet at least fix the example to be compliant to
+> later schema as e.g. found in gpio-pca95xx.yaml, fairchild,74hc595.yaml
+> and gpio/fsl-imx-gpio.yaml.
+>
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Note to self: now that I see that the Samsung "S3C" SPI controller,
-which I was thinking of as "some kind of early 2000s legacy" is used
-by the very latest silicon I bumped up fixing it to use GPIO descriptors
-a bit on my TODO list.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij

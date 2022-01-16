@@ -2,327 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F14A048FE55
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 19:11:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C31ED48FE57
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 19:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235963AbiAPSLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 13:11:16 -0500
-Received: from mga14.intel.com ([192.55.52.115]:65392 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232590AbiAPSLP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 13:11:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642356675; x=1673892675;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BI/kSRsR+AC4ZYLXLbuKliItqJFlMvu1oqx1oEPBFzs=;
-  b=OVTilx7LZqtWfs8YdMyd6nbLrudy3PkFAMiQen5UlXwgZzYkJFkqNJCz
-   hbE8HTwnbat5ao8kllX/VoW3AQTKQ4gp7HQrlrg77s9rnpnxxyrPQmLW+
-   KKF7nEQFWVaTf4pt5Xu/FoEICOuiXTNmY8fkH8VBJIIZ+z8X47ySSL/N2
-   A4b+1AW0AO9h/nXq6JpgWdHGBD8j5lwCsbk9HuYG5dq8TH99eBE7qk5Bp
-   Nmpw8IMaz608ZvfffTnUQ7/3e/wXQGQ53EX6z/7wBx0sh8aDHf8Ni8bRC
-   EdQW4pwYWLLNFw+y1ykSAg0+yADejD4K+TMG099n8UsrVEalyuju71HZr
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10228"; a="244703842"
-X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
-   d="scan'208";a="244703842"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 10:11:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
-   d="scan'208";a="671351376"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Jan 2022 10:11:13 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n99zk-000Atw-AD; Sun, 16 Jan 2022 18:11:12 +0000
-Date:   Mon, 17 Jan 2022 02:10:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Todd Kjos <tkjos@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Lokesh Gidra <lokeshgidra@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.4
- 6517/9999] fs/userfaultfd.c:1519:9: warning: variable 'ioctls_out' set but
- not used
-Message-ID: <202201170247.Cir3moOM-lkp@intel.com>
+        id S235972AbiAPSLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 13:11:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235965AbiAPSLb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 13:11:31 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5643C06161C
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 10:11:31 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id 128so7710812pfe.12
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 10:11:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fmUbTZjqBInIJavSOPsGB7sguS3NLG7eeySfoArPt34=;
+        b=Xd3KitxSS0Fc59xyCcCdOjDz2nPHsDQszROLzx5GXTOSNYxND4QMmpIKIIwfmpSTEX
+         kwvxCEdX0gL0KhKIKxVkQCp+xfoWswctZVbeSdUkly7ZspeebaXY62+5lLuK9u9byZFu
+         2NzyoCuxQnlTHpAKhNY/u0M7u3os+w2LtIxd6i3W27vG+jsDehJQrGeImPjKNeECxDd7
+         vnwAJiS/2IXWN77ZHUg0MPXzVwCzjDhPY5VqnDkjs6C2UnPCNYrv6MKgb/2UyFz47Akt
+         EdHO+ffGRTFs+1Q/TaJ+vyRVa8q5XQ+EBVSadIgOyb9AOdfa9s2g4+URuA9r8wOzxq+j
+         dBbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fmUbTZjqBInIJavSOPsGB7sguS3NLG7eeySfoArPt34=;
+        b=13NN1IETUBSHBwJ8uOYKSEvMAtHzS5QChvei9yoSpsMiX2gCdFmhBk6wCMy4TjHGs0
+         tk8mFbRmHXphy5XsruH4o6nVKtZOjc2XICcozwFUX6OYfBPcgGqq9F3+dVnjl7IS3O9g
+         PyQRcZ1p9Gs4gRn6yOJFKAPkz+2k+//4mti2V8kCrKvodJ1kEW0i/F88gDtWnqgqyAPN
+         XKzP2eZi30EevyNAzKJhc9I+MIL9E7/1g/Xj5gcL8ilWSxsgCJ1K+GaT6FGvpn3lj0lr
+         VAVdzUNIcNZDULQvX2XOkjlBumXwxHxzag4iS/MUus/JeGwn+IMorG5f7vXJKBCidmfo
+         yRIw==
+X-Gm-Message-State: AOAM530Zz99L2kV9oSMHKhxwQ4taj+OC7FiCDDvzUM2QOo7zXu0eAqIY
+        mGoZzTcW/AGjmXjdywWQB2QvG9NLoi9VzOHxFvTitQ==
+X-Google-Smtp-Source: ABdhPJzXoxob/X/DHCIAvQXfNmkfleCnn7lo5NMjRZpAiVrSHkykqZ8vcF4tuq0Djs8919C3EyWNG02Ij1EuYglKpBQ=
+X-Received: by 2002:a63:710f:: with SMTP id m15mr15850765pgc.40.1642356691202;
+ Sun, 16 Jan 2022 10:11:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
+ <20211228080717.10666-2-lizhijian@cn.fujitsu.com> <20220106002130.GP6467@ziepe.ca>
+ <bf038e6c-66db-50ca-0126-3ad4ac1371e7@fujitsu.com>
+In-Reply-To: <bf038e6c-66db-50ca-0126-3ad4ac1371e7@fujitsu.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Sun, 16 Jan 2022 10:11:19 -0800
+Message-ID: <CAPcyv4h2Cuzm_fn9fi9RqQ_iEwOwuc9qdk5x_7W=VXvsOAVPFA@mail.gmail.com>
+Subject: Re: [RFC PATCH rdma-next 01/10] RDMA: mr: Introduce is_pmem
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
+        "aharonl@nvidia.com" <aharonl@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mbloch@nvidia.com" <mbloch@nvidia.com>,
+        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
+        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
+        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Axel,
+On Wed, Jan 5, 2022 at 10:13 PM lizhijian@fujitsu.com
+<lizhijian@fujitsu.com> wrote:
+>
+>
+> Add Dan to the party :)
+>
+> May i know whether there is any existing APIs to check whether
+> a va/page backs to a nvdimm/pmem ?
+>
+>
+>
+> On 06/01/2022 08:21, Jason Gunthorpe wrote:
+> > On Tue, Dec 28, 2021 at 04:07:08PM +0800, Li Zhijian wrote:
+> >> We can use it to indicate whether the registering mr is associated with
+> >> a pmem/nvdimm or not.
+> >>
+> >> Currently, we only assign it in rxe driver, for other device/drivers,
+> >> they should implement it if needed.
+> >>
+> >> RDMA FLUSH will support the persistence feature for a pmem/nvdimm.
+> >>
+> >> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+> >>   drivers/infiniband/sw/rxe/rxe_mr.c | 47 ++++++++++++++++++++++++++++++
+> >>   include/rdma/ib_verbs.h            |  1 +
+> >>   2 files changed, 48 insertions(+)
+> >>
+> >> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+> >> index 7c4cd19a9db2..bcd5e7afa475 100644
+> >> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+> >> @@ -162,6 +162,50 @@ void rxe_mr_init_dma(struct rxe_pd *pd, int access, struct rxe_mr *mr)
+> >>      mr->type = IB_MR_TYPE_DMA;
+> >>   }
+> >>
+> >> +// XXX: the logic is similar with mm/memory-failure.c
+> >> +static bool page_in_dev_pagemap(struct page *page)
+> >> +{
+> >> +    unsigned long pfn;
+> >> +    struct page *p;
+> >> +    struct dev_pagemap *pgmap = NULL;
+> >> +
+> >> +    pfn = page_to_pfn(page);
+> >> +    if (!pfn) {
+> >> +            pr_err("no such pfn for page %p\n", page);
+> >> +            return false;
+> >> +    }
+> >> +
+> >> +    p = pfn_to_online_page(pfn);
+> >> +    if (!p) {
+> >> +            if (pfn_valid(pfn)) {
+> >> +                    pgmap = get_dev_pagemap(pfn, NULL);
+> >> +                    if (pgmap)
+> >> +                            put_dev_pagemap(pgmap);
+> >> +            }
+> >> +    }
+> >> +
+> >> +    return !!pgmap;
+> > You need to get Dan to check this out, but I'm pretty sure this should
+> > be more like this:
+> >
+> > if (is_zone_device_page(page) && page->pgmap->type == MEMORY_DEVICE_FS_DAX)
+>
+> Great, i have added him.
+>
+>
+>
+> >
+> >
+> >> +static bool iova_in_pmem(struct rxe_mr *mr, u64 iova, int length)
+> >> +{
+> >> +    struct page *page = NULL;
+> >> +    char *vaddr = iova_to_vaddr(mr, iova, length);
+> >> +
+> >> +    if (!vaddr) {
+> >> +            pr_err("not a valid iova %llu\n", iova);
+> >> +            return false;
+> >> +    }
+> >> +
+> >> +    page = virt_to_page(vaddr);
+> > And obviously this isn't uniform for the entire umem, so I don't even
+> > know what this is supposed to mean.
+>
+> My intention is to check if a memory region belongs to a nvdimm/pmem.
+> The approach is like that:
+> iova(user space)-+                     +-> page -> page_in_dev_pagemap()
+>                   |                     |
+>                   +-> va(kernel space) -+
+> Since current MR's va is associated with map_set where it record the relations
+> between iova and va and page. Do do you mean we should travel map_set to
+> get its page ? or by any other ways.
 
-FYI, the error/warning still remains.
+Apologies for the delay in responding.
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.4
-head:   bdf17ba628090156b539b1474eb5c636eeaf571b
-commit: b69f713e60d03ae448e5c9fd92e5b0b193dea7be [6517/9999] BACKPORT: FROMGIT: userfaultfd: add UFFDIO_CONTINUE ioctl
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220117/202201170247.Cir3moOM-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project c63a3175c2947e8c1a2d3bbe16a8586600705c54)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/b69f713e60d03ae448e5c9fd92e5b0b193dea7be
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.4
-        git checkout b69f713e60d03ae448e5c9fd92e5b0b193dea7be
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The Subject line of this patch is confusing, if you want to know if a
+pfn is in persistent memory the only mechanism for that is:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+region_intersects(addr, length, IORESOURCE_MEM, IORES_DESC_PERSISTENT_MEMORY)
 
-All warnings (new ones prefixed by >>):
+...there is otherwise nothing pmem specific about the dev_pagemap
+infrastructure. Yes, pmem is the primary user, but it is also used for
+mapping "soft-reserved" memory (See: the EFI_MEMORY_SP) attribute, and
+other users.
 
->> fs/userfaultfd.c:1519:9: warning: variable 'ioctls_out' set but not used [-Wunused-but-set-variable]
-                   __u64 ioctls_out;
-                         ^
-   1 warning generated.
-
-
-vim +/ioctls_out +1519 fs/userfaultfd.c
-
-  1311	
-  1312	static int userfaultfd_register(struct userfaultfd_ctx *ctx,
-  1313					unsigned long arg)
-  1314	{
-  1315		struct mm_struct *mm = ctx->mm;
-  1316		struct vm_area_struct *vma, *prev, *cur;
-  1317		int ret;
-  1318		struct uffdio_register uffdio_register;
-  1319		struct uffdio_register __user *user_uffdio_register;
-  1320		unsigned long vm_flags, new_flags;
-  1321		bool found;
-  1322		bool basic_ioctls;
-  1323		unsigned long start, end, vma_end;
-  1324	
-  1325		user_uffdio_register = (struct uffdio_register __user *) arg;
-  1326	
-  1327		ret = -EFAULT;
-  1328		if (copy_from_user(&uffdio_register, user_uffdio_register,
-  1329				   sizeof(uffdio_register)-sizeof(__u64)))
-  1330			goto out;
-  1331	
-  1332		ret = -EINVAL;
-  1333		if (!uffdio_register.mode)
-  1334			goto out;
-  1335		if (uffdio_register.mode & ~UFFD_API_REGISTER_MODES)
-  1336			goto out;
-  1337		vm_flags = 0;
-  1338		if (uffdio_register.mode & UFFDIO_REGISTER_MODE_MISSING)
-  1339			vm_flags |= VM_UFFD_MISSING;
-  1340		if (uffdio_register.mode & UFFDIO_REGISTER_MODE_WP) {
-  1341			vm_flags |= VM_UFFD_WP;
-  1342			/*
-  1343			 * FIXME: remove the below error constraint by
-  1344			 * implementing the wprotect tracking mode.
-  1345			 */
-  1346			ret = -EINVAL;
-  1347			goto out;
-  1348		}
-  1349		if (uffdio_register.mode & UFFDIO_REGISTER_MODE_MINOR) {
-  1350	#ifndef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
-  1351			goto out;
-  1352	#endif
-  1353			vm_flags |= VM_UFFD_MINOR;
-  1354		}
-  1355	
-  1356		ret = validate_range(mm, &uffdio_register.range.start,
-  1357				     uffdio_register.range.len);
-  1358		if (ret)
-  1359			goto out;
-  1360	
-  1361		start = uffdio_register.range.start;
-  1362		end = start + uffdio_register.range.len;
-  1363	
-  1364		ret = -ENOMEM;
-  1365		if (!mmget_not_zero(mm))
-  1366			goto out;
-  1367	
-  1368		down_write(&mm->mmap_sem);
-  1369		if (!mmget_still_valid(mm))
-  1370			goto out_unlock;
-  1371		vma = find_vma_prev(mm, start, &prev);
-  1372		if (!vma)
-  1373			goto out_unlock;
-  1374	
-  1375		/* check that there's at least one vma in the range */
-  1376		ret = -EINVAL;
-  1377		if (vma->vm_start >= end)
-  1378			goto out_unlock;
-  1379	
-  1380		/*
-  1381		 * If the first vma contains huge pages, make sure start address
-  1382		 * is aligned to huge page size.
-  1383		 */
-  1384		if (is_vm_hugetlb_page(vma)) {
-  1385			unsigned long vma_hpagesize = vma_kernel_pagesize(vma);
-  1386	
-  1387			if (start & (vma_hpagesize - 1))
-  1388				goto out_unlock;
-  1389		}
-  1390	
-  1391		/*
-  1392		 * Search for not compatible vmas.
-  1393		 */
-  1394		found = false;
-  1395		basic_ioctls = false;
-  1396		for (cur = vma; cur && cur->vm_start < end; cur = cur->vm_next) {
-  1397			cond_resched();
-  1398	
-  1399			BUG_ON(!!cur->vm_userfaultfd_ctx.ctx ^
-  1400			       !!(cur->vm_flags & __VM_UFFD_FLAGS));
-  1401	
-  1402			/* check not compatible vmas */
-  1403			ret = -EINVAL;
-  1404			if (!vma_can_userfault(cur, vm_flags))
-  1405				goto out_unlock;
-  1406	
-  1407			/*
-  1408			 * UFFDIO_COPY will fill file holes even without
-  1409			 * PROT_WRITE. This check enforces that if this is a
-  1410			 * MAP_SHARED, the process has write permission to the backing
-  1411			 * file. If VM_MAYWRITE is set it also enforces that on a
-  1412			 * MAP_SHARED vma: there is no F_WRITE_SEAL and no further
-  1413			 * F_WRITE_SEAL can be taken until the vma is destroyed.
-  1414			 */
-  1415			ret = -EPERM;
-  1416			if (unlikely(!(cur->vm_flags & VM_MAYWRITE)))
-  1417				goto out_unlock;
-  1418	
-  1419			/*
-  1420			 * If this vma contains ending address, and huge pages
-  1421			 * check alignment.
-  1422			 */
-  1423			if (is_vm_hugetlb_page(cur) && end <= cur->vm_end &&
-  1424			    end > cur->vm_start) {
-  1425				unsigned long vma_hpagesize = vma_kernel_pagesize(cur);
-  1426	
-  1427				ret = -EINVAL;
-  1428	
-  1429				if (end & (vma_hpagesize - 1))
-  1430					goto out_unlock;
-  1431			}
-  1432	
-  1433			/*
-  1434			 * Check that this vma isn't already owned by a
-  1435			 * different userfaultfd. We can't allow more than one
-  1436			 * userfaultfd to own a single vma simultaneously or we
-  1437			 * wouldn't know which one to deliver the userfaults to.
-  1438			 */
-  1439			ret = -EBUSY;
-  1440			if (cur->vm_userfaultfd_ctx.ctx &&
-  1441			    cur->vm_userfaultfd_ctx.ctx != ctx)
-  1442				goto out_unlock;
-  1443	
-  1444			/*
-  1445			 * Note vmas containing huge pages
-  1446			 */
-  1447			if (is_vm_hugetlb_page(cur))
-  1448				basic_ioctls = true;
-  1449	
-  1450			found = true;
-  1451		}
-  1452		BUG_ON(!found);
-  1453	
-  1454		if (vma->vm_start < start)
-  1455			prev = vma;
-  1456	
-  1457		ret = 0;
-  1458		do {
-  1459			cond_resched();
-  1460	
-  1461			BUG_ON(!vma_can_userfault(vma, vm_flags));
-  1462			BUG_ON(vma->vm_userfaultfd_ctx.ctx &&
-  1463			       vma->vm_userfaultfd_ctx.ctx != ctx);
-  1464			WARN_ON(!(vma->vm_flags & VM_MAYWRITE));
-  1465	
-  1466			/*
-  1467			 * Nothing to do: this vma is already registered into this
-  1468			 * userfaultfd and with the right tracking mode too.
-  1469			 */
-  1470			if (vma->vm_userfaultfd_ctx.ctx == ctx &&
-  1471			    (vma->vm_flags & vm_flags) == vm_flags)
-  1472				goto skip;
-  1473	
-  1474			if (vma->vm_start > start)
-  1475				start = vma->vm_start;
-  1476			vma_end = min(end, vma->vm_end);
-  1477	
-  1478			new_flags = (vma->vm_flags & ~__VM_UFFD_FLAGS) | vm_flags;
-  1479			prev = vma_merge(mm, prev, start, vma_end, new_flags,
-  1480					 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
-  1481					 vma_policy(vma),
-  1482					 ((struct vm_userfaultfd_ctx){ ctx }),
-  1483					 vma_get_anon_name(vma));
-  1484			if (prev) {
-  1485				vma = prev;
-  1486				goto next;
-  1487			}
-  1488			if (vma->vm_start < start) {
-  1489				ret = split_vma(mm, vma, start, 1);
-  1490				if (ret)
-  1491					break;
-  1492			}
-  1493			if (vma->vm_end > end) {
-  1494				ret = split_vma(mm, vma, end, 0);
-  1495				if (ret)
-  1496					break;
-  1497			}
-  1498		next:
-  1499			/*
-  1500			 * In the vma_merge() successful mprotect-like case 8:
-  1501			 * the next vma was merged into the current one and
-  1502			 * the current one has not been updated yet.
-  1503			 */
-  1504			vma->vm_flags = new_flags;
-  1505			vma->vm_userfaultfd_ctx.ctx = ctx;
-  1506	
-  1507			if (is_vm_hugetlb_page(vma) && uffd_disable_huge_pmd_share(vma))
-  1508				hugetlb_unshare_all_pmds(vma);
-  1509	
-  1510		skip:
-  1511			prev = vma;
-  1512			start = vma->vm_end;
-  1513			vma = vma->vm_next;
-  1514		} while (vma && vma->vm_start < end);
-  1515	out_unlock:
-  1516		up_write(&mm->mmap_sem);
-  1517		mmput(mm);
-  1518		if (!ret) {
-> 1519			__u64 ioctls_out;
-  1520	
-  1521			ioctls_out = basic_ioctls ? UFFD_API_RANGE_IOCTLS_BASIC :
-  1522			    UFFD_API_RANGE_IOCTLS;
-  1523	
-  1524			/* CONTINUE ioctl is only supported for MINOR ranges. */
-  1525			if (!(uffdio_register.mode & UFFDIO_REGISTER_MODE_MINOR))
-  1526				ioctls_out &= ~((__u64)1 << _UFFDIO_CONTINUE);
-  1527	
-  1528			/*
-  1529			 * Now that we scanned all vmas we can already tell
-  1530			 * userland which ioctls methods are guaranteed to
-  1531			 * succeed on this range.
-  1532			 */
-  1533			if (put_user(basic_ioctls ? UFFD_API_RANGE_IOCTLS_BASIC :
-  1534				     UFFD_API_RANGE_IOCTLS,
-  1535				     &user_uffdio_register->ioctls))
-  1536				ret = -EFAULT;
-  1537		}
-  1538	out:
-  1539		return ret;
-  1540	}
-  1541	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Can you clarify the intent? I am missing some context.

@@ -2,194 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 707F248FC4D
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 12:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9EC48FC57
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 12:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbiAPLZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 06:25:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbiAPLY7 (ORCPT
+        id S234938AbiAPLcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 06:32:52 -0500
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net ([162.243.161.220]:60041
+        "HELO zg8tmtyylji0my4xnjeumjiw.icoremail.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with SMTP id S232797AbiAPLcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 06:24:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31C5C061574;
-        Sun, 16 Jan 2022 03:24:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C6F9B80D3D;
-        Sun, 16 Jan 2022 11:24:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F66C36AE7;
-        Sun, 16 Jan 2022 11:24:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642332296;
-        bh=SCm04AFPsLST/8ZlVrtGPvyNPIJ3KZ962EHDyckiGZk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HGqax4vFQK6J0AxhqaMoxaDep75PIIIEccQ0z6I5FWuausPJQEBQ5IBujRmh0vBhN
-         y3SLmRcnGHIaGzMuWGMUkC93/BHBobWQ4vRer44UR7Rtdoz+vDwCkICOXANTJ5b7Ob
-         cjIsNtbWYo3RTwiWaxQh5w8/LmiJP+HqqZBdIVSKA/iTr1eeRRXi0hHAx2mgCR8o/6
-         PRSuL0W+aY+iO62VPEA8YefbjuXhmFYBqomi9k28wRm1MWXpAV980Ogi/N1OHN1zMT
-         lcCfXATIgQrrOJyzIytIyRJLYi7r0cumRAExpaKqUJhNg3yGhhrsSGiNgxrXyLor/L
-         0N0PotkRZCliA==
-Date:   Sun, 16 Jan 2022 11:30:56 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Cristian Pop <cristian.pop@analog.com>
-Cc:     <linux-iio@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: iio: addac: one-bit-adc-dac yaml
- documentation
-Message-ID: <20220116113056.535a5cad@jic23-huawei>
-In-Reply-To: <20220111115919.14645-1-cristian.pop@analog.com>
-References: <20220111115919.14645-1-cristian.pop@analog.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Sun, 16 Jan 2022 06:32:51 -0500
+X-Greylist: delayed 21321 seconds by postgrey-1.27 at vger.kernel.org; Sun, 16 Jan 2022 06:32:51 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=4qtF5pTLgHrEtS/8byluABFgtK1z5IUdOHuMX+F5kgw=; b=A
+        gpwgqDGv4gr0ssKHhJ3wqZ4uhsqWVe5I44dY0ari+e0sXuhdyWaSb++2TTeYJ6G6
+        5cRYWBpqAI1fOtJEijJGxMqkvxYxeCX6uLi1ASgZy71xd1mSM6ebOadb+T9NPDcA
+        NVpS5c/R2d+GtKF6sbKa+555zST/3Y4GN1gTiJ7JZQ=
+Received: from localhost (unknown [10.129.21.144])
+        by front01 (Coremail) with SMTP id 5oFpogAXHTkgAuRh8vdaAA--.26418S2;
+        Sun, 16 Jan 2022 19:31:44 +0800 (CST)
+From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
+To:     peter.ujfalusi@gmail.com, vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yongzhi Liu <lyz_cs@pku.edu.cn>
+Subject: [PATCH] dmaengine: ti: Fix runtime PM imbalance on error
+Date:   Sun, 16 Jan 2022 03:31:42 -0800
+Message-Id: <1642332702-126304-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: 5oFpogAXHTkgAuRh8vdaAA--.26418S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKrW7ZFW7WF1rGrW8GF4rKrg_yoWfAFb_Cr
+        1rZrWxXrnxWF4Dtw17AwnxZFy0qF4UXr1DuF4Fv343trWjyrs8JrWYvFnYyws3X3yjyr1q
+        ya1v9F17CrWDWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb4xFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK
+        82IY6x8ErcxFaVAv8VWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
+        UU=
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEEBlPy7t9+qgASsW
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Jan 2022 13:59:18 +0200
-Cristian Pop <cristian.pop@analog.com> wrote:
+pm_runtime_get_sync() increments the runtime PM usage counter even
+when it returns an error code, thus a matching decrement is needed on
+the error handling path to keep the counter balanced.
 
-> This adds device tree bindings for the one-bit-adc-dac.
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+---
+ drivers/dma/ti/edma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-This series really needs a cover letter where you describe in
-general terms what the aim is etc.
-
-> 
-> Signed-off-by: Cristian Pop <cristian.pop@analog.com>
-> V1->V2                                                                     
->  - I am aware of the recommendation of rename/move this driver. Should we  
->    consider "drivers/io/gpio.c"? 
-
-Probably keep with the naming of the hwmon iio bridge and go with
-gpio_iio.c to indicate bridge from gpio to iio.
-
-I'll put more general comments in patch 2 review, but I'm very doubtful
-that setting this up via dt is giong to be the way forward.
-Shall we say, the iio_hwmon bindings have always been controversial and
-we'd probably not get away with them today...
-
-Reason being it's policy not wiring and reflects internal Linux subsystem
-constructs, not generic things applicable to all operating systems.
-
-                                          
->  - Add .yaml file                                                          
->  - Remove blank lines, remove unnecessary coma                             
->  - Remove macros for channels                                              
->  - Check if channel is input for write_raw                                 
->  - Use labels instead of extend_name                                       
->  - Fix channel indexing                                                    
->  - Use "sizeof(*channels)" in devm_kcalloc()                               
->  - Remove assignment: " indio_dev->dev.parent = &pdev->dev;"               
->  - Remove "platform_set_drvdata"                               
-Not in this patch so shouldn't be in this description.            
->  - Remove "adi" from compatible string since is not ADI specific driver.
-> ---
-
-Version log here for stuff in this patch.  Fine to have the log in the
-cover letter if the changes tend to go across multiple patches (renames etc).
-
->  .../bindings/iio/addac/one-bit-adc-dac.yaml   | 89 +++++++++++++++++++
->  1 file changed, 89 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/addac/one-bit-adc-dac.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/addac/one-bit-adc-dac.yaml b/Documentation/devicetree/bindings/iio/addac/one-bit-adc-dac.yaml
-> new file mode 100644
-> index 000000000000..dbed0f3b1ca4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/addac/one-bit-adc-dac.yaml
-> @@ -0,0 +1,89 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright 2020 Analog Devices Inc.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/addac/one-bit-adc-dac.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices one bit ADC DAC driver
-> +
-> +maintainers:
-> +  - Cristian Pop <cristian.pop@analog.com>
-> +
-> +description: |
-> +  One bit ADC DAC driver
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,one-bit-adc-dac
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  in-gpios:
-> +    description: Input GPIOs
-> +
-> +  out-gpios:
-> +    description: Output GPIOs
-> +
-> +required:
-> +  - compatible
-> +  - in-gpios
-> +  - out-gpios
-> +
-> +patternProperties:
-> +  "^channel@([0-9]|1[0-5])$":
-> +    type: object
-> +    description: |
-> +      Represents the external channels which are connected to the ADDAC.
-> +
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-> +        description: |
-> +          The channel number.
-> +
-> +      label:
-> +        description: |
-> +          Unique name to identify which channel this is.
-> +
-> +    required:
-> +      - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    one-bit-adc-dac@0 {
-> +        compatible = "one-bit-adc-dac";
-> +
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        in-gpios = <&gpio 17 0>, <&gpio 27 0>;
-> +        out-gpios = <&gpio 23 0>, <&gpio 24 0>;
-> +
-> +        channel@0 {
-> +          reg = <0>;
-> +          label = "i_17";
-> +        };
-> +
-> +        channel@1 {
-> +          reg = <1>;
-> +          label = "i_27";
-> +        };
-> +
-> +        channel@2 {
-> +          reg = <2>;
-> +          label = "o_23";
-> +        };
-> +
-> +        channel@3 {
-> +          reg = <3>;
-> +          label = "o_24";
-> +        };
-> +    };
+diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
+index 08e47f4..a73f779 100644
+--- a/drivers/dma/ti/edma.c
++++ b/drivers/dma/ti/edma.c
+@@ -2398,9 +2398,9 @@ static int edma_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, ecc);
+ 
+ 	pm_runtime_enable(dev);
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret < 0) {
+-		dev_err(dev, "pm_runtime_get_sync() failed\n");
++		dev_err(dev, "pm_runtime_resume_and_get() failed\n");
+ 		pm_runtime_disable(dev);
+ 		return ret;
+ 	}
+-- 
+2.7.4
 

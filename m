@@ -2,115 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7366648FDD8
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 17:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B2848FDE1
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 17:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232697AbiAPQ07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 11:26:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43582 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232084AbiAPQ06 (ORCPT
+        id S233824AbiAPQbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 11:31:08 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:33759 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231292AbiAPQbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 11:26:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642350417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+nAKKNi5XgiAfNAzdu5aMlABcg+AfndDyAJ+czrA3dE=;
-        b=Ezx1eoFtGtYGdIsj6hWy/hyi7trbhFjBkrokNq1GlTlRrxD29AUdJdnBJfRb2xWCimLyqP
-        31g9BVzqayXWFgHXCyzUSd4X3+LJzoP++YhhyLz5Cre+kSs86AeFM5tn0MYDOrpddl2YMd
-        N5yIYJiZsbjwFV2lRsV1qfrRfSGeRzE=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-222-BVDJw2hwMPCCtzpzYhC-XA-1; Sun, 16 Jan 2022 11:26:56 -0500
-X-MC-Unique: BVDJw2hwMPCCtzpzYhC-XA-1
-Received: by mail-ot1-f70.google.com with SMTP id e73-20020a9d01cf000000b005935b064de2so3738236ote.22
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 08:26:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=+nAKKNi5XgiAfNAzdu5aMlABcg+AfndDyAJ+czrA3dE=;
-        b=zaTBKs7Nf/oOjV3VlqhnNEWQ6Uwd40jHP9d4I/iFTHnxPCOOXn/z4ZZMllLE7Upe9V
-         UngGmQQaWy/VXagSoI7c4xif2TjLnXgNV3JkZZVbqUWl2ZmnpjOOMPfgsKCJ4cwTcy0L
-         kjsaMQs634hAmXjR7HP0okOavUVQjv0a7efOH8d1DkAXJIWiPIPG/SnD285GHAG2O8Kl
-         6fK2uKgJBZYg8k1/lTmB4n7EWSWzexXPTAIr76km0K33e35xp/Dfs6OKLqdRa72ySRe1
-         zRCaaD8zOqo3meUKGTMOKAxSIC3cU1A3/FyWEuJs/UDlSLX4g6fJAw8l+znWtuKFPrMi
-         Hc/Q==
-X-Gm-Message-State: AOAM530+fvhr7mw6K4uGewSb6B60OtmC4KH3rqcwiMzPKg5ATSoFGP//
-        bTvDWZH3wF6uWdHMaFD1eEp26RcPxKukrnjNgBBYS0fIPAhKGtUtGuk3iBxE1KgXVNlXYIVt3Zs
-        caSvNoQkUrILctG6fKh3B8oa1NWZICQhZoggQsvoO4aifHai5mkurTiz+gcWP8/GrOyT7i7A=
-X-Received: by 2002:a9d:7f0e:: with SMTP id j14mr1680722otq.305.1642350415651;
-        Sun, 16 Jan 2022 08:26:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw0frExX8193TcIlUQCAdXQ8x5SRFRqaag+E9CI8NFwDwphAdh5+uw2Ho1hbhxiMP7W3hFeWA==
-X-Received: by 2002:a9d:7f0e:: with SMTP id j14mr1680711otq.305.1642350415410;
-        Sun, 16 Jan 2022 08:26:55 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id bo8sm4862700oib.22.2022.01.16.08.26.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 08:26:55 -0800 (PST)
-Subject: Re: [PATCH] NFS: simplify check for freeing cn_resp
-To:     Trond Myklebust <trondmy@hammerspace.com>,
-        "anna.schumaker@netapp.com" <anna.schumaker@netapp.com>
-Cc:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220116144301.399581-1-trix@redhat.com>
- <9362b77845cecef630cd2cf98e3daf557318941b.camel@hammerspace.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <1bfd05a9-5245-9094-b382-f01c8b35f761@redhat.com>
-Date:   Sun, 16 Jan 2022 08:26:53 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sun, 16 Jan 2022 11:31:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1642350648;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=wd5B5q6uhmXCkTltl4oPLre+b0CAXOOsrH3DYJLPWOk=;
+    b=QAyRW1JmAAA/yFoj8X3QlSMfV7J/1fZy54Yx3ak5/iNi9bBnRjTZ0qdv2HRCVFrQeH
+    4I9sz6VMbpxUQOhW874t2uU7b+e+pkg9hOpqKlo8sy+eGHj5CMVFdSQrAUEgNkj4ko1a
+    +//H9KPf6J9h/viwiQOokXiVltBL/RziMlcqLcyRLAIDnTGiOFY5mqGVGmhdK+R0DkTz
+    UbLMgs+VUrIn5piPwwXZXhDJ7ggj2l/dUCJ/ZReyuW2PRPpX2rdRpICmDN9XGTLvUGxJ
+    4lyglW81xWiXjBh7BIzt/MjXtU7CupYK6pceuw04NaqNn/qWpawq+FnenPnkDAgKJT5Q
+    T5Vw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrK8+86Y="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 47.37.6 AUTH)
+    with ESMTPSA id h68d06y0GGUk8zU
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 16 Jan 2022 17:30:46 +0100 (CET)
+Date:   Sun, 16 Jan 2022 17:30:39 +0100
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH 09/15] rpmsg: smd: Drop unnecessary condition for channel
+ creation
+Message-ID: <YeRILypv8ajssNae@gerhold.net>
+References: <20220112194118.178026-1-luca@z3ntu.xyz>
+ <20220112194118.178026-10-luca@z3ntu.xyz>
+ <Yd9KebiZUjTuHtIM@gerhold.net>
+ <12385151.O9o76ZdvQC@g550jk>
 MIME-Version: 1.0
-In-Reply-To: <9362b77845cecef630cd2cf98e3daf557318941b.camel@hammerspace.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <12385151.O9o76ZdvQC@g550jk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jan 16, 2022 at 05:08:29PM +0100, Luca Weiss wrote:
+> On Mittwoch, 12. J�nner 2022 22:39:53 CET Stephan Gerhold wrote:
+> > On Wed, Jan 12, 2022 at 08:40:58PM +0100, Luca Weiss wrote:
+> > > From: Vladimir Lypak <vladimir.lypak@gmail.com>
+> > > 
+> > > RPM Firmware on variety of newer SoCs such as MSM8917 (also likely
+> > > MSM8937, MSM8940, MSM8952), MSM8953 and on some MSM8916 devices) doesn't
+> > > initiate opening of the SMD channel if it was previously opened by
+> > > bootloader. This doesn't allow probing of smd-rpm driver on such devices
+> > > because there is a check that requires RPM this behaviour.
+> > > 
+> > > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+> > > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > > Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > 
+> > This is effectively a "Revert "Revert "rpmsg: smd: Create device for all
+> > channels""":
+> > 
+> > https://lore.kernel.org/linux-arm-msm/20171212235857.10432-3-bjorn.andersson
+> > @linaro.org/
+> > https://lore.kernel.org/linux-arm-msm/20180315181244.8859-1-bjorn.andersson
+> > @linaro.org/
+> > 
+> > Won't this cause the same regression reported by Srinivas again?
+> > 
+> 
+> Do you have any suggestion on another way to solve this? Without this commit 
+> the regulators just won't probe at all, I haven't looked very deep into it 
+> though given this patch solves it.
+> 
+> I guess worst case it'll become a devicetree property to enable this quirk?
+> 
 
-On 1/16/22 7:47 AM, Trond Myklebust wrote:
-> Hi Tom,
->
-> On Sun, 2022-01-16 at 06:43 -0800, trix@redhat.com wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> nfs42_files_from_same_server() is called to check if freeing
->> cn_resp is required.  Instead of calling a function, check
->> the pointer.
->>
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> ---
->>   fs/nfs/nfs4file.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/fs/nfs/nfs4file.c b/fs/nfs/nfs4file.c
->> index e79ae4cbc395e..677631ea4cfb3 100644
->> --- a/fs/nfs/nfs4file.c
->> +++ b/fs/nfs/nfs4file.c
->> @@ -180,7 +180,7 @@ static ssize_t __nfs4_copy_file_range(struct file
->> *file_in, loff_t pos_in,
->>          ret = nfs42_proc_copy(file_in, pos_in, file_out, pos_out,
->> count,
->>                                  nss, cnrs, sync);
->>   out:
->> -       if (!nfs42_files_from_same_server(file_in, file_out))
->> +       if (cn_resp)
->>                  kfree(cn_resp);
-> The kernel convention in these circumstances is to just skip the NULL
-> pointer check, since kfree() does that anyway.
+My spontaneous suggestion would be to skip the check only for the
+"rpm_requests" channel, e.g. something like
 
-Yes. I'll respin.
+	if (remote_state != SMD_CHANNEL_OPENING &&
+	    remote_state != SMD_CHANNEL_OPENED &&
+	    strcmp(channel->name, "rpm_requests")
+		continue;
 
-Tom
+This will avoid changing the behavior for anything but the RPM channel.
+I don't think anything else is affected by the same problem (since the
+bootloader or earlier firmware should not make use of any other channel).
+Also, we definitely *always* want to open the channel to the RPM because
+otherwise almost everything breaks.
 
->
->>          if (ret == -EAGAIN)
->>                  goto retry;
+Many solutions are possible though so at the end it is mostly up to
+Bjorn to decide I think. :)
 
+Thanks,
+Stephan

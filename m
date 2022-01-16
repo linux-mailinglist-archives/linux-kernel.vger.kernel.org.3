@@ -2,79 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5DE48FC82
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 13:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799AF48FC83
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 13:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235022AbiAPMHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 07:07:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S235028AbiAPMIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 07:08:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235015AbiAPMHq (ORCPT
+        with ESMTP id S235015AbiAPMIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 07:07:46 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5ADC06173E
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 04:07:46 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id s9so19342727oib.11
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 04:07:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kNXnIX6RDJdtlZPD9+1UW8TCX7PYSU+tj75Zl+vyUO4=;
-        b=DBLiHXCLxN1uq/uKSNR3y1nJSqPKpE2i5uNfleicUU8F6GQf1QGbCLk2W/wMZvLUB8
-         I1UevA001hhXsayZHUXVT4z6jlO5ULWJEAZZmFF9nZYl9kQll4hNM0x8AXMEIeevPrm1
-         KEmYUFirkHg2Toi5bBoqpqzOBVMAOS2DPQQryXOgsZcVf39BSx4hZvi+Ue8wWfPTwcES
-         vgjyLjCVSxXj19NrwR8SviXhlP/el7rDt5QLZIOJ+v5PlqbCFfYD+6y5Ptu8KwIwgVbE
-         YCjXzDNpEP/N8iSM0nGIMSFZrPfA31Gkpg9ZjThATQ6LQ2kz5pxUTtxFt4H16b3HtpST
-         Pvdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kNXnIX6RDJdtlZPD9+1UW8TCX7PYSU+tj75Zl+vyUO4=;
-        b=xCxtmLOiK5HdEZFLYHkWkXaRL6dHvtve1gNzTfmOa0sp3z0UxLAEkyV0VG4FIoRjQb
-         nW79YVrNj8xbz/+qk3uVIo+xiDVqcab8wBG8D5gLbI5qHhQyHh26DDjeNi29oAeWF9YC
-         ImwjQ3OPTYY81RIdmoxOkvOdkIzoER3wjiJE0KCxJFK2qVXP7IYtJpVrro5OBZa0f9th
-         v14rCV8NMfsIQGg2AxwEKGd+X8x6N+cW5GCimDuiRdxThmM7VKU4I5ZZPC0t2MVFEanM
-         QNxvZ2v1sAGAMGv5MrwD08nDru/w/ZYx7vyTjJP7LfETKO+fbXWGIC7bz63BMaDQokro
-         Ea/A==
-X-Gm-Message-State: AOAM531AjOd6/dvNv8Dqhp4GfBrThOJYKC6atpkbJLVFdo9GzGhO3iYg
-        jaFT8icWiZTnK1JssiRSYVK2p5Afm42tbCNO3vM31A==
-X-Google-Smtp-Source: ABdhPJz3c7i1nWVvOnru4irBp0CN9UCIjC4v/gQ2WmRYxXxAzL7nI+jCT0NKiIxoq70CnTa+JgsYI6a/CP+caVcn7fg=
-X-Received: by 2002:a05:6808:2097:: with SMTP id s23mr9512934oiw.132.1642334866142;
- Sun, 16 Jan 2022 04:07:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20220114065125.21208-1-linmq006@gmail.com>
-In-Reply-To: <20220114065125.21208-1-linmq006@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 16 Jan 2022 13:07:34 +0100
-Message-ID: <CACRpkdYSmgziDQuMU7McW2QQ_M7S16gPb6TgzRX2UkNzt2QdaA@mail.gmail.com>
-Subject: Re: [PATCH] gpio: idt3243x: Fix IRQ check in idt_gpio_probe
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Sun, 16 Jan 2022 07:08:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230A5C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 04:08:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1810B80D36
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 12:08:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AE24C36AE3;
+        Sun, 16 Jan 2022 12:08:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642334881;
+        bh=QGNKE7gbEb/ZzfuejdUhcHsHbvOyANPOdasmGXvhZfc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IqUzl8lalETftViUl232zvy4jSTKKmAHDGE0hph/1tJNyEjXXUthXDtV8CTlPYpyG
+         WATInUbsF6NS8ZKk5gY35IqlpBmfCnTwk4d+qNyZR2GHJLkSrb9PhEBgfo6Av6HFt3
+         Kb+DzeI5G8LAeB0UKuuTgeNp8cs67AyC2gST9Pnq2IHQ5uMq2pbeU7qagTGyPJBRSk
+         tzGUViPCcisfZxevycZL+NbVRBm1RfBvCqkg+pVv1wQRLGl490mUu2HNp4AQ+DSW4r
+         TWrRwOBEhM/n5P7eAfFaM7ZC4+zT0kHZzHqVct54y9EJpw1Dhq4KthgV/LgO6ZwD4/
+         llVeH+WSUZW2w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n94KF-000lcj-LU; Sun, 16 Jan 2022 12:07:59 +0000
+Date:   Sun, 16 Jan 2022 12:07:59 +0000
+Message-ID: <87v8yjyjc0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        chenxiang <chenxiang66@hisilicon.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "liuqi (BA)" <liuqi115@huawei.com>
+Subject: Re: PCI MSI issue for maxcpus=1
+In-Reply-To: <19d55cdf-9ef7-e4a3-5ae5-0970f0d7751b@huawei.com>
+References: <78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com>
+        <87a6g8vp8k.wl-maz@kernel.org>
+        <19d55cdf-9ef7-e4a3-5ae5-0970f0d7751b@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: john.garry@huawei.com, tglx@linutronix.de, chenxiang66@hisilicon.com, shameerali.kolothum.thodi@huawei.com, linux-kernel@vger.kernel.org, liuqi115@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 7:51 AM Miaoqian Lin <linmq006@gmail.com> wrote:
+On Fri, 07 Jan 2022 11:24:38 +0000,
+John Garry <john.garry@huawei.com> wrote:
+> 
+> Hi Marc,
+> 
+> >> So it's the driver call to pci_alloc_irq_vectors_affinity() which
+> >> errors [1]:
+> >> 
+> >> [    9.619070] hisi_sas_v3_hw: probe of 0000:74:02.0 failed with error -2
+> > Can you log what error is returned from pci_alloc_irq_vectors_affinity()?
+> 
+> -EINVAL
+> 
+> > 
+> >> Some details:
+> >> - device supports 32 MSI
+> >> - min and max msi for that function is 17 and 32, respect.
+> > This 17 is a bit odd, owing to the fact that MultiMSI can only deal
+> > with powers of 2. You will always allocate 32 in this case. Not sure
+> > why that'd cause an issue though. Unless...
+> 
+> Even though 17 is the min, we still try for nvec=32 in
+> msi_capability_init() as possible CPUs is 96.
+> 
+> > 
+> >> - affd pre and post are 16 and 0, respect.
+> >> 
+> >> I haven't checked to see what the issue is yet and I think that the
+> >> pci_alloc_irq_vectors_affinity() usage is ok...
+> > ... we really end-up with desc->nvec_used == 32 and try to activate
+> > past vector 17 (which is likely to fail). Could you please check this?
+> 
+> Yeah, that looks to fail. Reason being that in the GIC ITS driver when
+> we try to activate the irq for this managed interrupt all cpus in the
+> affinity mask are offline. Calling its_irq_domain_activate() ->
+> its_select_cpu() it gives cpu=nr_cpu_ids. The affinity mask for that
+> interrupt is 24-29.
 
-> platform_get_irq() returns negative error number instead 0 on failure.
-> And the doc of platform_get_irq() provides a usage example:
->
->     int irq = platform_get_irq(pdev, 0);
->     if (irq < 0)
->         return irq;
->
-> Fix the check of return value to catch errors correctly.
->
-> Fixes: 4195926aedca ("gpio: Add support for IDT 79RC3243x GPIO controller")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+I guess that for managed interrupts, it shouldn't matter, as these
+interrupts should only be used when the relevant CPUs come online.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Would something like below help? Totally untested, as I don't have a
+Multi-MSI capable device that I can plug in a GICv3 system (maybe I
+should teach that to a virtio device...).
 
-Yours,
-Linus Walleij
+Thanks,
+
+	M.
+
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index d25b7a864bbb..850407294adb 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -1632,6 +1632,10 @@ static int its_select_cpu(struct irq_data *d,
+ 			cpumask_and(tmpmask, tmpmask, cpumask_of_node(node));
+ 
+ 		cpu = cpumask_pick_least_loaded(d, tmpmask);
++
++		/* If all the possible CPUs are offline, just pick a victim. */
++		if (cpu == nr_cpu_ids)
++			cpu = cpumask_pick_least_loaded(d, irq_data_get_affinity_mask(d));
+ 	}
+ out:
+ 	free_cpumask_var(tmpmask);
+
+-- 
+Without deviation from the norm, progress is not possible.

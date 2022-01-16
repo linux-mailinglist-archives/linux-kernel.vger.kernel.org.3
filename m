@@ -2,108 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5F048FE7A
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 19:34:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF3748FE80
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 19:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235963AbiAPSey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 13:34:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235906AbiAPSex (ORCPT
+        id S236010AbiAPSqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 13:46:33 -0500
+Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:58674 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235915AbiAPSqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 13:34:53 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFA1C06161C
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 10:34:53 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id z25-20020a0568301db900b005946f536d85so8110467oti.9
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 10:34:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=to:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=8tWFetS/0R91mAOw4wQiTZSwlHSR50XGbCjUlKQuD+A=;
-        b=u8KBF5jOEy3icvGHKQWWiLkKz/Omz5FsxL3Tj2/2r/KZawCZE7/h1xBEvdLLeaLD33
-         Ou3IYHX5Qs1oX+UPaTT8NQS1IHKhGNG76vMYsFyprbEHyEI9f+NM7EjbISDYGiwCi3jU
-         Bcolm/cBefYRlXyvHzoBml89qqkAs7K0jQQclrYwh0VTiZYbJrbAckn4UcgI8GVQKSMG
-         cOV+174xzmM8qwARphD7bcdJrGYPFh/O/lCkHlEZ+vdWsyTmqaC5+k5CBHH7YsTjo3/X
-         4hwNpWXIgzy/E8wmglzZXJDMmNmMtr4vG7XGt3++tf/nprdV2Ro/loDBXH1sUxOvONUF
-         3tdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=8tWFetS/0R91mAOw4wQiTZSwlHSR50XGbCjUlKQuD+A=;
-        b=mw6Hkh0AHk4OmxbaOSiBkMWubR2C6kduw/oBN+96++EyZGjqEHZq0bVFiaAkzWgS9F
-         NiPAs2zHbNGCdEkNdgFeCge2YAVmNWvSGhkugQ5tKs1LzFZFgkVqFXRcFvHGHYWemDCI
-         zBFFExnouZkDBASxa53fn/kVpb7aTIuKub2OC14z/qH0lZfJa5idgUs/E6Y88PzKVZdC
-         K8gPXfNdV83YUHqwdAlDG9JQugfEt1RV3UVnr3XN1jaFZ8mQ6IZlp/uuRXDxIfM7Y139
-         8hDG3KxTIqlyaP5UpV+crd6cynJCcMscWWATD9JYEeMpzLnQLqD8k78Sjns2kCPDIeWq
-         EibQ==
-X-Gm-Message-State: AOAM533nsvD0mhQDWwT41AGIW9EJVttEfDNCVVD/jETyFMY2ldc/hQNx
-        0vohzZ+a8XTQ79gq6aXjL9UOM2RFdTLNCQ==
-X-Google-Smtp-Source: ABdhPJyc1L+aLyOyLgGrMm2krIG1Asfl7+3mKuAkHXVV5LH4erGZSK1ycu3RtzB/2XhF4MTSrObAHg==
-X-Received: by 2002:a9d:294a:: with SMTP id d68mr13692860otb.301.1642358092223;
-        Sun, 16 Jan 2022 10:34:52 -0800 (PST)
-Received: from [192.168.86.178] ([136.62.4.88])
-        by smtp.gmail.com with ESMTPSA id 184sm5399896oih.58.2022.01.16.10.34.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 10:34:51 -0800 (PST)
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   Rob Landley <rob@landley.net>
-Subject: [PATCH] Wire up CONFIG_DEVTMPFS_MOUNT to initramfs.
-Message-ID: <d53f041a-83f7-57f7-28ae-eb7b23034f83@landley.net>
-Date:   Sun, 16 Jan 2022 12:36:49 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sun, 16 Jan 2022 13:46:32 -0500
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id 9AXrnM977HZHJ9AXrn7KaY; Sun, 16 Jan 2022 19:46:30 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 16 Jan 2022 19:46:30 +0100
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Dave Ertman <david.m.ertman@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
+Subject: [PATCH] ice: Don't use GFP_KERNEL in atomic context
+Date:   Sun, 16 Jan 2022 19:46:20 +0100
+Message-Id: <40c94af2f9140794351593047abc95ca65e4e576.1642358759.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Landley <rob@landley.net>
+ice_misc_intr() is an irq handler. It should not sleep.
 
-The kernel has had CONFIG_DEVTMPFS_MOUNT for years, but it only applied to
-fallback ROOT= not initramfs/initmpfs. As long as the config option exists, it
-might as well work.
+Use GFP_ATOMIC instead of GFP_KERNEL when allocating some memory.
 
-I use this for board bringup: populating a chdir and calling cpio as a normal
-user often leaves /dev empty (because mknod requires root access), meaning no
-/dev/console for init/main.c to open, meaning init runs without
-stdin/stdout/stderr and has to mount devtmpfs and redirect the filehandles blind
-with no error output if something goes wrong.
-
-Signed-off-by: Rob Landley <rob@landley.net>
+Fixes: 348048e724a0 ("ice: Implement iidc operations")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-Previously: https://lkml.org/lkml/2017/9/13/651
+I've never played a lot with irq handler. My understanding is that they
+should never sleep. So GFP_KERNEL must be avoided. So I guess that this
+patch is correct.
 
- init/main.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+However, I don't know if some special cases allow such allocation.
+Any feedback/pointer to a good doc/explanation is welcome :)
+---
+ drivers/net/ethernet/intel/ice/ice_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/init/main.c b/init/main.c
-index bb984ed79de0..288c73db57f4 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -1612,7 +1612,6 @@ static noinline void __init kernel_init_freeable(void)
- 	kunit_run_all_tests();
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 30814435f779..65de01f3a504 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -3018,7 +3018,7 @@ static irqreturn_t ice_misc_intr(int __always_unused irq, void *data)
+ 		struct iidc_event *event;
+ 
+ 		ena_mask &= ~ICE_AUX_CRIT_ERR;
+-		event = kzalloc(sizeof(*event), GFP_KERNEL);
++		event = kzalloc(sizeof(*event), GFP_ATOMIC);
+ 		if (event) {
+ 			set_bit(IIDC_EVENT_CRIT_ERR, event->type);
+ 			/* report the entire OICR value to AUX driver */
+-- 
+2.32.0
 
- 	wait_for_initramfs();
--	console_on_rootfs();
-
- 	/*
- 	 * check if there is an early userspace init.  If yes, let it do all
-@@ -1621,7 +1620,11 @@ static noinline void __init kernel_init_freeable(void)
- 	if (init_eaccess(ramdisk_execute_command) != 0) {
- 		ramdisk_execute_command = NULL;
- 		prepare_namespace();
-+	} else if (IS_ENABLED(CONFIG_DEVTMPFS_MOUNT)) {
-+		sys_mkdir("/dev", 0755);
-+		devtmpfs_mount();
- 	}
-+	console_on_rootfs();
-
- 	/*
- 	 * Ok, we have completed the initial bootup, and

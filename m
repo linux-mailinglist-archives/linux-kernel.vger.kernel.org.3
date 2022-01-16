@@ -2,93 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AEC48FC3D
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 11:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106F048FC46
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 12:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234853AbiAPK4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 05:56:24 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:38259 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231880AbiAPK4X (ORCPT
+        id S234861AbiAPLS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 06:18:29 -0500
+Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:64347 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230451AbiAPLS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 05:56:23 -0500
-Received: from [192.168.100.1] ([82.142.13.186]) by mrelayeu.kundenserver.de
- (mreue109 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1M4JeB-1n8m5I1jM1-000H4F; Sun, 16 Jan 2022 11:55:53 +0100
-Message-ID: <a3308bbb-dcd1-9869-7df2-79d33dc75cd0@vivier.eu>
-Date:   Sun, 16 Jan 2022 11:55:51 +0100
+        Sun, 16 Jan 2022 06:18:28 -0500
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id 93YEngVhBZQwW93YFnBe69; Sun, 16 Jan 2022 12:18:25 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 16 Jan 2022 12:18:25 +0100
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        alsa-devel@alsa-project.org
+Subject: [PATCH] ASoC: soc-pcm: use GFP_ATOMIC in dpcm_create_debugfs_state()
+Date:   Sun, 16 Jan 2022 12:18:17 +0100
+Message-Id: <ed322b8821fa787907c1a4cce879564d1281b69d.1642331884.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: fr
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        linux-rtc@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-References: <20220115193245.3777833-1-laurent@vivier.eu>
- <20220115193245.3777833-4-laurent@vivier.eu>
- <CAK8P3a13g_o4mTsOO-4b=WU6TGRHubY7HCt1x1FdXpVmjy6-Sg@mail.gmail.com>
-From:   Laurent Vivier <laurent@vivier.eu>
-Subject: Re: [PATCH v8 3/4] clocksource/drivers: Add a goldfish-timer
- clocksource
-In-Reply-To: <CAK8P3a13g_o4mTsOO-4b=WU6TGRHubY7HCt1x1FdXpVmjy6-Sg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:yAYh0kBjspao1FPwwjQFzrwNjusPh/NSMML6K9oI88CPco9mgv5
- /c8hmxM+3/XybS+hh03Ui/WlejayL6CdpHYzvpCKfRB9BxeoSYxVU4d41QVwqqjO40oIWMX
- LGXKZfyN+s7/DnfuMHJTiwphZjQhqhivF5X6/ZBJLhkPycOrqeIKThXMI/4d6rZVZDh3IZi
- Pa1QcqOawYI+vk/hNl2Xg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:EHN11PVMIiQ=:NgaScoTv6k50lOY3vSUuKE
- 2SDTBwmugBTj1+vfwjT4agENBu+zhw6njZ13A12VeJkrJo+Nhrv/uU1lG+Fd74kRDif08WhRL
- PDpWTQ/S779u7VSpF8GzqKoycSt9jodI4dbSzWZhyZIf4L6elDPcZQ31VKS0sq1Dvc3ujsrsC
- lqdGQLB1/gdZRdpQCSgyEIfdYrb6mY+SrgIaEQ2AdsqCBHZXpmUb/lnpGqT+sdaHBPLQz7vIr
- 2HCJG6KsSWkdR/D9wxoIqPXlMHQ+2vpHXdLp9WO+of4UQOj8Wtyr/It2jMcczZCYtcc5wOniQ
- 2ECziwxaXkg+deAJcqBdVa78EvKOeD7i9Lnv5MF0YjbLCo9lVx4sCwfStV1xgurGkv/GXqbA+
- YlH9hUitG05TfBqyBBIYfSS2bMGG4UcTGB7leofpk1ZhhAaLzm5V5Nrh5THMgaxvX169K/noP
- v55JrmFImKf/AMwGXJkmr+YOTPtjU8kBT7sWpDqtJFpqlqFrgCLDzSlRp+/lD+LBbhAGXooLd
- YWSdgFE4hTdWym1PUl7UpFjRzPPV2VYyiCWuE4EiRMCRB52ozEax/6jHFrhDharRE2x11DkBY
- DilHdwTxvVdmGMPnl8w9Xhy5BaQeXoGWF96T+qOtskO09E8fGd0ptb0A7B0/qtMM8mu8g9aZE
- s6yQG2AbtQeeH4v5t+m50DEMnedvLpLpDypZDXuekkyEXxaLrwYmZL6lQ0zYQdwfl4Sc=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 16/01/2022 à 11:44, Arnd Bergmann a écrit :
-> On Sat, Jan 15, 2022 at 8:32 PM Laurent Vivier <laurent@vivier.eu> wrote:
-> 
->> +
->> +/* goldfish endianness depends on CPU endianness */
->> +#ifdef CONFIG_CPU_BIG_ENDIAN
->> +#define goldfish_ioread32 ioread32be
->> +#define goldfish_iowrite32 iowrite32be
->> +#else
->> +#define goldfish_ioread32 ioread32
->> +#define goldfish_iowrite32 iowrite32
->> +#endif
-> 
-> This is not what I meant here, as you are breaking big-endian support
-> for all other
-> architectures in the process.
-> 
-> On architectures that support both big-endian and little-endian kernels, devices
-> (including emulated ones) can't know which type of kernel you are running, so
-> this has to be fixed by architecture. Ideally this macro should be in
-> an architecture
-> specific header file, but you can also just make this a check for m68k and  hope
-> that qemu doesn't duplicate this bug on architectures that gain support for this
-> driver in the future.
-> 
+The commit below states that dpcm_be_connect() may be called from atomic
+context. It changes a GFP_KERNEL into a GFP_ATOMIC to deal with it.
 
-Is it OK if I replace "CONFIG_CPU_BIG_ENDIAN" by "CONFIG_M68K" as M68K is the only big-endian 
-architecture using goldfish?
+Another memory allocation is done in dpcm_create_debugfs_state() which is
+called by dpcm_be_connect(). Also use GFP_ATOMIC there to be consistent
+and be compliant with atomic context.
 
-Thanks,
-Laurent
+Fixes: d8a9c6e1f676 ("ASoC: soc-pcm: use GFP_ATOMIC for dpcm structure")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Not clear to me how dpcm_be_connect() can be called from an atomic context,
+though. But better safe than sorry.
+---
+ sound/soc/soc-pcm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
+index 7abfc48b26ca..1a536a2b9dc3 100644
+--- a/sound/soc/soc-pcm.c
++++ b/sound/soc/soc-pcm.c
+@@ -212,7 +212,7 @@ static void dpcm_create_debugfs_state(struct snd_soc_dpcm *dpcm, int stream)
+ {
+ 	char *name;
+ 
+-	name = kasprintf(GFP_KERNEL, "%s:%s", dpcm->be->dai_link->name,
++	name = kasprintf(GFP_ATOMIC, "%s:%s", dpcm->be->dai_link->name,
+ 			 stream ? "capture" : "playback");
+ 	if (name) {
+ 		dpcm->debugfs_state = debugfs_create_dir(
+-- 
+2.32.0
+

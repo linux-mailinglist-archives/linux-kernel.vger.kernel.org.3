@@ -2,141 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB66148FE3B
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 18:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6510948FE3F
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 18:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235924AbiAPRvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 12:51:11 -0500
-Received: from mga11.intel.com ([192.55.52.93]:59816 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231300AbiAPRvK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 12:51:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642355470; x=1673891470;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=L4V4B+IwpyR9wgYyuAvJP6EjO4dTV71ecF6SQLdY6Sk=;
-  b=KkEIFmRagUUD/e8AUWm+HooiQHLSkV5AYwt75XAy/DDDD5ZmLtjYx7fP
-   xxA9aFrz3vHgUN0C4nxKrhrQghULT42uyw+1HZZ//ypuvaJpLTh5bXedz
-   z+fsjzqjOwqgmjR0nIDwQFiV0Ei/sXabmlleJHH17yWIvijk3P97aEe3G
-   Qe0k2Q4ep1YHRZ2z1lILwNemEHW1/0oIVHciOu0PS/Fl6YsutxOO3UkOz
-   Pm+M2+OlAWwVHe3HwNaTMU4UIGQHIfTFfLzbihEdXHSWDS6FZXNJFNzRg
-   42xB3R0Rpto4dDkDulzu6IVbFNmiKqIX/AtS+G6Y9umd/7uGHFBwKaZXH
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10228"; a="242063695"
-X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
-   d="scan'208";a="242063695"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 09:51:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
-   d="scan'208";a="692828947"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 16 Jan 2022 09:51:08 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n99gJ-000Asu-Fa; Sun, 16 Jan 2022 17:51:07 +0000
-Date:   Mon, 17 Jan 2022 01:50:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Subject: arch/arm/mach-ep93xx/clock.c:210:35: sparse: sparse: Using plain
- integer as NULL pointer
-Message-ID: <202201170148.vIvPQRko-lkp@intel.com>
+        id S233513AbiAPRyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 12:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230174AbiAPRyM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 12:54:12 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00A1C061574;
+        Sun, 16 Jan 2022 09:54:11 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id e3so46342315lfc.9;
+        Sun, 16 Jan 2022 09:54:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+FwywsmeKxCvqz366I7pw78v5C+rzvcwSFpFisGArd8=;
+        b=SHmCb9Ix2ZOU7lgCI9KWTqe91Wt4Q0kUzz3UNC7982BILZQkZgpMHOONHG+HBvE/o6
+         9O5uGeLoio2EncHZvD5iftz8DnPMgYMKXwRs7/N7b7vmIH3HZj7wFvd4gbh+ghXaRpPg
+         my49ZZ6J+azPqmFFhzKxpFtXCv3++jkrV3nTMQsqh+MY8HRiAlLbjEzL6tC4LB9ib7iQ
+         96bAnnpp3gbMHAQgJODvHuxOegNh7cDDeKT/X7YU0sJuH4e43VHwE5HQVRgCafq6tDZb
+         DHV66sX8QVCfPa4GwkBnWlFDUf1oknkNcFmFQUebfe9isHKoEzD34iq4Kur1VxaY56SM
+         cH7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+FwywsmeKxCvqz366I7pw78v5C+rzvcwSFpFisGArd8=;
+        b=f7ph7nJw5277gnSUjBycdcQZsiknnboAMfigwPEL4A0UcmVeH+mGO1YWRZrWAURf6W
+         Fu4CqD4CFEQINPsJWa5VnWfOFuSSiH0XYXYXzRzUy3aEPAQBO81kJZP9YAkKO3Yb8Zzy
+         8/aPmgG/hoNHKFDnKRzzwGTQjoPgGiFbQo07wP7qcY5YEZIt3hcCLHbuxU05208Kct0D
+         g0eMlQsJmbcG8bZNt0F9FffWPlPqYrOPFOQUKEz1IU6vPIm6BO3eJH9gyhe379W9/+0S
+         pjgFZD0koIvkAuEtuaSNIZC1CCqjMgzR+RJMWv258oUI8zPaGtqBndp1FJlhySA5NltY
+         jNRg==
+X-Gm-Message-State: AOAM532/6c9mPG6zHUIQsbpoVn6X3ttXy89+eiPzy+lfs5Lh3/J1U+72
+        TlD1X1JPu7msNnFs8MDV4LkvFAn7VTs=
+X-Google-Smtp-Source: ABdhPJxhoFluSDEIVijugDkxVn4Lxyg98P5p+RJ0v6ZBCHTbyRgLaGSCFwcJI9NQFGGgBz6K53ioTw==
+X-Received: by 2002:a05:651c:1304:: with SMTP id u4mr5036791lja.49.1642355649594;
+        Sun, 16 Jan 2022 09:54:09 -0800 (PST)
+Received: from [192.168.2.145] (46-138-227-157.dynamic.spd-mgts.ru. [46.138.227.157])
+        by smtp.googlemail.com with ESMTPSA id m3sm1174498lfr.60.2022.01.16.09.54.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Jan 2022 09:54:09 -0800 (PST)
+Subject: Re: [PATCH 0/2] i2c: tegra: allow compiling out support for Tegra's
+ special constrollers
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <cover.1642348712.git.mirq-linux@rere.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <ea9ab0b7-022b-93e2-ed7d-dccfa95bd900@gmail.com>
+Date:   Sun, 16 Jan 2022 20:54:08 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <cover.1642348712.git.mirq-linux@rere.qmqm.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4d66020dcef83314092f2c8c89152a8d122627e2
-commit: 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 ep93xx: clock: convert in-place to COMMON_CLK
-date:   3 months ago
-config: arm-randconfig-s031-20220116 (https://download.01.org/0day-ci/archive/20220117/202201170148.vIvPQRko-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9645ccc7bd7a16cd73c3be9dee70cd702b03be37
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9645ccc7bd7a16cd73c3be9dee70cd702b03be37
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash
+16.01.2022 19:02, Michał Mirosław пишет:
+> To patches that, combined, reduce I2C driver's code by ~2kB and a bit
+> from runtime overhead for non-Tegra20 or non-Tegra210 builds.
+> 
+> Michał Mirosław (2):
+>   i2c: tegra: allow DVC support to be compiled out
+>   i2c: tegra: allow VI support to be compiled out
+> 
+>  drivers/i2c/busses/Kconfig     | 16 ++++++++++++++++
+>  drivers/i2c/busses/i2c-tegra.c | 35 +++++++++++++++++++++-------------
+>  2 files changed, 38 insertions(+), 13 deletions(-)
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
->> arch/arm/mach-ep93xx/clock.c:210:35: sparse: sparse: Using plain integer as NULL pointer
-   arch/arm/mach-ep93xx/clock.c:99:9: sparse: sparse: context imbalance in 'ep93xx_clk_enable' - different lock contexts for basic block
-   arch/arm/mach-ep93xx/clock.c:116:9: sparse: sparse: context imbalance in 'ep93xx_clk_disable' - different lock contexts for basic block
-   arch/arm/mach-ep93xx/clock.c:197:9: sparse: sparse: context imbalance in 'ep93xx_mux_set_parent_lock' - different lock contexts for basic block
-
-vim +210 arch/arm/mach-ep93xx/clock.c
-
-   205	
-   206	static int ep93xx_mux_determine_rate(struct clk_hw *hw,
-   207					struct clk_rate_request *req)
-   208	{
-   209		unsigned long rate = req->rate;
- > 210		struct clk *best_parent = 0;
-   211		unsigned long __parent_rate;
-   212		unsigned long best_rate = 0, actual_rate, mclk_rate;
-   213		unsigned long best_parent_rate;
-   214		int __div = 0, __pdiv = 0;
-   215		int i;
-   216	
-   217		/*
-   218		 * Try the two pll's and the external clock
-   219		 * Because the valid predividers are 2, 2.5 and 3, we multiply
-   220		 * all the clocks by 2 to avoid floating point math.
-   221		 *
-   222		 * This is based on the algorithm in the ep93xx raster guide:
-   223		 * http://be-a-maverick.com/en/pubs/appNote/AN269REV1.pdf
-   224		 *
-   225		 */
-   226		for (i = 0; i < ARRAY_SIZE(mux_parents); i++) {
-   227			struct clk *parent = clk_get_sys(mux_parents[i], NULL);
-   228	
-   229			__parent_rate = clk_get_rate(parent);
-   230			mclk_rate = __parent_rate * 2;
-   231	
-   232			/* Try each predivider value */
-   233			for (__pdiv = 4; __pdiv <= 6; __pdiv++) {
-   234				__div = mclk_rate / (rate * __pdiv);
-   235				if (__div < 2 || __div > 127)
-   236					continue;
-   237	
-   238				actual_rate = mclk_rate / (__pdiv * __div);
-   239				if (is_best(rate, actual_rate, best_rate)) {
-   240					best_rate = actual_rate;
-   241					best_parent_rate = __parent_rate;
-   242					best_parent = parent;
-   243				}
-   244			}
-   245		}
-   246	
-   247		if (!best_parent)
-   248			return -EINVAL;
-   249	
-   250		req->best_parent_rate = best_parent_rate;
-   251		req->best_parent_hw = __clk_get_hw(best_parent);
-   252		req->rate = best_rate;
-   253	
-   254		return 0;
-   255	}
-   256	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+2KB is a too small difference to justify the ifdefs and Kconfig entries,
+IMO.

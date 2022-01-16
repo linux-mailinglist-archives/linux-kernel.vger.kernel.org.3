@@ -2,93 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D361548FDCF
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 17:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC0548FDD3
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 17:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235589AbiAPQUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 11:20:03 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:53869 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232279AbiAPQUB (ORCPT
+        id S235769AbiAPQWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 11:22:24 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49132 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235758AbiAPQWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 11:20:01 -0500
-Received: from mail-wm1-f44.google.com ([209.85.128.44]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MK5BG-1mt7ZZ2yII-00LVJU; Sun, 16 Jan 2022 17:19:59 +0100
-Received: by mail-wm1-f44.google.com with SMTP id d187-20020a1c1dc4000000b003474b4b7ebcso17092231wmd.5;
-        Sun, 16 Jan 2022 08:19:59 -0800 (PST)
-X-Gm-Message-State: AOAM531RozIZHsAFI5VdAvCW2ptj0agn0wZcVzCK8YSxvBeFsChcXmx2
-        kTg6pHuMpx7PWTwCt6WYuivJYap0LTMxNSvbK5U=
-X-Google-Smtp-Source: ABdhPJwLndypdoZqcgVySXUrUaTHtCgNSa0LHq+rQ0wsbDBGYparskmUw5otmdG9JKYAHAXXiKO0Lvzj6vDV3ZLvoZo=
-X-Received: by 2002:a05:600c:5c1:: with SMTP id p1mr23740237wmd.1.1642349999360;
- Sun, 16 Jan 2022 08:19:59 -0800 (PST)
-MIME-Version: 1.0
-References: <20220115193245.3777833-1-laurent@vivier.eu> <20220115193245.3777833-4-laurent@vivier.eu>
- <CAK8P3a13g_o4mTsOO-4b=WU6TGRHubY7HCt1x1FdXpVmjy6-Sg@mail.gmail.com> <77e747de-c7d6-314d-e0b0-58852d463326@vivier.eu>
-In-Reply-To: <77e747de-c7d6-314d-e0b0-58852d463326@vivier.eu>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 16 Jan 2022 17:19:43 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1i_ngEaqhsy4xNrQV8=d1jY=JTxGNNUqOZ0g0to5bw8Q@mail.gmail.com>
-Message-ID: <CAK8P3a1i_ngEaqhsy4xNrQV8=d1jY=JTxGNNUqOZ0g0to5bw8Q@mail.gmail.com>
-Subject: Re: [PATCH v8 3/4] clocksource/drivers: Add a goldfish-timer clocksource
-To:     Laurent Vivier <laurent@vivier.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        linux-rtc@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:bThAav2QClU2G8a4VqvDbdC7de32a8IVLrelQESCHmeQjbSLhUj
- pgzKAzKuhznJp4iR70zztH7hqKuLV4WG2pbQB+KyMhjbvGIRkh33vdizgGaFQU/LFgJNhTJ
- RHGZetorKATZCv865TdUJZoAPz10ZxbwXIf1UOjDOIUjjmXKTRq1MZUjjxmxJxT9YB558cU
- pGO4H7hvHDQ4In3U6SQOg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GsuQMbQxaAQ=:6+LJzRMiLXZF0auSsX8SEM
- MLG9fkQZT+uzptLgd27Z6+Tk6POLO144shBEmlig0IaK+982IGiD/vTBgRYEeIYL1X9cGoDZ7
- /T1uHAHO2z8OdTEDPumbealgUyGPudLt/SBhDSMn5S7RggfbW/k9kiAzir1kuFDCRLMUmAZlK
- 1ZdP1S3qMCDCQRo4sAmRMtuDgMIF7mF8ekho1ujiMuAcDsKtB8RsVtLEe2alRYTDuUAEEW3B+
- Og90QGYSXJGSDiPSS+AzGArG8vHds1rcwz6BbKVDUg8mA/AdQZfpZ8VLVw0WnjbeZOKF+0ypj
- JgP0pI6yAlZSwA9t6ZeF/cQrmPgrenk++eCnlK+CD/ZJhX9ZaMijCnVZ1Ly9Q6nU/VCJ4vMro
- /zdhzKEzGDsDO/zsY90bcDVHzJl0ctPZvajREIgUUxKC3tVgXN+kG0UDvdLjsCrH4Lz8K6LQG
- 6eo0vDnGXAEMT3q2+LjEhLVLas6T8ESv1PkrSYo/ciX3IuHmI7wASI4dsqUTfJVBmGO7Qf2dh
- qS8eCGzYdEULU4s2tbfADKP8YILsGw2UH/tj6bSvTXuqu/ZZnyVUUsGwjQDieQelfyFrHH9fM
- eMRolJMPuzyRLe/zTvI09FoGV51Hw7tfjRSbcwyi64BegguroYZ2zu0nT43q2avq8shy3806Z
- 6F5TbM5qrlfePvjRfsWe9QDeEC6Xai0dfqgJLOSgevwye1kC363JL76OQohsjjz3RbtdhAMPZ
- czQhkH4diTUNQ9D/v5ITwPWKeWwWOYoyiRNRzBsvZjdc2mN+ROo5HTjbvKSbUJex+IjWV8zcK
- CCrm/tZhCjd2J3sxyKdQGn/yj4UiiHLsoKPdK+OTDNOeCmxt1k=
+        Sun, 16 Jan 2022 11:22:22 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C98C60F5D;
+        Sun, 16 Jan 2022 16:22:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9AFC6C36AE7;
+        Sun, 16 Jan 2022 16:22:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642350141;
+        bh=2jdyKrWpKup8kv17H0oHHbBaH+dLiIj2E9IXQlp3gIM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=puS/oAWOoQmSqj1P3anb/GfP5jxcwqfBJf+Z08EBMa2JEJm00gLTzOWzTjbWPFooE
+         qyhJnApN9CD4BGkzEGTb8Jdzy7mRRJxIp7aEYrpeZo21XQjMYSdsajyniqeiz3U4oK
+         7pqXNtZjjxP1++tOqawscsFS1jw7PkH+GwtUoaQLohopQx9bIVZhJBIl7InlGZnUhQ
+         Xk45gUqhmpkHOvgKSo/HspTsZoBLYGwtXYpw6i+1btwAvaoXnPY6OQlwOBnNDeGnVG
+         c8GULIICNOq5R0TQsxlqtrzqpIZyos6o/YVOEOXGRGNMQ5co6Hn1R9nXweEs6ieeZU
+         vDIlOQ5yvgnDw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 861A3F60796;
+        Sun, 16 Jan 2022 16:22:21 +0000 (UTC)
+Subject: Re: [GIT PULL] Hyper-V next for 5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220114190246.4uvu7oehhugxcwki@liuwe-devbox-debian-v2>
+References: <20220114190246.4uvu7oehhugxcwki@liuwe-devbox-debian-v2>
+X-PR-Tracked-List-Id: <linux-hyperv.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220114190246.4uvu7oehhugxcwki@liuwe-devbox-debian-v2>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-next-signed-20220114
+X-PR-Tracked-Commit-Id: 4eea5332d67d8ae6ba5717ec0f4e671fdbd222e7
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: cb3f09f9afe5286c0aed7a1c5cc71495de166efb
+Message-Id: <164235014154.4755.17282227684468805915.pr-tracker-bot@kernel.org>
+Date:   Sun, 16 Jan 2022 16:22:21 +0000
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Wei Liu <wei.liu@kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+        sthemmin@microsoft.com, Michael Kelley <mikelley@microsoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 12:54 PM Laurent Vivier <laurent@vivier.eu> wrote:
->
-> Virtio has exactly the same problem in the past (prio to v1.0), and it uses __LITTLE_ENDIAN in
-> virtio_legacy_is_little_endian() to know the endianness of the device.
+The pull request you sent on Fri, 14 Jan 2022 19:02:46 +0000:
 
-Right, that was my point, let's not duplicate the bug from pre-standard virtio.
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-next-signed-20220114
 
-> So the code can become:
->
-> #ifdef __LITTLE_ENDIAN
-> #define goldfish_ioread32 ioread32
-> #define goldfish_iowrite32 iowrite32
-> #else
-> #define goldfish_ioread32 ioread32be
-> #define goldfish_iowrite32 iowrite32be
-> #endif
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/cb3f09f9afe5286c0aed7a1c5cc71495de166efb
 
-This is exactly the same as what you had before, it continues to break when
-host and guest disagree on the endianess.
+Thank you!
 
-> What do you prefer: CONFIG_M68K or __LITTLE_ENDIAN?
-
-Checking for CONFIG_M68K at least has a chance of working, provided
-that all existing qemu implementations agree on the semantics here.
-
-       Arnd
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

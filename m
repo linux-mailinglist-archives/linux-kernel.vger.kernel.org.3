@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC6C48F9F9
+	by mail.lfdr.de (Postfix) with ESMTP id C7FCB48F9FA
 	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 01:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbiAPAWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 19:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
+        id S233973AbiAPAXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 19:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiAPAWr (ORCPT
+        with ESMTP id S229622AbiAPAXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 19:22:47 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66985C061574
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 16:22:47 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id hv15so16647251pjb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 16:22:47 -0800 (PST)
+        Sat, 15 Jan 2022 19:23:39 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF8CC061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 16:23:38 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id c14-20020a17090a674e00b001b31e16749cso25829995pjm.4
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 16:23:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :in-reply-to;
-        bh=K8LELWEzyxef93MtcdvUmJL/NjY2Pd5i9bwCODfPWqQ=;
-        b=Vd8hWoFgHHnK/pniROrX/CSrjsvXpHVsAu5uN8hD9YoPKQ63l2Q2nMEEbmvAnRNcVZ
-         M6byGxPbkvttWLPTabAkFxa/4Ftj4U0h0ePq3VswTWD7JgYV5xY/3BuhyFpB2mAFvyDG
-         y+kJXZ8ra9MgKxfRtnMQX3JFm6sC8abndv0umJQneiuB28Vz0UOpx8MRpNiusfz+ch0H
-         1KpsmPmomUfyaM5YGy1hQ+J+a4Fj7vQ7d25MYvT2iJZx7CeCCyQ1s/WKFBB7D7PLPLMc
-         6qHSdqd2eJTjLti5tPWYXtJ1o3aimg1ZcCXQrS9c1vOz3d567CONy5v6R0JjyCCkdo4K
-         maWA==
+        bh=XUevpNNDykU/4ILcYiCpzemK8vBue+56hRj6RQzQGMU=;
+        b=MiAgIFkxalnmcs4sv9TbjpiMgQaqwR0LrRmpbYZ1WsoAE6WXtNvj6hRowhxnmGfs5s
+         ayewYOWnUmiWOIcSwa7g2hvfadQHekefJrOuwuD2rGXggBZQYSh4D3hulFSVzxkWERYe
+         eOAYWEUlihEVnN5w0f0MTWo5/fVl6QsJEy2sCtrmO9Zaj++MtJWK8yAMNfbW+3V07a0m
+         du8r9KfRzJgwJqdNHU9LeQQ2SI+WYojcz7bBWW7iI0tczmuOi/fehEnyTy3zNbGFZ/+H
+         85xD7/MasPepPmDm+TJxjoxT4wtQQwqA4DGCScdAhD/0SPq+8qrxcp0dWz6JLrrKa8Sk
+         +tsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:in-reply-to;
-        bh=K8LELWEzyxef93MtcdvUmJL/NjY2Pd5i9bwCODfPWqQ=;
-        b=4DgVEhhG5ZguEDX7TXD8W4MI+MvWD/uy2oJijvx4Iis0cub+aQU8ZSuKzMXLucx9bj
-         FUvhgYBcfL29Ql2O21SPMx6wzsxmffc6OOF16fivRGlaHK6utJIEQiM8tTOCylVsoWRU
-         VOTyLSepBGJ7gaJmN99FOdzC3OplwkHnlElqeIsqmH+lG5h7j5ApyiB5QPuFYJW/7qPW
-         /eb1BwfNmax5nrvqxcnyyEjZg/IhpWEl1H4IxrqW7Nv/2S2xtKB1QRR7wONQw5XsAliy
-         GL3NuNx2eb9t1si+IQ2KuTseStYw47cQHJS0MrOpPbu3e5xME8+SX81THtMvWdO+5/Br
-         IJRg==
-X-Gm-Message-State: AOAM530jmj+ay+EraraQU0YrvZtnsjldhvSLO3brxNTy3QbSFEoq5vka
-        dDcZAvEXYLm2yG1uPtoRJks=
-X-Google-Smtp-Source: ABdhPJwiy/L3lBuZRaL8KEh8n1Z23x1ZqNTFAk8gHGEj0vW0RHDDTxXhOEvefPJoT4GN313V9accAw==
-X-Received: by 2002:a17:90b:4b0c:: with SMTP id lx12mr27211798pjb.209.1642292566962;
-        Sat, 15 Jan 2022 16:22:46 -0800 (PST)
+        bh=XUevpNNDykU/4ILcYiCpzemK8vBue+56hRj6RQzQGMU=;
+        b=C+4lLoq7UywtXwiPuYwxf6C5WBEkDVTPtSTMVrsIsJ27/P5aRrnYhzqGhOmtS0T7M8
+         T4Rz4KmgEOrfPMhHz9eacdmtegl31XNDutIEoiJ4Nl9jbrFyTsLLW0aICNkTuGi5CRD5
+         tCw7FDyiYO46e0PiHH8+ssGKGJvDYzzDBP5rxvmko+hLZMrSQ7pvZ9XQ9+Hzd8cWJBj8
+         S+pgPBPg1YKiA+O9JVLrorRN1MX/g5cymQOY4kpWYvNcw3RgwSnoyB+3JxUU/NHNiFa6
+         kgIWXdvFlv0eSeMPZT+GovAF5RvlOI0cJJzrlNH1dmIY+DM9OLxFKVUfeDJ55auES5AG
+         FRqw==
+X-Gm-Message-State: AOAM533CjOHtLaxABGn0AMNKK3pksC4NWURT5I2TsTO1LL7VShkPpel7
+        7u09bTykYiJl8N3bZGqCST4=
+X-Google-Smtp-Source: ABdhPJyfyEL9fNB3mhjYVVtumdJtJpoq2ElX2EhvkynF/cIBVq5utdJx0nN5McC9ot4pFcj6H5k0NA==
+X-Received: by 2002:a17:90b:3607:: with SMTP id ml7mr2910363pjb.141.1642292618470;
+        Sat, 15 Jan 2022 16:23:38 -0800 (PST)
 Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
-        by smtp.gmail.com with ESMTPSA id c11sm9583628pfl.134.2022.01.15.16.22.44
+        by smtp.gmail.com with ESMTPSA id c17sm9904581pfc.163.2022.01.15.16.23.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Jan 2022 16:22:46 -0800 (PST)
-Date:   Sun, 16 Jan 2022 13:22:41 +1300
+        Sat, 15 Jan 2022 16:23:38 -0800 (PST)
+Date:   Sun, 16 Jan 2022 13:23:33 +1300
 From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
 To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
         realwakka@gmail.com
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] staging: pi433: change order in which driver config the
- rf69 chip
-Message-ID: <20220116002241.GA23202@mail.google.com>
+Subject: [PATCH 3/3] staging: pi433: validate max bit_rate based on
+ modulation used
+Message-ID: <20220116002333.GA23305@mail.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -64,49 +64,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is an explicitly dependency between modulation and bit rate
-configurations. To ensure proper validation of input value for the
-set_bit_rate routine, we must ensure that modulation has been set
-before.
+Max bit rate is dependent on which modulation is used. Previous
+validation routine only took into consideration min bit rate which can
+lead a misconfiguration of the rf69 chip causing the packets not to be
+sent/read.
 
-This patch ensure that set_modulation is always called before
-set_bit_rate for both RX and TX routines
+This patch enhances that input check in set_bit_rate to account for
+modulation values and their respective max bit rate
 
 Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
 ---
- drivers/staging/pi433/pi433_if.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/staging/pi433/rf69.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
-index f9f86e2c44a9..17ff51f6a9da 100644
---- a/drivers/staging/pi433/pi433_if.c
-+++ b/drivers/staging/pi433/pi433_if.c
-@@ -167,10 +167,10 @@ rf69_set_rx_cfg(struct pi433_device *dev, struct pi433_rx_cfg *rx_cfg)
- 	ret = rf69_set_frequency(dev->spi, rx_cfg->frequency);
- 	if (ret < 0)
- 		return ret;
--	ret = rf69_set_bit_rate(dev->spi, rx_cfg->bit_rate);
-+	ret = rf69_set_modulation(dev->spi, rx_cfg->modulation);
- 	if (ret < 0)
- 		return ret;
--	ret = rf69_set_modulation(dev->spi, rx_cfg->modulation);
-+	ret = rf69_set_bit_rate(dev->spi, rx_cfg->bit_rate);
- 	if (ret < 0)
- 		return ret;
- 	ret = rf69_set_antenna_impedance(dev->spi, rx_cfg->antenna_impedance);
-@@ -290,10 +290,10 @@ rf69_set_tx_cfg(struct pi433_device *dev, struct pi433_tx_cfg *tx_cfg)
- 	ret = rf69_set_frequency(dev->spi, tx_cfg->frequency);
- 	if (ret < 0)
- 		return ret;
--	ret = rf69_set_bit_rate(dev->spi, tx_cfg->bit_rate);
-+	ret = rf69_set_modulation(dev->spi, tx_cfg->modulation);
- 	if (ret < 0)
- 		return ret;
--	ret = rf69_set_modulation(dev->spi, tx_cfg->modulation);
-+	ret = rf69_set_bit_rate(dev->spi, tx_cfg->bit_rate);
- 	if (ret < 0)
- 		return ret;
- 	ret = rf69_set_deviation(dev->spi, tx_cfg->dev_frequency);
+diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
+index f4ac17adcd83..70ffe291b0e6 100644
+--- a/drivers/staging/pi433/rf69.c
++++ b/drivers/staging/pi433/rf69.c
+@@ -229,9 +229,19 @@ int rf69_set_bit_rate(struct spi_device *spi, u16 bit_rate)
+ 	u32 bit_rate_reg;
+ 	u8 msb;
+ 	u8 lsb;
++	enum modulation mod;
++
++	// check if modulation is configured
++	mod = rf69_get_modulation(spi);
++	if (mod == UNDEF) {
++		dev_dbg(&spi->dev, "setBitRate: modulation is undefined");
++		return -EINVAL;
++	}
+ 
+ 	// check input value
+-	if (bit_rate < 1200) {
++	if (bit_rate < 1200 ||
++	    (mod == FSK && bit_rate > 300000) ||
++	    (mod == OOK && bit_rate > 32768)) {
+ 		dev_dbg(&spi->dev, "setBitRate: illegal input param");
+ 		return -EINVAL;
+ 	}
 -- 
 2.25.4
 

@@ -2,141 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F5D48FA9F
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 05:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B5B48FAA9
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 05:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234253AbiAPEKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 23:10:48 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:43086 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234179AbiAPEKq (ORCPT
+        id S234266AbiAPEhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 23:37:42 -0500
+Received: from out162-62-57-210.mail.qq.com ([162.62.57.210]:50481 "EHLO
+        out162-62-57-210.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230092AbiAPEhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 23:10:46 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 25A0FCE0B6D
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 04:10:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D064C36AE3;
-        Sun, 16 Jan 2022 04:10:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642306243;
-        bh=nYYJymzK0ORvrcLSkNfDIC0dMacCVTMv4xlMVpNGGaM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MRB8opdqda5gkgfZqYFzA1K+zrdynf4o4Z55i1zRhvm9bY8ATH/G95DRwIFt8M53O
-         QXzAH+XUjtzhMcazooaZJZkQ9R8/a/D4s2ceXYi7J69+PYbAKafwXfW/it7RIGmTya
-         SnExWlGzM1YCWNzCqbxd5x1swGgrPxI2k6wZrtVM71fOSUWbCNOZ+OjGzlS7EYD45K
-         DhD2dR9GeClWaEUUrz2UnEY9e8djaMnRQSEBOZQjZb+hk/GvjiagGtq4Qc+2g7dygs
-         0QgOLXZtZZZOsSchmZQAEAnx77gHDWrD68ROugg3e42+Og57Dh9lOBM1BWGa585e6b
-         BkxymCc70JJrA==
-Date:   Sat, 15 Jan 2022 21:10:38 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Yinan Liu <yinan@linux.alibaba.com>, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel test robot <lkp@intel.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        llvm@lists.linux.dev
-Subject: Re: [for-next][PATCH 10/31] scripts: ftrace - move the
- sort-processing in ftrace_init
-Message-ID: <YeOavpztGp7bCB5Q@archlinux-ax161>
-References: <20220111173030.999527342@goodmis.org>
- <20220111173115.079437896@goodmis.org>
- <YeMwNEfNaGErFthk@archlinux-ax161>
- <20220115225920.0e5939aa@gandalf.local.home>
+        Sat, 15 Jan 2022 23:37:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1642307857;
+        bh=2mTqmg1W9dS0Kv/L7soH7R821Fj9eiYWYXJ3eGCvI9M=;
+        h=From:To:Cc:Subject:Date;
+        b=OTFH9S0MMT/R14p6eAaEjS4tettjeAtsjTXBsO5HPYDz4Nouch4YkD8HNw+/9FBxs
+         ethXx6AJHVMKIiRNyOSr5NCONXnQ9eaUJ8/p7AkMiIqC3SNGZ2xiE0Gz3Top30GYrA
+         e2EYJWTrkGWK4AF3wfnKbysXo18ncQ47LHuO/C04=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
+        id 917314DA; Sun, 16 Jan 2022 12:36:23 +0800
+X-QQ-mid: xmsmtpt1642307783t51oumnca
+Message-ID: <tencent_3494A6FE814002990D726938622822C34709@qq.com>
+X-QQ-XMAILINFO: NALSiNJGVz8siqDzRFfLfEsfl8EiRsW0xQQhTQCVaO8DTNHg2l0Rck11d0d55v
+         NpnJiKb4kQiZ1cPZ6642+cGBadiJ3pQ9uaJxSZGiTRS7Tnm5DkkYHknpRdvZXbxDWuXcuDpp9P+q
+         VmW1i7eh+5SBmpRPrU8bztSY2FBwQQNVrCFD40K7uyXFuUDrkVlOVOii79ofTM/tn99ip/Psf/RO
+         Cf21AKGNg4PSd8y8wXKpkV0vpGz0j8aMet8vfmsARsR6Ti3LSUr201+ovMsM+WPVzFmesD7W6SJg
+         P2Wpxg+bLGkcLHdSA0Xsl6So97Swf3kW7Fxt1usEApeb6nUahs0Ydun4f89H9sDgnjMvIT3esd4r
+         treAjV2Dr7M0G7526xRbBbdA+PSmwgJv0bThvS60TYWB0kDJKxLO2S9r6wVFeNdJF8JERztjQomh
+         okntuSOjuhS9sy9v1aDn7byt8UMBQuzqMA+Mf8yBt/46g7NL/Gw7ahPjyTqIYhvOdKIToglRxGTp
+         BSNQyfacd9RjYirCpMxFCiuIgJmjgD530ncOSoQGPNeMZ3ZUuWFI5B31RS6i7qGb7klUhtvbeXgN
+         Nj5xrLcGTgNoRqsI0JhcF5B8LMEqKNzSugIYeJpq/RXNry2nf2xBh9iAh4cho6J4lduX8nzxCRSE
+         d9QKurMudb21g0R7ewBb2oO2jE6pv7F1+sPj1Dvc7Hs5D2FWzYyt/tkF4GCfYyy9PXQJYAkjHRDj
+         Q9VfcdkBW9Ip/2HJp31V2J+Xdvsw6hdl29Ywl6FSZM6h6N4vE7GJsnbaJcd6yLzcEeioO5UoAwKf
+         UKCUEvsF1/7TfkC7mAIVgVJZlECzD2W9CZq9Jlv6zJcUHPDkbPQxnpbcDutXOmwYargoeKRvFe4X
+         44G7fGm+R2PJgMotraavFl37ZT2OZiHs3Ec8OZ7E4yl97LfWT166E=
+From:   xkernel.wang@foxmail.com
+To:     peda@axentia.se
+Cc:     wsa+renesas@sang-engineering.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] i2c: mux: demux-pinctrl: check the return value of devm_kstrdup()
+Date:   Sun, 16 Jan 2022 12:35:06 +0800
+X-OQ-MSGID: <20220116043506.2292-1-xkernel.wang@foxmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220115225920.0e5939aa@gandalf.local.home>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 10:59:20PM -0500, Steven Rostedt wrote:
-> On Sat, 15 Jan 2022 13:36:04 -0700
-> Nathan Chancellor <nathan@kernel.org> wrote:
-> 
-> > Hi Steven and Yinan,
-> > 
-> > On Tue, Jan 11, 2022 at 12:30:41PM -0500, Steven Rostedt wrote:
-> > > From: Yinan Liu <yinan@linux.alibaba.com>
-> > > 
-> > > When the kernel starts, the initialization of ftrace takes
-> > > up a portion of the time (approximately 6~8ms) to sort mcount
-> > > addresses. We can save this time by moving mcount-sorting to
-> > > compile time.
-> > > 
-> > > Link: https://lkml.kernel.org/r/20211212113358.34208-2-yinan@linux.alibaba.com
-> > > 
-> > > Signed-off-by: Yinan Liu <yinan@linux.alibaba.com>
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > > Signed-off-by: Steven Rostedt <rostedt@goodmis.org>  
-> > 
-> > This change as commit 72b3942a173c ("scripts: ftrace - move the
-> > sort-processing in ftrace_init") in -next causes a bunch of warnings at
-> > the beginning of the build when using clang as the host compiler:
-> > 
-> 
-> 
-> > 
-> > Should mcount_sort_thread be zero initialized or is there something else
-> > going on here? I am currently hunting down a bunch of other regressions
-> > so apologies for just the report rather than a patch to fix it.
-> 
-> Can this really happen? We have:
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-The way the code is written now, yes.
+devm_kstrdup() returns pointer to allocated string on success,
+NULL on failure. So it is better to check the return value of it.
 
->         if (pthread_create(&mcount_sort_thread, NULL, &sort_mcount_loc, &mstruct)) {
->                 fprintf(stderr,
->                         "pthread_create mcount_sort_thread failed '%s': %s\n",
->                         strerror(errno), fname);
->                 goto out;
->         }
-> [..]
-> 
->         if (mcount_sort_thread) {
->                 void *retval = NULL;
->                 /* wait for mcount sort done */
->                 rc = pthread_join(mcount_sort_thread, &retval);
->                 if (rc) {
->                         fprintf(stderr,
->                                 "pthread_join failed '%s': %s\n",
->                                 strerror(errno), fname);
->                 } else if (retval) {
->                         rc = -1;
->                         fprintf(stderr,
->                                 "failed to sort mcount '%s': %s\n",
->                                 (char *)retval, fname);
->                 }
->         }
-> 
-> Shouldn't the pthread_create() initialize it? And I'm not even sure if we
-> need that if statement?
-> 
-> Or is there a path to get there without pthread_create() initializing it?
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/i2c/muxes/i2c-demux-pinctrl.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Yes. If the if statment right above the pthread_create() call triggers,
-we jump to the out label, which hits the if (mcount_sort_thread), and
-mcount_sort_thread won't be initialized.
-
-	if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-		fprintf(stderr,
-			"incomplete mcount's sort in file: %s\n",
-			fname);
-		goto out;
-	}
-
-	if (pthread_create(&mcount_sort_thread, ...)) {
-...
-
-out:
-...
-	if (mcount_sort_thread) {
-
-If I am misunderstanding something, please let me know.
-
-Cheers,
-Nathan
+diff --git a/drivers/i2c/muxes/i2c-demux-pinctrl.c b/drivers/i2c/muxes/i2c-demux-pinctrl.c
+index 5365199..3203361 100644
+--- a/drivers/i2c/muxes/i2c-demux-pinctrl.c
++++ b/drivers/i2c/muxes/i2c-demux-pinctrl.c
+@@ -243,6 +243,10 @@ static int i2c_demux_pinctrl_probe(struct platform_device *pdev)
+ 
+ 		props[i].name = devm_kstrdup(&pdev->dev, "status", GFP_KERNEL);
+ 		props[i].value = devm_kstrdup(&pdev->dev, "ok", GFP_KERNEL);
++		if (!props[i].name || !props[i].value) {
++			err = -ENOMEM;
++			goto err_rollback;
++		}
+ 		props[i].length = 3;
+ 
+ 		of_changeset_init(&priv->chan[i].chgset);
+-- 

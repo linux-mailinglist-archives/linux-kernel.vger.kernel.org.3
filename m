@@ -2,87 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0271548FA6D
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 04:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0897D48FA74
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 04:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234134AbiAPDH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 22:07:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S234153AbiAPDW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 22:22:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbiAPDH5 (ORCPT
+        with ESMTP id S232540AbiAPDW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 22:07:57 -0500
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE084C06161C
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 19:07:56 -0800 (PST)
-Received: by mail-vk1-xa33.google.com with SMTP id n9so7276273vkq.8
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 19:07:56 -0800 (PST)
+        Sat, 15 Jan 2022 22:22:27 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB1FC061574;
+        Sat, 15 Jan 2022 19:22:26 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id d18-20020a05600c251200b0034974323cfaso15706987wma.4;
+        Sat, 15 Jan 2022 19:22:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=fc35oj1WXtoN0miP5IG+v8d9RduIqQk3g9nq0y/mLs4=;
-        b=CAWkRd1LSB1mKTbwuXGegxVxPCFOSvzZkYIHh9Wb0oBbg+j+IyEIodMEeqqMhAUq3b
-         nahk+4KPJiS6krYufsdZ7whmtJEzf/0SxLJngL3X23Z7jvPJfazUrJVn+eGMFtuxDDfr
-         uAs2/fBojIg6ymtV2n/uNB4BcmCeoPaspwVAonYljvS9u9QjJm9kCwArT2wtbcvyoWAg
-         aOciMbEPemBJau3lnpNMpynHvzKQ8x90AiwP6dmfECJO4VDiCL8/xDXSkaKJ7u1smExW
-         /YBM/n2CYgBQyANWhOvWqkc7FLc0U9hvYLjCN5CS6mUdzoX8l2+B9CXhl5WhurIwYviC
-         GXsw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y0RvgzcdSRbA/gXGiR6apnZgPu9pepPQ0gbrYqOPoLE=;
+        b=Gw9tlcGHUBA7nL9vDVhM/NR8f84EcT3JgkX2vsS43sjZNMI5lvgxcXzixbJDkgIvEh
+         zNH7DFhwQfJguxA87AAG2RHmLDCQiKzuCrWBcp90ZLjiG7kIuwTXxjOTYwSjgH1otBCv
+         sVWyXVWCEZCx2xDOY5GWVIjLoieRuMbZIw1sxJ7bnD4Nl/BdsRgevK2VKY4LAH+Qraif
+         /pUjmBC1JS+s1kxJ2d8rzdUkfSh0bRfhGRY7wvD7WhepJyYjLSS3tVoUIyzy0eH4Qx3S
+         wL66lAN0rchlXkF55movnqeEnYd0bYJZ+lNkDkmc+PvwRQ/gMc4fJIRVmT0rWkuBRx1y
+         KGBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=fc35oj1WXtoN0miP5IG+v8d9RduIqQk3g9nq0y/mLs4=;
-        b=Kn7J9P8Q56kHZd9xRqVLSyiaSIoPOGHUBt6brNoX2MxEbKWWeFNO9tnSCEy0S1biE+
-         Vz8ZrUj1MpAJOTet0NCfqsWhhufrJ81oHvgLb0E4cK9C2b986QZQdGX7j5QY13JR2X/0
-         2970j8iy791/YPawOly9+TlI8c2JGhwhsDcYAWFi1h1Aa3DSG3qDIoIvufWsDoZIfpaQ
-         lDtkJsAYly76N7lWC0iZD5UMHzGOp6sOLfvWrIbfqxhK0UblqZU8OmNowpzd/KzBGEl7
-         MEilQwkR4+MZs6X7+WKJ993KEOSNaqG4qs58t9iuCr941NQZzzm3warGGMgjOz5SoGUE
-         ozyQ==
-X-Gm-Message-State: AOAM532oml3X2rSnoFIznalXfhLFQZfxrx5VAEaRlwotIAcUlCsp1Igw
-        hVzMJIxGqBtXOffKQap63A6PutOHBkwwetDDiCM=
-X-Google-Smtp-Source: ABdhPJwPJWf6OS/xIbnFP1YeXoqqA1QitlfwlcYy/9yW8cEAt+cnMWy/a6VV3oGDN7Z4ykhhojwswO3iq7iABkiQ2sk=
-X-Received: by 2002:a05:6122:90a:: with SMTP id j10mr6169550vka.12.1642302474867;
- Sat, 15 Jan 2022 19:07:54 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y0RvgzcdSRbA/gXGiR6apnZgPu9pepPQ0gbrYqOPoLE=;
+        b=Rk7QMWOTHLJ02vR8M3bp+rpDCyFtl9LW0SMJu06i/wFVw0sHlnGMfddpl1+pI2peab
+         /wlmAdBudDFjrxFpNGs4VKeQVvNfcy2EyHp4tUSgh8DhbxbK6dfb4V75oZcnbkfLEFYL
+         LvEhfw1UPIcAWHghDgJVHAZhrlcJWxVygLl3HDOWiYkc7jMAd51dskdNxoXh36S9S9Of
+         TEjyEPaeiGrKdXWxVYSwSgBGEGt3QkGY0RFa4CeOxEZVw01eTfhRu6Y6qJSzuOVll+9t
+         As2R9TvkGZT+JHPYYAHK9qtZsSFEMkxpHR433JdIweQEDw6ZJ3KOjoonKbscOyABAa6R
+         keTA==
+X-Gm-Message-State: AOAM532iAd9FtUxBk69kDjsYvEXh2zsRyq0+QZJ2GSeNEqpZw2rxaLdd
+        Uszmn4ngZEMcMqBuKez6T9cPFoL4uzE=
+X-Google-Smtp-Source: ABdhPJyo4nf0cRPn+sy7h83rr4UPkcSsMjlYgG5pSzjHC4ZsPh7KLffkSIuV75Wl41iYNRMVu+k8hg==
+X-Received: by 2002:adf:f94a:: with SMTP id q10mr13990771wrr.263.1642303345120;
+        Sat, 15 Jan 2022 19:22:25 -0800 (PST)
+Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.googlemail.com with ESMTPSA id u16sm1446785wmq.23.2022.01.15.19.22.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jan 2022 19:22:24 -0800 (PST)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>
+Subject: [PATCH 1/2] mtd: parsers: qcom: Fix kernel panic on skipped partition
+Date:   Sun, 16 Jan 2022 04:22:10 +0100
+Message-Id: <20220116032211.9728-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Reply-To: ouedibepaul@yandex.com
-Sender: bertipau4@gmail.com
-Received: by 2002:a59:cf2a:0:b0:27b:550d:7fe6 with HTTP; Sat, 15 Jan 2022
- 19:07:54 -0800 (PST)
-From:   "Ouedi be.Paul" <ouedibepa1@gmail.com>
-Date:   Sun, 16 Jan 2022 03:07:54 +0000
-X-Google-Sender-Auth: B3LMFxLVyePfGh9pScg1i1frtIQ
-Message-ID: <CAAyuv15fOjJCKO=OdCW2brLiONhyrdiSfuWeAy7Ma7vEwxHBLA@mail.gmail.com>
-Subject: Hello.......!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings to you!
+In the event of a skipped partition (case when the entry name is empty)
+the kernel panics in the cleanup function as the name entry is NULL.
+Rework the parser logic by first checking the real partition number and
+then allocate the space and set the data for the valid partitions.
 
-I am Mr.Ouedi be.Paul, the Audit and Account Manager (A.D.B)Bank in
-Ouagadougou Burkina Faso, West Africa
+The logic was also fundamentally wrong as with a skipped partition, the
+parts number returned was incorrect by not decreasing it for the skipped
+partitions.
 
-I have a business transaction for you, In my department i discovered
-an abandoned Sum of US$10,2 Million Dollars,
-In an account that belongs to one of our late foreign customer who
-died in plane crash with his family member years ago.
-ever Since he died, Nobody to claim the left over balance in the account.
-therefore upon this discovery i decided to seek your assistance to
-transfer the funds to your bank account, 100% risk free,
+Fixes: 803eb12 ("mtd: parsers: Add Qcom SMEM parser")
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+---
+ drivers/mtd/parsers/qcomsmempart.c | 31 ++++++++++++++++++------------
+ 1 file changed, 19 insertions(+), 12 deletions(-)
 
-if you accept i would give you the guide lines of how we can achieve
-this transfer of the balance $10,2 Million Dollars to your account.
-the fund will be share 50-50%. by both of us
+diff --git a/drivers/mtd/parsers/qcomsmempart.c b/drivers/mtd/parsers/qcomsmempart.c
+index 06a818cd2433..f4fc7635c1f3 100644
+--- a/drivers/mtd/parsers/qcomsmempart.c
++++ b/drivers/mtd/parsers/qcomsmempart.c
+@@ -58,11 +58,11 @@ static int parse_qcomsmem_part(struct mtd_info *mtd,
+ 			       const struct mtd_partition **pparts,
+ 			       struct mtd_part_parser_data *data)
+ {
++	size_t len = SMEM_FLASH_PTABLE_HDR_LEN;
++	int ret, i, j, tmpparts, numparts = 0;
+ 	struct smem_flash_pentry *pentry;
+ 	struct smem_flash_ptable *ptable;
+-	size_t len = SMEM_FLASH_PTABLE_HDR_LEN;
+ 	struct mtd_partition *parts;
+-	int ret, i, numparts;
+ 	char *name, *c;
+ 
+ 	if (IS_ENABLED(CONFIG_MTD_SPI_NOR_USE_4K_SECTORS)
+@@ -87,8 +87,8 @@ static int parse_qcomsmem_part(struct mtd_info *mtd,
+ 	}
+ 
+ 	/* Ensure that # of partitions is less than the max we have allocated */
+-	numparts = le32_to_cpu(ptable->numparts);
+-	if (numparts > SMEM_FLASH_PTABLE_MAX_PARTS_V4) {
++	tmpparts = le32_to_cpu(ptable->numparts);
++	if (tmpparts > SMEM_FLASH_PTABLE_MAX_PARTS_V4) {
+ 		pr_err("Partition numbers exceed the max limit\n");
+ 		return -EINVAL;
+ 	}
+@@ -116,11 +116,17 @@ static int parse_qcomsmem_part(struct mtd_info *mtd,
+ 		return PTR_ERR(ptable);
+ 	}
+ 
++	for (i = 0; i < tmpparts; i++) {
++		pentry = &ptable->pentry[i];
++		if (pentry->name[0] != '\0')
++			numparts++;
++	}
++
+ 	parts = kcalloc(numparts, sizeof(*parts), GFP_KERNEL);
+ 	if (!parts)
+ 		return -ENOMEM;
+ 
+-	for (i = 0; i < numparts; i++) {
++	for (i = 0, j = 0; i < tmpparts; i++) {
+ 		pentry = &ptable->pentry[i];
+ 		if (pentry->name[0] == '\0')
+ 			continue;
+@@ -135,24 +141,25 @@ static int parse_qcomsmem_part(struct mtd_info *mtd,
+ 		for (c = name; *c != '\0'; c++)
+ 			*c = tolower(*c);
+ 
+-		parts[i].name = name;
+-		parts[i].offset = le32_to_cpu(pentry->offset) * mtd->erasesize;
+-		parts[i].mask_flags = pentry->attr;
+-		parts[i].size = le32_to_cpu(pentry->length) * mtd->erasesize;
++		parts[j].name = name;
++		parts[j].offset = le32_to_cpu(pentry->offset) * mtd->erasesize;
++		parts[j].mask_flags = pentry->attr;
++		parts[j].size = le32_to_cpu(pentry->length) * mtd->erasesize;
+ 		pr_debug("%d: %s offs=0x%08x size=0x%08x attr:0x%08x\n",
+ 			 i, pentry->name, le32_to_cpu(pentry->offset),
+ 			 le32_to_cpu(pentry->length), pentry->attr);
++		j++;
+ 	}
+ 
+ 	pr_debug("SMEM partition table found: ver: %d len: %d\n",
+-		 le32_to_cpu(ptable->version), numparts);
++		 le32_to_cpu(ptable->version), tmpparts);
+ 	*pparts = parts;
+ 
+ 	return numparts;
+ 
+ out_free_parts:
+-	while (--i >= 0)
+-		kfree(parts[i].name);
++	while (--j >= 0)
++		kfree(parts[j].name);
+ 	kfree(parts);
+ 	*pparts = NULL;
+ 
+-- 
+2.33.1
 
-Send the information required below for more details,
-
-1. Full Names:...
-2. Address:...
-3. Your Age:...
-4. Your Country:...
-5. Your Private Phone Number:...
-
-Best Regards,
-Mr.Ouedi be.Paul.

@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7A148F9F3
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 01:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 963AE48F9F5
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 01:17:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233957AbiAPAPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 19:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
+        id S233964AbiAPARe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 19:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiAPAPt (ORCPT
+        with ESMTP id S229622AbiAPARd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 19:15:49 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D4DC06161C
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 16:15:49 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso14995227otf.0
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 16:15:49 -0800 (PST)
+        Sat, 15 Jan 2022 19:17:33 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84666C061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 16:17:33 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id q25so550907pfl.8
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 16:17:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J58Ay0MwgKpcKHEpa/tLJQnUzvcoo3T5SyIZllVSKEc=;
-        b=lhVT+9/uZXNsl2OC/ekTcgBoqteZsMFKZzUn26HZH1nTLmqqQEiT/qW/YPFklyNFAI
-         QR83Cy5SV/zDJQIm8C8mlOBkrHa91eFn8UMM5zpWeJnhLXavbJ7B4m9aM5MBOBccaFyZ
-         hskbd+u9Z7o8wVbQhg2HuSABjDNV57qMRNN7UgwNeeEijZxZzq1gaIQ9iYmIn98T8GAK
-         TELs6lpsiqnQsEonPjG6+/M0chB3AV+qLbyKJ5JJVpB48loeL88Ijf46NPBia647Wr/d
-         Gt3rquyj9+rRN2yg8VEH9IU/aOU85PVguL664M6cuPsfa7M3EB7c5nNLK2wOosPrplB4
-         rMxQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=i5Ou1yz0idejycfR7awkotrdd+23zegzIC5dA163t+g=;
+        b=C5xIzSsYHtbu7OniZp8jIhBTCOP4jfnCYmsCECiOhVGiIQa6rlPxtG9GDijeCLsVc1
+         zm2HHKyH99R8KmUFDrIWgBFT5R0DIN20reWU510G6ZE+xVkawmTAbz/mUQrBY0PTRIdb
+         ItIuDYKGzuypBSvLhtZAnxNbGy8JEwRfMBHcshnREOWzPsWz7NV8dYV/D/kemuyW7g7K
+         KLLOKMvHPDAMM2we0BGAADrswgS9YTTXnwzGJ15vq7LMlnoca8OKukPvrfwKlhHBXUa9
+         IdhzZHgUyiwVsiYO8fhwhU0KhZ8c6s66F13uTF28GP9KXRk0GTFHFAlracR3/NbGK/hf
+         LzRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J58Ay0MwgKpcKHEpa/tLJQnUzvcoo3T5SyIZllVSKEc=;
-        b=IJpbfG2J97Brh4aSrFDoj90B3qxBxspTFCJp7NWrsBSlNPZvVcLHLlTQAeRv37lzLV
-         PZ9I4yJR1BwY2pTvKFn2lBjb7MDLYFRM1CKpsCAT0GniiqCYnV/kTT00bPZkD3mR5sWT
-         Zfe3nCg66dDTmpDRZ6+6aRWoTOutbzCon4cTsAqf2RoIiKA9wBwxuCNNKixPdakv1nLm
-         rZrbdeNBY4ss4hYdWpTox32qV6PkoZ7tVuFicVFJTuwqSeD+0guH+Xxg5bEJAQfHVDiT
-         lcxbIe+vh723c2V96gK4wPh01k7Y08mjbOHcHYddMnmKpoUB0ZMZKdD83Rmbak2T17mk
-         lwZw==
-X-Gm-Message-State: AOAM532qdMOfZm/dsgNl4nRYEcnQ3GtHkNQfv8YdihBMh/OKdo47xJvJ
-        XgrNAd+JaBhQkrFBd49niKa6haXPZ7TdPau1Y0tzgA==
-X-Google-Smtp-Source: ABdhPJx4kIqCI5FoCiChppQwfGv/XO3RN9p/BURapc8Or1jwM4XnS8OjJ/+04RBHq9ydcM2UygKBM1+5M8v1xQoW5Rg=
-X-Received: by 2002:a9d:a42:: with SMTP id 60mr11957191otg.179.1642292148191;
- Sat, 15 Jan 2022 16:15:48 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=i5Ou1yz0idejycfR7awkotrdd+23zegzIC5dA163t+g=;
+        b=uacItHF4uRkOaLworYEXqdh8bzss7lHmQKUjCkRPett9+FLeeoW38okv4+L77Gx0W9
+         w9xCLq61NMQwJDKzYWsZEXndnaiZDjJ92COrjdGPl5QZHl6yGAuh7YQmTennOI0q0Ylm
+         afEj4ZafUQiFOZLYOtt5NLaI5XAER5UNuYPjUaJrJsqSS7d+WtJ1DtawmhiBgrvYV05Q
+         giyV502tv1BIurTQ/b73dcm4gyPjtbyp42Xm1/osKHNBrAQ99zT/p8OB0e+LNYUrCkeA
+         hnUIAt4dwPpPyya4kI/VV4wLRqXSrqVzhf4Q3WNfqIW2rsjMNMUk4OPLX62jr/nCSpkS
+         k3zA==
+X-Gm-Message-State: AOAM5315MNmIwsGqQwRJZFcqrAfI4YCmr8eQdY1JjsILTDZKuoISkYVO
+        NlInXl2XAMBMZEC9BF1KVq0//lVWnlzQsIBI
+X-Google-Smtp-Source: ABdhPJx1T/5+V8yBIGbZNJi6n1OOAef69v3TsxufKcksJI4HtJurA1JQMvyO9xEzoTjOOQoDjeMUzg==
+X-Received: by 2002:a63:3c07:: with SMTP id j7mr13313957pga.60.1642292252870;
+        Sat, 15 Jan 2022 16:17:32 -0800 (PST)
+Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id r26sm7661951pgu.65.2022.01.15.16.17.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jan 2022 16:17:32 -0800 (PST)
+Date:   Sun, 16 Jan 2022 13:17:26 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
+        realwakka@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] staging: pi433: validate min/max bit rate settings
+Message-ID: <20220116001726.GA22699@mail.google.com>
 MIME-Version: 1.0
-References: <20211228072645.32341-1-luizluca@gmail.com> <CACRpkdbEGxWSyPd=-xM_1YFzke7O34jrHLdmBzWCFZXt-Nve8g@mail.gmail.com>
- <CAJq09z5k396kc1VU0S_a_6gwpT5sO5LtXFcW_T8PPzKmkRpnQg@mail.gmail.com>
-In-Reply-To: <CAJq09z5k396kc1VU0S_a_6gwpT5sO5LtXFcW_T8PPzKmkRpnQg@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 16 Jan 2022 01:15:36 +0100
-Message-ID: <CACRpkdaTetKkY2mL-dnmL1vAm0_hKsVitg1yY3j6cruqQN8W3g@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: net: dsa: realtek-smi: convert to YAML schema
-To:     Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Cc:     devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 12:44 AM Luiz Angelo Daros de Luca
-<luizluca@gmail.com> wrote:
+RF69 chip supports different bit rate settings depending on which frequency
+modulation is used. Failing to correctly validate bit rate can lead to a 
+silently failure and cause packets not to be read/sent.
 
-> BTW, I couldn't find a datasheet for rtl8366rb.
+This series changes the order in which the rf69 chip is configured and adds
+max bit rate validation.
 
-There is none... all I have is a code dump from realtek.
-The custom header had to be reverse engineered.
+This series depend on these patches as they change the same set of files:
 
-> The commit message
-> says it is from a DIR-685 but wikidevi days that device has a
-> RTL8366SR, which is described as "SINGLE-CHIP 5+1-PORT 10/100/1000
-> MBPS SWITCH CONTROLLER WITH DUAL MAC INTERFACES".
+- https://lore.kernel.org/lkml/20220108212728.GA7784@mail.google.com/
+- https://lore.kernel.org/lkml/20220114221643.GA7843@mail.google.com/
 
-The device most definitely has the RTL8366RB, as can be seen in the
-PCB photo here:
-https://www.redeszone.net/app/uploads-redeszone.net/d-link_dir-685_analisis_15.jpg
+Paulo Miguel Almeida (3):
+  staging: pi433: fix validation for min bit rate supported by the
+    device
+  staging: pi433: change order in which driver config the rf69 chip
+  staging: pi433: validate max bit_rate based on modulation used
 
-> Do you have any suggestions?
+ drivers/staging/pi433/pi433_if.c |  8 ++++----
+ drivers/staging/pi433/rf69.c     | 14 +++++++++++---
+ 2 files changed, 15 insertions(+), 7 deletions(-)
 
-The DIR-685 has WAN + 4 x LAN and the WAN port is handled in a separate
-register from the LAN ports (suggesting it can also do an optical
-line) so I think
-it's 4 + 1.
+-- 
+2.25.4
 
-Yours,
-Linus Walleij

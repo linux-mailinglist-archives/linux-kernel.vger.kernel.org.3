@@ -2,166 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7C248FF61
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 22:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6BB548FF6A
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 23:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236323AbiAPV5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 16:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbiAPV5C (ORCPT
+        id S236326AbiAPWHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 17:07:40 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57870 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230171AbiAPWHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 16:57:02 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6398CC061574;
-        Sun, 16 Jan 2022 13:57:02 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Sun, 16 Jan 2022 17:07:39 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JcTQh58kPz4y4B;
-        Mon, 17 Jan 2022 08:57:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642370221;
-        bh=+44FdQ9yi9zlm/WpV+A+PqUF4BuStBMbD1wHprju17I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GP1GT6Z6Iqws/tc1gWnUKafWEhVCxauPyw7qgvFz8FAkKCwnjYqPuo3O7KPd2f0Jj
-         SeY03uei+iFHMlGM9BQQ1wAohyP9lehSTSc1/9nb4uwX+u1Kbk1Mzs6peFmANoxRO6
-         VVxyzeJklmJc9WxQLDxF8Hd1lz1qhsBoVkeoYtGVxqq4yTFGEsypZsxO+kJxZs/rIK
-         CL5UH91ZDRifRPFnuGyl88IRIxC9wnNzdrJTGsj5jzr6GGW+sxLX0HpffYGp3XHkhn
-         SZOZXduXHYtNtX5h1eh12uRqmIi9cqtBWfg9nka9g6El2z6H0wVmEM/Sj+ZEAwbrkE
-         hY+mcgn3kVpmA==
-Date:   Mon, 17 Jan 2022 08:57:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Venky Shankar <vshankar@redhat.com>
-Subject: Re: linux-next: manual merge of the akpm-current tree with the ceph
- tree
-Message-ID: <20220117085700.389949a8@canb.auug.org.au>
-In-Reply-To: <20220114145502.2ab21d46@canb.auug.org.au>
-References: <20220114145502.2ab21d46@canb.auug.org.au>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4E2F71F37B;
+        Sun, 16 Jan 2022 22:07:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642370858; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2ux+cjqDfKM9y7l7EW+chWJOdcxq8/Set71C0Gfwhnk=;
+        b=F9LbMxiu7IaXElzxJ33nkgmsNBeSOpWABZ5swO1HBZMQ+e0L+iohMBTICPAdzEegTdytWe
+        dtSIeMfyFBmf/3sMeZbyE99ufIRAXVEHvt7PYdU6B509PMrPPUUleJWkPOmJ6cMHZPfjZQ
+        ynFdWLT22eD/bpUa89HxmP2Jv/W4ubM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642370858;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2ux+cjqDfKM9y7l7EW+chWJOdcxq8/Set71C0Gfwhnk=;
+        b=+pDW7mEqfW5TbqRYHhSF+HDd6t14DSpM5uNAhXFZEmfiWm5blHuUnfm77guyYn47KXWVFD
+        IfETWWwEGHH5kaAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7F350132D4;
+        Sun, 16 Jan 2022 22:07:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KI2WDieX5GGDZgAAMHmgww
+        (envelope-from <neilb@suse.de>); Sun, 16 Jan 2022 22:07:35 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+g05TpvkkHvSzhVKHgXFjii";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+From:   "NeilBrown" <neilb@suse.de>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        torvalds@linux-foundation.org
+cc:     "Christian Brauner" <christian.brauner@ubuntu.com>,
+        Anthony Iliopoulos <ailiop@suse.com>,
+        David Howells <dhowells@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH - resend] devtmpfs regression fix: reconfigure on each mount
+In-reply-to: <20211214141824.fvmtwvp57pqg7ost@wittgenstein>
+References: <163935794678.22433.16837658353666486857@noble.neil.brown.name>,
+ <20211213125906.ngqbjsywxwibvcuq@wittgenstein>, <YbexPXpuI8RdOb8q@technoir>,
+ <20211214101207.6yyp7x7hj2nmrmvi@wittgenstein>, <Ybik5dWF2w06JQM6@technoir>,
+ <20211214141824.fvmtwvp57pqg7ost@wittgenstein>
+Date:   Mon, 17 Jan 2022 09:07:26 +1100
+Message-id: <164237084692.24166.3761469608708322913@noble.neil.brown.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/+g05TpvkkHvSzhVKHgXFjii
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Prior to Linux v5.4 devtmpfs used mount_single() which treats the given
+mount options as "remount" options, so it updates the configuration of the
+single super_block on each mount.
+Since that was changed, the mount options used for devtmpfs are ignored.
+This is a regression which affect systemd - which mounts devtmpfs
+with "-o mode=3D755,size=3D4m,nr_inodes=3D1m".
 
-On Fri, 14 Jan 2022 14:55:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the akpm-current tree got conflicts in:
->=20
->   include/linux/ceph/libceph.h
->   net/ceph/ceph_common.c
->=20
-> between commit:
->=20
->   4153c7fc937a ("libceph: rename parse_fsid() to ceph_parse_fsid() and ex=
-port")
->=20
-> from the ceph tree and commit:
->=20
->   f9126de5849a ("mm: allow !GFP_KERNEL allocations for kvmalloc")
->=20
-> from the akpm-current tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc include/linux/ceph/libceph.h
-> index 644f224eccf7,309acbcb5a8a..000000000000
-> --- a/include/linux/ceph/libceph.h
-> +++ b/include/linux/ceph/libceph.h
-> @@@ -295,8 -295,6 +295,7 @@@ extern bool libceph_compatible(void *da
->  =20
->   extern const char *ceph_msg_type_name(int type);
->   extern int ceph_check_fsid(struct ceph_client *client, struct ceph_fsid=
- *fsid);
-> - extern void *ceph_kvmalloc(size_t size, gfp_t flags);
->  +extern int ceph_parse_fsid(const char *str, struct ceph_fsid *fsid);
->  =20
->   struct fs_parameter;
->   struct fc_log;
-> diff --cc net/ceph/ceph_common.c
-> index decae43b4262,9441b4a4912b..000000000000
-> --- a/net/ceph/ceph_common.c
-> +++ b/net/ceph/ceph_common.c
-> @@@ -190,34 -190,7 +190,7 @@@ int ceph_compare_options(struct ceph_op
->   }
->   EXPORT_SYMBOL(ceph_compare_options);
->  =20
-> - /*
-> -  * kvmalloc() doesn't fall back to the vmalloc allocator unless flags a=
-re
-> -  * compatible with (a superset of) GFP_KERNEL.  This is because while t=
-he
-> -  * actual pages are allocated with the specified flags, the page table =
-pages
-> -  * are always allocated with GFP_KERNEL.
-> -  *
-> -  * ceph_kvmalloc() may be called with GFP_KERNEL, GFP_NOFS or GFP_NOIO.
-> -  */
-> - void *ceph_kvmalloc(size_t size, gfp_t flags)
-> - {
-> - 	void *p;
-> -=20
-> - 	if ((flags & (__GFP_IO | __GFP_FS)) =3D=3D (__GFP_IO | __GFP_FS)) {
-> - 		p =3D kvmalloc(size, flags);
-> - 	} else if ((flags & (__GFP_IO | __GFP_FS)) =3D=3D __GFP_IO) {
-> - 		unsigned int nofs_flag =3D memalloc_nofs_save();
-> - 		p =3D kvmalloc(size, GFP_KERNEL);
-> - 		memalloc_nofs_restore(nofs_flag);
-> - 	} else {
-> - 		unsigned int noio_flag =3D memalloc_noio_save();
-> - 		p =3D kvmalloc(size, GFP_KERNEL);
-> - 		memalloc_noio_restore(noio_flag);
-> - 	}
-> -=20
-> - 	return p;
-> - }
-> -=20
->  -static int parse_fsid(const char *str, struct ceph_fsid *fsid)
->  +int ceph_parse_fsid(const char *str, struct ceph_fsid *fsid)
->   {
->   	int i =3D 0;
->   	char tmp[3];
+This patch restores the "remount" effect by calling reconfigure_single()
 
-This is now a conflict between the ceph tree and Linus' tree.
+Fixes: d401727ea0d7 ("devtmpfs: don't mix {ramfs,shmem}_fill_super() with mou=
+nt_single()")
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: NeilBrown <neilb@suse.de>
+---
+ drivers/base/devtmpfs.c    | 7 +++++++
+ fs/super.c                 | 4 ++--
+ include/linux/fs_context.h | 2 ++
+ 3 files changed, 11 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/base/devtmpfs.c b/drivers/base/devtmpfs.c
+index 1e2c2d3882e2..f41063ac1aee 100644
+--- a/drivers/base/devtmpfs.c
++++ b/drivers/base/devtmpfs.c
+@@ -65,8 +65,15 @@ static struct dentry *public_dev_mount(struct file_system_=
+type *fs_type, int fla
+ 		      const char *dev_name, void *data)
+ {
+ 	struct super_block *s =3D mnt->mnt_sb;
++	int err;
++
+ 	atomic_inc(&s->s_active);
+ 	down_write(&s->s_umount);
++	err =3D reconfigure_single(s, flags, data);
++	if (err < 0) {
++		deactivate_locked_super(s);
++		return ERR_PTR(err);
++	}
+ 	return dget(s->s_root);
+ }
+=20
+diff --git a/fs/super.c b/fs/super.c
+index 3bfc0f8fbd5b..a6405d44d4ca 100644
+--- a/fs/super.c
++++ b/fs/super.c
+@@ -1423,8 +1423,8 @@ struct dentry *mount_nodev(struct file_system_type *fs_=
+type,
+ }
+ EXPORT_SYMBOL(mount_nodev);
+=20
+-static int reconfigure_single(struct super_block *s,
+-			      int flags, void *data)
++int reconfigure_single(struct super_block *s,
++		       int flags, void *data)
+ {
+ 	struct fs_context *fc;
+ 	int ret;
+diff --git a/include/linux/fs_context.h b/include/linux/fs_context.h
+index 6b54982fc5f3..13fa6f3df8e4 100644
+--- a/include/linux/fs_context.h
++++ b/include/linux/fs_context.h
+@@ -142,6 +142,8 @@ extern void put_fs_context(struct fs_context *fc);
+ extern int vfs_parse_fs_param_source(struct fs_context *fc,
+ 				     struct fs_parameter *param);
+ extern void fc_drop_locked(struct fs_context *fc);
++int reconfigure_single(struct super_block *s,
++		       int flags, void *data);
+=20
+ /*
+  * sget() wrappers to be called from the ->get_tree() op.
 --=20
-Cheers,
-Stephen Rothwell
+2.34.1
 
---Sig_/+g05TpvkkHvSzhVKHgXFjii
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHklKwACgkQAVBC80lX
-0GwQ7wgAiISglzpGUpBWS07YF4AiK9msJDK0BTTIYUvv8dPYytmjEubZ5wUWBVcA
-AC+bIjz7I5401hLuO+k7aperW4K1KHl8/lUUEa1YrexNOu1ZZ1NrXchWc7xnkPyl
-rp9Lq4d2ItDZT0MA6/U7Rboh90hNaA67YElyFWZfWI2ebwJEpuVvNmZKIJdijKTJ
-kGne2Lxr0s3a8r4trS/xtDWfh2AyJEKPjaILr88agA8VBdskZ4XcanmpZcEamKjO
-4hVY740Kk7+0QaZs3WczZUxgxM67LELapctHorNMlXblcgqVmMsHFDN3FMVx/2br
-GQ09gwLUZinvffdPjCw/oaBz0zOwcQ==
-=kwAz
------END PGP SIGNATURE-----
-
---Sig_/+g05TpvkkHvSzhVKHgXFjii--

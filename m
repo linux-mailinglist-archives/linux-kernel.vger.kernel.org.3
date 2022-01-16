@@ -2,86 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B343E48FD36
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 14:39:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF3448FD43
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 14:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235343AbiAPNjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 08:39:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33431 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233233AbiAPNjG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 08:39:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642340345;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cp5M2AGP5P4N6b6EQKr0vl4nAKthbkR6iiQTidIywuQ=;
-        b=b4gYr5tri//+j84Dfnb1zxHYzoXTBJfC4F2+kxPJu+I2sBmhTfvXynQw+AtFxyad2EfC0j
-        xxYplHqIhLV31NJnH4YETbRgl2Cci0uiEytA5jsn+zQY4iK6O8AS74/us5eyLDngMdUfzH
-        lp346KClC2idleWzHWgRgY+nePq9Kmc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-xbtBAwTnOzqAyXi4zY5DnA-1; Sun, 16 Jan 2022 08:39:00 -0500
-X-MC-Unique: xbtBAwTnOzqAyXi4zY5DnA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2AF89802924;
-        Sun, 16 Jan 2022 13:38:57 +0000 (UTC)
-Received: from localhost (ovpn-12-76.pek2.redhat.com [10.72.12.76])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9B9F7105C891;
-        Sun, 16 Jan 2022 13:38:51 +0000 (UTC)
-Date:   Sun, 16 Jan 2022 21:38:47 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        hpa@zytor.com, Eric Biederman <ebiederm@xmission.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, kexec@lists.infradead.org,
-        Alexandre ghiti <alex@ghiti.fr>
-Subject: Re: [PATCH v2 0/5] kexec: use IS_ENABLED(CONFIG_KEXEC_CORE) instead
- of #ifdef
-Message-ID: <20220116133847.GE2388@MiWiFi-R3L-srv>
-References: <20211206160514.2000-1-jszhang@kernel.org>
+        id S235368AbiAPNqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 08:46:06 -0500
+Received: from mga04.intel.com ([192.55.52.120]:51885 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230028AbiAPNqB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 16 Jan 2022 08:46:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642340761; x=1673876761;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wn0cjGJKyOCTgNwzAcJvaqvOzJGySCw/4EqvWxkv60c=;
+  b=jiiGco9HiH+sK4lLoD2FX1qrFnIOJdej7a4age5PMtfN4AM8UrtTSSVO
+   w1xtmeXcEEbWOx3HLay5mlfq05DUsqYbI1ldDR2RefZhyMQduz3bB5I7Z
+   o4pRgRww9lGtFg5WNg+Fhdq8GeHQ0DnkLM4loTsgTp0dpW8kYjzBSYjIw
+   Dq3CZijh16vfOfjqHqqzcxMJ3uw87ZK/EBwOwUrpkol+kS4HkXxUVH8Y6
+   XZFTvpoWPipB0Z8wtdgS09eFo4hx2KHw4oYFqMe10XETgrB17gwGIpaAt
+   iT/bLmUArYnEPKdzMHql01VH4O2zIJixO96vIELQq/4MFtT0cuIgd+bnE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10228"; a="243313400"
+X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
+   d="scan'208";a="243313400"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 05:46:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,293,1635231600"; 
+   d="scan'208";a="692791174"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 16 Jan 2022 05:45:59 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n95r5-000Ak6-0m; Sun, 16 Jan 2022 13:45:59 +0000
+Date:   Sun, 16 Jan 2022 21:45:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [bvanassche:scsi-move-scsi-pointer 16/18]
+ drivers/scsi/fdomain.c:122:22: warning: no previous prototype for
+ 'fdomain_scsi_pointer'
+Message-ID: <202201162111.5FI8my1D-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211206160514.2000-1-jszhang@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jisheng,
+tree:   https://github.com/bvanassche/linux scsi-move-scsi-pointer
+head:   7173550f8dd7130891118452742bb6e99b63fd27
+commit: 6eea006091e2b2b428a910feb8041bbb99aa707d [16/18] fdomain: Move the SCSI pointer to private command data
+config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220116/202201162111.5FI8my1D-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/bvanassche/linux/commit/6eea006091e2b2b428a910feb8041bbb99aa707d
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche scsi-move-scsi-pointer
+        git checkout 6eea006091e2b2b428a910feb8041bbb99aa707d
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/scsi/
 
-On 12/07/21 at 12:05am, Jisheng Zhang wrote:
-> Replace the conditional compilation using "#ifdef CONFIG_KEXEC_CORE"
-> by a check for "IS_ENABLED(CONFIG_KEXEC_CORE)", to simplify the code
-> and increase compile coverage.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I go through this patchset, You mention the benefits it brings are
-1) simplity the code;
-2) increase compile coverage;
+All warnings (new ones prefixed by >>):
 
-For benefit 1), it mainly removes the dummy function in x86, arm and
-arm64, right?
+>> drivers/scsi/fdomain.c:122:22: warning: no previous prototype for 'fdomain_scsi_pointer' [-Wmissing-prototypes]
+     122 | struct scsi_pointer *fdomain_scsi_pointer(struct scsi_cmnd *cmd)
+         |                      ^~~~~~~~~~~~~~~~~~~~
 
-For benefit 2), increasing compile coverage, could you tell more how it
-achieves and why it matters? What if people disables CONFIG_KEXEC_CORE in
-purpose? Please forgive my poor compiling knowledge.
 
-Thanks
-Baoquan
+vim +/fdomain_scsi_pointer +122 drivers/scsi/fdomain.c
 
+   121	
+ > 122	struct scsi_pointer *fdomain_scsi_pointer(struct scsi_cmnd *cmd)
+   123	{
+   124		struct fdomain_priv *fcmd = scsi_cmd_priv(cmd);
+   125	
+   126		return &fcmd->scsi_pointer;
+   127	}
+   128	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

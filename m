@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D88EF48FF5C
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 22:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7C248FF61
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 22:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236316AbiAPVym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 16:54:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
+        id S236323AbiAPV5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 16:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233774AbiAPVyl (ORCPT
+        with ESMTP id S233689AbiAPV5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 16:54:41 -0500
+        Sun, 16 Jan 2022 16:57:02 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12367C061574;
-        Sun, 16 Jan 2022 13:54:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6398CC061574;
+        Sun, 16 Jan 2022 13:57:02 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JcTMr05B0z4y4r;
-        Mon, 17 Jan 2022 08:54:31 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JcTQh58kPz4y4B;
+        Mon, 17 Jan 2022 08:57:00 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642370076;
-        bh=4Oy66ShTun4ti7zT93SlHvM1ki9/1BUHlvd5thJEPsU=;
+        s=201702; t=1642370221;
+        bh=+44FdQ9yi9zlm/WpV+A+PqUF4BuStBMbD1wHprju17I=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bEc7BpYtzC9Mx9Wq6rpmDsjPVg9amw+gIx42NWxrhfV/m/qASAA1AVf3KsOZ3d2r+
-         qdSPlsJUg9+71V5BLF+RwFZ/L5K9RZDHri0Lhnhg/EMNP3ewaO4v0bK3yI6f5KonR5
-         pP2KizvVbsbUz25pveCvgXS4zxMbfR2N2kOg5xA8DmM5fmU4PpXPxpQVyNWO46+cqq
-         pE/l3rk2jR9qXyb/M8+U2R1BVGAYnlHraLm4KWJH3KI3XoDnAgy3O0p1h/c5wk2fxY
-         YaAYZ1XyKxYedMmUv+K5JiKnKATwmIWVhK5VO80HKgxj1Z7WaxCv9sHB9Gyv+PasnO
-         Ji6myd+GYnACQ==
-Date:   Mon, 17 Jan 2022 08:54:31 +1100
+        b=GP1GT6Z6Iqws/tc1gWnUKafWEhVCxauPyw7qgvFz8FAkKCwnjYqPuo3O7KPd2f0Jj
+         SeY03uei+iFHMlGM9BQQ1wAohyP9lehSTSc1/9nb4uwX+u1Kbk1Mzs6peFmANoxRO6
+         VVxyzeJklmJc9WxQLDxF8Hd1lz1qhsBoVkeoYtGVxqq4yTFGEsypZsxO+kJxZs/rIK
+         CL5UH91ZDRifRPFnuGyl88IRIxC9wnNzdrJTGsj5jzr6GGW+sxLX0HpffYGp3XHkhn
+         SZOZXduXHYtNtX5h1eh12uRqmIi9cqtBWfg9nka9g6El2z6H0wVmEM/Sj+ZEAwbrkE
+         hY+mcgn3kVpmA==
+Date:   Mon, 17 Jan 2022 08:57:00 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atish.patra@wdc.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
+To:     Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: linux-next: manual merge of the kvm tree with the risc-v tree
-Message-ID: <20220117085431.7bef9ebc@canb.auug.org.au>
-In-Reply-To: <20220112114024.7be8aac6@canb.auug.org.au>
-References: <20220112114024.7be8aac6@canb.auug.org.au>
+        Michal Hocko <mhocko@suse.com>,
+        Venky Shankar <vshankar@redhat.com>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the ceph
+ tree
+Message-ID: <20220117085700.389949a8@canb.auug.org.au>
+In-Reply-To: <20220114145502.2ab21d46@canb.auug.org.au>
+References: <20220114145502.2ab21d46@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ls2tCAonIwnKX_AJBeqqKur";
+Content-Type: multipart/signed; boundary="Sig_/+g05TpvkkHvSzhVKHgXFjii";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ls2tCAonIwnKX_AJBeqqKur
+--Sig_/+g05TpvkkHvSzhVKHgXFjii
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 12 Jan 2022 11:40:24 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Fri, 14 Jan 2022 14:55:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Today's linux-next merge of the kvm tree got a conflict in:
+> Today's linux-next merge of the akpm-current tree got conflicts in:
 >=20
->   arch/riscv/include/asm/sbi.h
+>   include/linux/ceph/libceph.h
+>   net/ceph/ceph_common.c
 >=20
 > between commit:
 >=20
->   b579dfe71a6a ("RISC-V: Use SBI SRST extension when available")
+>   4153c7fc937a ("libceph: rename parse_fsid() to ceph_parse_fsid() and ex=
+port")
 >=20
-> from the risc-v tree and commit:
+> from the ceph tree and commit:
 >=20
->   c62a76859723 ("RISC-V: KVM: Add SBI v0.2 base extension")
+>   f9126de5849a ("mm: allow !GFP_KERNEL allocations for kvmalloc")
 >=20
-> from the kvm tree.
+> from the akpm-current tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -85,47 +84,84 @@ wrote:
 > complex conflicts.
 >=20
 >=20
-> diff --cc arch/riscv/include/asm/sbi.h
-> index 289621da4a2a,9c46dd3ff4a2..000000000000
-> --- a/arch/riscv/include/asm/sbi.h
-> +++ b/arch/riscv/include/asm/sbi.h
-> @@@ -27,7 -27,14 +27,15 @@@ enum sbi_ext_id=20
->   	SBI_EXT_IPI =3D 0x735049,
->   	SBI_EXT_RFENCE =3D 0x52464E43,
->   	SBI_EXT_HSM =3D 0x48534D,
->  +	SBI_EXT_SRST =3D 0x53525354,
-> +=20
-> + 	/* Experimentals extensions must lie within this range */
-> + 	SBI_EXT_EXPERIMENTAL_START =3D 0x08000000,
-> + 	SBI_EXT_EXPERIMENTAL_END =3D 0x08FFFFFF,
-> +=20
-> + 	/* Vendor extensions must lie within this range */
-> + 	SBI_EXT_VENDOR_START =3D 0x09000000,
-> + 	SBI_EXT_VENDOR_END =3D 0x09FFFFFF,
->   };
+> diff --cc include/linux/ceph/libceph.h
+> index 644f224eccf7,309acbcb5a8a..000000000000
+> --- a/include/linux/ceph/libceph.h
+> +++ b/include/linux/ceph/libceph.h
+> @@@ -295,8 -295,6 +295,7 @@@ extern bool libceph_compatible(void *da
 >  =20
->   enum sbi_ext_base_fid {
+>   extern const char *ceph_msg_type_name(int type);
+>   extern int ceph_check_fsid(struct ceph_client *client, struct ceph_fsid=
+ *fsid);
+> - extern void *ceph_kvmalloc(size_t size, gfp_t flags);
+>  +extern int ceph_parse_fsid(const char *str, struct ceph_fsid *fsid);
+>  =20
+>   struct fs_parameter;
+>   struct fc_log;
+> diff --cc net/ceph/ceph_common.c
+> index decae43b4262,9441b4a4912b..000000000000
+> --- a/net/ceph/ceph_common.c
+> +++ b/net/ceph/ceph_common.c
+> @@@ -190,34 -190,7 +190,7 @@@ int ceph_compare_options(struct ceph_op
+>   }
+>   EXPORT_SYMBOL(ceph_compare_options);
+>  =20
+> - /*
+> -  * kvmalloc() doesn't fall back to the vmalloc allocator unless flags a=
+re
+> -  * compatible with (a superset of) GFP_KERNEL.  This is because while t=
+he
+> -  * actual pages are allocated with the specified flags, the page table =
+pages
+> -  * are always allocated with GFP_KERNEL.
+> -  *
+> -  * ceph_kvmalloc() may be called with GFP_KERNEL, GFP_NOFS or GFP_NOIO.
+> -  */
+> - void *ceph_kvmalloc(size_t size, gfp_t flags)
+> - {
+> - 	void *p;
+> -=20
+> - 	if ((flags & (__GFP_IO | __GFP_FS)) =3D=3D (__GFP_IO | __GFP_FS)) {
+> - 		p =3D kvmalloc(size, flags);
+> - 	} else if ((flags & (__GFP_IO | __GFP_FS)) =3D=3D __GFP_IO) {
+> - 		unsigned int nofs_flag =3D memalloc_nofs_save();
+> - 		p =3D kvmalloc(size, GFP_KERNEL);
+> - 		memalloc_nofs_restore(nofs_flag);
+> - 	} else {
+> - 		unsigned int noio_flag =3D memalloc_noio_save();
+> - 		p =3D kvmalloc(size, GFP_KERNEL);
+> - 		memalloc_noio_restore(noio_flag);
+> - 	}
+> -=20
+> - 	return p;
+> - }
+> -=20
+>  -static int parse_fsid(const char *str, struct ceph_fsid *fsid)
+>  +int ceph_parse_fsid(const char *str, struct ceph_fsid *fsid)
+>   {
+>   	int i =3D 0;
+>   	char tmp[3];
 
-This is now a conflict between the risc-v tree and Linus' tree.
+This is now a conflict between the ceph tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ls2tCAonIwnKX_AJBeqqKur
+--Sig_/+g05TpvkkHvSzhVKHgXFjii
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHklBcACgkQAVBC80lX
-0Gx0Kgf8DwWsTWCg2uDT5qR3wwkFtCKSuP0wF5QIgkhrkYZpRAudXaqXQyjsiXO5
-+sELtoAlDRix1bMM+A470UU5PFX0nol4w3iP+YqQM0blt2K8B8ghCeq4bww4U+RP
-f2tE7YVt88/vqoz689CO5XkBSx3FHThW9iyGpZbSdc6ZLALypOB/NSIqQqaMKEfu
-qRCNILhu8gVRVsBMXvZeKDEb+w4YdKggW8vifasj+Wldrk+C0r61jc+wycpUvbSS
-WBPm5NjAj4Dz1VxUxc/x/TkRJZVzxFI3Z2bj7Zz/1XftvUBrS0MaW7BRoU0gTeUY
-iJX/XQCADUMTvHa94AVweB0pauBgqA==
-=N0Ig
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHklKwACgkQAVBC80lX
+0GwQ7wgAiISglzpGUpBWS07YF4AiK9msJDK0BTTIYUvv8dPYytmjEubZ5wUWBVcA
+AC+bIjz7I5401hLuO+k7aperW4K1KHl8/lUUEa1YrexNOu1ZZ1NrXchWc7xnkPyl
+rp9Lq4d2ItDZT0MA6/U7Rboh90hNaA67YElyFWZfWI2ebwJEpuVvNmZKIJdijKTJ
+kGne2Lxr0s3a8r4trS/xtDWfh2AyJEKPjaILr88agA8VBdskZ4XcanmpZcEamKjO
+4hVY740Kk7+0QaZs3WczZUxgxM67LELapctHorNMlXblcgqVmMsHFDN3FMVx/2br
+GQ09gwLUZinvffdPjCw/oaBz0zOwcQ==
+=kwAz
 -----END PGP SIGNATURE-----
 
---Sig_/ls2tCAonIwnKX_AJBeqqKur--
+--Sig_/+g05TpvkkHvSzhVKHgXFjii--

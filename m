@@ -2,91 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FA348FA35
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 03:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D5F48FA3D
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 03:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234071AbiAPCDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 21:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234061AbiAPCDd (ORCPT
+        id S234081AbiAPCFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 21:05:24 -0500
+Received: from inbound.memeplex.com ([35.162.238.239]:53876 "EHLO
+        relay.memeplex.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234072AbiAPCFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 21:03:33 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF14C06161C
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 18:03:33 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 133so2013431pgb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 18:03:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igorinstitute-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:from:date:subject:to:cc;
-        bh=EQpPofv3xqVheya0dgefCVu2/vpqFU87ufMossH4bmQ=;
-        b=WyZmlmZplLS8zfYwy8JZCK4zxfN773ZY67zGGv43GjSQbpeJp2sSAgI/ZzQRFrZlX8
-         FLGhVsixwvrXFVgbAFnRzNE2XDpwDgL3RdJBKMrnMeX3wEy3BExHbaC0/0F8+8s/3DZH
-         CTSNY4v5VwwBZ+ShgfXy//zoDrUSdpels/Of4iN1J/LeJdIhWr7KKqyWJIciF6d4q3B8
-         83TePSuKskIQrH2nLGtK776rp8eH5TZo3lQPe8HP6YAJis4xdtEXw7hbw0oIAYcr0eyS
-         oMFBlWLTSX2SyU2eNq+YtA3vDwzc2fJv3bZjNnhZj0rAmUs4aX+2Zu6E0XQXrTZ3oKQ3
-         j/Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:from:date:subject:to:cc;
-        bh=EQpPofv3xqVheya0dgefCVu2/vpqFU87ufMossH4bmQ=;
-        b=g25dobKSt14TFPC3Vi84MamH9jIvuuc9ZyD063SFP1qXIOxV5clmYU6fvvgxaGGb7a
-         SZAIfUKI2VEh08TPjtvmG5GNqZdCnocCBu6lmvh+Sehn+YZxtvsAUcDSNNICiDB48ljU
-         wAwyhz898N2lhmolJURd/WmSXaeBpcAR4AKDPVXYIgqhH9ZX3HhqIrTszKPfqKXER8SR
-         aDHSMaH/lvZaX67Bv9uU7YnHnPxZoQn8gjjZPfsxSC3ZehXZDdMZ+bXRKo67rokDJZvc
-         01tm05RvtFcLkfFsOYpPRpqfcpZ+AD/2A6noxy72qD3Bq9J17vS+4vwZV5zYtZCWcL3V
-         +Rhg==
-X-Gm-Message-State: AOAM530K50AAkGnDWhWq8JEkVjPgkg7gaCKVvQiufMkDT60jI1FokvWb
-        SkQhy2jajJtM+NRNYgaFV1CHkQ==
-X-Google-Smtp-Source: ABdhPJzi4Nm0DAxYTAaquO6l69+WqV4eA7FwkV4Kp5hunLWNzSWKwTbscVwRpgaBdnUYKJtCnkMnRg==
-X-Received: by 2002:aa7:9ec7:0:b0:4be:19fa:f0f3 with SMTP id r7-20020aa79ec7000000b004be19faf0f3mr15342794pfq.8.1642298612838;
-        Sat, 15 Jan 2022 18:03:32 -0800 (PST)
-Received: from localhost ([121.99.145.49])
-        by smtp.gmail.com with ESMTPSA id c10sm9761822pfl.200.2022.01.15.18.03.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Jan 2022 18:03:32 -0800 (PST)
-Message-Id: <cover.1642298336.git.daniel.beer@igorinstitute.com>
-From:   Daniel Beer <daniel.beer@igorinstitute.com>
-Date:   Sun, 16 Jan 2022 14:58:56 +1300
-Subject: [PATCH v3 0/2] ASoC: add support for TAS5805M digital amplifier
-To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Andy Liu <andy-liu@ti.com>,
-        Daniel Beer <daniel.beer@igorinstitute.com>,
-        Derek Simkowiak <derek.simkowiak@igorinstitute.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
+        Sat, 15 Jan 2022 21:05:23 -0500
+Received: from mail.memeplex.com ([35.162.238.239])
+        by relay.memeplex.com (Postfix) with ESMTPS id 6B73F4012F
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 02:05:23 +0000 (UTC)
+Message-ID: <d6b66503-47c4-0f2b-b718-678976a1a6a6@memeplex.com>
+Date:   Sat, 15 Jan 2022 18:05:22 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+From:   Andrew than <linux_kernel_aathan@memeplex.com>
+Subject: Catastrophic data loss in Mac OS X VirtualBox guest running Linux
+ ubuntu 5.11.0-41-generic
+To:     linux-kernel@vger.kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This pair of patches implements support for the TAS5805M class D audio
-amplifier. This driver, and the example configuration in the device-tree
-file, were originally based on a 4.19 series kernel and have been
-modified slightly from the tested version.
+Please cc: me on any response, I am not subscribed to LKML
 
-This resubmission differs from v2 as follows:
+I've posted this issue on the Virtual Box bug reporting site at Oracle, 
+but I'm not sure whether it's a VirtualBox only issue.
 
-  - The redundant mutex has been removed
-  - DSP configuration is loaded as a firmware image, rather than
-    directly from the device-tree
-  - The volume control returns non-zero when the values have changed, as
-    required
-  - Some corrections to device-tree example
+Would someone please direct me as to how best to pursue this issue with 
+the kernel gods? It's not clear to me that the problem is in a storage 
+driver because I was also getting soft lockup errors reported prior to 
+the data loss.
 
-Daniel Beer (2):
-  ASoC: add support for TAS5805M digital amplifier
-  ASoC: dt-bindings: add bindings for TI TAS5805M.
+[1359528.850122] systemd-journald[284]: Failed to write entry (22 items, 739 bytes), ignoring: Read-only file system
 
- .../devicetree/bindings/sound/tas5805m.yaml   |  56 ++
- sound/soc/codecs/Kconfig                      |   9 +
- sound/soc/codecs/Makefile                     |   2 +
- sound/soc/codecs/tas5805m.c                   | 567 ++++++++++++++++++
- 4 files changed, 634 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/tas5805m.yaml
- create mode 100644 sound/soc/codecs/tas5805m.c
 
--- 
-2.30.2
+(the above dmesg reported error occurs many many times with different 
+timestamps of course)
 
+which seems to stem from:
+
+Jan 15 21:35:14 ubuntu CRON[1188952]: (root) CMD (command -v debian-sa1 > /dev/null && debian-sa1 1 1)
+Jan 15 21:37:35 ubuntu kernel: [1355482.810724] ata3.00: exception Emask 0x0 SAct 0x8000000 SErr 0x0 action 0x6 frozen
+Jan 15 21:37:35 ubuntu kernel: [1355482.810769] ata3.00: failed command: WRITE FPDMA QUEUED
+Jan 15 21:37:35 ubuntu kernel: [1355482.810786] ata3.00: cmd 61/10:d8:90:a0:53/00:00:00:00:00/40 tag 27 ncq dma 8192 out
+Jan 15 21:37:35 ubuntu kernel: [1355482.810786]          res 40/00:00:00:00:00/00:00:00:00:00/00 Emask 0x4 (timeout)
+Jan 15 21:37:35 ubuntu kernel: [1355482.810824] ata3.00: status: { DRDY }
+Jan 15 21:37:35 ubuntu kernel: [1355482.810839] ata3: hard resetting link
+Jan 15 21:37:37 ubuntu kernel: [1355485.044289] ata3: SATA link down (SStatus 1 SControl 300)
+Jan 15 21:37:42 ubuntu kernel: [1355490.294132] ata3: hard resetting link
+Jan 15 21:37:45 ubuntu kernel: [1355492.509352] ata3: SATA link down (SStatus 1 SControl 300)
+Jan 15 21:38:07 ubuntu kernel: [1355497.707142] ata3: hard resetting link
+
+
+
+Sorry about the formatting of these ... although looking at this again, 
+maybe it *is* an issue with the SATA drivers that affects any system 
+that writes to disk??
+
+[483574.483756] watchdog: BUG: soft lockup - CPU#1 stuck for 22s! 
+[swapper/1:0] Jan 6 11:36:36 ubuntu kernel: [541789.358312] watchdog: 
+BUG: soft lockup - CPU#1 stuck for 23s! [swapper/1:0] Jan 6 13:37:15 
+ubuntu kernel: [549027.924906] watchdog: BUG: soft lockup - CPU#1 stuck 
+for 21s! [swapper/1:0] Jan 6 13:37:15 ubuntu kernel: 
+[549027.925052] do_softirq+0xce/0x281 Jan 6 13:37:15 ubuntu kernel: 
+[549027.925059] do_softirq_own_stack+0x3d/0x50 Jan 7 05:12:07 ubuntu 
+kernel: [605122.533658] watchdog: BUG: soft lockup - CPU#1 stuck for 
+21s! [swapper/1:0]

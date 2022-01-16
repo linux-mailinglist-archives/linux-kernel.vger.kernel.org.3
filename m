@@ -2,145 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BB548FF6A
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 23:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3505648FF6D
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 23:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236326AbiAPWHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 17:07:40 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:57870 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiAPWHj (ORCPT
+        id S236331AbiAPWIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 17:08:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230171AbiAPWH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 17:07:39 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4E2F71F37B;
-        Sun, 16 Jan 2022 22:07:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642370858; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2ux+cjqDfKM9y7l7EW+chWJOdcxq8/Set71C0Gfwhnk=;
-        b=F9LbMxiu7IaXElzxJ33nkgmsNBeSOpWABZ5swO1HBZMQ+e0L+iohMBTICPAdzEegTdytWe
-        dtSIeMfyFBmf/3sMeZbyE99ufIRAXVEHvt7PYdU6B509PMrPPUUleJWkPOmJ6cMHZPfjZQ
-        ynFdWLT22eD/bpUa89HxmP2Jv/W4ubM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642370858;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2ux+cjqDfKM9y7l7EW+chWJOdcxq8/Set71C0Gfwhnk=;
-        b=+pDW7mEqfW5TbqRYHhSF+HDd6t14DSpM5uNAhXFZEmfiWm5blHuUnfm77guyYn47KXWVFD
-        IfETWWwEGHH5kaAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7F350132D4;
-        Sun, 16 Jan 2022 22:07:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KI2WDieX5GGDZgAAMHmgww
-        (envelope-from <neilb@suse.de>); Sun, 16 Jan 2022 22:07:35 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 16 Jan 2022 17:07:57 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B71BC061574;
+        Sun, 16 Jan 2022 14:07:57 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id l21-20020a17090b079500b001b49df5c4dfso1549034pjz.2;
+        Sun, 16 Jan 2022 14:07:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=M2veCCmWFE1gjuS1WjHHYX1pPVCrH6un9yG9kmaxmLw=;
+        b=AQowX1sr42Qg5V4hFnvSSXhLiRpVnH3vaxSQnU0bB5wVNelKXIprNZxK52/NlnvDDK
+         d4bSMzVJDdocK7AVwDLCRcYZEEocaNEvG4jBWKWj2eMGAr/O9lPUWf7zcdPRwepxQPTZ
+         lVW2Tiw2xRFQSrLZZgH+FMPBNKkY5VnX4PeK94wEQEwBSg2NjByAQSqCHqGA1qf2LD2Y
+         9YvHXKg/Njub+g+ZWa1iCLLC81Fjw2Sz6kyyYqO85dLUVSXk6V32x8qho+ZJt2CL/k0E
+         PTQIlgeu6Z4O67Gr/fEQ/t4HCkkxKv0lT7LT4mIf/t53tEzZ/3JZWs+CG1aptf9a0QWI
+         AliQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=M2veCCmWFE1gjuS1WjHHYX1pPVCrH6un9yG9kmaxmLw=;
+        b=as/7QhCwsM8rSwOKNGhYBUZI/9QO28sY8jcNzTBRO4WgeP5WG2Fn9vsOZmX98MVgUN
+         n9eoczsX8IdDWe2TEV6YEos/Fdewfj9bjMqM2B66AeKbP52TyVU5V9aNb5/pKMSIjfQy
+         SakvXVUxlElfdw5sO+LVWSIImCxSJuU/7lr3D2I1Va+bNBMH1NMqscst09QpZ58Ti2dP
+         iHbVbNXBaMzDs7Df0CjdIoDKSVLHLxVDVeq3y/Gof5m/4QLR8GdCz/OKxy4gnfLV55FT
+         fBL9AvD2yzcvHdkAfolp3GA7D09R/1s/nq6LfpuGeDmWL9UUaohS8aL5wbiJhHq7Yyzh
+         rKnA==
+X-Gm-Message-State: AOAM530MUavCeQNL4KUflgpYo4RVkUtiKiwKmQbggGhrFK4xwJ8IMTL7
+        USYzfK0XBQgP22mrhUIPrj06wU7eimU=
+X-Google-Smtp-Source: ABdhPJwpho4X/3I1qIa9lHTTirRHkdYwPzyZk3fOqiB4tLVa3q3wF19VY924xXO0Chz6mrUef2EXFw==
+X-Received: by 2002:a17:90a:de08:: with SMTP id m8mr21885784pjv.102.1642370876551;
+        Sun, 16 Jan 2022 14:07:56 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:f7d7:da1d:6c29:1bd6])
+        by smtp.gmail.com with ESMTPSA id u64sm11275757pfb.208.2022.01.16.14.07.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jan 2022 14:07:55 -0800 (PST)
+Date:   Sun, 16 Jan 2022 14:07:53 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [git pull] Input updates for v5.17-rc0
+Message-ID: <YeSXOaSWDSjMykUO@google.com>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        torvalds@linux-foundation.org
-cc:     "Christian Brauner" <christian.brauner@ubuntu.com>,
-        Anthony Iliopoulos <ailiop@suse.com>,
-        David Howells <dhowells@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH - resend] devtmpfs regression fix: reconfigure on each mount
-In-reply-to: <20211214141824.fvmtwvp57pqg7ost@wittgenstein>
-References: <163935794678.22433.16837658353666486857@noble.neil.brown.name>,
- <20211213125906.ngqbjsywxwibvcuq@wittgenstein>, <YbexPXpuI8RdOb8q@technoir>,
- <20211214101207.6yyp7x7hj2nmrmvi@wittgenstein>, <Ybik5dWF2w06JQM6@technoir>,
- <20211214141824.fvmtwvp57pqg7ost@wittgenstein>
-Date:   Mon, 17 Jan 2022 09:07:26 +1100
-Message-id: <164237084692.24166.3761469608708322913@noble.neil.brown.name>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
-Prior to Linux v5.4 devtmpfs used mount_single() which treats the given
-mount options as "remount" options, so it updates the configuration of the
-single super_block on each mount.
-Since that was changed, the mount options used for devtmpfs are ignored.
-This is a regression which affect systemd - which mounts devtmpfs
-with "-o mode=3D755,size=3D4m,nr_inodes=3D1m".
+Please pull from:
 
-This patch restores the "remount" effect by calling reconfigure_single()
+	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git for-linus
 
-Fixes: d401727ea0d7 ("devtmpfs: don't mix {ramfs,shmem}_fill_super() with mou=
-nt_single()")
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-Signed-off-by: NeilBrown <neilb@suse.de>
----
- drivers/base/devtmpfs.c    | 7 +++++++
- fs/super.c                 | 4 ++--
- include/linux/fs_context.h | 2 ++
- 3 files changed, 11 insertions(+), 2 deletions(-)
+to receive updates for the input subsystem. You will get updates to
+Goodix touchscreen driver (addition of pen support) and Silead
+touchscreen driver (also addition of pen support and parsing of
+embedded firmware to determine screen size), along with assorted
+fixes for other drivers.
 
-diff --git a/drivers/base/devtmpfs.c b/drivers/base/devtmpfs.c
-index 1e2c2d3882e2..f41063ac1aee 100644
---- a/drivers/base/devtmpfs.c
-+++ b/drivers/base/devtmpfs.c
-@@ -65,8 +65,15 @@ static struct dentry *public_dev_mount(struct file_system_=
-type *fs_type, int fla
- 		      const char *dev_name, void *data)
- {
- 	struct super_block *s =3D mnt->mnt_sb;
-+	int err;
-+
- 	atomic_inc(&s->s_active);
- 	down_write(&s->s_umount);
-+	err =3D reconfigure_single(s, flags, data);
-+	if (err < 0) {
-+		deactivate_locked_super(s);
-+		return ERR_PTR(err);
-+	}
- 	return dget(s->s_root);
- }
-=20
-diff --git a/fs/super.c b/fs/super.c
-index 3bfc0f8fbd5b..a6405d44d4ca 100644
---- a/fs/super.c
-+++ b/fs/super.c
-@@ -1423,8 +1423,8 @@ struct dentry *mount_nodev(struct file_system_type *fs_=
-type,
- }
- EXPORT_SYMBOL(mount_nodev);
-=20
--static int reconfigure_single(struct super_block *s,
--			      int flags, void *data)
-+int reconfigure_single(struct super_block *s,
-+		       int flags, void *data)
- {
- 	struct fs_context *fc;
- 	int ret;
-diff --git a/include/linux/fs_context.h b/include/linux/fs_context.h
-index 6b54982fc5f3..13fa6f3df8e4 100644
---- a/include/linux/fs_context.h
-+++ b/include/linux/fs_context.h
-@@ -142,6 +142,8 @@ extern void put_fs_context(struct fs_context *fc);
- extern int vfs_parse_fs_param_source(struct fs_context *fc,
- 				     struct fs_parameter *param);
- extern void fc_drop_locked(struct fs_context *fc);
-+int reconfigure_single(struct super_block *s,
-+		       int flags, void *data);
-=20
- /*
-  * sget() wrappers to be called from the ->get_tree() op.
---=20
-2.34.1
+Note that you will get a merge conflict in axp20x-pek driver, please
+resolve it so it looks as follows (axp20x_pek_probe):
 
+	axp20x_pek->axp20x = dev_get_drvdata(pdev->dev.parent);
+
+	if (axp20x_pek_should_register_input(axp20x_pek)) {
+		error = axp20x_pek_probe_input_device(axp20x_pek, pdev);
+		if (error)
+			return error;
+	}
+
+Changelog:
+---------
+
+Alistair Francis (1):
+      Input: wacom_i2c - clean up the query device fields
+
+Charles Keepax (1):
+      Input: ff-core - correct magnitude setting for rumble compatibility
+
+Christophe JAILLET (1):
+      Input: gpio-keys - avoid clearing twice some memory
+
+Colin Ian King (2):
+      Input: palmas-pwrbutton - make a couple of arrays static const
+      Input: ucb1400_ts - remove redundant variable penup
+
+Dario Binacchi (3):
+      Input: ti_am335x_tsc - set ADCREFM for X configuration
+      Input: ti_am335x_tsc - fix STEPCONFIG setup for Z2
+      Input: ti_am335x_tsc - lower the X and Y sampling time
+
+Geert Uytterhoeven (1):
+      Input: palmas-pwrbutton - use bitfield helpers
+
+Hans de Goede (6):
+      Input: goodix - add pen support
+      Input: goodix - improve gpiod_get() error logging
+      Input: goodix - 2 small fixes for pen support
+      Input: silead - add support for EFI-embedded fw using different min/max coordinates
+      Input: silead - add pen support
+      Input: axp20x-pek - revert "always register interrupt handlers" change
+
+Linus Walleij (2):
+      dt-bindings: input/ts/zinitix: Convert to YAML, fix and extend
+      Input: zinitix - handle proper supply names
+
+Nikita Travkin (1):
+      Input: zinitix - add compatible for bt532
+
+Qinghua Jin (1):
+      Input: ti_am335x_tsc - fix a typo in a comment
+
+Xiang wangx (1):
+      Input: byd - fix typo in a comment
+
+Diffstat:
+--------
+
+ .../bindings/input/touchscreen/zinitix,bt400.yaml  | 115 ++++++++++++++
+ .../bindings/input/touchscreen/zinitix.txt         |  40 -----
+ drivers/input/ff-core.c                            |   2 +-
+ drivers/input/keyboard/gpio_keys.c                 |   2 +-
+ drivers/input/misc/axp20x-pek.c                    |  72 +++++----
+ drivers/input/misc/palmas-pwrbutton.c              |   9 +-
+ drivers/input/mouse/byd.c                          |   2 +-
+ drivers/input/touchscreen/goodix.c                 | 127 ++++++++++++++-
+ drivers/input/touchscreen/goodix.h                 |   1 +
+ drivers/input/touchscreen/silead.c                 | 172 ++++++++++++++++++++-
+ drivers/input/touchscreen/ti_am335x_tsc.c          |  20 ++-
+ drivers/input/touchscreen/ucb1400_ts.c             |   4 +-
+ drivers/input/touchscreen/wacom_i2c.c              |  44 +++---
+ drivers/input/touchscreen/zinitix.c                |  22 ++-
+ 14 files changed, 507 insertions(+), 125 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/input/touchscreen/zinitix,bt400.yaml
+ delete mode 100644 Documentation/devicetree/bindings/input/touchscreen/zinitix.txt
+
+Thanks.
+
+
+-- 
+Dmitry

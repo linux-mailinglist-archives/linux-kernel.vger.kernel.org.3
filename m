@@ -2,102 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AE348FD79
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 15:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 116AA48FD7C
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 15:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235444AbiAPOeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 09:34:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33146 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiAPOef (ORCPT
+        id S235458AbiAPOmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 09:42:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52873 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235447AbiAPOmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 09:34:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14139B80D05;
-        Sun, 16 Jan 2022 14:34:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FF34C36AE7;
-        Sun, 16 Jan 2022 14:34:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642343672;
-        bh=oCqvjsNEHd9Y5M9rEsW3iU49LfLeq8eNQ8Zn339zLqU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j58W1h/obVl+IfAzefOxcsNjkMZGG9Dh7jPlmOPhHkz2nq9mysO1oJvaEn9mQkNfj
-         ylI2Advz7kOA48NCzouItB152EWl6E3XY8I5hGqc9jNY/PpeIAqcx0CHKaudy8Pc9Z
-         KJKtfAh1LmpnPXYD7eyVGZCazzJeMzNPV48SLuuZ7ZP8GyLjllSCfApEZnJIrUVVAG
-         S1f34/3bv2CEgtlXTn3BVTEsuvxHkAatjm0N0NqnQaZuMC5Jtss+lTcguvnLE0AIw7
-         zqYC+7leO0dKC6vTQLEwFC88CA/rv+rcZWpfBRSpqQW0M5i6te5pTUTSdeghWOBGFU
-         6J3bPsKGKjbcQ==
-Date:   Sun, 16 Jan 2022 16:34:20 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tadeusz Struk <tstruk@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-integrity@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] selftests: tpm: add async space test with
- noneexisting handle
-Message-ID: <YeQs7Fy5NaK6m6Ar@iki.fi>
-References: <20220116012627.2031-1-tstruk@gmail.com>
- <20220116012627.2031-2-tstruk@gmail.com>
+        Sun, 16 Jan 2022 09:42:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642344138;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JRRT3Yl7+f6HbkWI411SEh1HSKqxqkLW8Pqe76fS2Gs=;
+        b=c9r1HtrTQmy2v1uvmEc51TO9JD0VGcGfRwEieTTj7+/i7fW8hSvp01ZMXM3nTS/kGfxhdU
+        dPmJWURTG5V8dFDz9Hye8ztv24Sq/YvlqUo5undOKcVRvhzNTzP5CdeoexEARaIVvqrJ+I
+        g2m/w3pCCrCpIhCfnyTSXwDUZ6I8os0=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-341-3bgqf_c7PK2i0F5fw_7NSg-1; Sun, 16 Jan 2022 09:42:17 -0500
+X-MC-Unique: 3bgqf_c7PK2i0F5fw_7NSg-1
+Received: by mail-ot1-f71.google.com with SMTP id a89-20020a9d2662000000b005909e4d9585so4332493otb.18
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 06:42:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JRRT3Yl7+f6HbkWI411SEh1HSKqxqkLW8Pqe76fS2Gs=;
+        b=xqeja6V6Jj8tHOl0qQcmRj0hFhT0uPLGiGGiKWvd1K6IUyDs1dmtbxZ+4xQj4/IQVg
+         r5ExiTmL8x0jtTKJKObZzXO/FQjKnB0u9UPC6TuWHhhAP2twwaubK4u9AYtNXNBunS6Q
+         aBvP7WygH0oskFwklhIkmqbhZzVExku9NeaMZ54Kq0ApuAI2DcDACnC7lFUGJPb/k44U
+         J3y8vUIFlwssjBvqFnVpWRytJIWqwC/6bFD8+TW+1sC2DESpJA4BnIEL0hJ6iBrhglrz
+         aI6I8kIhEFvOxXY1oWtjWrztB6latv7WdJcEu+dkvnxXCrnZF7KrrXx9kOMp9d4cozRg
+         PLaA==
+X-Gm-Message-State: AOAM531KNIOOP85iXiX8Iashpjq2ncc6PbUUkojY3UNOgJI8fVdvszTm
+        zVlbbn8r6XP7NWYPARouIBMTmWbybw4zxmKm0IJBVW6oSMacbVSzcgeyM6Nm2p2V4jJ3s0LUvsM
+        BWn3v0NZiSLmRE9Rds602sWSR
+X-Received: by 2002:aca:1c16:: with SMTP id c22mr4588769oic.83.1642344136528;
+        Sun, 16 Jan 2022 06:42:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwrmwZp7l+rQuzj7d+eeD89HQdHOy2AEvZ4lDFXM1Xjeb9/2maMuS4teFTtAREUYd6VJgPcwQ==
+X-Received: by 2002:aca:1c16:: with SMTP id c22mr4588753oic.83.1642344136355;
+        Sun, 16 Jan 2022 06:42:16 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id b22sm2168045otl.24.2022.01.16.06.42.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jan 2022 06:42:15 -0800 (PST)
+From:   trix@redhat.com
+To:     kvalo@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com, akolli@codeaurora.org
+Cc:     ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] ath11k: fix error handling in ath11k_qmi_assign_target_mem_chunk()
+Date:   Sun, 16 Jan 2022 06:42:06 -0800
+Message-Id: <20220116144206.399385-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220116012627.2031-2-tstruk@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 05:26:27PM -0800, Tadeusz Struk wrote:
-> Add a test for /dev/tpmrm0 in async mode that checks if
-> the code handles invalid handles correctly.
-> 
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: <linux-integrity@vger.kernel.org>
-> Cc: <linux-kselftest@vger.kernel.org>
-> Cc: <linux-kernel@vger.kernel.org>
-> 
-> Tested-by: Jarkko Sakkinen<jarkko@kernel.org>
-> Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
-> ---
-> Changed in v2:
-> - Updated commit message
-> Changed in v3:
-> - Fixed typo in the function name
-> ---
->  tools/testing/selftests/tpm2/tpm2_tests.py | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-> index 9d764306887b..340ffef97fb6 100644
-> --- a/tools/testing/selftests/tpm2/tpm2_tests.py
-> +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-> @@ -302,3 +302,19 @@ class AsyncTest(unittest.TestCase):
->          log.debug("Calling get_cap in a NON_BLOCKING mode")
->          async_client.get_cap(tpm2.TPM2_CAP_HANDLES, tpm2.HR_LOADED_SESSION)
->          async_client.close()
-> +
-> +    def test_flush_invalid_context(self):
-> +        log = logging.getLogger(__name__)
-> +        log.debug(sys._getframe().f_code.co_name)
-> +
-> +        async_client = tpm2.Client(tpm2.Client.FLAG_SPACE | tpm2.Client.FLAG_NONBLOCK)
-> +        log.debug("Calling flush_context passing in an invalid handle ")
-> +        handle = 0x80123456
-> +        rc = 0
-> +        try:
-> +            async_client.flush_context(handle)
-> +        except OSError as e:
-> +            rc = e.errno
-> +
-> +        self.assertEqual(rc, 22)
-> +        async_client.close()
-> -- 
-> 2.30.2
-> 
+From: Tom Rix <trix@redhat.com>
 
-Thank you.
+Clang static analysis reports this problem
+qmi.c:1935:5: warning: Undefined or garbage value returned to caller
+  return ret;
+  ^~~~~~~~~~
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+ret is uninitialized.  When of_parse_phandle() fails, garbage is
+returned.  So return -EINVAL.
 
-BR, Jarkko
+Fixes: 6ac04bdc5edb ("ath11k: Use reserved host DDR addresses from DT for PCI devices")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/wireless/ath/ath11k/qmi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/ath/ath11k/qmi.c b/drivers/net/wireless/ath/ath11k/qmi.c
+index 65d3c6ba35ae6..81b2304b1fdeb 100644
+--- a/drivers/net/wireless/ath/ath11k/qmi.c
++++ b/drivers/net/wireless/ath/ath11k/qmi.c
+@@ -1932,7 +1932,7 @@ static int ath11k_qmi_assign_target_mem_chunk(struct ath11k_base *ab)
+ 			if (!hremote_node) {
+ 				ath11k_dbg(ab, ATH11K_DBG_QMI,
+ 					   "qmi fail to get hremote_node\n");
+-				return ret;
++				return -EINVAL;
+ 			}
+ 
+ 			ret = of_address_to_resource(hremote_node, 0, &res);
+-- 
+2.26.3
+

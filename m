@@ -2,76 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E3748F9D3
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 00:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07ABC48F9D5
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 01:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbiAOX7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 15 Jan 2022 18:59:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S233927AbiAPABH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 15 Jan 2022 19:01:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233894AbiAOX7i (ORCPT
+        with ESMTP id S233894AbiAPABG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 15 Jan 2022 18:59:38 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3492CC061574
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 15:59:38 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id s9so17917482oib.11
-        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 15:59:38 -0800 (PST)
+        Sat, 15 Jan 2022 19:01:06 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6EFC061574
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 16:01:06 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id g205so17998663oif.5
+        for <linux-kernel@vger.kernel.org>; Sat, 15 Jan 2022 16:01:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=BY0t3wChnwPpABJAzUPI2uRQxasjitbf0zoLnLuzNmM=;
-        b=xELVyXalO+/z52bs31zIMVRomNZNMvebNU/EH0nbs+9Y845YgY/qW6U4CzW8ijlaYP
-         mg9DCeggvHBxQ5UinnwOo8phB/k5lWUORlqCYh4uGXWHU6A+fctnXEh87NwBtWnxY+nJ
-         F97BcU1laAUD6j2u/tIhTMpDO93qF/J+/sOspsgvrStamqciVxBHV5D2FjUtLmvYr4dn
-         shlDqcN9uNaPVFkxImqHkD9tn5rs+yvN5dDp6TqcNabCBhIkFcUHax7vYm0bfSn2R8Ji
-         HZfrCzHENBfchX1EA3yQD9iW3KRhZTlVfTTOrg7RzyRsFDonfYBVV2up1BAsDETjo+6l
-         KaAQ==
+        bh=kADQFhR2AfzvIpqsJVy4t8n1qBnT7lu/EvJZU+85jgQ=;
+        b=LLg16acyV9ssxzPynuDwH/S0CSc9tMRmrCIGdfwdrK7w85YRVu4Npgj+M//L/tDr1j
+         +PEhJUymrMgWTts01augIl92yJZf1aVBfKdzBN9nHzipXIpTkLbTuWuUO9Uaf3zjE32h
+         TbZXMS7sGGEK/1YkGFWy3HamgZZrEUuWJst5u7mTLybjcK/qWzghX8gcX2xy4yr1WtuH
+         zjcFNZc24bkMehhg9rtL3RhaxpLOxleTi9rtFlTtXdLzs5UGZ1ewf1hRQ7kfSme0TB85
+         mwuZXvIwGlvIKbSgTXEMEFRziLFU8E2p6X4JtqhoNSQACmTiaVnaWfw1qzfwemqMO32X
+         v6wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=BY0t3wChnwPpABJAzUPI2uRQxasjitbf0zoLnLuzNmM=;
-        b=pPjkMAI52/0e6oGzUtM+5+X6cDmZnyilBJb5r/TT4C+0iBHXnBLv5dBnn7KScXSZHn
-         Kvvo3w7AS09aeSrzgdqWXp1zLvLS8w2v3kwEPJLSzxEqGvuj4JSYdZlpNiEJ7+OfJFL3
-         hEfuajoZgZAT+UVa6SUjk5Jzf5vttWeOM4nzO8Dji2/Tr1jiI/ZTvZ+oZLHn0Bo7DkXw
-         xrWFqwfNfJEz1HkHMBvfnf7SZF5fO9natEHW1aoSGQdSiPtBWF72EfziNI27mf2RUvKy
-         OodnOUQFJ0qR1vSha0QzHcv2OXb7zG3ati0b+VdiBWITwTCEHVdukPsMLyvx9FSAG13g
-         6InQ==
-X-Gm-Message-State: AOAM5316j1j8bOZzEAilG+jtH2AGLdc/IKp3Vkj2nPYmxAOQu96apIPr
-        7TC9JS9zQIDEzeGpTWSfVY17O49CRUtWOFshM6FiREUmwBA=
-X-Google-Smtp-Source: ABdhPJy/oexnFc8hU3ysnUaLWHcbDN0ylAfYaUb2qiC7xMh3/+4Bu0iKtmkB9eeU2Rgz97bTHlGyDz6kcjZ52JUrjGQ=
-X-Received: by 2002:aca:5a87:: with SMTP id o129mr13134949oib.114.1642291177322;
- Sat, 15 Jan 2022 15:59:37 -0800 (PST)
+        bh=kADQFhR2AfzvIpqsJVy4t8n1qBnT7lu/EvJZU+85jgQ=;
+        b=LSovqjwwKx2IY6uzn+vOnD3/UAWz6Ssq+GVBDhAS12uEfXaJv7j3009PaaFU5kQ4WE
+         GueayJP8uign5U34o6MiqZ2Lg6Qi8VHga+6bpyAcIEi319BIoB2mhoCGNFjd8bn7dBV1
+         SHYJnn868mOpC8wWuViyX2Jbmrjtc6raHnJd/v2QnFoc6TX3+wYrIt3VdvJ7MiVh+RCi
+         hdEfofXXa92wCNzsdehz/ZhM27okYG5744fEA4pZyIhUs9oEMJTP6uO0oRO1GWAMNOaU
+         bKnPlNp0+yUYd2K4yvnMennX2LmMS9ymR328WLL+JjpGVsgxluAnQmFlS+BA6HMDMckP
+         gW7A==
+X-Gm-Message-State: AOAM531Yj6cQQZDj+KjWxI0pawWXA3EeGbTLK79AZJopIDbAaBq2QByw
+        LO4DaOZCO1aLds1snjQucIAotgXQyIkXfRJOfZGFKQ==
+X-Google-Smtp-Source: ABdhPJytr9O5BgJJKKvmhJe6nwvjD4EG7WvnlzXNK+Ha+gaYYY8i+iU7YPfleFA4yPpF/1UCw+73EDGmS+2gySZs2Gs=
+X-Received: by 2002:a05:6808:2097:: with SMTP id s23mr8244855oiw.132.1642291264587;
+ Sat, 15 Jan 2022 16:01:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20220103101855.17350-1-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220103101855.17350-1-angelogioacchino.delregno@collabora.com>
+References: <20220104140913.29699-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220104140913.29699-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 16 Jan 2022 00:59:26 +0100
-Message-ID: <CACRpkdZhxEc0iFYkUJmPVc1ydDVtRd6-gqwcELyLb1ZRLe5STA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] pinctrl: mediatek: pinctrl-moore: Simplify with dev_err_probe()
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     sean.wang@kernel.org, matthias.bgg@gmail.com,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@collabora.com
+Date:   Sun, 16 Jan 2022 01:00:53 +0100
+Message-ID: <CACRpkdaPVQ4jph5mWca9-ubAZjV6tpSpUfjJrsK+0+Si6yqtwQ@mail.gmail.com>
+Subject: Re: [PATCH v2] pinctrl: at91-pio4: Use platform_get_irq() to get the interrupt
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 3, 2022 at 11:19 AM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+On Tue, Jan 4, 2022 at 3:10 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 
-> Use the dev_err_probe() helper to simplify error handling during probe.
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
 >
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
+>
+> While at it, replace the dev_err() with dev_dbg() as platform_get_irq()
+> prints an error message upon error.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v1->v2
+> * Switched using platform_get_irq()
+> * Replaced dev_err() with dev_dbg()
 
-This patch set seems in nice shape, sadly we missed the v5.17 merge
-window but please resend it as v2 once v5.17-rc1 is out with Chen-Yu's
-review tags and minor fixes folded in.
+Looks good to me but I'd like some ACK from a Microchip person
+before I merge this (for v5.18).
 
-Thanks!
+Yours,
 Linus Walleij

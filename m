@@ -2,119 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 698B848FD97
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 16:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 211FD48FD99
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 16:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233352AbiAPPW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 10:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
+        id S233426AbiAPPXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 10:23:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232438AbiAPPWZ (ORCPT
+        with ESMTP id S232438AbiAPPXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 10:22:25 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECF5C061574
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 07:22:25 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id c3so17756761pls.5
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 07:22:25 -0800 (PST)
+        Sun, 16 Jan 2022 10:23:01 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9513C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 07:23:00 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id t7so15609317qvj.0
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 07:23:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7BIV0js4UbF8/Y8EYJIpYDkaZzNBpg6RgfMsE41pezQ=;
-        b=BOv1G4Lw//e9jAGIFPrDuw7fzdnWMIY6fhuk6tlrDK8z67I4P1+cFov7fTCMzp5SM8
-         nFjFSNw79uASgPIC4/1ZCqSKDevHAJtIaUifqEAKAbo9MlsBsGjXmaMGZ1eR8cYn9nmo
-         sybKBH3l+EByRA1Gyg0jo0bharfKujVHTXUYgURgygS2xO6u/lgCMtj6rLOOz5m143WC
-         803XnVpF9DM2Nb37vw28De7wL0N6aNfcoQbxuVrG0+7zboXb22pmI4R+PTUhUV6jN9bk
-         FkLYfy+JlqTig24YyqTKgzaMAgDSoT4EqmkbU8F1Qn3viw2zT9sXZVhbZH0t5gGlkcMV
-         aZMQ==
+        d=kudzu-us.20210112.gappssmtp.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=0+19Hzm1LKlWTdEcIqV6bZl7E8816hmTBnOSIqiFrLg=;
+        b=PEPDk2JLI3xJtSFNm5KPZ2EluWJrvuNdX+/dhy/+6iyKxChLS9Kkm3R4117b1HKwlP
+         ieZGc+ZFsreGjARxlOZCiYOLIbNelcDveykYgep8sJj1+BUsTiFmcJQOdIF+7W/yZepy
+         Yed49C9pjp2yF+GxuZjp9fUci3ZTNgTuIXMoys+UOsw7UxgfN34kV3gdKfFRCExZnIbK
+         NzokY3wwLQYhzgWxIuJUi8hPa7FOPXR875k8vK0TAatL8qMMFpT0NlXJYsg0aTCuYL3d
+         1UGhbHtp6jRejgpaso1oaZH2h0zPU60afXufj/covO5lsdVOaCutyGRriD0grpRshE1X
+         pINA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7BIV0js4UbF8/Y8EYJIpYDkaZzNBpg6RgfMsE41pezQ=;
-        b=PRtgjOp364jBH5ntEBM5x44UGdxR9QMYHaFQstyudVaj0CqIYi0Wa+9AXv/HMl9gtz
-         etLmRwb3682/SXEZQZNOkvHse6cO6wLhHans8TWEpidpwOMI2TLm7G57vr0QFLBXNHUV
-         xjvNiZDgEQ1IUDEKIxdtIeD0WF7kW1aX1NgfBcopNI33D6zZSt8KW2vSNb24tePP/Nce
-         DA0p4m6iDj4u47tu3J9VdeSf55LXhJw+knm+RuZxabLE1k0X4PR69beVyyn3XFtAc8+p
-         cokaWLmU+LizltFO3LMf6HffTITddRIq+T0sdpuDHE9DB4ZKT9ktnWgJ6Ec9VsS2+5TN
-         0yLQ==
-X-Gm-Message-State: AOAM531/pxSCLZP1Nn4f2ddDAN2Yhzzi2lyKou0w+ZQL/4L7mH7LVt4l
-        Bdh3xJ1rKr0OO0IPbSrOTt6cBbOSfaA=
-X-Google-Smtp-Source: ABdhPJypzOcki1MvhKG0rkpZAhPTqWajyk7J+SdUpYPjjHEgoO5gWUMjks0wUmKq8VzRXq7eCfBidA==
-X-Received: by 2002:a17:90b:1648:: with SMTP id il8mr20944360pjb.227.1642346545096;
-        Sun, 16 Jan 2022 07:22:25 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id j11sm10863224pfn.199.2022.01.16.07.22.23
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=0+19Hzm1LKlWTdEcIqV6bZl7E8816hmTBnOSIqiFrLg=;
+        b=f1dY9ufMtDON1EY490VDAwvg1HbOjVXQUnOOJMRqE2KzOiFcZyD/wGOPvJSaTLJCgB
+         S5rVfVqqqIwoJs02VHcEcO+rscFqsMzWUjAWQI2frVR+/G4G5CZvgNyZOi/Yxpa1BIIq
+         QPaz5Eb5pe+ePoEaRxJjERS3TiCxjiZNln6FWfhiWDZzPUcu+snwAbxNOX7fciqr+QWB
+         2tmcT6RR3T38RXOTkBQQUtGe1rkDgyBI9Z1lFaMiYKzNYxogXggIwhcGgMoX1zpBSl/Q
+         wcQvlR0q/a5NWuhRjg6iPzDlSyWpnzPWyyLuYM7fhR8wqvFMtijskZZBqPtvi43q4AE6
+         np7g==
+X-Gm-Message-State: AOAM5339r+mFBZfCq2GKfw2TmLZfuWU80za1nRqMfyxPSzvXTyC9OSxE
+        M3xIwDM7JIdsXAUrcVBd+bAwAWQ2HcI2GA==
+X-Google-Smtp-Source: ABdhPJwd9SBvkqYcFjI9nCKWj198jCgTTkkJ1C5QhnYt7G/FhVplrAQOtNsZ/yXIbP53e0NzksxNbw==
+X-Received: by 2002:a05:6214:ca3:: with SMTP id s3mr12750848qvs.9.1642346580035;
+        Sun, 16 Jan 2022 07:23:00 -0800 (PST)
+Received: from localhost ([2605:a601:a63c:b500:5f7b:d189:347c:3a5a])
+        by smtp.gmail.com with ESMTPSA id bs34sm7198733qkb.57.2022.01.16.07.22.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jan 2022 07:22:24 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: yang.yang29@zte.com.cn
-To:     akpm@linux-foundation.org, hannes@cmpxchg.org, sfr@canb.auug.org.au
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yang Yang <yang.yang29@zte.com.cn>
-Subject: [PATCH] psi: Treat ksm swapping in copy as memstall
-Date:   Sun, 16 Jan 2022 15:21:51 +0000
-Message-Id: <20220116152150.859520-1-yang.yang29@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 16 Jan 2022 07:22:59 -0800 (PST)
+From:   Jon Mason <jdmason@kudzu.us>
+X-Google-Original-From: Jon Mason <jdm@n00b.kudzu.us>
+Date:   Sun, 16 Jan 2022 10:22:59 -0500
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-ntb@googlegroups.com
+Subject: [GIT PULL] NTB bug fixes for vv5.17
+Message-ID: <YeQ4Uz9mNkff+ypm@n00b.kudzu.us>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yang <yang.yang29@zte.com.cn>
+Hello Linus,
+Here are a few NTB bug fixes for v5.17.  Please consider pulling them.
 
-When faults in from swap what used to be a ksm page and that page
-had been swapped in before, system has to make a copy. Obviously
-this kind of copy is related to high memory pressure, so we treat
-it as memstall. Although ksm page merging is not because of high
-memory pressure.
+Thanks,
+Jon
 
-Information of this new kind of stall will help psi to account
-memory pressure more precise.
 
-Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
----
- mm/ksm.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 4a7f8614e57d..d4ec6773f9b8 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -39,6 +39,7 @@
- #include <linux/freezer.h>
- #include <linux/oom.h>
- #include <linux/numa.h>
-+#include <linux/psi.h>
- 
- #include <asm/tlbflush.h>
- #include "internal.h"
-@@ -2569,6 +2570,7 @@ struct page *ksm_might_need_to_copy(struct page *page,
- {
- 	struct anon_vma *anon_vma = page_anon_vma(page);
- 	struct page *new_page;
-+	unsigned long pflags;
- 
- 	if (PageKsm(page)) {
- 		if (page_stable_node(page) &&
-@@ -2583,6 +2585,7 @@ struct page *ksm_might_need_to_copy(struct page *page,
- 	if (!PageUptodate(page))
- 		return page;		/* let do_swap_page report the error */
- 
-+	psi_memstall_enter(&pflags);
- 	new_page = alloc_page_vma(GFP_HIGHUSER_MOVABLE, vma, address);
- 	if (new_page &&
- 	    mem_cgroup_charge(page_folio(new_page), vma->vm_mm, GFP_KERNEL)) {
-@@ -2600,6 +2603,7 @@ struct page *ksm_might_need_to_copy(struct page *page,
- #endif
- 	}
- 
-+	psi_memstall_leave(&pflags);
- 	return new_page;
- }
- 
--- 
-2.25.1
+The following changes since commit df0cc57e057f18e44dac8e6c18aba47ab53202f9:
 
+  Linux 5.16 (2022-01-09 14:55:34 -0800)
+
+are available in the Git repository at:
+
+  git://github.com/jonmason/ntb tags/ntb-5.17
+
+for you to fetch changes up to 8cd778650ae223cd306588042b55d0290ef81037:
+
+  ntb_hw_switchtec: Fix a minor issue in config_req_id_table() (2022-01-11 15:38:59 -0500)
+
+----------------------------------------------------------------
+New AMD PCI ID for NTB, and a number of bug fixes for ntb_hw_switchtec
+for Linux v5.17
+
+----------------------------------------------------------------
+Jeremy Pallotta (2):
+      ntb_hw_switchtec: Fix pff ioread to read into mmio_part_cfg_all
+      ntb_hw_switchtec: AND with the part_map for a valid tpart_vec
+
+Kelvin Cao (3):
+      ntb_hw_switchtec: Update the way of getting VEP instance ID
+      ntb_hw_switchtec: Remove code for disabling ID protection
+      ntb_hw_switchtec: Fix a minor issue in config_req_id_table()
+
+Randy Dunlap (1):
+      ntb_hw_switchtec: fix the spelling of "its"
+
+Sanjay R Mehta (1):
+      ntb_hw_amd: Add NTB PCI ID for new gen CPU
+
+Wesley Sheng (1):
+      ntb_hw_switchtec: Fix bug with more than 32 partitions
+
+Yang Li (1):
+      NTB/msi: Fix ntbm_msi_request_threaded_irq() kernel-doc comment
+
+ drivers/ntb/hw/amd/ntb_hw_amd.c        |  2 ++
+ drivers/ntb/hw/mscc/ntb_hw_switchtec.c | 26 ++++++++++++--------------
+ drivers/ntb/msi.c                      |  3 ++-
+ include/linux/switchtec.h              |  2 --
+ 4 files changed, 16 insertions(+), 17 deletions(-)

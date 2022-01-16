@@ -2,95 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A931048FEA7
-	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 20:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B96C48FEAA
+	for <lists+linux-kernel@lfdr.de>; Sun, 16 Jan 2022 20:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236092AbiAPT0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 14:26:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
+        id S236042AbiAPT3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 14:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbiAPT0k (ORCPT
+        with ESMTP id S230076AbiAPT3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 14:26:40 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B1EC061574
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 11:26:39 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id j27so7869552pgj.3
-        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 11:26:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+an7IKXCzTHm4c2E+GDMSIDpCDQ46aOoF0DBIs1Sxew=;
-        b=oMdJpG1xA/YwY0eaxDCNRpvT2JhA+XDMWTFoCCCOl2dYec0Qczbc8/zbD1RZoxKoWB
-         RJ0CwLB9qULgDj1yN8vNwuQZasbwyuabCJjTuI78jQWGDiEnuRMM9HzdQSBq4HVk34+n
-         3y/fjCWdW6pEpggH+fbqKdW9YIIOE28BGCC3ps+H6uDUqs8jAirY/0Sg7+XIPeVFFTkk
-         zygpFHZaZ+c8LbzkMKQLDTyZGNO4Uv4vZNnGTvkRbOg39zVyyQZWmUSTglYdxUx8w+Dr
-         J7I031NuWgqBai2CE4msg04OHLg0URDPC9l8Q3sBeEaKUFHZinSniPTtTUJ5qXa8zZz5
-         HqYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+an7IKXCzTHm4c2E+GDMSIDpCDQ46aOoF0DBIs1Sxew=;
-        b=ldNYMTp9PIimvTyyGGazVB+/WXlWFaf+EG7oOys4dLepojbODPvIF0DQpWdt3Q/D+l
-         2FISO07S4tgdeunFuaIDJcYyeP5DuQ1XeAaskfg5hD0pLFFAiZel7qJjs0Wl/T9OA+oJ
-         ix+6j76cGDIytFp50BHOXhXbki+7Hcv18PTBGCJfIctyqiJHiqMNJTBkL/7cTdSqknkk
-         PguOieDt/x7i9F0iBaU109Pd/fkjuY3e842SAQqHdHkS0PZRaymGtbQY3WF5e+Q2zL5z
-         i43Hko2Gep1qT8jRjdZWZIWUtNSk9pEmUxRAjNH2PwwbsECcVy45pSlX4y2hilloDXvZ
-         WKpA==
-X-Gm-Message-State: AOAM5329aT/CR3NoUB39TX9uk8I9Q792HXzpz8JzfpTGPQad4VSWJDb2
-        TAhtO61Nf5XBcgJHmLNJudo=
-X-Google-Smtp-Source: ABdhPJyCorLyOHoL+v6+t7fDcnQCr8n8tc4BiS/tIqwyTaIsw6rXyPsQE5JQGABwt26Edn+PmsFP3A==
-X-Received: by 2002:a63:338c:: with SMTP id z134mr16055036pgz.459.1642361199173;
-        Sun, 16 Jan 2022 11:26:39 -0800 (PST)
-Received: from localhost.localdomain ([150.129.206.110])
-        by smtp.gmail.com with ESMTPSA id v10sm7773823pfg.19.2022.01.16.11.26.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jan 2022 11:26:38 -0800 (PST)
-From:   Vihas Mak <makvihas@gmail.com>
-To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, martin@kaiser.cx,
-        straube.linux@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Vihas Mak <makvihas@gmail.com>
-Subject: [PATCH] staging: r8188eu: handle rtw_init_netdev_name() failure appropriately
-Date:   Mon, 17 Jan 2022 00:56:11 +0530
-Message-Id: <20220116192611.19224-1-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Sun, 16 Jan 2022 14:29:04 -0500
+X-Greylist: delayed 111399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Jan 2022 11:29:03 PST
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07B7C061574;
+        Sun, 16 Jan 2022 11:29:03 -0800 (PST)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 2F194D64DC7;
+        Sun, 16 Jan 2022 20:29:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1642361341;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GIoSTxudl4ORprjRcu++GnE1IFzgu7Qi36PinduD8GM=;
+        b=Sdahs2igqjBvlecM/tslBBQJ0uRu18YInEwW24OOIFbu949Ic24DGux3jNRAFnYUyCmoz3
+        q9ZNzZ369O8CoiEnYlCGxXLhzoalCRYFxrd87QuI4xa5brnLaVgY2cbpqHhlNuzhwM2TVK
+        xjJ6/Bil4wB4YV++v9NcvXc08ut+UUg=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     andy.shevchenko@gmail.com, pauk.denis@gmail.com,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: PATCH v4 ASUS EC Sensors
+Date:   Sun, 16 Jan 2022 20:28:59 +0100
+Message-ID: <2613330.mvXUDI8C0e@natalenko.name>
+In-Reply-To: <20220111180347.1245774-1-eugene.shalygin@gmail.com>
+References: <20220111180347.1245774-1-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rtw_init_netdev_name() calls dev_alloc_name() which allocates the name
-for the device as per the given name format.
-It returns a negative err code if the format is invalid. Currently the
-name format is specified by the module parameter "ifname".
-Warn the user if "ifname" is invalid.
+Hello.
 
-Signed-off-by: Vihas Mak <makvihas@gmail.com>
----
- drivers/staging/r8188eu/os_dep/usb_intf.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On =FAter=FD 11. ledna 2022 19:03:43 CET Eugene Shalygin wrote:
+> This patchset replaces the HWMON asus_wmi_ec_sensors driver with
+> an implementation that does not use WMI but queries the embedded
+> controller directly.
+>=20
+> That provides two enhancements: sensor reading became quicker (on some
+> systems or kernel configuration it took almost a full second to read
+> all the sensors, that transfers less than 15 bytes of data), the driver
+> became more fexible. The driver now relies on ACPI mutex to lock access
+> to the EC, in the same way as the WMI DSDT code does.
+>=20
+> Chenges in v5:
+>  - Place the sensors bitset directly into the driver_data field of the
+> 	 dmi_system_id struct.
+>  - Replace doc comments with regular ones.
 
-diff --git a/drivers/staging/r8188eu/os_dep/usb_intf.c b/drivers/staging/r8188eu/os_dep/usb_intf.c
-index 91792dfd3..875815b5e 100644
---- a/drivers/staging/r8188eu/os_dep/usb_intf.c
-+++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
-@@ -399,7 +399,10 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
- 			DBG_88E("can't get autopm:\n");
- 
- 	/*  alloc dev name after read efuse. */
--	rtw_init_netdev_name(pnetdev, padapter->registrypriv.ifname);
-+	if (rtw_init_netdev_name(pnetdev, padapter->registrypriv.ifname) < 0) {
-+		DBG_88E("rtw_init_netdev_name failed, ifname:%s\n",
-+			padapter->registrypriv.ifname);
-+	}
- 	rtw_macaddr_cfg(padapter->eeprompriv.mac_addr);
- 	rtw_init_wifidirect_addrs(padapter, padapter->eeprompriv.mac_addr,
- 				  padapter->eeprompriv.mac_addr);
--- 
-2.30.2
+BTW, is this OK:
+
+```
+[   11.104396] asus-ec-sensors PNP0C09:00: board has 6 EC sensors that span=
+ 7 registers
+[   11.104400] asus-ec-sensors PNP0C09:00: hwmon: 'asus-ec-sensors' is not =
+a valid name attribute, please fix
+```
+
+?
+
+>=20
+> Changes in v4:
+>  - Deprecate the wmi driver rather than removing it.
+>=20
+> Changes in v3:
+>  - Remove BIOS version checks and BIOS version dependent mutex path.
+>=20
+> Changes in v2:
+>  - Replace sensor flags enum with bitset
+>  - Replace module init/probe functions with module_platform_driver_probe
+>    and ask the platform drivers framework to load the driver when ACPI
+>    EC is found (ACPI ID "PNP0C09").
+>  - Extend board data with BIOS version attribute for the mutex path to be
+>    BIOS version dependent.
+>  - Add module parameter to override the mutex path.
+
+Thanks.
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
 

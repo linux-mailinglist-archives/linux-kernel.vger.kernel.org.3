@@ -2,176 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CCF490B18
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B07490B1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 16:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240333AbiAQPFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 10:05:42 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:56174 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240325AbiAQPFl (ORCPT
+        id S240353AbiAQPF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 10:05:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42857 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240342AbiAQPFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 10:05:41 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D9E1F212C6;
-        Mon, 17 Jan 2022 15:05:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642431939; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 17 Jan 2022 10:05:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642431954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XyZmC30U6sjtWN7TG3pC2JHIlqjaiAIKCoTYmErcjY8=;
-        b=K1CdIC7ySlYn/05WwukFtZKvNmGlcnN+ieYWpEzqvNFVFUyPcfqA4HBXsegdpR0jUKnVb2
-        RfuDrbNzziEpME3AJCpSQpLOWfefMSBAJJtU3WPEMT77K1Bu54FxYa+P8+m4w9EH6a3ONh
-        FDPaU0DlqJkMxCzr3SRM3gA3ngkcx94=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642431939;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XyZmC30U6sjtWN7TG3pC2JHIlqjaiAIKCoTYmErcjY8=;
-        b=trFPKxXLqcnyVc2KZM+naIzGP6zxRkQ0pzNUZVJCVwMf7/EA9Y7KH4OeUyEQ+G1/JcW6U+
-        rJR+OUz9gSKmrNDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=vT5SFyPQwf3C5QU0HD+SeNKojUWOi+souCVxIuzr4TU=;
+        b=EtCPFf36oFYoPxxwsxl3YMgvt1BmYctu8ZZbjSQQ19JUleE127ZlPc3icQbTMU6ER2hpIg
+        3d5gwpEW024SxxOXDQqysOYqtYQJyr4Rsavqgkc6tJCf3JT2wLmjAtjm5D39WmAwCa+x2v
+        ONQyDlGanB77r7yuhg3NpbO7t+4ObIc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-593-w-OqnEp0OlS9L7wMt3HcaQ-1; Mon, 17 Jan 2022 10:05:53 -0500
+X-MC-Unique: w-OqnEp0OlS9L7wMt3HcaQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A0C8713B96;
-        Mon, 17 Jan 2022 15:05:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id XQAkJsOF5WGZMgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 17 Jan 2022 15:05:39 +0000
-Message-ID: <faa46e76-d38c-f436-d005-ce69915033fb@suse.de>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D0DFA1054F90;
+        Mon, 17 Jan 2022 15:05:51 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.195.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A6A512B59F;
+        Mon, 17 Jan 2022 15:05:49 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Igor Mammedov <imammedo@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/4] KVM: x86: Do runtime CPUID update before updating vcpu->arch.cpuid_entries
 Date:   Mon, 17 Jan 2022 16:05:39 +0100
+Message-Id: <20220117150542.2176196-2-vkuznets@redhat.com>
+In-Reply-To: <20220117150542.2176196-1-vkuznets@redhat.com>
+References: <20220117150542.2176196-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-Content-Language: en-US
-To:     Helge Deller <deller@gmx.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
- <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
- <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
- <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
- <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
- <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------U6P7Sg8j3HvoICmTscu0hAe7"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------U6P7Sg8j3HvoICmTscu0hAe7
-Content-Type: multipart/mixed; boundary="------------XRAqflnSekDgbJdZDKrbFRyX";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Helge Deller <deller@gmx.de>, Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Gerd Hoffmann <kraxel@redhat.com>, Daniel Vetter <daniel@ffwll.ch>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- "airlied@gmail.com" <airlied@gmail.com>,
- Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- DRI Development <dri-devel@lists.freedesktop.org>,
- Javier Martinez Canillas <javierm@redhat.com>
-Message-ID: <faa46e76-d38c-f436-d005-ce69915033fb@suse.de>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
- <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
- <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
- <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
- <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
- <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
-In-Reply-To: <57d276d3-aa12-fa40-6f90-dc19ef393679@gmx.de>
+kvm_update_cpuid_runtime() mangles CPUID data coming from userspace
+VMM after updating 'vcpu->arch.cpuid_entries', this makes it
+impossible to compare an update with what was previously
+supplied. Introduce __kvm_update_cpuid_runtime() version which can be
+used to tweak the input before it goes to 'vcpu->arch.cpuid_entries'
+so the upcoming update check can compare tweaked data.
 
---------------XRAqflnSekDgbJdZDKrbFRyX
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+No functional change intended.
 
-SGkNCg0KQW0gMTcuMDEuMjIgdW0gMTU6NDcgc2NocmllYiBIZWxnZSBEZWxsZXI6DQo+IE9u
-IDEvMTcvMjIgMTU6MTAsIEdlZXJ0IFV5dHRlcmhvZXZlbiB3cm90ZToNCj4gWy4uLl0NCj4+
-IFVzaW5nIGFuIFhSR0IzMiBpbnRlcm1lZGlhdGUgd291bGQga2lsbCB0aGUgdXNlciBleHBl
-cmllbmNlIG9uIG9sZA0KPj4gbWFjaGluZXMsIGR1ZSB0byBib3RoIGluY3JlYXNlZCBtZW1v
-cnkgdXNhZ2UgYW5kIGNvcHkgb3ZlcmhlYWQuDQo+Pg0KPj4+IFBlcnNvbmFsbHksIEknZCBt
-dWNoIGFwcHJlY2lhdGUgaWYgdXNlcnNwYWNlIHdvdWxkIHN1cHBvcnQgbW9yZSBvZiB0aGUN
-Cj4+PiBuYXRpdmUgZm9ybWF0cyBhbmQgbm90IHJlbHkgb24gWFJHQjMyLg0KPj4NCj4+IFN1
-cHBvcnRpbmcgbW9ub2Nocm9tZSwgMTYgY29sb3JzLCBhbmQgMjU2IGNvbG9ycyB3b3VsZCBi
-ZSBuaWNlLg0KPiANCj4gIEZyb20gdGhpcyBjb252ZXJzYXRpb24gaXQgc2VlbXMgRFJNIGNv
-bXBsZXRlbHkgbGFja3MgYmFja3dhcmRzIGNvbXBhdGliaWxpdHksDQo+IGluY2x1ZGluZyBh
-IG1pc3NpbmcgMkQgYml0Ymx0IGNvcHkuDQo+IElzbid0IHRoYXQgYWxsIHdoYXQncyBuZWVk
-ZWQgYW5kIHRoZW4gbWlncmF0aW5nIGV4aXN0aW5nIGRyaXZlcnMgd291bGQNCj4gYmUgZWFz
-eSA/DQoNCldoYXQgZXhhY3RseSBkbyB5b3UgbWVhbiBieSAnYmFja3dhcmRzIGNvbXBhdGli
-aWxpdHknPyBUaGUgZHJpdmVyIEFQSSBpcyANCmRpZmZlcmVudCwgb2YgY291cnNlLiBNeSBj
-b252ZXJzaW9uIGhlbHBlcnMgY2FuIHByb3ZpZGUgYSBzdGFydGluZyBwb2ludCANCnRvIG1v
-dmUgZmJkZXYgY29kZSBpbnRvIERSTSBkcml2ZXJzLg0KDQpGb3IgZmJkZXYgMmQtYml0Ymx0
-IGlvY3RscywgeW91IGNhbiBhZGQgdGhlbSB0byBEUk0gZHJpdmVycyBhbmQgc2V0IHVwIA0K
-RFJNJ3MgZmJkZXYgZW11bGF0aW9uIGFjY29yZGluZ2x5LiBTb21lIERSTSBkcml2ZXJzIGRv
-L2RpZCB0aGlzLiBUbyBteSANCmtub3dsZWRnZSwgc28gZmFyIHRoZXJlJ3Mgbm90IGJlZW4g
-YSB1c2UgY2FzZSB3aGVyZSB0aGF0IHByb3ZpZGVzIGEgDQpiZW5lZml0IG92ZXIgc2ltcGxl
-IG1lbWNweS4gRm9yIGZhc3QgMmQgYmxpdHRpbmcgZnJvbSB1c2Vyc3BhY2UsIHlvdSANCnNo
-b3VsZCByZWFkIERhbmllbCdzIGNvbW1lbnQgYXQgWzFdLiB0bDtkcjogYSBnZW5lcmljIHNv
-bHV0aW9uIGlzIA0Kbm9uLXRyaXZpYWwuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNClsx
-XSBodHRwczovL2Jsb2cuZmZ3bGwuY2gvMjAxOC8wOC9uby0yZC1pbi1kcm0uaHRtbA0KDQo+
-IA0KPiBIZWxnZQ0KPiANCj4gDQo+Pj4+IFRoaXMgbm90IG9ubHkgdG8gc3VwcG9ydCAib2xk
-IiBoYXJkd2FyZSwgYnV0IGFsc28gbW9kZXJuIHNtYWxsIE9MRUQNCj4+Pj4gYW5kIGUtaW5r
-IGRpc3BsYXlzLg0KPj4+DQo+Pj4gVGhlcmUncyBhIERSTSBkcml2ZXIgZm9yIFJlcGFwZXIg
-ZS1JbmsgZGlzcGxheXMuIFNvIGl0IHNlZW1zIGRvYWJsZSBhdA0KPj4+IGxlYXN0Lg0KPj4N
-Cj4+IFdoaWNoIHVzZXMgYW4gRFJNX0ZPUk1BVF9YUkdCODg4OCBpbnRlcm1lZGlhdGUsIGFu
-ZA0KPj4gZHJtX2ZiX3hyZ2I4ODg4X3RvX2dyYXk4KCkgYW5kIHJlcGFwZXJfZ3JheThfdG9f
-bW9ub19yZXZlcnNlZCgpDQo+PiB0byBjb252ZXJ0IGZyb20gdHJ1ZWNvbG9yIHRvIG1vbm9j
-aHJvbWUuICBJIGd1ZXNzIHRoYXQgd291bGQgd29yaywNCj4+IGFzIHRoaXMgaXMgYSBzbG93
-IGUtaW5rIGRpc3BsYXkuICBIYXZlIGZ1biBhcyBhIHRleHQgY29uc29sZSA7LSkNCj4+DQo+
-PiBHcntvZXRqZSxlZXRpbmd9cywNCj4+DQo+PiAgICAgICAgICAgICAgICAgICAgICAgICAg
-R2VlcnQNCj4+DQo+PiAtLQ0KPj4gR2VlcnQgVXl0dGVyaG9ldmVuIC0tIFRoZXJlJ3MgbG90
-cyBvZiBMaW51eCBiZXlvbmQgaWEzMiAtLSBnZWVydEBsaW51eC1tNjhrLm9yZw0KPj4NCj4+
-IEluIHBlcnNvbmFsIGNvbnZlcnNhdGlvbnMgd2l0aCB0ZWNobmljYWwgcGVvcGxlLCBJIGNh
-bGwgbXlzZWxmIGEgaGFja2VyLiBCdXQNCj4+IHdoZW4gSSdtIHRhbGtpbmcgdG8gam91cm5h
-bGlzdHMgSSBqdXN0IHNheSAicHJvZ3JhbW1lciIgb3Igc29tZXRoaW5nIGxpa2UgdGhhdC4N
-Cj4+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC0tIExpbnVzIFRvcnZhbGRz
-DQo+Pg0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERl
-dmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxk
-c3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJu
-YmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ arch/x86/kvm/cpuid.c | 34 ++++++++++++++++++++++++----------
+ 1 file changed, 24 insertions(+), 10 deletions(-)
 
---------------XRAqflnSekDgbJdZDKrbFRyX--
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index c55e57b30e81..812190a707f6 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -145,14 +145,21 @@ static void kvm_update_kvm_cpuid_base(struct kvm_vcpu *vcpu)
+ 	}
+ }
+ 
+-static struct kvm_cpuid_entry2 *kvm_find_kvm_cpuid_features(struct kvm_vcpu *vcpu)
++static struct kvm_cpuid_entry2 *__kvm_find_kvm_cpuid_features(struct kvm_vcpu *vcpu,
++					      struct kvm_cpuid_entry2 *entries, int nent)
+ {
+ 	u32 base = vcpu->arch.kvm_cpuid_base;
+ 
+ 	if (!base)
+ 		return NULL;
+ 
+-	return kvm_find_cpuid_entry(vcpu, base | KVM_CPUID_FEATURES, 0);
++	return cpuid_entry2_find(entries, nent, base | KVM_CPUID_FEATURES, 0);
++}
++
++static struct kvm_cpuid_entry2 *kvm_find_kvm_cpuid_features(struct kvm_vcpu *vcpu)
++{
++	return __kvm_find_kvm_cpuid_features(vcpu, vcpu->arch.cpuid_entries,
++					     vcpu->arch.cpuid_nent);
+ }
+ 
+ void kvm_update_pv_runtime(struct kvm_vcpu *vcpu)
+@@ -167,11 +174,12 @@ void kvm_update_pv_runtime(struct kvm_vcpu *vcpu)
+ 		vcpu->arch.pv_cpuid.features = best->eax;
+ }
+ 
+-void kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu)
++static void __kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *entries,
++				       int nent)
+ {
+ 	struct kvm_cpuid_entry2 *best;
+ 
+-	best = kvm_find_cpuid_entry(vcpu, 1, 0);
++	best = cpuid_entry2_find(entries, nent, 1, 0);
+ 	if (best) {
+ 		/* Update OSXSAVE bit */
+ 		if (boot_cpu_has(X86_FEATURE_XSAVE))
+@@ -182,33 +190,38 @@ void kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu)
+ 			   vcpu->arch.apic_base & MSR_IA32_APICBASE_ENABLE);
+ 	}
+ 
+-	best = kvm_find_cpuid_entry(vcpu, 7, 0);
++	best = cpuid_entry2_find(entries, nent, 7, 0);
+ 	if (best && boot_cpu_has(X86_FEATURE_PKU) && best->function == 0x7)
+ 		cpuid_entry_change(best, X86_FEATURE_OSPKE,
+ 				   kvm_read_cr4_bits(vcpu, X86_CR4_PKE));
+ 
+-	best = kvm_find_cpuid_entry(vcpu, 0xD, 0);
++	best = cpuid_entry2_find(entries, nent, 0xD, 0);
+ 	if (best)
+ 		best->ebx = xstate_required_size(vcpu->arch.xcr0, false);
+ 
+-	best = kvm_find_cpuid_entry(vcpu, 0xD, 1);
++	best = cpuid_entry2_find(entries, nent, 0xD, 1);
+ 	if (best && (cpuid_entry_has(best, X86_FEATURE_XSAVES) ||
+ 		     cpuid_entry_has(best, X86_FEATURE_XSAVEC)))
+ 		best->ebx = xstate_required_size(vcpu->arch.xcr0, true);
+ 
+-	best = kvm_find_kvm_cpuid_features(vcpu);
++	best = __kvm_find_kvm_cpuid_features(vcpu, entries, nent);
+ 	if (kvm_hlt_in_guest(vcpu->kvm) && best &&
+ 		(best->eax & (1 << KVM_FEATURE_PV_UNHALT)))
+ 		best->eax &= ~(1 << KVM_FEATURE_PV_UNHALT);
+ 
+ 	if (!kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_MISC_ENABLE_NO_MWAIT)) {
+-		best = kvm_find_cpuid_entry(vcpu, 0x1, 0);
++		best = cpuid_entry2_find(entries, nent, 0x1, 0);
+ 		if (best)
+ 			cpuid_entry_change(best, X86_FEATURE_MWAIT,
+ 					   vcpu->arch.ia32_misc_enable_msr &
+ 					   MSR_IA32_MISC_ENABLE_MWAIT);
+ 	}
+ }
++
++void kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu)
++{
++	__kvm_update_cpuid_runtime(vcpu, vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
++}
+ EXPORT_SYMBOL_GPL(kvm_update_cpuid_runtime);
+ 
+ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+@@ -298,6 +311,8 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ {
+ 	int r;
+ 
++	__kvm_update_cpuid_runtime(vcpu, e2, nent);
++
+ 	r = kvm_check_cpuid(vcpu, e2, nent);
+ 	if (r)
+ 		return r;
+@@ -307,7 +322,6 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+ 	vcpu->arch.cpuid_nent = nent;
+ 
+ 	kvm_update_kvm_cpuid_base(vcpu);
+-	kvm_update_cpuid_runtime(vcpu);
+ 	kvm_vcpu_after_set_cpuid(vcpu);
+ 
+ 	return 0;
+-- 
+2.34.1
 
---------------U6P7Sg8j3HvoICmTscu0hAe7
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHlhcMFAwAAAAAACgkQlh/E3EQov+At
-pQ/+LUuZ5uf/Je4+jhq3lowFD+6Wv+T2aYnnIYbB5A23b5zumo+Z30WmEQpIrDHo7TloFaPs4DGl
-hjLmBOIWFMhFdBzL+cchiMxyYh9Dij81gE86LK4ERkZj89WTAStB6EEY8NBdVRm/yWQQid5vfh0G
-Y9zfgkbW6lSOpAUmwBsL/1mpSd0FG+DyatCp14jAJiGoi8x/9UON+j9bFuQjhJimXQQLCja1i7Kz
-HTaM3a3ZxqiIGJbToKtSFpEuU+NxcJwQ8wyXX+ZpGa9UC9ztYf4xP9ovWedNH0ZqtesdwEhOWrj3
-0Pmx+MnW6yRQ4QK2dtKX3O2ZMBPznFEEIU2RVuUR7k0BErI8WiG9V1w4uWltAZ++HXL6YITuRDMS
-NItGHiqwRNLkz3pAC6/yw2dntjQNgOkmvpnVysbGpOXF6Q8qXO+QaogyyHPzhhvqoIDuZP9w6vBB
-r9RQYp+wZY6UMknL/EDRIc+Ux8qjbWRINQN7JuEAaSvvMzUyrCIYRUiFeTu0FNBGi7qERZg4kSQ1
-WwX/QnV1ty+eeIWiNDjvtWHuf+M47yT5E3BUgwn8UqaE9Me687PsW3d4lfX8DX4f1qqYws4DmQhk
-i8WJdj1p81juhyIMi4Y+VXxlER/FspU+hYdoRtHBMA+1bCLfo7jsSBuikH0qV8aVkiLHA8Yq9Szl
-Hy0=
-=cnlU
------END PGP SIGNATURE-----
-
---------------U6P7Sg8j3HvoICmTscu0hAe7--

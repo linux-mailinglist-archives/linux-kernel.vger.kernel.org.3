@@ -2,95 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AAE4901C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 06:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 958224901C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 06:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234493AbiAQFxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 00:53:31 -0500
-Received: from mga14.intel.com ([192.55.52.115]:8453 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234453AbiAQFxa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 00:53:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642398810; x=1673934810;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tpT5VmVxWjbvY4z2KyJN0ZNH+4f1u3S7Bwh/lcv5a0M=;
-  b=NoJMxRp5tPGTKMYlAxzUv6cdpXw0rzQrtgdtfzBV0xx5ZprVEraUT5qk
-   a+YZPuSrF4f/nsC9zZF+al/LbfrinrMX4qmhkxgCREPAL34yoOGYqdQml
-   p9JDIjEbbaSQtKArUOkhqiJavaY+TkV+vd429BgF19Vi7JWlxaVZQ1vI0
-   cYKAaV6+6+4XXsvhwNUWPhItDNaXl8qFGd7CSG5/sDHH109r3mQG0SqKT
-   pWO4cI06JELtdxIw31bP+zeD7YkvFCYSpXYsxWrJ37ayls/xlzRziPdMV
-   GcyKg885Tta9pJOeHFp2V1fzKqJW71SKVXtbUSEjRTG40U8DlVXlwUr3Z
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244754870"
-X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
-   d="scan'208";a="244754870"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2022 21:53:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,294,1635231600"; 
-   d="scan'208";a="517286464"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 16 Jan 2022 21:53:25 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n9KxI-000BI6-Pp; Mon, 17 Jan 2022 05:53:24 +0000
-Date:   Mon, 17 Jan 2022 13:52:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: drivers/mtd/nand/raw/renesas-nand-controller.c:1405:34: warning:
- unused variable 'rnandc_id_table'
-Message-ID: <202201171330.2qRTJyxi-lkp@intel.com>
+        id S232865AbiAQF4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 00:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232040AbiAQF4I (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 00:56:08 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3F8C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 21:56:07 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id 30so60965680edv.3
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 21:56:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zRK/0z1pNzIoVcKbrmsaM4+gypDDyPNW8G8QLN7lLpU=;
+        b=O04pFd1Av+HFa2y7toxjGyGq/OBY4BDKvdL8NOgVGrI2ylQooEl/RGe3RNuEOudKaB
+         j9F/+ELni0Q5Lli2EIlFwVrA6OXdH1kl9t9h1MJHTjo4BWF6ftuRU2gTfCgq0YQ3wokT
+         zX/zUD1TI1km1ilWoBJIzqBPSwTR7jI824Mh8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zRK/0z1pNzIoVcKbrmsaM4+gypDDyPNW8G8QLN7lLpU=;
+        b=qNNOmgHCCiwV0u23+Bb+uw6wGN5iaWT4/qumsu/vWXDlFveZ6yaLXYUXbf/ZZ1ghRN
+         g/ChurElsNLvXmXIR/1qscQ0wPyOLx3YuAKPWujdM8IXpTiTGEg0jdCQDv2Fv33kf5st
+         gC3HRAZ7HcV4ruEk7C7wJYsxwwxSByuGZclvEueoco86j0jlQvOYBhYXeqvUpdp8uW73
+         I1FXb0pIWItS6jswVG4Cq1jPj1ENA6pySW5PNqwuKroy1hU31FS7gSkNyxylF3B81BoB
+         +RooOp2gx/dbzjfr0+EYuwCESw9sOjV8y3rM2ugZ0KNg29ItCHwom3S6M/b6TmPrWwJd
+         l2Rg==
+X-Gm-Message-State: AOAM533WIfkMv6GKC/k0PJmOa9nl+z746qeor5z4J8s64NjWqOOtG2PO
+        LtMUO/gKIU6g0Jd5Kv+4sTeaz3Wfv1K6mZHb
+X-Google-Smtp-Source: ABdhPJztNbU+Ud1G8Q3PqmpECrwbGT2fof6eIdKJ5L3XOP01QQAUlDOCHIq3Y3RkXkqJqfYxKffGAQ==
+X-Received: by 2002:aa7:dc15:: with SMTP id b21mr18966148edu.237.1642398965949;
+        Sun, 16 Jan 2022 21:56:05 -0800 (PST)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id c19sm5343770ede.47.2022.01.16.21.56.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Jan 2022 21:56:05 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id s6-20020a7bc386000000b0034a89445406so17960994wmj.2
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 21:56:05 -0800 (PST)
+X-Received: by 2002:a05:600c:1908:: with SMTP id j8mr4207602wmq.155.1642398965019;
+ Sun, 16 Jan 2022 21:56:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <87a6g11zq9.fsf@collabora.com>
+In-Reply-To: <87a6g11zq9.fsf@collabora.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 17 Jan 2022 07:55:49 +0200
+X-Gmail-Original-Message-ID: <CAHk-=whX5gamPwDcZhV-ejWatq6eFCp7Q7ZEL8XiQMh8ZARN-g@mail.gmail.com>
+Message-ID: <CAHk-=whX5gamPwDcZhV-ejWatq6eFCp7Q7ZEL8XiQMh8ZARN-g@mail.gmail.com>
+Subject: Re: [GIT PULL] unicode patches for 5.17
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Chao Yu <chao@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   35ce8ae9ae2e471f92759f9d6880eab42cc1c3b6
-commit: d8701fe890ecbab239086e7053d62d0f08587d7c mtd: rawnand: renesas: Add new NAND controller driver
-date:   4 weeks ago
-config: hexagon-randconfig-r014-20220117 (https://download.01.org/0day-ci/archive/20220117/202201171330.2qRTJyxi-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f782d25a742302d25ef3c8b84b54f7483c2deb9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d8701fe890ecbab239086e7053d62d0f08587d7c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d8701fe890ecbab239086e7053d62d0f08587d7c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mtd/nand/raw/
+On Wed, Jan 12, 2022 at 3:59 AM Gabriel Krisman Bertazi
+<krisman@collabora.com> wrote:
+>
+> This branch has patches from Christoph Hellwig to split the large data
+> tables of the unicode subsystem into a loadable module, which allow
+> users to not have them around if case-insensitive filesystems are not to
+> be used.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+As seen by the pr-tracker-bot, I've merged this, but it had several rough spots.
 
-All warnings (new ones prefixed by >>):
+One of them was around the renaming of the utf8data.h file to a .c
+file: I fixed up the .gitignore problem myself, but the incorrect
+comments still remain.
 
->> drivers/mtd/nand/raw/renesas-nand-controller.c:1405:34: warning: unused variable 'rnandc_id_table' [-Wunused-const-variable]
-   static const struct of_device_id rnandc_id_table[] = {
-                                    ^
-   1 warning generated.
+The Kconfig thing is also just plain badly done.
 
+It's completely pointless and stupid to first have a "bool UNICODE"
+question, and then have a "tristate UNICODE_UTF8_DATA" question that
+depends on it.
 
-vim +/rnandc_id_table +1405 drivers/mtd/nand/raw/renesas-nand-controller.c
+The Kconfig file even *knows* it's pointless and stupid, because it
+has comment to the effect, but despite writing that comment,
+apparently nobody spent the five seconds actually thinking about how
+to do it properly.
 
-  1404	
-> 1405	static const struct of_device_id rnandc_id_table[] = {
-  1406		{ .compatible = "renesas,rcar-gen3-nandc" },
-  1407		{ .compatible = "renesas,rzn1-nandc" },
-  1408		{} /* sentinel */
-  1409	};
-  1410	MODULE_DEVICE_TABLE(of, rnandc_id_table);
-  1411	
+The sane and proper thing would have been to have *one* single
+tristate question ("unicode y/m/n"), and that's used for the unicode
+data module status.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Then the "core unicode" option (currently that "UNICODE" bool
+question) would become something just computed off the modular
+question:
+
+  config UNICODE
+         def_bool UNICODE_UTF8_DATA != n
+
+with no actual user input being needed for it.
+
+And yes, it might be even nicer to just make "UNICODE" itself be the
+tristate, and not have a separate config variable at all, but that
+would require changes to the users.
+
+In particular, the filesystems that have
+
+    #ifdef CONFIG_UNICODE
+
+would have to be updated to use something like
+
+    #ifdef IS_ENABLED(CONFIG_UNICODE)
+
+instead.
+
+That would probably be a good change, though, and then the 'UNICODE'
+config option could just be a tristate, with the support code being
+built in for the module case, with just the data being (potentially)
+modular.
+
+ANYWAY. I didn't do the above, I only fixed up the trivially annoying
+gitconfig thing.
+
+I've said this before, and I'll probably have to say it again: the
+kernel config part is likely one of the most painful barriers to
+people building their own kernel. Some of it is just because we have
+*so* many modules, and there's just a lot of configuration you can do.
+
+But the fact that it's already painful is no excuse to then ask people
+_stupid_ questions and making the whole process unnecessarily even
+more painful.
+
+                  Linus

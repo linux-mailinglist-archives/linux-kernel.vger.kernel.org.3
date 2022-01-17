@@ -2,98 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B28C049005B
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57790490064
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236877AbiAQCwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 21:52:45 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:31093 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbiAQCwo (ORCPT
+        id S236884AbiAQCz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 21:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232541AbiAQCz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 21:52:44 -0500
-Received: from kwepemi100002.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Jcbvc3twnz1FCgc;
-        Mon, 17 Jan 2022 10:49:00 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100002.china.huawei.com (7.221.188.188) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 17 Jan 2022 10:52:42 +0800
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 17 Jan 2022 10:52:41 +0800
-Subject: Re: [PATCH v6 12/15] ubi: fastmap: Add all fastmap pebs into
- 'ai->fastmap' when fm->used_blocks>=2
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     Richard Weinberger <richard@nod.at>
-CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        mcoquelin stm32 <mcoquelin.stm32@gmail.com>,
-        "kirill shutemov" <kirill.shutemov@linux.intel.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20211227032246.2886878-1-chengzhihao1@huawei.com>
- <11976804.249069.1641902225370.JavaMail.zimbra@nod.at>
- <0a7a5cce-1ee1-70b6-d368-615dfa0a617a@huawei.com>
- <1492514284.249466.1641909382867.JavaMail.zimbra@nod.at>
- <6815e4af-9b5b-313f-5828-644722dd4d1f@huawei.com>
- <23886736.260777.1642185939371.JavaMail.zimbra@nod.at>
- <88df000c-97a6-ff3f-a1e2-10fa4da8c604@huawei.com>
- <face6dce-d860-a7e6-fe9c-39f59cef22c5@huawei.com>
- <626252388.262848.1642240912242.JavaMail.zimbra@nod.at>
- <89fd8bab-3c12-f76d-b23f-f41ea8fc2dd7@huawei.com>
-Message-ID: <e5f5093e-bddc-21d6-df96-d62654cf5b4f@huawei.com>
-Date:   Mon, 17 Jan 2022 10:52:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Sun, 16 Jan 2022 21:55:27 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E99C061574;
+        Sun, 16 Jan 2022 18:55:27 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id g11-20020a17090a7d0b00b001b2c12c7273so9766941pjl.0;
+        Sun, 16 Jan 2022 18:55:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TC/ZT9U+TsRTqvL1Tb9mnrdS2C63NBDexd+hsYqZ5YA=;
+        b=ioltH1Ov2iDS+zfilvwI9UGF/CcMMagRNRziEiYf2LDCpGiJQ5VKUVsRKGbDL57Ian
+         qV7rRvMH6jMd6xxyawKRu8OEhYYK+u1ryc19EBCI4k4+3VWPGLxhCQN55lY/QnMJugLo
+         PEY+EJKkFtlWKdemG4U3XYmDnUb8K3GigGkkVrHATN6McN6YEYpHbwsBp8WoUs+yW/MV
+         LNMk9YDZfGJ5YXB0W9hSPadI23jKwX2dTBIa7PITQW3ocP0ZoaADw3aHlajQA/DdE8sr
+         vHMXqTlkZSHrFBN2aHbHP03zDZmRT23xeaCusaHDFUVxSHgo4t18fgvNCjft6DaQLLue
+         7euQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TC/ZT9U+TsRTqvL1Tb9mnrdS2C63NBDexd+hsYqZ5YA=;
+        b=S9zwKH+Yd9sXbHmW0BD1+BCB+aXCbXmghiYerqKZsFSciH0jhKWRu9NFo/tePS6o7m
+         5Og7Jp2lOj3j0nFc5zMrpfFgpdNVABJGzMFE9WfiUKjR8vKF9WX/48VKD3TIuA8Cocvy
+         VdkJrrHFo3Dmxri6aP3n+GS06shYzwe3TdFbKiuHV+Y3ACXo+2FwwlYYlVmq7adIEfun
+         dS6rhuRM7kYarWHb6YgGjiH5MANwgLO3+UibVu/jH39dWrJlJd7e4t4136fZOaG3nWfU
+         wzf7AyFzUiYZ5MDZPeybUyO8QkOeHpW3If7EQbOaVpxAM26KIVjEGPh8wVBAENhRRjVn
+         KBmg==
+X-Gm-Message-State: AOAM531DPPNCrumWg7g1j7dGWXt25x8ehpLRgfYNVlUpyxG/ETWfhbWh
+        NHFfdJsZgCEB/8LRBHEW5/U=
+X-Google-Smtp-Source: ABdhPJxX/DmQygLiFOoAZgI7NcB5iJLAGqce8UZtJc2Um6HmytK1FcZF0sGb0BRyMsGrnTTICGFByg==
+X-Received: by 2002:a17:90b:4012:: with SMTP id ie18mr22834074pjb.43.1642388126918;
+        Sun, 16 Jan 2022 18:55:26 -0800 (PST)
+Received: from [192.168.254.36] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id t3sm12457550pfj.137.2022.01.16.18.55.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Jan 2022 18:55:26 -0800 (PST)
+Message-ID: <ed1dc51a-8dfb-1179-3200-13669a25c845@gmail.com>
+Date:   Sun, 16 Jan 2022 18:55:25 -0800
 MIME-Version: 1.0
-In-Reply-To: <89fd8bab-3c12-f76d-b23f-f41ea8fc2dd7@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3 2/2] selftests: tpm: add async space test with
+ noneexisting handle
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-integrity@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220116012627.2031-1-tstruk@gmail.com>
+ <20220116012627.2031-2-tstruk@gmail.com> <YeQs7Fy5NaK6m6Ar@iki.fi>
+ <YeR6Z9a4Z3Xz79Tp@iki.fi> <070044a5-5468-1095-334f-67cf98eb30b3@gmail.com>
+ <YeTKG3qPxm2DJGCN@iki.fi>
+From:   Tadeusz Struk <tstruk@gmail.com>
+In-Reply-To: <YeTKG3qPxm2DJGCN@iki.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard,
->> FYI, I think I understand now our disagreement.
->> You assume that old Fastmap PEBs are *guaranteed* to be part of 
->> Fastmap's erase list.
->> That's okay and this is what Linux as of today does.
->>
->> My point is that we need to be paranoid and check carefully for old 
->> Fastmap PEBs
->> which might be *not* on the erase list.
->> I saw such issues in the wild. These were causes by old and/or buggy 
->> Fastmap
->> implementations.
->> Keep in mind that Linux is not the only system that implements UBI 
->> (and fastmap).
-> Uh, that is really a point, I met UBI implemented in Vxworks ever. Now, 
-> you convinced me, we should process fastmap with considering bad 
-> images(caused by other implementations). Let's keep this wonky assertion 
-> until a better fix.
->>
->> So let me give the whole situation another thought on how to improve it.
->> I totally agree with you that currently there is a problem with 
->> fm->used_blocks > 1.
->> I'm just careful (maybe too careful) about changing Fastmap code.
->>I reconsider the WARNON, it can recognize the bad images and fall back 
-full scanning mode early. If linux kernel encounters the WARNON, it 
-means something wrong with your image(caused by bad UBI implementation). 
-I begin to like this strict check.
-After comparing WARNON with the assertion:
-   WARN_ON(count_fastmap_pebs(ai) != ubi->peb_count - ai->bad_peb_count 
-- fm->used_blocks)
-   ubi_assert(ubi->good_peb_count == found_pebs)
-The 'found_pebs' consists of 'ai->erase', 'ai->free', 'ai->volumes' and 
-'ai->fastmap'. The count_fastmap_pebs() includes 'ai->erase', 'ai->free' 
-and 'ai->volumes'. This means the number of 'ai->fastmap' equals to 
-'fm->used_blocks'. So, the 'ai->fastmap' adding position in my fix is right.
-In a word, can you accept the point that 'WARNON' can help us recognize 
-the bad fastmap images?
+On 1/16/22 17:44, Jarkko Sakkinen wrote:
+> NP, Both are applied now.
+
+Looking at
+https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/
+I can see only the 2/2 selftest applied.

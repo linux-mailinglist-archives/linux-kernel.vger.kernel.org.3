@@ -2,110 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 572B5490FF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B473490FF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241867AbiAQRwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:52:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
+        id S241699AbiAQRzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbiAQRwx (ORCPT
+        with ESMTP id S238100AbiAQRzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:52:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAF5C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 09:52:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FE7BB80F00
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 17:52:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A2D3C36AE3;
-        Mon, 17 Jan 2022 17:52:50 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Qz4RErlu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1642441968;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SR77sVBJKfk/enxOsWX3Wu8wGdXDiwHLJ+nNzLvRppY=;
-        b=Qz4RErlu17jmLsEsoT3sgMJ0fbY4w0qRPvCCU5ko7oohvLb1KKb0Gcu5pJcCPZWete8wF+
-        gi02PYUjfAQT8Z+NUEwvyJbSkgkKdP1UoEu9AOnCa4ztcyCRdUidgKI50KidhKQrYHqBFW
-        zfhxx+ln8ECTseOpwlnFlzui4lBVdTU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 937c7668 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 17 Jan 2022 17:52:48 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH] random: simplify arithmetic function flow in account()
-Date:   Mon, 17 Jan 2022 18:52:37 +0100
-Message-Id: <20220117175237.361518-1-Jason@zx2c4.com>
-In-Reply-To: <YeWnVHwcBaS7OZak@owl.dominikbrodowski.net>
-References: <YeWnVHwcBaS7OZak@owl.dominikbrodowski.net>
+        Mon, 17 Jan 2022 12:55:07 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7329AC06161C
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 09:55:07 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id e3so57818012lfc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 09:55:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=embecosm.com; s=google;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=cwLRKEGEpMI2ZE1H9bFkR9wzYdchQAM25oYHbDE2xJI=;
+        b=Z4uRl0MVRiirvaT9sJ1t9OkkLO3CHmIQ751lzUNYhxDx7ws/GTs5S/AZd0bN+BySCm
+         sHCN8MzJVc8iI5k2e2+EddfoXccN1yMRUhCYH59ncx2PDXEWyEYIHw+7c2dOaj0qNB3P
+         GOj+hBBdhVtdki2iaCxAQ+yuKM7iyJ4yL1e19IJTJLE6UIYY9IfWSeEQbC8wP940wkRV
+         zJBewdJ/7Kp02fYC4DiiOs+CnfRpwISGGu/+fTGOfjvcr3GEqSzuGwNcPom8k5eLLGOq
+         QZDfb/qb0XZdvcmEOqt8kU8GGJS4rkbc582DstuDCda8nODZj2cl7/hQ+U1LpgsR5bvi
+         8eDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=cwLRKEGEpMI2ZE1H9bFkR9wzYdchQAM25oYHbDE2xJI=;
+        b=yHiIr6VMcI+FGeG0rG+YXOcioU0+lIy4keeQY3wk4Td385D6S62Ma1y3bZjyXKvjmY
+         jFHzLgG9u6ygPdRuZZ/2WnuEA5Bz1d2kfc84fLMvwS5FxxJgomSZkiJ9Cq6cOUMgWQqG
+         g0QMBrAzvAZ5dRrjL75TgyXUENWKV0+Nq7eeIjuuGtwFqYu8lh+/R7ougwLDRz0dcUqd
+         KpqAJkoaH1OpWs3qtIbtSyUVw/tBSdkRK15aBKrmKm3UEDs9GzJ8sc8rz6Z1aT1NL0MK
+         gPDtD1U0EHlK5lEhMPo/fDTOCLLe4y4XIfDHNhqSBIKVqoG0Ee//4/+Ljr5sxE5gWJQ2
+         JZvw==
+X-Gm-Message-State: AOAM533iZeYhrsmfVyplV92IctICEkHjkFF5PByRb3q9A91oy7ecJS2B
+        09tlZMWmfqNj0ff17EBAiDNbDoPRB4iGGg==
+X-Google-Smtp-Source: ABdhPJy+LfZBkjXYa1Q5BuuXNEb0Ca47QVTVnKosBFub+2myWJLAzkrYXRRQbzGGN969EE+Zx/4Cgw==
+X-Received: by 2002:a05:6512:308c:: with SMTP id z12mr12242340lfd.35.1642442105820;
+        Mon, 17 Jan 2022 09:55:05 -0800 (PST)
+Received: from [192.168.219.3] ([78.8.192.131])
+        by smtp.gmail.com with ESMTPSA id i6sm756372lfb.76.2022.01.17.09.55.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 17 Jan 2022 09:55:05 -0800 (PST)
+Date:   Mon, 17 Jan 2022 17:55:02 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@embecosm.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] tty: Revert the removal of the Cyclades public API
+In-Reply-To: <YeKDD6imTh1Y6GuN@kroah.com>
+Message-ID: <alpine.DEB.2.20.2201151231020.11348@tpp.orcam.me.uk>
+References: <alpine.DEB.2.20.2201141832330.11348@tpp.orcam.me.uk> <YeKDD6imTh1Y6GuN@kroah.com>
+User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that have_bytes is never modified, we can simplify this function.
-First, we move the check for negative entropy_count to be first. That
-ensures that subsequent reads of this will be non-negative. Then,
-have_bytes and ibytes can be folded into their one use site in the
-min_t() function.
+On Sat, 15 Jan 2022, Greg Kroah-Hartman wrote:
 
-Suggested-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
+> On Fri, Jan 14, 2022 at 08:54:05PM +0000, Maciej W. Rozycki wrote:
+> > Fix a user API regression introduced with commit f76edd8f7ce0 ("tty: 
+> > cyclades, remove this orphan"), which removed a part of the API and 
+> > caused compilation errors for user programs using said part, such as 
+> > GCC 9 in its libsanitizer component[1]:
+> > 
+> > .../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc:160:10: fatal error: linux/cyclades.h: No such file or directory
+> >   160 | #include <linux/cyclades.h>
+> >       |          ^~~~~~~~~~~~~~~~~~
+> > compilation terminated.
+> > make[4]: *** [Makefile:664: sanitizer_platform_limits_posix.lo] Error 1
+> 
+> So all we need is an empty header file?  Why bring back all of the
+> unused structures?
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index a1720a48f583..ecb45be9535f 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1291,9 +1291,9 @@ EXPORT_SYMBOL_GPL(add_disk_randomness);
-  * This function decides how many bytes to actually take from the
-  * given pool, and also debits the entropy count accordingly.
-  */
--static size_t account(size_t nbytes, int min)
-+static noinline size_t account(size_t nbytes, int min)
- {
--	int entropy_count, orig, have_bytes;
-+	int entropy_count, orig;
- 	size_t ibytes, nfrac;
- 
- 	BUG_ON(input_pool.entropy_count > POOL_FRACBITS);
-@@ -1301,20 +1301,15 @@ static size_t account(size_t nbytes, int min)
- 	/* Can we pull enough? */
- retry:
- 	entropy_count = orig = READ_ONCE(input_pool.entropy_count);
--	ibytes = nbytes;
--	/* never pull more than available */
--	have_bytes = entropy_count >> (POOL_ENTROPY_SHIFT + 3);
--
--	if (have_bytes < 0)
--		have_bytes = 0;
--	ibytes = min_t(size_t, ibytes, have_bytes);
--	if (ibytes < min)
--		ibytes = 0;
--
- 	if (WARN_ON(entropy_count < 0)) {
- 		pr_warn("negative entropy count: count %d\n", entropy_count);
- 		entropy_count = 0;
- 	}
-+
-+	/* never pull more than available */
-+	ibytes = min_t(size_t, nbytes, entropy_count >> (POOL_ENTROPY_SHIFT + 3));
-+	if (ibytes < min)
-+		ibytes = 0;
- 	nfrac = ibytes << (POOL_ENTROPY_SHIFT + 3);
- 	if ((size_t)entropy_count > nfrac)
- 		entropy_count -= nfrac;
--- 
-2.34.1
+ Because they have become a part of the published API.  Someone may even 
+use a system using headers from the most recent version of the Linux 
+kernel (though not necessarily running such a kernel) to build software 
+intended to run on an older version that still does implement the API.  
+Times where people individually built pefectly matching software from 
+sources to run on each system they looked after have largely long gone.
 
+> > Any part of the public API is a contract between the kernel and the 
+> > userland and therefore once there it must not be removed even if its 
+> > implementation side has gone and any relevant calls will now fail 
+> > unconditionally.
+> 
+> Does this code actually use any of these structures?
+
+ Well, they have been exported, so they have become a part of the API.  
+This user program may not use them, another one will.  If you don't want 
+an API to become public, then do not export it in the first place.
+
+> > Revert the part of the commit referred then that affects the user API, 
+> > bringing the most recent version of <linux/cyclades.h> back verbatim 
+> > modulo the removal of trailing whitespace which used to be there, and 
+> > updating <linux/major.h> accordingly.
+> 
+> Why major.h?  What uses that?  No userspace code should care about that.
+
+ So it shouldn't have been a part of the user API in the first place.  
+Given that it has become a part of it it has to stay, that's the whole 
+point of having a user API.
+
+> Also, your text here is full of trailing whitespace, so I couldn't take
+> this commit as-is anyway :(
+
+ Well, `git' is supposed to sort it automatically.  I've been routinely 
+feeding my patches as posted to `git am' for other projects so as to push 
+them and any trailing whitespace (added automatically by my e-mail client, 
+I guess for presentation purposes; not to be confused with `format=flowed' 
+arrangement as indicated by `Content-Type:', which I know to avoid) does 
+get stripped as the command executes, clearly prepared for this situation.
+
+ The same must have happened for my earlier Linux kernel submissions ever 
+since the switch to `git' back in 2005 as they have been correctly applied 
+and no maintainer including you had an issue with it before.  And I have 
+been using the same e-mail client doing the same all over these years.
+
+ To double-check I have just fed my submission as it to `git am' and it 
+did strip all the unwanted trailing whitespace.  Does that not happen with 
+your setup now?  Odd.
+
+ Or did you get confused with the formatting issues the header itself used 
+to have that I did not address as preexisting code?  If so, then I could 
+reformat the body of the change, however due to the original defects it 
+wouldn't be a trivial revert anymore (arguably in that case there ought to 
+be two changes in a series then, first a genuine revert, followed by the 
+style fix).  Let me know if that is what you desire and I'll adapt v2 
+accordingly.
+
+ Thank you for your review.
+
+  Maciej

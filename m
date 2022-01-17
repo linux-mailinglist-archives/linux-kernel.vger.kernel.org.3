@@ -2,112 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C29EC49100E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 19:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B06A491010
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 19:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242277AbiAQSJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 13:09:20 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:55428 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232426AbiAQSJT (ORCPT
+        id S242288AbiAQSJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 13:09:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232426AbiAQSJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 13:09:19 -0500
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 56F4E20B9137;
-        Mon, 17 Jan 2022 10:09:19 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 56F4E20B9137
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1642442959;
-        bh=B2GA201M0cTSfGmIbIiF4zl6ZppQgnfBiD+YcFkewWo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hpkxX8QqPHnDxN5lEuXzKNbq5NCY+Gp4dzBoc5PI/W4W9+7dm+SLhlfOKXeFLXQW2
-         G85KbAm3R6wqtxD6jprj2sr1g3xkaCmVwx+4SK8o8rWsrGMoEXyQwWeTmIEegoE8TK
-         s1M8sc7qGL7ffi2TVhTYo8gBN7DOHSYg7gGb2GfM=
-Date:   Mon, 17 Jan 2022 10:09:14 -0800
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 01/12] user_events: Add minimal support for
- trace_event into ftrace
-Message-ID: <20220117180914.GA1789@kbox>
-References: <20220111172602.2513-1-beaub@linux.microsoft.com>
- <20220111172602.2513-2-beaub@linux.microsoft.com>
- <20220118004517.b9dda3d98d6c5d6233ac8886@kernel.org>
+        Mon, 17 Jan 2022 13:09:36 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308E1C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 10:09:36 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id bu18so37716335lfb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 10:09:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aCBpQE3+WKAHFckl3pJBbXwBgqjJXxTRTSODJTXYv7Y=;
+        b=nbREpN2YaeqLnZMVaW619Kq51fm9aWUkoukudf4cywftKptHH3Vsfw9n/3ft4bAsif
+         QQ0w83Cs9R9F4HnP+26UedSOauMchTX03j320ASZUG+JdQ+AoVNLXF7LKPH8dGkqZ4ud
+         Znva8zjFyPD6oYjl20ha16uTDgswsNBNsCAAcbYaLHjl5u08RBuldTmQGaOammODmlxI
+         sf/cWQ0Dl5+eh8sK7iDN5wIJ6r0DC/3GHw729TSb5Nj1JAlzb9jcsAD9KupZq0vlv8xc
+         75Pq2qZ35W4unKVHgfIyr3AeF6SF17TmnWQkb1XUjEiS8Wf90RGI4sQltFBDNykbnG8u
+         ORiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aCBpQE3+WKAHFckl3pJBbXwBgqjJXxTRTSODJTXYv7Y=;
+        b=8AmSUwjdIY+6ImSyz+Pm7gSkm4C/rPvurwijOG5edNlurvSIn8JXEtyKLGn+xLeFL5
+         UfsuMJ83AKq08hzGUHKIGmQPCBipgvbb2PJtUWOg4e/2c21nOpK9Z1j/hP34CHYMf9+M
+         7PXn5rgqWlatLJcrgKnLAfFbL40w9hjaJjjus3JFWcSbbBbWq1966611L3kT3aKVJ271
+         Hj26glJbxVzTHzyJCpID/EaRcVaS12Q0F8kVEZFYN+M4ghJSXbSBS3+61Yvy89ab0MyN
+         erNKTuR/hQCqDROThiVLcPV3Yj55sqAG8C+ijpUj3FBGhRzQY4JLq+F3+aujzz9FfcP4
+         CCOA==
+X-Gm-Message-State: AOAM531EDmnOgVTf89Dl89zhpC0saBDHc0ou7C2pXWKFUayNgicRwOLz
+        Kk27/qOrN7bHx7lPkg6H86y5c5hl7gnzIM5do3A/18NjyCo=
+X-Google-Smtp-Source: ABdhPJzQDt9oG1pDNP+UePVmsbqVilT0eCroclyIpQ16Rn8UweQ7upS1R2bO7ir2v+uIbj3n61q3iqwI7YQKMRhMrjE=
+X-Received: by 2002:a05:6512:2629:: with SMTP id bt41mr17727678lfb.264.1642442974365;
+ Mon, 17 Jan 2022 10:09:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118004517.b9dda3d98d6c5d6233ac8886@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20220115144150.1195590-1-shakeelb@google.com> <YeUXcK3/6vIXw7Ju@infradead.org>
+In-Reply-To: <YeUXcK3/6vIXw7Ju@infradead.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Mon, 17 Jan 2022 10:09:22 -0800
+Message-ID: <CALvZod7=CSNqjPNdgFsESxDNKb2ovyyQv8sM_YE=_EXK8W6_3Q@mail.gmail.com>
+Subject: Re: [PATCH] mpage: remove ineffective __GFP_HIGH flag
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Michal Hocko <mhocko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 12:45:17AM +0900, Masami Hiramatsu wrote:
-> Hi Beau,
-> 
-> On Tue, 11 Jan 2022 09:25:51 -0800
-> Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> 
-> > +static int user_event_show(struct seq_file *m, struct dyn_event *ev)
-> > +{
-> > +	struct user_event *user = container_of(ev, struct user_event, devent);
-> > +	struct ftrace_event_field *field, *next;
-> > +	struct list_head *head;
-> > +	int depth = 0;
-> > +
-> > +	seq_printf(m, "%s%s", USER_EVENTS_PREFIX, EVENT_NAME(user));
-> > +
-> > +	head = trace_get_fields(&user->call);
-> > +
-> > +	list_for_each_entry_safe_reverse(field, next, head, link) {
-> > +		if (depth == 0)
-> > +			seq_puts(m, " ");
-> > +		else
-> > +			seq_puts(m, "; ");
-> > +		seq_printf(m, "%s %s", field->type, field->name);
-> > +		depth++;
-> > +	}
-> > +
-> > +	seq_puts(m, "\n");
-> > +
-> > +	return 0;
-> > +}
-> 
-> Let me confirm just one point. Your syntax supports
-> 
-> [__data_loc|__rel_loc] [unsigned] TYPE[\[LEN\]] NAME
-> 
-> or
-> 
-> struct TYPE NAME SIZE
-> 
-> for the fields, right? In that case, above seq_printf() seems not enough.
+On Sun, Jan 16, 2022 at 11:15 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> FYI, I have a patch removing mpage_alloc entirely as part of a bio
+> allocation refactoring series about to be sent out.  So while your
+> analysis here is correct I'd prefer to hold this as the issue goes away
+> entirely.
 
-Yep, I see.
-
-The non-struct cases work as expected from my testing:
-echo 'u:test unsigned char msg[20]' > dynamic_events
-cat dynamic_events
-u:test unsigned char msg[20]
-
-In the struct case you are right, it's missing the size. Good catch!
-I'll fix this up!
-
-Was there another case you had in mind that I might have missed beyond
-the struct case?
-
-I also would like, since I'm re-spinning, to fix a warning the intel bot
-found related to the same code pulled from single_open, etc.
-
-See https://lore.kernel.org/llvm/YeGk0nIH9x91k01I@archlinux-ax161/
-
-> 
-> Thank you,
-> 
-> 
-> -- 
-> Masami Hiramatsu <mhiramat@kernel.org>
-
-Thanks,
--Beau
+SGTM

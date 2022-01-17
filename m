@@ -2,477 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A54A449048E
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64739490491
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 10:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbiAQJDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 04:03:38 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:35786 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbiAQJDf (ORCPT
+        id S233659AbiAQJD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 04:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232907AbiAQJDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 04:03:35 -0500
-Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Mon, 17 Jan
- 2022 17:03:32 +0800
-Message-ID: <70307ecc-b251-6adc-66c2-f7600d237f08@amlogic.com>
-Date:   Mon, 17 Jan 2022 17:03:31 +0800
+        Mon, 17 Jan 2022 04:03:55 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52360C061574;
+        Mon, 17 Jan 2022 01:03:55 -0800 (PST)
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n9Nvc-0005vo-I4; Mon, 17 Jan 2022 10:03:52 +0100
+Message-ID: <acd2fd5e-d622-948c-82ef-629a8030c9d8@leemhuis.info>
+Date:   Mon, 17 Jan 2022 10:03:52 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V4 3/5] tty: serial: meson: The UART baud rate
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220110085604.18042-1-yu.tu@amlogic.com>
- <20220110085604.18042-4-yu.tu@amlogic.com>
- <1j8rvnps11.fsf@starbuckisacylon.baylibre.com>
- <c9bb2f8f-6169-b4ab-5637-56c185dbf254@amlogic.com>
- <1j7dayn4vh.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1j7dayn4vh.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-BS
+To:     "James D. Turner" <linuxkernel.foss@dmarc-none.turner.link>,
+        Alex Williamson <alex.williamson@redhat.com>
+Cc:     kvm@vger.kernel.org, regressions@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <87ee57c8fu.fsf@turner.link>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [REGRESSION] Too-low frequency limit for AMD GPU
+ PCI-passed-through to Windows VM
+In-Reply-To: <87ee57c8fu.fsf@turner.link>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.29.173]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1642410235;881c5ab1;
+X-HE-SMSGID: 1n9Nvc-0005vo-I4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  Hi Jerome,
-	Thank you very much for your reply.
+[TLDR: I'm adding this regression to regzbot, the Linux kernel
+regression tracking bot; most text you find below is compiled from a few
+templates paragraphs some of you might have seen already.]
 
-On 2022/1/17 16:26, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> 
-> On Tue 11 Jan 2022 at 15:04, Yu Tu <yu.tu@amlogic.com> wrote:
-> 
->> Hi Jerome,
->> 	Thank you very much for your reply.
->>
->> On 2022/1/10 22:29, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> On Mon 10 Jan 2022 at 16:56, Yu Tu <yu.tu@amlogic.com> wrote:
->>> Title is bad (like several other patches in this series) - Please fix it
->>> Ok.
->>>> Using the common Clock code to describe the UART baud rate clock
->>>> makes it easier for the UART driver to be compatible with the
->>>> baud rate requirements of the UART IP on different meson chips.
->>>>
->>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>> ---
->>>>    drivers/tty/serial/meson_uart.c | 224 +++++++++++++++++++++++---------
->>>>    1 file changed, 163 insertions(+), 61 deletions(-)
->>>>
->>>> diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
->>>> index 7570958d010c..1004fd0b0c9e 100644
->>>> --- a/drivers/tty/serial/meson_uart.c
->>>> +++ b/drivers/tty/serial/meson_uart.c
->>>> @@ -6,6 +6,7 @@
->>>>     */
->>>>      #include <linux/clk.h>
->>>> +#include <linux/clk-provider.h>
->>>>    #include <linux/console.h>
->>>>    #include <linux/delay.h>
->>>>    #include <linux/init.h>
->>>> @@ -65,9 +66,7 @@
->>>>    #define AML_UART_RECV_IRQ(c)		((c) & 0xff)
->>>>      /* AML_UART_REG5 bits */
->>>> -#define AML_UART_BAUD_MASK		0x7fffff
->>>>    #define AML_UART_BAUD_USE		BIT(23)
->>>> -#define AML_UART_BAUD_XTAL		BIT(24)
->>>>      #define AML_UART_PORT_NUM		12
->>>>    #define AML_UART_PORT_OFFSET		6
->>>> @@ -76,6 +75,13 @@
->>>>    #define AML_UART_POLL_USEC		5
->>>>    #define AML_UART_TIMEOUT_USEC		10000
->>>>    +struct meson_uart_data {
->>>> +	struct uart_port	port;
->>>> +	struct clk		*pclk;
->>>> +	struct clk		*baud_clk;
->>>> +	bool			use_xtal_clk;
->>>> +};
->>>> +
->>>>    static struct uart_driver meson_uart_driver;
->>>>      static struct uart_port *meson_ports[AML_UART_PORT_NUM];
->>>> @@ -268,14 +274,11 @@ static void meson_uart_reset(struct uart_port *port)
->>>>    static int meson_uart_startup(struct uart_port *port)
->>>>    {
->>>>    	u32 val;
->>>> -	int ret = 0;
->>>> +	int ret;
->>>>    -	val = readl(port->membase + AML_UART_CONTROL);
->>>> -	val |= AML_UART_CLEAR_ERR;
->>>> -	writel(val, port->membase + AML_UART_CONTROL);
->>>> -	val &= ~AML_UART_CLEAR_ERR;
->>>> -	writel(val, port->membase + AML_UART_CONTROL);
->>>> +	meson_uart_reset(port);
->>>>    +	val = readl(port->membase + AML_UART_CONTROL);
->>>>    	val |= (AML_UART_RX_EN | AML_UART_TX_EN);
->>>>    	writel(val, port->membase + AML_UART_CONTROL);
->>>>    @@ -293,19 +296,17 @@ static int meson_uart_startup(struct uart_port
->>>> *port)
->>>>      static void meson_uart_change_speed(struct uart_port *port, unsigned
->>>> long baud)
->>>>    {
->>>> +	struct meson_uart_data *private_data = port->private_data;
->>>>    	u32 val;
->>>>      	while (!meson_uart_tx_empty(port))
->>>>    		cpu_relax();
->>>>    -	if (port->uartclk == 24000000) {
->>>> -		val = ((port->uartclk / 3) / baud) - 1;
->>>> -		val |= AML_UART_BAUD_XTAL;
->>>> -	} else {
->>>> -		val = ((port->uartclk * 10 / (baud * 4) + 5) / 10) - 1;
->>>> -	}
->>>> +	val = readl(port->membase + AML_UART_REG5);
->>>>    	val |= AML_UART_BAUD_USE;
->>>>    	writel(val, port->membase + AML_UART_REG5);
->>>> +
->>>> +	clk_set_rate(private_data->baud_clk, baud);
->>>>    }
->>>>      static void meson_uart_set_termios(struct uart_port *port,
->>>> @@ -395,11 +396,27 @@ static int meson_uart_verify_port(struct uart_port *port,
->>>>      static void meson_uart_release_port(struct uart_port *port)
->>>>    {
->>>> -	/* nothing to do */
->>>> +	struct meson_uart_data *private_data = port->private_data;
->>>> +
->>>> +	clk_disable_unprepare(private_data->baud_clk);
->>>> +	clk_disable_unprepare(private_data->pclk);
->>>>    }
->>>>      static int meson_uart_request_port(struct uart_port *port)
->>>>    {
->>>> +	struct meson_uart_data *private_data = port->private_data;
->>>> +	int ret;
->>>> +
->>>> +	ret = clk_prepare_enable(private_data->pclk);
->>>> +	if (ret)
->>>> +		return ret;
->>> In the previous version of the series, you already been asked to the
->>> enable of pclk in the probe. Optimization should not be mixed with this
->>> series
->>> Please make sure all comments are addressed before re-posting
->>>
->> I'm sorry. I misunderstood you earlier. I'm going to move into the probe
->> function.
->>>> +
->>>> +	ret = clk_prepare_enable(private_data->baud_clk);
->>>> +	if (ret) {
->>>> +		clk_disable_unprepare(private_data->pclk);
->>>> +		return ret;
->>>> +	}
->>>> +
->>>>    	return 0;
->>>>    }
->>>>    @@ -629,55 +646,105 @@ static struct uart_driver meson_uart_driver = {
->>>>    	.cons		= MESON_SERIAL_CONSOLE,
->>>>    };
->>>>    -static inline struct clk *meson_uart_probe_clock(struct device *dev,
->>>> -						 const char *id)
->>>> +#define CLK_NAME(name) \
->>>> +({\
->>>> +	char clk_name[32];\
->>>> +	snprintf(clk_name, sizeof(clk_name), "%s#%s", dev_name(port->dev), #name);\
->>>> +	clk_name;\
->>>> +})
->>> 1) This result in some ugly code being inlined
->>> 2) You return a pointer a local variable which is not gurantee to exist
->>> anymore  outside of this ...
->>> Please do this simply in the related function.
->> I've overdone it. I'll move it to the meson_uart_probe_clocks function as
->> you suggested.
->>>
->>>> +
->>>> +static struct clk_div_table xtal_div_table[] = {
->>>> +	{ 0, 3  },
->>>> +	{ 1, 1  },
->>>> +	{ 2, 2  },
->>>> +	{ 3, 2  },
->>>> +};
->>>> +
->>>> +static int meson_uart_probe_clocks(struct uart_port *port)
->>>>    {
->>>> -	struct clk *clk = NULL;
->>>> -	int ret;
->>>> +	struct meson_uart_data *private_data = port->private_data;
->>>> +	struct clk *clk_baud, *clk_xtal;
->>>> +	struct clk_hw *hw;
->>>> +	struct clk_parent_data use_xtal_mux_parents[2] = {
->>>> +		{ .index = -1, },
->>>> +		{ .index = -1, },
->>>> +	};
->>>>    -	clk = devm_clk_get(dev, id);
->>>> -	if (IS_ERR(clk))
->>>> -		return clk;
->>>> +	private_data->pclk = devm_clk_get(port->dev, "pclk");
->>>> +	if (IS_ERR(private_data->pclk))
->>>> +		return dev_err_probe(port->dev, PTR_ERR(private_data->pclk),
->>>> +				     "Failed to get the 'pclk' clock\n");
->>>>    -	ret = clk_prepare_enable(clk);
->>>> -	if (ret) {
->>>> -		dev_err(dev, "couldn't enable clk\n");
->>>> -		return ERR_PTR(ret);
->>>> +	clk_baud = devm_clk_get(port->dev, "baud");
->>>> +	if (IS_ERR(clk_baud)) {
->>>> +		dev_err(port->dev, "Failed to get the 'baud' clock\n");
->>>> +		return PTR_ERR(clk_baud);
->>>>    	}
->>>>    -	devm_add_action_or_reset(dev,
->>>> -			(void(*)(void *))clk_disable_unprepare,
->>>> -			clk);
->>>> -
->>>> -	return clk;
->>>> -}
->>>> -
->>>> -static int meson_uart_probe_clocks(struct platform_device *pdev,
->>>> -				   struct uart_port *port)
->>>> -{
->>>> -	struct clk *clk_xtal = NULL;
->>>> -	struct clk *clk_pclk = NULL;
->>>> -	struct clk *clk_baud = NULL;
->>>> -
->>>> -	clk_pclk = meson_uart_probe_clock(&pdev->dev, "pclk");
->>>> -	if (IS_ERR(clk_pclk))
->>>> -		return PTR_ERR(clk_pclk);
->>>> -
->>>> -	clk_xtal = meson_uart_probe_clock(&pdev->dev, "xtal");
->>>> +	clk_xtal = devm_clk_get(port->dev, "xtal");
->>>>    	if (IS_ERR(clk_xtal))
->>>> -		return PTR_ERR(clk_xtal);
->>>> -
->>>> -	clk_baud = meson_uart_probe_clock(&pdev->dev, "baud");
->>>> -	if (IS_ERR(clk_baud))
->>>> -		return PTR_ERR(clk_baud);
->>>> +		return dev_err_probe(port->dev, PTR_ERR(clk_xtal),
->>>> +				     "Failed to get the 'xtal' clock\n");
->>>> +
->>>> +	if (private_data->use_xtal_clk) {
->>>> +		hw = devm_clk_hw_register_divider_table(port->dev,
->>>> +							CLK_NAME(xtal_div),
->>>> +							__clk_get_name(clk_baud),
->>>> +							CLK_SET_RATE_NO_REPARENT,
->>>> +							port->membase + AML_UART_REG5,
->>>> +							26, 2,
->>>> +							CLK_DIVIDER_READ_ONLY,
->>>> +							xtal_div_table, NULL);
->>>> +		if (IS_ERR(hw))
->>>> +			return PTR_ERR(hw);
->>>> +
->>>> +		use_xtal_mux_parents[1].hw = hw;
->>>> +	} else {
->>>> +		hw = devm_clk_hw_register_fixed_factor(port->dev,
->>>> +						       CLK_NAME(clk81_div4),
->>>> +						       __clk_get_name(clk_baud),
->>>> +						       CLK_SET_RATE_NO_REPARENT,
->>>> +						       1, 4);
->>>> +		if (IS_ERR(hw))
->>>> +			return PTR_ERR(hw);
->>>> +
->>>> +		use_xtal_mux_parents[0].hw = hw;
->>>> +	}
->>> Contradiction with previous series.
->>> In the previous series we could clearly see that gxbb did not have the
->>> /4 divider. It did not have bits 26 and 27 either.
->>> Now gxbb get the /4 divider. It operated correctly without it so far, so
->>> this is rather suspicious. Could you please comment on this ?
->>>
->> As Martin and I discussed earlier.
->> meson6 and meson8b SoC.There are not have bits 26 and 27 either.
->> CLK81 is recommended for this part of SOC.
->>
->> GXL,GXM,GXBB and AXG SOC.The UART_EE_A_REG5[26] is added.
->> UART_EE_A_REG5[26]:
->> - 0x0: divide the input clock by 3 (meaning: this internally works
->> with an 8MHz clock)
->> - 0x1: use the input clock directly without further division (meaning:
->> this internally work with an 24MHz clock)
->> 8MHz is recommended for this part of SOC. Their UART IP configuration is
->> the same.
->>
->> G12A/B,,SM1,A1 and S4 SOC.The UART_EE_A_REG5[27] is added.
->> UART_EE_A_REG5[27]:
->> - 0x0: use the clock as configured in UART_EE_A_REG5[26]
->> - 0x1: divide the input clock by 2 (meaning: this internally works
->> with an 12MHz clock)
->> 12MHz is recommended for this part of SOC.
->>
->> NOTE:
->> 1. clk81 /4 divider.
->> There is a 4 divider inside, this is what the internal SOC designer told
->> me. But they forgot to document it. So it makes people feel suspicious.
->>
->> 2.The UART_EE_A_REG5 default value is 0,except for the console port(set in
->> romcode).All the baud rate clocks supported by UART can work, but different
->> chip usage scenarios suggest using that clock to reduce jitter.
->>
->> In summary, I would like to know your suggestions, including how to change
->> compatible.
->> Thank you so much!
-> 
->  From your comment, gxbb should have "true" instead of false, isn't it ?
-> 
-Yes, You are right.
-I don't see the need to split "amlogic, meson-gx-uart" compatible right 
-now. I think the following change
-{
-.compatible = "amlogic,meson-gx-uart",
-.data = (void *)true,
-},
-can satisfy all UART IP using XTAL. Because CCF automatically selects an 
-appropriate clock source when setting baud rate.
+Hi, this is your Linux kernel regression tracker speaking.
 
-I wonder if you agree with that. Or maybe you have a better idea. I'd 
-like to know your opinion
->>
->>   >>
->>>> -	port->uartclk = clk_get_rate(clk_baud);
->>>> +	hw = __devm_clk_hw_register_mux(port->dev, NULL,
->>>> +					CLK_NAME(use_xtal),
->>>> +					ARRAY_SIZE(use_xtal_mux_parents),
->>>> +					NULL, NULL,
->>>> +					use_xtal_mux_parents,
->>>> +					CLK_SET_RATE_PARENT,
->>>> +					port->membase + AML_UART_REG5,
->>>> +					24, 0x1,
->>>> +					CLK_MUX_READ_ONLY,
->>>> +					NULL, NULL);
->>>> +	if (IS_ERR(hw))
->>>> +		return PTR_ERR(hw);
->>>> +
->>>> +	port->uartclk = clk_hw_get_rate(hw);
->>>> +
->>>> +	hw = devm_clk_hw_register_divider(port->dev,
->>>> +					  CLK_NAME(baud_div),
->>>> +					  clk_hw_get_name(hw),
->>>> +					  CLK_SET_RATE_PARENT,
->>>> +					  port->membase + AML_UART_REG5,
->>>> +					  0, 23,
->>>> +					  CLK_DIVIDER_ROUND_CLOSEST,
->>>> +					  NULL);
->>>> +	if (IS_ERR(hw))
->>>> +		return PTR_ERR(hw);
->>>> +
->>>> +	private_data->baud_clk = clk_hw_get_clk(hw, "baud_rate");
->>> I have already commented on the use of this function in the previous
->>> version.
->>> Please make sure all comments are addressed before re-posting
->>>
->> I'm sorry. I misunderstood you earlier. I will be changed to
->> "private_data->baud_clk = hw->clk;".What do you think?
+
+On 17.01.22 03:12, James D. Turner wrote:
 > 
-> yes
+> With newer kernels, starting with the v5.14 series, when using a MS
+> Windows 10 guest VM with PCI passthrough of an AMD Radeon Pro WX 3200
+> discrete GPU, the passed-through GPU will not run above 501 MHz, even
+> when it is under 100% load and well below the temperature limit. As a
+> result, GPU-intensive software (such as video games) runs unusably
+> slowly in the VM.
+
+Thanks for the report. Greg already asked for a bisection, which would
+help a lot here.
+
+To be sure this issue doesn't fall through the cracks unnoticed, I'm
+adding it to regzbot, my Linux kernel regression tracking bot:
+
+#regzbot ^introduced v5.13..v5.14-rc1
+#regzbot ignore-activity
+
+Reminder: when fixing the issue, please add a 'Link:' tag with the URL
+to the report (the parent of this mail) using the kernel.org redirector,
+as explained in 'Documentation/process/submitting-patches.rst'. Regzbot
+then will automatically mark the regression as resolved once the fix
+lands in the appropriate tree. For more details about regzbot see footer.
+
+Sending this to everyone that got the initial report, to make all aware
+of the tracking. I also hope that messages like this motivate people to
+directly get at least the regression mailing list and ideally even
+regzbot involved when dealing with regressions, as messages like this
+wouldn't be needed then.
+
+Don't worry, I'll send further messages wrt to this regression just to
+the lists (with a tag in the subject so people can filter them away), as
+long as they are intended just for regzbot. With a bit of luck no such
+messages will be needed anyway.
+
+Ciao, Thorsten (wearing his 'Linux kernel regression tracker' hat)
+
+P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
+on my table. I can only look briefly into most of them. Unfortunately
+therefore I sometimes will get things wrong or miss something important.
+I hope that's not the case here; if you think it is, don't hesitate to
+tell me about it in a public reply, that's in everyone's interest.
+
+BTW, I have no personal interest in this issue, which is tracked using
+regzbot, my Linux kernel regression tracking bot
+(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
+this mail to get things rolling again and hence don't need to be CC on
+all further activities wrt to this regression.
+
+> In contrast, with older kernels, the passed-through GPU runs at up to
+> 1295 MHz (the correct hardware limit), so GPU-intensive software runs at
+> a reasonable speed in the VM.
 > 
->>>>      	return 0;
->>>>    }
->>>>      static int meson_uart_probe(struct platform_device *pdev)
->>>>    {
->>>> +	struct meson_uart_data *private_data;
->>>>    	struct resource *res_mem;
->>>>    	struct uart_port *port;
->>>>    	u32 fifosize = 64; /* Default is 64, 128 for EE UART_0 */
->>>> @@ -716,18 +783,20 @@ static int meson_uart_probe(struct platform_device *pdev)
->>>>    		return -EBUSY;
->>>>    	}
->>>>    -	port = devm_kzalloc(&pdev->dev, sizeof(struct uart_port),
->>>> GFP_KERNEL);
->>>> -	if (!port)
->>>> +	private_data = devm_kzalloc(&pdev->dev, sizeof(*private_data),
->>>> +				    GFP_KERNEL);
->>>> +	if (!private_data)
->>>>    		return -ENOMEM;
->>>>    +	if (device_get_match_data(&pdev->dev))
->>>> +		private_data->use_xtal_clk = true;
->>>> +
->>>> +	port = &private_data->port;
->>>> +
->>>>    	port->membase = devm_ioremap_resource(&pdev->dev, res_mem);
->>>>    	if (IS_ERR(port->membase))
->>>>    		return PTR_ERR(port->membase);
->>>>    -	ret = meson_uart_probe_clocks(pdev, port);
->>>> -	if (ret)
->>>> -		return ret;
->>>> -
->>>>    	port->iotype = UPIO_MEM;
->>>>    	port->mapbase = res_mem->start;
->>>>    	port->mapsize = resource_size(res_mem);
->>>> @@ -740,7 +809,11 @@ static int meson_uart_probe(struct platform_device *pdev)
->>>>    	port->x_char = 0;
->>>>    	port->ops = &meson_uart_ops;
->>>>    	port->fifosize = fifosize;
->>>> +	port->private_data = private_data;
->>> port has private_data
->>> private_data has port
->>> Is it really necessary to have both ... looks to me that port in
->>> private_data is overkill
->>>
->> It's very thoughtful of you. I'll delete it as you suggested.
->>>>    +	ret = meson_uart_probe_clocks(port);
->>>> +	if (ret)
->>>> +		return ret;
->>>>    	meson_ports[pdev->id] = port;
->>>>    	platform_set_drvdata(pdev, port);
->>>>    @@ -766,10 +839,39 @@ static int meson_uart_remove(struct
->>>> platform_device *pdev)
->>>>    }
->>>>      static const struct of_device_id meson_uart_dt_match[] = {
->>>> -	{ .compatible = "amlogic,meson6-uart" },
->>>> -	{ .compatible = "amlogic,meson8-uart" },
->>>> -	{ .compatible = "amlogic,meson8b-uart" },
->>>> -	{ .compatible = "amlogic,meson-gx-uart" },
->>>> +	{
->>>> +		.compatible = "amlogic,meson6-uart",
->>>> +		.data = (void *)false,
->>>> +	},
->>>> +	{
->>>> +		.compatible = "amlogic,meson8-uart",
->>>> +		.data = (void *)false,
->>>> +	},
->>>> +	{
->>>> +		.compatible = "amlogic,meson8b-uart",
->>>> +		.data = (void *)false,
->>>> +	},
->>>> +	{
->>>> +		.compatible = "amlogic,meson-gxbb-uart",
->>>> +		.data = (void *)false,
->>>> +	},
->>>> +	{
->>>> +		.compatible = "amlogic,meson-gxl-uart",
->>>> +		.data = (void *)true,
->>>> +	},
->>>> +	{
->>>> +		.compatible = "amlogic,meson-g12a-uart",
->>>> +		.data = (void *)true,
->>>> +	},
->>>> +	/*
->>>> +	 * deprecated, don't use anymore because it doesn't differentiate
->>>> +	 * between GXBB, GXL and G12A which have different revisions
->>>> +	 * of the UART IP.
->>>> +	 */
->>>> +	{
->>>> +		.compatible = "amlogic,meson-gx-uart",
->>>> +		.data = (void *)false,
->>>> +	},
->>>>    	{ /* sentinel */ },
->>>>    };
->>>>    MODULE_DEVICE_TABLE(of, meson_uart_dt_match);
->>>
->>
->> _______________________________________________
->> linux-amlogic mailing list
->> linux-amlogic@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+> I've confirmed that the issue exists with the following kernel versions:
 > 
+> - v5.16
+> - v5.14
+> - v5.14-rc1
+> 
+> The issue does not exist with the following kernels:
+> 
+> - v5.13
+> - various packaged (non-vanilla) 5.10.* Arch Linux `linux-lts` kernels
+> 
+> So, the issue was introduced between v5.13 and v5.14-rc1. I'm willing to
+> bisect the commit history to narrow it down further, if that would be
+> helpful.
+> 
+> The configuration details and test results are provided below. In
+> summary, for the kernels with this issue, the GPU core stays at a
+> constant 0.8 V, the GPU core clock ranges from 214 MHz to 501 MHz, and
+> the GPU memory stays at a constant 625 MHz, in the VM. For the correctly
+> working kernels, the GPU core ranges from 0.85 V to 1.0 V, the GPU core
+> clock ranges from 214 MHz to 1295 MHz, and the GPU memory stays at 1500
+> MHz, in the VM.
+> 
+> Please let me know if additional information would be helpful.
+> 
+> Regards,
+> James Turner
+> 
+> # Configuration Details
+> 
+> Hardware:
+> 
+> - Dell Precision 7540 laptop
+> - CPU: Intel Core i7-9750H (x86-64)
+> - Discrete GPU: AMD Radeon Pro WX 3200
+> - The internal display is connected to the integrated GPU, and external
+>   displays are connected to the discrete GPU.
+> 
+> Software:
+> 
+> - KVM host: Arch Linux
+>   - self-built vanilla kernel (built using Arch Linux `PKGBUILD`
+>     modified to use vanilla kernel sources from git.kernel.org)
+>   - libvirt 1:7.10.0-2
+>   - qemu 6.2.0-2
+> 
+> - KVM guest: Windows 10
+>   - GPU driver: Radeon Pro Software Version 21.Q3 (Note that I also
+>     experienced this issue with the 20.Q4 driver, using packaged
+>     (non-vanilla) Arch Linux kernels on the host, before updating to the
+>     21.Q3 driver.)
+> 
+> Kernel config:
+> 
+> - For v5.13, v5.14-rc1, and v5.14, I used
+>   https://github.com/archlinux/svntogit-packages/blob/89c24952adbfa645d9e1a6f12c572929f7e4e3c7/trunk/config
+>   (The build script ran `make olddefconfig` on that config file.)
+> 
+> - For v5.16, I used
+>   https://github.com/archlinux/svntogit-packages/blob/94f84e1ad8a530e54aa34cadbaa76e8dcc439d10/trunk/config
+>   (The build script ran `make olddefconfig` on that config file.)
+> 
+> I set up the VM with PCI passthrough according to the instructions at
+> https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF
+> 
+> I'm passing through the following PCI devices to the VM, as listed by
+> `lspci -D -nn`:
+> 
+>   0000:01:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Lexa XT [Radeon PRO WX 3200] [1002:6981]
+>   0000:01:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Baffin HDMI/DP Audio [Radeon RX 550 640SP / RX 560/560X] [1002:aae0]
+> 
+> The host kernel command line includes the following relevant options:
+> 
+>   intel_iommu=on vfio-pci.ids=1002:6981,1002:aae0
+> 
+> to enable IOMMU and bind the `vfio-pci` driver to the PCI devices.
+> 
+> My `/etc/mkinitcpio.conf` includes the following line:
+> 
+>   MODULES=(vfio_pci vfio vfio_iommu_type1 vfio_virqfd i915 amdgpu)
+> 
+> to load `vfio-pci` before the graphics drivers. (Note that removing
+> `i915 amdgpu` has no effect on this issue.)
+> 
+> I'm using libvirt to manage the VM. The relevant portions of the XML
+> file are:
+> 
+>   <hostdev mode="subsystem" type="pci" managed="yes">
+>     <source>
+>       <address domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
+>     </source>
+>     <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
+>   </hostdev>
+>   <hostdev mode="subsystem" type="pci" managed="yes">
+>     <source>
+>       <address domain="0x0000" bus="0x01" slot="0x00" function="0x1"/>
+>     </source>
+>     <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
+>   </hostdev>
+> 
+> # Test Results
+> 
+> For testing, I used the following procedure:
+> 
+> 1. Boot the host machine and log in.
+> 
+> 2. Run the following commands to gather information. For all the tests,
+>    the output was identical.
+> 
+>    - `cat /proc/sys/kernel/tainted` printed:
+> 
+>      0
+> 
+>    - `hostnamectl | grep "Operating System"` printed:
+> 
+>      Operating System: Arch Linux
+> 
+>    - `lspci -nnk -d 1002:6981` printed
+> 
+>      01:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Lexa XT [Radeon PRO WX 3200] [1002:6981]
+>      	Subsystem: Dell Device [1028:0926]
+>      	Kernel driver in use: vfio-pci
+>      	Kernel modules: amdgpu
+> 
+>    - `lspci -nnk -d 1002:aae0` printed
+> 
+>      01:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Baffin HDMI/DP Audio [Radeon RX 550 640SP / RX 560/560X] [1002:aae0]
+>      	Subsystem: Dell Device [1028:0926]
+>      	Kernel driver in use: vfio-pci
+>      	Kernel modules: snd_hda_intel
+> 
+>    - `sudo dmesg | grep -i vfio` printed the kernel command line and the
+>      following messages:
+> 
+>      VFIO - User Level meta-driver version: 0.3
+>      vfio-pci 0000:01:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
+>      vfio_pci: add [1002:6981[ffffffff:ffffffff]] class 0x000000/00000000
+>      vfio_pci: add [1002:aae0[ffffffff:ffffffff]] class 0x000000/00000000
+>      vfio-pci 0000:01:00.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=none
+> 
+> 3. Start the Windows VM using libvirt and log in. Record sensor
+>    information.
+> 
+> 4. Run a graphically-intensive video game to put the GPU under load.
+>    Record sensor information.
+> 
+> 5. Stop the game. Record sensor information.
+> 
+> 6. Shut down the VM. Save the output of `sudo dmesg`.
+> 
+> I compared the `sudo dmesg` output for v5.13 and v5.14-rc1 and didn't
+> see any relevant differences.
+> 
+> Note that the issue occurs only within the guest VM. When I'm not using
+> a VM (after removing `vfio-pci.ids=1002:6981,1002:aae0` from the kernel
+> command line so that the PCI devices are bound to their normal `amdgpu`
+> and `snd_hda_intel` drivers instead of the `vfio-pci` driver), the GPU
+> operates correctly on the host.
+> 
+> ## Linux v5.16 (issue present)
+> 
+> $ cat /proc/version
+> Linux version 5.16.0-1 (linux@archlinux) (gcc (GCC) 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1 SMP PREEMPT Sun, 16 Jan 2022 01:51:08 +0000
+> 
+> Before running the game:
+> 
+> - GPU core: 214.0 MHz, 0.800 V, 0.0% load, 53.0 degC
+> - GPU memory: 625.0 MHz
+> 
+> While running the game:
+> 
+> - GPU core: 501.0 MHz, 0.800 V, 100.0% load, 54.0 degC
+> - GPU memory: 625.0 MHz
+> 
+> After stopping the game:
+> 
+> - GPU core: 214.0 MHz, 0.800 V, 0.0% load, 51.0 degC
+> - GPU memory: 625.0 MHz
+> 
+> ## Linux v5.14 (issue present)
+> 
+> $ cat /proc/version
+> Linux version 5.14.0-1 (linux@archlinux) (gcc (GCC) 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1 SMP PREEMPT Sun, 16 Jan 2022 03:19:35 +0000
+> 
+> Before running the game:
+> 
+> - GPU core: 214.0 MHz, 0.800 V, 0.0% load, 50.0 degC
+> - GPU memory: 625.0 MHz
+> 
+> While running the game:
+> 
+> - GPU core: 501.0 MHz, 0.800 V, 100.0% load, 54.0 degC
+> - GPU memory: 625.0 MHz
+> 
+> After stopping the game:
+> 
+> - GPU core: 214.0 MHz, 0.800 V, 0.0% load, 49.0 degC
+> - GPU memory: 625.0 MHz
+> 
+> ## Linux v5.14-rc1 (issue present)
+> 
+> $ cat /proc/version
+> Linux version 5.14.0-rc1-1 (linux@archlinux) (gcc (GCC) 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1 SMP PREEMPT Sun, 16 Jan 2022 18:31:35 +0000
+> 
+> Before running the game:
+> 
+> - GPU core: 214.0 MHz, 0.800 V, 0.0% load, 50.0 degC
+> - GPU memory: 625.0 MHz
+> 
+> While running the game:
+> 
+> - GPU core: 501.0 MHz, 0.800 V, 100.0% load, 54.0 degC
+> - GPU memory: 625.0 MHz
+> 
+> After stopping the game:
+> 
+> - GPU core: 214.0 MHz, 0.800 V, 0.0% load, 49.0 degC
+> - GPU memory: 625.0 MHz
+> 
+> ## Linux v5.13 (works correctly, issue not present)
+> 
+> $ cat /proc/version
+> Linux version 5.13.0-1 (linux@archlinux) (gcc (GCC) 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1 SMP PREEMPT Sun, 16 Jan 2022 02:39:18 +0000
+> 
+> Before running the game:
+> 
+> - GPU core: 214.0 MHz, 0.850 V, 0.0% load, 55.0 degC
+> - GPU memory: 1500.0 MHz
+> 
+> While running the game:
+> 
+> - GPU core: 1295.0 MHz, 1.000 V, 100.0% load, 67.0 degC
+> - GPU memory: 1500.0 MHz
+> 
+> After stopping the game:
+> 
+> - GPU core: 214.0 MHz, 0.850 V, 0.0% load, 52.0 degC
+> - GPU memory: 1500.0 MHz
+> 
+> 
+---
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and/or the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+tell #regzbot about it in the report, as that will ensure the regression
+gets on the radar of regzbot and the regression tracker. That's in your
+interest, as they will make sure the report won't fall through the
+cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include a 'Link:' tag to the report in the commit message, as explained
+in Documentation/process/submitting-patches.rst
+That aspect was recently was made more explicit in commit 1f57bd42b77c:
+https://git.kernel.org/linus/1f57bd42b77c

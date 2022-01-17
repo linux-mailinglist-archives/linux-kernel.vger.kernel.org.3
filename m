@@ -2,124 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF33490AC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD32490ACB
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237225AbiAQOxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:53:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237192AbiAQOxH (ORCPT
+        id S237244AbiAQOxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:53:36 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:54646 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237192AbiAQOxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:53:07 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042F3C061574;
-        Mon, 17 Jan 2022 06:53:07 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id o15so58480906lfo.11;
-        Mon, 17 Jan 2022 06:53:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=onWdt0fyeqqEsMifvTUGSb7FG4MeJVVCrnl4WB/xhwg=;
-        b=HlBqFcVJUgeG+7AzJjGBH0RvzQNnFMma5/bY22sKBRoLna4EicyPr5dp5uy+m/kif7
-         sw4UvpGlY1XCqoek48qGhJoVrK1PV41rEYtzYJ1FhoQGb0vb1z2eaSTlWDTkBRjsPFgA
-         iJmJcExF29aZEVSsKjpMHdBDdar/ZYhsYQEhQ9dT2CdgZHoDZ5eA4leKvMVLYiwJE1Nr
-         k37RKbl6BCJ41ZStGYk/h33vS9OpAHi9av8S/VOCGIfa1QL5jSuqwN97WCV+GIGF3Cy3
-         Sk4XDGZly2uPs1+RLDGjolamZ91PIuGkTrBy2bzKdoNMIM1hEBbY30rcf5Bd/k8fdYu1
-         wUpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=onWdt0fyeqqEsMifvTUGSb7FG4MeJVVCrnl4WB/xhwg=;
-        b=GiTWchsnh/k2l40D+LFFqZWx6ddIl4CTo8uX+Z4d5Nc+gvWGm6SMnA6LByAZJ94/7A
-         XrFaXg8YuWbDPW+9DE/OBmNVpNkM8tqN+okwXZJzhQlKnCOmDsh+lQvQ2XbIWpC0WcNI
-         YCfTgktusT5BLH8YnQzIS4I2Q9yflL9fncpnecSMcrTjWaeHlsKqHGVShfCEeIkdnmEL
-         EsDkdhk+ruiakF6kCL/Cu80QYnvtvX+j6/14iSJMCNiYrS70GLFNtbash/lKfEWB4gWb
-         ZkADBKlGhUTwVsdDpfDWXNxPImDxTBx7iZmRvqePxeSKMf6ebZjWSWXXkYTDx85tGHRF
-         DgIA==
-X-Gm-Message-State: AOAM5308StXjC7weVIEb9yhYQ6+OpEU0ZxR/g3jKzMhdLnAdnNTbioID
-        gp67YNzB3EwaAn3uesnlUdQ=
-X-Google-Smtp-Source: ABdhPJzCgLZE2f1V4ZTHHLY0+82A8Z0lem/5f4KqeZD0C75yveNJ5NrqaZPCkP/ybtda2xUf2KLx8g==
-X-Received: by 2002:a05:6512:2606:: with SMTP id bt6mr16873651lfb.202.1642431185384;
-        Mon, 17 Jan 2022 06:53:05 -0800 (PST)
-Received: from smtpclient.apple (31-178-191-245.dynamic.chello.pl. [31.178.191.245])
-        by smtp.gmail.com with ESMTPSA id p13sm1418432lfa.42.2022.01.17.06.53.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 17 Jan 2022 06:53:04 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH 5/9] arm64: dts: rockchip: add rk3568 tsadc nodes
-From:   Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
-In-Reply-To: <CAMdYzYqsPgAbLBt+xwDL2s7ViLDJw5mnzDnupimRVESt0xFksQ@mail.gmail.com>
-Date:   Mon, 17 Jan 2022 15:53:03 +0100
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A6AF0F12-FB41-4C60-96AA-660C1E8B379C@gmail.com>
-References: <20210728135534.703028-1-pgwipeout@gmail.com>
- <20210728135534.703028-6-pgwipeout@gmail.com>
- <C3AE0A81-A829-4241-A65E-EB28825E3C33@gmail.com>
- <CAMdYzYo2gkNvNYjU9_kc4cTwNBFU+kg3bRwaS3yCCAsMdo-Tow@mail.gmail.com>
- <E3AA167E-1E40-45CD-8CBB-3EB280856604@gmail.com>
- <CAMdYzYqsPgAbLBt+xwDL2s7ViLDJw5mnzDnupimRVESt0xFksQ@mail.gmail.com>
-To:     Peter Geis <pgwipeout@gmail.com>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
+        Mon, 17 Jan 2022 09:53:34 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B2620212BC;
+        Mon, 17 Jan 2022 14:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1642431213; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/I60TRzGqM2Rnu7f2DTYAexCdlVVwBUVgjtIF3/qa+E=;
+        b=fGZ7momd5m8UC6uZTi0otmOg5jF36MIvOxdGN1FTd5rt9lS3kgO3Qdc/hX6c2OT3BGCa0w
+        RyZ/n7IGWzdjRmEZMtlRyM5YriCqegv0JTBYFknC93q4IjErPtIW6qhjaWfhittxTCIEp2
+        1Uy0VoGvYip4XtvJaVN2WQvrmZ3YnkQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1642431213;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/I60TRzGqM2Rnu7f2DTYAexCdlVVwBUVgjtIF3/qa+E=;
+        b=bw84tTQh5OLUxdnLS6BZ1vFNPvhr5j50np/dCdZWkJQrXgSWkiPq+QNWnpsHBr5M089cJd
+        F8Fo+Sv3O3iho9BA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7804B13C0E;
+        Mon, 17 Jan 2022 14:53:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cScrHO2C5WEjKwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 17 Jan 2022 14:53:33 +0000
+Message-ID: <1e005f6b-3cac-b8f3-e5fd-e4c117d8986a@suse.de>
+Date:   Mon, 17 Jan 2022 15:53:32 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>, Helge Deller <deller@gmx.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Javier Martinez Canillas <javierm@redhat.com>
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+ <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
+ <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
+ <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
+ <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------A0AjPNV0nKMCzsHsKXoumNfW"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------A0AjPNV0nKMCzsHsKXoumNfW
+Content-Type: multipart/mixed; boundary="------------kLLSmv7rsQiLi2as8kPPAykj";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Gerd Hoffmann <kraxel@redhat.com>, Helge Deller <deller@gmx.de>,
+ Daniel Vetter <daniel@ffwll.ch>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ "airlied@gmail.com" <airlied@gmail.com>,
+ Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ DRI Development <dri-devel@lists.freedesktop.org>,
+ Javier Martinez Canillas <javierm@redhat.com>
+Message-ID: <1e005f6b-3cac-b8f3-e5fd-e4c117d8986a@suse.de>
+Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
+References: <YeG8ydoJNWWkGrTb@ls3530>
+ <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
+ <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+ <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
+ <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com>
+ <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
+ <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
+In-Reply-To: <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
 
+--------------kLLSmv7rsQiLi2as8kPPAykj
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> Wiadomo=C5=9B=C4=87 napisana przez Peter Geis <pgwipeout@gmail.com> w =
-dniu 17.01.2022, o godz. 15:38:
->=20
->=20
->=20
-> Your issue is in your dts.
-> You have retained the quartz64-a &cpu_thermal active thermal node
-> without tying in an active thermal control device (a fan).
-> By default the rk356x dtsi passive thermal trips are hooked up and
-> will throttle the device in case of overtemp.
-> If your device has no active thermal control, you don't need to add
-> the &cpu_thermal node at all to your dts.
->=20
->>=20
->> btw2: for rk3566 i'm using majority of your patches!
->> Great work of you!
+SGkNCg0KQW0gMTcuMDEuMjIgdW0gMTU6MTAgc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46
+DQo+IFsuLi5dICANCj4gV2hpY2ggdXNlcyBhbiBEUk1fRk9STUFUX1hSR0I4ODg4IGludGVy
+bWVkaWF0ZSwgYW5kDQo+IGRybV9mYl94cmdiODg4OF90b19ncmF5OCgpIGFuZCByZXBhcGVy
+X2dyYXk4X3RvX21vbm9fcmV2ZXJzZWQoKQ0KPiB0byBjb252ZXJ0IGZyb20gdHJ1ZWNvbG9y
+IHRvIG1vbm9jaHJvbWUuICBJIGd1ZXNzIHRoYXQgd291bGQgd29yaywNCj4gYXMgdGhpcyBp
+cyBhIHNsb3cgZS1pbmsgZGlzcGxheS4gIEhhdmUgZnVuIGFzIGEgdGV4dCBjb25zb2xlIDst
+KQ0KDQpCdXQgdGhhdCdzIHJlYWxseSBqdXN0IGEgcXVlc3Rpb24gb2Ygb3B0aW1pemF0aW9u
+LiBUaGUgY29uc29sZSBpcyANCnVzZXJzcGFjZS1pc2ggaW4gdGhhdCBubyBvbmUgaGFzIGFz
+a2VkIGZvciBtb25vY2hyb21lIHN1cHBvcnQgeWV0LiBTbyANCml0J3Mgbm90IHRoZXJlLiBX
+ZSBjb3VsZCBhZGQgaXQgaWYgaXQncyBldmVyIG5lZWRlZC4NCg0KQmVzdCByZWdhcmRzDQpU
+aG9tYXMNCg0KPiANCj4gR3J7b2V0amUsZWV0aW5nfXMsDQo+IA0KPiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgR2VlcnQNCj4gDQo+IC0tDQo+IEdlZXJ0IFV5dHRlcmhvZXZlbiAtLSBU
+aGVyZSdzIGxvdHMgb2YgTGludXggYmV5b25kIGlhMzIgLS0gZ2VlcnRAbGludXgtbTY4ay5v
+cmcNCj4gDQo+IEluIHBlcnNvbmFsIGNvbnZlcnNhdGlvbnMgd2l0aCB0ZWNobmljYWwgcGVv
+cGxlLCBJIGNhbGwgbXlzZWxmIGEgaGFja2VyLiBCdXQNCj4gd2hlbiBJJ20gdGFsa2luZyB0
+byBqb3VybmFsaXN0cyBJIGp1c3Qgc2F5ICJwcm9ncmFtbWVyIiBvciBzb21ldGhpbmcgbGlr
+ZSB0aGF0Lg0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAtLSBMaW51cyBU
+b3J2YWxkcw0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2
+ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRz
+dHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5i
+ZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-Peter,
+--------------kLLSmv7rsQiLi2as8kPPAykj--
 
-Many thx!
+--------------A0AjPNV0nKMCzsHsKXoumNfW
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Now it works nicely:
+-----BEGIN PGP SIGNATURE-----
 
-cpu_thermal-virtual-0
-Adapter: Virtual device
-temp1:        +33.8=C2=B0C  (crit =3D +95.0=C2=B0C)
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHlguwFAwAAAAAACgkQlh/E3EQov+DH
+3RAAhyS7g1l+rdX7sGHUP+aGrCc2dFsAGBn9uNsJ2mWoPwJPW3u/ilU35je+kROU3dbyttqV3k+W
+L2+WeoXj0xkundZVaNnEhg/WMHfW+23RYq1VfjItcKVDsaUPiM7/FMlpsVykesF/GueV45StxAD1
+HpaqFW3m4TKEbOgzzOKFmgeYZmR4BDpeyI0Mn3Z4zTUhsNH7xyAFJFWp4c/3DRRZ04xhP+L4YUPS
+C/CaCS/8MNEyokcTHo/l9oQWxAvUMty7C803fgu9KffFW5Af1MZg7tQFOchYBS5gl0AC3iHeHAZG
+uruwCR46ZKza+LHOiDQCF1x0bRskX9ixJN74foVQzCNlLY93m+HFMQpUOd0VGUWhb4zssMwWOfUh
+iLGD4/c5e6TN21bJpZHo5nXQdu5RjX++5bNSzbJA3X5fjJsijkoBfJaB3k175vSdc8EOLVU9d4bP
+7KisNNrlrsBSwBtlsoFndRRehA08pB8MQ5aB5vP8CQGr0amjQZcBjwUPtnxWJVo3wtraC/SWR2DK
+GxVHUmIsODgrDXRilFYXwjPryHjHNaNZrOYBNE0rzf80OAxiltQ/wHHa9XyAqWTMpwVuduH1YZdQ
+3efQAm/UxcLcTFtZzieShtSkiYxcHe/qtDgwxARs9D4A+gCj/bp02yuJ/+1dackFkTarJaZUg5Tk
+ylc=
+=oJev
+-----END PGP SIGNATURE-----
 
-gpu_thermal-virtual-0
-Adapter: Virtual device
-temp1:        +34.4=C2=B0C  (crit =3D +95.0=C2=B0C)
-
-again: many thx!
-
-
-
-forgive me unrelated q:
-may hint me for script you are using in your gitlab ci for building =
-quartz64 u-boot in ci pipeline?
-I'm using yours binaries - but want to add building from sources in my =
-project....=20
-
-
+--------------A0AjPNV0nKMCzsHsKXoumNfW--

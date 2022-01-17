@@ -2,101 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A95449095A
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18A749095D
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240192AbiAQNTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 08:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240197AbiAQNTi (ORCPT
+        id S240200AbiAQNV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 08:21:28 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:52860 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229474AbiAQNV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 08:19:38 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95891C06161C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 05:19:37 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id t24so65409866edi.8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 05:19:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IxUqdkrB03qbYhYuHFWlu2efipfhSAmvjjxMHHkbVxM=;
-        b=dBlIuWZAuOfikzlsjwqbQNe67U4gG/OPgnx6Mp3cjciVzUbosp7YfjXAlTxg/8Q4wU
-         eg2+f82vVEo5voCTPWazcYPHiyAGP/F8Xgp9DF6jnr/C+Ls1Gzsh0VzPH6FnJPmxwJYV
-         LUvl3AaN5aiCKtt+ACCLUEh8C27bcoYLN62RI3mTt+iGlbjvSBKYitr0YzDb663AYlSA
-         8XTIK6y7Q/KbiEMWoy0KNGo20n45XaLd1+ogfLHRiGcpA0K1TDNTj1zkVAvEhVEqA4oZ
-         D7k4nxhoD7dmhQSL6L1sAof1bxraUoMtStTjHRRjKQZ9XFiClHSQEcL6+wZo2hrYOawI
-         f9eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IxUqdkrB03qbYhYuHFWlu2efipfhSAmvjjxMHHkbVxM=;
-        b=TXxggBgPbZ6rf5wzzzmGDs5Jw2/37Np/8yYg7Qva6FLpIVYQgt8rQGuTsoWKAvhsES
-         Nbfsf9AZyDmR6QEKG1mgni4ncJyrSEHYD7Ti8ATZ1/TALXh4eUhZnS/eQiAQf1vNoLFf
-         Zk29dAXRd0Y8l+ndEL1OsL3U0AKeoKzZlBdVJX4BiIwNT4qX30/qRV/14+8s0QTXy1lX
-         CqA9VKASTpNB3A32rMrPnITk/1QI6dSHt/QIVJDqA1H2Xy/QnmDIh4jqFabVkwWtrs5Q
-         kAENpyyz7QSYlZCb3itG6W2S43h1s3WSkBrAVZiygkS6HTfPwX7lwe0y+Iz64w56/OPG
-         O3Ew==
-X-Gm-Message-State: AOAM530fOXPNHSzklVkH444Wd3x/6YXGro3ietkbZpAdvcWK8KOEacYS
-        gVAdMrHq6wgZiVmJZ2lwpdpDo2RTD+cJf+f0Z/U9mA==
-X-Google-Smtp-Source: ABdhPJzV65XYave/zqi1u2Cgz1Qk+KhaEhxJR6isTs/bztiOlugFj3597cvcgQrOGcspRUnOYNHXr7GL03uSYjG3N5M=
-X-Received: by 2002:a05:6402:7cc:: with SMTP id u12mr4850867edy.373.1642425576203;
- Mon, 17 Jan 2022 05:19:36 -0800 (PST)
+        Mon, 17 Jan 2022 08:21:27 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: adalessandro)
+        with ESMTPSA id 9FE951F439D4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642425686;
+        bh=cLpfRqHBURM9rPTwgK+plOEmXlOGSYOFoD1NYi3A9mc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AuQBprJ8i3XCaq30qQMFk4a9PThm05/O46+YIvsdbm1F+SQT5ZBUWBz4gAhyQiSj1
+         ll7IXNX9lzGT1dFT8+Y6yppTQeRGlFzdji++G2JEcXNxHah7P13D1RYZQPwkWZG1SH
+         ueqe792bXa1IwliwmL0uQW4/DBSVFVoYxHYL/LbBeWqSPneJiVIH7LlO7ana3HqGWE
+         H0oDsoH004kaMx7wt/Fn3qBd3JpBzmMUpOKlScZ/YZG0CXxOP+/8fxzD/qZVisSZQ+
+         aHdfRBtNkPgVNmPw7KGYTObE/6NySch99Pr7G29on7YxfuDeS//DZ7jPX8YSq7FdAd
+         speTeoYIXz7Uw==
+From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     Xiubo.Lee@gmail.com, ariel.dalessandro@collabora.com,
+        bcousson@baylibre.com, broonie@kernel.org, festevam@gmail.com,
+        kuninori.morimoto.gx@renesas.com, lgirdwood@gmail.com,
+        michael@amarulasolutions.com, nicoleotsuka@gmail.com,
+        perex@perex.cz, robh+dt@kernel.org, shengjiu.wang@gmail.com,
+        tiwai@suse.com, tony@atomide.com
+Subject: [PATCH v2 0/5] fsl-asoc-card: Add optional dt property for setting mclk-id
+Date:   Mon, 17 Jan 2022 10:21:04 -0300
+Message-Id: <20220117132109.283365-1-ariel.dalessandro@collabora.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220114065125.21208-1-linmq006@gmail.com>
-In-Reply-To: <20220114065125.21208-1-linmq006@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 17 Jan 2022 14:19:25 +0100
-Message-ID: <CAMRc=MfN1zybtDcR882GtqkYivCE-pPUCxM9aNgs9EN8vohYNA@mail.gmail.com>
-Subject: Re: [PATCH] gpio: idt3243x: Fix IRQ check in idt_gpio_probe
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 7:51 AM Miaoqian Lin <linmq006@gmail.com> wrote:
->
-> platform_get_irq() returns negative error number instead 0 on failure.
-> And the doc of platform_get_irq() provides a usage example:
->
->     int irq = platform_get_irq(pdev, 0);
->     if (irq < 0)
->         return irq;
->
-> Fix the check of return value to catch errors correctly.
->
-> Fixes: 4195926aedca ("gpio: Add support for IDT 79RC3243x GPIO controller")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/gpio/gpio-idt3243x.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-idt3243x.c b/drivers/gpio/gpio-idt3243x.c
-> index 50003ad2e589..08493b05be2d 100644
-> --- a/drivers/gpio/gpio-idt3243x.c
-> +++ b/drivers/gpio/gpio-idt3243x.c
-> @@ -164,8 +164,8 @@ static int idt_gpio_probe(struct platform_device *pdev)
->                         return PTR_ERR(ctrl->pic);
->
->                 parent_irq = platform_get_irq(pdev, 0);
-> -               if (!parent_irq)
-> -                       return -EINVAL;
-> +               if (parent_irq < 0)
-> +                       return parent_irq;
->
->                 girq = &ctrl->gc.irq;
->                 girq->chip = &idt_gpio_irqchip;
-> --
-> 2.17.1
->
+This is a follow up of patchset:
 
-Queued for fixes, thanks!
+    [RFC patch 0/5] Support BCLK input clock in tlv320aic31xx
 
-Bart
+Sound cards may allow using different main clock inputs. In the generic
+fsl-asoc-card driver, these values are hardcoded for each specific card
+configuration.
+
+Let's make it more flexible, allowing setting mclk-id from the
+device-tree node.
+
+Changes in v2:
+* Split patch adding mckl-id property.
+
+Ariel D'Alessandro (5):
+  dt-bindings: sound: Rename tlv320aic31xx-micbias as tlv320aic31xx
+  dt-bindings: tlv320aic31xx: Define PLL clock inputs
+  ASoC: bindings: fsl-asoc-card: Add mclk-id optional property
+  ASoC: fsl-asoc-card: Add optional dt property for setting mclk-id
+  ASoC: fsl-asoc-card: Remove BCLK default value for tlv320aic31xx card
+
+ .../devicetree/bindings/sound/fsl-asoc-card.txt    |  1 +
+ .../devicetree/bindings/sound/tlv320aic31xx.txt    |  2 +-
+ arch/arm/boot/dts/am43x-epos-evm.dts               |  2 +-
+ include/dt-bindings/sound/tlv320aic31xx-micbias.h  |  9 ---------
+ include/dt-bindings/sound/tlv320aic31xx.h          | 14 ++++++++++++++
+ sound/soc/codecs/tlv320aic31xx.c                   |  2 +-
+ sound/soc/fsl/fsl-asoc-card.c                      |  7 ++++++-
+ 7 files changed, 24 insertions(+), 13 deletions(-)
+ delete mode 100644 include/dt-bindings/sound/tlv320aic31xx-micbias.h
+ create mode 100644 include/dt-bindings/sound/tlv320aic31xx.h
+
+-- 
+2.34.1
+

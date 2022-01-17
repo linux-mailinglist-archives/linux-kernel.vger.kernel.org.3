@@ -2,119 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C059F490CB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2959A490CBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 17:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241144AbiAQQ6G convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 17 Jan 2022 11:58:06 -0500
-Received: from aposti.net ([89.234.176.197]:56930 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237844AbiAQQ6G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:58:06 -0500
-Date:   Mon, 17 Jan 2022 16:57:52 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v3 0/6] DEV_PM_OPS macros rework v3
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        BROADCOM NVRAM DRIVER <linux-mips@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Message-Id: <GS5V5R.BVK5SB217XZU2@crapouillou.net>
-In-Reply-To: <CAJZ5v0htDq+qFhEoV+PLQ9_pOy_xa7+rMoaGtqK7QpEbpUDA+Q@mail.gmail.com>
-References: <20220107181723.54392-1-paul@crapouillou.net>
-        <IKXS5R.AB16PVIGN8Z9@crapouillou.net>
-        <CAJZ5v0htDq+qFhEoV+PLQ9_pOy_xa7+rMoaGtqK7QpEbpUDA+Q@mail.gmail.com>
+        id S241157AbiAQQ7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 11:59:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237741AbiAQQ65 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 11:58:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F0FC061574;
+        Mon, 17 Jan 2022 08:58:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2599B61196;
+        Mon, 17 Jan 2022 16:58:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 557D6C36AE3;
+        Mon, 17 Jan 2022 16:58:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642438736;
+        bh=jMvOlTe10aiL8xVey/HFWpKZibYbbP0tunjN77I5CEA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=H9Y43t1tmAXNYlc//esilVi2HvXiRWDQ0sSUipvB08xhigdJpOWH4JmVufwTmt7Ge
+         z1fmrq3zLZUqqdb6QdP2jBAbNHlpAy/nCPzRNqBIVdWjfrN8JO78tOGLS+ZepU7Ruc
+         Xgdshv6/XV5JY3u4/iVkZKzt0e9C00TsJk3J9p4jLUKmfWD+j0q7HwI2piFC2poJTw
+         l/Z+7VHXafimMl1BOpKmaDEbe+Z28m7vZj3DabFMLjnI0lOdID3H6Rt6c2UA6yMzD9
+         E2jD40O3LLfXLv2/U0WA8k1jKVsrJUFAkTfUuVUews9JrHHgFCA2lFt+V430SO3zmf
+         13NIjEX1gAICg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>, Abel Vesa <abel.vesa@nxp.com>,
+        Sasha Levin <sashal@kernel.org>, mturquette@baylibre.com,
+        sboyd@kernel.org, shawnguo@kernel.org, linux-clk@vger.kernel.org,
+        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.16 01/52] clk: imx: Use div64_ul instead of do_div
+Date:   Mon, 17 Jan 2022 11:58:02 -0500
+Message-Id: <20220117165853.1470420-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
+[ Upstream commit c1b6ad9a902539f9c037b6b3c35cb134c5724022 ]
 
-Le lun., janv. 17 2022 at 14:37:45 +0100, Rafael J. Wysocki 
-<rafael@kernel.org> a écrit :
-> Hi,
-> 
-> On Sun, Jan 16, 2022 at 1:05 PM Paul Cercueil <paul@crapouillou.net> 
-> wrote:
->> 
->>  Hi Rafael,
->> 
->>  Could patches [1/6] and [2/6] make it to 5.17-rc1, or at least -rc2?
-> 
-> Yes.  I'm going to send a PR with the whole series later today.
+do_div() does a 64-by-32 division. Here the divisor is an unsigned long
+which on some platforms is 64 bit wide. So use div64_ul instead of do_div
+to avoid a possible truncation.
 
-Ok, perfect then. I saw my previous PM patches in upstream/master and 
-assumed that you already sent your PR.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
+Link: https://lore.kernel.org/r/20211118080634.165275-1-deng.changcheng@zte.com.cn
+Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/clk/imx/clk-pllv3.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Cheers,
--Paul
-
-> 
->>  I'm afraid that if these two have to wait for the 5.18 cycle, then 
->> I'll
->>  have more drivers to fix later.
->> 
->>  Should I add a Fixes tag maybe?
-> 
-> No need, thanks!
-> 
->>  Le ven., janv. 7 2022 at 18:17:17 +0000, Paul Cercueil
->>  <paul@crapouillou.net> a écrit :
->>  > Hi,
->>  >
->>  > A V2 of my patchset that tweaks a bit the *_DEV_PM_OPS() macros 
->> that
->>  > were introduced recently.
->>  >
->>  > Changes since V2:
->>  > * [1/6]: - Keep UNIVERSAL_DEV_PM_OPS() macro deprecated
->>  >          - Rework commit message
->>  > * [3/6]: - Reorder the code to have non-private macros together 
->> in the
->>  >            file
->>  >        - Add comment about the necesity to use the new export 
->> macro
->>  >          when the dev_pm_ops has to be exported
->>  > * [5/6]: Add comment about the necesity to use the new export 
->> macro
->>  >          when the dev_pm_ops has to be exported
->>  >
->>  > Cheers,
->>  > -Paul
->>  >
->>  > Paul Cercueil (6):
->>  >   PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
->>  >   PM: core: Remove static qualifier in DEFINE_SIMPLE_DEV_PM_OPS 
->> macro
->>  >   PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
->>  >   PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
->>  >   PM: runtime: Add EXPORT[_GPL]_RUNTIME_DEV_PM_OPS macros
->>  >   iio: pressure: bmp280: Use new PM macros
->>  >
->>  >  drivers/iio/pressure/bmp280-core.c | 11 ++----
->>  >  drivers/iio/pressure/bmp280-i2c.c  |  2 +-
->>  >  drivers/iio/pressure/bmp280-spi.c  |  2 +-
->>  >  drivers/mmc/host/jz4740_mmc.c      |  4 +--
->>  >  drivers/mmc/host/mxcmmc.c          |  2 +-
->>  >  include/linux/pm.h                 | 55
->>  > ++++++++++++++++++++++--------
->>  >  include/linux/pm_runtime.h         | 24 +++++++++++++
->>  >  7 files changed, 71 insertions(+), 29 deletions(-)
->>  >
->>  > --
->>  > 2.34.1
->>  >
->> 
->> 
-
+diff --git a/drivers/clk/imx/clk-pllv3.c b/drivers/clk/imx/clk-pllv3.c
+index 20ee9611ba6e3..eea32f87c60aa 100644
+--- a/drivers/clk/imx/clk-pllv3.c
++++ b/drivers/clk/imx/clk-pllv3.c
+@@ -247,7 +247,7 @@ static long clk_pllv3_av_round_rate(struct clk_hw *hw, unsigned long rate,
+ 	div = rate / parent_rate;
+ 	temp64 = (u64) (rate - div * parent_rate);
+ 	temp64 *= mfd;
+-	do_div(temp64, parent_rate);
++	temp64 = div64_ul(temp64, parent_rate);
+ 	mfn = temp64;
+ 
+ 	temp64 = (u64)parent_rate;
+@@ -277,7 +277,7 @@ static int clk_pllv3_av_set_rate(struct clk_hw *hw, unsigned long rate,
+ 	div = rate / parent_rate;
+ 	temp64 = (u64) (rate - div * parent_rate);
+ 	temp64 *= mfd;
+-	do_div(temp64, parent_rate);
++	temp64 = div64_ul(temp64, parent_rate);
+ 	mfn = temp64;
+ 
+ 	val = readl_relaxed(pll->base);
+@@ -334,7 +334,7 @@ static struct clk_pllv3_vf610_mf clk_pllv3_vf610_rate_to_mf(
+ 		/* rate = parent_rate * (mfi + mfn/mfd) */
+ 		temp64 = rate - parent_rate * mf.mfi;
+ 		temp64 *= mf.mfd;
+-		do_div(temp64, parent_rate);
++		temp64 = div64_ul(temp64, parent_rate);
+ 		mf.mfn = temp64;
+ 	}
+ 
+-- 
+2.34.1
 

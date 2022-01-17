@@ -2,185 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56E1049106C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 19:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D5549106F
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 19:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232580AbiAQSik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 13:38:40 -0500
-Received: from mail-dm6nam12on2080.outbound.protection.outlook.com ([40.107.243.80]:23137
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230519AbiAQSij (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 13:38:39 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EfS8jcMqgHGdlL8e0vRX+Lt+ntxMCoId6pm1FPLk2c3rdebq0mlIaS9gY5sNdnjexX0gslUs2rEPRfYcltnf1hHQNiWKPpVxj8EeHS0UDEzBjdsqhqJLOmnzY1SmzqiFs+M2kZ+9HhJTySLywZz0qHvZsX3AEbTIi0jIMcC+oQUss1+o46HUuMZQhN5Ri5FTPnD0cjUZPr+gp/hmiJf2kdk587iKJgrdZb+S4tIhyXWdO5hSFmtKDXfxRDeetcQaHCKkdQr4v3DkZuTsvugv0T0SLaTjqxjeqyRmQ2EdUOc9bm+eE3r4TWDAiwsBsU6pxzIOlg6dlicqY2IAPj81YA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IVd94PBesjdDdrUPuRE2kF/UIngSHeE3KrA8p4G4vfE=;
- b=NIv78tcnbnBGQ7kWdi6gxwZmoTrnPlqWoAp5NViZ9Z9BgmvgK6BIWV2TkJEX2almykj0tI4c+qUluelJkA5PyOfotmbBO9bkCxQCr/5kBv3WkkVURGesZPm5O1hYAdj94WXOoYF/HInRR7v5N357r3U/jzp2V7B5uAEz7JrHEbliEZTeVlP8iRv6L46xfzUGozgQHG96Xg/tMI5A7kB0TqLCy+zqSDlYzxSb3bYx43bztpWh7Rtk7fR9ciw6Q1b8WYX1qkX/5NSAelHHgzYHy3Jmp8QZ/hJYdnVseWLOiT5Mlh5mnMqSUmmbxIUZ704wahVuUzG+XOJ69GkFmyc/Tw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IVd94PBesjdDdrUPuRE2kF/UIngSHeE3KrA8p4G4vfE=;
- b=fXsraHnM/ukoLqNhDOmw8lAxiK8mf2owgq+HJzpDztJWDZeKZsJP165VgKQo52B3opCeBjhZ/Dx2+kEWBKfBnYqHcOAS4GrF8sJSHtGwW1PCZdjcma4pkTMx22kBYhcPI+5FZP4TbHotwq9ylMdIOYhjCiL0nZLJJGCqbdP2c4QGHORHtv2/n1EzprSjlzqmVo/OkNPyLu3DQ1fldVq/EhrfBKIpKL7Z01HymMyL8R6RhAF0zDI2ybtzZRNr9HKon9y2BEnSf0cLlh7G41mavX/dIFWcszyLK6cRICatbNIqGtxhw+58RoIGn1sP4YDeBeSh6lHj10KS8s9x0NQ5kw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by SA0PR12MB4382.namprd12.prod.outlook.com (2603:10b6:806:9a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.13; Mon, 17 Jan
- 2022 18:38:33 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::464:eb3d:1fde:e6af]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::464:eb3d:1fde:e6af%8]) with mapi id 15.20.4888.014; Mon, 17 Jan 2022
- 18:38:33 +0000
-Date:   Mon, 17 Jan 2022 14:38:32 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        syzbot+8fcbb77276d43cc8b693@syzkaller.appspotmail.com
-Subject: Re: [PATCH rdma-rc] RDMA/cma: Clear all multicast request fields
-Message-ID: <20220117183832.GD84788@nvidia.com>
-References: <1876bacbbcb6f82af3948e5c37a09da6ea3fcae5.1641474841.git.leonro@nvidia.com>
- <20220106173941.GA2963550@nvidia.com>
- <YdrTbNDTg7VdR2iu@unreal>
- <20220110153619.GC2328285@nvidia.com>
- <Ydx1dDSa1JDJGFdJ@unreal>
- <20220117161621.GC84788@nvidia.com>
- <YeWzeA/8TgXalrD8@unreal>
+        id S233872AbiAQSmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 13:42:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51225 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230519AbiAQSma (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 13:42:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642444950;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x/Q3U/Vd6Qj9rm/nBiWqBsXqiLf/otr5/shlpSyBqHw=;
+        b=NwagwQ7CzxVAhctSXfVT4YziGef7vjk8Mi0NJgfp4vlFQ41zjC43tyssKsX8cN9Cn5oqdQ
+        pvmQ3j8U2RSvQDQPcN3n0CLJEsYKaEwHCWrKNzVvD+3l+C3QkJsSEoNGCqEeCjiMH6EWwT
+        liLE5kSSLWkyZWLmxMmrGVMDecaE8Xw=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-592-TFCdOetGPoykh-tz6oAPWw-1; Mon, 17 Jan 2022 13:42:29 -0500
+X-MC-Unique: TFCdOetGPoykh-tz6oAPWw-1
+Received: by mail-qt1-f199.google.com with SMTP id b7-20020ac85bc7000000b002b65aee118bso13113342qtb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 10:42:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=x/Q3U/Vd6Qj9rm/nBiWqBsXqiLf/otr5/shlpSyBqHw=;
+        b=Irs5wkJbnywsVTxcU8loL38rCEN9S5OkGaSUuTLLY58STMO7M74vZgSZtzI8LfLS0g
+         CWE2cQUb+uUEDAfFbng1Rm2zJCzC48CixeNPMBudP4MoJFkwl1OqGPgWsE7VNCauMSm/
+         9W96fvGRmK+/6PG3G5MU1jXZKbRJ/QXR6EWvtVdx7EyQur1dtPO9ikJLmgxY0a95U/uA
+         3KqBq2cHr1oub/d3yR/9iYY7et1+U4vx6NjwGHMRjXUN5sM83QGOV+rEk3Y4ig613C+J
+         9VV1RmvaFn1M1Mm/nFpuOFax0h10aE2CglN16O1JJ6UVg4ziJBrqvS7ORShrMxbLGtVb
+         CokA==
+X-Gm-Message-State: AOAM5327AYdDjGSzgNethlhmSLoh/UsLfnBhKD98BE6o5GpQBs//6x92
+        +a33qzyRRhkaZQ9VrPfBXWLcHsIqMLYTX6IDWE4Aa3UR/dXrDsWlPZ0rU1uWokWkoXdEjMw/Z9C
+        hZH3s+ks4dbqj0bEiGzG25NwM
+X-Received: by 2002:a37:93c4:: with SMTP id v187mr15308881qkd.690.1642444948166;
+        Mon, 17 Jan 2022 10:42:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwNQsRLrsq0GcLiiP9/XWDBACY0xvoBNWHeIzR9mJ4vVs3NU3QJtH9xLMhb+z99lZzn16vCpg==
+X-Received: by 2002:a37:93c4:: with SMTP id v187mr15308874qkd.690.1642444947840;
+        Mon, 17 Jan 2022 10:42:27 -0800 (PST)
+Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
+        by smtp.gmail.com with ESMTPSA id bj25sm1203596qkb.118.2022.01.17.10.42.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 10:42:27 -0800 (PST)
+Date:   Mon, 17 Jan 2022 13:42:25 -0500
+From:   Brian Foster <bfoster@redhat.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Ian Kent <raven@themaw.net>, "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        David Howells <dhowells@redhat.com>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        xfs <linux-xfs@vger.kernel.org>,
+        Dave Chinner <david@fromorbit.com>
+Subject: Re: [PATCH] vfs: check dentry is still valid in get_link()
+Message-ID: <YeW4kaT5YkeG1EDZ@bfoster>
+References: <164180589176.86426.501271559065590169.stgit@mickey.themaw.net>
+ <YeJr7/E+9stwEb3t@zeniv-ca.linux.org.uk>
+ <275358741c4ee64b5e4e008d514876ed4ec1071c.camel@themaw.net>
+ <YeV+zseKGNqnSuKR@bfoster>
+ <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YeWzeA/8TgXalrD8@unreal>
-X-ClientProxiedBy: BL0PR02CA0073.namprd02.prod.outlook.com
- (2603:10b6:208:51::14) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 65698d72-ea3a-4d1c-6996-08d9d9e8908e
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4382:EE_
-X-Microsoft-Antispam-PRVS: <SA0PR12MB4382CE0FF1196813ECF9910FC2579@SA0PR12MB4382.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /BppAGVRruoNFBOAp2+iQWf3EHlXgxiNSYn+MO2ITWHEw0ITLCPmecZx1lvR9Cl3Lt3eauMYDDg49sMSnGV4icRYxCeDqsixXs8H9CSXM0Yd0ZJhDnxAFhIDzlZilqzCTDCx6E91XNihVgYakfyJEpGsD9XERtMWjWtDQwkjIqG/oblgNQvNKAdSU3CsLqgV2IslENVJWsXGGpGwWdXtJgLTyl5kngl/AiKg+cbb5Dc0Wk0BeW9tKFA8ifHnqiaKHCI1GVBccD2sHeU5UlcvWBxadr4RqnExHHiikUdC2VXZKNNch6+SYSnoqrnDpyftY9C8NcbGIL78sVo/eE6a4vSQBhNlLUEzoQkbTWJPqmGH9Im49WcTDYCHI29h2OyaYVUoQ9WUh1jBkMyEs7GuvhxvQ3DZAjJHEVlFesaHdgiej8crj6a/XsYQxGhPCXnQQ22grwOIp3x4kUnjLDbURGDUjwL+k3m5rzEPwgiFWa1z9lwxSHWcEilyj/p5b41dqPLT1KR36vdMG2yZ31B87O8k9d4upzSX6u66XfZG33kKO/76X3/vZoEVl4CpFEmU13kKcmJ+2RtYhQczw12H+U03BI2BsgH3AkepmNUzUSJG+lfJLtrgFYh8VlHiDO/jaMrcEHoXKFggW6CzlEXqag==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(1076003)(186003)(316002)(6486002)(66556008)(66476007)(66946007)(26005)(6916009)(36756003)(33656002)(2616005)(38100700002)(8936002)(8676002)(2906002)(6512007)(6506007)(508600001)(4326008)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pOXrCW6NY3jk9lHCie5+v00Q7lf5Xf3WF3EbKBLXXMywfsJRfOt6gNhvPNsB?=
- =?us-ascii?Q?MIZ0/Y7SfmWVsYAUSEHX6whW/2osRfuXt2U05u8TzI9etog15gboTeBHWSwb?=
- =?us-ascii?Q?5aNNFFl4CyskNjBEp9ZvVQBa8cxzIvzspv7ZXl8r3GNm5elEgVPvE2SBdQ3J?=
- =?us-ascii?Q?UiXP6Z8IdAZoejEwSIxp3uNFa0WR2+ARUoMYCRepr4K/3rnArOEp3yLTQ3l5?=
- =?us-ascii?Q?AA3AfmfVTgFTJVltSzvsCN13wj7mhsQt4OaTPS/QDZXAMkiup1o3RDv1clT4?=
- =?us-ascii?Q?qQV7bSzUXspR9OKMl7TOIkBeRvqvyIpP8fWkhecZpeLmbg4rRmTNTkFiplJs?=
- =?us-ascii?Q?w14mx8J9QVeHM5eQ9IlBk93k+q/iFA1k3LV6I966fqIm4Ggysnz7WUXi4vw/?=
- =?us-ascii?Q?S+/MVI9FseGrE14Bc4zJoGcB5/wCwr8wMBop9mtSRj6OykzW+dpuwoqUrAXQ?=
- =?us-ascii?Q?/UORb7cl76V9Wfkw+tJCBnuvQcI8ToBrb8pAfAllpl+Y+bwxse6qPVd9J8M2?=
- =?us-ascii?Q?umk1GpX9U+sKDDrg/En/VLk/zs+7EWpI7xvPYqK8F013g2r630uIHtp0Ni0N?=
- =?us-ascii?Q?4fjyA/x2Ycxjhoypj2hm++Bwicb69R2u+J8vaQUHgFEAP33w6GTPwMVHwEZk?=
- =?us-ascii?Q?OUn/kKamNlPmvJgFHTkQM1/OlId6eM2zySI1W/du5q+QgmmtKGXzwWhIfAm6?=
- =?us-ascii?Q?fsVi+FRw+CjP7FelPetuiBn9hxu3BK+x6GlOWGIK9f55HiohbSLOBDYJt3Gy?=
- =?us-ascii?Q?NG6JiwvPl8pQDcaDpuJZexxkpmQMxgJuZZ7yTuSUzpL1SgWBqlfoEMnMSAno?=
- =?us-ascii?Q?tsm4bcJwlaMalhVx8yAPqm26FdCDv49NeYYWpLONDpSH8wAW69g8f4mj/gsT?=
- =?us-ascii?Q?AVbho6ioaOX+U2VzqDoJVrTv2SHfWM1dyL3Vd6DXxndgapST5/hhDAUPaflr?=
- =?us-ascii?Q?EOkXmyVqeNGF+ieKFa6dj5LYNnUkIuto/8YBEh/zmdGofV8lVNw+cc4E4TtM?=
- =?us-ascii?Q?QHlsR7R/0HXGp0FwwYgMCJgbdotyUqwLg55BL3b/xuomdfo8AaQbtWAxq0wE?=
- =?us-ascii?Q?xwtg2OOpLiVtrM3Wt+tayVMC1pds/oqSHFMgo1qEjlId2ZrBo8ny4jOWn1MK?=
- =?us-ascii?Q?/dUlkWafhCAstyMvAyoRC9FuH5KN8Sp/YVsMOaN6QGgpeYYYodLzPKzT7Amz?=
- =?us-ascii?Q?yR19yAHJwPWZZPKD6mdXDEdzwhtdsHDtpjdANWcavpNh1mbdyAHO1wvZA/zZ?=
- =?us-ascii?Q?/FerciBHBTfTuiA0wtwX/h8RygITWVL6NMr6R1TuvG8krlMbtcNElxV1jLbH?=
- =?us-ascii?Q?dl475/sF3MfFvNbbX/51Cg2POQUY5n4SjIX4aIw4fzRRHOuLprpmI3dIx4bj?=
- =?us-ascii?Q?OLSl8XDknAOa9lGxcMO8cqJF5Yv8HfxKwRKVvwPxkigoaoesyuwUr9Md2MJH?=
- =?us-ascii?Q?lmS4tNUyY245SsdYbjmTMnicYAKI7MtrYexxanN4E4wbK8UubLRQuVz4Q5b/?=
- =?us-ascii?Q?cvTs8+9BSm0OY//oKwaXRNDvBF7p/VIaDRA9s1qqcdGA9u8oajQVfaJokOrC?=
- =?us-ascii?Q?cObrK0LLTO/jZ262DQ8=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65698d72-ea3a-4d1c-6996-08d9d9e8908e
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 18:38:33.1934
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m365EvRtQLVUe0VBrt8NTCYOcZxT8hVrf0qNcthpoqFowRFmfYI1RHVkIgKWc5nh
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4382
+In-Reply-To: <YeWZRL88KPtLWlkI@zeniv-ca.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 08:20:40PM +0200, Leon Romanovsky wrote:
-> On Mon, Jan 17, 2022 at 12:16:21PM -0400, Jason Gunthorpe wrote:
-> > On Mon, Jan 10, 2022 at 08:05:40PM +0200, Leon Romanovsky wrote:
-> > 
-> > > > We should probably check the PS even earlier to prevent the IB side
-> > > > from having the same issue.
-> > > 
-> > > What do you think about this?
-> > 
-> > IB is a bit different, it has a bunch of PS's that are UD compatible..
-> > 
-> > Probably what we really want here is to check/restrict the CM ID to
-> > SIDR mode, which does have the qkey and is the only mode that makes
-> > sense to be mixed with multicast, and then forget about port space
-> > entirely.
-> > 
-> > It may be that port space indirectly restricts the CM ID to SIDR mode,
-> > but the language here should be 'is in sidr mode', not some confusing
-> > open coded port space check.
-> > 
-> > I'm also not sure of the lifecycle of the qkey, qkeys only exist in
-> > SIDR mode so obviously anything that sets/gets a qkey should be
-> > restriced to SIDR CM IDs..
-> > 
-> > > diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-> > > index 835ac54d4a24..0a1f008ca929 100644
-> > > +++ b/drivers/infiniband/core/cma.c
-> > > @@ -4669,12 +4669,8 @@ static int cma_join_ib_multicast(struct rdma_id_private *id_priv,
-> > >         if (ret)
-> > >                 return ret;
-> > > 
-> > > -       ret = cma_set_qkey(id_priv, 0);
-> > > -       if (ret)
-> > > -               return ret;
-> > > -
-> > >         cma_set_mgid(id_priv, (struct sockaddr *) &mc->addr, &rec.mgid);
-> > > -       rec.qkey = cpu_to_be32(id_priv->qkey);
-> > > +       rec.qkey = cpu_to_be32(RDMA_UDP_QKEY);
-> > 
-> > And I'm not sure this makes sense? The UD qkey should still be
-> > negotiated right?
+On Mon, Jan 17, 2022 at 04:28:52PM +0000, Al Viro wrote:
+> On Mon, Jan 17, 2022 at 09:35:58AM -0500, Brian Foster wrote:
 > 
-> Yes, I think so, it will be changed in SIDR phase.
+> > To Al's question, at the end of the day there is no rcu delay involved
+> > with inode reuse in XFS. We do use call_rcu() for eventual freeing of
+> > inodes (see __xfs_inode_free()), but inode reuse occurs for inodes that
+> > have been put into a "reclaim" state before getting to the point of
+> > freeing the struct inode memory. This lead to the long discussion [1]
+> > Ian references around ways to potentially deal with that. I think the
+> > TLDR of that thread is there are various potential options for
+> > improvement, such as to rcu wait on inode creation/reuse (either
+> > explicitly or via more open coded grace period cookie tracking), to rcu
+> > wait somewhere in the destroy sequence before inodes become reuse
+> > candidates, etc., but none of them seemingly agreeable for varying
+> > reasons (IIRC mostly stemming from either performance or compexity) [2].
+> > 
+> > The change that has been made so far in XFS is to turn rcuwalk for
+> > symlinks off once again, which looks like landed in Linus' tree as
+> > commit 7b7820b83f23 ("xfs: don't expose internal symlink metadata
+> > buffers to the vfs"). The hope is that between that patch and this
+> > prospective vfs tweak, we can have a couple incremental fixes that at
+> > least address the practical problem users have been running into (which
+> > is a crash due to a NULL ->get_link() callback pointer due to inode
+> > reuse). The inode reuse vs. rcu thing might still be a broader problem,
+> > but AFAIA that mechanism has been in place in XFS on Linux pretty much
+> > forever.
 > 
-> The original code has "cma_set_qkey(id_priv, 0)" call, that in IB case will
-> execute this switch anyway:
->    515         switch (id_priv->id.ps) {
->    516         case RDMA_PS_UDP:
->    517         case RDMA_PS_IB:
->    518                 id_priv->qkey = RDMA_UDP_QKEY;
+> My problem with that is that pathname resolution very much relies upon
+> the assumption that any inode it observes will *not* change its nature
+> until the final rcu_read_unlock().  Papering over ->i_op->get_link reads
+> in symlink case might be sufficient at the moment (I'm still not certain
+> about that, though), but that's rather brittle.  E.g. if some XFS change
+> down the road adds ->permission() on some inodes, you'll get the same
+> problem in do_inode_permission().  We also have places where we rely upon
+> 	sample ->d_seq
+> 	fetch ->d_flags
+> 	fetch ->d_inode
+> 	validate ->d_seq
+> 	...
+> 	assume that inode type matches the information in flags
 > 
-> The difference is that we won't store RDMA_UDP_QKEY in id_priv->qkey,
-> but I'm unsure that this is right.
+> How painful would it be to make xfs_destroy_inode() a ->free_inode() instance?
+> IOW, how far is xfs_inode_mark_reclaimable() from being callable in RCU
+> callback context?  Note that ->destroy_inode() is called via
+> 
 
-Well the whoele cma_set_qkey() function appears to be complete
-jumblied nonsense as if qkey is zero then it doesn't do anything if
-the qkey was already set.
+As discussed on IRC, this was brought up in the earlier discussion by
+Miklos. Dave expressed some concern around locking, but I'm not sure I
+grok the details from reading back [1]. The implication seems to be the
+lookup side would have to rcu wait on associated inodes in the destroy
+side, which might be more of a concern about unconditional use of
+free_inode() as opposed to more selective rcu waiting for unlinked (or
+inactive) inodes. Dave would need to chime in further on that..
 
-When called with 0 it is really some sort of 'make a default qkey if
-the user hasn't set one already' and in that case defaulting to
-RDMA_UDP_QKEY does makes some kind of sense.
+As it is, it looks to me that unlinked inodes unconditionally go to the
+inactive queues and thus the create side (xfs_iget_cache_hit(), if we're
+considering inode reuse) basically pushes on the queue and waits on the
+inode state to clear. Given that, ISTM it shouldn't be that much
+functional pain to introduce an rcu delay somewhere before an inactive
+inode becomes reclaimable (and thus reusable).
 
-The functions purposes should be split into two functions really.
+I think the impediment to something like this has been more performance
+related. An inode alloc/free workload can turn into a continuous reuse
+of the same batch of inodes, over and over. Therefore an rcu wait on
+iget reuse can become effectively unconditional and slow things down
+quite a bit (hence my previous, untested thought around making it
+conditional and potentially amortizing the cost). I had played with a
+more selective grace period in the teardown side for inactive inodes via
+queue_rcu_work(), since that's an easy place to inject an rcu
+delay/callback, but that had some performance impact on sustained file
+removal that might require retuning other bits..
 
-So, we end up with 'make sure the cm id is in SDIR mode' then 'if the
-qkey is not set, set it to a default', so that the net result is the
-qkey is always set once the function returns.
+Brian
 
-Though, I'm not sure what the semantics are for qkey during SIDR
-negotiation, that should be checked in the spec.
+[1] https://lore.kernel.org/linux-fsdevel/20211114231834.GM449541@dread.disaster.area/#t
 
-Jason
+> static void destroy_inode(struct inode *inode)
+> {
+> 	const struct super_operations *ops = inode->i_sb->s_op;
+> 
+> 	BUG_ON(!list_empty(&inode->i_lru));
+> 	__destroy_inode(inode);
+> 	if (ops->destroy_inode) {
+> 		ops->destroy_inode(inode);
+> 		if (!ops->free_inode)
+> 			return;
+> 	}
+> 	inode->free_inode = ops->free_inode;
+> 	call_rcu(&inode->i_rcu, i_callback);
+> }
+> 
+> with
+> 
+> static void i_callback(struct rcu_head *head)
+> {
+>         struct inode *inode = container_of(head, struct inode, i_rcu);
+> 	if (inode->free_inode)
+> 		inode->free_inode(inode);
+> 	else   
+> 		free_inode_nonrcu(inode);
+> }
+> 
+> IOW, ->free_inode() is RCU-delayed part of ->destroy_inode().  If both
+> are present, ->destroy_inode() will be called synchronously, followed
+> by ->free_inode() from RCU callback, so you can have both - moving just
+> the "finally mark for reuse" part into ->free_inode() would be OK.
+> Any blocking stuff (if any) can be left in ->destroy_inode()...
+> 
+

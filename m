@@ -2,119 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 070D849004C
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8542E49004E
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 03:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236849AbiAQCnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 16 Jan 2022 21:43:04 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:21845 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbiAQCnD (ORCPT
+        id S236867AbiAQCpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 16 Jan 2022 21:45:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232774AbiAQCpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 16 Jan 2022 21:43:03 -0500
-Received: from [10.28.39.106] (10.28.39.106) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 17 Jan
- 2022 10:43:01 +0800
-Message-ID: <d6933fd7-ec4c-aee1-5cf4-9cbcf881a33d@amlogic.com>
-Date:   Mon, 17 Jan 2022 10:43:01 +0800
+        Sun, 16 Jan 2022 21:45:38 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE46C061574
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 18:45:37 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id f8so9565899pgf.8
+        for <linux-kernel@vger.kernel.org>; Sun, 16 Jan 2022 18:45:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=qUMGXQA24GuCkD0foGZ5EQ/jWXa2C4jCsPx92Oi0DR4=;
+        b=3JcalMkLwRqtx0dh+FBtyQAGr4zEik0NNokh7CZm9OjxATON/gXp5yImWlNGSIthv+
+         GKYZ+O5JUE82OShMSyjYbUfxwuerQa/dKw8d7y9kVZm3zCqZJOKr0d1o6ayrotoo3lAJ
+         MmQZ1GZ5ae53FWqTbV1p4NViMmmFmTtzBh4sCCWV8S0DvMixlOTHfAfZkbOp699BGmZc
+         afbQ9vjEADSw0zK+vnLf4MyjIuPu5pTDn2igIrZ7D0ZnOdZrUU1kZWmPomddoEpg5LNj
+         9nnyRMfVFRPxSyImBzr3BFn7mjlhalInCzqMRsNZTIpyJ2B3c6mTjAHrA4Tyv0wFWSRS
+         SZ5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qUMGXQA24GuCkD0foGZ5EQ/jWXa2C4jCsPx92Oi0DR4=;
+        b=Qq3mYCsv7XzHEbJeB19AvJOpP6BHVBZCqD+nNWYrSCg49CXJJ3do45CK3J4rfkQZnt
+         p/mb0W81FUngH5DLhXhh2yAuULV0fIRb4K+y7rfwhdOVpkV/Ex1fjCurbk2gWxsIiFxK
+         UVFM0zLFEGLibQdcaaRhmAcgubemQUD2F1sZk6yWUw+804O9n5gZMyYptDqTqaJnCufc
+         OgA+6IVhIj75zvz1I9f7o+WcaI7LvAqfL0wZ0wIcJlVZm+wXeluK+LVPEIzSCG+r1LNT
+         1O+ml/uE5BcsHjaaCWPy6CH7OKKxx0AWkUa6l6+rNSUXm2NO4qKk5h1tUCAJTSE8s8hh
+         fhqQ==
+X-Gm-Message-State: AOAM530I4nqpIMyasqGpxKJ7KeqyWRH6Lz4JkgUI/2zFzbcFfM3mx81V
+        ZjbaCnGP/u+MLcf5DnGbereF7Q==
+X-Google-Smtp-Source: ABdhPJzq0NYrXjwknb/WYsPDwFTg401OZR3e8p/eQrIgNjYBek+0BxMrjWkmpMsqlGtfJhXoVGGOoA==
+X-Received: by 2002:a05:6a00:188a:b0:4c2:faa1:b6ed with SMTP id x10-20020a056a00188a00b004c2faa1b6edmr10839523pfh.54.1642387536771;
+        Sun, 16 Jan 2022 18:45:36 -0800 (PST)
+Received: from [10.16.129.73] (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id c21sm2183587pgw.41.2022.01.16.18.45.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Jan 2022 18:45:36 -0800 (PST)
+Message-ID: <dfc44001-cdb7-3a85-2c66-b6180183bd5a@igel.co.jp>
+Date:   Mon, 17 Jan 2022 11:45:27 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v9 3/4] clk: meson: add DT documentation for emmc clock
- controller
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [RFC PATH 1/3] drm: add support modifiers for drivers whose
+ planes only support linear layout
 Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-clk@vger.kernel.org>
-CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20220113115745.45826-1-liang.yang@amlogic.com>
- <20220113115745.45826-4-liang.yang@amlogic.com>
- <20220113212957.768FFC36AE3@smtp.kernel.org>
- <5d99ac02-a246-5bcc-2ecb-371b0d193537@amlogic.com>
- <20220114225957.285ADC36AE7@smtp.kernel.org>
-From:   Liang Yang <liang.yang@amlogic.com>
-In-Reply-To: <20220114225957.285ADC36AE7@smtp.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <mdaenzer@redhat.com>,
+        Simon Ser <contact@emersion.fr>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        Mark Yacoub <markyacoub@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Evan Quan <evan.quan@amd.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org,
+        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
+        Takanari Hayama <taki@igel.co.jp>
+References: <20211222052727.19725-1-etom@igel.co.jp>
+ <20211222052727.19725-2-etom@igel.co.jp>
+ <YeGpw7L3jODHHnPC@phenom.ffwll.local>
+From:   Esaki Tomohito <etom@igel.co.jp>
+In-Reply-To: <YeGpw7L3jODHHnPC@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.28.39.106]
-X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
- (10.28.11.5)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thank you for your reviews.
 
+On 2022/01/15 1:50, Daniel Vetter wrote:
+> On Wed, Dec 22, 2021 at 02:27:25PM +0900, Tomohito Esaki wrote:
+>> The LINEAR modifier is advertised as default if a driver doesn't specify
+>> modifiers. However, there are legacy drivers such as radeon that do not
+>> support modifiers but infer the actual layout of the underlying buffer.
+>> Therefore, a new flag not_support_fb_modifires is introduced for these
+>> legacy drivers. Allow_fb_modifiers will be replaced with this new flag.
+>>
+>> Signed-off-by: Tomohito Esaki <etom@igel.co.jp>
+>> ---
+>>   drivers/gpu/drm/drm_plane.c   | 34 ++++++++++++++++++++++++++--------
+>>   include/drm/drm_mode_config.h | 10 ++++++++++
+>>   include/drm/drm_plane.h       |  3 +++
+>>   3 files changed, 39 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/drm_plane.c b/drivers/gpu/drm/drm_plane.c
+>> index 82afb854141b..75308ee240c0 100644
+>> --- a/drivers/gpu/drm/drm_plane.c
+>> +++ b/drivers/gpu/drm/drm_plane.c
+>> @@ -161,6 +161,16 @@ modifiers_ptr(struct drm_format_modifier_blob *blob)
+>>   	return (struct drm_format_modifier *)(((char *)blob) + blob->modifiers_offset);
+>>   }
+>>   
+>> +static bool check_format_modifier(struct drm_plane *plane, uint32_t format,
+>> +				  uint64_t modifier)
+>> +{
+>> +	if (plane->funcs->format_mod_supported)
+>> +		return plane->funcs->format_mod_supported(plane, format,
+>> +							  modifier);
+>> +
+>> +	return modifier == DRM_FORMAT_MOD_LINEAR;
+>> +}
+>> +
+>>   static int create_in_format_blob(struct drm_device *dev, struct drm_plane *plane)
+>>   {
+>>   	const struct drm_mode_config *config = &dev->mode_config;
+>> @@ -203,16 +213,15 @@ static int create_in_format_blob(struct drm_device *dev, struct drm_plane *plane
+>>   	memcpy(formats_ptr(blob_data), plane->format_types, formats_size);
+>>   
+>>   	/* If we can't determine support, just bail */
+>> -	if (!plane->funcs->format_mod_supported)
+>> +	if (config->fb_modifiers_not_supported)
+>>   		goto done;
+>>   
+>>   	mod = modifiers_ptr(blob_data);
+>>   	for (i = 0; i < plane->modifier_count; i++) {
+>>   		for (j = 0; j < plane->format_count; j++) {
+>> -			if (plane->funcs->format_mod_supported(plane,
+>> -							       plane->format_types[j],
+>> -							       plane->modifiers[i])) {
+>> -
+>> +			if (check_format_modifier(plane,
+>> +						  plane->format_types[j],
+>> +						  plane->modifiers[i])) {
+>>   				mod->formats |= 1ULL << j;
+>>   			}
+>>   		}
+>> @@ -242,6 +251,10 @@ static int __drm_universal_plane_init(struct drm_device *dev,
+>>   				      const char *name, va_list ap)
+>>   {
+>>   	struct drm_mode_config *config = &dev->mode_config;
+>> +	const uint64_t default_modifiers[] = {
+>> +		DRM_FORMAT_MOD_LINEAR,
+>> +		DRM_FORMAT_MOD_INVALID
+>> +	};
+>>   	unsigned int format_modifier_count = 0;
+>>   	int ret;
+>>   
+>> @@ -282,6 +295,11 @@ static int __drm_universal_plane_init(struct drm_device *dev,
+>>   
+>>   		while (*temp_modifiers++ != DRM_FORMAT_MOD_INVALID)
+>>   			format_modifier_count++;
+>> +	} else {
+>> +		if (!dev->mode_config.fb_modifiers_not_supported) {
+>> +			format_modifiers = default_modifiers;
+>> +			format_modifier_count = 1;
+>> +		}
+>>   	}
+>>   
+>>   	/* autoset the cap and check for consistency across all planes */
+>> @@ -346,7 +364,7 @@ static int __drm_universal_plane_init(struct drm_device *dev,
+>>   		drm_object_attach_property(&plane->base, config->prop_src_h, 0);
+>>   	}
+>>   
+>> -	if (config->allow_fb_modifiers)
+>> +	if (format_modifier_count)
+>>   		create_in_format_blob(dev, plane);
+>>   
+>>   	return 0;
+>> @@ -373,8 +391,8 @@ static int __drm_universal_plane_init(struct drm_device *dev,
+>>    * drm_universal_plane_init() to let the DRM managed resource infrastructure
+>>    * take care of cleanup and deallocation.
+>>    *
+>> - * Drivers supporting modifiers must set @format_modifiers on all their planes,
+>> - * even those that only support DRM_FORMAT_MOD_LINEAR.
+>> + * For drivers supporting modifiers, all planes will advertise
+>> + * DRM_FORMAT_MOD_LINEAR support, if @format_modifiers is not set.
+>>    *
+>>    * Returns:
+>>    * Zero on success, error code on failure.
+>> diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
+>> index 48b7de80daf5..c56f298c55bd 100644
+>> --- a/include/drm/drm_mode_config.h
+>> +++ b/include/drm/drm_mode_config.h
+>> @@ -920,6 +920,16 @@ struct drm_mode_config {
+>>   	 */
+>>   	bool allow_fb_modifiers;
+>>   
+>> +	/**
+>> +	 * @fb_modifiers_not_supported:
+>> +	 *
+>> +	 * This flag is for legacy drivers such as radeon that do not support
+> 
+> Maybe don't put specific driver names into kerneldoc (in commit message to
+> motivate your changes it's fine). It's unlikely radeon ever changes on
+> this, but also no one will update this in the docs if we ever do that.
+> 
+> Perhaps also add that new driver should never set this, just to hammer it
+> home that modifiers really should work everywhere.
 
-On 2022/1/15 6:59, Stephen Boyd wrote:
-> [ EXTERNAL EMAIL ]
+I agree with you.
+I'll modify this docs.
+
+Thanks,
+Tomohito Esaki
+
 > 
-> Quoting Liang Yang (2022-01-13 19:06:07)
->> Hi Stephen,
->>
->> Thanks for your quick response.
->>
->> On 2022/1/14 5:29, Stephen Boyd wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> Quoting Liang Yang (2022-01-13 03:57:44)
->>>> Document the MMC sub clock controller driver, the potential consumer
->>>> of this driver is MMC or NAND. Also add four clock bindings IDs which
->>>> provided by this driver.
->>>>
->>>> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
->>>> ---
->>>>    .../bindings/clock/amlogic,mmc-clkc.yaml      | 64 +++++++++++++++++++
->>>>    include/dt-bindings/clock/amlogic,mmc-clkc.h  | 14 ++++
->>>>    2 files changed, 78 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
->>>>    create mode 100644 include/dt-bindings/clock/amlogic,mmc-clkc.h
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
->>>> new file mode 100644
->>>> index 000000000000..a274c3d5fc2e
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
->>>> @@ -0,0 +1,64 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/clock/amlogic,mmc-clkc.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Amlogic MMC Sub Clock Controller Driver Device Tree Bindings
->>>> +
->>>> +maintainers:
->>>> +  - jianxin.pan@amlogic.com
->>>> +  - liang.yang@amlogic.com
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - "amlogic,axg-mmc-clkc", "syscon"
->>>
->>> Why is it a syscon?
->>
->> The register documented by reg is shared with SD/eMMC controller port C,
->> and it need to be ops on NFC driver.
+> Otherwise I think this series is the right thing to do.
+> -Daniel
+> 
+>> +	 * modifiers but infer the actual layout of the underlying buffer.
+>> +	 * Generally, each drivers must support modifiers, this flag should not
+>> +	 * be set.
+>> +	 */
+>> +	bool fb_modifiers_not_supported;
+>> +
+>>   	/**
+>>   	 * @normalize_zpos:
+>>   	 *
+>> diff --git a/include/drm/drm_plane.h b/include/drm/drm_plane.h
+>> index 0c1102dc4d88..cad641b1f797 100644
+>> --- a/include/drm/drm_plane.h
+>> +++ b/include/drm/drm_plane.h
+>> @@ -803,6 +803,9 @@ void *__drmm_universal_plane_alloc(struct drm_device *dev,
+>>    *
+>>    * The @drm_plane_funcs.destroy hook must be NULL.
+>>    *
+>> + * For drivers supporting modifiers, all planes will advertise
+>> + * DRM_FORMAT_MOD_LINEAR support, if @format_modifiers is not set.
+>> + *
+>>    * Returns:
+>>    * Pointer to new plane, or ERR_PTR on failure.
+>>    */
+>> -- 
+>> 2.17.1
 >>
 > 
-> Is this the case where the clk is inside the SD/eMMC controller? Can the
-yes.
-> mmc driver register the clk controller from there and pass it an iomem
-> pointer to poke clks?
-we can't do that since EMMC and NAND is mutually exclusivem. both of 
-them share the same data pins.
-> 
-> .

@@ -2,106 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8085C490D4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A12490CF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 18:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238344AbiAQRCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 12:02:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50724 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241428AbiAQRBD (ORCPT
+        id S241503AbiAQRAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 12:00:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241391AbiAQQ7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:01:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A42A611B9;
-        Mon, 17 Jan 2022 17:01:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EBA2C36AE3;
-        Mon, 17 Jan 2022 17:01:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642438863;
-        bh=grTelnkSX6Y12cAJ2c2Z7iI+CF/lO3oFNnwSui4aYhQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FAwRg9FjhEZO6YeRXgFcKaOLTmqRwTe94xPkcObvK8OLJ22fjhIJCqCYTKBMAs2Dk
-         3zKNQ6ZxCf/kTRzSYDD3RNaf2i1Vdl/tERgqkH2JNLK/y4eL8DKK46D6OwoMkDpfjV
-         aq45jBkRb5piZfENjohw1zLQzWINAPy3p0lx35qF6V+RDwK8SOgKR6q8qwB8s8Q81K
-         HqsraVngMF2o8C+6d7K9dhGRAvUH+nLbGSDuYIa3Kb3cfaaHo5Zuu1FBNpk/hhWeQJ
-         FGRylGb8w5lJ3QtJjrVO0036MRQgu8NmDGPy8gFEgT16qsmF5F2Nfi0qvgeZ59ewWC
-         hrCc3etzubmVg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tzung-Bi Shih <tzungbi@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, matthias.bgg@gmail.com,
-        jiaxin.yu@mediatek.com, rikard.falkeborn@gmail.com,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.16 46/52] ASoC: mediatek: mt8183: fix device_node leak
-Date:   Mon, 17 Jan 2022 11:58:47 -0500
-Message-Id: <20220117165853.1470420-46-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220117165853.1470420-1-sashal@kernel.org>
-References: <20220117165853.1470420-1-sashal@kernel.org>
+        Mon, 17 Jan 2022 11:59:37 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F99C06175A
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:59:36 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id f5so3307520qtp.11
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 08:59:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M6FC+MGdL30gAj9EdPhED9cNHVQ32Hj7K3pOskYfkaQ=;
+        b=gFC9j7I+OFnRVrRKCqdjsZRVySxXC8NTHW8t3V9aTuiWzqpJznj15MWSJnC3BQJ5yi
+         DsjJAa3U/00tZlBlvC+ZG1Tq9QC05bJBvmG3irLwRsAOEmrhHo5Wcn89IW7rJu1+4V9z
+         MQodtJLk2SFX/ksqr0nvFOLHX7S8PEVe4Tass=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M6FC+MGdL30gAj9EdPhED9cNHVQ32Hj7K3pOskYfkaQ=;
+        b=Rn4WJaWjygARUNewo7UUv1wAoRAqeeZpjahLPYXqMJmwsGbgf2fn5JIeDblEJX20Xj
+         UJkrimvdGy0J2BI5uVDd7Z50vu7tEOa3A09HIoZmcaM0CBe/zQ0lpUwzO1WYSGpu37+U
+         8iRkuAosZUMc7vzbB/iRzRzsXDT9hrelz2d7rUTDosO//WUD8I/I+iT70c5VcaeaUu+v
+         +P22v7URjFNBTVTiOmey5w11GXBbIJKKVBC7r0XtJfpXI2D8K/5tKsMCdK5QW7STsajH
+         UD11dVpb2M2MJ8tuCmSIn0lzgFT4K02MJ7XueWBDww7Em4ro+D8TVgQyZVkML/6QkPVk
+         UVlw==
+X-Gm-Message-State: AOAM532ne98wVMeU2ZeRePJMVt6kzkJf+8TyrR5OMdPasqPL0+suuni+
+        SEnLV6CTZewWfrg8jK0jOc+plA==
+X-Google-Smtp-Source: ABdhPJx/CVKfryDFmfdtXhpNB2rqUDRRelC/Mxp8ZUOQ+Sc2eRFkvkGtFT2jZ9Qq5aQk/5WlzY+R3w==
+X-Received: by 2002:ac8:5c4b:: with SMTP id j11mr18035483qtj.490.1642438775873;
+        Mon, 17 Jan 2022 08:59:35 -0800 (PST)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-32-216-209-220-181.dsl.bell.ca. [216.209.220.181])
+        by smtp.gmail.com with ESMTPSA id bs34sm9118306qkb.57.2022.01.17.08.59.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 08:59:35 -0800 (PST)
+Date:   Mon, 17 Jan 2022 11:59:33 -0500
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com, ebiggers@kernel.org
+Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+Message-ID: <20220117165933.l3762ppcbj5jxicc@meerkat.local>
+References: <20220111180318.591029-1-roberto.sassu@huawei.com>
+ <YeV+jkGg6mpQdRID@zx2c4.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YeV+jkGg6mpQdRID@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tzung-Bi Shih <tzungbi@google.com>
+On Mon, Jan 17, 2022 at 03:34:54PM +0100, Jason A. Donenfeld wrote:
+> If you're looking for a simple signature mechanism to replace the use of
+> X.509 and all of that infrastructure, may I suggest just coming up with
+> something simple using ed25519, similar to signify or minisign? Very
+> minimal code in the kernel, in userspace, and very few moving parts to
+> break.
 
-[ Upstream commit cb006006fe6221f092fadaffd3f219288304c9ad ]
+I am concerned that ed25519 private key management is very rudimentary -- more
+often than not it is just kept somewhere on disk, often without any passphrase
+encryption.
 
-Fixes the device_node leak.
+With all its legacy warts, GnuPG at least has decent support for hardware
+off-load via OpenPGP smartcards or TPM integration in GnuPG 2.3, but the best
+we have with ed25519 is passhprase protection as implemented in minisign (and
+even that is rudimentary -- if you need to sign 10 things, you will need to
+type in your passphrase 10 times, as there is no passphrase agent of any
+kind).
 
-Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
-Link: https://lore.kernel.org/r/20211224064719.2031210-3-tzungbi@google.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c         | 6 +++++-
- sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c | 7 ++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
+The most promising non-PGP development of PKI signatures that I've seen lately
+is the openssh FIDO2 integration (the -sk keys) and support for
+signing/verifying arbitrary external content using `ssh-keygen -n`. It even
+does fairly sane things with identity/revocation/expiration via its
+allowed_signers implementation, even if I'm less excited about it all being in
+a single file.
 
-diff --git a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
-index a4d26a6fc8492..bda103211e0bd 100644
---- a/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
-+++ b/sound/soc/mediatek/mt8183/mt8183-da7219-max98357.c
-@@ -781,7 +781,11 @@ static int mt8183_da7219_max98357_dev_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	return devm_snd_soc_register_card(&pdev->dev, card);
-+	ret = devm_snd_soc_register_card(&pdev->dev, card);
-+
-+	of_node_put(platform_node);
-+	of_node_put(hdmi_codec);
-+	return ret;
- }
- 
- #ifdef CONFIG_OF
-diff --git a/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c b/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
-index aeb1af86047ef..9f0bf15fe465e 100644
---- a/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
-+++ b/sound/soc/mediatek/mt8183/mt8183-mt6358-ts3a227-max98357.c
-@@ -780,7 +780,12 @@ mt8183_mt6358_ts3a227_max98357_dev_probe(struct platform_device *pdev)
- 				 __func__, ret);
- 	}
- 
--	return devm_snd_soc_register_card(&pdev->dev, card);
-+	ret = devm_snd_soc_register_card(&pdev->dev, card);
-+
-+	of_node_put(platform_node);
-+	of_node_put(ec_codec);
-+	of_node_put(hdmi_codec);
-+	return ret;
- }
- 
- #ifdef CONFIG_OF
--- 
-2.34.1
+Everything else is just treating key management as something out of scope, and
+I'm worried that it's going to result in a net loss in overall security.
 
+-K

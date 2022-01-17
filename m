@@ -2,81 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3FD1490940
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9172D490941
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 14:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240135AbiAQNKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 08:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbiAQNKM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 08:10:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8FFC061574;
-        Mon, 17 Jan 2022 05:10:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9DF52B81014;
-        Mon, 17 Jan 2022 13:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E589C36AEC;
-        Mon, 17 Jan 2022 13:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642425009;
-        bh=1KPr3RJ9vJZ9QbTuZ1L39nuwUAuef3jmkI+BhfeQFZs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fxu+ZB5mZ0CY66YvzvL4Uev03KmHUSJsp4DUEioMNjxqU6h7dRMZ7ds6s6fIpp9iI
-         LLOAEKhKWglnSjPxljyvPTtev+EsjXNIJg79wkme9YxCBQqgYaOmkO0mXqaxxMmtCq
-         fB+JIhgOeEaISFY8x2DR/HHe2Q23P+drK8+qJG1tzT33c1JOrdGProvosL58408agS
-         EHYFv/E0aT2gIUuIhorB6DgzEHWBTDRCqrNrvcKYgk9lRyqU1a5Ynr5tZvaphWSk+t
-         0JIaz/aUopoOK4Y+UMcB88g13+APBEt+jxFzjmIthw7WSOPROYauHtRFAT+FBNpAjl
-         CQibcp5a+MneQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 55401F6079A;
-        Mon, 17 Jan 2022 13:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S237124AbiAQNLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 08:11:04 -0500
+Received: from foss.arm.com ([217.140.110.172]:58158 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231894AbiAQNLB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 08:11:01 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DEFDA1FB;
+        Mon, 17 Jan 2022 05:11:00 -0800 (PST)
+Received: from C02TD0UTHF1T.local (unknown [10.57.38.30])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 356003F774;
+        Mon, 17 Jan 2022 05:10:59 -0800 (PST)
+Date:   Mon, 17 Jan 2022 13:10:56 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Matija Glavinic-Pecotic <matija.glavinic-pecotic.ext@nokia.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: move efi_reboot to restart handler
+Message-ID: <20220117131056.GC87485@C02TD0UTHF1T.local>
+References: <YeVhtL2gCLkhTPdv@localhost.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: ocelot: Fix the call to
- switchdev_bridge_port_offload
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164242500934.15907.2434323319190112955.git-patchwork-notify@kernel.org>
-Date:   Mon, 17 Jan 2022 13:10:09 +0000
-References: <20220117125300.2399394-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20220117125300.2399394-1-horatiu.vultur@microchip.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, kuba@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YeVhtL2gCLkhTPdv@localhost.localdomain>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi,
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Mon, 17 Jan 2022 13:53:00 +0100 you wrote:
-> In the blamed commit, the call to the function
-> switchdev_bridge_port_offload was passing the wrong argument for
-> atomic_nb. It was ocelot_netdevice_nb instead of ocelot_swtchdev_nb.
-> This patch fixes this issue.
+On Mon, Jan 17, 2022 at 01:31:48PM +0100, Krzysztof Adamski wrote:
+> On EFI enabled arm64 systems, efi_reboot was called before
+> do_kernel_restart, completely omitting the reset_handlers functionality.
+> By registering efi_reboot as part of the chain with slightly elevated
+> priority, we make it run before the default handler but still allow
+> plugging in other handlers.
+> Thanks to that, things like gpio_restart, restart handlers in
+> watchdog_core, mmc or mtds are working on those platforms.
 > 
-> Fixes: 4e51bf44a03af6 ("net: bridge: move the switchdev object replay helpers to "push" mode")
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> The priority 129 should be high enough as we will likely be the first
+> one to register on this prio so we will be called before others, like
+> PSCI handler.
+
+I apprecaiate that this is kinda nice for consistency, but if adds more
+lines and reduces certainty down to "likely", neither of which seem
+ideal.
+
+What do we gain by changing this? e.g. does this enable some further
+rework?
+
+Do we actually need to change this?
+
 > 
-> [...]
+> Signed-off-by: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+> ---
+>  arch/arm64/kernel/process.c |  7 -------
+>  arch/arm64/kernel/setup.c   | 21 +++++++++++++++++++++
+>  2 files changed, 21 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+> index 5369e649fa79..b86ef77bb0c8 100644
+> --- a/arch/arm64/kernel/process.c
+> +++ b/arch/arm64/kernel/process.c
+> @@ -130,13 +130,6 @@ void machine_restart(char *cmd)
+>  	local_irq_disable();
+>  	smp_send_stop();
+>  
+> -	/*
+> -	 * UpdateCapsule() depends on the system being reset via
+> -	 * ResetSystem().
+> -	 */
+> -	if (efi_enabled(EFI_RUNTIME_SERVICES))
+> -		efi_reboot(reboot_mode, NULL);
+> -
+>  	/* Now call the architecture specific reboot code. */
+>  	do_kernel_restart(cmd);
+>  
+> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+> index f70573928f1b..5fa95980ba73 100644
+> --- a/arch/arm64/kernel/setup.c
+> +++ b/arch/arm64/kernel/setup.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/stddef.h>
+>  #include <linux/ioport.h>
+>  #include <linux/delay.h>
+> +#include <linux/reboot.h>
+>  #include <linux/initrd.h>
+>  #include <linux/console.h>
+>  #include <linux/cache.h>
+> @@ -298,6 +299,24 @@ u64 cpu_logical_map(unsigned int cpu)
+>  	return __cpu_logical_map[cpu];
+>  }
+>  
+> +static int efi_restart(struct notifier_block *nb, unsigned long action,
+> +		       void *data)
+> +{
+> +	/*
+> +	 * UpdateCapsule() depends on the system being reset via
+> +	 * ResetSystem().
+> +	 */
+> +	if (efi_enabled(EFI_RUNTIME_SERVICES))
+> +		efi_reboot(reboot_mode, NULL);
+> +
+> +	return NOTIFY_DONE;
+> +}
+> +
+> +static struct notifier_block efi_restart_nb = {
+> +	.notifier_call = efi_restart,
+> +	.priority = 129,
+> +};
+> +
+>  void __init __no_sanitize_address setup_arch(char **cmdline_p)
+>  {
+>  	setup_initial_init_mm(_stext, _etext, _edata, _end);
+> @@ -346,6 +365,8 @@ void __init __no_sanitize_address setup_arch(char **cmdline_p)
+>  
+>  	paging_init();
+>  
+> +	register_restart_handler(&efi_restart_nb);
 
-Here is the summary with links:
-  - [net] net: ocelot: Fix the call to switchdev_bridge_port_offload
-    https://git.kernel.org/netdev/net/c/c0b7f7d7e0ad
+If we're going to register this, it'd be nicer to register it
+conditionally in the EFI code when we probe EFI, rather than having the
+arch setup code unconditionally register a notifier that conditionally
+does something.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks,
+Mark.
 
-
+> +
+>  	acpi_table_upgrade();
+>  
+>  	/* Parse the ACPI tables for possible boot-time configuration */
+> -- 
+> 2.34.1
+> 

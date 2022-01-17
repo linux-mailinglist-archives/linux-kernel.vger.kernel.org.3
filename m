@@ -2,79 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73027490913
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65509490916
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 13:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240043AbiAQM5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 07:57:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57459 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234259AbiAQM5Y (ORCPT
+        id S237089AbiAQM6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 07:58:46 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:56590 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231817AbiAQM6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 07:57:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642424243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sFtW5j5+VVKOnv4SvkQZxdJ10EG3/bDXd5xR/QAYVgI=;
-        b=OVK7S+ucd577j99ldF7Crqduhy59h/A296QDjNGR7JVnK8XJui4d+AhN9O7k0cvi5JKvzg
-        hPu2RIjCK5mS4wwBDJmrfkYbJbXisgR58c4xcsffa9cDskX/GdRuZCvAAm931Hrm+JeaU+
-        cL0ewXk8WY18EymsZJkRywyMCavTexI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-413-5nhe9x8AO5uAzsdZdyfyQQ-1; Mon, 17 Jan 2022 07:57:20 -0500
-X-MC-Unique: 5nhe9x8AO5uAzsdZdyfyQQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 00CA11006AB7;
-        Mon, 17 Jan 2022 12:57:19 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.192.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A80AC74EAE;
-        Mon, 17 Jan 2022 12:57:18 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id C4BE318003BF; Mon, 17 Jan 2022 13:57:16 +0100 (CET)
-Date:   Mon, 17 Jan 2022 13:57:16 +0100
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        linux-fbdev@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-Message-ID: <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
-References: <YeG8ydoJNWWkGrTb@ls3530>
- <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
+        Mon, 17 Jan 2022 07:58:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=m5kIBOoiXpb3N+lgSWcHZRw+Kr+bgXJDOWmyyH88Lp0=; b=SrRagzFyGX+P+2zxwfDSs3RDzz
+        NbBYSRB0agzrnS+5ejdNFQr9UveEZQssybBF4ooPSJnBgGZ3JQ8UmyV6u4zaTIO/gS/KIAoCpv0Ob
+        VJX1fLCmzMVnpg5I0NsqL8TSm1oE6+YDKzzzk+LwE7VY/+FP3jyNuIdXXLgE/Coe0pAC4rXEsvyzM
+        CsNo7EtIyuC7agvfulou6SMbhym1V2NxDepnjJC+efEFRqNWQtiB19HMJ+n9DZisVHkL1SDzt9unY
+        Dh4c9pd7jr+Nm7qhjdmf2UoM3AtHCaAUjKLyxv3lMmVQtfXIYxGEgRjY1iBbfLeD38lDaYadV4NXW
+        7Rd58jUQ==;
+Received: from [179.98.77.138] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1n9Raq-0003xP-ER; Mon, 17 Jan 2022 13:58:41 +0100
+Message-ID: <5c52f546-a821-6195-b531-8251f108f587@igalia.com>
+Date:   Mon, 17 Jan 2022 09:58:21 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
+Content-Language: en-US
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        pmladek@suse.com, kernel@gpiccoli.net, senozhatsky@chromium.org,
+        rostedt@goodmis.org, john.ogness@linutronix.de,
+        feng.tang@intel.com, kexec@lists.infradead.org, dyoung@redhat.com,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com
+References: <20220114183046.428796-1-gpiccoli@igalia.com>
+ <20220117033344.GA2523@MiWiFi-R3L-srv> <20220117061315.GF2388@MiWiFi-R3L-srv>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220117061315.GF2388@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  Hi,
+On 17/01/2022 03:13, Baoquan He wrote:
+> [...]
+>>
+>> Patch can'e be applied on the latest code of linus's tree, can you tell
+>> which branch your code are based on?
+> 
+> OK, this is based on linux-next, I will apply this patch on the
+> linux-next/master and have a look.
+> 
 
-> b) to include new drivers (for old hardware) if they arrive (probably happens rarely but there can be).
->    I know of at least one driver which won't be able to support DRM....
+Indeed, I'm sorry for that - should have mentioned, but I forgot in the V3.
+It's based on linux-next because it's on top of some patches there - if
+I base in Linus tree, it wouldn't work on -next heh
 
-Hmm?  I seriously doubt that.  There is always the option to use a
-shadow framebuffer, then convert from standard drm formats to whatever
-esoteric pixel format your hardware expects.
+Thanks in advance for the reviews/test =)
+Cheers,
 
-Been there, done that.  Have a look at the cirrus driver.  The physical
-hardware was designed in the early 90-ies, almost 30 years ago.  These
-days it exists in virtual form only (qemu emulates it).  Thanks to the
-drm driver it runs wayland just fine even though it has a bunch of
-constrains dictated by the hardware design.
 
-take care,
-  Gerd
-
+Guilherme

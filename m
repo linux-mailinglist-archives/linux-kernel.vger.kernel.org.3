@@ -2,100 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE98D4903F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D45C4903FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 09:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238227AbiAQIek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 03:34:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238257AbiAQIeh (ORCPT
+        id S238255AbiAQIgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 03:36:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38217 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238251AbiAQIgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 03:34:37 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE586C061574;
-        Mon, 17 Jan 2022 00:34:36 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id B4D1B1F4135B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642408475;
-        bh=xoK0jv3NtU8ZkFPzIzfvCTtQcjyKWM9goIUF47mzE/o=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=IqPEoxEtxahmxn6slrmLI5kbao8z63Jjv3ia08ySyB2cwgvYAjuXWtX/zfe6H8SVu
-         LVU6yeTfN5PyztamR8/+VsrtSEok9fHjGiQKH/Q4VQD9k+eO3ktHcOimWf9KPHA/tJ
-         35gFyCbIUM2qBZgGg0rjph6PN1V7dqTh2/ukELJ8pcrqXjaTITDGaTZZIJyC1NHSGR
-         yfOEyKC5i1RUhzJeePiBaWs/vG2NG2RXQ8bmKxDzt+WdoGX/79A3IxpjQmZQXZ0Nga
-         ZyFxn3DJ55nAST/jHMH4Woogxhc79M2UKW7WOexmE/UBYqDKp+QqCJ4xTkOihpaKBb
-         VmRwclfcTAidQ==
-Message-ID: <b5b69eac10039de1b287df90279f464bd70e1de0.camel@collabora.com>
-Subject: Re: [PATCH] iio: frequency: admv1013: remove the always true
- condition
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-Date:   Mon, 17 Jan 2022 13:34:28 +0500
-In-Reply-To: <20220115180941.709a667a@jic23-huawei>
-References: <YdS3gJYtECMaDDjA@debian-BULLSEYE-live-builder-AMD64>
-         <20220115180941.709a667a@jic23-huawei>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Mon, 17 Jan 2022 03:36:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642408598;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uNhzno0wWEhzgVxHRwjARVs6TzvvxzJQTz1ejQZ7JqQ=;
+        b=A8mRCfAK6l4N/G9AFMgckDSyDB+nL4pCMnR1hi7QwE1uIBue9wb2fBeANa6aexmoSBLeBL
+        5gqcwUP5D49NgebqpJu/hDXw+rjPiKfzlFcMKHk7vcORNw9sBreuTsvE3cfg1jE076AG6S
+        LHMRYMkAPNCoH7Ic2YPoHBew0tYJHdY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-272-KZfgY9rcP96CfMVddnsjug-1; Mon, 17 Jan 2022 03:36:33 -0500
+X-MC-Unique: KZfgY9rcP96CfMVddnsjug-1
+Received: by mail-wm1-f72.google.com with SMTP id p7-20020a05600c1d8700b0034a0c77dad6so10551268wms.7
+        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 00:36:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uNhzno0wWEhzgVxHRwjARVs6TzvvxzJQTz1ejQZ7JqQ=;
+        b=OOPZtRKABMdbHD5zDmPzFGjBTEu6QCko0M/MlETTwZVg9BLtVJCd5shanrKbiXyHPx
+         8OEBOYnB+kKtnBhXLQ5JR9I5e+HQy4F0mWTUFVASOyBc+XdbNOOtNsHiXVpSaQ7aSKna
+         JZ+X8tnHD7QX2LrctrzQLE8Zn99CxItidE05bYn/3zE29ZaycHVDvxv2QNwwKf7VeB3k
+         qU9m9jtaG2p/nnO2dMoBRmlCnzjiWGmMA5nalnXJPkaKr2iiN8Fckh9jJO/ezsfoOOeu
+         6egjzSQpilK+WikSSq+YBicgudXeoxQJGW0hVARWXGfZtdAh9vodfmkfSZf2+Lq9JDYJ
+         eHwQ==
+X-Gm-Message-State: AOAM531lW6xPrcIEUpu3Q3CXyPeq3oYp8n3++UR5Y/yzgKvlGUuSudYm
+        guc+xmUxDLqSJdBBFpCnejlvkxptJJ+A1smodaFAbxHD1h7D/0tdbBJQVyPCWa9iA8L9i+0mRt1
+        ZQryIEBzJurYozxU7hAl7cDPz
+X-Received: by 2002:adf:e84f:: with SMTP id d15mr18256188wrn.15.1642408592053;
+        Mon, 17 Jan 2022 00:36:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxj2pp45Ih4MGk2jlOZCfHILaORsUuOFs80diJwXqRhG219ra8KDaGLXAInm8r0EuFBpb0QPA==
+X-Received: by 2002:adf:e84f:: with SMTP id d15mr18256174wrn.15.1642408591893;
+        Mon, 17 Jan 2022 00:36:31 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id r19sm12674076wmh.42.2022.01.17.00.36.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jan 2022 00:36:31 -0800 (PST)
+Message-ID: <4ca0ec95-6552-ac86-64e4-4b50e65c776e@redhat.com>
+Date:   Mon, 17 Jan 2022 09:36:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] KVM: x86/svm: Add module param to control PMU
+ virtualization
+Content-Language: en-US
+To:     Like Xu <like.xu.linux@gmail.com>,
+        Jim Mattson <jmattson@google.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211117080304.38989-1-likexu@tencent.com>
+ <c840f1fe-5000-fb45-b5f6-eac15e205995@redhat.com>
+ <CALMp9eQCEFsQTbm7F9CqotirbP18OF_cQUySb7Q=dqiuiK1FMg@mail.gmail.com>
+ <ad3cc4b9-11d4-861b-6e31-a75564539216@gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <ad3cc4b9-11d4-861b-6e31-a75564539216@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-01-15 at 18:09 +0000, Jonathan Cameron wrote:
-> On Wed, 5 Jan 2022 02:09:20 +0500
-> Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
+On 1/17/22 03:33, Like Xu wrote:
+>>>
+>>
+>> Whoops! The global 'pmu' is hidden by a local 'pmu' in get_gp_pmc_amd().
 > 
-> > unsigned int variable is always greater than or equal to zero. Make the
-> > if condition simple.
-> > 
-> > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> Hi,
-> 
-> + CC Antoniu and this should have a Fixes tag.
-> 
-> Thanks,
-> 
-> Jonathan
-> 
-Fixes: da35a7b526d9 ("iio: frequency: admv1013: add support for ADMV1013")
+> Indeed, I wonder if Poalo would like to take a look at this fix:
+> https://lore.kernel.org/kvm/20220113035324.59572-1-likexu@tencent.com/
 
-Please let me know if I should send a V2 with this tag included.
+Yes, my mistake.
 
-Thanks,
-Usama
-> > ---
-> >  drivers/iio/frequency/admv1013.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/iio/frequency/admv1013.c b/drivers/iio/frequency/admv1013.c
-> > index 6cdeb50143af..3f3c478e9baa 100644
-> > --- a/drivers/iio/frequency/admv1013.c
-> > +++ b/drivers/iio/frequency/admv1013.c
-> > @@ -348,7 +348,7 @@ static int admv1013_update_mixer_vgate(struct admv1013_state *st)
-> >  
-> > 
-> > 
-> > 
-> >  	vcm = regulator_get_voltage(st->reg);
-> >  
-> > 
-> > 
-> > 
-> > -	if (vcm >= 0 && vcm < 1800000)
-> > +	if (vcm < 1800000)
-> >  		mixer_vgate = (2389 * vcm / 1000000 + 8100) / 100;
-> >  	else if (vcm > 1800000 && vcm < 2600000)
-> >  		mixer_vgate = (2375 * vcm / 1000000 + 125) / 100;
-> 
-
+Paolo
 

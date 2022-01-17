@@ -2,128 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A13490A05
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FF7490A21
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 15:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234368AbiAQOKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 09:10:15 -0500
-Received: from mail-ua1-f53.google.com ([209.85.222.53]:46844 "EHLO
-        mail-ua1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiAQOKN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 09:10:13 -0500
-Received: by mail-ua1-f53.google.com with SMTP id c36so30514829uae.13;
-        Mon, 17 Jan 2022 06:10:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IVkUe3uV+8LCxfEyOkwQAxMSTEPLRyMs/0Qx0B4nQCU=;
-        b=NU3WzHjZNvmYoqfteQtWZMlr5Mpol057e5ikKlgFF54YUjW9Kes83mRSC7lJcr+rUI
-         CNLd8zhY8vxhpieLc/Zb/rMVnVizRY73AknaNbUrPNdXpUO9R25G/5RupMHRdu1G47S2
-         HHyOC9PP3IuxAQIw4Z9MhxIp9WWXIkb/VVvmp5TMdb2Z7cpQvcRupPR0PYB2bZHZKliU
-         fVK3AIJJNa0VH6gqpzrVkXY6fa8ihdbrEx8JsaXa/AWnCQH+9eo6/wGL9Tz2niVAcEf+
-         +3IyVo9WsY4jEMg7hReXTZT2tw2FTQQJpkv6fOooFK+3NFxEq4d2C+xCjlVT2wJc6DcK
-         iBGg==
-X-Gm-Message-State: AOAM532U+ZELnBdqXXmo1ytDWXGLkGaNYYIkYVINhztvePKMpQ4ItS0W
-        U6d2vEOlGpR+MDsjCf17lIlIYmH5T3Vbtw==
-X-Google-Smtp-Source: ABdhPJyveOK2vsyjygRhrucwI9ABwHYr1oireyMbGlhFB+C+UK+UJAQVIbS4uwiuspQQ12g1GYM6DQ==
-X-Received: by 2002:a9f:2105:: with SMTP id 5mr1076798uab.38.1642428612625;
-        Mon, 17 Jan 2022 06:10:12 -0800 (PST)
-Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com. [209.85.221.182])
-        by smtp.gmail.com with ESMTPSA id e10sm541227vsa.29.2022.01.17.06.10.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 06:10:12 -0800 (PST)
-Received: by mail-vk1-f182.google.com with SMTP id n14so9203380vkk.6;
-        Mon, 17 Jan 2022 06:10:11 -0800 (PST)
-X-Received: by 2002:a1f:2344:: with SMTP id j65mr7794483vkj.7.1642428611448;
- Mon, 17 Jan 2022 06:10:11 -0800 (PST)
+        id S238829AbiAQOOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 09:14:47 -0500
+Received: from mga09.intel.com ([134.134.136.24]:55398 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232040AbiAQOOb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 17 Jan 2022 09:14:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642428871; x=1673964871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dpdDCUgIFGr2FuwMabXwCtN6FdEIwM7gKE2hLUmGplQ=;
+  b=I96sjmSgw4oe3wkv++h1RNQ9mKPLYX7q5I0SYBHqXU32XBhKecQKohLE
+   ipyANRe8K0C6FVAbSyDbdGHI5nZbJR8MyWId9SJHP8jNHM9edFEf1iXoi
+   NWDYUVIErlLyxvQaXxe72C6RzRZvGRwgqLIUZBdGA48vdpunxDDyTw0N9
+   8HoPVoT/wP+lz75mX8lfmlwzDBUWv1kWqb/yQXmAxBqCvw5D9R4KZwrmZ
+   rlnJXe1hYqsWHJEebo1nhYmCSAe/UUjv74caqBUR/VmG+gKgzw57ksJVp
+   bsQrmL77qOENiphhcy3U230ngljFMgsRkCu22+Q4/SHhKNgJyQX5eLMXu
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10229"; a="244429786"
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="244429786"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 06:10:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,295,1635231600"; 
+   d="scan'208";a="671568402"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 17 Jan 2022 06:10:52 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 17 Jan 2022 16:10:51 +0200
+Date:   Mon, 17 Jan 2022 16:10:51 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] usb: common: ulpi: Fix crash in ulpi_match()
+Message-ID: <YeV466hTEyDwvmyL@kuha.fi.intel.com>
+References: <20220114100217.59541-1-jonathanh@nvidia.com>
 MIME-Version: 1.0
-References: <YeG8ydoJNWWkGrTb@ls3530> <CAKMK7uGdJckdM+fg+576iJXsqzCOUg20etPBMwRLB9U7GcG01Q@mail.gmail.com>
- <c80ed72c-2eb4-16dd-a7ad-57e9dde59ba1@gmx.de> <20220117125716.yjwxsze35j2ndn2i@sirius.home.kraxel.org>
- <CAMuHMdW=Zpp2mHbrBx7i0WN8PqY3XpK5qpyAyYxgf9n88edpug@mail.gmail.com> <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
-In-Reply-To: <70530b62-7b3f-db88-7f1a-f89b824e5825@suse.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 17 Jan 2022 15:10:00 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
-Message-ID: <CAMuHMdW5M=zEuGEnQQc3JytDhoxCKRiq0QFw+HOPp0YMORzidw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Helge as fbdev maintainer
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>, Helge Deller <deller@gmx.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220114100217.59541-1-jonathanh@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+Hi Jon,
 
-On Mon, Jan 17, 2022 at 2:51 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Am 17.01.22 um 14:29 schrieb Geert Uytterhoeven:
-> > On Mon, Jan 17, 2022 at 1:57 PM Gerd Hoffmann <kraxel@redhat.com> wrote:
-> >>> b) to include new drivers (for old hardware) if they arrive (probably happens rarely but there can be).
-> >>>     I know of at least one driver which won't be able to support DRM....
-> >>
-> >> Hmm?  I seriously doubt that.  There is always the option to use a
-> >> shadow framebuffer, then convert from standard drm formats to whatever
-> >> esoteric pixel format your hardware expects.
-> >>
-> >> Been there, done that.  Have a look at the cirrus driver.  The physical
-> >> hardware was designed in the early 90-ies, almost 30 years ago.  These
-> >> days it exists in virtual form only (qemu emulates it).  Thanks to the
-> >> drm driver it runs wayland just fine even though it has a bunch of
-> >> constrains dictated by the hardware design.
-> >
-> > The Cirrus DRM driver supports TrueColor (RGB565/888 and ARGB8888)
-> > modes only.  The Cirrus fbdev driver also supports mochrome and 256
-> > color modes.
-> >
-> > There exist some DRM drivers that do support DRM_FORMAT_C8, but none of
-> > the "tiny" ones do. Same for DRM_FORMAT_RGB{332,233}.  Using a shadow
-> > frame buffer to convert from truecolor to 256 colors would be doable,
-> > but would give bad results. And what about less colors?
-> > Adding support for e.g. DRM_FORMAT_C4 is not straight-forward, as
-> > the DRM core assumes in many places that a pixel is at least 1 byte,
-> > and would crash otherwise (yes I tried).  Other modes needed are
-> > DRM_FORMAT_Y4 and DRM_FORMAT_{BW,WB} (monochrome).
->
-> We export XRGB32 from each driver, because userspace expects it. But
-> that is not a hard requirement. Userspace can use any format. It's just
-> that no one seems to have any use cases so far, so no work has been
-> done. Think of XRGB32 as a fallback.
+On Fri, Jan 14, 2022 at 10:02:17AM +0000, Jon Hunter wrote:
+> Commit 7495af930835 ("ARM: multi_v7_defconfig: Enable drivers for
+> DragonBoard 410c") enables the CONFIG_PHY_QCOM_USB_HS for the ARM
+> multi_v7_defconfig. Enabling this Kconfig is causing the kernel to crash
+> on the Tegra20 Ventana platform in the ulpi_match() function.
+> 
+> The Qualcomm USB HS PHY driver that is enabled by CONFIG_PHY_QCOM_USB_HS,
+> registers a ulpi_driver but this driver does not provide an 'id_table',
+> so when ulpi_match() is called on the Tegra20 Ventana platform, it
+> crashes when attempting to deference the id_table pointer which is not
+> valid. The Qualcomm USB HS PHY driver uses device-tree for matching the
+> ULPI driver with the device and so fix this crash by using device-tree
+> for matching if the id_table is not valid.
+> 
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
 
-Using an XRGB32 intermediate would kill the user experience on old
-machines, due to both increased memory usage and copy overhead.
+So is this fixing commit 7495af930835, or perhaps commit ef6a7bcfb01c
+("usb: ulpi: Support device discovery via DT")?
 
-> Personally, I'd much appreciate if userspace would support more of the
-> native formats and not rely on XRGB32.
+I would assume ef6a7bcfb01c ("usb: ulpi: Support device discovery via
+DT"). Please include the appropriate Fixes tag.
 
-Supporting monochrome, 16 colors, and 256 colors would be nice.
+> ---
+>  drivers/usb/common/ulpi.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+> index 4169cf40a03b..8f8405b0d608 100644
+> --- a/drivers/usb/common/ulpi.c
+> +++ b/drivers/usb/common/ulpi.c
+> @@ -39,8 +39,11 @@ static int ulpi_match(struct device *dev, struct device_driver *driver)
+>  	struct ulpi *ulpi = to_ulpi_dev(dev);
+>  	const struct ulpi_device_id *id;
+>  
+> -	/* Some ULPI devices don't have a vendor id so rely on OF match */
+> -	if (ulpi->id.vendor == 0)
+> +	/*
+> +	 * Some ULPI devices don't have a vendor id
+> +	 * or provide an id_table so rely on OF match.
+> +	 */
+> +	if (ulpi->id.vendor == 0 || !drv->id_table)
+>  		return of_driver_match_device(dev, driver);
+>  
+>  	for (id = drv->id_table; id->vendor; id++)
+> -- 
+> 2.25.1
 
-> > This not only to support "old" hardware, but also modern small OLED
-> > and e-ink displays.
->
-> There's a DRM driver for Repaper e-Ink displays. So it seems doable at
-> least.
+thanks,
 
-Which uses an DRM_FORMAT_XRGB8888 intermediate, and
-drm_fb_xrgb8888_to_gray8() and repaper_gray8_to_mono_reversed()
-to convert from truecolor to monochrome.  I guess that would work,
-as this is a slow e-ink display.  Have fun as a text console ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+heikki

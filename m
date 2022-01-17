@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE7F491134
-	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 22:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDE1491137
+	for <lists+linux-kernel@lfdr.de>; Mon, 17 Jan 2022 22:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243203AbiAQVAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 17 Jan 2022 16:00:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S243214AbiAQVBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 17 Jan 2022 16:01:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243182AbiAQVAc (ORCPT
+        with ESMTP id S235646AbiAQVBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 17 Jan 2022 16:00:32 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619EDC06161C
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 13:00:31 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id x7so62353218lfu.8
-        for <linux-kernel@vger.kernel.org>; Mon, 17 Jan 2022 13:00:31 -0800 (PST)
+        Mon, 17 Jan 2022 16:01:36 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6775C061574;
+        Mon, 17 Jan 2022 13:01:35 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id m196so21138487ybf.4;
+        Mon, 17 Jan 2022 13:01:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QdXHGenv3tZIOnYPfCA1iCRPfis03+iHQr5vhZDRmzE=;
-        b=LHCrYpBn/smiTJofppxDrX+ObncdoQHEUbtlu7Uv8G9dvP69Qbsxn1Zd8Npqatpqgn
-         V/+c1uEyFCqjxVX8KFt4LnZvrRJ9IpXUHupdXbi4Y4EtgbS0hk95vFQWV1xYNHzk0eDz
-         cifHShq1ecjEPg/13qDD/r3F6WOXCCGJtXcmJX41XoCwt0atbYn9NZeIyJLtjpNaUGFZ
-         jYHi+5tF/8g+r697NSHleOOlNMAPrhK+CNlU6yXI21P+N3wYvwuJc5udF519uNScPBIp
-         VcG5hLejYUs/hq2PnxOVpiwqwUoh4fWBfzAsNzrgrefvDSxxVjPYn0NQXkszk587E9DI
-         a26Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E/L36AdK5Ipen2tmpRXUP0pX59XDvEK9cBawMrh2MjE=;
+        b=DligtBPwqn6VtiU+rpAn5X+wN11F98GkoqMRJbBi53/INouP3OZYi4BtPYLmhfHf7W
+         YAbGiO6l/guh3I1zu20VxIFUqvd2xlQ4X2C7GWESOPxMC1Rtmvysn0lBEoc0krZG2eDh
+         +EHyAxlxaB91ofBqytmoOm6j3O3EhP+ujjSCroUGMLct0ASx49rMLrK95JesRNrkO97j
+         L/5hAuK3K08Y80yWzXfXX9DtZqRenb2y2Gnm40NOQvZUaal9aV8Q+puBweI0GDpnJ31Z
+         mPVhhzwNuk8lvKAdau1XGZj3HSTJpTLmM3eurQKuW6CJNz//eHH4uJEJaB28/wgmpS8m
+         uyxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QdXHGenv3tZIOnYPfCA1iCRPfis03+iHQr5vhZDRmzE=;
-        b=ItMVtR/KYDpVHWhdKvE9qGXe8CkxvMuCSrEp5dF3Wz6aWx6hftZakJwbl5uX6fuqxk
-         pbIMXAye1O3F4TZ28O34iyncbgN9M6URi2VGd+fR5F6bwtSJT+Fk7wuDE125fdOJ8aPa
-         UOlJD4OAjwbq0aV5BMOQ4uwgw0mx4EoNRpPH2TUDfmfjzaSYMYZ9R8a5nSTUrLNOSfmm
-         fuv51vEiV0FsWkdc8OKIsUTDL5LgANosLUrSW09fc9Uwg2eJdxzgCYvJVslJgaDNauk/
-         6vZ6M4Wtz5SOstbxExWiye3mLNz17TJE88qeLWGaL/DqEsFfDMnKrADZ82uT8WPUFBXj
-         e4oA==
-X-Gm-Message-State: AOAM531lgdPVHCLrTsrk5i5YDcDYT/yR2PF/hxRcz581wHmXW7HQTfG5
-        iNo0SCt6s90dpyDSkWJE3JMYcQ==
-X-Google-Smtp-Source: ABdhPJwo88Lo7R6WVD9bXds5DI6nWc0dJtRADfIjRocxWhl6taT1Sq4djYHIrDbA3yWrii1W/rWEKA==
-X-Received: by 2002:a2e:b70a:: with SMTP id j10mr13657179ljo.376.1642453229685;
-        Mon, 17 Jan 2022 13:00:29 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id k9sm1037129lfg.121.2022.01.17.13.00.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 13:00:28 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 49E4D10387E; Tue, 18 Jan 2022 00:00:57 +0300 (+03)
-Date:   Tue, 18 Jan 2022 00:00:57 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 04/12] mm/vmscan: Free non-shmem folios without splitting
- them
-Message-ID: <20220117210057.o2aug2unmovufrdz@box.shutemov.name>
-References: <20220116121822.1727633-1-willy@infradead.org>
- <20220116121822.1727633-5-willy@infradead.org>
- <20220117160625.oofpzl7tqm5udwaj@box.shutemov.name>
- <YeWVBkgYMp4MctTW@casper.infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E/L36AdK5Ipen2tmpRXUP0pX59XDvEK9cBawMrh2MjE=;
+        b=FvdIVExb3eHWlsvtpTVHkYIw+ps3EvojSl+O2i31Hj7uhJnvg4JPF14Ib0C3BxnV01
+         ErcgPYh8kDvAeMEV7Kx4QZEum8MtMTth2tjQqtXPrSE5S+yNCXUksAHcdZ29WvBpbiw5
+         2m9BSSwMDPWoN58g6xY/efcGzMXC2tc2nUVEkCnLa+b3RCho95zgqwi2xPq0BZM0GRuh
+         6JcOs3DIBmCQhVmsroMf9qOgtj+N/DiMqWnVI4gKbgTA7ej3LgtFRfiLyxOJO6LDN1aF
+         /NJES2X2ZaykDxM6vBPhzBDDb6QERjUixRd3KARqSS9W2XG1Umkc+UJVzFhfYlZhwTRM
+         06kg==
+X-Gm-Message-State: AOAM533TElS5eNJTUFJVpADAq0NfL0HPJDHjC0Vcngt/KX4hEJjQTecl
+        dTccfLYfkEt+SjVBe4SJPKGU6Rrxe/xY7m2uN1kSmcRf
+X-Google-Smtp-Source: ABdhPJz2qC1gbLERDHPFPmDnVv4rb4ybLBXYBQWsc0lxZSVX9k2ZYOya1CMbAN8jg7o53QZDYaTP6MHHW0h2Q+EsfXA=
+X-Received: by 2002:a25:b184:: with SMTP id h4mr13155000ybj.738.1642453295121;
+ Mon, 17 Jan 2022 13:01:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeWVBkgYMp4MctTW@casper.infradead.org>
+References: <20220114064625.765511-1-deng.changcheng@zte.com.cn>
+In-Reply-To: <20220114064625.765511-1-deng.changcheng@zte.com.cn>
+From:   ronnie sahlberg <ronniesahlberg@gmail.com>
+Date:   Tue, 18 Jan 2022 07:01:23 +1000
+Message-ID: <CAN05THS5A5r8PgaHk8BaK+8kTyT8mJ3LdB__tJCbSb8Cs+yaKQ@mail.gmail.com>
+Subject: Re: [PATCH] cifs: Replace one-element array with flexible-array member
+To:     cgel.zte@gmail.com
+Cc:     Steve French <sfrench@samba.org>,
+        linux-cifs <linux-cifs@vger.kernel.org>,
+        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 04:10:46PM +0000, Matthew Wilcox wrote:
-> On Mon, Jan 17, 2022 at 07:06:25PM +0300, Kirill A. Shutemov wrote:
-> > On Sun, Jan 16, 2022 at 12:18:14PM +0000, Matthew Wilcox (Oracle) wrote:
-> > > We have to allocate memory in order to split a file-backed folio, so
-> > > it's not a good idea to split them in the memory freeing path.
-> > 
-> > Could elaborate on why split a file-backed folio requires memory
-> > allocation?
-> 
-> In the commit message or explain it to you now?
-> 
-> We need to allocate xarray nodes to store all the newly-independent
-> pages.  With a folio that's more than 64 entries in size (current
-> implementation), we elide the lowest layer of the radix tree.  But
-> with any data structure that tracks folios, we'll need to create
-> space in it to track N folios instead of 1.
+This patch is wrong.
+qi_iov is not even the trailing element of the array so we cant change
+it to be a flexible array member.
+This change will likely clobber io_iov so the potential for breaking,
+memory leaks or ooops is quite possible.
+qi_iov is supposed to be exactly one element in size.
 
-Looks good.
+Same for close_iov, while it is the last element in the structure, it
+is not a flexible array but an array of exactly one member.
+This change to close_iov would likely lead to reading/writing beyond
+the end of the structure.
 
-> > > It also
-> > > doesn't work for XFS because pages have an extra reference count from
-> > > page_has_private() and split_huge_page() expects that reference to have
-> > > already been removed.
-> > 
-> > Need to adjust can_split_huge_page()?
-> 
-> no?
 
-I meant we can make can_split_huge_page() expect extra pin if
-page_has_private() is true. If it is the only thing that stops
-split_huge_page() from handling XFS pages.
+NACK
 
--- 
- Kirill A. Shutemov
+On Sat, Jan 15, 2022 at 12:44 AM <cgel.zte@gmail.com> wrote:
+>
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+>
+> There is a regular need in the kernel to provide a way to declare having
+> a dynamically sized set of trailing elements in a structure. Kernel code
+> should always use "flexible array members" for these cases. The older
+> style of one-element or zero-length arrays should no longer be used.
+> Reference:
+> https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+> ---
+>  fs/cifs/smb2ops.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+> index af5d0830bc8a..5c104b2f308a 100644
+> --- a/fs/cifs/smb2ops.c
+> +++ b/fs/cifs/smb2ops.c
+> @@ -1609,10 +1609,10 @@ struct iqi_vars {
+>         struct smb_rqst rqst[3];
+>         struct kvec rsp_iov[3];
+>         struct kvec open_iov[SMB2_CREATE_IOV_SIZE];
+> -       struct kvec qi_iov[1];
+> +       struct kvec qi_iov[];
+>         struct kvec io_iov[SMB2_IOCTL_IOV_SIZE];
+>         struct kvec si_iov[SMB2_SET_INFO_IOV_SIZE];
+> -       struct kvec close_iov[1];
+> +       struct kvec close_iov[];
+>  };
+>
+>  static int
+> --
+> 2.25.1
+>
